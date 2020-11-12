@@ -503,7 +503,7 @@ public:
         return m_items.size();
     }
 
-    CN_ITEM* Add( D_PAD* pad );
+    CN_ITEM* Add( PAD* pad );
 
     CN_ITEM* Add( TRACK* track );
 

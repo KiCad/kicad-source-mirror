@@ -32,7 +32,7 @@
 MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape )
 {
     int      oX;
-    D_PAD*   pad;
+    PAD*     pad;
     MODULE*  module;
     wxString msg, cmp_name;
     int      pad_count = 2;
@@ -203,7 +203,7 @@ MODULE* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
 
     while( aPadCount-- )
     {
-        D_PAD* pad = new D_PAD( footprint );
+        PAD* pad = new PAD( footprint );
 
         footprint->Add( pad, ADD_MODE::INSERT );
 

@@ -126,7 +126,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
         }
         else
         {
-            for( D_PAD* pad : module->Pads() )
+            for( PAD* pad : module->Pads() )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )
                     break;

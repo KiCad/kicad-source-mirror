@@ -34,7 +34,7 @@
 #include <tuple>
 #include <wx/xml/xml.h>
 
-class D_PAD;
+class PAD;
 class FP_TEXT;
 class ZONE;
 
@@ -307,7 +307,7 @@ private:
     void packageSMD( MODULE* aModule, wxXmlNode* aTree ) const;
 
     ///> Handles common pad properties
-    void transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) const;
+    void transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const;
 
     ///> Deletes the footprint templates list
     void deleteTemplates();

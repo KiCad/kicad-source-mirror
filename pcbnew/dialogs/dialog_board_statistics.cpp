@@ -200,7 +200,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
         }
 
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             // Go through pads types list
             for( auto& type : m_padsTypes )

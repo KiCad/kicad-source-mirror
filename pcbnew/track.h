@@ -51,7 +51,7 @@
 
 class TRACK;
 class VIA;
-class D_PAD;
+class PAD;
 class MSG_PANEL_ITEM;
 class SHAPE_POLY_SET;
 

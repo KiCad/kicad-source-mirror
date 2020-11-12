@@ -703,7 +703,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
 {
     for( std::pair<PAD_ID, COMPONENT_PAD> padPair : aComponent.ComponentPads )
     {
-        D_PAD* pad = getKiCadPad( padPair.second, aModule );
+        PAD* pad = getKiCadPad( padPair.second, aModule );
         aModule->Add( pad,
                 ADD_MODE::INSERT ); // insert so that we get correct behaviour when finding pads
                                     // in the module by PAD_ID - see loadNets()
@@ -711,11 +711,11 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
 }
 
 
-D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, MODULE* aParent )
+PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, MODULE* aParent )
 {
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
 
-    D_PAD* pad = new D_PAD( aParent );
+    PAD* pad = new PAD( aParent );
 
     switch( aCadstarPad.Side )
     {
@@ -1226,7 +1226,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                     csPad.Side = padEx.Side;
 
                 //Find the pad in the module definition
-                D_PAD* kiPad = m->Pads().at( padEx.ID - (long) 1 );
+                PAD* kiPad = m->Pads().at( padEx.ID - (long) 1 );
 
                 if( kiPad )
                     delete kiPad;

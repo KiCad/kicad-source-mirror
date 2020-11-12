@@ -79,13 +79,13 @@ BOARD_NETLIST_UPDATER::~BOARD_NETLIST_UPDATER()
 // These functions allow inspection of pad nets during dry runs by keeping a cache of
 // current pad netnames indexed by pad.
 
-void BOARD_NETLIST_UPDATER::cacheNetname( D_PAD* aPad, const wxString& aNetname )
+void BOARD_NETLIST_UPDATER::cacheNetname( PAD* aPad, const wxString& aNetname )
 {
     m_padNets[ aPad ] = aNetname;
 }
 
 
-wxString BOARD_NETLIST_UPDATER::getNetname( D_PAD* aPad )
+wxString BOARD_NETLIST_UPDATER::getNetname( PAD* aPad )
 {
     if( m_isDryRun && m_padNets.count( aPad ) )
         return m_padNets[ aPad ];
@@ -94,13 +94,13 @@ wxString BOARD_NETLIST_UPDATER::getNetname( D_PAD* aPad )
 }
 
 
-void BOARD_NETLIST_UPDATER::cachePinFunction( D_PAD* aPad, const wxString& aPinFunction )
+void BOARD_NETLIST_UPDATER::cachePinFunction( PAD* aPad, const wxString& aPinFunction )
 {
     m_padPinFunctions[ aPad ] = aPinFunction;
 }
 
 
-wxString BOARD_NETLIST_UPDATER::getPinFunction( D_PAD* aPad )
+wxString BOARD_NETLIST_UPDATER::getPinFunction( PAD* aPad )
 {
     if( m_isDryRun && m_padPinFunctions.count( aPad ) )
         return m_padPinFunctions[ aPad ];
@@ -171,7 +171,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
     // Set the pads ratsnest settings to the global settings
     bool set_ratsnest = m_frame->GetDisplayOptions().m_ShowGlobalRatsnest;
 
-    for ( D_PAD* pad : footprint->Pads() )
+    for( PAD* pad : footprint->Pads() )
         pad->SetLocalRatsnestVisible( set_ratsnest );
 
     m_newFootprintsCount++;
@@ -355,7 +355,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
     bool changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
-    for( D_PAD* pad : aPcbComponent->Pads() )
+    for( PAD* pad : aPcbComponent->Pads() )
     {
         const COMPONENT_NET& net = aNewComponent->GetNet( pad->GetName() );
 
@@ -568,7 +568,7 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             // net is guaranteed to be wrong.
             wxString updatedNetname = wxEmptyString;
 
-            for( D_PAD* pad : m_zoneConnectionsCache[ zone ] )
+            for( PAD* pad : m_zoneConnectionsCache[ zone ] )
             {
                 if( getNetname( pad ) != zone->GetNetname() )
                 {
@@ -657,24 +657,24 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
 
 bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 {
-    int         count = 0;
-    wxString    netname;
-    wxString    msg;
-    D_PAD*      previouspad = NULL;
+    int       count = 0;
+    wxString  netname;
+    wxString  msg;
+    PAD*      previouspad = NULL;
 
     // We need the pad list for next tests.
 
     m_board->BuildListOfNets();
 
-    std::vector<D_PAD*> padlist = m_board->GetPads();
+    std::vector<PAD*> padlist = m_board->GetPads();
 
     // Sort pads by netlist name
-    std::sort( padlist.begin(), padlist.end(), [ this ]( D_PAD* a, D_PAD* b ) -> bool
+    std::sort( padlist.begin(), padlist.end(), [ this ]( PAD* a, PAD* b ) -> bool
                                                {
                                                    return getNetname( a ) < getNetname( b );
                                                } );
 
-    for( D_PAD* pad : padlist )
+    for( PAD* pad : padlist )
     {
         if( getNetname( pad ).IsEmpty() )
             continue;

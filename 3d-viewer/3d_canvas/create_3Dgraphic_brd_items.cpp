@@ -330,7 +330,7 @@ void BOARD_ADAPTER::createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aD
 }
 
 
-void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
+void BOARD_ADAPTER::createNewPadWithClearance( const PAD* aPad,
                                                CGENERICCONTAINER2D *aDstContainer,
                                                PCB_LAYER_ID aLayer,
                                                wxSize aClearanceValue ) const
@@ -347,7 +347,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
     if( ( aClearanceValue.x < 0 || aClearanceValue.x != aClearanceValue.y )
             && aPad->GetShape() != PAD_SHAPE_CUSTOM )
     {
-        D_PAD dummy( *aPad );
+        PAD dummy( *aPad );
         dummy.SetSize( aPad->GetSize() + aClearanceValue + aClearanceValue );
         dummy.TransformShapeWithClearanceToPolygon( poly, aLayer, 0, ARC_HIGH_DEF, ERROR_INSIDE );
         aClearanceValue = { 0, 0 };
@@ -435,7 +435,7 @@ void BOARD_ADAPTER::createNewPadWithClearance( const D_PAD* aPad,
 }
 
 
-COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const D_PAD* aPad, int aInflateValue )
+COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const PAD* aPad, int aInflateValue )
 {
     wxSize drillSize = aPad->GetDrillSize();
 
@@ -481,7 +481,7 @@ void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule
                                                            bool aSkipPlatedPads,
                                                            bool aSkipNonPlatedPads )
 {
-    for( D_PAD* pad : aModule->Pads() )
+    for( PAD* pad : aModule->Pads() )
     {
         if( !pad->IsOnLayer( aLayerId ) )
             continue;
@@ -840,7 +840,7 @@ void BOARD_ADAPTER::AddSolidAreasShapesToContainer( const ZONE* aZoneContainer,
 
 
 
-void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
+void BOARD_ADAPTER::buildPadShapeThickOutlineAsSegments( const PAD*  aPad,
                                                          CGENERICCONTAINER2D *aDstContainer,
                                                          int aWidth )
 {

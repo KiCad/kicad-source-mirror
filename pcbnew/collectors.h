@@ -278,7 +278,7 @@ public:
 
     /**
      * A scan list for all primary board items, omitting items which are subordinate to
-     * a MODULE, such as D_PAD and TEXTEMODULE.
+     * a MODULE, such as PAD and FP_TEXT.
      */
     static const KICAD_T BoardLevelItems[];
 

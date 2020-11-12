@@ -28,7 +28,7 @@
 
 /**
  * Enum PAD_SHAPE_T
- * is the set of pad shapes, used with D_PAD::{Set,Get}Shape()
+ * is the set of pad shapes, used with PAD::{Set,Get}Shape()
  */
 enum PAD_SHAPE_T
 {
@@ -61,7 +61,7 @@ static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE_T a )
 
 /**
  * Enum PAD_DRILL_SHAPE_T
- * is the set of pad drill shapes, used with D_PAD::{Set,Get}DrillShape()
+ * is the set of pad drill shapes, used with PAD::{Set,Get}DrillShape()
  */
 enum PAD_DRILL_SHAPE_T
 {
@@ -72,7 +72,7 @@ enum PAD_DRILL_SHAPE_T
 
 /**
  * Enum PAD_ATTR_T
- * is the set of pad shapes, used with D_PAD::{Set,Get}Attribute()
+ * is the set of pad shapes, used with PAD::{Set,Get}Attribute()
  * The double name is for convenience of Python devs
  */
 enum PAD_ATTR_T

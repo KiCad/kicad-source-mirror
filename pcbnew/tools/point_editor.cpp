@@ -199,9 +199,9 @@ public:
 
         case PCB_PAD_T:
         {
-            const D_PAD* pad = static_cast<const D_PAD*>( aItem );
-            wxPoint      shapePos = pad->ShapePos();
-            wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+            const PAD* pad = static_cast<const PAD*>( aItem );
+            wxPoint    shapePos = pad->ShapePos();
+            wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
             if( pad->GetParent() &&
                     ( pad->GetParent()->IsLocked() || pad->GetParent()->PadsLocked() ) )
@@ -1186,7 +1186,7 @@ void POINT_EDITOR::updateItem() const
 
     case PCB_PAD_T:
     {
-        D_PAD* pad = static_cast<D_PAD*>( item );
+        PAD* pad = static_cast<PAD*>( item );
 
         switch( pad->GetShape() )
         {
@@ -1594,10 +1594,10 @@ void POINT_EDITOR::updatePoints()
 
     case PCB_PAD_T:
     {
-        const D_PAD* pad = static_cast<const D_PAD*>( item );
-        bool         locked = pad->GetParent() && pad->GetParent()->PadsLocked();
-        wxPoint      shapePos = pad->ShapePos();
-        wxPoint      halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+        const PAD* pad = static_cast<const PAD*>( item );
+        bool       locked = pad->GetParent() && pad->GetParent()->PadsLocked();
+        wxPoint    shapePos = pad->ShapePos();
+        wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
 
         switch( pad->GetShape() )
         {

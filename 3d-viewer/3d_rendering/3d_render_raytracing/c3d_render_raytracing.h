@@ -205,7 +205,7 @@ private:
 
     void add_3D_vias_and_pads_to_container();
     void insert3DViaHole( const VIA* aVia );
-    void insert3DPadHole( const D_PAD* aPad );
+    void insert3DPadHole( const PAD* aPad );
     void load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation );
     void add_3D_models( CCONTAINER &aDstContainer,
                         const S3DMODEL *a3DModel,

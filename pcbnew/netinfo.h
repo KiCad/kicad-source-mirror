@@ -40,7 +40,7 @@ class wxDC;
 class wxPoint;
 class LINE_READER;
 class EDA_DRAW_FRAME;
-class D_PAD;
+class PAD;
 class BOARD;
 class BOARD_ITEM;
 class MSG_PANEL_ITEM;
@@ -56,7 +56,7 @@ class PCB_BASE_FRAME;
 #define CH_ACTIF            8        /* Not routed. */
 #define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single module. */
 
-DECL_VEC_FOR_SWIG( D_PADS, D_PAD* )
+DECL_VEC_FOR_SWIG( PADS_VEC, PAD* )
 
 /**
  * NETINFO_ITEM

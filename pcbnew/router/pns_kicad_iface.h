@@ -34,7 +34,7 @@ class BOARD_COMMIT;
 class PCB_DISPLAY_OPTIONS;
 class PCB_TOOL_BASE;
 class MODULE;
-class D_PAD;
+class PAD;
 
 namespace PNS
 {
@@ -88,10 +88,10 @@ protected:
     PNS_PCBNEW_RULE_RESOLVER* m_ruleResolver;
     PNS::DEBUG_DECORATOR* m_debugDecorator;
 
-    std::unique_ptr<PNS::SOLID> syncPad( D_PAD* aPad );
+    std::unique_ptr<PNS::SOLID>   syncPad( PAD* aPad );
     std::unique_ptr<PNS::SEGMENT> syncTrack( TRACK* aTrack );
-    std::unique_ptr<PNS::ARC> syncArc( ARC* aArc );
-    std::unique_ptr<PNS::VIA> syncVia( VIA* aVia );
+    std::unique_ptr<PNS::ARC>     syncArc( ARC* aArc );
+    std::unique_ptr<PNS::VIA>     syncVia( VIA* aVia );
     bool syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB_LAYER_ID aLayer );
     bool syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem );
     bool syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_SET* aBoardOutline );
@@ -132,7 +132,7 @@ private:
         VECTOR2I p_old, p_new;
     };
 
-    std::map<D_PAD*, OFFSET>        m_moduleOffsets;
+    std::map<PAD*, OFFSET>          m_moduleOffsets;
     KIGFX::VIEW*                    m_view;
     KIGFX::VIEW_GROUP*              m_previewItems;
     std::unordered_set<BOARD_ITEM*> m_hiddenItems;

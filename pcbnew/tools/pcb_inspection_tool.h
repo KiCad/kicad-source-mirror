@@ -130,7 +130,7 @@ private:
     void onInspectClearanceDialogClosed( wxCommandEvent& aEvent );
     void onInspectConstraintsDialogClosed( wxCommandEvent& aEvent );
 
-    void reportZoneConnection( ZONE* aZone, D_PAD* aPad, REPORTER* r );
+    void reportZoneConnection( ZONE* aZone, PAD* aPad, REPORTER* r );
 
     void reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType, PCB_LAYER_ID aLayer,
                           BOARD_ITEM* aA, BOARD_ITEM* aB, REPORTER* r );

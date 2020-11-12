@@ -56,7 +56,7 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
     {
     case PCB_PAD_T:
     {
-        D_PAD* pad = (D_PAD*) m_parent;
+        PAD* pad = static_cast<PAD*>( m_parent );
 
         if( n == 0 )
             return VECTOR2I( pad->GetPosition() );
@@ -197,7 +197,7 @@ void CN_ITEM::RemoveInvalidRefs()
 }
 
 
-CN_ITEM* CN_LIST::Add( D_PAD* pad )
+CN_ITEM* CN_LIST::Add( PAD* pad )
  {
     if( !pad->IsOnCopperLayer() )
          return nullptr;

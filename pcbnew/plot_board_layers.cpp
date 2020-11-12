@@ -231,7 +231,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     {
         aPlotter->StartBlock( NULL );
 
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             OUTLINE_MODE padPlotMode = plotMode;
 
@@ -335,7 +335,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             {
                 // inflate/deflate a custom shape is a bit complex.
                 // so build a similar pad shape, and inflate/deflate the polygonal shape
-                D_PAD dummy( *pad );
+                PAD dummy( *pad );
                 SHAPE_POLY_SET shape;
                 pad->MergePrimitivesAsPolygon( &shape, UNDEFINED_LAYER );
                 // Shape polygon can have holes so use InflateWithLinkedHoles(), not Inflate()
@@ -634,7 +634,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
             for( MODULE* module : aBoard->Modules() )
             {
-                for( D_PAD* pad : module->Pads() )
+                for( PAD* pad : module->Pads() )
                 {
                     wxSize hole = pad->GetDrillSize();
 

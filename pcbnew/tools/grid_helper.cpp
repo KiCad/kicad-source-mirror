@@ -401,7 +401,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
     bool                          isHighContrast = settings->GetHighContrast();
 
     auto handlePadShape =
-            [&]( D_PAD* aPad )
+            [&]( PAD* aPad )
             {
                 addAnchor( aPad->GetPosition(), CORNER | SNAPPABLE, aPad );
 
@@ -517,7 +517,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         {
             MODULE* mod = static_cast<MODULE*>( aItem );
 
-            for( D_PAD* pad : mod->Pads() )
+            for( PAD* pad : mod->Pads() )
             {
                 // Getting pads from the module requires re-checking that the pad is shown
                 if( ( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
@@ -540,7 +540,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         {
             if( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {
-                D_PAD* pad = static_cast<D_PAD*>( aItem );
+                PAD* pad = static_cast<PAD*>( aItem );
                 handlePadShape( pad );
             }
 

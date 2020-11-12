@@ -34,7 +34,7 @@
 #include <footprint.h>
 
 
-void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
+void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const PAD* aPad,
                                                         SHAPE_POLY_SET& aCornerBuffer,
                                                         int aWidth ) const
 {

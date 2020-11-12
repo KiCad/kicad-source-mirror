@@ -40,7 +40,7 @@ class ARC;
 class BOARD;
 class VIA;
 class TRACK;
-class D_PAD;
+class PAD;
 class PCB_SHAPE;
 class PCB_GROUP;
 class MODULE;
@@ -284,7 +284,7 @@ protected:
     void draw( const TRACK* aTrack, int aLayer );
     void draw( const ARC* aArc, int aLayer );
     void draw( const VIA* aVia, int aLayer );
-    void draw( const D_PAD* aPad, int aLayer );
+    void draw( const PAD* aPad, int aLayer );
     void draw( const PCB_SHAPE* aSegment, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const FP_TEXT* aText, int aLayer );
@@ -307,12 +307,12 @@ protected:
     /**
      * Return drill shape of a pad.
      */
-    virtual int getDrillShape( const D_PAD* aPad ) const;
+    virtual int getDrillShape( const PAD* aPad ) const;
 
     /**
      * Return drill size for a pad (internal units).
      */
-    virtual VECTOR2D getDrillSize( const D_PAD* aPad ) const;
+    virtual VECTOR2D getDrillSize( const PAD* aPad ) const;
 
     /**
      * Return drill diameter for a via (internal units).

@@ -251,7 +251,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
         if( typeMask[ PCB_PAD_T ] )
         {
-            for( D_PAD* pad : mod->Pads() )
+            for( PAD* pad : mod->Pads() )
             {
                 if( ( pad->GetLayerSet() & aLayers ).any() )
                 {

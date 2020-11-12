@@ -32,7 +32,7 @@
 
 class NETCLASS;
 class TRACK;
-class D_PAD;
+class PAD;
 
 /**
  * BOARD_CONNECTED_ITEM

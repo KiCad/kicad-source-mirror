@@ -3774,11 +3774,11 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * Function makePADSTACK
      * creates a PADSTACK which matches the given pad.  Only pads which do not
      * satisfy the function isKeepout() should be passed to this function.
-     * @param aBoard The owner of the MODULE.
-     * @param aPad The D_PAD which needs to be made into a PADSTACK.
+     * @param aBoard The owner of the PAD's footprint.
+     * @param aPad The PAD which needs to be made into a PADSTACK.
      * @return PADSTACK* - The created padstack, including its padstack_id.
      */
-    PADSTACK* makePADSTACK( BOARD* aBoard, D_PAD* aPad );
+    PADSTACK* makePADSTACK( BOARD* aBoard, PAD* aPad );
 
     /**
      * Function makeVia

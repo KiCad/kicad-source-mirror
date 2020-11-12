@@ -3041,8 +3041,8 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_pad:
         {
-            D_PAD* pad = parseD_PAD( module.get() );
-            pt         = pad->GetPos0();
+            PAD* pad = parsePAD( module.get() );
+            pt       = pad->GetPos0();
 
             RotatePoint( &pt, module->GetOrientation() );
             pad->SetPosition( pt + module->GetPosition() );
@@ -3412,15 +3412,15 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 }
 
 
-D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
+PAD* PCB_PARSER::parsePAD( MODULE* aParent )
 {
     wxCHECK_MSG( CurTok() == T_pad, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as D_PAD." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PAD." ) );
 
     wxSize  sz;
     wxPoint pt;
 
-    std::unique_ptr<D_PAD> pad = std::make_unique<D_PAD>( aParent );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
 
     // File only contains a token if KeepTopBottom is true
     pad->SetKeepTopBottom( false );
@@ -3439,7 +3439,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
     case T_smd:
         pad->SetAttribute( PAD_ATTRIB_SMD );
 
-        // Default D_PAD object is thru hole with drill.
+        // Default PAD object is thru hole with drill.
         // SMD pads have no hole
         pad->SetDrillSize( wxSize( 0, 0 ) );
         break;
@@ -3447,7 +3447,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
     case T_connect:
         pad->SetAttribute( PAD_ATTRIB_CONN );
 
-        // Default D_PAD object is thru hole with drill.
+        // Default PAD object is thru hole with drill.
         // CONN pads have no hole
         pad->SetDrillSize( wxSize( 0, 0 ) );
         break;
@@ -3584,10 +3584,10 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                     }
                 }
 
-                // This fixes a bug caused by setting the default D_PAD drill size to a value
-                // other than 0 used to fix a bunch of debug assertions even though it is defined
-                // as a through hole pad.  Wouldn't a though hole pad with no drill be a surface
-                // mount pad (or a conn pad which is a smd pad with no solder paste)?
+                // This fixes a bug caused by setting the default PAD drill size to a value other
+                // than 0 used to fix a bunch of debug assertions even though it is defined as a
+                // through hole pad.  Wouldn't a though hole pad with no drill be a surface mount
+                // pad (or a conn pad which is a smd pad with no solder paste)?
                 if( ( pad->GetAttribute() != PAD_ATTRIB_SMD ) && ( pad->GetAttribute() != PAD_ATTRIB_CONN ) )
                     pad->SetDrillSize( drillSize );
                 else
@@ -3787,7 +3787,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
             break;
 
         case T_options:
-            parseD_PAD_option( pad.get() );
+            parsePAD_option( pad.get() );
             break;
 
         case T_primitives:
@@ -3881,7 +3881,7 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
 }
 
 
-bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
+bool PCB_PARSER::parsePAD_option( PAD* aPad )
 {
     // Parse only the (option ...) inside a pad description
     for( T token = NextTok(); token != T_RIGHT; token = NextTok() )

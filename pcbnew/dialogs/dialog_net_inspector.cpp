@@ -1156,7 +1156,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
     }
     else if( MODULE* footprint = dynamic_cast<MODULE*>( aBoardItem ) )
     {
-        for( const D_PAD* pad : footprint->Pads() )
+        for( const PAD* pad : footprint->Pads() )
         {
             OPT<LIST_ITEM_ITER> r = m_data_model->findItem( pad->GetNet() );
 
@@ -1195,7 +1195,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
     }
     else if( MODULE* footprint = dynamic_cast<MODULE*>( aBoardItem ) )
     {
-        for( const D_PAD* pad : footprint->Pads() )
+        for( const PAD* pad : footprint->Pads() )
         {
             OPT<LIST_ITEM_ITER> r = m_data_model->findItem( pad->GetNet() );
 
@@ -1376,7 +1376,7 @@ std::unique_ptr<DIALOG_NET_INSPECTOR::LIST_ITEM> DIALOG_NET_INSPECTOR::buildNewI
         BOARD_CONNECTED_ITEM* item = ( *i )->Parent();
 
         if( item->Type() == PCB_PAD_T )
-            new_item->AddChipWireLength( static_cast<D_PAD*>( item )->GetPadToDieLength() );
+            new_item->AddChipWireLength( static_cast<PAD*>( item )->GetPadToDieLength() );
 
         else if( TRACK* track = dynamic_cast<TRACK*>( item ) )
         {
@@ -1473,7 +1473,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
 
     for( MODULE* footprint : m_brd->Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             auto i = std::lower_bound( nets.begin(), nets.end(), pad->GetNetCode(),
                                        NET_INFO_CMP_LESS() );

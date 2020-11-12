@@ -39,7 +39,7 @@ class BOARD_ITEM_CONTAINER;
 class MODULE;
 class TRACK;
 class VIA;
-class D_PAD;
+class PAD;
 class PCB_TARGET;
 class PCB_GROUP;
 class DIMENSION_BASE;

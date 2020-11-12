@@ -253,7 +253,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             return color.Brightened( m_selectFactor ).WithAlpha( 0.8 );
 
         // Don't let pads that *should* be NPTHs get lost
-        if( item->Type() == PCB_PAD_T && dyn_cast<const D_PAD*>( item )->PadShouldBeNPTH() )
+        if( item->Type() == PCB_PAD_T && dyn_cast<const PAD*>( item )->PadShouldBeNPTH() )
             aLayer = LAYER_MOD_TEXT_INVISIBLE;
 
         if( item->IsSelected() )
@@ -331,7 +331,7 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
             }
             else if( item->Type() == PCB_PAD_T )
             {
-                isActive = static_cast<const D_PAD*>( item )->IsOnLayer( primary );
+                isActive = static_cast<const PAD*>( item )->IsOnLayer( primary );
             }
             else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
             {
@@ -382,13 +382,13 @@ int PCB_PAINTER::getLineThickness( int aActualThickness ) const
 }
 
 
-int PCB_PAINTER::getDrillShape( const D_PAD* aPad ) const
+int PCB_PAINTER::getDrillShape( const PAD* aPad ) const
 {
     return aPad->GetDrillShape();
 }
 
 
-VECTOR2D PCB_PAINTER::getDrillSize( const D_PAD* aPad ) const
+VECTOR2D PCB_PAINTER::getDrillSize( const PAD* aPad ) const
 {
     return VECTOR2D( aPad->GetDrillSize() );
 }
@@ -423,7 +423,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_PAD_T:
-        draw( static_cast<const D_PAD*>( item ), aLayer );
+        draw( static_cast<const PAD*>( item ), aLayer );
         break;
 
     case PCB_SHAPE_T:
@@ -770,7 +770,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
+void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 {
     // Draw description layer
     if( IsNetnameLayer( aLayer ) )
@@ -934,7 +934,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
         if( margin.x != margin.y )
         {
-            const_cast<D_PAD*>( aPad )->SetSize( pad_size + margin + margin );
+            const_cast<PAD*>( aPad )->SetSize( pad_size + margin + margin );
             margin.x = margin.y = 0;
         }
 
@@ -943,7 +943,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             // Reset the stored pad size
             if( aPad->GetSize() != pad_size )
-                const_cast<D_PAD*>( aPad )->SetSize( pad_size );
+                const_cast<PAD*>( aPad )->SetSize( pad_size );
 
             return;
         }
@@ -1054,7 +1054,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         }
 
         if( aPad->GetSize() != pad_size )
-            const_cast<D_PAD*>( aPad )->SetSize( pad_size );
+            const_cast<PAD*>( aPad )->SetSize( pad_size );
     }
 
     // Clearance outlines

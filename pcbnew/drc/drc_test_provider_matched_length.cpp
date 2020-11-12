@@ -295,11 +295,11 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
                     ent.viaCount++;
                     ent.totalVia += computeViaThruLength( via, nitem.second ); // fixme: via thru distance
                 }
-                else if ( auto trk = dyn_cast<TRACK*>(citem ))
+                else if ( TRACK* trk = dyn_cast<TRACK*>(citem ))
                 {
                     ent.totalRoute += trk->GetLength();
                 }
-                else if ( auto pad = dyn_cast<D_PAD*>( citem ))
+                else if ( PAD* pad = dyn_cast<PAD*>( citem ))
                 {
                     ent.totalPadToDie += pad->GetPadToDieLength();
                 }

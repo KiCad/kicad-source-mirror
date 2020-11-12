@@ -355,18 +355,18 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
         else
             buffer += "layer other\n";
 
-        std::vector<D_PAD*> sortedPads;
+        std::vector<PAD*> sortedPads;
 
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
             sortedPads.push_back( pad );
 
         std::sort( sortedPads.begin(), sortedPads.end(),
-                   []( D_PAD* a, D_PAD* b ) -> bool
+                   []( PAD* a, PAD* b ) -> bool
                    {
                        return StrNumCmp( a->GetName(), b->GetName(), true ) < 0;
                    });
 
-        for( D_PAD* pad : sortedPads )
+        for( PAD* pad : sortedPads )
         {
             sprintf( line, "$PAD \"%s\"\n", TO_UTF8( pad->GetName() ) );
             buffer += line;

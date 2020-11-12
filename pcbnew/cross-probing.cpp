@@ -69,7 +69,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     int         netcode = -1;
     bool        multiHighlight = false;
     MODULE*     module = NULL;
-    D_PAD*      pad = NULL;
+    PAD*        pad = NULL;
     BOARD*      pcb = GetBoard();
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = GetPcbNewSettings()->m_CrossProbing;
@@ -414,7 +414,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     case PCB_PAD_T:
         {
             module = (MODULE*) aItem->GetParent();
-            wxString pad = ((D_PAD*)aItem)->GetName();
+            wxString pad = static_cast<PAD*>( aItem )->GetName();
 
             return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
                               TO_UTF8( module->GetReference() ),
@@ -513,7 +513,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             COMPONENT* component = new COMPONENT( module->GetFPID(), module->GetReference(),
                                                   module->GetValue(), module->GetPath() );
 
-            for( D_PAD* pad : module->Pads() )
+            for( PAD* pad : module->Pads() )
             {
                 const wxString& netname = pad->GetShortNetname();
 

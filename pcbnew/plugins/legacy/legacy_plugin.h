@@ -49,7 +49,7 @@ class NETINFO_ITEM;
 class NETINFO_MAPPING;
 class FP_TEXT;
 class TRACK;
-class D_PAD;
+class PAD;
 struct LP_CACHE;
 
 

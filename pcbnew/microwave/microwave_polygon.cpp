@@ -240,7 +240,8 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 
 MODULE* MICROWAVE_TOOL::createPolygonShape()
 {
-    D_PAD*    pad1, * pad2;
+    PAD*      pad1;
+    PAD*      pad2;
     MODULE*   module;
     wxString  cmp_name;
     int       pad_count = 2;

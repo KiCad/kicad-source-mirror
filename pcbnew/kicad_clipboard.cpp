@@ -85,7 +85,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
         // Do not modify existing board
         MODULE newFootprint( *footprint );
 
-        for( D_PAD* pad : newFootprint.Pads() )
+        for( PAD* pad : newFootprint.Pads() )
             pad->SetNetCode( 0 );
 
         // locked means "locked in place"; copied items therefore can't be locked
@@ -115,7 +115,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
                 text->SetType( FP_TEXT::TEXT_is_DIVERS );
 
             // If it is only a footprint, clear the nets from the pads
-            if( D_PAD* pad = dyn_cast<D_PAD*>( clone ) )
+            if( PAD* pad = dyn_cast<PAD*>( clone ) )
                pad->SetNetCode( 0 );
 
             // Add the pad to the new footprint before moving to ensure the local coords are
@@ -192,7 +192,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
             {
                 // Create a parent to own the copied pad
                 MODULE* footprint = new MODULE( m_board );
-                D_PAD*  pad = (D_PAD*) item->Clone();
+                PAD*    pad = (PAD*) item->Clone();
 
                 footprint->SetPosition( pad->GetPosition() );
                 pad->SetPos0( wxPoint() );

@@ -220,7 +220,7 @@ void NETINFO_MAPPING::Update()
     // footprints/pads
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
             nets.insert( pad->GetNetCode() );
     }
 

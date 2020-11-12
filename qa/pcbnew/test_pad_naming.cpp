@@ -33,32 +33,32 @@ struct PAD_FIXTURE
     {
     }
 
-    D_PAD MakeNPTH()
+    PAD MakeNPTH()
     {
-        D_PAD pad( &m_module );
+        PAD pad( &m_module );
 
         pad.SetAttribute( PAD_ATTRIB_NPTH );
-        pad.SetLayerSet( D_PAD::UnplatedHoleMask() );
+        pad.SetLayerSet( PAD::UnplatedHoleMask() );
 
         return pad;
     }
 
-    D_PAD MakeAperture()
+    PAD MakeAperture()
     {
-        D_PAD pad( &m_module );
+        PAD pad( &m_module );
 
         pad.SetAttribute( PAD_ATTRIB_PTH );
-        pad.SetLayerSet( D_PAD::ApertureMask() );
+        pad.SetLayerSet( PAD::ApertureMask() );
 
         return pad;
     }
 
-    D_PAD MakeSmd()
+    PAD MakeSmd()
     {
-        D_PAD pad( &m_module );
+        PAD pad( &m_module );
 
         pad.SetAttribute( PAD_ATTRIB_SMD );
-        pad.SetLayerSet( D_PAD::SMDMask() );
+        pad.SetLayerSet( PAD::SMDMask() );
 
         return pad;
     }

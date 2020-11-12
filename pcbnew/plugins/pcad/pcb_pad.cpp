@@ -193,7 +193,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     int             width = 0;
     int             height = 0;
 
-    D_PAD* pad = new D_PAD( aModule );
+    PAD* pad = new PAD( aModule );
 
     if( !m_isHolePlated && m_hole )
     {

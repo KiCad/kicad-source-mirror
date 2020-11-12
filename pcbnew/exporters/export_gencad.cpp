@@ -354,9 +354,9 @@ static void CreateArtworksSection( FILE* aFile )
 // Via name is synthesized from their attributes, pads are numbered
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 {
-    std::vector<D_PAD*> padstacks;
-    std::vector<VIA*>   vias;
-    std::vector<VIA*>   viastacks;
+    std::vector<PAD*> padstacks;
+    std::vector<VIA*> vias;
+    std::vector<VIA*> viastacks;
 
     padstacks.resize( 1 ); // We count pads from 1
 
@@ -368,10 +368,10 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
     // Enumerate and sort the pads
 
-    std::vector<D_PAD*> pads = aPcb->GetPads();
-    std::sort( pads.begin(), pads.end(), []( const D_PAD* a, const D_PAD* b )
+    std::vector<PAD*> pads = aPcb->GetPads();
+    std::sort( pads.begin(), pads.end(), []( const PAD* a, const PAD* b )
                                          {
-                                             return D_PAD::Compare( a, b ) < 0;
+                                             return PAD::Compare( a, b ) < 0;
                                          } );
 
 
@@ -402,17 +402,17 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
     }
 
     // Emit component pads
-    D_PAD* old_pad = 0;
-    int    pad_name_number = 0;
+    PAD* old_pad = 0;
+    int  pad_name_number = 0;
 
     for( unsigned i = 0; i<pads.size(); ++i )
     {
-        D_PAD* pad = pads[i];
+        PAD* pad = pads[i];
         const wxPoint& off = pad->GetOffset();
 
         pad->SetSubRatsnest( pad_name_number );
 
-        if( old_pad && 0==D_PAD::Compare( old_pad, pad ) )
+        if( old_pad && 0 == PAD::Compare( old_pad, pad ) )
             continue;  // already created
 
         old_pad = pad;
@@ -629,7 +629,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
      *  until it appears yet another noncompliant importer */
     for( unsigned i = 1; i < padstacks.size(); i++ )
     {
-        D_PAD* pad = padstacks[i];
+        PAD* pad = padstacks[i];
 
         // Straight padstack
         fprintf( aFile, "PADSTACK PAD%u %g\n", i, pad->GetDrillSize().x / SCALE_FACTOR );
@@ -750,7 +750,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
         // set of already emitted pins to check for duplicates
         std::set<wxString> pins;
 
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             /* Padstacks are defined using the correct layers for the pads, therefore to
              * all pads need to be marked as TOP to use the padstack information correctly.
@@ -900,7 +900,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 
         for( MODULE* module : aPcb->Modules() )
         {
-            for( D_PAD* pad : module->Pads() )
+            for( PAD* pad : module->Pads() )
             {
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;

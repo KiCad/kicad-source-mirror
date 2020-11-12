@@ -416,7 +416,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_PAD_T:
-        format( static_cast<D_PAD*>( aItem ), aNestLevel );
+        format( static_cast<PAD*>( aItem ), aNestLevel );
         break;
 
     case PCB_TEXT_T:
@@ -1077,14 +1077,14 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
     Format( (BOARD_ITEM*) &aModule->Reference(), aNestLevel+1 );
     Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
 
-    std::set<D_PAD*, MODULE::cmp_pads> sorted_pads( aModule->Pads().begin(),
-            aModule->Pads().end() );
+    std::set<PAD*, MODULE::cmp_pads> sorted_pads( aModule->Pads().begin(),
+                                                  aModule->Pads().end() );
     std::set<BOARD_ITEM*, MODULE::cmp_drawings> sorted_drawings( aModule->GraphicalItems().begin(),
-            aModule->GraphicalItems().end() );
+                                                                 aModule->GraphicalItems().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aModule->Zones().begin(),
-            aModule->Zones().end() );
+                                                             aModule->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aModule->Groups().begin(),
-            aModule->Groups().end() );
+                                                             aModule->Groups().end() );
 
     // Save drawing elements.
 
@@ -1092,7 +1092,7 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         Format( gr, aNestLevel+1 );
 
     // Save pads.
-    for( D_PAD* pad : sorted_pads )
+    for( PAD* pad : sorted_pads )
         Format( pad, aNestLevel+1 );
 
     // Save zones.
@@ -1229,7 +1229,7 @@ void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
+void PCB_IO::format( PAD* aPad, int aNestLevel ) const
 {
     const char* shape;
 

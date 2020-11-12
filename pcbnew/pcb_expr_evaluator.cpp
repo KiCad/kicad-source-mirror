@@ -124,7 +124,7 @@ static void isPlated( LIBEVAL::CONTEXT* aCtx, void* self )
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    D_PAD*            pad = dynamic_cast<D_PAD*>( item );
+    PAD*              pad = dynamic_cast<PAD*>( item );
 
     if( pad && pad->GetAttribute() == PAD_ATTRIB_PTH )
         result->Set( 1.0 );
@@ -230,7 +230,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     if( item->Type() == PCB_PAD_T )
                     {
-                        D_PAD*               pad = static_cast<D_PAD*>( item );
+                        PAD*                 pad = static_cast<PAD*>( item );
                         const SHAPE_SEGMENT* holeShape = pad->GetEffectiveHoleShape();
 
                         return zone->Outline()->Collide( holeShape );

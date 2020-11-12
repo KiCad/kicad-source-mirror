@@ -516,7 +516,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
 
         for( MODULE* footprint : Modules() )
         {
-            for( D_PAD* pad : footprint->Pads() )
+            for( PAD* pad : footprint->Pads() )
                 pad->SetLocalRatsnestVisible( isEnabled );
         }
 
@@ -773,7 +773,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
         if( footprint->m_Uuid == aID )
             return footprint;
 
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( pad->m_Uuid == aID )
                 return pad;
@@ -848,7 +848,7 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
     {
         aMap[ footprint->m_Uuid ] = footprint;
 
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
             aMap[ pad->m_Uuid ] = pad;
 
         aMap[ footprint->Reference().m_Uuid ] = &footprint->Reference();
@@ -977,7 +977,7 @@ unsigned BOARD::GetNodesCount( int aNet ) const
 
     for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( ( aNet == -1 && pad->GetNetCode() > 0 ) || aNet == pad->GetNetCode() )
                 retval++;
@@ -1329,11 +1329,11 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
     {
         // Build the pad count by net:
         padCountListByNet.clear();
-        std::vector<D_PAD*> pads = GetPads();
+        std::vector<PAD*> pads = GetPads();
 
         padCountListByNet.assign( max_netcode + 1, 0 );
 
-        for( D_PAD* pad : pads )
+        for( PAD* pad : pads )
         {
             int netCode = pad->GetNetCode();
 
@@ -1443,14 +1443,14 @@ int BOARD::SetAreasNetCodesFromNetNames()
 }
 
 
-D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
+PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
 {
     if( !aLayerSet.any() )
         aLayerSet = LSET::AllCuMask();
 
     for( MODULE* footprint : m_modules )
     {
-        D_PAD* pad = NULL;
+        PAD* pad = NULL;
 
         if( footprint->HitTest( aPosition ) )
             pad = footprint->GetPad( aPosition, aLayerSet );
@@ -1463,7 +1463,7 @@ D_PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
 }
 
 
-D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
+PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 {
     const wxPoint& aPosition = aTrace->GetEndPoint( aEndPoint );
 
@@ -1473,11 +1473,11 @@ D_PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 }
 
 
-D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
+PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
 {
     for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
         if( pad->GetPosition() != aPosition )
             continue;
@@ -1492,7 +1492,7 @@ D_PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
 }
 
 
-D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerSet )
+PAD* BOARD::GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerSet )
 {
     // Search aPadList for aPosition
     // aPadList is sorted by X then Y values, and a fast binary search is used
@@ -1511,7 +1511,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, L
 
         delta /= 2;
 
-        D_PAD* pad = aPadList[idx];
+        PAD* pad = aPadList[idx];
 
         if( pad->GetPosition() == aPosition )       // candidate found
         {
@@ -1591,7 +1591,7 @@ D_PAD* BOARD::GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, L
  *
  * This function is used to build ordered pads lists
  */
-bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
+bool sortPadsByXthenYCoord( PAD* const & ref, PAD* const & comp )
 {
     if( ref->GetPosition().x == comp->GetPosition().x )
         return ref->GetPosition().y < comp->GetPosition().y;
@@ -1599,11 +1599,11 @@ bool sortPadsByXthenYCoord( D_PAD* const & ref, D_PAD* const & comp )
 }
 
 
-void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode )
+void BOARD::GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetCode )
 {
     for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : footprint->Pads( ) )
+        for( PAD* pad : footprint->Pads( ) )
         {
             if( aNetCode < 0 ||  pad->GetNetCode() == aNetCode )
                 aVector.push_back( pad );
@@ -1614,7 +1614,7 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNe
 }
 
 
-void BOARD::PadDelete( D_PAD* aPad )
+void BOARD::PadDelete( PAD* aPad )
 {
     GetConnectivity()->Remove( aPad );
 
@@ -1644,7 +1644,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
 
             for( auto pad_it : connectivity->GetConnectedPads( item ) )
             {
-                D_PAD* pad = static_cast<D_PAD*>( pad_it );
+                PAD* pad = static_cast<PAD*>( pad_it );
 
                 if( pad->HitTest( track->GetStart(), track->GetWidth() / 2 )
                         && pad->HitTest( track->GetEnd(), track->GetWidth() / 2 ) )
@@ -1657,7 +1657,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
             if( !inPad )
                 length += track->GetLength();
         }
-        else if( D_PAD* pad = dyn_cast<D_PAD*>( item ) )
+        else if( PAD* pad = dyn_cast<PAD*>( item ) )
         {
             package_length += pad->GetPadToDieLength();
         }
@@ -1856,13 +1856,13 @@ bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aError
 }
 
 
-const std::vector<D_PAD*> BOARD::GetPads() const
+const std::vector<PAD*> BOARD::GetPads() const
 {
-    std::vector<D_PAD*> allPads;
+    std::vector<PAD*> allPads;
 
     for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
             allPads.push_back( pad );
     }
 
@@ -1890,7 +1890,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
 
     for( MODULE* footprint : Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
             items.push_back( pad );
     }
 

@@ -173,7 +173,7 @@ void ARRAY_CREATOR::Invoke()
                 // Renumber non-aperture pads.
                 if( this_item->Type() == PCB_PAD_T )
                 {
-                    auto& pad = static_cast<D_PAD&>( *this_item );
+                    PAD& pad = static_cast<PAD&>( *this_item );
 
                     if( PAD_NAMING::PadCanHaveName( pad ) )
                     {

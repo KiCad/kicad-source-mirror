@@ -34,7 +34,7 @@
 
 class PCB_SHAPE;
 class TRACK;
-class D_PAD;
+class PAD;
 class MODULE;
 
 #define AR_MAX_ROUTING_LAYERS_COUNT 2
@@ -131,24 +131,30 @@ public:
     void        SetDist( int aRow, int aCol, int aSide, DIST_CELL );
 
     void TraceSegmentPcb( PCB_SHAPE* pt_segm, int color, int marge, AR_MATRIX::CELL_OP op_logic );
-    void CreateKeepOutRectangle(
-            int ux0, int uy0, int ux1, int uy1, int marge, int aKeepOut, LSET aLayerMask );
-    void PlacePad( D_PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic );
+
+    void CreateKeepOutRectangle( int ux0, int uy0, int ux1, int uy1, int marge, int aKeepOut,
+                                 LSET aLayerMask );
+
+    void PlacePad( PAD* aPad, int color, int marge, AR_MATRIX::CELL_OP op_logic );
+
     void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, double angle, LSET aLayerMask,
-            int color, AR_MATRIX::CELL_OP op_logic );
+                               int color, AR_MATRIX::CELL_OP op_logic );
+
     void TraceFilledRectangle( int ux0, int uy0, int ux1, int uy1, LSET aLayerMask, int color,
-            AR_MATRIX::CELL_OP op_logic );
+                               AR_MATRIX::CELL_OP op_logic );
 
 private:
     void drawSegmentQcq( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer, int color,
             CELL_OP op_logic );
 
     void traceCircle( int ux0, int uy0, int ux1, int uy1, int lg, LAYER_NUM layer, int color,
-            AR_MATRIX::CELL_OP op_logic );
-    void traceFilledCircle(
-            int cx, int cy, int radius, LSET aLayerMask, int color, AR_MATRIX::CELL_OP op_logic );
+                      AR_MATRIX::CELL_OP op_logic );
+
+    void traceFilledCircle( int cx, int cy, int radius, LSET aLayerMask, int color,
+                            AR_MATRIX::CELL_OP op_logic );
+
     void traceArc( int ux0, int uy0, int ux1, int uy1, double ArcAngle, int lg, LAYER_NUM layer,
-            int color, AR_MATRIX::CELL_OP op_logic );
+                   int color, AR_MATRIX::CELL_OP op_logic );
 };
 
 #endif

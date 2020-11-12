@@ -190,7 +190,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
     MODULE*         module      = nullptr;
     PCB_GROUP*      group       = nullptr;
-    D_PAD*          pad         = nullptr;
+    PAD*            pad         = nullptr;
     bool            pad_through = false;
     VIA*            via         = nullptr;
     MARKER_PCB*     marker      = nullptr;
@@ -278,7 +278,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // board side must be seen
         // if pad is a thru hole, then it can be visible when its parent module is not.
         // for through pads: pads on Front or Back board sides must be seen
-        pad = (D_PAD*) item;
+        pad = static_cast<PAD*>( item );
 
         if( (pad->GetAttribute() != PAD_ATTRIB_SMD) &&
             (pad->GetAttribute() != PAD_ATTRIB_CONN) )    // a hole is present, so multiple layers

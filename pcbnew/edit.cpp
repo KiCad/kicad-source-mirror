@@ -127,7 +127,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     case PCB_PAD_T:
-        ShowPadPropertiesDialog( static_cast<D_PAD*>( aItem ) );
+        ShowPadPropertiesDialog( static_cast<PAD*>( aItem ) );
         break;
 
     case PCB_MODULE_T:

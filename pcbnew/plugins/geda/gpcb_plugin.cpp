@@ -539,7 +539,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            D_PAD* pad = new D_PAD( module.get() );
+            PAD* pad = new PAD( module.get() );
 
             static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
@@ -627,7 +627,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            D_PAD* pad = new D_PAD( module.get() );
+            PAD* pad = new PAD( module.get() );
 
             pad->SetShape( PAD_SHAPE_CIRCLE );
 

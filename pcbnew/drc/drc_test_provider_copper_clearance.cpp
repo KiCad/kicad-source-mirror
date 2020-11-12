@@ -84,7 +84,7 @@ private:
 
     void testTrackClearances();
 
-    bool testPadAgainstItem( D_PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
+    bool testPadAgainstItem( PAD* pad, SHAPE* padShape, PCB_LAYER_ID layer, BOARD_ITEM* other );
 
     void testPadClearances();
 
@@ -226,9 +226,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
 
 static std::shared_ptr<SHAPE> getShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 {
-    if( aItem->Type() == PCB_PAD_T && !static_cast<D_PAD*>( aItem )->FlashLayer( aLayer ) )
+    if( aItem->Type() == PCB_PAD_T && !static_cast<PAD*>( aItem )->FlashLayer( aLayer ) )
     {
-        D_PAD* aPad = static_cast<D_PAD*>( aItem );
+        PAD* aPad = static_cast<PAD*>( aItem );
 
         if( aPad->GetAttribute() == PAD_ATTRIB_PTH )
         {
@@ -397,7 +397,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 }
 
 
-bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( D_PAD* pad, SHAPE* padShape,
+bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* padShape,
                                                              PCB_LAYER_ID layer,
                                                              BOARD_ITEM* other )
 {
@@ -420,7 +420,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( D_PAD* pad, SHAPE* 
 
     if( other->Type() == PCB_PAD_T )
     {
-        auto otherPad = static_cast<D_PAD*>( other );
+        auto otherPad = static_cast<PAD*>( other );
 
         // If pads are equivalent (ie: from the same footprint with the same pad number)...
         if( pad->SameLogicalPadAs( otherPad ) )
@@ -522,7 +522,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( !reportProgress( ii++, count, delta ) )
                 break;

@@ -23,7 +23,7 @@
 
 #include "pad_naming.h"
 
-bool PAD_NAMING::PadCanHaveName( const D_PAD& aPad )
+bool PAD_NAMING::PadCanHaveName( const PAD& aPad )
 {
     // Aperture pads don't get a number
     if( aPad.IsAperturePad() )

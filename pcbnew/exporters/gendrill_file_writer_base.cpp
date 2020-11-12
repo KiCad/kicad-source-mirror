@@ -45,8 +45,8 @@ static bool CmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
         return a.m_Hole_Diameter < b.m_Hole_Diameter;
 
     // group by components when possible
-    const D_PAD* pada = dyn_cast<const D_PAD*>( a.m_ItemParent );
-    const D_PAD* padb = dyn_cast<const D_PAD*>( b.m_ItemParent );
+    const PAD* pada = dyn_cast<const PAD*>( a.m_ItemParent );
+    const PAD* padb = dyn_cast<const PAD*>( b.m_ItemParent );
 
     if( pada && padb )
     {

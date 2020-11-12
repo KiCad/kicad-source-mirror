@@ -199,7 +199,7 @@ static POINT mapPt( const wxPoint& pt )
  * decides if the pad is a copper-less through hole which needs to be made into
  * a round keepout.
  */
-static bool isRoundKeepout( D_PAD* aPad )
+static bool isRoundKeepout( PAD* aPad )
 {
     if( aPad->GetShape()==PAD_SHAPE_CIRCLE )
     {
@@ -229,7 +229,7 @@ static PATH* makePath( const POINT& aStart, const POINT& aEnd, const std::string
 }
 
 
-PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, D_PAD* aPad )
+PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 {
     char        name[256];                  // padstack name builder
     std::string uniqifier;
@@ -610,7 +610,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
     // from the pads, and make an IMAGE using collated padstacks.
     for( int p=0; p < moduleItems.GetCount(); ++p )
     {
-        D_PAD* pad = (D_PAD*) moduleItems[p];
+        PAD* pad = (PAD*) moduleItems[p];
 
         // see if this pad is a through hole with no copper on its perimeter
         if( isRoundKeepout( pad ) )

@@ -31,7 +31,7 @@
 
 class BOARD;
 class MODULE;
-class D_PAD;
+class PAD;
 
 /**
  * PLACEFILE_GERBER_WRITER is a class mainly used to create Gerber drill files
@@ -101,7 +101,7 @@ private:
      * @param aPadList is the list to fill
      * @param aFootprint is the footprint to test
      */
-    void findPads1( std::vector<D_PAD*>& aPadList, MODULE* aFootprint ) const;
+    void findPads1( std::vector<PAD*>& aPadList, MODULE* aFootprint ) const;
 };
 
 #endif  //  #ifndef PLACEFILE_GERBER_WRITER_H

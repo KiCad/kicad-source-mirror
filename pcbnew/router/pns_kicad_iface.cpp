@@ -121,7 +121,7 @@ int PNS_PCBNEW_RULE_RESOLVER::holeRadius( const PNS::ITEM* aItem ) const
 {
     if( aItem->Kind() == PNS::ITEM::SOLID_T )
     {
-        const D_PAD* pad = dynamic_cast<const D_PAD*>( aItem->Parent() );
+        const PAD* pad = dynamic_cast<const PAD*>( aItem->Parent() );
 
         if( pad && pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
             return pad->GetDrillSize().x / 2;
@@ -763,7 +763,7 @@ PNS_KICAD_IFACE::~PNS_KICAD_IFACE()
 }
 
 
-std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
+std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
 {
     LAYER_RANGE layers( 0, MAX_CU_LAYERS - 1 );
 
@@ -852,7 +852,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( D_PAD* aPad )
         // router, otherwise it won't know how to correctly build walkaround 'hulls' for the pad
         // primitives - it can recognize only simple shapes, but not COMPOUNDs made of multiple shapes.
         // The proper way to fix this would be to implement SHAPE_COMPOUND::ConvertToSimplePolygon(),
-        // but the complexity of pad polygonization code (see D_PAD::GetEffectivePolygon), including approximation
+        // but the complexity of pad polygonization code (see PAD::GetEffectivePolygon), including approximation
         // error handling makes me slightly scared to do it right now.
 
         const std::shared_ptr<SHAPE_POLY_SET>& outline = aPad->GetEffectivePolygon();
@@ -1109,7 +1109,7 @@ bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const
 
         case PCB_PAD_T:
         {
-            const D_PAD* pad = static_cast<const D_PAD*>( aItem->Parent() );
+            const PAD* pad = static_cast<const PAD*>( aItem->Parent() );
 
             return pad->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
         }
@@ -1188,7 +1188,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( std::unique_ptr<PNS::SOLID> solid = syncPad( pad ) )
                 aWorld->Add( std::move( solid ) );
@@ -1352,7 +1352,7 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
 
     if ( aItem->OfKind(PNS::ITEM::SOLID_T) )
     {
-        D_PAD*   pad = static_cast<D_PAD*>( parent );
+        PAD*   pad = static_cast<PAD*>( parent );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
         m_moduleOffsets[ pad ].p_old = pos;
@@ -1420,7 +1420,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     case PNS::ITEM::SOLID_T:
     {
-        D_PAD*   pad = static_cast<D_PAD*>( aItem->Parent() );
+        PAD*   pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
         m_moduleOffsets[ pad ].p_new = pos;

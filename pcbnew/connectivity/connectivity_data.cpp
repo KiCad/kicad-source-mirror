@@ -506,24 +506,24 @@ const
 
 
 void CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem,
-                                                std::set<D_PAD*>* pads ) const
+                                          std::set<PAD*>* pads ) const
 {
-    for( auto citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
+    for( CN_ITEM* citem : m_connAlgo->ItemEntry( aItem ).GetItems() )
     {
-        for( auto connected : citem->ConnectedItems() )
+        for( CN_ITEM* connected : citem->ConnectedItems() )
         {
             if( connected->Valid() && connected->Parent()->Type() == PCB_PAD_T )
-                pads->insert( static_cast<D_PAD*> ( connected->Parent() ) );
+                pads->insert( static_cast<PAD*> ( connected->Parent() ) );
         }
     }
 }
 
 
-const std::vector<D_PAD*> CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem )
+const std::vector<PAD*> CONNECTIVITY_DATA::GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem )
 const
 {
-    std::set<D_PAD*> pads;
-    std::vector<D_PAD*> rv;
+    std::set<PAD*>    pads;
+    std::vector<PAD*> rv;
 
     GetConnectedPads( aItem, &pads );
 
@@ -559,7 +559,7 @@ unsigned int CONNECTIVITY_DATA::GetPadCount( int aNet ) const
         if( !pad->Valid() || pad->Parent()->Type() != PCB_PAD_T)
             continue;
 
-        D_PAD* dpad = static_cast<D_PAD*>( pad->Parent() );
+        PAD* dpad = static_cast<PAD*>( pad->Parent() );
 
         if( aNet < 0 || aNet == dpad->GetNetCode() )
             n++;
@@ -727,7 +727,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections )
 {
     std::set<int> nets;
-    std::set<const D_PAD*> pads;
+    std::set<const PAD*> pads;
     std::vector<CN_EDGE> edges;
 
     for( auto pad : aComponent->Pads() )
@@ -745,8 +745,8 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* a
             auto srcNode = edge.GetSourceNode();
             auto dstNode = edge.GetTargetNode();
 
-            auto srcParent = static_cast<const D_PAD*>( srcNode->Parent() );
-            auto dstParent = static_cast<const D_PAD*>( dstNode->Parent() );
+            const PAD* srcParent = static_cast<const PAD*>( srcNode->Parent() );
+            const PAD* dstParent = static_cast<const PAD*>( dstNode->Parent() );
 
             bool srcFound = ( pads.find(srcParent) != pads.end() );
             bool dstFound = ( pads.find(dstParent) != pads.end() );

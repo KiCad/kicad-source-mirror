@@ -109,7 +109,7 @@ int PCB_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, D_PAD* aPad, REPORTER* r )
+void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, PAD* aPad, REPORTER* r )
 {
     ENUM_MAP<ZONE_CONNECTION> connectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
     wxString                  source;
@@ -264,9 +264,9 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
         layer = a->GetLayer();
     else if( b->Type() == PCB_TRACE_T || b->Type() == PCB_ARC_T )
         layer = b->GetLayer();
-    else if( a->Type() == PCB_PAD_T && static_cast<D_PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
+    else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
     {
-        D_PAD* pad = static_cast<D_PAD*>( a );
+        PAD* pad = static_cast<PAD*>( a );
 
         if( pad->GetAttribute() == PAD_ATTRIB_SMD && pad->IsOnLayer( F_Cu ) )
             layer = F_Cu;
@@ -275,7 +275,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     }
     else if( b->Type() == PCB_PAD_T )
     {
-        D_PAD* pad = static_cast<D_PAD*>( b );
+        PAD* pad = static_cast<PAD*>( b );
 
         if( pad->GetAttribute() == PAD_ATTRIB_SMD && pad->IsOnLayer( F_Cu ) )
             layer = F_Cu;
@@ -342,7 +342,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
             if( ac->Type() == PCB_ZONE_T && bc->Type() == PCB_PAD_T )
             {
-                reportZoneConnection( static_cast<ZONE*>( ac ), static_cast<D_PAD*>( bc ), r );
+                reportZoneConnection( static_cast<ZONE*>( ac ), static_cast<PAD*>( bc ), r );
             }
             else
             {
@@ -519,7 +519,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Flush();
     }
 
-    if( ( item->Type() == PCB_PAD_T && static_cast<D_PAD*>( item )->GetDrillSize().x > 0 )
+    if( ( item->Type() == PCB_PAD_T && static_cast<PAD*>( item )->GetDrillSize().x > 0 )
             || item->Type() == PCB_VIA_T )
     {
         WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Hole Size" ) );
@@ -865,7 +865,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                 // Clear the previous local ratsnest if we click off all items
                 for( MODULE* fp : board->Modules() )
                 {
-                    for( D_PAD* pad : fp->Pads() )
+                    for( PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
@@ -873,7 +873,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             {
                 for( EDA_ITEM* item : selection )
                 {
-                    if( D_PAD* pad = dyn_cast<D_PAD*>(item) )
+                    if( PAD* pad = dyn_cast<PAD*>( item) )
                     {
                         pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
                     }
@@ -883,7 +883,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                         {
                             bool enable = !fp->Pads()[0]->GetLocalRatsnestVisible();
 
-                            for( D_PAD* childPad : fp->Pads() )
+                            for( PAD* childPad : fp->Pads() )
                                 childPad->SetLocalRatsnestVisible( enable );
                         }
                     }
@@ -902,7 +902,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             {
                 for( MODULE* fp : board->Modules() )
                 {
-                    for( D_PAD* pad : fp->Pads() )
+                    for( PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
                 }
             }
@@ -974,7 +974,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
         if( item->Type() == PCB_MODULE_T )
         {
-            for( D_PAD* pad : static_cast<MODULE*>( item )->Pads() )
+            for( PAD* pad : static_cast<MODULE*>( item )->Pads() )
             {
                 if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
                     items.push_back( pad );

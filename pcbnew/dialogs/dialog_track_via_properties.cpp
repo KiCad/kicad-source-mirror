@@ -319,13 +319,13 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 }
 
 
-bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<D_PAD*>& changingPads )
+bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& changingPads )
 {
     wxString msg;
 
     if( changingPads.size() == 1 )
     {
-        D_PAD* pad = *changingPads.begin();
+        PAD* pad = *changingPads.begin();
         msg.Printf( _( "This will change the net assigned to %s pad %s to %s.\n"
                        "Do you wish to continue?" ),
                     pad->GetParent()->GetReference(),
@@ -334,8 +334,8 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<D_PAD*>& c
     }
     else if( changingPads.size() == 2 )
     {
-        D_PAD* pad1 = *changingPads.begin();
-        D_PAD* pad2 = *( ++changingPads.begin() );
+        PAD* pad1 = *changingPads.begin();
+        PAD* pad2 = *( ++changingPads.begin() );
         msg.Printf( _( "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
                        "Do you wish to continue?" ),
                     pad1->GetParent()->GetReference(),
@@ -364,26 +364,25 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
     auto connectivity = m_frame->GetBoard()->GetConnectivity();
     int newNetCode = m_netSelector->GetSelectedNetcode();
-    std::vector<D_PAD*> changingPads;
+    std::vector<PAD*> changingPads;
 
     if ( !m_netSelector->IsIndeterminate() )
     {
-        std::set<D_PAD*> connectedPads;
+        std::set<PAD*> connectedPads;
 
-        for( auto& item : m_items )
+        for( EDA_ITEM* item : m_items )
         {
             const KICAD_T ourTypes[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_MODULE_T, EOT };
             auto connectedItems = connectivity->GetConnectedItems( static_cast<BOARD_CONNECTED_ITEM*>( item ), ourTypes, true );
-            for ( auto citem : connectedItems )
+
+            for ( BOARD_CONNECTED_ITEM* citem : connectedItems )
             {
                 if( citem->Type() == PCB_PAD_T )
-                {
-                    connectedPads.insert( static_cast<D_PAD*>( citem ) );
-                }
+                    connectedPads.insert( static_cast<PAD*>( citem ) );
             }
         }
 
-        for( D_PAD* pad : connectedPads )
+        for( PAD* pad : connectedPads )
         {
             if( pad->GetNetCode() != newNetCode )
                 changingPads.push_back( pad );
@@ -563,7 +562,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         // Commit::Push() will rebuild connectivitiy propagating nets from connected pads
         // outwards.  We therefore have to update the connected pads in order for the net
         // change to "stick".
-        for( D_PAD* pad : changingPads )
+        for( PAD* pad : changingPads )
         {
             m_commit.Modify( pad );
             pad->SetNetCode( m_netSelector->GetSelectedNetcode() );

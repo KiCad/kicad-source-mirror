@@ -43,7 +43,7 @@ class PICKED_ITEMS_LIST;
 class BOARD;
 class ZONE;
 class TRACK;
-class D_PAD;
+class PAD;
 class MARKER_PCB;
 class MSG_PANEL_ITEM;
 class NETLIST;
@@ -701,7 +701,7 @@ public:
      *
      * @return D_PADS - a full list of pads
      */
-    const std::vector<D_PAD*> GetPads() const;
+    const std::vector<PAD*> GetPads() const;
 
     void BuildListOfNets()
     {
@@ -990,10 +990,10 @@ public:
      *
      * @param aPosition A wxPoint object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
-     * @return A pointer to a D_PAD object if found or NULL if not found.
+     * @return A pointer to a PAD object if found or NULL if not found.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask );
-    D_PAD* GetPad( const wxPoint& aPosition )
+    PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask );
+    PAD* GetPad( const wxPoint& aPosition )
     {
         return GetPad( aPosition, LSET().set() );
     }
@@ -1003,9 +1003,9 @@ public:
      *
      * @param aTrace A pointer to a TRACK object to hit test against.
      * @param aEndPoint The end point of \a aTrace the hit test against.
-     * @return A pointer to a D_PAD object if found or NULL if not found.
+     * @return A pointer to a PAD object if found or NULL if not found.
      */
-    D_PAD* GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint );
+    PAD* GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint );
 
     /**
      * Return pad found at \a aPosition on \a aLayerMask using the fast search method.
@@ -1014,9 +1014,9 @@ public:
      * </p>
      * @param aPosition A wxPoint object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
-     * @return A pointer to a D_PAD object if found or NULL if not found.
+     * @return A pointer to a PAD object if found or NULL if not found.
      */
-    D_PAD* GetPadFast( const wxPoint& aPosition, LSET aLayerMask );
+    PAD* GetPadFast( const wxPoint& aPosition, LSET aLayerMask );
 
     /**
      * Locate the pad connected at \a aPosition on \a aLayer starting at list position
@@ -1027,19 +1027,19 @@ public:
      * function.
      * </p>
      * @note The normal pad list is sorted by increasing netcodes.
-     * @param aPadList = the list of pads candidates (a std::vector<D_PAD*>)
+     * @param aPadList = the list of pads candidates (a std::vector<PAD*>)
      * @param aPosition A wxPoint object containing the position to test.
      * @param aLayerMask A layer or layers to mask the hit test.
-     * @return a D_PAD object pointer to the connected pad.
+     * @return a PAD object pointer to the connected pad.
      */
-    D_PAD* GetPad( std::vector<D_PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask );
+    PAD* GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask );
 
     /**
      * Delete a given pad from the BOARD by removing it from its module and
      * from the m_NetInfo.  Makes no UI calls.
      * @param aPad is the pad to delete.
      */
-    void PadDelete( D_PAD* aPad );
+    void PadDelete( PAD* aPad );
 
     /**
      * First empties then fills the vector with all pads and sorts them by
@@ -1052,7 +1052,7 @@ public:
      *                  = -1 to build the full pad list.
      *                  = a given netcode to build the pad list relative to the given net
      */
-    void GetSortedPadListByXthenYCoord( std::vector<D_PAD*>& aVector, int aNetCode = -1 );
+    void GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetCode = -1 );
 
     /**
      * Returns data on the length and number of track segments connected to a given track.

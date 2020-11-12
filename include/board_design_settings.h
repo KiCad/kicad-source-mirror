@@ -300,7 +300,7 @@ public:
     wxPoint    m_AuxOrigin;                 ///< origin for plot exports
     wxPoint    m_GridOrigin;                ///< origin for grid offsets
 
-    D_PAD      m_Pad_Master;                // A dummy pad to store all default parameters
+    PAD        m_Pad_Master;                // A dummy pad to store all default parameters
                                             // when importing values or creating a new pad
 
     // Set to true if the board has a stackup management.

@@ -44,7 +44,7 @@ static std::unique_ptr<MODULE> ModuleWithPads( const std::vector<wxString> aName
 
     for( const auto& name : aNames )
     {
-        auto pad = std::make_unique<D_PAD>( module.get() );
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( module.get() );
 
         pad->SetName( name );
 

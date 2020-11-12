@@ -68,7 +68,7 @@ public:
 
 private:
     void checkVia( VIA* via, bool aExceedMicro, bool aExceedStd );
-    void checkPad( D_PAD* aPad );
+    void checkPad( PAD* aPad );
 
     BOARD* m_board;
 };
@@ -86,7 +86,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
             break;
 
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
                 break;
@@ -124,7 +124,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 }
 
 
-void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( D_PAD* aPad )
+void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
 {
     int holeSize = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
 

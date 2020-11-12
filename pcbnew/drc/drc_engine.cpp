@@ -699,7 +699,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         // whether or not there's a flashed pad.  Not true for NPTHs.
         if( a->Type() == PCB_PAD_T )
         {
-            const D_PAD* pad = static_cast<const D_PAD*>( a );
+            const PAD* pad = static_cast<const PAD*>( a );
 
             if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( aLayer ) )
                 aConstraintId = HOLE_CLEARANCE_CONSTRAINT;

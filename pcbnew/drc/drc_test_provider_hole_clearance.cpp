@@ -85,7 +85,7 @@ static std::shared_ptr<SHAPE_CIRCLE> getDrilledHoleShape( BOARD_ITEM* aItem )
     }
     else if( aItem->Type() == PCB_PAD_T )
     {
-        D_PAD* pad = static_cast<D_PAD*>( aItem );
+        PAD* pad = static_cast<PAD*>( aItem );
         return std::make_shared<SHAPE_CIRCLE>( pad->GetPosition(), pad->GetDrillSize().x / 2 );
     }
 
@@ -138,7 +138,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
                 if( item->Type() == PCB_PAD_T )
                 {
-                    D_PAD* pad = static_cast<D_PAD*>( item );
+                    PAD* pad = static_cast<PAD*>( item );
 
                     // Check for round hole
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
@@ -198,7 +198,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     for( MODULE* footprint : m_board->Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( !reportProgress( ii++, count, delta ) )
                 break;

@@ -488,9 +488,9 @@ void PCB_EDIT_FRAME::ExchangeFootprint( MODULE* aExisting, MODULE* aNew, BOARD_C
 
     aNew->SetLocked( aExisting->IsLocked() );
 
-    for( D_PAD* pad : aNew->Pads() )
+    for( PAD* pad : aNew->Pads() )
     {
-        D_PAD* oldPad = aExisting->FindPadByName( pad->GetName() );
+        PAD* oldPad = aExisting->FindPadByName( pad->GetName() );
 
         if( oldPad )
         {

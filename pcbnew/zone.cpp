@@ -325,7 +325,7 @@ const EDA_RECT ZONE::GetBoundingBox() const
 }
 
 
-int ZONE::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
+int ZONE::GetThermalReliefGap( PAD* aPad, wxString* aSource ) const
 {
     if( aPad->GetEffectiveThermalGap() == 0 )
     {
@@ -340,7 +340,7 @@ int ZONE::GetThermalReliefGap( D_PAD* aPad, wxString* aSource ) const
 }
 
 
-int ZONE::GetThermalReliefSpokeWidth( D_PAD* aPad, wxString* aSource ) const
+int ZONE::GetThermalReliefSpokeWidth( PAD* aPad, wxString* aSource ) const
 {
     if( aPad->GetEffectiveThermalSpokeWidth() == 0 )
     {
@@ -765,7 +765,7 @@ void ZONE::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 }
 
 
-ZONE_CONNECTION ZONE::GetPadConnection( D_PAD* aPad, wxString* aSource ) const
+ZONE_CONNECTION ZONE::GetPadConnection( PAD* aPad, wxString* aSource ) const
 {
     if( aPad == NULL || aPad->GetEffectiveZoneConnection() == ZONE_CONNECTION::INHERITED )
     {

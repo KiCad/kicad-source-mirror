@@ -306,7 +306,7 @@ void AR_AUTOPLACER::addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask )
     }
 }
 
-void AR_AUTOPLACER::addPad( D_PAD* aPad, int aClearance )
+void AR_AUTOPLACER::addPad( PAD* aPad, int aClearance )
 {
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     EDA_RECT bbox = aPad->GetBoundingBox();
@@ -356,7 +356,7 @@ void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
     addFpBody( fpBBox.GetOrigin(), fpBBox.GetEnd(), layerMask );
 
     // Trace pads + clearance areas.
-    for( D_PAD* pad : aFootprint->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
     {
         int margin = (m_matrix.m_GridRouting / 2) + pad->GetOwnClearance( pad->GetLayer() );
         addPad( pad, margin );
@@ -410,7 +410,7 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( MODULE* Module )
                           CELL_IS_MODULE, AR_MATRIX::WRITE_OR_CELL );
 
     // Trace pads + clearance areas.
-    for( D_PAD* pad : Module->Pads() )
+    for( PAD* pad : Module->Pads() )
     {
         int margin = (m_matrix.m_GridRouting / 2) + pad->GetOwnClearance( pad->GetLayer() );
         m_matrix.PlacePad( pad, CELL_IS_MODULE, margin, AR_MATRIX::WRITE_OR_CELL );
@@ -679,10 +679,10 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
 }
 
 
-const D_PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefModule, D_PAD* aRefPad, const wxPoint& aOffset)
+const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefModule, PAD* aRefPad, const wxPoint& aOffset)
 {
-    const D_PAD* nearest = nullptr;
-    int64_t nearestDist = INT64_MAX;
+    const PAD* nearest = nullptr;
+    int64_t    nearestDist = INT64_MAX;
 
     for ( auto mod : m_board->Modules() )
     {

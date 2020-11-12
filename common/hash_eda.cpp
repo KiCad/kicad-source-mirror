@@ -74,7 +74,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
 
     case PCB_PAD_T:
         {
-            const D_PAD* pad = static_cast<const D_PAD*>( aItem );
+            const PAD* pad = static_cast<const PAD*>( aItem );
 
             ret = hash<int>{}( pad->GetShape() << 16 );
             hash_combine( ret, pad->GetDrillShape() << 18 );

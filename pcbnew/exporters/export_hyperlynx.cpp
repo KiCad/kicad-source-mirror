@@ -49,7 +49,7 @@ class HYPERLYNX_PAD_STACK
 public:
     friend class HYPERLYNX_EXPORTER;
 
-    HYPERLYNX_PAD_STACK( BOARD* aBoard, const D_PAD* aPad );
+    HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad );
     HYPERLYNX_PAD_STACK( BOARD* aBoard, const VIA* aVia );
     ~HYPERLYNX_PAD_STACK(){};
 
@@ -222,7 +222,7 @@ private:
 };
 
 
-HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const D_PAD* aPad )
+HYPERLYNX_PAD_STACK::HYPERLYNX_PAD_STACK( BOARD* aBoard, const PAD* aPad )
 {
     m_board = aBoard;
     m_sx    = aPad->GetSize().x;
@@ -404,7 +404,7 @@ bool HYPERLYNX_EXPORTER::writePadStacks()
 {
     for( MODULE* mod : m_board->Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( PAD* pad : mod->Pads() )
         {
             HYPERLYNX_PAD_STACK* ps = addPadStack( HYPERLYNX_PAD_STACK( m_board, pad ) );
             m_padMap[pad] = ps;
@@ -431,7 +431,7 @@ bool HYPERLYNX_EXPORTER::writeNetObjects( const std::vector<BOARD_ITEM*>& aObjec
 {
     for( BOARD_ITEM* item : aObjects )
     {
-        if( D_PAD* pad = dyn_cast<D_PAD*>( item ) )
+        if( PAD* pad = dyn_cast<PAD*>( item ) )
         {
             auto pstackIter = m_padMap.find( pad );
 
@@ -548,7 +548,7 @@ const std::vector<BOARD_ITEM*> HYPERLYNX_EXPORTER::collectNetObjects( int netcod
 
     for( MODULE* mod : m_board->Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( PAD* pad : mod->Pads() )
         {
             if( check( pad ) )
                 rv.push_back( pad );

@@ -397,7 +397,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
         if( footprint )
         {
-            for( D_PAD* pad : footprint->Pads() )
+            for( PAD* pad : footprint->Pads() )
                 sel_items.push_back( pad );
         }
     }
@@ -1016,7 +1016,7 @@ static wxPoint mirrorPointX( const wxPoint& aPoint, const wxPoint& aMirrorPoint 
 /**
  * Mirror a pad in the vertical axis passing through a point (mirror left to right)
  */
-static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
+static void mirrorPadX( PAD& aPad, const wxPoint& aMirrorPoint )
 {
     if( aPad.GetShape() == PAD_SHAPE_CUSTOM )
         aPad.FlipPrimitives( true );  // mirror primitives left to right
@@ -1108,7 +1108,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         case PCB_PAD_T:
         {
-            D_PAD* pad = static_cast<D_PAD*>( item );
+            PAD* pad = static_cast<PAD*>( item );
             mirrorPadX( *pad, mirrorPoint );
             break;
         }
@@ -1292,7 +1292,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         case PCB_PAD_T:
             {
-                D_PAD*  pad = static_cast<D_PAD*>( item );
+                PAD*    pad = static_cast<PAD*>( item );
                 MODULE* parent = static_cast<MODULE*>( item->GetParent() );
 
                 m_commit->Modify( parent );
@@ -1570,13 +1570,13 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             dupe_item = parentFootprint->DuplicateItem( orig_item );
 
             if( increment && item->Type() == PCB_PAD_T
-                    && PAD_NAMING::PadCanHaveName( *static_cast<D_PAD*>( dupe_item ) ) )
+                    && PAD_NAMING::PadCanHaveName( *static_cast<PAD*>( dupe_item ) ) )
             {
                 PAD_TOOL* padTool = m_toolMgr->GetTool<PAD_TOOL>();
                 wxString padName = padTool->GetLastPadName();
                 padName = parentFootprint->GetNextPadName( padName );
                 padTool->SetLastPadName( padName );
-                static_cast<D_PAD*>( dupe_item )->SetName( padName );
+                static_cast<PAD*>( dupe_item )->SetName( padName );
             }
         }
         else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_MODULE_T )

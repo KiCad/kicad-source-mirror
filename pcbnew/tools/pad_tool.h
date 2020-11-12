@@ -79,8 +79,8 @@ private:
     ///> Push pad settings from a pad to other pads on board or module
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
-    PCB_LAYER_ID explodePad( D_PAD* aPad );
-    void recombinePad( D_PAD* aPad );
+    PCB_LAYER_ID explodePad( PAD* aPad );
+    void recombinePad( PAD* aPad );
 
 private:
     wxString       m_lastPadName;

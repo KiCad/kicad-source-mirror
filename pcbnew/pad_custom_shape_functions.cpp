@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_pad_custom_shape_functions.cpp
- * D_PAD functions specific to custom shaped pads.
- */
-
 #include <board.h>
 #include <class_board_item.h>
 #include <pcb_shape.h>
@@ -41,7 +36,7 @@
  * the shape is a polygon (can be with thick outline), segment, circle or arc
  */
 
-void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness )
+void PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness )
 {
     std::vector<wxPoint> points;
 
@@ -57,7 +52,7 @@ void D_PAD::AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness )
 }
 
 
-void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness )
+void PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_POLYGON );
@@ -68,7 +63,7 @@ void D_PAD::AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness 
 }
 
 
-void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
+void PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetStart( aStart );
@@ -79,8 +74,8 @@ void D_PAD::AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int
 }
 
 
-void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
-                             int aThickness )
+void PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
+                           int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_ARC );
@@ -93,8 +88,8 @@ void D_PAD::AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int 
 }
 
 
-void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
-                               const wxPoint& aCtrl2, int aThickness )
+void PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,
+                             const wxPoint& aCtrl2, int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_CURVE );
@@ -108,7 +103,7 @@ void D_PAD::AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const
 }
 
 
-void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness )
+void PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_CIRCLE );
@@ -120,7 +115,7 @@ void D_PAD::AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickn
 }
 
 
-void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
+void PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness )
 {
     PCB_SHAPE* item = new PCB_SHAPE();
     item->SetShape( S_RECT );
@@ -132,7 +127,7 @@ void D_PAD::AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aT
 }
 
 
-void D_PAD::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
+void PAD::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
     // clear old list
     DeletePrimitivesList();
@@ -145,7 +140,7 @@ void D_PAD::ReplacePrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aP
 }
 
 
-void D_PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
+void PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPrimitivesList )
 {
     // Add duplicates of aPrimitivesList to the pad primitives list:
     for( const std::shared_ptr<PCB_SHAPE>& prim : aPrimitivesList )
@@ -155,7 +150,7 @@ void D_PAD::AppendPrimitives( const std::vector<std::shared_ptr<PCB_SHAPE>>& aPr
 }
 
 
-void D_PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
+void PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 {
     m_editPrimitives.emplace_back( aPrimitive );
 
@@ -164,7 +159,7 @@ void D_PAD::AddPrimitive( PCB_SHAPE* aPrimitive )
 
 
 // clear the basic shapes list and associated data
-void D_PAD::DeletePrimitivesList()
+void PAD::DeletePrimitivesList()
 {
     m_editPrimitives.clear();
 
@@ -172,8 +167,8 @@ void D_PAD::DeletePrimitivesList()
 }
 
 
-void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
-                                       int aError, ERROR_LOC aErrorLoc ) const
+void PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer,
+                                     int aError, ERROR_LOC aErrorLoc ) const
 {
     SHAPE_POLY_SET polyset;
 
@@ -190,7 +185,7 @@ void D_PAD::addPadPrimitivesToPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER
     }
 }
 
-void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const
+void PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_ID aLayer ) const
 {
     BOARD* board = GetBoard();
     int    maxError = board ? board->GetDesignSettings().m_MaxError: ARC_HIGH_DEF;
@@ -219,7 +214,7 @@ void D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon, PCB_LAYER_
 }
 
 
-bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
+bool PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
     addPadPrimitivesToPolygon( &poly, UNDEFINED_LAYER, ARC_LOW_DEF, ERROR_INSIDE );

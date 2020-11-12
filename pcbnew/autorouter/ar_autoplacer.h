@@ -109,17 +109,17 @@ private:
     MODULE*      pickModule();
 
     void         placeModule( MODULE* aModule, bool aDoNotRecreateRatsnest, const wxPoint& aPos );
-    const D_PAD* nearestPad( MODULE* aRefModule, D_PAD* aRefPad, const wxPoint& aOffset );
+    const PAD* nearestPad( MODULE* aRefModule, PAD* aRefPad, const wxPoint& aOffset );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
-    void         addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask );
+    void addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
-    void         addPad( D_PAD* aPad, int aClearance );
+    void addPad( PAD* aPad, int aClearance );
 
     // Build m_fpAreaTop and m_fpAreaBottom polygonal shapes for aFootprint.
     // aFpClearance is a mechanical clearance.
-    void         buildFpAreas( MODULE* aFootprint, int aFpClearance );
+    void buildFpAreas( MODULE* aFootprint, int aFpClearance );
 
     AR_MATRIX m_matrix;
     SHAPE_POLY_SET m_topFreeArea;       // The polygonal description of the top side free areas;

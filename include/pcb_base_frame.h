@@ -52,7 +52,7 @@ class BOARD_CONNECTED_ITEM;
 class COLOR_SETTINGS;
 class MODULE;
 class TRACK;
-class D_PAD;
+class PAD;
 class EDA_3D_VIEWER;
 class GENERAL_COLLECTOR;
 class GENERAL_COLLECTORS_GUIDE;
@@ -309,7 +309,7 @@ public:
      */
     void PlaceFootprint( MODULE* aFootprint, bool aRecreateRatsnest = true );
 
-    void ShowPadPropertiesDialog( D_PAD* aPad );
+    void ShowPadPropertiesDialog( PAD* aPad );
 
     /**
      * Function SelectFootprintFromLibTree

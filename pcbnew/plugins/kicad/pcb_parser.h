@@ -43,7 +43,7 @@ class ARC;
 class BOARD;
 class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
-class D_PAD;
+class PAD;
 class BOARD_DESIGN_SETTINGS;
 class DIMENSION_BASE;
 class PCB_SHAPE;
@@ -173,9 +173,9 @@ class PCB_PARSER : public PCB_LEXER
     MODULE*         parseMODULE_unchecked( wxArrayString* aInitialComments = 0 );
     FP_TEXT*        parseFP_TEXT();
     FP_SHAPE*       parseFP_SHAPE();
-    D_PAD*          parseD_PAD( MODULE* aParent = NULL );
+    PAD*            parsePAD( MODULE* aParent = NULL );
     // Parse only the (option ...) inside a pad description
-    bool            parseD_PAD_option( D_PAD* aPad );
+    bool            parsePAD_option( PAD* aPad );
     ARC*            parseARC();
     TRACK*          parseTRACK();
     VIA*            parseVIA();

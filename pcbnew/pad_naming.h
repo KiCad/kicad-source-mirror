@@ -29,7 +29,7 @@
 
 /**
  * The PAD_NAMING namespace contains helper functions for common operations
- * to do with naming of #D_PAD objects.
+ * to do with naming of #PAD objects.
  */
 namespace PAD_NAMING
 {
@@ -43,7 +43,7 @@ namespace PAD_NAMING
  * @param  aPad the pad to check
  * @return      true if the pad gets a name
  */
-bool PadCanHaveName( const D_PAD& aPad );
+bool PadCanHaveName( const PAD& aPad );
 
 } // namespace PAD_NAMING
 

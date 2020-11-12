@@ -419,7 +419,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 
     for( MODULE* footprint : board()->Modules() )
     {
-        for( D_PAD* pad : footprint->Pads() )
+        for( PAD* pad : footprint->Pads() )
             processItem( pad );
     }
 
@@ -868,7 +868,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 fp->SetParent( board );
 
                 // Pads in the library all have orphaned nets.  Replace with Default.
-                for( D_PAD* pad : fp->Pads() )
+                for( PAD* pad : fp->Pads() )
                     pad->SetNetCode( 0 );
 
                 // Put it on FRONT layer,

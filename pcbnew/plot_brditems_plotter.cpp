@@ -57,9 +57,9 @@
 #include <pcb_shape.h>
 #include <fp_shape.h>
 #include <footprint.h>
-#include <fp_text.h>                          // for FP_TEXT
+#include <fp_text.h>
 #include <track.h>
-#include <pad.h>                        // for D_PAD
+#include <pad.h>
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <zone.h>
@@ -85,7 +85,7 @@ COLOR4D BRDITEMS_PLOTTER::getColor( LAYER_NUM aLayer )
 }
 
 
-void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode )
+void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode )
 {
     wxPoint shape_pos = aPad->ShapePos();
     GBR_METADATA gbr_metadata;

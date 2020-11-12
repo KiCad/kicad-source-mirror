@@ -247,7 +247,7 @@ private:
     ITEM* pickSingleItem( ITEM_SET& aItems ) const;
     void splitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
 
-    ITEM* syncPad( D_PAD* aPad );
+    ITEM* syncPad( PAD* aPad );
     ITEM* syncTrack( TRACK* aTrack );
     ITEM* syncVia( VIA* aVia );
 

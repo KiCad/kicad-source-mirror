@@ -183,10 +183,10 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
             last_item_is_via = true;
         }
-        else if( dyn_cast<const D_PAD*>( hole_descr.m_ItemParent ) )
+        else if( dyn_cast<const PAD*>( hole_descr.m_ItemParent ) )
         {
             last_item_is_via = false;
-            const D_PAD* pad = dyn_cast<const D_PAD*>( hole_descr.m_ItemParent );
+            const PAD* pad = dyn_cast<const PAD*>( hole_descr.m_ItemParent );
 
             if( pad->GetProperty() == PAD_PROP_CASTELLATED )
                 gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CASTELLATEDDRILL );

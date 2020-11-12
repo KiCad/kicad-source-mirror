@@ -93,7 +93,7 @@ static PAD_ATTR_T code_type[] =
 #define NPTH_DLG_TYPE 3
 #define APERTURE_DLG_TYPE 4
 
-void PCB_BASE_FRAME::ShowPadPropertiesDialog( D_PAD* aPad )
+void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
 
@@ -112,7 +112,7 @@ void PCB_BASE_FRAME::ShowPadPropertiesDialog( D_PAD* aPad )
 }
 
 
-DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad ) :
+DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad ) :
     DIALOG_PAD_PROPERTIES_BASE( aParent ),
     m_parent( aParent ),
     m_canUpdate( false ),
@@ -156,7 +156,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_nonCopperWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
 
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
-    m_dummyPad   = new D_PAD( (MODULE*) NULL );
+    m_dummyPad   = new PAD((MODULE*) NULL );
 
     if( aPad )
     {
@@ -1073,7 +1073,7 @@ void DIALOG_PAD_PROPERTIES::updatePadLayersList( LSET layer_mask, bool remove_un
     {
     case PTH_DLG_TYPE:
         if( !layer_mask.any() )
-            layer_mask = D_PAD::PTHMask();
+            layer_mask = PAD::PTHMask();
 
         if( !( layer_mask & LSET::AllCuMask() ).any() )
             m_rbCopperLayersSel->SetSelection( 3 );
@@ -1088,7 +1088,7 @@ void DIALOG_PAD_PROPERTIES::updatePadLayersList( LSET layer_mask, bool remove_un
 
     case SMD_DLG_TYPE:
         if( !layer_mask.any() )
-            layer_mask = D_PAD::SMDMask();
+            layer_mask = PAD::SMDMask();
 
         if( layer_mask.test( F_Cu ) )
             m_rbCopperLayersSel->SetSelection( 0 );
@@ -1099,7 +1099,7 @@ void DIALOG_PAD_PROPERTIES::updatePadLayersList( LSET layer_mask, bool remove_un
 
     case CONN_DLG_TYPE:
         if( !layer_mask.any() )
-            layer_mask = D_PAD::ConnSMDMask();
+            layer_mask = PAD::ConnSMDMask();
 
         if( layer_mask.test( F_Cu ) )
             m_rbCopperLayersSel->SetSelection( 0 );
@@ -1110,7 +1110,7 @@ void DIALOG_PAD_PROPERTIES::updatePadLayersList( LSET layer_mask, bool remove_un
 
     case NPTH_DLG_TYPE:
         if( !layer_mask.any() )
-            layer_mask = D_PAD::UnplatedHoleMask();
+            layer_mask = PAD::UnplatedHoleMask();
 
         if( layer_mask.test( F_Cu ) && layer_mask.test( B_Cu ) )
             m_rbCopperLayersSel->SetSelection( 0 );
@@ -1125,7 +1125,7 @@ void DIALOG_PAD_PROPERTIES::updatePadLayersList( LSET layer_mask, bool remove_un
 
     case APERTURE_DLG_TYPE:
         if( !layer_mask.any() )
-            layer_mask = D_PAD::ApertureMask();
+            layer_mask = PAD::ApertureMask();
 
         m_rbCopperLayersSel->SetSelection( 0 );
         break;
@@ -1635,7 +1635,7 @@ PAD_PROP_T DIALOG_PAD_PROPERTIES::getSelectedProperty()
 }
 
 
-bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
+bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 {
     wxString    msg;
 

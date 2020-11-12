@@ -131,7 +131,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                                                         bool aSkipPlatedPads,
                                                         bool aSkipNonPlatedPads ) const
 {
-    for( D_PAD* pad : m_pads )
+    for( PAD* pad : m_pads )
     {
         if( aLayer != UNDEFINED_LAYER && !pad->IsOnLayer(aLayer) )
             continue;
@@ -201,7 +201,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
         if( ( clearance.x < 0 || clearance.x != clearance.y )
                 && pad->GetShape() != PAD_SHAPE_CUSTOM )
         {
-            D_PAD dummy( *pad );
+            PAD dummy( *pad );
             dummy.SetSize( pad->GetSize() + clearance + clearance );
             dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, aLayer, 0,
                                                         aMaxError, aErrorLoc );
@@ -560,10 +560,10 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 }
 
 
-void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                  PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                  int aError, ERROR_LOC aErrorLoc,
-                                                  bool ignoreLineWidth ) const
+void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                int aError, ERROR_LOC aErrorLoc,
+                                                bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
 
@@ -685,7 +685,7 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         break;
 
     default:
-        wxFAIL_MSG( "D_PAD::TransformShapeWithClearanceToPolygon no implementation for "
+        wxFAIL_MSG( "PAD::TransformShapeWithClearanceToPolygon no implementation for "
                     + PAD_SHAPE_T_asString( GetShape() ) );
         break;
     }
@@ -693,8 +693,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 
 
-bool D_PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
-                                                 int aError, ERROR_LOC aErrorLoc ) const
+bool PAD::TransformHoleWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aInflateValue,
+                                               int aError, ERROR_LOC aErrorLoc ) const
 {
     wxSize drillsize = GetDrillSize();
 

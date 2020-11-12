@@ -466,7 +466,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
 
     for( MODULE* module : m_pcb->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
             {

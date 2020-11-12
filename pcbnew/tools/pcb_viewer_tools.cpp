@@ -100,7 +100,7 @@ int PCB_VIEWER_TOOLS::ShowPadNumbers( const TOOL_EVENT& aEvent )
 
     for( MODULE* fp : board()->Modules() )
     {
-        for( D_PAD* pad : fp->Pads() )
+        for( PAD* pad : fp->Pads() )
             view()->Update( pad, KIGFX::GEOMETRY );
     }
 
@@ -119,7 +119,7 @@ int PCB_VIEWER_TOOLS::PadDisplayMode( const TOOL_EVENT& aEvent )
 
     for( MODULE* fp : board()->Modules() )
     {
-        for( D_PAD* pad : fp->Pads() )
+        for( PAD* pad : fp->Pads() )
             view()->Update( pad, KIGFX::GEOMETRY );
     }
 

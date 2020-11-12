@@ -22,7 +22,7 @@
 
 #include <set>
 
-class D_PAD;
+class PAD;
 class BOARD_CONNECTED_ITEM;
 
 class FROM_TO_CACHE
@@ -32,17 +32,17 @@ public:
     struct FT_ENDPOINT
     {
         wxString name;
-        D_PAD* parent;
+        PAD* parent;
     };
 
     struct FT_PATH
     {
         int net;
-        D_PAD *from;
-        D_PAD *to;
+        PAD*     from;
+        PAD*     to;
         wxString fromName, toName;
         wxString fromWildcard, toWildcard;
-        bool isUnique;
+        bool     isUnique;
         std::set<BOARD_CONNECTED_ITEM*> pathItems;
     };
 

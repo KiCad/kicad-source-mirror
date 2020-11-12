@@ -1161,7 +1161,7 @@ void C3D_RENDER_RAYTRACING::insert3DViaHole( const VIA* aVia )
 
 // Based on draw3DPadHole from
 // 3d_draw_helper_functions.cpp
-void C3D_RENDER_RAYTRACING::insert3DPadHole( const D_PAD* aPad )
+void C3D_RENDER_RAYTRACING::insert3DPadHole( const PAD* aPad )
 {
     const COBJECT2D *object2d_A = NULL;
 

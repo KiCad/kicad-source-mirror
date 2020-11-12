@@ -146,7 +146,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
         const KICAD_T onlyRouting[] = { PCB_PAD_T, PCB_ARC_T, PCB_VIA_T, PCB_TRACE_T, EOT };
 
         auto padCandidates = connectivity->GetConnectedItems( path.from, onlyRouting );
-        D_PAD* toPad = nullptr;
+        PAD* toPad = nullptr;
 
         for( auto pitem : padCandidates )
         {
@@ -156,7 +156,7 @@ int FROM_TO_CACHE::cacheFromToPaths( const wxString& aFrom, const wxString& aTo 
             if( pitem->Type() != PCB_PAD_T )
                 continue;
 
-            D_PAD *pad = static_cast<D_PAD*>( pitem );
+            PAD *pad = static_cast<PAD*>( pitem );
 
             wxString toName = pad->GetParent()->GetReference() + "-" + pad->GetName();
 

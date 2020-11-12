@@ -26,7 +26,7 @@
 
 #include <dialog_push_pad_properties_base.h>
 
-class D_PAD;
+class PAD;
 class PCB_BASE_FRAME;
 /************************************/
 /* class DIALOG_PUSH_PAD_PROPERTIES */

@@ -236,9 +236,8 @@ public:
 
     /**
      * Function IsOnLayer
-     * tests to see if this object is on the given layer.  Is virtual so
-     * objects like D_PAD, which reside on multiple layers can do their own
-     * form of testing.
+     * tests to see if this object is on the given layer.  Virtual so objects like PAD, which
+     * reside on multiple layers can do their own form of testing.
      * @param aLayer The layer to test for.
      * @return bool - true if on given layer, else false.
      */

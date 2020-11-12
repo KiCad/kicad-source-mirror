@@ -39,7 +39,7 @@ class DIMENSION_BASE;
 class FP_SHAPE;
 class PCB_SHAPE;
 class PCB_TARGET;
-class D_PAD;
+class PAD;
 class FP_TEXT;
 class PCB_GROUP;
 class TRACK;
@@ -270,7 +270,7 @@ private:
 
     void format( MODULE* aModule, int aNestLevel = 0 ) const;
 
-    void format( D_PAD* aPad, int aNestLevel = 0 ) const;
+    void format( PAD* aPad, int aNestLevel = 0 ) const;
 
     void format( PCB_TEXT* aText, int aNestLevel = 0 ) const;
 

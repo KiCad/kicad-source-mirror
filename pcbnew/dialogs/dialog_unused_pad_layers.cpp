@@ -114,7 +114,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
             if( item->Type() == PCB_PAD_T && m_rbScope->GetSelection() == SCOPE_PADS )
             {
-                D_PAD* pad = static_cast<D_PAD*>( item );
+                PAD* pad = static_cast<PAD*>( item );
 
                 pad->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
                 pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );

@@ -90,7 +90,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     for( MODULE* mod : board->Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( PAD* pad : mod->Pads() )
         {
             if( pad->GetNetCode() == GetNet() )
             {

@@ -1699,7 +1699,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
             module = m_components.at( elem.component );
         }
 
-        D_PAD* pad = new D_PAD( module );
+        PAD* pad = new PAD( module );
         module->Add( pad, ADD_MODE::APPEND );
 
         pad->SetName( elem.name );
@@ -1834,14 +1834,14 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         {
         case ALTIUM_LAYER::TOP_LAYER:
             pad->SetLayer( F_Cu );
-            pad->SetLayerSet( D_PAD::SMDMask() );
+            pad->SetLayerSet( PAD::SMDMask() );
             break;
         case ALTIUM_LAYER::BOTTOM_LAYER:
             pad->SetLayer( B_Cu );
-            pad->SetLayerSet( FlipLayerMask( D_PAD::SMDMask() ) );
+            pad->SetLayerSet( FlipLayerMask( PAD::SMDMask() ) );
             break;
         case ALTIUM_LAYER::MULTI_LAYER:
-            pad->SetLayerSet( elem.plated ? D_PAD::PTHMask() : D_PAD::UnplatedHoleMask() );
+            pad->SetLayerSet( elem.plated ? PAD::PTHMask() : PAD::UnplatedHoleMask() );
             break;
         default:
             PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );

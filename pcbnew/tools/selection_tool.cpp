@@ -1014,7 +1014,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
 
     std::map<wxPoint, std::vector<TRACK*>> trackMap;
     std::map<wxPoint, VIA*>                viaMap;
-    std::map<wxPoint, D_PAD*>              padMap;
+    std::map<wxPoint, PAD*>                padMap;
 
     // Build maps of connected items
     for( BOARD_CONNECTED_ITEM* item : connectedItems )
@@ -1039,7 +1039,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
 
         case PCB_PAD_T:
         {
-            D_PAD* pad = static_cast<D_PAD*>( item );
+            PAD* pad = static_cast<PAD*>( item );
             padMap[ pad->GetPosition() ] = pad;
         }
             break;
@@ -1188,11 +1188,12 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     }
 
     //Generate a list of all pads, and of all nets they belong to.
-    std::list<int> netcodeList;
-    std::list<D_PAD*> padList;
+    std::list<int>  netcodeList;
+    std::list<PAD*> padList;
+
     for( MODULE* mmod : modList )
     {
-        for( D_PAD* pad : mmod->Pads() )
+        for( PAD* pad : mmod->Pads() )
         {
             if( pad->IsConnected() )
             {
@@ -1208,7 +1209,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     // auto select trivial connections segments which are launched from the pads
     std::list<TRACK*> launchTracks;
 
-    for( D_PAD* pad : padList )
+    for( PAD* pad : padList )
         selectConnectedTracks( *pad, STOP_NEVER );
 
     // now we need to find all footprints that are connected to each of these nets
@@ -1901,7 +1902,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
                 return true;
         }
 
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( Selectable( pad, true ) )
                 return true;
@@ -1951,7 +1952,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         if( aItem->Type() == PCB_PAD_T )
         {
-            auto pad = static_cast<const D_PAD*>( aItem );
+            const PAD* pad = static_cast<const PAD*>( aItem );
 
             // Check render mode (from the Items tab) first
             switch( pad->GetAttribute() )
@@ -2427,7 +2428,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     {
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            if( D_PAD* pad = dyn_cast<D_PAD*>( aCollector[i] ) )
+            if( PAD* pad = dyn_cast<PAD*>( aCollector[i] ) )
             {
                 MODULE* parent = pad->GetParent();
                 double ratio = calcRatio( calcArea( pad ), calcArea( parent ) );

@@ -749,7 +749,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
             {
                 case PCB_PAD_T:
                 {
-                    D_PAD* item = dynamic_cast<D_PAD *>( intersectedBoardItem );
+                    PAD* item = dynamic_cast<PAD *>( intersectedBoardItem );
 
                     if( item )
                     {

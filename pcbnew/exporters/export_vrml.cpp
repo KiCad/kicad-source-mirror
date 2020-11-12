@@ -1110,7 +1110,7 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, FP_SHAPE* aOutline, MOD
 }
 
 
-static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_PAD* aPad )
+static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, PAD* aPad )
 {
     // The (maybe offset) pad position
     wxPoint pad_pos = aPad->ShapePos();
@@ -1243,7 +1243,7 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
 }
 
 
-static void export_vrml_pad( MODEL_VRML& aModel, BOARD* aPcb, D_PAD* aPad )
+static void export_vrml_pad( MODEL_VRML& aModel, BOARD* aPcb, PAD* aPad )
 {
     double  hole_drill_w    = (double) aPad->GetDrillSize().x * BOARD_SCALE / 2.0;
     double  hole_drill_h    = (double) aPad->GetDrillSize().y * BOARD_SCALE / 2.0;
@@ -1394,7 +1394,7 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
     }
 
     // Export pads
-    for( D_PAD* pad : aModule->Pads() )
+    for( PAD* pad : aModule->Pads() )
         export_vrml_pad( aModel, aPcb, pad );
 
     bool isFlipped = aModule->GetLayer() == B_Cu;

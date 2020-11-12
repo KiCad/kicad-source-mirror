@@ -1459,7 +1459,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         module = static_cast<const MODULE*>(item);
 
-        for( const D_PAD* pad : module->Pads() )
+        for( const PAD* pad : module->Pads() )
         {
             PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
 

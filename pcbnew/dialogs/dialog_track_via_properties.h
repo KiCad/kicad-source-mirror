@@ -30,7 +30,7 @@
 class PCBNEW_SELECTION;
 class COMMIT;
 class PCB_BASE_FRAME;
-class D_PAD;
+class PAD;
 
 class DIALOG_TRACK_VIA_PROPERTIES : public DIALOG_TRACK_VIA_PROPERTIES_BASE
 {
@@ -48,7 +48,7 @@ private:
     void onViaSelect( wxCommandEvent& aEvent ) override;
     void onViaEdit( wxCommandEvent& aEvent ) override;
 
-    bool confirmPadChange( const std::vector<D_PAD*>& connectedPads );
+    bool confirmPadChange( const std::vector<PAD*>& connectedPads );
 
     PCB_BASE_FRAME*         m_frame;
     const PCBNEW_SELECTION& m_items;   // List of items to be modified.

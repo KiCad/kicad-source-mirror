@@ -39,7 +39,7 @@
 
 class PLOTTER;
 class PCB_TEXT;
-class D_PAD;
+class PAD;
 class PCB_SHAPE;
 class DIMENSION_BASE;
 class MODULE;
@@ -112,7 +112,7 @@ public:
      * and be drawn as a non filled item although the plot mode is filled
      * color and plot mode are needed by this function
      */
-    void PlotPad( D_PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode );
+    void PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMode );
 
     /**
      * plot items like text and graphics,

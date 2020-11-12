@@ -1040,7 +1040,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
         m_board->Add( m, ADD_MODE::APPEND );
 
         // update the nets within the pads of the clone
-        for( D_PAD* pad : m->Pads() )
+        for( PAD* pad : m->Pads() )
         {
             wxString pn_key = makeKey( e.name, pad->GetName() );
 
@@ -1671,7 +1671,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
     int shape = EPAD::UNDEF;
     int eagleDrillz = e.drill.ToPcbUnits();
 
-    D_PAD* pad = new D_PAD( aModule );
+    PAD* pad = new PAD( aModule );
     aModule->Add( pad );
     transferPad( e, pad );
 
@@ -1706,7 +1706,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
         case EPAD::OCTAGON:
             // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
             // pad->SetShape( PAD_OCTAGON );
-            wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
+            wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in PAD constructor
             pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
             pad->SetChamferPositions( RECT_CHAMFER_ALL );
             pad->SetChamferRectRatio( 0.25 );
@@ -2134,7 +2134,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter 
     EHOLE   e( aTree );
 
     // we add a PAD_ATTRIB_NPTH pad to this module.
-    D_PAD* pad = new D_PAD( aModule );
+    PAD* pad = new PAD( aModule );
     aModule->Add( pad );
 
     pad->SetShape( PAD_SHAPE_CIRCLE );
@@ -2176,7 +2176,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     if( !IsCopperLayer( layer ) )
         return;
 
-    D_PAD* pad = new D_PAD( aModule );
+    PAD* pad = new PAD( aModule );
     aModule->Add( pad );
     transferPad( e, pad );
 
@@ -2240,7 +2240,7 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, D_PAD* aPad ) const
+void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 {
     aPad->SetName( FROM_UTF8( aEaglePad.name.c_str() ) );
 

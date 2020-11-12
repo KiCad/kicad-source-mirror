@@ -99,9 +99,9 @@ public:
     }
 
 protected:
-    int getDrillShape( const D_PAD* aPad ) const override;
+    int getDrillShape( const PAD* aPad ) const override;
 
-    VECTOR2D getDrillSize( const D_PAD* aPad ) const override;
+    VECTOR2D getDrillSize( const PAD* aPad ) const override;
 
     int getDrillSize( const VIA* aVia ) const override;
 

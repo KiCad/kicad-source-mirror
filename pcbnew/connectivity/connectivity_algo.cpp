@@ -140,7 +140,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         if( m_itemMap.find ( aItem ) != m_itemMap.end() )
             return false;
 
-        add( m_itemList, static_cast<D_PAD*>( aItem ) );
+        add( m_itemList, static_cast<PAD*>( aItem ) );
 
         break;
 
@@ -450,9 +450,9 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         reportProgress( aReporter, ii++, size, delta );
     }
 
-    for( MODULE* mod : aBoard->Modules() )
+    for( MODULE* footprint : aBoard->Modules() )
     {
-        for( D_PAD* pad : mod->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             Add( pad );
             reportProgress( aReporter, ii++, size, delta );

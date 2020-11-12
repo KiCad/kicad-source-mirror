@@ -107,19 +107,19 @@ bool PAD_TOOL::Init()
 
 int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 {
-    auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
+    auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
-    const D_PAD& masterPad = frame()->GetDesignSettings().m_Pad_Master;
+    const PAD&  masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
     BOARD_COMMIT commit( frame() );
 
     // for every selected pad, paste global settings
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         if( item->Type() == PCB_PAD_T )
         {
             commit.Modify( item );
-            static_cast<D_PAD&>( *item ).ImportSettingsFrom( masterPad );
+            static_cast<PAD&>( *item ).ImportSettingsFrom( masterPad );
         }
     }
 
@@ -137,7 +137,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
     auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
 
-    D_PAD& masterPad = frame()->GetDesignSettings().m_Pad_Master;
+    PAD& masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
     // can only copy from a single pad
     if( selection.Size() == 1 )
@@ -146,7 +146,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 
         if( item->Type() == PCB_PAD_T )
         {
-            const auto& selPad = static_cast<const D_PAD&>( *item );
+            const PAD& selPad = static_cast<const PAD&>( *item );
             masterPad.ImportSettingsFrom( selPad );
             m_padCopied = true;
         }
@@ -156,7 +156,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 }
 
 
-static void doPushPadProperties( BOARD& board, const D_PAD& aSrcPad, BOARD_COMMIT& commit,
+static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT& commit,
                                  bool aSameFootprints,
                                  bool aPadShapeFilter,
                                  bool aPadOrientFilter,
@@ -211,10 +211,10 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 {
     auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
-    D_PAD*      srcPad;
+    PAD*      srcPad;
 
     if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
-        srcPad = static_cast<D_PAD*>( selection[0] );
+        srcPad = static_cast<PAD*>( selection[0] );
     else
         return 0;
 
@@ -283,7 +283,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
 
     KIGFX::VIEW* view = m_toolMgr->GetView();
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
-    std::list<D_PAD*> selectedPads;
+    std::list<PAD*> selectedPads;
     BOARD_COMMIT commit( frame() );
     std::map<wxString, std::pair<int, wxString>> oldNames;
     bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
@@ -352,12 +352,12 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 collector.Collect( board(), types, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
-                    selectedPads.push_back( static_cast<D_PAD*>( collector[i] ) );
+                    selectedPads.push_back( static_cast<PAD*>( collector[i] ) );
             }
 
             selectedPads.unique();
 
-            for( D_PAD* pad : selectedPads )
+            for( PAD* pad : selectedPads )
             {
                 // If pad was not selected, then enumerate it
                 if( !pad->IsSelected() )
@@ -437,7 +437,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
     }
 
-    for( D_PAD* p : board()->GetFirstFootprint()->Pads() )
+    for( PAD* p : board()->GetFirstFootprint()->Pads() )
     {
         p->ClearSelected();
         view->Update( p );
@@ -466,7 +466,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
         {
-            D_PAD* pad = new D_PAD( m_board->GetFirstFootprint() );
+            PAD* pad = new PAD( m_board->GetFirstFootprint() );
 
             pad->ImportSettingsFrom( m_frame->GetDesignSettings().m_Pad_Master );
 
@@ -483,7 +483,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
         bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit ) override
         {
-            D_PAD* pad = dynamic_cast<D_PAD*>( aItem );
+            PAD* pad = dynamic_cast<PAD*>( aItem );
 
             if( pad )
             {
@@ -517,7 +517,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 
     if( m_editPad != niluuid )
     {
-        D_PAD* pad = dynamic_cast<D_PAD*>( frame()->GetItem( m_editPad ) );
+        PAD* pad = dynamic_cast<PAD*>( frame()->GetItem( m_editPad ) );
 
         if( pad )
             recombinePad( pad );
@@ -526,7 +526,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
     }
     else if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
     {
-        D_PAD*       pad = static_cast<D_PAD*>( selection[0] );
+        PAD*         pad = static_cast<PAD*>( selection[0] );
         PCB_LAYER_ID layer = explodePad( pad );
 
         m_wasHighContrast = ( opts.m_ContrastModeDisplay !=
@@ -564,7 +564,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 }
 
 
-PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
+PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
 {
     PCB_LAYER_ID layer;
     BOARD_COMMIT commit( frame() );
@@ -611,7 +611,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( D_PAD* aPad )
 }
 
 
-void PAD_TOOL::recombinePad( D_PAD* aPad )
+void PAD_TOOL::recombinePad( PAD* aPad )
 {
     int  maxError = board()->GetDesignSettings().m_MaxError;
 

@@ -22,15 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_pad.h
- * @brief Pad object description
- */
+#ifndef PAD_H
+#define PAD_H
 
-#ifndef PAD_H_
-#define PAD_H_
-
-#include "zones.h"
+#include <zones.h>
 #include <board_connected_item.h>
 #include <class_board_item.h>
 #include <convert_to_biu.h>
@@ -61,15 +56,15 @@ namespace KIGFX
     class VIEW;
 }
 
-class D_PAD : public BOARD_CONNECTED_ITEM
+class PAD : public BOARD_CONNECTED_ITEM
 {
 public:
-    D_PAD( MODULE* parent );
+    PAD( MODULE* parent );
 
     // Copy constructor & operator= are needed because the list of basic shapes
     // must be duplicated in copy.
-    D_PAD( const D_PAD& aPad );
-    D_PAD& operator=( const D_PAD &aOther );
+    PAD( const PAD& aPad );
+    PAD& operator=( const PAD &aOther );
 
     /*
      * Default layers used for pads, according to the pad type.
@@ -116,7 +111,7 @@ public:
      * as aMasterPad
      * @param aMasterPad = the template pad
      */
-    void ImportSettingsFrom( const D_PAD& aMasterPad );
+    void ImportSettingsFrom( const PAD& aMasterPad );
 
     /**
      * @return true if the pad has a footprint parent flipped
@@ -143,7 +138,7 @@ public:
      * @param other
      * @return
      */
-    bool SameLogicalPadAs( const D_PAD* other ) const
+    bool SameLogicalPadAs( const PAD* other ) const
     {
         // hide tricks behind sensible API
         return GetParent() == other->GetParent() && m_name == other->m_name;
@@ -579,7 +574,7 @@ public:
      * compares two pads and return 0 if they are equal.
      * @return int - <0 if left less than right, 0 if equal, >0 if left greater than right.
      */
-    static int Compare( const D_PAD* padref, const D_PAD* padcmp );
+    static int Compare( const PAD* padref, const PAD* padcmp );
 
     void Move( const wxPoint& aMoveVector ) override
     {
@@ -609,12 +604,12 @@ public:
     EDA_ITEM* Clone() const override;
 
     /**
-     * same as Clone, but returns a D_PAD item.
+     * same as Clone, but returns a PAD item.
      * Useful mainly for python scripts, because Clone returns an EDA_ITEM.
      */
-    D_PAD* ClonePad() const
+    PAD* ClonePad() const
     {
-        return (D_PAD*) Clone();
+        return (PAD*) Clone();
     }
 
     /**
@@ -745,4 +740,4 @@ private:
     int         m_thermalGap;
 };
 
-#endif  // PAD_H_
+#endif  // PAD_H

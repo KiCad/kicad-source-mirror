@@ -546,7 +546,7 @@ void pasteFootprintItemsToFootprintEditor( MODULE* aClipFootprint, BOARD* aBoard
 
     aClipFootprint->SetParent( aBoard );
 
-    for( D_PAD* pad : aClipFootprint->Pads() )
+    for( PAD* pad : aClipFootprint->Pads() )
     {
         pad->SetParent( editorFootprint );
         aPastedItems.push_back( pad );

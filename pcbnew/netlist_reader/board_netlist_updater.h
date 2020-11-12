@@ -134,11 +134,11 @@ public:
     }
 
 private:
-    void cacheNetname( D_PAD* aPad, const wxString& aNetname );
-    wxString getNetname( D_PAD* aPad );
+    void cacheNetname( PAD* aPad, const wxString& aNetname );
+    wxString getNetname( PAD* aPad );
 
-    void cachePinFunction( D_PAD* aPad, const wxString& aPinFunction );
-    wxString getPinFunction( D_PAD* aPad );
+    void cachePinFunction( PAD* aPad, const wxString& aPinFunction );
+    wxString getPinFunction( PAD* aPad );
 
     wxPoint estimateComponentInsertionPosition();
     MODULE* addNewComponent( COMPONENT* aComponent );
@@ -156,12 +156,12 @@ private:
     BOARD*          m_board;
     REPORTER*       m_reporter;
 
-    std::map<ZONE*, std::vector<D_PAD*>> m_zoneConnectionsCache;
-    std::map<wxString, wxString>         m_oldToNewNets;
-    std::map<D_PAD*, wxString>           m_padNets;
-    std::map<D_PAD*, wxString>           m_padPinFunctions;
-    std::vector<MODULE*>                 m_addedComponents;
-    std::map<wxString, NETINFO_ITEM*>    m_addedNets;
+    std::map<ZONE*, std::vector<PAD*>> m_zoneConnectionsCache;
+    std::map<wxString, wxString>       m_oldToNewNets;
+    std::map<PAD*, wxString>           m_padNets;
+    std::map<PAD*, wxString>           m_padPinFunctions;
+    std::vector<MODULE*>               m_addedComponents;
+    std::map<wxString, NETINFO_ITEM*>  m_addedNets;
 
     bool m_deleteSinglePadNets;
     bool m_deleteUnusedComponents;

@@ -2137,7 +2137,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
                 if( MODULE* mod = dyn_cast<MODULE*>( item ) )
                 {
-                    for( D_PAD* pad : mod->Pads() )
+                    for( PAD* pad : mod->Pads() )
                     {
                         for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
                         {
@@ -2175,7 +2175,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             for( auto mod : m_board->Modules() )
             {
-                for( D_PAD* pad : mod->Pads() )
+                for( PAD* pad : mod->Pads() )
                 {
                     if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
                         return -1;

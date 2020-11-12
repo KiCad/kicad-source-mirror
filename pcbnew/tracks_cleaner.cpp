@@ -85,7 +85,7 @@ void TRACKS_CLEANER::removeShortingTrackSegments()
 
     for( TRACK* segment : m_brd->Tracks() )
     {
-        for( D_PAD* testedPad : connectivity->GetConnectedPads( segment ) )
+        for( PAD* testedPad : connectivity->GetConnectedPads( segment ) )
         {
             if( segment->GetNetCode() != testedPad->GetNetCode() )
             {
@@ -225,7 +225,7 @@ void TRACKS_CLEANER::deleteTracksInPads()
             continue;
 
         // Mark track if connected to pads
-        for( D_PAD* pad : connectivity->GetConnectedPads( track ) )
+        for( PAD* pad : connectivity->GetConnectedPads( track ) )
         {
             if( pad->HitTest( track->GetStart() ) && pad->HitTest( track->GetEnd() ) )
             {
@@ -310,7 +310,7 @@ void TRACKS_CLEANER::cleanup( bool aDeleteDuplicateVias, bool aDeleteNullSegment
 
             // To delete through Via on THT pads at same location
             // Examine the list of connected pads: if a through pad is found, the via is redundant
-            for( D_PAD* pad : m_brd->GetConnectivity()->GetConnectedPads( via ) )
+            for( PAD* pad : m_brd->GetConnectivity()->GetConnectedPads( via ) )
             {
                 const LSET all_cu = LSET::AllCuMask();
 

@@ -222,13 +222,13 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
             plotter.PLOTTER::PlotPoly( poly, FILL_TYPE::NO_FILL, line_thickness, &gbr_metadata );
         }
 
-        std::vector<D_PAD*>pad_key_list;
+        std::vector<PAD*>pad_key_list;
 
         if( m_plotPad1Marker )
         {
             findPads1( pad_key_list, footprint );
 
-            for( D_PAD* pad1 : pad_key_list )
+            for( PAD* pad1 : pad_key_list )
             {
                 gbr_metadata.SetApertureAttrib(
                         GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PAD1_POSITION );
@@ -253,11 +253,11 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
                     GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_PADOTHER_POSITION );
             gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_PAD );
 
-            for( D_PAD* pad: footprint->Pads() )
+            for( PAD* pad: footprint->Pads() )
             {
                 bool skip_pad = false;
 
-                for( D_PAD* pad1 : pad_key_list )
+                for( PAD* pad1 : pad_key_list )
                 {
                     if( pad == pad1 )   // Already plotted
                     {
@@ -324,13 +324,13 @@ double PLACEFILE_GERBER_WRITER::mapRotationAngle( double aAngle )
 }
 
 
-void PLACEFILE_GERBER_WRITER::findPads1( std::vector<D_PAD*>& aPadList, MODULE* aFootprint ) const
+void PLACEFILE_GERBER_WRITER::findPads1( std::vector<PAD*>& aPadList, MODULE* aFootprint ) const
 {
     // Fint the pad "1" or pad "A1"
     // this is possible only if only one pad is found
     // Usefull to place a marker in this position
 
-    for( D_PAD* pad : aFootprint->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
     {
         if( !pad->IsOnLayer( m_layer ) )
             continue;

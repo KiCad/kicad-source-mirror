@@ -121,7 +121,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( pad->IsDirty() )
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
@@ -502,7 +502,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 /**
  * Return true if the given pad has a thermal connection with the given zone.
  */
-bool hasThermalConnection( D_PAD* pad, const ZONE* aZone )
+bool hasThermalConnection( PAD* pad, const ZONE* aZone )
 {
     // Rejects non-standard pads with tht-only thermal reliefs
     if( aZone->GetPadConnection( pad ) == ZONE_CONNECTION::THT_THERMAL
@@ -532,7 +532,7 @@ bool hasThermalConnection( D_PAD* pad, const ZONE* aZone )
  * Add a knockout for a pad.  The knockout is 'aGap' larger than the pad (which might be
  * either the thermal clearance or the electrical clearance).
  */
-void ZONE_FILLER::addKnockout( D_PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
+void ZONE_FILLER::addKnockout( PAD* aPad, PCB_LAYER_ID aLayer, int aGap, SHAPE_POLY_SET& aHoles )
 {
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
@@ -617,7 +617,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( !hasThermalConnection( pad, aZone ) )
                 continue;
@@ -692,7 +692,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     // Add non-connected pad clearances
     //
     auto knockoutPadClearance =
-            [&]( D_PAD* aPad )
+            [&]( PAD* aPad )
             {
                 if( aPad->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
@@ -731,7 +731,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
 
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
@@ -1290,7 +1290,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
             // We have to use a dummy pad to avoid dirtying the cached shapes
             wxPoint shapePos = pad->ShapePos();
             double  padAngle = pad->GetOrientation();
-            D_PAD   dummy_pad( *pad );
+            PAD     dummy_pad( *pad );
             dummy_pad.SetOrientation( 0.0 );
             dummy_pad.SetPosition( { 0, 0 } );
 
@@ -1532,7 +1532,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
 
         for( MODULE* module : m_board->Modules() )
         {
-            for( D_PAD* pad : module->Pads() )
+            for( PAD* pad : module->Pads() )
             {
                 if( pad->GetNetCode() == aZone->GetNetCode()
                     && pad->IsOnLayer( aLayer )

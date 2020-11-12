@@ -1398,9 +1398,9 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
 void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 {
-    std::unique_ptr<D_PAD> pad = std::make_unique<D_PAD>( aModule );
-    char*           line;
-    char*           saveptr;
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aModule );
+    char*                line;
+    char*                saveptr;
 
     while( ( line = READLINE( m_reader ) ) != NULL )
     {

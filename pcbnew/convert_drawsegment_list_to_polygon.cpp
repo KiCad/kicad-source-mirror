@@ -906,7 +906,7 @@ bool isCopperOutside( const MODULE* aMod, SHAPE_POLY_SET& aShape )
 {
     bool padOutside = false;
 
-    for( D_PAD* pad : aMod->Pads() )
+    for( PAD* pad : aMod->Pads() )
     {
         SHAPE_POLY_SET poly = aShape;
 

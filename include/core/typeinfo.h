@@ -87,7 +87,7 @@ enum KICAD_T
 
     // Items in pcb
     PCB_MODULE_T,           ///< class MODULE, a footprint
-    PCB_PAD_T,              ///< class D_PAD, a pad in a footprint
+    PCB_PAD_T,              ///< class PAD, a pad in a footprint
     PCB_SHAPE_T,            ///< class PCB_SHAPE, a segment not on copper layers
     PCB_TEXT_T,             ///< class PCB_TEXT, text on a layer
     PCB_FP_TEXT_T,          ///< class FP_TEXT, text in a footprint

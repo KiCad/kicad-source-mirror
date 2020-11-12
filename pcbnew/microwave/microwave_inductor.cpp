@@ -360,7 +360,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
      * (Radius decreases if necessary)
      */
 
-    D_PAD*   pad;
+    PAD*     pad;
     wxString msg;
 
     PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
@@ -437,7 +437,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     }
 
     // Place a pad on each end of coil.
-    pad = new D_PAD( footprint );
+    pad = new PAD( footprint );
 
     footprint->Add( pad );
 
@@ -451,7 +451,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     pad->SetAttribute( PAD_ATTRIB_SMD );
     pad->SetShape( PAD_SHAPE_CIRCLE );
 
-    D_PAD* newpad = new D_PAD( *pad );
+    PAD* newpad = new PAD( *pad );
     const_cast<KIID&>( newpad->m_Uuid ) = KIID();
 
     footprint->Add( newpad );

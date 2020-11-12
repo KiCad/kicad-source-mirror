@@ -285,13 +285,13 @@ KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal )
 }
 
 
-int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const D_PAD* aPad ) const
+int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const
 {
     return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillShape( aPad ) : PAD_DRILL_SHAPE_CIRCLE;
 }
 
 
-VECTOR2D KIGFX::PCB_PRINT_PAINTER::getDrillSize( const D_PAD* aPad ) const
+VECTOR2D KIGFX::PCB_PRINT_PAINTER::getDrillSize( const PAD* aPad ) const
 {
     // TODO should it depend on the pad size?
     return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aPad ) :

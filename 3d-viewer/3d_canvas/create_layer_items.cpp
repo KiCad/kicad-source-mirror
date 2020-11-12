@@ -465,7 +465,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -499,7 +499,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     // /////////////////////////////////////////////////////////////////////////
     for( MODULE* module : m_board->Modules() )
     {
-        for( D_PAD* pad : module->Pads() )
+        for( PAD* pad : module->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -1000,7 +1000,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 int     linewidth = g_DrawDefaultLineThickness;
 
-                for( D_PAD* pad : module->Pads() )
+                for( PAD* pad : module->Pads() )
                 {
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
@@ -1027,7 +1027,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             {
                 const int linewidth = g_DrawDefaultLineThickness;
 
-                for( D_PAD* pad : module->Pads() )
+                for( PAD* pad : module->Pads() )
                 {
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;

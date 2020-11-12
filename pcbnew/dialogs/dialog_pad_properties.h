@@ -47,14 +47,14 @@
 class DIALOG_PAD_PROPERTIES : public DIALOG_PAD_PROPERTIES_BASE
 {
 public:
-    DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aPad );
+    DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad );
     ~DIALOG_PAD_PROPERTIES();
 
 private:
     PCB_BASE_FRAME* m_parent;
-    D_PAD*  m_currentPad;           // pad currently being edited
-    D_PAD*  m_dummyPad;             // a working copy used to show changes
-    D_PAD*  m_padMaster;            // pad used to create new pads in board or footprint editor
+    PAD*    m_currentPad;           // pad currently being edited
+    PAD*    m_dummyPad;             // a working copy used to show changes
+    PAD*    m_padMaster;            // pad used to create new pads in board or footprint editor
     BOARD*  m_board;                // the main board: this is the board handled by the PCB
                                     //    editor or the dummy board used by the footprint editor
     bool    m_isFlipped;            // indicates the parent footprint is flipped (mirrored) in
@@ -104,7 +104,7 @@ private:
     void updatePadLayersList( LSET layer_mask, bool remove_unconnected, bool keep_top_bottom );
 
     /// Copy values from dialog field to aPad's members
-    bool transferDataToPad( D_PAD* aPad );
+    bool transferDataToPad( PAD* aPad );
 
     bool Show( bool aShow ) override;
 

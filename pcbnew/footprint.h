@@ -42,7 +42,7 @@
 
 class LINE_READER;
 class EDA_3D_CANVAS;
-class D_PAD;
+class PAD;
 class BOARD;
 class MSG_PANEL_ITEM;
 class SHAPE;
@@ -98,7 +98,7 @@ public:
     bool     m_Show;        ///< Include module in rendering
 };
 
-DECL_DEQ_FOR_SWIG( PADS, D_PAD* )
+DECL_DEQ_FOR_SWIG( PADS, PAD* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
 DECL_VEC_FOR_SWIG( FP_ZONES, FP_ZONE* )
 DECL_VEC_FOR_SWIG( MODULE_GROUPS, PCB_GROUP* )
@@ -481,12 +481,12 @@ public:
 
     /**
      * Function FindPadByName
-     * returns a D_PAD* with a matching name.  Note that names may not be
+     * returns a PAD* with a matching name.  Note that names may not be
      * unique, depending on how the foot print was created.
      * @param aPadName the pad name to find
-     * @return D_PAD* - The first matching name is returned, or NULL if not found.
+     * @return PAD* - The first matching name is returned, or NULL if not found.
      */
-    D_PAD* FindPadByName( const wxString& aPadName ) const;
+    PAD* FindPadByName( const wxString& aPadName ) const;
 
     /**
      * Function GetPad
@@ -494,17 +494,17 @@ public:
      *
      * @param aPosition A wxPoint object containing the position to hit test.
      * @param aLayerMask A layer or layers to mask the hit test.
-     * @return A pointer to a D_PAD object if found otherwise NULL.
+     * @return A pointer to a PAD object if found otherwise NULL.
      */
-    D_PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
+    PAD* GetPad( const wxPoint& aPosition, LSET aLayerMask = LSET::AllLayersMask() );
 
-    D_PAD* GetTopLeftPad();
+    PAD* GetTopLeftPad();
 
     /**
      * Gets the first pad in the list or NULL if none
      * @return first pad or null pointer
      */
-    D_PAD* GetFirstPad() const
+    PAD* GetFirstPad() const
     {
         return m_pads.empty() ? nullptr : m_pads.front();
     }
@@ -682,7 +682,7 @@ public:
 
     struct cmp_pads
     {
-        bool operator()( const D_PAD* aFirst, const D_PAD* aSecond ) const;
+        bool operator()( const PAD* aFirst, const PAD* aSecond ) const;
     };
 
 
@@ -691,10 +691,10 @@ public:
 #endif
 
 private:
-    DRAWINGS               m_drawings;  // BOARD_ITEMs for drawings on the board, owned by pointer.
-    PADS                   m_pads;      // D_PAD items, owned by pointer
-    FP_ZONES               m_fp_zones;  // FP_ZONE items, owned by pointer
-    MODULE_GROUPS          m_fp_groups; // PCB_GROUP items, owned by pointer
+    DRAWINGS       m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
+    PADS           m_pads;              // PAD items, owned by pointer
+    FP_ZONES       m_fp_zones;          // FP_ZONE items, owned by pointer
+    MODULE_GROUPS  m_fp_groups;         // PCB_GROUP items, owned by pointer
 
     double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint        m_Pos;               // Position of module on the board in internal units.

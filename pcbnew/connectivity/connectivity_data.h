@@ -50,7 +50,7 @@ class ZONE;
 class RN_DATA;
 class RN_NET;
 class TRACK;
-class D_PAD;
+class PAD;
 class MODULE;
 class PROGRESS_REPORTER;
 
@@ -191,9 +191,9 @@ public:
 
     const std::vector<TRACK*> GetConnectedTracks( const BOARD_CONNECTED_ITEM* aItem ) const;
 
-    const std::vector<D_PAD*> GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem ) const;
+    const std::vector<PAD*> GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem ) const;
 
-    void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<D_PAD*>* pads ) const;
+    void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<PAD*>* pads ) const;
 
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] );
 

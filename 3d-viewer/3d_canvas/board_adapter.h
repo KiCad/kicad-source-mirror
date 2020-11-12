@@ -540,12 +540,12 @@ class BOARD_ADAPTER
      void createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aDstContainer,
                           int aClearanceValue );
 
-    void createNewPadWithClearance( const D_PAD *aPad,
+    void createNewPadWithClearance( const PAD *aPad,
                                     CGENERICCONTAINER2D *aDstContainer,
                                     PCB_LAYER_ID aLayer,
                                     wxSize aClearanceValue ) const;
 
-    COBJECT2D *createNewPadDrill( const D_PAD* aPad, int aInflateValue );
+    COBJECT2D *createNewPadDrill( const PAD* aPad, int aInflateValue );
 
     void AddPadsShapesWithClearanceToContainer( const MODULE *aModule,
                                                 CGENERICCONTAINER2D *aDstContainer,
@@ -587,12 +587,12 @@ class BOARD_ADAPTER
                                  CGENERICCONTAINER2D *aDstContainer,
                                  const BOARD_ITEM &aBoardItem );
 
-    void buildPadShapeThickOutlineAsSegments( const D_PAD *aPad,
+    void buildPadShapeThickOutlineAsSegments( const PAD *aPad,
                                               CGENERICCONTAINER2D *aDstContainer,
                                               int aWidth );
 
     // Helper functions to create poly contours
-    void buildPadShapeThickOutlineAsPolygon( const D_PAD *aPad,
+    void buildPadShapeThickOutlineAsPolygon( const PAD *aPad,
                                              SHAPE_POLY_SET &aCornerBuffer,
                                              int aWidth) const;
 

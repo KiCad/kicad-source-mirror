@@ -1117,7 +1117,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
 
             // Store net names for all pads, to create net remap information
-            std::unordered_map<D_PAD*, wxString> netMap;
+            std::unordered_map<PAD*, wxString> netMap;
 
             for( const auto& pad : GetBoard()->GetPads() )
             {
