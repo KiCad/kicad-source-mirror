@@ -411,13 +411,13 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     // Footprint IDs are the most important, so give them the first crack at "claiming" a
     // particular KIID.
 
-    for( MODULE* footprint : board()->Modules() )
+    for( MODULE* footprint : board()->Footprints() )
         processItem( footprint );
 
     // After that the principal use is for DRC marker pointers, which are most likely to pads
     // or tracks.
 
-    for( MODULE* footprint : board()->Modules() )
+    for( MODULE* footprint : board()->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
             processItem( pad );
@@ -428,7 +428,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 
     // From here out I don't think order matters much.
 
-    for( MODULE* footprint : board()->Modules() )
+    for( MODULE* footprint : board()->Footprints() )
     {
         processItem( &footprint->Reference() );
         processItem( &footprint->Value() );

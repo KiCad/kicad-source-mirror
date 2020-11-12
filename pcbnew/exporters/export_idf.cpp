@@ -617,8 +617,8 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
         idf_export_outline( aPcb, idfBoard );
 
         // Output the drill holes and module (library) data.
-        for( auto module : aPcb->Modules() )
-            idf_export_module( aPcb, module, idfBoard );
+        for( MODULE* footprint : aPcb->Footprints() )
+            idf_export_module( aPcb, footprint, idfBoard );
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {

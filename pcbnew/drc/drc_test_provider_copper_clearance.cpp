@@ -127,7 +127,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
             m_zones.push_back( zone );
     }
 
-    for( MODULE* footprint : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
         for( ZONE* zone : footprint->Zones() )
         {
@@ -513,16 +513,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
     size_t count = 0;
 
-    for( MODULE* module : m_board->Modules() )
-        count += module->Pads().size();
+    for( MODULE* footprint : m_board->Footprints() )
+        count += footprint->Pads().size();
 
     reportAux( "Testing %d pads...", count );
 
     int ii = 0;
 
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( !reportProgress( ii++, count, delta ) )
                 break;

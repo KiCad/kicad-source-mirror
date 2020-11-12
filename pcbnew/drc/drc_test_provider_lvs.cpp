@@ -85,22 +85,22 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                        return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
                    };
 
-    auto mods = std::set<MODULE*, decltype( compare )>( compare );
+    auto footprints = std::set<MODULE*, decltype( compare )>( compare );
 
     // Search for duplicate footprints on the board
-    for( MODULE* mod : board->Modules() )
+    for( MODULE* footprint : board->Footprints() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_DUPLICATE_FOOTPRINT ) )
             break;
 
-        auto ins = mods.insert( mod );
+        auto ins = footprints.insert( footprint );
 
         if( !ins.second )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DUPLICATE_FOOTPRINT );
-            drcItem->SetItems( mod, *ins.first );
+            drcItem->SetItems( footprint, *ins.first );
 
-            reportViolation( drcItem, mod->GetPosition() );
+            reportViolation( drcItem, footprint->GetPosition() );
         }
     }
 
@@ -108,9 +108,9 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
     for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
         COMPONENT* component = aNetlist.GetComponent( ii );
-        MODULE*    module    = board->FindModuleByReference( component->GetReference() );
+        MODULE*    footprint = board->FindModuleByReference( component->GetReference() );
 
-        if( module == nullptr )
+        if( footprint == nullptr )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
                 break;
@@ -126,7 +126,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
         }
         else
         {
-            for( PAD* pad : module->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )
                     break;
@@ -141,7 +141,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition() );
                 }
                 else if( pcb_netname.IsEmpty() && !sch_net.GetNetName().IsEmpty() )
                 {
@@ -151,7 +151,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition() );
                 }
                 else if( pcb_netname != sch_net.GetNetName() )
                 {
@@ -162,7 +162,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
                     drcItem->SetItems( pad );
-                    reportViolation( drcItem, module->GetPosition() );
+                    reportViolation( drcItem, footprint->GetPosition() );
                 }
             }
 
@@ -173,35 +173,35 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 
                 const COMPONENT_NET& sch_net = component->GetNet( jj );
 
-                if( !module->FindPadByName( sch_net.GetPinName() ) )
+                if( !footprint->FindPadByName( sch_net.GetPinName() ) )
                 {
                     m_msg.Printf( _( "No pad found for pin %s in schematic." ),
                                   sch_net.GetPinName() );
 
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_NET_CONFLICT );
                     drcItem->SetErrorMessage( m_msg );
-                    drcItem->SetItems( module );
-                    reportViolation( drcItem, module->GetPosition() );
+                    drcItem->SetItems( footprint );
+                    reportViolation( drcItem, footprint->GetPosition() );
                 }
             }
         }
     }
 
     // Search for component footprints found on board but not in netlist.
-    for( MODULE* module : board->Modules() )
+    for( MODULE* footprint : board->Footprints() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_EXTRA_FOOTPRINT ) )
             break;
 
-        if( module->GetAttributes() & MOD_BOARD_ONLY )
+        if( footprint->GetAttributes() & MOD_BOARD_ONLY )
             continue;
 
-        if( !aNetlist.GetComponentByReference( module->GetReference() ) )
+        if( !aNetlist.GetComponentByReference( footprint->GetReference() ) )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_EXTRA_FOOTPRINT );
 
-            drcItem->SetItems( module );
-            reportViolation( drcItem, module->GetPosition() );
+            drcItem->SetItems( footprint );
+            reportViolation( drcItem, footprint->GetPosition() );
         }
     }
 }

@@ -365,7 +365,7 @@ void DRC_ENGINE::loadImplicitRules()
             keepoutZones.push_back( zone );
     }
 
-    for( MODULE* footprint : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
         for( ZONE* zone : footprint->Zones() )
         {
@@ -659,7 +659,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     for( ZONE* zone : m_board->Zones() )
         zone->CacheBoundingBox();
 
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* module : m_board->Footprints() )
     {
         for( ZONE* zone : module->Zones() )
             zone->CacheBoundingBox();

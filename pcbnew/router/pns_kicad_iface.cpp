@@ -1186,7 +1186,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         syncZone( aWorld, zone, boardOutline );
     }
 
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* module : m_board->Footprints() )
     {
         for( PAD* pad : module->Pads() )
         {

@@ -250,15 +250,17 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         if( crossProbingSettings.center_on_items )
         {
-            for( auto zone : pcb->Zones() )
+            for( ZONE* zone : pcb->Zones() )
                 merge_area( zone );
 
-            for( auto track : pcb->Tracks() )
+            for( TRACK* track : pcb->Tracks() )
                 merge_area( track );
 
-            for( auto mod : pcb->Modules() )
-                for( auto mod_pad : mod->Pads() )
-                    merge_area( mod_pad );
+            for( MODULE* footprint : pcb->Footprints() )
+            {
+                for( PAD* pad : footprint->Pads() )
+                    merge_area( pad );
+            }
         }
     }
     else
@@ -508,7 +510,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         NETLIST          netlist;
         STRING_FORMATTER sf;
 
-        for( MODULE* module : this->GetBoard()->Modules() )
+        for( MODULE* module : this->GetBoard()->Footprints() )
         {
             COMPONENT* component = new COMPONENT( module->GetFPID(), module->GetReference(),
                                                   module->GetValue(), module->GetPath() );

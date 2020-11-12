@@ -194,7 +194,7 @@ private:
     wxString            m_fileName;
     MARKERS             m_markers;
     DRAWINGS            m_drawings;
-    MODULES             m_modules;
+    MODULES             m_footprints;
     TRACKS              m_tracks;
     GROUPS              m_groups;
     ZONES               m_zones;
@@ -281,8 +281,8 @@ public:
     TRACKS& Tracks() { return m_tracks; }
     const TRACKS& Tracks() const { return m_tracks; }
 
-    MODULES& Modules() { return m_modules; }
-    const MODULES& Modules() const { return m_modules; }
+    MODULES& Footprints() { return m_footprints; }
+    const MODULES& Footprints() const { return m_footprints; }
 
     DRAWINGS& Drawings() { return m_drawings; }
     const DRAWINGS& Drawings() const { return m_drawings; }
@@ -328,7 +328,7 @@ public:
 
     bool IsEmpty() const
     {
-        return m_drawings.empty() && m_modules.empty() && m_tracks.empty() && m_zones.empty();
+        return m_drawings.empty() && m_footprints.empty() && m_tracks.empty() && m_zones.empty();
     }
 
     void Move( const wxPoint& aMoveVector ) override;
@@ -347,7 +347,7 @@ public:
      */
     MODULE* GetFirstFootprint() const
     {
-        return m_modules.empty() ? nullptr : m_modules.front();
+        return m_footprints.empty() ? nullptr : m_footprints.front();
     }
 
     /**
@@ -355,10 +355,10 @@ public:
      */
     void DeleteAllModules()
     {
-        for( MODULE* mod : m_modules )
-            delete mod;
+        for( MODULE* footprint : m_footprints )
+            delete footprint;
 
-        m_modules.clear();
+        m_footprints.clear();
     }
 
     /**

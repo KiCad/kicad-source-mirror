@@ -82,8 +82,8 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
     m_board = aBoard;
     m_connectivity = std::make_unique<CONNECTIVITY_DATA>( );
 
-    for( auto mod : m_board->Modules() )
-        m_connectivity->Add( mod );
+    for( MODULE* footprint : m_board->Footprints() )
+        m_connectivity->Add( footprint );
 
     m_gridSize = Millimeter2iu( STEP_AR_MM );
     m_progressReporter = nullptr;
@@ -684,17 +684,17 @@ const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefModule, PAD* aRefPad, const wx
     const PAD* nearest = nullptr;
     int64_t    nearestDist = INT64_MAX;
 
-    for ( auto mod : m_board->Modules() )
+    for ( MODULE* footprint : m_board->Footprints() )
     {
-        if ( mod == aRefModule )
+        if ( footprint == aRefModule )
             continue;
 
-        if( !m_matrix.m_BrdBox.Contains( mod->GetPosition() ) )
+        if( !m_matrix.m_BrdBox.Contains( footprint->GetPosition() ) )
             continue;
 
-        for ( auto pad: mod->Pads() )
+        for( PAD* pad: footprint->Pads() )
         {
-            if ( pad->GetNetCode() != aRefPad->GetNetCode() || pad->GetNetCode() <= 0 )
+            if( pad->GetNetCode() != aRefPad->GetNetCode() || pad->GetNetCode() <= 0 )
                 continue;
 
             auto dist = (VECTOR2I( aRefPad->GetPosition() - aOffset ) - VECTOR2I( pad->GetPosition() ) ).EuclideanNorm();
@@ -786,10 +786,10 @@ MODULE* AR_AUTOPLACER::pickModule( )
     std::vector <MODULE*> moduleList;
 
 
-    for( auto m : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        m->CalculateBoundingBox();
-        moduleList.push_back( m );
+        footprint->CalculateBoundingBox();
+        moduleList.push_back( footprint );
     }
 
     sort( moduleList.begin(), moduleList.end(), sortFootprintsByComplexity );
@@ -898,40 +898,38 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
 
     int moduleCount = 0;
 
-    for ( auto m : m_board->Modules() )
-    {
-        m->SetNeedsPlaced( false );
-    }
+    for( MODULE* footprint : m_board->Footprints() )
+        footprint->SetNeedsPlaced( false );
 
     std::vector<MODULE*> offboardMods;
 
     if( aPlaceOffboardModules )
     {
-        for( MODULE* m : m_board->Modules() )
+        for( MODULE* footprint : m_board->Footprints() )
         {
-            if( !m_matrix.m_BrdBox.Contains( m->GetPosition() ) )
-                offboardMods.push_back( m );
+            if( !m_matrix.m_BrdBox.Contains( footprint->GetPosition() ) )
+                offboardMods.push_back( footprint );
         }
     }
 
-    for( MODULE* m : aModules )
+    for( MODULE* footprint : aModules )
     {
-        m->SetNeedsPlaced( true );
-        aCommit->Modify(m);
+        footprint->SetNeedsPlaced( true );
+        aCommit->Modify( footprint );
     }
 
-    for( MODULE* m : offboardMods )
+    for( MODULE* footprint : offboardMods )
     {
-        m->SetNeedsPlaced( true );
-        aCommit->Modify(m);
+        footprint->SetNeedsPlaced( true );
+        aCommit->Modify( footprint );
     }
 
-    for( MODULE* m : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        if( m->NeedsPlaced() )    // Erase from screen
+        if( footprint->NeedsPlaced() )    // Erase from screen
             moduleCount++;
         else
-            genModuleOnRoutingMatrix( m );
+            genModuleOnRoutingMatrix( footprint );
     }
 
 
@@ -1079,8 +1077,8 @@ end_of_tst:
 
     m_matrix.UnInitRoutingMatrix();
 
-    for( MODULE* m : m_board->Modules() )
-        m->CalculateBoundingBox();
+    for( MODULE* footprint : m_board->Footprints() )
+        footprint->CalculateBoundingBox();
 
     return cancelled ? AR_CANCELLED : AR_COMPLETED;
 }

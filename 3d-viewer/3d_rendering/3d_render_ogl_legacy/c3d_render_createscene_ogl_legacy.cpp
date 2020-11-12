@@ -862,9 +862,9 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         tht_inner_holes_poly.RemoveAllContours();
 
         // Insert pads holes (vertical cylinders)
-        for( const auto module : m_boardAdapter.GetBoard()->Modules() )
+        for( const MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
         {
-            for( auto pad : module->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 if( pad->GetAttribute() != PAD_ATTRIB_NPTH )
                 {
@@ -957,15 +957,17 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
  */
 void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER* aStatusReporter )
 {
-    if((!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL )) &&
-       (!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT )) &&
-       (!m_boardAdapter.GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL )) )
+    if( !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL )
+            && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
+            && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )
+    {
         return;
+    }
 
     // Go for all footprints
-    for( MODULE* module : m_boardAdapter.GetBoard()->Modules() )
+    for( MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        for( const MODULE_3D_SETTINGS& model : module->Models() )
+        for( const MODULE_3D_SETTINGS& model : footprint->Models() )
         {
             if( model.m_Show && !model.m_Filename.empty() )
             {

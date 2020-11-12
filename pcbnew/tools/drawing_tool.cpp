@@ -2173,9 +2173,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             const wxPoint position = aVia->GetPosition();
             const LSET    lset = aVia->GetLayerSet();
 
-            for( auto mod : m_board->Modules() )
+            for( MODULE* footprint : m_board->Footprints() )
             {
-                for( PAD* pad : mod->Pads() )
+                for( PAD* pad : footprint->Pads() )
                 {
                     if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
                         return -1;

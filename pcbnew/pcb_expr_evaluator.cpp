@@ -164,7 +164,7 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
     }
     else
     {
-        for( MODULE* candidate : item->GetBoard()->Modules() )
+        for( MODULE* candidate : item->GetBoard()->Footprints() )
         {
             if( candidate->GetReference().Matches( arg->AsString() ) )
             {
@@ -322,7 +322,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             }
         }
 
-        for( MODULE* module : item->GetBoard()->Modules() )
+        for( MODULE* module : item->GetBoard()->Footprints() )
         {
             for( ZONE* candidate : module->Zones() )
             {
@@ -353,7 +353,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             }
         }
 
-        for( MODULE* module : item->GetBoard()->Modules() )
+        for( MODULE* module : item->GetBoard()->Footprints() )
         {
             for( ZONE* candidate : module->Zones() )
             {

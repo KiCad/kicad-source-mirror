@@ -88,7 +88,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     int count = 0;
 
-    for( MODULE* mod : board->Modules() )
+    for( MODULE* mod : board->Footprints() )
     {
         for( PAD* pad : mod->Pads() )
         {

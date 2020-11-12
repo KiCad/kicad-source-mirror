@@ -143,10 +143,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     // footprints inside footprints are not supported yet
                     wxASSERT( boardItem->Type() != PCB_MODULE_T );
 
-                    boardItem->SetParent( board->Modules().front() );
+                    boardItem->SetParent( board->Footprints().front() );
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Modules().front()->Add( boardItem );
+                        board->Footprints().front()->Add( boardItem );
                 }
                 else if( boardItem->Type() == PCB_FP_TEXT_T ||
                          boardItem->Type() == PCB_FP_SHAPE_T ||

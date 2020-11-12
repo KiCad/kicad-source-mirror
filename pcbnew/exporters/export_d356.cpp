@@ -94,9 +94,9 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
 {
     wxPoint origin = aPcb->GetDesignSettings().m_AuxOrigin;
 
-    for( auto module : aPcb->Modules() )
+    for( MODULE* footprint : aPcb->Footprints() )
     {
-        for( auto pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             D356_RECORD rk;
             rk.access = compute_pad_access_code( aPcb, pad->GetLayerSet() );
@@ -106,7 +106,7 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
             {
                 rk.netname = pad->GetNetname();
                 rk.pin = pad->GetName();
-                rk.refdes = module->GetReference();
+                rk.refdes = footprint->GetReference();
                 rk.midpoint = false; // XXX MAYBE need to be computed (how?)
                 const wxSize& drill = pad->GetDrillSize();
                 rk.drill = std::min( drill.x, drill.y );

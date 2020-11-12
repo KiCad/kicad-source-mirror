@@ -313,7 +313,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
     LIB_ID   newFPID;
     wxString value;
 
-    if( m_parent->GetBoard()->Modules().empty() )
+    if( m_parent->GetBoard()->Footprints().empty() )
         return false;
 
     if( !m_updateMode )
@@ -327,8 +327,8 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
     /* The change is done from the last footprint because processFootprint() modifies the last
      * item in the list.
      */
-    for( auto it = m_parent->GetBoard()->Modules().rbegin();
-            it != m_parent->GetBoard()->Modules().rend(); it++ )
+    for( auto it = m_parent->GetBoard()->Footprints().rbegin();
+            it != m_parent->GetBoard()->Footprints().rend(); it++ )
     {
         auto mod = *it;
 

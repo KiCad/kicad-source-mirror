@@ -220,26 +220,25 @@ void DIALOG_FIND::search( bool aDirection )
 
         if( FindIncludeTexts || FindIncludeValues || FindIncludeReferences )
         {
-            for( MODULE* module : m_frame->GetBoard()->Modules() )
+            for( MODULE* fp : m_frame->GetBoard()->Footprints() )
             {
-                if( ( module->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
-                            && FindIncludeReferences )
-                        || ( module->Value().Matches( m_frame->GetFindReplaceData(), nullptr )
-                                   && FindIncludeValues ) )
+                if( ( fp->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
+                      && FindIncludeReferences )
+                        || ( fp->Value().Matches( m_frame->GetFindReplaceData(), nullptr )
+                             && FindIncludeValues ) )
                 {
-                    m_hitList.push_back( module );
+                    m_hitList.push_back( fp );
                 }
 
                 if( m_includeTexts->GetValue() )
                 {
-                    for( BOARD_ITEM* item : module->GraphicalItems() )
+                    for( BOARD_ITEM* item : fp->GraphicalItems() )
                     {
                         FP_TEXT* textItem = dynamic_cast<FP_TEXT*>( item );
 
-                        if( textItem
-                                && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
+                        if( textItem && textItem->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                         {
-                            m_hitList.push_back( module );
+                            m_hitList.push_back( fp );
                         }
                     }
                 }

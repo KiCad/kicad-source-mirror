@@ -669,7 +669,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 MODULE* editorFootprint = board()->GetFirstFootprint();
                 std::vector<BOARD_ITEM*> pastedItems;
 
-                for( MODULE* clipFootprint : clipBoard->Modules() )
+                for( MODULE* clipFootprint : clipBoard->Footprints() )
                     pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
@@ -832,7 +832,7 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
     std::vector<BOARD_ITEM*> items;
 
     moveUnflaggedItems( aBoard->Tracks(), items, isNew );
-    moveUnflaggedItems( aBoard->Modules(), items, isNew );
+    moveUnflaggedItems( aBoard->Footprints(), items, isNew );
     moveUnflaggedItems( aBoard->Drawings(), items, isNew );
     moveUnflaggedItems( aBoard->Zones(), items, isNew );
 
@@ -955,7 +955,7 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
     for( auto track : brd->Tracks() )
         track->SetFlags( SKIP_STRUCT );
 
-    for( auto module : brd->Modules() )
+    for( auto module : brd->Footprints() )
         module->SetFlags( SKIP_STRUCT );
 
     for( auto group : brd->Groups() )

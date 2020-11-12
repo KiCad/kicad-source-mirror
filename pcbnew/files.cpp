@@ -1104,15 +1104,15 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
 
             // Update module LIB_IDs to point to the just imported Eagle library
-            for( MODULE* module : GetBoard()->Modules() )
+            for( MODULE* footprint : GetBoard()->Footprints() )
             {
-                LIB_ID libId = module->GetFPID();
+                LIB_ID libId = footprint->GetFPID();
 
                 if( libId.GetLibItemName().empty() )
                     continue;
 
                 libId.SetLibNickname( newfilename.GetName() );
-                module->SetFPID( libId );
+                footprint->SetFPID( libId );
             }
 
 

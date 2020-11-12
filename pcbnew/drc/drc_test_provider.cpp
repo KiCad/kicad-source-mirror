@@ -218,7 +218,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
     {
         for( ZONE* item : brd->Zones() )
         {
-            if( (item->GetLayerSet() & aLayers).any() )
+            if( ( item->GetLayerSet() & aLayers ).any() )
             {
                 if( !aFunc( item ) )
                     return n;
@@ -228,21 +228,21 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         }
     }
 
-    for( MODULE* mod : brd->Modules() )
+    for( MODULE* footprint : brd->Footprints() )
     {
         if( typeMask[ PCB_FP_TEXT_T ] )
         {
-            if( (mod->Reference().GetLayerSet() & aLayers).any() )
+            if( ( footprint->Reference().GetLayerSet() & aLayers ).any() )
             {
-                if( !aFunc( &mod->Reference() ) )
+                if( !aFunc( &footprint->Reference() ) )
                     return n;
 
                 n++;
             }
 
-            if( (mod->Value().GetLayerSet() & aLayers).any() )
+            if( ( footprint->Value().GetLayerSet() & aLayers ).any() )
             {
-                if( !aFunc( &mod->Value() ) )
+                if( !aFunc( &footprint->Value() ) )
                     return n;
 
                 n++;
@@ -251,7 +251,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
         if( typeMask[ PCB_PAD_T ] )
         {
-            for( PAD* pad : mod->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 if( ( pad->GetLayerSet() & aLayers ).any() )
                 {
@@ -263,7 +263,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             }
         }
 
-        for( BOARD_ITEM* dwg : mod->GraphicalItems() )
+        for( BOARD_ITEM* dwg : footprint->GraphicalItems() )
         {
             if( (dwg->GetLayerSet() & aLayers).any() )
             {
@@ -286,7 +286,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
         if( typeMask[ PCB_FP_ZONE_T ] )
         {
-            for( ZONE* zone : mod->Zones() )
+            for( ZONE* zone : footprint->Zones() )
             {
                 if( (zone->GetLayerSet() & aLayers).any() )
                 {
@@ -300,7 +300,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
 
         if( typeMask[ PCB_MODULE_T ] )
         {
-            if( !aFunc( mod ) )
+            if( !aFunc( footprint ) )
                 return n;
 
             n++;

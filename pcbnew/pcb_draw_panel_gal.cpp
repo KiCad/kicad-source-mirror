@@ -197,7 +197,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( track );
 
     // Load footprints and its additional elements
-    for( auto module : aBoard->Modules() )
+    for( auto module : aBoard->Footprints() )
         m_view->Add( module );
 
     // DRC markers

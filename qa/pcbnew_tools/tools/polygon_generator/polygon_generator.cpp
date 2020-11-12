@@ -82,7 +82,7 @@ int polygon_gererator_main( int argc, char* argv[] )
         for( auto track : brd->Tracks() )
             process( track, net );
 
-        for( auto mod : brd->Modules() )
+        for( auto mod : brd->Footprints() )
         {
             for( auto pad : mod->Pads() )
                 process( pad, net );

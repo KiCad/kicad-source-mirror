@@ -1376,7 +1376,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     // /////////////////////////////////////////////////////////////////////////
 
     // Insert vias holes (vertical cylinders)
-    for( auto track : m_boardAdapter.GetBoard()->Tracks() )
+    for( TRACK* track : m_boardAdapter.GetBoard()->Tracks() )
     {
         if( track->Type() == PCB_VIA_T )
         {
@@ -1386,9 +1386,9 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     }
 
     // Insert pads holes (vertical cylinders)
-    for( auto module : m_boardAdapter.GetBoard()->Modules() )
+    for( MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        for( auto pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
             if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
             {
                 insert3DPadHole( pad );
@@ -1400,14 +1400,14 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
 void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation )
 {
     // Go for all footprints
-    for( auto module : m_boardAdapter.GetBoard()->Modules() )
+    for( MODULE* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
-        if((!module->Models().empty() ) &&
-           m_boardAdapter.ShouldModuleBeDisplayed((MODULE_ATTR_T)module->GetAttributes() ) )
+        if( !fp->Models().empty()
+                && m_boardAdapter.ShouldModuleBeDisplayed( (MODULE_ATTR_T)fp->GetAttributes() ) )
         {
-            double zpos = m_boardAdapter.GetModulesZcoord3DIU( module->IsFlipped() );
+            double zpos = m_boardAdapter.GetModulesZcoord3DIU( fp->IsFlipped() );
 
-            wxPoint pos = module->GetPosition();
+            wxPoint pos = fp->GetPosition();
 
             glm::mat4 moduleMatrix = glm::mat4( 1.0f );
 
@@ -1416,16 +1416,16 @@ void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSki
                                                     -pos.y * m_boardAdapter.BiuTo3Dunits(),
                                                     zpos ) );
 
-            if( module->GetOrientation() )
+            if( fp->GetOrientation() )
             {
                 moduleMatrix = glm::rotate( moduleMatrix,
-                                            ( (float)(module->GetOrientation() / 10.0f) / 180.0f ) *
+                                            ( (float)(fp->GetOrientation() / 10.0f) / 180.0f ) *
                                             glm::pi<float>(),
                                             SFVEC3F( 0.0f, 0.0f, 1.0f ) );
             }
 
 
-            if( module->IsFlipped() )
+            if( fp->IsFlipped() )
             {
                 moduleMatrix = glm::rotate( moduleMatrix,
                                             glm::pi<float>(),
@@ -1444,12 +1444,12 @@ void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSki
                                                 modelunit_to_3d_units_factor,
                                                 modelunit_to_3d_units_factor ) );
 
-            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( module );
+            BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( fp );
 
             // Get the list of model files for this model
             S3D_CACHE* cacheMgr = m_boardAdapter.Get3DCacheManager();
-            auto sM = module->Models().begin();
-            auto eM = module->Models().end();
+            auto sM = fp->Models().begin();
+            auto eM = fp->Models().end();
 
             while( sM != eM )
             {

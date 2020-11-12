@@ -663,7 +663,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent
         canInsert = true;
 
         // search if the source footprint was not deleted:
-        for( MODULE* candidate : mainpcb->Modules() )
+        for( MODULE* candidate : mainpcb->Footprints() )
         {
             if( editorFootprint->GetLink() == candidate->m_Uuid )
             {

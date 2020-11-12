@@ -1173,7 +1173,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     std::list<MODULE*> modList;
 
     // store all footprints that are on that sheet path
-    for( MODULE* module : board()->Modules() )
+    for( MODULE* module : board()->Footprints() )
     {
         if( module == nullptr )
             continue;

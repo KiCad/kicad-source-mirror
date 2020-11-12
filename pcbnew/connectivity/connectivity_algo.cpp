@@ -433,8 +433,8 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     size += aBoard->Zones().size();
     size += aBoard->Tracks().size();
 
-    for( MODULE* mod : aBoard->Modules() )
-        size += mod->Pads().size();
+    for( MODULE* footprint : aBoard->Footprints() )
+        size += footprint->Pads().size();
 
     size *= 2;      // Our caller us gets the other half of the progress bar
 
@@ -450,7 +450,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         reportProgress( aReporter, ii++, size, delta );
     }
 
-    for( MODULE* footprint : aBoard->Modules() )
+    for( MODULE* footprint : aBoard->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

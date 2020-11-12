@@ -113,7 +113,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     // Build and sort the list of footprints alphabetically
     std::vector<LIST_MOD> list;
 
-    for( MODULE* footprint : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
         if( m_side != PCB_BOTH_SIDES )
         {
@@ -303,61 +303,61 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "$EndBOARD\n\n";
 
-    std::vector<MODULE*> sortedModules;
+    std::vector<MODULE*> sortedFootprints;
 
-    for( MODULE* module : m_board->Modules() )
-        sortedModules.push_back( module );
+    for( MODULE* footprint : m_board->Footprints() )
+        sortedFootprints.push_back( footprint );
 
-    std::sort( sortedModules.begin(), sortedModules.end(),
+    std::sort( sortedFootprints.begin(), sortedFootprints.end(),
                []( MODULE* a, MODULE* b ) -> bool
                {
                    return StrNumCmp( a->GetReference(), b->GetReference(), true ) < 0;
                });
 
-    for( MODULE* module : sortedModules )
+    for( MODULE* footprint : sortedFootprints )
     {
-        wxString ref = module->Reference().GetShownText();
+        wxString ref = footprint->Reference().GetShownText();
 
         sprintf( line, "$MODULE %s\n", TO_UTF8( ref ) );
         buffer += line;
 
         sprintf( line, "reference %s\n", TO_UTF8( ref ) );
-        sprintf( line, "value %s\n", EscapedUTF8( module->Value().GetShownText() ).c_str() );
-        sprintf( line, "footprint %s\n", module->GetFPID().Format().c_str() );
+        sprintf( line, "value %s\n", EscapedUTF8( footprint->Value().GetShownText() ).c_str() );
+        sprintf( line, "footprint %s\n", footprint->GetFPID().Format().c_str() );
         buffer += line;
 
         buffer += "attribut";
 
-        if( ( module->GetAttributes() & ( MOD_THROUGH_HOLE | MOD_SMD ) ) == 0 )
+        if(( footprint->GetAttributes() & ( MOD_THROUGH_HOLE | MOD_SMD ) ) == 0 )
             buffer += " virtual";
 
-        if( module->GetAttributes() & MOD_SMD )
+        if( footprint->GetAttributes() & MOD_SMD )
             buffer += " smd";
 
-        if( module->GetAttributes() & MOD_THROUGH_HOLE )
+        if( footprint->GetAttributes() & MOD_THROUGH_HOLE )
             buffer += " none";
 
         buffer += "\n";
 
-        wxPoint module_pos = module->GetPosition();
+        wxPoint module_pos = footprint->GetPosition();
         module_pos -= m_place_Offset;
 
         sprintf( line, "position %9.6f %9.6f  orientation %.2f\n",
                  module_pos.x * conv_unit,
                  module_pos.y * conv_unit,
-                 module->GetOrientation() / 10.0 );
+                 footprint->GetOrientation() / 10.0 );
         buffer += line;
 
-        if( module->GetLayer() == F_Cu )
+        if( footprint->GetLayer() == F_Cu )
             buffer += "layer front\n";
-        else if( module->GetLayer() == B_Cu )
+        else if( footprint->GetLayer() == B_Cu )
             buffer += "layer back\n";
         else
             buffer += "layer other\n";
 
         std::vector<PAD*> sortedPads;
 
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
             sortedPads.push_back( pad );
 
         std::sort( sortedPads.begin(), sortedPads.end(),
@@ -390,7 +390,7 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
                      pad->GetPos0().y * conv_unit,
                      pad->GetSize().x * conv_unit,
                      pad->GetSize().y * conv_unit,
-                     ( pad->GetOrientation() - module->GetOrientation()) / 10.0 );
+                     ( pad->GetOrientation() - footprint->GetOrientation()) / 10.0 );
             buffer += line;
 
             sprintf( line, "drill %9.6f\n", pad->GetDrillSize().x * conv_unit );

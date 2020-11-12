@@ -82,9 +82,9 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
     int ii = 0;
 
-    for( MODULE* footprint : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        if( !reportProgress( ii++, m_board->Modules().size(), delta ) )
+        if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
             return;
 
         if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) != 0 )
@@ -128,9 +128,9 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 
     int ii = 0;
 
-    for( auto it1 = m_board->Modules().begin(); it1 != m_board->Modules().end(); it1++ )
+    for( auto it1 = m_board->Footprints().begin(); it1 != m_board->Footprints().end(); it1++ )
     {
-        if( !reportProgress( ii++, m_board->Modules().size(), delta ) )
+        if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
             break;
 
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
@@ -143,7 +143,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
         if( footprintFront.OutlineCount() == 0 && footprintBack.OutlineCount() == 0 )
             continue; // No courtyards defined
 
-        for( auto it2 = it1 + 1; it2 != m_board->Modules().end(); it2++ )
+        for( auto it2 = it1 + 1; it2 != m_board->Footprints().end(); it2++ )
         {
             MODULE*         test = *it2;
             SHAPE_POLY_SET& testFront = test->GetPolyCourtyardFront();

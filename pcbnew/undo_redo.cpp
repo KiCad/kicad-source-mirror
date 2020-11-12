@@ -118,7 +118,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             return true;
     }
 
-    for( MODULE* item : aPcb->Modules() )
+    for( MODULE* item : aPcb->Footprints() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;

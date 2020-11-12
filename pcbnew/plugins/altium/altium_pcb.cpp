@@ -445,9 +445,9 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
     }
 
     // Finish Board by recalculating module boundingboxes
-    for( auto& module : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        module->CalculateBoundingBox();
+        footprint->CalculateBoundingBox();
     }
 
     // Otherwise we cannot save the imported board

@@ -74,7 +74,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     FILE*      fp_bom;
     wxString   msg;
 
-    if( GetBoard()->Modules().empty() )
+    if( GetBoard()->Footprints().empty() )
     {
         ShowInfoBarError( _( "Cannot export BOM: there are no footprints on the PCB." ) );
         return;
@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     CmpList::iterator iter;
     int               i = 1;
 
-    for( MODULE* module : GetBoard()->Modules() )
+    for( MODULE* fp : GetBoard()->Footprints() )
     {
         bool valExist = false;
 
@@ -128,10 +128,10 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             cmp* current = *iter;
 
-            if( (current->m_Val == module->GetValue()) && (current->m_fpid == module->GetFPID()) )
+            if( (current->m_Val == fp->GetValue()) && (current->m_fpid == fp->GetFPID()) )
             {
                 current->m_Ref.Append( wxT( ", " ), 1 );
-                current->m_Ref.Append( module->Reference().GetShownText() );
+                current->m_Ref.Append( fp->Reference().GetShownText() );
                 current->m_CmpCount++;
 
                 valExist = true;
@@ -144,9 +144,9 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             comp = new cmp();
             comp->m_Id  = i++;
-            comp->m_Val = module->Value().GetShownText();
-            comp->m_Ref = module->Reference().GetShownText();
-            comp->m_fpid = module->GetFPID();
+            comp->m_Val = fp->Value().GetShownText();
+            comp->m_Ref = fp->Reference().GetShownText();
+            comp->m_fpid = fp->GetFPID();
             comp->m_CmpCount = 1;
             list.Append( comp );
         }

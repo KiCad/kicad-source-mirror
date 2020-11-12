@@ -403,7 +403,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     for( ZONE* zone : m_frame->GetBoard()->Zones() )
         zone->CacheBoundingBox();
 
-    for( MODULE* module : m_frame->GetBoard()->Modules() )
+    for( MODULE* module : m_frame->GetBoard()->Footprints() )
     {
         for( ZONE* zone : module->Zones() )
             zone->CacheBoundingBox();
@@ -863,7 +863,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             if( selection.Empty() )
             {
                 // Clear the previous local ratsnest if we click off all items
-                for( MODULE* fp : board->Modules() )
+                for( MODULE* fp : board->Footprints() )
                 {
                     for( PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
@@ -900,7 +900,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {
-                for( MODULE* fp : board->Modules() )
+                for( MODULE* fp : board->Footprints() )
                 {
                     for( PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );

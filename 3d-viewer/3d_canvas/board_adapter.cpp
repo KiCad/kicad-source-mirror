@@ -93,12 +93,12 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_calc_seg_max_factor3DU = 0.0f;
 
     SetFlag( FL_USE_REALISTIC_MODE, true );
-    SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, true );
+    SetFlag( FL_FP_ATTRIBUTES_NORMAL, true );
     SetFlag( FL_SHOW_BOARD_BODY, true );
     SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, false );
-    SetFlag( FL_MODULE_ATTRIBUTES_NORMAL, true );
-    SetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, true );
-    SetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL, true );
+    SetFlag( FL_FP_ATTRIBUTES_NORMAL, true );
+    SetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT, true );
+    SetFlag( FL_FP_ATTRIBUTES_VIRTUAL, true );
     SetFlag( FL_ZONE, true );
     SetFlag( FL_SILKSCREEN, true );
     SetFlag( FL_SOLDERMASK, true );
@@ -241,11 +241,11 @@ void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
 bool BOARD_ADAPTER::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
 {
     if( aModuleAttributs & MOD_SMD )
-        return GetFlag( FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
+        return GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT );
     else if( aModuleAttributs & MOD_THROUGH_HOLE )
-        return GetFlag( FL_MODULE_ATTRIBUTES_NORMAL );
+        return GetFlag( FL_FP_ATTRIBUTES_NORMAL );
     else
-        return GetFlag( FL_MODULE_ATTRIBUTES_VIRTUAL );
+        return GetFlag( FL_FP_ATTRIBUTES_VIRTUAL );
 }
 
 

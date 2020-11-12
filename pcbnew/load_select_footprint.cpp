@@ -331,7 +331,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
     wxString        msg;
     wxArrayString   listnames;
 
-    for( MODULE* footprint : aPcb->Modules() )
+    for( MODULE* footprint : aPcb->Footprints() )
         listnames.Add( footprint->GetReference() );
 
     msg.Printf( _( "Footprints [%u items]" ), (unsigned) listnames.GetCount() );
@@ -360,7 +360,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 
     oldName = fpname;
 
-    for( auto mod : aPcb->Modules() )
+    for( auto mod : aPcb->Footprints() )
     {
         if( fpname == mod->GetReference() )
             return mod;
@@ -431,7 +431,7 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     wxArrayString   fplist;
 
     // Build list of available fp references, to display them in dialog
-    for( auto fp : GetBoard()->Modules() )
+    for( auto fp : GetBoard()->Footprints() )
         fplist.Add( fp->GetReference() + wxT("    ( ") + fp->GetValue() + wxT(" )") );
 
     fplist.Sort();
@@ -447,7 +447,7 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 
     if( !footprintName.IsEmpty() )
     {
-        for( auto mod : GetBoard()->Modules() )
+        for( auto mod : GetBoard()->Footprints() )
         {
             if( mod->GetReference().CmpNoCase( footprintName ) == 0 )
                 return mod;

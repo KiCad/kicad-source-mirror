@@ -181,18 +181,18 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     BOARD* board = m_parentFrame->GetBoard();
 
     // Get footprints and pads count
-    for( MODULE* module : board->Modules() )
+    for( MODULE* footprint : board->Footprints() )
     {
         // Do not proceed footprints with no pads if checkbox checked
-        if( m_checkBoxExcludeComponentsNoPins->GetValue() && ! module->Pads().size() )
+        if( m_checkBoxExcludeComponentsNoPins->GetValue() && ! footprint->Pads().size() )
             continue;
 
         // Go through components types list
         for( auto& type : m_componentsTypes )
         {
-            if( ( module->GetAttributes() & type.attribute ) > 0 )
+            if(( footprint->GetAttributes() & type.attribute ) > 0 )
             {
-                if( module->IsFlipped() )
+                if( footprint->IsFlipped() )
                     type.backSideQty++;
                 else
                     type.frontSideQty++;
@@ -200,7 +200,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
         }
 
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             // Go through pads types list
             for( auto& type : m_padsTypes )
@@ -229,10 +229,11 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
                 }
 
                 drillType_t drill( pad->GetDrillSize().x, pad->GetDrillSize().y,
-                        pad->GetDrillShape(), pad->GetAttribute() != PAD_ATTRIB_NPTH,
-                        true, top, bottom );
+                                   pad->GetDrillShape(), pad->GetAttribute() != PAD_ATTRIB_NPTH,
+                                   true, top, bottom );
 
                 auto it = m_drillTypes.begin();
+
                 for( ; it != m_drillTypes.end(); it++ )
                 {
                     if( *it == drill )
@@ -267,9 +268,10 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
 
             drillType_t drill( via->GetDrillValue(), via->GetDrillValue(), PAD_DRILL_SHAPE_CIRCLE,
-                    true, false, via->TopLayer(), via->BottomLayer() );
+                               true, false, via->TopLayer(), via->BottomLayer() );
 
             auto it = m_drillTypes.begin();
+
             for( ; it != m_drillTypes.end(); it++ )
             {
                 if( *it == drill )
@@ -289,7 +291,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     }
 
     sort( m_drillTypes.begin(), m_drillTypes.end(),
-            drillType_t::COMPARE( drillType_t::COL_COUNT, false ) );
+          drillType_t::COMPARE( drillType_t::COL_COUNT, false ) );
 
     bool           boundingBoxCreated = false; //flag if bounding box initialized
     BOX2I          bbox;

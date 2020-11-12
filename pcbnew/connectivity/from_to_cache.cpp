@@ -35,15 +35,15 @@ void FROM_TO_CACHE::buildEndpointList( )
 {
     m_ftEndpoints.clear();
 
-    for( auto mod : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( auto pad : mod->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             FT_ENDPOINT ent;
-            ent.name = mod->GetReference() + "-" + pad->GetName();
+            ent.name = footprint->GetReference() + "-" + pad->GetName();
             ent.parent = pad;
             m_ftEndpoints.push_back( ent );
-            ent.name = mod->GetReference();
+            ent.name = footprint->GetReference();
             ent.parent = pad;
             m_ftEndpoints.push_back( ent );
         }

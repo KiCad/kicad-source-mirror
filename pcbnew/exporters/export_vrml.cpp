@@ -1655,8 +1655,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
             output_file << "  children [\n";
 
             // Export footprints
-            for( MODULE* module : pcb->Modules() )
-                export_vrml_module( model3d, pcb, module, &output_file );
+            for( MODULE* footprint : pcb->Footprints() )
+                export_vrml_module( model3d, pcb, footprint, &output_file );
 
             // write out the board and all layers
             write_layers( model3d, pcb, TO_UTF8( aFullFileName ), &output_file );
@@ -1669,8 +1669,8 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         else
         {
             // Export footprints
-            for( MODULE* module : pcb->Modules() )
-                export_vrml_module( model3d, pcb, module, NULL );
+            for( MODULE* footprint : pcb->Footprints() )
+                export_vrml_module( model3d, pcb, footprint, NULL );
 
             // write out the board and all layers
             write_layers( model3d, pcb, TO_UTF8( aFullFileName ), NULL );

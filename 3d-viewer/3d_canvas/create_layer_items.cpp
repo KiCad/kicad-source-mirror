@@ -463,9 +463,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // Add holes of footprints
     // /////////////////////////////////////////////////////////////////////////
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -497,9 +497,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // Add contours of the pad holes (pads can be Circle or Segment holes)
     // /////////////////////////////////////////////////////////////////////////
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             const wxSize padHole = pad->GetDrillSize();
 
@@ -549,28 +549,28 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // ADD PADS
-        for( MODULE* module : m_board->Modules() )
+        for( MODULE* footprint : m_board->Footprints() )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
-            AddPadsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0,
+            AddPadsShapesWithClearanceToContainer( footprint, layerContainer, curr_layer_id, 0,
                                                    true, renderPlatedPadsAsPlated, false );
 
             // Micro-wave footprints may have items on copper layers
-            AddGraphicsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0 );
+            AddGraphicsShapesWithClearanceToContainer( footprint, layerContainer, curr_layer_id, 0 );
         }
     }
 
     if( renderPlatedPadsAsPlated )
     {
         // ADD PLATED PADS
-        for( MODULE* module : m_board->Modules() )
+        for( MODULE* footprint : m_board->Footprints() )
         {
-            AddPadsShapesWithClearanceToContainer( module, m_platedpads_container2D_F_Cu, F_Cu, 0,
-                                                   true, false, true );
+            AddPadsShapesWithClearanceToContainer( footprint, m_platedpads_container2D_F_Cu, F_Cu,
+                                                   0, true, false, true );
 
-            AddPadsShapesWithClearanceToContainer( module, m_platedpads_container2D_B_Cu, B_Cu, 0,
-                                                   true, false, true );
+            AddPadsShapesWithClearanceToContainer( footprint, m_platedpads_container2D_B_Cu, B_Cu,
+                                                   0, true, false, true );
         }
 
         m_platedpads_container2D_F_Cu->BuildBVH();
@@ -588,33 +588,33 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
 
             // Add pads to polygon list
-            for( auto module : m_board->Modules() )
+            for( MODULE* footprint : m_board->Footprints() )
             {
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
-                module->TransformPadsShapesWithClearanceToPolygon( *layerPoly, curr_layer_id,
-                                                                   0, ARC_HIGH_DEF, ERROR_INSIDE,
-                                                                   true, renderPlatedPadsAsPlated,
-                                                                   false );
+                footprint->TransformPadsShapesWithClearanceToPolygon( *layerPoly, curr_layer_id,
+                                                                      0, ARC_HIGH_DEF, ERROR_INSIDE,
+                                                                      true, renderPlatedPadsAsPlated,
+                                                                      false );
 
-                transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
+                transformGraphicModuleEdgeToPolygonSet( footprint, curr_layer_id, *layerPoly );
             }
         }
 
         if( renderPlatedPadsAsPlated )
         {
             // ADD PLATED PADS contourns
-            for( auto module : m_board->Modules() )
+            for( MODULE* footprint : m_board->Footprints() )
             {
-                module->TransformPadsShapesWithClearanceToPolygon( *m_F_Cu_PlatedPads_poly, F_Cu,
-                                                                   0, ARC_HIGH_DEF, ERROR_INSIDE,
-                                                                   true, false, true );
+                footprint->TransformPadsShapesWithClearanceToPolygon( *m_F_Cu_PlatedPads_poly, F_Cu,
+                                                                      0, ARC_HIGH_DEF, ERROR_INSIDE,
+                                                                      true, false, true );
 
                 //transformGraphicModuleEdgeToPolygonSet( module, F_Cu, *m_F_Cu_PlatedPads_poly );
 
-                module->TransformPadsShapesWithClearanceToPolygon( *m_B_Cu_PlatedPads_poly, B_Cu,
-                                                                   0, ARC_HIGH_DEF, ERROR_INSIDE,
-                                                                   true, false, true );
+                footprint->TransformPadsShapesWithClearanceToPolygon( *m_B_Cu_PlatedPads_poly, B_Cu,
+                                                                      0, ARC_HIGH_DEF, ERROR_INSIDE,
+                                                                      true, false, true );
 
                 //transformGraphicModuleEdgeToPolygonSet( module, B_Cu, *m_B_Cu_PlatedPads_poly );
             }
@@ -994,7 +994,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         // Add footprints tech layers - objects
         // /////////////////////////////////////////////////////////////////////
-        for( MODULE* module : m_board->Modules() )
+        for( MODULE* module : m_board->Footprints() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
@@ -1021,7 +1021,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
 
         // Add footprints tech layers - contours
-        for( MODULE* module : m_board->Modules() )
+        for( MODULE* module : m_board->Footprints() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {

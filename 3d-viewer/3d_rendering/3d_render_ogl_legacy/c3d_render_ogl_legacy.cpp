@@ -970,8 +970,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    // Enables Texture Env so it can combine model transparency with
-    // each module opacity setting
+    // Enables Texture Env so it can combine model transparency with each footprint opacity
     glEnable( GL_TEXTURE_2D );
     glActiveTexture( GL_TEXTURE0 );
 
@@ -1266,15 +1265,16 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
     C_OGL_3DMODEL::BeginDrawMulti( !aRenderSelectedOnly );
 
     // Go for all footprints
-    for( auto module : m_boardAdapter.GetBoard()->Modules() )
+    for( MODULE* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
-        const bool isIntersected = ( module == m_currentIntersectedBoardItem );
+        const bool isIntersected = ( fp == m_currentIntersectedBoardItem );
 
-        if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) &&
-            !isIntersected &&
-            ( ( aRenderSelectedOnly && !module->IsSelected() ) ||
-              ( !aRenderSelectedOnly && module->IsSelected() ) ) )
+        if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) && !isIntersected
+                && ( ( aRenderSelectedOnly && !fp->IsSelected() )
+                    || ( !aRenderSelectedOnly && fp->IsSelected() ) ) )
+        {
             continue;
+        }
 
         if( isIntersected && aRenderSelectedOnly )
         {
@@ -1285,11 +1285,17 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
             glLineWidth( 6 );
         }
 
-        if( !module->Models().empty() )
-            if( m_boardAdapter.ShouldModuleBeDisplayed((MODULE_ATTR_T) module->GetAttributes() ) )
-                if( ( aRenderTopOrBot && !module->IsFlipped() )
-                        || ( !aRenderTopOrBot && module->IsFlipped() ) )
-                    render_3D_module( module, aRenderTransparentOnly, isIntersected );
+        if( !fp->Models().empty() )
+        {
+            if( m_boardAdapter.ShouldModuleBeDisplayed( (MODULE_ATTR_T) fp->GetAttributes() ) )
+            {
+                if( ( aRenderTopOrBot && !fp->IsFlipped() )
+                 || ( !aRenderTopOrBot && fp->IsFlipped() ) )
+                {
+                    render_3D_module( fp, aRenderTransparentOnly, isIntersected );
+                }
+            }
+        }
 
         if( isIntersected && aRenderSelectedOnly )
         {

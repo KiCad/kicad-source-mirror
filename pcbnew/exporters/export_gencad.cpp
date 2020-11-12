@@ -275,14 +275,14 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
      */
     BOARD*  pcb = GetBoard();
 
-    for( MODULE* module : pcb->Modules() )
+    for( MODULE* footprint : pcb->Footprints() )
     {
-        module->SetFlag( 0 );
+        footprint->SetFlag( 0 );
 
-        if( module->GetLayer() == B_Cu )
+        if( footprint->GetLayer() == B_Cu )
         {
-            module->Flip( module->GetPosition(), Settings().m_FlipLeftRight );
-            module->SetFlag( 1 );
+            footprint->Flip( footprint->GetPosition(), Settings().m_FlipLeftRight );
+            footprint->SetFlag( 1 );
         }
     }
 
@@ -311,12 +311,12 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     fclose( file );
 
     // Undo the footprints modifications (flipped footprints)
-    for( auto module : pcb->Modules() )
+    for( MODULE* footprint : pcb->Footprints() )
     {
-        if( module->GetFlag() )
+        if( footprint->GetFlag() )
         {
-            module->Flip( module->GetPosition(), Settings().m_FlipLeftRight );
-            module->SetFlag( 0 );
+            footprint->Flip( footprint->GetPosition(), Settings().m_FlipLeftRight );
+            footprint->SetFlag( 0 );
         }
     }
 
@@ -694,7 +694,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
     fputs( "$SHAPES\n", aFile );
 
-    for( MODULE* module : aPcb->Modules() )
+    for( MODULE* footprint : aPcb->Footprints() )
     {
         if( !individualShapes )
         {
@@ -702,10 +702,10 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             // It is necessary to compute hash (i.e. check all children objects) as
             // certain components instances might have been modified on the board.
             // In such case the shape will be different despite the same LIB_ID.
-            wxString shapeName = module->GetFPID().Format();
+            wxString shapeName = footprint->GetFPID().Format();
 
             auto shapeIt = shapes.find( shapeName );
-            size_t modHash = hashModule( module );
+            size_t modHash = hashModule( footprint );
 
             if( shapeIt != shapes.end() )
             {
@@ -731,26 +731,26 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 if( shapeIt != shapes.end() && modHash == shapeIt->second )
                 {
                     // shape found, so reuse it
-                    componentShapes[module] = modHash;
+                    componentShapes[footprint] = modHash;
                     continue;
                 }
             }
 
             // new shape
-            componentShapes[module] = modHash;
+            componentShapes[footprint] = modHash;
             shapeNames[modHash] = shapeName;
             shapes[shapeName] = modHash;
-            FootprintWriteShape( aFile, module, shapeName );
+            FootprintWriteShape( aFile, footprint, shapeName );
         }
         else // individual shape for each component
         {
-            FootprintWriteShape( aFile, module, module->GetReference() );
+            FootprintWriteShape( aFile, footprint, footprint->GetReference() );
         }
 
         // set of already emitted pins to check for duplicates
         std::set<wxString> pins;
 
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             /* Padstacks are defined using the correct layers for the pads, therefore to
              * all pads need to be marked as TOP to use the padstack information correctly.
@@ -778,11 +778,11 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
                 pins.insert( pinname );
             }
 
-            double orient = pad->GetOrientation() - module->GetOrientation();
+            double orient = pad->GetOrientation() - footprint->GetOrientation();
             NORMALIZE_ANGLE_POS( orient );
 
             // Bottom side footprints use the flipped padstack
-            fprintf( aFile, ( flipBottomPads && module->GetFlag() ) ?
+            fprintf( aFile, ( flipBottomPads && footprint->GetFlag() ) ?
                      "PIN \"%s\" PAD%dF %g %g %s %g %s\n" :
                      "PIN \"%s\" PAD%d %g %g %s %g %s\n",
                      TO_UTF8( escapeString( pinname ) ), pad->GetSubRatsnest(),
@@ -807,13 +807,13 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
     int cu_count = aPcb->GetCopperLayerCount();
 
-    for( MODULE* module : aPcb->Modules() )
+    for( MODULE* footprint : aPcb->Footprints() )
     {
         const char*   mirror;
         const char*   flip;
-        double        fp_orient = module->GetOrientation();
+        double        fp_orient = footprint->GetOrientation();
 
-        if( module->GetFlag() )
+        if( footprint->GetFlag() )
         {
             mirror = "MIRRORX";
             flip   = "FLIP";
@@ -826,25 +826,25 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
         }
 
         fprintf( aFile, "\nCOMPONENT \"%s\"\n",
-                 TO_UTF8( escapeString( module->GetReference() ) ) );
+                 TO_UTF8( escapeString( footprint->GetReference() ) ) );
         fprintf( aFile, "DEVICE \"DEV_%s\"\n",
-                 TO_UTF8( escapeString( getShapeName( module ) ) ) );
+                 TO_UTF8( escapeString( getShapeName( footprint ) ) ) );
         fprintf( aFile, "PLACE %g %g\n",
-                 MapXTo( module->GetPosition().x ),
-                 MapYTo( module->GetPosition().y ) );
+                 MapXTo( footprint->GetPosition().x ),
+                 MapYTo( footprint->GetPosition().y ) );
         fprintf( aFile, "LAYER %s\n",
-                 module->GetFlag() ? "BOTTOM" : "TOP" );
+                 footprint->GetFlag() ? "BOTTOM" : "TOP" );
         fprintf( aFile, "ROTATION %g\n",
                  fp_orient / 10.0 );
         fprintf( aFile, "SHAPE \"%s\" %s %s\n",
-                 TO_UTF8( escapeString( getShapeName( module ) ) ),
+                 TO_UTF8( escapeString( getShapeName( footprint ) ) ),
                  mirror, flip );
 
         // Text on silk layer: RefDes and value (are they actually useful?)
-        for( FP_TEXT* textItem : { &module->Reference(), &module->Value() } )
+        for( FP_TEXT* textItem : { &footprint->Reference(), &footprint->Value() } )
         {
             double txt_orient = textItem->GetTextAngle();
-            std::string layer = GenCADLayerName( cu_count, module->GetFlag() ? B_SilkS : F_SilkS );
+            std::string layer = GenCADLayerName( cu_count, footprint->GetFlag() ? B_SilkS : F_SilkS );
 
             fprintf( aFile, "TEXT %g %g %g %g %s %s \"%s\"",
                      textItem->GetPos0().x / SCALE_FACTOR,
@@ -863,8 +863,8 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
         // The SHEET is a 'generic description' for referencing the component
         fprintf( aFile, "SHEET \"RefDes: %s, Value: %s\"\n",
-                 TO_UTF8( module->GetReference() ),
-                 TO_UTF8( module->GetValue() ) );
+                 TO_UTF8( footprint->GetReference() ),
+                 TO_UTF8( footprint->GetValue() ) );
     }
 
     fputs( "$ENDCOMPONENTS\n\n", aFile );
@@ -898,15 +898,15 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         fputs( TO_UTF8( msg ), aFile );
         fputs( "\n", aFile );
 
-        for( MODULE* module : aPcb->Modules() )
+        for( MODULE* footprint : aPcb->Footprints() )
         {
-            for( PAD* pad : module->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 if( pad->GetNetCode() != net->GetNet() )
                     continue;
 
                 msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
-                            escapeString( module->GetReference() ),
+                            escapeString( footprint->GetReference() ),
                             escapeString( pad->GetName() ) );
 
                 fputs( TO_UTF8( msg ), aFile );
@@ -922,8 +922,8 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
 // Creates the header section
 static bool CreateHeaderInfoData( FILE* aFile, PCB_EDIT_FRAME* aFrame )
 {
-    wxString    msg;
-    BOARD *board = aFrame->GetBoard();
+    wxString msg;
+    BOARD*   board = aFrame->GetBoard();
 
     fputs( "$HEADER\n", aFile );
     fputs( "GENCAD 1.4\n", aFile );

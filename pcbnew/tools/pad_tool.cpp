@@ -167,7 +167,7 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
 
     double pad_orient = aSrcPad.GetOrientation() - moduleRef->GetOrientation();
 
-    for( auto module : board.Modules() )
+    for( auto module : board.Footprints() )
     {
         if( !aSameFootprints && ( module != moduleRef ) )
             continue;

@@ -67,7 +67,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     // Collect footprints on the right layer
     std::vector<MODULE*> fp_list;
 
-    for( MODULE* footprint : m_pcb->Modules() )
+    for( MODULE* footprint : m_pcb->Footprints() )
     {
         if( footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
              continue;

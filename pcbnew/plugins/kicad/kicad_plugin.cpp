@@ -619,8 +619,8 @@ void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 {
-    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_modules( aBoard->Modules().begin(),
-            aBoard->Modules().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_modules( aBoard->Footprints().begin(),
+                                                               aBoard->Footprints().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),
             aBoard->Drawings().end() );
     std::set<TRACK*, TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),

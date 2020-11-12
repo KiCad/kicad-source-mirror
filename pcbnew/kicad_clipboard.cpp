@@ -136,7 +136,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
         }
 
         // Set the new relative internal local coordinates of copied items
-        MODULE* editedFootprint = m_board->Modules().front();
+        MODULE* editedFootprint = m_board->Footprints().front();
         wxPoint moveVector = partialFootprint.GetPosition() + editedFootprint->GetPosition();
 
         partialFootprint.MoveAnchorPosition( moveVector );

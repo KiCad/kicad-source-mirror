@@ -624,7 +624,7 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     wxString msg;
     const COMPONENT* component;
 
-    for( MODULE* footprint : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
         if(( footprint->GetAttributes() & MOD_BOARD_ONLY ) > 0 )
             continue;
@@ -785,7 +785,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     m_errorCount = 0;
     m_warningCount = 0;
     m_newFootprintsCount = 0;
-    MODULE* lastPreexistingFootprint = m_board->Modules().empty() ? NULL : m_board->Modules().back();
+    MODULE* lastPreexistingFootprint = m_board->Footprints().empty() ? NULL : m_board->Footprints().back();
 
     cacheCopperZoneConnections();
 
@@ -813,7 +813,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-        for( auto footprint : m_board->Modules() )
+        for( MODULE* footprint : m_board->Footprints() )
         {
             bool     match = false;
 

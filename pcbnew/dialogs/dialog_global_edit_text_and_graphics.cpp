@@ -378,7 +378,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
 
     // Go through the footprints
-    for( MODULE* fp : m_parent->GetBoard()->Modules() )
+    for( MODULE* fp : m_parent->GetBoard()->Footprints() )
     {
         if( m_references->GetValue() )
             visitItem( commit, &fp->Reference() );

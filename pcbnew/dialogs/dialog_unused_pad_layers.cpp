@@ -90,7 +90,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 {
     if( m_cbSelectedOnly->IsChecked() )
     {
-        for( auto item : m_items )
+        for( EDA_ITEM* item : m_items )
         {
             m_commit.Modify( item );
 
@@ -103,9 +103,9 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
             if( item->Type() == PCB_MODULE_T && m_rbScope->GetSelection() == SCOPE_PADS )
             {
-                MODULE* mod = static_cast<MODULE*>( item );
+                MODULE* footprint = static_cast<MODULE*>( item );
 
-                for( auto pad : mod->Pads() )
+                for( PAD* pad : footprint->Pads() )
                 {
                     pad->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
                     pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
@@ -125,12 +125,11 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
     {
         if( m_rbScope->GetSelection() == SCOPE_PADS )
         {
-            for( auto item : m_frame->GetBoard()->Modules() )
+            for( MODULE* footprint : m_frame->GetBoard()->Footprints() )
             {
-                m_commit.Modify( item );
-                MODULE* mod = static_cast<MODULE*>( item );
+                m_commit.Modify( footprint );
 
-                for( auto pad : mod->Pads() )
+                for( PAD* pad : footprint->Pads() )
                 {
                     pad->SetRemoveUnconnected( m_rbAction->GetSelection() == PAD_ACTION_REMOVE );
                     pad->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
@@ -139,7 +138,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
         }
         else
         {
-            for( auto item : m_frame->GetBoard()->Tracks() )
+            for( TRACK* item : m_frame->GetBoard()->Tracks() )
             {
                 if( item->Type() != PCB_VIA_T )
                     continue;

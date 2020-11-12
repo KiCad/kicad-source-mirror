@@ -97,7 +97,7 @@ wxString ActionMessage[] = {
 
 DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
         : DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ),
-        m_modules( aParentFrame->GetBoard()->Modules() )
+        m_modules( aParentFrame->GetBoard()->Footprints() )
 {
     m_Config = Kiface().KifaceSettings();
     InitValues();
@@ -706,7 +706,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
     m_FrontModules.clear();
     m_BackModules.clear();
     m_ExcludeArray.clear();
-    m_modules = m_frame->GetBoard()->Modules();
+    m_modules = m_frame->GetBoard()->Footprints();
 
     std::vector<KIID> selected;
 

@@ -218,7 +218,7 @@ void NETINFO_MAPPING::Update()
         nets.insert( track->GetNetCode() );
 
     // footprints/pads
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* module : m_board->Footprints() )
     {
         for( PAD* pad : module->Pads() )
             nets.insert( pad->GetNetCode() );

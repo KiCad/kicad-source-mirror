@@ -638,7 +638,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
         prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
-        for( MODULE* footprint : GetBoard()->Modules() )
+        for( MODULE* footprint : GetBoard()->Footprints() )
         {
             try
             {
@@ -675,7 +675,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         IO_MGR::PCB_FILE_T piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER   pi( IO_MGR::PluginFind( piType ) );
 
-        for( MODULE* footprint : GetBoard()->Modules() )
+        for( MODULE* footprint : GetBoard()->Footprints() )
         {
             try
             {
@@ -804,7 +804,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     {
         sourceFootprint = nullptr;
 
-        for( MODULE* candidate : mainpcb->Modules() )
+        for( MODULE* candidate : mainpcb->Footprints() )
         {
             if( editorFootprint->GetLink() == candidate->m_Uuid )
             {

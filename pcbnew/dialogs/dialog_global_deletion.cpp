@@ -170,7 +170,7 @@ void DIALOG_GLOBAL_DELETION::AcceptPcbDelete()
 
     if( delAll || m_DelModules->GetValue() )
     {
-        for( auto item : pcb->Modules() )
+        for( MODULE* item : pcb->Footprints() )
         {
             bool del_fp = delAll;
 

@@ -520,9 +520,9 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, raytrace_procedural_textures );
 
         TRANSFER_SETTING( FL_AXIS,                            show_axis );
-        TRANSFER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL,        show_footprints_normal );
-        TRANSFER_SETTING( FL_MODULE_ATTRIBUTES_NORMAL_INSERT, show_footprints_insert );
-        TRANSFER_SETTING( FL_MODULE_ATTRIBUTES_VIRTUAL,       show_footprints_virtual );
+        TRANSFER_SETTING( FL_FP_ATTRIBUTES_NORMAL,            show_footprints_normal );
+        TRANSFER_SETTING( FL_FP_ATTRIBUTES_NORMAL_INSERT,     show_footprints_insert );
+        TRANSFER_SETTING( FL_FP_ATTRIBUTES_VIRTUAL,           show_footprints_virtual );
         TRANSFER_SETTING( FL_ZONE,                            show_zones );
         TRANSFER_SETTING( FL_ADHESIVE,                        show_adhesive );
         TRANSFER_SETTING( FL_SILKSCREEN,                      show_silkscreen );
@@ -688,9 +688,9 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( renderPlatedPadsAsPlated, FL_RENDER_PLATED_PADS_AS_PLATED );
         TRANSFER_SETTING( show_comments,            FL_COMMENTS );
         TRANSFER_SETTING( show_eco,                 FL_ECO );
-        TRANSFER_SETTING( show_footprints_insert,   FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
-        TRANSFER_SETTING( show_footprints_normal,   FL_MODULE_ATTRIBUTES_NORMAL );
-        TRANSFER_SETTING( show_footprints_virtual,  FL_MODULE_ATTRIBUTES_VIRTUAL );
+        TRANSFER_SETTING( show_footprints_insert,   FL_FP_ATTRIBUTES_NORMAL_INSERT );
+        TRANSFER_SETTING( show_footprints_normal,   FL_FP_ATTRIBUTES_NORMAL );
+        TRANSFER_SETTING( show_footprints_virtual,  FL_FP_ATTRIBUTES_VIRTUAL );
         TRANSFER_SETTING( show_silkscreen,          FL_SILKSCREEN );
         TRANSFER_SETTING( show_soldermask,          FL_SOLDERMASK );
         TRANSFER_SETTING( show_solderpaste,         FL_SOLDERPASTE );

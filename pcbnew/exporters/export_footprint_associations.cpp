@@ -39,16 +39,16 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
 
     fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );
 
-    for( auto module : aBrd->Modules() )
+    for( MODULE* fp : aBrd->Footprints() )
     {
         fprintf( cmpFile, "\nBeginCmp\n" );
-        fprintf( cmpFile, "TimeStamp = %s\n", TO_UTF8( module->m_Uuid.AsString() ) );
-        fprintf( cmpFile, "Path = %s\n", TO_UTF8( module->GetPath().AsString() ) );
+        fprintf( cmpFile, "TimeStamp = %s\n", TO_UTF8( fp->m_Uuid.AsString() ) );
+        fprintf( cmpFile, "Path = %s\n", TO_UTF8( fp->GetPath().AsString() ) );
         fprintf( cmpFile, "Reference = %s;\n",
-                 !module->GetReference().IsEmpty() ? TO_UTF8( module->GetReference() ) : "[NoRef]" );
+                 !fp->GetReference().IsEmpty() ? TO_UTF8( fp->GetReference() ) : "[NoRef]" );
         fprintf( cmpFile, "ValeurCmp = %s;\n",
-                 !module->GetValue().IsEmpty() ? TO_UTF8( module->GetValue() ) : "[NoVal]" );
-        fprintf( cmpFile, "IdModule  = %s;\n", module->GetFPID().Format().c_str() );
+                 !fp->GetValue().IsEmpty() ? TO_UTF8( fp->GetValue() ) : "[NoVal]" );
+        fprintf( cmpFile, "IdModule  = %s;\n", fp->GetFPID().Format().c_str() );
         fprintf( cmpFile, "EndCmp\n" );
     }
 

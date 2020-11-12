@@ -208,19 +208,19 @@ TOOL_ACTION EDA_3D_ACTIONS::attributesTHT( "3DViewer.Control.attributesTHT",
         AS_ACTIVE,
         'T', "",
         _( "Toggle Through Hole 3D models" ),  _( "Toggle 3D models with 'Through hole' attribute" ),
-        nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_NORMAL );
+        nullptr, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL );
 
 TOOL_ACTION EDA_3D_ACTIONS::attributesSMD( "3DViewer.Control.attributesSMD",
         AS_ACTIVE,
         'S', "",
         _( "Toggle SMD 3D models" ), _( "Toggle 3D models with 'Surface mount' attribute" ),
-        nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_NORMAL_INSERT );
+        nullptr, AF_NONE, (void*) FL_FP_ATTRIBUTES_NORMAL_INSERT );
 
 TOOL_ACTION EDA_3D_ACTIONS::attributesVirtual( "3DViewer.Control.attributesVirtual",
         AS_ACTIVE,
         'V', "",
         _( "Toggle Virtual 3D models" ), _( "Toggle 3D models with 'Virtual' attribute" ),
-        nullptr, AF_NONE, (void*) FL_MODULE_ATTRIBUTES_VIRTUAL );
+        nullptr, AF_NONE, (void*) FL_FP_ATTRIBUTES_VIRTUAL );
 
 TOOL_ACTION EDA_3D_ACTIONS::showBoundingBoxes( "3DViewer.Control.showBoundingBoxes",
          AS_GLOBAL, 0, "",

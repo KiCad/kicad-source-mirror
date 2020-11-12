@@ -1736,7 +1736,7 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
     // top view.
     // Note: to export footprints, the footprints must be flipped around the X axis,
     // otherwise the rotation angle is not good
-    for( auto module : aBoard->Modules() )
+    for( auto module : aBoard->Footprints() )
     {
         module->SetFlag( 0 );
         if( module->GetLayer() == B_Cu )
@@ -1758,7 +1758,7 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
     // DSN Images (=KiCad MODULES and pads) must be presented from the
     // top view.  Restore those that were flipped.
     // Note: to export footprints, the footprints were flipped around the X axis,
-    for( auto module : aBoard->Modules() )
+    for( auto module : aBoard->Footprints() )
     {
         if( module->GetFlag() )
         {

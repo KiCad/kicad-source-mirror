@@ -119,9 +119,9 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
     if( aLayerPair == DRILL_LAYER_PAIR( F_Cu, B_Cu ) )
     {
         // add holes for thru hole pads
-        for( auto module : m_pcb->Modules() )
+        for( MODULE* footprint : m_pcb->Footprints() )
         {
-            for( auto& pad : module->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 if( !m_merge_PTH_NPTH )
                 {

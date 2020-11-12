@@ -139,9 +139,9 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
 
-    for( MODULE* module : m_board->Modules() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
             {
@@ -169,6 +169,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     for( TRACK* track : m_board->Tracks() )
     {
         const VIA *via = dynamic_cast<const VIA*>( track );
+
         if( via )
         {
             switch( via->GetViaType() )
@@ -262,8 +263,11 @@ void DIALOG_GENDRILL::OnSelZerosFmtSelected( wxCommandEvent& event )
 
 void DIALOG_GENDRILL::UpdatePrecisionOptions()
 {
-    if( m_Choice_Unit->GetSelection()== 1 )     // Units = inches
+    if( m_Choice_Unit->GetSelection()== 1 )
+    {
+        // Units = inches
         m_staticTextPrecision->SetLabel( precisionListForInches.GetPrecisionString() );
+    }
     else
     {
         // metric options

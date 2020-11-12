@@ -107,10 +107,10 @@ BOARD::~BOARD()
 
     m_zones.clear();
 
-    for( MODULE* m : m_modules )
-        delete m;
+    for( MODULE* footprint : m_footprints )
+        delete footprint;
 
-    m_modules.clear();
+    m_footprints.clear();
 
     for( TRACK* t : m_tracks )
         delete t;
@@ -514,7 +514,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
         for( TRACK* track : Tracks() )
             track->SetLocalRatsnestVisible( isEnabled );
 
-        for( MODULE* footprint : Modules() )
+        for( MODULE* footprint : Footprints() )
         {
             for( PAD* pad : footprint->Pads() )
                 pad->SetLocalRatsnestVisible( isEnabled );
@@ -598,9 +598,9 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_MODULE_T:
         if( aMode == ADD_MODE::APPEND )
-            m_modules.push_back( (MODULE*) aBoardItem );
+            m_footprints.push_back((MODULE*) aBoardItem );
         else
-            m_modules.push_front( (MODULE*) aBoardItem );
+            m_footprints.push_front((MODULE*) aBoardItem );
 
         break;
 
@@ -677,11 +677,11 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_MODULE_T:
-        m_modules.erase( std::remove_if( m_modules.begin(), m_modules.end(),
-                                         [aBoardItem]( BOARD_ITEM* aItem )
-                                         {
-                                             return aItem == aBoardItem;
-                                         } ) );
+        m_footprints.erase( std::remove_if( m_footprints.begin(), m_footprints.end(),
+                                            [aBoardItem]( BOARD_ITEM* aItem )
+                                            {
+                                                return aItem == aBoardItem;
+                                            } ) );
         break;
 
     case PCB_TRACE_T:
@@ -768,7 +768,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             return track;
     }
 
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         if( footprint->m_Uuid == aID )
             return footprint;
@@ -844,7 +844,7 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
     for( TRACK* track : Tracks() )
         aMap[ track->m_Uuid ] = track;
 
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         aMap[ footprint->m_Uuid ] = footprint;
 
@@ -900,7 +900,7 @@ wxString BOARD::ConvertCrossReferencesToKIIDs( const wxString& aSource )
                 wxString remainder;
                 wxString ref = token.BeforeFirst( ':', &remainder );
 
-                for( MODULE* footprint : Modules() )
+                for( MODULE* footprint : Footprints() )
                 {
                     if( footprint->GetReference().CmpNoCase( ref ) == 0 )
                     {
@@ -975,7 +975,7 @@ unsigned BOARD::GetNodesCount( int aNet ) const
 {
     unsigned retval = 0;
 
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -1012,7 +1012,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     }
 
     // Check footprints
-    for( MODULE* footprint : m_modules )
+    for( MODULE* footprint : m_footprints )
     {
         if( !( footprint->GetLayerSet() & visible ).any() )
             continue;
@@ -1123,7 +1123,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_FP_ZONE_T:
 
             // this calls MODULE::Visit() on each module.
-            result = IterateForward<MODULE*>( m_modules, inspector, testData, p );
+            result = IterateForward<MODULE*>( m_footprints, inspector, testData, p );
 
             // skip over any types handled in the above call.
             for( ; ; )
@@ -1254,7 +1254,7 @@ NETINFO_ITEM* BOARD::FindNet( const wxString& aNetname ) const
 
 MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 {
-    for( MODULE* footprint : m_modules )
+    for( MODULE* footprint : m_footprints )
     {
         if( aReference == footprint->GetReference() )
             return footprint;
@@ -1266,7 +1266,7 @@ MODULE* BOARD::FindModuleByReference( const wxString& aReference ) const
 
 MODULE* BOARD::FindModuleByPath( const KIID_PATH& aPath ) const
 {
-    for( MODULE* footprint : m_modules )
+    for( MODULE* footprint : m_footprints )
     {
         if( footprint->GetPath() == aPath )
             return footprint;
@@ -1448,7 +1448,7 @@ PAD* BOARD::GetPad( const wxPoint& aPosition, LSET aLayerSet )
     if( !aLayerSet.any() )
         aLayerSet = LSET::AllCuMask();
 
-    for( MODULE* footprint : m_modules )
+    for( MODULE* footprint : m_footprints )
     {
         PAD* pad = NULL;
 
@@ -1475,7 +1475,7 @@ PAD* BOARD::GetPad( TRACK* aTrace, ENDPOINT_T aEndPoint )
 
 PAD* BOARD::GetPadFast( const wxPoint& aPosition, LSET aLayerSet )
 {
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -1601,7 +1601,7 @@ bool sortPadsByXthenYCoord( PAD* const & ref, PAD* const & comp )
 
 void BOARD::GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetCode )
 {
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         for( PAD* pad : footprint->Pads( ) )
         {
@@ -1676,7 +1676,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
     int     alt_min_dim   = 0x7FFFFFFF;
     bool    current_layer_back = IsBackLayer( aActiveLayer );
 
-    for( MODULE* candidate : m_modules )
+    for( MODULE* candidate : m_footprints )
     {
         // is the ref point within the footprint's bounds?
         if( !candidate->HitTest( aPosition ) )
@@ -1740,7 +1740,7 @@ std::list<ZONE*> BOARD::GetZoneList( bool aIncludeZonesInFootprints )
 
     if( aIncludeZonesInFootprints )
     {
-        for( MODULE* footprint : m_modules )
+        for( MODULE* footprint : m_footprints )
         {
             for( FP_ZONE* zone : footprint->Zones() )
                 zones.push_back( zone );
@@ -1860,7 +1860,7 @@ const std::vector<PAD*> BOARD::GetPads() const
 {
     std::vector<PAD*> allPads;
 
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
             allPads.push_back( pad );
@@ -1874,7 +1874,7 @@ unsigned BOARD::GetPadCount() const
 {
     unsigned retval = 0;
 
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
         retval += footprint->Pads().size();
 
     return retval;
@@ -1888,7 +1888,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
     for( TRACK* track : Tracks() )
         items.push_back( track );
 
-    for( MODULE* footprint : Modules() )
+    for( MODULE* footprint : Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
             items.push_back( pad );

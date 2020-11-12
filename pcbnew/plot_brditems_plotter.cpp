@@ -1022,7 +1022,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         }
     }
 
-    for( auto Module : m_board->Modules() )
+    for( auto Module : m_board->Footprints() )
     {
         for( auto pad : Module->Pads() )
         {
