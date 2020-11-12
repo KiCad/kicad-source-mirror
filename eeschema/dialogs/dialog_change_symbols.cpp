@@ -97,7 +97,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     {
         m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
-        if( i != REFERENCE && i != VALUE )
+        if( i != REFERENCE_FIELD && i != VALUE_FIELD )
             m_fieldsBox->Check( i, true );
     }
 

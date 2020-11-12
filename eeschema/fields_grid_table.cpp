@@ -54,8 +54,8 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aPart ),
         m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
-        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE ),
+        m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), REFERENCE_FIELD ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),
         m_libIdValidator( LIB_ID::ID_PCB ),
         m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
@@ -75,7 +75,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_part( nullptr ),
         m_fieldNameValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_NAME ),
         m_referenceValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), SHEETNAME_V ),
-        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE ),
+        m_valueValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), VALUE_FIELD ),
         m_libIdValidator( LIB_ID::ID_PCB ),
         m_urlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
         m_nonUrlValidator( aFrame->IsType( FRAME_SCH_SYMBOL_EDITOR ), FIELD_VALUE ),
@@ -262,12 +262,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
 
     case FDC_VALUE:
-        if( m_parentType == SCH_COMPONENT_T && aRow == REFERENCE )
+        if( m_parentType == SCH_COMPONENT_T && aRow == REFERENCE_FIELD )
         {
             m_referenceAttr->IncRef();
             return m_referenceAttr;
         }
-        else if( m_parentType == SCH_COMPONENT_T && aRow == VALUE )
+        else if( m_parentType == SCH_COMPONENT_T && aRow == VALUE_FIELD )
         {
             // For power symbols, the value is not editable, because value and pin name must
             // be the same and can be edited only in library editor.
@@ -284,12 +284,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 return m_valueAttr;
             }
         }
-        else if( m_parentType == SCH_COMPONENT_T && aRow == FOOTPRINT )
+        else if( m_parentType == SCH_COMPONENT_T && aRow == FOOTPRINT_FIELD )
         {
             m_footprintAttr->IncRef();
             return m_footprintAttr;
         }
-        else if( m_parentType == SCH_COMPONENT_T && aRow == DATASHEET )
+        else if( m_parentType == SCH_COMPONENT_T && aRow == DATASHEET_FIELD )
         {
             m_urlAttr->IncRef();
             return m_urlAttr;
@@ -570,13 +570,13 @@ template class FIELDS_GRID_TABLE<LIB_FIELD>;
 
 void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu )
 {
-    if( m_grid->GetGridCursorRow() == FOOTPRINT && m_grid->GetGridCursorCol() == FDC_VALUE )
+    if( m_grid->GetGridCursorRow() == FOOTPRINT_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE )
     {
         menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
                      _( "Browse for footprint" ) );
         menu.AppendSeparator();
     }
-    else if( m_grid->GetGridCursorRow() == DATASHEET && m_grid->GetGridCursorCol() == FDC_VALUE )
+    else if( m_grid->GetGridCursorRow() == DATASHEET_FIELD && m_grid->GetGridCursorCol() == FDC_VALUE )
     {
         menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
                      _( "Show datasheet in browser" ) );
@@ -592,17 +592,17 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     if( event.GetId() == MYID_SELECT_FOOTPRINT )
     {
         // pick a footprint using the footprint picker.
-        wxString      fpid = m_grid->GetCellValue( FOOTPRINT, FDC_VALUE );
+        wxString      fpid = m_grid->GetCellValue( FOOTPRINT_FIELD, FDC_VALUE );
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &fpid, m_dlg ) )
-            m_grid->SetCellValue( FOOTPRINT, FDC_VALUE, fpid );
+            m_grid->SetCellValue( FOOTPRINT_FIELD, FDC_VALUE, fpid );
 
         frame->Destroy();
     }
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
-        wxString datasheet_uri = m_grid->GetCellValue( DATASHEET, FDC_VALUE );
+        wxString datasheet_uri = m_grid->GetCellValue( DATASHEET_FIELD, FDC_VALUE );
         GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj() );
     }
     else

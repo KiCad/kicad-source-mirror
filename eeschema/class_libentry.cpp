@@ -99,10 +99,10 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
     m_drawings[LIB_FIELD_T].reserve( 4 );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, VALUE ) );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, REFERENCE ) );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT ) );
-    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET ) );
+    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, VALUE_FIELD ) );
+    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, REFERENCE_FIELD ) );
+    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, FOOTPRINT_FIELD ) );
+    m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, DATASHEET_FIELD ) );
 
     SetName( aName );
 
@@ -574,7 +574,7 @@ void LIB_PART::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert,
         // to add '?' and the part id
         wxString tmp = field.GetShownText();
 
-        if( field.GetId() == REFERENCE )
+        if( field.GetId() == REFERENCE_FIELD )
         {
             wxString text = field.GetFullText( aUnit );
             field.SetText( text );
@@ -913,7 +913,7 @@ const LIB_FIELD* LIB_PART::FindField( const wxString& aFieldName ) const
 
 LIB_FIELD& LIB_PART::GetValueField()
 {
-    LIB_FIELD* field = GetField( VALUE );
+    LIB_FIELD* field = GetField( VALUE_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }
@@ -921,7 +921,7 @@ LIB_FIELD& LIB_PART::GetValueField()
 
 LIB_FIELD& LIB_PART::GetReferenceField()
 {
-    LIB_FIELD* field = GetField( REFERENCE );
+    LIB_FIELD* field = GetField( REFERENCE_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }
@@ -929,7 +929,7 @@ LIB_FIELD& LIB_PART::GetReferenceField()
 
 LIB_FIELD& LIB_PART::GetFootprintField()
 {
-    LIB_FIELD* field = GetField( FOOTPRINT );
+    LIB_FIELD* field = GetField( FOOTPRINT_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }
@@ -937,7 +937,7 @@ LIB_FIELD& LIB_PART::GetFootprintField()
 
 LIB_FIELD& LIB_PART::GetDatasheetField()
 {
-    LIB_FIELD* field = GetField( DATASHEET );
+    LIB_FIELD* field = GetField( DATASHEET_FIELD );
     wxASSERT( field != NULL );
     return *field;
 }

@@ -46,10 +46,10 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
     {
         switch( aFieldNdx )
         {
-        case  REFERENCE: return REFCANONICAL;   // The component reference, R1, C1, etc.
-        case  VALUE:     return VALCANONICAL;   // The component value + name
-        case  FOOTPRINT: return FTPCANONICAL;   // The footprint for use with Pcbnew
-        case  DATASHEET: return DSHCANONICAL;   // Link to a datasheet for component
+        case  REFERENCE_FIELD: return REFCANONICAL;   // The component reference, R1, C1, etc.
+        case  VALUE_FIELD:     return VALCANONICAL;   // The component value + name
+        case  FOOTPRINT_FIELD: return FTPCANONICAL;   // The footprint for use with Pcbnew
+        case  DATASHEET_FIELD: return DSHCANONICAL;   // Link to a datasheet for component
         }
     }
 
@@ -68,11 +68,11 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
     // Fixed values for the mandatory fields
     switch( aFieldNdx )
     {
-    case  REFERENCE: return referenceDefault;   // The component reference, R1, C1, etc.
-    case  VALUE:     return valueDefault;       // The component value + name
-    case  FOOTPRINT: return footprintDefault;   // The footprint for use with Pcbnew
-    case  DATASHEET: return datasheetDefault;   // Link to a datasheet for component
-    default:         return wxString::Format( fieldDefault, aFieldNdx );
+    case  REFERENCE_FIELD: return referenceDefault;   // The component reference, R1, C1, etc.
+    case  VALUE_FIELD:     return valueDefault;       // The component value + name
+    case  FOOTPRINT_FIELD: return footprintDefault;   // The footprint for use with Pcbnew
+    case  DATASHEET_FIELD: return datasheetDefault;   // Link to a datasheet for component
+    default:               return wxString::Format( fieldDefault, aFieldNdx );
     }
 
 }

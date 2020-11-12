@@ -79,13 +79,13 @@ public:
 protected:
     void showPopupMenu( wxMenu& menu ) override
     {
-        if( m_grid->GetGridCursorCol() == FOOTPRINT )
+        if( m_grid->GetGridCursorCol() == FOOTPRINT_FIELD )
         {
             menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
                          _( "Browse for footprint" ) );
             menu.AppendSeparator();
         }
-        else if( m_grid->GetGridCursorCol() == DATASHEET )
+        else if( m_grid->GetGridCursorCol() == DATASHEET_FIELD )
         {
             menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
                          _( "Show datasheet in browser" ) );
@@ -100,17 +100,17 @@ protected:
         if( event.GetId() == MYID_SELECT_FOOTPRINT )
         {
             // pick a footprint using the footprint picker.
-            wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT );
+            wxString      fpid = m_grid->GetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD );
             KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_VIEWER_MODAL, true, m_dlg );
 
             if( frame->ShowModal( &fpid, m_dlg ) )
-                m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT, fpid );
+                m_grid->SetCellValue( m_grid->GetGridCursorRow(), FOOTPRINT_FIELD, fpid );
 
             frame->Destroy();
         }
         else if (event.GetId() == MYID_SHOW_DATASHEET )
         {
-            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(), DATASHEET );
+            wxString datasheet_uri = m_grid->GetCellValue( m_grid->GetGridCursorRow(), DATASHEET_FIELD );
             GetAssociatedDocument( m_dlg, datasheet_uri, &m_dlg->Prj() );
         }
         else
@@ -120,11 +120,11 @@ protected:
 
         if( event.GetId() >= GRIDTRICKS_FIRST_SHOWHIDE && event.GetId() < GRIDTRICKS_LAST_ID )
         {
-            if( !m_grid->IsColShown( REFERENCE ) )
+            if( !m_grid->IsColShown( REFERENCE_FIELD ) )
             {
                 DisplayError( m_dlg, _( "The Reference column cannot be hidden." ) );
 
-                m_grid->ShowCol( REFERENCE );
+                m_grid->ShowCol( REFERENCE_FIELD );
             }
 
             // Refresh Show checkboxes from grid columns
@@ -246,7 +246,7 @@ public:
 
     wxString GetValue( int aRow, int aCol ) override
     {
-        if( aCol == REFERENCE )
+        if( aCol == REFERENCE_FIELD )
         {
             // Poor-man's tree controls
             if( m_rows[ aRow ].m_Flag == GROUP_COLLAPSED )
@@ -275,7 +275,7 @@ public:
 
         for( const auto& ref : group.m_Refs )
         {
-            if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
+            if( aCol == REFERENCE_FIELD || aCol == QUANTITY_COLUMN )
             {
                 references.push_back( ref );
             }
@@ -300,7 +300,7 @@ public:
             }
         }
 
-        if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
+        if( aCol == REFERENCE_FIELD || aCol == QUANTITY_COLUMN )
         {
             // Remove duplicates (other units of multi-unit parts)
             std::sort( references.begin(), references.end(),
@@ -326,7 +326,7 @@ public:
             references.erase( logicalEnd, references.end() );
         }
 
-        if( aCol == REFERENCE )
+        if( aCol == REFERENCE_FIELD )
         {
             fieldValue = SCH_REFERENCE_LIST::Shorthand( references );
         }
@@ -341,7 +341,7 @@ public:
 
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
-        if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
+        if( aCol == REFERENCE_FIELD || aCol == QUANTITY_COLUMN )
             return;             // Can't modify references or quantity
 
         DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
@@ -378,7 +378,7 @@ public:
         wxString lhs = dataModel->GetValue( (DATA_MODEL_ROW&) lhGroup, sortCol );
         wxString rhs = dataModel->GetValue( (DATA_MODEL_ROW&) rhGroup, sortCol );
 
-        if( lhs == rhs || sortCol == REFERENCE )
+        if( lhs == rhs || sortCol == REFERENCE_FIELD )
         {
             wxString lhRef = lhGroup.m_Refs[ 0 ].GetRef() + lhGroup.m_Refs[ 0 ].GetRefNumber();
             wxString rhRef = rhGroup.m_Refs[ 0 ].GetRef() + rhGroup.m_Refs[ 0 ].GetRefNumber();
@@ -427,7 +427,7 @@ public:
 
         // First check the reference column.  This can be done directly out of the
         // SCH_REFERENCEs as the references can't be edited in the grid.
-        if( fieldsCtrl->GetToggleValue( REFERENCE, GROUP_BY_COLUMN ) )
+        if( fieldsCtrl->GetToggleValue( REFERENCE_FIELD, GROUP_BY_COLUMN ) )
         {
             // if we're grouping by reference, then only the prefix must match
             if( lhRef.GetRef() != rhRef.GetRef() )
@@ -441,7 +441,7 @@ public:
 
         // Now check all the other columns.  This must be done out of the dataStore
         // for the refresh button to work after editing.
-        for( int i = REFERENCE + 1; i < fieldsCtrl->GetItemCount(); ++i )
+        for( int i = REFERENCE_FIELD + 1; i < fieldsCtrl->GetItemCount(); ++i )
         {
             if( !fieldsCtrl->GetToggleValue( i, GROUP_BY_COLUMN ) )
                 continue;
@@ -633,17 +633,17 @@ public:
                 {
                     comp.RemoveField( srcName );
                 }
-                else if( destField->GetId() == REFERENCE )
+                else if( destField->GetId() == REFERENCE_FIELD )
                 {
                     // Reference is not editable
                 }
-                else if( destField->GetId() == VALUE )
+                else if( destField->GetId() == VALUE_FIELD )
                 {
                     // Value field cannot be empty
                     if( !srcValue.IsEmpty() )
                         comp.SetValue( srcValue );
                 }
-                else if( destField->GetId() == FOOTPRINT )
+                else if( destField->GetId() == FOOTPRINT_FIELD )
                 {
                     comp.SetFootprint( srcValue );
                 }
@@ -662,7 +662,7 @@ public:
     {
         int width = 0;
 
-        if( aCol == REFERENCE )
+        if( aCol == REFERENCE_FIELD )
         {
             for( int row = 0; row < GetNumberRows(); ++row )
             {
@@ -783,17 +783,17 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // set reference column attributes
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly();
-    m_grid->SetColAttr( REFERENCE, attr );
+    m_grid->SetColAttr( REFERENCE_FIELD, attr );
 
     // set footprint column browse button
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_FOOTPRINT_ID_EDITOR( this ) );
-    m_grid->SetColAttr( FOOTPRINT, attr );
+    m_grid->SetColAttr( FOOTPRINT_FIELD, attr );
 
     // set datasheet column viewer button
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
-    m_grid->SetColAttr( DATASHEET, attr );
+    m_grid->SetColAttr( DATASHEET_FIELD, attr );
 
     // set quantities column attributes
     attr = new wxGridCellAttr;
@@ -1066,7 +1066,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
     {
         bool value = m_fieldsCtrl->GetToggleValue( row, col );
 
-        if( row == REFERENCE && !value )
+        if( row == REFERENCE_FIELD && !value )
         {
             DisplayError( this, _( "The Reference column cannot be hidden." ) );
 
@@ -1155,7 +1155,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& aEvent )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
 {
-    if( event.GetCol() == REFERENCE )
+    if( event.GetCol() == REFERENCE_FIELD )
     {
         m_grid->ClearSelection();
         m_grid->SetGridCursor( event.GetRow(), event.GetCol() );

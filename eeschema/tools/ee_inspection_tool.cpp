@@ -362,7 +362,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 
         SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
 
-        datasheet = component->GetField( DATASHEET )->GetText();
+        datasheet = component->GetField( DATASHEET_FIELD )->GetText();
     }
 
     if( !datasheet.IsEmpty() && datasheet != wxT( "~" ) )

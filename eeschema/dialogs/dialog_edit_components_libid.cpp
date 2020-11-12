@@ -753,7 +753,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
             m_isModified = true;
 
             cmp.m_Screen->Remove( cmp.m_Component );
-            SCH_FIELD* value = cmp.m_Component->GetField( VALUE );
+            SCH_FIELD* value = cmp.m_Component->GetField( VALUE_FIELD );
 
             // If value is a proxy for the itemName then make sure it gets updated
             if( cmp.m_Component->GetLibId().GetLibItemName().wx_str() == value->GetText() )

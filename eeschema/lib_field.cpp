@@ -94,7 +94,7 @@ void LIB_FIELD::Init( int id )
 
     // By contrast, VALUE and REFERENCE are are always constructed as initially visible, and
     // template fieldsnames' initial visibility is controlled by the template fieldname config.
-    if( id == DATASHEET || id == FOOTPRINT )
+    if( id == DATASHEET_FIELD || id == FOOTPRINT_FIELD )
         SetVisible( false );
 }
 
@@ -129,7 +129,7 @@ bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     EDA_TEXT tmp_text( *this );
 
     // Reference designator text has one or 2 additional character (displays U? or U?A)
-    if( m_id == REFERENCE )
+    if( m_id == REFERENCE_FIELD )
     {
         const LIB_PART*  parent = dynamic_cast<const LIB_PART*>( m_Parent );
 
@@ -296,7 +296,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 
 wxString LIB_FIELD::GetFullText( int unit ) const
 {
-    if( m_id != REFERENCE )
+    if( m_id != REFERENCE_FIELD )
         return GetText();
 
     wxString text = GetText();
@@ -342,9 +342,9 @@ void LIB_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 
     switch( m_id )
     {
-    case REFERENCE: aLayers[0] = LAYER_REFERENCEPART; break;
-    case VALUE:     aLayers[0] = LAYER_VALUEPART;     break;
-    default:        aLayers[0] = LAYER_FIELDS;        break;
+    case REFERENCE_FIELD: aLayers[0] = LAYER_REFERENCEPART; break;
+    case VALUE_FIELD:     aLayers[0] = LAYER_VALUEPART;     break;
+    default:              aLayers[0] = LAYER_FIELDS;        break;
     }
 
     aLayers[1] = LAYER_SELECTION_SHADOWS;
@@ -355,9 +355,9 @@ SCH_LAYER_ID LIB_FIELD::GetDefaultLayer()
 {
     switch( m_id )
     {
-    case REFERENCE: return LAYER_REFERENCEPART;
-    case VALUE:     return LAYER_VALUEPART;
-    default:        return LAYER_FIELDS;
+    case REFERENCE_FIELD: return LAYER_REFERENCEPART;
+    case VALUE_FIELD:     return LAYER_VALUEPART;
+    default:              return LAYER_FIELDS;
     }
 }
 
@@ -375,10 +375,10 @@ wxString LIB_FIELD::GetCanonicalName() const
 {
     switch( m_id )
     {
-    case  REFERENCE: return wxT( "Reference" );
-    case  VALUE:     return wxT( "Value" );
-    case  FOOTPRINT: return wxT( "Footprint" );
-    case  DATASHEET: return wxT( "Datasheet" );
+    case  REFERENCE_FIELD: return wxT( "Reference" );
+    case  VALUE_FIELD:     return wxT( "Value" );
+    case  FOOTPRINT_FIELD: return wxT( "Footprint" );
+    case  DATASHEET_FIELD: return wxT( "Datasheet" );
     }
 
     return m_name;

@@ -46,10 +46,10 @@ class SCH_LEGACY_PLUGIN_CACHE;
  *
  *  The first 4 fields have a special meaning:
  *
- *  0 = REFERENCE
- *  1 = VALUE
- *  2 = FOOTPRINT (default Footprint)
- *  3 = DATASHEET (user doc link)
+ *  0 = REFERENCE_FIELD
+ *  1 = VALUE_FIELD
+ *  2 = FOOTPRINT_FIELD (default Footprint)
+ *  3 = DATASHEET_FIELD (user doc link)
  *
  *  others = free fields
  * </p>

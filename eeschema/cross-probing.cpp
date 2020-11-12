@@ -377,12 +377,16 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
     {
     case SCH_FIELD_T:
         if( aComp )
-            return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
+        {
+            return StrPrintf( "$PART: \"%s\"",
+                              TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
+        }
         break;
 
     case SCH_COMPONENT_T:
         aComp = (SCH_COMPONENT*) aItem;
-        return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
+        return StrPrintf( "$PART: \"%s\"",
+                          TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
 
     case SCH_SHEET_T:
         {
@@ -415,12 +419,12 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
             {
                 return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"",
                                   TO_UTF8( pin->GetNumber() ),
-                                  TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
+                                  TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
             }
             else
             {
                 return StrPrintf( "$PART: \"%s\"",
-                                  TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
+                                  TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
             }
         }
 

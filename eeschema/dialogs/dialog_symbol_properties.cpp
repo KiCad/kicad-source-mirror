@@ -287,7 +287,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
 
     m_width = 0;
-    m_delayedFocusRow = REFERENCE;
+    m_delayedFocusRow = REFERENCE_FIELD;
     m_delayedFocusColumn = FDC_VALUE;
     m_delayedSelection = true;
 
@@ -539,12 +539,12 @@ bool DIALOG_SYMBOL_PROPERTIES::Validate()
     if( !m_fieldsGrid->CommitPendingChanges() || !m_fieldsGrid->Validate() )
         return false;
 
-    if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
+    if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
     {
         DisplayErrorMessage( this, _( "References must start with a letter." ) );
 
         m_delayedFocusColumn = FDC_VALUE;
-        m_delayedFocusRow = REFERENCE;
+        m_delayedFocusRow = REFERENCE_FIELD;
         m_delayedSelection = false;
 
         return false;
@@ -641,7 +641,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     LIB_PART* entry = GetParent()->GetLibPart( m_comp->GetLibId() );
 
     if( entry && entry->IsPower() )
-        m_fields->at( VALUE ).SetText( m_comp->GetLibId().GetLibItemName() );
+        m_fields->at( VALUE_FIELD ).SetText( m_comp->GetLibId().GetLibItemName() );
 
     // Push all fields to the component -except- for those which are TEMPLATE_FIELDNAMES
     // with empty values.
@@ -674,12 +674,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     // Reference has a specific initialization, depending on the current active sheet
     // because for a given component, in a complex hierarchy, there are more than one
     // reference.
-    m_comp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE ).GetText() );
+    m_comp->SetRef( &GetParent()->GetCurrentSheet(), m_fields->at( REFERENCE_FIELD ).GetText() );
 
     // Similar for Value and Footprint, except that the GUI behaviour is that they are kept
     // in sync between multiple instances.
-    m_comp->SetValue( m_fields->at( VALUE ).GetText() );
-    m_comp->SetFootprint( m_fields->at( FOOTPRINT ).GetText() );
+    m_comp->SetValue( m_fields->at( VALUE_FIELD ).GetText() );
+    m_comp->SetFootprint( m_fields->at( FOOTPRINT_FIELD ).GetText() );
 
     m_comp->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
     m_comp->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
@@ -703,9 +703,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
             {
                 GetParent()->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
                                                  appendUndo );
-                otherUnit->SetValue( m_fields->at( VALUE ).GetText() );
-                otherUnit->SetFootprint( m_fields->at( FOOTPRINT ).GetText() );
-                otherUnit->GetField( DATASHEET )->SetText( m_fields->at( DATASHEET ).GetText() );
+                otherUnit->SetValue( m_fields->at( VALUE_FIELD ).GetText() );
+                otherUnit->SetFootprint( m_fields->at( FOOTPRINT_FIELD ).GetText() );
+                otherUnit->GetField( DATASHEET_FIELD )->SetText( m_fields->at( DATASHEET_FIELD ).GetText() );
                 otherUnit->SetIncludeInBom( !m_cbExcludeFromBom->IsChecked() );
                 otherUnit->SetIncludeOnBoard( !m_cbExcludeFromBoard->IsChecked() );
                 GetParent()->UpdateItem( otherUnit );
@@ -775,7 +775,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_SYMBOL_PROPERTIES::OnGridEditorShown( wxGridEvent& aEvent )
 {
-    if( aEvent.GetRow() == REFERENCE && aEvent.GetCol() == FDC_VALUE )
+    if( aEvent.GetRow() == REFERENCE_FIELD && aEvent.GetCol() == FDC_VALUE )
         m_delayedSelection= true;
 }
 
@@ -790,7 +790,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
     SCH_FIELD           newField( wxPoint( 0, 0 ), fieldID, m_comp,
                                   TEMPLATE_FIELDNAME::GetDefaultFieldName( fieldID ) );
 
-    newField.SetTextAngle( m_fields->at( REFERENCE ).GetTextAngle() );
+    newField.SetTextAngle( m_fields->at( REFERENCE_FIELD ).GetTextAngle() );
     newField.SetTextSize( wxSize( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
 
     m_fields->push_back( newField );
@@ -1006,7 +1006,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     // Handle a delayed selection
     if( m_delayedSelection )
     {
-        wxGridCellEditor* cellEditor = m_fieldsGrid->GetCellEditor( REFERENCE, FDC_VALUE );
+        wxGridCellEditor* cellEditor = m_fieldsGrid->GetCellEditor( REFERENCE_FIELD, FDC_VALUE );
 
         if( wxTextEntry* txt = dynamic_cast<wxTextEntry*>( cellEditor->GetControl() ) )
             KIUI::SelectReferenceNumber( txt );

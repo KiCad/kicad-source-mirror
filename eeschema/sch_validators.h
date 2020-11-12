@@ -37,7 +37,7 @@
 #define FIELD_VALUE -2
 
 #define SHEETNAME_V      100    // We can't use SHEETNAME and SHEETFILENAME because they
-#define SHEETFILENAME_V  101    //   overlap with REFERENCE and VALUE
+#define SHEETFILENAME_V  101    //   overlap with REFERENCE_FIELD and VALUE_FIELD
 #define SHEETUSERFIELD_V 102
 
 /**

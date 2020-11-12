@@ -615,7 +615,7 @@ int SCH_SHEET::ComponentCount() const
         {
             SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
 
-            if( comp->GetField( VALUE )->GetText().GetChar( 0 ) != '#' )
+            if( comp->GetField( VALUE_FIELD )->GetText().GetChar( 0 ) != '#' )
                 n++;
         }
 

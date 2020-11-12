@@ -586,8 +586,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             {
                 msg.Printf( _( "Setting schematic symbol '%s %s' library identifier "
                                "to '%s'. " ),
-                            symbol->GetField( REFERENCE )->GetText(),
-                            symbol->GetField( VALUE )->GetText(),
+                            symbol->GetField( REFERENCE_FIELD )->GetText(),
+                            symbol->GetField( VALUE_FIELD )->GetText(),
                             symbol->GetLibId().Format().wx_str() );
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
@@ -661,8 +661,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             if( aReporter )
             {
                 msg.Printf( _( "Falling back to cache to set symbol '%s:%s' link '%s'." ),
-                            symbol->GetField( REFERENCE )->GetText(),
-                            symbol->GetField( VALUE )->GetText(),
+                            symbol->GetField( REFERENCE_FIELD )->GetText(),
+                            symbol->GetField( VALUE_FIELD )->GetText(),
                             id );
                 aReporter->ReportTail( msg, RPT_SEVERITY_WARNING );
             }
@@ -682,8 +682,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             if( aReporter )
             {
                 msg.Printf( _( "Setting schematic symbol '%s %s' library identifier to '%s'. " ),
-                            symbol->GetField( REFERENCE )->GetText(),
-                            symbol->GetField( VALUE )->GetText(),
+                            symbol->GetField( REFERENCE_FIELD )->GetText(),
+                            symbol->GetField( VALUE_FIELD )->GetText(),
                             symbol->GetLibId().Format().wx_str() );
                 aReporter->ReportTail( msg, RPT_SEVERITY_INFO );
             }
@@ -693,8 +693,8 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
             if( aReporter )
             {
                 msg.Printf( _( "No library symbol found for schematic symbol '%s %s'. " ),
-                            symbol->GetField( REFERENCE )->GetText(),
-                            symbol->GetField( VALUE )->GetText() );
+                            symbol->GetField( REFERENCE_FIELD )->GetText(),
+                            symbol->GetField( VALUE_FIELD )->GetText() );
                 aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
             }
         }

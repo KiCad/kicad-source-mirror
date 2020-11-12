@@ -395,7 +395,7 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
     if( !symbol )
         return;
 
-    LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT );
+    LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT_FIELD );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
     ShowFootprint( fp_name );
@@ -457,7 +457,7 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
     if( symbol != nullptr )
     {
         LIB_PINS   temp_pins;
-        LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT );
+        LIB_FIELD* fp_field = symbol->GetField( FOOTPRINT_FIELD );
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
         symbol->GetPins( temp_pins );
@@ -483,11 +483,11 @@ void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
     m_field_edits.erase( std::remove_if( m_field_edits.begin(), m_field_edits.end(),
                                          []( std::pair<int, wxString> const& i )
                                          {
-                                             return i.first == FOOTPRINT;
+                                             return i.first == FOOTPRINT_FIELD;
                                          } ),
                          m_field_edits.end() );
 
-    m_field_edits.emplace_back( std::make_pair( FOOTPRINT, m_fp_override ) );
+    m_field_edits.emplace_back( std::make_pair( FOOTPRINT_FIELD, m_fp_override ) );
 
     ShowFootprint( m_fp_override );
 }

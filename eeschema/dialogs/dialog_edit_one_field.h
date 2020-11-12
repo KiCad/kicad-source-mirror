@@ -126,7 +126,7 @@ public:
         aField->SetText( m_text );
 
         // VALUE === component name, so update the parent component if it changes.
-        if( aField->GetId() == VALUE && aField->GetParent() )
+        if( aField->GetId() == VALUE_FIELD && aField->GetParent() )
             aField->GetParent()->SetName( m_text );
 
         updateText( aField );

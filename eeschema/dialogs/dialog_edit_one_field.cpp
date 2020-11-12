@@ -53,7 +53,7 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     SetTitle( aTitle );
 
     // The field ID and power status are Initialized in the derived object's ctor.
-    m_fieldId = VALUE;
+    m_fieldId = VALUE_FIELD;
     m_isPower = false;
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_StyledTextCtrl, wxT( "{}" ) );
@@ -87,7 +87,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     m_CommonConvert->Show( false );
     m_CommonUnit->Show( false );
 
-    if( !isSymbolEditor && ( m_fieldId == REFERENCE || m_fieldId == VALUE ) )
+    if( !isSymbolEditor && ( m_fieldId == REFERENCE_FIELD || m_fieldId == VALUE_FIELD ) )
     {
         m_StyledTextCtrl->Show( false );
         SetInitialFocus( m_TextCtrl );
@@ -100,11 +100,11 @@ void DIALOG_EDIT_ONE_FIELD::init()
 
     // Show the footprint selection dialog if this is the footprint field.
     m_TextValueSelectButton->SetBitmap( KiBitmap( small_library_xpm ) );
-    m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT );
+    m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
 
     // Value fields of power components cannot be modified. This will grey out
     // the text box and display an explanation.
-    if( m_fieldId == VALUE && m_isPower )
+    if( m_fieldId == VALUE_FIELD && m_isPower )
     {
         m_PowerComponentValues->Show( true );
         m_TextCtrl->Enable( false );
@@ -167,13 +167,13 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
     // Note that we can't do this on OSX as it tends to provoke Apple's
     // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
     // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
-    if( m_fieldId == REFERENCE || m_fieldId == VALUE || m_fieldId == SHEETNAME_V )
+    if( m_fieldId == REFERENCE_FIELD || m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
         m_TextCtrl->Update();
 #endif
 
-    if( m_fieldId == REFERENCE )
+    if( m_fieldId == REFERENCE_FIELD )
         KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextCtrl ) );
-    else if( m_fieldId == VALUE || m_fieldId == SHEETNAME_V )
+    else if( m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
         m_TextCtrl->SetSelection( -1, -1 );
 
     event.Skip();
@@ -208,7 +208,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
     else if( m_StyledTextCtrl->IsShown() )
         m_text = m_StyledTextCtrl->GetValue();
 
-    if( m_fieldId == REFERENCE )
+    if( m_fieldId == REFERENCE_FIELD )
     {
         // Test if the reference string is valid:
         if( !SCH_COMPONENT::IsReferenceStringValid( m_text ) )
@@ -217,7 +217,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
             return false;
         }
     }
-    else if( m_fieldId == VALUE )
+    else if( m_fieldId == VALUE_FIELD )
     {
         if( m_text.IsEmpty() )
         {
@@ -395,11 +395,11 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     {
         SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( parent );
 
-        if( fieldType == REFERENCE )
+        if( fieldType == REFERENCE_FIELD )
             comp->SetRef( aSheetPath, m_text );
-        else if( fieldType == VALUE )
+        else if( fieldType == VALUE_FIELD )
             comp->SetValue( m_text );
-        else if( fieldType == FOOTPRINT )
+        else if( fieldType == FOOTPRINT_FIELD )
             comp->SetFootprint( m_text );
     }
 
@@ -429,9 +429,9 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
     {
         SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( parent );
 
-        if( symbol->IsAnnotated( aSheetPath ) && ( fieldType == VALUE
-                                                || fieldType == FOOTPRINT
-                                                || fieldType == DATASHEET ) )
+        if( symbol->IsAnnotated( aSheetPath ) && ( fieldType == VALUE_FIELD
+                                                || fieldType == FOOTPRINT_FIELD
+                                                || fieldType == DATASHEET_FIELD ) )
         {
             wxString ref = symbol->GetRef( aSheetPath );
             int      unit = symbol->GetUnit();
@@ -449,9 +449,9 @@ void DIALOG_SCH_EDIT_ONE_FIELD::UpdateField( SCH_FIELD* aField, SCH_SHEET_PATH* 
                     editFrame->SaveCopyInUndoList( screen, otherUnit, UNDO_REDO::CHANGED,
                                                    appendUndo );
 
-                    if( fieldType == VALUE )
+                    if( fieldType == VALUE_FIELD )
                         otherUnit->SetValue( m_text );
-                    else if( fieldType == FOOTPRINT )
+                    else if( fieldType == FOOTPRINT_FIELD )
                         otherUnit->SetFootprint( m_text );
                     else
                         otherUnit->GetField( fieldType )->SetText( m_text );

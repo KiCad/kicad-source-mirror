@@ -494,7 +494,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
-    if( aField->GetId() == VALUE )
+    if( aField->GetId() == VALUE_FIELD )
         caption = _( "Edit Component Name" );
     else
         caption.Printf( _( "Edit %s Field" ), aField->GetName() );
@@ -508,7 +508,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 
     wxString newFieldValue = LIB_ID::FixIllegalChars( dlg.GetText(), LIB_ID::ID_SCH );
     wxString oldFieldValue = aField->GetFullText( m_frame->GetUnit() );
-    bool     renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
+    bool     renamed = aField->GetId() == VALUE_FIELD && newFieldValue != oldFieldValue;
 
     if( renamed )
         saveCopyInUndoList( parent, UNDO_REDO::LIB_RENAME );

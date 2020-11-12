@@ -107,11 +107,11 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
 
     // also check the default field accessors
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( m_part_no_data.GetReferenceField() )( "Reference" )( NumFieldType::REFERENCE ) );
+            ( m_part_no_data.GetReferenceField() )( "Reference" )( NumFieldType::REFERENCE_FIELD ) );
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( m_part_no_data.GetValueField() )( "Value" )( NumFieldType::VALUE ) );
+            ( m_part_no_data.GetValueField() )( "Value" )( NumFieldType::VALUE_FIELD ) );
     BOOST_CHECK_PREDICATE( KI_TEST::FieldNameIdMatches,
-            ( m_part_no_data.GetFootprintField() )( "Footprint" )( NumFieldType::FOOTPRINT ) );
+            ( m_part_no_data.GetFootprintField() )( "Footprint" )( NumFieldType::FOOTPRINT_FIELD ) );
 }
 
 

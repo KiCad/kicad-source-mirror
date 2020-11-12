@@ -108,10 +108,10 @@ bool AreDefaultFieldsCorrect( const LIB_FIELDS& aFields )
 
     bool ok = true;
 
-    ok &= FieldNameIdMatches( aFields[0], "Reference", NumFieldType::REFERENCE );
-    ok &= FieldNameIdMatches( aFields[1], "Value", NumFieldType::VALUE );
-    ok &= FieldNameIdMatches( aFields[2], "Footprint", NumFieldType::FOOTPRINT );
-    ok &= FieldNameIdMatches( aFields[3], "Datasheet", NumFieldType::DATASHEET );
+    ok &= FieldNameIdMatches( aFields[0], "Reference", NumFieldType::REFERENCE_FIELD );
+    ok &= FieldNameIdMatches( aFields[1], "Value",     NumFieldType::VALUE_FIELD );
+    ok &= FieldNameIdMatches( aFields[2], "Footprint", NumFieldType::FOOTPRINT_FIELD );
+    ok &= FieldNameIdMatches( aFields[3], "Datasheet", NumFieldType::DATASHEET_FIELD );
 
     return ok;
 }

@@ -1638,7 +1638,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
                 SCH_PARSE_ERROR( "unit value out of range", aReader, line );
 
             component->AddHierarchicalReference( path, reference, (int)tmp );
-            component->GetField( REFERENCE )->SetText( reference );
+            component->GetField( REFERENCE_FIELD )->SetText( reference );
 
         }
         else if( strCompare( "F", line, &line ) )
@@ -2002,10 +2002,10 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     }
     else
     {
-        if( aComponent->GetField( REFERENCE )->GetText().IsEmpty() )
+        if( aComponent->GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
             name1 = toUTFTildaText( aComponent->GetPrefix() );
         else
-            name1 = toUTFTildaText( aComponent->GetField( REFERENCE )->GetText() );
+            name1 = toUTFTildaText( aComponent->GetField( REFERENCE_FIELD )->GetText() );
     }
 
     wxString part_name = aComponent->GetLibId().Format();
@@ -2729,7 +2729,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
 
             case 'F':
                 if( symbol )
-                    symbol->GetField( DATASHEET )->SetText( text );
+                    symbol->GetField( DATASHEET_FIELD )->SetText( text );
                 break;
 
             case 0:
@@ -2977,7 +2977,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
 
                 *field = *parentField;
 
-                if( id == VALUE )
+                if( id == VALUE_FIELD )
                     field->SetText( newAliasName );
 
                 field->SetParent( newPart );
@@ -3130,7 +3130,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
 
         // Ensure the VALUE field = the part name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
-        if( id == VALUE )
+        if( id == VALUE_FIELD )
             field->SetText( aPart->GetName() );
     }
     else

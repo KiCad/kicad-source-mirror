@@ -128,7 +128,7 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                     if( m_resolveTextVars )
                         fields.value = comp2->GetValue( &sheetList[i] );
                     else
-                        fields.value = comp2->GetField( VALUE )->GetText();
+                        fields.value = comp2->GetField( VALUE_FIELD )->GetText();
                 }
 
                 if( !comp2->GetFootprint( &sheetList[i] ).IsEmpty()
@@ -137,16 +137,16 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
                     if( m_resolveTextVars )
                         fields.footprint = comp2->GetFootprint( &sheetList[i] );
                     else
-                        fields.footprint = comp2->GetField( FOOTPRINT )->GetText();
+                        fields.footprint = comp2->GetField( FOOTPRINT_FIELD )->GetText();
                 }
 
-                if( !comp2->GetField( DATASHEET )->IsVoid()
+                if( !comp2->GetField( DATASHEET_FIELD )->IsVoid()
                         && ( unit < minUnit || fields.datasheet.IsEmpty() ) )
                 {
                     if( m_resolveTextVars )
-                        fields.datasheet = comp2->GetField( DATASHEET )->GetShownText();
+                        fields.datasheet = comp2->GetField( DATASHEET_FIELD )->GetShownText();
                     else
-                        fields.datasheet = comp2->GetField( DATASHEET )->GetText();
+                        fields.datasheet = comp2->GetField( DATASHEET_FIELD )->GetText();
                 }
 
                 for( int fldNdx = MANDATORY_FIELDS;  fldNdx < comp2->GetFieldCount();  ++fldNdx )
@@ -170,19 +170,19 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
     else
     {
         if( m_resolveTextVars )
-            fields.value = comp->GetField( VALUE )->GetShownText();
+            fields.value = comp->GetField( VALUE_FIELD )->GetShownText();
         else
-            fields.value = comp->GetField( VALUE )->GetText();
+            fields.value = comp->GetField( VALUE_FIELD )->GetText();
 
         if( m_resolveTextVars )
-            fields.footprint = comp->GetField( FOOTPRINT )->GetShownText();
+            fields.footprint = comp->GetField( FOOTPRINT_FIELD )->GetShownText();
         else
-            fields.footprint = comp->GetField( FOOTPRINT )->GetText();
+            fields.footprint = comp->GetField( FOOTPRINT_FIELD )->GetText();
 
         if( m_resolveTextVars )
-            fields.datasheet = comp->GetField( DATASHEET )->GetShownText();
+            fields.datasheet = comp->GetField( DATASHEET_FIELD )->GetShownText();
         else
-            fields.datasheet = comp->GetField( DATASHEET )->GetText();
+            fields.datasheet = comp->GetField( DATASHEET_FIELD )->GetText();
 
         for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
         {

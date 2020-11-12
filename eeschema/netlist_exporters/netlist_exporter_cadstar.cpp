@@ -78,8 +78,8 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
             if( !component )
                 continue;
 
-            if( !component->GetField( FOOTPRINT )->IsVoid() )
-                footprint = component->GetField( FOOTPRINT )->GetShownText();
+            if( !component->GetField( FOOTPRINT_FIELD )->IsVoid() )
+                footprint = component->GetField( FOOTPRINT_FIELD )->GetShownText();
             else
                 footprint = "$noname";
 

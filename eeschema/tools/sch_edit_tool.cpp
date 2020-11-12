@@ -1239,11 +1239,11 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-            editFieldText( component->GetField( REFERENCE ) );
+            editFieldText( component->GetField( REFERENCE_FIELD ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-            editFieldText( component->GetField( VALUE ) );
+            editFieldText( component->GetField( VALUE_FIELD ) );
         else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-            editFieldText( component->GetField( FOOTPRINT ) );
+            editFieldText( component->GetField( FOOTPRINT_FIELD ) );
     }
     else if( item->Type() == SCH_FIELD_T )
     {

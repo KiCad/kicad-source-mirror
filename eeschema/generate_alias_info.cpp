@@ -167,7 +167,7 @@ protected:
 
         switch( aField.GetId() )
         {
-        case DATASHEET:
+        case DATASHEET_FIELD:
             text = m_symbol->GetDatasheetField().GetText();
 
             if( text.IsEmpty() || text == wxT( "~" ) )
@@ -189,7 +189,7 @@ protected:
 
             break;
 
-        case VALUE:
+        case VALUE_FIELD:
             // showing the value just repeats the name, so that's not much use...
             return wxEmptyString;
 

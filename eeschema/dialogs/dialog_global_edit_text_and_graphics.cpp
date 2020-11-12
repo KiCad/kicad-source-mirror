@@ -359,10 +359,10 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( const SCH_SHEET_PATH& aShe
         SCH_COMPONENT* component = (SCH_COMPONENT*) aItem;
 
         if( m_references->GetValue() )
-            processItem( aSheetPath, component->GetField( REFERENCE ) );
+            processItem( aSheetPath, component->GetField( REFERENCE_FIELD ) );
 
         if( m_values->GetValue() )
-            processItem( aSheetPath, component->GetField( VALUE ) );
+            processItem( aSheetPath, component->GetField( VALUE_FIELD ) );
 
         if( m_otherFields->GetValue() )
         {

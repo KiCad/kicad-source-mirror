@@ -334,7 +334,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
             SCH_COMPONENT* component =
                     loadSchematicSymbol( sym, kiPart, compOrientationTenthDegree );
 
-            SCH_FIELD* refField = component->GetField( REFERENCE );
+            SCH_FIELD* refField = component->GetField( REFERENCE_FIELD );
             refField->SetText( sym.ComponentRef.Designator );
             loadSymbolFieldAttribute(
                     sym.ComponentRef.AttrLoc, compOrientationTenthDegree, refField );
@@ -498,7 +498,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             {
                 if( mPowerSymMap.find( netTerm.SymbolID ) != mPowerSymMap.end() )
                 {
-                    SCH_FIELD* val = mPowerSymMap.at( netTerm.SymbolID )->GetField( VALUE );
+                    SCH_FIELD* val = mPowerSymMap.at( netTerm.SymbolID )->GetField( VALUE_FIELD );
                     val->SetText( netName );
                     val->SetPosition( getKiCadPoint( netTerm.NetLabel.Position ) );
                     val->SetTextAngle( getAngleTenthDegree( netTerm.NetLabel.OrientAngle ) );
@@ -828,7 +828,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
     if( symbol.TextLocations.find( SYMBOL_NAME_ATTRID ) != symbol.TextLocations.end() )
     {
         TEXT_LOCATION textLoc = symbol.TextLocations.at( SYMBOL_NAME_ATTRID );
-        LIB_FIELD*    field   = aPart->GetField( REFERENCE );
+        LIB_FIELD*    field   = aPart->GetField( REFERENCE_FIELD );
         loadLibraryFieldAttribute( textLoc, symbol.Origin, field );
         field->SetUnit( gateNumber );
     }

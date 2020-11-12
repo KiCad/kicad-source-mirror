@@ -658,9 +658,10 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
                 continue; // unit has been already processed
 
             // Instantiate the missing component unit
-            int                            unit      = unitEntry.first;
-            const wxString                 reference = origCmp->GetField( REFERENCE )->GetText();
+            int            unit      = unitEntry.first;
+            const wxString reference = origCmp->GetField( REFERENCE_FIELD )->GetText();
             std::unique_ptr<SCH_COMPONENT> component( (SCH_COMPONENT*) origCmp->Duplicate() );
+
             component->SetUnitSelection( &sheetpath, unit );
             component->SetUnit( unit );
             component->SetOrientation( 0 );
@@ -1140,7 +1141,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     component->SetLibId( libId );
     component->SetUnit( unit );
     component->SetPosition( wxPoint( einstance.x.ToSchUnits(), -einstance.y.ToSchUnits() ) );
-    component->GetField( FOOTPRINT )->SetText( package );
+    component->GetField( FOOTPRINT_FIELD )->SetText( package );
 
     if( einstance.rot )
     {
@@ -1174,21 +1175,21 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     m_rootSheet->LocatePathOfScreen( screen, &sheetpath );
     wxString current_sheetpath = sheetpath.PathAsString() + component->m_Uuid.AsString();
 
-    component->GetField( REFERENCE )->SetText( reference );
+    component->GetField( REFERENCE_FIELD )->SetText( reference );
     component->AddHierarchicalReference( current_sheetpath, reference, unit );
 
     if( epart->value )
-        component->GetField( VALUE )->SetText( *epart->value );
+        component->GetField( VALUE_FIELD )->SetText( *epart->value );
     else
-        component->GetField( VALUE )->SetText( kisymbolname );
+        component->GetField( VALUE_FIELD )->SetText( kisymbolname );
 
     // Set the visibility of fields.
-    component->GetField( REFERENCE )->SetVisible( part->GetField( REFERENCE )->IsVisible() );
-    component->GetField( VALUE )->SetVisible( part->GetField( VALUE )->IsVisible() );
+    component->GetField( REFERENCE_FIELD )->SetVisible( part->GetField( REFERENCE_FIELD )->IsVisible() );
+    component->GetField( VALUE_FIELD )->SetVisible( part->GetField( VALUE_FIELD )->IsVisible() );
 
     for( const auto& a : epart->attribute )
     {
-        auto field = component->AddField( *component->GetField( VALUE ) );
+        auto field = component->AddField( *component->GetField( VALUE_FIELD ) );
         field->SetName( a.first );
         field->SetText( a.second );
         field->SetVisible( false );
@@ -1196,7 +1197,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
     for( const auto& a : epart->variant )
     {
-        auto field = component->AddField( *component->GetField( VALUE ) );
+        auto field = component->AddField( *component->GetField( VALUE_FIELD ) );
         field->SetName( "VARIANT_" + a.first );
         field->SetText( a.second );
         field->SetVisible( false );
@@ -1217,12 +1218,12 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
 
             if( attr.name.Lower() == "name" )
             {
-                field              = component->GetField( REFERENCE );
+                field              = component->GetField( REFERENCE_FIELD );
                 nameAttributeFound = true;
             }
             else if( attr.name.Lower() == "value" )
             {
-                field               = component->GetField( VALUE );
+                field               = component->GetField( VALUE_FIELD );
                 valueAttributeFound = true;
             }
             else
@@ -1264,7 +1265,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             if( attributeNode->GetAttribute( "name", &variant )
                     && attributeNode->GetAttribute( "value", &value ) )
             {
-                auto field = component->AddField( *component->GetField( VALUE ) );
+                auto field = component->AddField( *component->GetField( VALUE_FIELD ) );
                 field->SetName( "VARIANT_" + variant );
                 field->SetText( value );
                 field->SetVisible( false );
@@ -1277,10 +1278,10 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     if( einstance.smashed && einstance.smashed.Get() )
     {
         if( !valueAttributeFound )
-            component->GetField( VALUE )->SetVisible( false );
+            component->GetField( VALUE_FIELD )->SetVisible( false );
 
         if( !nameAttributeFound )
-            component->GetField( REFERENCE )->SetVisible( false );
+            component->GetField( REFERENCE_FIELD )->SetVisible( false );
     }
 
     // Save the pin positions
@@ -1355,7 +1356,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary(
             kpart->SetUnitCount( gates_count );
             kpart->LockUnits( true );
 
-            LIB_FIELD* reference = kpart->GetField( REFERENCE );
+            LIB_FIELD* reference = kpart->GetField( REFERENCE_FIELD );
 
             if( prefix.length() == 0 )
                 reference->SetVisible( false );
@@ -1503,13 +1504,13 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
 
             if( libtext->GetText().Upper() == ">NAME" )
             {
-                LIB_FIELD* field = aPart->GetField( REFERENCE );
+                LIB_FIELD* field = aPart->GetField( REFERENCE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
                 foundName = true;
             }
             else if( libtext->GetText().Upper() == ">VALUE" )
             {
-                LIB_FIELD* field = aPart->GetField( VALUE );
+                LIB_FIELD* field = aPart->GetField( VALUE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
                 foundValue = true;
             }
@@ -1539,10 +1540,10 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
     }
 
     if( foundName == false )
-        aPart->GetField( REFERENCE )->SetVisible( false );
+        aPart->GetField( REFERENCE_FIELD )->SetVisible( false );
 
     if( foundValue == false )
-        aPart->GetField( VALUE )->SetVisible( false );
+        aPart->GetField( VALUE_FIELD )->SetVisible( false );
 
     return pincount == 1 ? ispower : false;
 }
@@ -2546,7 +2547,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
         return;
 
     int                   unit      = aComponent->GetUnit();
-    const wxString        reference = aComponent->GetField( REFERENCE )->GetText();
+    const wxString        reference = aComponent->GetField( REFERENCE_FIELD )->GetText();
     std::vector<LIB_PIN*> pins;
     aComponent->GetPartRef()->GetPins( pins );
     std::set<int> missingUnits;

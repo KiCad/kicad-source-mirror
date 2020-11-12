@@ -87,8 +87,8 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                     SCH_SHEET_PATH* sheetPath = nullptr;    // &refs[ii].GetSheetPath();
                     wxString        oldfp = refs[ii].GetFootprint();
 
-                    if( oldfp.IsEmpty() && component->GetField( FOOTPRINT )->IsVisible() )
-                        component->GetField( FOOTPRINT )->SetVisible( false );
+                    if( oldfp.IsEmpty() && component->GetField( FOOTPRINT_FIELD )->IsVisible() )
+                        component->GetField( FOOTPRINT_FIELD )->SetVisible( false );
 
                     if( oldfp != footprint )
                     {
@@ -188,7 +188,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                 component->SetFootprint( sheetPath, footprint );
 
                 if( aForceVisibilityState )
-                    component->GetField( FOOTPRINT )->SetVisible( aVisibilityState );
+                    component->GetField( FOOTPRINT_FIELD )->SetVisible( aVisibilityState );
             }
         }
     }

@@ -252,9 +252,9 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
     for( auto item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
         auto component = static_cast<SCH_COMPONENT*>( item );
-        component->GetField( REFERENCE )->SetText( component->GetRef( this ) );
-        component->GetField( VALUE )->SetText( component->GetValue( this ) );
-        component->GetField( FOOTPRINT )->SetText( component->GetFootprint( this ) );
+        component->GetField( REFERENCE_FIELD )->SetText( component->GetRef( this ) );
+        component->GetField( VALUE_FIELD )->SetText( component->GetValue( this ) );
+        component->GetField( FOOTPRINT_FIELD )->SetText( component->GetFootprint( this ) );
         component->UpdateUnit( component->GetUnitSelection( this ) );
     }
 }
@@ -820,7 +820,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
         symbol->AddHierarchicalReference( symbolInstances[i].GetSheetPath().Path(),
                                           it->m_Reference, it->m_Unit, it->m_Value,
                                           it->m_Footprint );
-        symbol->GetField( REFERENCE )->SetText( it->m_Reference );
+        symbol->GetField( REFERENCE_FIELD )->SetText( it->m_Reference );
     }
 }
 

@@ -2249,7 +2249,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
                 fieldIDsRead.insert( field->GetId() );
 
             // Set the default symbol reference prefix.
-            if( field->GetId() == REFERENCE )
+            if( field->GetId() == REFERENCE_FIELD )
             {
                 wxString refDesignator = field->GetText();
 

@@ -186,15 +186,15 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
     {
     case SF_PRIMITIVE:
     {
-        const wxString refName = aComponent->GetField( REFERENCE )->GetShownText();
+        const wxString refName = aComponent->GetField( REFERENCE_FIELD )->GetShownText();
         return refName.GetChar( 0 );
         break;
     }
 
     case SF_MODEL:
     {
-        wxChar prim = aComponent->GetField( REFERENCE )->GetShownText().GetChar( 0 );
-        wxString value = aComponent->GetField( VALUE )->GetShownText();
+        wxChar prim = aComponent->GetField( REFERENCE_FIELD )->GetShownText().GetChar( 0 );
+        wxString value = aComponent->GetField( VALUE_FIELD )->GetShownText();
 
         // Is it a passive component?
         if( aCtl & NET_ADJUST_PASSIVE_VALS && ( prim == 'C' || prim == 'L' || prim == 'R' ) )

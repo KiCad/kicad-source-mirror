@@ -33,9 +33,9 @@ TUNER_SLIDER::TUNER_SLIDER( SIM_PLOT_FRAME* aFrame, wxWindow* aParent, SCH_COMPO
     : TUNER_SLIDER_BASE( aParent ), m_component( aComponent ),
     m_min( 0.0 ), m_max( 0.0 ), m_value( 0.0 ), m_frame ( aFrame )
 {
-    const wxString compName = aComponent->GetField( REFERENCE )->GetText();
+    const wxString compName = aComponent->GetField( REFERENCE_FIELD )->GetText();
     m_name->SetLabel( compName );
-    m_value = SPICE_VALUE( aComponent->GetField( VALUE )->GetText() );
+    m_value = SPICE_VALUE( aComponent->GetField( VALUE_FIELD )->GetText() );
 
     m_changed = false;
     m_spiceName = aFrame->GetExporter()->GetSpiceDevice( compName ).Lower();
@@ -138,7 +138,7 @@ void TUNER_SLIDER::onClose( wxCommandEvent& event )
 void TUNER_SLIDER::onSave( wxCommandEvent& event )
 {
     /// @todo it will crash when component is removed; completely remove m_component
-    m_component->GetField( VALUE )->SetText( m_value.ToOrigString() );
+    m_component->GetField( VALUE_FIELD )->SetText( m_value.ToOrigString() );
 }
 
 

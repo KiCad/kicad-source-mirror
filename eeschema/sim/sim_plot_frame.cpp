@@ -536,7 +536,7 @@ void SIM_PLOT_FRAME::AddTuner( SCH_COMPONENT* aComponent )
     if( primitiveType != SP_RESISTOR && primitiveType != SP_CAPACITOR && primitiveType != SP_INDUCTOR )
         return;
 
-    const wxString componentName = aComponent->GetField( REFERENCE )->GetText();
+    const wxString componentName = aComponent->GetField( REFERENCE_FIELD )->GetText();
 
     // Do not add multiple instances for the same component
     auto tunerIt = std::find_if( m_tuners.begin(), m_tuners.end(), [&]( const TUNER_SLIDER* t )

@@ -41,10 +41,10 @@ class TEMPLATE_FIELDNAMES_LEXER;
  * user defined fields, only some of which have indices defined here.
  */
 enum  NumFieldType {
-    REFERENCE = 0,          ///< Field Reference of part, i.e. "IC21"
-    VALUE,                  ///< Field Value of part, i.e. "3.3K"
-    FOOTPRINT,              ///< Field Name Module PCB, i.e. "16DIP300"
-    DATASHEET,              ///< name of datasheet
+    REFERENCE_FIELD = 0,          ///< Field Reference of part, i.e. "IC21"
+    VALUE_FIELD,                  ///< Field Value of part, i.e. "3.3K"
+    FOOTPRINT_FIELD,              ///< Field Name Module PCB, i.e. "16DIP300"
+    DATASHEET_FIELD,              ///< name of datasheet
 
     /// The first 4 are mandatory, and must be instantiated in SCH_COMPONENT
     /// and LIB_PART constructors

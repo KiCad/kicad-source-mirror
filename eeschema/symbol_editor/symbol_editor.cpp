@@ -546,16 +546,16 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
 
             switch( id )
             {
-            case REFERENCE:
+            case REFERENCE_FIELD:
                 // parent's reference already copied
                 break;
 
-            case VALUE:
+            case VALUE_FIELD:
                 field->SetText( name );
                 break;
 
-            case FOOTPRINT:
-            case DATASHEET:
+            case FOOTPRINT_FIELD:
+            case DATASHEET_FIELD:
                 // - footprint might be the same as parent, but might not
                 // - datasheet is most likely different
                 // - probably best to play it safe and copy neither

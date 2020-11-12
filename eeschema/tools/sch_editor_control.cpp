@@ -1090,7 +1090,7 @@ int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
             {
                 std::vector<SCH_FIELD>& fields = comp->GetFields();
 
-                for( int id : { REFERENCE, VALUE } )
+                for( int id : { REFERENCE_FIELD, VALUE_FIELD } )
                 {
                     if( item->IsBrightened() && fields[id].IsVisible() )
                         fields[id].SetBrightened();

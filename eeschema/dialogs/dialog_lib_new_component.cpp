@@ -37,8 +37,8 @@ DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
     if( aRootSymbolNames && aRootSymbolNames->GetCount() )
         m_comboInheritanceSelect->Append( *aRootSymbolNames );
 
-    m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
-    m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE ) );
+    m_textName->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );
+    m_textReference->SetValidator( SCH_FIELD_VALIDATOR( true, REFERENCE_FIELD ) );
 
     m_pinTextPosition.SetValue( Mils2iu( DEFAULT_PIN_NAME_OFFSET ) );
 

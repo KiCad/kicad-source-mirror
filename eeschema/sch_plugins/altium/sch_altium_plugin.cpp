@@ -1608,7 +1608,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
     component->SetLibId( libId );
     component->SetLibSymbol( new LIB_PART( *kpart ) );
 
-    SCH_FIELD* valueField = component->GetField( VALUE );
+    SCH_FIELD* valueField = component->GetField( VALUE_FIELD );
 
     // TODO: Why do I need to set those a second time?
     valueField->SetVisible( true );
@@ -2013,7 +2013,7 @@ void SCH_ALTIUM_PLUGIN::ParseDesignator( const std::map<wxString, wxString>& aPr
 
     component->SetRef( &sheetpath, elem.text );
 
-    SCH_FIELD* refField = component->GetField( REFERENCE );
+    SCH_FIELD* refField = component->GetField( REFERENCE_FIELD );
 
     refField->SetPosition( elem.location + m_sheetOffset );
     refField->SetVisible( true );

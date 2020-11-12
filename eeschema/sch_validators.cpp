@@ -46,11 +46,11 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     wxString excludes( "\r\n\t" );
 
     // The reference field cannot contain spaces.
-    if( aFieldId == REFERENCE )
+    if( aFieldId == REFERENCE_FIELD )
     {
         excludes += " ";
     }
-    else if( aFieldId == VALUE && m_isLibEditor )
+    else if( aFieldId == VALUE_FIELD && m_isLibEditor )
     {
         excludes += " :/\\";
     }
@@ -62,8 +62,8 @@ SCH_FIELD_VALIDATOR::SCH_FIELD_VALIDATOR(  bool aIsLibEditor, int aFieldId, wxSt
     long style = GetStyle();
 
     // The reference, value sheetname and sheetfilename fields cannot be empty.
-    if( aFieldId == REFERENCE
-            || aFieldId == VALUE
+    if( aFieldId == REFERENCE_FIELD
+            || aFieldId == VALUE_FIELD
             || aFieldId == SHEETNAME_V
             || aFieldId == SHEETFILENAME_V
             || aFieldId == FIELD_NAME )
@@ -102,19 +102,19 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 
     switch( m_fieldId )
     {
-    case REFERENCE:
+    case REFERENCE_FIELD:
         fieldCharError = _( "The reference designator cannot contain %s character(s)." );
         break;
 
-    case VALUE:
+    case VALUE_FIELD:
         fieldCharError = _( "The value field cannot contain %s character(s)." );
         break;
 
-    case FOOTPRINT:
+    case FOOTPRINT_FIELD:
         fieldCharError = _( "The footprint field cannot contain %s character(s)." );
         break;
 
-    case DATASHEET:
+    case DATASHEET_FIELD:
         fieldCharError = _( "The datasheet field cannot contain %s character(s)." );
         break;
 
@@ -140,14 +140,14 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
         // Some fields cannot have an empty value, and user fields require a name:
         if( m_fieldId == FIELD_NAME )
             msg.Printf( _( "The name of the field cannot be empty." ) );
-        else    // the FIELD_VALUE id or REFERENCE or VALUE
+        else    // the FIELD_VALUE id or REFERENCE_FIELD or VALUE_FIELD
             msg.Printf( _( "The value of the field cannot be empty." ) );
     }
     else if( HasFlag( wxFILTER_EXCLUDE_CHAR_LIST ) && ContainsExcludedCharacters( val ) )
     {
         wxArrayString whiteSpace;
-        bool spaceIllegal = m_fieldId == REFERENCE
-                                || ( m_fieldId == VALUE && m_isLibEditor )
+        bool spaceIllegal = m_fieldId == REFERENCE_FIELD
+                                || ( m_fieldId == VALUE_FIELD && m_isLibEditor )
                                 || m_fieldId == SHEETNAME_V
                                 || m_fieldId == SHEETFILENAME_V;
 
@@ -176,7 +176,7 @@ bool SCH_FIELD_VALIDATOR::Validate( wxWindow *aParent )
 
         msg.Printf( fieldCharError, badChars );
     }
-    else if( m_fieldId == REFERENCE && val.Contains( wxT( "${" ) ) )
+    else if( m_fieldId == REFERENCE_FIELD && val.Contains( wxT( "${" ) ) )
     {
         msg.Printf( _( "The reference designator cannot contain text variable references" ) );
     }

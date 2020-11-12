@@ -88,9 +88,9 @@ void SCH_FIELD::SetId( int aId )
     {
         switch( m_id )
         {
-        case REFERENCE:     SetLayer( LAYER_REFERENCEPART ); break;
-        case VALUE:         SetLayer( LAYER_VALUEPART );     break;
-        default:            SetLayer( LAYER_FIELDS );        break;
+        case REFERENCE_FIELD: SetLayer( LAYER_REFERENCEPART ); break;
+        case VALUE_FIELD:     SetLayer( LAYER_VALUEPART );     break;
+        default:              SetLayer( LAYER_FIELDS );        break;
         }
     }
 
@@ -158,7 +158,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     {
         SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
 
-        if( m_id == REFERENCE )
+        if( m_id == REFERENCE_FIELD )
         {
             // For more than one part per package, we must add the part selection
             // A, B, ... or 1, 2, .. to the reference.
@@ -326,7 +326,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     if( !IsVisible() && !searchHiddenFields )
         return false;
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE )
+    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE_FIELD )
     {
         if( searchAndReplace && !replaceReferences )
             return false;
@@ -358,7 +358,7 @@ bool SCH_FIELD::IsReplaceable() const
     {
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
 
-        if( m_id == VALUE )
+        if( m_id == VALUE_FIELD )
         {
             LIB_PART* part = parentComponent->GetPartRef().get();
 
@@ -385,7 +385,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
     {
         SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
 
-        if( m_id == REFERENCE )
+        if( m_id == REFERENCE_FIELD )
         {
             wxCHECK_MSG( aAuxData != NULL, false,
                          wxT( "Cannot replace reference designator without valid sheet path." ) );
@@ -459,10 +459,10 @@ wxString SCH_FIELD::GetCanonicalName() const
     {
         switch( m_id )
         {
-        case  REFERENCE: return wxT( "Reference" );
-        case  VALUE:     return wxT( "Value" );
-        case  FOOTPRINT: return wxT( "Footprint" );
-        case  DATASHEET: return wxT( "Datasheet" );
+        case  REFERENCE_FIELD: return wxT( "Reference" );
+        case  VALUE_FIELD:     return wxT( "Value" );
+        case  FOOTPRINT_FIELD: return wxT( "Footprint" );
+        case  DATASHEET_FIELD: return wxT( "Datasheet" );
         }
     }
     else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
@@ -484,10 +484,10 @@ BITMAP_DEF SCH_FIELD::GetMenuImage() const
     {
         switch( m_id )
         {
-        case REFERENCE: return edit_comp_ref_xpm;
-        case VALUE:     return edit_comp_value_xpm;
-        case FOOTPRINT: return edit_comp_footprint_xpm;
-        default:        return edit_text_xpm;
+        case REFERENCE_FIELD: return edit_comp_ref_xpm;
+        case VALUE_FIELD:     return edit_comp_value_xpm;
+        case FOOTPRINT_FIELD: return edit_comp_footprint_xpm;
+        default:              return edit_text_xpm;
         }
     }
 

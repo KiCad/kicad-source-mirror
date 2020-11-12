@@ -188,9 +188,9 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     {
         m_Fields.emplace_back( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
-        if( i == REFERENCE )
+        if( i == REFERENCE_FIELD )
             m_Fields.back().SetLayer( LAYER_REFERENCEPART );
-        else if( i == VALUE )
+        else if( i == VALUE_FIELD )
             m_Fields.back().SetLayer( LAYER_VALUEPART );
         else
             m_Fields.back().SetLayer( LAYER_FIELDS );
@@ -431,10 +431,10 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     // use this as a default for this path.  This will happen if we load a version 1 schematic
     // file.  It will also mean that multiple instances of the same sheet by default all have
     // the same component references, but perhaps this is best.
-    if( ref.IsEmpty() && !GetField( REFERENCE )->GetText().IsEmpty() )
+    if( ref.IsEmpty() && !GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
     {
-        const_cast<SCH_COMPONENT*>( this )->SetRef( sheet, GetField( REFERENCE )->GetText() );
-        ref = GetField( REFERENCE )->GetText();
+        const_cast<SCH_COMPONENT*>( this )->SetRef( sheet, GetField( REFERENCE_FIELD )->GetText() );
+        ref = GetField( REFERENCE_FIELD )->GetText();
     }
 
     if( ref.IsEmpty() )
@@ -484,7 +484,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearDefaultNetName( sheet );
 
-    SCH_FIELD* rf = GetField( REFERENCE );
+    SCH_FIELD* rf = GetField( REFERENCE_FIELD );
 
     // @todo Should we really be checking for what is a "reasonable" position?
     if( rf->GetText().IsEmpty()
@@ -575,13 +575,13 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
     {
         if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
         {
-            SCH_FIELD dummy( wxDefaultPosition, VALUE, const_cast<SCH_COMPONENT*>( this ) );
+            SCH_FIELD dummy( wxDefaultPosition, VALUE_FIELD, const_cast<SCH_COMPONENT*>( this ) );
             dummy.SetText( instance.m_Value );
             return dummy.GetShownText();
         }
     }
 
-    return GetField( VALUE )->GetShownText();
+    return GetField( VALUE_FIELD )->GetShownText();
 }
 
 
@@ -593,7 +593,7 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
         for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Value = wxEmptyString;
 
-        m_Fields[ VALUE ].SetText( aValue );
+        m_Fields[ VALUE_FIELD ].SetText( aValue );
         return;
     }
 
@@ -622,13 +622,13 @@ const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet ) const
     {
         if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
         {
-            SCH_FIELD dummy( wxDefaultPosition, FOOTPRINT, const_cast<SCH_COMPONENT*>( this ) );
+            SCH_FIELD dummy( wxDefaultPosition, FOOTPRINT_FIELD, const_cast<SCH_COMPONENT*>( this ) );
             dummy.SetText( instance.m_Footprint );
             return dummy.GetShownText();
         }
     }
 
-    return GetField( FOOTPRINT )->GetShownText();
+    return GetField( FOOTPRINT_FIELD )->GetShownText();
 }
 
 
@@ -640,7 +640,7 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
         for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Footprint = wxEmptyString;
 
-        m_Fields[ FOOTPRINT ].SetText( aFootprint );
+        m_Fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
         return;
     }
 
@@ -750,7 +750,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             int idx = libField.GetId();
             SCH_FIELD* schField;
 
-            if( idx == REFERENCE && !aResetRef )
+            if( idx == REFERENCE_FIELD && !aResetRef )
                 continue;
 
             if( idx >= 0 && idx < MANDATORY_FIELDS )
@@ -775,12 +775,12 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 schField->SetTextPos( m_Pos + libField.GetTextPos() );
             }
 
-            if( idx == VALUE )
+            if( idx == VALUE_FIELD )
             {
                 schField->SetText( m_lib_id.GetLibItemName() ); // fetch alias-specific value
                 symbolName = m_lib_id.GetLibItemName();
             }
-            else if( idx == DATASHEET )
+            else if( idx == DATASHEET_FIELD )
             {
                 schField->SetText( GetDatasheet() );            // fetch alias-specific value
             }
@@ -902,11 +902,11 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
     {
         if( token->IsSameAs( m_Fields[ i ].GetCanonicalName().Upper() ) )
         {
-            if( i == REFERENCE && schematic )
+            if( i == REFERENCE_FIELD && schematic )
                 *token = GetRef( &schematic->CurrentSheet(), true );
-            else if( i == VALUE && schematic )
+            else if( i == VALUE_FIELD && schematic )
                 *token = GetValue( &schematic->CurrentSheet() );
-            else if( i == FOOTPRINT && schematic )
+            else if( i == FOOTPRINT_FIELD && schematic )
                 *token = GetFootprint( &schematic->CurrentSheet() );
             else
                 *token = m_Fields[ i ].GetShownText( aDepth + 1 );
@@ -932,7 +932,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
         if( schematic )
             footprint = GetFootprint( &schematic->CurrentSheet() );
         else
-            footprint = m_Fields[ FOOTPRINT ].GetShownText();
+            footprint = m_Fields[ FOOTPRINT_FIELD ].GetShownText();
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -946,7 +946,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
         if( schematic )
             footprint = GetFootprint( &schematic->CurrentSheet() );
         else
-            footprint = m_Fields[ FOOTPRINT ].GetShownText();
+            footprint = m_Fields[ FOOTPRINT_FIELD ].GetShownText();
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1009,7 +1009,7 @@ void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
-    m_Fields[REFERENCE].SetText( defRef ); //for drawing.
+    m_Fields[REFERENCE_FIELD].SetText( defRef ); //for drawing.
 }
 
 
@@ -1028,7 +1028,7 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheet
     }
 
     // This entry does not exist: add it, with its last-used reference
-    AddHierarchicalReference( aSheetPath, m_Fields[REFERENCE].GetText(), m_unit );
+    AddHierarchicalReference( aSheetPath, m_Fields[REFERENCE_FIELD].GetText(), m_unit );
     return true;
 }
 
@@ -1586,7 +1586,7 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 wxString SCH_COMPONENT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Symbol %s [%s]" ),
-                             GetField( REFERENCE )->GetShownText(),
+                             GetField( REFERENCE_FIELD )->GetShownText(),
                              GetLibId().GetLibItemName().wx_str() );
 }
 
@@ -1617,26 +1617,26 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 
         if( stype == SCH_FIELD_LOCATE_REFERENCE_T )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( REFERENCE ), (void*) this ) )
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( REFERENCE_FIELD ), (void*) this ) )
                 return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_VALUE_T
                 || ( stype == SCH_COMPONENT_LOCATE_POWER_T && m_part && m_part->IsPower() ) )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( VALUE ), (void*) this ) )
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( VALUE_FIELD ), (void*) this ) )
                 return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_FOOTPRINT_T )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( FOOTPRINT ), (void*) this ) )
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( FOOTPRINT_FIELD ), (void*) this ) )
                 return SEARCH_RESULT::QUIT;
         }
 
         if( stype == SCH_FIELD_LOCATE_DATASHEET_T )
         {
-            if( SEARCH_RESULT::QUIT == aInspector( GetField( DATASHEET ), (void*) this ) )
+            if( SEARCH_RESULT::QUIT == aInspector( GetField( DATASHEET_FIELD ), (void*) this ) )
                 return SEARCH_RESULT::QUIT;
         }
 
@@ -1692,7 +1692,7 @@ bool SCH_COMPONENT::operator==( const SCH_COMPONENT& aComponent ) const
     if( GetFieldCount() !=  aComponent.GetFieldCount() )
         return false;
 
-    for( int i = VALUE; i < GetFieldCount(); i++ )
+    for( int i = VALUE_FIELD; i < GetFieldCount(); i++ )
     {
         if( GetField( i )->GetText().Cmp( aComponent.GetField( i )->GetText() ) != 0 )
             return false;

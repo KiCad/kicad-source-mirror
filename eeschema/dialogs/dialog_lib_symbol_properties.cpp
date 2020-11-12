@@ -73,9 +73,9 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
-    m_grid->SetAttr( DATASHEET, FDC_VALUE, attr );
+    m_grid->SetAttr( DATASHEET_FIELD, FDC_VALUE, attr );
 
-    m_SymbolNameCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
+    m_SymbolNameCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE_FIELD ) );
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
@@ -215,7 +215,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
 
     // Alias symbol reference can be empty because it inherits from the parent symbol.
     if( m_libEntry->IsRoot() &&
-        !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
+        !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE_FIELD ).GetText() ) )
     {
         if( m_NoteBook->GetSelection() != 0 )
             m_NoteBook->SetSelection( 0 );
@@ -223,7 +223,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
         m_delayedErrorMessage = _( "References must start with a letter." );
         m_delayedFocusGrid = m_grid;
         m_delayedFocusColumn = FDC_VALUE;
-        m_delayedFocusRow = REFERENCE;
+        m_delayedFocusRow = REFERENCE_FIELD;
         m_delayedFocusPage = 0;
 
         return false;
@@ -290,7 +290,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         return false;
 
     // We need to keep the name and the value the same at the moment!
-    wxString   newName = m_fields->at( VALUE ).GetText();
+    wxString   newName = m_fields->at( VALUE_FIELD ).GetText();
     wxString   oldName = m_libEntry->GetName();
 
     if( oldName != newName )
@@ -422,7 +422,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
             }
         }
     }
-    else if( event.GetRow() == VALUE && event.GetCol() == FDC_VALUE )
+    else if( event.GetRow() == VALUE_FIELD && event.GetCol() == FDC_VALUE )
         m_SymbolNameCtrl->ChangeValue( event.GetString() );
 
     editor->DecRef();
@@ -431,7 +431,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnGridCellChanging( wxGridEvent& event )
 
 void DIALOG_LIB_SYMBOL_PROPERTIES::OnSymbolNameText( wxCommandEvent& event )
 {
-    m_grid->SetCellValue( VALUE, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
+    m_grid->SetCellValue( VALUE_FIELD, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
 }
 
 
@@ -675,7 +675,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
         int row = m_grid->GetGridCursorRow();
         int col = m_grid->GetGridCursorCol();
 
-        if( row == VALUE && col == FDC_VALUE )
+        if( row == VALUE_FIELD && col == FDC_VALUE )
         {
             wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
             m_SymbolNameCtrl->ChangeValue( editor->GetValue() );
