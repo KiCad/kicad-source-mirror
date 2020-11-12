@@ -701,7 +701,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, MODULE* aModule )
 {
-    for( std::pair<PAD_ID, PAD> padPair : aComponent.Pads )
+    for( std::pair<PAD_ID, COMPONENT_PAD> padPair : aComponent.ComponentPads )
     {
         D_PAD* pad = getKiCadPad( padPair.second, aModule );
         aModule->Add( pad,
@@ -711,7 +711,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, 
 }
 
 
-D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const PAD& aCadstarPad, MODULE* aParent )
+D_PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, MODULE* aParent )
 {
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
 
@@ -1211,7 +1211,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
             for( std::pair<PAD_ID, PADEXCEPTION> padPair : comp.PadExceptions )
             {
                 PADEXCEPTION& padEx = padPair.second;
-                PAD           csPad = fpLibEntry.Pads.at( padPair.first );
+                COMPONENT_PAD csPad = fpLibEntry.ComponentPads.at( padPair.first );
 
                 if( !padEx.PadCode.IsEmpty() )
                     csPad.PadCodeID = padEx.PadCode;

@@ -1136,7 +1136,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_EXITS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PAD::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_PAD::Parse( XNODE* aNode )
 {
     wxASSERT( aNode->GetName() == wxT( "PAD" ) );
 
@@ -1540,9 +1540,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "PAD" ) )
         {
-            PAD pad;
+            COMPONENT_PAD pad;
             pad.Parse( cNode );
-            Pads.insert( std::make_pair( pad.ID, pad ) );
+            ComponentPads.insert( std::make_pair( pad.ID, pad ) );
         }
         else if( cNodeName == wxT( "DIMENSIONS" ) )
         {

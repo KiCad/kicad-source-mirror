@@ -522,7 +522,7 @@ public:
     };
 
 
-    struct PAD
+    struct COMPONENT_PAD
     {
         PAD_ID     ID;
         POINT      Position; ///< Pad position within the component's coordinate frame.
@@ -544,11 +544,10 @@ public:
                                ///< removed from the existing pad when this new pad is added. The
                                ///< property is used by the 'First Pad' highlight when in a PCB
                                ///< design."
-        bool PCBonlyPad =
-                false; ///< From CADSTAR Help: "The PCB Only Pad property can be used to stop
-                       ///< ECO Update, Back Annotation, and Design Comparison incorrectly
-                       ///< acting on mechanical pads / components that only appear in the
-                       ///< PCB design."
+        bool PCBonlyPad = false; ///< From CADSTAR Help: "The PCB Only Pad property can be used to
+                                 ///< stop ECO Update, Back Annotation, and Design Comparison
+                                 ///< incorrectly acting on mechanical pads / components that only
+                                 ///< appear in the PCB design."
 
         void Parse( XNODE* aNode );
     };
@@ -779,7 +778,7 @@ public:
 
         std::vector<COMPONENT_COPPER>          ComponentCoppers;
         std::map<COMP_AREA_ID, COMPONENT_AREA> ComponentAreas;
-        std::map<PAD_ID, PAD>                  Pads;
+        std::map<PAD_ID, COMPONENT_PAD>        ComponentPads;
         std::map<DIMENSION_ID, DIMENSION>      Dimensions; ///< inside "DIMENSIONS" subnode
 
         void Parse( XNODE* aNode ) override;

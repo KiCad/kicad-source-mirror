@@ -338,7 +338,7 @@ private:
 
     // Helper Functions for obtaining individual elements as KiCad elements:
     double     getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
-    D_PAD*     getKiCadPad( const PAD& aCadstarPad, MODULE* aParent );
+    D_PAD*     getKiCadPad( const COMPONENT_PAD& aCadstarPad, MODULE* aParent );
     MODULE*    getModuleFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
     int        getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
     int        getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
