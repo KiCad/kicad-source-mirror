@@ -4,7 +4,7 @@ import pcbnew
 
 pcb = pcbnew.GetBoard()
 
-for m in pcb.GetModules():
+for m in pcb.GetFootprints():
     print(m.GetPosition())
     for p in m.Pads():
         print("p=>", p.GetPosition(), p.GetName())

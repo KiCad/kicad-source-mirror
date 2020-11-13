@@ -16,12 +16,12 @@ class TestPCBLoad(unittest.TestCase):
         self.assertEqual(len(tracks),361)
 
     def test_pcb_modules(self):
-        modules = list(self.pcb.GetModules())
+        modules = list(self.pcb.GetFootprints())
         self.assertEqual(len(modules), 72)
 
     def test_pcb_module_references(self):
         board_refs = list(module.GetReference() for
-                          module in self.pcb.GetModules())
+                          module in self.pcb.GetFootprints())
 
         known_refs = [u'P1', u'P3', u'C2', u'C1', u'D1', u'Q3', u'Q5', u'Q7',
                       u'Q6', u'Q1', u'Q2', u'Q4', u'Q8', u'P2', u'U1', u'U4',

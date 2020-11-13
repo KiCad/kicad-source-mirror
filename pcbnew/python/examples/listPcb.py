@@ -49,7 +49,7 @@ for item in pcb.GetDrawings():
 print("")
 print("LIST MODULES:")
 
-for module in pcb.GetModules():
+for module in pcb.GetFootprints():
     print("* Module: %s at %s" % (module.GetReference(), ToUnits(module.GetPosition())))
 
 print("")

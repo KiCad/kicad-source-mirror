@@ -103,7 +103,7 @@ public:
 
     bool Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
 
-    FOOTPRINT_MAP& GetModules() { return m_modules; }
+    FOOTPRINT_MAP& GetFootprints() { return m_modules; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -2158,7 +2158,7 @@ void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_cache->GetModules().begin(); it != m_cache->GetModules().end(); ++it )
+    for( MODULE_CITER it = m_cache->GetFootprints().begin(); it != m_cache->GetFootprints().end(); ++it )
         aFootprintNames.Add( it->first );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
@@ -2184,7 +2184,7 @@ const FOOTPRINT* PCB_IO::getFootprint( const wxString& aLibraryPath,
         // do nothing with the error
     }
 
-    const FOOTPRINT_MAP& mods = m_cache->GetModules();
+    const FOOTPRINT_MAP& mods = m_cache->GetFootprints();
 
     MODULE_CITER it = mods.find( aFootprintName );
 
@@ -2263,7 +2263,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
 
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
-    FOOTPRINT_MAP& mods = m_cache->GetModules();
+    FOOTPRINT_MAP& mods = m_cache->GetFootprints();
 
     // Quietly overwrite module and delete module file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),

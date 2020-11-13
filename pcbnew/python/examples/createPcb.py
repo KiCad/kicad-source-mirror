@@ -41,9 +41,9 @@ pcb.Save("my2.kicad_pcb")
 
 pcb = LoadBoard("my2.kicad_pcb")
 
-print(map( lambda x: x.GetReference() , list(pcb.GetModules())))
+print(map( lambda x: x.GetReference() , list(pcb.GetFootprints())))
 
-for m in pcb.GetModules():
+for m in pcb.GetFootprints():
     for p in m.Pads():
         print('pad ', p.GetName(), p.GetPosition(), p.GetOffset())
 

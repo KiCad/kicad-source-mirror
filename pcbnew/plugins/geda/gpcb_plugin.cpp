@@ -178,7 +178,7 @@ public:
 
     wxString GetPath() const { return m_lib_path.GetPath(); }
     bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
-    FOOTPRINT_MAP& GetModules() { return m_footprints; }
+    FOOTPRINT_MAP& GetFootprints() { return m_footprints; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -896,7 +896,7 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_cache->GetModules().begin(); it != m_cache->GetModules().end(); ++it )
+    for( MODULE_CITER it = m_cache->GetFootprints().begin(); it != m_cache->GetFootprints().end(); ++it )
         aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
@@ -915,7 +915,7 @@ const FOOTPRINT* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
 
     validateCache( aLibraryPath, checkModified );
 
-    const FOOTPRINT_MAP& mods = m_cache->GetModules();
+    const FOOTPRINT_MAP& mods = m_cache->GetFootprints();
 
     MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
 

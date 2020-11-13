@@ -176,7 +176,7 @@ class add_automatic_border( ActionPlugin ):
                 max_y = self.max( max_y, bbox.GetY() + bbox.GetHeight() )
 
         # Same with modules: Find including area
-        for module in pcb.GetModules():
+        for module in pcb.GetFootprints():
             bbox = module.GetBoundingBox()
             min_x = self.min( min_x, bbox.GetX() )
             min_y = self.min( min_y, bbox.GetY() )

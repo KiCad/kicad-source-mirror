@@ -14,7 +14,7 @@ class testundoredo0(ActionPlugin):
     def Run(self):
         pcb = GetBoard()
 
-        for module in pcb.GetModules():
+        for module in pcb.GetFootprints():
             pcb.RemoveNative(module)
 
 
@@ -32,7 +32,7 @@ class testundoredo1(ActionPlugin):
             area = pcb.GetArea(0)
             pcb.RemoveNative(area)
 
-        for module in pcb.GetModules():
+        for module in pcb.GetFootprints():
             pcb.RemoveNative(module)
 
         for track in pcb.GetTracks():
@@ -138,7 +138,7 @@ class testundoredo3(ActionPlugin):
             area = pcb.GetArea(i)
             area.Move(wxPointMM(random.randint(-20,20),random.randint(-20,20)))
 
-        for module in pcb.GetModules():
+        for module in pcb.GetFootprints():
             module.Move(wxPointMM(random.randint(-20,20),random.randint(-20,20)))
             if random.randint(0,10) > 5:
                 module.Flip(module.GetPosition())
