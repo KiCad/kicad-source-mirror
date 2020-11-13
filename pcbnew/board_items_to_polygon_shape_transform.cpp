@@ -227,7 +227,7 @@ void MODULE::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                                                       PCB_LAYER_ID aLayer, int aClearance,
                                                       int aError, ERROR_LOC aErrorLoc,
                                                       bool aIncludeText,
-                                                      bool aIncludeEdges ) const
+                                                      bool aIncludeShapes ) const
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
 
@@ -241,7 +241,7 @@ void MODULE::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                 texts.push_back( text );
         }
 
-        if( item->Type() == PCB_FP_SHAPE_T && aIncludeEdges )
+        if( item->Type() == PCB_FP_SHAPE_T && aIncludeShapes )
         {
             FP_SHAPE* outline = static_cast<FP_SHAPE*>( item );
 

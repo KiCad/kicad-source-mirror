@@ -54,21 +54,21 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
     {
     case PCB_MODULE_T:
         {
-            const MODULE* module = static_cast<const MODULE*>( aItem );
+            const MODULE* footprint = static_cast<const MODULE*>( aItem );
 
-            ret    = hash_board_item( module, aFlags );
+            ret = hash_board_item( footprint, aFlags );
 
             if( aFlags & HASH_POS )
-                hash_combine( ret, module->GetPosition().x, module->GetPosition().y );
+                hash_combine( ret, footprint->GetPosition().x, footprint->GetPosition().y );
 
             if( aFlags & HASH_ROT )
-                hash_combine( ret, module->GetOrientation() );
+                hash_combine( ret, footprint->GetOrientation() );
 
-            for( auto i : module->GraphicalItems() )
-                hash_combine( ret, hash_eda( i, aFlags ) );
+            for( BOARD_ITEM* item : footprint->GraphicalItems() )
+                hash_combine( ret, hash_eda( item, aFlags ) );
 
-            for( auto i : module->Pads() )
-                hash_combine( ret, hash_eda( static_cast<EDA_ITEM*>( i ), aFlags ) );
+            for( PAD* pad : footprint->Pads() )
+                hash_combine( ret, hash_eda( static_cast<EDA_ITEM*>( pad ), aFlags ) );
         }
         break;
 

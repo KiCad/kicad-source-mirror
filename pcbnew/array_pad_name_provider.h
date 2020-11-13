@@ -37,10 +37,10 @@ class ARRAY_PAD_NAME_PROVIDER
 {
 public:
     /**
-     * @param aMod          the module to gather existing names from (nullptr for no module)
-     * @oaram aArrayOpts    the array options that provide the candidate names
+     * @param aFootprint the footprint to gather existing names from (nullptr for no footprint)
+     * @oaram aArrayOpts the array options that provide the candidate names
      */
-    ARRAY_PAD_NAME_PROVIDER( const MODULE* aMod, const ARRAY_OPTIONS& aArrayOpts );
+    ARRAY_PAD_NAME_PROVIDER( const MODULE* aFootprint, const ARRAY_OPTIONS& aArrayOpts );
 
     /**
      * Get the next available pad name.

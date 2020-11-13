@@ -95,7 +95,7 @@ public:
     VECTOR3D m_Offset;      ///< 3D model offset (mm)
     double   m_Opacity;
     wxString m_Filename;    ///< The 3D shape filename in 3D library
-    bool     m_Show;        ///< Include module in rendering
+    bool     m_Show;        ///< Include model in rendering
 };
 
 DECL_DEQ_FOR_SWIG( PADS, PAD* )
@@ -111,7 +111,7 @@ public:
 
     MODULE( const MODULE& aFootprint );
 
-    // Move constructor and operator needed due to std containers inside the module
+    // Move constructor and operator needed due to std containers inside the footprint
     MODULE( MODULE&& aFootprint );
 
     ~MODULE();
@@ -147,7 +147,7 @@ public:
 
     /**
      * Function GetFootprintRect()
-     * Build and returns the boundary box of the module footprint excluding any text.
+     * Build and returns the boundary box of the footprint excluding any text.
      * @return EDA_RECT - The rectangle containing the footprint.
      */
     EDA_RECT GetFootprintRect() const;
@@ -157,7 +157,7 @@ public:
      * (call CalculateBoundingBox() to recalculate it)
      * @return EDA_RECT - The rectangle containing the footprint
      */
-    EDA_RECT GetBoundingBoxBase() const { return m_BoundaryBox; }
+    EDA_RECT GetBoundingBoxBase() const { return m_boundingBox; }
 
     /**
      * Returns the bounding box containing pads when the footprint
@@ -169,7 +169,7 @@ public:
     EDA_RECT GetFpPadsLocalBbox() const;
 
     /**
-     * Returns a bounding polygon for the shapes and pads in the module
+     * Returns a bounding polygon for the shapes and pads in the footprint
      * This operation is slower but more accurate than calculating a bounding box
      */
     SHAPE_POLY_SET GetBoundingPoly() const;
@@ -196,57 +196,57 @@ public:
     const std::list<FP_3DMODEL>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos ) override;
-    wxPoint GetPosition() const override { return m_Pos; }
+    wxPoint GetPosition() const override { return m_pos; }
 
     void SetOrientation( double aNewAngle );
     void SetOrientationDegrees( double aOrientation ) { SetOrientation( aOrientation * 10.0 ); }
-    double GetOrientation() const { return m_Orient; }
-    double GetOrientationDegrees() const { return m_Orient / 10.0; }
-    double GetOrientationRadians() const { return m_Orient * M_PI / 1800; }
+    double GetOrientation() const { return m_orient; }
+    double GetOrientationDegrees() const { return m_orient / 10.0; }
+    double GetOrientationRadians() const { return m_orient * M_PI / 1800; }
 
     const LIB_ID& GetFPID() const { return m_fpid; }
     void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID; }
 
-    const wxString& GetDescription() const { return m_Doc; }
-    void SetDescription( const wxString& aDoc ) { m_Doc = aDoc; }
+    const wxString& GetDescription() const { return m_doc; }
+    void SetDescription( const wxString& aDoc ) { m_doc = aDoc; }
 
-    const wxString& GetKeywords() const { return m_KeyWord; }
-    void SetKeywords( const wxString& aKeywords ) { m_KeyWord = aKeywords; }
+    const wxString& GetKeywords() const { return m_keywords; }
+    void SetKeywords( const wxString& aKeywords ) { m_keywords = aKeywords; }
 
-    const KIID_PATH& GetPath() const { return m_Path; }
-    void SetPath( const KIID_PATH& aPath ) { m_Path = aPath; }
+    const KIID_PATH& GetPath() const { return m_path; }
+    void SetPath( const KIID_PATH& aPath ) { m_path = aPath; }
 
-    int GetLocalSolderMaskMargin() const { return m_LocalSolderMaskMargin; }
-    void SetLocalSolderMaskMargin( int aMargin ) { m_LocalSolderMaskMargin = aMargin; }
+    int GetLocalSolderMaskMargin() const { return m_localSolderMaskMargin; }
+    void SetLocalSolderMaskMargin( int aMargin ) { m_localSolderMaskMargin = aMargin; }
 
-    int GetLocalClearance() const { return m_LocalClearance; }
-    void SetLocalClearance( int aClearance ) { m_LocalClearance = aClearance; }
+    int GetLocalClearance() const { return m_localClearance; }
+    void SetLocalClearance( int aClearance ) { m_localClearance = aClearance; }
 
     int GetLocalClearance( wxString* aSource ) const
     {
         if( aSource )
             *aSource = wxString::Format( _( "footprint %s" ), GetReference() );
 
-        return m_LocalClearance;
+        return m_localClearance;
     }
 
-    int GetLocalSolderPasteMargin() const { return m_LocalSolderPasteMargin; }
-    void SetLocalSolderPasteMargin( int aMargin ) { m_LocalSolderPasteMargin = aMargin; }
+    int GetLocalSolderPasteMargin() const { return m_localSolderPasteMargin; }
+    void SetLocalSolderPasteMargin( int aMargin ) { m_localSolderPasteMargin = aMargin; }
 
-    double GetLocalSolderPasteMarginRatio() const { return m_LocalSolderPasteMarginRatio; }
-    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_LocalSolderPasteMarginRatio = aRatio; }
+    double GetLocalSolderPasteMarginRatio() const { return m_localSolderPasteMarginRatio; }
+    void SetLocalSolderPasteMarginRatio( double aRatio ) { m_localSolderPasteMarginRatio = aRatio; }
 
-    void SetZoneConnection( ZONE_CONNECTION aType ) { m_ZoneConnection = aType; }
-    ZONE_CONNECTION GetZoneConnection() const { return m_ZoneConnection; }
+    void SetZoneConnection( ZONE_CONNECTION aType ) { m_zoneConnection = aType; }
+    ZONE_CONNECTION GetZoneConnection() const { return m_zoneConnection; }
 
-    void SetThermalWidth( int aWidth ) { m_ThermalWidth = aWidth; }
-    int GetThermalWidth() const { return m_ThermalWidth; }
+    void SetThermalWidth( int aWidth ) { m_thermalWidth = aWidth; }
+    int GetThermalWidth() const { return m_thermalWidth; }
 
-    void SetThermalGap( int aGap ) { m_ThermalGap = aGap; }
-    int GetThermalGap() const { return m_ThermalGap; }
+    void SetThermalGap( int aGap ) { m_thermalGap = aGap; }
+    int GetThermalGap() const { return m_thermalGap; }
 
-    int GetAttributes() const { return m_Attributs; }
-    void SetAttributes( int aAttributes ) { m_Attributs = aAttributes; }
+    int GetAttributes() const { return m_attributes; }
+    void SetAttributes( int aAttributes ) { m_attributes = aAttributes; }
 
     void SetFlag( int aFlag ) { m_arflag = aFlag; }
     void IncrementFlag() { m_arflag += 1; }
@@ -276,20 +276,20 @@ public:
 
     /**
      * function IsFlipped
-     * @return true if the module is flipped, i.e. on the back side of the board
+     * @return true if the footprint is flipped, i.e. on the back side of the board
      */
     bool IsFlipped() const { return GetLayer() == B_Cu; }
 
-// m_footprintstatus bits:
-#define MODULE_is_LOCKED    0x01        ///< module LOCKED: no autoplace allowed
-#define MODULE_is_PLACED    0x02        ///< In autoplace: module automatically placed
-#define MODULE_to_PLACE     0x04        ///< In autoplace: module waiting for autoplace
-#define MODULE_PADS_LOCKED  0x08        ///< In autoplace: module waiting for autoplace
+// m_footprintStatus bits:
+#define FP_is_LOCKED        0x01        ///< footprint LOCKED: no autoplace allowed
+#define FP_is_PLACED        0x02        ///< In autoplace: footprint automatically placed
+#define FP_to_PLACE         0x04        ///< In autoplace: footprint waiting for autoplace
+#define FP_PADS_are_LOCKED  0x08
 
 
     bool IsLocked() const override
     {
-        return ( m_ModuleStatus & MODULE_is_LOCKED ) != 0;
+        return ( m_moduleStatus & FP_is_LOCKED ) != 0;
     }
 
     /**
@@ -300,42 +300,42 @@ public:
     void SetLocked( bool isLocked ) override
     {
         if( isLocked )
-            m_ModuleStatus |= MODULE_is_LOCKED;
+            m_moduleStatus |= FP_is_LOCKED;
         else
-            m_ModuleStatus &= ~MODULE_is_LOCKED;
+            m_moduleStatus &= ~FP_is_LOCKED;
     }
 
-    bool IsPlaced() const { return m_ModuleStatus & MODULE_is_PLACED;  }
+    bool IsPlaced() const { return m_moduleStatus & FP_is_PLACED;  }
     void SetIsPlaced( bool isPlaced )
     {
         if( isPlaced )
-            m_ModuleStatus |= MODULE_is_PLACED;
+            m_moduleStatus |= FP_is_PLACED;
         else
-            m_ModuleStatus &= ~MODULE_is_PLACED;
+            m_moduleStatus &= ~FP_is_PLACED;
     }
 
-    bool NeedsPlaced() const { return m_ModuleStatus & MODULE_to_PLACE;  }
+    bool NeedsPlaced() const { return m_moduleStatus & FP_to_PLACE;  }
     void SetNeedsPlaced( bool needsPlaced )
     {
         if( needsPlaced )
-            m_ModuleStatus |= MODULE_to_PLACE;
+            m_moduleStatus |= FP_to_PLACE;
         else
-            m_ModuleStatus &= ~MODULE_to_PLACE;
+            m_moduleStatus &= ~FP_to_PLACE;
     }
 
-    bool PadsLocked() const { return m_ModuleStatus & MODULE_PADS_LOCKED;  }
+    bool PadsLocked() const { return m_moduleStatus & FP_PADS_are_LOCKED;  }
 
     void SetPadsLocked( bool aPadsLocked )
     {
         if( aPadsLocked )
-            m_ModuleStatus |= MODULE_PADS_LOCKED;
+            m_moduleStatus |= FP_PADS_are_LOCKED;
         else
-            m_ModuleStatus &= ~MODULE_PADS_LOCKED;
+            m_moduleStatus &= ~FP_PADS_are_LOCKED;
     }
 
-    void SetLastEditTime( timestamp_t aTime ) { m_LastEditTime = aTime; }
-    void SetLastEditTime() { m_LastEditTime = time( NULL ); }
-    timestamp_t GetLastEditTime() const { return m_LastEditTime; }
+    void SetLastEditTime( timestamp_t aTime ) { m_lastEditTime = aTime; }
+    void SetLastEditTime() { m_lastEditTime = time( NULL ); }
+    timestamp_t GetLastEditTime() const { return m_lastEditTime; }
 
     /* drawing functions */
 
@@ -375,13 +375,13 @@ public:
      * @param aClearance = a value to inflate shapes
      * @param aError = Maximum error between true arc and polygon approx
      * @param aIncludeText = True to transform text shapes
-     * @param aIncludeEdges = True to transform module shapes
+     * @param aIncludeShapes = True to transform footprint shapes
      */
     void TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                   PCB_LAYER_ID aLayer, int aClearance,
                                                   int aError, ERROR_LOC aErrorLoc,
                                                   bool aIncludeText = true,
-                                                  bool aIncludeEdges = true ) const;
+                                                  bool aIncludeShapes = true ) const;
 
     /**
      * @brief TransformFPTextWithClearanceToPolygonSet
@@ -413,7 +413,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     /**
-     * Tests if a point is inside the bounding polygon of the module
+     * Tests if a point is inside the bounding polygon of the footprint
      *
      * The other hit test methods are just checking the bounding box, which
      * can be quite inaccurate for rotated or oddly-shaped footprints.
@@ -431,7 +431,7 @@ public:
      */
     const wxString GetReference() const
     {
-        return m_Reference->GetText();
+        return m_reference->GetText();
     }
 
     /**
@@ -441,7 +441,7 @@ public:
      */
     void SetReference( const wxString& aReference )
     {
-        m_Reference->SetText( aReference );
+        m_reference->SetText( aReference );
     }
 
     /**
@@ -456,7 +456,7 @@ public:
      */
     const wxString GetValue() const
     {
-        return m_Value->GetText();
+        return m_value->GetText();
     }
 
     /**
@@ -465,16 +465,16 @@ public:
      */
     void SetValue( const wxString& aValue )
     {
-        m_Value->SetText( aValue );
+        m_value->SetText( aValue );
     }
 
     /// read/write accessors:
-    FP_TEXT& Value()           { return *m_Value; }
-    FP_TEXT& Reference()       { return *m_Reference; }
+    FP_TEXT& Value()           { return *m_value; }
+    FP_TEXT& Reference()       { return *m_reference; }
 
     /// The const versions to keep the compiler happy.
-    FP_TEXT& Value() const     { return *m_Value; }
-    FP_TEXT& Reference() const { return *m_Reference; }
+    FP_TEXT& Value() const     { return *m_value; }
+    FP_TEXT& Reference() const { return *m_reference; }
 
     const std::map<wxString, wxString>& GetProperties() const { return m_properties; }
     void SetProperties( const std::map<wxString, wxString>& aProps ) { m_properties = aProps; }
@@ -535,7 +535,7 @@ public:
 
     /**
      * Function GetNextPadName
-     * returns the next available pad name in the module
+     * returns the next available pad name in the footprint
      *
      * @param aFillSequenceGaps true if the numbering should "fill in" gaps in the sequence,
      *                          else return the highest value + 1
@@ -545,23 +545,23 @@ public:
 
     double GetArea( int aPadding = 0 ) const;
 
-    KIID GetLink() const { return m_Link; }
-    void SetLink( const KIID& aLink ) { m_Link = aLink; }
+    KIID GetLink() const { return m_link; }
+    void SetLink( const KIID& aLink ) { m_link = aLink; }
 
-    int GetPlacementCost180() const { return m_CntRot180; }
-    void SetPlacementCost180( int aCost )   { m_CntRot180 = aCost; }
+    int GetPlacementCost180() const { return m_rot180Cost; }
+    void SetPlacementCost180( int aCost )   { m_rot180Cost = aCost; }
 
-    int GetPlacementCost90() const { return m_CntRot90; }
-    void SetPlacementCost90( int aCost )    { m_CntRot90 = aCost; }
+    int GetPlacementCost90() const { return m_rot90Cost; }
+    void SetPlacementCost90( int aCost )    { m_rot90Cost = aCost; }
 
     BOARD_ITEM* Duplicate() const override;
 
     /**
      * Function DuplicateItem
-     * Duplicate a given item within the module, optionally adding it to the board
+     * Duplicate a given item within the footprint, optionally adding it to the board
      * @return the new item, or NULL if the item could not be duplicated
      */
-    BOARD_ITEM* DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule = false );
+    BOARD_ITEM* DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint = false );
 
     /**
      * Function Add3DModel
@@ -587,14 +587,14 @@ public:
     /**
      * Function RunOnChildren
      *
-     * Invokes a function on all BOARD_ITEMs that belong to the module (pads, drawings, texts).
-     * Note that this function should not add or remove items to the module
+     * Invokes a function on all BOARD_ITEMs that belong to the footprint (pads, drawings, texts).
+     * Note that this function should not add or remove items to the footprint
      * @param aFunction is the function to be invoked.
      */
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const;
 
     /**
-     * Returns a set of all layers that this module has drawings on similar to ViewGetLayers()
+     * Returns a set of all layers that this footprint has drawings on similar to ViewGetLayers()
      *
      * @param aLayers is an array to store layer ids
      * @param aCount is the number of layers stored in the array
@@ -691,44 +691,44 @@ public:
 #endif
 
 private:
-    DRAWINGS       m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
-    PADS           m_pads;              // PAD items, owned by pointer
-    FP_ZONES       m_fp_zones;          // FP_ZONE items, owned by pointer
-    MODULE_GROUPS  m_fp_groups;         // PCB_GROUP items, owned by pointer
+    DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
+    PADS            m_pads;              // PAD items, owned by pointer
+    FP_ZONES        m_fp_zones;          // FP_ZONE items, owned by pointer
+    MODULE_GROUPS   m_fp_groups;         // PCB_GROUP items, owned by pointer
 
-    double         m_Orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
-    wxPoint        m_Pos;               // Position of module on the board in internal units.
-    FP_TEXT*       m_Reference;         // Component reference designator value (U34, R18..)
-    FP_TEXT*       m_Value;             // Component value (74LS00, 22K..)
-    LIB_ID         m_fpid;              // The #LIB_ID of the MODULE.
-    int            m_Attributs;         // Flag bits ( see Mod_Attribut )
-    int            m_ModuleStatus;      // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
-    EDA_RECT       m_BoundaryBox;       // Bounding box : coordinates on board, real orientation.
+    double          m_orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
+    wxPoint         m_pos;               // Position of footprint on the board in internal units.
+    FP_TEXT*        m_reference;         // Component reference designator value (U34, R18..)
+    FP_TEXT*        m_value;             // Component value (74LS00, 22K..)
+    LIB_ID          m_fpid;              // The #LIB_ID of the MODULE.
+    int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
+    int             m_moduleStatus;      // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
+    EDA_RECT        m_boundingBox;       // Bounding box : coordinates on board, real orientation.
 
-    ZONE_CONNECTION m_ZoneConnection;
-    int            m_ThermalWidth;
-    int            m_ThermalGap;
-    int            m_LocalClearance;
-    int            m_LocalSolderMaskMargin;       // Solder mask margin
-    int            m_LocalSolderPasteMargin;      // Solder paste margin absolute value
-    double         m_LocalSolderPasteMarginRatio; // Solder mask margin ratio value of pad size
+    ZONE_CONNECTION m_zoneConnection;
+    int             m_thermalWidth;
+    int             m_thermalGap;
+    int             m_localClearance;
+    int             m_localSolderMaskMargin;       // Solder mask margin
+    int             m_localSolderPasteMargin;      // Solder paste margin absolute value
+    double          m_localSolderPasteMarginRatio; // Solder mask margin ratio value of pad size
 
-    wxString       m_Doc;               // File name and path for documentation file.
-    wxString       m_KeyWord;           // Search keywords to find module in library.
-    KIID_PATH      m_Path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
-    timestamp_t    m_LastEditTime;
-    int            m_arflag;            // Use to trace ratsnest and auto routing.
-    KIID           m_Link;              // Temporary logical link used during editing
-    int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
-    int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
+    wxString        m_doc;               // File name and path for documentation file.
+    wxString        m_keywords;          // Search keywords to find footprint in library.
+    KIID_PATH       m_path;              // Path to associated symbol ([sheetUUID, .., symbolUUID]).
+    timestamp_t     m_lastEditTime;
+    int             m_arflag;            // Use to trace ratsnest and auto routing.
+    KIID            m_link;              // Temporary logical link used during editing
+    int             m_rot90Cost;         // Horizontal automatic placement cost ( 0..10 ).
+    int             m_rot180Cost;        // Vertical automatic placement cost ( 0..10 ).
 
     std::list<FP_3DMODEL>         m_3D_Drawings;       // Linked list of 3D models.
     std::map<wxString, wxString>  m_properties;
-    wxArrayString*                m_initial_comments;  // s-expression comments in the module,
+    wxArrayString*                m_initial_comments;  // s-expression comments in the footprint,
                                                        // lazily allocated only if needed for speed
 
-    SHAPE_POLY_SET m_poly_courtyard_front;  // Note that a module can have both front and back
-    SHAPE_POLY_SET m_poly_courtyard_back;   // courtyards populated.
+    SHAPE_POLY_SET  m_poly_courtyard_front;  // Note that a footprint can have both front and back
+    SHAPE_POLY_SET  m_poly_courtyard_back;   // courtyards populated.
 };
 
 #endif     // FOOTPRINT_H

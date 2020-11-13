@@ -43,25 +43,25 @@ class SCH_EDIT_FRAME;
  * @brief Back annotation algorithm class used to recieve, check, and apply a \ref NETLIST from
  * PCBNEW.
  * The following checks are made:
- * - Schematic symbol exists, but linked PCBnew module missing
- * - PCBnew module exists but no schematic symbol connected to
- * - PCBnew module is standalone
+ * - Schematic symbol exists, but linked PCBnew footprint missing
+ * - PCBnew footprint exists but no schematic symbol connected to
+ * - PCBnew footprint is standalone
  * - Schematic sheet is reused one or more times and user trying to change footprint or value
  * only for few of them.
  * - Schematic symbols share same path
- * - More than one PCBnew module linked to same path
+ * - More than one PCBnew footprint linked to same path
 
  */
 class BACK_ANNOTATE
 {
 public:
     /**
-     * @brief Struct to hold PCBnew module data
+     * @brief Struct to hold PCBnew footprint data
      */
-    struct PCB_MODULE_DATA
+    struct PCB_FP_DATA
     {
-        PCB_MODULE_DATA( const wxString& aRef, const wxString& aFootprint,
-                         const wxString& aValue, const std::map<wxString, wxString> aPinMap ) :
+        PCB_FP_DATA( const wxString& aRef, const wxString& aFootprint, const wxString& aValue,
+                     const std::map<wxString, wxString> aPinMap ) :
                 m_ref( aRef ),
                 m_footprint( aFootprint ),
                 m_value( aValue ),
@@ -75,9 +75,9 @@ public:
     };
 
     ///> Map to hold NETLIST footprints data
-    using PCB_MODULES_MAP = std::map<wxString, std::shared_ptr<PCB_MODULE_DATA>>;
+    using PCB_MODULES_MAP = std::map<wxString, std::shared_ptr<PCB_FP_DATA>>;
 
-    using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_MODULE_DATA>>;
+    using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_FP_DATA>>;
 
     BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                    bool aProcessFootprints, bool aProcessValues, bool aProcessReferences,

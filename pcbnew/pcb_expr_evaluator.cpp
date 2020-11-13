@@ -322,9 +322,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             }
         }
 
-        for( MODULE* module : item->GetBoard()->Footprints() )
+        for( MODULE* footprint : item->GetBoard()->Footprints() )
         {
-            for( ZONE* candidate : module->Zones() )
+            for( ZONE* candidate : footprint->Zones() )
             {
                 // Only a single zone can match the UUID; exit once we find a match whether
                 // "inside" or not
@@ -353,9 +353,9 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             }
         }
 
-        for( MODULE* module : item->GetBoard()->Footprints() )
+        for( MODULE* footprint : item->GetBoard()->Footprints() )
         {
-            for( ZONE* candidate : module->Zones() )
+            for( ZONE* candidate : footprint->Zones() )
             {
                 // Many zones can match the name; exit only when we find an "inside"
                 if( candidate->GetZoneName().Matches( arg->AsString() ) )

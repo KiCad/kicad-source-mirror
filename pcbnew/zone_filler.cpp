@@ -119,15 +119,15 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
     }
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( pad->IsDirty() )
                 pad->BuildEffectiveShapes( UNDEFINED_LAYER );
         }
 
-        for( ZONE* zone : module->Zones() )
+        for( ZONE* zone : footprint->Zones() )
         {
             zone->CacheBoundingBox();
             m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
@@ -615,9 +615,9 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 {
     SHAPE_POLY_SET holes;
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( !hasThermalConnection( pad, aZone ) )
                 continue;
@@ -729,9 +729,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
@@ -818,12 +818,12 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        knockoutGraphicClearance( &module->Reference() );
-        knockoutGraphicClearance( &module->Value() );
+        knockoutGraphicClearance( &footprint->Reference() );
+        knockoutGraphicClearance( &footprint->Value() );
 
-        for( BOARD_ITEM* item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
@@ -895,9 +895,9 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         }
     }
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( ZONE* otherZone : module->Zones() )
+        for( ZONE* otherZone : footprint->Zones() )
         {
             if( checkForCancel( m_progressReporter ) )
                 return;
@@ -947,9 +947,9 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
         }
     }
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( ZONE* otherZone : module->Zones() )
+        for( ZONE* otherZone : footprint->Zones() )
         {
             if( otherZone->GetNetCode() == aZone->GetNetCode()
                     && otherZone->GetPriority() > aZone->GetPriority() )
@@ -1248,9 +1248,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
     // us avoid the question.
     int epsilon = KiROUND( IU_PER_MM * 0.04 );  // about 1.5 mil
 
-    for( auto module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( auto pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( !hasThermalConnection( pad, aZone ) )
                 continue;
@@ -1530,9 +1530,9 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             }
         }
 
-        for( MODULE* module : m_board->Footprints() )
+        for( MODULE* footprint : m_board->Footprints() )
         {
-            for( PAD* pad : module->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 if( pad->GetNetCode() == aZone->GetNetCode()
                     && pad->IsOnLayer( aLayer )

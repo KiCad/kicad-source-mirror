@@ -171,7 +171,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-                // Pick the module to be placed
+                // Pick the footprint to be placed
                 bool footprintPreviews = m_frame->eeconfig()->m_Appearance.footprint_preview;
                 PICKED_SYMBOL sel = m_frame->PickSymbolFromLibTree( &filter, *historyList, true,
                                                                     1, 1, footprintPreviews );
@@ -281,7 +281,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         else
             evt->SetPassEvent();
 
-        // Enable autopanning and cursor capture only when there is a module to be placed
+        // Enable autopanning and cursor capture only when there is a footprint to be placed
         getViewControls()->SetAutoPan( component != nullptr );
         getViewControls()->CaptureCursor( component != nullptr );
     }
@@ -447,7 +447,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         else
             evt->SetPassEvent();
 
-        // Enable autopanning and cursor capture only when there is a module to be placed
+        // Enable autopanning and cursor capture only when there is a footprint to be placed
         getViewControls()->SetAutoPan( image != nullptr );
         getViewControls()->CaptureCursor( image != nullptr );
     }
@@ -981,7 +981,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         else
             evt->SetPassEvent();
 
-        // Enable autopanning and cursor capture only when there is a module to be placed
+        // Enable autopanning and cursor capture only when there is a footprint to be placed
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }

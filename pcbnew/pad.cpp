@@ -477,17 +477,17 @@ const EDA_RECT PAD::GetBoundingBox() const
 
 void PAD::SetDrawCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* parentFootprint = (MODULE*) m_Parent;
 
     m_pos = m_pos0;
 
-    if( module == NULL )
+    if( parentFootprint == NULL )
         return;
 
-    double angle = module->GetOrientation();
+    double angle = parentFootprint->GetOrientation();
 
     RotatePoint( &m_pos.x, &m_pos.y, angle );
-    m_pos += module->GetPosition();
+    m_pos += parentFootprint->GetPosition();
 
     m_shapesDirty = true;
 }
@@ -495,16 +495,16 @@ void PAD::SetDrawCoord()
 
 void PAD::SetLocalCoord()
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* parentFootprint = (MODULE*) m_Parent;
 
-    if( module == NULL )
+    if( parentFootprint == NULL )
     {
         m_pos0 = m_pos;
         return;
     }
 
-    m_pos0 = m_pos - module->GetPosition();
-    RotatePoint( &m_pos0.x, &m_pos0.y, -module->GetOrientation() );
+    m_pos0 = m_pos - parentFootprint->GetPosition();
+    RotatePoint( &m_pos0.x, &m_pos0.y, -parentFootprint->GetOrientation() );
 }
 
 
@@ -658,14 +658,14 @@ int PAD::GetSolderMaskMargin() const
 
     int     margin = m_localSolderMaskMargin;
 
-    MODULE* module = GetParent();
+    MODULE* parentFootprint = GetParent();
 
-    if( module )
+    if( parentFootprint )
     {
         if( margin == 0 )
         {
-            if( module->GetLocalSolderMaskMargin() )
-                margin = module->GetLocalSolderMaskMargin();
+            if( parentFootprint->GetLocalSolderMaskMargin() )
+                margin = parentFootprint->GetLocalSolderMaskMargin();
         }
 
         if( margin == 0 )
@@ -704,12 +704,12 @@ wxSize PAD::GetSolderPasteMargin() const
     int     margin = m_localSolderPasteMargin;
     double  mratio = m_localSolderPasteMarginRatio;
 
-    MODULE* module = GetParent();
+    MODULE* parentFootprint = GetParent();
 
-    if( module )
+    if( parentFootprint )
     {
         if( margin == 0 )
-            margin = module->GetLocalSolderPasteMargin();
+            margin = parentFootprint->GetLocalSolderPasteMargin();
 
         auto brd = GetBoard();
 
@@ -717,7 +717,7 @@ wxSize PAD::GetSolderPasteMargin() const
             margin = brd->GetDesignSettings().m_SolderPasteMargin;
 
         if( mratio == 0.0 )
-            mratio = module->GetLocalSolderPasteMarginRatio();
+            mratio = parentFootprint->GetLocalSolderPasteMarginRatio();
 
         if( mratio == 0.0 && brd )
         {
@@ -742,14 +742,14 @@ wxSize PAD::GetSolderPasteMargin() const
 
 ZONE_CONNECTION PAD::GetEffectiveZoneConnection( wxString* aSource ) const
 {
-    MODULE* module = GetParent();
+    MODULE* parentFootprint = GetParent();
 
-    if( m_zoneConnection == ZONE_CONNECTION::INHERITED && module )
+    if( m_zoneConnection == ZONE_CONNECTION::INHERITED && parentFootprint )
     {
         if( aSource )
             *aSource = _( "parent footprint" );
 
-        return module->GetZoneConnection();
+        return parentFootprint->GetZoneConnection();
     }
     else
     {
@@ -763,14 +763,14 @@ ZONE_CONNECTION PAD::GetEffectiveZoneConnection( wxString* aSource ) const
 
 int PAD::GetEffectiveThermalSpokeWidth( wxString* aSource ) const
 {
-    MODULE* module = GetParent();
+    MODULE* parentFootprint = GetParent();
 
-    if( m_thermalWidth == 0 && module )
+    if( m_thermalWidth == 0 && parentFootprint )
     {
         if( aSource )
             *aSource = _( "parent footprint" );
 
-        return module->GetThermalWidth();
+        return parentFootprint->GetThermalWidth();
     }
 
     if( aSource )
@@ -782,14 +782,14 @@ int PAD::GetEffectiveThermalSpokeWidth( wxString* aSource ) const
 
 int PAD::GetEffectiveThermalGap( wxString* aSource ) const
 {
-    MODULE* module = GetParent();
+    MODULE* parentFootprint = GetParent();
 
-    if( m_thermalGap == 0 && module )
+    if( m_thermalGap == 0 && parentFootprint )
     {
         if( aSource )
             *aSource = _( "parent footprint" );
 
-        return module->GetThermalGap();
+        return parentFootprint->GetThermalGap();
     }
 
     if( aSource )
@@ -805,10 +805,10 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     wxString               msg, msg2;
     BOARD*                 board = GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    MODULE*                module = (MODULE*) m_Parent;
+    MODULE*                parentFootprint = (MODULE*) m_Parent;
 
-    if( module )
-        aList.emplace_back( _( "Footprint" ), module->GetReference(), DARKCYAN );
+    if( parentFootprint )
+        aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference(), DARKCYAN );
 
     aList.emplace_back( _( "Pad" ), m_name, BROWN );
 
@@ -862,12 +862,12 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
         aList.emplace_back( _( "Height" ), msg, RED );
     }
 
-    double module_orient_degrees = module ? module->GetOrientationDegrees() : 0;
-    double pad_orient_degrees = GetOrientationDegrees() - module_orient_degrees;
+    double fp_orient_degrees = parentFootprint ? parentFootprint->GetOrientationDegrees() : 0;
+    double pad_orient_degrees = GetOrientationDegrees() - fp_orient_degrees;
     pad_orient_degrees = NormalizeAngleDegrees( pad_orient_degrees, -180.0, +180.0 );
 
-    if( module_orient_degrees != 0.0 )
-        msg.Printf( wxT( "%.4g(+ %.4g)" ), pad_orient_degrees, module_orient_degrees );
+    if( fp_orient_degrees != 0.0 )
+        msg.Printf( wxT( "%.4g(+ %.4g)" ), pad_orient_degrees, fp_orient_degrees );
     else
         msg.Printf( wxT( "%.4g" ), GetOrientationDegrees() );
 

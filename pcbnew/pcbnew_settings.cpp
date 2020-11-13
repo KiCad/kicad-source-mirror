@@ -395,7 +395,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_FootprintWizardList.height, -1 ) );
 
     m_params.emplace_back( new PARAM<bool>(
-            "reannotate_dialog.annotate_sort_on_modules", &m_Reannotate.sort_on_module_location, true ) );
+            "reannotate_dialog.annotate_sort_on_modules", &m_Reannotate.sort_on_fp_location, true ) );
     m_params.emplace_back( new PARAM<bool>(
             "reannotate_dialog.annotate_remove_front_prefix", &m_Reannotate.remove_front_prefix, false ) );
     m_params.emplace_back( new PARAM<bool>(

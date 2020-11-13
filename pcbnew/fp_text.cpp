@@ -31,11 +31,11 @@
 #include <settings/settings_manager.h>
 #include <trigo.h>
 
-FP_TEXT::FP_TEXT( MODULE* parent, TEXT_TYPE text_type ) :
-    BOARD_ITEM( parent, PCB_FP_TEXT_T ),
+FP_TEXT::FP_TEXT( MODULE* aParentFootprint, TEXT_TYPE text_type ) :
+    BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
     EDA_TEXT()
 {
-    MODULE* module = static_cast<MODULE*>( m_Parent );
+    MODULE* parentFootprint = static_cast<MODULE*>( m_Parent );
 
     m_Type = text_type;
     m_keepUpright = true;
@@ -45,11 +45,11 @@ FP_TEXT::FP_TEXT( MODULE* parent, TEXT_TYPE text_type ) :
     SetLayer( F_SilkS );
 
     // Set position and give a default layer if a valid parent footprint exists
-    if( module && ( module->Type() == PCB_MODULE_T ) )
+    if( parentFootprint && ( parentFootprint->Type() == PCB_MODULE_T ) )
     {
-        SetTextPos( module->GetPosition() );
+        SetTextPos( parentFootprint->GetPosition() );
 
-        if( IsBackLayer( module->GetLayer() ) )
+        if( IsBackLayer( parentFootprint->GetLayer() ) )
         {
             SetLayer( B_SilkS );
             SetMirrored( true );
@@ -127,7 +127,7 @@ void FP_TEXT::KeepUpright( double aOldOrientation, double aNewOrientation )
 void FP_TEXT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // Used in footprint editing
-    // Note also in module editor, m_Pos0 = m_Pos
+    // Note also in footprint editor, m_Pos0 = m_Pos
 
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aRotCentre, aAngle );
@@ -197,32 +197,32 @@ int FP_TEXT::GetLength() const
 
 void FP_TEXT::SetDrawCoord()
 {
-    const MODULE* module = static_cast<const MODULE*>( m_Parent );
+    const MODULE* parentFootprint = static_cast<const MODULE*>( m_Parent );
 
     SetTextPos( m_Pos0 );
 
-    if( module  )
+    if( parentFootprint  )
     {
-        double angle = module->GetOrientation();
+        double angle = parentFootprint->GetOrientation();
 
         wxPoint pt = GetTextPos();
         RotatePoint( &pt, angle );
         SetTextPos( pt );
 
-        Offset( module->GetPosition() );
+        Offset( parentFootprint->GetPosition() );
     }
 }
 
 
 void FP_TEXT::SetLocalCoord()
 {
-    const MODULE* module = static_cast<const MODULE*>( m_Parent );
+    const MODULE* parentFootprint = static_cast<const MODULE*>( m_Parent );
 
-    if( module )
+    if( parentFootprint )
     {
-        m_Pos0 = GetTextPos() - module->GetPosition();
+        m_Pos0 = GetTextPos() - parentFootprint->GetPosition();
 
-        double angle = module->GetOrientation();
+        double angle = parentFootprint->GetOrientation();
 
         RotatePoint( &m_Pos0.x, &m_Pos0.y, -angle );
     }
@@ -246,11 +246,11 @@ const EDA_RECT FP_TEXT::GetBoundingBox() const
 
 double FP_TEXT::GetDrawRotation() const
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* parentFootprint = (MODULE*) m_Parent;
     double  rotation = GetTextAngle();
 
-    if( module )
-        rotation += module->GetOrientation();
+    if( parentFootprint )
+        rotation += parentFootprint->GetOrientation();
 
     if( m_keepUpright )
     {
@@ -273,9 +273,9 @@ double FP_TEXT::GetDrawRotation() const
 // see class_text_mod.h
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    MODULE* module = (MODULE*) m_Parent;
+    MODULE* parentFootprint = (MODULE*) m_Parent;
 
-    if( module == NULL )        // Happens in modedit, and for new texts
+    if( parentFootprint == NULL )        // Happens in modedit, and for new texts
         return;
 
     wxString msg, Line;
@@ -285,7 +285,7 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
         _( "Ref." ), _( "Value" ), _( "Text" )
     };
 
-    Line = module->GetReference();
+    Line = parentFootprint->GetReference();
     aList.emplace_back( _( "Footprint" ), Line, DARKCYAN );
 
     Line = GetShownText();
@@ -421,14 +421,14 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 wxString FP_TEXT::GetShownText( int aDepth ) const
 {
-    const MODULE* module = static_cast<MODULE*>( GetParent() );
-    wxASSERT( module );
-    const BOARD*  board = module->GetBoard();
+    const MODULE* parentFootprint = static_cast<MODULE*>( GetParent() );
+    wxASSERT( parentFootprint );
+    const BOARD*  board = parentFootprint->GetBoard();
 
-    std::function<bool( wxString* )> moduleResolver =
+    std::function<bool( wxString* )> footprintResolver =
             [&]( wxString* token ) -> bool
             {
-                return module && module->ResolveTextVar( token, aDepth );
+                return parentFootprint && parentFootprint->ResolveTextVar( token, aDepth );
             };
 
     std::function<bool( wxString* )> boardTextResolver =
@@ -444,11 +444,11 @@ wxString FP_TEXT::GetShownText( int aDepth ) const
     {
         PROJECT* project = nullptr;
 
-        if( module && module->GetParent() )
-            project = static_cast<BOARD*>( module->GetParent() )->GetProject();
+        if( parentFootprint && parentFootprint->GetParent() )
+            project = static_cast<BOARD*>( parentFootprint->GetParent() )->GetProject();
 
         if( aDepth < 10 )
-            text = ExpandTextVars( text, &moduleResolver, project, &boardTextResolver );
+            text = ExpandTextVars( text, &footprintResolver, project, &boardTextResolver );
     }
 
     return text;

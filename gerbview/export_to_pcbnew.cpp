@@ -243,7 +243,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
 
 /*
  * Many holes will be pads, but we have no way to create those without footprints, and creating
- * a module per pad is not really viable.
+ * a footprint per pad is not really viable.
  *
  * So we use vias to mimic holes, with the loss of any hole shape (as we only have round holes
  * in vias at present).
@@ -396,7 +396,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
 
 /*
  * Flashed items are usually pads or vias.  Pads are problematic because we have no way to
- * represent one in Pcbnew outside of a module (and creating a module per pad isn't really
+ * represent one in Pcbnew outside of a footprint (and creating a footprint per pad isn't really
  * viable).
  * If we've already created a via from a hole, and the flashed copper item is a simple circle
  * then we'll enlarge the via to the proper size.  Otherwise we create a copper polygon to

@@ -97,17 +97,16 @@ wxString ActionMessage[] = {
 
 DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
         : DIALOG_BOARD_REANNOTATE_BASE( aParentFrame ),
-        m_modules( aParentFrame->GetBoard()->Footprints() )
+          m_footprints( aParentFrame->GetBoard()->Footprints() )
 {
     m_Config = Kiface().KifaceSettings();
     InitValues();
 
     m_frame      = aParentFrame;
     m_screen     = m_frame->GetScreen();
-    m_Units      = m_frame->GetUserUnits();
-    m_Standalone = !m_frame->TestStandalone(); //Do this here forces the menu on top
+    m_standalone = !m_frame->TestStandalone(); //Do this here forces the menu on top
 
-    if( m_Standalone )
+    if( m_standalone )
     { //Only update the schematic if not in standalone mode
         m_UpdateSchematic->Enable( false );
         m_UpdateSchematic->SetValue( false );
@@ -120,37 +119,37 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
     m_sdbSizer->Layout();
 
-    m_Settings = aParentFrame->config();
+    m_settings = aParentFrame->config();
     wxArrayString gridslist;
-    GRID_MENU::BuildChoiceList( &gridslist, m_Settings, aParentFrame );
+    GRID_MENU::BuildChoiceList( &gridslist, m_settings, aParentFrame );
 
-    if( -1 == m_GridIndex ) //If no default loaded
-        m_GridIndex = m_Settings->m_Window.grid.last_size_idx;        //Get the current grid size
+    if( -1 == m_gridIndex ) //If no default loaded
+        m_gridIndex = m_settings->m_Window.grid.last_size_idx;        //Get the current grid size
 
-    m_SortGridx = m_frame->GetCanvas()->GetGAL()->GetGridSize().x;
-    m_SortGridy = m_frame->GetCanvas()->GetGAL()->GetGridSize().y;
+    m_sortGridx = m_frame->GetCanvas()->GetGAL()->GetGridSize().x;
+    m_sortGridy = m_frame->GetCanvas()->GetGAL()->GetGridSize().y;
 
     m_GridChoice->Set( gridslist ); //Show the choice in the dialog
-    m_GridChoice->SetSelection( m_GridIndex );
+    m_GridChoice->SetSelection( m_gridIndex );
 
     for( wxRadioButton* button : m_sortButtons )
         button->SetValue( false );
 
-    m_sortButtons[m_SortCode]->SetValue( true );
+    m_sortButtons[m_sortCode]->SetValue( true );
 
     m_selection = m_frame->GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
 
     if( !m_selection.Empty() )
-        m_AnnotationChoice = AnnotationChoice::AnnotateSelected;
+        m_annotationChoice = AnnotationChoice::AnnotateSelected;
 
     for( wxRadioButton* button : AnnotateWhat )
         button->SetValue( false );
 
-    m_AnnotationChoice = ( m_SortCode >= (int) AnnotateWhat.size() ) ?
-                                 AnnotationChoice::AnnotateAll :
-                                 m_AnnotationChoice;
+    m_annotationChoice = ( m_sortCode >= (int) AnnotateWhat.size() ) ?
+                         AnnotationChoice::AnnotateAll :
+                         m_annotationChoice;
 
-    AnnotateWhat[m_AnnotationChoice]->SetValue( true );
+    AnnotateWhat[m_annotationChoice]->SetValue( true );
 
     reannotate_down_right_bitmap->SetBitmap( KiBitmap( reannotate_right_down_xpm ) );
     reannotate_right_down_bitmap->SetBitmap( KiBitmap( reannotate_left_down_xpm ) );
@@ -184,16 +183,16 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
 {
     GetParameters(); //Get the current menu settings
     PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    cfg->m_Reannotate.sort_on_module_location = m_locationChoice->GetSelection() == 0;
+    cfg->m_Reannotate.sort_on_fp_location = m_locationChoice->GetSelection() == 0;
     cfg->m_Reannotate.remove_front_prefix     = m_RemoveFrontPrefix->GetValue();
     cfg->m_Reannotate.remove_back_prefix      = m_RemoveBackPrefix->GetValue();
     cfg->m_Reannotate.update_schematic        = m_UpdateSchematic->GetValue();
     cfg->m_Reannotate.exclude_locked          = m_ExcludeLocked->GetValue();
 
-    cfg->m_Reannotate.grid_index              = m_GridIndex;
-    cfg->m_Reannotate.sort_code               = m_SortCode;
-    cfg->m_Reannotate.annotation_choice       = m_AnnotationChoice;
-    cfg->m_Reannotate.report_severity         = m_Severity;
+    cfg->m_Reannotate.grid_index              = m_gridIndex;
+    cfg->m_Reannotate.sort_code               = m_sortCode;
+    cfg->m_Reannotate.annotation_choice       = m_annotationChoice;
+    cfg->m_Reannotate.report_severity         = m_severity;
 
     cfg->m_Reannotate.front_refdes_start      = m_FrontRefDesStart->GetValue();
     cfg->m_Reannotate.back_refdes_start       = m_BackRefDesStart->GetValue();
@@ -208,16 +207,16 @@ DIALOG_BOARD_REANNOTATE::~DIALOG_BOARD_REANNOTATE()
 void DIALOG_BOARD_REANNOTATE::InitValues( void )
 {
     PCBNEW_SETTINGS* cfg = m_frame->GetPcbNewSettings();
-    m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_module_location ? 0 : 1 );
+    m_locationChoice->SetSelection( cfg->m_Reannotate.sort_on_fp_location ? 0 : 1 );
     m_RemoveFrontPrefix->SetValue( cfg->m_Reannotate.remove_front_prefix );
     m_RemoveBackPrefix->SetValue( cfg->m_Reannotate.remove_back_prefix );
     m_UpdateSchematic->SetValue( cfg->m_Reannotate.update_schematic );
     m_ExcludeLocked->SetValue( cfg->m_Reannotate.exclude_locked );
 
-    m_GridIndex         = cfg->m_Reannotate.grid_index ;
-    m_SortCode          = cfg->m_Reannotate.sort_code ;
-    m_AnnotationChoice  = cfg->m_Reannotate.annotation_choice ;
-    m_Severity          = cfg->m_Reannotate.report_severity;
+    m_gridIndex         = cfg->m_Reannotate.grid_index ;
+    m_sortCode          = cfg->m_Reannotate.sort_code ;
+    m_annotationChoice  = cfg->m_Reannotate.annotation_choice ;
+    m_severity          = cfg->m_Reannotate.report_severity;
 
     m_FrontRefDesStart->SetValue( cfg->m_Reannotate.front_refdes_start );
     m_BackRefDesStart->SetValue( cfg->m_Reannotate.back_refdes_start );
@@ -303,7 +302,7 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
     wxString tmp;
 
     aMessage.Printf( _( "\n%s footprints will be reannotated." ),
-                    _( AnnotateString[m_AnnotationChoice] ) );
+                    _( AnnotateString[m_annotationChoice] ) );
 
     if( !m_ExcludeList->GetValue().empty() )
     {
@@ -362,14 +361,14 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
         }
     }
 
-    bool moduleLocation = m_locationChoice->GetSelection() == 0;
+    bool fpLocation = m_locationChoice->GetSelection() == 0;
 
     aMessage += wxString::Format( _( "\nPrior to sorting by %s, the coordinates of which will be "
                                      "rounded to a %s, %s grid." ),
-                                  moduleLocation ? _( "footprint location" )
-                                                 : _( "reference designator location" ),
-                                  MessageTextFromValue( m_Units, m_SortGridx ),
-                                  MessageTextFromValue( m_Units, m_SortGridy ) );
+                                  fpLocation ? _( "footprint location" )
+                                             : _( "reference designator location" ),
+                                  MessageTextFromValue( m_units, m_sortGridx ),
+                                  MessageTextFromValue( m_units, m_sortGridy ) );
 
     if( m_UpdateSchematic->GetValue() )
         aMessage += _( "\nThe schematic will be updated." );
@@ -382,37 +381,37 @@ void DIALOG_BOARD_REANNOTATE::MakeSampleText( wxString& aMessage )
 
 void DIALOG_BOARD_REANNOTATE::GetParameters()
 {
-    m_SortCode = 0; //Convert radio button to sort direction code
+    m_sortCode = 0; //Convert radio button to sort direction code
 
     for( wxRadioButton* sortbuttons : m_sortButtons )
     {
         if( sortbuttons->GetValue() )
             break;
 
-        m_SortCode++;
+        m_sortCode++;
     }
 
-    if( m_SortCode >= (int) m_sortButtons.size() )
-        m_SortCode = 0;
+    if( m_sortCode >= (int) m_sortButtons.size() )
+        m_sortCode = 0;
 
-    m_FrontPrefixString = m_FrontPrefix->GetValue();
-    m_BackPrefixString  = m_BackPrefix->GetValue();
+    m_frontPrefixString = m_FrontPrefix->GetValue();
+    m_backPrefixString  = m_BackPrefix->GetValue();
 
     //Get the chosen sort grid for rounding
-    m_GridIndex = m_GridChoice->GetSelection();
+    m_gridIndex = m_GridChoice->GetSelection();
 
-    if( m_GridIndex >= ( int ) m_Settings->m_Window.grid.sizes.size() )
+    if( m_gridIndex >= ( int ) m_settings->m_Window.grid.sizes.size() )
     {
-        m_SortGridx = DoubleValueFromString( EDA_UNITS::MILS,
-                                             m_Settings->m_Window.grid.user_grid_x );
-        m_SortGridy = DoubleValueFromString( EDA_UNITS::MILS,
-                                             m_Settings->m_Window.grid.user_grid_y );
+        m_sortGridx = DoubleValueFromString( EDA_UNITS::MILS,
+                                             m_settings->m_Window.grid.user_grid_x );
+        m_sortGridy = DoubleValueFromString( EDA_UNITS::MILS,
+                                             m_settings->m_Window.grid.user_grid_y );
     }
     else
     {
-        m_SortGridx = DoubleValueFromString( EDA_UNITS::MILS,
-                                             m_Settings->m_Window.grid.sizes[ m_GridIndex ] );
-        m_SortGridy = m_SortGridx;
+        m_sortGridx = DoubleValueFromString( EDA_UNITS::MILS,
+                                             m_settings->m_Window.grid.sizes[ m_gridIndex ] );
+        m_sortGridy = m_sortGridx;
     }
 
     int i = 0;
@@ -425,7 +424,7 @@ void DIALOG_BOARD_REANNOTATE::GetParameters()
             i++;
     }
 
-    m_AnnotationChoice = ( i >= (int) AnnotateWhat.size() ) ? AnnotationChoice::AnnotateAll : i;
+    m_annotationChoice = ( i >= (int) AnnotateWhat.size() ) ? AnnotationChoice::AnnotateAll : i;
 
     m_MessageWindow->SetLazyUpdate( true );
 }
@@ -496,8 +495,9 @@ static bool ModuleCompare( const RefDesInfo& aA, const RefDesInfo& aB )
 /// @return the string
 wxString DIALOG_BOARD_REANNOTATE::CoordTowxString( int aX, int aY )
 {
-    return wxString::Format( "%s, %s", MessageTextFromValue( m_Units, aX ),
-                             MessageTextFromValue( m_Units, aY ) );
+    return wxString::Format( "%s, %s",
+                             MessageTextFromValue( m_units, aX ),
+                             MessageTextFromValue( m_units, aY ) );
 }
 
 
@@ -526,16 +526,16 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
     message.Printf( _( "\n\nThere are %i types of reference designations\n"
                        "**********************************************************\n" ),
-                    (int) m_RefDesTypes.size() );
+                    (int) m_refDesTypes.size() );
 
-    for( RefDesTypeStr Type : m_RefDesTypes ) //Show all the types of refdes
+    for( RefDesTypeStr Type : m_refDesTypes ) //Show all the types of refdes
         message += Type.RefDesType + ( 0 == ( i++ % 16 ) ? "\n" : " " );
 
-    if( !m_ExcludeArray.empty() )
+    if( !m_excludeArray.empty() )
     {
         wxString excludes;
 
-        for( wxString& exclude : m_ExcludeArray ) //Show the refdes we are excluding
+        for( wxString& exclude : m_excludeArray ) //Show the refdes we are excluding
             excludes += exclude + " ";
 
         message += wxString::Format( _( "\nExcluding: %s from reannotation\n\n" ), excludes );
@@ -543,7 +543,7 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
     message += _( "\n    Change Array\n***********************\n" );
 
-    for( RefDesChange Change : m_ChangeArray )
+    for( RefDesChange Change : m_changeArray )
     {
         message += wxString::Format( "%s -> %s  %s %s\n", Change.OldRefDesString, Change.NewRefDes,
                 ActionMessage[Change.Action],
@@ -572,7 +572,7 @@ void DIALOG_BOARD_REANNOTATE::LogFootprints( wxString& aMessage,
                                      fpLocations ? _( "Footprint Coordinates" )
                                                  : _( "Reference Designator Coordinates" ) );
 
-        message += wxString::Format( _( "\nSort Code %d" ), m_SortCode );
+        message += wxString::Format( _( "\nSort Code %d" ), m_sortCode );
 
         for( const RefDesInfo& mod : aFootprints )
         {
@@ -636,16 +636,16 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     if( m_UpdateSchematic->GetValue() )
     { //If updating schematic send a netlist
 
-        for( MODULE* mod : m_modules )
+        for( MODULE* footprint : m_footprints )
         { // Create a netlist
-            newref = GetNewRefDes( mod );
+            newref = GetNewRefDes( footprint );
 
             if( nullptr == newref )
                 return false; //Not found in changelist
 
             //add to the netlist
-            netlist.AddComponent( new COMPONENT( mod->GetFPID(), newref->NewRefDes,
-                                                 mod->GetValue(), mod->GetPath() ) );
+            netlist.AddComponent( new COMPONENT( footprint->GetFPID(), newref->NewRefDes,
+                                                 footprint->GetValue(), footprint->GetPath() ) );
         }
 
         netlist.Format( "pcb_netlist", &stringformatter, 0,
@@ -672,7 +672,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     if( reannotateok )
     { //Only update if no errors
 
-    	for( MODULE* mod : m_modules )
+    	for( MODULE* mod : m_footprints )
         { // Create a netlist
             newref = GetNewRefDes( mod );
 
@@ -702,19 +702,20 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
     int          errorcount = 0;
     unsigned int backstartrefdes;
-    size_t  firstnum = 0;
+    size_t       firstnum = 0;
 
-    m_FrontModules.clear();
-    m_BackModules.clear();
-    m_ExcludeArray.clear();
-    m_modules = m_frame->GetBoard()->Footprints();
+    m_frontFootprints.clear();
+    m_backFootprints.clear();
+    m_excludeArray.clear();
+    m_footprints = m_frame->GetBoard()->Footprints();
 
     std::vector<KIID> selected;
 
     if( m_AnnotateSelection->GetValue() )
     {
         for( EDA_ITEM* item : m_selection )
-        { //Get the timestamps of selected footprints
+        {
+            //Get the timestamps of selected footprints
             if( item->Type() == PCB_MODULE_T )
                 selected.push_back( item->m_Uuid );
         }
@@ -729,20 +730,20 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
     	if( ( ' ' == thischar ) || ( ',' == thischar ) )
         {
-            m_ExcludeArray.push_back( exclude );
+            m_excludeArray.push_back( exclude );
             exclude.clear();
         }
         else
             exclude += thischar;
 
         if( !exclude.empty() )
-            m_ExcludeArray.push_back( exclude );
+            m_excludeArray.push_back( exclude );
     }
 
     RefDesInfo thismodule;
     bool       useModuleLocation = m_locationChoice->GetSelection() == 0;
 
-    for( MODULE* mod : m_modules )
+    for( MODULE* mod : m_footprints )
     {
         thismodule.Uuid         = mod->m_Uuid;
         thismodule.RefDesString = mod->GetReference();
@@ -751,8 +752,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
                                                     : mod->Reference().GetPosition().x;
         thismodule.y            = useModuleLocation ? mod->GetPosition().y
                                                     :  mod->Reference().GetPosition().y;
-        thismodule.roundedx     = RoundToGrid( thismodule.x, m_SortGridx ); //Round to sort
-        thismodule.roundedy     = RoundToGrid( thismodule.y, m_SortGridy );
+        thismodule.roundedx     = RoundToGrid( thismodule.x, m_sortGridx ); //Round to sort
+        thismodule.roundedy     = RoundToGrid( thismodule.y, m_sortGridy );
         thismodule.Front        = mod->GetLayer() == F_Cu;
         thismodule.Action       = UpdateRefDes; //Usually good
 
@@ -769,7 +770,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
         //Get the type (R, C, etc)
         thismodule.RefDesType = thismodule.RefDesString.substr( 0, firstnum );
 
-        for( wxString excluded : m_ExcludeArray )
+        for( wxString excluded : m_excludeArray )
         {
             if( excluded == thismodule.RefDesType ) //Am I supposed to exclude this type?
             {
@@ -781,7 +782,9 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
         if( ( thismodule.Front && annotateback ) ||       //If a front module and doing backs only
                 ( !thismodule.Front && annotatefront ) || //If a back module and doing front only
                 ( mod->IsLocked() && skiplocked ) )       //If excluding locked and it is locked
+        {
             thismodule.Action = Exclude;
+        }
 
         if( annotateselected )
         {                                //If onnly annotating selected c
@@ -798,46 +801,50 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
         }
 
         if( thismodule.Front )
-            m_FrontModules.push_back( thismodule );
+            m_frontFootprints.push_back( thismodule );
         else
-            m_BackModules.push_back( thismodule );
+            m_backFootprints.push_back( thismodule );
     }
 
-    SetSortCodes( FrontDirectionsArray, m_SortCode ); //Determine the sort order for the front
-    sort( m_FrontModules.begin(), m_FrontModules.end(),ModuleCompare ); //Sort the front footprints
+    SetSortCodes( FrontDirectionsArray, m_sortCode ); //Determine the sort order for the front
+    sort( m_frontFootprints.begin(), m_frontFootprints.end(), ModuleCompare ); //Sort the front footprints
 
-    SetSortCodes( BackDirectionsArray, m_SortCode ); //Determine the sort order for the back
-    sort( m_BackModules.begin(), m_BackModules.end(), ModuleCompare ); //Sort the back footprints
+    SetSortCodes( BackDirectionsArray, m_sortCode ); //Determine the sort order for the back
+    sort( m_backFootprints.begin(), m_backFootprints.end(), ModuleCompare ); //Sort the back footprints
 
-    m_RefDesTypes.clear();
-    m_ChangeArray.clear();
+    m_refDesTypes.clear();
+    m_changeArray.clear();
     backstartrefdes = wxAtoi( m_BackRefDesStart->GetValue() );
 
-    if( !m_FrontModules.empty() )
-        BuildChangeArray( m_FrontModules, wxAtoi( m_FrontRefDesStart->GetValue() ),
+    if( !m_frontFootprints.empty() )
+    {
+        BuildChangeArray( m_frontFootprints, wxAtoi( m_FrontRefDesStart->GetValue() ),
                           m_FrontPrefix->GetValue(), m_RemoveFrontPrefix->GetValue(), aBadRefDes );
+    }
 
-    if( !m_BackModules.empty() )
-        BuildChangeArray( m_BackModules, backstartrefdes, m_BackPrefix->GetValue(),
+    if( !m_backFootprints.empty() )
+    {
+        BuildChangeArray( m_backFootprints, backstartrefdes, m_BackPrefix->GetValue(),
                           m_RemoveBackPrefix->GetValue(), aBadRefDes );
+    }
 
-    if( !m_ChangeArray.empty() )
-        sort( m_ChangeArray.begin(), m_ChangeArray.end(), ChangeArrayCompare );
+    if( !m_changeArray.empty() )
+        sort( m_changeArray.begin(), m_changeArray.end(), ChangeArrayCompare );
 
     LogChangePlan();
 
-    size_t changearraysize = m_ChangeArray.size();
+    size_t changearraysize = m_changeArray.size();
 
     for( size_t i = 0; i < changearraysize; i++ ) //Scan through for duplicates if update or skip
     {
-        if( ( m_ChangeArray[i].Action != EmptyRefDes )
-                && ( m_ChangeArray[i].Action != InvalidRefDes ) )
+        if( ( m_changeArray[i].Action != EmptyRefDes )
+                && ( m_changeArray[i].Action != InvalidRefDes ) )
         {
             for( size_t j = i + 1; j < changearraysize; j++ )
             {
-                if( m_ChangeArray[i].NewRefDes == m_ChangeArray[j].NewRefDes )
+                if( m_changeArray[i].NewRefDes == m_changeArray[j].NewRefDes )
                 {
-                    ShowReport( "Duplicate instances of " + m_ChangeArray[j].NewRefDes,
+                    ShowReport( "Duplicate instances of " + m_changeArray[j].NewRefDes,
                                 RPT_SEVERITY_ERROR );
 
                     if( errorcount++ > MAXERROR )
@@ -883,8 +890,8 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
 
     if( 0 != aStartRefDes ) //Initialize the change array if present
     {
-    	for( i = 0; i < m_RefDesTypes.size(); i++ )
-            m_RefDesTypes[i].RefDesCount = aStartRefDes;
+    	for( i = 0; i < m_refDesTypes.size(); i++ )
+            m_refDesTypes[i].RefDesCount = aStartRefDes;
     }
 
     for( RefDesInfo footprint : aFootprints )
@@ -900,7 +907,7 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
 
         if( ( change.Action == EmptyRefDes ) || ( change.Action == InvalidRefDes ) )
         {
-            m_ChangeArray.push_back( change );
+            m_changeArray.push_back( change );
             aBadRefDes.push_back( footprint );
             continue;
         }
@@ -916,36 +923,40 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
             if( aRemovePrefix && prefixpresent ) //If there is a prefix remove it
                 footprint.RefDesType.erase( 0, prefixsize );
 
-            for( i = 0; i < m_RefDesTypes.size(); i++ ) //See if it is in the types array
-                if( m_RefDesTypes[i].RefDesType == footprint.RefDesType ) //Found it!
+            for( i = 0; i < m_refDesTypes.size(); i++ ) //See if it is in the types array
+            {
+                if( m_refDesTypes[i].RefDesType == footprint.RefDesType ) //Found it!
                     break;
+            }
 
-            if( i == m_RefDesTypes.size() )
+            if( i == m_refDesTypes.size() )
             { //Wasn't in the types array so add it
                 newtype.RefDesType  = footprint.RefDesType;
                 newtype.RefDesCount = ( aStartRefDes == 0 ? 1 : aStartRefDes );
-                m_RefDesTypes.push_back( newtype );
+                m_refDesTypes.push_back( newtype );
             }
 
-            change.NewRefDes = m_RefDesTypes[i].RefDesType
-                               + std::to_string( m_RefDesTypes[i].RefDesCount++ );
+            change.NewRefDes = m_refDesTypes[i].RefDesType
+                               + std::to_string( m_refDesTypes[i].RefDesCount++ );
         }
-        m_ChangeArray.push_back( change ); //Add to the change array
+        m_changeArray.push_back( change ); //Add to the change array
     }
 }
 
 
 //
-/// @returns the new refdes for this module
-RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aMod )
+/// @returns the new refdes for this footprint
+RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aFootprint )
 {
     size_t i;
 
-    for( i = 0; i < m_ChangeArray.size(); i++ )
-        if( aMod->m_Uuid == m_ChangeArray[i].Uuid )
-            return ( &m_ChangeArray[i] );
+    for( i = 0; i < m_changeArray.size(); i++ )
+    {
+        if( aFootprint->m_Uuid == m_changeArray[i].Uuid )
+            return ( &m_changeArray[i] );
+    }
 
-    ShowReport( _( "Footprint not found in changelist" ) + wxS( " " ) + aMod->GetReference(),
+    ShowReport( _( "Footprint not found in changelist" ) + wxS( " " ) + aFootprint->GetReference(),
                 RPT_SEVERITY_ERROR );
 
     return nullptr; //Should never happen

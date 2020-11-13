@@ -321,10 +321,10 @@ public:
 
     /**
      * Adds the given module to the board.
-     * @param module
+     * @param aFootprint
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */
-    virtual void AddFootprintToBoard( MODULE* module );
+    virtual void AddFootprintToBoard( MODULE* aFootprint );
 
     /**
      * Function SelectFootprintFromLibBrowser

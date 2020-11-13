@@ -67,8 +67,8 @@ public:
     bool m_DisplayViaFill;
     bool m_DisplayPadNum;           // show pads numbers
     bool m_DisplayPadIsol;
-    bool m_DisplayGraphicsFill;     // How to display module drawings ( sketch/ filled )
-    bool m_DisplayTextFill;         // How to display module texts ( sketch/ filled )
+    bool m_DisplayGraphicsFill;     // How to display fp drawings ( sketch/ filled )
+    bool m_DisplayTextFill;         // How to display fp texts ( sketch/ filled )
     bool m_DisplayPcbTrackFill;     // false : tracks are show in sketch mode, true = filled.
 
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.

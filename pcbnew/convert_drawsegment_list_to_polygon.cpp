@@ -802,8 +802,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, unsign
     PCB_TYPE_COLLECTOR  items;
     bool                success = false;
 
-    // Get all the DRAWSEGMENTS and module graphics into 'items',
-    // then keep only those on layer == Edge_Cuts.
+    // Get all the PCB and FP shapes into 'items', then keep only those on layer == Edge_Cuts.
     static const KICAD_T  scan_graphics[] = { PCB_SHAPE_T, PCB_FP_SHAPE_T, EOT };
     items.Collect( aBoard, scan_graphics );
 
@@ -1147,7 +1146,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
 
         if( chain.SegmentCount() == 0 )
         {
-            // Something is wrong, bail out with the overall module bounding box
+            // Something is wrong, bail out with the overall footprint bounding box
             wxLogTrace( traceBoardOutline, "No line segments in provided outline" );
             aOutlines = bbox;
             return true;

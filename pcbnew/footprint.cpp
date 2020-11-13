@@ -43,25 +43,25 @@ MODULE::MODULE( BOARD* parent ) :
     BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
     m_initial_comments( 0 )
 {
-    m_Attributs    = 0;
+    m_attributes   = 0;
     m_Layer        = F_Cu;
-    m_Orient       = 0;
-    m_ModuleStatus = MODULE_PADS_LOCKED;
-    m_arflag = 0;
-    m_CntRot90 = m_CntRot180 = 0;
-    m_Link     = 0;
-    m_LastEditTime  = 0;
-    m_LocalClearance = 0;
-    m_LocalSolderMaskMargin  = 0;
-    m_LocalSolderPasteMargin = 0;
-    m_LocalSolderPasteMarginRatio = 0.0;
-    m_ZoneConnection              = ZONE_CONNECTION::INHERITED; // Use zone setting by default
-    m_ThermalWidth = 0;     // Use zone setting by default
-    m_ThermalGap = 0;       // Use zone setting by default
+    m_orient       = 0;
+    m_moduleStatus = FP_PADS_are_LOCKED;
+    m_arflag       = 0;
+    m_rot90Cost    = m_rot180Cost = 0;
+    m_link         = 0;
+    m_lastEditTime = 0;
+    m_localClearance              = 0;
+    m_localSolderMaskMargin       = 0;
+    m_localSolderPasteMargin      = 0;
+    m_localSolderPasteMarginRatio = 0.0;
+    m_zoneConnection              = ZONE_CONNECTION::INHERITED; // Use zone setting by default
+    m_thermalWidth = 0;     // Use zone setting by default
+    m_thermalGap = 0;       // Use zone setting by default
 
     // These are special and mandatory text fields
-    m_Reference = new FP_TEXT( this, FP_TEXT::TEXT_is_REFERENCE );
-    m_Value = new FP_TEXT( this, FP_TEXT::TEXT_is_VALUE );
+    m_reference = new FP_TEXT( this, FP_TEXT::TEXT_is_REFERENCE );
+    m_value = new FP_TEXT( this, FP_TEXT::TEXT_is_VALUE );
 
     m_3D_Drawings.clear();
 }
@@ -70,31 +70,31 @@ MODULE::MODULE( BOARD* parent ) :
 MODULE::MODULE( const MODULE& aFootprint ) :
     BOARD_ITEM_CONTAINER( aFootprint )
 {
-    m_Pos = aFootprint.m_Pos;
-    m_fpid = aFootprint.m_fpid;
-    m_Attributs = aFootprint.m_Attributs;
-    m_ModuleStatus = aFootprint.m_ModuleStatus;
-    m_Orient = aFootprint.m_Orient;
-    m_BoundaryBox = aFootprint.m_BoundaryBox;
-    m_CntRot90 = aFootprint.m_CntRot90;
-    m_CntRot180 = aFootprint.m_CntRot180;
-    m_LastEditTime = aFootprint.m_LastEditTime;
-    m_Link = aFootprint.m_Link;
-    m_Path = aFootprint.m_Path;
+    m_pos          = aFootprint.m_pos;
+    m_fpid         = aFootprint.m_fpid;
+    m_attributes   = aFootprint.m_attributes;
+    m_moduleStatus = aFootprint.m_moduleStatus;
+    m_orient       = aFootprint.m_orient;
+    m_boundingBox  = aFootprint.m_boundingBox;
+    m_rot90Cost    = aFootprint.m_rot90Cost;
+    m_rot180Cost   = aFootprint.m_rot180Cost;
+    m_lastEditTime = aFootprint.m_lastEditTime;
+    m_link         = aFootprint.m_link;
+    m_path         = aFootprint.m_path;
 
-    m_LocalClearance = aFootprint.m_LocalClearance;
-    m_LocalSolderMaskMargin = aFootprint.m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin = aFootprint.m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio = aFootprint.m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection = aFootprint.m_ZoneConnection;
-    m_ThermalWidth = aFootprint.m_ThermalWidth;
-    m_ThermalGap = aFootprint.m_ThermalGap;
+    m_localClearance = aFootprint.m_localClearance;
+    m_localSolderMaskMargin = aFootprint.m_localSolderMaskMargin;
+    m_localSolderPasteMargin = aFootprint.m_localSolderPasteMargin;
+    m_localSolderPasteMarginRatio = aFootprint.m_localSolderPasteMarginRatio;
+    m_zoneConnection = aFootprint.m_zoneConnection;
+    m_thermalWidth = aFootprint.m_thermalWidth;
+    m_thermalGap = aFootprint.m_thermalGap;
 
     // Copy reference and value.
-    m_Reference = new FP_TEXT( *aFootprint.m_Reference );
-    m_Reference->SetParent( this );
-    m_Value = new FP_TEXT( *aFootprint.m_Value );
-    m_Value->SetParent( this );
+    m_reference = new FP_TEXT( *aFootprint.m_reference );
+    m_reference->SetParent( this );
+    m_value = new FP_TEXT( *aFootprint.m_value );
+    m_value->SetParent( this );
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -150,8 +150,8 @@ MODULE::MODULE( const MODULE& aFootprint ) :
     // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings = aFootprint.m_3D_Drawings;
 
-    m_Doc         = aFootprint.m_Doc;
-    m_KeyWord     = aFootprint.m_KeyWord;
+    m_doc         = aFootprint.m_doc;
+    m_keywords     = aFootprint.m_keywords;
     m_properties  = aFootprint.m_properties;
 
     m_arflag = 0;
@@ -174,8 +174,8 @@ MODULE::MODULE( MODULE&& aFootprint ) :
 MODULE::~MODULE()
 {
     // Clean up the owned elements
-    delete m_Reference;
-    delete m_Value;
+    delete m_reference;
+    delete m_value;
     delete m_initial_comments;
 
     for( PAD* p : m_pads )
@@ -204,31 +204,31 @@ MODULE& MODULE::operator=( MODULE&& aOther )
 {
     BOARD_ITEM::operator=( aOther );
 
-    m_Pos           = aOther.m_Pos;
+    m_pos           = aOther.m_pos;
     m_fpid          = aOther.m_fpid;
-    m_Attributs     = aOther.m_Attributs;
-    m_ModuleStatus  = aOther.m_ModuleStatus;
-    m_Orient        = aOther.m_Orient;
-    m_BoundaryBox   = aOther.m_BoundaryBox;
-    m_CntRot90      = aOther.m_CntRot90;
-    m_CntRot180     = aOther.m_CntRot180;
-    m_LastEditTime  = aOther.m_LastEditTime;
-    m_Link          = aOther.m_Link;
-    m_Path          = aOther.m_Path;
+    m_attributes    = aOther.m_attributes;
+    m_moduleStatus  = aOther.m_moduleStatus;
+    m_orient        = aOther.m_orient;
+    m_boundingBox   = aOther.m_boundingBox;
+    m_rot90Cost     = aOther.m_rot90Cost;
+    m_rot180Cost    = aOther.m_rot180Cost;
+    m_lastEditTime  = aOther.m_lastEditTime;
+    m_link          = aOther.m_link;
+    m_path          = aOther.m_path;
 
-    m_LocalClearance                = aOther.m_LocalClearance;
-    m_LocalSolderMaskMargin         = aOther.m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin        = aOther.m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio   = aOther.m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection                = aOther.m_ZoneConnection;
-    m_ThermalWidth                  = aOther.m_ThermalWidth;
-    m_ThermalGap                    = aOther.m_ThermalGap;
+    m_localClearance                = aOther.m_localClearance;
+    m_localSolderMaskMargin         = aOther.m_localSolderMaskMargin;
+    m_localSolderPasteMargin        = aOther.m_localSolderPasteMargin;
+    m_localSolderPasteMarginRatio   = aOther.m_localSolderPasteMarginRatio;
+    m_zoneConnection                = aOther.m_zoneConnection;
+    m_thermalWidth                  = aOther.m_thermalWidth;
+    m_thermalGap                    = aOther.m_thermalGap;
 
     // Move reference and value
-    m_Reference = aOther.m_Reference;
-    m_Reference->SetParent( this );
-    m_Value = aOther.m_Value;
-    m_Value->SetParent( this );
+    m_reference = aOther.m_reference;
+    m_reference->SetParent( this );
+    m_value = aOther.m_value;
+    m_value->SetParent( this );
 
 
     // Move the pads
@@ -274,8 +274,8 @@ MODULE& MODULE::operator=( MODULE&& aOther )
     // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings.clear();
     m_3D_Drawings = aOther.m_3D_Drawings;
-    m_Doc         = aOther.m_Doc;
-    m_KeyWord     = aOther.m_KeyWord;
+    m_doc         = aOther.m_doc;
+    m_keywords     = aOther.m_keywords;
     m_properties  = aOther.m_properties;
 
     // Ensure auxiliary data is up to date
@@ -287,8 +287,8 @@ MODULE& MODULE::operator=( MODULE&& aOther )
     aOther.Pads().clear();
     aOther.Zones().clear();
     aOther.GraphicalItems().clear();
-    aOther.m_Value            = nullptr;
-    aOther.m_Reference        = nullptr;
+    aOther.m_value            = nullptr;
+    aOther.m_reference        = nullptr;
     aOther.m_initial_comments = nullptr;
 
     return *this;
@@ -299,31 +299,31 @@ MODULE& MODULE::operator=( const MODULE& aOther )
 {
     BOARD_ITEM::operator=( aOther );
 
-    m_Pos           = aOther.m_Pos;
+    m_pos           = aOther.m_pos;
     m_fpid          = aOther.m_fpid;
-    m_Attributs     = aOther.m_Attributs;
-    m_ModuleStatus  = aOther.m_ModuleStatus;
-    m_Orient        = aOther.m_Orient;
-    m_BoundaryBox   = aOther.m_BoundaryBox;
-    m_CntRot90      = aOther.m_CntRot90;
-    m_CntRot180     = aOther.m_CntRot180;
-    m_LastEditTime  = aOther.m_LastEditTime;
-    m_Link          = aOther.m_Link;
-    m_Path          = aOther.m_Path;
+    m_attributes    = aOther.m_attributes;
+    m_moduleStatus  = aOther.m_moduleStatus;
+    m_orient        = aOther.m_orient;
+    m_boundingBox   = aOther.m_boundingBox;
+    m_rot90Cost     = aOther.m_rot90Cost;
+    m_rot180Cost    = aOther.m_rot180Cost;
+    m_lastEditTime  = aOther.m_lastEditTime;
+    m_link          = aOther.m_link;
+    m_path          = aOther.m_path;
 
-    m_LocalClearance                = aOther.m_LocalClearance;
-    m_LocalSolderMaskMargin         = aOther.m_LocalSolderMaskMargin;
-    m_LocalSolderPasteMargin        = aOther.m_LocalSolderPasteMargin;
-    m_LocalSolderPasteMarginRatio   = aOther.m_LocalSolderPasteMarginRatio;
-    m_ZoneConnection                = aOther.m_ZoneConnection;
-    m_ThermalWidth                  = aOther.m_ThermalWidth;
-    m_ThermalGap                    = aOther.m_ThermalGap;
+    m_localClearance                = aOther.m_localClearance;
+    m_localSolderMaskMargin         = aOther.m_localSolderMaskMargin;
+    m_localSolderPasteMargin        = aOther.m_localSolderPasteMargin;
+    m_localSolderPasteMarginRatio   = aOther.m_localSolderPasteMarginRatio;
+    m_zoneConnection                = aOther.m_zoneConnection;
+    m_thermalWidth                  = aOther.m_thermalWidth;
+    m_thermalGap                    = aOther.m_thermalGap;
 
     // Copy reference and value
-    *m_Reference = *aOther.m_Reference;
-    m_Reference->SetParent( this );
-    *m_Value = *aOther.m_Value;
-    m_Value->SetParent( this );
+    *m_reference = *aOther.m_reference;
+    m_reference->SetParent( this );
+    *m_value = *aOther.m_value;
+    m_value->SetParent( this );
 
     std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
 
@@ -380,8 +380,8 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     // Copy auxiliary data: 3D_Drawings info
     m_3D_Drawings.clear();
     m_3D_Drawings = aOther.m_3D_Drawings;
-    m_Doc         = aOther.m_Doc;
-    m_KeyWord     = aOther.m_KeyWord;
+    m_doc         = aOther.m_doc;
+    m_keywords     = aOther.m_keywords;
     m_properties  = aOther.m_properties;
 
     // Ensure auxiliary data is up to date
@@ -406,12 +406,12 @@ bool MODULE::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
-        *token = m_Reference->GetShownText( aDepth + 1 );
+        *token = m_reference->GetShownText( aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "VALUE" ) ) )
     {
-        *token = m_Value->GetShownText( aDepth + 1 );
+        *token = m_value->GetShownText( aDepth + 1 );
         return true;
     }
     else if( token->IsSameAs( wxT( "LAYER" ) ) )
@@ -563,14 +563,14 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 
 void MODULE::CalculateBoundingBox()
 {
-    m_BoundaryBox = GetFootprintRect();
+    m_boundingBox = GetFootprintRect();
 }
 
 
 double MODULE::GetArea( int aPadding ) const
 {
-    double w = std::abs( static_cast<double>( m_BoundaryBox.GetWidth() ) ) + aPadding;
-    double h = std::abs( static_cast<double>( m_BoundaryBox.GetHeight() ) ) + aPadding;
+    double w = std::abs( static_cast<double>( m_boundingBox.GetWidth() ) ) + aPadding;
+    double h = std::abs( static_cast<double>( m_boundingBox.GetHeight() ) ) + aPadding;
     return w * h;
 }
 
@@ -579,8 +579,8 @@ EDA_RECT MODULE::GetFootprintRect() const
 {
     EDA_RECT area;
 
-    area.SetOrigin( m_Pos );
-    area.SetEnd( m_Pos );
+    area.SetOrigin( m_pos );
+    area.SetEnd( m_pos );
     area.Inflate( Millimeter2iu( 0.25 ) );   // Give a min size to the area
 
     for( BOARD_ITEM* item : m_drawings )
@@ -653,21 +653,21 @@ const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
         // not being present in the current PCB stackup.  Values, references, and all
         // footprint text can also be turned off via the GAL meta-layers, so the 2nd and
         // 3rd "&&" conditionals handle that.
-        valueLayerIsVisible = board->IsLayerVisible( m_Value->GetLayer() )
+        valueLayerIsVisible = board->IsLayerVisible( m_value->GetLayer() )
                               && board->IsElementVisible( LAYER_MOD_VALUES )
                               && board->IsElementVisible( LAYER_MOD_TEXT_FR );
 
-        refLayerIsVisible = board->IsLayerVisible( m_Reference->GetLayer() )
+        refLayerIsVisible = board->IsLayerVisible( m_reference->GetLayer() )
                             && board->IsElementVisible( LAYER_MOD_REFERENCES )
                             && board->IsElementVisible( LAYER_MOD_TEXT_FR );
     }
 
 
-    if( ( m_Value->IsVisible() && valueLayerIsVisible ) || aIncludeInvisibleText )
-        area.Merge( m_Value->GetBoundingBox() );
+    if(( m_value->IsVisible() && valueLayerIsVisible ) || aIncludeInvisibleText )
+        area.Merge( m_value->GetBoundingBox() );
 
-    if( ( m_Reference->IsVisible() && refLayerIsVisible ) || aIncludeInvisibleText )
-        area.Merge( m_Reference->GetBoundingBox() );
+    if(( m_reference->IsVisible() && refLayerIsVisible ) || aIncludeInvisibleText )
+        area.Merge( m_reference->GetBoundingBox() );
 
     return area;
 }
@@ -716,7 +716,7 @@ SHAPE_POLY_SET MODULE::GetBoundingPoly() const
     }
 
     poly.Inflate( Millimeter2iu( 0.01 ), 4 );
-    poly.Rotate( -orientation, m_Pos );
+    poly.Rotate( -orientation, m_pos );
 
     return poly;
 }
@@ -726,16 +726,16 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
 {
     wxString msg, msg2;
 
-    aList.emplace_back( m_Reference->GetShownText(), m_Value->GetShownText(), DARKCYAN );
+    aList.emplace_back( m_reference->GetShownText(), m_value->GetShownText(), DARKCYAN );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
         || aFrame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
         || aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
     {
-        wxDateTime date( static_cast<time_t>( m_LastEditTime ) );
+        wxDateTime date( static_cast<time_t>( m_lastEditTime ) );
 
         // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-        if( m_LastEditTime && date.IsValid() )
+        if( m_lastEditTime && date.IsValid() )
             msg = date.Format( wxT( "%b %d, %Y" ) ); // Abbreviated_month_name Day, Year
         else
             msg = _( "Unknown" );
@@ -762,16 +762,16 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     if( IsLocked() )
         addToken( &status, _( "locked" ) );
 
-    if( m_ModuleStatus & MODULE_is_PLACED )
+    if( m_moduleStatus & FP_is_PLACED )
         addToken( &status, _( "autoplaced" ) );
 
-    if( m_Attributs & FP_BOARD_ONLY )
+    if( m_attributes & FP_BOARD_ONLY )
         addToken( &attrs, _( "not in schematic" ) );
 
-    if( m_Attributs & FP_EXCLUDE_FROM_POS_FILES )
+    if( m_attributes & FP_EXCLUDE_FROM_POS_FILES )
         addToken( &attrs, _( "exclude from pos files" ) );
 
-    if( m_Attributs & FP_EXCLUDE_FROM_BOM )
+    if( m_attributes & FP_EXCLUDE_FROM_BOM )
         addToken( &attrs, _( "exclude from BOM" ) );
 
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs, BROWN );
@@ -784,15 +784,15 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
                  m_3D_Drawings.empty() ? _( "none" ) : m_3D_Drawings.front().m_Filename );
     aList.emplace_back( msg, msg2, BLUE );
 
-    msg.Printf( _( "Doc: %s" ), m_Doc );
-    msg2.Printf( _( "Keywords: %s" ), m_KeyWord );
+    msg.Printf( _( "Doc: %s" ), m_doc );
+    msg2.Printf( _( "Keywords: %s" ), m_keywords );
     aList.emplace_back( msg, msg2, BLACK );
 }
 
 
 bool MODULE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    EDA_RECT rect = m_BoundaryBox;//.GetBoundingBoxRotated( GetPosition(), m_Orient );
+    EDA_RECT rect = m_boundingBox;//.GetBoundingBoxRotated( GetPosition(), m_Orient );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
@@ -809,7 +809,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
     arect.Inflate( aAccuracy );
 
     if( aContained )
-        return arect.Contains( m_BoundaryBox );
+        return arect.Contains( m_boundingBox );
     else
     {
         // If the rect does not intersect the bounding box, skip any tests
@@ -954,7 +954,7 @@ void MODULE::Add3DModel( FP_3DMODEL* a3DModel )
 }
 
 
-// see class_module.h
+// see footprint.h
 SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
@@ -988,12 +988,12 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             break;
 
         case PCB_FP_TEXT_T:
-            result = inspector( m_Reference, testData );
+            result = inspector( m_reference, testData );
 
             if( result == SEARCH_RESULT::QUIT )
                 break;
 
-            result = inspector( m_Value, testData );
+            result = inspector( m_value, testData );
 
             if( result == SEARCH_RESULT::QUIT )
                 break;
@@ -1079,8 +1079,8 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
         for( BOARD_ITEM* drawing : m_drawings )
             aFunction( static_cast<BOARD_ITEM*>( drawing ) );
 
-        aFunction( static_cast<BOARD_ITEM*>( m_Reference ) );
-        aFunction( static_cast<BOARD_ITEM*>( m_Value ) );
+        aFunction( static_cast<BOARD_ITEM*>( m_reference ) );
+        aFunction( static_cast<BOARD_ITEM*>( m_value ) );
     }
     catch( std::bad_function_call& )
     {
@@ -1184,8 +1184,8 @@ const BOX2I MODULE::ViewBBox() const
     EDA_RECT area = GetFootprintRect();
 
     // Calculate extended area including text fields
-    area.Merge( m_Reference->GetBoundingBox() );
-    area.Merge( m_Value->GetBoundingBox() );
+    area.Merge( m_reference->GetBoundingBox() );
+    area.Merge( m_value->GetBoundingBox() );
 
     // Add the Clearance shape size: (shape around the pads when the clearance is shown.  Not
     // optimized, but the draw cost is small (perhaps smaller than optimization).
@@ -1228,7 +1228,7 @@ const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 
 void MODULE::Move( const wxPoint& aMoveVector )
 {
-    wxPoint newpos = m_Pos + aMoveVector;
+    wxPoint newpos = m_pos + aMoveVector;
     SetPosition( newpos );
 }
 
@@ -1237,13 +1237,13 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     double  orientation = GetOrientation();
     double  newOrientation = orientation + aAngle;
-    wxPoint newpos = m_Pos;
+    wxPoint newpos = m_pos;
     RotatePoint( &newpos, aRotCentre, aAngle );
     SetPosition( newpos );
     SetOrientation( newOrientation );
 
-    m_Reference->KeepUpright( orientation, newOrientation );
-    m_Value->KeepUpright( orientation, newOrientation );
+    m_reference->KeepUpright( orientation, newOrientation );
+    m_value->KeepUpright( orientation, newOrientation );
 
     for( BOARD_ITEM* item : m_drawings )
     {
@@ -1258,14 +1258,13 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // Move footprint to its final position:
-    wxPoint finalPos = m_Pos;
+    wxPoint finalPos = m_pos;
 
     // Now Flip the footprint.
-    // Flipping a footprint is a specific transform:
-    // it is not mirrored like a text.
-    // We have to change the side, and ensure the footprint rotation is
-    // modified accordint to the transform, because this parameter is used
-    // in pick and place files, and when updating the footprint from library.
+    // Flipping a footprint is a specific transform: it is not mirrored like a text.
+    // We have to change the side, and ensure the footprint rotation is modified according to the
+    // transform, because this parameter is used in pick and place files, and when updating the
+    // footprint from library.
     // When flipped around the X axis (Y coordinates changed) orientation is negated
     // When flipped around the Y axis (X coordinates changed) orientation is 180 - old orient.
     // Because it is specfic to a footprint, we flip around the X axis, and after rotate 180 deg
@@ -1278,21 +1277,21 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     SetLayer( FlipLayer( GetLayer() ) );
 
     // Reverse mirror orientation.
-    m_Orient = -m_Orient;
+    m_orient = -m_orient;
 
-    NORMALIZE_ANGLE_180( m_Orient );
+    NORMALIZE_ANGLE_180( m_orient );
 
     // Mirror pads to other side of board.
     for( PAD* pad : m_pads )
-        pad->Flip( m_Pos, false );
+        pad->Flip( m_pos, false );
 
     // Mirror zones to other side of board.
     for( ZONE* zone : m_fp_zones )
-        zone->Flip( m_Pos, aFlipLeftRight );
+        zone->Flip( m_pos, aFlipLeftRight );
 
     // Mirror reference and value.
-    m_Reference->Flip( m_Pos, false );
-    m_Value->Flip( m_Pos, false );
+    m_reference->Flip( m_pos, false );
+    m_value->Flip( m_pos, false );
 
     // Reverse mirror module graphics and texts.
     for( BOARD_ITEM* item : m_drawings )
@@ -1300,11 +1299,11 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         switch( item->Type() )
         {
         case PCB_FP_SHAPE_T:
-            static_cast<FP_SHAPE*>( item )->Flip( m_Pos, false );
+            static_cast<FP_SHAPE*>( item )->Flip( m_pos, false );
             break;
 
         case PCB_FP_TEXT_T:
-            static_cast<FP_TEXT*>( item )->Flip( m_Pos, false );
+            static_cast<FP_TEXT*>( item )->Flip( m_pos, false );
             break;
 
         default:
@@ -1323,12 +1322,12 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
 void MODULE::SetPosition( const wxPoint& aPos )
 {
-    wxPoint delta = aPos - m_Pos;
+    wxPoint delta = aPos - m_pos;
 
-    m_Pos += delta;
+    m_pos += delta;
 
-    m_Reference->EDA_TEXT::Offset( delta );
-    m_Value->EDA_TEXT::Offset( delta );
+    m_reference->EDA_TEXT::Offset( delta );
+    m_value->EDA_TEXT::Offset( delta );
 
     for( PAD* pad : m_pads )
         pad->SetPosition( pad->GetPosition() + delta );
@@ -1360,7 +1359,7 @@ void MODULE::SetPosition( const wxPoint& aPos )
         }
     }
 
-    m_BoundaryBox.Move( delta );
+    m_boundingBox.Move( delta );
 }
 
 
@@ -1380,10 +1379,10 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
     RotatePoint( &moveVector, -GetOrientation() );
 
     // Update of the reference and value.
-    m_Reference->SetPos0( m_Reference->GetPos0() + moveVector );
-    m_Reference->SetDrawCoord();
-    m_Value->SetPos0( m_Value->GetPos0() + moveVector );
-    m_Value->SetDrawCoord();
+    m_reference->SetPos0( m_reference->GetPos0() + moveVector );
+    m_reference->SetDrawCoord();
+    m_value->SetPos0( m_value->GetPos0() + moveVector );
+    m_value->SetDrawCoord();
 
     // Update the pad local coordinates.
     for( PAD* pad : m_pads )
@@ -1423,11 +1422,11 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 
 void MODULE::SetOrientation( double aNewAngle )
 {
-    double angleChange = aNewAngle - m_Orient;  // change in rotation
+    double angleChange = aNewAngle - m_orient;  // change in rotation
 
     NORMALIZE_ANGLE_180( aNewAngle );
 
-    m_Orient = aNewAngle;
+    m_orient = aNewAngle;
 
     for( PAD* pad : m_pads )
     {
@@ -1441,8 +1440,8 @@ void MODULE::SetOrientation( double aNewAngle )
     }
 
     // Update of the reference and value.
-    m_Reference->SetDrawCoord();
-    m_Value->SetDrawCoord();
+    m_reference->SetDrawCoord();
+    m_value->SetDrawCoord();
 
     // Displace contours and text of the footprint.
     for( BOARD_ITEM* item : m_drawings )
@@ -1473,7 +1472,7 @@ BOARD_ITEM* MODULE::Duplicate() const
 }
 
 
-BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
+BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint )
 {
     BOARD_ITEM* new_item = NULL;
     FP_ZONE* new_zone = NULL;
@@ -1485,7 +1484,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         PAD* new_pad = new PAD( *static_cast<const PAD*>( aItem ) );
         const_cast<KIID&>( new_pad->m_Uuid ) = KIID();
 
-        if( aAddToModule )
+        if( aAddToFootprint )
             m_pads.push_back( new_pad );
 
         new_item = new_pad;
@@ -1497,7 +1496,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         new_zone = new FP_ZONE( *static_cast<const FP_ZONE*>( aItem ) );
         const_cast<KIID&>( new_zone->m_Uuid ) = KIID();
 
-        if( aAddToModule )
+        if( aAddToFootprint )
             m_fp_zones.push_back( new_zone );
 
         new_item = new_zone;
@@ -1520,7 +1519,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
             new_text->SetType( FP_TEXT::TEXT_is_DIVERS );
         }
 
-        if( aAddToModule )
+        if( aAddToFootprint )
             Add( new_text );
 
         new_item = new_text;
@@ -1533,7 +1532,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToModule )
         FP_SHAPE* new_shape = new FP_SHAPE( *static_cast<const FP_SHAPE*>( aItem ) );
         const_cast<KIID&>( new_shape->m_Uuid ) = KIID();
 
-        if( aAddToModule )
+        if( aAddToFootprint )
             Add( new_shape );
 
         new_item = new_shape;
@@ -1627,8 +1626,8 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
     for( PAD* pad : m_pads )
         addRect( holes, pad->GetBoundingBox() );
 
-    addRect( holes, m_Reference->GetBoundingBox() );
-    addRect( holes, m_Value->GetBoundingBox() );
+    addRect( holes, m_reference->GetBoundingBox() );
+    addRect( holes, m_value->GetBoundingBox() );
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {

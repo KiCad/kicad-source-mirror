@@ -105,44 +105,60 @@ public:
 
 private:
     PCB_EDIT_FRAME*  m_frame;
-    MODULES          m_modules;
+    MODULES          m_footprints;
     PCB_SCREEN*      m_screen;
     PCBNEW_SELECTION m_selection;
 
-    std::vector<RefDesChange>  m_ChangeArray;
-    std::vector<RefDesInfo>    m_FrontModules;
-    std::vector<RefDesInfo>    m_BackModules;
-    std::vector<RefDesTypeStr> m_RefDesTypes;
-    std::vector<wxString>      m_ExcludeArray;
+    std::vector<RefDesChange>  m_changeArray;
+    std::vector<RefDesInfo>    m_frontFootprints;
+    std::vector<RefDesInfo>    m_backFootprints;
+    std::vector<RefDesTypeStr> m_refDesTypes;
+    std::vector<wxString>      m_excludeArray;
 
-    EDA_UNITS m_Units;
+    bool m_standalone;
 
-    bool m_Standalone;
+    int m_sortCode;
+    int m_gridIndex;
+    int m_annotationChoice;
+    int m_severity;
 
-    int m_SortCode;
-    int m_GridIndex;
-    int m_AnnotationChoice;
-    int m_Severity;
+    double m_sortGridx;
+    double m_sortGridy;
 
-    double m_SortGridx;
-    double m_SortGridy;
+    wxString m_frontPrefixString;
+    wxString m_backPrefixString;
+    wxString m_validPrefixes;
 
-    wxString m_FrontPrefixString;
-    wxString m_BackPrefixString;
-    wxString m_ValidPrefixes;
+    APP_SETTINGS_BASE* m_settings;
 
-    APP_SETTINGS_BASE* m_Settings;
+    std::vector<wxRadioButton*> m_sortButtons = {
+            m_Down_Right,
+            m_Right_Down,
+            m_Down_Left,
+            m_Left_Down,
+            m_Up_Right,
+            m_Right_Up,
+            m_Up_Left,
+            m_Left_Up
+    };
 
-    std::vector<wxRadioButton*> m_sortButtons = { m_Down_Right, m_Right_Down, m_Down_Left,
-        m_Left_Down, m_Up_Right, m_Right_Up, m_Up_Left, m_Left_Up };
+    std::vector<wxRadioButton*> AnnotateWhat = {
+            m_AnnotateAll,
+            m_AnnotateFront,
+            m_AnnotateBack,
+            m_AnnotateSelection
+    };
 
-    std::vector<wxRadioButton*> AnnotateWhat = { m_AnnotateAll, m_AnnotateFront, m_AnnotateBack,
-        m_AnnotateSelection };
-
-
-    std::vector<wxStaticBitmap*> Bitmaps = { reannotate_down_right_bitmap, reannotate_right_down_bitmap,
-        reannotate_down_left_bitmap, reannotate_left_down_bitmap, reannotate_up_right_bitmap,
-        reannotate_right_up_bitmap, reannotate_up_left_bitmap, reannotate_left_up_bitmap };
+    std::vector<wxStaticBitmap*> Bitmaps = {
+            reannotate_down_right_bitmap,
+            reannotate_right_down_bitmap,
+            reannotate_down_left_bitmap,
+            reannotate_left_down_bitmap,
+            reannotate_up_right_bitmap,
+            reannotate_right_up_bitmap,
+            reannotate_up_left_bitmap,
+            reannotate_left_up_bitmap
+    };
 
     APP_SETTINGS_BASE* m_Config;
 
@@ -162,9 +178,10 @@ private:
     bool ReannotateBoard( void );
     bool BuildModuleList( std::vector<RefDesInfo>& aBadRefDes );
     void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
-                           wxString aPrefix, bool aRemovePrefix, std::vector<RefDesInfo>& aBadRefDes );
+                           wxString aPrefix, bool aRemovePrefix,
+                           std::vector<RefDesInfo>& aBadRefDes );
 
-    RefDesChange* GetNewRefDes( MODULE* aMod );
+    RefDesChange* GetNewRefDes( MODULE* aFootprint );
 
     int      RoundToGrid( int aCoord, int aGrid );
     wxString CoordTowxString( int aX, int aY );

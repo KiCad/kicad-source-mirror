@@ -214,18 +214,18 @@ public:
     }
 
     /**
-     * Get info for a module by id.
+     * Get info for a footprint by id.
      */
     FOOTPRINT_INFO* GetFootprintInfo( const wxString& aFootprintName );
 
     /**
-     * Get info for a module by libNickname/footprintName
+     * Get info for a footprint by libNickname/footprintName
      */
     FOOTPRINT_INFO* GetFootprintInfo( const wxString& aLibNickname,
                                       const wxString& aFootprintName );
 
     /**
-     * Get info for a module by index.
+     * Get info for a footprint by index.
      * @param aIdx = index of the given item
      * @return the aIdx item in list
      */

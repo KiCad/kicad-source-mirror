@@ -149,11 +149,11 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
 
-    wxPoint m_Start0;       ///< Start point or center, relative to module origin, orient 0.
-    wxPoint m_End0;         ///< End point, relative to module origin, orient 0.
+    wxPoint m_Start0;       ///< Start point or center, relative to footprint origin, orient 0.
+    wxPoint m_End0;         ///< End point, relative to footprint origin, orient 0.
     wxPoint m_ThirdPoint0;  ///< End point for an arc.
-    wxPoint m_Bezier0_C1;   ///< Bezier Control Point 1, relative to module origin, orient 0.
-    wxPoint m_Bezier0_C2;   ///< Bezier Control Point 2, relative to module origin, orient 0.
+    wxPoint m_Bezier0_C1;   ///< Bezier Control Point 1, relative to footprint origin, orient 0.
+    wxPoint m_Bezier0_C2;   ///< Bezier Control Point 2, relative to footprint origin, orient 0.
 };
 
 #endif    // FP_SHAPE_H

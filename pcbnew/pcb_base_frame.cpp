@@ -152,23 +152,23 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
-void PCB_BASE_FRAME::AddFootprintToBoard( MODULE* module )
+void PCB_BASE_FRAME::AddFootprintToBoard( MODULE* aFootprint )
 {
-    if( module )
+    if( aFootprint )
     {
-        GetBoard()->Add( module, ADD_MODE::APPEND );
+        GetBoard()->Add( aFootprint, ADD_MODE::APPEND );
 
-        module->SetFlags( IS_NEW );
-        module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized yet
+        aFootprint->SetFlags(IS_NEW );
+        aFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized yet
 
         // Put it on FRONT layer (note that it might be stored flipped if the lib is an archive
         // built from a board)
-        if( module->IsFlipped() )
-            module->Flip( module->GetPosition(), m_settings->m_FlipLeftRight );
+        if( aFootprint->IsFlipped() )
+            aFootprint->Flip( aFootprint->GetPosition(), m_settings->m_FlipLeftRight );
 
         // Place it in orientation 0 even if it is not saved with orientation 0 in lib (note that
         // it might be stored in another orientation if the lib is an archive built from a board)
-        module->SetOrientation( 0 );
+        aFootprint->SetOrientation( 0 );
     }
 }
 

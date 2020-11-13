@@ -1409,38 +1409,32 @@ void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSki
 
             wxPoint pos = fp->GetPosition();
 
-            glm::mat4 moduleMatrix = glm::mat4( 1.0f );
+            glm::mat4 fpMatrix = glm::mat4( 1.0f );
 
-            moduleMatrix = glm::translate( moduleMatrix,
-                                           SFVEC3F( pos.x * m_boardAdapter.BiuTo3Dunits(),
-                                                    -pos.y * m_boardAdapter.BiuTo3Dunits(),
-                                                    zpos ) );
+            fpMatrix = glm::translate( fpMatrix, SFVEC3F( pos.x * m_boardAdapter.BiuTo3Dunits(),
+                                                          -pos.y * m_boardAdapter.BiuTo3Dunits(),
+                                                          zpos ) );
 
             if( fp->GetOrientation() )
             {
-                moduleMatrix = glm::rotate( moduleMatrix,
-                                            ( (float)(fp->GetOrientation() / 10.0f) / 180.0f ) *
-                                            glm::pi<float>(),
-                                            SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+                fpMatrix = glm::rotate( fpMatrix,
+                                        ( (float)(fp->GetOrientation() / 10.0f) / 180.0f ) * glm::pi<float>(),
+                                        SFVEC3F( 0.0f, 0.0f, 1.0f ) );
             }
 
 
             if( fp->IsFlipped() )
             {
-                moduleMatrix = glm::rotate( moduleMatrix,
-                                            glm::pi<float>(),
-                                            SFVEC3F( 0.0f, 1.0f, 0.0f ) );
+                fpMatrix = glm::rotate( fpMatrix, glm::pi<float>(), SFVEC3F( 0.0f, 1.0f, 0.0f ) );
 
-                moduleMatrix = glm::rotate( moduleMatrix,
-                                            glm::pi<float>(),
-                                            SFVEC3F( 0.0f, 0.0f, 1.0f ) );
+                fpMatrix = glm::rotate( fpMatrix, glm::pi<float>(), SFVEC3F( 0.0f, 0.0f, 1.0f ) );
             }
 
             const double modelunit_to_3d_units_factor = m_boardAdapter.BiuTo3Dunits() *
                                                         UNITS3D_TO_UNITSPCB;
 
-            moduleMatrix = glm::scale( moduleMatrix,
-                                       SFVEC3F( modelunit_to_3d_units_factor,
+            fpMatrix = glm::scale( fpMatrix,
+                                   SFVEC3F( modelunit_to_3d_units_factor,
                                                 modelunit_to_3d_units_factor,
                                                 modelunit_to_3d_units_factor ) );
 
@@ -1462,7 +1456,7 @@ void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSki
                     // only add it if the return is not NULL
                     if( modelPtr )
                     {
-                        glm::mat4 modelMatrix = moduleMatrix;
+                        glm::mat4 modelMatrix = fpMatrix;
 
                         modelMatrix = glm::translate( modelMatrix,
                                                       SFVEC3F( sM->m_Offset.x,
@@ -1611,12 +1605,9 @@ MODEL_MATERIALS *C3D_RENDER_RAYTRACING::get_3D_model_material( const S3DMODEL *a
     return materialVector;
 }
 
-void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
-                                           const S3DMODEL *a3DModel,
-                                           const glm::mat4 &aModelMatrix,
-                                           float aModuleOpacity,
-                                           bool aSkipMaterialInformation,
-                                           BOARD_ITEM *aBoardItem )
+void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer, const S3DMODEL *a3DModel,
+                                           const glm::mat4 &aModelMatrix, float aFPOpacity,
+                                           bool aSkipMaterialInformation, BOARD_ITEM *aBoardItem )
 {
 
     // Validate a3DModel pointers
@@ -1629,12 +1620,12 @@ void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
     wxASSERT( a3DModel->m_Meshes != NULL );
     wxASSERT( a3DModel->m_MaterialsSize > 0 );
     wxASSERT( a3DModel->m_MeshesSize > 0 );
-    wxASSERT( aModuleOpacity > 0.0f );
-    wxASSERT( aModuleOpacity <= 1.0f );
+    wxASSERT( aFPOpacity > 0.0f );
+    wxASSERT( aFPOpacity <= 1.0f );
 
-    if( aModuleOpacity > 1.0f )
+    if( aFPOpacity > 1.0f )
     {
-        aModuleOpacity = 1.0f;
+        aFPOpacity = 1.0f;
     }
 
     if( (a3DModel->m_Materials != NULL) && (a3DModel->m_Meshes != NULL) &&
@@ -1672,14 +1663,14 @@ void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
                 ((mesh.m_FaceIdxSize % 3) == 0) &&
                 (mesh.m_MaterialIdx < a3DModel->m_MaterialsSize) )
             {
-                float moduleTransparency;
+                float fpTransparency;
                 const CBLINN_PHONG_MATERIAL *blinn_material;
 
                 if( !aSkipMaterialInformation )
                 {
                     blinn_material = &(*materialVector)[mesh.m_MaterialIdx];
 
-                    moduleTransparency = 1.0f - ( ( 1.0f - blinn_material->GetTransparency() ) * aModuleOpacity );
+                    fpTransparency = 1.0f - (( 1.0f - blinn_material->GetTransparency() ) * aFPOpacity );
                 }
 
                 // Add all face triangles
@@ -1726,7 +1717,7 @@ void C3D_RENDER_RAYTRACING::add_3D_models( CCONTAINER &aDstContainer,
                         if( !aSkipMaterialInformation )
                         {
                             newTriangle->SetMaterial( blinn_material );
-                            newTriangle->SetModelTransparency( moduleTransparency );
+                            newTriangle->SetModelTransparency( fpTransparency );
 
                             if( mesh.m_Color == NULL )
                             {

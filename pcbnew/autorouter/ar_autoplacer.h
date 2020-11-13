@@ -97,12 +97,12 @@ private:
 
     int          testRectangle( const EDA_RECT& aRect, int side );
     unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
-    int          testModuleOnBoard( MODULE* aFootprint, bool TstOtherSide, const wxPoint& aOffset );
+    int          testFootprintOnBoard( MODULE* aFootprint, bool TstOtherSide, const wxPoint& aOffset );
     int          getOptimalFPPlacement( MODULE* aFootprint );
     double       computePlacementRatsnestCost( MODULE* aFootprint, const wxPoint& aOffset );
 
     /**
-     * Find the "best" module place. The criteria are:
+     * Find the "best" footprint place. The criteria are:
      * - Maximum ratsnest with footprints already placed
      * - Max size, and number of pads max
      */

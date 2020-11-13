@@ -189,19 +189,19 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_worksheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
 
     // Load drawings
-    for( auto drawing : const_cast<BOARD*>(aBoard)->Drawings() )
+    for( BOARD_ITEM* drawing : aBoard->Drawings() )
         m_view->Add( drawing );
 
     // Load tracks
-    for( auto track : aBoard->Tracks() )
+    for( TRACK* track : aBoard->Tracks() )
         m_view->Add( track );
 
     // Load footprints and its additional elements
-    for( auto module : aBoard->Footprints() )
-        m_view->Add( module );
+    for( MODULE* footprint : aBoard->Footprints() )
+        m_view->Add( footprint );
 
     // DRC markers
-    for( auto marker : aBoard->Markers() )
+    for( MARKER_PCB* marker : aBoard->Markers() )
         m_view->Add( marker );
 
     // Finalize the triangulation threads
@@ -209,7 +209,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 
     // Load zones
-    for( auto zone : aBoard->Zones() )
+    for( ZONE* zone : aBoard->Zones() )
         m_view->Add( zone );
 
     // Ratsnest

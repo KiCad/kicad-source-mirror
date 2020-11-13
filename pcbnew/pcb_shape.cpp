@@ -580,17 +580,17 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
         if( m_Poly.IsEmpty() )
             break;
 
-        MODULE* module = GetParentFootprint();
+        MODULE* parentFootprint = GetParentFootprint();
         bbox = EDA_RECT();  // re-init for merging
 
         for( auto iter = m_Poly.CIterate(); iter; iter++ )
         {
             wxPoint pt( iter->x, iter->y );
 
-            if( module ) // Transform, if we belong to a module
+            if( parentFootprint ) // Transform, if we belong to a footprint
             {
-                RotatePoint( &pt, module->GetOrientation() );
-                pt += module->GetPosition();
+                RotatePoint( &pt, parentFootprint->GetOrientation() );
+                pt += parentFootprint->GetPosition();
             }
 
             bbox.Merge( pt );
@@ -942,18 +942,18 @@ const BOX2I PCB_SHAPE::ViewBBox() const
 std::vector<wxPoint> PCB_SHAPE::GetRectCorners() const
 {
     std::vector<wxPoint> pts;
-    MODULE* module = GetParentFootprint();
+    MODULE* parentFootprint = GetParentFootprint();
     wxPoint topLeft = GetStart();
     wxPoint botRight = GetEnd();
 
     // Un-rotate rect topLeft and botRight
-    if( module && KiROUND( module->GetOrientation() ) % 900 != 0 )
+    if( parentFootprint && KiROUND( parentFootprint->GetOrientation() ) % 900 != 0 )
     {
-        topLeft -= module->GetPosition();
-        RotatePoint( &topLeft, -module->GetOrientation() );
+        topLeft -= parentFootprint->GetPosition();
+        RotatePoint( &topLeft, -parentFootprint->GetOrientation() );
 
-        botRight -= module->GetPosition();
-        RotatePoint( &botRight, -module->GetOrientation() );
+        botRight -= parentFootprint->GetPosition();
+        RotatePoint( &botRight, -parentFootprint->GetOrientation() );
     }
 
     // Set up the un-rotated 4 corners
@@ -963,12 +963,12 @@ std::vector<wxPoint> PCB_SHAPE::GetRectCorners() const
     pts.emplace_back( topLeft.x, botRight.y );
 
     // Now re-rotate the 4 corners to get a diamond
-    if( module && KiROUND( module->GetOrientation() ) % 900 != 0 )
+    if( parentFootprint && KiROUND( parentFootprint->GetOrientation() ) % 900 != 0 )
     {
         for( wxPoint& pt : pts )
         {
-            RotatePoint( &pt,module->GetOrientation() );
-            pt += module->GetPosition();
+            RotatePoint( &pt, parentFootprint->GetOrientation() );
+            pt += parentFootprint->GetPosition();
         }
     }
 

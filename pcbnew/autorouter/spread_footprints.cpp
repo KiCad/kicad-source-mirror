@@ -165,13 +165,13 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <MODULE*>
         pos.x *= scale;
         pos.y *= scale;
 
-        MODULE * module = aFootprintList[vecSubRects[it].n];
+        MODULE* footprint = aFootprintList[vecSubRects[it].n];
 
-        EDA_RECT fpBBox = module->GetFootprintRect();
-        wxPoint mod_pos = pos + ( module->GetPosition() - fpBBox.GetOrigin() )
+        EDA_RECT fpBBox = footprint->GetFootprintRect();
+        wxPoint mod_pos = pos + ( footprint->GetPosition() - fpBBox.GetOrigin() )
                           + aFreeArea.GetOrigin();
 
-        module->Move( mod_pos - module->GetPosition() );
+        footprint->Move( mod_pos - footprint->GetPosition() );
     }
 }
 

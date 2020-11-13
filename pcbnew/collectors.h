@@ -26,7 +26,8 @@
 #define COLLECTORS_H
 
 
-/*  This module contains a number of COLLECTOR implementations which are used
+/*
+ *  This module contains a number of COLLECTOR implementations which are used
  *  to augment the functionality of class PCB_EDIT_FRAME.
  */
 

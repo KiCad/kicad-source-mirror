@@ -210,7 +210,7 @@ private:
     void add_3D_models( CCONTAINER &aDstContainer,
                         const S3DMODEL *a3DModel,
                         const glm::mat4 &aModelMatrix,
-                        float aModuleOpacity,
+                        float aFPOpacity,
                         bool aSkipMaterialInformation,
                         BOARD_ITEM *aBoardItem );
 

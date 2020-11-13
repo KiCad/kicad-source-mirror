@@ -52,9 +52,9 @@ void ARRAY_CREATOR::Invoke()
     if( m_selection.Size() == 0 )
         return;
 
-    MODULE* const module = m_editModules ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
+    MODULE* const fp = m_isFootprintEditor ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
 
-    const bool enableArrayNumbering = m_editModules;
+    const bool enableArrayNumbering = m_isFootprintEditor;
     const wxPoint rotPoint = (wxPoint) m_selection.GetCenter();
 
     std::unique_ptr<ARRAY_OPTIONS> array_opts;
@@ -68,15 +68,15 @@ void ARRAY_CREATOR::Invoke()
 
     BOARD_COMMIT commit( &m_parent );
 
-    ARRAY_PAD_NAME_PROVIDER pad_name_provider( module, *array_opts );
+    ARRAY_PAD_NAME_PROVIDER pad_name_provider( fp, *array_opts );
 
     for ( int i = 0; i < m_selection.Size(); ++i )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_selection[ i ] );
 
-        if( item->Type() == PCB_PAD_T && !m_editModules )
+        if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
         {
-            // If it is not the module editor, then duplicate the parent module instead
+            // If it is not the footprint editor, then duplicate the parent footprint instead
             item = static_cast<MODULE*>( item )->GetParent();
         }
 
@@ -96,11 +96,11 @@ void ARRAY_CREATOR::Invoke()
                 // Need to create a new item
                 BOARD_ITEM* new_item = nullptr;
 
-                if( m_editModules )
+                if( m_isFootprintEditor )
                 {
-                    // Don't bother incrementing pads: the module won't update
-                    // until commit, so we can only do this once
-                    new_item = module->DuplicateItem( item );
+                    // Don't bother incrementing pads: the footprint won't update until commit,
+                    // so we can only do this once
+                    new_item = fp->DuplicateItem( item );
                 }
                 else
                 {

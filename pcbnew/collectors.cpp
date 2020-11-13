@@ -37,7 +37,8 @@
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
 
-/* This module contains out of line member functions for classes given in
+/*
+ * This module contains out of line member functions for classes given in
  * collectors.h.  Those classes augment the functionality of class PCB_EDIT_FRAME.
  */
 
@@ -188,7 +189,7 @@ const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
-    MODULE*         module      = nullptr;
+    MODULE*         footprint   = nullptr;
     PCB_GROUP*      group       = nullptr;
     PAD*            pad         = nullptr;
     bool            pad_through = false;
@@ -205,12 +206,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
     case PCB_PAD_T:
         {
-            MODULE* m = (MODULE*) item->GetParent();
+            MODULE* footprint = (MODULE*) item->GetParent();
 
-            if( m->GetReference() == wxT( "Y2" ) )
-            {
+            if( footprint->GetReference() == wxT( "Y2" ) )
                 breakhere++;
-            }
         }
         break;
 
@@ -237,23 +236,19 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_FP_TEXT_T:
         {
-            FP_TEXT* tm = (FP_TEXT*) item;
+            FP_TEXT* fpText = (FP_TEXT*) item;
 
-            if( tm->GetText() == wxT( "10uH" ) )
-            {
+            if( fpText->GetText() == wxT( "10uH" ) )
                 breakhere++;
-            }
         }
         break;
 
     case PCB_MODULE_T:
         {
-            MODULE* m = (MODULE*) item;
+            MODULE* footprint = (MODULE*) item;
 
-            if( m->GetReference() == wxT( "C98" ) )
-            {
+            if( footprint->GetReference() == wxT( "C98" ) )
                 breakhere++;
-            }
         }
         break;
 
@@ -274,22 +269,22 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_PAD_T:
         // there are pad specific visibility controls.
         // Criterias to select a pad is:
-        // for smd pads: the module parent must be seen, and pads on the corresponding
-        // board side must be seen
-        // if pad is a thru hole, then it can be visible when its parent module is not.
-        // for through pads: pads on Front or Back board sides must be seen
+        // for smd pads: the footprint parent must be visible, and pads on the corresponding
+        // board side must be visible
+        // if pad is a thru hole, then it can be visible when its parent footprint is not.
+        // for through pads: pads on Front or Back board sides must be visible
         pad = static_cast<PAD*>( item );
 
         if( (pad->GetAttribute() != PAD_ATTRIB_SMD) &&
-            (pad->GetAttribute() != PAD_ATTRIB_CONN) )    // a hole is present, so multiple layers
+            (pad->GetAttribute() != PAD_ATTRIB_CONN) )   // a hole is present, so multiple layers
         {
-            // proceed to the common tests below, but without the parent module test,
-            // by leaving module==NULL, but having pad != null
+            // proceed to the common tests below, but without the parent footprint test,
+            // by leaving footprint==NULL, but having pad != null
             pad_through = true;
         }
-        else  // smd, so use pads test after module test
+        else  // smd, so use pads test after footprint test
         {
-            module = static_cast<MODULE*>( item->GetParent() );
+            footprint = static_cast<MODULE*>( item->GetParent() );
         }
 
         break;
@@ -305,7 +300,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FP_ZONE_T:
-        module = static_cast<MODULE*>( item->GetParent() );
+        footprint = static_cast<MODULE*>( item->GetParent() );
 
         // Fallthrough to get the zone as well
         KI_FALLTHROUGH;
@@ -368,8 +363,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                 break;
             }
 
-            // Extract the module since it could be hidden
-            module = static_cast<MODULE*>( item->GetParent() );
+            // Extract the footprint since it could be hidden
+            footprint = static_cast<MODULE*>( item->GetParent() );
         }
         break;
 
@@ -378,7 +373,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_MODULE_T:
-        module = static_cast<MODULE*>( item );
+        footprint = static_cast<MODULE*>( item );
         break;
 
     case PCB_GROUP_T:
@@ -395,12 +390,12 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     // common tests:
 
-    if( module )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_MODULE_T
+    if( footprint )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_MODULE_T
     {
-        if( m_Guide->IgnoreFootprintsOnBack() && ( module->GetLayer() == B_Cu) )
+        if( m_Guide->IgnoreFootprintsOnBack() && ( footprint->GetLayer() == B_Cu) )
             goto exit;
 
-        if( m_Guide->IgnoreFootprintsOnFront() && ( module->GetLayer() == F_Cu) )
+        if( m_Guide->IgnoreFootprintsOnFront() && ( footprint->GetLayer() == F_Cu) )
             goto exit;
     }
 
@@ -459,10 +454,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
-        // text in module *is* sensitive to layer visibility but that was already handled.
+        // text in a footprint *is* sensitive to layer visibility but that was already handled.
 
-        if( via || module || pad || m_Guide->IsLayerVisible( layer )
-                || !m_Guide->IgnoreNonVisibleLayers() )
+        if( via || footprint || pad || m_Guide->IsLayerVisible( layer )
+            || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
             {
@@ -484,8 +479,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( item->Type() == PCB_MODULE_T )
                     {
-                        if( module->HitTest( m_refPos, accuracy )
-                                && module->HitTestAccurate( m_refPos, accuracy ) )
+                        if( footprint->HitTest( m_refPos, accuracy )
+                            && footprint->HitTestAccurate( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;
@@ -533,10 +528,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         // footprints and their subcomponents: reference, value and pads are not sensitive
         // to the layer visibility controls.  They all have their own separate visibility
         // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
-        // text in module *is* sensitive to layer visibility but that was already handled.
+        // text in a footprint *is* sensitive to layer visibility but that was already handled.
 
-        if( via || module || pad || zone || m_Guide->IsLayerVisible( layer )
-                || !m_Guide->IgnoreNonVisibleLayers() )
+        if( via || footprint || pad || zone || m_Guide->IsLayerVisible( layer )
+            || !m_Guide->IgnoreNonVisibleLayers() )
         {
             if( !m_Guide->IsLayerLocked( layer ) || !m_Guide->IgnoreLockedLayers() )
             {
@@ -558,8 +553,8 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     }
                     else if( item->Type() == PCB_MODULE_T )
                     {
-                        if( module->HitTest( m_refPos, accuracy )
-                                && module->HitTestAccurate( m_refPos, accuracy ) )
+                        if( footprint->HitTest( m_refPos, accuracy )
+                            && footprint->HitTestAccurate( m_refPos, accuracy ) )
                         {
                             Append( item );
                             goto exit;

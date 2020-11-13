@@ -622,7 +622,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
             // We must compute board coordinates from m_PolyList which are relative to the parent
             // position at orientation 0
-            MODULE *module = aShape->GetParentFootprint();
+            MODULE *parentFootprint = aShape->GetParentFootprint();
 
             std::vector<wxPoint> cornerList;
 
@@ -630,10 +630,10 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
             for( wxPoint corner : polyPoints )
             {
-                if( module )
+                if( parentFootprint )
                 {
-                    RotatePoint( &corner, module->GetOrientation() );
-                    corner += module->GetPosition();
+                    RotatePoint( &corner, parentFootprint->GetOrientation() );
+                    corner += parentFootprint->GetPosition();
                 }
 
                 cornerList.push_back( corner );
@@ -644,11 +644,11 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
                 for( size_t i = 1; i < cornerList.size(); i++ )
                 {
                     m_plotter->ThickSegment( cornerList[i - 1], cornerList[i], thickness,
-                            GetPlotMode(), &gbr_metadata );
+                                             GetPlotMode(), &gbr_metadata );
                 }
 
                 m_plotter->ThickSegment( cornerList.back(), cornerList.front(), thickness,
-                        GetPlotMode(), &gbr_metadata );
+                                         GetPlotMode(), &gbr_metadata );
 
             }
             else

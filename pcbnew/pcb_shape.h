@@ -219,9 +219,9 @@ public:
 
     /**
      * Function GetParentFootprint
-     * returns a pointer to the parent module, or NULL if PCB_SHAPE does not
-     * belong to a module.
-     * @return MODULE* - pointer to the parent module or NULL.
+     * returns a pointer to the parent footprint, or NULL if PCB_SHAPE does not
+     * belong to a footprint.
+     * @return MODULE* - pointer to the parent footprint or NULL.
      */
     MODULE* GetParentFootprint() const;
 

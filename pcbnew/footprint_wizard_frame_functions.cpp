@@ -103,14 +103,14 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
 
     // Creates the module
     wxString msg;
-    MODULE* module = footprintWizard->GetFootprint( &msg );
+    MODULE*  footprint = footprintWizard->GetFootprint( &msg );
     DisplayBuildMessage( msg );
 
-    if( module )
+    if( footprint )
     {
         //  Add the object to board
-        GetBoard()->Add( module, ADD_MODE::APPEND );
-        module->SetPosition( wxPoint( 0, 0 ) );
+        GetBoard()->Add( footprint, ADD_MODE::APPEND );
+        footprint->SetPosition( wxPoint( 0, 0 ) );
     }
 
     updateView();

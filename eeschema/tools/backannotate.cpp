@@ -197,7 +197,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         else
         {
             // Add module to the map
-            auto data = std::make_shared<PCB_MODULE_DATA>( ref, footprint, value, pinNetMap );
+            auto data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, pinNetMap );
             m_pcbModules.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
@@ -206,7 +206,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
 void BACK_ANNOTATE::getChangeList()
 {
-    for( std::pair<const wxString, std::shared_ptr<PCB_MODULE_DATA>>& module : m_pcbModules )
+    for( std::pair<const wxString, std::shared_ptr<PCB_FP_DATA>>& module : m_pcbModules )
     {
         const wxString& pcbPath = module.first;
         auto&           pcbData = module.second;
@@ -273,7 +273,7 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
     size_t i = 0;
 
-    for( const std::pair<SCH_REFERENCE, std::shared_ptr<PCB_MODULE_DATA>>& item : m_changelist )
+    for( const std::pair<SCH_REFERENCE, std::shared_ptr<PCB_FP_DATA>>& item : m_changelist )
     {
         // Refs and changelist are both sorted by paths, so we just go over m_refs and
         // generate errors before we will find m_refs member to which item linked
@@ -305,61 +305,61 @@ void BACK_ANNOTATE::applyChangelist()
     for( CHANGELIST_ITEM& item : m_changelist )
     {
         SCH_REFERENCE&   ref = item.first;
-        PCB_MODULE_DATA& module = *item.second;
+        PCB_FP_DATA& fpData = *item.second;
         SCH_COMPONENT*   comp = ref.GetComp();
         SCH_SCREEN*      screen = ref.GetSheetPath().LastScreen();
         wxString         oldFootprint = ref.GetFootprint();
         wxString         oldValue = ref.GetValue();
         bool             skip = ( ref.GetComp()->GetFlags() & SKIP_STRUCT ) > 0;
 
-        if( m_processReferences && ref.GetRef() != module.m_ref && !skip )
+        if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
             ++m_changesCount;
             msg.Printf( _( "Change \"%s\" reference designator to \"%s\"." ),
                         ref.GetFullRef(),
-                        module.m_ref );
+                        fpData.m_ref );
 
             if( !m_dryRun )
             {
                 m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->SetRef( &ref.GetSheetPath(), module.m_ref );
+                comp->SetRef( &ref.GetSheetPath(), fpData.m_ref );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
-        if( m_processFootprints && oldFootprint != module.m_footprint && !skip )
+        if( m_processFootprints && oldFootprint != fpData.m_footprint && !skip )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s footprint from \"%s\" to \"%s\"." ),
                         ref.GetFullRef(),
                         oldFootprint,
-                        module.m_footprint );
+                        fpData.m_footprint );
 
             if( !m_dryRun )
             {
                 m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->SetFootprint( &ref.GetSheetPath(), module.m_footprint );
+                comp->SetFootprint( &ref.GetSheetPath(), fpData.m_footprint );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
         }
 
-        if( m_processValues && oldValue != module.m_value && !skip )
+        if( m_processValues && oldValue != fpData.m_value && !skip )
         {
             ++m_changesCount;
             msg.Printf( _( "Change %s value from \"%s\" to \"%s\"." ),
                         ref.GetFullRef(),
                         oldValue,
-                        module.m_value );
+                        fpData.m_value );
 
             if( !m_dryRun )
             {
                 m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->SetValue( &ref.GetSheetPath(), module.m_value );
+                comp->SetValue( &ref.GetSheetPath(), fpData.m_value );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -367,7 +367,7 @@ void BACK_ANNOTATE::applyChangelist()
 
         if( m_processNetNames )
         {
-            for( const std::pair<const wxString, wxString>& entry : module.m_pinMap )
+            for( const std::pair<const wxString, wxString>& entry : fpData.m_pinMap )
             {
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;

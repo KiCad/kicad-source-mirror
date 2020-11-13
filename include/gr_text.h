@@ -89,7 +89,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool italic, b
 
 /**
  * Function GRText
- * Draw a graphic text (like module texts)
+ * Draw a graphic text (like footprint text)
  *  @param aClipBox = the clipping rect, or NULL if no clipping
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)

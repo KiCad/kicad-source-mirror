@@ -26,8 +26,8 @@
 #include <pad.h>
 
 
-ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER(
-        const MODULE* aMod, const ARRAY_OPTIONS& aArrayOpts )
+ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER( const MODULE* aFootprint,
+                                                  const ARRAY_OPTIONS& aArrayOpts )
         : m_arrayOpts( aArrayOpts )
 {
     // start by numbering the first new item
@@ -41,14 +41,12 @@ ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER(
     }
     else
     {
-        // no module, no reserved names either
-        if( aMod )
+        // no footprint, no reserved names either
+        if( aFootprint )
         {
             // reserve the name of each existing pad
-            for( auto pad : aMod->Pads() )
-            {
+            for( PAD* pad : aFootprint->Pads() )
                 m_existing_pad_names.insert( pad->GetName() );
-            }
         }
     }
 }

@@ -457,7 +457,7 @@ public:
 
     /**
      * Return the zone connection in effect (either locally overridden or overridden in the
-     * parent module).
+     * parent footprint).
      * Optionally reports on the source of the property (pad, parent footprint or zone).
      */
     ZONE_CONNECTION GetEffectiveZoneConnection( wxString* aSource = nullptr ) const;
@@ -706,7 +706,7 @@ private:
                                     //   to have a single axis be non-0.
 
     wxPoint     m_pos0;             // Initial Pad position (i.e. pad position relative to the
-                                    //   module anchor, orientation 0)
+                                    //   footprint anchor, orientation 0)
 
     PAD_ATTR_T  m_attribute;        // PAD_ATTRIB_NORMAL, PAD_ATTRIB_SMD, PAD_ATTRIB_CONN,
                                     //   PAD_ATTRIB_NPTH

@@ -191,7 +191,7 @@ public:
 
     struct DIALOG_REANNOTATE
     {
-        bool     sort_on_module_location;
+        bool     sort_on_fp_location;
         bool     remove_front_prefix;
         bool     remove_back_prefix;
         bool     update_schematic;

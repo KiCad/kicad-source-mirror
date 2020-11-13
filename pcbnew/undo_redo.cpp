@@ -194,19 +194,19 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     commandToUndo->m_TransformPoint = aTransformPoint;
 
     // First, filter unnecessary stuff from the list (i.e. for multiple pads / labels modified),
-    // take the first occurence of the module (we save copies of footprints when one of its subitems
-    // is changed).
+    // take the first occurence of the footprint (we save copies of footprints when one of its
+    // subitems is changed).
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         ITEM_PICKER curr_picker = aItemsList.GetItemWrapper(ii);
         BOARD_ITEM* item        = dynamic_cast<BOARD_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
-        // For items belonging to footprints, we need to save state of the parent module
+        // For items belonging to footprints, we need to save state of the parent footprint
         if( item && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
         {
             item = item->GetParent();
 
-            // Check if the parent module has already been saved in another entry
+            // Check if the parent footprint has already been saved in another entry
             bool found = false;
 
             for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
@@ -221,7 +221,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
 
             if( !found )
             {
-                // Create a clean copy of the parent module
+                // Create a clean copy of the parent footprint
                 MODULE* orig = static_cast<MODULE*>( item );
                 MODULE* clone = new MODULE( *orig );
                 clone->SetParent( GetBoard() );

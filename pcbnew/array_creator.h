@@ -33,15 +33,16 @@
 #include <tools/pcbnew_selection.h>
 
 /*!
- * Class that performs array creation by producing a dialog to gather
- * parameters and then creating and laying out the items.
+ * Class that performs array creation by producing a dialog to gather parameters and then
+ * creating and laying out the items.
  */
 class ARRAY_CREATOR
 {
 public:
-    ARRAY_CREATOR( PCB_BASE_FRAME& aParent, bool editModules, const PCBNEW_SELECTION& aSelection ) :
+    ARRAY_CREATOR( PCB_BASE_FRAME& aParent, bool aIsFootprintEditor,
+                   const PCBNEW_SELECTION& aSelection ) :
             m_parent( aParent ),
-            m_editModules( editModules ),
+            m_isFootprintEditor( aIsFootprintEditor ),
             m_selection( aSelection )
     {}
 
@@ -54,7 +55,7 @@ public:
 
 private:
     PCB_BASE_FRAME&         m_parent;
-    bool                    m_editModules;
+    bool                    m_isFootprintEditor;
     const PCBNEW_SELECTION& m_selection;
 };
 

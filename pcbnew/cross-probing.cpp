@@ -68,8 +68,8 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char*       text;
     int         netcode = -1;
     bool        multiHighlight = false;
-    MODULE*     module = NULL;
-    PAD*        pad = NULL;
+    MODULE*     footprint = nullptr;
+    PAD*        pad = nullptr;
     BOARD*      pcb = GetBoard();
 
     CROSS_PROBING_SETTINGS& crossProbingSettings = GetPcbNewSettings()->m_CrossProbing;
@@ -151,15 +151,15 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         modName = FROM_UTF8( text );
 
-        module = pcb->FindModuleByReference( modName );
+        footprint = pcb->FindModuleByReference( modName );
 
-        if( module )
-            pad = module->FindPadByName( pinName );
+        if( footprint )
+            pad = footprint->FindPadByName( pinName );
 
         if( pad )
             netcode = pad->GetNetCode();
 
-        if( module == NULL )
+        if( footprint == NULL )
             msg.Printf( _( "%s not found" ), modName );
         else if( pad == NULL )
             msg.Printf( _( "%s pin %s not found" ), modName, pinName );
@@ -174,9 +174,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         modName = FROM_UTF8( text );
 
-        module = pcb->FindModuleByReference( modName );
+        footprint = pcb->FindModuleByReference( modName );
 
-        if( module )
+        if( footprint )
             msg.Printf( _( "%s found" ), modName );
         else
             msg.Printf( _( "%s not found" ), modName );
@@ -212,14 +212,14 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     BOX2I bbox = { { 0, 0 }, { 0, 0 } };
 
-    if( module )
+    if( footprint )
     {
-        bbox = module->GetBoundingBox( false ); // No invisible text in bbox calc
+        bbox = footprint->GetBoundingBox( false ); // No invisible text in bbox calc
 
         if( pad )
             m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) pad );
         else
-            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) module );
+            m_toolManager->RunAction( PCB_ACTIONS::highlightItem, true, (void*) footprint );
     }
     else if( netcode > 0 || multiHighlight )
     {
@@ -256,10 +256,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             for( TRACK* track : pcb->Tracks() )
                 merge_area( track );
 
-            for( MODULE* footprint : pcb->Footprints() )
+            for( MODULE* fp : pcb->Footprints() )
             {
-                for( PAD* pad : footprint->Pads() )
-                    merge_area( pad );
+                for( PAD* p : fp->Pads() )
+                    merge_area( p );
             }
         }
     }
@@ -402,7 +402,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
 std::string FormatProbeItem( BOARD_ITEM* aItem )
 {
-    MODULE*     module;
+    MODULE* footprint;
 
     if( !aItem )
         return "$CLEAR: \"HIGHLIGHTED\""; // message to clear highlight state
@@ -410,22 +410,22 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
-        module = (MODULE*) aItem;
-        return StrPrintf( "$PART: \"%s\"", TO_UTF8( module->GetReference() ) );
+        footprint = (MODULE*) aItem;
+        return StrPrintf( "$PART: \"%s\"", TO_UTF8( footprint->GetReference() ) );
 
     case PCB_PAD_T:
         {
-            module = (MODULE*) aItem->GetParent();
+            footprint = (MODULE*) aItem->GetParent();
             wxString pad = static_cast<PAD*>( aItem )->GetName();
 
             return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
-                              TO_UTF8( module->GetReference() ),
+                              TO_UTF8( footprint->GetReference() ),
                               TO_UTF8( pad ) );
         }
 
     case PCB_FP_TEXT_T:
         {
-            module = static_cast<MODULE*>( aItem->GetParent() );
+            footprint = static_cast<MODULE*>( aItem->GetParent() );
 
             FP_TEXT*    text = static_cast<FP_TEXT*>( aItem );
             const char* text_key;
@@ -440,7 +440,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
                 break;
 
             return StrPrintf( "$PART: \"%s\" %s \"%s\"",
-                              TO_UTF8( module->GetReference() ),
+                              TO_UTF8( footprint->GetReference() ),
                               text_key,
                               TO_UTF8( text->GetText() ) );
         }
@@ -454,7 +454,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 
 
 /* Send a remote command to Eeschema via a socket,
- * aSyncItem = item to be located on schematic (module, pin or text)
+ * aSyncItem = item to be located on schematic (footprint, pin or text)
  * Commands are
  * $PART: "reference"   put cursor on component anchor
  * $PART: "reference" $PAD: "pad number" put cursor on the component pin
@@ -510,12 +510,12 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         NETLIST          netlist;
         STRING_FORMATTER sf;
 
-        for( MODULE* module : this->GetBoard()->Footprints() )
+        for( MODULE* footprint : this->GetBoard()->Footprints() )
         {
-            COMPONENT* component = new COMPONENT( module->GetFPID(), module->GetReference(),
-                                                  module->GetValue(), module->GetPath() );
+            COMPONENT* component = new COMPONENT( footprint->GetFPID(), footprint->GetReference(),
+                                                  footprint->GetValue(), footprint->GetPath() );
 
-            for( PAD* pad : module->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 const wxString& netname = pad->GetShortNetname();
 
