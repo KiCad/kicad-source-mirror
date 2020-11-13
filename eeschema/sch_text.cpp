@@ -1245,7 +1245,10 @@ HTML_MESSAGE_BOX* SCH_TEXT::ShowSyntaxHelp( wxWindow* aParentWindow )
      ;
 
     HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
-    dlg->SetDialogSizeInDU( 280, 280 );
+    wxSize            sz( 320, 320 );
+
+    dlg->SetMinSize( dlg->ConvertDialogToPixels( sz ) );
+    dlg->SetDialogSizeInDU( sz.x, sz.y );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
