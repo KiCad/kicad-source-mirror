@@ -35,6 +35,7 @@
 #include <wx/app.h>
 #include <wx/event.h>
 #include <wx/grid.h>
+#include <wx/bmpbuttn.h>
 
 #include <algorithm>
 
@@ -178,6 +179,7 @@ int DIALOG_SHIM::VertPixelsFromDU( int y )
 // our hashtable is an implementation secret, don't need or want it in a header file
 #include <hashtables.h>
 #include <typeinfo>
+#include <wx/osx/bmpbuttn.h>
 
 static RECT_MAP class_map;
 
@@ -279,14 +281,32 @@ static void selectAllInTextCtrls( wxWindowList& children )
 {
     for( wxWindow* child : children )
     {
-        if( auto childTextCtrl = dynamic_cast<wxTextCtrl*>( child ) )
+        if( wxTextCtrl* childTextCtrl = dynamic_cast<wxTextCtrl*>( child ) )
         {
             // Respect an existing selection
             if( childTextCtrl->GetStringSelection().IsEmpty() )
                 childTextCtrl->SelectAll();
         }
+#ifdef __WXMAC__
+        // Temp hack for square (looking) buttons on OSX.  Will likely be made redundant
+        // by the image store....
+        else if( dynamic_cast<wxBitmapButton*>( child ) != nullptr )
+        {
+            wxSize minSize( 29, 27 );
+            wxRect rect = child->GetRect();
+
+            child->ConvertDialogToPixels( minSize );
+
+            rect.Inflate( std::max( 0, minSize.x - rect.GetWidth() ),
+                          std::max( 0, minSize.y - rect.GetHeight() ) );
+
+            child->SetSize( rect );
+        }
+#endif
         else
+        {
             selectAllInTextCtrls( child->GetChildren() );
+        }
     }
 }
 
