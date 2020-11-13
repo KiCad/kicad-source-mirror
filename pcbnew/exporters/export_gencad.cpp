@@ -184,14 +184,14 @@ static int GencadOffsetX, GencadOffsetY;
 static std::map<MODULE*, int> componentShapes;
 static std::map<int, wxString> shapeNames;
 
-static const wxString getShapeName( MODULE* aModule )
+static const wxString getShapeName( MODULE* aFootprint )
 {
     static const wxString invalid( "invalid" );
 
     if( individualShapes )
-        return aModule->GetReference();
+        return aFootprint->GetReference();
 
-    auto itShape = componentShapes.find( aModule );
+    auto itShape = componentShapes.find( aFootprint );
     wxCHECK( itShape != componentShapes.end(), invalid );
 
     auto itName = shapeNames.find( itShape->second );
@@ -664,17 +664,17 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
 
 /// Compute hashes for footprints without taking into account their position, rotation or layer
-static size_t hashModule( const MODULE* aModule )
+static size_t hashModule( const MODULE* aFootprint )
 {
     size_t ret = 0x11223344;
     constexpr int flags = HASH_FLAGS::HASH_POS | HASH_FLAGS::REL_COORD
                 | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
 
 
-    for( auto i : aModule->GraphicalItems() )
+    for( auto i : aFootprint->GraphicalItems() )
         ret += hash_eda( i, flags );
 
-    for( auto i : aModule->Pads() )
+    for( auto i : aFootprint->Pads() )
         ret += hash_eda( i, flags );
 
     return ret;

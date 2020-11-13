@@ -63,13 +63,13 @@ const int scale = (int)(0.01 * IU_PER_MM);
 const int PADDING = (int)(1 * IU_PER_MM);
 
 // Populates a list of rectangles, from a list of footprints
-void fillRectList( CSubRectArray& vecSubRects, std::vector <MODULE*>& aModuleList )
+void fillRectList( CSubRectArray& vecSubRects, std::vector <MODULE*>& aFootprintList )
 {
     vecSubRects.clear();
 
-    for( unsigned ii = 0; ii < aModuleList.size(); ii++ )
+    for( unsigned ii = 0; ii < aFootprintList.size(); ii++ )
     {
-        EDA_RECT fpBox = aModuleList[ii]->GetFootprintRect();
+        EDA_RECT fpBox = aFootprintList[ii]->GetFootprintRect();
         TSubRect fpRect( ( fpBox.GetWidth() + PADDING ) / scale,
                          ( fpBox.GetHeight() + PADDING ) / scale, ii );
         vecSubRects.push_back( fpRect );
@@ -148,16 +148,13 @@ void spreadRectangles( CRectPlacement& aPlacementArea,
 }
 
 
-void moveFootprintsInArea( CRectPlacement& aPlacementArea,
-                           std::vector <MODULE*>& aModuleList,
-                           EDA_RECT& aFreeArea,
-                           bool aFindAreaOnly )
+void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <MODULE*>& aFootprintList,
+                           EDA_RECT& aFreeArea, bool aFindAreaOnly )
 {
     CSubRectArray   vecSubRects;
 
-    fillRectList( vecSubRects, aModuleList );
-    spreadRectangles( aPlacementArea, vecSubRects,
-                      aFreeArea.GetWidth(), aFreeArea.GetHeight() );
+    fillRectList( vecSubRects, aFootprintList );
+    spreadRectangles( aPlacementArea, vecSubRects, aFreeArea.GetWidth(), aFreeArea.GetHeight() );
 
     if( aFindAreaOnly )
         return;
@@ -168,7 +165,7 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea,
         pos.x *= scale;
         pos.y *= scale;
 
-        MODULE * module = aModuleList[vecSubRects[it].n];
+        MODULE * module = aFootprintList[vecSubRects[it].n];
 
         EDA_RECT fpBBox = module->GetFootprintRect();
         wxPoint mod_pos = pos + ( module->GetPosition() - fpBBox.GetOrigin() )
@@ -189,8 +186,7 @@ static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare );
  * @param aSpreadAreaPosition the position of the upper left corner of the
  *        area allowed to spread footprints
  */
-void SpreadFootprints( std::vector<MODULE*>* aFootprints,
-                       wxPoint aSpreadAreaPosition )
+void SpreadFootprints( std::vector<MODULE*>* aFootprints,  wxPoint aSpreadAreaPosition )
 {
     // Build candidate list
     // calculate also the area needed by these footprints
@@ -271,8 +267,7 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,
                 }
 
                 bool findAreaOnly = pass == 0;
-                moveFootprintsInArea( placementArea, footprintListBySheet,
-                                      freeArea, findAreaOnly );
+                moveFootprintsInArea( placementArea, footprintListBySheet, freeArea, findAreaOnly );
 
                 if( pass == 0 )
                 {

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_pad.h
- */
-
 #ifndef PCB_PAD_H_
 #define PCB_PAD_H_
 
@@ -40,24 +36,27 @@ namespace PCAD2KICAD {
 class PCB_PAD : public PCB_COMPONENT
 {
 public:
-    int m_number;
-    int m_hole;
-    bool m_isHolePlated;
+    int                  m_number;
+    int                  m_hole;
+    bool                 m_isHolePlated;
     PCB_PAD_SHAPES_ARRAY m_shapes;
 
     PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD();
 
-    virtual void    Parse( XNODE*          aNode,
-                           const wxString& aDefaultMeasurementUnit,
-                           const wxString& aActualConversion );
-    virtual void    Flip() override;
-    void            AddToModule( MODULE* aModule ) override
+    virtual void Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion );
+
+    virtual void Flip() override;
+
+    void AddToFootprint( MODULE* aFootprint ) override
     {
-        AddToModule( aModule, 0, true );
+        AddToFootprint( aFootprint, 0, true );
     }
-    void            AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad );
-    void            AddToBoard() override;
+
+    void AddToFootprint( MODULE* aFootprint, int aRotation, bool aEncapsulatedPad );
+
+    void AddToBoard() override;
 
 private:
     wxString m_defaultPinDes;

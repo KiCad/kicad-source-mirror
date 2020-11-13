@@ -3765,10 +3765,10 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * allocates an IMAGE on the heap and creates all the PINs according
      * to the D_PADs in the MODULE.
      * @param aBoard The owner of the MODULE.
-     * @param aModule The MODULE from which to build the IMAGE.
+     * @param aFootprint The MODULE from which to build the IMAGE.
      * @return IMAGE* - not tested for duplication yet.
      */
-    IMAGE* makeIMAGE( BOARD* aBoard, MODULE* aModule );
+    IMAGE* makeIMAGE( BOARD* aBoard, MODULE* aFootprint );
 
     /**
      * Function makePADSTACK

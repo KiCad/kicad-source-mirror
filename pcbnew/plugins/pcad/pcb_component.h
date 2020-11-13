@@ -64,7 +64,7 @@ public:
 
     virtual void    SetPosOffset( int aX_offs, int aY_offs );
     virtual void    Flip();
-    virtual void    AddToModule( MODULE* aModule );
+    virtual void    AddToFootprint( MODULE* aModule );
     virtual void    AddToBoard() = 0;
 
     PCB_LAYER_ID        GetKiCadLayer() { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }

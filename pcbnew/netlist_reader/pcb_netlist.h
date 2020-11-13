@@ -172,7 +172,7 @@ public:
         return ( aRelease ) ? m_footprint.release() : m_footprint.get();
     }
 
-    void SetModule( MODULE* aModule );
+    void SetModule( MODULE* aFootprint );
 
     bool IsLibSource( const wxString& aLibrary, const wxString& aName ) const
     {

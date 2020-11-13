@@ -574,7 +574,7 @@ void PCB_MODULE::AddToBoard()
         if( m_moduleObjects[i]->m_objType == wxT( 'T' ) )
         {
             ( (PCB_TEXT*) m_moduleObjects[i] )->m_tag = i + 2;
-            m_moduleObjects[i]->AddToModule( module );
+            m_moduleObjects[ i ]->AddToFootprint( module );
         }
     }
 
@@ -582,35 +582,35 @@ void PCB_MODULE::AddToBoard()
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'L' ) )
-            m_moduleObjects[i]->AddToModule( module );
+            m_moduleObjects[ i ]->AddToFootprint( module );
     }
 
     // MODULE Arcs
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'A' ) )
-            m_moduleObjects[i]->AddToModule( module );
+            m_moduleObjects[ i ]->AddToFootprint( module );
     }
 
     // MODULE POLYGONS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'Z' ) )
-            m_moduleObjects[i]->AddToModule( module );
+            m_moduleObjects[ i ]->AddToFootprint( module );
     }
 
     // PADS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'P' ) )
-            ( (PCB_PAD*) m_moduleObjects[i] )->AddToModule( module, m_rotation, false );
+            ((PCB_PAD*) m_moduleObjects[ i ] )->AddToFootprint( module, m_rotation, false );
     }
 
     // VIAS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'V' ) )
-            ( (PCB_VIA*) m_moduleObjects[i] )->AddToModule( module, m_rotation, false );
+            ((PCB_VIA*) m_moduleObjects[ i ] )->AddToFootprint( module, m_rotation, false );
     }
 
     module->CalculateBoundingBox();

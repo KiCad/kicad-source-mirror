@@ -70,7 +70,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     // NOTE: IMPLEMENTATION
     // If/when component cutouts are allowed, we must implement them separately. Cutouts
     // must be added to the board outline section and not to the Other Outline section.
-    // The module cutouts should be handled via the idf_export_module() routine.
+    // The module cutouts should be handled via the idf_export_footprint() routine.
 
     double offX, offY;
     aIDFBoard.GetUserOffset( offX, offY );
@@ -268,20 +268,20 @@ UseBoundingBox:
 
 
 /**
- * Function idf_export_module
+ * Function idf_export_footprint
  * retrieves information from all board footprints, adds drill holes to
  * the DRILLED_HOLES or BOARD_OUTLINE section as appropriate,
  * compiles data for the PLACEMENT section and compiles data for
  * the library ELECTRICAL section.
  */
-static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoard )
+static void idf_export_footprint( BOARD* aPcb, MODULE* aFootprint, IDF3_BOARD& aIDFBoard )
 {
     // Reference Designator
-    std::string crefdes = TO_UTF8( aModule->Reference().GetShownText() );
+    std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText() );
 
     if( crefdes.empty() || !crefdes.compare( "~" ) )
     {
-        std::string cvalue = TO_UTF8( aModule->Value().GetShownText() );
+        std::string cvalue = TO_UTF8( aFootprint->Value().GetShownText() );
 
         // if both the RefDes and Value are empty or set to '~' the board owns the part,
         // otherwise associated parts of the module must be marked NOREFDES.
@@ -292,7 +292,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
     }
 
     // TODO: If module cutouts are supported we must add code here
-    // for( EDA_ITEM* item = aModule->GraphicalItems();  item != NULL;  item = item->Next() )
+    // for( EDA_ITEM* item = aFootprint->GraphicalItems();  item != NULL;  item = item->Next() )
     // {
     //     if( item->Type() != PCB_FP_SHAPE_T || item->GetLayer() != Edge_Cuts )
     //         continue;
@@ -310,7 +310,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
 
     aIDFBoard.GetUserOffset( dx, dy );
 
-    for( auto pad : aModule->Pads() )
+    for( auto pad : aFootprint->Pads() )
     {
         drill = (double) pad->GetDrillSize().x * scale;
         x     = pad->GetPosition().x * scale + dx;
@@ -402,8 +402,8 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
 
     IDF3_COMPONENT* comp = NULL;
 
-    auto sM = aModule->Models().begin();
-    auto eM = aModule->Models().end();
+    auto sM = aFootprint->Models().begin();
+    auto eM = aFootprint->Models().end();
     wxFileName idfFile;
     wxString   idfExt;
 
@@ -420,7 +420,7 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
 
         if( refdes.empty() )
         {
-            refdes = TO_UTF8( aModule->Reference().GetShownText() );
+            refdes = TO_UTF8( aFootprint->Reference().GetShownText() );
 
             // NOREFDES cannot be used or else the software gets confused
             // when writing out the placement data due to conflicting
@@ -437,25 +437,25 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
         if( !outline )
             throw( std::runtime_error( aIDFBoard.GetError() ) );
 
-        double rotz = aModule->GetOrientation() / 10.0;
+        double rotz = aFootprint->GetOrientation() / 10.0;
         double locx = sM->m_Offset.x * 25.4;  // part offsets are in inches
         double locy = sM->m_Offset.y * 25.4;
         double locz = sM->m_Offset.z * 25.4;
         double lrot = sM->m_Rotation.z;
 
-        bool top = ( aModule->GetLayer() == B_Cu ) ? false : true;
+        bool top = ( aFootprint->GetLayer() == B_Cu ) ? false : true;
 
         if( top )
         {
             locy = -locy;
-            RotatePoint( &locx, &locy, aModule->GetOrientation() );
+            RotatePoint( &locx, &locy, aFootprint->GetOrientation() );
             locy = -locy;
         }
 
         if( !top )
         {
             lrot = -lrot;
-            RotatePoint( &locx, &locy, aModule->GetOrientation() );
+            RotatePoint( &locx, &locy, aFootprint->GetOrientation() );
             locy = -locy;
 
             rotz = 180.0 - rotz;
@@ -480,12 +480,12 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
             comp->SetRefDes( refdes );
 
             if( top )
-                comp->SetPosition( aModule->GetPosition().x * scale + dx,
-                                   -aModule->GetPosition().y * scale + dy,
+                comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                   -aFootprint->GetPosition().y * scale + dy,
                                    rotz, IDF3::LYR_TOP );
             else
-                comp->SetPosition( aModule->GetPosition().x * scale + dx,
-                                   -aModule->GetPosition().y * scale + dy,
+                comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                   -aFootprint->GetPosition().y * scale + dy,
                                    rotz, IDF3::LYR_BOTTOM );
 
             comp->SetPlacement( IDF3::PS_ECAD );
@@ -501,12 +501,12 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
             {
                 // place the item
                 if( top )
-                    comp->SetPosition( aModule->GetPosition().x * scale + dx,
-                                       -aModule->GetPosition().y * scale + dy,
+                    comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                       -aFootprint->GetPosition().y * scale + dy,
                                        rotz, IDF3::LYR_TOP );
                 else
-                    comp->SetPosition( aModule->GetPosition().x * scale + dx,
-                                       -aModule->GetPosition().y * scale + dy,
+                    comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
+                                       -aFootprint->GetPosition().y * scale + dy,
                                        rotz, IDF3::LYR_BOTTOM );
 
                 comp->SetPlacement( IDF3::PS_ECAD );
@@ -515,8 +515,8 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
             else
             {
                 // check that the retrieved component matches this one
-                refX = refX - ( aModule->GetPosition().x * scale + dx );
-                refY = refY - ( -aModule->GetPosition().y * scale + dy );
+                refX = refX - ( aFootprint->GetPosition().x * scale + dx );
+                refY = refY - ( -aFootprint->GetPosition().y * scale + dy );
                 refA = refA - rotz;
                 refA *= refA;
                 refX *= refX;
@@ -533,9 +533,9 @@ static void idf_export_module( BOARD* aPcb, MODULE* aModule, IDF3_BOARD& aIDFBoa
                     std::ostringstream ostr;
                     ostr << "* " << __FILE__ << ":" << __LINE__ << ":" << __FUNCTION__ << "():\n";
                     ostr << "* conflicting Reference Designator '" << refdes << "'\n";
-                    ostr << "* X loc: " << (aModule->GetPosition().x * scale + dx);
+                    ostr << "* X loc: " << ( aFootprint->GetPosition().x * scale + dx);
                     ostr << " vs. " << refX << "\n";
-                    ostr << "* Y loc: " << (-aModule->GetPosition().y * scale + dy);
+                    ostr << "* Y loc: " << ( -aFootprint->GetPosition().y * scale + dy);
                     ostr << " vs. " << refY << "\n";
                     ostr << "* angle: " << rotz;
                     ostr << " vs. " << refA << "\n";
@@ -618,7 +618,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
 
         // Output the drill holes and module (library) data.
         for( MODULE* footprint : aPcb->Footprints() )
-            idf_export_module( aPcb, footprint, idfBoard );
+            idf_export_footprint( aPcb, footprint, idfBoard );
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )
         {

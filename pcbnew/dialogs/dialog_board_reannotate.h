@@ -156,13 +156,13 @@ private:
     void FilterBackPrefix( wxCommandEvent& event ) override;
 
     void ShowReport( wxString aMessage, SEVERITY aSeverity );
-    void LogModules( wxString& aMessage, std::vector<RefDesInfo>& aModules );
+    void LogFootprints( wxString& aMessage, std::vector<RefDesInfo>& aFootprints );
     void LogChangePlan( void );
 
     bool ReannotateBoard( void );
     bool BuildModuleList( std::vector<RefDesInfo>& aBadRefDes );
-    void BuildChangeArray( std::vector<RefDesInfo>& aModules, unsigned int aStartRefDes,
-            wxString aPrefix, bool aRemovePrefix, std::vector<RefDesInfo>& aBadRefDes );
+    void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
+                           wxString aPrefix, bool aRemovePrefix, std::vector<RefDesInfo>& aBadRefDes );
 
     RefDesChange* GetNewRefDes( MODULE* aMod );
 

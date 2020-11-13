@@ -116,11 +116,11 @@ protected:
 };
 
 
-class GRAPHICS_IMPORTER_MODULE : public GRAPHICS_IMPORTER_PCBNEW
+class GRAPHICS_IMPORTER_FOOTPRINT : public GRAPHICS_IMPORTER_PCBNEW
 {
 public:
-    GRAPHICS_IMPORTER_MODULE( MODULE* aModule )
-        : m_module( aModule )
+    GRAPHICS_IMPORTER_FOOTPRINT( MODULE* aFootprint )
+        : m_footprint( aFootprint )
     {
     }
 
@@ -128,7 +128,7 @@ protected:
     std::unique_ptr<PCB_SHAPE> createDrawing() override;
     std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() override;
 
-    MODULE* m_module;
+    MODULE* m_footprint;
 };
 
 #endif /* GRAPHICS_IMPORTER_PCBNEW */

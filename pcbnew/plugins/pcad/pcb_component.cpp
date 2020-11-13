@@ -61,7 +61,7 @@ PCB_COMPONENT::~PCB_COMPONENT()
 }
 
 
-void PCB_COMPONENT::AddToModule( MODULE* aModule )
+void PCB_COMPONENT::AddToFootprint( MODULE* aModule )
 {
 }
 

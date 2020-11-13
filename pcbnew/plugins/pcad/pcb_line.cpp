@@ -115,7 +115,7 @@ void PCB_LINE::Flip()
 }
 
 
-void PCB_LINE::AddToModule( MODULE* aModule )
+void PCB_LINE::AddToFootprint( MODULE* aModule )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {

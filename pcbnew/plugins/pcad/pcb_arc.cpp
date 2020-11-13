@@ -156,7 +156,7 @@ void PCB_ARC::Flip()
 }
 
 
-void PCB_ARC::AddToModule( MODULE* aModule )
+void PCB_ARC::AddToFootprint( MODULE* aModule )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {

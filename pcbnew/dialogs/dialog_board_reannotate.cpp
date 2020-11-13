@@ -556,24 +556,25 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
 //
 /// Create a list of the footprints and their coordinates
-void DIALOG_BOARD_REANNOTATE::LogModules( wxString& aMessage, std::vector<RefDesInfo>& aModules )
+void DIALOG_BOARD_REANNOTATE::LogFootprints( wxString& aMessage,
+                                             std::vector<RefDesInfo>& aFootprints )
 {
     wxString message = aMessage;
 
-    if( aModules.empty() )
+    if( aFootprints.empty() )
         message += _( "\nNo footprints" );
     else
     {
         int i = 1;
-        bool moduleLocations = m_locationChoice->GetSelection() == 0;
+        bool fpLocations = m_locationChoice->GetSelection() == 0;
 
         message += wxString::Format( _( "\n*********** Sort on %s ***********" ),
-                                     moduleLocations ? _( "Footprint Coordinates" )
-                                                     : _( "Reference Designator Coordinates" ) );
+                                     fpLocations ? _( "Footprint Coordinates" )
+                                                 : _( "Reference Designator Coordinates" ) );
 
         message += wxString::Format( _( "\nSort Code %d" ), m_SortCode );
 
-        for( const RefDesInfo& mod : aModules )
+        for( const RefDesInfo& mod : aFootprints )
         {
             message += wxString::Format( _( "\n%d %s Uuid: [%s], X, Y: %s, Rounded X, Y, %s" ),
                                          i++,
@@ -858,7 +859,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
 //
 /// Scan through the module arrays and create the from -> to array
-void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModules,
+void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootprints,
                                                 unsigned int aStartRefDes, wxString aPrefix,
                                                 bool aRemovePrefix,
                                                 std::vector<RefDesInfo>& aBadRefDes )
@@ -876,50 +877,52 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aModule
 
     bool prefixpresent; //Prefix found
 
-    wxString logstring = ( aModules.front().Front ) ? _( "\n\nFront Footprints" )
-                                                    : _( "\n\nBack Footprints" );
-    LogModules( logstring, aModules );
+    wxString logstring = ( aFootprints.front().Front ) ? _( "\n\nFront Footprints" )
+                                                       : _( "\n\nBack Footprints" );
+    LogFootprints( logstring, aFootprints );
 
     if( 0 != aStartRefDes ) //Initialize the change array if present
+    {
     	for( i = 0; i < m_RefDesTypes.size(); i++ )
             m_RefDesTypes[i].RefDesCount = aStartRefDes;
+    }
 
-    for( RefDesInfo Mod : aModules )
+    for( RefDesInfo footprint : aFootprints )
     { //For each module
-        change.Uuid            = Mod.Uuid;
-        change.Action          = Mod.Action;
-        change.OldRefDesString = Mod.RefDesString;
-        change.NewRefDes       = Mod.RefDesString;
-        change.Front           = Mod.Front;
+        change.Uuid            = footprint.Uuid;
+        change.Action          = footprint.Action;
+        change.OldRefDesString = footprint.RefDesString;
+        change.NewRefDes       = footprint.RefDesString;
+        change.Front           = footprint.Front;
 
-        if( Mod.RefDesString.IsEmpty() )
-            Mod.Action = EmptyRefDes;
+        if( footprint.RefDesString.IsEmpty() )
+            footprint.Action = EmptyRefDes;
 
         if( ( change.Action == EmptyRefDes ) || ( change.Action == InvalidRefDes ) )
         {
             m_ChangeArray.push_back( change );
-            aBadRefDes.push_back( Mod );
+            aBadRefDes.push_back( footprint );
             continue;
         }
 
         if( change.Action == UpdateRefDes )
         {
-            refdestype    = Mod.RefDesType;
-            prefixpresent = ( 0 == Mod.RefDesType.find( aPrefix ) );
+            refdestype    = footprint.RefDesType;
+            prefixpresent = ( 0 == footprint.RefDesType.find( aPrefix ) );
 
             if( addprefix && !prefixpresent )
-                Mod.RefDesType.insert( 0, aPrefix ); //Add prefix once only
+                footprint.RefDesType.insert( 0, aPrefix ); //Add prefix once only
 
             if( aRemovePrefix && prefixpresent ) //If there is a prefix remove it
-                Mod.RefDesType.erase( 0, prefixsize );
+                footprint.RefDesType.erase( 0, prefixsize );
 
             for( i = 0; i < m_RefDesTypes.size(); i++ ) //See if it is in the types array
-                if( m_RefDesTypes[i].RefDesType == Mod.RefDesType ) //Found it!
+                if( m_RefDesTypes[i].RefDesType == footprint.RefDesType ) //Found it!
                     break;
 
             if( i == m_RefDesTypes.size() )
             { //Wasn't in the types array so add it
-                newtype.RefDesType  = Mod.RefDesType;
+                newtype.RefDesType  = footprint.RefDesType;
                 newtype.RefDesCount = ( aStartRefDes == 0 ? 1 : aStartRefDes );
                 m_RefDesTypes.push_back( newtype );
             }

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,12 +44,12 @@ public:
     PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_TEXT();
 
-    virtual void    Parse( XNODE*          aNode,
-                           int             aLayer,
-                           const wxString& aDefaultMeasurementUnit,
-                           const wxString& aActualConversion );
-    void            AddToModule( MODULE* aModule ) override;
-    void            AddToBoard() override;
+    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion );
+
+    void AddToFootprint( MODULE* aFootprint ) override;
+
+    void AddToBoard() override;
 
 // virtual void    SetPosOffset( int aX_offs, int aY_offs );
 };

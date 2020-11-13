@@ -37,18 +37,18 @@ int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 }
 
 
-void COMPONENT::SetModule( MODULE* aModule )
+void COMPONENT::SetModule( MODULE* aFootprint )
 {
-    m_footprint.reset( aModule );
+    m_footprint.reset( aFootprint );
 
-    if( aModule == NULL )
+    if( aFootprint == NULL )
         return;
 
-    aModule->SetReference( m_reference );
-    aModule->SetValue( m_value );
-    aModule->SetFPID( m_fpid );
-    aModule->SetPath( m_path );
-    aModule->SetProperties( m_properties );
+    aFootprint->SetReference( m_reference );
+    aFootprint->SetValue( m_value );
+    aFootprint->SetFPID( m_fpid );
+    aFootprint->SetPath( m_path );
+    aFootprint->SetProperties( m_properties );
 }
 
 

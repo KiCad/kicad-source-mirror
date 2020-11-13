@@ -448,7 +448,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
             module->SetFPID( fpid );
 
-            loadMODULE( module.get() );
+            loadFOOTPRINT( module.get());
             m_board->Add( module.release(), ADD_MODE::APPEND );
         }
 
@@ -1178,7 +1178,7 @@ void LEGACY_PLUGIN::loadSETUP()
 }
 
 
-void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
+void LEGACY_PLUGIN::loadFOOTPRINT( MODULE* aFootprint )
 {
     char*   line;
 
@@ -1190,12 +1190,12 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
 
         if( TESTSUBSTR( "D" ) && strchr( "SCAP", line[1] ) )  // read a drawing item, e.g. "DS"
         {
-            loadMODULE_EDGE( aModule );
+            loadFP_SHAPE( aFootprint );
         }
 
         else if( TESTLINE( "$PAD" ) )
         {
-            loadPAD( aModule );
+            loadPAD( aFootprint );
         }
 
         // Read a footprint text description (ref, value, or drawing)
@@ -1209,17 +1209,17 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             switch( tnum )
             {
             case FP_TEXT::TEXT_is_REFERENCE:
-                text = &aModule->Reference();
+                text = &aFootprint->Reference();
                 break;
 
             case FP_TEXT::TEXT_is_VALUE:
-                text = &aModule->Value();
+                text = &aFootprint->Value();
                 break;
 
             // All other fields greater than 1.
             default:
-                text = new FP_TEXT( aModule );
-                aModule->Add( text );
+                text = new FP_TEXT( aFootprint );
+                aFootprint->Add( text );
             }
 
             loadMODULE_TEXT( text );
@@ -1241,31 +1241,31 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             // data is now a two character long string
             // Note: some old files do not have this field
             if( data && data[0] == 'F' )
-                aModule->SetLocked( true );
+                aFootprint->SetLocked( true );
 
             if( data && data[1] == 'P' )
-                aModule->SetIsPlaced( true );
+                aFootprint->SetIsPlaced( true );
 
-            aModule->SetPosition( wxPoint( pos_x, pos_y ) );
-            aModule->SetLayer( layer_id );
-            aModule->SetOrientation( orient );
-            const_cast<KIID&>( aModule->m_Uuid ) = KIID( uuid );
-            aModule->SetLastEditTime( edittime );
+            aFootprint->SetPosition( wxPoint( pos_x, pos_y ) );
+            aFootprint->SetLayer( layer_id );
+            aFootprint->SetOrientation( orient );
+            const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
+            aFootprint->SetLastEditTime( edittime );
         }
 
-        /* footprint name set earlier, immediately after MODULE construction
+        /* footprint name set earlier, immediately after FOOTPRINT construction
         else if( TESTLINE( "Li" ) )         // Library name of footprint
         {
             // There can be whitespace in the footprint name on some old libraries.
             // Grab everything after "Li" up to end of line:
-            //aModule->SetFPID( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
+            //aFootprint->SetFPID( FROM_UTF8( StrPurge( line + SZ( "Li" ) ) ) );
         }
         */
 
         else if( TESTLINE( "Sc" ) )         // timestamp
         {
             char* uuid = strtok_r( (char*) line + SZ( "Sc" ), delims, (char**) &data );
-            const_cast<KIID&>( aModule->m_Uuid ) = KIID( uuid );
+            const_cast<KIID&>( aFootprint->m_Uuid ) = KIID( uuid );
         }
 
         else if( TESTLINE( "Op" ) )         // (Op)tions for auto placement
@@ -1277,7 +1277,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             if( cntRot180 > 10 )
                 cntRot180 = 10;
 
-            aModule->SetPlacementCost180( cntRot180 );
+            aFootprint->SetPlacementCost180( cntRot180 );
 
             int cntRot90  = itmp1 & 0x0F;
             if( cntRot90 > 10 )
@@ -1287,7 +1287,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             if( itmp1 > 10 )
                 itmp1 = 0;
 
-            aModule->SetPlacementCost90( (itmp1 << 4) | cntRot90 );
+            aFootprint->SetPlacementCost90((itmp1 << 4) | cntRot90 );
         }
 
         else if( TESTLINE( "At" ) )         // (At)tributes of module
@@ -1303,7 +1303,7 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             else
                 attrs |= MOD_THROUGH_HOLE | MOD_EXCLUDE_FROM_POS_FILES;
 
-            aModule->SetAttributes( attrs );
+            aFootprint->SetAttributes( attrs );
         }
 
         else if( TESTLINE( "AR" ) )         // Alternate Reference
@@ -1312,23 +1312,23 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
             data = strtok_r( line + SZ( "AR" ), delims, (char**) &data );
 
             if( data )
-                aModule->SetPath( KIID_PATH( FROM_UTF8( data ) ) );
+                aFootprint->SetPath( KIID_PATH( FROM_UTF8( data ) ) );
         }
 
         else if( TESTLINE( "$SHAPE3D" ) )
         {
-            load3D( aModule );
+            load3D( aFootprint );
         }
 
         else if( TESTLINE( "Cd" ) )
         {
             // e.g. "Cd Double rangee de contacts 2 x 4 pins\r\n"
-            aModule->SetDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
+            aFootprint->SetDescription( FROM_UTF8( StrPurge( line + SZ( "Cd" ) ) ) );
         }
 
         else if( TESTLINE( "Kw" ) )         // Key words
         {
-            aModule->SetKeywords( FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
+            aFootprint->SetKeywords( FROM_UTF8( StrPurge( line + SZ( "Kw" ) ) ) );
         }
 
         else if( TESTLINE( ".SolderPasteRatio" ) )
@@ -1342,63 +1342,63 @@ void LEGACY_PLUGIN::loadMODULE( MODULE* aModule )
                 tmp = -0.50;
             if( tmp > 0.0 )
                 tmp = 0.0;
-            aModule->SetLocalSolderPasteMarginRatio( tmp );
+            aFootprint->SetLocalSolderPasteMarginRatio( tmp );
         }
 
         else if( TESTLINE( ".SolderPaste" ) )
         {
             BIU tmp = biuParse( line + SZ( ".SolderPaste" ) );
-            aModule->SetLocalSolderPasteMargin( tmp );
+            aFootprint->SetLocalSolderPasteMargin( tmp );
         }
 
         else if( TESTLINE( ".SolderMask" ) )
         {
             BIU tmp = biuParse( line + SZ( ".SolderMask" ) );
-            aModule->SetLocalSolderMaskMargin( tmp );
+            aFootprint->SetLocalSolderMaskMargin( tmp );
         }
 
         else if( TESTLINE( ".LocalClearance" ) )
         {
             BIU tmp = biuParse( line + SZ( ".LocalClearance" ) );
-            aModule->SetLocalClearance( tmp );
+            aFootprint->SetLocalClearance( tmp );
         }
 
         else if( TESTLINE( ".ZoneConnection" ) )
         {
             int tmp = intParse( line + SZ( ".ZoneConnection" ) );
-            aModule->SetZoneConnection( (ZONE_CONNECTION) tmp );
+            aFootprint->SetZoneConnection((ZONE_CONNECTION) tmp );
         }
 
         else if( TESTLINE( ".ThermalWidth" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalWidth" ) );
-            aModule->SetThermalWidth( tmp );
+            aFootprint->SetThermalWidth( tmp );
         }
 
         else if( TESTLINE( ".ThermalGap" ) )
         {
             BIU tmp = biuParse( line + SZ( ".ThermalGap" ) );
-            aModule->SetThermalGap( tmp );
+            aFootprint->SetThermalGap( tmp );
         }
 
         else if( TESTLINE( "$EndMODULE" ) )
         {
-            aModule->CalculateBoundingBox();
+            aFootprint->CalculateBoundingBox();
 
             return;     // preferred exit
         }
     }
 
     wxString msg = wxString::Format(
-            _( "Missing '$EndMODULE' for MODULE \"%s\"" ), aModule->GetFPID().GetLibItemName().wx_str() );
+            _( "Missing '$EndMODULE' for MODULE \"%s\"" ), aFootprint->GetFPID().GetLibItemName().wx_str() );
 
     THROW_IO_ERROR( msg );
 }
 
 
-void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
+void LEGACY_PLUGIN::loadPAD( MODULE* aFootprint )
 {
-    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aModule );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
     char*                line;
     char*                saveptr;
 
@@ -1444,7 +1444,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
                                 padchar,
                                 padchar,
                                 m_reader->LineNumber(),
-                                aModule->GetFPID().GetLibItemName().wx_str()
+                                aFootprint->GetFPID().GetLibItemName().wx_str()
                     );
                 THROW_IO_ERROR( m_error );
             }
@@ -1618,11 +1618,11 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 
             wxPoint padpos = pad->GetPos0();
 
-            RotatePoint( &padpos, aModule->GetOrientation() );
+            RotatePoint( &padpos, aFootprint->GetOrientation() );
 
-            pad->SetPosition( padpos + aModule->GetPosition() );
+            pad->SetPosition( padpos + aFootprint->GetPosition() );
 
-            aModule->Add( pad.release() );
+            aFootprint->Add( pad.release() );
             return;     // preferred exit
         }
     }
@@ -1631,7 +1631,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aModule )
 }
 
 
-void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
+void LEGACY_PLUGIN::loadFP_SHAPE( MODULE* aFootprint )
 {
     PCB_SHAPE_TYPE_T shape;
     char*            line = m_reader->Line();     // obtain current (old) line
@@ -1647,12 +1647,12 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
                         (unsigned char) line[1],
                         (unsigned char) line[1],
                         m_reader->LineNumber(),
-                        aModule->GetFPID().GetLibItemName().wx_str()
+                        aFootprint->GetFPID().GetLibItemName().wx_str()
                         );
         THROW_IO_ERROR( m_error );
     }
 
-    std::unique_ptr<FP_SHAPE> dwg = std::make_unique<FP_SHAPE>( aModule, shape );    // a drawing
+    std::unique_ptr<FP_SHAPE> dwg = std::make_unique<FP_SHAPE>( aFootprint, shape );    // a drawing
 
     const char* data;
 
@@ -1757,7 +1757,7 @@ void LEGACY_PLUGIN::loadMODULE_EDGE( MODULE* aModule )
 
     FP_SHAPE* fpShape = dwg.release();
 
-    aModule->Add( fpShape );
+    aFootprint->Add( fpShape );
 
     // this had been done at the MODULE level before, presumably because the
     // FP_SHAPE needs to be already added to a module before this function will work.
@@ -1859,7 +1859,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
 }
 
 
-void LEGACY_PLUGIN::load3D( MODULE* aModule )
+void LEGACY_PLUGIN::load3D( MODULE* aFootprint )
 {
     FP_3DMODEL t3D;
 
@@ -1899,7 +1899,7 @@ void LEGACY_PLUGIN::load3D( MODULE* aModule )
 
         else if( TESTLINE( "$EndSHAPE3D" ) )
         {
-            aModule->Models().push_back( t3D );
+            aFootprint->Models().push_back( t3D );
             return;         // preferred exit
         }
     }
@@ -3254,7 +3254,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             // set the footprint name first thing, so exceptions can use name.
             module->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 
-            m_owner->loadMODULE( module.get() );
+            m_owner->loadFOOTPRINT( module.get());
 
             MODULE* m = module.release();   // exceptions after this are not expected.
 

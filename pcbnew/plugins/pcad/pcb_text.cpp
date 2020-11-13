@@ -31,8 +31,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_TEXT::PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks,
-                                                                                aBoard )
+PCB_TEXT::PCB_TEXT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType = wxT( 'T' );
 }
@@ -43,9 +43,7 @@ PCB_TEXT::~PCB_TEXT()
 }
 
 
-void PCB_TEXT::Parse( XNODE*          aNode,
-                      int             aLayer,
-                      const wxString& aDefaultMeasurementUnit,
+void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
                       const wxString& aActualConversion )
 {
     XNODE*      lNode;
@@ -59,8 +57,10 @@ void PCB_TEXT::Parse( XNODE*          aNode,
     lNode = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
-        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                     &m_positionX, &m_positionY, aActualConversion );
+    {
+        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_positionX, &m_positionY,
+                     aActualConversion );
+    }
 
     lNode = FindNode( aNode, wxT( "rotation" ) );
 
@@ -89,7 +89,7 @@ void PCB_TEXT::Parse( XNODE*          aNode,
 }
 
 
-void PCB_TEXT::AddToModule( MODULE* aModule )
+void PCB_TEXT::AddToFootprint( MODULE* aFootprint )
 {
 }
 
@@ -114,8 +114,7 @@ void PCB_TEXT::AddToBoard()
     pcbtxt->SetTextThickness( m_name.textstrokeWidth );
 
     SetTextJustify( pcbtxt, m_name.justify );
-    pcbtxt->SetTextPos( wxPoint( m_name.textPositionX,
-                                 m_name.textPositionY ) );
+    pcbtxt->SetTextPos( wxPoint( m_name.textPositionX, m_name.textPositionY ) );
 
     pcbtxt->SetMirrored( m_name.mirror );
 

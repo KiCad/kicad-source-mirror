@@ -187,14 +187,14 @@ std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_BOARD::creat
 }
 
 
-std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_MODULE::createDrawing()
+std::unique_ptr<PCB_SHAPE> GRAPHICS_IMPORTER_FOOTPRINT::createDrawing()
 {
-    return std::make_unique<FP_SHAPE>( m_module );
+    return std::make_unique<FP_SHAPE>( m_footprint );
 }
 
 
-std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_MODULE::createText()
+std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> GRAPHICS_IMPORTER_FOOTPRINT::createText()
 {
-    FP_TEXT* text = new FP_TEXT( m_module );
+    FP_TEXT* text = new FP_TEXT( m_footprint );
     return make_pair( std::unique_ptr<BOARD_ITEM>( text ), static_cast<EDA_TEXT*>( text ) );
 }

@@ -34,7 +34,8 @@
 
 namespace PCAD2KICAD {
 
-PCB_PAD::PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks, aBoard )
+PCB_PAD::PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType       = wxT( 'P' );
     m_number        = 0;
@@ -49,17 +50,15 @@ PCB_PAD::~PCB_PAD()
     int i;
 
     for( i = 0; i < (int) m_shapes.GetCount(); i++ )
-    {
         delete m_shapes[i];
-    }
 }
 
 
-void PCB_PAD::Parse( XNODE*          aNode,
-                     const wxString& aDefaultMeasurementUnit,
+void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
                      const wxString& aActualConversion )
 {
-    XNODE*          lNode, *cNode;
+    XNODE*          lNode;
+    XNODE*          cNode;
     long            num;
     wxString        propValue, str, emsg;
     PCB_PAD_SHAPE*  padShape;
@@ -85,8 +84,10 @@ void PCB_PAD::Parse( XNODE*          aNode,
     lNode = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
-        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                     &m_positionX, &m_positionY, aActualConversion );
+    {
+        SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_positionX, &m_positionY,
+                     aActualConversion );
+    }
 
     lNode = FindNode( aNode, wxT( "rotation" ) );
 
@@ -123,6 +124,7 @@ void PCB_PAD::Parse( XNODE*          aNode,
         lNode = lNode->GetParent();
 
     lNode   = FindNode( lNode, wxT( "library" ) );
+
     if ( !lNode )
         THROW_IO_ERROR( wxT( "Unable to find library section" ) );
 
@@ -184,7 +186,7 @@ void PCB_PAD::Flip()
 }
 
 
-void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad )
+void PCB_PAD::AddToFootprint( MODULE* aFootprint, int aRotation, bool aEncapsulatedPad )
 {
     PCB_PAD_SHAPE*  padShape;
     wxString        padShapeName = wxT( "Ellipse" );
@@ -193,7 +195,7 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
     int             width = 0;
     int             height = 0;
 
-    PAD* pad = new PAD( aModule );
+    PAD* pad = new PAD( aFootprint );
 
     if( !m_isHolePlated && m_hole )
     {
@@ -300,11 +302,11 @@ void PCB_PAD::AddToModule( MODULE* aModule, int aRotation, bool aEncapsulatedPad
         // whereas Pos0 is relative to the module's but is the unrotated coordinate.
         wxPoint padpos( m_positionX, m_positionY );
         pad->SetPos0( padpos );
-        RotatePoint( &padpos, aModule->GetOrientation() );
-        pad->SetPosition( padpos + aModule->GetPosition() );
+        RotatePoint( &padpos, aFootprint->GetOrientation() );
+        pad->SetPosition( padpos + aFootprint->GetPosition() );
     }
 
-    aModule->Add( pad );
+    aFootprint->Add( pad );
 }
 
 
@@ -363,7 +365,7 @@ void PCB_PAD::AddToBoard()
         m_name.text = m_defaultPinDes;
 
         module->SetPosition( wxPoint( m_positionX, m_positionY ) );
-        AddToModule( module, 0, true );
+        AddToFootprint( module, 0, true );
 
     }
 }

@@ -49,7 +49,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_parent = aParent;
 
     if( aImportAsFootprintGraphic )
-        m_importer = std::make_unique<GRAPHICS_IMPORTER_MODULE>( m_parent->GetBoard()->GetFirstFootprint() );
+        m_importer = std::make_unique<GRAPHICS_IMPORTER_FOOTPRINT>( m_parent->GetBoard()->GetFirstFootprint() );
     else
         m_importer = std::make_unique<GRAPHICS_IMPORTER_BOARD>( m_parent->GetBoard() );
 

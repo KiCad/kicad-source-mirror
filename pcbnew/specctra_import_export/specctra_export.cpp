@@ -593,24 +593,24 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 typedef std::map<wxString, int> PINMAP;
 
 
-IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
+IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aFootprint )
 {
     PINMAP      pinmap;
     wxString    padName;
 
-    PCB_TYPE_COLLECTOR  moduleItems;
+    PCB_TYPE_COLLECTOR  fpItems;
 
     // get all the MODULE's pads.
-    moduleItems.Collect( aModule, scanPADs );
+    fpItems.Collect( aFootprint, scanPADs );
 
     IMAGE*  image = new IMAGE(0);
 
-    image->image_id = aModule->GetFPID().Format().c_str();
+    image->image_id = aFootprint->GetFPID().Format().c_str();
 
     // from the pads, and make an IMAGE using collated padstacks.
-    for( int p=0; p < moduleItems.GetCount(); ++p )
+    for( int p=0; p < fpItems.GetCount(); ++p )
     {
-        PAD* pad = (PAD*) moduleItems[p];
+        PAD* pad = (PAD*) fpItems[p];
 
         // see if this pad is a through hole with no copper on its perimeter
         if( isRoundKeepout( pad ) )
@@ -686,7 +686,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
 
             pin->padstack_id = padstack->padstack_id;
 
-            double angle = pad->GetOrientationDegrees() - aModule->GetOrientationDegrees();
+            double angle = pad->GetOrientationDegrees() - aFootprint->GetOrientationDegrees();
             NORMALIZE_ANGLE_DEGREES_POS( angle );
             pin->SetRotation( angle );
 
@@ -700,11 +700,11 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aModule )
     static const KICAD_T scanEDGEs[] = { PCB_FP_SHAPE_T, EOT };
 
     // get all the MODULE's EDGE_MODULEs and convert those to DSN outlines.
-    moduleItems.Collect( aModule, scanEDGEs );
+    fpItems.Collect( aFootprint, scanEDGEs );
 
-    for( int i = 0; i<moduleItems.GetCount(); ++i )
+    for( int i = 0; i < fpItems.GetCount(); ++i )
     {
-        FP_SHAPE* graphic = (FP_SHAPE*) moduleItems[i];
+        FP_SHAPE* graphic = (FP_SHAPE*) fpItems[i];
         SHAPE*    outline;
         PATH*     path;
 

@@ -190,16 +190,16 @@ protected:
     void loadSETUP();
     void loadSHEET();
 
-    void load3D( MODULE* aModule );
-    void loadPAD( MODULE* aModule );
+    void load3D( MODULE* aFootprint );
+    void loadPAD( MODULE* aFootprint );
     void loadMODULE_TEXT( FP_TEXT* aText );
-    void loadMODULE_EDGE( MODULE* aModule );
+    void loadFP_SHAPE( MODULE* aFootprint );
 
     void loadPCB_LINE();
     void loadNETINFO_ITEM();
     void loadPCB_TEXT();
     void loadNETCLASS();
-    void loadMODULE( MODULE* aModule );
+    void loadFOOTPRINT( MODULE* aFootprint );
 
     /**
      * Function loadTrackList

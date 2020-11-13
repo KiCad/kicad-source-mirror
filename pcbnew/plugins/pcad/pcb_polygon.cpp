@@ -160,12 +160,12 @@ bool PCB_POLYGON::Parse( XNODE*          aNode,
 }
 
 
-void PCB_POLYGON::AddToModule( MODULE* aModule )
+void PCB_POLYGON::AddToFootprint( MODULE* aFootprint )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        FP_SHAPE* dwg = new FP_SHAPE( aModule, S_POLYGON );
-        aModule->Add( dwg );
+        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, S_POLYGON );
+        aFootprint->Add( dwg );
 
         dwg->SetWidth( 0 );
         dwg->SetLayer( m_KiCadLayer );

@@ -1047,7 +1047,7 @@ static void export_vrml_zones( MODEL_VRML& aModel, BOARD* aPcb, COMMIT* aCommit 
 }
 
 
-static void export_vrml_text_module( FP_TEXT* item )
+static void export_vrml_fp_text( FP_TEXT* item )
 {
     if( item->IsVisible() )
     {
@@ -1069,7 +1069,7 @@ static void export_vrml_text_module( FP_TEXT* item )
 }
 
 
-static void export_vrml_edge_module( MODEL_VRML& aModel, FP_SHAPE* aOutline, MODULE* aModule )
+static void export_vrml_fp_shape( MODEL_VRML& aModel, FP_SHAPE* aOutline, MODULE* aFootprint )
 {
     LAYER_NUM layer = aOutline->GetLayer();
     double  x   = aOutline->GetStart().x * BOARD_SCALE;
@@ -1093,8 +1093,8 @@ static void export_vrml_edge_module( MODEL_VRML& aModel, FP_SHAPE* aOutline, MOD
         break;
 
     case S_POLYGON:
-        export_vrml_polygon( aModel, layer, aOutline, aModule->GetOrientationRadians(),
-                aModule->GetPosition() );
+        export_vrml_polygon( aModel, layer, aOutline, aFootprint->GetOrientationRadians(),
+                             aFootprint->GetPosition() );
         break;
 
     case S_RECT:
@@ -1361,30 +1361,30 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 }
 
 
-static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
-                                MODULE* aModule, std::ostream* aOutputFile )
+static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aFootprint,
+                                   std::ostream* aOutputFile )
 {
     if( !aModel.m_plainPCB )
     {
         // Reference and value
-        if( aModule->Reference().IsVisible() )
-            export_vrml_text_module( &aModule->Reference() );
+        if( aFootprint->Reference().IsVisible() )
+            export_vrml_fp_text( &aFootprint->Reference());
 
-        if( aModule->Value().IsVisible() )
-            export_vrml_text_module( &aModule->Value() );
+        if( aFootprint->Value().IsVisible() )
+            export_vrml_fp_text( &aFootprint->Value());
 
         // Export module edges
 
-        for( BOARD_ITEM* item : aModule->GraphicalItems() )
+        for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
         {
             switch( item->Type() )
             {
             case PCB_FP_TEXT_T:
-                export_vrml_text_module( static_cast<FP_TEXT*>( item ) );
+                export_vrml_fp_text( static_cast<FP_TEXT*>( item ));
                 break;
 
             case PCB_FP_SHAPE_T:
-                export_vrml_edge_module( aModel, static_cast<FP_SHAPE*>( item ), aModule );
+                export_vrml_fp_shape( aModel, static_cast<FP_SHAPE*>( item ), aFootprint );
                 break;
 
             default:
@@ -1394,14 +1394,14 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
     }
 
     // Export pads
-    for( PAD* pad : aModule->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
         export_vrml_pad( aModel, aPcb, pad );
 
-    bool isFlipped = aModule->GetLayer() == B_Cu;
+    bool isFlipped = aFootprint->GetLayer() == B_Cu;
 
     // Export the object VRML model(s)
-    auto sM = aModule->Models().begin();
-    auto eM = aModule->Models().end();
+    auto sM = aFootprint->Models().begin();
+    auto eM = aFootprint->Models().end();
 
     wxFileName subdir( SUBDIR_3D, "" );
 
@@ -1439,9 +1439,9 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
         build_quat( 0, 0, 1, DEG2RAD( rotz ), q2 );
         compose_quat( q1, q2, q1 );
 
-        // Note here aModule->GetOrientation() is in 0.1 degrees,
+        // Note here aFootprint->GetOrientation() is in 0.1 degrees,
         // so module rotation has to be converted to radians
-        build_quat( 0, 0, 1, DECIDEG2RAD( aModule->GetOrientation() ), q2 );
+        build_quat( 0, 0, 1, DECIDEG2RAD( aFootprint->GetOrientation() ), q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );
 
@@ -1458,12 +1458,12 @@ static void export_vrml_module( MODEL_VRML& aModel, BOARD* aPcb,
         else // In normal mode, Y axis is reversed in Pcbnew.
             offsety = -offsety;
 
-        RotatePoint( &offsetx, &offsety, aModule->GetOrientation() );
+        RotatePoint( &offsetx, &offsety, aFootprint->GetOrientation() );
 
         SGPOINT trans;
-        trans.x = ( offsetx + aModule->GetPosition().x ) * BOARD_SCALE + aModel.m_tx;
-        trans.y = -(offsety + aModule->GetPosition().y) * BOARD_SCALE - aModel.m_ty;
-        trans.z = (offsetz * BOARD_SCALE ) + aModel.GetLayerZ( aModule->GetLayer() );
+        trans.x = ( offsetx + aFootprint->GetPosition().x ) * BOARD_SCALE + aModel.m_tx;
+        trans.y = -( offsety + aFootprint->GetPosition().y) * BOARD_SCALE - aModel.m_ty;
+        trans.z = (offsetz * BOARD_SCALE ) + aModel.GetLayerZ( aFootprint->GetLayer() );
 
         if( USE_INLINES )
         {
@@ -1656,7 +1656,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
 
             // Export footprints
             for( MODULE* footprint : pcb->Footprints() )
-                export_vrml_module( model3d, pcb, footprint, &output_file );
+                export_vrml_footprint( model3d, pcb, footprint, &output_file );
 
             // write out the board and all layers
             write_layers( model3d, pcb, TO_UTF8( aFullFileName ), &output_file );
@@ -1670,7 +1670,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         {
             // Export footprints
             for( MODULE* footprint : pcb->Footprints() )
-                export_vrml_module( model3d, pcb, footprint, NULL );
+                export_vrml_footprint( model3d, pcb, footprint, NULL );
 
             // write out the board and all layers
             write_layers( model3d, pcb, TO_UTF8( aFullFileName ), NULL );

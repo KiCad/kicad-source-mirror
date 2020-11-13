@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,22 +51,24 @@ public:
     PCB_POLYGON( PCB_CALLBACKS* aCallbacks, BOARD* aBoard, int aPCadLayer );
     ~PCB_POLYGON();
 
-    virtual bool Parse( XNODE*          aNode,
-                        const wxString& aDefaultMeasurementUnit,
+    virtual bool Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
                         const wxString& aActualConversion );
 
-    virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
-    virtual void    Flip() override;
-    void            AddToModule( MODULE* aModule ) override;
-    void            AddToBoard() override;
+    virtual void SetPosOffset( int aX_offs, int aY_offs ) override;
+
+    virtual void Flip() override;
+
+    void AddToFootprint( MODULE* aFootprint ) override;
+
+    void AddToBoard() override;
 
 // protected:
-    void            AssignNet( const wxString& aNetName );
-    void            SetOutline( VERTICES_ARRAY* aOutline );
+    void AssignNet( const wxString& aNetName );
 
-    void            FormPolygon( XNODE*   aNode, VERTICES_ARRAY* aPolygon,
-                                 const wxString& aDefaultMeasurementUnit,
-                                 const wxString& actualConversion );
+    void SetOutline( VERTICES_ARRAY* aOutline );
+
+    void FormPolygon( XNODE* aNode, VERTICES_ARRAY* aPolygon,
+                      const wxString& aDefaultMeasurementUnit, const wxString& actualConversion );
 protected:
     bool            m_filled;
 };
