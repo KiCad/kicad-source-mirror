@@ -220,7 +220,7 @@ endif()
 #=====================================================================
 # Determine whether unix or win32 paths should be used
 #=====================================================================
-if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_HOST_UNIX )
+if(WIN32 AND NOT CYGWIN AND NOT MSYS AND NOT CMAKE_HOST_UNIX AND NOT MINGW)
   set(wxWidgets_FIND_STYLE "win32")
 else()
   set(wxWidgets_FIND_STYLE "unix")
