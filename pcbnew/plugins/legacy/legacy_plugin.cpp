@@ -1963,7 +1963,6 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 case 1:
                     int mtype;
                     mtype = intParse( data );
-                    dseg->SetType( mtype );   // m_Type
                     break;
                 case 2:
                     double angle;

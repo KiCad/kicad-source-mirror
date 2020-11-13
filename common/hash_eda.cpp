@@ -140,7 +140,6 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
     {
         const FP_SHAPE* segment = static_cast<const FP_SHAPE*>( aItem );
         ret = hash_board_item( segment, aFlags );
-        hash_combine( ret, segment->GetType() );
         hash_combine( ret, segment->GetShape() );
         hash_combine( ret, segment->GetWidth() );
         hash_combine( ret, segment->GetRadius() );

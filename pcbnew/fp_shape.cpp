@@ -38,8 +38,8 @@
 FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, PCB_SHAPE_TYPE_T aShape ) :
         PCB_SHAPE( parent, PCB_FP_SHAPE_T )
 {
-    m_Shape = aShape;
-    m_Angle = 0;
+    m_shape = aShape;
+    m_angle = 0;
     m_Layer = F_SilkS;
 }
 
@@ -55,19 +55,19 @@ void FP_SHAPE::SetLocalCoord()
 
     if( fp == NULL )
     {
-        m_Start0 = m_Start;
-        m_End0 = m_End;
-        m_ThirdPoint0 = m_ThirdPoint;
-        m_Bezier0_C1 = m_BezierC1;
-        m_Bezier0_C2 = m_BezierC2;
+        m_Start0 = m_start;
+        m_End0 = m_end;
+        m_ThirdPoint0 = m_thirdPoint;
+        m_Bezier0_C1 = m_bezierC1;
+        m_Bezier0_C2 = m_bezierC2;
         return;
     }
 
-    m_Start0 = m_Start - fp->GetPosition();
-    m_End0 = m_End - fp->GetPosition();
-    m_ThirdPoint0 = m_ThirdPoint - fp->GetPosition();
-    m_Bezier0_C1 = m_BezierC1 - fp->GetPosition();
-    m_Bezier0_C2 = m_BezierC2 - fp->GetPosition();
+    m_Start0 = m_start - fp->GetPosition();
+    m_End0 = m_end - fp->GetPosition();
+    m_ThirdPoint0 = m_thirdPoint - fp->GetPosition();
+    m_Bezier0_C1 = m_bezierC1 - fp->GetPosition();
+    m_Bezier0_C2 = m_bezierC2 - fp->GetPosition();
     double angle = fp->GetOrientation();
     RotatePoint( &m_Start0.x, &m_Start0.y, -angle );
     RotatePoint( &m_End0.x, &m_End0.y, -angle );
@@ -81,28 +81,28 @@ void FP_SHAPE::SetDrawCoord()
 {
     FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
 
-    m_Start      = m_Start0;
-    m_End        = m_End0;
-    m_ThirdPoint = m_ThirdPoint0;
-    m_BezierC1   = m_Bezier0_C1;
-    m_BezierC2   = m_Bezier0_C2;
+    m_start      = m_Start0;
+    m_end        = m_End0;
+    m_thirdPoint = m_ThirdPoint0;
+    m_bezierC1   = m_Bezier0_C1;
+    m_bezierC2   = m_Bezier0_C2;
 
     if( fp )
     {
-        RotatePoint( &m_Start.x, &m_Start.y, fp->GetOrientation() );
-        RotatePoint( &m_End.x, &m_End.y, fp->GetOrientation() );
-        RotatePoint( &m_ThirdPoint.x, &m_ThirdPoint.y, fp->GetOrientation() );
-        RotatePoint( &m_BezierC1.x, &m_BezierC1.y, fp->GetOrientation() );
-        RotatePoint( &m_BezierC2.x, &m_BezierC2.y, fp->GetOrientation() );
+        RotatePoint( &m_start.x, &m_start.y, fp->GetOrientation() );
+        RotatePoint( &m_end.x, &m_end.y, fp->GetOrientation() );
+        RotatePoint( &m_thirdPoint.x, &m_thirdPoint.y, fp->GetOrientation() );
+        RotatePoint( &m_bezierC1.x, &m_bezierC1.y, fp->GetOrientation() );
+        RotatePoint( &m_bezierC2.x, &m_bezierC2.y, fp->GetOrientation() );
 
-        m_Start      += fp->GetPosition();
-        m_End        += fp->GetPosition();
-        m_ThirdPoint += fp->GetPosition();
-        m_BezierC1   += fp->GetPosition();
-        m_BezierC2   += fp->GetPosition();
+        m_start      += fp->GetPosition();
+        m_end        += fp->GetPosition();
+        m_thirdPoint += fp->GetPosition();
+        m_bezierC1   += fp->GetPosition();
+        m_bezierC2   += fp->GetPosition();
     }
 
-    RebuildBezierToSegmentsPointsList( m_Width );
+    RebuildBezierToSegmentsPointsList( m_width );
 }
 
 
@@ -130,7 +130,7 @@ void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 wxString FP_SHAPE::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "%s on %s" ),
-                             ShowShape( m_Shape  ),
+                             ShowShape( m_shape  ),
                              GetLayerName() );
 }
 
@@ -152,12 +152,12 @@ void FP_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
     // Mark as depreciated.
     // m_Angle does not define the arc anymore
     // m_Angle must be >= -360 and <= +360 degrees
-    m_Angle = NormalizeAngle360Max( aAngle );
+    m_angle = NormalizeAngle360Max( aAngle );
 
     if( aUpdateEnd )
     {
         m_ThirdPoint0 = m_End0;
-        RotatePoint( &m_ThirdPoint0, m_Start0, -m_Angle );
+        RotatePoint( &m_ThirdPoint0, m_Start0, -m_angle );
     }
 }
 
@@ -177,16 +177,16 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     case S_CURVE:
         // If Start0 and Start are equal (ie: ModEdit), then flip both sets around the
         // centre point.
-        if( m_Start == m_Start0 )
+        if( m_start == m_Start0 )
             pt = aCentre;
 
         if( aFlipLeftRight )
         {
-            MIRROR( m_Start.x, aCentre.x );
-            MIRROR( m_End.x, aCentre.x );
-            MIRROR( m_ThirdPoint.x, aCentre.x );
-            MIRROR( m_BezierC1.x, aCentre.x );
-            MIRROR( m_BezierC2.x, aCentre.x );
+            MIRROR( m_start.x, aCentre.x );
+            MIRROR( m_end.x, aCentre.x );
+            MIRROR( m_thirdPoint.x, aCentre.x );
+            MIRROR( m_bezierC1.x, aCentre.x );
+            MIRROR( m_bezierC2.x, aCentre.x );
             MIRROR( m_Start0.x, pt.x );
             MIRROR( m_End0.x, pt.x );
             MIRROR( m_ThirdPoint0.x, pt.x );
@@ -195,11 +195,11 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         }
         else
         {
-            MIRROR( m_Start.y, aCentre.y );
-            MIRROR( m_End.y, aCentre.y );
-            MIRROR( m_ThirdPoint.y, aCentre.y );
-            MIRROR( m_BezierC1.y, aCentre.y );
-            MIRROR( m_BezierC2.y, aCentre.y );
+            MIRROR( m_start.y, aCentre.y );
+            MIRROR( m_end.y, aCentre.y );
+            MIRROR( m_thirdPoint.y, aCentre.y );
+            MIRROR( m_bezierC1.y, aCentre.y );
+            MIRROR( m_bezierC2.y, aCentre.y );
             MIRROR( m_Start0.y, pt.y );
             MIRROR( m_End0.y, pt.y );
             MIRROR( m_ThirdPoint0.y, pt.y );
@@ -207,12 +207,12 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             MIRROR( m_Bezier0_C2.y, pt.y );
         }
 
-        RebuildBezierToSegmentsPointsList( m_Width );
+        RebuildBezierToSegmentsPointsList( m_width );
         break;
 
     case S_POLYGON:
         // polygon corners coordinates are relative to the footprint position, orientation 0
-        m_Poly.Mirror( aFlipLeftRight, !aFlipLeftRight );
+        m_poly.Mirror( aFlipLeftRight, !aFlipLeftRight );
         break;
     }
 
@@ -257,12 +257,12 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
             MIRROR( m_Bezier0_C2.x, aCentre.x );
         }
 
-        for( unsigned ii = 0; ii < m_BezierPoints.size(); ii++ )
+        for( unsigned ii = 0; ii < m_bezierPoints.size(); ii++ )
         {
             if( aMirrorAroundXAxis )
-                MIRROR( m_BezierPoints[ii].y, aCentre.y );
+                MIRROR( m_bezierPoints[ii].y, aCentre.y );
             else
-                MIRROR( m_BezierPoints[ii].x, aCentre.x );
+                MIRROR( m_bezierPoints[ii].x, aCentre.x );
         }
 
         break;
@@ -270,7 +270,7 @@ void FP_SHAPE::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        m_Poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis );
+        m_poly.Mirror( !aMirrorAroundXAxis, aMirrorAroundXAxis );
         break;
     }
 
@@ -307,7 +307,7 @@ void FP_SHAPE::Move( const wxPoint& aMoveVector )
     case S_POLYGON:
         // polygon corners coordinates are always relative to the
         // footprint position, orientation 0
-        m_Poly.Move( VECTOR2I( aMoveVector ) );
+        m_poly.Move( VECTOR2I( aMoveVector ) );
 
         break;
     }

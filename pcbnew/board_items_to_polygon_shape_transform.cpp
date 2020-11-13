@@ -399,11 +399,11 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                                                       int aError, ERROR_LOC aErrorLoc,
                                                       bool ignoreLineWidth ) const
 {
-    int width = ignoreLineWidth ? 0 : m_Width;
+    int width = ignoreLineWidth ? 0 : m_width;
 
     width += 2 * aClearanceValue;
 
-    switch( m_Shape )
+    switch( m_shape )
     {
     case S_CIRCLE:
         if( width == 0 )
@@ -447,7 +447,7 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         break;
 
     case S_SEGMENT:
-        TransformOvalToPolygon( aCornerBuffer, m_Start, m_End, width, aError, aErrorLoc );
+        TransformOvalToPolygon( aCornerBuffer, m_start, m_end, width, aError, aErrorLoc );
         break;
 
     case S_POLYGON:
@@ -500,10 +500,10 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
     case S_CURVE:       // Bezier curve
         {
-            std::vector<wxPoint> ctrlPoints = { m_Start, m_BezierC1, m_BezierC2, m_End };
+            std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
             BEZIER_POLY converter( ctrlPoints );
             std::vector< wxPoint> poly;
-            converter.GetPoly( poly, m_Width );
+            converter.GetPoly( poly, m_width );
 
             if( width != 0 )
             {
@@ -518,7 +518,7 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
 
     default:
         wxFAIL_MSG( "PCB_SHAPE::TransformShapeWithClearanceToPolygon no implementation for "
-                    + PCB_SHAPE_TYPE_T_asString( m_Shape ) );
+                    + PCB_SHAPE_TYPE_T_asString( m_shape ) );
         break;
     }
 }

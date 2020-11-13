@@ -43,19 +43,18 @@ class MSG_PANEL_ITEM;
 class PCB_SHAPE : public BOARD_ITEM
 {
 protected:
-    int                  m_Width;        // thickness of lines ...
-    wxPoint              m_Start;        // Line start point or Circle and Arc center
-    wxPoint              m_End;          // Line end point or circle and arc start point
-    wxPoint              m_ThirdPoint;   // Used only for Arcs: arc end point
+    int                  m_width;        // thickness of lines ...
+    wxPoint              m_start;        // Line start point or Circle and Arc center
+    wxPoint              m_end;          // Line end point or circle and arc start point
+    wxPoint              m_thirdPoint;   // Used only for Arcs: arc end point
 
-    PCB_SHAPE_TYPE_T     m_Shape;        // Shape: line, Circle, Arc
-    int                  m_Type;         // Used in complex associations ( Dimensions.. )
-    double               m_Angle;        // Used only for Arcs: Arc angle in 1/10 deg
-    wxPoint              m_BezierC1;     // Bezier Control Point 1
-    wxPoint              m_BezierC2;     // Bezier Control Point 2
+    PCB_SHAPE_TYPE_T     m_shape;        // Shape: line, Circle, Arc
+    double               m_angle;        // Used only for Arcs: Arc angle in 1/10 deg
+    wxPoint              m_bezierC1;     // Bezier Control Point 1
+    wxPoint              m_bezierC2;     // Bezier Control Point 2
 
-    std::vector<wxPoint> m_BezierPoints;
-    SHAPE_POLY_SET       m_Poly;         // Stores the S_POLYGON shape
+    std::vector<wxPoint> m_bezierPoints;
+    SHAPE_POLY_SET       m_poly;         // Stores the S_POLYGON shape
 
     // Computes the bounding box for an arc
     void computeArcBBox( EDA_RECT& aBBox ) const;
@@ -96,8 +95,8 @@ public:
      */
     bool IsPolygonFilled() const { return m_Layer != Edge_Cuts; }
 
-    void SetWidth( int aWidth )             { m_Width = aWidth; }
-    int GetWidth() const                    { return m_Width; }
+    void SetWidth( int aWidth )             { m_width = aWidth; }
+    int GetWidth() const                    { return m_width; }
 
     /**
      * Function SetAngle
@@ -105,19 +104,16 @@ public:
      * @param aAngle is tenths of degrees, but will soon be degrees.
      */
     virtual void SetAngle( double aAngle, bool aUpdateEnd = true );
-    double GetAngle() const { return m_Angle; }
+    double GetAngle() const { return m_angle; }
 
-    void SetType( int aType )                       { m_Type = aType; }
-    int GetType() const                             { return m_Type; }
+    void SetShape( PCB_SHAPE_TYPE_T aShape )       { m_shape = aShape; }
+    PCB_SHAPE_TYPE_T GetShape() const              { return m_shape; }
 
-    void SetShape( PCB_SHAPE_TYPE_T aShape )       { m_Shape = aShape; }
-    PCB_SHAPE_TYPE_T GetShape() const              { return m_Shape; }
+    void SetBezControl1( const wxPoint& aPoint )    { m_bezierC1 = aPoint; }
+    const wxPoint& GetBezControl1() const           { return m_bezierC1; }
 
-    void SetBezControl1( const wxPoint& aPoint )    { m_BezierC1 = aPoint; }
-    const wxPoint& GetBezControl1() const           { return m_BezierC1; }
-
-    void SetBezControl2( const wxPoint& aPoint )    { m_BezierC2 = aPoint; }
-    const wxPoint& GetBezControl2() const           { return m_BezierC2; }
+    void SetBezControl2( const wxPoint& aPoint )    { m_bezierC2 = aPoint; }
+    const wxPoint& GetBezControl2() const           { return m_bezierC2; }
 
     void SetPosition( const wxPoint& aPos ) override;
     wxPoint GetPosition() const override;
@@ -126,41 +122,41 @@ public:
      * Function GetStart
      * returns the starting point of the graphic
      */
-    const wxPoint& GetStart() const         { return m_Start; }
-    int GetStartY()                         { return m_Start.y; }
-    int GetStartX()                         { return m_Start.x; }
-    void SetStart( const wxPoint& aStart )  { m_Start = aStart; }
-    void SetStartY( int y )                 { m_Start.y = y; }
-    void SetStartX( int x )                 { m_Start.x = x; }
+    const wxPoint& GetStart() const         { return m_start; }
+    int GetStartY()                         { return m_start.y; }
+    int GetStartX()                         { return m_start.x; }
+    void SetStart( const wxPoint& aStart )  { m_start = aStart; }
+    void SetStartY( int y )                 { m_start.y = y; }
+    void SetStartX( int x )                 { m_start.x = x; }
 
     /**
      * Function GetEnd
      * returns the ending point of the graphic
      */
-    const wxPoint& GetEnd() const           { return m_End; }
-    int GetEndY()                           { return m_End.y; }
-    int GetEndX()                           { return m_End.x; }
-    void SetEnd( const wxPoint& aEnd )      { m_End = aEnd; }
-    void SetEndY( int y )                   { m_End.y = y; }
-    void SetEndX( int x )                   { m_End.x = x; }
+    const wxPoint& GetEnd() const           { return m_end; }
+    int GetEndY()                           { return m_end.y; }
+    int GetEndX()                           { return m_end.x; }
+    void SetEnd( const wxPoint& aEnd )      { m_end = aEnd; }
+    void SetEndY( int y )                   { m_end.y = y; }
+    void SetEndX( int x )                   { m_end.x = x; }
 
     /**
      * Function GetThirdPoint
      * returns the third point point of the graphic
      */
-    const wxPoint& GetThirdPoint() const           { return m_ThirdPoint; }
-    int GetThirdPointY()                           { return m_ThirdPoint.y; }
-    int GetThirdPointX()                           { return m_ThirdPoint.x; }
-    void SetThirdPoint( const wxPoint& aPoint )    { m_ThirdPoint = aPoint; }
-    void SetThirdPointY( int y )                   { m_ThirdPoint.y = y; }
-    void SetThirdPointX( int x )                   { m_ThirdPoint.x = x; }
+    const wxPoint& GetThirdPoint() const           { return m_thirdPoint; }
+    int GetThirdPointY()                           { return m_thirdPoint.y; }
+    int GetThirdPointX()                           { return m_thirdPoint.x; }
+    void SetThirdPoint( const wxPoint& aPoint )    { m_thirdPoint = aPoint; }
+    void SetThirdPointY( int y )                   { m_thirdPoint.y = y; }
+    void SetThirdPointX( int x )                   { m_thirdPoint.x = x; }
 
     // Some attributes are read only, since they are "calculated" from
     // m_Start, m_End, and m_Angle.
     // No Set...() function for these attributes.
 
     wxPoint GetCenter() const override;
-    wxPoint GetArcStart() const      { return m_End; }
+    wxPoint GetArcStart() const      { return m_end; }
     wxPoint GetArcEnd() const;
     wxPoint GetArcMid() const;
     std::vector<wxPoint> GetRectCorners() const;
@@ -184,7 +180,7 @@ public:
      */
     int GetRadius() const
     {
-        double radius = GetLineLength( m_Start, m_End );
+        double radius = GetLineLength( m_start, m_end );
 
         // don't allow degenerate arcs
         return std::max( 1, KiROUND( radius ) );
@@ -196,7 +192,7 @@ public:
      */
     void SetArcStart( const wxPoint& aArcStartPoint )
     {
-        m_End = aArcStartPoint;
+        m_end = aArcStartPoint;
     }
 
     /**
@@ -205,12 +201,12 @@ public:
      */
     void SetArcEnd( const wxPoint& aArcEndPoint )
     {
-        m_ThirdPoint = aArcEndPoint;
+        m_thirdPoint = aArcEndPoint;
     }
 
     /** For arcs and circles:
      */
-    void SetCenter( const wxPoint& aCenterPoint ) { m_Start = aCenterPoint; }
+    void SetCenter( const wxPoint& aCenterPoint ) { m_start = aCenterPoint; }
 
     const wxPoint GetFocusPosition() const override
     {
@@ -226,7 +222,7 @@ public:
     FOOTPRINT* GetParentFootprint() const;
 
     // Accessors:
-    const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; }
+    const std::vector<wxPoint>& GetBezierPoints() const { return m_bezierPoints; }
 
     /** Build and return the list of corners in a std::vector<wxPoint>
      * It must be used only to convert the SHAPE_POLY_SET internal corner buffer
@@ -241,19 +237,19 @@ public:
     int GetPointCount() const;
 
     // Accessors to the polygonal shape
-    SHAPE_POLY_SET& GetPolyShape() { return m_Poly; }
-    const SHAPE_POLY_SET& GetPolyShape() const { return m_Poly; }
+    SHAPE_POLY_SET& GetPolyShape() { return m_poly; }
+    const SHAPE_POLY_SET& GetPolyShape() const { return m_poly; }
 
     /**
      * @return true if the polygonal shape is valid (has more than 2 points)
      */
     bool IsPolyShapeValid() const;
 
-    void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_Poly = aShape; }
+    void SetPolyShape( const SHAPE_POLY_SET& aShape ) { m_poly = aShape; }
 
     void SetBezierPoints( const std::vector<wxPoint>& aPoints )
     {
-        m_BezierPoints = aPoints;
+        m_bezierPoints = aPoints;
     }
 
     /** Rebuild the m_BezierPoints vertex list that approximate the Bezier curve
