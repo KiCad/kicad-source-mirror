@@ -234,7 +234,9 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, FOOTPRINT
         return newFootprint;
     }
     else
+    {
         delete newFootprint;
+    }
 
     return nullptr;
 }
@@ -740,22 +742,21 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 }
 
 
-bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
+bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist,
+                                              std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap )
 {
     // Verify that board contains all pads in netlist: if it doesn't then footprints are
     // wrong or missing.
-    // Note that we use references to find the footprints as they're already updated by this
-    // point (whether by-reference or by-timestamp).
 
     wxString msg;
     wxString padname;
 
     for( int i = 0; i < (int) aNetlist.GetCount(); i++ )
     {
-        const COMPONENT* component = aNetlist.GetComponent( i );
-        FOOTPRINT*       footprint = m_board->FindFootprintByReference( component->GetReference() );
+        COMPONENT* component = aNetlist.GetComponent( i );
+        FOOTPRINT* footprint = aFootprintMap[component];
 
-        if( footprint == NULL )    // It can be missing in partial designs
+        if( !footprint )    // It can be missing in partial designs
             continue;
 
         // Explore all pins/pads in component
@@ -787,8 +788,12 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     m_errorCount = 0;
     m_warningCount = 0;
     m_newFootprintsCount = 0;
-    FOOTPRINT* lastPreexistingFootprint = m_board->Footprints().empty() ? NULL
-                                                                        : m_board->Footprints().back();
+    FOOTPRINT* lastPreexistingFootprint = nullptr;
+
+    std::map<COMPONENT*, FOOTPRINT*> footprintMap;
+
+    if( !m_board->Footprints().empty() )
+        lastPreexistingFootprint = m_board->Footprints().back();
 
     cacheCopperZoneConnections();
 
@@ -837,6 +842,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
                 if( tmp )
                 {
+                    footprintMap[ component ] = tmp;
+
                     updateComponentParameters( tmp, component );
                     updateComponentPadConnections( tmp, component );
                 }
@@ -857,6 +864,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
             if( tmp )
             {
+                footprintMap[ component ] = tmp;
+
                 updateComponentParameters( tmp, component );
                 updateComponentPadConnections( tmp, component );
             }
@@ -877,7 +886,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     if( !m_isDryRun )
     {
         m_board->GetConnectivity()->Build( m_board );
-        testConnectivity( aNetlist );
+        testConnectivity( aNetlist, footprintMap );
 
         // Now the connectivity data is rebuilt, we can delete single pads nets
         if( m_deleteSinglePadNets )
@@ -897,10 +906,12 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_commit.Push( _( "Update netlist" ) );
     }
     else if( m_deleteSinglePadNets && !m_newFootprintsCount )
+    {
         // We can delete single net pads in dry run mode only if no new footprints
         // are added, because these new footprints are not actually added to the board
         // and the current pad list is wrong in this case.
         deleteSinglePadNets();
+    }
 
     if( m_isDryRun )
     {

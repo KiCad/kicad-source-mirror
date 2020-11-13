@@ -159,7 +159,7 @@ private:
 
     bool deleteSinglePadNets();
 
-    bool testConnectivity( NETLIST& aNetlist );
+    bool testConnectivity( NETLIST& aNetlist, std::map<COMPONENT*, FOOTPRINT*>& aFootprintMap );
 
     PCB_EDIT_FRAME* m_frame;
     BOARD_COMMIT    m_commit;
