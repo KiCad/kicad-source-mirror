@@ -124,7 +124,7 @@
 %{
 
 // called from pcbnew/swig/pcbnew_footprint_wizards.cpp
-MODULE* PyFootprint_to_FOOTPRINT(PyObject *obj0)
+FOOTPRINT* PyFootprint_to_FOOTPRINT(PyObject *obj0)
 {
     void* argp;
     int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_FOOTPRINT, 0 |  0 );
