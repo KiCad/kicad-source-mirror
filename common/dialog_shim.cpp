@@ -179,7 +179,6 @@ int DIALOG_SHIM::VertPixelsFromDU( int y )
 // our hashtable is an implementation secret, don't need or want it in a header file
 #include <hashtables.h>
 #include <typeinfo>
-#include <wx/osx/bmpbuttn.h>
 
 static RECT_MAP class_map;
 
