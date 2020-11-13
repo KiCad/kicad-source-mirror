@@ -364,7 +364,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     wxString origPath, alias, shortPath;
     FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
-    for( const MODULE_3D_SETTINGS& model : m_footprint->Models() )
+    for( const FP_3DMODEL& model : m_footprint->Models() )
     {
         m_shapes3D_list.push_back( model );
         origPath = model.m_Filename;
@@ -503,8 +503,8 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAdd3DModel( wxCommandEvent&  )
 
     int selected = m_modelsGrid->GetGridCursorRow();
 
-    PROJECT& prj = Prj();
-    MODULE_3D_SETTINGS model;
+    PROJECT&   prj = Prj();
+    FP_3DMODEL model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
@@ -568,7 +568,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnAdd3DRow( wxCommandEvent&  )
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
 
-    MODULE_3D_SETTINGS model;
+    FP_3DMODEL model;
 
     model.m_Show = true;
     m_shapes3D_list.push_back( model );
@@ -747,7 +747,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( change_layer )
         m_footprint->Flip( m_footprint->GetPosition(), m_frame->Settings().m_FlipLeftRight );
 
-    std::list<MODULE_3D_SETTINGS>* draw3D = &m_footprint->Models();
+    std::list<FP_3DMODEL>* draw3D = &m_footprint->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 

@@ -31,8 +31,8 @@ class FILENAME_RESOLVER;
 
 namespace S3D
 {
-    bool Select3DModel( wxWindow* aParent, S3D_CACHE* aCache,
-        wxString& prevModelSelectDir, int& prevModelWildcard, MODULE_3D_SETTINGS* aModel );
+    bool Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevModelSelectDir,
+                        int& prevModelWildcard, FP_3DMODEL* aModel );
 
     bool Configure3DPaths( wxWindow* aParent, FILENAME_RESOLVER* aResolver );
 }

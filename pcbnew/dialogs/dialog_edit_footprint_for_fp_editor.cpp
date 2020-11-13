@@ -52,7 +52,7 @@ int DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page d
 
 
 DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
-                                                        MODULE* aModule ) :
+                                                        MODULE* aFootprint ) :
     DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent ),
     m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits, true ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
@@ -60,7 +60,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_inSelect( false )
 {
     m_frame = aParent;
-    m_footprint = aModule;
+    m_footprint = aFootprint;
 
     m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
 
@@ -298,7 +298,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     wxString origPath, alias, shortPath;
     FILENAME_RESOLVER* res = Prj().Get3DCacheManager()->GetResolver();
 
-    for( const MODULE_3D_SETTINGS& model : m_footprint->Models() )
+    for( const FP_3DMODEL& model : m_footprint->Models() )
     {
         m_shapes3D_list.push_back( model );
         origPath = model.m_Filename;
@@ -434,8 +434,8 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
 
     int selected = m_modelsGrid->GetGridCursorRow();
 
-    PROJECT& prj = Prj();
-    MODULE_3D_SETTINGS model;
+    PROJECT&   prj = Prj();
+    FP_3DMODEL model;
 
     wxString initialpath = prj.GetRString( PROJECT::VIEWER_3D_PATH );
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
@@ -499,7 +499,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
     if( !m_modelsGrid->CommitPendingChanges() )
         return;
 
-    MODULE_3D_SETTINGS model;
+    FP_3DMODEL model;
 
     model.m_Show = true;
     m_shapes3D_list.push_back( model );
@@ -697,7 +697,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     case 3:  m_footprint->SetZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
-    std::list<MODULE_3D_SETTINGS>* draw3D  = &m_footprint->Models();
+    std::list<FP_3DMODEL>* draw3D  = &m_footprint->Models();
     draw3D->clear();
     draw3D->insert( draw3D->end(), m_shapes3D_list.begin(), m_shapes3D_list.end() );
 

@@ -242,7 +242,7 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
 {
     PAD*      pad1;
     PAD*      pad2;
-    MODULE*   module;
+    MODULE*   footprint;
     wxString  cmp_name;
     int       pad_count = 2;
     FP_SHAPE* shape;
@@ -280,13 +280,13 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
     cmp_name = wxT( "muwave_polygon" );
 
     // Create a footprint with 2 pads, orientation = 0, pos 0
-    module = createBaseFootprint( cmp_name, 0, pad_count );
+    footprint = createBaseFootprint( cmp_name, 0, pad_count );
 
     // We try to place the footprint anchor to the middle of the shape len
     wxPoint offset;
     offset.x = -ShapeSize.x / 2;
 
-    auto it = module->Pads().begin();
+    auto it = footprint->Pads().begin();
 
     pad1 = *it;
     pad1->SetX0( offset.x );
@@ -297,11 +297,11 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
     pad2->SetX( pad2->GetPos0().x );
 
     // Add a polygonal edge (corners will be added later) on copper layer
-    shape = new FP_SHAPE( module );
+    shape = new FP_SHAPE( footprint );
     shape->SetShape( S_POLYGON );
     shape->SetLayer( F_Cu );
 
-    module->Add( shape, ADD_MODE::INSERT );
+    footprint->Add( shape, ADD_MODE::INSERT );
 
     // Get the corner buffer of the polygonal edge
     std::vector<wxPoint> polyPoints;
@@ -346,7 +346,7 @@ MODULE* MICROWAVE_TOOL::createPolygonShape()
     shape->SetWidth( 0 );
     PolyEdges.clear();
 
-    module->CalculateBoundingBox();
+    footprint->CalculateBoundingBox();
     editFrame.OnModify();
-    return module;
+    return footprint;
 }

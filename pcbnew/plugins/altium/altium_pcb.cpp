@@ -820,7 +820,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data(
         MODULE*        module         = m_components.at( elem.component );
         const wxPoint& modulePosition = module->GetPosition();
 
-        MODULE_3D_SETTINGS modelSettings;
+        FP_3DMODEL modelSettings;
 
         modelSettings.m_Filename = modelTuple->second;
 

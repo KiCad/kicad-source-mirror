@@ -33,7 +33,7 @@ MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintSha
 {
     int      oX;
     PAD*     pad;
-    MODULE*  module;
+    MODULE*  footprint;
     wxString msg, cmp_name;
     int      pad_count = 2;
     int      angle     = 0;
@@ -74,7 +74,7 @@ MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintSha
     }
 
     wxString value = StringFromValue( editFrame.GetUserUnits(), gap_size );
-    WX_TEXT_ENTRY_DIALOG dlg( &editFrame, msg, _( "Create microwave module" ), value );
+    WX_TEXT_ENTRY_DIALOG dlg( &editFrame, msg, _( "Create microwave footprint" ), value );
 
     if( dlg.ShowModal() != wxID_OK )
         return NULL; // cancelled by user
@@ -89,7 +89,7 @@ MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintSha
         double            fcoeff = 10.0, fval;
         msg.Printf( wxT( "%3.1f" ), angle / fcoeff );
         WX_TEXT_ENTRY_DIALOG angledlg( &editFrame, _( "Angle in degrees:" ),
-                                       _( "Create microwave module" ), msg );
+                                       _( "Create microwave footprint" ), msg );
 
         if( angledlg.ShowModal() != wxID_OK )
             return NULL; // cancelled by user
@@ -111,8 +111,8 @@ MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintSha
     if( abort )
         return NULL;
 
-    module = createBaseFootprint( cmp_name, text_size, pad_count );
-    auto it = module->Pads().begin();
+    footprint = createBaseFootprint( cmp_name, text_size, pad_count );
+    auto it = footprint->Pads().begin();
     pad = *it;
 
     switch( aFootprintShape )
@@ -173,11 +173,11 @@ MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintSha
         break;
     }
 
-    // Update the module and board
-    module->CalculateBoundingBox();
+    // Update the footprint and board
+    footprint->CalculateBoundingBox();
     editFrame.OnModify();
 
-    return module;
+    return footprint;
 }
 
 

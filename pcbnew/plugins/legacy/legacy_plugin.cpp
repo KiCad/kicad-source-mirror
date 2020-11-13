@@ -1861,7 +1861,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
 
 void LEGACY_PLUGIN::load3D( MODULE* aModule )
 {
-    MODULE_3D_SETTINGS t3D;
+    FP_3DMODEL t3D;
 
     char*   line;
     while( ( line = READLINE( m_reader ) ) != NULL )

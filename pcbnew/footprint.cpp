@@ -942,7 +942,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
-void MODULE::Add3DModel( MODULE_3D_SETTINGS* a3DModel )
+void MODULE::Add3DModel( FP_3DMODEL* a3DModel )
 {
     if( NULL == a3DModel )
         return;

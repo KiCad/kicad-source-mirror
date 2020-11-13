@@ -74,23 +74,23 @@ class MODULE;
 class PANEL_PREV_3D: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREV_3D_BASE
 {
 public:
-    PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
-                   std::vector<MODULE_3D_SETTINGS>* aParentModelList );
+    PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aFootprint,
+                   std::vector<FP_3DMODEL>* aParentModelList );
 
     ~PANEL_PREV_3D();
 
 private:
-    EDA_3D_CANVAS*                   m_previewPane;
-    WX_INFOBAR*                      m_infobar;
-    BOARD_ADAPTER                    m_boardAdapter;
-    CCAMERA&                         m_currentCamera;
-    CTRACK_BALL                      m_trackBallCamera;
+    EDA_3D_CANVAS*           m_previewPane;
+    WX_INFOBAR*              m_infobar;
+    BOARD_ADAPTER            m_boardAdapter;
+    CCAMERA&                 m_currentCamera;
+    CTRACK_BALL              m_trackBallCamera;
 
-    BOARD*                           m_dummyBoard;
-    MODULE*                          m_dummyModule;
+    BOARD*                   m_dummyBoard;
+    MODULE*                  m_dummyFootprint;
 
-    std::vector<MODULE_3D_SETTINGS>* m_parentModelList;
-    int                              m_selected;   /// Index into m_parentInfoList
+    std::vector<FP_3DMODEL>* m_parentModelList;
+    int                      m_selected;   /// Index into m_parentInfoList
 
     EDA_UNITS m_userUnits;
 

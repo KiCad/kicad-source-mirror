@@ -41,8 +41,8 @@
 #include <widgets/infobar.h>
 
 
-PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
-                              std::vector<MODULE_3D_SETTINGS>* aParentModelList ) :
+PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aFootprint,
+                              std::vector<FP_3DMODEL>* aParentModelList ) :
         PANEL_PREV_3D_BASE( aParent, wxID_ANY ),
         m_previewPane( nullptr ),
         m_infobar( nullptr ),
@@ -86,8 +86,8 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
     m_parentModelList = aParentModelList;
 
-    m_dummyModule = new MODULE( *aModule );
-    m_dummyBoard->Add( m_dummyModule );
+    m_dummyFootprint = new MODULE( *aFootprint );
+    m_dummyBoard->Add( m_dummyFootprint );
 
     // Create the infobar
     m_infobar = new WX_INFOBAR( this );
@@ -228,7 +228,7 @@ void PANEL_PREV_3D::SetSelectedModel( int idx )
     if( m_parentModelList && idx >= 0 && idx < (int) m_parentModelList->size() )
     {
         m_selected = idx;
-        const MODULE_3D_SETTINGS& modelInfo = m_parentModelList->at( (unsigned) m_selected );
+        const FP_3DMODEL& modelInfo = m_parentModelList->at( (unsigned) m_selected );
 
         // Use ChangeValue() instead of SetValue().  It's not the user making the change, so we
         // don't want to generate wxEVT_GRID_CELL_CHANGED events.
@@ -273,7 +273,7 @@ void PANEL_PREV_3D::updateOrientation( wxCommandEvent &event )
     if( m_parentModelList && m_selected >= 0 && m_selected < (int) m_parentModelList->size() )
     {
         // Write settings back to the parent
-        MODULE_3D_SETTINGS* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
+        FP_3DMODEL* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
 
         modelInfo->m_Scale.x = DoubleValueFromString( EDA_UNITS::UNSCALED, xscale->GetValue() );
         modelInfo->m_Scale.y = DoubleValueFromString( EDA_UNITS::UNSCALED, yscale->GetValue() );
@@ -298,7 +298,7 @@ void PANEL_PREV_3D::onOpacitySlider( wxCommandEvent& event )
     if( m_parentModelList && m_selected >= 0 && m_selected < (int) m_parentModelList->size() )
     {
         // Write settings back to the parent
-        MODULE_3D_SETTINGS* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
+        FP_3DMODEL* modelInfo = &m_parentModelList->at( (unsigned) m_selected );
 
         modelInfo->m_Opacity = m_opacity->GetValue() / 100.0;
 
@@ -451,12 +451,12 @@ void PANEL_PREV_3D::onMouseWheelOffset( wxMouseEvent& event )
 
 void PANEL_PREV_3D::UpdateDummyFootprint( bool aReloadRequired )
 {
-    m_dummyModule->Models().clear();
+    m_dummyFootprint->Models().clear();
 
-    for( MODULE_3D_SETTINGS& model : *m_parentModelList)
+    for( FP_3DMODEL& model : *m_parentModelList)
     {
         if( model.m_Show )
-            m_dummyModule->Models().push_back( model );
+            m_dummyFootprint->Models().push_back( model );
     }
 
     if( aReloadRequired )

@@ -183,12 +183,12 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDim
 
 
 // Based on
-// void MODULE::TransformGraphicShapesWithClearanceToPolygonSet
+// void FOOTPRINT::TransformFPShapesWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp#L204
-void BOARD_ADAPTER::AddGraphicsShapesWithClearanceToContainer( const MODULE* aModule,
-                                                               CGENERICCONTAINER2D *aDstContainer,
-                                                               PCB_LAYER_ID aLayerId,
-                                                               int aInflateValue )
+void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const MODULE* aModule,
+                                                         CGENERICCONTAINER2D *aDstContainer,
+                                                         PCB_LAYER_ID aLayerId,
+                                                         int aInflateValue )
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
     FP_SHAPE* outline;
@@ -473,13 +473,13 @@ COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const PAD* aPad, int aInflateValue 
 }
 
 
-void BOARD_ADAPTER::AddPadsShapesWithClearanceToContainer( const MODULE* aModule,
-                                                           CGENERICCONTAINER2D *aDstContainer,
-                                                           PCB_LAYER_ID aLayerId,
-                                                           int aInflateValue,
-                                                           bool aSkipNPTHPadsWihNoCopper,
-                                                           bool aSkipPlatedPads,
-                                                           bool aSkipNonPlatedPads )
+void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const MODULE* aModule,
+                                                     CGENERICCONTAINER2D *aDstContainer,
+                                                     PCB_LAYER_ID aLayerId,
+                                                     int aInflateValue,
+                                                     bool aSkipNPTHPadsWihNoCopper,
+                                                     bool aSkipPlatedPads,
+                                                     bool aSkipNonPlatedPads )
 {
     for( PAD* pad : aModule->Pads() )
     {

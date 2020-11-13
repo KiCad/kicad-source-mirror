@@ -421,7 +421,7 @@ struct AMODEL
     wxString id;
     bool     isEmbedded;
 
-    MODULE_3D_SETTINGS::VECTOR3D rotation;
+    FP_3DMODEL::VECTOR3D rotation;
 
     explicit AMODEL( ALTIUM_PARSER& aReader );
 };
@@ -523,16 +523,16 @@ struct AARC6
 
 struct ACOMPONENTBODY6
 {
-    uint16_t component;
+    uint16_t             component;
 
-    wxString modelName;
-    wxString modelId;
-    bool     modelIsEmbedded;
+    wxString             modelName;
+    wxString             modelId;
+    bool                 modelIsEmbedded;
 
-    MODULE_3D_SETTINGS::VECTOR3D modelPosition;
-    MODULE_3D_SETTINGS::VECTOR3D modelRotation;
-    double                       rotation;
-    double                       bodyOpacity;
+    FP_3DMODEL::VECTOR3D modelPosition;
+    FP_3DMODEL::VECTOR3D modelRotation;
+    double               rotation;
+    double               bodyOpacity;
 
     explicit ACOMPONENTBODY6( ALTIUM_PARSER& aReader );
 };

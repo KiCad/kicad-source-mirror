@@ -58,7 +58,7 @@ class PCB_TARGET;
 class VIA;
 class ZONE;
 class MARKER_PCB;
-class MODULE_3D_SETTINGS;
+class FP_3DMODEL;
 struct LAYER;
 
 
@@ -250,7 +250,7 @@ class PCB_PARSER : public PCB_LEXER
      */
     void parseEDA_TEXT( EDA_TEXT* aText );
 
-    MODULE_3D_SETTINGS* parse3DModel();
+    FP_3DMODEL* parse3DModel();
 
     /**
      * Function parseDouble

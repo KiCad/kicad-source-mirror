@@ -39,33 +39,33 @@ class FOOTPRINT_EDIT_FRAME;
 class DIALOG_FOOTPRINT_FP_EDITOR : public DIALOG_FOOTPRINT_FP_EDITOR_BASE
 {
 private:
-    FOOTPRINT_EDIT_FRAME*            m_frame;
-    MODULE*                          m_footprint;
+    FOOTPRINT_EDIT_FRAME*    m_frame;
+    MODULE*                  m_footprint;
 
-    static int                       m_page;       // remember the last open page during session
+    static int               m_page;       // remember the last open page during session
 
-    TEXT_MOD_GRID_TABLE*             m_texts;
+    TEXT_MOD_GRID_TABLE*     m_texts;
 
-    UNIT_BINDER                      m_netClearance;
-    UNIT_BINDER                      m_solderMask;
-    UNIT_BINDER                      m_solderPaste;
+    UNIT_BINDER              m_netClearance;
+    UNIT_BINDER              m_solderMask;
+    UNIT_BINDER              m_solderPaste;
 
-    std::vector<MODULE_3D_SETTINGS>  m_shapes3D_list;
-    PANEL_PREV_3D*                   m_PreviewPane;
+    std::vector<FP_3DMODEL>  m_shapes3D_list;
+    PANEL_PREV_3D*           m_PreviewPane;
 
-    wxControl*                       m_delayedFocusCtrl;
-    int                              m_delayedFocusPage;
+    wxControl*               m_delayedFocusCtrl;
+    int                      m_delayedFocusPage;
 
-    WX_GRID*                         m_delayedFocusGrid;
-    int                              m_delayedFocusRow;
-    int                              m_delayedFocusColumn;
-    wxString                         m_delayedErrorMessage;
+    WX_GRID*                 m_delayedFocusGrid;
+    int                      m_delayedFocusRow;
+    int                      m_delayedFocusColumn;
+    wxString                 m_delayedErrorMessage;
 
-    bool                             m_inSelect;
+    bool                     m_inSelect;
 
 public:
     // Constructor and destructor
-    DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, MODULE* aModule );
+    DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, MODULE* aFootprint );
     ~DIALOG_FOOTPRINT_FP_EDITOR() override;
 
     bool Validate() override;

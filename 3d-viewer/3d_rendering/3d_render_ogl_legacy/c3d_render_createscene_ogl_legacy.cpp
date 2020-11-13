@@ -967,7 +967,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER* aStatusReporter )
     // Go for all footprints
     for( MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
-        for( const MODULE_3D_SETTINGS& model : footprint->Models() )
+        for( const FP_3DMODEL& model : footprint->Models() )
         {
             if( model.m_Show && !model.m_Filename.empty() )
             {

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef MODULE_H_
-#define MODULE_H_
+#ifndef FOOTPRINT_H
+#define FOOTPRINT_H
 
 #include <deque>
 
@@ -72,10 +72,10 @@ enum MODULE_ATTR_T
     MOD_BOARD_ONLY             = 0x0010    // Footprint has no corresponding symbol
 };
 
-class MODULE_3D_SETTINGS
+class FP_3DMODEL
 {
 public:
-    MODULE_3D_SETTINGS() :
+    FP_3DMODEL() :
         // Initialize with sensible values
         m_Scale { 1, 1, 1 },
         m_Rotation { 0, 0, 0 },
@@ -192,8 +192,8 @@ public:
 
     bool HasThroughHolePads() const;
 
-    std::list<MODULE_3D_SETTINGS>& Models()             { return m_3D_Drawings; }
-    const std::list<MODULE_3D_SETTINGS>& Models() const { return m_3D_Drawings; }
+    std::list<FP_3DMODEL>& Models()             { return m_3D_Drawings; }
+    const std::list<FP_3DMODEL>& Models() const { return m_3D_Drawings; }
 
     void SetPosition( const wxPoint& aPos ) override;
     wxPoint GetPosition() const override { return m_Pos; }
@@ -357,15 +357,15 @@ public:
      * @param aSkipPlatedPads = used on 3D-Viewer to extract plated and nontplated pads.
      * @param aSkipNonPlatedPads = used on 3D-Viewer to extract plated and plated pads.
      */
-    void TransformPadsShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                    PCB_LAYER_ID aLayer,int aClearance,
-                                                    int aMaxError, ERROR_LOC aErrorLoc,
-                                                    bool aSkipNPTHPadsWihNoCopper = false,
-                                                    bool aSkipPlatedPads = false,
-                                                    bool aSkipNonPlatedPads = false ) const;
+    void TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                              PCB_LAYER_ID aLayer, int aClearance,
+                                              int aMaxError, ERROR_LOC aErrorLoc,
+                                              bool aSkipNPTHPadsWihNoCopper = false,
+                                              bool aSkipPlatedPads = false,
+                                              bool aSkipNonPlatedPads = false ) const;
 
     /**
-     * function TransformGraphicShapesWithClearanceToPolygonSet
+     * function TransformFPShapesWithClearanceToPolygon
      * generate shapes of graphic items (outlines) on layer aLayer as polygons and adds these
      * polygons to aCornerBuffer
      * Useful to generate a polygonal representation of a footprint in 3D view and plot functions,
@@ -377,23 +377,23 @@ public:
      * @param aIncludeText = True to transform text shapes
      * @param aIncludeEdges = True to transform module shapes
      */
-    void TransformGraphicShapesWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                                          PCB_LAYER_ID aLayer, int aClearance,
-                                                          int aError, ERROR_LOC aErrorLoc,
-                                                          bool aIncludeText = true,
-                                                          bool aIncludeEdges = true ) const;
+    void TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                  PCB_LAYER_ID aLayer, int aClearance,
+                                                  int aError, ERROR_LOC aErrorLoc,
+                                                  bool aIncludeText = true,
+                                                  bool aIncludeEdges = true ) const;
 
     /**
-     * @brief TransformGraphicTextWithClearanceToPolygonSet
+     * @brief TransformFPTextWithClearanceToPolygonSet
      * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
      * but only generate text
      */
-    void TransformGraphicTextWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                                        PCB_LAYER_ID aLayer, int aClearance,
-                                                        int aError, ERROR_LOC aErrorLoc ) const
+    void TransformFPTextWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
+                                                   PCB_LAYER_ID aLayer, int aClearance,
+                                                   int aError, ERROR_LOC aErrorLoc ) const
     {
-        TransformGraphicShapesWithClearanceToPolygonSet( aCornerBuffer, aLayer, aClearance,
-                                                         aError, aErrorLoc, true, false );
+        TransformFPShapesWithClearanceToPolygon( aCornerBuffer, aLayer, aClearance, aError,
+                                                 aErrorLoc, true, false );
     }
 
     /**
@@ -567,9 +567,9 @@ public:
      * Function Add3DModel
      * adds \a a3DModel definition to the end of the 3D model list.
      *
-     * @param a3DModel A pointer to a #MODULE_3D_SETTINGS to add to the list.
+     * @param a3DModel A pointer to a #FP_3DMODEL to add to the list.
      */
-    void Add3DModel( MODULE_3D_SETTINGS* a3DModel );
+    void Add3DModel( FP_3DMODEL* a3DModel );
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
@@ -722,7 +722,7 @@ private:
     int            m_CntRot90;          // Horizontal automatic placement cost ( 0..10 ).
     int            m_CntRot180;         // Vertical automatic placement cost ( 0..10 ).
 
-    std::list<MODULE_3D_SETTINGS> m_3D_Drawings;  // Linked list of 3D models.
+    std::list<FP_3DMODEL>         m_3D_Drawings;       // Linked list of 3D models.
     std::map<wxString, wxString>  m_properties;
     wxArrayString*                m_initial_comments;  // s-expression comments in the module,
                                                        // lazily allocated only if needed for speed
@@ -731,4 +731,4 @@ private:
     SHAPE_POLY_SET m_poly_courtyard_back;   // courtyards populated.
 };
 
-#endif     // MODULE_H_
+#endif     // FOOTPRINT_H

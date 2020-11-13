@@ -111,16 +111,17 @@ public:
     }
 
     /**
-     * Function TransformShapeWithClearanceToPolygonSet
+     * Function TransformShapeWithClearanceToPolygon
      * Convert the text shape to a set of polygons (one by segment)
      * Used in 3D viewer
      * Circles and arcs are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearance = the clearance around the text
+     * @param aClearanceValue = the clearance around the text
      * @param aError = deviation from true arc position to segment approx
      */
-    void TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer, int aClearance,
-                                                  int aError, ERROR_LOC aErrorLoc ) const;
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
+                                               int aClearanceValue, int aError, ERROR_LOC aErrorLoc,
+                                               bool aIgnoreLineWidth = false ) const override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;

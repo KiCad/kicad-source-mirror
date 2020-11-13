@@ -41,7 +41,8 @@
 
 
 DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager,
-    MODULE_3D_SETTINGS* aModelItem, wxString& prevModelSelectDir, int& prevModelWildcard ) :
+                                        FP_3DMODEL* aModelItem, wxString& prevModelSelectDir,
+                                        int& prevModelWildcard ) :
     DLG_SELECT_3D_MODELE_BASE( aParent ),
     m_model( aModelItem ), m_cache( aCacheManager ), m_previousDir( prevModelSelectDir ),
     m_previousFilterIndex( prevModelWildcard )

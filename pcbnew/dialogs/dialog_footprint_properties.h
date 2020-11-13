@@ -56,7 +56,7 @@ private:
     UNIT_BINDER                      m_solderMask;
     UNIT_BINDER                      m_solderPaste;
 
-    std::vector<MODULE_3D_SETTINGS>  m_shapes3D_list;
+    std::vector<FP_3DMODEL>          m_shapes3D_list;
     PANEL_PREV_3D*                   m_PreviewPane;
 
     wxString                         m_delayedErrorMessage;

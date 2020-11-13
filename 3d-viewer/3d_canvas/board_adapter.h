@@ -540,65 +540,50 @@ class BOARD_ADAPTER
      void createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aDstContainer,
                           int aClearanceValue );
 
-    void createNewPadWithClearance( const PAD *aPad,
-                                    CGENERICCONTAINER2D *aDstContainer,
-                                    PCB_LAYER_ID aLayer,
-                                    wxSize aClearanceValue ) const;
+    void createNewPadWithClearance( const PAD *aPad, CGENERICCONTAINER2D *aDstContainer,
+                                    PCB_LAYER_ID aLayer, wxSize aClearanceValue ) const;
 
     COBJECT2D *createNewPadDrill( const PAD* aPad, int aInflateValue );
 
-    void AddPadsShapesWithClearanceToContainer( const MODULE *aModule,
-                                                CGENERICCONTAINER2D *aDstContainer,
-                                                PCB_LAYER_ID aLayerId,
-                                                int aInflateValue,
-                                                bool aSkipNPTHPadsWihNoCopper,
-                                                bool aSkipPlatedPads,
-                                                bool aSkipNonPlatedPads );
+    void AddPadsWithClearanceToContainer( const MODULE *aModule,
+                                          CGENERICCONTAINER2D *aDstContainer,
+                                          PCB_LAYER_ID aLayerId, int aInflateValue,
+                                          bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
+                                          bool aSkipNonPlatedPads );
 
-    void AddGraphicsShapesWithClearanceToContainer( const MODULE *aModule,
-                                                    CGENERICCONTAINER2D *aDstContainer,
-                                                    PCB_LAYER_ID aLayerId,
-                                                    int aInflateValue );
+    void AddFPShapesWithClearanceToContainer( const MODULE *aModule,
+                                              CGENERICCONTAINER2D *aDstContainer,
+                                              PCB_LAYER_ID aLayerId, int aInflateValue );
 
     void AddShapeWithClearanceToContainer( const PCB_TEXT *aText,
                                            CGENERICCONTAINER2D *aDstContainer,
-                                           PCB_LAYER_ID aLayerId,
-                                           int aClearanceValue );
+                                           PCB_LAYER_ID aLayerId, int aClearanceValue );
 
     void AddShapeWithClearanceToContainer( const PCB_SHAPE *aShape,
                                            CGENERICCONTAINER2D *aDstContainer,
-                                           PCB_LAYER_ID aLayerId,
-                                           int aClearanceValue );
+                                           PCB_LAYER_ID aLayerId, int aClearanceValue );
 
     void AddShapeWithClearanceToContainer( const DIMENSION_BASE *aDimension,
                                            CGENERICCONTAINER2D *aDstContainer,
-                                           PCB_LAYER_ID aLayerId,
-                                           int aClearanceValue );
+                                           PCB_LAYER_ID aLayerId, int aClearanceValue );
 
     void AddSolidAreasShapesToContainer( const ZONE *aZoneContainer,
                                          CGENERICCONTAINER2D *aDstContainer,
                                          PCB_LAYER_ID aLayerId );
 
-    void TransformArcToSegments( const wxPoint &aCentre,
-                                 const wxPoint &aStart,
-                                 double aArcAngle,
-                                 int aCircleToSegmentsCount,
-                                 int aWidth,
-                                 CGENERICCONTAINER2D *aDstContainer,
-                                 const BOARD_ITEM &aBoardItem );
+    void TransformArcToSegments( const wxPoint &aCentre, const wxPoint &aStart, double aArcAngle,
+                                 int aCircleToSegmentsCount, int aWidth,
+                                 CGENERICCONTAINER2D *aDstContainer, const BOARD_ITEM &aBoardItem );
 
-    void buildPadShapeThickOutlineAsSegments( const PAD *aPad,
-                                              CGENERICCONTAINER2D *aDstContainer,
+    void buildPadShapeThickOutlineAsSegments( const PAD *aPad, CGENERICCONTAINER2D *aDstContainer,
                                               int aWidth );
 
     // Helper functions to create poly contours
-    void buildPadShapeThickOutlineAsPolygon( const PAD *aPad,
-                                             SHAPE_POLY_SET &aCornerBuffer,
+    void buildPadShapeThickOutlineAsPolygon( const PAD *aPad, SHAPE_POLY_SET &aCornerBuffer,
                                              int aWidth) const;
 
-    void transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule,
-                                                 PCB_LAYER_ID aLayer,
-                                                 SHAPE_POLY_SET& aCornerBuffer ) const;
+    void transformFPShapesToPolygon( const MODULE *aFootprint, PCB_LAYER_ID aLayer,
+                                     SHAPE_POLY_SET& aCornerBuffer ) const;
 
 public:
     SFVEC4F m_BgColorBot;         ///< background bottom color

@@ -219,19 +219,19 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     itemplotter.PlotBoardGraphicItems();
 
     // Draw footprint texts:
-    for( MODULE* module : aBoard->Footprints() )
-        itemplotter.PlotFootprintTextItems( module );
+    for( MODULE* footprint : aBoard->Footprints() )
+        itemplotter.PlotFootprintTextItems( footprint );
 
     // Draw footprint other graphic items:
-    for( MODULE* module : aBoard->Footprints() )
-        itemplotter.PlotFootprintGraphicItems( module );
+    for( MODULE* footprint : aBoard->Footprints() )
+        itemplotter.PlotFootprintGraphicItems( footprint );
 
     // Plot footprint pads
-    for( MODULE* module : aBoard->Footprints() )
+    for( MODULE* footprint : aBoard->Footprints() )
     {
         aPlotter->StartBlock( NULL );
 
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             OUTLINE_MODE padPlotMode = plotMode;
 
@@ -632,9 +632,9 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
                                   ? SMALL_DRILL : INT_MAX;
 
-            for( MODULE* module : aBoard->Footprints() )
+            for( MODULE* footprint : aBoard->Footprints() )
             {
-                for( PAD* pad : module->Pads() )
+                for( PAD* pad : footprint->Pads() )
                 {
                     wxSize hole = pad->GetDrillSize();
 
@@ -727,11 +727,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     itemplotter.PlotBoardGraphicItems();
 
-    for( MODULE* module : aBoard->Footprints() )
+    for( MODULE* footprint : aBoard->Footprints() )
     {
-        for( BOARD_ITEM* item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
-            itemplotter.PlotFootprintTextItems( module );
+            itemplotter.PlotFootprintTextItems( footprint );
 
             if( item->Type() == PCB_FP_SHAPE_T && item->GetLayer() == layer )
                 itemplotter.PlotFootprintGraphicItem( (FP_SHAPE*) item );
@@ -757,14 +757,14 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 #endif
     {
         // Plot pads
-        for( MODULE* module : aBoard->Footprints() )
+        for( MODULE* footprint : aBoard->Footprints() )
         {
             // add shapes with their exact mask layer size in initialPolys
-            module->TransformPadsShapesWithClearanceToPolygon( initialPolys, layer, 0, maxError,
-                                                               ERROR_OUTSIDE );
+            footprint->TransformPadsWithClearanceToPolygon( initialPolys, layer, 0, maxError,
+                                                            ERROR_OUTSIDE );
             // add shapes inflated by aMinThickness/2 in areas
-            module->TransformPadsShapesWithClearanceToPolygon( areas, layer, inflate, maxError,
-                                                               ERROR_OUTSIDE );
+            footprint->TransformPadsWithClearanceToPolygon( areas, layer, inflate, maxError,
+                                                            ERROR_OUTSIDE );
         }
 
         // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,

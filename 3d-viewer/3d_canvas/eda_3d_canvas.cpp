@@ -749,27 +749,24 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
             {
                 case PCB_PAD_T:
                 {
-                    PAD* item = dynamic_cast<PAD *>( intersectedBoardItem );
+                    PAD* pad = dynamic_cast<PAD*>( intersectedBoardItem );
 
-                    if( item )
+                    if( pad && pad->IsOnCopperLayer() )
                     {
-                        if( item->IsOnCopperLayer() )
-                            activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
-                                                     item->GetNet()->GetNetname(),
-                                                     item->GetNet()->GetClassName(),
-                                                     item->GetName() ) );
+                        activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
+                                                                   pad->GetNet()->GetNetname(),
+                                                                   pad->GetNet()->GetClassName(),
+                                                                   pad->GetName() ) );
                     }
                 }
                 break;
 
                 case PCB_MODULE_T:
                 {
-                    MODULE* module = dynamic_cast<MODULE *>( intersectedBoardItem );
+                    MODULE* footprint = dynamic_cast<MODULE *>( intersectedBoardItem );
 
-                    if( module )
-                    {
-                        activityReporter.Report( module->GetReference() );
-                    }
+                    if( footprint )
+                        activityReporter.Report( footprint->GetReference() );
                 }
                 break;
 
@@ -777,27 +774,26 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
                 case PCB_VIA_T:
                 case PCB_ARC_T:
                 {
-                    TRACK* item = dynamic_cast<TRACK *>( intersectedBoardItem );
+                    TRACK* track = dynamic_cast<TRACK *>( intersectedBoardItem );
 
-                    if( item )
+                    if( track )
                     {
                         activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                 item->GetNet()->GetNetname(),
-                                                 item->GetNet()->GetClassName() ) );
+                                                                   track->GetNet()->GetNetname(),
+                                                                   track->GetNet()->GetClassName() ) );
                     }
                 }
                 break;
 
                 case PCB_ZONE_T:
                 {
-                    ZONE* item = dynamic_cast<ZONE*>( intersectedBoardItem );
+                    ZONE* zone = dynamic_cast<ZONE*>( intersectedBoardItem );
 
-                    if( item )
+                    if( zone && zone->IsOnCopperLayer() )
                     {
-                        if( item->IsOnCopperLayer() )
-                            activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                     item->GetNet()->GetNetname(),
-                                                     item->GetNet()->GetClassName() ) );
+                        activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                                   zone->GetNet()->GetNetname(),
+                                                                   zone->GetNet()->GetClassName() ) );
                     }
                 }
                 break;

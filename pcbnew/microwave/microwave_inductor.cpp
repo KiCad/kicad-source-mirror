@@ -303,11 +303,10 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
 
     wxString errorMessage;
 
-    auto inductorModule = std::unique_ptr<MODULE>( createMicrowaveInductor( pattern,
-                                                                            errorMessage ) );
+    auto inductorFP = std::unique_ptr<MODULE>( createMicrowaveInductor( pattern, errorMessage ) );
 
     // on any error, report if we can
-    if ( !inductorModule || !errorMessage.IsEmpty() )
+    if ( !inductorFP || !errorMessage.IsEmpty() )
     {
         if ( !errorMessage.IsEmpty() )
             editFrame.ShowInfoBarError( errorMessage );
@@ -315,10 +314,10 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
     else
     {
         // at this point, we can save the module
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, inductorModule.get() );
+        m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, inductorFP.get() );
 
         BOARD_COMMIT commit( this );
-        commit.Add( inductorModule.release() );
+        commit.Add( inductorFP.release() );
         commit.Push( _("Add microwave inductor" ) );
     }
 }

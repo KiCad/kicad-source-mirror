@@ -60,11 +60,10 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const PAD* aPad,
 }
 
 
-void BOARD_ADAPTER::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule,
-                                                            PCB_LAYER_ID aLayer,
-                                                            SHAPE_POLY_SET& aCornerBuffer ) const
+void BOARD_ADAPTER::transformFPShapesToPolygon( const MODULE *aFootprint, PCB_LAYER_ID aLayer,
+                                                SHAPE_POLY_SET& aCornerBuffer ) const
 {
-    for( BOARD_ITEM* item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
         {

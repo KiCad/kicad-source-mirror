@@ -33,7 +33,7 @@
 
 #include "dlg_select_3dmodel_base.h"
 
-class MODULE_3D_SETTINGS;
+class FP_3DMODEL;
 class S3D_CACHE;
 class FILENAME_RESOLVER;
 class C3D_MODEL_VIEWER;
@@ -41,9 +41,9 @@ class C3D_MODEL_VIEWER;
 class DLG_SELECT_3DMODEL : public DLG_SELECT_3D_MODELE_BASE
 {
 private:
-    MODULE_3D_SETTINGS* m_model;        // data for the selected model
-    S3D_CACHE* m_cache;                 // cache manager
-    FILENAME_RESOLVER*  m_resolver; // 3D filename resolver
+    FP_3DMODEL*        m_model;       // data for the selected model
+    S3D_CACHE*         m_cache;       // cache manager
+    FILENAME_RESOLVER* m_resolver;    // 3D filename resolver
 
     wxString& m_previousDir;
     int&      m_previousFilterIndex;
@@ -53,8 +53,8 @@ private:
     void updateDirChoiceList( void );
 
 public:
-    DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, MODULE_3D_SETTINGS* aModelItem,
-        wxString& prevModelSelectDir, int& prevModelWildcard );
+    DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheManager, FP_3DMODEL* aModelItem,
+                        wxString& prevModelSelectDir, int& prevModelWildcard );
 
     bool TransferDataFromWindow() override;
     void OnSelectionChanged( wxCommandEvent& event )override;
