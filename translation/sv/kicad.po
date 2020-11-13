@@ -6,14 +6,14 @@ msgstr ""
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
 "PO-Revision-Date: 2020-11-03 18:15+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -338,9 +338,8 @@ msgid "Get colors from physical stackup"
 msgstr "Hämta färger från fysisk stackup"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
-#, fuzzy
 msgid "3D Grid"
-msgstr "Rutnät"
+msgstr "3D Rutnät"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
 msgid "Reset to Default Settings"
@@ -472,7 +471,7 @@ msgstr "Visa silkskiktslager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:170
 msgid "Show solder mask layers"
-msgstr "Visa alla lödmask lager"
+msgstr "Visa all lödmask lager"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:179
 msgid "Show solder paste layers"
@@ -829,7 +828,7 @@ msgstr "Koppar Färglager"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1000
 msgid "Board Body Color"
-msgstr "Kretskortets Bakgrunds Färg"
+msgstr "Mönsterkort Bakgrunds Färg"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1019
 msgid "Solder Paste Color"
@@ -869,7 +868,7 @@ msgstr "Rotera motsols"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
 msgid "Move board Left"
-msgstr "Flytta mönsterkortet åt Vänster"
+msgstr "Flytta mönsterkortet åt vänster"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
 msgid "Move board Right"
@@ -2292,7 +2291,7 @@ msgstr "Användare (anpassad)"
 
 #: common/dialogs/dialog_page_settings.cpp:104
 msgid "Preview Settings"
-msgstr "Förvisning av Inställningar"
+msgstr "Förhandsgranska Inställningar"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Paper"
@@ -2831,7 +2830,7 @@ msgstr "Körbara filer ("
 
 #: common/dialogs/panel_common_settings.cpp:286
 msgid "Select Preferred PDF Browser"
-msgstr "Välj Önskad PDF Läsare"
+msgstr "Väl Önskad PDF Läsare"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
@@ -4888,9 +4887,8 @@ msgid "ERC warning"
 msgstr "Varning"
 
 #: common/layer_id.cpp:130
-#, fuzzy
 msgid "ERC error"
-msgstr " fel"
+msgstr "ERC-fel"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:168
 #, fuzzy
@@ -7127,9 +7125,8 @@ msgid "Filter footprint list by library"
 msgstr "Filtrera fotavtryckslistan efter bibliotek"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:267
-#, fuzzy
 msgid "Delete all associations?"
-msgstr "Radera alla associationer"
+msgstr "Radera alla associationer?"
 
 #: eeschema/annotate.cpp:127
 #, c-format
@@ -7949,9 +7946,8 @@ msgid "symbols"
 msgstr "Placera block"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:473
-#, fuzzy
 msgid "*** symbol not found ***"
-msgstr " hittades inte"
+msgstr "*** symbol hittades inte ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:482
 msgid "*** new symbol has too few units ***"
@@ -8353,9 +8349,8 @@ msgid "Annotation not complete. ERC cannot be run."
 msgstr "Annotera schema komponenter"
 
 #: eeschema/dialogs/dialog_erc.cpp:193
-#, fuzzy
 msgid "Delete exclusions too?"
-msgstr "Radera markerade"
+msgstr "Radera uteslutningar också?"
 
 #: eeschema/dialogs/dialog_erc.cpp:193 pcbnew/dialogs/dialog_drc.cpp:767
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
@@ -22302,9 +22297,8 @@ msgstr "1234 mm"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:145
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:114
-#, fuzzy
 msgid "1234 (mm)"
-msgstr " (mm):"
+msgstr "1234 (mm)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:155
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:160
@@ -23024,9 +23018,8 @@ msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
 msgstr "%s fotavtryck \"%s\" (från \"%s\") till \"%s\""
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
-#, fuzzy
 msgid "*** footprint not found ***"
-msgstr " hittades inte"
+msgstr "*** fotavtryck hittades inte ***"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:24
 #, fuzzy
