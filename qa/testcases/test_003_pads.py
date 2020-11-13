@@ -7,7 +7,7 @@ class TestPads(unittest.TestCase):
         self.pcb = pcbnew.LoadBoard("data/custom_pads.kicad_pcb")
 
     def test_custom_pads_outline(self):
-        custom_pad1 = self.pcb.FindModuleByReference("SB1").Pads()[0]
+        custom_pad1 = self.pcb.FindFootprintByReference("SB1").Pads()[0]
         expected_polygons = [[
             [1000000, 0],
             [500000, 750000],

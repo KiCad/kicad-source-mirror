@@ -23,7 +23,7 @@ class TestBoardClass(unittest.TestCase):
         self.FILENAME=tempfile.mktemp()+".kicad_pcb"
 
     def test_pcb_find_module(self):
-        module = self.pcb.FindModuleByReference('P1')
+        module = self.pcb.FindFootprintByReference('P1')
         self.assertEqual(module.GetReference(),'P1')
 
     def test_pcb_get_track_count(self):
