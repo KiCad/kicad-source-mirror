@@ -100,27 +100,27 @@ static inline long parseInt( const wxString& aValue, double aScalar )
  * GPCB_FPL_CACHE_ITEM
  * is helper class for creating a footprint library cache.
  *
- * The new footprint library design is a file path of individual module files
- * that contain a single module per file.  This class is a helper only for the
+ * The new footprint library design is a file path of individual footprint files
+ * that contain a single footprint per file.  This class is a helper only for the
  * footprint portion of the PLUGIN API, and only for the #PCB_IO plugin.  It is
  * private to this implementation file so it is not placed into a header.
  */
 class GPCB_FPL_CACHE_ITEM
 {
     WX_FILENAME             m_filename; ///< The the full file name and path of the footprint to cache.
-    std::unique_ptr<MODULE> m_module;
+    std::unique_ptr<MODULE> m_footprint;
 
 public:
     GPCB_FPL_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName );
 
-    WX_FILENAME  GetFileName() const { return m_filename; }
-    MODULE*      GetModule()   const { return m_module.get(); }
+    WX_FILENAME  GetFileName() const  { return m_filename; }
+    MODULE*      GetFootprint() const { return m_footprint.get(); }
 };
 
 
 GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName ) :
-    m_filename( aFileName ),
-    m_module( aFootprint )
+        m_filename( aFileName ),
+        m_footprint( aFootprint )
 {
 }
 
@@ -132,14 +132,14 @@ typedef MODULE_MAP::const_iterator                          MODULE_CITER;
 
 class GPCB_FPL_CACHE
 {
-    GPCB_PLUGIN*    m_owner;        /// Plugin object that owns the cache.
-    wxFileName      m_lib_path;     /// The path of the library.
-    MODULE_MAP      m_modules;      /// Map of footprint file name per MODULE*.
+    GPCB_PLUGIN*    m_owner;            ///< Plugin object that owns the cache.
+    wxFileName      m_lib_path;         ///< The path of the library.
+    MODULE_MAP      m_footprints;       ///< Map of footprint file name to MODULE*.
 
-    bool            m_cache_dirty;      // Stored separately because it's expensive to check
-                                        // m_cache_timestamp against all the files.
-    long long       m_cache_timestamp;  // A hash of the timestamps for all the footprint
-                                        // files.
+    bool            m_cache_dirty;      ///< Stored separately because it's expensive to check
+                                        ///< m_cache_timestamp against all the files.
+    long long       m_cache_timestamp;  ///< A hash of the timestamps for all the footprint
+                                        ///< files.
 
     MODULE* parseMODULE( LINE_READER* aLineReader );
 
@@ -178,7 +178,7 @@ public:
 
     wxString GetPath() const { return m_lib_path.GetPath(); }
     bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
-    MODULE_MAP& GetModules() { return m_modules; }
+    MODULE_MAP& GetModules() { return m_footprints; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -258,7 +258,7 @@ void GPCB_FPL_CACHE::Load()
 
             // The footprint name is the file name without the extension.
             footprint->SetFPID( LIB_ID( wxEmptyString, fn.GetName() ) );
-            m_modules.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn ) );
+            m_footprints.insert( name, new GPCB_FPL_CACHE_ITEM( footprint, fn ) );
         }
         catch( const IO_ERROR& ioe )
         {
@@ -278,18 +278,18 @@ void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 {
     std::string footprintName = TO_UTF8( aFootprintName );
 
-    MODULE_CITER it = m_modules.find( footprintName );
+    MODULE_CITER it = m_footprints.find( footprintName );
 
-    if( it == m_modules.end() )
+    if( it == m_footprints.end() )
     {
         THROW_IO_ERROR( wxString::Format( _( "library \"%s\" has no footprint \"%s\" to delete" ),
                                           m_lib_path.GetPath().GetData(),
                                           aFootprintName.GetData() ) );
     }
 
-    // Remove the module from the cache and delete the module file from the library.
+    // Remove the footprint from the cache and delete the footprint file from the library.
     wxString fullPath = it->second->GetFileName().GetFullPath();
-    m_modules.erase( footprintName );
+    m_footprints.erase( footprintName );
     wxRemoveFile( fullPath );
 }
 
@@ -318,12 +318,12 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
     #define NEW_GPCB_UNIT_CONV ( 0.01*IU_PER_MILS )
 
-    int                   paramCnt;
-    double                conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
-    wxPoint               textPos;
-    wxString              msg;
-    wxArrayString         parameters;
-    std::unique_ptr<MODULE> module = std::make_unique<MODULE>( nullptr );
+    int                     paramCnt;
+    double                  conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
+    wxPoint                 textPos;
+    wxString                msg;
+    wxArrayString           parameters;
+    std::unique_ptr<MODULE> footprint = std::make_unique<MODULE>( nullptr );
 
 
     if( aLineReader->ReadLine() == NULL )
@@ -364,22 +364,22 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 
     if( paramCnt > 10 )
     {
-        module->SetDescription( parameters[3] );
-        module->SetReference( parameters[4] );
+        footprint->SetDescription( parameters[3] );
+        footprint->SetReference( parameters[4] );
     }
     else
     {
-        module->SetDescription( parameters[2] );
-        module->SetReference( parameters[3] );
+        footprint->SetDescription( parameters[2] );
+        footprint->SetReference( parameters[3] );
     }
 
     // Read value
     if( paramCnt > 10 )
-        module->SetValue( parameters[5] );
+        footprint->SetValue( parameters[5] );
     // With gEDA/pcb, value is meaningful after instantiation, only, so it's
     // often empty in bare footprints.
-    if( module->Value().GetText().IsEmpty() )
-        module->Value().SetText( wxT( "Val**" ) );
+    if( footprint->Value().GetText().IsEmpty() )
+        footprint->Value().SetText( wxT( "Val**" ) );
 
 
     if( paramCnt == 14 )
@@ -394,7 +394,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     }
 
     int orientation = parseInt( parameters[paramCnt-4], 1.0 );
-    module->Reference().SetTextAngle( (orientation % 2) ? 900 : 0 );
+    footprint->Reference().SetTextAngle(( orientation % 2) ? 900 : 0 );
 
     // Calculate size: default height is 40 mils, width 30 mil.
     // real size is:  default * ibuf[idx+3] / 100 (size in gpcb is given in percent of default size
@@ -406,7 +406,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     // gEDA/pcb aligns top/left, not pcbnew's default, center/center.
     // Compensate for this by shifting the insertion point instead of the
     // alignment, because alignment isn't changeable in the GUI.
-    textPos.x = textPos.x + twsize * module->GetReference().Len() / 2;
+    textPos.x = textPos.x + twsize * footprint->GetReference().Len() / 2;
     textPos.y += thsize / 2;
 
     // gEDA/pcb draws a bit too low/left, while pcbnew draws a bit too
@@ -414,20 +414,20 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     textPos.x -= thsize / 10;
     textPos.y += thsize / 2;
 
-    module->Reference().SetTextPos( textPos );
-    module->Reference().SetPos0( textPos );
-    module->Reference().SetTextSize( wxSize( twsize, thsize ) );
-    module->Reference().SetTextThickness( thickness );
+    footprint->Reference().SetTextPos( textPos );
+    footprint->Reference().SetPos0( textPos );
+    footprint->Reference().SetTextSize( wxSize( twsize, thsize ) );
+    footprint->Reference().SetTextThickness( thickness );
 
     // gEDA/pcb shows only one of value/reference/description at a time. Which
     // one is selectable by a global menu setting. pcbnew needs reference as
     // well as value visible, so place the value right below the reference.
-    module->Value().SetTextAngle( module->Reference().GetTextAngle() );
-    module->Value().SetTextSize( module->Reference().GetTextSize() );
-    module->Value().SetTextThickness( module->Reference().GetTextThickness());
+    footprint->Value().SetTextAngle( footprint->Reference().GetTextAngle() );
+    footprint->Value().SetTextSize( footprint->Reference().GetTextSize() );
+    footprint->Value().SetTextThickness( footprint->Reference().GetTextThickness());
     textPos.y += thsize * 13 / 10;  // 130% line height
-    module->Value().SetTextPos( textPos );
-    module->Value().SetPos0( textPos );
+    footprint->Value().SetTextPos( textPos );
+    footprint->Value().SetPos0( textPos );
 
     while( aLineReader->ReadLine() )
     {
@@ -464,7 +464,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            FP_SHAPE* shape = new FP_SHAPE( module.get() );
+            FP_SHAPE* shape = new FP_SHAPE( footprint.get() );
             shape->SetLayer( F_SilkS );
             shape->SetShape( S_SEGMENT );
             shape->SetStart0( wxPoint( parseInt( parameters[2], conv_unit ),
@@ -473,7 +473,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                      parseInt( parameters[5], conv_unit ) ) );
             shape->SetWidth( parseInt( parameters[6], conv_unit ) );
             shape->SetDrawCoord();
-            module->Add( shape );
+            footprint->Add( shape );
             continue;
         }
 
@@ -488,10 +488,10 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             }
 
             // Pcbnew does know ellipse so we must have Width = Height
-            FP_SHAPE* shape = new FP_SHAPE( module.get() );
+            FP_SHAPE* shape = new FP_SHAPE( footprint.get() );
             shape->SetLayer( F_SilkS );
             shape->SetShape( S_ARC );
-            module->Add( shape );
+            footprint->Add( shape );
 
             // for and arc: ibuf[3] = ibuf[4]. Pcbnew does not know ellipses
             int     radius = ( parseInt( parameters[4], conv_unit ) +
@@ -539,7 +539,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            PAD* pad = new PAD( module.get() );
+            PAD* pad = new PAD( footprint.get() );
 
             static const LSET pad_front( 3, F_Cu, F_Mask, F_Paste );
             static const LSET pad_back(  3, B_Cu, B_Mask, B_Paste );
@@ -597,7 +597,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 
             // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );
-            padPos += module->GetPosition();
+            padPos += footprint->GetPosition();
             pad->SetPosition( padPos );
 
             if( !testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
@@ -608,7 +608,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                     pad->SetShape( PAD_SHAPE_OVAL );
             }
 
-            module->Add( pad );
+            footprint->Add( pad );
             continue;
         }
 
@@ -627,7 +627,7 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
                                    aLineReader->LineNumber(), 0 );
             }
 
-            PAD* pad = new PAD( module.get() );
+            PAD* pad = new PAD( footprint.get() );
 
             pad->SetShape( PAD_SHAPE_CIRCLE );
 
@@ -680,20 +680,20 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 
             // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );
-            padPos += module->GetPosition();
+            padPos += footprint->GetPosition();
             pad->SetPosition( padPos );
 
             if( pad->GetShape() == PAD_SHAPE_CIRCLE  &&  pad->GetSize().x != pad->GetSize().y )
                 pad->SetShape( PAD_SHAPE_OVAL );
 
-            module->Add( pad );
+            footprint->Add( pad );
             continue;
         }
     }
 
     // Recalculate the bounding box
-    module->CalculateBoundingBox();
-    return module.release();
+    footprint->CalculateBoundingBox();
+    return footprint.release();
 }
 
 
@@ -925,7 +925,7 @@ const MODULE* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
         return NULL;
     }
 
-    return it->second->GetModule();
+    return it->second->GetFootprint();
 }
 
 

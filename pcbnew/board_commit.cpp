@@ -105,11 +105,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         // Module items need to be saved in the undo buffer before modification
         if( m_isFootprintEditor )
         {
-            // Be sure that we are storing a module
+            // Be sure that we are storing a footprint
             if( ent.m_item->Type() != PCB_MODULE_T )
                 ent.m_item = ent.m_item->GetParent();
 
-            // We have not saved the module yet, so let's create an entry
+            // We have not saved the footprint yet, so let's create an entry
             if( savedModules.count( ent.m_item ) == 0 )
             {
                 if( !ent.m_copy )
@@ -188,7 +188,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_FP_SHAPE_T:
                 case PCB_FP_TEXT_T:
                 case PCB_FP_ZONE_T:
-                    // This level can only handle module items when editing footprints
+                    // This level can only handle footprint children when editing footprints
                     wxASSERT( m_isFootprintEditor );
 
                     if( boardItem->Type() == PCB_FP_TEXT_T )
@@ -204,9 +204,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     if( !( changeFlags & CHT_DONE ) )
                     {
-                        MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
-                        wxASSERT( module && module->Type() == PCB_MODULE_T );
-                        module->Delete( boardItem );
+                        MODULE* footprint = static_cast<MODULE*>( boardItem->GetParent() );
+                        wxASSERT( footprint && footprint->Type() == PCB_MODULE_T );
+                        footprint->Delete( boardItem );
                     }
 
                     break;
@@ -233,15 +233,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 case PCB_MODULE_T:
                 {
-                    // There are no footprints inside a module yet
+                    // No support for nested footprints (yet)
                     wxASSERT( !m_isFootprintEditor );
 
-                    MODULE* module = static_cast<MODULE*>( boardItem );
-                    view->Remove( module );
-                    module->ClearFlags();
+                    MODULE* footprint = static_cast<MODULE*>( boardItem );
+                    view->Remove( footprint );
+                    footprint->ClearFlags();
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Remove( module );        // handles connectivity
+                        board->Remove( footprint );        // handles connectivity
                 }
                 break;
 

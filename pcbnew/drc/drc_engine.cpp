@@ -659,12 +659,12 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
     for( ZONE* zone : m_board->Zones() )
         zone->CacheBoundingBox();
 
-    for( MODULE* module : m_board->Footprints() )
+    for( MODULE* footprint : m_board->Footprints() )
     {
-        for( ZONE* zone : module->Zones() )
+        for( ZONE* zone : footprint->Zones() )
             zone->CacheBoundingBox();
 
-        module->BuildPolyCourtyards();
+        footprint->BuildPolyCourtyards();
     }
 
     for( DRC_TEST_PROVIDER* provider : m_testProviders )

@@ -23,7 +23,7 @@
 
 /*
  *  1 - create ascii files for automatic placement of smd components
- *  2 - create a module report (pos and module descr) (ascii file)
+ *  2 - create a footprint report (pos and footprint descr) (ascii file)
  */
 
 #include <confirm.h>
@@ -528,7 +528,7 @@ void PCB_EDIT_FRAME::GenFootprintsReport( wxCommandEvent& event )
     }
 }
 
-/* Print a module report.
+/* Print a footprint report.
  */
 bool PCB_EDIT_FRAME::DoGenFootprintsReport( const wxString& aFullFilename, bool aUnitsMM )
 {

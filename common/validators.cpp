@@ -71,8 +71,8 @@ void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
 FOOTPRINT_NAME_VALIDATOR::FOOTPRINT_NAME_VALIDATOR( wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
 {
-    // This list of characters follows the string from class_module.cpp
-    // which, in turn mimics the strings from lib_id.cpp
+    // This list of characters follows the string from footprint.cpp which, in turn mimics the
+    // strings from lib_id.cpp
     // TODO: Unify forbidden character lists
     wxString illegalChars = "%$<>\t\n\r\"\\/:";
     SetCharExcludes( illegalChars );

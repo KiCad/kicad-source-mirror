@@ -111,7 +111,7 @@ private:
     bool                         m_processNetNames;
     bool                         m_dryRun;
 
-    PCB_MODULES_MAP              m_pcbModules;
+    PCB_MODULES_MAP              m_pcbFootprints;
     SCH_REFERENCE_LIST           m_refs;
     SCH_MULTI_UNIT_REFERENCE_MAP m_multiUnitsRefs;
     std::deque<CHANGELIST_ITEM>  m_changelist;

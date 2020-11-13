@@ -343,7 +343,7 @@ public:
     /**
      * Gets the first footprint on the board or nullptr.
      * This is used primarily by the footprint editor which knows there is only one.
-     * @return first module or null pointer
+     * @return first footprint or null pointer
      */
     MODULE* GetFirstFootprint() const
     {
@@ -546,12 +546,12 @@ public:
     void SetElementVisibility( GAL_LAYER_ID aLayer, bool aNewState );
 
     /**
-     * Expect either of the two layers on which a module can reside, and returns
+     * Expect either of the two layers on which a footprint can reside, and returns
      * whether that layer is visible.
      * @param aLayer One of the two allowed layers for footprints: F_Cu or B_Cu
      * @return bool - true if the layer is visible, else false.
      */
-    bool IsModuleLayerVisible( PCB_LAYER_ID aLayer );
+    bool IsFootprintLayerVisible( PCB_LAYER_ID aLayer );
 
     /**
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
@@ -1035,18 +1035,17 @@ public:
     PAD* GetPad( std::vector<PAD*>& aPadList, const wxPoint& aPosition, LSET aLayerMask );
 
     /**
-     * Delete a given pad from the BOARD by removing it from its module and
-     * from the m_NetInfo.  Makes no UI calls.
+     * Delete a given pad from the BOARD by removing it from its footprint and from the
+     * m_NetInfo.  Makes no UI calls.
      * @param aPad is the pad to delete.
      */
     void PadDelete( PAD* aPad );
 
     /**
-     * First empties then fills the vector with all pads and sorts them by
-     * increasing x coordinate, and for increasing y coordinate for same values of x coordinates.
-     * The vector only holds pointers to the pads and
-     * those pointers are only references to pads which are owned by the BOARD
-     * through other links.
+     * First empties then fills the vector with all pads and sorts them by increasing x
+     * coordinate, and for increasing y coordinate for same values of x coordinates.  The vector
+     * only holds pointers to the pads and those pointers are only references to pads which are
+     * owned by the BOARD through other links.
      * @param aVector Where to put the pad pointers.
      * @param aNetCode = the netcode filter:
      *                  = -1 to build the full pad list.
@@ -1082,7 +1081,6 @@ public:
      * @param aActiveLayer Layer to test.
      * @param aVisibleOnly Search only the visible layers if true.
      * @param aIgnoreLocked Ignore locked footprints when true.
-     * @return MODULE* The best module or NULL if none.
      */
     MODULE* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
                           bool aVisibleOnly, bool aIgnoreLocked = false );

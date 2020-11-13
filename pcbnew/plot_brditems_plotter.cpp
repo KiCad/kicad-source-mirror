@@ -335,10 +335,10 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
 }
 
 
-// plot items like text and graphics, but not tracks and module
+// plot items like text and graphics, but not tracks and footprints
 void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
 {
-    for( auto item : m_board->Drawings() )
+    for( BOARD_ITEM* item : m_board->Drawings() )
     {
         switch( item->Type() )
         {

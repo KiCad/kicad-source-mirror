@@ -62,7 +62,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     ret |= fprintf( f, "\"%s\"\n", TO_UTF8( title ) );
     ret |= fprintf( f, ".TYP FULL\n\n" );
 
-    // Create netlist module section
+    // Create netlist footprints section
     m_ReferencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();

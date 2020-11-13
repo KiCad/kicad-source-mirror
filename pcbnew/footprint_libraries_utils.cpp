@@ -784,7 +784,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( MODULE* aFootprint,
 
 bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 {
-    // update module in the current board,
+    // update footprint in the current board,
     // not just add it to the board with total disregard for the netlist...
     PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
@@ -824,7 +824,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
     BOARD_COMMIT commit( pcbframe );
 
-    // Create the "new" module
+    // Create the "new" footprint
     MODULE* newFootprint = new MODULE( *editorFootprint );
     const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
 
@@ -838,7 +838,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         // deleted
         pcbframe->ExchangeFootprint( sourceFootprint, newFootprint, commit );
         const_cast<KIID&>( newFootprint->m_Uuid ) = editorFootprint->GetLink();
-        commit.Push( wxT( "Update module" ) );
+        commit.Push( wxT( "Update footprint" ) );
     }
     else        // This is an insert command
     {
@@ -851,7 +851,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         newFootprint->SetPosition( wxPoint( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
         const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
-        commit.Push( wxT( "Insert module" ) );
+        commit.Push( wxT( "Insert footprint" ) );
 
         pcbframe->Raise();
         pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newFootprint );

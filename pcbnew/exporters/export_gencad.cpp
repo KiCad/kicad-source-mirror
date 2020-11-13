@@ -53,7 +53,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb );
 static void CreateSignalsSection( FILE* aFile, BOARD* aPcb );
 static void CreateShapesSection( FILE* aFile, BOARD* aPcb );
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb );
-static void FootprintWriteShape( FILE* File, MODULE* module, const wxString& aShapeName );
+static void FootprintWriteShape( FILE* File, MODULE* aFootprint, const wxString& aShapeName );
 
 // layer names for Gencad export
 
@@ -259,7 +259,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     // Update some board data, to ensure a reliable gencad export
     GetBoard()->ComputeBoundingBox();
 
-    // Save the auxiliary origin for the rest of the module
+    // Save the auxiliary origin for the rest of the footprint
     wxPoint auxOrigin = m_pcb->GetDesignSettings().m_AuxOrigin;
     GencadOffsetX = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.x : 0;
     GencadOffsetY = optionsDialog.GetOption( USE_AUX_ORIGIN ) ? auxOrigin.y : 0;
@@ -1065,10 +1065,15 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
         if( !newDevice )        // do not repeat device definitions
             continue;
 
-        const MODULE* module = componentShape.first;
+        const MODULE* footprint = componentShape.first;
+
         fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( escapeString( shapeName ) ) );
-        fprintf( aFile, "PART \"%s\"\n", TO_UTF8( escapeString( module->GetValue() ) ) );
-        fprintf( aFile, "PACKAGE \"%s\"\n", TO_UTF8( escapeString( module->GetFPID().Format() ) ) );
+
+        fprintf( aFile, "PART \"%s\"\n",
+                 TO_UTF8( escapeString( footprint->GetValue() ) ) );
+
+        fprintf( aFile, "PACKAGE \"%s\"\n",
+                 TO_UTF8( escapeString( footprint->GetFPID().Format() ) ) );
     }
 
     fputs( "$ENDDEVICES\n\n", aFile );
@@ -1137,14 +1142,14 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
  * It's almost guaranteed that the silk layer will be imported wrong but
  * the shape also contains the pads!
  */
-static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aShapeName )
+static void FootprintWriteShape( FILE* aFile, MODULE* aFootprint, const wxString& aShapeName )
 {
     FP_SHAPE* shape;
 
     /* creates header: */
     fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
-    if( module->GetAttributes() & FP_THROUGH_HOLE )
+    if( aFootprint->GetAttributes() & FP_THROUGH_HOLE )
         fprintf( aFile, "INSERT TH\n" );
     else
         fprintf( aFile, "INSERT SMD\n" );
@@ -1153,7 +1158,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
     // CAM350 read it right but only closed shapes
     // ProntoPlace double-flip it (at least the pads are correct)
     // GerberTool usually get it right...
-    for( BOARD_ITEM* PtStruct : module->GraphicalItems() )
+    for( BOARD_ITEM* PtStruct : aFootprint->GraphicalItems() )
     {
         switch( PtStruct->Type() )
         {

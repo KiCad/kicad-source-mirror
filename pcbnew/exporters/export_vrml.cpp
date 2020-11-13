@@ -1373,7 +1373,7 @@ static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aFoo
         if( aFootprint->Value().IsVisible() )
             export_vrml_fp_text( &aFootprint->Value());
 
-        // Export module edges
+        // Export footprint graphics
 
         for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
         {
@@ -1439,8 +1439,8 @@ static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aFoo
         build_quat( 0, 0, 1, DEG2RAD( rotz ), q2 );
         compose_quat( q1, q2, q1 );
 
-        // Note here aFootprint->GetOrientation() is in 0.1 degrees,
-        // so module rotation has to be converted to radians
+        // Note here aFootprint->GetOrientation() is in 0.1 degrees, so footprint rotation
+        // has to be converted to radians
         build_quat( 0, 0, 1, DECIDEG2RAD( aFootprint->GetOrientation() ), q2 );
         compose_quat( q1, q2, q1 );
         from_quat( q1, rot );

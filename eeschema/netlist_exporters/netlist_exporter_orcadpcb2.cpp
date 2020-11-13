@@ -60,7 +60,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
     ret |= fprintf( f, "( { %s created  %s }\n",
                         NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
 
-    // Create netlist module section
+    // Create netlist footprints section
     m_ReferencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();

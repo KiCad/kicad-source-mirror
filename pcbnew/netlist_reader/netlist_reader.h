@@ -346,10 +346,10 @@ private:
      *       (pin (num 1) (name ~) (type passive))
      *       (pin (num 2) (name ~) (type passive))))
      *
-     *  And add the strings giving the footprint filter (subsection footprints)
-     *  of the corresponding module info
-     *  <p>This section is used by CvPcb, and is not useful in Pcbnew,
-     *  therefore it it not always read </p>
+     *  And add the strings giving the footprint filter (subsection footprints) of the
+     *  corresponding footprint info
+     *  <p>This section is used by CvPcb, and is not useful in Pcbnew, therefore it it not
+     *  always read </p>
      */
     void parseLibPartList();
 

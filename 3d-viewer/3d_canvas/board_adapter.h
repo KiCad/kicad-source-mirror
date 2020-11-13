@@ -108,14 +108,12 @@ class BOARD_ADAPTER
     /**
      * @brief Is3DLayerEnabled - Check if a layer is enabled
      * @param aLayer: layer ID to get status
-     * @return true if layer should be displayed, false if not
      */
     bool Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const;
 
     /**
-     * @brief ShouldModuleBeDisplayed - Test if module should be displayed in
-     * relation to attributs and the flags
-     * @return true if module should be displayed, false if not
+     * @brief ShouldFPBeDisplayed - Test if footprint should be displayed in relation to
+     * attributes and the flags
      */
     bool ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const;
 
@@ -229,10 +227,10 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetModulesZcoord3DIU - Get the position of the module in 3d integer units
+     * @brief GetModulesZcoord3DIU - Get the position of the footprint in 3d integer units
      * considering if it is flipped or not.
      * @param aIsFlipped: true for use in footprints on Front (top) layer, false
-     *                    if module is on back (bottom) layer
+     *                    if footprint is on back (bottom) layer
      * @return the Z position of 3D shapes, in 3D integer units
      */
     float GetModulesZcoord3DIU( bool aIsFlipped ) const ;

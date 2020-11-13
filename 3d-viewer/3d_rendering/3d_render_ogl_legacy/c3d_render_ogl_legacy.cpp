@@ -1292,7 +1292,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
                 if( ( aRenderTopOrBot && !fp->IsFlipped() )
                  || ( !aRenderTopOrBot && fp->IsFlipped() ) )
                 {
-                    render_3D_module( fp, aRenderTransparentOnly, isIntersected );
+                    render_3D_footprint( fp, aRenderTransparentOnly, isIntersected );
                 }
             }
         }
@@ -1319,26 +1319,26 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
-                                              bool aRenderTransparentOnly,
-                                              bool aIsSelected )
+void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const MODULE* aFootprint,
+                                                 bool aRenderTransparentOnly,
+                                                 bool aIsSelected )
 {
-    if( !module->Models().empty() )
+    if( !aFootprint->Models().empty() )
     {
-        const double zpos = m_boardAdapter.GetModulesZcoord3DIU( module->IsFlipped() );
+        const double zpos = m_boardAdapter.GetModulesZcoord3DIU( aFootprint->IsFlipped() );
 
         glPushMatrix();
 
-        wxPoint pos = module->GetPosition();
+        wxPoint pos = aFootprint->GetPosition();
 
         glTranslatef( pos.x * m_boardAdapter.BiuTo3Dunits(),
                       -pos.y * m_boardAdapter.BiuTo3Dunits(),
                        zpos );
 
-        if( module->GetOrientation() )
-            glRotated( (double) module->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
+        if( aFootprint->GetOrientation() )
+            glRotated((double) aFootprint->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
 
-        if( module->IsFlipped() )
+        if( aFootprint->IsFlipped() )
         {
             glRotatef( 180.0f, 0.0f, 1.0f, 0.0f );
             glRotatef( 180.0f, 0.0f, 0.0f, 1.0f );
@@ -1351,7 +1351,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
                   modelunit_to_3d_units_factor );
 
         // Get the list of model files for this model
-        for( const FP_3DMODEL& sM : module->Models() )
+        for( const FP_3DMODEL& sM : aFootprint->Models() )
         {
             if( !sM.m_Show || sM.m_Filename.empty() )
                 continue;
@@ -1386,10 +1386,10 @@ void C3D_RENDER_OGL_LEGACY::render_3D_module( const MODULE* module,
 
                     if( aRenderTransparentOnly )
                         modelPtr->Draw_transparent( sM.m_Opacity,
-                                                    module->IsSelected() || aIsSelected,
+                                                    aFootprint->IsSelected() || aIsSelected,
                                                     m_boardAdapter.m_opengl_selectionColor );
                     else
-                        modelPtr->Draw_opaque( module->IsSelected() || aIsSelected,
+                        modelPtr->Draw_opaque( aFootprint->IsSelected() || aIsSelected,
                                                m_boardAdapter.m_opengl_selectionColor );
 
                     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) )

@@ -838,12 +838,12 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             // Fabricate a MODULE with a single PAD_ATTRIB_NPTH pad.
             // Use m_hole_count to gen up a unique name.
 
-            MODULE* module = new MODULE( m_board );
-            m_board->Add( module, ADD_MODE::APPEND );
-            module->SetReference( wxString::Format( "@HOLE%d", m_hole_count++ ) );
-            module->Reference().SetVisible( false );
+            MODULE* footprint = new MODULE( m_board );
+            m_board->Add( footprint, ADD_MODE::APPEND );
+            footprint->SetReference( wxString::Format( "@HOLE%d", m_hole_count++ ) );
+            footprint->Reference().SetVisible( false );
 
-            packageHole( module, gr, true );
+            packageHole( footprint, gr, true );
 
             m_xpath->pop();
         }
@@ -2138,7 +2138,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCent
 {
     EHOLE   e( aTree );
 
-    // we add a PAD_ATTRIB_NPTH pad to this module.
+    // we add a PAD_ATTRIB_NPTH pad to this footprint.
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
 
@@ -2249,8 +2249,8 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
 {
     aPad->SetName( FROM_UTF8( aEaglePad.name.c_str() ) );
 
-    // pad's "Position" is not relative to the module's,
-    // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+    // pad's "Position" is not relative to the footprint's,
+    // whereas Pos0 is relative to the footprint's but is the unrotated coordinate.
     wxPoint padPos( kicad_x( aEaglePad.x ), kicad_y( aEaglePad.y ) );
     aPad->SetPos0( padPos );
 
@@ -2258,17 +2258,17 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
     const wxSize& padSize( aPad->GetSize() );
 
     aPad->SetLocalSolderMaskMargin( eagleClamp( m_rules->mlMinStopFrame,
-                (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
-                m_rules->mlMaxStopFrame ) );
+                                                (int)( m_rules->mvStopFrame * std::min( padSize.x, padSize.y ) ),
+                                                m_rules->mlMaxStopFrame ) );
 
     // Solid connection to copper zones
     if( aEaglePad.thermals && !*aEaglePad.thermals )
         aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
 
-    MODULE* module = aPad->GetParent();
-    wxCHECK( module, /* void */ );
-    RotatePoint( &padPos, module->GetOrientation() );
-    aPad->SetPosition( padPos + module->GetPosition() );
+    MODULE* footprint = aPad->GetParent();
+    wxCHECK( footprint, /* void */ );
+    RotatePoint( &padPos, footprint->GetOrientation() );
+    aPad->SetPosition( padPos + footprint->GetPosition() );
 }
 
 

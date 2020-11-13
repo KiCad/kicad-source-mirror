@@ -157,11 +157,13 @@ private:
      * @param aMirrorInvert if true, it inverts the Mirror status of aCadstarText
      */
     void drawCadstarText( const TEXT& aCadstarText, BOARD_ITEM_CONTAINER* aContainer,
-            const GROUP_ID& aCadstarGroupID       = wxEmptyString,
-            const LAYER_ID& aCadstarLayerOverride = wxEmptyString,
-            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
-            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
-            const bool& aMirrorInvert = false );
+                          const GROUP_ID& aCadstarGroupID = wxEmptyString,
+                          const LAYER_ID& aCadstarLayerOverride = wxEmptyString,
+                          const wxPoint& aMoveVector = { 0, 0 },
+                          const double& aRotationAngle = 0.0,
+                          const double& aScalingFactor = 1.0,
+                          const wxPoint& aTransformCentre = { 0, 0 },
+                          const bool& aMirrorInvert = false );
 
     /**
      * @brief
@@ -178,10 +180,13 @@ private:
      * @param aMirrorInvert if true, mirrors the shape
      */
     void drawCadstarShape( const SHAPE& aCadstarShape, const PCB_LAYER_ID& aKiCadLayer,
-            const int& aLineThickness, const wxString& aShapeName, BOARD_ITEM_CONTAINER* aContainer,
-            const GROUP_ID& aCadstarGroupID = wxEmptyString, const wxPoint& aMoveVector = { 0, 0 },
-            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
-            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+                           const int& aLineThickness, const wxString& aShapeName,
+                           BOARD_ITEM_CONTAINER* aContainer,
+                           const GROUP_ID& aCadstarGroupID = wxEmptyString,
+                           const wxPoint& aMoveVector = { 0, 0 },
+                           const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
+                           const wxPoint& aTransformCentre = { 0, 0 },
+                           const bool& aMirrorInvert = false );
 
     /**
      * @brief Uses PCB_SHAPE to draw the cutouts on mBoard object
@@ -197,11 +202,14 @@ private:
      * @param aMirrorInvert if true, mirrors the drawsegments
      */
     void drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
-            const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-            BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID = wxEmptyString,
-            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
-            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
-            const bool& aMirrorInvert = false );
+                                       const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
+                                       BOARD_ITEM_CONTAINER* aContainer,
+                                       const GROUP_ID& aCadstarGroupID = wxEmptyString,
+                                       const wxPoint& aMoveVector = { 0, 0 },
+                                       const double& aRotationAngle = 0.0,
+                                       const double& aScalingFactor = 1.0,
+                                       const wxPoint& aTransformCentre = { 0, 0 },
+                                       const bool& aMirrorInvert = false );
 
     /**
      * @brief Uses PCB_SHAPE to draw the vertices on mBoard object
@@ -218,11 +226,14 @@ private:
      * @param aCadstarGroupID to add the shape to
      */
     void drawCadstarVerticesAsSegments( const std::vector<VERTEX>& aCadstarVertices,
-            const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-            BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID = wxEmptyString,
-            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
-            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
-            const bool& aMirrorInvert = false );
+                                        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
+                                        BOARD_ITEM_CONTAINER* aContainer,
+                                        const GROUP_ID& aCadstarGroupID = wxEmptyString,
+                                        const wxPoint& aMoveVector = { 0, 0 },
+                                        const double& aRotationAngle = 0.0,
+                                        const double& aScalingFactor = 1.0,
+                                        const wxPoint& aTransformCentre = { 0, 0 },
+                                        const bool& aMirrorInvert = false );
 
     /**
      * @brief Returns a vector of pointers to PCB_SHAPE objects. Caller owns the objects.
@@ -236,11 +247,14 @@ private:
      * @param aMirrorInvert if true, mirrors the drawsegment
      * @return
      */
-    std::vector<PCB_SHAPE*> getDrawSegmentsFromVertices(
-            const std::vector<VERTEX>& aCadstarVertices, BOARD_ITEM_CONTAINER* aContainer = nullptr,
-            const GROUP_ID& aCadstarGroupID = wxEmptyString, const wxPoint& aMoveVector = { 0, 0 },
-            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
-            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+    std::vector<PCB_SHAPE*> getDrawSegmentsFromVertices( const std::vector<VERTEX>& aCadstarVertices,
+                                                         BOARD_ITEM_CONTAINER* aContainer = nullptr,
+                                                         const GROUP_ID& aCadstarGroupID = wxEmptyString,
+                                                         const wxPoint& aMoveVector = { 0, 0 },
+                                                         const double& aRotationAngle = 0.0,
+                                                         const double& aScalingFactor = 1.0,
+                                                         const wxPoint& aTransformCentre = { 0, 0 },
+                                                         const bool& aMirrorInvert = false );
 
     /**
      * @brief Returns a pointer to a PCB_SHAPE object. Caller owns the object.
@@ -256,10 +270,14 @@ private:
      * @return
      */
     PCB_SHAPE* getDrawSegmentFromVertex( const POINT& aCadstarStartPoint,
-            const VERTEX& aCadstarVertex, BOARD_ITEM_CONTAINER* aContainer = nullptr,
-            const GROUP_ID& aCadstarGroupID = wxEmptyString, const wxPoint& aMoveVector = { 0, 0 },
-            const double& aRotationAngle = 0.0, const double& aScalingFactor = 1.0,
-            const wxPoint& aTransformCentre = { 0, 0 }, const bool& aMirrorInvert = false );
+                                         const VERTEX& aCadstarVertex,
+                                         BOARD_ITEM_CONTAINER* aContainer = nullptr,
+                                         const GROUP_ID& aCadstarGroupID = wxEmptyString,
+                                         const wxPoint& aMoveVector = { 0, 0 },
+                                         const double& aRotationAngle = 0.0,
+                                         const double& aScalingFactor = 1.0,
+                                         const wxPoint& aTransformCentre = { 0, 0 },
+                                         const bool& aMirrorInvert = false );
 
     /**
      * @brief
@@ -284,10 +302,13 @@ private:
      * @return
      */
     SHAPE_POLY_SET getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
-            const int& aLineThickness = -1, BOARD_ITEM_CONTAINER* aContainer = nullptr,
-            const wxPoint& aMoveVector = { 0, 0 }, const double& aRotationAngle = 0.0,
-            const double& aScalingFactor = 1.0, const wxPoint& aTransformCentre = { 0, 0 },
-            const bool& aMirrorInvert = false );
+                                               const int& aLineThickness = -1,
+                                               BOARD_ITEM_CONTAINER* aContainer = nullptr,
+                                               const wxPoint& aMoveVector = { 0, 0 },
+                                               const double& aRotationAngle = 0.0,
+                                               const double& aScalingFactor = 1.0,
+                                               const wxPoint& aTransformCentre = { 0, 0 },
+                                               const bool& aMirrorInvert = false );
 
     /**
      * @brief Returns a SHAPE_LINE_CHAIN object from a series of PCB_SHAPE objects
@@ -308,19 +329,21 @@ private:
      * @return
     */
     std::vector<TRACK*> makeTracksFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments,
-            BOARD_ITEM_CONTAINER* aParentContainer, NETINFO_ITEM* aNet = nullptr,
-            PCB_LAYER_ID aLayerOverride = PCB_LAYER_ID::UNDEFINED_LAYER, int aWidthOverride = -1 );
+                                                    BOARD_ITEM_CONTAINER* aParentContainer,
+                                                    NETINFO_ITEM* aNet = nullptr,
+                                                    PCB_LAYER_ID aLayerOverride = UNDEFINED_LAYER,
+                                                    int aWidthOverride = -1 );
 
     /**
-     * @brief Adds a CADSTAR Attribute to a KiCad module
+     * @brief Adds a CADSTAR Attribute to a KiCad footprint
      * @param aCadstarAttrLoc
      * @param aCadstarAttributeID
      * @param aFootprint
      * @param aAttributeValue
      */
     void addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-            const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aFootprint,
-            const wxString& aAttributeValue );
+                       const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aFootprint,
+                       const wxString& aAttributeValue );
 
     //Helper Functions for obtaining CADSTAR elements in the parsed structures
     int        getLineThickness( const LINECODE_ID& aCadstarLineCodeID );

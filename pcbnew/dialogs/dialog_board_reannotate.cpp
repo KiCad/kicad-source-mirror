@@ -601,7 +601,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     RefDesChange*           newref;
     NETLIST                 netlist;
 
-    if( !BuildModuleList( BadRefDes ) )
+    if( !BuildFootprintList( BadRefDes ) )
     {
         ShowReport( "Selected options resulted in errors! Change them and try again.",
                     RPT_SEVERITY_ERROR );
@@ -664,41 +664,41 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
 
     } //If updating schematic
 
-    bool reannotateok = payload.size( ) == 0;
+    bool reannotateOk = payload.size( ) == 0;
 
-    ShowReport( payload, reannotateok ? RPT_SEVERITY_ACTION : RPT_SEVERITY_ERROR );
+    ShowReport( payload, reannotateOk ? RPT_SEVERITY_ACTION : RPT_SEVERITY_ERROR );
     BOARD_COMMIT commit( m_frame );
 
-    if( reannotateok )
-    { //Only update if no errors
+    if( reannotateOk )//Only update if no errors
+    {
 
-    	for( MODULE* mod : m_footprints )
-        { // Create a netlist
-            newref = GetNewRefDes( mod );
+    	for( MODULE* footprint : m_footprints )
+        {
+            newref = GetNewRefDes( footprint );
 
             if( nullptr == newref )
                 return false;
 
-            commit.Modify( mod );                           //Make a copy for undo
-            mod->SetReference( newref->NewRefDes );         //Update the PCB reference
-            m_frame->GetCanvas()->GetView()->Update( mod ); //Touch the module
+            commit.Modify( footprint );                           // Make a copy for undo
+            footprint->SetReference( newref->NewRefDes );         // Update the PCB reference
+            m_frame->GetCanvas()->GetView()->Update( footprint ); // Touch the footprint
         }
     }
 
     commit.Push( "Geographic reannotation" );
-    return reannotateok;
+    return reannotateOk;
 }
 
 
 //
-/// Build the module lists, sort it, filter for excludes, then build the change list
+/// Build the footprint lists, sort it, filter for excludes, then build the change list
 /// @returns true if success, false if errors
-bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefDes )
+bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadRefDes )
 {
-    bool annotateselected;
-    bool annotatefront = m_AnnotateFront->GetValue(); //Unless only doing back
-    bool annotateback  = m_AnnotateBack->GetValue();  //Unless only doing front
-    bool skiplocked    = m_ExcludeLocked->GetValue();
+    bool annotateSelected;
+    bool annotateFront = m_AnnotateFront->GetValue(); //Unless only doing back
+    bool annotateBack  = m_AnnotateBack->GetValue();  //Unless only doing front
+    bool skipLocked    = m_ExcludeLocked->GetValue();
 
     int          errorcount = 0;
     unsigned int backstartrefdes;
@@ -721,7 +721,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
         }
     }
 
-    annotateselected = !selected.empty();
+    annotateSelected = !selected.empty();
 
     wxString exclude;
 
@@ -740,70 +740,72 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
             m_excludeArray.push_back( exclude );
     }
 
-    RefDesInfo thismodule;
+    RefDesInfo fpData;
     bool       useModuleLocation = m_locationChoice->GetSelection() == 0;
 
-    for( MODULE* mod : m_footprints )
+    for( MODULE* footprint : m_footprints )
     {
-        thismodule.Uuid         = mod->m_Uuid;
-        thismodule.RefDesString = mod->GetReference();
-        thismodule.FPID         = mod->GetFPID();
-        thismodule.x            = useModuleLocation ? mod->GetPosition().x
-                                                    : mod->Reference().GetPosition().x;
-        thismodule.y            = useModuleLocation ? mod->GetPosition().y
-                                                    :  mod->Reference().GetPosition().y;
-        thismodule.roundedx     = RoundToGrid( thismodule.x, m_sortGridx ); //Round to sort
-        thismodule.roundedy     = RoundToGrid( thismodule.y, m_sortGridy );
-        thismodule.Front        = mod->GetLayer() == F_Cu;
-        thismodule.Action       = UpdateRefDes; //Usually good
+        fpData.Uuid         = footprint->m_Uuid;
+        fpData.RefDesString = footprint->GetReference();
+        fpData.FPID         = footprint->GetFPID();
+        fpData.x            = useModuleLocation ? footprint->GetPosition().x
+                                                : footprint->Reference().GetPosition().x;
+        fpData.y            = useModuleLocation ? footprint->GetPosition().y
+                                                : footprint->Reference().GetPosition().y;
+        fpData.roundedx     = RoundToGrid( fpData.x, m_sortGridx ); //Round to sort
+        fpData.roundedy     = RoundToGrid( fpData.y, m_sortGridy );
+        fpData.Front        = footprint->GetLayer() == F_Cu;
+        fpData.Action       = UpdateRefDes; //Usually good
 
-        if( thismodule.RefDesString.IsEmpty() )
-            thismodule.Action = EmptyRefDes;
+        if( fpData.RefDesString.IsEmpty() )
+        {
+            fpData.Action = EmptyRefDes;
+        }
         else
         {
-            firstnum = thismodule.RefDesString.find_first_of( "0123456789" );
+            firstnum = fpData.RefDesString.find_first_of( "0123456789" );
 
             if( std::string::npos == firstnum )
-                thismodule.Action = InvalidRefDes; //do not change ref des such as 12 or +1, or L
+                fpData.Action = InvalidRefDes; //do not change ref des such as 12 or +1, or L
         }
 
         //Get the type (R, C, etc)
-        thismodule.RefDesType = thismodule.RefDesString.substr( 0, firstnum );
+        fpData.RefDesType = fpData.RefDesString.substr( 0, firstnum );
 
         for( wxString excluded : m_excludeArray )
         {
-            if( excluded == thismodule.RefDesType ) //Am I supposed to exclude this type?
+            if( excluded == fpData.RefDesType ) //Am I supposed to exclude this type?
             {
-                thismodule.Action = Exclude; //Yes
+                fpData.Action = Exclude; //Yes
                 break;
             }
         }
 
-        if( ( thismodule.Front && annotateback ) ||       //If a front module and doing backs only
-                ( !thismodule.Front && annotatefront ) || //If a back module and doing front only
-                ( mod->IsLocked() && skiplocked ) )       //If excluding locked and it is locked
+        if(( fpData.Front && annotateBack ) ||            // If a front module and doing backs only
+                ( !fpData.Front && annotateFront ) ||     // If a back module and doing front only
+                ( footprint->IsLocked() && skipLocked ) ) // If excluding locked and it is locked
         {
-            thismodule.Action = Exclude;
+            fpData.Action = Exclude;
         }
 
-        if( annotateselected )
-        {                                //If onnly annotating selected c
-            thismodule.Action = Exclude; //Assume it isn't selected
+        if( annotateSelected )
+        {                                // If onnly annotating selected c
+            fpData.Action = Exclude;     // Assume it isn't selected
 
             for( KIID sel : selected )
             {
-                if( thismodule.Uuid == sel )
-                {                                     //Found in selected footprints
-                    thismodule.Action = UpdateRefDes; //Update it
+                if( fpData.Uuid == sel )
+                {                                  // Found in selected footprints
+                    fpData.Action = UpdateRefDes;  // Update it
                     break;
                 }
             }
         }
 
-        if( thismodule.Front )
-            m_frontFootprints.push_back( thismodule );
+        if( fpData.Front )
+            m_frontFootprints.push_back( fpData );
         else
-            m_backFootprints.push_back( thismodule );
+            m_backFootprints.push_back( fpData );
     }
 
     SetSortCodes( FrontDirectionsArray, m_sortCode ); //Determine the sort order for the front
@@ -865,7 +867,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildModuleList( std::vector<RefDesInfo>& aBadRefD
 
 
 //
-/// Scan through the module arrays and create the from -> to array
+/// Scan through the footprint arrays and create the from -> to array
 void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootprints,
                                                 unsigned int aStartRefDes, wxString aPrefix,
                                                 bool aRemovePrefix,
@@ -894,44 +896,44 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
             m_refDesTypes[i].RefDesCount = aStartRefDes;
     }
 
-    for( RefDesInfo footprint : aFootprints )
-    { //For each module
-        change.Uuid            = footprint.Uuid;
-        change.Action          = footprint.Action;
-        change.OldRefDesString = footprint.RefDesString;
-        change.NewRefDes       = footprint.RefDesString;
-        change.Front           = footprint.Front;
+    for( RefDesInfo fpData : aFootprints )
+    {
+        change.Uuid            = fpData.Uuid;
+        change.Action          = fpData.Action;
+        change.OldRefDesString = fpData.RefDesString;
+        change.NewRefDes       = fpData.RefDesString;
+        change.Front           = fpData.Front;
 
-        if( footprint.RefDesString.IsEmpty() )
-            footprint.Action = EmptyRefDes;
+        if( fpData.RefDesString.IsEmpty() )
+            fpData.Action = EmptyRefDes;
 
         if( ( change.Action == EmptyRefDes ) || ( change.Action == InvalidRefDes ) )
         {
             m_changeArray.push_back( change );
-            aBadRefDes.push_back( footprint );
+            aBadRefDes.push_back( fpData );
             continue;
         }
 
         if( change.Action == UpdateRefDes )
         {
-            refdestype    = footprint.RefDesType;
-            prefixpresent = ( 0 == footprint.RefDesType.find( aPrefix ) );
+            refdestype    = fpData.RefDesType;
+            prefixpresent = ( 0 == fpData.RefDesType.find( aPrefix ) );
 
             if( addprefix && !prefixpresent )
-                footprint.RefDesType.insert( 0, aPrefix ); //Add prefix once only
+                fpData.RefDesType.insert( 0, aPrefix ); //Add prefix once only
 
             if( aRemovePrefix && prefixpresent ) //If there is a prefix remove it
-                footprint.RefDesType.erase( 0, prefixsize );
+                fpData.RefDesType.erase( 0, prefixsize );
 
             for( i = 0; i < m_refDesTypes.size(); i++ ) //See if it is in the types array
             {
-                if( m_refDesTypes[i].RefDesType == footprint.RefDesType ) //Found it!
+                if( m_refDesTypes[i].RefDesType == fpData.RefDesType ) //Found it!
                     break;
             }
 
             if( i == m_refDesTypes.size() )
             { //Wasn't in the types array so add it
-                newtype.RefDesType  = footprint.RefDesType;
+                newtype.RefDesType  = fpData.RefDesType;
                 newtype.RefDesCount = ( aStartRefDes == 0 ? 1 : aStartRefDes );
                 m_refDesTypes.push_back( newtype );
             }

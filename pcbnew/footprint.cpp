@@ -46,7 +46,7 @@ MODULE::MODULE( BOARD* parent ) :
     m_attributes   = 0;
     m_Layer        = F_Cu;
     m_orient       = 0;
-    m_moduleStatus = FP_PADS_are_LOCKED;
+    m_fpStatus     = FP_PADS_are_LOCKED;
     m_arflag       = 0;
     m_rot90Cost    = m_rot180Cost = 0;
     m_link         = 0;
@@ -73,7 +73,7 @@ MODULE::MODULE( const MODULE& aFootprint ) :
     m_pos          = aFootprint.m_pos;
     m_fpid         = aFootprint.m_fpid;
     m_attributes   = aFootprint.m_attributes;
-    m_moduleStatus = aFootprint.m_moduleStatus;
+    m_fpStatus     = aFootprint.m_fpStatus;
     m_orient       = aFootprint.m_orient;
     m_boundingBox  = aFootprint.m_boundingBox;
     m_rot90Cost    = aFootprint.m_rot90Cost;
@@ -207,7 +207,7 @@ MODULE& MODULE::operator=( MODULE&& aOther )
     m_pos           = aOther.m_pos;
     m_fpid          = aOther.m_fpid;
     m_attributes    = aOther.m_attributes;
-    m_moduleStatus  = aOther.m_moduleStatus;
+    m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
     m_boundingBox   = aOther.m_boundingBox;
     m_rot90Cost     = aOther.m_rot90Cost;
@@ -302,7 +302,7 @@ MODULE& MODULE::operator=( const MODULE& aOther )
     m_pos           = aOther.m_pos;
     m_fpid          = aOther.m_fpid;
     m_attributes    = aOther.m_attributes;
-    m_moduleStatus  = aOther.m_moduleStatus;
+    m_fpStatus      = aOther.m_fpStatus;
     m_orient        = aOther.m_orient;
     m_boundingBox   = aOther.m_boundingBox;
     m_rot90Cost     = aOther.m_rot90Cost;
@@ -762,7 +762,7 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     if( IsLocked() )
         addToken( &status, _( "locked" ) );
 
-    if( m_moduleStatus & FP_is_PLACED )
+    if( m_fpStatus & FP_is_PLACED )
         addToken( &status, _( "autoplaced" ) );
 
     if( m_attributes & FP_BOARD_ONLY )
@@ -1293,7 +1293,7 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     m_reference->Flip( m_pos, false );
     m_value->Flip( m_pos, false );
 
-    // Reverse mirror module graphics and texts.
+    // Reverse mirror footprint graphics and texts.
     for( BOARD_ITEM* item : m_drawings )
     {
         switch( item->Type() )

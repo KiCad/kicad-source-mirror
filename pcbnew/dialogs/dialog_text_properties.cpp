@@ -249,16 +249,16 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     if( m_item->Type() == PCB_FP_TEXT_T && m_fpText )
     {
-        MODULE*  module = dynamic_cast<MODULE*>( m_fpText->GetParent() );
+        MODULE*  footprint = dynamic_cast<MODULE*>( m_fpText->GetParent() );
         wxString msg;
 
-        if( module )
+        if( footprint )
         {
-            msg.Printf( _("Footprint %s (%s), %s, rotated %.1f deg"),
-                        module->GetReference(),
-                        module->GetValue(),
-                        module->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
-                        module->GetOrientation() / 10.0 );
+            msg.Printf( _( "Footprint %s (%s), %s, rotated %.1f deg"),
+                        footprint->GetReference(),
+                        footprint->GetValue(),
+                        footprint->IsFlipped() ? _( "back side (mirrored)" ) : _( "front side" ),
+                        footprint->GetOrientation() / 10.0 );
         }
 
         m_statusLine->SetLabel( msg );

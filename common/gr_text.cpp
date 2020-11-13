@@ -106,7 +106,7 @@ int GraphicTextWidth( const wxString& aText, const wxSize& aSize, bool aItalic, 
 
 /**
  * Function GRText
- * Draw a graphic text (like module texts)
+ * Draw a graphic text (like footprint texts)
  *  @param aDC = the current Device Context. NULL if draw within a 3D GL Canvas
  *  @param aPos = text position (according to h_justify, v_justify)
  *  @param aColor (COLOR4D) = text color

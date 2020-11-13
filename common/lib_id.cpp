@@ -374,8 +374,7 @@ bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
     if( aUniChar < ' ' )
         return false;
 
-    // This list of characters is also duplicated in validators.cpp and
-    // class_module.cpp
+    // This list of characters is also duplicated in validators.cpp and footprint.cpp
     // TODO: Unify forbidden character lists
     switch( aUniChar )
     {

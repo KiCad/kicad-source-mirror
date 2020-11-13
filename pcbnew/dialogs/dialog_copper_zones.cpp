@@ -175,7 +175,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     }
 
     // Do not enable/disable antipad clearance and spoke width.  They might be needed if
-    // a module or pad overrides the zone to specify a thermal connection.
+    // a footprint or pad overrides the zone to specify a thermal connection.
     m_antipadClearance.SetValue( m_settings.m_ThermalReliefGap );
     m_spokeWidth.SetValue( m_settings.m_ThermalReliefSpokeWidth );
 

@@ -27,7 +27,7 @@
  * @file panel_prev_model.h
  * @brief Defines a panel which is to be added to a wxFileDialog via
  * SetExtraControl();
- * The panel shows a preview of the module being edited and provides controls
+ * The panel shows a preview of the footprint being edited and provides controls
  * to set the offset/rotation/scale of each model 3d shape as per KiCad's
  * current behavior. The panel may also be used in the 3D configuration dialog
  * to tune the positioning of the models without invoking a file selector dialog.
@@ -201,14 +201,14 @@ public:
     CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
     /**
-     * @brief SetModelDataIdx - Sets the currently selected index in the model list so that
+     * @brief SetSelectedModel - Sets the currently selected index in the model list so that
      * the scale/rotation/offset controls can be updated.
      */
     void SetSelectedModel( int idx );
 
     /**
-     * @brief UpdateModelInfoList - copy shapes from the current shape list which are flagged
-     * for preview to the copy of module that is on the preview dummy board
+     * @brief UpdateDummyFootprint - copy shapes from the current shape list which are flagged
+     * for preview to the copy of footprint that is on the preview dummy board
      */
     void UpdateDummyFootprint( bool aRelaodRequired = true );
 };

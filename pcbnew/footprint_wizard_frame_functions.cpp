@@ -101,7 +101,7 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     // Delete the current footprint
     GetBoard()->DeleteAllModules();
 
-    // Creates the module
+    // Creates the footprint
     wxString msg;
     MODULE*  footprint = footprintWizard->GetFootprint( &msg );
     DisplayBuildMessage( msg );

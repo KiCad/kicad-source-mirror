@@ -120,15 +120,16 @@ PCB_SHAPE* ALTIUM_PCB::HelperCreateAndAddDrawsegment( uint16_t aComponent )
     {
         if( m_components.size() <= aComponent )
         {
-            THROW_IO_ERROR( wxString::Format(
-                    "Component creator tries to access component id %d of %d existing components",
-                    aComponent, m_components.size() ) );
+            THROW_IO_ERROR( wxString::Format( "Component creator tries to access component id %d "
+                                              "of %d existing components",
+                                              aComponent,
+                                              m_components.size() ) );
         }
 
-        MODULE*    module = m_components.at( aComponent );
-        PCB_SHAPE* fpShape = new FP_SHAPE( module );
+        MODULE*    footprint = m_components.at( aComponent );
+        PCB_SHAPE* fpShape = new FP_SHAPE( footprint );
 
-        module->Add( fpShape, ADD_MODE::APPEND );
+        footprint->Add( fpShape, ADD_MODE::APPEND );
         return fpShape;
     }
 }
@@ -444,11 +445,9 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         zone.second->SetPriority( 0 );
     }
 
-    // Finish Board by recalculating module boundingboxes
+    // Finish Board by recalculating footprint boundingboxes
     for( MODULE* footprint : m_board->Footprints() )
-    {
         footprint->CalculateBoundingBox();
-    }
 
     // Otherwise we cannot save the imported board
     m_board->SetModified();
@@ -750,28 +749,28 @@ void ALTIUM_PCB::ParseComponents6Data(
     {
         ACOMPONENT6 elem( reader );
 
-        MODULE* module = new MODULE( m_board );
-        m_board->Add( module, ADD_MODE::APPEND );
-        m_components.emplace_back( module );
+        MODULE* footprint = new MODULE( m_board );
+        m_board->Add( footprint, ADD_MODE::APPEND );
+        m_components.emplace_back( footprint );
 
         LIB_ID fpID = AltiumToKiCadLibID(LIB_ID::ID_PCB, elem.sourcefootprintlibrary, elem.sourcelibreference );
 
-        module->SetFPID( fpID );
+        footprint->SetFPID( fpID );
 
-        module->SetPosition( elem.position );
-        module->SetOrientationDegrees( elem.rotation );
+        footprint->SetPosition( elem.position );
+        footprint->SetOrientationDegrees( elem.rotation );
 
         // KiCad netlisting requires parts to have non-digit + digit annotation.
         // If the reference begins with a number, we prepend 'UNK' (unknown) for the source designator
         wxString reference = elem.sourcedesignator;
         if( reference.find_first_not_of( "0123456789" ) == wxString::npos )
             reference.Prepend( "UNK" );
-        module->SetReference( reference );
+        footprint->SetReference( reference );
 
-        module->SetLocked( elem.locked );
-        module->Reference().SetVisible( elem.nameon );
-        module->Value().SetVisible( elem.commenton );
-        module->SetLayer( elem.layer == ALTIUM_LAYER::TOP_LAYER ? F_Cu : B_Cu );
+        footprint->SetLocked( elem.locked );
+        footprint->Reference().SetVisible( elem.nameon );
+        footprint->Value().SetVisible( elem.commenton );
+        footprint->SetLayer( elem.layer == ALTIUM_LAYER::TOP_LAYER ? F_Cu : B_Cu );
 
         componentId++;
     }
@@ -817,20 +816,20 @@ void ALTIUM_PCB::ParseComponentsBodies6Data(
                     elem.modelId ) );
         }
 
-        MODULE*        module         = m_components.at( elem.component );
-        const wxPoint& modulePosition = module->GetPosition();
+        MODULE*        footprint  = m_components.at( elem.component );
+        const wxPoint& fpPosition = footprint->GetPosition();
 
         FP_3DMODEL modelSettings;
 
         modelSettings.m_Filename = modelTuple->second;
 
-        modelSettings.m_Offset.x = Iu2Millimeter( (int) elem.modelPosition.x - modulePosition.x );
-        modelSettings.m_Offset.y = -Iu2Millimeter( (int) elem.modelPosition.y - modulePosition.y );
+        modelSettings.m_Offset.x = Iu2Millimeter((int) elem.modelPosition.x - fpPosition.x );
+        modelSettings.m_Offset.y = -Iu2Millimeter((int) elem.modelPosition.y - fpPosition.y );
         modelSettings.m_Offset.z = Iu2Millimeter( (int) elem.modelPosition.z );
 
-        double orientation = module->GetOrientation();
+        double orientation = footprint->GetOrientation();
 
-        if( module->IsFlipped() )
+        if( footprint->IsFlipped() )
         {
             modelSettings.m_Offset.y = -modelSettings.m_Offset.y;
             orientation              = -orientation;
@@ -845,7 +844,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data(
 
         modelSettings.m_Opacity = elem.bodyOpacity;
 
-        module->Models().push_back( modelSettings );
+        footprint->Models().push_back( modelSettings );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1681,26 +1680,28 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         }
 
         // Create Pad
-        MODULE* module = nullptr;
+        MODULE* footprint = nullptr;
+
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            module = new MODULE( m_board ); // We cannot add a pad directly into the PCB
-            m_board->Add( module, ADD_MODE::APPEND );
-            module->SetPosition( elem.position );
+            footprint = new MODULE( m_board ); // We cannot add a pad directly into the PCB
+            m_board->Add( footprint, ADD_MODE::APPEND );
+            footprint->SetPosition( elem.position );
         }
         else
         {
             if( m_components.size() <= elem.component )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        "Pads6 stream tries to access component id %d of %d existing components",
-                        elem.component, m_components.size() ) );
+                THROW_IO_ERROR( wxString::Format( "Pads6 stream tries to access component id %d "
+                                                  "of %d existing components",
+                                                  elem.component,
+                                                  m_components.size() ) );
             }
-            module = m_components.at( elem.component );
+            footprint = m_components.at( elem.component );
         }
 
-        PAD* pad = new PAD( module );
-        module->Add( pad, ADD_MODE::APPEND );
+        PAD* pad = new PAD( footprint );
+        footprint->Add( pad, ADD_MODE::APPEND );
 
         pad->SetName( elem.name );
         pad->SetNetCode( GetNetCode( elem.net ) );
@@ -1722,8 +1723,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
             {
                 // TODO: I assume other values are possible as well?
                 wxLogError( wxString::Format(
-                        "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad",
-                        elem.name, module->GetReference() ) );
+                            "Pad '%s' of Footprint %s is not marked as multilayer, but it is an THT pad",
+                            elem.name, footprint->GetReference() ) );
             }
             pad->SetAttribute( elem.plated ? PAD_ATTR_T::PAD_ATTRIB_PTH :
                                              PAD_ATTR_T::PAD_ATTRIB_NPTH );
@@ -1742,8 +1743,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
 
                 case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
                     wxLogWarning( wxString::Format(
-                            _( "Pad '%s' of Footprint %s has a square hole. KiCad does not support this yet" ),
-                            elem.name, module->GetReference() ) );
+                                _( "Pad '%s' of Footprint %s has a square hole. KiCad does not support this yet" ),
+                                elem.name, footprint->GetReference() ) );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
                     // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in this case or rect holes have a different id
@@ -1763,8 +1764,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                         if( normalizedSlotrotation != 90. && normalizedSlotrotation != 270. )
                         {
                             wxLogWarning( wxString::Format(
-                                    _( "Pad '%s' of Footprint %s has a hole-rotation of %f degree. KiCad only supports 90 degree angles" ),
-                                    elem.name, module->GetReference(), normalizedSlotrotation ) );
+                                        _( "Pad '%s' of Footprint %s has a hole-rotation of %f degree. KiCad only supports 90 degree angles" ),
+                                        elem.name, footprint->GetReference(), normalizedSlotrotation ) );
                         }
 
                         pad->SetDrillSize( wxSize( elem.holesize, elem.sizeAndShape->slotsize ) );
@@ -1775,8 +1776,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                 default:
                 case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
                     wxLogError( wxString::Format(
-                            "Pad '%s' of Footprint %s uses a hole of unknown kind %d", elem.name,
-                            module->GetReference(), elem.sizeAndShape->holeshape ) );
+                                "Pad '%s' of Footprint %s uses a hole of unknown kind %d", elem.name,
+                                footprint->GetReference(), elem.sizeAndShape->holeshape ) );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
                     break;
@@ -1792,8 +1793,8 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         if( elem.padmode != ALTIUM_PAD_MODE::SIMPLE )
         {
             wxLogWarning( wxString::Format(
-                    _( "Pad '%s' of Footprint %s uses a complex pad stack (kind %d), which is not supported yet" ),
-                    elem.name, module->GetReference(), elem.padmode ) );
+                        _( "Pad '%s' of Footprint %s uses a complex pad stack (kind %d), which is not supported yet" ),
+                        elem.name, footprint->GetReference(), elem.padmode ) );
         }
 
         switch( elem.topshape )
@@ -1826,7 +1827,7 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         case ALTIUM_PAD_SHAPE::UNKNOWN:
         default:
             wxLogError( wxString::Format( "Pad '%s' of Footprint %s uses a unknown pad-shape",
-                    elem.name, module->GetReference() ) );
+                                          elem.name, footprint->GetReference() ) );
             break;
         }
 
@@ -2248,26 +2249,27 @@ void ALTIUM_PCB::ParseTexts6Data(
         {
             if( m_components.size() <= elem.component )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        "Texts6 stream tries to access component id %d of %d existing components",
-                        elem.component, m_components.size() ) );
+                THROW_IO_ERROR( wxString::Format( "Texts6 stream tries to access component id %d "
+                                                  "of %d existing components",
+                                                  elem.component,
+                                                  m_components.size() ) );
             }
 
-            MODULE*  module = m_components.at( elem.component );
+            MODULE*  footprint = m_components.at( elem.component );
             FP_TEXT* fpText;
 
             if( elem.isDesignator )
             {
-                fpText = &module->Reference();
+                fpText = &footprint->Reference();
             }
             else if( elem.isComment )
             {
-                fpText = &module->Value();
+                fpText = &footprint->Value();
             }
             else
             {
-                fpText = new FP_TEXT( module );
-                module->Add( fpText, ADD_MODE::APPEND );
+                fpText = new FP_TEXT( footprint );
+                footprint->Add( fpText, ADD_MODE::APPEND );
             }
 
             fpText->SetKeepUpright( false );

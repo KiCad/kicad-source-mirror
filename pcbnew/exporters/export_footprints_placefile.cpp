@@ -23,7 +23,7 @@
 
 /*
  *  1 - create ascii/csv files for automatic placement of smd components
- *  2 - create a module report (pos and module descr) (ascii file)
+ *  2 - create a footprint report (pos and footprint descr) (ascii file)
  */
 
 #include <kicad_string.h>
@@ -35,7 +35,7 @@
 class LIST_MOD      // An helper class used to build a list of useful footprints.
 {
 public:
-    MODULE*       m_Module;         // Link to the actual footprint
+    MODULE*       m_Footprint;      // Link to the actual footprint
     wxString      m_Reference;      // Its schematic reference
     wxString      m_Value;          // Its schematic value
     LAYER_NUM     m_Layer;          // its side (B_Cu, or F_Cu)
@@ -132,7 +132,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         m_fpCount++;
 
         LIST_MOD item;
-        item.m_Module    = footprint;
+        item.m_Footprint    = footprint;
         item.m_Reference = footprint->Reference().GetShownText();
         item.m_Value     = footprint->Value().GetShownText();
         item.m_Layer     = footprint->GetLayer();
@@ -140,7 +140,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
         lenRefText = std::max( lenRefText, (int) item.m_Reference.length() );
         lenValText = std::max( lenValText, (int) item.m_Value.length() );
-        lenPkgText = std::max( lenPkgText, (int) item.m_Module->GetFPID().GetLibItemName().length() );
+        lenPkgText = std::max( lenPkgText, (int) item.m_Footprint->GetFPID().GetLibItemName().length() );
     }
 
     if( list.size() > 1 )
@@ -162,10 +162,10 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         for( int ii = 0; ii < m_fpCount; ii++ )
         {
             wxPoint  footprint_pos;
-            footprint_pos  = list[ii].m_Module->GetPosition();
+            footprint_pos  = list[ii].m_Footprint->GetPosition();
             footprint_pos -= m_place_Offset;
 
-            LAYER_NUM layer = list[ii].m_Module->GetLayer();
+            LAYER_NUM layer = list[ii].m_Footprint->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
             if( layer == B_Cu )
@@ -175,7 +175,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
             tmp << "\"" << csv_sep;
             tmp << "\"" << list[ii].m_Value;
             tmp << "\"" << csv_sep;
-            tmp << "\"" << list[ii].m_Module->GetFPID().GetLibItemName().wx_str();
+            tmp << "\"" << list[ii].m_Footprint->GetFPID().GetLibItemName().wx_str();
             tmp << "\"" << csv_sep;
 
             tmp << wxString::Format( "%f%c%f%c%f",
@@ -183,7 +183,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
                                     // Keep the Y axis oriented from bottom to top,
                                     // ( change y coordinate sign )
                                     -footprint_pos.y * conv_unit, csv_sep,
-                                    list[ii].m_Module->GetOrientation() / 10.0 );
+                                     list[ii].m_Footprint->GetOrientation() / 10.0 );
             tmp << csv_sep;
 
             tmp << ( (layer == F_Cu ) ? PLACE_FILE_EXPORTER::GetFrontSideName()
@@ -228,10 +228,10 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
         for( int ii = 0; ii < m_fpCount; ii++ )
         {
             wxPoint  footprint_pos;
-            footprint_pos  = list[ii].m_Module->GetPosition();
+            footprint_pos  = list[ii].m_Footprint->GetPosition();
             footprint_pos -= m_place_Offset;
 
-            LAYER_NUM layer = list[ii].m_Module->GetLayer();
+            LAYER_NUM layer = list[ii].m_Footprint->GetLayer();
             wxASSERT( layer == F_Cu || layer == B_Cu );
 
             if( layer == B_Cu )
@@ -239,7 +239,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
 
             wxString ref = list[ii].m_Reference;
             wxString val = list[ii].m_Value;
-            wxString pkg = list[ii].m_Module->GetFPID().GetLibItemName();
+            wxString pkg = list[ii].m_Footprint->GetFPID().GetLibItemName();
             ref.Replace( wxT( " " ), wxT( "_" ) );
             val.Replace( wxT( " " ), wxT( "_" ) );
             pkg.Replace( wxT( " " ), wxT( "_" ) );
@@ -251,7 +251,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
                     // Keep the coordinates in the first quadrant,
                     // (i.e. change y sign
                     -footprint_pos.y * conv_unit,
-                    list[ii].m_Module->GetOrientation() / 10.0,
+                    list[ii].m_Footprint->GetOrientation() / 10.0,
                     (layer == F_Cu ) ? GetFrontSideName().c_str() : GetBackSideName().c_str() );
             buffer += line;
         }

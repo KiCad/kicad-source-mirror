@@ -138,7 +138,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
     PTREE&   tree = doc.get_child( "pcb_netlist" );
     wxString msg;
-    m_pcbModules.clear();
+    m_pcbFootprints.clear();
 
     for( const std::pair<const std::string, PTREE>& item : tree )
     {
@@ -184,9 +184,9 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         }
 
         // Use lower_bound for not to iterate over map twice
-        auto nearestItem = m_pcbModules.lower_bound( path );
+        auto nearestItem = m_pcbFootprints.lower_bound( path );
 
-        if( nearestItem != m_pcbModules.end() && nearestItem->first == path )
+        if( nearestItem != m_pcbFootprints.end() && nearestItem->first == path )
         {
             // Module with this path already exists - generate error
             msg.Printf( _( "Pcb footprints '%s' and '%s' linked to same symbol." ),
@@ -196,9 +196,9 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         }
         else
         {
-            // Add module to the map
+            // Add footprint to the map
             auto data = std::make_shared<PCB_FP_DATA>( ref, footprint, value, pinNetMap );
-            m_pcbModules.insert( nearestItem, std::make_pair( path, data ) );
+            m_pcbFootprints.insert( nearestItem, std::make_pair( path, data ) );
         }
     }
 }
@@ -206,10 +206,10 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
 void BACK_ANNOTATE::getChangeList()
 {
-    for( std::pair<const wxString, std::shared_ptr<PCB_FP_DATA>>& module : m_pcbModules )
+    for( std::pair<const wxString, std::shared_ptr<PCB_FP_DATA>>& fpData : m_pcbFootprints )
     {
-        const wxString& pcbPath = module.first;
-        auto&           pcbData = module.second;
+        const wxString& pcbPath = fpData.first;
+        auto&           pcbData = fpData.second;
         int             refIndex;
         bool            foundInMultiunit = false;
 
@@ -224,7 +224,7 @@ void BACK_ANNOTATE::getChangeList()
 
             if( refIndex >= 0 )
             {
-                // If module linked to multi unit symbol, we add all symbol's units to
+                // If footprint linked to multi unit symbol, we add all symbol's units to
                 // the change list
                 foundInMultiunit = true;
 

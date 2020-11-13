@@ -70,7 +70,7 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
     // NOTE: IMPLEMENTATION
     // If/when component cutouts are allowed, we must implement them separately. Cutouts
     // must be added to the board outline section and not to the Other Outline section.
-    // The module cutouts should be handled via the idf_export_footprint() routine.
+    // The footprint cutouts should be handled via the idf_export_footprint() routine.
 
     double offX, offY;
     aIDFBoard.GetUserOffset( offX, offY );
@@ -219,10 +219,9 @@ UseBoundingBox:
     else
         outline = new IDF_OUTLINE;
 
-    // fetch a rectangular bounding box for the board;
-    // there is always some uncertainty in the board dimensions
-    // computed via ComputeBoundingBox() since this depends on the
-    // individual module entities.
+    // Fetch a rectangular bounding box for the board; there is always some uncertainty in the
+    // board dimensions computed via ComputeBoundingBox() since this depends on the individual
+    // footprint entities.
     EDA_RECT bbbox = aPcb->GetBoardEdgesBoundingBox();
 
     // convert to mm and compensate for an assumed LINE_WIDTH line thickness
@@ -284,14 +283,14 @@ static void idf_export_footprint( BOARD* aPcb, MODULE* aFootprint, IDF3_BOARD& a
         std::string cvalue = TO_UTF8( aFootprint->Value().GetShownText() );
 
         // if both the RefDes and Value are empty or set to '~' the board owns the part,
-        // otherwise associated parts of the module must be marked NOREFDES.
+        // otherwise associated parts of the footprint must be marked NOREFDES.
         if( cvalue.empty() || !cvalue.compare( "~" ) )
             crefdes = "BOARD";
         else
             crefdes = "NOREFDES";
     }
 
-    // TODO: If module cutouts are supported we must add code here
+    // TODO: If footprint cutouts are supported we must add code here
     // for( EDA_ITEM* item = aFootprint->GraphicalItems();  item != NULL;  item = item->Next() )
     // {
     //     if( item->Type() != PCB_FP_SHAPE_T || item->GetLayer() != Edge_Cuts )
@@ -616,7 +615,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
         // Export the board outline
         idf_export_outline( aPcb, idfBoard );
 
-        // Output the drill holes and module (library) data.
+        // Output the drill holes and footprint (library) data.
         for( MODULE* footprint : aPcb->Footprints() )
             idf_export_footprint( aPcb, footprint, idfBoard );
 

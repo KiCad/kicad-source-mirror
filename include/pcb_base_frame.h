@@ -301,11 +301,11 @@ public:
     MODULE* CreateNewFootprint( const wxString& aFootprintName );
 
     /**
-     * Function PlaceModule
-     * places \a aModule at the current cursor position and updates module coordinates
+     * Function PlaceFootprint
+     * places \a aFootprint at the current cursor position and updates footprint coordinates
      * with the new position.
      *
-     * @param aRecreateRatsnest A bool true redraws the module rats nest.
+     * @param aRecreateRatsnest A bool true redraws the footprint ratsnest.
      */
     void PlaceFootprint( MODULE* aFootprint, bool aRecreateRatsnest = true );
 
@@ -320,7 +320,7 @@ public:
     MODULE* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID() );
 
     /**
-     * Adds the given module to the board.
+     * Adds the given footprint to the board.
      * @param aFootprint
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */

@@ -176,7 +176,7 @@ private:
     void LogChangePlan( void );
 
     bool ReannotateBoard( void );
-    bool BuildModuleList( std::vector<RefDesInfo>& aBadRefDes );
+    bool BuildFootprintList( std::vector<RefDesInfo>& aBadRefDes );
     void BuildChangeArray( std::vector<RefDesInfo>& aFootprints, unsigned int aStartRefDes,
                            wxString aPrefix, bool aRemovePrefix,
                            std::vector<RefDesInfo>& aBadRefDes );

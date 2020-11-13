@@ -78,13 +78,13 @@ private:
     int drawMicrowaveInductor( const TOOL_EVENT& aEvent );
 
     /**
-     * Creates a module "GAP" or "STUB" used in micro wave designs.
-     *  This module has 2 pads:
+     * Creates a footprint "GAP" or "STUB" used in micro wave designs.
+     *  This footprint has 2 pads:
      *  PAD_ATTRIB_SMD, rectangular, H size = V size = current track width.
      *  the "gap" is isolation created between this 2 pads
      *
      * @param aComponentShape is the component to create
-     * @return the new module
+     * @return the new footprint
      */
     MODULE* createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape );
 
@@ -104,7 +104,7 @@ private:
      * @param aValue is the text value
      * @param aTextSize is the size of ref and value texts ( <= 0 to use board default values )
      * @param aPadCount is number of pads
-     * @return the new module
+     * @return the new footprint
      */
     MODULE* createBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
 };

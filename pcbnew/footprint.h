@@ -289,7 +289,7 @@ public:
 
     bool IsLocked() const override
     {
-        return ( m_moduleStatus & FP_is_LOCKED ) != 0;
+        return ( m_fpStatus & FP_is_LOCKED ) != 0;
     }
 
     /**
@@ -300,37 +300,37 @@ public:
     void SetLocked( bool isLocked ) override
     {
         if( isLocked )
-            m_moduleStatus |= FP_is_LOCKED;
+            m_fpStatus |= FP_is_LOCKED;
         else
-            m_moduleStatus &= ~FP_is_LOCKED;
+            m_fpStatus &= ~FP_is_LOCKED;
     }
 
-    bool IsPlaced() const { return m_moduleStatus & FP_is_PLACED;  }
+    bool IsPlaced() const { return m_fpStatus & FP_is_PLACED;  }
     void SetIsPlaced( bool isPlaced )
     {
         if( isPlaced )
-            m_moduleStatus |= FP_is_PLACED;
+            m_fpStatus |= FP_is_PLACED;
         else
-            m_moduleStatus &= ~FP_is_PLACED;
+            m_fpStatus &= ~FP_is_PLACED;
     }
 
-    bool NeedsPlaced() const { return m_moduleStatus & FP_to_PLACE;  }
+    bool NeedsPlaced() const { return m_fpStatus & FP_to_PLACE;  }
     void SetNeedsPlaced( bool needsPlaced )
     {
         if( needsPlaced )
-            m_moduleStatus |= FP_to_PLACE;
+            m_fpStatus |= FP_to_PLACE;
         else
-            m_moduleStatus &= ~FP_to_PLACE;
+            m_fpStatus &= ~FP_to_PLACE;
     }
 
-    bool PadsLocked() const { return m_moduleStatus & FP_PADS_are_LOCKED;  }
+    bool PadsLocked() const { return m_fpStatus & FP_PADS_are_LOCKED;  }
 
     void SetPadsLocked( bool aPadsLocked )
     {
         if( aPadsLocked )
-            m_moduleStatus |= FP_PADS_are_LOCKED;
+            m_fpStatus |= FP_PADS_are_LOCKED;
         else
-            m_moduleStatus &= ~FP_PADS_are_LOCKED;
+            m_fpStatus &= ~FP_PADS_are_LOCKED;
     }
 
     void SetLastEditTime( timestamp_t aTime ) { m_lastEditTime = aTime; }
@@ -702,7 +702,7 @@ private:
     FP_TEXT*        m_value;             // Component value (74LS00, 22K..)
     LIB_ID          m_fpid;              // The #LIB_ID of the MODULE.
     int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
-    int             m_moduleStatus;      // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
+    int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
     EDA_RECT        m_boundingBox;       // Bounding box : coordinates on board, real orientation.
 
     ZONE_CONNECTION m_zoneConnection;

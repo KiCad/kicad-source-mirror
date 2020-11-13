@@ -532,7 +532,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
 }
 
 
-bool BOARD::IsModuleLayerVisible( PCB_LAYER_ID aLayer )
+bool BOARD::IsFootprintLayerVisible( PCB_LAYER_ID aLayer )
 {
     switch( aLayer )
     {
@@ -1109,11 +1109,10 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             ++p;
             break;
 
-        /*  Instances of the requested KICAD_T live in a list, either one
-         *   that I manage, or that my footprints manage.  If it's a type managed
-         *   by class MODULE, then simply pass it on to each module's
-         *   MODULE::Visit() function by way of the
-         *   IterateForward( m_Modules, ... ) call.
+        /*
+         * Instances of the requested KICAD_T live in a list, either one that I manage, or one
+         * that my footprints manage.  If it's a type managed by class FOOTPRINT, then simply
+         * pass it on to each footprint's Visit() function via IterateForward( m_footprints, ... ).
          */
 
         case PCB_MODULE_T:
@@ -1122,7 +1121,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         case PCB_FP_SHAPE_T:
         case PCB_FP_ZONE_T:
 
-            // this calls MODULE::Visit() on each module.
+            // this calls FOOTPRINT::Visit() on each footprint.
             result = IterateForward<MODULE*>( m_footprints, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -1689,7 +1688,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
         PCB_LAYER_ID layer = candidate->GetLayer();
 
         // Filter non visible footprints if requested
-        if( !aVisibleOnly || IsModuleLayerVisible( layer ) )
+        if( !aVisibleOnly || IsFootprintLayerVisible( layer ) )
         {
             EDA_RECT bb = candidate->GetFootprintRect();
 
@@ -1709,7 +1708,7 @@ MODULE* BOARD::GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer
                     min_dim = dist;
                 }
             }
-            else if( aVisibleOnly && IsModuleLayerVisible( layer ) )
+            else if( aVisibleOnly && IsFootprintLayerVisible( layer ) )
             {
                 if( dist <= alt_min_dim )
                 {

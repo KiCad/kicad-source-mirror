@@ -134,7 +134,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
     wxString   msg;
     LIB_ID     lastFPID;
     COMPONENT* component;
-    MODULE*    module = nullptr;
+    MODULE*    footprint = nullptr;
     MODULE*    fpOnBoard;
 
     if( aNetlist.IsEmpty() || Prj().PcbFootprintLibs()->IsEmpty() )
@@ -184,7 +184,7 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
 
         if( component->GetFPID() != lastFPID )
         {
-            module = nullptr;
+            footprint = nullptr;
 
             // The LIB_ID is ok as long as there is a footprint portion coming the library if
             // it's needed.  Nickname can be blank.
@@ -199,15 +199,16 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             }
 
             // loadFootprint() can find a footprint with an empty nickname in fpid.
-            module = PCB_BASE_FRAME::loadFootprint( component->GetFPID() );
+            footprint = PCB_BASE_FRAME::loadFootprint( component->GetFPID() );
 
-            if( module )
+            if( footprint )
             {
                 lastFPID = component->GetFPID();
             }
             else
             {
-                msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint library table.\n" ),
+                msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint "
+                               "library table.\n" ),
                             component->GetReference(),
                             component->GetFPID().GetLibItemName().wx_str() );
                 aReporter.Report( msg, RPT_SEVERITY_ERROR );
@@ -218,14 +219,14 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         else
         {
             // Footprint already loaded from a library, duplicate it (faster)
-            if( !module )
-                continue;            // Module does not exist in any library.
+            if( !footprint )
+                continue;            // Footprint does not exist in any library.
 
-            module = new MODULE( *module );
-            const_cast<KIID&>( module->m_Uuid ) = KIID();
+            footprint = new MODULE( *footprint );
+            const_cast<KIID&>( footprint->m_Uuid ) = KIID();
         }
 
-        if( module )
-            component->SetModule( module );
+        if( footprint )
+            component->SetModule( footprint );
     }
 }

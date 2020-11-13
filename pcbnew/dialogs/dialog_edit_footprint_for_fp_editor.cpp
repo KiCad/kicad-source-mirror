@@ -545,7 +545,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
     if( !DIALOG_SHIM::Validate() )
         return false;
 
-    // First, test for invalid chars in module name
+    // First, test for invalid chars in footprint name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
 
     if( !checkFootprintName( footprintName ) )
@@ -703,7 +703,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 
     m_footprint->CalculateBoundingBox();
 
-    commit.Push( _( "Modify module properties" ) );
+    commit.Push( _( "Modify footprint properties" ) );
 
     return true;
 }

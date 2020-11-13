@@ -192,7 +192,7 @@ private:
     XPATH*      m_xpath;            ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
 
-    int         m_hole_count;       ///< generates unique module names from eagle "hole"s.
+    int         m_hole_count;       ///< generates unique footprint names from eagle "hole"s.
 
     NET_MAP     m_pads_to_nets;     ///< net list
 
@@ -300,10 +300,10 @@ private:
 
     /**
      * Function packageHole
-     * @parameter aFootprint - The KiCad module to which to assign the hole
+     * @parameter aFootprint - The KiCad footprint to which to assign the hole
      * @parameter aTree - The Eagle XML node that is of type "hole"
-     * @parameter aCenter - If true, center the hole in the module and
-     *      offset the module position
+     * @parameter aCenter - If true, center the hole in the footprint and
+     *      offset the footprint position
      */
     void packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
     void packageSMD( MODULE* aFootprint, wxXmlNode* aTree ) const;

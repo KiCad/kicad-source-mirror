@@ -52,7 +52,7 @@
 /* Bits characterizing cell */
 #define CELL_IS_EMPTY  0x00
 #define CELL_IS_HOLE   0x01   /* a conducting hole or obstacle */
-#define CELL_IS_MODULE 0x02   /* auto placement occupied by a module */
+#define CELL_IS_MODULE 0x02   /* auto placement occupied by a footprint */
 #define CELL_IS_EDGE   0x20   /* Area and auto-placement: limiting cell contour (Board, Zone) */
 #define CELL_IS_FRIEND 0x40   /* Area and auto-placement: cell part of the net */
 #define CELL_IS_ZONE   0x80   /* Area and auto-placement: cell available */
@@ -542,7 +542,7 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int sid
 }
 
 
-/* Test if the module can be placed on the board.
+/* Test if the footprint can be placed on the board.
  * Returns the value TstRectangle().
  * Module is known by its bounding box
  */
@@ -651,7 +651,7 @@ int AR_AUTOPLACER::getOptimalFPPlacement( MODULE* aFootprint )
             if( keepOutCost >= 0 )    // i.e. if the footprint can be put here
             {
                 error = 0;
-                // m_frame->build_ratsnest_module( aFootprint ); // fixme
+                // m_frame->build_ratsnest_footprint( aFootprint ); // fixme
                 curr_cost   = computePlacementRatsnestCost( aFootprint, fpOffset );
                 Score       = curr_cost + keepOutCost;
 
@@ -816,9 +816,9 @@ MODULE* AR_AUTOPLACER::pickFootprint( )
 
     sort( fpList.begin(), fpList.end(), sortFootprintsByRatsnestSize );
 
-    // Search for "best" module.
-    MODULE* bestModule  = nullptr;
-    MODULE* altModule   = nullptr;
+    // Search for "best" footprint.
+    MODULE* bestFootprint  = nullptr;
+    MODULE* altFootprint   = nullptr;
 
     for( unsigned ii = 0; ii < fpList.size(); ii++ )
     {
@@ -827,19 +827,19 @@ MODULE* AR_AUTOPLACER::pickFootprint( )
         if( !footprint->NeedsPlaced() )
             continue;
 
-        altModule = footprint;
+        altFootprint = footprint;
 
         if( footprint->GetFlag() == 0 )
             continue;
 
-        bestModule = footprint;
+        bestFootprint = footprint;
         break;
     }
 
-    if( bestModule )
-        return bestModule;
+    if( bestFootprint )
+        return bestFootprint;
     else
-        return altModule;
+        return altFootprint;
 }
 
 
@@ -890,7 +890,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<MODULE*>& aFootprints,
     if( m_matrix.m_GridRouting < Millimeter2iu( 0.25 ) )
         m_matrix.m_GridRouting = Millimeter2iu( 0.25 );
 
-    // Compute module parameters used in auto place
+    // Compute footprint parameters used in autoplace
     if( genPlacementRoutingMatrix( ) == 0 )
         return AR_FAILURE;
 

@@ -562,12 +562,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
     BOARD_DESIGN_SETTINGS&                 ds           = mBoard->GetDesignSettings();
     std::map<SPACINGCODE_ID, SPACINGCODE>& spacingCodes = Assignments.Codedefs.SpacingCodes;
 
-    auto applyRule = [&]( wxString aID, int* aVal ) {
-        if( spacingCodes.find( aID ) == spacingCodes.end() )
-            wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
-        else
-            *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
-    };
+    auto applyRule =
+            [&]( wxString aID, int* aVal )
+            {
+                if( spacingCodes.find( aID ) == spacingCodes.end() )
+                    wxLogWarning( _( "Design rule %s was not found. This was ignored." ) );
+                else
+                    *aVal = getKiCadLength( spacingCodes.at( aID ).Spacing );
+            };
 
     //Note: for details on the different spacing codes see SPACINGCODE::ID
 
@@ -588,14 +590,12 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDesignRules()
 
     applyNetClassRule( "T_T", ds.GetDefault(), &::NETCLASS::SetClearance );
 
-    wxLogWarning(
-            _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
-               "design rules were imported. It is recommended that you review the design "
-               "rules that have been applied." ) );
-    wxLogWarning(
-            _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
-               "design rules were imported. It is recommended that you review the design "
-               "rules that have been applied." ) );
+    wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
+                     "design rules were imported. It is recommended that you review the design "
+                     "rules that have been applied." ) );
+    wxLogWarning( _( "KiCad design rules are different from CADSTAR ones. Only the compatible "
+                     "design rules were imported. It is recommended that you review the design "
+                     "rules that have been applied." ) );
 }
 
 
@@ -603,25 +603,24 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
 {
     for( std::pair<SYMDEF_ID, SYMDEF_PCB> symPair : Library.ComponentDefinitions )
     {
-        SYMDEF_ID  key        = symPair.first;
-        SYMDEF_PCB component  = symPair.second;
-        wxString   moduleName = component.ReferenceName
-                              + ( ( component.Alternate.size() > 0 ) ?
+        SYMDEF_ID  key = symPair.first;
+        SYMDEF_PCB component = symPair.second;
+        wxString   fpName = component.ReferenceName + ( ( component.Alternate.size() > 0 ) ?
                                               ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
                                               wxT( "" ) );
-        MODULE* m = new MODULE( mBoard );
-        m->SetPosition( getKiCadPoint( component.Origin ) );
+        MODULE* footprint = new MODULE( mBoard );
+        footprint->SetPosition( getKiCadPoint( component.Origin ) );
 
         LIB_ID libID;
-        libID.Parse( moduleName, LIB_ID::LIB_ID_TYPE::ID_PCB, true );
+        libID.Parse( fpName, LIB_ID::LIB_ID_TYPE::ID_PCB, true );
 
-        m->SetFPID( libID );
-        loadLibraryFigures( component, m );
-        loadLibraryCoppers( component, m );
-        loadLibraryAreas( component, m );
-        loadLibraryPads( component, m );
+        footprint->SetFPID( libID );
+        loadLibraryFigures( component, footprint );
+        loadLibraryCoppers( component, footprint );
+        loadLibraryAreas( component, footprint );
+        loadLibraryPads( component, footprint );
 
-        mLibraryMap.insert( std::make_pair( key, m ) );
+        mLibraryMap.insert( std::make_pair( key, footprint ) );
     }
 }
 
@@ -1194,20 +1193,20 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
     {
         COMPONENT& comp = compPair.second;
 
-        auto moduleIter = mLibraryMap.find( comp.SymdefID );
+        auto fpIter = mLibraryMap.find( comp.SymdefID );
 
-        if( moduleIter == mLibraryMap.end() )
+        if( fpIter == mLibraryMap.end() )
         {
             THROW_IO_ERROR( wxString::Format( _( "Unable to find component '%s' in the library"
                                                  "(Symdef ID: '%s')" ),
                     comp.Name, comp.SymdefID ) );
         }
 
-        // copy constructor to clone the module from the library
-        MODULE* m                      = new MODULE( *moduleIter->second );
-        const_cast<KIID&>( m->m_Uuid ) = KIID();
+        // copy constructor to clone the footprint from the library
+        MODULE* footprint                      = new MODULE( *fpIter->second );
+        const_cast<KIID&>( footprint->m_Uuid ) = KIID();
 
-        mBoard->Add( m, ADD_MODE::APPEND );
+        mBoard->Add( footprint, ADD_MODE::APPEND );
 
         //Override pads with pad exceptions
         if( comp.PadExceptions.size() > 0 )
@@ -1231,37 +1230,37 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                 if( padEx.OverrideSide )
                     csPad.Side = padEx.Side;
 
-                //Find the pad in the module definition
-                PAD* kiPad = m->Pads().at( padEx.ID - (long) 1 );
+                // Find the pad in the footprint definition
+                PAD* kiPad = footprint->Pads().at( padEx.ID - (long) 1 );
 
                 if( kiPad )
                     delete kiPad;
 
-                m->Pads().at( padEx.ID - (long) 1 ) = getKiCadPad( csPad, m );
+                footprint->Pads().at( padEx.ID - (long) 1 ) = getKiCadPad( csPad, footprint );
             }
         }
 
         //set to empty string to avoid duplication when loading attributes:
-        m->SetValue( wxEmptyString );
+        footprint->SetValue( wxEmptyString );
 
-        m->SetPosition( getKiCadPoint( comp.Origin ) );
-        m->SetOrientation( getAngleTenthDegree( comp.OrientAngle ) );
-        m->SetReference( comp.Name );
+        footprint->SetPosition( getKiCadPoint( comp.Origin ) );
+        footprint->SetOrientation( getAngleTenthDegree( comp.OrientAngle ) );
+        footprint->SetReference( comp.Name );
 
         if( comp.Mirror )
         {
             double mirroredAngle = - getAngleTenthDegree( comp.OrientAngle );
             NORMALIZE_ANGLE_180( mirroredAngle );
-            m->SetOrientation( mirroredAngle );
-            m->Flip( getKiCadPoint( comp.Origin ), true );
+            footprint->SetOrientation( mirroredAngle );
+            footprint->Flip( getKiCadPoint( comp.Origin ), true );
         }
 
-        loadComponentAttributes( comp, m );
+        loadComponentAttributes( comp, footprint );
 
         if( !comp.PartID.IsEmpty() && comp.PartID != wxT( "NO_PART" ) )
-            m->SetDescription( getPart( comp.PartID ).Definition.Name );
+            footprint->SetDescription( getPart( comp.PartID ).Definition.Name );
 
-        mComponentMap.insert( { comp.ID, m } );
+        mComponentMap.insert( { comp.ID, footprint } );
     }
 }
 
@@ -1601,8 +1600,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
             }
             else
             {
-                // The below works because we have added the pads in the correct order to the module and
-                // it so happens that PAD_ID in Cadstar is a sequential, numerical ID
+                // The below works because we have added the pads in the correct order to the
+                // footprint and the PAD_ID in Cadstar is a sequential, numerical ID
                 m->Pads().at( pin.PadID - (long) 1 )->SetNet( getKiCadNet( net.ID ) );
             }
         }

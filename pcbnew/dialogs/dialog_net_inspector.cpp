@@ -1469,7 +1469,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
     }
 
     // count the pads for each net.  since the nets are sorted by netcode
-    // iterating over the modules' pads is faster.
+    // iterating over the footprints' pads is faster.
 
     for( MODULE* footprint : m_brd->Footprints() )
     {
