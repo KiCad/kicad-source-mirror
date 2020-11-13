@@ -69,7 +69,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
     for( MODULE* footprint : m_pcb->Footprints() )
     {
-        if( footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
+        if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
              continue;
 
         if( footprint->GetLayer() == aLayer )
@@ -146,9 +146,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
 
         pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_UNSPECIFIED;
 
-        if( footprint->GetAttributes() & MOD_THROUGH_HOLE )
+        if( footprint->GetAttributes() & FP_THROUGH_HOLE )
             pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_TH;
-        else if( footprint->GetAttributes() & MOD_SMD )
+        else if( footprint->GetAttributes() & FP_SMD )
             pnpAttrib.m_MountType = GBR_CMP_PNP_METADATA::MOUNT_TYPE_SMD;
 
         // Add component value info:

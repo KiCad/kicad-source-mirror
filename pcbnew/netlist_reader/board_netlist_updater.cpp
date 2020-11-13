@@ -310,19 +310,19 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
     }
 
     if( ( aNewComponent->GetProperties().count( "exclude_from_bom" ) > 0 )
-            != ( ( aPcbComponent->GetAttributes() & MOD_EXCLUDE_FROM_BOM ) > 0 ) )
+            != ( ( aPcbComponent->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
     {
         int attributes = aPcbComponent->GetAttributes();
 
         if( aNewComponent->GetProperties().count( "exclude_from_bom" ) )
         {
-            attributes |= MOD_EXCLUDE_FROM_BOM;
+            attributes |= FP_EXCLUDE_FROM_BOM;
             msg.Printf( _( "Setting %s 'exclude from BOM' fabrication attribute." ),
                         aPcbComponent->GetReference() );
         }
         else
         {
-            attributes &= ~MOD_EXCLUDE_FROM_BOM;
+            attributes &= ~FP_EXCLUDE_FROM_BOM;
             msg.Printf( _( "Removing %s 'exclude from BOM' fabrication attribute." ),
                         aPcbComponent->GetReference() );
         }
@@ -626,7 +626,7 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
 
     for( MODULE* footprint : m_board->Footprints() )
     {
-        if(( footprint->GetAttributes() & MOD_BOARD_ONLY ) > 0 )
+        if(( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
             continue;
 
         if( m_lookupByTimestamp )

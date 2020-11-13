@@ -765,13 +765,13 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
     if( m_ModuleStatus & MODULE_is_PLACED )
         addToken( &status, _( "autoplaced" ) );
 
-    if( m_Attributs & MOD_BOARD_ONLY )
+    if( m_Attributs & FP_BOARD_ONLY )
         addToken( &attrs, _( "not in schematic" ) );
 
-    if( m_Attributs & MOD_EXCLUDE_FROM_POS_FILES )
+    if( m_Attributs & FP_EXCLUDE_FROM_POS_FILES )
         addToken( &attrs, _( "exclude from pos files" ) );
 
-    if( m_Attributs & MOD_EXCLUDE_FROM_BOM )
+    if( m_Attributs & FP_EXCLUDE_FROM_BOM )
         addToken( &attrs, _( "exclude from BOM" ) );
 
     aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs, BROWN );

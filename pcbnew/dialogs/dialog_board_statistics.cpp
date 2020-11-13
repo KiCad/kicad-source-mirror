@@ -134,8 +134,8 @@ void DIALOG_BOARD_STATISTICS::refreshItemsTypes()
 
     // If you need some more types to be shown, simply add them to the
     // corresponding list
-    m_componentsTypes.push_back( componentsType_t( MOD_THROUGH_HOLE, _( "THT:" ) ) );
-    m_componentsTypes.push_back( componentsType_t( MOD_SMD, _( "SMD:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( FP_THROUGH_HOLE, _( "THT:" ) ) );
+    m_componentsTypes.push_back( componentsType_t( FP_SMD, _( "SMD:" ) ) );
 
     m_padsTypes.clear();
     m_padsTypes.push_back( padsType_t( PAD_ATTRIB_PTH, _( "Through hole:" ) ) );

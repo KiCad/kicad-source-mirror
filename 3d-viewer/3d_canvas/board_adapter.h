@@ -117,7 +117,7 @@ class BOARD_ADAPTER
      * relation to attributs and the flags
      * @return true if module should be displayed, false if not
      */
-    bool ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const;
+    bool ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const;
 
     /**
      * @brief SetBoard - Set current board to be rendered

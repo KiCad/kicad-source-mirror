@@ -102,7 +102,7 @@ public:
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
     void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
 
-    void    SaveModule3D( const MODULE* aModule ) const;
+    void SaveFP3DModels( const MODULE* aFootprint ) const;
 
     // return the new .kicad_pcb layer id from the old (legacy) layer id
     static PCB_LAYER_ID leg_layer2new( int cu_count, LAYER_NUM aLayerNum );

@@ -1144,7 +1144,7 @@ static void FootprintWriteShape( FILE* aFile, MODULE* module, const wxString& aS
     /* creates header: */
     fprintf( aFile, "\nSHAPE \"%s\"\n", TO_UTF8( escapeString( aShapeName ) ) );
 
-    if( module->GetAttributes() & MOD_THROUGH_HOLE )
+    if( module->GetAttributes() & FP_THROUGH_HOLE )
         fprintf( aFile, "INSERT TH\n" );
     else
         fprintf( aFile, "INSERT SMD\n" );

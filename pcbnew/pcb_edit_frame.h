@@ -736,7 +736,7 @@ public:
     // Footprint editing (see also PCB_BASE_FRAME)
     void ShowFootprintPropertiesDialog( MODULE* aFootprint );
 
-    int ShowExchangeFootprintsDialog( MODULE* aModule, bool updateMode, bool selectedMode );
+    int ShowExchangeFootprintsDialog( MODULE* aFootprint, bool updateMode, bool selectedMode );
 
     /**
      * Function Exchange_Module

@@ -123,7 +123,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
                 continue;
         }
 
-        if( footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
+        if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
             continue;
 
         if( m_excludeAllTH && footprint->HasThroughHolePads() )
@@ -328,13 +328,13 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
         buffer += "attribut";
 
-        if(( footprint->GetAttributes() & ( MOD_THROUGH_HOLE | MOD_SMD ) ) == 0 )
+        if(( footprint->GetAttributes() & ( FP_THROUGH_HOLE | FP_SMD ) ) == 0 )
             buffer += " virtual";
 
-        if( footprint->GetAttributes() & MOD_SMD )
+        if( footprint->GetAttributes() & FP_SMD )
             buffer += " smd";
 
-        if( footprint->GetAttributes() & MOD_THROUGH_HOLE )
+        if( footprint->GetAttributes() & FP_THROUGH_HOLE )
             buffer += " none";
 
         buffer += "\n";

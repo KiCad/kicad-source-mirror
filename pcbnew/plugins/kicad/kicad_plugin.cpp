@@ -61,19 +61,19 @@ using namespace PCB_KEYS_T;
 class FP_CACHE_ITEM
 {
     WX_FILENAME             m_filename;
-    std::unique_ptr<MODULE> m_module;
+    std::unique_ptr<MODULE> m_footprint;
 
 public:
-    FP_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName );
+    FP_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName );
 
     const WX_FILENAME& GetFileName() const { return m_filename; }
-    const MODULE*      GetModule()   const { return m_module.get(); }
+    const MODULE*      GetModule()   const { return m_footprint.get(); }
 };
 
 
-FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName ) :
-    m_filename( aFileName ),
-    m_module( aModule )
+FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName ) :
+        m_filename( aFileName ),
+        m_footprint( aFootprint )
 { }
 
 
@@ -109,9 +109,9 @@ public:
     /**
      * Save the footprint cache or a single module from it to disk
      *
-     * @param aModule if set, save only this module, otherwise, save the full library
+     * @param aFootprint if set, save only this module, otherwise, save the full library
      */
-    void Save( MODULE* aModule = NULL );
+    void Save( MODULE* aFootprint = NULL );
 
     void Load();
 
@@ -154,7 +154,7 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 }
 
 
-void FP_CACHE::Save( MODULE* aModule )
+void FP_CACHE::Save( MODULE* aFootprint )
 {
     m_cache_timestamp = 0;
 
@@ -172,7 +172,7 @@ void FP_CACHE::Save( MODULE* aModule )
 
     for( MODULE_ITER it = m_modules.begin();  it != m_modules.end();  ++it )
     {
-        if( aModule && aModule != it->second->GetModule() )
+        if( aFootprint && aFootprint != it->second->GetModule() )
             continue;
 
         WX_FILENAME fn = it->second->GetFileName();
@@ -216,7 +216,7 @@ void FP_CACHE::Save( MODULE* aModule )
     m_cache_timestamp += m_lib_path.GetModificationTime().GetValue().GetValue();
 
     // If we've saved the full cache, we clear the dirty flag.
-    if( !aModule )
+    if( !aFootprint )
         m_cache_dirty = false;
 }
 
@@ -846,39 +846,39 @@ void PCB_IO::format( PCB_SHAPE* aShape, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( FP_SHAPE* aModuleDrawing, int aNestLevel ) const
+void PCB_IO::format( FP_SHAPE* aFPShape, int aNestLevel ) const
 {
-    switch( aModuleDrawing->GetShape() )
+    switch( aFPShape->GetShape() )
     {
     case S_SEGMENT:  // Line
         m_out->Print( aNestLevel, "(fp_line (start %s) (end %s)",
-                      FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str() );
+                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case S_RECT:    // Rectangle
         m_out->Print( aNestLevel, "(fp_rect (start %s) (end %s)",
-                      FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str() );
+                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case S_CIRCLE:  // Circle
         m_out->Print( aNestLevel, "(fp_circle (center %s) (end %s)",
-                      FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str() );
+                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     case S_ARC:     // Arc
         m_out->Print( aNestLevel, "(fp_arc (start %s) (end %s) (angle %s)",
-                      FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str(),
-                      FormatAngle( aModuleDrawing->GetAngle() ).c_str() );
+                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str(),
+                      FormatAngle( aFPShape->GetAngle() ).c_str() );
         break;
 
     case S_POLYGON: // Polygonal segment
-        if( aModuleDrawing->IsPolyShapeValid() )
+        if( aFPShape->IsPolyShapeValid() )
         {
-            SHAPE_POLY_SET& poly = aModuleDrawing->GetPolyShape();
+            SHAPE_POLY_SET& poly = aFPShape->GetPolyShape();
             SHAPE_LINE_CHAIN& outline = poly.Outline( 0 );
             int pointsCount = outline.PointCount();
 
@@ -909,23 +909,23 @@ void PCB_IO::format( FP_SHAPE* aModuleDrawing, int aNestLevel ) const
 
     case S_CURVE:   // Bezier curve
         m_out->Print( aNestLevel, "(fp_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
-                      FormatInternalUnits( aModuleDrawing->GetStart0() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetBezier0_C1() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetBezier0_C2() ).c_str(),
-                      FormatInternalUnits( aModuleDrawing->GetEnd0() ).c_str() );
+                      FormatInternalUnits( aFPShape->GetStart0() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetBezier0_C1() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetBezier0_C2() ).c_str(),
+                      FormatInternalUnits( aFPShape->GetEnd0() ).c_str() );
         break;
 
     default:
         wxFAIL_MSG( "PCB_IO::format cannot format unknown FP_SHAPE shape:"
-                    + PCB_SHAPE_TYPE_T_asString( aModuleDrawing->GetShape() ) );
+                    + PCB_SHAPE_TYPE_T_asString( aFPShape->GetShape() ) );
         return;
     };
 
-    formatLayer( aModuleDrawing );
+    formatLayer( aFPShape );
 
-    m_out->Print( 0, " (width %s)", FormatInternalUnits( aModuleDrawing->GetWidth() ).c_str() );
+    m_out->Print( 0, " (width %s)", FormatInternalUnits( aFPShape->GetWidth() ).c_str() );
 
-    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aModuleDrawing->m_Uuid.AsString() ) );
+    m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
 }
@@ -949,11 +949,11 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
+void PCB_IO::format( MODULE* aFootprint, int aNestLevel ) const
 {
     if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
     {
-        const wxArrayString* initial_comments = aModule->GetInitialComments();
+        const wxArrayString* initial_comments = aFootprint->GetInitialComments();
 
         if( initial_comments )
         {
@@ -966,45 +966,45 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
 
     if( m_ctl & CTL_OMIT_LIBNAME )
         m_out->Print( aNestLevel, "(module %s",
-                      m_out->Quotes( aModule->GetFPID().GetLibItemNameAndRev() ).c_str() );
+                      m_out->Quotes( aFootprint->GetFPID().GetLibItemNameAndRev() ).c_str() );
     else
         m_out->Print( aNestLevel, "(module %s",
-                      m_out->Quotes( aModule->GetFPID().Format() ).c_str() );
+                      m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
 
-    if( aModule->IsLocked() )
+    if( aFootprint->IsLocked() )
         m_out->Print( 0, " locked" );
 
-    if( aModule->IsPlaced() )
+    if( aFootprint->IsPlaced() )
         m_out->Print( 0, " placed" );
 
-    formatLayer( aModule );
+    formatLayer( aFootprint );
 
-    m_out->Print( 0, " (tedit %lX)", (unsigned long)aModule->GetLastEditTime() );
+    m_out->Print( 0, " (tedit %lX)", (unsigned long)aFootprint->GetLastEditTime() );
 
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
-        m_out->Print( 0, " (tstamp %s)", TO_UTF8( aModule->m_Uuid.AsString() ) );
+        m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFootprint->m_Uuid.AsString() ) );
 
     m_out->Print( 0, "\n" );
 
     if( !( m_ctl & CTL_OMIT_AT ) )
     {
-        m_out->Print( aNestLevel+1, "(at %s", FormatInternalUnits( aModule->GetPosition() ).c_str() );
+        m_out->Print( aNestLevel+1, "(at %s", FormatInternalUnits( aFootprint->GetPosition() ).c_str() );
 
-        if( aModule->GetOrientation() != 0.0 )
-            m_out->Print( 0, " %s", FormatAngle( aModule->GetOrientation() ).c_str() );
+        if( aFootprint->GetOrientation() != 0.0 )
+            m_out->Print( 0, " %s", FormatAngle( aFootprint->GetOrientation() ).c_str() );
 
         m_out->Print( 0, ")\n" );
     }
 
-    if( !aModule->GetDescription().IsEmpty() )
+    if( !aFootprint->GetDescription().IsEmpty() )
         m_out->Print( aNestLevel+1, "(descr %s)\n",
-                      m_out->Quotew( aModule->GetDescription() ).c_str() );
+                      m_out->Quotew( aFootprint->GetDescription() ).c_str() );
 
-    if( !aModule->GetKeywords().IsEmpty() )
+    if( !aFootprint->GetKeywords().IsEmpty() )
         m_out->Print( aNestLevel+1, "(tags %s)\n",
-                      m_out->Quotew( aModule->GetKeywords() ).c_str() );
+                      m_out->Quotew( aFootprint->GetKeywords() ).c_str() );
 
-    const std::map<wxString, wxString>& props = aModule->GetProperties();
+    const std::map<wxString, wxString>& props = aFootprint->GetProperties();
 
     for( const std::pair<const wxString, wxString>& prop : props )
     {
@@ -1013,78 +1013,78 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
                       m_out->Quotew( prop.second ).c_str() );
     }
 
-    if( !( m_ctl & CTL_OMIT_PATH ) && !aModule->GetPath().empty() )
+    if( !( m_ctl & CTL_OMIT_PATH ) && !aFootprint->GetPath().empty() )
         m_out->Print( aNestLevel+1, "(path %s)\n",
-                      m_out->Quotew( aModule->GetPath().AsString() ).c_str() );
+                      m_out->Quotew( aFootprint->GetPath().AsString() ).c_str() );
 
-    if( aModule->GetPlacementCost90() != 0 )
-        m_out->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", aModule->GetPlacementCost90() );
+    if( aFootprint->GetPlacementCost90() != 0 )
+        m_out->Print( aNestLevel+1, "(autoplace_cost90 %d)\n", aFootprint->GetPlacementCost90() );
 
-    if( aModule->GetPlacementCost180() != 0 )
-        m_out->Print( aNestLevel+1, "(autoplace_cost180 %d)\n", aModule->GetPlacementCost180() );
+    if( aFootprint->GetPlacementCost180() != 0 )
+        m_out->Print( aNestLevel+1, "(autoplace_cost180 %d)\n", aFootprint->GetPlacementCost180() );
 
-    if( aModule->GetLocalSolderMaskMargin() != 0 )
+    if( aFootprint->GetLocalSolderMaskMargin() != 0 )
         m_out->Print( aNestLevel+1, "(solder_mask_margin %s)\n",
-                      FormatInternalUnits( aModule->GetLocalSolderMaskMargin() ).c_str() );
+                      FormatInternalUnits( aFootprint->GetLocalSolderMaskMargin() ).c_str() );
 
-    if( aModule->GetLocalSolderPasteMargin() != 0 )
+    if( aFootprint->GetLocalSolderPasteMargin() != 0 )
         m_out->Print( aNestLevel+1, "(solder_paste_margin %s)\n",
-                      FormatInternalUnits( aModule->GetLocalSolderPasteMargin() ).c_str() );
+                      FormatInternalUnits( aFootprint->GetLocalSolderPasteMargin() ).c_str() );
 
-    if( aModule->GetLocalSolderPasteMarginRatio() != 0 )
+    if( aFootprint->GetLocalSolderPasteMarginRatio() != 0 )
         m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
-                      Double2Str( aModule->GetLocalSolderPasteMarginRatio() ).c_str() );
+                      Double2Str( aFootprint->GetLocalSolderPasteMarginRatio() ).c_str() );
 
-    if( aModule->GetLocalClearance() != 0 )
+    if( aFootprint->GetLocalClearance() != 0 )
         m_out->Print( aNestLevel+1, "(clearance %s)\n",
-                      FormatInternalUnits( aModule->GetLocalClearance() ).c_str() );
+                      FormatInternalUnits( aFootprint->GetLocalClearance() ).c_str() );
 
-    if( aModule->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
+    if( aFootprint->GetZoneConnection() != ZONE_CONNECTION::INHERITED )
         m_out->Print( aNestLevel+1, "(zone_connect %d)\n",
-                                    static_cast<int>( aModule->GetZoneConnection() ) );
+                                    static_cast<int>( aFootprint->GetZoneConnection() ) );
 
-    if( aModule->GetThermalWidth() != 0 )
+    if( aFootprint->GetThermalWidth() != 0 )
         m_out->Print( aNestLevel+1, "(thermal_width %s)\n",
-                      FormatInternalUnits( aModule->GetThermalWidth() ).c_str() );
+                      FormatInternalUnits( aFootprint->GetThermalWidth() ).c_str() );
 
-    if( aModule->GetThermalGap() != 0 )
+    if( aFootprint->GetThermalGap() != 0 )
         m_out->Print( aNestLevel+1, "(thermal_gap %s)\n",
-                      FormatInternalUnits( aModule->GetThermalGap() ).c_str() );
+                      FormatInternalUnits( aFootprint->GetThermalGap() ).c_str() );
 
     // Attributes
-    if( aModule->GetAttributes() )
+    if( aFootprint->GetAttributes() )
     {
         m_out->Print( aNestLevel+1, "(attr" );
 
-        if( aModule->GetAttributes() & MOD_SMD )
+        if( aFootprint->GetAttributes() & FP_SMD )
             m_out->Print( 0, " smd" );
 
-        if( aModule->GetAttributes() & MOD_THROUGH_HOLE )
+        if( aFootprint->GetAttributes() & FP_THROUGH_HOLE )
             m_out->Print( 0, " through_hole" );
 
-        if( aModule->GetAttributes() & MOD_BOARD_ONLY )
+        if( aFootprint->GetAttributes() & FP_BOARD_ONLY )
             m_out->Print( 0, " board_only" );
 
-        if( aModule->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES )
+        if( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
             m_out->Print( 0, " exclude_from_pos_files" );
 
-        if( aModule->GetAttributes() & MOD_EXCLUDE_FROM_BOM )
+        if( aFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM )
             m_out->Print( 0, " exclude_from_bom" );
 
         m_out->Print( 0, ")\n" );
     }
 
-    Format( (BOARD_ITEM*) &aModule->Reference(), aNestLevel+1 );
-    Format( (BOARD_ITEM*) &aModule->Value(), aNestLevel+1 );
+    Format((BOARD_ITEM*) &aFootprint->Reference(), aNestLevel + 1 );
+    Format((BOARD_ITEM*) &aFootprint->Value(), aNestLevel + 1 );
 
-    std::set<PAD*, MODULE::cmp_pads> sorted_pads( aModule->Pads().begin(),
-                                                  aModule->Pads().end() );
-    std::set<BOARD_ITEM*, MODULE::cmp_drawings> sorted_drawings( aModule->GraphicalItems().begin(),
-                                                                 aModule->GraphicalItems().end() );
-    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aModule->Zones().begin(),
-                                                             aModule->Zones().end() );
-    std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aModule->Groups().begin(),
-                                                             aModule->Groups().end() );
+    std::set<PAD*, MODULE::cmp_pads> sorted_pads( aFootprint->Pads().begin(),
+                                                  aFootprint->Pads().end() );
+    std::set<BOARD_ITEM*, MODULE::cmp_drawings> sorted_drawings( aFootprint->GraphicalItems().begin(),
+                                                                 aFootprint->GraphicalItems().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aFootprint->Zones().begin(),
+                                                             aFootprint->Zones().end() );
+    std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(),
+                                                             aFootprint->Groups().end() );
 
     // Save drawing elements.
 
@@ -1104,8 +1104,8 @@ void PCB_IO::format( MODULE* aModule, int aNestLevel ) const
         Format( group, aNestLevel + 1 );
 
     // Save 3D info.
-    auto bs3D = aModule->Models().begin();
-    auto es3D = aModule->Models().end();
+    auto bs3D = aFootprint->Models().begin();
+    auto es3D = aFootprint->Models().end();
 
     while( bs3D != es3D )
     {

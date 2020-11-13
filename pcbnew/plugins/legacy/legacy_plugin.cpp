@@ -1297,11 +1297,11 @@ void LEGACY_PLUGIN::loadFOOTPRINT( MODULE* aFootprint )
             data = line + SZ( "At" );
 
             if( strstr( data, "SMD" ) )
-                attrs |= MOD_SMD;
+                attrs |= FP_SMD;
             else if( strstr( data, "VIRTUAL" ) )
-                attrs |= MOD_EXCLUDE_FROM_POS_FILES | MOD_EXCLUDE_FROM_BOM;
+                attrs |= FP_EXCLUDE_FROM_POS_FILES | FP_EXCLUDE_FROM_BOM;
             else
-                attrs |= MOD_THROUGH_HOLE | MOD_EXCLUDE_FROM_POS_FILES;
+                attrs |= FP_THROUGH_HOLE | FP_EXCLUDE_FROM_POS_FILES;
 
             aFootprint->SetAttributes( attrs );
         }
@@ -3017,10 +3017,10 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 }
 
 
-void LEGACY_PLUGIN::SaveModule3D( const MODULE* me ) const
+void LEGACY_PLUGIN::SaveFP3DModels( const MODULE* aFootprint ) const
 {
-    auto sM = me->Models().begin();
-    auto eM = me->Models().end();
+    auto sM = aFootprint->Models().begin();
+    auto eM = aFootprint->Models().end();
 
     while( sM != eM )
     {

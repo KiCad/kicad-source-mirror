@@ -58,18 +58,18 @@ enum INCLUDE_NPTH_T
 };
 
 /**
- * Enum MODULE_ATTR_T
- * is the set of attributes allowed within a MODULE, using MODULE::SetAttributes()
- * and MODULE::GetAttributes().  These are to be ORed together when calling
- * MODULE::SetAttributes()
+ * Enum FOOTPRINT_ATTR_T
+ * is the set of attributes allowed within a FOOTPRINT, using FOOTPRINT::SetAttributes()
+ * and FOOTPRINT::GetAttributes().  These are to be ORed together when calling
+ * FOOTPRINT::SetAttributes()
  */
-enum MODULE_ATTR_T
+enum FOOTPRINT_ATTR_T
 {
-    MOD_THROUGH_HOLE           = 0x0001,
-    MOD_SMD                    = 0x0002,
-    MOD_EXCLUDE_FROM_POS_FILES = 0x0004,
-    MOD_EXCLUDE_FROM_BOM       = 0x0008,
-    MOD_BOARD_ONLY             = 0x0010    // Footprint has no corresponding symbol
+    FP_THROUGH_HOLE           = 0x0001,
+    FP_SMD                    = 0x0002,
+    FP_EXCLUDE_FROM_POS_FILES = 0x0004,
+    FP_EXCLUDE_FROM_BOM       = 0x0008,
+    FP_BOARD_ONLY             = 0x0010    // Footprint has no corresponding symbol
 };
 
 class FP_3DMODEL

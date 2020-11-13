@@ -238,11 +238,11 @@ void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
     m_drawFlags[aFlag] = aState;
 }
 
-bool BOARD_ADAPTER::ShouldModuleBeDisplayed( MODULE_ATTR_T aModuleAttributs ) const
+bool BOARD_ADAPTER::ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const
 {
-    if( aModuleAttributs & MOD_SMD )
+    if( aFPAttributes & FP_SMD )
         return GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT );
-    else if( aModuleAttributs & MOD_THROUGH_HOLE )
+    else if( aFPAttributes & FP_THROUGH_HOLE )
         return GetFlag( FL_FP_ATTRIBUTES_NORMAL );
     else
         return GetFlag( FL_FP_ATTRIBUTES_VIRTUAL );

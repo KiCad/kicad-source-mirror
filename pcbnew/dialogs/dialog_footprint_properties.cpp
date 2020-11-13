@@ -316,16 +316,16 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );
 
-    if( m_footprint->GetAttributes() & MOD_THROUGH_HOLE )
+    if( m_footprint->GetAttributes() & FP_THROUGH_HOLE )
         m_componentType->SetSelection( 0 );
-    else if( m_footprint->GetAttributes() & MOD_SMD )
+    else if( m_footprint->GetAttributes() & FP_SMD )
         m_componentType->SetSelection( 1 );
     else
         m_componentType->SetSelection( 2 );
 
-    m_boardOnly->SetValue( m_footprint->GetAttributes() & MOD_BOARD_ONLY );
-    m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & MOD_EXCLUDE_FROM_POS_FILES );
-    m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & MOD_EXCLUDE_FROM_BOM );
+    m_boardOnly->SetValue( m_footprint->GetAttributes() & FP_BOARD_ONLY );
+    m_excludeFromPosFiles->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES );
+    m_excludeFromBOM->SetValue( m_footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM );
 
     // Local Clearances
 
@@ -706,19 +706,19 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     switch( m_componentType->GetSelection() )
     {
-    case 0:  attributes |= MOD_THROUGH_HOLE; break;
-    case 1:  attributes |= MOD_SMD;          break;
-    default:                                 break;
+    case 0:  attributes |= FP_THROUGH_HOLE; break;
+    case 1:  attributes |= FP_SMD;          break;
+    default:                                break;
     }
 
     if( m_boardOnly->GetValue() )
-        attributes |= MOD_BOARD_ONLY;
+        attributes |= FP_BOARD_ONLY;
 
     if( m_excludeFromPosFiles->GetValue() )
-        attributes |= MOD_EXCLUDE_FROM_POS_FILES;
+        attributes |= FP_EXCLUDE_FROM_POS_FILES;
 
     if( m_excludeFromBOM->GetValue() )
-        attributes |= MOD_EXCLUDE_FROM_BOM;
+        attributes |= FP_EXCLUDE_FROM_BOM;
 
     m_footprint->SetAttributes( attributes );
 

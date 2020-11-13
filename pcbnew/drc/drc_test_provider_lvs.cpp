@@ -193,7 +193,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_EXTRA_FOOTPRINT ) )
             break;
 
-        if( footprint->GetAttributes() & MOD_BOARD_ONLY )
+        if( footprint->GetAttributes() & FP_BOARD_ONLY )
             continue;
 
         if( !aNetlist.GetComponentByReference( footprint->GetReference() ) )

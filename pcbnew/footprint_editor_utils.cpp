@@ -122,28 +122,28 @@ void FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( wxCommandEvent& event )
 class BASIC_FOOTPRINT_INFO : public FOOTPRINT_INFO
 {
 public:
-    BASIC_FOOTPRINT_INFO( MODULE* aModule )
+    BASIC_FOOTPRINT_INFO( MODULE* aFootprint )
     {
-        m_nickname = aModule->GetFPID().GetLibNickname().wx_str();
-        m_fpname = aModule->GetFPID().GetLibItemName().wx_str();
-        m_pad_count = aModule->GetPadCount( DO_NOT_INCLUDE_NPTH );
-        m_unique_pad_count = aModule->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
-        m_keywords = aModule->GetKeywords();
-        m_doc = aModule->GetDescription();
+        m_nickname = aFootprint->GetFPID().GetLibNickname().wx_str();
+        m_fpname = aFootprint->GetFPID().GetLibItemName().wx_str();
+        m_pad_count = aFootprint->GetPadCount( DO_NOT_INCLUDE_NPTH );
+        m_unique_pad_count = aFootprint->GetUniquePadCount( DO_NOT_INCLUDE_NPTH );
+        m_keywords = aFootprint->GetKeywords();
+        m_doc = aFootprint->GetDescription();
         m_loaded = true;
     }
 };
 
 
-void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
+void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aFootprint )
 {
-    LIB_ID oldFPID = aModule->GetFPID();
+    LIB_ID oldFPID = aFootprint->GetFPID();
 
-    DIALOG_FOOTPRINT_FP_EDITOR dialog( this, aModule );
+    DIALOG_FOOTPRINT_FP_EDITOR dialog( this, aFootprint );
     dialog.ShowModal();
 
     // Update library tree
-    BASIC_FOOTPRINT_INFO footprintInfo( aModule );
+    BASIC_FOOTPRINT_INFO footprintInfo( aFootprint );
     wxDataViewItem       treeItem = m_adapter->FindItem( oldFPID );
 
     if( treeItem.IsOk() )   // Can be not found in tree if the current footprint is imported

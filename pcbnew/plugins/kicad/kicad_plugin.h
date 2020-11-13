@@ -260,7 +260,7 @@ private:
 
     void format( DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
-    void format( FP_SHAPE* aModuleDrawing, int aNestLevel = 0 ) const;
+    void format( FP_SHAPE* aFPShape, int aNestLevel = 0 ) const;
 
     void format( PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
 
@@ -268,7 +268,7 @@ private:
 
     void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
 
-    void format( MODULE* aModule, int aNestLevel = 0 ) const;
+    void format( MODULE* aFootprint, int aNestLevel = 0 ) const;
 
     void format( PAD* aPad, int aNestLevel = 0 ) const;
 

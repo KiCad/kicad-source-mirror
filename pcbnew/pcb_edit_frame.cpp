@@ -1568,10 +1568,10 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( MODULE* aFootprint )
 }
 
 
-int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( MODULE* aModule, bool updateMode,
+int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( MODULE* aFootprint, bool updateMode,
                                                   bool selectedMode )
 {
-    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aModule, updateMode, selectedMode );
+    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aFootprint, updateMode, selectedMode );
 
     return dialog.ShowQuasiModal();
 }

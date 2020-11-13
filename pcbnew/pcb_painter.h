@@ -288,7 +288,7 @@ protected:
     void draw( const PCB_SHAPE* aSegment, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const FP_TEXT* aText, int aLayer );
-    void draw( const MODULE* aModule, int aLayer );
+    void draw( const MODULE* aFootprint, int aLayer );
     void draw( const PCB_GROUP* aGroup, int aLayer );
     void draw( const ZONE* aZone, int aLayer );
     void draw( const DIMENSION_BASE* aDimension, int aLayer );

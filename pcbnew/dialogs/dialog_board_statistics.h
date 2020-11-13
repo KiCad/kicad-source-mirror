@@ -73,17 +73,17 @@ public:
      */
     struct componentsType_t
     {
-        componentsType_t( MODULE_ATTR_T aAttribute, wxString aTitle )
+        componentsType_t( FOOTPRINT_ATTR_T aAttribute, wxString aTitle )
                 : attribute( aAttribute ),
                   title( aTitle ),
                   frontSideQty( 0 ),
                   backSideQty( 0 )
         {
         }
-        MODULE_ATTR_T attribute;
-        wxString      title;
-        int           frontSideQty;
-        int           backSideQty;
+        FOOTPRINT_ATTR_T attribute;
+        wxString         title;
+        int              frontSideQty;
+        int              backSideQty;
     };
 
     struct drillType_t
