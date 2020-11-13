@@ -13,7 +13,7 @@
 # 3) Entered following command line, script takes no arguments
 # $ PYTHONPATH=. <path_to>/test_kicad_plugin.py
 
-from pcbnew import IO_MGR, BOARD, MODULE, FPID, UTF8
+from pcbnew import IO_MGR, BOARD, FOOTPRINT, FPID, UTF8
 from os import rename as mv
 
 tmp_path = '/tmp'
@@ -43,8 +43,8 @@ plugin.FootprintLibCreate( lib_path2 )
 
 board = BOARD()
 
-# The only way to construct a MODULE is to pass it a BOARD? Yep.
-module = MODULE( board )
+# The only way to construct a FOOTPRINT is to pass it a BOARD? Yep.
+module = FOOTPRINT( board )
 
 fpid = FPID( 'mine' )
 

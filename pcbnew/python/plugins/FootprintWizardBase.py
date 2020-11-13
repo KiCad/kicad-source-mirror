@@ -100,7 +100,7 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
         """
 
         self.buildmessages = ""
-        self.module = pcbnew.MODULE(None)  # create a new module
+        self.module = pcbnew.FOOTPRINT(None)  # create a new module
 
         # Perform default checks on all parameters
         for p in self.params:

@@ -10,7 +10,7 @@ pads = 40
 pcb = BOARD()
 
 # create a new module, it's parent is our previously created pcb
-module = MODULE(pcb)
+module = FOOTPRINT(pcb)
 module.SetReference("FPC"+str(pads))   # give it a reference name
 module.Reference().SetPos0(wxPointMM(-1,-1))
 pcb.Add(module)             # add it to our pcb

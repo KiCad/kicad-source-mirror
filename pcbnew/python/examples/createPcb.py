@@ -13,7 +13,7 @@ pcb = BOARD()
 pcb.GetNetClasses().GetDefault().SetClearance(FromMM(0.1))
 
 # create a new module, it's parent is our previously created pcb
-module = MODULE(pcb)
+module = FOOTPRINT(pcb)
 module.SetReference("M1")   # give it a reference name
 module.Reference().SetPos0(wxPointMM(6,-2))
 module.Reference().SetDrawCoord()

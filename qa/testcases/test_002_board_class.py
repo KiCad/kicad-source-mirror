@@ -60,7 +60,7 @@ class TestBoardClass(unittest.TestCase):
 
     def test_pcb_get_pad(self):
         pcb = BOARD()
-        module = MODULE(pcb)
+        module = FOOTPRINT(pcb)
         pcb.Add(module)
         pad = D_PAD(module)
         module.Add(pad)

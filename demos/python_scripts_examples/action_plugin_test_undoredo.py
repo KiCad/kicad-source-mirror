@@ -49,22 +49,22 @@ class testundoredo2(ActionPlugin):
         self.category = "Test Undo/Redo"
         self.description = ""
 
-    def createFPCXModule(self,pads):
+    def createFPCXFootprint(self,pads):
         size_025_160mm = wxSizeMM(0.25,1.6)
         size_150_200mm = wxSizeMM(1.50,2.0)
-        # create a new module, it's parent is our previously created pcb
-        module = MODULE(self.pcb)
-        module.SetReference("FPC"+str(pads))   # give it a reference name
-        module.Reference().SetPosition(wxPointMM(-1,-1))
-        self.pcb.Add(module)             # add it to our pcb
+        # create a new footprint, it's parent is our previously created pcb
+        footprint = FOOTPRINT(self.pcb)
+        footprint.SetReference("FPC"+str(pads))   # give it a reference name
+        footprint.Reference().SetPosition(wxPointMM(-1,-1))
+        self.pcb.Add(footprint)             # add it to our pcb
         m_pos = wxPointMM(0,0)#random.randint(10,200),random.randint(10,200))
-        module.SetPosition(m_pos)
+        footprint.SetPosition(m_pos)
 
-        # create a pad array and add it to the module
+        # create a pad array and add it to the footprint
 
 
-        def smdRectPad(module,size,pos,name):
-            pad = D_PAD(module)
+        def smdRectPad(footprint,size,pos,name):
+            pad = D_PAD(footprint)
             pad.SetSize(size)
             pad.SetShape(PAD_SHAPE_RECT)
             pad.SetAttribute(PAD_ATTRIB_SMD)
@@ -74,16 +74,16 @@ class testundoredo2(ActionPlugin):
             return pad
 
         for n in range (0,pads):
-            pad = smdRectPad(module,size_025_160mm,wxPointMM(0.5*n,0),str(n+1))
-            module.Add(pad)
+            pad = smdRectPad(footprint,size_025_160mm,wxPointMM(0.5*n,0),str(n+1))
+            footprint.Add(pad)
 
 
-        pad_s0 = smdRectPad(module,size_150_200mm,wxPointMM(-1.6,1.3),"0")
-        pad_s1 = smdRectPad(module,size_150_200mm,wxPointMM((pads-1)*0.5+1.6,1.3),"0")
-        module.Add(pad_s0)
-        module.Add(pad_s1)
+        pad_s0 = smdRectPad(footprint,size_150_200mm,wxPointMM(-1.6,1.3),"0")
+        pad_s1 = smdRectPad(footprint,size_150_200mm,wxPointMM((pads-1)*0.5+1.6,1.3),"0")
+        footprint.Add(pad_s0)
+        footprint.Add(pad_s1)
 
-        e = EDGE_MODULE(module)
+        e = EDGE_MODULE(footprint)
         e.SetStart0(wxPointMM(-1,0))
         e.SetEnd0(wxPointMM(0,0))
         e.SetWidth(FromMM(0.2))
