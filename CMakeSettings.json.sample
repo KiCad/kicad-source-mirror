@@ -1,15 +1,29 @@
 ﻿{
   "environments": [
-    { "BuildDir": "${workspaceRoot}\\build" },
-    { "InstallDir": "${workspaceRoot}\\build\\install" },
-    { "VcPkgDir": "D:/vcpkg/" }
+    {
+      "BuildDir": "${workspaceRoot}\\build",
+      "InstallDir": "${workspaceRoot}\\build\\install"
+	  },
+    {
+      "environment": "vcpkg",
+      "VcPkgDir": "D:/vcpkg/"
+    },
+    {
+      "environment": "mingw_64",
+      "MINGW64_ROOT": "D:/msys64/mingw64",
+      "BIN_ROOT": "${env.MINGW64_ROOT}/bin",
+      "FLAVOR": "x86_64-w64-mingw32",
+      "TOOLSET_VERSION": "10.2.0",
+      "PATH": "${env.MINGW64_ROOT}/bin;${env.MINGW64_ROOT}/../usr/local/bin;${env.MINGW64_ROOT}/../usr/bin;${env.MINGW64_ROOT}/../bin;${env.PATH}",
+      "INCLUDE": "${env.INCLUDE};${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION};${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION}/tr1;${env.MINGW64_ROOT}/include/c++/${env.TOOLSET_VERSION}/${env.FLAVOR}"
+    }
   ],
   "configurations": [
     {
       "name": "x86-Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
-      "inheritEnvironments": [ "msvc_x86" ],
+      "inheritEnvironments": [ "msvc_x86", "vcpkg" ],
       "buildRoot": "${env.BuildDir}\\${name}",
       "installRoot": "${env.InstallDir}\\${name}",
       "addressSanitizerEnabled": true,
@@ -74,7 +88,7 @@
       "name": "x86-Release",
       "generator": "Ninja",
       "configurationType": "RelWithDebInfo",
-      "inheritEnvironments": [ "msvc_x86" ],
+      "inheritEnvironments": [ "msvc_x86", "vcpkg" ],
       "buildRoot": "${env.BuildDir}\\${name}",
       "installRoot": "${env.InstallDir}\\${name}",
       "cmakeCommandArgs": "",
@@ -138,7 +152,7 @@
       "name": "x64-Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "inheritEnvironments": [ "msvc_x64_x64", "vcpkg" ],
       "buildRoot": "${env.BuildDir}\\${name}",
       "installRoot": "${env.InstallDir}\\${name}",
       "cmakeCommandArgs": "",
@@ -190,11 +204,11 @@
           "value": "OFF",
           "type": "BOOL"
         },
-		    {
+        {
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
-		    }
+        }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
     },
@@ -202,7 +216,7 @@
       "name": "x64-Release",
       "generator": "Ninja",
       "configurationType": "RelWithDebInfo",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "inheritEnvironments": [ "msvc_x64_x64", "vcpkg" ],
       "buildRoot": "${env.BuildDir}\\${name}",
       "installRoot": "${env.InstallDir}\\${name}",
       "cmakeCommandArgs": "",
@@ -254,13 +268,86 @@
           "value": "OFF",
           "type": "BOOL"
         },
-		    {
+        {
           "name": "KICAD_WIN32_DPI_AWARE",
           "value": "ON",
           "type": "BOOL"
-		    }
+        }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "MSYS2-x64-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "mingw_64" ],
+      "buildRoot": "${env.BuildDir}\\${name}",
+      "installRoot": "${env.InstallDir}\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "intelliSenseMode": "linux-gcc-x64",
+      "cmakeToolchain": "",
+      "variables": [
+        {
+          "name": "CMAKE_C_COMPILER",
+          "value": "${env.BIN_ROOT}/gcc.exe"
+        },
+        {
+          "name": "CMAKE_CXX_COMPILER",
+          "value": "${env.BIN_ROOT}/g++.exe"
+        },
+        {
+          "name": "KICAD_SPICE",
+          "value": "ON",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_PYTHON3",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_SCRIPTING_MODULES",
+          "value": "OFF",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCE",
+          "value": "ON",
+          "type": "STRING"
+        },
+        {
+          "name": "KICAD_USE_OCC",
+          "value": "OFF",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_BUILD_QA_TESTS",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_SCRIPTING_WXPYTHON_PHOENIX",
+          "value": "OFF",
+          "type": "BOOL"
+        },
+        {
+          "name": "KICAD_WIN32_DPI_AWARE",
+          "value": "ON",
+          "type": "BOOL"
+        }
+      ]
     }
   ]
 }
