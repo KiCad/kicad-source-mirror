@@ -53,7 +53,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb );
 static void CreateSignalsSection( FILE* aFile, BOARD* aPcb );
 static void CreateShapesSection( FILE* aFile, BOARD* aPcb );
 static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb );
-static void FootprintWriteShape( FILE* File, MODULE* aFootprint, const wxString& aShapeName );
+static void FootprintWriteShape( FILE* File, FOOTPRINT* aFootprint, const wxString& aShapeName );
 
 // layer names for Gencad export
 
@@ -181,10 +181,10 @@ static bool storeOriginCoords;
 static int GencadOffsetX, GencadOffsetY;
 
 // Association between shape names (using shapeName index) and components
-static std::map<MODULE*, int> componentShapes;
+static std::map<FOOTPRINT*, int> componentShapes;
 static std::map<int, wxString> shapeNames;
 
-static const wxString getShapeName( MODULE* aFootprint )
+static const wxString getShapeName( FOOTPRINT* aFootprint )
 {
     static const wxString invalid( "invalid" );
 
@@ -275,7 +275,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
      */
     BOARD*  pcb = GetBoard();
 
-    for( MODULE* footprint : pcb->Footprints() )
+    for( FOOTPRINT* footprint : pcb->Footprints() )
     {
         footprint->SetFlag( 0 );
 
@@ -311,7 +311,7 @@ void PCB_EDIT_FRAME::ExportToGenCAD( wxCommandEvent& aEvent )
     fclose( file );
 
     // Undo the footprints modifications (flipped footprints)
-    for( MODULE* footprint : pcb->Footprints() )
+    for( FOOTPRINT* footprint : pcb->Footprints() )
     {
         if( footprint->GetFlag() )
         {
@@ -664,17 +664,16 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
 
 
 /// Compute hashes for footprints without taking into account their position, rotation or layer
-static size_t hashModule( const MODULE* aFootprint )
+static size_t hashFootprint( const FOOTPRINT* aFootprint )
 {
-    size_t ret = 0x11223344;
+    size_t    ret = 0x11223344;
     constexpr int flags = HASH_FLAGS::HASH_POS | HASH_FLAGS::REL_COORD
-                | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
+                            | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
 
-
-    for( auto i : aFootprint->GraphicalItems() )
+    for( BOARD_ITEM* i : aFootprint->GraphicalItems() )
         ret += hash_eda( i, flags );
 
-    for( auto i : aFootprint->Pads() )
+    for( PAD* i : aFootprint->Pads() )
         ret += hash_eda( i, flags );
 
     return ret;
@@ -694,7 +693,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
 
     fputs( "$SHAPES\n", aFile );
 
-    for( MODULE* footprint : aPcb->Footprints() )
+    for( FOOTPRINT* footprint : aPcb->Footprints() )
     {
         if( !individualShapes )
         {
@@ -705,7 +704,7 @@ static void CreateShapesSection( FILE* aFile, BOARD* aPcb )
             wxString shapeName = footprint->GetFPID().Format();
 
             auto shapeIt = shapes.find( shapeName );
-            size_t modHash = hashModule( footprint );
+            size_t modHash = hashFootprint( footprint );
 
             if( shapeIt != shapes.end() )
             {
@@ -807,7 +806,7 @@ static void CreateComponentsSection( FILE* aFile, BOARD* aPcb )
 
     int cu_count = aPcb->GetCopperLayerCount();
 
-    for( MODULE* footprint : aPcb->Footprints() )
+    for( FOOTPRINT* footprint : aPcb->Footprints() )
     {
         const char*   mirror;
         const char*   flip;
@@ -898,7 +897,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         fputs( TO_UTF8( msg ), aFile );
         fputs( "\n", aFile );
 
-        for( MODULE* footprint : aPcb->Footprints() )
+        for( FOOTPRINT* footprint : aPcb->Footprints() )
         {
             for( PAD* pad : footprint->Pads() )
             {
@@ -1065,7 +1064,7 @@ static void CreateDevicesSection( FILE* aFile, BOARD* aPcb )
         if( !newDevice )        // do not repeat device definitions
             continue;
 
-        const MODULE* footprint = componentShape.first;
+        const FOOTPRINT* footprint = componentShape.first;
 
         fprintf( aFile, "\nDEVICE \"DEV_%s\"\n", TO_UTF8( escapeString( shapeName ) ) );
 
@@ -1142,7 +1141,7 @@ static void CreateTracksInfoData( FILE* aFile, BOARD* aPcb )
  * It's almost guaranteed that the silk layer will be imported wrong but
  * the shape also contains the pads!
  */
-static void FootprintWriteShape( FILE* aFile, MODULE* aFootprint, const wxString& aShapeName )
+static void FootprintWriteShape( FILE* aFile, FOOTPRINT* aFootprint, const wxString& aShapeName )
 {
     FP_SHAPE* shape;
 

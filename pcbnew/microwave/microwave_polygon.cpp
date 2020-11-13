@@ -238,14 +238,14 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 }
 
 
-MODULE* MICROWAVE_TOOL::createPolygonShape()
+FOOTPRINT* MICROWAVE_TOOL::createPolygonShape()
 {
-    PAD*      pad1;
-    PAD*      pad2;
-    MODULE*   footprint;
-    wxString  cmp_name;
-    int       pad_count = 2;
-    FP_SHAPE* shape;
+    PAD*       pad1;
+    PAD*       pad2;
+    FOOTPRINT* footprint;
+    wxString   cmp_name;
+    int        pad_count = 2;
+    FP_SHAPE*  shape;
 
     PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
 

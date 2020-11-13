@@ -355,7 +355,7 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
     if( m_isFootprintEditor )
     {
-        MODULE* parentFootprint = board->GetFirstFootprint();
+        FOOTPRINT* parentFootprint = board->GetFirstFootprint();
 
         m_frame->SaveCopyInUndoList( parentFootprint, UNDO_REDO::CHANGED );
 
@@ -413,7 +413,7 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
         {
             if( m_isFootprintEditor )
             {
-                MODULE* parentFootprint = board->GetFirstFootprint();
+                FOOTPRINT* parentFootprint = board->GetFirstFootprint();
 
                 m_frame->SaveCopyInUndoList( parentFootprint, UNDO_REDO::CHANGED );
 

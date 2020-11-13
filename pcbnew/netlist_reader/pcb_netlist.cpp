@@ -37,7 +37,7 @@ int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 }
 
 
-void COMPONENT::SetModule( MODULE* aFootprint )
+void COMPONENT::SetFootprint( FOOTPRINT* aFootprint )
 {
     m_footprint.reset( aFootprint );
 

@@ -53,7 +53,7 @@
 
 // ignore a couple of items that generate warnings from swig built code
 %ignore BOARD_ITEM::ZeroOffset;
-%ignore D_PAD::m_PadSketchModePenSize;
+%ignore PAD::m_PadSketchModePenSize;
 
 class BASE_SET {};
 %ignore BASE_SET;

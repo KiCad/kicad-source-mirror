@@ -490,9 +490,9 @@ BOARD_ITEM* PCB_PARSER::Parse()
 
     m_groupInfos.clear();
 
-    // MODULEs can be prefixed with an initial block of single line comments and these
-    // are kept for Format() so they round trip in s-expression form.  BOARDs might
-    // eventually do the same, but currently do not.
+    // FOOTPRINTS can be prefixed with an initial block of single line comments and these are
+    // kept for Format() so they round trip in s-expression form.  BOARDs might  eventually do
+    // the same, but currently do not.
     std::unique_ptr<wxArrayString> initial_comments( ReadCommentLines() );
 
     token = CurTok();
@@ -746,7 +746,7 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
         }
         else if( aParent->Type() == PCB_FOOTPRINT_T )
         {
-            static_cast<MODULE*>( aParent )->RunOnChildren(
+            static_cast<FOOTPRINT*>( aParent )->RunOnChildren(
                     [&]( BOARD_ITEM* child )
                     {
                         if( child->m_Uuid == aId )
@@ -771,7 +771,7 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
         const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
 
         if( aGrp.parent->Type() == PCB_FOOTPRINT_T )
-            static_cast<MODULE*>( aGrp.parent )->Add( group );
+            static_cast<FOOTPRINT*>( aGrp.parent )->Add( group );
         else
             static_cast<BOARD*>( aGrp.parent )->Add( group );
     }
@@ -1735,8 +1735,8 @@ void PCB_PARSER::parseSetup()
             break;
 
         case T_mod_text_size:   // note: legacy (pre-6.0) token
-            designSettings.m_TextSize[ LAYER_CLASS_SILK ].x = parseBoardUnits( "module text width" );
-            designSettings.m_TextSize[ LAYER_CLASS_SILK ].y = parseBoardUnits( "module text height" );
+            designSettings.m_TextSize[ LAYER_CLASS_SILK ].x = parseBoardUnits( "footprint text width" );
+            designSettings.m_TextSize[ LAYER_CLASS_SILK ].y = parseBoardUnits( "footprint text height" );
             m_board->m_LegacyDesignSettingsLoaded = true;
             NeedRIGHT();
             break;
@@ -2761,7 +2761,7 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
 }
 
 
-MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
+FOOTPRINT* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
 {
     try
     {
@@ -2777,10 +2777,10 @@ MODULE* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
 }
 
 
-MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
+FOOTPRINT* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 {
     wxCHECK_MSG( CurTok() == T_module, NULL,
-                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as MODULE." ) );
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FOOTPRINT." ) );
 
     wxString name;
     wxPoint  pt;
@@ -2788,11 +2788,11 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     LIB_ID   fpid;
     int      attributes = 0;
 
-    std::unique_ptr<MODULE> module = std::make_unique<MODULE>( m_board );
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
     std::map<wxString, wxString> properties;
 
-    module->SetInitialComments( aInitialComments );
+    footprint->SetInitialComments( aInitialComments );
 
     token = NextTok();
 
@@ -2818,7 +2818,7 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         {
         case T_version:
         {
-            // Theoretically a module nested in a PCB could declare its own version, though
+            // Theoretically a footprint nested in a PCB could declare its own version, though
             // as of writing this comment we don't do that. Just in case, take the greater
             // version.
             int this_version = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
@@ -2829,11 +2829,11 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         }
 
         case T_locked:
-            module->SetLocked( true );
+            footprint->SetLocked( true );
             break;
 
         case T_placed:
-            module->SetIsPlaced( true );
+            footprint->SetIsPlaced( true );
             break;
 
         case T_layer:
@@ -2842,31 +2842,31 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             // but because we can find some stupid layer in file, ensure a
             // acceptable layer is set for the footprint
             PCB_LAYER_ID layer = parseBoardItemLayer();
-            module->SetLayer( layer == B_Cu ? B_Cu : F_Cu );
+            footprint->SetLayer( layer == B_Cu ? B_Cu : F_Cu );
         }
             NeedRIGHT();
             break;
 
         case T_tedit:
-            module->SetLastEditTime( parseHex() );
+            footprint->SetLastEditTime( parseHex() );
             NeedRIGHT();
             break;
 
         case T_tstamp:
             NextTok();
-            const_cast<KIID&>( module->m_Uuid ) = CurStrToKIID();
+            const_cast<KIID&>( footprint->m_Uuid ) = CurStrToKIID();
             NeedRIGHT();
             break;
 
         case T_at:
             pt.x = parseBoardUnits( "X coordinate" );
             pt.y = parseBoardUnits( "Y coordinate" );
-            module->SetPosition( pt );
+            footprint->SetPosition( pt );
             token = NextTok();
 
             if( token == T_NUMBER )
             {
-                module->SetOrientation( parseDouble() * 10.0 );
+                footprint->SetOrientation( parseDouble() * 10.0 );
                 NeedRIGHT();
             }
             else if( token != T_RIGHT )
@@ -2878,13 +2878,13 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_descr:
             NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
-            module->SetDescription( FromUTF8() );
+            footprint->SetDescription( FromUTF8() );
             NeedRIGHT();
             break;
 
         case T_tags:
             NeedSYMBOLorNUMBER(); // some symbols can be 0508, so a number is also a symbol here
-            module->SetKeywords( FromUTF8() );
+            footprint->SetKeywords( FromUTF8() );
             NeedRIGHT();
             break;
 
@@ -2894,54 +2894,54 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
 
         case T_path:
             NeedSYMBOLorNUMBER(); // Paths can be numerical so a number is also a symbol here
-            module->SetPath( KIID_PATH( FromUTF8() ) );
+            footprint->SetPath( KIID_PATH( FromUTF8() ) );
             NeedRIGHT();
             break;
 
         case T_autoplace_cost90:
-            module->SetPlacementCost90( parseInt( "auto place cost at 90 degrees" ) );
+            footprint->SetPlacementCost90( parseInt( "auto place cost at 90 degrees" ) );
             NeedRIGHT();
             break;
 
         case T_autoplace_cost180:
-            module->SetPlacementCost180( parseInt( "auto place cost at 180 degrees" ) );
+            footprint->SetPlacementCost180( parseInt( "auto place cost at 180 degrees" ) );
             NeedRIGHT();
             break;
 
         case T_solder_mask_margin:
-            module->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
+            footprint->SetLocalSolderMaskMargin( parseBoardUnits( "local solder mask margin value" ) );
             NeedRIGHT();
             break;
 
         case T_solder_paste_margin:
-            module->SetLocalSolderPasteMargin(
+            footprint->SetLocalSolderPasteMargin(
                     parseBoardUnits( "local solder paste margin value" ) );
             NeedRIGHT();
             break;
 
         case T_solder_paste_ratio:
-            module->SetLocalSolderPasteMarginRatio(
+            footprint->SetLocalSolderPasteMarginRatio(
                     parseDouble( "local solder paste margin ratio value" ) );
             NeedRIGHT();
             break;
 
         case T_clearance:
-            module->SetLocalClearance( parseBoardUnits( "local clearance value" ) );
+            footprint->SetLocalClearance( parseBoardUnits( "local clearance value" ) );
             NeedRIGHT();
             break;
 
         case T_zone_connect:
-            module->SetZoneConnection( (ZONE_CONNECTION) parseInt( "zone connection value" ) );
+            footprint->SetZoneConnection((ZONE_CONNECTION) parseInt( "zone connection value" ) );
             NeedRIGHT();
             break;
 
         case T_thermal_width:
-            module->SetThermalWidth( parseBoardUnits( "thermal width value" ) );
+            footprint->SetThermalWidth( parseBoardUnits( "thermal width value" ) );
             NeedRIGHT();
             break;
 
         case T_thermal_gap:
-            module->SetThermalGap( parseBoardUnits( "thermal gap value" ) );
+            footprint->SetThermalGap( parseBoardUnits( "thermal gap value" ) );
             NeedRIGHT();
             break;
 
@@ -2984,28 +2984,28 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_fp_text:
         {
             FP_TEXT* text = parseFP_TEXT();
-            text->SetParent( module.get() );
+            text->SetParent( footprint.get() );
             double orientation = text->GetTextAngle();
-            orientation -= module->GetOrientation();
+            orientation -= footprint->GetOrientation();
             text->SetTextAngle( orientation );
             text->SetDrawCoord();
 
             switch( text->GetType() )
             {
             case FP_TEXT::TEXT_is_REFERENCE:
-                module->Reference() = *text;
-                const_cast<KIID&>( module->Reference().m_Uuid ) = text->m_Uuid;
+                footprint->Reference() = *text;
+                const_cast<KIID&>( footprint->Reference().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
             case FP_TEXT::TEXT_is_VALUE:
-                module->Value() = *text;
-                const_cast<KIID&>( module->Value().m_Uuid ) = text->m_Uuid;
+                footprint->Value() = *text;
+                const_cast<KIID&>( footprint->Value().m_Uuid ) = text->m_Uuid;
                 delete text;
                 break;
 
             default:
-                module->Add( text, ADD_MODE::APPEND );
+                footprint->Add( text, ADD_MODE::APPEND );
             }
         }
             break;
@@ -3017,9 +3017,9 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
             // Drop 0 and NaN angles as these can corrupt/crash the schematic
             if( std::isnormal( shape->GetAngle() ) )
             {
-                shape->SetParent( module.get() );
+                shape->SetParent( footprint.get() );
                 shape->SetDrawCoord();
-                module->Add( shape, ADD_MODE::APPEND );
+                footprint->Add( shape, ADD_MODE::APPEND );
             }
             else
                 delete shape;
@@ -3033,36 +3033,36 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         case T_fp_poly:
         {
             FP_SHAPE* shape = parseFP_SHAPE();
-            shape->SetParent( module.get() );
+            shape->SetParent( footprint.get() );
             shape->SetDrawCoord();
-            module->Add( shape, ADD_MODE::APPEND );
+            footprint->Add( shape, ADD_MODE::APPEND );
         }
             break;
 
         case T_pad:
         {
-            PAD* pad = parsePAD( module.get() );
+            PAD* pad = parsePAD( footprint.get() );
             pt       = pad->GetPos0();
 
-            RotatePoint( &pt, module->GetOrientation() );
-            pad->SetPosition( pt + module->GetPosition() );
-            module->Add( pad, ADD_MODE::APPEND );
+            RotatePoint( &pt, footprint->GetOrientation() );
+            pad->SetPosition( pt + footprint->GetPosition() );
+            footprint->Add( pad, ADD_MODE::APPEND );
         }
             break;
 
         case T_model:
-            module->Add3DModel( parse3DModel() );
+            footprint->Add3DModel( parse3DModel() );
             break;
 
         case T_zone:
         {
-            ZONE* zone = parseZONE( module.get() );
-            module->Add( zone, ADD_MODE::APPEND );
+            ZONE* zone = parseZONE( footprint.get() );
+            footprint->Add( zone, ADD_MODE::APPEND );
         }
             break;
 
         case T_group:
-            parseGROUP( module.get() );
+            parseGROUP( footprint.get() );
             break;
 
         default:
@@ -3084,10 +3084,10 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     if( m_requiredVersion < 20200826 && attributes == 0 )
         attributes |= FP_THROUGH_HOLE;
 
-    module->SetAttributes( attributes );
+    footprint->SetAttributes( attributes );
 
-    module->SetFPID( fpid );
-    module->SetProperties( properties );
+    footprint->SetFPID( fpid );
+    footprint->SetProperties( properties );
 
     // We want to calculate the bounding box in most cases except
     // if the advanced config is set and its a general footprint load
@@ -3096,10 +3096,10 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
     if( !ADVANCED_CFG::GetCfg().m_SkipBoundingBoxOnFpLoad || m_board != nullptr
             || reader->GetSource().Contains( "clipboard" ) )
     {
-        module->CalculateBoundingBox();
+        footprint->CalculateBoundingBox();
     }
 
-    return module.release();
+    return footprint.release();
 }
 
 
@@ -3412,7 +3412,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 }
 
 
-PAD* PCB_PARSER::parsePAD( MODULE* aParent )
+PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
 {
     wxCHECK_MSG( CurTok() == T_pad, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as PAD." ) );
@@ -4002,7 +4002,7 @@ void PCB_PARSER::parseGROUP( BOARD_ITEM* aParent )
     while( ( token = NextTok() ) != T_RIGHT )
     {
         // This token is the Uuid of the item in the group.
-        // Since groups are serialized at the end of the file/module, the Uuid should already
+        // Since groups are serialized at the end of the file/footprint, the Uuid should already
         // have been seen and exist in the board.
         KIID uuid( CurStr() );
         groupInfo.memberUuids.push_back( uuid );
@@ -4276,16 +4276,16 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
 
     // bigger scope since each filled_polygon is concatenated in here
     std::map<PCB_LAYER_ID, SHAPE_POLY_SET> pts;
-    bool         inModule = false;
+    bool         inFootprint = false;
     PCB_LAYER_ID filledLayer;
     bool         addedFilledPolygons = false;
 
-    if( dynamic_cast<MODULE*>( aParent ) )      // The zone belongs a footprint
-        inModule = true;
+    if( dynamic_cast<FOOTPRINT*>( aParent ) )      // The zone belongs a footprint
+        inFootprint = true;
 
     std::unique_ptr<ZONE> zone;
 
-    if( inModule )
+    if( inFootprint )
         zone = std::make_unique<FP_ZONE>( aParent );
     else
         zone = std::make_unique<ZONE>( aParent );

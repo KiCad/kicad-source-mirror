@@ -115,12 +115,12 @@ void PCB_LINE::Flip()
 }
 
 
-void PCB_LINE::AddToFootprint( MODULE* aModule )
+void PCB_LINE::AddToFootprint( FOOTPRINT* aFootprint )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {
-        FP_SHAPE* segment = new FP_SHAPE( aModule, S_SEGMENT );
-        aModule->Add( segment );
+        FP_SHAPE* segment = new FP_SHAPE( aFootprint, S_SEGMENT );
+        aFootprint->Add( segment );
 
         segment->m_Start0   = wxPoint( m_positionX, m_positionY );
         segment->m_End0     = wxPoint( m_toX, m_toY );

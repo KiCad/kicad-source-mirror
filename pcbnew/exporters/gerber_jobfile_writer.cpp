@@ -464,7 +464,7 @@ void GERBER_JOBFILE_WRITER::addJSONDesignRules()
     int minPadClearanceOuter = defaultNC.GetClearance();
     int minPadClearanceInner = defaultNC.GetClearance();
 
-    for( MODULE* footprint : m_pcb->Footprints() )
+    for( FOOTPRINT* footprint : m_pcb->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

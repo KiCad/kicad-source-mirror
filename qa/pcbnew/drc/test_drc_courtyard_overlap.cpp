@@ -50,10 +50,9 @@ struct RECT_DEFINITION
 
 
 /*
- * A simple mock module with a set of courtyard rectangles and some other
- * information
+ * A simple mock footprint with a set of courtyard rectangles and some other information
  */
-struct COURTYARD_TEST_MODULE
+struct COURTYARD_TEST_FP
 {
     std::string                  m_refdes;
     std::vector<RECT_DEFINITION> m_rects;
@@ -85,65 +84,57 @@ std::ostream& operator<<( std::ostream& os, const COURTYARD_COLLISION& aColl )
  */
 struct COURTYARD_OVERLAP_TEST_CASE
 {
-    std::string m_case_name;
-
-    // The footprint in the test case
-    std::vector<COURTYARD_TEST_MODULE> m_mods;
-
-    // The expected number of collisions
-    std::vector<COURTYARD_COLLISION> m_collisions;
+    std::string                      m_case_name;
+    std::vector<COURTYARD_TEST_FP>   m_fpDefs;      // The footprint in the test case
+    std::vector<COURTYARD_COLLISION> m_collisions;  // The expected number of collisions
 };
 
 
 /**
- * Add a rectangular courtyard outline to a module.
+ * Add a rectangular courtyard outline to a footprint.
  */
-void AddRectCourtyard( MODULE& aMod, const RECT_DEFINITION& aRect )
+void AddRectCourtyard( FOOTPRINT& aFootprint, const RECT_DEFINITION& aRect )
 {
     const PCB_LAYER_ID layer = aRect.m_front ? F_CrtYd : B_CrtYd;
 
     const int width = Millimeter2iu( 0.1 );
 
-    KI_TEST::DrawRect( aMod, aRect.m_centre, aRect.m_size, aRect.m_corner_rad, width, layer );
+    KI_TEST::DrawRect( aFootprint, aRect.m_centre, aRect.m_size, aRect.m_corner_rad, width, layer );
 }
 
 
 /**
- * Construct a #MODULE to use in a courtyard test from a #COURTYARD_TEST_MODULE
- * definition.
+ * Construct a #FOOTPRINT to use in a courtyard test from a #COURTYARD_TEST_FP definition.
  */
-std::unique_ptr<MODULE> MakeCourtyardTestModule( BOARD& aBoard, const COURTYARD_TEST_MODULE& aMod )
+std::unique_ptr<FOOTPRINT> MakeCourtyardTestFP( BOARD& aBoard, const COURTYARD_TEST_FP& aFPDef )
 {
-    auto module = std::make_unique<MODULE>( &aBoard );
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( &aBoard );
 
-    for( const auto& rect : aMod.m_rects )
-    {
-        AddRectCourtyard( *module, rect );
-    }
+    for( const RECT_DEFINITION& rect : aFPDef.m_rects )
+        AddRectCourtyard( *footprint, rect );
 
-    module->SetReference( aMod.m_refdes );
+    footprint->SetReference( aFPDef.m_refdes );
 
-    // As of 2019-01-17, this has to go after adding the courtyards,
-    // or all the poly sets are empty when DRC'd
-    module->SetPosition( (wxPoint) aMod.m_pos );
+    // This has to go after adding the courtyards, or all the poly sets are empty when DRC'd
+    footprint->SetPosition( (wxPoint) aFPDef.m_pos );
 
-    return module;
+    return footprint;
 }
 
 /**
  * Make a board for courtyard testing.
  *
- * @param aMods the list of module definitions to add to the board
+ * @param aFPDefs the list of footprint definitions to add to the board
  */
-std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_TEST_MODULE>& aMods )
+std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_TEST_FP>& aFPDefs )
 {
-    auto board = std::make_unique<BOARD>();
+    std::unique_ptr<BOARD> board = std::make_unique<BOARD>();
 
-    for( const auto& mod : aMods )
+    for( const COURTYARD_TEST_FP& fpDef : aFPDefs )
     {
-        auto module = MakeCourtyardTestModule( *board, mod );
+        std::unique_ptr<FOOTPRINT> footprint = MakeCourtyardTestFP( *board, fpDef );
 
-        board->Add( module.release() );
+        board->Add( footprint.release() );
     }
 
     return board;
@@ -220,7 +211,7 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
                         true,
                     },
                 },
-                { Millimeter2iu( 3 ), Millimeter2iu( 1 ) }, // One module is far from the other
+                { Millimeter2iu( 3 ), Millimeter2iu( 1 ) }, // One footprint is far from the other
             },
         },
         {}, // no collisions
@@ -398,8 +389,8 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
 {
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
 
-    const MODULE* item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
-    const MODULE* item_b = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetAuxItemID() ) );
+    const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetMainItemID() ) );
+    const FOOTPRINT* item_b = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetAuxItemID() ) );
 
     // cant' find the items!
     if( !item_a || !item_b )
@@ -448,7 +439,7 @@ static void CheckCollisionsMatchExpected( BOARD& aBoard,
 static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
                                     const KI_TEST::BOARD_DUMPER& aDumper )
 {
-    auto board = MakeBoard( aCase.m_mods );
+    auto board = MakeBoard( aCase.m_fpDefs );
 
     // Dump if env var set
     aDumper.DumpBoardToFile( *board, aCase.m_case_name );

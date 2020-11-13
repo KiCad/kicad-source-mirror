@@ -44,7 +44,7 @@ class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 
-    std::unique_ptr<MODULE>     m_revertModule;
+    std::unique_ptr<FOOTPRINT>  m_revertModule;
     wxString                    m_footprintNameWhenLoaded;
 
     int                         m_defaultLibWidth;
@@ -180,10 +180,10 @@ public:
      * @param aFootprint = the given footprint
      * @return : true if OK, false if abort
      */
-    bool SaveFootprint( MODULE* aFootprint );
-    bool SaveFootprintAs( MODULE* aFootprint );
+    bool SaveFootprint( FOOTPRINT* aFootprint );
+    bool SaveFootprintAs( FOOTPRINT* aFootprint );
     bool SaveFootprintToBoard( bool aAddNew );
-    bool SaveFootprintInLibrary( MODULE* aFootprint, const wxString& aLibraryName );
+    bool SaveFootprintInLibrary( FOOTPRINT* aFootprint, const wxString& aLibraryName );
     bool RevertFootprint();
 
     /**
@@ -221,7 +221,7 @@ public:
     /**
      * Create a file containing only one footprint.
      */
-    void ExportFootprint( MODULE* aFootprint );
+    void ExportFootprint( FOOTPRINT* aFootprint );
 
     /**
      * Read a file containing only one footprint.
@@ -229,7 +229,7 @@ public:
      * The import function can also read gpcb footprint file, in Newlib format.
      * (One footprint per file, Newlib files have no special ext.)
      */
-    MODULE* ImportFootprint( const wxString& aName = wxT( "") );
+    FOOTPRINT* ImportFootprint( const wxString& aName = wxT( "") );
 
     /**
      * Load a footprint from the main board into the Footprint Editor.
@@ -238,14 +238,14 @@ public:
      *                     footprint reference.
      * @return true if a footprint is loaded.
      */
-    bool LoadFootprintFromBoard( MODULE* aFootprint );
+    bool LoadFootprintFromBoard( FOOTPRINT* aFootprint );
 
     /**
      * Display the list of footprints currently existing on the BOARD.
      *
      * @return the selected footprint or nullptr
      */
-    MODULE* SelectFootprintFromBoard( BOARD* aPcb );
+    FOOTPRINT* SelectFootprintFromBoard( BOARD* aPcb );
 
     /**
      * Delete the given footprint from its library.
@@ -281,7 +281,7 @@ public:
      * Override from PCB_BASE_EDIT_FRAME which adds a footprint to the editor's dummy board,
      * NOT to the user's PCB.
      */
-    void AddFootprintToBoard( MODULE* aFootprint ) override;
+    void AddFootprintToBoard( FOOTPRINT* aFootprint ) override;
 
     /**
      * Allows Modedit to install its preferences panel into the preferences dialog.
@@ -347,7 +347,7 @@ protected:
     /**
      * Run the Footprint Properties dialog and handle changes made in it.
      */
-    void editFootprintProperties( MODULE* aFootprint );
+    void editFootprintProperties( FOOTPRINT* aFootprint );
 
     void setupUIConditions() override;
 };

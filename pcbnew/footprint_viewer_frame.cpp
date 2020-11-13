@@ -663,7 +663,7 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& aEvent )
         // Delete the current footprint (MUST reset tools first)
         GetToolManager()->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
-        GetBoard()->DeleteAllModules();
+        GetBoard()->DeleteAllFootprints();
 
         LIB_ID id;
         id.SetLibNickname( getCurNickname() );
@@ -733,7 +733,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& aEvent )
         BOARD_COMMIT commit( pcbframe );
 
         // Create the "new" footprint
-        MODULE* newFootprint = (MODULE*) GetBoard()->GetFirstFootprint()->Duplicate();
+        FOOTPRINT* newFootprint = (FOOTPRINT*) GetBoard()->GetFirstFootprint()->Duplicate();
         newFootprint->SetParent( pcbframe->GetBoard() );
         newFootprint->SetLink( 0 );
 
@@ -1027,10 +1027,10 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
         setCurFootprintName( m_fpList->GetString((unsigned) selection ) );
 
         // Delete the current footprint
-        GetBoard()->DeleteAllModules();
+        GetBoard()->DeleteAllFootprints();
 
-        MODULE* footprint = Prj().PcbFootprintLibs()->FootprintLoad( getCurNickname(),
-                                                                     getCurFootprintName() );
+        FOOTPRINT* footprint = Prj().PcbFootprintLibs()->FootprintLoad( getCurNickname(),
+                                                                        getCurFootprintName() );
 
         if( footprint )
             GetBoard()->Add( footprint, ADD_MODE::APPEND );

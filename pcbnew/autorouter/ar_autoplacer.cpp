@@ -82,7 +82,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
     m_board = aBoard;
     m_connectivity = std::make_unique<CONNECTIVITY_DATA>( );
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
         m_connectivity->Add( footprint );
 
     m_gridSize = Millimeter2iu( STEP_AR_MM );
@@ -92,7 +92,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
 }
 
 
-void AR_AUTOPLACER::placeFootprint( MODULE* aFootprint, bool aDoNotRecreateRatsnest,
+void AR_AUTOPLACER::placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest,
                                     const wxPoint& aPos )
 {
     if( !aFootprint )
@@ -271,7 +271,7 @@ bool AR_AUTOPLACER::fillMatrix()
 }
 
 
-void AR_AUTOPLACER::rotateFootprint( MODULE* aFootprint, double angle, bool incremental )
+void AR_AUTOPLACER::rotateFootprint( FOOTPRINT* aFootprint, double angle, bool incremental )
 {
     if( aFootprint == NULL )
         return;
@@ -332,7 +332,7 @@ void AR_AUTOPLACER::addPad( PAD* aPad, int aClearance )
 }
 
 
-void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
+void AR_AUTOPLACER::buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance )
 {
     m_fpAreaTop.RemoveAllContours();
     m_fpAreaBottom.RemoveAllContours();
@@ -365,7 +365,7 @@ void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
 }
 
 
-void AR_AUTOPLACER::genModuleOnRoutingMatrix( MODULE* Module )
+void AR_AUTOPLACER::genModuleOnRoutingMatrix( FOOTPRINT* Module )
 {
     int         ox, oy, fx, fy;
     LSET        layerMask;
@@ -546,7 +546,7 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int sid
  * Returns the value TstRectangle().
  * Module is known by its bounding box
  */
-int AR_AUTOPLACER::testFootprintOnBoard( MODULE* aFootprint, bool TstOtherSide,
+int AR_AUTOPLACER::testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide,
                                          const wxPoint& aOffset )
 {
     int side = AR_SIDE_TOP;
@@ -584,7 +584,7 @@ int AR_AUTOPLACER::testFootprintOnBoard( MODULE* aFootprint, bool TstOtherSide,
 }
 
 
-int AR_AUTOPLACER::getOptimalFPPlacement( MODULE* aFootprint )
+int AR_AUTOPLACER::getOptimalFPPlacement( FOOTPRINT* aFootprint )
 {
     int     error = 1;
     wxPoint lastPosOK;
@@ -678,12 +678,12 @@ int AR_AUTOPLACER::getOptimalFPPlacement( MODULE* aFootprint )
 }
 
 
-const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefFP, PAD* aRefPad, const wxPoint& aOffset)
+const PAD* AR_AUTOPLACER::nearestPad( FOOTPRINT *aRefFP, PAD* aRefPad, const wxPoint& aOffset)
 {
     const PAD* nearest = nullptr;
     int64_t    nearestDist = INT64_MAX;
 
-    for ( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if ( footprint == aRefFP )
             continue;
@@ -710,7 +710,7 @@ const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefFP, PAD* aRefPad, const wxPoin
 }
 
 
-double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aFootprint, const wxPoint& aOffset )
+double AR_AUTOPLACER::computePlacementRatsnestCost( FOOTPRINT *aFootprint, const wxPoint& aOffset )
 {
     double  curr_cost;
     VECTOR2I start;      // start point of a ratsnest
@@ -719,7 +719,7 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aFootprint, const wx
 
     curr_cost = 0;
 
-    for ( PAD* pad : aFootprint->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
     {
         const PAD* nearest = nearestPad( aFootprint, pad, aOffset );
 
@@ -758,7 +758,7 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aFootprint, const wx
 
 
 // Sort routines
-static bool sortFootprintsByComplexity( MODULE* ref, MODULE* compare )
+static bool sortFootprintsByComplexity( FOOTPRINT* ref, FOOTPRINT* compare )
 {
     double ff1, ff2;
 
@@ -769,7 +769,7 @@ static bool sortFootprintsByComplexity( MODULE* ref, MODULE* compare )
 }
 
 
-static bool sortFootprintsByRatsnestSize( MODULE* ref, MODULE* compare )
+static bool sortFootprintsByRatsnestSize( FOOTPRINT* ref, FOOTPRINT* compare )
 {
     double ff1, ff2;
 
@@ -779,12 +779,12 @@ static bool sortFootprintsByRatsnestSize( MODULE* ref, MODULE* compare )
 }
 
 
-MODULE* AR_AUTOPLACER::pickFootprint( )
+FOOTPRINT* AR_AUTOPLACER::pickFootprint( )
 {
-    std::vector<MODULE*> fpList;
+    std::vector<FOOTPRINT*> fpList;
 
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         footprint->CalculateBoundingBox();
         fpList.push_back( footprint );
@@ -794,7 +794,7 @@ MODULE* AR_AUTOPLACER::pickFootprint( )
 
     for( unsigned kk = 0; kk < fpList.size(); kk++ )
     {
-        MODULE* footprint = fpList[kk];
+        FOOTPRINT* footprint = fpList[kk];
         footprint->SetFlag( 0 );
 
         if( !footprint->NeedsPlaced() )
@@ -807,7 +807,7 @@ MODULE* AR_AUTOPLACER::pickFootprint( )
 
     for( unsigned kk = 0; kk < fpList.size(); kk++ )
     {
-        MODULE* footprint = fpList[kk];
+        FOOTPRINT* footprint = fpList[kk];
 
         auto edges = m_connectivity->GetRatsnestForComponent( footprint, true );
 
@@ -817,12 +817,12 @@ MODULE* AR_AUTOPLACER::pickFootprint( )
     sort( fpList.begin(), fpList.end(), sortFootprintsByRatsnestSize );
 
     // Search for "best" footprint.
-    MODULE* bestFootprint  = nullptr;
-    MODULE* altFootprint   = nullptr;
+    FOOTPRINT* bestFootprint  = nullptr;
+    FOOTPRINT* altFootprint   = nullptr;
 
     for( unsigned ii = 0; ii < fpList.size(); ii++ )
     {
-        MODULE* footprint = fpList[ii];
+        FOOTPRINT* footprint = fpList[ii];
 
         if( !footprint->NeedsPlaced() )
             continue;
@@ -874,7 +874,7 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
 }
 
 
-AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<MODULE*>& aFootprints,
+AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprints,
                                               BOARD_COMMIT* aCommit,
                                               bool aPlaceOffboardModules )
 {
@@ -896,33 +896,33 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<MODULE*>& aFootprints,
 
     int placedCount = 0;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
         footprint->SetNeedsPlaced( false );
 
-    std::vector<MODULE*> offboardMods;
+    std::vector<FOOTPRINT*> offboardMods;
 
     if( aPlaceOffboardModules )
     {
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             if( !m_matrix.m_BrdBox.Contains( footprint->GetPosition() ) )
                 offboardMods.push_back( footprint );
         }
     }
 
-    for( MODULE* footprint : aFootprints )
+    for( FOOTPRINT* footprint : aFootprints )
     {
         footprint->SetNeedsPlaced( true );
         aCommit->Modify( footprint );
     }
 
-    for( MODULE* footprint : offboardMods )
+    for( FOOTPRINT* footprint : offboardMods )
     {
         footprint->SetNeedsPlaced( true );
         aCommit->Modify( footprint );
     }
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if( footprint->NeedsPlaced() )    // Erase from screen
             placedCount++;
@@ -945,7 +945,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<MODULE*>& aFootprints,
     if( m_refreshCallback )
         m_refreshCallback( nullptr );
 
-    MODULE* footprint;
+    FOOTPRINT* footprint;
 
     while( ( footprint = pickFootprint() ) != nullptr )
     {
@@ -1075,7 +1075,7 @@ end_of_tst:
 
     m_matrix.UnInitRoutingMatrix();
 
-    for( MODULE* fp : m_board->Footprints() )
+    for( FOOTPRINT* fp : m_board->Footprints() )
         fp->CalculateBoundingBox();
 
     return cancelled ? AR_CANCELLED : AR_COMPLETED;

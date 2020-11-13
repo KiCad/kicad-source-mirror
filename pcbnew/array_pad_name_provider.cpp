@@ -26,7 +26,7 @@
 #include <pad.h>
 
 
-ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER( const MODULE* aFootprint,
+ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER( const FOOTPRINT* aFootprint,
                                                   const ARRAY_OPTIONS& aArrayOpts )
         : m_arrayOpts( aArrayOpts )
 {

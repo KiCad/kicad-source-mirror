@@ -81,7 +81,7 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
     m_board = m_drcEngine->GetBoard();
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
             break;

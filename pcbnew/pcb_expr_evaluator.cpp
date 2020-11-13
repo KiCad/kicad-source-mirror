@@ -149,22 +149,22 @@ static void insideCourtyard( LIBEVAL::CONTEXT* aCtx, void* self )
 
     PCB_EXPR_VAR_REF* vref = static_cast<PCB_EXPR_VAR_REF*>( self );
     BOARD_ITEM*       item = vref ? vref->GetObject( aCtx ) : nullptr;
-    MODULE*           footprint = nullptr;
+    FOOTPRINT*        footprint = nullptr;
 
     if( !item )
         return;
 
     if( arg->AsString() == "A" )
     {
-        footprint = dynamic_cast<MODULE*>( context->GetItem( 0 ) );
+        footprint = dynamic_cast<FOOTPRINT*>( context->GetItem( 0 ) );
     }
     else if( arg->AsString() == "B" )
     {
-        footprint = dynamic_cast<MODULE*>( context->GetItem( 1 ) );
+        footprint = dynamic_cast<FOOTPRINT*>( context->GetItem( 1 ) );
     }
     else
     {
-        for( MODULE* candidate : item->GetBoard()->Footprints() )
+        for( FOOTPRINT* candidate : item->GetBoard()->Footprints() )
         {
             if( candidate->GetReference().Matches( arg->AsString() ) )
             {
@@ -248,7 +248,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
 
                 if( item->Type() == PCB_FOOTPRINT_T )
                 {
-                    MODULE* footprint = static_cast<MODULE*>( item );
+                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
                     if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) != 0 )
                     {
@@ -322,7 +322,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             }
         }
 
-        for( MODULE* footprint : item->GetBoard()->Footprints() )
+        for( FOOTPRINT* footprint : item->GetBoard()->Footprints() )
         {
             for( ZONE* candidate : footprint->Zones() )
             {
@@ -353,7 +353,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
             }
         }
 
-        for( MODULE* footprint : item->GetBoard()->Footprints() )
+        for( FOOTPRINT* footprint : item->GetBoard()->Footprints() )
         {
             for( ZONE* candidate : footprint->Zones() )
             {

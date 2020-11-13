@@ -75,38 +75,38 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
         }
         else if( item->Type() == PCB_FP_ZONE_T )
         {
-            MODULE* mod = static_cast<MODULE*>( item->GetParent() );
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item->GetParent() );
 
             // case 1: handle locking
-            if( ( aFlags & EXCLUDE_LOCKED ) && mod && mod->IsLocked() )
+            if( ( aFlags & EXCLUDE_LOCKED ) && fp && fp->IsLocked() )
             {
                 aCollector.Remove( item );
             }
 
             // case 2: selection contains both the module and its pads - remove the pads
-            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && mod && aCollector.HasItem( mod ) )
+            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && fp && aCollector.HasItem( fp ) )
                 aCollector.Remove( item );
         }
         else if( item->Type() == PCB_PAD_T )
         {
-            MODULE* mod = static_cast<MODULE*>( item->GetParent() );
+            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item->GetParent() );
 
             // case 1: handle locking
-            if( ( aFlags & EXCLUDE_LOCKED ) && mod && mod->IsLocked() )
+            if( ( aFlags & EXCLUDE_LOCKED ) && fp && fp->IsLocked() )
             {
                 aCollector.Remove( item );
             }
-            else if( ( aFlags & EXCLUDE_LOCKED_PADS ) && mod && mod->PadsLocked() )
+            else if( ( aFlags & EXCLUDE_LOCKED_PADS ) && fp && fp->PadsLocked() )
             {
                 // Pad locking is considerably "softer" than item locking
                 aCollector.Remove( item );
 
-                if( !mod->IsLocked() && !aCollector.HasItem( mod ) )
-                    aCollector.Append( mod );
+                if( !fp->IsLocked() && !aCollector.HasItem( fp ) )
+                    aCollector.Append( fp );
             }
 
             // case 2: selection contains both the module and its pads - remove the pads
-            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && mod && aCollector.HasItem( mod ) )
+            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && fp && aCollector.HasItem( fp ) )
                 aCollector.Remove( item );
         }
         else if( ( aFlags & EXCLUDE_TRANSIENTS ) && item->Type() == PCB_MARKER_T )
@@ -233,7 +233,7 @@ bool EDIT_TOOL::Init()
 int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 {
     SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    MODULE*         fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
+    FOOTPRINT*      fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
 
     if( fp )
     {
@@ -390,7 +390,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     for( EDA_ITEM* item : selection )
     {
         BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-        MODULE*     footprint = dynamic_cast<MODULE*>( item );
+        FOOTPRINT*  footprint = dynamic_cast<FOOTPRINT*>( item );
 
         if( boardItem )
             sel_items.push_back( boardItem );
@@ -1278,8 +1278,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         {
         case PCB_FP_TEXT_T:
             {
-                FP_TEXT* text = static_cast<FP_TEXT*>( item );
-                MODULE*  parent = static_cast<MODULE*>( item->GetParent() );
+                FP_TEXT*   text = static_cast<FP_TEXT*>( item );
+                FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
 
                 if( text->GetType() == FP_TEXT::TEXT_is_DIVERS )
                 {
@@ -1292,8 +1292,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         case PCB_PAD_T:
             {
-                PAD*    pad = static_cast<PAD*>( item );
-                MODULE* parent = static_cast<MODULE*>( item->GetParent() );
+                PAD*       pad = static_cast<PAD*>( item );
+                FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
 
                 m_commit->Modify( parent );
                 getView()->Remove( pad );
@@ -1303,8 +1303,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         case PCB_FP_ZONE_T:
             {
-                FP_ZONE* zone = static_cast<FP_ZONE*>( item );
-                MODULE*  parent = static_cast<MODULE*>( item->GetParent() );
+                FP_ZONE*   zone = static_cast<FP_ZONE*>( item );
+                FOOTPRINT* parent = static_cast<FOOTPRINT*>( item->GetParent() );
 
                 m_commit->Modify( parent );
                 getView()->Remove( zone );
@@ -1566,7 +1566,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
         if( m_isFootprintEditor )
         {
-            MODULE* parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
+            FOOTPRINT* parentFootprint = editFrame->GetBoard()->GetFirstFootprint();
             dupe_item = parentFootprint->DuplicateItem( orig_item );
 
             if( increment && item->Type() == PCB_PAD_T
@@ -1581,7 +1581,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         }
         else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_FOOTPRINT_T )
         {
-            MODULE* parentFootprint = static_cast<MODULE*>( orig_item->GetParent() );
+            FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( orig_item->GetParent() );
 
             m_commit->Modify( parentFootprint );
             dupe_item = parentFootprint->DuplicateItem( orig_item, true /* add to parent */ );

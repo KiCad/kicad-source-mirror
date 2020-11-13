@@ -152,7 +152,7 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
-void PCB_BASE_FRAME::AddFootprintToBoard( MODULE* aFootprint )
+void PCB_BASE_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 {
     if( aFootprint )
     {
@@ -191,17 +191,19 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
         if( lastItem->Type() == PCB_FOOTPRINT_T )
         {
-            static_cast<MODULE*>( lastItem )->RunOnChildren( [&]( BOARD_ITEM* child )
-                                                             {
-                                                                 child->ClearBrightened();
-                                                             } );
+            static_cast<FOOTPRINT*>( lastItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->ClearBrightened();
+                    } );
         }
         else if( lastItem->Type() == PCB_GROUP_T )
         {
-            static_cast<PCB_GROUP*>( lastItem )->RunOnChildren( [&]( BOARD_ITEM* child )
-                                                                {
-                                                                    child->ClearBrightened();
-                                                                } );
+            static_cast<PCB_GROUP*>( lastItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->ClearBrightened();
+                    } );
         }
 
         GetCanvas()->GetView()->Update( lastItem );
@@ -215,17 +217,19 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
         if( aItem->Type() == PCB_FOOTPRINT_T )
         {
-            static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* child )
-                                                          {
-                                                              child->SetBrightened();
-                                                          });
+            static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->SetBrightened();
+                    });
         }
         else if( aItem->Type() == PCB_GROUP_T )
         {
-            static_cast<PCB_GROUP*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* child )
-            {
-                child->SetBrightened();
-            });
+            static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
+                    [&]( BOARD_ITEM* child )
+                    {
+                        child->SetBrightened();
+                    });
         }
 
         GetCanvas()->GetView()->Update( aItem );

@@ -50,7 +50,7 @@ void FOOTPRINT_EDIT_FRAME::LoadFootprintFromLibrary( LIB_ID aFPID)
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
-    MODULE* footprint = LoadFootprint( aFPID );
+    FOOTPRINT* footprint = LoadFootprint( aFPID );
 
     if( !footprint )
         return;
@@ -122,7 +122,7 @@ void FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( wxCommandEvent& event )
 class BASIC_FOOTPRINT_INFO : public FOOTPRINT_INFO
 {
 public:
-    BASIC_FOOTPRINT_INFO( MODULE* aFootprint )
+    BASIC_FOOTPRINT_INFO( FOOTPRINT* aFootprint )
     {
         m_nickname = aFootprint->GetFPID().GetLibNickname().wx_str();
         m_fpname = aFootprint->GetFPID().GetLibItemName().wx_str();
@@ -135,7 +135,7 @@ public:
 };
 
 
-void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aFootprint )
+void FOOTPRINT_EDIT_FRAME::editFootprintProperties( FOOTPRINT* aFootprint )
 {
     LIB_ID oldFPID = aFootprint->GetFPID();
 
@@ -164,11 +164,11 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_PAD_T:
-        ShowPadPropertiesDialog( static_cast<PAD*>( aItem ));
+        ShowPadPropertiesDialog( static_cast<PAD*>( aItem ) );
         break;
 
     case PCB_FOOTPRINT_T:
-        editFootprintProperties( (MODULE*) aItem );
+        editFootprintProperties( static_cast<FOOTPRINT*>( aItem ) );
         GetCanvas()->Refresh();
         break;
 

@@ -110,7 +110,7 @@ protected:
         return getModel<BOARD>();
     }
 
-    MODULE* module() const
+    FOOTPRINT* footprint() const
     {
         return board()->GetFirstFootprint();
     }

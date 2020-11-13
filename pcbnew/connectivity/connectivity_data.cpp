@@ -225,7 +225,7 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
-            for( auto pad : static_cast<MODULE*>(item)->Pads() )
+            for( PAD* pad : static_cast<FOOTPRINT*>(item)->Pads() )
                 citems.push_back( pad );
         }
         else
@@ -656,10 +656,8 @@ void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
 {
     if ( aItem->Type() == PCB_FOOTPRINT_T)
     {
-        for ( auto pad : static_cast<MODULE*>( aItem )->Pads() )
-        {
+        for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
             m_connAlgo->MarkNetAsDirty( pad->GetNetCode() );
-        }
     }
     if (aItem->IsConnected() )
     {
@@ -685,9 +683,9 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
     {
         if( item->Type() == PCB_FOOTPRINT_T )
         {
-            auto component = static_cast<MODULE*>( item );
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
-            for( auto pad : component->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
                 nets.insert( pad->GetNetCode() );
                 item_set.insert( pad );
@@ -724,7 +722,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 }
 
 
-const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections )
+const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForComponent( FOOTPRINT* aComponent, bool aSkipInternalConnections )
 {
     std::set<int> nets;
     std::set<const PAD*> pads;

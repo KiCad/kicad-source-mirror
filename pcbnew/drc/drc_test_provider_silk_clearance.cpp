@@ -167,8 +167,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 
                 if( refGraphic && testGraphic )
                 {
-                    MODULE *refParentFP = dynamic_cast<MODULE*>( refGraphic->GetParent() );
-                    MODULE *testParentFP = dynamic_cast<MODULE*>( testGraphic->GetParent() );
+                    FOOTPRINT *refParentFP = dynamic_cast<FOOTPRINT*>( refGraphic->GetParent() );
+                    FOOTPRINT *testParentFP = dynamic_cast<FOOTPRINT*>( testGraphic->GetParent() );
 
                     if( refParentFP == testParentFP ) // also true when both are nullptr
                         return true;

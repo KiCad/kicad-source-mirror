@@ -478,7 +478,7 @@ wxString PCB_MODULE::ModuleLayer( int aMirror )
     wxString result;
 
     // ///NOT !   {IntToStr(KiCadLayer)}    NOT !
-    // /  MODULES ARE HARD PLACED ON COMPONENT OR COPPER LAYER.
+    // /  FOOTPRINTs ARE HARD PLACED ON COMPONENT OR COPPER LAYER.
     // /  IsFLIPPED--> MIRROR attribute is decision Point!!!
 
     if( aMirror == 0 )
@@ -502,7 +502,7 @@ void PCB_MODULE::AddToBoard()
     CorrectTextPosition( &m_value );
     RotatePoint( &m_value.correctedPositionX, &m_value.correctedPositionY, (double) -m_rotation );
 
-    MODULE* module = new MODULE( m_board );
+    FOOTPRINT* module = new FOOTPRINT( m_board );
     m_board->Add( module, ADD_MODE::APPEND );
 
     module->SetPosition( wxPoint( m_positionX, m_positionY ) );

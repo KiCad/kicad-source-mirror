@@ -46,7 +46,7 @@ void FOOTPRINT_INFO_IMPL::load()
 
     wxASSERT( fptable );
 
-    const MODULE* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
+    const FOOTPRINT* footprint = fptable->GetEnumeratedFootprint( m_nickname, m_fpname );
 
     if( footprint == NULL ) // Should happen only with malformed/broken libraries
     {

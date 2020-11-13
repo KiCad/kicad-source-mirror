@@ -69,9 +69,9 @@ wxString PCB_TEXT::GetShownText( int aDepth ) const
 
                     if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
                     {
-                        MODULE* refModule = static_cast<MODULE*>( refItem );
+                        FOOTPRINT* refFP = static_cast<FOOTPRINT*>( refItem );
 
-                        if( refModule->ResolveTextVar( &remainder, aDepth + 1 ) )
+                        if( refFP->ResolveTextVar( &remainder, aDepth + 1 ) )
                         {
                             *token = remainder;
                             return true;

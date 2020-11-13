@@ -309,12 +309,12 @@ public:
     static const KICAD_T ModuleItems[];
 
     /**
-     * A scan list for only TRACKS
+     * A scan list for only TRACKs
      */
     static const KICAD_T Tracks[];
 
     /**
-     * A scan list for TRACKS, VIAS, MODULES
+     * A scan list for TRACKs, VIAs, FOOTPRINTs
      */
     static const KICAD_T LockableItems[];
 

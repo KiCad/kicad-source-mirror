@@ -57,7 +57,7 @@ bool g_reset3DModels[2]         = { false, true };
 
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
-                                                        MODULE* aFootprint,
+                                                        FOOTPRINT* aFootprint,
                                                         bool updateMode, bool selectedMode ) :
         DIALOG_EXCHANGE_FOOTPRINTS_BASE( aParent ),
         m_commit( aParent ),
@@ -169,7 +169,7 @@ DIALOG_EXCHANGE_FOOTPRINTS::~DIALOG_EXCHANGE_FOOTPRINTS()
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aFootprint )
+bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( FOOTPRINT* aFootprint )
 {
     LIB_ID specifiedID;
 
@@ -351,7 +351,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
 }
 
 
-bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( MODULE* aFootprint, const LIB_ID& aNewFPID )
+bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const LIB_ID& aNewFPID )
 {
     LIB_ID    oldFPID = aFootprint->GetFPID();
     wxString  msg;
@@ -363,7 +363,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( MODULE* aFootprint, const LIB
                 oldFPID.Format().c_str(),
                 aNewFPID.Format().c_str() );
 
-    MODULE* newFootprint = m_parent->LoadFootprint( aNewFPID );
+    FOOTPRINT* newFootprint = m_parent->LoadFootprint( aNewFPID );
 
     if( !newFootprint )
     {
@@ -411,7 +411,7 @@ void processTextItem( const FP_TEXT& aSrc, FP_TEXT& aDest,
 }
 
 
-FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, MODULE* aFootprint )
+FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, FOOTPRINT* aFootprint )
 {
     std::vector<FP_TEXT*> candidates;
 
@@ -459,10 +459,10 @@ FP_TEXT* getMatchingTextItem( FP_TEXT* aRefItem, MODULE* aFootprint )
 }
 
 
-void PCB_EDIT_FRAME::ExchangeFootprint( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
-                                        bool deleteExtraTexts, bool resetTextLayers,
-                                        bool resetTextEffects, bool resetFabricationAttrs,
-                                        bool reset3DModels )
+void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
+                                        BOARD_COMMIT& aCommit, bool deleteExtraTexts,
+                                        bool resetTextLayers, bool resetTextEffects,
+                                        bool resetFabricationAttrs, bool reset3DModels )
 {
     PCB_GROUP* parentGroup = aExisting->GetParentGroup();
 

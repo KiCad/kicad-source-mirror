@@ -35,7 +35,7 @@ void FROM_TO_CACHE::buildEndpointList( )
 {
     m_ftEndpoints.clear();
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

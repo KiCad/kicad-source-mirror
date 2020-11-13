@@ -220,7 +220,7 @@ void DIALOG_FIND::search( bool aDirection )
 
         if( FindIncludeTexts || FindIncludeValues || FindIncludeReferences )
         {
-            for( MODULE* fp : m_frame->GetBoard()->Footprints() )
+            for( FOOTPRINT* fp : m_frame->GetBoard()->Footprints() )
             {
                 if( ( fp->Reference().Matches( m_frame->GetFindReplaceData(), nullptr )
                       && FindIncludeReferences )

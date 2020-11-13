@@ -111,7 +111,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         except:
             self.this = this
 
-    def GetModules(self):             return self.Modules()
+    def GetFootprints(self):          return self.Footprints()
     def GetDrawings(self):            return self.Drawings()
     def GetTracks(self):              return self.Tracks()
 

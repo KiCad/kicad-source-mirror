@@ -52,7 +52,7 @@ class FP_SHAPE;
 class FP_TEXT;
 class PCB_TEXT;
 class TRACK;
-class MODULE;
+class FOOTPRINT;
 class PCB_GROUP;
 class PCB_TARGET;
 class VIA;
@@ -170,10 +170,10 @@ class PCB_PARSER : public PCB_LEXER
      * Function parseMODULE_unchecked
      * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
-    MODULE*         parseMODULE_unchecked( wxArrayString* aInitialComments = 0 );
+    FOOTPRINT*      parseMODULE_unchecked( wxArrayString* aInitialComments = 0 );
     FP_TEXT*        parseFP_TEXT();
     FP_SHAPE*       parseFP_SHAPE();
-    PAD*            parsePAD( MODULE* aParent = NULL );
+    PAD*            parsePAD( FOOTPRINT* aParent = NULL );
     // Parse only the (option ...) inside a pad description
     bool            parsePAD_option( PAD* aPad );
     ARC*            parseARC();
@@ -388,7 +388,7 @@ public:
      *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
      *   this function and care must be taken to delete it even on exception.
      */
-    MODULE*         parseMODULE( wxArrayString* aInitialComments = 0 );
+    FOOTPRINT* parseMODULE( wxArrayString* aInitialComments = 0 );
 
     /**
      * Return whether a version number, if any was parsed, was too recent

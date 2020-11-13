@@ -234,7 +234,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 
             if( graphicPolygonsLayers.Contains( m_params.m_layer ) )
             {
-                auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE((MODULE *) parent )
+                auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT *) parent )
                                                        : new PCB_SHAPE();
                 poly->SetShape ( S_POLYGON );
                 poly->SetLayer( m_params.m_layer );
@@ -248,7 +248,7 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 
                 for( auto seg = outline->CIterateSegments( 0 ); seg; seg++ )
                 {
-                    auto* new_seg = m_tool.m_isFootprintEditor ? new FP_SHAPE((MODULE *) parent )
+                    auto* new_seg = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT *) parent )
                                                                : new PCB_SHAPE();
                     new_seg->SetShape( S_SEGMENT );
                     new_seg->SetLayer( m_params.m_layer );

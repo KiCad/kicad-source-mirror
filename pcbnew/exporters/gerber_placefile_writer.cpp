@@ -65,9 +65,9 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         m_offset = m_pcb->GetDesignSettings().m_AuxOrigin;
 
     // Collect footprints on the right layer
-    std::vector<MODULE*> fp_list;
+    std::vector<FOOTPRINT*> fp_list;
 
-    for( MODULE* footprint : m_pcb->Footprints() )
+    for( FOOTPRINT* footprint : m_pcb->Footprints() )
     {
         if( footprint->GetAttributes() & FP_EXCLUDE_FROM_POS_FILES )
              continue;
@@ -124,7 +124,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
     bool allowUtf8 = true;
 
     // Plot components data: position, outlines, pad1 and other pads.
-    for( MODULE* footprint : fp_list )
+    for( FOOTPRINT* footprint : fp_list )
     {
         // Manage the aperture attribute component position:
         GBR_METADATA gbr_metadata;
@@ -299,7 +299,7 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         brd_plotter.PlotBoardGraphicItems();
 
         // Draw footprint other graphic items:
-        for( MODULE* footprint : fp_list )
+        for( FOOTPRINT* footprint : fp_list )
         {
             for( BOARD_ITEM* item : footprint->GraphicalItems() )
             {
@@ -324,7 +324,7 @@ double PLACEFILE_GERBER_WRITER::mapRotationAngle( double aAngle )
 }
 
 
-void PLACEFILE_GERBER_WRITER::findPads1( std::vector<PAD*>& aPadList, MODULE* aFootprint ) const
+void PLACEFILE_GERBER_WRITER::findPads1( std::vector<PAD*>& aPadList, FOOTPRINT* aFootprint ) const
 {
     // Fint the pad "1" or pad "A1"
     // this is possible only if only one pad is found

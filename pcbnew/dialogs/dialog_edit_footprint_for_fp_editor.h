@@ -40,7 +40,7 @@ class DIALOG_FOOTPRINT_FP_EDITOR : public DIALOG_FOOTPRINT_FP_EDITOR_BASE
 {
 private:
     FOOTPRINT_EDIT_FRAME*    m_frame;
-    MODULE*                  m_footprint;
+    FOOTPRINT*               m_footprint;
 
     static int               m_page;       // remember the last open page during session
 
@@ -65,7 +65,7 @@ private:
 
 public:
     // Constructor and destructor
-    DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, MODULE* aFootprint );
+    DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, FOOTPRINT* aFootprint );
     ~DIALOG_FOOTPRINT_FP_EDITOR() override;
 
     bool Validate() override;

@@ -119,7 +119,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         m_worstClearance = std::max( m_worstClearance, zone->GetLocalClearance() );
     }
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -615,7 +615,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
 {
     SHAPE_POLY_SET holes;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -729,7 +729,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -818,7 +818,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 }
             };
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         knockoutGraphicClearance( &footprint->Reference() );
         knockoutGraphicClearance( &footprint->Value() );
@@ -895,7 +895,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         }
     }
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( ZONE* otherZone : footprint->Zones() )
         {
@@ -947,7 +947,7 @@ void ZONE_FILLER::subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID a
         }
     }
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( ZONE* otherZone : footprint->Zones() )
         {
@@ -1248,7 +1248,7 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
     // us avoid the question.
     int epsilon = KiROUND( IU_PER_MM * 0.04 );  // about 1.5 mil
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -1530,7 +1530,7 @@ bool ZONE_FILLER::addHatchFillTypeOnZone( const ZONE* aZone, PCB_LAYER_ID aLayer
             }
         }
 
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             for( PAD* pad : footprint->Pads() )
             {

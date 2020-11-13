@@ -54,12 +54,12 @@ public:
 
     ~CADSTAR_PCB_ARCHIVE_LOADER()
     {
-        for( std::pair<SYMDEF_ID, MODULE*> libItem : mLibraryMap )
+        for( std::pair<SYMDEF_ID, FOOTPRINT*> libItem : mLibraryMap )
         {
-            MODULE* mod = libItem.second;
+            FOOTPRINT* footprint = libItem.second;
 
-            if( mod )
-                delete mod;
+            if( footprint )
+                delete footprint;
         }
     }
 
@@ -76,18 +76,18 @@ private:
     ::BOARD*                         mBoard;
     std::map<LAYER_ID, PCB_LAYER_ID> mLayermap;          ///< Map between Cadstar and KiCad Layers.
                                                          ///< Populated by loadBoardStackup().
-    std::map<SYMDEF_ID, MODULE*> mLibraryMap;            ///< Map between Cadstar and KiCad
+    std::map<SYMDEF_ID, FOOTPRINT*>  mLibraryMap;        ///< Map between Cadstar and KiCad
                                                          ///< components in the library. Populated
                                                          ///< by loadComponentLibrary(). Owns the
-                                                         ///< MODULE objects.
-    std::map<GROUP_ID, PCB_GROUP*> mGroupMap;            ///< Map between Cadstar and KiCad
+                                                         ///< FOOTPRINT objects.
+    std::map<GROUP_ID, PCB_GROUP*>   mGroupMap;          ///< Map between Cadstar and KiCad
                                                          ///< groups. Does NOT ownthe PCB_GROUP
                                                          ///< objects (these should have been
                                                          ///< loaded to mBoard).
-    std::map<COMPONENT_ID, MODULE*> mComponentMap;       ///< Map between Cadstar and KiCad
+    std::map<COMPONENT_ID, FOOTPRINT*> mComponentMap;    ///< Map between Cadstar and KiCad
                                                          ///< components on the board. Does NOT own
-                                                         ///< the MODULE objects (these should have
-                                                         ///< been loaded to mBoard).
+                                                         ///< the FOOTPRINT objects (these should
+                                                         ///< have been loaded to mBoard).
     std::map<NET_ID, NETINFO_ITEM*>       mNetMap;       ///< Map between Cadstar and KiCad Nets
     std::map<ROUTECODE_ID, NETCLASSPTR>   mNetClassMap;  ///< Map between Cadstar and KiCad classes
     std::map<PHYSICAL_LAYER_ID, LAYER_ID> mCopperLayers; ///< Map of CADSTAR Physical layers to
@@ -133,11 +133,11 @@ private:
                                  const PCB_LAYER_ID& aKiCadLayer );
     void logBoardStackupMessage( const wxString& aCadstarLayerName,
                                  const PCB_LAYER_ID& aKiCadLayer );
-    void loadLibraryFigures( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
-    void loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
-    void loadLibraryAreas( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
-    void loadLibraryPads( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
-    void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aFootprint );
+    void loadLibraryFigures( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
+    void loadLibraryCoppers( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
+    void loadLibraryAreas( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
+    void loadLibraryPads( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
+    void loadComponentAttributes( const COMPONENT& aComponent, FOOTPRINT* aFootprint );
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute );
     void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
@@ -283,7 +283,7 @@ private:
      * @brief
      * @param aCadstarShape
      * @param aLineThickness Thickness of line to draw with
-     * @param aParentContainer Parent object (e.g. mBoard or a MODULE pointer)
+     * @param aParentContainer Parent object (e.g. BOARD or FOOTPRINT pointer)
      * @return Pointer to ZONE. Caller owns the object.
      */
     ZONE* getZoneFromCadstarShape( const SHAPE& aCadstarShape, const int& aLineThickness,
@@ -342,7 +342,7 @@ private:
      * @param aAttributeValue
      */
     void addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                       const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aFootprint,
+                       const ATTRIBUTE_ID& aCadstarAttributeID, FOOTPRINT* aFootprint,
                        const wxString& aAttributeValue );
 
     //Helper Functions for obtaining CADSTAR elements in the parsed structures
@@ -361,8 +361,8 @@ private:
 
     // Helper Functions for obtaining individual elements as KiCad elements:
     double     getHatchCodeAngleDegrees( const HATCHCODE_ID& aCadstarHatchcodeID );
-    PAD*       getKiCadPad( const COMPONENT_PAD& aCadstarPad, MODULE* aParent );
-    MODULE*    getModuleFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
+    PAD*       getKiCadPad( const COMPONENT_PAD& aCadstarPad, FOOTPRINT* aParent );
+    FOOTPRINT* getFootprintFromCadstarID( const COMPONENT_ID& aCadstarComponentID );
     int        getKiCadHatchCodeThickness( const HATCHCODE_ID& aCadstarHatchcodeID );
     int        getKiCadHatchCodeGap( const HATCHCODE_ID& aCadstarHatchcodeID );
     PCB_GROUP* getKiCadGroup( const GROUP_ID& aCadstarGroupID );
@@ -448,9 +448,9 @@ private:
     LSET getKiCadLayerSet( const LAYER_ID& aCadstarLayerID );
 
 
-    bool isModule( BOARD_ITEM_CONTAINER* aContainer )
+    bool isFootprint( BOARD_ITEM_CONTAINER* aContainer )
     {
-        return aContainer && aContainer->GetClass() == wxT( "MODULE" );
+        return aContainer && aContainer->Type() == PCB_FOOTPRINT_T;
     }
 
 

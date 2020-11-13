@@ -77,10 +77,6 @@ Load() TODO's
 using namespace std;
 
 
-typedef MODULE_MAP::iterator          MODULE_ITER;
-typedef MODULE_MAP::const_iterator    MODULE_CITER;
-
-
 /// Parse an eagle distance which is either mm, or mils if there is "mil" suffix.
 /// Return is in BIU.
 static int parseEagle( const wxString& aDistance )
@@ -835,10 +831,10 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
         {
             m_xpath->push( "hole" );
 
-            // Fabricate a MODULE with a single PAD_ATTRIB_NPTH pad.
+            // Fabricate a FOOTPRINT with a single PAD_ATTRIB_NPTH pad.
             // Use m_hole_count to gen up a unique name.
 
-            MODULE* footprint = new MODULE( m_board );
+            FOOTPRINT* footprint = new FOOTPRINT( m_board );
             m_board->Add( footprint, ADD_MODE::APPEND );
             footprint->SetReference( wxString::Format( "@HOLE%d", m_hole_count++ ) );
             footprint->Reference().SetVisible( false );
@@ -927,8 +923,8 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
     m_xpath->push( "packages" );
 
-    // Create a MODULE for all the eagle packages, for use later via a copy constructor
-    // to instantiate needed footprints in our BOARD.  Save the MODULE templates in
+    // Create a FOOTPRINT for all the eagle packages, for use later via a copy constructor
+    // to instantiate needed footprints in our BOARD.  Save the FOOTPRINT templates in
     // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
 
     // Get the first package and iterate
@@ -945,10 +941,10 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
         wxString key = aLibName ? makeKey( *aLibName, pack_ref ) : pack_ref;
 
-        MODULE* m = makeModule( package, pack_ref );
+        FOOTPRINT* m = makeFootprint( package, pack_ref );
 
-        // add the templating MODULE to the MODULE template factory "m_templates"
-        std::pair<MODULE_ITER, bool> r = m_templates.insert( {key, m} );
+        // add the templating FOOTPRINT to the FOOTPRINT template factory "m_templates"
+        std::pair<FOOTPRINT_MAP::iterator, bool> r = m_templates.insert( {key, m} );
 
         if( !r.second /* && !( m_props && m_props->Value( "ignore_duplicates" ) ) */ )
         {
@@ -1026,21 +1022,22 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         wxString pkg_key = makeKey( e.library, e.package );
 
-        MODULE_CITER mi = m_templates.find( pkg_key );
+        FOOTPRINT_MAP::const_iterator it = m_templates.find( pkg_key );
 
-        if( mi == m_templates.end() )
+        if( it == m_templates.end() )
         {
             wxString emsg = wxString::Format( _( "No \"%s\" package in library \"%s\"" ),
-                    FROM_UTF8( e.package.c_str() ), FROM_UTF8( e.library.c_str() ) );
+                                              FROM_UTF8( e.package.c_str() ),
+                                              FROM_UTF8( e.library.c_str() ) );
             THROW_IO_ERROR( emsg );
         }
 
-        MODULE* m = static_cast<MODULE*>( mi->second->Duplicate() );
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( it->second->Duplicate() );
 
-        m_board->Add( m, ADD_MODE::APPEND );
+        m_board->Add( footprint, ADD_MODE::APPEND );
 
         // update the nets within the pads of the clone
-        for( PAD* pad : m->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             wxString pn_key = makeKey( e.name, pad->GetName() );
 
@@ -1054,37 +1051,37 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
 
         refanceNamePresetInPackageLayout = true;
         valueNamePresetInPackageLayout = true;
-        m->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
+        footprint->SetPosition( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
 
         // Is >NAME field set in package layout ?
-        if( m->GetReference().size() == 0 )
+        if( footprint->GetReference().size() == 0 )
         {
-            m->Reference().SetVisible( false ); // No so no show
+            footprint->Reference().SetVisible( false ); // No so no show
             refanceNamePresetInPackageLayout = false;
         }
 
         // Is >VALUE field set in package layout
-        if( m->GetValue().size() == 0 )
+        if( footprint->GetValue().size() == 0 )
         {
-            m->Value().SetVisible( false );     // No so no show
+            footprint->Value().SetVisible( false );     // No so no show
             valueNamePresetInPackageLayout = false;
         }
 
-        m->SetReference( FROM_UTF8( e.name.c_str() ) );
-        m->SetValue( FROM_UTF8( e.value.c_str() ) );
+        footprint->SetReference( FROM_UTF8( e.name.c_str() ) );
+        footprint->SetValue( FROM_UTF8( e.value.c_str() ) );
 
         if( !e.smashed )
         { // Not smashed so show NAME & VALUE
             if( valueNamePresetInPackageLayout )
-                m->Value().SetVisible( true );  // Only if place holder in package layout
+                footprint->Value().SetVisible( true );  // Only if place holder in package layout
 
             if( refanceNamePresetInPackageLayout )
-                m->Reference().SetVisible( true );   // Only if place holder in package layout
+                footprint->Reference().SetVisible( true );   // Only if place holder in package layout
         }
         else if( *e.smashed == true )
         { // Smashed so set default to no show for NAME and VALUE
-            m->Value().SetVisible( false );
-            m->Reference().SetVisible( false );
+            footprint->Value().SetVisible( false );
+            footprint->Reference().SetVisible( false );
 
             // initialize these to default values in case the <attribute> elements are not present.
             m_xpath->push( "attribute", "name" );
@@ -1131,43 +1128,43 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                                 reference.Prepend( "UNK" );
 
                             nameAttr->name = reference;
-                            m->SetReference( reference );
+                            footprint->SetReference( reference );
 
                             if( refanceNamePresetInPackageLayout )
-                                m->Reference().SetVisible( true );
+                                footprint->Reference().SetVisible( true );
 
                             break;
                         }
                         case EATTR::NAME :
                             if( refanceNamePresetInPackageLayout )
                             {
-                                m->SetReference( "NAME" );
-                                m->Reference().SetVisible( true );
+                                footprint->SetReference( "NAME" );
+                                footprint->Reference().SetVisible( true );
                             }
                             break;
 
                         case EATTR::BOTH :
                             if( refanceNamePresetInPackageLayout )
-                                m->Reference().SetVisible( true );
+                                footprint->Reference().SetVisible( true );
 
                             nameAttr->name =  nameAttr->name + " = " + e.name;
-                            m->SetReference( "NAME = " + e.name );
+                            footprint->SetReference( "NAME = " + e.name );
                             break;
 
                         case EATTR::Off :
-                            m->Reference().SetVisible( false );
+                            footprint->Reference().SetVisible( false );
                             break;
 
                         default:
                             nameAttr->name =  e.name;
 
                             if( refanceNamePresetInPackageLayout )
-                                m->Reference().SetVisible( true );
+                                footprint->Reference().SetVisible( true );
                         }
                     }
                     else
                         // No display, so default is visible, and show value of NAME
-                        m->Reference().SetVisible( true );
+                        footprint->Reference().SetVisible( true );
                 }
                 else if( a.name == "VALUE" )
                 {
@@ -1181,43 +1178,43 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         {
                         case EATTR::VALUE :
                             valueAttr->value = opt_wxString( e.value );
-                            m->SetValue( e.value );
+                            footprint->SetValue( e.value );
 
                             if( valueNamePresetInPackageLayout )
-                                m->Value().SetVisible( true );
+                                footprint->Value().SetVisible( true );
 
                             break;
 
                         case EATTR::NAME :
                             if( valueNamePresetInPackageLayout )
-                                m->Value().SetVisible( true );
+                                footprint->Value().SetVisible( true );
 
-                            m->SetValue( "VALUE" );
+                            footprint->SetValue( "VALUE" );
                             break;
 
                         case EATTR::BOTH :
                             if( valueNamePresetInPackageLayout )
-                                m->Value().SetVisible( true );
+                                footprint->Value().SetVisible( true );
 
                             valueAttr->value = opt_wxString( "VALUE = " + e.value );
-                            m->SetValue( "VALUE = " + e.value );
+                            footprint->SetValue( "VALUE = " + e.value );
                             break;
 
                         case EATTR::Off :
-                            m->Value().SetVisible( false );
+                            footprint->Value().SetVisible( false );
                             break;
 
                         default:
                             valueAttr->value = opt_wxString( e.value );
 
                             if( valueNamePresetInPackageLayout )
-                                m->Value().SetVisible( true );
+                                footprint->Value().SetVisible( true );
                         }
                     }
                     else
                     {
                         // No display, so default is visible, and show value of NAME
-                        m->Value().SetVisible( true );
+                        footprint->Value().SetVisible( true );
                     }
 
                 }
@@ -1228,11 +1225,11 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
             m_xpath->pop();     // "attribute"
         }
 
-        orientModuleAndText( m, e, nameAttr, valueAttr );
+        orientFootprintAndText( footprint, e, nameAttr, valueAttr );
 
         // Set the local coordinates for the footprint text items
-        m->Reference().SetLocalCoord();
-        m->Value().SetLocalCoord();
+        footprint->Reference().SetLocalCoord();
+        footprint->Value().SetLocalCoord();
 
         // Get next element
         element = element->GetNext();
@@ -1387,8 +1384,8 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 }
 
 
-void EAGLE_PLUGIN::orientModuleAndText( MODULE* aFootprint, const EELEMENT& e,
-                                        const EATTR* aNameAttr, const EATTR* aValueAttr )
+void EAGLE_PLUGIN::orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT& e,
+                                           const EATTR* aNameAttr, const EATTR* aValueAttr )
 {
     if( e.rot )
     {
@@ -1404,13 +1401,13 @@ void EAGLE_PLUGIN::orientModuleAndText( MODULE* aFootprint, const EELEMENT& e,
         }
     }
 
-    orientModuleText( aFootprint, e, &aFootprint->Reference(), aNameAttr );
-    orientModuleText( aFootprint, e, &aFootprint->Value(), aValueAttr );
+    orientFPText( aFootprint, e, &aFootprint->Reference(), aNameAttr );
+    orientFPText( aFootprint, e, &aFootprint->Value(), aValueAttr );
 }
 
 
-void EAGLE_PLUGIN::orientModuleText( MODULE* aFootprint, const EELEMENT& e, FP_TEXT* aFPText,
-                                     const EATTR* aAttr )
+void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TEXT* aFPText,
+                                 const EATTR* aAttr )
 {
     // Smashed part ?
     if( aAttr )
@@ -1543,9 +1540,9 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* aFootprint, const EELEMENT& e, FP_T
 }
 
 
-MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName )
+FOOTPRINT* EAGLE_PLUGIN::makeFootprint( wxXmlNode* aPackage, const wxString& aPkgName )
 {
-    std::unique_ptr<MODULE> m = std::make_unique<MODULE>( m_board );
+    std::unique_ptr<FOOTPRINT> m = std::make_unique<FOOTPRINT>( m_board );
 
     LIB_ID fpID;
     fpID.Parse( aPkgName, LIB_ID::ID_PCB, true );
@@ -1592,7 +1589,7 @@ MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName 
 }
 
 
-void EAGLE_PLUGIN::packageWire( MODULE* aFootprint, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     EWIRE        w( aTree );
     PCB_LAYER_ID layer = kicad_layer( w.layer );
@@ -1666,7 +1663,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aFootprint, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packagePad( MODULE* aFootprint, wxXmlNode* aTree )
+void EAGLE_PLUGIN::packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree )
 {
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
@@ -1768,7 +1765,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aFootprint, wxXmlNode* aTree )
 }
 
 
-void EAGLE_PLUGIN::packageText( MODULE* aFootprint, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
@@ -1879,7 +1876,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aFootprint, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageRectangle( MODULE* aFootprint, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     ERECT r( aTree );
 
@@ -1948,7 +1945,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aFootprint, wxXmlNode* aTree ) cons
 }
 
 
-void EAGLE_PLUGIN::packagePolygon( MODULE* aFootprint, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     EPOLYGON      p( aTree );
 
@@ -2051,7 +2048,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aFootprint, wxXmlNode* aTree ) const
     }
 }
 
-void EAGLE_PLUGIN::packageCircle( MODULE* aFootprint, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     ECIRCLE e( aTree );
 
@@ -2134,7 +2131,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aFootprint, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCenter ) const
+void EAGLE_PLUGIN::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aCenter ) const
 {
     EHOLE   e( aTree );
 
@@ -2173,7 +2170,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCent
 }
 
 
-void EAGLE_PLUGIN::packageSMD( MODULE* aFootprint, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
 {
     ESMD e( aTree );
     PCB_LAYER_ID layer = kicad_layer( e.layer );
@@ -2265,7 +2262,7 @@ void EAGLE_PLUGIN::transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const
     if( aEaglePad.thermals && !*aEaglePad.thermals )
         aPad->SetZoneConnection( ZONE_CONNECTION::FULL );
 
-    MODULE* footprint = aPad->GetParent();
+    FOOTPRINT* footprint = aPad->GetParent();
     wxCHECK( footprint, /* void */ );
     RotatePoint( &padPos, footprint->GetOrientation() );
     aPad->SetPosition( padPos + footprint->GetPosition() );
@@ -2639,7 +2636,7 @@ std::tuple<PCB_LAYER_ID, LSET, bool> EAGLE_PLUGIN::defaultKicadLayer( int aEagle
 
     // Packages show the future chip pins on SMD parts using layer 51.
     // This is an area slightly smaller than the PAD/SMD copper area.
-    // Carry those visual aids into the MODULE on the fabrication layer,
+    // Carry those visual aids into the FOOTPRINT on the fabrication layer,
     // not silkscreen. This is perhaps not perfect, but there is not a lot
     // of other suitable paired layers
     case EAGLE_LAYER::TDOCU:
@@ -2836,7 +2833,7 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_templates.begin();  it != m_templates.end();  ++it )
+    for( FOOTPRINT_MAP::const_iterator it = m_templates.begin(); it != m_templates.end(); ++it )
         aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
@@ -2844,18 +2841,19 @@ void EAGLE_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxS
 }
 
 
-MODULE* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                     const PROPERTIES* aProperties )
+FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                        const wxString& aFootprintName,
+                                        const PROPERTIES* aProperties )
 {
     init( aProperties );
     cacheLib( aLibraryPath );
-    MODULE_CITER mi = m_templates.find( aFootprintName );
+    FOOTPRINT_MAP::const_iterator it = m_templates.find( aFootprintName );
 
-    if( mi == m_templates.end() )
+    if( it == m_templates.end() )
         return NULL;
 
     // Return a copy of the template
-    return (MODULE*) mi->second->Duplicate();
+    return (FOOTPRINT*) it->second->Duplicate();
 }
 
 
@@ -2864,10 +2862,10 @@ void EAGLE_PLUGIN::FootprintLibOptions( PROPERTIES* aListToAppendTo ) const
     PLUGIN::FootprintLibOptions( aListToAppendTo );
 
     /*
-    (*aListToAppendTo)["ignore_duplicates"] = UTF8( _(
-        "Ignore duplicately named footprints within the same Eagle library. "
-        "Only the first similarly named footprint will be loaded."
-        ));
+    (*aListToAppendTo)["ignore_duplicates"] = UTF8( _( "Ignore duplicately named footprints within "
+                                                       "the same Eagle library. "
+                                                       "Only the first similarly named footprint "
+                                                       "will be loaded." ) );
     */
 }
 
@@ -2879,7 +2877,8 @@ void EAGLE_PLUGIN::Save( const wxString& aFileName, BOARD* aBoard, const PROPERT
 }
 
 
-void EAGLE_PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, const PROPERTIES* aProperties )
+void EAGLE_PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
+                                  const PROPERTIES* aProperties )
 {
 }
 

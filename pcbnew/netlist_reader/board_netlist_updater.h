@@ -38,7 +38,7 @@ class BOARD;
 class REPORTER;
 class NETLIST;
 class COMPONENT;
-class MODULE;
+class FOOTPRINT;
 class PCB_EDIT_FRAME;
 
 #include <board_commit.h>
@@ -128,7 +128,7 @@ public:
         m_lookupByTimestamp = aEnabled;
     }
 
-    std::vector<MODULE*> GetAddedComponents() const
+    std::vector<FOOTPRINT*> GetAddedComponents() const
     {
         return m_addedComponents;
     }
@@ -141,14 +141,24 @@ private:
     wxString getPinFunction( PAD* aPad );
 
     wxPoint estimateComponentInsertionPosition();
-    MODULE* addNewComponent( COMPONENT* aComponent );
-    MODULE* replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent, COMPONENT* aNewComponent );
-    bool updateComponentParameters( MODULE* aPcbComponent, COMPONENT* aNewComponent );
-    bool updateComponentPadConnections( MODULE* aPcbComponent, COMPONENT* aNewComponent );
+
+    FOOTPRINT* addNewComponent( COMPONENT* aComponent );
+
+    FOOTPRINT* replaceComponent( NETLIST& aNetlist, FOOTPRINT* aPcbComponent,
+                                 COMPONENT* aNewComponent );
+
+    bool updateComponentParameters( FOOTPRINT* aPcbComponent, COMPONENT* aNewComponent );
+
+    bool updateComponentPadConnections( FOOTPRINT* aPcbComponent, COMPONENT* aNewComponent );
+
     void cacheCopperZoneConnections();
+
     bool updateCopperZoneNets( NETLIST& aNetlist );
+
     bool deleteUnusedComponents( NETLIST& aNetlist );
+
     bool deleteSinglePadNets();
+
     bool testConnectivity( NETLIST& aNetlist );
 
     PCB_EDIT_FRAME* m_frame;
@@ -160,7 +170,7 @@ private:
     std::map<wxString, wxString>       m_oldToNewNets;
     std::map<PAD*, wxString>           m_padNets;
     std::map<PAD*, wxString>           m_padPinFunctions;
-    std::vector<MODULE*>               m_addedComponents;
+    std::vector<FOOTPRINT*>            m_addedComponents;
     std::map<wxString, NETINFO_ITEM*>  m_addedNets;
 
     bool m_deleteSinglePadNets;

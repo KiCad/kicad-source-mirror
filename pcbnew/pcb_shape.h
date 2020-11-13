@@ -36,7 +36,7 @@
 
 class LINE_READER;
 class EDA_DRAW_FRAME;
-class MODULE;
+class FOOTPRINT;
 class MSG_PANEL_ITEM;
 
 
@@ -223,7 +223,7 @@ public:
      * belong to a footprint.
      * @return MODULE* - pointer to the parent footprint or NULL.
      */
-    MODULE* GetParentFootprint() const;
+    FOOTPRINT* GetParentFootprint() const;
 
     // Accessors:
     const std::vector<wxPoint>& GetBezierPoints() const { return m_BezierPoints; }

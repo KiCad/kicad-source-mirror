@@ -249,8 +249,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     if( m_item->Type() == PCB_FP_TEXT_T && m_fpText )
     {
-        MODULE*  footprint = dynamic_cast<MODULE*>( m_fpText->GetParent() );
-        wxString msg;
+        FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( m_fpText->GetParent() );
+        wxString   msg;
 
         if( footprint )
         {

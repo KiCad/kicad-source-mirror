@@ -75,7 +75,7 @@ public:
     };
 
     ///> Map to hold NETLIST footprints data
-    using PCB_MODULES_MAP = std::map<wxString, std::shared_ptr<PCB_FP_DATA>>;
+    using PCB_FOOTPRINTS_MAP = std::map<wxString, std::shared_ptr<PCB_FP_DATA>>;
 
     using CHANGELIST_ITEM = std::pair<SCH_REFERENCE, std::shared_ptr<PCB_FP_DATA>>;
 
@@ -111,7 +111,7 @@ private:
     bool                         m_processNetNames;
     bool                         m_dryRun;
 
-    PCB_MODULES_MAP              m_pcbFootprints;
+    PCB_FOOTPRINTS_MAP           m_pcbFootprints;
     SCH_REFERENCE_LIST           m_refs;
     SCH_MULTI_UNIT_REFERENCE_MAP m_multiUnitsRefs;
     std::deque<CHANGELIST_ITEM>  m_changelist;

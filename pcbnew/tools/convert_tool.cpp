@@ -118,7 +118,7 @@ bool CONVERT_TOOL::Init()
 
 int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
 {
-    MODULE* parentFootprint = nullptr;
+    FOOTPRINT* parentFootprint = nullptr;
 
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
@@ -473,7 +473,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( m_frame );
     FOOTPRINT_EDIT_FRAME* fpEditor = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame );
 
-    MODULE* footprint = nullptr;
+    FOOTPRINT* footprint = nullptr;
 
     if( fpEditor )
         footprint = fpEditor->GetBoard()->GetFirstFootprint();

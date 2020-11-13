@@ -3,29 +3,29 @@
 %include pad_shapes.h
 %include pad.h
 
-%rename(Get) operator   D_PAD*;
+%rename(Get) operator   PAD*;
 %{
 #include <pad.h>
 %}
 
-%extend D_PAD
+%extend PAD
 {
     %pythoncode
     %{
 
-    # SetPadName() is the old name for D_PAD::SetName()
+    # SetPadName() is the old name for PAD::SetName()
     # define it for compatibility
     def SetPadName(self, aName):
         return self.SetName(aName)
 
-    # GetPadName() is the old name for D_PAD::GetName()
+    # GetPadName() is the old name for PAD::GetName()
     # define it for compatibility
     def GetPadName(self):
         return self.GetName()
 
     # AddPrimitive() is the old name for D_PAD::AddPrimitivePoly(),
-    # D_PAD::AddPrimitiveSegment(), D_PAD::AddPrimitiveCircle(),
-    # D_PAD::AddPrimitiveArc(), D_PAD::AddPrimitiveCurve()
+    # PAD::AddPrimitiveSegment(), PAD::AddPrimitiveCircle(),
+    # PAD::AddPrimitiveArc(), PAD::AddPrimitiveCurve()
     # define it for compatibility
     def AddPrimitive(self, *args):
         if len(args) == 2:

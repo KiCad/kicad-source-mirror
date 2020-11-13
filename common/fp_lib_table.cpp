@@ -307,8 +307,8 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 }
 
 
-static void setLibNickname( MODULE* aModule,
-                            const wxString& aNickname, const wxString& aFootprintName )
+static void setLibNickname( FOOTPRINT* aModule, const wxString& aNickname,
+                            const wxString& aFootprintName )
 {
     // The library cannot know its own name, because it might have been renamed or moved.
     // Therefore footprints cannot know their own library nickname when residing in
@@ -331,8 +331,8 @@ static void setLibNickname( MODULE* aModule,
 }
 
 
-const MODULE* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname,
-                                                    const wxString& aFootprintName )
+const FOOTPRINT* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname,
+                                                       const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
@@ -359,13 +359,13 @@ bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& a
 }
 
 
-MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
+FOOTPRINT* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
 
-    MODULE* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
-                                              row->GetProperties() );
+    FOOTPRINT* ret = row->plugin->FootprintLoad( row->GetFullURI( true ), aFootprintName,
+                                                 row->GetProperties() );
 
     setLibNickname( ret, row->GetNickName(), aFootprintName );
 
@@ -374,7 +374,7 @@ MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& 
 
 
 FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
-                                                  const MODULE* aFootprint, bool aOverwrite )
+                                                  const FOOTPRINT* aFootprint, bool aOverwrite )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );
     wxASSERT( (PLUGIN*) row->plugin );
@@ -386,8 +386,9 @@ FP_LIB_TABLE::SAVE_T FP_LIB_TABLE::FootprintSave( const wxString& aNickname,
 
         wxString fpname = aFootprint->GetFPID().GetLibItemName();
 
-        std::unique_ptr<MODULE> footprint( row->plugin->FootprintLoad( row->GetFullURI( true ),
-                                           fpname, row->GetProperties() ) );
+        std::unique_ptr<FOOTPRINT> footprint( row->plugin->FootprintLoad( row->GetFullURI( true ),
+                                                                          fpname,
+                                                                          row->GetProperties() ) );
 
         if( footprint.get() )
             return SAVE_SKIPPED;
@@ -432,7 +433,7 @@ void FP_LIB_TABLE::FootprintLibCreate( const wxString& aNickname )
 }
 
 
-MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
+FOOTPRINT* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId )
 {
     wxString   nickname = aFootprintId.GetLibNickname();
     wxString   fpname   = aFootprintId.GetLibItemName();
@@ -452,7 +453,7 @@ MODULE* FP_LIB_TABLE::FootprintLoadWithOptionalNickname( const LIB_ID& aFootprin
         {
             // FootprintLoad() returns NULL on not found, does not throw exception
             // unless there's an IO_ERROR.
-            MODULE* ret = FootprintLoad( nicks[i], fpname );
+            FOOTPRINT* ret = FootprintLoad( nicks[i], fpname );
 
             if( ret )
                 return ret;

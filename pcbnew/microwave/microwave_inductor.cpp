@@ -303,7 +303,7 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
 
     wxString errorMessage;
 
-    auto inductorFP = std::unique_ptr<MODULE>( createMicrowaveInductor( pattern, errorMessage ) );
+    auto inductorFP = std::unique_ptr<FOOTPRINT>( createMicrowaveInductor( pattern, errorMessage ) );
 
     // on any error, report if we can
     if ( !inductorFP || !errorMessage.IsEmpty() )
@@ -323,8 +323,8 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
 }
 
 
-MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aInductorPattern,
-                                                 wxString& aErrorMessage )
+FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aInductorPattern,
+                                                    wxString& aErrorMessage )
 {
     /* Build a microwave inductor footprint.
      * - Length Mself.lng
@@ -413,7 +413,7 @@ MODULE* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aIn
     if( ( cmpdlg.ShowModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user
 
-    MODULE* footprint = editFrame.CreateNewFootprint( msg );
+    FOOTPRINT* footprint = editFrame.CreateNewFootprint( msg );
 
     footprint->SetFPID( LIB_ID( wxEmptyString, wxT( "mw_inductor" ) ) );
     footprint->SetAttributes( FP_EXCLUDE_FROM_POS_FILES | FP_EXCLUDE_FROM_BOM );

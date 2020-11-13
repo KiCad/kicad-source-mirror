@@ -515,7 +515,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
     {
         case PCB_FOOTPRINT_T:
         {
-            MODULE* footprint = static_cast<MODULE*>( aItem );
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
 
             for( PAD* pad : footprint->Pads() )
             {

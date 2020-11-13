@@ -131,7 +131,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         break;
 
     case PCB_FOOTPRINT_T:
-        ShowFootprintPropertiesDialog( static_cast<MODULE*>( aItem ) );
+        ShowFootprintPropertiesDialog( static_cast<FOOTPRINT*>( aItem ) );
         break;
 
     case PCB_TARGET_T:

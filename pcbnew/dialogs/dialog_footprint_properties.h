@@ -42,7 +42,7 @@ class DIALOG_FOOTPRINT_PROPERTIES: public DIALOG_FOOTPRINT_PROPERTIES_BASE
 {
 private:
     PCB_EDIT_FRAME*                  m_frame;
-    MODULE*                          m_footprint;
+    FOOTPRINT*                       m_footprint;
 
     static int                       m_page;       // remember the last open page during session
 
@@ -81,7 +81,7 @@ public:
 
 public:
     // Constructor and destructor
-    DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent, MODULE* aFootprint );
+    DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent, FOOTPRINT* aFootprint );
     ~DIALOG_FOOTPRINT_PROPERTIES() override;
 
     bool Validate() override;

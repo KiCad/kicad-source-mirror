@@ -105,7 +105,7 @@ public:
 
 private:
     PCB_EDIT_FRAME*  m_frame;
-    MODULES          m_footprints;
+    FOOTPRINTS       m_footprints;
     PCB_SCREEN*      m_screen;
     PCBNEW_SELECTION m_selection;
 
@@ -181,7 +181,7 @@ private:
                            wxString aPrefix, bool aRemovePrefix,
                            std::vector<RefDesInfo>& aBadRefDes );
 
-    RefDesChange* GetNewRefDes( MODULE* aFootprint );
+    RefDesChange* GetNewRefDes( FOOTPRINT* aFootprint );
 
     int      RoundToGrid( int aCoord, int aGrid );
     wxString CoordTowxString( int aX, int aY );

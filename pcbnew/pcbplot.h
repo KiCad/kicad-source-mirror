@@ -42,7 +42,7 @@ class PCB_TEXT;
 class PAD;
 class PCB_SHAPE;
 class DIMENSION_BASE;
-class MODULE;
+class FOOTPRINT;
 class FP_SHAPE;
 class PCB_TARGET;
 class FP_TEXT;
@@ -90,7 +90,7 @@ public:
 
     // Basic functions to plot a board item
     void SetLayerSet( LSET aLayerMask )     { m_layerMask = aLayerMask; }
-    void PlotFootprintGraphicItems( MODULE* aModule );
+    void PlotFootprintGraphicItems( FOOTPRINT* aFootprint );
     void PlotFootprintGraphicItem( FP_SHAPE* aShape );
     void PlotFootprintTextItem( FP_TEXT* aText, COLOR4D aColor );
 
@@ -98,7 +98,7 @@ public:
      * Reference, Value, and other fields are plotted only if the corresponding option is enabled.
      * Invisible text fields are plotted only if PlotInvisibleText option is set.
      */
-    void PlotFootprintTextItems( MODULE* aModule );
+    void PlotFootprintTextItems( FOOTPRINT* aFootprint );
 
     void PlotDimension( DIMENSION_BASE* Dimension );
     void PlotPcbTarget( PCB_TARGET* PtMire );

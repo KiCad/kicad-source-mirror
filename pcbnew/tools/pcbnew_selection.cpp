@@ -97,7 +97,7 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
 
                 if( item->Type() == PCB_FOOTPRINT_T )
                 {
-                    MODULE* footprint = static_cast<MODULE*>( item );
+                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
                     footprint->RunOnChildren( [&]( BOARD_ITEM* bitem )
                                               {
                                                   addItem( bitem );
@@ -117,7 +117,7 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
         addItem( item );
 
 #if 0
-    for( auto item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
         items.push_back( item );
 

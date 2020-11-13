@@ -1154,7 +1154,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
         // resort to generic slower net update otherwise.
         updateNet( i->GetNet() );
     }
-    else if( MODULE* footprint = dynamic_cast<MODULE*>( aBoardItem ) )
+    else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aBoardItem ) )
     {
         for( const PAD* pad : footprint->Pads() )
         {
@@ -1193,7 +1193,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
     {
         m_data_model->deleteItem( m_data_model->findItem( net ) );
     }
-    else if( MODULE* footprint = dynamic_cast<MODULE*>( aBoardItem ) )
+    else if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aBoardItem ) )
     {
         for( const PAD* pad : footprint->Pads() )
         {
@@ -1244,7 +1244,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
 void DIALOG_NET_INSPECTOR::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) != nullptr
-            || dynamic_cast<MODULE*>( aBoardItem ) != nullptr )
+            || dynamic_cast<FOOTPRINT*>( aBoardItem ) != nullptr )
     {
         buildNetsList();
         m_netsList->Refresh();
@@ -1471,7 +1471,7 @@ void DIALOG_NET_INSPECTOR::buildNetsList()
     // count the pads for each net.  since the nets are sorted by netcode
     // iterating over the footprints' pads is faster.
 
-    for( MODULE* footprint : m_brd->Footprints() )
+    for( FOOTPRINT* footprint : m_brd->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

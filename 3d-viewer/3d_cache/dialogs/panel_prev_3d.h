@@ -69,12 +69,12 @@ class S3D_CACHE;
 class FILENAME_RESOLVER;
 class BOARD;
 class BOARD_ADAPTER;
-class MODULE;
+class FOOTPRINT;
 
 class PANEL_PREV_3D: public EDA_3D_BOARD_HOLDER, public TOOLS_HOLDER, public PANEL_PREV_3D_BASE
 {
 public:
-    PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aFootprint,
+    PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint,
                    std::vector<FP_3DMODEL>* aParentModelList );
 
     ~PANEL_PREV_3D();
@@ -87,7 +87,7 @@ private:
     CTRACK_BALL              m_trackBallCamera;
 
     BOARD*                   m_dummyBoard;
-    MODULE*                  m_dummyFootprint;
+    FOOTPRINT*               m_dummyFootprint;
 
     std::vector<FP_3DMODEL>* m_parentModelList;
     int                      m_selected;   /// Index into m_parentInfoList

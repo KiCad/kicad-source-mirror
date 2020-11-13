@@ -35,7 +35,7 @@
 class LIST_MOD      // An helper class used to build a list of useful footprints.
 {
 public:
-    MODULE*       m_Footprint;      // Link to the actual footprint
+    FOOTPRINT*    m_Footprint;      // Link to the actual footprint
     wxString      m_Reference;      // Its schematic reference
     wxString      m_Value;          // Its schematic value
     LAYER_NUM     m_Layer;          // its side (B_Cu, or F_Cu)
@@ -113,7 +113,7 @@ std::string PLACE_FILE_EXPORTER::GenPositionData()
     // Build and sort the list of footprints alphabetically
     std::vector<LIST_MOD> list;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if( m_side != PCB_BOTH_SIDES )
         {
@@ -303,18 +303,18 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
     buffer += "$EndBOARD\n\n";
 
-    std::vector<MODULE*> sortedFootprints;
+    std::vector<FOOTPRINT*> sortedFootprints;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
         sortedFootprints.push_back( footprint );
 
     std::sort( sortedFootprints.begin(), sortedFootprints.end(),
-               []( MODULE* a, MODULE* b ) -> bool
+               []( FOOTPRINT* a, FOOTPRINT* b ) -> bool
                {
                    return StrNumCmp( a->GetReference(), b->GetReference(), true ) < 0;
                });
 
-    for( MODULE* footprint : sortedFootprints )
+    for( FOOTPRINT* footprint : sortedFootprints )
     {
         wxString ref = footprint->Reference().GetShownText();
 

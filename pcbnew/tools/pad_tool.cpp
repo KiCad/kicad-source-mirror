@@ -142,7 +142,7 @@ int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
     // can only copy from a single pad
     if( selection.Size() == 1 )
     {
-        auto item = selection[0];
+        EDA_ITEM* item = selection[0];
 
         if( item->Type() == PCB_PAD_T )
         {
@@ -163,24 +163,24 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
                                  bool aPadLayerFilter,
                                  bool aPadTypeFilter )
 {
-    const MODULE* moduleRef = aSrcPad.GetParent();
+    const FOOTPRINT* refFootprint = aSrcPad.GetParent();
 
-    double pad_orient = aSrcPad.GetOrientation() - moduleRef->GetOrientation();
+    double pad_orient = aSrcPad.GetOrientation() - refFootprint->GetOrientation();
 
-    for( auto module : board.Footprints() )
+    for( FOOTPRINT* footprint : board.Footprints() )
     {
-        if( !aSameFootprints && ( module != moduleRef ) )
+        if( !aSameFootprints && ( footprint != refFootprint ) )
             continue;
 
-        if( module->GetFPID() != moduleRef->GetFPID() )
+        if( footprint->GetFPID() != refFootprint->GetFPID() )
             continue;
 
-        for( auto pad : module->Pads() )
+        for( auto pad : footprint->Pads() )
         {
             if( aPadShapeFilter && ( pad->GetShape() != aSrcPad.GetShape() ) )
                 continue;
 
-            double currpad_orient = pad->GetOrientation() - module->GetOrientation();
+            double currpad_orient = pad->GetOrientation() - footprint->GetOrientation();
 
             if( aPadOrientFilter && ( currpad_orient != pad_orient ) )
                 continue;
@@ -211,19 +211,19 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 {
     auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
     const auto& selection = selTool.GetSelection();
-    PAD*      srcPad;
+    PAD*        srcPad;
 
     if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
         srcPad = static_cast<PAD*>( selection[0] );
     else
         return 0;
 
-    MODULE* module = srcPad->GetParent();
+    FOOTPRINT* footprint = srcPad->GetParent();
 
-    if( !module )
+    if( !footprint )
         return 0;
 
-    frame()->SetMsgPanel( module );
+    frame()->SetMsgPanel( footprint );
 
     DIALOG_PUSH_PAD_PROPERTIES dlg( frame() );
     int dialogRet = dlg.ShowModal();

@@ -186,7 +186,7 @@ void PCB_PAD::Flip()
 }
 
 
-void PCB_PAD::AddToFootprint( MODULE* aFootprint, int aRotation, bool aEncapsulatedPad )
+void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncapsulatedPad )
 {
     PCB_PAD_SHAPE*  padShape;
     wxString        padShapeName = wxT( "Ellipse" );
@@ -359,7 +359,7 @@ void PCB_PAD::AddToBoard()
     }
     else // pad
     {
-        MODULE* module = new MODULE( m_board );
+        FOOTPRINT* module = new FOOTPRINT( m_board );
         m_board->Add( module, ADD_MODE::APPEND );
 
         m_name.text = m_defaultPinDes;

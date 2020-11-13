@@ -1104,7 +1104,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
 
             // Update footprint LIB_IDs to point to the just imported Eagle library
-            for( MODULE* footprint : GetBoard()->Footprints() )
+            for( FOOTPRINT* footprint : GetBoard()->Footprints() )
             {
                 LIB_ID libId = footprint->GetFPID();
 

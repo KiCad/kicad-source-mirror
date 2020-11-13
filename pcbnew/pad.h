@@ -47,7 +47,7 @@ enum CUST_PAD_SHAPE_IN_ZONE
 
 class LINE_READER;
 class EDA_3D_CANVAS;
-class MODULE;
+class FOOTPRINT;
 class FP_SHAPE;
 class TRACK;
 
@@ -59,7 +59,7 @@ namespace KIGFX
 class PAD : public BOARD_CONNECTED_ITEM
 {
 public:
-    PAD( MODULE* parent );
+    PAD( FOOTPRINT* parent );
 
     // Copy constructor & operator= are needed because the list of basic shapes
     // must be duplicated in copy.
@@ -103,7 +103,7 @@ public:
         return false;
     }
 
-    MODULE* GetParent() const;
+    FOOTPRINT* GetParent() const;
 
     /**
      * Imports the pad settings from aMasterPad.

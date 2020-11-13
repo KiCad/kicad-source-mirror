@@ -189,7 +189,7 @@ const KICAD_T GENERAL_COLLECTOR::Dimensions[] = {
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
     BOARD_ITEM*     item        = (BOARD_ITEM*) testItem;
-    MODULE*         footprint   = nullptr;
+    FOOTPRINT*      footprint   = nullptr;
     PCB_GROUP*      group       = nullptr;
     PAD*            pad         = nullptr;
     bool            pad_through = false;
@@ -206,7 +206,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
     case PCB_PAD_T:
         {
-            MODULE* footprint = (MODULE*) item->GetParent();
+            FOOTPRINT* footprint = (FOOTPRINT*) item->GetParent();
 
             if( footprint->GetReference() == wxT( "Y2" ) )
                 breakhere++;
@@ -245,7 +245,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     case PCB_FOOTPRINT_T:
         {
-            MODULE* footprint = (MODULE*) item;
+            FOOTPRINT* footprint = (FOOTPRINT*) item;
 
             if( footprint->GetReference() == wxT( "C98" ) )
                 breakhere++;
@@ -284,7 +284,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
         else  // smd, so use pads test after footprint test
         {
-            footprint = static_cast<MODULE*>( item->GetParent() );
+            footprint = static_cast<FOOTPRINT*>( item->GetParent() );
         }
 
         break;
@@ -300,7 +300,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FP_ZONE_T:
-        footprint = static_cast<MODULE*>( item->GetParent() );
+        footprint = static_cast<FOOTPRINT*>( item->GetParent() );
 
         // Fallthrough to get the zone as well
         KI_FALLTHROUGH;
@@ -364,7 +364,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             }
 
             // Extract the footprint since it could be hidden
-            footprint = static_cast<MODULE*>( item->GetParent() );
+            footprint = static_cast<FOOTPRINT*>( item->GetParent() );
         }
         break;
 
@@ -373,7 +373,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_FOOTPRINT_T:
-        footprint = static_cast<MODULE*>( item );
+        footprint = static_cast<FOOTPRINT*>( item );
         break;
 
     case PCB_GROUP_T:
@@ -390,7 +390,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
     // common tests:
 
-    if( footprint )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_MODULE_T
+    if( footprint )    // true from case PCB_PAD_T, PCB_FP_TEXT_T, or PCB_FOOTPRINT_T
     {
         if( m_Guide->IgnoreFootprintsOnBack() && ( footprint->GetLayer() == B_Cu) )
             goto exit;

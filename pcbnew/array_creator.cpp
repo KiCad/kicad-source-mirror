@@ -52,7 +52,7 @@ void ARRAY_CREATOR::Invoke()
     if( m_selection.Size() == 0 )
         return;
 
-    MODULE* const fp = m_isFootprintEditor ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
+    FOOTPRINT* const fp = m_isFootprintEditor ? m_parent.GetBoard()->GetFirstFootprint() : nullptr;
 
     const bool enableArrayNumbering = m_isFootprintEditor;
     const wxPoint rotPoint = (wxPoint) m_selection.GetCenter();
@@ -77,7 +77,7 @@ void ARRAY_CREATOR::Invoke()
         if( item->Type() == PCB_PAD_T && !m_isFootprintEditor )
         {
             // If it is not the footprint editor, then duplicate the parent footprint instead
-            item = static_cast<MODULE*>( item )->GetParent();
+            item = static_cast<FOOTPRINT*>( item )->GetParent();
         }
 
         // The first item in list is the original item. We do not modify it
@@ -130,8 +130,8 @@ void ARRAY_CREATOR::Invoke()
                     // @TODO: renumber footprints if asked. This needs UI to enable.
                     // something like this, but needs a "block offset" to prevent
                     // multiple selections overlapping.
-                    // if( new_item->Type() == PCB_MODULE_T )
-                    //     static_cast<MODULE&>( *new_item ).IncrementReference( ptN );
+                    // if( new_item->Type() == PCB_FOOTPRINT_T )
+                    //     static_cast<FOOTPRINT&>( *new_item ).IncrementReference( ptN );
 
                     // @TODO: we should merge zones. This is a bit tricky, because
                     // the undo command needs saving old area, if it is merged.
@@ -147,7 +147,7 @@ void ARRAY_CREATOR::Invoke()
 
                     if( this_item->Type() == PCB_FOOTPRINT_T )
                     {
-                        static_cast<MODULE*>( this_item )->RunOnChildren(
+                        static_cast<FOOTPRINT*>( this_item )->RunOnChildren(
                                 [&]( BOARD_ITEM* aItem )
                                 {
                                     aItem->ClearSelected();

@@ -228,7 +228,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
         }
     }
 
-    for( MODULE* footprint : brd->Footprints() )
+    for( FOOTPRINT* footprint : brd->Footprints() )
     {
         if( typeMask[ PCB_FP_TEXT_T ] )
         {

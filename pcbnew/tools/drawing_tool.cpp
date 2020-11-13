@@ -235,7 +235,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       line = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
@@ -281,7 +281,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::RECTANGLE );
@@ -325,7 +325,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::CIRCLE );
@@ -369,7 +369,7 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     if( m_isFootprintEditor && !m_frame->GetModel() )
         return 0;
 
-    MODULE*          parentFootprint = dynamic_cast<MODULE*>( m_frame->GetModel() );
+    FOOTPRINT*          parentFootprint = dynamic_cast<FOOTPRINT*>( m_frame->GetModel() );
     PCB_SHAPE*       arc = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
     BOARD_COMMIT     commit( m_frame );
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ARC );
@@ -501,7 +501,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 // Init the new item attributes
                 if( m_isFootprintEditor )
                 {
-                    FP_TEXT* fpText = new FP_TEXT( (MODULE*) m_frame->GetModel() );
+                    FP_TEXT* fpText = new FP_TEXT( (FOOTPRINT*) m_frame->GetModel() );
 
                     fpText->SetLayer( layer );
                     fpText->SetTextSize( dsnSettings.GetTextSize( layer ) );
@@ -1197,13 +1197,13 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
         if( evt->IsClick( BUT_LEFT ) )
         {
-            MODULE* module = (MODULE*) m_frame->GetModel();
+            FOOTPRINT*   footprint = (FOOTPRINT*) m_frame->GetModel();
             BOARD_COMMIT commit( m_frame );
-            commit.Modify( module );
+            commit.Modify( footprint );
 
             // set the new relative internal local coordinates of footprint items
-            wxPoint     moveVector = module->GetPosition() - (wxPoint) cursorPos;
-            module->MoveAnchorPosition( moveVector );
+            wxPoint     moveVector = footprint->GetPosition() - (wxPoint) cursorPos;
+            footprint->MoveAnchorPosition( moveVector );
 
             commit.Push( _( "Move the footprint reference anchor" ) );
 
@@ -2135,9 +2135,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                         return true;
                 }
 
-                if( MODULE* mod = dyn_cast<MODULE*>( item ) )
+                if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item ) )
                 {
-                    for( PAD* pad : mod->Pads() )
+                    for( PAD* pad : footprint->Pads() )
                     {
                         for( PCB_LAYER_ID layer : pad->GetLayerSet().Seq() )
                         {
@@ -2173,7 +2173,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             const wxPoint position = aVia->GetPosition();
             const LSET    lset = aVia->GetLayerSet();
 
-            for( MODULE* footprint : m_board->Footprints() )
+            for( FOOTPRINT* footprint : m_board->Footprints() )
             {
                 for( PAD* pad : footprint->Pads() )
                 {

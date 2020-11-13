@@ -38,10 +38,10 @@ class PAD;
 class FP_TEXT;
 class ZONE;
 
-typedef std::map<wxString, MODULE*>  MODULE_MAP;
-typedef std::vector<ZONE*>           ZONES;
-typedef std::map<wxString, ENET>     NET_MAP;
-typedef NET_MAP::const_iterator      NET_MAP_CITER;
+typedef std::map<wxString, FOOTPRINT*> FOOTPRINT_MAP;
+typedef std::vector<ZONE*>             ZONES;
+typedef std::map<wxString, ENET>        NET_MAP;
+typedef NET_MAP::const_iterator         NET_MAP_CITER;
 
 
 /// subset of eagle.drawing.board.designrules in the XML document
@@ -132,8 +132,8 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const PROPERTIES* aProperties = NULL) override;
 
-    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                           const PROPERTIES* aProperties = NULL ) override;
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              const PROPERTIES* aProperties = NULL ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {
@@ -183,25 +183,25 @@ private:
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
-    int         m_cu_map[17];       ///< map eagle to kicad, cu layers only.
-    std::map<int, ELAYER> m_eagleLayers; ///< Eagle layers data stored by the layer number
-    std::map<wxString, int> m_eagleLayersIds; ///< Eagle layers id stored by the layer name
-    std::map<wxString, PCB_LAYER_ID> m_layer_map; ///< Mapping of Eagle layers to KiCAD layers
+    int                              m_cu_map[17];     ///< map eagle to kicad, cu layers only.
+    std::map<int, ELAYER>            m_eagleLayers;    ///< Eagle layer data stored by layer number
+    std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
+    std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCAD layers
 
-    ERULES*     m_rules;            ///< Eagle design rules.
-    XPATH*      m_xpath;            ///< keeps track of what we are working on within
+    ERULES*       m_rules;          ///< Eagle design rules.
+    XPATH*        m_xpath;          ///< keeps track of what we are working on within
                                     ///< XML document during a Load().
 
-    int         m_hole_count;       ///< generates unique footprint names from eagle "hole"s.
+    int           m_hole_count;     ///< generates unique footprint names from eagle "hole"s.
 
-    NET_MAP     m_pads_to_nets;     ///< net list
+    NET_MAP       m_pads_to_nets;   ///< net list
 
-    MODULE_MAP  m_templates;        ///< is part of a MODULE factory that operates
+    FOOTPRINT_MAP m_templates;      ///< is part of a MODULE factory that operates
                                     ///< using copy construction.
                                     ///< lookup key is either libname.packagename or simply
                                     ///< packagename if FootprintLoad() or FootprintEnumberate()
 
-    const PROPERTIES* m_props;            ///< passed via Save() or Load(), no ownership, may be NULL.
+    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
     BOARD*      m_board;            ///< which BOARD is being worked on, no ownership here
 
     int         m_min_trace;        ///< smallest trace we find on Load(), in BIU.
@@ -276,10 +276,11 @@ private:
      */
     ZONE* loadPolygon( wxXmlNode* aPolyNode );
 
-    void orientModuleAndText( MODULE* aFootprint, const EELEMENT& e, const EATTR* aNameAttr,
-                              const EATTR* aValueAttr );
+    void orientFootprintAndText( FOOTPRINT* aFootprint, const EELEMENT& e, const EATTR* aNameAttr,
+                                 const EATTR* aValueAttr );
 
-    void orientModuleText( MODULE* aFootprint, const EELEMENT& e, FP_TEXT* aFPText, const EATTR* a );
+    void orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TEXT* aFPText,
+                       const EATTR* aAttr );
 
 
     /// move the BOARD into the center of the page
@@ -289,14 +290,14 @@ private:
      * Function makeModule
      * creates a MODULE from an Eagle package.
      */
-    MODULE* makeModule( wxXmlNode* aPackage, const wxString& aPkgName );
+    FOOTPRINT* makeFootprint( wxXmlNode* aPackage, const wxString& aPkgName );
 
-    void packageWire( MODULE* aFootprint, wxXmlNode* aTree ) const;
-    void packagePad( MODULE* aFootprint, wxXmlNode* aTree );
-    void packageText( MODULE* aFootprint, wxXmlNode* aTree ) const;
-    void packageRectangle( MODULE* aFootprint, wxXmlNode* aTree ) const;
-    void packagePolygon( MODULE* aFootprint, wxXmlNode* aTree ) const;
-    void packageCircle( MODULE* aFootprint, wxXmlNode* aTree ) const;
+    void packageWire( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
+    void packagePad( FOOTPRINT* aFootprint, wxXmlNode* aTree );
+    void packageText( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
+    void packageRectangle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
+    void packagePolygon( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
+    void packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
 
     /**
      * Function packageHole
@@ -305,8 +306,8 @@ private:
      * @parameter aCenter - If true, center the hole in the footprint and
      *      offset the footprint position
      */
-    void packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
-    void packageSMD( MODULE* aFootprint, wxXmlNode* aTree ) const;
+    void packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
+    void packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
 
     ///> Handles common pad properties
     void transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const;

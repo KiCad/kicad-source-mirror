@@ -126,8 +126,8 @@ bool FOOTPRINT_EDITOR_TOOLS::Init()
 
 int FOOTPRINT_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
 {
-    LIB_ID selected = m_frame->GetTreeFPID();
-    MODULE* newFootprint = m_frame->CreateNewFootprint( wxEmptyString );
+    LIB_ID     selected = m_frame->GetTreeFPID();
+    FOOTPRINT* newFootprint = m_frame->CreateNewFootprint( wxEmptyString );
 
     if( !newFootprint )
         return 0;
@@ -189,7 +189,7 @@ int FOOTPRINT_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
     if( wizard->ShowModal( NULL, m_frame ) )
     {
         // Creates the new footprint from python script wizard
-        MODULE* newFootprint = wizard->GetBuiltFootprint();
+        FOOTPRINT* newFootprint = wizard->GetBuiltFootprint();
 
         if( newFootprint )    // i.e. if create module command is OK
         {
@@ -279,7 +279,7 @@ int FOOTPRINT_EDITOR_TOOLS::SaveAs( const TOOL_EVENT& aEvent )
     else
     {
         // Save Selected Footprint As
-        MODULE* footprint = m_frame->LoadFootprint( m_frame->GetTargetFPID() );
+        FOOTPRINT* footprint = m_frame->LoadFootprint( m_frame->GetTargetFPID() );
 
         if( footprint && m_frame->SaveFootprintAs( footprint ) )
             m_frame->SyncLibraryTree( true );
@@ -302,7 +302,7 @@ int FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
     LIB_ID fpID = m_frame->GetTreeFPID();
 
     if( fpID == m_frame->GetLoadedFPID() )
-        m_copiedFootprint.reset( new MODULE( *m_frame->GetBoard()->GetFirstFootprint() ) );
+        m_copiedFootprint.reset( new FOOTPRINT( *m_frame->GetBoard()->GetFirstFootprint() ) );
     else
         m_copiedFootprint.reset( m_frame->LoadFootprint( fpID ) );
 
@@ -371,8 +371,8 @@ int FOOTPRINT_EDITOR_TOOLS::ImportFootprint( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
 {
-    LIB_ID  fpID = m_frame->GetTreeFPID();
-    MODULE* fp;
+    LIB_ID     fpID = m_frame->GetTreeFPID();
+    FOOTPRINT* fp;
 
     if( !fpID.IsValid() )
         fp = m_frame->GetBoard()->GetFirstFootprint();
@@ -428,7 +428,7 @@ int FOOTPRINT_EDITOR_TOOLS::ToggleFootprintTree( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_TOOLS::Properties( const TOOL_EVENT& aEvent )
 {
-    MODULE* footprint = m_frame->GetBoard()->GetFirstFootprint();
+    FOOTPRINT* footprint = m_frame->GetBoard()->GetFirstFootprint();
 
     if( footprint )
     {

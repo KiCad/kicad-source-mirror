@@ -39,7 +39,7 @@
 #include <convert_drawsegment_list_to_polygon.h>
 
 
-MODULE::MODULE( BOARD* parent ) :
+FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
         m_initial_comments( 0 )
 {
@@ -67,7 +67,7 @@ MODULE::MODULE( BOARD* parent ) :
 }
 
 
-MODULE::MODULE( const MODULE& aFootprint ) :
+FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     BOARD_ITEM_CONTAINER( aFootprint )
 {
     m_pos          = aFootprint.m_pos;
@@ -164,14 +164,14 @@ MODULE::MODULE( const MODULE& aFootprint ) :
 }
 
 
-MODULE::MODULE( MODULE&& aFootprint ) :
+FOOTPRINT::FOOTPRINT( FOOTPRINT&& aFootprint ) :
     BOARD_ITEM_CONTAINER( aFootprint )
 {
     *this = std::move( aFootprint );
 }
 
 
-MODULE::~MODULE()
+FOOTPRINT::~FOOTPRINT()
 {
     // Clean up the owned elements
     delete m_reference;
@@ -200,7 +200,7 @@ MODULE::~MODULE()
 }
 
 
-MODULE& MODULE::operator=( MODULE&& aOther )
+FOOTPRINT& FOOTPRINT::operator=( FOOTPRINT&& aOther )
 {
     BOARD_ITEM::operator=( aOther );
 
@@ -295,7 +295,7 @@ MODULE& MODULE::operator=( MODULE&& aOther )
 }
 
 
-MODULE& MODULE::operator=( const MODULE& aOther )
+FOOTPRINT& FOOTPRINT::operator=( const FOOTPRINT& aOther )
 {
     BOARD_ITEM::operator=( aOther );
 
@@ -394,7 +394,7 @@ MODULE& MODULE::operator=( const MODULE& aOther )
 }
 
 
-void MODULE::GetContextualTextVars( wxArrayString* aVars ) const
+void FOOTPRINT::GetContextualTextVars( wxArrayString* aVars ) const
 {
     aVars->push_back( wxT( "REFERENCE" ) );
     aVars->push_back( wxT( "VALUE" ) );
@@ -402,7 +402,7 @@ void MODULE::GetContextualTextVars( wxArrayString* aVars ) const
 }
 
 
-bool MODULE::ResolveTextVar( wxString* token, int aDepth ) const
+bool FOOTPRINT::ResolveTextVar( wxString* token, int aDepth ) const
 {
     if( token->IsSameAs( wxT( "REFERENCE" ) ) )
     {
@@ -429,7 +429,7 @@ bool MODULE::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-void MODULE::ClearAllNets()
+void FOOTPRINT::ClearAllNets()
 {
     // Force the ORPHANED dummy net info for all pads.
     // ORPHANED dummy net does not depend on a board
@@ -438,7 +438,7 @@ void MODULE::ClearAllNets()
 }
 
 
-void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
+void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {
@@ -491,7 +491,7 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 }
 
 
-void MODULE::Remove( BOARD_ITEM* aBoardItem )
+void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem )
 {
     switch( aBoardItem->Type() )
     {
@@ -561,13 +561,13 @@ void MODULE::Remove( BOARD_ITEM* aBoardItem )
 }
 
 
-void MODULE::CalculateBoundingBox()
+void FOOTPRINT::CalculateBoundingBox()
 {
     m_boundingBox = GetFootprintRect();
 }
 
 
-double MODULE::GetArea( int aPadding ) const
+double FOOTPRINT::GetArea( int aPadding ) const
 {
     double w = std::abs( static_cast<double>( m_boundingBox.GetWidth() ) ) + aPadding;
     double h = std::abs( static_cast<double>( m_boundingBox.GetHeight() ) ) + aPadding;
@@ -575,7 +575,7 @@ double MODULE::GetArea( int aPadding ) const
 }
 
 
-EDA_RECT MODULE::GetFootprintRect() const
+EDA_RECT FOOTPRINT::GetFootprintRect() const
 {
     EDA_RECT area;
 
@@ -601,13 +601,13 @@ EDA_RECT MODULE::GetFootprintRect() const
 }
 
 
-EDA_RECT MODULE::GetFpPadsLocalBbox() const
+EDA_RECT FOOTPRINT::GetFpPadsLocalBbox() const
 {
     EDA_RECT area;
 
     // We want the bounding box of the footprint pads at rot 0, not flipped
     // Create such a image:
-    MODULE dummy( *this );
+    FOOTPRINT dummy( *this );
 
     dummy.SetPosition( wxPoint( 0, 0 ) );
 
@@ -624,13 +624,13 @@ EDA_RECT MODULE::GetFpPadsLocalBbox() const
 }
 
 
-const EDA_RECT MODULE::GetBoundingBox() const
+const EDA_RECT FOOTPRINT::GetBoundingBox() const
 {
     return GetBoundingBox( true );
 }
 
 
-const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
+const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeInvisibleText ) const
 {
     EDA_RECT area = GetFootprintRect();
 
@@ -687,13 +687,12 @@ const EDA_RECT MODULE::GetBoundingBox( bool aIncludeInvisibleText ) const
  * We should consider doing that instead at some point in the future if we can
  * use a performant algorithm and cache the result to avoid extra computing.
  */
-SHAPE_POLY_SET MODULE::GetBoundingPoly() const
+SHAPE_POLY_SET FOOTPRINT::GetBoundingPoly() const
 {
     SHAPE_POLY_SET poly;
+    double         orientation = GetOrientationRadians();
+    FOOTPRINT      temp = *this;
 
-    double orientation = GetOrientationRadians();
-
-    MODULE temp = *this;
     temp.SetOrientation( 0.0 );
     BOX2I area = temp.GetFootprintRect();
 
@@ -722,7 +721,7 @@ SHAPE_POLY_SET MODULE::GetBoundingPoly() const
 }
 
 
-void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg, msg2;
 
@@ -790,20 +789,20 @@ void MODULE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
 }
 
 
-bool MODULE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+bool FOOTPRINT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = m_boundingBox;//.GetBoundingBoxRotated( GetPosition(), m_Orient );
     return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
 
-bool MODULE::HitTestAccurate( const wxPoint& aPosition, int aAccuracy ) const
+bool FOOTPRINT::HitTestAccurate( const wxPoint& aPosition, int aAccuracy ) const
 {
     return GetBoundingPoly().Collide( aPosition, aAccuracy );
 }
 
 
-bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+bool FOOTPRINT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
     EDA_RECT arect = aRect;
     arect.Inflate( aAccuracy );
@@ -816,7 +815,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
         if( !aRect.Intersects( GetBoundingBox() ) )
             return false;
 
-        // Determine if any elements in the MODULE intersect the rect
+        // Determine if any elements in the FOOTPRINT intersect the rect
         for( PAD* pad : m_pads )
         {
             if( pad->HitTest( arect, false, 0 ) )
@@ -843,7 +842,7 @@ bool MODULE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) co
 }
 
 
-PAD* MODULE::FindPadByName( const wxString& aPadName ) const
+PAD* FOOTPRINT::FindPadByName( const wxString& aPadName ) const
 {
     for( PAD* pad : m_pads )
     {
@@ -855,7 +854,7 @@ PAD* MODULE::FindPadByName( const wxString& aPadName ) const
 }
 
 
-PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
+PAD* FOOTPRINT::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 {
     for( PAD* pad : m_pads )
     {
@@ -871,7 +870,7 @@ PAD* MODULE::GetPad( const wxPoint& aPosition, LSET aLayerMask )
 }
 
 
-PAD* MODULE::GetTopLeftPad()
+PAD* FOOTPRINT::GetTopLeftPad()
 {
     PAD* topLeftPad = GetFirstPad();
 
@@ -890,7 +889,7 @@ PAD* MODULE::GetTopLeftPad()
 }
 
 
-unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+unsigned FOOTPRINT::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     if( aIncludeNPTH )
         return m_pads.size();
@@ -909,7 +908,7 @@ unsigned MODULE::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
-unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     std::set<wxString> usedNames;
 
@@ -942,7 +941,7 @@ unsigned MODULE::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
-void MODULE::Add3DModel( FP_3DMODEL* a3DModel )
+void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 {
     if( NULL == a3DModel )
         return;
@@ -955,7 +954,7 @@ void MODULE::Add3DModel( FP_3DMODEL* a3DModel )
 
 
 // see footprint.h
-SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
+SEARCH_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
     KICAD_T        stype;
     SEARCH_RESULT  result = SEARCH_RESULT::CONTINUE;
@@ -998,7 +997,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
             if( result == SEARCH_RESULT::QUIT )
                 break;
 
-            // Intentionally fall through since m_Drawings can hold TYPETEXTMODULE also
+            // Intentionally fall through since m_Drawings can hold PCB_FP_SHAPE_T also
             KI_FALLTHROUGH;
 
         case PCB_FP_SHAPE_T:
@@ -1040,7 +1039,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
 }
 
 
-wxString MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString FOOTPRINT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     wxString reference = GetReference();
 
@@ -1051,19 +1050,19 @@ wxString MODULE::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF MODULE::GetMenuImage() const
+BITMAP_DEF FOOTPRINT::GetMenuImage() const
 {
     return module_xpm;
 }
 
 
-EDA_ITEM* MODULE::Clone() const
+EDA_ITEM* FOOTPRINT::Clone() const
 {
-    return new MODULE( *this );
+    return new FOOTPRINT( *this );
 }
 
 
-void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const
+void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM*)>& aFunction ) const
 {
     try
     {
@@ -1084,12 +1083,12 @@ void MODULE::RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction )
     }
     catch( std::bad_function_call& )
     {
-        wxFAIL_MSG( "Error running MODULE::RunOnChildren" );
+        wxFAIL_MSG( "Error running FOOTPRINT::RunOnChildren" );
     }
 }
 
 
-void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads ) const
+void FOOTPRINT::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads ) const
 {
     std::unordered_set<int> layers;
 
@@ -1116,7 +1115,7 @@ void MODULE::GetAllDrawingLayers( int aLayers[], int& aCount, bool aIncludePads 
 }
 
 
-void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
+void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
     aLayers[0] = LAYER_ANCHOR;
@@ -1162,7 +1161,7 @@ void MODULE::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-double MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
+double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
     int layer = ( m_Layer == F_Cu ) ? LAYER_MOD_FR :
                 ( m_Layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
@@ -1179,7 +1178,7 @@ double MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 }
 
 
-const BOX2I MODULE::ViewBBox() const
+const BOX2I FOOTPRINT::ViewBBox() const
 {
     EDA_RECT area = GetFootprintRect();
 
@@ -1200,7 +1199,7 @@ const BOX2I MODULE::ViewBBox() const
 }
 
 
-bool MODULE::IsLibNameValid( const wxString & aName )
+bool FOOTPRINT::IsLibNameValid( const wxString & aName )
 {
     const wxChar * invalids = StringLibNameInvalidChars( false );
 
@@ -1211,7 +1210,7 @@ bool MODULE::IsLibNameValid( const wxString & aName )
 }
 
 
-const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
+const wxChar* FOOTPRINT::StringLibNameInvalidChars( bool aUserReadable )
 {
     // This list of characters is also duplicated in validators.cpp and
     // lib_id.cpp
@@ -1226,14 +1225,14 @@ const wxChar* MODULE::StringLibNameInvalidChars( bool aUserReadable )
 }
 
 
-void MODULE::Move( const wxPoint& aMoveVector )
+void FOOTPRINT::Move( const wxPoint& aMoveVector )
 {
     wxPoint newpos = m_pos + aMoveVector;
     SetPosition( newpos );
 }
 
 
-void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
+void FOOTPRINT::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     double  orientation = GetOrientation();
     double  newOrientation = orientation + aAngle;
@@ -1255,7 +1254,7 @@ void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
-void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     // Move footprint to its final position:
     wxPoint finalPos = m_pos;
@@ -1320,7 +1319,7 @@ void MODULE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-void MODULE::SetPosition( const wxPoint& aPos )
+void FOOTPRINT::SetPosition( const wxPoint& aPos )
 {
     wxPoint delta = aPos - m_pos;
 
@@ -1363,7 +1362,7 @@ void MODULE::SetPosition( const wxPoint& aPos )
 }
 
 
-void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
+void FOOTPRINT::MoveAnchorPosition( const wxPoint& aMoveVector )
 {
     /* Move the reference point of the footprint
      * the footprints elements (pads, outlines, edges .. ) are moved
@@ -1420,7 +1419,7 @@ void MODULE::MoveAnchorPosition( const wxPoint& aMoveVector )
 }
 
 
-void MODULE::SetOrientation( double aNewAngle )
+void FOOTPRINT::SetOrientation( double aNewAngle )
 {
     double angleChange = aNewAngle - m_orient;  // change in rotation
 
@@ -1458,9 +1457,9 @@ void MODULE::SetOrientation( double aNewAngle )
 }
 
 
-BOARD_ITEM* MODULE::Duplicate() const
+BOARD_ITEM* FOOTPRINT::Duplicate() const
 {
-    MODULE* dupe = (MODULE*) Clone();
+    FOOTPRINT* dupe = (FOOTPRINT*) Clone();
     const_cast<KIID&>( dupe->m_Uuid ) = KIID();
 
     dupe->RunOnChildren( [&]( BOARD_ITEM* child )
@@ -1472,7 +1471,7 @@ BOARD_ITEM* MODULE::Duplicate() const
 }
 
 
-BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint )
+BOARD_ITEM* FOOTPRINT::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint )
 {
     BOARD_ITEM* new_item = NULL;
     FP_ZONE* new_zone = NULL;
@@ -1557,7 +1556,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint
 }
 
 
-wxString MODULE::GetNextPadName( const wxString& aLastPadName ) const
+wxString FOOTPRINT::GetNextPadName( const wxString& aLastPadName ) const
 {
     std::set<wxString> usedNames;
 
@@ -1575,7 +1574,7 @@ wxString MODULE::GetNextPadName( const wxString& aLastPadName ) const
 }
 
 
-void MODULE::IncrementReference( int aDelta )
+void FOOTPRINT::IncrementReference( int aDelta )
 {
     const wxString& refdes = GetReference();
 
@@ -1614,7 +1613,7 @@ static void addRect( SHAPE_POLY_SET& aPolySet, wxRect aRect )
     aPolySet.Append( aRect.GetX(), aRect.GetY()+aRect.height );
 }
 
-double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
+double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 {
     double fpArea = GetFootprintRect().GetArea();
     SHAPE_POLY_SET coveredRegion;
@@ -1669,7 +1668,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 }
 
 
-std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
 
@@ -1693,7 +1692,7 @@ std::shared_ptr<SHAPE> MODULE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-void MODULE::BuildPolyCourtyards()
+void FOOTPRINT::BuildPolyCourtyards()
 {
     m_poly_courtyard_front.RemoveAllContours();
     m_poly_courtyard_back.RemoveAllContours();
@@ -1741,15 +1740,15 @@ void MODULE::BuildPolyCourtyards()
 }
 
 
-void MODULE::SwapData( BOARD_ITEM* aImage )
+void FOOTPRINT::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_FOOTPRINT_T );
 
-    std::swap( *((MODULE*) this), *((MODULE*) aImage) );
+    std::swap( *((FOOTPRINT*) this), *((FOOTPRINT*) aImage) );
 }
 
 
-bool MODULE::HasThroughHolePads() const
+bool FOOTPRINT::HasThroughHolePads() const
 {
     for( PAD* pad : Pads() )
     {
@@ -1761,7 +1760,8 @@ bool MODULE::HasThroughHolePads() const
 }
 
 
-bool MODULE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITEM* aSecond ) const
+bool FOOTPRINT::cmp_drawings::operator()( const BOARD_ITEM* aFirst,
+                                          const BOARD_ITEM* aSecond ) const
 {
     if( aFirst->Type() != aSecond->Type() )
         return aFirst->Type() < aSecond->Type();
@@ -1785,7 +1785,7 @@ bool MODULE::cmp_drawings::operator()( const BOARD_ITEM* aFirst, const BOARD_ITE
 }
 
 
-bool MODULE::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) const
+bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) const
 {
     if( aFirst->GetName() != aSecond->GetName() )
         return StrNumCmp( aFirst->GetName(), aSecond->GetName() ) < 0;
@@ -1816,37 +1816,37 @@ static struct MODULE_DESC
         fpLayers.Add( LSET::Name( B_Cu ), B_Cu );
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
-        REGISTER_TYPE( MODULE );
-        propMgr.AddTypeCast( new TYPE_CAST<MODULE, BOARD_ITEM> );
-        propMgr.AddTypeCast( new TYPE_CAST<MODULE, BOARD_ITEM_CONTAINER> );
-        propMgr.InheritsAfter( TYPE_HASH( MODULE ), TYPE_HASH( BOARD_ITEM ) );
-        propMgr.InheritsAfter( TYPE_HASH( MODULE ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
+        REGISTER_TYPE( FOOTPRINT );
+        propMgr.AddTypeCast( new TYPE_CAST<FOOTPRINT, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<FOOTPRINT, BOARD_ITEM_CONTAINER> );
+        propMgr.InheritsAfter( TYPE_HASH( FOOTPRINT ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( FOOTPRINT ), TYPE_HASH( BOARD_ITEM_CONTAINER ) );
 
-        auto layer = new PROPERTY_ENUM<MODULE, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer" ),
-                    &MODULE::SetLayer, &MODULE::GetLayer );
+        auto layer = new PROPERTY_ENUM<FOOTPRINT, PCB_LAYER_ID, BOARD_ITEM>( _HKI( "Layer" ),
+                    &FOOTPRINT::SetLayer, &FOOTPRINT::GetLayer );
         layer->SetChoices( fpLayers );
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ), layer );
 
-        propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _HKI( "Reference" ),
-                    &MODULE::SetReference, &MODULE::GetReference ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, wxString>( _HKI( "Value" ),
-                    &MODULE::SetValue, &MODULE::GetValue ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, double>( _HKI( "Orientation" ),
-                    &MODULE::SetOrientationDegrees, &MODULE::GetOrientationDegrees,
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
+                    &FOOTPRINT::SetReference, &FOOTPRINT::GetReference ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Value" ),
+                    &FOOTPRINT::SetValue, &FOOTPRINT::GetValue ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Orientation" ),
+                    &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::DEGREE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Local Clearance" ),
-                    &MODULE::SetLocalClearance, &MODULE::GetLocalClearance,
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Local Clearance" ),
+                    &FOOTPRINT::SetLocalClearance, &FOOTPRINT::GetLocalClearance,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Local Solderpaste Margin" ),
-                    &MODULE::SetLocalSolderPasteMargin, &MODULE::GetLocalSolderPasteMargin,
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Local Solderpaste Margin" ),
+                    &FOOTPRINT::SetLocalSolderPasteMargin, &FOOTPRINT::GetLocalSolderPasteMargin,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, double>( _HKI( "Local Solderpaste Margin Ratio" ),
-                    &MODULE::SetLocalSolderPasteMarginRatio, &MODULE::GetLocalSolderPasteMarginRatio ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Thermal Width" ),
-                    &MODULE::SetThermalWidth, &MODULE::GetThermalWidth,
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, double>( _HKI( "Local Solderpaste Margin Ratio" ),
+                    &FOOTPRINT::SetLocalSolderPasteMarginRatio, &FOOTPRINT::GetLocalSolderPasteMarginRatio ) );
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Width" ),
+                    &FOOTPRINT::SetThermalWidth, &FOOTPRINT::GetThermalWidth,
                     PROPERTY_DISPLAY::DISTANCE ) );
-        propMgr.AddProperty( new PROPERTY<MODULE, int>( _HKI( "Thermal Gap" ),
-                    &MODULE::SetThermalGap, &MODULE::GetThermalGap,
+        propMgr.AddProperty( new PROPERTY<FOOTPRINT, int>( _HKI( "Thermal Gap" ),
+                    &FOOTPRINT::SetThermalGap, &FOOTPRINT::GetThermalGap,
                     PROPERTY_DISPLAY::DISTANCE ) );
         // TODO zone connection, FPID?
     }

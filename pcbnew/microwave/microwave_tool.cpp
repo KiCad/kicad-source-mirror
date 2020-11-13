@@ -73,13 +73,13 @@ int MICROWAVE_TOOL::addMicrowaveFootprint( const TOOL_EVENT& aEvent )
             case MICROWAVE_FOOTPRINT_SHAPE::GAP:
             case MICROWAVE_FOOTPRINT_SHAPE::STUB:
             case MICROWAVE_FOOTPRINT_SHAPE::STUB_ARC:
-                return std::unique_ptr<MODULE>( m_tool->createFootprint( m_itemType ) );
+                return std::unique_ptr<FOOTPRINT>( m_tool->createFootprint( m_itemType ) );
 
             case MICROWAVE_FOOTPRINT_SHAPE::FUNCTION_SHAPE:
-                return std::unique_ptr<MODULE>( m_tool->createPolygonShape() );
+                return std::unique_ptr<FOOTPRINT>( m_tool->createPolygonShape() );
 
             default:
-                return std::unique_ptr<MODULE>();
+                return std::unique_ptr<FOOTPRINT>();
             };
         }
 

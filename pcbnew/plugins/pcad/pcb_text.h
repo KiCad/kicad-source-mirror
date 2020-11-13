@@ -47,7 +47,7 @@ public:
     virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
                         const wxString& aActualConversion );
 
-    void AddToFootprint( MODULE* aFootprint ) override;
+    void AddToFootprint( FOOTPRINT* aFootprint ) override;
 
     void AddToBoard() override;
 

@@ -80,7 +80,7 @@ public:
     ///> @copydoc PCB_BASE_FRAME::GetModel()
     BOARD_ITEM_CONTAINER* GetModel() const override;
 
-    MODULE*             GetBuiltFootprint();
+    FOOTPRINT* GetBuiltFootprint();
 
     /**
      * Reload the Python plugins if they are newer than

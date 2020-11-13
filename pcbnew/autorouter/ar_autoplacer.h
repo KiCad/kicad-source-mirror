@@ -59,7 +59,7 @@ class AR_AUTOPLACER
 public:
     AR_AUTOPLACER( BOARD* aBoard );
 
-    AR_RESULT AutoplaceFootprints( std::vector<MODULE*>& aFootprints, BOARD_COMMIT* aCommit,
+    AR_RESULT AutoplaceFootprints( std::vector<FOOTPRINT*>& aFootprints, BOARD_COMMIT* aCommit,
                                    bool aPlaceOffboardModules = false );
 
     /**
@@ -74,7 +74,7 @@ public:
      * a callback function to redraw on screen the view after changes,
      * for instance after moving a footprint
      */
-    void SetRefreshCallback( std::function<int( MODULE* aModule )> aCallback )
+    void SetRefreshCallback( std::function<int( FOOTPRINT* aFootprint )> aCallback )
     {
         m_refreshCallback = aCallback;
     }
@@ -85,33 +85,32 @@ public:
     }
 
 private:
-    void         drawPlacementRoutingMatrix();  // draw the working area (shows free and occupied areas)
-    void         rotateFootprint( MODULE* aFootprint, double angle, bool incremental );
-    int          genPlacementRoutingMatrix();
+    void drawPlacementRoutingMatrix();  // draw the working area (shows free and occupied areas)
+    void rotateFootprint( FOOTPRINT* aFootprint, double angle, bool incremental );
+    int genPlacementRoutingMatrix();
 
     /** fills m_matrix cells from m_boardShape.
      * cells inside m_boardShape are set to CELL_IS_ZONE
      */
-    bool         fillMatrix();
-    void         genModuleOnRoutingMatrix( MODULE* Module );
+    bool fillMatrix();
+    void genModuleOnRoutingMatrix( FOOTPRINT* aFootprint );
 
-    int          testRectangle( const EDA_RECT& aRect, int side );
+    int testRectangle( const EDA_RECT& aRect, int side );
     unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
-    int          testFootprintOnBoard( MODULE* aFootprint, bool TstOtherSide, const wxPoint& aOffset );
-    int          getOptimalFPPlacement( MODULE* aFootprint );
-    double       computePlacementRatsnestCost( MODULE* aFootprint, const wxPoint& aOffset );
+    int testFootprintOnBoard( FOOTPRINT* aFootprint, bool TstOtherSide, const wxPoint& aOffset );
+    int getOptimalFPPlacement( FOOTPRINT* aFootprint );
+    double computePlacementRatsnestCost( FOOTPRINT* aFootprint, const wxPoint& aOffset );
 
     /**
      * Find the "best" footprint place. The criteria are:
      * - Maximum ratsnest with footprints already placed
      * - Max size, and number of pads max
      */
-    MODULE*      pickFootprint();
+    FOOTPRINT* pickFootprint();
 
-    void         placeFootprint( MODULE* aFootprint, bool aDoNotRecreateRatsnest,
-                                 const wxPoint& aPos );
+    void placeFootprint( FOOTPRINT* aFootprint, bool aDoNotRecreateRatsnest, const wxPoint& aPos );
 
-    const PAD* nearestPad( MODULE* aRefFP, PAD* aRefPad, const wxPoint& aOffset );
+    const PAD* nearestPad( FOOTPRINT* aRefFP, PAD* aRefPad, const wxPoint& aOffset );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     void addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask );
@@ -121,7 +120,7 @@ private:
 
     // Build m_fpAreaTop and m_fpAreaBottom polygonal shapes for aFootprint.
     // aFpClearance is a mechanical clearance.
-    void buildFpAreas( MODULE* aFootprint, int aFpClearance );
+    void buildFpAreas( FOOTPRINT* aFootprint, int aFpClearance );
 
     AR_MATRIX m_matrix;
     SHAPE_POLY_SET m_topFreeArea;       // The polygonal description of the top side free areas;
@@ -136,10 +135,10 @@ private:
     double  m_minCost;
     int     m_gridSize;
 
-    std::shared_ptr<KIGFX::VIEW_OVERLAY>    m_overlay;
-    std::unique_ptr<CONNECTIVITY_DATA>      m_connectivity;
-    std::function<int( MODULE* aModule )>   m_refreshCallback;
-    PROGRESS_REPORTER*                      m_progressReporter;
+    std::shared_ptr<KIGFX::VIEW_OVERLAY>        m_overlay;
+    std::unique_ptr<CONNECTIVITY_DATA>          m_connectivity;
+    std::function<int( FOOTPRINT* aFootprint )> m_refreshCallback;
+    PROGRESS_REPORTER*                          m_progressReporter;
 };
 
 #endif

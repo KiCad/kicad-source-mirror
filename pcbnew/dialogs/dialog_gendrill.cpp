@@ -139,7 +139,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_microViasCount   = 0;
     m_blindOrBuriedViasCount = 0;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

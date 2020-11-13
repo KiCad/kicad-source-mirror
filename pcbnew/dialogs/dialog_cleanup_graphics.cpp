@@ -84,7 +84,7 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
 
     BOARD_COMMIT     commit( m_parentFrame );
     BOARD*           board = m_parentFrame->GetBoard();
-    MODULE*          fp = m_isFootprintEditor ? board->GetFirstFootprint() : nullptr;
+    FOOTPRINT*       fp = m_isFootprintEditor ? board->GetFirstFootprint() : nullptr;
     GRAPHICS_CLEANER cleaner( fp ? fp->GraphicalItems() : board->Drawings(), fp, commit );
 
     if( !aDryRun )

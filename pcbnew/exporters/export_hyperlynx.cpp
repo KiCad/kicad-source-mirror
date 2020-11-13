@@ -383,7 +383,7 @@ bool HYPERLYNX_EXPORTER::writeDevices()
 {
     m_out->Print( 0, "{DEVICES\n" );
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         wxString ref = footprint->GetReference();
         wxString layerName = m_board->GetLayerName( footprint->GetLayer() );
@@ -402,7 +402,7 @@ bool HYPERLYNX_EXPORTER::writeDevices()
 
 bool HYPERLYNX_EXPORTER::writePadStacks()
 {
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -546,9 +546,9 @@ const std::vector<BOARD_ITEM*> HYPERLYNX_EXPORTER::collectNetObjects( int netcod
                 return false;
             };
 
-    for( MODULE* mod : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : mod->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( check( pad ) )
                 rv.push_back( pad );

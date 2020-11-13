@@ -118,7 +118,7 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
             return true;
     }
 
-    for( MODULE* item : aPcb->Footprints() )
+    for( FOOTPRINT* item : aPcb->Footprints() )
     {
         if( aItem == static_cast<BOARD_ITEM*>( item ) )
             return true;
@@ -222,8 +222,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
             if( !found )
             {
                 // Create a clean copy of the parent footprint
-                MODULE* orig = static_cast<MODULE*>( item );
-                MODULE* clone = new MODULE( *orig );
+                FOOTPRINT* orig = static_cast<FOOTPRINT*>( item );
+                FOOTPRINT* clone = new FOOTPRINT( *orig );
                 clone->SetParent( GetBoard() );
 
                 // Clear current flags (which can be temporary set by a current edit command)

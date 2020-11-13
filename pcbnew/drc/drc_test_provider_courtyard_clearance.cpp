@@ -82,7 +82,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
     int ii = 0;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
             return;
@@ -136,7 +136,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_OVERLAPPING_FOOTPRINTS) )
             break;
 
-        MODULE*         footprint = *it1;
+        FOOTPRINT*      footprint = *it1;
         SHAPE_POLY_SET& footprintFront = footprint->GetPolyCourtyardFront();
         SHAPE_POLY_SET& footprintBack = footprint->GetPolyCourtyardBack();
 
@@ -145,7 +145,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 
         for( auto it2 = it1 + 1; it2 != m_board->Footprints().end(); it2++ )
         {
-            MODULE*         test = *it2;
+            FOOTPRINT*      test = *it2;
             SHAPE_POLY_SET& testFront = test->GetPolyCourtyardFront();
             SHAPE_POLY_SET& testBack = test->GetPolyCourtyardBack();
             SHAPE_POLY_SET  intersection;

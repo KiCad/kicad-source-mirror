@@ -901,7 +901,7 @@ void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline )
 }
 
 
-bool isCopperOutside( const MODULE* aMod, SHAPE_POLY_SET& aShape )
+bool isCopperOutside( const FOOTPRINT* aMod, SHAPE_POLY_SET& aShape )
 {
     bool padOutside = false;
 
@@ -1038,7 +1038,7 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
     bool success = ConvertOutlineToPolygon( segList, outlines, aTolerance, aErrorText,
                                             aDiscontinuities, aIntersections );
 
-    MODULE* footprint = aBoard->GetFirstFootprint();
+    FOOTPRINT* footprint = aBoard->GetFirstFootprint();
 
     // No footprint loaded
     if( !footprint )

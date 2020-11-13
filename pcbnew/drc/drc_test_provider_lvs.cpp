@@ -80,15 +80,15 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
 {
     BOARD* board = m_drcEngine->GetBoard();
 
-    auto compare = []( const MODULE* x, const MODULE* y )
+    auto compare = []( const FOOTPRINT* x, const FOOTPRINT* y )
                    {
                        return x->GetReference().CmpNoCase( y->GetReference() ) < 0;
                    };
 
-    auto footprints = std::set<MODULE*, decltype( compare )>( compare );
+    auto footprints = std::set<FOOTPRINT*, decltype( compare )>( compare );
 
     // Search for duplicate footprints on the board
-    for( MODULE* footprint : board->Footprints() )
+    for( FOOTPRINT* footprint : board->Footprints() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_DUPLICATE_FOOTPRINT ) )
             break;
@@ -108,7 +108,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
     for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
         COMPONENT* component = aNetlist.GetComponent( ii );
-        MODULE*    footprint = board->FindModuleByReference( component->GetReference() );
+        FOOTPRINT* footprint = board->FindFootprintByReference( component->GetReference());
 
         if( footprint == nullptr )
         {
@@ -188,7 +188,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
     }
 
     // Search for component footprints found on board but not in netlist.
-    for( MODULE* footprint : board->Footprints() )
+    for( FOOTPRINT* footprint : board->Footprints() )
     {
         if( m_drcEngine->IsErrorLimitExceeded( DRCE_EXTRA_FOOTPRINT ) )
             break;

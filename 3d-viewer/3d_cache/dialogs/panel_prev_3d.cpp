@@ -41,7 +41,7 @@
 #include <widgets/infobar.h>
 
 
-PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aFootprint,
+PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRINT* aFootprint,
                               std::vector<FP_3DMODEL>* aParentModelList ) :
         PANEL_PREV_3D_BASE( aParent, wxID_ANY ),
         m_previewPane( nullptr ),
@@ -86,7 +86,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
     m_parentModelList = aParentModelList;
 
-    m_dummyFootprint = new MODULE( *aFootprint );
+    m_dummyFootprint = new FOOTPRINT( *aFootprint );
     m_dummyBoard->Add( m_dummyFootprint );
 
     // Create the infobar

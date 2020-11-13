@@ -440,7 +440,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_FOOTPRINT_T:
-        draw( static_cast<const MODULE*>( item ), aLayer );
+        draw( static_cast<const FOOTPRINT*>( item ), aLayer );
         break;
 
     case PCB_GROUP_T:
@@ -1195,7 +1195,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
 
         m_gal->Save();
 
-        if( MODULE* parentFootprint = aShape->GetParentFootprint() )
+        if( FOOTPRINT* parentFootprint = aShape->GetParentFootprint() )
         {
             m_gal->Translate( parentFootprint->GetPosition() );
             m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
@@ -1299,7 +1299,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
 }
 
 
-void PCB_PAINTER::draw( const MODULE* aFootprint, int aLayer )
+void PCB_PAINTER::draw( const FOOTPRINT* aFootprint, int aLayer )
 {
     if( aLayer == LAYER_ANCHOR )
     {

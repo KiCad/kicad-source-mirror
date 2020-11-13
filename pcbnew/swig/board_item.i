@@ -52,7 +52,7 @@ class ALIGNED_DIMENSION;
 class ORTHOGONAL_DIMENSION;
 class LEADER;
 class CENTER_DIMENSION;
-class MODULE;
+class FOOTPRINT;
 class PCB_GROUP;
 class FP_TEXT;
 class PCB_SHAPE;
@@ -77,7 +77,7 @@ static ALIGNED_DIMENSION*    Cast_to_ALIGNED_DIMENSION( BOARD_ITEM* );
 static ORTHOGONAL_DIMENSION* Cast_to_ORTHOGONAL_DIMENSION( BOARD_ITEM* );
 static LEADER*               Cast_to_LEADER( BOARD_ITEM* );
 static CENTER_DIMENSION*     Cast_to_CENTER_DIMENSION( BOARD_ITEM* );
-static MODULE*               Cast_to_MODULE( BOARD_ITEM* );
+static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
@@ -102,7 +102,7 @@ static ALIGNED_DIMENSION*    Cast_to_ALIGNED_DIMENSION( BOARD_ITEM* );
 static ORTHOGONAL_DIMENSION* Cast_to_ORTHOGONAL_DIMENSION( BOARD_ITEM* );
 static LEADER*               Cast_to_LEADER( BOARD_ITEM* );
 static CENTER_DIMENSION*     Cast_to_CENTER_DIMENSION( BOARD_ITEM* );
-static MODULE*               Cast_to_MODULE( BOARD_ITEM* );
+static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
@@ -185,22 +185,22 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
 // classes and therefore will C++ compile due to the respective headers which will go into
 // the %header section.  See section 5.6.2 of SWIG 3.0 documentation.
 %wrapper %{
-static PCB_TEXT*             Cast_to_PCB_TEXT( BOARD_ITEM* self )             { return dynamic_cast<PCB_TEXT *>(self);            }
+static PCB_TEXT*             Cast_to_PCB_TEXT( BOARD_ITEM* self )             { return dynamic_cast<PCB_TEXT*>(self);             }
 static ALIGNED_DIMENSION*    Cast_to_ALIGNED_DIMENSION( BOARD_ITEM* self )    { return dynamic_cast<ALIGNED_DIMENSION*>(self);    }
 static ORTHOGONAL_DIMENSION* Cast_to_ORTHOGONAL_DIMENSION( BOARD_ITEM* self ) { return dynamic_cast<ORTHOGONAL_DIMENSION*>(self); }
 static LEADER*               Cast_to_LEADER( BOARD_ITEM* self )               { return dynamic_cast<LEADER*>(self);               }
 static CENTER_DIMENSION*     Cast_to_CENTER_DIMENSION( BOARD_ITEM* self )     { return dynamic_cast<CENTER_DIMENSION*>(self);     }
-static MODULE*               Cast_to_MODULE( BOARD_ITEM* self )               { return dynamic_cast<MODULE*>(self);               }
+static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* self )            { return dynamic_cast<FOOTPRINT*>(self);            }
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* self )            { return dynamic_cast<PCB_GROUP*>(self);            }
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* self )              { return dynamic_cast<FP_TEXT*>(self);              }
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* self )            { return dynamic_cast<PCB_SHAPE*>(self);            }
 static MARKER_PCB*           Cast_to_MARKER_PCB( BOARD_ITEM* self )           { return dynamic_cast<MARKER_PCB*>(self);           }
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* self )                { return dynamic_cast<BOARD*>(self);                }
-static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* self )             { return dynamic_cast<FP_SHAPE *>(self);            }
-static PAD*                  Cast_to_PAD( BOARD_ITEM* self )                  { return dynamic_cast<PAD*>( self);                 }
+static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* self )             { return dynamic_cast<FP_SHAPE*>(self);             }
+static PAD*                  Cast_to_PAD( BOARD_ITEM* self )                  { return dynamic_cast<PAD*>(self);                  }
 static TRACK*                Cast_to_TRACK( BOARD_ITEM* self )                { return dynamic_cast<TRACK*>(self);                }
 static VIA*                  Cast_to_VIA( BOARD_ITEM* self )                  { return dynamic_cast<VIA*>(self);                  }
-static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>( self);                }
-static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* self )              { return dynamic_cast<FP_ZONE*>( self);             }
+static ZONE*                 Cast_to_ZONE( BOARD_ITEM* self )                 { return dynamic_cast<ZONE*>(self);                 }
+static FP_ZONE*              Cast_to_FP_ZONE( BOARD_ITEM* self )              { return dynamic_cast<FP_ZONE*>(self);              }
 static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* self )           { return dynamic_cast<PCB_TARGET*>(self);           }
 %}

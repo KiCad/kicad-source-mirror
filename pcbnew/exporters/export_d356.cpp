@@ -94,7 +94,7 @@ static void build_pad_testpoints( BOARD *aPcb, std::vector <D356_RECORD>& aRecor
 {
     wxPoint origin = aPcb->GetDesignSettings().m_AuxOrigin;
 
-    for( MODULE* footprint : aPcb->Footprints() )
+    for( FOOTPRINT* footprint : aPcb->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

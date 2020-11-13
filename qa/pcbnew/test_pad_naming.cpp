@@ -29,13 +29,15 @@
 
 struct PAD_FIXTURE
 {
-    PAD_FIXTURE() : m_board(), m_module( &m_board )
+    PAD_FIXTURE() :
+            m_board(),
+            m_footprint( &m_board )
     {
     }
 
     PAD MakeNPTH()
     {
-        PAD pad( &m_module );
+        PAD pad( &m_footprint );
 
         pad.SetAttribute( PAD_ATTRIB_NPTH );
         pad.SetLayerSet( PAD::UnplatedHoleMask() );
@@ -45,7 +47,7 @@ struct PAD_FIXTURE
 
     PAD MakeAperture()
     {
-        PAD pad( &m_module );
+        PAD pad( &m_footprint );
 
         pad.SetAttribute( PAD_ATTRIB_PTH );
         pad.SetLayerSet( PAD::ApertureMask() );
@@ -55,7 +57,7 @@ struct PAD_FIXTURE
 
     PAD MakeSmd()
     {
-        PAD pad( &m_module );
+        PAD pad( &m_footprint );
 
         pad.SetAttribute( PAD_ATTRIB_SMD );
         pad.SetLayerSet( PAD::SMDMask() );
@@ -63,8 +65,8 @@ struct PAD_FIXTURE
         return pad;
     }
 
-    BOARD  m_board;
-    MODULE m_module;
+    BOARD     m_board;
+    FOOTPRINT m_footprint;
 };
 
 

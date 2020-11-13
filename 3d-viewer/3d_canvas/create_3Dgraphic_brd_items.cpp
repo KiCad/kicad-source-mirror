@@ -185,7 +185,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDim
 // Based on
 // void FOOTPRINT::TransformFPShapesWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp#L204
-void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const MODULE* aFootprint,
+void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const FOOTPRINT* aFootprint,
                                                          CGENERICCONTAINER2D *aDstContainer,
                                                          PCB_LAYER_ID aLayerId,
                                                          int aInflateValue )
@@ -473,7 +473,7 @@ COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const PAD* aPad, int aInflateValue 
 }
 
 
-void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const MODULE* aFootprint,
+void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const FOOTPRINT* aFootprint,
                                                      CGENERICCONTAINER2D *aDstContainer,
                                                      PCB_LAYER_ID aLayerId,
                                                      int aInflateValue,

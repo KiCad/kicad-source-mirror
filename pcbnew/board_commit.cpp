@@ -130,7 +130,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 }
 
                 savedModules.insert( ent.m_item );
-                static_cast<MODULE*>( ent.m_item )->SetLastEditTime();
+                static_cast<FOOTPRINT*>( ent.m_item )->SetLastEditTime();
             }
         }
 
@@ -204,7 +204,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     if( !( changeFlags & CHT_DONE ) )
                     {
-                        MODULE* footprint = static_cast<MODULE*>( boardItem->GetParent() );
+                        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem->GetParent() );
                         wxASSERT( footprint && footprint->Type() == PCB_FOOTPRINT_T );
                         footprint->Delete( boardItem );
                     }
@@ -236,7 +236,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     // No support for nested footprints (yet)
                     wxASSERT( !m_isFootprintEditor );
 
-                    MODULE* footprint = static_cast<MODULE*>( boardItem );
+                    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( boardItem );
                     view->Remove( footprint );
                     footprint->ClearFlags();
 
@@ -286,10 +286,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 if( m_isFootprintEditor )
                 {
-                    static_cast<MODULE*>( boardItem )->RunOnChildren( [&]( BOARD_ITEM* aChild )
-                                                                      {
-                                                                          view->Update( aChild );
-                                                                      });
+                    static_cast<FOOTPRINT*>( boardItem )->RunOnChildren(
+                            [&]( BOARD_ITEM* aChild )
+                            {
+                                view->Update( aChild );
+                            });
                 }
 
                 board->OnItemChanged( boardItem );
@@ -373,7 +374,7 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
             return aItem->GetParent();
 
         case PCB_ZONE_T:
-            wxASSERT( !dynamic_cast<MODULE*>( aItem->GetParent() ) );
+            wxASSERT( !dynamic_cast<FOOTPRINT*>( aItem->GetParent() ) );
             return aItem;
 
         default:

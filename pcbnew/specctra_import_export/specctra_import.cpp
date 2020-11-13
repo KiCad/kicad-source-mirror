@@ -349,10 +349,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             {
                 PLACE* place = &places[i];  // '&' even though places[] holds a pointer!
 
-                wxString reference = FROM_UTF8( place->component_id.c_str() );
-                MODULE* module = aBoard->FindModuleByReference( reference );
+                wxString   reference = FROM_UTF8( place->component_id.c_str() );
+                FOOTPRINT* footprint = aBoard->FindFootprintByReference( reference );
 
-                if( !module )
+                if( !footprint )
                 {
                     THROW_IO_ERROR( wxString::Format( _( "Reference '%s' not found." ),
                                                       reference ) );
@@ -365,32 +365,32 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 wxASSERT( resolution );
 
                 wxPoint newPos = mapPt( place->vertex, resolution );
-                module->SetPosition( newPos );
+                footprint->SetPosition( newPos );
 
                 if( place->side == T_front )
                 {
                     // convert from degrees to tenths of degrees used in KiCad.
                     int orientation = KiROUND( place->rotation * 10.0 );
 
-                    if( module->GetLayer() != F_Cu )
+                    if( footprint->GetLayer() != F_Cu )
                     {
                         // module is on copper layer (back)
-                        module->Flip( module->GetPosition(), false );
+                        footprint->Flip( footprint->GetPosition(), false );
                     }
 
-                    module->SetOrientation( orientation );
+                    footprint->SetOrientation( orientation );
                 }
                 else if( place->side == T_back )
                 {
                     int orientation = KiROUND( (place->rotation + 180.0) * 10.0 );
 
-                    if( module->GetLayer() != B_Cu )
+                    if( footprint->GetLayer() != B_Cu )
                     {
                         // module is on component layer (front)
-                        module->Flip( module->GetPosition(), false );
+                        footprint->Flip( footprint->GetPosition(), false );
                     }
 
-                    module->SetOrientation( orientation );
+                    footprint->SetOrientation( orientation );
                 }
                 else
                 {

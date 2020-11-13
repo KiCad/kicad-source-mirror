@@ -42,13 +42,13 @@
 #include <kicad_string.h>
 #include <common.h> // needed for wxString hash template
 
-class MODULE;
+class FOOTPRINT;
 struct EINSTANCE;
 struct EPART;
 struct ETEXT;
 
 typedef std::unordered_map<wxString, wxXmlNode*> NODE_MAP;
-typedef std::map<wxString, MODULE*> MODULE_MAP;
+typedef std::map<wxString, FOOTPRINT*> FOOTPRINT_MAP;
 typedef std::map<wxString, EINSTANCE*> EINSTANCE_MAP;
 typedef std::map<wxString, std::unique_ptr<EPART>> EPART_MAP;
 

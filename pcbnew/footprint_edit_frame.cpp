@@ -374,7 +374,7 @@ LIB_ID FOOTPRINT_EDIT_FRAME::GetTargetFPID() const
 
 LIB_ID FOOTPRINT_EDIT_FRAME::GetLoadedFPID() const
 {
-    MODULE* footprint = GetBoard()->GetFirstFootprint();
+    FOOTPRINT* footprint = GetBoard()->GetFirstFootprint();
 
     if( footprint )
         return LIB_ID( footprint->GetFPID().GetLibNickname(), m_footprintNameWhenLoaded );
@@ -394,7 +394,7 @@ void FOOTPRINT_EDIT_FRAME::ClearModify()
 
 bool FOOTPRINT_EDIT_FRAME::IsCurrentFPFromBoard() const
 {
-    MODULE* footprint = GetBoard()->GetFirstFootprint();
+    FOOTPRINT* footprint = GetBoard()->GetFirstFootprint();
 
     return ( footprint && footprint->GetLink() != niluuid );
 }
@@ -423,7 +423,7 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
         id.SetLibNickname( libNickname );
         id.SetLibItemName( footprintName );
 
-        MODULE* footprint = loadFootprint( id );
+        FOOTPRINT* footprint = loadFootprint( id );
 
         if( footprint )
             AddFootprintToBoard( footprint );
@@ -431,9 +431,9 @@ void FOOTPRINT_EDIT_FRAME::restoreLastFootprint()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( MODULE* aFootprint )
+void FOOTPRINT_EDIT_FRAME::AddFootprintToBoard( FOOTPRINT* aFootprint )
 {
-    m_revertModule.reset( (MODULE*) aFootprint->Clone() );
+    m_revertModule.reset( (FOOTPRINT*) aFootprint->Clone() );
 
     m_footprintNameWhenLoaded = aFootprint->GetFPID().GetLibItemName();
 
@@ -542,7 +542,7 @@ MAGNETIC_SETTINGS* FOOTPRINT_EDIT_FRAME::GetMagneticItemsSettings()
 
 const BOX2I FOOTPRINT_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
-    MODULE* footprint = GetBoard()->GetFirstFootprint();
+    FOOTPRINT* footprint = GetBoard()->GetFirstFootprint();
 
     if( footprint )
     {
@@ -653,8 +653,8 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent
 {
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    MODULE* editorFootprint = GetBoard()->GetFirstFootprint();
-    bool canInsert = frame && editorFootprint && editorFootprint->GetLink() == niluuid;
+    FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
+    bool       canInsert = frame && editorFootprint && editorFootprint->GetLink() == niluuid;
 
     // If the source was deleted, the footprint can inserted but not updated in the board.
     if( frame && editorFootprint && editorFootprint->GetLink() != niluuid )
@@ -663,7 +663,7 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateSaveFootprintToBoard( wxUpdateUIEvent& aEvent
         canInsert = true;
 
         // search if the source footprint was not deleted:
-        for( MODULE* candidate : mainpcb->Footprints() )
+        for( FOOTPRINT* candidate : mainpcb->Footprints() )
         {
             if( editorFootprint->GetLink() == candidate->m_Uuid )
             {
@@ -714,10 +714,10 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title;
-    LIB_ID   fpid = GetLoadedFPID();
-    MODULE*  footprint = GetBoard()->GetFirstFootprint();
-    bool     writable = true;
+    wxString   title;
+    LIB_ID     fpid = GetLoadedFPID();
+    FOOTPRINT* footprint = GetBoard()->GetFirstFootprint();
+    bool       writable = true;
 
     if( IsCurrentFPFromBoard() )
     {

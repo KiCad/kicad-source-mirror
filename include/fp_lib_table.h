@@ -29,7 +29,7 @@
 #include <lib_table_base.h>
 #include <io_mgr.h>
 
-class MODULE;
+class FOOTPRINT;
 class FP_LIB_TABLE_GRID;
 
 
@@ -182,12 +182,12 @@ public:
      *
      * @param aFootprintName is the name of the footprint to load.
      *
-     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     * @return  FOOTPRINT* - if found caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
      *          is thrown in the case where aFootprintName cannot be found.
      */
-    MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
+    FOOTPRINT* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
 
     /**
      * Function FootprintExists
@@ -203,8 +203,8 @@ public:
      * cache management.  Return value is const to allow it to return a reference to a cached
      * item.
      */
-    const MODULE* GetEnumeratedFootprint( const wxString& aNickname,
-                                          const wxString& aFootprintName );
+    const FOOTPRINT* GetEnumeratedFootprint( const wxString& aNickname,
+                                             const wxString& aFootprintName );
     /**
      * Enum SAVE_T
      * is the set of return values from FootprintSave() below.
@@ -233,7 +233,7 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving.
      */
-    SAVE_T FootprintSave( const wxString& aNickname, const MODULE* aFootprint,
+    SAVE_T FootprintSave( const wxString& aNickname, const FOOTPRINT* aFootprint,
                           bool aOverwrite = true );
 
     /**
@@ -271,13 +271,13 @@ public:
      *
      * @param aFootprintId the [nickname] & footprint name of the footprint to load.
      *
-     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     * @return  FOOTPRINT* - if found caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
      *          is thrown in the case where aFootprintName cannot be found.
      * @throw   PARSE_ERROR if @a aFootprintId is not parsed OK.
      */
-    MODULE* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId );
+    FOOTPRINT* FootprintLoadWithOptionalNickname( const LIB_ID& aFootprintId );
 
     /**
      * Function LoadGlobalTable

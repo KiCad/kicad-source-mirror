@@ -1386,7 +1386,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
     }
 
     // Insert pads holes (vertical cylinders)
-    for( MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
+    for( FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
             if( pad->GetAttribute () != PAD_ATTRIB_NPTH )
@@ -1400,7 +1400,7 @@ void C3D_RENDER_RAYTRACING::add_3D_vias_and_pads_to_container()
 void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation )
 {
     // Go for all footprints
-    for( MODULE* fp : m_boardAdapter.GetBoard()->Footprints() )
+    for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
         if( !fp->Models().empty()
                 && m_boardAdapter.ShouldFPBeDisplayed((FOOTPRINT_ATTR_T) fp->GetAttributes()) )

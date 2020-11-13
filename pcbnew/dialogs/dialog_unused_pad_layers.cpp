@@ -103,7 +103,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
 
             if( item->Type() == PCB_FOOTPRINT_T && m_rbScope->GetSelection() == SCOPE_PADS )
             {
-                MODULE* footprint = static_cast<MODULE*>( item );
+                FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
                 for( PAD* pad : footprint->Pads() )
                 {
@@ -125,7 +125,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
     {
         if( m_rbScope->GetSelection() == SCOPE_PADS )
         {
-            for( MODULE* footprint : m_frame->GetBoard()->Footprints() )
+            for( FOOTPRINT* footprint : m_frame->GetBoard()->Footprints() )
             {
                 m_commit.Modify( footprint );
 

@@ -83,7 +83,7 @@ enum class ALTIUM_PCB_DIR
 
 class BOARD;
 class PCB_SHAPE;
-class MODULE;
+class FOOTPRINT;
 class ZONE;
 
 
@@ -183,7 +183,7 @@ private:
     void HelperDrawsegmentSetLocalCoord( PCB_SHAPE* aShape, uint16_t aComponent );
 
     BOARD*                               m_board;
-    std::vector<MODULE*>                 m_components;
+    std::vector<FOOTPRINT*>              m_components;
     std::vector<ZONE*>                   m_polygons;
     std::map<wxString, wxString>         m_models;
     size_t                               m_num_nets;

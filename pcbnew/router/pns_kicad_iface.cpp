@@ -19,7 +19,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <undo_redo_container.h>
 #include <board.h>
 #include <board_connected_item.h>
 #include <fp_text.h>
@@ -1186,9 +1185,9 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         syncZone( aWorld, zone, boardOutline );
     }
 
-    for( MODULE* module : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( std::unique_ptr<PNS::SOLID> solid = syncPad( pad ) )
                 aWorld->Add( std::move( solid ) );
@@ -1196,16 +1195,16 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             worstPadClearance = std::max( worstPadClearance, pad->GetLocalClearance() );
         }
 
-        syncTextItem( aWorld, &module->Reference(), module->Reference().GetLayer() );
-        syncTextItem( aWorld, &module->Value(), module->Value().GetLayer() );
+        syncTextItem( aWorld, &footprint->Reference(), footprint->Reference().GetLayer() );
+        syncTextItem( aWorld, &footprint->Value(), footprint->Value().GetLayer() );
 
-        for( FP_ZONE* zone : module->Zones() )
+        for( FP_ZONE* zone : footprint->Zones() )
             syncZone( aWorld, zone, boardOutline );
 
-        if( module->IsNetTie() )
+        if( footprint->IsNetTie() )
             continue;
 
-        for( BOARD_ITEM* mgitem : module->GraphicalItems() )
+        for( BOARD_ITEM* mgitem : footprint->GraphicalItems() )
         {
             if( mgitem->Type() == PCB_FP_SHAPE_T )
             {
@@ -1355,7 +1354,7 @@ void PNS_KICAD_IFACE::RemoveItem( PNS::ITEM* aItem )
         PAD*   pad = static_cast<PAD*>( parent );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
-        m_moduleOffsets[ pad ].p_old = pos;
+        m_fpOffsets[ pad ].p_old = pos;
         return;
     }
 
@@ -1423,7 +1422,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         PAD*   pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
-        m_moduleOffsets[ pad ].p_new = pos;
+        m_fpOffsets[ pad ].p_new = pos;
         return;
     }
 
@@ -1444,14 +1443,14 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
 void PNS_KICAD_IFACE::Commit()
 {
-    std::set<MODULE*> processedMods;
+    std::set<FOOTPRINT*> processedMods;
 
     EraseView();
 
-    for( auto mo : m_moduleOffsets )
+    for( auto fpOffset : m_fpOffsets )
     {
-        auto offset = mo.second.p_new - mo.second.p_old;
-        auto mod = mo.first->GetParent();
+        auto offset = fpOffset.second.p_new - fpOffset.second.p_old;
+        auto mod = fpOffset.first->GetParent();
 
         VECTOR2I p_orig = mod->GetPosition();
         VECTOR2I p_new = p_orig + offset;
@@ -1464,7 +1463,7 @@ void PNS_KICAD_IFACE::Commit()
         mod->SetPosition( wxPoint( p_new.x, p_new.y ));
     }
 
-    m_moduleOffsets.clear();
+    m_fpOffsets.clear();
 
     m_commit->Push( _( "Interactive Router" ) );
     m_commit = std::make_unique<BOARD_COMMIT>( m_tool );

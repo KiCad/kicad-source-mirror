@@ -31,7 +31,7 @@
 #include <dialog_netlist_base.h>
 
 
-class MODULE;
+class FOOTPRINT;
 class NETLIST;
 
 

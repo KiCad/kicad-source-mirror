@@ -219,15 +219,15 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     itemplotter.PlotBoardGraphicItems();
 
     // Draw footprint texts:
-    for( MODULE* footprint : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
         itemplotter.PlotFootprintTextItems( footprint );
 
     // Draw footprint other graphic items:
-    for( MODULE* footprint : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
         itemplotter.PlotFootprintGraphicItems( footprint );
 
     // Plot footprint pads
-    for( MODULE* footprint : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         aPlotter->StartBlock( NULL );
 
@@ -632,7 +632,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             int smallDrill = (aPlotOpt.GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE)
                                   ? SMALL_DRILL : INT_MAX;
 
-            for( MODULE* footprint : aBoard->Footprints() )
+            for( FOOTPRINT* footprint : aBoard->Footprints() )
             {
                 for( PAD* pad : footprint->Pads() )
                 {
@@ -727,7 +727,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 
     itemplotter.PlotBoardGraphicItems();
 
-    for( MODULE* footprint : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
@@ -757,7 +757,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
 #endif
     {
         // Plot pads
-        for( MODULE* footprint : aBoard->Footprints() )
+        for( FOOTPRINT* footprint : aBoard->Footprints() )
         {
             // add shapes with their exact mask layer size in initialPolys
             footprint->TransformPadsWithClearanceToPolygon( initialPolys, layer, 0, maxError,

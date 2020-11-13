@@ -30,7 +30,7 @@
 #include <wx/gdicmn.h>
 
 class BOARD;
-class MODULE;
+class FOOTPRINT;
 class PAD;
 
 /**
@@ -101,7 +101,7 @@ private:
      * @param aPadList is the list to fill
      * @param aFootprint is the footprint to test
      */
-    void findPads1( std::vector<PAD*>& aPadList, MODULE* aFootprint ) const;
+    void findPads1( std::vector<PAD*>& aPadList, FOOTPRINT* aFootprint ) const;
 };
 
 #endif  //  #ifndef PLACEFILE_GERBER_WRITER_H

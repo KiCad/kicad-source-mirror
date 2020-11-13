@@ -327,7 +327,7 @@ void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( const LIB_ID& aFPID )
 }
 
 
-void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<MODULE> aFootprint )
+void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint )
 {
     if( m_currentFootprint )
     {

@@ -89,7 +89,7 @@ void PCB_TEXT::Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurem
 }
 
 
-void PCB_TEXT::AddToFootprint( MODULE* aFootprint )
+void PCB_TEXT::AddToFootprint( FOOTPRINT* aFootprint )
 {
 }
 

@@ -608,7 +608,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         wxString   fpName = component.ReferenceName + ( ( component.Alternate.size() > 0 ) ?
                                               ( wxT( " (" ) + component.Alternate + wxT( ")" ) ) :
                                               wxT( "" ) );
-        MODULE* footprint = new MODULE( mBoard );
+        FOOTPRINT* footprint = new FOOTPRINT( mBoard );
         footprint->SetPosition( getKiCadPoint( component.Origin ) );
 
         LIB_ID libID;
@@ -626,7 +626,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponent,
-                                                     MODULE* aFootprint )
+                                                     FOOTPRINT* aFootprint )
 {
     for( std::pair<FIGURE_ID, FIGURE> figPair : aComponent.Figures )
     {
@@ -643,7 +643,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponen
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aFootprint )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint )
 {
     for( COMPONENT_COPPER compCopper : aComponent.ComponentCoppers )
     {
@@ -659,7 +659,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
-                                                   MODULE* aFootprint )
+                                                   FOOTPRINT* aFootprint )
 {
     for( std::pair<COMP_AREA_ID, COMPONENT_AREA> areaPair : aComponent.ComponentAreas )
     {
@@ -705,7 +705,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent,
-                                                  MODULE* aFootprint )
+                                                  FOOTPRINT* aFootprint )
 {
     for( std::pair<PAD_ID, COMPONENT_PAD> padPair : aComponent.ComponentPads )
     {
@@ -716,7 +716,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent,
 }
 
 
-PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, MODULE* aParent )
+PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, FOOTPRINT* aParent )
 {
     PADCODE csPadcode = getPadCode( aCadstarPad.PadCodeID );
 
@@ -1203,7 +1203,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
         }
 
         // copy constructor to clone the footprint from the library
-        MODULE* footprint                      = new MODULE( *fpIter->second );
+        FOOTPRINT* footprint = new FOOTPRINT( *fpIter->second );
         const_cast<KIID&>( footprint->m_Uuid ) = KIID();
 
         mBoard->Add( footprint, ADD_MODE::APPEND );
@@ -1582,27 +1582,28 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         for( std::pair<NETELEMENT_ID, NET_PCB::PIN> pinPair : net.Pins )
         {
             NET_PCB::PIN pin = pinPair.second;
-            MODULE*      m   = getModuleFromCadstarID( pin.ComponentID );
+            FOOTPRINT*   footprint = getFootprintFromCadstarID( pin.ComponentID );
 
-            if( m == nullptr )
+            if( footprint == nullptr )
             {
                 wxLogWarning( wxString::Format(
                         _( "The net '%s' references component ID '%s' which does not exist. "
                            "This has been ignored." ),
                         netnameForErrorReporting, pin.ComponentID ) );
             }
-            else if( ( pin.PadID - (long) 1 ) > m->Pads().size() )
+            else if( ( pin.PadID - (long) 1 ) > footprint->Pads().size() )
             {
-                wxLogWarning( wxString::Format(
-                        _( "The net '%s' references non-existent pad index '%d' in component '%s'. "
-                           "This has been ignored." ),
-                        netnameForErrorReporting, pin.PadID, m->GetReference() ) );
+                wxLogWarning( wxString::Format( _( "The net '%s' references non-existent pad index"
+                                                   " '%d' in component '%s'. This has been ignored." ),
+                                                netnameForErrorReporting,
+                                                pin.PadID,
+                                                footprint->GetReference() ) );
             }
             else
             {
                 // The below works because we have added the pads in the correct order to the
                 // footprint and the PAD_ID in Cadstar is a sequential, numerical ID
-                m->Pads().at( pin.PadID - (long) 1 )->SetNet( getKiCadNet( net.ID ) );
+                footprint->Pads().at( pin.PadID - (long) 1 )->SetNet( getKiCadNet( net.ID ) );
             }
         }
     }
@@ -1610,7 +1611,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentAttributes( const COMPONENT& aComponent,
-                                                          MODULE* aFootprint )
+                                                          FOOTPRINT* aFootprint )
 {
     for( std::pair<ATTRIBUTE_ID, ATTRIBUTE_VALUE> attrPair : aComponent.AttributeValues )
     {
@@ -1867,10 +1868,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
-        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness, const wxString& aShapeName,
-        BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID,
-        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
-        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+                                                   const PCB_LAYER_ID& aKiCadLayer,
+                                                   const int& aLineThickness,
+                                                   const wxString& aShapeName,
+                                                   BOARD_ITEM_CONTAINER* aContainer,
+                                                   const GROUP_ID& aCadstarGroupID,
+                                                   const wxPoint& aMoveVector,
+                                                   const double& aRotationAngle,
+                                                   const double& aScalingFactor,
+                                                   const wxPoint& aTransformCentre,
+                                                   const bool& aMirrorInvert )
 {
     switch( aCadstarShape.Type )
     {
@@ -1896,8 +1903,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
     {
         PCB_SHAPE* shape;
 
-        if( isModule( aContainer ) )
-            shape = new FP_SHAPE( (MODULE*) aContainer, S_POLYGON );
+        if( isFootprint( aContainer ) )
+        {
+            shape = new FP_SHAPE( (FOOTPRINT*) aContainer, S_POLYGON );
+        }
         else
         {
             shape = new PCB_SHAPE( aContainer );
@@ -1919,16 +1928,21 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsSegments( const std::vector<CUTOUT>& aCutouts,
-        const PCB_LAYER_ID& aKiCadLayer, const int& aLineThickness,
-        BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID,
-        const wxPoint& aMoveVector, const double& aRotationAngle, const double& aScalingFactor,
-        const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+                                                               const PCB_LAYER_ID& aKiCadLayer,
+                                                               const int& aLineThickness,
+                                                               BOARD_ITEM_CONTAINER* aContainer,
+                                                               const GROUP_ID& aCadstarGroupID,
+                                                               const wxPoint& aMoveVector,
+                                                               const double& aRotationAngle,
+                                                               const double& aScalingFactor,
+                                                               const wxPoint& aTransformCentre,
+                                                               const bool& aMirrorInvert )
 {
     for( CUTOUT cutout : aCutouts )
     {
         drawCadstarVerticesAsSegments( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer,
-                aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor, aTransformCentre,
-                aMirrorInvert );
+                                       aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
+                                       aTransformCentre, aMirrorInvert );
     }
 }
 
@@ -2009,9 +2023,9 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
 
     case VERTEX_TYPE::POINT:
 
-        if( isModule( aContainer ) )
+        if( isFootprint( aContainer ) )
         {
-            ds = new FP_SHAPE( static_cast<MODULE*>( aContainer ), S_SEGMENT );
+            ds = new FP_SHAPE( static_cast<FOOTPRINT*>( aContainer ), S_SEGMENT );
         }
         else
         {
@@ -2031,9 +2045,9 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
     case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
     case VERTEX_TYPE::ANTICLOCKWISE_ARC:
 
-        if( isModule( aContainer ) )
+        if( isFootprint( aContainer ) )
         {
-            ds = new FP_SHAPE((MODULE*) aContainer, S_ARC );
+            ds = new FP_SHAPE((FOOTPRINT*) aContainer, S_ARC );
         }
         else
         {
@@ -2075,7 +2089,7 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getDrawSegmentFromVertex( const POINT& aC
     if( aMoveVector != wxPoint{ 0, 0 } )
         ds->Move( aMoveVector );
 
-    if( isModule( aContainer ) && ds != nullptr )
+    if( isFootprint( aContainer ) && ds != nullptr )
         static_cast<FP_SHAPE*>( ds )->SetLocalCoord();
 
     if( !aCadstarGroupID.IsEmpty() )
@@ -2089,7 +2103,7 @@ ZONE* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape( const SHAPE& aCadstar
                                                            const int& aLineThickness,
                                                            BOARD_ITEM_CONTAINER* aParentContainer )
 {
-    ZONE* zone = new ZONE( aParentContainer, isModule( aParentContainer ) );
+    ZONE* zone = new ZONE( aParentContainer, isFootprint( aParentContainer ) );
 
     if( aCadstarShape.Type == SHAPE_TYPE::HATCHED )
     {
@@ -2113,15 +2127,23 @@ ZONE* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape( const SHAPE& aCadstar
 
 
 SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
-        const int& aLineThickness, BOARD_ITEM_CONTAINER* aContainer, const wxPoint& aMoveVector,
-        const double& aRotationAngle, const double& aScalingFactor, const wxPoint& aTransformCentre,
-        const bool& aMirrorInvert )
+                                                                       const int& aLineThickness,
+                                                                       BOARD_ITEM_CONTAINER* aContainer,
+                                                                       const wxPoint& aMoveVector,
+                                                                       const double& aRotationAngle,
+                                                                       const double& aScalingFactor,
+                                                                       const wxPoint& aTransformCentre,
+                                                                       const bool& aMirrorInvert )
 {
     GROUP_ID noGroup = wxEmptyString;
 
-    std::vector<PCB_SHAPE*> outlineSegments =
-            getDrawSegmentsFromVertices( aCadstarShape.Vertices, aContainer, noGroup, aMoveVector,
-                    aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
+    std::vector<PCB_SHAPE*> outlineSegments = getDrawSegmentsFromVertices( aCadstarShape.Vertices,
+                                                                           aContainer, noGroup,
+                                                                           aMoveVector,
+                                                                           aRotationAngle,
+                                                                           aScalingFactor,
+                                                                           aTransformCentre,
+                                                                           aMirrorInvert );
 
     SHAPE_POLY_SET polySet( getLineChainFromDrawsegments( outlineSegments ) );
 
@@ -2131,9 +2153,13 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 
     for( CUTOUT cutout : aCadstarShape.Cutouts )
     {
-        std::vector<PCB_SHAPE*> cutoutSeg =
-                getDrawSegmentsFromVertices( cutout.Vertices, aContainer, noGroup, aMoveVector,
-                        aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert );
+        std::vector<PCB_SHAPE*> cutoutSeg = getDrawSegmentsFromVertices( cutout.Vertices,
+                                                                         aContainer, noGroup,
+                                                                         aMoveVector,
+                                                                         aRotationAngle,
+                                                                         aScalingFactor,
+                                                                         aTransformCentre,
+                                                                         aMirrorInvert );
 
         polySet.AddHole( getLineChainFromDrawsegments( cutoutSeg ) );
 
@@ -2143,8 +2169,7 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
     }
 
     if( aLineThickness > 0 )
-        polySet.Inflate(
-                aLineThickness / 2, 32, SHAPE_POLY_SET::CORNER_STRATEGY::ROUND_ALL_CORNERS );
+        polySet.Inflate( aLineThickness / 2, 32, SHAPE_POLY_SET::CORNER_STRATEGY::ROUND_ALL_CORNERS );
 
     //Make a new polyset with no holes
     //TODO: Using strictly simple to be safe, but need to find out if PM_FAST works okay
@@ -2166,8 +2191,7 @@ SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHA
 }
 
 
-SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments(
-        const std::vector<PCB_SHAPE*> aDrawsegments )
+SHAPE_LINE_CHAIN CADSTAR_PCB_ARCHIVE_LOADER::getLineChainFromDrawsegments( const std::vector<PCB_SHAPE*> aDrawsegments )
 {
     SHAPE_LINE_CHAIN lineChain;
 
@@ -2288,7 +2312,7 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
 
 void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
                                                const ATTRIBUTE_ID& aCadstarAttributeID,
-                                               MODULE* aFootprint,
+                                               FOOTPRINT* aFootprint,
                                                const wxString& aAttributeValue )
 {
     FP_TEXT* txt;
@@ -2639,8 +2663,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
 }
 
 
-MODULE* CADSTAR_PCB_ARCHIVE_LOADER::getModuleFromCadstarID(
-        const COMPONENT_ID& aCadstarComponentID )
+FOOTPRINT* CADSTAR_PCB_ARCHIVE_LOADER::getFootprintFromCadstarID( const COMPONENT_ID& aCadstarComponentID )
 {
     if( mComponentMap.find( aCadstarComponentID ) == mComponentMap.end() )
         return nullptr;
@@ -2690,7 +2713,7 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
 
                 NET_PCB::PIN firstPin = ( *csNet.Pins.begin() ).second;
                 //we should have already loaded the component with loadComponents() :
-                MODULE* m = getModuleFromCadstarID( firstPin.ComponentID );
+                FOOTPRINT* m = getFootprintFromCadstarID( firstPin.ComponentID );
                 newName   = wxT( "Net-(" );
                 newName << m->Reference().GetText();
                 newName << "-Pad" << wxString::Format( "%ld", firstPin.PadID ) << ")";

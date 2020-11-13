@@ -196,7 +196,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
         via->SetFlags( SKIP_STRUCT );
     }
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {

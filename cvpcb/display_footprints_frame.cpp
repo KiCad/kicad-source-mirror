@@ -171,7 +171,7 @@ DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
-    GetBoard()->DeleteAllModules();
+    GetBoard()->DeleteAllFootprints();
     GetCanvas()->StopDrawing();
     GetCanvas()->GetView()->Clear();
     // Be sure any event cannot be fired after frame deletion:
@@ -371,11 +371,11 @@ COLOR4D DISPLAY_FOOTPRINTS_FRAME::GetGridColor()
 }
 
 
-MODULE* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName,
-                                                REPORTER& aReporter )
+FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName,
+                                                   REPORTER& aReporter )
 {
-    MODULE* footprint = NULL;
-    LIB_ID  fpid;
+    FOOTPRINT* footprint = NULL;
+    LIB_ID     fpid;
 
     if( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) >= 0 )
     {
@@ -434,10 +434,10 @@ MODULE* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintName,
 void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 {
     CVPCB_MAINFRAME*      parentframe = (CVPCB_MAINFRAME *) GetParent();
-    MODULE*               footprint = nullptr;
+    FOOTPRINT*            footprint = nullptr;
     const FOOTPRINT_INFO* fpInfo = nullptr;
 
-    GetBoard()->DeleteAllModules();
+    GetBoard()->DeleteAllFootprints();
     GetCanvas()->GetView()->Clear();
 
     wxString footprintName = parentframe->GetSelectedFootprint();
@@ -500,7 +500,7 @@ void DISPLAY_FOOTPRINTS_FRAME::updateView()
 
 void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 {
-    MODULE*         footprint = GetBoard()->GetFirstFootprint();
+    FOOTPRINT*      footprint = GetBoard()->GetFirstFootprint();
     MSG_PANEL_ITEMS items;
 
     if( footprint )

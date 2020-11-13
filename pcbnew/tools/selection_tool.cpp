@@ -780,14 +780,14 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
         switch( item->Type() )
         {
         case PCB_FOOTPRINT_T:
-            if( static_cast<MODULE*>( item )->IsLocked() )
+            if( static_cast<FOOTPRINT*>( item )->IsLocked() )
                 containsLocked = true;
             break;
 
         case PCB_FP_SHAPE_T:
         case PCB_FP_TEXT_T:
         case PCB_FP_ZONE_T:
-            if( static_cast<MODULE*>( item->GetParent() )->IsLocked() )
+            if( static_cast<FOOTPRINT*>( item->GetParent() )->IsLocked() )
                 containsLocked = true;
             break;
 
@@ -1170,30 +1170,30 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
 void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
-    std::list<MODULE*> modList;
+    std::list<FOOTPRINT*> footprintList;
 
     // store all footprints that are on that sheet path
-    for( MODULE* module : board()->Footprints() )
+    for( FOOTPRINT* footprint : board()->Footprints() )
     {
-        if( module == nullptr )
+        if( footprint == nullptr )
             continue;
 
-        wxString footprint_path = module->GetPath().AsString().BeforeLast('/');
+        wxString footprint_path = footprint->GetPath().AsString().BeforeLast('/');
 
         if( aSheetPath.IsEmpty() )
             aSheetPath += '/';
 
         if( footprint_path == aSheetPath )
-            modList.push_back( module );
+            footprintList.push_back( footprint );
     }
 
     //Generate a list of all pads, and of all nets they belong to.
     std::list<int>  netcodeList;
     std::list<PAD*> padList;
 
-    for( MODULE* mmod : modList )
+    for( FOOTPRINT* footprint : footprintList )
     {
-        for( PAD* pad : mmod->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( pad->IsConnected() )
             {
@@ -1222,7 +1222,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     {
         for( BOARD_CONNECTED_ITEM* mitem : board()->GetConnectivity()->GetNetItems( netCode, padType ) )
         {
-            if( mitem->Type() == PCB_PAD_T && !alg::contains( modList, mitem->GetParent() ) )
+            if( mitem->Type() == PCB_PAD_T && !alg::contains( footprintList, mitem->GetParent() ) )
             {
                 // if we cannot find the module of the pad in the modList
                 // then we can assume that that module is not located in the same
@@ -1251,7 +1251,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
             localConnectionList.push_back( item );
     }
 
-    for( BOARD_ITEM* i : modList )
+    for( BOARD_ITEM* i : footprintList )
     {
         if( i != NULL )
             select( i );
@@ -1320,15 +1320,15 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     if( item->Type() != PCB_FOOTPRINT_T )
         return 0;
 
-    auto mod = dynamic_cast<MODULE*>( item );
+    FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( item );
 
-    if( mod->GetPath().empty() )
+    if( footprint->GetPath().empty() )
         return 0;
 
     ClearSelection( true /*quiet mode*/ );
 
     // get the sheet path only.
-    wxString sheetPath = mod->GetPath().AsString().BeforeLast( '/' );
+    wxString sheetPath = footprint->GetPath().AsString().BeforeLast( '/' );
 
     if( sheetPath.IsEmpty() )
         sheetPath += '/';
@@ -1402,7 +1402,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
         {
         case PCB_FOOTPRINT_T:
         {
-            const MODULE& footprint = static_cast<const MODULE&>( aItem );
+            const FOOTPRINT& footprint = static_cast<const FOOTPRINT&>( aItem );
 
             include = aFilterOptions.includeModules;
 
@@ -1795,10 +1795,10 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
     for( int i = 0; i < count; ++i )
     {
-        MODULE* module = (MODULE*) ( *aCollector )[i];
+        FOOTPRINT* footprint = (FOOTPRINT*) ( *aCollector )[i];
 
-        int lx = module->GetFootprintRect().GetWidth();
-        int ly = module->GetFootprintRect().GetHeight();
+        int lx = footprint->GetFootprintRect().GetWidth();
+        int ly = footprint->GetFootprintRect().GetHeight();
 
         int lmin = std::min( lx, ly );
 
@@ -1883,21 +1883,21 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         // Allow selection of footprints if some part of the footprint is visible.
 
-        MODULE* module = const_cast<MODULE*>( static_cast<const MODULE*>( aItem ) );
+        FOOTPRINT* footprint = const_cast<FOOTPRINT*>( static_cast<const FOOTPRINT*>( aItem ) );
 
-        for( BOARD_ITEM* item : module->GraphicalItems() )
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
         {
             if( Selectable( item, true ) )
                 return true;
         }
 
-        for( PAD* pad : module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( Selectable( pad, true ) )
                 return true;
         }
 
-        for( ZONE* zone : module->Zones() )
+        for( ZONE* zone : footprint->Zones() )
         {
             if( Selectable( zone, true ) )
                 return true;
@@ -2011,9 +2011,9 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 
     if( aItem->Type() == PCB_PAD_T )
     {
-        MODULE* module = static_cast<MODULE*>( aItem->GetParent() );
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
 
-        if( m_selection.Contains( module ) )
+        if( m_selection.Contains( footprint ) )
             return;
     }
 
@@ -2067,7 +2067,7 @@ void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
     // all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren(
+        static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
                 {
                     highlightInternal( aChild, aMode, aSelectionViewGroup, true );
@@ -2125,7 +2125,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
     // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
-        static_cast<MODULE*>( aItem )->RunOnChildren(
+        static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
                 {
                     unhighlightInternal( aChild, aMode, aSelectionViewGroup, true );
@@ -2164,7 +2164,7 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 static EDA_RECT getRect( const BOARD_ITEM* aItem )
 {
     if( aItem->Type() == PCB_FOOTPRINT_T )
-        return static_cast<const MODULE*>( aItem )->GetFootprintRect();
+        return static_cast<const FOOTPRINT*>( aItem )->GetFootprintRect();
 
     return aItem->GetBoundingBox();
 }
@@ -2419,7 +2419,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         {
             if( PAD* pad = dyn_cast<PAD*>( aCollector[i] ) )
             {
-                MODULE* parent = pad->GetParent();
+                FOOTPRINT* parent = pad->GetParent();
                 double ratio = calcRatio( calcArea( pad ), calcArea( parent ) );
 
                 // when pad area is small compared to the parent footprint,
@@ -2444,35 +2444,43 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     if( aCollector.CountType( PCB_FOOTPRINT_T ) > 0 )
     {
         double maxArea = calcMaxArea( aCollector, PCB_FOOTPRINT_T );
-        BOX2D viewportD = getView()->GetViewport();
-        BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+        BOX2D  viewportD = getView()->GetViewport();
+        BOX2I  viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
         double maxCoverRatio = footprintMaxCoverRatio;
 
-        // MODULE::CoverageRatio() doesn't take zone handles & borders into account so just
+        // FOOTPRINT::CoverageRatio() doesn't take zone handles & borders into account so just
         // use a more aggressive cutoff point if zones are involved.
         if(  aCollector.CountType( PCB_ZONE_T ) )
             maxCoverRatio /= 2;
 
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
-            if( MODULE* mod = dyn_cast<MODULE*>( aCollector[i] ) )
+            if( FOOTPRINT* footprint = dyn_cast<FOOTPRINT*>( aCollector[i] ) )
             {
                 // filter out components larger than the viewport
-                if( mod->ViewBBox().GetHeight() > viewport.GetHeight() ||
-                    mod->ViewBBox().GetWidth() > viewport.GetWidth() )
-                    rejected.insert( mod );
+                if( footprint->ViewBBox().GetHeight() > viewport.GetHeight()
+                            ||  footprint->ViewBBox().GetWidth() > viewport.GetWidth() )
+                {
+                    rejected.insert( footprint );
+                }
                 // footprints completely covered with other features have no other
                 // means of selection, so must be kept
-                else if( mod->CoverageRatio( aCollector ) > maxCoverRatio )
-                    rejected.erase( mod );
+                else if( footprint->CoverageRatio( aCollector ) > maxCoverRatio )
+                {
+                    rejected.erase( footprint );
+                }
                 // if a footprint is much smaller than the largest overlapping
                 // footprint then it should be considered for selection
-                else if( calcRatio( calcArea( mod ), maxArea ) <= footprintToFootprintMinRatio )
+                else if( calcRatio( calcArea( footprint ), maxArea ) <= footprintToFootprintMinRatio )
+                {
                     continue;
+                }
                 // reject ALL OTHER footprints if there's still something else left
                 // to select
                 else if( hasNonModules )
-                    rejected.insert( mod );
+                {
+                    rejected.insert( footprint );
+                }
             }
         }
     }
@@ -2559,7 +2567,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
         for( int j = 0; j < aCollector.GetCount(); ++j )
         {
-            if( MODULE* footprint = dyn_cast<MODULE*>( aCollector[j] ) )
+            if( FOOTPRINT* footprint = dyn_cast<FOOTPRINT*>( aCollector[j] ) )
             {
                 double ratio = calcRatio( maxArea, footprint->GetFootprintRect().GetArea() );
 

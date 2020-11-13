@@ -45,15 +45,13 @@ BOOST_FIXTURE_TEST_SUITE( DrcCourtyardInvalid, COURTYARD_TEST_FIXTURE )
 
 
 /*
- * A simple mock module with a set of courtyard rectangles and some other
- * information
+ * A simple mock footprint with a set of courtyard rectangles and some other information
  */
-struct COURTYARD_INVALID_TEST_MODULE
+struct COURTYARD_INVALID_TEST_FP
 {
-
-    std::string      m_refdes;   /// Module Ref-Des (for identifying DRC errors)
+    std::string      m_refdes;   /// Footprint Ref-Des (for identifying DRC errors)
     std::vector<SEG> m_segs;     /// List of segments that will be placed on the courtyard
-    VECTOR2I         m_pos;      /// Module position
+    VECTOR2I         m_pos;      /// Footprint position
 };
 
 
@@ -74,9 +72,9 @@ std::ostream& operator<<( std::ostream& os, const COURTYARD_INVALID_INFO& aInval
 
 struct COURTYARD_INVALID_CASE
 {
-    std::string                                m_case_name;
-    std::vector<COURTYARD_INVALID_TEST_MODULE> m_mods;
-    std::vector<COURTYARD_INVALID_INFO>        m_exp_errors;
+    std::string                            m_case_name;
+    std::vector<COURTYARD_INVALID_TEST_FP> m_mods;
+    std::vector<COURTYARD_INVALID_INFO>    m_exp_errors;
 };
 
 
@@ -136,10 +134,10 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
                 { 0, 0 },
             },
         },
-        {   // one error: the module has malformed courtyard
+        {   // one error: the footprint has malformed courtyard
             {
                 "U1",
-                    DRCE_MALFORMED_COURTYARD,
+                DRCE_MALFORMED_COURTYARD,
             },
         },
     },
@@ -175,10 +173,10 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
                 { 0, 0 },
             },
         },
-        {   // one error: the second module has malformed courtyard
+        {   // one error: the second footprint has malformed courtyard
             {
                 "U2",
-                    DRCE_MALFORMED_COURTYARD,
+                DRCE_MALFORMED_COURTYARD,
             },
         },
     },
@@ -187,41 +185,41 @@ static const std::vector<COURTYARD_INVALID_CASE> courtyard_invalid_cases =
 
 
 /**
- * Construct a #MODULE to use in a courtyard test from a #COURTYARD_TEST_MODULE
+ * Construct a #FOOTPRINT to use in a courtyard test from a #COURTYARD_TEST_FP
  * definition.
  */
-std::unique_ptr<MODULE> MakeInvalidCourtyardTestModule( BOARD& aBoard,
-                                                        const COURTYARD_INVALID_TEST_MODULE& aMod )
+std::unique_ptr<FOOTPRINT> MakeInvalidCourtyardTestFP( BOARD& aBoard,
+                                                       const COURTYARD_INVALID_TEST_FP& aFPDef )
 {
-    auto module = std::make_unique<MODULE>( &aBoard );
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( &aBoard );
 
-    for( const auto& seg : aMod.m_segs )
+    for( const SEG& seg : aFPDef.m_segs )
     {
         const PCB_LAYER_ID layer = F_CrtYd; // aRect.m_front ? F_CrtYd : B_CrtYd;
         const int          width = Millimeter2iu( 0.1 );
 
-        KI_TEST::DrawSegment( *module, seg, width, layer );
+        KI_TEST::DrawSegment( *footprint, seg, width, layer );
     }
 
-    module->SetReference( aMod.m_refdes );
+    footprint->SetReference( aFPDef.m_refdes );
 
     // As of 2019-01-17, this has to go after adding the courtyards,
     // or all the poly sets are empty when DRC'd
-    module->SetPosition( (wxPoint) aMod.m_pos );
+    footprint->SetPosition( (wxPoint) aFPDef.m_pos );
 
-    return module;
+    return footprint;
 }
 
 
-std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_INVALID_TEST_MODULE>& aMods )
+std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_INVALID_TEST_FP>& aTestFPDefs )
 {
     auto board = std::make_unique<BOARD>();
 
-    for( const auto& mod : aMods )
+    for( const COURTYARD_INVALID_TEST_FP& fpDef : aTestFPDefs )
     {
-        auto module = MakeInvalidCourtyardTestModule( *board, mod );
+        std::unique_ptr<FOOTPRINT> footprint = MakeInvalidCourtyardTestFP( *board, fpDef );
 
-        board->Add( module.release() );
+        board->Add( footprint.release() );
     }
 
     return board;
@@ -235,7 +233,7 @@ static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
                                     const COURTYARD_INVALID_INFO& aInvalid )
 {
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
-    const MODULE*   item_a = dynamic_cast<MODULE*>( aBoard.GetItem( reporter->GetMainItemID() ) );
+    const FOOTPRINT* item_a = dynamic_cast<FOOTPRINT*>( aBoard.GetItem( reporter->GetMainItemID() ) );
 
     // This one is more than just a mis-match!
     if( reporter->GetAuxItemID() != niluuid )

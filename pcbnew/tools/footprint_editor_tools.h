@@ -79,10 +79,10 @@ private:
     void setTransitions() override;
 
 private:
-    FOOTPRINT_EDIT_FRAME*   m_frame;
+    FOOTPRINT_EDIT_FRAME*      m_frame;
 
     // A private clipboard for cut/copy/past of an entire footprint
-    std::unique_ptr<MODULE> m_copiedFootprint;
+    std::unique_ptr<FOOTPRINT> m_copiedFootprint;
 };
 
 #endif

@@ -51,7 +51,7 @@ int DIALOG_FOOTPRINT_PROPERTIES::m_page = 0;     // remember the last open page 
 
 
 DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParent,
-                                                          MODULE* aFootprint ) :
+                                                          FOOTPRINT* aFootprint ) :
     DIALOG_FOOTPRINT_PROPERTIES_BASE( aParent ),
     m_posX( aParent, m_XPosLabel, m_ModPositionX, m_XPosUnit ),
     m_posY( aParent, m_YPosLabel, m_ModPositionY, m_YPosUnit ),

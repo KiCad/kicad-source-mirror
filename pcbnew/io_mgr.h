@@ -34,7 +34,7 @@
 
 class BOARD;
 class PLUGIN;
-class MODULE;
+class FOOTPRINT;
 class PROPERTIES;
 
 
@@ -408,17 +408,17 @@ public:
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
      *          is thrown in the case where aFootprintName cannot be found.
      */
-    virtual MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                   const PROPERTIES* aProperties = NULL );
+    virtual FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                      const PROPERTIES* aProperties = NULL );
 
     /**
      * Function GetEnumeratedFootprint
      * a version of FootprintLoad() for use after FootprintEnumerate() for more efficient
      * cache management.
      */
-    virtual const MODULE* GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                                  const wxString& aFootprintName,
-                                                  const PROPERTIES* aProperties = NULL );
+    virtual const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                     const wxString& aFootprintName,
+                                                     const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintExists
@@ -446,8 +446,8 @@ public:
      *
      * @throw IO_ERROR if there is a problem saving.
      */
-    virtual void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
-            const PROPERTIES* aProperties = NULL );
+    virtual void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
+                                const PROPERTIES* aProperties = NULL );
 
     /**
      * Function FootprintDelete

@@ -539,10 +539,10 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void pasteFootprintItemsToFootprintEditor( MODULE* aClipFootprint, BOARD* aBoard,
+void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOARD* aBoard,
                                            std::vector<BOARD_ITEM*>& aPastedItems )
 {
-    MODULE* editorFootprint = aBoard->GetFirstFootprint();
+    FOOTPRINT* editorFootprint = aBoard->GetFirstFootprint();
 
     aClipFootprint->SetParent( aBoard );
 
@@ -666,10 +666,10 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( isFootprintEditor )
             {
-                MODULE* editorFootprint = board()->GetFirstFootprint();
+                FOOTPRINT* editorFootprint = board()->GetFirstFootprint();
                 std::vector<BOARD_ITEM*> pastedItems;
 
-                for( MODULE* clipFootprint : clipBoard->Footprints() )
+                for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
                     pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
@@ -718,7 +718,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         case PCB_FOOTPRINT_T:
         {
-            MODULE* clipFootprint = static_cast<MODULE*>( clipItem );
+            FOOTPRINT* clipFootprint = static_cast<FOOTPRINT*>( clipItem );
             std::vector<BOARD_ITEM*> pastedItems;
 
             if( isFootprintEditor )
@@ -888,7 +888,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         case PCB_FOOTPRINT_T:
             // Update the module path with the new KIID path if the module is new
             if( aIsNew )
-                static_cast<MODULE*>( item )->SetPath( KIID_PATH() );
+                static_cast<FOOTPRINT*>( item )->SetPath( KIID_PATH() );
 
             break;
 
@@ -1075,7 +1075,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
     else if( auto editFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        MODULE* footprint = static_cast<MODULE*>( editFrame->GetModel() );
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( editFrame->GetModel() );
 
         if( !footprint )
             return 0;

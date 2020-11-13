@@ -77,11 +77,11 @@ static void AddFootprintToHistory( const wxString& aName )
 
 
 #include <bitmaps.h>
-bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
+bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 {
     bool is_last_fp_from_brd = IsCurrentFPFromBoard();
 
-    MODULE*         newFootprint = nullptr;
+    FOOTPRINT*      newFootprint = nullptr;
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
     if( frame == NULL )     // happens if no board editor opened
@@ -101,7 +101,7 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( MODULE* aFootprint )
     if( !Clear_Pcb( true ) )
         return false;
 
-    newFootprint = (MODULE*) aFootprint->Duplicate();
+    newFootprint = (FOOTPRINT*) aFootprint->Duplicate();
     newFootprint->SetParent( GetBoard() );
     newFootprint->SetLink( aFootprint->m_Uuid );
 
@@ -191,12 +191,12 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 }
 
 
-MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
+FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
 {
     FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
     wxString        footprintName;
     LIB_ID          fpid;
-    MODULE*         footprint = nullptr;
+    FOOTPRINT*      footprint = nullptr;
 
     static wxString lastComponentName;
 
@@ -283,9 +283,9 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
 }
 
 
-MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
+FOOTPRINT* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 {
-    MODULE* footprint = NULL;
+    FOOTPRINT* footprint = NULL;
 
     try
     {
@@ -299,13 +299,13 @@ MODULE* PCB_BASE_FRAME::LoadFootprint( const LIB_ID& aFootprintId )
 }
 
 
-MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
+FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 {
     FP_LIB_TABLE*   fptbl = Prj().PcbFootprintLibs();
 
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 
-    MODULE *footprint = nullptr;
+    FOOTPRINT *footprint = nullptr;
     try
     {
         footprint = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
@@ -323,7 +323,7 @@ MODULE* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
 }
 
 
-MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
+FOOTPRINT* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
 {
     static wxString oldName;       // Save name of last footprint selected.
 
@@ -331,7 +331,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::SelectFootprintFromBoard( BOARD* aPcb )
     wxString        msg;
     wxArrayString   listnames;
 
-    for( MODULE* footprint : aPcb->Footprints() )
+    for( FOOTPRINT* footprint : aPcb->Footprints() )
         listnames.Add( footprint->GetReference() );
 
     msg.Printf( _( "Footprints [%u items]" ), (unsigned) listnames.GetCount() );
@@ -395,7 +395,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 
         for( unsigned i = 0;  i < footprints.size();  ++i )
         {
-            const MODULE* footprint = cur->GetEnumeratedFootprint( curLibPath, footprints[i] );
+            const FOOTPRINT* footprint = cur->GetEnumeratedFootprint( curLibPath, footprints[i] );
             dst->FootprintSave( dstLibPath, footprint );
 
             msg = wxString::Format( _( "Footprint \"%s\" saved" ), footprints[i] );
@@ -419,13 +419,13 @@ bool FOOTPRINT_EDIT_FRAME::SaveLibraryAs( const wxString& aLibraryPath )
 }
 
 
-static MODULE* s_FootprintInitialCopy = NULL;       // Copy of footprint for abort/undo command
+static FOOTPRINT* s_FootprintInitialCopy = NULL;       // Copy of footprint for abort/undo command
 
 static PICKED_ITEMS_LIST s_PickedList;              // A pick-list to save initial footprint
                                                     //   and dragged tracks
 
 
-MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
+FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 {
     wxString        footprintName;
     wxArrayString   fplist;
@@ -458,7 +458,7 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 }
 
 
-void PCB_BASE_FRAME::PlaceFootprint( MODULE* aFootprint, bool aRecreateRatsnest )
+void PCB_BASE_FRAME::PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest )
 {
     if( aFootprint == 0 )
         return;

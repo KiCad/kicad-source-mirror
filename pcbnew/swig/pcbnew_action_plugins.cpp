@@ -217,7 +217,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Append footprints:
-    for( MODULE* item : currentPcb->Modules() )
+    for( FOOTPRINT* item : currentPcb->Footprints() )
     {
         ITEM_PICKER picker( nullptr, item, UNDO_REDO::CHANGED );
         itemsList.PushItem( picker );
@@ -274,7 +274,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         currItemList.insert( item );
 
     // Append footprints:
-    for( MODULE* item : currentPcb->Modules() )
+    for( FOOTPRINT* item : currentPcb->Footprints() )
         currItemList.insert( item );
 
     // Append drawings
@@ -304,7 +304,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Find new footprints
-    for( MODULE* item : currentPcb->Modules() )
+    for( FOOTPRINT* item : currentPcb->Footprints() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {

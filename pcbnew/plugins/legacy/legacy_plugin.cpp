@@ -81,23 +81,17 @@
 #include <pcb_shape.h>
 #include <pcb_target.h>
 #include <fp_shape.h>
-#include <3d_cache/3d_info.h>
 #include <pcb_plot_params.h>
 #include <pcb_plot_params_parser.h>
 #include <convert_to_biu.h>
 #include <trigo.h>
-#include <build_version.h>
 #include <confirm.h>
 #include <math/util.h>      // for KiROUND
-#include <template_fieldnames.h>
 
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
 #define VERSION_ERROR_FORMAT    _( "File \"%s\" is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
-#define UNKNOWN_GRAPHIC_FORMAT  _( "unknown graphic type: %d")
-#define UNKNOWN_PAD_FORMAT      _( "unknown pad type: %d")
-#define UNKNOWN_PAD_ATTRIBUTE   _( "unknown pad attribute: %d" )
 
 
 typedef unsigned                LEG_MASK;
@@ -434,7 +428,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         if( TESTLINE( "$MODULE" ) )
         {
-            std::unique_ptr<MODULE> module = std::make_unique<MODULE>( m_board );
+            std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
             LIB_ID      fpid;
             std::string fpName = StrPurge( line + SZ( "$MODULE" ) );
@@ -446,10 +440,10 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             if( !fpName.empty() )
                 fpid.Parse( fpName, LIB_ID::ID_PCB, true );
 
-            module->SetFPID( fpid );
+            footprint->SetFPID( fpid );
 
-            loadFOOTPRINT( module.get());
-            m_board->Add( module.release(), ADD_MODE::APPEND );
+            loadFOOTPRINT( footprint.get());
+            m_board->Add( footprint.release(), ADD_MODE::APPEND );
         }
 
         else if( TESTLINE( "$DRAWSEGMENT" ) )
@@ -1178,7 +1172,7 @@ void LEGACY_PLUGIN::loadSETUP()
 }
 
 
-void LEGACY_PLUGIN::loadFOOTPRINT( MODULE* aFootprint )
+void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
 {
     char*   line;
 
@@ -1396,7 +1390,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( MODULE* aFootprint )
 }
 
 
-void LEGACY_PLUGIN::loadPAD( MODULE* aFootprint )
+void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 {
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
     char*                line;
@@ -1631,7 +1625,7 @@ void LEGACY_PLUGIN::loadPAD( MODULE* aFootprint )
 }
 
 
-void LEGACY_PLUGIN::loadFP_SHAPE( MODULE* aFootprint )
+void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
 {
     PCB_SHAPE_TYPE_T shape;
     char*            line = m_reader->Line();     // obtain current (old) line
@@ -1822,7 +1816,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
     aText->SetPos0( wxPoint( pos0_x, pos0_y ) );
     aText->SetTextSize( wxSize( size0_x, size0_y ) );
 
-    orient -= ( static_cast<MODULE*>( aText->GetParent() ) )->GetOrientation();
+    orient -= ( static_cast<FOOTPRINT*>( aText->GetParent() ) )->GetOrientation();
 
     aText->SetTextAngle( orient );
 
@@ -1859,7 +1853,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( FP_TEXT* aText )
 }
 
 
-void LEGACY_PLUGIN::load3D( MODULE* aFootprint )
+void LEGACY_PLUGIN::load3D( FOOTPRINT* aFootprint )
 {
     FP_3DMODEL t3D;
 
@@ -3017,7 +3011,7 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 }
 
 
-void LEGACY_PLUGIN::SaveFP3DModels( const MODULE* aFootprint ) const
+void LEGACY_PLUGIN::SaveFP3DModels( const FOOTPRINT* aFootprint ) const
 {
     auto sM = aFootprint->Models().begin();
     auto eM = aFootprint->Models().end();
@@ -3093,9 +3087,9 @@ void LEGACY_PLUGIN::SaveFP3DModels( const MODULE* aFootprint ) const
 #include <boost/ptr_container/ptr_map.hpp>
 #include <wx/filename.h>
 
-typedef boost::ptr_map< std::string, MODULE >   MODULE_MAP;
-typedef MODULE_MAP::iterator                    MODULE_ITER;
-typedef MODULE_MAP::const_iterator              MODULE_CITER;
+typedef boost::ptr_map< std::string, FOOTPRINT >   FOOTPRINT_MAP;
+typedef FOOTPRINT_MAP::iterator                    MODULE_ITER;
+typedef FOOTPRINT_MAP::const_iterator              MODULE_CITER;
 
 
 /**
@@ -3106,9 +3100,9 @@ typedef MODULE_MAP::const_iterator              MODULE_CITER;
  */
 struct LP_CACHE
 {
-    LEGACY_PLUGIN*  m_owner;        // my owner, I need its LEGACY_PLUGIN::loadMODULE()
+    LEGACY_PLUGIN*  m_owner;            // my owner, I need its LEGACY_PLUGIN::loadFOOTPRINT()
     wxString        m_lib_path;
-    MODULE_MAP      m_modules;      // map or tuple of footprint_name vs. MODULE*
+    FOOTPRINT_MAP   m_footprints;       // map or tuple of footprint_name vs. FOOTPRINT*
     bool            m_writable;
 
     bool            m_cache_dirty;      // Stored separately because it's expensive to check
@@ -3243,7 +3237,7 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
         // test first for the $MODULE, even before reading because of INDEX bug.
         if( TESTLINE( "$MODULE" ) )
         {
-            std::unique_ptr<MODULE> module = std::make_unique<MODULE>( m_owner->m_board );
+            std::unique_ptr<FOOTPRINT> fp_ptr = std::make_unique<FOOTPRINT>( m_owner->m_board );
 
             std::string         footprintName = StrPurge( line + SZ( "$MODULE" ) );
 
@@ -3252,11 +3246,11 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
             ReplaceIllegalFileNameChars( &footprintName );
 
             // set the footprint name first thing, so exceptions can use name.
-            module->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
+            fp_ptr->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
 
-            m_owner->loadFOOTPRINT( module.get());
+            m_owner->loadFOOTPRINT( fp_ptr.get());
 
-            MODULE* m = module.release();   // exceptions after this are not expected.
+            FOOTPRINT* fp = fp_ptr.release();   // exceptions after this are not expected.
 
             // Not sure why this is asserting on debug builds.  The debugger shows the
             // strings are the same.  If it's not really needed maybe it can be removed.
@@ -3275,11 +3269,11 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 
             */
 
-            MODULE_CITER it = m_modules.find( footprintName );
+            MODULE_CITER it = m_footprints.find( footprintName );
 
-            if( it == m_modules.end() )  // footprintName is not present in cache yet.
+            if( it == m_footprints.end() )  // footprintName is not present in cache yet.
             {
-                std::pair<MODULE_ITER, bool> r = m_modules.insert( footprintName, m );
+                std::pair<MODULE_ITER, bool> r = m_footprints.insert( footprintName, fp );
 
                 wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
                 (void) r;
@@ -3301,14 +3295,14 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
                     sprintf( buf, "%d", version++ );
                     newName += buf;
 
-                    it = m_modules.find( newName );
+                    it = m_footprints.find( newName );
 
-                    if( it == m_modules.end() )
+                    if( it == m_footprints.end() )
                     {
                         nameOK = true;
 
-                        m->SetFPID( LIB_ID( wxEmptyString, newName ) );
-                        std::pair<MODULE_ITER, bool> r = m_modules.insert( newName, m );
+                        fp->SetFPID( LIB_ID( wxEmptyString, newName ) );
+                        std::pair<MODULE_ITER, bool> r = m_footprints.insert( newName, fp );
 
                         wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
                         (void) r;
@@ -3359,7 +3353,7 @@ void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_cache->m_modules.begin(); it != m_cache->m_modules.end(); ++it )
+    for( MODULE_CITER it = m_cache->m_footprints.begin(); it != m_cache->m_footprints.end(); ++it )
         aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
@@ -3367,8 +3361,9 @@ void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
 }
 
 
-MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
-        const wxString& aFootprintName, const PROPERTIES* aProperties )
+FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                         const wxString& aFootprintName,
+                                         const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -3376,11 +3371,11 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 
     cacheLib( aLibraryPath );
 
-    const MODULE_MAP&   mods = m_cache->m_modules;
+    const FOOTPRINT_MAP&   footprints = m_cache->m_footprints;
 
-    MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
+    MODULE_CITER it = footprints.find( TO_UTF8( aFootprintName ) );
 
-    if( it == mods.end() )
+    if( it == footprints.end() )
     {
         /*
         THROW_IO_ERROR( wxString::Format( _( "No \"%s\" footprint in library \"%s\"" ),
@@ -3391,7 +3386,7 @@ MODULE* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
     }
 
     // Return copy of already loaded MODULE
-    return (MODULE*) it->second->Duplicate();
+    return (FOOTPRINT*) it->second->Duplicate();
 }
 
 

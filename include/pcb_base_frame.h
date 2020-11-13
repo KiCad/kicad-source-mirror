@@ -50,7 +50,7 @@ class APP_SETTINGS_BASE;
 class BOARD;
 class BOARD_CONNECTED_ITEM;
 class COLOR_SETTINGS;
-class MODULE;
+class FOOTPRINT;
 class TRACK;
 class PAD;
 class EDA_3D_VIEWER;
@@ -86,12 +86,12 @@ protected:
      * attempts to load \a aFootprintId from the footprint library table.
      *
      * @param aFootprintId is the #LIB_ID of component footprint to load.
-     * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
+     * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
      *         libraries in the table returned from #Prj().PcbFootprintLibs().
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *                 occurs while reading footprint library files.
      */
-    MODULE* loadFootprint( const LIB_ID& aFootprintId );
+    FOOTPRINT* loadFootprint( const LIB_ID& aFootprintId );
 
 public:
     PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
@@ -124,10 +124,10 @@ public:
      * attempts to load \a aFootprintId from the footprint library table.
      *
      * @param aFootprintId is the #LIB_ID of component footprint to load.
-     * @return the #MODULE if found or NULL if \a aFootprintId not found in any of the
+     * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
      *         libraries in table returned from #Prj().PcbFootprintLibs().
      */
-    MODULE* LoadFootprint( const LIB_ID& aFootprintId );
+    FOOTPRINT* LoadFootprint( const LIB_ID& aFootprintId );
 
     /**
      * Function GetBoardBoundingBox
@@ -275,7 +275,7 @@ public:
      *         reference is entered by the user from a dialog (by awxTextCtlr, or a list of
      *         available references)
      */
-    MODULE* GetFootprintFromBoardByReference();
+    FOOTPRINT* GetFootprintFromBoardByReference();
 
     /**
      * Function OnModify
@@ -298,7 +298,7 @@ public:
      * when the fooprint is placed on a board and a netlist is read
      * @param aFootprintName = name of the new footprint in library
      */
-    MODULE* CreateNewFootprint( const wxString& aFootprintName );
+    FOOTPRINT* CreateNewFootprint( const wxString& aFootprintName );
 
     /**
      * Function PlaceFootprint
@@ -307,7 +307,7 @@ public:
      *
      * @param aRecreateRatsnest A bool true redraws the footprint ratsnest.
      */
-    void PlaceFootprint( MODULE* aFootprint, bool aRecreateRatsnest = true );
+    void PlaceFootprint( FOOTPRINT* aFootprint, bool aRecreateRatsnest = true );
 
     void ShowPadPropertiesDialog( PAD* aPad );
 
@@ -317,14 +317,14 @@ public:
      *
      * @param aPreslect = if valid, the LIB_ID to select (otherwise the global history is used)
      */
-    MODULE* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID() );
+    FOOTPRINT* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID() );
 
     /**
      * Adds the given footprint to the board.
      * @param aFootprint
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */
-    virtual void AddFootprintToBoard( MODULE* aFootprint );
+    virtual void AddFootprintToBoard( FOOTPRINT* aFootprint );
 
     /**
      * Function SelectFootprintFromLibBrowser

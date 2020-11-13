@@ -273,7 +273,7 @@ UseBoundingBox:
  * compiles data for the PLACEMENT section and compiles data for
  * the library ELECTRICAL section.
  */
-static void idf_export_footprint( BOARD* aPcb, MODULE* aFootprint, IDF3_BOARD& aIDFBoard )
+static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD& aIDFBoard )
 {
     // Reference Designator
     std::string crefdes = TO_UTF8( aFootprint->Reference().GetShownText() );
@@ -616,7 +616,7 @@ bool PCB_EDIT_FRAME::Export_IDF3( BOARD* aPcb, const wxString& aFullFileName,
         idf_export_outline( aPcb, idfBoard );
 
         // Output the drill holes and footprint (library) data.
-        for( MODULE* footprint : aPcb->Footprints() )
+        for( FOOTPRINT* footprint : aPcb->Footprints() )
             idf_export_footprint( aPcb, footprint, idfBoard );
 
         if( !idfBoard.WriteFile( aFullFileName, idfUnit, false ) )

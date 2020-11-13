@@ -102,8 +102,8 @@ class COMPONENT
     /// this one is a copy of the netlist footprint assignment
     LIB_ID         m_altFpid;
 
-    /// The #MODULE loaded for #m_fpid.
-    std::unique_ptr< MODULE > m_footprint;
+    /// The #FOOTPRINT loaded for #m_fpid.
+    std::unique_ptr< FOOTPRINT > m_footprint;
 
     /// Component-specific properties found in the netlist.
     std::map<wxString, wxString> m_properties;
@@ -167,12 +167,12 @@ public:
     void SetPinCount( int aPinCount ) { m_pinCount = aPinCount; }
     int GetPinCount() const { return m_pinCount; }
 
-    MODULE* GetModule( bool aRelease = false )
+    FOOTPRINT* GetFootprint( bool aRelease = false )
     {
         return ( aRelease ) ? m_footprint.release() : m_footprint.get();
     }
 
-    void SetModule( MODULE* aFootprint );
+    void SetFootprint( FOOTPRINT* aFootprint );
 
     bool IsLibSource( const wxString& aLibrary, const wxString& aName ) const
     {

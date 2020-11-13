@@ -37,7 +37,7 @@
 
 #include <widgets/footprint_preview_widget.h>
 
-class MODULE;
+class FOOTPRINT;
 class KIWAY;
 class IO_MGR;
 class BOARD;
@@ -76,9 +76,9 @@ public:
 private:
     struct CACHE_ENTRY
     {
-        LIB_ID                  fpid;
-        std::shared_ptr<MODULE> footprint;
-        FOOTPRINT_STATUS        status;
+        LIB_ID                     fpid;
+        std::shared_ptr<FOOTPRINT> footprint;
+        FOOTPRINT_STATUS           status;
     };
 
     /**
@@ -98,7 +98,7 @@ private:
 
     void OnLoaderThreadUpdate( wxCommandEvent& aEvent );
 
-    void renderFootprint( std::shared_ptr<MODULE> aFootprint );
+    void renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint );
 
 private:
     FP_LOADER_THREAD*                m_loader;
@@ -108,9 +108,9 @@ private:
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
 
-    std::shared_ptr<MODULE> m_currentFootprint;
-    LIB_ID                  m_currentFPID;
-    bool                    m_footprintDisplayed;
+    std::shared_ptr<FOOTPRINT> m_currentFootprint;
+    LIB_ID                     m_currentFPID;
+    bool                       m_footprintDisplayed;
 };
 
 #endif

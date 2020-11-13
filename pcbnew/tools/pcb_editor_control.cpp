@@ -411,13 +411,13 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     // Footprint IDs are the most important, so give them the first crack at "claiming" a
     // particular KIID.
 
-    for( MODULE* footprint : board()->Footprints() )
+    for( FOOTPRINT* footprint : board()->Footprints() )
         processItem( footprint );
 
     // After that the principal use is for DRC marker pointers, which are most likely to pads
     // or tracks.
 
-    for( MODULE* footprint : board()->Footprints() )
+    for( FOOTPRINT* footprint : board()->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
             processItem( pad );
@@ -428,7 +428,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 
     // From here out I don't think order matters much.
 
-    for( MODULE* footprint : board()->Footprints() )
+    for( FOOTPRINT* footprint : board()->Footprints() )
     {
         processItem( &footprint->Reference() );
         processItem( &footprint->Value() );
@@ -758,10 +758,10 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 {
-    MODULE* fp = aEvent.Parameter<MODULE*>();
+    FOOTPRINT*            fp = aEvent.Parameter<FOOTPRINT*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    BOARD_COMMIT commit( m_frame );
-    BOARD* board = getModel<BOARD>();
+    BOARD_COMMIT          commit( m_frame );
+    BOARD*                board = getModel<BOARD>();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->ShowCursor( true );
@@ -1255,7 +1255,7 @@ int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    MODULE* fp = selection.FirstOfKind<MODULE>();
+    FOOTPRINT* fp = selection.FirstOfKind<FOOTPRINT>();
 
     if( !fp )
         return 0;

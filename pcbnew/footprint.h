@@ -101,23 +101,23 @@ public:
 DECL_DEQ_FOR_SWIG( PADS, PAD* )
 DECL_DEQ_FOR_SWIG( DRAWINGS, BOARD_ITEM* )
 DECL_VEC_FOR_SWIG( FP_ZONES, FP_ZONE* )
-DECL_VEC_FOR_SWIG( MODULE_GROUPS, PCB_GROUP* )
-DECL_DEQ_FOR_SWIG( MODULES, MODULE* )
+DECL_VEC_FOR_SWIG( FP_GROUPS, PCB_GROUP* )
+DECL_DEQ_FOR_SWIG( FOOTPRINTS, FOOTPRINT* )
 
-class MODULE : public BOARD_ITEM_CONTAINER
+class FOOTPRINT : public BOARD_ITEM_CONTAINER
 {
 public:
-    MODULE( BOARD* parent );
+    FOOTPRINT( BOARD* parent );
 
-    MODULE( const MODULE& aFootprint );
+    FOOTPRINT( const FOOTPRINT& aFootprint );
 
     // Move constructor and operator needed due to std containers inside the footprint
-    MODULE( MODULE&& aFootprint );
+    FOOTPRINT( FOOTPRINT&& aFootprint );
 
-    ~MODULE();
+    ~FOOTPRINT();
 
-    MODULE& operator=( const MODULE& aOther );
-    MODULE& operator=( MODULE&& aOther );
+    FOOTPRINT& operator=( const FOOTPRINT& aOther );
+    FOOTPRINT& operator=( FOOTPRINT&& aOther );
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -187,8 +187,8 @@ public:
     FP_ZONES& Zones()             { return m_fp_zones; }
     const FP_ZONES& Zones() const { return m_fp_zones; }
 
-    MODULE_GROUPS& Groups()             { return m_fp_groups; }
-    const MODULE_GROUPS& Groups() const { return m_fp_groups; }
+    FP_GROUPS& Groups()             { return m_fp_groups; }
+    const FP_GROUPS& Groups() const { return m_fp_groups; }
 
     bool HasThroughHolePads() const;
 
@@ -694,7 +694,7 @@ private:
     DRAWINGS        m_drawings;          // BOARD_ITEMs for drawings on the board, owned by pointer.
     PADS            m_pads;              // PAD items, owned by pointer
     FP_ZONES        m_fp_zones;          // FP_ZONE items, owned by pointer
-    MODULE_GROUPS   m_fp_groups;         // PCB_GROUP items, owned by pointer
+    FP_GROUPS       m_fp_groups;         // PCB_GROUP items, owned by pointer
 
     double          m_orient;            // Orientation in tenths of a degree, 900=90.0 degrees.
     wxPoint         m_pos;               // Position of footprint on the board in internal units.

@@ -1461,13 +1461,13 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     PNS::ITEM* startItem = nullptr;
     PNS::ITEM_SET itemsToDrag;
-    const MODULE* module = nullptr;
+    const FOOTPRINT* footprint = nullptr;
 
     if( item->Type() == PCB_FOOTPRINT_T )
     {
-        module = static_cast<const MODULE*>(item);
+        footprint = static_cast<const FOOTPRINT*>(item);
 
-        for( const PAD* pad : module->Pads() )
+        for( const PAD* pad : footprint->Pads() )
         {
             PNS::ITEM* solid = m_router->GetWorld()->FindItemByParent( pad );
 
@@ -1538,14 +1538,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
 
-            if( module )
+            if( footprint )
             {
                 VECTOR2I offset = m_endSnapPoint - p;
                 BOARD_ITEM* previewItem;
 
                 view()->ClearPreview();
 
-                for( BOARD_ITEM* drawing : module->GraphicalItems() )
+                for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
                 {
                     previewItem = static_cast<BOARD_ITEM*>( drawing->Clone() );
 
@@ -1563,17 +1563,17 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
                     view()->Hide( drawing, true );
                 }
 
-                previewItem = static_cast<BOARD_ITEM*>( module->Reference().Clone() );
+                previewItem = static_cast<BOARD_ITEM*>( footprint->Reference().Clone() );
                 previewItem->Move( offset );
                 view()->AddToPreview( previewItem );
-                view()->Hide( &module->Reference() );
+                view()->Hide( &footprint->Reference() );
 
-                previewItem = static_cast<BOARD_ITEM*>( module->Value().Clone() );
+                previewItem = static_cast<BOARD_ITEM*>( footprint->Value().Clone() );
                 previewItem->Move( offset );
                 view()->AddToPreview( previewItem );
-                view()->Hide( &module->Value() );
+                view()->Hide( &footprint->Value() );
 
-                for( ZONE* zone : module->Zones() )
+                for( ZONE* zone : footprint->Zones() )
                 {
                     previewItem = static_cast<BOARD_ITEM*>( zone->Clone() );
                     previewItem->Move( offset );
@@ -1601,15 +1601,15 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( module )
+    if( footprint )
     {
-        for( BOARD_ITEM* drawing : module->GraphicalItems() )
+        for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
             view()->Hide( drawing, false );
 
-        view()->Hide( &module->Reference(), false );
-        view()->Hide( &module->Value(), false );
+        view()->Hide( &footprint->Reference(), false );
+        view()->Hide( &footprint->Value(), false );
 
-        for( ZONE* zone : module->Zones() )
+        for( ZONE* zone : footprint->Zones() )
             view()->Hide( zone, false );
 
         view()->ClearPreview();

@@ -54,7 +54,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
     {
     case PCB_FOOTPRINT_T:
     {
-        const MODULE* footprint = static_cast<const MODULE*>( aItem );
+        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
 
         ret = hash_board_item( footprint, aFlags );
 

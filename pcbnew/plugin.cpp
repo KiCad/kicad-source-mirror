@@ -73,9 +73,9 @@ void PLUGIN::PrefetchLib( const wxString& aLibraryPath, const PROPERTIES* aPrope
 }
 
 
-const MODULE* PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                              const wxString& aFootprintName,
-                                              const PROPERTIES* aProperties )
+const FOOTPRINT* PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                 const wxString& aFootprintName,
+                                                 const PROPERTIES* aProperties )
 {
     // default implementation
     return FootprintLoad( aLibraryPath, aFootprintName, aProperties );
@@ -90,8 +90,8 @@ bool PLUGIN::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                               const PROPERTIES* aProperties )
+FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                  const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
@@ -99,7 +99,7 @@ MODULE* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFo
 }
 
 
-void PLUGIN::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+void PLUGIN::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
                             const PROPERTIES* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.

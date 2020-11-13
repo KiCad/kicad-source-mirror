@@ -39,7 +39,7 @@
 #define FOOTPRINT_LIBRARY_HEADER_CNT    18
 
 class PCB_TARGET;
-class MODULE;
+class FOOTPRINT;
 class TRACK;
 class NETCLASS;
 class NETCLASSES;
@@ -82,8 +82,8 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
 
-    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-            const PROPERTIES* aProperties = NULL ) override;
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              const PROPERTIES* aProperties = NULL ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
                              const PROPERTIES* aProperties = NULL ) override;
@@ -102,7 +102,7 @@ public:
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
     void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
 
-    void SaveFP3DModels( const MODULE* aFootprint ) const;
+    void SaveFP3DModels( const FOOTPRINT* aFootprint ) const;
 
     // return the new .kicad_pcb layer id from the old (legacy) layer id
     static PCB_LAYER_ID leg_layer2new( int cu_count, LAYER_NUM aLayerNum );
@@ -111,23 +111,23 @@ public:
 
 protected:
 
-    int             m_cu_count;
+    int               m_cu_count;
 
-    wxString        m_error;        ///< for throwing exceptions
-    BOARD*          m_board;        ///< which BOARD, no ownership here
-    const PROPERTIES*   m_props;    ///< passed via Save() or Load(), no ownership, may be NULL.
+    wxString          m_error;      ///< for throwing exceptions
+    BOARD*            m_board;      ///< which BOARD, no ownership here
+    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
 
-    LINE_READER*    m_reader;       ///< no ownership here.
-    FILE*           m_fp;           ///< no ownership here.
+    LINE_READER*      m_reader;     ///< no ownership here.
+    FILE*             m_fp;         ///< no ownership here.
 
-    wxString        m_field;        ///< reused to stuff MODULE fields.
-    int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
-    LP_CACHE*       m_cache;
-    bool            m_showLegacyZoneWarning;
+    wxString          m_field;      ///< reused to stuff MODULE fields.
+    int               m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
+    LP_CACHE*         m_cache;
+    bool              m_showLegacyZoneWarning;
 
-    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty nets
+    NETINFO_MAPPING*  m_mapping;    ///< mapping for net codes, so only not empty nets
                                     ///< are stored with consecutive integers as net codes
-    std::vector<int>    m_netCodes; ///< net codes mapping for boards being loaded
+    std::vector<int>  m_netCodes;   ///< net codes mapping for boards being loaded
 
     /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
     void    init( const PROPERTIES* aProperties );
@@ -190,16 +190,16 @@ protected:
     void loadSETUP();
     void loadSHEET();
 
-    void load3D( MODULE* aFootprint );
-    void loadPAD( MODULE* aFootprint );
+    void load3D( FOOTPRINT* aFootprint );
+    void loadPAD( FOOTPRINT* aFootprint );
     void loadMODULE_TEXT( FP_TEXT* aText );
-    void loadFP_SHAPE( MODULE* aFootprint );
+    void loadFP_SHAPE( FOOTPRINT* aFootprint );
 
     void loadPCB_LINE();
     void loadNETINFO_ITEM();
     void loadPCB_TEXT();
     void loadNETCLASS();
-    void loadFOOTPRINT( MODULE* aFootprint );
+    void loadFOOTPRINT( FOOTPRINT* aFootprint );
 
     /**
      * Function loadTrackList

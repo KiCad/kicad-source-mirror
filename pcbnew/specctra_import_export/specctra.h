@@ -42,7 +42,7 @@ class BOARD;
 class TRACK;
 class VIA;
 class NETCLASS;
-class MODULE;
+class FOOTPRINT;
 class SHAPE_POLY_SET;
 
 typedef DSN::T  DSN_T;
@@ -3768,7 +3768,7 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      * @param aFootprint The MODULE from which to build the IMAGE.
      * @return IMAGE* - not tested for duplication yet.
      */
-    IMAGE* makeIMAGE( BOARD* aBoard, MODULE* aFootprint );
+    IMAGE* makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint );
 
     /**
      * Function makePADSTACK

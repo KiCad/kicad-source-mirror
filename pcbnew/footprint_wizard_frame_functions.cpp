@@ -99,11 +99,11 @@ void FOOTPRINT_WIZARD_FRAME::ReloadFootprint()
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     // Delete the current footprint
-    GetBoard()->DeleteAllModules();
+    GetBoard()->DeleteAllFootprints();
 
     // Creates the footprint
-    wxString msg;
-    MODULE*  footprint = footprintWizard->GetFootprint( &msg );
+    wxString   msg;
+    FOOTPRINT* footprint = footprintWizard->GetFootprint( &msg );
     DisplayBuildMessage( msg );
 
     if( footprint )
@@ -141,14 +141,14 @@ FOOTPRINT_WIZARD* FOOTPRINT_WIZARD_FRAME::GetMyWizard()
 }
 
 
-MODULE* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
+FOOTPRINT* FOOTPRINT_WIZARD_FRAME::GetBuiltFootprint()
 {
     FOOTPRINT_WIZARD* footprintWizard = FOOTPRINT_WIZARD_LIST::GetWizard( m_wizardName );
 
     if( footprintWizard && m_modal_ret_val )
     {
-        wxString msg;
-        MODULE * footprint = footprintWizard->GetFootprint( &msg );
+        wxString   msg;
+        FOOTPRINT* footprint = footprintWizard->GetFootprint( &msg );
         DisplayBuildMessage( msg );
 
         return footprint;

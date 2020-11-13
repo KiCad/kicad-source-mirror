@@ -45,7 +45,7 @@
 
 #include <memory>
 
-PAD::PAD( MODULE* parent ) :
+PAD::PAD( FOOTPRINT* parent ) :
     BOARD_CONNECTED_ITEM( parent, PCB_PAD_T )
 {
     m_size.x = m_size.y   = Mils2iu( 60 );  // Default pad size 60 mils.
@@ -477,7 +477,7 @@ const EDA_RECT PAD::GetBoundingBox() const
 
 void PAD::SetDrawCoord()
 {
-    MODULE* parentFootprint = (MODULE*) m_Parent;
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
 
     m_pos = m_pos0;
 
@@ -495,7 +495,7 @@ void PAD::SetDrawCoord()
 
 void PAD::SetLocalCoord()
 {
-    MODULE* parentFootprint = (MODULE*) m_Parent;
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
 
     if( parentFootprint == NULL )
     {
@@ -658,7 +658,7 @@ int PAD::GetSolderMaskMargin() const
 
     int     margin = m_localSolderMaskMargin;
 
-    MODULE* parentFootprint = GetParent();
+    FOOTPRINT* parentFootprint = GetParent();
 
     if( parentFootprint )
     {
@@ -704,7 +704,7 @@ wxSize PAD::GetSolderPasteMargin() const
     int     margin = m_localSolderPasteMargin;
     double  mratio = m_localSolderPasteMarginRatio;
 
-    MODULE* parentFootprint = GetParent();
+    FOOTPRINT* parentFootprint = GetParent();
 
     if( parentFootprint )
     {
@@ -742,7 +742,7 @@ wxSize PAD::GetSolderPasteMargin() const
 
 ZONE_CONNECTION PAD::GetEffectiveZoneConnection( wxString* aSource ) const
 {
-    MODULE* parentFootprint = GetParent();
+    FOOTPRINT* parentFootprint = GetParent();
 
     if( m_zoneConnection == ZONE_CONNECTION::INHERITED && parentFootprint )
     {
@@ -763,7 +763,7 @@ ZONE_CONNECTION PAD::GetEffectiveZoneConnection( wxString* aSource ) const
 
 int PAD::GetEffectiveThermalSpokeWidth( wxString* aSource ) const
 {
-    MODULE* parentFootprint = GetParent();
+    FOOTPRINT* parentFootprint = GetParent();
 
     if( m_thermalWidth == 0 && parentFootprint )
     {
@@ -782,7 +782,7 @@ int PAD::GetEffectiveThermalSpokeWidth( wxString* aSource ) const
 
 int PAD::GetEffectiveThermalGap( wxString* aSource ) const
 {
-    MODULE* parentFootprint = GetParent();
+    FOOTPRINT* parentFootprint = GetParent();
 
     if( m_thermalGap == 0 && parentFootprint )
     {
@@ -805,7 +805,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     wxString               msg, msg2;
     BOARD*                 board = GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    MODULE*                parentFootprint = (MODULE*) m_Parent;
+    FOOTPRINT*             parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
 
     if( parentFootprint )
         aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference(), DARKCYAN );
@@ -1238,9 +1238,9 @@ const BOX2I PAD::ViewBBox() const
 }
 
 
-MODULE* PAD::GetParent() const
+FOOTPRINT* PAD::GetParent() const
 {
-    return dynamic_cast<MODULE*>( m_Parent );
+    return dynamic_cast<FOOTPRINT*>( m_Parent );
 }
 
 
@@ -1332,7 +1332,7 @@ void PAD::SwapData( BOARD_ITEM* aImage )
 {
     assert( aImage->Type() == PCB_PAD_T );
 
-    std::swap( *((MODULE*) this), *((MODULE*) aImage) );
+    std::swap( *((FOOTPRINT*) this), *((FOOTPRINT*) aImage) );
 }
 
 

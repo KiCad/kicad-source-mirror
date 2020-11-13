@@ -155,17 +155,17 @@ public:
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
 
-    const MODULE* GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                          const wxString& aFootprintName,
-                                          const PROPERTIES* aProperties = NULL ) override;
+    const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                             const wxString& aFootprintName,
+                                             const PROPERTIES* aProperties = NULL ) override;
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
                           const PROPERTIES* aProperties = NULL ) override;
 
-    MODULE* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                           const PROPERTIES* aProperties = NULL ) override;
+    FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                              const PROPERTIES* aProperties = NULL ) override;
 
-    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+    void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
                         const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
@@ -232,8 +232,8 @@ protected:
 
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
-    const MODULE* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
-                  const PROPERTIES* aProperties, bool checkModified );
+    const FOOTPRINT* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                   const PROPERTIES* aProperties, bool checkModified );
 
     void init( const PROPERTIES* aProperties );
 
@@ -268,7 +268,7 @@ private:
 
     void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
 
-    void format( MODULE* aFootprint, int aNestLevel = 0 ) const;
+    void format( FOOTPRINT* aFootprint, int aNestLevel = 0 ) const;
 
     void format( PAD* aPad, int aNestLevel = 0 ) const;
 

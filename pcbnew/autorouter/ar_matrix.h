@@ -35,7 +35,7 @@
 class PCB_SHAPE;
 class TRACK;
 class PAD;
-class MODULE;
+class FOOTPRINT;
 
 #define AR_MAX_ROUTING_LAYERS_COUNT 2
 

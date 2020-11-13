@@ -463,7 +463,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // Add holes of footprints
     // /////////////////////////////////////////////////////////////////////////
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -497,7 +497,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     // Add contours of the pad holes (pads can be Circle or Segment holes)
     // /////////////////////////////////////////////////////////////////////////
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -549,7 +549,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // ADD PADS
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             // Note: NPTH pads are not drawn on copper layers when the pad
             // has same shape as its hole
@@ -564,7 +564,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     if( renderPlatedPadsAsPlated )
     {
         // ADD PLATED PADS
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             AddPadsWithClearanceToContainer( footprint, m_platedpads_container2D_F_Cu, F_Cu,
                                              0, true, false, true );
@@ -588,7 +588,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
 
             // Add pads to polygon list
-            for( MODULE* footprint : m_board->Footprints() )
+            for( FOOTPRINT* footprint : m_board->Footprints() )
             {
                 // Note: NPTH pads are not drawn on copper layers when the pad
                 // has same shape as its hole
@@ -604,7 +604,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( renderPlatedPadsAsPlated )
         {
             // ADD PLATED PADS contourns
-            for( MODULE* footprint : m_board->Footprints() )
+            for( FOOTPRINT* footprint : m_board->Footprints() )
             {
                 footprint->TransformPadsWithClearanceToPolygon( *m_F_Cu_PlatedPads_poly, F_Cu,
                                                                 0, ARC_HIGH_DEF, ERROR_INSIDE,
@@ -977,7 +977,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         // Add footprints tech layers - objects
         // /////////////////////////////////////////////////////////////////////
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {
@@ -1002,7 +1002,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
 
         // Add footprints tech layers - contours
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             if( (curr_layer_id == F_SilkS) || (curr_layer_id == B_SilkS) )
             {

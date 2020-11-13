@@ -454,12 +454,12 @@ void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 }
 
 
-MODULE* PCB_SHAPE::GetParentFootprint() const
+FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 {
     if( !m_Parent || m_Parent->Type() != PCB_FOOTPRINT_T )
         return NULL;
 
-    return (MODULE*) m_Parent;
+    return (FOOTPRINT*) m_Parent;
 }
 
 
@@ -580,7 +580,7 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
         if( m_Poly.IsEmpty() )
             break;
 
-        MODULE* parentFootprint = GetParentFootprint();
+        FOOTPRINT* parentFootprint = GetParentFootprint();
         bbox = EDA_RECT();  // re-init for merging
 
         for( auto iter = m_Poly.CIterate(); iter; iter++ )
@@ -942,9 +942,9 @@ const BOX2I PCB_SHAPE::ViewBBox() const
 std::vector<wxPoint> PCB_SHAPE::GetRectCorners() const
 {
     std::vector<wxPoint> pts;
-    MODULE* parentFootprint = GetParentFootprint();
-    wxPoint topLeft = GetStart();
-    wxPoint botRight = GetEnd();
+    FOOTPRINT* parentFootprint = GetParentFootprint();
+    wxPoint    topLeft = GetStart();
+    wxPoint    botRight = GetEnd();
 
     // Un-rotate rect topLeft and botRight
     if( parentFootprint && KiROUND( parentFootprint->GetOrientation() ) % 900 != 0 )

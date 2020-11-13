@@ -148,9 +148,9 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
  * @param aFileType - type of the file
  * @param aName - name of the footprint
  */
-static MODULE* parse_module_with_plugin( const wxFileName& aFileName,
-                                         IO_MGR::PCB_FILE_T aFileType,
-                                         const wxString& aName )
+static FOOTPRINT* parse_module_with_plugin( const wxFileName& aFileName,
+                                            IO_MGR::PCB_FILE_T aFileType,
+                                            const wxString& aName )
 {
     wxString path;
 
@@ -176,7 +176,7 @@ static MODULE* parse_module_with_plugin( const wxFileName& aFileName,
  * Parse a KICAD footprint.
  * @param aFileName - file name to parse
  */
-static MODULE* parse_module_kicad( const wxFileName& aFileName )
+static FOOTPRINT* parse_module_kicad( const wxFileName& aFileName )
 {
     wxString fcontents;
     PCB_IO   pcb_io;
@@ -187,7 +187,7 @@ static MODULE* parse_module_kicad( const wxFileName& aFileName )
 
     f.ReadAll( &fcontents );
 
-    return dynamic_cast<MODULE*>( pcb_io.Parse( fcontents ) );
+    return dynamic_cast<FOOTPRINT*>( pcb_io.Parse( fcontents ) );
 }
 
 
@@ -197,10 +197,10 @@ static MODULE* parse_module_kicad( const wxFileName& aFileName )
  * @param aFileType - type of the file to load
  * @param aName - footprint name
  */
-MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
-        const wxString& aName )
+FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFileType,
+                               const wxString& aName )
 {
-    MODULE* footprint;
+    FOOTPRINT* footprint;
 
     switch( aFileType )
     {
@@ -222,7 +222,7 @@ MODULE* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T aFil
 }
 
 
-MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
+FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 {
     wxString lastOpenedPathForLoading = m_mruPath;
     FOOTPRINT_EDITOR_SETTINGS* cfg    = GetSettings();
@@ -260,7 +260,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         return NULL;
     }
 
-    MODULE* footprint = NULL;
+    FOOTPRINT* footprint = NULL;
 
     try
     {
@@ -306,7 +306,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ExportFootprint( MODULE* aFootprint )
+void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 {
     wxFileName fn;
     FOOTPRINT_EDITOR_SETTINGS* cfg = GetSettings();
@@ -621,7 +621,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
     wxString footprintName;
 
     auto resetReference =
-            []( MODULE* aFootprint )
+            []( FOOTPRINT* aFootprint )
             {
                 aFootprint->SetReference( "REF**" );
             };
@@ -638,7 +638,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
         prj.SetRString( PROJECT::PCB_LIB_NICKNAME, nickname );
 
-        for( MODULE* footprint : GetBoard()->Footprints() )
+        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {
             try
             {
@@ -646,7 +646,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 
                 if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
                 {
-                    MODULE* fpCopy = static_cast<MODULE*>( footprint->Duplicate() );
+                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
 
                     resetReference( fpCopy );
                     tbl->FootprintSave( nickname, fpCopy, true );
@@ -675,13 +675,13 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
         IO_MGR::PCB_FILE_T piType = IO_MGR::KICAD_SEXP;
         PLUGIN::RELEASER   pi( IO_MGR::PluginFind( piType ) );
 
-        for( MODULE* footprint : GetBoard()->Footprints() )
+        for( FOOTPRINT* footprint : GetBoard()->Footprints() )
         {
             try
             {
                 if( !footprint->GetFPID().GetLibItemName().empty() )    // Handle old boards.
                 {
-                    MODULE* fpCopy = static_cast<MODULE*>( footprint->Duplicate() );
+                    FOOTPRINT* fpCopy = static_cast<FOOTPRINT*>( footprint->Duplicate() );
 
                     resetReference( fpCopy );
                     pi->FootprintSave( libPath, fpCopy );
@@ -698,7 +698,7 @@ void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxStr
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aFootprint )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprint( FOOTPRINT* aFootprint )
 {
     if( !aFootprint )      // Happen if no footprint loaded
         return false;
@@ -760,7 +760,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aFootprint )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( MODULE* aFootprint,
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintInLibrary( FOOTPRINT* aFootprint,
                                                    const wxString& aLibraryName )
 {
     try
@@ -794,9 +794,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         return false;
     }
 
-    BOARD*  mainpcb  = pcbframe->GetBoard();
-    MODULE* sourceFootprint  = NULL;
-    MODULE* editorFootprint = GetBoard()->GetFirstFootprint();
+    BOARD*     mainpcb  = pcbframe->GetBoard();
+    FOOTPRINT* sourceFootprint  = NULL;
+    FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
 
     // Search the old footprint (source) if exists
     // Because this source could be deleted when editing the main board...
@@ -804,7 +804,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     {
         sourceFootprint = nullptr;
 
-        for( MODULE* candidate : mainpcb->Footprints() )
+        for( FOOTPRINT* candidate : mainpcb->Footprints() )
         {
             if( editorFootprint->GetLink() == candidate->m_Uuid )
             {
@@ -825,7 +825,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     BOARD_COMMIT commit( pcbframe );
 
     // Create the "new" footprint
-    MODULE* newFootprint = new MODULE( *editorFootprint );
+    FOOTPRINT* newFootprint = new FOOTPRINT( *editorFootprint );
     const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
 
     newFootprint->SetParent( mainpcb );
@@ -863,7 +863,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aFootprint )
+bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 {
     if( aFootprint == NULL )
         return false;
@@ -906,7 +906,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aFootprint )
     bNameSizer->Add( nameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
     wxTextValidator nameValidator( wxFILTER_EXCLUDE_CHAR_LIST );
-    nameValidator.SetCharExcludes( MODULE::StringLibNameInvalidChars( false ) );
+    nameValidator.SetCharExcludes( FOOTPRINT::StringLibNameInvalidChars( false ) );
     nameTextCtrl->SetValidator( nameValidator );
 
     wxSizer* mainSizer = dlg.GetSizer();
@@ -1000,7 +1000,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
         if( ConfirmRevertDialog( this, msg ) )
         {
             Clear_Pcb( false );
-            AddFootprintToBoard( (MODULE*) m_revertModule->Clone());
+            AddFootprintToBoard( (FOOTPRINT*) m_revertModule->Clone());
 
             Zoom_Automatique( false );
 
@@ -1020,7 +1020,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
 }
 
 
-MODULE* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
+FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
 {
     wxString footprintName = aFootprintName;
 
@@ -1045,7 +1045,7 @@ MODULE* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
     }
 
     // Creates the new footprint and add it to the head of the linked list of footprints
-    MODULE* footprint = new MODULE( GetBoard() );
+    FOOTPRINT* footprint = new FOOTPRINT( GetBoard() );
 
     // Update parameters: timestamp ...
     footprint->SetLastEditTime();

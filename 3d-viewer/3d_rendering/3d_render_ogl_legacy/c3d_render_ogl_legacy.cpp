@@ -1265,7 +1265,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
     C_OGL_3DMODEL::BeginDrawMulti( !aRenderSelectedOnly );
 
     // Go for all footprints
-    for( MODULE* fp : m_boardAdapter.GetBoard()->Footprints() )
+    for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
         const bool isIntersected = ( fp == m_currentIntersectedBoardItem );
 
@@ -1319,7 +1319,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const MODULE* aFootprint,
+void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
                                                  bool aRenderTransparentOnly,
                                                  bool aIsSelected )
 {

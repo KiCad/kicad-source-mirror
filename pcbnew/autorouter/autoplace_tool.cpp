@@ -46,7 +46,7 @@ AUTOPLACE_TOOL::~AUTOPLACE_TOOL()
 // especially each time a footprint is autoplaced,
 static PCB_BASE_EDIT_FRAME* fparent;
 
-static int refreshCallback( MODULE* aFootprint )
+static int refreshCallback( FOOTPRINT* aFootprint )
 {
     if( aFootprint )
         fparent->GetCanvas()->GetView()->Update( aFootprint );
@@ -59,7 +59,7 @@ static int refreshCallback( MODULE* aFootprint )
 }
 
 
-int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aFootprints, bool aPlaceOffboard )
+int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlaceOffboard )
 {
     EDA_RECT bbox = board()->GetBoardEdgesBoundingBox();
 
@@ -82,7 +82,7 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aFootprints, bool aPlaceOff
     autoplacer.SetOverlay( overlay );
 
     fparent = frame();
-    std::function<int( MODULE* aFootprint )> callback = refreshCallback;
+    std::function<int( FOOTPRINT* aFootprint )> callback = refreshCallback;
     autoplacer.SetRefreshCallback( callback );
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
@@ -102,12 +102,12 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aFootprints, bool aPlaceOff
 
 int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
 {
-    std::vector<MODULE*> footprints;
+    std::vector<FOOTPRINT*> footprints;
 
     for( EDA_ITEM* item : selection() )
     {
         if( item->Type() == PCB_FOOTPRINT_T )
-            footprints.push_back( static_cast<MODULE*>( item ) );
+            footprints.push_back( static_cast<FOOTPRINT*>( item ) );
     }
 
     return autoplace( footprints, false );
@@ -116,7 +116,7 @@ int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
 
 int AUTOPLACE_TOOL::autoplaceOffboard( const TOOL_EVENT& aEvent )
 {
-    std::vector<MODULE*> footprints;
+    std::vector<FOOTPRINT*> footprints;
 
     return autoplace( footprints, true );
 }

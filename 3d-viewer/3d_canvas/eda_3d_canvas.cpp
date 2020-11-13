@@ -763,7 +763,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
                 case PCB_FOOTPRINT_T:
                 {
-                    MODULE* footprint = dynamic_cast<MODULE *>( intersectedBoardItem );
+                    FOOTPRINT* footprint = dynamic_cast<FOOTPRINT *>( intersectedBoardItem );
 
                     if( footprint )
                         activityReporter.Report( footprint->GetReference() );

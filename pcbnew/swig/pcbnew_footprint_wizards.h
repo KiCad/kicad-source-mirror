@@ -43,8 +43,7 @@ class PYTHON_FOOTPRINT_WIZARD : public FOOTPRINT_WIZARD
     PyObject* m_PyWizard;
     PyObject*       CallMethod( const char* aMethod, PyObject* aArglist = NULL );
     wxString        CallRetStrMethod( const char* aMethod, PyObject* aArglist = NULL );
-    wxArrayString   CallRetArrayStrMethod( const char*  aMethod,
-                                           PyObject*    aArglist = NULL );
+    wxArrayString   CallRetArrayStrMethod( const char*  aMethod, PyObject* aArglist = NULL );
 
 public:
     PYTHON_FOOTPRINT_WIZARD( PyObject* wizard );
@@ -61,7 +60,7 @@ public:
     wxArrayString   GetParameterErrors( int aPage ) override;
     // must return an empty string or an error description:
     wxString        SetParameterValues( int aPage, wxArrayString& aValues ) override;
-    MODULE*         GetFootprint( wxString * aMessages ) override;
+    FOOTPRINT*      GetFootprint( wxString * aMessages ) override;
     void*           GetObject() override;
     wxArrayString   GetParameterHints( int aPage ) override;
     wxArrayString   GetParameterDesignators( int aPage = 0) override;

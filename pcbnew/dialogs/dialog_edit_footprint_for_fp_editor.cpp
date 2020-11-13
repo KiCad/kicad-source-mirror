@@ -52,7 +52,7 @@ int DIALOG_FOOTPRINT_FP_EDITOR::m_page = 0;     // remember the last open page d
 
 
 DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent,
-                                                        MODULE* aFootprint ) :
+                                                        FOOTPRINT* aFootprint ) :
     DIALOG_FOOTPRINT_FP_EDITOR_BASE( aParent ),
     m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits, true ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
@@ -526,10 +526,10 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::checkFootprintName( const wxString& aFootprintN
         m_delayedErrorMessage = _( "Footprint must have a name." );
         return false;
     }
-    else if( !MODULE::IsLibNameValid( aFootprintName ) )
+    else if( !FOOTPRINT::IsLibNameValid( aFootprintName ) )
     {
         m_delayedErrorMessage.Printf( _( "Footprint name may not contain \"%s\"." ),
-                                      MODULE::StringLibNameInvalidChars( true ) );
+                                      FOOTPRINT::StringLibNameInvalidChars( true ) );
         return false;
     }
 
@@ -709,7 +709,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 }
 
 
-static bool footprintIsFromBoard( MODULE* aFootprint )
+static bool footprintIsFromBoard( FOOTPRINT* aFootprint )
 {
     return aFootprint->GetLink() != niluuid;
 }

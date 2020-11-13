@@ -49,7 +49,7 @@ class wxSize;
 class wxString;
 
 class BOARD;
-class MODULE;
+class FOOTPRINT;
 
 // Often this is not used in the prototypes, since wxFrame is good enough and would
 // represent maximum information hiding.

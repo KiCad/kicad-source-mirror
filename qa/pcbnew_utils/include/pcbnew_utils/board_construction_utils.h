@@ -34,7 +34,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <math/vector2d.h>
 
-class MODULE;
+class FOOTPRINT;
 class SEG;
 
 
@@ -48,7 +48,7 @@ namespace KI_TEST
  * @param aWidth The width of the segment
  * @param aLayer The layer to draw on
  */
-void DrawSegment( MODULE& aMod, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer );
+void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer );
 
 /**
  * Draw a polyline - a set of linked segments
@@ -57,8 +57,8 @@ void DrawSegment( MODULE& aMod, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer
  * @param aWidth The width of the segments
  * @param aLayer The layer to draw on
  */
-void DrawPolyline(
-        MODULE& aMod, const std::vector<VECTOR2I>& aPts, int aWidth, PCB_LAYER_ID aLayer );
+void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int aWidth,
+                  PCB_LAYER_ID aLayer );
 
 /**
  * Draw an arc on a module
@@ -69,8 +69,8 @@ void DrawPolyline(
  * @param aWidth  The width of the arc segment
  * @param aLayer  The layer to draw on
  */
-void DrawArc( MODULE& aMod, const VECTOR2I& aCentre, const VECTOR2I& aStart, double aAngle,
-        int aWidth, PCB_LAYER_ID aLayer );
+void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
+              double aAngle, int aWidth, PCB_LAYER_ID aLayer );
 
 /**
  * Draw a rectangle on a module
@@ -81,8 +81,8 @@ void DrawArc( MODULE& aMod, const VECTOR2I& aCentre, const VECTOR2I& aStart, dou
  * @param aWidth  Line width
  * @param aLayer  Layer to draw on
  */
-void DrawRect( MODULE& aMod, const VECTOR2I& aPos, const VECTOR2I& aSize, int aRadius, int aWidth,
-        PCB_LAYER_ID aLayer );
+void DrawRect( FOOTPRINT& aFootprint, const VECTOR2I& aPos, const VECTOR2I& aSize, int aRadius,
+               int aWidth, PCB_LAYER_ID aLayer );
 
 } // namespace KI_TEST
 

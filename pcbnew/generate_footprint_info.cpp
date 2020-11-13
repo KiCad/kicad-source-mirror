@@ -49,7 +49,7 @@ class FOOTPRINT_INFO_GENERATOR
     wxString      m_html;
     FP_LIB_TABLE* m_fp_lib_table;
     LIB_ID const  m_lib_id;
-    MODULE*       m_footprint;
+    FOOTPRINT*    m_footprint;
 
 public:
     FOOTPRINT_INFO_GENERATOR( FP_LIB_TABLE* aFpLibTable, LIB_ID const& aLibId )

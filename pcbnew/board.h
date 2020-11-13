@@ -194,7 +194,7 @@ private:
     wxString            m_fileName;
     MARKERS             m_markers;
     DRAWINGS            m_drawings;
-    MODULES             m_footprints;
+    FOOTPRINTS          m_footprints;
     TRACKS              m_tracks;
     GROUPS              m_groups;
     ZONES               m_zones;
@@ -281,8 +281,8 @@ public:
     TRACKS& Tracks() { return m_tracks; }
     const TRACKS& Tracks() const { return m_tracks; }
 
-    MODULES& Footprints() { return m_footprints; }
-    const MODULES& Footprints() const { return m_footprints; }
+    FOOTPRINTS& Footprints() { return m_footprints; }
+    const FOOTPRINTS& Footprints() const { return m_footprints; }
 
     DRAWINGS& Drawings() { return m_drawings; }
     const DRAWINGS& Drawings() const { return m_drawings; }
@@ -345,7 +345,7 @@ public:
      * This is used primarily by the footprint editor which knows there is only one.
      * @return first footprint or null pointer
      */
-    MODULE* GetFirstFootprint() const
+    FOOTPRINT* GetFirstFootprint() const
     {
         return m_footprints.empty() ? nullptr : m_footprints.front();
     }
@@ -353,9 +353,9 @@ public:
     /**
      * Removes all footprints from the deque and frees the memory associated with them
      */
-    void DeleteAllModules()
+    void DeleteAllFootprints()
     {
-        for( MODULE* footprint : m_footprints )
+        for( FOOTPRINT* footprint : m_footprints )
             delete footprint;
 
         m_footprints.clear();
@@ -802,22 +802,23 @@ public:
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
-     * Search for a MODULE within this board with the given reference designator.
+     * Search for a FOOTPRINT within this board with the given reference designator.
      *
-     * Finds only the first one, if there is more than one such MODULE.
+     * Finds only the first one, if there is more than one such FOOTPRINT.
      *
-     * @param aReference The reference designator of the MODULE to find.
-     * @return MODULE* - If found, the MODULE having the given reference designator, else NULL.
+     * @param aReference The reference designator of the FOOTPRINT to find.
+     * @return FOOTPRINT* - If found, the FOOTPRINT having the given reference designator, else
+     *                      nullptr.
      */
-    MODULE* FindModuleByReference( const wxString& aReference ) const;
+    FOOTPRINT* FindFootprintByReference( const wxString& aReference ) const;
 
     /**
-     * Search for a MODULE within this board with the given path.
+     * Search for a FOOTPRINT within this board with the given path.
      *
      * @param aPath The path ([sheetUUID, .., symbolUUID]) to search for.
-     * @return MODULE* - If found, the MODULE having the given uuid, else NULL.
+     * @return FOOTPRINT* - If found, the FOOTPRINT having the given uuid, else NULL.
      */
-    MODULE* FindModuleByPath( const KIID_PATH& aPath ) const;
+    FOOTPRINT* FindFootprintByPath( const KIID_PATH& aPath ) const;
 
     /**
      * @param aNames An array string to fill with net names.
@@ -1082,8 +1083,8 @@ public:
      * @param aVisibleOnly Search only the visible layers if true.
      * @param aIgnoreLocked Ignore locked footprints when true.
      */
-    MODULE* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
-                          bool aVisibleOnly, bool aIgnoreLocked = false );
+    FOOTPRINT* GetFootprint( const wxPoint& aPosition, PCB_LAYER_ID aActiveLayer,
+                             bool aVisibleOnly, bool aIgnoreLocked = false );
 
     /**
      * Reset all items' netcodes to 0 (no net).

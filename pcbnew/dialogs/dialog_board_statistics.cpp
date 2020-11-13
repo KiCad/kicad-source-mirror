@@ -181,7 +181,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
     BOARD* board = m_parentFrame->GetBoard();
 
     // Get footprints and pads count
-    for( MODULE* footprint : board->Footprints() )
+    for( FOOTPRINT* footprint : board->Footprints() )
     {
         // Do not proceed footprints with no pads if checkbox checked
         if( m_checkBoxExcludeComponentsNoPins->GetValue() && ! footprint->Pads().size() )

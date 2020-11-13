@@ -198,7 +198,7 @@ DIALOG_FIND_BASE::~DIALOG_FIND_BASE()
 }
 
 
-MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
+FOOTPRINT* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
 {
     return nullptr;
 }

@@ -126,7 +126,7 @@ PCB_SHAPE* ALTIUM_PCB::HelperCreateAndAddDrawsegment( uint16_t aComponent )
                                               m_components.size() ) );
         }
 
-        MODULE*    footprint = m_components.at( aComponent );
+        FOOTPRINT* footprint = m_components.at( aComponent );
         PCB_SHAPE* fpShape = new FP_SHAPE( footprint );
 
         footprint->Add( fpShape, ADD_MODE::APPEND );
@@ -304,7 +304,7 @@ ALTIUM_PCB::~ALTIUM_PCB()
 }
 
 void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
-        const std::map<ALTIUM_PCB_DIR, std::string>&   aFileMapping )
+                        const std::map<ALTIUM_PCB_DIR, std::string>&   aFileMapping )
 {
     // this vector simply declares in which order which functions to call.
     const std::vector<std::tuple<bool, ALTIUM_PCB_DIR, PARSE_FUNCTION_POINTER_fp>> parserOrder = {
@@ -399,10 +399,9 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
         const auto& mappedDirectory = aFileMapping.find( directory );
         if( mappedDirectory == aFileMapping.end() )
         {
-            wxASSERT_MSG( !isRequired,
-                    wxString::Format(
-                            "Altium Directory of kind %d was expected, but no mapping is present in the code",
-                            directory ) );
+            wxASSERT_MSG( !isRequired, wxString::Format( "Altium Directory of kind %d was expected, "
+                                                         "but no mapping is present in the code",
+                                                         directory ) );
             continue;
         }
 
@@ -446,7 +445,7 @@ void ALTIUM_PCB::Parse( const CFB::CompoundFileReader& aReader,
     }
 
     // Finish Board by recalculating footprint boundingboxes
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
         footprint->CalculateBoundingBox();
 
     // Otherwise we cannot save the imported board
@@ -504,8 +503,8 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
     return nullptr;
 }
 
-void ALTIUM_PCB::ParseFileHeader(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseFileHeader( const CFB::CompoundFileReader& aReader,
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -523,8 +522,8 @@ void ALTIUM_PCB::ParseFileHeader(
     //}
 }
 
-void ALTIUM_PCB::ParseBoard6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseBoard6Data( const CFB::CompoundFileReader& aReader,
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -703,8 +702,8 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
     }
 }
 
-void ALTIUM_PCB::ParseClasses6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseClasses6Data( const CFB::CompoundFileReader& aReader,
+                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -739,8 +738,8 @@ void ALTIUM_PCB::ParseClasses6Data(
     m_board->m_LegacyNetclassesLoaded = true;
 }
 
-void ALTIUM_PCB::ParseComponents6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
+                                       const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -749,7 +748,7 @@ void ALTIUM_PCB::ParseComponents6Data(
     {
         ACOMPONENT6 elem( reader );
 
-        MODULE* footprint = new MODULE( m_board );
+        FOOTPRINT* footprint = new FOOTPRINT( m_board );
         m_board->Add( footprint, ADD_MODE::APPEND );
         m_components.emplace_back( footprint );
 
@@ -782,8 +781,8 @@ void ALTIUM_PCB::ParseComponents6Data(
 }
 
 
-void ALTIUM_PCB::ParseComponentsBodies6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseComponentsBodies6Data( const CFB::CompoundFileReader& aReader,
+                                             const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -816,7 +815,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data(
                     elem.modelId ) );
         }
 
-        MODULE*        footprint  = m_components.at( elem.component );
+        FOOTPRINT*     footprint  = m_components.at( elem.component );
         const wxPoint& fpPosition = footprint->GetPosition();
 
         FP_3DMODEL modelSettings;
@@ -865,9 +864,9 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format(
-                _( "Dimension on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                aElem.layer ) );
+        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
+                                           "Put it on Eco1_User instead" ),
+                                        aElem.layer ) );
         klayer = Eco1_User;
     }
 
@@ -942,9 +941,9 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format(
-                _( "Dimension on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                aElem.layer ) );
+        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
+                                           "Put it on Eco1_User instead" ),
+                                        aElem.layer ) );
         klayer = Eco1_User;
     }
 
@@ -1020,9 +1019,9 @@ void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format(
-                _( "Dimension on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                aElem.layer ) );
+        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
+                                           "Put it on Eco1_User instead" ),
+                                        aElem.layer ) );
         klayer = Eco1_User;
     }
 
@@ -1043,9 +1042,9 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
     PCB_LAYER_ID klayer = GetKicadLayer( aElem.layer );
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format(
-                _( "Dimension on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                aElem.layer ) );
+        wxLogWarning( wxString::Format( _( "Dimension on Altium layer %d has no KiCad equivalent. "
+                                           "Put it on Eco1_User instead" ),
+                                        aElem.layer ) );
         klayer = Eco1_User;
     }
 
@@ -1061,8 +1060,8 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
 }
 
 
-void ALTIUM_PCB::ParseDimensions6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseDimensions6Data( const CFB::CompoundFileReader& aReader,
+                                       const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1099,7 +1098,7 @@ void ALTIUM_PCB::ParseDimensions6Data(
 
 
 void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
-        const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir )
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry, const wxString aRootDir )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1175,8 +1174,8 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
 }
 
 
-void ALTIUM_PCB::ParseNets6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseNets6Data( const CFB::CompoundFileReader& aReader,
+                                 const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1194,8 +1193,8 @@ void ALTIUM_PCB::ParseNets6Data(
     }
 }
 
-void ALTIUM_PCB::ParsePolygons6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParsePolygons6Data( const CFB::CompoundFileReader& aReader,
+                                     const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1206,9 +1205,9 @@ void ALTIUM_PCB::ParsePolygons6Data(
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format(
-                    _( "Polygon on Altium layer %d has no KiCad equivalent. Ignore it instead" ),
-                    elem.layer ) );
+            wxLogWarning( wxString::Format( _( "Polygon on Altium layer %d has no KiCad equivalent. "
+                                               "Ignore it instead" ),
+                                            elem.layer ) );
             m_polygons.emplace_back( nullptr );
             continue;
         }
@@ -1218,9 +1217,10 @@ void ALTIUM_PCB::ParsePolygons6Data(
 
         if( linechain.PointCount() < 2 )
         {
-            wxLogError( wxString::Format(
-                    _( "Polygon has only %d point extracted from %ld vertices. At least 2 points are required." ),
-                    linechain.PointCount(), elem.vertices.size() ) );
+            wxLogError( wxString::Format( _( "Polygon has only %d point extracted from %ld vertices. "
+                                             "At least 2 points are required." ),
+                                          linechain.PointCount(),
+                                          elem.vertices.size() ) );
             m_polygons.emplace_back( nullptr );
             continue;
         }
@@ -1321,8 +1321,8 @@ void ALTIUM_PCB::ParsePolygons6Data(
     }
 }
 
-void ALTIUM_PCB::ParseRules6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseRules6Data( const CFB::CompoundFileReader& aReader,
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1337,7 +1337,10 @@ void ALTIUM_PCB::ParseRules6Data(
     for( auto&& val : m_rules )
     {
         std::sort( val.second.begin(), val.second.end(),
-                []( const auto& lhs, const auto& rhs ) { return lhs.priority < rhs.priority; } );
+                []( const auto& lhs, const auto& rhs )
+                {
+                    return lhs.priority < rhs.priority;
+                } );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1346,8 +1349,8 @@ void ALTIUM_PCB::ParseRules6Data(
     }
 }
 
-void ALTIUM_PCB::ParseBoardRegionsData(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseBoardRegionsData( const CFB::CompoundFileReader& aReader,
+                                        const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1364,8 +1367,8 @@ void ALTIUM_PCB::ParseBoardRegionsData(
     }
 }
 
-void ALTIUM_PCB::ParseShapeBasedRegions6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aReader,
+                                              const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1413,9 +1416,9 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format(
-                            _( "Zone on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                            elem.layer ) );
+                    wxLogWarning( wxString::Format( _( "Zone on Altium layer %d has no KiCad "
+                                                       "equivalent. Put it on Eco1_User instead" ),
+                                                    elem.layer ) );
                     klayer = Eco1_User;
                 }
                 zone->SetLayer( klayer );
@@ -1431,9 +1434,9 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format(
-                            _( "Polygon on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                            elem.layer ) );
+                    wxLogWarning( wxString::Format( _( "Polygon on Altium layer %d has no KiCad "
+                                                       "equivalent. Put it on Eco1_User instead" ),
+                                                    elem.layer ) );
                     klayer = Eco1_User;
                 }
 
@@ -1442,9 +1445,10 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
 
                 if( linechain.PointCount() < 2 )
                 {
-                    wxLogError( wxString::Format(
-                            _( "Polygon has only %d point extracted from %ld vertices. At least 2 points are required." ),
-                            linechain.PointCount(), elem.vertices.size() ) );
+                    wxLogError( wxString::Format( _( "Polygon has only %d point extracted from %ld "
+                                                     "vertices. At least 2 points are required." ),
+                                                  linechain.PointCount(),
+                                                  elem.vertices.size() ) );
                     continue;
                 }
 
@@ -1459,9 +1463,10 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
         }
         else
         {
-            wxLogError( wxString::Format(
-                    "Ignore polygon shape of kind %d on layer %s, because not implemented yet",
-                    elem.kind, LSET::Name( GetKicadLayer( elem.layer ) ) ) );
+            wxLogError( wxString::Format( "Ignore polygon shape of kind %d on layer %s, because "
+                                          "not implemented yet",
+                                          elem.kind,
+                                          LSET::Name( GetKicadLayer( elem.layer ) ) ) );
         }
     }
 
@@ -1471,8 +1476,8 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data(
     }
 }
 
-void ALTIUM_PCB::ParseRegions6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseRegions6Data( const CFB::CompoundFileReader& aReader,
+                                    const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -1588,9 +1593,9 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
                 PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
                 if( klayer == UNDEFINED_LAYER )
                 {
-                    wxLogWarning( wxString::Format(
-                            _( "Arc Keepout on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                            elem.layer ) );
+                    wxLogWarning( wxString::Format( _( "Arc Keepout on Altium layer %d has no "
+                                                       "KiCad equivalent. Put it on Eco1_User instead" ),
+                                                    elem.layer ) );
                     klayer = Eco1_User;
                 }
                 zone->SetLayer( klayer );
@@ -1607,9 +1612,9 @@ void ALTIUM_PCB::ParseArcs6Data( const CFB::CompoundFileReader& aReader,
 
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format(
-                    _( "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                    elem.layer ) );
+            wxLogWarning( wxString::Format( _( "Arc on Altium layer %d has no KiCad equivalent. "
+                                               "Put it on Eco1_User instead" ),
+                                            elem.layer ) );
             klayer = Eco1_User;
         }
 
@@ -1680,11 +1685,11 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
         }
 
         // Create Pad
-        MODULE* footprint = nullptr;
+        FOOTPRINT* footprint = nullptr;
 
         if( elem.component == ALTIUM_COMPONENT_NONE )
         {
-            footprint = new MODULE( m_board ); // We cannot add a pad directly into the PCB
+            footprint = new FOOTPRINT( m_board ); // We cannot add a pad directly into the PCB
             m_board->Add( footprint, ADD_MODE::APPEND );
             footprint->SetPosition( elem.position );
         }
@@ -1742,9 +1747,10 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                     break;
 
                 case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
-                    wxLogWarning( wxString::Format(
-                                _( "Pad '%s' of Footprint %s has a square hole. KiCad does not support this yet" ),
-                                elem.name, footprint->GetReference() ) );
+                    wxLogWarning( wxString::Format( _( "Pad '%s' of Footprint %s has a square hole. "
+                                                       "KiCad does not support this yet" ),
+                                                    elem.name,
+                                                    footprint->GetReference() ) );
                     pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                     pad->SetDrillSize( wxSize( elem.holesize, elem.holesize ) ); // Workaround
                     // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in this case or rect holes have a different id
@@ -1763,9 +1769,12 @@ void ALTIUM_PCB::ParsePads6Data( const CFB::CompoundFileReader& aReader,
                     {
                         if( normalizedSlotrotation != 90. && normalizedSlotrotation != 270. )
                         {
-                            wxLogWarning( wxString::Format(
-                                        _( "Pad '%s' of Footprint %s has a hole-rotation of %f degree. KiCad only supports 90 degree angles" ),
-                                        elem.name, footprint->GetReference(), normalizedSlotrotation ) );
+                            wxLogWarning( wxString::Format( _( "Pad '%s' of Footprint %s has a "
+                                                               "hole-rotation of %f degree. KiCad "
+                                                               "only supports 90 degree angles" ),
+                                                            elem.name,
+                                                            footprint->GetReference(),
+                                                            normalizedSlotrotation ) );
                         }
 
                         pad->SetDrillSize( wxSize( elem.holesize, elem.sizeAndShape->slotsize ) );
@@ -2217,8 +2226,8 @@ void ALTIUM_PCB::ParseTracks6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseTexts6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2255,8 +2264,8 @@ void ALTIUM_PCB::ParseTexts6Data(
                                                   m_components.size() ) );
             }
 
-            MODULE*  footprint = m_components.at( elem.component );
-            FP_TEXT* fpText;
+            FOOTPRINT* footprint = m_components.at( elem.component );
+            FP_TEXT*   fpText;
 
             if( elem.isDesignator )
             {
@@ -2301,12 +2310,12 @@ void ALTIUM_PCB::ParseTexts6Data(
 
         if( elem.component != ALTIUM_COMPONENT_NONE )
         {
-            FP_TEXT* fpText = dynamic_cast<FP_TEXT*>( tx );
+            FP_TEXT*   fpText = dynamic_cast<FP_TEXT*>( tx );
+            FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( fpText->GetParent() );
 
             if( fpText )
             {
-                double orientation =
-                        static_cast<const MODULE*>( fpText->GetParent() )->GetOrientation();
+                double orientation = parentFootprint->GetOrientation();
                 fpText->SetTextAngle( fpText->GetTextAngle() - orientation );
                 fpText->SetLocalCoord();
             }

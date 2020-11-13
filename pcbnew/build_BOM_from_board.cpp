@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
     CmpList::iterator iter;
     int               i = 1;
 
-    for( MODULE* fp : GetBoard()->Footprints() )
+    for( FOOTPRINT* fp : GetBoard()->Footprints() )
     {
         bool valExist = false;
 

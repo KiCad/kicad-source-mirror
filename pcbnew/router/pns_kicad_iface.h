@@ -33,7 +33,7 @@ class BOARD;
 class BOARD_COMMIT;
 class PCB_DISPLAY_OPTIONS;
 class PCB_TOOL_BASE;
-class MODULE;
+class FOOTPRINT;
 class PAD;
 
 namespace PNS
@@ -132,7 +132,7 @@ private:
         VECTOR2I p_old, p_new;
     };
 
-    std::map<PAD*, OFFSET>          m_moduleOffsets;
+    std::map<PAD*, OFFSET>          m_fpOffsets;
     KIGFX::VIEW*                    m_view;
     KIGFX::VIEW_GROUP*              m_previewItems;
     std::unordered_set<BOARD_ITEM*> m_hiddenItems;

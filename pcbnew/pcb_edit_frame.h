@@ -36,7 +36,7 @@ class PCB_SCREEN;
 class BOARD;
 class BOARD_COMMIT;
 class BOARD_ITEM_CONTAINER;
-class MODULE;
+class FOOTPRINT;
 class TRACK;
 class VIA;
 class PAD;
@@ -734,9 +734,9 @@ public:
     bool ImportSpecctraSession( const wxString& aFullFilename );
 
     // Footprint editing (see also PCB_BASE_FRAME)
-    void ShowFootprintPropertiesDialog( MODULE* aFootprint );
+    void ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint );
 
-    int ShowExchangeFootprintsDialog( MODULE* aFootprint, bool updateMode, bool selectedMode );
+    int ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aUpdateMode, bool aSelectedMode );
 
     /**
      * Function Exchange_Module
@@ -747,7 +747,7 @@ public:
      * @param aNew = footprint to put
      * @param aCommit = commit that should store the changes
      */
-    void ExchangeFootprint( MODULE* aExisting, MODULE* aNew, BOARD_COMMIT& aCommit,
+    void ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew, BOARD_COMMIT& aCommit,
                             bool deleteExtraTexts = true, bool resetTextLayers = true,
                             bool resetTextEffects = true, bool resetFabricationAttrs = true,
                             bool reset3DModels = true );

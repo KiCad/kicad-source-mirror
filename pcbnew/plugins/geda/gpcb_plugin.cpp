@@ -107,41 +107,41 @@ static inline long parseInt( const wxString& aValue, double aScalar )
  */
 class GPCB_FPL_CACHE_ITEM
 {
-    WX_FILENAME             m_filename; ///< The the full file name and path of the footprint to cache.
-    std::unique_ptr<MODULE> m_footprint;
+    WX_FILENAME m_filename; ///< The the full file name and path of the footprint to cache.
+    std::unique_ptr<FOOTPRINT> m_footprint;
 
 public:
-    GPCB_FPL_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName );
+    GPCB_FPL_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     WX_FILENAME  GetFileName() const  { return m_filename; }
-    MODULE*      GetFootprint() const { return m_footprint.get(); }
+    FOOTPRINT*      GetFootprint() const { return m_footprint.get(); }
 };
 
 
-GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName ) :
+GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName ) :
         m_filename( aFileName ),
         m_footprint( aFootprint )
 {
 }
 
 
-typedef boost::ptr_map< std::string, GPCB_FPL_CACHE_ITEM >  MODULE_MAP;
-typedef MODULE_MAP::iterator                                MODULE_ITER;
-typedef MODULE_MAP::const_iterator                          MODULE_CITER;
+typedef boost::ptr_map< std::string, GPCB_FPL_CACHE_ITEM >  FOOTPRINT_MAP;
+typedef FOOTPRINT_MAP::iterator                             MODULE_ITER;
+typedef FOOTPRINT_MAP::const_iterator                       MODULE_CITER;
 
 
 class GPCB_FPL_CACHE
 {
     GPCB_PLUGIN*    m_owner;            ///< Plugin object that owns the cache.
     wxFileName      m_lib_path;         ///< The path of the library.
-    MODULE_MAP      m_footprints;       ///< Map of footprint file name to MODULE*.
+    FOOTPRINT_MAP   m_footprints;       ///< Map of footprint file name to MODULE*.
 
     bool            m_cache_dirty;      ///< Stored separately because it's expensive to check
                                         ///< m_cache_timestamp against all the files.
     long long       m_cache_timestamp;  ///< A hash of the timestamps for all the footprint
                                         ///< files.
 
-    MODULE* parseMODULE( LINE_READER* aLineReader );
+    FOOTPRINT* parseMODULE( LINE_READER* aLineReader );
 
     /**
      * Function testFlags
@@ -178,7 +178,7 @@ public:
 
     wxString GetPath() const { return m_lib_path.GetPath(); }
     bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
-    MODULE_MAP& GetModules() { return m_footprints; }
+    FOOTPRINT_MAP& GetModules() { return m_footprints; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -252,9 +252,8 @@ void GPCB_FPL_CACHE::Load()
         {
             // reader now owns fp, will close on exception or return
             FILE_LINE_READER reader( fn.GetFullPath() );
-
             std::string      name = TO_UTF8( fn.GetName() );
-            MODULE*          footprint = parseMODULE( &reader );
+            FOOTPRINT*       footprint = parseMODULE( &reader );
 
             // The footprint name is the file name without the extension.
             footprint->SetFPID( LIB_ID( wxEmptyString, fn.GetName() ) );
@@ -310,7 +309,7 @@ long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 }
 
 
-MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
+FOOTPRINT* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
 {
     #define TEXT_DEFAULT_SIZE  ( 40*IU_PER_MILS )
     #define OLD_GPCB_UNIT_CONV IU_PER_MILS
@@ -318,12 +317,12 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
     // Old version unit = 1 mil, so conv_unit is 10 or 0.1
     #define NEW_GPCB_UNIT_CONV ( 0.01*IU_PER_MILS )
 
-    int                     paramCnt;
-    double                  conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
-    wxPoint                 textPos;
-    wxString                msg;
-    wxArrayString           parameters;
-    std::unique_ptr<MODULE> footprint = std::make_unique<MODULE>( nullptr );
+    int                        paramCnt;
+    double                     conv_unit = NEW_GPCB_UNIT_CONV; // GPCB unit = 0.01 mils and Pcbnew 0.1
+    wxPoint                    textPos;
+    wxString                   msg;
+    wxArrayString              parameters;
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
 
 
     if( aLineReader->ReadLine() == NULL )
@@ -905,10 +904,10 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
 }
 
 
-const MODULE* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
-                                         const wxString& aFootprintName,
-                                         const PROPERTIES* aProperties,
-                                         bool checkModified )
+const FOOTPRINT* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
+                                            const wxString& aFootprintName,
+                                            const PROPERTIES* aProperties,
+                                            bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -916,7 +915,7 @@ const MODULE* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
 
     validateCache( aLibraryPath, checkModified );
 
-    const MODULE_MAP& mods = m_cache->GetModules();
+    const FOOTPRINT_MAP& mods = m_cache->GetModules();
 
     MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
 
@@ -929,19 +928,20 @@ const MODULE* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
 }
 
 
-const MODULE* GPCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                                   const wxString& aFootprintName,
-                                                   const PROPERTIES* aProperties )
+const FOOTPRINT* GPCB_PLUGIN::GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                      const wxString& aFootprintName,
+                                                      const PROPERTIES* aProperties )
 {
     return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
 
 
-MODULE* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                                    const PROPERTIES* aProperties )
+FOOTPRINT* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
+                                       const wxString& aFootprintName,
+                                       const PROPERTIES* aProperties )
 {
-    const MODULE* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
-    return footprint ? (MODULE*) footprint->Duplicate() : nullptr;
+    const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
+    return footprint ? (FOOTPRINT*) footprint->Duplicate() : nullptr;
 }
 
 

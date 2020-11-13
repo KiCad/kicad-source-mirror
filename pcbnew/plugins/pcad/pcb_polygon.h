@@ -58,7 +58,7 @@ public:
 
     virtual void Flip() override;
 
-    void AddToFootprint( MODULE* aFootprint ) override;
+    void AddToFootprint( FOOTPRINT* aFootprint ) override;
 
     void AddToBoard() override;
 

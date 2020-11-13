@@ -160,7 +160,7 @@ bool PCB_POLYGON::Parse( XNODE*          aNode,
 }
 
 
-void PCB_POLYGON::AddToFootprint( MODULE* aFootprint )
+void PCB_POLYGON::AddToFootprint( FOOTPRINT* aFootprint )
 {
     if( IsNonCopperLayer( m_KiCadLayer ) )
     {

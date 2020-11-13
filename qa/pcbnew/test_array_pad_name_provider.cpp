@@ -38,20 +38,20 @@
 /**
  * Make a module with a given list of named pads
  */
-static std::unique_ptr<MODULE> ModuleWithPads( const std::vector<wxString> aNames )
+static std::unique_ptr<FOOTPRINT> ModuleWithPads( const std::vector<wxString> aNames )
 {
-    auto module = std::make_unique<MODULE>( nullptr );
+    std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
 
-    for( const auto& name : aNames )
+    for( const wxString& name : aNames )
     {
-        std::unique_ptr<PAD> pad = std::make_unique<PAD>( module.get() );
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( footprint.get() );
 
         pad->SetName( name );
 
-        module->Add( pad.release() );
+        footprint->Add( pad.release() );
     }
 
-    return module;
+    return footprint;
 }
 
 /**
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE( ModuleCases )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            std::unique_ptr<MODULE> module;
+            std::unique_ptr<FOOTPRINT> module;
 
             if( c.m_using_module )
             {

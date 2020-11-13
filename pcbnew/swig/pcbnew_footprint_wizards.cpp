@@ -342,10 +342,10 @@ void PYTHON_FOOTPRINT_WIZARD::ResetParameters()
 
 
 // this is a SWIG function declaration -from module.i
-MODULE* PyModule_to_MODULE( PyObject* obj0 );
+FOOTPRINT* PyFootprint_to_FOOTPRINT( PyObject* obj0 );
 
 
-MODULE* PYTHON_FOOTPRINT_WIZARD::GetFootprint( wxString * aMessages )
+FOOTPRINT* PYTHON_FOOTPRINT_WIZARD::GetFootprint( wxString * aMessages )
 {
     PyLOCK      lock;
 
@@ -365,9 +365,9 @@ MODULE* PYTHON_FOOTPRINT_WIZARD::GetFootprint( wxString * aMessages )
         PyErr_Clear();
     }
 
-    MODULE* mod = PyModule_to_MODULE( obj );
+    FOOTPRINT* footprint = PyFootprint_to_FOOTPRINT( obj );
 
-    return mod;
+    return footprint;
 }
 
 

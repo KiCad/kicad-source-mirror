@@ -343,7 +343,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
     if( m_referenceFilterOpt->GetValue() && !m_referenceFilter->GetValue().IsEmpty() )
     {
-        MODULE* fp = dynamic_cast<MODULE*>( aItem->GetParent() );
+        FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
 
         if( fp )
         {
@@ -354,7 +354,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
     if( m_footprintFilterOpt->GetValue() && !m_footprintFilter->GetValue().IsEmpty() )
     {
-        MODULE* fp = dynamic_cast<MODULE*>( aItem->GetParent() );
+        FOOTPRINT* fp = dynamic_cast<FOOTPRINT*>( aItem->GetParent() );
 
         if( fp )
         {
@@ -378,7 +378,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
 
     // Go through the footprints
-    for( MODULE* fp : m_parent->GetBoard()->Footprints() )
+    for( FOOTPRINT* fp : m_parent->GetBoard()->Footprints() )
     {
         if( m_references->GetValue() )
             visitItem( commit, &fp->Reference() );

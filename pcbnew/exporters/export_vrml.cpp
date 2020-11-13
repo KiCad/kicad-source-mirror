@@ -1069,7 +1069,7 @@ static void export_vrml_fp_text( FP_TEXT* item )
 }
 
 
-static void export_vrml_fp_shape( MODEL_VRML& aModel, FP_SHAPE* aOutline, MODULE* aFootprint )
+static void export_vrml_fp_shape( MODEL_VRML& aModel, FP_SHAPE* aOutline, FOOTPRINT* aFootprint )
 {
     LAYER_NUM layer = aOutline->GetLayer();
     double  x   = aOutline->GetStart().x * BOARD_SCALE;
@@ -1361,7 +1361,7 @@ static void compose_quat( double q1[4], double q2[4], double qr[4] )
 }
 
 
-static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, MODULE* aFootprint,
+static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, FOOTPRINT* aFootprint,
                                    std::ostream* aOutputFile )
 {
     if( !aModel.m_plainPCB )
@@ -1655,7 +1655,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
             output_file << "  children [\n";
 
             // Export footprints
-            for( MODULE* footprint : pcb->Footprints() )
+            for( FOOTPRINT* footprint : pcb->Footprints() )
                 export_vrml_footprint( model3d, pcb, footprint, &output_file );
 
             // write out the board and all layers
@@ -1669,7 +1669,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
         else
         {
             // Export footprints
-            for( MODULE* footprint : pcb->Footprints() )
+            for( FOOTPRINT* footprint : pcb->Footprints() )
                 export_vrml_footprint( model3d, pcb, footprint, NULL );
 
             // write out the board and all layers

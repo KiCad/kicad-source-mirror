@@ -51,7 +51,7 @@ class RN_DATA;
 class RN_NET;
 class TRACK;
 class PAD;
-class MODULE;
+class FOOTPRINT;
 class PROGRESS_REPORTER;
 
 struct CN_DISJOINT_NET_ENTRY
@@ -267,7 +267,8 @@ public:
 #ifndef SWIG
     const std::vector<CN_EDGE> GetRatsnestForItems( const std::vector<BOARD_ITEM*> aItems );
 
-    const std::vector<CN_EDGE> GetRatsnestForComponent( MODULE* aComponent, bool aSkipInternalConnections = false );
+    const std::vector<CN_EDGE> GetRatsnestForComponent( FOOTPRINT* aComponent,
+                                                        bool aSkipInternalConnections = false );
 #endif
 
     std::shared_ptr<FROM_TO_CACHE> GetFromToCache()

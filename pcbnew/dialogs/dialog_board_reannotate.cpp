@@ -636,7 +636,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     if( m_UpdateSchematic->GetValue() )
     { //If updating schematic send a netlist
 
-        for( MODULE* footprint : m_footprints )
+        for( FOOTPRINT* footprint : m_footprints )
         { // Create a netlist
             newref = GetNewRefDes( footprint );
 
@@ -672,7 +672,7 @@ bool DIALOG_BOARD_REANNOTATE::ReannotateBoard()
     if( reannotateOk )//Only update if no errors
     {
 
-    	for( MODULE* footprint : m_footprints )
+    	for( FOOTPRINT* footprint : m_footprints )
         {
             newref = GetNewRefDes( footprint );
 
@@ -743,7 +743,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
     RefDesInfo fpData;
     bool       useModuleLocation = m_locationChoice->GetSelection() == 0;
 
-    for( MODULE* footprint : m_footprints )
+    for( FOOTPRINT* footprint : m_footprints )
     {
         fpData.Uuid         = footprint->m_Uuid;
         fpData.RefDesString = footprint->GetReference();
@@ -948,7 +948,7 @@ void DIALOG_BOARD_REANNOTATE::BuildChangeArray( std::vector<RefDesInfo>& aFootpr
 
 //
 /// @returns the new refdes for this footprint
-RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( MODULE* aFootprint )
+RefDesChange* DIALOG_BOARD_REANNOTATE::GetNewRefDes( FOOTPRINT* aFootprint )
 {
     size_t i;
 

@@ -31,11 +31,11 @@
 #include <settings/settings_manager.h>
 #include <trigo.h>
 
-FP_TEXT::FP_TEXT( MODULE* aParentFootprint, TEXT_TYPE text_type ) :
+FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
     EDA_TEXT()
 {
-    MODULE* parentFootprint = static_cast<MODULE*>( m_Parent );
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
 
     m_Type = text_type;
     m_keepUpright = true;
@@ -197,7 +197,7 @@ int FP_TEXT::GetLength() const
 
 void FP_TEXT::SetDrawCoord()
 {
-    const MODULE* parentFootprint = static_cast<const MODULE*>( m_Parent );
+    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_Parent );
 
     SetTextPos( m_Pos0 );
 
@@ -216,7 +216,7 @@ void FP_TEXT::SetDrawCoord()
 
 void FP_TEXT::SetLocalCoord()
 {
-    const MODULE* parentFootprint = static_cast<const MODULE*>( m_Parent );
+    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_Parent );
 
     if( parentFootprint )
     {
@@ -246,8 +246,8 @@ const EDA_RECT FP_TEXT::GetBoundingBox() const
 
 double FP_TEXT::GetDrawRotation() const
 {
-    MODULE* parentFootprint = (MODULE*) m_Parent;
-    double  rotation = GetTextAngle();
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    double     rotation = GetTextAngle();
 
     if( parentFootprint )
         rotation += parentFootprint->GetOrientation();
@@ -273,7 +273,7 @@ double FP_TEXT::GetDrawRotation() const
 // see class_text_mod.h
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    MODULE* parentFootprint = (MODULE*) m_Parent;
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
 
     if( parentFootprint == NULL )        // Happens in modedit, and for new texts
         return;
@@ -331,17 +331,17 @@ wxString FP_TEXT::GetSelectMenuText( EDA_UNITS aUnits ) const
     {
     case TEXT_is_REFERENCE:
         return wxString::Format( _( "Reference '%s'" ),
-                                 static_cast<MODULE*>( GetParent() )->GetReference() );
+                                 static_cast<FOOTPRINT*>( GetParent() )->GetReference() );
 
     case TEXT_is_VALUE:
         return wxString::Format( _( "Value '%s' of %s" ),
                                  GetShownText(),
-                                 static_cast<MODULE*>( GetParent() )->GetReference() );
+                                 static_cast<FOOTPRINT*>( GetParent() )->GetReference() );
 
     default:
         return wxString::Format( _( "Footprint Text '%s' of %s" ),
                                  ShortenedShownText(),
-                                 static_cast<MODULE*>( GetParent() )->GetReference() );
+                                 static_cast<FOOTPRINT*>( GetParent() )->GetReference() );
     }
 }
 
@@ -421,7 +421,7 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
 wxString FP_TEXT::GetShownText( int aDepth ) const
 {
-    const MODULE* parentFootprint = static_cast<MODULE*>( GetParent() );
+    const FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( GetParent() );
     wxASSERT( parentFootprint );
     const BOARD*  board = parentFootprint->GetBoard();
 

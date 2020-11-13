@@ -862,7 +862,7 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
         tht_inner_holes_poly.RemoveAllContours();
 
         // Insert pads holes (vertical cylinders)
-        for( const MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
+        for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
         {
             for( PAD* pad : footprint->Pads() )
             {
@@ -965,7 +965,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER* aStatusReporter )
     }
 
     // Go for all footprints
-    for( MODULE* footprint : m_boardAdapter.GetBoard()->Footprints() )
+    for( FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
     {
         for( const FP_3DMODEL& model : footprint->Models() )
         {

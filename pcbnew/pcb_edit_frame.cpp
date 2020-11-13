@@ -1513,7 +1513,7 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
 }
 
 
-void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( MODULE* aFootprint )
+void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
 {
     if( aFootprint == NULL )
         return;
@@ -1568,10 +1568,10 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( MODULE* aFootprint )
 }
 
 
-int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( MODULE* aFootprint, bool updateMode,
-                                                  bool selectedMode )
+int PCB_EDIT_FRAME::ShowExchangeFootprintsDialog( FOOTPRINT* aFootprint, bool aUpdateMode,
+                                                  bool aSelectedMode )
 {
-    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aFootprint, updateMode, selectedMode );
+    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aFootprint, aUpdateMode, aSelectedMode );
 
     return dialog.ShowQuasiModal();
 }

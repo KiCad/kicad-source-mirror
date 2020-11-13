@@ -156,7 +156,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, PAD* aPad
     m_nonCopperWarningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
 
     m_padMaster  = &m_parent->GetDesignSettings().m_Pad_Master;
-    m_dummyPad   = new PAD((MODULE*) NULL );
+    m_dummyPad   = new PAD( (FOOTPRINT*) NULL );
 
     if( aPad )
     {
@@ -462,7 +462,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_isFlipped = m_currentPad->IsFlipped();
 
         // Diplay parent footprint info
-        MODULE* footprint = m_currentPad->GetParent();
+        FOOTPRINT* footprint = m_currentPad->GetParent();
 
         if( footprint )
         {
@@ -479,7 +479,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
 
     if( m_currentPad )
     {
-        MODULE* footprint = m_currentPad->GetParent();
+        FOOTPRINT* footprint = m_currentPad->GetParent();
 
         if( footprint )
         {
@@ -1522,8 +1522,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetPosition( m_padMaster->GetPosition() );
     m_currentPad->SetOrientation( m_padMaster->GetOrientation() );
 
-    wxSize  size;
-    MODULE* footprint = m_currentPad->GetParent();
+    wxSize     size;
+    FOOTPRINT* footprint = m_currentPad->GetParent();
 
     m_currentPad->SetSize( m_padMaster->GetSize() );
 

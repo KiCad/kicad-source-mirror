@@ -201,9 +201,11 @@ private:
      */
     void render_3D_models( bool aRenderTopOrBot, bool aRenderTransparentOnly );
 
-    void render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly, bool aRenderSelectedOnly );
+    void render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
+                                    bool aRenderSelectedOnly );
 
-    void render_3D_footprint( const MODULE* aFootprint, bool aRenderTransparentOnly, bool aIsSelected );
+    void render_3D_footprint( const FOOTPRINT* aFootprint, bool aRenderTransparentOnly,
+                              bool aIsSelected );
 
     void setLight_Front( bool enabled );
     void setLight_Top( bool enabled );

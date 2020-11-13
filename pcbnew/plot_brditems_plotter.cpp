@@ -285,9 +285,9 @@ void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMod
 }
 
 
-void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
+void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
 {
-    FP_TEXT*  textItem = &aModule->Reference();
+    FP_TEXT*  textItem = &aFootprint->Reference();
     LAYER_NUM textLayer = textItem->GetLayer();
 
     // Reference and value are specfic items, not in graphic items list
@@ -297,7 +297,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
         PlotFootprintTextItem( textItem, getColor( textLayer ));
     }
 
-    textItem = &aModule->Value();
+    textItem = &aFootprint->Value();
     textLayer = textItem->GetLayer();
 
     if( GetPlotValue() && m_layerMask[textLayer]
@@ -306,7 +306,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( MODULE* aModule )
         PlotFootprintTextItem( textItem, getColor( textLayer ));
     }
 
-    for( BOARD_ITEM* item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         textItem = dyn_cast<FP_TEXT*>( item );
 
@@ -395,7 +395,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItem( FP_TEXT* aTextMod, COLOR4D aColor 
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    MODULE* parent = static_cast<MODULE*> ( aTextMod->GetParent() );
+    FOOTPRINT* parent = static_cast<FOOTPRINT*> ( aTextMod->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     m_plotter->SetCurrentLineWidth( thickness );
@@ -514,9 +514,9 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
 
 
 // Plot footprints graphic items (outlines)
-void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( MODULE* aModule )
+void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( FOOTPRINT* aFootprint )
 {
-    for( BOARD_ITEM* item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         FP_SHAPE* edge = dynamic_cast<FP_SHAPE*>( item );
 
@@ -540,7 +540,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
     GBR_METADATA gbr_metadata;
     gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
-    MODULE* parent = static_cast<MODULE*> ( aShape->GetParent() );
+    FOOTPRINT* parent = static_cast<FOOTPRINT*> ( aShape->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
@@ -622,7 +622,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
             // We must compute board coordinates from m_PolyList which are relative to the parent
             // position at orientation 0
-            MODULE *parentFootprint = aShape->GetParentFootprint();
+            FOOTPRINT *parentFootprint = aShape->GetParentFootprint();
 
             std::vector<wxPoint> cornerList;
 

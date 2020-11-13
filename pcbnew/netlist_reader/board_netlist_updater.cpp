@@ -137,7 +137,7 @@ wxPoint BOARD_NETLIST_UPDATER::estimateComponentInsertionPosition()
 }
 
 
-MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
+FOOTPRINT* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 {
     wxString msg;
 
@@ -151,7 +151,7 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
         return nullptr;
     }
 
-    MODULE* footprint = m_frame->LoadFootprint( aComponent->GetFPID() );
+    FOOTPRINT* footprint = m_frame->LoadFootprint( aComponent->GetFPID() );
 
     if( footprint == nullptr )
     {
@@ -193,8 +193,8 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 }
 
 
-MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcbComponent,
-                                                 COMPONENT* aNewComponent )
+FOOTPRINT* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, FOOTPRINT* aPcbComponent,
+                                                    COMPONENT* aNewComponent )
 {
     wxString msg;
 
@@ -208,7 +208,7 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
         return nullptr;
     }
 
-    MODULE* newFootprint = m_frame->LoadFootprint( aNewComponent->GetFPID() );
+    FOOTPRINT* newFootprint = m_frame->LoadFootprint( aNewComponent->GetFPID() );
 
     if( newFootprint == nullptr )
     {
@@ -240,14 +240,15 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
 }
 
 
-bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
+bool BOARD_NETLIST_UPDATER::updateComponentParameters( FOOTPRINT* aPcbComponent,
                                                        COMPONENT* aNewComponent )
 {
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
-    MODULE* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr : (MODULE*) aPcbComponent->Clone();
-    bool changed = false;
+    FOOTPRINT* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr
+                                                          : (FOOTPRINT*) aPcbComponent->Clone();
+    bool       changed = false;
 
     // Test for reference designator field change.
     if( aPcbComponent->GetReference() != aNewComponent->GetReference() )
@@ -345,14 +346,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( MODULE* aPcbComponent,
 }
 
 
-bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent,
+bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbComponent,
                                                            COMPONENT* aNewComponent )
 {
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
-    MODULE* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr : (MODULE*) aPcbComponent->Clone();
-    bool changed = false;
+    FOOTPRINT* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr
+                                                          : (FOOTPRINT*) aPcbComponent->Clone();
+    bool       changed = false;
 
     // At this point, the component footprint is updated.  Now update the nets.
     for( PAD* pad : aPcbComponent->Pads() )
@@ -624,7 +626,7 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
     wxString msg;
     const COMPONENT* component;
 
-    for( MODULE* footprint : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
         if(( footprint->GetAttributes() & FP_BOARD_ONLY ) > 0 )
             continue;
@@ -751,7 +753,7 @@ bool BOARD_NETLIST_UPDATER::testConnectivity( NETLIST& aNetlist )
     for( int i = 0; i < (int) aNetlist.GetCount(); i++ )
     {
         const COMPONENT* component = aNetlist.GetComponent( i );
-        MODULE* footprint = m_board->FindModuleByReference( component->GetReference() );
+        FOOTPRINT*       footprint = m_board->FindFootprintByReference( component->GetReference() );
 
         if( footprint == NULL )    // It can be missing in partial designs
             continue;
@@ -785,7 +787,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     m_errorCount = 0;
     m_warningCount = 0;
     m_newFootprintsCount = 0;
-    MODULE* lastPreexistingFootprint = m_board->Footprints().empty() ? NULL : m_board->Footprints().back();
+    FOOTPRINT* lastPreexistingFootprint = m_board->Footprints().empty() ? NULL
+                                                                        : m_board->Footprints().back();
 
     cacheCopperZoneConnections();
 
@@ -803,7 +806,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     {
         COMPONENT* component = aNetlist.GetComponent( i );
         int        matchCount = 0;
-        MODULE*    tmp;
+        FOOTPRINT* tmp;
 
         if( component->GetProperties().count( "exclude_from_board" ) )
             continue;
@@ -813,7 +816,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );
 
-        for( MODULE* footprint : m_board->Footprints() )
+        for( FOOTPRINT* footprint : m_board->Footprints() )
         {
             bool     match = false;
 

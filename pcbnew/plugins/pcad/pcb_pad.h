@@ -49,12 +49,12 @@ public:
 
     virtual void Flip() override;
 
-    void AddToFootprint( MODULE* aFootprint ) override
+    void AddToFootprint( FOOTPRINT* aFootprint ) override
     {
         AddToFootprint( aFootprint, 0, true );
     }
 
-    void AddToFootprint( MODULE* aFootprint, int aRotation, bool aEncapsulatedPad );
+    void AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncapsulatedPad );
 
     void AddToBoard() override;
 

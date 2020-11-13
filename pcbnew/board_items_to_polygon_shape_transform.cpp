@@ -77,7 +77,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     }
 
     // convert pads
-    for( MODULE* footprint : m_footprints )
+    for( FOOTPRINT* footprint : m_footprints )
     {
         footprint->TransformPadsWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
                                                         ERROR_INSIDE );
@@ -125,12 +125,12 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 }
 
 
-void MODULE::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                  PCB_LAYER_ID aLayer, int aClearance,
-                                                  int aMaxError, ERROR_LOC aErrorLoc,
-                                                  bool aSkipNPTHPadsWihNoCopper,
-                                                  bool aSkipPlatedPads,
-                                                  bool aSkipNonPlatedPads ) const
+void FOOTPRINT::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                     PCB_LAYER_ID aLayer, int aClearance,
+                                                     int aMaxError, ERROR_LOC aErrorLoc,
+                                                     bool aSkipNPTHPadsWihNoCopper,
+                                                     bool aSkipPlatedPads,
+                                                     bool aSkipNonPlatedPads ) const
 {
     for( PAD* pad : m_pads )
     {
@@ -223,11 +223,11 @@ void MODULE::TransformPadsWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @aIncludeText = indicates footprint text items (reference, value, etc.) should be included
  *                 in the outline
  */
-void MODULE::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                      PCB_LAYER_ID aLayer, int aClearance,
-                                                      int aError, ERROR_LOC aErrorLoc,
-                                                      bool aIncludeText,
-                                                      bool aIncludeShapes ) const
+void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                         PCB_LAYER_ID aLayer, int aClearance,
+                                                         int aError, ERROR_LOC aErrorLoc,
+                                                         bool aIncludeText,
+                                                         bool aIncludeShapes ) const
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
 
@@ -455,9 +455,9 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         {
             // The polygon is expected to be a simple polygon
             // not self intersecting, no hole.
-            MODULE* footprint = GetParentFootprint();     // NULL for items not in footprints
-            double  orientation = footprint ? footprint->GetOrientation() : 0.0;
-            wxPoint offset;
+            FOOTPRINT* footprint = GetParentFootprint();     // NULL for items not in footprints
+            double     orientation = footprint ? footprint->GetOrientation() : 0.0;
+            wxPoint    offset;
 
             if( footprint )
                 offset = footprint->GetPosition();

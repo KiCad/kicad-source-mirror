@@ -35,7 +35,7 @@
 #include <view/view.h>
 
 
-FP_SHAPE::FP_SHAPE( MODULE* parent, PCB_SHAPE_TYPE_T aShape ) :
+FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, PCB_SHAPE_TYPE_T aShape ) :
         PCB_SHAPE( parent, PCB_FP_SHAPE_T )
 {
     m_Shape = aShape;
@@ -51,7 +51,7 @@ FP_SHAPE::~FP_SHAPE()
 
 void FP_SHAPE::SetLocalCoord()
 {
-    MODULE* fp = (MODULE*) m_Parent;
+    FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
 
     if( fp == NULL )
     {
@@ -79,7 +79,7 @@ void FP_SHAPE::SetLocalCoord()
 
 void FP_SHAPE::SetDrawCoord()
 {
-    MODULE* fp = (MODULE*) m_Parent;
+    FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
 
     m_Start      = m_Start0;
     m_End        = m_End0;
@@ -109,9 +109,8 @@ void FP_SHAPE::SetDrawCoord()
 // see class_edge_mod.h
 void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString msg;
-
-    MODULE*  fp = (MODULE*) m_Parent;
+    wxString   msg;
+    FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
 
     if( !fp )
         return;

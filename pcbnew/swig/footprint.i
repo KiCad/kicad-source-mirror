@@ -34,24 +34,24 @@
 %include footprint.h
 %feature("flatnested", "");
 
-%rename(Get) operator   MODULE*;
+%rename(Get) operator   FOOTPRINT*;
 %{
 #include <footprint.h>
 %}
-%template(MODULE_3D_SETTINGS_List) std::list<MODULE_3D_SETTINGS>;
+%template(FP_3DMODLE_List) std::list<FP_3DMODLE>;
 
 
 // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
 // automatically and inherited by the python wrapper class.
 
 
-%extend MODULE
+%extend FOOTPRINT
 {
     %pythoncode
     %{
 
     #def SaveToLibrary(self,filename):
-    #  return SaveModuleToLibrary(filename,self)
+    #  return SaveFootprintToLibrary(filename,self)
 
     #
     # add function, clears the thisown to avoid python from deleting
@@ -124,16 +124,17 @@
 %{
 
 // called from pcbnew/swig/pcbnew_footprint_wizards.cpp
-MODULE* PyModule_to_MODULE(PyObject *obj0)
+MODULE* PyFootprint_to_FOOTPRINT(PyObject *obj0)
 {
     void* argp;
-    int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_MODULE, 0 |  0 );
+    int res1 = SWIG_ConvertPtr(obj0, &argp,SWIGTYPE_p_FOOTPRINT, 0 |  0 );
+
     if (!SWIG_IsOK(res1))
     {
-        SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to MODULE*");
+        SWIG_exception_fail(SWIG_ArgError(res1), "Converting object to FOOTPRINT*");
     }
 
-    return (MODULE*) argp;
+    return ( FOOTPRINT *) argp;
 
 fail:
     return NULL;

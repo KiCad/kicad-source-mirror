@@ -43,7 +43,7 @@ class TRACK;
 class PAD;
 class PCB_SHAPE;
 class PCB_GROUP;
-class MODULE;
+class FOOTPRINT;
 class ZONE;
 class PCB_TEXT;
 class FP_TEXT;
@@ -288,7 +288,7 @@ protected:
     void draw( const PCB_SHAPE* aSegment, int aLayer );
     void draw( const PCB_TEXT* aText, int aLayer );
     void draw( const FP_TEXT* aText, int aLayer );
-    void draw( const MODULE* aFootprint, int aLayer );
+    void draw( const FOOTPRINT* aFootprint, int aLayer );
     void draw( const PCB_GROUP* aGroup, int aLayer );
     void draw( const ZONE* aZone, int aLayer );
     void draw( const DIMENSION_BASE* aDimension, int aLayer );

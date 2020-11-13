@@ -32,9 +32,9 @@
 namespace KI_TEST
 {
 
-void DrawSegment( MODULE& aMod, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer )
+void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<FP_SHAPE>( &aMod, S_SEGMENT );
+    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, S_SEGMENT );
 
     seg->SetStart0( (wxPoint) aSeg.A );
     seg->SetEnd0( (wxPoint) aSeg.B );
@@ -42,24 +42,24 @@ void DrawSegment( MODULE& aMod, const SEG& aSeg, int aWidth, PCB_LAYER_ID aLayer
     seg->SetWidth( aWidth );
     seg->SetLayer( aLayer );
 
-    aMod.Add( seg.release() );
+    aFootprint.Add( seg.release() );
 }
 
 
-void DrawPolyline(
-        MODULE& aMod, const std::vector<VECTOR2I>& aPts, int aWidth, PCB_LAYER_ID aLayer )
+void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int aWidth,
+                   PCB_LAYER_ID aLayer )
 {
     for( unsigned i = 0; i < aPts.size() - 1; ++i )
     {
-        DrawSegment( aMod, { aPts[i], aPts[i + 1] }, aWidth, aLayer );
+        DrawSegment( aFootprint, { aPts[i], aPts[i + 1] }, aWidth, aLayer );
     }
 }
 
 
-void DrawArc( MODULE& aMod, const VECTOR2I& aCentre, const VECTOR2I& aStart, double aAngle,
-        int aWidth, PCB_LAYER_ID aLayer )
+void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aStart,
+              double aAngle, int aWidth, PCB_LAYER_ID aLayer )
 {
-    auto seg = std::make_unique<FP_SHAPE>( &aMod, S_ARC );
+    auto seg = std::make_unique<FP_SHAPE>( &aFootprint, S_ARC );
 
     seg->SetStart0( (wxPoint) aCentre );
     seg->SetEnd0( (wxPoint) aStart );
@@ -68,12 +68,12 @@ void DrawArc( MODULE& aMod, const VECTOR2I& aCentre, const VECTOR2I& aStart, dou
     seg->SetWidth( aWidth );
     seg->SetLayer( aLayer );
 
-    aMod.Add( seg.release() );
+    aFootprint.Add( seg.release() );
 }
 
 
-void DrawRect( MODULE& aMod, const VECTOR2I& aPos, const VECTOR2I& aSize, int aRadius, int aWidth,
-        PCB_LAYER_ID aLayer )
+void DrawRect( FOOTPRINT& aFootprint, const VECTOR2I& aPos, const VECTOR2I& aSize, int aRadius,
+               int aWidth, PCB_LAYER_ID aLayer )
 {
     const auto x_r = aPos.x + aSize.x / 2;
     const auto x_l = aPos.x - aSize.x / 2;
@@ -88,22 +88,22 @@ void DrawRect( MODULE& aMod, const VECTOR2I& aPos, const VECTOR2I& aSize, int aR
     // If non-zero (could be zero if it's a stadium shape)
     if( xin_l != xin_r )
     {
-        DrawSegment( aMod, { { xin_l, y_t }, { xin_r, y_t } }, aWidth, aLayer );
-        DrawSegment( aMod, { { xin_l, y_b }, { xin_r, y_b } }, aWidth, aLayer );
+        DrawSegment( aFootprint, { { xin_l, y_t }, { xin_r, y_t } }, aWidth, aLayer );
+        DrawSegment( aFootprint, { { xin_l, y_b }, { xin_r, y_b } }, aWidth, aLayer );
     }
 
     if( yin_b != yin_t )
     {
-        DrawSegment( aMod, { { x_l, yin_b }, { x_l, yin_t } }, aWidth, aLayer );
-        DrawSegment( aMod, { { x_r, yin_b }, { x_r, yin_t } }, aWidth, aLayer );
+        DrawSegment( aFootprint, { { x_l, yin_b }, { x_l, yin_t } }, aWidth, aLayer );
+        DrawSegment( aFootprint, { { x_r, yin_b }, { x_r, yin_t } }, aWidth, aLayer );
     }
 
     if( aRadius > 0 )
     {
-        DrawArc( aMod, { xin_r, yin_t }, { x_r, yin_t }, 90, aWidth, aLayer );
-        DrawArc( aMod, { xin_l, yin_t }, { xin_l, y_t }, 90, aWidth, aLayer );
-        DrawArc( aMod, { xin_l, yin_b }, { x_l, yin_b }, 90, aWidth, aLayer );
-        DrawArc( aMod, { xin_r, yin_b }, { xin_r, y_b }, 90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_r, yin_t }, { x_r, yin_t }, 90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_l, yin_t }, { xin_l, y_t }, 90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_l, yin_b }, { x_l, yin_b }, 90, aWidth, aLayer );
+        DrawArc( aFootprint, { xin_r, yin_b }, { xin_r, y_b }, 90, aWidth, aLayer );
     }
 }
 

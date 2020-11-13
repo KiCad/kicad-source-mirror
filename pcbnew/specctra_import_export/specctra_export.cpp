@@ -92,7 +92,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 
     LOCALE_IO       toggle;     // Switch the locale to standard C
 
-    // DSN Images (=KiCad MODULES and pads) must be presented from the
+    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
     // top view.  So we temporarily flip any modules which are on the back
     // side of the board to the front, and record this in the MODULE's flag field.
     db.FlipMODULEs( GetBoard() );
@@ -593,14 +593,14 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 typedef std::map<wxString, int> PINMAP;
 
 
-IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, MODULE* aFootprint )
+IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 {
     PINMAP      pinmap;
     wxString    padName;
 
     PCB_TYPE_COLLECTOR  fpItems;
 
-    // get all the MODULE's pads.
+    // get all the FOOTPRINT's pads.
     fpItems.Collect( aFootprint, scanPADs );
 
     IMAGE*  image = new IMAGE(0);
@@ -904,22 +904,23 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
-            MODULE* module = (MODULE*) items[i];
+            FOOTPRINT* footprint = (FOOTPRINT*) items[i];
 
-            if( module->GetReference() == wxEmptyString )
+            if( footprint->GetReference() == wxEmptyString )
             {
                 THROW_IO_ERROR( wxString::Format(
                         _( "Symbol with value of \"%s\" has empty reference id." ),
-                        module->GetValue() ) );
+                        footprint->GetValue() ) );
             }
 
             // if we cannot insert OK, that means the reference has been seen before.
-            STRINGSET_PAIR refpair = refs.insert( TO_UTF8( module->GetReference() ) );
+            STRINGSET_PAIR refpair = refs.insert( TO_UTF8( footprint->GetReference() ) );
+
             if( !refpair.second )      // insert failed
             {
                 THROW_IO_ERROR( wxString::Format(
                         _( "Multiple symbols have identical reference IDs of \"%s\"." ),
-                        module->GetReference() ) );
+                        footprint->GetReference() ) );
             }
         }
     }
@@ -1337,11 +1338,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         for( int m = 0; m<items.GetCount(); ++m )
         {
-            MODULE* module = (MODULE*) items[m];
+            FOOTPRINT* footprint = (FOOTPRINT*) items[m];
 
-            IMAGE*  image = makeIMAGE( aBoard, module );
+            IMAGE*  image = makeIMAGE( aBoard, footprint );
 
-            componentId = TO_UTF8( module->GetReference() );
+            componentId = TO_UTF8( footprint->GetReference() );
 
             // create a net list entry for all the actual pins in the image
             // for the current module.  location of this code is critical
@@ -1387,15 +1388,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
             comp->places.push_back( place );
 
-            place->SetRotation( module->GetOrientationDegrees() );
-            place->SetVertex( mapPt( module->GetPosition() ) );
+            place->SetRotation( footprint->GetOrientationDegrees() );
+            place->SetVertex( mapPt( footprint->GetPosition() ) );
             place->component_id = componentId;
-            place->part_number  = TO_UTF8( module->GetValue() );
+            place->part_number  = TO_UTF8( footprint->GetValue() );
 
             // module is flipped from bottom side, set side to T_back
-            if( module->GetFlag() )
+            if( footprint->GetFlag() )
             {
-                double angle = 180.0 - module->GetOrientationDegrees();
+                double angle = 180.0 - footprint->GetOrientationDegrees();
                 NORMALIZE_ANGLE_DEGREES_POS( angle );
                 place->SetRotation( angle );
 
@@ -1732,7 +1733,7 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 
 void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
 {
-    // DSN Images (=KiCad MODULES and pads) must be presented from the
+    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
     // top view.
     // Note: to export footprints, the footprints must be flipped around the X axis,
     // otherwise the rotation angle is not good
@@ -1755,7 +1756,7 @@ void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
     if( !modulesAreFlipped )
         return;
 
-    // DSN Images (=KiCad MODULES and pads) must be presented from the
+    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
     // top view.  Restore those that were flipped.
     // Note: to export footprints, the footprints were flipped around the X axis,
     for( auto module : aBoard->Footprints() )

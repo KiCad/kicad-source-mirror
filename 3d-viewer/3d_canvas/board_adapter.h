@@ -543,13 +543,13 @@ class BOARD_ADAPTER
 
     COBJECT2D *createNewPadDrill( const PAD* aPad, int aInflateValue );
 
-    void AddPadsWithClearanceToContainer( const MODULE *aFootprint,
+    void AddPadsWithClearanceToContainer( const FOOTPRINT *aFootprint,
                                           CGENERICCONTAINER2D *aDstContainer,
                                           PCB_LAYER_ID aLayerId, int aInflateValue,
                                           bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
                                           bool aSkipNonPlatedPads );
 
-    void AddFPShapesWithClearanceToContainer( const MODULE *aFootprint,
+    void AddFPShapesWithClearanceToContainer( const FOOTPRINT *aFootprint,
                                               CGENERICCONTAINER2D *aDstContainer,
                                               PCB_LAYER_ID aLayerId, int aInflateValue );
 
@@ -580,7 +580,7 @@ class BOARD_ADAPTER
     void buildPadShapeThickOutlineAsPolygon( const PAD *aPad, SHAPE_POLY_SET &aCornerBuffer,
                                              int aWidth) const;
 
-    void transformFPShapesToPolygon( const MODULE *aFootprint, PCB_LAYER_ID aLayer,
+    void transformFPShapesToPolygon( const FOOTPRINT *aFootprint, PCB_LAYER_ID aLayer,
                                      SHAPE_POLY_SET& aCornerBuffer ) const;
 
 public:

@@ -32,7 +32,7 @@
 
 class BOARD_ITEM;
 class BOARD;
-class MODULE;
+class FOOTPRINT;
 class PCB_SHAPE;
 class EDA_TEXT;
 
@@ -119,7 +119,7 @@ protected:
 class GRAPHICS_IMPORTER_FOOTPRINT : public GRAPHICS_IMPORTER_PCBNEW
 {
 public:
-    GRAPHICS_IMPORTER_FOOTPRINT( MODULE* aFootprint )
+    GRAPHICS_IMPORTER_FOOTPRINT( FOOTPRINT* aFootprint )
         : m_footprint( aFootprint )
     {
     }
@@ -128,7 +128,7 @@ protected:
     std::unique_ptr<PCB_SHAPE> createDrawing() override;
     std::pair<std::unique_ptr<BOARD_ITEM>, EDA_TEXT*> createText() override;
 
-    MODULE* m_footprint;
+    FOOTPRINT* m_footprint;
 };
 
 #endif /* GRAPHICS_IMPORTER_PCBNEW */

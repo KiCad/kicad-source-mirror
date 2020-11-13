@@ -29,14 +29,15 @@
 #include <trigo.h>
 
 
-MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape )
+FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape )
 {
-    int      oX;
-    PAD*     pad;
-    MODULE*  footprint;
-    wxString msg, cmp_name;
-    int      pad_count = 2;
-    int      angle     = 0;
+    int        oX;
+    PAD*       pad;
+    FOOTPRINT* footprint;
+    wxString   msg;
+    wxString   cmp_name;
+    int        pad_count = 2;
+    int        angle     = 0;
 
     PCB_EDIT_FRAME& editFrame  = *getEditFrame<PCB_EDIT_FRAME>();
 
@@ -181,12 +182,12 @@ MODULE* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintSha
 }
 
 
-MODULE* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
-                                             int aTextSize, int aPadCount )
+FOOTPRINT* MICROWAVE_TOOL::createBaseFootprint( const wxString& aValue,
+                                                int aTextSize, int aPadCount )
 {
     PCB_EDIT_FRAME& editFrame = *getEditFrame<PCB_EDIT_FRAME>();
 
-    MODULE* footprint = editFrame.CreateNewFootprint( aValue );
+    FOOTPRINT* footprint = editFrame.CreateNewFootprint( aValue );
 
     if( aTextSize > 0 )
     {

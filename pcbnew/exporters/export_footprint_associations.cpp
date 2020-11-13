@@ -39,7 +39,7 @@ bool RecreateCmpFile( BOARD * aBrd, const wxString& aFullCmpFileName )
 
     fprintf( cmpFile, "Cmp-Mod V01 Created by PcbNew   date = %s\n", TO_UTF8( DateAndTime() ) );
 
-    for( MODULE* fp : aBrd->Footprints() )
+    for( FOOTPRINT* fp : aBrd->Footprints() )
     {
         fprintf( cmpFile, "\nBeginCmp\n" );
         fprintf( cmpFile, "TimeStamp = %s\n", TO_UTF8( fp->m_Uuid.AsString() ) );

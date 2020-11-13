@@ -86,14 +86,14 @@ private:
      * @param aComponentShape is the component to create
      * @return the new footprint
      */
-    MODULE* createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape );
+    FOOTPRINT* createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprintShape );
 
-    MODULE* createPolygonShape();
+    FOOTPRINT* createPolygonShape();
 
     /**
      * Creates an S-shaped coil footprint for microwave applications.
      */
-    MODULE* createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aPattern, wxString& aErrorMessage );
+    FOOTPRINT* createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& aPattern, wxString& aErrorMessage );
 
     /**
      * Create a basic footprint for micro wave applications.
@@ -106,7 +106,7 @@ private:
      * @param aPadCount is number of pads
      * @return the new footprint
      */
-    MODULE* createBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
+    FOOTPRINT* createBaseFootprint( const wxString& aValue, int aTextSize, int aPadCount );
 };
 
 

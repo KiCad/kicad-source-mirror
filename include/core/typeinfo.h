@@ -86,7 +86,7 @@ enum KICAD_T
     SCREEN_T, ///< not really an item, used to identify a screen
 
     // Items in pcb
-    PCB_FOOTPRINT_T,        ///< class MODULE, a footprint
+    PCB_FOOTPRINT_T,        ///< class FOOTPRINT, a footprint
     PCB_PAD_T,              ///< class PAD, a pad in a footprint
     PCB_SHAPE_T,            ///< class PCB_SHAPE, a segment not on copper layers
     PCB_TEXT_T,             ///< class PCB_TEXT, text on a layer

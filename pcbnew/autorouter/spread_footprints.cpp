@@ -63,7 +63,7 @@ const int scale = (int)(0.01 * IU_PER_MM);
 const int PADDING = (int)(1 * IU_PER_MM);
 
 // Populates a list of rectangles, from a list of footprints
-void fillRectList( CSubRectArray& vecSubRects, std::vector <MODULE*>& aFootprintList )
+void fillRectList( CSubRectArray& vecSubRects, std::vector <FOOTPRINT*>& aFootprintList )
 {
     vecSubRects.clear();
 
@@ -148,7 +148,7 @@ void spreadRectangles( CRectPlacement& aPlacementArea,
 }
 
 
-void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <MODULE*>& aFootprintList,
+void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <FOOTPRINT*>& aFootprintList,
                            EDA_RECT& aFreeArea, bool aFindAreaOnly )
 {
     CSubRectArray   vecSubRects;
@@ -165,7 +165,7 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <MODULE*>
         pos.x *= scale;
         pos.y *= scale;
 
-        MODULE* footprint = aFootprintList[vecSubRects[it].n];
+        FOOTPRINT* footprint = aFootprintList[vecSubRects[it].n];
 
         EDA_RECT fpBBox = footprint->GetFootprintRect();
         wxPoint mod_pos = pos + ( footprint->GetPosition() - fpBBox.GetOrigin() )
@@ -175,7 +175,7 @@ void moveFootprintsInArea( CRectPlacement& aPlacementArea, std::vector <MODULE*>
     }
 }
 
-static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare );
+static bool sortFootprintsbySheetPath( FOOTPRINT* ref, FOOTPRINT* compare );
 
 
 /**
@@ -186,13 +186,13 @@ static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare );
  * @param aSpreadAreaPosition the position of the upper left corner of the
  *        area allowed to spread footprints
  */
-void SpreadFootprints( std::vector<MODULE*>* aFootprints,  wxPoint aSpreadAreaPosition )
+void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadAreaPosition )
 {
     // Build candidate list
     // calculate also the area needed by these footprints
-    std::vector <MODULE*> footprintList;
+    std::vector <FOOTPRINT*> footprintList;
 
-    for( MODULE* footprint : *aFootprints )
+    for( FOOTPRINT* footprint : *aFootprints )
     {
         if( footprint->IsLocked() )
             continue;
@@ -208,10 +208,10 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,  wxPoint aSpreadAreaPo
     sort( footprintList.begin(), footprintList.end(), sortFootprintsbySheetPath );
 
     // Extract and place footprints by sheet
-    std::vector <MODULE*> footprintListBySheet;
-    std::vector <EDA_RECT> placementSheetAreas;
-    double subsurface;
-    double placementsurface = 0.0;
+    std::vector <FOOTPRINT*> footprintListBySheet;
+    std::vector <EDA_RECT>   placementSheetAreas;
+    double                   subsurface;
+    double                   placementsurface = 0.0;
 
     // The placement uses 2 passes:
     // the first pass creates the rectangular areas to place footprints
@@ -228,8 +228,8 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,  wxPoint aSpreadAreaPo
 
         for( unsigned ii = 0; ii < footprintList.size(); ii++ )
         {
-            MODULE* footprint = footprintList[ii];
-            bool islastItem = false;
+            FOOTPRINT* footprint = footprintList[ii];
+            bool       islastItem = false;
 
             if( ii == footprintList.size() - 1 ||
                 ( footprintList[ii]->GetPath().AsString().BeforeLast( '/' ) !=
@@ -337,7 +337,7 @@ void SpreadFootprints( std::vector<MODULE*>* aFootprints,  wxPoint aSpreadAreaPo
 // Footprints are sorted by their sheet path.
 // (the full sheet path restricted to the time stamp of the sheet itself,
 // without the time stamp of the footprint ).
-static bool sortFootprintsbySheetPath( MODULE* ref, MODULE* compare )
+static bool sortFootprintsbySheetPath( FOOTPRINT* ref, FOOTPRINT* compare )
 {
     return ref->GetPath() < compare->GetPath();
 }

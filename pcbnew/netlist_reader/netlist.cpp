@@ -48,7 +48,7 @@ using namespace std::placeholders;
 #include <project/project_file.h>  // LAST_PATH_TYPE
 
 
-extern void SpreadFootprints( std::vector<MODULE*>* aFootprints, wxPoint aSpreadAreaPosition );
+extern void SpreadFootprints( std::vector<FOOTPRINT*>* aFootprints, wxPoint aSpreadAreaPosition );
 
 
 bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename, NETLIST& aNetlist,
@@ -99,7 +99,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     for( auto track : board->Tracks() )
         GetCanvas()->GetView()->Update( track );
 
-    std::vector<MODULE*> newFootprints = aUpdater.GetAddedComponents();
+    std::vector<FOOTPRINT*> newFootprints = aUpdater.GetAddedComponents();
 
     // Spread new footprints.
     wxPoint areaPosition = (wxPoint) GetCanvas()->GetViewControls()->GetCursorPosition();
@@ -112,7 +112,7 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
     // Start drag command for new footprints
     if( !newFootprints.empty() )
     {
-        for( MODULE* footprint : newFootprints )
+        for( FOOTPRINT* footprint : newFootprints )
             GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, footprint );
 
         *aRunDragCommand = true;
@@ -134,8 +134,8 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
     wxString   msg;
     LIB_ID     lastFPID;
     COMPONENT* component;
-    MODULE*    footprint = nullptr;
-    MODULE*    fpOnBoard;
+    FOOTPRINT* footprint = nullptr;
+    FOOTPRINT* fpOnBoard;
 
     if( aNetlist.IsEmpty() || Prj().PcbFootprintLibs()->IsEmpty() )
         return;
@@ -159,9 +159,9 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
         // Check if component footprint is already on BOARD and only load the footprint from
         // the library if it's needed.  Nickname can be blank.
         if( aNetlist.IsFindByTimeStamp() )
-            fpOnBoard = m_pcb->FindModuleByPath( aNetlist.GetComponent( ii )->GetPath() );
+            fpOnBoard = m_pcb->FindFootprintByPath( aNetlist.GetComponent( ii )->GetPath() );
         else
-            fpOnBoard = m_pcb->FindModuleByReference( aNetlist.GetComponent( ii )->GetReference() );
+            fpOnBoard = m_pcb->FindFootprintByReference( aNetlist.GetComponent( ii )->GetReference() );
 
         bool footprintMisMatch = fpOnBoard && fpOnBoard->GetFPID() != component->GetFPID();
 
@@ -222,11 +222,11 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
             if( !footprint )
                 continue;            // Footprint does not exist in any library.
 
-            footprint = new MODULE( *footprint );
+            footprint = new FOOTPRINT( *footprint );
             const_cast<KIID&>( footprint->m_Uuid ) = KIID();
         }
 
         if( footprint )
-            component->SetModule( footprint );
+            component->SetFootprint( footprint );
     }
 }

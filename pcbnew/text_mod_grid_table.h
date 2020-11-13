@@ -30,7 +30,7 @@
 #include <fp_text.h>
 
 
-class MODULE;
+class FOOTPRINT;
 class PCB_BASE_FRAME;
 
 enum TEXT_MOD_COL_ORDER

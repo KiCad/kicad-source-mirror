@@ -68,7 +68,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     char*       text;
     int         netcode = -1;
     bool        multiHighlight = false;
-    MODULE*     footprint = nullptr;
+    FOOTPRINT*  footprint = nullptr;
     PAD*        pad = nullptr;
     BOARD*      pcb = GetBoard();
 
@@ -151,7 +151,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         modName = FROM_UTF8( text );
 
-        footprint = pcb->FindModuleByReference( modName );
+        footprint = pcb->FindFootprintByReference( modName );
 
         if( footprint )
             pad = footprint->FindPadByName( pinName );
@@ -174,7 +174,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         modName = FROM_UTF8( text );
 
-        footprint = pcb->FindModuleByReference( modName );
+        footprint = pcb->FindFootprintByReference( modName );
 
         if( footprint )
             msg.Printf( _( "%s found" ), modName );
@@ -256,7 +256,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             for( TRACK* track : pcb->Tracks() )
                 merge_area( track );
 
-            for( MODULE* fp : pcb->Footprints() )
+            for( FOOTPRINT* fp : pcb->Footprints() )
             {
                 for( PAD* p : fp->Pads() )
                     merge_area( p );
@@ -402,7 +402,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
 std::string FormatProbeItem( BOARD_ITEM* aItem )
 {
-    MODULE* footprint;
+    FOOTPRINT* footprint;
 
     if( !aItem )
         return "$CLEAR: \"HIGHLIGHTED\""; // message to clear highlight state
@@ -410,12 +410,12 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_FOOTPRINT_T:
-        footprint = (MODULE*) aItem;
+        footprint = (FOOTPRINT*) aItem;
         return StrPrintf( "$PART: \"%s\"", TO_UTF8( footprint->GetReference() ) );
 
     case PCB_PAD_T:
         {
-            footprint = (MODULE*) aItem->GetParent();
+            footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
             wxString pad = static_cast<PAD*>( aItem )->GetName();
 
             return StrPrintf( "$PART: \"%s\" $PAD: \"%s\"",
@@ -425,7 +425,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 
     case PCB_FP_TEXT_T:
         {
-            footprint = static_cast<MODULE*>( aItem->GetParent() );
+            footprint = static_cast<FOOTPRINT*>( aItem->GetParent() );
 
             FP_TEXT*    text = static_cast<FP_TEXT*>( aItem );
             const char* text_key;
@@ -510,7 +510,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         NETLIST          netlist;
         STRING_FORMATTER sf;
 
-        for( MODULE* footprint : this->GetBoard()->Footprints() )
+        for( FOOTPRINT* footprint : this->GetBoard()->Footprints() )
         {
             COMPONENT* component = new COMPONENT( footprint->GetFPID(), footprint->GetReference(),
                                                   footprint->GetValue(), footprint->GetPath() );

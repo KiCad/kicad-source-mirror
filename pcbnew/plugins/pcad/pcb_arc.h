@@ -39,26 +39,26 @@ namespace PCAD2KICAD {
 class PCB_ARC : public PCB_COMPONENT
 {
 public:
-    int m_startX;
-    int m_startY;
-    double m_angle;
-    int m_width;
+    int    m_StartX;
+    int    m_StartY;
+    double m_Angle;
+    int    m_Width;
 
     PCB_ARC( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_ARC();
 
-    virtual void    Parse( XNODE* aNode,
-                           int aLayer,
-                           const wxString& aDefaultMeasurementUnit,
-                           const wxString& aActualConversion );
+    virtual void Parse( XNODE* aNode, int aLayer, const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion );
 
-    virtual void    SetPosOffset( int aX_offs, int aY_offs ) override;
-    virtual void    Flip() override;
-    void            AddToFootprint( MODULE* aModule ) override;
-    void            AddToBoard() override;
+    virtual void SetPosOffset( int aX_offs, int aY_offs ) override;
+
+    virtual void Flip() override;
+
+    void AddToFootprint( FOOTPRINT* aFootprint ) override;
+    void AddToBoard() override;
 
 private:
-    bool            IsCircle();
+    bool IsCircle();
 };
 
 } // namespace PCAD2KICAD

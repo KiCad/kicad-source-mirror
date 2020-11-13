@@ -60,26 +60,26 @@ using namespace PCB_KEYS_T;
  */
 class FP_CACHE_ITEM
 {
-    WX_FILENAME             m_filename;
-    std::unique_ptr<MODULE> m_footprint;
+    WX_FILENAME                m_filename;
+    std::unique_ptr<FOOTPRINT> m_footprint;
 
 public:
-    FP_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName );
+    FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     const WX_FILENAME& GetFileName() const { return m_filename; }
-    const MODULE*      GetModule()   const { return m_footprint.get(); }
+    const FOOTPRINT* GetModule()   const { return m_footprint.get(); }
 };
 
 
-FP_CACHE_ITEM::FP_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName ) :
+FP_CACHE_ITEM::FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName ) :
         m_filename( aFileName ),
         m_footprint( aFootprint )
 { }
 
 
-typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   MODULE_MAP;
-typedef MODULE_MAP::iterator                        MODULE_ITER;
-typedef MODULE_MAP::const_iterator                  MODULE_CITER;
+typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   FOOTPRINT_MAP;
+typedef FOOTPRINT_MAP::iterator                     MODULE_ITER;
+typedef FOOTPRINT_MAP::const_iterator               MODULE_CITER;
 
 
 class FP_CACHE
@@ -87,7 +87,7 @@ class FP_CACHE
     PCB_IO*         m_owner;            // Plugin object that owns the cache.
     wxFileName      m_lib_path;         // The path of the library.
     wxString        m_lib_raw_path;     // For quick comparisons.
-    MODULE_MAP      m_modules;          // Map of footprint file name per MODULE*.
+    FOOTPRINT_MAP   m_modules;          // Map of footprint file name per MODULE*.
 
     bool            m_cache_dirty;      // Stored separately because it's expensive to check
                                         // m_cache_timestamp against all the files.
@@ -97,10 +97,13 @@ class FP_CACHE
 public:
     FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath );
 
-    wxString    GetPath() const { return m_lib_raw_path; }
-    bool        IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
-    bool        Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
-    MODULE_MAP& GetModules() { return m_modules; }
+    wxString GetPath() const { return m_lib_raw_path; }
+
+    bool IsWritable() const { return m_lib_path.IsOk() && m_lib_path.IsDirWritable(); }
+
+    bool Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
+
+    FOOTPRINT_MAP& GetModules() { return m_modules; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
@@ -111,7 +114,7 @@ public:
      *
      * @param aFootprint if set, save only this module, otherwise, save the full library
      */
-    void Save( MODULE* aFootprint = NULL );
+    void Save( FOOTPRINT* aFootprint = NULL );
 
     void Load();
 
@@ -154,7 +157,7 @@ FP_CACHE::FP_CACHE( PCB_IO* aOwner, const wxString& aLibraryPath )
 }
 
 
-void FP_CACHE::Save( MODULE* aFootprint )
+void FP_CACHE::Save( FOOTPRINT* aFootprint )
 {
     m_cache_timestamp = 0;
 
@@ -258,8 +261,8 @@ void FP_CACHE::Load()
 
                 m_owner->m_parser->SetLineReader( &reader );
 
-                MODULE*     footprint = (MODULE*) m_owner->m_parser->Parse();
-                wxString    fpName = fn.GetName();
+                FOOTPRINT* footprint = (FOOTPRINT*) m_owner->m_parser->Parse();
+                wxString   fpName = fn.GetName();
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
@@ -412,7 +415,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_FOOTPRINT_T:
-        format( static_cast<MODULE*>( aItem ), aNestLevel );
+        format( static_cast<FOOTPRINT*>( aItem ), aNestLevel );
         break;
 
     case PCB_PAD_T:
@@ -949,7 +952,7 @@ void PCB_IO::format( PCB_TARGET* aTarget, int aNestLevel ) const
 }
 
 
-void PCB_IO::format( MODULE* aFootprint, int aNestLevel ) const
+void PCB_IO::format( FOOTPRINT* aFootprint, int aNestLevel ) const
 {
     if( !( m_ctl & CTL_OMIT_INITIAL_COMMENTS ) )
     {
@@ -1077,10 +1080,10 @@ void PCB_IO::format( MODULE* aFootprint, int aNestLevel ) const
     Format((BOARD_ITEM*) &aFootprint->Reference(), aNestLevel + 1 );
     Format((BOARD_ITEM*) &aFootprint->Value(), aNestLevel + 1 );
 
-    std::set<PAD*, MODULE::cmp_pads> sorted_pads( aFootprint->Pads().begin(),
-                                                  aFootprint->Pads().end() );
-    std::set<BOARD_ITEM*, MODULE::cmp_drawings> sorted_drawings( aFootprint->GraphicalItems().begin(),
-                                                                 aFootprint->GraphicalItems().end() );
+    std::set<PAD*, FOOTPRINT::cmp_pads> sorted_pads( aFootprint->Pads().begin(),
+                                                     aFootprint->Pads().end() );
+    std::set<BOARD_ITEM*, FOOTPRINT::cmp_drawings> sorted_drawings( aFootprint->GraphicalItems().begin(),
+                                                                    aFootprint->GraphicalItems().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_zones( aFootprint->Zones().begin(),
                                                              aFootprint->Zones().end() );
     std::set<BOARD_ITEM*, PCB_GROUP::ptr_cmp> sorted_groups( aFootprint->Groups().begin(),
@@ -1603,7 +1606,7 @@ void PCB_IO::format( FP_TEXT* aText, int aNestLevel ) const
     // but internally the angle is held relative to its parent footprint.  parent
     // may be NULL when saving a footprint outside a BOARD.
     double   orient = aText->GetTextAngle();
-    MODULE*  parent = (MODULE*) aText->GetParent();
+    FOOTPRINT*  parent = (FOOTPRINT*) aText->GetParent();
 
     if( parent )
     {
@@ -2155,10 +2158,10 @@ void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
 }
 
 
-const MODULE* PCB_IO::getFootprint( const wxString& aLibraryPath,
-                                    const wxString& aFootprintName,
-                                    const PROPERTIES* aProperties,
-                                    bool checkModified )
+const FOOTPRINT* PCB_IO::getFootprint( const wxString& aLibraryPath,
+                                       const wxString& aFootprintName,
+                                       const PROPERTIES* aProperties,
+                                       bool checkModified )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -2173,7 +2176,7 @@ const MODULE* PCB_IO::getFootprint( const wxString& aLibraryPath,
         // do nothing with the error
     }
 
-    const MODULE_MAP& mods = m_cache->GetModules();
+    const FOOTPRINT_MAP& mods = m_cache->GetModules();
 
     MODULE_CITER it = mods.find( aFootprintName );
 
@@ -2184,9 +2187,9 @@ const MODULE* PCB_IO::getFootprint( const wxString& aLibraryPath,
 }
 
 
-const MODULE* PCB_IO::GetEnumeratedFootprint( const wxString& aLibraryPath,
-                                              const wxString& aFootprintName,
-                                              const PROPERTIES* aProperties )
+const FOOTPRINT* PCB_IO::GetEnumeratedFootprint( const wxString& aLibraryPath,
+                                                 const wxString& aFootprintName,
+                                                 const PROPERTIES* aProperties )
 {
     return getFootprint( aLibraryPath, aFootprintName, aProperties, false );
 }
@@ -2208,15 +2211,15 @@ bool PCB_IO::FootprintExists( const wxString& aLibraryPath, const wxString& aFoo
 }
 
 
-MODULE* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                               const PROPERTIES* aProperties )
+FOOTPRINT* PCB_IO::FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
+                                  const PROPERTIES* aProperties )
 {
-    const MODULE* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
-    return footprint ? (MODULE*) footprint->Duplicate() : nullptr;
+    const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
+    return footprint ? (FOOTPRINT*) footprint->Duplicate() : nullptr;
 }
 
 
-void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint,
+void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
                             const PROPERTIES* aProperties )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
@@ -2252,7 +2255,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
-    MODULE_MAP& mods = m_cache->GetModules();
+    FOOTPRINT_MAP& mods = m_cache->GetModules();
 
     // Quietly overwrite module and delete module file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
@@ -2298,25 +2301,25 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
     }
 
     // I need my own copy for the cache
-    MODULE* module = static_cast<MODULE*>( aFootprint->Clone() );
+    FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aFootprint->Clone() );
 
     // It should have no parent, orientation should be zero, and it should be on the front layer.
-    module->SetParent( nullptr );
-    module->SetOrientation( 0 );
+    footprint->SetParent( nullptr );
+    footprint->SetOrientation( 0 );
 
-    if( module->GetLayer() != F_Cu )
+    if( footprint->GetLayer() != F_Cu )
     {
-        auto cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
+        PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() );
 
         if( cfg )
-            module->Flip( module->GetPosition(), cfg->m_FlipLeftRight );
+            footprint->Flip( footprint->GetPosition(), cfg->m_FlipLeftRight );
         else
-            module->Flip( module->GetPosition(), false );
+            footprint->Flip( footprint->GetPosition(), false );
     }
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
-    mods.insert( footprintName, new FP_CACHE_ITEM( module, WX_FILENAME( fn.GetPath(), fullName ) ) );
-    m_cache->Save( module );
+    mods.insert( footprintName, new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
+    m_cache->Save( footprint );
 }
 
 

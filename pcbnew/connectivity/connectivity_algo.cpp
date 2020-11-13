@@ -46,7 +46,7 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_FOOTPRINT_T:
-        for( PAD* pad : static_cast<MODULE*>( aItem )->Pads() )
+        for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
         {
             m_itemMap[pad].MarkItemsAsInvalid();
             m_itemMap.erase( pad );
@@ -102,9 +102,9 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
     {
         if( aItem->Type() == PCB_FOOTPRINT_T )
         {
-            auto mod = static_cast <const MODULE*>( aItem );
+            const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
 
-            for( auto pad : mod->Pads() )
+            for( PAD* pad : footprint->Pads() )
                 MarkNetAsDirty( pad->GetNetCode() );
         }
     }
@@ -125,7 +125,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         break;
 
     case PCB_FOOTPRINT_T:
-        for( PAD* pad : static_cast<MODULE*>( aItem )->Pads() )
+        for( PAD* pad : static_cast<FOOTPRINT*>( aItem )->Pads() )
         {
             if( m_itemMap.find( pad ) != m_itemMap.end() )
                 return false;
@@ -423,7 +423,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
     size += aBoard->Zones().size();
     size += aBoard->Tracks().size();
 
-    for( MODULE* footprint : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
         size += footprint->Pads().size();
 
     size *= 2;      // Our caller us gets the other half of the progress bar
@@ -440,7 +440,7 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
         reportProgress( aReporter, ii++, size, delta );
     }
 
-    for( MODULE* footprint : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
         for( PAD* pad : footprint->Pads() )
         {
@@ -465,7 +465,7 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
                 break;
 
             case PCB_FOOTPRINT_T:
-                for( PAD* pad : static_cast<MODULE*>( item )->Pads() )
+                for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
                     Add( pad );
 
                 break;

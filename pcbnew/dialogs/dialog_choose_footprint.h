@@ -42,7 +42,7 @@ class wxTimer;
 
 class PCB_BASE_FRAME;
 class LIB_TREE;
-class MODULE;
+class FOOTPRINT;
 
 
 /**

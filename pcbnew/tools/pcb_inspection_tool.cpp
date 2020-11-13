@@ -403,12 +403,12 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     for( ZONE* zone : m_frame->GetBoard()->Zones() )
         zone->CacheBoundingBox();
 
-    for( MODULE* module : m_frame->GetBoard()->Footprints() )
+    for( FOOTPRINT* footprint : m_frame->GetBoard()->Footprints() )
     {
-        for( ZONE* zone : module->Zones() )
+        for( ZONE* zone : footprint->Zones() )
             zone->CacheBoundingBox();
 
-        module->BuildPolyCourtyards();
+        footprint->BuildPolyCourtyards();
     }
 
     if( item->Type() == PCB_TRACE_T )
@@ -862,7 +862,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
             if( selection.Empty() )
             {
                 // Clear the previous local ratsnest if we click off all items
-                for( MODULE* fp : board->Footprints() )
+                for( FOOTPRINT* fp : board->Footprints() )
                 {
                     for( PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
@@ -876,7 +876,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
                     {
                         pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
                     }
-                    else if( MODULE* fp = dyn_cast<MODULE*>( item) )
+                    else if( FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item) )
                     {
                         if( !fp->Pads().empty() )
                         {
@@ -899,7 +899,7 @@ int PCB_INSPECTION_TOOL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
         {
             if( aCondition != PCBNEW_PICKER_TOOL::END_ACTIVATE )
             {
-                for( MODULE* fp : board->Footprints() )
+                for( FOOTPRINT* fp : board->Footprints() )
                 {
                     for( PAD* pad : fp->Pads() )
                         pad->SetLocalRatsnestVisible( opt.m_ShowGlobalRatsnest );
@@ -973,7 +973,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 
         if( item->Type() == PCB_FOOTPRINT_T )
         {
-            for( PAD* pad : static_cast<MODULE*>( item )->Pads() )
+            for( PAD* pad : static_cast<FOOTPRINT*>( item )->Pads() )
             {
                 if( pad->GetLocalRatsnestVisible() || displayOptions().m_ShowModuleRatsnest )
                     items.push_back( pad );

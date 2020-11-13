@@ -87,7 +87,7 @@ public:
      */
     COLOR4D GetGridColor() override;
 
-    MODULE* GetFootprint( const wxString& aFootprintName, REPORTER& aReporter );
+    FOOTPRINT* GetFootprint( const wxString& aFootprintName, REPORTER& aReporter );
 
     /* SaveCopyInUndoList() virtual
      * currently: do nothing in CvPcb.

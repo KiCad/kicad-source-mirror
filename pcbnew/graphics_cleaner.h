@@ -26,7 +26,7 @@
 
 #include <board.h>
 
-class MODULE;
+class FOOTPRINT;
 class BOARD_COMMIT;
 class CLEANUP_ITEM;
 
@@ -35,15 +35,15 @@ class CLEANUP_ITEM;
 class GRAPHICS_CLEANER
 {
 public:
-    GRAPHICS_CLEANER( DRAWINGS& aDrawings, MODULE* aParentModule, BOARD_COMMIT& aCommit );
+    GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint, BOARD_COMMIT& aCommit );
 
     /**
      * the cleanup function.
      * @param aMergeRects = merge for segments forming a rectangle into a rect
      * @param aDeleteRedundant = true to delete null graphics and duplicated graphics
      */
-    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList, bool aMergeRects,
-                       bool aDeleteRedundant );
+    void CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
+                       bool aMergeRects, bool aDeleteRedundant );
 
 private:
     bool isNullSegment( PCB_SHAPE* aShape );
@@ -54,7 +54,7 @@ private:
 
 private:
     DRAWINGS&                   m_drawings;
-    MODULE*                     m_parentModule;  // nullptr if not in ModEdit
+    FOOTPRINT*                  m_parentFootprint;  // nullptr if not in Footprint Editor
     BOARD_COMMIT&               m_commit;
     bool                        m_dryRun;
     std::vector<std::shared_ptr<CLEANUP_ITEM> >* m_itemsList;

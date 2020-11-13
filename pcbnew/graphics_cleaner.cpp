@@ -31,10 +31,10 @@
 #include <graphics_cleaner.h>
 
 
-GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, MODULE* aParentModule,
+GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint,
                                     BOARD_COMMIT& aCommit ) :
         m_drawings( aDrawings ),
-        m_parentModule( aParentModule ),
+        m_parentFootprint( aParentFootprint ),
         m_commit( aCommit ),
         m_dryRun( true ),
         m_itemsList( nullptr )
@@ -42,7 +42,8 @@ GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, MODULE* aParentModule,
 }
 
 
-void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun, std::vector<std::shared_ptr<CLEANUP_ITEM> >* aItemsList,
+void GRAPHICS_CLEANER::CleanupBoard( bool aDryRun,
+                                     std::vector<std::shared_ptr<CLEANUP_ITEM>>* aItemsList,
                                      bool aMergeRects, bool aDeleteRedundant )
 {
     m_dryRun = aDryRun;
@@ -300,8 +301,8 @@ void GRAPHICS_CLEANER::mergeRects()
                 {
                     PCB_SHAPE* rect;
 
-                    if( m_parentModule )
-                        rect = new FP_SHAPE( m_parentModule );
+                    if( m_parentFootprint )
+                        rect = new FP_SHAPE( m_parentFootprint );
                     else
                         rect = new PCB_SHAPE();
 

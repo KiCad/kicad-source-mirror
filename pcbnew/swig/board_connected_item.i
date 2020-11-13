@@ -42,7 +42,7 @@
         switch( aItem->Type() ) {
         case PCB_PAD_T:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
-                                      SWIGTYPE_p_D_PAD,
+                                      SWIGTYPE_p_PAD,
                                       0 | 0 );
             break;
 
