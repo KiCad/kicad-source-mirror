@@ -38,7 +38,7 @@
 %{
 #include <footprint.h>
 %}
-%template(FP_3DMODLE_List) std::list<FP_3DMODLE>;
+%template(FP_3DMODEL_List) std::list<FP_3DMODEL>;
 
 
 // BOARD_ITEM_CONTAINER's interface functions will be implemented by SWIG
