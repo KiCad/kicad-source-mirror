@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-04 19:09-0800\n"
+"POT-Creation-Date: 2020-11-13 10:46-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -64,8 +64,8 @@ msgstr "no such file"
 msgid "failed to open file"
 msgstr "failed to open file"
 
-msgid "Build board body"
-msgstr "Build board body"
+msgid "Build board outline"
+msgstr "Build board outline"
 
 msgid "Create layers"
 msgstr "Create layers"
@@ -128,6 +128,12 @@ msgstr "Loading %s"
 
 msgid "Loading..."
 msgstr "Loading…"
+
+msgid "Load Raytracing: board"
+msgstr "Load Raytracing: board"
+
+msgid "Load Raytracing: layers"
+msgstr "Load Raytracing: layers"
 
 #, c-format
 msgid "Rendering time %.3f s"
@@ -2305,6 +2311,9 @@ msgstr "Board Text"
 msgid "Footprint Text"
 msgstr "Footprint Text"
 
+msgid "Zone"
+msgstr "Zone"
+
 msgid "Track"
 msgstr "Track"
 
@@ -2328,9 +2337,6 @@ msgstr "Leader"
 
 msgid "Target"
 msgstr "Target"
-
-msgid "Zone"
-msgstr "Zone"
 
 msgid "Item List"
 msgstr "Item List"
@@ -4144,8 +4150,8 @@ msgid "Equivalence File Load Error"
 msgstr "Equivalence File Load Error"
 
 #, c-format
-msgid "%lu footprint/cmp equivalences found."
-msgstr "%lu footprint/cmp equivalences found."
+msgid "%lu footprint/symbol equivalences found."
+msgstr "%lu footprint/symbol equivalences found."
 
 #, c-format
 msgid ""
@@ -8579,6 +8585,10 @@ msgstr ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 
 #, c-format
+msgid "Power symbol creates a global label with name '%s'"
+msgstr "Power symbol creates a global label with name '%s'"
+
+#, c-format
 msgid ""
 "The design is too large and cannot be imported into KiCad. \n"
 "Please reduce the maximum design size in CADSTAR by navigating to: \n"
@@ -10135,23 +10145,23 @@ msgstr ""
 "You must launch the KiCad project manager and create a project."
 
 #, c-format
-msgid "Footprint \"%s\" has no symbol associated."
-msgstr "Footprint \"%s\" has no symbol associated."
+msgid "Footprint '%s' has no associated symbol."
+msgstr "Footprint '%s' has no associated symbol."
 
 #, c-format
-msgid "Pcb footprints \"%s\" and \"%s\" linked to same symbol"
-msgstr "Pcb footprints \"%s\" and \"%s\" linked to same symbol"
+msgid "Pcb footprints '%s' and '%s' linked to same symbol."
+msgstr "Pcb footprints '%s' and '%s' linked to same symbol."
 
 #, c-format
-msgid "Cannot find symbol for \"%s\" footprint"
-msgstr "Cannot find symbol for \"%s\" footprint"
+msgid "Cannot find symbol for footprint '%s'."
+msgstr "Cannot find symbol for footprint '%s'."
 
 #, c-format
-msgid "Cannot find footprint for \"%s\" symbol"
-msgstr "Cannot find footprint for \"%s\" symbol"
+msgid "Cannot find footprint for symbol '%s'."
+msgstr "Cannot find footprint for symbol '%s'."
 
-msgid "Cannot relink footprints because schematic is not fully annotated"
-msgstr "Cannot relink footprints because schematic is not fully annotated"
+msgid "Cannot relink footprints because schematic is not fully annotated."
+msgstr "Cannot relink footprints because schematic is not fully annotated."
 
 #, c-format
 msgid "Change \"%s\" reference designator to \"%s\"."
@@ -11441,6 +11451,23 @@ msgstr "This job file uses an outdated format. Please recreate it."
 
 msgid "Open Gerber Job File"
 msgstr "Open Gerber Job File"
+
+msgid "Change Layer Color for"
+msgstr "Change Layer Color for"
+
+msgid "Change Render Color for"
+msgstr "Change Render Color for"
+
+msgid ""
+"Left double click or middle click for color change, right click for menu"
+msgstr ""
+"Left double click or middle click for color change, right click for menu"
+
+msgid "Enable this for visibility"
+msgstr "Enable this for visibility"
+
+msgid "Left double click or middle click for color change"
+msgstr "Left double click or middle click for color change"
 
 msgid "Open Recent Gerber File"
 msgstr "Open Recent Gerber File"
@@ -13513,6 +13540,30 @@ msgstr "Autoplace Components"
 msgid "Autoplace components"
 msgstr "Autoplace components"
 
+msgid "This is the default net class."
+msgstr "This is the default net class."
+
+msgid "PCB"
+msgstr "PCB"
+
+msgid "Pads"
+msgstr "Pads"
+
+msgid "Vias"
+msgstr "Vias"
+
+msgid "Track Segments"
+msgstr "Track Segments"
+
+msgid "Nodes"
+msgstr "Nodes"
+
+msgid "Nets"
+msgstr "Nets"
+
+msgid "Unrouted"
+msgstr "Unrouted"
+
 msgid "NetName"
 msgstr "NetName"
 
@@ -13581,8 +13632,17 @@ msgstr "PrePreg"
 msgid "Layer \"%s\" (sublayer %d/%d)"
 msgstr "Layer \"%s\" (sublayer %d/%d)"
 
+msgid "Select dielectric layer to add to board stack up."
+msgstr "Select dielectric layer to add to board stack up."
+
 msgid "Dielectric Layers List"
 msgstr "Dielectric Layers List"
+
+msgid "Select dielectric layer to remove from board stack up."
+msgstr "Select dielectric layer to remove from board stack up."
+
+msgid "Dielectric Layers"
+msgstr "Dielectric Layers"
 
 msgid "Copper"
 msgstr "Copper"
@@ -13784,30 +13844,6 @@ msgstr "Designation"
 msgid "Supplier and ref"
 msgstr "Supplier and ref"
 
-msgid "This is the default net class."
-msgstr "This is the default net class."
-
-msgid "PCB"
-msgstr "PCB"
-
-msgid "Pads"
-msgstr "Pads"
-
-msgid "Vias"
-msgstr "Vias"
-
-msgid "Track Segments"
-msgstr "Track Segments"
-
-msgid "Nodes"
-msgstr "Nodes"
-
-msgid "Nets"
-msgstr "Nets"
-
-msgid "Unrouted"
-msgstr "Unrouted"
-
 msgid "Rect"
 msgstr "Rect"
 
@@ -13835,25 +13871,6 @@ msgstr "Position Y"
 msgid "Locked"
 msgstr "Locked"
 
-msgid "Dimension"
-msgstr "Dimension"
-
-msgid "Prefix"
-msgstr "Prefix"
-
-msgid "Override Text"
-msgstr "Override Text"
-
-msgid "Precision"
-msgstr "Precision"
-
-msgid "Suffix"
-msgstr "Suffix"
-
-#, c-format
-msgid "Dimension '%s' on %s"
-msgstr "Dimension '%s' on %s"
-
 msgid "Marker"
 msgstr "Marker"
 
@@ -13863,408 +13880,6 @@ msgstr "Violation"
 #, c-format
 msgid "Marker (%s)"
 msgstr "Marker (%s)"
-
-msgid "Last Change"
-msgstr "Last Change"
-
-msgid "Board Side"
-msgstr "Board Side"
-
-msgid "Back (Flipped)"
-msgstr "Back (Flipped)"
-
-msgid "Front"
-msgstr "Front"
-
-msgid "locked"
-msgstr "locked"
-
-msgid "autoplaced"
-msgstr "autoplaced"
-
-msgid "not in schematic"
-msgstr "not in schematic"
-
-msgid "exclude from pos files"
-msgstr "exclude from pos files"
-
-msgid "exclude from BOM"
-msgstr "exclude from BOM"
-
-msgid "Status: "
-msgstr "Status: "
-
-msgid "Attributes:"
-msgstr "Attributes:"
-
-#, c-format
-msgid "3D-Shape: %s"
-msgstr "3D-Shape: %s"
-
-msgid "none"
-msgstr "none"
-
-#, c-format
-msgid "Doc: %s"
-msgstr "Doc: %s"
-
-#, c-format
-msgid "Keywords: %s"
-msgstr "Keywords: %s"
-
-msgid "<no reference designator>"
-msgstr "<no reference designator>"
-
-#, c-format
-msgid "Footprint %s"
-msgstr "Footprint %s"
-
-#, c-format
-msgid "Processing courtyard of \"%s\": %s"
-msgstr "Processing courtyard of “%s”: %s"
-
-msgid "Local Clearance"
-msgstr "Local Clearance"
-
-msgid "Local Solderpaste Margin"
-msgstr "Local Solderpaste Margin"
-
-msgid "Local Solderpaste Margin Ratio"
-msgstr "Local Solderpaste Margin Ratio"
-
-msgid "Thermal Width"
-msgstr "Thermal Width"
-
-msgid "Thermal Gap"
-msgstr "Thermal Gap"
-
-#, c-format
-msgid "footprint %s"
-msgstr "footprint %s"
-
-#, c-format
-msgid "pad %s"
-msgstr "pad %s"
-
-msgid "parent footprint"
-msgstr "parent footprint"
-
-msgid "pad"
-msgstr "pad"
-
-msgid "Pin Name"
-msgstr "Pin Name"
-
-msgid "BGA"
-msgstr "BGA"
-
-msgid "Fiducial global"
-msgstr "Fiducial global"
-
-msgid "Fiducial local"
-msgstr "Fiducial local"
-
-msgid "Test point"
-msgstr "Test point"
-
-msgid "Heat sink"
-msgstr "Heat sink"
-
-msgid "Castellated"
-msgstr "Castellated"
-
-msgid "Diameter"
-msgstr "Diameter"
-
-msgid "Length in Package"
-msgstr "Length in Package"
-
-msgid "Drill"
-msgstr "Drill"
-
-msgid "Drill X / Y"
-msgstr "Drill X / Y"
-
-#, c-format
-msgid "Min Clearance: %s"
-msgstr "Min Clearance: %s"
-
-#, c-format
-msgid "(from %s)"
-msgstr "(from %s)"
-
-msgid "Oval"
-msgstr "Oval"
-
-msgid "Trap"
-msgstr "Trap"
-
-msgid "Roundrect"
-msgstr "Roundrect"
-
-msgid "Chamferedrect"
-msgstr "Chamferedrect"
-
-msgid "CustomShape"
-msgstr "CustomShape"
-
-msgid "PTH"
-msgstr "PTH"
-
-msgid "SMD"
-msgstr "SMD"
-
-msgid "Conn"
-msgstr "Conn"
-
-msgid "NPTH"
-msgstr "NPTH"
-
-#, c-format
-msgid "Pad of %s on %s"
-msgstr "Pad of %s on %s"
-
-#, c-format
-msgid "Pad %s of %s on %s"
-msgstr "Pad %s of %s on %s"
-
-msgid "Through-hole"
-msgstr "Through-hole"
-
-msgid "Edge connector"
-msgstr "Edge connector"
-
-msgid "NPTH, mechanical"
-msgstr "NPTH, mechanical"
-
-msgid "Trapezoid"
-msgstr "Trapezoid"
-
-msgid "Rounded rectangle"
-msgstr "Rounded rectangle"
-
-msgid "Chamfered rectangle"
-msgstr "Chamfered rectangle"
-
-msgid "BGA pad"
-msgstr "BGA pad"
-
-msgid "Fiducial, global to board"
-msgstr "Fiducial, global to board"
-
-msgid "Fiducial, local to footprint"
-msgstr "Fiducial, local to footprint"
-
-msgid "Test point pad"
-msgstr "Test point pad"
-
-msgid "Heatsink pad"
-msgstr "Heatsink pad"
-
-msgid "Castellated pad"
-msgstr "Castellated pad"
-
-msgid "Pad Type"
-msgstr "Pad Type"
-
-msgid "Pad Number"
-msgstr "Pad Number"
-
-msgid "Size X"
-msgstr "Size X"
-
-msgid "Size Y"
-msgstr "Size Y"
-
-msgid "Hole Size X"
-msgstr "Hole Size X"
-
-msgid "Hole Size Y"
-msgstr "Hole Size Y"
-
-msgid "Pad To Die Length"
-msgstr "Pad To Die Length"
-
-msgid "Local Soldermask Margin"
-msgstr "Local Soldermask Margin"
-
-msgid "Thermal Relief Spoke Width"
-msgstr "Thermal Relief Spoke Width"
-
-msgid "Thermal Relief"
-msgstr "Thermal Relief"
-
-msgid "Fabrication Property"
-msgstr "Fabrication Property"
-
-msgid "Round Radius Ratio"
-msgstr "Round Radius Ratio"
-
-#, c-format
-msgid "Anonymous Group, %zu members"
-msgstr "Anonymous Group, %zu members"
-
-#, c-format
-msgid "Group \"%s\", %zu members"
-msgstr "Group \"%s\", %zu members"
-
-msgid "Anonymous"
-msgstr "Anonymous"
-
-msgid "Members"
-msgstr "Members"
-
-#, c-format
-msgid "Blind/Buried Via %s on %s"
-msgstr "Blind/Buried Via %s on %s"
-
-#, c-format
-msgid "Micro Via %s on %s"
-msgstr "Micro Via %s on %s"
-
-#, c-format
-msgid "Via %s on %s"
-msgstr "Via %s on %s"
-
-msgid "removed annular ring"
-msgstr "removed annular ring"
-
-msgid "Full Length"
-msgstr "Full Length"
-
-#, c-format
-msgid "Min Width: %s"
-msgstr "Min Width: %s"
-
-msgid "Blind/Buried Via"
-msgstr "Blind/Buried Via"
-
-#, c-format
-msgid "Min Annular Width: %s"
-msgstr "Min Annular Width: %s"
-
-msgid "NetCode"
-msgstr "NetCode"
-
-#, c-format
-msgid "Track %s on %s, length %s"
-msgstr "Track %s on %s, length %s"
-
-msgid "Through"
-msgstr "Through"
-
-msgid "Blind/buried"
-msgstr "Blind/buried"
-
-msgid "Micro"
-msgstr "Micro"
-
-msgid "Origin X"
-msgstr "Origin X"
-
-msgid "Origin Y"
-msgstr "Origin Y"
-
-msgid "End X"
-msgstr "End X"
-
-msgid "End Y"
-msgstr "End Y"
-
-msgid "Layer Top"
-msgstr "Layer Top"
-
-msgid "Layer Bottom"
-msgstr "Layer Bottom"
-
-msgid "Via Type"
-msgstr "Via Type"
-
-msgid "zone"
-msgstr "zone"
-
-msgid "Rule Area"
-msgstr "Rule Area"
-
-msgid "Copper Zone"
-msgstr "Copper Zone"
-
-msgid "Non-copper Zone"
-msgstr "Non-copper Zone"
-
-msgid "Cutout"
-msgstr "Cutout"
-
-msgid "No vias"
-msgstr "No vias"
-
-msgid "No tracks"
-msgstr "No tracks"
-
-msgid "No pads"
-msgstr "No pads"
-
-msgid "No copper zones"
-msgstr "No copper zones"
-
-msgid "No footprints"
-msgstr "No footprints"
-
-msgid "Restrictions"
-msgstr "Restrictions"
-
-msgid "Priority"
-msgstr "Priority"
-
-#, c-format
-msgid "%s and %d more"
-msgstr "%s and %d more"
-
-msgid "Hatched"
-msgstr "Hatched"
-
-msgid "Fill Mode"
-msgstr "Fill Mode"
-
-msgid "Filled Area"
-msgstr "Filled Area"
-
-msgid "HatchBorder Lines"
-msgstr "HatchBorder Lines"
-
-msgid "Corner Count"
-msgstr "Corner Count"
-
-msgid "(Cutout)"
-msgstr "(Cutout)"
-
-msgid "(Rule Area)"
-msgstr "(Rule Area)"
-
-#, c-format
-msgid "Zone Outline %s on %s"
-msgstr "Zone Outline %s on %s"
-
-msgid "Inherited"
-msgstr "Inherited"
-
-msgid "Thermal reliefs"
-msgstr "Thermal reliefs"
-
-msgid "Reliefs for PTH"
-msgstr "Reliefs for PTH"
-
-msgid "Min Width"
-msgstr "Min Width"
-
-msgid "Pad Connections"
-msgstr "Pad Connections"
-
-msgid "Thermal Clearance"
-msgstr "Thermal Clearance"
-
-msgid "Thermal Spoke Width"
-msgstr "Thermal Spoke Width"
 
 msgid "Checking zone fills..."
 msgstr "Checking zone fills…"
@@ -14443,11 +14058,11 @@ msgstr ""
 msgid ""
 "\n"
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
-"grid. "
+"grid."
 msgstr ""
 "\n"
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
-"grid. "
+"grid."
 
 msgid "footprint location"
 msgstr "footprint location"
@@ -14568,8 +14183,8 @@ msgstr ""
 "\n"
 "Reannotate failed!\n"
 
-msgid "Aborted: too many errors "
-msgstr "Aborted: too many errors "
+msgid "Aborted: too many errors"
+msgstr "Aborted: too many errors"
 
 msgid ""
 "\n"
@@ -14642,6 +14257,9 @@ msgstr "Reannotation Scope"
 
 msgid "Reannotate:"
 msgstr "Reannotate:"
+
+msgid "Front"
+msgstr "Front"
 
 msgid "Update schematic"
 msgstr "Update schematic"
@@ -14828,6 +14446,12 @@ msgstr "???"
 
 msgid "N/A"
 msgstr "N/A"
+
+msgid "PTH"
+msgstr "PTH"
+
+msgid "NPTH"
+msgstr "NPTH"
 
 msgid "Save Report File"
 msgstr "Save Report File"
@@ -15045,6 +14669,9 @@ msgstr ""
 msgid "Outline display:"
 msgstr "Outline display:"
 
+msgid "Hatched"
+msgstr "Hatched"
+
 msgid "Fully hatched"
 msgstr "Fully hatched"
 
@@ -15078,6 +14705,12 @@ msgid ""
 msgstr ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local  pad settings"
+
+msgid "Thermal reliefs"
+msgstr "Thermal reliefs"
+
+msgid "Reliefs for PTH"
+msgstr "Reliefs for PTH"
 
 msgid "Thermal clearance:"
 msgstr "Thermal clearance:"
@@ -15600,8 +15233,8 @@ msgstr "Footprint name may not contain “%s”."
 msgid "Text items must have some content."
 msgstr "Text items must have some content."
 
-msgid "Modify module properties"
-msgstr "Modify module properties"
+msgid "Modify footprint properties"
+msgstr "Modify footprint properties"
 
 msgid "Reference and value are mandatory."
 msgstr "Reference and value are mandatory."
@@ -15650,6 +15283,9 @@ msgstr "Component:"
 
 msgid "Through hole"
 msgstr "Through hole"
+
+msgid "SMD"
+msgstr "SMD"
 
 msgid "Other"
 msgstr "Other"
@@ -15889,6 +15525,9 @@ msgstr "File name:"
 msgid "Select an IDF export filename"
 msgstr "Select an IDF export filename"
 
+msgid "*.emn"
+msgstr "*.emn"
+
 msgid "Grid reference point:"
 msgstr "Grid reference point:"
 
@@ -15901,8 +15540,8 @@ msgstr "X position:"
 msgid "Y position:"
 msgstr "Y position:"
 
-msgid "Output Units:"
-msgstr "Output Units:"
+msgid "Output Units"
+msgstr "Output Units"
 
 msgid "Export IDFv3"
 msgstr "Export IDFv3"
@@ -16075,6 +15714,9 @@ msgstr "Unable to create directory \"%s\""
 msgid "Save VRML Board File"
 msgstr "Save VRML Board File"
 
+msgid "*.wrl"
+msgstr "*.wrl"
+
 msgid "Footprint 3D model path:"
 msgstr "Footprint 3D model path:"
 
@@ -16147,6 +15789,33 @@ msgstr "“%s” not found"
 msgid "No hits"
 msgstr "No hits"
 
+msgid "Search for:"
+msgstr "Search for:"
+
+msgid "Match case"
+msgstr "Match case"
+
+msgid "Wrap"
+msgstr "Wrap"
+
+msgid "Search footprint reference designators"
+msgstr "Search footprint reference designators"
+
+msgid "Search footprint values"
+msgstr "Search footprint values"
+
+msgid "Search other text items"
+msgstr "Search other text items"
+
+msgid "Search DRC markers"
+msgstr "Search DRC markers"
+
+msgid "Find Previous"
+msgstr "Find Previous"
+
+msgid "Restart Search"
+msgstr "Restart Search"
+
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
@@ -16167,9 +15836,6 @@ msgstr ""
 "Component is locked: it cannot be freely moved or auto placed, and can only "
 "be selected when the \"Locked items\" checkbox is enabled in the selection "
 "filter."
-
-msgid "Modify footprint properties"
-msgstr "Modify footprint properties"
 
 msgid "Keep Upright"
 msgstr "Keep Upright"
@@ -16491,6 +16157,9 @@ msgstr "Zeros Format"
 msgid "Choose EXCELLON numbers notation"
 msgstr "Choose EXCELLON numbers notation"
 
+msgid "Precision"
+msgstr "Precision"
+
 msgid "Hole Counts"
 msgstr "Hole Counts"
 
@@ -16722,24 +16391,17 @@ msgstr "Rectangle Properties"
 msgid "Line Segment Properties"
 msgstr "Line Segment Properties"
 
-msgid ""
-"This item was on a non-existing or forbidden layer.\n"
-"It has been moved to the first allowed layer. Please fix it."
-msgstr ""
-"This item was on a non-existing or forbidden layer.\n"
-"It has been moved to the first allowed layer. Please fix it."
-
 msgid "Modify drawing properties"
 msgstr "Modify drawing properties"
 
 msgid "The arc angle cannot be zero."
 msgstr "The arc angle cannot be zero."
 
-msgid "The radius must be greater than zero."
-msgstr "The radius must be greater than zero."
+msgid "The radius cannot be zero."
+msgstr "The radius cannot be zero."
 
-msgid "The rectangle can not be empty."
-msgstr "The rectangle can not be empty."
+msgid "The rectangle cannot be empty."
+msgstr "The rectangle cannot be empty."
 
 msgid "Error List"
 msgstr "Error List"
@@ -16793,11 +16455,11 @@ msgid "KiCad Layer"
 msgstr "KiCad Layer"
 
 msgid ""
-"All layers must be matched. Please click on 'Auto-Matched Layers' to "
-"automatically match the remaining layers."
+"All required layers (marked with '*') must be matched. Please click on 'Auto-"
+"Match Layers' to automatically match the remaining layers"
 msgstr ""
-"All layers must be matched. Please click on 'Auto-Matched Layers' to "
-"automatically match the remaining layers."
+"All required layers (marked with '*') must be matched. Please click on 'Auto-"
+"Match Layers' to automatically match the remaining layers"
 
 msgid "Unmatched Layers"
 msgstr "Unmatched Layers"
@@ -16886,6 +16548,81 @@ msgstr "Use polar coordinates"
 
 msgid "Move Item"
 msgstr "Move Item"
+
+msgid "Net Name"
+msgstr "Net Name"
+
+msgid "Pad Count"
+msgstr "Pad Count"
+
+msgid "Via Count"
+msgstr "Via Count"
+
+msgid "Via Length"
+msgstr "Via Length"
+
+msgid "Board Length"
+msgstr "Board Length"
+
+msgid "Die Length"
+msgstr "Die Length"
+
+msgid "Total Length"
+msgstr "Total Length"
+
+msgid "Net Length"
+msgstr "Net Length"
+
+msgid "Net name:"
+msgstr "Net name:"
+
+msgid "New Net"
+msgstr "New Net"
+
+#, c-format
+msgid "Net name '%s' is already in use."
+msgstr "Net name '%s' is already in use."
+
+msgid "Rename Net"
+msgstr "Rename Net"
+
+msgid "Net name cannot be empty."
+msgstr "Net name cannot be empty."
+
+#, c-format
+msgid "Net '%s' is in use.  Delete anyway?"
+msgstr "Net '%s' is in use.  Delete anyway?"
+
+#, c-format
+msgid "Delete all nets in group '%s'?"
+msgstr "Delete all nets in group '%s'?"
+
+msgid "Report file"
+msgstr "Report file"
+
+msgid "Show zero pad nets"
+msgstr "Show zero pad nets"
+
+msgid "Group by:"
+msgstr "Group by:"
+
+msgid "Wildcard"
+msgstr "Wildcard"
+
+msgid "RegEx"
+msgstr "RegEx"
+
+msgid "Wildcard Substr"
+msgstr "Wildcard Substr"
+
+msgid "RegEx Substr"
+msgstr "RegEx Substr"
+
+msgid "Create Report..."
+msgstr "Create Report…"
+
+msgid "Net Inspector"
+msgstr "Net Inspector"
 
 msgid "Rebuild Ratsnest"
 msgstr "Rebuild Ratsnest"
@@ -17154,6 +16891,9 @@ msgstr "Add Primitive"
 msgid "Pad type:"
 msgstr "Pad type:"
 
+msgid "Through-hole"
+msgstr "Through-hole"
+
 msgid "Edge Connector"
 msgstr "Edge Connector"
 
@@ -17166,20 +16906,26 @@ msgstr "SMD Aperture"
 msgid "Pad number:"
 msgstr "Pad number:"
 
-msgid "Net name:"
-msgstr "Net name:"
-
 msgid "Pad shape:"
 msgstr "Pad shape:"
 
 msgid "Circular"
 msgstr "Circular"
 
+msgid "Oval"
+msgstr "Oval"
+
 msgid "Rectangular"
 msgstr "Rectangular"
 
 msgid "Trapezoidal"
 msgstr "Trapezoidal"
+
+msgid "Rounded rectangle"
+msgstr "Rounded rectangle"
+
+msgid "Chamfered rectangle"
+msgstr "Chamfered rectangle"
 
 msgid "Chamfered with other corners rounded"
 msgstr "Chamfered with other corners rounded"
@@ -17250,9 +16996,6 @@ msgstr "Top right"
 
 msgid "Bottom right"
 msgstr "Bottom right"
-
-msgid "Other corners:"
-msgstr "Other corners:"
 
 msgid "Pad size X:"
 msgstr "Pad size X:"
@@ -17332,6 +17075,21 @@ msgstr ""
 "Heatsink pad  specify a thermal pad\n"
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
+
+msgid "BGA pad"
+msgstr "BGA pad"
+
+msgid "Fiducial, local to footprint"
+msgstr "Fiducial, local to footprint"
+
+msgid "Fiducial, global to board"
+msgstr "Fiducial, global to board"
+
+msgid "Test point pad"
+msgstr "Test point pad"
+
+msgid "Heatsink pad"
+msgstr "Heatsink pad"
 
 msgid "Castellated pad (through hole only)"
 msgstr "Castellated pad (through hole only)"
@@ -17873,8 +17631,8 @@ msgstr "Shove"
 msgid "Walk around"
 msgstr "Walk around"
 
-msgid "Mode:"
-msgstr "Mode:"
+msgid "Mode"
+msgstr "Mode"
 
 msgid "Mouse drag behavior:"
 msgstr "Mouse drag behavior:"
@@ -18117,87 +17875,6 @@ msgstr "&Run"
 msgid "Scripting Test Window"
 msgstr "Scripting Test Window"
 
-msgid "Net Name"
-msgstr "Net Name"
-
-msgid "Pad Count"
-msgstr "Pad Count"
-
-msgid "Via Count"
-msgstr "Via Count"
-
-msgid "Via Length"
-msgstr "Via Length"
-
-msgid "Board Length"
-msgstr "Board Length"
-
-msgid "Die Length"
-msgstr "Die Length"
-
-msgid "Total Length"
-msgstr "Total Length"
-
-msgid "Net Length"
-msgstr "Net Length"
-
-msgid "New Net"
-msgstr "New Net"
-
-#, c-format
-msgid "Net name '%s' is already in use."
-msgstr "Net name '%s' is already in use."
-
-msgid "Rename Net"
-msgstr "Rename Net"
-
-msgid "Net name cannot be empty."
-msgstr "Net name cannot be empty."
-
-#, c-format
-msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Net '%s' is in use.  Delete anyway?"
-
-#, c-format
-msgid "Delete all nets in group '%s'?"
-msgstr "Delete all nets in group '%s'?"
-
-msgid "Report file"
-msgstr "Report file"
-
-msgid "Show zero pad nets"
-msgstr "Show zero pad nets"
-
-msgid "Wildcard"
-msgstr "Wildcard"
-
-msgid "RegEx"
-msgstr "RegEx"
-
-msgid "Wildcard Substr"
-msgstr "Wildcard Substr"
-
-msgid "RegEx Substr"
-msgstr "RegEx Substr"
-
-msgid "Sort groups first"
-msgstr "Sort groups first"
-
-msgid "Via Length:"
-msgstr "Via Length:"
-
-msgid "Constant"
-msgstr "Constant"
-
-msgid "From Stackup"
-msgstr "From Stackup"
-
-msgid "Create Report..."
-msgstr "Create Report…"
-
-msgid "Net Inspector"
-msgstr "Net Inspector"
-
 msgid "Move items on:"
 msgstr "Move items on:"
 
@@ -18322,6 +17999,15 @@ msgstr "Use net class sizes"
 
 msgid "Via type:"
 msgstr "Via type:"
+
+msgid "Through"
+msgstr "Through"
+
+msgid "Micro"
+msgstr "Micro"
+
+msgid "Blind/buried"
+msgstr "Blind/buried"
 
 msgid "Start layer:"
 msgstr "Start layer:"
@@ -19123,6 +18809,13 @@ msgstr ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 
+msgid ""
+"Positive clearance means area bigger than the pad (usual for solder mask "
+"clearance)."
+msgstr ""
+"Positive clearance means area bigger than the pad (usual for solder mask "
+"clearance)."
+
 msgid "Solder mask minimum bridge width:"
 msgstr "Solder mask minimum bridge width:"
 
@@ -19145,6 +18838,13 @@ msgstr ""
 "Global clearance between pads and the solder paste.\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
+
+msgid ""
+"Negative clearance means area smaller than the pad (usual for solder paste "
+"clearance)."
+msgstr ""
+"Negative clearance means area smaller than the pad (usual for solder paste "
+"clearance)."
 
 msgid ""
 "Global clearance ratio in percent between pads and the solder paste.\n"
@@ -19249,6 +18949,9 @@ msgstr "Differential pair via gap less than minimum clearance (%s)."
 msgid "Pre-defined track and via dimensions:"
 msgstr "Pre-defined track and via dimensions:"
 
+msgid "Drill"
+msgstr "Drill"
+
 msgid "Differential Pairs"
 msgstr "Differential Pairs"
 
@@ -19257,6 +18960,22 @@ msgstr "Gap"
 
 msgid "Via Gap"
 msgstr "Via Gap"
+
+msgid "Dimension"
+msgstr "Dimension"
+
+msgid "Prefix"
+msgstr "Prefix"
+
+msgid "Override Text"
+msgstr "Override Text"
+
+msgid "Suffix"
+msgstr "Suffix"
+
+#, c-format
+msgid "Dimension '%s' on %s"
+msgstr "Dimension '%s' on %s"
 
 msgid "board setup constraints"
 msgstr "board setup constraints"
@@ -19936,6 +19655,81 @@ msgstr ""
 "\n"
 "%s"
 
+msgid "Last Change"
+msgstr "Last Change"
+
+msgid "Board Side"
+msgstr "Board Side"
+
+msgid "Back (Flipped)"
+msgstr "Back (Flipped)"
+
+msgid "locked"
+msgstr "locked"
+
+msgid "autoplaced"
+msgstr "autoplaced"
+
+msgid "not in schematic"
+msgstr "not in schematic"
+
+msgid "exclude from pos files"
+msgstr "exclude from pos files"
+
+msgid "exclude from BOM"
+msgstr "exclude from BOM"
+
+msgid "Status: "
+msgstr "Status: "
+
+msgid "Attributes:"
+msgstr "Attributes:"
+
+#, c-format
+msgid "3D-Shape: %s"
+msgstr "3D-Shape: %s"
+
+msgid "none"
+msgstr "none"
+
+#, c-format
+msgid "Doc: %s"
+msgstr "Doc: %s"
+
+#, c-format
+msgid "Keywords: %s"
+msgstr "Keywords: %s"
+
+msgid "<no reference designator>"
+msgstr "<no reference designator>"
+
+#, c-format
+msgid "Footprint %s"
+msgstr "Footprint %s"
+
+#, c-format
+msgid "Processing courtyard of \"%s\": %s"
+msgstr "Processing courtyard of “%s”: %s"
+
+msgid "Local Clearance"
+msgstr "Local Clearance"
+
+msgid "Local Solderpaste Margin"
+msgstr "Local Solderpaste Margin"
+
+msgid "Local Solderpaste Margin Ratio"
+msgstr "Local Solderpaste Margin Ratio"
+
+msgid "Thermal Width"
+msgstr "Thermal Width"
+
+msgid "Thermal Gap"
+msgstr "Thermal Gap"
+
+#, c-format
+msgid "footprint %s"
+msgstr "footprint %s"
+
 msgid "Inner layers"
 msgstr "Inner layers"
 
@@ -19967,9 +19761,6 @@ msgstr "No footprint selected."
 
 msgid "Footprint Image File Name"
 msgstr "Footprint Image File Name"
-
-msgid "The current footprint has been modified.  Save changes?"
-msgstr "The current footprint has been modified.  Save changes?"
 
 msgid "Edit Zone"
 msgstr "Edit Zone"
@@ -20072,8 +19863,8 @@ msgstr "Delete footprint '%s' from library '%s'?"
 msgid "Footprint '%s' deleted from library '%s'"
 msgstr "Footprint '%s' deleted from library '%s'"
 
-msgid "No footprints to harvest!"
-msgstr "No footprints to harvest!"
+msgid "No footprints to export!"
+msgstr "No footprints to export!"
 
 msgid "No board currently open."
 msgstr "No board currently open."
@@ -20103,8 +19894,8 @@ msgid "Component \"%s\" replaced in \"%s\""
 msgstr "Component “%s” replaced in “%s”"
 
 #, c-format
-msgid "Component \"%s\" added in  \"%s\""
-msgstr "Component “%s” added in  “%s”"
+msgid "Component \"%s\" added in \"%s\""
+msgstr "Component \"%s\" added in \"%s\""
 
 msgid "Enter footprint name:"
 msgstr "Enter footprint name:"
@@ -20231,8 +20022,8 @@ msgstr "There is no plugin to handle this file type."
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 
-msgid "Placement:"
-msgstr "Placement:"
+msgid "Placement"
+msgstr "Placement"
 
 msgid "Interactive placement"
 msgstr "Interactive placement"
@@ -20249,8 +20040,8 @@ msgstr "DXF origin on PCB Grid, Y Coordinate"
 msgid "Select PCB grid units"
 msgstr "Select PCB grid units"
 
-msgid "Import parameters:"
-msgstr "Import parameters:"
+msgid "Import Parameters"
+msgstr "Import Parameters"
 
 msgid "Line width (DXF import):"
 msgstr "Line width (DXF import):"
@@ -20275,29 +20066,15 @@ msgid ""
 msgstr ""
 "Current Board will be lost and this operation cannot be undone. Continue?"
 
+msgid "The current footprint has been modified.  Save changes?"
+msgstr "The current footprint has been modified.  Save changes?"
+
 #, c-format
 msgid "UNKNOWN (%d)"
 msgstr "UNKNOWN (%d)"
 
 msgid "Clipboard content is not KiCad compatible"
 msgstr "Clipboard content is not KiCad compatible"
-
-msgid "Change Layer Color for"
-msgstr "Change Layer Color for"
-
-msgid "Change Render Color for"
-msgstr "Change Render Color for"
-
-msgid ""
-"Left double click or middle click for color change, right click for menu"
-msgstr ""
-"Left double click or middle click for color change, right click for menu"
-
-msgid "Enable this for visibility"
-msgstr "Enable this for visibility"
-
-msgid "Left double click or middle click for color change"
-msgstr "Left double click or middle click for color change"
 
 #, c-format
 msgid "Choose Footprint (%d items loaded)"
@@ -20403,31 +20180,31 @@ msgstr ""
 msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
+msgid "Export Footprints to Library..."
+msgstr "Export Footprints to Library..."
+
+msgid ""
+"Add footprints used on board to an existing footprint library\n"
+"(does not remove other footprints from this library)"
+msgstr ""
+"Add footprints used on board to an existing footprint library\n"
+"(does not remove other footprints from this library)"
+
+msgid "Export Footprints to New Library..."
+msgstr "Export Footprints to New Library..."
+
+msgid ""
+"Create a new footprint library containing the footprints used on board\n"
+"(if the library already exists it will be replaced)"
+msgstr ""
+"Create a new footprint library containing the footprints used on board\n"
+"(if the library already exists it will be replaced)"
+
 msgid "Fabrication Outputs"
 msgstr "Fabrication Outputs"
 
 msgid "Auto-Place Footprints"
 msgstr "Auto-Place Footprints"
-
-msgid "&Harvest Footprints to Library..."
-msgstr "&Harvest Footprints to Library..."
-
-msgid ""
-"Add footprints used on board to an existing footprint library\n"
-"(does not remove other footprints from this library)"
-msgstr ""
-"Add footprints used on board to an existing footprint library\n"
-"(does not remove other footprints from this library)"
-
-msgid "&Harvest Footprints to New Library..."
-msgstr "&Harvest Footprints to New Library..."
-
-msgid ""
-"Create a new footprint library containing the footprints used on board\n"
-"(if the library already exists it will be replaced)"
-msgstr ""
-"Create a new footprint library containing the footprints used on board\n"
-"(if the library already exists it will be replaced)"
 
 msgid "External Plugins"
 msgstr "External Plugins"
@@ -20459,8 +20236,8 @@ msgstr "Stub Size:"
 msgid "Arc Stub Radius Value:"
 msgstr "Arc Stub Radius Value:"
 
-msgid "Create microwave module"
-msgstr "Create microwave module"
+msgid "Create microwave footprint"
+msgstr "Create microwave footprint"
 
 msgid "Angle in degrees:"
 msgstr "Angle in degrees:"
@@ -20731,6 +20508,125 @@ msgstr ""
 "file: \"%s\"\n"
 "line: %d"
 
+#, c-format
+msgid "pad %s"
+msgstr "pad %s"
+
+msgid "parent footprint"
+msgstr "parent footprint"
+
+msgid "pad"
+msgstr "pad"
+
+msgid "Pin Name"
+msgstr "Pin Name"
+
+msgid "BGA"
+msgstr "BGA"
+
+msgid "Fiducial global"
+msgstr "Fiducial global"
+
+msgid "Fiducial local"
+msgstr "Fiducial local"
+
+msgid "Test point"
+msgstr "Test point"
+
+msgid "Heat sink"
+msgstr "Heat sink"
+
+msgid "Castellated"
+msgstr "Castellated"
+
+msgid "Diameter"
+msgstr "Diameter"
+
+msgid "Length in Package"
+msgstr "Length in Package"
+
+msgid "Drill X / Y"
+msgstr "Drill X / Y"
+
+#, c-format
+msgid "Min Clearance: %s"
+msgstr "Min Clearance: %s"
+
+#, c-format
+msgid "(from %s)"
+msgstr "(from %s)"
+
+msgid "Trap"
+msgstr "Trap"
+
+msgid "Roundrect"
+msgstr "Roundrect"
+
+msgid "Chamferedrect"
+msgstr "Chamferedrect"
+
+msgid "CustomShape"
+msgstr "CustomShape"
+
+msgid "Conn"
+msgstr "Conn"
+
+#, c-format
+msgid "Pad of %s on %s"
+msgstr "Pad of %s on %s"
+
+#, c-format
+msgid "Pad %s of %s on %s"
+msgstr "Pad %s of %s on %s"
+
+msgid "Edge connector"
+msgstr "Edge connector"
+
+msgid "NPTH, mechanical"
+msgstr "NPTH, mechanical"
+
+msgid "Trapezoid"
+msgstr "Trapezoid"
+
+msgid "Castellated pad"
+msgstr "Castellated pad"
+
+msgid "Pad Type"
+msgstr "Pad Type"
+
+msgid "Pad Number"
+msgstr "Pad Number"
+
+msgid "Size X"
+msgstr "Size X"
+
+msgid "Size Y"
+msgstr "Size Y"
+
+msgid "Hole Size X"
+msgstr "Hole Size X"
+
+msgid "Hole Size Y"
+msgstr "Hole Size Y"
+
+msgid "Pad To Die Length"
+msgstr "Pad To Die Length"
+
+msgid "Local Soldermask Margin"
+msgstr "Local Soldermask Margin"
+
+msgid "Thermal Relief Spoke Width"
+msgstr "Thermal Relief Spoke Width"
+
+msgid "Thermal Relief"
+msgstr "Thermal Relief"
+
+msgid "Fabrication Property"
+msgstr "Fabrication Property"
+
+msgid "Round Radius Ratio"
+msgstr "Round Radius Ratio"
+
 msgid "Error loading project footprint libraries"
 msgstr "Error loading project footprint libraries"
 
@@ -20789,6 +20685,20 @@ msgstr "Footprint has no back courtyard."
 msgid "must be mm, in, or mil"
 msgstr "must be mm, in, or mil"
 
+#, c-format
+msgid "Anonymous Group, %zu members"
+msgstr "Anonymous Group, %zu members"
+
+#, c-format
+msgid "Group \"%s\", %zu members"
+msgstr "Group \"%s\", %zu members"
+
+msgid "Anonymous"
+msgstr "Anonymous"
+
+msgid "Members"
+msgstr "Members"
+
 msgid "(not activated)"
 msgstr "(not activated)"
 
@@ -20803,6 +20713,12 @@ msgstr "Points"
 
 msgid "Unrecognized"
 msgstr "Unrecognized"
+
+msgid "End X"
+msgstr "End X"
+
+msgid "End Y"
+msgstr "End Y"
 
 msgid "PCB Text"
 msgstr "PCB Text"
@@ -21283,8 +21199,24 @@ msgid "No \"%s\" package in library \"%s\""
 msgstr "No “%s” package in library “%s”"
 
 #, c-format
-msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
-msgstr "Unsupported Eagle layer ‘%s’ (%d), converted to Dwgs.User layer"
+msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
+msgstr "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
+
+#, c-format
+msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
+msgstr "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
+
+#, c-format
+msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
+msgstr "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
+
+#, c-format
+msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
+msgstr "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
+
+#, c-format
+msgid "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
+msgstr "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
 
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
@@ -21501,14 +21433,6 @@ msgstr ""
 "File “%s” is format version: %d.\n"
 "I only support format version <= %d.\n"
 "Please upgrade Pcbnew to load this file."
-
-#, c-format
-msgid "unknown graphic type: %d"
-msgstr "unknown graphic type: %d"
-
-#, c-format
-msgid "unknown pad attribute: %d"
-msgstr "unknown pad attribute: %d"
 
 #, c-format
 msgid "Unknown sheet type \"%s\" on line:%d"
@@ -21952,9 +21876,6 @@ msgstr "Load footprint from current board"
 
 msgid "Insert footprint into current board"
 msgstr "Insert footprint into current board"
-
-msgid "Check footprint"
-msgstr "Check footprint"
 
 msgid "+/- to switch"
 msgstr "+/- to switch"
@@ -23226,6 +23147,9 @@ msgstr "Net Tools"
 msgid "Zone connection type: %s."
 msgstr "Zone connection type: %s."
 
+msgid "zone"
+msgstr "zone"
+
 #, c-format
 msgid "Overridden by %s; connection type: %s."
 msgstr "Overridden by %s; connection type: %s."
@@ -23442,6 +23366,57 @@ msgstr "Unfill Zone"
 
 msgid "Unfill All Zones"
 msgstr "Unfill All Zones"
+
+#, c-format
+msgid "Blind/Buried Via %s on %s"
+msgstr "Blind/Buried Via %s on %s"
+
+#, c-format
+msgid "Micro Via %s on %s"
+msgstr "Micro Via %s on %s"
+
+#, c-format
+msgid "Via %s on %s"
+msgstr "Via %s on %s"
+
+msgid "removed annular ring"
+msgstr "removed annular ring"
+
+msgid "Full Length"
+msgstr "Full Length"
+
+#, c-format
+msgid "Min Width: %s"
+msgstr "Min Width: %s"
+
+msgid "Blind/Buried Via"
+msgstr "Blind/Buried Via"
+
+#, c-format
+msgid "Min Annular Width: %s"
+msgstr "Min Annular Width: %s"
+
+msgid "NetCode"
+msgstr "NetCode"
+
+#, c-format
+msgid "Track %s on %s, length %s"
+msgstr "Track %s on %s, length %s"
+
+msgid "Origin X"
+msgstr "Origin X"
+
+msgid "Origin Y"
+msgstr "Origin Y"
+
+msgid "Layer Top"
+msgstr "Layer Top"
+
+msgid "Layer Bottom"
+msgstr "Layer Bottom"
+
+msgid "Via Type"
+msgstr "Via Type"
 
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Incomplete undo/redo operation: some items not found"
@@ -23793,6 +23768,80 @@ msgstr ""
 msgid "Only %s"
 msgstr "Only %s"
 
+msgid "Rule Area"
+msgstr "Rule Area"
+
+msgid "Copper Zone"
+msgstr "Copper Zone"
+
+msgid "Non-copper Zone"
+msgstr "Non-copper Zone"
+
+msgid "Cutout"
+msgstr "Cutout"
+
+msgid "No vias"
+msgstr "No vias"
+
+msgid "No tracks"
+msgstr "No tracks"
+
+msgid "No pads"
+msgstr "No pads"
+
+msgid "No copper zones"
+msgstr "No copper zones"
+
+msgid "No footprints"
+msgstr "No footprints"
+
+msgid "Restrictions"
+msgstr "Restrictions"
+
+msgid "Priority"
+msgstr "Priority"
+
+#, c-format
+msgid "%s and %d more"
+msgstr "%s and %d more"
+
+msgid "Fill Mode"
+msgstr "Fill Mode"
+
+msgid "Filled Area"
+msgstr "Filled Area"
+
+msgid "HatchBorder Lines"
+msgstr "HatchBorder Lines"
+
+msgid "Corner Count"
+msgstr "Corner Count"
+
+msgid "(Cutout)"
+msgstr "(Cutout)"
+
+msgid "(Rule Area)"
+msgstr "(Rule Area)"
+
+#, c-format
+msgid "Zone Outline %s on %s"
+msgstr "Zone Outline %s on %s"
+
+msgid "Inherited"
+msgstr "Inherited"
+
+msgid "Min Width"
+msgstr "Min Width"
+
+msgid "Pad Connections"
+msgstr "Pad Connections"
+
+msgid "Thermal Clearance"
+msgstr "Thermal Clearance"
+
+msgid "Thermal Spoke Width"
+msgstr "Thermal Spoke Width"
+
 msgid "Building zone fills..."
 msgstr "Building zone fills..."
 
@@ -23820,6 +23869,116 @@ msgstr "Refill %d Zones"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "Build board body"
+#~ msgstr "Build board body"
+
+#~ msgid "%lu footprint/cmp equivalences found."
+#~ msgstr "%lu footprint/cmp equivalences found."
+
+#~ msgid "Footprint \"%s\" has no symbol associated."
+#~ msgstr "Footprint \"%s\" has no symbol associated."
+
+#~ msgid "Pcb footprints \"%s\" and \"%s\" linked to same symbol"
+#~ msgstr "Pcb footprints \"%s\" and \"%s\" linked to same symbol"
+
+#~ msgid "Cannot find symbol for \"%s\" footprint"
+#~ msgstr "Cannot find symbol for \"%s\" footprint"
+
+#~ msgid "Cannot find footprint for \"%s\" symbol"
+#~ msgstr "Cannot find footprint for \"%s\" symbol"
+
+#~ msgid "Cannot relink footprints because schematic is not fully annotated"
+#~ msgstr "Cannot relink footprints because schematic is not fully annotated"
+
+#~ msgid ""
+#~ "\n"
+#~ "Prior to sorting by %s, the coordinates of which will be rounded to a %s, "
+#~ "%s grid. "
+#~ msgstr ""
+#~ "\n"
+#~ "Prior to sorting by %s, the coordinates of which will be rounded to a %s, "
+#~ "%s grid. "
+
+#~ msgid "Aborted: too many errors "
+#~ msgstr "Aborted: too many errors "
+
+#~ msgid "Modify module properties"
+#~ msgstr "Modify module properties"
+
+#~ msgid "Output Units:"
+#~ msgstr "Output Units:"
+
+#~ msgid ""
+#~ "This item was on a non-existing or forbidden layer.\n"
+#~ "It has been moved to the first allowed layer. Please fix it."
+#~ msgstr ""
+#~ "This item was on a non-existing or forbidden layer.\n"
+#~ "It has been moved to the first allowed layer. Please fix it."
+
+#~ msgid "The radius must be greater than zero."
+#~ msgstr "The radius must be greater than zero."
+
+#~ msgid "The rectangle can not be empty."
+#~ msgstr "The rectangle can not be empty."
+
+#~ msgid ""
+#~ "All layers must be matched. Please click on 'Auto-Matched Layers' to "
+#~ "automatically match the remaining layers."
+#~ msgstr ""
+#~ "All layers must be matched. Please click on 'Auto-Matched Layers' to "
+#~ "automatically match the remaining layers."
+
+#~ msgid "Other corners:"
+#~ msgstr "Other corners:"
+
+#~ msgid "Mode:"
+#~ msgstr "Mode:"
+
+#~ msgid "Sort groups first"
+#~ msgstr "Sort groups first"
+
+#~ msgid "Via Length:"
+#~ msgstr "Via Length:"
+
+#~ msgid "Constant"
+#~ msgstr "Constant"
+
+#~ msgid "From Stackup"
+#~ msgstr "From Stackup"
+
+#~ msgid "No footprints to harvest!"
+#~ msgstr "No footprints to harvest!"
+
+#~ msgid "Component \"%s\" added in  \"%s\""
+#~ msgstr "Component “%s” added in  “%s”"
+
+#~ msgid "Placement:"
+#~ msgstr "Placement:"
+
+#~ msgid "Import parameters:"
+#~ msgstr "Import parameters:"
+
+#~ msgid "&Harvest Footprints to Library..."
+#~ msgstr "&Harvest Footprints to Library..."
+
+#~ msgid "&Harvest Footprints to New Library..."
+#~ msgstr "&Harvest Footprints to New Library..."
+
+#~ msgid "Create microwave module"
+#~ msgstr "Create microwave module"
+
+#~ msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
+#~ msgstr "Unsupported Eagle layer ‘%s’ (%d), converted to Dwgs.User layer"
+
+#~ msgid "unknown graphic type: %d"
+#~ msgstr "unknown graphic type: %d"
+
+#~ msgid "unknown pad attribute: %d"
+#~ msgstr "unknown pad attribute: %d"
+
+#~ msgid "Check footprint"
+#~ msgstr "Check footprint"
 
 #~ msgid "Preferences...\tCTRL+,"
 #~ msgstr "Preferences...\tCTRL+,"
@@ -28891,9 +29050,6 @@ msgstr "[INFO] load failed: input line too long\n"
 
 #~ msgid "No marker found"
 #~ msgstr "No marker found"
-
-#~ msgid "Search for:"
-#~ msgstr "Search for:"
 
 #~ msgid "Do not warp mouse pointer"
 #~ msgstr "Do not warp mouse pointer"
