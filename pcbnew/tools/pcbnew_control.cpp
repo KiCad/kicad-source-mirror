@@ -716,7 +716,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
             break;
         }
 
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
         {
             MODULE* clipFootprint = static_cast<MODULE*>( clipItem );
             std::vector<BOARD_ITEM*> pastedItems;
@@ -885,7 +885,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             break;
             }
 
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
             // Update the module path with the new KIID path if the module is new
             if( aIsNew )
                 static_cast<MODULE*>( item )->SetPath( KIID_PATH() );

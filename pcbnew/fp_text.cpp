@@ -45,7 +45,7 @@ FP_TEXT::FP_TEXT( MODULE* aParentFootprint, TEXT_TYPE text_type ) :
     SetLayer( F_SilkS );
 
     // Set position and give a default layer if a valid parent footprint exists
-    if( parentFootprint && ( parentFootprint->Type() == PCB_MODULE_T ) )
+    if( parentFootprint && parentFootprint->Type() == PCB_FOOTPRINT_T )
     {
         SetTextPos( parentFootprint->GetPosition() );
 

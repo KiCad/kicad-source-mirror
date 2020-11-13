@@ -620,9 +620,8 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
     bool request3DviewRedraw = true;
 
-    if( item )
-        if( item->Type() != PCB_MODULE_T )
-            request3DviewRedraw = false;
+    if( item && item->Type() != PCB_FOOTPRINT_T )
+        request3DviewRedraw = false;
 
     if( request3DviewRedraw )
         m_frame->Redraw3Dview();
@@ -972,7 +971,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( queued_items[i] );
 
-        if( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_FOOTPRINT_T )
         {
             for( PAD* pad : static_cast<MODULE*>( item )->Pads() )
             {
@@ -1002,7 +1001,7 @@ void PCB_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
                                                     || aItem->Type() == PCB_PAD_T
                                                     || aItem->Type() == PCB_ARC_T
                                                     || aItem->Type() == PCB_ZONE_T
-                                                    || aItem->Type() == PCB_MODULE_T
+                                                    || aItem->Type() == PCB_FOOTPRINT_T
                                                     || aItem->Type() == PCB_VIA_T );
                                        } ) )
     {

@@ -164,8 +164,8 @@ bool EDIT_TOOL::Init()
                 return m_isFootprintEditor;
             };
 
-    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyType( PCB_MODULE_T )
-                                    && SELECTION_CONDITIONS::Count( 1 );
+    auto singleFootprintCondition = SELECTION_CONDITIONS::OnlyType( PCB_FOOTPRINT_T )
+                                        && SELECTION_CONDITIONS::Count( 1 );
 
     auto noActiveToolCondition =
             [ this ] ( const SELECTION& aSelection )
@@ -460,7 +460,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
                         static_cast<BOARD_ITEM*>( item )->Move( movement );
 
-                    if( item->Type() == PCB_MODULE_T )
+                    if( item->Type() == PCB_FOOTPRINT_T )
                         requestRedraw3Dview = true;
                 }
 
@@ -1365,7 +1365,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
             auto removeItem = [&]( BOARD_ITEM* bItem )
             {
-                if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_MODULE_T )
+                if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_FOOTPRINT_T )
                 {
                     m_commit->Modify( bItem->GetParent() );
                     getView()->Remove( group );
@@ -1579,7 +1579,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                 static_cast<PAD*>( dupe_item )->SetName( padName );
             }
         }
-        else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_MODULE_T )
+        else if( orig_item->GetParent() && orig_item->GetParent()->Type() == PCB_FOOTPRINT_T )
         {
             MODULE* parentFootprint = static_cast<MODULE*>( orig_item->GetParent() );
 
@@ -1590,7 +1590,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         {
             switch( orig_item->Type() )
             {
-            case PCB_MODULE_T:
+            case PCB_FOOTPRINT_T:
             case PCB_TEXT_T:
             case PCB_SHAPE_T:
             case PCB_TRACE_T:
@@ -1706,7 +1706,7 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
 
-        if( item->Type() != PCB_MODULE_T )
+        if( item->Type() != PCB_FOOTPRINT_T )
             aCollector.Remove( i );
     }
 }

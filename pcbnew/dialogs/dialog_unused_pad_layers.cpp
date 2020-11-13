@@ -101,7 +101,7 @@ bool DIALOG_UNUSED_PAD_LAYERS::TransferDataFromWindow()
                 via->SetKeepTopBottom( m_cbPreservePads->IsChecked() );
             }
 
-            if( item->Type() == PCB_MODULE_T && m_rbScope->GetSelection() == SCOPE_PADS )
+            if( item->Type() == PCB_FOOTPRINT_T && m_rbScope->GetSelection() == SCOPE_PADS )
             {
                 MODULE* footprint = static_cast<MODULE*>( item );
 

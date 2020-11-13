@@ -513,26 +513,26 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
 
     switch( aItem->Type() )
     {
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
         {
-            MODULE* mod = static_cast<MODULE*>( aItem );
+            MODULE* footprint = static_cast<MODULE*>( aItem );
 
-            for( PAD* pad : mod->Pads() )
+            for( PAD* pad : footprint->Pads() )
             {
-                // Getting pads from the module requires re-checking that the pad is shown
+                // Getting pads from the footprint requires re-checking that the pad is shown
                 if( ( aFrom || m_magneticSettings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
-                        && pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) )
-                        && view->IsVisible( pad )
-                        && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
-                        && pad->ViewGetLOD( pad->GetLayer(), view ) < view->GetScale() )
+                    && pad->GetBoundingBox().Contains( wxPoint( aRefPos.x, aRefPos.y ) )
+                    && view->IsVisible( pad )
+                    && ( !isHighContrast || activeLayers.count( pad->GetLayer() ) )
+                    && pad->ViewGetLOD( pad->GetLayer(), view ) < view->GetScale() )
                 {
                     handlePadShape( pad );
                     break;
                 }
             }
 
-            // if the cursor is not over a pad, then drag the module by its origin
-            addAnchor( mod->GetPosition(), ORIGIN | SNAPPABLE, mod );
+            // if the cursor is not over a pad, then drag the footprint by its origin
+            addAnchor( footprint->GetPosition(), ORIGIN | SNAPPABLE, footprint );
             break;
         }
 

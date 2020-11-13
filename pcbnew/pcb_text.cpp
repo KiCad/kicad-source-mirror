@@ -67,7 +67,7 @@ wxString PCB_TEXT::GetShownText( int aDepth ) const
                     wxString      ref = token->BeforeFirst( ':', &remainder );
                     BOARD_ITEM*   refItem = board->GetItem( KIID( ref ) );
 
-                    if( refItem && refItem->Type() == PCB_MODULE_T )
+                    if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
                     {
                         MODULE* refModule = static_cast<MODULE*>( refItem );
 

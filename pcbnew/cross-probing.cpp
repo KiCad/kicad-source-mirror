@@ -409,7 +409,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         footprint = (MODULE*) aItem;
         return StrPrintf( "$PART: \"%s\"", TO_UTF8( footprint->GetReference() ) );
 

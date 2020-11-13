@@ -2035,7 +2035,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_FP_SHAPE_T )
         {
             FP_SHAPE* edge = static_cast<FP_SHAPE*>( graphicItem );
-            assert( edge->GetParent()->Type() == PCB_MODULE_T );
+            assert( edge->GetParent()->Type() == PCB_FOOTPRINT_T );
             newSegment = new FP_SHAPE( *edge );
         }
         else

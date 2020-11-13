@@ -744,7 +744,7 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
         {
             aItem = static_cast<BOARD*>( aParent )->GetItem( aId );
         }
-        else if( aParent->Type() == PCB_MODULE_T )
+        else if( aParent->Type() == PCB_FOOTPRINT_T )
         {
             static_cast<MODULE*>( aParent )->RunOnChildren(
                     [&]( BOARD_ITEM* child )
@@ -770,7 +770,7 @@ void PCB_PARSER::resolveGroups( BOARD_ITEM* aParent )
         group->SetName( aGrp.name );
         const_cast<KIID&>( group->m_Uuid ) = aGrp.uuid;
 
-        if( aGrp.parent->Type() == PCB_MODULE_T )
+        if( aGrp.parent->Type() == PCB_FOOTPRINT_T )
             static_cast<MODULE*>( aGrp.parent )->Add( group );
         else
             static_cast<BOARD*>( aGrp.parent )->Add( group );

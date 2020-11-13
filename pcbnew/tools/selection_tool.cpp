@@ -779,7 +779,7 @@ SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
     {
         switch( item->Type() )
         {
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
             if( static_cast<MODULE*>( item )->IsLocked() )
                 containsLocked = true;
             break;
@@ -1317,7 +1317,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
     if( !item )
         return 0;
 
-    if( item->Type() != PCB_MODULE_T )
+    if( item->Type() != PCB_FOOTPRINT_T )
         return 0;
 
     auto mod = dynamic_cast<MODULE*>( item );
@@ -1400,58 +1400,49 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
     {
         switch( aItem.Type() )
         {
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
         {
-            const auto& module = static_cast<const MODULE&>( aItem );
+            const MODULE& footprint = static_cast<const MODULE&>( aItem );
 
             include = aFilterOptions.includeModules;
 
             if( include && !aFilterOptions.includeLockedModules )
-            {
-                include = !module.IsLocked();
-            }
+                include = !footprint.IsLocked();
 
             break;
         }
         case PCB_TRACE_T:
         case PCB_ARC_T:
-        {
             include = aFilterOptions.includeTracks;
             break;
-        }
+
         case PCB_VIA_T:
-        {
             include = aFilterOptions.includeVias;
             break;
-        }
+
         case PCB_ZONE_T:
-        {
             include = aFilterOptions.includeZones;
             break;
-        }
+
         case PCB_SHAPE_T:
         case PCB_TARGET_T:
         case PCB_DIM_ALIGNED_T:
         case PCB_DIM_CENTER_T:
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_DIM_LEADER_T:
-        {
             if( layer == Edge_Cuts )
                 include = aFilterOptions.includeBoardOutlineLayer;
             else
                 include = aFilterOptions.includeItemsOnTechLayers;
             break;
-        }
+
         case PCB_TEXT_T:
-        {
             include = aFilterOptions.includePcbTexts;
             break;
-        }
+
         default:
-        {
             // no filtering, just select it
             break;
-        }
         }
     }
 
@@ -1518,19 +1509,17 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         if( !m_filter.footprints )
             return false;
 
         break;
 
     case PCB_PAD_T:
-    {
         if( !m_filter.pads )
             return false;
 
         break;
-    }
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
@@ -1554,9 +1543,9 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
         {
             return false;
         }
-
-        break;
     }
+        break;
+
     case PCB_SHAPE_T:
     case PCB_TARGET_T:
         if( !m_filter.graphics )
@@ -1624,7 +1613,7 @@ void SELECTION_TOOL::RebuildSelection()
             EDA_ITEM* parent = item->GetParent();
 
             // Flags on module children might be set only because the parent is selected.
-            if( parent && parent->Type() == PCB_MODULE_T && parent->IsSelected() )
+            if( parent && parent->Type() == PCB_FOOTPRINT_T && parent->IsSelected() )
                 return SEARCH_RESULT::CONTINUE;
 
             highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
@@ -1796,7 +1785,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 
     for( int i = 0; i < count; ++i )
     {
-        if( ( *aCollector )[i]->Type() != PCB_MODULE_T )
+        if(( *aCollector )[i]->Type() != PCB_FOOTPRINT_T )
             return NULL;
     }
 
@@ -1859,7 +1848,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
         // Check to see if this keepout is part of a footprint
         // If it is, and we are not editing the footprint, it should not be selectable
-        bool zoneInFootprint = zone->GetParent() && zone->GetParent()->Type() == PCB_MODULE_T;
+        bool zoneInFootprint = zone->GetParent() && zone->GetParent()->Type() == PCB_FOOTPRINT_T;
 
         if( zoneInFootprint && !m_isFootprintEditor && !checkVisibilityOnly )
             return false;
@@ -1886,7 +1875,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         return ( board()->GetVisibleLayers() & via->GetLayerSet() ).any();
     }
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
     {
         // In modedit, we do not want to select the module itself.
         if( m_isFootprintEditor )
@@ -2076,7 +2065,7 @@ void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
 
     // footprints are treated in a special way - when they are highlighted, we have to highlight
     // all the parts that make the module, not the module itself
-    if( aItem->Type() == PCB_MODULE_T )
+    if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<MODULE*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
@@ -2134,7 +2123,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
 
     // footprints are treated in a special way - when they are highlighted, we have to
     // highlight all the parts that make the module, not the module itself
-    if( aItem->Type() == PCB_MODULE_T )
+    if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<MODULE*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
@@ -2174,7 +2163,7 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
 static EDA_RECT getRect( const BOARD_ITEM* aItem )
 {
-    if( aItem->Type() == PCB_MODULE_T )
+    if( aItem->Type() == PCB_FOOTPRINT_T )
         return static_cast<const MODULE*>( aItem )->GetFootprintRect();
 
     return aItem->GetBoundingBox();
@@ -2359,7 +2348,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                     double itemCommonRatio = calcRatio( commonArea, itemArea );
                     double txtCommonRatio = calcRatio( commonArea, textArea );
 
-                    if( item->Type() == PCB_MODULE_T )
+                    if( item->Type() == PCB_FOOTPRINT_T )
                     {
                         // when text area is small compared to an overlapping footprint,
                         // then it's a clear sign the text is the selection target
@@ -2374,7 +2363,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                         case PCB_PAD_T:
                         case PCB_SHAPE_T:
                         case PCB_VIA_T:
-                        case PCB_MODULE_T:
+                        case PCB_FOOTPRINT_T:
                             if( areaRatio > textToFeatureMinRatio && txtCommonRatio < commonAreaRatio )
                                 rejected.insert( txt );
                             break;
@@ -2445,16 +2434,16 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
-        if( aCollector[i]->Type() != PCB_MODULE_T )
+        if( aCollector[i]->Type() != PCB_FOOTPRINT_T )
         {
             hasNonModules = true;
             break;
         }
     }
 
-    if( aCollector.CountType( PCB_MODULE_T ) > 0 )
+    if( aCollector.CountType( PCB_FOOTPRINT_T ) > 0 )
     {
-        double maxArea = calcMaxArea( aCollector, PCB_MODULE_T );
+        double maxArea = calcMaxArea( aCollector, PCB_FOOTPRINT_T );
         BOX2D viewportD = getView()->GetViewport();
         BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
         double maxCoverRatio = footprintMaxCoverRatio;
@@ -2504,7 +2493,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                     BOARD_ITEM* item = aCollector[j];
                     double areaRatio = calcRatio( viaArea, calcArea( item ) );
 
-                    if( item->Type() == PCB_MODULE_T && areaRatio < padToFootprintMinRatio )
+                    if( item->Type() == PCB_FOOTPRINT_T && areaRatio < padToFootprintMinRatio )
                         rejected.insert( item );
 
                     if( item->Type() == PCB_PAD_T && areaRatio < viaToPadMinRatio )
@@ -2570,12 +2559,15 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
         for( int j = 0; j < aCollector.GetCount(); ++j )
         {
-            if( MODULE* mod = dyn_cast<MODULE*>( aCollector[j] ) )
+            if( MODULE* footprint = dyn_cast<MODULE*>( aCollector[j] ) )
             {
-                double ratio = calcRatio( maxArea, mod->GetFootprintRect().GetArea() );
+                double ratio = calcRatio( maxArea, footprint->GetFootprintRect().GetArea() );
 
-                if( ratio < padToFootprintMinRatio && calcCommonArea( maxTrack, mod ) < commonAreaRatio )
-                    rejected.insert( mod );
+                if( ratio < padToFootprintMinRatio
+                        && calcCommonArea( maxTrack, footprint ) < commonAreaRatio )
+                {
+                    rejected.insert( footprint );
+                }
             }
         }
     }
@@ -2583,9 +2575,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     if( (unsigned) aCollector.GetCount() > rejected.size() )  // do not remove everything
     {
         for( BOARD_ITEM* item : rejected )
-        {
             aCollector.Transfer( item );
-        }
     }
 }
 
@@ -2622,9 +2612,7 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
     for( BOARD_ITEM* item : toAdd )
     {
         if( !aCollector.HasItem( item ) )
-        {
             aCollector.Append( item );
-        }
     }
 }
 

@@ -52,120 +52,120 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
 
     switch( aItem->Type() )
     {
-    case PCB_MODULE_T:
-        {
-            const MODULE* footprint = static_cast<const MODULE*>( aItem );
+    case PCB_FOOTPRINT_T:
+    {
+        const MODULE* footprint = static_cast<const MODULE*>( aItem );
 
-            ret = hash_board_item( footprint, aFlags );
+        ret = hash_board_item( footprint, aFlags );
 
-            if( aFlags & HASH_POS )
-                hash_combine( ret, footprint->GetPosition().x, footprint->GetPosition().y );
+        if( aFlags & HASH_POS )
+            hash_combine( ret, footprint->GetPosition().x, footprint->GetPosition().y );
 
-            if( aFlags & HASH_ROT )
-                hash_combine( ret, footprint->GetOrientation() );
+        if( aFlags & HASH_ROT )
+            hash_combine( ret, footprint->GetOrientation() );
 
-            for( BOARD_ITEM* item : footprint->GraphicalItems() )
-                hash_combine( ret, hash_eda( item, aFlags ) );
+        for( BOARD_ITEM* item : footprint->GraphicalItems() )
+            hash_combine( ret, hash_eda( item, aFlags ) );
 
-            for( PAD* pad : footprint->Pads() )
-                hash_combine( ret, hash_eda( static_cast<EDA_ITEM*>( pad ), aFlags ) );
-        }
+        for( PAD* pad : footprint->Pads() )
+            hash_combine( ret, hash_eda( static_cast<EDA_ITEM*>( pad ), aFlags ) );
+    }
         break;
 
     case PCB_PAD_T:
+    {
+        const PAD* pad = static_cast<const PAD*>( aItem );
+
+        ret = hash<int>{}( pad->GetShape() << 16 );
+        hash_combine( ret, pad->GetDrillShape() << 18 );
+        hash_combine( ret, pad->GetSize().x << 8 );
+        hash_combine( ret, pad->GetSize().y << 9 );
+        hash_combine( ret, pad->GetOffset().x << 6 );
+        hash_combine( ret, pad->GetOffset().y << 7 );
+        hash_combine( ret, pad->GetDelta().x << 4 );
+        hash_combine( ret, pad->GetDelta().y << 5 );
+
+        hash_combine( ret, hash_board_item( pad, aFlags ) );
+
+        if( aFlags & HASH_POS )
         {
-            const PAD* pad = static_cast<const PAD*>( aItem );
-
-            ret = hash<int>{}( pad->GetShape() << 16 );
-            hash_combine( ret, pad->GetDrillShape() << 18 );
-            hash_combine( ret, pad->GetSize().x << 8 );
-            hash_combine( ret, pad->GetSize().y << 9 );
-            hash_combine( ret, pad->GetOffset().x << 6 );
-            hash_combine( ret, pad->GetOffset().y << 7 );
-            hash_combine( ret, pad->GetDelta().x << 4 );
-            hash_combine( ret, pad->GetDelta().y << 5 );
-
-            hash_combine( ret, hash_board_item( pad, aFlags ) );
-
-            if( aFlags & HASH_POS )
-            {
-                if( aFlags & REL_COORD )
-                    hash_combine( ret, pad->GetPos0().x, pad->GetPos0().y );
-                else
-                    hash_combine( ret, pad->GetPosition().x, pad->GetPosition().y );
-            }
-
-            if( aFlags & HASH_ROT )
-                hash_combine( ret, pad->GetOrientation() );
-
-            if( aFlags & HASH_NET )
-                hash_combine( ret, pad->GetNetCode() );
+            if( aFlags & REL_COORD )
+                hash_combine( ret, pad->GetPos0().x, pad->GetPos0().y );
+            else
+                hash_combine( ret, pad->GetPosition().x, pad->GetPosition().y );
         }
+
+        if( aFlags & HASH_ROT )
+            hash_combine( ret, pad->GetOrientation() );
+
+        if( aFlags & HASH_NET )
+            hash_combine( ret, pad->GetNetCode() );
+    }
         break;
 
     case PCB_FP_TEXT_T:
+    {
+        const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
+
+        if( !( aFlags & HASH_REF ) && text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+            break;
+
+        if( !( aFlags & HASH_VALUE ) && text->GetType() == FP_TEXT::TEXT_is_VALUE )
+            break;
+
+        ret = hash_board_item( text, aFlags );
+        hash_combine( ret, text->GetText().ToStdString() );
+        hash_combine( ret,  text->IsItalic() );
+        hash_combine( ret, text->IsBold() );
+        hash_combine( ret, text->IsMirrored() );
+        hash_combine( ret, text->GetTextWidth() );
+        hash_combine( ret, text->GetTextHeight() );
+        hash_combine( ret, text->GetHorizJustify() );
+        hash_combine( ret, text->GetVertJustify() );
+
+        if( aFlags & HASH_POS )
         {
-            const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
-
-            if( !( aFlags & HASH_REF ) && text->GetType() == FP_TEXT::TEXT_is_REFERENCE )
-                break;
-
-            if( !( aFlags & HASH_VALUE ) && text->GetType() == FP_TEXT::TEXT_is_VALUE )
-                break;
-
-            ret = hash_board_item( text, aFlags );
-            hash_combine( ret, text->GetText().ToStdString() );
-            hash_combine( ret,  text->IsItalic() );
-            hash_combine( ret, text->IsBold() );
-            hash_combine( ret, text->IsMirrored() );
-            hash_combine( ret, text->GetTextWidth() );
-            hash_combine( ret, text->GetTextHeight() );
-            hash_combine( ret, text->GetHorizJustify() );
-            hash_combine( ret, text->GetVertJustify() );
-
-            if( aFlags & HASH_POS )
-            {
-                if( aFlags & REL_COORD )
-                    hash_combine( ret, text->GetPos0().x, text->GetPos0().y );
-                else
-                    hash_combine( ret, text->GetPosition().x, text->GetPosition().y );
-            }
-
-            if( aFlags & HASH_ROT )
-                hash_combine( ret, text->GetTextAngle() );
+            if( aFlags & REL_COORD )
+                hash_combine( ret, text->GetPos0().x, text->GetPos0().y );
+            else
+                hash_combine( ret, text->GetPosition().x, text->GetPosition().y );
         }
+
+        if( aFlags & HASH_ROT )
+            hash_combine( ret, text->GetTextAngle() );
+    }
         break;
 
     case PCB_FP_SHAPE_T:
+    {
+        const FP_SHAPE* segment = static_cast<const FP_SHAPE*>( aItem );
+        ret = hash_board_item( segment, aFlags );
+        hash_combine( ret, segment->GetType() );
+        hash_combine( ret, segment->GetShape() );
+        hash_combine( ret, segment->GetWidth() );
+        hash_combine( ret, segment->GetRadius() );
+
+        if( aFlags & HASH_POS )
         {
-            const FP_SHAPE* segment = static_cast<const FP_SHAPE*>( aItem );
-            ret = hash_board_item( segment, aFlags );
-            hash_combine( ret, segment->GetType() );
-            hash_combine( ret, segment->GetShape() );
-            hash_combine( ret, segment->GetWidth() );
-            hash_combine( ret, segment->GetRadius() );
-
-            if( aFlags & HASH_POS )
+            if( aFlags & REL_COORD )
             {
-                if( aFlags & REL_COORD )
-                {
-                    hash_combine( ret, segment->GetStart0().x );
-                    hash_combine( ret, segment->GetStart0().y );
-                    hash_combine( ret, segment->GetEnd0().x );
-                    hash_combine( ret, segment->GetEnd0().y );
-                }
-                else
-                {
-                    hash_combine( ret, segment->GetStart().x );
-                    hash_combine( ret, segment->GetStart().y );
-                    hash_combine( ret, segment->GetEnd().x );
-                    hash_combine( ret, segment->GetEnd().y );
-                }
+                hash_combine( ret, segment->GetStart0().x );
+                hash_combine( ret, segment->GetStart0().y );
+                hash_combine( ret, segment->GetEnd0().x );
+                hash_combine( ret, segment->GetEnd0().y );
             }
-
-            if( aFlags & HASH_ROT )
-                hash_combine( ret, segment->GetAngle() );
+            else
+            {
+                hash_combine( ret, segment->GetStart().x );
+                hash_combine( ret, segment->GetStart().y );
+                hash_combine( ret, segment->GetEnd().x );
+                hash_combine( ret, segment->GetEnd().y );
+            }
         }
+
+        if( aFlags & HASH_ROT )
+            hash_combine( ret, segment->GetAngle() );
+    }
         break;
 
     default:

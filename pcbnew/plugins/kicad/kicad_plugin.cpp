@@ -411,7 +411,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         format( static_cast<PCB_TARGET*>( aItem ), aNestLevel );
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         format( static_cast<MODULE*>( aItem ), aNestLevel );
         break;
 

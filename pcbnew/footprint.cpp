@@ -40,8 +40,8 @@
 
 
 MODULE::MODULE( BOARD* parent ) :
-    BOARD_ITEM_CONTAINER( (BOARD_ITEM*) parent, PCB_MODULE_T ),
-    m_initial_comments( 0 )
+        BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
+        m_initial_comments( 0 )
 {
     m_attributes   = 0;
     m_Layer        = F_Cu;
@@ -972,7 +972,7 @@ SEARCH_RESULT MODULE::Visit( INSPECTOR inspector, void* testData, const KICAD_T 
 
         switch( stype )
         {
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
             result = inspector( this, testData );  // inspect me
             ++p;
             break;
@@ -1543,7 +1543,7 @@ BOARD_ITEM* MODULE::DuplicateItem( const BOARD_ITEM* aItem, bool aAddToFootprint
         new_item = static_cast<const PCB_GROUP*>( aItem )->DeepDuplicate();
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         // Ignore the footprint itself
         break;
 
@@ -1743,7 +1743,7 @@ void MODULE::BuildPolyCourtyards()
 
 void MODULE::SwapData( BOARD_ITEM* aImage )
 {
-    assert( aImage->Type() == PCB_MODULE_T );
+    assert( aImage->Type() == PCB_FOOTPRINT_T );
 
     std::swap( *((MODULE*) this), *((MODULE*) aImage) );
 }

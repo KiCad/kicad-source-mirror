@@ -167,7 +167,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
         ShowPadPropertiesDialog( static_cast<PAD*>( aItem ));
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         editFootprintProperties( (MODULE*) aItem );
         GetCanvas()->Refresh();
         break;

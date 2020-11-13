@@ -60,11 +60,11 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
     // if aItem belongs a footprint, the full footprint will be saved
     // because undo/redo does not handle "sub items" modifications
-    if( aItem && aItem->Type() != PCB_MODULE_T && aChangeType == CHT_MODIFY )
+    if( aItem && aItem->Type() != PCB_FOOTPRINT_T && aChangeType == CHT_MODIFY )
     {
         EDA_ITEM* item = aItem->GetParent();
 
-        if( item && item->Type() == PCB_MODULE_T )  // means aItem belongs a footprint
+        if( item && item->Type() == PCB_FOOTPRINT_T )  // means aItem belongs a footprint
             aItem = item;
     }
 
@@ -106,7 +106,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         if( m_isFootprintEditor )
         {
             // Be sure that we are storing a footprint
-            if( ent.m_item->Type() != PCB_MODULE_T )
+            if( ent.m_item->Type() != PCB_FOOTPRINT_T )
                 ent.m_item = ent.m_item->GetParent();
 
             // We have not saved the footprint yet, so let's create an entry
@@ -118,8 +118,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     ent.m_copy = ent.m_item->Clone();
                 }
 
-                wxASSERT( ent.m_item->Type() == PCB_MODULE_T );
-                wxASSERT( ent.m_copy->Type() == PCB_MODULE_T );
+                wxASSERT( ent.m_item->Type() == PCB_FOOTPRINT_T );
+                wxASSERT( ent.m_copy->Type() == PCB_FOOTPRINT_T );
 
                 if( aCreateUndoEntry )
                 {
@@ -141,7 +141,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 if( m_isFootprintEditor )
                 {
                     // footprints inside footprints are not supported yet
-                    wxASSERT( boardItem->Type() != PCB_MODULE_T );
+                    wxASSERT( boardItem->Type() != PCB_FOOTPRINT_T );
 
                     boardItem->SetParent( board->Footprints().front() );
 
@@ -153,7 +153,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                          boardItem->Type() == PCB_FP_ZONE_T )
                 {
                     wxASSERT( boardItem->GetParent() &&
-                              boardItem->GetParent()->Type() == PCB_MODULE_T );
+                              boardItem->GetParent()->Type() == PCB_FOOTPRINT_T );
                 }
                 else
                 {
@@ -205,7 +205,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     if( !( changeFlags & CHT_DONE ) )
                     {
                         MODULE* footprint = static_cast<MODULE*>( boardItem->GetParent() );
-                        wxASSERT( footprint && footprint->Type() == PCB_MODULE_T );
+                        wxASSERT( footprint && footprint->Type() == PCB_FOOTPRINT_T );
                         footprint->Delete( boardItem );
                     }
 
@@ -231,7 +231,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     break;
 
-                case PCB_MODULE_T:
+                case PCB_FOOTPRINT_T:
                 {
                     // No support for nested footprints (yet)
                     wxASSERT( !m_isFootprintEditor );

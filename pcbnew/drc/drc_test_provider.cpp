@@ -136,7 +136,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
     {
         for( int i = 0; i < MAX_STRUCT_TYPE_ID; i++ )
         {
-            if( i != PCB_MODULE_T && i != PCB_GROUP_T )
+            if( i != PCB_FOOTPRINT_T && i != PCB_GROUP_T )
             {
                 s_allBasicItems.push_back( (KICAD_T) i );
 
@@ -298,7 +298,7 @@ int DRC_TEST_PROVIDER::forEachGeometryItem( const std::vector<KICAD_T>& aTypes, 
             }
         }
 
-        if( typeMask[ PCB_MODULE_T ] )
+        if( typeMask[ PCB_FOOTPRINT_T ] )
         {
             if( !aFunc( footprint ) )
                 return n;

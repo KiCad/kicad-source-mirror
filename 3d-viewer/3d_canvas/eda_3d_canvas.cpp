@@ -761,7 +761,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
                 }
                 break;
 
-                case PCB_MODULE_T:
+                case PCB_FOOTPRINT_T:
                 {
                     MODULE* footprint = dynamic_cast<MODULE *>( intersectedBoardItem );
 

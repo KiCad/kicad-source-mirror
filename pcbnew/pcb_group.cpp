@@ -73,7 +73,7 @@ PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
 {
     PCB_GROUP* candidate = item->GetParentGroup();
 
-    if( !candidate && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+    if( !candidate && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
         candidate = item->GetParent()->GetParentGroup();
 
     while( candidate && candidate->GetParentGroup() && candidate->GetParentGroup() != scope )
@@ -85,7 +85,7 @@ PCB_GROUP* PCB_GROUP::TopLevelGroup( BOARD_ITEM* item, PCB_GROUP* scope )
 
 bool PCB_GROUP::WithinScope( BOARD_ITEM* item, PCB_GROUP* scope )
 {
-    if( item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+    if( item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
         item = item->GetParent();
 
     for( PCB_GROUP* parent = item->GetParentGroup(); parent; parent = parent->GetParentGroup() )

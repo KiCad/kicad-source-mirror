@@ -456,7 +456,7 @@ void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 
 MODULE* PCB_SHAPE::GetParentFootprint() const
 {
-    if( !m_Parent || m_Parent->Type() != PCB_MODULE_T )
+    if( !m_Parent || m_Parent->Type() != PCB_FOOTPRINT_T )
         return NULL;
 
     return (MODULE*) m_Parent;

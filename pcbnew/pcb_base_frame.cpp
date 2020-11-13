@@ -189,7 +189,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
     {
         lastItem->ClearBrightened();
 
-        if( lastItem->Type() == PCB_MODULE_T )
+        if( lastItem->Type() == PCB_FOOTPRINT_T )
         {
             static_cast<MODULE*>( lastItem )->RunOnChildren( [&]( BOARD_ITEM* child )
                                                              {
@@ -213,7 +213,7 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
     {
         aItem->SetBrightened();
 
-        if( aItem->Type() == PCB_MODULE_T )
+        if( aItem->Type() == PCB_FOOTPRINT_T )
         {
             static_cast<MODULE*>( aItem )->RunOnChildren( [&]( BOARD_ITEM* child )
                                                           {

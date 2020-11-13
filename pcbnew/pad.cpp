@@ -53,7 +53,7 @@ PAD::PAD( MODULE* parent ) :
     m_orient              = 0;              // Pad rotation in 1/10 degrees.
     m_lengthPadToDie      = 0;
 
-    if( m_Parent  &&  m_Parent->Type() == PCB_MODULE_T )
+    if( m_Parent  && m_Parent->Type() == PCB_FOOTPRINT_T )
     {
         m_pos = GetParent()->GetPosition();
     }

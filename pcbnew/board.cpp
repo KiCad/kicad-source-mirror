@@ -253,7 +253,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         //        PCB_FP_TEXT_T,        Can't be at board level
         //        PCB_FP_SHAPE_T,       Can't be at board level
         //        PCB_FP_ZONE_T,        Can't be at board level
-        PCB_MODULE_T,
+        PCB_FOOTPRINT_T,
         PCB_ZONE_T,
         EOT
     };
@@ -596,7 +596,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         if( aMode == ADD_MODE::APPEND )
             m_footprints.push_back((MODULE*) aBoardItem );
         else
@@ -676,7 +676,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
                                        } ) );
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         m_footprints.erase( std::remove_if( m_footprints.begin(), m_footprints.end(),
                                             [aBoardItem]( BOARD_ITEM* aItem )
                                             {
@@ -955,7 +955,7 @@ wxString BOARD::ConvertKIIDsToCrossReferences( const wxString& aSource )
                 wxString      ref = token.BeforeFirst( ':', &remainder );
                 BOARD_ITEM*   refItem = GetItem( KIID( ref ) );
 
-                if( refItem && refItem->Type() == PCB_MODULE_T )
+                if( refItem && refItem->Type() == PCB_FOOTPRINT_T )
                     token = static_cast<MODULE*>( refItem )->GetReference() + ":" + remainder;
             }
 
@@ -1115,7 +1115,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
          * pass it on to each footprint's Visit() function via IterateForward( m_footprints, ... ).
          */
 
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
         case PCB_PAD_T:
         case PCB_FP_TEXT_T:
         case PCB_FP_SHAPE_T:
@@ -1129,7 +1129,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             {
                 switch( stype = *++p )
                 {
-                case PCB_MODULE_T:
+                case PCB_FOOTPRINT_T:
                 case PCB_PAD_T:
                 case PCB_FP_TEXT_T:
                 case PCB_FP_SHAPE_T:

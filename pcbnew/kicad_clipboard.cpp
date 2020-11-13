@@ -78,7 +78,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
     // Prepare net mapping that assures that net codes saved in a file are consecutive integers
     m_mapping->SetBoard( m_board );
 
-    if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_MODULE_T )
+    if( aSelected.Size() == 1 && aSelected.Front()->Type() == PCB_FOOTPRINT_T )
     {
         // make the footprint safe to transfer to other pcbs
         const MODULE* footprint = static_cast<MODULE*>( aSelected.Front() );

@@ -824,7 +824,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                         case PCB_TRACE_T:        mask = DRC_DISALLOW_TRACKS;     break;
                         case PCB_ARC_T:          mask = DRC_DISALLOW_TRACKS;     break;
                         case PCB_PAD_T:          mask = DRC_DISALLOW_PADS;       break;
-                        case PCB_MODULE_T:       mask = DRC_DISALLOW_FOOTPRINTS; break;
+                        case PCB_FOOTPRINT_T:    mask = DRC_DISALLOW_FOOTPRINTS; break;
                         case PCB_SHAPE_T:        mask = DRC_DISALLOW_GRAPHICS;   break;
                         case PCB_FP_SHAPE_T:     mask = DRC_DISALLOW_GRAPHICS;   break;
                         case PCB_TEXT_T:         mask = DRC_DISALLOW_TEXTS;      break;

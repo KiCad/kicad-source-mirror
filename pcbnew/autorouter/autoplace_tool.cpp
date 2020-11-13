@@ -106,7 +106,7 @@ int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection() )
     {
-        if( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_FOOTPRINT_T )
             footprints.push_back( static_cast<MODULE*>( item ) );
     }
 

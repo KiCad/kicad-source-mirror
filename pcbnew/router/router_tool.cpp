@@ -1422,8 +1422,12 @@ bool ROUTER_TOOL::CanInlineDrag()
     {
         const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
 
-        if( item->Type() == PCB_TRACE_T || item->Type() == PCB_VIA_T || item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_TRACE_T
+             || item->Type() == PCB_VIA_T
+             || item->Type() == PCB_FOOTPRINT_T )
+        {
             return true;
+        }
     }
 
     return false;
@@ -1442,8 +1446,12 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( selection.Front() );
 
-    if( item->Type() != PCB_TRACE_T && item->Type() != PCB_VIA_T && item->Type() != PCB_MODULE_T )
+    if( item->Type() != PCB_TRACE_T
+         && item->Type() != PCB_VIA_T
+         && item->Type() != PCB_FOOTPRINT_T )
+    {
         return 0;
+    }
 
     Activate();
 
@@ -1455,7 +1463,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     PNS::ITEM_SET itemsToDrag;
     const MODULE* module = nullptr;
 
-    if( item->Type() == PCB_MODULE_T )
+    if( item->Type() == PCB_FOOTPRINT_T )
     {
         module = static_cast<const MODULE*>(item);
 

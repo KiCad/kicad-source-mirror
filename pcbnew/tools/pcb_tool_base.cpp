@@ -69,12 +69,12 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                     newItem->SetPosition( (wxPoint) aPosition );
                     preview.Add( newItem.get() );
 
-                    if( newItem->Type() == PCB_MODULE_T )
+                    if( newItem->Type() == PCB_FOOTPRINT_T )
                     {
-                        auto module = dyn_cast<MODULE*>( newItem.get() );
+                        MODULE* fp = dyn_cast<MODULE*>( newItem.get() );
 
                         // footprints have more drawable parts
-                        module->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
+                        fp->RunOnChildren( std::bind( &KIGFX::VIEW_GROUP::Add, &preview, _1 ) );
                     }
                 }
             };

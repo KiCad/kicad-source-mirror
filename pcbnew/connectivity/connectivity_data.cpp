@@ -223,7 +223,7 @@ void CONNECTIVITY_DATA::BlockRatsnestItems( const std::vector<BOARD_ITEM*>& aIte
 
     for( auto item : aItems )
     {
-        if( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_FOOTPRINT_T )
         {
             for( auto pad : static_cast<MODULE*>(item)->Pads() )
                 citems.push_back( pad );
@@ -654,7 +654,7 @@ RN_NET* CONNECTIVITY_DATA::GetRatsnestForNet( int aNet )
 
 void CONNECTIVITY_DATA::MarkItemNetAsDirty( BOARD_ITEM *aItem )
 {
-    if (aItem->Type() == PCB_MODULE_T)
+    if ( aItem->Type() == PCB_FOOTPRINT_T)
     {
         for ( auto pad : static_cast<MODULE*>( aItem )->Pads() )
         {
@@ -683,7 +683,7 @@ const std::vector<CN_EDGE> CONNECTIVITY_DATA::GetRatsnestForItems( std::vector<B
 
     for( auto item : aItems )
     {
-        if( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_FOOTPRINT_T )
         {
             auto component = static_cast<MODULE*>( item );
 

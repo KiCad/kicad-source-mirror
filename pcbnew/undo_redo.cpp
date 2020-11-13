@@ -202,7 +202,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
         BOARD_ITEM* item        = dynamic_cast<BOARD_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
         // For items belonging to footprints, we need to save state of the parent footprint
-        if( item && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+        if( item && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
         {
             item = item->GetParent();
 
@@ -435,7 +435,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         // see if we must rebuild ratsnets and pointers lists
         switch( eda_item->Type() )
         {
-        case PCB_MODULE_T:
+        case PCB_FOOTPRINT_T:
         case PCB_GROUP_T:
             deep_reBuild_ratsnest = true;   // Pointers on pads can be invalid
             KI_FALLTHROUGH;

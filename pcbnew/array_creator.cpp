@@ -106,7 +106,7 @@ void ARRAY_CREATOR::Invoke()
                 {
                     switch( item->Type() )
                     {
-                    case PCB_MODULE_T:
+                    case PCB_FOOTPRINT_T:
                     case PCB_TEXT_T:
                     case PCB_SHAPE_T:
                     case PCB_TRACE_T:
@@ -145,7 +145,7 @@ void ARRAY_CREATOR::Invoke()
                     // it this state, reset the selected stated of aItem:
                     this_item->ClearSelected();
 
-                    if( this_item->Type() == PCB_MODULE_T )
+                    if( this_item->Type() == PCB_FOOTPRINT_T )
                     {
                         static_cast<MODULE*>( this_item )->RunOnChildren(
                                 [&]( BOARD_ITEM* aItem )

@@ -102,7 +102,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
 
     // The new zone is a ZONE if created in the board editor and a FP_ZONE if created in the
     // footprint editor
-    wxASSERT( !m_tool.m_isFootprintEditor || ( parent->Type() == PCB_MODULE_T ) );
+    wxASSERT( !m_tool.m_isFootprintEditor || ( parent->Type() == PCB_FOOTPRINT_T ) );
 
     std::unique_ptr<ZONE> newZone = m_tool.m_isFootprintEditor ?
                                                 std::make_unique<FP_ZONE>( parent ) :

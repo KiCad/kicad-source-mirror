@@ -892,7 +892,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 {
     PCB_TYPE_COLLECTOR     items;
 
-    static const KICAD_T    scanMODULEs[] = { PCB_MODULE_T, EOT };
+    static const KICAD_T    scanMODULEs[] = { PCB_FOOTPRINT_T, EOT };
 
     // Not all boards are exportable.  Check that all reference Ids are unique.
     // Unless they are unique, we cannot import the session file which comes

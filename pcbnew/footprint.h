@@ -121,7 +121,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && PCB_MODULE_T == aItem->Type();
+        return aItem && aItem->Type() == PCB_FOOTPRINT_T;
     }
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Add()

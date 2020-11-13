@@ -258,7 +258,7 @@ static struct EDA_ITEM_DESC
             .Map( NOT_USED,             wxT( "<not used>" ) )
             .Map( SCREEN_T,             _HKI( "Screen" ) )
 
-            .Map( PCB_MODULE_T,         _HKI( "Footprint" ) )
+            .Map( PCB_FOOTPRINT_T,      _HKI( "Footprint" ) )
             .Map( PCB_PAD_T,            _HKI( "Pad" ) )
             .Map( PCB_SHAPE_T,          _HKI( "Graphic Shape" ) )
             .Map( PCB_TEXT_T,           _HKI( "Board Text" ) )

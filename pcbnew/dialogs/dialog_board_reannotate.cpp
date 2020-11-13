@@ -716,7 +716,7 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
         for( EDA_ITEM* item : m_selection )
         {
             //Get the timestamps of selected footprints
-            if( item->Type() == PCB_MODULE_T )
+            if( item->Type() == PCB_FOOTPRINT_T )
                 selected.push_back( item->m_Uuid );
         }
     }

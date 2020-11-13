@@ -246,7 +246,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                     return false;
                 }
 
-                if( item->Type() == PCB_MODULE_T )
+                if( item->Type() == PCB_FOOTPRINT_T )
                 {
                     MODULE* footprint = static_cast<MODULE*>( item );
 
@@ -395,7 +395,7 @@ static void memberOf( LIBEVAL::CONTEXT* aCtx, void* self )
 
     PCB_GROUP* group = item->GetParentGroup();
 
-    if( !group && item->GetParent() && item->GetParent()->Type() == PCB_MODULE_T )
+    if( !group && item->GetParent() && item->GetParent()->Type() == PCB_FOOTPRINT_T )
         group = item->GetParent()->GetParentGroup();
 
     while( group )

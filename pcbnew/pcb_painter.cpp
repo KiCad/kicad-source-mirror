@@ -439,7 +439,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const FP_TEXT*>( item ), aLayer );
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         draw( static_cast<const MODULE*>( item ), aLayer );
         break;
 

@@ -60,13 +60,13 @@ void PCB_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
 {
     auto item = static_cast<BOARD_ITEM*>( aItem );
 
-    if( item->Type() == PCB_MODULE_T )
+    if( item->Type() == PCB_FOOTPRINT_T )
     {
-        auto mod = static_cast<MODULE*>( item );
-        mod->RunOnChildren( [this] ( BOARD_ITEM* aModItem )
-                            {
-                                VIEW::Add( aModItem );
-                            } );
+        MODULE* footprint = static_cast<MODULE*>( item );
+        footprint->RunOnChildren( [this]( BOARD_ITEM* aChild )
+                                  {
+                                      VIEW::Add( aChild );
+                                  } );
     }
 
     VIEW::Add( item, aDrawPriority );
@@ -78,12 +78,13 @@ void PCB_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
     auto item = static_cast<BOARD_ITEM*>( aItem );
 
 
-    if( item->Type() == PCB_MODULE_T )
+    if( item->Type() == PCB_FOOTPRINT_T )
     {
-        auto mod = static_cast<MODULE*>( item );
-        mod->RunOnChildren([this] ( BOARD_ITEM* aModItem ) {
-                VIEW::Remove( aModItem );
-            } );
+        MODULE* footprint = static_cast<MODULE*>( item );
+        footprint->RunOnChildren( [this]( BOARD_ITEM* aChild )
+                                  {
+                                      VIEW::Remove( aChild );
+                                  } );
     }
 
     VIEW::Remove( item );
@@ -94,7 +95,7 @@ void PCB_VIEW::Update( const KIGFX::VIEW_ITEM* aItem, int aUpdateFlags ) const
 {
     const BOARD_ITEM* item = static_cast<const BOARD_ITEM*>( aItem );
 
-    if( item->Type() == PCB_MODULE_T )
+    if( item->Type() == PCB_FOOTPRINT_T )
     {
         const MODULE* mod = static_cast<const MODULE*>( item );
 

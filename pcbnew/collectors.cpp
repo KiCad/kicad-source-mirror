@@ -60,7 +60,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_ARC_T,              // in m_tracks
     PCB_PAD_T,              // in footprints
     PCB_FP_TEXT_T,          // in footprints
-    PCB_MODULE_T,           // in m_footprints
+    PCB_FOOTPRINT_T,        // in m_footprints
     PCB_GROUP_T,            // in m_groups
     PCB_ZONE_T,             // in m_zones
     EOT
@@ -79,7 +79,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_VIA_T,
     PCB_ARC_T,
     PCB_TRACE_T,
-    PCB_MODULE_T,
+    PCB_FOOTPRINT_T,
     PCB_GROUP_T,
     PCB_ZONE_T,
     EOT
@@ -100,7 +100,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_ARC_T,
     PCB_PAD_T,
     PCB_FP_TEXT_T,
-    PCB_MODULE_T,
+    PCB_FOOTPRINT_T,
     PCB_GROUP_T,
     PCB_ZONE_T,         // if it is visible on screen, it should be selectable
     EOT
@@ -108,14 +108,14 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
 
 
 const KICAD_T GENERAL_COLLECTOR::Modules[] = {
-    PCB_MODULE_T,
+    PCB_FOOTPRINT_T,
     EOT
 };
 
 
 const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
     PCB_PAD_T,
-    PCB_MODULE_T,
+    PCB_FOOTPRINT_T,
     EOT
 };
 
@@ -130,7 +130,7 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
 
 
 const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
-    PCB_MODULE_T,
+    PCB_FOOTPRINT_T,
     PCB_FP_TEXT_T,
     PCB_FP_SHAPE_T,
     PCB_PAD_T,
@@ -159,7 +159,7 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
 
 
 const KICAD_T GENERAL_COLLECTOR::LockableItems[] = {
-    PCB_MODULE_T,
+    PCB_FOOTPRINT_T,
     PCB_GROUP_T,  // Can a group be locked?
     PCB_TRACE_T,
     PCB_ARC_T,
@@ -243,7 +243,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         {
             MODULE* footprint = (MODULE*) item;
 
@@ -372,7 +372,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         shape = static_cast<FP_SHAPE*>( item );
         break;
 
-    case PCB_MODULE_T:
+    case PCB_FOOTPRINT_T:
         footprint = static_cast<MODULE*>( item );
         break;
 
@@ -477,7 +477,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( item->Type() == PCB_MODULE_T )
+                    else if( item->Type() == PCB_FOOTPRINT_T )
                     {
                         if( footprint->HitTest( m_refPos, accuracy )
                             && footprint->HitTestAccurate( m_refPos, accuracy ) )
@@ -551,7 +551,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( item->Type() == PCB_MODULE_T )
+                    else if( item->Type() == PCB_FOOTPRINT_T )
                     {
                         if( footprint->HitTest( m_refPos, accuracy )
                             && footprint->HitTestAccurate( m_refPos, accuracy ) )

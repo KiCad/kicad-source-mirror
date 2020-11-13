@@ -45,8 +45,8 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
 
     switch( aItem->Type() )
     {
-    case PCB_MODULE_T:
-        for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
+    case PCB_FOOTPRINT_T:
+        for( PAD* pad : static_cast<MODULE*>( aItem )->Pads() )
         {
             m_itemMap[pad].MarkItemsAsInvalid();
             m_itemMap.erase( pad );
@@ -100,7 +100,7 @@ void CN_CONNECTIVITY_ALGO::markItemNetAsDirty( const BOARD_ITEM* aItem )
     }
     else
     {
-        if( aItem->Type() == PCB_MODULE_T )
+        if( aItem->Type() == PCB_FOOTPRINT_T )
         {
             auto mod = static_cast <const MODULE*>( aItem );
 
@@ -121,12 +121,11 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_NETINFO_T:
-        {
-            MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
-            break;
-        }
-    case PCB_MODULE_T:
-        for( auto pad : static_cast<MODULE*>( aItem ) -> Pads() )
+        MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
+        break;
+
+    case PCB_FOOTPRINT_T:
+        for( PAD* pad : static_cast<MODULE*>( aItem )->Pads() )
         {
             if( m_itemMap.find( pad ) != m_itemMap.end() )
                 return false;
@@ -141,35 +140,27 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
             return false;
 
         add( m_itemList, static_cast<PAD*>( aItem ) );
-
         break;
 
     case PCB_TRACE_T:
-    {
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<TRACK*>( aItem ) );
-
         break;
-    }
 
     case PCB_ARC_T:
-    {
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<ARC*>( aItem ) );
-
         break;
-    }
 
     case PCB_VIA_T:
         if( m_itemMap.find( aItem ) != m_itemMap.end() )
             return false;
 
         add( m_itemList, static_cast<VIA*>( aItem ) );
-
         break;
 
     case PCB_ZONE_T:
@@ -186,9 +177,8 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
             for( CN_ITEM* zitem : m_itemList.Add( zone, layer ) )
                 m_itemMap[zone].Link( zitem );
         }
-
-        break;
     }
+        break;
 
     default:
         return false;
@@ -299,9 +289,9 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_T,
-                                  PCB_MODULE_T, EOT };
+                                  PCB_FOOTPRINT_T, EOT };
     constexpr KICAD_T no_zones[] = { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T,
-                                     PCB_MODULE_T, EOT };
+                                     PCB_FOOTPRINT_T, EOT };
 
     if( aMode == CSM_PROPAGATE )
         return SearchClusters( aMode, no_zones, -1 );
@@ -474,15 +464,11 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
                 Add( item );
                 break;
 
-            case PCB_MODULE_T:
-            {
-                for( auto pad : static_cast<MODULE*>( item )->Pads() )
-                {
+            case PCB_FOOTPRINT_T:
+                for( PAD* pad : static_cast<MODULE*>( item )->Pads() )
                     Add( pad );
-                }
 
                 break;
-            }
 
             default:
                 break;

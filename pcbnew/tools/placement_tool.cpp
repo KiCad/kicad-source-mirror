@@ -96,7 +96,7 @@ ALIGNMENT_RECTS GetBoundingBoxes( const T &sel )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
-        if( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_FOOTPRINT_T )
             rects.emplace_back( std::make_pair( boardItem, static_cast<MODULE*>( item )->GetFootprintRect() ) );
         else
             rects.emplace_back( std::make_pair( boardItem, item->GetBoundingBox() ) );

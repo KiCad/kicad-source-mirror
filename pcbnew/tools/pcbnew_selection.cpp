@@ -52,7 +52,7 @@ using namespace std::placeholders;
 
 
 
-EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool onlyModules ) const
+EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool aFootprintsOnly ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
 
@@ -63,7 +63,7 @@ EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool onlyModules ) const
     {
         pnt = item->GetPosition();
 
-        if( ( item->Type() != PCB_MODULE_T ) && onlyModules )
+        if( ( item->Type() != PCB_FOOTPRINT_T ) && aFootprintsOnly )
         {
             continue;
         }
@@ -91,39 +91,51 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
     std::vector<VIEW_ITEM*> items;
 
     std::function<void ( EDA_ITEM* )> addItem;
-    addItem = [&]( EDA_ITEM* item ) {
-                       items.push_back( item );
+    addItem = [&]( EDA_ITEM* item )
+            {
+                items.push_back( item );
 
-                       if( item->Type() == PCB_MODULE_T )
-                       {
-                           MODULE* module = static_cast<MODULE*>( item );
-                           module->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { addItem( bitem ); } );
-                       }
-                       else if( item->Type() == PCB_GROUP_T )
-                       {
-                           PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-                           group->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { addItem( bitem ); } );
-                       }
-                   };
+                if( item->Type() == PCB_FOOTPRINT_T )
+                {
+                    MODULE* footprint = static_cast<MODULE*>( item );
+                    footprint->RunOnChildren( [&]( BOARD_ITEM* bitem )
+                                              {
+                                                  addItem( bitem );
+                                              } );
+                }
+                else if( item->Type() == PCB_GROUP_T )
+                {
+                    PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
+                    group->RunOnChildren( [&]( BOARD_ITEM* bitem )
+                                          {
+                                              addItem( bitem );
+                                          } );
+                }
+            };
 
-    for( auto item : m_items )
-    {
+    for( EDA_ITEM* item : m_items )
         addItem( item );
-    }
+
 #if 0
     for( auto item : m_items )
     {
         items.push_back( item );
 
-        if( item->Type() == PCB_MODULE_T )
+        if( item->Type() == PCB_FOOTPRINT_T )
         {
-            MODULE* module = static_cast<MODULE*>( item );
-            module->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { items.push_back( bitem ); } );
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+            footprint->RunOnChildren( [&]( BOARD_ITEM* bitem )
+                                      {
+                                          items.push_back( bitem );
+                                      } );
         }
         else if( item->Type() == PCB_GROUP_T )
         {
             PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-            group->RunOnChildren( [&] ( BOARD_ITEM* bitem ) { items.push_back( bitem ); } );
+            group->RunOnChildren( [&]( BOARD_ITEM* bitem )
+                                  {
+                                      items.push_back( bitem );
+                                  } );
         }
     }
 #endif
@@ -135,9 +147,9 @@ const LSET PCBNEW_SELECTION::GetSelectionLayers()
 {
     LSET retval;
 
-    for( auto item : m_items )
+    for( EDA_ITEM* item : m_items )
     {
-        if( auto board_item = dynamic_cast<BOARD_ITEM*>( item ) )
+        if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
             retval |= board_item->GetLayerSet();
     }
 
