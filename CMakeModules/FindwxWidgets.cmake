@@ -917,7 +917,7 @@ else()
     # When using wx-config in MSYS, the include paths are UNIX style paths which may or may
     # not work correctly depending on you MSYS/MinGW configuration.  CMake expects native
     # paths internally.
-    if(wxWidgets_FOUND AND MSYS)
+    if(wxWidgets_FOUND AND (MSYS OR MINGW))
       find_program(_cygpath_exe cygpath ONLY_CMAKE_FIND_ROOT_PATH)
       DBG_MSG_V("_cygpath_exe:  ${_cygpath_exe}")
       if(_cygpath_exe)
