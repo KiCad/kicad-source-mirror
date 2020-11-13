@@ -399,22 +399,6 @@ For debug builds, run the cmake command with `-DCMAKE_BUILD_TYPE=Debug` from the
 There are some known issues that are specific to MSYS2.  This section provides a list of the
 currently known issues when building KiCad using MSYS2.
 
-
-#### 64-bit Package of Boost 1.59 ### {#ki_msys2_64bit_boost}
-
-The context library of the x86_64 package of Boost version 1.59 is broken and will cause KiCad
-to crash.  You must downgrade to version 1.57 by running the command:
-
-    pacman -U /var/cache/pacman/pkg/mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz
-
-If the file mingw-w64-x86_64-boost-1.57.0-4-any.pkg.tar.xz is no longer in your pacman cache,
-you will have to download it from the [MSYS2 64-bit SourceForge repo][].  You should also
-configure pacman to prevent upgrading the 64-bit Boost package by adding:
-
-    IgnorePkg = mingw-w64-x86_64-boost
-
-to your /etc/pacman.conf file.
-
 #### Building with Boost 1.70 ### {#ki_msys2_boost_1_70}
 
 There is an issue building KiCad with Boost version 1.70 due to CMake not defining the proper
