@@ -626,35 +626,41 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryFigures( const SYMDEF_PCB& aComponent,
+                                                     MODULE* aFootprint )
 {
     for( std::pair<FIGURE_ID, FIGURE> figPair : aComponent.Figures )
     {
         FIGURE& fig = figPair.second;
+
         drawCadstarShape( fig.Shape, getKiCadLayer( fig.LayerID ),
-                getLineThickness( fig.LineCodeID ),
-                wxString::Format( "Component %s:%s -> Figure %s", aComponent.ReferenceName,
-                        aComponent.Alternate, fig.ID ),
-                aModule );
+                          getLineThickness( fig.LineCodeID ),
+                          wxString::Format( "Component %s:%s -> Figure %s",
+                                            aComponent.ReferenceName,
+                                            aComponent.Alternate,
+                                            fig.ID ),
+                          aFootprint );
     }
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aFootprint )
 {
     for( COMPONENT_COPPER compCopper : aComponent.ComponentCoppers )
     {
         int lineThickness = getKiCadLength( getCopperCode( compCopper.CopperCodeID ).CopperWidth );
 
         drawCadstarShape( compCopper.Shape, getKiCadLayer( compCopper.LayerID ), lineThickness,
-                wxString::Format( "Component %s:%s -> Copper element", aComponent.ReferenceName,
-                        aComponent.Alternate ),
-                aModule );
+                          wxString::Format( "Component %s:%s -> Copper element",
+                                            aComponent.ReferenceName,
+                                            aComponent.Alternate ),
+                          aFootprint );
     }
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
+                                                   MODULE* aFootprint )
 {
     for( std::pair<COMP_AREA_ID, COMPONENT_AREA> areaPair : aComponent.ComponentAreas )
     {
@@ -663,9 +669,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
         if( area.NoVias || area.NoTracks )
         {
             ZONE* zone = getZoneFromCadstarShape( area.Shape, getLineThickness( area.LineCodeID ),
-                                                  aModule );
+                                                  aFootprint );
 
-            aModule->Add( zone, ADD_MODE::APPEND );
+            aFootprint->Add( zone, ADD_MODE::APPEND );
 
             if( isLayerSet( area.LayerID ) )
                 zone->SetLayerSet( getKiCadLayerSet( area.LayerID ) );
@@ -699,14 +705,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryPads( const SYMDEF_PCB& aComponent,
+                                                  MODULE* aFootprint )
 {
     for( std::pair<PAD_ID, COMPONENT_PAD> padPair : aComponent.ComponentPads )
     {
-        PAD* pad = getKiCadPad( padPair.second, aModule );
-        aModule->Add( pad,
-                ADD_MODE::INSERT ); // insert so that we get correct behaviour when finding pads
-                                    // in the module by PAD_ID - see loadNets()
+        PAD* pad = getKiCadPad( padPair.second, aFootprint );
+        aFootprint->Add( pad, ADD_MODE::INSERT ); // insert so that we get correct behaviour
+                                                  // when finding pads by PAD_ID - see loadNets()
     }
 }
 
@@ -1604,15 +1610,18 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentAttributes(
-        const COMPONENT& aComponent, MODULE* aModule )
+void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentAttributes( const COMPONENT& aComponent,
+                                                          MODULE* aFootprint )
 {
     for( std::pair<ATTRIBUTE_ID, ATTRIBUTE_VALUE> attrPair : aComponent.AttributeValues )
     {
         ATTRIBUTE_VALUE& attrval = attrPair.second;
 
         if( attrval.HasLocation ) //only import attributes with location. Ignore the rest
-            addAttribute( attrval.AttributeLocation, attrval.AttributeID, aModule, attrval.Value );
+        {
+            addAttribute( attrval.AttributeLocation, attrval.AttributeID, aFootprint,
+                          attrval.Value );
+        }
     }
 
     for( std::pair<ATTRIBUTE_ID, TEXT_LOCATION> textlocPair : aComponent.TextLocations )
@@ -1635,7 +1644,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentAttributes(
         else
             attrval = getAttributeValue( textloc.AttributeID, aComponent.AttributeValues );
 
-        addAttribute( textloc, textloc.AttributeID, aModule, attrval );
+        addAttribute( textloc, textloc.AttributeID, aFootprint, attrval );
     }
 }
 
@@ -2279,26 +2288,28 @@ std::vector<TRACK*> CADSTAR_PCB_ARCHIVE_LOADER::makeTracksFromDrawsegments(
 
 
 void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-        const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule, const wxString& aAttributeValue )
+                                               const ATTRIBUTE_ID& aCadstarAttributeID,
+                                               MODULE* aFootprint,
+                                               const wxString& aAttributeValue )
 {
     FP_TEXT* txt;
 
     if( aCadstarAttributeID == COMPONENT_NAME_ATTRID )
     {
-        txt = &aModule->Reference(); //text should be set outside this function
+        txt = &aFootprint->Reference(); //text should be set outside this function
     }
     else if( aCadstarAttributeID == PART_NAME_ATTRID )
     {
-        if( aModule->Value().GetText().IsEmpty() )
+        if( aFootprint->Value().GetText().IsEmpty() )
         {
             // Use PART_NAME_ATTRID as the value is value field is blank
-            aModule->SetValue( aAttributeValue );
-            txt = &aModule->Value();
+            aFootprint->SetValue( aAttributeValue );
+            txt = &aFootprint->Value();
         }
         else
         {
-            txt = new FP_TEXT( aModule );
-            aModule->Add( txt );
+            txt = new FP_TEXT( aFootprint );
+            aFootprint->Add( txt );
             txt->SetText( aAttributeValue );
         }
         txt->SetVisible( false ); //make invisible to avoid clutter.
@@ -2306,34 +2317,34 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     else if( aCadstarAttributeID != COMPONENT_NAME_2_ATTRID
              && getAttributeName( aCadstarAttributeID ) == wxT( "Value" ) )
     {
-        if( !aModule->Value().GetText().IsEmpty() )
+        if( !aFootprint->Value().GetText().IsEmpty() )
         {
             //copy the object
-            aModule->Add( new FP_TEXT( aModule->Value() ) );
+            aFootprint->Add( new FP_TEXT( aFootprint->Value() ) );
         }
 
-        aModule->SetValue( aAttributeValue );
-        txt = &aModule->Value();
+        aFootprint->SetValue( aAttributeValue );
+        txt = &aFootprint->Value();
         txt->SetVisible( false ); //make invisible to avoid clutter.
     }
     else
     {
-        txt = new FP_TEXT( aModule );
-        aModule->Add( txt );
+        txt = new FP_TEXT( aFootprint );
+        aFootprint->Add( txt );
         txt->SetText( aAttributeValue );
         txt->SetVisible( false ); //make all user attributes invisible to avoid clutter.
         //TODO: Future improvement - allow user to decide what to do with attributes
     }
 
-    wxPoint rotatedTextPos = getKiCadPoint( aCadstarAttrLoc.Position ) - aModule->GetPosition();
-    RotatePoint( &rotatedTextPos, -aModule->GetOrientation() );
+    wxPoint rotatedTextPos = getKiCadPoint( aCadstarAttrLoc.Position ) - aFootprint->GetPosition();
+    RotatePoint( &rotatedTextPos, -aFootprint->GetOrientation() );
 
     txt->SetTextPos( getKiCadPoint( aCadstarAttrLoc.Position ) );
     txt->SetPos0( rotatedTextPos );
     txt->SetLayer( getKiCadLayer( aCadstarAttrLoc.LayerID ) );
     txt->SetMirrored( aCadstarAttrLoc.Mirror );
     txt->SetTextAngle(
-            getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) - aModule->GetOrientation() );
+            getAngleTenthDegree( aCadstarAttrLoc.OrientAngle ) - aFootprint->GetOrientation() );
 
     if( aCadstarAttrLoc.Mirror ) // If mirroring, invert angle to match CADSTAR
         txt->SetTextAngle( -txt->GetTextAngle() );

@@ -46,10 +46,10 @@ AUTOPLACE_TOOL::~AUTOPLACE_TOOL()
 // especially each time a footprint is autoplaced,
 static PCB_BASE_EDIT_FRAME* fparent;
 
-static int refreshCallback( MODULE* aModule )
+static int refreshCallback( MODULE* aFootprint )
 {
-    if( aModule )
-        fparent->GetCanvas()->GetView()->Update( aModule );
+    if( aFootprint )
+        fparent->GetCanvas()->GetView()->Update( aFootprint );
 
     fparent->GetCanvas()->GetView()->MarkDirty();
     fparent->GetCanvas()->Refresh();
@@ -59,7 +59,7 @@ static int refreshCallback( MODULE* aModule )
 }
 
 
-int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboard )
+int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aFootprints, bool aPlaceOffboard )
 {
     EDA_RECT bbox = board()->GetBoardEdgesBoundingBox();
 
@@ -82,14 +82,14 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboa
     autoplacer.SetOverlay( overlay );
 
     fparent = frame();
-    std::function<int( MODULE* aModule )> callback = refreshCallback;
+    std::function<int( MODULE* aFootprint )> callback = refreshCallback;
     autoplacer.SetRefreshCallback( callback );
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
             new WX_PROGRESS_REPORTER( frame(), _( "Autoplace Components" ), 1 ) );
 
     autoplacer.SetProgressReporter( progressReporter.get() );
-    auto result = autoplacer.AutoplaceModules( aModules, &commit, aPlaceOffboard );
+    auto result = autoplacer.AutoplaceFootprints( aFootprints, &commit, aPlaceOffboard );
 
     if( result == AR_COMPLETED )
         commit.Push( _( "Autoplace components" ) );
@@ -102,23 +102,23 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboa
 
 int AUTOPLACE_TOOL::autoplaceSelected( const TOOL_EVENT& aEvent )
 {
-    std::vector<MODULE*> mods;
+    std::vector<MODULE*> footprints;
 
     for( EDA_ITEM* item : selection() )
     {
         if( item->Type() == PCB_MODULE_T )
-            mods.push_back( static_cast<MODULE*>( item ) );
+            footprints.push_back( static_cast<MODULE*>( item ) );
     }
 
-    return autoplace( mods, false );
+    return autoplace( footprints, false );
 }
 
 
 int AUTOPLACE_TOOL::autoplaceOffboard( const TOOL_EVENT& aEvent )
 {
-    std::vector<MODULE*> mods;
+    std::vector<MODULE*> footprints;
 
-    return autoplace( mods, true );
+    return autoplace( footprints, true );
 }
 
 

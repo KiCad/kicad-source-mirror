@@ -59,8 +59,8 @@ class AR_AUTOPLACER
 public:
     AR_AUTOPLACER( BOARD* aBoard );
 
-    AR_RESULT AutoplaceModules( std::vector<MODULE*>& aModules, BOARD_COMMIT* aCommit,
-                                bool aPlaceOffboardModules = false );
+    AR_RESULT AutoplaceFootprints( std::vector<MODULE*>& aFootprints, BOARD_COMMIT* aCommit,
+                                   bool aPlaceOffboardModules = false );
 
     /**
      * Set a VIEW overlay to draw items during a autoplace session.
@@ -86,7 +86,7 @@ public:
 
 private:
     void         drawPlacementRoutingMatrix();  // draw the working area (shows free and occupied areas)
-    void         rotateModule( MODULE* module, double angle, bool incremental );
+    void         rotateFootprint( MODULE* aFootprint, double angle, bool incremental );
     int          genPlacementRoutingMatrix();
 
     /** fills m_matrix cells from m_boardShape.
@@ -97,19 +97,21 @@ private:
 
     int          testRectangle( const EDA_RECT& aRect, int side );
     unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
-    int          testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const wxPoint& aOffset );
-    int          getOptimalModulePlacement( MODULE* aModule );
-    double       computePlacementRatsnestCost( MODULE* aModule, const wxPoint& aOffset );
+    int          testModuleOnBoard( MODULE* aFootprint, bool TstOtherSide, const wxPoint& aOffset );
+    int          getOptimalFPPlacement( MODULE* aFootprint );
+    double       computePlacementRatsnestCost( MODULE* aFootprint, const wxPoint& aOffset );
 
     /**
      * Find the "best" module place. The criteria are:
      * - Maximum ratsnest with footprints already placed
      * - Max size, and number of pads max
      */
-    MODULE*      pickModule();
+    MODULE*      pickFootprint();
 
-    void         placeModule( MODULE* aModule, bool aDoNotRecreateRatsnest, const wxPoint& aPos );
-    const PAD* nearestPad( MODULE* aRefModule, PAD* aRefPad, const wxPoint& aOffset );
+    void         placeFootprint( MODULE* aFootprint, bool aDoNotRecreateRatsnest,
+                                 const wxPoint& aPos );
+
+    const PAD* nearestPad( MODULE* aRefFP, PAD* aRefPad, const wxPoint& aOffset );
 
     // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
     void addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask );

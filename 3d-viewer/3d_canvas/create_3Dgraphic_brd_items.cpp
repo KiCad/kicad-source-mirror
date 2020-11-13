@@ -185,7 +185,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDim
 // Based on
 // void FOOTPRINT::TransformFPShapesWithClearanceToPolygonSet
 // board_items_to_polygon_shape_transform.cpp#L204
-void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const MODULE* aModule,
+void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const MODULE* aFootprint,
                                                          CGENERICCONTAINER2D *aDstContainer,
                                                          PCB_LAYER_ID aLayerId,
                                                          int aInflateValue )
@@ -193,7 +193,7 @@ void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const MODULE* aModule,
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
     FP_SHAPE* outline;
 
-    for( BOARD_ITEM* item : aModule->GraphicalItems() )
+    for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
         switch( item->Type() )
         {
@@ -225,13 +225,13 @@ void BOARD_ADAPTER::AddFPShapesWithClearanceToContainer( const MODULE* aModule,
     }
 
     // Convert texts sur footprints
-    if( aModule->Reference().GetLayer() == aLayerId && aModule->Reference().IsVisible() )
-        texts.push_back( &aModule->Reference() );
+    if( aFootprint->Reference().GetLayer() == aLayerId && aFootprint->Reference().IsVisible() )
+        texts.push_back( &aFootprint->Reference() );
 
-    if( aModule->Value().GetLayer() == aLayerId && aModule->Value().IsVisible() )
-        texts.push_back( &aModule->Value() );
+    if( aFootprint->Value().GetLayer() == aLayerId && aFootprint->Value().IsVisible() )
+        texts.push_back( &aFootprint->Value() );
 
-    s_boardItem    = (const BOARD_ITEM *)&aModule->Value();
+    s_boardItem    = (const BOARD_ITEM *)&aFootprint->Value();
     s_dstcontainer = aDstContainer;
     s_biuTo3Dunits = m_biuTo3Dunits;
 
@@ -473,7 +473,7 @@ COBJECT2D *BOARD_ADAPTER::createNewPadDrill( const PAD* aPad, int aInflateValue 
 }
 
 
-void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const MODULE* aModule,
+void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const MODULE* aFootprint,
                                                      CGENERICCONTAINER2D *aDstContainer,
                                                      PCB_LAYER_ID aLayerId,
                                                      int aInflateValue,
@@ -481,7 +481,7 @@ void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const MODULE* aModule,
                                                      bool aSkipPlatedPads,
                                                      bool aSkipNonPlatedPads )
 {
-    for( PAD* pad : aModule->Pads() )
+    for( PAD* pad : aFootprint->Pads() )
     {
         if( !pad->IsOnLayer( aLayerId ) )
             continue;

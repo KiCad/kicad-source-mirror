@@ -276,8 +276,10 @@ private:
      */
     ZONE* loadPolygon( wxXmlNode* aPolyNode );
 
-    void orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr, const EATTR* valueAttr );
-    void orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt, const EATTR* a );
+    void orientModuleAndText( MODULE* aFootprint, const EELEMENT& e, const EATTR* aNameAttr,
+                              const EATTR* aValueAttr );
+
+    void orientModuleText( MODULE* aFootprint, const EELEMENT& e, FP_TEXT* aFPText, const EATTR* a );
 
 
     /// move the BOARD into the center of the page
@@ -289,22 +291,22 @@ private:
      */
     MODULE* makeModule( wxXmlNode* aPackage, const wxString& aPkgName );
 
-    void packageWire( MODULE* aModule, wxXmlNode* aTree ) const;
-    void packagePad( MODULE* aModule, wxXmlNode* aTree );
-    void packageText( MODULE* aModule, wxXmlNode* aTree ) const;
-    void packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const;
-    void packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const;
-    void packageCircle( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageWire( MODULE* aFootprint, wxXmlNode* aTree ) const;
+    void packagePad( MODULE* aFootprint, wxXmlNode* aTree );
+    void packageText( MODULE* aFootprint, wxXmlNode* aTree ) const;
+    void packageRectangle( MODULE* aFootprint, wxXmlNode* aTree ) const;
+    void packagePolygon( MODULE* aFootprint, wxXmlNode* aTree ) const;
+    void packageCircle( MODULE* aFootprint, wxXmlNode* aTree ) const;
 
     /**
      * Function packageHole
-     * @parameter aModule - The KiCad module to which to assign the hole
+     * @parameter aFootprint - The KiCad module to which to assign the hole
      * @parameter aTree - The Eagle XML node that is of type "hole"
      * @parameter aCenter - If true, center the hole in the module and
      *      offset the module position
      */
-    void packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter ) const;
-    void packageSMD( MODULE* aModule, wxXmlNode* aTree ) const;
+    void packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
+    void packageSMD( MODULE* aFootprint, wxXmlNode* aTree ) const;
 
     ///> Handles common pad properties
     void transferPad( const EPAD_COMMON& aEaglePad, PAD* aPad ) const;

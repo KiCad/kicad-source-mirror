@@ -42,7 +42,7 @@ public:
     void setTransitions() override;
 
 private:
-    int autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboard );
+    int autoplace( std::vector<MODULE*>& aFootprints, bool aPlaceOffboard );
 
     int autoplaceSelected( const TOOL_EVENT& aEvent );
     int autoplaceOffboard( const TOOL_EVENT& aEvent );

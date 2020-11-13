@@ -1387,27 +1387,29 @@ ZONE* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 }
 
 
-void EAGLE_PLUGIN::orientModuleAndText( MODULE* m, const EELEMENT& e, const EATTR* nameAttr,
-                                        const EATTR* valueAttr )
+void EAGLE_PLUGIN::orientModuleAndText( MODULE* aFootprint, const EELEMENT& e,
+                                        const EATTR* aNameAttr, const EATTR* aValueAttr )
 {
     if( e.rot )
     {
         if( e.rot->mirror )
         {
             double orientation = e.rot->degrees + 180.0;
-            m->SetOrientation( orientation * 10 );
-            m->Flip( m->GetPosition(), false );
+            aFootprint->SetOrientation( orientation * 10 );
+            aFootprint->Flip( aFootprint->GetPosition(), false );
         }
         else
-            m->SetOrientation( e.rot->degrees * 10 );
+        {
+            aFootprint->SetOrientation( e.rot->degrees * 10 );
+        }
     }
 
-    orientModuleText( m, e, &m->Reference(), nameAttr );
-    orientModuleText( m, e, &m->Value(), valueAttr );
+    orientModuleText( aFootprint, e, &aFootprint->Reference(), aNameAttr );
+    orientModuleText( aFootprint, e, &aFootprint->Value(), aValueAttr );
 }
 
 
-void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt,
+void EAGLE_PLUGIN::orientModuleText( MODULE* aFootprint, const EELEMENT& e, FP_TEXT* aFPText,
                                      const EATTR* aAttr )
 {
     // Smashed part ?
@@ -1417,26 +1419,26 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt,
 
         if( a.value )
         {
-            txt->SetText( FROM_UTF8( a.value->c_str() ) );
+            aFPText->SetText( FROM_UTF8( a.value->c_str() ) );
         }
 
         if( a.x && a.y )    // OPT
         {
             wxPoint pos( kicad_x( *a.x ), kicad_y( *a.y ) );
-            txt->SetTextPos( pos );
+            aFPText->SetTextPos( pos );
         }
 
         // Even though size and ratio are both optional, I am not seeing
         // a case where ratio is present but size is not.
         double  ratio = 8;
-        wxSize  fontz = txt->GetTextSize();
+        wxSize  fontz = aFPText->GetTextSize();
         int     textThickness = KiROUND( fontz.y * ratio / 100 );
 
-        txt->SetTextThickness( textThickness );
+        aFPText->SetTextThickness( textThickness );
         if( a.size )
         {
             fontz = kicad_fontz( *a.size, textThickness );
-            txt->SetTextSize( fontz );
+            aFPText->SetTextSize( fontz );
 
             if( a.ratio )
                 ratio = *a.ratio;
@@ -1463,62 +1465,62 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt,
         {
             spin = a.rot->spin;
             sign = a.rot->mirror ? -1 : 1;
-            txt->SetMirrored( a.rot->mirror );
+            aFPText->SetMirrored( a.rot->mirror );
         }
 
         if( degrees == 90 || degrees == 0 || spin )
         {
-            orient = degrees - m->GetOrientation() / 10;
-            txt->SetTextAngle( sign * orient * 10 );
+            orient = degrees - aFootprint->GetOrientation() / 10;
+            aFPText->SetTextAngle( sign * orient * 10 );
         }
         else if( degrees == 180 )
         {
-            orient = 0 - m->GetOrientation() / 10;
-            txt->SetTextAngle( sign * orient * 10 );
+            orient = 0 - aFootprint->GetOrientation() / 10;
+            aFPText->SetTextAngle( sign * orient * 10 );
             align = -align;
         }
         else if( degrees == 270 )
         {
-            orient = 90 - m->GetOrientation() / 10;
+            orient = 90 - aFootprint->GetOrientation() / 10;
             align = -align;
-            txt->SetTextAngle( sign * orient * 10 );
+            aFPText->SetTextAngle( sign * orient * 10 );
         }
         else
         {
-            orient = 90 - degrees - m->GetOrientation() / 10;
-            txt->SetTextAngle( sign * orient * 10 );
+            orient = 90 - degrees - aFootprint->GetOrientation() / 10;
+            aFPText->SetTextAngle( sign * orient * 10 );
         }
 
         switch( align )
         {
         case ETEXT::TOP_RIGHT:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
             break;
 
         case ETEXT::BOTTOM_LEFT:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
 
         case ETEXT::TOP_LEFT:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
             break;
 
         case ETEXT::BOTTOM_RIGHT:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
 
         case ETEXT::TOP_CENTER:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
             break;
 
         case ETEXT::BOTTOM_CENTER:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_CENTER );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
             break;
 
         default:
@@ -1527,15 +1529,15 @@ void EAGLE_PLUGIN::orientModuleText( MODULE* m, const EELEMENT& e, FP_TEXT* txt,
     }
     else    // Part is not smash so use Lib default for NAME/VALUE // the text is per the original package, sans <attribute>
     {
-        double degrees = ( txt->GetTextAngle() + m->GetOrientation() ) / 10;
+        double degrees = ( aFPText->GetTextAngle() + aFootprint->GetOrientation() ) / 10;
 
         // @todo there are a few more cases than these to contend with:
-        if( (!txt->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ))
-         || ( txt->IsMirrored() && ( degrees == 360 ) ) )
+        if( ( !aFPText->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ))
+         || ( aFPText->IsMirrored() && ( degrees == 360 ) ) )
         {
             // ETEXT::TOP_RIGHT:
-            txt->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-            txt->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
+            aFPText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+            aFPText->SetVertJustify( GR_TEXT_VJUSTIFY_TOP );
         }
     }
 }
@@ -1590,7 +1592,7 @@ MODULE* EAGLE_PLUGIN::makeModule( wxXmlNode* aPackage, const wxString& aPkgName 
 }
 
 
-void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageWire( MODULE* aFootprint, wxXmlNode* aTree ) const
 {
     EWIRE        w( aTree );
     PCB_LAYER_ID layer = kicad_layer( w.layer );
@@ -1598,19 +1600,19 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     wxPoint      end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
     int          width = w.width.ToPcbUnits();
 
-    if( layer == UNDEFINED_LAYER ) {
-        wxLogMessage( wxString::Format(
-            _( "Ignoring a wire since Eagle layer '%s' (%d) "
-               "was not mapped" ),
-                    eagle_layer_name( w.layer ),
-                    w.layer ) );
+    if( layer == UNDEFINED_LAYER )
+    {
+        wxLogMessage( wxString::Format( _( "Ignoring a wire since Eagle layer '%s' (%d) "
+                                           "was not mapped" ),
+                                        eagle_layer_name( w.layer ),
+                                        w.layer ) );
         return;
     }
 
     // KiCad cannot handle zero or negative line widths which apparently have meaning in Eagle.
     if( width <= 0 )
     {
-        BOARD* board = aModule->GetBoard();
+        BOARD* board = aFootprint->GetBoard();
 
         if( board )
         {
@@ -1641,14 +1643,14 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( !w.curve )
     {
-        dwg = new FP_SHAPE( aModule, S_SEGMENT );
+        dwg = new FP_SHAPE( aFootprint, S_SEGMENT );
 
         dwg->SetStart0( start );
         dwg->SetEnd0( end );
     }
     else
     {
-        dwg = new FP_SHAPE( aModule, S_ARC );
+        dwg = new FP_SHAPE( aFootprint, S_ARC );
         wxPoint center = ConvertArcCenter( start, end, *w.curve );
 
         dwg->SetStart0( center );
@@ -1660,26 +1662,26 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetWidth( width );
     dwg->SetDrawCoord();
 
-    aModule->Add( dwg );
+    aFootprint->Add( dwg );
 }
 
 
-void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
+void EAGLE_PLUGIN::packagePad( MODULE* aFootprint, wxXmlNode* aTree )
 {
     // this is thru hole technology here, no SMDs
     EPAD e( aTree );
     int shape = EPAD::UNDEF;
     int eagleDrillz = e.drill.ToPcbUnits();
 
-    PAD* pad = new PAD( aModule );
-    aModule->Add( pad );
+    PAD* pad = new PAD( aFootprint );
+    aFootprint->Add( pad );
     transferPad( e, pad );
 
     if( e.first && *e.first && m_rules->psFirst != EPAD::UNDEF )
         shape = m_rules->psFirst;
-    else if( aModule->GetLayer() == F_Cu &&  m_rules->psTop != EPAD::UNDEF )
+    else if( aFootprint->GetLayer() == F_Cu && m_rules->psTop != EPAD::UNDEF )
         shape = m_rules->psTop;
-    else if( aModule->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
+    else if( aFootprint->GetLayer() == B_Cu && m_rules->psBottom != EPAD::UNDEF )
         shape = m_rules->psBottom;
 
     pad->SetDrillSize( wxSize( eagleDrillz, eagleDrillz ) );
@@ -1766,31 +1768,31 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree )
 }
 
 
-void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageText( MODULE* aFootprint, wxXmlNode* aTree ) const
 {
     ETEXT        t( aTree );
     PCB_LAYER_ID layer = kicad_layer( t.layer );
 
-    if( layer == UNDEFINED_LAYER ) {
-        wxLogMessage( wxString::Format(
-            _( "Ignoring a text since Eagle layer '%s' (%d) "
-               "was not mapped" ),
-                    eagle_layer_name( t.layer ),
-                    t.layer ) );
+    if( layer == UNDEFINED_LAYER )
+    {
+        wxLogMessage( wxString::Format( _( "Ignoring a text since Eagle layer '%s' (%d) "
+                                           "was not mapped" ),
+                                        eagle_layer_name( t.layer ),
+                                        t.layer ) );
         return;
     }
 
     FP_TEXT* txt;
 
     if( t.text == ">NAME" || t.text == ">name" )
-        txt = &aModule->Reference();
+        txt = &aFootprint->Reference();
     else if( t.text == ">VALUE" || t.text == ">value" )
-        txt = &aModule->Value();
+        txt = &aFootprint->Value();
     else
     {
         // FIXME: graphical text items are rotated for some reason.
-        txt = new FP_TEXT( aModule );
-        aModule->Add( txt );
+        txt = new FP_TEXT( aFootprint );
+        aFootprint->Add( txt );
     }
 
     txt->SetText( FROM_UTF8( t.text.c_str() ) );
@@ -1798,7 +1800,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     wxPoint pos( kicad_x( t.x ), kicad_y( t.y ) );
 
     txt->SetTextPos( pos );
-    txt->SetPos0( pos - aModule->GetPosition() );
+    txt->SetPos0( pos - aFootprint->GetPosition() );
 
     txt->SetLayer( layer );
 
@@ -1812,7 +1814,7 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
     int align = t.align ? *t.align : ETEXT::BOTTOM_LEFT;  // bottom-left is eagle default
 
     // An eagle package is never rotated, the DTD does not allow it.
-    // angle -= aModule->GetOrienation();
+    // angle -= aFootprint->GetOrienation();
 
     if( t.rot )
     {
@@ -1877,15 +1879,15 @@ void EAGLE_PLUGIN::packageText( MODULE* aModule, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageRectangle( MODULE* aFootprint, wxXmlNode* aTree ) const
 {
     ERECT r( aTree );
 
     if( r.layer == EAGLE_LAYER::TRESTRICT || r.layer == EAGLE_LAYER::BRESTRICT
             || r.layer == EAGLE_LAYER::VRESTRICT )
     {
-        FP_ZONE* zone = new FP_ZONE( aModule );
-        aModule->Add( zone, ADD_MODE::APPEND );
+        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        aFootprint->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, r.layer );
 
@@ -1908,18 +1910,19 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( r.layer );
-        if( layer == UNDEFINED_LAYER ) {
-            wxLogMessage( wxString::Format(
-            _( "Ignoring a rectange since Eagle layer '%s' (%d) "
-               "was not mapped" ),
-                    eagle_layer_name( r.layer ),
-                    r.layer ) );
+
+        if( layer == UNDEFINED_LAYER )
+        {
+            wxLogMessage( wxString::Format( _( "Ignoring a rectange since Eagle layer '%s' (%d) "
+                                               "was not mapped" ),
+                                            eagle_layer_name( r.layer ),
+                                            r.layer ) );
             return;
         }
 
-        FP_SHAPE* dwg = new FP_SHAPE( aModule, S_POLYGON );
+        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, S_POLYGON );
 
-        aModule->Add( dwg );
+        aFootprint->Add( dwg );
 
         dwg->SetLayer( layer );
         dwg->SetWidth( 0 );
@@ -1945,7 +1948,7 @@ void EAGLE_PLUGIN::packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packagePolygon( MODULE* aFootprint, wxXmlNode* aTree ) const
 {
     EPOLYGON      p( aTree );
 
@@ -2007,8 +2010,8 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
      || p.layer == EAGLE_LAYER::BRESTRICT
      || p.layer == EAGLE_LAYER::VRESTRICT )
     {
-        FP_ZONE* zone = new FP_ZONE( aModule );
-        aModule->Add( zone, ADD_MODE::APPEND );
+        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        aFootprint->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, p.layer );
 
@@ -2022,18 +2025,19 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( p.layer );
-        if( layer == UNDEFINED_LAYER ) {
-            wxLogMessage( wxString::Format(
-            _( "Ignoring a polygon since Eagle layer '%s' (%d) "
-               "was not mapped" ),
-                    eagle_layer_name( p.layer ),
-                    p.layer ) );
+
+        if( layer == UNDEFINED_LAYER )
+        {
+            wxLogMessage( wxString::Format( _( "Ignoring a polygon since Eagle layer '%s' (%d) "
+                                               "was not mapped" ),
+                                            eagle_layer_name( p.layer ),
+                                            p.layer ) );
             return;
         }
 
-        FP_SHAPE* dwg = new FP_SHAPE( aModule, S_POLYGON );
+        FP_SHAPE* dwg = new FP_SHAPE( aFootprint, S_POLYGON );
 
-        aModule->Add( dwg );
+        aFootprint->Add( dwg );
 
         dwg->SetWidth( 0 ); // it's filled, no need for boundary width
         dwg->SetLayer( layer );
@@ -2047,7 +2051,7 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     }
 }
 
-void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageCircle( MODULE* aFootprint, wxXmlNode* aTree ) const
 {
     ECIRCLE e( aTree );
 
@@ -2058,8 +2062,8 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
      || e.layer == EAGLE_LAYER::BRESTRICT
      || e.layer == EAGLE_LAYER::VRESTRICT )
     {
-        FP_ZONE* zone = new FP_ZONE( aModule );
-        aModule->Add( zone, ADD_MODE::APPEND );
+        FP_ZONE* zone = new FP_ZONE( aFootprint );
+        aFootprint->Add( zone, ADD_MODE::APPEND );
 
         setKeepoutSettingsToZone( zone, e.layer );
 
@@ -2091,16 +2095,17 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     else
     {
         PCB_LAYER_ID layer = kicad_layer( e.layer );
-        if( layer == UNDEFINED_LAYER ) {
-            wxLogMessage( wxString::Format(
-                _( "Ignoring a cricle since Eagle layer '%s' (%d) "
-                   "was not mapped" ),
-                        eagle_layer_name( e.layer ),
-                        e.layer ) );
+
+        if( layer == UNDEFINED_LAYER )
+        {
+            wxLogMessage( wxString::Format( _( "Ignoring a cricle since Eagle layer '%s' (%d) "
+                                               "was not mapped" ),
+                                            eagle_layer_name( e.layer ),
+                                            e.layer ) );
             return;
         }
 
-        FP_SHAPE* gr = new FP_SHAPE( aModule, S_CIRCLE );
+        FP_SHAPE* gr = new FP_SHAPE( aFootprint, S_CIRCLE );
 
         // with == 0 means filled circle
         if( width <= 0 )
@@ -2109,7 +2114,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
             radius = radius / 2;
         }
 
-        aModule->Add( gr );
+        aFootprint->Add( gr );
         gr->SetWidth( width );
 
         switch( (int) layer )
@@ -2129,13 +2134,13 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 }
 
 
-void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter ) const
+void EAGLE_PLUGIN::packageHole( MODULE* aFootprint, wxXmlNode* aTree, bool aCenter ) const
 {
     EHOLE   e( aTree );
 
     // we add a PAD_ATTRIB_NPTH pad to this module.
-    PAD* pad = new PAD( aModule );
-    aModule->Add( pad );
+    PAD* pad = new PAD( aFootprint );
+    aFootprint->Add( pad );
 
     pad->SetShape( PAD_SHAPE_CIRCLE );
     pad->SetAttribute( PAD_ATTRIB_NPTH );
@@ -2150,13 +2155,13 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter 
     if( aCenter )
     {
         pad->SetPos0( wxPoint( 0, 0 ) );
-        aModule->SetPosition( padpos );
+        aFootprint->SetPosition( padpos );
         pad->SetPosition( padpos );
     }
     else
     {
         pad->SetPos0( padpos );
-        pad->SetPosition( padpos + aModule->GetPosition() );
+        pad->SetPosition( padpos + aFootprint->GetPosition() );
     }
 
     wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
@@ -2168,7 +2173,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter 
 }
 
 
-void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
+void EAGLE_PLUGIN::packageSMD( MODULE* aFootprint, wxXmlNode* aTree ) const
 {
     ESMD e( aTree );
     PCB_LAYER_ID layer = kicad_layer( e.layer );
@@ -2176,8 +2181,8 @@ void EAGLE_PLUGIN::packageSMD( MODULE* aModule, wxXmlNode* aTree ) const
     if( !IsCopperLayer( layer ) )
         return;
 
-    PAD* pad = new PAD( aModule );
-    aModule->Add( pad );
+    PAD* pad = new PAD( aFootprint );
+    aFootprint->Add( pad );
     transferPad( e, pad );
 
     pad->SetShape( PAD_SHAPE_RECT );

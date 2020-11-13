@@ -92,13 +92,14 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
 }
 
 
-void AR_AUTOPLACER::placeModule( MODULE* aModule, bool aDoNotRecreateRatsnest, const wxPoint& aPos )
+void AR_AUTOPLACER::placeFootprint( MODULE* aFootprint, bool aDoNotRecreateRatsnest,
+                                    const wxPoint& aPos )
 {
-    if( !aModule )
+    if( !aFootprint )
         return;
 
-    aModule->SetPosition( aPos );
-    m_connectivity->Update( aModule );
+    aFootprint->SetPosition( aPos );
+    m_connectivity->Update( aFootprint );
 }
 
 
@@ -270,18 +271,18 @@ bool AR_AUTOPLACER::fillMatrix()
 }
 
 
-void AR_AUTOPLACER::rotateModule( MODULE* module, double angle, bool incremental )
+void AR_AUTOPLACER::rotateFootprint( MODULE* aFootprint, double angle, bool incremental )
 {
-    if( module == NULL )
+    if( aFootprint == NULL )
         return;
 
     if( incremental )
-        module->SetOrientation( module->GetOrientation() + angle );
+        aFootprint->SetOrientation( aFootprint->GetOrientation() + angle );
     else
-        module->SetOrientation( angle );
+        aFootprint->SetOrientation( angle );
 
 
-    m_board->GetConnectivity()->Update( module );
+    m_board->GetConnectivity()->Update( aFootprint );
 }
 
 
@@ -545,22 +546,23 @@ unsigned int AR_AUTOPLACER::calculateKeepOutArea( const EDA_RECT& aRect, int sid
  * Returns the value TstRectangle().
  * Module is known by its bounding box
  */
-int AR_AUTOPLACER::testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const wxPoint& aOffset )
+int AR_AUTOPLACER::testModuleOnBoard( MODULE* aFootprint, bool TstOtherSide,
+                                      const wxPoint& aOffset )
 {
     int side = AR_SIDE_TOP;
     int otherside = AR_SIDE_BOTTOM;
 
-    if( aModule->GetLayer() == B_Cu )
+    if( aFootprint->GetLayer() == B_Cu )
     {
         side = AR_SIDE_BOTTOM; otherside = AR_SIDE_TOP;
     }
 
-    EDA_RECT    fpBBox = aModule->GetFootprintRect();
+    EDA_RECT    fpBBox = aFootprint->GetFootprintRect();
     fpBBox.Move( -aOffset );
 
-    buildFpAreas( aModule, 0 );
+    buildFpAreas( aFootprint, 0 );
 
-    int diag = //testModuleByPolygon( aModule, side, aOffset );
+    int diag = //testModuleByPolygon( aFootprint, side, aOffset );
         testRectangle( fpBBox, side );
 
     if( diag != AR_FREE_CELL )
@@ -568,33 +570,33 @@ int AR_AUTOPLACER::testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const 
 
     if( TstOtherSide )
     {
-        diag = //testModuleByPolygon( aModule, otherside, aOffset );
+        diag = //testModuleByPolygon( aFootprint, otherside, aOffset );
                 testRectangle( fpBBox, otherside );
 
         if( diag != AR_FREE_CELL )
             return diag;
     }
 
-    int marge = ( m_matrix.m_GridRouting * aModule->GetPadCount() ) / AR_GAIN;
+    int marge = ( m_matrix.m_GridRouting * aFootprint->GetPadCount() ) / AR_GAIN;
 
     fpBBox.Inflate( marge );
     return calculateKeepOutArea( fpBBox, side );
 }
 
 
-int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
+int AR_AUTOPLACER::getOptimalFPPlacement( MODULE* aFootprint )
 {
     int     error = 1;
     wxPoint LastPosOK;
     double  min_cost, curr_cost, Score;
     bool    TstOtherSide;
 
-    aModule->CalculateBoundingBox();
+    aFootprint->CalculateBoundingBox();
 
     LastPosOK = m_matrix.m_BrdBox.GetOrigin();
 
-    wxPoint     mod_pos = aModule->GetPosition();
-    EDA_RECT    fpBBox  = aModule->GetFootprintRect();
+    wxPoint     mod_pos = aFootprint->GetPosition();
+    EDA_RECT    fpBBox  = aFootprint->GetFootprintRect();
 
     // Move fpBBox to have the footprint position at (0,0)
     fpBBox.Move( -mod_pos );
@@ -620,9 +622,9 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
 
     if( m_matrix.m_RoutingLayersCount > 1 )
     {
-        LSET    other( aModule->GetLayer() == B_Cu  ? F_Cu : B_Cu );
+        LSET other( aFootprint->GetLayer() == B_Cu ? F_Cu : B_Cu );
 
-        for( auto pad : aModule->Pads() )
+        for( PAD* pad : aFootprint->Pads() )
         {
             if( !( pad->GetLayerSet() & other ).any() )
                 continue;
@@ -647,13 +649,13 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
 
             fpBBox.SetOrigin( fpBBoxOrg + m_curPosition );
             moduleOffset = mod_pos - m_curPosition;
-            int keepOutCost = testModuleOnBoard( aModule, TstOtherSide, moduleOffset );
+            int keepOutCost = testModuleOnBoard( aFootprint, TstOtherSide, moduleOffset );
 
             if( keepOutCost >= 0 )    // i.e. if the module can be put here
             {
                 error = 0;
-                // m_frame->build_ratsnest_module( aModule ); // fixme
-                curr_cost   = computePlacementRatsnestCost( aModule, moduleOffset );
+                // m_frame->build_ratsnest_module( aFootprint ); // fixme
+                curr_cost   = computePlacementRatsnestCost( aFootprint, moduleOffset );
                 Score       = curr_cost + keepOutCost;
 
                 if( (min_cost >= Score ) || (min_cost < 0 ) )
@@ -679,14 +681,14 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
 }
 
 
-const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefModule, PAD* aRefPad, const wxPoint& aOffset)
+const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefFP, PAD* aRefPad, const wxPoint& aOffset)
 {
     const PAD* nearest = nullptr;
     int64_t    nearestDist = INT64_MAX;
 
     for ( MODULE* footprint : m_board->Footprints() )
     {
-        if ( footprint == aRefModule )
+        if ( footprint == aRefFP )
             continue;
 
         if( !m_matrix.m_BrdBox.Contains( footprint->GetPosition() ) )
@@ -711,7 +713,7 @@ const PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefModule, PAD* aRefPad, const wx
 }
 
 
-double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aModule, const wxPoint& aOffset )
+double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aFootprint, const wxPoint& aOffset )
 {
     double  curr_cost;
     VECTOR2I start;      // start point of a ratsnest
@@ -720,9 +722,9 @@ double AR_AUTOPLACER::computePlacementRatsnestCost( MODULE *aModule, const wxPoi
 
     curr_cost = 0;
 
-    for ( auto pad : aModule->Pads() )
+    for ( PAD* pad : aFootprint->Pads() )
     {
-        auto nearest = nearestPad( aModule, pad, aOffset );
+        const PAD* nearest = nearestPad( aFootprint, pad, aOffset );
 
         if( !nearest )
             continue;
@@ -780,61 +782,60 @@ static bool sortFootprintsByRatsnestSize( MODULE* ref, MODULE* compare )
 }
 
 
-MODULE* AR_AUTOPLACER::pickModule( )
+MODULE* AR_AUTOPLACER::pickFootprint( )
 {
-    MODULE* module;
-    std::vector <MODULE*> moduleList;
+    std::vector<MODULE*> fpList;
 
 
     for( MODULE* footprint : m_board->Footprints() )
     {
         footprint->CalculateBoundingBox();
-        moduleList.push_back( footprint );
+        fpList.push_back( footprint );
     }
 
-    sort( moduleList.begin(), moduleList.end(), sortFootprintsByComplexity );
+    sort( fpList.begin(), fpList.end(), sortFootprintsByComplexity );
 
-    for( unsigned kk = 0; kk < moduleList.size(); kk++ )
+    for( unsigned kk = 0; kk < fpList.size(); kk++ )
     {
-        module = moduleList[kk];
-        module->SetFlag( 0 );
+        MODULE* footprint = fpList[kk];
+        footprint->SetFlag( 0 );
 
-        if( !module->NeedsPlaced() )
+        if( !footprint->NeedsPlaced() )
             continue;
 
-        m_connectivity->Update( module );
+        m_connectivity->Update( footprint );
     }
 
     m_connectivity->RecalculateRatsnest();
 
-    for( unsigned kk = 0; kk < moduleList.size(); kk++ )
+    for( unsigned kk = 0; kk < fpList.size(); kk++ )
     {
-        module = moduleList[kk];
+        MODULE* footprint = fpList[kk];
 
-        auto edges = m_connectivity->GetRatsnestForComponent( module, true );
+        auto edges = m_connectivity->GetRatsnestForComponent( footprint, true );
 
-        module->SetFlag( edges.size() ) ;
+        footprint->SetFlag( edges.size() ) ;
     }
 
-    sort( moduleList.begin(), moduleList.end(), sortFootprintsByRatsnestSize );
+    sort( fpList.begin(), fpList.end(), sortFootprintsByRatsnestSize );
 
     // Search for "best" module.
     MODULE* bestModule  = nullptr;
     MODULE* altModule   = nullptr;
 
-    for( unsigned ii = 0; ii < moduleList.size(); ii++ )
+    for( unsigned ii = 0; ii < fpList.size(); ii++ )
     {
-        module = moduleList[ii];
+        MODULE* footprint = fpList[ii];
 
-        if( !module->NeedsPlaced() )
+        if( !footprint->NeedsPlaced() )
             continue;
 
-        altModule = module;
+        altModule = footprint;
 
-        if( module->GetFlag() == 0 )
+        if( footprint->GetFlag() == 0 )
             continue;
 
-        bestModule = module;
+        bestModule = footprint;
         break;
     }
 
@@ -876,12 +877,12 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
 }
 
 
-AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD_COMMIT* aCommit,
-                                           bool aPlaceOffboardModules )
+AR_RESULT AR_AUTOPLACER::AutoplaceFootprints( std::vector<MODULE*>& aFootprints,
+                                              BOARD_COMMIT* aCommit,
+                                              bool aPlaceOffboardModules )
 {
     wxPoint memopos;
     int     error;
-    MODULE* module = nullptr;
     bool    cancelled = false;
 
     memopos = m_curPosition;
@@ -912,7 +913,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
         }
     }
 
-    for( MODULE* footprint : aModules )
+    for( MODULE* footprint : aFootprints )
     {
         footprint->SetNeedsPlaced( true );
         aCommit->Modify( footprint );
@@ -947,19 +948,20 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
     if( m_refreshCallback )
         m_refreshCallback( nullptr );
 
+    MODULE* footprint;
 
-    while( ( module = pickModule( ) ) != nullptr )
+    while( ( footprint = pickFootprint() ) != nullptr )
     {
-        // Display some info about activity, module placement can take a while:
+        // Display some info about activity, footprint placement can take a while:
         //m_frame->SetStatusText( msg );
 
         if( m_progressReporter )
             m_progressReporter->SetTitle( wxString::Format(
-                                          _( "Autoplacing %s" ), module->GetReference() ) );
+                    _( "Autoplacing %s" ), footprint->GetReference() ) );
 
-        double initialOrient = module->GetOrientation();
+        double initialOrient = footprint->GetOrientation();
 
-        error = getOptimalModulePlacement( module );
+        error = getOptimalFPPlacement( footprint );
         double bestScore = m_minCost;
         double bestRotation = 0.0;
         int rotAllowed;
@@ -968,12 +970,12 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
             goto end_of_tst;
 
         // Try orientations 90, 180, 270 degrees from initial orientation
-        rotAllowed = module->GetPlacementCost180();
+        rotAllowed = footprint->GetPlacementCost180();
 
         if( rotAllowed != 0 )
         {
-            rotateModule( module, 1800.0, true );
-            error   = getOptimalModulePlacement( module );
+            rotateFootprint( footprint, 1800.0, true );
+            error   = getOptimalFPPlacement( footprint );
             m_minCost *= OrientationPenalty[rotAllowed];
 
             if( bestScore > m_minCost )    // This orientation is better.
@@ -983,7 +985,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
             }
             else
             {
-                rotateModule( module, initialOrient, false );
+                rotateFootprint( footprint, initialOrient, false );
             }
 
             if( error == AR_ABORT_PLACEMENT )
@@ -991,12 +993,12 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
         }
 
         // Determine if the best orientation of a module is 90.
-        rotAllowed = module->GetPlacementCost90();
+        rotAllowed = footprint->GetPlacementCost90();
 
         if( rotAllowed != 0 )
         {
-            rotateModule( module, 900.0, true );
-            error   = getOptimalModulePlacement( module );
+            rotateFootprint( footprint, 900.0, true );
+            error   = getOptimalFPPlacement( footprint );
             m_minCost *= OrientationPenalty[rotAllowed];
 
             if( bestScore > m_minCost )    // This orientation is better.
@@ -1006,7 +1008,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
             }
             else
             {
-                rotateModule( module, initialOrient, false );
+                rotateFootprint( footprint, initialOrient, false );
             }
 
             if( error == AR_ABORT_PLACEMENT )
@@ -1016,8 +1018,8 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
         // Determine if the best orientation of a module is -90.
         if( rotAllowed != 0 )
         {
-            rotateModule( module, 2700.0, true );
-            error   = getOptimalModulePlacement( module );
+            rotateFootprint( footprint, 2700.0, true );
+            error   = getOptimalFPPlacement( footprint );
             m_minCost *= OrientationPenalty[rotAllowed];
 
             if( bestScore > m_minCost )    // This orientation is better.
@@ -1027,7 +1029,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*>& aModules, BOARD
             }
             else
             {
-                rotateModule( module, initialOrient, false );
+                rotateFootprint( footprint, initialOrient, false );
             }
 
             if( error == AR_ABORT_PLACEMENT )
@@ -1042,22 +1044,22 @@ end_of_tst:
 
         bestRotation += initialOrient;
 
-        if( bestRotation != module->GetOrientation() )
+        if( bestRotation != footprint->GetOrientation() )
         {
-            rotateModule( module, bestRotation, false );
+            rotateFootprint( footprint, bestRotation, false );
         }
 
         // Place module.
-        placeModule( module, true, m_curPosition );
+        placeFootprint( footprint, true, m_curPosition );
 
-        module->CalculateBoundingBox();
-        genModuleOnRoutingMatrix( module );
-        module->SetIsPlaced( true );
-        module->SetNeedsPlaced( false );
+        footprint->CalculateBoundingBox();
+        genModuleOnRoutingMatrix( footprint );
+        footprint->SetIsPlaced( true );
+        footprint->SetNeedsPlaced( false );
         drawPlacementRoutingMatrix();
 
         if( m_refreshCallback )
-            m_refreshCallback( module );
+            m_refreshCallback( footprint );
 
 
         if( m_progressReporter )

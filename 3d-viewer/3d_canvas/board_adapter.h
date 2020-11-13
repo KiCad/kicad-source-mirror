@@ -545,13 +545,13 @@ class BOARD_ADAPTER
 
     COBJECT2D *createNewPadDrill( const PAD* aPad, int aInflateValue );
 
-    void AddPadsWithClearanceToContainer( const MODULE *aModule,
+    void AddPadsWithClearanceToContainer( const MODULE *aFootprint,
                                           CGENERICCONTAINER2D *aDstContainer,
                                           PCB_LAYER_ID aLayerId, int aInflateValue,
                                           bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
                                           bool aSkipNonPlatedPads );
 
-    void AddFPShapesWithClearanceToContainer( const MODULE *aModule,
+    void AddFPShapesWithClearanceToContainer( const MODULE *aFootprint,
                                               CGENERICCONTAINER2D *aDstContainer,
                                               PCB_LAYER_ID aLayerId, int aInflateValue );
 

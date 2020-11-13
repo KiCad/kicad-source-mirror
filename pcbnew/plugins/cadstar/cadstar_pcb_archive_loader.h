@@ -133,11 +133,11 @@ private:
                                  const PCB_LAYER_ID& aKiCadLayer );
     void logBoardStackupMessage( const wxString& aCadstarLayerName,
                                  const PCB_LAYER_ID& aKiCadLayer );
-    void loadLibraryFigures( const SYMDEF_PCB& aComponent, MODULE* aModule );
-    void loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aModule );
-    void loadLibraryAreas( const SYMDEF_PCB& aComponent, MODULE* aModule );
-    void loadLibraryPads( const SYMDEF_PCB& aComponent, MODULE* aModule );
-    void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aModule );
+    void loadLibraryFigures( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
+    void loadLibraryCoppers( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
+    void loadLibraryAreas( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
+    void loadLibraryPads( const SYMDEF_PCB& aComponent, MODULE* aFootprint );
+    void loadComponentAttributes( const COMPONENT& aComponent, MODULE* aFootprint );
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute );
     void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
@@ -315,11 +315,11 @@ private:
      * @brief Adds a CADSTAR Attribute to a KiCad module
      * @param aCadstarAttrLoc
      * @param aCadstarAttributeID
-     * @param aModule
+     * @param aFootprint
      * @param aAttributeValue
      */
     void addAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-            const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aModule,
+            const ATTRIBUTE_ID& aCadstarAttributeID, MODULE* aFootprint,
             const wxString& aAttributeValue );
 
     //Helper Functions for obtaining CADSTAR elements in the parsed structures

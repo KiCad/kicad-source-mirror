@@ -111,16 +111,16 @@ class GPCB_FPL_CACHE_ITEM
     std::unique_ptr<MODULE> m_module;
 
 public:
-    GPCB_FPL_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName );
+    GPCB_FPL_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName );
 
     WX_FILENAME  GetFileName() const { return m_filename; }
     MODULE*      GetModule()   const { return m_module.get(); }
 };
 
 
-GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aModule, const WX_FILENAME& aFileName ) :
+GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( MODULE* aFootprint, const WX_FILENAME& aFileName ) :
     m_filename( aFileName ),
-    m_module( aModule )
+    m_module( aFootprint )
 {
 }
 
