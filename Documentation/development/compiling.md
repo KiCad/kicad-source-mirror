@@ -394,6 +394,55 @@ change the paths in the cmake configuration from `/mingw64` to `/mingw32`.
 
 For debug builds, run the cmake command with `-DCMAKE_BUILD_TYPE=Debug` from the `build/debug` folder.
 
+### MSYS2 with CLion
+KiCad in combiation with MSYS2 can be configured to be used with CLion to provide a nice IDE experience.
+
+#### Toolchain Setup
+First you must register MSYS2 as a toolchain, or namely, the compiler.
+
+File > Preferences to open the Settings window.
+
+Navigate to Build, Execution, Development and then the Toolchains page.
+
+Add a new toolchain, and configure it as such
+
+* Name: `MSYS2-MinGW64`
+* Environment Path: `<your msys2 install folder>\mingw64\`
+* CMake: `<your msys2 install folder>\mingw64\bin\cmake.exe`
+
+All other fields will become automatically populated.
+
+
+#### Project Setup
+File > Open and select the folder containing the kicad source.
+CLion may attempt to start CMake generation and fail, this is ok.
+
+Open the Settings window again.
+Navigate to Build, Execution, Development and then the CMake page.
+These settings are saved to the project.
+
+You want to create a Debug configuration as such
+
+* Name: `Debug-MSYS2`
+* Build-Type: `Debug`
+* Toolchain: `MSYS2-MinGW64`
+* CMake options:
+```
+-G "MinGW Makefiles"
+-DCMAKE_PREFIX_PATH=/mingw64
+-DCMAKE_INSTALL_PREFIX=/mingw64
+-DDEFAULT_INSTALL_PATH=/mingw64
+```
+* Build-directory: `build/debug-msys2`
+
+
+You may now trigger the "Reload CMake Cache" option in CLion to generate the cmake project
+You should delete the "junk" build folder (usually name cmake-build-debug-xxxx) it may have created in the source before it was changed above.
+We change the build folder because we have a gitignore for `/build`
+
+Warning: Receiving warning messages about Boost versions is normal.
+
+
 ### Known MSYS2 Build Issues ## {#known_issues_msys2}
 
 There are some known issues that are specific to MSYS2.  This section provides a list of the
