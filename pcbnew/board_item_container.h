@@ -38,7 +38,7 @@ enum class ADD_MODE
 
 /**
  * @brief Abstract interface for BOARD_ITEMs capable of storing other items inside.
- * @see MODULE
+ * @see FOOTPRINT
  * @see BOARD
  */
 class BOARD_ITEM_CONTAINER : public BOARD_ITEM

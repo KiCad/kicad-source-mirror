@@ -87,7 +87,7 @@ class FP_CACHE
     PCB_IO*         m_owner;            // Plugin object that owns the cache.
     wxFileName      m_lib_path;         // The path of the library.
     wxString        m_lib_raw_path;     // For quick comparisons.
-    FOOTPRINT_MAP   m_modules;          // Map of footprint file name per MODULE*.
+    FOOTPRINT_MAP   m_modules;          // Map of footprint file name per FOOTPRINT*.
 
     bool            m_cache_dirty;      // Stored separately because it's expensive to check
                                         // m_cache_timestamp against all the files.

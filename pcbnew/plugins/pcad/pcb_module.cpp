@@ -40,12 +40,12 @@
 
 namespace PCAD2KICAD {
 
-PCB_MODULE::PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks,
-                                                                                    aBoard )
+PCB_MODULE::PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+        PCB_COMPONENT( aCallbacks, aBoard )
 {
     InitTTextValue( &m_value );
     m_mirror = 0;
-    m_objType = wxT( 'M' );    // MODULE
+    m_objType = wxT( 'M' );  // FOOTPRINT
     m_KiCadLayer = F_SilkS;  // default
 }
 
@@ -578,21 +578,21 @@ void PCB_MODULE::AddToBoard()
         }
     }
 
-    // MODULE LINES
+    // FOOTPRINT LINES
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'L' ) )
             m_moduleObjects[ i ]->AddToFootprint( module );
     }
 
-    // MODULE Arcs
+    // FOOTPRINT ARCS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'A' ) )
             m_moduleObjects[ i ]->AddToFootprint( module );
     }
 
-    // MODULE POLYGONS
+    // FOOTPRINT POLYGONS
     for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
     {
         if( m_moduleObjects[i]->m_objType == wxT( 'Z' ) )

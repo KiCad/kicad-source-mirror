@@ -180,7 +180,7 @@ template <typename FOUND_CONT> using FOUND_OBJ = typename FOUND_CONT::value_type
  * an "expected" object, perhaps of a different type.
  *
  * Exactly what "equivalent to" means depends heavily on the context and what
- * is care about. For example, if you only care about a #MODULE's refdes,
+ * is care about. For example, if you only care about a #FOOTPRINT's refdes,
  * std::string is sufficient to indicate a "match".
  *
  * This can be used, for example, for checking a set of results without having

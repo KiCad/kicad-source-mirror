@@ -403,7 +403,7 @@ public:
      *  The caller continues to own this object (plugin may not delete it), and
      *  plugins should expect it to be optionally NULL.
      *
-     * @return  MODULE* - if found caller owns it, else NULL if not found.
+     * @return  FOOTPRINT* - if found caller owns it, else NULL if not found.
      *
      * @throw   IO_ERROR if the library cannot be found or read.  No exception
      *          is thrown in the case where aFootprintName cannot be found.

@@ -150,7 +150,7 @@ public:
 /*
     void Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties = NULL );
 
-    void FootprintSave( const wxString& aLibraryPath, const MODULE* aFootprint, const PROPERTIES* aProperties = NULL );
+    void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint, const PROPERTIES* aProperties = NULL );
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
 
@@ -196,8 +196,8 @@ private:
 
     NET_MAP       m_pads_to_nets;   ///< net list
 
-    FOOTPRINT_MAP m_templates;      ///< is part of a MODULE factory that operates
-                                    ///< using copy construction.
+    FOOTPRINT_MAP m_templates;      ///< is part of a FOOTPRINT factory that operates using copy
+                                    ///< construction.
                                     ///< lookup key is either libname.packagename or simply
                                     ///< packagename if FootprintLoad() or FootprintEnumberate()
 
@@ -287,8 +287,8 @@ private:
     void centerBoard();
 
     /**
-     * Function makeModule
-     * creates a MODULE from an Eagle package.
+     * Function makeFootprint
+     * creates a FOOTPRINT from an Eagle package.
      */
     FOOTPRINT* makeFootprint( wxXmlNode* aPackage, const wxString& aPkgName );
 

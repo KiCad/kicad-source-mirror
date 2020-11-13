@@ -31,7 +31,7 @@
 /**
  * Simple class that sequentially provides names from an #ARRAY_OPTIONS
  * object, making sure that they do not conflict with names already existing
- * in a #MODULE.
+ * in a #FOOTPRINT.
  */
 class ARRAY_PAD_NAME_PROVIDER
 {

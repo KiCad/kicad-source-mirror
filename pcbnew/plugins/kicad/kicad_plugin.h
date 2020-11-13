@@ -95,7 +95,7 @@ class PCB_TEXT;
 
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)
 #define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)
-#define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit MODULE initial comments
+#define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit FOOTPRINT initial comments
 #define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
 #define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation
                                                 // (always saved with potion 0,0 and rotation = 0 in library)

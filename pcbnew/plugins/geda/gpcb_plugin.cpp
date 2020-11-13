@@ -134,7 +134,7 @@ class GPCB_FPL_CACHE
 {
     GPCB_PLUGIN*    m_owner;            ///< Plugin object that owns the cache.
     wxFileName      m_lib_path;         ///< The path of the library.
-    FOOTPRINT_MAP   m_footprints;       ///< Map of footprint file name to MODULE*.
+    FOOTPRINT_MAP   m_footprints;       ///< Map of footprint file name to FOOTPRINT*.
 
     bool            m_cache_dirty;      ///< Stored separately because it's expensive to check
                                         ///< m_cache_timestamp against all the files.

@@ -1789,7 +1789,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
             return NULL;
     }
 
-    // All are footprints, now find smallest MODULE
+    // All are footprints, now find smallest FOOTPRINT
     int minDim = 0x7FFFFFFF;
     int minNdx = 0;
 

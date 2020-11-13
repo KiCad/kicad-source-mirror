@@ -2243,7 +2243,7 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
             continue;
         }
 
-        // TODO: better approach to select if item belongs to a MODULE
+        // TODO: better approach to select if item belongs to a FOOTPRINT
         EDA_TEXT*   tx  = nullptr;
         BOARD_ITEM* itm = nullptr;
 

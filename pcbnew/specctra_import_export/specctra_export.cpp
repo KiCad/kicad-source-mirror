@@ -92,9 +92,9 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
 
     LOCALE_IO       toggle;     // Switch the locale to standard C
 
-    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
-    // top view.  So we temporarily flip any modules which are on the back
-    // side of the board to the front, and record this in the MODULE's flag field.
+    // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
+    // temporarily flip any footprints which are on the back side of the board to the front,
+    // and record this in the FOOTPRINT's flag field.
     db.FlipMODULEs( GetBoard() );
 
     try
@@ -117,7 +117,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     // done assuredly, even if an exception was thrown and caught.
     db.RevertMODULEs( GetBoard() );
 
-    // The two calls below to MODULE::Flip(), both set the
+    // The two calls below to FOOTPRINT::Flip(), both set the
     // modified flag, yet their actions cancel each other out, so it should
     // be ok to clear the modify flag.
     if( !wasModified )
@@ -699,7 +699,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 #if 1    // enable image (outline) scopes.
     static const KICAD_T scanEDGEs[] = { PCB_FP_SHAPE_T, EOT };
 
-    // get all the MODULE's EDGE_MODULEs and convert those to DSN outlines.
+    // get all the FOOTPRINT's FP_SHAPEs and convert those to DSN outlines.
     fpItems.Collect( aFootprint, scanEDGEs );
 
     for( int i = 0; i < fpItems.GetCount(); ++i )

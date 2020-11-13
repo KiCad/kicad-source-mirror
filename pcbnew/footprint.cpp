@@ -478,7 +478,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     default:
     {
         wxString msg;
-        msg.Printf( wxT( "MODULE::Add() needs work: BOARD_ITEM type (%d) not handled" ),
+        msg.Printf( wxT( "FOOTPRINT::Add() needs work: BOARD_ITEM type (%d) not handled" ),
                     aBoardItem->Type() );
         wxFAIL_MSG( msg );
 
@@ -553,7 +553,7 @@ void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem )
     default:
     {
         wxString msg;
-        msg.Printf( wxT( "MODULE::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
+        msg.Printf( wxT( "FOOTPRINT::Remove() needs work: BOARD_ITEM type (%d) not handled" ),
                     aBoardItem->Type() );
         wxFAIL_MSG( msg );
     }
@@ -1306,7 +1306,7 @@ void FOOTPRINT::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
             break;
 
         default:
-            wxMessageBox( wxT( "MODULE::Flip() error: Unknown Draw Type" ) );
+            wxMessageBox( wxT( "FOOTPRINT::Flip() error: Unknown Draw Type" ) );
             break;
         }
     }

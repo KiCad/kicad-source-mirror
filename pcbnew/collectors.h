@@ -279,7 +279,7 @@ public:
 
     /**
      * A scan list for all primary board items, omitting items which are subordinate to
-     * a MODULE, such as PAD and FP_TEXT.
+     * a FOOTPRINT, such as PAD and FP_TEXT.
      */
     static const KICAD_T BoardLevelItems[];
 
@@ -372,7 +372,7 @@ public:
     /**
      * Scan a BOARD_ITEM using this class's Inspector method, which does the collection.
      *
-     * @param aItem A BOARD_ITEM to scan, may be a BOARD or MODULE, or whatever.
+     * @param aItem A BOARD_ITEM to scan, may be a BOARD or FOOTPRINT, or whatever.
      * @param aScanList A list of KICAD_Ts with a terminating EOT, that specs
      *  what is to be collected and the priority order of the resultant
      *  collection in "m_list".

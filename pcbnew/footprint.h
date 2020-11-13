@@ -575,7 +575,7 @@ public:
 
     wxString GetClass() const override
     {
-        return wxT( "MODULE" );
+        return wxT( "FOOTPRINT" );
     }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
@@ -639,7 +639,7 @@ public:
      * Note that a block of single line comments constitutes a multiline block of single
      * line comments.  That is, the block is made of consecutive single line comments.
      * @param aInitialComments is a heap allocated wxArrayString or NULL, which the caller
-     *                         gives up ownership of over to this MODULE.
+     *                         gives up ownership of over to this FOOTPRINT.
      */
     void SetInitialComments( wxArrayString* aInitialComments )
     {
@@ -700,7 +700,7 @@ private:
     wxPoint         m_pos;               // Position of footprint on the board in internal units.
     FP_TEXT*        m_reference;         // Component reference designator value (U34, R18..)
     FP_TEXT*        m_value;             // Component value (74LS00, 22K..)
-    LIB_ID          m_fpid;              // The #LIB_ID of the MODULE.
+    LIB_ID          m_fpid;              // The #LIB_ID of the FOOTPRINT.
     int             m_attributes;        // Flag bits ( see FOOTPRINT_ATTR_T )
     int             m_fpStatus;          // For autoplace: flags (LOCKED, FIELDS_AUTOPLACED)
     EDA_RECT        m_boundingBox;       // Bounding box : coordinates on board, real orientation.

@@ -93,9 +93,9 @@ public:
 
     /**
      * Flip entity relative to aCentre.
-     * The item is mirrored, and layer changed to the paired corresponding layer if it is on
-     * a paired layer.
-     * This function should be called only from MODULE::Flip because it is not usual to flip
+     * The item is mirrored, and layer changed to the paired corresponding layer if it is on a
+     * paired layer.
+     * This function should be called only from FOOTPRINT::Flip because it is not usual to flip
      * an item alone, without flipping the parent footprint (consider Mirror() instead).
      */
     void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;

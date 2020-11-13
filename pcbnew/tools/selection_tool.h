@@ -57,7 +57,7 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, SE
  * - pick single objects (click LMB)
  * - add objects to existing selection (Shift+LMB)
  * - draw selection box (drag LMB)
- * - handles MODULEs properly (i.e. selects either MODULE or its PADs, TEXTs, etc.)
+ * - handles MODULEs properly (i.e. selects either FOOTPRINT or its PADs, TEXTs, etc.)
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */

@@ -120,7 +120,7 @@ protected:
     LINE_READER*      m_reader;     ///< no ownership here.
     FILE*             m_fp;         ///< no ownership here.
 
-    wxString          m_field;      ///< reused to stuff MODULE fields.
+    wxString          m_field;      ///< reused to stuff FOOTPRINT fields.
     int               m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
     LP_CACHE*         m_cache;
     bool              m_showLegacyZoneWarning;

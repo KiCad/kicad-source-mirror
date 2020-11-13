@@ -1753,8 +1753,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
 
     aFootprint->Add( fpShape );
 
-    // this had been done at the MODULE level before, presumably because the
-    // FP_SHAPE needs to be already added to a module before this function will work.
+    // this had been done at the FOOTPRINT level before, presumably because the FP_SHAPE needs
+    // to be already added to a module before this function will work.
     fpShape->SetDrawCoord();
 }
 
@@ -3074,7 +3074,7 @@ void LEGACY_PLUGIN::SaveFP3DModels( const FOOTPRINT* aFootprint ) const
     lifetime, so it only needs to be good enough for a short duration of time.
     Caching all the MODULEs is a bit memory intensive, but it is a considerably
     faster way of fulfilling the API contract. Otherwise, without the cache, you
-    would have to re-read the file when searching for any MODULE, and this would
+    would have to re-read the file when searching for any FOOTPRINT, and this would
     be very problematic filling a FOOTPRINT_LIST via this PLUGIN API. If memory
     becomes a concern, consider the cache lifetime policy, which determines the
     time that a LP_CACHE is in RAM. Note PLUGIN lifetime also plays a role in
@@ -3384,7 +3384,7 @@ FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         return NULL;
     }
 
-    // Return copy of already loaded MODULE
+    // Return copy of already loaded FOOTPRINT
     return (FOOTPRINT*) it->second->Duplicate();
 }
 

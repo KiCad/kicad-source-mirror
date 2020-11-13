@@ -53,7 +53,7 @@ namespace KI_TEST
 void DumpBoardToFile( BOARD& aBoard, const std::string& aFilename );
 
 /**
- * Utility function to read a #BOARD_ITEM (probably a #MODULE or a #BOARD)
+ * Utility function to read a #BOARD_ITEM (probably a #FOOTPRINT or a #BOARD)
  * from a file.
  *
  * Helps when writing tests or utilities that can be fed an external file.
@@ -66,7 +66,7 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream );
 /**
  * Read a specific kind of #BOARD_ITEM from a stream
  *
- * @tparam ITEM the item type to return (probably a #MODULE or #BOARD)
+ * @tparam ITEM the item type to return (probably a #FOOTPRINT or #BOARD)
  * @param aStream the stream to read from.
  */
 template <typename ITEM> std::unique_ptr<ITEM> ReadItemFromStream( std::istream& aStream )
