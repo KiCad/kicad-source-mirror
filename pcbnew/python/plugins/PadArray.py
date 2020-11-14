@@ -46,7 +46,7 @@ class PadMaker(object):
         @param shape: the shape of the pad
         @param rot_degree: the pad rotation, in degrees
         """
-        pad = pcbnew.D_PAD(self.module)
+        pad = pcbnew.PAD(self.module)
         pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_PTH)
@@ -71,7 +71,7 @@ class PadMaker(object):
 
         @param drill: the drill diameter (equals the NPTH diameter)
         """
-        pad = pcbnew.D_PAD(self.module)
+        pad = pcbnew.PAD(self.module)
         pad.SetSize(pcbnew.wxSize(drill, drill))
         pad.SetShape(pcbnew.PAD_SHAPE_CIRCLE)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_HOLE_NOT_PLATED)
@@ -88,7 +88,7 @@ class PadMaker(object):
         @param shape: the shape of the pad
         @param rot_degree: the pad rotation, in degrees
         """
-        pad = pcbnew.D_PAD(self.module)
+        pad = pcbnew.PAD(self.module)
         pad.SetSize(pcbnew.wxSize(Hsize, Vsize))
         pad.SetShape(shape)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)

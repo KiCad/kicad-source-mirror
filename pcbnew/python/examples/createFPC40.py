@@ -21,7 +21,7 @@ module.SetPosition(m_pos)
 
 
 def smdRectPad(module,size,pos,name):
-    pad = D_PAD(module)
+    pad = PAD(module)
     pad.SetSize(size)
     pad.SetShape(PAD_SHAPE_RECT)
     pad.SetAttribute(PAD_ATTRIB_SMD)

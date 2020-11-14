@@ -62,7 +62,7 @@ class TestBoardClass(unittest.TestCase):
         pcb = BOARD()
         module = FOOTPRINT(pcb)
         pcb.Add(module)
-        pad = D_PAD(module)
+        pad = PAD(module)
         module.Add(pad)
 
         pad.SetShape(PAD_SHAPE_OVAL)

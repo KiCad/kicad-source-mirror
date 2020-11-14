@@ -55,7 +55,7 @@ class MutualcapButtonWizard(FootprintWizardBase.FootprintWizard):
 
     # build a rectangular pad
     def smdRectPad(self,module,size,pos,name):
-        pad = D_PAD(module)
+        pad = PAD(module)
         pad.SetSize(size)
         pad.SetShape(PAD_SHAPE_RECT)
         pad.SetAttribute(PAD_ATTRIB_SMD)

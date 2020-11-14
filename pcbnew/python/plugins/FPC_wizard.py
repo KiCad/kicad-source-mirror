@@ -44,7 +44,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
     # build a rectangular pad
     def smdRectPad(self,module,size,pos,name):
-        pad = pcbnew.D_PAD(module)
+        pad = pcbnew.PAD(module)
         pad.SetSize(size)
         pad.SetShape(pcbnew.PAD_SHAPE_RECT)
         pad.SetAttribute(pcbnew.PAD_ATTRIB_SMD)

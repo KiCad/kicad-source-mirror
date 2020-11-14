@@ -84,7 +84,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         # build a rectangular pad as a dot on copper layer,
         # and a polygon (a square) on silkscreen
         if self.UseCu:
-            pad = pcbnew.D_PAD(self.module)
+            pad = pcbnew.PAD(self.module)
             pad.SetSize(pcbnew.wxSize(self.X, self.X))
             pad_pos = pcbnew.wxPoint(xposition,yposition)
             pad.SetPosition(pad_pos)

@@ -25,7 +25,7 @@ module.SetPosition(m_pos)
 n = 1
 for y in range (0,10):
     for x in range (0,10):
-        pad = D_PAD(module)
+        pad = PAD(module)
         pad.SetDrillSize(size_0_6mm)
         pad.SetSize(size_1_0mm)
         pt = wxPointMM(1.27*x,1.27*y)

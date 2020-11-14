@@ -64,7 +64,7 @@ class testundoredo2(ActionPlugin):
 
 
         def smdRectPad(footprint,size,pos,name):
-            pad = D_PAD(footprint)
+            pad = PAD(footprint)
             pad.SetSize(size)
             pad.SetShape(PAD_SHAPE_RECT)
             pad.SetAttribute(PAD_ATTRIB_SMD)
