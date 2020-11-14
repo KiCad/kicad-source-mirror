@@ -166,6 +166,6 @@ class QFPWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Reference(0, -text_offset, text_size)
 
         # set SMD attribute
-        self.module.SetAttributes(pcbnew.MOD_SMD)
+        self.module.SetAttributes(pcbnew.PAD_ATTRIB_SMD)
 
 QFPWizard().register()

@@ -189,7 +189,7 @@ class TouchSliderWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Reference(0, -ypos, t_size)
 
         # set SMD attribute
-        self.module.SetAttributes(MOD_SMD)
+        self.module.SetAttributes(PAD_ATTRIB_SMD)
 
         # starting pad
         band_width = touch_width/bands

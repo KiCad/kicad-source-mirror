@@ -133,7 +133,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         self.draw.Line(-xstart, posy, -xend, yend)
 
         # set SMD attribute
-        self.module.SetAttributes(pcbnew.MOD_SMD)
+        self.module.SetAttributes(pcbnew.PAD_ATTRIB_SMD)
 
         # vertical segment at left of the pad
         xstart = xend

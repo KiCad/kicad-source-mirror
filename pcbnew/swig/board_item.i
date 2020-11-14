@@ -146,7 +146,7 @@ static PCB_TARGET*           Cast_to_PCB_TARGET( BOARD_ITEM* );
         elif ct=="PCB_GROUP":
             return Cast_to_PCB_GROUP(self)
         elif ct=="PAD":
-            return Cast_to_D_PAD(self)
+            return Cast_to_PAD(self)
         elif ct=="MTEXT":
             return Cast_to_FP_TEXT(self)
         elif ct=="VIA":
