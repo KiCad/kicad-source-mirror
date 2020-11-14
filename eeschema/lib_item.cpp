@@ -42,7 +42,7 @@ LIB_ITEM::LIB_ITEM( KICAD_T        aType,
     m_Unit              = aUnit;
     m_Convert           = aConvert;
     m_Fill              = aFillType;
-    m_Parent            = (EDA_ITEM*) aComponent;
+    m_parent            = (EDA_ITEM*) aComponent;
     m_isFillable        = false;
 }
 
@@ -119,7 +119,7 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 
 bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     EDA_RECT sel = aRect;

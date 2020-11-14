@@ -34,30 +34,30 @@
 
 void EDA_RECT::Normalize()
 {
-    if( m_Size.y < 0 )
+    if( m_size.y < 0 )
     {
-        m_Size.y = -m_Size.y;
-        m_Pos.y -= m_Size.y;
+        m_size.y = -m_size.y;
+        m_pos.y -= m_size.y;
     }
 
-    if( m_Size.x < 0 )
+    if( m_size.x < 0 )
     {
-        m_Size.x = -m_Size.x;
-        m_Pos.x -= m_Size.x;
+        m_size.x = -m_size.x;
+        m_pos.x -= m_size.x;
     }
 }
 
 
 void EDA_RECT::Move( const wxPoint& aMoveVector )
 {
-    m_Pos += aMoveVector;
+    m_pos += aMoveVector;
 }
 
 
 bool EDA_RECT::Contains( const wxPoint& aPoint ) const
 {
-    wxPoint rel_pos = aPoint - m_Pos;
-    wxSize  size    = m_Size;
+    wxPoint rel_pos = aPoint - m_pos;
+    wxSize  size    = m_size;
 
     if( size.x < 0 )
     {
@@ -160,13 +160,13 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect ) const
     rect.Normalize(); // ensure size is >= 0
 
     // calculate the left common area coordinate:
-    int left = std::max( me.m_Pos.x, rect.m_Pos.x );
+    int left = std::max( me.m_pos.x, rect.m_pos.x );
     // calculate the right common area coordinate:
-    int right = std::min( me.m_Pos.x + me.m_Size.x, rect.m_Pos.x + rect.m_Size.x );
+    int right = std::min( me.m_pos.x + me.m_size.x, rect.m_pos.x + rect.m_size.x );
     // calculate the upper common area coordinate:
-    int top = std::max( me.m_Pos.y, aRect.m_Pos.y );
+    int top = std::max( me.m_pos.y, aRect.m_pos.y );
     // calculate the lower common area coordinate:
-    int bottom = std::min( me.m_Pos.y + me.m_Size.y, rect.m_Pos.y + rect.m_Size.y );
+    int bottom = std::min( me.m_pos.y + me.m_size.y, rect.m_pos.y + rect.m_size.y );
 
     // if a common area exists, it must have a positive (null accepted) size
     if( left <= right && top <= bottom )
@@ -230,10 +230,10 @@ bool EDA_RECT::Intersects( const EDA_RECT& aRect, double aRot ) const
 
     /* Test A : Any corners exist in rotated rect? */
 
-    corners[0] = m_Pos;
-    corners[1] = m_Pos + wxPoint( m_Size.x, 0 );
-    corners[2] = m_Pos + wxPoint( m_Size.x, m_Size.y );
-    corners[3] = m_Pos + wxPoint( 0, m_Size.y );
+    corners[0] = m_pos;
+    corners[1] = m_pos + wxPoint( m_size.x, 0 );
+    corners[2] = m_pos + wxPoint( m_size.x, m_size.y );
+    corners[3] = m_pos + wxPoint( 0, m_size.y );
 
     wxPoint rCentre = aRect.Centre();
 
@@ -362,65 +362,65 @@ EDA_RECT& EDA_RECT::Inflate( int aDelta )
 
 EDA_RECT& EDA_RECT::Inflate( wxCoord dx, wxCoord dy )
 {
-    if( m_Size.x >= 0 )
+    if( m_size.x >= 0 )
     {
-        if( m_Size.x < -2 * dx )
+        if( m_size.x < -2 * dx )
         {
             // Don't allow deflate to eat more width than we have,
-            m_Pos.x += m_Size.x / 2;
-            m_Size.x = 0;
+            m_pos.x += m_size.x / 2;
+            m_size.x = 0;
         }
         else
         {
             // The inflate is valid.
-            m_Pos.x -= dx;
-            m_Size.x += 2 * dx;
+            m_pos.x -= dx;
+            m_size.x += 2 * dx;
         }
     }
     else // size.x < 0:
     {
-        if( m_Size.x > -2 * dx )
+        if( m_size.x > -2 * dx )
         {
             // Don't allow deflate to eat more width than we have,
-            m_Pos.x -= m_Size.x / 2;
-            m_Size.x = 0;
+            m_pos.x -= m_size.x / 2;
+            m_size.x = 0;
         }
         else
         {
             // The inflate is valid.
-            m_Pos.x += dx;
-            m_Size.x -= 2 * dx; // m_Size.x <0: inflate when dx > 0
+            m_pos.x += dx;
+            m_size.x -= 2 * dx; // m_Size.x <0: inflate when dx > 0
         }
     }
 
-    if( m_Size.y >= 0 )
+    if( m_size.y >= 0 )
     {
-        if( m_Size.y < -2 * dy )
+        if( m_size.y < -2 * dy )
         {
             // Don't allow deflate to eat more height than we have,
-            m_Pos.y += m_Size.y / 2;
-            m_Size.y = 0;
+            m_pos.y += m_size.y / 2;
+            m_size.y = 0;
         }
         else
         {
             // The inflate is valid.
-            m_Pos.y -= dy;
-            m_Size.y += 2 * dy;
+            m_pos.y -= dy;
+            m_size.y += 2 * dy;
         }
     }
     else // size.y < 0:
     {
-        if( m_Size.y > 2 * dy )
+        if( m_size.y > 2 * dy )
         {
             // Don't allow deflate to eat more height than we have,
-            m_Pos.y -= m_Size.y / 2;
-            m_Size.y = 0;
+            m_pos.y -= m_size.y / 2;
+            m_size.y = 0;
         }
         else
         {
             // The inflate is valid.
-            m_Pos.y += dy;
-            m_Size.y -= 2 * dy; // m_Size.y <0: inflate when dy > 0
+            m_pos.y += dy;
+            m_size.y -= 2 * dy; // m_Size.y <0: inflate when dy > 0
         }
     }
 
@@ -434,8 +434,8 @@ void EDA_RECT::Merge( const EDA_RECT& aRect )
     {
         if( aRect.IsValid() )
         {
-            m_Pos  = aRect.GetPosition();
-            m_Size = aRect.GetSize();
+            m_pos  = aRect.GetPosition();
+            m_size = aRect.GetSize();
             m_init = true;
         }
         return;
@@ -448,8 +448,8 @@ void EDA_RECT::Merge( const EDA_RECT& aRect )
     wxPoint rect_end = rect.GetEnd();
 
     // Change origin and size in order to contain the given rect
-    m_Pos.x = std::min( m_Pos.x, rect.m_Pos.x );
-    m_Pos.y = std::min( m_Pos.y, rect.m_Pos.y );
+    m_pos.x = std::min( m_pos.x, rect.m_pos.x );
+    m_pos.y = std::min( m_pos.y, rect.m_pos.y );
     end.x   = std::max( end.x, rect_end.x );
     end.y   = std::max( end.y, rect_end.y );
     SetEnd( end );
@@ -460,8 +460,8 @@ void EDA_RECT::Merge( const wxPoint& aPoint )
 {
     if( !m_init )
     {
-        m_Pos  = aPoint;
-        m_Size = wxSize( 0, 0 );
+        m_pos  = aPoint;
+        m_size = wxSize( 0, 0 );
         m_init = true;
         return;
     }
@@ -470,8 +470,8 @@ void EDA_RECT::Merge( const wxPoint& aPoint )
 
     wxPoint end = GetEnd();
     // Change origin and size in order to contain the given rect
-    m_Pos.x = std::min( m_Pos.x, aPoint.x );
-    m_Pos.y = std::min( m_Pos.y, aPoint.y );
+    m_pos.x = std::min( m_pos.x, aPoint.x );
+    m_pos.y = std::min( m_pos.y, aPoint.y );
     end.x   = std::max( end.x, aPoint.x );
     end.y   = std::max( end.y, aPoint.y );
     SetEnd( end );

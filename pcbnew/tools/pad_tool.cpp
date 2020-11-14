@@ -28,7 +28,7 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <bitmaps.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <board_commit.h>

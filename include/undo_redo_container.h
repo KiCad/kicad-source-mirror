@@ -78,9 +78,9 @@ enum class UNDO_REDO {
 class ITEM_PICKER
 {
 private:
-    STATUS_FLAGS   m_pickerFlags;      /* a copy of m_Flags member. useful in mode/drag
+    STATUS_FLAGS   m_pickerFlags;      /* a copy of m_flags member. useful in mode/drag
                                         * undo/redo commands */
-    UNDO_REDO    m_undoRedoStatus;   /* type of operation to undo/redo for this item */
+    UNDO_REDO      m_undoRedoStatus;   /* type of operation to undo/redo for this item */
     EDA_ITEM*      m_pickedItem;       /* Pointer on the schematic or board item that is concerned
                                         * (picked), or in undo redo commands, the copy of an
                                         * edited item. */
@@ -288,7 +288,7 @@ public:
 
     /**
      * Function SetPickerFlags
-     * set the flags of the picker (usually to the picked item m_Flags value)
+     * set the flags of the picker (usually to the picked item m_flags value)
      * @param aFlags The flag value to save in picker
      * @param aIdx Index of the picker in the picked list
      * @return True if the picker exists or false if does not exist

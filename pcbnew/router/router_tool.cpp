@@ -23,7 +23,7 @@
 #include <functional>
 using namespace std::placeholders;
 #include <board.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pad.h>

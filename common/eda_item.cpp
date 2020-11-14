@@ -49,30 +49,30 @@ static const BITMAP_OPAQUE dummy_xpm[1] = {{ dummy_png, sizeof( dummy_png ), "du
 
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
-        m_StructType( idType ),
-        m_Status( 0 ),
-        m_Parent( parent ),
+        m_structType( idType ),
+        m_status( 0 ),
+        m_parent( parent ),
         m_forceVisible( false ),
-        m_Flags( 0 )
+        m_flags( 0 )
 { }
 
 
 EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
-        m_StructType( idType ),
-        m_Status( 0 ),
-        m_Parent( nullptr ),
+        m_structType( idType ),
+        m_status( 0 ),
+        m_parent( nullptr ),
         m_forceVisible( false ),
-        m_Flags( 0 )
+        m_flags( 0 )
 { }
 
 
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_Uuid( base.m_Uuid ),
-        m_StructType( base.m_StructType ),
-        m_Status( base.m_Status ),
-        m_Parent( base.m_Parent ),
+        m_structType( base.m_structType ),
+        m_status( base.m_status ),
+        m_parent( base.m_parent ),
         m_forceVisible( base.m_forceVisible ),
-        m_Flags( base.m_Flags )
+        m_flags( base.m_flags )
 { }
 
 
@@ -81,8 +81,8 @@ void EDA_ITEM::SetModified()
     SetFlags( IS_CHANGED );
 
     // If this a child object, then the parent modification state also needs to be set.
-    if( m_Parent )
-        m_Parent->SetModified();
+    if( m_parent )
+        m_parent->SetModified();
 }
 
 
@@ -194,10 +194,10 @@ EDA_ITEM& EDA_ITEM::operator=( const EDA_ITEM& aItem )
 {
     // do not call initVars()
 
-    m_StructType = aItem.m_StructType;
-    m_Flags      = aItem.m_Flags;
-    m_Status     = aItem.m_Status;
-    m_Parent     = aItem.m_Parent;
+    m_structType = aItem.m_structType;
+    m_flags      = aItem.m_flags;
+    m_status     = aItem.m_status;
+    m_parent     = aItem.m_parent;
     m_forceVisible = aItem.m_forceVisible;
 
     return *this;

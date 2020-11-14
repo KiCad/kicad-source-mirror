@@ -32,7 +32,7 @@
 
 #include <action_plugin.h>
 #include <board.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <cstdlib>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
@@ -163,7 +163,7 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
             // Best efforts...
         }
 
-        for( MARKER_PCB* marker : brd->ResolveDRCExclusions() )
+        for( PCB_MARKER* marker : brd->ResolveDRCExclusions() )
             brd->Add( marker );
 
         brd->BuildConnectivity();

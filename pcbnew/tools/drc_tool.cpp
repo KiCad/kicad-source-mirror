@@ -194,7 +194,7 @@ void DRC_TOOL::RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones
                 }
                 else
                 {
-                    MARKER_PCB* marker = new MARKER_PCB( aItem, aPos );
+                    PCB_MARKER* marker = new PCB_MARKER( aItem, aPos );
                     commit.Add( marker );
                 }
             } );

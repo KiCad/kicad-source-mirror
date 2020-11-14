@@ -26,7 +26,7 @@
 #define DRC_TEST_PROVIDER__H
 
 #include <board.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 
 #include <functional>
 #include <set>

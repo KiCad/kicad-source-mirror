@@ -166,7 +166,7 @@ public:
      * @return The sheet that is the parent of this sheet pin or NULL if it does
      *         not have a parent.
      */
-    SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_Parent; }
+    SCH_SHEET* GetParent() const { return (SCH_SHEET*) m_parent; }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

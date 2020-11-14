@@ -32,7 +32,7 @@
 #include <macros_swig.h>
 #include <gr_basic.h>
 #include <netclass.h>
-#include <class_board_item.h>
+#include <board_item.h>
 
 
 

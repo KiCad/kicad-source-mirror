@@ -28,7 +28,7 @@
 #include <deque>
 
 #include <board_item_container.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <collectors.h>
 #include <convert_to_biu.h>
 #include <layers_id_colors_and_visibility.h> // ALL_LAYERS definition.

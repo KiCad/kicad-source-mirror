@@ -75,7 +75,7 @@ void SCH_FIELD::SetId( int aId )
 {
     m_id = aId;
 
-    if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         switch( m_id )
         {
@@ -109,7 +109,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 }
                 else
                 {
-                    SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
+                    SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_parent );
 
                     if( component->ResolveTextVar( token, aDepth + 1 ) )
                         return true;
@@ -127,7 +127,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     std::function<bool( wxString* )> sheetResolver =
             [&]( wxString* token ) -> bool
             {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
                 return sheet->ResolveTextVar( token, aDepth + 1 );
             };
 
@@ -142,9 +142,9 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
 
         if( aDepth < 10 )
         {
-            if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+            if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
                 text = ExpandTextVars( text, &symbolResolver, project );
-            else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+            else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver, project );
             else
                 text = ExpandTextVars( text, nullptr, project );
@@ -154,9 +154,9 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
     // WARNING: the IDs of FIELDS and SHEETS overlap, so one must check *both* the
     // id and the parent's type.
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( m_id == REFERENCE_FIELD )
         {
@@ -166,7 +166,7 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 text << LIB_PART::SubReference( component->GetUnit() );
         }
     }
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         if( m_id == SHEETFILENAME )
             text = _( "File:" ) + wxS( " " )+ text;
@@ -196,9 +196,9 @@ void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     // Calculate the text orientation according to the component orientation.
     orient = GetTextAngle();
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( parentComponent && parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
         {
@@ -263,9 +263,9 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     // Now, apply the component transform (mirror/rot)
     TRANSFORM transform;
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
 
         // Due to the Y axis direction, we must mirror the bounding box,
         // relative to the text position:
@@ -326,12 +326,12 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     if( !IsVisible() && !searchHiddenFields )
         return false;
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE_FIELD )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T && m_id == REFERENCE_FIELD )
     {
         if( searchAndReplace && !replaceReferences )
             return false;
 
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
         wxASSERT( aAuxData );
 
         // Take sheet path into account which effects the reference field and the unit for
@@ -354,9 +354,9 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 
 bool SCH_FIELD::IsReplaceable() const
 {
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( m_id == VALUE_FIELD )
         {
@@ -366,7 +366,7 @@ bool SCH_FIELD::IsReplaceable() const
                 return false;
         }
     }
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         // See comments in SCH_FIELD::Replace(), below.
         if( m_id == SHEETFILENAME )
@@ -381,9 +381,9 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool isReplaced = false;
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( m_id == REFERENCE_FIELD )
         {
@@ -405,7 +405,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
             isReplaced = EDA_TEXT::Replace( aSearchData );
         }
     }
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         isReplaced = EDA_TEXT::Replace( aSearchData );
 
@@ -443,9 +443,9 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
         return m_name;
     else if( aUseDefaultName )
     {
-        if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+        if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
-        else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+        else if( m_parent && m_parent->Type() == SCH_SHEET_T )
             return SCH_SHEET::GetDefaultFieldName( m_id );
     }
 
@@ -455,7 +455,7 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 
 wxString SCH_FIELD::GetCanonicalName() const
 {
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
         switch( m_id )
         {
@@ -465,7 +465,7 @@ wxString SCH_FIELD::GetCanonicalName() const
         case  DATASHEET_FIELD: return wxT( "Datasheet" );
         }
     }
-    else if( m_Parent && m_Parent->Type() == SCH_SHEET_T )
+    else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
         switch( m_id )
         {
@@ -480,7 +480,7 @@ wxString SCH_FIELD::GetCanonicalName() const
 
 BITMAP_DEF SCH_FIELD::GetMenuImage() const
 {
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
         switch( m_id )
         {
@@ -543,9 +543,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     // Calculate the text orientation, according to the component orientation/mirror
     int orient = GetTextAngle();
 
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( parentComponent->GetTransform().y1 )  // Rotate component 90 deg.
         {
@@ -582,9 +582,9 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
     // Actual positions are calculated by the rotation/mirror transform of the
     // parent component of the field.  The inverse transform is used to calculate
     // the position relative to the parent component.
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
         wxPoint        relativePos = aPosition - parentComponent->GetPosition();
 
         relativePos = parentComponent->GetTransform().
@@ -600,9 +600,9 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
 
 wxPoint SCH_FIELD::GetPosition() const
 {
-    if( m_Parent && m_Parent->Type() == SCH_COMPONENT_T )
+    if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_Parent );
+        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
         wxPoint        relativePos = GetTextPos() - parentComponent->GetPosition();
 
         relativePos = parentComponent->GetTransform().TransformCoordinate( relativePos );
@@ -616,7 +616,7 @@ wxPoint SCH_FIELD::GetPosition() const
 
 wxPoint SCH_FIELD::GetParentPosition() const
 {
-    return m_Parent ? m_Parent->GetPosition() : wxPoint( 0, 0 );
+    return m_parent ? m_parent->GetPosition() : wxPoint( 0, 0 );
 }
 
 

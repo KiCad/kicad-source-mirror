@@ -27,7 +27,7 @@
 #include <pcbnew_utils/board_file_utils.h>
 #include <board.h>
 #include <footprint.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <widgets/ui_common.h>
@@ -227,9 +227,9 @@ std::unique_ptr<BOARD> MakeBoard( const std::vector<COURTYARD_INVALID_TEST_FP>& 
 
 
 /**
- * Check if a #MARKER_PCB is described by a particular #COURTYARD_INVALID_INFO object.
+ * Check if a #PCB_MARKER is described by a particular #COURTYARD_INVALID_INFO object.
  */
-static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
+static bool InvalidMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
                                     const COURTYARD_INVALID_INFO& aInvalid )
 {
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
@@ -260,12 +260,12 @@ static bool InvalidMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
  * @param aCollisions list of expected collisions
  */
 static void CheckInvalidsMatchExpected( BOARD& aBoard,
-                                        const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers,
+                                        const std::vector<std::unique_ptr<PCB_MARKER>>& aMarkers,
                                         const std::vector<COURTYARD_INVALID_INFO>& aExpInvalids )
 {
     KI_TEST::CheckUnorderedMatches( aExpInvalids, aMarkers,
             [&]( const COURTYARD_INVALID_INFO& aInvalid,
-                 const std::unique_ptr<MARKER_PCB>& aMarker )
+                 const std::unique_ptr<PCB_MARKER>& aMarker )
             {
                 return InvalidMatchesExpected( aBoard, *aMarker, aInvalid );
             } );
@@ -290,7 +290,7 @@ void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
     bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_ERROR;
 
     // list of markers to collect
-    std::vector<std::unique_ptr<MARKER_PCB>> markers;
+    std::vector<std::unique_ptr<PCB_MARKER>> markers;
 
     DRC_ENGINE drcEngine( board.get(), &board->GetDesignSettings() );
 
@@ -303,7 +303,7 @@ void DoCourtyardInvalidTest( const COURTYARD_INVALID_CASE& aCase,
                     || aItem->GetErrorCode() == DRCE_MALFORMED_COURTYARD
                     || aItem->GetErrorCode() == DRCE_MISSING_COURTYARD )
                 {
-                    markers.push_back( std::make_unique<MARKER_PCB>( aItem, aPos ) );
+                    markers.push_back( std::make_unique<PCB_MARKER>( aItem, aPos ) );
                 }
             } );
 

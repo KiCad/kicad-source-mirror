@@ -23,7 +23,7 @@
  */
 
 #include <board.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <pcb_shape.h>
 #include <pad.h>
 #include <convert_basic_shapes_to_polygon.h>

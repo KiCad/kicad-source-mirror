@@ -26,7 +26,7 @@
 #define DRC_RTREE_H_
 
 #include <eda_rect.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <track.h>
 #include <unordered_set>
 #include <set>

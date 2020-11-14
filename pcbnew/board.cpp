@@ -35,7 +35,7 @@
 #include <footprint.h>
 #include <track.h>
 #include <zone.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <pcb_target.h>
 #include <core/kicad_algo.h>
 #include <connectivity/connectivity_data.h>
@@ -51,9 +51,8 @@
 #include <tool/selection_conditions.h>
 #include <convert_drawsegment_list_to_polygon.h>
 
-/* This is an odd place for this, but CvPcb won't link if it is
- *  in class_board_item.cpp like I first tried it.
- */
+// This is an odd place for this, but CvPcb won't link if it's in board_item.cpp like I first
+// tried it.
 wxPoint BOARD_ITEM::ZeroOffset( 0, 0 );
 
 
@@ -180,9 +179,9 @@ void BOARD::ClearProject()
 }
 
 
-std::vector<MARKER_PCB*> BOARD::ResolveDRCExclusions()
+std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions()
 {
-    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         auto i = m_designSettings->m_DrcExclusions.find( marker->Serialize() );
 
@@ -193,11 +192,11 @@ std::vector<MARKER_PCB*> BOARD::ResolveDRCExclusions()
         }
     }
 
-    std::vector<MARKER_PCB*> newMarkers;
+    std::vector<PCB_MARKER*> newMarkers;
 
     for( const wxString& exclusionData : m_designSettings->m_DrcExclusions )
     {
-        MARKER_PCB* marker = MARKER_PCB::Deserialize( exclusionData );
+        PCB_MARKER* marker = PCB_MARKER::Deserialize( exclusionData );
 
         if( marker )
         {
@@ -565,7 +564,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     // this one uses a vector
     case PCB_MARKER_T:
-        m_markers.push_back( (MARKER_PCB*) aBoardItem );
+        m_markers.push_back( (PCB_MARKER*) aBoardItem );
         break;
 
     // this one uses a vector
@@ -727,8 +726,8 @@ wxString BOARD::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 void BOARD::DeleteMARKERs()
 {
-    // the vector does not know how to delete the MARKER_PCB, it holds pointers
-    for( MARKER_PCB* marker : m_markers )
+    // the vector does not know how to delete the PCB_MARKER, it holds pointers
+    for( PCB_MARKER* marker : m_markers )
         delete marker;
 
     m_markers.clear();
@@ -740,7 +739,7 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
     // Deleting lots of items from a vector can be very slow.  Copy remaining items instead.
     MARKERS remaining;
 
-    for( MARKER_PCB* marker : m_markers )
+    for( PCB_MARKER* marker : m_markers )
     {
         if( ( marker->IsExcluded() && aExclusions )
                 || ( !marker->IsExcluded() && aWarningsAndErrors ) )
@@ -816,7 +815,7 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
             return drawing;
     }
 
-    for( MARKER_PCB* marker : m_markers )
+    for( PCB_MARKER* marker : m_markers )
     {
         if( marker->m_Uuid == aID )
             return marker;
@@ -864,7 +863,7 @@ void BOARD::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
     for( BOARD_ITEM* drawing : Drawings() )
         aMap[ drawing->m_Uuid ] = drawing;
 
-    for( MARKER_PCB* marker : m_markers )
+    for( PCB_MARKER* marker : m_markers )
         aMap[ marker->m_Uuid ] = marker;
 
     for( PCB_GROUP* group : m_groups )
@@ -1189,7 +1188,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         case PCB_MARKER_T:
-            for( MARKER_PCB* marker : m_markers )
+            for( PCB_MARKER* marker : m_markers )
             {
                 result = marker->Visit( inspector, testData, p );
 

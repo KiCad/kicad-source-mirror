@@ -26,7 +26,7 @@
 #ifndef BOARD_CONNECTED_ITEM_H
 #define BOARD_CONNECTED_ITEM_H
 
-#include <class_board_item.h>
+#include <board_item.h>
 #include <netinfo.h>
 #include <reporter.h>
 

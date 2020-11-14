@@ -27,7 +27,7 @@
 #include <board_commit.h>
 #include <board.h>
 #include <track.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <geometry/seg.h>
 #include <geometry/shape_poly_set.h>
 #include <memory>

@@ -32,7 +32,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <dimension.h>
 #include <footprint.h>
 #include <track.h>

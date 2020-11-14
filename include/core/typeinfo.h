@@ -73,7 +73,7 @@ class EDA_ITEM;
 
 /**
  * Enum KICAD_T
- * is the set of class identification values, stored in EDA_ITEM::m_StructType
+ * is the set of class identification values, stored in EDA_ITEM::m_structType
  */
 enum KICAD_T
 {

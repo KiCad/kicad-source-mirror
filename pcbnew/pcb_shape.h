@@ -25,7 +25,7 @@
 #ifndef PCB_SHAPE_H
 #define PCB_SHAPE_H
 
-#include <class_board_item.h>
+#include <board_item.h>
 #include <eda_units.h>
 #include <convert_to_biu.h>
 #include <math/util.h>      // for KiROUND

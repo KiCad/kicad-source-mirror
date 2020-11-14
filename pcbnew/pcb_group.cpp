@@ -23,7 +23,7 @@
  */
 #include <bitmaps.h>
 #include <board.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <pcb_group.h>
 #include <confirm.h>
 #include <widgets/msgpanel.h>

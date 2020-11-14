@@ -25,7 +25,7 @@
 #ifndef PCB_TARGET_H
 #define PCB_TARGET_H
 
-#include <class_board_item.h>
+#include <board_item.h>
 
 
 class EDA_RECT;

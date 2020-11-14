@@ -725,7 +725,7 @@ void PCB_EDIT_FRAME::RecordDRCExclusions()
     BOARD_DESIGN_SETTINGS& bds = GetBoard()->GetDesignSettings();
     bds.m_DrcExclusions.clear();
 
-    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         if( marker->IsExcluded() )
             bds.m_DrcExclusions.insert( marker->Serialize() );
@@ -737,12 +737,12 @@ void PCB_EDIT_FRAME::ResolveDRCExclusions()
 {
     BOARD_COMMIT commit( this );
 
-    for( MARKER_PCB* marker : GetBoard()->ResolveDRCExclusions() )
+    for( PCB_MARKER* marker : GetBoard()->ResolveDRCExclusions() )
         commit.Add( marker );
 
     commit.Push( wxEmptyString, false, false );
 
-    for( MARKER_PCB* marker : GetBoard()->Markers() )
+    for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         if( marker->IsExcluded() )
         {

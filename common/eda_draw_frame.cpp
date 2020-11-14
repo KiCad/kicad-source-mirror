@@ -79,7 +79,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_gridSelectBox       = NULL;
     m_zoomSelectBox       = NULL;
     m_firstRunDialogSetting = 0;
-    m_UndoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
+    m_undoRedoCountMax    = DEFAULT_MAX_UNDO_ITEMS;
 
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     m_canvas              = NULL;
@@ -92,9 +92,9 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_drawBgColor         = COLOR4D( BLACK );   // the background color of the draw canvas:
                                                 // BLACK for Pcbnew, BLACK or WHITE for Eeschema
     m_colorSettings       = nullptr;
-    m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
+    m_msgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_userUnits           = EDA_UNITS::MILLIMETRES;
-    m_PolarCoords         = false;
+    m_polarCoords         = false;
     m_findReplaceData     = new wxFindReplaceData( wxFR_DOWN );
 
     m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
@@ -137,10 +137,10 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     // Create child subwindows.
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
     m_FramePos.x   = m_FramePos.y = 0;
-    m_FrameSize.y -= m_MsgFrameHeight;
+    m_FrameSize.y -= m_msgFrameHeight;
 
     m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
-                                         wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
+                                         wxSize( m_FrameSize.x, m_msgFrameHeight ) );
 
     m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
 }
@@ -541,7 +541,7 @@ void EDA_DRAW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     // Read units used in dialogs and toolbars
     SetUserUnits( static_cast<EDA_UNITS>( aCfg->m_System.units ) );
 
-    m_UndoRedoCountMax = aCfg->m_System.max_undo_items;
+    m_undoRedoCountMax = aCfg->m_System.max_undo_items;
     m_firstRunDialogSetting = aCfg->m_System.first_run_shown;
 
     m_galDisplayOptions.ReadConfig( *cmnCfg, *window, this );

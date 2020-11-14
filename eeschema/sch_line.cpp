@@ -634,10 +634,10 @@ std::vector<wxPoint> SCH_LINE::GetConnectionPoints() const
 
 void SCH_LINE::GetSelectedPoints( std::vector< wxPoint >& aPoints ) const
 {
-    if( m_Flags & STARTPOINT )
+    if( m_flags & STARTPOINT )
         aPoints.push_back( m_start );
 
-    if( m_Flags & ENDPOINT )
+    if( m_flags & ENDPOINT )
         aPoints.push_back( m_end );
 }
 
@@ -727,7 +727,7 @@ bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool SCH_LINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     EDA_RECT rect = aRect;

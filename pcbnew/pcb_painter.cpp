@@ -32,7 +32,7 @@
 #include <kicad_string.h>
 #include <zone.h>
 #include <pcb_text.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <dimension.h>
 #include <pcb_target.h>
 
@@ -467,7 +467,7 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         break;
 
     case PCB_MARKER_T:
-        draw( static_cast<const MARKER_PCB*>( item ), aLayer );
+        draw( static_cast<const PCB_MARKER*>( item ), aLayer );
         break;
 
     default:
@@ -1636,7 +1636,7 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 }
 
 
-void PCB_PAINTER::draw( const MARKER_PCB* aMarker, int aLayer )
+void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
 {
     bool isShadow = aLayer == LAYER_MARKER_SHADOWS;
 

@@ -29,7 +29,7 @@
 using namespace std::placeholders;
 #include <core/kicad_algo.h>
 #include <board.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <track.h>
 #include <footprint.h>
 #include <pcb_shape.h>

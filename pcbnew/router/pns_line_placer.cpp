@@ -31,7 +31,7 @@
 #include "pns_utils.h"
 #include "pns_walkaround.h"
 
-#include <class_board_item.h>
+#include <board_item.h>
 
 #include <memory>
 

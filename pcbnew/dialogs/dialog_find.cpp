@@ -24,7 +24,7 @@
  */
 
 #include <board.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <footprint.h>
 #include <pcb_text.h>
 #include <fp_text.h>
@@ -260,7 +260,7 @@ void DIALOG_FIND::search( bool aDirection )
 
         if( FindIncludeMarkers )
         {
-            for( MARKER_PCB* marker : m_frame->GetBoard()->Markers() )
+            for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
             {
                 if( marker->Matches( m_frame->GetFindReplaceData(), nullptr ) )
                     m_hitList.push_back( marker );

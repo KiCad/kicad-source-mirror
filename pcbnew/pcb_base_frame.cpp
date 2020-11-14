@@ -634,7 +634,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         m_displayOptions = cfg->m_Display;
-        m_PolarCoords = cfg->m_PolarCoords;
+        m_polarCoords = cfg->m_PolarCoords;
     }
 
     wxASSERT( GetCanvas() );
@@ -674,7 +674,7 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     if( cfg )
     {
         cfg->m_Display = m_displayOptions;
-        cfg->m_PolarCoords = m_PolarCoords;
+        cfg->m_PolarCoords = m_polarCoords;
     }
 }
 

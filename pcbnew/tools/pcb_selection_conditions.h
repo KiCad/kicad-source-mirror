@@ -27,7 +27,7 @@
 
 #include <tool/selection.h>
 #include <tool/selection_conditions.h>
-#include <class_board_item.h>
+#include <board_item.h>
 
 
 class PCB_SELECTION_CONDITIONS : public SELECTION_CONDITIONS

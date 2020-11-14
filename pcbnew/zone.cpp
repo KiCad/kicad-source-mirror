@@ -108,7 +108,7 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     // only from a copy constructor.
 
     // Copy only useful EDA_ITEM flags:
-    m_Flags                   = aZone.m_Flags;
+    m_flags                   = aZone.m_flags;
     m_forceVisible            = aZone.m_forceVisible;
 
     // Replace the outlines for aZone outlines.

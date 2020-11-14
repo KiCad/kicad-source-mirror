@@ -27,7 +27,7 @@
 
 #include <tool/tool_interactive.h>
 #include <tools/pcbnew_selection.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <pcb_base_frame.h>
 
 using ALIGNMENT_RECT = std::pair<BOARD_ITEM*, EDA_RECT>;

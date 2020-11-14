@@ -53,7 +53,7 @@ PAD::PAD( FOOTPRINT* parent ) :
     m_orient              = 0;              // Pad rotation in 1/10 degrees.
     m_lengthPadToDie      = 0;
 
-    if( m_Parent  && m_Parent->Type() == PCB_FOOTPRINT_T )
+    if( m_parent && m_parent->Type() == PCB_FOOTPRINT_T )
     {
         m_pos = GetParent()->GetPosition();
     }
@@ -477,7 +477,7 @@ const EDA_RECT PAD::GetBoundingBox() const
 
 void PAD::SetDrawCoord()
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
     m_pos = m_pos0;
 
@@ -495,7 +495,7 @@ void PAD::SetDrawCoord()
 
 void PAD::SetLocalCoord()
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
     if( parentFootprint == NULL )
     {
@@ -805,7 +805,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     wxString               msg, msg2;
     BOARD*                 board = GetBoard();
     BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    FOOTPRINT*             parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    FOOTPRINT*             parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
     if( parentFootprint )
         aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference(), DARKCYAN );
@@ -1240,7 +1240,7 @@ const BOX2I PAD::ViewBBox() const
 
 FOOTPRINT* PAD::GetParent() const
 {
-    return dynamic_cast<FOOTPRINT*>( m_Parent );
+    return dynamic_cast<FOOTPRINT*>( m_parent );
 }
 
 

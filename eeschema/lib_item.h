@@ -182,7 +182,7 @@ public:
 
     LIB_PART* GetParent() const
     {
-        return (LIB_PART*) m_Parent;
+        return (LIB_PART*) m_parent;
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;

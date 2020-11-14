@@ -52,7 +52,7 @@
 #include <pcb_plot_params.h>                  // for PCB_PLOT_PARAMS, PCB_PL...
 
 #include <board.h>
-#include <class_board_item.h>                 // for BOARD_ITEM, S_CIRCLE
+#include <board_item.h>                       // for BOARD_ITEM, S_CIRCLE
 #include <dimension.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>

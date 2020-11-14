@@ -57,7 +57,7 @@ class PCB_GROUP;
 class PCB_TARGET;
 class VIA;
 class ZONE;
-class MARKER_PCB;
+class PCB_MARKER;
 class FP_3DMODEL;
 struct LAYER;
 
@@ -176,7 +176,7 @@ class PCB_PARSER : public PCB_LEXER
     VIA*            parseVIA();
     ZONE*           parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET*     parsePCB_TARGET();
-    MARKER_PCB*     parseMARKER( BOARD_ITEM_CONTAINER* aParent );
+    PCB_MARKER*     parseMARKER( BOARD_ITEM_CONTAINER* aParent );
     BOARD*          parseBOARD();
     void            parseGROUP( BOARD_ITEM* aParent );
 

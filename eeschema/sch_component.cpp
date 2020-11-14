@@ -147,7 +147,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, PICKED_SY
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
-    m_Parent      = aComponent.m_Parent;
+    m_parent      = aComponent.m_parent;
     m_Pos         = aComponent.m_Pos;
     m_unit        = aComponent.m_unit;
     m_convert     = aComponent.m_convert;
@@ -1759,7 +1759,7 @@ bool SCH_COMPONENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+    if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
         return false;
 
     EDA_RECT rect = aRect;

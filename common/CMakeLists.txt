@@ -502,12 +502,12 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/board_design_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board_items_to_polygon_shape_transform.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/board.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_board_item.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/board_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/dimension.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_shape.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/fp_shape.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/pcb_group.cpp
-    ${CMAKE_SOURCE_DIR}/pcbnew/class_marker_pcb.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/pcb_marker.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_item.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/netinfo_list.cpp

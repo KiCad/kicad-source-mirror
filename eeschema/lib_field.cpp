@@ -73,7 +73,7 @@ LIB_FIELD& LIB_FIELD::operator=( const LIB_FIELD& field )
 {
     m_id = field.m_id;
     m_name = field.m_name;
-    m_Parent = field.m_Parent;
+    m_parent = field.m_parent;
 
     SetText( field.GetText() );
     SetEffects( field );
@@ -131,7 +131,7 @@ bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     // Reference designator text has one or 2 additional character (displays U? or U?A)
     if( m_id == REFERENCE_FIELD )
     {
-        const LIB_PART*  parent = dynamic_cast<const LIB_PART*>( m_Parent );
+        const LIB_PART*  parent = dynamic_cast<const LIB_PART*>( m_parent );
 
         wxString extended_text = tmp_text.GetText();
         extended_text.Append('?');
@@ -169,7 +169,7 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 
     aTarget->CopyText( *this );
     aTarget->SetEffects( *this );
-    aTarget->SetParent( m_Parent );
+    aTarget->SetParent( m_parent );
 }
 
 

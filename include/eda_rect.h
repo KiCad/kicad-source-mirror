@@ -44,25 +44,25 @@
 class EDA_RECT
 {
 private:
-    wxPoint m_Pos;      // Rectangle Origin
-    wxSize  m_Size;     // Rectangle Size
+    wxPoint m_pos;      // Rectangle Origin
+    wxSize  m_size;     // Rectangle Size
     bool    m_init;     // Is the rectangle initialized
 
 public:
     EDA_RECT() : m_init( false ) { };
 
     EDA_RECT( const wxPoint& aPos, const wxSize& aSize ) :
-        m_Pos( aPos ),
-        m_Size( aSize ),
-        m_init( true )
+            m_pos( aPos ),
+            m_size( aSize ),
+            m_init( true )
     { }
 
     virtual ~EDA_RECT() { };
 
     wxPoint Centre() const
     {
-        return wxPoint( m_Pos.x + ( m_Size.x >> 1 ),
-                        m_Pos.y + ( m_Size.y >> 1 ) );
+        return wxPoint( m_pos.x + ( m_size.x >> 1 ),
+                        m_pos.y + ( m_size.y >> 1 ) );
     }
 
     /**
@@ -100,28 +100,28 @@ public:
      */
     bool Contains( const EDA_RECT& aRect ) const;
 
-    const wxSize GetSize() const { return m_Size; }
+    const wxSize GetSize() const { return m_size; }
 
     /**
      * @brief GetSizeMax
      * @return the max size dimension
      */
-    int GetSizeMax() const { return ( m_Size.x > m_Size.y ) ? m_Size.x : m_Size.y; }
+    int GetSizeMax() const { return ( m_size.x > m_size.y ) ? m_size.x : m_size.y; }
 
-    int GetX() const { return m_Pos.x; }
-    int GetY() const { return m_Pos.y; }
+    int GetX() const { return m_pos.x; }
+    int GetY() const { return m_pos.y; }
 
-    const wxPoint GetOrigin() const { return m_Pos; }
-    const wxPoint GetPosition() const { return m_Pos; }
-    const wxPoint GetEnd() const { return wxPoint( m_Pos.x + m_Size.x, m_Pos.y + m_Size.y ); }
-    const wxPoint GetCenter() const { return wxPoint( m_Pos.x + ( m_Size.x / 2 ), m_Pos.y + ( m_Size.y / 2 ) ); }
+    const wxPoint GetOrigin() const { return m_pos; }
+    const wxPoint GetPosition() const { return m_pos; }
+    const wxPoint GetEnd() const { return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y ); }
+    const wxPoint GetCenter() const { return wxPoint( m_pos.x + ( m_size.x / 2 ), m_pos.y + ( m_size.y / 2 ) ); }
 
-    int GetWidth() const { return m_Size.x; }
-    int GetHeight() const { return m_Size.y; }
-    int GetRight() const { return m_Pos.x + m_Size.x; }
-    int GetLeft() const { return m_Pos.x; }
-    int GetTop() const { return m_Pos.y; }
-    int GetBottom() const { return m_Pos.y + m_Size.y; }    // Y axis from top to bottom
+    int GetWidth() const { return m_size.x; }
+    int GetHeight() const { return m_size.y; }
+    int GetRight() const { return m_pos.x + m_size.x; }
+    int GetLeft() const { return m_pos.x; }
+    int GetTop() const { return m_pos.y; }
+    int GetBottom() const { return m_pos.y + m_size.y; }    // Y axis from top to bottom
 
     bool IsValid() const
     {
@@ -130,62 +130,62 @@ public:
 
     void SetOrigin( const wxPoint &pos )
     {
-        m_Pos = pos;
+        m_pos = pos;
         m_init = true;
     }
 
     void SetOrigin( int x, int y )
     {
-        m_Pos.x = x;
-        m_Pos.y = y;
+        m_pos.x = x;
+        m_pos.y = y;
         m_init = true;
     }
 
     void SetSize( const wxSize &size )
     {
-        m_Size = size;
+        m_size = size;
         m_init = true;
     }
 
     void SetSize( int w, int h )
     {
-        m_Size.x = w;
-        m_Size.y = h;
+        m_size.x = w;
+        m_size.y = h;
         m_init = true;
     }
 
     void Offset( int dx, int dy )
     {
-        m_Pos.x += dx;
-        m_Pos.y += dy;
+        m_pos.x += dx;
+        m_pos.y += dy;
     }
 
     void Offset( const wxPoint &offset )
     {
-        m_Pos += offset;
+        m_pos += offset;
     }
 
     void SetX( int val )
     {
-        m_Pos.x = val;
+        m_pos.x = val;
         m_init = true;
     }
 
     void SetY( int val )
     {
-        m_Pos.y = val;
+        m_pos.y = val;
         m_init = true;
     }
 
     void SetWidth( int val )
     {
-        m_Size.x = val;
+        m_size.x = val;
         m_init = true;
     }
 
     void SetHeight( int val )
     {
-        m_Size.y = val;
+        m_size.y = val;
         m_init = true;
     }
 
@@ -197,8 +197,8 @@ public:
 
     void SetEnd( const wxPoint &pos )
     {
-        m_Size.x = pos.x - m_Pos.x;
-        m_Size.y = pos.y - m_Pos.y;
+        m_size.x = pos.x - m_pos.x;
+        m_size.y = pos.y - m_pos.y;
         m_init = true;
     }
 
@@ -208,8 +208,8 @@ public:
      */
     void RevertYAxis()
     {
-        m_Pos.y  = -m_Pos.y;
-        m_Size.y = -m_Size.y;
+        m_pos.y  = -m_pos.y;
+        m_size.y = -m_size.y;
         Normalize();
     }
 
@@ -291,9 +291,9 @@ public:
      */
     operator wxRect() const
     {
-        EDA_RECT rect( m_Pos, m_Size );
+        EDA_RECT rect( m_pos, m_size );
         rect.Normalize();
-        return wxRect( rect.m_Pos, rect.m_Size );
+        return wxRect( rect.m_pos, rect.m_size );
     }
 
     /**
@@ -303,7 +303,7 @@ public:
      */
     operator BOX2I() const
     {
-        EDA_RECT rect( m_Pos, m_Size );
+        EDA_RECT rect( m_pos, m_size );
         rect.Normalize();
         return BOX2I( rect.GetOrigin(), rect.GetSize() );
     }

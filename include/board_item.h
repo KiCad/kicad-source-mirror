@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  class_board_item.h
- * @brief Classes BOARD_ITEM and BOARD_CONNECTED_ITEM.
- */
-
 #ifndef BOARD_ITEM_STRUCT_H
 #define BOARD_ITEM_STRUCT_H
 
@@ -181,7 +176,7 @@ public:
      */
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const;
 
-    BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_Parent; }
+    BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
     /**
      * Function GetLayer

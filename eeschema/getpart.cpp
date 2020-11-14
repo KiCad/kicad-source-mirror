@@ -266,7 +266,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 
     TestDanglingEnds();
     aComponent->ClearFlags();
-    aComponent->SetFlags( savedFlags );   // Restore m_Flags (modified by SetConvert())
+    aComponent->SetFlags( savedFlags );   // Restore m_flags (modified by SetConvert())
 
     // If selected make sure all the now-included pins are selected
     if( aComponent->IsSelected() )

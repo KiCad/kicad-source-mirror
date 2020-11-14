@@ -649,7 +649,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     if( sorted_drawings.size() )
         m_out->Print( 0, "\n" );
 
-    // Do not save MARKER_PCBs, they can be regenerated easily.
+    // Do not save PCB_MARKERs, they can be regenerated easily.
 
     // Save the tracks and vias.
     for( TRACK* track : sorted_tracks )

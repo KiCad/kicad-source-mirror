@@ -24,10 +24,10 @@
 #include "drc_test_utils.h"
 
 
-std::ostream& operator<<( std::ostream& os, const MARKER_PCB& aMarker )
+std::ostream& operator<<( std::ostream& os, const PCB_MARKER& aMarker )
 {
     const auto& reporter = aMarker.GetRCItem();
-    os << "MARKER_PCB[\n";
+    os << "PCB_MARKER[\n";
     os << "    type=" << reporter->GetErrorCode() << " (" << reporter->GetErrorText() << ")"
        << "\n";
     os << "]";
@@ -38,7 +38,7 @@ std::ostream& operator<<( std::ostream& os, const MARKER_PCB& aMarker )
 namespace KI_TEST
 {
 
-bool IsDrcMarkerOfType( const MARKER_PCB& aMarker, int aErrorCode )
+bool IsDrcMarkerOfType( const PCB_MARKER& aMarker, int aErrorCode )
 {
     return aMarker.GetRCItem()->GetErrorCode() == aErrorCode;
 }

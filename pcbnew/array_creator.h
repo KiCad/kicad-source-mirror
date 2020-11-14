@@ -29,7 +29,7 @@
 
 #include <board.h>
 #include <footprint.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <tools/pcbnew_selection.h>
 
 /*!

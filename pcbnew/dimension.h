@@ -26,7 +26,7 @@
 #define DIMENSION_H
 
 
-#include <class_board_item.h>
+#include <board_item.h>
 #include <pcb_text.h>
 #include <geometry/shape.h>
 

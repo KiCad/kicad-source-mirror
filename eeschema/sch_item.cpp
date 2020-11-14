@@ -137,7 +137,7 @@ void SCH_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 
 bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 {
-    if( ( m_Flags & STRUCT_DELETED ) || ( m_Flags & SKIP_STRUCT ) )
+    if(( m_flags & STRUCT_DELETED ) || ( m_flags & SKIP_STRUCT ) )
         return false;
 
     return doIsConnected( aPosition );

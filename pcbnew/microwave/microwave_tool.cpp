@@ -23,7 +23,7 @@
 
 #include <bitmaps.h>
 #include <board_commit.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <class_draw_panel_gal.h>
 #include <footprint.h>
 #include <confirm.h>

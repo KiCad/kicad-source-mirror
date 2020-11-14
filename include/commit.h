@@ -147,14 +147,9 @@ public:
 protected:
     struct COMMIT_LINE
     {
-        ///> Main item that is added/deleted/modified
-        EDA_ITEM* m_item;
-
-        ///> Optional copy of the item
-        EDA_ITEM* m_copy;
-
-        ///> Modification type
-        CHANGE_TYPE m_type;
+        EDA_ITEM*   m_item;       ///> Main item that is added/deleted/modified
+        EDA_ITEM*   m_copy;       ///> Optional copy of the item
+        CHANGE_TYPE m_type;       ///> Modification type
     };
 
     // Should be called in Push() & Revert() methods

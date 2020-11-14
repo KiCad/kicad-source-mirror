@@ -33,7 +33,7 @@
 #include "cbbox2d.h"
 #include <cstring>
 
-#include <class_board_item.h>
+#include <board_item.h>
 
 enum class INTERSECTION_RESULT
 {

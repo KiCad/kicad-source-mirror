@@ -44,7 +44,7 @@ class BOARD;
 class ZONE;
 class TRACK;
 class PAD;
-class MARKER_PCB;
+class PCB_MARKER;
 class MSG_PANEL_ITEM;
 class NETLIST;
 class REPORTER;
@@ -164,7 +164,7 @@ public:
 };
 
 
-DECL_VEC_FOR_SWIG( MARKERS, MARKER_PCB* )
+DECL_VEC_FOR_SWIG( MARKERS, PCB_MARKER* )
 DECL_VEC_FOR_SWIG( ZONES, ZONE* )
 DECL_DEQ_FOR_SWIG( TRACKS, TRACK* )
 // Dequeue rather than Vector just so we can use moveUnflaggedItems in pcbnew_control.cpp
@@ -408,7 +408,7 @@ public:
     /**
      * Rebuild DRC markers from the serialized data in BOARD_DESIGN_SETTINGS.
      */
-    std::vector<MARKER_PCB*> ResolveDRCExclusions();
+    std::vector<PCB_MARKER*> ResolveDRCExclusions();
 
     /**
      * Reset all high light data to the init state

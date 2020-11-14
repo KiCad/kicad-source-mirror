@@ -36,7 +36,7 @@
 #define CLASS_PCB_GROUP_H_
 
 #include <board_commit.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <unordered_set>
 
 namespace KIGFX

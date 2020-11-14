@@ -37,7 +37,7 @@
 #include <pcb_target.h>
 #include <track.h>
 #include <zone.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <collectors.h>
 #include <confirm.h>
 #include <cstdint>
@@ -449,7 +449,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
     for( ZONE* zone : board()->Zones() )
         processItem( zone );
 
-    for( MARKER_PCB* marker : board()->Markers() )
+    for( PCB_MARKER* marker : board()->Markers() )
         processItem( marker );
 
     for( PCB_GROUP* group : board()->Groups() )

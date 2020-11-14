@@ -94,7 +94,7 @@ typedef std::function< SEARCH_RESULT ( EDA_ITEM* aItem, void* aTestData ) >   IN
 typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested users by ref, avoids copying std::function
 
 
-// These define are used for the .m_Flags and .m_UndoRedoStatus member of the
+// These define are used for the .m_flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
 //
 // NB: DO NOT ADD FLAGS ANYWHERE BUT AT THE END: THE FLAG-SET IS STORED AS AN INTEGER IN FILES.
@@ -142,8 +142,7 @@ typedef unsigned STATUS_FLAGS;
 
 /**
  * EDA_ITEM
- * is a base class for most all the KiCad significant classes, used in
- * schematics and boards.
+ * is a base class for most all the KiCad significant classes used in schematics and boards.
  */
 class EDA_ITEM : public KIGFX::VIEW_ITEM
 {
@@ -152,17 +151,16 @@ public:
 
 private:
     /**
-     * Run time identification, _keep private_ so it can never be changed after
-     * a constructor sets it.  See comment near SetType() regarding virtual
-     * functions.
+     * Run time identification, _keep private_ so it can never be changed after a ctor
+     * sets it.  See comment near SetType() regarding virtual functions.
      */
-    KICAD_T       m_StructType;
+    KICAD_T       m_structType;
 
 protected:
-    STATUS_FLAGS  m_Status;
-    EDA_ITEM*     m_Parent;       ///< Linked list: Link (parent struct)
+    STATUS_FLAGS  m_status;
+    EDA_ITEM*     m_parent;       ///< Linked list: Link (parent struct)
     bool          m_forceVisible;
-    STATUS_FLAGS  m_Flags;
+    STATUS_FLAGS  m_flags;
 
 protected:
     EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
@@ -175,23 +173,23 @@ public:
     /**
      * Function Type()
      *
-     * returns the type of object.  This attribute should never be changed
-     * after a constructor sets it, so there is no public "setter" method.
+     * returns the type of object.  This attribute should never be changed after a ctor sets
+     * it, so there is no public "setter" method.
      * @return KICAD_T - the type of object.
      */
-    inline KICAD_T Type() const { return m_StructType; }
+    inline KICAD_T Type() const { return m_structType; }
 
-    EDA_ITEM* GetParent() const { return m_Parent; }
-    virtual void SetParent( EDA_ITEM* aParent )   { m_Parent = aParent; }
+    EDA_ITEM* GetParent() const { return m_parent; }
+    virtual void SetParent( EDA_ITEM* aParent )   { m_parent = aParent; }
 
-    inline bool IsModified() const { return m_Flags & IS_CHANGED; }
-    inline bool IsNew() const { return m_Flags & IS_NEW; }
-    inline bool IsMoving() const { return m_Flags & IS_MOVED; }
-    inline bool IsDragging() const { return m_Flags & IS_DRAGGED; }
-    inline bool IsWireImage() const { return m_Flags & IS_WIRE_IMAGE; }
-    inline bool IsSelected() const { return m_Flags & SELECTED; }
-    inline bool IsResized() const { return m_Flags & IS_RESIZED; }
-    inline bool IsBrightened() const { return m_Flags & BRIGHTENED; }
+    inline bool IsModified() const { return m_flags & IS_CHANGED; }
+    inline bool IsNew() const { return m_flags & IS_NEW; }
+    inline bool IsMoving() const { return m_flags & IS_MOVED; }
+    inline bool IsDragging() const { return m_flags & IS_DRAGGED; }
+    inline bool IsWireImage() const { return m_flags & IS_WIRE_IMAGE; }
+    inline bool IsSelected() const { return m_flags & SELECTED; }
+    inline bool IsResized() const { return m_flags & IS_RESIZED; }
+    inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
 
     inline void SetWireImage() { SetFlags( IS_WIRE_IMAGE ); }
     inline void SetSelected() { SetFlags( SELECTED ); }
@@ -204,31 +202,31 @@ public:
 
     int GetState( int type ) const
     {
-        return m_Status & type;
+        return m_status & type;
     }
 
     void SetState( int type, int state )
     {
         if( state )
-            m_Status |= type; // state = ON or OFF
+            m_status |= type; // state = ON or OFF
         else
-            m_Status &= ~type;
+            m_status &= ~type;
     }
 
-    STATUS_FLAGS GetStatus() const           { return m_Status; }
-    void SetStatus( STATUS_FLAGS aStatus )   { m_Status = aStatus; }
+    STATUS_FLAGS GetStatus() const           { return m_status; }
+    void SetStatus( STATUS_FLAGS aStatus )   { m_status = aStatus; }
 
-    void SetFlags( STATUS_FLAGS aMask ) { m_Flags |= aMask; }
-    void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
-    STATUS_FLAGS GetFlags() const { return m_Flags; }
-    bool HasFlag( STATUS_FLAGS aFlag ) { return ( m_Flags & aFlag ) == aFlag; }
+    void SetFlags( STATUS_FLAGS aMask ) { m_flags |= aMask; }
+    void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_flags &= ~aMask; }
+    STATUS_FLAGS GetFlags() const { return m_flags; }
+    bool HasFlag( STATUS_FLAGS aFlag ) { return ( m_flags & aFlag ) == aFlag; }
 
     STATUS_FLAGS GetEditFlags() const
     {
         constexpr int mask = ( IS_NEW | IS_PASTED | IS_MOVED | IS_RESIZED | IS_DRAGGED |
                                IS_WIRE_IMAGE | STRUCT_DELETED );
 
-        return m_Flags & mask;
+        return m_flags & mask;
     }
 
     void ClearTempFlags()
@@ -255,7 +253,7 @@ public:
 
         for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
         {
-            if( m_StructType == *p )
+            if( m_structType == *p )
                 return true;
         }
 

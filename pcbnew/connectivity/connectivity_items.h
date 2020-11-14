@@ -26,8 +26,8 @@
  */
 
 
-#ifndef PCBNEW_CONNECTIVITY_CONNECTIVITY_ITEMS_H_
-#define PCBNEW_CONNECTIVITY_CONNECTIVITY_ITEMS_H_
+#ifndef PCBNEW_CONNECTIVITY_ITEMS_H
+#define PCBNEW_CONNECTIVITY_ITEMS_H
 
 #include <board.h>
 #include <pad.h>
@@ -175,32 +175,21 @@ public:
 private:
     BOARD_CONNECTED_ITEM* m_parent;
 
-    ///> list of items physically connected (touching)
-    CONNECTED_ITEMS m_connected;
+    CONNECTED_ITEMS m_connected;      ///> list of items physically connected (touching)
+    CN_ANCHORS      m_anchors;
 
-    CN_ANCHORS m_anchors;
+    bool            m_canChangeNet;  ///> can the net propagator modify the netcode?
 
-    ///> visited flag for the BFS scan
-    bool m_visited;
+    bool            m_visited;       ///> visited flag for the BFS scan
+    bool            m_valid;         ///> used to identify garbage items (we use lazy removal)
 
-    ///> can the net propagator modify the netcode?
-    bool m_canChangeNet;
-
-    ///> valid flag, used to identify garbage items (we use lazy removal)
-    bool m_valid;
-
-    ///> mutex protecting this item's connected_items set to allow parallel connection threads
-    std::mutex m_listLock;
-
+    std::mutex      m_listLock;      ///> mutex protecting this item's connected_items set to
+                                     ///> allow parallel connection threads
 protected:
-    ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
-    bool m_dirty;
-
-    ///> layer range over which the item exists
-    LAYER_RANGE m_layers;
-
-    ///> bounding box for the item
-    BOX2I m_bbox;
+    bool            m_dirty;         ///> used to identify recently added item not yet
+                                     ///> scanned into the connectivity search
+    LAYER_RANGE     m_layers;        ///> layer range over which the item exists
+    BOX2I           m_bbox;          ///> bounding box for the item
 
 public:
     void Dump();
@@ -224,30 +213,13 @@ public:
         m_anchors.emplace_back( std::make_shared<CN_ANCHOR>( aPos, this ) );
     }
 
-    CN_ANCHORS& Anchors()
-    {
-        return m_anchors;
-    }
+    CN_ANCHORS& Anchors() { return m_anchors; }
 
-    void SetValid( bool aValid )
-    {
-        m_valid = aValid;
-    }
+    void SetValid( bool aValid ) { m_valid = aValid; }
+    bool Valid() const { return m_valid; }
 
-    bool Valid() const
-    {
-        return m_valid;
-    }
-
-    void SetDirty( bool aDirty )
-    {
-        m_dirty = aDirty;
-    }
-
-    bool Dirty() const
-    {
-        return m_dirty;
-    }
+    void SetDirty( bool aDirty ) { m_dirty = aDirty; }
+    bool Dirty() const { return m_dirty;  }
 
     /**
      * Function SetLayers()
@@ -304,30 +276,13 @@ public:
         return m_parent;
     }
 
-    const CONNECTED_ITEMS& ConnectedItems()  const
-    {
-        return m_connected;
-    }
+    const CONNECTED_ITEMS& ConnectedItems() const { return m_connected; }
+    void ClearConnections() { m_connected.clear(); }
 
-    void ClearConnections()
-    {
-        m_connected.clear();
-    }
+    void SetVisited( bool aVisited ) { m_visited = aVisited; }
+    bool Visited() const { return m_visited; }
 
-    void SetVisited( bool aVisited )
-    {
-        m_visited = aVisited;
-    }
-
-    bool Visited() const
-    {
-        return m_visited;
-    }
-
-    bool CanChangeNet() const
-    {
-        return m_canChangeNet;
-    }
+    bool CanChangeNet() const { return m_canChangeNet; }
 
     void Connect( CN_ITEM* b )
     {
@@ -343,8 +298,8 @@ public:
 
     void RemoveInvalidRefs();
 
-    virtual int             AnchorCount() const;
-    virtual const VECTOR2I  GetAnchor( int n ) const;
+    virtual int AnchorCount() const;
+    virtual const VECTOR2I GetAnchor( int n ) const;
 
     int Net() const
     {
@@ -358,9 +313,9 @@ class CN_ZONE_LAYER : public CN_ITEM
 {
 public:
     CN_ZONE_LAYER( ZONE* aParent, PCB_LAYER_ID aLayer, bool aCanChangeNet, int aSubpolyIndex ) :
-        CN_ITEM( aParent, aCanChangeNet ),
-        m_subpolyIndex( aSubpolyIndex ),
-        m_layer( aLayer )
+            CN_ITEM( aParent, aCanChangeNet ),
+            m_subpolyIndex( aSubpolyIndex ),
+            m_layer( aLayer )
     {
         SHAPE_LINE_CHAIN outline = aParent->GetFilledPolysList( aLayer ).COutline( aSubpolyIndex );
 
@@ -382,7 +337,7 @@ public:
 
     bool ContainsPoint( const VECTOR2I p, int aAccuracy = 0 ) const
     {
-        auto zone = static_cast<ZONE*>( Parent() );
+        ZONE* zone = static_cast<ZONE*>( Parent() );
         int clearance = aAccuracy;
 
         if( zone->GetFilledPolysUseThickness() )
@@ -399,23 +354,23 @@ public:
         return m_bbox;
     }
 
-    virtual int             AnchorCount() const override;
-    virtual const VECTOR2I  GetAnchor( int n ) const override;
+    virtual int AnchorCount() const override;
+    virtual const VECTOR2I GetAnchor( int n ) const override;
 
 private:
-    std::vector<VECTOR2I> m_testOutlinePoints;
+    std::vector<VECTOR2I>                m_testOutlinePoints;
     std::unique_ptr<POLY_GRID_PARTITION> m_cachedPoly;
-    int m_subpolyIndex;
-    PCB_LAYER_ID m_layer;
+    int                                  m_subpolyIndex;
+    PCB_LAYER_ID                         m_layer;
 };
 
 class CN_LIST
 {
 private:
-    bool m_dirty;
-    bool m_hasInvalid;
+    bool                  m_dirty;
+    bool                  m_hasInvalid;
 
-    CN_RTREE<CN_ITEM*> m_index;
+    CN_RTREE<CN_ITEM*>    m_index;
 
 protected:
     std::vector<CN_ITEM*> m_items;
@@ -465,20 +420,10 @@ public:
         m_index.Query( aItem->BBox(), aItem->Layers(), aFunc );
     }
 
-    void SetHasInvalid( bool aInvalid = true )
-    {
-        m_hasInvalid = aInvalid;
-    }
+    void SetHasInvalid( bool aInvalid = true ) { m_hasInvalid = aInvalid; }
 
-    void SetDirty( bool aDirty = true )
-    {
-        m_dirty = aDirty;
-    }
-
-    bool IsDirty() const
-    {
-        return m_dirty;
-    }
+    void SetDirty( bool aDirty = true ) { m_dirty = aDirty; }
+    bool IsDirty() const { return m_dirty; }
 
     void RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage );
 
@@ -517,25 +462,17 @@ public:
 class CN_CLUSTER
 {
 private:
-
-    bool m_conflicting = false;
-    int m_originNet = 0;
-    CN_ITEM* m_originPad = nullptr;
+    bool                  m_conflicting = false;
+    int                   m_originNet = 0;
+    CN_ITEM*              m_originPad = nullptr;
     std::vector<CN_ITEM*> m_items;
 
 public:
     CN_CLUSTER();
     ~CN_CLUSTER();
 
-    bool HasValidNet() const
-    {
-        return m_originNet > 0;
-    }
-
-    int OriginNet() const
-    {
-        return m_originNet;
-    }
+    bool HasValidNet() const { return m_originNet > 0; }
+    int OriginNet() const { return m_originNet; }
 
     wxString OriginNetName() const;
 
@@ -543,25 +480,11 @@ public:
     bool    Contains( const BOARD_CONNECTED_ITEM* aItem );
     void    Dump();
 
-    int Size() const
-    {
-        return m_items.size();
-    }
+    int Size() const { return m_items.size(); }
 
-    bool HasNet() const
-    {
-        return m_originNet > 0;
-    }
+    bool IsOrphaned() const { return m_originPad == nullptr; }
 
-    bool IsOrphaned() const
-    {
-        return m_originPad == nullptr;
-    }
-
-    bool IsConflicting() const
-    {
-        return m_conflicting;
-    }
+    bool IsConflicting() const { return m_conflicting; }
 
     void Add( CN_ITEM* item );
 
@@ -574,4 +497,4 @@ public:
 typedef std::shared_ptr<CN_CLUSTER> CN_CLUSTER_PTR;
 
 
-#endif /* PCBNEW_CONNECTIVITY_CONNECTIVITY_ITEMS_H_ */
+#endif /* PCBNEW_CONNECTIVITY_ITEMS_H */

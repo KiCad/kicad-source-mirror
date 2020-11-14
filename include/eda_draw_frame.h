@@ -73,7 +73,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
 
     /// Default display origin transforms object
-    ORIGIN_TRANSFORMS           m_OriginTransforms;
+    ORIGIN_TRANSFORMS           m_originTransforms;
 
 protected:
     wxSocketServer*             m_socketServer;
@@ -85,9 +85,9 @@ protected:
     COLOR4D            m_gridColor;         // Grid color
     COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for
                                             // Pcbnew, BLACK or WHITE for eeschema
-    int                m_UndoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
+    int                m_undoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
                                             // to screens
-    bool               m_PolarCoords;       // For those frames that support polar coordinates
+    bool               m_polarCoords;       // For those frames that support polar coordinates
 
     bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
     long               m_firstRunDialogSetting;    // Show first run dialog on startup
@@ -105,7 +105,7 @@ protected:
     wxArrayString      m_replaceStringHistoryList;
 
     EDA_MSG_PANEL*     m_messagePanel;
-    int                m_MsgFrameHeight;
+    int                m_msgFrameHeight;
 
     COLOR_SETTINGS*    m_colorSettings;
 
@@ -188,8 +188,8 @@ public:
     /**
      * For those frames that support polar coordinates.
      */
-    bool GetShowPolarCoords() const { return m_PolarCoords; }
-    void SetShowPolarCoords( bool aShow ) { m_PolarCoords = aShow; }
+    bool GetShowPolarCoords() const { return m_polarCoords; }
+    void SetShowPolarCoords( bool aShow ) { m_polarCoords = aShow; }
 
     void ToggleUserUnits() override;
 
@@ -220,7 +220,7 @@ public:
      * Return a reference to the default ORIGIN_TRANSFORMS object
      */
     virtual ORIGIN_TRANSFORMS& GetOriginTransforms()
-    { return m_OriginTransforms; }
+    { return m_originTransforms; }
 
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;

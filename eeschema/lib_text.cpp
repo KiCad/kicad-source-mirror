@@ -80,7 +80,7 @@ EDA_ITEM* LIB_TEXT::Clone() const
 
     newitem->m_Unit      = m_Unit;
     newitem->m_Convert   = m_Convert;
-    newitem->m_Flags     = m_Flags;
+    newitem->m_flags     = m_flags;
 
     newitem->SetText( GetText() );
     newitem->SetEffects( *this );

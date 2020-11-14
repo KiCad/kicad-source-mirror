@@ -31,7 +31,7 @@
 #include <wx/event.h>
 #include <deque>
 
-#include <class_board_item.h>
+#include <board_item.h>
 
 #include <dialog_find_base.h>
 

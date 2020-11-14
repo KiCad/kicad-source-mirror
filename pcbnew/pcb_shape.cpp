@@ -47,7 +47,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype ) :
 {
     m_angle = 0;
     m_filled = false;
-    m_Flags = 0;
+    m_flags = 0;
     m_shape = S_SEGMENT;
     m_width = Millimeter2iu( DEFAULT_LINE_WIDTH );
 }
@@ -456,10 +456,10 @@ void PCB_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 
 FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 {
-    if( !m_Parent || m_Parent->Type() != PCB_FOOTPRINT_T )
+    if( !m_parent || m_parent->Type() != PCB_FOOTPRINT_T )
         return NULL;
 
-    return (FOOTPRINT*) m_Parent;
+    return (FOOTPRINT*) m_parent;
 }
 
 
@@ -1223,9 +1223,9 @@ void PCB_SHAPE::SwapData( BOARD_ITEM* aImage )
     std::swap( m_bezierPoints, image->m_bezierPoints );
     std::swap( m_poly, image->m_poly );
     std::swap( m_layer, image->m_layer );
-    std::swap( m_Flags, image->m_Flags );
-    std::swap( m_Status, image->m_Status );
-    std::swap( m_Parent, image->m_Parent );
+    std::swap( m_flags, image->m_flags );
+    std::swap( m_status, image->m_status );
+    std::swap( m_parent, image->m_parent );
     std::swap( m_forceVisible, image->m_forceVisible );
 }
 

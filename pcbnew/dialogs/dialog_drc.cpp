@@ -33,7 +33,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/number_badge.h>
@@ -428,7 +428,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
     case 1:
     {
-        MARKER_PCB* marker = dynamic_cast<MARKER_PCB*>( node->m_RcItem->GetParent() );
+        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
 
         if( marker )
         {
@@ -444,7 +444,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
     case 2:
     {
-        MARKER_PCB* marker = dynamic_cast<MARKER_PCB*>( node->m_RcItem->GetParent() );
+        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
 
         if( marker )
         {
@@ -465,7 +465,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     case 3:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
 
-        for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
+        for( PCB_MARKER* marker : m_brdEditor->GetBoard()->Markers() )
         {
             if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
                 m_brdEditor->GetCanvas()->GetView()->Update( marker );
@@ -479,7 +479,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     case 4:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
 
-        for( MARKER_PCB* marker : m_brdEditor->GetBoard()->Markers() )
+        for( PCB_MARKER* marker : m_brdEditor->GetBoard()->Markers() )
         {
             if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
                 m_brdEditor->GetCanvas()->GetView()->Update( marker );
@@ -494,7 +494,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     {
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
-        std::vector<MARKER_PCB*>& markers = m_brdEditor->GetBoard()->Markers();
+        std::vector<PCB_MARKER*>& markers = m_brdEditor->GetBoard()->Markers();
 
         for( unsigned i = 0; i < markers.size(); )
         {

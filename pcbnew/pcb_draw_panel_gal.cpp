@@ -32,7 +32,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <track.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <pcb_base_frame.h>
 #include <pcbnew_settings.h>
 #include <ratsnest/ratsnest_data.h>
@@ -201,7 +201,7 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         m_view->Add( footprint );
 
     // DRC markers
-    for( MARKER_PCB* marker : aBoard->Markers() )
+    for( PCB_MARKER* marker : aBoard->Markers() )
         m_view->Add( marker );
 
     // Finalize the triangulation threads

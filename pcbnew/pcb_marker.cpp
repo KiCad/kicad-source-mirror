@@ -27,7 +27,7 @@
 #include <base_units.h>
 #include <pcb_base_frame.h>
 #include <board.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <layers_id_colors_and_visibility.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -42,7 +42,7 @@
 
 
 
-MARKER_PCB::MARKER_PCB( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition ) :
+PCB_MARKER::PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition ) :
     BOARD_ITEM( nullptr, PCB_MARKER_T ),  // parent set during BOARD::Add()
     MARKER_BASE( SCALING_FACTOR, aItem )
 {
@@ -54,12 +54,12 @@ MARKER_PCB::MARKER_PCB( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition
 
 
 /* destructor */
-MARKER_PCB::~MARKER_PCB()
+PCB_MARKER::~PCB_MARKER()
 {
 }
 
 
-wxString MARKER_PCB::Serialize() const
+wxString PCB_MARKER::Serialize() const
 {
     return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
                              m_rcItem->GetSettingsKey(),
@@ -70,7 +70,7 @@ wxString MARKER_PCB::Serialize() const
 }
 
 
-MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
+PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
 {
     wxArrayString props = wxSplit( data, '|' );
     wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
@@ -83,11 +83,11 @@ MARKER_PCB* MARKER_PCB::Deserialize( const wxString& data )
 
     drcItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
 
-    return new MARKER_PCB( drcItem, markerPos );
+    return new PCB_MARKER( drcItem, markerPos );
 }
 
 
-void MARKER_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     aList.emplace_back( _( "Type" ), _( "Marker" ), DARKCYAN );
     aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage(), RED );
@@ -113,13 +113,13 @@ void MARKER_PCB::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void MARKER_PCB::Rotate(const wxPoint& aRotCentre, double aAngle)
+void PCB_MARKER::Rotate( const wxPoint& aRotCentre, double aAngle)
 {
     RotatePoint( &m_Pos, aRotCentre, aAngle );
 }
 
 
-void MARKER_PCB::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
+void PCB_MARKER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
         m_Pos.x = aCentre.x - ( m_Pos.x - aCentre.x );
@@ -128,7 +128,7 @@ void MARKER_PCB::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 }
 
 
-wxString MARKER_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
+wxString PCB_MARKER::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     // m_rcItem->GetErrorMessage() could be used instead, but is probably too long
     // for menu duty.
@@ -136,13 +136,13 @@ wxString MARKER_PCB::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-BITMAP_DEF MARKER_PCB::GetMenuImage() const
+BITMAP_DEF PCB_MARKER::GetMenuImage() const
 {
     return drc_xpm;
 }
 
 
-void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
+void PCB_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
 
@@ -170,7 +170,7 @@ void MARKER_PCB::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-GAL_LAYER_ID MARKER_PCB::GetColorLayer() const
+GAL_LAYER_ID PCB_MARKER::GetColorLayer() const
 {
     if( IsExcluded() )
         return LAYER_DRC_EXCLUSION;
@@ -191,14 +191,14 @@ GAL_LAYER_ID MARKER_PCB::GetColorLayer() const
 }
 
 
-KIGFX::COLOR4D MARKER_PCB::getColor() const
+KIGFX::COLOR4D PCB_MARKER::getColor() const
 {
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
     return colors->GetColor( GetColorLayer() );
 }
 
 
-const EDA_RECT MARKER_PCB::GetBoundingBox() const
+const EDA_RECT PCB_MARKER::GetBoundingBox() const
 {
     EDA_RECT bbox = m_shapeBoundingBox;
 
@@ -211,7 +211,7 @@ const EDA_RECT MARKER_PCB::GetBoundingBox() const
 }
 
 
-const BOX2I MARKER_PCB::ViewBBox() const
+const BOX2I PCB_MARKER::ViewBBox() const
 {
     EDA_RECT bbox = GetBoundingBox();
     return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );

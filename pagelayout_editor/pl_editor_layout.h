@@ -39,7 +39,7 @@
 class PL_EDITOR_LAYOUT
 {
 private:
-    EDA_RECT                m_BoundingBox;
+    EDA_RECT                m_boundingBox;
     PAGE_INFO               m_paper;
     TITLE_BLOCK             m_titles;
 
@@ -80,9 +80,9 @@ public:
      * may be called soon after ComputeBoundingBox() to return the same EDA_RECT,
      * as long as the CLASS_PL_EDITOR_LAYOUT has not changed.
      */
-    const EDA_RECT GetBoundingBox() const { return m_BoundingBox; }
+    const EDA_RECT GetBoundingBox() const { return m_boundingBox; }
 
-    void SetBoundingBox( const EDA_RECT& aBox ) { m_BoundingBox = aBox; }
+    void SetBoundingBox( const EDA_RECT& aBox ) { m_boundingBox = aBox; }
 
 #if defined(DEBUG)
     void    Show( int nestLevel, std::ostream& os ) const;

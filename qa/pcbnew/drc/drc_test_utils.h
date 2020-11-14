@@ -31,12 +31,12 @@
 
 #include <iostream>
 
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 
 /**
- * Define a stream function for logging #MARKER_PCB test assertions.
+ * Define a stream function for logging #PCB_MARKER test assertions.
  *
- * This has to be in the same namespace as #MARKER_PCB
+ * This has to be in the same namespace as #PCB_MARKER
  *
  * Note: this assumes there is not a operator<< for this type in the main
  * Pcbnew library. If one is introduced there, this one should be removed.
@@ -45,7 +45,7 @@
  * will keep testing logging and application-level operator<< implementations
  * separate, as they should be.
  */
-std::ostream& operator<<( std::ostream& os, const MARKER_PCB& aMarker );
+std::ostream& operator<<( std::ostream& os, const PCB_MARKER& aMarker );
 
 
 namespace KI_TEST
@@ -56,7 +56,7 @@ namespace KI_TEST
  * @param  aErrorCode   the expected DRC violation code
  * @return              true if the marker has this code
  */
-bool IsDrcMarkerOfType( const MARKER_PCB& aMarker, int aErrorCode );
+bool IsDrcMarkerOfType( const PCB_MARKER& aMarker, int aErrorCode );
 
 } // namespace KI_TEST
 

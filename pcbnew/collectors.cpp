@@ -23,13 +23,13 @@
  */
 
 #include <collectors.h>
-#include <class_board_item.h>             // class BOARD_ITEM
+#include <board_item.h>             // class BOARD_ITEM
 
 #include <footprint.h>
 #include <fp_shape.h>
 #include <pad.h>
 #include <track.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <dimension.h>
 #include <zone.h>
 #include <pcb_shape.h>
@@ -194,7 +194,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     PAD*            pad         = nullptr;
     bool            pad_through = false;
     VIA*            via         = nullptr;
-    MARKER_PCB*     marker      = nullptr;
+    PCB_MARKER*     marker      = nullptr;
     ZONE*           zone        = nullptr;
     PCB_SHAPE*      shape       = nullptr;
     DIMENSION_BASE* dimension   = nullptr;
@@ -381,7 +381,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_MARKER_T:
-        marker = static_cast<MARKER_PCB*>( item );
+        marker = static_cast<PCB_MARKER*>( item );
         break;
 
     default:

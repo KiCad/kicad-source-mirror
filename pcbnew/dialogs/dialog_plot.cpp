@@ -229,7 +229,7 @@ void DIALOG_PLOT::reInitDialog()
     int knownViolations = 0;
     int exclusions = 0;
 
-    for( MARKER_PCB* marker : m_parent->GetBoard()->Markers() )
+    for( PCB_MARKER* marker : m_parent->GetBoard()->Markers() )
     {
         if( marker->IsExcluded() )
             exclusions++;

@@ -738,7 +738,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     }
 
     // Display the flags:
-    msg.Printf( wxT( "0x%08X" ), m_Flags );
+    msg.Printf( wxT( "0x%08X" ), m_flags );
     aList.emplace_back( wxT( "Flags" ), msg, BLUE );
 
     // Display start and end positions:

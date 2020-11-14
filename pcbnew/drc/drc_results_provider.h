@@ -26,7 +26,7 @@
 #define DRC_PROVIDER__H
 
 #include <board.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <pcb_base_frame.h>
 #include <drc/drc_item.h>
 #include <widgets/ui_common.h>
@@ -44,7 +44,7 @@ private:
     BOARD*                   m_board;
 
     int                      m_severities;
-    std::vector<MARKER_PCB*> m_filteredMarkers;
+    std::vector<PCB_MARKER*> m_filteredMarkers;
 
 public:
     BOARD_DRC_ITEMS_PROVIDER( BOARD* aBoard ) :
@@ -61,7 +61,7 @@ public:
 
         m_filteredMarkers.clear();
 
-        for( MARKER_PCB* marker : m_board->Markers() )
+        for( PCB_MARKER* marker : m_board->Markers() )
         {
             int markerSeverity;
 
@@ -84,7 +84,7 @@ public:
 
         int count = 0;
 
-        for( MARKER_PCB* marker : m_board->Markers() )
+        for( PCB_MARKER* marker : m_board->Markers() )
         {
             int markerSeverity;
 
@@ -102,14 +102,14 @@ public:
 
     std::shared_ptr<RC_ITEM> GetItem( int aIndex ) override
     {
-        MARKER_PCB* marker = m_filteredMarkers[ aIndex ];
+        PCB_MARKER* marker = m_filteredMarkers[ aIndex ];
 
         return marker ? marker->GetRCItem() : nullptr;
     }
 
     void DeleteItem( int aIndex, bool aDeep ) override
     {
-        MARKER_PCB* marker = m_filteredMarkers[ aIndex ];
+        PCB_MARKER* marker = m_filteredMarkers[ aIndex ];
         m_filteredMarkers.erase( m_filteredMarkers.begin() + aIndex );
 
         if( aDeep )

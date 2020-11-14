@@ -38,7 +38,7 @@
 
 
 #include <board_connected_item.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <convert_to_biu.h>
 #include <pcb_display_options.h>
 #include <pcbnew.h>

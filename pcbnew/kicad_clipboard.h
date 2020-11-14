@@ -31,7 +31,7 @@
 #define KICAD_CLIPBOARD_H
 
 #include <plugins/kicad/kicad_plugin.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <footprint.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <memory.h>

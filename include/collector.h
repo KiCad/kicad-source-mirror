@@ -57,16 +57,16 @@ protected:
     std::vector<EDA_ITEM*> m_list;       // Primary list of most likely items
     std::vector<EDA_ITEM*> m_backupList; // Secondary list with items removed by heuristics
 
-    const KICAD_T* m_scanTypes;
-    INSPECTOR_FUNC m_inspector;
-    wxPoint        m_refPos;            // Reference position used to generate the collection.
-    EDA_RECT       m_refBox;            // Selection rectangle used to generate the collection.
+    const KICAD_T*         m_scanTypes;
+    INSPECTOR_FUNC         m_inspector;
+    wxPoint                m_refPos;     // Reference position used to generate the collection.
+    EDA_RECT               m_refBox;     // Selection rectangle used to generate the collection.
 
 public:
-    int            m_Threshold;         // Hit-test threshold in internal units.
+    int            m_Threshold;          // Hit-test threshold in internal units.
 
-    wxString       m_MenuTitle;         // The title of selection disambiguation menu (if needed)
-    bool           m_MenuCancelled;     // Indicates selection disambiguation menu was cancelled
+    wxString       m_MenuTitle;          // The title of selection disambiguation menu (if needed)
+    bool           m_MenuCancelled;      // Indicates selection disambiguation menu was cancelled
 
 public:
     COLLECTOR() :

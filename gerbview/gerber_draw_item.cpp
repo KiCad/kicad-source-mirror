@@ -919,12 +919,12 @@ void GERBER_DRAW_ITEM::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() <<
 
-    " shape=\"" << m_Shape << '"' <<
-    " addr=\"" << std::hex << this << std::dec << '"' <<
-    " layer=\"" << GetLayer() << '"' <<
-    " size=\"" << m_Size << '"' <<
-    " flags=\"" << m_Flags << '"' <<
-    " status=\"" << GetStatus() << '"' <<
+                                 " shape=\"" << m_Shape << '"' <<
+                                 " addr=\"" << std::hex << this << std::dec << '"' <<
+                                 " layer=\"" << GetLayer() << '"' <<
+                                 " size=\"" << m_Size << '"' <<
+                                 " flags=\"" << m_flags << '"' <<
+                                 " status=\"" << GetStatus() << '"' <<
     "<start" << m_Start << "/>" <<
     "<end" << m_End << "/>";
 

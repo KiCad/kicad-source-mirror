@@ -29,7 +29,7 @@
 
 #include <wx/htmllbox.h>
 #include <rc_item.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <board.h>
 #include <dialog_drc_base.h>
 #include <widgets/progress_reporter.h>

@@ -24,7 +24,7 @@
  */
 
 #include <board.h>
-#include <class_board_item.h>
+#include <board_item.h>
 #include <connectivity/connectivity_data.h>
 #include <drc/drc_engine.h>
 #include <kicad_string.h>

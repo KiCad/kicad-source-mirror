@@ -262,7 +262,7 @@ bool LIB_BEZIER::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 
 bool LIB_BEZIER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     EDA_RECT sel = aRect;

@@ -22,16 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_marker_pcb.h
- * @brief Markers used to show a drc problem on boards.
- */
-
-#ifndef CLASS_MARKER_PCB_H
-#define CLASS_MARKER_PCB_H
+#ifndef PCB_MARKER_H
+#define PCB_MARKER_H
 
 
-#include <class_board_item.h>
+#include <board_item.h>
 #include <drc/drc_item.h>
 #include <marker_base.h>
 
@@ -43,11 +38,11 @@ class DRC_ITEM;
 class MSG_PANEL_ITEM;
 
 
-class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
+class PCB_MARKER : public BOARD_ITEM, public MARKER_BASE
 {
 public:
-    MARKER_PCB( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition );
-    ~MARKER_PCB();
+    PCB_MARKER( std::shared_ptr<RC_ITEM> aItem, const wxPoint& aPosition );
+    ~PCB_MARKER();
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -58,7 +53,7 @@ public:
 
     wxString Serialize() const;
 
-    static MARKER_PCB* Deserialize( const wxString& data );
+    static PCB_MARKER* Deserialize( const wxString& data );
 
     void Move(const wxPoint& aMoveVector) override
     {
@@ -106,15 +101,15 @@ public:
 #endif
 
     /** Get class name
-     * @return  string "MARKER_PCB"
+     * @return  string "PCB_MARKER"
      */
     virtual wxString GetClass() const override
     {
-        return wxT( "MARKER_PCB" );
+        return wxT( "PCB_MARKER" );
     }
 
 protected:
     KIGFX::COLOR4D getColor() const override;
 };
 
-#endif      //  CLASS_MARKER_PCB_H
+#endif      //  PCB_MARKER_H

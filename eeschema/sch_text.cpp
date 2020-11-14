@@ -478,8 +478,8 @@ void SCH_TEXT::GetContextualTextVars( wxArrayString* aVars ) const
     if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
         aVars->push_back( wxT( "CONNECTION_TYPE" ) );
 
-    if( Type() == SCH_SHEET_PIN_T && m_Parent )
-        static_cast<SCH_SHEET*>( m_Parent )->GetContextualTextVars( aVars );
+    if( Type() == SCH_SHEET_PIN_T && m_parent )
+        static_cast<SCH_SHEET*>( m_parent )->GetContextualTextVars( aVars );
 }
 
 
@@ -497,9 +497,9 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
                     return true;
                 }
 
-                if( Type() == SCH_SHEET_PIN_T && m_Parent )
+                if( Type() == SCH_SHEET_PIN_T && m_parent )
                 {
-                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_Parent );
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
                     if( sheet->ResolveTextVar( token, aDepth ) )
                         return true;

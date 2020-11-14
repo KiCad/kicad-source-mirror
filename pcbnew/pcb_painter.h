@@ -49,7 +49,7 @@ class PCB_TEXT;
 class FP_TEXT;
 class DIMENSION_BASE;
 class PCB_TARGET;
-class MARKER_PCB;
+class PCB_MARKER;
 class NET_SETTINGS;
 class NETINFO_LIST;
 
@@ -293,7 +293,7 @@ protected:
     void draw( const ZONE* aZone, int aLayer );
     void draw( const DIMENSION_BASE* aDimension, int aLayer );
     void draw( const PCB_TARGET* aTarget );
-    void draw( const MARKER_PCB* aMarker, int aLayer );
+    void draw( const PCB_MARKER* aMarker, int aLayer );
 
     /**
      * Function getLineThickness()

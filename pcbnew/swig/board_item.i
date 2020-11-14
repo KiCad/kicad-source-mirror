@@ -30,12 +30,12 @@
 
 
 
-%include class_board_item.h         // generate code for this interface
+%include board_item.h         // generate code for this interface
 
 %rename(Get) operator       BOARD_ITEM*;
 
 %{
-#include <class_board_item.h>
+#include <board_item.h>
 %}
 
 
@@ -81,7 +81,7 @@ static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
-static MARKER_PCB*           Cast_to_MARKER_PCB( BOARD_ITEM* );
+static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
 static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static PAD*                  Cast_to_PAD( BOARD_ITEM* );
@@ -106,7 +106,7 @@ static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* );
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* );
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* );
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* );
-static MARKER_PCB*           Cast_to_MARKER_PCB( BOARD_ITEM* );
+static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* );
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* );
 static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* );
 static PAD*                  Cast_to_PAD( BOARD_ITEM* );
@@ -194,7 +194,7 @@ static FOOTPRINT*            Cast_to_FOOTPRINT( BOARD_ITEM* self )            { 
 static PCB_GROUP*            Cast_to_PCB_GROUP( BOARD_ITEM* self )            { return dynamic_cast<PCB_GROUP*>(self);            }
 static FP_TEXT*              Cast_to_FP_TEXT( BOARD_ITEM* self )              { return dynamic_cast<FP_TEXT*>(self);              }
 static PCB_SHAPE*            Cast_to_PCB_SHAPE( BOARD_ITEM* self )            { return dynamic_cast<PCB_SHAPE*>(self);            }
-static MARKER_PCB*           Cast_to_MARKER_PCB( BOARD_ITEM* self )           { return dynamic_cast<MARKER_PCB*>(self);           }
+static PCB_MARKER*           Cast_to_PCB_MARKER( BOARD_ITEM* self )           { return dynamic_cast<PCB_MARKER*>(self);           }
 static BOARD*                Cast_to_BOARD( BOARD_ITEM* self )                { return dynamic_cast<BOARD*>(self);                }
 static FP_SHAPE*             Cast_to_FP_SHAPE( BOARD_ITEM* self )             { return dynamic_cast<FP_SHAPE*>(self);             }
 static PAD*                  Cast_to_PAD( BOARD_ITEM* self )                  { return dynamic_cast<PAD*>(self);                  }

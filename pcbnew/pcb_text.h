@@ -26,7 +26,7 @@
 #define PCB_TEXT_H
 
 #include <eda_text.h>
-#include <class_board_item.h>
+#include <board_item.h>
 
 
 class LINE_READER;

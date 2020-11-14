@@ -27,7 +27,7 @@
 #include <pcbnew_utils/board_file_utils.h>
 #include <board.h>
 #include <footprint.h>
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 #include <drc/drc_item.h>
 #include <drc/drc_engine.h>
 #include <widgets/ui_common.h>
@@ -382,9 +382,9 @@ static std::vector<COURTYARD_OVERLAP_TEST_CASE> courtyard_cases = {
 
 
 /**
- * Check if a #MARKER_PCB is described by a particular #COURTYARD_COLLISION object.
+ * Check if a #PCB_MARKER is described by a particular #COURTYARD_COLLISION object.
  */
-static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
+static bool CollisionMatchesExpected( BOARD& aBoard, const PCB_MARKER& aMarker,
                                       const COURTYARD_COLLISION& aCollision )
 {
     auto reporter = std::static_pointer_cast<DRC_ITEM>( aMarker.GetRCItem() );
@@ -415,7 +415,7 @@ static bool CollisionMatchesExpected( BOARD& aBoard, const MARKER_PCB& aMarker,
  * @param aCollisions list of expected collisions
  */
 static void CheckCollisionsMatchExpected( BOARD& aBoard,
-                                          const std::vector<std::unique_ptr<MARKER_PCB>>& aMarkers,
+                                          const std::vector<std::unique_ptr<PCB_MARKER>>& aMarkers,
                                           const std::vector<COURTYARD_COLLISION>& aExpCollisions )
 {
     for( const auto& marker : aMarkers )
@@ -425,7 +425,7 @@ static void CheckCollisionsMatchExpected( BOARD& aBoard,
     }
 
     KI_TEST::CheckUnorderedMatches( aExpCollisions, aMarkers,
-            [&]( const COURTYARD_COLLISION& aColl, const std::unique_ptr<MARKER_PCB>& aMarker )
+            [&]( const COURTYARD_COLLISION& aColl, const std::unique_ptr<PCB_MARKER>& aMarker )
             {
                 return CollisionMatchesExpected( aBoard, *aMarker, aColl );
             } );
@@ -452,7 +452,7 @@ static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
     bds.m_DRCSeverities[ DRCE_MISSING_COURTYARD ] = RPT_SEVERITY_IGNORE;
 
     // list of markers to collect
-    std::vector<std::unique_ptr<MARKER_PCB>> markers;
+    std::vector<std::unique_ptr<PCB_MARKER>> markers;
 
     DRC_ENGINE drcEngine( board.get(), &board->GetDesignSettings() );
 
@@ -465,7 +465,7 @@ static void DoCourtyardOverlapTest( const COURTYARD_OVERLAP_TEST_CASE& aCase,
                     || aItem->GetErrorCode() == DRCE_MALFORMED_COURTYARD
                     || aItem->GetErrorCode() == DRCE_MISSING_COURTYARD )
                 {
-                    markers.push_back( std::make_unique<MARKER_PCB>( aItem, aPos ) );
+                    markers.push_back( std::make_unique<PCB_MARKER>( aItem, aPos ) );
                 }
             } );
 

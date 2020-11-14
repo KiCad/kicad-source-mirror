@@ -194,7 +194,7 @@ bool SCH_JUNCTION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool SCH_JUNCTION::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+    if( m_flags & STRUCT_DELETED || m_flags & SKIP_STRUCT )
         return false;
 
     if( aContained )

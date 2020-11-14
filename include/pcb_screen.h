@@ -27,7 +27,7 @@
 
 
 #include <base_screen.h>
-#include <class_board_item.h>
+#include <board_item.h>
 
 
 /* Handle info to display a board */

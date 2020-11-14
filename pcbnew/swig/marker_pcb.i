@@ -1,6 +1,6 @@
 
-%include class_marker_pcb.h
+%include pcb_marker.h
 %{
-#include <class_marker_pcb.h>
+#include <pcb_marker.h>
 %}
 

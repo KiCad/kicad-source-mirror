@@ -100,7 +100,7 @@ bool LIB_ARC::HitTest( const wxPoint& aRefPoint, int aAccuracy ) const
 
 bool LIB_ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     wxPoint  center = DefaultTransform.TransformCoordinate( GetPosition() );

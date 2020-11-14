@@ -35,7 +35,7 @@ FP_TEXT::FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type ) :
     BOARD_ITEM( aParentFootprint, PCB_FP_TEXT_T ),
     EDA_TEXT()
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
     m_Type = text_type;
     m_keepUpright = true;
@@ -197,7 +197,7 @@ int FP_TEXT::GetLength() const
 
 void FP_TEXT::SetDrawCoord()
 {
-    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_Parent );
+    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_parent );
 
     SetTextPos( m_Pos0 );
 
@@ -216,7 +216,7 @@ void FP_TEXT::SetDrawCoord()
 
 void FP_TEXT::SetLocalCoord()
 {
-    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_Parent );
+    const FOOTPRINT* parentFootprint = static_cast<const FOOTPRINT*>( m_parent );
 
     if( parentFootprint )
     {
@@ -246,7 +246,7 @@ const EDA_RECT FP_TEXT::GetBoundingBox() const
 
 double FP_TEXT::GetDrawRotation() const
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
     double     rotation = GetTextAngle();
 
     if( parentFootprint )
@@ -273,7 +273,7 @@ double FP_TEXT::GetDrawRotation() const
 // see class_text_mod.h
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_Parent );
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
     if( parentFootprint == NULL )        // Happens in modedit, and for new texts
         return;

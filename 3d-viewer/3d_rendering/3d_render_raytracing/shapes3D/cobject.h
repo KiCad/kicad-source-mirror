@@ -34,7 +34,7 @@
 #include "../hitinfo.h"
 #include "../cmaterial.h"
 
-#include <class_board_item.h>
+#include <board_item.h>
 
 enum class OBJECT3D_TYPE
 {

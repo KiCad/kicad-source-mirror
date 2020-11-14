@@ -66,7 +66,7 @@ protected:
         m_peer = aPeer;
         m_index = aIndex;
         m_penWidth = 0;
-        m_Flags = 0;
+        m_flags = 0;
     }
 
 public:

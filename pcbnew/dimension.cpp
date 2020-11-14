@@ -305,7 +305,7 @@ void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     // for now, display only the text within the DIMENSION using class PCB_TEXT.
     wxString    msg;
 
-    wxCHECK_RET( m_Parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
+    wxCHECK_RET( m_parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
     aList.emplace_back( _( "Dimension" ), m_text.GetShownText(), DARKGREEN );
 
