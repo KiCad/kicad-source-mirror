@@ -408,10 +408,10 @@ double FP_TEXT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     if( IsParentFlipped() && !aView->IsLayerVisible( LAYER_MOD_BK ) )
         return HIDE;
 
-    if( IsFrontLayer( m_Layer ) && !aView->IsLayerVisible( LAYER_MOD_TEXT_FR ) )
+    if( IsFrontLayer( m_layer ) && !aView->IsLayerVisible( LAYER_MOD_TEXT_FR ) )
         return HIDE;
 
-    if( IsBackLayer( m_Layer ) && !aView->IsLayerVisible( LAYER_MOD_TEXT_BK ) )
+    if( IsBackLayer( m_layer ) && !aView->IsLayerVisible( LAYER_MOD_TEXT_BK ) )
         return HIDE;
 
     // Other layers are shown without any conditions

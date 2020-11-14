@@ -196,7 +196,7 @@ class SCH_ITEM : public EDA_ITEM
     friend class CONNECTION_GRAPH;
 
 protected:
-    SCH_LAYER_ID      m_Layer;
+    SCH_LAYER_ID      m_layer;
     EDA_ITEMS         m_connections;      // List of items connected to this item.
     FIELDS_AUTOPLACED m_fieldsAutoplaced; // indicates status of field autoplacement
     wxPoint           m_storedPos;        // a temporary variable used in some move commands
@@ -276,14 +276,14 @@ public:
     /**
      * Return the layer this item is on.
      */
-    SCH_LAYER_ID GetLayer() const { return m_Layer; }
+    SCH_LAYER_ID GetLayer() const { return m_layer; }
 
     /**
      * Set the layer this item is on.
      *
      * @param aLayer The layer number.
      */
-    void SetLayer( SCH_LAYER_ID aLayer )  { m_Layer = aLayer; }
+    void SetLayer( SCH_LAYER_ID aLayer )  { m_layer = aLayer; }
 
     /**
      * Return the layers the item is drawn on (which may be more than its "home" layer)
@@ -369,7 +369,7 @@ public:
 
     virtual bool IsDangling() const { return false; }
 
-    virtual bool CanConnect( const SCH_ITEM* aItem ) const { return m_Layer == aItem->GetLayer(); }
+    virtual bool CanConnect( const SCH_ITEM* aItem ) const { return m_layer == aItem->GetLayer(); }
 
     /**
      * @return true if the schematic item can connect to another schematic item.

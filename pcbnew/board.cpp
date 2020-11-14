@@ -72,12 +72,12 @@ BOARD::BOARD() :
 
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
-        m_Layer[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
+        m_layers[layer].m_name = GetStandardLayerName( ToLAYER_ID( layer ) );
 
         if( IsCopperLayer( layer ) )
-            m_Layer[layer].m_type = LT_SIGNAL;
+            m_layers[layer].m_type = LT_SIGNAL;
         else
-            m_Layer[layer].m_type = LT_UNDEFINED;
+            m_layers[layer].m_type = LT_UNDEFINED;
     }
 
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
@@ -296,9 +296,9 @@ TRACKS BOARD::TracksInNet( int aNetCode )
 
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
-    if( unsigned( aIndex ) < arrayDim( m_Layer ) )
+    if( unsigned( aIndex ) < arrayDim( m_layers ) )
     {
-        m_Layer[ aIndex ] = aLayer;
+        m_layers[ aIndex ] = aLayer;
         return true;
     }
 
@@ -312,8 +312,8 @@ const PCB_LAYER_ID BOARD::GetLayerID( const wxString& aLayerName ) const
     // Check the BOARD physical layer names.
     for( LAYER_NUM layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
-        if ( ( m_Layer[ layer ].m_name == aLayerName )
-                || ( m_Layer[ layer ].m_userName == aLayerName ) )
+        if ( ( m_layers[ layer ].m_name == aLayerName )
+                || ( m_layers[ layer ].m_userName == aLayerName ) )
             return ToLAYER_ID( layer );
     }
 
@@ -336,8 +336,8 @@ const wxString BOARD::GetLayerName( PCB_LAYER_ID aLayer ) const
         // Standard names were set in BOARD::BOARD() but they may be over-ridden by
         // BOARD::SetLayerName().  For copper layers, return the user defined layer name,
         // if it was set.  Otherwise return the Standard English layer name.
-        if( !m_Layer[aLayer].m_userName.IsEmpty() )
-            return m_Layer[aLayer].m_userName;
+        if( !m_layers[aLayer].m_userName.IsEmpty() )
+            return m_layers[aLayer].m_userName;
     }
 
     return GetStandardLayerName( aLayer );
@@ -354,7 +354,7 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
 
     if( IsLayerEnabled( aLayer ) )
     {
-        m_Layer[aLayer].m_userName = aLayerName;
+        m_layers[aLayer].m_userName = aLayerName;
         return true;
     }
 
@@ -370,7 +370,7 @@ LAYER_T BOARD::GetLayerType( PCB_LAYER_ID aLayer ) const
     //@@IMB: The original test was broken due to the discontinuity
     // in the layer sequence.
     if( IsLayerEnabled( aLayer ) )
-        return m_Layer[aLayer].m_type;
+        return m_layers[aLayer].m_type;
 
     return LT_SIGNAL;
 }
@@ -385,7 +385,7 @@ bool BOARD::SetLayerType( PCB_LAYER_ID aLayer, LAYER_T aLayerType )
     // in the layer sequence.
     if( IsLayerEnabled( aLayer ) )
     {
-        m_Layer[aLayer].m_type = aLayerType;
+        m_layers[aLayer].m_type = aLayerType;
         return true;
     }
 

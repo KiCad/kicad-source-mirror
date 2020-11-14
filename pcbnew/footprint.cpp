@@ -44,7 +44,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_initial_comments( 0 )
 {
     m_attributes   = 0;
-    m_Layer        = F_Cu;
+    m_layer        = F_Cu;
     m_orient       = 0;
     m_fpStatus     = FP_PADS_are_LOCKED;
     m_arflag       = 0;
@@ -1120,7 +1120,7 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
     aCount = 2;
     aLayers[0] = LAYER_ANCHOR;
 
-    switch( m_Layer )
+    switch( m_layer )
     {
     default:
         wxASSERT_MSG( false, "Illegal layer" );    // do you really have footprints placed on
@@ -1163,8 +1163,8 @@ void FOOTPRINT::ViewGetLayers( int aLayers[], int& aCount ) const
 
 double FOOTPRINT::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
-    int layer = ( m_Layer == F_Cu ) ? LAYER_MOD_FR :
-                ( m_Layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
+    int layer = ( m_layer == F_Cu ) ? LAYER_MOD_FR :
+                ( m_layer == B_Cu ) ? LAYER_MOD_BK : LAYER_ANCHOR;
 
     // Currently this is only pertinent for the anchor layer; everything else is drawn from the
     // children.

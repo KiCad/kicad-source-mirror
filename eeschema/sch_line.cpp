@@ -45,9 +45,9 @@ SCH_LINE::SCH_LINE( const wxPoint& pos, int layer ) :
 
     switch( layer )
     {
-    default:         m_Layer = LAYER_NOTES; break;
-    case LAYER_WIRE: m_Layer = LAYER_WIRE;  break;
-    case LAYER_BUS:  m_Layer = LAYER_BUS;   break;
+    default: m_layer = LAYER_NOTES; break;
+    case LAYER_WIRE: m_layer = LAYER_WIRE;  break;
+    case LAYER_BUS: m_layer = LAYER_BUS;   break;
     }
 }
 
@@ -141,7 +141,7 @@ void SCH_LINE::MoveEnd( const wxPoint& aOffset )
 void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 {
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
-                                 << " layer=\"" << m_Layer << '"'
+                                 << " layer=\"" << m_layer << '"'
                                  << " startIsDangling=\"" << m_startIsDangling
                                  << '"' << " endIsDangling=\""
                                  << m_endIsDangling << '"' << ">"
@@ -156,7 +156,7 @@ void SCH_LINE::Show( int nestLevel, std::ostream& os ) const
 void SCH_LINE::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 2;
-    aLayers[0] = m_Layer;
+    aLayers[0] = m_layer;
     aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
@@ -276,7 +276,7 @@ int SCH_LINE::GetPenWidth() const
 {
     NETCLASSPTR netclass = NetClass();
 
-    switch ( m_Layer )
+    switch ( m_layer )
     {
     default:
         if( m_stroke.GetWidth() > 0 )
@@ -578,7 +578,7 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
 bool SCH_LINE::IsConnectable() const
 {
-    if( m_Layer == LAYER_WIRE || m_Layer == LAYER_BUS )
+    if( m_layer == LAYER_WIRE || m_layer == LAYER_BUS )
         return true;
 
     return false;
@@ -587,7 +587,7 @@ bool SCH_LINE::IsConnectable() const
 
 bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
 {
-    if( m_Layer == LAYER_WIRE )
+    if( m_layer == LAYER_WIRE )
     {
         switch( aItem->Type() )
         {
@@ -605,7 +605,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
             break;
         }
     }
-    else if( m_Layer == LAYER_BUS )
+    else if( m_layer == LAYER_BUS )
     {
         switch( aItem->Type() )
         {
@@ -622,7 +622,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
         }
     }
 
-    return aItem->GetLayer() == m_Layer;
+    return aItem->GetLayer() == m_layer;
 }
 
 
@@ -648,7 +648,7 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     if( m_start.x == m_end.x )
     {
-        switch( m_Layer )
+        switch( m_layer )
         {
         case LAYER_WIRE:  txtfmt = _( "Vertical Wire, length %s" );         break;
         case LAYER_BUS:   txtfmt = _( "Vertical Bus, length %s" );          break;
@@ -657,7 +657,7 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
     }
     else if( m_start.y == m_end.y )
     {
-        switch( m_Layer )
+        switch( m_layer )
         {
         case LAYER_WIRE:  txtfmt = _( "Horizontal Wire, length %s" );         break;
         case LAYER_BUS:   txtfmt = _( "Horizontal Bus, length %s" );          break;
@@ -666,7 +666,7 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
     }
     else
     {
-        switch( m_Layer )
+        switch( m_layer )
         {
         case LAYER_WIRE:  txtfmt = _( "Wire, length %s" );         break;
         case LAYER_BUS:   txtfmt = _( "Bus, length %s" );          break;
@@ -681,9 +681,9 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 BITMAP_DEF SCH_LINE::GetMenuImage() const
 {
-    if( m_Layer == LAYER_NOTES )
+    if( m_layer == LAYER_NOTES )
         return add_dashed_line_xpm;
-    else if( m_Layer == LAYER_WIRE )
+    else if( m_layer == LAYER_WIRE )
         return add_line_xpm;
 
     return add_bus_xpm;
@@ -746,7 +746,7 @@ void SCH_LINE::SwapData( SCH_ITEM* aItem )
 {
     SCH_LINE* item = (SCH_LINE*) aItem;
 
-    std::swap( m_Layer, item->m_Layer );
+    std::swap( m_layer, item->m_layer );
 
     std::swap( m_start, item->m_start );
     std::swap( m_end, item->m_end );
@@ -758,7 +758,7 @@ void SCH_LINE::SwapData( SCH_ITEM* aItem )
 
 bool SCH_LINE::doIsConnected( const wxPoint& aPosition ) const
 {
-    if( m_Layer != LAYER_WIRE && m_Layer != LAYER_BUS )
+    if( m_layer != LAYER_WIRE && m_layer != LAYER_BUS )
         return false;
 
     return IsEndPoint( aPosition );
@@ -776,7 +776,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter )
 
     aPlotter->SetColor( color );
 
-    switch( m_Layer )
+    switch( m_layer )
     {
     case LAYER_WIRE: penWidth = settings->m_DefaultWireThickness; break;
     case LAYER_BUS:  penWidth = settings->m_DefaultBusThickness;  break;

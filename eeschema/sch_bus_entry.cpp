@@ -53,7 +53,7 @@ SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, bool 
 SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_WIRE_ENTRY_T, pos, aFlipY )
 {
-    m_Layer  = LAYER_WIRE;
+    m_layer  = LAYER_WIRE;
     m_connected_bus_item = nullptr;
 }
 
@@ -61,7 +61,7 @@ SCH_BUS_WIRE_ENTRY::SCH_BUS_WIRE_ENTRY( const wxPoint& pos, bool aFlipY ) :
 SCH_BUS_BUS_ENTRY::SCH_BUS_BUS_ENTRY( const wxPoint& pos, bool aFlipY ) :
     SCH_BUS_ENTRY_BASE( SCH_BUS_BUS_ENTRY_T, pos, aFlipY )
 {
-    m_Layer = LAYER_BUS;
+    m_layer = LAYER_BUS;
     m_connected_bus_items[0] = nullptr;
     m_connected_bus_items[1] = nullptr;
 }
@@ -198,7 +198,7 @@ void SCH_BUS_ENTRY_BASE::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffs
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = ( GetStrokeColor()  == COLOR4D::UNSPECIFIED ) ?
-            aSettings->GetLayerColor( m_Layer ) : GetStrokeColor();
+                    aSettings->GetLayerColor( m_layer ) : GetStrokeColor();
     int     penWidth = ( GetPenWidth() == 0 ) ? aSettings->GetDefaultPenWidth() : GetPenWidth();
 
     GRLine( nullptr, DC, m_pos.x + aOffset.x, m_pos.y + aOffset.y, GetEnd().x + aOffset.x,
@@ -393,7 +393,7 @@ void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter )
     auto* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
 
     COLOR4D color = ( GetStrokeColor() == COLOR4D::UNSPECIFIED ) ?
-            settings->GetLayerColor( m_Layer ) : GetStrokeColor();
+                    settings->GetLayerColor( m_layer ) : GetStrokeColor();
     int     penWidth = ( GetPenWidth() == 0 ) ? settings->GetDefaultPenWidth() : GetPenWidth();
 
     penWidth = std::max( penWidth, settings->GetMinPenWidth() );

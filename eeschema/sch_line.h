@@ -73,11 +73,11 @@ public:
 
         for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
         {
-            if( *p == SCH_LINE_LOCATE_WIRE_T && m_Layer == LAYER_WIRE )
+            if( *p == SCH_LINE_LOCATE_WIRE_T && m_layer == LAYER_WIRE )
                 return true;
-            else if ( *p == SCH_LINE_LOCATE_BUS_T && m_Layer == LAYER_BUS )
+            else if ( *p == SCH_LINE_LOCATE_BUS_T && m_layer == LAYER_BUS )
                 return true;
-            else if ( *p == SCH_LINE_LOCATE_GRAPHIC_LINE_T && m_Layer == LAYER_NOTES )
+            else if ( *p == SCH_LINE_LOCATE_GRAPHIC_LINE_T && m_layer == LAYER_NOTES )
                 return true;
         }
 

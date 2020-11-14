@@ -45,7 +45,7 @@ SCH_JUNCTION::SCH_JUNCTION( const wxPoint& aPosition, int aDiameter, SCH_LAYER_I
     m_pos   = aPosition;
     m_color = COLOR4D::UNSPECIFIED;
     m_diameter = aDiameter;
-    m_Layer = aLayer;
+    m_layer = aLayer;
 }
 
 
@@ -70,7 +70,7 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount     = 2;
-    aLayers[0] = m_Layer;
+    aLayers[0] = m_layer;
     aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 

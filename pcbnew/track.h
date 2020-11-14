@@ -370,19 +370,19 @@ public:
 
         for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
         {
-            if( *p == PCB_LOCATE_STDVIA_T && m_ViaType == VIATYPE::THROUGH )
+            if( *p == PCB_LOCATE_STDVIA_T && m_viaType == VIATYPE::THROUGH )
                 return true;
-            else if( *p == PCB_LOCATE_UVIA_T && m_ViaType == VIATYPE::MICROVIA )
+            else if( *p == PCB_LOCATE_UVIA_T && m_viaType == VIATYPE::MICROVIA )
                 return true;
-            else if( *p == PCB_LOCATE_BBVIA_T && m_ViaType == VIATYPE::BLIND_BURIED )
+            else if( *p == PCB_LOCATE_BBVIA_T && m_viaType == VIATYPE::BLIND_BURIED )
                 return true;
         }
 
         return false;
     }
 
-    VIATYPE GetViaType() const { return m_ViaType; }
-    void SetViaType( VIATYPE aViaType ) { m_ViaType = aViaType; }
+    VIATYPE GetViaType() const { return m_viaType; }
+    void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
@@ -391,8 +391,7 @@ public:
 
     /**
      * Function SetLayerPair
-     * For a via m_Layer contains the top layer, the other layer is in
-     * m_BottomLayer
+     * For a via m_layer contains the top layer, the other layer is in m_bottomLayer
      * @param aTopLayer = first layer connected by the via
      * @param aBottomLayer = last layer connected by the via
      */
@@ -455,14 +454,14 @@ public:
      * Sets the unconnected removal property.  If true, the copper is removed on zone fill
      * or when specifically requested when the via is not connected on a layer.
      */
-    void SetRemoveUnconnected( bool aSet )      { m_RemoveUnconnectedLayer = aSet; }
-    bool GetRemoveUnconnected() const           { return m_RemoveUnconnectedLayer; }
+    void SetRemoveUnconnected( bool aSet )      { m_removeUnconnectedLayer = aSet; }
+    bool GetRemoveUnconnected() const           { return m_removeUnconnectedLayer; }
 
     /**
      * Sets whether we keep the top and bottom connections even if they are not connected
      */
-    void SetKeepTopBottom( bool aSet )      { m_KeepTopBottomLayer = aSet; }
-    bool GetKeepTopBottom() const           { return m_KeepTopBottomLayer; }
+    void SetKeepTopBottom( bool aSet )      { m_keepTopBottomLayer = aSet; }
+    bool GetKeepTopBottom() const           { return m_keepTopBottomLayer; }
 
     /**
      * Checks to see whether the via should have a pad on the specific layer
@@ -483,14 +482,14 @@ public:
      * sets the drill value for vias.
      * @param aDrill is the new drill diameter
     */
-    void SetDrill( int aDrill )             { m_Drill = aDrill; }
+    void SetDrill( int aDrill )             { m_drill = aDrill; }
 
     /**
      * Function GetDrill
      * returns the local drill setting for this VIA.  If you want the calculated value,
      * use GetDrillValue() instead.
      */
-    int GetDrill() const                    { return m_Drill; }
+    int GetDrill() const                    { return m_drill; }
 
     /**
      * Function GetDrillValue
@@ -504,32 +503,32 @@ public:
      * Function SetDrillDefault
      * sets the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
     */
-    void SetDrillDefault()      { m_Drill = UNDEFINED_DRILL_DIAMETER; }
+    void SetDrillDefault()      { m_drill = UNDEFINED_DRILL_DIAMETER; }
 
     /**
      * Function IsDrillDefault
      * @return true if the drill value is default value (-1)
     */
-    bool IsDrillDefault() const { return m_Drill <= 0; }
+    bool IsDrillDefault() const { return m_drill <= 0; }
 
-    virtual void SwapData( BOARD_ITEM* aImage ) override;
+    void SwapData( BOARD_ITEM* aImage ) override;
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
 protected:
     wxString LayerMaskDescribe() const override;
 
 private:
-    /// The bottom layer of the via (the top layer is in m_Layer)
-    PCB_LAYER_ID m_BottomLayer;
+    /// The bottom layer of the via (the top layer is in m_layer)
+    PCB_LAYER_ID m_bottomLayer;
 
-    VIATYPE m_ViaType; // Type of via
+    VIATYPE      m_viaType;                  ///< through, blind/buried or micro
 
-    int     m_Drill; // for vias: via drill (- 1 for default value)
+    int          m_drill;                    ///< for vias: via drill (- 1 for default value)
 
-    bool    m_RemoveUnconnectedLayer;   ///< Remove unconnected copper on a via
-    bool    m_KeepTopBottomLayer;       ///< Keep the top and bottom annular rings
+    bool         m_removeUnconnectedLayer;   ///< Remove unconnected copper on a via
+    bool         m_keepTopBottomLayer;       ///< Keep the top and bottom annular rings
 };
 
 

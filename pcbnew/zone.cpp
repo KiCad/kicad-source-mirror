@@ -235,7 +235,7 @@ void ZONE::SetLayer( PCB_LAYER_ID aLayer )
 {
     SetLayerSet( LSET( aLayer ) );
 
-    m_Layer = aLayer;
+    m_layer = aLayer;
 }
 
 
@@ -277,10 +277,10 @@ void ZONE::SetLayerSet( LSET aLayerSet )
     // Set the single layer parameter.  For zones that can be on many layers, this parameter
     // is arbitrary at best, but some code still uses it.
     // Priority is F_Cu then B_Cu then to the first selected layer
-    m_Layer = aLayerSet.Seq()[0];
+    m_layer = aLayerSet.Seq()[0];
 
-    if( m_Layer != F_Cu && aLayerSet[B_Cu] )
-        m_Layer = B_Cu;
+    if( m_layer != F_Cu && aLayerSet[B_Cu] )
+        m_layer = B_Cu;
 }
 
 
@@ -634,7 +634,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
     aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg, BLUE ) );
 
-    PCB_LAYER_ID layer = m_Layer;
+    PCB_LAYER_ID layer = m_layer;
 
     // NOTE: This brings in dependence on PCB_EDIT_FRAME to the qa tests, which isn't ideal.
     // TODO: Figure out a way for items to know the active layer without the whole edit frame?

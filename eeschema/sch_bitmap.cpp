@@ -44,7 +44,7 @@ SCH_BITMAP::SCH_BITMAP( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_BITMAP_T )
 {
     m_pos   = pos;
-    m_Layer = LAYER_NOTES;              // used only to draw/plot a rectangle,
+    m_layer = LAYER_NOTES;              // used only to draw/plot a rectangle,
                                         // when a bitmap cannot be drawn or plotted
     m_image = new BITMAP_BASE();
 }
@@ -54,7 +54,7 @@ SCH_BITMAP::SCH_BITMAP( const SCH_BITMAP& aSchBitmap ) :
     SCH_ITEM( aSchBitmap )
 {
     m_pos   = aSchBitmap.m_pos;
-    m_Layer = aSchBitmap.m_Layer;
+    m_layer = aSchBitmap.m_layer;
     m_image = new BITMAP_BASE( *aSchBitmap.m_image );
 }
 

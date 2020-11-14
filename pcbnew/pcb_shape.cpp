@@ -1222,7 +1222,7 @@ void PCB_SHAPE::SwapData( BOARD_ITEM* aImage )
     std::swap( m_bezierC2, image->m_bezierC2 );
     std::swap( m_bezierPoints, image->m_bezierPoints );
     std::swap( m_poly, image->m_poly );
-    std::swap( m_Layer, image->m_Layer );
+    std::swap( m_layer, image->m_layer );
     std::swap( m_Flags, image->m_Flags );
     std::swap( m_Status, image->m_Status );
     std::swap( m_Parent, image->m_Parent );

@@ -62,10 +62,10 @@ wxString BOARD_ITEM::GetLayerName() const
     BOARD*  board = GetBoard();
 
     if( board )
-        return board->GetLayerName( m_Layer );
+        return board->GetLayerName( m_layer );
 
     // If no parent, return standard name
-    return BOARD::GetStandardLayerName( m_Layer );
+    return BOARD::GetStandardLayerName( m_layer );
 }
 
 
@@ -106,7 +106,7 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Basic fallback
     aCount = 1;
-    aLayers[0] = m_Layer;
+    aLayers[0] = m_layer;
 }
 
 

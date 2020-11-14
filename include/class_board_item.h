@@ -91,13 +91,13 @@ static inline wxString PCB_SHAPE_TYPE_T_asString( PCB_SHAPE_TYPE_T a )
 class BOARD_ITEM : public EDA_ITEM
 {
 protected:
-    PCB_LAYER_ID    m_Layer;
+    PCB_LAYER_ID    m_layer;
     PCB_GROUP*      m_group;
 
 public:
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
             EDA_ITEM( aParent, idtype ),
-            m_Layer( F_Cu ),
+            m_layer( F_Cu ),
             m_group( nullptr )
     {
     }
@@ -187,13 +187,13 @@ public:
      * Function GetLayer
      * returns the primary layer this item is on.
      */
-    virtual PCB_LAYER_ID GetLayer() const { return m_Layer; }
+    virtual PCB_LAYER_ID GetLayer() const { return m_layer; }
 
     /**
      * Function GetLayerSet
      * returns a std::bitset of all layers on which the item physically resides.
      */
-    virtual LSET GetLayerSet() const { return LSET( m_Layer ); }
+    virtual LSET GetLayerSet() const { return LSET( m_layer ); }
     virtual void SetLayerSet( LSET aLayers )
     {
         wxFAIL_MSG( "Attempted to SetLayerSet() on a single-layer object." );
@@ -210,7 +210,7 @@ public:
      */
     virtual void SetLayer( PCB_LAYER_ID aLayer )
     {
-        m_Layer = aLayer;
+        m_layer = aLayer;
     }
 
     /**
@@ -243,7 +243,7 @@ public:
      */
     virtual bool IsOnLayer( PCB_LAYER_ID aLayer ) const
     {
-        return m_Layer == aLayer;
+        return m_layer == aLayer;
     }
 
     /**

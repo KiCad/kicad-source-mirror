@@ -199,9 +199,8 @@ private:
     GROUPS              m_groups;
     ZONES               m_zones;
 
-    LAYER               m_Layer[PCB_LAYER_ID_COUNT];
+    LAYER               m_layers[PCB_LAYER_ID_COUNT];
 
-                                                        // if true m_highLight_NetCode is used
     HIGH_LIGHT_INFO     m_highLight;                // current high light data
     HIGH_LIGHT_INFO     m_highLightPrevious;        // a previously stored high light data
 
@@ -227,7 +226,7 @@ private:
      */
     std::unique_ptr<BOARD_DESIGN_SETTINGS> m_designSettings;
 
-    NETINFO_LIST        m_NetInfo;              // net info list (name, design constraints ..
+    NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
 
     std::vector<BOARD_LISTENER*> m_listeners;
 

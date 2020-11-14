@@ -32,7 +32,7 @@
 SCH_IREF::SCH_IREF( const wxPoint& pos, const wxString& text, SCH_GLOBALLABEL* aParent ) :
         SCH_TEXT( pos, text, SCH_IREF_T )
 {
-    m_Layer  = LAYER_GLOBLABEL;
+    m_layer  = LAYER_GLOBLABEL;
     m_parentLabel = aParent;
     SetMultilineAllowed( false );
     m_screen = nullptr;

@@ -1234,7 +1234,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
                                  << " ref=\"" << TO_UTF8( GetField( 0 )->GetName() )
                                  << '"' << " chipName=\""
                                  << GetLibId().Format() << '"' << m_Pos
-                                 << " layer=\"" << m_Layer
+                                 << " layer=\"" << m_layer
                                  << '"' << ">\n";
 
     // skip the reference, it's been output already.

@@ -47,7 +47,7 @@
 SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
     EDA_ITEM( aParent, aType )
 {
-    m_Layer              = LAYER_WIRE; // It's only a default, in fact
+    m_layer              = LAYER_WIRE; // It's only a default, in fact
     m_fieldsAutoplaced   = FIELDS_AUTOPLACED_NO;
     m_connectivity_dirty = true;
 }
@@ -56,7 +56,7 @@ SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
 SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
     EDA_ITEM( aItem )
 {
-    m_Layer              = aItem.m_Layer;
+    m_layer              = aItem.m_layer;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
     m_connectivity_dirty = true;
 }

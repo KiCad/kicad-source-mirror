@@ -63,10 +63,10 @@ VIA::VIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
     SetViaType( VIATYPE::THROUGH );
-    m_BottomLayer = B_Cu;
+    m_bottomLayer = B_Cu;
     SetDrillDefault();
-    m_RemoveUnconnectedLayer = false;
-    m_KeepTopBottomLayer = true;
+    m_removeUnconnectedLayer = false;
+    m_keepTopBottomLayer = true;
 }
 
 
@@ -169,8 +169,8 @@ int VIA::GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const
 
 int VIA::GetDrillValue() const
 {
-    if( m_Drill > 0 ) // Use the specific value.
-        return m_Drill;
+    if( m_drill > 0 ) // Use the specific value.
+        return m_drill;
 
     // Use the default value from the Netclass
     NETCLASS* netclass = GetNetClass();
@@ -369,10 +369,10 @@ LSET VIA::GetLayerSet() const
 
     LSET layermask;
 
-    wxASSERT( m_Layer <= m_BottomLayer );
+    wxASSERT( m_layer <= m_bottomLayer );
 
     // PCB_LAYER_IDs are numbered from front to back, this is top to bottom.
-    for( LAYER_NUM id = m_Layer; id <= m_BottomLayer; ++id )
+    for( LAYER_NUM id = m_layer; id <= m_bottomLayer; ++id )
     {
         layermask.set( id );
     }
@@ -389,11 +389,11 @@ void VIA::SetLayerSet( LSET aLayerSet )
     {
         if( first )
         {
-            m_Layer = layer;
+            m_layer = layer;
             first = false;
         }
 
-        m_BottomLayer = layer;
+        m_bottomLayer = layer;
     }
 }
 
@@ -401,21 +401,21 @@ void VIA::SetLayerSet( LSET aLayerSet )
 void VIA::SetLayerPair( PCB_LAYER_ID aTopLayer, PCB_LAYER_ID aBottomLayer )
 {
 
-    m_Layer = aTopLayer;
-    m_BottomLayer = aBottomLayer;
+    m_layer = aTopLayer;
+    m_bottomLayer = aBottomLayer;
     SanitizeLayers();
 }
 
 
 void VIA::SetTopLayer( PCB_LAYER_ID aLayer )
 {
-    m_Layer = aLayer;
+    m_layer = aLayer;
 }
 
 
 void VIA::SetBottomLayer( PCB_LAYER_ID aLayer )
 {
-    m_BottomLayer = aLayer;
+    m_bottomLayer = aLayer;
 }
 
 
@@ -426,8 +426,8 @@ void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
 
     if( GetViaType() != VIATYPE::THROUGH )
     {
-        b_layer = m_BottomLayer;
-        t_layer = m_Layer;
+        b_layer = m_bottomLayer;
+        t_layer = m_layer;
 
         if( b_layer < t_layer )
             std::swap( b_layer, t_layer );
@@ -443,13 +443,13 @@ void VIA::LayerPair( PCB_LAYER_ID* top_layer, PCB_LAYER_ID* bottom_layer ) const
 
 PCB_LAYER_ID VIA::TopLayer() const
 {
-    return m_Layer;
+    return m_layer;
 }
 
 
 PCB_LAYER_ID VIA::BottomLayer() const
 {
-    return m_BottomLayer;
+    return m_bottomLayer;
 }
 
 
@@ -457,12 +457,12 @@ void VIA::SanitizeLayers()
 {
     if( GetViaType() == VIATYPE::THROUGH )
     {
-        m_Layer       = F_Cu;
-        m_BottomLayer = B_Cu;
+        m_layer       = F_Cu;
+        m_bottomLayer = B_Cu;
     }
 
-    if( m_BottomLayer < m_Layer )
-        std::swap( m_BottomLayer, m_Layer );
+    if( m_bottomLayer < m_layer )
+        std::swap( m_bottomLayer, m_layer );
 }
 
 
@@ -492,10 +492,10 @@ bool VIA::FlashLayer( int aLayer ) const
     if( !IsOnLayer( static_cast<PCB_LAYER_ID>( aLayer ) ) )
         return false;
 
-    if( !m_RemoveUnconnectedLayer )
+    if( !m_removeUnconnectedLayer )
         return true;
 
-    if( m_KeepTopBottomLayer && ( aLayer == m_Layer || aLayer == m_BottomLayer ) )
+    if( m_keepTopBottomLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
         return true;
 
     return board->GetConnectivity()->IsConnectedOnLayer( this, static_cast<int>( aLayer ),
@@ -582,7 +582,7 @@ double VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Draw blind/buried/microvias only if at least one of the layers crossed is enabeld.
     if( aView->IsLayerVisible( LAYER_VIAS ) )
     {
-        if( !onVisibleLayer && m_ViaType != VIATYPE::THROUGH )
+        if( !onVisibleLayer && m_viaType != VIATYPE::THROUGH )
             return HIDE;
 
         return aView->IsLayerVisible( LAYER_VIAS ) ? 0.0 : HIDE;

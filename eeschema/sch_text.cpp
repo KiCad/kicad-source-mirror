@@ -126,7 +126,7 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
         m_connectionType( CONNECTION_TYPE::NONE ),
         m_spin_style( LABEL_SPIN_STYLE::LEFT )
 {
-    m_Layer = LAYER_NOTES;
+    m_layer = LAYER_NOTES;
 
     SetTextPos( pos );
     SetMultilineAllowed( true );
@@ -274,7 +274,7 @@ void SCH_TEXT::SwapData( SCH_ITEM* aItem )
 {
     SCH_TEXT* item = (SCH_TEXT*) aItem;
 
-    std::swap( m_Layer, item->m_Layer );
+    std::swap( m_layer, item->m_layer );
 
     std::swap( m_shape, item->m_shape );
     std::swap( m_isDangling, item->m_isDangling );
@@ -324,7 +324,7 @@ int SCH_TEXT::GetPenWidth() const
 
 void SCH_TEXT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    COLOR4D color = aSettings->GetLayerColor( m_Layer );
+    COLOR4D color = aSettings->GetLayerColor( m_layer );
     wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
     EDA_TEXT::Print( aSettings, text_offset, color );
@@ -697,7 +697,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
     wxString s = GetClass();
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str()
-                                 << " layer=\"" << m_Layer << '"'
+                                 << " layer=\"" << m_layer << '"'
                                  << " shape=\"" << static_cast<int>( m_shape ) << '"'
                                  << " dangling=\"" << m_isDangling << '"'
                                  << '>'
@@ -711,7 +711,7 @@ void SCH_TEXT::Show( int nestLevel, std::ostream& os ) const
 SCH_LABEL::SCH_LABEL( const wxPoint& pos, const wxString& text )
         : SCH_TEXT( pos, text, SCH_LABEL_T )
 {
-    m_Layer      = LAYER_LOCLABEL;
+    m_layer      = LAYER_LOCLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
@@ -808,7 +808,7 @@ BITMAP_DEF SCH_LABEL::GetMenuImage() const
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
         : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
 {
-    m_Layer      = LAYER_GLOBLABEL;
+    m_layer      = LAYER_GLOBLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
     m_isDangling = true;
     m_iref       = nullptr;
@@ -899,7 +899,7 @@ void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
     static std::vector <wxPoint> Poly;
 
     wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( m_Layer );
+    COLOR4D color = aSettings->GetLayerColor( m_layer );
     int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
     wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
@@ -1052,7 +1052,7 @@ BITMAP_DEF SCH_GLOBALLABEL::GetMenuImage() const
 SCH_HIERLABEL::SCH_HIERLABEL( const wxPoint& pos, const wxString& text, KICAD_T aType )
         : SCH_TEXT( pos, text, aType )
 {
-    m_Layer      = LAYER_HIERLABEL;
+    m_layer      = LAYER_HIERLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_INPUT;
     m_isDangling = true;
     SetMultilineAllowed( false );
@@ -1115,7 +1115,7 @@ void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
     wxDC*           DC = aSettings->GetPrintDC();
     SCH_CONNECTION* conn = Connection();
     bool            isBus = conn && conn->IsBus();
-    COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_Layer );
+    COLOR4D         color = aSettings->GetLayerColor( isBus ? LAYER_BUS : m_layer );
     int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
     wxPoint         textOffset = offset + GetSchematicTextOffset( aSettings );
 

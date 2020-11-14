@@ -70,7 +70,7 @@ const wxString SCH_SHEET::GetDefaultFieldName( int aFieldNdx )
 SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const wxPoint& pos ) :
     SCH_ITEM( aParent, SCH_SHEET_T )
 {
-    m_Layer = LAYER_SHEET;
+    m_layer = LAYER_SHEET;
     m_pos = pos;
     m_size = wxSize( Mils2iu( MIN_SHEET_WIDTH ), Mils2iu( MIN_SHEET_HEIGHT ) );
     m_screen = NULL;
@@ -101,7 +101,7 @@ SCH_SHEET::SCH_SHEET( const SCH_SHEET& aSheet ) :
 {
     m_pos = aSheet.m_pos;
     m_size = aSheet.m_size;
-    m_Layer = aSheet.m_Layer;
+    m_layer = aSheet.m_layer;
     const_cast<KIID&>( m_Uuid ) = aSheet.m_Uuid;
     m_fields = aSheet.m_fields;
     m_fieldsAutoplaced = aSheet.m_fieldsAutoplaced;

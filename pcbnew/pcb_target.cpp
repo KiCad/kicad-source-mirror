@@ -40,7 +40,7 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     m_Shape = 0;
     m_Size  = Millimeter2iu( 5 );       // Gives a decent size
     m_Width = Millimeter2iu( DEFAULT_COPPER_LINE_WIDTH );
-    m_Layer = Edge_Cuts;                   // a target is on all layers
+    m_layer = Edge_Cuts;                   // a target is on all layers
 }
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, PCB_LAYER_ID aLayer,
@@ -48,7 +48,7 @@ PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, PCB_LAYER_ID aLayer,
     BOARD_ITEM( aParent, PCB_TARGET_T )
 {
     m_Shape = aShape;
-    m_Layer = aLayer;
+    m_layer = aLayer;
     m_Pos   = aPos;
     m_Size  = aSize;
     m_Width = aWidth;

@@ -54,7 +54,7 @@ DIMENSION_BASE::DIMENSION_BASE( BOARD_ITEM* aParent, KICAD_T aType ) :
         m_text( aParent ),
         m_measuredValue( 0 )
 {
-    m_Layer = Dwgs_User;
+    m_layer = Dwgs_User;
 }
 
 
@@ -211,7 +211,7 @@ const wxString DIMENSION_BASE::GetText() const
 
 void DIMENSION_BASE::SetLayer( PCB_LAYER_ID aLayer )
 {
-    m_Layer = aLayer;
+    m_layer = aLayer;
     m_text.SetLayer( aLayer );
 }
 

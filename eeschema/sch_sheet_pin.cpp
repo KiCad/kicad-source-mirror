@@ -43,7 +43,7 @@ SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxStr
 {
     SetParent( parent );
     wxASSERT( parent );
-    m_Layer = LAYER_SHEETLABEL;
+    m_layer = LAYER_SHEETLABEL;
 
     SetTextPos( pos );
 

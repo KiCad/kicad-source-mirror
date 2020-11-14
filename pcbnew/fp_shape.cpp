@@ -40,7 +40,7 @@ FP_SHAPE::FP_SHAPE( FOOTPRINT* parent, PCB_SHAPE_TYPE_T aShape ) :
 {
     m_shape = aShape;
     m_angle = 0;
-    m_Layer = F_SilkS;
+    m_layer = F_SilkS;
 }
 
 

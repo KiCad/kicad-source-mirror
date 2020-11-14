@@ -185,7 +185,7 @@ int SCH_FIELD::GetPenWidth() const
 void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*    DC = aSettings->GetPrintDC();
-    COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_Layer );
+    COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
     int      orient;
     wxPoint  textpos;
     int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
@@ -241,7 +241,7 @@ void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 
     SCH_FIELD* item = (SCH_FIELD*) aItem;
 
-    std::swap( m_Layer, item->m_Layer );
+    std::swap( m_layer, item->m_layer );
     SwapText( *item );
     SwapEffects( *item );
 }

@@ -1741,8 +1741,8 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     }
 
     // Check for a reasonable layer:
-    // m_Layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints
-    // can use the copper layers m_Layer < FIRST_NON_COPPER_LAYER is allowed.
+    // layer must be >= FIRST_NON_COPPER_LAYER, but because microwave footprints can use the
+    // copper layers, layer < FIRST_NON_COPPER_LAYER is allowed.
     if( layer < FIRST_LAYER || layer > LAST_NON_COPPER_LAYER )
         layer = SILKSCREEN_N_FRONT;
 
