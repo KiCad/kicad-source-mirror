@@ -191,6 +191,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
             PCB_SHAPE* graphic = isFootprint ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
 
             graphic->SetShape( S_POLYGON );
+            graphic->SetFilled( destLayer != Edge_Cuts );
             graphic->SetLayer( destLayer );
             graphic->SetPolyShape( poly );
 
@@ -616,6 +617,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
         VECTOR2I center = GetArcCenter( start, mid, end );
 
         arc->SetShape( S_ARC );
+        arc->SetFilled( false );
         arc->SetLayer( layer );
         arc->SetWidth( line->GetWidth() );
 

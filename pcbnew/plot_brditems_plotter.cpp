@@ -446,6 +446,7 @@ void BRDITEMS_PLOTTER::PlotDimension( DIMENSION_BASE* aDim )
             int radius = static_cast<const SHAPE_CIRCLE*>( shape.get() )->GetRadius();
 
             draw.SetShape( S_CIRCLE );
+            draw.SetFilled( false );
             draw.SetStart( start );
             draw.SetEnd( wxPoint( start.x + radius, start.y ) );
 
@@ -472,6 +473,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
     PCB_SHAPE  draw;
 
     draw.SetShape( S_CIRCLE );
+    draw.SetFilled( false );
     draw.SetWidth( aMire->GetWidth() );
     draw.SetLayer( aMire->GetLayer() );
     draw.SetStart( aMire->GetPosition() );
@@ -534,6 +536,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
 
+    bool    sketch = GetPlotMode() == SKETCH;
     int     thickness = aShape->GetWidth();
     wxPoint pos( aShape->GetStart() );
     wxPoint end( aShape->GetEnd() );
@@ -567,14 +570,15 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
     {
         std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-        if( aShape->GetWidth() > 0 )
+        if( sketch || thickness > 0 )
         {
             m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
         }
-        else
+
+        if( !sketch && aShape->IsFilled() )
         {
             SHAPE_LINE_CHAIN poly;
 
@@ -589,10 +593,10 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, pos ) );
 
-        if( aShape->GetWidth() > 0 )
-            m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        if( aShape->IsFilled() )
+            m_plotter->FilledCircle( pos, radius * 2 + thickness, GetPlotMode(), &gbr_metadata );
         else
-            m_plotter->FilledCircle( pos, radius * 2, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickCircle( pos, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
 
         break;
 
@@ -639,7 +643,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
                 cornerList.push_back( corner );
             }
 
-            if( !aShape->IsPolygonFilled() )
+            if( sketch || thickness > 0 )
             {
                 for( size_t i = 1; i < cornerList.size(); i++ )
                 {
@@ -651,7 +655,8 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
                                          GetPlotMode(), &gbr_metadata );
 
             }
-            else
+
+            if( !sketch && aShape->IsFilled() )
             {
                 // This must be simplified and fractured to prevent overlapping polygons
                 // from generating invalid Gerber files
@@ -674,8 +679,7 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItem( FP_SHAPE* aShape )
 
     case S_CURVE:
         m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
-                                aShape->GetBezControl2(), aShape->GetEnd(),
-                                0, thickness );
+                                aShape->GetBezControl2(), aShape->GetEnd(), 0, thickness );
         break;
 
     default:
@@ -852,6 +856,7 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
 
     int     radius = 0;
     double  StAngle = 0, EndAngle = 0;
+    bool    sketch = GetPlotMode() == SKETCH;
     int     thickness = aShape->GetWidth();
 
     m_plotter->SetColor( getColor( aShape->GetLayer() ) );
@@ -879,10 +884,11 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
     case S_CIRCLE:
         radius = KiROUND( GetLineLength( end, start ) );
 
-        if( thickness > 0 )
-            m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        if( aShape->IsFilled() )
+            m_plotter->FilledCircle( start, radius * 2 + thickness, GetPlotMode(), &gbr_metadata );
         else
-            m_plotter->FilledCircle( start, radius * 2, GetPlotMode(), &gbr_metadata );
+            m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+
         break;
 
     case S_ARC:
@@ -892,19 +898,25 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
 
         // when startAngle == endAngle ThickArc() doesn't know whether it's 0 deg and 360 deg
         if( std::abs( aShape->GetAngle() ) == 3600.0 )
+        {
             m_plotter->ThickCircle( start, radius * 2, thickness, GetPlotMode(), &gbr_metadata );
+        }
         else
-            m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode(), &gbr_metadata );
+        {
+            m_plotter->ThickArc( start, -EndAngle, -StAngle, radius, thickness, GetPlotMode(),
+                                 &gbr_metadata );
+        }
         break;
 
     case S_CURVE:
-        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(), aShape->GetBezControl2(),
-                                aShape->GetEnd(), 0, thickness );
+        m_plotter->BezierCurve( aShape->GetStart(), aShape->GetBezControl1(),
+                                aShape->GetBezControl2(), aShape->GetEnd(), 0, thickness );
         break;
 
     case S_POLYGON:
+        if( aShape->IsPolyShapeValid() )
         {
-            if( !aShape->IsPolygonFilled() )
+            if( sketch || thickness > 0 )
             {
                 for( auto it = aShape->GetPolyShape().CIterateSegments( 0 ); it; it++ )
                 {
@@ -913,7 +925,8 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
                                              thickness, GetPlotMode(), &gbr_metadata );
                 }
             }
-            else
+
+            if( !sketch && aShape->IsFilled() )
             {
                 m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
                 // Draw the polygon: only one polygon is expected
@@ -937,14 +950,15 @@ void BRDITEMS_PLOTTER::PlotPcbShape( PCB_SHAPE* aShape )
     {
         std::vector<wxPoint> pts = aShape->GetRectCorners();
 
-        if( aShape->GetWidth() > 0 )
+        if( sketch || thickness > 0 )
         {
             m_plotter->ThickSegment( pts[0], pts[1], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[1], pts[2], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[2], pts[3], thickness, GetPlotMode(), &gbr_metadata );
             m_plotter->ThickSegment( pts[3], pts[0], thickness, GetPlotMode(), &gbr_metadata );
         }
-        else
+
+        if( !sketch && aShape->IsFilled() )
         {
             SHAPE_LINE_CHAIN poly;
 

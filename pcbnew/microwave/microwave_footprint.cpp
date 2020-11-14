@@ -166,7 +166,7 @@ FOOTPRINT* MICROWAVE_TOOL::createFootprint( MICROWAVE_FOOTPRINT_SHAPE aFootprint
         // Close the polygon:
         polyPoints.push_back( polyPoints[0] );
 
-        pad->AddPrimitivePoly( polyPoints, 0 ); // add a polygonal basic shape
+        pad->AddPrimitivePoly( polyPoints, 0, true ); // add a polygonal basic shape
     }
         break;
 

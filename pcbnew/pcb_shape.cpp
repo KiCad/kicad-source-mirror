@@ -46,6 +46,7 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype )
 {
     m_angle = 0;
+    m_filled = false;
     m_Flags = 0;
     m_shape = S_SEGMENT;
     m_width = Millimeter2iu( DEFAULT_LINE_WIDTH );
@@ -609,7 +610,7 @@ const EDA_RECT PCB_SHAPE::GetBoundingBox() const
         break;
     }
 
-    bbox.Inflate((( m_width + 1) / 2) + 1 );
+    bbox.Inflate( m_width / 2 );
     bbox.Normalize();
 
     return bbox;
@@ -627,7 +628,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         int radius = GetRadius();
         int dist   = KiROUND( EuclideanNorm( aPosition - GetCenter() ) );
 
-        if( m_width == 0 )      // Filled circle hit-test
+        if( IsFilled() )        // Filled circle hit-test
         {
             if( dist <= radius + maxdist )
                 return true;
@@ -681,25 +682,27 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         break;
 
     case S_CURVE:
-        ( (PCB_SHAPE*) this)->RebuildBezierToSegmentsPointsList( m_width );
+        const_cast<PCB_SHAPE*>( this )->RebuildBezierToSegmentsPointsList( m_width );
 
         for( unsigned int i= 1; i < m_bezierPoints.size(); i++)
         {
             if( TestSegmentHit( aPosition, m_bezierPoints[ i - 1], m_bezierPoints[i], maxdist ) )
                 return true;
         }
+
         break;
 
     case S_SEGMENT:
         if( TestSegmentHit( aPosition, m_start, m_end, maxdist ) )
             return true;
+
         break;
 
     case S_RECT:
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
-        if( m_width == 0 )          // Filled rect hit-test
+        if( IsFilled() )            // Filled rect hit-test
         {
             SHAPE_POLY_SET poly;
             poly.NewOutline();
@@ -724,15 +727,16 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         break;
 
     case S_POLYGON:
+        if( IsFilled() )
         {
-            if( !IsPolygonFilled() )
-            {
-                SHAPE_POLY_SET::VERTEX_INDEX dummy;
-                return m_poly.CollideEdge( VECTOR2I( aPosition ), dummy, maxdist );
-            }
-            else
-                return m_poly.Collide( VECTOR2I( aPosition ), maxdist );
+            return m_poly.Collide( VECTOR2I( aPosition ), maxdist );
         }
+        else
+        {
+            SHAPE_POLY_SET::VERTEX_INDEX dummy;
+            return m_poly.CollideEdge( VECTOR2I( aPosition ), dummy, maxdist );
+        }
+
         break;
 
     default:
@@ -1077,11 +1081,12 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
-        if( m_width == 0 )
+        if( IsFilled() )
         {
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( pts ) );
         }
-        else
+
+        if( m_width > 0 || !IsFilled() )
         {
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[0], pts[1], m_width ) );
             effectiveShapes.emplace_back( new SHAPE_SEGMENT( pts[1], pts[2], m_width ) );
@@ -1093,11 +1098,12 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
 
     case S_CIRCLE:
     {
-        if( m_width == 0 )
+        if( IsFilled() )
         {
             effectiveShapes.emplace_back( new SHAPE_CIRCLE( GetCenter(), GetRadius() ) );
         }
-        else
+
+        if( m_width > 0 || !IsFilled() )
         {
             // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
             SHAPE_ARC        circle( GetCenter(), GetEnd(), 360.0 );
@@ -1132,12 +1138,12 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
     {
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
 
-        if( IsPolygonFilled() )
+        if( IsFilled() )
         {
             effectiveShapes.emplace_back( new SHAPE_SIMPLE( l ) );
         }
 
-        if( !IsPolygonFilled() || m_width > 0 )
+        if( m_width > 0 || !IsFilled() )
         {
             for( int i = 0; i < l.SegmentCount(); i++ )
                 effectiveShapes.emplace_back( new SHAPE_SEGMENT( l.Segment( i ), m_width ) );

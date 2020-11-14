@@ -474,48 +474,6 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 }
 
 
-int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
-{
-    PCB_LAYER_COLLECTOR collector;
-
-    collector.SetLayerId( Edge_Cuts );
-    collector.Collect( aBoard, GENERAL_COLLECTOR::AllBoardItems );
-
-    int  edgeWidth = -1;
-    bool mixed = false;
-
-    for( int i = 0; i < collector.GetCount(); i++ )
-    {
-        if( collector[i]->Type() == PCB_SHAPE_T )
-        {
-            int itemWidth = static_cast<PCB_SHAPE*>( collector[i] )->GetWidth();
-
-            if( edgeWidth != -1 && edgeWidth != itemWidth )
-            {
-                mixed = true;
-                edgeWidth = std::max( edgeWidth, itemWidth );
-            }
-            else
-            {
-                edgeWidth = itemWidth;
-            }
-        }
-    }
-
-    if( mixed )
-    {
-        // If they had different widths then we can't ensure that fills will be the same.
-        wxMessageBox( _( "If the zones on this board are refilled the Copper Edge Clearance\n"
-                         "setting will be used (see Board Setup > Design Rules).  This may\n"
-                         "result in different fills from previous Kicad versions which used\n"
-                         "the line thickness of the board boundary on the Edge Cuts layer." ),
-                      _( "Edge Clearance Warning" ), wxOK|wxICON_WARNING, this );
-    }
-
-    return std::max( 0, edgeWidth / 2 );
-}
-
-
 bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     // This is for python:

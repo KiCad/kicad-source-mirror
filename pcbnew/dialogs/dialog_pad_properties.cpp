@@ -2104,8 +2104,13 @@ void DIALOG_PAD_PROPERTIES::onDeletePrimitive( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 {
     // Ask user for shape type
-    wxString shapelist[] = { _( "Segment" ), _( "Arc" ), _( "Bezier" ),
-                             _( "Ring/Circle" ), _( "Polygon" ) };
+    wxString shapelist[] = {
+            _( "Segment" ),
+            _( "Arc" ),
+            _( "Bezier" ),
+            _( "Ring/Circle" ),
+            _( "Polygon" )
+    };
 
     int type = wxGetSingleChoiceIndex( _( "Shape type:" ), _( "Add Primitive" ),
                                        arrayDim( shapelist ), shapelist, 0, this );
@@ -2119,6 +2124,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
     PCB_SHAPE* primitive = new PCB_SHAPE();
     primitive->SetShape( listtype[type] );
     primitive->SetWidth( m_board->GetDesignSettings().GetLineThickness( F_Cu ) );
+    primitive->SetFilled( true );
 
     if( listtype[type] == S_POLYGON )
     {

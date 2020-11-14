@@ -55,7 +55,7 @@ enum HASH_FLAGS
  * @param aItem is the item for which the hash will be computed.
  * @return Hash value.
  */
-std::size_t hash_eda( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_ALL );
+std::size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags = HASH_FLAGS::HASH_ALL );
 
 /**
  * This is a dummy function to take the final case of hash_combine below

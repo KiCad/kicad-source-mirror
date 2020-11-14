@@ -185,6 +185,7 @@ void PCB_ARC::AddToBoard()
     m_board->Add( arc, ADD_MODE::APPEND );
 
     arc->SetShape( IsCircle() ? S_CIRCLE : S_ARC );
+    arc->SetFilled( false );
     arc->SetLayer( m_KiCadLayer );
     arc->SetStart( wxPoint( m_positionX, m_positionY ) );
     arc->SetEnd( wxPoint( m_StartX, m_StartY ) );

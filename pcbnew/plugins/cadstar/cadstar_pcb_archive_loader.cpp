@@ -902,7 +902,8 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
                                                        ERROR_LOC::ERROR_INSIDE );
 
             PCB_SHAPE* padShape = new PCB_SHAPE;
-            padShape->SetShape( PCB_SHAPE_TYPE_T::S_POLYGON );
+            padShape->SetShape( S_POLYGON );
+            padShape->SetFilled( true );
             padShape->SetPolyShape( padOutline );
             padShape->SetWidth( 0 );
             padShape->Move( padOffset - drillOffset );
@@ -1911,6 +1912,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         {
             shape = new PCB_SHAPE( aContainer );
             shape->SetShape( S_POLYGON );
+            shape->SetFilled( true );
         }
 
         shape->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer, aMoveVector,

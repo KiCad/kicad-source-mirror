@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__
-#define __DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -22,6 +21,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/settings.h>
 #include <wx/textctrl.h>
 #include <wx/gbsizer.h>
+#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/sizer.h>
 #include <wx/statline.h>
@@ -37,7 +37,7 @@ class PCB_LAYER_BOX_SELECTOR;
 class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxGridBagSizer* m_sizerLeft;
 		wxStaticText* m_startPointLabel;
@@ -71,6 +71,7 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_angleLabel;
 		wxTextCtrl* m_angleCtrl;
 		wxStaticText* m_angleUnits;
+		wxCheckBox* m_filledCtrl;
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
@@ -80,17 +81,16 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_StandardButtonsSizer;
 		wxButton* m_StandardButtonsSizerOK;
 		wxButton* m_StandardButtonsSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnInitDlg( wxInitDialogEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Graphic Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+
+		DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Graphic Item Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE();
-	
+
 };
 
-#endif //__DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE_H__

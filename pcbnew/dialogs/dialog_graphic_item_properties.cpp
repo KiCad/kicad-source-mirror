@@ -33,6 +33,7 @@
 #include <dialogs/html_messagebox.h>
 #include <pcb_shape.h>
 #include <fp_shape.h>
+#include <confirm.h>
 #include <widgets/unit_binder.h>
 
 #include <dialog_graphic_item_properties_base.h>
@@ -175,20 +176,28 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         m_endX.SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
 
         m_endY.Show( false );
+
+        m_filledCtrl->Show( true );
         break;
 
     case S_ARC:
         SetTitle( _( "Arc Properties" ) );
         m_AngleValue = m_item->GetAngle() / 10.0;
+
+        m_filledCtrl->Show( false );
         break;
 
     case S_POLYGON:
         SetTitle( _( "Polygon Properties" ) );
         m_sizerLeft->Show( false );
+
+        m_filledCtrl->Show( true );
         break;
 
     case S_RECT:
         SetTitle( _( "Rectangle Properties" ) );
+
+        m_filledCtrl->Show( true );
         break;
 
     case S_SEGMENT:
@@ -198,6 +207,8 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
             m_flipStartEnd = m_item->GetStart().x > m_item->GetEnd().x;
 
         SetTitle( _( "Line Segment Properties" ) );
+
+        m_filledCtrl->Show( false );
         break;
 
     default:
@@ -246,6 +257,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
     m_bezierCtrl2X.SetValue( m_item->GetBezControl2().x );
     m_bezierCtrl2Y.SetValue( m_item->GetBezControl2().y );
 
+    m_filledCtrl->SetValue( m_item->IsFilled() );
     m_thickness.SetValue( m_item->GetWidth() );
 
     m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
@@ -261,6 +273,13 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
 
     if( !m_thickness.Validate( 0, Millimeter2iu( 1000.0 ) ) )
         return false;
+
+    if( m_thickness.GetValue() == 0 && !m_filledCtrl->GetValue() )
+    {
+        DisplayError( this, _( "Line width may not be 0 for unfilled shapes." ) );
+        m_thicknessCtrl->SetFocus();
+        return false;
+    }
 
     LAYER_NUM layer = m_LayerSelectionCtrl->GetLayerSelection();
 
@@ -321,6 +340,7 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         }
     }
 
+    m_item->SetFilled( m_filledCtrl->GetValue() );
     m_item->SetWidth( m_thickness.GetValue() );
     m_item->SetLayer( ToLAYER_ID( layer ) );
 

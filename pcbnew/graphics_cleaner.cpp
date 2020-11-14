@@ -307,6 +307,7 @@ void GRAPHICS_CLEANER::mergeRects()
                         rect = new PCB_SHAPE();
 
                     rect->SetShape( S_RECT );
+                    rect->SetFilled( false );
                     rect->SetStart( top->start );
                     rect->SetEnd( bottom->end );
                     rect->SetLayer( top->shape->GetLayer() );

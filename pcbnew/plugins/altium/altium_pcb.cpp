@@ -1455,6 +1455,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const CFB::CompoundFileReader& aRe
                 PCB_SHAPE* shape = new PCB_SHAPE( m_board );
                 m_board->Add( shape, ADD_MODE::APPEND );
                 shape->SetShape( S_POLYGON );
+                shape->SetFilled( true );
                 shape->SetLayer( klayer );
                 shape->SetWidth( 0 );
 
@@ -1893,29 +1894,31 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( wxString::Format(
-                _( "Non-Copper Pad on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                aElem.layer ) );
+        wxLogWarning( wxString::Format( _( "Non-Copper Pad on Altium layer %d has no KiCad "
+                                           "equivalent. Put it on Eco1_User instead" ),
+                                        aElem.layer ) );
         klayer = Eco1_User;
     }
 
     if( aElem.net != ALTIUM_NET_UNCONNECTED )
     {
-        wxLogError( wxString::Format(
-                "Non-Copper Pad '%s' is connected to a net. This is not supported", aElem.name ) );
+        wxLogError( wxString::Format( "Non-Copper Pad '%s' is connected to a net. This is not "
+                                      "supported",
+                                      aElem.name ) );
     }
 
     if( aElem.holesize != 0 )
     {
-        wxLogError( wxString::Format(
-                "Non-Copper Pad '%s' has a hole. This should not happen", aElem.name ) );
+        wxLogError( wxString::Format( _( "Non-Copper Pad '%s' has a hole. This should not happen" ),
+                                      aElem.name ) );
     }
 
     if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
     {
-        wxLogWarning( wxString::Format(
-                _( "Non-Copper Pad '%s' uses a complex pad stack (kind %d). This should not happen" ),
-                aElem.name, aElem.padmode ) );
+        wxLogWarning( wxString::Format( _( "Non-Copper Pad '%s' uses a complex pad stack (kind %d). "
+                                           "This should not happen" ),
+                                        aElem.name,
+                                        aElem.padmode ) );
     }
 
     switch( aElem.topshape )
@@ -1925,6 +1928,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         // filled rect
         PCB_SHAPE* shape = HelperCreateAndAddDrawsegment( aElem.component );
         shape->SetShape( S_POLYGON );
+        shape->SetFilled( true );
         shape->SetLayer( klayer );
         shape->SetWidth( 0 );
 
@@ -1969,6 +1973,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             {
                 // circle
                 shape->SetShape( S_CIRCLE );
+                shape->SetFilled( true );
                 shape->SetCenter( aElem.position );
                 shape->SetWidth( aElem.topsize.x / 2 );
                 shape->SetArcStart( aElem.position - wxPoint( 0, aElem.topsize.x / 4 ) );
@@ -2000,6 +2005,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
             // filled circle
             PCB_SHAPE* shape = HelperCreateAndAddDrawsegment( aElem.component );
             shape->SetShape( S_CIRCLE );
+            shape->SetFilled( true );
             shape->SetLayer( klayer );
             shape->SetCenter( aElem.position );
             shape->SetWidth( aElem.topsize.x / 2 );
@@ -2039,6 +2045,7 @@ void ALTIUM_PCB::HelperParsePad6NonCopper( const APAD6& aElem )
         // filled octagon
         PCB_SHAPE* shape = HelperCreateAndAddDrawsegment( aElem.component );
         shape->SetShape( S_POLYGON );
+        shape->SetFilled( true );
         shape->SetLayer( klayer );
         shape->SetWidth( 0 );
 
@@ -2407,8 +2414,8 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
     }
 }
 
-void ALTIUM_PCB::ParseFills6Data(
-        const CFB::CompoundFileReader& aReader, const CFB::COMPOUND_FILE_ENTRY* aEntry )
+void ALTIUM_PCB::ParseFills6Data( const CFB::CompoundFileReader& aReader,
+                                  const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     ALTIUM_PARSER reader( aReader, aEntry );
 
@@ -2426,9 +2433,9 @@ void ALTIUM_PCB::ParseFills6Data(
         PCB_LAYER_ID klayer = GetKicadLayer( elem.layer );
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning( wxString::Format(
-                    _( "Fill on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead" ),
-                    elem.layer ) );
+            wxLogWarning( wxString::Format( _( "Fill on Altium layer %d has no KiCad equivalent. "
+                                               "Put it on Eco1_User instead" ),
+                                            elem.layer ) );
             klayer = Eco1_User;
         }
 
@@ -2474,6 +2481,7 @@ void ALTIUM_PCB::ParseFills6Data(
             m_board->Add( shape, ADD_MODE::APPEND );
 
             shape->SetShape( S_POLYGON );
+            shape->SetFilled( true );
             shape->SetLayer( klayer );
             shape->SetWidth( 0 );
 

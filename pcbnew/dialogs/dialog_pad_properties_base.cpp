@@ -1259,7 +1259,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 
 	fgSizerShapeProperties->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
 	fgSizerShapeProperties->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
@@ -1276,14 +1276,11 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 
 	fgSizerShapeProperties->Add( 0, 0, 1, wxEXPAND, 5 );
 
+	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerShapeProperties->Add( m_filledCtrl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+
 
 	bSizermain->Add( fgSizerShapeProperties, 1, wxEXPAND|wxALL, 10 );
-
-	m_staticTextInfo = new wxStaticText( this, wxID_ANY, _("Set thickness to 0 for a filled circle."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextInfo->Wrap( -1 );
-	m_staticTextInfo->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSizermain->Add( m_staticTextInfo, 0, wxRIGHT|wxLEFT, 15 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizermain->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
@@ -1457,8 +1454,8 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	m_gridCornersList->SetMargins( 0, 0 );
 
 	// Columns
-	m_gridCornersList->SetColSize( 0, 100 );
-	m_gridCornersList->SetColSize( 1, 100 );
+	m_gridCornersList->SetColSize( 0, 124 );
+	m_gridCornersList->SetColSize( 1, 124 );
 	m_gridCornersList->EnableDragColMove( false );
 	m_gridCornersList->EnableDragColSize( true );
 	m_gridCornersList->SetColLabelSize( 22 );
@@ -1498,21 +1495,24 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	bLeftSizer->Add( bSizerRightButts, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxFlexGridSizer* fgSizerThickness;
-	fgSizerThickness = new wxFlexGridSizer( 0, 5, 0, 0 );
+	fgSizerThickness = new wxFlexGridSizer( 0, 4, 0, 0 );
 	fgSizerThickness->AddGrowableCol( 1 );
 	fgSizerThickness->SetFlexibleDirection( wxBOTH );
 	fgSizerThickness->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Outline thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("Line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
 	fgSizerThickness->Add( m_thicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_thicknessCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerThickness->Add( m_thicknessCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerThickness->Add( m_thicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
 	fgSizerThickness->Add( m_thicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+	m_filledCtrl = new wxCheckBox( this, wxID_ANY, _("Filled shape"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerThickness->Add( m_filledCtrl, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 20 );
 
 
 	bLeftSizer->Add( fgSizerThickness, 0, wxALL|wxEXPAND, 10 );
@@ -1559,26 +1559,11 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE::DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE( wxWi
 	wxBoxSizer* bSizer24;
 	bSizer24 = new wxBoxSizer( wxHORIZONTAL );
 
-	wxBoxSizer* bSizer25;
-	bSizer25 = new wxBoxSizer( wxVERTICAL );
-
-
-	bSizer25->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 4 );
-
 	m_statusLine1 = new wxStaticText( this, wxID_ANY, _("Coordinates are relative to anchor pad, rotated 0.0 deg."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_statusLine1->Wrap( -1 );
 	m_statusLine1->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer25->Add( m_statusLine1, 0, 0, 5 );
-
-	m_statusLine2 = new wxStaticText( this, wxID_ANY, _("Set thickness to 0 for a filled polygon."), wxDefaultPosition, wxSize( -1,-1 ), 0 );
-	m_statusLine2->Wrap( -1 );
-	m_statusLine2->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
-
-	bSizer25->Add( m_statusLine2, 0, wxTOP, 2 );
-
-
-	bSizer24->Add( bSizer25, 1, wxEXPAND|wxLEFT, 10 );
+	bSizer24->Add( m_statusLine1, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );

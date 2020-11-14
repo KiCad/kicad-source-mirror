@@ -344,7 +344,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 int numSegs = GetArcToSegmentCount( margin.x, maxError, 360.0 );
                 shape.InflateWithLinkedHoles( margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
-                dummy.AddPrimitivePoly( shape, 0 );
+                dummy.AddPrimitivePoly( shape, 0, true );
 
                 // Be sure the anchor pad is not bigger than the deflated shape because this
                 // anchor will be added to the pad shape when plotting the pad. So now the

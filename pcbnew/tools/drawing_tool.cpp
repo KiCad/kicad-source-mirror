@@ -288,6 +288,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
     rect->SetShape( S_RECT );
+    rect->SetFilled( false );
     rect->SetFlags(IS_NEW );
 
     if( aEvent.HasPosition() )
@@ -312,6 +313,7 @@ int DRAWING_TOOL::DrawRectangle( const TOOL_EVENT& aEvent )
 
         rect = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         rect->SetShape( S_RECT );
+        rect->SetFilled( false );
         rect->SetFlags(IS_NEW );
         startingPoint = NULLOPT;
     }
@@ -332,6 +334,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     OPT<VECTOR2D>    startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
 
     circle->SetShape( S_CIRCLE );
+    circle->SetFilled( false );
     circle->SetFlags( IS_NEW );
 
     if( aEvent.HasPosition() )
@@ -356,6 +359,7 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
         circle = m_isFootprintEditor ? new FP_SHAPE( parentFootprint ) : new PCB_SHAPE;
         circle->SetShape( S_CIRCLE );
+        circle->SetFilled( false );
         circle->SetFlags( IS_NEW );
         startingPoint = NULLOPT;
     }
@@ -1398,6 +1402,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
                 // Init the new item attributes
                 graphic->SetShape( (PCB_SHAPE_TYPE_T) shape );
+                graphic->SetFilled( false );
                 graphic->SetWidth( m_lineWidth );
                 graphic->SetLayer( m_frame->GetActiveLayer() );
                 grid.SetSkipPoint( cursorPos );

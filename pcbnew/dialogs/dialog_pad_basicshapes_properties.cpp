@@ -70,11 +70,8 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
     if( m_shape == NULL )
         return false;
 
-    // Shows the text info about circle or ring only for S_CIRCLE shape
-    if( m_shape->GetShape() != S_CIRCLE )
-        m_staticTextInfo->Show( false );
-
     m_thickness.SetValue( m_shape->GetWidth() );
+    m_filledCtrl->SetValue( m_shape->IsFilled() );
 
     switch( m_shape->GetShape() )
     {
@@ -93,6 +90,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_staticTextPosCtrl2->Show( false );
         m_staticTextPosCtrl2->SetSize( 0, 0 );
         m_radius.Show( false );
+        m_filledCtrl->Show( false );
         break;
 
     case S_CURVE:         // Bezier line
@@ -106,6 +104,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_ctrl2X.SetValue( m_shape->GetBezControl2().x );
         m_ctrl2Y.SetValue( m_shape->GetBezControl2().y );
         m_radius.Show( false );
+        m_filledCtrl->Show( false );
         break;
 
     case S_ARC:             // Arc with rounded ends
@@ -126,6 +125,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_staticTextPosCtrl1->SetSize( 0, 0 );
         m_staticTextPosCtrl2->Show( false );
         m_staticTextPosCtrl2->SetSize( 0, 0 );
+        m_filledCtrl->Show( false );
         break;
 
     case S_CIRCLE:          //  ring or circle
@@ -152,6 +152,7 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_staticTextPosCtrl1->SetSize( 0, 0 );
         m_staticTextPosCtrl2->Show( false );
         m_staticTextPosCtrl2->SetSize( 0, 0 );
+        m_filledCtrl->Show( true );
         break;
 
     case S_POLYGON:         // polygon
@@ -168,8 +169,16 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
 {
+    if( m_thickness.GetValue() == 0 && !m_filledCtrl->GetValue() )
+    {
+        DisplayError( this, _( "Line width may not be 0 for unfilled shapes." ) );
+        m_thicknessCtrl->SetFocus();
+        return false;
+    }
+
     // Transfer data out of the GUI.
     m_shape->SetWidth( m_thickness.GetValue() );
+    m_shape->SetFilled( m_filledCtrl->GetValue() );
 
     switch( m_shape->GetShape() )
     {
@@ -257,6 +266,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
         return false;
 
     m_thickness.SetValue( m_shape->GetWidth() );
+    m_filledCtrl->SetValue( m_shape->IsFilled() );
 
     // Populates the list of corners
     int extra_rows = m_currPoints.size() - m_gridCornersList->GetNumberRows();
@@ -296,6 +306,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataFromWindow()
 
     m_shape->SetPolyPoints( m_currPoints );
     m_shape->SetWidth( m_thickness.GetValue() );
+    m_shape->SetFilled( m_filledCtrl->GetValue() );
 
     return true;
 }

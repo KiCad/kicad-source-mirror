@@ -406,9 +406,9 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     switch( m_shape )
     {
     case S_CIRCLE:
-        if( width == 0 )
+        if( IsFilled() )
         {
-            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius(), aError,
+            TransformCircleToPolygon( aCornerBuffer, GetCenter(), GetRadius() + width / 2, aError,
                                       aErrorLoc );
         }
         else
@@ -422,7 +422,7 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
     {
         std::vector<wxPoint> pts = GetRectCorners();
 
-        if( width == 0 )
+        if( IsFilled() )
         {
             aCornerBuffer.NewOutline();
 
@@ -430,7 +430,7 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
                 aCornerBuffer.Append( pt );
         }
 
-        if( width > 0 )
+        if( width > 0 || !IsFilled() )
         {
             // Add in segments
             TransformOvalToPolygon( aCornerBuffer, pts[0], pts[1], width, aError, aErrorLoc );
@@ -451,69 +451,63 @@ void PCB_SHAPE::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuf
         break;
 
     case S_POLYGON:
-        if( IsPolyShapeValid() )
+    {
+        if( !IsPolyShapeValid() )
+            break;
+
+        // The polygon is expected to be a simple polygon; not self intersecting, no hole.
+        FOOTPRINT* footprint = GetParentFootprint();
+        double     orientation = footprint ? footprint->GetOrientation() : 0.0;
+        wxPoint    offset;
+
+        if( footprint )
+            offset = footprint->GetPosition();
+
+        // Build the polygon with the actual position and orientation:
+        std::vector< wxPoint> poly;
+        poly = BuildPolyPointsList();
+
+        for( wxPoint& point : poly )
         {
-            // The polygon is expected to be a simple polygon
-            // not self intersecting, no hole.
-            FOOTPRINT* footprint = GetParentFootprint();     // NULL for items not in footprints
-            double     orientation = footprint ? footprint->GetOrientation() : 0.0;
-            wxPoint    offset;
+            RotatePoint( &point, orientation );
+            point += offset;
+        }
 
-            if( footprint )
-                offset = footprint->GetPosition();
-
-            // Build the polygon with the actual position and orientation:
-            std::vector< wxPoint> poly;
-            poly = BuildPolyPointsList();
+        if( IsFilled() )
+        {
+            aCornerBuffer.NewOutline();
 
             for( wxPoint& point : poly )
+                aCornerBuffer.Append( point.x, point.y );
+        }
+
+        if( width > 0 || !IsFilled() )
+        {
+            wxPoint pt1( poly[ poly.size() - 1] );
+
+            for( wxPoint pt2 : poly )
             {
-                RotatePoint( &point, orientation );
-                point += offset;
-            }
+                if( pt2 != pt1 )
+                    TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width, aError, aErrorLoc );
 
-            if( IsPolygonFilled() || width == 0 )
-            {
-                aCornerBuffer.NewOutline();
-
-                for( wxPoint& point : poly )
-                    aCornerBuffer.Append( point.x, point.y );
-            }
-
-            if( width > 0 )
-            {
-                wxPoint pt1( poly[ poly.size() - 1] );
-
-                for( wxPoint pt2 : poly )
-                {
-                    if( pt2 != pt1 )
-                    {
-                        TransformOvalToPolygon( aCornerBuffer, pt1, pt2, width,
-                                                aError, aErrorLoc );
-                    }
-
-                    pt1 = pt2;
-                }
+                pt1 = pt2;
             }
         }
+    }
         break;
 
     case S_CURVE:       // Bezier curve
-        {
-            std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
-            BEZIER_POLY converter( ctrlPoints );
-            std::vector< wxPoint> poly;
-            converter.GetPoly( poly, m_width );
+    {
+        std::vector<wxPoint> ctrlPoints = { m_start, m_bezierC1, m_bezierC2, m_end };
+        BEZIER_POLY converter( ctrlPoints );
+        std::vector< wxPoint> poly;
+        converter.GetPoly( poly, m_width );
 
-            if( width != 0 )
-            {
-                for( unsigned ii = 1; ii < poly.size(); ii++ )
-                {
-                    TransformOvalToPolygon( aCornerBuffer, poly[ii-1], poly[ii], width,
-                                            aError, aErrorLoc );
-                }
-            }
+        for( unsigned ii = 1; ii < poly.size(); ii++ )
+        {
+            TransformOvalToPolygon( aCornerBuffer, poly[ii-1], poly[ii], width, aError, aErrorLoc );
         }
+    }
         break;
 
     default:

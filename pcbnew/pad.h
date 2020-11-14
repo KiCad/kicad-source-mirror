@@ -255,11 +255,12 @@ public:
      *   a arc
      *   a bezier curve
      */
-    void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness );
-    void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness );
+    void AddPrimitivePoly( const SHAPE_POLY_SET& aPoly, int aThickness, bool aFilled );
+    void AddPrimitivePoly( const std::vector<wxPoint>& aPoly, int aThickness, bool aFilled );
     void AddPrimitiveSegment( const wxPoint& aStart, const wxPoint& aEnd, int aThickness );
-    void AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness );
-    void AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness );
+    void AddPrimitiveCircle( const wxPoint& aCenter, int aRadius, int aThickness, bool aFilled );
+    void AddPrimitiveRect( const wxPoint& aStart, const wxPoint& aEnd, int aThickness,
+                           bool aFilled );
     void AddPrimitiveArc( const wxPoint& aCenter, const wxPoint& aStart, int aArcAngle,
                           int aThickness );
     void AddPrimitiveCurve( const wxPoint& aStart, const wxPoint& aEnd, const wxPoint& aCtrl1,

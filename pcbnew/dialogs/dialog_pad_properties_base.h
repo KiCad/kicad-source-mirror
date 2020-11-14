@@ -308,7 +308,7 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
-		wxStaticText* m_staticTextInfo;
+		wxCheckBox* m_filledCtrl;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -369,12 +369,12 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 		wxStaticText* m_thicknessLabel;
 		TEXT_CTRL_EVAL* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
+		wxCheckBox* m_filledCtrl;
 		wxPanel* m_panelPoly;
 		wxStaticBitmap* m_warningIcon;
 		wxStaticText* m_warningText;
 		wxStaticLine* m_staticline3;
 		wxStaticText* m_statusLine1;
-		wxStaticText* m_statusLine2;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

@@ -44,6 +44,7 @@ class PCB_SHAPE : public BOARD_ITEM
 {
 protected:
     int                  m_width;        // thickness of lines ...
+    bool                 m_filled;       // Pretty much what it says on the tin...
     wxPoint              m_start;        // Line start point or Circle and Arc center
     wxPoint              m_end;          // Line end point or circle and arc start point
     wxPoint              m_thirdPoint;   // Used only for Arcs: arc end point
@@ -90,13 +91,27 @@ public:
         return false;
     }
 
-    /** Polygonal shape is not always filled.
-     * For now it is filled on all layers but Edge_Cut layer
-     */
-    bool IsPolygonFilled() const { return m_Layer != Edge_Cuts; }
+    void SetFilled( bool aFlag ) { m_filled = aFlag; }
 
-    void SetWidth( int aWidth )             { m_width = aWidth; }
-    int GetWidth() const                    { return m_width; }
+    bool IsFilled() const
+    {
+        switch( m_shape )
+        {
+        case S_RECT:
+        case S_CIRCLE:
+        case S_POLYGON:
+            return m_filled;
+
+        case S_SEGMENT:
+        case S_ARC:
+        case S_CURVE:
+        case S_LAST:
+            return false;
+        }
+    }
+
+    void SetWidth( int aWidth ) { m_width = aWidth; }
+    int GetWidth() const        { return m_width; }
 
     /**
      * Function SetAngle

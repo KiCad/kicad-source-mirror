@@ -46,7 +46,7 @@ static inline size_t hash_board_item( const BOARD_ITEM* aItem, int aFlags )
 }
 
 
-size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
+size_t hash_fp_item( const EDA_ITEM* aItem, int aFlags )
 {
     size_t ret = 0;
 
@@ -65,10 +65,10 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
             hash_combine( ret, footprint->GetOrientation() );
 
         for( BOARD_ITEM* item : footprint->GraphicalItems() )
-            hash_combine( ret, hash_eda( item, aFlags ) );
+            hash_combine( ret, hash_fp_item( item, aFlags ) );
 
         for( PAD* pad : footprint->Pads() )
-            hash_combine( ret, hash_eda( static_cast<EDA_ITEM*>( pad ), aFlags ) );
+            hash_combine( ret, hash_fp_item( static_cast<EDA_ITEM*>( pad ), aFlags ) );
     }
         break;
 
@@ -142,6 +142,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
         ret = hash_board_item( segment, aFlags );
         hash_combine( ret, segment->GetShape() );
         hash_combine( ret, segment->GetWidth() );
+        hash_combine( ret, segment->IsFilled() );
         hash_combine( ret, segment->GetRadius() );
 
         if( aFlags & HASH_POS )
@@ -168,7 +169,7 @@ size_t hash_eda( const EDA_ITEM* aItem, int aFlags )
         break;
 
     default:
-        wxASSERT_MSG( false, "Unhandled type in function hashModItem() (exporter_gencad.cpp)" );
+        wxASSERT_MSG( false, "Unhandled type in function hash_fp_item() (exporter_gencad.cpp)" );
     }
 
     return ret;

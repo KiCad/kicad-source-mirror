@@ -236,7 +236,8 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
             {
                 auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT *) parent )
                                                        : new PCB_SHAPE();
-                poly->SetShape ( S_POLYGON );
+                poly->SetShape( S_POLYGON );
+                poly->SetFilled( m_params.m_layer != Edge_Cuts );
                 poly->SetLayer( m_params.m_layer );
                 poly->SetPolyShape ( *aZone->Outline() );
                 bCommit.Add( poly );

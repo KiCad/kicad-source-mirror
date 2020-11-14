@@ -213,11 +213,6 @@ protected:
     bool importFile( const wxString& aFileName, int aFileType );
 
     /**
-     * Use the existing edge_cut line thicknesses to infer the edge clearace.
-     */
-    int inferLegacyEdgeClearance( BOARD* aBoard );
-
-    /**
      * Rematch orphaned zones and vias to schematic nets.
      */
     bool fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap );

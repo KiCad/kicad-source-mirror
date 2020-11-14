@@ -585,6 +585,7 @@ PCB_LAYER_ID PAD_TOOL::explodePad( PAD* aPad )
             FP_SHAPE* shape = new FP_SHAPE( board()->GetFirstFootprint() );
 
             shape->SetShape( primitive->GetShape() );
+            shape->SetFilled( primitive->IsFilled() );
             shape->SetWidth( primitive->GetWidth() );
             shape->SetStart( primitive->GetStart() );
             shape->SetEnd( primitive->GetEnd() );
@@ -680,6 +681,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
 
             PCB_SHAPE* shape = new PCB_SHAPE;
             shape->SetShape( S_POLYGON );
+            shape->SetFilled( true );
             shape->SetPolyShape( existingOutline );
             shape->Move( - aPad->GetPosition() );
             shape->Rotate( wxPoint( 0, 0 ), - aPad->GetOrientation() );
@@ -694,6 +696,7 @@ void PAD_TOOL::recombinePad( PAD* aPad )
         PCB_SHAPE* pcbShape = new PCB_SHAPE;
 
         pcbShape->SetShape( fpShape->GetShape() );
+        pcbShape->SetFilled( fpShape->IsFilled() );
         pcbShape->SetWidth( fpShape->GetWidth() );
         pcbShape->SetStart( fpShape->GetStart() );
         pcbShape->SetEnd( fpShape->GetEnd() );

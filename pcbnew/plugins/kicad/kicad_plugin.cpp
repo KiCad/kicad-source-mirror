@@ -843,6 +843,9 @@ void PCB_IO::format( PCB_SHAPE* aShape, int aNestLevel ) const
 
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aShape->GetWidth() ).c_str() );
 
+    if( aShape->IsFilled() )
+        m_out->Print( 0, " (fill yes)" );
+
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
     m_out->Print( 0, ")\n" );
@@ -927,6 +930,9 @@ void PCB_IO::format( FP_SHAPE* aFPShape, int aNestLevel ) const
     formatLayer( aFPShape );
 
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aFPShape->GetWidth() ).c_str() );
+
+    if( aFPShape->IsFilled() )
+        m_out->Print( 0, " (fill yes)" );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 
@@ -1453,48 +1459,43 @@ void PCB_IO::format( PAD* aPad, int aNestLevel ) const
             switch( primitive->GetShape() )
             {
             case S_SEGMENT:         // usual segment : line with rounded ends
-                m_out->Print( nested_level, "(gr_line (start %s) (end %s) (width %s))",
+                m_out->Print( nested_level, "(gr_line (start %s) (end %s)",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
-                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 
             case S_RECT:
-                m_out->Print( nested_level, "(gr_rect (start %s) (end %s) (width %s))",
+                m_out->Print( nested_level, "(gr_rect (start %s) (end %s)",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
-                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 
             case S_ARC:             // Arc with rounded ends
-                m_out->Print( nested_level, "(gr_arc (start %s) (end %s) (angle %s) (width %s))",
+                m_out->Print( nested_level, "(gr_arc (start %s) (end %s) (angle %s)",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
                               FormatInternalUnits( primitive->GetEnd() ).c_str(),
-                              FormatAngle( primitive->GetAngle() ).c_str(),
-                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                              FormatAngle( primitive->GetAngle() ).c_str() );
                 break;
 
             case S_CIRCLE:          //  ring or circle (circle if width == 0
-                m_out->Print( nested_level, "(gr_circle (center %s) (end %s) (width %s))",
+                m_out->Print( nested_level, "(gr_circle (center %s) (end %s)",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
-                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 
             case S_CURVE:          //  Bezier Curve
-                m_out->Print( aNestLevel, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s)) (width %s))",
+                m_out->Print( nested_level, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s))",
                               FormatInternalUnits( primitive->GetStart() ).c_str(),
                               FormatInternalUnits( primitive->GetBezControl1() ).c_str(),
                               FormatInternalUnits( primitive->GetBezControl2() ).c_str(),
-                              FormatInternalUnits( primitive->GetEnd() ).c_str(),
-                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
+                              FormatInternalUnits( primitive->GetEnd() ).c_str() );
                 break;
 
             case S_POLYGON:         // polygon
                 if( primitive->GetPolyShape().COutline( 0 ).CPoints().size() < 2 )
                     break;      // Malformed polygon.
 
-                {
+            {
                 m_out->Print( nested_level, "(gr_poly (pts\n");
 
                 // Write the polygon corners coordinates:
@@ -1516,14 +1517,21 @@ void PCB_IO::format( PAD* aPad, int aNestLevel ) const
                     }
                 }
 
-                m_out->Print( newLine ? 0 : nested_level, ") (width %s))",
-                              FormatInternalUnits( primitive->GetWidth() ).c_str() );
-                }
+                m_out->Print( newLine ? 0 : nested_level, ")" );
+            }
                 break;
 
             default:
                 break;
             }
+
+            m_out->Print( nested_level, " (width %s)",
+                          FormatInternalUnits( primitive->GetWidth() ).c_str() );
+
+            if( primitive->IsFilled() )
+                m_out->Print( nested_level, " (fill yes)" );
+
+            m_out->Print( nested_level, ")" );
         }
 
         m_out->Print( 0, "\n");

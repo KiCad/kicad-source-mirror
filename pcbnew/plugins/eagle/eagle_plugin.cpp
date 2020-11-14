@@ -775,14 +775,8 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                     PCB_SHAPE* shape = new PCB_SHAPE( m_board );
                     m_board->Add( shape, ADD_MODE::APPEND );
 
-                    // with == 0 means filled circle
-                    if( width <= 0 )
-                    {
-                        width  = radius;
-                        radius = radius / 2;
-                    }
-
                     shape->SetShape( S_CIRCLE );
+                    shape->SetFilled( false );
                     shape->SetLayer( layer );
                     shape->SetStart( wxPoint( kicad_x( c.x ), kicad_y( c.y ) ) );
                     shape->SetEnd( wxPoint( kicad_x( c.x ) + radius, kicad_y( c.y ) ) );

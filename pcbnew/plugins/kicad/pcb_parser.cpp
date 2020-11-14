@@ -603,7 +603,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_circle:
         case T_gr_rect:
             // these filled shapes are allowed and are filled if the line width = 0
-            m_board->Add( parsePCB_SHAPE( true ), ADD_MODE::APPEND );
+            m_board->Add( parsePCB_SHAPE(), ADD_MODE::APPEND );
             break;
 
         case T_gr_text:
@@ -2071,7 +2071,8 @@ void PCB_PARSER::parseNETCLASS()
             break;
 
         default:
-            Expecting( "clearance, trace_width, via_dia, via_drill, uvia_dia, uvia_drill, diff_pair_width, diff_pair_gap or add_net" );
+            Expecting( "clearance, trace_width, via_dia, via_drill, uvia_dia, uvia_drill, "
+                       "diff_pair_width, diff_pair_gap or add_net" );
         }
 
         NeedRIGHT();
@@ -2092,7 +2093,7 @@ void PCB_PARSER::parseNETCLASS()
 }
 
 
-PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowZeroWidth )
+PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 {
     wxCHECK_MSG( CurTok() == T_gr_arc || CurTok() == T_gr_circle || CurTok() == T_gr_curve ||
                  CurTok() == T_gr_rect || CurTok() == T_gr_line || CurTok() == T_gr_poly, NULL,
@@ -2252,37 +2253,69 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE( bool aAllowZeroWidth )
         {
         case T_angle:
             shape->SetAngle( parseDouble( "segment angle" ) * 10.0 );
+            NeedRIGHT();
             break;
 
         case T_layer:
             shape->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
             break;
 
         case T_width:
             shape->SetWidth( parseBoardUnits( T_width ) );
+            NeedRIGHT();
             break;
 
         case T_tstamp:
             NextTok();
             const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+
+        case T_fill:
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_yes:
+                    shape->SetFilled( true );
+                    break;
+
+                default:
+                    Expecting( "yes" );
+                }
+            }
             break;
 
         /// We continue to parse the status field but it is no longer written
         case T_status:
             shape->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            NeedRIGHT();
             break;
 
         default:
-            Expecting( "layer, width, tstamp, or status" );
+            Expecting( "layer, width, fill, tstamp, or status" );
         }
-
-        NeedRIGHT();
     }
 
-    // Only filled polygons, circles and rect may have a zero-line width
-    // This is not permitted in KiCad for other shapes but some external tools can
-    // generate invalid files.
-    if( shape->GetWidth() < 0 || ( shape->GetWidth() == 0 && !aAllowZeroWidth ) )
+    // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
+    // should be filled by specifying a 0 stroke-width.
+    if( m_requiredVersion <= 20201002 )
+    {
+        if( shape->GetWidth() == 0 && ( shape->GetShape() == S_RECT
+                                         || shape->GetShape() == S_CIRCLE
+                                         || shape->GetShape() == S_POLYGON ) )
+        {
+            shape->SetFilled( true );
+        }
+    }
+
+    // Only filled shapes may have a zero line-width.  This is not permitted in KiCad but some
+    // external tools can generate invalid files.
+    if( shape->GetWidth() <= 0 && !shape->IsFilled() )
     {
         shape->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
     }
@@ -3375,35 +3408,64 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         {
         case T_layer:
             shape->SetLayer( parseBoardItemLayer() );
+            NeedRIGHT();
             break;
 
         case T_width:
             shape->SetWidth( parseBoardUnits( T_width ) );
+            NeedRIGHT();
             break;
 
         case T_tstamp:
             NextTok();
             const_cast<KIID&>( shape->m_Uuid ) = CurStrToKIID();
+            NeedRIGHT();
+            break;
+
+        case T_fill:
+            for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+            {
+                if( token == T_LEFT )
+                    token = NextTok();
+
+                switch( token )
+                {
+                case T_yes:
+                    shape->SetFilled( true );
+                    break;
+
+                default:
+                    Expecting( "yes" );
+                }
+            }
             break;
 
         /// We continue to parse the status field but it is no longer written
         case T_status:
             shape->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            NeedRIGHT();
             break;
 
         default:
-            Expecting( "layer, width or tstamp" );
+            Expecting( "layer, width, fill, tstamp, or status" );
         }
-
-        NeedRIGHT();
     }
 
-    // Only filled shapes may have a zero-line width. While not permitted in KiCad, some
-    // external tools generate invalid files.
-    if( shape->GetShape() != S_RECT
-        && shape->GetShape() != S_CIRCLE
-        && shape->GetShape() != S_POLYGON
-        && shape->GetWidth() == 0 )
+    // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
+    // should be filled by specifying a 0 stroke-width.
+    if( m_requiredVersion <= 20201002 )
+    {
+        if( shape->GetWidth() == 0 && ( shape->GetShape() == S_RECT
+                                         || shape->GetShape() == S_CIRCLE
+                                         || shape->GetShape() == S_POLYGON ) )
+        {
+            shape->SetFilled( true );
+        }
+    }
+
+    // Only filled shapes may have a zero line-width.  This is not permitted in KiCad but some
+    // external tools can generate invalid files.
+    if( shape->GetWidth() <= 0 && !shape->IsFilled() )
     {
         shape->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
     }
@@ -3817,32 +3879,29 @@ PAD* PCB_PARSER::parsePAD( FOOTPRINT* aParent )
                     break;
 
                 case T_gr_circle:
-                    dummysegm = parsePCB_SHAPE( true ); // Circles with 0 thickness are allowed
-                                                        // ( filled circles )
+                    dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveCircle( dummysegm->GetCenter(), dummysegm->GetRadius(),
-                                             dummysegm->GetWidth() );
+                                             dummysegm->GetWidth(), dummysegm->IsFilled() );
                     break;
 
                 case T_gr_rect:
-                    dummysegm = parsePCB_SHAPE( true ); // rect with 0 thickness are allowed
-                                                        // ( filled rects )
+                    dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveRect( dummysegm->GetStart(), dummysegm->GetEnd(),
-                                           dummysegm->GetWidth() );
+                                           dummysegm->GetWidth(), dummysegm->IsFilled() );
                     break;
 
 
                 case T_gr_poly:
-                    dummysegm = parsePCB_SHAPE( true );
-                    pad->AddPrimitivePoly( dummysegm->BuildPolyPointsList(),
-                                           dummysegm->GetWidth() );
+                    dummysegm = parsePCB_SHAPE();
+                    pad->AddPrimitivePoly( dummysegm->BuildPolyPointsList(), dummysegm->GetWidth(),
+                                           dummysegm->IsFilled() );
                     break;
 
                 case T_gr_curve:
                     dummysegm = parsePCB_SHAPE();
                     pad->AddPrimitiveCurve( dummysegm->GetStart(), dummysegm->GetEnd(),
                                             dummysegm->GetBezControl1(),
-                                            dummysegm->GetBezControl2(),
-                                            dummysegm->GetWidth() );
+                                            dummysegm->GetBezControl2(), dummysegm->GetWidth() );
                     break;
 
                 default:

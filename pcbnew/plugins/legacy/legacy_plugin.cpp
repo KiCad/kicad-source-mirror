@@ -1933,6 +1933,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                 width = 0;
 
             dseg->SetShape( PCB_SHAPE_TYPE_T( shape ) );
+            dseg->SetFilled( false );
             dseg->SetWidth( width );
             dseg->SetStart( wxPoint( start_x, start_y ) );
             dseg->SetEnd( wxPoint( end_x, end_y ) );

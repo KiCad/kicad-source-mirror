@@ -79,6 +79,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 {
     std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
     circle->SetShape( S_CIRCLE );
+    circle->SetFilled( GetLayer() != Edge_Cuts );
     circle->SetLayer( GetLayer() );
     circle->SetWidth( MapLineWidth( aWidth ) );
     circle->SetCenter( MapCoordinate( aCenter ) );
@@ -119,6 +120,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
 
     std::unique_ptr<PCB_SHAPE> polygon( createDrawing() );
     polygon->SetShape( S_POLYGON );
+    polygon->SetFilled( GetLayer() != Edge_Cuts );
     polygon->SetLayer( GetLayer() );
     polygon->SetPolyPoints( convertedPoints );
 

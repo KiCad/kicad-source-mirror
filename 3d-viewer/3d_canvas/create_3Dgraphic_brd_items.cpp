@@ -587,14 +587,12 @@ void BOARD_ADAPTER::TransformArcToSegments( const wxPoint &aCentre,
 
         if( Is_segment_a_circle( start3DU, end3DU ) )
         {
-            aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU,
-                                                     ( aWidth / 2 ) * m_biuTo3Dunits,
+            aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, ( aWidth / 2 ) * m_biuTo3Dunits,
                                                      aBoardItem ) );
         }
         else
         {
-            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
-                                                     aWidth * m_biuTo3Dunits,
+            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU, aWidth * m_biuTo3Dunits,
                                                      aBoardItem ) );
         }
 
@@ -625,40 +623,51 @@ void BOARD_ADAPTER::TransformArcToSegments( const wxPoint &aCentre,
 // Based on
 // TransformShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp#L431
-void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegment,
+void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
                                                       CGENERICCONTAINER2D *aDstContainer,
                                                       PCB_LAYER_ID aLayerId,
                                                       int aClearanceValue )
 {
     // The full width of the lines to create
     // The extra 1 protects the inner/outer radius values from degeneracy
-    const int linewidth = aDrawSegment->GetWidth() + (2 * aClearanceValue) + 1;
+    const int linewidth = aShape->GetWidth() + ( 2 * aClearanceValue ) + 1;
 
-    switch( aDrawSegment->GetShape() )
+    switch( aShape->GetShape() )
     {
     case S_CIRCLE:
     {
-        const SFVEC2F center3DU(  aDrawSegment->GetCenter().x * m_biuTo3Dunits,
-                                 -aDrawSegment->GetCenter().y * m_biuTo3Dunits );
+        const SFVEC2F center3DU( aShape->GetCenter().x * m_biuTo3Dunits,
+                                 -aShape->GetCenter().y * m_biuTo3Dunits );
 
-        float inner_radius = ( aDrawSegment->GetRadius() - linewidth / 2 ) * m_biuTo3Dunits;
-        float outer_radius = ( aDrawSegment->GetRadius() + linewidth / 2 ) * m_biuTo3Dunits;
+        float inner_radius = ( aShape->GetRadius() - linewidth / 2 ) * m_biuTo3Dunits;
+        float outer_radius = ( aShape->GetRadius() + linewidth / 2 ) * m_biuTo3Dunits;
 
         if( inner_radius < 0 )
             inner_radius = 0;
 
-        if( aDrawSegment->GetWidth() > 0 )
-            aDstContainer->Add( new CRING2D( center3DU, inner_radius, outer_radius, *aDrawSegment ) );
+        if( aShape->IsFilled() )
+            aDstContainer->Add( new CFILLEDCIRCLE2D( center3DU, outer_radius, *aShape ) );
         else
-            aDstContainer->Add( new CFILLEDCIRCLE2D( center3DU, outer_radius, *aDrawSegment ) );
+            aDstContainer->Add( new CRING2D( center3DU, inner_radius, outer_radius, *aShape ) );
     }
-    break;
+        break;
 
     case S_RECT:
-    {
-        if( aDrawSegment->GetWidth() > 0 )
+        if( aShape->IsFilled() )
         {
-            std::vector<wxPoint> pts = aDrawSegment->GetRectCorners();
+            SHAPE_POLY_SET polyList;
+
+            aShape->TransformShapeWithClearanceToPolygon( polyList, aLayerId, linewidth / 2,
+                                                          ARC_HIGH_DEF, ERROR_INSIDE );
+
+            polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+            Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
+                                                     *aShape );
+        }
+        else
+        {
+            std::vector<wxPoint> pts = aShape->GetRectCorners();
 
             const SFVEC2F topLeft3DU(  pts[0].x * m_biuTo3Dunits, -pts[0].y * m_biuTo3Dunits );
             const SFVEC2F topRight3DU( pts[1].x * m_biuTo3Dunits, -pts[1].y * m_biuTo3Dunits );
@@ -666,68 +675,42 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegm
             const SFVEC2F botLeft3DU(  pts[3].x * m_biuTo3Dunits, -pts[3].y * m_biuTo3Dunits );
 
             aDstContainer->Add( new CROUNDSEGMENT2D( topLeft3DU, topRight3DU,
-                                                     linewidth * m_biuTo3Dunits,
-                                                     *aDrawSegment ) );
+                                                     linewidth * m_biuTo3Dunits, *aShape ) );
             aDstContainer->Add( new CROUNDSEGMENT2D( topRight3DU, botRight3DU,
-                                                     linewidth * m_biuTo3Dunits,
-                                                     *aDrawSegment ) );
+                                                     linewidth * m_biuTo3Dunits, *aShape ) );
             aDstContainer->Add( new CROUNDSEGMENT2D( botRight3DU, botLeft3DU,
-                                                     linewidth * m_biuTo3Dunits,
-                                                     *aDrawSegment ) );
+                                                     linewidth * m_biuTo3Dunits, *aShape ) );
             aDstContainer->Add( new CROUNDSEGMENT2D( botLeft3DU, topLeft3DU,
-                                                     linewidth * m_biuTo3Dunits,
-                                                     *aDrawSegment ) );
+                                                     linewidth * m_biuTo3Dunits, *aShape ) );
         }
-        else
-        {
-            SHAPE_POLY_SET polyList;
-
-            aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId,
-                                                                aClearanceValue,
-                                                                ARC_HIGH_DEF, ERROR_INSIDE );
-
-            polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-            Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
-                                                     *aDrawSegment );
-        }
-    }
         break;
 
     case S_ARC:
     {
-        const unsigned int nr_segments =
-                GetNrSegmentsCircle( aDrawSegment->GetBoundingBox().GetSizeMax() );
+        unsigned int segCount = GetNrSegmentsCircle( aShape->GetBoundingBox().GetSizeMax() );
 
-        TransformArcToSegments( aDrawSegment->GetCenter(),
-                                aDrawSegment->GetArcStart(),
-                                aDrawSegment->GetAngle(),
-                                nr_segments,
-                                aDrawSegment->GetWidth(),
-                                aDstContainer,
-                                *aDrawSegment );
+        TransformArcToSegments( aShape->GetCenter(), aShape->GetArcStart(), aShape->GetAngle(),
+                                segCount, linewidth, aDstContainer, *aShape );
     }
     break;
 
     case S_SEGMENT:
     {
-        const SFVEC2F start3DU(  aDrawSegment->GetStart().x * m_biuTo3Dunits,
-                                -aDrawSegment->GetStart().y * m_biuTo3Dunits );
+        const SFVEC2F start3DU( aShape->GetStart().x * m_biuTo3Dunits,
+                                -aShape->GetStart().y * m_biuTo3Dunits );
 
-        const SFVEC2F end3DU  (  aDrawSegment->GetEnd().x   * m_biuTo3Dunits,
-                                -aDrawSegment->GetEnd().y   * m_biuTo3Dunits );
+        const SFVEC2F end3DU  ( aShape->GetEnd().x * m_biuTo3Dunits,
+                                -aShape->GetEnd().y * m_biuTo3Dunits );
 
         if( Is_segment_a_circle( start3DU, end3DU ) )
         {
-            aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU,
-                                                     ( linewidth / 2 ) * m_biuTo3Dunits,
-                                                     *aDrawSegment ) );
+            aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU, ( linewidth / 2 ) * m_biuTo3Dunits,
+                                                     *aShape ) );
         }
         else
         {
-            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
-                                                     linewidth * m_biuTo3Dunits,
-                                                     *aDrawSegment ) );
+            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU, linewidth * m_biuTo3Dunits,
+                                                     *aShape ) );
         }
     }
     break;
@@ -737,8 +720,8 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegm
     {
         SHAPE_POLY_SET polyList;
 
-        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aLayerId, aClearanceValue,
-                                                            ARC_HIGH_DEF, ERROR_INSIDE );
+        aShape->TransformShapeWithClearanceToPolygon( polyList, aLayerId, linewidth / 2,
+                                                      ARC_HIGH_DEF, ERROR_INSIDE );
 
         polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -746,13 +729,13 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aDrawSegm
             break;
 
         Convert_shape_line_polygon_to_triangles( polyList, *aDstContainer, m_biuTo3Dunits,
-                                                 *aDrawSegment );
+                                                 *aShape );
     }
     break;
 
     default:
         wxFAIL_MSG( "BOARD_ADAPTER::AddShapeWithClearanceToContainer no implementation for "
-                    + PCB_SHAPE_TYPE_T_asString( aDrawSegment->GetShape()) );
+                    + PCB_SHAPE_TYPE_T_asString( aShape->GetShape()) );
         break;
     }
 }

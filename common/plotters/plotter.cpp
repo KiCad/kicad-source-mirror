@@ -565,11 +565,13 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
 }
 
 
-void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
-                           OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, OUTLINE_MODE tracemode,
+                           void* aData )
 {
     if( tracemode == FILLED )
+    {
         Circle( pos, diametre, FILL_TYPE::NO_FILL, width );
+    }
     else
     {
         SetCurrentLineWidth( -1 );
@@ -579,11 +581,12 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width,
 }
 
 
-void PLOTTER::FilledCircle( const wxPoint& pos, int diametre,
-                            OUTLINE_MODE tracemode, void* aData )
+void PLOTTER::FilledCircle( const wxPoint& pos, int diametre, OUTLINE_MODE tracemode, void* aData )
 {
     if( tracemode == FILLED )
+    {
         Circle( pos, diametre, FILL_TYPE::FILLED_SHAPE, 0 );
+    }
     else
     {
         SetCurrentLineWidth( -1 );

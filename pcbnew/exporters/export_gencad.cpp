@@ -671,10 +671,10 @@ static size_t hashFootprint( const FOOTPRINT* aFootprint )
                             | HASH_FLAGS::HASH_ROT | HASH_FLAGS::HASH_LAYER;
 
     for( BOARD_ITEM* i : aFootprint->GraphicalItems() )
-        ret += hash_eda( i, flags );
+        ret += hash_fp_item( i, flags );
 
     for( PAD* i : aFootprint->Pads() )
-        ret += hash_eda( i, flags );
+        ret += hash_fp_item( i, flags );
 
     return ret;
 }
