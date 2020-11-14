@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-13 16:57+0000\n"
+"PO-Revision-Date: 2020-11-16 21:45+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -141,9 +141,8 @@ msgid "failed to open file"
 msgstr "nie można otworzyć pliku"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "Obrys płytki"
+msgstr "Budowanie obrysu płytki"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
@@ -232,14 +231,12 @@ msgid "Loading..."
 msgstr "Wczytywanie..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Ładowanie OpenGL: płytka"
+msgstr "Ładowanie raytraceingu: płytka"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Ładowanie OpenGL: warstwy"
+msgstr "Ładowanie raytraceingu: warstwy"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
@@ -6398,9 +6395,9 @@ msgid "Equivalence File Load Error"
 msgstr "Błąd odczytu pliku .EQU"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "Znaleziono %lu par przydzieleń footprintów."
+msgstr "Znaleziono %lu par przydzieleń footprintów do symboli."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -12640,7 +12637,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "Symbol zasilania tworzy globalną etykietę z nazwą '%s'"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:63
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -14560,31 +14557,30 @@ msgstr ""
 "Należy uruchomić Menedżer programu KiCad oraz utworzyć projekt."
 
 #: eeschema/tools/backannotate.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no associated symbol."
-msgstr "Footprint \"%s\" nie ma przydzielonego symbolu."
+msgstr "Footprint '%s' nie ma przydzielonego symbolu."
 
 #: eeschema/tools/backannotate.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Pcb footprints '%s' and '%s' linked to same symbol."
-msgstr "Footprinty \"%s\" oraz \"%s\" prowadzą do tego samego symbolu"
+msgstr "Footprinty '%s' oraz '%s' przypisano do tego samego symbolu."
 
 #: eeschema/tools/backannotate.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "Nie można znaleźć symbolu dla footprintu \"%s\""
+msgstr "Nie można znaleźć symbolu dla footprintu '%s'."
 
 #: eeschema/tools/backannotate.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find footprint for symbol '%s'."
-msgstr "Nie można odnaleźć footprintu dla symbolu \"%s\""
+msgstr "Nie można odnaleźć footprintu dla symbolu '%s'."
 
 #: eeschema/tools/backannotate.cpp:292
-#, fuzzy
 msgid "Cannot relink footprints because schematic is not fully annotated."
 msgstr ""
 "Nie można ponownie przypisać footprintów ponieważ schemat nie jest w pełni "
-"ponumerowany"
+"ponumerowany."
 
 #: eeschema/tools/backannotate.cpp:318
 #, c-format
@@ -19352,11 +19348,10 @@ msgid "Layer \"%s\" (sublayer %d/%d)"
 msgstr "Warstwa \"%s\" (podwarstwa %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
-#, fuzzy
 msgid "Select dielectric layer to add to board stack up."
 msgstr ""
 "Wybierz warstwę zdefiniowaną przez użytkownika, aby dodać ją do zestawu "
-"warstw płytki"
+"warstw płytki."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
 msgid "Dielectric Layers List"
@@ -19364,12 +19359,11 @@ msgstr "Lista warstw dielektryka"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
-msgstr ""
+msgstr "Wybiera warstwę dielektryczną by ją usunąć ze zestawu warstw płytki."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
-#, fuzzy
 msgid "Dielectric Layers"
-msgstr "Lista warstw dielektryka"
+msgstr "Warstwy dielektryczne"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:619
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:168
@@ -19905,14 +19899,14 @@ msgstr ""
 "Footprinty na dolnej warstwie będą miały dodane przedrostki '%s'."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
 "\n"
-"Z uwagi na sortowanie wg %s, koordynaty będą zaokrąglone do siatki %s, %s. "
+"Z uwagi na sortowanie wg %s, koordynaty będą zaokrąglone do siatki %s, %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 msgid "footprint location"
@@ -20053,9 +20047,8 @@ msgstr ""
 "Nie udało się ponownie ponumerować!\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
-#, fuzzy
 msgid "Aborted: too many errors"
-msgstr "Przerwano: zbyt dużo błędów "
+msgstr "Przerwano: zbyt dużo błędów"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
 msgid ""
@@ -21983,7 +21976,7 @@ msgstr "Wybierz nazwę pliku dla eksportu IDF"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:51
@@ -22006,9 +21999,8 @@ msgstr "Pozycja Y:"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:104
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:115
-#, fuzzy
 msgid "Output Units"
-msgstr "Jednostki wyjściowe:"
+msgstr "Jednostki wyjściowe"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:61
 msgid "Export IDFv3"
@@ -22244,7 +22236,7 @@ msgstr "Zapisz plik VRML płytki"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -22347,42 +22339,36 @@ msgid "Search for:"
 msgstr "Szukaj:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match case"
-msgstr "Rozróźniaj wielkość liter"
+msgstr "Rozróżniaj wielkość liter"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Wracaj na początek"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "Połącz footprinty używając odnośników"
+msgstr "Wyszukaj w oznaczeniach footprintów"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint values"
-msgstr "Pokaż wartości dla footprintów"
+msgstr "Wyszukaj w wartościach dla footprintów"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search other text items"
-msgstr "Inne elementy tekstowe footprintów"
+msgstr "Wyszukaj w innych elementach tekstowych footprintów"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC markers"
-msgstr "Pokaż reguły DRC"
+msgstr "Wyszukaj w znacznikach DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
-#, fuzzy
 msgid "Find Previous"
-msgstr "Podgląd wydruku"
+msgstr "Znajdź poprzedni"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "Zrestartuj wyszukiwanie"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:307
 msgid ""
@@ -23169,12 +23155,10 @@ msgid "The arc angle cannot be zero."
 msgstr "Kąt łuku nie może być zerowy."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:363
-#, fuzzy
 msgid "The radius cannot be zero."
-msgstr "Kąt łuku nie może być zerowy."
+msgstr "Promień nie może być zerowy."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:369
-#, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "Prostokąt nie może być pusty."
 
@@ -23250,13 +23234,13 @@ msgid "KiCad Layer"
 msgstr "Warstwa programu KiCad"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Wszystkie warstwy muszą być dopasowane. Kliknij opcję 'Autodopasowanie "
-"warstw', aby automatycznie dopasować pozostałe warstwy."
+"Wszystkie wymagane warstwy (oznaczone przez '*') muszą być dopasowane. "
+"Kliknij opcję 'Autodopasowanie warstw', aby automatycznie dopasować "
+"pozostałe warstwy"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
@@ -23460,9 +23444,8 @@ msgid "Show zero pad nets"
 msgstr "Pokaż sieci niepodłączone"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
-#, fuzzy
 msgid "Group by:"
-msgstr "Grupuj według"
+msgstr "Grupuj według:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:54
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:55
@@ -24832,9 +24815,8 @@ msgid "Walk around"
 msgstr "Omijaj przeszkody"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
-#, fuzzy
 msgid "Mode"
-msgstr "Model"
+msgstr "Tryb"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
@@ -26570,13 +26552,12 @@ msgstr ""
 "footprintach lub dla pól lutowniczych."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
 msgstr ""
-"Dodatnia wartość prześwitu oznacza większą niż pole lutownicze (zwykle dla "
-"prześwitu soldermaski)."
+"Dodatnia wartość prześwitu oznacza większą przestrzeń niż pole lutownicze ("
+"zwykle dla prześwitu soldermaski)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
 msgid "Solder mask minimum bridge width:"
@@ -26608,13 +26589,12 @@ msgstr ""
 "prześwitu."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:91
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
 msgstr ""
-"Ujemna wartość prześwitu oznacza mniejszą niż pole lutownicze (zwykle dla "
-"prześwitu pasty)."
+"Ujemna wartość prześwitu oznacza mniejszą przestrzeń niż pole lutownicze ("
+"zwykle dla prześwitu pasty)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:101
 msgid ""
@@ -27967,9 +27947,8 @@ msgid "Footprint '%s' deleted from library '%s'"
 msgstr "Footprint '%s' usunięty z biblioteki '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:617
-#, fuzzy
 msgid "No footprints to export!"
-msgstr "Brak footprintów do zebrania!"
+msgstr "Nie ma footprintów mogących być wyeksportowanych!"
 
 #: pcbnew/footprint_libraries_utils.cpp:793
 #: pcbnew/footprint_viewer_frame.cpp:728
@@ -28010,9 +27989,9 @@ msgid "Component \"%s\" replaced in \"%s\""
 msgstr "Komponent \"%s\" zastąpiony przez \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:982
-#, fuzzy, c-format
+#, c-format
 msgid "Component \"%s\" added in \"%s\""
-msgstr "Komponent \"%s\" dodano do   \"%s\""
+msgstr "Komponent \"%s\" dodany do \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:1030
 msgid "Enter footprint name:"
@@ -28177,9 +28156,8 @@ msgstr ""
 "Tylko wektory zostaną zaimportowane.  Bitmapy i czcionki zostaną zignorowane."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:45
-#, fuzzy
 msgid "Placement"
-msgstr "Rozmieszczenie:"
+msgstr "Rozmieszczenie"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:50
 msgid "Interactive placement"
@@ -28202,9 +28180,8 @@ msgid "Select PCB grid units"
 msgstr "Wybór jednostek siatki PCB"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:122
-#, fuzzy
 msgid "Import Parameters"
-msgstr "Importuj parametry:"
+msgstr "Importuj parametry"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:136
 msgid "Line width (DXF import):"
@@ -28390,9 +28367,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:153
-#, fuzzy
 msgid "Export Footprints to Library..."
-msgstr "Zbierz footprinty w bibliotekę..."
+msgstr "Eksportuj footprinty do biblioteki..."
 
 #: pcbnew/menubar_pcb_editor.cpp:154
 msgid ""
@@ -28403,9 +28379,8 @@ msgstr ""
 "(nie usuwa innych footprintów z tej biblioteki)"
 
 #: pcbnew/menubar_pcb_editor.cpp:158
-#, fuzzy
 msgid "Export Footprints to New Library..."
-msgstr "Zbierz footprinty do nowej biblioteki..."
+msgstr "Eksportuj footprinty do nowej biblioteki..."
 
 #: pcbnew/menubar_pcb_editor.cpp:159
 msgid ""
@@ -28465,7 +28440,6 @@ msgstr "Promień łuku czopu:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:78
 #: pcbnew/microwave/microwave_footprint.cpp:93
-#, fuzzy
 msgid "Create microwave footprint"
 msgstr "Utwórz footprint dla aplikacji mikrofalowej"
 
@@ -29663,26 +29637,32 @@ msgstr "Nie ma obudowy \"%s\" w bibliotece \"%s\""
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Zignorowano wielokąt, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1602
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Zignorowano połączenie, ponieważ warstwa Eagle '%s' (%d) nie została "
+"zmapowana"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1775
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Zignorowano tekst, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1913
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Zignorowano prostokąt, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2098
 #, c-format
 msgid "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Zignorowano okrąg, ponieważ warstwa Eagle '%s' (%d) nie została zmapowana"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:90
 #, c-format
