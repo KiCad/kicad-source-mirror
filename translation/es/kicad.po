@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-11 10:33+0000\n"
+"PO-Revision-Date: 2020-11-16 21:45+0000\n"
 "Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20519,7 +20519,7 @@ msgstr "Rotar:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:140
 #: pcbnew/footprint.cpp:747
 msgid "Front"
-msgstr "Frontal"
+msgstr "Lado Frontal"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:190
 #, fuzzy
@@ -20581,10 +20581,13 @@ msgid "Remove back prefix"
 msgstr "Eliminar prefijo de ruta seleccionado"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:242
+#, fuzzy
 msgid ""
 "If checked will remove the Back side prefix\n"
 "in the back prefix box if present"
 msgstr ""
+"Si está marcado, eliminará el prefijo del lado posterior\n"
+"en el cuadro de prefijo posterior si está presente"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:246
 #, fuzzy
@@ -20606,6 +20609,7 @@ msgstr "Prefijo del nombre del pad:"
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:264
 msgid "Optional prefix for solder side reference designations (i.e. B_)"
 msgstr ""
+"Prefijo opcional para referencias del lado de la soldadura (es decir, B_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:268
 #, fuzzy
@@ -20627,6 +20631,8 @@ msgid ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
 msgstr ""
+"No volver a anotar este tipo \n"
+"de referencia (R significa R*)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.h:107
 #, fuzzy
@@ -20697,6 +20703,8 @@ msgid ""
 "Error importing settings from board:\n"
 "Associated project file %s could not be loaded"
 msgstr ""
+"Error al importar la configuración de la placa:\n"
+"No se pudo cargar el archivo de proyecto asociado %s"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:188 pcbnew/files.cpp:666
 #, c-format
@@ -20731,12 +20739,12 @@ msgstr "Área:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:137
 msgid "THT:"
-msgstr ""
+msgstr "THT:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:138
 #: pcbnew/dialogs/dialog_board_statistics.cpp:142
 msgid "SMD:"
-msgstr ""
+msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:141
 #, fuzzy
@@ -20750,7 +20758,7 @@ msgstr "Conector"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:144
 msgid "NPTH:"
-msgstr ""
+msgstr "NPTH:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:165
@@ -20817,6 +20825,8 @@ msgid ""
 "PCB statistics report\n"
 "====================="
 msgstr ""
+"Informe de estadísticas de la placa\n"
+"============================="
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:648
 msgid "Date"
@@ -20884,7 +20894,7 @@ msgstr "No plateado"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr ""
+msgstr "Vía/Pad"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 #, fuzzy
@@ -20977,11 +20987,11 @@ msgstr "Eliminar vías re&dundantes"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:28
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "eliminar vías de pads de agujero pasante y de vías superpuestas"
+msgstr "eliminar vías de pads de orificio pasante y de vías superpuestas"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:32
 msgid "Delete vias connected on only one layer"
-msgstr ""
+msgstr "Eliminar vías conectadas en una sola capa"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 #, fuzzy
@@ -21008,7 +21018,7 @@ msgstr "Pistas conectando múltiples redes:"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:46
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr ""
+msgstr "Eliminar pistas que tengan la posición inicial y final dentro de un pad"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:57
 #, fuzzy
@@ -21017,7 +21027,7 @@ msgstr "&Optimizar pistas y vías..."
 
 #: pcbnew/dialogs/dialog_constraints_reporter_base.h:41
 msgid "Constraints Resolution Report"
-msgstr ""
+msgstr "Informe de Resolución de Requerimientos"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:282
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:163
@@ -21095,7 +21105,7 @@ msgstr "Nombre de red:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:107
 msgid "A unique name for this zone to identify it for DRC"
-msgstr ""
+msgstr "Un nombre único para esta zona para identificarla para DRC"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:128
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:51
@@ -21258,6 +21268,11 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
+"Valor del esfuerzo de suavizado\n"
+"0 = sin suavizado\n"
+"1 = chaflán\n"
+"2 = esquinas redondeadas\n"
+"3 = esquinas redondeadas (forma más fina)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:333
 #, fuzzy
@@ -21271,6 +21286,10 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
+"Relación entre el tamaño de las esquinas suavizadas y el espacio entre "
+"líneas\n"
+"0 = sin suavizado\n"
+"1.0 = radio máximo / tamaño de chaflán (valor de mitad del espacio)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:343
 #, fuzzy
@@ -21297,7 +21316,7 @@ msgstr "Tamaño mínimo de vía:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:358
 msgid "Isolated islands smaller than this will be removed"
-msgstr ""
+msgstr "Se eliminarán las islas aisladas más pequeñas que este valor"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:387
 msgid "Export Settings to Other Zones"
@@ -21570,8 +21589,9 @@ msgstr "Nombre de red:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
+#, fuzzy
 msgid "Draw a shape around the leader text"
-msgstr ""
+msgstr "Dibuja una forma alrededor del texto guía"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:51
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:74
@@ -21605,6 +21625,8 @@ msgstr "Valor actual"
 msgid ""
 "When checked, the actual measurement is ignored and any value can be entered"
 msgstr ""
+"Si se ha marcado, se ignora la medida actual y se puede introducir cualquier "
+"valor"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:114
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:44
@@ -21622,6 +21644,8 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
+"Unidades de esta dimensión (\"automático\" para seguir las unidades "
+"seleccionadas en el editor)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:130
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:135
