@@ -369,6 +369,11 @@ bool PGM_SINGLE_TOP::OnPgmInit()
     // and is one of the types in FRAME_T.
     KIWAY_PLAYER* frame = Kiway.Player( appType, true );
 
+    if( frame == nullptr )
+    {
+        return false;
+    }
+
     Kiway.SetTop( frame );
 
     App().SetTopWindow( frame );      // wxApp gets a face.

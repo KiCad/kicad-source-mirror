@@ -351,7 +351,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         // way it gets some explanatory text.
 
         wxASSERT_MSG( 0, wxT( "caller has a bug, passed a bad aFrameType" ) );
-        return NULL;
+        return nullptr;
     }
 
     // return the previously opened window
@@ -381,19 +381,19 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayErrorMessage( NULL, _( "Error loading editor" ), ioe.What() );
+            DisplayErrorMessage( nullptr, _( "Error loading editor" ), ioe.What() );
         }
         catch( const std::exception& e)
         {
-            DisplayErrorMessage( NULL, _( "Error loading editor" ), e.what() );
+            DisplayErrorMessage( nullptr, _( "Error loading editor" ), e.what() );
         }
         catch( ... )
         {
-            DisplayErrorMessage( NULL, _( "Error loading editor" ) );
+            DisplayErrorMessage( nullptr, _( "Error loading editor" ) );
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
