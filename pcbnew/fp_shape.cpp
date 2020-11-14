@@ -51,7 +51,7 @@ FP_SHAPE::~FP_SHAPE()
 
 void FP_SHAPE::SetLocalCoord()
 {
-    FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_Parent );
 
     if( fp == NULL )
     {
@@ -79,7 +79,7 @@ void FP_SHAPE::SetLocalCoord()
 
 void FP_SHAPE::SetDrawCoord()
 {
-    FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_Parent );
 
     m_start      = m_Start0;
     m_end        = m_End0;
@@ -108,10 +108,14 @@ void FP_SHAPE::SetDrawCoord()
 
 std::shared_ptr<SHAPE> FP_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 {
+    FOOTPRINT*          fp = static_cast<FOOTPRINT*>( m_Parent );
     std::vector<SHAPE*> shapes = MakeEffectiveShapes();
 
     for( SHAPE* shape : shapes )
-        shape->Move( m_Parent->GetPosition() );
+    {
+        shape->Rotate( -fp->GetOrientationRadians() );
+        shape->Move( fp->GetPosition() );
+    }
 
     return std::make_shared<SHAPE_COMPOUND>( shapes );
 }
@@ -121,7 +125,7 @@ std::shared_ptr<SHAPE> FP_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString   msg;
-    FOOTPRINT* fp = (FOOTPRINT*) m_Parent;
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_Parent );
 
     if( !fp )
         return;
