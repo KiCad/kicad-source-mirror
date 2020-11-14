@@ -107,11 +107,14 @@ public:
                         const int mmin[2] = { bbox.GetX(), bbox.GetY() };
                         const int mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
 
-                        m_tree[layer]->Insert( mmin, mmax,
-                                               new ITEM_WITH_SHAPE( aItem, subshape, shape ) );
+                        m_tree[layer]->Insert( mmin, mmax, new ITEM_WITH_SHAPE( aItem, subshape,
+                                                                                shape ) );
                         m_count++;
                     }
                 };
+
+        if( aItem->Type() == PCB_FP_TEXT_T && !dynamic_cast<FP_TEXT*>( aItem )->IsVisible() )
+            return;
 
         if( aLayer != UNDEFINED_LAYER )
         {
@@ -293,36 +296,36 @@ public:
     };
 
     int QueryCollidingPairs( DRC_RTREE* aRefTree,
-                             std::vector<LAYER_PAIR> aLayers,
+                             std::vector<LAYER_PAIR> aLayerPairs,
                              std::function<bool( const LAYER_PAIR&,
                                                  ITEM_WITH_SHAPE*, ITEM_WITH_SHAPE*,
                                                  bool* aCollision )> aVisitor,
                              int aMaxClearance,
                              std::function<bool(int, int )> aProgressReporter ) const
     {
-        std::vector< PAIR_INFO > pairsToVisit;
+        std::vector<PAIR_INFO> pairsToVisit;
 
-        for( LAYER_PAIR& refLayerIter : aLayers )
+        for( LAYER_PAIR& layerPair : aLayerPairs )
         {
-            const PCB_LAYER_ID refLayer = refLayerIter.first;
-            const PCB_LAYER_ID targetLayer = refLayerIter.second;
+            const PCB_LAYER_ID refLayer = layerPair.first;
+            const PCB_LAYER_ID targetLayer = layerPair.second;
 
             for( ITEM_WITH_SHAPE* refItem : aRefTree->OnLayer( refLayer ) )
             {
                 BOX2I box = refItem->shape->BBox();
                 box.Inflate( aMaxClearance );
 
-                int min[2] = { box.GetX(),         box.GetY() };
-                int max[2] = { box.GetRight(),     box.GetBottom() };
+                int min[2] = { box.GetX(),     box.GetY() };
+                int max[2] = { box.GetRight(), box.GetBottom() };
 
                 auto visit =
                         [&]( ITEM_WITH_SHAPE* aItemToTest ) -> bool
                         {
                             // don't collide items against themselves
-                            if( refLayer == targetLayer && aItemToTest->parent == refItem->parent )
+                            if( aItemToTest->parent == refItem->parent )
                                 return true;
 
-                            pairsToVisit.emplace_back( refLayerIter, refItem, aItemToTest );
+                            pairsToVisit.emplace_back( layerPair, refItem, aItemToTest );
                             return true;
                         };
 
@@ -338,13 +341,20 @@ public:
         int progress = 0;
         int count = pairsToVisit.size();
 
-        for( PAIR_INFO& pair : pairsToVisit )
+        for( const PAIR_INFO& pair : pairsToVisit )
         {
             if( !aProgressReporter( progress++, count ) )
                 break;
 
+            BOARD_ITEM* a = pair.refItem->parent;
+            BOARD_ITEM* b = pair.testItem->parent;
+
+            // store canonical order so we don't collide in both directions (a:b and b:a)
+            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                std::swap( a, b );
+
             // don't report multiple collisions for compound or triangulated shapes
-            if( collidingCompounds.count( { pair.refItem->parent, pair.testItem->parent } ) )
+            if( collidingCompounds.count( { a, b } ) )
                 continue;
 
             bool collisionDetected = false;
@@ -353,7 +363,7 @@ public:
                 break;
 
             if( collisionDetected )
-                collidingCompounds[ { pair.refItem->parent, pair.testItem->parent } ] = 1;
+                collidingCompounds[ { a, b } ] = 1;
         }
 
         return 0;
