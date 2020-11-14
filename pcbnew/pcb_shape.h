@@ -105,7 +105,6 @@ public:
         case S_SEGMENT:
         case S_ARC:
         case S_CURVE:
-        case S_LAST:
             return false;
         }
 
