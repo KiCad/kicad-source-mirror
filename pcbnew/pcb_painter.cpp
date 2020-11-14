@@ -1222,9 +1222,17 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     case S_POLYGON:
     {
         SHAPE_POLY_SET& shape = const_cast<PCB_SHAPE*>( aShape )->GetPolyShape();
+        FOOTPRINT*      parentFootprint = aShape->GetParentFootprint();
 
         if( shape.OutlineCount() == 0 )
             break;
+
+        if( parentFootprint )
+        {
+            m_gal->Save();
+            m_gal->Translate( parentFootprint->GetPosition() );
+            m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
+        }
 
         if( sketch )
         {
@@ -1257,21 +1265,14 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
                 if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
                     shape.CacheTriangulation();
 
-                m_gal->Save();
-
-                if( FOOTPRINT* parentFootprint = aShape->GetParentFootprint() )
-                {
-                    m_gal->Translate( parentFootprint->GetPosition() );
-                    m_gal->Rotate( -parentFootprint->GetOrientationRadians() );
-                }
-
                 m_gal->DrawPolygon( shape );
-                m_gal->Restore();
             }
         }
 
-        break;
+        if( parentFootprint )
+            m_gal->Restore();
     }
+        break;
 
     case S_CURVE:
         if( sketch )
