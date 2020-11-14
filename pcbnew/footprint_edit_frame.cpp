@@ -205,7 +205,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
 #if !defined( _WIN32 )
     // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds of graphical glitches
-    auiFlags |= wxAUI_MGR_LIVE_RESIZE );
+    auiFlags |= wxAUI_MGR_LIVE_RESIZE;
 #endif
     m_auimgr.SetFlags( auiFlags );
 
