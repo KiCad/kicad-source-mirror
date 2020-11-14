@@ -86,7 +86,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
             }
 
             // case 2: selection contains both the module and its pads - remove the pads
-            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && fp && aCollector.HasItem( fp ) )
+            if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
                 aCollector.Remove( item );
         }
         else if( item->Type() == PCB_PAD_T )
@@ -108,7 +108,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
             }
 
             // case 2: selection contains both the module and its pads - remove the pads
-            if( !( aFlags & INCLUDE_PADS_AND_MODULES ) && fp && aCollector.HasItem( fp ) )
+            if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
                 aCollector.Remove( item );
         }
         else if( ( aFlags & EXCLUDE_TRANSIENTS ) && item->Type() == PCB_MARKER_T )

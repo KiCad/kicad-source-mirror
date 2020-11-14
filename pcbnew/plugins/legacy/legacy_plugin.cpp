@@ -3088,8 +3088,6 @@ void LEGACY_PLUGIN::SaveFP3DModels( const FOOTPRINT* aFootprint ) const
 #include <wx/filename.h>
 
 typedef boost::ptr_map< std::string, FOOTPRINT >   FOOTPRINT_MAP;
-typedef FOOTPRINT_MAP::iterator                    MODULE_ITER;
-typedef FOOTPRINT_MAP::const_iterator              MODULE_CITER;
 
 
 /**
@@ -3269,14 +3267,14 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
 
             */
 
-            MODULE_CITER it = m_footprints.find( footprintName );
+            FOOTPRINT_MAP::const_iterator it = m_footprints.find( footprintName );
 
             if( it == m_footprints.end() )  // footprintName is not present in cache yet.
             {
-                std::pair<MODULE_ITER, bool> r = m_footprints.insert( footprintName, fp );
-
-                wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
-                (void) r;
+                if( !m_footprints.insert( footprintName, fp ).second )
+                {
+                    wxFAIL_MSG( "error doing cache insert using guaranteed unique name" );
+                }
             }
 
             // Bad library has a duplicate of this footprintName, generate a
@@ -3302,10 +3300,11 @@ void LP_CACHE::LoadModules( LINE_READER* aReader )
                         nameOK = true;
 
                         fp->SetFPID( LIB_ID( wxEmptyString, newName ) );
-                        std::pair<MODULE_ITER, bool> r = m_footprints.insert( newName, fp );
 
-                        wxASSERT_MSG( r.second, wxT( "error doing cache insert using guaranteed unique name" ) );
-                        (void) r;
+                        if( !m_footprints.insert( newName, fp ).second )
+                        {
+                            wxFAIL_MSG( "error doing cache insert using guaranteed unique name" );
+                        }
                     }
                 }
             }
@@ -3353,8 +3352,8 @@ void LEGACY_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wx
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_cache->m_footprints.begin(); it != m_cache->m_footprints.end(); ++it )
-        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+    for( const auto& footprint : m_cache->m_footprints )
+        aFootprintNames.Add( FROM_UTF8( footprint.first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
@@ -3372,8 +3371,7 @@ FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
     cacheLib( aLibraryPath );
 
     const FOOTPRINT_MAP&   footprints = m_cache->m_footprints;
-
-    MODULE_CITER it = footprints.find( TO_UTF8( aFootprintName ) );
+    FOOTPRINT_MAP::const_iterator it = footprints.find( TO_UTF8( aFootprintName ) );
 
     if( it == footprints.end() )
     {

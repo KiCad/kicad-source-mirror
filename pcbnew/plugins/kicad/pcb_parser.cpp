@@ -510,7 +510,7 @@ BOARD_ITEM* PCB_PARSER::Parse()
         break;
 
     case T_module:
-        item = (BOARD_ITEM*) parseMODULE( initial_comments.release() );
+        item = (BOARD_ITEM*) parseFOOTPRINT( initial_comments.release());
         break;
 
     default:
@@ -615,7 +615,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_module:
-            m_board->Add( parseMODULE(), ADD_MODE::APPEND );
+            m_board->Add( parseFOOTPRINT(), ADD_MODE::APPEND );
             break;
 
         case T_segment:
@@ -2794,11 +2794,11 @@ DIMENSION_BASE* PCB_PARSER::parseDIMENSION()
 }
 
 
-FOOTPRINT* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
+FOOTPRINT* PCB_PARSER::parseFOOTPRINT( wxArrayString* aInitialComments )
 {
     try
     {
-        return parseMODULE_unchecked( aInitialComments );
+        return parseFOOTPRINT_unchecked( aInitialComments );
     }
     catch( const PARSE_ERROR& parse_error )
     {
@@ -2810,7 +2810,7 @@ FOOTPRINT* PCB_PARSER::parseMODULE( wxArrayString* aInitialComments )
 }
 
 
-FOOTPRINT* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
+FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments )
 {
     wxCHECK_MSG( CurTok() == T_module, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FOOTPRINT." ) );

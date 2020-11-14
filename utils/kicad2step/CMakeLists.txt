@@ -9,7 +9,7 @@ set( KS2_LIB_FILES
     pcb/3d_resolver.cpp
     pcb/base.cpp
     pcb/kicadmodel.cpp
-    pcb/kicadmodule.cpp
+    pcb/kicadfootprint.cpp
     pcb/kicadpad.cpp
     pcb/kicadpcb.cpp
     pcb/kicadcurve.cpp

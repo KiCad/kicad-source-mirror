@@ -140,9 +140,11 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
             const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
-                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool ) {
-                        EditToolSelectionFilter(
-                                aCollector, EXCLUDE_TRANSIENTS | INCLUDE_PADS_AND_MODULES, sTool );
+                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    {
+                        EditToolSelectionFilter( aCollector,
+                                                 EXCLUDE_TRANSIENTS | INCLUDE_PADS_AND_FOOTPRINTS,
+                                                 sTool );
                     } );
 
             if( sel.Empty() )

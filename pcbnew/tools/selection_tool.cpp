@@ -534,7 +534,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
             ExitGroup();
     }
 
-    collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::ModuleItems
+    collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                     : GENERAL_COLLECTOR::AllBoardItems,
                        (wxPoint) aWhere, guide );
 
@@ -1622,7 +1622,7 @@ void SELECTION_TOOL::RebuildSelection()
         return SEARCH_RESULT::CONTINUE;
     };
 
-    board()->Visit( inspector, nullptr, m_isFootprintEditor ? GENERAL_COLLECTOR::ModuleItems
+    board()->Visit( inspector, nullptr, m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                             : GENERAL_COLLECTOR::AllBoardItems );
 }
 

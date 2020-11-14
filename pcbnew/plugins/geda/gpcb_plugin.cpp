@@ -28,7 +28,6 @@
  */
 
 #include <wildcards_and_files_ext.h>
-#include <filter_reader.h>
 #include <trace_helpers.h>
 #include <math/util.h>      // for KiROUND
 
@@ -58,7 +57,7 @@ static inline long parseInt( const wxString& aValue, double aScalar )
      * the previous format.
      *
      * Distinction between the even older format (mils, 1000 units per inch)
-     * and the pre-2011 format is done in ::parseMODULE already; the
+     * and the pre-2011 format is done in ::parseFOOTPRINT already; the
      * distinction is by wether an object definition opens with '(' or '['.
      * All values with explicite unit open with a '[' so there's no need to
      * consider this distinction when parsing them.
@@ -126,8 +125,6 @@ GPCB_FPL_CACHE_ITEM::GPCB_FPL_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENA
 
 
 typedef boost::ptr_map< std::string, GPCB_FPL_CACHE_ITEM >  FOOTPRINT_MAP;
-typedef FOOTPRINT_MAP::iterator                             MODULE_ITER;
-typedef FOOTPRINT_MAP::const_iterator                       MODULE_CITER;
 
 
 class GPCB_FPL_CACHE
@@ -141,7 +138,7 @@ class GPCB_FPL_CACHE
     long long       m_cache_timestamp;  ///< A hash of the timestamps for all the footprint
                                         ///< files.
 
-    FOOTPRINT* parseMODULE( LINE_READER* aLineReader );
+    FOOTPRINT* parseFOOTPRINT( LINE_READER* aLineReader );
 
     /**
      * Function testFlags
@@ -253,7 +250,7 @@ void GPCB_FPL_CACHE::Load()
             // reader now owns fp, will close on exception or return
             FILE_LINE_READER reader( fn.GetFullPath() );
             std::string      name = TO_UTF8( fn.GetName() );
-            FOOTPRINT*       footprint = parseMODULE( &reader );
+            FOOTPRINT*       footprint = parseFOOTPRINT( &reader );
 
             // The footprint name is the file name without the extension.
             footprint->SetFPID( LIB_ID( wxEmptyString, fn.GetName() ) );
@@ -277,7 +274,7 @@ void GPCB_FPL_CACHE::Remove( const wxString& aFootprintName )
 {
     std::string footprintName = TO_UTF8( aFootprintName );
 
-    MODULE_CITER it = m_footprints.find( footprintName );
+    FOOTPRINT_MAP::const_iterator it = m_footprints.find( footprintName );
 
     if( it == m_footprints.end() )
     {
@@ -309,7 +306,7 @@ long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 }
 
 
-FOOTPRINT* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
+FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
 {
     #define TEXT_DEFAULT_SIZE  ( 40*IU_PER_MILS )
     #define OLD_GPCB_UNIT_CONV IU_PER_MILS
@@ -896,8 +893,8 @@ void GPCB_PLUGIN::FootprintEnumerate( wxArrayString& aFootprintNames, const wxSt
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_cache->GetFootprints().begin(); it != m_cache->GetFootprints().end(); ++it )
-        aFootprintNames.Add( FROM_UTF8( it->first.c_str() ) );
+    for( const auto& footprint : m_cache->GetFootprints() )
+        aFootprintNames.Add( FROM_UTF8( footprint.first.c_str() ) );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
@@ -917,12 +914,10 @@ const FOOTPRINT* GPCB_PLUGIN::getFootprint( const wxString& aLibraryPath,
 
     const FOOTPRINT_MAP& mods = m_cache->GetFootprints();
 
-    MODULE_CITER it = mods.find( TO_UTF8( aFootprintName ) );
+    FOOTPRINT_MAP::const_iterator it = mods.find( TO_UTF8( aFootprintName ) );
 
     if( it == mods.end() )
-    {
         return NULL;
-    }
 
     return it->second->GetFootprint();
 }

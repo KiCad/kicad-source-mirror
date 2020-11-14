@@ -1797,9 +1797,9 @@ bool FOOTPRINT::cmp_pads::operator()( const PAD* aFirst, const PAD* aSecond ) co
 }
 
 
-static struct MODULE_DESC
+static struct FOOTPRINT_DESC
 {
-    MODULE_DESC()
+    FOOTPRINT_DESC()
     {
         ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
@@ -1850,4 +1850,4 @@ static struct MODULE_DESC
                     PROPERTY_DISPLAY::DISTANCE ) );
         // TODO zone connection, FPID?
     }
-} _MODULE_DESC;
+} _FOOTPRINT_DESC;

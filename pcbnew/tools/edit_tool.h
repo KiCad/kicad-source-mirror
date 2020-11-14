@@ -50,10 +50,10 @@ namespace KIGFX {
  * optionally excludes locked items and/or transient items (such as markers).
  */
 
-#define EXCLUDE_LOCKED 0x0001
-#define EXCLUDE_LOCKED_PADS 0x0002
-#define EXCLUDE_TRANSIENTS 0x0004
-#define INCLUDE_PADS_AND_MODULES 0x0008
+#define EXCLUDE_LOCKED              0x0001
+#define EXCLUDE_LOCKED_PADS         0x0002
+#define EXCLUDE_TRANSIENTS          0x0004
+#define INCLUDE_PADS_AND_FOOTPRINTS 0x0008
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTION_TOOL* sTool );
 

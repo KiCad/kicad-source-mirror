@@ -86,35 +86,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
 };
 
 
-const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
-    PCB_MARKER_T,
-    PCB_TEXT_T,
-    PCB_SHAPE_T,
-    PCB_DIM_ALIGNED_T,
-    PCB_DIM_ORTHOGONAL_T,
-    PCB_DIM_CENTER_T,
-    PCB_DIM_LEADER_T,
-    PCB_TARGET_T,
-    PCB_VIA_T,
-    PCB_TRACE_T,
-    PCB_ARC_T,
-    PCB_PAD_T,
-    PCB_FP_TEXT_T,
-    PCB_FOOTPRINT_T,
-    PCB_GROUP_T,
-    PCB_ZONE_T,         // if it is visible on screen, it should be selectable
-    EOT
-};
-
-
-const KICAD_T GENERAL_COLLECTOR::Modules[] = {
-    PCB_FOOTPRINT_T,
-    EOT
-};
-
-
-const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
-    PCB_PAD_T,
+const KICAD_T GENERAL_COLLECTOR::Footprints[] = {
     PCB_FOOTPRINT_T,
     EOT
 };
@@ -129,18 +101,7 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
 };
 
 
-const KICAD_T GENERAL_COLLECTOR::ModulesAndTheirItems[] = {
-    PCB_FOOTPRINT_T,
-    PCB_FP_TEXT_T,
-    PCB_FP_SHAPE_T,
-    PCB_PAD_T,
-    PCB_FP_ZONE_T,
-    PCB_GROUP_T,
-    EOT
-    };
-
-
-const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
+const KICAD_T GENERAL_COLLECTOR::FootprintItems[] = {
     PCB_FP_TEXT_T,
     PCB_FP_SHAPE_T,
     PCB_PAD_T,

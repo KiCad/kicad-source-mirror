@@ -78,8 +78,6 @@ FP_CACHE_ITEM::FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileNam
 
 
 typedef boost::ptr_map< wxString, FP_CACHE_ITEM >   FOOTPRINT_MAP;
-typedef FOOTPRINT_MAP::iterator                     MODULE_ITER;
-typedef FOOTPRINT_MAP::const_iterator               MODULE_CITER;
 
 
 class FP_CACHE
@@ -173,7 +171,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
                                           m_lib_raw_path ) );
     }
 
-    for( MODULE_ITER it = m_modules.begin();  it != m_modules.end();  ++it )
+    for( FOOTPRINT_MAP::iterator it = m_modules.begin();  it != m_modules.end();  ++it )
     {
         if( aFootprint && aFootprint != it->second->GetModule() )
             continue;
@@ -286,7 +284,7 @@ void FP_CACHE::Load()
 
 void FP_CACHE::Remove( const wxString& aFootprintName )
 {
-    MODULE_CITER it = m_modules.find( aFootprintName );
+    FOOTPRINT_MAP::const_iterator it = m_modules.find( aFootprintName );
 
     if( it == m_modules.end() )
     {
@@ -2158,8 +2156,8 @@ void PCB_IO::FootprintEnumerate( wxArrayString& aFootprintNames, const wxString&
     // Some of the files may have been parsed correctly so we want to add the valid files to
     // the library.
 
-    for( MODULE_CITER it = m_cache->GetFootprints().begin(); it != m_cache->GetFootprints().end(); ++it )
-        aFootprintNames.Add( it->first );
+    for( const auto& footprint : m_cache->GetFootprints() )
+        aFootprintNames.Add( footprint.first );
 
     if( !errorMsg.IsEmpty() && !aBestEfforts )
         THROW_IO_ERROR( errorMsg );
@@ -2184,11 +2182,10 @@ const FOOTPRINT* PCB_IO::getFootprint( const wxString& aLibraryPath,
         // do nothing with the error
     }
 
-    const FOOTPRINT_MAP& mods = m_cache->GetFootprints();
+    FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
+    FOOTPRINT_MAP::const_iterator it = footprints.find( aFootprintName );
 
-    MODULE_CITER it = mods.find( aFootprintName );
-
-    if( it == mods.end() )
+    if( it == footprints.end() )
         return nullptr;
 
     return it->second->GetModule();
@@ -2263,7 +2260,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
 
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
-    FOOTPRINT_MAP& mods = m_cache->GetFootprints();
+    FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
 
     // Quietly overwrite module and delete module file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
@@ -2299,12 +2296,12 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
 
     wxString fullPath = fn.GetFullPath();
     wxString fullName = fn.GetFullName();
-    MODULE_CITER it = mods.find( footprintName );
+    FOOTPRINT_MAP::const_iterator it = footprints.find( footprintName );
 
-    if( it != mods.end() )
+    if( it != footprints.end() )
     {
         wxLogTrace( traceKicadPcbPlugin, wxT( "Removing footprint file '%s'." ), fullPath );
-        mods.erase( footprintName );
+        footprints.erase( footprintName );
         wxRemoveFile( fullPath );
     }
 
@@ -2326,7 +2323,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
     }
 
     wxLogTrace( traceKicadPcbPlugin, wxT( "Creating s-expr footprint file '%s'." ), fullPath );
-    mods.insert( footprintName, new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
+    footprints.insert( footprintName, new FP_CACHE_ITEM( footprint, WX_FILENAME( fn.GetPath(), fullName ) ) );
     m_cache->Save( footprint );
 }
 

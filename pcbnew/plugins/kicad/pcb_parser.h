@@ -162,10 +162,10 @@ class PCB_PARSER : public PCB_LEXER
     DIMENSION_BASE* parseDIMENSION();
 
     /**
-     * Function parseMODULE_unchecked
+     * Function parseFOOTPRINT_unchecked
      * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
-    FOOTPRINT*      parseMODULE_unchecked( wxArrayString* aInitialComments = 0 );
+    FOOTPRINT*      parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = 0 );
     FP_TEXT*        parseFP_TEXT();
     FP_SHAPE*       parseFP_SHAPE();
     PAD*            parsePAD( FOOTPRINT* aParent = NULL );
@@ -378,12 +378,12 @@ public:
 
     BOARD_ITEM* Parse();
     /**
-     * Function parseMODULE
+     * Function parseFOOTPRINT
      * @param aInitialComments may be a pointer to a heap allocated initial comment block
      *   or NULL.  If not NULL, then caller has given ownership of a wxArrayString to
      *   this function and care must be taken to delete it even on exception.
      */
-    FOOTPRINT* parseMODULE( wxArrayString* aInitialComments = 0 );
+    FOOTPRINT* parseFOOTPRINT( wxArrayString* aInitialComments = 0 );
 
     /**
      * Return whether a version number, if any was parsed, was too recent

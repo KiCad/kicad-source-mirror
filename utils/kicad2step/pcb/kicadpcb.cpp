@@ -24,7 +24,7 @@
 #include "kicadpcb.h"
 
 #include "kicadcurve.h"
-#include "kicadmodule.h"
+#include "kicadfootprint.h"
 #include "oce_utils.h"
 
 #include <sexpr/sexpr.h>
@@ -368,7 +368,7 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
 
 bool KICADPCB::parseModule( SEXPR::SEXPR* data )
 {
-    KICADMODULE* mp = new KICADMODULE( this );
+    KICADFOOTPRINT* mp = new KICADFOOTPRINT( this );
 
     if( !mp->Read( data ) )
     {

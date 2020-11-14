@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "kicadmodule.h"
+#include "kicadfootprint.h"
 
 #include "3d_resolver.h"
 #include "kicadcurve.h"
@@ -40,7 +40,7 @@
 
 #include <Standard_Failure.hxx>
 
-KICADMODULE::KICADMODULE( KICADPCB* aParent )
+KICADFOOTPRINT::KICADFOOTPRINT( KICADPCB* aParent )
 {
     m_parent = aParent;
     m_side = LAYER_NONE;
@@ -51,7 +51,7 @@ KICADMODULE::KICADMODULE( KICADPCB* aParent )
 }
 
 
-KICADMODULE::~KICADMODULE()
+KICADFOOTPRINT::~KICADFOOTPRINT()
 {
     for( auto i : m_pads )
         delete i;
@@ -66,7 +66,7 @@ KICADMODULE::~KICADMODULE()
 }
 
 
-bool KICADMODULE::Read( SEXPR::SEXPR* aEntry )
+bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
 {
     if( NULL == aEntry )
         return false;
@@ -149,7 +149,7 @@ bool KICADMODULE::Read( SEXPR::SEXPR* aEntry )
 }
 
 
-bool KICADMODULE::parseModel( SEXPR::SEXPR* data )
+bool KICADFOOTPRINT::parseModel( SEXPR::SEXPR* data )
 {
     KICADMODEL* mp = new KICADMODEL();
 
@@ -168,7 +168,7 @@ bool KICADMODULE::parseModel( SEXPR::SEXPR* data )
 }
 
 
-bool KICADMODULE::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
+bool KICADFOOTPRINT::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 {
     KICADCURVE* mp = new KICADCURVE();
 
@@ -190,7 +190,7 @@ bool KICADMODULE::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 }
 
 
-bool KICADMODULE::parseLayer( SEXPR::SEXPR* data )
+bool KICADFOOTPRINT::parseLayer( SEXPR::SEXPR* data )
 {
     SEXPR::SEXPR* val = data->GetChild( 1 );
     std::string layername;
@@ -219,13 +219,13 @@ bool KICADMODULE::parseLayer( SEXPR::SEXPR* data )
 }
 
 
-bool KICADMODULE::parsePosition( SEXPR::SEXPR* data )
+bool KICADFOOTPRINT::parsePosition( SEXPR::SEXPR* data )
 {
     return Get2DPositionAndRotation( data, m_position, m_rotation );
 }
 
 
-bool KICADMODULE::parseAttribute( SEXPR::SEXPR* data )
+bool KICADFOOTPRINT::parseAttribute( SEXPR::SEXPR* data )
 {
     if( data->GetNumberOfChildren() < 2 )
     {
@@ -251,7 +251,7 @@ bool KICADMODULE::parseAttribute( SEXPR::SEXPR* data )
 }
 
 
-bool KICADMODULE::parseText( SEXPR::SEXPR* data )
+bool KICADFOOTPRINT::parseText( SEXPR::SEXPR* data )
 {
     // we're only interested in the Reference Designator
     if( data->GetNumberOfChildren() < 3 )
@@ -280,7 +280,7 @@ bool KICADMODULE::parseText( SEXPR::SEXPR* data )
 }
 
 
-bool KICADMODULE::parsePad( SEXPR::SEXPR* data )
+bool KICADFOOTPRINT::parsePad( SEXPR::SEXPR* data )
 {
     KICADPAD* mp = new KICADPAD();
 
@@ -303,8 +303,8 @@ bool KICADMODULE::parsePad( SEXPR::SEXPR* data )
 }
 
 
-bool KICADMODULE::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
-    DOUBLET aOrigin, bool aComposeVirtual )
+bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
+                                 DOUBLET aOrigin, bool aComposeVirtual )
 {
     // translate pads and curves to final position and append to PCB.
     double dlim = (double)std::numeric_limits< float >::epsilon();

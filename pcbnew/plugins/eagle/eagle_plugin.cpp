@@ -919,7 +919,7 @@ void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 
     // Create a FOOTPRINT for all the eagle packages, for use later via a copy constructor
     // to instantiate needed footprints in our BOARD.  Save the FOOTPRINT templates in
-    // a MODULE_MAP using a single lookup key consisting of libname+pkgname.
+    // a FOOTPRINT_MAP using a single lookup key consisting of libname+pkgname.
 
     // Get the first package and iterate
     wxXmlNode* package = packages->GetChildren();

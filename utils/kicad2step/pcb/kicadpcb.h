@@ -46,7 +46,7 @@ namespace SEXPR
     class SEXPR;
 }
 
-class KICADMODULE;
+class KICADFOOTPRINT;
 class KICADCURVE;
 class PCBMODEL;
 
@@ -71,7 +71,7 @@ private:
 
     // PCB parameters/entities
     double                      m_thickness;
-    std::vector< KICADMODULE* > m_modules;
+    std::vector< KICADFOOTPRINT* > m_modules;
     std::vector< KICADCURVE* >  m_curves;
 
     bool parsePCB( SEXPR::SEXPR* data );

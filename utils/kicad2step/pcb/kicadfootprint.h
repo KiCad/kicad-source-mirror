@@ -21,13 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file kicadmodule.h
- * declares the PCB Component object.
- */
-
-#ifndef KICADMODULE_H
-#define KICADMODULE_H
+#ifndef KICADFOOTPRINT_H
+#define KICADFOOTPRINT_H
 
 #include "base.h"
 #include "kicadpcb.h"
@@ -46,7 +41,7 @@ class KICADMODEL;
 class PCBMODEL;
 class S3D_RESOLVER;
 
-class KICADMODULE
+class KICADFOOTPRINT
 {
 private:
     bool parseModel( SEXPR::SEXPR* data );
@@ -57,7 +52,7 @@ private:
     bool parseText( SEXPR::SEXPR* data );
     bool parsePad( SEXPR::SEXPR* data );
 
-    KICADPCB* m_parent;     // The parent KICADPCB, to know layer names
+    KICADPCB*   m_parent;     // The parent KICADPCB, to know layer names
 
     LAYERS      m_side;
     std::string m_refdes;
@@ -70,8 +65,8 @@ private:
     std::vector< KICADMODEL* >  m_models;
 
 public:
-    KICADMODULE( KICADPCB* aParent );
-    virtual ~KICADMODULE();
+    KICADFOOTPRINT( KICADPCB* aParent );
+    virtual ~KICADFOOTPRINT();
 
     bool Read( SEXPR::SEXPR* aEntry );
 
@@ -79,4 +74,4 @@ public:
         DOUBLET aOrigin, bool aComposeVirtual = true );
 };
 
-#endif  // KICADMODULE_H
+#endif  // KICADFOOTPRINT_H

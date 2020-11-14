@@ -819,7 +819,7 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
         if( !alg::contains( newLayerSeq, layer_id ) )
         {
             collector.SetLayerId( layer_id );
-            collector.Collect( m_pcb, GENERAL_COLLECTOR::ModuleItems );
+            collector.Collect( m_pcb, GENERAL_COLLECTOR::FootprintItems );
 
             if( collector.GetCount() != 0 )
                 inUseLayers.push_back( layer_id );

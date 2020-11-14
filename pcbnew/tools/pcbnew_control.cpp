@@ -494,7 +494,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
             if( m_isFootprintEditor )
-                collector.Collect( board, GENERAL_COLLECTOR::ModuleItems, (wxPoint) aPos, guide );
+                collector.Collect( board, GENERAL_COLLECTOR::FootprintItems, (wxPoint) aPos, guide );
             else
                 collector.Collect( board, GENERAL_COLLECTOR::BoardLevelItems, (wxPoint) aPos, guide );
 

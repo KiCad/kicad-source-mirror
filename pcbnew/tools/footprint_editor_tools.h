@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef MODULE_EDITOR_TOOLS_H
-#define MODULE_EDITOR_TOOLS_H
+#ifndef FOOTPRINT_EDITOR_TOOLS_H
+#define FOOTPRINT_EDITOR_TOOLS_H
 
 #include <tools/pcb_tool_base.h>
 

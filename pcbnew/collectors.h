@@ -268,11 +268,6 @@ public:
     static const KICAD_T AllBoardItems[];
 
     /**
-     * A scan list for all editable board items, except zones
-     */
-    static const KICAD_T AllButZones[];
-
-    /**
      * A scan list for zones outlines only
      */
     static const KICAD_T Zones[];
@@ -284,14 +279,9 @@ public:
     static const KICAD_T BoardLevelItems[];
 
     /**
-     * A scan list for only MODULEs
+     * A scan list for only FOOTPRINTs
      */
-    static const KICAD_T Modules[];
-
-    /**
-     * A scan list for PADs or MODULEs
-     */
-    static const KICAD_T PadsOrModules[];
+    static const KICAD_T Footprints[];
 
     /**
      * A scan list for PADs, TRACKs, or VIAs
@@ -299,14 +289,9 @@ public:
     static const KICAD_T PadsOrTracks[];
 
     /**
-     * A scan list for MODULEs and their items (for Modedit)
+     * A scan list for primary footprint items.
      */
-    static const KICAD_T ModulesAndTheirItems[];
-
-    /**
-     * A scan list for primary module items.
-     */
-    static const KICAD_T ModuleItems[];
+    static const KICAD_T FootprintItems[];
 
     /**
      * A scan list for only TRACKs

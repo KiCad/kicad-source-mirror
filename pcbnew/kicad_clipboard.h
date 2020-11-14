@@ -42,9 +42,9 @@ class CLIPBOARD_PARSER : public PCB_PARSER
 public:
     CLIPBOARD_PARSER( LINE_READER* aReader = NULL ): PCB_PARSER( aReader ) {};
 
-    FOOTPRINT* parseMODULE( wxArrayString* aInitialComments )
+    FOOTPRINT* parseFOOTPRINT( wxArrayString* aInitialComments )
     {
-       return PCB_PARSER::parseMODULE( aInitialComments );
+       return PCB_PARSER::parseFOOTPRINT( aInitialComments );
     }
 };
 
