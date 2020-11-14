@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -39,7 +39,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	messagesPanel->SetSizer( bMessagesSizer );
 	messagesPanel->Layout();
 	bMessagesSizer->Fit( messagesPanel );
-	m_notebook->AddPage( messagesPanel, _("Messages"), false );
+	m_notebook->AddPage( messagesPanel, _("Messages"), true );
 	violationsPanel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bViolationsSizer;
 	bViolationsSizer = new wxBoxSizer( wxVERTICAL );
@@ -48,7 +48,7 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	m_markerDataView->SetToolTip( _("Click on items to highlight them on the board.") );
 	m_markerDataView->SetMinSize( wxSize( 640,260 ) );
 
-	bViolationsSizer->Add( m_markerDataView, 2, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bViolationsSizer->Add( m_markerDataView, 2, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	violationsPanel->SetSizer( bViolationsSizer );
@@ -96,13 +96,13 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bSeveritySizer->Add( m_saveReport, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bSeveritySizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( bSeveritySizer, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
 
 
 	bSizer1->Add( bMainSizer, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 8 );
 
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( m_staticline1, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 

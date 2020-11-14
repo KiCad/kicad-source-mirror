@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun 18 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -196,7 +196,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_passive->SetSizer( bSizer41 );
 	m_passive->Layout();
 	bSizer41->Fit( m_passive );
-	m_notebook->AddPage( m_passive, _("Passive"), false );
+	m_notebook->AddPage( m_passive, _("Passive"), true );
 	m_model = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
@@ -924,7 +924,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	wxString m_pwrTypeChoices[] = { _("Voltage"), _("Current") };
 	int m_pwrTypeNChoices = sizeof( m_pwrTypeChoices ) / sizeof( wxString );
-	m_pwrType = new wxRadioBox( m_power, wxID_ANY, _("Source type:"), wxDefaultPosition, wxDefaultSize, m_pwrTypeNChoices, m_pwrTypeChoices, 1, wxRA_SPECIFY_ROWS );
+	m_pwrType = new wxRadioBox( m_power, wxID_ANY, _("Source Type"), wxDefaultPosition, wxDefaultSize, m_pwrTypeNChoices, m_pwrTypeChoices, 1, wxRA_SPECIFY_ROWS );
 	m_pwrType->SetSelection( 1 );
 	bSizer4->Add( m_pwrType, 0, wxALL|wxEXPAND, 5 );
 
@@ -932,7 +932,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_power->SetSizer( bSizer4 );
 	m_power->Layout();
 	bSizer4->Fit( m_power );
-	m_notebook->AddPage( m_power, _("Source"), true );
+	m_notebook->AddPage( m_power, _("Source"), false );
 
 	bSizer1->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 
