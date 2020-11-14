@@ -56,12 +56,12 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
 {
     m_xOffset   = 0.0;          // X coord offset for conversion (in mm)
     m_yOffset   = 0.0;          // Y coord offset for conversion (in mm)
-    m_DXF2mm    = 1.0;          // The scale factor to convert DXF units to mm
+    m_dxf2mm    = 1.0;          // The scale factor to convert DXF units to mm
     m_version   = 0;            // the dxf version, not yet used
     m_inBlock   = false;        // Discard blocks
     m_defaultThickness = 0.2;   // default thickness (in mm)
     m_brdLayer = Dwgs_User;     // The default import layer
-    m_importAsfootprintGraphicItems = true;
+    m_importAsFPShapes = true;
     m_minX = m_minY = std::numeric_limits<double>::max();
     m_maxX = m_maxY = std::numeric_limits<double>::min();
 }
@@ -110,19 +110,19 @@ void DXF_IMPORT_PLUGIN::SetImporter( GRAPHICS_IMPORTER* aImporter )
 
 double DXF_IMPORT_PLUGIN::mapX( double aDxfCoordX )
 {
-    return SCALE_FACTOR( m_xOffset + ( aDxfCoordX * m_DXF2mm ) );
+    return SCALE_FACTOR( m_xOffset + ( aDxfCoordX * m_dxf2mm ) );
 }
 
 
 double DXF_IMPORT_PLUGIN::mapY( double aDxfCoordY )
 {
-    return SCALE_FACTOR( m_yOffset - ( aDxfCoordY * m_DXF2mm ) );
+    return SCALE_FACTOR( m_yOffset - ( aDxfCoordY * m_dxf2mm ) );
 }
 
 
 double DXF_IMPORT_PLUGIN::mapDim( double aDxfValue )
 {
-    return SCALE_FACTOR( aDxfValue * m_DXF2mm );
+    return SCALE_FACTOR( aDxfValue * m_dxf2mm );
 }
 
 
@@ -275,16 +275,16 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 
     if( m_curr_entity.m_EntityParseStatus == 1 )    // This is the first vertex of an entity
     {
-        m_curr_entity.m_LastCoordinate.x = m_xOffset + vertex->x * m_DXF2mm;
-        m_curr_entity.m_LastCoordinate.y = m_yOffset - vertex->y * m_DXF2mm;
+        m_curr_entity.m_LastCoordinate.x = m_xOffset + vertex->x * m_dxf2mm;
+        m_curr_entity.m_LastCoordinate.y = m_yOffset - vertex->y * m_dxf2mm;
         m_curr_entity.m_PolylineStart = m_curr_entity.m_LastCoordinate;
         m_curr_entity.m_BulgeVertex = vertex->bulge;
         m_curr_entity.m_EntityParseStatus = 2;
         return;
     }
 
-    VECTOR2D seg_end( m_xOffset + vertex->x * m_DXF2mm,
-                         m_yOffset - vertex->y * m_DXF2mm );
+    VECTOR2D seg_end( m_xOffset + vertex->x * m_dxf2mm,
+                         m_yOffset - vertex->y * m_dxf2mm );
 
     if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
         insertLine( m_curr_entity.m_LastCoordinate, seg_end, lineWidth );
@@ -709,51 +709,51 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
         switch( value )
         {
         case 1:     // inches
-            m_DXF2mm = 25.4;
+            m_dxf2mm = 25.4;
             break;
 
         case 2:     // feet
-            m_DXF2mm = 304.8;
+            m_dxf2mm = 304.8;
             break;
 
         case 4:     // mm
-            m_DXF2mm = 1.0;
+            m_dxf2mm = 1.0;
             break;
 
         case 5:     // centimeters
-            m_DXF2mm = 10.0;
+            m_dxf2mm = 10.0;
             break;
 
         case 6:     // meters
-            m_DXF2mm = 1000.0;
+            m_dxf2mm = 1000.0;
             break;
 
         case 8:     // microinches
-            m_DXF2mm = 2.54e-5;
+            m_dxf2mm = 2.54e-5;
             break;
 
         case 9:     // mils
-            m_DXF2mm = 0.0254;
+            m_dxf2mm = 0.0254;
             break;
 
         case 10:    // yards
-            m_DXF2mm = 914.4;
+            m_dxf2mm = 914.4;
             break;
 
         case 11:    // Angstroms
-            m_DXF2mm = 1.0e-7;
+            m_dxf2mm = 1.0e-7;
             break;
 
         case 12:    // nanometers
-            m_DXF2mm = 1.0e-6;
+            m_dxf2mm = 1.0e-6;
             break;
 
         case 13:    // micrometers
-            m_DXF2mm = 1.0e-3;
+            m_dxf2mm = 1.0e-3;
             break;
 
         case 14:    // decimeters
-            m_DXF2mm = 100.0;
+            m_dxf2mm = 100.0;
             break;
 
         default:
@@ -767,7 +767,7 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
             // 18: AU
             // 19: lightyears
             // 20: parsecs
-            m_DXF2mm = 1.0;
+            m_dxf2mm = 1.0;
             break;
         }
 

@@ -113,7 +113,7 @@ private:
     void exportEeschemaFormat();
 
     /**
-     * Generate a module in S expr format
+     * Generate a footprint in S expr format
      */
     void exportPcbnewFormat();
 

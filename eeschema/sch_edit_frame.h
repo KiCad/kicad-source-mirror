@@ -218,7 +218,7 @@ public:
     /**
      * Execute a remote command sent by Pcbnew via a socket connection.
      * <p>
-     * When user selects a module or pin in Pcbnew, Eeschema shows that same
+     * When user selects a footprint or pin in Pcbnew, Eeschema shows that same
      * component or pin and moves cursor on the item.  The socket port used
      * is #KICAD_SCH_PORT_SERVICE_NUMBER which defaults to 4243.
      *

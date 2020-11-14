@@ -341,7 +341,7 @@ void PYTHON_FOOTPRINT_WIZARD::ResetParameters()
 }
 
 
-// this is a SWIG function declaration -from module.i
+// this is a SWIG function declaration -from footprint.i
 FOOTPRINT* PyFootprint_to_FOOTPRINT( PyObject* obj0 );
 
 

@@ -64,7 +64,7 @@ static const wxString INFO_LEGACY_LIB_WARN_DELETE(
 
 
 /**
- * Prompt the user for a module file to open.
+ * Prompt the user for a footprint file to open.
  * @param aParent - parent window for the dialog
  * @param aLastPath - last opened path
  */
@@ -96,7 +96,7 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
  * Read a file to detect the type.
  * @param aFile - open file to be read. File pointer will be closed.
  * @param aFileName - file name to be read
- * @param aName - wxString to receive the module name iff type is LEGACY
+ * @param aName - wxString to receive the footprint name iff type is LEGACY
  */
 static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFileName,
                                             wxString* aName )
@@ -148,22 +148,17 @@ static IO_MGR::PCB_FILE_T detect_file_type( FILE* aFile, const wxFileName& aFile
  * @param aFileType - type of the file
  * @param aName - name of the footprint
  */
-static FOOTPRINT* parse_module_with_plugin( const wxFileName& aFileName,
-                                            IO_MGR::PCB_FILE_T aFileType,
-                                            const wxString& aName )
+static FOOTPRINT* parse_footprint_with_plugin( const wxFileName& aFileName,
+                                               IO_MGR::PCB_FILE_T aFileType,
+                                               const wxString& aName )
 {
     wxString path;
 
     switch( aFileType )
     {
-    case IO_MGR::GEDA_PCB:
-        path = aFileName.GetPath();
-        break;
-    case IO_MGR::LEGACY:
-        path = aFileName.GetFullPath();
-        break;
-    default:
-        wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) );
+    case IO_MGR::GEDA_PCB: path = aFileName.GetPath();             break;
+    case IO_MGR::LEGACY:   path = aFileName.GetFullPath();         break;
+    default: wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) ); break;
     }
 
     PLUGIN::RELEASER pi( IO_MGR::PluginFind( aFileType ) );
@@ -176,7 +171,7 @@ static FOOTPRINT* parse_module_with_plugin( const wxFileName& aFileName,
  * Parse a KICAD footprint.
  * @param aFileName - file name to parse
  */
-static FOOTPRINT* parse_module_kicad( const wxFileName& aFileName )
+static FOOTPRINT* parse_footprint_kicad( const wxFileName& aFileName )
 {
     wxString fcontents;
     PCB_IO   pcb_io;
@@ -206,11 +201,11 @@ FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T a
     {
     case IO_MGR::GEDA_PCB:
     case IO_MGR::LEGACY:
-        footprint = parse_module_with_plugin( aFileName, aFileType, aName );
+        footprint = parse_footprint_with_plugin( aFileName, aFileType, aName );
         break;
 
     case IO_MGR::KICAD_SEXP:
-        footprint = parse_module_kicad( aFileName );
+        footprint = parse_footprint_kicad( aFileName );
         break;
 
     default:

@@ -374,7 +374,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                     if( footprint->GetLayer() != F_Cu )
                     {
-                        // module is on copper layer (back)
+                        // footprint is on copper layer (back)
                         footprint->Flip( footprint->GetPosition(), false );
                     }
 
@@ -386,7 +386,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
                     if( footprint->GetLayer() != B_Cu )
                     {
-                        // module is on component layer (front)
+                        // footprint is on component layer (front)
                         footprint->Flip( footprint->GetPosition(), false );
                     }
 

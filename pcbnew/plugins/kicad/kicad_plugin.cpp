@@ -53,10 +53,10 @@ using namespace PCB_KEYS_T;
 /**
  * Helper class for creating a footprint library cache.
  *
- * The new footprint library design is a file path of individual module files
- * that contain a single module per file.  This class is a helper only for the
- * footprint portion of the PLUGIN API, and only for the #PCB_IO plugin.  It is
- * private to this implementation file so it is not placed into a header.
+ * The new footprint library design is a file path of individual footprint files that contain
+ * a single footprint per file.  This class is a helper only for the footprint portion of the
+ * PLUGIN API, and only for the #PCB_IO plugin.  It is private to this implementation file so
+ * it is not placed into a header.
  */
 class FP_CACHE_ITEM
 {
@@ -294,7 +294,7 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
         THROW_IO_ERROR( msg );
     }
 
-    // Remove the module from the cache and delete the module file from the library.
+    // Remove the footprint from the cache and delete the footprint file from the library.
     wxString fullPath = it->second->GetFileName().GetFullPath();
     m_footprints.erase( aFootprintName );
     wxRemoveFile( fullPath );
@@ -620,8 +620,8 @@ void PCB_IO::formatHeader( BOARD* aBoard, int aNestLevel ) const
 
 void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
 {
-    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_modules( aBoard->Footprints().begin(),
-                                                               aBoard->Footprints().end() );
+    std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_footprints( aBoard->Footprints().begin(),
+                                                                  aBoard->Footprints().end() );
     std::set<BOARD_ITEM*, BOARD_ITEM::ptr_cmp> sorted_drawings( aBoard->Drawings().begin(),
             aBoard->Drawings().end() );
     std::set<TRACK*, TRACK::cmp_tracks> sorted_tracks( aBoard->Tracks().begin(),
@@ -634,9 +634,9 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
     formatHeader( aBoard, aNestLevel );
 
     // Save the footprints.
-    for( BOARD_ITEM* module : sorted_modules )
+    for( BOARD_ITEM* footprint : sorted_footprints )
     {
-        Format( module, aNestLevel );
+        Format( footprint, aNestLevel );
         m_out->Print( 0, "\n" );
     }
 
@@ -2262,7 +2262,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
 
     FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
 
-    // Quietly overwrite module and delete module file from path for any by same name.
+    // Quietly overwrite footprint and delete footprint file from path for any by same name.
     wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
                    KiCadFootprintFileExtension );
 

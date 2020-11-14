@@ -23,12 +23,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcb_module.h
- */
-
-#ifndef PCB_MODULE_H_
-#define PCB_MODULE_H_
+#ifndef PCB_FOOTPRINT_H
+#define PCB_FOOTPRINT_H
 
 #include <wx/wx.h>
 
@@ -71,4 +67,4 @@ private:
 
 } // namespace PCAD2KICAD
 
-#endif    // PCB_MODULE_H_
+#endif    // PCB_FOOTPRINT_H

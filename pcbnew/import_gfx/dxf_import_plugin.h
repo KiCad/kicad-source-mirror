@@ -125,25 +125,24 @@ public:
 class DXF_IMPORT_PLUGIN : public GRAPHICS_IMPORT_PLUGIN, public DL_CreationAdapter
 {
 private:
-    double m_xOffset;           // X coord offset for conversion (in mm)
-    double m_yOffset;           // Y coord offset for conversion (in mm)
-    double m_defaultThickness;  // default line thickness for conversion (in mm)
-    double m_DXF2mm;            // The scale factor to convert DXF units to mm
-    int m_brdLayer;             // The board layer to place imported DXF items
-    int m_version;              // the dxf version, not used here
-    bool m_inBlock;             // Are we parsing a block
-    std::string m_codePage;     // The code page, not used here
-    bool m_importAsfootprintGraphicItems;  // Use module items instead of board items when true.
-                                // true when the items are imported in the footprint editor
-    std::string m_messages;     // messages generated during dxf file parsing.
-                                // Each message ends by '\n'
+    double      m_xOffset;           // X coord offset for conversion (in mm)
+    double      m_yOffset;           // Y coord offset for conversion (in mm)
+    double      m_defaultThickness;  // default line thickness for conversion (in mm)
+    double      m_dxf2mm;            // The scale factor to convert DXF units to mm
+    int         m_brdLayer;          // The board layer to place imported DXF items
+    int         m_version;           // the dxf version, not used here
+    bool        m_inBlock;           // Are we parsing a block
+    std::string m_codePage;          // The code page, not used here
+    bool        m_importAsFPShapes;  // Use footprint items instead of board items when true.
+                                     // true when the items are imported in the footprint editor
+    std::string m_messages;          // messages generated during dxf file parsing.
+                                     // Each message ends by '\n'
     DXF2BRD_ENTITY_DATA m_curr_entity;  // the current entity parameters when parsing a DXF entity
 
-    double m_minX, m_maxX;      // handles image size in mm
-    double m_minY, m_maxY;      // handles image size in mm
+    double      m_minX, m_maxX;      // handles image size in mm
+    double      m_minY, m_maxY;      // handles image size in mm
 
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
-
 
 public:
     DXF_IMPORT_PLUGIN();
@@ -177,7 +176,7 @@ public:
      */
     void ImportAsFootprintGraphic( bool aImportAsFootprintGraphic )
     {
-        m_importAsfootprintGraphicItems = aImportAsFootprintGraphic;
+        m_importAsFPShapes = aImportAsFootprintGraphic;
     }
 
 

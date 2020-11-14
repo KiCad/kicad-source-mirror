@@ -753,7 +753,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     // So we must set the file type based on it
     if( event.GetEventType() == wxEVT_BUTTON )
     {
-        // Let's default to adding a kicad module for just the module
+        // Let's default to adding a kicad footprint file for just the footprint
         fileTypeIt = fileTypes().find( ID_PANEL_FPLIB_ADD_KICADMOD );
     }
     else

@@ -781,8 +781,8 @@ bool DIALOG_BOARD_REANNOTATE::BuildFootprintList( std::vector<RefDesInfo>& aBadR
             }
         }
 
-        if(( fpData.Front && annotateBack ) ||            // If a front module and doing backs only
-                ( !fpData.Front && annotateFront ) ||     // If a back module and doing front only
+        if(( fpData.Front && annotateBack ) ||            // If a front fp and doing backs only
+                ( !fpData.Front && annotateFront ) ||     // If a back fp and doing front only
                 ( footprint->IsLocked() && skipLocked ) ) // If excluding locked and it is locked
         {
             fpData.Action = Exclude;

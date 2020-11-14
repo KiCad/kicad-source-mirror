@@ -141,7 +141,7 @@ private:
      * This is slightly different from the standard lock checking in that we ignore the lock
      * of the first element in the selection as this is meant to be our anchor.
      * We also check the lock of a pad's parent as we will not move pads independently of
-     * the parent module
+     * the parent footprint
      */
     int checkLockedStatus( const PCBNEW_SELECTION &selection ) const;
 

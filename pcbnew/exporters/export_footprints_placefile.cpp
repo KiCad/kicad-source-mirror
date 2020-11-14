@@ -339,12 +339,12 @@ std::string PLACE_FILE_EXPORTER::GenReportData()
 
         buffer += "\n";
 
-        wxPoint module_pos = footprint->GetPosition();
-        module_pos -= m_place_Offset;
+        wxPoint footprint_pos = footprint->GetPosition();
+        footprint_pos -= m_place_Offset;
 
         sprintf( line, "position %9.6f %9.6f  orientation %.2f\n",
-                 module_pos.x * conv_unit,
-                 module_pos.y * conv_unit,
+                 footprint_pos.x * conv_unit,
+                 footprint_pos.y * conv_unit,
                  footprint->GetOrientation() / 10.0 );
         buffer += line;
 

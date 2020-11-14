@@ -39,7 +39,7 @@ set( QA_EESCHEMA_SRCS
     uuid_test_utils.cpp
 
     # The main test entry points
-    test_footprint.cpp
+    test_module.cpp
 
     # Base internal units (1=100nm) testing.
     test_sch_biu.cpp

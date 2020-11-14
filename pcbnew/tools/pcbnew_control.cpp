@@ -650,9 +650,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
     }
 
-    // The clipboard can contain two different things, an entire kicad_pcb
-    // or a single module
-
+    // The clipboard can contain two different things, an entire kicad_pcb or a single footprint
     if( isFootprintEditor && ( !board() || !footprint() ) )
     {
         return 0;
@@ -886,7 +884,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
             }
 
         case PCB_FOOTPRINT_T:
-            // Update the module path with the new KIID path if the module is new
+            // Update the footprint path with the new KIID path if the footprint is new
             if( aIsNew )
                 static_cast<FOOTPRINT*>( item )->SetPath( KIID_PATH() );
 

@@ -2065,7 +2065,7 @@ void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
     }
 
     // footprints are treated in a special way - when they are highlighted, we have to highlight
-    // all the parts that make the module, not the module itself
+    // all the parts that make the footprint, not the footprint itself
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<FOOTPRINT*>( aItem )->RunOnChildren(

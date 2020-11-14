@@ -307,11 +307,10 @@ public:
     /**
      * Function LoadFootprintFiles
      * reads the list of footprint (*.mod files) and generate the list of footprints.
-     * for each module are stored
-     *      the module name
+     * for each footprint are stored
+     *      the footprint name
      *      documentation string
      *      associated keywords
-     * m_ModuleLibNames is the list of library that must be read (loaded)
      * fills m_footprints
      * @return true if libraries are found, false otherwise.
      */

@@ -669,7 +669,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             {
                 pinmap[ padName ] = 0;
             }
-            else    // pad name is a duplicate within this module
+            else    // pad name is a duplicate within this footprint
             {
                 char    buf[32];
 
@@ -900,7 +900,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     {
         items.Collect( aBoard, scanMODULEs );
 
-        STRINGSET       refs;       // holds module reference designators
+        STRINGSET       refs;       // holds footprint reference designators
 
         for( int i=0;  i<items.GetCount();  ++i )
         {
@@ -1345,13 +1345,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             componentId = TO_UTF8( footprint->GetReference() );
 
             // create a net list entry for all the actual pins in the image
-            // for the current module.  location of this code is critical
+            // for the current footprint.  location of this code is critical
             // because we fabricated some pin names to ensure unique-ness
-            // of pin names within a module, do not move this code because
+            // of pin names within a footprint, do not move this code because
             // the life of this 'IMAGE* image' is not necessarily long.  The
             // exported netlist will have some fabricated pin names in it.
             // If you don't like fabricated pin names, then make sure all pads
-            // within your MODULEs are uniquely named!
+            // within your FOOTPRINTs are uniquely named!
             for( unsigned p = 0; p<image->pins.size(); ++p )
             {
                 PIN*    pin = &image->pins[p];
@@ -1393,7 +1393,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             place->component_id = componentId;
             place->part_number  = TO_UTF8( footprint->GetValue() );
 
-            // module is flipped from bottom side, set side to T_back
+            // footprint is flipped from bottom side, set side to T_back
             if( footprint->GetFlag() )
             {
                 double angle = 180.0 - footprint->GetOrientationDegrees();
@@ -1737,13 +1737,13 @@ void SPECCTRA_DB::FlipFOOTPRINTs( BOARD* aBoard )
     // top view.
     // Note: to export footprints, the footprints must be flipped around the X axis,
     // otherwise the rotation angle is not good
-    for( auto module : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
-        module->SetFlag( 0 );
-        if( module->GetLayer() == B_Cu )
+        footprint->SetFlag( 0 );
+        if( footprint->GetLayer() == B_Cu )
         {
-            module->Flip( module->GetPosition(), false );
-            module->SetFlag( 1 );
+            footprint->Flip( footprint->GetPosition(), false );
+            footprint->SetFlag( 1 );
         }
     }
 
