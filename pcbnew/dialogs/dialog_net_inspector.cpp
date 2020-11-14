@@ -1337,27 +1337,45 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
 unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const TRACK* aTrack ) const
 {
     const VIA& via = dynamic_cast<const VIA&>( *aTrack );
+    BOARD_DESIGN_SETTINGS& bds = m_brd->GetDesignSettings();
 
-    // calculate the via length individually from the board stackup and
-    // via's start and end layer.
-    const BOARD_STACKUP& stackup = m_brd->GetDesignSettings().GetStackupDescriptor();
-
-    std::pair<PCB_LAYER_ID, int> layer_dist[2] = { std::make_pair( via.TopLayer(), 0 ),
-                                                   std::make_pair( via.BottomLayer(), 0 ) };
-
-    for( const BOARD_STACKUP_ITEM* i : stackup.GetList() )
+    // calculate the via length individually from the board stackup and via's start and end layer.
+    if( bds.m_HasStackup )
     {
-        for( std::pair<PCB_LAYER_ID, int>& j : layer_dist )
+        const BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
+
+        std::pair<PCB_LAYER_ID, int> layer_dist[2] = { std::make_pair( via.TopLayer(), 0 ),
+                                                       std::make_pair( via.BottomLayer(), 0 ) };
+
+        for( const BOARD_STACKUP_ITEM* i : stackup.GetList() )
         {
-            if( j.first != UNDEFINED_LAYER )
-                j.second += i->GetThickness();
+            for( std::pair<PCB_LAYER_ID, int>& j : layer_dist )
+            {
+                if( j.first != UNDEFINED_LAYER )
+                    j.second += i->GetThickness();
 
-            if( j.first == i->GetBrdLayerId() )
-                j.first = UNDEFINED_LAYER;
+                if( j.first == i->GetBrdLayerId() )
+                    j.first = UNDEFINED_LAYER;
+            }
         }
-    }
 
-    return std::abs( layer_dist[0].second - layer_dist[1].second );
+        return std::abs( layer_dist[0].second - layer_dist[1].second );
+    }
+    else
+    {
+        int dielectricLayers = bds.GetCopperLayerCount() - 1;
+        int layerThickness = bds.GetBoardThickness() / dielectricLayers;
+        int effectiveBottomLayer;
+
+        if( via.BottomLayer() == B_Cu )
+            effectiveBottomLayer = F_Cu + dielectricLayers;
+        else
+            effectiveBottomLayer = via.BottomLayer();
+
+        int layerCount = effectiveBottomLayer - via.TopLayer();
+
+        return layerCount * layerThickness;
+    }
 }
 
 
