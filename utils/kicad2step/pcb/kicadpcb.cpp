@@ -103,7 +103,7 @@ KICADPCB::KICADPCB()
 
 KICADPCB::~KICADPCB()
 {
-    for( auto i : m_modules )
+    for( auto i : m_footprints )
         delete i;
 
     for( auto i : m_curves )
@@ -368,41 +368,41 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
 
 bool KICADPCB::parseModule( SEXPR::SEXPR* data )
 {
-    KICADFOOTPRINT* mp = new KICADFOOTPRINT( this );
+    KICADFOOTPRINT* footprint = new KICADFOOTPRINT( this );
 
-    if( !mp->Read( data ) )
+    if( !footprint->Read( data ) )
     {
-        delete mp;
+        delete footprint;
         return false;
     }
 
-    m_modules.push_back( mp );
+    m_footprints.push_back( footprint );
     return true;
 }
 
 
 bool KICADPCB::parseRect( SEXPR::SEXPR* data )
 {
-    KICADCURVE* mp = new KICADCURVE();
+    KICADCURVE* rect = new KICADCURVE();
 
-    if( !mp->Read( data, CURVE_LINE ) )
+    if( !rect->Read( data, CURVE_LINE ) )
     {
-        delete mp;
+        delete rect;
         return false;
     }
 
     // reject any curves not on the Edge.Cuts layer
-    if( mp->GetLayer() != LAYER_EDGE )
+    if( rect->GetLayer() != LAYER_EDGE )
     {
-        delete mp;
+        delete rect;
         return true;
     }
 
-    KICADCURVE* top = new KICADCURVE( *mp );
-    KICADCURVE* right = new KICADCURVE( *mp );
-    KICADCURVE* bottom = new KICADCURVE( *mp );
-    KICADCURVE* left = new KICADCURVE( *mp );
-    delete mp;
+    KICADCURVE* top = new KICADCURVE( *rect );
+    KICADCURVE* right = new KICADCURVE( *rect );
+    KICADCURVE* bottom = new KICADCURVE( *rect );
+    KICADCURVE* left = new KICADCURVE( *rect );
+    delete rect;
 
     top->m_end.y = right->m_start.y;
     m_curves.push_back( top );
@@ -422,22 +422,22 @@ bool KICADPCB::parseRect( SEXPR::SEXPR* data )
 
 bool KICADPCB::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 {
-    KICADCURVE* mp = new KICADCURVE();
+    KICADCURVE* curve = new KICADCURVE();
 
-    if( !mp->Read( data, aCurveType ) )
+    if( !curve->Read( data, aCurveType ) )
     {
-        delete mp;
+        delete curve;
         return false;
     }
 
     // reject any curves not on the Edge.Cuts layer
-    if( mp->GetLayer() != LAYER_EDGE )
+    if( curve->GetLayer() != LAYER_EDGE )
     {
-        delete mp;
+        delete curve;
         return true;
     }
 
-    m_curves.push_back( mp );
+    m_curves.push_back( curve );
     return true;
 }
 
@@ -447,7 +447,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
     if( m_pcb_model )
         return true;
 
-    if( m_modules.empty() && m_curves.empty() )
+    if( m_footprints.empty() && m_curves.empty() )
     {
         ReportMessage( "Error: no PCB data (no footprint, no outline) to render\n" );
         return false;
@@ -499,7 +499,7 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
         m_pcb_model->AddOutlineSegment( &lcurve );
     }
 
-    for( auto i : m_modules )
+    for( auto i : m_footprints )
         i->ComposePCB( m_pcb_model, &m_resolver, origin, aComposeVirtual );
 
     ReportMessage( "Create PCB solid model\n" );

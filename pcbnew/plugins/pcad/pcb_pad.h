@@ -36,10 +36,10 @@ namespace PCAD2KICAD {
 class PCB_PAD : public PCB_COMPONENT
 {
 public:
-    int                  m_number;
-    int                  m_hole;
-    bool                 m_isHolePlated;
-    PCB_PAD_SHAPES_ARRAY m_shapes;
+    int                  m_Number;
+    int                  m_Hole;
+    bool                 m_IsHolePlated;
+    PCB_PAD_SHAPES_ARRAY m_Shapes;
 
     PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD();

@@ -313,7 +313,7 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
     }
     else
     {
-        // at this point, we can save the module
+        // at this point, we can save the footprint
         m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, inductorFP.get() );
 
         BOARD_COMMIT commit( this );

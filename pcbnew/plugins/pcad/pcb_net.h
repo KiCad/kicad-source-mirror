@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,8 @@ namespace PCAD2KICAD {
 class PCB_NET_NODE : public wxObject
 {
 public:
-    wxString    m_compRef;
-    wxString    m_pinRef;
+    wxString    m_CompRef;
+    wxString    m_PinRef;
 
     PCB_NET_NODE();
     ~PCB_NET_NODE();
@@ -51,9 +51,9 @@ WX_DEFINE_ARRAY( PCB_NET_NODE*, PCB_NET_NODES_ARRAY );
 class PCB_NET : public wxObject
 {
 public:
-    wxString            m_name;
-    int                 m_netCode;
-    PCB_NET_NODES_ARRAY m_netNodes;
+    wxString            m_Name;
+    int                 m_NetCode;
+    PCB_NET_NODES_ARRAY m_NetNodes;
 
     PCB_NET( int aNetCode );
     ~PCB_NET();

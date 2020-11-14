@@ -68,7 +68,7 @@ public:
     void setTransitions() override;
 
     /**
-     * Toggles edit module mode. When enabled, one may select parts of footprints individually
+     * Toggles edit footprint mode. When enabled, one may select parts of footprints individually
      * (graphics, pads, etc.), so they can be modified.
      * @param aEnabled decides if the mode should be enabled.
      */

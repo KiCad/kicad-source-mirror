@@ -49,8 +49,8 @@ public:
     /**
      * Function ExchangeFootprints()
      *
-     * Invoke the dialog used to update or exchange the footprints used for
-     * modules.  The mode depends on the PCB_ACTIONS held by the TOOL_EVENT.
+     * Invoke the dialog used to update or exchange the footprint definitions used for
+     * footprints.  The mode depends on the PCB_ACTIONS held by the TOOL_EVENT.
      */
     int ExchangeFootprints( const TOOL_EVENT& aEvent );
 

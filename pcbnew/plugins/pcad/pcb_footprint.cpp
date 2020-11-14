@@ -30,7 +30,7 @@
 #include <pcb_cutout.h>
 #include <pcb_plane.h>
 #include <pcb_line.h>
-#include <pcb_module.h>
+#include <pcb_footprint.h>
 #include <pcb_pad.h>
 #include <pcb_polygon.h>
 #include <plugins/pcad/pcb_text.h>
@@ -40,28 +40,28 @@
 
 namespace PCAD2KICAD {
 
-PCB_MODULE::PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
+PCB_FOOTPRINT::PCB_FOOTPRINT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCB_COMPONENT( aCallbacks, aBoard )
 {
-    InitTTextValue( &m_value );
-    m_mirror = 0;
+    InitTTextValue( &m_Value );
+    m_Mirror = 0;
     m_objType = wxT( 'M' );  // FOOTPRINT
     m_KiCadLayer = F_SilkS;  // default
 }
 
 
-PCB_MODULE::~PCB_MODULE()
+PCB_FOOTPRINT::~PCB_FOOTPRINT()
 {
     int i;
 
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        delete m_moduleObjects[i];
+        delete m_FootprintItems[i];
     }
 }
 
 
-XNODE* PCB_MODULE::FindModulePatternDefName( XNODE* aNode, const wxString& aName )
+XNODE* PCB_FOOTPRINT::FindModulePatternDefName( XNODE* aNode, const wxString& aName )
 {
     XNODE*      result, * lNode;
     wxString    propValue1, propValue2;
@@ -115,7 +115,7 @@ XNODE* PCB_MODULE::FindModulePatternDefName( XNODE* aNode, const wxString& aName
 }
 
 
-XNODE* PCB_MODULE::FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName )
+XNODE* PCB_FOOTPRINT::FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName )
 {
     XNODE*      result, * pNode, * lNode;
     wxString    propValue, patName;
@@ -207,12 +207,12 @@ XNODE* PCB_MODULE::FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGra
 }
 
 
-void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
-                                         PCB_MODULE*            aPCBModule,
-                                         PCB_COMPONENTS_ARRAY*  aList,
-                                         wxStatusBar*           aStatusBar,
-                                         const wxString&        aDefaultMeasurementUnit,
-                                         const wxString&        aActualConversion )
+void PCB_FOOTPRINT::DoLayerContentsObjects( XNODE*                 aNode,
+                                            PCB_FOOTPRINT*            aFootprint,
+                                            PCB_COMPONENTS_ARRAY*  aList,
+                                            wxStatusBar*           aStatusBar,
+                                            const wxString&        aDefaultMeasurementUnit,
+                                            const wxString&        aActualConversion )
 {
     PCB_ARC*            arc;
     PCB_POLYGON*        polygon;
@@ -240,7 +240,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
     {
         plane_layer = new PCB_POLYGON( m_callbacks, m_board, PCadLayer );
         plane_layer->AssignNet( m_callbacks->GetLayerNetNameRef( PCadLayer ) );
-        plane_layer->SetOutline( &m_boardOutline );
+        plane_layer->SetOutline( &m_BoardOutline );
         aList->Add( plane_layer );
 
         // fill the polygon with the same contour as its outline is
@@ -281,7 +281,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
             {
                 tNode = FindNode( lNode, wxT( "textStyleRef" ) );
 
-                if( tNode && aPCBModule )
+                if( tNode && aFootprint )
                 {
                     // TODO: to understand and may be repair
                     // Alexander Lunev: originally in Delphi version of the project there was
@@ -291,7 +291,7 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
                     // required when the function DoLayerContentsObjects() is called from
                     // function ProcessXMLtoPCBLib().
                     SetFontProperty( tNode,
-                                     &aPCBModule->m_name,
+                                     &aFootprint->m_name,
                                      aDefaultMeasurementUnit,
                                      aActualConversion );
                 }
@@ -362,27 +362,27 @@ void PCB_MODULE::DoLayerContentsObjects( XNODE*                 aNode,
 }
 
 
-void PCB_MODULE::SetName( const wxString& aPin, const wxString& aName )
+void PCB_FOOTPRINT::SetName( const wxString& aPin, const wxString& aName )
 {
     int     i;
     long    num;
 
     aPin.ToLong( &num );
 
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'P' ) )
-            if( ( (PCB_PAD*) m_moduleObjects[i] )->m_number == num )
-                ( (PCB_PAD*) m_moduleObjects[i] )->m_name.text = aName;
+        if( m_FootprintItems[i]->m_objType == wxT( 'P' ) )
+            if(( (PCB_PAD*) m_FootprintItems[i] )->m_Number == num )
+                ( (PCB_PAD*) m_FootprintItems[i] )->m_name.text = aName;
 
 
     }
 }
 
 
-void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
-                        const wxString& aDefaultMeasurementUnit,
-                        const wxString& aActualConversion )
+void PCB_FOOTPRINT::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
+                           const wxString& aDefaultMeasurementUnit,
+                           const wxString& aActualConversion )
 {
     XNODE*      lNode, * tNode, * mNode;
     PCB_PAD*    pad;
@@ -409,14 +409,14 @@ void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
             {
                 pad = new PCB_PAD( m_callbacks, m_board );
                 pad->Parse( tNode, aDefaultMeasurementUnit, aActualConversion );
-                m_moduleObjects.Add( pad );
+                m_FootprintItems.Add( pad );
             }
 
             if( tNode->GetName() == wxT( "via" ) )
             {
                 via = new PCB_VIA( m_callbacks, m_board );
                 via->Parse( tNode, aDefaultMeasurementUnit, aActualConversion );
-                m_moduleObjects.Add( via );
+                m_FootprintItems.Add( via );
             }
 
             tNode = tNode->GetNext();
@@ -432,7 +432,7 @@ void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
     while( lNode )
     {
         if( lNode->GetName() == wxT( "layerContents" ) )
-            DoLayerContentsObjects( lNode, this, &m_moduleObjects, aStatusBar,
+            DoLayerContentsObjects( lNode, this, &m_FootprintItems, aStatusBar,
                                     aDefaultMeasurementUnit, aActualConversion );
 
         lNode = lNode->GetNext();
@@ -473,7 +473,7 @@ void PCB_MODULE::Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
 }
 
 
-wxString PCB_MODULE::ModuleLayer( int aMirror )
+wxString PCB_FOOTPRINT::ModuleLayer( int aMirror )
 {
     wxString result;
 
@@ -490,7 +490,7 @@ wxString PCB_MODULE::ModuleLayer( int aMirror )
 }
 
 
-void PCB_MODULE::AddToBoard()
+void PCB_FOOTPRINT::AddToBoard()
 {
     int i;
     int r;
@@ -499,23 +499,23 @@ void PCB_MODULE::AddToBoard()
     CorrectTextPosition( &m_name );
     RotatePoint( &m_name.correctedPositionX, &m_name.correctedPositionY, (double) -m_rotation );
 
-    CorrectTextPosition( &m_value );
-    RotatePoint( &m_value.correctedPositionX, &m_value.correctedPositionY, (double) -m_rotation );
+    CorrectTextPosition( &m_Value );
+    RotatePoint( &m_Value.correctedPositionX, &m_Value.correctedPositionY, (double) -m_rotation );
 
-    FOOTPRINT* module = new FOOTPRINT( m_board );
-    m_board->Add( module, ADD_MODE::APPEND );
+    FOOTPRINT* footprint = new FOOTPRINT( m_board );
+    m_board->Add( footprint, ADD_MODE::APPEND );
 
-    module->SetPosition( wxPoint( m_positionX, m_positionY ) );
-    module->SetLayer( m_mirror ? B_Cu : F_Cu );
-    module->SetOrientation( m_rotation );
-    module->SetLastEditTime( 0 );
+    footprint->SetPosition( wxPoint( m_positionX, m_positionY ) );
+    footprint->SetLayer( m_Mirror ? B_Cu : F_Cu );
+    footprint->SetOrientation( m_rotation );
+    footprint->SetLastEditTime( 0 );
 
     LIB_ID fpID;
     fpID.Parse( m_compRef, LIB_ID::ID_PCB, true );
-    module->SetFPID( fpID );
+    footprint->SetFPID( fpID );
 
     // reference text
-    FP_TEXT* ref_text = &module->Reference();
+    FP_TEXT* ref_text = &footprint->Reference();
 
     ref_text->SetText( ValidateReference( m_name.text ) );
     ref_text->SetType( FP_TEXT::TEXT_is_REFERENCE );
@@ -542,98 +542,98 @@ void PCB_MODULE::AddToBoard()
     ref_text->SetDrawCoord();
 
     // value text
-    FP_TEXT* val_text = &module->Value();
+    FP_TEXT* val_text = &footprint->Value();
 
-    val_text->SetText( m_value.text );
+    val_text->SetText( m_Value.text );
     val_text->SetType( FP_TEXT::TEXT_is_VALUE );
 
-    val_text->SetPos0( wxPoint( m_value.correctedPositionX, m_value.correctedPositionY ) );
-    if( m_value.isTrueType )
-        SetTextSizeFromTrueTypeFontHeight( val_text, m_value.textHeight );
+    val_text->SetPos0( wxPoint( m_Value.correctedPositionX, m_Value.correctedPositionY ) );
+    if( m_Value.isTrueType )
+        SetTextSizeFromTrueTypeFontHeight( val_text, m_Value.textHeight );
     else
-        SetTextSizeFromStrokeFontHeight( val_text, m_value.textHeight );
+        SetTextSizeFromStrokeFontHeight( val_text, m_Value.textHeight );
 
-    r = m_value.textRotation - m_rotation;
+    r = m_Value.textRotation - m_rotation;
     val_text->SetTextAngle( r );
     val_text->SetKeepUpright( false );
 
-    val_text->SetItalic( m_value.isItalic );
-    val_text->SetTextThickness( m_value.textstrokeWidth );
+    val_text->SetItalic( m_Value.isItalic );
+    val_text->SetTextThickness( m_Value.textstrokeWidth );
 
-    val_text->SetMirrored( m_value.mirror );
-    val_text->SetVisible( m_value.textIsVisible );
+    val_text->SetMirrored( m_Value.mirror );
+    val_text->SetVisible( m_Value.textIsVisible );
 
-    val_text->SetLayer( m_value.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
+    val_text->SetLayer( m_Value.mirror ? FlipLayer( m_KiCadLayer ) : m_KiCadLayer );
 
     // Calculate the actual position.
     val_text->SetDrawCoord();
 
     // TEXTS
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'T' ) )
+        if( m_FootprintItems[i]->m_objType == wxT( 'T' ) )
         {
-            ( (PCB_TEXT*) m_moduleObjects[i] )->m_tag = i + 2;
-            m_moduleObjects[ i ]->AddToFootprint( module );
+            ( (PCB_TEXT*) m_FootprintItems[i] )->m_tag = i + 2;
+            m_FootprintItems[ i ]->AddToFootprint( footprint );
         }
     }
 
     // FOOTPRINT LINES
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'L' ) )
-            m_moduleObjects[ i ]->AddToFootprint( module );
+        if( m_FootprintItems[i]->m_objType == wxT( 'L' ) )
+            m_FootprintItems[ i ]->AddToFootprint( footprint );
     }
 
     // FOOTPRINT ARCS
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'A' ) )
-            m_moduleObjects[ i ]->AddToFootprint( module );
+        if( m_FootprintItems[i]->m_objType == wxT( 'A' ) )
+            m_FootprintItems[ i ]->AddToFootprint( footprint );
     }
 
     // FOOTPRINT POLYGONS
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'Z' ) )
-            m_moduleObjects[ i ]->AddToFootprint( module );
+        if( m_FootprintItems[i]->m_objType == wxT( 'Z' ) )
+            m_FootprintItems[ i ]->AddToFootprint( footprint );
     }
 
     // PADS
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'P' ) )
-            ((PCB_PAD*) m_moduleObjects[ i ] )->AddToFootprint( module, m_rotation, false );
+        if( m_FootprintItems[i]->m_objType == wxT( 'P' ) )
+            ((PCB_PAD*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_rotation, false );
     }
 
     // VIAS
-    for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+    for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
     {
-        if( m_moduleObjects[i]->m_objType == wxT( 'V' ) )
-            ((PCB_VIA*) m_moduleObjects[ i ] )->AddToFootprint( module, m_rotation, false );
+        if( m_FootprintItems[i]->m_objType == wxT( 'V' ) )
+            ((PCB_VIA*) m_FootprintItems[ i ] )->AddToFootprint( footprint, m_rotation, false );
     }
 
-    module->CalculateBoundingBox();
+    footprint->CalculateBoundingBox();
 }
 
 
-void PCB_MODULE::Flip()
+void PCB_FOOTPRINT::Flip()
 {
     int i;
 
-    if( m_mirror == 1 )
+    if( m_Mirror == 1 )
     {
         m_rotation = -m_rotation;
 
-        for( i = 0; i < (int) m_moduleObjects.GetCount(); i++ )
+        for( i = 0; i < (int) m_FootprintItems.GetCount(); i++ )
         {
-            if( m_moduleObjects[i]->m_objType == wxT( 'L' ) || // lines
-                m_moduleObjects[i]->m_objType == wxT( 'A' ) || // arcs
-                m_moduleObjects[i]->m_objType == wxT( 'Z' ) || // polygons
-                m_moduleObjects[i]->m_objType == wxT( 'P' ) || // pads
-                m_moduleObjects[i]->m_objType == wxT( 'V' ) )  // vias
+            if( m_FootprintItems[i]->m_objType == wxT( 'L' ) || // lines
+                m_FootprintItems[i]->m_objType == wxT( 'A' ) || // arcs
+                m_FootprintItems[i]->m_objType == wxT( 'Z' ) || // polygons
+                m_FootprintItems[i]->m_objType == wxT( 'P' ) || // pads
+                m_FootprintItems[i]->m_objType == wxT( 'V' ) )  // vias
             {
-                m_moduleObjects[i]->Flip();
+                m_FootprintItems[i]->Flip();
             }
         }
     }

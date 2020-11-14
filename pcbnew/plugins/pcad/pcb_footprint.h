@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,34 +37,32 @@
 
 namespace PCAD2KICAD {
 
-class PCB_MODULE : public PCB_COMPONENT
+class PCB_FOOTPRINT : public PCB_COMPONENT
 {
 public:
-    TTEXTVALUE              m_value;            // has reference (Name from parent) and value
-    PCB_COMPONENTS_ARRAY    m_moduleObjects;    // set of objects like PCB_LINE, PCB_PAD, PCB_VIA,....
-    int m_mirror;
-    VERTICES_ARRAY          m_boardOutline;
+    TTEXTVALUE            m_Value;           // has reference (Name from parent) and value
+    PCB_COMPONENTS_ARRAY  m_FootprintItems;  // set of objects like PCB_LINE, PCB_PAD, PCB_VIA....
+    int                   m_Mirror;
+    VERTICES_ARRAY        m_BoardOutline;
 
-    PCB_MODULE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
-    ~PCB_MODULE();
+    PCB_FOOTPRINT( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
+    ~PCB_FOOTPRINT();
 
-    XNODE*      FindModulePatternDefName( XNODE* aNode, const wxString& aName );
+    XNODE*  FindModulePatternDefName( XNODE* aNode, const wxString& aName );
 
-    void        DoLayerContentsObjects( XNODE*                  aNode,
-                                        PCB_MODULE*             aPCBModule,
-                                        PCB_COMPONENTS_ARRAY*   aList,
-                                        wxStatusBar*            aStatusBar,
-                                        const wxString&         aDefaultMeasurementUnit,
-                                        const wxString&         aActualConversion );
+    void DoLayerContentsObjects( XNODE* aNode, PCB_FOOTPRINT* aFootprint,
+                                 PCB_COMPONENTS_ARRAY* aList, wxStatusBar* aStatusBar,
+                                 const wxString&  aDefaultMeasurementUnit,
+                                 const wxString& aActualConversion );
 
-    void            SetName( const wxString& aPin, const wxString& aName );
+    void SetName( const wxString& aPin, const wxString& aName );
 
-    virtual void    Parse( XNODE*   aNode, wxStatusBar* aStatusBar,
-                           const wxString& aDefaultMeasurementUnit,
-                           const wxString& aActualConversion );
+    virtual void Parse( XNODE* aNode, wxStatusBar* aStatusBar,
+                        const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion );
 
-    virtual void    Flip() override;
-    void            AddToBoard() override;
+    virtual void Flip() override;
+    void AddToBoard() override;
 
 private:
     XNODE*          FindPatternMultilayerSection( XNODE* aNode, wxString* aPatGraphRefName );

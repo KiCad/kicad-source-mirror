@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,14 +32,8 @@
 #include <common.h>
 
 #include <pcb.h>
-#include <pcb_arc.h>
-#include <pcb_copper_pour.h>
-#include <pcb_cutout.h>
 #include <pcb_keepout.h>
-#include <pcb_line.h>
-#include <pcb_module.h>
-#include <pcb_pad_shape.h>
-#include <pcb_via_shape.h>
+#include <pcb_footprint.h>
 #include <pcb_pad.h>
 #include <pcb_text.h>
 #include <pcb_via.h>
@@ -49,9 +43,9 @@ namespace PCAD2KICAD {
 
 PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
 {
-    auto it = m_layersMap.find( aPCadLayer );
+    auto it = m_LayersMap.find( aPCadLayer );
 
-    if( it == m_layersMap.end() )
+    if( it == m_LayersMap.end() )
         THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
 
     return it->second.KiCadLayer;
@@ -59,9 +53,9 @@ PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
 
 LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer )
 {
-    auto it = m_layersMap.find( aPCadLayer );
+    auto it = m_LayersMap.find( aPCadLayer );
 
-    if( it == m_layersMap.end() )
+    if( it == m_LayersMap.end() )
         THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
 
     return it->second.layerType;
@@ -69,17 +63,18 @@ LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer )
 
 wxString PCB::GetLayerNetNameRef( int aPCadLayer )
 {
-    auto it = m_layersMap.find( aPCadLayer );
+    auto it = m_LayersMap.find( aPCadLayer );
 
-    if( it == m_layersMap.end() )
+    if( it == m_LayersMap.end() )
         THROW_IO_ERROR( wxString::Format( _( "Unknown PCad layer %u" ), unsigned( aPCadLayer ) ) );
 
     return it->second.netNameRef;
 }
 
-PCB::PCB( BOARD* aBoard ) : PCB_MODULE( this, aBoard )
+PCB::PCB( BOARD* aBoard ) :
+        PCB_FOOTPRINT( this, aBoard )
 {
-    m_defaultMeasurementUnit = wxT( "mil" );
+    m_DefaultMeasurementUnit = wxT( "mil" );
 
     for( size_t i = 0; i < 8; ++i )
     {
@@ -88,21 +83,21 @@ PCB::PCB( BOARD* aBoard ) : PCB_MODULE( this, aBoard )
         layer.layerType  = LAYER_TYPE_NONSIGNAL; // default
         layer.netNameRef = wxT( "" ); // default
 
-        m_layersMap.insert( std::make_pair( i, layer ) );
+        m_LayersMap.insert( std::make_pair( i, layer ) );
     }
 
-    m_sizeX = 0;
-    m_sizeY = 0;
+    m_SizeX = 0;
+    m_SizeY = 0;
 
-    m_layersMap[1].KiCadLayer = F_Cu;
-    m_layersMap[1].layerType  = LAYER_TYPE_SIGNAL;
+    m_LayersMap[1].KiCadLayer = F_Cu;
+    m_LayersMap[1].layerType  = LAYER_TYPE_SIGNAL;
 
-    m_layersMap[2].KiCadLayer = B_Cu;
-    m_layersMap[2].layerType  = LAYER_TYPE_SIGNAL;
+    m_LayersMap[2].KiCadLayer = B_Cu;
+    m_LayersMap[2].layerType  = LAYER_TYPE_SIGNAL;
 
-    m_layersMap[3].KiCadLayer  = Eco2_User;
-    m_layersMap[6].KiCadLayer  = F_SilkS;
-    m_layersMap[7].KiCadLayer  = B_SilkS;
+    m_LayersMap[3].KiCadLayer  = Eco2_User;
+    m_LayersMap[6].KiCadLayer  = F_SilkS;
+    m_LayersMap[7].KiCadLayer  = B_SilkS;
 }
 
 
@@ -110,14 +105,14 @@ PCB::~PCB()
 {
     int i;
 
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+    for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
     {
-        delete m_pcbComponents[i];
+        delete m_PcbComponents[i];
     }
 
-    for( i = 0; i < (int) m_pcbNetlist.GetCount(); i++ )
+    for( i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
     {
-        delete m_pcbNetlist[i];
+        delete m_PcbNetlist[i];
     }
 }
 
@@ -126,13 +121,13 @@ int PCB::GetNetCode( wxString aNetName )
 {
     PCB_NET* net;
 
-    for( int i = 0; i < (int) m_pcbNetlist.GetCount(); i++ )
+    for( int i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
     {
-        net = m_pcbNetlist[i];
+        net = m_PcbNetlist[i];
 
-        if( net->m_name == aNetName )
+        if( net->m_Name == aNetName )
         {
-            return net->m_netCode;
+            return net->m_NetCode;
         }
     }
 
@@ -234,7 +229,7 @@ void PCB::SetTextProperty( XNODE*   aNode, TTEXTVALUE* aTextValue,
     }
 
     if( tNode )
-        SetTextParameters( tNode, aTextValue, m_defaultMeasurementUnit, aActualConversion );
+        SetTextParameters( tNode, aTextValue, m_DefaultMeasurementUnit, aActualConversion );
 }
 
 
@@ -243,18 +238,18 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                            const wxString&  aActualConversion,
                            wxStatusBar*     aStatusBar )
 {
-    XNODE*        lNode, * tNode, * mNode;
-    PCB_MODULE*   mc;
-    PCB_PAD*      pad;
-    PCB_VIA*      via;
-    PCB_KEEPOUT*  keepOut;
-    wxString      cn, str, propValue;
+    XNODE*         lNode, * tNode, * mNode;
+    PCB_FOOTPRINT* fp;
+    PCB_PAD*       pad;
+    PCB_VIA*       via;
+    PCB_KEEPOUT*   keepOut;
+    wxString       cn, str, propValue;
 
     lNode = aNode->GetChildren();
 
     while( lNode )
     {
-        mc = NULL;
+        fp = NULL;
 
         if( lNode->GetName() == wxT( "pattern" ) )
         {
@@ -269,38 +264,37 @@ void PCB::DoPCBComponents( XNODE*           aNode,
 
                 if( tNode )
                 {
-                    mc = new PCB_MODULE( this, m_board );
+                    fp = new PCB_FOOTPRINT( this, m_board );
 
                     mNode = FindNode( lNode, wxT( "patternGraphicsNameRef" ) );
                     if( mNode )
-                        mNode->GetAttribute( wxT( "Name" ), &mc->m_patGraphRefName );
+                        mNode->GetAttribute( wxT( "Name" ), &fp->m_patGraphRefName );
 
-                    mc->Parse( tNode, aStatusBar, m_defaultMeasurementUnit, aActualConversion );
+                    fp->Parse( tNode, aStatusBar, m_DefaultMeasurementUnit, aActualConversion );
                 }
             }
 
-            if( mc )
+            if( fp )
             {
-                mc->m_compRef = cn;    // default - in new version of file it is updated later....
+                fp->m_compRef = cn;    // default - in new version of file it is updated later....
                 tNode = FindNode( lNode, wxT( "refDesRef" ) );
 
                 if( tNode )
                 {
-                    tNode->GetAttribute( wxT( "Name" ), &mc->m_name.text );
-                    SetTextProperty( lNode, &mc->m_name, mc->m_patGraphRefName, wxT(
-                                         "RefDes" ), aActualConversion );
-                    SetTextProperty( lNode, &mc->m_value, mc->m_patGraphRefName, wxT(
-                                         "Value" ), aActualConversion );
+                    tNode->GetAttribute( wxT( "Name" ), &fp->m_name.text );
+                    SetTextProperty( lNode, &fp->m_name, fp->m_patGraphRefName, wxT( "RefDes" ),
+                                     aActualConversion );
+                    SetTextProperty( lNode, &fp->m_Value, fp->m_patGraphRefName, wxT( "Value" ),
+                                     aActualConversion );
                 }
 
                 tNode = FindNode( lNode, wxT( "pt" ) );
 
                 if( tNode )
-                    SetPosition( tNode->GetNodeContent(),
-                                 m_defaultMeasurementUnit,
-                                 &mc->m_positionX,
-                                 &mc->m_positionY,
-                                 aActualConversion );
+                {
+                    SetPosition( tNode->GetNodeContent(), m_DefaultMeasurementUnit,
+                                 &fp->m_positionX, &fp->m_positionY, aActualConversion );
+                }
 
                 tNode = FindNode( lNode, wxT( "rotation" ) );
 
@@ -308,13 +302,13 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                 {
                     str = tNode->GetNodeContent();
                     str.Trim( false );
-                    mc->m_rotation = StrToInt1Units( str );
+                    fp->m_rotation = StrToInt1Units( str );
                 }
 
                 str = FindNodeGetContent( lNode, wxT( "isFlipped" ) );
 
                 if( str == wxT( "True" ) )
-                    mc->m_mirror = 1;
+                    fp->m_Mirror = 1;
 
                 tNode = aNode;
 
@@ -331,24 +325,24 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                     {
                         tNode->GetAttribute( wxT( "Name" ), &propValue );
 
-                        if( propValue == mc->m_name.text )
+                        if( propValue == fp->m_name.text )
                         {
                             if( FindNode( tNode, wxT( "compValue" ) ) )
                             {
                                 FindNode( tNode,
                                           wxT( "compValue" ) )->GetAttribute( wxT( "Name" ),
-                                                                              &mc->m_value.text );
-                                mc->m_value.text.Trim( false );
-                                mc->m_value.text.Trim( true );
+                                                                              &fp->m_Value.text );
+                                fp->m_Value.text.Trim( false );
+                                fp->m_Value.text.Trim( true );
                             }
 
                             if( FindNode( tNode, wxT( "compRef" ) ) )
                             {
                                 FindNode( tNode,
                                           wxT( "compRef" ) )->GetAttribute( wxT( "Name" ),
-                                                                            &mc->m_compRef );
-                                mc->m_compRef.Trim( false );
-                                mc->m_compRef.Trim( true );
+                                                                            &fp->m_compRef );
+                                fp->m_compRef.Trim( false );
+                                fp->m_compRef.Trim( true );
                             }
 
                             tNode = NULL;
@@ -360,7 +354,7 @@ void PCB::DoPCBComponents( XNODE*           aNode,
 
                 // map pins
                 tNode   = FindNode( (XNODE *)aXmlDoc->GetRoot(), wxT( "library" ) );
-                tNode   = FindCompDefName( tNode, mc->m_compRef );
+                tNode   = FindCompDefName( tNode, fp->m_compRef );
 
                 if( tNode )
                 {
@@ -381,7 +375,7 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                                     break;
 
                                 mNode->GetAttribute( wxT( "Name" ), &propValue );
-                                mc->SetName( str, propValue );
+                                fp->SetName( str, propValue );
                                 mNode = mNode->GetNext();
                             }
                             else
@@ -397,27 +391,27 @@ void PCB::DoPCBComponents( XNODE*           aNode,
                     }
                 }
 
-                m_pcbComponents.Add( mc );
+                m_PcbComponents.Add( fp );
             }
         }
         else if( lNode->GetName() == wxT( "pad" ) )
         {
             pad = new PCB_PAD( this, m_board );
-            pad->Parse( lNode, m_defaultMeasurementUnit, aActualConversion );
-            m_pcbComponents.Add( pad );
+            pad->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion );
+            m_PcbComponents.Add( pad );
         }
         else if( lNode->GetName() == wxT( "via" ) )
         {
             via = new PCB_VIA( this, m_board );
-            via->Parse( lNode, m_defaultMeasurementUnit, aActualConversion );
-            m_pcbComponents.Add( via );
+            via->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion );
+            m_PcbComponents.Add( via );
         }
         else if( lNode->GetName() == wxT( "polyKeepOut" ) )
         {
             keepOut = new PCB_KEEPOUT( m_callbacks, m_board, 0 );
 
-            if( keepOut->Parse( lNode, m_defaultMeasurementUnit, aActualConversion ) )
-                m_pcbComponents.Add( keepOut );
+            if( keepOut->Parse( lNode, m_DefaultMeasurementUnit, aActualConversion ) )
+                m_PcbComponents.Add( keepOut );
             else
                 delete keepOut;
         }
@@ -427,25 +421,24 @@ void PCB::DoPCBComponents( XNODE*           aNode,
 }
 
 
-void PCB::ConnectPinToNet( const wxString& aCompRef,
-                           const wxString& aPinRef,
+void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
                            const wxString& aNetName )
 {
-    PCB_MODULE* module;
-    PCB_PAD*    cp;
-    int         i, j;
+    PCB_FOOTPRINT* footprint;
+    PCB_PAD*       cp;
+    int            i, j;
 
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+    for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
     {
-        module = (PCB_MODULE*) m_pcbComponents[i];
+        footprint = (PCB_FOOTPRINT*) m_PcbComponents[i];
 
-        if( module->m_objType == wxT( 'M' ) && module->m_name.text == aCompRef )
+        if( footprint->m_objType == wxT( 'M' ) && footprint->m_name.text == aCompRef )
         {
-            for( j = 0; j < (int) module->m_moduleObjects.GetCount(); j++ )
+            for( j = 0; j < (int) footprint->m_FootprintItems.GetCount(); j++ )
             {
-                if( module->m_moduleObjects[j]->m_objType == wxT( 'P' ) )
+                if( footprint->m_FootprintItems[j]->m_objType == wxT( 'P' ) )
                 {
-                    cp = (PCB_PAD*) module->m_moduleObjects[j];
+                    cp = (PCB_PAD*) footprint->m_FootprintItems[j];
 
                     if( cp->m_name.text == aPinRef )
                         cp->m_net = aNetName;
@@ -552,12 +545,12 @@ void PCB::MapLayer( XNODE* aNode )
             newlayer.layerType = LAYER_TYPE_PLANE;
     }
 
-    m_layersMap.insert( std::make_pair( num, newlayer ) );
+    m_LayersMap.insert( std::make_pair( num, newlayer ) );
 
     if( FindNode( aNode, wxT( "netNameRef" ) ) )
     {
         FindNode( aNode, wxT( "netNameRef" ) )->GetAttribute( wxT( "Name" ),
-                                                              &m_layersMap[(int) num].netNameRef );
+                                                              &m_LayersMap[(int) num].netNameRef );
     }
 }
 
@@ -621,11 +614,11 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
 
                             if( pNode )
                             {
-                                SetPosition( pNode->GetNodeContent(), m_defaultMeasurementUnit,
+                                SetPosition( pNode->GetNodeContent(), m_DefaultMeasurementUnit,
                                              &x, &y, aActualConversion );
 
-                                if( FindOutlinePoint( &m_boardOutline, wxRealPoint( x, y) ) == -1 )
-                                    m_boardOutline.Add( new wxRealPoint( x, y ) );
+                                if( FindOutlinePoint( &m_BoardOutline, wxRealPoint( x, y) ) == -1 )
+                                    m_BoardOutline.Add( new wxRealPoint( x, y ) );
                             }
 
                             if( pNode )
@@ -633,11 +626,11 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
 
                             if( pNode )
                             {
-                                SetPosition( pNode->GetNodeContent(), m_defaultMeasurementUnit,
+                                SetPosition( pNode->GetNodeContent(), m_DefaultMeasurementUnit,
                                              &x, &y, aActualConversion );
 
-                                if( FindOutlinePoint( &m_boardOutline, wxRealPoint( x, y) ) == -1 )
-                                    m_boardOutline.Add( new wxRealPoint( x, y ) );
+                                if( FindOutlinePoint( &m_BoardOutline, wxRealPoint( x, y) ) == -1 )
+                                    m_BoardOutline.Add( new wxRealPoint( x, y ) );
                             }
                         }
 
@@ -646,16 +639,16 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
 
                     //m_boardOutline.Sort( cmpFunc );
                     // sort vertices according to the distances between them
-                    if( m_boardOutline.GetCount() > 3 )
+                    if( m_BoardOutline.GetCount() > 3 )
                     {
-                        for( i = 0; i < (int) m_boardOutline.GetCount() - 1; i++ )
+                        for( i = 0; i < (int) m_BoardOutline.GetCount() - 1; i++ )
                         {
-                            minDistance = GetDistance( m_boardOutline[i], m_boardOutline[i + 1] );
+                            minDistance = GetDistance( m_BoardOutline[i], m_BoardOutline[ i + 1] );
                             targetInd = i + 1;
 
-                            for( j = i + 2; j < (int) m_boardOutline.GetCount(); j++ )
+                            for( j = i + 2; j < (int) m_BoardOutline.GetCount(); j++ )
                             {
-                                distance = GetDistance( m_boardOutline[i], m_boardOutline[j] );
+                                distance = GetDistance( m_BoardOutline[i], m_BoardOutline[j] );
                                 if( distance < minDistance )
                                 {
                                     minDistance = distance;
@@ -663,9 +656,9 @@ void PCB::GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConver
                                 }
                             }
 
-                            xchgPoint = m_boardOutline[i + 1];
-                            m_boardOutline[i + 1] = m_boardOutline[targetInd];
-                            m_boardOutline[targetInd] = xchgPoint;
+                            xchgPoint = m_BoardOutline[ i + 1];
+                            m_BoardOutline[ i + 1] = m_BoardOutline[targetInd];
+                            m_BoardOutline[targetInd] = xchgPoint;
                         }
                     }
 
@@ -683,7 +676,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
     XNODE*          aNode;//, *aaNode;
     PCB_NET*        net;
     PCB_COMPONENT*  comp;
-    PCB_MODULE*     module;
+    PCB_FOOTPRINT*  footprint;
     wxString        compRef, pinRef, layerName, layerType;
     int             i, j, netCode;
 
@@ -696,9 +689,9 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
 
         if( aNode )
         {
-            m_defaultMeasurementUnit = aNode->GetNodeContent().Lower();
-            m_defaultMeasurementUnit.Trim( true );
-            m_defaultMeasurementUnit.Trim( false );
+            m_DefaultMeasurementUnit = aNode->GetNodeContent().Lower();
+            m_DefaultMeasurementUnit.Trim( true );
+            m_DefaultMeasurementUnit.Trim( false );
         }
     }
 
@@ -793,7 +786,7 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
         {
             net = new PCB_NET( netCode++ );
             net->Parse( aNode );
-            m_pcbNetlist.Add( net );
+            m_PcbNetlist.Add( net );
 
             aNode = aNode->GetNext();
         }
@@ -817,8 +810,8 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
 
             // objects
             if( aNode->GetName() == wxT( "layerContents" ) )
-                DoLayerContentsObjects( aNode, NULL, &m_pcbComponents, aStatusBar,
-                                        m_defaultMeasurementUnit, aActualConversion );
+                DoLayerContentsObjects( aNode, NULL, &m_PcbComponents, aStatusBar,
+                                        m_DefaultMeasurementUnit, aActualConversion );
 
             aNode = aNode->GetNext();
         }
@@ -826,78 +819,78 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
         // POSTPROCESS -- SET NETLIST REFERENCES
         // aStatusBar->SetStatusText( wxT( "Processing NETLIST " ) );
 
-        for( i = 0; i < (int) m_pcbNetlist.GetCount(); i++ )
+        for( i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
         {
-            net = m_pcbNetlist[i];
+            net = m_PcbNetlist[i];
 
-            for( j = 0; j < (int) net->m_netNodes.GetCount(); j++ )
+            for( j = 0; j < (int) net->m_NetNodes.GetCount(); j++ )
             {
-                compRef = net->m_netNodes[j]->m_compRef;
+                compRef = net->m_NetNodes[j]->m_CompRef;
                 compRef.Trim( false );
                 compRef.Trim( true );
-                pinRef = net->m_netNodes[j]->m_pinRef;
+                pinRef = net->m_NetNodes[j]->m_PinRef;
                 pinRef.Trim( false );
                 pinRef.Trim( true );
-                ConnectPinToNet( compRef, pinRef, net->m_name );
+                ConnectPinToNet( compRef, pinRef, net->m_Name );
             }
         }
 
         // POSTPROCESS -- FLIP COMPONENTS
-        for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+        for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
         {
-            if( m_pcbComponents[i]->m_objType == wxT( 'M' ) )
-                ( (PCB_MODULE*) m_pcbComponents[i] )->Flip();
+            if( m_PcbComponents[i]->m_objType == wxT( 'M' ) )
+                ( (PCB_FOOTPRINT*) m_PcbComponents[i] )->Flip();
         }
 
         // POSTPROCESS -- SET/OPTIMIZE NEW PCB POSITION
         // aStatusBar->SetStatusText( wxT( "Optimizing BOARD POSITION " ) );
 
-        m_sizeX = 10000000;
-        m_sizeY = 0;
+        m_SizeX = 10000000;
+        m_SizeY = 0;
 
-        for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+        for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
         {
-            comp = m_pcbComponents[i];
+            comp = m_PcbComponents[i];
 
-            if( comp->m_positionY < m_sizeY )
-                m_sizeY = comp->m_positionY; // max Y
+            if( comp->m_positionY < m_SizeY )
+                m_SizeY = comp->m_positionY; // max Y
 
-            if( comp->m_positionX < m_sizeX && comp->m_positionX > 0 )
-                m_sizeX = comp->m_positionX; // Min X
+            if( comp->m_positionX < m_SizeX && comp->m_positionX > 0 )
+                m_SizeX = comp->m_positionX; // Min X
         }
 
-        m_sizeY -= 10000;
-        m_sizeX -= 10000;
+        m_SizeY -= 10000;
+        m_SizeX -= 10000;
         // aStatusBar->SetStatusText( wxT( " POSITIONING POSTPROCESS " ) );
 
-        for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
-            m_pcbComponents[i]->SetPosOffset( -m_sizeX, -m_sizeY );
+        for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
+            m_PcbComponents[i]->SetPosOffset( -m_SizeX, -m_SizeY );
 
-        m_sizeX = 0;
-        m_sizeY = 0;
+        m_SizeX = 0;
+        m_SizeY = 0;
 
-        for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+        for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
         {
-            comp = m_pcbComponents[i];
+            comp = m_PcbComponents[i];
 
-            if( comp->m_positionY < m_sizeY )
-                m_sizeY = comp->m_positionY; // max Y
+            if( comp->m_positionY < m_SizeY )
+                m_SizeY = comp->m_positionY; // max Y
 
-            if( comp->m_positionX > m_sizeX )
-                m_sizeX = comp->m_positionX; // Min X
+            if( comp->m_positionX > m_SizeX )
+                m_SizeX = comp->m_positionX; // Min X
         }
 
         // SHEET SIZE CALCULATION
-        m_sizeY = -m_sizeY;    // it is in absolute units
-        m_sizeX += 10000;
-        m_sizeY += 10000;
+        m_SizeY = -m_SizeY;    // it is in absolute units
+        m_SizeX += 10000;
+        m_SizeY += 10000;
 
         // A4 is minimum $Descr A4 11700 8267
-        if( m_sizeX < 11700 )
-            m_sizeX = 11700;
+        if( m_SizeX < 11700 )
+            m_SizeX = 11700;
 
-        if( m_sizeY < 8267 )
-            m_sizeY = 8267;
+        if( m_SizeY < 8267 )
+            m_SizeY = 8267;
     }
     else
     {
@@ -916,10 +909,10 @@ void PCB::ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc, const wxS
 
                 if( aNode->GetName() == wxT( "compDef" ) )
                 {
-                    module = new PCB_MODULE( this, m_board );
-                    module->Parse( aNode, aStatusBar, m_defaultMeasurementUnit,
-                                   aActualConversion );
-                    m_pcbComponents.Add( module );
+                    footprint = new PCB_FOOTPRINT( this, m_board );
+                    footprint->Parse( aNode, aStatusBar, m_DefaultMeasurementUnit,
+                                      aActualConversion );
+                    m_PcbComponents.Add( footprint );
                 }
 
                 aNode = aNode->GetNext();
@@ -936,16 +929,16 @@ void PCB::AddToBoard()
 
     m_board->SetCopperLayerCount( m_layersStackup.GetCount() );
 
-    for( i = 0; i < (int) m_pcbNetlist.GetCount(); i++ )
+    for( i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
     {
-        net = m_pcbNetlist[i];
+        net = m_PcbNetlist[i];
 
-        m_board->Add( new NETINFO_ITEM( m_board, net->m_name, net->m_netCode ) );
+        m_board->Add( new NETINFO_ITEM( m_board, net->m_Name, net->m_NetCode ) );
     }
 
-    for( i = 0; i < (int) m_pcbComponents.GetCount(); i++ )
+    for( i = 0; i < (int) m_PcbComponents.GetCount(); i++ )
     {
-        m_pcbComponents[i]->AddToBoard();
+        m_PcbComponents[i]->AddToBoard();
     }
 }
 

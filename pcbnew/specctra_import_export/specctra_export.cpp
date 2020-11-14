@@ -95,7 +95,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the top view.  So we
     // temporarily flip any footprints which are on the back side of the board to the front,
     // and record this in the FOOTPRINT's flag field.
-    db.FlipMODULEs( GetBoard() );
+    db.FlipFOOTPRINTs( GetBoard());
 
     try
     {
@@ -115,7 +115,7 @@ bool PCB_EDIT_FRAME::ExportSpecctraFile( const wxString& aFullFilename )
     }
 
     // done assuredly, even if an exception was thrown and caught.
-    db.RevertMODULEs( GetBoard() );
+    db.RevertFOOTPRINTs( GetBoard());
 
     // The two calls below to FOOTPRINT::Flip(), both set the
     // modified flag, yet their actions cancel each other out, so it should
@@ -255,11 +255,11 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
 
     for( int layer=0; layer<copperCount; ++layer )
     {
-        PCB_LAYER_ID kilayer = pcbLayer2kicad[layer];
+        PCB_LAYER_ID kilayer = m_pcbLayer2kicad[layer];
 
         if( onAllCopperLayers || aPad->IsOnLayer( kilayer ) )
         {
-            layerName[reportedLayers++] = layerIds[layer].c_str();
+            layerName[reportedLayers++] = m_layerIds[layer].c_str();
 
             if( !onAllCopperLayers )
             {
@@ -632,7 +632,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
 
                 circle->SetDiameter( diameter );
                 circle->SetVertex( vertex );
-                circle->SetLayerId( layerIds[layer].c_str() );
+                circle->SetLayerId( m_layerIds[layer].c_str() );
             }
         }
         // else if() could there be a square keepout here?
@@ -647,9 +647,9 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
                 continue;
 
             PADSTACK*               padstack = makePADSTACK( aBoard, pad );
-            PADSTACKSET::iterator   iter = padstackset.find( *padstack );
+            PADSTACKSET::iterator   iter = m_padstackset.find( *padstack );
 
-            if( iter != padstackset.end() )
+            if( iter != m_padstackset.end() )
             {
                 // padstack is a duplicate, delete it and use the original
                 delete padstack;
@@ -657,7 +657,7 @@ IMAGE* SPECCTRA_DB::makeIMAGE( BOARD* aBoard, FOOTPRINT* aFootprint )
             }
             else
             {
-                padstackset.insert( padstack );
+                m_padstackset.insert( padstack );
             }
 
             PIN* pin = new PIN( image );
@@ -796,7 +796,7 @@ PADSTACK* SPECCTRA_DB::makeVia( int aCopperDiameter, int aDrillDiameter,
         shape->SetShape( circle );
 
         circle->SetDiameter( dsnDiameter );
-        circle->SetLayerId( layerIds[layer].c_str() );
+        circle->SetLayerId( m_layerIds[layer].c_str() );
     }
 
     snprintf( name, sizeof(name), "Via[%d-%d]_%.6g:%.6g_um",
@@ -819,8 +819,8 @@ PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 
     aVia->LayerPair( &topLayerNum, &botLayerNum );
 
-    int topLayer = kicadLayer2pcb[topLayerNum];
-    int botLayer = kicadLayer2pcb[botLayerNum];
+    int topLayer = m_kicadLayer2pcb[topLayerNum];
+    int botLayer = m_kicadLayer2pcb[botLayerNum];
 
     if( topLayer > botLayer )
         std::swap( topLayer, botLayer );
@@ -863,7 +863,7 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 
             keepout->SetShape( poly_ko );
             poly_ko->SetLayerId( "signal" );
-            pcb->structure->keepouts.push_back( keepout );
+            m_pcb->structure->keepouts.push_back( keepout );
 
             SHAPE_LINE_CHAIN& hole = outlines.Hole( cnt, ii );
 
@@ -925,8 +925,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
-    if( !pcb )
-        pcb = SPECCTRA_DB::MakePCB();
+    if( !m_pcb )
+        m_pcb = SPECCTRA_DB::MakePCB();
 
     //-----<layer_descriptor>-----------------------------------------------
     {
@@ -940,15 +940,15 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         for( int pcbNdx=0; pcbNdx<layerCount; ++pcbNdx )
         {
-            LAYER* layer = new LAYER( pcb->structure );
+            LAYER* layer = new LAYER( m_pcb->structure );
 
-            pcb->structure->layers.push_back( layer );
+            m_pcb->structure->layers.push_back( layer );
 
-            layer->name = layerIds[pcbNdx];
+            layer->name = m_layerIds[pcbNdx];
 
             DSN_T layerType;
 
-            switch( aBoard->GetLayerType( pcbLayer2kicad[pcbNdx] ) )
+            switch( aBoard->GetLayerType( m_pcbLayer2kicad[pcbNdx] ) )
             {
             default:
             case LT_SIGNAL: layerType = T_signal;       break;
@@ -975,7 +975,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
     // a space in a quoted token is NOT a terminator, true establishes this.
-    pcb->parser->space_in_quoted_tokens = true;
+    m_pcb->parser->space_in_quoted_tokens = true;
 
     //-----<unit_descriptor> & <resolution_descriptor>--------------------
     {
@@ -983,9 +983,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // which is 100 nm resolution.  Possibly more resolution is possible
         // in freerouter, but it would need testing.
 
-        pcb->unit->units = T_um;
-        pcb->resolution->units  = T_um;
-        pcb->resolution->value  = 10;       // tenths of a um
+        m_pcb->unit->units = T_um;
+        m_pcb->resolution->units  = T_um;
+        m_pcb->resolution->value  = 10;       // tenths of a um
         // pcb->resolution->value = 1000;   // "thousandths of a um" (i.e. "nm")
     }
 
@@ -996,7 +996,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // of an exception.
         BOUNDARY* boundary = new BOUNDARY( 0 );
 
-        pcb->structure->SetBOUNDARY( boundary );
+        m_pcb->structure->SetBOUNDARY( boundary );
         fillBOUNDARY( aBoard, boundary );
     }
 
@@ -1011,7 +1011,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         double    clearance = scale( defaultClearance );
 
-        STRINGS&  rules = pcb->structure->rules->rules;
+        STRINGS&  rules = m_pcb->structure->rules->rules;
 
         sprintf( rule, "(width %.6g)", scale( defaultTrackWidth ) );
         rules.push_back( rule );
@@ -1088,9 +1088,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             if( ! IsCopperLayer( item->GetLayer() ) )
                 continue;
 
-            COPPER_PLANE*   plane = new COPPER_PLANE( pcb->structure );
+            COPPER_PLANE*   plane = new COPPER_PLANE( m_pcb->structure );
 
-            pcb->structure->planes.push_back( plane );
+            m_pcb->structure->planes.push_back( plane );
 
             PATH* mainPolygon = new     PATH( plane, T_polygon );
 
@@ -1104,19 +1104,19 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 // This is one of those no connection zones, netcode=0, and it has no name.
                 // Create a unique, bogus netname.
-                NET* no_net = new NET( pcb->network );
+                NET* no_net = new NET( m_pcb->network );
 
                 sprintf( name, "@:no_net_%d", netlessZones++ );
                 no_net->net_id = name;
 
                 // add the bogus net name to network->nets.
-                pcb->network->nets.push_back( no_net );
+                m_pcb->network->nets.push_back( no_net );
 
                 // use the bogus net name in the netless zone.
                 plane->name = no_net->net_id;
             }
 
-            mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+            mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ item->GetLayer() ] ];
 
             // Handle the main outlines
             SHAPE_POLY_SET::ITERATOR iterator;
@@ -1163,7 +1163,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                     window->SetShape( cutout );
 
-                    cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+                    cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ item->GetLayer() ] ];
                 }
 
                 // If the point in this iteration is the last of the contour, the next iteration
@@ -1229,13 +1229,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 if( !item->IsOnLayer( PCB_LAYER_ID( layer ) ) )
                     continue;
 
-                KEEPOUT*   keepout = new KEEPOUT( pcb->structure, keepout_type );
-                pcb->structure->keepouts.push_back( keepout );
+                KEEPOUT*   keepout = new KEEPOUT( m_pcb->structure, keepout_type );
+                m_pcb->structure->keepouts.push_back( keepout );
 
                 PATH* mainPolygon = new PATH( keepout, T_polygon );
                 keepout->SetShape( mainPolygon );
 
-                mainPolygon->layer_id = layerIds[ kicadLayer2pcb[ layer ] ];
+                mainPolygon->layer_id = m_layerIds[ m_kicadLayer2pcb[ layer ] ];
 
                 // Handle the main outlines
                 SHAPE_POLY_SET::ITERATOR iterator;
@@ -1280,7 +1280,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                         window->SetShape( cutout );
 
-                        cutout->layer_id = layerIds[ kicadLayer2pcb[ item->GetLayer() ] ];
+                        cutout->layer_id = m_layerIds[ m_kicadLayer2pcb[ item->GetLayer() ] ];
                     }
 
                     isStartContour = iterator.IsEndContour();
@@ -1308,7 +1308,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
     //-----<build the images, components, and netlist>-----------------------
     {
-        PIN_REF empty( pcb->network );
+        PIN_REF empty( m_pcb->network );
 
         std::string componentId;
 
@@ -1318,10 +1318,10 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         deleteNETs();
 
         // expand the net vector to highestNetCode+1, setting empty to NULL
-        nets.resize( highestNetCode + 1, NULL );
+        m_nets.resize( highestNetCode + 1, NULL );
 
-        for( unsigned i = 1 /* skip "No Net" at [0] */; i < nets.size(); ++i )
-            nets[i] = new NET( pcb->network );
+        for( unsigned i = 1 /* skip "No Net" at [0] */; i < m_nets.size(); ++i )
+            m_nets[i] = new NET( m_pcb->network );
 
         for( unsigned ii = 0; ii < aBoard->GetNetCount(); ii++ )
         {
@@ -1329,12 +1329,12 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             int             netcode = net->GetNet();
 
             if( netcode > 0 )
-                nets[ netcode ]->net_id = TO_UTF8( net->GetNetname() );
+                m_nets[ netcode ]->net_id = TO_UTF8( net->GetNetname() );
         }
 
         items.Collect( aBoard, scanMODULEs );
 
-        padstackset.clear();
+        m_padstackset.clear();
 
         for( int m = 0; m<items.GetCount(); ++m )
         {
@@ -1360,7 +1360,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
                 if( netcode > 0 )
                 {
-                    NET* net = nets[netcode];
+                    NET* net = m_nets[netcode];
 
                     net->pins.push_back( empty );
 
@@ -1372,7 +1372,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
             }
 
 
-            IMAGE* registered = pcb->library->LookupIMAGE( image );
+            IMAGE* registered = m_pcb->library->LookupIMAGE( image );
 
             if( registered != image )
             {
@@ -1382,7 +1382,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 image = registered;
             }
 
-            COMPONENT*  comp = pcb->placement->LookupCOMPONENT( image->GetImageId() );
+            COMPONENT*  comp = m_pcb->placement->LookupCOMPONENT( image->GetImageId() );
 
             PLACE*      place = new PLACE( comp );
 
@@ -1406,25 +1406,25 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         // copy the SPECCTRA_DB::padstackset to the LIBRARY.  Since we are
         // removing, do not increment the iterator
-        for( PADSTACKSET::iterator i = padstackset.begin(); i!=padstackset.end();
-             i = padstackset.begin() )
+        for( PADSTACKSET::iterator i = m_padstackset.begin(); i != m_padstackset.end();
+             i = m_padstackset.begin() )
         {
-            PADSTACKSET::auto_type ps = padstackset.release( i );
+            PADSTACKSET::auto_type ps = m_padstackset.release( i );
             PADSTACK* padstack = ps.release();
 
-            pcb->library->AddPadstack( padstack );
+            m_pcb->library->AddPadstack( padstack );
         }
 
         // copy our SPECCTRA_DB::nets to the pcb->network
-        for( unsigned n = 1; n<nets.size(); ++n )
+        for( unsigned n = 1; n < m_nets.size(); ++n )
         {
-            NET* net = nets[n];
+            NET* net = m_nets[n];
 
             if( net->pins.size() )
             {
                 // give ownership to pcb->network
-                pcb->network->nets.push_back( net );
-                nets[n] = 0;
+                m_pcb->network->nets.push_back( net );
+                m_nets[n] = 0;
             }
         }
     }
@@ -1464,8 +1464,8 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // we AppendVia() this first one, there is no way it can be a duplicate,
         // the pcb->library via container is empty at this point.  After this,
         // we'll have to use LookupVia().
-        wxASSERT( pcb->library->vias.size() == 0 );
-        pcb->library->AppendVia( via );
+        wxASSERT( m_pcb->library->vias.size() == 0 );
+        m_pcb->library->AppendVia( via );
 
 #if 0
         // I've seen no way to make stock vias useable by freerouter.  Also the
@@ -1502,7 +1502,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                            m_top_via_layer, m_bot_via_layer );
 
             // maybe add 'via' to the library, but only if unique.
-            PADSTACK* registered = pcb->library->LookupVia( via );
+            PADSTACK* registered = m_pcb->library->LookupVia( via );
 
             if( registered != via )
                 delete via;
@@ -1521,7 +1521,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         items.Collect( aBoard, scanTRACKs );
 
         std::string netname;
-        WIRING*     wiring = pcb->wiring;
+        WIRING*     wiring = m_pcb->wiring;
         PATH*       path = 0;
 
         int old_netcode = -1;
@@ -1562,13 +1562,13 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 wire->wire_type = T_protect;    // @todo, this should be configurable
 
                 LAYER_NUM kiLayer  = track->GetLayer();
-                int pcbLayer = kicadLayer2pcb[kiLayer];
+                int pcbLayer = m_kicadLayer2pcb[kiLayer];
 
                 path = new PATH( wire );
 
                 wire->SetShape( path );
 
-                path->layer_id = layerIds[pcbLayer];
+                path->layer_id = m_layerIds[pcbLayer];
                 path->aperture_width = scale( old_width );
 
                 path->AppendPoint( mapPt( track->GetStart() ) );
@@ -1598,7 +1598,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 continue;
 
             PADSTACK*   padstack    = makeVia( via );
-            PADSTACK*   registered  = pcb->library->LookupVia( padstack );
+            PADSTACK*   registered  = m_pcb->library->LookupVia( padstack );
 
             // if the one looked up is not our padstack, then delete our padstack
             // since it was a duplicate of one already registered.
@@ -1607,9 +1607,9 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
                 delete padstack;
             }
 
-            WIRE_VIA* dsnVia = new WIRE_VIA( pcb->wiring );
+            WIRE_VIA* dsnVia = new WIRE_VIA( m_pcb->wiring );
 
-            pcb->wiring->wire_vias.push_back( dsnVia );
+            m_pcb->wiring->wire_vias.push_back( dsnVia );
 
             dsnVia->padstack_id = registered->padstack_id;
             dsnVia->vertexes.push_back( mapPt( via->GetPosition() ) );
@@ -1633,11 +1633,11 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
 
         // Output the vias in the padstack list here, by name only.  This must
         // be done after exporting existing vias as WIRE_VIAs.
-        VIA* vias = pcb->structure->via;
+        VIA* vias = m_pcb->structure->via;
 
-        for(  unsigned viaNdx = 0; viaNdx < pcb->library->vias.size(); ++viaNdx )
+        for( unsigned viaNdx = 0; viaNdx < m_pcb->library->vias.size(); ++viaNdx )
         {
-            vias->AppendVia( pcb->library->vias[viaNdx].padstack_id.c_str() );
+            vias->AppendVia( m_pcb->library->vias[viaNdx].padstack_id.c_str() );
         }
     }
 
@@ -1687,9 +1687,9 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 
     char    text[256];
 
-    CLASS*  clazz = new CLASS( pcb->network );
+    CLASS*  clazz = new CLASS( m_pcb->network );
 
-    pcb->network->classes.push_back( clazz );
+    m_pcb->network->classes.push_back( clazz );
 
     // freerouter creates a class named 'default' anyway, and if we
     // try and use that, we end up with two 'default' via rules so use
@@ -1731,7 +1731,7 @@ void SPECCTRA_DB::exportNETCLASS( const NETCLASSPTR& aNetClass, BOARD* aBoard )
 }
 
 
-void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
+void SPECCTRA_DB::FlipFOOTPRINTs( BOARD* aBoard )
 {
     // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
     // top view.
@@ -1747,28 +1747,28 @@ void SPECCTRA_DB::FlipMODULEs( BOARD* aBoard )
         }
     }
 
-    modulesAreFlipped = true;
+    m_footprintsAreFlipped = true;
 }
 
 
-void SPECCTRA_DB::RevertMODULEs( BOARD* aBoard )
+void SPECCTRA_DB::RevertFOOTPRINTs( BOARD* aBoard )
 {
-    if( !modulesAreFlipped )
+    if( !m_footprintsAreFlipped )
         return;
 
     // DSN Images (=KiCad FOOTPRINTs and PADs) must be presented from the
     // top view.  Restore those that were flipped.
     // Note: to export footprints, the footprints were flipped around the X axis,
-    for( auto module : aBoard->Footprints() )
+    for( FOOTPRINT* footprint : aBoard->Footprints() )
     {
-        if( module->GetFlag() )
+        if( footprint->GetFlag() )
         {
-            module->Flip( module->GetPosition(), false );
-            module->SetFlag( 0 );
+            footprint->Flip( footprint->GetPosition(), false );
+            footprint->SetFlag( 0 );
         }
     }
 
-    modulesAreFlipped = false;
+    m_footprintsAreFlipped = false;
 }
 
 }       // namespace DSN

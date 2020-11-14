@@ -85,7 +85,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
                 aCollector.Remove( item );
             }
 
-            // case 2: selection contains both the module and its pads - remove the pads
+            // case 2: selection contains both the footprint and its pads - remove the pads
             if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
                 aCollector.Remove( item );
         }
@@ -107,7 +107,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
                     aCollector.Append( fp );
             }
 
-            // case 2: selection contains both the module and its pads - remove the pads
+            // case 2: selection contains both the footprint and its pads - remove the pads
             if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
                 aCollector.Remove( item );
         }

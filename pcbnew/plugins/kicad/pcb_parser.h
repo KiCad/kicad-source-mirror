@@ -163,7 +163,7 @@ class PCB_PARSER : public PCB_LEXER
 
     /**
      * Function parseFOOTPRINT_unchecked
-     * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
+     * Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
     FOOTPRINT*      parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = 0 );
     FP_TEXT*        parseFP_TEXT();
@@ -182,7 +182,7 @@ class PCB_PARSER : public PCB_LEXER
 
     /**
      * Function parseBOARD_unchecked
-     * Parse a module, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
+     * Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
      */
     BOARD*          parseBOARD_unchecked();
 

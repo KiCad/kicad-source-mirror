@@ -380,7 +380,7 @@ public:
     /// Tool for creating an array of objects
     static TOOL_ACTION createArray;
 
-    /// Display module edges as outlines
+    /// Display footprint graphics as outlines
     static TOOL_ACTION graphicsOutlines;
 
     /// Display texts as lines
@@ -394,7 +394,7 @@ public:
     /// Copy the default pad settings to the selected pad
     static TOOL_ACTION applyPadSettings;
 
-    /// Copy the current pad's settings to other pads in the module or on the board
+    /// Copy the current pad's settings to other pads in the footprint or on the board
     static TOOL_ACTION pushPadSettings;
 
     // Microwave tools

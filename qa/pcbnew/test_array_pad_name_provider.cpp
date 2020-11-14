@@ -36,9 +36,9 @@
 #include <pad.h>
 
 /**
- * Make a module with a given list of named pads
+ * Make a footprint with a given list of named pads
  */
-static std::unique_ptr<FOOTPRINT> ModuleWithPads( const std::vector<wxString> aNames )
+static std::unique_ptr<FOOTPRINT> FootprintWithPads( const std::vector<wxString> aNames )
 {
     std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( nullptr );
 
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_SUITE( ArrayPadNameProv )
 struct APNP_CASE
 {
     std::string                    m_case_name;
-    bool                           m_using_module;
+    bool                           m_using_footprint;
     std::vector<wxString>          m_existing_pads;
     std::unique_ptr<ARRAY_OPTIONS> m_arr_opts;
     std::vector<wxString>          m_exp_arr_names;
@@ -71,10 +71,10 @@ struct APNP_CASE
 
 
 /**
- * Get Array Pad Name Provider cases when a module is looked
- * at to determine what names are available.
+ * Get Array Pad Name Provider cases when a footprint is looked at to determine what names
+ * are available.
  */
-std::vector<APNP_CASE> GetModuleAPNPCases()
+std::vector<APNP_CASE> GetFootprintAPNPCases()
 {
     std::vector<APNP_CASE> cases;
 
@@ -93,7 +93,7 @@ std::vector<APNP_CASE> GetModuleAPNPCases()
             { "2", "4", "5", "6", "7" },
     } );
 
-    // one without a module
+    // one without a footprint
     opts = std::make_unique<ARRAY_GRID_OPTIONS>();
 
     // simple linear numbering (again)
@@ -102,7 +102,7 @@ std::vector<APNP_CASE> GetModuleAPNPCases()
     opts->m_pri_axis.SetAxisType( ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC );
 
     cases.push_back( {
-            "Simple linear, no module",
+            "Simple linear, no footprint",
             false,
             {}, // not used
             std::move( opts ),
@@ -135,20 +135,18 @@ void CheckPadNameProvider( ARRAY_PAD_NAME_PROVIDER& aProvider, std::vector<wxStr
 }
 
 
-BOOST_AUTO_TEST_CASE( ModuleCases )
+BOOST_AUTO_TEST_CASE( FootprintCases )
 {
-    for( const auto& c : GetModuleAPNPCases() )
+    for( const auto& c : GetFootprintAPNPCases() )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            std::unique_ptr<FOOTPRINT> module;
+            std::unique_ptr<FOOTPRINT> footprint;
 
-            if( c.m_using_module )
-            {
-                module = ModuleWithPads( c.m_existing_pads );
-            }
+            if( c.m_using_footprint )
+                footprint = FootprintWithPads( c.m_existing_pads );
 
-            ARRAY_PAD_NAME_PROVIDER apnp( module.get(), *c.m_arr_opts );
+            ARRAY_PAD_NAME_PROVIDER apnp( footprint.get(), *c.m_arr_opts );
 
             CheckPadNameProvider( apnp, c.m_exp_arr_names );
         }

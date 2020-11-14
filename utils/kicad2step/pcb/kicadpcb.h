@@ -70,9 +70,9 @@ private:
     std::map<std::string, int> m_layersNames;
 
     // PCB parameters/entities
-    double                      m_thickness;
-    std::vector< KICADFOOTPRINT* > m_modules;
-    std::vector< KICADCURVE* >  m_curves;
+    double                       m_thickness;
+    std::vector<KICADFOOTPRINT*> m_footprints;
+    std::vector<KICADCURVE*>     m_curves;
 
     bool parsePCB( SEXPR::SEXPR* data );
     bool parseGeneral( SEXPR::SEXPR* data );

@@ -78,9 +78,9 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
     // Same as KiCad now except for B_Cu
     unsigned layerCount = aBoard->GetCopperLayerCount();
 
-    layerIds.clear();
-    pcbLayer2kicad.resize( layerCount );
-    kicadLayer2pcb.resize( B_Cu + 1 );
+    m_layerIds.clear();
+    m_pcbLayer2kicad.resize( layerCount );
+    m_kicadLayer2pcb.resize( B_Cu + 1 );
 
 #if 0 // was:
     for( LAYER_NUM kiNdx = layerCount - 1, pcbNdx=FIRST_LAYER;
@@ -99,22 +99,22 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 
     // establish bi-directional mapping between KiCad's BOARD layer and PCB layer
 
-    for( unsigned i = 0;  i < kicadLayer2pcb.size();  ++i )
+    for( unsigned i = 0; i < m_kicadLayer2pcb.size(); ++i )
     {
         if( i < layerCount-1 )
-            kicadLayer2pcb[i] = i;
+            m_kicadLayer2pcb[i] = i;
         else
-            kicadLayer2pcb[i] = layerCount - 1;
+            m_kicadLayer2pcb[i] = layerCount - 1;
     }
 
-    for( unsigned i = 0;  i < pcbLayer2kicad.size();  ++i )
+    for( unsigned i = 0; i < m_pcbLayer2kicad.size(); ++i )
     {
         PCB_LAYER_ID id = ( i < layerCount-1 ) ? ToLAYER_ID( i ) : B_Cu;
 
-        pcbLayer2kicad[i] = id;
+        m_pcbLayer2kicad[i] = id;
 
         // save the specctra layer name in SPECCTRA_DB::layerIds for later.
-        layerIds.push_back( TO_UTF8( aBoard->GetLayerName( id ) ) );
+        m_layerIds.push_back(TO_UTF8( aBoard->GetLayerName( id ) ) );
     }
 
 #endif
@@ -123,9 +123,9 @@ void SPECCTRA_DB::buildLayerMaps( BOARD* aBoard )
 
 int SPECCTRA_DB::findLayerName( const std::string& aLayerName ) const
 {
-    for( int i=0;  i < int(layerIds.size());  ++i )
+    for( int i=0;  i < int( m_layerIds.size()); ++i )
     {
-        if( 0 == aLayerName.compare( layerIds[i] ) )
+        if( 0 == aLayerName.compare( m_layerIds[i] ) )
             return i;
     }
     return -1;
@@ -254,7 +254,7 @@ void SPECCTRA_DB::LoadPCB( const wxString& aFilename )
 
     SetPCB( new PCB() );
 
-    doPCB( pcb );
+    doPCB( m_pcb );
     PopReader();
 }
 
@@ -273,7 +273,7 @@ void SPECCTRA_DB::LoadSESSION( const wxString& aFilename )
 
     SetSESSION( new SESSION() );
 
-    doSESSION( session );
+    doSESSION( m_session );
 
     PopReader();
 }
@@ -420,7 +420,7 @@ void SPECCTRA_DB::doPARSER( PARSER* growth )
                 Expecting( T_QUOTE_DEF );
             SetStringDelimiter( (unsigned char) *CurText() );
             growth->string_quote = *CurText();
-            quote_char = CurText();
+            m_quote_char = CurText();
             NeedRIGHT();
             break;
 
@@ -1400,12 +1400,12 @@ void SPECCTRA_DB::doRULE( RULE* growth )
                 builder += ' ';
 
             if( tok==T_STRING )
-                builder += quote_char;
+                builder += m_quote_char;
 
             builder += CurText();
 
             if( tok==T_STRING )
-                builder += quote_char;
+                builder += m_quote_char;
         }
 
         // When the nested rule is closed with a T_RIGHT and we are back down
@@ -2576,12 +2576,12 @@ void SPECCTRA_DB::doCLASS( CLASS* growth )
                             builder += ' ';
 
                         if( tok==T_STRING )
-                            builder += quote_char;
+                            builder += m_quote_char;
 
                         builder += CurText();
 
                         if( tok==T_STRING )
-                            builder += quote_char;
+                            builder += m_quote_char;
                     }
 
                     // When the nested rule is closed with a T_RIGHT and we are back down
@@ -3441,25 +3441,25 @@ void SPECCTRA_DB::doSUPPLY_PIN( SUPPLY_PIN* growth )
 
 void SPECCTRA_DB::ExportPCB( const wxString& aFilename, bool aNameChange )
 {
-    if( pcb )
+    if( m_pcb )
     {
-        FILE_OUTPUTFORMATTER    formatter( aFilename, wxT( "wt" ), quote_char[0] );
+        FILE_OUTPUTFORMATTER    formatter( aFilename, wxT( "wt" ), m_quote_char[0] );
 
         if( aNameChange )
-            pcb->pcbname = TO_UTF8( aFilename );
+            m_pcb->pcbname = TO_UTF8( aFilename );
 
-        pcb->Format( &formatter, 0 );
+        m_pcb->Format( &formatter, 0 );
     }
 }
 
 
 void SPECCTRA_DB::ExportSESSION( const wxString& aFilename )
 {
-    if( session )
+    if( m_session )
     {
-        FILE_OUTPUTFORMATTER formatter( aFilename, wxT( "wt" ), quote_char[0] );
+        FILE_OUTPUTFORMATTER formatter( aFilename, wxT( "wt" ), m_quote_char[0] );
 
-        session->Format( &formatter, 0 );
+        m_session->Format( &formatter, 0 );
     }
 }
 

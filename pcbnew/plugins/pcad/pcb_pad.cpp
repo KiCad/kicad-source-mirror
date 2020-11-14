@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,9 @@ PCB_PAD::PCB_PAD( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) :
         PCB_COMPONENT( aCallbacks, aBoard )
 {
     m_objType       = wxT( 'P' );
-    m_number        = 0;
-    m_hole          = 0;
-    m_isHolePlated  = true;
+    m_Number        = 0;
+    m_Hole          = 0;
+    m_IsHolePlated  = true;
     m_defaultPinDes = wxEmptyString;
 }
 
@@ -49,8 +49,8 @@ PCB_PAD::~PCB_PAD()
 {
     int i;
 
-    for( i = 0; i < (int) m_shapes.GetCount(); i++ )
-        delete m_shapes[i];
+    for( i = 0; i < (int) m_Shapes.GetCount(); i++ )
+        delete m_Shapes[i];
 }
 
 
@@ -69,7 +69,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
     if( lNode )
     {
         lNode->GetNodeContent().ToLong( &num );
-        m_number = (int) num;
+        m_Number = (int) num;
     }
 
     lNode = FindNode( aNode, wxT( "padStyleRef" ) );
@@ -146,10 +146,10 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
     cNode = FindNode( lNode, wxT( "holeDiam" ) );
 
     if( cNode )
-        SetWidth( cNode->GetNodeContent(), aDefaultMeasurementUnit, &m_hole, aActualConversion );
+        SetWidth( cNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Hole, aActualConversion );
 
     if( FindNodeGetContent( lNode, wxT( "isHolePlated" ) ) == wxT( "False" ) )
-        m_isHolePlated = false;
+        m_IsHolePlated = false;
 
     cNode   = FindNode( lNode, wxT( "padShape" ) );
 
@@ -163,7 +163,7 @@ void PCB_PAD::Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
             {
                 padShape = new PCB_PAD_SHAPE( m_callbacks, m_board );
                 padShape->Parse( cNode, aDefaultMeasurementUnit, aActualConversion );
-                m_shapes.Add( padShape );
+                m_Shapes.Add( padShape );
             }
         }
 
@@ -181,8 +181,8 @@ void PCB_PAD::Flip()
     if( m_objType == wxT( 'P' ) )
         m_rotation = -m_rotation;
 
-    for( i = 0; i < (int)m_shapes.GetCount(); i++ )
-        m_shapes[i]->m_KiCadLayer = FlipLayer( m_shapes[i]->m_KiCadLayer );
+    for( i = 0; i < (int)m_Shapes.GetCount(); i++ )
+        m_Shapes[i]->m_KiCadLayer = FlipLayer( m_Shapes[i]->m_KiCadLayer );
 }
 
 
@@ -197,21 +197,21 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
     PAD* pad = new PAD( aFootprint );
 
-    if( !m_isHolePlated && m_hole )
+    if( !m_IsHolePlated && m_Hole )
     {
         // mechanical hole
         pad->SetShape( PAD_SHAPE_CIRCLE );
         pad->SetAttribute( PAD_ATTRIB_NPTH );
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
-        pad->SetDrillSize( wxSize( m_hole, m_hole ) );
-        pad->SetSize( wxSize( m_hole, m_hole ) );
+        pad->SetDrillSize( wxSize( m_Hole, m_Hole ) );
+        pad->SetSize( wxSize( m_Hole, m_Hole ) );
 
         // Mounting Hole: Solder Mask Margin from Top Layer Width size.
         // Used the default zone clearance (simplify)
-        if( m_shapes.GetCount() && m_shapes[0]->m_shape == wxT( "MtHole" ) )
+        if( m_Shapes.GetCount() && m_Shapes[0]->m_Shape == wxT( "MtHole" ) )
         {
-            int sm_margin = ( m_shapes[0]->m_width - m_hole ) / 2;
+            int sm_margin = ( m_Shapes[0]->m_Width - m_Hole ) / 2;
             pad->SetLocalSolderMaskMargin( sm_margin );
             pad->SetLocalClearance( sm_margin + Millimeter2iu( 0.254 ) );
         }
@@ -220,21 +220,21 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
     }
     else
     {
-        ( m_hole ) ? padType = PAD_ATTRIB_PTH : padType = PAD_ATTRIB_SMD;
+        ( m_Hole ) ? padType = PAD_ATTRIB_PTH : padType = PAD_ATTRIB_SMD;
 
         // form layer mask
-        for( i = 0; i < (int) m_shapes.GetCount(); i++ )
+        for( i = 0; i < (int) m_Shapes.GetCount(); i++ )
         {
-            padShape = m_shapes[i];
+            padShape = m_Shapes[i];
 
-            if( padShape->m_width > 0 && padShape->m_height > 0 )
+            if( padShape->m_Width > 0 && padShape->m_Height > 0 )
             {
                 if( padShape->m_KiCadLayer == F_Cu ||
                     padShape->m_KiCadLayer == B_Cu )
                 {
-                    padShapeName = padShape->m_shape;
-                    width = padShape->m_width;
-                    height = padShape->m_height;
+                    padShapeName = padShape->m_Shape;
+                    width = padShape->m_Width;
+                    height = padShape->m_Height;
 
                     // assume this is SMD pad
                     if( padShape->m_KiCadLayer == F_Cu )
@@ -280,7 +280,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
         pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
         pad->SetOffset( wxPoint( 0, 0 ) );
-        pad->SetDrillSize( wxSize( m_hole, m_hole ) );
+        pad->SetDrillSize( wxSize( m_Hole, m_Hole ) );
 
         pad->SetAttribute( padType );
 
@@ -298,8 +298,8 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
 
     if( !aEncapsulatedPad )
     {
-        // pad's "Position" is not relative to the module's,
-        // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+        // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative to
+        // the footprint's but is the unrotated coordinate.
         wxPoint padpos( m_positionX, m_positionY );
         pad->SetPos0( padpos );
         RotatePoint( &padpos, aFootprint->GetOrientation() );
@@ -320,17 +320,17 @@ void PCB_PAD::AddToBoard()
     if( m_objType == wxT( 'V' ) ) // via
     {
         // choose one of the shapes
-        for( i = 0; i < (int) m_shapes.GetCount(); i++ )
+        for( i = 0; i < (int) m_Shapes.GetCount(); i++ )
         {
-            padShape = m_shapes[i];
+            padShape = m_Shapes[i];
 
-            if( padShape->m_width > 0 && padShape->m_height > 0 )
+            if( padShape->m_Width > 0 && padShape->m_Height > 0 )
             {
                 if( padShape->m_KiCadLayer == F_Cu
                     || padShape->m_KiCadLayer == B_Cu )
                 {
-                    width = padShape->m_width;
-                    height = padShape->m_height;
+                    width = padShape->m_Width;
+                    height = padShape->m_Height;
 
                     break;
                 }
@@ -351,7 +351,7 @@ void PCB_PAD::AddToBoard()
             via->SetWidth( height );
             via->SetViaType( VIATYPE::THROUGH );
             via->SetLayerPair( F_Cu, B_Cu );
-            via->SetDrill( m_hole );
+            via->SetDrill( m_Hole );
 
             via->SetLayer( m_KiCadLayer );
             via->SetNetCode( m_netCode );
@@ -359,14 +359,13 @@ void PCB_PAD::AddToBoard()
     }
     else // pad
     {
-        FOOTPRINT* module = new FOOTPRINT( m_board );
-        m_board->Add( module, ADD_MODE::APPEND );
+        FOOTPRINT* footprint = new FOOTPRINT( m_board );
+        m_board->Add( footprint, ADD_MODE::APPEND );
 
         m_name.text = m_defaultPinDes;
 
-        module->SetPosition( wxPoint( m_positionX, m_positionY ) );
-        AddToFootprint( module, 0, true );
-
+        footprint->SetPosition( wxPoint( m_positionX, m_positionY ) );
+        AddToFootprint( footprint, 0, true );
     }
 }
 

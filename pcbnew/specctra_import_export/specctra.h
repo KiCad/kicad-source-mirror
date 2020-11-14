@@ -3600,49 +3600,43 @@ typedef boost::ptr_set<PADSTACK>    PADSTACKSET;
 
 /**
  * SPECCTRA_DB
- * holds a DSN data tree, usually coming from a DSN file. Is essentially a
- * SPECCTRA_PARSER class.
+ * holds a DSN data tree, usually coming from a DSN file. Is essentially a SPECCTRA_PARSER class.
  */
 class SPECCTRA_DB : public SPECCTRA_LEXER
 {
     /// specctra DSN keywords
     static const KEYWORD keywords[];
-    static const unsigned keywordCount;
 
-    PCB*            pcb;
-    SESSION*        session;
-    wxString        filename;
-    std::string     quote_char;
+    PCB*              m_pcb;
+    SESSION*          m_session;
+    wxString          m_filename;
+    std::string       m_quote_char;
 
-    bool            modulesAreFlipped;
+    bool              m_footprintsAreFlipped;
 
-    STRING_FORMATTER sf;
+    STRING_FORMATTER  m_sf;
 
-    STRINGS         layerIds;       ///< indexed by PCB layer number
+    STRINGS           m_layerIds;        ///< indexed by PCB layer number
 
-    /// maps BOARD layer number to PCB layer numbers
-    std::vector<int> kicadLayer2pcb;
-
-    /// maps PCB layer number to BOARD layer numbers
-    std::vector<PCB_LAYER_ID>   pcbLayer2kicad;
+    std::vector<int>          m_kicadLayer2pcb;  ///< maps BOARD layer number to PCB layer numbers
+    std::vector<PCB_LAYER_ID> m_pcbLayer2kicad;  ///< maps PCB layer number to BOARD layer numbers
 
     /// used during FromSESSION() only, memory for it is not owned here.
-    UNIT_RES*       routeResolution;
+    UNIT_RES*         m_routeResolution;
 
     /// a copy to avoid passing as an argument, memory for it is not owned here.
-    BOARD*          sessionBoard;
+    BOARD*            m_sessionBoard;
 
     static const KICAD_T scanPADs[];
 
-    PADSTACKSET     padstackset;
+    PADSTACKSET       m_padstackset;
 
     /// we don't want ownership here permanently, so we don't use boost::ptr_vector
-    std::vector<NET*>   nets;
+    std::vector<NET*> m_nets;
 
     /// specctra cu layers, 0 based index:
-    int     m_top_via_layer;
-    int     m_bot_via_layer;
-
+    int               m_top_via_layer;
+    int               m_bot_via_layer;
 
     /**
      * Function buildLayerMaps
@@ -3808,10 +3802,10 @@ class SPECCTRA_DB : public SPECCTRA_LEXER
      */
     void deleteNETs()
     {
-        for( unsigned n=0;  n<nets.size();  ++n )
-            delete nets[n];
+        for( unsigned n=0; n < m_nets.size(); ++n )
+            delete m_nets[n];
 
-        nets.clear();
+        m_nets.clear();
     }
 
     /**
@@ -3848,24 +3842,24 @@ public:
         // we don't own it:
         wxASSERT( !iOwnReaders );
 
-        pcb   = 0;
-        session = 0;
-        quote_char += '"';
-        modulesAreFlipped = false;
+        m_pcb   = 0;
+        m_session = 0;
+        m_quote_char += '"';
+        m_footprintsAreFlipped = false;
 
         SetSpecctraMode( true );
 
         // Avoid not initialized members:
-        routeResolution = NULL;
-        sessionBoard = NULL;
+        m_routeResolution = NULL;
+        m_sessionBoard = NULL;
         m_top_via_layer = 0;
         m_bot_via_layer = 0;
     }
 
     virtual ~SPECCTRA_DB()
     {
-        delete pcb;
-        delete session;
+        delete m_pcb;
+        delete m_session;
 
         deleteNETs();
     }
@@ -3882,10 +3876,10 @@ public:
      */
     void SetPCB( PCB* aPcb )
     {
-        delete pcb;
-        pcb = aPcb;
+        delete m_pcb;
+        m_pcb = aPcb;
     }
-    PCB*  GetPCB()  { return pcb; }
+    PCB*  GetPCB()  { return m_pcb; }
 
     /**
      * Function SetSESSION
@@ -3893,10 +3887,10 @@ public:
      */
     void SetSESSION( SESSION* aSession )
     {
-        delete session;
-        session = aSession;
+        delete m_session;
+        m_session = aSession;
     }
-    SESSION* GetSESSION() { return session; }
+    SESSION* GetSESSION() { return m_session; }
 
     /**
      * Function LoadPCB
@@ -3935,7 +3929,7 @@ public:
     /**
      * Function FromBOARD
      * adds the entire BOARD to the PCB but does not write it out.  Note that the BOARD given
-     * to this function must have all the MODULEs on the component side of the BOARD.
+     * to this function must have all the FOOTPRINTs on the component side of the BOARD.
      *
      * See PCB_EDIT_FRAME::ExportToSpecctra() for an example before calling this function.
      *
@@ -3962,16 +3956,16 @@ public:
     void ExportSESSION( const wxString& aFilename );
 
     /**
-     * Function FlipMODULEs
+     * Function FlipFOOTPRINTs
      * flips the footprints which are on the back side of the board to the front.
      */
-    void FlipMODULEs( BOARD* aBoard );
+    void FlipFOOTPRINTs( BOARD* aBoard );
 
     /**
-     * Function RevertMODULEs
+     * Function RevertFOOTPRINTs
      * flips the footprints which were on the back side of the board back to the back.
      */
-    void RevertMODULEs( BOARD* aBoard );
+    void RevertFOOTPRINTs( BOARD* aBoard );
 };
 
 

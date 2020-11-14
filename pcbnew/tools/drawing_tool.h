@@ -150,13 +150,13 @@ public:
 
     /**
      * Function PlaceImportedGraphics()
-     * Places a drawing imported from a DXF or SVG file in module editor.
+     * Places a drawing imported from a DXF or SVG file in footprint editor.
      */
     int PlaceImportedGraphics( const TOOL_EVENT& aEvent );
 
     /**
      * Function SetAnchor()
-     * Places the footprint anchor (only in module editor).
+     * Places the footprint anchor (only in footprint editor).
      */
     int SetAnchor( const TOOL_EVENT& aEvent );
 

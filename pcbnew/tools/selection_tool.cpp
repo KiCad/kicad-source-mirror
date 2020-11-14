@@ -1212,9 +1212,8 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
     for( PAD* pad : padList )
         selectConnectedTracks( *pad, STOP_NEVER );
 
-    // now we need to find all footprints that are connected to each of these nets
-    // then we need to determine if these modules are in the list of footprints
-    // belonging to this sheet ( modList )
+    // now we need to find all footprints that are connected to each of these nets then we need
+    // to determine if these footprints are in the list of footprints belonging to this sheet
     std::list<int> removeCodeList;
     constexpr KICAD_T padType[] = { PCB_PAD_T, EOT };
 
@@ -1224,9 +1223,9 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
         {
             if( mitem->Type() == PCB_PAD_T && !alg::contains( footprintList, mitem->GetParent() ) )
             {
-                // if we cannot find the module of the pad in the modList
-                // then we can assume that that module is not located in the same
-                // schematic, therefore invalidate this netcode.
+                // if we cannot find the footprint of the pad in the footprintList then we can
+                // assume that that footprint is not located in the same schematic, therefore
+                // invalidate this netcode.
                 removeCodeList.push_back( netCode );
                 break;
             }
@@ -1612,7 +1611,7 @@ void SELECTION_TOOL::RebuildSelection()
         {
             EDA_ITEM* parent = item->GetParent();
 
-            // Flags on module children might be set only because the parent is selected.
+            // Flags on footprint children might be set only because the parent is selected.
             if( parent && parent->Type() == PCB_FOOTPRINT_T && parent->IsSelected() )
                 return SEARCH_RESULT::CONTINUE;
 
@@ -1877,7 +1876,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     case PCB_FOOTPRINT_T:
     {
-        // In modedit, we do not want to select the module itself.
+        // In footprint editor, we do not want to select the footprint itself.
         if( m_isFootprintEditor )
             return false;
 
@@ -1908,8 +1907,9 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     case PCB_FP_TEXT_T:
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
-        // module subparts one by one, rather than with a drag selection.  This is so you can
-        // pick up items under an (unlocked) module without also moving the module's sub-parts.
+        // footprint subparts one by one, rather than with a drag selection.  This is so you can
+        // pick up items under an (unlocked) footprint without also moving the footprint's
+        // sub-parts.
         if( !m_isFootprintEditor && !checkVisibilityOnly )
         {
             if( m_multiple && !settings->GetHighContrast() )
@@ -1931,8 +1931,9 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     case PCB_PAD_T:
     {
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
-        // module subparts one by one, rather than with a drag selection.  This is so you can
-        // pick up items under an (unlocked) module without also moving the module's sub-parts.
+        // footprint subparts one by one, rather than with a drag selection.  This is so you can
+        // pick up items under an (unlocked) footprint without also moving the footprint's
+        // sub-parts.
         if( !m_isFootprintEditor && !checkVisibilityOnly )
         {
             if( m_multiple )
@@ -1972,8 +1973,8 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     {
         PCB_GROUP* group = const_cast<PCB_GROUP*>( static_cast<const PCB_GROUP*>( aItem ) );
 
-        // Similar to logic for module, a group is selectable if any of its
-        // members are. (This recurses.)
+        // Similar to logic for footprint, a group is selectable if any of its members are.
+        // (This recurses.)
         for( BOARD_ITEM* item : group->GetItems() )
         {
             if( Selectable( item, true ) )
@@ -2122,7 +2123,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
     }
 
     // footprints are treated in a special way - when they are highlighted, we have to
-    // highlight all the parts that make the module, not the module itself
+    // highlight all the parts that make the footprint, not the footprint itself
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<FOOTPRINT*>( aItem )->RunOnChildren(

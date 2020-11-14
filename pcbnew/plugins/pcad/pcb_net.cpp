@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +35,8 @@ namespace PCAD2KICAD {
 
 PCB_NET_NODE::PCB_NET_NODE()
 {
-    m_compRef   = wxEmptyString;
-    m_pinRef    = wxEmptyString;
+    m_CompRef   = wxEmptyString;
+    m_PinRef    = wxEmptyString;
 }
 
 
@@ -45,9 +45,9 @@ PCB_NET_NODE::~PCB_NET_NODE()
 }
 
 
-PCB_NET::PCB_NET( int aNetCode ) : m_netCode( aNetCode )
+PCB_NET::PCB_NET( int aNetCode ) : m_NetCode( aNetCode )
 {
-    m_name = wxEmptyString;
+    m_Name = wxEmptyString;
 }
 
 
@@ -55,9 +55,9 @@ PCB_NET::~PCB_NET()
 {
     int i;
 
-    for( i = 0; i < (int) m_netNodes.GetCount(); i++ )
+    for( i = 0; i < (int) m_NetNodes.GetCount(); i++ )
     {
-        delete m_netNodes[i];
+        delete m_NetNodes[i];
     }
 }
 
@@ -71,7 +71,7 @@ void PCB_NET::Parse( XNODE* aNode )
     aNode->GetAttribute( wxT( "Name" ), &propValue );
     propValue.Trim( false );
     propValue.Trim( true );
-    m_name = propValue;
+    m_Name = propValue;
 
     lNode = FindNode( aNode, wxT( "node" ) );
 
@@ -90,12 +90,12 @@ void PCB_NET::Parse( XNODE* aNode )
         netNode = new PCB_NET_NODE;
         s1.Trim( false );
         s1.Trim( true );
-        netNode->m_compRef = s1;
+        netNode->m_CompRef = s1;
 
         s2.Trim( false );
         s2.Trim( true );
-        netNode->m_pinRef = s2;
-        m_netNodes.Add( netNode );
+        netNode->m_PinRef = s2;
+        m_NetNodes.Add( netNode );
         lNode = lNode->GetNext();
     }
 }

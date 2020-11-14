@@ -16,7 +16,7 @@ set( PCAD2PCBNEW_SRCS
     pcb_cutout.cpp
     pcb_keepout.cpp
     pcb_line.cpp
-    pcb_module.cpp
+    pcb_footprint.cpp
     pcb_net.cpp
     pcb_pad.cpp
     pcb_pad_shape.cpp

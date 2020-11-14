@@ -53,8 +53,8 @@ enum CURVE_TYPE
 
 /*
  * Layers of importance to MCAD export:
- * LAYER_TOP: specifies that a module is on the top of the PCB
- * LAYER_BOTTOM: specifies that a module is on the bottom of the PCB
+ * LAYER_TOP: specifies that a footprint is on the top of the PCB
+ * LAYER_BOTTOM: specifies that a footprint is on the bottom of the PCB
  * LAYER_EDGE: specifies that a Curve is associated with the PCB edge
  */
 enum LAYERS

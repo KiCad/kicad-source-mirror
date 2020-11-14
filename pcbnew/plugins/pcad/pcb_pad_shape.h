@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,18 +40,17 @@ namespace PCAD2KICAD {
 class PCB_PAD_SHAPE : public PCB_COMPONENT
 {
 public:
-    wxString    m_shape;
-    int         m_width;
-    int         m_height;
+    wxString    m_Shape;
+    int         m_Width;
+    int         m_Height;
 
     PCB_PAD_SHAPE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_PAD_SHAPE();
 
-    virtual void    Parse( XNODE*          aNode,
-                           const wxString& aDefaultMeasurementUnit,
-                           const wxString& aActualConversion );
+    virtual void Parse( XNODE* aNode, const wxString& aDefaultMeasurementUnit,
+                        const wxString& aActualConversion );
 
-    void            AddToBoard() override;
+    void AddToBoard() override;
 };
 
 WX_DEFINE_ARRAY( PCB_PAD_SHAPE*, PCB_PAD_SHAPES_ARRAY );

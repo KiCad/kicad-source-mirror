@@ -31,7 +31,7 @@
 
 bool init_unit_test()
 {
-    boost::unit_test::framework::master_test_suite().p_name.value = "S-expression module tests";
+    boost::unit_test::framework::master_test_suite().p_name.value = "S-expression footprint tests";
     return wxInitialize();
 }
 

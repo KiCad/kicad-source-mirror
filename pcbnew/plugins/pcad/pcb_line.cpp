@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012-2013 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,9 +39,9 @@ namespace PCAD2KICAD {
 PCB_LINE::PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard ) : PCB_COMPONENT( aCallbacks,
                                                                                 aBoard )
 {
-    m_width     = 0;
-    m_toX       = 0;
-    m_toY       = 0;
+    m_Width     = 0;
+    m_ToX       = 0;
+    m_ToY       = 0;
     m_objType   = wxT( 'L' );
 }
 
@@ -63,9 +63,9 @@ void PCB_LINE::Parse( XNODE*          aNode,
     m_KiCadLayer    = GetKiCadLayer();
     m_positionX     = 0;
     m_positionY     = 0;
-    m_toX   = 0;
-    m_toY   = 0;
-    m_width = 0;
+    m_ToX   = 0;
+    m_ToY   = 0;
+    m_Width = 0;
     lNode   = FindNode( aNode, wxT( "pt" ) );
 
     if( lNode )
@@ -77,12 +77,12 @@ void PCB_LINE::Parse( XNODE*          aNode,
 
     if( lNode )
         SetPosition( lNode->GetNodeContent(), aDefaultMeasurementUnit,
-                     &m_toX, &m_toY, aActualConversion );
+                     &m_ToX, &m_ToY, aActualConversion );
 
     lNode = FindNode( aNode, wxT( "width" ) );
 
     if( lNode )
-        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_width, aActualConversion );
+        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Width, aActualConversion );
 
     lNode = FindNode( aNode, wxT( "netNameRef" ) );
 
@@ -101,8 +101,8 @@ void PCB_LINE::SetPosOffset( int aX_offs, int aY_offs )
 {
     PCB_COMPONENT::SetPosOffset( aX_offs, aY_offs );
 
-    m_toX   += aX_offs;
-    m_toY   += aY_offs;
+    m_ToX   += aX_offs;
+    m_ToY   += aY_offs;
 }
 
 
@@ -110,7 +110,7 @@ void PCB_LINE::Flip()
 {
     PCB_COMPONENT::Flip();
 
-    m_toX = -m_toX;
+    m_ToX = -m_ToX;
     m_KiCadLayer = FlipLayer( m_KiCadLayer );
 }
 
@@ -123,9 +123,9 @@ void PCB_LINE::AddToFootprint( FOOTPRINT* aFootprint )
         aFootprint->Add( segment );
 
         segment->m_Start0   = wxPoint( m_positionX, m_positionY );
-        segment->m_End0     = wxPoint( m_toX, m_toY );
+        segment->m_End0     = wxPoint( m_ToX, m_ToY );
 
-        segment->SetWidth( m_width );
+        segment->SetWidth( m_Width );
         segment->SetLayer( m_KiCadLayer );
 
         segment->SetDrawCoord();
@@ -141,9 +141,9 @@ void PCB_LINE::AddToBoard()
         m_board->Add( track );
 
         track->SetPosition( wxPoint( m_positionX, m_positionY ) );
-        track->SetEnd( wxPoint( m_toX, m_toY ) );
+        track->SetEnd( wxPoint( m_ToX, m_ToY ) );
 
-        track->SetWidth( m_width );
+        track->SetWidth( m_Width );
 
         track->SetLayer( m_KiCadLayer );
         track->SetNetCode( m_netCode );
@@ -155,8 +155,8 @@ void PCB_LINE::AddToBoard()
 
         segment->SetLayer( m_KiCadLayer );
         segment->SetStart( wxPoint( m_positionX, m_positionY ) );
-        segment->SetEnd( wxPoint( m_toX, m_toY ) );
-        segment->SetWidth( m_width );
+        segment->SetEnd( wxPoint( m_ToX, m_ToY ) );
+        segment->SetWidth( m_Width );
     }
 }
 

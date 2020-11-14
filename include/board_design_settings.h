@@ -304,9 +304,9 @@ public:
                                             // when importing values or creating a new pad
 
     // Set to true if the board has a stackup management.
-    // If not set a default basic stackup witll be used to generate the ;gbrjob file.
+    // If not set a default basic stackup will be used to generate the gbrjob file.
     // Could be removed later, or at least always set to true
-    bool m_HasStackup;
+    bool       m_HasStackup;
 
 private:
     // Indicies into the trackWidth, viaSizes and diffPairDimensions lists.

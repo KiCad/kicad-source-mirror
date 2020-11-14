@@ -138,9 +138,8 @@ int FOOTPRINT_EDITOR_TOOLS::NewFootprint( const TOOL_EVENT& aEvent )
     canvas()->GetViewControls()->SetCrossHairCursorPosition( VECTOR2D( 0, 0 ), false );
     m_frame->AddFootprintToBoard( newFootprint );
 
-    // Initialize data relative to nets and netclasses (for a new
-    // module the defaults are used)
-    // This is mandatory to handle and draw pads
+    // Initialize data relative to nets and netclasses (for a new footprint the defaults are
+    // used).  This is mandatory to handle and draw pads.
     board()->BuildListOfNets();
     newFootprint->SetPosition( wxPoint( 0, 0 ) );
     newFootprint->ClearFlags();
@@ -191,7 +190,7 @@ int FOOTPRINT_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
         // Creates the new footprint from python script wizard
         FOOTPRINT* newFootprint = wizard->GetBuiltFootprint();
 
-        if( newFootprint )    // i.e. if create module command is OK
+        if( newFootprint )    // i.e. if create footprint command is OK
         {
             m_frame->Clear_Pcb( false );
 
@@ -199,9 +198,8 @@ int FOOTPRINT_EDITOR_TOOLS::CreateFootprint( const TOOL_EVENT& aEvent )
             //  Add the new object to board
             m_frame->AddFootprintToBoard( newFootprint );
 
-            // Initialize data relative to nets and netclasses (for a new
-            // module the defaults are used)
-            // This is mandatory to handle and draw pads
+            // Initialize data relative to nets and netclasses (for a new footprint the defaults
+            // are used).  This is mandatory to handle and draw pads.
             board()->BuildListOfNets();
             newFootprint->SetPosition( wxPoint( 0, 0 ) );
             newFootprint->ClearFlags();

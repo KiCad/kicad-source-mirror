@@ -85,7 +85,7 @@ class FP_CACHE
     PCB_IO*         m_owner;            // Plugin object that owns the cache.
     wxFileName      m_lib_path;         // The path of the library.
     wxString        m_lib_raw_path;     // For quick comparisons.
-    FOOTPRINT_MAP   m_modules;          // Map of footprint file name per FOOTPRINT*.
+    FOOTPRINT_MAP   m_footprints;       // Map of footprint filename to FOOTPRINT*.
 
     bool            m_cache_dirty;      // Stored separately because it's expensive to check
                                         // m_cache_timestamp against all the files.
@@ -101,16 +101,16 @@ public:
 
     bool Exists() const { return m_lib_path.IsOk() && m_lib_path.DirExists(); }
 
-    FOOTPRINT_MAP& GetFootprints() { return m_modules; }
+    FOOTPRINT_MAP& GetFootprints() { return m_footprints; }
 
     // Most all functions in this class throw IO_ERROR exceptions.  There are no
     // error codes nor user interface calls from here, nor in any PLUGIN.
     // Catch these exceptions higher up please.
 
     /**
-     * Save the footprint cache or a single module from it to disk
+     * Save the footprint cache or a single footprint from it to disk
      *
-     * @param aFootprint if set, save only this module, otherwise, save the full library
+     * @param aFootprint if set, save only this footprint, otherwise, save the full library
      */
     void Save( FOOTPRINT* aFootprint = NULL );
 
@@ -171,7 +171,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
                                           m_lib_raw_path ) );
     }
 
-    for( FOOTPRINT_MAP::iterator it = m_modules.begin();  it != m_modules.end();  ++it )
+    for( FOOTPRINT_MAP::iterator it = m_footprints.begin(); it != m_footprints.end(); ++it )
     {
         if( aFootprint && aFootprint != it->second->GetModule() )
             continue;
@@ -263,7 +263,7 @@ void FP_CACHE::Load()
                 wxString   fpName = fn.GetName();
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
-                m_modules.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
+                m_footprints.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
 
                 m_cache_timestamp += fn.GetTimestamp();
             }
@@ -284,9 +284,9 @@ void FP_CACHE::Load()
 
 void FP_CACHE::Remove( const wxString& aFootprintName )
 {
-    FOOTPRINT_MAP::const_iterator it = m_modules.find( aFootprintName );
+    FOOTPRINT_MAP::const_iterator it = m_footprints.find( aFootprintName );
 
-    if( it == m_modules.end() )
+    if( it == m_footprints.end() )
     {
         wxString msg = wxString::Format( _( "library \"%s\" has no footprint \"%s\" to delete" ),
                                          m_lib_raw_path,
@@ -296,7 +296,7 @@ void FP_CACHE::Remove( const wxString& aFootprintName )
 
     // Remove the module from the cache and delete the module file from the library.
     wxString fullPath = it->second->GetFileName().GetFullPath();
-    m_modules.erase( aFootprintName );
+    m_footprints.erase( aFootprintName );
     wxRemoveFile( fullPath );
 }
 
@@ -640,7 +640,7 @@ void PCB_IO::format( BOARD* aBoard, int aNestLevel ) const
         m_out->Print( 0, "\n" );
     }
 
-    // Save the graphical items on the board (not owned by a module)
+    // Save the graphical items on the board (not owned by a footprint)
     for( BOARD_ITEM* item : sorted_drawings )
         Format( item, aNestLevel );
 

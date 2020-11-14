@@ -40,9 +40,9 @@ namespace PCAD2KICAD {
 class PCB_LINE : public PCB_COMPONENT
 {
 public:
-    int m_width;
-    int m_toX;
-    int m_toY;
+    int m_Width;
+    int m_ToX;
+    int m_ToY;
 
     PCB_LINE( PCB_CALLBACKS* aCallbacks, BOARD* aBoard );
     ~PCB_LINE();

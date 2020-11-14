@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,7 +112,7 @@ void PCB_VIA::Parse( XNODE*          aNode,
         lNode   = FindNode( tNode, wxT( "holeDiam" ) );
 
         if( lNode )
-            SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_hole,
+            SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Hole,
                       aActualConversion );
 
         lNode = FindNode( tNode, wxT( "viaShape" ) );
@@ -127,7 +127,7 @@ void PCB_VIA::Parse( XNODE*          aNode,
                 {
                     viaShape = new PCB_VIA_SHAPE( m_callbacks, m_board );
                     viaShape->Parse( lNode, aDefaultMeasurementUnit, aActualConversion );
-                    m_shapes.Add( viaShape );
+                    m_Shapes.Add( viaShape );
                 }
             }
 

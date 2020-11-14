@@ -54,7 +54,7 @@ public:
 
     /**
      * Function PlacePad()
-     * Places a pad in module editor.
+     * Places a pad in footprint editor.
      */
     int PlacePad( const TOOL_EVENT& aEvent );
 
@@ -76,7 +76,7 @@ private:
     ///> Copy pad settings from a pad to the board design settings
     int copyPadSettings( const TOOL_EVENT& aEvent );
 
-    ///> Push pad settings from a pad to other pads on board or module
+    ///> Push pad settings from a pad to other pads on board or footprint
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
     PCB_LAYER_ID explodePad( PAD* aPad );

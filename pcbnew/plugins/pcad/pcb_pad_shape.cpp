@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,9 @@ namespace PCAD2KICAD {
 PCB_PAD_SHAPE::PCB_PAD_SHAPE( PCB_CALLBACKS*    aCallbacks,
                               BOARD*            aBoard ) : PCB_COMPONENT( aCallbacks, aBoard )
 {
-    m_shape     = wxEmptyString;
-    m_width     = 0;
-    m_height    = 0;
+    m_Shape     = wxEmptyString;
+    m_Width     = 0;
+    m_Height    = 0;
 }
 
 
@@ -64,7 +64,7 @@ void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
     {
         str = lNode->GetNodeContent();
         str.Trim( false );
-        m_shape = str;
+        m_Shape = str;
     }
 
     lNode = FindNode( aNode, wxT( "layerNumRef" ) );
@@ -77,25 +77,25 @@ void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
 
     m_KiCadLayer = GetKiCadLayer();
 
-    if( m_shape == wxT( "Oval" )
-        || m_shape == wxT( "Rect" )
-        || m_shape == wxT( "Ellipse" )
-        || m_shape == wxT( "MtHole" )
-        || m_shape == wxT( "RndRect" ) )
+    if( m_Shape == wxT( "Oval" )
+        || m_Shape == wxT( "Rect" )
+        || m_Shape == wxT( "Ellipse" )
+        || m_Shape == wxT( "MtHole" )
+        || m_Shape == wxT( "RndRect" ) )
     {
         lNode = FindNode( aNode, wxT( "shapeWidth" ) );
 
         if( lNode )
-            SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_width,
+            SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Width,
                       aActualConversion );
 
         lNode = FindNode( aNode, wxT( "shapeHeight" ) );
 
         if( lNode )
             SetWidth(
-                lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_height, aActualConversion );
+                    lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Height, aActualConversion );
     }
-    else if( m_shape == wxT( "Polygon" ) )
+    else if( m_Shape == wxT( "Polygon" ) )
     {
         // aproximation to simplier pad shape .....
         lNode = FindNode( aNode, wxT( "shapeOutline" ) );
@@ -128,8 +128,8 @@ void PCB_PAD_SHAPE::Parse( XNODE*          aNode,
             lNode = lNode->GetNext();
         }
 
-        m_width     = maxX - minX;
-        m_height    = maxY - minY;
+        m_Width     = maxX - minX;
+        m_Height    = maxY - minY;
     }
 }
 

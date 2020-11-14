@@ -54,7 +54,7 @@ class PCB_BASE_FRAME;
 #define CH_UNROUTABLE       2        /* Don't use autorouter. */
 #define CH_ROUTE_REQ        4        /* Must be routed by the autorouter. */
 #define CH_ACTIF            8        /* Not routed. */
-#define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single module. */
+#define LOCAL_RATSNEST_ITEM 0x8000   /* Line between two pads of a single footprint. */
 
 DECL_VEC_FOR_SWIG( PADS_VEC, PAD* )
 

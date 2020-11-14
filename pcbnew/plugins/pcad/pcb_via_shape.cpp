@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007, 2008 Lubo Racko <developer@lura.sk>
  * Copyright (C) 2007, 2008, 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ void PCB_VIA_SHAPE::Parse( XNODE*          aNode,
     {
         str = lNode->GetNodeContent();
         str.Trim( false );
-        m_shape = str;
+        m_Shape = str;
     }
 
     lNode = FindNode( aNode, wxT( "layerNumRef" ) );
@@ -74,12 +74,12 @@ void PCB_VIA_SHAPE::Parse( XNODE*          aNode,
     lNode = FindNode( aNode, wxT( "shapeWidth" ) );
 
     if( lNode )
-        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_width, aActualConversion );
+        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Width, aActualConversion );
 
     lNode = FindNode( aNode, wxT( "shapeHeight" ) );
 
     if( lNode )
-        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_height, aActualConversion );
+        SetWidth( lNode->GetNodeContent(), aDefaultMeasurementUnit, &m_Height, aActualConversion );
 
 }
 

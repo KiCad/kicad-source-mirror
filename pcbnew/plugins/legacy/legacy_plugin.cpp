@@ -1284,7 +1284,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
             aFootprint->SetPlacementCost90((itmp1 << 4) | cntRot90 );
         }
 
-        else if( TESTLINE( "At" ) )         // (At)tributes of module
+        else if( TESTLINE( "At" ) )         // (At)tributes of footprint
         {
             int attrs = 0;
 
@@ -1607,8 +1607,8 @@ void LEGACY_PLUGIN::loadPAD( FOOTPRINT* aFootprint )
 
         else if( TESTLINE( "$EndPAD" ) )
         {
-            // pad's "Position" is not relative to the module's,
-            // whereas Pos0 is relative to the module's but is the unrotated coordinate.
+            // pad's "Position" is not relative to the footprint's, whereas Pos0 is relative
+            // to the footprint's but is the unrotated coordinate.
 
             wxPoint padpos = pad->GetPos0();
 
@@ -1754,7 +1754,7 @@ void LEGACY_PLUGIN::loadFP_SHAPE( FOOTPRINT* aFootprint )
     aFootprint->Add( fpShape );
 
     // this had been done at the FOOTPRINT level before, presumably because the FP_SHAPE needs
-    // to be already added to a module before this function will work.
+    // to be already added to a footprint before this function will work.
     fpShape->SetDrawCoord();
 }
 

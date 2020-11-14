@@ -952,19 +952,19 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 
     // Mark existing items, in order to know what are the new items so we can select only
     // the new items after loading
-    for( auto track : brd->Tracks() )
+    for( TRACK* track : brd->Tracks() )
         track->SetFlags( SKIP_STRUCT );
 
-    for( auto module : brd->Footprints() )
-        module->SetFlags( SKIP_STRUCT );
+    for( FOOTPRINT* footprint : brd->Footprints() )
+        footprint->SetFlags( SKIP_STRUCT );
 
-    for( auto group : brd->Groups() )
+    for( PCB_GROUP* group : brd->Groups() )
         group->SetFlags( SKIP_STRUCT );
 
-    for( auto drawing : brd->Drawings() )
+    for( BOARD_ITEM* drawing : brd->Drawings() )
         drawing->SetFlags( SKIP_STRUCT );
 
-    for( auto zone : brd->Zones() )
+    for( ZONE* zone : brd->Zones() )
         zone->SetFlags( SKIP_STRUCT );
 
     std::map<wxString, wxString> oldProperties = brd->GetProperties();

@@ -96,7 +96,7 @@ public:
 
     /**
      * Function PlaceModule()
-     * Displays a dialog to select a module to be added and allows the user to set its position.
+     * Displays a dialog to select a footprint to be added and allows the user to set its position.
      */
     int PlaceModule( const TOOL_EVENT& aEvent );
 

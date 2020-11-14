@@ -42,8 +42,8 @@ namespace KI_TEST
 {
 
 /**
- * Draw a segment in the given module.
- * @param aMod   The module to add the segment to
+ * Draw a segment in the given footprint.
+ * @param aMod   The footprint to add the segment to
  * @param aSeg   The segment geometry
  * @param aWidth The width of the segment
  * @param aLayer The layer to draw on
@@ -52,7 +52,7 @@ void DrawSegment( FOOTPRINT& aFootprint, const SEG& aSeg, int aWidth, PCB_LAYER_
 
 /**
  * Draw a polyline - a set of linked segments
- * @param aMod   The module to add the segment to
+ * @param aMod   The footprint to add the segment to
  * @param aPts   The polyline points
  * @param aWidth The width of the segments
  * @param aLayer The layer to draw on
@@ -61,8 +61,8 @@ void DrawPolyline( FOOTPRINT& aFootprint, const std::vector<VECTOR2I>& aPts, int
                   PCB_LAYER_ID aLayer );
 
 /**
- * Draw an arc on a module
- * @param aMod    The module to add the segment to
+ * Draw an arc on a footprint
+ * @param aMod    The footprint to add the segment to
  * @param aCentre The arc centre
  * @param aStart  The arc start point
  * @param aAngle  The arc angle (degrees, NOT deci-degrees)
@@ -73,8 +73,8 @@ void DrawArc( FOOTPRINT& aFootprint, const VECTOR2I& aCentre, const VECTOR2I& aS
               double aAngle, int aWidth, PCB_LAYER_ID aLayer );
 
 /**
- * Draw a rectangle on a module
- * @param aMod    The module to add the rectangle to
+ * Draw a rectangle on a footprint
+ * @param aMod    The footprint to add the rectangle to
  * @param aPos    Rectangle centre point
  * @param aSize   Rectangle size (x, y)
  * @param aRadius Corner radius (0 for a normal rect)

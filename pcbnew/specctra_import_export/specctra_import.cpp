@@ -167,12 +167,12 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
                 wxString::Format( _( "Session file uses invalid layer id \"%s\"" ), layerName ) );
     }
 
-    TRACK* track = new TRACK( sessionBoard );
+    TRACK* track = new TRACK( m_sessionBoard );
 
-    track->SetStart( mapPt( aPath->points[aPointIndex+0], routeResolution ) );
-    track->SetEnd( mapPt( aPath->points[aPointIndex+1], routeResolution ) );
-    track->SetLayer( pcbLayer2kicad[layerNdx] );
-    track->SetWidth( scale( aPath->aperture_width, routeResolution ) );
+    track->SetStart( mapPt( aPath->points[aPointIndex+0], m_routeResolution ) );
+    track->SetEnd( mapPt( aPath->points[aPointIndex+1], m_routeResolution ) );
+    track->SetLayer( m_pcbLayer2kicad[layerNdx] );
+    track->SetWidth( scale( aPath->aperture_width, m_routeResolution ) );
     track->SetNetCode( aNetcode );
 
     return track;
@@ -187,7 +187,7 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
 
     int     shapeCount = aPadstack->Length();
     int     drill_diam_iu = -1;
-    int     copperLayerCount = sessionBoard->GetCopperLayerCount();
+    int     copperLayerCount = m_sessionBoard->GetCopperLayerCount();
 
 
     // The drill diameter is encoded in the padstack name if Pcbnew did the DSN export.
@@ -226,10 +226,10 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
                     wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
-        int viaDiam = scale( circle->diameter, routeResolution );
+        int viaDiam = scale( circle->diameter, m_routeResolution );
 
-        via = new ::VIA( sessionBoard );
-        via->SetPosition( mapPt( aPoint, routeResolution ) );
+        via = new ::VIA( m_sessionBoard );
+        via->SetPosition( mapPt( aPoint, m_routeResolution ) );
         via->SetDrill( drill_diam_iu );
         via->SetViaType( VIATYPE::THROUGH );
         via->SetWidth( viaDiam );
@@ -244,10 +244,10 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
                     wxString::Format( _( "Unsupported via shape: %s" ), GetTokenString( type ) ) );
 
         CIRCLE* circle = (CIRCLE*) shape->shape;
-        int viaDiam = scale( circle->diameter, routeResolution );
+        int viaDiam = scale( circle->diameter, m_routeResolution );
 
-        via = new ::VIA( sessionBoard );
-        via->SetPosition( mapPt( aPoint, routeResolution ) );
+        via = new ::VIA( m_sessionBoard );
+        via->SetPosition( mapPt( aPoint, m_routeResolution ) );
         via->SetDrill( drill_diam_iu );
         via->SetViaType( VIATYPE::THROUGH );
         via->SetWidth( viaDiam );
@@ -285,11 +285,11 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
                 botLayerNdx = layerNdx;
 
             if( viaDiam == -1 )
-                viaDiam = scale( circle->diameter, routeResolution );
+                viaDiam = scale( circle->diameter, m_routeResolution );
         }
 
-        via = new ::VIA( sessionBoard );
-        via->SetPosition( mapPt( aPoint, routeResolution ) );
+        via = new ::VIA( m_sessionBoard );
+        via->SetPosition( mapPt( aPoint, m_routeResolution ) );
         via->SetDrill( drill_diam_iu );
 
         if( (topLayerNdx==0 && botLayerNdx==1)
@@ -300,8 +300,8 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
 
         via->SetWidth( viaDiam );
 
-        PCB_LAYER_ID topLayer = pcbLayer2kicad[topLayerNdx];
-        PCB_LAYER_ID botLayer = pcbLayer2kicad[botLayerNdx];
+        PCB_LAYER_ID topLayer = m_pcbLayer2kicad[topLayerNdx];
+        PCB_LAYER_ID botLayer = m_pcbLayer2kicad[botLayerNdx];
 
         via->SetLayerPair( topLayer, botLayer );
     }
@@ -318,15 +318,15 @@ TRACK* SPECCTRA_DB::makeTRACK( PATH* aPath, int aPointIndex, int aNetcode )
 
 void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 {
-    sessionBoard = aBoard;      // not owned here
+    m_sessionBoard = aBoard;      // not owned here
 
-    if( !session )
+    if( !m_session )
         THROW_IO_ERROR( _("Session file is missing the \"session\" section") );
 
-    if( !session->route )
+    if( !m_session->route )
         THROW_IO_ERROR( _("Session file is missing the \"routes\" section") );
 
-    if( !session->route->library )
+    if( !m_session->route->library )
         THROW_IO_ERROR( _("Session file is missing the \"library_out\" section") );
 
     // delete all the old tracks and vias
@@ -336,12 +336,12 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
     buildLayerMaps( aBoard );
 
-    if( session->placement )
+    if( m_session->placement )
     {
         // Walk the PLACEMENT object's COMPONENTs list, and for each PLACE within
         // each COMPONENT, reposition and re-orient each component and put on
         // correct side of the board.
-        COMPONENTS& components = session->placement->components;
+        COMPONENTS& components = m_session->placement->components;
         for( COMPONENTS::iterator comp=components.begin();  comp!=components.end();  ++comp )
         {
             PLACES& places = comp->places;
@@ -401,10 +401,10 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         }
     }
 
-    routeResolution = session->route->GetUnits();
+    m_routeResolution = m_session->route->GetUnits();
 
     // Walk the NET_OUTs and create tracks and vias anew.
-    NET_OUTS& net_outs = session->route->net_outs;
+    NET_OUTS& net_outs = m_session->route->net_outs;
     for( NET_OUTS::iterator net = net_outs.begin(); net!=net_outs.end(); ++net )
     {
         int netoutCode = 0;
@@ -456,7 +456,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
         }
 
         WIRE_VIAS& wire_vias = net->wire_vias;
-        LIBRARY& library = *session->route->library;
+        LIBRARY& library = *m_session->route->library;
         for( unsigned i=0;  i<wire_vias.size();  ++i )
         {
             int         netCode = 0;
