@@ -22,13 +22,12 @@
 
 #import <Cocoa/Cocoa.h>
 #include <wx/osx/core/cfstring.h>
-
+#include <wx/filefn.h>
 
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 {
-    wxString temp = "file:///" + aPath;
-
-    NSURL*   url = [NSURL URLWithString:wxCFStringRef( temp ).AsNSString()];
+    bool     isDirectory = wxDirExists( aPath );
+    NSURL*   url = [NSURL fileURLWithPath:wxCFStringRef( aPath ).AsNSString() isDirectory:isDirectory];
     NSError* err = NULL;
 
     BOOL result = [[NSFileManager defaultManager] trashItemAtURL:url resultingItemURL:nil error:&err];
