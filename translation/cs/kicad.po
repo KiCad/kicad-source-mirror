@@ -1,5 +1,5 @@
 # translation of kicad.po to Čeština
-# Martin Kratoška <martin@ok1rr.com>, 2008.
+# Martin Kratoška <martin@ok1rr.com>, 2008, 2020.
 # Milan Horák <stranger@tiscali.cz>, 2008.
 # Chronos <robie@centrum.cz>, 2011.
 # Roman Ondráček <ondracek.roman@centrum.cz>, 2017.
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
 "PO-Revision-Date: 2020-11-16 21:45+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"Last-Translator: Martin Kratoška <martin@ok1rr.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -437,12 +437,14 @@ msgstr "Zkrátit potisk na prstenec prokovu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr ""
+msgstr "Nepokovené měděné plošky jako holá měď"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
 msgstr ""
+"Zobrazit pokovené plošky jako pokovené, ostatní měď jako holý materiál. "
+"(Pomalé)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
@@ -20463,9 +20465,8 @@ msgid "unknown"
 msgstr "neznámý"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:451
-#, fuzzy
 msgid "Round"
-msgstr " nalezeno"
+msgstr "Kulaté"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:454
 msgid "Slot"
