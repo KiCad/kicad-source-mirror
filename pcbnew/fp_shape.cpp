@@ -106,6 +106,17 @@ void FP_SHAPE::SetDrawCoord()
 }
 
 
+std::shared_ptr<SHAPE> FP_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    std::vector<SHAPE*> shapes = MakeEffectiveShapes();
+
+    for( SHAPE* shape : shapes )
+        shape->Move( m_Parent->GetPosition() );
+
+    return std::make_shared<SHAPE_COMPOUND>( shapes );
+}
+
+
 // see class_edge_mod.h
 void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
