@@ -3451,13 +3451,17 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         }
     }
 
-    // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
-    // should be filled by specifying a 0 stroke-width.
     if( m_requiredVersion <= 20201002 )
     {
-        if( shape->GetWidth() == 0 && ( shape->GetShape() == S_RECT
-                                         || shape->GetShape() == S_CIRCLE
-                                         || shape->GetShape() == S_POLYGON ) )
+        // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
+        // should be filled by specifying a 0 stroke-width.
+        if( shape->GetWidth() == 0
+                && ( shape->GetShape() == S_RECT || shape->GetShape() == S_CIRCLE ) )
+        {
+            shape->SetFilled( true );
+        }
+        // Polygons on non-Edge_Cuts layers were always filled
+        else if( shape->GetShape() == S_POLYGON && shape->GetLayer() != Edge_Cuts )
         {
             shape->SetFilled( true );
         }
