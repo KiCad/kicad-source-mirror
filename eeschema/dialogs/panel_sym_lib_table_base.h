@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -57,7 +57,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		WX_GRID* m_path_subs_grid;
 
 		// Virtual event handlers, overide them in your derived class
-		virtual void pageChangedHandler( wxNotebookEvent& event ) { event.Skip(); }
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void browseLibrariesHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }

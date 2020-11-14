@@ -49,7 +49,7 @@ private:
      */
     bool verifyTables();
 
-    void pageChangedHandler( wxNotebookEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void browseLibrariesHandler( wxCommandEvent& event ) override;
     void appendRowHandler( wxCommandEvent& event ) override;
     void deleteRowHandler( wxCommandEvent& event ) override;

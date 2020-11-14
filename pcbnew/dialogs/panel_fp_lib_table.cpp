@@ -545,7 +545,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                 m_cur_grid->MakeCellVisible( r, 0 );
                 m_cur_grid->SetGridCursor( r, 1 );
 
-                wxMessageDialog errdlg( this, msg, _( "No Colon in Nicknames" ) );
+                wxMessageDialog errdlg( this, msg, _( "Library Nickname Error" ) );
                 errdlg.ShowModal();
                 return false;
             }
@@ -575,7 +575,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    wxString msg = wxString::Format( _( "Duplicate Nicknames \"%s\"." ), nick1 );
+                    wxString msg = wxString::Format( _( "Duplicate nicknames \"%s\"." ), nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( model != cur_model() )
@@ -585,7 +585,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                     m_cur_grid->MakeCellVisible( r2, 0 );
                     m_cur_grid->SetGridCursor( r2, 1 );
 
-                    wxMessageDialog errdlg( this, msg, _( "Please Delete or Modify One" ) );
+                    wxMessageDialog errdlg( this, msg, _( "Library Nickname Error" ) );
                     errdlg.ShowModal();
                     return false;
                 }
@@ -597,9 +597,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 }
 
 
-//-----<event handlers>----------------------------------
-
-void PANEL_FP_LIB_TABLE::pageChangedHandler( wxNotebookEvent& event )
+void PANEL_FP_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
     m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;

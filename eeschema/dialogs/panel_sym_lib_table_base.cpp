@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -208,7 +208,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bSizer1->Fit( this );
 
 	// Connect Events
-	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SYM_LIB_TABLE_BASE::OnUpdateUI ) );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_browse_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
@@ -220,7 +220,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 PANEL_SYM_LIB_TABLE_BASE::~PANEL_SYM_LIB_TABLE_BASE()
 {
 	// Disconnect Events
-	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SYM_LIB_TABLE_BASE::OnUpdateUI ) );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_browse_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::browseLibrariesHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );

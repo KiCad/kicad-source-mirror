@@ -465,7 +465,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 }
 
 
-void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxNotebookEvent& event )
+void PANEL_SYM_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
     m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
     m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;
