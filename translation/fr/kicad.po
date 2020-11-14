@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-12 09:04+0100\n"
+"POT-Creation-Date: 2020-11-14 08:58+0100\n"
+"PO-Revision-Date: 2020-11-14 08:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -71,7 +71,7 @@ msgstr "Echelle"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1165
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1191
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1217
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1330
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1327
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:63
 msgid "X:"
 msgstr "X:"
@@ -96,7 +96,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1176
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1202
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1228
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1341
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1338
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:80
 msgid "Y:"
 msgstr "Y:"
@@ -280,7 +280,7 @@ msgstr "Copie Image 3D"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:282
 #: eeschema/eeschema_config.cpp:224 eeschema/eeschema_config.cpp:395
 #: gerbview/gerbview_frame.cpp:1012 pagelayout_editor/pl_editor_frame.cpp:460
-#: pcbnew/footprint_edit_frame.cpp:872 pcbnew/pcbnew_config.cpp:55
+#: pcbnew/footprint_edit_frame.cpp:878 pcbnew/pcbnew_config.cpp:55
 msgid "Display Options"
 msgstr "Options d'Affichage"
 
@@ -507,7 +507,7 @@ msgstr "Incrément de Rotation :"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:152
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:59
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1362
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1359
 msgid "deg"
 msgstr "deg"
 
@@ -706,7 +706,7 @@ msgstr "Azimuth (degrés)"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:182
 #: pcbnew/dialogs/dialog_create_array_base.cpp:306
 #: pcbnew/dialogs/dialog_create_array_base.cpp:313
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1382
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1379
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:108
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:169
@@ -2436,7 +2436,7 @@ msgstr "Hauteur de la page (utilisateur)."
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:103
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:118
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:129
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:163
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:172
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1157
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1172
@@ -2447,9 +2447,9 @@ msgstr "Hauteur de la page (utilisateur)."
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1235
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1249
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1272
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1337
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1348
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1513
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1334
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1345
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1510
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:76
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:105
 #: pcbnew/dialogs/dialog_pns_length_tuning_settings_base.cpp:116
@@ -3890,9 +3890,9 @@ msgstr "Symbole"
 
 #: common/eda_item.cpp:306 eeschema/lib_arc.h:70
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/class_board_item.cpp:37
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:112
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:111
 #: pcbnew/dialogs/dialog_pad_properties.cpp:706
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2107 pcbnew/pcb_shape.cpp:488
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2109 pcbnew/pcb_shape.cpp:488
 msgid "Arc"
 msgstr "Arc"
 
@@ -3920,9 +3920,9 @@ msgid "Polyline"
 msgstr "PolyLigne"
 
 #: common/eda_item.cpp:311 eeschema/lib_bezier.h:54
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:99
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:97
 #: pcbnew/dialogs/dialog_pad_properties.cpp:700
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2107
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2110
 msgid "Bezier"
 msgstr "Bézier"
 
@@ -4019,8 +4019,8 @@ msgstr "Gauche"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:92
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:108
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:171
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:115
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:172
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:135
 msgid "Center"
 msgstr "Centrer"
@@ -4068,7 +4068,7 @@ msgstr "Texte"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:86
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:57
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:57
-#: pcbnew/fp_text.cpp:318 pcbnew/pcb_shape.cpp:1258 pcbnew/pcb_text.cpp:125
+#: pcbnew/fp_text.cpp:318 pcbnew/pcb_shape.cpp:1262 pcbnew/pcb_text.cpp:125
 #: pcbnew/text_mod_grid_table.cpp:93
 msgid "Thickness"
 msgstr "Épaisseur"
@@ -4402,7 +4402,7 @@ msgid "Eeschema"
 msgstr "Eeschema"
 
 #: common/hotkey_store.cpp:68 pcbnew/menubar_pcb_editor.cpp:188
-#: pcbnew/pcb_edit_frame.cpp:1164 pcbnew/pcbnew_config.cpp:54
+#: pcbnew/pcb_edit_frame.cpp:1170 pcbnew/pcbnew_config.cpp:54
 msgid "Pcbnew"
 msgstr "Pcbnew"
 
@@ -5773,8 +5773,8 @@ msgstr "Examinateur de Librairies d'Empreintes"
 msgid "Browse footprint libraries"
 msgstr "Parcourir et visualiser les bibliothèques d'empreintes"
 
-#: common/tool/actions.cpp:557 pcbnew/footprint_edit_frame.cpp:754
-#: pcbnew/footprint_edit_frame.cpp:871 pcbnew/menubar_footprint_editor.cpp:100
+#: common/tool/actions.cpp:557 pcbnew/footprint_edit_frame.cpp:760
+#: pcbnew/footprint_edit_frame.cpp:877 pcbnew/menubar_footprint_editor.cpp:100
 msgid "Footprint Editor"
 msgstr "Éditeur d'Empreintes"
 
@@ -5971,7 +5971,7 @@ msgid "Footprint not found"
 msgstr "Empreinte non trouvée"
 
 #: common/widgets/footprint_select_widget.cpp:80 cvpcb/cvpcb_mainframe.cpp:793
-#: pcbnew/footprint_edit_frame.cpp:779 pcbnew/load_select_footprint.cpp:205
+#: pcbnew/footprint_edit_frame.cpp:785 pcbnew/load_select_footprint.cpp:205
 msgid "Loading Footprint Libraries"
 msgstr "Chargement Librairies d'Empreintes"
 
@@ -8490,6 +8490,9 @@ msgstr "Alignement V (champs seulement) :"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:282
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:25
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:343
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:165
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1262
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1503
 msgid "Line width:"
 msgstr "Largeur de ligne:"
 
@@ -8704,7 +8707,7 @@ msgstr "Numéros de pins:"
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:42
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:56
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:336
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1510
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1507
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:71
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:88
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
@@ -10718,7 +10721,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:142
 #: pcbnew/dialogs/dialog_create_array_base.cpp:241
 #: pcbnew/dialogs/dialog_move_exact.cpp:204
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:118
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:117
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:331
 #: pcbnew/dialogs/dialog_position_relative.cpp:162
 msgid "Angle:"
@@ -11046,8 +11049,8 @@ msgid "/path/to/sheet"
 msgstr "/chemin/de/feuille"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:26
-#: pcbnew/footprint_edit_frame.cpp:220 pcbnew/footprint_edit_frame.cpp:694
-#: pcbnew/pcb_edit_frame.cpp:251 pcbnew/pcb_edit_frame.cpp:1099
+#: pcbnew/footprint_edit_frame.cpp:226 pcbnew/footprint_edit_frame.cpp:700
+#: pcbnew/pcb_edit_frame.cpp:257 pcbnew/pcb_edit_frame.cpp:1105
 msgid "Appearance"
 msgstr "Apparence"
 
@@ -11502,7 +11505,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:900
 #: eeschema/dialogs/panel_sym_lib_table.cpp:913 eeschema/sch_base_frame.cpp:206
 #: eeschema/sch_base_frame.cpp:222 pcbnew/dialogs/panel_fp_lib_table.cpp:1051
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1064 pcbnew/files.cpp:1101
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1064 pcbnew/files.cpp:1059
 msgid "File Save Error"
 msgstr "Erreur Écriture  Fichier"
 
@@ -11587,13 +11590,13 @@ msgstr ""
 #: eeschema/eeschema_config.cpp:225 eeschema/eeschema_config.cpp:396
 #: gerbview/gerbview_frame.cpp:1013
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
-#: pcbnew/footprint_edit_frame.cpp:874 pcbnew/pcbnew_config.cpp:56
+#: pcbnew/footprint_edit_frame.cpp:880 pcbnew/pcbnew_config.cpp:56
 msgid "Editing Options"
 msgstr "Options d'Edition"
 
 #: eeschema/eeschema_config.cpp:226 eeschema/eeschema_config.cpp:397
 #: pagelayout_editor/pl_editor_frame.cpp:461
-#: pcbnew/footprint_edit_frame.cpp:873 pcbnew/pcbnew_config.cpp:57
+#: pcbnew/footprint_edit_frame.cpp:879 pcbnew/pcbnew_config.cpp:57
 msgid "Colors"
 msgstr "Couleurs"
 
@@ -11786,7 +11789,7 @@ msgstr ""
 "Erreur en sauvant le fichier schématique \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:134 pcbnew/files.cpp:854
+#: eeschema/files-io.cpp:134 pcbnew/files.cpp:812
 #, c-format
 msgid "Failed to create temporary file \"%s\""
 msgstr "Impossible de créer le fichier temporaire \"%s\""
@@ -11800,7 +11803,7 @@ msgstr ""
 "Erreur en sauvant le fichier schématique \"%s\".\n"
 "Impossible de renommer le fichier temporaire \"%s\""
 
-#: eeschema/files-io.cpp:155 pcbnew/files.cpp:873
+#: eeschema/files-io.cpp:155 pcbnew/files.cpp:831
 #, c-format
 msgid "Failed to rename temporary file \"%s\""
 msgstr "Impossible de renommer le fichier temporaire \"%s\""
@@ -12039,7 +12042,7 @@ msgid "Arc, radius %s"
 msgstr "Arc, rayon %s"
 
 #: eeschema/lib_circle.cpp:253
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:173
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:174
 #: pcbnew/pcb_shape.cpp:484 pcbnew/pcb_shape.cpp:493
 msgid "Radius"
 msgstr "Rayon"
@@ -12088,12 +12091,12 @@ msgid "No"
 msgstr "Non"
 
 #: eeschema/lib_pin.cpp:1003 eeschema/sch_pin.cpp:196
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1465
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1462
 msgid "Pos X"
 msgstr "Pos X"
 
 #: eeschema/lib_pin.cpp:1006 eeschema/sch_pin.cpp:199
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1466
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1463
 msgid "Pos Y"
 msgstr "Pos Y"
 
@@ -12536,7 +12539,7 @@ msgstr "Le nouveau fichier schématique n'est pas sauvé"
 #: eeschema/sch_edit_frame.cpp:631
 #: eeschema/symbol_editor/symbol_editor.cpp:1101
 #: pagelayout_editor/pl_editor_frame.cpp:351
-#: pcbnew/footprint_edit_frame.cpp:591 pcbnew/pcb_edit_frame.cpp:762
+#: pcbnew/footprint_edit_frame.cpp:597 pcbnew/pcb_edit_frame.cpp:768
 #, c-format
 msgid "Save changes to \"%s\" before closing?"
 msgstr "Sauver les changements en \"%s\" avant de fermer?"
@@ -12577,7 +12580,7 @@ msgid "[no file]"
 msgstr "[pas de fichier]"
 
 #: eeschema/sch_edit_frame.cpp:1202 kicad/kicad_manager_frame.cpp:604
-#: pcbnew/footprint_edit_frame.cpp:744 pcbnew/pcb_edit_frame.cpp:1160
+#: pcbnew/footprint_edit_frame.cpp:750 pcbnew/pcb_edit_frame.cpp:1166
 msgid "[Read Only]"
 msgstr "[Lecture Seule]"
 
@@ -12869,7 +12872,7 @@ msgstr ""
 
 #: eeschema/sch_plugins/eagle/sch_eagle_plugin.cpp:409
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:333
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2770
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2764
 #, c-format
 msgid "Unable to read file \"%s\""
 msgstr "Impossible de lire le fichier \"%s\""
@@ -14128,7 +14131,7 @@ msgid "Library Editor"
 msgstr "Éditeur de Librairies"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:158
-#: pcbnew/footprint_edit_frame.cpp:215 pcbnew/footprint_edit_frame.cpp:690
+#: pcbnew/footprint_edit_frame.cpp:221 pcbnew/footprint_edit_frame.cpp:696
 msgid "Libraries"
 msgstr "Librairies"
 
@@ -17123,8 +17126,8 @@ msgid "Application failed to load:\n"
 msgstr "Échec du chargement de l’application:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:601
-#: kicad/tools/kicad_manager_control.cpp:608 pcbnew/pcb_edit_frame.cpp:1397
-#: pcbnew/pcb_edit_frame.cpp:1428
+#: kicad/tools/kicad_manager_control.cpp:608 pcbnew/pcb_edit_frame.cpp:1403
+#: pcbnew/pcb_edit_frame.cpp:1434
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
@@ -17295,11 +17298,6 @@ msgstr "Erreur sur les  permissions d'accès ?"
 msgid "Failed to delete '%s'"
 msgstr "Impossible de supprimer \"%s\""
 
-#: libs/kiplatform/msw/environment.cpp:46
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
-
 #: pagelayout_editor/design_inspector.cpp:223
 msgid "Layout"
 msgstr "Plan"
@@ -17444,7 +17442,7 @@ msgid "Set to 0 for default"
 msgstr "Mettre à 0 pour défaut"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:364
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1352
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1349
 msgid "Rotation:"
 msgstr "Rotation:"
 
@@ -17484,7 +17482,6 @@ msgstr "Valeurs par Défaut:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:542
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:351
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:134
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:209
 msgid "Line thickness:"
 msgstr "Epaisseur de ligne:"
@@ -19681,7 +19678,7 @@ msgstr "Rect"
 msgid "Bezier Curve"
 msgstr "Courbe de Bézier"
 
-#: pcbnew/class_board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2108
+#: pcbnew/class_board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2112
 #: pcbnew/pcb_shape.cpp:504
 msgid "Polygon"
 msgstr "Polygone"
@@ -20355,7 +20352,7 @@ msgstr ""
 "Erreur d’importation des paramètres à partir du circuit imprimé :\n"
 "Impossible de charger le fichier de projet associé %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:188 pcbnew/files.cpp:666
+#: pcbnew/dialogs/dialog_board_setup.cpp:188 pcbnew/files.cpp:624
 #, c-format
 msgid ""
 "Error loading board file:\n"
@@ -21183,7 +21180,7 @@ msgstr "Dessiner une forme autour du texte du repère"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:74
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:183
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:117
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:167
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:83
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:138
@@ -21342,7 +21339,6 @@ msgid "Text pos Y"
 msgstr "Texte pos Y"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1262
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:141
 msgid "Thickness:"
@@ -23169,43 +23165,49 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:170
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:171
 msgid "Circle Properties"
 msgstr "Propriétés du Cercle"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:181
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:184
 msgid "Arc Properties"
 msgstr "Propriétés de l'Arc"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:186
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:191
 msgid "Polygon Properties"
 msgstr "Propriétés du Polygone"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:191
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:198
 msgid "Rectangle Properties"
 msgstr "Propriétés du Rectangle"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:200
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:209
 msgid "Line Segment Properties"
 msgstr "Propriétés du Segment de Droite"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:335
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
+msgid "Line width may not be 0 for unfilled shapes."
+msgstr ""
+"La largeur de la ligne ne peut pas être 0 pour les formes non remplies."
+
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
 msgid "Modify drawing properties"
 msgstr "Modifier les propriétés de l'élément graphique"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:356
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:376
 msgid "The arc angle cannot be zero."
 msgstr "L'angle de l'arc doit être différent de zéro."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:363
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:383
 msgid "The radius cannot be zero."
 msgstr "Le rayon ne peut pas être nul."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:369
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:389
 msgid "The rectangle cannot be empty."
 msgstr "Le rectangle ne peut pas être vide."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:385
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:405
 msgid "Error List"
 msgstr "Liste des Erreurs"
 
@@ -23226,7 +23228,13 @@ msgstr "Point de Controle Bezier"
 msgid "Arc angle:"
 msgstr "Angle de l'arc:"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:91
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1279
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1514
+msgid "Filled shape"
+msgstr "Forme remplie"
+
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:92
 msgid "Graphic Item Properties"
 msgstr "Propriétés de l'Élément Graphique"
 
@@ -23277,13 +23285,13 @@ msgid "KiCad Layer"
 msgstr "Couche Kicad"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
 msgstr ""
-"Toutes les couches doivent être appairées. Veuillez cliquer sur 'Couches "
-"auto-appairées' pour correspondre automatiquement aux couches restantes."
+"Toutes les couches requises (marquées par '*') doivent être appairés. "
+"Veuillez cliquer sur 'Auto-Associe Couches' pour appairer automatiquement "
+"les couches restantes"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
@@ -23648,9 +23656,9 @@ msgstr "Effort de lissage:"
 msgid "Non Copper Zones Properties"
 msgstr "Propriétés des Zones sur Couches non Cuivre"
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:82
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:79
 #: pcbnew/dialogs/dialog_pad_properties.cpp:694
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2107 pcbnew/pcb_shape.cpp:522
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2108 pcbnew/pcb_shape.cpp:522
 msgid "Segment"
 msgstr "Segment"
 
@@ -23662,27 +23670,27 @@ msgstr "Anneau"
 msgid "Center:"
 msgstr "Centre:"
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:319
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:330
 msgid "Polygon must have at least 3 corners"
 msgstr "Le polygone doit avoir au moins 3 sommets"
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:334
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:345
 msgid "Polygon must have at least 3 corners after simplification"
 msgstr "Le polygone doit avoir au moins 3 sommets après simplification"
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:340
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:351
 msgid "Polygon can not be self-intersecting"
 msgstr "Le polygone ne peut être auto intersectant"
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:358
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:369
 msgid "Note: redundant corners removed"
 msgstr "Note: sommets redondants supprimés"
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:384
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:395
 msgid "Select a corner to add the new corner after."
 msgstr "Sélectionner un sommet avant d'ajouter le nouveau sommet suivant."
 
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:418
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:429
 msgid "Select a corner to delete."
 msgstr "Sélectionner un sommet à supprimer."
 
@@ -23866,20 +23874,20 @@ msgid "Modify pad"
 msgstr "Modifier pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2018
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2156
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2190
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2162
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2196
 msgid "No shape selected"
 msgstr "Pas de forme sélectionnée"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2108
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2111
 msgid "Ring/Circle"
 msgstr "Anneau/Cercle"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2110
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2115
 msgid "Shape type:"
 msgstr "Type de forme:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2110
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2115
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:810
 msgid "Add Primitive"
 msgstr "Ajouter Primitive"
@@ -24293,33 +24301,21 @@ msgstr "Point de controle 2"
 msgid "End point"
 msgstr "Position Fin"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1282
-msgid "Set thickness to 0 for a filled circle."
-msgstr "Définissez l'épaisseur à 0 pour un cercle rempli."
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1326
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1323
 msgid "Move vector"
 msgstr "Vecteur de dépl"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1375
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1372
 msgid "Scaling factor:"
 msgstr "Facteur d'échelle:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1397
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1394
 msgid "Duplicate:"
 msgstr "Doubles:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1506
-msgid "Outline thickness:"
-msgstr "Épaisseur contour:"
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1568
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1562
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
 msgstr "Les coordonnées sont relatives au pad d’ancrage, orientation 0,0 deg."
-
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:1574
-msgid "Set thickness to 0 for a filled polygon."
-msgstr "Définissez l'épaisseur à 0 pour un polygone rempli."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.h:264
 msgid "Pad Properties"
@@ -27653,39 +27649,21 @@ msgstr "Le circuit actuel va être fermé. Continuer?"
 msgid "noname"
 msgstr "sansnom"
 
-#: pcbnew/files.cpp:508
-msgid ""
-"If the zones on this board are refilled the Copper Edge Clearance\n"
-"setting will be used (see Board Setup > Design Rules).  This may\n"
-"result in different fills from previous Kicad versions which used\n"
-"the line thickness of the board boundary on the Edge Cuts layer."
-msgstr ""
-"Si les zones de cette carte sont re-remplies, le réglage d'isolation entre "
-"cuivre et contours sera utilisé\n"
-"(voir Configuration du CI > règles de conception).  Cela peut entraîner des "
-"remplissages différents des\n"
-"versions précédentes de kicad qui utilisaient l’épaisseur de ligne du "
-"contour de la carte sur la couche Edge Cuts."
-
-#: pcbnew/files.cpp:512
-msgid "Edge Clearance Warning"
-msgstr "Avertissement Isolation Contour de CI"
-
-#: pcbnew/files.cpp:543
+#: pcbnew/files.cpp:501
 #, c-format
 msgid "PCB file \"%s\" is already open."
 msgstr "Le fichier PCB \"%s\" est déjà ouvert."
 
-#: pcbnew/files.cpp:550
+#: pcbnew/files.cpp:508
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Le circuit imprimé a été modifié. Voulez vous sauver les changements?"
 
-#: pcbnew/files.cpp:569
+#: pcbnew/files.cpp:527
 #, c-format
 msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "Le PCB \"%s\" n'existe pas. Voulez vous le créer?"
 
-#: pcbnew/files.cpp:708
+#: pcbnew/files.cpp:666
 msgid ""
 "This file was created by an older version of Pcbnew.\n"
 "It will be stored in the new file format when you save this file again."
@@ -27693,12 +27671,12 @@ msgstr ""
 "Ce fichier a été créé par une version plus ancienne de Pcbnew.\n"
 "Il sera enregistré au nouveau format après la prochaine sauvegarde."
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:923
+#: pcbnew/files.cpp:742 pcbnew/files.cpp:881
 #, c-format
 msgid "No access rights to write to file \"%s\""
 msgstr "Pas de droit d'écriture pour le fichier \"%s\""
 
-#: pcbnew/files.cpp:849 pcbnew/files.cpp:943
+#: pcbnew/files.cpp:807 pcbnew/files.cpp:901
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -27707,7 +27685,7 @@ msgstr ""
 "Erreur en sauvegarde du fichier PCB \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:868
+#: pcbnew/files.cpp:826
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -27716,12 +27694,12 @@ msgstr ""
 "Erreur en sauvegarde du fichier PCB \"%s\".\n"
 "Impossible de renommer le fichier temporaire \"%s\""
 
-#: pcbnew/files.cpp:903
+#: pcbnew/files.cpp:861
 #, c-format
 msgid "Wrote board file: \"%s\""
 msgstr "Écriture fichier CI: \"%s\""
 
-#: pcbnew/files.cpp:981
+#: pcbnew/files.cpp:939
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -27730,7 +27708,7 @@ msgstr ""
 "Pcb copié vers:\n"
 "\"%s\""
 
-#: pcbnew/files.cpp:1099
+#: pcbnew/files.cpp:1057
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -27844,42 +27822,42 @@ msgstr "empreinte %s"
 msgid "Inner layers"
 msgstr "Couches internes"
 
-#: pcbnew/footprint_edit_frame.cpp:224 pcbnew/pcb_edit_frame.cpp:256
+#: pcbnew/footprint_edit_frame.cpp:230 pcbnew/pcb_edit_frame.cpp:262
 msgid "Selection Filter"
 msgstr "Filtre de Sélection"
 
-#: pcbnew/footprint_edit_frame.cpp:277
+#: pcbnew/footprint_edit_frame.cpp:283
 msgid "Footprint changes are unsaved"
 msgstr "Les modifications de l'empreinte ne sont pas sauvées."
 
-#: pcbnew/footprint_edit_frame.cpp:448
+#: pcbnew/footprint_edit_frame.cpp:454
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 "Edite %s à partir du PCB.  L’enregistrement mettra à jour le PCB uniquement."
 
-#: pcbnew/footprint_edit_frame.cpp:724
+#: pcbnew/footprint_edit_frame.cpp:730
 #, c-format
 msgid "%s [from %s.%s]"
 msgstr "%s [de %s.%s]"
 
-#: pcbnew/footprint_edit_frame.cpp:751 pcbnew/pcb_edit_frame.cpp:1162
+#: pcbnew/footprint_edit_frame.cpp:757 pcbnew/pcb_edit_frame.cpp:1168
 msgid "[Unsaved]"
 msgstr "[Non sauvé]"
 
-#: pcbnew/footprint_edit_frame.cpp:803
+#: pcbnew/footprint_edit_frame.cpp:809
 msgid "Updating Footprint Libraries"
 msgstr "Mise à Jour Librairies d'Empreintes"
 
-#: pcbnew/footprint_edit_frame.cpp:875
+#: pcbnew/footprint_edit_frame.cpp:881
 msgid "Default Values"
 msgstr "Valeurs par Défaut"
 
-#: pcbnew/footprint_edit_frame.cpp:1065
+#: pcbnew/footprint_edit_frame.cpp:1071
 msgid "No footprint selected."
 msgstr "Aucune empreinte sélectionnée."
 
-#: pcbnew/footprint_edit_frame.cpp:1074
+#: pcbnew/footprint_edit_frame.cpp:1080
 msgid "Footprint Image File Name"
 msgstr "Nom du Fichier Image Empreinte"
 
@@ -27981,7 +27959,7 @@ msgid "Footprint exported to file \"%s\""
 msgstr "Empreinte exportée dans fichier \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:436
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2337
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2345
 #, c-format
 msgid "Library \"%s\" is read only."
 msgstr "La librairie \"%s\" est en lecture seule."
@@ -28148,7 +28126,7 @@ msgstr "pas d'assistant Sélectionné"
 msgid "Couldn't reload footprint wizard"
 msgstr "Ne peut recharger l'assistant"
 
-#: pcbnew/fp_shape.cpp:132 pcbnew/pcb_shape.cpp:908
+#: pcbnew/fp_shape.cpp:132 pcbnew/pcb_shape.cpp:911
 #, c-format
 msgid "%s on %s"
 msgstr "%s sur %s"
@@ -28509,9 +28487,8 @@ msgstr "Valeur du Rayon du Stub Arc:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:78
 #: pcbnew/microwave/microwave_footprint.cpp:93
-#, fuzzy
 msgid "Create microwave footprint"
-msgstr "Créer Gap MicroOnde"
+msgstr "Créer une empreinte micro-onde"
 
 #: pcbnew/microwave/microwave_footprint.cpp:92
 msgid "Angle in degrees:"
@@ -28753,7 +28730,7 @@ msgstr ""
 "netliste."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:425
-#: pcbnew/plugins/kicad/pcb_parser.cpp:2807
+#: pcbnew/plugins/kicad/pcb_parser.cpp:2840
 #, c-format
 msgid ""
 "Invalid footprint ID in\n"
@@ -29028,24 +29005,24 @@ msgstr "Rapport Rayon d'Arrondi"
 msgid "Error loading project footprint libraries"
 msgstr "Erreur lors du chargement des librairies d'empreintes"
 
-#: pcbnew/pcb_edit_frame.cpp:320
+#: pcbnew/pcb_edit_frame.cpp:326
 msgid "New PCB file is unsaved"
 msgstr "Le nouveau fichier PCB n'est pas sauvé"
 
-#: pcbnew/pcb_edit_frame.cpp:813
+#: pcbnew/pcb_edit_frame.cpp:819
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Le fichier d'auto sauvegarde \"%s\" n'a pas pu être supprimé!"
 
-#: pcbnew/pcb_edit_frame.cpp:1059
+#: pcbnew/pcb_edit_frame.cpp:1065
 msgid "PCB file changes are unsaved"
 msgstr "Les modifications du C.I. ne sont pas sauvées."
 
-#: pcbnew/pcb_edit_frame.cpp:1304
+#: pcbnew/pcb_edit_frame.cpp:1310
 msgid "The schematic for this board cannot be found."
 msgstr "La schématique pour ce circiut imprimé ne peut pas être trouvée."
 
-#: pcbnew/pcb_edit_frame.cpp:1337
+#: pcbnew/pcb_edit_frame.cpp:1343
 msgid ""
 "Cannot update the PCB because Pcbnew is opened in stand-alone mode. In order "
 "to create or update PCBs from schematics, you must launch the KiCad project "
@@ -29055,20 +29032,20 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créez un projet."
 
-#: pcbnew/pcb_edit_frame.cpp:1355
+#: pcbnew/pcb_edit_frame.cpp:1361
 msgid "Eeschema netlist"
 msgstr "Netliste EEschema"
 
-#: pcbnew/pcb_edit_frame.cpp:1396
+#: pcbnew/pcb_edit_frame.cpp:1402
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "Fichier schématique\"%s\" non trouvé."
 
-#: pcbnew/pcb_edit_frame.cpp:1427
+#: pcbnew/pcb_edit_frame.cpp:1433
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema a échoué pour charger:\n"
 
-#: pcbnew/pcb_edit_frame.cpp:1611
+#: pcbnew/pcb_edit_frame.cpp:1617
 msgid "Export Hyperlynx Layout"
 msgstr "Exporter au Format Hyperlynx"
 
@@ -29137,11 +29114,11 @@ msgstr "Points"
 msgid "Unrecognized"
 msgstr "Non reconnu"
 
-#: pcbnew/pcb_shape.cpp:1265 pcbnew/track.cpp:1060 pcbnew/track.cpp:1077
+#: pcbnew/pcb_shape.cpp:1269 pcbnew/track.cpp:1060 pcbnew/track.cpp:1077
 msgid "End X"
 msgstr "Fin X"
 
-#: pcbnew/pcb_shape.cpp:1267 pcbnew/track.cpp:1062 pcbnew/track.cpp:1079
+#: pcbnew/pcb_shape.cpp:1271 pcbnew/track.cpp:1062 pcbnew/track.cpp:1079
 msgid "End Y"
 msgstr "Fin Y"
 
@@ -29261,7 +29238,7 @@ msgstr ""
 "Polygone sur couche Altium %d n'a pas d'équivalent dans Kicad. Placé sur "
 "couche Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1596
+#: pcbnew/plugins/altium/altium_pcb.cpp:1597
 #, c-format
 msgid ""
 "Arc Keepout on Altium layer %d has no KiCad equivalent. Put it on Eco1_User "
@@ -29270,7 +29247,7 @@ msgstr ""
 "Arc de zone interdite sur couche Altium %d n'a pas d'équivalent dans Kicad. "
 "Placé sur couche Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1615
+#: pcbnew/plugins/altium/altium_pcb.cpp:1616
 #, c-format
 msgid ""
 "Arc on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
@@ -29278,7 +29255,7 @@ msgstr ""
 "Arc sur couche Altium %d n'a pas d'équivalent dans Kicad. Placé sur couche "
 "Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1750
+#: pcbnew/plugins/altium/altium_pcb.cpp:1751
 #, c-format
 msgid ""
 "Pad '%s' of Footprint %s has a square hole. KiCad does not support this yet"
@@ -29286,7 +29263,7 @@ msgstr ""
 "Le pad '%s’de l’empreinte %s a un trou carré. KiCad ne supporte pas encore "
 "ceci."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1772
+#: pcbnew/plugins/altium/altium_pcb.cpp:1773
 #, c-format
 msgid ""
 "Pad '%s' of Footprint %s has a hole-rotation of %f degree. KiCad only "
@@ -29295,7 +29272,7 @@ msgstr ""
 "Le pad '%s’de l’empreinte %s a un trou avec rotation de %f degrés. KiCad ne "
 "supporte que des rotations de 90 degrés."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1805
+#: pcbnew/plugins/altium/altium_pcb.cpp:1806
 #, c-format
 msgid ""
 "Pad '%s' of Footprint %s uses a complex pad stack (kind %d), which is not "
@@ -29313,7 +29290,12 @@ msgstr ""
 "Le pad non cuivre sur la couche Altium %d n’a pas d’équivalent KiCad. Mis "
 "sur Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:1917
+#: pcbnew/plugins/altium/altium_pcb.cpp:1912
+#, c-format
+msgid "Non-Copper Pad '%s' has a hole. This should not happen"
+msgstr "Le pad non cuivre '%s' a un trou. Cela ne devrait pas se produire"
+
+#: pcbnew/plugins/altium/altium_pcb.cpp:1918
 #, c-format
 msgid ""
 "Non-Copper Pad '%s' uses a complex pad stack (kind %d). This should not "
@@ -29322,7 +29304,7 @@ msgstr ""
 "Le pad non cuivre '%s’ utilise une pile de pads complexe (type %d). Cela ne "
 "doit pas arriver"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2175
+#: pcbnew/plugins/altium/altium_pcb.cpp:2182
 #, c-format
 msgid ""
 "Track Keepout on Altium layer %d has no KiCad equivalent. Put it on "
@@ -29331,7 +29313,7 @@ msgstr ""
 "Piste de zone interdite sur couche Altium %d n'a pas d'équivalent dans "
 "Kicad. Placé sur couche Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2193
+#: pcbnew/plugins/altium/altium_pcb.cpp:2200
 #, c-format
 msgid ""
 "Track on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
@@ -29339,7 +29321,7 @@ msgstr ""
 "Piste sur couche Altium %d n'a pas d'équivalent dans Kicad. Placé sur couche "
 "Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2241
+#: pcbnew/plugins/altium/altium_pcb.cpp:2248
 #, c-format
 msgid ""
 "Ignore Barcode on Altium layer %d because it is not supported right now."
@@ -29347,7 +29329,7 @@ msgstr ""
 "Ignore le code-barre sur la couche Altium %d parce qu’il n’est pas pris en "
 "charge actuellement."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2329
+#: pcbnew/plugins/altium/altium_pcb.cpp:2336
 #, c-format
 msgid ""
 "Text on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
@@ -29355,7 +29337,7 @@ msgstr ""
 "Texte sur couche Altium %d n'a pas d'équivalent dans Kicad. Placé sur couche "
 "Eco1_User à la place"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2430
+#: pcbnew/plugins/altium/altium_pcb.cpp:2436
 #, c-format
 msgid ""
 "Fill on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
@@ -29443,7 +29425,7 @@ msgstr ""
 "La zone CADSTAR '%s’dans le composant en librairie  '%s’n’a pas d’équivalent "
 "KiCad. La zone n’est mas une zone interdite. La zone n’a pas été importée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:932
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:933
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
@@ -29452,7 +29434,7 @@ msgstr ""
 "La définition de pad CADSTAR '%s' a la forme du trou en dehors de la forme "
 "du pad. Le trou a été déplacé au le centre du pad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:993
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:994
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
@@ -29461,7 +29443,7 @@ msgstr ""
 "Le fichier semble être corrompu. Impossible de trouver l'ID de groupe %s "
 "dans les définitions de groupe."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1000
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1001
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
@@ -29470,13 +29452,13 @@ msgstr ""
 "Le fichier semble être corrompu. Impossible de trouver le sous-groupe %s "
 "dans la carte de groupe (ID de groupe parent=%s, Nom=%s)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1119
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1129
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1120
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1130
 #, c-format
 msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
 msgstr "Cote type %s n'a pas d'équivalent dans KiCad. N'a pas été importée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1168
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1169
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -29487,7 +29469,7 @@ msgstr ""
 "Les zones de placement ne sont pas prises en charge dans KiCad. Seuls les "
 "éléments pris en charge ont été importés."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1176
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1177
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
@@ -29496,20 +29478,20 @@ msgstr ""
 "La zone CADSTAR '%s’n’a pas d’équivalent KiCad. Les zones de placement pur "
 "ne sont pas prises en charge."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1200
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1201
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
 "Impossible de trouver l'élément '%s’dans la librairie (Symdef ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1282
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1283
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 "Impossible de trouver la documentation du symbole dans la librairie (Symdef "
 "ID: '%s')"
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1348
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1349
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
@@ -29518,7 +29500,7 @@ msgstr ""
 "Le modèle CADSTAR '%s’ a le paramètre 'Autorisé dans zones de non routage' "
 "activé . Ce paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1354
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1355
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
@@ -29527,7 +29509,7 @@ msgstr ""
 "Le modèle CADSTAR '%s' a le paramètre 'Box Isolated Pins' activé. Ce "
 "paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1360
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1361
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
@@ -29536,7 +29518,7 @@ msgstr ""
 "Le modèle CADSTAR '%s' a activé le paramètre 'Automatic Repour'. Ce "
 "paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1369
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1370
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -29547,7 +29529,7 @@ msgstr ""
 "'Sliver Width'. Il n’y a pas d’équivalent KiCad pour cela, donc ce paramètre "
 "a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1377
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1378
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -29560,7 +29542,7 @@ msgstr ""
 "de distinction entre ces deux paramètres. Le réglage de cuivre non connecté "
 "a été appliqué comme ilot de zone minimal de la zone de KiCad."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1408
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1409
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -29571,7 +29553,7 @@ msgstr ""
 "pads et les vias. KiCad ne prend en charge qu’un seul paramètre pour les "
 "deux. Le réglage des plaquettes a été appliqué."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1448
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1449
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -29582,7 +29564,7 @@ msgstr ""
 "Toutefois, aucun net avec un tel nom n’existe.\n"
 "La couche a été chargée mais aucune zone de cuivre n’a été créée."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1492
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1493
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -29594,7 +29576,7 @@ msgstr ""
 "sont solides ou avec hachures, ou sous forme de piste KiCad si la forme "
 "était un contour non rempli (ouvert ou fermé)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1590
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1591
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
@@ -29603,7 +29585,7 @@ msgstr ""
 "Le net '%s' fait référence à l’ID de composant '%s ' qui n’existe pas. Cela "
 "a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1596
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1597
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
@@ -29612,7 +29594,7 @@ msgstr ""
 "Le net '%s' fait référence à l’indice de pad inexistant '%d' dans le "
 "composant '%s'. Cela a été ignoré."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1693
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1694
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -29623,7 +29605,7 @@ msgstr ""
 "en charge que les vias circulaires de sorte que ce type via a été changé "
 "pour être une via circulaire de %.2f mm de diamètre."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1898
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1899
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
@@ -29632,7 +29614,7 @@ msgstr ""
 "La forme pour '%s' est hachurée dans CADSTAR, et n’a pas d’équivalent KiCad. "
 "Remplissage solide à la place."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2615
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2617
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -29643,7 +29625,7 @@ msgstr ""
 "que 2 hachures (hachure en croix) à 90 degrés l’une de l’autre. La hachure "
 "importée est en croix."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2625
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2627
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -29654,7 +29636,7 @@ msgstr ""
 "hachure. KiCad ne prend en charge qu’une largeur. Les hachures importée "
 "utilise la largeur définie la première, c’est-à-dire %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2637
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2639
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -29665,7 +29647,7 @@ msgstr ""
 "hachure. KiCad ne prend en charge qu’une taille pour les hachures. Les "
 "hachures importée utilisent la première taille définie, c’est-à-dire %.2f mm."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2650
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2652
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -29678,7 +29660,7 @@ msgstr ""
 "importée a deux hachures à 90 degrés l’une de l’autre, tournées de %.1f "
 "degrés de l’horizontale."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2733
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2735
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -29691,7 +29673,7 @@ msgstr ""
 "plus proche du \"Net Route Code\" de CADSTAR (qui a été importé pour tous "
 "les nets)."
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2744
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2746
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -29703,41 +29685,45 @@ msgstr ""
 "sorte que ces éléments n’ont pas été importés. S’il vous plaît examiner les "
 "règles de conception car les zones de cuivre seront affectées par cela."
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:955
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:949
 #, c-format
 msgid "<package> name: \"%s\" duplicated in eagle <library>: \"%s\""
 msgstr "nom <package>: \"%s\" dupliqué dans la <librairie> Eagle: \"%s\""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1029
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1023
 #, c-format
 msgid "No \"%s\" package in library \"%s\""
 msgstr "Pas de boîtier \"%s\" en librairie \"%s\""
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1253
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2028
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1247
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2022
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Ignorer un polygone puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1602
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1596
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorer un fil puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1775
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1769
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Ignorer un texte puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:1913
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:1907
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Ignorer un rectangle puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
-#: pcbnew/plugins/eagle/eagle_plugin.cpp:2098
+#: pcbnew/plugins/eagle/eagle_plugin.cpp:2092
 #, c-format
-msgid "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
+msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Ignorer un cercle puisque la couche Eagle '%s' (%d) n’a pas été associée"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:90
 #, c-format
@@ -29767,7 +29753,7 @@ msgid "Element token contains %d parameters."
 msgstr "Element token contains %d parameters."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:959
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2251
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2259
 #, c-format
 msgid "Library \"%s\" is read only"
 msgstr "Librairie \"%s\" est en lecture seule"
@@ -29837,26 +29823,26 @@ msgstr "Structure interne de données de groupe corrompue"
 msgid "Save Anyway"
 msgstr "Sauver de Toute Façon"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1250
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1256
 #, c-format
 msgid "unknown pad type: %d"
 msgstr "type pad inconnu: %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1681
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1689
 #, c-format
 msgid "unknown via type %d"
 msgstr "type via inconnu %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:1850
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:1858
 #, c-format
 msgid "unknown zone corner smoothing type %d"
 msgstr "unknown zone corner smoothing type %d"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2102
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2110
 msgid "this file does not contain a PCB"
 msgstr "ce fichier ne contient pas de PCB"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2239
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2247
 #, c-format
 msgid ""
 "Library \"%s\" does not exist.\n"
@@ -29865,42 +29851,42 @@ msgstr ""
 "La librairie\"%s\" n'existe pas.\n"
 "Voulez vous la créer?"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2243
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2251
 msgid "Library Not Found"
 msgstr "Librairie non trouvée"
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2282
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2290
 #, c-format
 msgid "Footprint file name \"%s\" is not valid."
 msgstr "Nom de fichier d'empreinte \"%s\" non valide."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2288
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2296
 #, c-format
 msgid "No write permissions to delete file \"%s\""
 msgstr "Pas de permission d'écriture pour supprimer  le fichier \"%s\""
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2356
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2364
 #, c-format
 msgid "Cannot overwrite library path \"%s\"."
 msgstr "Impossible de remplacer le chemin librairie  \"%s\"."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2381
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2389
 #, c-format
 msgid "User does not have permission to delete directory \"%s\"."
 msgstr ""
 "Vous n'avez pas la permission d'écriture pour supprimer le répertoire \"%s\"."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2389
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2397
 #, c-format
 msgid "Library directory \"%s\" has unexpected sub-directories."
 msgstr "Le répertoire librairie \"%s\" a des sous-répertoires inattendus."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2408
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2416
 #, c-format
 msgid "Unexpected file \"%s\" was found in library path \"%s\"."
 msgstr "Fichier inattendu \"%s\" trouvé dans le chemin de librairie \"%s\"."
 
-#: pcbnew/plugins/kicad/kicad_plugin.cpp:2424
+#: pcbnew/plugins/kicad/kicad_plugin.cpp:2432
 #, c-format
 msgid "Footprint library \"%s\" cannot be deleted."
 msgstr "La librairie d'empreintes  \"%s\" ne peut pas être supprimée."
@@ -29940,18 +29926,18 @@ msgstr ""
 msgid "%d is not a valid layer count"
 msgstr "%d n'est pas un nombre de couches valide"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:2088
+#: pcbnew/plugins/kicad/pcb_parser.cpp:2089
 #, c-format
 msgid "Duplicate NETCLASS name \"%s\" in file \"%s\" at line %d, offset %d"
 msgstr ""
 "Nom NETCLASS \"%s\" dupliqué dans le fichier \"%s\" ligne %d, offset %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3132
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3165
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Ne peut gérer le texte d'empreinte type %s"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3609
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3671
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -29964,7 +29950,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3625
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3687
 #, c-format
 msgid ""
 "Net name doesn't match net ID in\n"
@@ -29977,10 +29963,10 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4063
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4134
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4221
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4313
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4122
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4193
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4280
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4372
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -29993,7 +29979,7 @@ msgstr ""
 "ligne: %d\n"
 "offset: %d"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4429
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4488
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2581
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
@@ -30002,7 +29988,7 @@ msgstr ""
 "Le mode de remplissage par segment  n'est plus supporté.\n"
 "Convertir la zone en polygone de remplissage?"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4431
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4490
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2583
 msgid "Legacy Zone Warning"
 msgstr "Avertissement d'Obsolescence"
@@ -30658,19 +30644,19 @@ msgstr "Via: %s (%s)"
 msgid "Convert..."
 msgstr "Convertir..."
 
-#: pcbnew/tools/convert_tool.cpp:200
+#: pcbnew/tools/convert_tool.cpp:201
 msgid "Convert shapes to polygon"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:231
+#: pcbnew/tools/convert_tool.cpp:232
 msgid "Convert shapes to zone"
 msgstr "Convertir les formes en zone"
 
-#: pcbnew/tools/convert_tool.cpp:554
+#: pcbnew/tools/convert_tool.cpp:555
 msgid "Convert polygons to lines"
 msgstr "Convertir les polygones en lignes"
 
-#: pcbnew/tools/convert_tool.cpp:644
+#: pcbnew/tools/convert_tool.cpp:646
 msgid "Create arc from line segment"
 msgstr "Créer arc à partir du segment"
 
@@ -30678,51 +30664,51 @@ msgstr "Créer arc à partir du segment"
 msgid "Select Via Size"
 msgstr "Sélectionner Taille Via"
 
-#: pcbnew/tools/drawing_tool.cpp:262 pcbnew/tools/drawing_tool.cpp:1436
+#: pcbnew/tools/drawing_tool.cpp:262 pcbnew/tools/drawing_tool.cpp:1441
 msgid "Draw a line segment"
 msgstr "Tracer une ligne"
 
-#: pcbnew/tools/drawing_tool.cpp:308 pcbnew/tools/pcb_actions.cpp:98
+#: pcbnew/tools/drawing_tool.cpp:309 pcbnew/tools/pcb_actions.cpp:98
 msgid "Draw a rectangle"
 msgstr "Tracer un rectangle"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/pcb_actions.cpp:104
+#: pcbnew/tools/drawing_tool.cpp:355 pcbnew/tools/pcb_actions.cpp:104
 msgid "Draw a circle"
 msgstr "Tracer un cercle"
 
-#: pcbnew/tools/drawing_tool.cpp:393 pcbnew/tools/pcb_actions.cpp:110
+#: pcbnew/tools/drawing_tool.cpp:397 pcbnew/tools/pcb_actions.cpp:110
 msgid "Draw an arc"
 msgstr "Tracer un arc"
 
-#: pcbnew/tools/drawing_tool.cpp:581
+#: pcbnew/tools/drawing_tool.cpp:585
 msgid "Place a text"
 msgstr "Placer un texte"
 
-#: pcbnew/tools/drawing_tool.cpp:862
+#: pcbnew/tools/drawing_tool.cpp:866
 msgid "Draw a leader"
 msgstr "Tracer un guide"
 
-#: pcbnew/tools/drawing_tool.cpp:875
+#: pcbnew/tools/drawing_tool.cpp:879
 msgid "Draw a dimension"
 msgstr "Tracer une cote"
 
-#: pcbnew/tools/drawing_tool.cpp:1004
+#: pcbnew/tools/drawing_tool.cpp:1008
 msgid "No graphic items found in file to import"
 msgstr "Pas d'éléments graphiques trouvés dans le fichier à importer"
 
-#: pcbnew/tools/drawing_tool.cpp:1051 pcbnew/tools/drawing_tool.cpp:1144
+#: pcbnew/tools/drawing_tool.cpp:1055 pcbnew/tools/drawing_tool.cpp:1148
 msgid "Place a DXF_SVG drawing"
 msgstr "Placer un dessin DXF_SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:1208
+#: pcbnew/tools/drawing_tool.cpp:1212
 msgid "Move the footprint reference anchor"
 msgstr "Déplacer l'ancre de référence de l'empreinte"
 
-#: pcbnew/tools/drawing_tool.cpp:1856
+#: pcbnew/tools/drawing_tool.cpp:1861
 msgid "Self-intersecting polygons are not allowed"
 msgstr "Les polygones auto intersectants ne sont pas autorisés"
 
-#: pcbnew/tools/drawing_tool.cpp:2350
+#: pcbnew/tools/drawing_tool.cpp:2355
 msgid "Place via"
 msgstr "Place via"
 
@@ -30864,11 +30850,11 @@ msgstr "Mode Edition de Pad.  Appuyez à nouveau sur %s pour sortir."
 msgid "Pad Edit Mode.  Press %s to exit."
 msgstr "Mode Edition de Pad.  Appuyez sur %s pour sortir."
 
-#: pcbnew/tools/pad_tool.cpp:608
+#: pcbnew/tools/pad_tool.cpp:609
 msgid "Edit pad shapes"
 msgstr "Modifier les formes du pad"
 
-#: pcbnew/tools/pad_tool.cpp:713
+#: pcbnew/tools/pad_tool.cpp:716
 msgid "Recombine pads"
 msgstr "Recombiner pads"
 
@@ -32589,7 +32575,7 @@ msgstr "Ajouter une découpe de zone"
 msgid "Add a zone"
 msgstr "Ajoutez une zone"
 
-#: pcbnew/tools/zone_create_helper.cpp:261
+#: pcbnew/tools/zone_create_helper.cpp:262
 msgid "Add a graphical polygon"
 msgstr "Addition de polygones graphiques"
 
@@ -33295,9 +33281,34 @@ msgstr "Modifier les propriétés de la zone"
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
+
+#~ msgid "Set thickness to 0 for a filled circle."
+#~ msgstr "Définissez l'épaisseur à 0 pour un cercle rempli."
+
+#~ msgid "Outline thickness:"
+#~ msgstr "Épaisseur contour:"
+
+#~ msgid "Set thickness to 0 for a filled polygon."
+#~ msgstr "Définissez l'épaisseur à 0 pour un polygone rempli."
+
+#~ msgid ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance\n"
+#~ "setting will be used (see Board Setup > Design Rules).  This may\n"
+#~ "result in different fills from previous Kicad versions which used\n"
+#~ "the line thickness of the board boundary on the Edge Cuts layer."
+#~ msgstr ""
+#~ "Si les zones de cette carte sont re-remplies, le réglage d'isolation "
+#~ "entre cuivre et contours sera utilisé\n"
+#~ "(voir Configuration du CI > règles de conception).  Cela peut entraîner "
+#~ "des remplissages différents des\n"
+#~ "versions précédentes de kicad qui utilisaient l’épaisseur de ligne du "
+#~ "contour de la carte sur la couche Edge Cuts."
+
+#~ msgid "Edge Clearance Warning"
+#~ msgstr "Avertissement Isolation Contour de CI"
 
 #~ msgid "Modify module properties"
 #~ msgstr "Modifier les propriétés de l'empreinte"

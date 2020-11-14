@@ -2089,7 +2089,7 @@ void EAGLE_PLUGIN::packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) cons
 
         if( layer == UNDEFINED_LAYER )
         {
-            wxLogMessage( wxString::Format( _( "Ignoring a cricle since Eagle layer '%s' (%d) "
+            wxLogMessage( wxString::Format( _( "Ignoring a circle since Eagle layer '%s' (%d) "
                                                "was not mapped" ),
                                             eagle_layer_name( e.layer ),
                                             e.layer ) );
