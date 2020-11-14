@@ -201,7 +201,13 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetFlags( wxAUI_MGR_DEFAULT | wxAUI_MGR_LIVE_RESIZE );
+
+    unsigned int auiFlags = wxAUI_MGR_DEFAULT;
+#if !defined( _WIN32 )
+    // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds of graphical glitches
+    auiFlags |= wxAUI_MGR_LIVE_RESIZE );
+#endif
+    m_auimgr.SetFlags( auiFlags );
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
