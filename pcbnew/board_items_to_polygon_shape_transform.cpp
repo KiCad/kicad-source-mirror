@@ -641,13 +641,44 @@ void PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         wxSize shapesize( m_size );
         bool   doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
-        radius += aClearanceValue;
-        shapesize.x += aClearanceValue * 2;
-        shapesize.y += aClearanceValue * 2;
+        double chamferRatio = doChamfer ? GetChamferRectRatio() : 0.0;
+
+        if( aClearanceValue )
+        {
+            radius += aClearanceValue;
+            shapesize.x += aClearanceValue * 2;
+            shapesize.y += aClearanceValue * 2;
+
+            // The chamfer position (the 45 deg line on corner) must be
+            // offsetted by aClearanceValue from the base shape chamfer pos
+            // So we recalculate the chamferRatio to do that
+            //
+            // the chamfered shape is square with widet = w, and a corner dist from center
+            // is w*1.414 / 2 = w*0.707
+            // the distance from corner to chamfer line is ch = chamfer_size/707
+            // the distance from center to chamfer line is
+            // d = w*707 - ch/707
+            // so we have:
+            // base shape: d1 = w1*707 - ch1/707 = 0.707 * ( w1 - w1*chamferRatio)
+            // shape with clearance: d2 = w2*707 - ch2/707 = d1 + aClearanceValue
+            const double rootsq_2 = 1.41421356237/2;
+            int d1 = rootsq_2 * std::min( m_size.x, m_size.y ) * ( 1 - GetChamferRectRatio() );
+            int d2 = d1 + aClearanceValue;
+            // d2 = 0.707 * w2 * ( 1 - chamferRatio2 )
+            // 1 - d2 / ( 0.707 * w2 ) = chamferRatio2
+            chamferRatio = 1.0 - d2 / ( rootsq_2 * std::min( shapesize.x, shapesize.y ) );
+
+            // Ensure chamferRatio = 0.0 ... 0.5
+            if( chamferRatio < 0.0 )
+                chamferRatio = 0.0;
+
+            if( chamferRatio > 0.5 )
+                chamferRatio = 0.5;
+        }
 
         SHAPE_POLY_SET outline;
         TransformRoundChamferedRectToPolygon( outline, padShapePos, shapesize, angle, radius,
-                                              doChamfer ? GetChamferRectRatio() : 0.0,
+                                              chamferRatio,
                                               doChamfer ? GetChamferPositions() : 0,
                                               aError, aErrorLoc );
 

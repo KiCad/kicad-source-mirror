@@ -192,6 +192,8 @@ void TransformOvalToPolygon( SHAPE_POLY_SET& aCornerBuffer, wxPoint aStart, wxPo
 void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxSize& aSize,
                                   int aCornerRadius, int aError, ERROR_LOC aErrorLoc )
 {
+    SHAPE_POLY_SET outline;
+
     wxPoint centers[4];
     wxSize size( aSize / 2 );
 
@@ -228,26 +230,51 @@ void TransformRoundRectToPolygon( SHAPE_POLY_SET& aCornerBuffer, const wxSize& a
             wxPoint pt( -radius, 0 );
             RotatePoint( &pt, angle );
             pt += aCenter;
-            aCornerBuffer.Append( pt.x, pt.y );
+            outline.Append( pt.x, pt.y );
         }
     };
 
-    aCornerBuffer.NewOutline();
+    outline.NewOutline();
 
-    aCornerBuffer.Append( centers[0] + wxPoint( -radius, 0 ) );
+    outline.Append( centers[0] + wxPoint( -radius, 0 ) );
     genArc( centers[0], 0, 900 );
-    aCornerBuffer.Append( centers[0] + wxPoint( 0, radius ) );
-    aCornerBuffer.Append( centers[1] + wxPoint( 0, radius ) );
+    outline.Append( centers[0] + wxPoint( 0, radius ) );
+    outline.Append( centers[1] + wxPoint( 0, radius ) );
     genArc( centers[1], 900, 1800 );
-    aCornerBuffer.Append( centers[1] + wxPoint( radius, 0 ) );
-    aCornerBuffer.Append( centers[2] + wxPoint( radius, 0 ) );
+    outline.Append( centers[1] + wxPoint( radius, 0 ) );
+    outline.Append( centers[2] + wxPoint( radius, 0 ) );
     genArc( centers[2], 1800, 2700 );
-    aCornerBuffer.Append( centers[2] + wxPoint( 0, -radius ) );
-    aCornerBuffer.Append( centers[3] + wxPoint( 0, -radius ) );
+    outline.Append( centers[2] + wxPoint( 0, -radius ) );
+    outline.Append( centers[3] + wxPoint( 0, -radius ) );
     genArc( centers[3], 2700, 3600 );
-    aCornerBuffer.Append( centers[3] + wxPoint( -radius, 0 ) );
+    outline.Append( centers[3] + wxPoint( -radius, 0 ) );
 
-    aCornerBuffer.Outline( 0 ).SetClosed( true );
+    outline.Outline( 0 ).SetClosed( true );
+
+    // The created outlines are bigger than the actual outlines, due to the fact
+    // the corner radius is bigger than the initial value when building a shape outside the
+    // actual shape.
+    // However the bounding box shape does not need to be bigger: only rounded corners must
+    // be modified.
+    // So clamp the too big shape by the actual bounding box
+    if( aErrorLoc == ERROR_OUTSIDE )
+    {
+        SHAPE_POLY_SET bbox;
+        bbox.NewOutline();
+        wxSize bbox_size = aSize/2;
+
+        bbox.Append( wxPoint( -bbox_size.x, -bbox_size.y ) );
+        bbox.Append( wxPoint( bbox_size.x, -bbox_size.y ) );
+        bbox.Append( wxPoint( bbox_size.x, bbox_size.y ) );
+        bbox.Append( wxPoint( -bbox_size.x, bbox_size.y ) );
+        bbox.Outline( 0 ).SetClosed( true );
+
+        outline.BooleanIntersection( bbox, SHAPE_POLY_SET::PM_FAST );
+        // The result is a convex polygon, no need to simplify or fracture.
+    }
+
+    // Add the outline:
+    aCornerBuffer.Append( outline );
 }
 
 
