@@ -108,6 +108,8 @@ public:
         case S_LAST:
             return false;
         }
+
+        return false;   // Make compil happy
     }
 
     void SetWidth( int aWidth ) { m_width = aWidth; }
