@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # taotieren <admin@taotieren.com>,2019-2020.
 # Rigo Ligo <rigoligo03@gmail.com>, 2020.
+# Eric <spice2wolf@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-13 16:57+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2020-11-16 21:45+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -143,9 +144,8 @@ msgid "failed to open file"
 msgstr "无法打开文件"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "电路板边框"
+msgstr "构建电路板边框"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
@@ -234,14 +234,12 @@ msgid "Loading..."
 msgstr "载入中..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "载入 OpenGL：电路板"
+msgstr "加载 Raytracing：电路板"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "载入 OpenGL：层"
+msgstr "加载 Raytracing：层"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
@@ -6309,9 +6307,9 @@ msgid "Equivalence File Load Error"
 msgstr "等效文件载入错误"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu 找到了等价的封装/元件。"
+msgstr "找到了 %lu 个封装/符号等价。"
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -14256,29 +14254,28 @@ msgstr ""
 "您必须启动 KiCad 项目管理器并创建一个项目。"
 
 #: eeschema/tools/backannotate.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no associated symbol."
-msgstr "封装 \"%s\" 没有关联的符号。"
+msgstr "封装 '%s' 没有关联的符号。"
 
 #: eeschema/tools/backannotate.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Pcb footprints '%s' and '%s' linked to same symbol."
-msgstr "链接到同一符号的 PCB 封装 \"%s\" 和 \"%s\""
+msgstr "Pcb 封装 '%s' 和 '%s' 链接到相同的符号。"
 
 #: eeschema/tools/backannotate.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "找不到 \"%s\" 封装的符号"
+msgstr "找不到 \"%s\" 封装的符号。"
 
 #: eeschema/tools/backannotate.cpp:282
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find footprint for symbol '%s'."
-msgstr "找不到 \"%s\" 符号的封装"
+msgstr "找不到 \"%s\" 符号的封装。"
 
 #: eeschema/tools/backannotate.cpp:292
-#, fuzzy
 msgid "Cannot relink footprints because schematic is not fully annotated."
-msgstr "由于原理图未完全批注，因此无法重新链接封装"
+msgstr "无法重新链接封装，因为原理图未完全注释。"
 
 #: eeschema/tools/backannotate.cpp:318
 #, c-format
@@ -18996,9 +18993,8 @@ msgid "Layer \"%s\" (sublayer %d/%d)"
 msgstr "图层 \"%s\"（子层 %d/%d）"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
-#, fuzzy
 msgid "Select dielectric layer to add to board stack up."
-msgstr "选择要添加到电路板层集合的用户定义层"
+msgstr "选择要添加到电路板层叠结构的介电层。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
 msgid "Dielectric Layers List"
@@ -19009,9 +19005,8 @@ msgid "Select dielectric layer to remove from board stack up."
 msgstr ""
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
-#, fuzzy
 msgid "Dielectric Layers"
-msgstr "电介质层列表"
+msgstr "介电层"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:619
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:168
@@ -19540,14 +19535,14 @@ msgstr ""
 "底层封装将插入 '%s' 作为前缀。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
 "\n"
-"在按 %s 排序之前，其坐标将四舍五入为 %s, %s 网格。 "
+"按 %s 排序之前，其坐标将四舍五入为 %s, %s 网格。"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 msgid "footprint location"
@@ -19687,9 +19682,8 @@ msgstr ""
 "重新批注失败！\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
-#, fuzzy
 msgid "Aborted: too many errors"
-msgstr "中止：错误太多 "
+msgstr "已中止：错误太多"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
 msgid ""
@@ -21597,9 +21591,8 @@ msgstr "Y 坐标："
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:104
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:115
-#, fuzzy
 msgid "Output Units"
-msgstr "输出单位："
+msgstr "输出单元"
 
 #: pcbnew/dialogs/dialog_export_idf_base.h:61
 msgid "Export IDFv3"
@@ -21938,29 +21931,24 @@ msgid "Wrap"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "显示封装位号"
+msgstr "搜索封装参考指示符"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint values"
-msgstr "显示封装值"
+msgstr "搜索封装值"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search other text items"
-msgstr "其他封装文本项"
+msgstr "搜索其他文本项"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC markers"
-msgstr "显示 DRC 规则"
+msgstr "搜索 DRC 标记"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
-#, fuzzy
 msgid "Find Previous"
-msgstr "打印预览"
+msgstr "查找预览"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
@@ -22723,12 +22711,10 @@ msgid "The arc angle cannot be zero."
 msgstr "圆弧角度不能为 0。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:363
-#, fuzzy
 msgid "The radius cannot be zero."
-msgstr "圆弧角度不能为 0。"
+msgstr "半径不能为 0。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:369
-#, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "矩形不能为空。"
 
@@ -22804,11 +22790,10 @@ msgid "KiCad Layer"
 msgstr "KiCad 的图层"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:328
-#, fuzzy
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
-msgstr "必须匹配所有图层。请点击“自动匹配图层”以自动匹配其余图层。"
+msgstr "所有必需的层(用'*'标记)必须匹配。请点击“自动匹配图层”，自动匹配剩余的图层"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:331
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
@@ -23009,9 +22994,8 @@ msgid "Show zero pad nets"
 msgstr "显示 0 焊盘网络"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
-#, fuzzy
 msgid "Group by:"
-msgstr "分组依据"
+msgstr "分组依据："
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:54
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:55
@@ -24335,9 +24319,8 @@ msgid "Walk around"
 msgstr "绕走"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
-#, fuzzy
 msgid "Mode"
-msgstr "模型"
+msgstr "模式"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
@@ -26024,11 +26007,10 @@ msgstr ""
 "该值可以被封装和焊盘的本地值所取代。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:54
-#, fuzzy
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr "正间隙指的是比焊盘大的区域（通常为阻焊间隙）。"
+msgstr "正间隙是指比焊盘面积大的区域(通常用于焊料掩膜间隙)。"
 
 # 绿油桥宽：
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:62
@@ -26058,11 +26040,10 @@ msgstr ""
 "最终间隙值是该值与间隙值比率之和。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:91
-#, fuzzy
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr "负间隙指的是比焊盘小的区域（通常为锡膏间隙）。"
+msgstr "负间隙是指比焊盘小的区域 (通常用于锡膏间隙)。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:101
 msgid ""
@@ -27383,9 +27364,8 @@ msgid "Footprint '%s' deleted from library '%s'"
 msgstr "封装 \"%s\" 删除来自库 '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:617
-#, fuzzy
 msgid "No footprints to export!"
-msgstr "没有可获取的封装！"
+msgstr "没有可导出的封装！"
 
 #: pcbnew/footprint_libraries_utils.cpp:793
 #: pcbnew/footprint_viewer_frame.cpp:728
@@ -27423,9 +27403,9 @@ msgid "Component \"%s\" replaced in \"%s\""
 msgstr "元件 \"%s\" 替换为 \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:982
-#, fuzzy, c-format
+#, c-format
 msgid "Component \"%s\" added in \"%s\""
-msgstr "元件 \"%s\" 添加到 \"%s\""
+msgstr "组件 \"%s\" 已加入 \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:1030
 msgid "Enter footprint name:"
@@ -27588,9 +27568,8 @@ msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr "只导入矢量图。位图和字体将被忽略。"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:45
-#, fuzzy
 msgid "Placement"
-msgstr "放置："
+msgstr "放置"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:50
 msgid "Interactive placement"
@@ -27613,9 +27592,8 @@ msgid "Select PCB grid units"
 msgstr "选择 PCB 网格单位"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:122
-#, fuzzy
 msgid "Import Parameters"
-msgstr "导入参数："
+msgstr "导入参数"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:136
 msgid "Line width (DXF import):"
@@ -27796,9 +27774,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:153
-#, fuzzy
 msgid "Export Footprints to Library..."
-msgstr "将封装获取到库(&H)..."
+msgstr "将封装导出到库..."
 
 #: pcbnew/menubar_pcb_editor.cpp:154
 msgid ""
@@ -27809,9 +27786,8 @@ msgstr ""
 " (不会删除此库中的其他封装)"
 
 #: pcbnew/menubar_pcb_editor.cpp:158
-#, fuzzy
 msgid "Export Footprints to New Library..."
-msgstr "获取封装到新库(&H)..."
+msgstr "将封装导出到新库..."
 
 #: pcbnew/menubar_pcb_editor.cpp:159
 msgid ""
@@ -27871,9 +27847,8 @@ msgstr "圆弧半径值："
 
 #: pcbnew/microwave/microwave_footprint.cpp:78
 #: pcbnew/microwave/microwave_footprint.cpp:93
-#, fuzzy
 msgid "Create microwave footprint"
-msgstr "创建高频间距"
+msgstr "创建微波封装"
 
 #: pcbnew/microwave/microwave_footprint.cpp:92
 msgid "Angle in degrees:"
