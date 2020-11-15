@@ -634,40 +634,42 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
 
         const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
 
+        SHAPE_POLY_SET polyListSubtracted;
+        SHAPE_POLY_SET *aPolyList = nullptr;
+
         // Load the vertical (Z axis) component of shapes
 
-        if( map_poly.find( layer_id ) == map_poly.end() )
-            continue;
-
-        const SHAPE_POLY_SET *aPolyList = map_poly.at( layer_id );
-
-        SHAPE_POLY_SET polyListSubtracted;
-        polyListSubtracted = *aPolyList;
-
-        if( ( layer_id != B_Paste ) && ( layer_id != F_Paste ) &&
-            m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
+        if( map_poly.find( layer_id ) != map_poly.end() )
         {
-            polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+            polyListSubtracted = *map_poly.at( layer_id );;
 
-            if( ( layer_id != B_Mask ) && ( layer_id != F_Mask ) )
+            if( ( layer_id != B_Paste ) && ( layer_id != F_Paste ) &&
+                m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
             {
-                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(), SHAPE_POLY_SET::PM_FAST );
-                polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(), SHAPE_POLY_SET::PM_FAST );
+                polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+
+                if( ( layer_id != B_Mask ) && ( layer_id != F_Mask ) )
+                {
+                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(), SHAPE_POLY_SET::PM_FAST );
+                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(), SHAPE_POLY_SET::PM_FAST );
+                }
+
+                if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) )
+                {
+                    if( ( ( layer_id == B_SilkS ) && ( map_poly.find( B_Mask ) != map_poly.end() ) ) )
+                        polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ), SHAPE_POLY_SET::PM_FAST );
+                    else
+                        if( ( ( layer_id == F_SilkS ) && ( map_poly.find( F_Mask ) != map_poly.end() ) ) )
+                            polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ), SHAPE_POLY_SET::PM_FAST );
+
+                }
             }
 
-            if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) )
-            {
-                if( ( ( layer_id == B_SilkS ) && ( map_poly.find( B_Mask ) != map_poly.end() ) ) )
-                    polyListSubtracted.BooleanSubtract( *map_poly.at( B_Mask ), SHAPE_POLY_SET::PM_FAST );
-                else
-                    if( ( ( layer_id == F_SilkS ) && ( map_poly.find( F_Mask ) != map_poly.end() ) ) )
-                        polyListSubtracted.BooleanSubtract( *map_poly.at( F_Mask ), SHAPE_POLY_SET::PM_FAST );
-
-            }
+            aPolyList = &polyListSubtracted;
         }
 
         CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d,
-                                                                          &polyListSubtracted,
+                                                                          aPolyList,
                                                                           layer_id,
                                                                           &m_boardAdapter.GetThroughHole_Inner() );
 
