@@ -432,7 +432,11 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
     {
         // Clean up any allocated memory if an exception occurs loading the schematic.
         std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( aSchematic );
-        newSheet->SetFileName( aFileName );
+
+        wxFileName relPath( aFileName );
+        relPath.MakeRelativeTo( aSchematic->Prj().GetProjectPath(), wxPATH_UNIX );
+
+        newSheet->SetFileName( relPath.GetFullPath() );
         m_rootSheet = newSheet.get();
         loadHierarchy( newSheet.get() );
 
