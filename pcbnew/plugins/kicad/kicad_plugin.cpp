@@ -841,8 +841,11 @@ void PCB_IO::format( PCB_SHAPE* aShape, int aNestLevel ) const
 
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aShape->GetWidth() ).c_str() );
 
+    // The filled flag represents if a solid fill is present
     if( aShape->IsFilled() )
-        m_out->Print( 0, " (fill yes)" );
+        m_out->Print( 0, " (fill solid)" );
+    else
+        m_out->Print( 0, " (fill none)" );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aShape->m_Uuid.AsString() ) );
 
@@ -929,8 +932,11 @@ void PCB_IO::format( FP_SHAPE* aFPShape, int aNestLevel ) const
 
     m_out->Print( 0, " (width %s)", FormatInternalUnits( aFPShape->GetWidth() ).c_str() );
 
+    // The filled flag represents if a solid fill is present
     if( aFPShape->IsFilled() )
-        m_out->Print( 0, " (fill yes)" );
+        m_out->Print( 0, " (fill solid)" );
+    else
+        m_out->Print( 0, " (fill none)" );
 
     m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFPShape->m_Uuid.AsString() ) );
 

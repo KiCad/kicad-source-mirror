@@ -245,6 +245,7 @@ solder_mask_min_width
 solder_paste_margin
 solder_paste_margin_ratio
 solder_paste_ratio
+solid
 stackup
 start
 status

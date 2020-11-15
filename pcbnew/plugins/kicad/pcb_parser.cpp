@@ -2231,6 +2231,8 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
         Expecting( "gr_arc, gr_circle, gr_curve, gr_line, gr_poly, or gp_rect" );
     }
 
+    bool foundFill = false;
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
@@ -2262,6 +2264,8 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             break;
 
         case T_fill:
+            foundFill = true;
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 if( token == T_LEFT )
@@ -2269,12 +2273,19 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
                 switch( token )
                 {
+                // T_yes was used to indicate filling when first introduced,
+                // so treat it like a solid fill since that was the only fill available
                 case T_yes:
+                case T_solid:
                     shape->SetFilled( true );
                     break;
 
+                case T_none:
+                    shape->SetFilled( false );
+                    break;
+
                 default:
-                    Expecting( "yes" );
+                    Expecting( "yes, none, solid" );
                 }
             }
             break;
@@ -2289,6 +2300,12 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
             Expecting( "layer, width, fill, tstamp, or status" );
         }
     }
+
+    // In legacy versions there was no option for polygon filling and all polygons
+    // were considered filled if they were on a layer othar than the edge cuts.
+    // So if there was no (fill ) section in the sexpr for a polygon, assume the polygon is filled.
+    if( !foundFill && ( shape->GetShape() == S_POLYGON ) && ( shape->GetLayer() != Edge_Cuts ) )
+        shape->SetFilled( true );
 
     // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
     // should be filled by specifying a 0 stroke-width.
@@ -3386,6 +3403,8 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         Expecting( "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, or fp_rect" );
     }
 
+    bool foundFill = false;
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
@@ -3412,6 +3431,8 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
             break;
 
         case T_fill:
+            foundFill = true;
+
             for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
             {
                 if( token == T_LEFT )
@@ -3419,14 +3440,22 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
                 switch( token )
                 {
+                // T_yes was used to indicate filling when first introduced,
+                // so treat it like a solid fill since that was the only fill available
                 case T_yes:
+                case T_solid:
                     shape->SetFilled( true );
                     break;
 
+                case T_none:
+                    shape->SetFilled( false );
+                    break;
+
                 default:
-                    Expecting( "yes" );
+                    Expecting( "yes, none, solid" );
                 }
             }
+
             break;
 
         /// We continue to parse the status field but it is no longer written
@@ -3440,17 +3469,18 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
         }
     }
 
+    // In legacy versions there was no option for polygon filling and all polygons
+    // were considered filled if they were on a layer othar than the edge cuts.
+    // So if there was no (fill ) section in the sexpr for a polygon, assume the polygon is filled.
+    if( !foundFill && ( shape->GetShape() == S_POLYGON ) && ( shape->GetLayer() != Edge_Cuts ) )
+        shape->SetFilled( true );
+
     if( m_requiredVersion <= 20201002 )
     {
         // Legacy versions didn't have a filled flag but allowed some shapes to indicate they
         // should be filled by specifying a 0 stroke-width.
         if( shape->GetWidth() == 0
                 && ( shape->GetShape() == S_RECT || shape->GetShape() == S_CIRCLE ) )
-        {
-            shape->SetFilled( true );
-        }
-        // Polygons on non-Edge_Cuts layers were always filled
-        else if( shape->GetShape() == S_POLYGON && shape->GetLayer() != Edge_Cuts )
         {
             shape->SetFilled( true );
         }
