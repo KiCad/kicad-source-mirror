@@ -194,6 +194,15 @@ public:
     };
 
 
+    struct TERMATTR
+    {
+        TERMINAL_ID        TerminalID;
+        ATTRIBUTE_VALUE    Value;
+
+        void Parse( XNODE* aNode );
+    };
+
+
     struct SYMPINNAME_LABEL
     {
         TERMINAL_ID        TerminalID;
@@ -269,6 +278,7 @@ public:
         SYMBOL_ID  VariantParentSymbolID = wxEmptyString;
         VARIANT_ID VariantID             = wxEmptyString;
 
+        std::map<TERMINAL_ID, TERMATTR>         TerminalAttributes;
         std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinLabels;
         std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinNames;
         std::map<TERMINAL_ID, PIN_NUM>          PinNumbers;

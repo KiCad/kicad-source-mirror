@@ -455,7 +455,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::COMP::Parse( XNODE* aNode )
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
         }
     }
 }
@@ -482,7 +482,31 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PARTREF::Parse( XNODE* aNode )
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+        }
+    }
+}
+
+
+void CADSTAR_SCH_ARCHIVE_PARSER::TERMATTR::Parse( XNODE* aNode )
+{
+    wxCHECK( aNode->GetName() == wxT( "TERMATTR" ), /* void */ );
+
+    TerminalID = GetXmlAttributeIDLong( aNode, 0 );
+
+    XNODE* cNode = aNode->GetChildren();
+    bool   attrParsed = false;
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( !attrParsed && cNode->GetName() == wxT( "ATTR" ) )
+        {
+            Value.Parse( cNode );
+            attrParsed = true;
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
         }
     }
 }
@@ -506,7 +530,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode )
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
         }
     }
 }
@@ -530,7 +554,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode )
         }
         else
         {
-            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), wxT( "ATTR" ) );
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
         }
     }
 }
@@ -665,6 +689,12 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
         {
             IsSymbolVariant = true;
             SymbolVariant.Parse( cNode );
+        }
+        else if( cNodeName == wxT( "TERMATTR" ) )
+        {
+            TERMATTR termattr;
+            termattr.Parse( cNode );
+            TerminalAttributes.insert( std::make_pair( termattr.TerminalID, termattr ) );
         }
         else if( cNodeName == wxT( "SYMPINLABEL" ) )
         {
