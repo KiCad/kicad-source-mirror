@@ -1137,6 +1137,13 @@ std::vector<SHAPE*> PCB_SHAPE::MakeEffectiveShapes() const
     case S_POLYGON:
     {
         SHAPE_LINE_CHAIN l = GetPolyShape().COutline( 0 );
+        FOOTPRINT*       parentFootprint = dynamic_cast<FOOTPRINT*>( m_parent );
+
+        if( parentFootprint )
+        {
+            l.Rotate( -parentFootprint->GetOrientationRadians() );
+            l.Move( parentFootprint->GetPosition() );
+        }
 
         if( IsFilled() )
         {

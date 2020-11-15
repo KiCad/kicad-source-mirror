@@ -130,11 +130,6 @@ public:
      */
     void SetDrawCoord();
 
-    /**
-     * Makes a set of SHAPE objects representing the FP_SHAPE.  Caller owns the objects.
-     */
-    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
-
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     wxString GetClass() const override

@@ -106,21 +106,6 @@ void FP_SHAPE::SetDrawCoord()
 }
 
 
-std::shared_ptr<SHAPE> FP_SHAPE::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
-{
-    FOOTPRINT*          fp = static_cast<FOOTPRINT*>( m_parent );
-    std::vector<SHAPE*> shapes = MakeEffectiveShapes();
-
-    for( SHAPE* shape : shapes )
-    {
-        shape->Rotate( -fp->GetOrientationRadians() );
-        shape->Move( fp->GetPosition() );
-    }
-
-    return std::make_shared<SHAPE_COMPOUND>( shapes );
-}
-
-
 // see class_edge_mod.h
 void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
