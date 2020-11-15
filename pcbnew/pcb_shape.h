@@ -106,6 +106,9 @@ public:
         case S_ARC:
         case S_CURVE:
             return false;
+
+        case S_LAST:    // Sentinel
+            break;
         }
 
         return false;   // Make compil happy

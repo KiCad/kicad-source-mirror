@@ -309,7 +309,9 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
             wxString fn = GetValue( aRow, FDC_NAME );
 
             SCHEMATIC_SETTINGS* settings = m_frame->Prj().GetProjectFile().m_SchematicSettings;
-            const TEMPLATE_FIELDNAME* templateFn = settings->m_TemplateFieldNames.GetFieldName( fn );
+
+            const TEMPLATE_FIELDNAME* templateFn =
+                    settings ? settings->m_TemplateFieldNames.GetFieldName( fn ) : nullptr;
 
             if( templateFn && templateFn->m_URL )
             {
