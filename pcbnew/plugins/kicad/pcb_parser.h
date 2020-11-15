@@ -57,7 +57,6 @@ class PCB_GROUP;
 class PCB_TARGET;
 class VIA;
 class ZONE;
-class PCB_MARKER;
 class FP_3DMODEL;
 struct LAYER;
 
@@ -161,29 +160,25 @@ class PCB_PARSER : public PCB_LEXER
     PCB_TEXT*       parsePCB_TEXT();
     DIMENSION_BASE* parseDIMENSION();
 
-    /**
-     * Function parseFOOTPRINT_unchecked
-     * Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-     */
+    // Parse a footprint, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     FOOTPRINT*      parseFOOTPRINT_unchecked( wxArrayString* aInitialComments = 0 );
+
     FP_TEXT*        parseFP_TEXT();
     FP_SHAPE*       parseFP_SHAPE();
     PAD*            parsePAD( FOOTPRINT* aParent = NULL );
+
     // Parse only the (option ...) inside a pad description
     bool            parsePAD_option( PAD* aPad );
+
     ARC*            parseARC();
     TRACK*          parseTRACK();
     VIA*            parseVIA();
     ZONE*           parseZONE( BOARD_ITEM_CONTAINER* aParent );
     PCB_TARGET*     parsePCB_TARGET();
-    PCB_MARKER*     parseMARKER( BOARD_ITEM_CONTAINER* aParent );
     BOARD*          parseBOARD();
     void            parseGROUP( BOARD_ITEM* aParent );
 
-    /**
-     * Function parseBOARD_unchecked
-     * Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
-     */
+    // Parse a board, but do not replace PARSE_ERROR with FUTURE_FORMAT_ERROR automatically.
     BOARD*          parseBOARD_unchecked();
 
     /**
@@ -324,12 +319,6 @@ class PCB_PARSER : public PCB_LEXER
     }
 
     bool parseBool();
-
-    /**
-     * Parse a format version tag like (version 20160417) return the version.
-     * Expects to start on 'version', and eats the closing paren.
-     */
-    int parseVersion();
 
     /*
      * @return if m_resetKIIDs, returns new KIID(), otehrwise returns CurStr() as KIID.

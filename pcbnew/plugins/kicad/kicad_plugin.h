@@ -89,7 +89,8 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20200921  // Add orthogonal dimension
 //#define SEXPR_BOARD_FILE_VERSION    20200922  // Add user name to layer definition.
 //#define SEXPR_BOARD_FILE_VERSION    20201002  // Add groups in footprints (for footprint editor).
-#define SEXPR_BOARD_FILE_VERSION      20201114  // Add first-class support for filled shapes.
+//#define SEXPR_BOARD_FILE_VERSION    20201114  // Add first-class support for filled shapes.
+#define SEXPR_BOARD_FILE_VERSION    20201115  // module -> footprint.
 
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
@@ -175,10 +176,10 @@ public:
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void FootprintLibCreate( const wxString& aLibraryPath,
-            const PROPERTIES* aProperties = NULL) override;
+                             const PROPERTIES* aProperties = NULL) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-            const PROPERTIES* aProperties = NULL ) override;
+                             const PROPERTIES* aProperties = NULL ) override;
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
 
@@ -200,6 +201,7 @@ public:
     std::string GetStringOutput( bool doClear )
     {
         std::string ret = m_sf.GetString();
+
         if( doClear )
             m_sf.Clear();
 
@@ -221,8 +223,6 @@ protected:
 
     LINE_READER*    m_reader;       ///< no ownership here.
     wxString        m_filename;     ///< for saves only, name is in m_reader for loads
-
-    int             m_loading_format_version; ///< which #SEXPR_BOARD_FILE_VERSION should be Load()ed?
 
     STRING_FORMATTER    m_sf;
     OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership

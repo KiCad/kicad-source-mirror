@@ -181,19 +181,6 @@ bool PCB_PARSER::parseBool()
 }
 
 
-int PCB_PARSER::parseVersion()
-{
-    if( NextTok() != T_version )
-        Expecting( GetTokenText( T_version ) );
-
-    int pcb_version = parseInt( FromUTF8().mb_str( wxConvUTF8 ) );
-
-    NeedRIGHT();
-
-    return pcb_version;
-}
-
-
 wxString PCB_PARSER::GetRequiredVersion()
 {
     int year, month, day;
@@ -509,8 +496,9 @@ BOARD_ITEM* PCB_PARSER::Parse()
         item = (BOARD_ITEM*) parseBOARD();
         break;
 
-    case T_module:
-        item = (BOARD_ITEM*) parseFOOTPRINT( initial_comments.release());
+    case T_module:      // legacy token
+    case T_footprint:
+        item = (BOARD_ITEM*) parseFOOTPRINT( initial_comments.release() );
         break;
 
     default:
@@ -614,7 +602,8 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             m_board->Add( parseDIMENSION(), ADD_MODE::APPEND );
             break;
 
-        case T_module:
+        case T_module:      // legacy token
+        case T_footprint:
             m_board->Add( parseFOOTPRINT(), ADD_MODE::APPEND );
             break;
 
@@ -2812,7 +2801,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT( wxArrayString* aInitialComments )
 
 FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments )
 {
-    wxCHECK_MSG( CurTok() == T_module, NULL,
+    wxCHECK_MSG( CurTok() == T_module || CurTok() == T_footprint, NULL,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as FOOTPRINT." ) );
 
     wxString name;

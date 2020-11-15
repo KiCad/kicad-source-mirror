@@ -105,13 +105,14 @@ public:
         case S_SEGMENT:
         case S_ARC:
         case S_CURVE:
+        case S_LAST:        // Make CLang compiler happy
             return false;
 
         case S_LAST:    // Sentinel
             break;
         }
 
-        return false;   // Make compil happy
+        return false;       // Make GCC compiler happy
     }
 
     void SetWidth( int aWidth ) { m_width = aWidth; }

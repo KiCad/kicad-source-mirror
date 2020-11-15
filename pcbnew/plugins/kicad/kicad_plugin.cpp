@@ -67,7 +67,7 @@ public:
     FP_CACHE_ITEM( FOOTPRINT* aFootprint, const WX_FILENAME& aFileName );
 
     const WX_FILENAME& GetFileName() const { return m_filename; }
-    const FOOTPRINT* GetModule()   const { return m_footprint.get(); }
+    const FOOTPRINT* GetFootprint()  const { return m_footprint.get(); }
 };
 
 
@@ -173,7 +173,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
 
     for( FOOTPRINT_MAP::iterator it = m_footprints.begin(); it != m_footprints.end(); ++it )
     {
-        if( aFootprint && aFootprint != it->second->GetModule() )
+        if( aFootprint && aFootprint != it->second->GetFootprint() )
             continue;
 
         WX_FILENAME fn = it->second->GetFileName();
@@ -193,7 +193,7 @@ void FP_CACHE::Save( FOOTPRINT* aFootprint )
             FILE_OUTPUTFORMATTER formatter( tempFileName );
 
             m_owner->SetOutputFormatter( &formatter );
-            m_owner->Format( (BOARD_ITEM*) it->second->GetModule() );
+            m_owner->Format( (BOARD_ITEM*) it->second->GetFootprint() );
         }
 
 #ifdef USE_TMP_FILE
@@ -972,10 +972,10 @@ void PCB_IO::format( FOOTPRINT* aFootprint, int aNestLevel ) const
     }
 
     if( m_ctl & CTL_OMIT_LIBNAME )
-        m_out->Print( aNestLevel, "(module %s",
+        m_out->Print( aNestLevel, "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().GetLibItemNameAndRev() ).c_str() );
     else
-        m_out->Print( aNestLevel, "(module %s",
+        m_out->Print( aNestLevel, "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
 
     if( aFootprint->IsLocked() )
@@ -2118,7 +2118,6 @@ void PCB_IO::init( const PROPERTIES* aProperties )
 {
     m_board = NULL;
     m_reader = NULL;
-    m_loading_format_version = SEXPR_BOARD_FILE_VERSION;
     m_props = aProperties;
 }
 
@@ -2188,7 +2187,7 @@ const FOOTPRINT* PCB_IO::getFootprint( const wxString& aLibraryPath,
     if( it == footprints.end() )
         return nullptr;
 
-    return it->second->GetModule();
+    return it->second->GetFootprint();
 }
 
 
