@@ -2317,12 +2317,13 @@ void ALTIUM_PCB::ParseTexts6Data( const CFB::CompoundFileReader& aReader,
 
         if( elem.component != ALTIUM_COMPONENT_NONE )
         {
-            FP_TEXT*   fpText = dynamic_cast<FP_TEXT*>( tx );
-            FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( fpText->GetParent() );
+            FP_TEXT* fpText = dynamic_cast<FP_TEXT*>( tx );
 
             if( fpText )
             {
-                double orientation = parentFootprint->GetOrientation();
+                FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( fpText->GetParent() );
+                double     orientation     = parentFootprint->GetOrientation();
+
                 fpText->SetTextAngle( fpText->GetTextAngle() - orientation );
                 fpText->SetLocalCoord();
             }

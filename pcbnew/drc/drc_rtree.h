@@ -60,7 +60,7 @@ public:
     };
 
 private:
-    
+
     using drc_rtree = RTree<ITEM_WITH_SHAPE*, int, 2, double>;
 
 public:
@@ -113,7 +113,7 @@ public:
                     }
                 };
 
-        if( aItem->Type() == PCB_FP_TEXT_T && !dynamic_cast<FP_TEXT*>( aItem )->IsVisible() )
+        if( aItem->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( aItem )->IsVisible() )
             return;
 
         if( aLayer != UNDEFINED_LAYER )

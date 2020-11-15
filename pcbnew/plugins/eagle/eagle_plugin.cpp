@@ -2522,15 +2522,17 @@ void EAGLE_PLUGIN::mapEagleLayersToKicad()
 {
     std::vector<INPUT_LAYER_DESC> inputDescs;
 
-    for ( const std::pair<int, ELAYER>& layerPair : m_eagleLayers )
+    for ( const std::pair<const int, ELAYER>& layerPair : m_eagleLayers )
     {
         const ELAYER& eLayer = layerPair.second;
 
         INPUT_LAYER_DESC layerDesc;
         std::tie( layerDesc.AutoMapLayer, layerDesc.PermittedLayers, layerDesc.Required ) =
                 defaultKicadLayer( eLayer.number );
+
         if( layerDesc.AutoMapLayer == UNDEFINED_LAYER )
             continue; // Ignore unused copper layers
+
         layerDesc.Name = eLayer.name;
 
         inputDescs.push_back( layerDesc );
