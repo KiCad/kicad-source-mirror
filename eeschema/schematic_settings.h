@@ -49,9 +49,8 @@ public:
     double    m_TextOffsetRatio;
     int       m_PinSymbolSize;
     int       m_JunctionSize; // Size of junction dot in mils
-    // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc ) 
+    // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     int       m_JunctionSizeChoice;
-    double    m_JunctionSizeMult; // junction dot size = this value * default line width
 
     bool      m_IntersheetsRefShow;
     bool      m_IntersheetsRefFormatShort;

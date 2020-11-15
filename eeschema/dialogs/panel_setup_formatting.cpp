@@ -137,9 +137,6 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
             currJunctionDotSize = 1;
         }
 
-        settings.m_JunctionSizeMult =
-                projSettings->m_Drawing.junction_size_mult_list[currDotSizeIndex];
-
         settings.m_JunctionSizeChoice = currDotSizeIndex; // Store to set pulldown next time
     }
 
