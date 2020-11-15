@@ -243,7 +243,7 @@ public:
      * @return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor
      * Usually return true for small items (labels, junctions) and false for
-     * items which can be large (hierarchical sheets, compoments)
+     * items which can be large (hierarchical sheets, symbols)
      */
     virtual bool IsMovableFromAnchorPoint() { return true; }
 
@@ -254,7 +254,7 @@ public:
      * Searches the item hierarchy to find a SCHEMATIC
      *
      * Every SCH_ITEM that lives on a SCH_SCREEN should be parented to either that screen
-     * or another SCH_ITEM on the same screen (for example, pins to their components).
+     * or another SCH_ITEM on the same screen (for example, pins to their symbols).
      *
      * Every SCH_SCREEN should be parented to the SCHEMATIC.
      * Note that this hierarchy is not the same as the sheet hierarchy!
@@ -456,8 +456,7 @@ public:
      *
      * Fields that have been moved by hand are not automatically placed.
      *
-     * @param aScreen is the SCH_SCREEN associated with the current instance of the
-     *                component.
+     * @param aScreen is the SCH_SCREEN associated with the current instance of the symbol.
      */
     void AutoAutoplaceFields( SCH_SCREEN* aScreen )
     {

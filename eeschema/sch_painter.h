@@ -165,7 +165,7 @@ private:
     void draw( LIB_FIELD* aField, int aLayer );
     void draw( LIB_TEXT* aText, int aLayer );
     void draw( LIB_BEZIER* aCurve, int aLayer );
-    void draw( SCH_COMPONENT* aComp, int aLayer );
+    void draw( SCH_COMPONENT* aSymbol, int aLayer );
     void draw( SCH_JUNCTION* aJct, int aLayer );
     void draw( SCH_FIELD* aField, int aLayer );
     void draw( SCH_TEXT* aText, int aLayer );

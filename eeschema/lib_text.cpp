@@ -272,8 +272,8 @@ void LIB_TEXT::Plot( PLOTTER* plotter, const wxPoint& offset, bool fill,
     bBox.RevertYAxis();
     wxPoint txtpos = bBox.Centre();
 
-    /* The text orientation may need to be flipped if the
-     * transformation matrix causes xy axes to be flipped. */
+    // The text orientation may need to be flipped if the transformation matrix causes xy
+    // axes to be flipped.
     int t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
     wxPoint pos = aTransform.TransformCoordinate( txtpos ) + offset;
 
@@ -308,12 +308,11 @@ void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* 
     COLOR4D color = aSettings->GetLayerColor( LAYER_DEVICE );
     int     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
 
-    /* Calculate the text orientation, according to the component
-     * orientation/mirror (needed when draw text in schematic)
-     */
+    // Calculate the text orientation, according to the symbol orientation/mirror (needed when
+    // draw text in schematic)
     int orient = (int) GetTextAngle();
 
-    if( aTransform.y1 )  // Rotate component 90 degrees.
+    if( aTransform.y1 )  // Rotate symbol 90 degrees.
     {
         if( orient == TEXT_ANGLE_HORIZ )
             orient = TEXT_ANGLE_VERT;
@@ -321,16 +320,15 @@ void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* 
             orient = TEXT_ANGLE_HORIZ;
     }
 
-    /* Calculate the text justification, according to the component
-     * orientation/mirror this is a bit complicated due to cumulative
-     * calculations:
+    /*
+     * Calculate the text justification, according to the symbol orientation/mirror.
+     * This is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function recalculate also H and H justifications
-     *      according to the text orientation.
-     * - When a component is mirrored, the text is not mirrored and
-     *   justifications are complicated to calculate
-     * so the more easily way is to use no justifications ( Centered text )
-     * and use GetBoundaryBox to know the text coordinate considered as centered
+     * - the GRText function will also recalculate H and V justifications according to the text
+     *   orientation.
+     * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
+     *   to calculate so the more easily way is to use no justifications (centered text) and
+     *   use GetBoundingBox to know the text coordinate considered as centered
     */
     EDA_RECT bBox = GetBoundingBox();
 

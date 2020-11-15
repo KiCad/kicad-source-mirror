@@ -600,17 +600,17 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
     {
         auto* symbolEditor = (SYMBOL_EDIT_FRAME*) Kiway().Player( FRAME_SCH_SYMBOL_EDITOR, false );
 
-        if( symbolEditor && !symbolEditor->Close() )   // Can close component editor?
+        if( symbolEditor && !symbolEditor->Close() )   // Can close symbol editor?
             return false;
 
         auto* symbolViewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
 
-        if( symbolViewer && !symbolViewer->Close() )   // Can close component viewer?
+        if( symbolViewer && !symbolViewer->Close() )   // Can close symbol viewer?
             return false;
 
         symbolViewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
 
-        if( symbolViewer && !symbolViewer->Close() )   // Can close modal component viewer?
+        if( symbolViewer && !symbolViewer->Close() )   // Can close modal symbol viewer?
             return false;
     }
 
@@ -1095,7 +1095,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
     wxCHECK_RET( aItem != NULL, wxT( "Cannot add null item to list." ) );
 
     SCH_SHEET*     parentSheet = nullptr;
-    SCH_COMPONENT* parentComponent = nullptr;
+    SCH_COMPONENT* parentSymbol = nullptr;
     SCH_ITEM*      undoItem = aItem;
 
     if( aItem->Type() == SCH_SHEET_PIN_T )
@@ -1103,19 +1103,19 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         parentSheet = (SCH_SHEET*) aItem->GetParent();
 
         wxCHECK_RET( parentSheet && parentSheet->Type() == SCH_SHEET_T,
-                     wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
+                     wxT( "Cannot place sheet pin in invalid schematic sheet." ) );
 
         undoItem = parentSheet;
     }
 
     else if( aItem->Type() == SCH_FIELD_T )
     {
-        parentComponent = (SCH_COMPONENT*) aItem->GetParent();
+        parentSymbol = (SCH_COMPONENT*) aItem->GetParent();
 
-        wxCHECK_RET( parentComponent && parentComponent->Type() == SCH_COMPONENT_T,
-                     wxT( "Cannot place field in invalid schematic component object." ) );
+        wxCHECK_RET( parentSymbol && parentSymbol->Type() == SCH_COMPONENT_T,
+                     wxT( "Cannot place field in invalid schematic symbol." ) );
 
-        undoItem = parentComponent;
+        undoItem = parentSymbol;
     }
 
     if( aItem->IsNew() )
@@ -1129,8 +1129,8 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_SCREEN* aScreen, SCH_ITEM* 
         }
         else if( aItem->Type() == SCH_FIELD_T )
         {
-            // Component fields are also owned by their parent, but new component fields
-            // are handled elsewhere.
+            // Symbol fields are also owned by their parent, but new symbol fields are
+            // handled elsewhere.
             wxLogMessage( wxT( "addCurrentItemToScreen: unexpected new SCH_FIELD" ) );
         }
         else
@@ -1499,9 +1499,9 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
             {
                 if( item->Type() == SCH_COMPONENT_T )
                 {
-                    // For components we need to get the bounding box without invisible text
-                    SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
-                    bBoxItems.Merge( comp->GetBoundingBox( false ) );
+                    // For symbols we need to get the bounding box without invisible text
+                    SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+                    bBoxItems.Merge( symbol->GetBoundingBox( false ) );
                 }
                 else
                     bBoxItems.Merge( item->GetBoundingBox() );

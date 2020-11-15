@@ -113,7 +113,7 @@ private:
 
     // Defines the hierarchical path and reference of the component.  This allows support
     // for multiple references to a single sub-sheet.
-    std::vector<COMPONENT_INSTANCE_REFERENCE> m_instanceReferences;
+    std::vector<SYMBOL_INSTANCE_REFERENCE> m_instanceReferences;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -162,7 +162,7 @@ public:
         return wxT( "SCH_COMPONENT" );
     }
 
-    const std::vector<COMPONENT_INSTANCE_REFERENCE>& GetInstanceReferences()
+    const std::vector<SYMBOL_INSTANCE_REFERENCE>& GetInstanceReferences()
     {
         return m_instanceReferences;
     }

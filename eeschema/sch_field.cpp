@@ -109,12 +109,12 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 }
                 else
                 {
-                    SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_parent );
+                    SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
-                    if( component->ResolveTextVar( token, aDepth + 1 ) )
+                    if( parentSymbol->ResolveTextVar( token, aDepth + 1 ) )
                         return true;
 
-                    SCHEMATIC* schematic = component->Schematic();
+                    SCHEMATIC* schematic = parentSymbol->Schematic();
                     SCH_SHEET* sheet = schematic ? schematic->CurrentSheet().Last() : nullptr;
 
                     if( sheet && sheet->ResolveTextVar( token, aDepth + 1 ) )
@@ -156,14 +156,14 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
 
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( m_id == REFERENCE_FIELD )
         {
             // For more than one part per package, we must add the part selection
             // A, B, ... or 1, 2, .. to the reference.
-            if( component->GetUnitCount() > 1 )
-                text << LIB_PART::SubReference( component->GetUnit() );
+            if( parentSymbol->GetUnitCount() > 1 )
+                text << LIB_PART::SubReference( parentSymbol->GetUnit() );
         }
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
@@ -193,14 +193,14 @@ void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     if( ( !IsVisible() && !IsForceVisible() ) || IsVoid() )
         return;
 
-    // Calculate the text orientation according to the component orientation.
+    // Calculate the text orientation according to the symbol orientation.
     orient = GetTextAngle();
 
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
-        if( parentComponent && parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
+        if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
         {
             if( orient == TEXT_ANGLE_HORIZ )
                 orient = TEXT_ANGLE_VERT;
@@ -209,16 +209,15 @@ void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
         }
     }
 
-    /* Calculate the text justification, according to the component
-     * orientation/mirror this is a bit complicated due to cumulative
-     * calculations:
+    /*
+     * Calculate the text justification, according to the symbol orientation/mirror.
+     * This is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function recalculate also H and H justifications
-     *      according to the text orientation.
-     * - When a component is mirrored, the text is not mirrored and
-     *   justifications are complicated to calculate
-     * so the more easily way is to use no justifications ( Centered text )
-     * and use GetBoundaryBox to know the text coordinate considered as centered
+     * - the GRText function will also recalculate H and V justifications according to the text
+     *   orientation.
+     * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
+     *   to calculate so the more easily way is to use no justifications (centered text) and use
+     *   GetBoundingBox to know the text coordinate considered as centered
      */
     EDA_RECT boundaryBox = GetBoundingBox();
     textpos = boundaryBox.Centre() + aOffset;
@@ -260,19 +259,19 @@ const EDA_RECT SCH_FIELD::GetBoundingBox() const
     RotatePoint( &begin, pos, GetTextAngle() );
     RotatePoint( &end, pos, GetTextAngle() );
 
-    // Now, apply the component transform (mirror/rot)
+    // Now, apply the symbol transform (mirror/rot)
     TRANSFORM transform;
 
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
         // Due to the Y axis direction, we must mirror the bounding box,
         // relative to the text position:
         MIRROR( begin.y, pos.y );
         MIRROR( end.y,   pos.y );
 
-        transform = parentComponent->GetTransform();
+        transform = parentSymbol->GetTransform();
     }
     else
     {
@@ -331,20 +330,20 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
         if( searchAndReplace && !replaceReferences )
             return false;
 
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
         wxASSERT( aAuxData );
 
         // Take sheet path into account which effects the reference field and the unit for
-        // components with multiple parts.
+        // symbols with multiple parts.
         if( aAuxData )
         {
-            text = parentComponent->GetRef( (SCH_SHEET_PATH*) aAuxData );
+            text = parentSymbol->GetRef((SCH_SHEET_PATH*) aAuxData );
 
             if( SCH_ITEM::Matches( text, aSearchData ) )
                 return true;
 
-            if( parentComponent->GetUnitCount() > 1 )
-                text << LIB_PART::SubReference( parentComponent->GetUnit() );
+            if( parentSymbol->GetUnitCount() > 1 )
+                text << LIB_PART::SubReference( parentSymbol->GetUnit() );
         }
     }
 
@@ -356,11 +355,11 @@ bool SCH_FIELD::IsReplaceable() const
 {
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( m_id == VALUE_FIELD )
         {
-            LIB_PART* part = parentComponent->GetPartRef().get();
+            LIB_PART* part = parentSymbol->GetPartRef().get();
 
             if( part && part->IsPower() )
                 return false;
@@ -383,7 +382,7 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
         if( m_id == REFERENCE_FIELD )
         {
@@ -393,12 +392,12 @@ bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
             if( !( aSearchData.GetFlags() & FR_REPLACE_REFERENCES ) )
                 return false;
 
-            wxString text = parentComponent->GetRef( (SCH_SHEET_PATH*) aAuxData );
+            wxString text = parentSymbol->GetRef((SCH_SHEET_PATH*) aAuxData );
 
             isReplaced = EDA_ITEM::Replace( aSearchData, text );
 
             if( isReplaced )
-                parentComponent->SetRef( (SCH_SHEET_PATH*) aAuxData, text );
+                parentSymbol->SetRef((SCH_SHEET_PATH*) aAuxData, text );
         }
         else
         {
@@ -540,14 +539,14 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     if( IsVoid() )
         return;
 
-    // Calculate the text orientation, according to the component orientation/mirror
+    // Calculate the text orientation, according to the symbol orientation/mirror
     int orient = GetTextAngle();
 
     if( m_parent && m_parent->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* parentComponent = static_cast<SCH_COMPONENT*>( m_parent );
+        SCH_COMPONENT* parentSymbol = static_cast<SCH_COMPONENT*>( m_parent );
 
-        if( parentComponent->GetTransform().y1 )  // Rotate component 90 deg.
+        if( parentSymbol->GetTransform().y1 )  // Rotate symbol 90 deg.
         {
             if( orient == TEXT_ANGLE_HORIZ )
                 orient = TEXT_ANGLE_VERT;
@@ -557,15 +556,14 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter )
     }
 
     /*
-     * Calculate the text justification, according to the component orientation/mirror
-     * this is a bit complicated due to cumulative calculations:
+     * Calculate the text justification, according to the symbol orientation/mirror.
+     * This is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
-     * - the DrawGraphicText function also recalculates H and H justifications according to the
-     *   text orientation.
-     * - When a component is mirrored, the text is not mirrored and justifications are
-     *   complicated to calculate
-     * so the easier way is to use no justifications (centered text) and use GetBoundaryBox to
-     * know the text coordinate considered as centered
+     * - the plotter's Text function will also recalculate H and V justifications according to
+     *   the text orientation.
+     * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
+     *   to calculate so the easier way is to use no justifications (centered text) and use
+     *   GetBoundingBox to know the text coordinate considered as centered
      */
     EDA_RECT BoundaryBox = GetBoundingBox();
     EDA_TEXT_HJUSTIFY_T hjustify = GR_TEXT_HJUSTIFY_CENTER;

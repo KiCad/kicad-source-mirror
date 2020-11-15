@@ -605,7 +605,7 @@ wxPoint SCH_SHEET::GetRotationCenter() const
 }
 
 
-int SCH_SHEET::ComponentCount() const
+int SCH_SHEET::SymbolCount() const
 {
     int n = 0;
 
@@ -613,14 +613,14 @@ int SCH_SHEET::ComponentCount() const
     {
         for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = (SCH_COMPONENT*) aItem;
+            SCH_COMPONENT* symbol = (SCH_COMPONENT*) aItem;
 
-            if( comp->GetField( VALUE_FIELD )->GetText().GetChar( 0 ) != '#' )
+            if( symbol->GetField( VALUE_FIELD )->GetText().GetChar( 0 ) != '#' )
                 n++;
         }
 
         for( SCH_ITEM* aItem : m_screen->Items().OfType( SCH_SHEET_T ) )
-            n += static_cast<const SCH_SHEET*>( aItem )->ComponentCount();
+            n += static_cast<const SCH_SHEET*>( aItem )->SymbolCount();
     }
 
     return n;

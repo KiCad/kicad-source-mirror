@@ -1878,7 +1878,7 @@ void SCH_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
         {
             NeedSYMBOL();
 
-            COMPONENT_INSTANCE_REFERENCE instance;
+            SYMBOL_INSTANCE_REFERENCE instance;
 
             instance.m_Path = KIID_PATH( FromUTF8() );
 

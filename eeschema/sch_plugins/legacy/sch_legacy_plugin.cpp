@@ -1997,7 +1997,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     // This is redundant with the AR entries below, but it makes the files backwards-compatible.
     if( aComponent->GetInstanceReferences().size() > 0 )
     {
-        const COMPONENT_INSTANCE_REFERENCE& instance = aComponent->GetInstanceReferences()[0];
+        const SYMBOL_INSTANCE_REFERENCE& instance = aComponent->GetInstanceReferences()[0];
         name1 = toUTFTildaText( instance.m_Reference );
     }
     else
@@ -2040,7 +2040,7 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
      */
     if( aComponent->GetInstanceReferences().size() > 1 )
     {
-        for( const COMPONENT_INSTANCE_REFERENCE& instance : aComponent->GetInstanceReferences() )
+        for( const SYMBOL_INSTANCE_REFERENCE& instance : aComponent->GetInstanceReferences() )
         {
             /*format:
              * AR Path="/140/2" Ref="C99"   Part="1"

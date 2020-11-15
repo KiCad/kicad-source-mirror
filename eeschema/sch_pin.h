@@ -46,9 +46,9 @@ class SCH_PIN : public SCH_ITEM
     std::map<const SCH_SHEET_PATH, wxString> m_net_name_map;
 
 public:
-    SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent );
+    SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentSymbol );
 
-    SCH_PIN( SCH_COMPONENT* aParentComponent, const wxString& aNumber, const wxString& aAlt );
+    SCH_PIN( SCH_COMPONENT* aParentSymbol, const wxString& aNumber, const wxString& aAlt );
 
     SCH_PIN( const SCH_PIN& aPin );
 

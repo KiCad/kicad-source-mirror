@@ -120,7 +120,7 @@ EESCHEMA_SETTINGS* eeconfig()
 
 /**
  * Used when a LIB_PART is not found in library to draw a dummy shape.
- * This component is a 400 mils square with the text "??"
+ * This symbol is a 400 mils square with the text "??"
  *
  *   DEF DUMMY U 0 40 Y Y 1 0 N
  *     F0 "U" 0 -350 60 H V
@@ -1422,13 +1422,13 @@ static void orientPart( LIB_PART* part, int orientation )
 }
 
 
-void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
+void SCH_PAINTER::draw( SCH_COMPONENT *aSymbol, int aLayer )
 {
-    int unit = aComp->GetUnitSelection( &m_schematic->CurrentSheet() );
-    int convert = aComp->GetConvert();
+    int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
+    int convert = aSymbol->GetConvert();
 
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
-    LIB_PART* originalPart = aComp->GetPartRef() ? aComp->GetPartRef().get() : dummy();
+    LIB_PART* originalPart = aSymbol->GetPartRef() ? aSymbol->GetPartRef().get() : dummy();
     LIB_PINS  originalPins;
     originalPart->GetPins( originalPins, unit, convert );
 
@@ -1437,37 +1437,37 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     LIB_PINS tempPins;
     tempPart.GetPins( tempPins, unit, convert );
 
-    tempPart.SetFlags( aComp->GetFlags() );
+    tempPart.SetFlags( aSymbol->GetFlags() );
 
-    orientPart( &tempPart, aComp->GetOrientation() );
+    orientPart( &tempPart, aSymbol->GetOrientation() );
 
     for( auto& tempItem : tempPart.GetDrawItems() )
     {
-        tempItem.SetFlags( aComp->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
-        tempItem.MoveTo( tempItem.GetPosition() + (wxPoint) mapCoords( aComp->GetPosition() ) );
+        tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+        tempItem.MoveTo( tempItem.GetPosition() + (wxPoint) mapCoords( aSymbol->GetPosition() ) );
     }
 
-    // Copy the pin info from the component to the temp pins
+    // Copy the pin info from the symbol to the temp pins
     for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
-        SCH_PIN* compPin = aComp->GetPin( originalPins[ i ] );
+        SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
         LIB_PIN* tempPin = tempPins[ i ];
 
         tempPin->ClearFlags();
-        tempPin->SetFlags( compPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
+        tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
 
-        tempPin->SetName( compPin->GetName() );
-        tempPin->SetType( compPin->GetType() );
-        tempPin->SetShape( compPin->GetShape() );
+        tempPin->SetName( symbolPin->GetName() );
+        tempPin->SetType( symbolPin->GetType() );
+        tempPin->SetShape( symbolPin->GetShape() );
 
-        if( compPin->IsDangling() )
+        if( symbolPin->IsDangling() )
             tempPin->SetFlags( IS_DANGLING );
     }
 
-    draw( &tempPart, aLayer, false, aComp->GetUnit(), aComp->GetConvert() );
+    draw( &tempPart, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
 
     // The fields are SCH_COMPONENT-specific so don't need to be copied/oriented/translated
-    for( SCH_FIELD& field : aComp->GetFields() )
+    for( SCH_FIELD& field : aSymbol->GetFields() )
         draw( &field, aLayer );
 }
 
@@ -1507,7 +1507,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     {
         if( static_cast<SCH_COMPONENT*>( aField->GetParent() )->GetTransform().y1 )
         {
-        // Rotate component 90 degrees.
+        // Rotate symbol 90 degrees.
         if( orient == TEXT_ANGLE_HORIZ )
             orient = TEXT_ANGLE_VERT;
         else
@@ -1515,15 +1515,15 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         }
     }
 
-    /* Calculate the text justification, according to the component orientation/mirror.
+    /*
+     * Calculate the text justification, according to the symbol orientation/mirror.
      * This is a bit complicated due to cumulative calculations:
      * - numerous cases (mirrored or not, rotation)
      * - the DrawGraphicText function recalculate also H and H justifications according to the
      *   text orientation.
-     * - When a component is mirrored, the text is not mirrored and justifications are
-     *   complicated to calculate
-     * so the easier way is to use no justifications (centered text) and use GetBoundingBox
-     * to know the text coordinate considered as centered
+     * - when symbol is mirrored, the text is not mirrored and justifications are complicated
+     *   to calculate so the easier way is to use no justifications (centered text) and use
+     *   GetBoundingBox to know the text coordinate considered as centered
      */
     EDA_RECT boundaryBox = aField->GetBoundingBox();
     wxPoint textpos = boundaryBox.Centre();

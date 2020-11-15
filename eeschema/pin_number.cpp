@@ -27,7 +27,7 @@
 
 namespace {
 
-wxString GetNextComponent( const wxString& str, wxString::size_type& cursor )
+wxString GetNextSymbol( const wxString& str, wxString::size_type& cursor )
 {
     if( str.size() <= cursor )
         return wxEmptyString;
@@ -113,44 +113,44 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
     wxString::size_type cursor1 = 0;
     wxString::size_type cursor2 = 0;
 
-    wxString comp1, comp2;
+    wxString symbol1, symbol2;
 
     for( ; ; )
     {
-        comp1 = GetNextComponent( lhs, cursor1 );
-        comp2 = GetNextComponent( rhs, cursor2 );
+        symbol1 = GetNextSymbol( lhs, cursor1 );
+        symbol2 = GetNextSymbol( rhs, cursor2 );
 
-        if( comp1.empty() && comp2.empty() )
+        if( symbol1.empty() && symbol2.empty() )
             return 0;
 
-        if( comp1.empty() )
+        if( symbol1.empty() )
             return -2;
 
-        if( comp2.empty() )
+        if( symbol2.empty() )
             return 2;
 
-        wxChar c1    = comp1[0];
-        wxChar c2    = comp2[0];
+        wxChar c1    = symbol1[0];
+        wxChar c2    = symbol2[0];
 
         if( wxIsdigit( c1 ) || c1 == '-' || c1 == '+' )
         {
             if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
             {
                 // numeric comparison
-                wxString::size_type v1 = comp1.find_first_of( "vV" );
+                wxString::size_type v1 = symbol1.find_first_of( "vV" );
 
                 if( v1 != wxString::npos )
-                    comp1[v1] = '.';
+                    symbol1[v1] = '.';
 
-                wxString::size_type v2 = comp2.find_first_of( "vV" );
+                wxString::size_type v2 = symbol2.find_first_of( "vV" );
 
                 if( v2 != wxString::npos )
-                    comp2[v2] = '.';
+                    symbol2[v2] = '.';
 
                 double val1, val2;
 
-                comp1.ToCDouble( &val1 );
-                comp2.ToCDouble( &val2 );
+                symbol1.ToCDouble( &val1 );
+                symbol2.ToCDouble( &val2 );
 
                 if( val1 < val2 )
                 {
@@ -176,7 +176,7 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
             if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
                 return 2;
 
-            int res = comp1.Cmp( comp2 );
+            int res = symbol1.Cmp( symbol2 );
 
             if( res != 0 )
                 return res;

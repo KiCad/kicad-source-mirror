@@ -836,36 +836,36 @@ void SCH_SCREEN::ClearDrawingState()
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent,
+LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol,
                              bool aEndPointOnly )
 {
-    SCH_COMPONENT*  component = NULL;
+    SCH_COMPONENT*  candidate = NULL;
     LIB_PIN*        pin = NULL;
 
     for( SCH_ITEM* item : Items().Overlapping( SCH_COMPONENT_T, aPosition ) )
     {
-        component = static_cast<SCH_COMPONENT*>( item );
+        candidate = static_cast<SCH_COMPONENT*>( item );
 
         if( aEndPointOnly )
         {
             pin = NULL;
 
-            if( !component->GetPartRef() )
+            if( !candidate->GetPartRef() )
                 continue;
 
-            for( pin = component->GetPartRef()->GetNextPin(); pin;
-                 pin = component->GetPartRef()->GetNextPin( pin ) )
+            for( pin = candidate->GetPartRef()->GetNextPin(); pin;
+                 pin = candidate->GetPartRef()->GetNextPin( pin ) )
             {
                 // Skip items not used for this part.
-                if( component->GetUnit() && pin->GetUnit() &&
-                    ( pin->GetUnit() != component->GetUnit() ) )
+                if( candidate->GetUnit() && pin->GetUnit() &&
+                    ( pin->GetUnit() != candidate->GetUnit() ) )
                     continue;
 
-                if( component->GetConvert() && pin->GetConvert() &&
-                    ( pin->GetConvert() != component->GetConvert() ) )
+                if( candidate->GetConvert() && pin->GetConvert() &&
+                    ( pin->GetConvert() != candidate->GetConvert() ) )
                     continue;
 
-                if(component->GetPinPhysicalPosition( pin ) == aPosition )
+                if( candidate->GetPinPhysicalPosition( pin ) == aPosition )
                     break;
             }
             if( pin )
@@ -873,15 +873,15 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponen
         }
         else
         {
-            pin = (LIB_PIN*) component->GetDrawItem( aPosition, LIB_PIN_T );
+            pin = (LIB_PIN*) candidate->GetDrawItem( aPosition, LIB_PIN_T );
 
             if( pin )
                 break;
         }
     }
 
-    if( pin && aComponent )
-        *aComponent = component;
+    if( pin && aSymbol )
+        *aSymbol = candidate;
 
     return pin;
 }
@@ -924,9 +924,9 @@ void SCH_SCREEN::ClearAnnotation( SCH_SHEET_PATH* aSheetPath )
 
     for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
-        component->ClearAnnotation( aSheetPath );
+        symbol->ClearAnnotation( aSheetPath );
     }
 }
 
@@ -938,11 +938,11 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
     for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
     {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+        SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
         // Add (when not existing) all sheet path entries
         for( const SCH_SHEET_PATH& sheet : GetClientSheetPaths() )
-            component->AddSheetPathReferenceEntryIfMissing( sheet.Path() );
+            symbol->AddSheetPathReferenceEntryIfMissing( sheet.Path() );
     }
 }
 
@@ -1206,8 +1206,7 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
 
     wxCHECK_RET( sch, "Null schematic in SCH_SCREENS::ClearAnnotationOfNewSheetPaths" );
 
-    // Clear the annotation for the components inside new sheetpaths
-    // not already in aInitialSheetList
+    // Clear the annotation for symbols inside new sheetpaths not already in aInitialSheetList
     SCH_SCREENS screensList( sch->Root() );     // The list of screens, shared by sheet paths
     screensList.BuildClientSheetPathList();     // build the shared by sheet paths, by screen
 
@@ -1392,7 +1391,7 @@ bool SCH_SCREENS::HasNoFullyDefinedLibIds()
         for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
             cnt++;
-            auto symbol = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
 
             if( !symbol->GetLibId().GetLibNickname().empty() )
                 return false;
@@ -1409,8 +1408,8 @@ size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
     {
         for( auto item : screen->Items().OfType( SCH_COMPONENT_T ) )
         {
-            auto  symbol   = static_cast<SCH_COMPONENT*>( item );
-            auto& nickname = symbol->GetLibId().GetLibNickname();
+            SCH_COMPONENT* symbol   = static_cast<SCH_COMPONENT*>( item );
+            const UTF8&    nickname = symbol->GetLibId().GetLibNickname();
 
             if( !nickname.empty() && ( aLibNicknames.Index( nickname ) == wxNOT_FOUND ) )
                 aLibNicknames.Add( nickname );

@@ -40,7 +40,7 @@
 /**
  * A simple container for schematic symbol instance infromation.
  */
-struct COMPONENT_INSTANCE_REFERENCE
+struct SYMBOL_INSTANCE_REFERENCE
 {
     KIID_PATH m_Path;
 
@@ -68,45 +68,38 @@ struct SCH_SHEET_INSTANCE
 /**
  * Complex hierarchies
  *
- * A hierarchical schematic uses sheets (hierarchical sheets) included in a
- * given sheet.  Each sheet corresponds to a schematic drawing handled by a
- * SCH_SCREEN structure.  A SCH_SCREEN structure contains drawings, and have
- * a filename to write it's data.  Also a SCH_SCREEN display a sheet number
- * and the name of the sheet.
+ * A hierarchical schematic uses sheets (hierarchical sheets) included in a given sheet.
+ * Each sheet corresponds to a schematic drawing handled by a SCH_SCREEN structure.  A
+ * SCH_SCREEN structure contains drawings, and have a filename to write it's data.  Also a
+ * SCH_SCREEN displays a sheet number and the name of the sheet.
  *
- * In simple (and flat) hierarchies a sheet is linked to a SCH_SCREEN,
- * and a SCH_SCREEN is used by only one hierarchical sheet.
+ * In simple (and flat) hierarchies a sheet is linked to a SCH_SCREEN, and a SCH_SCREEN is
+ * used by the single hierarchical sheet.
  *
- * In complex hierarchies the same SCH_SCREEN (and its data) is shared between
- * more than one sheet.  Therefore subsheets (like subsheets in a SCH_SCREEN
- * shared by many sheets) can be also shared.  So the same SCH_SCREEN must
- * handle different components references and parts selection depending on
- * which sheet is currently selected, and how a given subsheet is selected.
- * 2 sheets share the same SCH_SCREEN (the same drawings) if they have the
- * same filename.
+ * In complex hierarchies the same SCH_SCREEN (and its data) is shared by more than one sheet.
+ * Therefore subsheets (like subsheets in a SCH_SCREEN shared by many sheets) can also be
+ * shared. So the same SCH_SCREEN must handle different symbol references and unit selections
+ * depending on which sheet is currently selected, and how a given subsheet is selected. Two
+ * sheets share the same SCH_SCREEN (the same drawings) if they have the same filename.
  *
- * In KiCad each component and sheet receives (when created) an unique
- * identification called Time Stamp.  So each sheet has 2 ids: its time stamp
- * (that cannot change) and its name ( that can be edited and therefore is
- * not reliable for strong identification).  KiCad uses Time Stamp ( a unique
- * 32 bit id), to identify sheets in hierarchies.
- * A given sheet in a hierarchy is fully labeled by its path (or sheet path)
- * that is the list of time stamp found to access it through the hierarchy
- * the root sheet is /.  All  other sheets have a path like /1234ABCD or
- * /4567FEDC/AA2233DD/.  This path can be displayed as human readable sheet
- * name like: / or /sheet1/include_sheet/ or /sheet2/include_sheet/
+ * In KiCad each symbol and sheet receives (when created) a uuid.  So each sheet has 2 id: its
+ * uuid (which cannot change) and its name (that can be edited and therefore is not reliable
+ * for strong identification).
+ * A given sheet in a hierarchy is fully labeled by its path (or sheet path) that is the list
+ * of uuids found to access it through the hierarchy.  The root sheet is /.  All  other sheets
+ * have a path like /1234ABCD or /4567FEDC/AA2233DD/.  This path can be displayed as human
+ * readable sheet name like: / or /sheet1/include_sheet/ or /sheet2/include_sheet/
  *
  * So to know for a given SCH_SCREEN (a given schematic drawings) we must:
  *   1) Handle all references possibilities.
  *   2) When acceded by a given selected sheet, display (update) the
  *      corresponding references and sheet path
  *
- * The class SCH_SHEET_PATH handles paths used to access a sheet.  The class
- * SCH_SHEET_LIST allows one to handle the full (or partial) list of sheets and
- * their paths in a complex hierarchy.  The class EDA_ScreenList allows one
- * to handle the list of SCH_SCREEN. It is useful to clear or save data,
- * but is not suitable to handle the full complex hierarchy possibilities
- * (usable in flat and simple hierarchies).
+ * The class SCH_SHEET_PATH handles paths used to access a sheet.  The class SCH_SHEET_LIST
+ * allows one to handle the full (or partial) list of sheets and their paths in a complex
+ * hierarchy.  The class EDA_ScreenList allows one to handle the list of SCH_SCREEN. It is
+ * useful  to clear or save data, but is not suitable to handle the full complex hierarchy
+ * possibilities (usable in flat and simple hierarchies).
  */
 
 
@@ -457,7 +450,7 @@ public:
      * WARNING: Do not call this on anything other than the full hierarchy.
      * @param aSymbolInstances is the symbol path information loaded from the root schematic.
      */
-    void UpdateSymbolInstances( const std::vector<COMPONENT_INSTANCE_REFERENCE>& aSymbolInstances );
+    void UpdateSymbolInstances( const std::vector<SYMBOL_INSTANCE_REFERENCE>& aSymbolInstances );
 
     /**
      * Update all of the sheet instance information using \a aSheetInstances.

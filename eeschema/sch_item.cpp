@@ -86,12 +86,12 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 
     if( newItem->Type() == SCH_COMPONENT_T )
     {
-        SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
+        SCH_COMPONENT* symbol = (SCH_COMPONENT*) newItem;
 
-        for( SCH_PIN* pin : component->GetPins() )
+        for( SCH_PIN* pin : symbol->GetPins() )
             pin->ClearFlags( SELECTED | BRIGHTENED );
 
-        for( SCH_FIELD& field : component->GetFields() )
+        for( SCH_FIELD& field : symbol->GetFields() )
             field.ClearFlags( SELECTED | BRIGHTENED );
     }
 

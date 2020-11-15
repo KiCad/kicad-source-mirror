@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE( Default )
 
     BOOST_CHECK_EQUAL( m_csheet.GetScreenCount(), 0 );
 
-    BOOST_CHECK_EQUAL( m_sheet.ComponentCount(), 0 );
+    BOOST_CHECK_EQUAL( m_sheet.SymbolCount(), 0 );
 }
 
 /**

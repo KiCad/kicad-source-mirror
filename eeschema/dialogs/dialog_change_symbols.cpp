@@ -451,7 +451,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
     wxString  msg;
     wxString  references;
 
-    for( COMPONENT_INSTANCE_REFERENCE instance : aSymbol->GetInstanceReferences() )
+    for( SYMBOL_INSTANCE_REFERENCE instance : aSymbol->GetInstanceReferences() )
     {
         if( references.IsEmpty() )
             references = instance.m_Reference;

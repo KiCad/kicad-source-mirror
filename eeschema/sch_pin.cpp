@@ -26,8 +26,8 @@
 #include <sch_edit_frame.h>
 
 
-SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
-    SCH_ITEM( aParentComponent, SCH_PIN_T )
+SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentSymbol ) :
+    SCH_ITEM( aParentSymbol, SCH_PIN_T )
 {
     m_alt = wxEmptyString;
     m_number = aLibPin->GetNumber();
@@ -41,9 +41,8 @@ SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
  * Create a proxy pin from an alternate pin designation.
  * The LIB_PIN data will be filled in when the pin is resolved (see SCH_COMPONENT::UpdatePins).
  */
-SCH_PIN::SCH_PIN( SCH_COMPONENT* aParentComponent, const wxString& aNumber,
-                  const wxString& aAlt ) :
-    SCH_ITEM( aParentComponent, SCH_PIN_T )
+SCH_PIN::SCH_PIN( SCH_COMPONENT* aParentSymbol, const wxString& aNumber, const wxString& aAlt ) :
+    SCH_ITEM( aParentSymbol, SCH_PIN_T )
 {
     m_alt = aAlt;
     m_number = aNumber;
@@ -248,7 +247,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath )
 
     bool annotated = true;
 
-    // Add timestamp for uninitialized components
+    // Add timestamp for uninitialized symbols
     if( name.Last() == '?' )
     {
         name << GetParentSymbol()->m_Uuid.AsString();

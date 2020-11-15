@@ -136,7 +136,7 @@ private:
      *          schematic file is loaded.  It is read only and it is only written to non-root
      *          schematic files.
      */
-    std::vector<COMPONENT_INSTANCE_REFERENCE> m_symbolInstances;
+    std::vector<SYMBOL_INSTANCE_REFERENCE> m_symbolInstances;
     std::vector<SCH_SHEET_INSTANCE> m_sheetInstances;
 
     friend SCH_EDIT_FRAME;     // Only to populate m_symbolInstances.
@@ -369,12 +369,12 @@ public:
      * Test the screen for a component pin item at \a aPosition.
      *
      * @param aPosition Position to test.
-     * @param aComponent The component if a pin was found, otherwise NULL.
+     * @param aSymbol The component if a pin was found, otherwise NULL.
      * @param aEndPointOnly Set to true to test if \a aPosition is the connection
      *                      point of the pin.
      * @return The pin item if found, otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aComponent = NULL,
+    LIB_PIN* GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol = NULL,
                      bool aEndPointOnly = false );
 
     /**
@@ -493,7 +493,7 @@ public:
         return m_aliases;
     }
 
-    const std::vector<COMPONENT_INSTANCE_REFERENCE>& GetSymbolInstances() const
+    const std::vector<SYMBOL_INSTANCE_REFERENCE>& GetSymbolInstances() const
     {
         return m_symbolInstances;
     }

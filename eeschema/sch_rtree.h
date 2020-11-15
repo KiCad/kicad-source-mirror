@@ -176,7 +176,7 @@ public:
      *
      * for( auto item : rtree.OfType( SCH_COMPONENT_T ) )
      *
-     * and iterate over the RTree items that are components only
+     * and iterate over the RTree items that are symbols only
      */
     struct EE_TYPE
     {

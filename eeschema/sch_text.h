@@ -425,10 +425,17 @@ public:
     wxPoint GetIrefSavedPosition() { return m_savedIrefPos; }
     void SetIrefSavedPosition( wxPoint pos ) { m_savedIrefPos = pos; }
 
-    bool IsPointClickableAnchor( const wxPoint& aPos ) const override { return m_isDangling && GetPosition() == aPos; }
+    bool IsPointClickableAnchor( const wxPoint& aPos ) const override
+    {
+        return m_isDangling && GetPosition() == aPos;
+    }
 
 private:
-    bool doIsConnected( const wxPoint& aPosition ) const override { return EDA_TEXT::GetTextPos() == aPosition; }
+    bool doIsConnected( const wxPoint& aPosition ) const override
+    {
+        return EDA_TEXT::GetTextPos() == aPosition;
+    }
+
     SCH_IREF* m_iref;
     wxPoint   m_savedIrefPos;
 };

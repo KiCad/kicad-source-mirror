@@ -768,7 +768,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
             m_out->Print( 0, "\n" );
             m_out->Print( 1, "(symbol_instances\n" );
 
-            for( const COMPONENT_INSTANCE_REFERENCE& instance : screen->m_symbolInstances )
+            for( const SYMBOL_INSTANCE_REFERENCE& instance : screen->m_symbolInstances )
             {
                 m_out->Print( 2, "(path %s (reference %s) (unit %d))\n",
                               m_out->Quotew( instance.m_Path.AsString() ).c_str(),

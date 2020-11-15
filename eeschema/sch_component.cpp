@@ -394,7 +394,7 @@ void SCH_COMPONENT::AddHierarchicalReference( const KIID_PATH& aPath, const wxSt
         }
     }
 
-    COMPONENT_INSTANCE_REFERENCE instance;
+    SYMBOL_INSTANCE_REFERENCE instance;
     instance.m_Path = aPath;
     instance.m_Reference = aRef;
     instance.m_Unit = aUnit;
@@ -418,7 +418,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet, bool aInclude
     KIID_PATH path = sheet->Path();
     wxString  ref;
 
-    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -469,7 +469,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     bool      notInArray = true;
 
     // check to see if it is already there before inserting it
-    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -522,7 +522,7 @@ bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
             return instance.m_Reference.Last() != '?';
@@ -536,7 +536,7 @@ int SCH_COMPONENT::GetUnitSelection( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
-    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
             return instance.m_Unit;
@@ -553,7 +553,7 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
     KIID_PATH path = aSheet->Path();
 
     // check to see if it is already there before inserting it
-    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -571,7 +571,7 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
 {
     KIID_PATH path = sheet->Path();
 
-    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
         {
@@ -590,7 +590,7 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
     if( sheet == nullptr )
     {
         // Clear instance overrides and set primary field value
-        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Value = wxEmptyString;
 
         m_Fields[ VALUE_FIELD ].SetText( aValue );
@@ -600,7 +600,7 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
     KIID_PATH path = sheet->Path();
 
     // check to see if it is already there before inserting it
-    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -618,7 +618,7 @@ const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet ) const
 {
     KIID_PATH path = sheet->Path();
 
-    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
         {
@@ -637,7 +637,7 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
     if( sheet == nullptr )
     {
         // Clear instance overrides and set primary field value
-        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Footprint = wxEmptyString;
 
         m_Fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
@@ -647,7 +647,7 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
     KIID_PATH path = sheet->Path();
 
     // check to see if it is already there before inserting it
-    for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         if( instance.m_Path == path )
         {
@@ -990,7 +990,7 @@ void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
     {
         KIID_PATH path = aSheetPath->Path();
 
-        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
         {
             if( instance.m_Path == path )
                 instance.m_Reference = defRef;
@@ -998,7 +998,7 @@ void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
     }
     else
     {
-        for( COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+        for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Reference = defRef;
     }
 
@@ -1020,7 +1020,7 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheet
 
     wxString reference_path;
 
-    for( const COMPONENT_INSTANCE_REFERENCE& instance : m_instanceReferences )
+    for( const SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
     {
         // if aSheetPath is found, nothing to do:
         if( instance.m_Path == aSheetPath )
@@ -1037,7 +1037,7 @@ bool SCH_COMPONENT::ReplaceInstanceSheetPath( const KIID_PATH& aOldSheetPath,
                                               const KIID_PATH& aNewSheetPath )
 {
     auto it = std::find_if( m_instanceReferences.begin(), m_instanceReferences.end(),
-                [ aOldSheetPath ]( COMPONENT_INSTANCE_REFERENCE& r )->bool
+                [ aOldSheetPath ]( SYMBOL_INSTANCE_REFERENCE& r )->bool
                 {
                     return aOldSheetPath == r.m_Path;
                 }
