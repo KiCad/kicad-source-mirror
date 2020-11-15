@@ -544,7 +544,7 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         // simplier "A.Via_Type == 'buried'" is perfectly clear.  Instead, return an undefined
         // value when the property doesn't appear on a particular object.
 
-        return LIBEVAL::VALUE( "UNDEFINED" );
+        return LIBEVAL::VALUE();
     }
     else
     {
@@ -564,7 +564,10 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
                 any.GetAs<wxString>( &str );
             }
 
-            return LIBEVAL::VALUE( str );
+            if( str == "UNDEFINED" )
+                return LIBEVAL::VALUE();
+            else
+                return LIBEVAL::VALUE( str );
         }
     }
 }

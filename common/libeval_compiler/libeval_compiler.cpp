@@ -107,21 +107,34 @@ static const wxString formatOpName( int op )
     return "???";
 }
 
+
 bool VALUE::EqualTo( const VALUE* b ) const
 {
+    if( m_type == VT_UNDEFINED || b->m_type == VT_UNDEFINED )
+        return false;
+
     if( m_type == VT_NUMERIC && b->m_type == VT_NUMERIC )
+    {
         return m_valueDbl == b->m_valueDbl;
+    }
     else if( m_type == VT_STRING && b->m_type == VT_STRING )
     {
         if( b->m_stringIsWildcard )
-        {
             return WildCompareString( b->m_valueStr, m_valueStr, false );
-        }
         else
             return !m_valueStr.CmpNoCase( b->m_valueStr );
     }
 
     return false;
+}
+
+
+bool VALUE::NotEqualTo( const VALUE* b ) const
+{
+    if( m_type == VT_UNDEFINED || b->m_type == VT_UNDEFINED )
+        return false;
+
+    return !EqualTo( b );
 }
 
 
@@ -1120,7 +1133,7 @@ void UOP::Exec( CONTEXT* ctx )
             result = arg1 && arg2 && arg1->EqualTo( arg2 ) ? 1 : 0;
             break;
         case TR_OP_NOT_EQUAL:
-            result = arg1 && arg2 && arg1->EqualTo( arg2 ) ? 0 : 1;
+            result = arg1 && arg2 && arg1->NotEqualTo( arg2 ) ? 1 : 0;
             break;
         case TR_OP_BOOL_AND:
             result = arg1Value != 0.0 && arg2Value != 0.0 ? 1 : 0;

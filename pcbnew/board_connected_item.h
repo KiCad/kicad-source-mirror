@@ -175,7 +175,7 @@ public:
      * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
      * std::shared_ptr stuff shows up large in performance profiling.
      */
-    NETCLASS* GetNetClass() const;
+    virtual NETCLASS* GetNetClass() const;
 
     /**
      * Function GetEffectiveNetclass
@@ -184,7 +184,7 @@ public:
      * Note: do NOT return a std::shared_ptr from this.  It is used heavily in DRC, and the
      * std::shared_ptr stuff shows up large in performance profiling.
      */
-    NETCLASS* GetEffectiveNetclass() const;
+    virtual NETCLASS* GetEffectiveNetclass() const;
 
     /**
      * Function GetNetClassName
@@ -194,7 +194,7 @@ public:
      * (should not return a null pointer).
      * @return the Net Class name of this item
      */
-    wxString GetNetClassName() const;
+    virtual wxString GetNetClassName() const;
 
     void SetLocalRatsnestVisible( bool aVisible )
     {

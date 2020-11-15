@@ -218,6 +218,9 @@ public:
 
     virtual bool EqualTo( const VALUE* b ) const;
 
+    // NB: this is not an inverse of EqualTo as they both return false for undefined values.
+    virtual bool NotEqualTo( const VALUE* b ) const;
+
     VAR_TYPE_T GetType() const { return m_type; };
 
     void Set( double aValue )

@@ -277,7 +277,7 @@ protected:
         wxAny a = getter( aObject );
 
         if ( !( std::is_enum<T>::value && a.CheckType<int>() ) && !a.CheckType<T>() )
-            throw std::invalid_argument("Invalid requested type");
+            throw std::invalid_argument( "Invalid requested type" );
 
         return wxANY_AS(a, T);
     }

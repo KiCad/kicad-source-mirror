@@ -213,10 +213,13 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
 
     if( aClearanceType == CLEARANCE_CONSTRAINT )
     {
-        auto edgeConstraint = drcEngine.EvalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aA, aB,
-                                                           aLayer, r );
+        if( ( aA && aA->GetLayer() == Edge_Cuts ) || ( aB && aB->GetLayer() == Edge_Cuts ) )
+        {
+            auto edgeConstraint = drcEngine.EvalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aA, aB,
+                                                               aLayer, r );
 
-        clearance = edgeConstraint.m_Value.HasMin() ? edgeConstraint.m_Value.Min() : 0;
+            clearance = edgeConstraint.m_Value.HasMin() ? edgeConstraint.m_Value.Min() : 0;
+        }
     }
 
     auto constraint = drcEngine.EvalRulesForItems( aClearanceType, aA, aB, aLayer, r );
@@ -293,8 +296,12 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             {
                 wxString s = aItem->GetSelectMenuText( r->GetUnits() );
 
-                if( auto* cItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( aItem ) )
-                    s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ), cItem->GetNetClassName() );
+                if( aItem->IsConnected() )
+                {
+                    BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+                    s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
+                                                        cItem->GetNetClassName() );
+                }
 
                 return s;
             };
@@ -333,8 +340,10 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                                      getItemDescription( a ),
                                      getItemDescription( b ) ) );
 
-        BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
-        BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
+        BOARD_CONNECTED_ITEM* ac = a && a->IsConnected() ?
+                                        static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
+        BOARD_CONNECTED_ITEM* bc = b && b->IsConnected() ?
+                                        static_cast<BOARD_CONNECTED_ITEM*>( b ) : nullptr;
 
         if( ac && bc && ac->GetNetCode() > 0 && ac->GetNetCode() == bc->GetNetCode() )
         {

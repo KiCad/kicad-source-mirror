@@ -706,10 +706,16 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
-    const BOARD_CONNECTED_ITEM* connectedA = dynamic_cast<const BOARD_CONNECTED_ITEM*>( a );
-    const BOARD_CONNECTED_ITEM* connectedB = dynamic_cast<const BOARD_CONNECTED_ITEM*>( b );
-    const DRC_CONSTRAINT*       constraintRef = nullptr;
-    bool                        implicit = false;
+    const BOARD_CONNECTED_ITEM* ac = a && a->IsConnected() ?
+                                         static_cast<const BOARD_CONNECTED_ITEM*>( a ) : nullptr;
+    const BOARD_CONNECTED_ITEM* bc = b && b->IsConnected() ?
+                                         static_cast<const BOARD_CONNECTED_ITEM*>( b ) : nullptr;
+
+    bool a_is_unconnected = a && !ac;
+    bool b_is_unconnected = b && !bc;
+
+    const DRC_CONSTRAINT* constraintRef = nullptr;
+    bool                  implicit = false;
 
     // Local overrides take precedence
     if( aConstraintId == CLEARANCE_CONSTRAINT )
@@ -717,9 +723,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         int overrideA = 0;
         int overrideB = 0;
 
-        if( connectedA && connectedA->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( ac && !b_is_unconnected && ac->GetLocalClearanceOverrides( nullptr ) > 0 )
         {
-            overrideA = connectedA->GetLocalClearanceOverrides( &m_msg );
+            overrideA = ac->GetLocalClearanceOverrides( &m_msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
@@ -727,9 +733,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                       MessageTextFromValue( UNITS, overrideA ) ) )
         }
 
-        if( connectedB && connectedB->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( bc && !a_is_unconnected && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
         {
-            overrideB = connectedB->GetLocalClearanceOverrides( &m_msg );
+            overrideB = bc->GetLocalClearanceOverrides( &m_msg );
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
@@ -794,9 +800,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
                 if( aConstraintId == CLEARANCE_CONSTRAINT )
                 {
-                    if( implicit && ( isKeepoutZone( a ) || isKeepoutZone( b ) ) )
+                    if( implicit && ( a_is_unconnected || b_is_unconnected ) )
                     {
-                        REPORT( _( "Board and netclass clearances not applied to keepout zones" ) );
+                        REPORT( _( "Board and netclass clearances apply only to connected items." ) );
                         return true;
                     }
                 }
@@ -956,8 +962,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     if( constraintRef && aConstraintId == CLEARANCE_CONSTRAINT && implicit )
     {
         int global = constraintRef->m_Value.Min();
-        int localA = connectedA ? connectedA->GetLocalClearance( nullptr ) : 0;
-        int localB = connectedB ? connectedB->GetLocalClearance( nullptr ) : 0;
+        int localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
+        int localB = bc ? bc->GetLocalClearance( nullptr ) : 0;
         int clearance = global;
 
         if( localA > 0 )
@@ -968,7 +974,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                       MessageTextFromValue( UNITS, localA ) ) )
 
             if( localA > clearance )
-                clearance = connectedA->GetLocalClearance( &m_msg );
+                clearance = ac->GetLocalClearance( &m_msg );
         }
 
         if( localB > 0 )
@@ -979,7 +985,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                       MessageTextFromValue( UNITS, localB ) ) )
 
             if( localB > clearance )
-                clearance = connectedB->GetLocalClearance( &m_msg );
+                clearance = bc->GetLocalClearance( &m_msg );
         }
 
         if( localA > global || localB > global )
