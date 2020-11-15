@@ -55,7 +55,7 @@ DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent
     m_sdbSizerOK->SetDefault();
 
     // Set invalid label characters list:
-    SCH_NETNAME_VALIDATOR validator;
+    SCH_NETNAME_VALIDATOR validator( true );
     m_comboName->SetValidator( validator );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
