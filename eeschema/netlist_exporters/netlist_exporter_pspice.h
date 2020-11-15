@@ -26,7 +26,7 @@
 #ifndef NETLIST_EXPORTER_PSPICE_H
 #define NETLIST_EXPORTER_PSPICE_H
 
-#include "netlist_exporter.h"
+#include "netlist_exporter_base.h"
 #include <list>
 #include <map>
 
@@ -98,11 +98,11 @@ struct SPICE_ITEM
  * NETLIST_EXPORTER_PSPICE
  * generates a PSPICE compatible netlist
  */
-class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER
+class NETLIST_EXPORTER_PSPICE : public NETLIST_EXPORTER_BASE
 {
 public:
     NETLIST_EXPORTER_PSPICE( SCHEMATIC* aSchematic ) :
-            NETLIST_EXPORTER( aSchematic )
+            NETLIST_EXPORTER_BASE( aSchematic )
     {
     }
 
@@ -140,7 +140,7 @@ public:
      */
     bool WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions ) override;
 
-    ///> @copydoc NETLIST_EXPORTER::Format()
+    ///> @copydoc NETLIST_EXPORTER_BASE::Format()
     bool Format( OUTPUTFORMATTER* aFormatter, unsigned aCtl );
 
     /**

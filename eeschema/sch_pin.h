@@ -64,7 +64,7 @@ public:
         return wxT( "SCH_PIN" );
     }
 
-    SCH_COMPONENT* GetParentComponent() const;
+    SCH_COMPONENT* GetParentSymbol() const;
 
     LIB_PIN* GetLibPin() const { return m_libPin; }
 

@@ -585,8 +585,8 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                     if( !pin->GetLibPin()->GetParent()->IsMulti() )
                         continue;
 
-                    wxString name = ( pin->GetParentComponent()->GetRef( &subgraph->m_sheet ) +
-                                      ":" + pin->GetNumber() );
+                    wxString name = pin->GetParentSymbol()->GetRef( &subgraph->m_sheet ) +
+                                      + ":" + pin->GetNumber();
 
                     if( !pinToNetMap.count( name ) )
                     {

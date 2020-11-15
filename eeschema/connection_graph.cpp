@@ -77,7 +77,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         PRIORITY item_priority = GetDriverPriority( item );
 
         if( item_priority == PRIORITY::PIN
-                && !static_cast<SCH_PIN*>( item )->GetParentComponent()->IsInNetlist() )
+                && !static_cast<SCH_PIN*>( item )->GetParentSymbol()->IsInNetlist() )
             continue;
 
         if( item_priority >= PRIORITY::HIER_LABEL )

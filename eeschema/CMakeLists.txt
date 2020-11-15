@@ -237,9 +237,9 @@ set( EESCHEMA_SRCS
     transform.cpp
     sch_iref.cpp
 
-    netlist_exporters/netlist_exporter.cpp
+    netlist_exporters/netlist_exporter_base.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
-    netlist_exporters/netlist_exporter_generic.cpp
+    netlist_exporters/netlist_exporter_xml.cpp
     netlist_exporters/netlist_exporter_kicad.cpp
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp

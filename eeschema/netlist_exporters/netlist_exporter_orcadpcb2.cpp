@@ -61,7 +61,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
                         NETLIST_HEAD_STRING, TO_UTF8( DateAndTime() ) );
 
     // Create netlist footprints section
-    m_ReferencesAlreadyFound.Clear();
+    m_referencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
@@ -72,7 +72,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
         // Process component attributes
         for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextComponent( item, &sheet );
+            SCH_COMPONENT* comp = findNextSymbol( item, &sheet );
 
             if( !comp )
                 continue;
@@ -104,7 +104,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
             ret |= fprintf( f, "\n" );
 
             // Write pin list:
-            for( const PIN_INFO& pin : m_SortedComponentPinList )
+            for( const PIN_INFO& pin : m_sortedSymbolPinList )
             {
                 netName = pin.netName;
                 netName.Replace( wxT( " " ), wxT( "_" ) );

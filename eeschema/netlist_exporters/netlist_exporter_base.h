@@ -90,71 +90,68 @@ struct PIN_INFO
 };
 
 /**
- * NETLIST_EXPORTER
+ * NETLIST_EXPORTER_BASE
  * is a abstract class used for the netlist exporters that eeschema supports.
  */
-class NETLIST_EXPORTER
+class NETLIST_EXPORTER_BASE
 {
 protected:
-    /// Used to temporarily store and filter the list of pins of a schematic component
-    /// when generating schematic component data in netlist (comp section). No ownership
-    /// of members.
+    /// Used to temporarily store and filter the list of pins of a schematic symbol when
+    /// generating schematic symbol data in netlist (comp section). No ownership of members.
     /// TODO(snh): Descope this object
-    std::vector<PIN_INFO> m_SortedComponentPinList;
+    std::vector<PIN_INFO> m_sortedSymbolPinList;
 
-    /// Used for "multi parts per package" components,
-    /// avoids processing a lib component more than once.
-    UNIQUE_STRINGS        m_ReferencesAlreadyFound;
+    /// Used for "multiple parts per package" symbols to avoid processing a lib part more than
+    /// once
+    UNIQUE_STRINGS        m_referencesAlreadyFound;
 
-    /// unique library parts used. LIB_PART items are s
-    /// orted by names
-    std::set<LIB_PART*, LIB_PART_LESS_THAN> m_LibParts;
+    /// unique library parts used. LIB_PART items are sorted by names
+    std::set<LIB_PART*, LIB_PART_LESS_THAN> m_libParts;
 
     /// The schematic we're generating a netlist for
-    SCHEMATIC* m_schematic;
+    SCHEMATIC*            m_schematic;
 
     /**
-     * Function findNextComponentAndCreatePinList
-     * finds a component from the DrawList and builds
-     * its pin list in m_SortedComponentPinList. This list is sorted by pin num.
-     * the component is the next actual component after aItem
-     * (power symbols and virtual components that have their reference starting by '#'are skipped).
+     * Function findNextSymbolAndCreatePinList
+     * finds a symbol from the DrawList and builds its pin list in m_sortedSymbolPinList. This
+     * list is sorted by pin num. The symbol is the next actual symbol after aSymbol.
+     *
+     * Power symbols and virtual symbols that have their reference designators starting with
+     * '#' are skipped.
      */
-    void CreatePinList( SCH_COMPONENT* aItem, SCH_SHEET_PATH* aSheetPath );
+    void CreatePinList( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheetPath );
 
     /**
-     * Checks if the given component should be processed for netlisting.
-     * Prevents processing multi-unit components more than once, etc.
-     * @param aItem is a component to check
-     * @param aSheetPath is the sheet to check the component for
-     * @return the component if it should be processed, or nullptr
+     * Checks if the given symbol should be processed for netlisting.
+     * Prevents processing multi-unit symbols more than once, etc.
+     * @param aItem is a symbol to check
+     * @param aSheetPath is the sheet to check the symbol for
+     * @return the symbol if it should be processed, or nullptr
      */
-    SCH_COMPONENT* findNextComponent( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
+    SCH_COMPONENT* findNextSymbol( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheetPath );
 
     /**
      * Function eraseDuplicatePins
-     * erase duplicate Pins from m_SortedComponentPinList (i.e. set pointer in this list to NULL).
-     * (This is a list of pins found in the whole schematic, for a single
-     * component.) These duplicate pins were put in list because some pins (powers... )
-     * are found more than one time when we have a multiple parts per package
-     * component. For instance, a 74ls00 has 4 parts, and therefore the VCC pin
-     * and GND pin appears 4 times in the list.
+     * erase duplicate Pins from m_sortedSymbolPinList (i.e. set pointer in this list to NULL).
+     * (This is a list of pins found in the whole schematic, for a single symbol.) These
+     * duplicate pins were put in list because some pins (power pins...) are found more than
+     * once when in "multiple parts per package" symbols. For instance, a 74ls00 has 4 parts,
+     * and therefore the VCC pin and GND pin appears 4 times in the list.
      * Note: this list *MUST* be sorted by pin number (.m_PinNum member value)
      * Also set the m_Flag member of "removed" NETLIST_OBJECT pin item to 1
      */
     void eraseDuplicatePins();
 
     /**
-     * Function findAllUnitsOfComponent
-     * is used for "multiple parts per package" components.
+     * Function findAllUnitsOfSymbol
+     * is used for "multiple parts per package" symbols.
      * <p>
-     * Search the entire design for all units of \a aComponent based on
-     * matching reference designator, and for each unit, add all its pins
-     * to the temporary sorted pin list, m_SortedComponentPinList.
+     * Search the entire design for all units of \a aSymbol based on matching reference
+     * designator, and for each unit, add all its pins to the temporary sorted pin list,
+     * m_sortedSymbolPinList.
      */
-    void findAllUnitsOfComponent( SCH_COMPONENT*  aComponent,
-                                  LIB_PART*       aEntry,
-                                  SCH_SHEET_PATH* aSheetPath );
+    void findAllUnitsOfSymbol( SCH_COMPONENT* aSymbol, LIB_PART* aPart,
+                               SCH_SHEET_PATH* aSheetPath );
 
 
 public:
@@ -164,13 +161,13 @@ public:
      * @param aMasterList we take ownership of this here.
      * @param aLibTable is the symbol library table of the project.
      */
-    NETLIST_EXPORTER( SCHEMATIC* aSchematic ) :
+    NETLIST_EXPORTER_BASE( SCHEMATIC* aSchematic ) :
         m_schematic( aSchematic )
     {
         wxASSERT( aSchematic );
     }
 
-    virtual ~NETLIST_EXPORTER()
+    virtual ~NETLIST_EXPORTER_BASE()
     {
     }
 
@@ -185,9 +182,8 @@ public:
 
     /**
      * Function MakeCommandLine
-     * builds up a string that describes a command line for
-     * executing a child process. The input and output file names
-     * along with any options to the executable are all possibly
+     * builds up a string that describes a command line for executing a child process. The
+     * input and output file names along with any options to the executable are all possibly
      * in the returned string.
      *
      * @param aFormatString holds:
@@ -197,12 +193,10 @@ public:
      *   <li>formatting sequences, see below.
      *   </ul>
      *
-     * @param aNetlistFile is the name of the input file for the
-     *  external program, that is a intermediate netlist file in xml format.
-     * @param aFinalFile is the name of the output file that
-     *  the user expects.
-     * @param aProjectDirectory is used for %P replacement, it should omit
-     *  the trailing '/'.
+     * @param aNetlistFile is the name of the input file for the external program, that is a
+     *                     intermediate netlist file in xml format.
+     * @param aFinalFile is the name of the output file that the user expects.
+     * @param aProjectDirectory is used for %P replacement, it should omit the trailing '/'.
      *
      *  <p> Supported formatting sequences and their meaning:
      *  <ul>
@@ -215,10 +209,8 @@ public:
      *  <li> %P => project directory, without name and without trailing '/'
      *  </ul>
      */
-    static wxString MakeCommandLine( const wxString& aFormatString,
-            const wxString& aNetlistFile, const wxString& aFinalFile,
-            const wxString& aProjectDirectory
-            );
+    static wxString MakeCommandLine( const wxString& aFormatString, const wxString& aNetlistFile,
+                                     const wxString& aFinalFile, const wxString& aProjectDirectory );
 };
 
 #endif

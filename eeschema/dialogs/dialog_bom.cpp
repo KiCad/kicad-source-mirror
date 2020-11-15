@@ -39,7 +39,7 @@
 #include <invoke_sch_dialog.h>
 #include <kiface_i.h>
 #include <netlist.h>
-#include <netlist_exporter_generic.h>
+#include <netlist_exporter_xml.h>
 #include <pgm_base.h>
 #include <reporter.h>
 #include <sch_edit_frame.h>

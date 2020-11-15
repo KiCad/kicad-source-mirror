@@ -447,7 +447,7 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
 
     ORIENT o = orientations[ 0 ];
 
-    SCH_COMPONENT* comp = aPin->GetParentComponent();
+    SCH_COMPONENT* comp = aPin->GetParentSymbol();
 
     if( !comp )
         return spin;

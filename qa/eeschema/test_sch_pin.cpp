@@ -47,25 +47,25 @@ public:
         m_lib_pin->SetPosition( wxPoint( 1, -2 ) );  // local coord system is upside-down
 
         SCH_SHEET_PATH path;
-        m_parent_comp = new SCH_COMPONENT( *m_parent_part, m_parent_part->GetLibId(),
-                                           &path, 0, 0, wxPoint( 1, 2 ) );
-        m_parent_comp->SetRef( &path, "U2" );
-        m_parent_comp->UpdatePins();
+        m_parent_symbol = new SCH_COMPONENT( *m_parent_part, m_parent_part->GetLibId(),
+                                             &path, 0, 0, wxPoint( 1, 2 ) );
+        m_parent_symbol->SetRef( &path, "U2" );
+        m_parent_symbol->UpdatePins();
         
-        m_sch_pin = m_parent_comp->GetPins( &path )[0];
+        m_sch_pin = m_parent_symbol->GetPins( &path )[0];
     }
 
     ~TEST_SCH_PIN_FIXTURE()
     {
-        delete m_parent_comp;
+        delete m_parent_symbol;
         delete m_parent_part;
     }
 
     LIB_PART*      m_parent_part;
     LIB_PIN*       m_lib_pin;
 
-    SCH_COMPONENT* m_parent_comp;
-    SCH_PIN*       m_sch_pin;       // owned by m_parent_comp, not us
+    SCH_COMPONENT* m_parent_symbol;
+    SCH_PIN*       m_sch_pin;       // owned by m_parent_symbol, not us
 };
 
 
@@ -79,7 +79,7 @@ BOOST_FIXTURE_TEST_SUITE( SchPin, TEST_SCH_PIN_FIXTURE )
  */
 BOOST_AUTO_TEST_CASE( DefaultProperties )
 {
-    BOOST_CHECK_EQUAL( m_sch_pin->GetParentComponent(), m_parent_comp );
+    BOOST_CHECK_EQUAL( m_sch_pin->GetParentSymbol(), m_parent_symbol );
 
     // Note: local coord system is upside-down; schematic coord system is not.
     BOOST_CHECK_EQUAL( m_sch_pin->GetLocalPosition(), wxPoint( 1, -2 ) );
@@ -101,7 +101,7 @@ BOOST_AUTO_TEST_CASE( Assign )
 {
     SCH_PIN assigned = *m_sch_pin;
 
-    BOOST_CHECK_EQUAL( assigned.GetParentComponent(), m_parent_comp );
+    BOOST_CHECK_EQUAL( assigned.GetParentSymbol(), m_parent_symbol );
     BOOST_CHECK_EQUAL( assigned.GetNumber(), m_lib_pin->GetNumber() );
 }
 
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE( Copy )
 {
     SCH_PIN copied( *m_sch_pin );
 
-    BOOST_CHECK_EQUAL( copied.GetParentComponent(), m_parent_comp );
+    BOOST_CHECK_EQUAL( copied.GetParentSymbol(), m_parent_symbol );
     BOOST_CHECK_EQUAL( copied.GetNumber(), m_lib_pin->GetNumber() );
 }
 
@@ -158,15 +158,15 @@ BOOST_AUTO_TEST_CASE( PinNumberingPower )
     m_lib_pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
     m_parent_part->SetPower();
 
-    // and update component from library...
+    // and update symbol from library...
     SCH_SHEET_PATH path;
-    delete m_parent_comp;
-    m_parent_comp = new SCH_COMPONENT( *m_parent_part, m_parent_part->GetLibId(),
-                                       &path, 0, 0, wxPoint( 1, 2 ) );
-    m_parent_comp->SetRef( &path, "U2" );
-    m_parent_comp->UpdatePins();
+    delete m_parent_symbol;
+    m_parent_symbol = new SCH_COMPONENT( *m_parent_part, m_parent_part->GetLibId(),
+                                         &path, 0, 0, wxPoint( 1, 2 ) );
+    m_parent_symbol->SetRef( &path, "U2" );
+    m_parent_symbol->UpdatePins();
 
-    m_sch_pin = m_parent_comp->GetPins( &path )[0];
+    m_sch_pin = m_parent_symbol->GetPins( &path )[0];
 
     // ... then the name is just the pin name
     const wxString pwr_name = m_sch_pin->GetDefaultNetName( path );

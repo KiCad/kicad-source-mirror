@@ -26,17 +26,17 @@
 #ifndef NETLIST_EXPORTER_ORCADPCB2_H
 #define NETLIST_EXPORTER_ORCADPCB2_H
 
-#include "netlist_exporter.h"
+#include "netlist_exporter_base.h"
 
 /**
  * NETLIST_EXPORTER_ORCADPCB2
  * generates a netlist compatible with OrCAD
  */
-class NETLIST_EXPORTER_ORCADPCB2 : public NETLIST_EXPORTER
+class NETLIST_EXPORTER_ORCADPCB2 : public NETLIST_EXPORTER_BASE
 {
 public:
     NETLIST_EXPORTER_ORCADPCB2( SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER( aSchematic )
+            NETLIST_EXPORTER_BASE( aSchematic )
     {
     }
 

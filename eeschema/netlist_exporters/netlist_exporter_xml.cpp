@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "netlist_exporter_generic.h"
+#include "netlist_exporter_xml.h"
 
 #include <build_version.h>
 #include <sch_base_frame.h>
@@ -37,8 +37,7 @@
 
 static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
 
-bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName,
-                                             unsigned aNetlistOptions )
+bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     // output the XML format netlist.
     wxXmlDocument   xdoc;
@@ -49,7 +48,7 @@ bool NETLIST_EXPORTER_GENERIC::WriteNetlist( const wxString& aOutFileName,
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( unsigned aCtl )
+XNODE* NETLIST_EXPORTER_XML::makeRoot( unsigned aCtl )
 {
     XNODE*      xroot = node( "export" );
 
@@ -60,7 +59,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeRoot( unsigned aCtl )
         xroot->AddChild( makeDesignHeader() );
 
     if( aCtl & GNL_COMPONENTS )
-        xroot->AddChild( makeComponents( aCtl ) );
+        xroot->AddChild( makeSymbols( aCtl ) );
 
     if( aCtl & GNL_PARTS )
         xroot->AddChild( makeLibParts() );
@@ -87,12 +86,12 @@ struct COMP_FIELDS
 };
 
 
-void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* comp,
-                                                   SCH_SHEET_PATH* aSheet )
+void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol,
+                                            SCH_SHEET_PATH* aSheet )
 {
     COMP_FIELDS fields;
 
-    if( comp->GetUnitCount() > 1 )
+    if( aSymbol->GetUnitCount() > 1 )
     {
         // Sadly, each unit of a component can have its own unique fields. This
         // block finds the unit with the lowest number having a non blank field
@@ -101,10 +100,10 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
         // any non blank fields in all units and use the first non-blank field
         // for each unique field name.
 
-        wxString    ref = comp->GetRef( aSheet );
+        wxString    ref = aSymbol->GetRef( aSheet );
 
         SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
-        int minUnit = comp->GetUnit();
+        int minUnit = aSymbol->GetUnit();
 
         for( unsigned i = 0;  i < sheetList.size();  i++ )
         {
@@ -170,23 +169,23 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
     else
     {
         if( m_resolveTextVars )
-            fields.value = comp->GetField( VALUE_FIELD )->GetShownText();
+            fields.value = aSymbol->GetField( VALUE_FIELD )->GetShownText();
         else
-            fields.value = comp->GetField( VALUE_FIELD )->GetText();
+            fields.value = aSymbol->GetField( VALUE_FIELD )->GetText();
 
         if( m_resolveTextVars )
-            fields.footprint = comp->GetField( FOOTPRINT_FIELD )->GetShownText();
+            fields.footprint = aSymbol->GetField( FOOTPRINT_FIELD )->GetShownText();
         else
-            fields.footprint = comp->GetField( FOOTPRINT_FIELD )->GetText();
+            fields.footprint = aSymbol->GetField( FOOTPRINT_FIELD )->GetText();
 
         if( m_resolveTextVars )
-            fields.datasheet = comp->GetField( DATASHEET_FIELD )->GetShownText();
+            fields.datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText();
         else
-            fields.datasheet = comp->GetField( DATASHEET_FIELD )->GetText();
+            fields.datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetText();
 
-        for( int fldNdx = MANDATORY_FIELDS; fldNdx < comp->GetFieldCount(); ++fldNdx )
+        for( int fldNdx = MANDATORY_FIELDS; fldNdx < aSymbol->GetFieldCount(); ++fldNdx )
         {
-            SCH_FIELD*  f = comp->GetField( fldNdx );
+            SCH_FIELD*  f = aSymbol->GetField( fldNdx );
 
             if( f->GetText().size() )
             {
@@ -200,20 +199,20 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 
     // Do not output field values blank in netlist:
     if( fields.value.size() )
-        xcomp->AddChild( node( "value", fields.value ) );
+        aNode->AddChild( node( "value", fields.value ) );
     else    // value field always written in netlist
-        xcomp->AddChild( node( "value", "~" ) );
+        aNode->AddChild( node( "value", "~" ) );
 
     if( fields.footprint.size() )
-        xcomp->AddChild( node( "footprint", fields.footprint ) );
+        aNode->AddChild( node( "footprint", fields.footprint ) );
 
     if( fields.datasheet.size() )
-        xcomp->AddChild( node( "datasheet", fields.datasheet ) );
+        aNode->AddChild( node( "datasheet", fields.datasheet ) );
 
     if( fields.f.size() )
     {
         XNODE* xfields;
-        xcomp->AddChild( xfields = node( "fields" ) );
+        aNode->AddChild( xfields = node( "fields" ) );
 
         // non MANDATORY fields are output alphabetically
         for( std::map< wxString, wxString >::const_iterator it = fields.f.begin();
@@ -227,12 +226,12 @@ void NETLIST_EXPORTER_GENERIC::addComponentFields( XNODE* xcomp, SCH_COMPONENT* 
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
+XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 {
     XNODE* xcomps = node( "components" );
 
-    m_ReferencesAlreadyFound.Clear();
-    m_LibParts.clear();
+    m_referencesAlreadyFound.Clear();
+    m_libParts.clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
@@ -249,62 +248,61 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
                                                            b->GetRef( &sheet ) ) < 0 );
                    };
 
-        std::set<SCH_COMPONENT*, decltype( cmp )> ordered_components( cmp );
+        std::set<SCH_COMPONENT*, decltype( cmp )> ordered_symbols( cmp );
 
         for( SCH_ITEM* item : sheetList[ii].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
-            auto           test = ordered_components.insert( comp );
+            SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
+            auto           test = ordered_symbols.insert( symbol );
 
             if( !test.second )
             {
-                if( ( *( test.first ) )->GetUnit() > comp->GetUnit() )
+                if( ( *( test.first ) )->GetUnit() > symbol->GetUnit() )
                 {
-                    ordered_components.erase( test.first );
-                    ordered_components.insert( comp );
+                    ordered_symbols.erase( test.first );
+                    ordered_symbols.insert( symbol );
                 }
             }
         }
 
-        for( EDA_ITEM* item : ordered_components )
+        for( EDA_ITEM* item : ordered_symbols )
         {
-            SCH_COMPONENT* comp = findNextComponent( item, &sheet );
+            SCH_COMPONENT* symbol = findNextSymbol( item, &sheet );
 
-            if( !comp
-               || ( ( aCtl & GNL_OPT_BOM ) && !comp->GetIncludeInBom() )
-               || ( ( aCtl & GNL_OPT_KICAD ) && !comp->GetIncludeOnBoard() ) )
+            if( !symbol
+               || ( ( aCtl & GNL_OPT_BOM ) && !symbol->GetIncludeInBom() )
+               || ( ( aCtl & GNL_OPT_KICAD ) && !symbol->GetIncludeOnBoard() ) )
             {
                 continue;
             }
 
-            // Output the component's elements in order of expected access frequency.
-            // This may not always look best, but it will allow faster execution
-            // under XSL processing systems which do sequential searching within
-            // an element.
+            // Output the symbol's elements in order of expected access frequency. This may
+            // not always look best, but it will allow faster execution under XSL processing
+            // systems which do sequential searching within an element.
 
             XNODE* xcomp;  // current component being constructed
             xcomps->AddChild( xcomp = node( "comp" ) );
 
-            xcomp->AddAttribute( "ref", comp->GetRef( &sheet ) );
-            addComponentFields( xcomp, comp, &sheetList[ii] );
+            xcomp->AddAttribute( "ref", symbol->GetRef( &sheet ) );
+            addSymbolFields( xcomp, symbol, &sheetList[ ii ] );
 
             XNODE*  xlibsource;
             xcomp->AddChild( xlibsource = node( "libsource" ) );
 
-            // "logical" library name, which is in anticipation of a better search
-            // algorithm for parts based on "logical_lib.part" and where logical_lib
-            // is merely the library name minus path and extension.
-            if( comp->GetPartRef() )
-                xlibsource->AddAttribute( "lib", comp->GetPartRef()->GetLibId().GetLibNickname() );
+            // "logical" library name, which is in anticipation of a better search algorithm
+            // for parts based on "logical_lib.part" and where logical_lib is merely the library
+            // name minus path and extension.
+            if( symbol->GetPartRef() )
+                xlibsource->AddAttribute( "lib", symbol->GetPartRef()->GetLibId().GetLibNickname() );
 
             // We only want the symbol name, not the full LIB_ID.
-            xlibsource->AddAttribute( "part", comp->GetLibId().GetLibItemName() );
+            xlibsource->AddAttribute( "part", symbol->GetLibId().GetLibItemName() );
 
-            xlibsource->AddAttribute( "description", comp->GetDescription() );
+            xlibsource->AddAttribute( "description", symbol->GetDescription() );
 
             XNODE* xproperty;
 
-            std::vector<SCH_FIELD>& fields = comp->GetFields();
+            std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
             for( size_t jj = MANDATORY_FIELDS; jj < fields.size(); ++jj )
             {
@@ -320,13 +318,13 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
                 xproperty->AddAttribute( "value", sheetField.GetText() );
             }
 
-            if( !comp->GetIncludeInBom() )
+            if( !symbol->GetIncludeInBom() )
             {
                 xcomp->AddChild( xproperty = node( "property" ) );
                 xproperty->AddAttribute( "name", "exclude_from_bom" );
             }
 
-            if( !comp->GetIncludeOnBoard() )
+            if( !symbol->GetIncludeOnBoard() )
             {
                 xcomp->AddChild( xproperty = node( "property" ) );
                 xproperty->AddAttribute( "name", "exclude_from_board" );
@@ -337,7 +335,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 
             xsheetpath->AddAttribute( "names", sheet.PathHumanReadable() );
             xsheetpath->AddAttribute( "tstamps", sheet.PathAsString() );
-            xcomp->AddChild( node( "tstamp", comp->m_Uuid.AsString() ) );
+            xcomp->AddChild( node( "tstamp", symbol->m_Uuid.AsString() ) );
         }
     }
 
@@ -345,7 +343,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeComponents( unsigned aCtl )
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
+XNODE* NETLIST_EXPORTER_XML::makeDesignHeader()
 {
     SCH_SCREEN* screen;
     XNODE*      xdesign = node( "design" );
@@ -446,7 +444,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeDesignHeader()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
+XNODE* NETLIST_EXPORTER_XML::makeLibraries()
 {
     XNODE*            xlibs = node( "libraries" );     // auto_ptr
     SYMBOL_LIB_TABLE* symbolLibTable = m_schematic->Prj().SchSymbolLibTable();
@@ -470,7 +468,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibraries()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
+XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 {
     XNODE*      xlibparts = node( "libparts" );   // auto_ptr
 
@@ -479,7 +477,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 
     m_libraries.clear();
 
-    for( auto lcomp : m_LibParts )
+    for( auto lcomp : m_libParts )
     {
         wxString libNickname = lcomp->GetLibId().GetLibNickname();;
 
@@ -573,7 +571,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
+XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 {
     XNODE*      xnets = node( "nets" );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
@@ -612,11 +610,11 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
                 if( item->Type() == SCH_PIN_T )
                 {
                     SCH_PIN*       pin = static_cast<SCH_PIN*>( item );
-                    SCH_COMPONENT* comp = pin->GetParentComponent();
+                    SCH_COMPONENT* symbol = pin->GetParentSymbol();
 
-                    if( !comp
-                       || ( ( aCtl & GNL_OPT_BOM ) && !comp->GetIncludeInBom() )
-                       || ( ( aCtl & GNL_OPT_KICAD ) && !comp->GetIncludeOnBoard() ) )
+                    if( !symbol
+                       || ( ( aCtl & GNL_OPT_BOM ) && !symbol->GetIncludeInBom() )
+                       || ( ( aCtl & GNL_OPT_KICAD ) && !symbol->GetIncludeOnBoard() ) )
                     {
                         continue;
                     }
@@ -631,8 +629,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
                    []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a,
                        const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                    {
-                       wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                       wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+                       wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                       wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
 
                        if( ref_a == ref_b )
                            return a.first->GetNumber() < b.first->GetNumber();
@@ -647,8 +645,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
                 []( const std::pair<SCH_PIN*, SCH_SHEET_PATH>& a,
                     const std::pair<SCH_PIN*, SCH_SHEET_PATH>& b )
                 {
-                    wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
 
                     return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
                 } ),
@@ -659,7 +657,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
             SCH_PIN* pin = pair.first;
             SCH_SHEET_PATH sheet = pair.second;
 
-            wxString refText = pin->GetParentComponent()->GetRef( &sheet );
+            wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
             wxString pinText = pin->GetNumber();
 
             // Skip power symbols and virtual components
@@ -694,8 +692,8 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( unsigned aCtl )
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::node( const wxString& aName,
-        const wxString& aTextualContent /* = wxEmptyString*/ )
+XNODE* NETLIST_EXPORTER_XML::node( const wxString& aName,
+                                   const wxString& aTextualContent /* = wxEmptyString*/ )
 {
     XNODE* n = new XNODE( wxXML_ELEMENT_NODE, aName );
 

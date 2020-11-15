@@ -34,12 +34,12 @@
 #include <erc.h>
 
 #include <netlist.h>
-#include <netlist_exporter.h>
+#include <netlist_exporter_base.h>
 #include <netlist_exporter_orcadpcb2.h>
 #include <netlist_exporter_cadstar.h>
 #include <netlist_exporter_pspice.h>
 #include <netlist_exporter_kicad.h>
-#include <netlist_exporter_generic.h>
+#include <netlist_exporter_xml.h>
 
 
 bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileName,
@@ -59,7 +59,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
 
     wxString    fileName = aFullFileName;
 
-    NETLIST_EXPORTER *helper;
+    NETLIST_EXPORTER_BASE *helper;
 
     SCHEMATIC* sch = &Schematic();
 
@@ -87,7 +87,7 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
             tmpFile.SetExt( GENERIC_INTERMEDIATE_NETLIST_EXT );
             fileName = tmpFile.GetFullPath();
 
-            helper = new NETLIST_EXPORTER_GENERIC( sch );
+            helper = new NETLIST_EXPORTER_XML( sch );
             executeCommandLine = true;
         }
         break;
@@ -101,14 +101,16 @@ bool SCH_EDIT_FRAME::WriteNetListFile( int aFormat, const wxString& aFullFileNam
     {
         wxString prj_dir = Prj().GetProjectPath();
 
+        // strip trailing '/'
+        prj_dir = prj_dir.SubString( 0, prj_dir.Len() - 2 );
+
         // build full command line from user's format string, e.g.:
         // "xsltproc -o %O /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl %I"
         // becomes, after the user selects /tmp/s1.net as the output file from the file dialog:
         // "xsltproc -o /tmp/s1.net /usr/local/lib/kicad/plugins/netlist_form_pads-pcb.xsl /tmp/s1.xml"
-        wxString commandLine = NETLIST_EXPORTER::MakeCommandLine( m_netListerCommand,
-                fileName, aFullFileName,
-                prj_dir.SubString( 0, prj_dir.Len() - 2 )       // strip trailing '/'
-                );
+        wxString commandLine = NETLIST_EXPORTER_BASE::MakeCommandLine( m_netListerCommand,
+                                                                       fileName, aFullFileName,
+                                                                       prj_dir );
 
         if( aReporter )
         {

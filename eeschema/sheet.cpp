@@ -186,8 +186,10 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     SCH_SHEET_LIST sheetHierarchy( newSheet.get() );    // This is the hierarchy of the loaded file.
 
     if( CheckSheetForRecursion( newSheet.get(), aHierarchy )
-      || checkForNoFullyDefinedLibIds( newSheet.get() ) )
+          || checkForNoFullyDefinedLibIds( newSheet.get() ) )
+    {
         return false;
+    }
 
     // Make a valiant attempt to warn the user of all possible scenarios where there could
     // be broken symbol library links.
@@ -202,7 +204,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
     wxMessageDialog::ButtonLabel cancelButtonLabel( _( "Cancel Load" ) );
 
     if( fileName.GetPathWithSep() == Prj().GetProjectPath()
-      && !prjScreens.HasSchematic( fullFilename ) )
+          && !prjScreens.HasSchematic( fullFilename ) )
     {
         // A schematic in the current project path that isn't part of the current project.
         // It's possible the user copied this schematic from another project so the library
@@ -276,8 +278,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHier
                 }
                 catch( const IO_ERROR& ioe )
                 {
-                    msg.Printf( _( "An error occurred loading the symbol library table "
-                                   "\"%s\"." ),
+                    msg.Printf( _( "An error occurred loading the symbol library table \"%s\"." ),
                                 symLibTableFn.GetFullPath() );
                     DisplayErrorMessage( NULL, msg, ioe.What() );
                     return false;

@@ -139,7 +139,7 @@ bool SCH_PIN::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
 }
 
 
-SCH_COMPONENT* SCH_PIN::GetParentComponent() const
+SCH_COMPONENT* SCH_PIN::GetParentSymbol() const
 {
     return static_cast<SCH_COMPONENT*>( GetParent() );
 }
@@ -148,7 +148,7 @@ SCH_COMPONENT* SCH_PIN::GetParentComponent() const
 wxString SCH_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( "%s %s",
-                             GetParentComponent()->GetSelectMenuText( aUnits ),
+                             GetParentSymbol()->GetSelectMenuText( aUnits ),
                              m_libPin->GetSelectMenuText( aUnits ) );
 }
 
@@ -200,9 +200,9 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
-    SCH_COMPONENT*  comp = GetParentComponent();
+    SCH_COMPONENT*  symbol = GetParentSymbol();
 
-    aList.emplace_back( comp->GetRef( currentSheet ), comp->GetValue( currentSheet ), DARKCYAN );
+    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValue( currentSheet ), DARKCYAN );
 
 #if defined(DEBUG)
 
@@ -244,14 +244,14 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath )
 
     wxString name = "Net-(";
 
-    name << GetParentComponent()->GetRef( &aPath );
+    name << GetParentSymbol()->GetRef( &aPath );
 
     bool annotated = true;
 
     // Add timestamp for uninitialized components
     if( name.Last() == '?' )
     {
-        name << GetParentComponent()->m_Uuid.AsString();
+        name << GetParentSymbol()->m_Uuid.AsString();
         annotated = false;
     }
 
@@ -266,20 +266,20 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath )
 
 wxPoint SCH_PIN::GetTransformedPosition() const
 {
-    TRANSFORM t = GetParentComponent()->GetTransform();
-    return ( t.TransformCoordinate( GetLocalPosition() ) + GetParentComponent()->GetPosition() );
+    TRANSFORM t = GetParentSymbol()->GetTransform();
+    return t.TransformCoordinate( GetLocalPosition() ) + GetParentSymbol()->GetPosition();
 }
 
 
 const EDA_RECT SCH_PIN::GetBoundingBox() const
 {
-    TRANSFORM t = GetParentComponent()->GetTransform();
+    TRANSFORM t = GetParentSymbol()->GetTransform();
     EDA_RECT  r = m_libPin->GetBoundingBox();
 
     r.RevertYAxis();
 
     r = t.TransformCoordinate( r );
-    r.Offset( GetParentComponent()->GetPosition() );
+    r.Offset( GetParentSymbol()->GetPosition() );
 
     return r;
 }

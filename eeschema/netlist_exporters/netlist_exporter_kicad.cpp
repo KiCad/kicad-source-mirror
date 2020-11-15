@@ -25,14 +25,16 @@
 
 
 #include <algorithm>
-#include <build_version.h>
 #include <confirm.h>
 
-#include <sch_edit_frame.h>
 #include <xnode.h>
 #include <connection_graph.h>
 #include "netlist_exporter_kicad.h"
 
+/**
+ * Generate the KiCad netlist format supported by Pcbnew. It is basically the XML netlist
+ * just formatted slightly different.
+ */
 bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
     try

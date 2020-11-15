@@ -23,10 +23,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef NETLIST_EXPORT_GENERIC_H
-#define NETLIST_EXPORT_GENERIC_H
+#ifndef NETLIST_EXPORT_XML_H
+#define NETLIST_EXPORT_XML_H
 
-#include <netlist_exporter.h>
+#include <netlist_exporter_base.h>
 
 #include <project.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
@@ -59,7 +59,7 @@ enum GNL_T
  * This allows using XSLT or other methods to transform the XML to other netlist formats
  * outside of the C++ codebase.
  */
-class NETLIST_EXPORTER_GENERIC : public NETLIST_EXPORTER
+class NETLIST_EXPORTER_XML : public NETLIST_EXPORTER_BASE
 {
 private:
     std::set<wxString>  m_libraries;         // Set of library nicknames.
@@ -68,9 +68,9 @@ protected:
     bool                m_resolveTextVars;   // Export textVar references resolved
 
 public:
-    NETLIST_EXPORTER_GENERIC( SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER( aSchematic ),
-        m_resolveTextVars( true )
+    NETLIST_EXPORTER_XML( SCHEMATIC* aSchematic ) :
+            NETLIST_EXPORTER_BASE( aSchematic ),
+            m_resolveTextVars( true )
     {}
 
     /**
@@ -108,7 +108,7 @@ protected:
     /**
      * @return XNODE* - returns a sub-tree holding all the schematic components.
      */
-    XNODE* makeComponents( unsigned aCtl );
+    XNODE* makeSymbols( unsigned aCtl );
 
     /**
      * Fills out a project "design" header into an XML node.
@@ -135,7 +135,7 @@ protected:
      */
     XNODE* makeLibraries();
 
-    void addComponentFields(  XNODE* xcomp, SCH_COMPONENT* comp, SCH_SHEET_PATH* aSheet );
+    void addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aSheet );
 };
 
 #endif

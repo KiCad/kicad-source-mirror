@@ -26,19 +26,19 @@
 #ifndef NETLIST_EXPORTER_KICAD_H
 #define NETLIST_EXPORTER_KICAD_H
 
-#include <netlist_exporter_generic.h>
+#include <netlist_exporter_xml.h>
 
 class OUTPUTFORMATTER;
 
 /**
- * Generate the KiCad netlist format supported by Pcbnew. It is basically the generic
- * netlist format just formatted slightly different.
+ * Generate the KiCad netlist format supported by Pcbnew. It is basically the XML netlist
+ * just formatted slightly different.
  */
-class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_GENERIC
+class NETLIST_EXPORTER_KICAD : public NETLIST_EXPORTER_XML
 {
 public:
     NETLIST_EXPORTER_KICAD( SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER_GENERIC( aSchematic )
+            NETLIST_EXPORTER_XML( aSchematic )
     {
         m_resolveTextVars = false;
     }

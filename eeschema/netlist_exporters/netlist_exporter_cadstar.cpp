@@ -53,7 +53,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     wxString StartCmpDesc = StartLine + wxT( "ADD_COM" );
     wxString msg;
     wxString footprint;
-    SCH_COMPONENT* component;
+    SCH_COMPONENT* symbol;
     wxString title = wxT( "Eeschema " ) + GetBuildVersion();
 
     ret |= fprintf( f, "%sHEA\n", TO_UTF8( StartLine ) );
@@ -63,7 +63,7 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     ret |= fprintf( f, ".TYP FULL\n\n" );
 
     // Create netlist footprints section
-    m_ReferencesAlreadyFound.Clear();
+    m_referencesAlreadyFound.Clear();
 
     SCH_SHEET_LIST sheetList = m_schematic->GetSheets();
 
@@ -71,23 +71,23 @@ bool NETLIST_EXPORTER_CADSTAR::WriteNetlist( const wxString& aOutFileName, unsig
     {
         std::vector<SCH_COMPONENT*> cmps;
 
-        for( auto item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            component = findNextComponent( item, &sheetList[i] );
+            symbol = findNextSymbol( item, &sheetList[ i ] );
 
-            if( !component )
+            if( !symbol )
                 continue;
 
-            if( !component->GetField( FOOTPRINT_FIELD )->IsVoid() )
-                footprint = component->GetField( FOOTPRINT_FIELD )->GetShownText();
+            if( !symbol->GetField( FOOTPRINT_FIELD )->IsVoid() )
+                footprint = symbol->GetField( FOOTPRINT_FIELD )->GetShownText();
             else
                 footprint = "$noname";
 
-            msg = component->GetRef( &sheetList[i] );
+            msg = symbol->GetRef( &sheetList[i] );
             ret |= fprintf( f, "%s     ", TO_UTF8( StartCmpDesc ) );
             ret |= fprintf( f, "%s", TO_UTF8( msg ) );
 
-            msg = component->GetValue( &sheetList[i] );
+            msg = symbol->GetValue( &sheetList[i] );
             msg.Replace( wxT( " " ), wxT( "_" ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( msg ) );
             ret |= fprintf( f, "     \"%s\"", TO_UTF8( footprint ) );
@@ -139,10 +139,10 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
 
         // Netlist ordering: Net name, then ref des, then pin name
         std::sort( sorted_items.begin(), sorted_items.end(),
-                []( auto a, auto b )
+                []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
                 {
-                    wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
 
                     if( ref_a == ref_b )
                         return a.first->GetNumber() < b.first->GetNumber();
@@ -154,10 +154,10 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
         // pins across units.  If the user connects the pins on each unit, they will
         // appear on separate subgraphs.  Remove those here:
         sorted_items.erase( std::unique( sorted_items.begin(), sorted_items.end(),
-                []( auto a, auto b )
+                []( std::pair<SCH_PIN*, SCH_SHEET_PATH> a, std::pair<SCH_PIN*, SCH_SHEET_PATH> b )
                 {
-                    wxString ref_a = a.first->GetParentComponent()->GetRef( &a.second );
-                    wxString ref_b = b.first->GetParentComponent()->GetRef( &b.second );
+                    wxString ref_a = a.first->GetParentSymbol()->GetRef( &a.second );
+                    wxString ref_b = b.first->GetParentSymbol()->GetRef( &b.second );
 
                     return ref_a == ref_b && a.first->GetNumber() == b.first->GetNumber();
                 } ),
@@ -170,20 +170,21 @@ bool NETLIST_EXPORTER_CADSTAR::writeListOfNets( FILE* f )
             SCH_PIN*       pin   = pair.first;
             SCH_SHEET_PATH sheet = pair.second;
 
-            wxString refText = pin->GetParentComponent()->GetRef( &sheet );
+            wxString refText = pin->GetParentSymbol()->GetRef( &sheet );
             wxString pinText = pin->GetNumber();
 
-            // Skip power symbols and virtual components
+            // Skip power symbols and virtual symbols
             if( refText[0] == wxChar( '#' ) )
                 continue;
 
             switch( print_ter )
             {
             case 0:
-            {
-                InitNetDescLine.Printf(
-                        wxT( "\n%s   %s   %.4s     %s" ), InitNetDesc, refText, pinText, netName );
-                }
+                InitNetDescLine.Printf( wxT( "\n%s   %s   %.4s     %s" ),
+                                        InitNetDesc,
+                                        refText,
+                                        pinText,
+                                        netName );
                 print_ter++;
                 break;
 

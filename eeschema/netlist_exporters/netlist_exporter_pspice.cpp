@@ -274,8 +274,8 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
     int netIdx = 1;
 
     m_libraries.clear();
-    m_ReferencesAlreadyFound.Clear();
-    m_LibParts.clear();
+    m_referencesAlreadyFound.Clear();
+    m_libParts.clear();
 
     UpdateDirectives( aCtl );
 
@@ -286,7 +286,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
         // Process component attributes to find Spice directives
         for( auto item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
-            SCH_COMPONENT* comp = findNextComponent( item, &sheet );
+            SCH_COMPONENT* comp = findNextSymbol( item, &sheet );
 
             if( !comp )
                 continue;
@@ -322,7 +322,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             wxArrayString pinNames;
 
             // Store pin information
-            for( const PIN_INFO& pin : m_SortedComponentPinList )
+            for( const PIN_INFO& pin : m_sortedSymbolPinList )
             {
                     // Create net mapping
                 spiceItem.m_pins.push_back( pin.netName );

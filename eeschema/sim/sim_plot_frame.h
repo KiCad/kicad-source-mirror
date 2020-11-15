@@ -259,7 +259,7 @@ private:
 
     /**
      * @brief Filters out tuners for components that do not exist anymore.
-     * Decisions are based on the current NETLIST_EXPORTER data.
+     * Decisions are based on the current NETLIST_EXPORTER_BASE data.
      */
     void updateTuners();
 

@@ -368,7 +368,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
+std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aSymbol )
 {
     // This is a keyword followed by a quoted string.
 
@@ -376,17 +376,17 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
     switch( aItem->Type() )
     {
     case SCH_FIELD_T:
-        if( aComp )
+        if( aSymbol )
         {
             return StrPrintf( "$PART: \"%s\"",
-                              TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
+                              TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
         }
         break;
 
     case SCH_COMPONENT_T:
-        aComp = (SCH_COMPONENT*) aItem;
+        aSymbol = (SCH_COMPONENT*) aItem;
         return StrPrintf( "$PART: \"%s\"",
-                          TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
+                          TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
 
     case SCH_SHEET_T:
         {
@@ -413,18 +413,18 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
     case SCH_PIN_T:
         {
             SCH_PIN* pin = (SCH_PIN*) aItem;
-            aComp = pin->GetParentComponent();
+            aSymbol = pin->GetParentSymbol();
 
             if( !pin->GetNumber().IsEmpty() )
             {
                 return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"",
                                   TO_UTF8( pin->GetNumber() ),
-                                  TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
+                                  TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
             }
             else
             {
                 return StrPrintf( "$PART: \"%s\"",
-                                  TO_UTF8( aComp->GetField( REFERENCE_FIELD )->GetText() ) );
+                                  TO_UTF8( aSymbol->GetField( REFERENCE_FIELD )->GetText() ) );
             }
         }
 

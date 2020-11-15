@@ -264,8 +264,7 @@ bool SCH_CONNECTION::IsDriver() const
         auto pin = static_cast<SCH_PIN*>( Parent() );
 
         // Only annotated components should drive nets
-        return ( pin->IsPowerConnection()
-                 || pin->GetParentComponent()->IsAnnotated( &m_sheet ) );
+        return pin->IsPowerConnection() || pin->GetParentSymbol()->IsAnnotated( &m_sheet );
     }
 
     default:

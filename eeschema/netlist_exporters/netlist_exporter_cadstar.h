@@ -26,14 +26,14 @@
 #ifndef NETLIST_EXPORTER_CADSTAR_H
 #define NETLIST_EXPORTER_CADSTAR_H
 
-#include "netlist_exporter.h"
+#include "netlist_exporter_base.h"
 
 
 /**
  * NETLIST_EXPORTER_CADSTAR
  * generates a netlist compatible with CADSTAR
  */
-class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER
+class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER_BASE
 {
     /**
      * Function writeListOfNetsCADSTAR
@@ -49,7 +49,7 @@ class NETLIST_EXPORTER_CADSTAR : public NETLIST_EXPORTER
 
 public:
     NETLIST_EXPORTER_CADSTAR( SCHEMATIC* aSchematic ) :
-        NETLIST_EXPORTER( aSchematic )
+            NETLIST_EXPORTER_BASE( aSchematic )
     {
     }
 
