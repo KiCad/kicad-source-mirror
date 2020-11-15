@@ -141,7 +141,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     InitExitKey();
 
     updateTitle();
-    DisplayCmpDoc();
+    DisplaySymbolDatasheet();
     RebuildSymbolUnitsList();
 
     // Create the infobar
@@ -1252,6 +1252,6 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>
     updateTitle();
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurPart()->HasConversion() );
-    DisplayCmpDoc();
+    DisplaySymbolDatasheet();
     Refresh();
 }

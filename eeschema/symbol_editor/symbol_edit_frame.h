@@ -76,8 +76,8 @@ class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME
     wxString m_reference;
 
     // True to force DeMorgan/normal tools selection enabled.
-    // They are enabled when the loaded component has graphic items for converted shape
-    // But under some circumstances (New component created) these tools must left enabled
+    // They are enabled when the loaded symbol has graphic items for converted shape
+    // But under some circumstances (New symbol created) these tools must left enabled
     static bool m_showDeMorgan;
 
 public:
@@ -267,7 +267,10 @@ public:
     bool GetShowDeMorgan() const { return m_showDeMorgan; }
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
-    void ClearMsgPanel() override { DisplayCmpDoc(); }
+    void ClearMsgPanel() override
+    {
+        DisplaySymbolDatasheet();
+    }
 
     bool IsSymbolFromSchematic() const { return m_isSymbolFromSchematic; }
 
@@ -324,7 +327,7 @@ private:
      * @param aConvert Convert to be selected
      * @return true if the symbol loaded correctly.
      */
-    bool LoadComponentFromCurrentLib( const wxString& aAliasName, int aUnit = 0, int aConvert = 0 );
+    bool LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit = 0, int aConvert = 0 );
 
     /**
      * Create a copy of \a aLibEntry into memory.
@@ -341,24 +344,24 @@ private:
 
 public:
     /**
-     * Display the documentation of the selected component.
+     * Display the documentation of the selected symbol.
      */
-    void DisplayCmpDoc();
+    void DisplaySymbolDatasheet();
 
     // General editing
     /**
-     * Create a copy of the current component, and save it in the undo list.
+     * Create a copy of the current symbol, and save it in the undo list.
      *
-     * Because a component in library editor does not have a lot of primitives,
-     * the full data is duplicated. It is not worth to try to optimize this save function.
+     * Because a symbol in library editor does not have a lot of primitives, the full data is
+     * duplicated. It is not worth to try to optimize this save function.
      */
     void SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType = UNDO_REDO::LIBEDIT,
                              bool aAppend = false );
 
-    void GetComponentFromUndoList();
-    void GetComponentFromRedoList();
+    void GetSymbolFromUndoList();
+    void GetSymbolFromRedoList();
 
-    void RollbackPartFromUndo();
+    void RollbackSymbolFromUndo();
 
     /**
      * Free the undo or redo list from \a aList element.
@@ -376,7 +379,7 @@ public:
 
 private:
     /**
-     * Read a component symbol file (*.sym ) and add graphic items to the current component.
+     * Read a symbol file (*.sym ) and add graphic items to the current symbol.
      *
      * A symbol file *.sym has the same format as a library, and contains only one symbol.
      */
@@ -385,7 +388,7 @@ private:
     /**
      * Saves the current symbol to a symbol file.
      *
-     * The symbol file format is similar to the standard component library file format, but
+     * The symbol file format is similar to the standard symbol library file format, but
      * there is only one symbol.  Invisible pins are not saved.
      */
     void SaveOneSymbol();
@@ -401,7 +404,7 @@ public:
      * @param aConvert the DeMorgan variant to show
      * @return true if the symbol defined by \a aLibId was loaded.
      */
-    bool LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
+    bool LoadSymbolAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
 
     /**
      * Print a page
@@ -411,9 +414,9 @@ public:
     void PrintPage( RENDER_SETTINGS* aSettings ) override;
 
     /**
-     * Creates the SVG print file for the current edited component.
+     * Creates the SVG print file for the current edited symbol.
      */
-    void SVG_PlotComponent( const wxString& aFullFileName );
+    void SVGPlotSymbol( const wxString& aFullFileName );
 
     /**
      * Synchronize the library manager to the symbol library table, and then the symbol tree
@@ -461,7 +464,7 @@ public:
      * @param aConvert the alternate body style of the symbol to edit.
      */
     void LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
-            const wxString& aReference, int aUnit, int aConvert );
+                                  const wxString& aReference, int aUnit, int aConvert );
 
     ///> Restores the empty editor screen, without any part or library selected.
     void emptyScreen();
@@ -483,16 +486,17 @@ private:
     ///> Returns currently edited part.
     LIB_PART* getTargetPart() const;
 
-    ///> Returns either the part selected in the component tree, if context menu is active
-    ///> or the currently modified part.
+    ///> Returns either the part selected in the symbol tree, if context menu is active or the
+    ///> currently modified part.
     LIB_ID getTargetLibId() const;
 
-    ///> Returns either the library selected in the component tree, if context menu is active
-    ///> or the library that is currently modified.
+    ///> Returns either the library selected in the symbol tree, if context menu is active or
+    ///> the library that is currently modified.
     wxString getTargetLib() const;
 
-    /* Returns true when the operation has succeeded (all requested libraries have been saved or
-     * none was selected and confirmed by OK).
+    /*
+     * Returns true when the operation has succeeded (all requested libraries have been saved
+     * or none was selected and confirmed by OK).
      * @param aRequireConfirmation when true, the user must be asked to confirm.
      */
     bool saveAllLibraries( bool aRequireConfirmation );
@@ -506,7 +510,7 @@ private:
     ///> Returns true if \a aLibId is an alias for the editor screen part.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
-    ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
+    ///> Renames LIB_PART aliases to avoid conflicts before adding a symbol to a library
     void ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary );
 
     DECLARE_EVENT_TABLE()

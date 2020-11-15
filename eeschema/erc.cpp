@@ -334,7 +334,7 @@ int ERC_TESTER::TestMultiunitFootprints()
     int errors = 0;
     std::map<wxString, LIB_ID> footprints;
     SCH_MULTI_UNIT_REFERENCE_MAP refMap;
-    sheets.GetMultiUnitComponents( refMap, true );
+    sheets.GetMultiUnitSymbols( refMap, true );
 
     for( std::pair<const wxString, SCH_REFERENCE_LIST>& component : refMap )
     {
@@ -358,7 +358,7 @@ int ERC_TESTER::TestMultiunitFootprints()
 
             if( !unitFP.IsEmpty() )
             {
-                unit = refList.GetItem( i ).GetComp();
+                unit = refList.GetItem( i ).GetSymbol();
                 unitName = unit->GetRef( &sheetPath, true );
                 break;
             }
@@ -367,7 +367,7 @@ int ERC_TESTER::TestMultiunitFootprints()
         for( unsigned i = 0; i < refList.GetCount(); ++i )
         {
             SCH_REFERENCE& secondRef = refList.GetItem( i );
-            SCH_COMPONENT* secondUnit = secondRef.GetComp();
+            SCH_COMPONENT* secondUnit = secondRef.GetSymbol();
             wxString       secondName = secondUnit->GetRef( &secondRef.GetSheetPath(), true );
             const wxString secondFp = secondRef.GetFootprint();
             wxString       msg;

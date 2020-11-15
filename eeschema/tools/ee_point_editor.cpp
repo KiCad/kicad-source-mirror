@@ -899,7 +899,7 @@ void EE_POINT_EDITOR::saveItemsToUndo()
 void EE_POINT_EDITOR::rollbackFromUndo()
 {
     if( m_isSymbolEditor )
-        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->RollbackPartFromUndo();
+        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->RollbackSymbolFromUndo();
     else
         static_cast<SCH_EDIT_FRAME*>( m_frame )->RollbackSchematicFromUndo();
 }

@@ -49,7 +49,7 @@ private:
     int                            m_groupByColWidth;
     int                            m_canonicalNameColWidth;
 
-    SCH_REFERENCE_LIST             m_componentRefs;
+    SCH_REFERENCE_LIST             m_symbolsList;
     FIELDS_EDITOR_GRID_DATA_MODEL* m_dataModel;
 
     void AddField( const wxString& displayName, const wxString& aCanonicalName, bool defaultShow,
@@ -59,8 +59,8 @@ private:
     void OnColSort( wxGridEvent& aEvent );
 
     void OnColumnItemToggled( wxDataViewEvent& event ) override;
-    void OnGroupComponentsToggled( wxCommandEvent& event ) override;
-    void OnRegroupComponents( wxCommandEvent& event ) override;
+    void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
+    void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnTableValueChanged( wxGridEvent& event ) override;
     void OnTableCellClick( wxGridEvent& event ) override;
     void OnTableItemContextMenu( wxGridEvent& event ) override;

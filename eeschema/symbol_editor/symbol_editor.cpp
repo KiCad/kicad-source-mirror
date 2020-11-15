@@ -148,7 +148,7 @@ bool SYMBOL_EDIT_FRAME::saveCurrentPart()
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
+bool SYMBOL_EDIT_FRAME::LoadSymbolAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
     if( GetCurPart() && GetCurPart()->GetLibId() == aLibId
             && GetUnit() == aUnit && GetConvert() == aConvert )
@@ -167,12 +167,12 @@ bool SYMBOL_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUn
     }
 
     SelectActiveLibrary( aLibId.GetLibNickname() );
-    return LoadComponentFromCurrentLib( aLibId.GetLibItemName(), aUnit, aConvert );
+    return LoadSymbolFromCurrentLib( aLibId.GetLibItemName(), aUnit, aConvert );
 }
 
 
-bool SYMBOL_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, int aUnit,
-                                                     int aConvert )
+bool SYMBOL_EDIT_FRAME::LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit,
+                                                  int aConvert )
 {
     LIB_PART* alias = nullptr;
 
@@ -264,7 +264,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString&
 
     // Display the document information based on the entry selected just in
     // case the entry is an alias.
-    DisplayCmpDoc();
+    DisplaySymbolDatasheet();
     Refresh();
 
     return true;
@@ -750,7 +750,7 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurPart()->Flatten()->HasConversion() );
     updateTitle();
-    DisplayCmpDoc();
+    DisplaySymbolDatasheet();
 
     RebuildView();
     OnModify();
@@ -1136,7 +1136,7 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 }
 
 
-void SYMBOL_EDIT_FRAME::DisplayCmpDoc()
+void SYMBOL_EDIT_FRAME::DisplaySymbolDatasheet()
 {
     EDA_DRAW_FRAME::ClearMsgPanel();
 

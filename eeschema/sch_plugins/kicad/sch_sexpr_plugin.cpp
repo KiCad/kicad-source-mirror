@@ -725,7 +725,7 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
         {
             SCH_REFERENCE_LIST instances;
 
-            sheetPath.GetComponents( instances, true, true );
+            sheetPath.GetSymbols( instances, true, true );
             instances.SortByReferenceOnly();
 
             for( size_t i = 0; i < instances.GetCount(); i++ )

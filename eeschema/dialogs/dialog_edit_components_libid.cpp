@@ -411,13 +411,13 @@ void DIALOG_EDIT_COMPONENTS_LIBID::initDlg()
     SCH_REFERENCE_LIST references;
     // build the full list of components including component having no symbol in loaded libs
     // (orphan components)
-    sheets.GetComponents( references, /* include power symbols */true,
-                          /* include orphan components */true );
+    sheets.GetSymbols( references, /* include power symbols */true,
+                       /* include orphan components */true );
 
     for( unsigned ii = 0; ii < references.GetCount(); ii++ )
     {
         SCH_REFERENCE& item = references[ii];
-        CMP_CANDIDATE candidate( item.GetComp() );
+        CMP_CANDIDATE candidate( item.GetSymbol() );
         candidate.m_Screen = item.GetSheetPath().LastScreen();
         SCH_SHEET_PATH sheetpath = item.GetSheetPath();
         candidate.m_Reference = candidate.m_Component->GetRef( &sheetpath );

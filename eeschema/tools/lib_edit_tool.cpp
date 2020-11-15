@@ -527,7 +527,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
         updateItem( aField, true );
         m_frame->GetCanvas()->Refresh();
         m_frame->OnModify();
-        m_frame->DisplayCmpDoc();
+        m_frame->DisplaySymbolDatasheet();
     }
 }
 
@@ -594,7 +594,7 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
 int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
-    m_frame->GetComponentFromUndoList();
+    m_frame->GetSymbolFromUndoList();
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();
@@ -605,7 +605,7 @@ int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 
 int LIB_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 {
-    m_frame->GetComponentFromRedoList();
+    m_frame->GetSymbolFromRedoList();
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();

@@ -45,7 +45,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 	protected:
 		wxSplitterWindow* m_splitterMainWindow;
 		wxPanel* m_leftPanel;
-		wxCheckBox* m_groupComponentsBox;
+		wxCheckBox* m_groupSymbolsBox;
 		wxBitmapButton* m_bRefresh;
 		wxDataViewListCtrl* m_fieldsCtrl;
 		wxButton* m_addFieldButton;
@@ -58,8 +58,8 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
-		virtual void OnGroupComponentsToggled( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnRegroupComponents( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnColumnItemToggled( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnSizeFieldList( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }

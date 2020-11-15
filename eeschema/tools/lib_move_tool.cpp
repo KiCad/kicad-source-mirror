@@ -286,7 +286,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( restore_state )
     {
-        m_frame->RollbackPartFromUndo();
+        m_frame->RollbackSymbolFromUndo();
 
         if( unselect )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );

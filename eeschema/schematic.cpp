@@ -230,18 +230,18 @@ wxString SCHEMATIC::ConvertRefsToKIIDs( const wxString& aSource ) const
                 wxString           ref = token.BeforeFirst( ':', &remainder );
                 SCH_REFERENCE_LIST references;
 
-                sheetList.GetComponents( references );
+                sheetList.GetSymbols( references );
 
                 for( size_t jj = 0; jj < references.GetCount(); jj++ )
                 {
-                    SCH_COMPONENT* refComponent = references[ jj ].GetComp();
+                    SCH_COMPONENT* refSymbol = references[ jj ].GetSymbol();
 
-                    if( ref == refComponent->GetRef( &references[ jj ].GetSheetPath(), true ) )
+                    if( ref == refSymbol->GetRef( &references[ jj ].GetSheetPath(), true ) )
                     {
                         wxString test( remainder );
 
-                        if( refComponent->ResolveTextVar( &test ) )
-                            token = refComponent->m_Uuid.AsString() + ":" + remainder;
+                        if( refSymbol->ResolveTextVar( &test ) )
+                            token = refSymbol->m_Uuid.AsString() + ":" + remainder;
 
                         break;
                     }

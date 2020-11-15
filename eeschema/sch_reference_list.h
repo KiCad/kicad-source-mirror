@@ -38,117 +38,97 @@
 
 /**
  * SCH_REFERENCE
- * is used as a helper to define a component's reference designator in a schematic.  This
- * helper is required in a complex hierarchy because a component can be used more than
- * once and its reference depends on the sheet path.  This class is used to flatten the
- * schematic hierarchy for annotation, net list generation, and bill of material
- * generation.
+ * is used as a helper to define a symbol's reference designator in a schematic.  This helper
+ * is required in a complex hierarchy because a symbol can be used more than once and its
+ * reference depends on the sheet path.  This class is used to flatten the schematic hierarchy
+ * for annotation, net list generation, and bill of material generation.
  */
 class SCH_REFERENCE
 {
-    /// Component reference prefix, without number (for IC1, this is IC) )
-    UTF8           m_Ref;               // it's private, use the accessors please
-    SCH_COMPONENT* m_RootCmp;           ///< The component associated the reference object.
-    LIB_PART*      m_Entry;             ///< The source component from a library.
-    wxPoint        m_CmpPos;            ///< The physical position of the component in schematic
+    /// Symbol reference prefix, without number (for IC1, this is IC) )
+    UTF8            m_ref;               // it's private, use the accessors please
+    SCH_COMPONENT*  m_rootSymbol;        ///< The symbol associated the reference object.
+    LIB_PART*       m_libPart;           ///< The source symbol from a library.
+    wxPoint         m_symbolPos;         ///< The physical position of the symbol in schematic
                                         ///< used to annotate by X or Y position
-    int            m_Unit;              ///< The unit number for components with multiple parts
+    int             m_unit;              ///< The unit number for symbol with multiple parts
                                         ///< per package.
-    wxString       m_Value;             ///< The component value.
-    wxString       m_Footprint;         ///< The footprint assigned.
-    SCH_SHEET_PATH m_SheetPath;         ///< The sheet path for this reference.
-    bool           m_IsNew;             ///< True if not yet annotated.
-    int            m_SheetNum;          ///< The sheet number for the reference.
-    KIID           m_Uuid;              ///< UUID of the component.
-    int            m_NumRef;            ///< The numeric part of the reference designator.
-    int            m_Flag;
+    wxString        m_value;             ///< The symbol value.
+    wxString        m_footprint;         ///< The footprint assigned.
+    SCH_SHEET_PATH  m_sheetPath;         ///< The sheet path for this reference.
+    bool            m_isNew;             ///< True if not yet annotated.
+    int             m_sheetNum;          ///< The sheet number for the reference.
+    KIID            m_symbolUuid;        ///< UUID of the symbol.
+    int             m_numRef;            ///< The numeric part of the reference designator.
+    int             m_flag;
 
     friend class SCH_REFERENCE_LIST;
 
 public:
 
     SCH_REFERENCE() :
-        m_SheetPath()
+            m_sheetPath()
     {
-        m_RootCmp         = NULL;
-        m_Entry           = NULL;
-        m_Unit            = 0;
-        m_IsNew           = false;
-        m_NumRef          = 0;
-        m_Flag            = 0;
-        m_SheetNum        = 0;
+        m_rootSymbol      = NULL;
+        m_libPart         = NULL;
+        m_unit            = 0;
+        m_isNew           = false;
+        m_numRef          = 0;
+        m_flag            = 0;
+        m_sheetNum        = 0;
     }
 
-    SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibComponent,
-                   const SCH_SHEET_PATH& aSheetPath );
+    SCH_REFERENCE( SCH_COMPONENT* aSymbol, LIB_PART* aLibPart, const SCH_SHEET_PATH& aSheetPath );
 
-    SCH_COMPONENT* GetComp() const             { return m_RootCmp; }
+    SCH_COMPONENT* GetSymbol() const           { return m_rootSymbol; }
 
-    LIB_PART*      GetLibPart() const          { return m_Entry; }
+    LIB_PART*      GetLibPart() const          { return m_libPart; }
 
-    const SCH_SHEET_PATH& GetSheetPath() const { return m_SheetPath; }
+    const SCH_SHEET_PATH& GetSheetPath() const { return m_sheetPath; }
 
-    SCH_SHEET_PATH& GetSheetPath()             { return m_SheetPath; }
+    SCH_SHEET_PATH& GetSheetPath()             { return m_sheetPath; }
 
-    int GetUnit() const                        { return m_Unit; }
-    void SetUnit( int aUnit )                  { m_Unit = aUnit; }
+    int GetUnit() const                        { return m_unit; }
+    void SetUnit( int aUnit )                  { m_unit = aUnit; }
 
-    const wxString GetValue() const            { return m_Value; }
-    void SetValue( const wxString& aValue )    { m_Value = aValue; }
+    const wxString GetValue() const            { return m_value; }
+    void SetValue( const wxString& aValue )    { m_value = aValue; }
 
-    const wxString GetFootprint() const        { return m_Footprint; }
-    void SetFootprint( const wxString& aFP )   { m_Footprint = aFP; }
+    const wxString GetFootprint() const        { return m_footprint; }
+    void SetFootprint( const wxString& aFP )   { m_footprint = aFP; }
 
-    void SetSheetNumber( int aSheetNumber )    { m_SheetNum = aSheetNumber; }
+    void SetSheetNumber( int aSheetNumber )    { m_sheetNum = aSheetNumber; }
 
     const wxString GetPath() const
     {
-        return m_RootCmp ? m_SheetPath.PathAsString() + m_RootCmp->m_Uuid.AsString() : "";
+        return m_rootSymbol ? m_sheetPath.PathAsString() + m_rootSymbol->m_Uuid.AsString() : "";
     }
 
     /**
      * Function Annotate
-     * updates the annotation of the component according the the current object state.
+     * updates the annotation of the symbol according the the current object state.
      */
     void Annotate();
 
     /**
      * Function Split
      * attempts to split the reference designator into a name (U) and number (1).  If the
-     * last character is '?' or not a digit, the reference is tagged as not annotated.
-     * For components with multiple parts per package that are not already annotated, set
-     * m_Unit to a max value (0x7FFFFFFF).
+     * last character is '?' or not a digit, the reference is tagged as not annotated.  For
+     * sybmols with multiple parts per package that are not already annotated, sets m_unit to
+     * a max value (0x7FFFFFFF).
      */
     void Split();
 
-    /*  Some accessors which hide the strategy of how the reference is stored,
-        thereby making it easy to change that strategy.
-    */
+    void SetRef( const wxString& aReference ) { m_ref = aReference; }
+    wxString GetRef() const { return m_ref; }
 
-    void SetRef( const wxString& aReference )
-    {
-        m_Ref = aReference;
-    }
-
-    wxString GetRef() const
-    {
-        return m_Ref;
-    }
-
-    void SetRefStr( const std::string& aReference )
-    {
-        m_Ref = aReference;
-    }
-
-    const char* GetRefStr() const
-    {
-        return m_Ref.c_str();
-    }
+    void SetRefStr( const std::string& aReference ) { m_ref = aReference; }
+    const char* GetRefStr() const { return m_ref.c_str(); }
 
     ///> Return reference name with unit altogether
     wxString GetFullRef()
     {
-        if( GetComp()->GetUnitCount() > 1 )
+        if( GetSymbol()->GetUnitCount() > 1 )
             return GetRef() + LIB_PART::SubReference( GetUnit() );
         else
             return GetRef();
@@ -158,59 +138,58 @@ public:
     {
         wxString ref;
 
-        if( m_NumRef < 0 )
+        if( m_numRef < 0 )
             return wxT( "?" );
 
-        // To avoid a risk of duplicate, for power components
-        // the ref number is 0nnn instead of nnn.
-        // Just because sometimes only power components are annotated
+        // To avoid a risk of duplicate, for power symbols the ref number is 0nnn instead of nnn.
+        // Just because sometimes only power symbols are annotated
         if( GetLibPart() && GetLibPart()->IsPower() )
             ref = wxT( "0" );
 
-        return ref << m_NumRef;
+        return ref << m_numRef;
     }
 
     int CompareValue( const SCH_REFERENCE& item ) const
     {
-        return m_Value.Cmp( item.m_Value );
+        return m_value.Cmp( item.m_value );
     }
 
     int CompareRef( const SCH_REFERENCE& item ) const
     {
-        return m_Ref.compare( item.m_Ref );
+        return m_ref.compare( item.m_ref );
     }
 
     int CompareLibName( const SCH_REFERENCE& item ) const
     {
-        return m_RootCmp->GetLibId().GetLibItemName().compare(
-            item.m_RootCmp->GetLibId().GetLibItemName() );
+        return m_rootSymbol->GetLibId().GetLibItemName().compare(
+            item.m_rootSymbol->GetLibId().GetLibItemName() );
     }
 
     /**
      * Function IsSameInstance
-     * returns whether this reference refers to the same component instance
-     * (component and sheet) as another.
+     * returns whether this reference refers to the same symbol instance (symbol and sheet) as
+     * another.
      */
     bool IsSameInstance( const SCH_REFERENCE& other ) const
     {
         // JEY TODO: should this be checking unit as well?
-        return GetComp() == other.GetComp()
-                    && GetSheetPath().Path() == other.GetSheetPath().Path();
+        return GetSymbol() == other.GetSymbol()
+               && GetSheetPath().Path() == other.GetSheetPath().Path();
     }
 
     bool IsUnitsLocked()
     {
-        return m_Entry->UnitsLocked();
+        return m_libPart->UnitsLocked();
     }
 };
 
 
 /**
  * SCH_REFERENCE_LIST
- * is used to create a flattened list of components because in a complex hierarchy, a component
+ * is used to create a flattened list of symbols because in a complex hierarchy, a symbol
  * can be used more than once and its reference designator is dependent on the sheet path for
- * the same component.  This flattened list is used for netlist generation, BOM generation,
- * and schematic annotation.
+ * the same symbol.  This flattened list is used for netlist generation, BOM generation, and
+ * schematic annotation.
  */
 class SCH_REFERENCE_LIST
 {
@@ -234,33 +213,11 @@ public:
         flatList.clear();
     }
 
-    /**
-     * Function GetCount
-     * @return the number of items in the list
-     */
-    unsigned GetCount() const
-    {
-        return flatList.size();
-    }
+    unsigned GetCount() const { return flatList.size(); }
 
-    /**
-     * Function GetItem
-     * @return the aIdx item
-     */
-    SCH_REFERENCE& GetItem( int aIdx )
-    {
-        return flatList[aIdx];
-    }
+    SCH_REFERENCE& GetItem( int aIdx ) { return flatList[aIdx]; }
 
-    /**
-     * Function AddItem
-     * adds a SCH_REFERENCE object to the list of references.
-     * @param aItem - a SCH_REFERENCE item to add
-     */
-    void AddItem( SCH_REFERENCE& aItem )
-    {
-        flatList.push_back( aItem );
-    }
+    void AddItem( SCH_REFERENCE& aItem ) { flatList.push_back( aItem ); }
 
     /**
      * Function RemoveItem
@@ -271,21 +228,20 @@ public:
     void RemoveItem( unsigned int aIndex );
 
     /* Sort functions:
-     * Sort functions are used to sort components for annotation or BOM generation.
-     * Because sorting depends on what we want to do, there are many sort functions.
+     * Sort functions are used to sort symbols for annotation or BOM generation.  Because
+     * sorting depends on what we want to do, there are many sort functions.
      * Note:
-     *    When creating BOM, components are fully annotated.
-     *    references are something like U3, U5 or R4, R8
-     *    When annotating,  some or all components are not annotated,
-     *    i.e. ref is only U or R, with no number.
+     *    When creating BOM, symbols are fully annotated.  References are something like U3,
+     *    U5 or R4, R8.  When annotating,  some or all suymbols are not annotated, i.e. ref is
+     *    only U or R, with no number.
      */
 
     /**
      * Function SplitReferences
      * attempts to split all reference designators into a name (U) and number (1).  If the
-     * last character is '?' or not a digit, the reference is tagged as not annotated.
-     * For components with multiple parts per package that are not already annotated, set
-     * m_Unit to a max value (0x7FFFFFFF).
+     * last character is '?' or not a digit, the reference is tagged as not annotated.  For
+     * symbols with multiple parts per package that are not already annotated, set m_unit to
+     * a max value (0x7FFFFFFF).
      * @see SCH_REFERENCE::Split()
      */
     void SplitReferences()
@@ -296,18 +252,16 @@ public:
 
     /**
      * function UpdateAnnotation
-     * Updates the reference components for the schematic project (or the current sheet)
-     * Note: this function does not calculate the reference numbers stored in m_NumRef
-     * So, it must be called after calculation of new reference numbers
+     * Updates the symbol references for the schematic project (or the current sheet).
+     * Note: this function does not calculate the reference numbers stored in m_numRef so it
+     * must be called after calculation of new reference numbers
      * @see SCH_REFERENCE::Annotate()
      */
     void UpdateAnnotation()
     {
         /* update the reference numbers */
         for( unsigned ii = 0; ii < GetCount(); ii++ )
-        {
             flatList[ii].Annotate();
-        }
     }
 
     /**
@@ -336,10 +290,10 @@ public:
      * <p>
      * The following annotation error conditions are tested:
      * <ul>
-     * <li>Components not annotated.</li>
-     * <li>Components having the same reference designator (duplicates).</li>
-     * <li>Components with multiple parts per package having different reference designators.</li>
-     * <li>Components with multiple parts per package with invalid part count.</li>
+     * <li>Symbols not annotated.</li>
+     * <li>Symbols having the same reference designator (duplicates).</li>
+     * <li>Symbols with multiple parts per package having different reference designators.</li>
+     * <li>Symbols with multiple parts per package with invalid part count.</li>
      * </ul>
      * </p>
      * @param aReporter A sink for error messages.  Use NULL_REPORTER if you don't need errors.
@@ -348,10 +302,10 @@ public:
     int CheckAnnotation( REPORTER& aReporter );
 
     /**
-     * Function sortByXCoordinate
+     * Function SortByXCoordinate
      * sorts the list of references by X position.
      * <p>
-     * Components are sorted as follows:
+     * Symbols are sorted as follows:
      * <ul>
      * <li>Numeric value of reference designator.</li>
      * <li>Sheet number.</li>
@@ -367,10 +321,10 @@ public:
     }
 
     /**
-     * Function sortByYCoordinate
+     * Function SortByYCoordinate
      * sorts the list of references by Y position.
      * <p>
-     * Components are sorted as follows:
+     * Symbols are sorted as follows:
      * <ul>
      * <li>Numeric value of reference designator.</li>
      * <li>Sheet number.</li>
@@ -386,7 +340,7 @@ public:
     }
 
     /**
-     * Function SortComponentsByTimeStamp
+     * Function SortByTimeStamp
      * sort the flat list by Time Stamp (sheet path + timestamp).
      * Useful to detect duplicate Time Stamps
      */
@@ -399,11 +353,11 @@ public:
      * Function SortByRefAndValue
      * sorts the list of references by value.
      * <p>
-     * Components are sorted in the following order:
+     * Symbols are sorted in the following order:
      * <ul>
      * <li>Numeric value of reference designator.</li>
-     * <li>Value of component.</li>
-     * <li>Unit number when component has multiple parts.</li>
+     * <li>Value of symbol.</li>
+     * <li>Unit number when symbol has multiple parts.</li>
      * <li>Sheet number.</li>
      * <li>X coordinate position.</li>
      * <li>Y coordinate position.</li>
@@ -419,10 +373,10 @@ public:
      * Function SortByReferenceOnly
      * sorts the list of references by reference.
      * <p>
-     * Components are sorted in the following order:
+     * Symbols are sorted in the following order:
      * <ul>
      * <li>Numeric value of reference designator.</li>
-     * <li>Unit number when component has multiple parts.</li>
+     * <li>Unit number when symbol has multiple parts.</li>
      * </ul>
      * </p>
      */
@@ -432,26 +386,25 @@ public:
     }
 
     /**
-     * searches the list for a component with a given reference.
+     * searches the list for a symbol with a given reference.
      * @param aPath
      * @return
      */
     int FindRef( const wxString& aPath ) const;
 
     /**
-     * searches the sorted list of components for a another component with the same
-     * reference and a given part unit.  Use this method to manage components with
-     * multiple parts per package.
-     * @param aIndex = index in aComponentsList for of given SCH_REFERENCE item to test.
+     * searches the sorted list of symbols for a another symbol with the same reference and a
+     * given part unit.  Use this method to manage symbols with multiple parts per package.
+     * @param aIndex = index in aSymbolsList for of given SCH_REFERENCE item to test.
      * @param aUnit = the given unit number to search
-     * @return index in aComponentsList if found or -1 if not found
+     * @return index in aSymbolsList if found or -1 if not found
      */
     int FindUnit( size_t aIndex, int aUnit );
 
     /**
-     * searches the list for a component with the given KIID path
+     * searches the list for a symbol with the given KIID path
      * @param aPath path to search
-     * @return index in aComponentsList if found or -1 if not found
+     * @return index in aSymbolsList if found or -1 if not found
      */
     int FindRefByPath( const wxString& aPath ) const;
 
@@ -459,7 +412,7 @@ public:
      * Function GetRefsInUse
      * adds all the reference designator numbers greater than \a aMinRefId to \a aIdList
      * skipping the reference at \a aIndex.
-     * @param aIndex = the current component index to use for reference prefix filtering.
+     * @param aIndex = the current symbol's index to use for reference prefix filtering.
      * @param aIdList = the buffer to fill
      * @param aMinRefId = the min id value to store. all values < aMinRefId are ignored
      */
@@ -467,9 +420,8 @@ public:
 
     /**
      * Function GetLastReference
-     * returns the last used (greatest) reference number in the reference list
-     * for the prefix reference given by \a aIndex.  The component list must be
-     * sorted.
+     * returns the last used (greatest) reference number in the reference list for the prefix
+     * used by the symbol pointed to by \a aIndex.  The symbol list must be sorted.
      *
      * @param aIndex The index of the reference item used for the search pattern.
      * @param aMinValue The minimum value for the current search.
@@ -486,11 +438,10 @@ public:
             SCH_REFERENCE& schref = flatList[i];
 
             printf( " [%-2d] ref:%-8s num:%-3d lib_part:%s\n",
-                i,
-                schref.m_Ref.c_str(),
-                schref.m_NumRef,
-                TO_UTF8( schref.GetLibPart()->GetName() )
-                );
+                    i,
+                    schref.m_ref.c_str(),
+                    schref.m_numRef,
+                    TO_UTF8( schref.GetLibPart()->GetName() ) );
         }
     }
 #endif

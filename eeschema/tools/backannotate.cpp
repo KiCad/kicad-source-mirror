@@ -74,8 +74,8 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     getPcbModulesFromString( aNetlist );
 
     SCH_SHEET_LIST sheets = m_frame->Schematic().GetSheets();
-    sheets.GetComponents( m_refs, false );
-    sheets.GetMultiUnitComponents( m_multiUnitsRefs );
+    sheets.GetSymbols( m_refs, false );
+    sheets.GetMultiUnitSymbols( m_multiUnitsRefs );
 
     getChangeList();
     checkForUnusedSymbols();
@@ -230,7 +230,7 @@ void BACK_ANNOTATE::getChangeList()
 
                 for( size_t i = 0; i < refList.GetCount(); ++i )
                 {
-                    refList[i].GetComp()->ClearFlags( SKIP_STRUCT );
+                    refList[ i ].GetSymbol()->ClearFlags(SKIP_STRUCT );
                     m_changelist.emplace_back( CHANGELIST_ITEM( refList[i], pcbData ) );
                 }
 
@@ -248,7 +248,7 @@ void BACK_ANNOTATE::getChangeList()
 
         if( refIndex >= 0 )
         {
-            m_refs[refIndex].GetComp()->ClearFlags( SKIP_STRUCT );
+            m_refs[ refIndex ].GetSymbol()->ClearFlags(SKIP_STRUCT );
             m_changelist.emplace_back( CHANGELIST_ITEM( m_refs[refIndex], pcbData ) );
         }
         else
@@ -304,13 +304,13 @@ void BACK_ANNOTATE::applyChangelist()
     // Apply changes from change list
     for( CHANGELIST_ITEM& item : m_changelist )
     {
-        SCH_REFERENCE&   ref = item.first;
-        PCB_FP_DATA& fpData = *item.second;
-        SCH_COMPONENT*   comp = ref.GetComp();
-        SCH_SCREEN*      screen = ref.GetSheetPath().LastScreen();
-        wxString         oldFootprint = ref.GetFootprint();
-        wxString         oldValue = ref.GetValue();
-        bool             skip = ( ref.GetComp()->GetFlags() & SKIP_STRUCT ) > 0;
+        SCH_REFERENCE& ref = item.first;
+        PCB_FP_DATA&   fpData = *item.second;
+        SCH_COMPONENT* symbol = ref.GetSymbol();
+        SCH_SCREEN*    screen = ref.GetSheetPath().LastScreen();
+        wxString       oldFootprint = ref.GetFootprint();
+        wxString       oldValue = ref.GetValue();
+        bool           skip = ( ref.GetSymbol()->GetFlags() & SKIP_STRUCT ) > 0;
 
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
@@ -321,9 +321,9 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
+                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->SetRef( &ref.GetSheetPath(), fpData.m_ref );
+                symbol->SetRef( &ref.GetSheetPath(), fpData.m_ref );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -339,9 +339,9 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
+                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->SetFootprint( &ref.GetSheetPath(), fpData.m_footprint );
+                symbol->SetFootprint( &ref.GetSheetPath(), fpData.m_footprint );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -357,9 +357,9 @@ void BACK_ANNOTATE::applyChangelist()
 
             if( !m_dryRun )
             {
-                m_frame->SaveCopyInUndoList( screen, comp, UNDO_REDO::CHANGED, m_appendUndo );
+                m_frame->SaveCopyInUndoList( screen, symbol, UNDO_REDO::CHANGED, m_appendUndo );
                 m_appendUndo = true;
-                comp->SetValue( &ref.GetSheetPath(), fpData.m_value );
+                symbol->SetValue( &ref.GetSheetPath(), fpData.m_value );
             }
 
             m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -371,7 +371,7 @@ void BACK_ANNOTATE::applyChangelist()
             {
                 const wxString& pinNumber = entry.first;
                 const wxString& shortNetName = entry.second;
-                SCH_PIN*        pin = comp->GetPin( pinNumber );
+                SCH_PIN*        pin = symbol->GetPin( pinNumber );
 
                 if( !pin )
                 {
@@ -421,7 +421,7 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
     case PIN_RIGHT: spin = LABEL_SPIN_STYLE::LEFT;   break;
     }
 
-    // Reorient based on the actual component orientation now
+    // Reorient based on the actual symbol orientation now
     struct ORIENT
     {
         int flag;
@@ -447,16 +447,16 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
 
     ORIENT o = orientations[ 0 ];
 
-    SCH_COMPONENT* comp = aPin->GetParentSymbol();
+    SCH_COMPONENT* parentSymbol = aPin->GetParentSymbol();
 
-    if( !comp )
+    if( !parentSymbol )
         return spin;
 
-    int compOrient = comp->GetOrientation();
+    int symbolOrientation = parentSymbol->GetOrientation();
 
     for( auto& i : orientations )
     {
-        if( i.flag == compOrient )
+        if( i.flag == symbolOrientation )
         {
             o = i;
             break;

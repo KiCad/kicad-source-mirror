@@ -54,16 +54,16 @@ bool SCH_REFERENCE_LIST::sortByXPosition( const SCH_REFERENCE& item1, const SCH_
     int ii = item1.CompareRef( item2 );
 
     if( ii == 0 )
-        ii = item1.m_SheetNum - item2.m_SheetNum;
+        ii = item1.m_sheetNum - item2.m_sheetNum;
 
     if( ii == 0 )
-        ii = item1.m_CmpPos.x - item2.m_CmpPos.x;
+        ii = item1.m_symbolPos.x - item2.m_symbolPos.x;
 
     if( ii == 0 )
-        ii = item1.m_CmpPos.y - item2.m_CmpPos.y;
+        ii = item1.m_symbolPos.y - item2.m_symbolPos.y;
 
     if( ii == 0 )
-        return item1.m_Uuid < item2.m_Uuid;     // ensure a deterministic sort
+        return item1.m_symbolUuid < item2.m_symbolUuid;     // ensure a deterministic sort
     else
         return ii < 0;
 }
@@ -74,16 +74,16 @@ bool SCH_REFERENCE_LIST::sortByYPosition( const SCH_REFERENCE& item1, const SCH_
     int ii = item1.CompareRef( item2 );
 
     if( ii == 0 )
-        ii = item1.m_SheetNum - item2.m_SheetNum;
+        ii = item1.m_sheetNum - item2.m_sheetNum;
 
     if( ii == 0 )
-        ii = item1.m_CmpPos.y - item2.m_CmpPos.y;
+        ii = item1.m_symbolPos.y - item2.m_symbolPos.y;
 
     if( ii == 0 )
-        ii = item1.m_CmpPos.x - item2.m_CmpPos.x;
+        ii = item1.m_symbolPos.x - item2.m_symbolPos.x;
 
     if( ii == 0 )
-        return item1.m_Uuid < item2.m_Uuid;     // ensure a deterministic sort
+        return item1.m_symbolUuid < item2.m_symbolUuid;     // ensure a deterministic sort
     else
         return ii < 0;
 }
@@ -98,19 +98,19 @@ bool SCH_REFERENCE_LIST::sortByRefAndValue( const SCH_REFERENCE& item1,
         ii = item1.CompareValue( item2 );
 
     if( ii == 0 )
-        ii = item1.m_Unit - item2.m_Unit;
+        ii = item1.m_unit - item2.m_unit;
 
     if( ii == 0 )
-        ii = item1.m_SheetNum - item2.m_SheetNum;
+        ii = item1.m_sheetNum - item2.m_sheetNum;
 
     if( ii == 0 )
-        ii = item1.m_CmpPos.x - item2.m_CmpPos.x;
+        ii = item1.m_symbolPos.x - item2.m_symbolPos.x;
 
     if( ii == 0 )
-        ii = item1.m_CmpPos.y - item2.m_CmpPos.y;
+        ii = item1.m_symbolPos.y - item2.m_symbolPos.y;
 
     if( ii == 0 )
-        return item1.m_Uuid < item2.m_Uuid;     // ensure a deterministic sort
+        return item1.m_symbolUuid < item2.m_symbolUuid;     // ensure a deterministic sort
     else
         return ii < 0;
 }
@@ -122,10 +122,10 @@ bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
     int ii = UTIL::RefDesStringCompare( item1.GetRef(), item2.GetRef() );
 
     if( ii == 0 )
-        ii = item1.m_Unit - item2.m_Unit;
+        ii = item1.m_unit - item2.m_unit;
 
     if( ii == 0 )
-        return item1.m_Uuid < item2.m_Uuid;     // ensure a deterministic sort
+        return item1.m_symbolUuid < item2.m_symbolUuid;     // ensure a deterministic sort
     else
         return ii < 0;
 }
@@ -134,10 +134,10 @@ bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
 bool SCH_REFERENCE_LIST::sortByTimeStamp( const SCH_REFERENCE& item1,
                                           const SCH_REFERENCE& item2 )
 {
-    int ii = item1.m_SheetPath.Cmp( item2.m_SheetPath );
+    int ii = item1.m_sheetPath.Cmp( item2.m_sheetPath );
 
     if( ii == 0 )
-        return item1.m_Uuid < item2.m_Uuid;     // ensure a deterministic sort
+        return item1.m_symbolUuid < item2.m_symbolUuid;     // ensure a deterministic sort
     else
         return ii < 0;
 }
@@ -147,17 +147,17 @@ int SCH_REFERENCE_LIST::FindUnit( size_t aIndex, int aUnit )
 {
     int NumRef;
 
-    NumRef = flatList[aIndex].m_NumRef;
+    NumRef = flatList[aIndex].m_numRef;
 
     for( size_t ii = 0; ii < flatList.size(); ii++ )
     {
         if(  ( aIndex == ii )
-          || ( flatList[ii].m_IsNew )
-          || ( flatList[ii].m_NumRef != NumRef )
+          || ( flatList[ii].m_isNew )
+          || ( flatList[ii].m_numRef != NumRef )
           || ( flatList[aIndex].CompareRef( flatList[ii] ) != 0 ) )
             continue;
 
-        if( flatList[ii].m_Unit == aUnit )
+        if( flatList[ii].m_unit == aUnit )
             return (int) ii;
     }
 
@@ -195,8 +195,8 @@ void SCH_REFERENCE_LIST::GetRefsInUse( int aIndex, std::vector< int >& aIdList, 
 
     for( SCH_REFERENCE& ref : flatList )
     {
-        if( flatList[aIndex].CompareRef( ref ) == 0 && ref.m_NumRef >= aMinRefId )
-            aIdList.push_back( ref.m_NumRef );
+        if( flatList[aIndex].CompareRef( ref ) == 0 && ref.m_numRef >= aMinRefId )
+            aIdList.push_back( ref.m_numRef );
     }
 
     sort( aIdList.begin(), aIdList.end() );
@@ -222,8 +222,8 @@ int SCH_REFERENCE_LIST::GetLastReference( int aIndex, int aMinValue )
             continue;
 
         // update max value for the current reference prefix
-        if( lastNumber < ref.m_NumRef )
-            lastNumber = ref.m_NumRef;
+        if( lastNumber < ref.m_numRef )
+            lastNumber = ref.m_numRef;
     }
 
     return lastNumber;
@@ -301,7 +301,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
 
     // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
     if( aUseSheetNum )
-        minRefId = flatList[first].m_SheetNum * aSheetIntervalId + 1;
+        minRefId = flatList[first].m_sheetNum * aSheetIntervalId + 1;
     else
         minRefId = aStartNumber + 1;
 
@@ -326,7 +326,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
     {
         auto& ref_unit = flatList[ii];
 
-        if( ref_unit.m_Flag )
+        if( ref_unit.m_flag )
             continue;
 
         // Check whether this component is in aLockedUnitMap.
@@ -349,14 +349,14 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         }
 
         if(  ( flatList[first].CompareRef( ref_unit ) != 0 )
-          || ( aUseSheetNum && ( flatList[first].m_SheetNum != ref_unit.m_SheetNum ) )  )
+          || ( aUseSheetNum && ( flatList[first].m_sheetNum != ref_unit.m_sheetNum ) )  )
         {
             // New reference found: we need a new ref number for this reference
             first = ii;
 
             // when using sheet number, ensure ref number >= sheet number* aSheetIntervalId
             if( aUseSheetNum )
-                minRefId = ref_unit.m_SheetNum * aSheetIntervalId + 1;
+                minRefId = ref_unit.m_sheetNum * aSheetIntervalId + 1;
             else
                 minRefId = aStartNumber + 1;
 
@@ -366,30 +366,30 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
         // Annotation of one part per package components (trivial case).
         if( ref_unit.GetLibPart()->GetUnitCount() <= 1 )
         {
-            if( ref_unit.m_IsNew )
+            if( ref_unit.m_isNew )
             {
                 LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
-                ref_unit.m_NumRef = LastReferenceNumber;
+                ref_unit.m_numRef = LastReferenceNumber;
             }
 
-            ref_unit.m_Unit  = 1;
-            ref_unit.m_Flag  = 1;
-            ref_unit.m_IsNew = false;
+            ref_unit.m_unit  = 1;
+            ref_unit.m_flag  = 1;
+            ref_unit.m_isNew = false;
             continue;
         }
 
         // Annotation of multi-unit parts ( n units per part ) (complex case)
         NumberOfUnits = ref_unit.GetLibPart()->GetUnitCount();
 
-        if( ref_unit.m_IsNew )
+        if( ref_unit.m_isNew )
         {
             LastReferenceNumber = CreateFirstFreeRefId( idList, minRefId );
-            ref_unit.m_NumRef = LastReferenceNumber;
+            ref_unit.m_numRef = LastReferenceNumber;
 
             if( !ref_unit.IsUnitsLocked() )
-                ref_unit.m_Unit = 1;
+                ref_unit.m_unit = 1;
 
-            ref_unit.m_Flag = 1;
+            ref_unit.m_flag = 1;
         }
 
         // If this component is in aLockedUnitMap, copy the annotation to all
@@ -405,7 +405,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 if( thisRef.IsSameInstance( ref_unit ) )
                 {
                     // This is the component we're currently annotating. Hold the unit!
-                    ref_unit.m_Unit = thisRef.m_Unit;
+                    ref_unit.m_unit = thisRef.m_unit;
                     // lock this new full reference
                     inUseRefs.insert( buildFullReference( ref_unit ) );
                 }
@@ -422,17 +422,17 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                     if( ! thisRef.IsSameInstance( flatList[jj] ) )
                         continue;
 
-                    wxString ref_candidate = buildFullReference( ref_unit, thisRef.m_Unit );
+                    wxString ref_candidate = buildFullReference( ref_unit, thisRef.m_unit );
 
                     // propagate the new reference and unit selection to the "old" component,
                     // if this new full reference is not already used (can happens when initial
                     // multiunits components have duplicate references)
                     if( inUseRefs.find( ref_candidate ) == inUseRefs.end() )
                     {
-                        flatList[jj].m_NumRef = ref_unit.m_NumRef;
-                        flatList[jj].m_Unit = thisRef.m_Unit;
-                        flatList[jj].m_IsNew = false;
-                        flatList[jj].m_Flag = 1;
+                        flatList[jj].m_numRef = ref_unit.m_numRef;
+                        flatList[jj].m_unit = thisRef.m_unit;
+                        flatList[jj].m_isNew = false;
+                        flatList[jj].m_flag = 1;
                         // lock this new full reference
                         inUseRefs.insert( ref_candidate );
                         break;
@@ -448,7 +448,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
             */
             for( Unit = 1; Unit <= NumberOfUnits; Unit++ )
             {
-                if( ref_unit.m_Unit == Unit )
+                if( ref_unit.m_unit == Unit )
                     continue;
 
                 int found = FindUnit( ii, Unit );
@@ -461,7 +461,7 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                 {
                     auto& cmp_unit = flatList[jj];
 
-                    if( cmp_unit.m_Flag )    // already tested
+                    if( cmp_unit.m_flag )    // already tested
                         continue;
 
                     if( cmp_unit.CompareRef( ref_unit ) != 0 )
@@ -477,17 +477,17 @@ void SCH_REFERENCE_LIST::Annotate( bool aUseSheetNum, int aSheetIntervalId, int 
                             cmp_unit.GetSheetPath().Cmp( ref_unit.GetSheetPath() ) != 0 )
                         continue;
 
-                    if( !cmp_unit.m_IsNew )
+                    if( !cmp_unit.m_isNew )
                         continue;
 
                     // Component without reference number found, annotate it if possible
                     if( !cmp_unit.IsUnitsLocked()
-                        || ( cmp_unit.m_Unit == Unit ) )
+                        || ( cmp_unit.m_unit == Unit ) )
                     {
-                        cmp_unit.m_NumRef = ref_unit.m_NumRef;
-                        cmp_unit.m_Unit   = Unit;
-                        cmp_unit.m_Flag   = 1;
-                        cmp_unit.m_IsNew  = false;
+                        cmp_unit.m_numRef = ref_unit.m_numRef;
+                        cmp_unit.m_unit   = Unit;
+                        cmp_unit.m_flag   = 1;
+                        cmp_unit.m_isNew  = false;
                         break;
                     }
                 }
@@ -513,21 +513,21 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
         msg.Empty();
         tmp.Empty();
 
-        if( flatList[ii].m_IsNew )    // Not yet annotated
+        if( flatList[ii].m_isNew )    // Not yet annotated
         {
-            if( flatList[ii].m_NumRef >= 0 )
-                tmp << flatList[ii].m_NumRef;
+            if( flatList[ii].m_numRef >= 0 )
+                tmp << flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
 
-            if(  ( flatList[ii].m_Unit > 0 )
-              && ( flatList[ii].m_Unit < 0x7FFFFFFF )  )
+            if(  ( flatList[ii].m_unit > 0 )
+              && ( flatList[ii].m_unit < 0x7FFFFFFF )  )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            flatList[ii].m_Unit );
+                            flatList[ii].m_unit );
             }
             else
             {
@@ -545,17 +545,17 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
         // parts in the component ).  This can happen if a component has changed in a
         // library after a previous annotation.
         if( std::max( flatList[ii].GetLibPart()->GetUnitCount(), 1 )
-            < flatList[ii].m_Unit )
+            < flatList[ii].m_unit )
         {
-            if( flatList[ii].m_NumRef >= 0 )
-                tmp << flatList[ii].m_NumRef;
+            if( flatList[ii].m_numRef >= 0 )
+                tmp << flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
             msg.Printf( _( "Error: symbol %s%s unit %d and symbol has only %d units defined\n" ),
                         flatList[ii].GetRef(),
                         tmp,
-                        flatList[ii].m_Unit,
+                        flatList[ii].m_unit,
                         flatList[ii].GetLibPart()->GetUnitCount() );
 
             aReporter.Report( msg, RPT_SEVERITY_ERROR );
@@ -576,24 +576,24 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
         tmp.Empty();
 
         if(  ( flatList[ii].CompareRef( flatList[ii + 1] ) != 0 )
-          || ( flatList[ii].m_NumRef != flatList[ii + 1].m_NumRef )  )
+          || ( flatList[ii].m_numRef != flatList[ ii + 1].m_numRef )  )
             continue;
 
         // Same reference found. If same unit, error!
-        if( flatList[ii].m_Unit == flatList[ii + 1].m_Unit )
+        if( flatList[ii].m_unit == flatList[ ii + 1].m_unit )
         {
-            if( flatList[ii].m_NumRef >= 0 )
-                tmp << flatList[ii].m_NumRef;
+            if( flatList[ii].m_numRef >= 0 )
+                tmp << flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].m_Unit > 0 )
-             && ( flatList[ii].m_Unit < 0x7FFFFFFF ) )
+            if( ( flatList[ii].m_unit > 0 )
+             && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
             {
                 msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            flatList[ii].m_Unit );
+                            flatList[ii].m_unit );
             }
             else
             {
@@ -612,18 +612,18 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
         if( flatList[ii].GetLibPart()->GetUnitCount()
             != flatList[ ii + 1].GetLibPart()->GetUnitCount()  )
         {
-            if( flatList[ii].m_NumRef >= 0 )
-                tmp << flatList[ii].m_NumRef;
+            if( flatList[ii].m_numRef >= 0 )
+                tmp << flatList[ii].m_numRef;
             else
                 tmp = wxT( "?" );
 
-            if( ( flatList[ii].m_Unit > 0 )
-             && ( flatList[ii].m_Unit < 0x7FFFFFFF ) )
+            if( ( flatList[ii].m_unit > 0 )
+             && ( flatList[ii].m_unit < 0x7FFFFFFF ) )
             {
                 msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
                             flatList[ii].GetRef(),
                             tmp,
-                            flatList[ii].m_Unit );
+                            flatList[ii].m_unit );
             }
             else
             {
@@ -643,13 +643,13 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
         {
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
                         flatList[ii].GetRef(),
-                        flatList[ii].m_NumRef,
-                        LIB_PART::SubReference( flatList[ii].m_Unit ),
-                        flatList[ii].m_Value,
+                        flatList[ii].m_numRef,
+                        LIB_PART::SubReference( flatList[ii].m_unit ),
+                        flatList[ii].m_value,
                         flatList[next].GetRef(),
-                        flatList[next].m_NumRef,
-                        LIB_PART::SubReference( flatList[next].m_Unit ),
-                        flatList[next].m_Value );
+                        flatList[next].m_numRef,
+                        LIB_PART::SubReference( flatList[next].m_unit ),
+                        flatList[next].m_value );
 
             aReporter.Report( msg, RPT_SEVERITY_ERROR );
             error++;
@@ -660,48 +660,48 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
 }
 
 
-SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aComponent, LIB_PART* aLibPart,
+SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aSymbol, LIB_PART* aLibPart,
                               const SCH_SHEET_PATH& aSheetPath )
 {
-    wxASSERT( aComponent != NULL );
+    wxASSERT( aSymbol != NULL );
 
-    m_RootCmp   = aComponent;
-    m_Entry     = aLibPart;     // Warning: can be nullptr for orphan components
+    m_rootSymbol   = aSymbol;
+    m_libPart     = aLibPart;     // Warning: can be nullptr for orphan components
                                 // (i.e. with a symbol library not found)
-    m_Unit      = aComponent->GetUnitSelection( &aSheetPath );
-    m_Footprint = aComponent->GetFootprint( &aSheetPath );
-    m_SheetPath = aSheetPath;
-    m_IsNew     = false;
-    m_Flag      = 0;
-    m_Uuid      = aComponent->m_Uuid;
-    m_CmpPos    = aComponent->GetPosition();
-    m_SheetNum  = 0;
+    m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
+    m_footprint  = aSymbol->GetFootprint( &aSheetPath );
+    m_sheetPath  = aSheetPath;
+    m_isNew      = false;
+    m_flag       = 0;
+    m_symbolUuid = aSymbol->m_Uuid;
+    m_symbolPos  = aSymbol->GetPosition();
+    m_sheetNum   = 0;
 
-    if( aComponent->GetRef( &aSheetPath ).IsEmpty() )
-        aComponent->SetRef( &aSheetPath, wxT( "DefRef?" ) );
+    if( aSymbol->GetRef( &aSheetPath ).IsEmpty() )
+        aSymbol->SetRef( &aSheetPath, wxT( "DefRef?" ) );
 
-    wxString ref = aComponent->GetRef( &aSheetPath );
+    wxString ref = aSymbol->GetRef( &aSheetPath );
     SetRef( ref );
 
-    m_NumRef = -1;
+    m_numRef = -1;
 
-    if( aComponent->GetValue( &aSheetPath ).IsEmpty() )
-        aComponent->SetValue( &aSheetPath, wxT( "~" ) );
+    if( aSymbol->GetValue( &aSheetPath ).IsEmpty() )
+        aSymbol->SetValue( &aSheetPath, wxT( "~" ) );
 
-    m_Value = aComponent->GetValue( &aSheetPath );
+    m_value = aSymbol->GetValue( &aSheetPath );
 }
 
 
 void SCH_REFERENCE::Annotate()
 {
-    if( m_NumRef < 0 )
-        m_Ref += '?';
+    if( m_numRef < 0 )
+        m_ref += '?';
     else
-        m_Ref = TO_UTF8( GetRef() << GetRefNumber() );
+        m_ref = TO_UTF8( GetRef() << GetRefNumber() );
 
-    m_RootCmp->SetRef( &m_SheetPath, FROM_UTF8( m_Ref.c_str() ) );
-    m_RootCmp->SetUnit( m_Unit );
-    m_RootCmp->SetUnitSelection( &m_SheetPath, m_Unit );
+    m_rootSymbol->SetRef( &m_sheetPath, FROM_UTF8( m_ref.c_str() ) );
+    m_rootSymbol->SetUnit( m_unit );
+    m_rootSymbol->SetUnitSelection( &m_sheetPath, m_unit );
 }
 
 
@@ -709,16 +709,16 @@ void SCH_REFERENCE::Split()
 {
     std::string refText = GetRefStr();
 
-    m_NumRef = -1;
+    m_numRef = -1;
 
     int ll = refText.length() - 1;
 
     if( refText[ll] == '?' )
     {
-        m_IsNew = true;
+        m_isNew = true;
 
         if( !IsUnitsLocked() )
-            m_Unit = 0x7FFFFFFF;
+            m_unit = 0x7FFFFFFF;
 
         refText.erase( ll );  // delete last char
 
@@ -726,10 +726,10 @@ void SCH_REFERENCE::Split()
     }
     else if( isdigit( refText[ll] ) == 0 )
     {
-        m_IsNew = true;
+        m_isNew = true;
 
         if( !IsUnitsLocked() )
-            m_Unit = 0x7FFFFFFF;
+            m_unit = 0x7FFFFFFF;
     }
     else
     {
@@ -744,7 +744,7 @@ void SCH_REFERENCE::Split()
                     // null terminated C string into cp
                     const char* cp = refText.c_str() + ll + 1;
 
-                    m_NumRef = atoi( cp );
+                    m_numRef = atoi( cp );
                 }
 
                 refText.erase( ll+1 );  // delete from ll+1 to end
@@ -765,13 +765,13 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
     while( i < aList.size() )
     {
         wxString ref = aList[ i ].GetRef();
-        int numRef = aList[ i ].m_NumRef;
+        int numRef = aList[ i ].m_numRef;
 
         size_t range = 1;
 
         while( i + range < aList.size()
                && aList[ i + range ].GetRef() == ref
-               && aList[ i + range ].m_NumRef == int( numRef + range ) )
+               && aList[ i + range ].m_numRef == int( numRef + range ) )
         {
             range++;
         }

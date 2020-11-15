@@ -37,11 +37,11 @@ void SCH_EDIT_FRAME::mapExistingAnnotation( std::map<wxString, wxString>& aMap )
 {
     SCH_REFERENCE_LIST references;
 
-    Schematic().GetSheets().GetComponents( references );
+    Schematic().GetSheets().GetSymbols( references );
 
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
-        SCH_COMPONENT* comp = references[ i ].GetComp();
+        SCH_COMPONENT* comp = references[ i ].GetSymbol();
         SCH_SHEET_PATH* curr_sheetpath = &references[ i ].GetSheetPath();
         KIID_PATH curr_full_uuid = curr_sheetpath->Path();
         curr_full_uuid.push_back( comp->m_Uuid );
@@ -133,7 +133,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     if( aLockUnits )
     {
         if( aAnnotateSchematic )
-            sheets.GetMultiUnitComponents( lockedComponents );
+            sheets.GetMultiUnitSymbols( lockedComponents );
         else
             GetCurrentSheet().GetMultiUnitComponents( lockedComponents );
     }
@@ -150,9 +150,9 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
     // Build component list
     if( aAnnotateSchematic )
-        sheets.GetComponents( references );
+        sheets.GetSymbols( references );
     else
-        GetCurrentSheet().GetComponents( references );
+        GetCurrentSheet().GetSymbols( references );
 
     // Break full components reference in name (prefix) and number:
     // example: IC1 become IC, and 1
@@ -190,21 +190,21 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     for( size_t i = 0; i < references.GetCount(); i++ )
     {
         SCH_REFERENCE&  ref = references[i];
-        SCH_COMPONENT*  comp = ref.GetComp();
+        SCH_COMPONENT*  symbol = ref.GetSymbol();
         SCH_SHEET_PATH* sheet = &ref.GetSheetPath();
 
-        SaveCopyInUndoList( sheet->LastScreen(), comp, UNDO_REDO::CHANGED, appendUndo );
+        SaveCopyInUndoList( sheet->LastScreen(), symbol, UNDO_REDO::CHANGED, appendUndo );
         appendUndo = true;
         ref.Annotate();
 
         KIID_PATH full_uuid = sheet->Path();
-        full_uuid.push_back( comp->m_Uuid );
+        full_uuid.push_back( symbol->m_Uuid );
 
         wxString  prevRef = previousAnnotation[ full_uuid.AsString() ];
-        wxString  newRef  = comp->GetRef( sheet );
+        wxString  newRef  = symbol->GetRef( sheet );
 
-        if( comp->GetUnitCount() > 1 )
-            newRef << LIB_PART::SubReference( comp->GetUnitSelection( sheet ) );
+        if( symbol->GetUnitCount() > 1 )
+            newRef << LIB_PART::SubReference( symbol->GetUnitSelection( sheet ) );
 
         wxString msg;
 
@@ -213,28 +213,28 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
             if( newRef == prevRef )
                 continue;
 
-            if( comp->GetUnitCount() > 1 )
+            if( symbol->GetUnitCount() > 1 )
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s" ),
-                            comp->GetValue( sheet ),
-                            LIB_PART::SubReference( comp->GetUnit(), false ),
+                            symbol->GetValue( sheet ),
+                            LIB_PART::SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
             else
                 msg.Printf( _( "Updated %s from %s to %s" ),
-                            comp->GetValue( sheet ),
+                            symbol->GetValue( sheet ),
                             prevRef,
                             newRef );
         }
         else
         {
-            if( comp->GetUnitCount() > 1 )
+            if( symbol->GetUnitCount() > 1 )
                 msg.Printf( _( "Annotated %s (unit %s) as %s" ),
-                            comp->GetValue( sheet ),
-                            LIB_PART::SubReference( comp->GetUnit(), false ),
+                            symbol->GetValue( sheet ),
+                            LIB_PART::SubReference( symbol->GetUnit(), false ),
                             newRef );
             else
                 msg.Printf( _( "Annotated %s as %s" ),
-                            comp->GetValue( sheet ),
+                            symbol->GetValue( sheet ),
                             newRef );
         }
 
@@ -260,18 +260,18 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
 
 int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
 {
-    SCH_REFERENCE_LIST  componentsList;
+    SCH_REFERENCE_LIST  referenceList;
     constexpr bool      includePowerSymbols = false;
 
-    // Build the list of components
+    // Build the list of symbols
     if( !aOneSheetOnly )
-        Schematic().GetSheets().GetComponents( componentsList, includePowerSymbols );
+        Schematic().GetSheets().GetSymbols( referenceList, includePowerSymbols );
     else
-        GetCurrentSheet().GetComponents( componentsList );
+        GetCurrentSheet().GetSymbols( referenceList );
 
     // Empty schematic does not need annotation
-    if( componentsList.GetCount() == 0 )
+    if( referenceList.GetCount() == 0 )
         return 0;
 
-    return componentsList.CheckAnnotation( aReporter );
+    return referenceList.CheckAnnotation( aReporter );
 }

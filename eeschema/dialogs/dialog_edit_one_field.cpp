@@ -339,21 +339,21 @@ void DIALOG_SCH_EDIT_ONE_FIELD::onScintillaCharAdded( wxStyledTextEvent &aEvent 
             wxString           ref = m_StyledTextCtrl->GetRange( refStart, start - 1 );
             SCH_SHEET_LIST     sheets = editFrame->Schematic().GetSheets();
             SCH_REFERENCE_LIST refs;
-            SCH_COMPONENT*     refComponent = nullptr;
+            SCH_COMPONENT*     refSymbol = nullptr;
 
-            sheets.GetComponents( refs );
+            sheets.GetSymbols( refs );
 
             for( size_t jj = 0; jj < refs.GetCount(); jj++ )
             {
-                if( refs[ jj ].GetComp()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
+                if( refs[ jj ].GetSymbol()->GetRef( &refs[ jj ].GetSheetPath(), true ) == ref )
                 {
-                    refComponent = refs[ jj ].GetComp();
+                    refSymbol = refs[ jj ].GetSymbol();
                     break;
                 }
             }
 
-            if( refComponent )
-                refComponent->GetContextualTextVars( &autocompleteTokens );
+            if( refSymbol )
+                refSymbol->GetContextualTextVars( &autocompleteTokens );
         }
     }
     else if( textVarRef( start ) )

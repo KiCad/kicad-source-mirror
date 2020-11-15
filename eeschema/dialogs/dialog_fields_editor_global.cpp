@@ -167,7 +167,7 @@ protected:
     // The data model is fundamentally m_componentRefs X m_fieldNames.
 
     SCH_EDIT_FRAME*       m_frame;
-    SCH_REFERENCE_LIST    m_componentRefs;
+    SCH_REFERENCE_LIST    m_symbolsList;
     bool                  m_edited;
     std::vector<wxString> m_fieldNames;
     int                   m_sortColumn;
@@ -189,14 +189,14 @@ protected:
 
 
 public:
-    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aComponentList ) :
+    FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aSymbolsList ) :
             m_frame( aFrame ),
-            m_componentRefs( aComponentList ),
+            m_symbolsList( aSymbolsList ),
             m_edited( false ),
             m_sortColumn( 0 ),
             m_sortAscending( false )
     {
-        m_componentRefs.SplitReferences();
+        m_symbolsList.SplitReferences();
     }
 
 
@@ -204,10 +204,10 @@ public:
     {
         m_fieldNames.push_back( aFieldName );
 
-        for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
+        for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
-            SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
-            m_dataStore[ comp->m_Uuid ][ aFieldName ] = comp->GetFieldText( aFieldName, m_frame );
+            SCH_COMPONENT* symbol = m_symbolsList[ i ].GetSymbol();
+            m_dataStore[ symbol->m_Uuid ][ aFieldName ] = symbol->GetFieldText( aFieldName, m_frame );
         }
     }
 
@@ -281,19 +281,19 @@ public:
             }
             else // Other columns are either a single value or ROW_MULTI_ITEMS
             {
-                const KIID& compID = ref.GetComp()->m_Uuid;
+                const KIID& symbolID = ref.GetSymbol()->m_Uuid;
 
-                if( !m_dataStore.count( compID ) ||
-                        !m_dataStore[ compID ].count( m_fieldNames[ aCol ] ) )
+                if( !m_dataStore.count( symbolID ) ||
+                    !m_dataStore[ symbolID ].count( m_fieldNames[ aCol ] ) )
                 {
                     return INDETERMINATE_STATE;
                 }
 
                 if( &ref == &group.m_Refs.front() )
                 {
-                    fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol ] ];
+                    fieldValue = m_dataStore[ symbolID ][ m_fieldNames[ aCol ] ];
                 }
-                else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol ] ] )
+                else if ( fieldValue != m_dataStore[ symbolID ][ m_fieldNames[ aCol ] ] )
                 {
                     return INDETERMINATE_STATE;
                 }
@@ -348,7 +348,7 @@ public:
         wxString fieldName = m_fieldNames[ aCol ];
 
         for( const auto& ref : rowGroup.m_Refs )
-            m_dataStore[ ref.GetComp()->m_Uuid ][ fieldName ] = aValue;
+            m_dataStore[ ref.GetSymbol()->m_Uuid ][ fieldName ] = aValue;
 
         m_edited = true;
     }
@@ -411,8 +411,7 @@ public:
 
     bool unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
     {
-        // If items are unannotated then we can't tell if they're units of the same
-        // component or not
+        // If items are unannotated then we can't tell if they're units of the same symbol or not
         if( lhRef.GetRefNumber() == wxT( "?" ) )
             return false;
 
@@ -436,8 +435,8 @@ public:
             matchFound = true;
         }
 
-        const KIID& lhRefID = lhRef.GetComp()->m_Uuid;
-        const KIID& rhRefID = rhRef.GetComp()->m_Uuid;
+        const KIID& lhRefID = lhRef.GetSymbol()->m_Uuid;
+        const KIID& rhRefID = rhRef.GetSymbol()->m_Uuid;
 
         // Now check all the other columns.  This must be done out of the dataStore
         // for the refresh button to work after editing.
@@ -458,7 +457,7 @@ public:
     }
 
 
-    void RebuildRows( wxCheckBox* groupComponentsBox, wxDataViewListCtrl* fieldsCtrl )
+    void RebuildRows( wxCheckBox* aGroupSymbolsBox, wxDataViewListCtrl* aFieldsCtrl )
     {
         if ( GetView() )
         {
@@ -472,12 +471,12 @@ public:
 
         m_rows.clear();
 
-        for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
+        for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
-            SCH_REFERENCE ref = m_componentRefs[ i ];
-            bool matchFound = false;
+            SCH_REFERENCE ref = m_symbolsList[ i ];
+            bool          matchFound = false;
 
-            // See if we already have a row which this component fits into
+            // See if we already have a row which this symbol fits into
             for( auto& row : m_rows )
             {
                 // all group members must have identical refs so just use the first one
@@ -489,7 +488,7 @@ public:
                     row.m_Refs.push_back( ref );
                     break;
                 }
-                else if (groupComponentsBox->GetValue() && groupMatch( ref, rowRef, fieldsCtrl ) )
+                else if ( aGroupSymbolsBox->GetValue() && groupMatch( ref, rowRef, aFieldsCtrl ) )
                 {
                     matchFound = true;
                     row.m_Refs.push_back( ref );
@@ -518,7 +517,7 @@ public:
         {
             bool matchFound = false;
 
-            // See if we already have a child group which this component fits into
+            // See if we already have a child group which this symbol fits into
             for( auto& child : children )
             {
                 // group members are by definition all matching, so just check
@@ -608,30 +607,30 @@ public:
 
     void ApplyData()
     {
-        for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
+        for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
         {
-            SCH_COMPONENT& comp = *m_componentRefs[i].GetComp();
-            SCH_SCREEN*    screen = m_componentRefs[i].GetSheetPath().LastScreen();
+            SCH_COMPONENT& symbol = *m_symbolsList[ i ].GetSymbol();
+            SCH_SCREEN*    screen = m_symbolsList[i].GetSheetPath().LastScreen();
 
-            m_frame->SaveCopyInUndoList( screen, &comp, UNDO_REDO::CHANGED, true );
+            m_frame->SaveCopyInUndoList( screen, &symbol, UNDO_REDO::CHANGED, true );
 
-            const std::map<wxString, wxString>& fieldStore = m_dataStore[comp.m_Uuid];
+            const std::map<wxString, wxString>& fieldStore = m_dataStore[symbol.m_Uuid];
 
             for( const std::pair<wxString, wxString> srcData : fieldStore )
             {
                 const wxString& srcName = srcData.first;
                 const wxString& srcValue = srcData.second;
-                SCH_FIELD*      destField = comp.FindField( srcName );
+                SCH_FIELD*      destField = symbol.FindField( srcName );
 
                 if( !destField && !srcValue.IsEmpty() )
                 {
-                    const auto compOrigin = comp.GetPosition();
-                    destField = comp.AddField( SCH_FIELD( compOrigin, -1, &comp, srcName ) );
+                    const wxPoint symbolPos = symbol.GetPosition();
+                    destField = symbol.AddField( SCH_FIELD( symbolPos, -1, &symbol, srcName ) );
                 }
 
                 if( !destField )
                 {
-                    comp.RemoveField( srcName );
+                    symbol.RemoveField( srcName );
                 }
                 else if( destField->GetId() == REFERENCE_FIELD )
                 {
@@ -641,11 +640,11 @@ public:
                 {
                     // Value field cannot be empty
                     if( !srcValue.IsEmpty() )
-                        comp.SetValue( srcValue );
+                        symbol.SetValue( srcValue );
                 }
                 else if( destField->GetId() == FOOTPRINT_FIELD )
                 {
-                    comp.SetFootprint( srcValue );
+                    symbol.SetFootprint( srcValue );
                 }
                 else
                 {
@@ -671,12 +670,12 @@ public:
         }
         else
         {
-            wxString column_label = GetColLabelValue( aCol );  // component fieldName or Qty string
+            wxString column_label = GetColLabelValue( aCol );  // symbol fieldName or Qty string
 
-            for( unsigned compRef = 0; compRef < m_componentRefs.GetCount(); ++ compRef )
+            for( unsigned symbolRef = 0; symbolRef < m_symbolsList.GetCount(); ++ symbolRef )
             {
-                const KIID& compId = m_componentRefs[ compRef ].GetComp()->m_Uuid;
-                wxString    text = m_dataStore[ compId ][ column_label ];
+                const KIID& symbolID = m_symbolsList[ symbolRef ].GetSymbol()->m_Uuid;
+                wxString    text = m_dataStore[ symbolID ][ column_label ];
 
                 width = std::max( width, KIUI::GetTextSize( text, GetView() ).x );
             }
@@ -699,8 +698,8 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 {
     wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
 
-    // Get all components from the list of schematic sheets
-    m_parent->Schematic().GetSheets().GetComponents( m_componentRefs, false );
+    // Get all symbols from the list of schematic sheets
+    m_parent->Schematic().GetSheets().GetSymbols( m_symbolsList, false );
 
     m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 
@@ -725,7 +724,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
     m_fieldsCtrl->SetIndent( 0 );
 
-    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_parent, m_componentRefs );
+    m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_parent, m_symbolsList );
 
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
@@ -754,7 +753,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
 
-    m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+    m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
 
     // wxGrid's column moving is buggy with native headers and this is one dialog where you'd
@@ -866,19 +865,19 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
     TOOL_MANAGER*      toolMgr = m_parent->GetToolManager();
     EE_SELECTION_TOOL* selectionTool = toolMgr->GetTool<EE_SELECTION_TOOL>();
     EE_SELECTION&      selection = selectionTool->GetSelection();
-    SCH_COMPONENT* component = nullptr;
+    SCH_COMPONENT*     symbol = nullptr;
 
     if( selection.GetSize() == 1 )
     {
         EDA_ITEM*      item = selection.Front();
 
         if( item->Type() == SCH_COMPONENT_T )
-            component = (SCH_COMPONENT*) item;
+            symbol = (SCH_COMPONENT*) item;
         else if( item->GetParent() && item->GetParent()->Type() == SCH_COMPONENT_T )
-            component = (SCH_COMPONENT*) item->GetParent();
+            symbol = (SCH_COMPONENT*) item->GetParent();
     }
 
-    if( component )
+    if( symbol )
     {
         for( int row = 0; row < m_dataModel->GetNumberRows(); ++row )
         {
@@ -887,7 +886,7 @@ bool DIALOG_FIELDS_EDITOR_GLOBAL::TransferDataToWindow()
 
             for( const SCH_REFERENCE& ref : references )
             {
-                if( ref.GetComp() == component )
+                if( ref.GetSymbol() == symbol )
                 {
                     found = true;
                     break;
@@ -967,12 +966,12 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 {
     std::set<wxString> userFieldNames;
 
-    for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
+    for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
     {
-        SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
+        SCH_COMPONENT* symbol = m_symbolsList[ i ].GetSymbol();
 
-        for( int j = MANDATORY_FIELDS; j < comp->GetFieldCount(); ++j )
-            userFieldNames.insert( comp->GetField( j )->GetName() );
+        for( int j = MANDATORY_FIELDS; j < symbol->GetFieldCount(); ++j )
+            userFieldNames.insert( symbol->GetField( j )->GetName() );
     }
 
     // Force References to always be shown
@@ -1090,7 +1089,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
         std::string fieldName( m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN ).ToUTF8() );
         cfg->m_FieldEditorPanel.fields_group_by[fieldName] = value;
 
-        m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+        m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
         m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
         m_grid->ForceRefresh();
         break;
@@ -1099,9 +1098,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColumnItemToggled( wxDataViewEvent& event )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnGroupComponentsToggled( wxCommandEvent& event )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnGroupSymbolsToggled( wxCommandEvent& event )
 {
-    m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+    m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
 }
@@ -1145,9 +1144,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableColSize( wxGridSizeEvent& aEvent )
 }
 
 
-void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupComponents( wxCommandEvent& aEvent )
+void DIALOG_FIELDS_EDITOR_GLOBAL::OnRegroupSymbols( wxCommandEvent& aEvent )
 {
-    m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
+    m_dataModel->RebuildRows( m_groupSymbolsBox, m_fieldsCtrl );
     m_dataModel->Sort( m_grid->GetSortingColumn(), m_grid->IsSortOrderAscending() );
     m_grid->ForceRefresh();
 }
@@ -1163,7 +1162,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
         m_dataModel->ExpandCollapseRow( event.GetRow() );
         std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( event.GetRow() );
 
-        // Focus Eeschema view on the component selected in the dialog
+        // Focus Eeschema view on the symbol selected in the dialog
         if( refs.size() == 1 )
         {
             SCH_EDITOR_CONTROL* editor = m_parent->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>();

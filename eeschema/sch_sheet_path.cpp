@@ -261,8 +261,8 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences()
 
 
 
-void SCH_SHEET_PATH::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
-                                    bool aForceIncludeOrphanComponents ) const
+void SCH_SHEET_PATH::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
+                                 bool aForceIncludeOrphanComponents ) const
 {
     for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
@@ -693,16 +693,16 @@ void SCH_SHEET_LIST::AnnotatePowerSymbols()
 }
 
 
-void SCH_SHEET_LIST::GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
-                                    bool aForceIncludeOrphanComponents ) const
+void SCH_SHEET_LIST::GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols,
+                                 bool aForceIncludeOrphanComponents ) const
 {
     for( const SCH_SHEET_PATH& sheet : *this )
-        sheet.GetComponents( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
+        sheet.GetSymbols( aReferences, aIncludePowerSymbols, aForceIncludeOrphanComponents );
 }
 
 
-void SCH_SHEET_LIST::GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                             bool aIncludePowerSymbols ) const
+void SCH_SHEET_LIST::GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                                          bool aIncludePowerSymbols ) const
 {
     for( SCH_SHEET_PATHS::const_iterator it = begin(); it != end(); ++it )
     {
@@ -778,7 +778,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
 {
     SCH_REFERENCE_LIST symbolInstances;
 
-    GetComponents( symbolInstances, true, true );
+    GetSymbols( symbolInstances, true, true );
 
     std::map<KIID_PATH, wxString> pathNameCache;
 
@@ -811,7 +811,7 @@ void SCH_SHEET_LIST::UpdateSymbolInstances(
             continue;
         }
 
-        SCH_COMPONENT* symbol = symbolInstances[i].GetComp();
+        SCH_COMPONENT* symbol = symbolInstances[ i ].GetSymbol();
 
         wxCHECK2( symbol, continue );
 

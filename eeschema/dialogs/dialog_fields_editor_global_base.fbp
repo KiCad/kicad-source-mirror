@@ -227,7 +227,7 @@
                                                     <property name="minimize_button">0</property>
                                                     <property name="minimum_size"></property>
                                                     <property name="moveable">1</property>
-                                                    <property name="name">m_groupComponentsBox</property>
+                                                    <property name="name">m_groupSymbolsBox</property>
                                                     <property name="pane_border">1</property>
                                                     <property name="pane_position"></property>
                                                     <property name="pane_size"></property>
@@ -240,7 +240,7 @@
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
-                                                    <property name="tooltip">Group components together based on common properties</property>
+                                                    <property name="tooltip">Group symbols together based on common properties</property>
                                                     <property name="validator_data_type"></property>
                                                     <property name="validator_style">wxFILTER_NONE</property>
                                                     <property name="validator_type">wxDefaultValidator</property>
@@ -248,7 +248,7 @@
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
-                                                    <event name="OnCheckBox">OnGroupComponentsToggled</event>
+                                                    <event name="OnCheckBox">OnGroupSymbolsToggled</event>
                                                 </object>
                                             </object>
                                             <object class="sizeritem" expanded="0">
@@ -331,7 +331,7 @@
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
                                                     <property name="window_style"></property>
-                                                    <event name="OnButtonClick">OnRegroupComponents</event>
+                                                    <event name="OnButtonClick">OnRegroupSymbols</event>
                                                 </object>
                                             </object>
                                         </object>

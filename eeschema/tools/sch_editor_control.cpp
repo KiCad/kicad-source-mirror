@@ -1246,7 +1246,7 @@ bool SCH_EDITOR_CONTROL::doCopy()
     }
 
     m_supplementaryClipboardInstances.Clear();
-    schematic.GetSheets().GetComponents( m_supplementaryClipboardInstances, true, true );
+    schematic.GetSheets().GetSymbols( m_supplementaryClipboardInstances, true, true );
     m_supplementaryClipboardPath = m_frame->GetCurrentSheet().Path();
 
     STRING_FORMATTER formatter;

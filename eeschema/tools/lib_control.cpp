@@ -379,7 +379,7 @@ int LIB_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
         pageTemp.SetHeightMils( int( componentSize.y * 1.2 ) );
 
         editFrame->GetScreen()->SetPageSettings( pageTemp );
-        editFrame->SVG_PlotComponent( fullFileName );
+        editFrame->SVGPlotSymbol( fullFileName );
         editFrame->GetScreen()->SetPageSettings( pageSave );
     }
 

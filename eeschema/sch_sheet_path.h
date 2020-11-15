@@ -293,8 +293,8 @@ public:
      * ( orphan components)
      * The normal option is false, and set to true only to build the full list of components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
-                        bool aForceIncludeOrphanComponents = false ) const;
+    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+                     bool aForceIncludeOrphanComponents = false ) const;
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
@@ -408,8 +408,8 @@ public:
      * ( orphan components)
      * The normal option is false, and set to true only to build the full list of components.
      */
-    void GetComponents( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
-                        bool aForceIncludeOrphanComponents = false ) const;
+    void GetSymbols( SCH_REFERENCE_LIST& aReferences, bool aIncludePowerSymbols = true,
+                     bool aForceIncludeOrphanComponents = false ) const;
 
     /**
      * Add a #SCH_REFERENCE_LIST object to \a aRefList for each same-reference set of
@@ -419,8 +419,8 @@ public:
      * @param aRefList Map of reference designators to reference lists
      * @param aIncludePowerSymbols Set to false to only get normal components.
      */
-    void GetMultiUnitComponents( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
-                                 bool aIncludePowerSymbols = true ) const;
+    void GetMultiUnitSymbols( SCH_MULTI_UNIT_REFERENCE_MAP &aRefList,
+                              bool aIncludePowerSymbols = true ) const;
 
     /**
      * Test every #SCH_SHEET_PATH in this #SCH_SHEET_LIST to verify if adding the sheets stored

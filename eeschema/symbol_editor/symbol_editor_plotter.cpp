@@ -29,7 +29,7 @@
 #include <class_library.h>
 #include <plotters_specific.h>
 
-void SYMBOL_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
+void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 {
     KIGFX::SCH_RENDER_SETTINGS renderSettings;
     renderSettings.LoadColors( GetColorSettings() );

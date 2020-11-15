@@ -46,7 +46,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
     SCH_SHEET_LIST      sheets    = m_frame->Schematic().GetSheets();
     bool                isChanged = false;
 
-    sheets.GetComponents( refs, false );
+    sheets.GetSymbols( refs, false );
 
     DSNLEXER lexer( aChangedSetOfReferences, FROM_UTF8( __func__ ) );
     PTREE    doc;
@@ -81,7 +81,7 @@ void SCH_EDITOR_CONTROL::AssignFootprints( const std::string& aChangedSetOfRefer
                     // We have found a candidate.
                     // Note: it can be not unique (multiple parts per package)
                     // So we *do not* stop the search here
-                    SCH_COMPONENT*  component = refs[ii].GetComp();
+                    SCH_COMPONENT*  component = refs[ ii ].GetSymbol();
                     // For backwards-compatibility CvPcb currently updates all instances of a
                     // component (even though it lists these instances separately).
                     SCH_SHEET_PATH* sheetPath = nullptr;    // &refs[ii].GetSheetPath();
@@ -122,7 +122,7 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
     SCH_REFERENCE_LIST  referencesList;
     SCH_SHEET_LIST      sheetList = m_frame->Schematic().GetSheets();
 
-    sheetList.GetComponents( referencesList, false );
+    sheetList.GetSymbols( referencesList, false );
 
     FILE* cmpFile = wxFopen( aFullFilename, wxT( "rt" ) );
 
@@ -182,13 +182,13 @@ bool SCH_EDITOR_CONTROL::processCmpToFootprintLinkFile( const wxString& aFullFil
                 // We have found a candidate.
                 // Note: it can be not unique (multiple units per part)
                 // So we *do not* stop the search here
-                SCH_COMPONENT*  component = referencesList[ii].GetComp();
+                SCH_COMPONENT*  symbol = referencesList[ ii ].GetSymbol();
                 SCH_SHEET_PATH* sheetPath = &referencesList[ii].GetSheetPath();
 
-                component->SetFootprint( sheetPath, footprint );
+                symbol->SetFootprint( sheetPath, footprint );
 
                 if( aForceVisibilityState )
-                    component->GetField( FOOTPRINT_FIELD )->SetVisible( aVisibilityState );
+                    symbol->GetField( FOOTPRINT_FIELD )->SetVisible( aVisibilityState );
             }
         }
     }

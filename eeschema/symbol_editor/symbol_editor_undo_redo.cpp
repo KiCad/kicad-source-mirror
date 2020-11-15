@@ -57,7 +57,7 @@ void SYMBOL_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO aUndoType
 }
 
 
-void SYMBOL_EDIT_FRAME::GetComponentFromRedoList()
+void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
 {
     if( GetRedoCommandCount() <= 0 )
         return;
@@ -105,7 +105,7 @@ void SYMBOL_EDIT_FRAME::GetComponentFromRedoList()
 }
 
 
-void SYMBOL_EDIT_FRAME::GetComponentFromUndoList()
+void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
 {
     if( GetUndoCommandCount() <= 0 )
         return;
@@ -153,7 +153,7 @@ void SYMBOL_EDIT_FRAME::GetComponentFromUndoList()
 }
 
 
-void SYMBOL_EDIT_FRAME::RollbackPartFromUndo()
+void SYMBOL_EDIT_FRAME::RollbackSymbolFromUndo()
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
