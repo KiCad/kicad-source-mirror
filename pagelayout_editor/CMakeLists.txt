@@ -13,22 +13,25 @@ include_directories(
     ${INC_AFTER}
     )
 
-set( PL_EDITOR_SRCS
+set( DIALOGS_SRCS
+    dialogs/properties_frame.cpp
     dialogs/properties_frame_base.cpp
     dialogs/dialogs_for_printing.cpp
     dialogs/dialog_new_dataitem_base.cpp
     dialogs/dialog_new_dataitem.cpp
     dialogs/dialog_design_inspector_base.cpp
+    dialogs/design_inspector.cpp
     dialogs/panel_pl_editor_color_settings.cpp
     dialogs/panel_pl_editor_color_settings_base.cpp
-    design_inspector.cpp
+    )
+
+set( PL_EDITOR_SRCS
     pl_editor_layout.cpp
     files.cpp
     pl_editor_frame.cpp
     pl_editor_settings.cpp
     pl_draw_panel_gal.cpp
     pl_editor_undo_redo.cpp
-    properties_frame.cpp
     menubar.cpp
     toolbars_pl_editor.cpp
 
