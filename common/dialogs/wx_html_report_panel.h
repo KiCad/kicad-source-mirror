@@ -146,10 +146,10 @@ private:
     bool m_lazyUpdate;
 
     ///> Print "Info:" at the front of Info messages (default)
-    bool m_PrintInfo;
+    bool m_printInfo;
 
     ///> Use this as the filename instead of /bin/report.txt (default)
-    wxString m_ReportFileName;
+    wxString m_reportFileName;
 };
 
 #endif //__WX_HTML_REPORT_PANEL_H__

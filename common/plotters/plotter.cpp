@@ -49,18 +49,18 @@
 
 PLOTTER::PLOTTER( )
 {
-    plotScale = 1;
-    currentPenWidth = -1;       // To-be-set marker
-    penState = 'Z';             // End-of-path idle
+    m_plotScale = 1;
+    m_currentPenWidth = -1;       // To-be-set marker
+    m_penState = 'Z';             // End-of-path idle
     m_plotMirror = false;       // Plot mirror option flag
     m_mirrorIsHorizontal = true;
     m_yaxisReversed = false;
-    outputFile = 0;
-    colorMode = false;          // Starts as a BW plot
-    negativeMode = false;
+    m_outputFile = 0;
+    m_colorMode = false;          // Starts as a BW plot
+    m_negativeMode = false;
     // Temporary init to avoid not initialized vars, will be set later
     m_IUsPerDecimil = 1;        // will be set later to the actual value
-    iuPerDeviceUnit = 1;        // will be set later to the actual value
+    m_iuPerDeviceUnit = 1;        // will be set later to the actual value
     m_renderSettings = nullptr;
 }
 
@@ -68,22 +68,22 @@ PLOTTER::~PLOTTER()
 {
     // Emergency cleanup, but closing the file is
     // usually made in EndPlot().
-    if( outputFile )
-        fclose( outputFile );
+    if( m_outputFile )
+        fclose( m_outputFile );
 }
 
 
 bool PLOTTER::OpenFile( const wxString& aFullFilename )
 {
-    filename = aFullFilename;
+    m_filename = aFullFilename;
 
-    wxASSERT( !outputFile );
+    wxASSERT( !m_outputFile );
 
     // Open the file in text mode (not suitable for all plotters
     // but only for most of them
-    outputFile = wxFopen( filename, wxT( "wt" ) );
+    m_outputFile = wxFopen( m_filename, wxT( "wt" ) );
 
-    if( outputFile == NULL )
+    if( m_outputFile == NULL )
         return false ;
 
     return true;
@@ -92,7 +92,7 @@ bool PLOTTER::OpenFile( const wxString& aFullFilename )
 
 DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& aCoordinate )
 {
-    wxPoint pos = aCoordinate - plotOffset;
+    wxPoint pos = aCoordinate - m_plotOffset;
 
     // Don't allow overflows; they can cause rendering failures in some file viewers
     // (such as Acrobat)
@@ -100,22 +100,22 @@ DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& aCoordinate )
     pos.x = std::max( -clampSize, std::min( pos.x, clampSize ) );
     pos.y = std::max( -clampSize, std::min( pos.y, clampSize ) );
 
-    double x = pos.x * plotScale;
-    double y = ( paperSize.y - pos.y * plotScale );
+    double x = pos.x * m_plotScale;
+    double y = ( m_paperSize.y - pos.y * m_plotScale );
 
     if( m_plotMirror )
     {
         if( m_mirrorIsHorizontal )
-            x = ( paperSize.x - pos.x * plotScale );
+            x = ( m_paperSize.x - pos.x * m_plotScale );
         else
-            y = pos.y * plotScale;
+            y = pos.y * m_plotScale;
     }
 
     if( m_yaxisReversed )
-        y = paperSize.y - y;
+        y = m_paperSize.y - y;
 
-    x *= iuPerDeviceUnit;
-    y *= iuPerDeviceUnit;
+    x *= m_iuPerDeviceUnit;
+    y *= m_iuPerDeviceUnit;
 
     return DPOINT( x, y );
 }
@@ -123,14 +123,14 @@ DPOINT PLOTTER::userToDeviceCoordinates( const wxPoint& aCoordinate )
 
 DPOINT PLOTTER::userToDeviceSize( const wxSize& size )
 {
-    return DPOINT( size.x * plotScale * iuPerDeviceUnit,
-	           size.y * plotScale * iuPerDeviceUnit );
+    return DPOINT( size.x * m_plotScale * m_iuPerDeviceUnit,
+                   size.y * m_plotScale * m_iuPerDeviceUnit );
 }
 
 
 double PLOTTER::userToDeviceSize( double size ) const
 {
-    return size * plotScale * iuPerDeviceUnit;
+    return size * m_plotScale * m_iuPerDeviceUnit;
 }
 
 
@@ -458,7 +458,7 @@ void PLOTTER::segmentAsOval( const wxPoint& start, const wxPoint& end, int width
 void PLOTTER::sketchOval( const wxPoint& pos, const wxSize& aSize, double orient, int width )
 {
     SetCurrentLineWidth( width );
-    width = currentPenWidth;
+    width = m_currentPenWidth;
     int radius, deltaxy, cx, cy;
     wxSize size( aSize );
 
@@ -536,9 +536,9 @@ void PLOTTER::ThickArc( const wxPoint& centre, double StAngle, double EndAngle,
     {
         SetCurrentLineWidth( -1 );
         Arc( centre, StAngle, EndAngle,
-             radius - ( width - currentPenWidth ) / 2, FILL_TYPE::NO_FILL, -1 );
+             radius - ( width - m_currentPenWidth ) / 2, FILL_TYPE::NO_FILL, -1 );
         Arc( centre, StAngle, EndAngle,
-             radius + ( width - currentPenWidth ) / 2, FILL_TYPE::NO_FILL, -1 );
+             radius + ( width - m_currentPenWidth ) / 2, FILL_TYPE::NO_FILL, -1 );
     }
 }
 
@@ -551,15 +551,15 @@ void PLOTTER::ThickRect( const wxPoint& p1, const wxPoint& p2, int width,
     else
     {
         SetCurrentLineWidth( -1 );
-        wxPoint offsetp1( p1.x - (width - currentPenWidth) / 2,
-                          p1.y - (width - currentPenWidth) / 2 );
-        wxPoint offsetp2( p2.x + (width - currentPenWidth) / 2,
-			  p2.y + (width - currentPenWidth) / 2 );
+        wxPoint offsetp1( p1.x - (width - m_currentPenWidth) / 2,
+                          p1.y - (width - m_currentPenWidth) / 2 );
+        wxPoint offsetp2( p2.x + (width - m_currentPenWidth) / 2,
+			  p2.y + (width - m_currentPenWidth) / 2 );
         Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
-        offsetp1.x += (width - currentPenWidth);
-        offsetp1.y += (width - currentPenWidth);
-        offsetp2.x -= (width - currentPenWidth);
-        offsetp2.y -= (width - currentPenWidth);
+        offsetp1.x += (width - m_currentPenWidth);
+        offsetp1.y += (width - m_currentPenWidth);
+        offsetp2.x -= (width - m_currentPenWidth);
+        offsetp2.y -= (width - m_currentPenWidth);
         Rect( offsetp1, offsetp2, FILL_TYPE::NO_FILL, -1 );
     }
 }
@@ -575,8 +575,8 @@ void PLOTTER::ThickCircle( const wxPoint& pos, int diametre, int width, OUTLINE_
     else
     {
         SetCurrentLineWidth( -1 );
-        Circle( pos, diametre - width + currentPenWidth, FILL_TYPE::NO_FILL, -1 );
-        Circle( pos, diametre + width - currentPenWidth, FILL_TYPE::NO_FILL, -1 );
+        Circle( pos, diametre - width + m_currentPenWidth, FILL_TYPE::NO_FILL, -1 );
+        Circle( pos, diametre + width - m_currentPenWidth, FILL_TYPE::NO_FILL, -1 );
     }
 }
 

@@ -152,23 +152,23 @@ void DXF_PLOTTER::SetUnits( DXF_UNITS aUnit )
 void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                double aScale, bool aMirror )
 {
-    plotOffset  = aOffset;
-    plotScale   = aScale;
+    m_plotOffset  = aOffset;
+    m_plotScale   = aScale;
 
     /* DXF paper is 'virtual' so there is no need of a paper size.
        Also this way we can handle the aux origin which can be useful
        (for example when aligning to a mechanical drawing) */
-    paperSize.x = 0;
-    paperSize.y = 0;
+    m_paperSize.x = 0;
+    m_paperSize.y = 0;
 
     /* Like paper size DXF units are abstract too. Anyway there is a
      * system variable (MEASUREMENT) which will be set to 0 to indicate
      * english units */
     m_IUsPerDecimil = aIusPerDecimil;
-    iuPerDeviceUnit = 1.0 / aIusPerDecimil; // Gives a DXF in decimils
-    iuPerDeviceUnit *= GetUnitScaling();    // Get the scaling factor for the current units
+    m_iuPerDeviceUnit = 1.0 / aIusPerDecimil; // Gives a DXF in decimils
+    m_iuPerDeviceUnit *= GetUnitScaling();    // Get the scaling factor for the current units
 
-    m_plotMirror = false;                   // No mirroring on DXF
+    m_plotMirror = false;                     // No mirroring on DXF
     m_currentColor = COLOR4D::BLACK;
 }
 
@@ -177,12 +177,12 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
  */
 bool DXF_PLOTTER::StartPlot()
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     // DXF HEADER - Boilerplate
     // Defines the minimum for drawing i.e. the angle system and the
     // 4 linetypes (CONTINUOUS, DOTDASH, DASHED and DOTTED)
-    fprintf( outputFile,
+    fprintf( m_outputFile,
             "  0\n"
             "SECTION\n"
             "  2\n"
@@ -293,7 +293,7 @@ bool DXF_PLOTTER::StartPlot()
             "-0.2\n"
             "  0\n"
             "ENDTAB\n",
-            GetMeasurementDirective() );
+             GetMeasurementDirective() );
 
     // Text styles table
     // Defines 4 text styles, one for each bold/italic combination
@@ -302,12 +302,12 @@ bool DXF_PLOTTER::StartPlot()
            "  2\n"
            "STYLE\n"
            "  70\n"
-           "4\n", outputFile );
+           "4\n", m_outputFile );
 
     static const char *style_name[4] = {"KICAD", "KICADB", "KICADI", "KICADBI"};
     for(int i = 0; i < 4; i++ )
     {
-        fprintf( outputFile,
+        fprintf( m_outputFile,
                  "  0\n"
                  "STYLE\n"
                  "  2\n"
@@ -339,7 +339,7 @@ bool DXF_PLOTTER::StartPlot()
         numLayers = static_cast<EDA_COLOR_T>( 1 );
 
     // Layer table - one layer per color
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "  0\n"
              "ENDTAB\n"
              "  0\n"
@@ -360,7 +360,7 @@ bool DXF_PLOTTER::StartPlot()
 
     for( EDA_COLOR_T i = BLACK; i < numLayers; i = static_cast<EDA_COLOR_T>( int( i ) + 1 )  )
     {
-        fprintf( outputFile,
+        fprintf( m_outputFile,
                  "  0\n"
                  "LAYER\n"
                  "  2\n"
@@ -382,7 +382,7 @@ bool DXF_PLOTTER::StartPlot()
            "  0\n"
            "SECTION\n"
            "  2\n"
-           "ENTITIES\n", outputFile );
+           "ENTITIES\n", m_outputFile );
 
     return true;
 }
@@ -390,15 +390,15 @@ bool DXF_PLOTTER::StartPlot()
 
 bool DXF_PLOTTER::EndPlot()
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     // DXF FOOTER
     fputs( "  0\n"
            "ENDSEC\n"
            "  0\n"
-           "EOF\n", outputFile );
-    fclose( outputFile );
-    outputFile = NULL;
+           "EOF\n", m_outputFile );
+    fclose( m_outputFile );
+    m_outputFile = NULL;
 
     return true;
 }
@@ -409,14 +409,16 @@ bool DXF_PLOTTER::EndPlot()
  */
 void DXF_PLOTTER::SetColor( COLOR4D color )
 {
-    if( ( colorMode )
+    if( ( m_colorMode )
        || ( color == COLOR4D::BLACK )
        || ( color == COLOR4D::WHITE ) )
     {
         m_currentColor = color;
     }
     else
+    {
         m_currentColor = COLOR4D::BLACK;
+    }
 }
 
 /**
@@ -424,7 +426,7 @@ void DXF_PLOTTER::SetColor( COLOR4D color )
  */
 void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     MoveTo( p1 );
     LineTo( wxPoint( p1.x, p2.y ) );
     LineTo( wxPoint( p2.x, p2.y ) );
@@ -441,7 +443,7 @@ void DXF_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, in
  */
 void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, int width )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     double radius = userToDeviceSize( diameter / 2 );
     DPOINT centre_dev = userToDeviceCoordinates( centre );
     if( radius > 0 )
@@ -450,24 +452,24 @@ void DXF_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill, i
 
         if( fill == FILL_TYPE::NO_FILL )
         {
-            fprintf( outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
-                    TO_UTF8( cname ),
-                    centre_dev.x, centre_dev.y, radius );
+            fprintf( m_outputFile, "0\nCIRCLE\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n",
+                     TO_UTF8( cname ),
+                     centre_dev.x, centre_dev.y, radius );
         }
 
         if( fill == FILL_TYPE::FILLED_SHAPE )
         {
             double r = radius*0.5;
-            fprintf( outputFile, "0\nPOLYLINE\n");
-            fprintf( outputFile, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ));
-            fprintf( outputFile, "40\n%g\n41\n%g\n", radius, radius);
-            fprintf( outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
-            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
+            fprintf( m_outputFile, "0\nPOLYLINE\n");
+            fprintf( m_outputFile, "8\n%s\n66\n1\n70\n1\n", TO_UTF8( cname ));
+            fprintf( m_outputFile, "40\n%g\n41\n%g\n", radius, radius);
+            fprintf( m_outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
+            fprintf( m_outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
                     centre_dev.x-r, centre_dev.y );
-            fprintf( outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
-            fprintf( outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
+            fprintf( m_outputFile, "0\nVERTEX\n8\n%s\n", TO_UTF8( cname ));
+            fprintf( m_outputFile, "10\n%g\n 20\n%g\n42\n1.0\n",
                     centre_dev.x+r, centre_dev.y );
-            fprintf( outputFile, "0\nSEQEND\n");
+            fprintf( m_outputFile, "0\nSEQEND\n");
         }
     }
 }
@@ -583,26 +585,27 @@ void DXF_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
 void DXF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
+
     if( plume == 'Z' )
     {
         return;
     }
     DPOINT pos_dev = userToDeviceCoordinates( pos );
-    DPOINT pen_lastpos_dev = userToDeviceCoordinates( penLastpos );
+    DPOINT pen_lastpos_dev = userToDeviceCoordinates( m_penLastpos );
 
-    if( penLastpos != pos && plume == 'D' )
+    if( m_penLastpos != pos && plume == 'D' )
     {
         wxASSERT( m_currentLineType >= PLOT_DASH_TYPE::FIRST_TYPE
                   && m_currentLineType <= PLOT_DASH_TYPE::LAST_TYPE );
         // DXF LINE
         wxString    cname = getDXFColorName( m_currentColor );
         const char* lname = getDXFLineType( static_cast<PLOT_DASH_TYPE>( m_currentLineType ) );
-        fprintf( outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
+        fprintf( m_outputFile, "0\nLINE\n8\n%s\n6\n%s\n10\n%g\n20\n%g\n11\n%g\n21\n%g\n",
                  TO_UTF8( cname ), lname,
                  pen_lastpos_dev.x, pen_lastpos_dev.y, pos_dev.x, pos_dev.y );
     }
-    penLastpos = pos;
+    m_penLastpos = pos;
 }
 
 
@@ -647,7 +650,7 @@ void DXF_PLOTTER::ThickSegment( const wxPoint& aStart, const wxPoint& aEnd, int 
 void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                        FILL_TYPE fill, int width )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     if( radius <= 0 )
         return;
@@ -665,7 +668,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 
     // Emit a DXF ARC entity
     wxString cname = getDXFColorName( m_currentColor );
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "0\nARC\n8\n%s\n10\n%g\n20\n%g\n40\n%g\n50\n%g\n51\n%g\n",
              TO_UTF8( cname ),
              centre_dev.x, centre_dev.y, radius_dev,
@@ -678,7 +681,7 @@ void DXF_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, i
 void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                 OUTLINE_MODE trace_mode, void* aData )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxSize size( aSize );
 
     /* The chip is reduced to an oval tablet with size.y > size.x
@@ -700,7 +703,7 @@ void DXF_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double 
 void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
                                     OUTLINE_MODE trace_mode, void* aData )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     Circle( pos, diametre, FILL_TYPE::NO_FILL );
 }
 
@@ -711,7 +714,7 @@ void DXF_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
 void DXF_PLOTTER::FlashPadRect( const wxPoint& pos, const wxSize& padsize,
                                 double orient, OUTLINE_MODE trace_mode, void* aData )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxSize size;
     int    ox, oy, fx, fy;
 
@@ -815,7 +818,7 @@ void DXF_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
 void DXF_PLOTTER::FlashPadTrapez( const wxPoint& aPadPos, const wxPoint *aCorners,
                                   double aPadOrient, OUTLINE_MODE aTrace_Mode, void* aData )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxPoint coord[4];       /* coord actual corners of a trapezoidal trace */
 
     for( int ii = 0; ii < 4; ii++ )
@@ -926,7 +929,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
         // Position, size, rotation and alignment
         // The two alignment point usages is somewhat idiot (see the DXF ref)
         // Anyway since we don't use the fit/aligned options, they're the same
-        fprintf( outputFile,
+        fprintf( m_outputFile,
                 "  0\n"
                 "TEXT\n"
                 "  7\n"
@@ -957,13 +960,13 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                 "%d\n",         // V alignment
                 aBold ? (aItalic ? "KICADBI" : "KICADB")
                       : (aItalic ? "KICADI" : "KICAD"),
-                TO_UTF8( cname ),
-                origin_dev.x, origin_dev.x,
-                origin_dev.y, origin_dev.y,
-                size_dev.y, fabs( size_dev.x / size_dev.y ),
-                aOrient / 10.0,
-                aItalic ? DXF_OBLIQUE_ANGLE : 0,
-                size_dev.x < 0 ? 2 : 0, // X mirror flag
+                 TO_UTF8( cname ),
+                 origin_dev.x, origin_dev.x,
+                 origin_dev.y, origin_dev.y,
+                 size_dev.y, fabs( size_dev.x / size_dev.y ),
+                 aOrient / 10.0,
+                 aItalic ? DXF_OBLIQUE_ANGLE : 0,
+                 size_dev.x < 0 ? 2 : 0, // X mirror flag
                 h_code, v_code );
 
         /* There are two issue in emitting the text:
@@ -990,7 +993,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
 
         bool overlining = false;
 
-        fputs( "  1\n", outputFile );
+        fputs( "  1\n", m_outputFile );
 
         for( unsigned i = 0; i < aText.length(); i++ )
         {
@@ -1005,7 +1008,7 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
             if( ch > 255 )
             {
                 // I can't encode this...
-                putc( '?', outputFile );
+                putc( '?', m_outputFile );
             }
             else
             {
@@ -1027,15 +1030,15 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                     else
                     {
                         // Handle the overline toggle
-                        fputs( overlining ? "%%o" : "%%O", outputFile );
+                        fputs( overlining ? "%%o" : "%%O", m_outputFile );
                         overlining = !overlining;
                     }
                 }
 
-                putc( ch, outputFile );
+                putc( ch, m_outputFile );
             }
         }
-        putc( '\n', outputFile );
+        putc( '\n', m_outputFile );
     }
 }
 

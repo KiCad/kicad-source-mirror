@@ -64,27 +64,14 @@ public:
         m_progressReporter = aProgressReporter;
     }
 
-    // fixme: don't directly expose any wx UI classes. Currently interface returns only
-    // an anonymous pointer so shouldn't introduce a dependency on wx unless wx is used
-    // by the particular exporter.
-    virtual wxDialog* CreateSettingsDialog( PROPERTIES* aProperties )
-    {
-        return nullptr;
-    }
-
-    virtual bool HasSettingsDialog() const
-    {
-        return false;
-    }
-
     virtual bool Run() = 0;
 
 protected:
-    PROPERTIES                            m_properties;
-    BOARD*                                m_board = nullptr;
-    wxFileName                            m_outputFilePath;
-    REPORTER* m_reporter = nullptr;
-    PROGRESS_REPORTER *m_progressReporter = nullptr;
+    PROPERTIES         m_properties;
+    BOARD*             m_board = nullptr;
+    wxFileName         m_outputFilePath;
+    REPORTER*          m_reporter = nullptr;
+    PROGRESS_REPORTER* m_progressReporter = nullptr;
 };
 
 #endif

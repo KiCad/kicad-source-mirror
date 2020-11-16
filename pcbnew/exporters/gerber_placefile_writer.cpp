@@ -44,10 +44,7 @@
 
 PLACEFILE_GERBER_WRITER::PLACEFILE_GERBER_WRITER( BOARD* aPcb )
 {
-    m_pcb = aPcb;
-    /* Set conversion scale depending on drill file units */
-    m_conversionUnits     = 1.0 / IU_PER_MM; // Gerber units = mm
-    m_forceSmdItems       = false;
+    m_pcb                 = aPcb;
     m_plotPad1Marker      = true; // Place a marker to pin 1 (or A1) position
     m_plotOtherPadsMarker = true; // Place a marker to other pins position
     m_layer               = PCB_LAYER_ID::UNDEFINED_LAYER; // No layer set

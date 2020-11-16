@@ -95,13 +95,13 @@ public:
 class DRILL_PRECISION
 {
 public:
-    int m_lhs;      // Left digit number (integer value of coordinates)
-    int m_rhs;      // Right digit number (decimal value of coordinates)
+    int m_Lhs;      // Left digit number (integer value of coordinates)
+    int m_Rhs;      // Right digit number (decimal value of coordinates)
 
 public:
     DRILL_PRECISION( int l = 2, int r = 4 )
     {
-        m_lhs = l; m_rhs = r;
+        m_Lhs = l; m_Rhs = r;
     }
 
 
@@ -109,7 +109,7 @@ public:
     {
         wxString text;
 
-        text << m_lhs << wxT( ":" ) << m_rhs;
+        text << m_Lhs << wxT( ":" ) << m_Rhs;
         return text;
     }
 };
@@ -208,8 +208,7 @@ public:
      * @param aPlotDirectory = the output folder
      * @param aReporter = a REPORTER to return activity or any message (can be NULL)
      */
-    void CreateMapFilesSet( const wxString& aPlotDirectory,
-                            REPORTER* aReporter = NULL );
+    void CreateMapFilesSet( const wxString& aPlotDirectory, REPORTER* aReporter = NULL );
 
     /**
      * Function GenDrillReportFile

@@ -33,11 +33,11 @@ WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
                                             const wxPoint& pos,
                                             const wxSize& size,
                                             long style ) :
-    WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
-    m_reporter( this ),
-    m_severities( -1 ),
-    m_lazyUpdate( false ),
-    m_PrintInfo( true )
+        WX_HTML_REPORT_PANEL_BASE( parent, id, pos, size, style ),
+        m_reporter( this ),
+        m_severities( -1 ),
+        m_lazyUpdate( false ),
+        m_printInfo( true )
 {
     syncCheckboxes();
     m_htmlView->SetPage( addHeader( "" ) );
@@ -314,10 +314,10 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
 {
     wxFileName fn;
 
-    if( m_ReportFileName.empty() )
+    if( m_reportFileName.empty() )
         fn = wxT( "./report.txt" );
     else
-        fn = m_ReportFileName;
+        fn = m_reportFileName;
 
     wxFileDialog dlg( this, _( "Save Report to File" ), fn.GetPath(), fn.GetFullName(),
                       TextFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -349,7 +349,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
         ConvertSmartQuotesAndDashes( &s );
         f.Write( s );
     }
-    m_ReportFileName = fn.GetFullPath();
+    m_reportFileName = fn.GetFullPath();
     f.Close();
 }
 
@@ -387,19 +387,19 @@ int WX_HTML_REPORT_PANEL::GetVisibleSeverities()
 
 void WX_HTML_REPORT_PANEL::SetFileName( wxString& aReportFileName )
 {
-    m_ReportFileName = aReportFileName;
+    m_reportFileName = aReportFileName;
 }
 
 
 wxString& WX_HTML_REPORT_PANEL::GetFileName( void )
 {
-    return ( m_ReportFileName );
+    return ( m_reportFileName );
 }
 
 
 void WX_HTML_REPORT_PANEL::SetPrintInfo( bool aPrintInfo )
 {
-    m_PrintInfo = aPrintInfo;
+    m_printInfo = aPrintInfo;
 }
 
 

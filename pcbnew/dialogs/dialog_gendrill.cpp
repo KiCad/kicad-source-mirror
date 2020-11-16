@@ -384,7 +384,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
     {
         EXCELLON_WRITER excellonWriter( m_board );
         excellonWriter.SetFormat( !m_UnitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
-                                  m_Precision.m_lhs, m_Precision.m_rhs );
+                                  m_Precision.m_Lhs, m_Precision.m_Rhs );
         excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
         excellonWriter.SetRouteModeForOvalHoles( m_UseRouteModeForOvalHoles );
         excellonWriter.SetMapFileFormat( filefmt[choice] );

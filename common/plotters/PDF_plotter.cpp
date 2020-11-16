@@ -105,14 +105,14 @@ std::string PDF_PLOTTER::encodeStringForPlotter( const wxString& aText )
 
 bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 {
-    filename = aFullFilename;
+    m_filename = aFullFilename;
 
-    wxASSERT( !outputFile );
+    wxASSERT( !m_outputFile );
 
     // Open the PDF file in binary mode
-    outputFile = wxFopen( filename, wxT( "wb" ) );
+    m_outputFile = wxFopen( m_filename, wxT( "wb" ) );
 
-    if( outputFile == NULL )
+    if( m_outputFile == NULL )
         return false ;
 
     return true;
@@ -122,13 +122,13 @@ bool PDF_PLOTTER::OpenFile( const wxString& aFullFilename )
 void PDF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                               double aScale, bool aMirror )
 {
-    m_plotMirror = aMirror;
-    plotOffset = aOffset;
-    plotScale = aScale;
+    m_plotMirror    = aMirror;
+    m_plotOffset    = aOffset;
+    m_plotScale     = aScale;
     m_IUsPerDecimil = aIusPerDecimil;
 
     // The CTM is set to 1 user unit per decimal
-    iuPerDeviceUnit = 1.0 / aIusPerDecimil;
+    m_iuPerDeviceUnit = 1.0 / aIusPerDecimil;
 
     /* The paper size in this engine is handled page by page
        Look in the StartPage function */
@@ -149,10 +149,10 @@ void PDF_PLOTTER::SetCurrentLineWidth( int aWidth, void* aData )
 
     wxASSERT_MSG( aWidth > 0, "Plotter called to set negative pen width" );
 
-    if( aWidth != currentPenWidth )
+    if( aWidth != m_currentPenWidth )
         fprintf( workFile, "%g w\n", userToDeviceSize( aWidth ) );
 
-    currentPenWidth = aWidth;
+    m_currentPenWidth = aWidth;
 }
 
 
@@ -336,18 +336,18 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
 
     if( plume == 'Z' )
     {
-        if( penState != 'Z' )
+        if( m_penState != 'Z' )
         {
             fputs( "S\n", workFile );
-            penState     = 'Z';
-            penLastpos.x = -1;
-            penLastpos.y = -1;
+            m_penState     = 'Z';
+            m_penLastpos.x = -1;
+            m_penLastpos.y = -1;
         }
 
         return;
     }
 
-    if( penState != plume || pos != penLastpos )
+    if( m_penState != plume || pos != m_penLastpos )
     {
         DPOINT pos_dev = userToDeviceCoordinates( pos );
         fprintf( workFile, "%g %g %c\n",
@@ -355,8 +355,8 @@ void PDF_PLOTTER::PenTo( const wxPoint& pos, char plume )
                  ( plume=='D' ) ? 'l' : 'm' );
     }
 
-    penState   = plume;
-    penLastpos = pos;
+    m_penState   = plume;
+    m_penLastpos = pos;
 }
 
 
@@ -401,7 +401,7 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
              "  /CS %s\n"
              "  /W %d\n"
              "  /H %d\n"
-             "ID\n", colorMode ? "/RGB" : "/G", pix_size.x, pix_size.y );
+             "ID\n", m_colorMode ? "/RGB" : "/G", pix_size.x, pix_size.y );
 
     /* Here comes the stream (in binary!). I *could* have hex or ascii84
        encoded it, but who cares? I'll go through zlib anyway */
@@ -439,7 +439,7 @@ void PDF_PLOTTER::PlotImage( const wxImage & aImage, const wxPoint& aPos,
             }
 
             // As usual these days, stdio buffering has to suffeeeeerrrr
-            if( colorMode )
+            if( m_colorMode )
             {
                 putc( r, workFile );
                 putc( g, workFile );
@@ -467,29 +467,29 @@ int PDF_PLOTTER::allocPdfObject()
 
 int PDF_PLOTTER::startPdfObject(int handle)
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxASSERT( !workFile );
 
     if( handle < 0)
         handle = allocPdfObject();
 
-    xrefTable[handle] = ftell( outputFile );
-    fprintf( outputFile, "%d 0 obj\n", handle );
+    xrefTable[handle] = ftell( m_outputFile );
+    fprintf( m_outputFile, "%d 0 obj\n", handle );
     return handle;
 }
 
 
 void PDF_PLOTTER::closePdfObject()
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxASSERT( !workFile );
-    fputs( "endobj\n", outputFile );
+    fputs( "endobj\n", m_outputFile );
 }
 
 
 int PDF_PLOTTER::startPdfStream( int handle )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxASSERT( !workFile );
     handle = startPdfObject( handle );
 
@@ -499,13 +499,13 @@ int PDF_PLOTTER::startPdfStream( int handle )
 
     if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
-        fprintf( outputFile,
+        fprintf( m_outputFile,
                  "<< /Length %d 0 R >>\n" // Length is deferred
                  "stream\n", handle + 1 );
     }
     else
     {
-        fprintf( outputFile,
+        fprintf( m_outputFile,
                  "<< /Length %d 0 R /Filter /FlateDecode >>\n" // Length is deferred
                  "stream\n", handle + 1 );
     }
@@ -548,7 +548,7 @@ void PDF_PLOTTER::closePdfStream()
     if( ADVANCED_CFG::GetCfg().m_DebugPDFWriter )
     {
         out_count = stream_len;
-        fwrite( inbuf, out_count, 1, outputFile );
+        fwrite( inbuf, out_count, 1, m_outputFile );
     }
     else
     {
@@ -571,29 +571,29 @@ void PDF_PLOTTER::closePdfStream()
         wxStreamBuffer* sb = memos.GetOutputStreamBuffer();
 
         out_count = sb->Tell();
-        fwrite( sb->GetBufferStart(), 1, out_count, outputFile );
+        fwrite( sb->GetBufferStart(), 1, out_count, m_outputFile );
     }
 
     delete[] inbuf;
-    fputs( "endstream\n", outputFile );
+    fputs( "endstream\n", m_outputFile );
     closePdfObject();
 
     // Writing the deferred length as an indirect object
     startPdfObject( streamLengthHandle );
-    fprintf( outputFile, "%u\n", out_count );
+    fprintf( m_outputFile, "%u\n", out_count );
     closePdfObject();
 }
 
 
 void PDF_PLOTTER::StartPage()
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     wxASSERT( !workFile );
 
     // Compute the paper size in IUs
-    paperSize = pageInfo.GetSizeMils();
-    paperSize.x *= 10.0 / iuPerDeviceUnit;
-    paperSize.y *= 10.0 / iuPerDeviceUnit;
+    m_paperSize = m_pageInfo.GetSizeMils();
+    m_paperSize.x *= 10.0 / m_iuPerDeviceUnit;
+    m_paperSize.y *= 10.0 / m_iuPerDeviceUnit;
 
     // Open the content stream; the page object will go later
     pageStreamHandle = startPdfStream();
@@ -626,9 +626,9 @@ void PDF_PLOTTER::ClosePage()
        to use */
 
     const double BIGPTsPERMIL = 0.072;
-    wxSize psPaperSize = pageInfo.GetSizeMils();
+    wxSize psPaperSize = m_pageInfo.GetSizeMils();
 
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "<<\n"
              "/Type /Page\n"
              "/Parent %d 0 R\n"
@@ -652,7 +652,7 @@ void PDF_PLOTTER::ClosePage()
 
 bool PDF_PLOTTER::StartPlot()
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     // First things first: the customary null object
     xrefTable.clear();
@@ -661,7 +661,7 @@ bool PDF_PLOTTER::StartPlot()
     /* The header (that's easy!). The second line is binary junk required
        to make the file binary from the beginning (the important thing is
        that they must have the bit 7 set) */
-    fputs( "%PDF-1.5\n%\200\201\202\203\n", outputFile );
+    fputs( "%PDF-1.5\n%\200\201\202\203\n", m_outputFile );
 
     /* Allocate an entry for the page tree root, it will go in every page
        parent entry */
@@ -681,7 +681,7 @@ bool PDF_PLOTTER::StartPlot()
 
 bool PDF_PLOTTER::EndPlot()
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     // Close the current page (often the only one)
     ClosePage();
@@ -706,7 +706,7 @@ bool PDF_PLOTTER::EndPlot()
     for( int i = 0; i < 4; i++ )
     {
         fontdefs[i].font_handle = startPdfObject();
-        fprintf( outputFile,
+        fprintf( m_outputFile,
                  "<< /BaseFont %s\n"
                  "   /Type /Font\n"
                  "   /Subtype /Type1\n"
@@ -721,15 +721,15 @@ bool PDF_PLOTTER::EndPlot()
 
     // Named font dictionary (was allocated, now we emit it)
     startPdfObject( fontResDictHandle );
-    fputs( "<<\n", outputFile );
+    fputs( "<<\n", m_outputFile );
 
     for( int i = 0; i < 4; i++ )
     {
-        fprintf( outputFile, "    %s %d 0 R\n",
-                fontdefs[i].rsname, fontdefs[i].font_handle );
+        fprintf( m_outputFile, "    %s %d 0 R\n",
+                 fontdefs[i].rsname, fontdefs[i].font_handle );
     }
 
-    fputs( ">>\n", outputFile );
+    fputs( ">>\n", m_outputFile );
     closePdfObject();
 
     /* The page tree: it's a B-tree but luckily we only have few pages!
@@ -738,12 +738,12 @@ bool PDF_PLOTTER::EndPlot()
     startPdfObject( pageTreeHandle );
     fputs( "<<\n"
            "/Type /Pages\n"
-           "/Kids [\n", outputFile );
+           "/Kids [\n", m_outputFile );
 
     for( unsigned i = 0; i < pageHandles.size(); i++ )
-        fprintf( outputFile, "%d 0 R\n", pageHandles[i] );
+        fprintf( m_outputFile, "%d 0 R\n", pageHandles[i] );
 
-    fprintf( outputFile,
+    fprintf( m_outputFile,
             "]\n"
             "/Count %ld\n"
              ">>\n", (long) pageHandles.size() );
@@ -757,14 +757,14 @@ bool PDF_PLOTTER::EndPlot()
     strftime( date_buf, 250, "D:%Y%m%d%H%M%S",
               localtime( &ltime ) );
 
-    if( title.IsEmpty() )
+    if( m_title.IsEmpty() )
     {
         // Windows uses '\' and other platforms ue '/' as separator
-        title = filename.AfterLast('\\');
-        title = title.AfterLast('/');
+        m_title = m_filename.AfterLast( '\\');
+        m_title = m_title.AfterLast( '/');
     }
 
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "<<\n"
              "/Producer (KiCad PDF)\n"
              "/CreationDate (%s)\n"
@@ -772,15 +772,15 @@ bool PDF_PLOTTER::EndPlot()
              "/Title %s\n"
              "/Trapped False\n",
              date_buf,
-             encodeStringForPlotter( creator ).c_str(),
-             encodeStringForPlotter( title ).c_str() );
+             encodeStringForPlotter( m_creator ).c_str(),
+             encodeStringForPlotter( m_title ).c_str() );
 
-    fputs( ">>\n", outputFile );
+    fputs( ">>\n", m_outputFile );
     closePdfObject();
 
     // The catalog, at last
     int catalogHandle = startPdfObject();
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "<<\n"
              "/Type /Catalog\n"
              "/Pages %d 0 R\n"
@@ -793,19 +793,19 @@ bool PDF_PLOTTER::EndPlot()
     /* Emit the xref table (format is crucial to the byte, each entry must
        be 20 bytes long, and object zero must be done in that way). Also
        the offset must be kept along for the trailer */
-    long xref_start = ftell( outputFile );
-    fprintf( outputFile,
+    long xref_start = ftell( m_outputFile );
+    fprintf( m_outputFile,
              "xref\n"
              "0 %ld\n"
              "0000000000 65535 f \n", (long) xrefTable.size() );
 
     for( unsigned i = 1; i < xrefTable.size(); i++ )
     {
-        fprintf( outputFile, "%010ld 00000 n \n", xrefTable[i] );
+        fprintf( m_outputFile, "%010ld 00000 n \n", xrefTable[i] );
     }
 
     // Done the xref, go for the trailer
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "trailer\n"
              "<< /Size %lu /Root %d 0 R /Info %d 0 R >>\n"
              "startxref\n"
@@ -813,8 +813,8 @@ bool PDF_PLOTTER::EndPlot()
              "%%%%EOF\n",
              (unsigned long) xrefTable.size(), catalogHandle, infoDictHandle, xref_start );
 
-    fclose( outputFile );
-    outputFile = NULL;
+    fclose( m_outputFile );
+    m_outputFile = NULL;
 
     return true;
 }

@@ -224,15 +224,15 @@ HPGL_PLOTTER::HPGL_PLOTTER()
 void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
                                 double aScale, bool aMirror )
 {
-    plotOffset  = aOffset;
-    plotScale   = aScale;
-    m_IUsPerDecimil = aIusPerDecimil;
-    iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
+    m_plotOffset      = aOffset;
+    m_plotScale       = aScale;
+    m_IUsPerDecimil   = aIusPerDecimil;
+    m_iuPerDeviceUnit = PLUsPERDECIMIL / aIusPerDecimil;
     /* Compute the paper size in IUs */
-    paperSize   = pageInfo.GetSizeMils();
-    paperSize.x *= 10.0 * aIusPerDecimil;
-    paperSize.y *= 10.0 * aIusPerDecimil;
-    m_plotMirror = aMirror;
+    m_paperSize   = m_pageInfo.GetSizeMils();
+    m_paperSize.x *= 10.0 * aIusPerDecimil;
+    m_paperSize.y *= 10.0 * aIusPerDecimil;
+    m_plotMirror  = aMirror;
 }
 
 
@@ -241,12 +241,12 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
  */
 bool HPGL_PLOTTER::StartPlot()
 {
-    wxASSERT( outputFile );
-    fprintf( outputFile, "IN;VS%d;PU;PA;SP%d;\n", penSpeed, penNumber );
+    wxASSERT( m_outputFile );
+    fprintf( m_outputFile, "IN;VS%d;PU;PA;SP%d;\n", penSpeed, penNumber );
 
     // Set HPGL Pen Thickness (in mm) (usefull in polygon fill command)
     double penThicknessMM = userToDeviceSize( penDiameter )/40;
-    fprintf( outputFile, "PT %.1f;\n", penThicknessMM );
+    fprintf( m_outputFile, "PT %.1f;\n", penThicknessMM );
 
     return true;
 }
@@ -257,10 +257,10 @@ bool HPGL_PLOTTER::StartPlot()
  */
 bool HPGL_PLOTTER::EndPlot()
 {
-    wxASSERT( outputFile );
-    fputs( "PU;PA;SP0;\n", outputFile );
-    fclose( outputFile );
-    outputFile = NULL;
+    wxASSERT( m_outputFile );
+    fputs( "PU;PA;SP0;\n", m_outputFile );
+    fclose( m_outputFile );
+    m_outputFile = NULL;
     return true;
 }
 
@@ -275,10 +275,10 @@ void HPGL_PLOTTER::SetPenDiameter( double diameter )
  */
 void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     DPOINT p2dev = userToDeviceCoordinates( p2 );
     MoveTo( p1 );
-    fprintf( outputFile, "EA %.0f,%.0f;\n", p2dev.x, p2dev.y );
+    fprintf( m_outputFile, "EA %.0f,%.0f;\n", p2dev.x, p2dev.y );
     PenFinish();
 }
 
@@ -287,7 +287,7 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, i
 void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
                            int width )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     double radius = userToDeviceSize( diameter / 2 );
     SetCurrentLineWidth( width );
 
@@ -295,15 +295,15 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
     {
         // Draw the filled area
         MoveTo( centre );
-        fprintf( outputFile, "PM 0; CI %g;\n", radius );
-        fprintf( outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
+        fprintf( m_outputFile, "PM 0; CI %g;\n", radius );
+        fprintf( m_outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
         PenFinish();
     }
 
     if( radius > 0 )
     {
         MoveTo( centre );
-        fprintf( outputFile, "CI %g;\n", radius );
+        fprintf( m_outputFile, "CI %g;\n", radius );
         PenFinish();
     }
 }
@@ -326,7 +326,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     {
         // Draw the filled area
         SetCurrentLineWidth( USE_DEFAULT_LINE_WIDTH );
-        fprintf( outputFile, "PM 0;\n" );       // Start polygon
+        fprintf( m_outputFile, "PM 0;\n" );       // Start polygon
 
         for( unsigned ii = 1; ii < aCornerList.size(); ++ii )
             LineTo( aCornerList[ii] );
@@ -336,7 +336,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
         if( aCornerList[ii] != aCornerList[0] )
             LineTo( aCornerList[0] );
 
-        fprintf( outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
+        fprintf( m_outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
     }
     else
     {
@@ -363,35 +363,35 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
  */
 void HPGL_PLOTTER::penControl( char plume )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     switch( plume )
     {
     case 'U':
 
-        if( penState != 'U' )
+        if( m_penState != 'U' )
         {
-            fputs( "PU;", outputFile );
-            penState = 'U';
+            fputs( "PU;", m_outputFile );
+            m_penState = 'U';
         }
 
         break;
 
     case 'D':
 
-        if( penState != 'D' )
+        if( m_penState != 'D' )
         {
-            fputs( "PD;", outputFile );
-            penState = 'D';
+            fputs( "PD;", m_outputFile );
+            m_penState = 'D';
         }
 
         break;
 
     case 'Z':
-        fputs( "PU;", outputFile );
-        penState        = 'U';
-        penLastpos.x    = -1;
-        penLastpos.y    = -1;
+        fputs( "PU;", m_outputFile );
+        m_penState        = 'U';
+        m_penLastpos.x    = -1;
+        m_penLastpos.y    = -1;
         break;
     }
 }
@@ -399,7 +399,7 @@ void HPGL_PLOTTER::penControl( char plume )
 
 void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     if( plume == 'Z' )
     {
@@ -410,10 +410,10 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
     penControl( plume );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
 
-    if( penLastpos != pos )
-        fprintf( outputFile, "PA %.0f,%.0f;\n", pos_dev.x, pos_dev.y );
+    if( m_penLastpos != pos )
+        fprintf( m_outputFile, "PA %.0f,%.0f;\n", pos_dev.x, pos_dev.y );
 
-    penLastpos = pos;
+    m_penLastpos = pos;
 }
 
 
@@ -422,21 +422,21 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
  */
 void HPGL_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
 
     switch( dashed )
     {
     case PLOT_DASH_TYPE::DASH:
-        fprintf( outputFile, "LT -2 4 1;\n" );
+        fprintf( m_outputFile, "LT -2 4 1;\n" );
         break;
     case PLOT_DASH_TYPE::DOT:
-        fprintf( outputFile, "LT -1 2 1;\n" );
+        fprintf( m_outputFile, "LT -1 2 1;\n" );
         break;
     case PLOT_DASH_TYPE::DASHDOT:
-        fprintf( outputFile, "LT -4 6 1;\n" );
+        fprintf( m_outputFile, "LT -4 6 1;\n" );
         break;
     default:
-        fputs( "LT;\n", outputFile );
+        fputs( "LT;\n", m_outputFile );
     }
 }
 
@@ -444,9 +444,7 @@ void HPGL_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
                                  int width, OUTLINE_MODE tracemode, void* aData )
 {
-    wxASSERT( outputFile );
-    wxPoint center;
-    wxSize  size;
+    wxASSERT( m_outputFile );
 
     // Suppress overlap if pen is too big
     if( penDiameter >= width )
@@ -455,7 +453,9 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
         FinishTo( end );
     }
     else
+    {
         segmentAsOval( start, end, width, tracemode );
+    }
 }
 
 
@@ -470,7 +470,7 @@ void HPGL_PLOTTER::ThickSegment( const wxPoint& start, const wxPoint& end,
 void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                         FILL_TYPE fill, int width )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     double angle;
 
     if( radius <= 0 )
@@ -492,12 +492,12 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
     cmap.y  = centre.y - KiROUND( sindecideg( radius, StAngle ) );
     DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
 
-    fprintf( outputFile,
+    fprintf( m_outputFile,
              "PU;PA %.0f,%.0f;PD;AA %.0f,%.0f,",
              cmap_dev.x, cmap_dev.y,
              centre_dev.x, centre_dev.y );
-    fprintf( outputFile, "%.0f", angle );
-    fprintf( outputFile, ";PU;\n" );
+    fprintf( m_outputFile, "%.0f", angle );
+    fprintf( m_outputFile, ";PU;\n" );
     PenFinish();
 }
 
@@ -507,7 +507,7 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
 void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double orient,
                                  OUTLINE_MODE trace_mode, void* aData )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     int     deltaxy, cx, cy;
     wxSize  size( aSize );
 
@@ -545,7 +545,7 @@ void HPGL_PLOTTER::FlashPadOval( const wxPoint& pos, const wxSize& aSize, double
 void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
                                    OUTLINE_MODE trace_mode, void* aData )
 {
-    wxASSERT( outputFile );
+    wxASSERT( m_outputFile );
     DPOINT  pos_dev = userToDeviceCoordinates( pos );
 
     int     radius  = diametre / 2;
@@ -568,14 +568,14 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
         // Gives a correct current starting point for the circle
         MoveTo( wxPoint( pos.x+radius, pos.y ) );
         // Plot filled area and its outline
-        fprintf( outputFile, "PM 0; PA %.0f,%.0f;CI %.0f;%s",
-                         pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd );
+        fprintf( m_outputFile, "PM 0; PA %.0f,%.0f;CI %.0f;%s",
+                 pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd );
     }
     else
     {
         // Draw outline only:
-        fprintf( outputFile, "PA %.0f,%.0f;CI %.0f;\n",
-                     pos_dev.x, pos_dev.y, rsize );
+        fprintf( m_outputFile, "PA %.0f,%.0f;CI %.0f;\n",
+                 pos_dev.x, pos_dev.y, rsize );
     }
 
     PenFinish();

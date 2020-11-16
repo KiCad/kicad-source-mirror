@@ -275,8 +275,8 @@ void GERBER_WRITER::SetFormat( int aRightDigits )
     m_conversionUnits = 1.0 / IU_PER_MM;        // Gerber units = mm
 
     // Set precison (unit is mm).
-    m_precision.m_lhs = 4;
-    m_precision.m_rhs = aRightDigits == 6 ? 6 : 5;
+    m_precision.m_Lhs = 4;
+    m_precision.m_Rhs = aRightDigits == 6 ? 6 : 5;
 }
 
 

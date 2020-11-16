@@ -45,7 +45,7 @@ struct MICROWAVE_INDUCTOR_PATTERN
 public:
     wxPoint m_Start;
     wxPoint m_End;
-    int     m_length;       // full length trace.
+    int     m_Length;       // full length trace.
     int     m_Width;        // Trace width.
 };
 

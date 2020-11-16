@@ -41,8 +41,10 @@ public:
 class IMPORTED_LINE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth )
-        : m_start( aStart ), m_end( aEnd ), m_width( aWidth )
+    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth ) :
+            m_start( aStart ),
+            m_end( aEnd ),
+            m_width( aWidth )
     {
     }
 
@@ -54,15 +56,17 @@ public:
 private:
     const VECTOR2D m_start;
     const VECTOR2D m_end;
-    double m_width;
+    double         m_width;
 };
 
 
 class IMPORTED_CIRCLE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth )
-        : m_center( aCenter ), m_radius( aRadius ), m_width( aWidth )
+    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth ) :
+            m_center( aCenter ),
+            m_radius( aRadius ),
+            m_width( aWidth )
     {
     }
 
@@ -73,16 +77,19 @@ public:
 
 private:
     const VECTOR2D m_center;
-    double m_radius;
-    double m_width;
+    double         m_radius;
+    double         m_width;
 };
 
 
 class IMPORTED_ARC : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth )
-        : m_center( aCenter ), m_start( aStart ), m_angle( aAngle ), m_width( aWidth )
+    IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth )  :
+            m_center( aCenter ),
+            m_start( aStart ),
+            m_angle( aAngle ),
+            m_width( aWidth )
     {
     }
 
@@ -94,16 +101,17 @@ public:
 private:
     const VECTOR2D m_center;
     const VECTOR2D m_start;
-    double m_angle;
-    double m_width;
+    double         m_angle;
+    double         m_width;
 };
 
 
 class IMPORTED_POLYGON : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_POLYGON( const std::vector< VECTOR2D >& aVertices, double aWidth )
-        : m_vertices( aVertices ), m_width( aWidth )
+    IMPORTED_POLYGON( const std::vector< VECTOR2D >& aVertices, double aWidth ) :
+            m_vertices( aVertices ),
+            m_width( aWidth )
     {
     }
 
@@ -113,21 +121,25 @@ public:
     }
 
 private:
-    const std::vector< VECTOR2D > m_vertices;
-    double m_width;
+    const std::vector<VECTOR2D> m_vertices;
+    double                      m_width;
 };
 
 
 class IMPORTED_TEXT : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_TEXT( const VECTOR2D& aOrigin, const wxString& aText,
-            double aHeight, double aWidth, double aThickness, double aOrientation,
-            EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
-        : m_origin( aOrigin ), m_text( aText ),
-            m_height( aHeight ), m_width( aWidth ), m_thickness( aThickness ),
-            m_orientation( aOrientation ),
-            m_hJustify( aHJustify ), m_vJustify( aVJustify )
+    IMPORTED_TEXT( const VECTOR2D& aOrigin, const wxString& aText, double aHeight, double aWidth,
+                   double aThickness, double aOrientation, EDA_TEXT_HJUSTIFY_T aHJustify,
+                   EDA_TEXT_VJUSTIFY_T aVJustify ) :
+        m_origin( aOrigin ),
+        m_text( aText ),
+        m_height( aHeight ),
+        m_width( aWidth ),
+        m_thickness( aThickness ),
+        m_orientation( aOrientation ),
+        m_hJustify( aHJustify ),
+        m_vJustify( aVJustify )
     {
     }
 
@@ -138,12 +150,12 @@ public:
     }
 
 private:
-    const VECTOR2D m_origin;
-    const wxString m_text;
-    double m_height;
-    double m_width;
-    double m_thickness;
-    double m_orientation;
+    const VECTOR2D      m_origin;
+    const wxString      m_text;
+    double              m_height;
+    double              m_width;
+    double              m_thickness;
+    double              m_orientation;
     EDA_TEXT_HJUSTIFY_T m_hJustify;
     EDA_TEXT_VJUSTIFY_T m_vJustify;
 };
@@ -153,9 +165,12 @@ class IMPORTED_SPLINE : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_SPLINE( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth )
-        : m_start( aStart ), m_bezierControl1( aBezierControl1 ),
-          m_bezierControl2( aBezierControl2 ), m_end( aEnd ), m_width( aWidth )
+                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth ) :
+        m_start( aStart ),
+        m_bezierControl1( aBezierControl1 ),
+        m_bezierControl2( aBezierControl2 ),
+        m_end( aEnd ),
+        m_width( aWidth )
     {
     }
 
@@ -169,7 +184,7 @@ private:
     const VECTOR2D m_bezierControl1;
     const VECTOR2D m_bezierControl2;
     const VECTOR2D m_end;
-    double m_width;
+    double         m_width;
 };
 
 

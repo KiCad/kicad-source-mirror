@@ -67,7 +67,7 @@ public:
     // For now we don't use 'thick' primitives, so no line width
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
     {
-        currentPenWidth = 0;
+        m_currentPenWidth = 0;
     }
 
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;

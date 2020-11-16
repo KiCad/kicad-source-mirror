@@ -89,7 +89,9 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             {
                 if( ( graphic->GetStart().x == graphic->GetEnd().x )
                     && ( graphic->GetStart().y == graphic->GetEnd().y ) )
+                {
                     break;
+                }
 
                 sp.x    = graphic->GetStart().x * scale + offX;
                 sp.y    = -graphic->GetStart().y * scale + offY;
@@ -106,7 +108,9 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             {
                 if( ( graphic->GetStart().x == graphic->GetEnd().x )
                     && ( graphic->GetStart().y == graphic->GetEnd().y ) )
+                {
                     break;
+                }
 
                 double top = graphic->GetStart().y * scale + offY;
                 double left = graphic->GetStart().x * scale + offX;
@@ -130,7 +134,9 @@ static void idf_export_outline( BOARD* aPcb, IDF3_BOARD& aIDFBoard )
             {
                 if( ( graphic->GetCenter().x == graphic->GetArcStart().x )
                     && ( graphic->GetCenter().y == graphic->GetArcStart().y ) )
+                {
                     break;
+                }
 
                 sp.x = graphic->GetCenter().x * scale + offX;
                 sp.y = -graphic->GetCenter().y * scale + offY;
@@ -479,13 +485,17 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             comp->SetRefDes( refdes );
 
             if( top )
+            {
                 comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                    -aFootprint->GetPosition().y * scale + dy,
                                    rotz, IDF3::LYR_TOP );
+            }
             else
+            {
                 comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                    -aFootprint->GetPosition().y * scale + dy,
                                    rotz, IDF3::LYR_BOTTOM );
+            }
 
             comp->SetPlacement( IDF3::PS_ECAD );
 
@@ -500,13 +510,17 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             {
                 // place the item
                 if( top )
+                {
                     comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                        -aFootprint->GetPosition().y * scale + dy,
                                        rotz, IDF3::LYR_TOP );
+                }
                 else
+                {
                     comp->SetPosition( aFootprint->GetPosition().x * scale + dx,
                                        -aFootprint->GetPosition().y * scale + dy,
                                        rotz, IDF3::LYR_BOTTOM );
+                }
 
                 comp->SetPlacement( IDF3::PS_ECAD );
 

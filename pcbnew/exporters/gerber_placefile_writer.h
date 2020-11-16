@@ -64,8 +64,7 @@ public:
      * @param aIncludeBrdEdges = true to include board outlines
      * @return component count, or -1 if the file cannot be created
      */
-    int  CreatePlaceFile( wxString& aFullFilename, PCB_LAYER_ID aLayer,
-                          bool aIncludeBrdEdges );
+    int CreatePlaceFile( wxString& aFullFilename, PCB_LAYER_ID aLayer, bool aIncludeBrdEdges );
 
     /**
      * @return a filename which identify the drill file function.
@@ -77,26 +76,22 @@ public:
                                      PCB_LAYER_ID aLayer ) const;
 
 private:
-    BOARD*          m_pcb;
-    /// The board layer currently used (typically F_Cu or B_Cu)
-    PCB_LAYER_ID    m_layer;
-    double          m_conversionUnits;  // scaling factor to convert the board unites to
-                                        // Excellon/Gerber units (i.e inches or mm)
-    wxPoint         m_offset;           // Drill offset coordinates
-    bool            m_forceSmdItems;
-    // True to plot a flashed marker shape at pad 1 position
-    bool            m_plotPad1Marker;
-    // True to plot a marker shape at other pads position
-    // This is a flashed 0 sized round pad
-    bool            m_plotOtherPadsMarker;
+    BOARD*       m_pcb;
+    PCB_LAYER_ID m_layer;            // The board layer currently used (typically F_Cu or B_Cu)
+    wxPoint      m_offset;           // Drill offset coordinates
 
+    bool         m_plotPad1Marker;       // True to plot a flashed marker shape at pad 1 position
+    bool         m_plotOtherPadsMarker;  // True to plot a marker shape at other pads position
+                                         // This is a flashed 0 sized round pad
 
-    /** convert a kicad footprint orientation to gerber rotation
-     *  both are in degrees
+    /**
+     * convert a kicad footprint orientation to gerber rotation
+     * both are in degrees
      */
-    double      mapRotationAngle( double aAngle );
+    double mapRotationAngle( double aAngle );
 
-    /** Find the pad(s) 1 (or pad "A1") of a footprint
+    /**
+     * Find the pad(s) 1 (or pad "A1") of a footprint
      * Usefull to plot a marker at this (these) position(s)
      * @param aPadList is the list to fill
      * @param aFootprint is the footprint to test

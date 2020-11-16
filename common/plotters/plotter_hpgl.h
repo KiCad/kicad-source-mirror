@@ -53,7 +53,7 @@ public:
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) override
     {
         // This is the truth
-        currentPenWidth = userToDeviceSize( penDiameter );
+        m_currentPenWidth = userToDeviceSize( penDiameter );
     }
 
     virtual void SetDash( PLOT_DASH_TYPE dashed ) override;

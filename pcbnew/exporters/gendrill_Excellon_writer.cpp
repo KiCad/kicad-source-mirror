@@ -341,15 +341,15 @@ void EXCELLON_WRITER::SetFormat( bool      aMetric,
     if( aRightDigits <= 0 )
         aRightDigits = m_unitsMetric ? 3 : 4;
 
-    m_precision.m_lhs = aLeftDigits;
-    m_precision.m_rhs = aRightDigits;
+    m_precision.m_Lhs = aLeftDigits;
+    m_precision.m_Rhs = aRightDigits;
 }
 
 
 void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoordY )
 {
     wxString xs, ys;
-    int      xpad = m_precision.m_lhs + m_precision.m_rhs;
+    int      xpad = m_precision.m_Lhs + m_precision.m_Rhs;
     int      ypad = xpad;
 
     switch( m_zeroFormat )
@@ -393,7 +393,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
         break;
 
     case SUPPRESS_LEADING:
-        for( int i = 0; i< m_precision.m_rhs; i++ )
+        for( int i = 0; i< m_precision.m_Rhs; i++ )
         {
             aCoordX *= 10; aCoordY *= 10;
         }
@@ -403,7 +403,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
 
     case SUPPRESS_TRAILING:
     {
-        for( int i = 0; i < m_precision.m_rhs; i++ )
+        for( int i = 0; i < m_precision.m_Rhs; i++ )
         {
             aCoordX *= 10;
             aCoordY *= 10;
@@ -433,7 +433,7 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
     }
 
     case KEEP_ZEROS:
-        for( int i = 0; i< m_precision.m_rhs; i++ )
+        for( int i = 0; i< m_precision.m_Rhs; i++ )
         {
             aCoordX *= 10; aCoordY *= 10;
         }

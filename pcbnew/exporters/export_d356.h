@@ -71,8 +71,7 @@ public:
     void Write( const wxString& aFilename );
 
 private:
-    BOARD* m_pcb;
-
+    BOARD*    m_pcb;
     wxWindow* m_parent;
 
     /// Writes a list of records to the given output stream

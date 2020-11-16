@@ -151,21 +151,21 @@ public:
 
     virtual void SetNegative( bool aNegative )
     {
-        negativeMode = aNegative;
+        m_negativeMode = aNegative;
     }
 
     /**
      * Plot in B/W or color.
      * @param aColorMode = true to plot in color, false to plot in black and white
      */
-    virtual void SetColorMode( bool aColorMode ) { colorMode = aColorMode; }
-    bool GetColorMode() const { return colorMode; }
+    virtual void SetColorMode( bool aColorMode ) { m_colorMode = aColorMode; }
+    bool GetColorMode() const { return m_colorMode; }
 
     void SetRenderSettings( RENDER_SETTINGS* aSettings ) { m_renderSettings = aSettings; }
     RENDER_SETTINGS* RenderSettings() { return m_renderSettings; }
 
-    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) { pageInfo = aPageSettings; }
-    PAGE_INFO& PageSettings() { return pageInfo; }
+    virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) { m_pageInfo = aPageSettings; }
+    PAGE_INFO& PageSettings() { return m_pageInfo; }
 
     /**
      * Set the line width for the next drawing.
@@ -173,21 +173,15 @@ public:
      * @param aData is an auxiliary parameter, mainly used in gerber plotter
      */
     virtual void SetCurrentLineWidth( int width, void* aData = NULL ) = 0;
-    virtual int GetCurrentLineWidth() const  { return currentPenWidth; }
+    virtual int GetCurrentLineWidth() const  { return m_currentPenWidth; }
 
     virtual void SetColor( COLOR4D color ) = 0;
 
     virtual void SetDash( PLOT_DASH_TYPE dashed ) = 0;
 
-    virtual void SetCreator( const wxString& aCreator )
-    {
-        creator = aCreator;
-    }
+    virtual void SetCreator( const wxString& aCreator ) { m_creator = aCreator; }
 
-    virtual void SetTitle( const wxString& aTitle )
-    {
-        title = aTitle;
-    }
+    virtual void SetTitle( const wxString& aTitle ) { m_title = aTitle; }
 
     /**
      * Add a line to the list of free lines to print at the beginning of the file
@@ -575,43 +569,39 @@ protected:
 
 protected:      // variables used in most of plotters:
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
-    double        plotScale;
+    double           m_plotScale;
 
     /* Caller scale (how many IUs in a decimil - always); it's a double
      * because in Eeschema there are 0.1 IUs in a decimil (Eeschema
      * always works in mils internally) while PcbNew can work in decimil
      * or nanometers, so this value would be >= 1 */
-    double        m_IUsPerDecimil;
+    double           m_IUsPerDecimil;
 
-    /// Device scale (from IUs to plotter device units - usually decimils)
-    double        iuPerDeviceUnit;
-
-    /// Plot offset (in IUs)
-    wxPoint       plotOffset;
-
-    /// X axis orientation (SVG)
-    /// and plot mirrored (only for PS, PDF HPGL and SVG)
-    bool          m_plotMirror;
-    bool          m_mirrorIsHorizontal;     /// true to mirror horizontally (else vertically)
-    bool          m_yaxisReversed;          /// true if the Y axis is top to bottom (SVG)
+    double           m_iuPerDeviceUnit;     // Device scale (from IUs to plotter device units;
+                                            // usually decimils)
+    wxPoint          m_plotOffset;          // Plot offset (in IUs)
+    bool             m_plotMirror;          // X axis orientation (SVG)
+                                            // and plot mirrored (only for PS, PDF HPGL and SVG)
+    bool             m_mirrorIsHorizontal;  // true to mirror horizontally (else vertically)
+    bool             m_yaxisReversed;       // true if the Y axis is top to bottom (SVG)
 
     /// Output file
-    FILE*         outputFile;
+    FILE*            m_outputFile;
 
     // Pen handling
-    bool             colorMode;           // true to plot in color, false to plot in black & white
-    bool             negativeMode;        // true to generate a negative image (PS mode mainly)
-    int              currentPenWidth;
-    char             penState;            // Current pen state: 'U', 'D' or 'Z' (see PenTo)
-    wxPoint          penLastpos;          // Last pen positions; set to -1,-1 when the pen is
-                                          // at rest
-    wxString         creator;
-    wxString         filename;
-    wxString         title;
-    PAGE_INFO        pageInfo;
-    wxSize           paperSize;          // Paper size in IU - not in mils
+    bool             m_colorMode;           // true to plot in color, otherwise black & white
+    bool             m_negativeMode;        // true to generate a negative image (PS mode mainly)
+    int              m_currentPenWidth;
+    char             m_penState;            // current pen state: 'U', 'D' or 'Z' (see PenTo)
+    wxPoint          m_penLastpos;          // last pen position; -1,-1 when pen is at rest
 
-    wxArrayString    m_headerExtraLines; // a set of string to print in header file
+    wxString         m_creator;
+    wxString         m_filename;
+    wxString         m_title;
+    PAGE_INFO        m_pageInfo;
+    wxSize           m_paperSize;           // Paper size in IU - not in mils
+
+    wxArrayString    m_headerExtraLines;    // a set of string to print in header file
 
     RENDER_SETTINGS* m_renderSettings;
 };
