@@ -2861,6 +2861,13 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
         }
 
+        case T_generator:
+            // We currently ignore the generator when parsing. It is included in the file for manual
+            // indication of where the footprint came from.
+            NeedSYMBOL();
+            NeedRIGHT();
+            break;
+
         case T_locked:
             footprint->SetLocked( true );
             break;
@@ -3105,7 +3112,7 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
                     "solder_paste_margin, solder_paste_ratio, clearance, "
                     "zone_connect, thermal_width, thermal_gap, attr, fp_text, "
                     "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, fp_rect, pad, "
-                    "zone, group, or model" );
+                    "zone, group, generator, version or model" );
         }
     }
 

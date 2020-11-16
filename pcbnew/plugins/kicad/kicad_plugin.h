@@ -90,8 +90,8 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20200922  // Add user name to layer definition.
 //#define SEXPR_BOARD_FILE_VERSION    20201002  // Add groups in footprints (for footprint editor).
 //#define SEXPR_BOARD_FILE_VERSION    20201114  // Add first-class support for filled shapes.
-#define SEXPR_BOARD_FILE_VERSION    20201115  // module -> footprint and change fill syntax.
-
+//#define SEXPR_BOARD_FILE_VERSION    20201115  // module -> footprint and change fill syntax.
+#define SEXPR_BOARD_FILE_VERSION    20201116  // Write version and generator string in footprint files.
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 
@@ -103,19 +103,19 @@ class PCB_TEXT;
                                                 // (always saved with potion 0,0 and rotation = 0 in library)
 //#define CTL_OMIT_HIDE             (1 << 6)    // found and defined in eda_text.h
 #define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for board/not library)
-
+#define CTL_OMIT_FOOTPRINT_VERSION  (1 << 8)    ///< Omit the version string from the (footprint ) sexpr group
 
 // common combinations of the above:
 
 /// Format output for the clipboard instead of footprint library or BOARD
-#define CTL_FOR_CLIPBOARD           // (CTL_OMIT_NETS)
+#define CTL_FOR_CLIPBOARD           (CTL_OMIT_INITIAL_COMMENTS) // (CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
 #define CTL_FOR_LIBRARY             (CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT|CTL_OMIT_LIBNAME)
 
 /// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
-#define CTL_FOR_BOARD               (CTL_OMIT_INITIAL_COMMENTS)
+#define CTL_FOR_BOARD               (CTL_OMIT_INITIAL_COMMENTS|CTL_OMIT_FOOTPRINT_VERSION)
 
 
 /**

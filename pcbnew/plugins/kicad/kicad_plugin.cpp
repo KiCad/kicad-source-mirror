@@ -992,6 +992,9 @@ void PCB_IO::format( FOOTPRINT* aFootprint, int aNestLevel ) const
         m_out->Print( aNestLevel, "(footprint %s",
                       m_out->Quotes( aFootprint->GetFPID().Format() ).c_str() );
 
+    if( !( m_ctl & CTL_OMIT_FOOTPRINT_VERSION ) )
+        m_out->Print( 0, " (version %d) (generator pcbnew)", SEXPR_BOARD_FILE_VERSION );
+
     if( aFootprint->IsLocked() )
         m_out->Print( 0, " locked" );
 
@@ -1000,7 +1003,8 @@ void PCB_IO::format( FOOTPRINT* aFootprint, int aNestLevel ) const
 
     formatLayer( aFootprint );
 
-    m_out->Print( 0, " (tedit %lX)", (unsigned long)aFootprint->GetLastEditTime() );
+    m_out->Print( 0, "\n" );
+    m_out->Print( aNestLevel+1, "(tedit %lX)", (unsigned long)aFootprint->GetLastEditTime() );
 
     if( !( m_ctl & CTL_OMIT_TSTAMPS ) )
         m_out->Print( 0, " (tstamp %s)", TO_UTF8( aFootprint->m_Uuid.AsString() ) );

@@ -119,6 +119,7 @@ fp_rect
 fp_text
 full
 general
+generator
 grid_origin
 group
 gr_arc
