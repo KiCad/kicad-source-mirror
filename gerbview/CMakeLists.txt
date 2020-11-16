@@ -26,17 +26,21 @@ set( DIALOGS_SRCS
     dialogs/dialog_select_one_pcb_layer.cpp
     )
 
+set( WIDGET_SRCS
+    widgets/dcode_selection_box.cpp
+    widgets/gbr_layer_box_selector.cpp
+    widgets/gerbview_layer_widget.cpp
+    widgets/layer_widget.cpp
+    )
+
 set( GERBVIEW_SRCS
     am_param.cpp
     am_primitive.cpp
-    DCodeSelectionbox.cpp
     gbr_layout.cpp
     gerber_file_image.cpp
     gerber_file_image_list.cpp
     gerber_draw_item.cpp
-    gerbview_layer_widget.cpp
     gerbview_printout.cpp
-    gbr_layer_box_selector.cpp
     X2_gerber_attributes.cpp
     clear_gbr_drawlayers.cpp
     dcode.cpp
@@ -48,7 +52,6 @@ set( GERBVIEW_SRCS
     gerbview_settings.cpp
     gerbview_frame.cpp
     job_file_reader.cpp
-    layer_widget.cpp
     menubar.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp
@@ -125,6 +128,7 @@ add_library( gerbview_kiface_objects OBJECT
     gerbview.cpp
     ${GERBVIEW_SRCS}
     ${DIALOGS_SRCS}
+    ${WIDGET_SRCS}
     ${GERBVIEW_EXTRA_SRCS}
     )
 

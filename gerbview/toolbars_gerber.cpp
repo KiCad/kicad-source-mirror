@@ -25,14 +25,14 @@
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <gbr_layer_box_selector.h>
-#include <DCodeSelectionbox.h>
 #include <dialog_helpers.h>
 #include <kicad_string.h>
 #include <wx/wupdlock.h>
 #include <tool/actions.h>
 #include <tool/action_toolbar.h>
 #include <tools/gerbview_actions.h>
+#include "widgets/gbr_layer_box_selector.h"
+#include "widgets/dcode_selection_box.h"
 
 void GERBVIEW_FRAME::ReCreateHToolbar()
 {

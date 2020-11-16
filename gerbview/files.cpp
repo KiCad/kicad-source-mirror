@@ -31,9 +31,9 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <excellon_image.h>
-#include <gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>
+#include "widgets/gerbview_layer_widget.h"
 
 // HTML Messages used more than one time:
 #define MSG_NO_MORE_LAYER _( "<b>No more available layers</b> in Gerbview to load files" )

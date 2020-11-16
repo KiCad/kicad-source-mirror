@@ -31,7 +31,7 @@
 #ifndef GERBER_LAYER_WIDGET_H
 #define GERBER_LAYER_WIDGET_H
 
-#include <layer_widget.h>
+#include "layer_widget.h"
 
 /**
  * GERBER_LAYER_WIDGET

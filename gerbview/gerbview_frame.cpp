@@ -22,7 +22,6 @@
 #include <pgm_base.h>
 #include <eda_base_frame.h>
 #include <base_units.h>
-#include <gbr_layer_box_selector.h>
 #include <bitmaps.h>
 #include <wildcards_and_files_ext.h>
 #include <gerbview.h>
@@ -30,8 +29,6 @@
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <DCodeSelectionbox.h>
-#include <gerbview_layer_widget.h>
 #include <gerbview_draw_panel_gal.h>
 #include <gerbview_settings.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -60,6 +57,10 @@
 #include <dialogs/panel_gerbview_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <wx/wupdlock.h>
+
+#include "widgets/gbr_layer_box_selector.h"
+#include "widgets/gerbview_layer_widget.h"
+#include "widgets/dcode_selection_box.h"
 
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )

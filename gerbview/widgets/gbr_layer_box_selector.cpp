@@ -32,7 +32,7 @@
 #include <gerbview_frame.h>
 #include <gerber_file_image_list.h>
 
-#include <gbr_layer_box_selector.h>
+#include "gbr_layer_box_selector.h"
 
 void GBR_LAYER_BOX_SELECTOR::Resync()
 {

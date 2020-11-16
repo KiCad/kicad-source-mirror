@@ -29,14 +29,14 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 #include <dialog_helpers.h>
-#include <DCodeSelectionbox.h>
-#include <gerbview_layer_widget.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <tool/selection.h>
 #include <tools/gerbview_selection_tool.h>
 #include <gerbview_painter.h>
 #include <view/view.h>
+#include "widgets/gerbview_layer_widget.h"
+#include "widgets/dcode_selection_box.h"
 
 
 // Event table:

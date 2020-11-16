@@ -33,7 +33,7 @@
 //#define STAND_ALONE     1   // define to enable test program for LAYER_WIDGET
 
 
-#include <layer_widget.h>
+#include "layer_widget.h"
 
 #include <macros.h>
 #include <common.h>

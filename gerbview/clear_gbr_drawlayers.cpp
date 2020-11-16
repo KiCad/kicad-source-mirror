@@ -31,9 +31,9 @@
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <gerbview_layer_widget.h>
 #include <view/view.h>
 #include <base_screen.h>
+#include "widgets/gerbview_layer_widget.h"
 
 #include <tool/tool_manager.h>
 

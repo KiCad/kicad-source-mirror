@@ -26,7 +26,7 @@
 #include <pgm_base.h>
 #include <dcode.h>
 
-#include <DCodeSelectionbox.h>
+#include "dcode_selection_box.h"
 
 /*******************************************/
 /* Helper class for displaying DCodes list */
