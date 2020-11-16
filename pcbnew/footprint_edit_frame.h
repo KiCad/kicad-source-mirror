@@ -284,7 +284,7 @@ public:
     void AddFootprintToBoard( FOOTPRINT* aFootprint ) override;
 
     /**
-     * Allows Modedit to install its preferences panel into the preferences dialog.
+     * Allows Footprint Editor to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 

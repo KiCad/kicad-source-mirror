@@ -1328,7 +1328,7 @@ void LEGACY_PLUGIN::loadFOOTPRINT( FOOTPRINT* aFootprint )
         else if( TESTLINE( ".SolderPasteRatio" ) )
         {
             double tmp = atof( line + SZ( ".SolderPasteRatio" ) );
-            // Due to a bug in dialog editor in Modedit, fixed in BZR version 3565
+            // Due to a bug in dialog editor in Footprint Editor, fixed in BZR version 3565
             // this parameter can be broken.
             // It should be >= -50% (no solder paste) and <= 0% (full area of the pad)
 

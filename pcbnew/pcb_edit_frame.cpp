@@ -1527,11 +1527,13 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     DIALOG_FOOTPRINT_PROPERTIES* dlg = new DIALOG_FOOTPRINT_PROPERTIES( this, aFootprint );
 
     int retvalue = dlg->ShowModal();
-    /* retvalue =
-     *  FP_PROPS_UPDATE_FP if update footprint
-     *  FP_PROPS_CHANGE_FP if change footprint
-     *  PRM_EDITOR_WANT_MODEDIT for a goto editor command
-     *  FP_PROPS_OK for normal edit
+    /*
+     * retvalue =
+     *   FP_PROPS_UPDATE_FP to show Update Footprints dialog
+     *   FP_PROPS_CHANGE_FP to show Chanage Footprints dialog
+     *   FP_PROPS_OK for normal edit
+     *   FP_PROPS_EDIT_BOARD_FP to load board footprint into Footprint Editor
+     *   FP_PROPS_EDIT_LIBRARY_FP to load library footprint into Footprint Editor
      */
 
     dlg->Close();

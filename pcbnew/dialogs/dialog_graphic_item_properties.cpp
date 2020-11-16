@@ -23,7 +23,7 @@
  */
 
 /*
- * Edit properties of Lines, Circles, Arcs and Polygons for PCBNew and ModEdit
+ * Edit properties of Lines, Circles, Arcs and Polygons for PCBNew and Footprint Editor
  */
 
 #include <pcb_base_edit_frame.h>

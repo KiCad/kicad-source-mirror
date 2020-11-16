@@ -18,8 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PANEL_MODEDIT_COLOR_SETTINGS_H_
-#define PANEL_MODEDIT_COLOR_SETTINGS_H_
+#ifndef PANEL_FP_EDITOR_COLOR_SETTINGS_H
+#define PANEL_FP_EDITOR_COLOR_SETTINGS_H
 
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
@@ -35,12 +35,12 @@ namespace KIGFX
     class WS_PROXY_VIEW_ITEM;
 }
 
-class PANEL_MODEDIT_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
+class PANEL_FP_EDITOR_COLOR_SETTINGS : public PANEL_COLOR_SETTINGS
 {
 public:
-    PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame, wxWindow* aParent );
+    PANEL_FP_EDITOR_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame, wxWindow* aParent );
 
-    ~PANEL_MODEDIT_COLOR_SETTINGS() override;
+    ~PANEL_FP_EDITOR_COLOR_SETTINGS() override;
 
 protected:
     bool TransferDataFromWindow() override;
@@ -55,14 +55,12 @@ protected:
     };
 
 private:
-    FOOTPRINT_EDIT_FRAME* m_frame;
-
-    PAGE_INFO* m_page;
-
-    TITLE_BLOCK* m_titleBlock;
+    FOOTPRINT_EDIT_FRAME*  m_frame;
+    PAGE_INFO*             m_page;
+    TITLE_BLOCK*           m_titleBlock;
 
     void createSwatches();
 };
 
 
-#endif
+#endif // PANEL_FP_EDITOR_COLOR_SETTINGS_H

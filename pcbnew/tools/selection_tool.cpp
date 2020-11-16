@@ -1906,10 +1906,10 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
     }
 
     case PCB_FP_TEXT_T:
-        // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
-        // footprint subparts one by one, rather than with a drag selection.  This is so you can
-        // pick up items under an (unlocked) footprint without also moving the footprint's
-        // sub-parts.
+        // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have to
+        // select footprint subparts one by one, rather than with a drag selection.  This is so
+        // you can pick up items under an (unlocked) footprint without also moving the
+        // footprint's sub-parts.
         if( !m_isFootprintEditor && !checkVisibilityOnly )
         {
             if( m_multiple && !settings->GetHighContrast() )
@@ -1922,7 +1922,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         break;
 
     case PCB_FP_SHAPE_T:
-        // Module edge selections are only allowed in modedit mode.
+        // Footprint shape selections are only allowed in footprint editor mode.
         if( !m_isFootprintEditor && !checkVisibilityOnly )
             return false;
 
@@ -1930,10 +1930,10 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 
     case PCB_PAD_T:
     {
-        // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
-        // footprint subparts one by one, rather than with a drag selection.  This is so you can
-        // pick up items under an (unlocked) footprint without also moving the footprint's
-        // sub-parts.
+        // Multiple selection is only allowed in footprint editor mode.  In pcbnew, you have to
+        // select footprint subparts one by one, rather than with a drag selection.  This is so
+        // you can pick up items under an (unlocked) footprint without also moving the
+        // footprint's sub-parts.
         if( !m_isFootprintEditor && !checkVisibilityOnly )
         {
             if( m_multiple )

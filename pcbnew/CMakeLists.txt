@@ -151,9 +151,9 @@ set( PCBNEW_DIALOGS
     dialogs/panel_edit_options_base.cpp
     dialogs/panel_fp_lib_table.cpp
     dialogs/panel_fp_lib_table_base.cpp
-    dialogs/panel_modedit_color_settings.cpp
-    dialogs/panel_modedit_defaults.cpp
-    dialogs/panel_modedit_defaults_base.cpp
+    dialogs/panel_fp_editor_color_settings.cpp
+    dialogs/panel_fp_editor_defaults.cpp
+    dialogs/panel_fp_editor_defaults_base.cpp
     dialogs/panel_pcbnew_color_settings.cpp
     dialogs/panel_pcbnew_display_origin.cpp
     dialogs/panel_pcbnew_display_origin_base.cpp

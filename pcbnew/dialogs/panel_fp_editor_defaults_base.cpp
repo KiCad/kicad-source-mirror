@@ -7,11 +7,11 @@
 
 #include "widgets/wx_grid.h"
 
-#include "panel_modedit_defaults_base.h"
+#include "panel_fp_editor_defaults_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_FP_EDITOR_DEFAULTS_BASE::PANEL_FP_EDITOR_DEFAULTS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
 {
 	wxBoxSizer* bSizerMain;
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
@@ -157,16 +157,16 @@ PANEL_MODEDIT_DEFAULTS_BASE::PANEL_MODEDIT_DEFAULTS_BASE( wxWindow* parent, wxWi
 	bSizerMain->Fit( this );
 
 	// Connect Events
-	m_textItemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnGridSize ), NULL, this );
-	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
-	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+	m_textItemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
+	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
 }
 
-PANEL_MODEDIT_DEFAULTS_BASE::~PANEL_MODEDIT_DEFAULTS_BASE()
+PANEL_FP_EDITOR_DEFAULTS_BASE::~PANEL_FP_EDITOR_DEFAULTS_BASE()
 {
 	// Disconnect Events
-	m_textItemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnGridSize ), NULL, this );
-	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
-	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_MODEDIT_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
+	m_textItemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnGridSize ), NULL, this );
+	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnAddTextItem ), NULL, this );
+	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_EDITOR_DEFAULTS_BASE::OnDeleteTextItem ), NULL, this );
 
 }

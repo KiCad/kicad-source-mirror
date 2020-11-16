@@ -106,7 +106,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libMgr = nullptr;
     m_unit = 1;
     m_convert = 1;
-    m_AboutTitle = "LibEdit";
+    m_AboutTitle = _( "Symbol Editor" );
 
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_libedit_xpm ) );

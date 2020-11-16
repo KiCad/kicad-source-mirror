@@ -27,7 +27,7 @@
 #include <widgets/wx_grid.h>
 #include <grid_tricks.h>
 
-#include <panel_modedit_defaults.h>
+#include <panel_fp_editor_defaults.h>
 #include <grid_layer_box_helpers.h>
 #include <bitmaps.h>
 
@@ -167,11 +167,12 @@ enum
 };
 
 
-PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent) :
-        PANEL_MODEDIT_DEFAULTS_BASE( aParent->GetTreebook() ),
+PANEL_FP_EDITOR_DEFAULTS::PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame,
+                                                    PAGED_DIALOG* aParent) :
+        PANEL_FP_EDITOR_DEFAULTS_BASE( aParent->GetTreebook() ),
         m_brdSettings( aFrame->GetDesignSettings() ),
         m_frame( aFrame ),
-        m_Parent( aParent )
+        m_parent( aParent )
 {
     m_textItemsGrid->SetDefaultRowSize( m_textItemsGrid->GetDefaultRowSize() + 4 );
     m_layerClassesGrid->SetDefaultRowSize( m_layerClassesGrid->GetDefaultRowSize() + 4 );
@@ -201,14 +202,14 @@ PANEL_MODEDIT_DEFAULTS::PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PA
 }
 
 
-PANEL_MODEDIT_DEFAULTS::~PANEL_MODEDIT_DEFAULTS()
+PANEL_FP_EDITOR_DEFAULTS::~PANEL_FP_EDITOR_DEFAULTS()
 {
     // destroy GRID_TRICKS before m_layerClassesGrid.
     m_layerClassesGrid->PopEventHandler( true );
 }
 
 
-bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
+bool PANEL_FP_EDITOR_DEFAULTS::TransferDataToWindow()
 {
     wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
 
@@ -274,7 +275,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
 }
 
 
-bool PANEL_MODEDIT_DEFAULTS::Show( bool aShow )
+bool PANEL_FP_EDITOR_DEFAULTS::Show( bool aShow )
 {
     bool retVal = wxPanel::Show( aShow );
 
@@ -297,14 +298,14 @@ bool PANEL_MODEDIT_DEFAULTS::Show( bool aShow )
 }
 
 
-int PANEL_MODEDIT_DEFAULTS::getGridValue( int aRow, int aCol )
+int PANEL_FP_EDITOR_DEFAULTS::getGridValue( int aRow, int aCol )
 {
     return ValueFromString( m_frame->GetUserUnits(),
                             m_layerClassesGrid->GetCellValue( aRow, aCol ) );
 }
 
 
-bool PANEL_MODEDIT_DEFAULTS::validateData()
+bool PANEL_FP_EDITOR_DEFAULTS::validateData()
 {
     if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
         return false;
@@ -319,7 +320,7 @@ bool PANEL_MODEDIT_DEFAULTS::validateData()
         {
             wxString msg = _( "Text will not be readable with a thickness greater than\n"
                               "1/4 its width or height." );
-            m_Parent->SetError( msg, this, m_layerClassesGrid, row, COL_TEXT_THICKNESS );
+            m_parent->SetError( msg, this, m_layerClassesGrid, row, COL_TEXT_THICKNESS );
             return false;
         }
     }
@@ -328,7 +329,7 @@ bool PANEL_MODEDIT_DEFAULTS::validateData()
 }
 
 
-bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
+bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
 {
     if( !validateData() )
         return false;
@@ -370,7 +371,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
 }
 
 
-void PANEL_MODEDIT_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
+void PANEL_FP_EDITOR_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 {
     if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
         return;
@@ -390,7 +391,7 @@ void PANEL_MODEDIT_DEFAULTS::OnAddTextItem( wxCommandEvent& event )
 }
 
 
-void PANEL_MODEDIT_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
+void PANEL_FP_EDITOR_DEFAULTS::OnDeleteTextItem( wxCommandEvent& event )
 {
     if( !m_textItemsGrid->CommitPendingChanges() || !m_layerClassesGrid->CommitPendingChanges() )
         return;

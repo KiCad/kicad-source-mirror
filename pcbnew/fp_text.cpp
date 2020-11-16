@@ -170,9 +170,8 @@ bool FP_TEXT::IsParentFlipped() const
 
 void FP_TEXT::Mirror( const wxPoint& aCentre, bool aMirrorAroundXAxis )
 {
-    // Used in modedit, to transform the footprint
-    // the mirror is around the Y axis or X axis if aMirrorAroundXAxis = true
     // the position is mirrored, but the text itself is not mirrored
+
     if( aMirrorAroundXAxis )
         SetTextY( ::MIRRORVAL( GetTextPos().y, aCentre.y ) );
     else
@@ -275,7 +274,7 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 {
     FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
-    if( parentFootprint == NULL )        // Happens in modedit, and for new texts
+    if( parentFootprint == NULL )        // Happens in footprint editor, and for new texts
         return;
 
     wxString msg, Line;

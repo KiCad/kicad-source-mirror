@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
-#define DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
+#ifndef DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H
+#define DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H
 
 #include <vector>
 #include <text_mod_grid_table.h>
@@ -96,4 +96,4 @@ private:
 };
 
 
-#endif      //  DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
+#endif      //  DIALOG_EDIT_FOOTPRINT_FOR_FP_EDITOR_H

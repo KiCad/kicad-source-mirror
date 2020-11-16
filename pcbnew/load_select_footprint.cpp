@@ -125,12 +125,12 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
     newFootprint->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
 
     // Put it on FRONT layer,
-    // because this is the default in ModEdit, and in libs
+    // because this is the default in Footprint Editor, and in libs
     if( newFootprint->GetLayer() != F_Cu )
         newFootprint->Flip( newFootprint->GetPosition(), frame->Settings().m_FlipLeftRight );
 
     // Put it in orientation 0,
-    // because this is the default orientation in ModEdit, and in libs
+    // because this is the default orientation in Footprint Editor, and in libs
     newFootprint->SetOrientation( 0 );
 
     Zoom_Automatique( false );

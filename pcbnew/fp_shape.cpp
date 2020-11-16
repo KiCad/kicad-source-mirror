@@ -175,7 +175,7 @@ void FP_SHAPE::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     default:
     case S_SEGMENT:
     case S_CURVE:
-        // If Start0 and Start are equal (ie: ModEdit), then flip both sets around the
+        // If Start0 and Start are equal (ie: Footprint Editor), then flip both sets around the
         // centre point.
         if( m_start == m_Start0 )
             pt = aCentre;

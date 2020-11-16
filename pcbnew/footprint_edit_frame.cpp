@@ -36,8 +36,8 @@
 #include <board.h>
 #include <footprint.h>
 #include <confirm.h>
-#include <dialogs/panel_modedit_color_settings.h>
-#include <dialogs/panel_modedit_defaults.h>
+#include <dialogs/panel_fp_editor_color_settings.h>
+#include <dialogs/panel_fp_editor_defaults.h>
 #include <dialogs/panel_display_options.h>
 #include <dialogs/panel_edit_options.h>
 #include <footprint_edit_frame.h>
@@ -115,7 +115,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_canvasType = aBackend;
-    m_AboutTitle = "ModEdit";
+    m_AboutTitle = _( "Footprint Editor" );
     m_selLayerBox = nullptr;
     m_settings = nullptr;
 
@@ -139,9 +139,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // This board will only be used to hold a footprint for editing
     GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
 
-    // In modedit, the default net clearance is not known (it depends on the actual board).
-    // So we do not show the default clearance, by setting it to 0.
-    // The footprint or pad specific clearance will be shown.
+    // In Footprint Editor, the default net clearance is not known (it depends on the actual
+    // board).  So we do not show the default clearance, by setting it to 0.  The footprint or
+    // pad specific clearance will be shown.
     GetBoard()->GetDesignSettings().GetDefault()->SetClearance( 0 );
 
     // Don't show the default board solder mask clearance in the footprint editor.  Only the
@@ -162,7 +162,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     GetGalDisplayOptions().m_axesEnabled = true;
 
-    // In modedit, set the default paper size to A4 for plot/print
+    // In Footprint Editor, set the default paper size to A4 for plot/print
     SetPageSettings( PAGE_INFO( PAGE_INFO::A4 ) );
     SetScreen( new PCB_SCREEN( GetPageSettings().GetSizeIU() ) );
 
@@ -876,9 +876,9 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_MODEDIT_COLOR_SETTINGS( this, book ), _( "Colors" ) );
+    book->AddSubPage( new PANEL_FP_EDITOR_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
-    book->AddSubPage( new PANEL_MODEDIT_DEFAULTS( this, aParent ), _( "Default Values" ) );
+    book->AddSubPage( new PANEL_FP_EDITOR_DEFAULTS( this, aParent ), _( "Default Values" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );
 }

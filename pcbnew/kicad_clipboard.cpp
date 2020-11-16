@@ -64,7 +64,7 @@ void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 }
 
 
-void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModEdit )
+void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isFootprintEditor )
 {
     VECTOR2I refPoint( 0, 0 );
 
@@ -96,7 +96,7 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isModE
 
         Format( static_cast<BOARD_ITEM*>( &newFootprint ) );
     }
-    else if( isModEdit )
+    else if( isFootprintEditor )
     {
         FOOTPRINT partialFootprint( m_board );
 

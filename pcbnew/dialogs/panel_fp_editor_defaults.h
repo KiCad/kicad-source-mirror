@@ -17,26 +17,26 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PANEL_MODEDIT_DEFAULTS_H
-#define KICAD_PANEL_MODEDIT_DEFAULTS_H
+#ifndef PANEL_FP_EDITOR_DEFAULTS_H
+#define PANEL_FP_EDITOR_DEFAULTS_H
 
-#include <panel_modedit_defaults_base.h>
+#include <panel_fp_editor_defaults_base.h>
 #include <board_design_settings.h>
 #include <widgets/unit_binder.h>
 
 class FOOTPRINT_EDIT_FRAME;
 
 
-class PANEL_MODEDIT_DEFAULTS : public PANEL_MODEDIT_DEFAULTS_BASE
+class PANEL_FP_EDITOR_DEFAULTS : public PANEL_FP_EDITOR_DEFAULTS_BASE
 {
     BOARD_DESIGN_SETTINGS   m_brdSettings;
     FOOTPRINT_EDIT_FRAME*   m_frame;
-    PAGED_DIALOG*           m_Parent;
+    PAGED_DIALOG*           m_parent;
     bool                    m_firstShow = true;
 
 public:
-    PANEL_MODEDIT_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
-    ~PANEL_MODEDIT_DEFAULTS() override;
+    PANEL_FP_EDITOR_DEFAULTS( FOOTPRINT_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent );
+    ~PANEL_FP_EDITOR_DEFAULTS() override;
 
 private:
     virtual void OnAddTextItem( wxCommandEvent& event ) override;
@@ -55,5 +55,5 @@ private:
 
 
 
-#endif //KICAD_PANEL_MODEDIT_DEFAULTS_H
+#endif // PANEL_FP_EDITOR_DEFAULTS_H
 

@@ -144,7 +144,7 @@ int BITMAPCONV_INFO::ConvertBitmap( potrace_bitmap_t* aPotrace_bitmap,
     case PCBNEW_KICAD_MOD:
         m_Format = PCBNEW_KICAD_MOD;
         m_ScaleX = MM2NANOMETER * 25.4 / aDpi_X;   // the conversion scale from PPI to UI
-        m_ScaleY = MM2NANOMETER * 25.4 / aDpi_Y;   // Y axis is top to bottom in modedit
+        m_ScaleY = MM2NANOMETER * 25.4 / aDpi_Y;   // Y axis is top to bottom in Footprint Editor
         createOutputData( aModLayer );
         break;
 

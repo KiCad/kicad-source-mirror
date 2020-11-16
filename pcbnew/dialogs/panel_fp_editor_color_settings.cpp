@@ -25,13 +25,13 @@
 #include <footprint_editor_settings.h>
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
-#include <panel_modedit_color_settings.h>
+#include <panel_fp_editor_color_settings.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 
 
-PANEL_MODEDIT_COLOR_SETTINGS::PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame,
-                                                            wxWindow* aParent )
+PANEL_FP_EDITOR_COLOR_SETTINGS::PANEL_FP_EDITOR_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME* aFrame,
+                                                                wxWindow* aParent )
         : PANEL_COLOR_SETTINGS( aParent ),
           m_frame( aFrame ),
           m_page( nullptr ),
@@ -82,7 +82,7 @@ PANEL_MODEDIT_COLOR_SETTINGS::PANEL_MODEDIT_COLOR_SETTINGS( FOOTPRINT_EDIT_FRAME
 }
 
 
-PANEL_MODEDIT_COLOR_SETTINGS::~PANEL_MODEDIT_COLOR_SETTINGS()
+PANEL_FP_EDITOR_COLOR_SETTINGS::~PANEL_FP_EDITOR_COLOR_SETTINGS()
 {
     delete m_currentSettings;
     delete m_page;
@@ -90,7 +90,7 @@ PANEL_MODEDIT_COLOR_SETTINGS::~PANEL_MODEDIT_COLOR_SETTINGS()
 }
 
 
-bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataFromWindow()
+bool PANEL_FP_EDITOR_COLOR_SETTINGS::TransferDataFromWindow()
 {
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
     FOOTPRINT_EDITOR_SETTINGS* settings = settingsMgr.GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
@@ -100,13 +100,13 @@ bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataFromWindow()
 }
 
 
-bool PANEL_MODEDIT_COLOR_SETTINGS::TransferDataToWindow()
+bool PANEL_FP_EDITOR_COLOR_SETTINGS::TransferDataToWindow()
 {
     return true;
 }
 
 
-void PANEL_MODEDIT_COLOR_SETTINGS::createSwatches()
+void PANEL_FP_EDITOR_COLOR_SETTINGS::createSwatches()
 {
     std::vector<GAL_LAYER_ID> galLayers;
 
