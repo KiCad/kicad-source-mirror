@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-10 23:04+0000\n"
+"PO-Revision-Date: 2020-11-16 21:45+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -524,7 +524,7 @@ msgstr "Možnosti OpenGL rendrování"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
-msgstr "Zobrazit obalový obrys modelu"
+msgstr "Zobrazit ohraničovací rámečky modelu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:313
 msgid "Show copper thickness"
@@ -632,7 +632,7 @@ msgstr ""
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:543
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "Faktor náhodného směru vylitých paprsků"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
@@ -945,11 +945,11 @@ msgstr "3D mřížka 1mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use All Properties"
-msgstr "Použít všechny vlastnosti materiálů"
+msgstr "Použít všechny vlastnosti"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:187
 msgid "Use all material properties from each 3D model file"
-msgstr "Použít všechny vlastnosti materiálů ze všech 3D modelů"
+msgstr "Použít všechny vlastnosti materiálů ze všech souborů 3D modelů"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:193
 msgid "Use Diffuse Only"
@@ -993,7 +993,7 @@ msgstr "Přepnout 3D modely s atributem 'Virtual'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
-msgstr "Zobrazit obalový obrys modelu"
+msgstr "Zobrazit ohraničovací rámečky modelu"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:232
 msgid "Render Shadows"
@@ -1024,11 +1024,11 @@ msgstr ""
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
 msgid "Render materials with reflective properties on final render (slow)"
 msgstr ""
-"Rendrovat materiály s reflexními vlastnostmi na finální render (pomalé)"
+"Rendrovat materiály s reflexními vlastnostmi na finální vykreslení (pomalé)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Render with improved quality on final render (slow)"
-msgstr "Vykreslit v lepší kvalitě výsledku (pomalé)"
+msgstr "Rendrování se zlepšenou kvalitou na konečné vykreslení (pomalé)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:263
 msgid ""
@@ -1259,7 +1259,7 @@ msgstr "Původní obrázek"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:29
 msgid "Greyscale Picture"
-msgstr "Šedý obrázek"
+msgstr "Obrázek ve stupních šedi"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:32
 msgid "Black&&White Picture"
@@ -1331,7 +1331,7 @@ msgstr "Exportovat do souboru"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:178
 msgid "Export to Clipboard"
-msgstr "Kopírovat do schránky"
+msgstr "Export do schránky"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Eeschema (.lib file)"
@@ -1365,7 +1365,8 @@ msgstr "Černobílý práh:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Nastavte úroveň pro konverzi šedého obrázku na černobílý obrázek."
+msgstr ""
+"Upravením úrovně převeďte obrázek ve stupních šedi na černobílý obrázek."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:351
@@ -2093,7 +2094,7 @@ msgstr "Vybrat soubor"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
 msgid "Configure Global Library Table"
-msgstr "Konfigurovat tabulku globální knihovny"
+msgstr "Konfigurovat globální tabulku knihovny"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:26 common/tool/actions.cpp:442
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -2475,7 +2476,7 @@ msgstr "Vlastní šířka papíru."
 #: common/dialogs/dialog_page_settings_base.cpp:317
 #: common/dialogs/dialog_page_settings_base.cpp:329
 msgid "Export to other sheets"
-msgstr "Exportovat na další stránky"
+msgstr "Exportovat na další listy"
 
 #: common/dialogs/dialog_page_settings_base.cpp:134
 msgid "Title Block Parameters"
@@ -2900,7 +2901,7 @@ msgstr "Textový editor:"
 
 #: common/dialogs/panel_common_settings_base.cpp:120
 msgid "System default PDF viewer"
-msgstr "Výchozí PDF prohlížeč"
+msgstr "Systémový výchozí prohlížeč souborů PDF"
 
 #: common/dialogs/panel_common_settings_base.cpp:123
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:175
@@ -3037,6 +3038,8 @@ msgid ""
 "If checked, launching a project will also launch tools such as eeschema and "
 "pcbnew with previously open files"
 msgstr ""
+"Je-li zaškrtnuto, spuštění projektu také spustí nástroje jako eeschema a "
+"pcbnew s dříve otevřenými soubory"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:72
 msgid "Type filter text"
@@ -3344,7 +3347,7 @@ msgstr "Filtr třídy sítí:"
 #: common/dialogs/panel_setup_netclasses_base.cpp:120
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:28
 msgid "Net name filter:"
-msgstr "Filtr sítě:"
+msgstr "Filtr názvu sítě:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:135
 msgid "Show All Nets"
@@ -3416,7 +3419,7 @@ msgstr "Chyba:"
 #: common/dialogs/wx_html_report_panel.cpp:183
 #: common/dialogs/wx_html_report_panel.cpp:206
 msgid "Warning:"
-msgstr "Upozornění:"
+msgstr "Varování:"
 
 #: common/dialogs/wx_html_report_panel.cpp:186
 #: common/dialogs/wx_html_report_panel.cpp:208
@@ -3439,7 +3442,7 @@ msgstr "Chyba při uložení souboru"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:14
 msgid "Output Messages"
-msgstr "Zprávy"
+msgstr "Výstupní zprávy"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:31
 #: eeschema/dialogs/dialog_erc_base.cpp:64
@@ -3460,7 +3463,7 @@ msgstr "Všechny"
 #: eeschema/dialogs/dialog_erc_base.cpp:80
 #: pcbnew/dialogs/dialog_drc_base.cpp:163
 msgid "Warnings"
-msgstr "Upozornění"
+msgstr "Varování"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
 msgid "Actions"
@@ -3731,9 +3734,8 @@ msgid "Aligned Dimension"
 msgstr "Přidat kótu"
 
 #: common/eda_item.cpp:272
-#, fuzzy
 msgid "Orthogonal Dimension"
-msgstr "Upravit rozměr"
+msgstr "Ortogonální rozměr"
 
 #: common/eda_item.cpp:273
 #, fuzzy
@@ -3889,9 +3891,8 @@ msgid "Gerber Layout"
 msgstr "Gerber"
 
 #: common/eda_item.cpp:316
-#, fuzzy
 msgid "Draw Item"
-msgstr "Táhnout položku"
+msgstr "Kreslit položku"
 
 #: common/eda_item.cpp:317 common/page_layout/ws_draw_item.cpp:131
 #: common/page_layout/ws_draw_item.cpp:440 eeschema/sch_bitmap.h:133
@@ -4371,7 +4372,7 @@ msgstr "Chyba načítání knihovny kiface \"%s\"."
 #, c-format
 msgid ""
 "Could not read instance name and version symbol form kiface library \"%s\"."
-msgstr "Nelze přečíst jméno instance a symbol verze z knihovny kiface \"% s\"."
+msgstr "Nelze přečíst jméno instance a symbol verze z knihovny kiface \"%s\"."
 
 #: common/kiway.cpp:271
 #, c-format
@@ -4393,18 +4394,16 @@ msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
 msgstr "Pravděpodobně chybí sdílení knihovna (.dll or .so).\n"
 
 #: common/kiway.cpp:279
-#, fuzzy
 msgid ""
 "From command line: argv[0]:\n"
 "'"
-msgstr "Z příkazové řádky: argv[0]:"
+msgstr ""
+"Z příkazové řádky: argv[0]:\n"
+"'"
 
 #: common/kiway.cpp:384 common/kiway.cpp:388 common/kiway.cpp:392
-#, fuzzy
 msgid "Error loading editor"
-msgstr ""
-"Chyba načítání netlistu.\n"
-"%s"
+msgstr "Chyba načítání editoru"
 
 #: common/kiway.cpp:477
 #, c-format
@@ -4775,9 +4774,8 @@ msgid "ERC error"
 msgstr "Chyba ERC"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:168
-#, fuzzy
 msgid "Helper items"
-msgstr "Smazat položky"
+msgstr "Pomocné položky"
 
 #: common/layer_id.cpp:132 common/layer_id.cpp:169 common/tool/grid_menu.cpp:40
 #: gerbview/gerbview_layer_widget.cpp:102
@@ -5013,9 +5011,8 @@ msgstr "Čára"
 
 #: common/page_layout/ws_draw_item.cpp:127
 #: common/page_layout/ws_draw_item.cpp:298
-#, fuzzy
 msgid "Imported Shape"
-msgstr "Importovat schéma"
+msgstr "Importovaný tvar"
 
 #: common/page_layout/ws_draw_item.cpp:137
 msgid "First Page Only"
@@ -5069,13 +5066,12 @@ msgid "Line, length %s"
 msgstr "Čára, délka %s"
 
 #: common/page_layout/ws_draw_item.cpp:446
-#, fuzzy
 msgid "Page Limits"
-msgstr "Zobrazit okraje strany:"
+msgstr "Okraje strany"
 
 #: common/pgm_base.cpp:165
 msgid "No default editor found, you must choose it"
-msgstr "Výchozí editor nenalezen, je třeba jej zvolit"
+msgstr "Nenalezen žádný výchozí editor, musíte jej zvolit"
 
 #: common/pgm_base.cpp:185
 msgid "Executable file (*.exe)|*.exe"
@@ -5105,9 +5101,9 @@ msgstr "Soubor jazyka KiCad pro tento jazyk není nainstalován."
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1979
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:240
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file '%s'"
-msgstr "Nelze kopírovat soubor \"%s\"."
+msgstr "Nelze otevřít soubor '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1995
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2013
@@ -5143,11 +5139,9 @@ msgid "Unknown Parameter '%s' in '%s'"
 msgstr ""
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr ""
-"Adresa URL nelze analyzovat:\n"
-"\"%s\""
+msgstr "Nelze analyzovat '%s' v '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:115
 #, c-format
@@ -5210,7 +5204,7 @@ msgstr "Chyba: "
 
 #: common/rc_item.cpp:333
 msgid "Warning: "
-msgstr "Upozornění: "
+msgstr "Varování: "
 
 #: common/richio.cpp:171
 #, c-format
@@ -5226,9 +5220,8 @@ msgid "Line length exceeded"
 msgstr "Délka čáry překročena"
 
 #: common/richio.cpp:551
-#, fuzzy
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
-msgstr "Chyba zápisu do souboru"
+msgstr "OUTPUTSTREAM_OUTPUTFORMATTER chyba zápisu"
 
 #: common/settings/color_settings.cpp:312
 msgid "(Footprints)"
@@ -5250,45 +5243,42 @@ msgid "Field%d"
 msgstr "Pole%d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Zavřít"
+msgstr "Zavřít %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "Ukončit"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Ukončit"
+msgstr "Ukončit %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
 msgstr "Nový..."
 
 #: common/tool/actions.cpp:41
-#, fuzzy
 msgid "Create a new document in the editor"
-msgstr "Vytvořit novou součástku z aktuální"
+msgstr "Vytvořit nový dokument v editoru"
 
 #: common/tool/actions.cpp:47
 msgid "New Library..."
 msgstr "Nová knihovna..."
 
 #: common/tool/actions.cpp:47
-#, fuzzy
 msgid "Create a new library folder"
-msgstr "Vytvořit novou knihovnu"
+msgstr "Vytvořit novou složku knihovny"
 
 #: common/tool/actions.cpp:53
 msgid "Add Library..."
 msgstr "Přidat knihovnu..."
 
 #: common/tool/actions.cpp:53
-#, fuzzy
 msgid "Add an existing library folder"
-msgstr "Přidat existující knihovnu"
+msgstr "Přidat existující složku knihovny"
 
 #: common/tool/actions.cpp:59
 msgid "Open..."
@@ -5307,19 +5297,16 @@ msgid "Save As..."
 msgstr "Uložit jako..."
 
 #: common/tool/actions.cpp:71
-#, fuzzy
 msgid "Save current document to another location"
-msgstr "Uložit součástku do nové knihovny"
+msgstr "Uložit aktuální dokument na jiné místo"
 
 #: common/tool/actions.cpp:77
-#, fuzzy
 msgid "Save Copy As..."
 msgstr "Uložit kopii jako..."
 
 #: common/tool/actions.cpp:77
-#, fuzzy
 msgid "Save a copy of the current document to another location"
-msgstr "Uložit kopii aktuálního listu"
+msgstr "Uložit kopii aktuálního dokumentu do jiného umístění"
 
 #: common/tool/actions.cpp:83
 msgid "Save All"
@@ -5334,9 +5321,8 @@ msgid "Throw away changes"
 msgstr "Zahodit změny"
 
 #: common/tool/actions.cpp:95
-#, fuzzy
 msgid "Page Settings..."
-msgstr "Nastavení &stránky..."
+msgstr "Nastavení stránky..."
 
 #: common/tool/actions.cpp:95
 #, fuzzy
@@ -5344,9 +5330,8 @@ msgid "Settings for paper size and title block info"
 msgstr "Nastavení stránky pro velikost papíru a textu"
 
 #: common/tool/actions.cpp:101 kicad/tree_project_frame.cpp:800
-#, fuzzy
 msgid "Print..."
-msgstr "&Tisknout..."
+msgstr "Tisk..."
 
 #: common/tool/actions.cpp:107
 msgid "Plot..."
@@ -5358,9 +5343,8 @@ msgid "Plot"
 msgstr "Kreslit"
 
 #: common/tool/actions.cpp:113
-#, fuzzy
 msgid "Close the current editor"
-msgstr "Zavřít editor pouzder"
+msgstr "Zavřete aktuální editor"
 
 #: common/tool/actions.cpp:120
 msgid "Cancel current tool"
@@ -6572,11 +6556,8 @@ msgid "Symbol to footprint changes are unsaved"
 msgstr "Soubory přiřazení pouzder k součástkám"
 
 #: cvpcb/cvpcb_mainframe.cpp:387
-#, fuzzy
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
-"Propojení součástky a pouzdra bylo změněno.\n"
-"Uložit před ukončením?"
+msgstr "Propojení součástky a pouzdra bylo změněno. Uložit změny?"
 
 #: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:218
 #, fuzzy, c-format
@@ -8023,19 +8004,16 @@ msgid "Done.<br><br>"
 msgstr ""
 
 #: eeschema/dialogs/dialog_erc.cpp:364
-#, fuzzy
 msgid "Checking sheet names..."
-msgstr "Kontroluji výplň zóny...\n"
+msgstr "Kontrola názvů listů..."
 
 #: eeschema/dialogs/dialog_erc.cpp:370
-#, fuzzy
 msgid "Checking bus conflicts..."
-msgstr "Kontroluji výplň zóny...\n"
+msgstr "Kontrola konfliktů sběrnic..."
 
 #: eeschema/dialogs/dialog_erc.cpp:375
-#, fuzzy
 msgid "Checking conflicts..."
-msgstr "Kontroluji výplň zóny...\n"
+msgstr "Kontrola konfliktů..."
 
 #: eeschema/dialogs/dialog_erc.cpp:382
 #, fuzzy
@@ -8043,19 +8021,16 @@ msgid "Checking footprints..."
 msgstr "Zkontrolovat pouzdra"
 
 #: eeschema/dialogs/dialog_erc.cpp:386
-#, fuzzy
 msgid "Checking pins..."
-msgstr "Kontroluji výplň zóny...\n"
+msgstr "Kontrola vývodů..."
 
 #: eeschema/dialogs/dialog_erc.cpp:399
-#, fuzzy
 msgid "Checking labels..."
-msgstr "Kontroluji výplň zóny...\n"
+msgstr "Kontrola označení..."
 
 #: eeschema/dialogs/dialog_erc.cpp:405
-#, fuzzy
 msgid "Checking for unresolved variables..."
-msgstr "Kontroluji výplň zóny...\n"
+msgstr "Kontrola nevyřešených proměnných..."
 
 #: eeschema/dialogs/dialog_erc.cpp:411
 #, fuzzy
@@ -11852,7 +11827,7 @@ msgid ""
 "load \n"
 "hierarchical sheet schematics."
 msgstr ""
-"Celé schéma nebylo možné načíst. Došlo k chybě při pokusu o načtení "
+"Celé schéma nelze načíst. Při pokusu o načtení došlo k chybám \n"
 "hierarchického listu schématu."
 
 #: eeschema/files-io.cpp:397
@@ -11954,12 +11929,15 @@ msgid "Project Save Warning"
 msgstr "Specifické knihovny projektu"
 
 #: eeschema/files-io.cpp:763
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 "%s"
-msgstr "Následující knihovny nebyly nalezeny:"
+msgstr ""
+"Následující soubory budou přepsány:\n"
+"\n"
+"%s"
 
 #: eeschema/files-io.cpp:764
 #, fuzzy
@@ -12439,31 +12417,26 @@ msgstr ""
 "Nastala chyba při pokusu o uložení projektové tabulky knihoven součástek."
 
 #: eeschema/sch_base_frame.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s'."
-msgstr ""
-"Chyba nastala při načítání součástky %s z knihovny %s.\n"
-"\n"
-"%s"
+msgstr "Chyba při načítání symbolu '%s' z knihovny '%s'."
 
 #: eeschema/sch_base_frame.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving global symbol library table:\n"
 "%s"
 msgstr ""
-"Nastala chyba při pokusu o uložení globální tabulky knihoven součástek:\n"
-"\n"
+"Chyba při ukládání globální tabulky knihovny symbolů:\n"
 "%s"
 
 #: eeschema/sch_base_frame.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
 msgstr ""
-"Nastala chyba při pokusu o uložení projektové tabulky knihoven součástek:\n"
-"\n"
+"Chyba při ukládání tabulky knihovny symbolů specifické pro projekt:\n"
 "%s"
 
 #: eeschema/sch_bus_entry.cpp:346
@@ -13624,15 +13597,15 @@ msgstr ""
 "některou z jejích podskupin jako nadřazený někde v schematické hierarchii."
 
 #: eeschema/sheet.cpp:81
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The schematic \"%s\" has not had it's symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
 msgstr ""
-"Schéma \"%s\" nebylo přemapováno na tabulku knihoven součástek.\n"
-"Projekt, kterému toto schéma patří, musí být nejprve přemapován,\n"
-"než se dá importovat do aktuálního projektu."
+"Schéma \"%s\" nebylo přemapováno na tabulku knihoven symbolů.  Projekt, "
+"kterému toto schéma patří, musí být před importem do aktuálního projektu "
+"nejprve přemapován."
 
 #: eeschema/sheet.cpp:144
 msgid ""
@@ -13795,9 +13768,8 @@ msgid "Plot%u - "
 msgstr "Kreslit%u"
 
 #: eeschema/sim/sim_plot_frame.cpp:598
-#, fuzzy
 msgid "Error: simulation type not defined!\n"
-msgstr "Chyba při ukládání souboru návrhu rozložení stránky"
+msgstr "Chyba: Typ simulace není definován!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:604
 msgid "Error: simulation type doesn't support plotting!\n"
@@ -13837,13 +13809,16 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Nejprve musíte spustit simulaci."
 
 #: eeschema/sim/sim_plot_frame.cpp:1524
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Nastavení simulace"
+msgstr ""
+"\n"
+"\n"
+"Výsledky simulace:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1586
 msgid "Hide Signal"
@@ -14064,11 +14039,13 @@ msgid "Library \"%s\" already exists"
 msgstr "Knihovna s názvem \"%s\" již existuje"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:790
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Check write permission."
-msgstr "Nelze vytvořit soubor knihovny. Zkontrolujte oprávnění k zápisu."
+msgstr ""
+"Nelze vytvořit soubor knihovny '%s'.\n"
+"Zkontrolujte oprávnění k zápisu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:800
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:203
@@ -14106,9 +14083,9 @@ msgid "Add To Library Table"
 msgstr "Přidat do tabulky knihovny"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:981
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save backup to \"%s\""
-msgstr "Nelze vytvořit záložní soubor \"%s\"\n"
+msgstr "Zálohu se nepodařilo uložit na \"%s\""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1123
 #, c-format
