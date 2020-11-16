@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,9 +45,9 @@ enum ID_WHKL_MENU_IDS
 
 
 /**
- * WIDGET_HOTKEY_CLIENT_DATA
- * Stores the hotkey change data associated with each row. To change a
- * hotkey, edit it via GetCurrentValue() in the row's client data, then call
+ * Store the hotkey change data associated with each row.
+ *
+ * To change a hotkey, edit it via GetCurrentValue() in the row's client data, then call
  * WIDGET_HOTKEY_LIST::UpdateFromClientData().
  */
 class WIDGET_HOTKEY_CLIENT_DATA : public wxClientData
@@ -64,7 +64,6 @@ public:
 
 
 /**
- * HK_PROMPT_DIALOG
  * Dialog to prompt the user to enter a key.
  */
 class HK_PROMPT_DIALOG : public DIALOG_SHIM
@@ -213,8 +212,6 @@ protected:
 
 
 /**
- * HOTKEY_FILTER
- *
  * Class to manage logic for filtering hotkeys based on user input
  */
 class HOTKEY_FILTER
@@ -227,9 +224,7 @@ public:
     }
 
     /**
-     * Method FilterMatches
-     *
-     * Checks if the filter matches the given hotkey
+     * Check if the filter matches the given hotkey
      *
      * @return true on match (or if filter is disabled)
      */
@@ -456,9 +451,12 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     if( !m_readOnly )
         command_header << " " << _( "(double-click to edit)" );
 
-    AppendColumn( command_header, 320, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
-    AppendColumn( _( "Hotkey" ), 110, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
-    AppendColumn( _( "Description" ), 1000, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( command_header, wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT,
+                  wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Hotkey" ), wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT,
+                  wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Description" ), wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT,
+                  wxCOL_RESIZABLE | wxCOL_SORTABLE );
     GetDataView()->SetIndent( 10 );
 
     if( !m_readOnly )

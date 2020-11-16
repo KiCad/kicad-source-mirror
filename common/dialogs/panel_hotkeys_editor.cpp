@@ -80,16 +80,14 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
 
     mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
 
-    SetSizer( mainSizer );
-    Layout();
-
 #ifdef __WXGTK__
     // Work around a bug that clips the text vertically in the wxSearchCtrl on GTK
     filterSearch->SetMinSize( wxSize( filterSearch->GetSize().x,
                                       int( filterSearch->GetSize().y * 1.6 ) ) );
-
-    Layout();
 #endif
+
+    SetSizer( mainSizer );
+    Layout();
 
     // Connect Events
     filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED, &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
