@@ -1,24 +1,26 @@
 # Vesa Solonen <vesa.solonen@hut.fi>, 2009, 2010, 2012.
+# Kliment <kliment@0xfb.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2012-04-04 00:01+0200\n"
-"Last-Translator: Vesa Solonen <vesa.solonen@hut.fi>\n"
-"Language-Team: Finnish <kicad-developers@lists.launchpad.net>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-11-16 21:45+0000\n"
+"Last-Translator: Kliment <kliment@0xfb.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-Basepath: /home/vesa/softat/kicad\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,212,-1,-1,-1\n"
-"X-Generator: Lokalize 1.2\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
 "X-Poedit-SearchPath-2: cvpcb\n"
@@ -1488,19 +1490,16 @@ msgid "Logo for title block (.kicad_wks file)"
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
-#, fuzzy
 msgid "Format:"
-msgstr "muoto: 2.3"
+msgstr "muoto:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options:"
-msgstr "Sivun asetukset"
+msgstr "Kuvaasetukset:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
-#, fuzzy
 msgid "Black / White Threshold:"
-msgstr "Mustavalko"
+msgstr "Mustavalko raja-arvo:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:172
 msgid ""
@@ -1547,17 +1546,16 @@ msgid ""
 msgstr ""
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
-#, fuzzy
 msgid "Bitmap to Component Converter"
-msgstr "Kirjastokomponentin ominaisuudet"
+msgstr "Luo komponentti kuvasta"
 
 #: common/base_units.cpp:480
 msgid "sq. mm"
-msgstr ""
+msgstr "mm²"
 
 #: common/base_units.cpp:482
 msgid "cu. mm"
-msgstr ""
+msgstr "mm³"
 
 #: common/base_units.cpp:492 common/eda_draw_frame.cpp:496
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1578,7 +1576,7 @@ msgstr ""
 #: pagelayout_editor/pl_editor_frame.cpp:731
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:143
 msgid "mils"
-msgstr "mils"
+msgstr "mil"
 
 #: common/base_units.cpp:494
 #, fuzzy
@@ -1647,14 +1645,12 @@ msgstr "Piilota"
 
 #: common/confirm.cpp:122
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:250
-#, fuzzy
 msgid "Message"
-msgstr "Viestiloki:"
+msgstr "Viesti"
 
 #: common/confirm.cpp:123
-#, fuzzy
 msgid "Question"
-msgstr "Merkintä"
+msgstr "Kysymys"
 
 #: common/confirm.cpp:124 common/confirm.cpp:245
 #: common/dialogs/panel_setup_severities.cpp:40
@@ -1752,16 +1748,15 @@ msgstr "KiCad netissä"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "The official KiCad website - "
-msgstr ""
+msgstr "Virallinen KiCad-sivusto - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
-#, fuzzy
 msgid "Developer website - "
-msgstr "Projekti Launcpad-sisällönhallinnassa"
+msgstr "Kehittäjäsivusto - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr ""
+msgstr "KiCadin viralliset kirjastot - "
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 #, fuzzy
