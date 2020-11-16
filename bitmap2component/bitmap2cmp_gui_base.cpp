@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerInfo;
-	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Bitmap Info:") ), wxVERTICAL );
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Bitmap Information") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerInfo;
 	fgSizerInfo = new wxFlexGridSizer( 0, 4, 0, 0 );
@@ -101,7 +101,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer->Add( sbSizerInfo, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizerImgPrms;
-	sbSizerImgPrms = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Output Parameters:") ), wxVERTICAL );
+	sbSizerImgPrms = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Output Parameters") ), wxVERTICAL );
 
 	wxBoxSizer* bSizerLock;
 	bSizerLock = new wxBoxSizer( wxHORIZONTAL );
@@ -155,14 +155,14 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	m_buttonExportClipboard = new wxButton( m_panelRight, wxID_ANY, _("Export to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
 	brightSizer->Add( m_buttonExportClipboard, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxString m_rbOutputFormatChoices[] = { _("Eeschema (.lib file)"), _("Pcbnew (.kicad_mod file)"), _("PostScript (.ps file)"), _("Logo for title block (.kicad_wks file)") };
+	wxString m_rbOutputFormatChoices[] = { _("Eeschema (.lib file)"), _("Pcbnew (.kicad_mod file)"), _("Postscript (.ps file)"), _("Logo for title block (.kicad_wks file)") };
 	int m_rbOutputFormatNChoices = sizeof( m_rbOutputFormatChoices ) / sizeof( wxString );
-	m_rbOutputFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, m_rbOutputFormatNChoices, m_rbOutputFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbOutputFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_rbOutputFormatNChoices, m_rbOutputFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbOutputFormat->SetSelection( 1 );
 	brightSizer->Add( m_rbOutputFormat, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options:") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options") ), wxVERTICAL );
 
 	m_ThresholdText = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Black / White Threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThresholdText->Wrap( -1 );
@@ -181,7 +181,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	wxString m_rbPCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User layer Eco2") };
 	int m_rbPCBLayerNChoices = sizeof( m_rbPCBLayerChoices ) / sizeof( wxString );
-	m_rbPCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline:"), wxDefaultPosition, wxDefaultSize, m_rbPCBLayerNChoices, m_rbPCBLayerChoices, 1, wxRA_SPECIFY_COLS );
+	m_rbPCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline"), wxDefaultPosition, wxDefaultSize, m_rbPCBLayerNChoices, m_rbPCBLayerChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbPCBLayer->SetSelection( 1 );
 	m_rbPCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe reference designator and value are always placed on the silk screen layer (but will be marked invisible).") );
 
@@ -196,6 +196,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	m_statusBar = this->CreateStatusBar( 1, wxSTB_SIZEGRIP, wxID_ANY );
 
 	// Connect Events

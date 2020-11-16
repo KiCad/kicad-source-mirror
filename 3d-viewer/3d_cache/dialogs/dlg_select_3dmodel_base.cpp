@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,14 +21,14 @@ DLG_SELECT_3D_MODELE_BASE::DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindow
 
 	bSizerUpper->SetMinSize( wxSize( -1,400 ) );
 	m_splitterWin = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
-	m_splitterWin->SetSashGravity( 0.5 );
+	m_splitterWin->SetSashGravity( 0.35 );
 	m_splitterWin->Connect( wxEVT_IDLE, wxIdleEventHandler( DLG_SELECT_3D_MODELE_BASE::m_splitterWinOnIdle ), NULL, this );
 
 	m_panelLeft = new wxPanel( m_splitterWin, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerLeft;
 	bSizerLeft = new wxBoxSizer( wxVERTICAL );
 
-	m_FileTree = new wxGenericDirCtrl( m_panelLeft, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_3D_INTERNAL|wxDIRCTRL_EDIT_LABELS|wxDIRCTRL_SELECT_FIRST|wxDIRCTRL_SHOW_FILTERS|wxBORDER_SIMPLE, wxEmptyString, 0 );
+	m_FileTree = new wxGenericDirCtrl( m_panelLeft, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDIRCTRL_3D_INTERNAL|wxDIRCTRL_EDIT_LABELS|wxDIRCTRL_SELECT_FIRST|wxDIRCTRL_SHOW_FILTERS|wxBORDER_DEFAULT, wxEmptyString, 0 );
 
 	m_FileTree->ShowHidden( false );
 	m_FileTree->SetMinSize( wxSize( 300,-1 ) );
@@ -46,7 +46,7 @@ DLG_SELECT_3D_MODELE_BASE::DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindow
 	m_pane3Dviewer->SetSizer( m_Sizer3Dviewer );
 	m_pane3Dviewer->Layout();
 	m_Sizer3Dviewer->Fit( m_pane3Dviewer );
-	m_splitterWin->SplitVertically( m_panelLeft, m_pane3Dviewer, 340 );
+	m_splitterWin->SplitVertically( m_panelLeft, m_pane3Dviewer, 300 );
 	bSizerUpper->Add( m_splitterWin, 1, wxEXPAND, 5 );
 
 
@@ -82,6 +82,7 @@ DLG_SELECT_3D_MODELE_BASE::DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindow
 
 	this->SetSizer( bSizerMain );
 	this->Layout();
+	bSizerMain->Fit( this );
 
 	this->Centre( wxBOTH );
 

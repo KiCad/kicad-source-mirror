@@ -59,8 +59,8 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     m_modelViewer = new C3D_MODEL_VIEWER( m_pane3Dviewer,
                                           COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
                                           m_cache );
-    m_modelViewer->SetMinSize( wxSize( 300, -1 ) );
-    m_Sizer3Dviewer->Add( m_modelViewer, 1, wxEXPAND, 5 );
+    m_modelViewer->SetMinSize( wxSize( 400, -1 ) );
+    m_Sizer3Dviewer->Add( m_modelViewer, 1, wxEXPAND|wxRIGHT, 5 );
 
     // create the filter list
     if( NULL != m_cache )
@@ -122,9 +122,9 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
         m_FileTree->SetFilterIndex( 0 );
     }
 
-    // Fix the filter box on the file selector widget so that it always shows the start of the filter
-    // string in the combobox. Otherwise it will only show the end of the string, which is empty for
-    // all but the all supported filters option.
+    // Fix the filter box on the file selector widget so that it always shows the start of
+    // the filter string in the combobox. Otherwise it will only show the end of the string,
+    // which is empty for all but the all supported filters option.
     wxChoice* filterBox = m_FileTree->GetFilterListCtrl();
     KIPLATFORM::UI::EllipsizeChoiceBox( filterBox );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,10 +22,10 @@
 #include <wx/splitter.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -60,12 +60,12 @@ class DLG_SELECT_3D_MODELE_BASE : public DIALOG_SHIM
 
 	public:
 
-		DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select 3D Model"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 468,347 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DLG_SELECT_3D_MODELE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Select 3D Model"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DLG_SELECT_3D_MODELE_BASE();
 
 		void m_splitterWinOnIdle( wxIdleEvent& )
 		{
-			m_splitterWin->SetSashPosition( 340 );
+			m_splitterWin->SetSashPosition( 300 );
 			m_splitterWin->Disconnect( wxEVT_IDLE, wxIdleEventHandler( DLG_SELECT_3D_MODELE_BASE::m_splitterWinOnIdle ), NULL, this );
 		}
 

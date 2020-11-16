@@ -47,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">DLG_SELECT_3D_MODELE_BASE</property>
             <property name="pos"></property>
-            <property name="size">468,347</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h; forward_declare</property>
             <property name="title">Select 3D Model</property>
@@ -117,8 +117,8 @@
                                 <property name="pin_button">1</property>
                                 <property name="pos"></property>
                                 <property name="resize">Resizable</property>
-                                <property name="sashgravity">0.5</property>
-                                <property name="sashpos">340</property>
+                                <property name="sashgravity">0.35</property>
+                                <property name="sashpos">300</property>
                                 <property name="sashsize">-1</property>
                                 <property name="show">1</property>
                                 <property name="size"></property>
@@ -246,7 +246,7 @@
                                                     <property name="tooltip"></property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
-                                                    <property name="window_style">wxBORDER_SIMPLE</property>
+                                                    <property name="window_style">wxBORDER_DEFAULT</property>
                                                     <event name="OnDirctrlFileActivated">OnFileActivated</event>
                                                     <event name="OnDirctrlSelectionChanged">OnSelectionChanged</event>
                                                 </object>
@@ -466,6 +466,7 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
+                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>

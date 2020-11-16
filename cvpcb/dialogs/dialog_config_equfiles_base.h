@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_CONFIG_EQUFILES_BASE_H__
-#define __DIALOG_CONFIG_EQUFILES_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -20,6 +19,9 @@
 #include <wx/settings.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
 #include <wx/grid.h>
@@ -35,7 +37,7 @@
 class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		enum
 		{
@@ -44,7 +46,7 @@ class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 			ID_EQU_UP,
 			ID_EQU_DOWN
 		};
-		
+
 		wxListBox* m_ListEquiv;
 		wxButton* m_buttonAddEqu;
 		wxButton* m_buttonRemoveEqu;
@@ -58,7 +60,7 @@ class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnAddFiles( wxCommandEvent& event ) { event.Skip(); }
@@ -67,13 +69,12 @@ class DIALOG_CONFIG_EQUFILES_BASE : public DIALOG_SHIM
 		virtual void OnButtonMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditEquFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_CONFIG_EQUFILES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_CONFIG_EQUFILES_BASE();
-	
+
 };
 
-#endif //__DIALOG_CONFIG_EQUFILES_BASE_H__
