@@ -160,7 +160,7 @@ public:
         ,valgrind_stack( 0 )
 #endif
     {
-        m_stacksize = ADVANCED_CFG::GetCfg().m_coroutineStackSize;
+        m_stacksize = ADVANCED_CFG::GetCfg().m_CoroutineStackSize;
     }
 
     ~COROUTINE()

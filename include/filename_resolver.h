@@ -42,17 +42,17 @@ class PGM_BASE;
 
 struct SEARCH_PATH
 {
-    wxString m_alias;           // alias to the base path
-    wxString m_pathvar;         // base path as stored in the config file
-    wxString m_pathexp;         // expanded base path
-    wxString m_description;     // description of the aliased path
+    wxString m_Alias;           // alias to the base path
+    wxString m_Pathvar;         // base path as stored in the config file
+    wxString m_Pathexp;         // expanded base path
+    wxString m_Description;     // description of the aliased path
 };
 
 class FILENAME_RESOLVER
 {
 private:
-    wxString               m_ConfigDir;     // 3D configuration directory
-    std::list<SEARCH_PATH> m_Paths;         // list of base paths to search from
+    wxString               m_configDir;     // 3D configuration directory
+    std::list<SEARCH_PATH> m_paths;         // list of base paths to search from
     int                    m_errflags;
     PGM_BASE*              m_pgm;
     PROJECT*               m_project;

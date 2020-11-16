@@ -179,9 +179,9 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_buttonExportFile->Enable( false );
     m_buttonExportClipboard->Enable( false );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
-    if ( m_FramePos == wxDefaultPosition )
+    if ( m_framePos == wxDefaultPosition )
         Centre();
 }
 

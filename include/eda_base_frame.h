@@ -127,16 +127,16 @@ class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER
     virtual bool IsModal() const { return false; }
 
 protected:
-    FRAME_T         m_Ident;                // Id Type (pcb, schematic, library..)
-    wxPoint         m_FramePos;
-    wxSize          m_FrameSize;
+    FRAME_T         m_ident;                // Id Type (pcb, schematic, library..)
+    wxPoint         m_framePos;
+    wxSize          m_frameSize;
     bool            m_maximizeByDefault;
 
     // These contain the frame size and position for when it is not maximized
-    wxPoint         m_NormalFramePos;
-    wxSize          m_NormalFrameSize;
+    wxPoint         m_normalFramePos;
+    wxSize          m_normalFrameSize;
 
-    wxString        m_AboutTitle;           // Name of program displayed in About.
+    wxString        m_aboutTitle;           // Name of program displayed in About.
 
     wxAuiManager    m_auimgr;
     wxString        m_perspective;          // wxAuiManager perspective.
@@ -155,7 +155,7 @@ protected:
     int             m_autoSaveInterval;     // The auto save interval time in seconds.
     wxTimer*        m_autoSaveTimer;
 
-    int             m_UndoRedoCountMax;     // undo/Redo command Max depth
+    int             m_undoRedoCountMax;     // undo/Redo command Max depth
 
     UNDO_REDO_CONTAINER m_undoList;         // Objects list for the undo command (old data)
     UNDO_REDO_CONTAINER m_redoList;         // Objects list for the redo command (old data)
@@ -314,7 +314,7 @@ public:
 
     int GetAutoSaveInterval() const { return m_autoSaveInterval; }
 
-    bool IsType( FRAME_T aType ) const { return m_Ident == aType; }
+    bool IsType( FRAME_T aType ) const { return m_ident == aType; }
 
     /**
      * Return a SEARCH_STACK pertaining to entire program.
@@ -551,7 +551,7 @@ public:
      */
     virtual void ProjectChanged() {}
 
-    const wxString& GetAboutTitle() const { return m_AboutTitle; }
+    const wxString& GetAboutTitle() const { return m_aboutTitle; }
 
     /**
      * Get if the contents of the frame have been modified since the last save.
@@ -630,7 +630,7 @@ public:
     virtual int GetUndoCommandCount() const { return m_undoList.m_CommandsList.size(); }
     virtual int GetRedoCommandCount() const { return m_redoList.m_CommandsList.size(); }
 
-    int GetMaxUndoItems() const { return m_UndoRedoCountMax; }
+    int GetMaxUndoItems() const { return m_undoRedoCountMax; }
 
     bool NonUserClose( bool aForce )
     {

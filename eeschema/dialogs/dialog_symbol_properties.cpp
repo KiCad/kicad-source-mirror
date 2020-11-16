@@ -361,7 +361,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
                         wxGridEventHandler( DIALOG_SYMBOL_PROPERTIES::OnPinTableColSort ),
                         nullptr, this );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 
@@ -1037,5 +1037,5 @@ void DIALOG_SYMBOL_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
     TransferDataToWindow();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }

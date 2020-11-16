@@ -49,7 +49,7 @@ DIALOG_LIB_NEW_COMPONENT::DIALOG_LIB_NEW_COMPONENT( EDA_DRAW_FRAME* aParent,
     m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

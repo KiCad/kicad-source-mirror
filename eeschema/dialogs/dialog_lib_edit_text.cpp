@@ -55,7 +55,7 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT
     m_sdbSizerButtonsOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

@@ -88,7 +88,7 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
     initValues();
     syncCheckboxes();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

@@ -144,7 +144,7 @@ DIALOG_SHIM::~DIALOG_SHIM()
 }
 
 
-void DIALOG_SHIM::FinishDialogSettings()
+void DIALOG_SHIM::finishDialogSettings()
 {
     // must be called from the constructor of derived classes,
     // when all widgets are initialized, and therefore their size fixed
@@ -155,21 +155,21 @@ void DIALOG_SHIM::FinishDialogSettings()
 }
 
 
-void DIALOG_SHIM::SetSizeInDU( int x, int y )
+void DIALOG_SHIM::setSizeInDU( int x, int y )
 {
     wxSize sz( x, y );
     SetSize( ConvertDialogToPixels( sz ) );
 }
 
 
-int DIALOG_SHIM::HorizPixelsFromDU( int x )
+int DIALOG_SHIM::horizPixelsFromDU( int x )
 {
     wxSize sz( x, 0 );
     return ConvertDialogToPixels( sz ).x;
 }
 
 
-int DIALOG_SHIM::VertPixelsFromDU( int y )
+int DIALOG_SHIM::vertPixelsFromDU( int y )
 {
     wxSize sz( 0, y );
     return ConvertDialogToPixels( sz ).y;
@@ -241,7 +241,7 @@ bool DIALOG_SHIM::Show( bool show )
 }
 
 
-void DIALOG_SHIM::ResetSize()
+void DIALOG_SHIM::resetSize()
 {
     const char* hash_key;
 

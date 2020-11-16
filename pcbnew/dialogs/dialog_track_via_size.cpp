@@ -44,7 +44,7 @@ DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( EDA_DRAW_FRAME* aParent,
     m_stdButtonsOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

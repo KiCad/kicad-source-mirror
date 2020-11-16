@@ -62,7 +62,7 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aP
 
     m_sdbSizerOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
@@ -250,7 +250,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

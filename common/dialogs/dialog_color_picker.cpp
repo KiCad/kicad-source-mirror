@@ -142,7 +142,7 @@ bool DIALOG_COLOR_PICKER::TransferDataToWindow()
     m_notebook->GetPage( 0 )->Layout();
     m_notebook->GetPage( 1 )->Layout();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 
     return true;
 }

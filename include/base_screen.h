@@ -41,8 +41,8 @@
 class BASE_SCREEN : public EDA_ITEM
 {
 private:
-    bool        m_FlagModified;     ///< Indicates current drawing has been modified.
-    bool        m_FlagSave;         ///< Indicates automatic file save.
+    bool        m_flagModified;     ///< Indicates current drawing has been modified.
+    bool        m_flagSave;         ///< Indicates automatic file save.
 
     /**
      * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
@@ -81,7 +81,7 @@ protected:
     wxString    m_pageNumber;
 
 public:
-    static  wxString m_PageLayoutDescrFileName; ///< the name of the page layout descr file,
+    static wxString m_PageLayoutDescrFileName;  ///< the name of the page layout descr file,
                                                 ///< or emty to used the default pagelayout
 
     wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
@@ -89,15 +89,12 @@ public:
     VECTOR2D    m_LocalOrigin;      ///< Relative Screen cursor coordinate (on grid)
                                     ///< in user units. (coordinates from last reset position)
 
-    wxPoint     m_StartVisu;        /**< Coordinates in drawing units of the current
-                                     * view position (upper left corner of device)
-                                     */
+    wxPoint     m_StartVisu;        ///< Coordinates in drawing units of the current
+                                    ///< view position (upper left corner of device)
 
-    bool        m_Center;           /**< Center on screen.  If true (0.0) is centered
-                                     * on screen coordinates can be < 0 and
-                                     * > 0 except for schematics.
-                                     * false: when coordinates can only be >= 0
-                                     * Schematic */
+    bool        m_Center;           ///< Center on screen.  If true (0.0) is centered on screen
+                                    ///< coordinates can be < 0 and > 0 except for schematics.
+                                    ///< false: when coordinates can only be >= 0 (schematics).
 
     VECTOR2D    m_ScrollCenter;     ///< Current scroll center point in logical units.
 
@@ -120,12 +117,12 @@ public:
 
     void InitDataPoints( const wxSize& aPageSizeInternalUnits );
 
-    void SetModify()        { m_FlagModified = true; }
-    void ClrModify()        { m_FlagModified = false; }
-    void SetSave()          { m_FlagSave = true; }
-    void ClrSave()          { m_FlagSave = false; }
-    bool IsModify() const   { return m_FlagModified; }
-    bool IsSave() const     { return m_FlagSave; }
+    void SetModify()        { m_flagModified = true; }
+    void ClrModify()        { m_flagModified = false; }
+    void SetSave()          { m_flagSave = true; }
+    void ClrSave()          { m_flagSave = false; }
+    bool IsModify() const   { return m_flagModified; }
+    bool IsSave() const     { return m_flagSave; }
 
     /**
      * Return the class name.

@@ -87,7 +87,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
                      wxGridEventHandler( DIALOG_SHEET_PROPERTIES::OnGridCellChanging ),
                      NULL, this );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 
@@ -823,5 +823,5 @@ void DIALOG_SHEET_PROPERTIES::OnInitDlg( wxInitDialogEvent& event )
     TransferDataToWindow();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }

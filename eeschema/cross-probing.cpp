@@ -578,7 +578,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         STRING_FORMATTER formatter;
 
         // TODO remove once real-time connectivity is a given
-        if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
             // Ensure the netlist data is up to date:
             RecalculateConnections( NO_CLEANUP );
 

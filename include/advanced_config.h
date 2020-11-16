@@ -59,8 +59,7 @@ class ADVANCED_CFG
 {
 public:
     /**
-     * Get the singleton instance's config, which is shared by all
-     * consumers of advanced config.
+     * Get the singleton instance's config, which is shared by all consumers.
      *
      * This configuration is read-only - to set options, users should add the parameters to
      * their config files at ~/.config/kicad/advanced, or the platform equivalent.
@@ -68,18 +67,16 @@ public:
     static const ADVANCED_CFG& GetCfg();
 
     /**
-     * For drawsegments - arcs.
      * Distance from an arc end point and the estimated end point, when rotating from the
      * start point to the end point.
      */
-    double m_drawArcAccuracy;
+    double m_DrawArcAccuracy;
 
     /**
-     * For drawsegments - arcs.
-     * When drawing an arc, the angle ( center - start ) - ( start - end )
-     * can be limited to avoid extremely high radii.
+     * When drawing an arc, the angle ( center - start ) - ( start - end ) can be limited to
+     * avoid extremely high radii.
      */
-    double m_drawArcCenterMaxAngle;
+    double m_DrawArcCenterMaxAngle;
 
     /**
      * Extra fill clearance for zone fills.  Note that for zone tests this is essentially
@@ -102,12 +99,12 @@ public:
     /**
      * Do real-time connectivity
      */
-    bool m_realTimeConnectivity;
+    bool m_RealTimeConnectivity;
 
     /**
      * Set the stack size for coroutines
      */
-    int m_coroutineStackSize;
+    int m_CoroutineStackSize;
 
     /**
      * Show PNS router debug graphics
@@ -143,7 +140,7 @@ public:
     bool m_DebugZoneFiller;
 
     /**
-     * A mode that writes PDF's without compression.
+     * A mode that writes PDFs without compression.
      */
     bool m_DebugPDFWriter;
 

@@ -154,7 +154,7 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
                                     // what ENTER does.  Must also SetFocus().
     m_sdbSizer1OK->SetFocus();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

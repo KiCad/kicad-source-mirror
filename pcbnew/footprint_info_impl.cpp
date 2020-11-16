@@ -174,8 +174,8 @@ bool FOOTPRINT_LIST_IMPL::ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxStri
 }
 
 
-void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
-        FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads )
+void FOOTPRINT_LIST_IMPL::startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
+                                        FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads )
 {
     m_loader = aLoader;
     m_lib_table = aTable;
@@ -204,7 +204,7 @@ void FOOTPRINT_LIST_IMPL::StartWorkers( FP_LIB_TABLE* aTable, wxString const* aN
     }
 }
 
-void FOOTPRINT_LIST_IMPL::StopWorkers()
+void FOOTPRINT_LIST_IMPL::stopWorkers()
 {
     std::lock_guard<std::mutex> lock1( m_join );
 
@@ -224,7 +224,7 @@ void FOOTPRINT_LIST_IMPL::StopWorkers()
         m_list_timestamp = 0;
 }
 
-bool FOOTPRINT_LIST_IMPL::JoinWorkers()
+bool FOOTPRINT_LIST_IMPL::joinWorkers()
 {
     {
         std::lock_guard<std::mutex> lock1( m_join );
@@ -335,7 +335,7 @@ FOOTPRINT_LIST_IMPL::FOOTPRINT_LIST_IMPL() :
 
 FOOTPRINT_LIST_IMPL::~FOOTPRINT_LIST_IMPL()
 {
-    StopWorkers();
+    stopWorkers();
 }
 
 

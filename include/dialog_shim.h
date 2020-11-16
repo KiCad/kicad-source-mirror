@@ -100,11 +100,10 @@ protected:
 public:
 
     DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
-            const   wxPoint& pos = wxDefaultPosition,
-            const   wxSize&  size = wxDefaultSize,
-            long    style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER,
-            const   wxString& name = wxDialogNameStr
-            );
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxDEFAULT_FRAME_STYLE | wxRESIZE_BORDER,
+                 const wxString& name = wxDialogNameStr );
 
     ~DIALOG_SHIM();
 
@@ -146,45 +145,38 @@ public:
                 e.ShiftDown() && !e.MetaDown();
     }
 
-    static void FixOSXCancelButtonIssue( wxWindow *aWindow );
-
 protected:
 
     /**
-     * In all dialogs, we must call the same functions to fix minimal
-     * dlg size, the default position and perhaps some others to fix a few issues
-     * depending on Windows Managers
+     * In all dialogs, we must call the same functions to fix minimal dlg size, the default
+     * position and perhaps some others to fix a few issues depending on Windows Managers
      * this helper function does these calls.
      *
-     * FinishDialogSettings must be called from derived classes,
-     * when all widgets are initialized, and therefore their size fixed.
-     * If TransferDataToWindow() is used to initialize widgets, at end of TransferDataToWindow,
-     * or better at end of a wxInitDialogEvent handler
-     *
-     * In any case, the best way is to call it in a wxInitDialogEvent handler
-     * after calling TransfertDataToWindow(), which is the default
-     * wxInitDialogEvent handler wxDialog
+     * finishDialogSettings must be called from derived classes after all widgets have been
+     * initialized, and therefore their size fixed.  If TransferDataToWindow() is used to
+     * initialize widgets, at the end of TransferDataToWindow, or better yet, at end of a
+     * wxInitDialogEvent handler.
      */
-    void FinishDialogSettings();
+    void finishDialogSettings();
 
     /**
      * Set the dialog to the given dimensions in "dialog units". These are units equivalent
      * to 4* the average character width and 8* the average character height, allowing a dialog
      * to be sized in a way that scales it with the system font.
      */
-    void SetSizeInDU( int x, int y );
+    void setSizeInDU( int x, int y );
 
     /**
      * Convert an integer number of dialog units to pixels, horizontally. See SetSizeInDU or
      * wxDialog documentation for more information.
      */
-    int HorizPixelsFromDU( int x );
+    int horizPixelsFromDU( int x );
 
     /**
      * Convert an integer number of dialog units to pixels, vertically. See SetSizeInDU or
      * wxDialog documentation for more information.
      */
-    int VertPixelsFromDU( int y );
+    int vertPixelsFromDU( int y );
 
     /**
      * Clear the existing dialog size and position.
@@ -193,10 +185,10 @@ protected:
      * the sizers will layout the dialog accordingly.  This useful when there are dialog
      * windows that size changes due to layout dependency hidden controls.
      */
-    void ResetSize();
+    void resetSize();
 
-    EDA_UNITS   m_units;    // userUnits for display and parsing
-    std::string m_hash_key; // alternate for class_map when classname re-used
+    EDA_UNITS              m_units;    // userUnits for display and parsing
+    std::string            m_hash_key; // alternate for class_map when classname re-used
 
     // On MacOS (at least) SetFocus() calls made in the constructor will fail because a
     // window that isn't yet visible will return false to AcceptsFocus().  So we must delay

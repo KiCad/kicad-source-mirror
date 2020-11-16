@@ -139,10 +139,10 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
             m_layers[layer] = std::make_pair( m_listTechLayers, checkIndex );
         }
 
-        m_layers[layer].first->Check( checkIndex, settings()->m_layerSet.test( layer ) );
+        m_layers[layer].first->Check( checkIndex, settings()->m_LayerSet.test( layer ) );
     }
 
-    m_checkboxMirror->SetValue( settings()->m_mirror );
+    m_checkboxMirror->SetValue( settings()->m_Mirror );
     m_checkboxNoEdge->SetValue( settings()->m_noEdgeLayer );
     m_titleBlock->SetValue( settings()->m_titleBlock );
 
@@ -373,7 +373,7 @@ void DIALOG_PRINT_PCBNEW::enableLayer( unsigned int aLayer, bool aValue )
 
 int DIALOG_PRINT_PCBNEW::setLayerSetFromList()
 {
-    settings()->m_layerSet = LSET();
+    settings()->m_LayerSet = LSET();
     int& pageCount = settings()->m_pageCount;
     pageCount = 0;
 
@@ -382,7 +382,7 @@ int DIALOG_PRINT_PCBNEW::setLayerSetFromList()
         if( isLayerEnabled( layer ) )
         {
             ++pageCount;
-            settings()->m_layerSet.set( layer );
+            settings()->m_LayerSet.set( layer );
         }
     }
 
@@ -409,7 +409,7 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
     settings()->m_pagination = m_boxPagination->GetSelection() == 0
         ? PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE : PCBNEW_PRINTOUT_SETTINGS::ALL_LAYERS;
 
-    settings()->m_mirror = m_checkboxMirror->GetValue();
+    settings()->m_Mirror = m_checkboxMirror->GetValue();
 
     PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 

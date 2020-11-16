@@ -61,7 +61,7 @@ DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aPar
     SetSizer( m_mainSizer );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 
     // Set the path in m_filePicker, now the size is set
     // (otherwize the text is truncated)

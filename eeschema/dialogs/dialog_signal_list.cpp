@@ -81,7 +81,7 @@ bool DIALOG_SIGNAL_LIST::TransferDataToWindow()
     bool success = DIALOG_SIGNAL_LIST_BASE::TransferDataToWindow();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 
     return success;
 }

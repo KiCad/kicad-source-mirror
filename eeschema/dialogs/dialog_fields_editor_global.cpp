@@ -834,7 +834,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_sdbSizerOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
     SetSize( defaultDlgSize );
     Center();
 

@@ -71,7 +71,7 @@ private:
         TransferDataToWindow();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
+        finishDialogSettings();
     }
 
     bool Validate() override;

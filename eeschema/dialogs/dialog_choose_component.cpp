@@ -155,14 +155,14 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
         // We specify the width of the right window (m_symbol_view_panel), because specify
         // the width of the left window does not work as expected when SetSashGravity() is called
         m_hsplitter->SetSashPosition( panelCfg.sash_pos_h > 0 ? panelCfg.sash_pos_h :
-                                                                HorizPixelsFromDU( 220 ) );
+                                      horizPixelsFromDU( 220 ) );
 
         if( m_vsplitter )
             m_vsplitter->SetSashPosition( panelCfg.sash_pos_v > 0 ? panelCfg.sash_pos_v :
-                                                                    VertPixelsFromDU( 230 ) );
+                                          vertPixelsFromDU( 230 ) );
 
-        wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : HorizPixelsFromDU( 390 ),
-                        panelCfg.height > 0 ? panelCfg.height : VertPixelsFromDU( 300 ) );
+        wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 390 ),
+                        panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
         SetSize( dlgSize );
     }
 

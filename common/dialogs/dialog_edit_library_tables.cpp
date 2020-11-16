@@ -57,7 +57,7 @@ void DIALOG_EDIT_LIBRARY_TABLES::InstallPanel( wxPanel* aPanel )
 
     sdbSizerOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 
     // On some windows manager (Unity, XFCE), this dialog is not always raised, depending
     // on how the dialog is run.

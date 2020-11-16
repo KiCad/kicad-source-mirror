@@ -84,7 +84,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName ),
         TOOLS_HOLDER(),
         KIWAY_HOLDER( aKiway, KIWAY_HOLDER::FRAME ),
-        m_Ident( aFrameType ),
+        m_ident( aFrameType ),
         m_maximizeByDefault( false ),
         m_infoBar( nullptr ),
         m_settingsManager( nullptr ),
@@ -92,14 +92,14 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         m_hasAutoSave( false ),
         m_autoSaveState( false ),
         m_autoSaveInterval(-1 ),
-        m_UndoRedoCountMax( DEFAULT_MAX_UNDO_ITEMS ),
+        m_undoRedoCountMax( DEFAULT_MAX_UNDO_ITEMS ),
         m_userUnits( EDA_UNITS::MILLIMETRES ),
         m_isClosing( false ),
         m_isNonUserClose( false )
 {
     m_autoSaveTimer = new wxTimer( this, ID_AUTO_SAVE_TIMER );
     m_mruPath       = wxStandardPaths::Get().GetDocumentsDir();
-    m_FrameSize     = wxSize( s_defaultSize_x, s_defaultSize_y );
+    m_frameSize     = wxSize( s_defaultSize_x, s_defaultSize_y );
 
     m_auimgr.SetArtProvider( new WX_AUI_DOCK_ART() );
 
@@ -109,7 +109,7 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     SetSizeHints( s_minsize_x, s_minsize_y, -1, -1, -1, -1 );
 
     // Store dimensions of the user area of the main window.
-    GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
+    GetClientSize( &m_frameSize.x, &m_frameSize.y );
 
     Connect( ID_AUTO_SAVE_TIMER, wxEVT_TIMER,
              wxTimerEventHandler( EDA_BASE_FRAME::onAutoSaveTimer ) );
@@ -131,7 +131,7 @@ wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
 
     // FIXME: CvPcb is currently implemented on top of KIWAY_PLAYER rather than DIALOG_SHIM,
     // so we have to look for it separately.
-    if( m_Ident == FRAME_SCH )
+    if( m_ident == FRAME_SCH )
     {
         wxWindow* cvpcb = wxWindow::FindWindowByName( "CvpcbFrame" );
         if( cvpcb )
@@ -450,22 +450,22 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
 {
     bool wasDefault = false;
 
-    m_FramePos.x  = aState.pos_x;
-    m_FramePos.y  = aState.pos_y;
-    m_FrameSize.x = aState.size_x;
-    m_FrameSize.y = aState.size_y;
+    m_framePos.x  = aState.pos_x;
+    m_framePos.y  = aState.pos_y;
+    m_frameSize.x = aState.size_x;
+    m_frameSize.y = aState.size_y;
 
     wxLogTrace( traceDisplayLocation, "Config position (%d, %d) with size (%d, %d)",
-        m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+                m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // Ensure minimum size is set if the stored config was zero-initialized
-    if( m_FrameSize.x < s_minsize_x || m_FrameSize.y < s_minsize_y )
+    if( m_frameSize.x < s_minsize_x || m_frameSize.y < s_minsize_y )
     {
-        m_FrameSize.x = s_defaultSize_x;
-        m_FrameSize.y = s_defaultSize_y;
+        m_frameSize.x = s_defaultSize_x;
+        m_frameSize.y = s_defaultSize_y;
         wasDefault    = true;
 
-        wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_FrameSize.x, m_FrameSize.y );
+        wxLogTrace( traceDisplayLocation, "Using minimum size (%d, %d)", m_frameSize.x, m_frameSize.y );
     }
 
     wxLogTrace( traceDisplayLocation, "Number of displays: %d", wxDisplay::GetCount() );
@@ -480,19 +480,19 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
         wxDisplay display( index );
         wxRect    clientSize = display.GetGeometry();
 
-        m_FramePos = wxDefaultPosition;
+        m_framePos = wxDefaultPosition;
 
         // Ensure the window fits on the display, since the other one could have been larger
-        if( m_FrameSize.x > clientSize.width )
-            m_FrameSize.x = clientSize.width;
+        if( m_frameSize.x > clientSize.width )
+            m_frameSize.x = clientSize.width;
 
-        if( m_FrameSize.y > clientSize.height )
-            m_FrameSize.y = clientSize.height;
+        if( m_frameSize.y > clientSize.height )
+            m_frameSize.y = clientSize.height;
     }
     else
     {
-        wxPoint upperRight( m_FramePos.x + m_FrameSize.x, m_FramePos.y );
-        wxPoint upperLeft( m_FramePos.x, m_FramePos.y );
+        wxPoint upperRight( m_framePos.x + m_frameSize.x, m_framePos.y );
+        wxPoint upperLeft( m_framePos.x, m_framePos.y );
 
         wxDisplay display( aState.display );
         wxRect clientSize = display.GetClientArea();
@@ -509,7 +509,7 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
             upperRight.x < xLimLeft  ||  // Upper right corner too close to left edge of screen
             upperRight.y > yLim )        // Upper corner too close to the bottom of the screen
         {
-            m_FramePos = wxDefaultPosition;
+            m_framePos = wxDefaultPosition;
             wxLogTrace( traceDisplayLocation, "Resetting to default position" );
         }
     }
@@ -521,25 +521,25 @@ void EDA_BASE_FRAME::LoadWindowState( const WINDOW_STATE& aState )
 #else
     int Ypos_min = 0;
 #endif
-    if( m_FramePos.y < Ypos_min )
-        m_FramePos.y = Ypos_min;
+    if( m_framePos.y < Ypos_min )
+        m_framePos.y = Ypos_min;
 
     wxLogTrace( traceDisplayLocation, "Final window position (%d, %d) with size (%d, %d)",
-        m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+                m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // Center the window if we reset to default
-    if( m_FramePos.x == -1 )
+    if( m_framePos.x == -1 )
     {
         wxLogTrace( traceDisplayLocation, "Centering window" );
         Center();
-        m_FramePos = GetPosition();
+        m_framePos = GetPosition();
     }
 
     // Record the frame sizes in an un-maximized state
-    m_NormalFrameSize = m_FrameSize;
-    m_NormalFramePos  = m_FramePos;
+    m_normalFrameSize = m_frameSize;
+    m_normalFramePos  = m_framePos;
 
     // Maximize if we were maximized before
     if( aState.maximized || ( wasDefault && m_maximizeByDefault ) )
@@ -576,25 +576,25 @@ void EDA_BASE_FRAME::SaveWindowSettings( WINDOW_SETTINGS* aCfg )
     // If the window is maximized, we use the saved window size from before it was maximized
     if( IsMaximized() )
     {
-        m_FramePos  = m_NormalFramePos;
-        m_FrameSize = m_NormalFrameSize;
+        m_framePos  = m_normalFramePos;
+        m_frameSize = m_normalFrameSize;
     }
     else
     {
-        m_FrameSize = GetWindowSize();
-        m_FramePos  = GetPosition();
+        m_frameSize = GetWindowSize();
+        m_framePos  = GetPosition();
     }
 
-    aCfg->state.pos_x     = m_FramePos.x;
-    aCfg->state.pos_y     = m_FramePos.y;
-    aCfg->state.size_x    = m_FrameSize.x;
-    aCfg->state.size_y    = m_FrameSize.y;
+    aCfg->state.pos_x     = m_framePos.x;
+    aCfg->state.pos_y     = m_framePos.y;
+    aCfg->state.size_x    = m_frameSize.x;
+    aCfg->state.size_y    = m_frameSize.y;
     aCfg->state.maximized = IsMaximized();
     aCfg->state.display   = wxDisplay::GetFromWindow( this );
 
     wxLogTrace( traceDisplayLocation, "Saving window maximized: %s", IsMaximized() ? "true" : "false" );
     wxLogTrace( traceDisplayLocation, "Saving config position (%d, %d) with size (%d, %d)",
-            m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+                m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // TODO(JE) should auto-save in common settings be overwritten by every app?
     if( m_hasAutoSave )
@@ -928,9 +928,9 @@ void EDA_BASE_FRAME::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
     m_undoList.PushCommand( aNewitem );
 
     // Delete the extra items, if count max reached
-    if( m_UndoRedoCountMax > 0 )
+    if( m_undoRedoCountMax > 0 )
     {
-        int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
+        int extraitems = GetUndoCommandCount() - m_undoRedoCountMax;
 
         if( extraitems > 0 )
             ClearUndoORRedoList( UNDO_LIST, extraitems );
@@ -943,9 +943,9 @@ void EDA_BASE_FRAME::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
     m_redoList.PushCommand( aNewitem );
 
     // Delete the extra items, if count max reached
-    if( m_UndoRedoCountMax > 0 )
+    if( m_undoRedoCountMax > 0 )
     {
-        int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
+        int extraitems = GetRedoCommandCount() - m_undoRedoCountMax;
 
         if( extraitems > 0 )
             ClearUndoORRedoList( REDO_LIST, extraitems );
@@ -986,10 +986,10 @@ void EDA_BASE_FRAME::OnMaximize( wxMaximizeEvent& aEvent )
     if( !IsMaximized() )
 #endif
     {
-        m_NormalFrameSize = GetWindowSize();
-        m_NormalFramePos  = GetPosition();
+        m_normalFrameSize = GetWindowSize();
+        m_normalFramePos  = GetPosition();
         wxLogTrace( traceDisplayLocation, "Maximizing window - Saving position (%d, %d) with size (%d, %d)",
-                m_NormalFramePos.x, m_NormalFramePos.y, m_NormalFrameSize.x, m_NormalFrameSize.y );
+                    m_normalFramePos.x, m_normalFramePos.y, m_normalFrameSize.x, m_normalFrameSize.y );
     }
 
     // Skip event to actually maximize the window

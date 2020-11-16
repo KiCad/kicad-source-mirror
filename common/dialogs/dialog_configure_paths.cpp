@@ -143,12 +143,12 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataToWindow()
 
        for( auto it = paths->begin(); it != paths->end(); ++it )
        {
-           if ( !( *it ).m_alias.StartsWith( "${" ) && !( *it ).m_alias.StartsWith( "$(" ) )
+           if ( !( *it ).m_Alias.StartsWith( "${" ) && !( *it ).m_Alias.StartsWith( "$(" ) )
            {
-               AppendSearchPath( it->m_alias, it->m_pathvar, it->m_description );
+               AppendSearchPath( it->m_Alias, it->m_Pathvar, it->m_Description );
 
                if( m_curdir.IsEmpty() )
-                   m_curdir = it->m_pathexp;
+                   m_curdir = it->m_Pathexp;
            }
        }
    }
@@ -272,11 +272,11 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
 
         for( int row = 0; row < m_SearchPaths->GetNumberRows(); ++row )
         {
-            alias.m_alias = m_SearchPaths->GetCellValue( row, SP_ALIAS_COL );
-            alias.m_pathvar = m_SearchPaths->GetCellValue( row, SP_PATH_COL );
-            alias.m_description = m_SearchPaths->GetCellValue( row, SP_DESC_COL );
+            alias.m_Alias = m_SearchPaths->GetCellValue( row, SP_ALIAS_COL );
+            alias.m_Pathvar = m_SearchPaths->GetCellValue( row, SP_PATH_COL );
+            alias.m_Description = m_SearchPaths->GetCellValue( row, SP_DESC_COL );
 
-            if( alias.m_alias.IsEmpty() )
+            if( alias.m_Alias.IsEmpty() )
             {
                 m_errorGrid = m_SearchPaths;
                 m_errorRow = row;
@@ -284,7 +284,7 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
                 m_errorMsg = _( "3D search path alias cannot be empty." );
                 return false;
             }
-            else if( alias.m_pathvar.IsEmpty() )
+            else if( alias.m_Pathvar.IsEmpty() )
             {
                 m_errorGrid = m_SearchPaths;
                 m_errorRow = row;

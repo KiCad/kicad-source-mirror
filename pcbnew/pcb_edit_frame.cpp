@@ -186,10 +186,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_ZoneFillsDirty = true;
 
     m_rotationAngle = 900;
-    m_AboutTitle = "Pcbnew";
+    m_aboutTitle = "Pcbnew";
 
     // Create GAL canvas
-    auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+    auto canvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                           GetGalDisplayOptions(),
                                           EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
 
@@ -310,9 +310,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // to calculate the wrong zoom size.  See PCB_EDIT_FRAME::onSize().
     Bind( wxEVT_SIZE, &PCB_EDIT_FRAME::onSize, this );
 
-    ResolveCanvasType();
+    resolveCanvasType();
 
-    InitExitKey();
+    initExitKey();
     setupUnits( config() );
 
     // Ensure the Python interpreter is up to date with its environment variables

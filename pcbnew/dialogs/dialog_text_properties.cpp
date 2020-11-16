@@ -158,7 +158,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

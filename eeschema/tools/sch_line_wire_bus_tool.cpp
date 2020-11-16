@@ -103,7 +103,7 @@ private:
         Clear();
 
         // TODO(JE) remove once real-time is enabled
-        if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        if( !ADVANCED_CFG::GetCfg().m_RealTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         {
             frame->RecalculateConnections( NO_CLEANUP );
 

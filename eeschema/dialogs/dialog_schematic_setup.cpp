@@ -85,7 +85,7 @@ DIALOG_SCHEMATIC_SETUP::DIALOG_SCHEMATIC_SETUP( SCH_EDIT_FRAME* aFrame ) :
     if( Prj().IsReadOnly() )
         m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ) );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

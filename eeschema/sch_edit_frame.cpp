@@ -217,7 +217,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_showBorderAndTitleBlock = true;   // true to show sheet references
     m_hasAutoSave = true;
-    m_AboutTitle = "Eeschema";
+    m_aboutTitle = "Eeschema";
 
     m_findReplaceDialog = nullptr;
 
@@ -274,7 +274,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
-    ResolveCanvasType();
+    resolveCanvasType();
     SwitchCanvas( m_canvasType );
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
@@ -291,7 +291,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
             p->SetSchematic( m_schematic );
     }
 
-    InitExitKey();
+    initExitKey();
     setupUnits( eeconfig() );
 
     // Net list generator
@@ -724,7 +724,7 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetModify();
     GetScreen()->SetSave();
 
-    if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
+    if( ADVANCED_CFG::GetCfg().m_RealTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( NO_CLEANUP );
 
     GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,

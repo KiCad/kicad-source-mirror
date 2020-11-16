@@ -130,7 +130,7 @@ void DIALOG_EDIT_ONE_FIELD::init()
     }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

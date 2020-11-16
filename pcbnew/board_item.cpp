@@ -69,7 +69,7 @@ wxString BOARD_ITEM::GetLayerName() const
 }
 
 
-wxString BOARD_ITEM::LayerMaskDescribe() const
+wxString BOARD_ITEM::layerMaskDescribe() const
 {
     BOARD* board = GetBoard();
     LSET   layers = GetLayerSet();

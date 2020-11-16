@@ -36,8 +36,8 @@
 BOARD_PRINTOUT_SETTINGS::BOARD_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
     : PRINTOUT_SETTINGS( aPageInfo )
 {
-    m_layerSet.set();
-    m_mirror = false;
+    m_LayerSet.set();
+    m_Mirror = false;
 }
 
 
@@ -45,10 +45,10 @@ void BOARD_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
 {
     PRINTOUT_SETTINGS::Load( aConfig );
 
-    m_layerSet.reset();
+    m_LayerSet.reset();
 
     for( int layer : aConfig->m_Printing.layers )
-        m_layerSet.set( layer, true );
+        m_LayerSet.set( layer, true );
 }
 
 
@@ -58,8 +58,8 @@ void BOARD_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
 
     aConfig->m_Printing.layers.clear();
 
-    for( unsigned layer = 0; layer < m_layerSet.size(); ++layer )
-        if( m_layerSet.test( layer ) )
+    for( unsigned layer = 0; layer < m_LayerSet.size(); ++layer )
+        if( m_LayerSet.test( layer ) )
             aConfig->m_Printing.layers.push_back( layer );
 }
 
@@ -126,7 +126,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         }
     }
 
-    setupViewLayers( *view, m_settings.m_layerSet );
+    setupViewLayers( *view, m_settings.m_LayerSet );
     setupPainter( *painter );
 
     auto sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
@@ -203,5 +203,5 @@ void BOARD_PRINTOUT::setupPainter( KIGFX::PAINTER& aPainter )
 
 void BOARD_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
-    aGal->SetFlip( m_settings.m_mirror, false );
+    aGal->SetFlip( m_settings.m_Mirror, false );
 }

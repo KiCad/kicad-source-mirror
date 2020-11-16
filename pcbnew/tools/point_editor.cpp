@@ -679,7 +679,7 @@ void POINT_EDITOR::editArcEndpointKeepTangent( PCB_SHAPE* aArc, VECTOR2I aCenter
         double delta = ( R * R - v2.x * v2.x - v2.y * v2.y ) / ( 2 * v2.x - 2 * R );
 
         // This is just to limit the radius, so nothing overflows later when drawing.
-        if( abs( v2.y / ( R - v2.x ) ) > ADVANCED_CFG::GetCfg().m_drawArcCenterMaxAngle )
+        if( abs( v2.y / ( R - v2.x ) ) > ADVANCED_CFG::GetCfg().m_DrawArcCenterMaxAngle )
         {
             arcValid = false;
         }
@@ -1002,7 +1002,7 @@ void POINT_EDITOR::editArcMidKeepEnpoints( PCB_SHAPE* aArc, VECTOR2I aCenter, VE
     RotatePoint( &( endTest.x ), &( endTest.y ), aCenter.x, aCenter.y, -newAngle );
     double distance = ( endTest - aEnd ).SquaredEuclideanNorm();
 
-    if( distance > ADVANCED_CFG::GetCfg().m_drawArcAccuracy )
+    if( distance > ADVANCED_CFG::GetCfg().m_DrawArcAccuracy )
     {
         // Cancel Everything
         // If the accuracy is low, we can't draw precisely the arc.

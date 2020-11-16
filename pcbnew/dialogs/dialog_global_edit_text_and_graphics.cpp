@@ -137,7 +137,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
 
     m_sdbSizerButtonsOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

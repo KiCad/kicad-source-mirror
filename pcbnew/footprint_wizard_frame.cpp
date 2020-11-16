@@ -99,7 +99,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     // Create the GAL canvas.
     // Must be created before calling LoadSettings() that needs a valid GAL canvas
     PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
-                                                                m_FrameSize,
+                                                                m_frameSize,
                                                                 GetGalDisplayOptions(),
                                                                 EDA_DRAW_PANEL_GAL::GAL_FALLBACK );
     SetCanvas( gal_drawPanel );
@@ -113,7 +113,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     LoadSettings( config() );
 
-    SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
+    SetSize( m_framePos.x, m_framePos.y, m_frameSize.x, m_frameSize.y );
 
     // Set some display options here, because the FOOTPRINT_WIZARD_FRAME
     // does not have a config menu to do that:

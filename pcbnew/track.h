@@ -517,7 +517,7 @@ public:
     std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
 protected:
-    wxString LayerMaskDescribe() const override;
+    wxString layerMaskDescribe() const override;
 
 private:
     /// The bottom layer of the via (the top layer is in m_layer)

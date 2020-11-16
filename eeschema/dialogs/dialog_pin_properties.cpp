@@ -201,7 +201,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     SetInitialFocus( m_textPinName );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 
     // On some window managers (Unity, XFCE) the dialog is not always raised, depending on
     // how it is is run.

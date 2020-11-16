@@ -93,7 +93,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_showBorderAndTitleBlock   = true; // true for reference drawings.
     WS_DATA_MODEL::GetTheInstance().m_EditMode = true;
     SetShowPageLimits( true );
-    m_AboutTitle = "PlEditor";
+    m_aboutTitle = "Page Layout Editor";
 
     // Give an icon
     wxIcon icon;
@@ -101,8 +101,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SetIcon( icon );
 
     // Create GAL canvas
-    auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-            GetGalDisplayOptions(), EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
+                                             GetGalDisplayOptions(), EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
     SetCanvas( drawPanel );
 
     LoadSettings( config() );
@@ -180,11 +180,11 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetPane( "InfoBar" ).Hide();
     m_auimgr.Update();
 
-    ResolveCanvasType();
+    resolveCanvasType();
     SwitchCanvas( m_canvasType );
 
     // Add the exit key handler
-    InitExitKey();
+    initExitKey();
     setupUnits( config() );
 
     wxPoint originCoord = ReturnCoordOriginCorner();

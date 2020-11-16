@@ -80,7 +80,7 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     m_sdbSizerButtonsOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

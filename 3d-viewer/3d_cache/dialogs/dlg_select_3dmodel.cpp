@@ -134,7 +134,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     m_modelViewer->Refresh();
     m_modelViewer->SetFocus();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 
@@ -216,14 +216,14 @@ void DLG_SELECT_3DMODEL::updateDirChoiceList( void )
     // extract the current project dir
     if( sL != md->end() )
     {
-        prjDir = sL->m_pathexp;
+        prjDir = sL->m_Pathexp;
         ++sL;
     }
 
     while( sL != md->end() )
     {
-        if( !sL->m_pathexp.empty() && sL->m_pathexp.compare( prjDir ) )
-            cl.insert( sL->m_pathexp );
+        if( !sL->m_Pathexp.empty() && sL->m_Pathexp.compare( prjDir ) )
+            cl.insert( sL->m_Pathexp );
 
         ++sL;
     }

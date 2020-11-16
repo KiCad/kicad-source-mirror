@@ -296,7 +296,7 @@ DIALOG_IMPORTED_LAYERS::DIALOG_IMPORTED_LAYERS( wxWindow* aParent,
     m_sdbSizerOK->SetDefault();
 
     Fit();
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 std::vector<wxString> DIALOG_IMPORTED_LAYERS::GetUnmappedRequiredLayers() const

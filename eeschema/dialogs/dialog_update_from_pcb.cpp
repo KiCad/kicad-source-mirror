@@ -66,7 +66,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     m_sdbSizer->Layout();
 
     m_sdbSizerOK->SetDefault();
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 void DIALOG_UPDATE_FROM_PCB::updateData()

@@ -904,7 +904,7 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
             c->SetSortOrder( aSettings.sort_order_asc );
     }
 
-    FinishDialogSettings();
+    finishDialogSettings();
 
 #define connect_event( e, f ) \
     m_frame->Connect( e, wxCommandEventHandler( DIALOG_NET_INSPECTOR::f ), nullptr, this )

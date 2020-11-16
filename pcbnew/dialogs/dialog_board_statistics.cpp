@@ -172,7 +172,7 @@ bool DIALOG_BOARD_STATISTICS::TransferDataToWindow()
     updateWidets();
     Layout();
     drillsPanel->Layout();
-    FinishDialogSettings();
+    finishDialogSettings();
     return true;
 }
 

@@ -84,7 +84,7 @@ public:
         m_sdbSizerOK->SetDefault();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
+        finishDialogSettings();
     }
 
     ~DIALOG_EXPORT_IDF3()

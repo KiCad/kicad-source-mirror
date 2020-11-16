@@ -189,7 +189,7 @@ DIALOG_INSPECTOR::DIALOG_INSPECTOR( PL_EDITOR_FRAME* aParent ) :
     ReCreateDesignList();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

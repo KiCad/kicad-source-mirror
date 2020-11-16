@@ -90,7 +90,7 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 
     m_sdbSizerButtonsOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

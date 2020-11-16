@@ -97,7 +97,7 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     if( Prj().IsReadOnly() )
         m_infoBar->ShowMessage( _( "Project is missing or read-only. Changes will not be saved." ) );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

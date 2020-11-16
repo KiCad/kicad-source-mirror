@@ -89,7 +89,7 @@ wxString VIA::GetSelectMenuText( EDA_UNITS aUnits ) const
 
     return wxString::Format( formatStr,
                              GetNetnameMsg(),
-                             LayerMaskDescribe() );
+                             layerMaskDescribe() );
 }
 
 
@@ -607,7 +607,7 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer
-    aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), layerMaskDescribe(), DARKGREEN );
 
     // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
@@ -672,7 +672,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
     // Display layer pair
-    aList.emplace_back( _( "Layer" ), LayerMaskDescribe(), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), layerMaskDescribe(), DARKGREEN );
 
     // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
@@ -761,7 +761,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 }
 
 
-wxString VIA::LayerMaskDescribe() const
+wxString VIA::layerMaskDescribe() const
 {
     BOARD*       board = GetBoard();
     PCB_LAYER_ID top_layer;

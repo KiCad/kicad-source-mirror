@@ -142,7 +142,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     m_previewNewWidget->SetLayoutDirection( wxLayout_LeftToRight );
 
     Layout();
-    SetSizeInDU( 480, 360 );
+    setSizeInDU( 480, 360 );
 
     // Make sure the HTML window is large enough. Some fun size juggling and
     // fudge factors here but it does seem to work pretty reliably.
@@ -153,7 +153,7 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
     m_htmlPrompt->SetSizeHints( 2 * prompt_size.x / 3, approx_info_height );
     Layout();
     GetSizer()->SetSizeHints( this );
-    SetSizeInDU( 480, 360 );
+    setSizeInDU( 480, 360 );
     Center();
 }
 

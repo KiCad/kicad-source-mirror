@@ -59,7 +59,7 @@ DIALOG_SHEET_PIN_PROPERTIES::DIALOG_SHEET_PIN_PROPERTIES( SCH_EDIT_FRAME* parent
     m_comboName->SetValidator( validator );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
-    FinishDialogSettings();
+    finishDialogSettings();
 
     /* This ugly hack fixes a bug in wxWidgets 2.8.7 and likely earlier versions for
      * the flex grid sizer in wxGTK that prevents the last column from being sized

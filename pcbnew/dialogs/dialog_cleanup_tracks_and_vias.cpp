@@ -57,7 +57,7 @@ DIALOG_CLEANUP_TRACKS_AND_VIAS::DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* 
     m_sdbSizerOK->SetDefault();
     m_sdbSizer->SetSizeHints( this );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

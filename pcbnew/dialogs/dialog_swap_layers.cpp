@@ -79,7 +79,7 @@ DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_
 
     m_sdbSizerOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

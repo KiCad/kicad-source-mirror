@@ -118,37 +118,27 @@ protected:
 
     void setupUnits( APP_SETTINGS_BASE* aCfg );
 
-    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
-
     /**
      * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
      */
-    void ResolveCanvasType();
+    void resolveCanvasType();
+
+    /**
+     * Returns the canvas type stored in the application settings.
+     */
+    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting();
+
+    /**
+     * Stores the canvas type in the application settings.
+     */
+    bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     /**
      * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
      * to the wxID_EXIT event id.  This is useful in sub-applications to pass the event
      * up to a non-owning window
      */
-    void InitExitKey();
-
-    /**
-     * @param doOpen if true runs an Open Library browser, otherwise New Library
-     * @param aFilename for New may contain a default name; in both cases return the chosen
-     *                  filename.
-     * @param wildcard a wildcard to filter the displayed files
-     * @param ext the library file extension
-     * @param isDirectory indicates the library files are directories
-     * @return true for OK; false for Cancel.
-     */
-    bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
-                             const wxString& wildcard, const wxString& ext,
-                             bool isDirectory = false );
-
-    /**
-     * Stores the canvas type in the application settings.
-     */
-    bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
+    void initExitKey();
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -237,6 +227,21 @@ public:
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }
 
+    /**
+     * @param doOpen if true runs an Open Library browser, otherwise New Library
+     * @param aFilename for New may contain a default name; in both cases return the chosen
+     *                  filename.
+     * @param wildcard a wildcard to filter the displayed files
+     * @param ext the library file extension
+     * @param isDirectory indicates the library files are directories
+     * @return true for OK; false for Cancel.
+     */
+    bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
+                             const wxString& wildcard, const wxString& ext,
+                             bool isDirectory = false );
+
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
+
     virtual wxString GetScreenDesc() const;
 
     /**
@@ -246,13 +251,9 @@ public:
     virtual BASE_SCREEN* GetScreen() const  { return m_currentScreen; }
 
     /**
-     * Execute a remote command send via a socket to the application,
-     * port KICAD_PCB_PORT_SERVICE_NUMBER (currently 4242)
-     * It called by EDA_DRAW_FRAME::OnSockRequest().
-     * this is a virtual function becuse the actual commands depends on the
-     * application.
-     * the basic function do nothing
-     * @param cmdline = received command from socket
+     * Execute a remote command sent via socket (to port KICAD_PCB_PORT_SERVICE_NUMBER,
+     * currently 4242).
+     * Subclasses should override to implement actual command handlers.
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
 
@@ -277,12 +278,11 @@ public:
     /**
      * Command event handler for selecting grid sizes.
      *
-     * All commands that set the grid size should eventually end up here.
-     * This is where the application setting is saved.  If you override
-     * this method, make sure you call down to the base class.
+     * All commands that set the grid size should eventually end up here. This is where the
+     * application setting is saved.  If you override this method, make sure you call down
+     * to the base class.
      *
-     * @param event - Command event passed by selecting grid size from the
-     *                grid size combobox on the toolbar.
+     * @param event - Command event from the grid size combobox on the toolbar.
      */
     void OnSelectGrid( wxCommandEvent& event );
 
@@ -403,7 +403,6 @@ public:
     void OnSockRequestServer( wxSocketEvent& evt );
 
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
-
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
@@ -432,7 +431,6 @@ public:
      * @param aList is the list of #MSG_PANEL_ITEM objects to fill the message panel.
      */
     void SetMsgPanel( const std::vector< MSG_PANEL_ITEM >& aList );
-
     void SetMsgPanel( EDA_ITEM* aItem );
 
     /**
@@ -451,11 +449,6 @@ public:
      * @param aDC = wxDC given by the calling print function
      */
     virtual void PrintPage( RENDER_SETTINGS* aSettings );
-
-    /**
-     * Returns the canvas type stored in the application settings.
-     */
-    EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting();
 
     /**
      * Use to start up the GAL drawing canvas.

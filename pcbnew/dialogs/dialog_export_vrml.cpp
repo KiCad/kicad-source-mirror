@@ -84,7 +84,7 @@ public:
         m_sdbSizer1OK->SetDefault();
 
         // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
+        finishDialogSettings();
 
         Connect( ID_USE_ABS_PATH, wxEVT_UPDATE_UI,
                  wxUpdateUIEventHandler( DIALOG_EXPORT_3DFILE::OnUpdateUseRelativePath ) );

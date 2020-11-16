@@ -70,7 +70,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tcFilterString      = NULL;
     m_FootprintsList      = FOOTPRINT_LIST::GetInstance( Kiway() );
     m_initialized         = false;
-    m_AboutTitle          = "CvPcb";
+    m_aboutTitle          = "CvPcb";
 
     // Give an icon
     wxIcon icon;
@@ -97,14 +97,14 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_libListBox, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(1)
                       .Caption( _( "Footprint Libraries" ) )
-                      .BestSize( (int) ( m_FrameSize.x * 0.20 ), m_FrameSize.y ) );
+                      .BestSize((int) ( m_frameSize.x * 0.20 ), m_frameSize.y ) );
 
     m_auimgr.AddPane( m_compListBox, EDA_PANE().Palette().Name( "Components" ).Center().Layer(0)
                       .Caption( _( "Symbol : Footprint Assignments" ) ) );
 
     m_auimgr.AddPane( m_footprintListBox, EDA_PANE().Palette().Name( "Footprints" ).Right().Layer(1)
                       .Caption( _( "Filtered Footprints" ) )
-                      .BestSize( (int) ( m_FrameSize.x * 0.30 ), m_FrameSize.y ) );
+                      .BestSize((int) ( m_frameSize.x * 0.30 ), m_frameSize.y ) );
 
     // Build the bottom panel, to display 2 status texts and the buttons:
     auto bottomPanel = new wxPanel( this );

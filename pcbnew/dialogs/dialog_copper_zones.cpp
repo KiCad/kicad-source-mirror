@@ -144,7 +144,7 @@ DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* 
                 m_islandThresholdUnits->Enable( val );
             } );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

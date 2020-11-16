@@ -55,7 +55,7 @@ public:
      */
     void SetDialogSizeInDU( int aWidth, int aHeight )
     {
-        SetSizeInDU( aWidth, aHeight );
+        setSizeInDU( aWidth, aHeight );
         Center();
     }
 

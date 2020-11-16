@@ -70,7 +70,7 @@ bool FILENAME_RESOLVER::Set3DConfigDir( const wxString& aConfigDir )
     if( !cfgdir.DirExists() )
         return false;
 
-    m_ConfigDir = cfgdir.GetPath();
+    m_configDir = cfgdir.GetPath();
     createPathList();
 
     return true;
@@ -96,22 +96,22 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
     if( flgChanged )
         *flgChanged = false;
 
-    if( m_Paths.empty() )
+    if( m_paths.empty() )
     {
         SEARCH_PATH al;
-        al.m_alias = "${KIPRJMOD}";
-        al.m_pathvar = "${KIPRJMOD}";
-        al.m_pathexp = m_curProjDir;
-        m_Paths.push_back( al );
+        al.m_Alias = "${KIPRJMOD}";
+        al.m_Pathvar = "${KIPRJMOD}";
+        al.m_Pathexp = m_curProjDir;
+        m_paths.push_back( al );
 
         if( flgChanged )
             *flgChanged = true;
     }
     else
     {
-        if( m_Paths.front().m_pathexp.Cmp( m_curProjDir ) )
+        if( m_paths.front().m_Pathexp.Cmp( m_curProjDir ) )
         {
-            m_Paths.front().m_pathexp = m_curProjDir;
+            m_paths.front().m_Pathexp = m_curProjDir;
 
             if( flgChanged )
                 *flgChanged = true;
@@ -127,7 +127,7 @@ bool FILENAME_RESOLVER::SetProject( PROJECT* aProject, bool* flgChanged )
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [INFO] changed project dir to ";
-        ostr << m_Paths.front().m_pathexp.ToUTF8();
+        ostr << m_paths.front().m_Pathexp.ToUTF8();
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
     }
 #endif
@@ -146,18 +146,18 @@ void FILENAME_RESOLVER::SetProgramBase( PGM_BASE* aBase )
 {
     m_pgm = aBase;
 
-    if( !m_pgm || m_Paths.empty() )
+    if( !m_pgm || m_paths.empty() )
         return;
 
     // recreate the path list
-    m_Paths.clear();
+    m_paths.clear();
     createPathList();
 }
 
 
 bool FILENAME_RESOLVER::createPathList()
 {
-    if( !m_Paths.empty() )
+    if( !m_paths.empty() )
         return true;
 
     wxString kmod;
@@ -167,10 +167,10 @@ bool FILENAME_RESOLVER::createPathList()
     // the user may change this later with a call to SetProjectDir()
 
     SEARCH_PATH lpath;
-    lpath.m_alias = "${KIPRJMOD}";
-    lpath.m_pathvar = "${KIPRJMOD}";
-    lpath.m_pathexp = m_curProjDir;
-    m_Paths.push_back( lpath );
+    lpath.m_Alias = "${KIPRJMOD}";
+    lpath.m_Pathvar = "${KIPRJMOD}";
+    lpath.m_Pathexp = m_curProjDir;
+    m_paths.push_back( lpath );
     wxFileName fndummy;
     wxUniChar psep = fndummy.GetPathSeparator();
     std::list< wxString > epaths;
@@ -183,39 +183,39 @@ bool FILENAME_RESOLVER::createPathList()
 
             if( pathVal.empty() )
             {
-                lpath.m_pathexp.clear();
+                lpath.m_Pathexp.clear();
             }
             else
             {
                 fndummy.Assign( pathVal, "" );
                 fndummy.Normalize();
-                lpath.m_pathexp = fndummy.GetFullPath();
+                lpath.m_Pathexp = fndummy.GetFullPath();
             }
 
-            lpath.m_alias =  curr_path;
-            lpath.m_pathvar = curr_path;
+            lpath.m_Alias =  curr_path;
+            lpath.m_Pathvar = curr_path;
 
-            if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
-                lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
+            if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
+                lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
 
-            m_Paths.push_back( lpath );
+            m_paths.push_back( lpath );
         }
     }
 
-    if( !m_ConfigDir.empty() )
+    if( !m_configDir.empty() )
         readPathList();
 
-    if( m_Paths.empty() )
+    if( m_paths.empty() )
         return false;
 
 #ifdef DEBUG
     wxLogTrace( MASK_3D_RESOLVER, " * [3D model] search paths:\n" );
-    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator sPL = m_paths.begin();
 
-    while( sPL != m_Paths.end() )
+    while( sPL != m_paths.end() )
     {
-        wxLogTrace( MASK_3D_RESOLVER, "   + %s : '%s'\n", (*sPL).m_alias.GetData(),
-            (*sPL).m_pathexp.GetData() );
+        wxLogTrace( MASK_3D_RESOLVER, "   + %s : '%s'\n", (*sPL).m_Alias.GetData(),
+            (*sPL).m_Pathexp.GetData() );
         ++sPL;
     }
 #endif
@@ -228,8 +228,8 @@ bool FILENAME_RESOLVER::UpdatePathList( std::vector< SEARCH_PATH >& aPathList )
 {
     wxUniChar envMarker( '$' );
 
-    while( !m_Paths.empty() && envMarker != *m_Paths.back().m_alias.rbegin() )
-        m_Paths.pop_back();
+    while( !m_paths.empty() && envMarker != *m_paths.back().m_Alias.rbegin() )
+        m_paths.pop_back();
 
     size_t nI = aPathList.size();
 
@@ -247,7 +247,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     if( aFileName.empty() )
         return wxEmptyString;
 
-    if( m_Paths.empty() )
+    if( m_paths.empty() )
         createPathList();
 
     // first attempt to use the name as specified:
@@ -316,8 +316,8 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // a. an aliased shortened name or
     // b. cannot be determined
 
-    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
-    std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::const_iterator sPL = m_paths.begin();
+    std::list< SEARCH_PATH >::const_iterator ePL = m_paths.end();
 
     // check the path relative to the current project directory;
     // note: this is not necessarily the same as the current working
@@ -326,9 +326,9 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // This check is performed before checking the path relative to
     // ${KISYS3DMOD} so that users can potentially override a model
     // within ${KISYS3DMOD}
-    if( !sPL->m_pathexp.empty() && !tname.StartsWith( ":" ) )
+    if( !sPL->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
-        tmpFN.Assign( sPL->m_pathexp, "" );
+        tmpFN.Assign( sPL->m_Pathexp, "" );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -362,7 +362,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     }
 
     // ${ENV_VAR} paths have already been checked; skip them
-    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != ePL && ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     // at this point the filename must contain an alias or else it is invalid
@@ -388,9 +388,9 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     while( sPL != ePL )
     {
-        if( !sPL->m_alias.Cmp( alias ) && !sPL->m_pathexp.empty() )
+        if( !sPL->m_Alias.Cmp( alias ) && !sPL->m_Pathexp.empty() )
         {
-            wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
+            wxFileName fpath( wxFileName::DirName( sPL->m_Pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
 
             fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -425,7 +425,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
 bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 {
-    if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
+    if( aPath.m_Alias.empty() || aPath.m_Pathvar.empty() )
         return false;
 
     std::lock_guard<std::mutex> lock( mutex_resolver );
@@ -433,14 +433,14 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
     SEARCH_PATH tpath = aPath;
 
     #ifdef _WIN32
-    while( tpath.m_pathvar.EndsWith( wxT( "\\" ) ) )
-        tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
+    while( tpath.m_Pathvar.EndsWith( wxT( "\\" ) ) )
+        tpath.m_pathvar.erase( tpath.m_Pathvar.length() - 1 );
     #else
-    while( tpath.m_pathvar.EndsWith( wxT( "/" ) ) &&  tpath.m_pathvar.length() > 1 )
-        tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
+    while( tpath.m_Pathvar.EndsWith( wxT( "/" ) ) && tpath.m_Pathvar.length() > 1 )
+        tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
     #endif
 
-    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_pathvar, m_project ), "" );
+    wxFileName path( ExpandEnvVarSubstitutions( tpath.m_Pathvar, m_project ), "" );
 
     path.Normalize();
 
@@ -448,45 +448,45 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
     {
         // suppress the message if the missing pathvar is the
         // legacy KISYS3DMOD variable
-        if( aPath.m_pathvar.compare( wxT( "${KISYS3DMOD}" ) ) )
+        if( aPath.m_Pathvar.compare( wxT( "${KISYS3DMOD}" ) ) )
         {
             wxString msg = _( "The given path does not exist" );
             msg.append( wxT( "\n" ) );
-            msg.append( tpath.m_pathvar );
+            msg.append( tpath.m_Pathvar );
             wxMessageBox( msg, _( "3D model search path" ) );
         }
 
-        tpath.m_pathexp.clear();
+        tpath.m_Pathexp.clear();
     }
     else
     {
-        tpath.m_pathexp = path.GetFullPath();
+        tpath.m_Pathexp = path.GetFullPath();
 
-        #ifdef _WIN32
-        while( tpath.m_pathexp.EndsWith( wxT( "\\" ) ) )
-        tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
-        #else
-        while( tpath.m_pathexp.EndsWith( wxT( "/" ) ) &&  tpath.m_pathexp.length() > 1 )
-            tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
-        #endif
+#ifdef _WIN32
+        while( tpath.m_Pathexp.EndsWith( wxT( "\\" ) ) )
+        tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
+#else
+        while( tpath.m_Pathexp.EndsWith( wxT( "/" ) ) && tpath.m_Pathexp.length() > 1 )
+            tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
+#endif
     }
 
     wxString pname = path.GetPath();
-    std::list< SEARCH_PATH >::iterator sPL = m_Paths.begin();
-    std::list< SEARCH_PATH >::iterator ePL = m_Paths.end();
+    std::list< SEARCH_PATH >::iterator sPL = m_paths.begin();
+    std::list< SEARCH_PATH >::iterator ePL = m_paths.end();
 
     while( sPL != ePL )
     {
-        if( !tpath.m_alias.Cmp( sPL->m_alias ) )
+        if( !tpath.m_Alias.Cmp( sPL->m_Alias ) )
         {
             wxString msg = _( "Alias: " );
-            msg.append( tpath.m_alias );
+            msg.append( tpath.m_Alias );
             msg.append( wxT( "\n" ) );
             msg.append( _( "This path:" ) + wxS( " " ) );
-            msg.append( tpath.m_pathvar );
+            msg.append( tpath.m_Pathvar );
             msg.append( wxT( "\n" ) );
             msg.append( _( "Existing path:" ) + wxS( " " ) );
-            msg.append( sPL->m_pathvar );
+            msg.append( sPL->m_Pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
 
             return false;
@@ -495,14 +495,14 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
         ++sPL;
     }
 
-    m_Paths.push_back( tpath );
+    m_paths.push_back( tpath );
     return true;
 }
 
 
 bool FILENAME_RESOLVER::readPathList()
 {
-    if( m_ConfigDir.empty() )
+    if( m_configDir.empty() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -512,11 +512,11 @@ bool FILENAME_RESOLVER::readPathList()
         return false;
     }
 
-    wxFileName cfgpath( m_ConfigDir, RESOLVER_CONFIG );
+    wxFileName cfgpath( m_configDir, RESOLVER_CONFIG );
     cfgpath.Normalize();
     wxString cfgname = cfgpath.GetFullPath();
 
-    size_t nitems = m_Paths.size();
+    size_t nitems = m_paths.size();
 
     std::ifstream cfgFile;
     std::string   cfgLine;
@@ -578,17 +578,17 @@ bool FILENAME_RESOLVER::readPathList()
 
         idx = 0;
 
-        if( !getHollerith( cfgLine, idx, al.m_alias ) )
+        if( !getHollerith( cfgLine, idx, al.m_Alias ) )
             continue;
 
         // never add on KISYS3DMOD from a config file
-        if( !al.m_alias.Cmp( wxT( "KISYS3DMOD" ) ) )
+        if( !al.m_Alias.Cmp( wxT( "KISYS3DMOD" ) ) )
             continue;
 
-        if( !getHollerith( cfgLine, idx, al.m_pathvar ) )
+        if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
             continue;
 
-        if( !getHollerith( cfgLine, idx, al.m_description ) )
+        if( !getHollerith( cfgLine, idx, al.m_Description ) )
             continue;
 
         addPath( al );
@@ -599,13 +599,13 @@ bool FILENAME_RESOLVER::readPathList()
     if( vnum < CFGFILE_VERSION )
         writePathList();
 
-    return( m_Paths.size() != nitems );
+    return( m_paths.size() != nitems );
 }
 
 
 bool FILENAME_RESOLVER::writePathList()
 {
-    if( m_ConfigDir.empty() )
+    if( m_configDir.empty() )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
@@ -618,13 +618,13 @@ bool FILENAME_RESOLVER::writePathList()
     }
 
     // skip all ${ENV_VAR} alias names
-    std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator sPL = m_paths.begin();
 
-    while( sPL != m_Paths.end() &&
-           ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != m_paths.end() &&
+           ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
         ++sPL;
 
-    wxFileName cfgpath( m_ConfigDir, RESOLVER_CONFIG );
+    wxFileName cfgpath( m_configDir, RESOLVER_CONFIG );
     wxString cfgname = cfgpath.GetFullPath();
     std::ofstream cfgFile;
 
@@ -645,13 +645,13 @@ bool FILENAME_RESOLVER::writePathList()
     cfgFile << "#V" << CFGFILE_VERSION << "\n";
     std::string tstr;
 
-    while( sPL != m_Paths.end() )
+    while( sPL != m_paths.end() )
     {
-        tstr = sPL->m_alias.ToUTF8();
+        tstr = sPL->m_Alias.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_pathvar.ToUTF8();
+        tstr = sPL->m_Pathvar.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_description.ToUTF8();
+        tstr = sPL->m_Description.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\"\n";
         ++sPL;
     }
@@ -694,24 +694,24 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
 
     // check if the alias exists; if not then add it to the end of the
     // env var section of the path list
-    auto sPL = m_Paths.begin();
-    auto ePL = m_Paths.end();
+    auto sPL = m_paths.begin();
+    auto ePL = m_paths.end();
 
     while( sPL != ePL )
     {
-        if( sPL->m_alias == envar )
+        if( sPL->m_Alias == envar )
             return;
 
-        if( !sPL->m_alias.StartsWith( "${" ) )
+        if( !sPL->m_Alias.StartsWith( "${" ) )
             break;
 
         ++sPL;
     }
 
     SEARCH_PATH lpath;
-    lpath.m_alias = envar;
-    lpath.m_pathvar = lpath.m_alias;
-    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_alias, m_project ), "" );
+    lpath.m_Alias = envar;
+    lpath.m_Pathvar = lpath.m_Alias;
+    wxFileName tmpFN( ExpandEnvVarSubstitutions( lpath.m_Alias, m_project ), "" );
 
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
@@ -719,15 +719,15 @@ void FILENAME_RESOLVER::checkEnvVarPath( const wxString& aPath )
     if( !tmpFN.DirExists() )
         return;
 
-    lpath.m_pathexp = tmpFN.GetFullPath();
+    lpath.m_Pathexp = tmpFN.GetFullPath();
 
-    if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
-        lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
+    if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
+        lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
 
-    if( lpath.m_pathexp.empty() )
+    if( lpath.m_Pathexp.empty() )
         return;
 
-    m_Paths.insert( sPL, lpath );
+    m_paths.insert( sPL, lpath );
 }
 
 
@@ -735,19 +735,19 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 {
     wxString fname = aFullPathName;
 
-    if( m_Paths.empty() )
+    if( m_paths.empty() )
         createPathList();
 
     std::lock_guard<std::mutex> lock( mutex_resolver );
 
-    std::list< SEARCH_PATH >::const_iterator sL = m_Paths.begin();
+    std::list< SEARCH_PATH >::const_iterator sL = m_paths.begin();
     size_t idx;
 
-    while( sL != m_Paths.end() )
+    while( sL != m_paths.end() )
     {
         // undefined paths do not participate in the
         // file name shortening procedure
-        if( sL->m_pathexp.empty() )
+        if( sL->m_Pathexp.empty() )
         {
             ++sL;
             continue;
@@ -756,9 +756,9 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
         wxFileName fpath;
 
         // in the case of aliases, ensure that we use the most recent definition
-        if( sL->m_alias.StartsWith( "${" ) || sL->m_alias.StartsWith( "$(" ) )
+        if( sL->m_Alias.StartsWith( "${" ) || sL->m_Alias.StartsWith( "$(" ) )
         {
-            wxString tpath = ExpandEnvVarSubstitutions( sL->m_alias, m_project );
+            wxString tpath = ExpandEnvVarSubstitutions( sL->m_Alias, m_project );
 
             if( tpath.empty() )
             {
@@ -770,7 +770,7 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
         }
         else
         {
-            fpath.Assign( sL->m_pathexp, wxT( "" ) );
+            fpath.Assign( sL->m_Pathexp, wxT( "" ) );
         }
 
         wxString fps = fpath.GetPathWithSep();
@@ -787,10 +787,10 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
             fname.Replace( wxT( "\\" ), wxT( "/" ) );
             #endif
 
-            if( sL->m_alias.StartsWith( "${" ) || sL->m_alias.StartsWith( "$(" ) )
+            if( sL->m_Alias.StartsWith( "${" ) || sL->m_Alias.StartsWith( "$(" ) )
             {
                 // old style ENV_VAR
-                tname = sL->m_alias;
+                tname = sL->m_Alias;
                 tname.Append( "/" );
                 tname.append( fname );
             }
@@ -798,7 +798,7 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
             {
                 // new style alias
                 tname = ":";
-                tname.append( sL->m_alias );
+                tname.append( sL->m_Alias );
                 tname.append( ":" );
                 tname.append( fname );
             }
@@ -824,7 +824,7 @@ wxString FILENAME_RESOLVER::ShortenPath( const wxString& aFullPathName )
 
 const std::list< SEARCH_PATH >* FILENAME_RESOLVER::GetPaths()
 {
-    return &m_Paths;
+    return &m_paths;
 }
 
 

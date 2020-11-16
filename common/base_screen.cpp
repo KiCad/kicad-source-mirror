@@ -40,8 +40,8 @@ BASE_SCREEN::BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType ) :
     m_pageCount         = 1;         // Hierarchy: Root: ScreenNumber = 1
     m_Center            = true;
 
-    m_FlagModified      = false;     // Set when any change is made on board.
-    m_FlagSave          = false;     // Used in auto save set when an auto save is required.
+    m_flagModified      = false;     // Set when any change is made on board.
+    m_flagSave          = false;     // Used in auto save set when an auto save is required.
 }
 
 

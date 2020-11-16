@@ -271,7 +271,7 @@ KIGFX::SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
 
 void SCH_BASE_FRAME::createCanvas()
 {
-    m_canvasType = LoadCanvasTypeSetting();
+    m_canvasType = loadCanvasTypeSetting();
 
     // Allows only a CAIRO or OPENGL canvas:
     if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
@@ -280,7 +280,7 @@ void SCH_BASE_FRAME::createCanvas()
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     }
 
-    SetCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
+    SetCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_frameSize,
                                    GetGalDisplayOptions(), m_canvasType ));
     ActivateGalCanvas();
 }

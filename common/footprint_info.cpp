@@ -182,7 +182,7 @@ void FOOTPRINT_ASYNC_LOADER::Start( FP_LIB_TABLE* aTable, wxString const* aNickn
     aTable->Format( &sof, 0 );
     m_last_table = sof.GetString();
 
-    m_list->StartWorkers( aTable, aNickname, this, aNThreads );
+    m_list->startWorkers( aTable, aNickname, this, aNThreads );
 }
 
 
@@ -190,7 +190,7 @@ bool FOOTPRINT_ASYNC_LOADER::Join()
 {
     if( m_list )
     {
-        bool rv = m_list->JoinWorkers();
+        bool rv = m_list->joinWorkers();
         m_list = nullptr;
         return rv;
     }
@@ -203,7 +203,7 @@ void FOOTPRINT_ASYNC_LOADER::Abort()
 {
     if( m_list )
     {
-        m_list->StopWorkers();
+        m_list->stopWorkers();
         m_list = nullptr;
     }
 }

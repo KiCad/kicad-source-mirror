@@ -373,7 +373,7 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
 
     initDlg();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

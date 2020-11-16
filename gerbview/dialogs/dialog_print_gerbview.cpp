@@ -141,7 +141,7 @@ bool DIALOG_PRINT_GERBVIEW::TransferDataToWindow()
         wxCheckListBox* listBox = m_layerLists[listIdx];
         listBox->Append( filename.GetFullName() );
 
-        if( settings()->m_layerSet.test(ii) )
+        if( settings()->m_LayerSet.test( ii) )
             listBox->Check( ii, true );
 
         wxASSERT( m_layerToItemMap.count( ii ) == 0 );
@@ -150,7 +150,7 @@ bool DIALOG_PRINT_GERBVIEW::TransferDataToWindow()
         ++itemIdx;
     }
 
-    m_checkboxMirror->SetValue( settings()->m_mirror );
+    m_checkboxMirror->SetValue( settings()->m_Mirror );
 
     // Update the dialog layout when layers are added
     GetSizer()->Fit( this );
@@ -267,7 +267,7 @@ void DIALOG_PRINT_GERBVIEW::enableLayer( unsigned int aLayer, bool aValue )
 
 int DIALOG_PRINT_GERBVIEW::setLayerSetFromList()
 {
-    settings()->m_layerSet = LSET();
+    settings()->m_LayerSet = LSET();
     int& pageCount = settings()->m_pageCount;
     pageCount = 0;
 
@@ -279,7 +279,7 @@ int DIALOG_PRINT_GERBVIEW::setLayerSetFromList()
         {
             if( isLayerEnabled( layer ) )
             {
-                settings()->m_layerSet.set( layer );
+                settings()->m_LayerSet.set( layer );
                 ++pageCount;
             }
 
@@ -295,7 +295,7 @@ void DIALOG_PRINT_GERBVIEW::saveSettings()
 {
     setLayerSetFromList();
 
-    settings()->m_mirror = m_checkboxMirror->GetValue();
+    settings()->m_Mirror = m_checkboxMirror->GetValue();
 
     DIALOG_PRINT_GENERIC::saveSettings();
 }

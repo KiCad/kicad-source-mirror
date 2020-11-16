@@ -118,20 +118,20 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
     // We specify the width of the right window (m_symbol_view_panel), because specify
     // the width of the left window does not work as expected when SetSashGravity() is called
     if( cfg->m_FootprintChooser.sash_h < 0 )
-        cfg->m_FootprintChooser.sash_h = HorizPixelsFromDU( 220 );
+        cfg->m_FootprintChooser.sash_h = horizPixelsFromDU( 220 );
 
     m_hsplitter->SetSashPosition( cfg->m_FootprintChooser.sash_h );
 
     if( cfg->m_FootprintChooser.sash_v < 0 )
-        cfg->m_FootprintChooser.sash_v = HorizPixelsFromDU( 230 );
+        cfg->m_FootprintChooser.sash_v = horizPixelsFromDU( 230 );
 
     if( m_vsplitter )
         m_vsplitter->SetSashPosition( cfg->m_FootprintChooser.sash_v );
 
     int w = cfg->m_FootprintChooser.width < 0 ?
-            HorizPixelsFromDU( 440 ) : cfg->m_FootprintChooser.width;
+            horizPixelsFromDU( 440 ) : cfg->m_FootprintChooser.width;
     int h = cfg->m_FootprintChooser.height < 0 ?
-            HorizPixelsFromDU( 340 ) : cfg->m_FootprintChooser.height;
+            horizPixelsFromDU( 340 ) : cfg->m_FootprintChooser.height;
     SetSize( wxSize( w, h ) );
 
     SetInitialFocus( m_tree );

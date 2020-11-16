@@ -91,7 +91,7 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_sdbSizer1->Layout();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

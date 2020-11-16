@@ -51,7 +51,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Load( APP_SETTINGS_BASE* aConfig )
     {
         m_drillMarks = static_cast<DRILL_MARK_SHAPE_T>( cfg->m_Plot.pads_drill_mode );
         m_pagination = static_cast<PAGINATION_T>( cfg->m_Plot.all_layers_on_one_page );
-        m_mirror     = cfg->m_Plot.mirror;
+        m_Mirror     = cfg->m_Plot.mirror;
     }
 }
 
@@ -64,7 +64,7 @@ void PCBNEW_PRINTOUT_SETTINGS::Save( APP_SETTINGS_BASE* aConfig )
     {
         cfg->m_Plot.pads_drill_mode        = m_drillMarks;
         cfg->m_Plot.all_layers_on_one_page = m_pagination;
-        cfg->m_Plot.mirror                 = m_mirror;
+        cfg->m_Plot.mirror                 = m_Mirror;
     }
 }
 
@@ -81,7 +81,7 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 {
     // Store the layerset, as it is going to be modified below and the original settings are
     // needed.
-    LSET         lset = m_settings.m_layerSet;
+    LSET         lset = m_settings.m_LayerSet;
     int          pageCount = lset.count();
     wxString     layerName;
     PCB_LAYER_ID extractLayer;
@@ -95,13 +95,13 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 
         // aPage starts at 1, not 0
         if( unsigned( aPage - 1 ) < seq.size() )
-            m_settings.m_layerSet = LSET( seq[aPage - 1] );
+            m_settings.m_LayerSet = LSET( seq[ aPage - 1] );
     }
 
-    if( !m_settings.m_layerSet.any() )
+    if( !m_settings.m_LayerSet.any() )
         return false;
 
-    extractLayer = m_settings.m_layerSet.ExtractLayer();
+    extractLayer = m_settings.m_LayerSet.ExtractLayer();
 
     if( extractLayer == UNDEFINED_LAYER )
         layerName = _( "Multiple Layers" );
@@ -110,12 +110,12 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 
     // In Pcbnew we can want the layer EDGE always printed
     if( !m_pcbnewSettings.m_noEdgeLayer )
-        m_settings.m_layerSet.set( Edge_Cuts );
+        m_settings.m_LayerSet.set( Edge_Cuts );
 
     DrawPage( layerName, aPage, pageCount );
 
     // Restore the original layer set, so the next page can be printed
-    m_settings.m_layerSet = lset;
+    m_settings.m_LayerSet = lset;
 
     return true;
 }
@@ -131,7 +131,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( KIGFX::VIEW& aView, const LSET& aLayerSet
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
-    for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
+    for( LSEQ layerSeq = m_settings.m_LayerSet.Seq(); layerSeq; ++layerSeq )
     {
         aView.SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
 

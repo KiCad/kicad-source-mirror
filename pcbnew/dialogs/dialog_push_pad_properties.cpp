@@ -59,7 +59,7 @@ DIALOG_PUSH_PAD_PROPERTIES::DIALOG_PUSH_PAD_PROPERTIES( PCB_BASE_FRAME* aParent 
 
     m_sdbSizer1OK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

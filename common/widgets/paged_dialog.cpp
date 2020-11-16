@@ -130,7 +130,7 @@ void PAGED_DIALOG::finishInitialization()
     m_treebook->Fit();
     m_treebook->Layout();
 
-   	FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

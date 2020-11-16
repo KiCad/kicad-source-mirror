@@ -69,7 +69,7 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
 
     m_stdButtonsOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

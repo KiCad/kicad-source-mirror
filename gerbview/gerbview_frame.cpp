@@ -89,7 +89,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_apertText = nullptr;
     m_dcodeText = nullptr;
     m_displayMode = 0;
-    m_AboutTitle = "GerbView";
+    m_aboutTitle = "GerbView";
 
     SHAPE_POLY_SET dummy;   // A ugly trick to force the linker to include
                             // some methods in code and avoid link errors
@@ -99,7 +99,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     m_zipFileHistory.SetMaxFiles( fileHistorySize );
     m_jobFileHistory.SetMaxFiles( fileHistorySize );
 
-    auto* galCanvas = new GERBVIEW_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+    auto* galCanvas = new GERBVIEW_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                    GetGalDisplayOptions(),
                                                    EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
@@ -160,7 +160,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
     SetActiveLayer( 0, true );
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 
-    ResolveCanvasType();
+    resolveCanvasType();
 
     SwitchCanvas( m_canvasType );
 

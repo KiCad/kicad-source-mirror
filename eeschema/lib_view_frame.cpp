@@ -111,7 +111,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     if( aFrameType == FRAME_SCH_VIEWER_MODAL )
         SetModal( true );
 
-    m_AboutTitle = "Symbol Library Viewer";
+    m_aboutTitle = "Symbol Library Viewer";
 
     // Force the frame name used in config. the lib viewer frame has a name
     // depending on aFrameType (needed to identify the frame by wxWidgets),
@@ -687,11 +687,11 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
 
     // Set parameters to a reasonable value.
-    if( m_libListWidth > m_FrameSize.x/2 )
-        m_libListWidth = m_FrameSize.x/2;
+    if( m_libListWidth > m_frameSize.x / 2 )
+        m_libListWidth = m_frameSize.x / 2;
 
-    if( m_cmpListWidth > m_FrameSize.x/2 )
-        m_cmpListWidth = m_FrameSize.x/2;
+    if( m_cmpListWidth > m_frameSize.x / 2 )
+        m_cmpListWidth = m_frameSize.x / 2;
 }
 
 

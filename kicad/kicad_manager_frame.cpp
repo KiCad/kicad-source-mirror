@@ -100,7 +100,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 {
     m_active_project = false;
     m_leftWinWidth = 250;       // Default value
-    m_AboutTitle = "KiCad";
+    m_aboutTitle = "KiCad";
 
     // Create the status line (bottom of the frame)
     static const int dims[3] = { -1, -1, 100 };

@@ -69,20 +69,11 @@ public:
     // These two accessors do not have to call ensure_loaded(), because constructor
     // fills in these fields:
 
-    const wxString& GetFootprintName() const
-    {
-        return m_fpname;
-    }
+    const wxString& GetFootprintName() const { return m_fpname; }
 
-    wxString GetLibNickname() const override
-    {
-        return m_nickname;
-    }
+    wxString GetLibNickname() const override { return m_nickname; }
 
-    wxString GetName() const override
-    {
-        return m_fpname;
-    }
+    wxString GetName() const override { return m_fpname; }
 
     LIB_ID GetLibId() const override
     {
@@ -282,18 +273,18 @@ protected:
      * Launch worker threads to load footprints. Part of the
      * FOOTPRINT_ASYNC_LOADER implementation.
      */
-    virtual void StartWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
-            FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) = 0;
+    virtual void startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
+                               FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) = 0;
 
     /**
      * Join worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
      */
-    virtual bool JoinWorkers() = 0;
+    virtual bool joinWorkers() = 0;
 
     /**
      * Stop worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
      */
-    virtual void StopWorkers() = 0;
+    virtual void stopWorkers() = 0;
 };
 
 
@@ -307,10 +298,10 @@ class APIEXPORT FOOTPRINT_ASYNC_LOADER
     friend class FOOTPRINT_LIST;
     friend class FOOTPRINT_LIST_IMPL;
 
-    FOOTPRINT_LIST*       m_list;
-    std::string           m_last_table;
+    FOOTPRINT_LIST*  m_list;
+    std::string      m_last_table;
 
-    int  m_total_libs;
+    int              m_total_libs;
 
 public:
     /**

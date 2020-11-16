@@ -52,7 +52,7 @@ DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SE
     m_sdbSizer1Apply->Hide();
 #endif
 
-    FinishDialogSettings();
+    finishDialogSettings();
     Layout();
     initPrintData();
 }

@@ -55,8 +55,8 @@ struct BOARD_PRINTOUT_SETTINGS : public PRINTOUT_SETTINGS
     {
     }
 
-    LSET m_layerSet;                   ///< Layers to print
-    bool m_mirror;                      ///< Print mirrored
+    LSET m_LayerSet;                   ///< Layers to print
+    bool m_Mirror;                     ///< Print mirrored
 
     void Load( APP_SETTINGS_BASE* aConfig ) override;
     void Save( APP_SETTINGS_BASE* aConfig ) override;

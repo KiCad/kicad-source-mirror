@@ -372,11 +372,10 @@ public:
 
 protected:
     /**
-     * Helper function
-     * Return a string (to be shown to the user) describing a layer mask.
-     * The BOARD is needed because layer names are (somewhat) customizable
+     * Return a string (to be shown to the user) describing a layer mask. The BOARD is needed
+     * because layer names are customizable.
      */
-    virtual wxString LayerMaskDescribe() const;
+    virtual wxString layerMaskDescribe() const;
 };
 
 #ifndef SWIG
@@ -407,10 +406,7 @@ public:
 
     // pure virtuals:
     void SetPosition( const wxPoint& ) override {}
-
-    wxPoint GetPosition() const override {
-        return wxPoint(0, 0);
-    }
+    wxPoint GetPosition() const override { return wxPoint(0, 0); }
 
     static DELETED_BOARD_ITEM* GetInstance()
     {

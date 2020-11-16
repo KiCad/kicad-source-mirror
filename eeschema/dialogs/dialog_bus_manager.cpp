@@ -183,7 +183,7 @@ DIALOG_BUS_MANAGER::DIALOG_BUS_MANAGER( SCH_EDIT_FRAME* aParent )
     m_bus_edit->SetHint( _( "Bus Alias Name" ) );
     m_signal_edit->SetHint( _( "Net or Bus Name" ) );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

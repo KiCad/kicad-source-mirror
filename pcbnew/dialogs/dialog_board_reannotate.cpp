@@ -175,7 +175,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_MessageWindow->SetPrintInfo( false ); // Suppress the "Info: " prefix
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

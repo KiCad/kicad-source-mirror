@@ -160,7 +160,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     // wxFormBuilder doesn't include this event...
     m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging ), NULL, this );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

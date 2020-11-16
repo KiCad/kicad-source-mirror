@@ -102,7 +102,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
         if( ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::ALIAS && aLibEntry->IsRoot() )
           || ( m_lastLayout == DIALOG_LIB_SYMBOL_PROPERTIES::PARENT && aLibEntry->IsAlias() ) )
         {
-            ResetSize();
+            resetSize();
         }
     }
 
@@ -113,7 +113,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     syncControlStates( m_libEntry->IsAlias() );
     Layout();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

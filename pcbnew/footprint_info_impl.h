@@ -101,11 +101,11 @@ class FOOTPRINT_LIST_IMPL : public FOOTPRINT_LIST
     bool CatchErrors( const std::function<void()>& aFunc );
 
 protected:
-    void StartWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
+    void startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
                        FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) override;
-    bool JoinWorkers() override;
+    bool joinWorkers() override;
 
-    void StopWorkers() override;
+    void stopWorkers() override;
 
     /**
      * Function loader_job

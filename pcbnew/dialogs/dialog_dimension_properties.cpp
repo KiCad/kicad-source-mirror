@@ -164,7 +164,7 @@ DIALOG_DIMENSION_PROPERTIES::DIALOG_DIMENSION_PROPERTIES( PCB_BASE_EDIT_FRAME* a
                 m_cbTextOrientation->Enable( !m_cbKeepAligned->GetValue() );
             } );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

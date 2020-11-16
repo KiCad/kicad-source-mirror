@@ -220,11 +220,11 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
-    m_realTimeConnectivity      = true;
-    m_coroutineStackSize        = AC_STACK::default_stack;
+    m_RealTimeConnectivity      = true;
+    m_CoroutineStackSize        = AC_STACK::default_stack;
     m_ShowRouterDebugGraphics   = false;
-    m_drawArcAccuracy           = 10.0;
-    m_drawArcCenterMaxAngle     = 50.0;
+    m_DrawArcAccuracy           = 10.0;
+    m_DrawArcCenterMaxAngle     = 50.0;
     m_DrawTriangulationOutlines = false;
     m_PluginAltiumSch           = false;
 
@@ -281,7 +281,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     std::vector<PARAM_CFG*> configParams;
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity,
-                                                &m_realTimeConnectivity, true ) );
+                                                &m_RealTimeConnectivity, true ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::ExtraFillMargin,
                                                   &m_ExtraClearance, 0.0005, 0.0, 1.0 ) );
@@ -293,7 +293,7 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                   &m_HoleWallThickness, 0.020, 0.0, 1.0 ) );
 
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::CoroutineStackSize,
-                                               &m_coroutineStackSize, AC_STACK::default_stack,
+                                               &m_CoroutineStackSize, AC_STACK::default_stack,
                                                AC_STACK::min_stack, AC_STACK::max_stack ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::ShowRouterDebugGraphics,
@@ -303,10 +303,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                 &m_CompactSave, false ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcAccuracy,
-                                                  &m_drawArcAccuracy, 10.0, 0.0, 100000.0 ) );
+                                                  &m_DrawArcAccuracy, 10.0, 0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::DrawArcCenterStartEndMaxAngle,
-                                                  &m_drawArcCenterMaxAngle, 50.0, 0.0, 100000.0 ) );
+                                                  &m_DrawArcCenterMaxAngle, 50.0, 0.0, 100000.0 ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::StrokeTriangulation,
                                                 &m_DrawTriangulationOutlines, false ) );

@@ -172,7 +172,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
     m_buttonBrowse->SetBitmap( KiBitmap( folder_xpm ) );
     m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

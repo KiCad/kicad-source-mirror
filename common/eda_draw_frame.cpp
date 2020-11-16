@@ -135,12 +135,12 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SetStatusWidths( arrayDim( dims ), dims );
 
     // Create child subwindows.
-    GetClientSize( &m_FrameSize.x, &m_FrameSize.y );
-    m_FramePos.x   = m_FramePos.y = 0;
-    m_FrameSize.y -= m_msgFrameHeight;
+    GetClientSize( &m_frameSize.x, &m_frameSize.y );
+    m_framePos.x   = m_framePos.y = 0;
+    m_frameSize.y -= m_msgFrameHeight;
 
-    m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
-                                         wxSize( m_FrameSize.x, m_msgFrameHeight ) );
+    m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_frameSize.y ),
+                                         wxSize( m_frameSize.x, m_msgFrameHeight ) );
 
     m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
 }
@@ -460,7 +460,7 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
 }
 
 
-void EDA_DRAW_FRAME::InitExitKey()
+void EDA_DRAW_FRAME::initExitKey()
 {
     wxAcceleratorEntry entries[1];
     entries[0].Set( wxACCEL_CTRL, int( 'Q' ), wxID_EXIT );
@@ -504,7 +504,7 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
 void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
-    m_FrameSize = GetClientSize( );
+    m_frameSize = GetClientSize( );
 
     SizeEv.Skip();
 }
@@ -659,7 +659,7 @@ void EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 }
 
 
-EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
+EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::loadCanvasTypeSetting()
 {
 #ifdef __WXMAC__
     // Cairo renderer doesn't handle Retina displays so there's really only one game
@@ -706,7 +706,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
     for( unsigned ii = 0; ii < arrayDim( allowed_frames ); ii++ )
     {
-        if( m_Ident == allowed_frames[ii] )
+        if( m_ident == allowed_frames[ii] )
         {
             allow_save = true;
             break;
@@ -992,9 +992,9 @@ void EDA_DRAW_FRAME::GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondary
 }
 
 
-void EDA_DRAW_FRAME::ResolveCanvasType()
+void EDA_DRAW_FRAME::resolveCanvasType()
 {
-    m_canvasType = LoadCanvasTypeSetting();
+    m_canvasType = loadCanvasTypeSetting();
 
     // Nudge user to switch to OpenGL if they are on legacy or Cairo
     if( m_firstRunDialogSetting < 1 )

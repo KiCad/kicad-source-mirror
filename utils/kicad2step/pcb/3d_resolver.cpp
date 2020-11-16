@@ -138,9 +138,9 @@ bool S3D_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
     if( m_Paths.empty() )
     {
         SEARCH_PATH al;
-        al.m_alias = "${KIPRJMOD}";
-        al.m_pathvar = "${KIPRJMOD}";
-        al.m_pathexp = m_curProjDir;
+        al.m_Alias = "${KIPRJMOD}";
+        al.m_Pathvar = "${KIPRJMOD}";
+        al.m_Pathexp = m_curProjDir;
         m_Paths.push_back( al );
         m_NameMap.clear();
 
@@ -150,9 +150,9 @@ bool S3D_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
     }
     else
     {
-        if( m_Paths.front().m_pathexp.Cmp( m_curProjDir ) )
+        if( m_Paths.front().m_Pathexp.Cmp( m_curProjDir ) )
         {
-            m_Paths.front().m_pathexp = m_curProjDir;
+            m_Paths.front().m_Pathexp = m_curProjDir;
             m_NameMap.clear();
 
             if( flgChanged )
@@ -170,7 +170,7 @@ bool S3D_RESOLVER::SetProjectDir( const wxString& aProjDir, bool* flgChanged )
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
         ostr << " * [INFO] changed project dir to ";
-        ostr << m_Paths.front().m_pathexp.ToUTF8();
+        ostr << m_Paths.front().m_Pathexp.ToUTF8();
         wxLogTrace( MASK_3D_RESOLVER, "%s\n", ostr.str().c_str() );
     } while( 0 );
 #endif
@@ -197,9 +197,9 @@ bool S3D_RESOLVER::createPathList( void )
     // the user may change this later with a call to SetProjectDir()
 
     SEARCH_PATH lpath;
-    lpath.m_alias = "${KIPRJMOD}";
-    lpath.m_pathvar = "${KIPRJMOD}";
-    lpath.m_pathexp = m_curProjDir;
+    lpath.m_Alias = "${KIPRJMOD}";
+    lpath.m_Pathvar = "${KIPRJMOD}";
+    lpath.m_Pathexp = m_curProjDir;
     m_Paths.push_back( lpath );
     wxFileName fndummy;
     wxUniChar psep = fndummy.GetPathSeparator();
@@ -250,12 +250,12 @@ bool S3D_RESOLVER::createPathList( void )
         if( tmp == "${KISYS3DMOD}" )
             hasKISYS3DMOD = true;
 
-        lpath.m_alias =  tmp;
-        lpath.m_pathvar = tmp;
-        lpath.m_pathexp = fndummy.GetFullPath();
+        lpath.m_Alias =  tmp;
+        lpath.m_Pathvar = tmp;
+        lpath.m_Pathexp = fndummy.GetFullPath();
 
-        if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
-            lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
+        if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
+            lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
 
         m_Paths.push_back( lpath );
 
@@ -268,19 +268,19 @@ bool S3D_RESOLVER::createPathList( void )
 
     if( !hasKISYS3DMOD && wxGetEnv( "KISYS3DMOD", &envar ) )
     {
-        lpath.m_alias = "${KISYS3DMOD}";
-        lpath.m_pathvar = "${KISYS3DMOD}";
+        lpath.m_Alias = "${KISYS3DMOD}";
+        lpath.m_Pathvar = "${KISYS3DMOD}";
         fndummy.Assign( envar, "" );
         fndummy.Normalize();
 
         if( fndummy.DirExists() )
         {
-            lpath.m_pathexp = fndummy.GetFullPath();
+            lpath.m_Pathexp = fndummy.GetFullPath();
 
-            if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
-                lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
+            if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
+                lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
 
-            if( !lpath.m_pathexp.empty() )
+            if( !lpath.m_Pathexp.empty() )
                 m_Paths.push_back( lpath );
         }
 
@@ -299,7 +299,7 @@ bool S3D_RESOLVER::createPathList( void )
 
     while( sPL != ePL )
     {
-        wxLogTrace( MASK_3D_RESOLVER, "   + '%s'\n", (*sPL).m_pathexp.ToUTF8() );
+        wxLogTrace( MASK_3D_RESOLVER, "   + '%s'\n", (*sPL).m_Pathexp.ToUTF8() );
         ++sPL;
     }
 #endif
@@ -312,7 +312,7 @@ bool S3D_RESOLVER::UpdatePathList( std::vector< SEARCH_PATH >& aPathList )
 {
     wxUniChar envMarker( '$' );
 
-    while( !m_Paths.empty() && envMarker != *m_Paths.back().m_alias.rbegin() )
+    while( !m_Paths.empty() && envMarker != *m_Paths.back().m_Alias.rbegin() )
         m_Paths.pop_back();
 
     size_t nI = aPathList.size();
@@ -417,9 +417,9 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     // This check is performed before checking the path relative to
     // ${KISYS3DMOD} so that users can potentially override a model
     // within ${KISYS3DMOD}
-    if( !sPL->m_pathexp.empty() && !tname.StartsWith( ":" ) )
+    if( !sPL->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
-        tmpFN.Assign( sPL->m_pathexp, "" );
+        tmpFN.Assign( sPL->m_Pathexp, "" );
         wxString fullPath = tmpFN.GetPathWithSep() + tname;
 
         if( fullPath.StartsWith( "${" ) || fullPath.StartsWith( "$(" ) )
@@ -457,7 +457,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
     }
 
     // ${ENV_VAR} paths have already been checked; skip them
-    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" ) || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != ePL && ( sPL->m_Alias.StartsWith( "${" ) || sPL->m_Alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     // at this point the filename must contain an alias or else it is invalid
@@ -482,9 +482,9 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
     while( sPL != ePL )
     {
-        if( !sPL->m_alias.Cmp( alias ) && !sPL->m_pathexp.empty() )
+        if( !sPL->m_Alias.Cmp( alias ) && !sPL->m_Pathexp.empty() )
         {
-            wxFileName fpath( wxFileName::DirName( sPL->m_pathexp ) );
+            wxFileName fpath( wxFileName::DirName( sPL->m_Pathexp ) );
             wxString fullPath = fpath.GetPathWithSep() + relpath;
 
             if( fullPath.StartsWith( "${") || fullPath.StartsWith( "$(" ) )
@@ -520,7 +520,7 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
 
 bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 {
-    if( aPath.m_alias.empty() || aPath.m_pathvar.empty() )
+    if( aPath.m_Alias.empty() || aPath.m_Pathvar.empty() )
         return false;
 
     std::lock_guard<std::mutex> lock( mutex3D_resolver );
@@ -528,39 +528,39 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
     SEARCH_PATH tpath = aPath;
 
 #ifdef _WIN32
-    while( tpath.m_pathvar.EndsWith( "\\" ) )
-        tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
+    while( tpath.m_Pathvar.EndsWith( "\\" ) )
+        tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
 #else
-    while( tpath.m_pathvar.EndsWith( "/" ) &&  tpath.m_pathvar.length() > 1 )
-        tpath.m_pathvar.erase( tpath.m_pathvar.length() - 1 );
+    while( tpath.m_Pathvar.EndsWith( "/" ) && tpath.m_Pathvar.length() > 1 )
+        tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
 #endif
 
-    wxFileName path( tpath.m_pathvar, "" );
+    wxFileName path( tpath.m_Pathvar, "" );
     path.Normalize();
 
     if( !path.DirExists() )
     {
         // suppress the message if the missing pathvar is the legacy KISYS3DMOD variable
-        if( aPath.m_pathvar != "${KISYS3DMOD}" && aPath.m_pathvar != "$(KISYS3DMOD)" )
+        if( aPath.m_Pathvar != "${KISYS3DMOD}" && aPath.m_Pathvar != "$(KISYS3DMOD)" )
         {
             wxString msg = _( "The given path does not exist" );
             msg.append( "\n" );
-            msg.append( tpath.m_pathvar );
+            msg.append( tpath.m_Pathvar );
             wxLogMessage( "%s\n", msg.ToUTF8() );
         }
 
-        tpath.m_pathexp.clear();
+        tpath.m_Pathexp.clear();
     }
     else
     {
-        tpath.m_pathexp = path.GetFullPath();
+        tpath.m_Pathexp = path.GetFullPath();
 
 #ifdef _WIN32
-        while( tpath.m_pathexp.EndsWith( "\\" ) )
-        tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
+        while( tpath.m_Pathexp.EndsWith( "\\" ) )
+        tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
 #else
-        while( tpath.m_pathexp.EndsWith( "/" ) &&  tpath.m_pathexp.length() > 1 )
-            tpath.m_pathexp.erase( tpath.m_pathexp.length() - 1 );
+        while( tpath.m_Pathexp.EndsWith( "/" ) && tpath.m_Pathexp.length() > 1 )
+            tpath.m_Pathexp.erase( tpath.m_Pathexp.length() - 1 );
 #endif
     }
 
@@ -570,16 +570,16 @@ bool S3D_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     while( sPL != ePL )
     {
-        if( !tpath.m_alias.Cmp( sPL->m_alias ) )
+        if( !tpath.m_Alias.Cmp( sPL->m_Alias ) )
         {
             wxString msg = _( "Alias:" ) + wxS( " " );
-            msg.append( tpath.m_alias );
+            msg.append( tpath.m_Alias );
             msg.append( "\n" );
             msg.append( _( "This path:" ) + wxS( " " ) );
-            msg.append( tpath.m_pathvar );
+            msg.append( tpath.m_Pathvar );
             msg.append( "\n" );
             msg.append( _( "Existing path:" ) + wxS( " " ) );
-            msg.append( sPL->m_pathvar );
+            msg.append( sPL->m_Pathvar );
             wxMessageBox( msg, _( "Bad alias (duplicate name)" ) );
 
             return false;
@@ -671,17 +671,17 @@ bool S3D_RESOLVER::readPathList( void )
 
         idx = 0;
 
-        if( !getHollerith( cfgLine, idx, al.m_alias ) )
+        if( !getHollerith( cfgLine, idx, al.m_Alias ) )
             continue;
 
         // never add on KISYS3DMOD from a config file
-        if( !al.m_alias.Cmp( "KISYS3DMOD" ) )
+        if( !al.m_Alias.Cmp( "KISYS3DMOD" ) )
             continue;
 
-        if( !getHollerith( cfgLine, idx, al.m_pathvar ) )
+        if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
             continue;
 
-        if( !getHollerith( cfgLine, idx, al.m_description ) )
+        if( !getHollerith( cfgLine, idx, al.m_Description ) )
             continue;
 
         addPath( al );
@@ -717,8 +717,8 @@ bool S3D_RESOLVER::writePathList( void )
     std::list< SEARCH_PATH >::const_iterator sPL = m_Paths.begin();
     std::list< SEARCH_PATH >::const_iterator ePL = m_Paths.end();
 
-    while( sPL != ePL && ( sPL->m_alias.StartsWith( "${" )
-                           || sPL->m_alias.StartsWith( "$(" ) ) )
+    while( sPL != ePL && ( sPL->m_Alias.StartsWith( "${" )
+                           || sPL->m_Alias.StartsWith( "$(" ) ) )
         ++sPL;
 
     wxFileName cfgpath( m_ConfigDir, S3D_RESOLVER_CONFIG );
@@ -770,11 +770,11 @@ bool S3D_RESOLVER::writePathList( void )
 
     while( sPL != ePL )
     {
-        tstr = sPL->m_alias.ToUTF8();
+        tstr = sPL->m_Alias.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_pathvar.ToUTF8();
+        tstr = sPL->m_Pathvar.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\",";
-        tstr = sPL->m_description.ToUTF8();
+        tstr = sPL->m_Description.ToUTF8();
         cfgFile << "\"" << tstr.size() << ":" << tstr << "\"\n";
         ++sPL;
     }
@@ -822,31 +822,31 @@ void S3D_RESOLVER::checkEnvVarPath( const wxString& aPath )
 
     while( sPL != ePL )
     {
-        if( sPL->m_alias == envar )
+        if( sPL->m_Alias == envar )
             return;
 
-        if( !sPL->m_alias.StartsWith( "${" ) )
+        if( !sPL->m_Alias.StartsWith( "${" ) )
             break;
 
         ++sPL;
     }
 
     SEARCH_PATH lpath;
-    lpath.m_alias = envar;
-    lpath.m_pathvar = lpath.m_alias;
-    wxFileName tmpFN( lpath.m_alias, "" );
+    lpath.m_Alias = envar;
+    lpath.m_Pathvar = lpath.m_Alias;
+    wxFileName tmpFN( lpath.m_Alias, "" );
     wxUniChar psep = tmpFN.GetPathSeparator();
     tmpFN.Normalize();
 
     if( !tmpFN.DirExists() )
         return;
 
-    lpath.m_pathexp = tmpFN.GetFullPath();
+    lpath.m_Pathexp = tmpFN.GetFullPath();
 
-    if( !lpath.m_pathexp.empty() && psep == *lpath.m_pathexp.rbegin() )
-        lpath.m_pathexp.erase( --lpath.m_pathexp.end() );
+    if( !lpath.m_Pathexp.empty() && psep == *lpath.m_Pathexp.rbegin() )
+        lpath.m_Pathexp.erase( --lpath.m_Pathexp.end() );
 
-    if( lpath.m_pathexp.empty() )
+    if( lpath.m_Pathexp.empty() )
         return;
 
     m_Paths.insert( sPL, lpath );
@@ -904,13 +904,13 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
     {
         // undefined paths do not participate in the
         // file name shortening procedure
-        if( sL->m_pathexp.empty() )
+        if( sL->m_Pathexp.empty() )
         {
             ++sL;
             continue;
         }
 
-        wxFileName fpath( sL->m_pathexp, "" );
+        wxFileName fpath( sL->m_Pathexp, "" );
         wxString fps = fpath.GetPathWithSep();
         wxString tname;
 
@@ -925,10 +925,10 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
             fname.Replace( "\\", "/" );
 #endif
 
-            if( sL->m_alias.StartsWith( "${" ) || sL->m_alias.StartsWith( "$(" ) )
+            if( sL->m_Alias.StartsWith( "${" ) || sL->m_Alias.StartsWith( "$(" ) )
             {
                 // old style ENV_VAR
-                tname = sL->m_alias;
+                tname = sL->m_Alias;
                 tname.Append( "/" );
                 tname.append( fname );
             }
@@ -936,7 +936,7 @@ wxString S3D_RESOLVER::ShortenPath( const wxString& aFullPathName )
             {
                 // new style alias
                 tname = ":";
-                tname.append( sL->m_alias );
+                tname.append( sL->m_Alias );
                 tname.append( ":" );
                 tname.append( fname );
             }

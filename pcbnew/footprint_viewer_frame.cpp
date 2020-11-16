@@ -116,7 +116,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     if( aFrameType == FRAME_FOOTPRINT_VIEWER_MODAL )
         SetModal( true );
 
-    m_AboutTitle = "Footprint Library Viewer";
+    m_aboutTitle = "Footprint Library Viewer";
 
     // Force the items to always snap
     m_magneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
@@ -168,8 +168,8 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     fpPanel->Fit();
 
     // Create GAL canvas
-    m_canvasType = LoadCanvasTypeSetting();
-    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+    m_canvasType = loadCanvasTypeSetting();
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
 
@@ -266,7 +266,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     GetCanvas()->GetView()->SetScale( cfg->m_FootprintViewerZoom );
 
     updateView();
-    InitExitKey();
+    initExitKey();
     setupUnits( config() );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame

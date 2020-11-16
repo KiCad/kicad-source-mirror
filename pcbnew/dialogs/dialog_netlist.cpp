@@ -89,7 +89,7 @@ DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, wxString& aNetlistFullF
     m_buttonsSizer->Layout();
 
     m_sdbSizer1OK->SetDefault();
-    FinishDialogSettings();
+    finishDialogSettings();
 
     m_initialized = true;
     loadNetlist( true );

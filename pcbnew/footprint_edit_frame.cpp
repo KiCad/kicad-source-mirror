@@ -115,7 +115,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     m_showBorderAndTitleBlock = false;   // true to show the frame references
     m_canvasType = aBackend;
-    m_AboutTitle = _( "Footprint Editor" );
+    m_aboutTitle = _( "Footprint Editor" );
     m_selLayerBox = nullptr;
     m_settings = nullptr;
 
@@ -126,11 +126,11 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     // Create GAL canvas
     if( aBackend == EDA_DRAW_PANEL_GAL::GAL_TYPE_UNKNOWN )
-        m_canvasType = LoadCanvasTypeSetting();
+        m_canvasType = loadCanvasTypeSetting();
     else
         m_canvasType = aBackend;
 
-    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
                                                             GetGalDisplayOptions(), m_canvasType );
     SetCanvas( drawPanel );
     SetBoard( new BOARD() );
@@ -276,7 +276,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
     updateTitle();
-    InitExitKey();
+    initExitKey();
     setupUnits( GetSettings() );
 
     // Default shutdown reason until a file is loaded

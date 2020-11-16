@@ -75,7 +75,7 @@ DIALOG_UPDATE_PCB::DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST* aNetlist
     m_sdbSizer1->Layout();
 
     m_sdbSizer1OK->SetDefault();
-    FinishDialogSettings();
+    finishDialogSettings();
 
     m_initialized = true;
     PerformUpdate( true );

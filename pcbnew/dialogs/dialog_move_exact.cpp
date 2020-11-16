@@ -84,7 +84,7 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
 
     m_stdButtonsOK->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

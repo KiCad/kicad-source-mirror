@@ -74,7 +74,7 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
     if( okButton )
         okButton->SetDefault();
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

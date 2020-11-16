@@ -50,7 +50,7 @@ DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, TOOL_MANAGER*
 
     SetSizer( main_sizer );
 
-    FinishDialogSettings();
+    finishDialogSettings();
 }
 
 

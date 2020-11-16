@@ -93,10 +93,10 @@ class KICADPCB;
 
 struct SEARCH_PATH
 {
-    wxString m_alias;           // alias to the base path
-    wxString m_pathvar;         // base path as stored in the config file
-    wxString m_pathexp;         // expanded base path
-    wxString m_description;     // description of the aliased path
+    wxString m_Alias;           // alias to the base path
+    wxString m_Pathvar;         // base path as stored in the config file
+    wxString m_Pathexp;         // expanded base path
+    wxString m_Description;     // description of the aliased path
 };
 
 class S3D_RESOLVER
