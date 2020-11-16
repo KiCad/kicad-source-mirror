@@ -230,10 +230,7 @@ public:
      * @param aSpinStyle Spin style as per LABEL_SPIN_STYLE storage class, may be the enum values or int value
      */
     virtual void     SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle );
-    LABEL_SPIN_STYLE GetLabelSpinStyle() const
-    {
-        return m_spin_style;
-    }
+    LABEL_SPIN_STYLE GetLabelSpinStyle() const  { return m_spin_style; }
 
     PINSHEETLABEL_SHAPE GetShape() const        { return m_shape; }
 
@@ -384,8 +381,6 @@ public:
 
     ~SCH_GLOBALLABEL() { }
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
-
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_GLOBAL_LABEL_T == aItem->Type();
@@ -395,6 +390,8 @@ public:
     {
         return wxT( "SCH_GLOBALLABEL" );
     }
+
+    EDA_ITEM* Clone() const override;
 
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
@@ -417,7 +414,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    EDA_ITEM* Clone() const override;
+    void Print( RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
     SCH_IREF* GetIref() { return m_iref; }
     void SetIref( SCH_IREF* iref ) { m_iref = iref; }

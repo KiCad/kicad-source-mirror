@@ -79,7 +79,7 @@ extern std::string toUTFTildaText( const wxString& txt );
 class SCH_COMPONENT : public SCH_ITEM
 {
 private:
-    wxPoint     m_Pos;
+    wxPoint     m_pos;
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
     int         m_unit;         ///< The unit for multiple part per package components.
     int         m_convert;      ///< The alternate body style for components that have more than
@@ -100,7 +100,7 @@ private:
     wxString    m_schLibSymbolName;
 
     TRANSFORM   m_transform;    ///< The rotation/mirror transformation matrix.
-    SCH_FIELDS  m_Fields;       ///< Variable length list of fields.
+    SCH_FIELDS  m_fields;       ///< Variable length list of fields.
 
     std::unique_ptr< LIB_PART >            m_part;    // a flattened copy of the LIB_PART from
                                                       // the PROJECT's libraries.
@@ -393,7 +393,7 @@ public:
     /**
      * Returns a vector of fields from the component
      */
-    std::vector<SCH_FIELD>& GetFields() { return m_Fields; }
+    std::vector<SCH_FIELD>& GetFields() { return m_fields; }
 
     /**
      * Add a field to the symbol.
@@ -428,7 +428,7 @@ public:
      */
     void SetFields( const SCH_FIELDS& aFields )
     {
-        m_Fields = aFields;     // vector copying, length is changed possibly
+        m_fields = aFields;     // vector copying, length is changed possibly
     }
 
     /**
@@ -441,7 +441,7 @@ public:
     /**
      * Return the number of fields in this symbol.
      */
-    int GetFieldCount() const { return (int)m_Fields.size(); }
+    int GetFieldCount() const { return (int)m_fields.size(); }
 
     /**
      * Automatically orient all the fields in the component.
@@ -578,9 +578,9 @@ public:
         if( aMoveVector == wxPoint( 0, 0 ) )
             return;
 
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
 
-        for( SCH_FIELD& field : m_Fields )
+        for( SCH_FIELD& field : m_fields )
             field.Move( aMoveVector );
 
         SetModified();
@@ -654,8 +654,8 @@ public:
 
     bool IsReplaceable() const override { return true; }
 
-    wxPoint GetPosition() const override { return m_Pos; }
-    void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_Pos ); }
+    wxPoint GetPosition() const override { return m_pos; }
+    void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_pos ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;

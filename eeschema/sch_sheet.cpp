@@ -719,7 +719,7 @@ void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
 }
 
 
-void SCH_SHEET::Rotate(wxPoint aPosition)
+void SCH_SHEET::Rotate( wxPoint aPosition )
 {
     wxPoint prev = m_pos;
 

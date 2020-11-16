@@ -148,7 +148,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
     m_parent      = aComponent.m_parent;
-    m_Pos         = aComponent.m_Pos;
+    m_pos         = aComponent.m_pos;
     m_unit        = aComponent.m_unit;
     m_convert     = aComponent.m_convert;
     m_lib_id      = aComponent.m_lib_id;
@@ -164,10 +164,10 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_transform = aComponent.m_transform;
     m_prefix = aComponent.m_prefix;
     m_instanceReferences = aComponent.m_instanceReferences;
-    m_Fields = aComponent.m_Fields;
+    m_fields = aComponent.m_fields;
 
     // Re-parent the fields, which before this had aComponent as parent
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
 
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
@@ -176,7 +176,7 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
 
 void SCH_COMPONENT::Init( const wxPoint& pos )
 {
-    m_Pos     = pos;
+    m_pos     = pos;
     m_unit    = 1;  // In multi unit chip - which unit to draw.
     m_convert = LIB_ITEM::LIB_CONVERT::BASE;  // De Morgan Handling
 
@@ -186,14 +186,14 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     // construct only the mandatory fields, which are the first 4 only.
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        m_Fields.emplace_back( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
+        m_fields.emplace_back( pos, i, this, TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
         if( i == REFERENCE_FIELD )
-            m_Fields.back().SetLayer( LAYER_REFERENCEPART );
+            m_fields.back().SetLayer( LAYER_REFERENCEPART );
         else if( i == VALUE_FIELD )
-            m_Fields.back().SetLayer( LAYER_VALUEPART );
+            m_fields.back().SetLayer( LAYER_VALUEPART );
         else
-            m_Fields.back().SetLayer( LAYER_FIELDS );
+            m_fields.back().SetLayer( LAYER_FIELDS );
     }
 
     m_prefix = wxString( wxT( "U" ) );
@@ -360,14 +360,14 @@ void SCH_COMPONENT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 
     if( m_part )
     {
-        m_part->Print( aSettings, m_Pos + aOffset, m_unit, m_convert, opts );
+        m_part->Print( aSettings, m_pos + aOffset, m_unit, m_convert, opts );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
-        dummy()->Print( aSettings, m_Pos + aOffset, 0, 0, opts );
+        dummy()->Print( aSettings, m_pos + aOffset, 0, 0, opts );
     }
 
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
         field.Print( aSettings, aOffset );
 }
 
@@ -488,11 +488,11 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
     // @todo Should we really be checking for what is a "reasonable" position?
     if( rf->GetText().IsEmpty()
-      || ( abs( rf->GetTextPos().x - m_Pos.x ) +
-           abs( rf->GetTextPos().y - m_Pos.y ) > Mils2iu( 10000 ) ) )
+      || ( abs( rf->GetTextPos().x - m_pos.x ) +
+           abs( rf->GetTextPos().y - m_pos.y ) > Mils2iu( 10000 ) ) )
     {
         // move it to a reasonable position
-        rf->SetTextPos( m_Pos + wxPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) );
+        rf->SetTextPos( m_pos + wxPoint( Mils2iu( 50 ), Mils2iu( 50 ) ) );
     }
 
     rf->SetText( ref );  // for drawing.
@@ -593,7 +593,7 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
         for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Value = wxEmptyString;
 
-        m_Fields[ VALUE_FIELD ].SetText( aValue );
+        m_fields[ VALUE_FIELD ].SetText( aValue );
         return;
     }
 
@@ -640,7 +640,7 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
         for( SYMBOL_INSTANCE_REFERENCE& instance : m_instanceReferences )
             instance.m_Footprint = wxEmptyString;
 
-        m_Fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
+        m_fields[ FOOTPRINT_FIELD ].SetText( aFootprint );
         return;
     }
 
@@ -663,8 +663,8 @@ void SCH_COMPONENT::SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& a
 
 SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx )
 {
-    if( (unsigned) aFieldNdx < m_Fields.size() )
-        return &m_Fields[aFieldNdx];
+    if( (unsigned) aFieldNdx < m_fields.size() )
+        return &m_fields[aFieldNdx];
 
     return nullptr;
 }
@@ -672,8 +672,8 @@ SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx )
 
 const SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 {
-    if( (unsigned) aFieldNdx < m_Fields.size() )
-        return &m_Fields[aFieldNdx];
+    if( (unsigned) aFieldNdx < m_fields.size() )
+        return &m_fields[aFieldNdx];
 
     return nullptr;
 }
@@ -681,7 +681,7 @@ const SCH_FIELD* SCH_COMPONENT::GetField( int aFieldNdx ) const
 
 wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME* aFrame ) const
 {
-    for( const SCH_FIELD& field : m_Fields )
+    for( const SCH_FIELD& field : m_fields )
     {
         if( aFieldName == field.GetName() || aFieldName == field.GetCanonicalName() )
             return field.GetText();
@@ -693,7 +693,7 @@ wxString SCH_COMPONENT::GetFieldText( const wxString& aFieldName, SCH_EDIT_FRAME
 
 void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOnly )
 {
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
     {
         if( !aVisibleOnly || ( field.IsVisible() && !field.IsVoid() ) )
             aVector.push_back( &field );
@@ -703,20 +703,20 @@ void SCH_COMPONENT::GetFields( std::vector<SCH_FIELD*>& aVector, bool aVisibleOn
 
 SCH_FIELD* SCH_COMPONENT::AddField( const SCH_FIELD& aField )
 {
-    int newNdx = m_Fields.size();
+    int newNdx = m_fields.size();
 
-    m_Fields.push_back( aField );
-    return &m_Fields[newNdx];
+    m_fields.push_back( aField );
+    return &m_fields[newNdx];
 }
 
 
 void SCH_COMPONENT::RemoveField( const wxString& aFieldName )
 {
-    for( unsigned i = MANDATORY_FIELDS; i < m_Fields.size(); ++i )
+    for( unsigned i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
-        if( aFieldName == m_Fields[i].GetName( false ) )
+        if( aFieldName == m_fields[i].GetName( false ) )
         {
-            m_Fields.erase( m_Fields.begin() + i );
+            m_fields.erase( m_fields.begin() + i );
             return;
         }
     }
@@ -727,10 +727,10 @@ SCH_FIELD* SCH_COMPONENT::FindField( const wxString& aFieldName, bool aIncludeDe
 {
     unsigned start = aIncludeDefaultFields ? 0 : MANDATORY_FIELDS;
 
-    for( unsigned i = start; i < m_Fields.size(); ++i )
+    for( unsigned i = start; i < m_fields.size(); ++i )
     {
-        if( aFieldName == m_Fields[i].GetName( false ) )
-            return &m_Fields[i];
+        if( aFieldName == m_fields[i].GetName( false ) )
+            return &m_fields[i];
     }
 
     return NULL;
@@ -772,7 +772,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             if( aResetStyle )
             {
                 schField->ImportValues( libField );
-                schField->SetTextPos( m_Pos + libField.GetTextPos() );
+                schField->SetTextPos( m_pos + libField.GetTextPos() );
             }
 
             if( idx == VALUE_FIELD )
@@ -859,16 +859,16 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     m_part.reset( part );
     UpdatePins();
 
-    std::swap( m_Pos, component->m_Pos );
+    std::swap( m_pos, component->m_pos );
     std::swap( m_unit, component->m_unit );
     std::swap( m_convert, component->m_convert );
 
-    m_Fields.swap( component->m_Fields );    // std::vector's swap()
+    m_fields.swap( component->m_fields );    // std::vector's swap()
 
-    for( SCH_FIELD& field : component->m_Fields )
+    for( SCH_FIELD& field : component->m_fields )
         field.SetParent( component );
 
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
         field.SetParent( this );
 
     TRANSFORM tmp = m_transform;
@@ -883,10 +883,10 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 void SCH_COMPONENT::GetContextualTextVars( wxArrayString* aVars ) const
 {
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
-        aVars->push_back( m_Fields[i].GetCanonicalName().Upper() );
+        aVars->push_back( m_fields[i].GetCanonicalName().Upper() );
 
-    for( size_t i = MANDATORY_FIELDS; i < m_Fields.size(); ++i )
-        aVars->push_back( m_Fields[i].GetName() );
+    for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
+        aVars->push_back( m_fields[i].GetName() );
 
     aVars->push_back( wxT( "FOOTPRINT_LIBRARY" ) );
     aVars->push_back( wxT( "FOOTPRINT_NAME" ) );
@@ -900,7 +900,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
 
     for( int i = 0; i < MANDATORY_FIELDS; ++i )
     {
-        if( token->IsSameAs( m_Fields[ i ].GetCanonicalName().Upper() ) )
+        if( token->IsSameAs( m_fields[ i ].GetCanonicalName().Upper() ) )
         {
             if( i == REFERENCE_FIELD && schematic )
                 *token = GetRef( &schematic->CurrentSheet(), true );
@@ -909,18 +909,18 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
             else if( i == FOOTPRINT_FIELD && schematic )
                 *token = GetFootprint( &schematic->CurrentSheet() );
             else
-                *token = m_Fields[ i ].GetShownText( aDepth + 1 );
+                *token = m_fields[ i ].GetShownText( aDepth + 1 );
 
             return true;
         }
     }
 
-    for( size_t i = MANDATORY_FIELDS; i < m_Fields.size(); ++i )
+    for( size_t i = MANDATORY_FIELDS; i < m_fields.size(); ++i )
     {
-        if( token->IsSameAs( m_Fields[ i ].GetName() )
-            || token->IsSameAs( m_Fields[ i ].GetName().Upper() ) )
+        if( token->IsSameAs( m_fields[ i ].GetName() )
+            || token->IsSameAs( m_fields[ i ].GetName().Upper() ) )
         {
-            *token = m_Fields[ i ].GetShownText( aDepth + 1 );
+            *token = m_fields[ i ].GetShownText( aDepth + 1 );
             return true;
         }
     }
@@ -932,7 +932,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
         if( schematic )
             footprint = GetFootprint( &schematic->CurrentSheet() );
         else
-            footprint = m_Fields[ FOOTPRINT_FIELD ].GetShownText();
+            footprint = m_fields[ FOOTPRINT_FIELD ].GetShownText();
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -946,7 +946,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
         if( schematic )
             footprint = GetFootprint( &schematic->CurrentSheet() );
         else
-            footprint = m_Fields[ FOOTPRINT_FIELD ].GetShownText();
+            footprint = m_fields[ FOOTPRINT_FIELD ].GetShownText();
 
         wxArrayString parts = wxSplit( footprint, ':' );
 
@@ -1009,7 +1009,7 @@ void SCH_COMPONENT::ClearAnnotation( const SCH_SHEET_PATH* aSheetPath )
     // When a clear annotation is made, the calling function must call a
     // UpdateAllScreenReferences for the active sheet.
     // But this call cannot made here.
-    m_Fields[REFERENCE_FIELD].SetText( defRef ); //for drawing.
+    m_fields[REFERENCE_FIELD].SetText( defRef ); //for drawing.
 }
 
 
@@ -1028,7 +1028,7 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const KIID_PATH& aSheet
     }
 
     // This entry does not exist: add it, with its last-used reference
-    AddHierarchicalReference( aSheetPath, m_Fields[REFERENCE_FIELD].GetText(), m_unit );
+    AddHierarchicalReference( aSheetPath, m_fields[REFERENCE_FIELD].GetText(), m_unit );
     return true;
 }
 
@@ -1233,7 +1233,7 @@ void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " ref=\"" << TO_UTF8( GetField( 0 )->GetName() )
                                  << '"' << " chipName=\""
-                                 << GetLibId().Format() << '"' << m_Pos
+                                 << GetLibId().Format() << '"' << m_pos
                                  << " layer=\"" << m_layer
                                  << '"' << ">\n";
 
@@ -1287,7 +1287,7 @@ EDA_RECT SCH_COMPONENT::GetBodyBoundingBox() const
     bBox.SetHeight( y2 - y1 );
     bBox.Normalize();
 
-    bBox.Offset( m_Pos );
+    bBox.Offset( m_pos );
     return bBox;
 }
 
@@ -1296,7 +1296,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
 
-    for( const SCH_FIELD& field : m_Fields )
+    for( const SCH_FIELD& field : m_fields )
         bbox.Merge( field.GetBoundingBox() );
 
     return bbox;
@@ -1307,7 +1307,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox( bool aIncludeInvisibleText ) const
 {
     EDA_RECT bbox = GetBodyBoundingBox();
 
-    for( const SCH_FIELD& field : m_Fields )
+    for( const SCH_FIELD& field : m_fields )
     {
         if( field.IsVisible() || aIncludeInvisibleText )
             bbox.Merge( field.GetBoundingBox() );
@@ -1408,13 +1408,13 @@ BITMAP_DEF SCH_COMPONENT::GetMenuImage() const
 
 void SCH_COMPONENT::MirrorY( int aYaxis_position )
 {
-    int dx = m_Pos.x;
+    int dx = m_pos.x;
 
     SetOrientation( CMP_MIRROR_Y );
-    MIRROR( m_Pos.x, aYaxis_position );
-    dx -= m_Pos.x;     // dx,0 is the move vector for this transform
+    MIRROR( m_pos.x, aYaxis_position );
+    dx -= m_pos.x;     // dx,0 is the move vector for this transform
 
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
     {
         // Move the fields to the new position because the component itself has moved.
         wxPoint pos = field.GetTextPos();
@@ -1426,13 +1426,13 @@ void SCH_COMPONENT::MirrorY( int aYaxis_position )
 
 void SCH_COMPONENT::MirrorX( int aXaxis_position )
 {
-    int dy = m_Pos.y;
+    int dy = m_pos.y;
 
     SetOrientation( CMP_MIRROR_X );
-    MIRROR( m_Pos.y, aXaxis_position );
-    dy -= m_Pos.y;     // dy,0 is the move vector for this transform
+    MIRROR( m_pos.y, aXaxis_position );
+    dy -= m_pos.y;     // dy,0 is the move vector for this transform
 
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
     {
         // Move the fields to the new position because the component itself has moved.
         wxPoint pos = field.GetTextPos();
@@ -1444,18 +1444,18 @@ void SCH_COMPONENT::MirrorX( int aXaxis_position )
 
 void SCH_COMPONENT::Rotate( wxPoint aPosition )
 {
-    wxPoint prev = m_Pos;
+    wxPoint prev = m_pos;
 
-    RotatePoint( &m_Pos, aPosition, 900 );
+    RotatePoint( &m_pos, aPosition, 900 );
 
     SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
 
-    for( SCH_FIELD& field : m_Fields )
+    for( SCH_FIELD& field : m_fields )
     {
         // Move the fields to the new position because the component itself has moved.
         wxPoint pos = field.GetTextPos();
-        pos.x -= prev.x - m_Pos.x;
-        pos.y -= prev.y - m_Pos.y;
+        pos.x -= prev.x - m_pos.x;
+        pos.y -= prev.y - m_pos.y;
         field.SetTextPos( pos );
     }
 }
@@ -1495,7 +1495,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
         bool previousState = pin->IsDangling();
         pin->SetIsDangling( true );
 
-        wxPoint pos = m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_Pos;
+        wxPoint pos = m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_pos;
 
         for( DANGLING_END_ITEM& each_item : aItemList )
         {
@@ -1541,7 +1541,7 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
     wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
                  wxT( "Cannot get physical position of pin." ) );
 
-    return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_Pos;
+    return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_pos;
 }
 
 
@@ -1562,7 +1562,7 @@ std::vector<wxPoint> SCH_COMPONENT::GetConnectionPoints() const
         if( pin_convert > 0 && pin_convert != GetConvert() )
             continue;
 
-        retval.push_back( m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_Pos );
+        retval.push_back( m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_pos );
     }
 
     return retval;
@@ -1574,7 +1574,7 @@ LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
     if( m_part )
     {
         // Calculate the position relative to the component.
-        wxPoint libPosition = aPosition - m_Pos;
+        wxPoint libPosition = aPosition - m_pos;
 
         return m_part->LocateDrawItem( m_unit, m_convert, aType, libPosition, m_transform );
     }
@@ -1608,7 +1608,7 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
 
         if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
         {
-            for( SCH_FIELD& field : m_Fields )
+            for( SCH_FIELD& field : m_fields )
             {
                 if( SEARCH_RESULT::QUIT == aInspector( &field, (void*) this ) )
                     return SEARCH_RESULT::QUIT;
@@ -1677,11 +1677,11 @@ bool SCH_COMPONENT::operator <( const SCH_ITEM& aItem ) const
     if( rect.GetArea() != component->GetBodyBoundingBox().GetArea() )
         return rect.GetArea() < component->GetBodyBoundingBox().GetArea();
 
-    if( m_Pos.x != component->m_Pos.x )
-        return m_Pos.x < component->m_Pos.x;
+    if( m_pos.x != component->m_pos.x )
+        return m_pos.x < component->m_pos.x;
 
-    if( m_Pos.y != component->m_Pos.y )
-        return m_Pos.y < component->m_Pos.y;
+    if( m_pos.y != component->m_pos.y )
+        return m_pos.y < component->m_pos.y;
 
     return m_Uuid < aItem.m_Uuid;       // Ensure deterministic sort
 }
@@ -1725,17 +1725,17 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         LIB_PART* libSymbol = c->m_part ? new LIB_PART( *c->m_part.get() ) : nullptr;
 
         m_part.reset( libSymbol );
-        m_Pos       = c->m_Pos;
+        m_pos       = c->m_pos;
         m_unit      = c->m_unit;
         m_convert   = c->m_convert;
         m_transform = c->m_transform;
 
         m_instanceReferences = c->m_instanceReferences;
 
-        m_Fields    = c->m_Fields;    // std::vector's assignment operator
+        m_fields    = c->m_fields;    // std::vector's assignment operator
 
         // Reparent fields after assignment to new component.
-        for( SCH_FIELD& field : m_Fields )
+        for( SCH_FIELD& field : m_fields )
             field.SetParent( this );
 
         UpdatePins();
@@ -1775,7 +1775,7 @@ bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 
 bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 {
-    wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_Pos );
+    wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_pos );
 
     for( const auto& pin : m_pins )
     {
@@ -1811,9 +1811,9 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
         TRANSFORM temp = GetTransform();
         aPlotter->StartBlock( nullptr );
 
-        m_part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
+        m_part->Plot( aPlotter, GetUnit(), GetConvert(), m_pos, temp );
 
-        for( SCH_FIELD field : m_Fields )
+        for( SCH_FIELD field : m_fields )
             field.Plot( aPlotter );
 
         aPlotter->EndBlock( nullptr );
