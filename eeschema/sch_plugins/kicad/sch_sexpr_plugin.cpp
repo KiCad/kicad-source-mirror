@@ -1605,8 +1605,11 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         for( auto unit : units )
         {
-            aFormatter.Print( aNestLevel + 1, "(symbol \"%s_%d_%d\"\n",
-                              unitName.c_str(), unit.m_unit, unit.m_convert );
+            name = aFormatter.Quotew( unitName );   // Add quotes and escape chars like ")
+            name.pop_back();    // Remove last char: the quote ending the string.
+
+            aFormatter.Print( aNestLevel + 1, "(symbol \%s_%d_%d\"\n",
+                              name.c_str(), unit.m_unit, unit.m_convert );
 
             for( auto item : unit.m_items )
                 saveSymbolDrawItem( item, aFormatter, aNestLevel + 2 );
