@@ -386,7 +386,6 @@ void SCH_SEXPR_PLUGIN::init( SCHEMATIC* aSchematic, const PROPERTIES* aPropertie
     m_fieldId   = 100; // number arbitrarily > MANDATORY_FIELDS or SHEET_MANDATORY_FIELDS
 }
 
-
 SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchematic,
                                    SCH_SHEET* aAppendToMe, const PROPERTIES* aProperties )
 {
@@ -434,7 +433,9 @@ SCH_SHEET* SCH_SEXPR_PLUGIN::Load( const wxString& aFileName, SCHEMATIC* aSchema
         std::unique_ptr<SCH_SHEET> newSheet = std::make_unique<SCH_SHEET>( aSchematic );
 
         wxFileName relPath( aFileName );
-        relPath.MakeRelativeTo( aSchematic->Prj().GetProjectPath(), wxPATH_UNIX );
+        // Do not use wxPATH_UNIX as option in MakeRelativeTo(). It can create incorrect
+        // relative paths on Windows, because paths have a disk identifier (C:, D: ...)
+        relPath.MakeRelativeTo( aSchematic->Prj().GetProjectPath() );
 
         newSheet->SetFileName( relPath.GetFullPath() );
         m_rootSheet = newSheet.get();
