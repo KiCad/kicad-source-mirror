@@ -62,6 +62,12 @@ private:
     /// Holds and calculates connectivity information of this schematic
     CONNECTION_GRAPH* m_connectionGraph;
 
+    /**
+     * Holds a map of labels to the page numbers that they appear on.  Used to update global
+     * label intersheet references.
+     */
+    std::map<wxString, std::set<wxString>> m_labelToPageRefsMap;
+
 public:
     SCHEMATIC( PROJECT* aPrj );
 
@@ -156,6 +162,8 @@ public:
      * just does the look-up and delegation.
      */
     bool ResolveCrossReference( wxString* token, int aDepth ) const;
+
+    std::map<wxString, std::set<wxString>>& GetPageRefsMap() { return m_labelToPageRefsMap; }
 
     wxString ConvertRefsToKIIDs( const wxString& aSource ) const;
     wxString ConvertKIIDsToRefs( const wxString& aSource ) const;

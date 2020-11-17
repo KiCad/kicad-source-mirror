@@ -949,9 +949,11 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
 void SCH_SCREEN::GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems )
 {
+    static KICAD_T hierarchicalTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+
     for( SCH_ITEM* item : Items() )
     {
-        if( ( item->Type() == SCH_SHEET_T ) || ( item->Type() == SCH_COMPONENT_T ) )
+        if( item->IsType( hierarchicalTypes ) )
             aItems->push_back( item );
     }
 }

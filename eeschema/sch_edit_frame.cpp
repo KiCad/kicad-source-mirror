@@ -45,9 +45,7 @@
 #include <project/project_file.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
-#include <sch_iref.h>
 #include <sch_painter.h>
-#include <sch_view.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
@@ -1234,182 +1232,99 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     timer.Stop();
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
-    if( settings.m_IntersheetsRefShow == true )
+    if( settings.m_IntersheetRefsShow == true )
         RecomputeIntersheetsRefs();
 
     Schematic().ConnectionGraph()->Recalculate( list, true );
 }
 
+
 int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
 {
-    SCHEMATIC_SETTINGS&   settings = Schematic().Settings();
-    std::vector<wxString> pagesNumbers;
-    SCH_GLOBALLABEL*      gLabel;
-    SCH_IREF*             iref;
+    std::map<wxString, std::set<wxString>>& pageRefsMap = Schematic().GetPageRefsMap();
 
-    m_labelTable.clear();
+    pageRefsMap.clear();
 
-    SCH_SCREENS screens( Schematic().Root() );
+    SCH_SCREENS           screens( Schematic().Root() );
+    std::vector<wxString> pageNumbers;
 
     /* Iterate over screens */
     for( SCH_SCREEN* screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
     {
-        pagesNumbers.clear();
+        pageNumbers.clear();
 
         /* Find in which sheets this screen is used */
         for( const SCH_SHEET_PATH& sheet : Schematic().GetSheets() )
         {
             if( sheet.LastScreen() == screen )
-                pagesNumbers.push_back( sheet.GetPageNumber() );
+                pageNumbers.push_back( sheet.GetPageNumber() );
         }
 
         for( SCH_ITEM* item : screen->Items() )
         {
             if( item->Type() == SCH_GLOBAL_LABEL_T )
             {
-                gLabel = static_cast<SCH_GLOBALLABEL*>( item );
-                m_labelTable.push_back( gLabel );
+                SCH_GLOBALLABEL*    globalLabel = static_cast<SCH_GLOBALLABEL*>( item );
+                std::set<wxString>& pageList = pageRefsMap[ globalLabel->GetText() ];
 
-                if( gLabel->GetIref() == nullptr )
-                {
-                    iref = new SCH_IREF();
-                    gLabel->SetIref( iref );
-
-                    iref->SetParentLabel( gLabel );
-                    iref->SetFlags( IS_NEW );
-                    iref->SetScreen( screen );
-
-                    if( gLabel->GetIrefSavedPosition() != wxDefaultPosition )
-                        iref->SetPosition( gLabel->GetIrefSavedPosition() );
-                    else
-                        iref->PlaceAtDefaultPosition();
-
-                    iref->CopyParentStyle();
-                }
-                else
-                {
-                    iref = gLabel->GetIref();
-
-                    wxCHECK2( iref, continue );
-                }
-
-                iref->GetRefTable().clear();
-                iref->GetRefTable().insert( iref->GetRefTable().end(),
-                                            pagesNumbers.begin(),
-                                            pagesNumbers.end() );
+                for( const wxString& pageNo : pageNumbers )
+                    pageList.insert( pageNo );
             }
         }
     }
 
-    /* Fill intersheets references for each global label */
-    for( SCH_GLOBALLABEL* item : m_labelTable )
-    {
-        for( SCH_GLOBALLABEL* iter : m_labelTable )
-        {
-            if( iter->GetText().IsSameAs( item->GetText() ) && ( iter != item ) )
-            {
-                iter->GetIref()->GetRefTable().insert( iter->GetIref()->GetRefTable().end(),
-                                                       item->GetIref()->GetRefTable().begin(),
-                                                       item->GetIref()->GetRefTable().end() );
-            }
-        }
-    }
+    bool show = Schematic().Settings().m_IntersheetRefsShow;
 
     /* Refresh all global labels */
-    for( SCH_GLOBALLABEL* item : m_labelTable )
+    for( EDA_ITEM* item : GetScreen()->Items() )
     {
-        wxString text, tmp;
-
-        iref = item->GetIref();
-
-        wxCHECK2( iref, continue );
-
-        std::sort( iref->GetRefTable().begin(), iref->GetRefTable().end() );
-        iref->GetRefTable().erase( std::unique( iref->GetRefTable().begin(),
-                                                iref->GetRefTable().end() ),
-                                   iref->GetRefTable().end() );
-
-        text.Printf( "%s", settings.m_IntersheetsRefPrefix );
-
-        if( ( settings.m_IntersheetsRefFormatShort ) && ( iref->GetRefTable().size() > 2 ) )
+        if( item->Type() == SCH_GLOBAL_LABEL_T )
         {
-            tmp.Printf( "%s..%s", iref->GetRefTable().front(), iref->GetRefTable().back() );
-            text.Append( tmp );
+            SCH_GLOBALLABEL* global = static_cast<SCH_GLOBALLABEL*>( item );
+
+            global->GetIntersheetRefs()->SetVisible( show );
+
+            if( show )
+                GetCanvas()->GetView()->Update( global );
         }
-        else
-        {
-            for( wxString ref : iref->GetRefTable() )
-            {
-                tmp.Printf( "%s,", ref );
-                text.Append( tmp );
-            }
-
-            if( text.Last() == ',' )
-                text.RemoveLast();
-        }
-
-        text.Append( settings.m_IntersheetsRefSuffix );
-
-        iref->SetText( text );
-
-        SCH_SCREEN* screen = iref->GetScreen();
-
-        if( !screen->CheckIfOnDrawList( iref ) )
-            AddToScreen( iref, screen );
-
-        iref->ClearFlags( IS_NEW );
-
-        screen->SetModify();
-        Refresh( iref );
-
-        iref->ClearEditFlags();
-        GetCanvas()->Refresh();
     }
 
+    GetCanvas()->Refresh();
     return 0;
 }
 
-void SCH_EDIT_FRAME::RemoveAllIntersheetsRefs()
-{
-    SCH_SHEET_LIST         sheets = Schematic().GetSheets();
-    std::vector<SCH_IREF*> irefList;
-    SCH_GLOBALLABEL*       gLabel;
 
+void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
+{
     SCH_SCREENS screens( Schematic().Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
     {
-
         for( SCH_ITEM* item : screen->Items() )
         {
             if( item->Type() == SCH_GLOBAL_LABEL_T )
             {
-                gLabel         = (SCH_GLOBALLABEL*)( item );
-                SCH_IREF* iref = gLabel->GetIref();
+                SCH_GLOBALLABEL* gLabel = (SCH_GLOBALLABEL*)( item );
+                SCH_FIELD*       intersheetRef = gLabel->GetIntersheetRefs();
 
-                if( iref )
-                {
-                    gLabel->SetIref( nullptr );
-                    gLabel->SetIrefSavedPosition( wxDefaultPosition );
-                    irefList.push_back( iref );
-                }
+                intersheetRef->SetVisible( aShow );
+
+                if( aShow )
+                    AddToScreen( intersheetRef, screen );
+                else
+                    RemoveFromScreen( intersheetRef, screen );
             }
         }
     }
-
-    for( SCH_IREF* iref : irefList )
-        RemoveFromScreen( iref, iref->GetScreen() );
 }
+
 
 void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
-    if( settings.m_IntersheetsRefShow == false )
-        RemoveAllIntersheetsRefs();
-    else
-        RecomputeIntersheetsRefs();
+    ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
     GetCanvas()->Refresh();

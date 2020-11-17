@@ -38,7 +38,6 @@
 #include <sch_line.h>
 #include <sch_no_connect.h>
 #include <sch_text.h>
-#include <sch_iref.h>
 #include <sch_sheet.h>
 #include <schematic.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
@@ -1233,18 +1232,6 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
     if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) || ( aText->Type() == SCH_HIER_LABEL_T ) )
         m_out->Print( 0, " (shape %s)", getSheetPinShapeToken( aText->GetShape() ) );
 
-    if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) )
-    {
-        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aText );
-
-        if( label->GetIref() != nullptr )
-        {
-            SCH_IREF* iref = label->GetIref();
-            m_out->Print( 0, " (iref %s %s)", FormatInternalUnits( iref->GetPosition().x ).c_str(),
-                          FormatInternalUnits( iref->GetPosition().y ).c_str() );
-        }
-    }
-
     if( aText->GetText().Length() < 50 )
     {
         m_out->Print( 0, " (at %s %s %s)",
@@ -1259,6 +1246,12 @@ void SCH_SEXPR_PLUGIN::saveText( SCH_TEXT* aText, int aNestLevel )
                       FormatInternalUnits( aText->GetPosition().x ).c_str(),
                       FormatInternalUnits( aText->GetPosition().y ).c_str(),
                       FormatAngle( aText->GetTextAngle() ).c_str() );
+    }
+
+    if( ( aText->Type() == SCH_GLOBAL_LABEL_T ) )
+    {
+        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aText );
+        saveField( label->GetIntersheetRefs(), aNestLevel + 1 );
     }
 
     m_out->Print( 0, "\n" );
@@ -1584,7 +1577,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         aSymbol->GetFields( fields );
 
-        for( auto field : fields )
+        for( LIB_FIELD& field : fields )
             saveField( &field, aFormatter, aNestLevel + 1 );
 
         lastFieldId = fields.back().GetId() + 1;
@@ -1630,7 +1623,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         aSymbol->GetFields( fields );
 
-        for( auto field : fields )
+        for( LIB_FIELD& field : fields )
             saveField( &field, aFormatter, aNestLevel + 1 );
 
         lastFieldId = fields.back().GetId() + 1;

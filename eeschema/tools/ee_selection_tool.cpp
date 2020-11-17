@@ -39,11 +39,9 @@
 #include <sch_base_frame.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
-#include <sch_field.h>
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_sheet.h>
-#include <sch_iref.h>
 #include <schematic.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
@@ -360,14 +358,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_toolMgr->ProcessEvent( *newEvt );
                         continueSelect = false;
                     }
-                    else if( collector[0]->Type() == SCH_IREF_T )
+                    else if( collector[0]->IsHypertext() )
                     {
-                        wxMenu menu;
-
-                        static_cast<SCH_IREF*>( collector[0] )->BuildHypertextMenu( &menu );
-
-                        intptr_t sel = m_frame->GetPopupMenuSelectionFromUser( menu );
-                        m_toolMgr->RunAction( EE_ACTIONS::hypertextCommand, true, (void*) sel );
+                        collector[0]->DoHypertextMenu( m_frame );
                         continueSelect = false;
                     }
                 }
@@ -518,8 +511,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         displayWireCursor = true;
                     }
-                    else if( collector[0]->Type() == SCH_IREF_T && !m_additive && !m_subtractive
-                             && !m_exclusive_or )
+                    else if( collector[0]->IsHypertext()
+                                && ( !m_additive && !m_subtractive && !m_exclusive_or ) )
                     {
                         rolloverItem = collector[0]->m_Uuid;
                     }
@@ -538,7 +531,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 item->ClearFlags( IS_ROLLOVER );
                 lastRolloverItem = niluuid;
-                m_frame->GetCanvas()->GetView()->Update( item );
+
+                if( item->Type() == SCH_FIELD_T )
+                    m_frame->GetCanvas()->GetView()->Update( item->GetParent() );
+                else
+                    m_frame->GetCanvas()->GetView()->Update( item );
             }
 
             item = m_frame->GetItem( rolloverItem );
@@ -547,7 +544,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 item->SetFlags( IS_ROLLOVER );
                 lastRolloverItem = rolloverItem;
-                m_frame->GetCanvas()->GetView()->Update( item );
+
+                if( item->Type() == SCH_FIELD_T )
+                    m_frame->GetCanvas()->GetView()->Update( item->GetParent() );
+                else
+                    m_frame->GetCanvas()->GetView()->Update( item );
             }
         }
 
@@ -659,12 +660,12 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
 {
     m_selection.ClearReferencePoint();
 
-    // Unmodified clicking of SCH_IREFs results in hypertext links rather than selection.
+    // Unmodified clicking of hypertext items results in hypertext actions rather than selection.
     if( !aAdd && !aSubtract && !aExclusiveOr )
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; --i )
         {
-            if( aCollector[i]->Type() == SCH_IREF_T )
+            if( aCollector[i]->IsHypertext() )
                 aCollector.Remove( i );
         }
     }
@@ -1302,7 +1303,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
     }
     else
     {
-        for( auto item : m_frame->GetScreen()->Items() )
+        for( SCH_ITEM* item : m_frame->GetScreen()->Items() )
         {
             // If the field and component are selected, only use the component
             if( item->IsSelected() )
@@ -1311,30 +1312,12 @@ void EE_SELECTION_TOOL::RebuildSelection()
             }
             else
             {
-                if( item->Type() == SCH_COMPONENT_T )
-                {
-                    for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( item )->GetFields() )
-                    {
-                        if( field.IsSelected() )
-                            select( &field );
-                    }
-                }
-
-                if( item->Type() == SCH_SHEET_T )
-                {
-                    for( SCH_FIELD& field : static_cast<SCH_SHEET*>( item )->GetFields() )
-                    {
-                        if( field.IsSelected() )
-                            select( &field );
-                    }
-
-                    for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
-                    {
-                        if( pin->IsSelected() )
-                            select( pin );
-                    }
-                }
-
+                item->RunOnChildren(
+                        [&]( SCH_ITEM* aChild )
+                        {
+                            if( aChild->IsSelected() )
+                                select( aChild );
+                        } );
             }
         }
     }
@@ -1595,42 +1578,14 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
 
     // Highlight pins and fields.  (All the other component children are currently only
     // represented in the LIB_PART and will inherit the settings of the parent component.)
-    if( itemType == SCH_COMPONENT_T )
-    {
-        for( SCH_PIN* pin : static_cast<SCH_COMPONENT*>( aItem )->GetPins() )
-        {
-            if( aMode == SELECTED )
-                pin->SetSelected();
-            else if( aMode == BRIGHTENED )
-                pin->SetBrightened();
-        }
-
-        for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
-        {
-            if( aMode == SELECTED )
-                field.SetSelected();
-            else if( aMode == BRIGHTENED )
-                field.SetBrightened();
-        }
-    }
-    else if( itemType == SCH_SHEET_T )
-    {
-        for( SCH_FIELD& field : static_cast<SCH_SHEET*>( aItem )->GetFields() )
-        {
-            if( aMode == SELECTED )
-                field.SetSelected();
-            else if( aMode == BRIGHTENED )
-                field.SetBrightened();
-        }
-
-        for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( aItem )->GetPins() )
-        {
-            if( aMode == SELECTED )
-                pin->SetSelected();
-            else if( aMode == BRIGHTENED )
-                pin->SetBrightened();
-        }
-    }
+    static_cast<SCH_ITEM*>( aItem )->RunOnChildren(
+            [&]( SCH_ITEM* aChild )
+            {
+                if( aMode == SELECTED )
+                    aChild->SetSelected();
+                else if( aMode == BRIGHTENED )
+                    aChild->SetSelected();
+            } );
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );
@@ -1653,42 +1608,14 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
 
     // Unhighlight pins and fields.  (All the other component children are currently only
     // represented in the LIB_PART.)
-    if( itemType == SCH_COMPONENT_T )
-    {
-        for( SCH_PIN* pin : static_cast<SCH_COMPONENT*>( aItem )->GetPins() )
-        {
-            if( aMode == SELECTED )
-                pin->ClearSelected();
-            else if( aMode == BRIGHTENED )
-                pin->ClearBrightened();
-        }
-
-        for( SCH_FIELD& field : static_cast<SCH_COMPONENT*>( aItem )->GetFields() )
-        {
-            if( aMode == SELECTED )
-                field.ClearSelected();
-            else if( aMode == BRIGHTENED )
-                field.ClearBrightened();
-        }
-    }
-    else if( itemType == SCH_SHEET_T )
-    {
-        for( SCH_FIELD& field : static_cast<SCH_SHEET*>( aItem )->GetFields() )
-        {
-            if( aMode == SELECTED )
-                field.ClearSelected();
-            else if( aMode == BRIGHTENED )
-                field.ClearBrightened();
-        }
-
-        for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( aItem )->GetPins() )
-        {
-            if( aMode == SELECTED )
-                pin->ClearSelected();
-            else if( aMode == BRIGHTENED )
-                pin->ClearBrightened();
-        }
-    }
+    static_cast<SCH_ITEM*>( aItem )->RunOnChildren(
+            [&]( SCH_ITEM* aChild )
+            {
+                if( aMode == SELECTED )
+                    aChild->ClearSelected();
+                else if( aMode == BRIGHTENED )
+                    aChild->ClearBrightened();
+            } );
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );

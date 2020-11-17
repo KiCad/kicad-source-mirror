@@ -900,6 +900,16 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
 }
 
 
+void SCH_SHEET::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+{
+    for( SCH_FIELD& field : m_fields )
+        aFunction( &field );
+
+    for( SCH_SHEET_PIN* pin : m_pins )
+        aFunction( pin );
+}
+
+
 wxString SCH_SHEET::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Hierarchical Sheet %s" ),

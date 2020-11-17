@@ -779,7 +779,7 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
 
 int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    EDA_ITEM* item          = nullptr;
+    SCH_ITEM* item          = nullptr;
     bool      isImportMode  = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     bool      isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
     bool      isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
@@ -885,11 +885,12 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     break;
                 case SCH_SHEET_PIN_T:
                 {
+                    EDA_ITEM*      i;
                     SCH_HIERLABEL* label = nullptr;
                     SCH_SHEET*     sheet = nullptr;
 
-                    if( m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly, &item ) )
-                        sheet = dynamic_cast<SCH_SHEET*>( item );
+                    if( m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly, &i ) )
+                        sheet = dynamic_cast<SCH_SHEET*>( i );
 
                     item = nullptr;
 
@@ -944,6 +945,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             else
             {
                 item->ClearFlags( IS_MOVED );
+                item->AutoplaceFields( /* aScreen */ nullptr, /* aManual */ false );
+
                 m_frame->AddItemToScreenAndUndoList( m_frame->GetScreen(), (SCH_ITEM*) item, false );
                 item = nullptr;
 

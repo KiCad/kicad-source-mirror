@@ -32,8 +32,6 @@
 
 class SCH_EDIT_FRAME;
 
-#define ID_HYPERTEXT_BACK 999
-
 /**
  * SCH_NAVIGATE_TOOL
  *

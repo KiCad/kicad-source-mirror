@@ -51,7 +51,6 @@
 #include <sch_component.h>
 #include <sch_edit_frame.h>
 #include <sch_field.h>
-#include <sch_iref.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_marker.h>
@@ -221,7 +220,6 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM( SCH_BUS_BUS_ENTRY_T, SCH_BUS_ENTRY_BASE );
     HANDLE_ITEM( SCH_BITMAP_T, SCH_BITMAP );
     HANDLE_ITEM( SCH_MARKER_T, SCH_MARKER );
-    HANDLE_ITEM( SCH_IREF_T, SCH_TEXT );
 
     default: return false;
     }
@@ -1160,7 +1158,7 @@ void SCH_PAINTER::draw( LIB_BEZIER *aCurve, int aLayer )
         std::deque<VECTOR2D> pts_xformed;
         poly.GetPoly( pts );
 
-        for( const auto &p : pts )
+        for( const wxPoint &p : pts )
             pts_xformed.push_back( mapCoords( p ) );
 
         m_gal->DrawPolygon( pts_xformed );
@@ -1273,12 +1271,16 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
     }
 
     if( aLine->IsStartDangling() )
+    {
         drawDanglingSymbol( aLine->GetStartPoint(), getLineWidth( aLine, drawingShadows ),
                             drawingShadows );
+    }
 
     if( aLine->IsEndDangling() )
+    {
         drawDanglingSymbol( aLine->GetEndPoint(), getLineWidth( aLine, drawingShadows ),
                             drawingShadows );
+    }
 }
 
 
@@ -1294,19 +1296,11 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     case SCH_SHEET_PIN_T:     aLayer = LAYER_SHEETLABEL; break;
     case SCH_HIER_LABEL_T:    aLayer = LAYER_HIERLABEL;  break;
     case SCH_GLOBAL_LABEL_T:  aLayer = LAYER_GLOBLABEL;  break;
-    case SCH_IREF_T:          aLayer = LAYER_GLOBLABEL;  break;
     case SCH_LABEL_T:         aLayer = LAYER_LOCLABEL;   break;
     default:                  aLayer = LAYER_NOTES;      break;
     }
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows );
-    bool    underline = false;
-
-    if( aText->Type() == SCH_IREF_T && ( aText->GetFlags() & IS_ROLLOVER ) > 0 )
-    {
-        color = BLUE;
-        underline = true;
-    }
 
     if( m_schematic )
     {
@@ -1329,7 +1323,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     m_gal->SetLineWidth( getTextThickness( aText, drawingShadows ) );
     m_gal->SetStrokeColor( color );
     m_gal->SetTextAttributes( aText );
-    m_gal->SetFontUnderlined( underline );
+    m_gal->SetFontUnderlined( false );
 
     VECTOR2D text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset( &m_schSettings );
     wxString shownText( aText->GetShownText() );
@@ -1500,6 +1494,14 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         return;
     }
 
+    bool underline = false;
+
+    if( aField->IsHypertext() && ( aField->GetFlags() & IS_ROLLOVER ) > 0 )
+    {
+        color = PUREBLUE;
+        underline = true;
+    }
+
     // Calculate the text orientation according to the parent orientation.
     int orient = (int) aField->GetTextAngle();
 
@@ -1549,7 +1551,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
         m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
         m_gal->SetFontBold( aField->IsBold() );
         m_gal->SetFontItalic( aField->IsItalic() );
-        m_gal->SetFontUnderlined( false );
+        m_gal->SetFontUnderlined( underline );
         m_gal->SetTextMirrored( aField->IsMirrored() );
         m_gal->SetLineWidth( getTextThickness( aField, drawingShadows ) );
 
@@ -1601,6 +1603,8 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     m_gal->DrawPolyline( pts2 );
 
     draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
+
+    draw( aLabel->GetIntersheetRefs(), aLayer );
 }
 
 

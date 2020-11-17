@@ -70,11 +70,11 @@ bool PANEL_SETUP_FORMATTING::TransferDataToWindow()
     m_pinSymbolSize.SetValue( settings.m_PinSymbolSize );
     m_choiceJunctionDotSize->SetSelection( settings.m_JunctionSizeChoice );
 
-    m_showIntersheetsReferences->SetValue( settings.m_IntersheetsRefShow );
-    m_radioFormatStandard->SetValue( !settings.m_IntersheetsRefFormatShort );
-    m_radioFormatAbbreviated->SetValue( settings.m_IntersheetsRefFormatShort );
-    m_prefixCtrl->ChangeValue( settings.m_IntersheetsRefPrefix );
-    m_suffixCtrl->ChangeValue( settings.m_IntersheetsRefSuffix );
+    m_showIntersheetsReferences->SetValue( settings.m_IntersheetRefsShow );
+    m_radioFormatStandard->SetValue( !settings.m_IntersheetRefsFormatShort );
+    m_radioFormatAbbreviated->SetValue( settings.m_IntersheetRefsFormatShort );
+    m_prefixCtrl->ChangeValue( settings.m_IntersheetRefsPrefix );
+    m_suffixCtrl->ChangeValue( settings.m_IntersheetRefsSuffix );
 
     wxString offsetRatio = wxString::Format( "%f", settings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );
@@ -142,10 +142,10 @@ bool PANEL_SETUP_FORMATTING::TransferDataFromWindow()
 
     settings.m_JunctionSize = currJunctionDotSize;
 
-    settings.m_IntersheetsRefShow        = m_showIntersheetsReferences->GetValue();
-    settings.m_IntersheetsRefFormatShort = !m_radioFormatStandard->GetValue();
-    settings.m_IntersheetsRefPrefix      = m_prefixCtrl->GetValue();
-    settings.m_IntersheetsRefSuffix      = m_suffixCtrl->GetValue();
+    settings.m_IntersheetRefsShow        = m_showIntersheetsReferences->GetValue();
+    settings.m_IntersheetRefsFormatShort = !m_radioFormatStandard->GetValue();
+    settings.m_IntersheetRefsPrefix      = m_prefixCtrl->GetValue();
+    settings.m_IntersheetRefsSuffix      = m_suffixCtrl->GetValue();
 
     double dtmp = 0.0;
     wxString msg = m_textOffsetRatioCtrl->GetValue();
@@ -171,11 +171,11 @@ void PANEL_SETUP_FORMATTING::ImportSettingsFrom( SCHEMATIC_SETTINGS& aSettings )
     m_lineWidth.SetValue( aSettings.m_DefaultLineWidth );
     m_pinSymbolSize.SetValue( aSettings.m_PinSymbolSize );
 
-    m_showIntersheetsReferences->SetValue( aSettings.m_IntersheetsRefShow );
-    m_radioFormatStandard->SetValue( aSettings.m_IntersheetsRefFormatShort );
-    m_radioFormatAbbreviated->SetValue( !aSettings.m_IntersheetsRefFormatShort );
-    m_prefixCtrl->ChangeValue( aSettings.m_IntersheetsRefPrefix );
-    m_suffixCtrl->ChangeValue( aSettings.m_IntersheetsRefSuffix );
+    m_showIntersheetsReferences->SetValue( aSettings.m_IntersheetRefsShow );
+    m_radioFormatStandard->SetValue( aSettings.m_IntersheetRefsFormatShort );
+    m_radioFormatAbbreviated->SetValue( !aSettings.m_IntersheetRefsFormatShort );
+    m_prefixCtrl->ChangeValue( aSettings.m_IntersheetRefsPrefix );
+    m_suffixCtrl->ChangeValue( aSettings.m_IntersheetRefsSuffix );
 
     wxString offsetRatio = wxString::Format( "%f", aSettings.m_TextOffsetRatio * 100.0 );
     m_textOffsetRatioCtrl->SetValue( offsetRatio );

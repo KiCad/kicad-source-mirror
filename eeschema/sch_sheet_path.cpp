@@ -526,56 +526,22 @@ SCH_ITEM* SCH_SHEET_LIST::GetItem( const KIID& aID, SCH_SHEET_PATH* aPathOut )
 
                 return aItem;
             }
-            else if( aItem->Type() == SCH_COMPONENT_T )
+
+            SCH_ITEM* childMatch = nullptr;
+
+            aItem->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        if( aChild->m_Uuid == aID )
+                            childMatch = aChild;
+                    } );
+
+            if( childMatch )
             {
-                SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem );
+                if( aPathOut )
+                    *aPathOut = sheet;
 
-                for( SCH_FIELD& field : comp->GetFields() )
-                {
-                    if( field.m_Uuid == aID )
-                    {
-                        if( aPathOut )
-                            *aPathOut = sheet;
-
-                        return &field;
-                    }
-                }
-
-                for( SCH_PIN* pin : comp->GetPins() )
-                {
-                    if( pin->m_Uuid == aID )
-                    {
-                        if( aPathOut )
-                            *aPathOut = sheet;
-
-                        return pin;
-                    }
-                }
-            }
-            else if( aItem->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sch_sheet = static_cast<SCH_SHEET*>( aItem );
-
-                for( SCH_FIELD& field : sch_sheet->GetFields() )
-                {
-                    if( field.m_Uuid == aID )
-                    {
-                        if( aPathOut )
-                            *aPathOut = sheet;
-                        return &field;
-                    }
-                }
-
-                for( SCH_SHEET_PIN* pin : sch_sheet->GetPins() )
-                {
-                    if( pin->m_Uuid == aID )
-                    {
-                        if( aPathOut )
-                            *aPathOut = sheet;
-
-                        return pin;
-                    }
-                }
+                return childMatch;
             }
         }
     }
@@ -595,26 +561,11 @@ void SCH_SHEET_LIST::FillItemMap( std::map<KIID, EDA_ITEM*>& aMap )
         {
             aMap[ aItem->m_Uuid ] = aItem;
 
-            if( aItem->Type() == SCH_COMPONENT_T )
-            {
-                SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( aItem );
-
-                for( SCH_FIELD& field : comp->GetFields() )
-                    aMap[ field.m_Uuid ] = &field;
-
-                for( SCH_PIN* pin : comp->GetPins() )
-                    aMap[ pin->m_Uuid ] = pin;
-            }
-            else if( aItem->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sch_sheet = static_cast<SCH_SHEET*>( aItem );
-
-                for( SCH_FIELD& field : sch_sheet->GetFields() )
-                    aMap[ field.m_Uuid ] = &field;
-
-                for( SCH_SHEET_PIN* pin : sch_sheet->GetPins() )
-                    aMap[ pin->m_Uuid ] = pin;
-            }
+            aItem->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        aMap[ aChild->m_Uuid ] = aChild;
+                    } );
         }
     }
 }

@@ -268,27 +268,11 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
         {
             visit( item, &m_frame->GetCurrentSheet() );
 
-            if( item->Type() == SCH_COMPONENT_T )
-            {
-                SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( item );
-
-                for( SCH_FIELD& field : cmp->GetFields() )
-                    visit( &field, &m_frame->GetCurrentSheet() );
-
-                for( SCH_PIN* pin : cmp->GetPins() )
-                    visit( pin, &m_frame->GetCurrentSheet() );
-            }
-            else if( item->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-
-                for( SCH_FIELD& field : sheet->GetFields() )
-                    visit( &field, &m_frame->GetCurrentSheet() );
-
-                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                    visit( pin, &m_frame->GetCurrentSheet() );
-            }
-
+            item->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
+                    {
+                        visit( aChild, &m_frame->GetCurrentSheet() );
+                    } );
         }
     }
     else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
@@ -1540,13 +1524,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             pastePath.push_back( sheet );
 
             updatePastedInstances( pastePath, clipPath, sheet, forceKeepAnnotations );
-        }
-
-        if( item->Type() == SCH_GLOBAL_LABEL_T )
-        {
-            SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
-            label->SetIref( nullptr );
-            label->SetIrefSavedPosition( wxDefaultPosition );
         }
 
         item->SetFlags( IS_NEW | IS_PASTED | IS_MOVED );

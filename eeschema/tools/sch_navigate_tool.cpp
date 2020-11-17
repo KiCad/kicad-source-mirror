@@ -23,6 +23,7 @@
  */
 
 #include <schematic.h>
+#include <eeschema_id.h>
 #include <tools/ee_actions.h>
 #include <tools/sch_navigate_tool.h>
 
@@ -58,7 +59,7 @@ int SCH_NAVIGATE_TOOL::HypertextCommand( const TOOL_EVENT& aEvent )
                 }
             };
 
-    if( aEvent.GetCommandId() == ID_HYPERTEXT_BACK )
+    if( *page == "HYPERTEXT_BACK" )
     {
         if( m_hypertextStack.size() > 0 )
         {

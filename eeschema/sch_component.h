@@ -454,6 +454,8 @@ public:
      */
     void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) override;
 
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+
 
     //-----</Fields>----------------------------------------------------------
 

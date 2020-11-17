@@ -71,9 +71,10 @@ const KICAD_T EE_COLLECTOR::SheetsOnly[] = {
 };
 
 
-const KICAD_T EE_COLLECTOR::ComponentsOrSheets[] = {
+const KICAD_T EE_COLLECTOR::FieldOwners[] = {
     SCH_COMPONENT_T,
     SCH_SHEET_T,
+    SCH_GLOBAL_LABEL_T,
     EOT
 };
 
@@ -122,6 +123,7 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
         // they're not in the filter list
         bool componentsVisited = false;
         bool sheetsVisited = false;
+        bool globalLabelsVisited = false;
 
         for( const KICAD_T* filter = aFilterList; *filter != EOT; ++filter )
         {
@@ -132,6 +134,9 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
 
                 if( *filter == SCH_SHEET_T || *filter == SCH_LOCATE_ANY_T )
                     sheetsVisited = true;
+
+                if( *filter == SCH_GLOBAL_LABEL_T || *filter == SCH_LOCATE_ANY_T )
+                    globalLabelsVisited = true;
 
                 item->Visit( m_inspector, nullptr, m_scanTypes );
             }
@@ -146,6 +151,12 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const KICAD_T aFilterList[], co
         if( !sheetsVisited )
         {
             for( SCH_ITEM* item : aScreen->Items().OfType( SCH_SHEET_T ) )
+                item->Visit( m_inspector, nullptr, m_scanTypes );
+        }
+
+        if( !globalLabelsVisited )
+        {
+            for( SCH_ITEM* item : aScreen->Items().OfType( SCH_GLOBAL_LABEL_T ) )
                 item->Visit( m_inspector, nullptr, m_scanTypes );
         }
     }
@@ -164,7 +175,7 @@ void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const KICAD_T aFilterLi
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );
 
-    for( auto& item : aItems )
+    for( LIB_ITEM& item : aItems )
     {
         if( item.Visit( m_inspector, nullptr, m_scanTypes ) == SEARCH_RESULT::QUIT )
             break;

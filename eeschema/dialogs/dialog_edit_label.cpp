@@ -33,13 +33,11 @@
 #include <sch_component.h>
 #include <sch_reference_list.h>
 #include <schematic.h>
-#include <widgets/unit_binder.h>
 #include <dialogs/html_messagebox.h>
 #include <dialog_edit_label.h>
 #include <kicad_string.h>
 #include <tool/actions.h>
 #include <scintilla_tricks.h>
-#include <sch_iref.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -348,14 +346,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     if( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T )
     {
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_CurrentText );
-        SCH_IREF*        iref  = label->GetIref();
-
-        if( iref )
-        {
-            if( iref->GetBoundingBox().Intersects( label->GetBoundingBox() ) )
-                iref->PlaceAtDefaultPosition();
-            iref->CopyParentStyle();
-        }
+        label->UpdateIntersheetRefProps();
     }
 
     return true;

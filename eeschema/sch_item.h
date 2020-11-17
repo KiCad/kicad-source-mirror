@@ -208,8 +208,7 @@ protected:
     /// Stores connectivity information, per sheet
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
 
-    /// True if connectivity info might be out of date
-    bool m_connectivity_dirty;
+    bool              m_connectivity_dirty;
 
 public:
     SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
@@ -272,6 +271,13 @@ public:
      * Set the  'lock' status to \a aLocked for of this item.
      */
     virtual void SetLocked( bool aLocked ) {}
+
+    /**
+     * Allows items to support hypertext actions when hovered/clicked.
+     */
+    virtual bool IsHypertext() const { return false; }
+
+    virtual void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) { }
 
     /**
      * Return the layer this item is on.
@@ -465,6 +471,8 @@ public:
     }
 
     virtual void AutoplaceFields( SCH_SCREEN* aScreen, bool aManual ) { }
+
+    virtual void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) { }
 
     /**
      * Check if this schematic item has line stoke properties.

@@ -29,11 +29,9 @@
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <eda_item.h>
-#include <sch_iref.h>
 #include <sch_item.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
-#include <sch_view.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
@@ -98,7 +96,6 @@ static const KICAD_T movableItems[] =
     SCH_COMPONENT_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
-    SCH_IREF_T,
     EOT
 };
 
@@ -708,36 +705,6 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
         else
             label->Move( (wxPoint) aDelta );
 
-        break;
-    }
-    case SCH_GLOBAL_LABEL_T:
-    {
-        SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( aItem );
-        EDA_ITEM*        iref  = (EDA_ITEM*) ( label->GetIref() );
-        static_cast<SCH_ITEM*>( aItem )->Move( (wxPoint) aDelta );
-
-        if( iref )
-            static_cast<SCH_ITEM*>( iref )->Move( (wxPoint) aDelta );
-
-        break;
-    }
-    case SCH_IREF_T:
-    {
-        SCH_IREF* iref = static_cast<SCH_IREF*>( aItem );
-        wxPoint   pt   = (wxPoint) aDelta;
-
-        int style = iref->GetParentLabel()->GetLabelSpinStyle();
-
-        if( iref->GetParentLabel()->IsSelected() )
-            break;
-
-        if( ( style == LABEL_SPIN_STYLE::RIGHT ) || ( style == LABEL_SPIN_STYLE::LEFT ) )
-            pt.y = 0;
-
-        if( ( style == LABEL_SPIN_STYLE::UP ) || ( style == LABEL_SPIN_STYLE::BOTTOM ) )
-            pt.x = 0;
-
-        iref->Move( pt );
         break;
     }
     default:

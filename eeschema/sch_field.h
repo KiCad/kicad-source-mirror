@@ -31,7 +31,6 @@
 #include <template_fieldnames.h>
 #include <general.h>
 
-
 class SCH_EDIT_FRAME;
 class SCH_COMPONENT;
 class LIB_FIELD;
@@ -92,6 +91,13 @@ public:
 
         return false;
     }
+
+    bool IsHypertext() const override
+    {
+        return m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T;
+    }
+
+    void DoHypertextMenu( EDA_DRAW_FRAME* aFrame ) override;
 
     /**
      * Function GetName

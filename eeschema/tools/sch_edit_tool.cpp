@@ -42,7 +42,6 @@
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
-#include <sch_iref.h>
 #include <sch_bus_entry.h>
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
@@ -276,8 +275,12 @@ bool SCH_EDIT_TOOL::Init()
     static KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
     auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
 
-    auto singleComponentCondition = E_C::Count( 1 )    && E_C::OnlyType( SCH_COMPONENT_T );
-    auto singleSheetCondition =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
+    static KICAD_T fieldParentTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+    auto singleFieldParentCondition = E_C::Count( 1 ) && E_C::OnlyTypes( fieldParentTypes );
+
+    auto singleSymbolCondition = E_C::Count( 1 ) && E_C::OnlyType( SCH_COMPONENT_T );
+
+    auto singleSheetCondition =  E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T );
     //
     // Add edit actions to the move tool menu
     //
@@ -293,9 +296,9 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( ACTIONS::doDelete,           E_C::NotEmpty );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
-        moveMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition );
-        moveMenu.AddItem( EE_ACTIONS::editValue,       singleComponentCondition );
-        moveMenu.AddItem( EE_ACTIONS::editFootprint,   singleComponentCondition );
+        moveMenu.AddItem( EE_ACTIONS::editReference,   singleSymbolCondition );
+        moveMenu.AddItem( EE_ACTIONS::editValue,       singleSymbolCondition );
+        moveMenu.AddItem( EE_ACTIONS::editFootprint,   singleSymbolCondition );
         moveMenu.AddItem( EE_ACTIONS::toggleDeMorgan,  E_C::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -323,10 +326,10 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editReference,    singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editValue,        singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editFootprint,    singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editReference,    singleSymbolCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editValue,        singleSymbolCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editFootprint,    singleSymbolCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleFieldParentCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -334,7 +337,7 @@ bool SCH_EDIT_TOOL::Init()
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
     drawMenu.AddMenu( symUnitMenu2.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,     singleSymbolCondition && E_C::Idle, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::toLabel,             anyTextTool && E_C::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toHLabel,            anyTextTool && E_C::Idle, 200 );
@@ -357,8 +360,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition
-                                                        || singleSheetCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleFieldParentCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toggleDeMorgan,   E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
@@ -366,7 +368,7 @@ bool SCH_EDIT_TOOL::Init()
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
     selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleSymbolCondition && E_C::Idle, 200 );
     selToolMenu.AddItem( EE_ACTIONS::changeSymbol,     E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::updateSymbol,     E_C::SingleSymbol, 200 );
 
@@ -460,10 +462,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             if( item->Type() == SCH_GLOBAL_LABEL_T )
             {
                 SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
-                SCH_IREF*        iref  = label->GetIref();
-
-                if( iref )
-                    iref->CopyParentStyle();
+                label->UpdateIntersheetRefProps();
             }
 
             break;
@@ -653,10 +652,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             if( item->Type() == SCH_GLOBAL_LABEL_T )
             {
                 SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
-                SCH_IREF*        iref  = label->GetIref();
-
-                if( iref )
-                    iref->CopyParentStyle();
+                label->UpdateIntersheetRefProps();
             }
 
             break;
@@ -846,14 +842,6 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         case SCH_NO_CONNECT_T:
             newItem->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( newItem, m_frame->GetScreen() );
-
-            if( newItem->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( newItem );
-                label->SetIref( nullptr );
-                label->SetIrefSavedPosition( wxDefaultPosition );
-            }
-
             break;
 
         case SCH_SHEET_T:
@@ -1062,16 +1050,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
                 sheet->RemovePin( pin );
             }
-            else if( sch_item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* label = (SCH_GLOBALLABEL*) sch_item;
-                SCH_IREF*        iref  = label->GetIref();
-
-                m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
-
-                if( iref )
-                    m_frame->RemoveFromScreen( iref, m_frame->GetScreen() );
-            }
             else
             {
                 m_frame->RemoveFromScreen( sch_item, m_frame->GetScreen() );
@@ -1259,7 +1237,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOrSheets );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::FieldOwners );
 
     if( selection.Empty() )
         return 0;
@@ -1269,16 +1247,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     if( !item->IsNew() )
         saveCopyInUndoList( item, UNDO_REDO::CHANGED );
 
-    if( item->Type() == SCH_COMPONENT_T )
-    {
-        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
-        component->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
-    }
-    else if( item->Type() == SCH_SHEET_T )
-    {
-        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-        sheet->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
-    }
+    item->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
 
     updateItem( item, true );
     m_frame->OnModify();
@@ -1302,7 +1271,9 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &EE_ACTIONS::changeSymbol )
             || aEvent.IsAction( &EE_ACTIONS::changeSymbols ) )
+    {
         mode = DIALOG_CHANGE_SYMBOLS::MODE::CHANGE;
+    }
 
     DIALOG_CHANGE_SYMBOLS dlg( m_frame, selectedSymbol, mode );
 
@@ -1323,11 +1294,15 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
             && component->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
+    {
         return 0;
+    }
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
             && component->GetConvert() != LIB_ITEM::LIB_CONVERT::DEMORGAN )
+    {
         return 0;
+    }
 
     if( !component->IsNew() )
         saveCopyInUndoList( component, UNDO_REDO::CHANGED );

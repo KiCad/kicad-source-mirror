@@ -22,7 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/* Fields are texts attached to a component, having a special meaning
+/*
+ * Fields are texts attached to a component, having a special meaning
  * Fields 0 and 1 are very important: reference and value
  * Field 2 is used as default footprint name.
  * Field 3 is reserved (not currently used
@@ -30,6 +31,7 @@
  * They can be renamed and can appear in reports
  */
 
+#include <wx/menu.h>
 #include <eda_item.h>
 #include <gr_text.h>
 #include <sch_edit_frame.h>
@@ -45,7 +47,9 @@
 #include <kicad_string.h>
 #include <trace_helpers.h>
 #include <trigo.h>
-
+#include <eeschema_id.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
 
 SCH_FIELD::SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
@@ -93,7 +97,6 @@ void SCH_FIELD::SetId( int aId )
         default:              SetLayer( LAYER_FIELDS );        break;
         }
     }
-
 }
 
 
@@ -131,6 +134,13 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 return sheet->ResolveTextVar( token, aDepth + 1 );
             };
 
+    std::function<bool( wxString* )> globalLabelResolver =
+            [&]( wxString* token ) -> bool
+            {
+                SCH_GLOBALLABEL* globalLabel = static_cast<SCH_GLOBALLABEL*>( m_parent );
+                return globalLabel->ResolveTextVar( token, aDepth + 1 );
+            };
+
     PROJECT*  project = nullptr;
     bool      processTextVars = false;
     wxString  text = EDA_TEXT::GetShownText( &processTextVars );
@@ -146,6 +156,8 @@ wxString SCH_FIELD::GetShownText( int aDepth ) const
                 text = ExpandTextVars( text, &symbolResolver, project );
             else if( m_parent && m_parent->Type() == SCH_SHEET_T )
                 text = ExpandTextVars( text, &sheetResolver, project );
+            else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
+                text = ExpandTextVars( text, &globalLabelResolver, project );
             else
                 text = ExpandTextVars( text, nullptr, project );
         }
@@ -371,6 +383,10 @@ bool SCH_FIELD::IsReplaceable() const
         if( m_id == SHEETFILENAME )
             return false;
     }
+    else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        return false;
+    }
 
     return true;
 }
@@ -436,6 +452,54 @@ wxString SCH_FIELD::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
+void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
+{
+    static wxString back = "HYPERTEXT_BACK";
+    wxMenu          menu;
+    SCH_TEXT*       label = dynamic_cast<SCH_TEXT*>( m_parent );
+
+    if( label && Schematic() )
+    {
+        auto it = Schematic()->GetPageRefsMap().find( label->GetText() );
+
+        if( it != Schematic()->GetPageRefsMap().end() )
+        {
+            std::map<wxString, wxString> sheetNames;
+            std::vector<wxString>        pageListCopy;
+
+            pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
+            std::sort( pageListCopy.begin(), pageListCopy.end() );
+
+            for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
+                sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
+
+            for( const wxString& pageNo : pageListCopy )
+            {
+                wxString pageName = pageNo == "/" ? _( "Root" ) : sheetNames[ pageNo ];
+
+                menu.Append( -1, wxString::Format( _( "Go to Page %s (%s)" ),
+                                                   pageNo,
+                                                   pageName ) );
+            }
+
+            menu.AppendSeparator();
+            menu.Append( -1, _( "Back" ) );
+
+            int   sel = aFrame->GetPopupMenuSelectionFromUser( menu );
+            void* param = nullptr;
+
+            if( sel >= 1 && sel <= (int) pageListCopy.size() )
+                param = (void*) &pageListCopy[ sel - 1 ];
+            else if( sel == (int) pageListCopy.size() )
+                param = (void*) &back;
+
+            if( param )
+                aFrame->GetToolManager()->RunAction( EE_ACTIONS::hypertextCommand, true, param );
+        }
+    }
+}
+
+
 wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
     if( !m_name.IsEmpty() )
@@ -446,6 +510,8 @@ wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
         else if( m_parent && m_parent->Type() == SCH_SHEET_T )
             return SCH_SHEET::GetDefaultFieldName( m_id );
+        else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
+            return _( "Intersheet References" );
     }
 
     return wxEmptyString;
@@ -471,6 +537,10 @@ wxString SCH_FIELD::GetCanonicalName() const
         case  SHEETNAME:     return wxT( "Sheetname" );
         case  SHEETFILENAME: return wxT( "Sheetfile" );
         }
+    }
+    else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
+    {
+        return wxT( "Intersheet References" );
     }
 
     return m_name;

@@ -44,7 +44,6 @@
 #include <dialogs/html_messagebox.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
-#include <sch_iref.h>
 #include <dialog_helpers.h>
 #include <trigo.h>
 
@@ -307,10 +306,16 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
 
 int SCH_TEXT::GetTextOffset( RENDER_SETTINGS* aSettings ) const
 {
-    SCH_RENDER_SETTINGS* renderSettings = static_cast<SCH_RENDER_SETTINGS*>( aSettings );
+    double ratio;
 
-    if( renderSettings )
-        return KiROUND( renderSettings->m_TextOffsetRatio * GetTextSize().y );
+    if( aSettings )
+        ratio = static_cast<SCH_RENDER_SETTINGS*>( aSettings )->m_TextOffsetRatio;
+    else if( Schematic() )
+        ratio = Schematic()->Settings().m_TextOffsetRatio;
+    else
+        ratio = DEFAULT_TEXT_OFFSET_RATIO;   // For previews (such as in Preferences), etc.
+
+    return KiROUND( ratio * GetTextSize().y );
 
     return 0;
 }
@@ -767,10 +772,7 @@ bool SCH_LABEL::IsType( const KICAD_T aScanTypes[] ) const
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     EDA_RECT rect = GetTextBox();
-
-    // In practice this is controlled by the current TextOffsetRatio, but the default is
-    // close enough for hit-testing, etc.
-    int margin = Mils2iu( TXT_MARGIN );
+    int      margin = GetTextOffset();
 
     rect.Inflate( margin );
 
@@ -805,21 +807,83 @@ BITMAP_DEF SCH_LABEL::GetMenuImage() const
 }
 
 
-SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text )
-        : SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T )
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
+        SCH_TEXT( pos, text, SCH_GLOBAL_LABEL_T ),
+        m_intersheetRefsField( { 0, 0 }, 0, this )
 {
     m_layer      = LAYER_GLOBLABEL;
     m_shape      = PINSHEETLABEL_SHAPE::PS_BIDI;
     m_isDangling = true;
-    m_iref       = nullptr;
     SetMultilineAllowed( false );
-    m_savedIrefPos = wxDefaultPosition;
+
+    m_intersheetRefsField.SetText( wxT( "${INTERSHEET_REFS}" ) );
+    m_intersheetRefsField.SetLayer( LAYER_GLOBLABEL );
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+}
+
+
+SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
+        SCH_TEXT( aGlobalLabel ),
+        m_intersheetRefsField( { 0, 0 }, 0, this )
+{
+    m_intersheetRefsField = aGlobalLabel.m_intersheetRefsField;
+
+    // Re-parent the fields, which before this had aGlobalLabel as parent
+    m_intersheetRefsField.SetParent( this );
+
+    m_fieldsAutoplaced = aGlobalLabel.m_fieldsAutoplaced;
 }
 
 
 EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 {
     return new SCH_GLOBALLABEL( *this );
+}
+
+
+void SCH_GLOBALLABEL::SwapData( SCH_ITEM* aItem )
+{
+    SCH_TEXT::SwapData( aItem );
+
+    SCH_GLOBALLABEL* globalLabel = static_cast<SCH_GLOBALLABEL*>( aItem );
+
+    // Swap field data wholesale...
+    std::swap( m_intersheetRefsField, globalLabel->m_intersheetRefsField );
+
+    // ...and then reset parent pointers.
+    globalLabel->m_intersheetRefsField.SetParent( globalLabel );
+    m_intersheetRefsField.SetParent( this );
+}
+
+
+SEARCH_RESULT SCH_GLOBALLABEL::Visit( INSPECTOR aInspector, void* testData,
+                                      const KICAD_T aFilterTypes[] )
+{
+    KICAD_T stype;
+
+    for( const KICAD_T* p = aFilterTypes;  (stype = *p) != EOT;   ++p )
+    {
+        // If caller wants to inspect my type
+        if( stype == SCH_LOCATE_ANY_T || stype == Type() )
+        {
+            if( SEARCH_RESULT::QUIT == aInspector( this, NULL ) )
+                return SEARCH_RESULT::QUIT;
+        }
+
+        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_T )
+        {
+            if( SEARCH_RESULT::QUIT == aInspector( GetIntersheetRefs(), this ) )
+                return SEARCH_RESULT::QUIT;
+        }
+    }
+
+    return SEARCH_RESULT::CONTINUE;
+}
+
+
+void SCH_GLOBALLABEL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+{
+    aFunction( &m_intersheetRefsField );
 }
 
 
@@ -891,6 +955,106 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
         SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
     }
+}
+
+
+void SCH_GLOBALLABEL::UpdateIntersheetRefProps()
+{
+    m_intersheetRefsField.SetTextSize( GetTextSize() );
+    m_intersheetRefsField.SetItalic( IsItalic() );
+    m_intersheetRefsField.SetBold( IsBold() );
+    m_intersheetRefsField.SetTextThickness( GetTextThickness() );
+
+    if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
+        AutoplaceFields( nullptr, false );
+}
+
+
+void SCH_GLOBALLABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
+{
+    int margin = GetTextOffset();
+    int labelLen = GetBoundingBox().GetSizeMax();
+    int penOffset = GetPenWidth() / 2;
+
+    // Set both axes to penOffset; we're going to overwrite the text axis below
+    wxPoint offset( -penOffset, -penOffset );
+
+    switch( GetLabelSpinStyle() )
+    {
+    default:
+    case LABEL_SPIN_STYLE::LEFT:
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
+        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        offset.x = - ( labelLen + margin / 2 );
+        break;
+
+    case LABEL_SPIN_STYLE::UP:
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
+        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        offset.y = - ( labelLen + margin / 2 );
+        break;
+
+    case LABEL_SPIN_STYLE::RIGHT:
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
+        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        offset.x = labelLen + margin /2 ;
+        break;
+
+    case LABEL_SPIN_STYLE::BOTTOM:
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
+        m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+        offset.y = labelLen + margin / 2;
+        break;
+    }
+
+    m_intersheetRefsField.SetTextPos( GetPosition() + offset );
+
+    m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
+}
+
+
+bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
+{
+    if( token->IsSameAs( wxT( "INTERSHEET_REFS" ) ) && Schematic() )
+    {
+        auto it = Schematic()->GetPageRefsMap().find( GetText() );
+
+        if( it != Schematic()->GetPageRefsMap().end() )
+        {
+            SCHEMATIC_SETTINGS&   settings = Schematic()->Settings();
+            std::vector<wxString> pageListCopy;
+
+            pageListCopy.insert( pageListCopy.end(), it->second.begin(), it->second.end() );
+            std::sort( pageListCopy.begin(), pageListCopy.end() );
+
+            token->Printf( "%s", settings.m_IntersheetRefsPrefix );
+
+            if( ( settings.m_IntersheetRefsFormatShort ) && ( pageListCopy.size() > 2 ) )
+            {
+                token->Append( wxString::Format( wxT( "%s..%s" ),
+                                                 pageListCopy.front(),
+                                                 pageListCopy.back() ) );
+            }
+            else
+            {
+                for( const wxString& pageNo : pageListCopy )
+                    token->Append( wxString::Format( wxT( "%s," ), pageNo ) );
+
+                if( token->Last() == ',' )
+                    token->RemoveLast();
+            }
+
+            token->Append( settings.m_IntersheetRefsSuffix );
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -987,11 +1151,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
     int x  = GetTextPos().x;
     int y  = GetTextPos().y;
     int penWidth = GetEffectiveTextPenWidth();
-
-    // In practice this is controlled by the current TextOffsetRatio, but the default is
-    // close enough for hit-testing, etc.
-    int margin = Mils2iu( TXT_MARGIN );
-
+    int margin = GetTextOffset();
     int height = ( (GetTextHeight() * 15) / 10 ) + penWidth + 2 * margin;
     int length = LenSize( GetShownText(), penWidth )
                  + height                 // add height for triangular shapes
@@ -1153,10 +1313,7 @@ void SCH_HIERLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
 const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 {
     int penWidth = GetEffectiveTextPenWidth();
-
-    // In practice this is controlled by the current TextOffsetRatio, but the default is
-    // close enough for hit-testing, etc.
-    int margin = Mils2iu( TXT_MARGIN );
+    int margin = GetTextOffset();
 
     int x  = GetTextPos().x;
     int y  = GetTextPos().y;

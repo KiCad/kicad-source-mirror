@@ -793,6 +793,16 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 }
 
 
+void SCH_COMPONENT::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
+{
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+        aFunction( pin.get() );
+
+    for( SCH_FIELD& field : m_fields )
+        aFunction( &field );
+}
+
+
 SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber )
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )

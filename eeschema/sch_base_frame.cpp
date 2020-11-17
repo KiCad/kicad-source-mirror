@@ -301,10 +301,10 @@ void SCH_BASE_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete )
         if( !isAddOrDelete )
             GetCanvas()->GetView()->Update( aItem );
 
-        // Component children are drawn from their parents.  Mark them for re-paint.
-        if( parent && parent->Type() == SCH_COMPONENT_T )
-            GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
-        else if( parent && parent->Type() == SCH_SHEET_T )
+        // Some children are drawn from their parents.  Mark them for re-paint.
+        static KICAD_T parentTypes[] = { SCH_COMPONENT_T, SCH_SHEET_T, SCH_GLOBAL_LABEL_T, EOT };
+
+        if( parent && parent->IsType( parentTypes ) )
             GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
     }
 

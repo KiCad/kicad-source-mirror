@@ -63,6 +63,9 @@
 ///< The default text size in mils. (can be changed in preference menu)
 #define DEFAULT_TEXT_SIZE 50
 
+///< Ratio of the font height to the baseline of the text above the wire.
+#define DEFAULT_TEXT_OFFSET_RATIO 0.08
+
 ///< The offset of the pin name string from the end of the pin in mils.
 #define DEFAULT_PIN_NAME_OFFSET 20
 

@@ -2231,7 +2231,6 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         case T_property:
-        {
             // The field parent symbol must be set and it's orientation must be set before
             // the field positions are set.
             field = parseSchField( symbol.get() );
@@ -2282,7 +2281,6 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
             delete field;
             break;
-        }
 
         case T_pin:
         {
@@ -2703,8 +2701,7 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
     case T_global_label:        text = std::make_unique<SCH_GLOBALLABEL>();   break;
     case T_hierarchical_label:  text = std::make_unique<SCH_HIERLABEL>();     break;
     default:
-        wxCHECK_MSG( false, nullptr,
-                     wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as text." ) );
+        wxCHECK_MSG( false, nullptr, "Cannot parse " + GetTokenString( CurTok() ) + " as text." );
     }
 
     NeedSYMBOL();
@@ -2721,7 +2718,6 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
         switch( token )
         {
         case T_at:
-        {
             text->SetPosition( parseXY() );
 
             switch( static_cast<int>( parseDouble( "text angle" ) ) )
@@ -2738,10 +2734,8 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             NeedRIGHT();
             break;
-        }
 
         case T_shape:
-        {
             if( text->Type() == SCH_TEXT_T || text->Type() == SCH_LABEL_T )
                 Unexpected( T_shape );
 
@@ -2760,22 +2754,36 @@ SCH_TEXT* SCH_SEXPR_PARSER::parseSchText()
 
             NeedRIGHT();
             break;
-        }
 
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ) );
             break;
 
-        case T_iref:
-        {
+        case T_iref:    // legacy format; current is a T_property (aka SCH_FIELD)
             if( text->Type() == SCH_GLOBAL_LABEL_T )
             {
                 SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
-                label->SetIrefSavedPosition( parseXY() );
+                SCH_FIELD*       field = label->GetIntersheetRefs();
+
+                field->SetTextPos( parseXY() );
                 NeedRIGHT();
+
+                field->SetVisible( true );
             }
             break;
-        }
+
+        case T_property:
+            if( text->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( text.get() );
+                SCH_FIELD*       field = parseSchField( label );
+
+                field->SetLayer( LAYER_GLOBLABEL );
+                label->SetIntersheetRefs( *field );
+
+                delete field;
+            }
+            break;
 
         default:
             Expecting( "at, shape, iref or effects" );

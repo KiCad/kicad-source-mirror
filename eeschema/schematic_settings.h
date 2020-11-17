@@ -52,10 +52,10 @@ public:
     // User choice for junction dot size ( e.g. none = 0, smallest = 1, small = 2, etc )
     int       m_JunctionSizeChoice;
 
-    bool      m_IntersheetsRefShow;
-    bool      m_IntersheetsRefFormatShort;
-    wxString  m_IntersheetsRefPrefix;
-    wxString  m_IntersheetsRefSuffix;
+    bool      m_IntersheetRefsShow;
+    bool      m_IntersheetRefsFormatShort;
+    wxString  m_IntersheetRefsPrefix;
+    wxString  m_IntersheetRefsSuffix;
 
     wxString  m_PageLayoutDescrFile;
 

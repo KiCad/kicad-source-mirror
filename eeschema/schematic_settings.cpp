@@ -38,14 +38,14 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
         m_DefaultWireThickness( DEFAULT_WIRE_THICKNESS * IU_PER_MILS ),
         m_DefaultBusThickness( DEFAULT_BUS_THICKNESS * IU_PER_MILS ),
         m_DefaultTextSize( DEFAULT_TEXT_SIZE * IU_PER_MILS ),
-        m_TextOffsetRatio( 0.08 ),
+        m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
         m_PinSymbolSize( DEFAULT_TEXT_SIZE * IU_PER_MILS / 2 ),
         m_JunctionSize( DEFAULT_JUNCTION_DIAM * IU_PER_MILS ),
         m_JunctionSizeChoice( 3 ),
-        m_IntersheetsRefShow( false ),
-        m_IntersheetsRefFormatShort( false ),
-        m_IntersheetsRefPrefix( DEFAULT_IREF_PREFIX ),
-        m_IntersheetsRefSuffix( DEFAULT_IREF_SUFFIX ),
+        m_IntersheetRefsShow( false ),
+        m_IntersheetRefsFormatShort( false ),
+        m_IntersheetRefsPrefix( DEFAULT_IREF_PREFIX ),
+        m_IntersheetRefsSuffix( DEFAULT_IREF_SUFFIX ),
         m_SpiceAdjustPassiveValues( false )
 {
     EESCHEMA_SETTINGS* appSettings = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
@@ -74,16 +74,16 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
             appSettings ? appSettings->m_Drawing.intersheets_ref_suffix : DEFAULT_IREF_SUFFIX;
 
     m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_show",
-            &m_IntersheetsRefShow, defaultIntersheetsRefShow ) );
+            &m_IntersheetRefsShow, defaultIntersheetsRefShow ) );
 
     m_params.emplace_back( new PARAM<bool>( "drawing.intersheets_ref_short",
-            &m_IntersheetsRefFormatShort, defaultIntersheetsRefFormatShort ) );
+            &m_IntersheetRefsFormatShort, defaultIntersheetsRefFormatShort ) );
 
     m_params.emplace_back( new PARAM<wxString>( "drawing.intersheets_ref_prefix",
-            &m_IntersheetsRefPrefix, defaultIntersheetsRefPrefix ) );
+            &m_IntersheetRefsPrefix, defaultIntersheetsRefPrefix ) );
 
     m_params.emplace_back( new PARAM<wxString>( "drawing.intersheets_ref_suffix",
-            &m_IntersheetsRefSuffix, defaultIntersheetsRefSuffix ) );
+            &m_IntersheetRefsSuffix, defaultIntersheetsRefSuffix ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "drawing.default_line_thickness",
             &m_DefaultLineWidth, Mils2iu( defaultLineThickness ),

@@ -133,10 +133,6 @@ private:
 
     DIALOG_SCH_FIND*        m_findReplaceDialog;
 
-    static PINSHEETLABEL_SHAPE m_lastSheetPinType;    ///< Last sheet pin type.
-
-    std::vector<SCH_GLOBALLABEL*> m_labelTable;
-
 protected:
     /**
      * Save the schematic files that have been modified and not yet saved.
@@ -923,7 +919,7 @@ public:
 
     int RecomputeIntersheetsRefs();
 
-    void RemoveAllIntersheetsRefs();
+    void ShowAllIntersheetRefs( bool aShow );
 
     DECLARE_EVENT_TABLE()
 };

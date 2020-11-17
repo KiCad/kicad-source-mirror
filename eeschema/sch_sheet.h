@@ -556,6 +556,8 @@ public:
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;

@@ -84,27 +84,11 @@ SCH_ITEM* SCH_ITEM::Duplicate( bool doClone ) const
 
     newItem->ClearFlags( SELECTED | BRIGHTENED );
 
-    if( newItem->Type() == SCH_COMPONENT_T )
-    {
-        SCH_COMPONENT* symbol = (SCH_COMPONENT*) newItem;
-
-        for( SCH_PIN* pin : symbol->GetPins() )
-            pin->ClearFlags( SELECTED | BRIGHTENED );
-
-        for( SCH_FIELD& field : symbol->GetFields() )
-            field.ClearFlags( SELECTED | BRIGHTENED );
-    }
-
-    if( newItem->Type() == SCH_SHEET_T )
-    {
-        SCH_SHEET* sheet = (SCH_SHEET*) newItem;
-
-        for( SCH_FIELD& field : sheet->GetFields() )
-            field.ClearFlags( SELECTED | BRIGHTENED );
-
-        for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-            pin->ClearFlags( SELECTED | BRIGHTENED );
-    }
+    newItem->RunOnChildren(
+            []( SCH_ITEM* aChild )
+            {
+                aChild->ClearFlags( SELECTED | BRIGHTENED );
+            } );
 
     return newItem;
 }
