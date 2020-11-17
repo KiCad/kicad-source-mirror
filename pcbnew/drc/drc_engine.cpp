@@ -83,20 +83,32 @@ DRC_ENGINE::~DRC_ENGINE()
 }
 
 
-static bool isKeepoutZone( const BOARD_ITEM* aItem )
+static bool isKeepoutZone( const BOARD_ITEM* aItem, bool aCheckFlags )
 {
-    if( aItem && ( aItem->Type() == PCB_ZONE_T || aItem->Type() == PCB_FP_ZONE_T ) )
-    {
-        const ZONE* zone = static_cast<const ZONE*>( aItem );
+    if( !aItem )
+        return false;
 
-        return zone->GetIsRuleArea() && (    zone->GetDoNotAllowTracks()
-                                          || zone->GetDoNotAllowVias()
-                                          || zone->GetDoNotAllowPads()
-                                          || zone->GetDoNotAllowCopperPour()
-                                          || zone->GetDoNotAllowFootprints() );
+    if( aItem->Type() != PCB_ZONE_T && aItem->Type() != PCB_FP_ZONE_T )
+        return false;
+
+    const ZONE* zone = static_cast<const ZONE*>( aItem );
+
+    if( !zone->GetIsRuleArea() )
+        return false;
+
+    if( aCheckFlags )
+    {
+        if(    !zone->GetDoNotAllowTracks()
+            && !zone->GetDoNotAllowVias()
+            && !zone->GetDoNotAllowPads()
+            && !zone->GetDoNotAllowCopperPour()
+            && !zone->GetDoNotAllowFootprints() )
+        {
+            return false;
+        }
     }
 
-    return false;
+    return true;
 }
 
 
@@ -361,7 +373,7 @@ void DRC_ENGINE::loadImplicitRules()
 
     for( ZONE* zone : m_board->Zones() )
     {
-        if( isKeepoutZone( zone ) )
+        if( isKeepoutZone( zone, true ) )
             keepoutZones.push_back( zone );
     }
 
@@ -369,7 +381,7 @@ void DRC_ENGINE::loadImplicitRules()
     {
         for( ZONE* zone : footprint->Zones() )
         {
-            if( isKeepoutZone( zone ) )
+            if( isKeepoutZone( zone, true ) )
                 keepoutZones.push_back( zone );
         }
     }
@@ -711,8 +723,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     const BOARD_CONNECTED_ITEM* bc = b && b->IsConnected() ?
                                          static_cast<const BOARD_CONNECTED_ITEM*>( b ) : nullptr;
 
-    bool a_is_unconnected = a && !ac;
-    bool b_is_unconnected = b && !bc;
+    bool a_is_non_copper = a && ( !a->IsOnCopperLayer() || isKeepoutZone( a, false ) );
+    bool b_is_non_copper = b && ( !b->IsOnCopperLayer() || isKeepoutZone( b, false ) );
 
     const DRC_CONSTRAINT* constraintRef = nullptr;
     bool                  implicit = false;
@@ -723,7 +735,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         int overrideA = 0;
         int overrideB = 0;
 
-        if( ac && !b_is_unconnected && ac->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( ac && !b_is_non_copper && ac->GetLocalClearanceOverrides( nullptr ) > 0 )
         {
             overrideA = ac->GetLocalClearanceOverrides( &m_msg );
 
@@ -733,7 +745,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                                       MessageTextFromValue( UNITS, overrideA ) ) )
         }
 
-        if( bc && !a_is_unconnected && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
+        if( bc && !a_is_non_copper && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
         {
             overrideB = bc->GetLocalClearanceOverrides( &m_msg );
 
@@ -800,7 +812,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
                 if( aConstraintId == CLEARANCE_CONSTRAINT )
                 {
-                    if( implicit && ( a_is_unconnected || b_is_unconnected ) )
+                    if( implicit && ( a_is_non_copper || b_is_non_copper ) )
                     {
                         REPORT( _( "Board and netclass clearances apply only to connected items." ) );
                         return true;

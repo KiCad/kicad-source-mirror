@@ -884,13 +884,13 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
                                                          nullptr, currentLayer );
 
         if( !constraint.IsNull() )
-            sizes.SetViaDiameter( constraint.m_Value.OptThenMin() );
+            sizes.SetViaDiameter( constraint.m_Value.Opt() );
 
         constraint = bds.m_DRCEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, &dummyVia, nullptr,
                                                          currentLayer );
 
         if( !constraint.IsNull() )
-            sizes.SetViaDrill( constraint.m_Value.OptThenMin() );
+            sizes.SetViaDrill( constraint.m_Value.Opt() );
     }
     else
     {

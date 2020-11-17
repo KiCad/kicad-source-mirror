@@ -28,9 +28,9 @@ template<class T=int>
 class MINOPTMAX
 {
 public:
-    T Min() const { assert( m_hasMin ); return m_min; };
-    T Max() const { assert( m_hasMax ); return m_max; };
-    T Opt() const { assert( m_hasOpt ); return m_opt; };
+    T Min() const { return m_hasMin ? m_min : 0; };
+    T Max() const { return m_hasMax ? m_max : std::numeric_limits<T>::max(); };
+    T Opt() const { return m_hasOpt ? m_opt : Min(); };
 
     bool HasMin() const { return m_hasMin; }
     bool HasMax() const { return m_hasMax; }
@@ -41,17 +41,6 @@ public:
     void SetOpt( T v ) { m_isNull = false; m_opt = v; m_hasOpt = true; }
 
     bool IsNull() const { return m_isNull; }
-
-    T OptThenMin() const 
-    {
-        if( m_hasOpt )
-            return m_opt;
-        else if( m_hasMin )
-            return m_min;
-
-        assert( m_hasMin );
-        return 0;
-    }
 
 private:
     bool m_isNull;
