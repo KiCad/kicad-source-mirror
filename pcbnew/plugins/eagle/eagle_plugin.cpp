@@ -530,12 +530,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
         else
         {
             // some eagle boards do not have contiguous layer number sequences.
-
-#if 0   // pre PCB_LAYER_ID & LSET:
-            m_cu_map[it->number] = cu.size() - 1 - ki_layer_count;
-#else
             m_cu_map[it->number] = ki_layer_count;
-#endif
         }
     }
 
@@ -548,10 +543,12 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
         {
             PCB_LAYER_ID layer =  kicad_layer( it->number );
 
-            // these function provide their own protection against UNDEFINED_LAYER:
-            m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
-            m_board->SetLayerType( layer, LT_SIGNAL );
-
+            // these function provide their own protection against non enabled layers:
+            if( layer >= 0 && layer < PCB_LAYER_ID_COUNT )    // layer should be valid
+            {
+                m_board->SetLayerName( layer, FROM_UTF8( it->name.c_str() ) );
+                m_board->SetLayerType( layer, LT_SIGNAL );
+            }
             // could map the colors here
         }
     }

@@ -785,7 +785,10 @@ public:
      */
     inline bool IsLayerEnabled( PCB_LAYER_ID aLayerId ) const
     {
-        return m_enabledLayers[aLayerId];
+        if( aLayerId >= 0 && aLayerId < PCB_LAYER_ID_COUNT )
+            return m_enabledLayers[aLayerId];
+
+        return false;
     }
 
     /**
