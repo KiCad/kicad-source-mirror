@@ -165,6 +165,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     forEachGeometryItem( { PCB_PAD_T, PCB_VIA_T }, LSET::AllLayersMask(), addToHoleTree );
 
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+
     for( TRACK* track : m_board->Tracks() )
     {
         if( track->Type() != PCB_VIA_T )
@@ -184,7 +186,23 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                     if( other->HasFlag( SKIP_STRUCT ) )
                         return false;
 
-                    return true;
+                    BOARD_ITEM* a = via;
+                    BOARD_ITEM* b = other;
+
+                    // store canonical order so we don't collide in both directions
+                    // (a:b and b:a)
+                    if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                        std::swap( a, b );
+
+                    if( checkedPairs.count( { a, b } ) )
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        checkedPairs[ { a, b } ] = 1;
+                        return true;
+                    }
                 },
                 // Visitor:
                 [&]( BOARD_ITEM* other ) -> bool
@@ -195,6 +213,8 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
         via->SetFlags( SKIP_STRUCT );
     }
+
+    checkedPairs.clear();
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
@@ -212,7 +232,23 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                         if( other->HasFlag( SKIP_STRUCT ) )
                             return false;
 
-                        return true;
+                        BOARD_ITEM* a = pad;
+                        BOARD_ITEM* b = other;
+
+                        // store canonical order so we don't collide in both directions
+                        // (a:b and b:a)
+                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                            std::swap( a, b );
+
+                        if( checkedPairs.count( { a, b } ) )
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            checkedPairs[ { a, b } ] = 1;
+                            return true;
+                        }
                     },
                     // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool

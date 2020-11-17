@@ -359,6 +359,8 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
     reportAux( "Testing %d tracks & vias...", m_board->Tracks().size() );
 
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
+
     for( TRACK* track : m_board->Tracks() )
     {
         if( !reportProgress( ii++, m_board->Tracks().size(), delta ) )
@@ -380,7 +382,23 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                         if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )
                             return false;
 
-                        return true;
+                        BOARD_ITEM* a = track;
+                        BOARD_ITEM* b = other;
+
+                        // store canonical order so we don't collide in both directions
+                        // (a:b and b:a)
+                        if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                            std::swap( a, b );
+
+                        if( checkedPairs.count( { a, b } ) )
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            checkedPairs[ { a, b } ] = 1;
+                            return true;
+                        }
                     },
                     // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool
@@ -519,6 +537,7 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
     reportAux( "Testing %d pads...", count );
 
     int ii = 0;
+    std::map< std::pair<BOARD_ITEM*, BOARD_ITEM*>, int> checkedPairs;
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
@@ -538,7 +557,23 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                             if( other->HasFlag( SKIP_STRUCT ) )
                                 return false;
 
-                            return true;
+                            BOARD_ITEM* a = pad;
+                            BOARD_ITEM* b = other;
+
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
+
+                            if( checkedPairs.count( { a, b } ) )
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                checkedPairs[ { a, b } ] = 1;
+                                return true;
+                            }
                         },
                         // Visitor
                         [&]( BOARD_ITEM* other ) -> bool
