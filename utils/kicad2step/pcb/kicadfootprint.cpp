@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright  2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright  2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #include <sstream>
 
 #include <Standard_Failure.hxx>
+
 
 KICADFOOTPRINT::KICADFOOTPRINT( KICADPCB* aParent )
 {
@@ -77,7 +78,7 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
         SEXPR::SEXPR* child = aEntry->GetChild( 0 );
         std::string name = child->GetSymbol();
 
-        if( name != "module" )
+        if( name != "module" && name != "footprint" )
         {
             std::ostringstream ostr;
             ostr << "* BUG: module parser invoked for type '" << name << "'\n";
@@ -93,7 +94,7 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
             std::string symname;
 
             // skip the optional locked and/or placed attributes; due to the vagaries of the
-            // kicad version of sexpr, the attribute may be a Symbol or a String
+            // KiCad version of sexpr, the attribute may be a Symbol or a String
             if( child->IsSymbol() || child->IsString() )
             {
                 if( child->IsSymbol() )
@@ -105,7 +106,7 @@ bool KICADFOOTPRINT::Read( SEXPR::SEXPR* aEntry )
                     continue;
 
                 wxLogMessage( "* module descr in PCB file at line %d: unexpected keyword '%s'\n",
-                             child->GetLineNumber(), symname.c_str() );
+                              child->GetLineNumber(), symname.c_str() );
                 return false;
             }
 
@@ -391,7 +392,8 @@ bool KICADFOOTPRINT::ComposePCB( class PCBMODEL* aPCB, S3D_RESOLVER* resolver,
         }
         catch( const Standard_Failure& e)
         {
-            ReportMessage( wxString::Format( "could not add component %s\n>>Opencascade error: %s\n ",
+            ReportMessage( wxString::Format( "could not add component %s\n>>Opencascade "
+                                             "error: %s\n ",
                                              m_refdes, e.GetMessageString() ) );
         }
     }

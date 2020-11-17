@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +48,7 @@
 /*
  * GetKicadConfigPath() is taken from KiCad's common.cpp source:
  * Copyright (C) 2014-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008-2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2015 KiCad Developers
  */
 static wxString GetKicadConfigPath()
@@ -121,7 +122,8 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 
     if( fname.GetExt() != "kicad_pcb" )
     {
-        ReportMessage( wxString::Format( "expecting extension kicad_pcb, got %s\n",  fname.GetExt() ) );
+        ReportMessage( wxString::Format( "expecting extension kicad_pcb, got %s\n",
+                                         fname.GetExt() ) );
         return false;
     }
 
@@ -157,7 +159,8 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
     }
     catch( ... )
     {
-        ReportMessage( wxString::Format( "unexpected exception while reading file: %s\n", aFileName ) );
+        ReportMessage( wxString::Format( "unexpected exception while reading file: %s\n",
+                                         aFileName ) );
         return false;
     }
 
@@ -208,7 +211,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
 
             if( !child->IsList() )
             {
-                ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n", child->GetLineNumber() ) );
+                ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+                                                 child->GetLineNumber() ) );
                 return false;
             }
 
@@ -221,6 +225,8 @@ bool KICADPCB::parsePCB( SEXPR::SEXPR* data )
             else if( symname == "layers" )
                 result = result && parseLayers( child );
             else if( symname == "module" )
+                result = result && parseModule( child );
+            else if( symname == "footprint" )
                 result = result && parseModule( child );
             else if( symname == "gr_arc" )
                 result = result && parseCurve( child, CURVE_ARC );
@@ -253,7 +259,8 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
 
         if( !child->IsList() )
         {
-            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n", child->GetLineNumber() ) );
+            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+                                             child->GetLineNumber() ) );
             return false;
         }
 
@@ -267,8 +274,8 @@ bool KICADPCB::parseGeneral( SEXPR::SEXPR* data )
     }
 
     ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n"
-                              "no PCB thickness specified in general section\n",
-                              child->GetLineNumber() ) );
+                                     "no PCB thickness specified in general section\n",
+                                     child->GetLineNumber() ) );
     return false;
 }
 
@@ -278,14 +285,15 @@ bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
     size_t nc = data->GetNumberOfChildren();
     SEXPR::SEXPR* child = NULL;
 
-    // Read the layername and the correstponding layer id list:
+    // Read the layername and the corresponding layer id list:
     for( size_t i = 1; i < nc; ++i )
     {
         child = data->GetChild( i );
 
         if( !child->IsList() )
         {
-            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n", child->GetLineNumber() ) );
+            ReportMessage( wxString::Format( "corrupt PCB file (line %d)\n",
+                                             child->GetLineNumber() ) );
             return false;
         }
         std::string ref;
@@ -300,6 +308,7 @@ bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
 
     return true;
 }
+
 
 int KICADPCB::GetLayerId( std::string& aLayerName )
 {
@@ -336,7 +345,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
             if( child->GetNumberOfChildren() != 3 )
             {
                 ReportMessage( wxString::Format(
-                               "corrupt PCB file (line %d): grid_origin has %d children (expected: 3)\n",
+                               "corrupt PCB file (line %d): grid_origin has %d children "
+                               "(expected: 3)\n",
                                child->GetLineNumber(), child->GetNumberOfChildren() ) );
                 return false;
             }
@@ -350,7 +360,8 @@ bool KICADPCB::parseSetup( SEXPR::SEXPR* data )
             if( child->GetNumberOfChildren() != 3 )
             {
                 ReportMessage( wxString::Format(
-                               "corrupt PCB file (line %d)m: aux_axis_origin has %d children (expected: 3)\n",
+                               "corrupt PCB file (line %d)m: aux_axis_origin has %d children "
+                               "(expected: 3)\n",
                                child->GetLineNumber(), child->GetNumberOfChildren() ) );
                 return false;
             }

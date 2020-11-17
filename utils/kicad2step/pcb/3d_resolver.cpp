@@ -395,8 +395,8 @@ wxString S3D_RESOLVER::ResolvePath( const wxString& aFileName )
         if( !( m_errflags & ERRFLG_ENVPATH ) )
         {
             m_errflags |= ERRFLG_ENVPATH;
-            wxString errmsg = "[3D File Resolver] file not found:\n";
-            errmsg << tname << "\n";
+            wxString errmsg = "[3D File Resolver] File \"";
+            errmsg << aFileName << "\" not found\n";
             ReportMessage( errmsg );
         }
 
