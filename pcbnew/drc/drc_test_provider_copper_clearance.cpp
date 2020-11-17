@@ -224,6 +224,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
     return true;
 }
 
+
 static std::shared_ptr<SHAPE> getShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
 {
     if( aItem->Type() == PCB_PAD_T && !static_cast<PAD*>( aItem )->FlashLayer( aLayer ) )
@@ -245,6 +246,15 @@ static std::shared_ptr<SHAPE> getShape( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer )
     }
 
     return aItem->GetEffectiveShape( aLayer );
+}
+
+
+static bool isNetTie( BOARD_ITEM* aItem )
+{
+    if( aItem->GetParent() && aItem->GetParent()->Type() == PCB_FOOTPRINT_T )
+        return static_cast<FOOTPRINT*>( aItem->GetParent() )->IsNetTie();
+
+    return false;
 }
 
 
@@ -375,6 +385,11 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     [&]( BOARD_ITEM* other ) -> bool
                     {
                         if( other->HasFlag( SKIP_STRUCT ) )
+                            return false;
+
+                        // It would really be better to know what particular nets a nettie
+                        // should allow, but for now it is what it is.
+                        if( isNetTie( other ) )
                             return false;
 
                         auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
