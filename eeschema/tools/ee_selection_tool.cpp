@@ -1578,7 +1578,9 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
 
     // Highlight pins and fields.  (All the other component children are currently only
     // represented in the LIB_PART and will inherit the settings of the parent component.)
-    static_cast<SCH_ITEM*>( aItem )->RunOnChildren(
+    if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( aItem ) )
+    {
+        sch_item->RunOnChildren(
             [&]( SCH_ITEM* aChild )
             {
                 if( aMode == SELECTED )
@@ -1586,6 +1588,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* aGr
                 else if( aMode == BRIGHTENED )
                     aChild->SetSelected();
             } );
+    }
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );
@@ -1608,7 +1611,9 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
 
     // Unhighlight pins and fields.  (All the other component children are currently only
     // represented in the LIB_PART.)
-    static_cast<SCH_ITEM*>( aItem )->RunOnChildren(
+    if( SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( aItem ) )
+    {
+        sch_item->RunOnChildren(
             [&]( SCH_ITEM* aChild )
             {
                 if( aMode == SELECTED )
@@ -1616,6 +1621,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, EE_SELECTION* a
                 else if( aMode == BRIGHTENED )
                     aChild->ClearBrightened();
             } );
+    }
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );
