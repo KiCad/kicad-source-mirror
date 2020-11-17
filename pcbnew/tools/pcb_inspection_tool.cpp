@@ -355,6 +355,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             }
             else
             {
+                r->Report( "" );
                 r->Report( _( "Items belong to the same net. Clearance is 0." ) );
             }
         }
