@@ -44,6 +44,8 @@
 #include "3d_cache/dialogs/panel_prev_3d.h"
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
+#include <tool/tool_manager.h>
+#include <tools/selection_tool.h>
 
 #include <fp_lib_table.h>
 
@@ -632,9 +634,15 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
         }
     }
 
-    // Remove items from m_footprint graphic list:
+    // Remove text items:
+    SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<SELECTION_TOOL>();
+
     for( FP_TEXT* item: items_to_remove )
+    {
+        selTool->RemoveItemFromSel( item );
+        view->Remove( item );
         item->DeleteStructure();
+    }
 
     // if there are still grid table entries, create new texts for them
     while( i < m_texts->size() )

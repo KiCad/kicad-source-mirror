@@ -112,7 +112,7 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 
 void BOARD_ITEM::DeleteStructure()
 {
-    auto parent = GetParent();
+    BOARD_ITEM_CONTAINER* parent = GetParent();
 
     if( parent )
         parent->Remove( this );
