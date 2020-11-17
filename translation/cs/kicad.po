@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-16 21:45+0000\n"
-"Last-Translator: Martin Kratoška <martin@ok1rr.com>\n"
+"PO-Revision-Date: 2020-11-19 21:34+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -145,9 +145,8 @@ msgid "failed to open file"
 msgstr "otevření souboru selhalo"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "Obrysy desky"
+msgstr "Sestavit obrys desky"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
@@ -236,14 +235,12 @@ msgid "Loading..."
 msgstr "Načítání..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Načíst OpenGL: deska"
+msgstr "Načíst Raytracing: deska"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Načíst OpenGL: vrstvy"
+msgstr "Načíst Raytracing: vrstvy"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
@@ -456,7 +453,7 @@ msgstr "Zobrazit 3D modely s vývody"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:120
 msgid "Show 3D SMD models"
-msgstr "Zobrazit 3D modely typu SMD"
+msgstr "Zobrazit 3D modely SMD"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:129
 msgid "Show 3D virtual models"
@@ -3000,6 +2997,7 @@ msgstr "Maximální počet záloh za den:"
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
+"Kolik záložních souborů si každý den ponechat (bez omezení nastaveno na 0)"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid "Minimum time between backups:"
@@ -3010,6 +3008,8 @@ msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
 msgstr ""
+"Počet minut od poslední zálohy před vytvořením další při příštím zálohování ("
+"nastavená 0 na minimum)"
 
 #: common/dialogs/panel_common_settings_base.cpp:257
 msgid "Maximum total backup size:"
@@ -3110,7 +3110,7 @@ msgstr "Rychlost zvětšování:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr ""
+msgstr "Jak daleko přiblížit při každém otočení kolečka myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
