@@ -665,11 +665,11 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aSymbol, LIB_PART* aLibPart,
 {
     wxASSERT( aSymbol != NULL );
 
-    m_rootSymbol   = aSymbol;
-    m_libPart     = aLibPart;     // Warning: can be nullptr for orphan components
-                                // (i.e. with a symbol library not found)
+    m_rootSymbol = aSymbol;
+    m_libPart    = aLibPart;     // Warning: can be nullptr for orphan components
+                                 // (i.e. with a symbol library not found)
     m_unit       = aSymbol->GetUnitSelection( &aSheetPath );
-    m_footprint  = aSymbol->GetFootprint( &aSheetPath );
+    m_footprint  = aSymbol->GetFootprint( &aSheetPath, true );
     m_sheetPath  = aSheetPath;
     m_isNew      = false;
     m_flag       = 0;
@@ -685,10 +685,10 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_COMPONENT* aSymbol, LIB_PART* aLibPart,
 
     m_numRef = -1;
 
-    if( aSymbol->GetValue( &aSheetPath ).IsEmpty() )
+    if( aSymbol->GetValue( &aSheetPath, false ).IsEmpty() )
         aSymbol->SetValue( &aSheetPath, wxT( "~" ) );
 
-    m_value = aSymbol->GetValue( &aSheetPath );
+    m_value = aSymbol->GetValue( &aSheetPath, false );
 }
 
 

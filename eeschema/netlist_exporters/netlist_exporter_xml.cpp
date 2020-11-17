@@ -121,22 +121,16 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol
                 // The lowest unit number wins.  User should only set fields in any one unit.
                 // remark: IsVoid() returns true for empty strings or the "~" string (empty
                 // field value)
-                if( !comp2->GetValue( &sheetList[i] ).IsEmpty()
+                if( !comp2->GetValue( &sheetList[i], m_resolveTextVars ).IsEmpty()
                         && ( unit < minUnit || fields.value.IsEmpty() ) )
                 {
-                    if( m_resolveTextVars )
-                        fields.value = comp2->GetValue( &sheetList[i] );
-                    else
-                        fields.value = comp2->GetField( VALUE_FIELD )->GetText();
+                    fields.value = comp2->GetValue( &sheetList[i], m_resolveTextVars );
                 }
 
-                if( !comp2->GetFootprint( &sheetList[i] ).IsEmpty()
+                if( !comp2->GetFootprint( &sheetList[i], m_resolveTextVars ).IsEmpty()
                         && ( unit < minUnit || fields.footprint.IsEmpty() ) )
                 {
-                    if( m_resolveTextVars )
-                        fields.footprint = comp2->GetFootprint( &sheetList[i] );
-                    else
-                        fields.footprint = comp2->GetField( FOOTPRINT_FIELD )->GetText();
+                    fields.footprint = comp2->GetFootprint( &sheetList[i], m_resolveTextVars );
                 }
 
                 if( !comp2->GetField( DATASHEET_FIELD )->IsVoid()

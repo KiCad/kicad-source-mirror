@@ -567,7 +567,7 @@ void SCH_COMPONENT::SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSel
 }
 
 
-const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
+const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const
 {
     KIID_PATH path = sheet->Path();
 
@@ -575,11 +575,17 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet ) const
     {
         if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
         {
+            if( !aResolve )
+                return instance.m_Value;
+
             SCH_FIELD dummy( wxDefaultPosition, VALUE_FIELD, const_cast<SCH_COMPONENT*>( this ) );
             dummy.SetText( instance.m_Value );
             return dummy.GetShownText();
         }
     }
+
+    if( !aResolve )
+        return GetField( VALUE_FIELD )->GetText();
 
     return GetField( VALUE_FIELD )->GetShownText();
 }
@@ -614,7 +620,7 @@ void SCH_COMPONENT::SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValu
 }
 
 
-const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet ) const
+const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const
 {
     KIID_PATH path = sheet->Path();
 
@@ -622,11 +628,17 @@ const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet ) const
     {
         if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
         {
+            if( !aResolve )
+                return instance.m_Footprint;
+
             SCH_FIELD dummy( wxDefaultPosition, FOOTPRINT_FIELD, const_cast<SCH_COMPONENT*>( this ) );
             dummy.SetText( instance.m_Footprint );
             return dummy.GetShownText();
         }
     }
+
+    if( !aResolve )
+        return GetField( FOOTPRINT_FIELD )->GetText();
 
     return GetField( FOOTPRINT_FIELD )->GetShownText();
 }
@@ -915,9 +927,9 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
             if( i == REFERENCE_FIELD && schematic )
                 *token = GetRef( &schematic->CurrentSheet(), true );
             else if( i == VALUE_FIELD && schematic )
-                *token = GetValue( &schematic->CurrentSheet() );
+                *token = GetValue( &schematic->CurrentSheet(), true );
             else if( i == FOOTPRINT_FIELD && schematic )
-                *token = GetFootprint( &schematic->CurrentSheet() );
+                *token = GetFootprint( &schematic->CurrentSheet(), true );
             else
                 *token = m_fields[ i ].GetShownText( aDepth + 1 );
 
@@ -940,7 +952,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
         wxString footprint;
 
         if( schematic )
-            footprint = GetFootprint( &schematic->CurrentSheet() );
+            footprint = GetFootprint( &schematic->CurrentSheet(), true );
         else
             footprint = m_fields[ FOOTPRINT_FIELD ].GetShownText();
 
@@ -954,7 +966,7 @@ bool SCH_COMPONENT::ResolveTextVar( wxString* token, int aDepth ) const
         wxString footprint;
 
         if( schematic )
-            footprint = GetFootprint( &schematic->CurrentSheet() );
+            footprint = GetFootprint( &schematic->CurrentSheet(), true );
         else
             footprint = m_fields[ FOOTPRINT_FIELD ].GetShownText();
 
@@ -1343,7 +1355,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 
             msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
-            aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet ), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet, true ), DARKCYAN ) );
 
 #if 0       // Display component flags, for debug only
             aList.push_back( MSG_PANEL_ITEM( _( "flags" ),
@@ -1375,7 +1387,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
             }
 
             // Display the current associated footprint, if exists.
-            msg = GetFootprint( currentSheet );
+            msg = GetFootprint( currentSheet, true );
 
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
@@ -1392,7 +1404,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
     {
         aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ), DARKCYAN ) );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetValue( currentSheet ), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetValue( currentSheet, true ), DARKCYAN ) );
         aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
 
         wxString libNickname = GetLibId().GetLibNickname();

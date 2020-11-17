@@ -201,7 +201,8 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
     SCH_COMPONENT*  symbol = GetParentSymbol();
 
-    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValue( currentSheet ), DARKCYAN );
+    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValue( currentSheet, true ),
+                        DARKCYAN );
 
 #if defined(DEBUG)
 

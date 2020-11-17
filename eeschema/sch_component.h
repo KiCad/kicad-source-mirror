@@ -554,7 +554,7 @@ public:
     void SetUnitSelection( const SCH_SHEET_PATH* aSheet, int aUnitSelection );
 
     // Returns the instance-specific value for the given sheet path.
-    const wxString GetValue( const SCH_SHEET_PATH* sheet ) const;
+    const wxString GetValue( const SCH_SHEET_PATH* sheet, bool aResolve ) const;
     void SetValue( const SCH_SHEET_PATH* sheet, const wxString& aValue );
 
     // Set the value for all instances (the default GUI behaviour)
@@ -564,7 +564,7 @@ public:
     }
 
     // Returns the instance-specific footprint assignment for the given sheet path.
-    const wxString GetFootprint( const SCH_SHEET_PATH* sheet ) const;
+    const wxString GetFootprint( const SCH_SHEET_PATH* sheet, bool aResolve ) const;
     void SetFootprint( const SCH_SHEET_PATH* sheet, const wxString& aFootprint );
 
     // Set the value for all instances (the default GUI behaviour)

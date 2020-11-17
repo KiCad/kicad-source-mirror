@@ -249,12 +249,12 @@ wxString SCH_SHEET_PATH::PathHumanReadable( bool aUseShortRootName ) const
 
 void SCH_SHEET_PATH::UpdateAllScreenReferences()
 {
-    for( auto item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
-        auto component = static_cast<SCH_COMPONENT*>( item );
+        SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
         component->GetField( REFERENCE_FIELD )->SetText( component->GetRef( this ) );
-        component->GetField( VALUE_FIELD )->SetText( component->GetValue( this ) );
-        component->GetField( FOOTPRINT_FIELD )->SetText( component->GetFootprint( this ) );
+        component->GetField( VALUE_FIELD )->SetText( component->GetValue( this, false ) );
+        component->GetField( FOOTPRINT_FIELD )->SetText( component->GetFootprint( this, false ) );
         component->UpdateUnit( component->GetUnitSelection( this ) );
     }
 }
