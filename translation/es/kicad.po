@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-16 21:45+0000\n"
-"Last-Translator: Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>\n"
+"PO-Revision-Date: 2020-11-19 21:34+0000\n"
+"Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -140,9 +140,8 @@ msgid "failed to open file"
 msgstr "no puede abrirse el archivo"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "Contorno de la placa"
+msgstr "Crear contorno de la placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
@@ -232,14 +231,12 @@ msgid "Loading..."
 msgstr "Cargando..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Abrir placa existente"
+msgstr "Cargar Raytracing: placa"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Cargar OpenGL: capas"
+msgstr "Carga Raytracing: capas"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
