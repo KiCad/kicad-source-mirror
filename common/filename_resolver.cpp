@@ -434,7 +434,7 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
 
     #ifdef _WIN32
     while( tpath.m_Pathvar.EndsWith( wxT( "\\" ) ) )
-        tpath.m_pathvar.erase( tpath.m_Pathvar.length() - 1 );
+        tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );
     #else
     while( tpath.m_Pathvar.EndsWith( wxT( "/" ) ) && tpath.m_Pathvar.length() > 1 )
         tpath.m_Pathvar.erase( tpath.m_Pathvar.length() - 1 );

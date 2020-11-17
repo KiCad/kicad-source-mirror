@@ -470,7 +470,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
     // Pressure relief valve for release builds
     const double max_recalc_time_msecs = 250.;
 
-    if( m_allowRealTime && ADVANCED_CFG::GetCfg().m_realTimeConnectivity &&
+    if( m_allowRealTime && ADVANCED_CFG::GetCfg().m_RealTimeConnectivity &&
         recalc_time.msecs() > max_recalc_time_msecs )
     {
         m_allowRealTime = false;
