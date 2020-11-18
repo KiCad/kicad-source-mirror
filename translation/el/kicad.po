@@ -1,22 +1,24 @@
+# aris-kimi <aris_kimi@hotmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2019-10-29 14:31+0200\n"
-"Last-Translator: Michael Misirlis <mmisirlis@gmail.com>\n"
-"Language-Team: Michael Misirlis <mmisirlis@gmail.com>\n"
+"PO-Revision-Date: 2020-11-19 21:34+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Language: el\n"
 "X-Source-Language: C\n"
-"X-Generator: Poedit 2.2.4\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
 "X-Poedit-SearchPath-1: eeschema\n"
 "X-Poedit-SearchPath-2: cvpcb\n"
@@ -30,14 +32,13 @@ msgid "All Files (*.*)|*.*"
 msgstr "Όλα τα Αρχεία (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
-#, fuzzy, c-format
+#, c-format
 msgid "All supported files (%s)"
-msgstr "Όλες οι υποστηριζόμενες μορφές|"
+msgstr "Όλα τα υποστιριζόμενα αρχεία (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
-#, fuzzy
 msgid "Available paths:"
-msgstr "Διαθέσιμα υλικά:"
+msgstr "Διαθέσιμες διαδρομές:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
@@ -117,9 +118,8 @@ msgid "Offset"
 msgstr "Μετατόπιση"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
-#, fuzzy
 msgid "Opacity"
-msgstr "Αδιαφάνεια:"
+msgstr "Αδιαφάνεια"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -143,21 +143,19 @@ msgstr "[δεν υπάρχει αρχείο"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
 msgid "failed to open file"
-msgstr "αποτυχία ανοίγματος  αρχείου"
+msgstr "αποτυχία ανοίγματος αρχείου"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "Περιγράμματα πλακέτας"
+msgstr "Περίγραμμα πλακέτας"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
 msgstr "Δημιουργία επιπέδων"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:484
-#, fuzzy
 msgid "Board outline is not closed:"
-msgstr "Το περίγραμμα πλακέτας δεν σχηματίζει κλειστό πολύγωνο"
+msgstr "Το περίγραμμα της πλακέτας δεν κλείνει σωστά:"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:223
 msgid "Create tracks and vias"
@@ -185,7 +183,7 @@ msgstr "Κατασκευή BVH για τρύπες και via"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:431
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Η έκδοσή του OpenGL σας δεν υποστηρίζεται. Ελάχιστη απαιτούμενη 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:552
 #, c-format
@@ -193,15 +191,15 @@ msgid "Render time %.0f ms ( %.1f fps)"
 msgstr "Χρόνος απόδοσης %.0f ms ( %.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:756
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "Παράμετροι κλάσης δικτύων"
+msgstr "Δίκτυο %s Κλάση %s ΌνομαPad %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:781
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "Κλάσεις Δικτύου"
+msgstr "Δίκτυο %s\tΚλάση %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:500
 msgid "Load OpenGL: board"
@@ -229,7 +227,7 @@ msgstr "Χρόνος επαναφόρτωσης %.3f s"
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:980
 #, c-format
 msgid "Loading %s"
-msgstr "Φόρτωση %s\""
+msgstr "Φόρτωση %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:572
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:183
@@ -238,14 +236,12 @@ msgid "Loading..."
 msgstr "Φόρτωση..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Φόρτωση υπάρχουσας πλακέτας"
+msgstr "Φόρτωση Raytracing: πλακέτα"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Φόρτωση OpenGL: επίπεδα"
+msgstr "Φόρτωση Raytracing: επίπεδα"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
@@ -263,11 +259,11 @@ msgstr "Απόδοση: Σκίαση μετά την επεξεργασία"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
-msgstr "Εξαγωγή τρέχουσας προβολής σε PNG..."
+msgstr "Εξαγωγή Τρέχουσας Προβολής ως PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 msgid "Export Current View as JPEG..."
-msgstr "Εξαγωγή τρέχουσας προβολής σε JPEG..."
+msgstr "Εξαγωγή Τρέχουσας Προβολής ως JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:70
 #: common/tool/actions.cpp:537 pcbnew/footprint_viewer_frame.cpp:949
@@ -290,7 +286,7 @@ msgstr "Επιλογές Εμφάνισης"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr "Ιχνηλάτηση Φωτός"
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
@@ -304,11 +300,11 @@ msgstr "Ιδιοτήτες Υλικού"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
-msgstr "Επιλογές Ιχνηλάτησης Φωτός"
+msgstr "Επιλογές Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
-msgstr "Επιλογή Χρωμάτων"
+msgstr "Επιλογές Χρωμάτων"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "Background Top Color..."
@@ -340,7 +336,7 @@ msgstr "Χρώμα Σώματος Πλακέτας..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:187
 msgid "Get colors from physical stackup"
-msgstr ""
+msgstr "Χρώματα από φυσική στοίβα"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
@@ -356,9 +352,8 @@ msgstr "Επαναφορά Προκαθορισμένων Ρυθμίσεων"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:231
 #: pcbnew/menubar_pcb_editor.cpp:434
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Προτιμήσεις..."
+msgstr "Προτιμήσεις..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:265
@@ -399,7 +394,7 @@ msgstr "&Προβολή"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:224 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:179
 msgid "&Preferences"
-msgstr "Π&ροτιμήσεις"
+msgstr "&Προτιμήσεις"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
@@ -415,7 +410,7 @@ msgstr "Ορισμός επιλογών προβολής, και ορατότη�
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr "Απόδοση τρέχουσας προβολής με χρήση Ιχνηλάτησης Φωτός"
+msgstr "Απόδοση τρέχουσας προβολής με χρήση Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
@@ -423,7 +418,7 @@ msgstr "Ρεαλιστική προβολή"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
 msgid "Show board body"
-msgstr "Εμφάνισης Σώματος Πλακέτας"
+msgstr "Εμφάνιση σώματος πλακέτας"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:59
 msgid "Show filled areas in zones"
@@ -436,21 +431,22 @@ msgstr "Αφαίρεση μάσκας συγκόλλησης από μεταξο
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr ""
+msgstr "Συγκράτιση μεταξοτυπίας στο δακτύλιο του via"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr ""
+msgstr "Pads χωρίς επιμετάλλωση σαν χαλκός"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
 msgstr ""
+"Απεικόνιση επιμεταλλωμένων pads σαν επιμεταλλωμένα αλλά ο υπόλοιπος χαλκός "
+"σαν υλικό ακατέργαστο. (Αργό)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
-#, fuzzy
 msgid "3D Model Visibility"
-msgstr "Ορατότητα 3Δ μοντέλων:"
+msgstr "Ορατότητα 3Δ μοντέλων"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -465,9 +461,8 @@ msgid "Show 3D virtual models"
 msgstr "Εμφάνιση 3Δ εικονικών μοντέλων"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
-#, fuzzy
 msgid "Board Layers"
-msgstr "Επίπεδα πλακέτας:"
+msgstr "Επίπεδα πλακέτας"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -486,9 +481,8 @@ msgid "Show adhesive layers"
 msgstr "Εμφάνιση όλων των επιπέδων επικόλλησης"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
-#, fuzzy
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Στρώματα χρηστών (δεν εμφανίζονται σε ρεαλιστική λειτουργία):"
+msgstr "Στρώματα χρηστών (δεν εμφανίζονται σε ρεαλιστική λειτουργία)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -504,9 +498,8 @@ msgid "Camera Options"
 msgstr "Επιλογές Χαρτιού"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
-#, fuzzy
 msgid "Rotation Increment:"
-msgstr "Επανάληψη Προσαύξησης Θέσης"
+msgstr "Επανάληψη Προσαύξησης Θέσης:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:243
 #: common/base_units.cpp:520 pcbnew/dialogs/dialog_copper_zones_base.cpp:298
@@ -519,19 +512,16 @@ msgid "deg"
 msgstr "μοίρες"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
-#, fuzzy
 msgid "Enable animation"
-msgstr "&Ενεργοποίηση Επιτάχυνσης"
+msgstr "Ενεργοποίηση κίνησης"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
-#, fuzzy
 msgid "Animation speed:"
-msgstr "Η ονοματοδοσία ολοκληρώθηκε."
+msgstr "Ταχύτητα κίνησης:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
-#, fuzzy
 msgid "OpenGL Render Options"
-msgstr "Επιλογές Απόδοσης"
+msgstr "Επιλογές Απόδοσης OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
@@ -542,9 +532,8 @@ msgid "Show copper thickness"
 msgstr "Εμφάνιση πάχους χαλκού"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
-#, fuzzy
 msgid "Other Options"
-msgstr "Άλλες επιλογές:"
+msgstr "Άλλες επιλογές"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
@@ -553,74 +542,62 @@ msgid "Anti-aliasing"
 msgstr "Αντι-οδόντωση"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "Disabled"
-msgstr "Ενεργοποιημένο"
+msgstr "Απενεργοποιημένο"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "2x"
-msgstr "2"
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "4x"
-msgstr "4"
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
-#, fuzzy
 msgid "8x"
-msgstr "8"
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
-msgstr ""
+msgstr "Η προβολή 3Δ πρέπει να επανεκκινηθεί για την εφαρμογή της ρύθμισης"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
-#, fuzzy
 msgid "Selection color"
-msgstr "Επιλογή αντιγράφηκε."
+msgstr "Χρώμα επιλογής"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
-msgstr ""
+msgstr "Κατα την κίνηση"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
-#, fuzzy
 msgid "Disable anti-aliasing"
-msgstr "Ισορροπημένη Αντι-οδόντωση"
+msgstr "Απενεργοποίηση Αντι-οδόντωσης"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
-#, fuzzy
 msgid "Disable thickness"
-msgstr "Πάχος γραμμής:"
+msgstr "Απενεργοποίηση πάχους"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
-#, fuzzy
 msgid "Disable vias"
-msgstr "Κανόνας σχεδίασης via:"
+msgstr "Απενεργοποίηση vias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
-#, fuzzy
 msgid "Disable holes"
-msgstr "Οβάλ τρύπα"
+msgstr "Απενεργοποίηση οπών"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
 msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
-#, fuzzy
 msgid "Raytracing Render Options"
-msgstr "Επιλογές Ιχνηλάτησης Φωτός"
+msgstr "Επιλογές Απόδοσης Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
-#, fuzzy
 msgid "Procedural textures"
-msgstr "Διαδικαστική Υφή"
+msgstr "Διαδικαστική πλοκή"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
 msgstr "Προσθήκη Δαπέδου"
 
@@ -630,34 +607,34 @@ msgid "Post-processing"
 msgstr "Μετά την επεξεργασία"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
-#, fuzzy
 msgid "Number of Samples"
-msgstr "Αριθμός εδρών"
+msgstr "Αριθμός Δειγμάτων"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
-msgstr ""
+msgstr "Συντελεστής Εξάπλωσης %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr ""
+msgstr "Αναδρομικό Επίπεδο"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
-#, fuzzy
 msgid "Shadows"
-msgstr "Απόδοση Σκιών"
+msgstr "Σκιές"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
 "Number of rays that will be cast, into light direction, to evaluate a shadow "
 "point"
 msgstr ""
+"Αριθμός ακτίνων που θα ρίχνονται, σε κατεύθυνση φωτός, για την αξιολόγηση "
+"ενός σημείου σκιάς"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:499
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:543
 msgid "Random direction factor of the cast rays"
-msgstr ""
+msgstr "Συντελεστής τυχαίας κατεύθυνσης των ακτίνων"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
@@ -667,12 +644,15 @@ msgstr "Αντανακλάσεις"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:514
 msgid "Number of rays that will be cast to evaluate a reflection point"
 msgstr ""
+"Αριθμός ακτίνων που θα εκπέμπονται για την αξιολόγηση ενός σημείου ανάκλασης"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:525
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Αριθμός αλληλεπιδράσεων ακτίνας μέσα από αντικείμενα. (ο υψηλότερος αριθμός "
+"επιπέδων βελτιώνει τα αποτελέσματα, ειδικά σε πολύ διαφανείς πίνακες)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
@@ -682,42 +662,39 @@ msgstr "Διαθλάσεις"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:537
 msgid "Number of rays that will be cast to evaluate a refraction point"
 msgstr ""
+"Αριθμός ακτίνων που θα ρίχνονται για την αξιολόγηση ενός σημείου διάθλασης"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:548
 msgid "Number of bounces that a ray can hit reflective objects"
 msgstr ""
+"Αριθμός αναπήδησης που μια ακτίνα μπορεί να χτυπήσει ανακλαστικά αντικείμενα"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
-#, fuzzy
 msgid "Lights configuration"
-msgstr "Ρύθμιση Διαδρομών"
+msgstr "Ρύθμιση φωτός"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr ""
+msgstr "Φωτισμός κάμερας περιβάλλοντος"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
-#, fuzzy
 msgid "Top Light"
-msgstr "Πάνω δεξιά"
+msgstr "Πάνω Φώς"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:611
-#, fuzzy
 msgid "Bottom Light"
-msgstr "Κάτω δεξιά"
+msgstr "Κάτω Φώς"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:635
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:652
-#, fuzzy
 msgid "Elevation (degrees)"
-msgstr "Περιστροφή (μοίρες)"
+msgstr "Ανύψωση (μοίρες)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:639
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:656
-#, fuzzy
 msgid "Azimuth (degrees)"
-msgstr "Περιστροφή (μοίρες)"
+msgstr "Αζιμούθιο (μοίρες)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:660
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:218
@@ -794,13 +771,12 @@ msgid "8"
 msgstr "8"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:785
-#, fuzzy
 msgid "Reset to defaults"
 msgstr "Επαναφορά σε Προκαθορισμένες Τιμές"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
 msgid "3D Display Options"
-msgstr "Επιλογές 3Δ Εμφάνισης"
+msgstr "Επιλογές 3Δ Προβολής"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:337
 msgid "Background Color, Bottom"
@@ -815,12 +791,13 @@ msgid "3D Image File Name"
 msgstr "Όνομα Αρχείου Εικόνας 3Δ"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:828
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Insufficient permissions required to save file\n"
 "%s"
 msgstr ""
-"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση της βιβλιοθήκης \"%s\"."
+"Απαιτούνται δικαιώματα εγγραφής για την αποθήκευση αρχείου\n"
+"%s"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:829 common/confirm.cpp:125
 #: common/confirm.cpp:257 common/dialogs/panel_setup_severities.cpp:40
@@ -891,39 +868,32 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Περιστροφή Ζ Αριστερόστροφα"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:79
-#, fuzzy
 msgid "Move board Left"
-msgstr "Μετακίνηση στόχου"
+msgstr "Μετακίνηση πλακέτας Αριστερά"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:85
-#, fuzzy
 msgid "Move board Right"
-msgstr "Μετακίνηση δεξιά"
+msgstr "Μετακίνηση πλακέτας Δεξιά"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:91
-#, fuzzy
 msgid "Move board Up"
-msgstr "Μετακίνηση Επάνω"
+msgstr "Μετακίνηση πλακέτας Επάνω"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:97
-#, fuzzy
 msgid "Move board Down"
-msgstr "Μετακίνηση Κάτω"
+msgstr "Μετακίνηση πλακέτας Κάτω"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:103
-#, fuzzy
 msgid "Home view"
-msgstr "Προεπισκόπηση"
+msgstr "Αρχική εικόνα"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:109
-#, fuzzy
 msgid "Reset view"
-msgstr "Επαναφορά Μεγέθους"
+msgstr "Επαναφορά εικόνας"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
-#, fuzzy
 msgid "Flip Board"
-msgstr "Αναστροφή Προβολής Πλακέτας"
+msgstr "Αναστροφή Πλακέτας"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 #, fuzzy
@@ -931,44 +901,36 @@ msgid "Flip the board view"
 msgstr "Αντιστρέφει (καθρεφτίζει) την προβολή της πλακέτας"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Toggle orthographic projection"
 msgstr "Ενεργοποίηση/Απενεργοποίηση ορθογραφικής προβολής"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
-#, fuzzy
 msgid "Enable/disable orthographic projection"
 msgstr "Ενεργοποίηση/Απενεργοποίηση ορθογραφικής προβολής"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:126
-#, fuzzy
 msgid "View Front"
-msgstr "Προβολή Αποτυπωμάτων"
+msgstr "Προβολή Εμπρός"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:132
-#, fuzzy
 msgid "View Back"
-msgstr "Κείμενο κάτω όψης"
+msgstr "Προβολή Πίσω"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:138
-#, fuzzy
 msgid "View Left"
-msgstr "Στοίχιση Αριστερά"
+msgstr "Προβολή Αριστερά"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:144
-#, fuzzy
 msgid "View Right"
-msgstr "Στοίχιση Δεξιά"
+msgstr "Προβολή Δεξιά"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:150
-#, fuzzy
 msgid "View Top"
-msgstr "Προβολή"
+msgstr "Προβολή Επάνω"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:156
-#, fuzzy
 msgid "View Bottom"
-msgstr "Προβολή"
+msgstr "Προβολή Κάτω"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:161
 msgid "No 3D Grid"
@@ -1015,34 +977,28 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "Χρήση χρωμάτων τύπου CAD, βασισμένα στο χρώμα διάχυσης του υλικού"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
-#, fuzzy
 msgid "Toggle Through Hole 3D models"
-msgstr "Προβολή 3Δ μοντέλων για διαμπερείς τρύπες"
+msgstr "Εναλλαγή Προβολής 3Δ μοντέλων για διαμπερείς οπές"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
-#, fuzzy
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "αφαίρεση via σε έδρες με διαμπερή τρύπα"
+msgstr "Εναλλαγή Προβολής 3Δ μοντέλων με xαρακτηριστικό 'Δια Μέσου Οπής'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle SMD 3D models"
-msgstr "Φόρτωση 3Δ μοντέλων"
+msgstr "Εναλλαγή 3Δ μοντέλων για SMD"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
-#, fuzzy
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "αφαίρεση via σε έδρες με διαμπερή τρύπα"
+msgstr "Εναλλαγή Προβολής 3Δ μοντέλων με xαρακτηριστικό 'Επιφανειακής στήριξης'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle Virtual 3D models"
-msgstr "Εμφάνιση 3Δ εικονικών μοντέλων"
+msgstr "Εναλλαγή Εμφάνισης 3Δ εικονικών μοντέλων"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
-#, fuzzy
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "αφαίρεση via σε έδρες με διαμπερή τρύπα"
+msgstr "Εναλλαγή Προβολής 3Δ μοντέλων με xαρακτηριστικό 'Εικονικό'"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
@@ -1069,12 +1025,10 @@ msgid "Adds a floor plane below the board (slow)"
 msgstr "Προσθήκη ενός επιπέδου δαπέδου κάτω από την πλακέτα (αργό)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
-#, fuzzy
 msgid "Render materials with refractive properties on final render (slow)"
 msgstr "Εμφάνιση υλικών με ιδιότητες διαθλάσεων στην τελική απόδοση (αργό)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
-#, fuzzy
 msgid "Render materials with reflective properties on final render (slow)"
 msgstr "Εμφάνιση υλικών με ιδιότητες αντανακλάσεων στην τελική απόδοση (αργό)"
 
@@ -1167,7 +1121,7 @@ msgstr "Αλλαγή Προβολής Ζωνών"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:313
 msgid "Toggle display of ECO layers"
-msgstr ""
+msgstr "Εναλλαγή προβολής επιπέδων ECO"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:154 common/base_units.cpp:478
 #: common/dialogs/dialog_grid_settings_base.cpp:41
@@ -1716,7 +1670,7 @@ msgstr "GNU General Public License (GPL) έκδοση 3 ή οποιαδήποτ�
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr ""
+msgstr "Επικεφαλής Ομάδα Ανάπτυξης"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
@@ -1724,7 +1678,7 @@ msgstr ""
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
-msgstr ""
+msgstr "Πρόσθετες Συνεισφορές Από"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
@@ -1732,7 +1686,7 @@ msgstr "Άλλο"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr ""
+msgstr "Ομάδα Βιβλιοθηκάριων KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -2306,11 +2260,11 @@ msgstr "Περί του KiCad"
 #: common/dialogs/dialog_migrate_settings.cpp:51
 #, c-format
 msgid "Welcome to KiCad %s!"
-msgstr ""
+msgstr "Καλωσορίσατε στο KiCad %s!"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
 msgid "Import settings from a previous version (none found)"
-msgstr ""
+msgstr "Εισαγωγή ρυθμίσεων προηγούμενης έκδοσης (δεν βρέθηκε)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:118
 #, fuzzy
@@ -2319,7 +2273,7 @@ msgstr "Επιλογή Διαδρομής"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A5 148x210mm"
-msgstr ""
+msgstr "A5 148x210mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A4 210x297mm"
@@ -2842,7 +2796,7 @@ msgstr "Νέο Σύμβολο..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr ""
+msgstr "(ανάγνωση)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 #, fuzzy
@@ -2868,7 +2822,7 @@ msgstr "Ορισμός όλων των συντομεύσεων στις προ�
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:29
 #: pagelayout_editor/dialogs/panel_pl_editor_color_settings_base.cpp:21
 msgid "Theme:"
-msgstr ""
+msgstr "Θέμα:"
 
 #: common/dialogs/panel_color_settings_base.cpp:33
 msgid "Override individual item colors"
@@ -2879,6 +2833,7 @@ msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
 msgstr ""
+"Προβολή προκαθορισμένων χρωμάτων στοιχείων αγνοώντας χρώματα στις ιδιότητες."
 
 #: common/dialogs/panel_color_settings_base.cpp:41
 #, fuzzy
@@ -2887,7 +2842,7 @@ msgstr "Ανοικτός εκπομπός"
 
 #: common/dialogs/panel_color_settings_base.cpp:42
 msgid "Open the folder containing color themes"
-msgstr ""
+msgstr "Άνοιγμα φακέλου θεματικών χρωμάτων"
 
 #: common/dialogs/panel_common_settings.cpp:52
 msgid ""
@@ -2960,7 +2915,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr ""
+msgstr "Days"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -3088,36 +3043,44 @@ msgstr "Αυτόματη Δρομολόγηση Δικτύου"
 msgid ""
 "Automatically create backup archives of the current project when saving files"
 msgstr ""
+"Αυτόματη δημιουργία αντιγράφων ασφαλείας τρέχον έργου κατα την αποθήκευση "
+"αρχείων"
 
 #: common/dialogs/panel_common_settings_base.cpp:221
 msgid "Create backups when auto save occurs"
-msgstr ""
+msgstr "Δημιουργία αντιγράφων ασφαλείας κατα την αυτόματη αποθήκευση"
 
 #: common/dialogs/panel_common_settings_base.cpp:222
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
 msgstr ""
+"Δημιουργία αντιγράφων ασφαλείας κατα την αυτόματη αποθήκευση όταν είναι "
+"ενεργοποιημένη. Αν δεν είναι επιλεγμένο, αντίγραφα αφαλείας θα "
+"δημιουργούνται κατα τη χειροκίνητη αποθήκευση αρχείου."
 
 #: common/dialogs/panel_common_settings_base.cpp:226
 msgid "Maximum backups to keep:"
-msgstr ""
+msgstr "Μέγιστος αριθμός αντιγράφων αφαλείας:"
 
 #: common/dialogs/panel_common_settings_base.cpp:228
 msgid "How many backup files total to keep (set to 0 for no limit)"
 msgstr ""
+"Πόσα αρχεία αντιγράφων ασφαλείας να διατηρηθούν συνολικά (0 για απεριόριστο)"
 
 #: common/dialogs/panel_common_settings_base.cpp:235
 msgid "Maximum backups per day:"
-msgstr ""
+msgstr "Μέγιστος αριθμός αντιγράφων ασφαλείας ανα ημέρα:"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
+"Πόσα αρχεία αντιγράφων ασφαλείας να διατηρηθούν κάθε ημέρα (0 για "
+"απεριόριστο)"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
 msgid "Minimum time between backups:"
-msgstr ""
+msgstr "Ελάχιστος χρόνος μεταξύ αντιγράφων ασφαλείας:"
 
 #: common/dialogs/panel_common_settings_base.cpp:246
 msgid ""
@@ -3126,29 +3089,28 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:257
-#, fuzzy
 msgid "Maximum total backup size:"
-msgstr "Ελάχιστο μέγεθος via:"
+msgstr "Συνολικό μέγιστο μέγεθος αντιγράφου ασφαλείας:"
 
 #: common/dialogs/panel_common_settings_base.cpp:259
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
 msgstr ""
+"Αν ο συνολικός αριθμός αρχείων ασφαλείας ξεπεράσει το όριο, αρχαιότερα "
+"αντίγραφα θα διαγραφούν (0 για απεριόριστο)"
 
 #: common/dialogs/panel_common_settings_base.cpp:266
-#, fuzzy
 msgid "MB"
-msgstr "B"
+msgstr "MB"
 
 #: common/dialogs/panel_common_settings_base.cpp:277
-#, fuzzy
 msgid "Session"
-msgstr "Αναθεώρηση:"
+msgstr "Συνεδρία"
 
 #: common/dialogs/panel_common_settings_base.cpp:279
 msgid "Remember open files for next project launch"
-msgstr ""
+msgstr "Απομνημόνευση ανοιχτών αρχείων για την επόμενη εκκίνηση"
 
 #: common/dialogs/panel_common_settings_base.cpp:281
 msgid ""
@@ -3305,11 +3267,11 @@ msgstr "Λείπουν:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:143
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:147
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:151
 #, fuzzy
@@ -3519,7 +3481,7 @@ msgstr "Κλάση Δικτύου"
 #: common/dialogs/panel_setup_severities.cpp:40
 #: common/dialogs/panel_setup_severities.cpp:94
 msgid "Ignore"
-msgstr ""
+msgstr "Παράληψη"
 
 #: common/dialogs/panel_setup_severities.cpp:94
 msgid "From Pin Conflicts Map"
@@ -5334,24 +5296,24 @@ msgid "Missing node '%s' in '%s'"
 msgstr ""
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:41
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr "Άγνωστο στοιχείο \"%s\""
+msgstr "Άγνωστο στοιχείο '%s' σε '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Ελλιπής παράμετρος '%s' σε '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Άγνωστη Παράμετρος '%s' σε '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr "Αδυναμία ανοίγματος του αρχείου '%s'"
+msgstr "Αδυναμία ανοίγματος του αρχείου '%s' σε '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:115
 #, c-format
@@ -5369,49 +5331,45 @@ msgstr ""
 "Σφάλμα κατά τη φόρτωση του καταλόγου βιβλιοθήκης αποτυπωμάτων του έργου"
 
 #: common/project/project_archiver.cpp:89
-#, fuzzy
 msgid "Could not open archive file\n"
-msgstr "Αδυναμία ανοίγματος αρχείου βιβλιοθήκης."
+msgstr "Αδυναμία ανοίγματος αρχείου\n"
 
 #: common/project/project_archiver.cpp:98
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "Λάθος κωδικοποίηση συμπιεσμένου αρχείου\n"
 
 #: common/project/project_archiver.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr "Εξαγωγή αρχείου \"%s\""
+msgstr "Εξαγωγή αρχείου \"%s\"\n"
 
 #: common/project/project_archiver.cpp:145
-#, fuzzy
 msgid "Error extracting file!\n"
-msgstr "Σφάλμα εγγραφής στο αρχείο \"%s\""
+msgstr "Σφάλμα εγγραφής στο αρχείο \"%s\"\n"
 
 #: common/project/project_archiver.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "Αδυναμία δημιουργίας αρχείου zip \"%s\""
+msgstr "Αδυναμία δημιουργίας αρχείου zip \"%s\"\n"
 
 #: common/project/project_archiver.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\"\n"
-msgstr "Αρχειοθέτηση αρχείου \"%s\""
+msgstr "Αρχειοθέτηση αρχείου \"%s\"\n"
 
 #: common/project/project_archiver.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr "Αρχειοθέτηση αρχείου \"%s\""
+msgstr "Αρχειοθέτηση αρχείου \"%s\": Απέτυχε!\n"
 
 #: common/project/project_archiver.cpp:270
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
-msgstr ""
-"\n"
-"Αρχείο zip \"%s\" δημιουργήθηκε (%d bytes)"
+msgstr "Αρχείο zip \"%s\" δημιουργήθηκε (%s ασυμπίετο, %s συμπιεσμένο)\n"
 
 #: common/rc_item.cpp:328
 msgid "Excluded "
-msgstr ""
+msgstr "Αποκλείσθηκε "
 
 #: common/rc_item.cpp:332
 msgid "Error: "
@@ -5439,19 +5397,16 @@ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
 msgstr "Σφάλμα εγγραφής OUTPUTSTREAM_OUTPUTFORMATTER"
 
 #: common/settings/color_settings.cpp:312
-#, fuzzy
 msgid "(Footprints)"
-msgstr "Αποτυπώματα"
+msgstr "(Αποτυπώματα)"
 
 #: common/settings/color_settings.cpp:364
-#, fuzzy
 msgid "KiCad Default"
 msgstr "Προκαθορισμένο"
 
 #: common/settings/color_settings.cpp:369
-#, fuzzy
 msgid "KiCad Classic"
-msgstr "2 Επίπεδα"
+msgstr "Classic"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:56
 #, c-format
@@ -5459,18 +5414,18 @@ msgid "Field%d"
 msgstr "Πεδίο%d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Κλείσιμο"
+msgstr "Κλείσιμο %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "Έξοδος"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Έξοδος"
+msgstr "Έξοδος %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -10452,7 +10407,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1095
 msgid "Lambda:"
-msgstr ""
+msgstr "Λάμδα:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1100
 msgid "type of random generator for source is invalid"
@@ -10730,7 +10685,7 @@ msgstr "Θόρυβος μεταβατικής φάσης"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:859
 msgid "Uniform"
-msgstr ""
+msgstr "Ομοιόμορφο"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:859
 #, fuzzy
@@ -21398,7 +21353,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
 msgid "0.000"
-msgstr ""
+msgstr "0000"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:170
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:129
@@ -23959,7 +23914,7 @@ msgstr "Όλα τα επίπεδα χαλκού"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:911
 #, c-format
 msgid "%s, %s and connected layers"
-msgstr ""
+msgstr "%s, %s και συνδεδεμένα επίπεδα"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:914
 #, fuzzy
@@ -27001,7 +26956,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:133
 msgid "How many digits of precision to show"
-msgstr ""
+msgstr "Πόσα ψηφία ακρίβειας εμφανίζονται"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:149
 msgid ""
@@ -31917,7 +31872,7 @@ msgstr "Μετακίνηση των επιλεγμένων αντικειμέν�
 
 #: pcbnew/tools/pcb_actions.cpp:658
 msgid "Ungroup"
-msgstr ""
+msgstr "Αποομαδοποίηση"
 
 #: pcbnew/tools/pcb_actions.cpp:663
 #, fuzzy
@@ -32339,7 +32294,7 @@ msgstr "Εκκαθάριση πλακέτας"
 
 #: pcbnew/tools/pcb_actions.cpp:1055
 msgid "Run various diagnostics and attempt to repair board"
-msgstr ""
+msgstr "Εκκίνηση διαφόρων διαγνωστικών και προσπάθεια επιδιόρθωσης πλακέτας"
 
 #: pcbnew/tools/pcb_actions.cpp:1063
 msgid "Align to Top"
@@ -32623,7 +32578,7 @@ msgstr "Βρέθηκαν και αντικαταστάθηκαν %d διπλές
 #: pcbnew/tools/pcb_editor_control.cpp:476
 #, c-format
 msgid "%d potential problems repaired."
-msgstr ""
+msgstr "%d πιθανά προβλήματα επιδιορθώθηκαν."
 
 #: pcbnew/tools/pcb_editor_control.cpp:481
 #, fuzzy
@@ -32799,7 +32754,7 @@ msgstr "Διάμετρος via:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:480
 #, c-format
 msgid "Diameter constraints: min %s max %s."
-msgstr ""
+msgstr "Περιορισμοί διαμέτρου: ελάχιστο %s μέγιστο %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:487
 #, fuzzy
@@ -32814,7 +32769,7 @@ msgstr "Διόρθωση πλάτους δρόμου:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:514
 #, c-format
 msgid "Annular width constraints: min %s max %s."
-msgstr ""
+msgstr "Περιορισμοί δακτυλιοειδούς πλάτους: ελάχιστο %s μέγιστο %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:525
 #, fuzzy
@@ -33203,7 +33158,7 @@ msgstr "Επίπεδα Χαλκού:"
 
 #: pcbnew/widgets/appearance_controls.cpp:587
 msgid "Non-active layers will be shown in full color"
-msgstr ""
+msgstr "Ανενεργά επίπεδα θα προβάλλονται με πλήρες χρώμα"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
@@ -33574,11 +33529,11 @@ msgstr ""
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
 msgid "Only %s"
-msgstr ""
+msgstr "Μόνο %s"
 
 #: pcbnew/zone.cpp:527
 msgid "Rule Area"
-msgstr ""
+msgstr "Περιοχή Κανόνων"
 
 #: pcbnew/zone.cpp:529
 #, fuzzy
@@ -33656,7 +33611,7 @@ msgstr "(Αποκοπή)"
 
 #: pcbnew/zone.cpp:859
 msgid "(Rule Area)"
-msgstr ""
+msgstr "(Περιοχή Κανόνων)"
 
 #: pcbnew/zone.cpp:877
 #, c-format
