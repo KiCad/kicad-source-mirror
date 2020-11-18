@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2008-2017 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -195,7 +195,7 @@ int ExecuteFile( wxWindow* frame, const wxString& ExecFile, const wxString& para
 bool OpenPDF( const wxString& file )
 {
     wxString command;
-    const wxString& filename = file;
+    wxString filename = file;
 
     Pgm().ReadPdfBrowserInfos();
 
@@ -210,11 +210,20 @@ bool OpenPDF( const wxString& file )
     }
     else
     {
+        // wxLaunchDefaultApplication on Unix systems is run as an external process passing
+        // the filename to the appropriate application as a command argument.  Spaces in the
+        // path and/or file name will cause argument parsing issues so always quote the file
+        // name and path.  This is applicable to all Unix platforms.
+        // See https://github.com/wxWidgets/wxWidgets/blob/master/src/unix/utilsx11.cpp#L2654
+#ifdef __WXGTK__
+        filename = wxT( "\"" ) + filename + wxT( "\"" );
+#endif
+
         if( wxLaunchDefaultApplication( filename ) )
             return true;
 
 #ifdef __WXMAC__
-        command = wxT( "/usr/bin/open -a '" ) + filename + wxT( "'" );
+        command = wxT( "/usr/bin/open -a '" ) + file + wxT( "'" );
 #endif
         // If launching the system default PDF viewer fails, fall through with empty command
         // string so the error message is displayed.
@@ -330,7 +339,7 @@ bool doPrintFile( const wxString& file, bool aDryRun )
 
     if( !aDryRun )
     {
-        DisplayError( nullptr, wxString::Format( _( "Cannot print '%s'.\n\nUnknown filetype." ),
+        DisplayError( nullptr, wxString::Format( _( "Cannot print '%s'.\n\nUnknown file type." ),
                                                  file ) );
     }
 
