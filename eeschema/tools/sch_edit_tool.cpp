@@ -454,16 +454,10 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
 
-            if( clockwise )
-                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().RotateCW() );
-            else
-                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().RotateCCW() );
+            textItem->Rotate90( clockwise );
 
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
-                label->UpdateIntersheetRefProps();
-            }
+            if( textItem->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
+                textItem->AutoplaceFields( m_frame->GetScreen(), false );
 
             break;
         }
@@ -473,6 +467,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // Rotate pin within parent sheet
             SCH_SHEET_PIN* pin   = static_cast<SCH_SHEET_PIN*>( item );
             SCH_SHEET*     sheet = pin->GetParent();
+
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
             {
                 pin->Rotate( sheet->GetBoundingBox().GetCenter() );
@@ -483,9 +478,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
-            {
                 item->Rotate( item->GetPosition() );
-            }
+
             break;
 
         case SCH_FIELD_T:
@@ -505,9 +499,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         case SCH_BITMAP_T:
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
-            {
                 item->Rotate( item->GetPosition() );
-            }
+
             // The bitmap is cached in Opengl: clear the cache to redraw
             getView()->RecacheAllItems();
             break;

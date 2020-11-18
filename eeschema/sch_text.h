@@ -280,6 +280,8 @@ public:
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
+    virtual void Rotate90( bool aClockwise );
+
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
         return SCH_ITEM::Matches( GetText(), aSearchData );
@@ -398,6 +400,8 @@ public:
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
+
+    void Rotate90( bool aClockwise ) override;
 
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 

@@ -229,6 +229,15 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 }
 
 
+void SCH_TEXT::Rotate90( bool aClockwise )
+{
+    if( aClockwise )
+        SetLabelSpinStyle( GetLabelSpinStyle().RotateCW() );
+    else
+        SetLabelSpinStyle( GetLabelSpinStyle().RotateCCW() );
+}
+
+
 void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
@@ -817,8 +826,11 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const wxPoint& pos, const wxString& text ) :
     m_isDangling = true;
     SetMultilineAllowed( false );
 
+    SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
+
     m_intersheetRefsField.SetText( wxT( "${INTERSHEET_REFS}" ) );
     m_intersheetRefsField.SetLayer( LAYER_GLOBLABEL );
+    m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
     m_fieldsAutoplaced = FIELDS_AUTOPLACED_AUTO;
 }
 
@@ -928,34 +940,72 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
     {
     default:
         wxASSERT_MSG( 1, "Bad spin style" );
-        break;
+        m_spin_style = LABEL_SPIN_STYLE::RIGHT;
+        KI_FALLTHROUGH;
 
     case LABEL_SPIN_STYLE::RIGHT: // Horiz Normal Orientation
-        //
-        m_spin_style = LABEL_SPIN_STYLE::RIGHT; // Handle the error spin style by resetting
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case LABEL_SPIN_STYLE::UP: // Vert Orientation UP
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case LABEL_SPIN_STYLE::LEFT: // Horiz Orientation
         SetTextAngle( TEXT_ANGLE_HORIZ );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
 
     case LABEL_SPIN_STYLE::BOTTOM: //  Vert Orientation BOTTOM
         SetTextAngle( TEXT_ANGLE_VERT );
         SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         break;
     }
+}
+
+
+void SCH_GLOBALLABEL::Rotate90( bool aClockwise )
+{
+    SCH_TEXT::Rotate90( aClockwise );
+
+    if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_VERT
+            && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+    {
+        if( !aClockwise )
+            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
+    }
+    else if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_VERT
+                && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    {
+        if( !aClockwise )
+            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
+    }
+    else if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_HORIZ
+                && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+    {
+        if( aClockwise )
+            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
+    }
+    else if( m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_HORIZ
+                && m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    {
+        if( aClockwise )
+            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+        m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
+    }
+
+    wxPoint pos = m_intersheetRefsField.GetTextPos();
+    RotatePoint( &pos, GetPosition(), aClockwise ? -900 : 900 );
+    m_intersheetRefsField.SetTextPos( pos );
 }
 
 
@@ -986,28 +1036,24 @@ void SCH_GLOBALLABEL::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
     case LABEL_SPIN_STYLE::LEFT:
         m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
         m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         offset.x = - ( labelLen + margin / 2 );
         break;
 
     case LABEL_SPIN_STYLE::UP:
         m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
         m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         offset.y = - ( labelLen + margin / 2 );
         break;
 
     case LABEL_SPIN_STYLE::RIGHT:
         m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_HORIZ );
         m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
-        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         offset.x = labelLen + margin /2 ;
         break;
 
     case LABEL_SPIN_STYLE::BOTTOM:
         m_intersheetRefsField.SetTextAngle( TEXT_ANGLE_VERT );
         m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
-        m_intersheetRefsField.SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
         offset.y = labelLen + margin / 2;
         break;
     }
