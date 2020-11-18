@@ -111,15 +111,14 @@ void EDA_MSG_PANEL::OnPaint( wxPaintEvent& aEvent )
 }
 
 
-void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText,
-                                   const wxString& aLowerText,
-                                   COLOR4D aColor, int aPad )
+void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText, const wxString& aLowerText,
+                                   int aPadding )
 {
     wxString    text;
     wxSize      drawSize = GetClientSize();
 
     text = ( aUpperText.Len() > aLowerText.Len() ) ? aUpperText : aLowerText;
-    text.Append( ' ', aPad );
+    text.Append( ' ', aPadding );
 
     MSG_PANEL_ITEM item;
 
@@ -135,7 +134,6 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText,
 
     item.m_UpperText = aUpperText;
     item.m_LowerText = aLowerText;
-    item.m_Color = aColor;
     m_Items.push_back( item );
     m_last_x += computeTextSize( text ).x;
 
@@ -147,7 +145,7 @@ void EDA_MSG_PANEL::AppendMessage( const wxString& aUpperText,
 
 
 void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
-                                const wxString& aLowerText, COLOR4D aColor )
+                                const wxString& aLowerText )
 {
     wxPoint pos;
     wxSize drawSize = GetClientSize();
@@ -166,7 +164,6 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 
     item.m_UpperText = aUpperText;
     item.m_LowerText = aLowerText;
-    item.m_Color = aColor;
 
     int ndx;
 
@@ -190,9 +187,7 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
     }
 
     if( ndx == limit )        // mutually exclusive with two above if tests
-    {
         m_Items.push_back( item );
-    }
 
     Refresh();
 }
@@ -200,20 +195,15 @@ void EDA_MSG_PANEL::SetMessage( int aXPosition, const wxString& aUpperText,
 
 void EDA_MSG_PANEL::showItem( wxDC& aDC, const MSG_PANEL_ITEM& aItem )
 {
-    // COLOR4D color = aItem.m_Color;
     COLOR4D color = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
 
     aDC.SetTextForeground( color.ToColour() );
 
     if( !aItem.m_UpperText.IsEmpty() )
-    {
         aDC.DrawText( aItem.m_UpperText, aItem.m_X, aItem.m_UpperY );
-    }
 
     if( !aItem.m_LowerText.IsEmpty() )
-    {
         aDC.DrawText( aItem.m_LowerText, aItem.m_X, aItem.m_LowerY );
-    }
 }
 
 

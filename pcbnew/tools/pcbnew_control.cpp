@@ -1068,7 +1068,7 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         MSG_PANEL_ITEMS msgItems;
         wxString        msg = wxString::Format( wxT( "%d" ), selection.GetSize() );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg, DARKCYAN ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Selected Items" ), msg ) );
         m_frame->SetMsgPanel( msgItems );
     }
     else if( auto editFrame = dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
@@ -1082,10 +1082,10 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         wxString        msg;
 
         msg = footprint->GetFPID().GetLibNickname().wx_str();
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg, DARKCYAN ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );
 
         msg = footprint->GetFPID().GetLibItemName().wx_str();
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg, DARKCYAN ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Footprint Name" ), msg ) );
 
         wxDateTime date( static_cast<time_t>( footprint->GetLastEditTime() ) );
 
@@ -1095,15 +1095,15 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
         else
             msg = _( "Unknown" );
 
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg, BROWN ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Last Change" ), msg ) );
 
         msg.Printf( wxT( "%zu" ), (size_t) footprint->GetPadCount( DO_NOT_INCLUDE_NPTH ) );
-        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg, BLUE ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( _( "Pads" ), msg ) );
 
         wxString doc, keyword;
         doc.Printf( _( "Doc: %s" ), footprint->GetDescription() );
         keyword.Printf( _( "Keywords: %s" ), footprint->GetKeywords() );
-        msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword, BLACK ) );
+        msgItems.emplace_back( MSG_PANEL_ITEM( doc, keyword ) );
 
         m_frame->SetMsgPanel( msgItems );
     }

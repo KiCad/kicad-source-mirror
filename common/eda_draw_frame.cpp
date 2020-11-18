@@ -601,11 +601,11 @@ void EDA_DRAW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
-                                     COLOR4D color, int pad )
+void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& aTextUpper, const wxString& aTextLower,
+                                     int aPadding )
 {
     if( m_messagePanel )
-        m_messagePanel->AppendMessage( textUpper, textLower, color, pad );
+        m_messagePanel->AppendMessage( aTextUpper, aTextLower, aPadding );
 }
 
 

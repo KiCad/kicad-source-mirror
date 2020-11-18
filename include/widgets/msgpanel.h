@@ -58,18 +58,16 @@ class MSG_PANEL_ITEM
     int         m_LowerY;
     wxString    m_UpperText;
     wxString    m_LowerText;
-    COLOR4D     m_Color;
-    int         m_Pad;
+    int         m_Padding;
 
     friend class EDA_MSG_PANEL;
 
 public:
-    MSG_PANEL_ITEM( const wxString& aUpperText, const wxString& aLowerText, COLOR4D aColor,
-                    int aPad = MSG_PANEL_DEFAULT_PAD ) :
-        m_UpperText( aUpperText ),
-        m_LowerText( aLowerText ),
-        m_Color( aColor ),
-        m_Pad( aPad )
+    MSG_PANEL_ITEM( const wxString& aUpperText, const wxString& aLowerText,
+                    int aPadding = MSG_PANEL_DEFAULT_PAD ) :
+            m_UpperText( aUpperText ),
+            m_LowerText( aLowerText ),
+            m_Padding( aPadding )
     {
         m_X = 0;
         m_UpperY = 0;
@@ -77,13 +75,12 @@ public:
     }
 
     MSG_PANEL_ITEM() :
-        m_Pad( MSG_PANEL_DEFAULT_PAD )
+            m_Padding( MSG_PANEL_DEFAULT_PAD )
 
     {
         m_X = 0;
         m_UpperY = 0;
         m_LowerY = 0;
-        m_Color = COLOR4D::UNSPECIFIED;
     }
 
     void SetUpperText( const wxString& aUpperText ) { m_UpperText = aUpperText; }
@@ -92,17 +89,12 @@ public:
     void SetLowerText( const wxString& aLowerText )  { m_LowerText = aLowerText; }
     const wxString& GetLowerText() const { return m_LowerText; }
 
-    void SetColor( COLOR4D aColor ) { m_Color = aColor; }
-    COLOR4D GetColor() const { return m_Color; }
-
-    void SetPadding( int aPad )  { m_Pad = aPad; }
-    int GetPadding() const { return m_Pad; }
+    void SetPadding( int aPadding )  { m_Padding = aPadding; }
+    int GetPadding() const { return m_Padding; }
 };
 
 
 typedef std::vector<MSG_PANEL_ITEM>      MSG_PANEL_ITEMS;
-typedef MSG_PANEL_ITEMS::iterator        MSG_PANEL_ITEMS_ITER;
-typedef MSG_PANEL_ITEMS::const_iterator  MSG_PANEL_ITEMS_CITER;
 
 
 /**
@@ -155,10 +147,8 @@ public:
      *                   to set the message using the last message position.
      * @param aUpperText The text to be displayed in top line.
      * @param aLowerText The text to be displayed in bottom line.
-     * @param aColor Color of the text to display.
      */
-    void SetMessage( int aXPosition, const wxString& aUpperText,
-                     const wxString& aLowerText, COLOR4D aColor );
+    void SetMessage( int aXPosition, const wxString& aUpperText, const wxString& aLowerText );
 
    /**
     * Function AppendMessage
@@ -171,11 +161,9 @@ public:
     *
     * @param aUpperText The message upper text.
     * @param aLowerText The message lower text.
-    * @param aColor A color to use for the message text
-    * @param aPad Number of spaces to pad between messages (default = 4).
+    * @param aPadding Number of spaces to pad between messages (default = 4).
     */
-    void AppendMessage( const wxString& aUpperText, const wxString& aLowerText,
-                        COLOR4D aColor, int aPad = 6 );
+    void AppendMessage( const wxString& aUpperText, const wxString& aLowerText, int aPadding = 6 );
 
    /**
     * Function AppendMessage
@@ -187,7 +175,7 @@ public:
     void AppendMessage( const MSG_PANEL_ITEM& aMessageItem )
     {
         AppendMessage( aMessageItem.GetUpperText(), aMessageItem.GetLowerText(),
-                       aMessageItem.GetColor(), aMessageItem.GetPadding() );
+                       aMessageItem.GetPadding() );
     }
 
     DECLARE_EVENT_TABLE()

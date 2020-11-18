@@ -558,7 +558,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
             AccumulateDescription( msg, _( "No footprints" ) );
 
         if( !msg.IsEmpty() )
-            aList.emplace_back( MSG_PANEL_ITEM( _( "Restrictions" ), msg, RED ) );
+            aList.emplace_back( MSG_PANEL_ITEM( _( "Restrictions" ), msg ) );
     }
     else if( IsOnCopperLayer() )
     {
@@ -633,7 +633,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     // Useful for statistics, especially when zones are complex the number of hatches
     // and filled polygons can explain the display and DRC calculation time:
     msg.Printf( wxT( "%d" ), (int) m_borderHatchLines.size() );
-    aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg, BLUE ) );
+    aList.emplace_back( MSG_PANEL_ITEM( _( "HatchBorder Lines" ), msg ) );
 
     PCB_LAYER_ID layer = m_layer;
 
@@ -641,8 +641,10 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     // TODO: Figure out a way for items to know the active layer without the whole edit frame?
 #if 0
     if( PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( aFrame ) )
+    {
         if( m_FilledPolysList.count( pcbframe->GetActiveLayer() ) )
             layer = pcbframe->GetActiveLayer();
+    }
 #endif
 
     if( !GetIsRuleArea() )
@@ -655,7 +657,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
         if( layer_it != m_FilledPolysList.end() )
         {
             msg.Printf( wxT( "%d" ), layer_it->second.TotalVertices() );
-            aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg, BLUE ) );
+            aList.emplace_back( MSG_PANEL_ITEM( _( "Corner Count" ), msg ) );
         }
     }
 }

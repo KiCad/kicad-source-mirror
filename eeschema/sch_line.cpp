@@ -817,14 +817,14 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     default:         msg = _( "Graphical" ); break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg ) );
 
     if( GetLineStyle() != GetEffectiveLineStyle() )
         msg = _( "from netclass" );
     else
         msg = GetLineStyleName( GetLineStyle() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Style" ), msg, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Style" ), msg ) );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
 
@@ -841,7 +841,7 @@ void SCH_LINE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
             if( netSettings.m_NetClassAssignments.count( netname ) )
                 netclassName = netSettings.m_NetClassAssignments[ netname ];
 
-            aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName, DARKRED ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
         }
     }
 }

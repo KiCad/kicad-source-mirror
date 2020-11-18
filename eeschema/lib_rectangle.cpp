@@ -193,7 +193,7 @@ void LIB_RECTANGLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
 
     wxString msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Width" ), msg ) );
 }
 
 

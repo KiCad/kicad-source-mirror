@@ -156,14 +156,14 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Pin" ), CYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Pin" ) ) );
 
     if( m_libPin->GetUnit() == 0 )
         msg = _( "All" );
     else
         msg.Printf( wxT( "%d" ), m_libPin->GetUnit() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg ) );
 
     if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
         msg = _( "no" );
@@ -172,37 +172,36 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     else
         msg = wxT( "?" );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Converted" ), msg ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetName(), DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), msg, DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( GetType() ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetName() ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), msg ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( GetType() ) ) );
 
     msg = PinShapeGetText( GetShape() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
 
     msg = IsVisible() ? _( "Yes" ) : _( "No" );
-    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), msg ) );
 
     // Display pin length
     msg = StringFromValue( aFrame->GetUserUnits(), GetLength() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, MAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg ) );
 
     msg = PinOrientationName( (unsigned) PinOrientationIndex( GetOrientation() ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, DARKMAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg ) );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.x );
-    aList.emplace_back( _( "Pos X" ), msg, DARKMAGENTA );
+    aList.emplace_back( _( "Pos X" ), msg );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_position.y );
-    aList.emplace_back( _( "Pos Y" ), msg, DARKMAGENTA );
+    aList.emplace_back( _( "Pos Y" ), msg );
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
     SCH_COMPONENT*  symbol = GetParentSymbol();
 
-    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValue( currentSheet, true ),
-                        DARKCYAN );
+    aList.emplace_back( symbol->GetRef( currentSheet ), symbol->GetValue( currentSheet, true ) );
 
 #if defined(DEBUG)
 

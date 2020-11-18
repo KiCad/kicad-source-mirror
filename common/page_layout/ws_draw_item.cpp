@@ -101,7 +101,7 @@ bool WS_DRAW_ITEM_BASE::HitTest( const EDA_RECT& aRect, bool aContained, int aAc
 
 void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    wxString            msg;
+    wxString      msg;
     WS_DATA_ITEM* dataItem = GetPeer();
 
     if( dataItem == nullptr )   // Is only a pure graphic item used in page layout editor
@@ -111,49 +111,49 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS
     switch( dataItem->GetType() )
     {
     case WS_DATA_ITEM::WS_SEGMENT:
-        aList.push_back( MSG_PANEL_ITEM( _( "Line" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Line" ), msg ) );
         break;
 
     case WS_DATA_ITEM::WS_RECT:
-        aList.push_back( MSG_PANEL_ITEM( _( "Rectangle" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Rectangle" ), msg ) );
         break;
 
     case WS_DATA_ITEM::WS_TEXT:
         msg = static_cast<WS_DRAW_ITEM_TEXT*>( this )->GetShownText();
-        aList.push_back( MSG_PANEL_ITEM( _( "Text" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Text" ), msg ) );
         break;
 
     case WS_DATA_ITEM::WS_POLYPOLYGON:
-        aList.push_back( MSG_PANEL_ITEM( _( "Imported Shape" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Imported Shape" ), msg ) );
         break;
 
     case WS_DATA_ITEM::WS_BITMAP:
-        aList.push_back( MSG_PANEL_ITEM( _( "Image" ), msg, DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Image" ), msg ) );
         break;
     }
 
     switch( dataItem->GetPage1Option() )
     {
-    case FIRST_PAGE_ONLY:  msg = _( "First Page Only" ); break;
+    case FIRST_PAGE_ONLY:  msg = _( "First Page Only" );  break;
     case SUBSEQUENT_PAGES: msg = _( "Subsequent Pages" ); break;
-    default:               msg = _( "All Pages" ); break;
+    default:               msg = _( "All Pages" );        break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "First Page Option" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "First Page Option" ), msg ) );
 
     msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_RepeatCount );
-    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Count" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Count" ), msg ) );
 
     msg = MessageTextFromValue( EDA_UNITS::UNSCALED, dataItem->m_IncrementLabel );
-    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Label Increment" ), msg, DARKGRAY ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Label Increment" ), msg ) );
 
     msg.Printf( wxT( "(%s, %s)" ),
                 MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.x ),
                 MessageTextFromValue( aFrame->GetUserUnits(), dataItem->m_IncrementVector.y ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Position Increment" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Repeat Position Increment" ), msg ) );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Comment" ), dataItem->m_Info, MAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Comment" ), dataItem->m_Info ) );
 }
 
 

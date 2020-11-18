@@ -1145,37 +1145,37 @@ void SYMBOL_EDIT_FRAME::DisplaySymbolDatasheet()
 
     wxString msg = m_my_part->GetName();
 
-    AppendMsgPanel( _( "Name" ), msg, BLUE, 8 );
+    AppendMsgPanel( _( "Name" ), msg, 8 );
 
     if( m_my_part->IsAlias() )
     {
         PART_SPTR parent = m_my_part->GetParent().lock();
 
         msg = parent ? parent->GetName() : _( "Undefined!" );
-        AppendMsgPanel( _( "Parent" ), msg, BROWN, 8 );
+        AppendMsgPanel( _( "Parent" ), msg, 8 );
     }
 
     static wxChar UnitLetter[] = wxT( "?ABCDEFGHIJKLMNOPQRSTUVWXYZ" );
     msg = UnitLetter[m_unit];
 
-    AppendMsgPanel( _( "Unit" ), msg, BROWN, 8 );
+    AppendMsgPanel( _( "Unit" ), msg, 8 );
 
     if( m_convert > 1 )
         msg = _( "Convert" );
     else
         msg = _( "Normal" );
 
-    AppendMsgPanel( _( "Body" ), msg, GREEN, 8 );
+    AppendMsgPanel( _( "Body" ), msg, 8 );
 
     if( m_my_part->IsPower() )
         msg = _( "Power Symbol" );
     else
         msg = _( "Symbol" );
 
-    AppendMsgPanel( _( "Type" ), msg, MAGENTA, 8 );
-    AppendMsgPanel( _( "Description" ), m_my_part->GetDescription(), CYAN, 8 );
-    AppendMsgPanel( _( "Keywords" ), m_my_part->GetKeyWords(), DARKDARKGRAY );
-    AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDatasheetField().GetText(), DARKDARKGRAY );
+    AppendMsgPanel( _( "Type" ), msg, 8 );
+    AppendMsgPanel( _( "Description" ), m_my_part->GetDescription(), 8 );
+    AppendMsgPanel( _( "Keywords" ), m_my_part->GetKeyWords() );
+    AppendMsgPanel( _( "Datasheet" ), m_my_part->GetDatasheetField().GetText() );
 }
 
 

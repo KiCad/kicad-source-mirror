@@ -418,7 +418,7 @@ void SCH_BUS_ENTRY_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEM
     case LAYER_BUS:  msg = _( "Bus" );  break;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Bus Entry Type" ), msg, DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Bus Entry Type" ), msg ) );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
 

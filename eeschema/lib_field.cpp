@@ -430,19 +430,19 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList 
 
     // Display style:
     msg = GetTextStyleName();
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg, MAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), msg ) );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg ) );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Height" ), msg ) );
 
     // Display field name (ref, value ...)
-    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName(), BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Field" ), GetName() ) );
 
     // Display field text:
-    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText(), BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetShownText() ) );
 }
 
 

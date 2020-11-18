@@ -640,7 +640,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     default: return;
     }
 
-    aList.push_back( MSG_PANEL_ITEM( msg, GetShownText(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( msg, GetShownText() ) );
 
     switch( GetLabelSpinStyle() )
     {
@@ -662,18 +662,18 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
     if( IsBold() )
         style += 2;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style], BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), textStyle[style] ) );
 
     // Display electrical type if it is relevant
     if( Type() == SCH_GLOBAL_LABEL_T || Type() == SCH_HIER_LABEL_T || Type() == SCH_SHEET_PIN_T )
     {
         msg = getElectricalTypeLabel( GetShape() );
-        aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg, BLUE ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Type" ), msg ) );
     }
 
     // Display text size (X or Y value, with are the same value in Eeschema)
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg ) );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
 
@@ -689,7 +689,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
             if( netSettings.m_NetClassAssignments.count( netname ) )
             {
                 const wxString& netclassName = netSettings.m_NetClassAssignments[ netname ];
-                aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName, DARKRED ) );
+                aList.push_back( MSG_PANEL_ITEM( _( "Assigned Netclass" ), netclassName ) );
             }
         }
     }

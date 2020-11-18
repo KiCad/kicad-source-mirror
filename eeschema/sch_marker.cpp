@@ -135,7 +135,7 @@ const EDA_RECT SCH_MARKER::GetBoundingBox() const
 void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
     aList.push_back( MSG_PANEL_ITEM( _( "Electronics Rule Check Error" ),
-                                     m_rcItem->GetErrorMessage(), DARKRED ) );
+                                     m_rcItem->GetErrorMessage() ) );
 }
 
 

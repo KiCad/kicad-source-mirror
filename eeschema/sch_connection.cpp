@@ -350,7 +350,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     wxString msg, group_name;
     std::vector<wxString> group_members;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), UnescapeString( Name() ), BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), UnescapeString( Name() ) ) );
 
     // NOTE(JE) Disabling this for now, because net codes are generated in the netlist exporter
     // in order to avoid sort costs.  It may make sense to just tear out net codes from the
@@ -359,7 +359,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     if( !IsBus() )
     {
         msg.Printf( "%d", m_net_code );
-        aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg, BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg ) );
     }
 #endif
 
@@ -372,7 +372,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
         for( const auto& member : alias->Members() )
             members << member << " ";
 
-        aList.push_back( MSG_PANEL_ITEM( msg, members, RED ) );
+        aList.push_back( MSG_PANEL_ITEM( msg, members ) );
     }
     else if( NET_SETTINGS::ParseBusGroup( m_name, &group_name, &group_members ) )
     {
@@ -387,7 +387,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
                 for( const auto& member : group_alias->Members() )
                     members << member << " ";
 
-                aList.push_back( MSG_PANEL_ITEM( msg, members, RED ) );
+                aList.push_back( MSG_PANEL_ITEM( msg, members ) );
             }
         }
     }
@@ -401,16 +401,16 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     if( IsBus() )
     {
         msg.Printf( "%d", m_bus_code );
-        aList.push_back( MSG_PANEL_ITEM( "Bus Code", msg, BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( "Bus Code", msg ) );
     }
 
     msg.Printf( "%d", m_subgraph_code );
-    aList.push_back( MSG_PANEL_ITEM( "Subgraph Code", msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( "Subgraph Code", msg ) );
 
     if( auto driver = Driver() )
     {
         msg.Printf( "%s at %p", driver->GetSelectMenuText( EDA_UNITS::MILLIMETRES ), driver );
-        aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg, RED ) );
+        aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg ) );
     }
 #endif
 }

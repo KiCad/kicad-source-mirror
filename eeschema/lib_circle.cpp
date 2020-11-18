@@ -247,10 +247,10 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
-    aList.push_back( MSG_PANEL_ITEM(  _( "Line Width" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM(  _( "Line Width" ), msg ) );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetRadius() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ),
                 bBox.GetOrigin().x,
@@ -258,7 +258,7 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList
                 bBox.GetEnd().x,
                 bBox.GetEnd().y );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Bounding Box" ), msg ) );
 }
 
 

@@ -743,9 +743,9 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 
     // Display start and end positions:
     msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "Start pos" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "Start pos" ), msg ) );
     msg.Printf( wxT( "%d %d" ), m_End.x, m_End.y );
-    aList.push_back( MSG_PANEL_ITEM( wxT( "End pos" ), msg, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( wxT( "End pos" ), msg ) );
 #endif
 
     // Display the State member
@@ -757,7 +757,7 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     if( GetState( TRACK_AR ) )
         msg[2] = 'A';
 
-    aList.emplace_back( _( "Status" ), msg, MAGENTA );
+    aList.emplace_back( _( "Status" ), msg );
 }
 
 

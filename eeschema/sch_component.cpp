@@ -1352,19 +1352,19 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
     {
         if( m_part.get() != dummy() )
         {
-            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ) ) );
 
             msg = m_part->IsPower() ? _( "Power symbol" ) : _( "Value" );
 
-            aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet, true ), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( msg, GetValue( currentSheet, true ) ) );
 
 #if 0       // Display component flags, for debug only
-            aList.push_back( MSG_PANEL_ITEM( _( "flags" ),
-                             wxString::Format("%X", GetEditFlags()), BROWN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "flags" ), wxString::Format( "%X",
+                                                                             GetEditFlags() ) ) );
 #endif
 
             // Display component reference in library and library
-            aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName() ) );
 
             if( !m_part->IsRoot() )
             {
@@ -1375,16 +1375,15 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
                 if( parent )
                     msg = parent->GetName();
 
-                aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), msg, BROWN ) );
+                aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), msg ) );
             }
             else if( !m_lib_id.GetLibNickname().empty() )
             {
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),
-                                                 BROWN ) );
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname() ) );
             }
             else
             {
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Undefined!!!" ), RED ) );
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "Undefined!!!" ) ) );
             }
 
             // Display the current associated footprint, if exists.
@@ -1393,31 +1392,31 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aL
             if( msg.IsEmpty() )
                 msg = _( "<Unknown>" );
 
-            aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg, DARKRED ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), msg ) );
 
             // Display description of the component, and keywords found in lib
             aList.push_back( MSG_PANEL_ITEM( _( "Description" ), m_part->GetDescription(),
                                              DARKCYAN ) );
-            aList.push_back( MSG_PANEL_ITEM( _( "Keywords" ), m_part->GetKeyWords(), DARKCYAN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Keywords" ), m_part->GetKeyWords() ) );
         }
     }
     else
     {
-        aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ), DARKCYAN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( currentSheet ) ) );
 
-        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetValue( currentSheet, true ), DARKCYAN ) );
-        aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetValue( currentSheet, true ) ) );
+        aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName() ) );
 
         wxString libNickname = GetLibId().GetLibNickname();
 
         if( libNickname.empty() )
         {
-            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "No library defined!" ), RED ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "No library defined!" ) ) );
         }
         else
         {
             msg.Printf( _( "Symbol not found in %s!" ), libNickname );
-            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), msg , RED ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), msg ) );
         }
     }
 }

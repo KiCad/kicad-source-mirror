@@ -356,10 +356,10 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
         if( parent )
             parentName = parent->GetName();
 
-        AppendMsgPanel( _( "Name" ), m_previewItem->GetName(), BLUE, 6 );
-        AppendMsgPanel( _( "Parent" ),  parentName, RED, 6 );
-        AppendMsgPanel( _( "Description" ), m_previewItem->GetDescription(), CYAN, 6 );
-        AppendMsgPanel( _( "Keywords" ), m_previewItem->GetKeyWords(), DARKDARKGRAY );
+        AppendMsgPanel( _( "Name" ), m_previewItem->GetName() );
+        AppendMsgPanel( _( "Parent" ),  parentName );
+        AppendMsgPanel( _( "Description" ), m_previewItem->GetDescription() );
+        AppendMsgPanel( _( "Keywords" ), m_previewItem->GetKeyWords() );
     }
 
     GetCanvas()->ForceRefresh();

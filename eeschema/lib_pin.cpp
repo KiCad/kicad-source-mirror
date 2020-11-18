@@ -978,32 +978,32 @@ void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 
     LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name, DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text, DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( m_type ), RED ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Name" ), m_name ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Number" ), text ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), ElectricalPinTypeGetText( m_type ) ) );
 
     text = PinShapeGetText( m_shape );
-    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), text, BLUE ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Style" ), text ) );
 
     text = IsVisible() ? _( "Yes" ) : _( "No" );
-    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), text, DARKGREEN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Visible" ), text ) );
 
     // Display pin length
     text = StringFromValue( aFrame->GetUserUnits(), m_length );
-    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text, MAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Length" ), text ) );
 
     text = PinOrientationName( (unsigned) PinOrientationIndex( m_orientation ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text, DARKMAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), text ) );
 
     wxPoint pinpos = GetPosition();
     pinpos.y = -pinpos.y;   // Display coord are top to bottom
                             // lib items coord are bottom to top
 
     text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.x );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text, DARKMAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pos X" ), text ) );
 
     text = MessageTextFromValue( aFrame->GetUserUnits(), pinpos.y );
-    aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text, DARKMAGENTA ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Pos Y" ), text ) );
 }
 
 

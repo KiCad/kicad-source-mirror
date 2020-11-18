@@ -412,13 +412,11 @@ public:
      * the frame and appends a message to it using the message panel
      * AppendMessage() method.
      *
-     * @param textUpper - The message upper text.
-     * @param textLower - The message lower text.
-     * @param color - A color ID from the KiCad color list (see colors.h).
-     * @param pad - Number of spaces to pad between messages (default = 4).
+     * @param aTextUpper - The message upper text.
+     * @param aTextLower - The message lower text.
+     * @param aPadding - Number of spaces to pad between messages.
      */
-    void AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
-                         COLOR4D color, int pad = 6 );
+    void AppendMsgPanel( const wxString& aTextUpper, const wxString& aTextLower, int aPadding = 6 );
 
     /**
      * Clear all messages from the message panel.
