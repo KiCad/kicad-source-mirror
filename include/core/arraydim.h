@@ -24,7 +24,9 @@
 #ifndef ARRAYDIM_H
 #define ARRAYDIM_H
 
-/// # of elements in an array.  This implements type-safe compile time checking
+/**
+ * Returns # of elements in an array.  This implements type-safe compile time checking
+ */
 template <typename T, std::size_t N>
 constexpr std::size_t arrayDim( T const ( & )[N] ) noexcept
 {

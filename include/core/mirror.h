@@ -25,8 +25,7 @@
 #define MIRROR_H
 
 /**
- * Function MIRRORVAL
- * Mirror @a aPoint in @a aMirrorRef.
+ *  Returns the mirror of aPoint relative to the aMirrorRef.
  */
 template <typename T>
 T MIRRORVAL( T aPoint, T aMirrorRef )
@@ -35,8 +34,7 @@ T MIRRORVAL( T aPoint, T aMirrorRef )
 }
 
 /**
- * Function MIRROR
- * Mirror @a aPoint in @a aMirrorRef.
+ *  Updates aPoint with the mirror of aPoint relative to the aMirrorRef.
  */
 template <typename T>
 void MIRROR( T& aPoint, const T& aMirrorRef )
