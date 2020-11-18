@@ -89,7 +89,7 @@ class BOARD_STACKUP_ITEM
 {
 public:
     BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType );
-    BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther );
+    BOARD_STACKUP_ITEM( const BOARD_STACKUP_ITEM& aOther );
 
 
 private:
@@ -243,7 +243,7 @@ public:
 
 public:
     BOARD_STACKUP();
-    BOARD_STACKUP( BOARD_STACKUP& aOther );
+    BOARD_STACKUP( const BOARD_STACKUP& aOther );
     BOARD_STACKUP& operator=( const BOARD_STACKUP& aOther );
 
     ~BOARD_STACKUP() { RemoveAll(); }
@@ -267,7 +267,7 @@ public:
     void RemoveAll();
 
     /// @return the number of layers in the stackup
-    int GetCount() { return (int) m_list.size(); }
+    int GetCount() const { return (int) m_list.size(); }
 
     /// @return the board thickness ( in UI) from the thickness of BOARD_STACKUP_ITEM list
     int BuildBoardTicknessFromStackup() const;
@@ -306,4 +306,4 @@ public:
 };
 
 
-#endif      // #ifndef CLASS_BOARD_STACKUP_H
+#endif      // CLASS_BOARD_STACKUP_H

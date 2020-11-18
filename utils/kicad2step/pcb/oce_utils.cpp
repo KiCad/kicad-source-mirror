@@ -308,7 +308,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             if( aCurve->m_startangle < 0.0 )
                 aCurve->m_startangle += 2.0 * M_PI;
 
-            double eang =  aCurve->m_startangle + aCurve->m_angle;
+            double eang = aCurve->m_startangle + aCurve->m_angle;
 
             if( eang < 0.0 )
                 eang += 2.0 * M_PI;
@@ -460,7 +460,7 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
 
 
 // add a pad hole or slot
-bool PCBMODEL::AddPadHole( KICADPAD* aPad )
+bool PCBMODEL::AddPadHole( const KICADPAD* aPad )
 {
     if( NULL == aPad || !aPad->IsThruHole() )
         return false;
@@ -1623,7 +1623,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
 }
 
 
-bool OUTLINE::testClosed( KICADCURVE& aFrontCurve, KICADCURVE& aBackCurve )
+bool OUTLINE::testClosed( const KICADCURVE& aFrontCurve, const KICADCURVE& aBackCurve )
 {
     double spx0, spy0, epx0, epy0;
     getEndPoints( aFrontCurve, spx0, spy0, epx0, epy0 );

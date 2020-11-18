@@ -53,7 +53,7 @@ private:
     double m_minDistance2;  // min squared distance to treat points as separate entities (mm)
 
     bool addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBLET& aLastPoint );
-    bool testClosed( KICADCURVE& aFrontCurve, KICADCURVE& aBackCurve );
+    bool testClosed( const KICADCURVE& aFrontCurve, const KICADCURVE& aBackCurve );
 
 public:
     std::list< KICADCURVE > m_curves;   // list of contiguous segments
@@ -118,7 +118,7 @@ public:
     bool AddOutlineSegment( KICADCURVE* aCurve );
 
     // add a pad hole or slot (must be in final position)
-    bool AddPadHole( KICADPAD* aPad );
+    bool AddPadHole( const KICADPAD* aPad );
 
     // add a component at the given position and orientation
     bool AddComponent( const std::string& aFileName, const std::string& aRefDes,
@@ -149,4 +149,4 @@ public:
     bool WriteSTEP( const wxString& aFileName );
 };
 
-#endif //OCE_VIS_OCE_UTILS_H
+#endif // OCE_VIS_OCE_UTILS_H

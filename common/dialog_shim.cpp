@@ -162,14 +162,14 @@ void DIALOG_SHIM::setSizeInDU( int x, int y )
 }
 
 
-int DIALOG_SHIM::horizPixelsFromDU( int x )
+int DIALOG_SHIM::horizPixelsFromDU( int x ) const
 {
     wxSize sz( x, 0 );
     return ConvertDialogToPixels( sz ).x;
 }
 
 
-int DIALOG_SHIM::vertPixelsFromDU( int y )
+int DIALOG_SHIM::vertPixelsFromDU( int y ) const
 {
     wxSize sz( 0, y );
     return ConvertDialogToPixels( sz ).y;

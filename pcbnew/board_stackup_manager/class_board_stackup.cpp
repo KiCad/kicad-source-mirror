@@ -78,7 +78,7 @@ BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType )
 }
 
 
-BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM& aOther )
+BOARD_STACKUP_ITEM::BOARD_STACKUP_ITEM( const BOARD_STACKUP_ITEM& aOther )
 {
     m_LayerId = aOther.m_LayerId;
     m_DielectricLayerId = aOther.m_DielectricLayerId;
@@ -320,7 +320,7 @@ BOARD_STACKUP::BOARD_STACKUP()
 }
 
 
-BOARD_STACKUP::BOARD_STACKUP( BOARD_STACKUP& aOther )
+BOARD_STACKUP::BOARD_STACKUP( const BOARD_STACKUP& aOther )
 {
     m_HasDielectricConstrains  = aOther.m_HasDielectricConstrains;
     m_HasThicknessConstrains   = aOther.m_HasThicknessConstrains;

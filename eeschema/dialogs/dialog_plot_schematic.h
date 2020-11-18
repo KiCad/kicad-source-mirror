@@ -148,6 +148,7 @@ private:
      * @return the created file name
      * @throw IO_ERROR on file I/O errors
      */
-    wxFileName createPlotFileName( wxString& aPlotFileName, wxString& aExtension,
+    wxFileName createPlotFileName( const wxString& aPlotFileName,
+                                   const wxString& aExtension,
                                    REPORTER* aReporter = NULL );
 };

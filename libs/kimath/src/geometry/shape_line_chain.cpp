@@ -534,11 +534,11 @@ void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
 
 struct compareOriginDistance
 {
-    compareOriginDistance( VECTOR2I& aOrigin ) :
+    compareOriginDistance( const VECTOR2I& aOrigin ) :
         m_origin( aOrigin ) {};
 
     bool operator()( const SHAPE_LINE_CHAIN::INTERSECTION& aA,
-                     const SHAPE_LINE_CHAIN::INTERSECTION& aB )
+                     const SHAPE_LINE_CHAIN::INTERSECTION& aB ) const
     {
         return ( m_origin - aA.p ).EuclideanNorm() < ( m_origin - aB.p ).EuclideanNorm();
     }

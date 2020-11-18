@@ -57,10 +57,10 @@ namespace PCAD2KICAD
         {
         }
 
-        virtual PCB_LAYER_ID  GetKiCadLayer( int aPCadLayer ) = 0;
-        virtual LAYER_TYPE_T  GetLayerType( int aPCadLayer ) = 0;
-        virtual wxString      GetLayerNetNameRef( int aPCadLayer ) = 0;
-        virtual int           GetNetCode( wxString netName ) = 0;
+        virtual PCB_LAYER_ID  GetKiCadLayer( int aPCadLayer ) const = 0;
+        virtual LAYER_TYPE_T  GetLayerType( int aPCadLayer ) const = 0;
+        virtual wxString      GetLayerNetNameRef( int aPCadLayer ) const = 0;
+        virtual int           GetNetCode( const wxString& netName ) const = 0;
     };
 }
 

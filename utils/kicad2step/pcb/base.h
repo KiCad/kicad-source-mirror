@@ -93,10 +93,10 @@ struct TRIPLET
 
 std::ostream& operator<<( std::ostream& aStream, const TRIPLET& aTriplet );
 
-bool Get2DPositionAndRotation( SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation );
-bool Get2DCoordinate( SEXPR::SEXPR* data, DOUBLET& aCoordinate );
-bool Get3DCoordinate( SEXPR::SEXPR* data, TRIPLET& aCoordinate );
-bool GetXYZRotation( SEXPR::SEXPR* data, TRIPLET& aRotation );
+bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation );
+bool Get2DCoordinate( const SEXPR::SEXPR* data, DOUBLET& aCoordinate );
+bool Get3DCoordinate( const SEXPR::SEXPR* data, TRIPLET& aCoordinate );
+bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation );
 
 /**
  * Get the layer name from a layer element, if the layer is syntactically

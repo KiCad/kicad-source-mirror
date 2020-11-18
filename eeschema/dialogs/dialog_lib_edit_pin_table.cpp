@@ -278,7 +278,7 @@ public:
         return res;
     }
 
-    void RebuildRows( LIB_PINS& aPins, bool groupByName )
+    void RebuildRows( const LIB_PINS& aPins, bool groupByName )
     {
         if ( GetView() )
         {

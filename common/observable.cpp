@@ -32,7 +32,7 @@ namespace UTIL {
         struct equals {
             equals( const T& val ) : val_( val ) {}
 
-            bool operator()( const T& val )
+            bool operator()( const T& val ) const
             {
                 return val == val_;
             }

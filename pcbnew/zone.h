@@ -659,7 +659,7 @@ public:
      * Function SetFilledPolysList
      * sets the list of filled polygons.
      */
-    void SetFilledPolysList( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aPolysList )
+    void SetFilledPolysList( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList )
     {
         m_FilledPolysList[aLayer] = aPolysList;
     }
@@ -668,7 +668,7 @@ public:
       * Function SetFilledPolysList
       * sets the list of filled polygons.
       */
-    void SetRawPolysList( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aPolysList )
+    void SetRawPolysList( PCB_LAYER_ID aLayer, const SHAPE_POLY_SET& aPolysList )
     {
         m_RawPolysList[aLayer] = aPolysList;
     }

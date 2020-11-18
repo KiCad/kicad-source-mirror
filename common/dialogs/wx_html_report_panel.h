@@ -85,7 +85,7 @@ public:
 
     ///> @return the visible severity filter.
     ///> If the m_showAll option is set, the mask is < 0
-    int GetVisibleSeverities();
+    int GetVisibleSeverities() const;
 
     ///> If true prints Info: at the beginning of each Info severity line (Default)
     void SetPrintInfo( bool aPrintInfo );
@@ -95,7 +95,7 @@ public:
     void SetShowSeverity( SEVERITY aSeverity, bool aValue );
 
     ///> Set the report full file name to the string
-    void SetFileName( wxString& aReportFileName );
+    void SetFileName( const wxString& aReportFileName );
 
     ///> @return reference to the current report fill file name string.
     wxString& GetFileName( void );

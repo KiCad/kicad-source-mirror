@@ -300,7 +300,7 @@ static void create_vrml_shell( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX color
 static void create_vrml_plane( IFSG_TRANSFORM& PcbOutput, VRML_COLOR_INDEX colorID,
                                VRML_LAYER* layer, double aHeight, bool aTopPlane );
 
-static void write_triangle_bag( std::ostream& aOut_file, VRML_COLOR& aColor,
+static void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColor,
                                 VRML_LAYER* aLayer, bool aPlane, bool aTop,
                                 double aTop_z, double aBottom_z )
 {

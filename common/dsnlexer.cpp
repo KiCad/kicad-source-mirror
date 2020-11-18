@@ -225,7 +225,7 @@ LINE_READER* DSNLEXER::PopReader()
 }
 
 
-int DSNLEXER::findToken( const std::string& tok )
+int DSNLEXER::findToken( const std::string& tok ) const
 {
     KEYWORD_MAP::const_iterator it = keyword_hash.find( tok.c_str() );
 
@@ -280,7 +280,7 @@ const char* DSNLEXER::Syntax( int aTok )
 }
 
 
-const char* DSNLEXER::GetTokenText( int aTok )
+const char* DSNLEXER::GetTokenText( int aTok ) const
 {
     const char* ret;
 
@@ -299,9 +299,9 @@ const char* DSNLEXER::GetTokenText( int aTok )
 }
 
 
-wxString DSNLEXER::GetTokenString( int aTok )
+wxString DSNLEXER::GetTokenString( int aTok ) const
 {
-    wxString    ret;
+    wxString ret;
 
     ret << wxT("'") << wxString::FromUTF8( GetTokenText(aTok) ) << wxT("'");
 
@@ -314,11 +314,11 @@ bool DSNLEXER::IsSymbol( int aTok )
     // This is static and not inline to reduce code space.
 
     // if aTok is >= 0, then it is a coincidental match to a keyword.
-    return aTok==DSN_SYMBOL || aTok==DSN_STRING || aTok>=0;
+    return aTok == DSN_SYMBOL || aTok == DSN_STRING || aTok >= 0;
 }
 
 
-void DSNLEXER::Expecting( int aTok )
+void DSNLEXER::Expecting( int aTok ) const
 {
     wxString errText = wxString::Format(
         _( "Expecting %s" ), GetTokenString( aTok ) );
@@ -326,7 +326,7 @@ void DSNLEXER::Expecting( int aTok )
 }
 
 
-void DSNLEXER::Expecting( const char* text )
+void DSNLEXER::Expecting( const char* text ) const
 {
     wxString errText = wxString::Format(
         _( "Expecting '%s'" ), wxString::FromUTF8( text ) );
@@ -334,7 +334,7 @@ void DSNLEXER::Expecting( const char* text )
 }
 
 
-void DSNLEXER::Unexpected( int aTok )
+void DSNLEXER::Unexpected( int aTok ) const
 {
     wxString errText = wxString::Format(
         _( "Unexpected %s" ), GetTokenString( aTok ) );
@@ -350,7 +350,7 @@ void DSNLEXER::Duplicate( int aTok )
 }
 
 
-void DSNLEXER::Unexpected( const char* text )
+void DSNLEXER::Unexpected( const char* text ) const
 {
     wxString errText = wxString::Format(
         _( "Unexpected '%s'" ), wxString::FromUTF8( text ) );

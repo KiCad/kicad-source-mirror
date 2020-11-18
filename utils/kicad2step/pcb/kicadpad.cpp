@@ -49,7 +49,7 @@ KICADPAD::~KICADPAD()
 }
 
 
-bool KICADPAD::Read( SEXPR::SEXPR* aEntry )
+bool KICADPAD::Read( const SEXPR::SEXPR* aEntry )
 {
     // form: ( pad N thru_hole shape (at x y {r}) (size x y) (drill {oval} x {y}) (layers X X X) )
     int nchild = aEntry->GetNumberOfChildren();
@@ -100,7 +100,7 @@ bool KICADPAD::Read( SEXPR::SEXPR* aEntry )
 }
 
 
-bool KICADPAD::parseDrill( SEXPR::SEXPR* aDrill )
+bool KICADPAD::parseDrill( const SEXPR::SEXPR* aDrill )
 {
     // form: (drill {oval} X {Y})
     const char bad_drill[] = "* corrupt module in PCB file; bad drill";

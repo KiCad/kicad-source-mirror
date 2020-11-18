@@ -46,7 +46,7 @@ public:
         m_type( aType )
     {}
 
-    HOLDER_TYPE GetType() { return m_type; }
+    HOLDER_TYPE GetType() const { return m_type; }
     
     /**
      * Function Kiway

@@ -358,8 +358,8 @@ void DIALOG_PLOT_SCHEMATIC::PlotSchematic( bool aPlotAll )
 }
 
 
-wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( wxString& aPlotFileName,
-                                                      wxString& aExtension,
+wxFileName DIALOG_PLOT_SCHEMATIC::createPlotFileName( const wxString& aPlotFileName,
+                                                      const wxString& aExtension,
                                                       REPORTER* aReporter )
 {
     wxString   path = ExpandEnvVarSubstitutions( m_outputDirectoryName->GetValue(), &Prj() );

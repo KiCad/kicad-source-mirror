@@ -379,13 +379,13 @@ void WX_HTML_REPORT_PANEL::SetVisibleSeverities( int aSeverities )
 }
 
 
-int WX_HTML_REPORT_PANEL::GetVisibleSeverities()
+int WX_HTML_REPORT_PANEL::GetVisibleSeverities() const
 {
     return m_severities;
 }
 
 
-void WX_HTML_REPORT_PANEL::SetFileName( wxString& aReportFileName )
+void WX_HTML_REPORT_PANEL::SetFileName( const wxString& aReportFileName )
 {
     m_reportFileName = aReportFileName;
 }

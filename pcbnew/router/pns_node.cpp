@@ -994,7 +994,7 @@ void NODE::MapConnectivity( JOINT* aStart, std::vector<JOINT*>& aFoundJoints )
 #endif
 
 
-int NODE::FindLinesBetweenJoints( JOINT& aA, JOINT& aB, std::vector<LINE>& aLines )
+int NODE::FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<LINE>& aLines )
 {
     for( ITEM* item : aA.LinkList() )
     {

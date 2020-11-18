@@ -66,7 +66,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat );
  *
  * See en.wikipedia.org/wiki/Universally_unique_identifier
  */
-wxString GbrMakeProjectGUIDfromString( wxString& aText );
+wxString GbrMakeProjectGUIDfromString( const wxString& aText );
 
 
 // this class handle info which can be added in a gerber file as attribute
@@ -272,7 +272,7 @@ wxString FormatStringFromGerber( const wxString& aString );
  * will be empty
  */
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,
-                         GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,
+                         const GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,
                          bool aUseX1StructuredComment );
 
 #endif      // GBR_METADATA_H

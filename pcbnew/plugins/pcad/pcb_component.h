@@ -67,8 +67,8 @@ public:
     virtual void    AddToFootprint( FOOTPRINT* aFootprint );
     virtual void    AddToBoard() = 0;
 
-    PCB_LAYER_ID        GetKiCadLayer() { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
-    int GetNetCode( wxString aNetName ) { return m_callbacks->GetNetCode( aNetName ); }
+    PCB_LAYER_ID        GetKiCadLayer() const { return m_callbacks->GetKiCadLayer( m_PCadLayer ); }
+    int GetNetCode( wxString aNetName ) const { return m_callbacks->GetNetCode( aNetName ); }
 
 protected:
     PCB_CALLBACKS*  m_callbacks;

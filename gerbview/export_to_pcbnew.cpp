@@ -55,7 +55,7 @@ GBR_TO_PCB_EXPORTER::~GBR_TO_PCB_EXPORTER()
 }
 
 
-bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLayers )
+bool GBR_TO_PCB_EXPORTER::ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCopperLayers )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 
@@ -138,7 +138,7 @@ bool GBR_TO_PCB_EXPORTER::ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLa
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     // used when a D_CODE is not found. default D_CODE to draw a flashed item
     static D_CODE  dummyD_CODE( 0 );
@@ -252,7 +252,7 @@ void GBR_TO_PCB_EXPORTER::export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LA
  * the pad gets drawn as a copper polygon, or increase it to the proper size if it has a
  * circular, concentric copper flashing.
  */
-void GBR_TO_PCB_EXPORTER::collect_hole( GERBER_DRAW_ITEM* aGbrItem )
+void GBR_TO_PCB_EXPORTER::collect_hole( const GERBER_DRAW_ITEM* aGbrItem )
 {
     int size = std::min( aGbrItem->m_Size.x, aGbrItem->m_Size.y );
     m_vias.emplace_back( aGbrItem->m_Start, size + 1, size );
@@ -279,7 +279,7 @@ void GBR_TO_PCB_EXPORTER::export_via( const EXPORT_VIA& aVia )
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     switch( aGbrItem->m_Shape )
     {
@@ -313,7 +313,7 @@ void GBR_TO_PCB_EXPORTER::export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     wxPoint seg_start, seg_end;
 
@@ -328,7 +328,8 @@ void GBR_TO_PCB_EXPORTER::export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem
 }
 
 
-void GBR_TO_PCB_EXPORTER::writeCopperLineItem( wxPoint& aStart, wxPoint& aEnd,
+void GBR_TO_PCB_EXPORTER::writeCopperLineItem( const wxPoint& aStart,
+                                               const wxPoint& aEnd,
                                                int aWidth, LAYER_NUM aLayer )
 {
   fprintf( m_fp, "(segment (start %s %s) (end %s %s) (width %s) (layer %s) (net 0))\n",
@@ -341,7 +342,7 @@ void GBR_TO_PCB_EXPORTER::writeCopperLineItem( wxPoint& aStart, wxPoint& aEnd,
 }
 
 
-void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     double  a = atan2( (double) ( aGbrItem->m_Start.y - aGbrItem->m_ArcCentre.y ),
                        (double) ( aGbrItem->m_Start.x - aGbrItem->m_ArcCentre.x ) );
@@ -402,7 +403,7 @@ void GBR_TO_PCB_EXPORTER::export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem,
  * then we'll enlarge the via to the proper size.  Otherwise we create a copper polygon to
  * represent the flashed item (which is presumably a pad).
  */
-void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem,
+void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem,
                                                       LAYER_NUM aLayer )
 {
     static D_CODE  flashed_item_D_CODE( 0 );
@@ -433,7 +434,7 @@ void GBR_TO_PCB_EXPORTER::export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem
 }
 
 
-void GBR_TO_PCB_EXPORTER::writePcbHeader( LAYER_NUM* aLayerLookUpTable )
+void GBR_TO_PCB_EXPORTER::writePcbHeader( const LAYER_NUM* aLayerLookUpTable )
 {
     fprintf( m_fp, "(kicad_pcb (version 4) (host Gerbview \"%s\")\n\n",
              TO_UTF8( GetBuildVersion() ) );
@@ -512,7 +513,7 @@ void GBR_TO_PCB_EXPORTER::writePcbPolygon( const SHAPE_POLY_SET& aPolys, LAYER_N
 }
 
 
-void GBR_TO_PCB_EXPORTER::writePcbZoneItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
+void GBR_TO_PCB_EXPORTER::writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer )
 {
     SHAPE_POLY_SET polys = aGbrItem->m_Polygon;
     polys.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

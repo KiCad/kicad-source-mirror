@@ -75,7 +75,7 @@ inline void scanList( PTREE* aTree, DSNLEXER* aLexer )
 }
 
 
-inline void scanAtom( PTREE* aTree, DSNLEXER* aLexer )
+inline void scanAtom( PTREE* aTree, const DSNLEXER* aLexer )
 {
     const char* key = aLexer->CurText();
 
@@ -109,13 +109,13 @@ void Scan( PTREE* aTree, DSNLEXER* aLexer )
 
 //-----<Format>------------------------------------------------------------------
 
-inline bool isAtom( CPTREE& aTree )
+inline bool isAtom( const CPTREE& aTree )
 {
-    return aTree.size()==0 && aTree.data().size()==0;
+    return aTree.size() == 0 && aTree.data().size() == 0;
 }
 
 
-inline bool isLast( CPTREE& aTree, CITER it )
+inline bool isLast( const CPTREE& aTree, CITER it )
 {
     CITER next = it;
     ++next;
@@ -131,13 +131,12 @@ inline CITER next( CITER it )
 
 
 static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
-        const std::string& aKey, CPTREE& aTree );
+        const std::string& aKey, const CPTREE& aTree );
 
 
-static void formatList( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree )
-
+static void formatList( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, const CPTREE& aTree )
 {
-    for( CITER it = aTree.begin();  it != aTree.end();  ++it )
+    for( CITER it = aTree.begin(); it != aTree.end(); ++it )
     {
         // Processing a tree which was read in with xml_parser?
         if( it->first == "<xmlattr>" )
@@ -165,7 +164,7 @@ static void formatList( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& 
 
 
 static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
-        const std::string& aKey, CPTREE& aTree )
+        const std::string& aKey, const CPTREE& aTree )
 
 {
     if( !isAtom( aTree ) )     // is a list, not an atom
@@ -198,7 +197,7 @@ static void formatNode( OUTPUTFORMATTER* out, int aNestLevel, int aCtl,
 }
 
 
-void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree )
+void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, const CPTREE& aTree )
 {
     if( aTree.size() == 1 && !aTree.data().size() )
     {

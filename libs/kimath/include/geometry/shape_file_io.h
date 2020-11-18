@@ -57,7 +57,7 @@ class SHAPE_FILE_IO
 
         void Write( const SHAPE* aShape, const std::string& aName = "<noname>" );
 
-        void Write( const SHAPE& aShape, const std::string aName = "<noname>" )
+        void Write( const SHAPE& aShape, const std::string& aName = "<noname>" )
         {
             Write( &aShape, aName );
         }
@@ -68,4 +68,4 @@ class SHAPE_FILE_IO
         IO_MODE m_mode;
 };
 
-#endif
+#endif // __SHAPE_FILE_IO_H

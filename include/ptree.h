@@ -90,6 +90,6 @@ void Scan( PTREE* aTree, DSNLEXER* aLexer );
  * Function Format
  * outputs a PTREE into s-expression format via an OUTPUTFORMATTER derivative.
  */
-void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, CPTREE& aTree );
+void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, const CPTREE& aTree );
 
 #endif  // PTREE_H_

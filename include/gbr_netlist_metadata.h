@@ -118,7 +118,7 @@ public:
 
     bool IsEmpty() const { return m_field.IsEmpty(); }
 
-    std::string GetGerberString();
+    std::string GetGerberString() const;
 
 
 private:

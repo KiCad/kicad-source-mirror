@@ -120,7 +120,7 @@ public:
 
     void EndQuasiModal( int retCode );  // End quasi-modal mode
 
-    bool IsQuasiModal()         { return m_qmodal_showing; }
+    bool IsQuasiModal() const { return m_qmodal_showing; }
 
     bool Show( bool show ) override;
 
@@ -170,13 +170,13 @@ protected:
      * Convert an integer number of dialog units to pixels, horizontally. See SetSizeInDU or
      * wxDialog documentation for more information.
      */
-    int horizPixelsFromDU( int x );
+    int horizPixelsFromDU( int x ) const;
 
     /**
      * Convert an integer number of dialog units to pixels, vertically. See SetSizeInDU or
      * wxDialog documentation for more information.
      */
-    int vertPixelsFromDU( int y );
+    int vertPixelsFromDU( int y ) const;
 
     /**
      * Clear the existing dialog size and position.

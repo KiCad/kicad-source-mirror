@@ -41,7 +41,7 @@
 
 namespace PCAD2KICAD {
 
-PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
+PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
@@ -51,7 +51,7 @@ PCB_LAYER_ID PCB::GetKiCadLayer( int aPCadLayer )
     return it->second.KiCadLayer;
 }
 
-LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer )
+LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
@@ -61,7 +61,7 @@ LAYER_TYPE_T PCB::GetLayerType( int aPCadLayer )
     return it->second.layerType;
 }
 
-wxString PCB::GetLayerNetNameRef( int aPCadLayer )
+wxString PCB::GetLayerNetNameRef( int aPCadLayer ) const
 {
     auto it = m_LayersMap.find( aPCadLayer );
 
@@ -117,9 +117,9 @@ PCB::~PCB()
 }
 
 
-int PCB::GetNetCode( wxString aNetName )
+int PCB::GetNetCode( const wxString& aNetName ) const
 {
-    PCB_NET* net;
+    const PCB_NET* net;
 
     for( int i = 0; i < (int) m_PcbNetlist.GetCount(); i++ )
     {
@@ -134,7 +134,7 @@ int PCB::GetNetCode( wxString aNetName )
     return 0;
 }
 
-XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName )
+XNODE* PCB::FindCompDefName( XNODE* aNode, const wxString& aName ) const
 {
     XNODE*      result = NULL, * lNode;
     wxString    propValue;
@@ -449,7 +449,7 @@ void PCB::ConnectPinToNet( const wxString& aCompRef, const wxString& aPinRef,
 }
 
 
-int PCB::FindLayer( const wxString& aLayerName )
+int PCB::FindLayer( const wxString& aLayerName ) const
 {
     for( LAYER_NUM i = 0; i < (int)m_layersStackup.GetCount(); ++i )
     {
@@ -554,7 +554,7 @@ void PCB::MapLayer( XNODE* aNode )
     }
 }
 
-int PCB::FindOutlinePoint( VERTICES_ARRAY* aOutline, wxRealPoint aPoint )
+int PCB::FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) const
 {
     int i;
 
@@ -572,7 +572,7 @@ int PCB::FindOutlinePoint( VERTICES_ARRAY* aOutline, wxRealPoint aPoint )
 
     return 0;
 }*/
-double PCB::GetDistance( wxRealPoint* aPoint1, wxRealPoint* aPoint2 )
+double PCB::GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const
 {
     return sqrt(  ( aPoint1->x - aPoint2->x ) *
                   ( aPoint1->x - aPoint2->x ) +

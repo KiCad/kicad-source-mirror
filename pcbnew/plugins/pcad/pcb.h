@@ -52,10 +52,10 @@ public:
     PCB( BOARD* aBoard );
     ~PCB();
 
-    PCB_LAYER_ID GetKiCadLayer( int aPCadLayer ) override;
-    LAYER_TYPE_T GetLayerType( int aPCadLayer ) override;
-    wxString GetLayerNetNameRef( int aPCadLayer ) override;
-    int GetNetCode( wxString aNetName ) override;
+    PCB_LAYER_ID GetKiCadLayer( int aPCadLayer ) const override;
+    LAYER_TYPE_T GetLayerType( int aPCadLayer ) const override;
+    wxString GetLayerNetNameRef( int aPCadLayer ) const override;
+    int GetNetCode( const wxString& aNetName ) const override;
 
     void ParseBoard( wxStatusBar* aStatusBar, wxXmlDocument* aXmlDoc,
                      const wxString& aActualConversion );
@@ -65,20 +65,20 @@ public:
 private:
     wxArrayString   m_layersStackup;
 
-    XNODE* FindCompDefName( XNODE* aNode, const wxString& aName );
+    XNODE* FindCompDefName( XNODE* aNode, const wxString& aName ) const;
 
     void SetTextProperty( XNODE* aNode, TTEXTVALUE* aTextValue, const wxString& aPatGraphRefName,
                           const wxString& aXmlName, const wxString& aActualConversion );
 
-    void DoPCBComponents( XNODE* aNode, wxXmlDocument*  aXmlDoc, const wxString& aActualConversion,
+    void DoPCBComponents( XNODE* aNode, wxXmlDocument* aXmlDoc, const wxString& aActualConversion,
                           wxStatusBar* aStatusBar );
 
     void ConnectPinToNet( const wxString& aCr, const wxString& aPr, const wxString& aNetName );
 
-    int FindLayer( const wxString& aLayerName );
+    int FindLayer( const wxString& aLayerName ) const;
     void MapLayer( XNODE* aNode );
-    int FindOutlinePoint( VERTICES_ARRAY* aOutline, wxRealPoint aPoint );
-    double GetDistance( wxRealPoint* aPoint1, wxRealPoint* aPoint2 );
+    int FindOutlinePoint( const VERTICES_ARRAY* aOutline, wxRealPoint aPoint ) const;
+    double GetDistance( const wxRealPoint* aPoint1, const wxRealPoint* aPoint2 ) const;
     void GetBoardOutline( wxXmlDocument* aXmlDoc, const wxString& aActualConversion );
 };
 

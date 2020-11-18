@@ -64,7 +64,7 @@ public:
      * Function ExportPcb
      * saves a board from a set of Gerber images.
      */
-    bool    ExportPcb( LAYER_NUM* aLayerLookUpTable, int aCopperLayers );
+    bool    ExportPcb( const LAYER_NUM* aLayerLookUpTable, int aCopperLayers );
 
 private:
     /**
@@ -72,7 +72,7 @@ private:
      * We'll use these later when writing pads & vias.
      * @param aGbrItem
      */
-    void    collect_hole( GERBER_DRAW_ITEM* aGbrItem );
+    void    collect_hole( const GERBER_DRAW_ITEM* aGbrItem );
 
     /**
      * write a via to the board file.
@@ -88,7 +88,7 @@ private:
      * @param aGbrItem = the Gerber item (line, arc) to export
      * @param aLayer = the technical layer to use
      */
-    void    export_non_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    export_non_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * write a non-copper polygon to the board file.
@@ -103,14 +103,14 @@ private:
      * @param aGbrItem = the Gerber item (line, arc) to export
      * @param aLayer = the technical layer to use
      */
-    void    writePcbZoneItem( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    writePcbZoneItem( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * write a track (or via) to the board file.
      * @param aGbrItem = the Gerber item (line, arc, flashed) to export
      * @param aLayer = the copper layer to use
      */
-    void    export_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    export_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * Function export_flashed_copper_item
@@ -120,7 +120,7 @@ private:
      * the pad.
      * @param aGbrItem = the flashed Gerber item to export
      */
-    void    export_flashed_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    export_flashed_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * Function export_segline_copper_item
@@ -128,7 +128,7 @@ private:
      * @param aGbrItem = the Gerber item (line only) to export
      * @param aLayer = the copper layer to use
      */
-    void    export_segline_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    export_segline_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * Function export_segarc_copper_item
@@ -137,27 +137,28 @@ private:
      * @param aGbrItem = the Gerber item (arc only) to export
      * @param aLayer = the copper layer to use
      */
-    void    export_segarc_copper_item( GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
+    void    export_segarc_copper_item( const GERBER_DRAW_ITEM* aGbrItem, LAYER_NUM aLayer );
 
     /**
      * function writeCopperLineItem
      * basic write function to write a a TRACK item
      * to the board file, from a non flashed item
      */
-    void    writeCopperLineItem( wxPoint& aStart, wxPoint& aEnd,
+    void    writeCopperLineItem( const wxPoint& aStart,
+                                 const wxPoint& aEnd,
                                  int aWidth, LAYER_NUM aLayer );
 
     /**
      * function writePcbHeader
      * Write a very basic header to the board file
      */
-    void    writePcbHeader( LAYER_NUM* aLayerLookUpTable );
+    void    writePcbHeader( const LAYER_NUM* aLayerLookUpTable );
 
     /** In Pcbnew files units are mm for coordinates.
      * So MapToPcbUnits converts internal gerbview to mm any pcbnew value
      * @param aValue is a coordinate value to convert in mm
      */
-    double MapToPcbUnits( int aValue )
+    double MapToPcbUnits( int aValue ) const
     {
         return aValue / IU_PER_MM;
     }

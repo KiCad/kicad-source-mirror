@@ -89,21 +89,21 @@ int COST_ESTIMATOR::CornerCost( const LINE& aLine )
 }
 
 
-void COST_ESTIMATOR::Add( LINE& aLine )
+void COST_ESTIMATOR::Add( const LINE& aLine )
 {
     m_lengthCost += aLine.CLine().Length();
     m_cornerCost += CornerCost( aLine );
 }
 
 
-void COST_ESTIMATOR::Remove( LINE& aLine )
+void COST_ESTIMATOR::Remove( const LINE& aLine )
 {
     m_lengthCost -= aLine.CLine().Length();
     m_cornerCost -= CornerCost( aLine );
 }
 
 
-void COST_ESTIMATOR::Replace( LINE& aOldLine, LINE& aNewLine )
+void COST_ESTIMATOR::Replace( const LINE& aOldLine, const LINE& aNewLine )
 {
     m_lengthCost -= aOldLine.CLine().Length();
     m_cornerCost -= CornerCost( aOldLine );
@@ -112,7 +112,7 @@ void COST_ESTIMATOR::Replace( LINE& aOldLine, LINE& aNewLine )
 }
 
 
-bool COST_ESTIMATOR::IsBetter( COST_ESTIMATOR& aOther,
+bool COST_ESTIMATOR::IsBetter( const COST_ESTIMATOR& aOther,
         double aLengthTolerance,
         double aCornerTolerance ) const
 {
@@ -216,7 +216,7 @@ void OPTIMIZER::CacheStaticItem( ITEM* aItem )
 }
 
 
-void OPTIMIZER::ClearCache( bool aStaticOnly  )
+void OPTIMIZER::ClearCache( bool aStaticOnly )
 {
     if( !aStaticOnly )
     {
@@ -236,7 +236,7 @@ void OPTIMIZER::ClearCache( bool aStaticOnly  )
 }
 
 
-bool ANGLE_CONSTRAINT_45::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+bool ANGLE_CONSTRAINT_45::Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
 {
     auto dir_orig0 = DIRECTION_45( aOriginLine->CSegment( aVertex1 ) );
     auto dir_orig1 = DIRECTION_45( aOriginLine->CSegment( aVertex2 - 1) );
@@ -261,7 +261,7 @@ bool ANGLE_CONSTRAINT_45::Check ( int aVertex1, int aVertex2, LINE* aOriginLine,
     return true;
 }
 
-bool AREA_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+bool AREA_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
 {
     auto p1 = aOriginLine->CPoint( aVertex1 );
     auto p2 = aOriginLine->CPoint( aVertex2 );
@@ -288,7 +288,7 @@ class JOINT_CACHE
 };
 
 
-bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+bool PRESERVE_VERTEX_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
 {
     bool cv = false;
 
@@ -321,7 +321,7 @@ bool PRESERVE_VERTEX_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOrig
 }
 
 
-bool RESTRICT_VERTEX_RANGE_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+bool RESTRICT_VERTEX_RANGE_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
 {
     return true;
 }
@@ -393,7 +393,7 @@ static bool pointInside2( const SHAPE_LINE_CHAIN& aL, const VECTOR2I& aP )
 }
 
 
-bool KEEP_TOPOLOGY_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+bool KEEP_TOPOLOGY_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
         {
     SHAPE_LINE_CHAIN encPoly = aOriginLine->CLine().Slice( aVertex1, aVertex2 );
 
@@ -410,18 +410,20 @@ bool KEEP_TOPOLOGY_CONSTRAINT::Check ( int aVertex1, int aVertex2, LINE* aOrigin
         return true;
 
     for( auto j : joints )
-        {
-        if ( j->Net() == aOriginLine->Net() )
+    {
+        if( j->Net() == aOriginLine->Net() )
             continue;
 
-        if ( pointInside2( encPoly, j->Pos() ) )
-            {
+        if( pointInside2( encPoly, j->Pos() ) )
+        {
             bool falsePositive = false;
-            for( int k = 0; k < encPoly.PointCount(); k++)
-                if(encPoly.CPoint(k) == j->Pos() )
+            for( int k = 0; k < encPoly.PointCount(); k++ )
+            {
+                if( encPoly.CPoint(k) == j->Pos() )
                 {
                     falsePositive = true;
                     break;
+                }
             }
 
             if( !falsePositive )
@@ -444,21 +446,21 @@ bool OPTIMIZER::checkColliding( ITEM* aItem, bool aUpdateCache )
 
 void OPTIMIZER::ClearConstraints()
 {
-    for (auto c : m_constraints)
+    for( auto c : m_constraints)
         delete c;
     m_constraints.clear();
 }
 
 void OPTIMIZER::AddConstraint ( OPT_CONSTRAINT *aConstraint )
-    {
+{
     m_constraints.push_back(aConstraint);
 }
 
-bool OPTIMIZER::checkConstraints(  int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
+bool OPTIMIZER::checkConstraints( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement )
 {
     for( auto c: m_constraints)
     {
-        if ( !c->Check( aVertex1, aVertex2, aOriginLine, aCurrentPath, aReplacement ) )
+        if( !c->Check( aVertex1, aVertex2, aOriginLine, aCurrentPath, aReplacement ) )
         {
             return false;
         }
@@ -610,19 +612,19 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
 
     bool rv = false;
 
-    if ( m_effortLevel & PRESERVE_VERTEX )
+    if( m_effortLevel & PRESERVE_VERTEX )
     {
         auto c = new PRESERVE_VERTEX_CONSTRAINT( m_world, m_preservedVertex );
         AddConstraint( c );
     }
     
-    if ( m_effortLevel & RESTRICT_VERTEX_RANGE )
+    if( m_effortLevel & RESTRICT_VERTEX_RANGE )
     {
         auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first, m_restrictedVertexRange.second );
         AddConstraint( c );
     }
 
-    if ( m_effortLevel & KEEP_TOPOLOGY )
+    if( m_effortLevel & KEEP_TOPOLOGY )
     {
         auto c = new KEEP_TOPOLOGY_CONSTRAINT( m_world );
         AddConstraint( c );
@@ -677,7 +679,7 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
 
             bool ok = false;
-            if ( !checkColliding( aLine, bypass ) )
+            if( !checkColliding( aLine, bypass ) )
             {
                 ok = checkConstraints ( n, n + step + 1, aLine, aCurrentPath, bypass );
             }
@@ -1426,32 +1428,30 @@ bool tightenSegment( bool dir, NODE *aNode, const LINE& cur,
     return true;
 }
 
-void Tighten( NODE *aNode, SHAPE_LINE_CHAIN& aOldLine, LINE& aNewLine, LINE& aOptimized )
+void Tighten( NODE *aNode, const SHAPE_LINE_CHAIN& aOldLine, const LINE& aNewLine, LINE& aOptimized )
 {
     LINE tmp;
 
-
-
-    if ( aNewLine.SegmentCount() < 3 )
+    if( aNewLine.SegmentCount() < 3 )
         return;
 
     SHAPE_LINE_CHAIN current ( aNewLine.CLine() );
 
-    for (int step = 0; step < 3; step++)
+    for( int step = 0; step < 3; step++)
     {
         current.Simplify();
 
-        for ( int i = 0; i <= current.SegmentCount() - 3; i++)
+        for( int i = 0; i <= current.SegmentCount() - 3; i++)
         {
             SHAPE_LINE_CHAIN l_in, l_out;
 
             l_in = current.Slice(i, i+3);
-            for (int dir = 0; dir < 1; dir++)
+            for( int dir = 0; dir < 1; dir++)
             {
-                if(  tightenSegment( dir ? true : false, aNode, aNewLine, l_in, l_out ) )
+                if( tightenSegment( dir ? true : false, aNode, aNewLine, l_in, l_out ) )
                 {
                     SHAPE_LINE_CHAIN opt = current;
-                    opt.Replace(i, i+3, l_out);
+                    opt.Replace(i, i + 3, l_out);
                     auto optArea = std::abs(shovedArea( aOldLine, opt ));
                     auto prevArea = std::abs(shovedArea( aOldLine, current ));
 

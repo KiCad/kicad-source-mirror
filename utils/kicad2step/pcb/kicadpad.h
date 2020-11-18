@@ -45,15 +45,15 @@ class KICADPAD
 {
 private:
     bool        m_thruhole;
-    bool parseDrill( SEXPR::SEXPR* aDrill );
+    bool parseDrill( const SEXPR::SEXPR* aDrill );
 
 public:
     KICADPAD();
     virtual ~KICADPAD();
 
-    bool Read( SEXPR::SEXPR* aEntry );
+    bool Read( const SEXPR::SEXPR* aEntry );
 
-    bool IsThruHole()
+    bool IsThruHole() const
     {
         return m_thruhole;
     }

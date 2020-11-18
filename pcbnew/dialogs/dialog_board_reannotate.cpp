@@ -556,8 +556,8 @@ void DIALOG_BOARD_REANNOTATE::LogChangePlan()
 
 //
 /// Create a list of the footprints and their coordinates
-void DIALOG_BOARD_REANNOTATE::LogFootprints( wxString& aMessage,
-                                             std::vector<RefDesInfo>& aFootprints )
+void DIALOG_BOARD_REANNOTATE::LogFootprints( const wxString& aMessage,
+                                             const std::vector<RefDesInfo>& aFootprints )
 {
     wxString message = aMessage;
 

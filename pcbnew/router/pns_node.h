@@ -425,8 +425,8 @@ public:
 #endif
 
     ///> finds all lines between a pair of joints. Used by the loop removal procedure.
-    int FindLinesBetweenJoints( JOINT&                  aA,
-                                JOINT&                  aB,
+    int FindLinesBetweenJoints( const JOINT&            aA,
+                                const JOINT&            aB,
                                 std::vector<LINE>&      aLines );
 
     ///> finds the joints corresponding to the ends of line aLine

@@ -60,7 +60,7 @@ public:
 
     VECTOR2I AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg );
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<SCH_ITEM*>& aItem );
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, const std::vector<SCH_ITEM*>& aItem );
 
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, SCH_ITEM* aDraggedItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,

@@ -64,11 +64,11 @@ public:
     static int CornerCost( const SHAPE_LINE_CHAIN& aLine );
     static int CornerCost( const LINE& aLine );
 
-    void Add( LINE& aLine );
-    void Remove( LINE& aLine );
-    void Replace( LINE& aOldLine, LINE& aNewLine );
+    void Add( const LINE& aLine );
+    void Remove( const LINE& aLine );
+    void Replace( const LINE& aOldLine, const LINE& aNewLine );
 
-    bool IsBetter( COST_ESTIMATOR& aOther, double aLengthTolerance,
+    bool IsBetter( const COST_ESTIMATOR& aOther, double aLengthTolerance,
                    double aCornerTollerace ) const;
 
     double GetLengthCost() const { return m_lengthCost; }
@@ -226,7 +226,7 @@ public:
 
     virtual ~OPT_CONSTRAINT() {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) = 0;
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) = 0;
 
     int GetPriority() const
     {
@@ -256,7 +256,7 @@ public:
 
     virtual ~ANGLE_CONSTRAINT_45() {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     int m_entryDirectionMask;
@@ -270,7 +270,7 @@ public:
         OPT_CONSTRAINT( aWorld ),
         m_allowedArea ( aAllowedArea ) {};
 
-        virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+        virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 
 private:
     BOX2I m_allowedArea;
@@ -284,7 +284,7 @@ public:
         OPT_CONSTRAINT( aWorld )
         {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 };
 
 class PRESERVE_VERTEX_CONSTRAINT: public OPT_CONSTRAINT
@@ -295,7 +295,7 @@ public:
         m_v( aV )
         {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
 
     VECTOR2I m_v;
@@ -310,7 +310,7 @@ public:
         m_end( aEnd )
         {};
 
-    virtual bool Check ( int aVertex1, int aVertex2, LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
+    virtual bool Check( int aVertex1, int aVertex2, const LINE* aOriginLine, const SHAPE_LINE_CHAIN& aCurrentPath, const SHAPE_LINE_CHAIN& aReplacement ) override;
 private:
 
     int m_start;
@@ -320,4 +320,4 @@ private:
 
 };
 
-#endif
+#endif // __PNS_OPTIMIZER_H

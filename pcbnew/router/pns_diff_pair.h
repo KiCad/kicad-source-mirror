@@ -497,7 +497,7 @@ public:
     }
 
 private:
-    void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, VIA& aVia )
+    void updateLine( LINE &aLine, const SHAPE_LINE_CHAIN& aShape, int aNet, const VIA& aVia )
     {
         aLine.SetShape( aShape );
         aLine.SetWidth( m_width );

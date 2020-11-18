@@ -174,7 +174,7 @@ VECTOR2I EE_GRID_HELPER::AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg )
     return nearest;
 }
 
-VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, std::vector<SCH_ITEM*>& aItems )
+VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, const std::vector<SCH_ITEM*>& aItems )
 {
     clearAnchors();
 

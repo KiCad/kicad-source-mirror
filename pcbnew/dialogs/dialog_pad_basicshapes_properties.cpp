@@ -559,7 +559,7 @@ DIALOG_PAD_PRIMITIVES_TRANSFORM::DIALOG_PAD_PRIMITIVES_TRANSFORM( wxWindow* aPar
 
 
 // A helper function in geometry transform
-inline void geom_transf( wxPoint& aCoord, wxPoint& aMove, double aScale, double aRotation )
+inline void geom_transf( wxPoint& aCoord, const wxPoint& aMove, double aScale, double aRotation )
 {
     aCoord.x = KiROUND( aCoord.x * aScale );
     aCoord.y = KiROUND( aCoord.y * aScale );

@@ -45,7 +45,7 @@ std::ostream& operator<<( std::ostream& aStream, const TRIPLET& aTriplet )
 }
 
 
-bool Get2DPositionAndRotation( SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation )
+bool Get2DPositionAndRotation( const SEXPR::SEXPR* data, DOUBLET& aPosition, double& aRotation )
 {
     // form: (at X Y {rot})
     int nchild = data->GetNumberOfChildren();
@@ -130,7 +130,7 @@ bool Get2DPositionAndRotation( SEXPR::SEXPR* data, DOUBLET& aPosition, double& a
 }
 
 
-bool Get2DCoordinate( SEXPR::SEXPR* data, DOUBLET& aCoordinate )
+bool Get2DCoordinate( const SEXPR::SEXPR* data, DOUBLET& aCoordinate )
 {
     // form: (at X Y {rot})
     int nchild = data->GetNumberOfChildren();
@@ -180,7 +180,7 @@ bool Get2DCoordinate( SEXPR::SEXPR* data, DOUBLET& aCoordinate )
 }
 
 
-bool Get3DCoordinate( SEXPR::SEXPR* data, TRIPLET& aCoordinate )
+bool Get3DCoordinate( const SEXPR::SEXPR* data, TRIPLET& aCoordinate )
 {
     // form: (at X Y Z)
     int nchild = data->GetNumberOfChildren();
@@ -221,7 +221,7 @@ bool Get3DCoordinate( SEXPR::SEXPR* data, TRIPLET& aCoordinate )
 }
 
 
-bool GetXYZRotation( SEXPR::SEXPR* data, TRIPLET& aRotation )
+bool GetXYZRotation( const SEXPR::SEXPR* data, TRIPLET& aRotation )
 {
     const char bad_rotation[] = "* invalid 3D rotation";
 

@@ -172,7 +172,7 @@ private:
     void FilterBackPrefix( wxCommandEvent& event ) override;
 
     void ShowReport( wxString aMessage, SEVERITY aSeverity );
-    void LogFootprints( wxString& aMessage, std::vector<RefDesInfo>& aFootprints );
+    void LogFootprints( const wxString& aMessage, const std::vector<RefDesInfo>& aFootprints );
     void LogChangePlan( void );
 
     bool ReannotateBoard( void );

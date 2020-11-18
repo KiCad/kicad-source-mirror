@@ -75,7 +75,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
 }
 
 
-wxString GbrMakeProjectGUIDfromString( wxString& aText )
+wxString GbrMakeProjectGUIDfromString( const wxString& aText )
 {
     /* Gerber GUID format should be RFC4122 Version 1 or 4.
      * See en.wikipedia.org/wiki/Universally_unique_identifier
@@ -482,14 +482,14 @@ wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf
 }
 
 
-std::string GBR_DATA_FIELD::GetGerberString()
+std::string GBR_DATA_FIELD::GetGerberString() const
 {
     wxString converted;
 
     if( !m_field.IsEmpty() )
         converted = ConvertNotAllowedCharsInGerber( m_field, m_useUTF8, m_escapeString );
 
-    // Convert the char string to std::string. Be carefull when converting awxString to
+    // Convert the char string to std::string. Be carefull when converting a wxString to
     // a std::string: using static_cast<const char*> is mandatory
     std::string txt = static_cast<const char*>( converted.utf8_str() );
 
@@ -525,7 +525,7 @@ std::string FormatStringToGerber( const wxString& aString )
 #define NO_PAD_NAME wxT( "" )       // pad name of pads without pad name/number (not normalized)
 
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,
-                         GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,
+                         const GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,
                          bool aUseX1StructuredComment )
 {
     aClearPreviousAttributes = false;

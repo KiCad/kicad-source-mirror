@@ -42,7 +42,7 @@ struct KEYWORD
     const char* name;       ///< unique keyword.
     int         token;      ///< a zero based index into an array of KEYWORDs
 };
-#endif
+#endif // SWIG
 
 // something like this macro can be used to help initialize a KEYWORD table.
 // see SPECCTRA_DB::keywords[] as an example.
@@ -55,18 +55,19 @@ struct KEYWORD
  * lists all the DSN lexer's tokens that are supported in lexing.  It is up
  * to the parser if it wants also to support them.
  */
-enum DSN_SYNTAX_T {
-    DSN_NONE = -11,
-    DSN_COMMENT = -10,
+enum DSN_SYNTAX_T
+{
+    DSN_NONE         = -11,
+    DSN_COMMENT      = -10,
     DSN_STRING_QUOTE = -9,
-    DSN_QUOTE_DEF = -8,
-    DSN_DASH = -7,
-    DSN_SYMBOL = -6,
-    DSN_NUMBER = -5,
-    DSN_RIGHT = -4,           // right bracket, ')'
-    DSN_LEFT = -3,            // left bracket, '('
-    DSN_STRING = -2,          // a quoted string, stripped of the quotes
-    DSN_EOF = -1              // special case for end of file
+    DSN_QUOTE_DEF    = -8,
+    DSN_DASH         = -7,
+    DSN_SYMBOL       = -6,
+    DSN_NUMBER       = -5,
+    DSN_RIGHT        = -4,  // right bracket, ')'
+    DSN_LEFT         = -3,  // left bracket, '('
+    DSN_STRING       = -2,  // a quoted string, stripped of the quotes
+    DSN_EOF          = -1   // special case for end of file
 };
 
 
@@ -142,11 +143,11 @@ protected:
      * @return int - with a value from the enum DSN_T matching the keyword text,
      *         or DSN_SYMBOL if @a aToken is not in the kewords table.
      */
-    int findToken( const std::string& aToken );
+    int findToken( const std::string& aToken ) const;
 
-    bool isStringTerminator( char cc )
+    bool isStringTerminator( char cc ) const
     {
-        if( !space_in_quoted_tokens && cc==' ' )
+        if( !space_in_quoted_tokens && cc == ' ' )
             return true;
 
         if( cc == stringDelimiter )
@@ -155,7 +156,7 @@ protected:
         return false;
     }
 
-#endif
+#endif // SWIG
 
 public:
 
@@ -317,7 +318,7 @@ public:
      * Function CurTok
      * returns whatever NextTok() returned the last time it was called.
      */
-    int CurTok()
+    int CurTok() const
     {
         return curTok;
     }
@@ -326,7 +327,7 @@ public:
      * Function PrevTok
      * returns whatever NextTok() returned the 2nd to last time it was called.
      */
-    int PrevTok()
+    int PrevTok() const
     {
         return prevTok;
     }
@@ -335,7 +336,7 @@ public:
      * Function GetCurStrAsToken
      * Used to support "loose" matches (quoted tokens)
      */
-    int GetCurStrAsToken()
+    int GetCurStrAsToken() const
     {
         return findToken( curText );
     }
@@ -412,7 +413,7 @@ public:
      * @param aTok is the token/keyword type which was expected at the current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( int aTok );
+    void Expecting( int aTok ) const;
 
     /**
      * Function Expecting
@@ -421,7 +422,7 @@ public:
      *         current input location, e.g.  "pin|graphic|property"
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Expecting( const char* aTokenList );
+    void Expecting( const char* aTokenList ) const;
 
     /**
      * Function Unexpected
@@ -430,7 +431,7 @@ public:
      *         current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( int aTok );
+    void Unexpected( int aTok ) const;
 
     /**
      * Function Unexpected
@@ -439,7 +440,7 @@ public:
      *         current input location.
      * @throw IO_ERROR with the location within the input file of the problem.
      */
-    void Unexpected( const char* aToken );
+    void Unexpected( const char* aToken ) const;
 
     /**
      * Function Duplicate
@@ -471,13 +472,13 @@ public:
      * Function GetTokenText
      * returns the C string representation of a DSN_T value.
      */
-    const char* GetTokenText( int aTok );
+    const char* GetTokenText( int aTok ) const;
 
     /**
      * Function GetTokenString
      * returns a quote wrapped wxString representation of a token value.
      */
-    wxString GetTokenString( int aTok );
+    wxString GetTokenString( int aTok ) const;
 
     static const char* Syntax( int aTok );
 
@@ -485,7 +486,7 @@ public:
      * Function CurText
      * returns a pointer to the current token's text.
      */
-    const char* CurText()
+    const char* CurText() const
     {
         return curText.c_str();
     }
@@ -494,7 +495,7 @@ public:
      * Function CurStr
      * returns a reference to current token in std::string form.
      */
-    const std::string& CurStr()
+    const std::string& CurStr() const
     {
         return curText;
     }
@@ -504,7 +505,7 @@ public:
      * returns the current token text as a wxString, assuming that the input
      * byte stream is UTF8 encoded.
      */
-    wxString FromUTF8()
+    wxString FromUTF8() const
     {
         return wxString::FromUTF8( curText.c_str() );
     }
@@ -513,7 +514,7 @@ public:
      * Function CurLineNumber
      * returns the current line number within my LINE_READER
      */
-    int CurLineNumber()
+    int CurLineNumber() const
     {
         return reader->LineNumber();
     }
@@ -523,7 +524,7 @@ public:
      * returns the current line of text, from which the CurText() would return
      * its token.
      */
-    const char* CurLine()
+    const char* CurLine() const
     {
         return (const char*)(*reader);
     }
@@ -534,7 +535,7 @@ public:
      * @return const wxString& - the source of the lines of text,
      *   e.g. a filename or "clipboard".
      */
-    const wxString& CurSource()
+    const wxString& CurSource() const
     {
         return reader->GetSource();
     }
@@ -544,7 +545,7 @@ public:
      * returns the byte offset within the current line, using a 1 based index.
      * @return int - a one based index into the current line.
      */
-    int CurOffset()
+    int CurOffset() const
     {
         return curOffset + 1;
     }
