@@ -49,6 +49,7 @@
 #include <settings/settings_manager.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
+#include <project/net_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/eagle/eagle_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
@@ -633,9 +634,13 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         SetBoard( loadedBoard );
 
-        // On save; design settings will be removed from the board
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
+        {
+            Prj().GetProjectFile().NetSettings().ResolveNetClassAssignments( true );
+
+            // On save; design settings will be removed from the board
             loadedBoard->SetModified();
+        }
 
         // Move legacy view settings to local project settings
         if( !loadedBoard->m_LegacyVisibleLayers.test( Rescue ) )
