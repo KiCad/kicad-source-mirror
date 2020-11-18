@@ -44,7 +44,9 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     DIALOG_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
-    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true )
+    m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits, true ),
+    m_dummySheet( *aSheet ),
+    m_dummySheetNameField( wxDefaultPosition, SHEETNAME, &m_dummySheet )
 {
     m_sheet = aSheet;
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_sheet );
@@ -776,11 +778,16 @@ void DIALOG_SHEET_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
     wxGridCellEditor* editor = m_grid->GetCellEditor( SHEETNAME, FDC_VALUE );
     wxControl*        control = editor->GetControl();
     wxTextEntry*      textControl = dynamic_cast<wxTextEntry*>( control );
+    wxString          sheetName;
 
     if( textControl )
-        hierarchicalPath += textControl->GetValue();
+        sheetName = textControl->GetValue();
     else
-        hierarchicalPath += m_grid->GetCellValue( SHEETNAME, FDC_VALUE );
+        sheetName = m_grid->GetCellValue( SHEETNAME, FDC_VALUE );
+
+    m_dummySheet.SetFields( *m_fields );
+    m_dummySheetNameField.SetText( sheetName );
+    hierarchicalPath += m_dummySheetNameField.GetShownText();
 
     editor->DecRef();
 

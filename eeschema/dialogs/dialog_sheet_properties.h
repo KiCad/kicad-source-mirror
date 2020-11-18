@@ -28,7 +28,7 @@
 #include <fields_grid_table.h>
 #include <widgets/unit_binder.h>
 #include <dialog_sheet_properties_base.h>
-
+#include <sch_sheet.h>
 
 class SCH_SHEET;
 class SCH_EDIT_FRAME;
@@ -54,6 +54,9 @@ private:
 
     FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
     UNIT_BINDER                   m_borderWidth;
+
+    SCH_SHEET                     m_dummySheet;
+    SCH_FIELD                     m_dummySheetNameField;
 
     bool onSheetFilenameChanged( const wxString& aNewFilename );
 
