@@ -31,6 +31,7 @@
 #include <tools/ee_selection.h>
 #include <ee_collectors.h>
 #include <sch_component.h>
+#include <cursors.h>
 
 class SCH_BASE_FRAME;
 class SCH_ITEM;
@@ -70,6 +71,8 @@ public:
      * The main loop.
      */
     int Main( const TOOL_EVENT& aEvent );
+
+    void OnIdle( wxIdleEvent& aEvent );
 
     /**
      * Function GetSelection()
@@ -277,19 +280,23 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_BASE_FRAME* m_frame;     // Pointer to the parent frame
-    EE_SELECTION    m_selection; // Current state of selection
+    SCH_BASE_FRAME* m_frame;             // Pointer to the parent frame
+    EE_SELECTION    m_selection;         // Current state of selection
 
-    bool m_additive;             // Items should be added to selection (instead of replacing)
-    bool m_subtractive;          // Items should be removed from selection
-    bool m_exclusive_or;         // Items' selection state should be toggled
-    bool m_multiple;             // Multiple selection mode is active
-    bool m_skip_heuristics;      // Heuristics are not allowed when choosing item under cursor
+    bool            m_additive;          // Items should be added to sel (instead of replacing)
+    bool            m_subtractive;       // Items should be removed from sel
+    bool            m_exclusive_or;      // Items' selection state should be toggled
+    bool            m_multiple;          // Multiple selection mode is active
+    bool            m_skip_heuristics;   // Show disambuguation menu for all items under the
+                                         // cursor rather than trying to narrow them down first
+                                         // using heuristics
 
-    bool m_isSymbolEditor;       // True when the symbol editor is the parent frame
-    bool m_isLibView;            // True when libview is the parent frame
-    int  m_unit;                 // Fixed unit filter (for symbol editor)
-    int  m_convert;              // Fixed DeMorgan filter (for symbol editor)
+    KICURSOR        m_nonModifiedCursor; // Cursor in the absence of shift/ctrl/alt
+
+    bool            m_isSymbolEditor;    // True when the symbol editor is the parent frame
+    bool            m_isLibView;         // True when libview is the parent frame
+    int             m_unit;              // Fixed unit filter (for symbol editor)
+    int             m_convert;           // Fixed DeMorgan filter (for symbol editor)
 };
 
 #endif //KICAD_SCH_SELECTION_TOOL_H

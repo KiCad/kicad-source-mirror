@@ -124,12 +124,12 @@ EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
     // Set up timer that prevents too frequent redraw commands
     m_refreshTimer.SetOwner( this );
     Connect( m_refreshTimer.GetId(), wxEVT_TIMER,
-            wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
+             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onRefreshTimer ), NULL, this );
 
     // Set up timer to execute OnShow() method when the window appears on the screen
     m_onShowTimer.SetOwner( this );
     Connect( m_onShowTimer.GetId(), wxEVT_TIMER,
-            wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onShowTimer ), NULL, this );
+             wxTimerEventHandler( EDA_DRAW_PANEL_GAL::onShowTimer ), NULL, this );
     m_onShowTimer.Start( 10 );
 }
 
@@ -464,7 +464,11 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     wxWindow* galWindow = dynamic_cast<wxWindow*>( new_gal );
 
     if( galWindow )
-        galWindow->Connect( wxEVT_SET_CURSOR, wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL, this );
+    {
+        galWindow->Connect( wxEVT_SET_CURSOR,
+                            wxSetCursorEventHandler( EDA_DRAW_PANEL_GAL::onSetCursor ), NULL,
+                            this );
+    }
 
     delete m_gal;
     m_gal = new_gal;
@@ -581,9 +585,7 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 void EDA_DRAW_PANEL_GAL::SetCurrentCursor( KICURSOR cursor )
 {
     if( m_currentKiCursor == cursor )
-    {
         return;
-    }
 
     m_currentCursor = CURSOR_STORE::GetCursor( cursor );
     m_currentKiCursor = cursor;

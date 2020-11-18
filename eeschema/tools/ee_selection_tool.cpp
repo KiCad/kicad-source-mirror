@@ -557,28 +557,20 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( displayWireCursor )
             {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_WIRE_ADD );
+                m_nonModifiedCursor = KICURSOR::LINE_WIRE_ADD;
             }
             else if( rolloverItem != niluuid )
             {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::HAND );
+                m_nonModifiedCursor = KICURSOR::HAND;
             }
-            else if( !modifier_enabled && !m_selection.Empty()
-                     && !m_frame->GetDragSelects() && evt->HasPosition()
+            else if( !m_selection.Empty() && !m_frame->GetDragSelects() && evt->HasPosition()
                      && selectionContains( evt->Position() ) ) //move/drag option prediction
             {
-                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+                m_nonModifiedCursor = KICURSOR::MOVING;
             }
             else
             {
-                if( m_additive )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
-                else if( m_subtractive )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
-                else if( m_exclusive_or )
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
-                else
-                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+                m_nonModifiedCursor = KICURSOR::ARROW;
             }
         }
     }
@@ -587,6 +579,33 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     m_selection.Clear();
 
     return 0;
+}
+
+
+void EE_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
+{
+    if( m_frame->ToolStackIsEmpty() )
+    {
+        wxMouseState keyboardState = wxGetMouseState();
+
+        m_subtractive = m_additive = m_exclusive_or = false;
+
+        if( keyboardState.ShiftDown() && keyboardState.ControlDown() )
+            m_subtractive = true;
+        else if( keyboardState.ShiftDown() )
+            m_additive = true;
+        else if( keyboardState.ControlDown() )
+            m_exclusive_or = true;
+
+        if( m_additive )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ADD );
+        else if( m_subtractive )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::SUBTRACT );
+        else if( m_exclusive_or )
+            m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::XOR );
+        else
+            m_frame->GetCanvas()->SetCurrentCursor( m_nonModifiedCursor );
+    }
 }
 
 

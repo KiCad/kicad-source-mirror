@@ -88,6 +88,20 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
     m_defaults( &m_base_frame_defaults )
 {
     createCanvas();
+
+    Bind( wxEVT_IDLE,
+            [this]( wxIdleEvent& aEvent )
+            {
+                // Handle cursor adjustments.  While we can get motion and key events through
+                // wxWidgets, we can't get modifier-key-up events.
+                if( m_toolManager )
+                {
+                    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
+                    if( selTool )
+                        selTool->OnIdle( aEvent );
+                }
+            } );
 }
 
 
