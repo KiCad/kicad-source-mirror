@@ -283,6 +283,7 @@ void DIALOG_ERC::OnRunERCClick( wxCommandEvent& event )
 
     m_infoBar->Hide();
 
+    m_parent->RecordERCExclusions();
     deleteAllMarkers( true );
 
     m_notebook->ChangeSelection( 0 );   // Display the "Tests Running..." tab
@@ -417,6 +418,8 @@ void DIALOG_ERC::testErc()
         AdvancePhase( _( "Checking for library symbol issues..." ) );
         tester.TestLibSymbolIssues();
     }
+
+    m_parent->ResolveERCExclusions();
 
     // Display diags:
     m_markerTreeModel->SetProvider( m_markerProvider );

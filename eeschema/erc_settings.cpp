@@ -138,6 +138,33 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             },
             {} ) );
 
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "erc_exclusions",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json js = nlohmann::json::array();
+
+                for( const auto& entry : m_ErcExclusions )
+                    js.push_back( entry );
+
+                return js;
+            },
+            [&]( const nlohmann::json& aObj )
+            {
+                m_ErcExclusions.clear();
+
+                if( !aObj.is_array() )
+                    return;
+
+                for( const nlohmann::json& entry : aObj )
+                {
+                    if( entry.empty() )
+                        continue;
+
+                    m_ErcExclusions.insert( entry.get<wxString>() );
+                }
+            },
+            {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "pin_map",
             [&]() -> nlohmann::json
             {

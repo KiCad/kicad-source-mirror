@@ -155,6 +155,7 @@ public:
 public:
 
     std::map<int, int> m_Severities;
+    std::set<wxString> m_ErcExclusions;
 
     PIN_ERROR m_PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 

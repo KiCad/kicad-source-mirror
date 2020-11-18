@@ -207,6 +207,16 @@ public:
     void OnModify() override;
 
     /**
+     * Scan existing markers and record data from any that are Excluded.
+     */
+    void RecordERCExclusions();
+
+    /**
+     * Update markers to match recorded exclusions.
+     */
+    void ResolveERCExclusions();
+
+    /**
      * Return a human-readable description of the current screen.
      */
     wxString GetScreenDesc() const override;

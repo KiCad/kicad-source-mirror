@@ -20,6 +20,7 @@
 #include <bus_alias.h>
 #include <connection_graph.h>
 #include <erc_settings.h>
+#include <sch_marker.h>
 #include <project.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -132,6 +133,45 @@ ERC_SETTINGS& SCHEMATIC::ErcSettings() const
 {
     wxASSERT( m_project );
     return *m_project->GetProjectFile().m_ErcSettings;
+}
+
+
+std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
+{
+    SCH_SHEET_LIST sheetList = GetSheets();
+    ERC_SETTINGS&  settings  = ErcSettings();
+
+    for( const SCH_SHEET_PATH& sheet : sheetList )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+            auto        it = ErcSettings().m_ErcExclusions.find( marker->Serialize() );
+
+            if( it != ErcSettings().m_ErcExclusions.end() )
+            {
+                marker->SetExcluded( true );
+                settings.m_ErcExclusions.erase( it );
+            }
+        }
+    }
+
+    std::vector<SCH_MARKER*> newMarkers;
+
+    for( const wxString& exclusionData : settings.m_ErcExclusions )
+    {
+        SCH_MARKER* marker = SCH_MARKER::Deserialize( exclusionData );
+
+        if( marker )
+        {
+            marker->SetExcluded( true );
+            newMarkers.push_back( marker );
+        }
+    }
+
+    settings.m_ErcExclusions.clear();
+
+    return newMarkers;
 }
 
 

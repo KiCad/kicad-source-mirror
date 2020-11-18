@@ -47,6 +47,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <sch_sheet.h>
+#include <sch_marker.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
@@ -693,6 +694,48 @@ void SCH_EDIT_FRAME::doCloseWindow()
     Schematic().Reset();
 
     Destroy();
+}
+
+
+void SCH_EDIT_FRAME::RecordERCExclusions()
+{
+    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
+    ERC_SETTINGS&  ercSettings = Schematic().ErcSettings();
+
+    ercSettings.m_ErcExclusions.clear();
+
+    for( unsigned i = 0; i < sheetList.size(); i++ )
+    {
+        for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->IsExcluded() )
+                ercSettings.m_ErcExclusions.insert( marker->Serialize() );
+        }
+    }
+}
+
+
+void SCH_EDIT_FRAME::ResolveERCExclusions()
+{
+    for( SCH_MARKER* marker : Schematic().ResolveERCExclusions() )
+    {
+        // JEY TODO: need to get the right screen....
+        GetScreen()->Append( marker );
+    }
+
+    // Update the view for the current screen
+    for( SCH_ITEM* item : GetScreen()->Items().OfType( SCH_MARKER_T ) )
+    {
+        SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+        if( marker->IsExcluded() )
+        {
+            GetCanvas()->GetView()->Remove( marker );
+            GetCanvas()->GetView()->Add( marker );
+        }
+    }
 }
 
 

@@ -143,6 +143,8 @@ public:
 
     ERC_SETTINGS& ErcSettings() const;
 
+    std::vector<SCH_MARKER*> ResolveERCExclusions();
+
     /**
      * Returns a pointer to a bus alias object for the given label, or null if one
      * doesn't exist.

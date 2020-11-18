@@ -285,6 +285,8 @@ void SCH_EDIT_FRAME::SaveProjectSettings()
     if( !fn.HasName() || !IsWritable( fn ) )
         return;
 
+    RecordERCExclusions();
+
     GetSettingsManager()->SaveProject( fn.GetFullPath() );
 }
 

@@ -36,6 +36,17 @@ public:
      */
     static std::shared_ptr<ERC_ITEM> Create( int aErrorCode );
 
+    static std::shared_ptr<ERC_ITEM> Create( const wxString& aErrorKey )
+    {
+        for( const RC_ITEM& item : allItemTypes )
+        {
+            if( aErrorKey == item.GetSettingsKey() )
+                return std::make_shared<ERC_ITEM>( static_cast<const ERC_ITEM&>( item ) );
+        }
+
+        return nullptr;
+    }
+
     static std::vector<std::reference_wrapper<RC_ITEM>> GetItemsWithSeverities()
     {
         return allItemTypes;

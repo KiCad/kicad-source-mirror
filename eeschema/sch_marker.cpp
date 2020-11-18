@@ -63,6 +63,34 @@ void SCH_MARKER::SwapData( SCH_ITEM* aItem )
 }
 
 
+wxString SCH_MARKER::Serialize() const
+{
+    return wxString::Format( wxT( "%s|%d|%d|%s|%s" ),
+                             m_rcItem->GetSettingsKey(),
+                             m_Pos.x,
+                             m_Pos.y,
+                             m_rcItem->GetMainItemID().AsString(),
+                             m_rcItem->GetAuxItemID().AsString() );
+}
+
+
+SCH_MARKER* SCH_MARKER::Deserialize( const wxString& data )
+{
+    wxArrayString props = wxSplit( data, '|' );
+    wxPoint       markerPos( (int) strtol( props[1].c_str(), nullptr, 10 ),
+                             (int) strtol( props[2].c_str(), nullptr, 10 ) );
+
+    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( props[0] );
+
+    if( !ercItem )
+        return nullptr;
+
+    ercItem->SetItems( KIID( props[3] ), KIID( props[4] ) );
+
+    return new SCH_MARKER( ercItem, markerPos );
+}
+
+
 #if defined(DEBUG)
 
 void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
