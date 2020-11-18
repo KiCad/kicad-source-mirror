@@ -884,9 +884,17 @@ public:
                 };
 
                 PART_DEFINITION_PIN_ID ID;
+
+                wxString Identifier = wxEmptyString;      ///< This should match a pad identifier
+                                                          ///< in the component footprint
+                                                          ///< subnode="PINIDENTIFIER". It is assumed
+                                                          ///< that this could be empty in earlier 
+                                                          ///< versions of CADSTAR
                 wxString Name = wxEmptyString;            ///< Can be empty. If empty the pin name
                                                           ///< displayed wil be Identifier
                                                           ///< (subnode="PINNAME")
+                                                          ///< This seems to be equivalent to "Pin 
+                                                          ///< Number" in KiCad.
                 wxString Label = wxEmptyString;           ///< This Can be empty (subnode=
                                                           ///< "PINLABEL")
                                                           ///< From CADSTAR Help: "Pin
@@ -900,6 +908,8 @@ public:
                                                           ///< correctly placed after any Gate and
                                                           ///< Pin Swaps are Back Annotated to the
                                                           ///< Schematic design."
+                                                          ///< This seems to be equivalent to "Pin 
+                                                          ///< Name" in KiCad.
                 wxString Signal = wxEmptyString;          ///< Usually for Power/Ground pins,
                                                           ///< (subnode="PINSIGNAL")
                 GATE_ID     TerminalGate;                 ///< (subnode="PINTERM", param0)
@@ -913,11 +923,6 @@ public:
                         POSITION::TOP_RIGHT; ///< The pin names will use these positions when
                                              ///< the symbol is added to a schematic design
                                              ///< subnode="PINPOSITION"
-
-                wxString Identifier =
-                        wxEmptyString; ///< This should match a pad identifier in the component
-                                       ///< footprint subnode="PINIDENTIFIER". It is assumed that
-                                       ///< this could be empty in earlier versions of CADSTAR
 
                 void Parse( XNODE* aNode );
             };

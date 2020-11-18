@@ -279,9 +279,12 @@ public:
         VARIANT_ID VariantID             = wxEmptyString;
 
         std::map<TERMINAL_ID, TERMATTR>         TerminalAttributes;
-        std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinLabels;
-        std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinNames;
-        std::map<TERMINAL_ID, PIN_NUM>          PinNumbers;
+        std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinLabels;  ///< Equivalent to KiCad's Pin Name
+        std::map<TERMINAL_ID, SYMPINNAME_LABEL> PinNames;   ///< Identifier of the pin in the PCB
+                                                            ///< Equivalent to KiCad's Pin Number
+        std::map<TERMINAL_ID, PIN_NUM>          PinNumbers; ///< This seems to only appear in older
+                                                            ///< designs and is similar to PinNames
+                                                            ///< but only allowing numerical values
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
         void Parse( XNODE* aNode );

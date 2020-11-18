@@ -1192,7 +1192,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 {
     for( std::pair<COMPONENT_ID, COMPONENT> compPair : Layout.Components )
     {
-        COMPONENT& comp = compPair.second;
+        COMPONENT& comp = compPair.second;        
 
         auto fpIter = mLibraryMap.find( comp.SymdefID );
 
@@ -1203,11 +1203,42 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                     comp.Name, comp.SymdefID ) );
         }
 
+        FOOTPRINT* libFootprint = fpIter->second;
+
         // copy constructor to clone the footprint from the library
-        FOOTPRINT* footprint = new FOOTPRINT( *fpIter->second );
+        FOOTPRINT* footprint = new FOOTPRINT( *libFootprint );
         const_cast<KIID&>( footprint->m_Uuid ) = KIID();
 
         mBoard->Add( footprint, ADD_MODE::APPEND );
+
+        // First lets fix the pad names on the footprint.
+        // CADSTAR defines the pad name in the PART definition and the SYMDEF (i.e. the PCB
+        // footprint definition) uses a numerical sequence. COMP is the only object that has
+        // visibility of both the SYMDEF and PART.
+        if( Parts.PartDefinitions.find( comp.PartID ) != Parts.PartDefinitions.end() )
+        {
+            PART part = Parts.PartDefinitions.at( comp.PartID );
+
+            // Only do this when the number of pins in the part definition equals the number of
+            // pads in the footprint.
+            if( part.Definition.Pins.size() == footprint->Pads().size() )
+            {
+                for( std::pair<PART_DEFINITION_PIN_ID, PART::DEFINITION::PIN> pinPair :
+                        part.Definition.Pins )
+                {
+                    PART::DEFINITION::PIN pin = pinPair.second;
+                    wxString              pinName = pin.Name;
+
+                    if( pinName.empty() )
+                        pinName = pin.Identifier;
+
+                    if( pinName.empty() )
+                        pinName = wxString::Format( wxT( "%ld" ), pin.ID );
+
+                    footprint->Pads().at( pin.ID - (long long) 1 )->SetName( pinName );
+                }
+            }
+        }
 
         //Override pads with pad exceptions
         if( comp.PadExceptions.size() > 0 )
@@ -1232,12 +1263,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
                     csPad.Side = padEx.Side;
 
                 // Find the pad in the footprint definition
-                PAD* kiPad = footprint->Pads().at( padEx.ID - (long) 1 );
+                PAD* kiPad = footprint->Pads().at( padEx.ID - (long long) 1 );
+                wxString padName = kiPad->GetName();
 
                 if( kiPad )
                     delete kiPad;
 
-                footprint->Pads().at( padEx.ID - (long) 1 ) = getKiCadPad( csPad, footprint );
+                kiPad = getKiCadPad( csPad, footprint );
+                kiPad->SetName( padName );
+                footprint->Pads().at( padEx.ID - (long long) 1 ) = kiPad;
             }
         }
 

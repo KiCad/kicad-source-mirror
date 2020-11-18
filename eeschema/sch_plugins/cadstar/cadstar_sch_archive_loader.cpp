@@ -774,13 +774,15 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         {
             PART::DEFINITION::PIN csPin = getPartDefinitionPin( *aCadstarPart, aGateID, term.ID );
 
-            pinName = csPin.Name;
-            pinNum  = wxString::Format( "%ld", csPin.ID );
+            pinName = csPin.Label;
+            pinNum  = csPin.Name;
 
-            if( pinName.IsEmpty() )
+            if( pinNum.IsEmpty() )
             {
                 if( !csPin.Identifier.IsEmpty() )
-                    pinName = csPin.Identifier;
+                    pinNum = csPin.Identifier;
+                else
+                    pinNum = wxString::Format( "%ld", csPin.ID );
             }
         }
 
