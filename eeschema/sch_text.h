@@ -281,6 +281,7 @@ public:
     void Rotate( wxPoint aPosition ) override;
 
     virtual void Rotate90( bool aClockwise );
+    virtual void MirrorSpinStyle( bool aLeftRight );
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
@@ -402,6 +403,7 @@ public:
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
     void Rotate90( bool aClockwise ) override;
+    void MirrorSpinStyle( bool aLeftRight ) override;
 
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 

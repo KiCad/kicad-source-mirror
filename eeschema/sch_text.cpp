@@ -238,6 +238,15 @@ void SCH_TEXT::Rotate90( bool aClockwise )
 }
 
 
+void SCH_TEXT::MirrorSpinStyle( bool aLeftRight )
+{
+    if( aLeftRight )
+        SetLabelSpinStyle( GetLabelSpinStyle().MirrorY() );
+    else
+        SetLabelSpinStyle( GetLabelSpinStyle().MirrorX() );
+}
+
+
 void SCH_TEXT::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 {
     m_spin_style = aSpinStyle;
@@ -1005,6 +1014,31 @@ void SCH_GLOBALLABEL::Rotate90( bool aClockwise )
 
     wxPoint pos = m_intersheetRefsField.GetTextPos();
     RotatePoint( &pos, GetPosition(), aClockwise ? -900 : 900 );
+    m_intersheetRefsField.SetTextPos( pos );
+}
+
+
+void SCH_GLOBALLABEL::MirrorSpinStyle( bool aLeftRight )
+{
+    SCH_TEXT::MirrorSpinStyle( aLeftRight );
+
+    if( ( aLeftRight && m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_HORIZ )
+            || ( !aLeftRight && m_intersheetRefsField.GetTextAngle() == TEXT_ANGLE_VERT ) )
+    {
+        if( m_intersheetRefsField.GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        else
+            m_intersheetRefsField.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+    }
+
+    wxPoint pos = m_intersheetRefsField.GetTextPos();
+    wxPoint delta = GetPosition() - pos;
+
+    if( aLeftRight )
+        pos.x = GetPosition().x + delta.x;
+    else
+        pos.y = GetPosition().y + delta.y;
+
     m_intersheetRefsField.SetTextPos( pos );
 }
 

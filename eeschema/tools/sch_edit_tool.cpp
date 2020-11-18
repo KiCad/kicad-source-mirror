@@ -453,12 +453,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
-
             textItem->Rotate90( clockwise );
-
-            if( textItem->GetFieldsAutoplaced() == FIELDS_AUTOPLACED_AUTO )
-                textItem->AutoplaceFields( m_frame->GetScreen(), false );
-
             break;
         }
 
@@ -469,9 +464,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_SHEET*     sheet = pin->GetParent();
 
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
-            {
                 pin->Rotate( sheet->GetBoundingBox().GetCenter() );
-            }
+
             break;
         }
 
@@ -636,18 +630,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         case SCH_HIER_LABEL_T:
         {
             SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
-
-            if( xAxis )
-                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorX() );
-            else
-                textItem->SetLabelSpinStyle( textItem->GetLabelSpinStyle().MirrorY() );
-
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( item );
-                label->UpdateIntersheetRefProps();
-            }
-
+            textItem->MirrorSpinStyle( !xAxis );
             break;
         }
 
