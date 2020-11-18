@@ -162,15 +162,8 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_COMPONENT* aSymbol
     }
     else
     {
-        if( m_resolveTextVars )
-            fields.value = aSymbol->GetField( VALUE_FIELD )->GetShownText();
-        else
-            fields.value = aSymbol->GetField( VALUE_FIELD )->GetText();
-
-        if( m_resolveTextVars )
-            fields.footprint = aSymbol->GetField( FOOTPRINT_FIELD )->GetShownText();
-        else
-            fields.footprint = aSymbol->GetField( FOOTPRINT_FIELD )->GetText();
+        fields.value = aSymbol->GetValue( aSheet, m_resolveTextVars );
+        fields.footprint = aSymbol->GetFootprint( aSheet, m_resolveTextVars );
 
         if( m_resolveTextVars )
             fields.datasheet = aSymbol->GetField( DATASHEET_FIELD )->GetShownText();
@@ -235,6 +228,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
     for( unsigned ii = 0; ii < sheetList.size(); ii++ )
     {
         SCH_SHEET_PATH sheet = sheetList[ii];
+        m_schematic->SetCurrentSheet( sheet );
 
         auto cmp = [sheet]( SCH_COMPONENT* a, SCH_COMPONENT* b )
                    {
@@ -244,7 +238,7 @@ XNODE* NETLIST_EXPORTER_XML::makeSymbols( unsigned aCtl )
 
         std::set<SCH_COMPONENT*, decltype( cmp )> ordered_symbols( cmp );
 
-        for( SCH_ITEM* item : sheetList[ii].LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_COMPONENT_T ) )
         {
             SCH_COMPONENT* symbol = static_cast<SCH_COMPONENT*>( item );
             auto           test = ordered_symbols.insert( symbol );

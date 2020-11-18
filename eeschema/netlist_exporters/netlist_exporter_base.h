@@ -111,6 +111,9 @@ protected:
     /// The schematic we're generating a netlist for
     SCHEMATIC*            m_schematic;
 
+    /// The schematic's CurrentSheet when we entered.  Restore on exiting.
+    SCH_SHEET_PATH        m_savedCurrentSheet;
+
     /**
      * Function findNextSymbolAndCreatePinList
      * finds a symbol from the DrawList and builds its pin list in m_sortedSymbolPinList. This
@@ -165,10 +168,12 @@ public:
         m_schematic( aSchematic )
     {
         wxASSERT( aSchematic );
+        m_savedCurrentSheet = m_schematic->CurrentSheet();
     }
 
     virtual ~NETLIST_EXPORTER_BASE()
     {
+        m_schematic->SetCurrentSheet( m_savedCurrentSheet );
     }
 
     /**

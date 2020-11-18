@@ -576,12 +576,9 @@ const wxString SCH_COMPONENT::GetValue( const SCH_SHEET_PATH* sheet, bool aResol
     {
         if( instance.m_Path == path && !instance.m_Value.IsEmpty() )
         {
-            if( !aResolve )
-                return instance.m_Value;
-
-            SCH_FIELD dummy( wxDefaultPosition, VALUE_FIELD, const_cast<SCH_COMPONENT*>( this ) );
-            dummy.SetText( instance.m_Value );
-            return dummy.GetShownText();
+            // This can only be an override from an Update Schematic from PCB, and therefore
+            // will always be fully resolved.
+            return instance.m_Value;
         }
     }
 
@@ -629,12 +626,9 @@ const wxString SCH_COMPONENT::GetFootprint( const SCH_SHEET_PATH* sheet, bool aR
     {
         if( instance.m_Path == path && !instance.m_Footprint.IsEmpty() )
         {
-            if( !aResolve )
-                return instance.m_Footprint;
-
-            SCH_FIELD dummy( wxDefaultPosition, FOOTPRINT_FIELD, const_cast<SCH_COMPONENT*>( this ) );
-            dummy.SetText( instance.m_Footprint );
-            return dummy.GetShownText();
+            // This can only be an override from an Update Schematic from PCB, and therefore
+            // will always be fully resolved.
+            return instance.m_Footprint;
         }
     }
 
