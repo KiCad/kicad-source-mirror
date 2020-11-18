@@ -302,7 +302,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
             return false;
 
         m_progressReporter->AdvancePhase();
-        m_progressReporter->Report( _( "Removing insulated copper islands..." ) );
+        m_progressReporter->Report( _( "Removing isolated copper islands..." ) );
         m_progressReporter->KeepRefreshing();
     }
 
