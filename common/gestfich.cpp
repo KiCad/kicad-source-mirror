@@ -36,6 +36,7 @@
 #include <pgm_base.h>
 #include <common.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <gestfich.h>
 
 void AddDelimiterString( wxString& string )

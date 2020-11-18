@@ -45,6 +45,7 @@
 #include <trigo.h>
 #include <vector>
 #include <thread>
+#include <core/arraydim.h>
 #include <algorithm>
 #include <atomic>
 

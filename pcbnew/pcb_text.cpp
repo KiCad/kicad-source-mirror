@@ -28,6 +28,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board.h>
+#include <core/mirror.h>
 #include <pcb_text.h>
 #include <pcb_painter.h>
 #include <trigo.h>

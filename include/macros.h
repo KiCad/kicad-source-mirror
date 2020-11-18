@@ -116,26 +116,4 @@ static inline wxString FROM_UTF8( const char* cstring )
     return line;
 }
 
-/// # of elements in an array.  This implements type-safe compile time checking
-template <typename T, std::size_t N>
-constexpr std::size_t arrayDim(T const (&)[N]) noexcept
-{
-    return N;
-}
-
-/**
- * Function MIRROR
- * Mirror @a aPoint in @a aMirrorRef.
- */
-template<typename T>
-T MIRRORVAL( T aPoint, T aMirrorRef )
-{
-    return -( aPoint - aMirrorRef ) + aMirrorRef;
-}
-template<typename T>
-void MIRROR( T& aPoint, const T& aMirrorRef )
-{
-    aPoint = MIRRORVAL( aPoint, aMirrorRef );
-}
-
 #endif // MACROS_H

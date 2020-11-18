@@ -25,6 +25,7 @@
 #include <sch_edit_frame.h>
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
+#include <core/mirror.h>
 #include <lib_rectangle.h>
 #include <lib_pin.h>
 #include <lib_text.h>

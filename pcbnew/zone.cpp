@@ -26,6 +26,7 @@
 #include <bitmaps.h>
 #include <geometry/geometry_utils.h>
 #include <geometry/shape_null.h>
+#include <core/mirror.h>
 #include <advanced_config.h>
 #include <pcb_edit_frame.h>
 #include <pcb_screen.h>

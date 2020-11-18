@@ -27,9 +27,9 @@
  * @file dielectric_material.cpp
  */
 
-#include <macros.h>
 #include "stackup_predefined_prms.h"
 #include "dielectric_material.h"
+#include <core/arraydim.h>
 
 
 // A list of available substrate material

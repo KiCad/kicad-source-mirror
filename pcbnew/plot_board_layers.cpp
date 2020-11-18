@@ -36,6 +36,7 @@
 #include <math/util.h>      // for KiROUND
 
 #include <board.h>
+#include <core/arraydim.h>
 #include <footprint.h>
 #include <track.h>
 #include <fp_shape.h>

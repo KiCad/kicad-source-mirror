@@ -27,6 +27,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <gerber_file_image_list.h>
+#include <core/arraydim.h>
 #include <view/view.h>
 #include <gerbview_painter.h>
 #include <gal/graphics_abstraction_layer.h>

@@ -25,6 +25,7 @@
 
 #include <base_units.h>
 #include <bitmaps.h>
+#include <core/mirror.h>
 #include <math/util.h>      // for KiROUND
 #include <eda_draw_frame.h>
 #include <geometry/shape_circle.h>

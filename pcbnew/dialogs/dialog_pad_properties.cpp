@@ -30,6 +30,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <convert_basic_shapes_to_polygon.h> // for enum RECT_CHAMFER_POSITIONS definition
 #include <geometry/shape_segment.h>
 #include <dialog_pad_properties.h>

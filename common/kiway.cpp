@@ -30,6 +30,7 @@
 #include <kiway_express.h>
 #include <pgm_base.h>
 #include <config.h>
+#include <core/arraydim.h>
 #include <id.h>
 #include <settings/settings_manager.h>
 #include <logging.h>

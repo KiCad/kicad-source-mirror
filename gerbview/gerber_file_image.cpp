@@ -35,6 +35,7 @@
 #include <X2_gerber_attributes.h>
 #include <algorithm>
 #include <map>
+#include <core/arraydim.h>
 
 
 /**

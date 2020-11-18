@@ -26,6 +26,7 @@
 
 #include <kiface_i.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <base_units.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>

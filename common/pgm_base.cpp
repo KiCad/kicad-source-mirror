@@ -43,6 +43,7 @@
 #include <build_version.h>
 #include <config_params.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_base_frame.h>
 #include <eda_draw_frame.h>

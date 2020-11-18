@@ -34,7 +34,7 @@
 #include <sch_no_connect.h>
 #include <settings/color_settings.h>
 #include <default_values.h>    // For some default values
-#include <macros.h>
+#include <core/mirror.h>
 #include <trigo.h>
 
 

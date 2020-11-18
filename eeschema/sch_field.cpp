@@ -37,6 +37,7 @@
 #include <sch_edit_frame.h>
 #include <plotter.h>
 #include <bitmaps.h>
+#include <core/mirror.h>
 #include <kiway.h>
 #include <general.h>
 #include <class_library.h>

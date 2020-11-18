@@ -26,6 +26,7 @@
 #include <base_screen.h>
 #include <bitmaps.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <dialog_shim.h>
 #include <eda_draw_frame.h>
 #include <filehistory.h>

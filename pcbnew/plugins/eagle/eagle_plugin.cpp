@@ -57,6 +57,7 @@ Load() TODO's
 #include <wx/filename.h>
 
 #include <convert_basic_shapes_to_polygon.h>
+#include <core/arraydim.h>
 #include <geometry/geometry_utils.h>
 #include <kicad_string.h>
 #include <locale_io.h>

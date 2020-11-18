@@ -26,6 +26,7 @@
 #include <kiface_i.h>
 #include <pgm_base.h>
 #include <bitmaps.h>
+#include <core/arraydim.h>
 #include <eda_item.h>
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_data_model.h>

@@ -33,7 +33,7 @@
 #include <base_units.h>
 #include <common.h>
 #include <eda_draw_frame.h>
-#include <macros.h>
+#include <core/mirror.h>
 #include <sch_bitmap.h>
 #include <trigo.h>
 

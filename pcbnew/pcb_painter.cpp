@@ -35,6 +35,7 @@
 #include <pcb_marker.h>
 #include <dimension.h>
 #include <pcb_target.h>
+#include <core/arraydim.h>
 
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_painter.h>
@@ -1668,7 +1669,7 @@ void PCB_PAINTER::draw( const PCB_MARKER* aMarker, int aLayer )
         m_gal->SetFillColor( color );
         m_gal->SetIsFill( true );
     }
-   
+
     m_gal->DrawPolygon( polygon );
     m_gal->Restore();
 }

@@ -18,10 +18,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include <gerbview.h>
 #include <gerbview_frame.h>
-#include <macros.h>
+#include <core/arraydim.h>
 
 #include "panel_gerbview_settings.h"
 

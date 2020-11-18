@@ -24,6 +24,7 @@
 
 #include <sch_draw_panel.h>
 #include <bitmaps.h>
+#include <core/mirror.h>
 #include <schematic.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>

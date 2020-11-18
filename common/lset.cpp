@@ -28,6 +28,7 @@
 #include <iostream>                           // for string, endl, basic_ost...
 #include <stddef.h>                           // for size_t
 
+#include <core/arraydim.h>
 #include <math/util.h>                        // for Clamp
 #include <layers_id_colors_and_visibility.h>  // for LSET, PCB_LAYER_ID, LSEQ
 #include <macros.h>                           // for arrayDim

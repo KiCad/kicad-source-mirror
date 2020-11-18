@@ -25,6 +25,7 @@
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_loader.h>
 
+#include <core/mirror.h>
 #include <eda_text.h>
 #include <lib_arc.h>
 #include <lib_polyline.h>

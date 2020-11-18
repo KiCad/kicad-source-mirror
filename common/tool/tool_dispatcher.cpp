@@ -38,6 +38,7 @@
 #include <class_draw_panel_gal.h>
 #include <eda_draw_frame.h>
 
+#include <core/arraydim.h>
 #include <core/optional.h>
 #include <wx/stc/stc.h>
 #include <kiplatform/app.h>

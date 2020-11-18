@@ -25,6 +25,7 @@
 
 #include <config_params.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <fp_lib_table.h>
 #include <kicad_string.h>
 #include <kiface_ids.h>

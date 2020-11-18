@@ -27,6 +27,7 @@
 #include <base_units.h>
 #include <bitmaps.h>
 #include <board.h>
+#include <core/mirror.h>
 #include <footprint.h>
 #include <settings/settings_manager.h>
 #include <trigo.h>

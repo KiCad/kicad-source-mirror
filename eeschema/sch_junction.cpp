@@ -31,7 +31,7 @@
 #include <common.h>
 #include <plotter.h>
 #include <bitmaps.h>
-#include <macros.h>
+#include <core/mirror.h>
 #include <geometry/shape_rect.h>
 #include <sch_painter.h>
 #include <sch_junction.h>

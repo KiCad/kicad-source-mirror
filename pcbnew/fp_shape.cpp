@@ -25,6 +25,7 @@
  */
 
 #include <bitmaps.h>
+#include <core/mirror.h>
 #include <math/util.h>      // for KiROUND
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>

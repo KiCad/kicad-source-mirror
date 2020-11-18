@@ -66,6 +66,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
 #include <eeschema_settings.h>
+#include <core/arraydim.h>
 
 #define FIELD_PADDING Mils2iu( 10 )            // arbitrarily chosen for aesthetics
 #define FIELD_PADDING_ALIGNED Mils2iu( 18 )    // aligns 50 mil text to a 100 mil grid

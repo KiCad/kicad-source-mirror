@@ -39,6 +39,7 @@
 #include "track.h"
 #include "zone.h"
 #include "convert_to_biu.h"
+#include <core/arraydim.h>
 #include <filename_resolver.h>
 #include "plugins/3dapi/ifsg_all.h"
 #include "streamwrapper.h"

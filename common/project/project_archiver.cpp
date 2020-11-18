@@ -24,6 +24,7 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 
+#include <core/arraydim.h>
 #include <macros.h>
 #include <project/project_archiver.h>
 #include <reporter.h>

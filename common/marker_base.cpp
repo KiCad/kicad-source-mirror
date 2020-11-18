@@ -32,6 +32,7 @@
 
 #include "base_screen.h"
 #include "marker_base.h"
+#include <core/arraydim.h>
 #include <geometry/shape_line_chain.h>
 #include <render_settings.h>
 #include "dialog_display_info_HTML_base.h"

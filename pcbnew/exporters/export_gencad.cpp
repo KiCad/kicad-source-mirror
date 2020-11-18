@@ -35,6 +35,7 @@
 #include <footprint.h>
 #include <track.h>
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <dialogs/dialog_gencad_export_options.h>
 #include <locale_io.h>
 #include <hash_eda.h>

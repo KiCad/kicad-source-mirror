@@ -23,6 +23,7 @@
  */
 
 #include <confirm.h>
+#include <core/arraydim.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>

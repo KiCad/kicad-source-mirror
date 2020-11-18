@@ -28,9 +28,9 @@
  */
 
 #include "cogl_att_list.h"
-#include <macros.h>
 #include <wx/glcanvas.h>
 #include <wx/debug.h>
+#include <core/arraydim.h>
 
 /**
  *  Attributes list to be passed to a wxGLCanvas creation.
