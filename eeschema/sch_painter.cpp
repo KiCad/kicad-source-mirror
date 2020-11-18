@@ -411,7 +411,7 @@ void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit
         drawnPart = tmpPart.get();
     }
 
-    for( auto& item : drawnPart->GetDrawItems() )
+    for( const LIB_ITEM& item : drawnPart->GetDrawItems() )
     {
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
             continue;
@@ -1574,37 +1574,37 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
-    if( drawingShadows && !aLabel->IsSelected() )
-        return;
+    if( !drawingShadows || aLabel->IsSelected() )
+    {
+        COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows );
 
-    COLOR4D color = getRenderColor( aLabel, LAYER_GLOBLABEL, drawingShadows );
+        std::vector<wxPoint> pts;
+        std::deque<VECTOR2D> pts2;
 
-    std::vector<wxPoint> pts;
-    std::deque<VECTOR2D> pts2;
+        aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
 
-    aLabel->CreateGraphicShape( &m_schSettings, pts, aLabel->GetTextPos() );
+        for( const wxPoint& p : pts )
+            pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
-    for( auto p : pts )
-        pts2.emplace_back( VECTOR2D( p.x, p.y ) );
+        // The text is drawn inside the graphic shape.
+        // On Cairo the graphic shape is filled by the background before drawing the text.
+        // However if the text is selected, it is draw twice: first on LAYER_SELECTION_SHADOWS
+        // and second on the text layer.  The second must not erase the first drawing.
+        bool fillBg = ( aLayer == LAYER_SELECTION_SHADOWS ) || !aLabel->IsSelected();
+        m_gal->SetIsFill( fillBg );
+        m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
+        m_gal->SetIsStroke( true );
+        m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
+        m_gal->SetStrokeColor( color );
+        m_gal->DrawPolyline( pts2 );
 
-    // the text is drawn inside the graphic shape.
-    // On Cairo the graphic shape is filled by the background
-    // before drawing the text ().
-    // However if the text is selected, it is draw twice:
-    // first, on LAYER_SELECTION_SHADOWS
-    // second, on the text layer.
-    // the second must not erase the first drawing.
-    bool fillBg = ( aLayer == LAYER_SELECTION_SHADOWS ) || !aLabel->IsSelected();
-    m_gal->SetIsFill( fillBg );
-    m_gal->SetFillColor( m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-    m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( getTextThickness( aLabel, drawingShadows ) );
-    m_gal->SetStrokeColor( color );
-    m_gal->DrawPolyline( pts2 );
+        draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
+    }
 
-    draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
-
-    draw( aLabel->GetIntersheetRefs(), aLayer );
+    if( !drawingShadows || eeconfig()->m_Selection.draw_selected_children || !aLabel->IsSelected() )
+    {
+        draw( aLabel->GetIntersheetRefs(), aLayer );
+    }
 }
 
 

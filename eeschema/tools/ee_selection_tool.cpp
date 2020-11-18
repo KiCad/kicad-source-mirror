@@ -512,7 +512,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         displayWireCursor = true;
                     }
                     else if( collector[0]->IsHypertext()
-                                && ( !m_additive && !m_subtractive && !m_exclusive_or ) )
+                                && !collector[0]->IsSelected()
+                                && !m_additive && !m_subtractive && !m_exclusive_or )
                     {
                         rolloverItem = collector[0]->m_Uuid;
                     }
@@ -555,13 +556,19 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         if( m_frame->ToolStackIsEmpty() )
         {
             if( displayWireCursor )
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::LINE_WIRE_ADD );
+            }
             else if( rolloverItem != niluuid )
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::HAND );
+            }
             else if( !modifier_enabled && !m_selection.Empty()
                      && !m_frame->GetDragSelects() && evt->HasPosition()
                      && selectionContains( evt->Position() ) ) //move/drag option prediction
+            {
                 m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+            }
             else
             {
                 if( m_additive )
@@ -659,16 +666,6 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
                                      bool aExclusiveOr )
 {
     m_selection.ClearReferencePoint();
-
-    // Unmodified clicking of hypertext items results in hypertext actions rather than selection.
-    if( !aAdd && !aSubtract && !aExclusiveOr )
-    {
-        for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-        {
-            if( aCollector[i]->IsHypertext() )
-                aCollector.Remove( i );
-        }
-    }
 
     // If still more than one item we're going to have to ask the user.
     if( aCollector.GetCount() > 1 )
