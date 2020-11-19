@@ -968,12 +968,14 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         }
     }
 
+    bool explicitConstraintFound = constraintRef && !implicit;
+
     // Unfortunately implicit rules don't work for local clearances (such as zones) because
     // they have to be max'ed with netclass values (which are already implicit rules), and our
     // rule selection paradigm is "winner takes all".
-    if( constraintRef && aConstraintId == CLEARANCE_CONSTRAINT && implicit )
+    if( aConstraintId == CLEARANCE_CONSTRAINT && !explicitConstraintFound )
     {
-        int global = constraintRef->m_Value.Min();
+        int global = constraintRef ? constraintRef->m_Value.Min() : 0;
         int localA = ac ? ac->GetLocalClearance( nullptr ) : 0;
         int localB = bc ? bc->GetLocalClearance( nullptr ) : 0;
         int clearance = global;
