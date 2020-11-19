@@ -341,7 +341,33 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZones( BOARD_ITEM* aItem
             VECTOR2I   pos;
             DRC_RTREE* zoneTree = m_zoneTrees[ zone ].get();
 
-            if( zoneTree->QueryColliding( aItem, aLayer, clearance - m_drcEpsilon, &actual, &pos ) )
+            EDA_RECT               itemBBox = aItem->GetBoundingBox();
+            std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape( aLayer );
+
+            if( aItem->Type() == PCB_PAD_T )
+            {
+                PAD* pad = static_cast<PAD*>( aItem );
+
+                if( !pad->FlashLayer( aLayer ) )
+                {
+                    if( pad->GetDrillSize().x == 0 && pad->GetDrillSize().y == 0 )
+                        continue;
+
+                    const SHAPE_SEGMENT* hole = pad->GetEffectiveHoleShape();
+                    int                  size = hole->GetWidth();
+
+                    // Note: drill size represents finish size, which means the actual hole
+                    // size is the plating thickness larger.
+                    if( pad->GetAttribute() == PAD_ATTRIB_PTH )
+                        size += m_board->GetDesignSettings().GetHolePlatingThickness();
+
+                    itemShape = std::make_shared<SHAPE_SEGMENT>( hole->GetSeg(), size );
+                }
+            }
+
+            if( zoneTree->QueryColliding( itemBBox, itemShape.get(), aLayer,
+                                          clearance - m_drcEpsilon,
+                                          &actual, &pos ) )
             {
                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_CLEARANCE );
 

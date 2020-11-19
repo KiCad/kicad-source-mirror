@@ -232,16 +232,13 @@ public:
      * It checks all items in the bbox overlap to find the minimal actual distance and
      * position.
      */
-    bool QueryColliding( BOARD_ITEM* aRefItem, PCB_LAYER_ID aLayer,
-                         int aClearance, int* aActual, VECTOR2I* aPos ) const
+    bool QueryColliding( EDA_RECT aBox, SHAPE* aRefShape, PCB_LAYER_ID aLayer, int aClearance,
+                         int* aActual, VECTOR2I* aPos ) const
     {
-        EDA_RECT box = aRefItem->GetBoundingBox();
-        box.Inflate( aClearance );
+        aBox.Inflate( aClearance );
 
-        int min[2] = { box.GetX(),         box.GetY() };
-        int max[2] = { box.GetRight(),     box.GetBottom() };
-
-        std::shared_ptr<SHAPE> refShape = aRefItem->GetEffectiveShape( aLayer );
+        int min[2] = { aBox.GetX(), aBox.GetY() };
+        int max[2] = { aBox.GetRight(), aBox.GetBottom() };
 
         bool     collision = false;
         int      actual = INT_MAX;
@@ -253,7 +250,7 @@ public:
                     int      curActual;
                     VECTOR2I curPos;
 
-                    if( refShape->Collide( aItem->shape, aClearance, &curActual, &curPos ) )
+                    if( aRefShape->Collide( aItem->shape, aClearance, &curActual, &curPos ) )
                     {
                         collision = true;
 
