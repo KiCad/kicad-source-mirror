@@ -782,6 +782,14 @@ bool TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 bool ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
+
+    // Short-circuit common cases where the arc is connected to a track or via at an endpoint
+    if( EuclideanNorm( GetStart() - aPosition ) <= max_dist ||
+            EuclideanNorm( GetEnd() - aPosition ) <= max_dist )
+    {
+        return true;
+    }
+
     wxPoint center = GetPosition();
     wxPoint relpos = aPosition - center;
     double dist = EuclideanNorm( relpos );
@@ -803,7 +811,7 @@ bool ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
     if( arc_angle < 0 )
         return arc_hittest >= 3600 + arc_angle;
 
-    return  arc_hittest <= GetAngle();
+    return  arc_hittest <= arc_angle;
 }
 
 
