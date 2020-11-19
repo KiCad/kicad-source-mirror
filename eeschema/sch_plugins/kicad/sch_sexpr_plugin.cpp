@@ -1599,7 +1599,8 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         for( auto unit : units )
         {
-            name = aFormatter.Quotew( unitName );   // Add quotes and escape chars like ")
+            // Add quotes and escape chars like ") to the UTF8 unitName string
+            name = aFormatter.Quotes( unitName );
             name.pop_back();    // Remove last char: the quote ending the string.
 
             aFormatter.Print( aNestLevel + 1, "(symbol %s_%d_%d\"\n",
