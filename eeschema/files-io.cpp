@@ -533,6 +533,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         GetScreen()->m_Initialized = true;
     }
 
+    // Load any exclusions from the project file
+    ResolveERCExclusions();
+
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
 

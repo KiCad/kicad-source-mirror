@@ -648,6 +648,8 @@ void SCH_EDIT_FRAME::doCloseWindow()
     if( m_toolManager )
         m_toolManager->ShutdownAllTools();
 
+    RecordERCExclusions();
+
     // Close the find dialog and preserve it's setting if it is displayed.
     if( m_findReplaceDialog )
     {
@@ -719,10 +721,17 @@ void SCH_EDIT_FRAME::RecordERCExclusions()
 
 void SCH_EDIT_FRAME::ResolveERCExclusions()
 {
+    SCH_SHEET_LIST sheetList = Schematic().GetSheets();
+
     for( SCH_MARKER* marker : Schematic().ResolveERCExclusions() )
     {
-        // JEY TODO: need to get the right screen....
-        GetScreen()->Append( marker );
+        SCH_SHEET_PATH errorPath;
+        (void) sheetList.GetItem( marker->GetRCItem()->GetMainItemID(), &errorPath );
+
+        if( errorPath.LastScreen() )
+            errorPath.LastScreen()->Append( marker );
+        else
+            Schematic().RootScreen()->Append( marker );
     }
 
     // Update the view for the current screen
