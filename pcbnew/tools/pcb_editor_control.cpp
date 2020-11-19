@@ -802,25 +802,26 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         if( reselect && fp )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, fp );
 
-        auto cleanup = [&] ()
-        {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            commit.Revert();
-
-            if( fromOtherCommand )
-            {
-                PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList();
-
-                if( undo )
+        auto cleanup =
+                [&] ()
                 {
-                    m_frame->PutDataInPreviousState( undo, false );
-                    undo->ClearListAndDeleteItems();
-                    delete undo;
-                }
-            }
+                    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                    commit.Revert();
 
-            fp = NULL;
-        };
+                    if( fromOtherCommand )
+                    {
+                        PICKED_ITEMS_LIST* undo = m_frame->PopCommandFromUndoList();
+
+                        if( undo )
+                        {
+                            m_frame->PutDataInPreviousState( undo, false );
+                            undo->ClearListAndDeleteItems();
+                            delete undo;
+                        }
+                    }
+
+                    fp = NULL;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -832,7 +833,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsActivate() )
         {
             if( fp )
@@ -849,7 +849,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !fp )
@@ -890,33 +889,32 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 fp = NULL;  // to indicate that there is no footprint that we currently modify
             }
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu(  selection()  );
         }
-
         else if( fp && ( evt->IsMotion() || evt->IsAction( &ACTIONS::refreshPreview ) ) )
         {
             fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection().SetReferencePoint( cursorPos );
             getView()->Update( & selection()  );
         }
-
         else if( fp && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
             // Calling 'Properties' action clears the selection, so we need to restore it
             reselect = true;
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
         controls->SetAutoPan( !!fp );
         controls->CaptureCursor( !!fp );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -1031,7 +1029,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             frame()->PopTool( tool );
             break;
         }
-
         else if( evt->IsActivate() )
         {
             if( evt->IsMoveTool() )
@@ -1045,13 +1042,11 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
             target->SetWidth( target->GetWidth() + WIDTH_STEP );
             view->Update( &preview );
         }
-
         else if( evt->IsAction( &PCB_ACTIONS::decWidth ) )
         {
             int width = target->GetWidth();
@@ -1062,7 +1057,6 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
                 view->Update( &preview );
             }
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             assert( target->GetSize() > 0 );
@@ -1078,25 +1072,26 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
             target = new PCB_TARGET( *target );
             preview.Add( target );
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
         }
-
         else if( evt->IsMotion() )
         {
             target->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             view->Update( &preview );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     preview.Clear();
     delete target;
     view->Remove( &preview );
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 

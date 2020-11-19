@@ -450,16 +450,17 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         setCursor();
         VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-        auto cleanup = [&]()
-                       {
-                           m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                           m_controls->ForceCursorPosition( false );
-                           m_controls->ShowCursor( true );
-                           m_controls->SetAutoPan( false );
-                           m_controls->CaptureCursor( false );
-                           delete text;
-                           text = NULL;
-                       };
+        auto cleanup =
+                [&]()
+                {
+                    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+                    m_controls->ForceCursorPosition( false );
+                    m_controls->ShowCursor( true );
+                    m_controls->SetAutoPan( false );
+                    m_controls->CaptureCursor( false );
+                    delete text;
+                    text = NULL;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -619,7 +620,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
     }
 
-    frame()->SetMsgPanel( board() );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    m_frame->SetMsgPanel( board() );
     return 0;
 }
 
@@ -696,25 +698,28 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        auto cleanup = [&]()
-                       {
-                           m_controls->SetAutoPan( false );
-                           m_controls->CaptureCursor( false );
+        auto cleanup =
+                [&]()
+                {
+                    m_controls->SetAutoPan( false );
+                    m_controls->CaptureCursor( false );
 
-                           preview.Clear();
-                           m_view->Update( &preview );
+                    preview.Clear();
+                    m_view->Update( &preview );
 
-                           delete dimension;
-                           dimension = nullptr;
-                           step = SET_ORIGIN;
-                       };
+                    delete dimension;
+                    dimension = nullptr;
+                    step = SET_ORIGIN;
+                };
 
         if( evt->IsCancelInteractive() )
         {
             m_controls->SetAutoPan( false );
 
             if( step != SET_ORIGIN )    // start from the beginning
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -980,9 +985,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     m_controls->SetAutoPan( false );
     m_controls->ForceCursorPosition( false );
     m_controls->CaptureCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 
     m_view->Remove( &preview );
-    frame()->SetMsgPanel( board() );
+    m_frame->SetMsgPanel( board() );
     return 0;
 }
 
@@ -1156,6 +1162,8 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     preview.Clear();
     m_view->Remove( &preview );
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_frame->PopTool( tool );
     return 0;
 }
@@ -1231,6 +1239,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         }
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -1316,16 +1325,17 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
         if( evt->Modifier( MD_CTRL ) )
             limit45 = !limit45;
 
-        auto cleanup = [&]()
-                       {
-                           preview.Clear();
-                           m_view->Update( &preview );
-                           delete graphic;
-                           graphic = nullptr;
+        auto cleanup =
+                [&]()
+                {
+                    preview.Clear();
+                    m_view->Update( &preview );
+                    delete graphic;
+                    graphic = nullptr;
 
-                           if( !isLocalOriginSet )
-                               m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
-                       };
+                    if( !isLocalOriginSet )
+                        m_frame->GetScreen()->m_LocalOrigin = VECTOR2D( 0, 0 );
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1520,7 +1530,9 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
 
     m_view->Remove( &twoPointAsst );
     m_view->Remove( &preview );
-    frame()->SetMsgPanel( board() );
+    m_frame->SetMsgPanel( board() );
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
@@ -1603,11 +1615,13 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), graphic );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        auto cleanup = [&] () {
-            preview.Clear();
-            delete *aGraphic;
-            *aGraphic = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    preview.Clear();
+                    delete *aGraphic;
+                    *aGraphic = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -1760,7 +1774,9 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     preview.Remove( graphic );
     m_view->Remove( &arcAsst );
     m_view->Remove( &preview );
-    frame()->SetMsgPanel( board() );
+    m_frame->SetMsgPanel( board() );
+
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
     m_controls->ForceCursorPosition( false );
@@ -1891,14 +1907,15 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         else
             polyGeomMgr.SetLeaderMode( POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
 
-        auto cleanup = [&] ()
-                       {
-                           polyGeomMgr.Reset();
-                           started = false;
-                           grid.ClearSkipPoint();
-                           m_controls->SetAutoPan( false );
-                           m_controls->CaptureCursor( false );
-                       };
+        auto cleanup =
+                [&] ()
+                {
+                    polyGeomMgr.Reset();
+                    started = false;
+                    grid.ClearSkipPoint();
+                    m_controls->SetAutoPan( false );
+                    m_controls->CaptureCursor( false );
+                };
 
         if( evt->IsCancelInteractive())
         {
@@ -2030,6 +2047,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
 
     }    // end while
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_controls->ForceCursorPosition( false );
     return 0;
 }

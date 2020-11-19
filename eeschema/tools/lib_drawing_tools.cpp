@@ -95,8 +95,10 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             {
                 if( item )
                     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PLACE );
+                else if( isText )
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::TEXT );
                 else
-                    m_frame->GetCanvas()->SetCurrentCursor( isText ? KICURSOR::TEXT : KICURSOR::PENCIL );
+                    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
             };
 
     // Set initial cursor
@@ -109,12 +111,14 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-            delete item;
-            item = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    m_view->ClearPreview();
+                    delete item;
+                    item = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -142,7 +146,6 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             LIB_PART* part = m_frame->GetCurPart();
@@ -201,7 +204,6 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 getViewControls()->SetCursorPosition( cursorPos, false );
             }
-
             // ... and second click places:
             else
             {
@@ -235,22 +237,23 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             static_cast<LIB_ITEM*>( item )->SetPosition( wxPoint( cursorPos.x, -cursorPos.y ) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is an item to be placed
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -294,12 +297,14 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-            delete item;
-            item = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    m_view->ClearPreview();
+                    delete item;
+                    item = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -311,7 +316,6 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsActivate() )
         {
             if( item )
@@ -332,7 +336,6 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsClick( BUT_LEFT ) && !item )
         {
             if( !part )
@@ -364,7 +367,6 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_selectionTool->AddItemToSel( item );
         }
-
         else if( item && ( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
                         || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
@@ -384,19 +386,16 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( ACTIONS::activatePointEditor );
             }
         }
-
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->CalcEdit( wxPoint( cursorPos.x, -cursorPos.y) );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
-
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
             m_toolMgr->RunAction( EE_ACTIONS::properties, true );
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // Warp after context menu only if dragging...
@@ -405,15 +404,17 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -478,6 +479,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
             evt->SetPassEvent();
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 

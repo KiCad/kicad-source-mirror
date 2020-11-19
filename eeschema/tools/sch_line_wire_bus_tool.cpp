@@ -469,7 +469,6 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
     controls->ShowCursor( true );
 
-
     Activate();
 
     // Add the new label to the selection so the rotate command operates on it
@@ -508,35 +507,37 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
         bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
 
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+                    for( auto wire : m_wires )
+                        delete wire;
+
+                    m_wires.clear();
+                    segment = nullptr;
+
+                    if( m_busUnfold.entry )
+                        m_frame->RemoveFromScreen( m_busUnfold.entry, screen );
+
+                    if( m_busUnfold.label && !m_busUnfold.label_placed )
+                        m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
+
+                    if( m_busUnfold.label && m_busUnfold.label_placed )
+                        m_frame->RemoveFromScreen( m_busUnfold.label, screen );
+
+                    delete m_busUnfold.entry;
+                    delete m_busUnfold.label;
+                    m_busUnfold = {};
+
+                    m_view->ClearPreview();
+                    m_view->ShowPreview( false );
+                };
+
         //------------------------------------------------------------------------
         // Handle cancel:
         //
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
-            for( auto wire : m_wires )
-                delete wire;
-
-            m_wires.clear();
-            segment = nullptr;
-
-            if( m_busUnfold.entry )
-                m_frame->RemoveFromScreen( m_busUnfold.entry, screen );
-
-            if( m_busUnfold.label && !m_busUnfold.label_placed )
-                m_selectionTool->RemoveItemFromSel( m_busUnfold.label, true );
-
-            if( m_busUnfold.label && m_busUnfold.label_placed )
-                m_frame->RemoveFromScreen( m_busUnfold.label, screen );
-
-            delete m_busUnfold.entry;
-            delete m_busUnfold.label;
-            m_busUnfold = {};
-
-            m_view->ClearPreview();
-            m_view->ShowPreview( false );
-        };
-
         if( evt->IsCancelInteractive() )
         {
             if( segment || m_busUnfold.in_progress )
@@ -730,13 +731,16 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
             }
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a segment to be placed
         controls->SetAutoPan( segment != nullptr );
         controls->CaptureCursor( segment != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls->ForceCursorPosition( false );
     return 0;
 }

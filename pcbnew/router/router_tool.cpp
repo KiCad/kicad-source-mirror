@@ -962,6 +962,7 @@ bool ROUTER_TOOL::finishInteractive()
 {
     m_router->StopRouting();
 
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );

@@ -84,14 +84,18 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     std::vector<PICKED_SYMBOL>* historyList = nullptr;
 
     if( aEvent.IsAction( &EE_ACTIONS::placeSymbol ) )
+    {
         historyList = &m_symbolHistoryList;
+    }
     else if (aEvent.IsAction( &EE_ACTIONS::placePower ) )
     {
         historyList = &m_powerHistoryList;
         filter.FilterPowerParts( true );
     }
     else
+    {
         wxFAIL_MSG( "PlaceCompontent(): unexpected request" );
+    }
 
     getViewControls()->ShowCursor( true );
 
@@ -115,7 +119,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
     else if( aEvent.HasPosition() )
+    {
         m_toolMgr->RunAction( EE_ACTIONS::cursorClick );
+    }
 
     auto setCursor =
             [&]()
@@ -132,17 +138,21 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         setCursor();
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-            delete component;
-            component = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    m_view->ClearPreview();
+                    delete component;
+                    component = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
             if( component )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -184,8 +194,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
                 if( !part )
                     continue;
 
-                component = new SCH_COMPONENT(
-                        *part, &m_frame->GetCurrentSheet(), sel, (wxPoint) cursorPos );
+                component = new SCH_COMPONENT( *part, &m_frame->GetCurrentSheet(), sel,
+                                               (wxPoint) cursorPos );
                 component->SetParent( m_frame->GetCurrentSheet().LastScreen() );
                 component->SetFlags( IS_NEW | IS_MOVED );
 
@@ -221,9 +231,13 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
 
                     if( m_frame->eeconfig()->m_SymChooserPanel.place_all_units
                             && component->GetUnit() < component->GetUnitCount() )
+                    {
                         new_unit++;
+                    }
                     else
+                    {
                         new_unit = 1;
+                    }
 
                     // We are either stepping to the next unit or next component
                     if( m_frame->eeconfig()->m_SymChooserPanel.keep_symbol || new_unit > 1 )
@@ -286,6 +300,7 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
         getViewControls()->CaptureCursor( component != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -335,17 +350,21 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         setCursor();
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-            delete image;
-            image = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    m_view->ClearPreview();
+                    delete image;
+                    image = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
             if( image )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -452,6 +471,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         getViewControls()->CaptureCursor( image != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -661,6 +681,7 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
     delete previewItem;
     m_view->ClearPreview();
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -825,17 +846,21 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-            delete item;
-            item = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    m_view->ClearPreview();
+                    delete item;
+                    item = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
             if( item )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -973,7 +998,9 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 m_view->AddToPreview( item->Clone() );
             }
             else
+            {
                 item = nullptr;
+            }
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -982,13 +1009,16 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
             m_view->AddToPreview( item->Clone() );
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -1024,17 +1054,21 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        auto cleanup = [&] () {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-            m_view->ClearPreview();
-            delete sheet;
-            sheet = nullptr;
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+                    m_view->ClearPreview();
+                    delete sheet;
+                    sheet = nullptr;
+                };
 
         if( evt->IsCancelInteractive() )
         {
             if( sheet )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -1061,7 +1095,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsClick( BUT_LEFT ) && !sheet )
         {
             EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
@@ -1082,7 +1115,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             m_view->ClearPreview();
             m_view->AddToPreview( sheet->Clone() );
         }
-
         else if( sheet && ( evt->IsClick( BUT_LEFT )
                          || evt->IsAction( &EE_ACTIONS::finishSheet ) ) )
         {
@@ -1106,14 +1138,12 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
             sheet = nullptr;
         }
-
         else if( sheet && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( sheet->Clone() );
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // Warp after context menu only if dragging...
@@ -1123,13 +1153,16 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed
         getViewControls()->SetAutoPan( sheet != nullptr );
         getViewControls()->CaptureCursor( sheet != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 

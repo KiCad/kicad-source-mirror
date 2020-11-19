@@ -254,6 +254,7 @@ void LENGTH_TUNER_TOOL::performTuning()
     m_router->StopRouting();
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     highlightNet( false );
 }
 
@@ -323,6 +324,7 @@ int LENGTH_TUNER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     // Store routing settings till the next invocation
     m_savedSizes = m_router->Sizes();
 
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     frame()->PopTool( tool );
     return 0;
 }

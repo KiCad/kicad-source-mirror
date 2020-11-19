@@ -110,15 +110,15 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
         cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         auto cleanup =
-            [&] ()
-            {
-                m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
-                item = nullptr;
+                [&] ()
+                {
+                    m_toolMgr->RunAction( PL_ACTIONS::clearSelection, true );
+                    item = nullptr;
 
-                // There's nothing to roll-back, but we still need to pop the undo stack
-                // This also deletes the item being placed.
-                m_frame->RollbackFromUndo();
-            };
+                    // There's nothing to roll-back, but we still need to pop the undo stack
+                    // This also deletes the item being placed.
+                    m_frame->RollbackFromUndo();
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -195,13 +195,16 @@ int PL_DRAWING_TOOLS::PlaceItem( const TOOL_EVENT& aEvent )
             getView()->Update( item );
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is an item to be placed
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 
@@ -261,7 +264,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( evt->IsActivate() && !evt->IsPointEditor() && !evt->IsMoveTool() )
                 break;
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !item ) // start drawing
@@ -285,7 +287,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_frame->OnModify();
             }
         }
-
         else if( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() )
         {
             if( item )
@@ -295,7 +296,6 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 getView()->Update( item );
             }
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // Warp after context menu only if dragging...
@@ -304,15 +304,17 @@ int PL_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
         getViewControls()->SetAutoPan( item != nullptr );
         getViewControls()->CaptureCursor( item != nullptr );
     }
 
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_frame->PopTool( tool );
     return 0;
 }

@@ -238,13 +238,13 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
         controls.ForceCursorPosition(true, cursorPos );
 
         auto clearRuler =
-            [&] ()
-            {
-                view.SetVisible( &ruler, false );
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-                originSet = false;
-            };
+                [&] ()
+                {
+                    view.SetVisible( &ruler, false );
+                    controls.SetAutoPan( false );
+                    controls.CaptureCursor( false );
+                    originSet = false;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -323,6 +323,8 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
 
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
+
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 

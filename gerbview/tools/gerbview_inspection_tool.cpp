@@ -191,9 +191,9 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
 
 int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 {
-    auto& view = *getView();
-    auto& controls = *getViewControls();
-    auto previous_settings = controls.GetSettings();
+    KIGFX::VIEW&          view = *getView();
+    KIGFX::VIEW_CONTROLS& controls = *getViewControls();
+    KIGFX::VC_SETTINGS    previous_settings = controls.GetSettings();
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -226,13 +226,13 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         const VECTOR2I cursorPos = controls.GetCursorPosition();
 
         auto clearRuler =
-            [&] ()
-            {
-                view.SetVisible( &ruler, false );
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-                originSet = false;
-            };
+                [&] ()
+                {
+                    view.SetVisible( &ruler, false );
+                    controls.SetAutoPan( false );
+                    controls.CaptureCursor( false );
+                    originSet = false;
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -312,7 +312,9 @@ int GERBVIEW_INSPECTION_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
     view.SetVisible( &ruler, false );
     view.Remove( &ruler );
+
     controls.ApplySettings( previous_settings );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 

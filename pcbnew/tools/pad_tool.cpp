@@ -315,7 +315,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             frame()->PopTool( tool );
             break;
         }
-
         else if( evt->IsActivate() )
         {
             commit.Push( _( "Renumber pads" ) );
@@ -323,7 +322,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             frame()->PopTool( tool );
             break;
         }
-
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             selectedPads.clear();
@@ -414,7 +412,6 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 }
             }
         }
-
         else if( ( evt->IsKeyPressed() && evt->KeyCode() == WXK_RETURN ) ||
                  evt->IsDblClick( BUT_LEFT ) )
         {
@@ -422,14 +419,14 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
             frame()->PopTool( tool );
             break;
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Prepare the next loop by updating the old cursor mouse position
         // to this last mouse cursor position
@@ -444,6 +441,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
     }
 
     statusPopup.Hide();
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     return 0;
 }
 

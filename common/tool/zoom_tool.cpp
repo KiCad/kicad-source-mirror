@@ -63,19 +63,22 @@ int ZOOM_TOOL::Main( const TOOL_EVENT& aEvent )
         setCursor();
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
+        {
             break;
-
+        }
         else if( evt->IsDrag( BUT_LEFT ) || evt->IsDrag( BUT_RIGHT ) )
         {
             if( selectRegion() )
                 break;
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     // Exit zoom tool
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     m_frame->PopTool( tool );
     return 0;
 }

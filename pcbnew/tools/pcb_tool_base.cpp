@@ -247,6 +247,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     }
 
     view()->Remove( &preview );
+    frame()->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
 }
 
 

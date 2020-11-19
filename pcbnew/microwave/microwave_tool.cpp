@@ -111,9 +111,9 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 {
     using namespace KIGFX::PREVIEW;
 
-    KIGFX::VIEW& view = *getView();
+    KIGFX::VIEW&          view = *getView();
     KIGFX::VIEW_CONTROLS& controls = *getViewControls();
-    PCB_EDIT_FRAME& frame = *getEditFrame<PCB_EDIT_FRAME>();
+    PCB_EDIT_FRAME&       frame = *getEditFrame<PCB_EDIT_FRAME>();
 
     std::string tool = aEvent.GetCommandStr().get();
     frame.PushTool( tool );
@@ -149,13 +149,15 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
         setCursor();
         VECTOR2I cursorPos = controls.GetCursorPosition();
 
-        auto cleanup = [&] () {
-            originSet = false;
-            controls.CaptureCursor( false );
-            controls.SetAutoPan( false );
-            view.SetVisible( &previewRect, false );
-            view.Update( &previewRect, KIGFX::GEOMETRY );
-        };
+        auto cleanup =
+                [&] ()
+                {
+                    originSet = false;
+                    controls.CaptureCursor( false );
+                    controls.SetAutoPan( false );
+                    view.SetVisible( &previewRect, false );
+                    view.Update( &previewRect, KIGFX::GEOMETRY );
+                };
 
         if( evt->IsCancelInteractive() )
         {
@@ -167,7 +169,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         else if( evt->IsActivate() )
         {
             if( originSet )
@@ -184,7 +185,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
                 break;
             }
         }
-
         // A click or drag starts
         else if( !originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsDrag( BUT_LEFT ) ) )
         {
@@ -195,7 +195,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             controls.CaptureCursor( true );
             controls.SetAutoPan( true );
         }
-
         // another click after origin set is the end
         // left up is also the end, as you'll only get that after a drag
         else if( originSet && ( evt->IsClick( BUT_LEFT ) || evt->IsMouseUp( BUT_LEFT ) ) )
@@ -212,7 +211,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             view.SetVisible( &previewRect, false );
             view.Update( &previewRect, KIGFX::GEOMETRY );
         }
-
         // any move or drag once the origin was set updates
         // the end point
         else if( originSet && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
@@ -223,19 +221,21 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             view.SetVisible( &previewRect, true );
             view.Update( &previewRect, KIGFX::GEOMETRY );
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection() );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
+    view.Remove( &previewRect );
+
+    frame.GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
     controls.CaptureCursor( false );
     controls.SetAutoPan( false );
-    view.Remove( &previewRect );
     return 0;
 }
 
