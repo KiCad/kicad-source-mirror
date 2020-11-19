@@ -189,7 +189,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
         if( nearestItem != m_pcbFootprints.end() && nearestItem->first == path )
         {
             // Module with this path already exists - generate error
-            msg.Printf( _( "Pcb footprints '%s' and '%s' linked to same symbol." ),
+            msg.Printf( _( "Footprints '%s' and '%s' linked to same symbol." ),
                         nearestItem->second->m_ref,
                         ref );
             m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
@@ -279,9 +279,14 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
         // generate errors before we will find m_refs member to which item linked
         while( i < m_refs.GetCount() && m_refs[i].GetPath() != item.first.GetPath() )
         {
-            wxString msg = wxString::Format( _( "Cannot find footprint for symbol '%s'." ),
-                                             m_refs[i++].GetFullRef() );
-            m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
+            const SCH_REFERENCE& ref = m_refs[i++];
+
+            if( ref.GetSymbol()->GetIncludeOnBoard() )
+            {
+                wxString msg = wxString::Format( _( "Cannot find footprint for symbol '%s'." ),
+                                                 m_refs[i++].GetFullRef() );
+                m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
+            }
         }
 
         ++i;
@@ -315,7 +320,7 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_processReferences && ref.GetRef() != fpData.m_ref && !skip )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change \"%s\" reference designator to \"%s\"." ),
+            msg.Printf( _( "Change '%s' reference designator to '%s'." ),
                         ref.GetFullRef(),
                         fpData.m_ref );
 
@@ -332,7 +337,7 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_processFootprints && oldFootprint != fpData.m_footprint && !skip )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change %s footprint from \"%s\" to \"%s\"." ),
+            msg.Printf( _( "Change %s footprint assignment from '%s' to '%s'." ),
                         ref.GetFullRef(),
                         oldFootprint,
                         fpData.m_footprint );
@@ -350,7 +355,7 @@ void BACK_ANNOTATE::applyChangelist()
         if( m_processValues && oldValue != fpData.m_value && !skip )
         {
             ++m_changesCount;
-            msg.Printf( _( "Change %s value from \"%s\" to \"%s\"." ),
+            msg.Printf( _( "Change %s value from '%s' to '%s'." ),
                         ref.GetFullRef(),
                         oldValue,
                         fpData.m_value );
@@ -375,7 +380,7 @@ void BACK_ANNOTATE::applyChangelist()
 
                 if( !pin )
                 {
-                    msg.Printf( _( "Cannot find \"%s\" pin \"%s\"." ),
+                    msg.Printf( _( "Cannot find %s pin '%s'." ),
                                 ref.GetFullRef(),
                                 pinNumber );
                     m_reporter.ReportHead( msg, RPT_SEVERITY_ERROR );
@@ -504,7 +509,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
     {
     case SCH_LABEL_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" labels to \"%s\"." ), aOldName, aNewName );
+        msg.Printf( _( "Change '%s' labels to '%s'." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
@@ -529,7 +534,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
     case SCH_GLOBAL_LABEL_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" global labels to \"%s\"." ), aOldName, aNewName );
+        msg.Printf( _( "Change '%s' global labels to '%s'." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
@@ -542,7 +547,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
     case SCH_HIER_LABEL_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" hierarchical label to \"%s\"." ), aOldName, aNewName );
+        msg.Printf( _( "Change '%s' hierarchical label to '%s'." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
@@ -573,7 +578,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
     case SCH_SHEET_PIN_T:
         ++m_changesCount;
-        msg.Printf( _( "Change \"%s\" hierarchical label to \"%s\"." ), aOldName, aNewName );
+        msg.Printf( _( "Change '%s' hierarchical label to '%s'." ), aOldName, aNewName );
 
         if( !m_dryRun )
         {
@@ -597,8 +602,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
 
         if( schPin->IsPowerConnection() )
         {
-            msg.Printf( _( "Net \"%s\" cannot be changed to \"%s\" because it "
-                           "is driven by a power pin." ),
+            msg.Printf( _( "Net %s cannot be changed to '%s' because it is driven by a power pin." ),
                         aOldName,
                         aNewName );
 
@@ -607,7 +611,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
         }
 
         ++m_changesCount;
-        msg.Printf( _( "Add label \"%s\" to net \"%s\"." ), aNewName, aOldName );
+        msg.Printf( _( "Add label '%s' to net %s." ), aNewName, aOldName );
 
         if( !m_dryRun )
         {
