@@ -330,7 +330,9 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.sizes.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    // if( aCfg->m_Window.grid.sizes.empty() )  // Will be probably never enabled
     {
         /*
          * Do NOT add others values (mainly grid values in mm), because they can break the
@@ -351,30 +353,19 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
                                       "1 mil" };
     }
 
-    if( aCfg->m_Window.zoom_factors.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    // if( aCfg->m_Window.zoom_factors.empty() )
     {
-        aCfg->m_Window.zoom_factors = { 0.1,
-                                        0.15,
-                                        0.2,
-                                        0.3,
-                                        0.5,
-                                        0.7,
-                                        1.0,
-                                        1.5,
-                                        2.0,
-                                        3.0,
-                                        4.5,
-                                        6.5,
-                                        10.0,
-                                        15.0,
-                                        20.0,
-                                        30.0,
-                                        45.0,
-                                        65.0,
-                                        100.0,
-                                        150.0 };
+        aCfg->m_Window.zoom_factors = { 0.05, 0.07,
+                                        0.1, 0.15, 0.2, 0.3, 0.5, 0.7,
+                                        1.0, 1.5, 2.0, 3.0, 4.5, 6.5,
+                                        10.0, 15.0, 20.0, 30.0, 45.0, 65.0,
+                                        100.0 };
     }
 
+    // ensure factors < MAX_ZOOM_FACTOR (useful only when the user will be
+    // able to change/edit the factor list
     for( double& factor : aCfg->m_Window.zoom_factors )
         factor = std::min( factor, MAX_ZOOM_FACTOR );
 }
