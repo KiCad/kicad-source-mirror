@@ -404,7 +404,9 @@ int GERBER_PLOTTER::GetOrCreateAperture( const std::vector<wxPoint>& aCorners, d
 
        last_D_code = tool->m_DCode;
 
-        if( (tool->m_Type == aType) && (tool->m_Corners.size() == aCorners.size() ) &&
+        if( (tool->m_Type == aType) &&
+            (tool->m_Corners.size() == aCorners.size() ) &&
+            (tool->m_Rotation == aRotDegree) &&
             (tool->m_ApertureAttribute == aApertureAttribute) )
         {
             // A candidate is found. the corner lists must be the same
