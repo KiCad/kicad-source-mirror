@@ -1069,7 +1069,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
     }
 
 
-    //-----<zone containers (not keepout areas) become planes>--------------------------------
+    //-----<zones (not keepout areas) become planes>--------------------------------
     // Note: only zones are output here, keepout areas be be created later
     {
         int netlessZones = 0;
@@ -1190,7 +1190,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         }
     }
 
-    //-----<zone containers flagged keepout areas become keepout>--------------------------------
+    //-----<zones flagged keepout areas become keepout>--------------------------------
     {
         static const KICAD_T  scanZONEs[] = { PCB_ZONE_T, EOT };
         items.Collect( aBoard, scanZONEs );

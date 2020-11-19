@@ -814,7 +814,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                 {
                     if( implicit && ( a_is_non_copper || b_is_non_copper ) )
                     {
-                        REPORT( _( "Board and netclass clearances apply only to connected items." ) );
+                        REPORT( _( "Board and netclass clearances apply only between copper items." ) );
                         return true;
                     }
                 }

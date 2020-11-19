@@ -876,7 +876,7 @@ public:
     int SetAreasNetCodesFromNetNames();
 
     /**
-     * Return the Area (Zone Container) at a given index.
+     * Return the Zone at a given index.
      *
      * @param index The array type index into a collection of ZONE *.
      * @return ZONE* - a pointer to the Area or NULL if index out of range.
