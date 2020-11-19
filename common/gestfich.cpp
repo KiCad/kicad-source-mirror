@@ -121,14 +121,15 @@ wxString FindKicadFile( const wxString& shortname )
             return fullFileName;
     }
 
+#if defined( __WINDOWS__ )
+    // kicad can be installed highly portably on Windows, anywhere and concurrently
+    // either the "kicad file" is immediately adjacent to the exe or it's not a valid install
+    return shortname;
+#endif
+
     // Path list for KiCad binary files
     const static wxChar* possibilities[] = {
-#if defined( __WINDOWS__ )
-        wxT( "c:/kicad/bin/" ),
-        wxT( "d:/kicad/bin/" ),
-        wxT( "c:/Program Files/kicad/bin/" ),
-        wxT( "d:/Program Files/kicad/bin/" ),
-#elif defined( __WXMAC__ )
+#if defined( __WXMAC__ )
         // all internal paths are relative to main bundle kicad.app
         wxT( "Contents/Applications/pcbnew.app/Contents/MacOS/" ),
         wxT( "Contents/Applications/eeschema.app/Contents/MacOS/" ),
