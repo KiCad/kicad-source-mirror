@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-03 18:15+0000\n"
+"PO-Revision-Date: 2020-11-19 21:34+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5304,19 +5304,19 @@ msgid "Error extracting file!\n"
 msgstr "Fel vid extrahering av fil!\n"
 
 #: common/project/project_archiver.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr "Kunde inte skapa filen "
+msgstr "Det gick inte att skapa arkivfil \"%s\"\n"
 
 #: common/project/project_archiver.cpp:234
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\"\n"
-msgstr "Arkivera projektfiler:"
+msgstr "Arkivera filen \"%s\"\n"
 
 #: common/project/project_archiver.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr "Arkivera projektfiler:"
+msgstr "Arkivera filen \"%s\": Misslyckades!\n"
 
 #: common/project/project_archiver.cpp:270
 #, c-format
@@ -5373,9 +5373,9 @@ msgid "Field%d"
 msgstr "Fält %d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Stäng"
+msgstr "Stäng %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 #, fuzzy
@@ -5383,9 +5383,9 @@ msgid "Quit"
 msgstr "&Avsluta"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "&Avsluta"
+msgstr "Avsluta %s"
 
 #: common/tool/actions.cpp:41
 #, fuzzy
@@ -6066,7 +6066,11 @@ msgid ""
 "%s\n"
 "or\n"
 "%s could not be found."
-msgstr "Hjälpfilen '%s' kunde inte hittas."
+msgstr ""
+"Html- eller pdf-hjälpfil \n"
+"%s\n"
+"Eller\n"
+"%s kunde inte hittas."
 
 #: common/tool/common_control.cpp:211
 #, fuzzy, c-format
@@ -6088,9 +6092,9 @@ msgid "Get involved with KiCad"
 msgstr "Kom igång med KiCad"
 
 #: common/tool/grid_menu.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Grid: %s (%s)"
-msgstr "Rotera fält"
+msgstr "Rutnät: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
@@ -6103,9 +6107,9 @@ msgid "Zoom: %.2f"
 msgstr "Zoom: %.2f"
 
 #: common/validators.cpp:250
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect value: %s"
-msgstr "Ny komponent"
+msgstr "Felaktigt värde: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
@@ -6802,11 +6806,13 @@ msgid "Configuration Error"
 msgstr "Inställningsfel"
 
 #: cvpcb/cvpcb_mainframe.cpp:856
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading schematic.\n"
 "%s"
-msgstr "Skriv ut schema"
+msgstr ""
+"Fel vid inläsning av schematisk.\n"
+"%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:49
 #, fuzzy, c-format
@@ -6938,9 +6944,9 @@ msgid "Footprint ID \"%s\" is not valid."
 msgstr "Fotavtryck-ID \"%s\" är inte giltigt."
 
 #: cvpcb/display_footprints_frame.cpp:397
-#, fuzzy, c-format
+#, c-format
 msgid "Library \"%s\" is not in the footprint library table."
-msgstr "Spara det nuvarande aktiva biblioteket"
+msgstr "Bibliotek \"%s\" finns inte i tabellen för fotavtrycksbiblioteket."
 
 #: cvpcb/display_footprints_frame.cpp:406
 #: cvpcb/display_footprints_frame.cpp:428
@@ -7146,12 +7152,12 @@ msgstr "Uppdaterad %s från %s till %s"
 #: eeschema/annotate.cpp:231
 #, c-format
 msgid "Annotated %s (unit %s) as %s"
-msgstr "Kommenterad %s (enhet %s) som %s"
+msgstr "Annoterad %s (enhet %s) som %s"
 
 #: eeschema/annotate.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid "Annotated %s as %s"
-msgstr "Annotera"
+msgstr "Annoterad %s som %s"
 
 #: eeschema/annotate.cpp:246
 #, fuzzy
@@ -8106,9 +8112,9 @@ msgid "Candidates count %d "
 msgstr "Kandidater räknar %d "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:658
-#, fuzzy, c-format
+#, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "Modulen %s hittades inte"
+msgstr "%u länk(ar) mappad, %u hittades inte"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:663
 #, c-format
@@ -9234,9 +9240,9 @@ msgstr "Namnet '%s' strider mot en befintlig post i biblioteket '%s'."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:417
 #: eeschema/dialogs/dialog_symbol_properties.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "The name '%s' is already in use."
-msgstr "Denna filen är INTE en biblioteksfil"
+msgstr "Namnet '%s' används redan."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:486
 #: eeschema/dialogs/dialog_sheet_properties.cpp:674
@@ -11907,9 +11913,9 @@ msgid "No Colon in Nicknames"
 msgstr "Ingen kolon i smeknamn"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:409
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate Nickname: \"%s\"."
-msgstr "Duplicera"
+msgstr "Duplikat Smeknamn: \"%s\"."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:419
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:588
@@ -12143,9 +12149,9 @@ msgid "Bus alias %s has conflicting definitions on %s and %s"
 msgstr "Bussalias %s har motstridiga definitioner på %s och %s"
 
 #: eeschema/erc.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "Radera alla associationer"
+msgstr "Olika fotavtryck som tilldelats %s och %s"
 
 #: eeschema/erc.cpp:426
 msgid "Pins with \"no connection\" type are connected"
@@ -12447,11 +12453,13 @@ msgid "Abort Project Save"
 msgstr "&Öppna projekt"
 
 #: eeschema/files-io.cpp:994
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading schematic \"%s\".\n"
 "%s"
-msgstr "Skriv ut schema"
+msgstr ""
+"Fel vid inläsning av schematisk \"%s\".\n"
+"%s"
 
 #: eeschema/files-io.cpp:1020
 #, fuzzy
@@ -12601,9 +12609,9 @@ msgid "PolyLine"
 msgstr "PolyLine"
 
 #: eeschema/lib_text.cpp:385 eeschema/sch_text.cpp:551
-#, fuzzy, c-format
+#, c-format
 msgid "Graphic Text '%s'"
-msgstr "Grafisk text"
+msgstr "Grafisk text '%s'"
 
 #: eeschema/lib_view_frame.cpp:353
 msgid "<none>"
@@ -12765,9 +12773,9 @@ msgid "Failed to create file \"%s\""
 msgstr "Det gick inte att skapa fil \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_pspice.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find library file %s"
-msgstr "Standardsökväg för bibliotek:"
+msgstr "Kunde inte hitta biblioteksfilen %s"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:120
 #, fuzzy
@@ -12880,9 +12888,9 @@ msgid "Cannot create file \"%s\".\n"
 msgstr "Kan inte spara fil <%s>"
 
 #: eeschema/project_rescue.cpp:193
-#, fuzzy, c-format
+#, c-format
 msgid "Rename %s to %s"
-msgstr "Döp om filen"
+msgstr "Byt namn %s till %s"
 
 #: eeschema/project_rescue.cpp:301 eeschema/project_rescue.cpp:462
 #, c-format
@@ -12926,23 +12934,27 @@ msgid "Error occurred saving project specific symbol library table."
 msgstr "Ett fel inträffade när projektbaserad symbolbibliotekstabell sparades."
 
 #: eeschema/sch_base_frame.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s'."
-msgstr "Skriv ut schema"
+msgstr "Fel inträffade vid inläsning av symbolen '%s' från biblioteket '%s'."
 
 #: eeschema/sch_base_frame.cpp:205
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving global symbol library table:\n"
 "%s"
-msgstr "Skriv ut schema"
+msgstr ""
+"Fel vid sparar global bibliotektabell:\n"
+"%s"
 
 #: eeschema/sch_base_frame.cpp:221
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error saving project-specific symbol library table:\n"
 "%s"
-msgstr "Välj bibliotek"
+msgstr ""
+"Fel vid sparande av projektspecifik bibliotektabell:\n"
+"%s"
 
 #: eeschema/sch_bus_entry.cpp:346
 msgid "Bus to Wire Entry"
@@ -31676,7 +31688,7 @@ msgstr "Stämd: skev "
 
 #: pcbnew/router/pns_router.cpp:209
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "Ruttstartpunkten bryter mot DRC."
 
 #: pcbnew/router/router_tool.cpp:85
 #, fuzzy
