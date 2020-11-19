@@ -2961,7 +2961,6 @@ void DL_Dxf::writeVertex( DL_WriterA& dw,
     {
         dw.dxfReal( 10, data.x );
         dw.dxfReal( 20, data.y );
-        dw.dxfReal( 30, data.z );
 
         if( fabs( data.bulge )>1.0e-10 )
         {
