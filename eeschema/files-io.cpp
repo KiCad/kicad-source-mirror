@@ -539,6 +539,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
 
+    RecomputeIntersheetsRefs();
+
     // re-create junctions if needed. Eeschema optimizes wires by merging
     // colinear segments. If a schematic is saved without a valid
     // cache library or missing installed libraries, this can cause connectivity errors
