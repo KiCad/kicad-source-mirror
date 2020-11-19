@@ -2416,6 +2416,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     txtSize.x = getKiCadLength( tc.Width );
     txtSize.y = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( tc.Height ) );
     txt->SetTextSize( txtSize );
+    txt->SetKeepUpright( false ); //Keeping it upright seems to result in incorrect orientation
 
     switch( aCadstarAttrLoc.Alignment )
     {
