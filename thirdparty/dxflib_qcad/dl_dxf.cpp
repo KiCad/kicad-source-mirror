@@ -370,7 +370,7 @@ bool DL_Dxf::getStrippedLine( std::string& s, unsigned int size,
 bool DL_Dxf::stripWhiteSpace( char** s, bool stripSpace )
 {
     // last non-NULL char:
-    int lastChar = strlen( *s ) - 1;
+    std::size_t lastChar = strlen( *s ) - 1;
 
     // Is last character CR or LF?
     while( (lastChar >= 0)
@@ -2295,7 +2295,7 @@ void DL_Dxf::addHatch( DL_CreationInterface* creationInterface )
 
     for( unsigned int i = 0; i<hatchEdges.size(); i++ )
     {
-        creationInterface->addHatchLoop( DL_HatchLoopData( hatchEdges[i].size() ) );
+        creationInterface->addHatchLoop( DL_HatchLoopData( static_cast<int>( hatchEdges[i].size() ) ) );
 
         for( unsigned int k = 0; k<hatchEdges[i].size(); k++ )
         {
@@ -3383,19 +3383,21 @@ void DL_Dxf::writeMText( DL_WriterA& dw,
     dw.dxfInt( 72, data.drawingDirection );
 
     // Creare text chunks of 250 characters each:
-    int length = data.text.length();
-    char chunk[251];
-    int i;
+    #define TEXT_CHUNK_SIZE 250
 
-    for( i = 250; i<length; i += 250 )
+    std::size_t length = data.text.length();
+    char chunk[TEXT_CHUNK_SIZE+1];
+    std::size_t i = 0;
+
+    for( i = TEXT_CHUNK_SIZE; i < length; i += TEXT_CHUNK_SIZE )
     {
-        strncpy( chunk, &data.text.c_str()[i - 250], 250 );
-        chunk[250] = '\0';
+        strncpy( chunk, &data.text.c_str()[i - TEXT_CHUNK_SIZE], TEXT_CHUNK_SIZE );
+        chunk[TEXT_CHUNK_SIZE] = '\0';
         dw.dxfString( 3, chunk );
     }
 
-    strncpy( chunk, &data.text.c_str()[i - 250], 250 );
-    chunk[250] = '\0';
+    strncpy( chunk, &data.text.c_str()[i - TEXT_CHUNK_SIZE], TEXT_CHUNK_SIZE );
+    chunk[TEXT_CHUNK_SIZE] = '\0';
     dw.dxfString( 1, chunk );
 
     dw.dxfString( 7, data.style );
@@ -4146,7 +4148,7 @@ void DL_Dxf::writeHatch2( DL_WriterA& dw,
         dw.dxfString( 1001, "ACAD" );
         dw.dxfReal( 1010, data.originX );
         dw.dxfReal( 1020, data.originY );
-        dw.dxfInt( 1030, 0.0 );
+        dw.dxfInt( 1030, 0 );
     }
 }
 
@@ -6298,7 +6300,7 @@ bool DL_Dxf::checkVariable( const char* var, DL_Codes::version version )
  */
 int DL_Dxf::getLibVersion( const std::string& str )
 {
-    int d[4];
+    std::size_t d[4];
     int idx = 0;
     // char v[4][5];
     std::string v[4];
