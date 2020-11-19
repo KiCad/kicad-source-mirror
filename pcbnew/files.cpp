@@ -1119,7 +1119,7 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             }
 
 
-            // Update footprint LIB_IDs to point to the just imported Eagle library
+            // Update footprint LIB_IDs to point to the just imported library
             for( FOOTPRINT* footprint : GetBoard()->Footprints() )
             {
                 LIB_ID libId = footprint->GetFPID();
@@ -1130,48 +1130,6 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                 libId.SetLibNickname( newfilename.GetName() );
                 footprint->SetFPID( libId );
             }
-
-
-            // Store net names for all pads, to create net remap information
-            std::unordered_map<PAD*, wxString> netMap;
-
-            for( const auto& pad : GetBoard()->GetPads() )
-            {
-                NETINFO_ITEM* netinfo = pad->GetNet();
-
-                if( netinfo->GetNet() > 0 && !netinfo->GetNetname().IsEmpty() )
-                    netMap[pad] = netinfo->GetNetname();
-            }
-
-            // Two stage netlist update:
-            // - first, assign valid timestamps to footprints (no reannotation)
-            // - second, perform schematic annotation and update footprint references
-            //   based on timestamps
-            NETLIST netlist;
-            FetchNetlistFromSchematic( netlist, NO_ANNOTATION );
-            DoUpdatePCBFromNetlist( netlist, false );
-            FetchNetlistFromSchematic( netlist, QUIET_ANNOTATION );
-            DoUpdatePCBFromNetlist( netlist, true );
-
-            std::unordered_map<wxString, wxString> netRemap;
-
-            // Compare the old net names with the new net names and create a net map
-            for( const auto& pad : GetBoard()->GetPads() )
-            {
-                auto it = netMap.find( pad );
-
-                if( it == netMap.end() )
-                    continue;
-
-                NETINFO_ITEM* netinfo = pad->GetNet();
-
-                // Net name has changed, create a remap entry
-                if( netinfo->GetNet() > 0 && netMap[pad] != netinfo->GetNetname() )
-                    netRemap[netMap[pad]] = netinfo->GetNetname();
-            }
-
-            if( !netRemap.empty() )
-                fixEagleNets( netRemap );
 
             return true;
         }
@@ -1185,52 +1143,3 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
     return false;
 }
 
-
-bool PCB_EDIT_FRAME::fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap )
-{
-    bool result = true;
-    BOARD* board = GetBoard();
-
-    // perform netlist matching to prevent orphaned zones.
-    for( auto zone : board->Zones() )
-    {
-        auto it = aRemap.find( zone->GetNet()->GetNetname() );
-
-        if( it != aRemap.end() )
-        {
-            NETINFO_ITEM* net = board->FindNet( it->second );
-
-            if( !net )
-            {
-                wxFAIL;
-                result = false;
-                continue;
-            }
-
-            zone->SetNet( net );
-        }
-    }
-
-
-    // perform netlist matching to prevent orphaned tracks/vias.
-    for( auto track : board->Tracks() )
-    {
-        auto it = aRemap.find( track->GetNet()->GetNetname() );
-
-        if( it != aRemap.end() )
-        {
-            NETINFO_ITEM* net = board->FindNet( it->second );
-
-            if( !net )
-            {
-                wxFAIL;
-                result = false;
-                continue;
-            }
-
-            track->SetNet( net );
-        }
-    }
-
-    return result;
-}

@@ -212,11 +212,6 @@ protected:
      */
     bool importFile( const wxString& aFileName, int aFileType );
 
-    /**
-     * Rematch orphaned zones and vias to schematic nets.
-     */
-    bool fixEagleNets( const std::unordered_map<wxString, wxString>& aRemap );
-
     bool canCloseWindow( wxCloseEvent& aCloseEvent ) override;
     void doCloseWindow() override;
 
