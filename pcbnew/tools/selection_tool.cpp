@@ -2032,7 +2032,7 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
 {
     highlightInternal( aItem, aMode, aGroup, false );
 
-    view()->Update( aItem );
+    view()->Update( aItem, KIGFX::REPAINT );
 
     // Many selections are very temporal and updating the display each time just
     // creates noise.
@@ -2083,7 +2083,7 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 {
     unhighlightInternal( aItem, aMode, aGroup, false );
 
-    view()->Update( aItem );
+    view()->Update( aItem, KIGFX::REPAINT );
 
     // Many selections are very temporal and updating the display each time just
     // creates noise.
@@ -2110,7 +2110,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
         // N.B. if we clear the selection flag for sub-elements, we need to also
         // remove the element from the selection group (if it exists)
         if( isChild )
-            view()->Update( aItem );
+            view()->Update( aItem, KIGFX::REPAINT );
     }
 
     // footprints are treated in a special way - when they are highlighted, we have to
