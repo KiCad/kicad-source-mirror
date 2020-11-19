@@ -48,13 +48,17 @@ inline void decompress(const char* data,
                     "either increase the limit or reduce the buffer size" );
         }
 
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
     if (inflateInit2(&inflate_s, window_bits) != Z_OK)
     {
         throw std::runtime_error("inflate init failed");
     }
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
     inflate_s.next_in = reinterpret_cast<z_const Bytef*>(data);
     inflate_s.avail_in = static_cast<unsigned int>(size);
     std::string buffer(static_cast<std::size_t>(size_step), char());
