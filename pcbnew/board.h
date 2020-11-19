@@ -314,6 +314,7 @@ public:
 
     /// True if the legacy board design settings were loaded from a file
     bool m_LegacyDesignSettingsLoaded;
+    bool m_LegacyCopperEdgeClearanceLoaded;
 
     /// True if netclasses were loaded from the file
     bool m_LegacyNetclassesLoaded;

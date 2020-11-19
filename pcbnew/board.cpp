@@ -65,6 +65,7 @@ BOARD::BOARD() :
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
         m_NetInfo( this ),
         m_LegacyDesignSettingsLoaded( false ),
+        m_LegacyCopperEdgeClearanceLoaded( false ),
         m_LegacyNetclassesLoaded( false )
 {
     // we have not loaded a board yet, assume latest until then.

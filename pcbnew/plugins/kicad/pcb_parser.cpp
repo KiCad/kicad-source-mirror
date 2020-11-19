@@ -1864,6 +1864,7 @@ void PCB_PARSER::parseDefaults( BOARD_DESIGN_SETTINGS& designSettings )
         {
         case T_edge_clearance:
             designSettings.m_CopperEdgeClearance = parseBoardUnits( T_edge_clearance );
+            m_board->m_LegacyCopperEdgeClearanceLoaded = true;
             NeedRIGHT();
             break;
 
