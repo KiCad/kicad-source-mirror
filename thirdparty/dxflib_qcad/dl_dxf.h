@@ -130,12 +130,12 @@ public:
     static bool getStrippedLine( std::string& s, unsigned int size,
             FILE* stream, bool stripSpace = true );
 
-    bool readDxfGroups( std::stringstream& stream,
+    bool readDxfGroups( std::istream& stream,
             DL_CreationInterface* creationInterface );
-    bool in( std::stringstream& stream,
+    bool in( std::istream& stream,
             DL_CreationInterface* creationInterface );
     static bool getStrippedLine( std::string& s, unsigned int size,
-            std::stringstream& stream, bool stripSpace = true );
+            std::istream& stream, bool stripSpace = true );
 
     static bool stripWhiteSpace( char** s, bool stripSpaces = true );
 
