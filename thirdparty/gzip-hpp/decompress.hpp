@@ -1,3 +1,6 @@
+#ifndef GZIP_HPP_INCLUDED
+#define GZIP_HPP_INCLUDED
+
 #ifndef ZLIB_CONST
 #define ZLIB_CONST
 #endif
@@ -115,3 +118,5 @@ inline std::string decompress(std::string const& input,
 }
 
 } // namespace gzip
+
+#endif
