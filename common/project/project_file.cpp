@@ -326,8 +326,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
     fromLegacy<bool>( aCfg, "CopperTextUpright",  bp + "defaults.copper_text_upright" );
 
     if( !fromLegacy<double>( aCfg, "EdgeCutLineWidth", bp + "defaults.board_outline_line_width" ) )
-        fromLegacy<double>(
-                aCfg, "BoardOutlineThickness", bp + "defaults.board_outline_line_width" );
+        fromLegacy<double>( aCfg, "BoardOutlineThickness", bp + "defaults.board_outline_line_width" );
 
     fromLegacy<double>( aCfg, "CourtyardLineWidth",   bp + "defaults.courtyard_line_width" );
 
@@ -352,8 +351,7 @@ bool PROJECT_FILE::MigrateFromLegacy( wxConfigBase* aCfg )
 
     std::string sev = bp + "rule_severities";
 
-    fromLegacy<bool>(
-            aCfg, "RequireCourtyardDefinitions", sev + "legacy_no_courtyard_defined" );
+    fromLegacy<bool>( aCfg, "RequireCourtyardDefinitions", sev + "legacy_no_courtyard_defined" );
 
     fromLegacy<bool>( aCfg, "ProhibitOverlappingCourtyards", sev + "legacy_courtyards_overlap" );
 
