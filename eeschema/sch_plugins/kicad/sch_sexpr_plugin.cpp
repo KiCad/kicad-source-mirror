@@ -1596,6 +1596,13 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         // Save the draw items grouped by units.
         std::vector<PART_UNITS> units = aSymbol->GetUnitDrawItems();
+        std::sort( units.begin(), units.end(), []( const PART_UNITS& a, const PART_UNITS& b )
+           {
+                if( a.m_unit == b.m_unit )
+                    return a.m_convert < b.m_convert;
+
+                return a.m_unit < b.m_unit;
+           } );
 
         for( auto unit : units )
         {
