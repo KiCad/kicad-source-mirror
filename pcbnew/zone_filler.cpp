@@ -664,10 +664,6 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                 return aReporter && ( ticker++ % 50 ) == 0 && aReporter->IsCancelled();
             };
 
-    static PCB_SHAPE dummyEdge;
-    dummyEdge.SetParent( m_board );
-    dummyEdge.SetLayer( Edge_Cuts );
-
     // A small extra clearance to be sure actual track clearances are not smaller than
     // requested clearance due to many approximations in calculations, like arc to segment
     // approx, rounding issues, etc.

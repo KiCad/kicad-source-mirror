@@ -1177,11 +1177,13 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
     }
 
     BOARD* board = GetBoard();
+    int    edgeClearance = 0;
     int    maxError = ARC_HIGH_DEF;
     bool   keepExternalFillets = false;
 
     if( board )
     {
+        edgeClearance = board->GetDesignSettings().m_CopperEdgeClearance;
         maxError = board->GetDesignSettings().m_MaxError;
         keepExternalFillets = board->GetDesignSettings().m_ZoneKeepExternalFillets;
     }
@@ -1228,14 +1230,18 @@ bool ZONE::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly, PCB_LAYER_ID aLayer
         aSmoothedPoly.BooleanAdd( *zone->Outline(), SHAPE_POLY_SET::PM_FAST );
 
     if( !GetIsRuleArea() && aBoardOutline )
-        aSmoothedPoly.BooleanIntersection( *aBoardOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    {
+        SHAPE_POLY_SET bufferedOutline = *aBoardOutline;
+        bufferedOutline.Deflate( std::max( m_ZoneClearance, edgeClearance ), 16 );
+        aSmoothedPoly.BooleanIntersection( bufferedOutline, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    }
 
     smooth( aSmoothedPoly );
 
     if( aSmoothedPolyWithApron )
     {
         SHAPE_POLY_SET bufferedExtents = *maxExtents;
-        bufferedExtents.Inflate( m_ZoneMinThickness, 8 );
+        bufferedExtents.Inflate( m_ZoneMinThickness, 16 );
         *aSmoothedPolyWithApron = aSmoothedPoly;
         aSmoothedPolyWithApron->BooleanIntersection( bufferedExtents, SHAPE_POLY_SET::PM_FAST );
     }
