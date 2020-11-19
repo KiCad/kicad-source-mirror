@@ -800,7 +800,13 @@ void PANEL_SYM_LIB_TABLE::adjustPathSubsGridColumns( int aWidth )
     aWidth -= ( m_path_subs_grid->GetSize().x - m_path_subs_grid->GetClientSize().x );
 
     m_path_subs_grid->AutoSizeColumn( 0 );
-    m_path_subs_grid->SetColSize( 1, aWidth - m_path_subs_grid->GetColSize( 0 ) );
+
+    int remaining_width = aWidth - m_path_subs_grid->GetColSize( 0 );
+
+    if( remaining_width < 0 )
+        m_path_subs_grid->SetColSize( 1, -1 );
+    else
+        m_path_subs_grid->SetColSize( 1, remaining_width );
 }
 
 
