@@ -4290,7 +4290,7 @@ void DL_Dxf::writeHatchEdge( DL_WriterA& dw,
  *
  * @return IMAGEDEF handle. Needed for the IMAGEDEF counterpart.
  */
-int DL_Dxf::writeImage( DL_WriterA& dw,
+unsigned int DL_Dxf::writeImage( DL_WriterA& dw,
         const DL_ImageData& data,
         const DL_Attributes& aAttrib )
 {
@@ -4335,8 +4335,7 @@ int DL_Dxf::writeImage( DL_WriterA& dw,
     dw.dxfReal( 23, data.height );
 
     // handle of IMAGEDEF object
-    int handle = dw.incHandle();
-    dw.dxfHex( 340, handle );
+    unsigned int handle = dw.handle(340);
 
     // flags
     dw.dxfInt( 70, 15 );
@@ -5496,13 +5495,10 @@ void DL_Dxf::writeAppDictionary( DL_WriterA& dw )
 }
 
 
-int DL_Dxf::writeDictionaryEntry( DL_WriterA& dw, const std::string& name )
+unsigned int DL_Dxf::writeDictionaryEntry( DL_WriterA& dw, const std::string& name )
 {
     dw.dxfString(  3, name );
-    int handle = dw.getNextHandle();
-    dw.dxfHex( 350, handle );
-    dw.incHandle();
-    return handle;
+    return dw.handle(350);
 }
 
 

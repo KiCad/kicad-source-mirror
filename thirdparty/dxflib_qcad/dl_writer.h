@@ -627,56 +627,6 @@ public:
     }
 
     /**
-     * Increases handle, so that the handle returned remains available.
-     */
-    unsigned long incHandle() const
-    {
-        return m_handle++;
-    }
-
-    /**
-     * Sets the handle of the model space. Entities refer to
-     * this handle.
-     */
-    void setModelSpaceHandle( unsigned long h )
-    {
-        modelSpaceHandle = h;
-    }
-
-    unsigned long getModelSpaceHandle()
-    {
-        return modelSpaceHandle;
-    }
-
-    /**
-     * Sets the handle of the paper space. Some special blocks refer to
-     * this handle.
-     */
-    void setPaperSpaceHandle( unsigned long h )
-    {
-        paperSpaceHandle = h;
-    }
-
-    unsigned long getPaperSpaceHandle()
-    {
-        return paperSpaceHandle;
-    }
-
-    /**
-     * Sets the handle of the paper space 0. Some special blocks refer to
-     * this handle.
-     */
-    void setPaperSpace0Handle( unsigned long h )
-    {
-        paperSpace0Handle = h;
-    }
-
-    unsigned long getPaperSpace0Handle()
-    {
-        return paperSpace0Handle;
-    }
-
-    /**
      * Must be overwritten by the implementing class to write a
      * real value to the file.
      *
