@@ -79,6 +79,19 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation )
 }
 
 
+void SHAPE_LINE_CHAIN::ConvertToArcs( const std::vector<SHAPE_ARC>& aArcs )
+{
+    int i = 0;
+    int j = 0;
+    int direction = 1;
+
+    for( SHAPE_ARC& arc :aArcs )
+    {
+
+    }
+}
+
+
 //TODO(SH): Adjust this into two functions: one to convert and one to split the arc into two arcs
 void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
 {
