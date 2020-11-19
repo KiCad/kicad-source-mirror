@@ -2044,9 +2044,6 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
 void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
                                         PCBNEW_SELECTION* aSelectionViewGroup, bool isChild )
 {
-    wxLogTrace( "GRP", wxString::Format( "highlight() %s",
-                                         aItem->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
-
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
@@ -2098,9 +2095,6 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
                                           PCBNEW_SELECTION* aSelectionViewGroup, bool isChild )
 {
-    wxLogTrace( "GRP", wxString::Format( "unhighlight() %s",
-                                         aItem->GetSelectMenuText( EDA_UNITS::MILLIMETRES ) ) );
-
     if( aMode == SELECTED )
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
