@@ -332,9 +332,6 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
     bool     in_super_or_subscript = false;
     VECTOR2D glyphSize = baseGlyphSize;
 
-    // Allocate only once (for performance)
-    std::deque<VECTOR2D> ptListScaled;
-
     yOffset = 0;
 
     for( UTF8::uni_iter chIt = aText.ubegin(), end = aText.uend(); chIt < end; ++chIt )
@@ -459,8 +456,7 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
         for( const std::vector<VECTOR2D>* ptList : *glyph )
         {
-            int ptCount = 0;
-            ptListScaled.clear();
+            std::deque<VECTOR2D> ptListScaled;
 
             for( const VECTOR2D& pt : *ptList )
             {
@@ -477,10 +473,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
                 }
 
                 ptListScaled.push_back( scaledPt );
-                ptCount++;
             }
 
-            m_gal->DrawPolyline( &ptListScaled[0], ptCount );
+            m_gal->DrawPolyline( ptListScaled );
         }
 
         xOffset += glyphSize.x * bbox.GetEnd().x;
