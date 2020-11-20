@@ -1579,23 +1579,25 @@ struct DXFLIB_EXPORT DL_LeaderData
      * Constructor.
      * Parameters: see member variables.
      */
-    DL_LeaderData( int lArrowHeadFlag,
-            int lLeaderPathType,
-            int lLeaderCreationFlag,
-            int lHooklineDirectionFlag,
-            int lHooklineFlag,
-            double lTextAnnotationHeight,
-            double lTextAnnotationWidth,
-            int lNumber )
+    DL_LeaderData( int arrowHeadFlag,
+            int leaderPathType,
+            int leaderCreationFlag,
+            int hooklineDirectionFlag,
+            int hooklineFlag,
+            double textAnnotationHeight,
+            double textAnnotationWidth,
+            int number,
+            double dimScale = 1.0 ) :
+        arrowHeadFlag(arrowHeadFlag),
+        leaderPathType(leaderPathType),
+        leaderCreationFlag(leaderCreationFlag),
+        hooklineDirectionFlag( hooklineDirectionFlag ),
+        hooklineFlag( hooklineFlag ),
+        textAnnotationHeight( textAnnotationHeight ),
+        textAnnotationWidth( textAnnotationWidth ),
+        number( number ),
+        dimScale( dimScale )
     {
-        arrowHeadFlag = lArrowHeadFlag;
-        leaderPathType = lLeaderPathType;
-        leaderCreationFlag = lLeaderCreationFlag;
-        hooklineDirectionFlag = lHooklineDirectionFlag;
-        hooklineFlag = lHooklineFlag;
-        textAnnotationHeight = lTextAnnotationHeight;
-        textAnnotationWidth = lTextAnnotationWidth;
-        number = lNumber;
     }
 
     /*! Arrow head flag (71). */
@@ -1621,6 +1623,9 @@ struct DXFLIB_EXPORT DL_LeaderData
 
     /*! Number of vertices in leader (76). */
     int number;
+
+    /*! Dimension scale (dimscale) style override. */
+    double dimScale;
 };
 
 

@@ -310,6 +310,8 @@ public:
             const DL_Attributes& attrib );
     void writeLeaderVertex( DL_WriterA& dw,
             const DL_LeaderVertexData& data );
+    void writeLeaderEnd( DL_WriterA& dw,
+            const DL_LeaderData& data );
     void writeHatch1( DL_WriterA& dw,
             const DL_HatchData& data,
             const DL_Attributes& attrib );
