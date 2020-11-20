@@ -41,17 +41,14 @@ class wxPoint;
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
- * @param aTolerance is the max distance between points that is still accepted as connected
- *                   (internal units)
- * @param aErrorText is a wxString to return error message.
+ * @param aTolerance is the max error distance when polygonizing a curve (internal units)
  * @param aDiscontinuities = an optional array of wxPoint giving the locations of
  *                           discontinuities in the outline
  * @param aIntersections = an optional array of wxPoint giving the locations of self-
  *                         intersections in the outline
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              unsigned int aTolerance, wxString* aErrorText,
-                              std::vector<wxPoint>* aDiscontinuities = nullptr,
+                              int aTolerance, std::vector<wxPoint>* aDiscontinuities = nullptr,
                               std::vector<wxPoint>* aIntersections = nullptr );
 
 
@@ -62,8 +59,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
  * All contours should be closed, i.e. are valid vertices for a closed polygon
  * return true if success, false if a contour is not valid
  */
-extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                       unsigned int aTolerance, wxString* aErrorText,
+extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aTolerance,
                                        std::vector<wxPoint>* aDiscontinuities = nullptr,
                                        std::vector<wxPoint>* aIntersections = nullptr );
 

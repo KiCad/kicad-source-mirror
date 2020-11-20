@@ -666,10 +666,11 @@ public:
 
     /**
      * Builds complex polygons of the courtyard areas from graphic items on the courtyard layers
-     * @remark sets the MALFORMED_FRONT_COURTYARD and MALFORMED_BACK_COURTYARD status flags if
-     *         the given courtyard layer does not contain a (single) closed shape
+     * @remark sets the MALFORMED_F_COURTYARD and MALFORMED_B_COURTYARD status flags if the given
+     *         courtyard layer does not contain a (single) closed shape
      */
-    void BuildPolyCourtyards();
+    void BuildPolyCourtyards( std::vector<wxPoint>* aDiscontinuities = nullptr,
+                              std::vector<wxPoint>* aIntersections = nullptr );
 
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 

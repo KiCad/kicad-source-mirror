@@ -23,8 +23,9 @@
 
 #include <dialog_constraints_reporter.h>
 #include <pcb_edit_frame.h>
+#include <tool/tool_manager.h>
 #include <wx_html_report_box.h>
-
+#include <tools/pcb_actions.h>
 
 DIALOG_CONSTRAINTS_REPORTER::DIALOG_CONSTRAINTS_REPORTER( PCB_EDIT_FRAME* aParent ) :
         DIALOG_CONSTRAINTS_REPORTER_BASE( aParent ),
@@ -47,7 +48,10 @@ void DIALOG_CONSTRAINTS_REPORTER::DeleteAllPages()
 
 void DIALOG_CONSTRAINTS_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+    if( event.GetLinkInfo().GetHref() == "boardsetup" )
+        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+    else if( event.GetLinkInfo().GetHref() == "drc" )
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
 }
 
 

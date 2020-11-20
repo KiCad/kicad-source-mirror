@@ -306,26 +306,46 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     if( item && node )
     {
         PCB_LAYER_ID             principalLayer = item->GetLayer();
-        std::shared_ptr<RC_ITEM> rc_item        = node->m_RcItem;
+        LSET                     violationLayers;
+        std::shared_ptr<RC_ITEM> rc_item = node->m_RcItem;
 
-        BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
-        BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
-        BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
-        BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
+        if( rc_item->GetErrorCode() == DRCE_MALFORMED_COURTYARD )
+        {
+            BOARD_ITEM* a = board->GetItem( rc_item->GetMainItemID() );
 
-        LSET violationLayers;
+            if( a && ( a->GetFlags() & MALFORMED_B_COURTYARD ) > 0
+                  && ( a->GetFlags() & MALFORMED_F_COURTYARD ) == 0 )
+            {
+                principalLayer = B_CrtYd;
+            }
+            else
+            {
+                principalLayer = F_CrtYd;
+            }
+        }
+        else if (rc_item->GetErrorCode() == DRCE_INVALID_OUTLINE )
+        {
+            principalLayer = Edge_Cuts;
+        }
+        else
+        {
+            BOARD_ITEM*  a = board->GetItem( rc_item->GetMainItemID() );
+            BOARD_ITEM*  b = board->GetItem( rc_item->GetAuxItemID() );
+            BOARD_ITEM*  c = board->GetItem( rc_item->GetAuxItem2ID() );
+            BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
 
-        if( a )
-            violationLayers &= a->GetLayerSet();
+            if( a )
+                violationLayers &= a->GetLayerSet();
 
-        if( b )
-            violationLayers &= b->GetLayerSet();
+            if( b )
+                violationLayers &= b->GetLayerSet();
 
-        if( c )
-            violationLayers &= c->GetLayerSet();
+            if( c )
+                violationLayers &= c->GetLayerSet();
 
-        if( d )
-            violationLayers &= d->GetLayerSet();
+            if( d )
+                violationLayers &= d->GetLayerSet();
+        }
 
         if( violationLayers.count() )
             principalLayer = violationLayers.Seq().front();
@@ -339,7 +359,7 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
         if( ( violationLayers & board->GetVisibleLayers() ) == 0 )
         {
-            m_brdEditor->GetAppearancePanel()->SetLayerVisible( item->GetLayer(), true );
+            m_brdEditor->GetAppearancePanel()->SetLayerVisible( principalLayer, true );
             m_brdEditor->GetCanvas()->Refresh();
         }
 

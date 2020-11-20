@@ -829,13 +829,10 @@ static void export_vrml_drawings( MODEL_VRML& aModel, BOARD* pcb )
 static void export_vrml_board( MODEL_VRML& aModel, BOARD* aPcb )
 {
     SHAPE_POLY_SET  pcbOutlines;      // stores the board main outlines
-    wxString msg;
 
-    if( !aPcb->GetBoardPolygonOutlines( pcbOutlines, &msg ) )
+    if( !aPcb->GetBoardPolygonOutlines( pcbOutlines ) )
     {
-        msg << "\n\n" <<
-            _( "Unable to calculate the board outlines; fall back to using the board boundary box." );
-        wxMessageBox( msg );
+        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
     }
 
     int seg;
@@ -864,18 +861,14 @@ static void export_vrml_board( MODEL_VRML& aModel, BOARD* aPcb )
 
             if( seg < 0 )
             {
-                msg << "\n\n" <<
-                  _( "VRML Export Failed: Could not add holes to contours." );
-                wxMessageBox( msg );
-
+                wxLogError( _( "VRML Export Failed: Could not add holes to contours." ) );
                 return;
             }
 
             for( int j = 0; j < hole.PointCount(); j++ )
             {
-                aModel.m_holes.AddVertex( seg, (double)hole.CPoint(j).x * BOARD_SCALE,
-                                          -((double)hole.CPoint(j).y * BOARD_SCALE ) );
-
+                aModel.m_holes.AddVertex( seg, (double) hole.CPoint(j).x * BOARD_SCALE,
+                                          -( (double) hole.CPoint(j).y * BOARD_SCALE ) );
             }
 
             aModel.m_holes.EnsureWinding( seg, true );

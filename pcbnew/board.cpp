@@ -1842,12 +1842,12 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE* aCurr
 }
 
 
-bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText,
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
                                      std::vector<wxPoint>* aDiscontinuities,
                                      std::vector<wxPoint>* aIntersections )
 {
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
-                                              aErrorText, aDiscontinuities, aIntersections );
+                                              aDiscontinuities, aIntersections );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

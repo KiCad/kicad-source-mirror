@@ -461,27 +461,26 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 {
     m_board_poly.RemoveAllContours();
 
-    bool     success = false;
-    wxString msg;
+    bool success;
 
     if( m_board->IsFootprintHolder() )
     {
         success = BuildFootprintPolygonOutlines( m_board, m_board_poly,
-                                                 m_board->GetDesignSettings().m_MaxError, &msg );
+                                                 m_board->GetDesignSettings().m_MaxError, nullptr );
 
         // Make polygon strictly simple to avoid issues (especially in 3D viewer)
         m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
-        if( aErrorMsg )
-            *aErrorMsg = msg;
+        if( !success && aErrorMsg )
+            *aErrorMsg = _( "Footprint outline is malformed. Run DRC for a full analysis." );
     }
     else
     {
 
-        success = m_board->GetBoardPolygonOutlines( m_board_poly, &msg );
+        success = m_board->GetBoardPolygonOutlines( m_board_poly );
 
-        if( aErrorMsg )
-            *aErrorMsg = _( "Board outline is not closed:" ) + wxS( " " )+ msg;
+        if( !success && aErrorMsg )
+            *aErrorMsg = _( "Board outline is malformed. Run DRC for a full analysis." );
     }
 
     return success;

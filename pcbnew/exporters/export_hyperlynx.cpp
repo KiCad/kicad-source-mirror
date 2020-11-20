@@ -299,6 +299,7 @@ bool HYPERLYNX_EXPORTER::writeBoardInfo()
 
     if( !m_board->GetBoardPolygonOutlines( outlines ) )
     {
+        wxLogError( _( "Board outline is malformed. Run DRC for a full analysis." ) );
         return false;
     }
 

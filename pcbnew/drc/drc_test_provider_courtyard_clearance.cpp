@@ -87,18 +87,40 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
         if( !reportProgress( ii++, m_board->Footprints().size(), delta ) )
             return;
 
-        if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) != 0 )
+        if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
         {
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_COURTYARD) )
                 continue;
 
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
+            std::vector<wxPoint> discontinuities;
+            std::vector<wxPoint> intersections;
 
-            m_msg.Printf( drcItem->GetErrorText() + wxS( " " ) + _( "(not a closed shape)" ) );
+            // Run courtyard test again to get error locations
+            footprint->BuildPolyCourtyards( &discontinuities, &intersections);
 
-            drcItem->SetErrorMessage( m_msg );
-            drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetPosition());
+            for( wxPoint pt : discontinuities )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
+
+                m_msg.Printf( _( "(not a closed shape)" ) );
+
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                drcItem->SetItems( footprint );
+
+                reportViolation( drcItem, pt );
+            }
+
+            for( wxPoint pt : intersections )
+            {
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
+
+                m_msg.Printf( _( "(self-intersecting)" ) );
+
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+                drcItem->SetItems( footprint );
+
+                reportViolation( drcItem, pt );
+            }
         }
         else if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
                 && footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
@@ -108,7 +130,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_COURTYARD );
             drcItem->SetItems( footprint );
-            reportViolation( drcItem, footprint->GetPosition());
+            reportViolation( drcItem, footprint->GetPosition() );
         }
         else
         {

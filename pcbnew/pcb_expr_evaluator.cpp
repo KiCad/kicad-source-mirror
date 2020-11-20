@@ -250,7 +250,7 @@ static void insideArea( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
-                    if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) != 0 )
+                    if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
                     {
                         aCtx->ReportError( _( "Footprint's courtyard is not a single, closed shape." ) );
                         return false;

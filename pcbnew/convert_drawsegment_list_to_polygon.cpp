@@ -191,17 +191,14 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
- * @param aTolerance is the max distance between points that is still accepted as connected
- *                   (internal units)
- * @param aErrorText is a wxString to return error message.
+ * @param aTolerance is the max error distance when polygonizing a curve (internal units)
  * @param aDiscontinuities = an optional array of wxPoint giving the locations of
  *                           discontinuities in the outline
  * @param aIntersections = an optional array of wxPoint giving the locations of self-
  *                         intersections in the outline
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              unsigned int aTolerance, wxString* aErrorText,
-                              std::vector<wxPoint>* aDiscontinuities,
+                              int aTolerance, std::vector<wxPoint>* aDiscontinuities,
                               std::vector<wxPoint>* aIntersections )
 {
     if( aSegList.size() == 0 )
@@ -519,15 +516,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             }
             else                // encountered discontinuity
             {
-                if( aErrorText )
-                {
-                    msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
-                                StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
-                                StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
-
-                    *aErrorText << msg << "\n";
-                }
-
                 if( aDiscontinuities )
                     aDiscontinuities->emplace_back( prevPt );
 
@@ -731,15 +719,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 }
                 else                // encountered discontinuity
                 {
-                    if( aErrorText )
-                    {
-                        msg.Printf( _( "Unable to find edge with an endpoint of (%s, %s)." ),
-                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.x ),
-                                    StringFromValue( EDA_UNITS::MILLIMETRES, prevPt.y ) );
-
-                        *aErrorText << msg << "\n";
-                    }
-
                     if( aDiscontinuities )
                         aDiscontinuities->emplace_back( prevPt );
 
@@ -795,8 +774,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
  * Any closed outline inside the main outline is a hole
  * All contours should be closed, i.e. valid closed polygon vertices
  */
-bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, unsigned int aTolerance,
-                                wxString* aErrorText, std::vector<wxPoint>* aDiscontinuities,
+bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aTolerance,
+                                std::vector<wxPoint>* aDiscontinuities,
                                 std::vector<wxPoint>* aIntersections )
 {
     PCB_TYPE_COLLECTOR  items;
@@ -817,12 +796,8 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, unsign
 
     if( segList.size() )
     {
-        success = ConvertOutlineToPolygon( segList, aOutlines, aTolerance, aErrorText,
-                                           aDiscontinuities, aIntersections );
-    }
-    else if( aErrorText )
-    {
-        *aErrorText = _( "No edges found on Edge.Cuts layer." );
+        success = ConvertOutlineToPolygon( segList, aOutlines, aTolerance, aDiscontinuities,
+                                           aIntersections );
     }
 
     if( !success || !aOutlines.OutlineCount() )
@@ -1035,8 +1010,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
             segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, outlines, aTolerance, aErrorText,
-                                            aDiscontinuities, aIntersections );
+    bool success = ConvertOutlineToPolygon( segList, outlines, aTolerance, aDiscontinuities,
+                                            aIntersections );
 
     FOOTPRINT* footprint = aBoard->GetFirstFootprint();
 

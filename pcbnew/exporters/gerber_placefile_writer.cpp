@@ -173,16 +173,18 @@ int PLACEFILE_GERBER_WRITER::CreatePlaceFile( wxString& aFullFilename, PCB_LAYER
         // We plot the footprint courtyard when possible.
         // If not, the pads bounding box will be used.
         bool useFpPadsBbox = true;
+        bool onBack = aLayer == B_Cu;
 
         footprint->BuildPolyCourtyards();
 
-        if( ( footprint->GetFlags() & MALFORMED_COURTYARD ) == 0 )
+        int checkFlag = onBack ? MALFORMED_B_COURTYARD : MALFORMED_F_COURTYARD;
+
+        if( ( footprint->GetFlags() & checkFlag ) == 0 )
         {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CMP_COURTYARD );
 
-            SHAPE_POLY_SET& courtyard = aLayer == B_Cu ?
-                                                footprint->GetPolyCourtyardBack():
-                                                footprint->GetPolyCourtyardFront();
+            SHAPE_POLY_SET& courtyard = onBack ? footprint->GetPolyCourtyardBack()
+                                               : footprint->GetPolyCourtyardFront();
 
             for( int ii = 0; ii < courtyard.OutlineCount(); ii++ )
             {

@@ -113,7 +113,7 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
         return 0;
 
     // Build the board shape
-    m_board->GetBoardPolygonOutlines( m_boardShape /*, aErrorText, aErrorLocation*/ );
+    m_board->GetBoardPolygonOutlines( m_boardShape );
     m_topFreeArea = m_boardShape;
     m_bottomFreeArea = m_boardShape;
 

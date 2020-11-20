@@ -39,7 +39,10 @@
 
 void DIALOG_INSPECTION_REPORTER::OnErrorLinkClicked( wxHtmlLinkEvent& event )
 {
-    m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+    if( event.GetLinkInfo().GetHref() == "boardsetup" )
+        m_frame->ShowBoardSetupDialog( _( "Rules" ) );
+    else if( event.GetLinkInfo().GetHref() == "drc" )
+        m_frame->GetToolManager()->RunAction( PCB_ACTIONS::runDRC, true );
 }
 
 
@@ -399,6 +402,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     DRC_ENGINE  drcEngine( m_frame->GetBoard(), &m_frame->GetBoard()->GetDesignSettings() );
+    bool        courtyardError = false;
     bool        compileError = false;
 
     try
@@ -419,6 +423,9 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             zone->CacheBoundingBox();
 
         footprint->BuildPolyCourtyards();
+
+        if( ( footprint->GetFlags() & MALFORMED_COURTYARDS ) != 0 )
+            courtyardError = true;
     }
 
     if( item->Type() == PCB_TRACE_T )
@@ -575,6 +582,13 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
     else
     {
+        if( courtyardError )
+        {
+            r->Report( "" );
+            r->Report( _( "Report may be incomplete: some footprint courtyards are malformed.  " )
+                       + "<a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
+        }
+
         auto constraint = drcEngine.EvalRulesForItems( DISALLOW_CONSTRAINT, item, nullptr,
                                                        UNDEFINED_LAYER, r );
 

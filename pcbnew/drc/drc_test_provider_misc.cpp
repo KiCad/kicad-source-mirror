@@ -85,34 +85,43 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
 
     SHAPE_POLY_SET boardOutlines;
 
-    if( m_board->GetBoardPolygonOutlines( boardOutlines, nullptr, &discontinuities,
-                                          &intersections ) )
+    if(! m_board->GetBoardPolygonOutlines( boardOutlines, &discontinuities, &intersections ) )
     {
-        return;
-    }
+        if( boardOutlines.IsEmpty() )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-    for( wxPoint pt : discontinuities )
-    {
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+            m_msg.Printf( _( "(no edges found on Edge.Cuts layer)" ) );
 
-        m_msg.Printf( _( "(not a closed shape)" ) );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetItems( m_board );
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-        drcItem->SetItems( m_board );
+            reportViolation( drcItem, m_board->GetBoundingBox().Centre() );
+        }
 
-        reportViolation( drcItem, pt );
-    }
+        for( wxPoint pt : discontinuities )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-    for( wxPoint pt : intersections )
-    {
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+            m_msg.Printf( _( "(not a closed shape)" ) );
 
-        m_msg.Printf( _( "(self-intersecting)" ) );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetItems( m_board );
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-        drcItem->SetItems( m_board );
+            reportViolation( drcItem, pt );
+        }
 
-        reportViolation( drcItem, pt );
+        for( wxPoint pt : intersections )
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+
+            m_msg.Printf( _( "(self-intersecting)" ) );
+
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetItems( m_board );
+
+            reportViolation( drcItem, pt );
+        }
     }
 }
 

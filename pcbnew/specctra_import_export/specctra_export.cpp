@@ -831,10 +831,12 @@ PADSTACK* SPECCTRA_DB::makeVia( const ::VIA* aVia )
 
 void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
 {
-    wxString errMessage;
     SHAPE_POLY_SET outlines;
 
-    aBoard->GetBoardPolygonOutlines( outlines, &errMessage );
+    if( !aBoard->GetBoardPolygonOutlines( outlines ) )
+    {
+        wxLogWarning( _( "Board outline is malformed. Run DRC for a full analysis." ) );
+    }
 
     for( int cnt = 0; cnt < outlines.OutlineCount(); cnt++ )   // Should be one outline
     {
@@ -878,9 +880,6 @@ void SPECCTRA_DB::fillBOUNDARY( BOARD* aBoard, BOUNDARY* boundary )
             poly_ko->AppendPoint( mapPt( pos ) );
         }
     }
-
-    if( !errMessage.IsEmpty() )
-        wxLogMessage( errMessage );
 }
 
 

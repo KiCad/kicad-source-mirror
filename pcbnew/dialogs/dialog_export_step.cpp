@@ -205,8 +205,8 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
     {
         if( !doAutoSave() )
         {
-            DisplayErrorMessage( this,
-                                 _( "STEP export failed!  Please save the PCB and try again" ) );
+            DisplayErrorMessage( this, _( "STEP export failed!  "
+                                          "Please save the PCB and try again" ) );
             return;
         }
 
@@ -245,9 +245,9 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     wxString msg;
 
     // Check if the board outline is continuous
-    if( !BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, Millimeter2iu( 0.01 ), &msg ) )
+    if( !BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, Millimeter2iu( 0.01 ) ) )
     {
-        DisplayErrorMessage( this, _( "Cannot determine the board outline." ), msg );
+        DisplayErrorMessage( this, _( "Board outline is malformed. Run DRC for a full analysis." ) );
         return;
     }
 

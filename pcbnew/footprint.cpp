@@ -1693,11 +1693,12 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-void FOOTPRINT::BuildPolyCourtyards()
+void FOOTPRINT::BuildPolyCourtyards( std::vector<wxPoint>* aDiscontinuities,
+                                     std::vector<wxPoint>* aIntersections )
 {
     m_poly_courtyard_front.RemoveAllContours();
     m_poly_courtyard_back.RemoveAllContours();
-    ClearFlags( MALFORMED_COURTYARD );
+    ClearFlags( MALFORMED_COURTYARDS );
 
     // Build the courtyard area from graphic items on the courtyard.
     // Only PCB_FP_SHAPE_T have meaning, graphic texts are ignored.
@@ -1717,26 +1718,18 @@ void FOOTPRINT::BuildPolyCourtyards()
     if( !list_front.size() && !list_back.size() )
         return;
 
-    wxString error_msg;
-
     #define ARC_ERROR_MAX 0.02      /* error max in mm to approximate a arc by segments */
-    if( !ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
-                                  (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg ) )
+
+    if( !ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, Millimeter2iu( ARC_ERROR_MAX ),
+                                  aDiscontinuities, aIntersections ) )
     {
-        SetFlags( MALFORMED_COURTYARD );
+        SetFlags( MALFORMED_F_COURTYARD );
     }
 
-    if( !ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
-                                  (unsigned) Millimeter2iu( ARC_ERROR_MAX ), &error_msg ) )
+    if( !ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, Millimeter2iu( ARC_ERROR_MAX ),
+                                  aDiscontinuities, aIntersections ) )
     {
-        SetFlags( MALFORMED_COURTYARD );
-    }
-
-    if( !error_msg.IsEmpty() )
-    {
-        wxLogMessage( wxString::Format( _( "Processing courtyard of \"%s\": %s" ),
-                                        GetFPID().Format().wx_str(),
-                                        error_msg ) );
+        SetFlags( MALFORMED_B_COURTYARD );
     }
 }
 
