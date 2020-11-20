@@ -110,6 +110,26 @@ public:
     }
 };
 
+// Magic constants as defined by dxf specification for line weight
+#define DXF_IMPORT_LINEWEIGHT_BY_LAYER -1
+#define DXF_IMPORT_LINEWEIGHT_BY_BLOCK -2
+#define DXF_IMPORT_LINEWEIGHT_BY_LW_DEFAULT -3
+
+/**
+ * A helper class to hold layer settings temporarily during import
+ */
+class DXF_IMPORT_LAYER
+{
+public:
+    wxString m_layerName;
+    int      m_lineWeight;
+
+    DXF_IMPORT_LAYER( wxString aName, int aLineWeight )
+    {
+        m_layerName  = aName;
+        m_lineWeight = aLineWeight;
+    }
+};
 
 /**
  * This class import DXF ASCII files and convert basic entities to board entities.
@@ -143,6 +163,8 @@ private:
     double      m_minY, m_maxY;      // handles image size in mm
 
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
+
+    std::vector<std::unique_ptr<DXF_IMPORT_LAYER>> m_layers;    // List of layers as we import, used just to grab props for objects
 
 public:
     DXF_IMPORT_PLUGIN();
@@ -236,9 +258,15 @@ private:
     double mapX( double aDxfCoordX );
     double mapY( double aDxfCoordY );
     double mapDim( double aDxfValue );
-    // mapWidth returns ( in mm) the aDxfValue if aDxfWidth > 0
-    // or m_defaultThickness
-    double mapWidth( double aDxfWidth );
+    double lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer );
+
+    /**
+     * Returns the import layer data
+     *
+     * @param aLayerName is the raw string from dxflib getLayer()
+     * @returns The given layer by name or the placeholder layer inserted in the constructor
+     */
+    DXF_IMPORT_LAYER* getImportLayer( const std::string& aLayerName );
 
     // Functions to aid in the creation of a Polyline
     void insertLine( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd, int aWidth );
@@ -268,7 +296,8 @@ private:
     virtual void setVariableDouble( const std::string& key, double value, int code ) override {}
 
     virtual void addLayer( const DL_LayerData& aData ) override;
-    virtual void addLine( const DL_LineData& aData) override;
+    virtual void addLine( const DL_LineData& aData ) override;
+    virtual void addLinetype( const DL_LinetypeData& data ) override;
 
     /**
      * Called for each BLOCK in the DXF file

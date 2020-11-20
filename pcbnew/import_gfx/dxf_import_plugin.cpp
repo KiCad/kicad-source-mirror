@@ -64,6 +64,11 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
     m_importAsFPShapes = true;
     m_minX = m_minY = std::numeric_limits<double>::max();
     m_maxX = m_maxY = std::numeric_limits<double>::min();
+
+    // placeholder layer so we can fallback to something later
+    std::unique_ptr<DXF_IMPORT_LAYER> layer0 =
+            std::make_unique<DXF_IMPORT_LAYER>( "", DXF_IMPORT_LINEWEIGHT_BY_LW_DEFAULT );
+    m_layers.push_back( std::move( layer0 ) );
 }
 
 
@@ -123,18 +128,6 @@ double DXF_IMPORT_PLUGIN::mapY( double aDxfCoordY )
 double DXF_IMPORT_PLUGIN::mapDim( double aDxfValue )
 {
     return SCALE_FACTOR( aDxfValue * m_dxf2mm );
-}
-
-
-double DXF_IMPORT_PLUGIN::mapWidth( double aDxfWidth )
-{
-    // Always return the default line width
-#if 0
-    // mapWidth returns the aDxfValue if aDxfWidth > 0 m_defaultThickness
-    if( aDxfWidth > 0.0 )
-        return SCALE_FACTOR( aDxfWidth * m_DXF2mm );
-#endif
-    return  SCALE_FACTOR( m_defaultThickness );
 }
 
 
@@ -219,11 +212,63 @@ void DXF_IMPORT_PLUGIN::addKnot( const DL_KnotData& aData)
 
 void DXF_IMPORT_PLUGIN::addLayer( const DL_LayerData& aData )
 {
-    // Not yet useful in Pcbnew.
-#if 0
     wxString name = wxString::FromUTF8( aData.name.c_str() );
-    wxLogMessage( name );
+
+    int lw = attributes.getWidth();
+
+    if( lw == DXF_IMPORT_LINEWEIGHT_BY_LAYER )
+    {
+        lw = DXF_IMPORT_LINEWEIGHT_BY_LW_DEFAULT;
+    }
+
+    std::unique_ptr<DXF_IMPORT_LAYER> layer = std::make_unique<DXF_IMPORT_LAYER>( name, lw );
+
+    m_layers.push_back( std::move( layer ) );
+}
+
+
+void DXF_IMPORT_PLUGIN::addLinetype( const DL_LinetypeData& data )
+{
+#if 0
+    wxString name = FROM_UTF8( data.name.c_str() );
+    wxString description = FROM_UTF8( data.description.c_str() );
 #endif
+}
+
+
+double DXF_IMPORT_PLUGIN::lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer )
+{
+    if( lw == DXF_IMPORT_LINEWEIGHT_BY_LAYER && aLayer != nullptr )
+    {
+        lw = aLayer->m_lineWeight;
+    }
+
+    // All lineweights >= 0 are always in 100ths of mm
+    double mm = m_defaultThickness;
+    if( lw >= 0 )
+    {
+        mm = lw / 100.0;
+    }
+
+    return SCALE_FACTOR( mm );
+}
+
+
+DXF_IMPORT_LAYER* DXF_IMPORT_PLUGIN::getImportLayer( const std::string& aLayerName )
+{
+    DXF_IMPORT_LAYER* layer     = m_layers.front().get();
+    wxString          layerName = wxString::FromUTF8( aLayerName.c_str() );
+
+    if( !layerName.IsEmpty() )
+    {
+        auto resultIt = std::find_if( m_layers.begin(), m_layers.end(),
+                [layerName]( const auto& it ) { return it->m_layerName == layerName; } );
+
+        if( resultIt != m_layers.end() )
+            layer = resultIt->get();
+    }
+
+    return layer;
 }
 
 
@@ -232,9 +277,11 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
     if( m_inBlock )
         return;
 
+    DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
+    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+
     VECTOR2D start( mapX( aData.x1 ), mapY( aData.y1 ) );
     VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
-    double lineWidth = mapWidth( attributes.getWidth() );
 
     m_internalImporter.AddLine( start, end, lineWidth );
 
@@ -269,7 +316,8 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
     if( m_curr_entity.m_EntityParseStatus == 0 )
         return;     // Error
 
-    double lineWidth = mapWidth( attributes.getWidth() );
+    DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
+    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
     const DL_VertexData* vertex = &aData;
 
@@ -299,14 +347,15 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 
 void DXF_IMPORT_PLUGIN::endEntity()
 {
+    DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
+    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+
     if( m_curr_entity.m_EntityType == DL_ENTITY_POLYLINE ||
         m_curr_entity.m_EntityType == DL_ENTITY_LWPOLYLINE )
     {
         // Polyline flags bit 0 indicates closed (1) or open (0) polyline
         if( m_curr_entity.m_EntityFlag & 1 )
         {
-            double lineWidth = mapWidth( attributes.getWidth() );
-
             if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
                 insertLine( m_curr_entity.m_LastCoordinate, m_curr_entity.m_PolylineStart,
                             lineWidth );
@@ -318,7 +367,6 @@ void DXF_IMPORT_PLUGIN::endEntity()
 
     if( m_curr_entity.m_EntityType == DL_ENTITY_SPLINE )
     {
-        double lineWidth = mapWidth( attributes.getWidth() );
         insertSpline( lineWidth );
     }
 
@@ -345,8 +393,10 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
     if( m_inBlock )
         return;
 
-    VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
-    double lineWidth = mapWidth( attributes.getWidth() );
+    VECTOR2D          center( mapX( aData.cx ), mapY( aData.cy ) );
+    DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
+    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+
     m_internalImporter.AddCircle( center, mapDim( aData.radius ), lineWidth, false );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -379,7 +429,8 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     if( angle > 0.0 )
         angle -= 360.0;
 
-    double lineWidth = mapWidth( attributes.getWidth() );
+    DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
+    double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
     m_internalImporter.AddArc( center, arcStart, angle, lineWidth );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
