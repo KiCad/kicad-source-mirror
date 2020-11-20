@@ -32,6 +32,7 @@
 #include <strings.h>
 #endif
 
+#include <cstring>
 #include <iostream>
 #include <algorithm>
 
