@@ -75,11 +75,11 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth )
+void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled )
 {
     std::unique_ptr<PCB_SHAPE> circle( createDrawing() );
     circle->SetShape( S_CIRCLE );
-    circle->SetFilled( GetLayer() != Edge_Cuts );
+    circle->SetFilled( aFilled );
     circle->SetLayer( GetLayer() );
     circle->SetWidth( MapLineWidth( aWidth ) );
     circle->SetCenter( MapCoordinate( aCenter ) );

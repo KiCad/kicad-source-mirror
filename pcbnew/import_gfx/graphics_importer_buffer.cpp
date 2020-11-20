@@ -39,9 +39,9 @@ void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& 
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth )
+void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled )
 {
-    m_shapes.push_back( make_shape< IMPORTED_CIRCLE >( aCenter, aRadius, aWidth ) );
+    m_shapes.push_back( make_shape<IMPORTED_CIRCLE>( aCenter, aRadius, aWidth, aFilled ) );
 }
 
 

@@ -204,7 +204,7 @@ public:
      * @param aRadius is the circle radius expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth ) = 0;
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) = 0;
 
     /**
      * Create an object representing an arc.

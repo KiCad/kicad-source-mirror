@@ -63,22 +63,24 @@ private:
 class IMPORTED_CIRCLE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth ) :
+    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) :
             m_center( aCenter ),
             m_radius( aRadius ),
-            m_width( aWidth )
+            m_width( aWidth ),
+            m_filled( aFilled )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddCircle( m_center, m_radius, m_width );
+        aImporter.AddCircle( m_center, m_radius, m_width, m_filled );
     }
 
 private:
     const VECTOR2D m_center;
     double         m_radius;
     double         m_width;
+    bool           m_filled;
 };
 
 
@@ -193,7 +195,7 @@ class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 public:
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth ) override;
 
-    void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth ) override;
+    void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth, bool aFilled ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) override;
 

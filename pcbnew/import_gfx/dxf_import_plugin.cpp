@@ -347,7 +347,7 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 
     VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
     double lineWidth = mapWidth( attributes.getWidth() );
-    m_internalImporter.AddCircle( center, mapDim( aData.radius ), lineWidth );
+    m_internalImporter.AddCircle( center, mapDim( aData.radius ), lineWidth, false );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
 

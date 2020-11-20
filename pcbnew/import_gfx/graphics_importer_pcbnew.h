@@ -60,7 +60,7 @@ public:
 
     void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth ) override;
 
-    void AddCircle( const VECTOR2D& aOrigin, double aRadius, double aWidth ) override;
+    void AddCircle( const VECTOR2D& aOrigin, double aRadius, double aWidth, bool aFilled ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
                  double aWidth ) override;
