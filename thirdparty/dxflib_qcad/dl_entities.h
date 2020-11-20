@@ -1581,24 +1581,24 @@ struct DXFLIB_EXPORT DL_LeaderData
      * Constructor.
      * Parameters: see member variables.
      */
-    DL_LeaderData( int arrowHeadFlag,
-            int leaderPathType,
-            int leaderCreationFlag,
-            int hooklineDirectionFlag,
-            int hooklineFlag,
-            double textAnnotationHeight,
-            double textAnnotationWidth,
-            int number,
-            double dimScale = 1.0 ) :
-        arrowHeadFlag(arrowHeadFlag),
-        leaderPathType(leaderPathType),
-        leaderCreationFlag(leaderCreationFlag),
-        hooklineDirectionFlag( hooklineDirectionFlag ),
-        hooklineFlag( hooklineFlag ),
-        textAnnotationHeight( textAnnotationHeight ),
-        textAnnotationWidth( textAnnotationWidth ),
-        number( number ),
-        dimScale( dimScale )
+    DL_LeaderData( int aArrowHeadFlag,
+            int aLeaderPathType,
+            int aLeaderCreationFlag,
+            int aHooklineDirectionFlag,
+            int aHooklineFlag,
+            double aTextAnnotationHeight,
+            double aTextAnnotationWidth,
+            int aNumber,
+            double aDimScale = 1.0 ) :
+        arrowHeadFlag(aArrowHeadFlag),
+        leaderPathType(aLeaderPathType),
+        leaderCreationFlag(aLeaderCreationFlag),
+        hooklineDirectionFlag( aHooklineDirectionFlag ),
+        hooklineFlag( aHooklineFlag ),
+        textAnnotationHeight( aTextAnnotationHeight ),
+        textAnnotationWidth( aTextAnnotationWidth ),
+        number( aNumber ),
+        dimScale( aDimScale )
     {
     }
 
