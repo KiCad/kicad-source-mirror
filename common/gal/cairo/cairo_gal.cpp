@@ -1155,7 +1155,7 @@ void CAIRO_GAL_BASE::drawPoly( const VECTOR2D aPointList[], int aListSize )
     const auto p = roundp( xform( ptr->x, ptr->y ) );
     cairo_move_to( currentContext, p.x, p.y );
 
-    for( int i = 0; i < aListSize; ++i )
+    for( int i = 1; i < aListSize; ++i )
     {
         ++ptr;
         const auto p2 = roundp( xform( ptr->x, ptr->y ) );

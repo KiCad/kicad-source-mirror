@@ -111,12 +111,13 @@ public:
         m_transformHistory.pop();
     }
 
-
     /**
      * @brief Draw a polyline
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
     virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
+
+    virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
 
     /** Start and end points are defined as 2D-Vectors.
      * @param aStartPoint   is the start point of the line.
@@ -146,6 +147,8 @@ public:
     }
 
 private:
+    void doDrawPolyline( const std::vector<wxPoint>& aLocalPointList );
+
     // Apply the roation/translation transform to aPoint
     const VECTOR2D transform( const VECTOR2D& aPoint ) const;
 
