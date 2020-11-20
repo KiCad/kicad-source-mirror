@@ -293,9 +293,9 @@ public:
             const DL_DimensionData& data,
             const DL_DimDiametricData& edata,
             const DL_Attributes& attrib );
-    void writeDimAngular( DL_WriterA& dw,
+    void writeDimAngular2L( DL_WriterA& dw,
             const DL_DimensionData& data,
-            const DL_DimAngularData& edata,
+            const DL_DimAngular2LData& edata,
             const DL_Attributes& attrib );
     void writeDimAngular3P( DL_WriterA& dw,
             const DL_DimensionData& data,

@@ -324,7 +324,7 @@ private:
     virtual void addDimDiametric( const DL_DimensionData&,
             const DL_DimDiametricData& ) override { ON_UNSUPPORTED( "addDimDiametric" ); }
     virtual void addDimAngular( const DL_DimensionData&,
-            const DL_DimAngularData& ) override { ON_UNSUPPORTED( "addDimAngular" ); }
+            const DL_DimAngular2LData& ) override { ON_UNSUPPORTED( "addDimAngular" ); }
     virtual void addDimAngular3P( const DL_DimensionData&,
             const DL_DimAngular3PData& ) override { ON_UNSUPPORTED( "addDimAngular3P" ); }
     virtual void addDimOrdinate( const DL_DimensionData&,

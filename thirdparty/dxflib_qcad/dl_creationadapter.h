@@ -84,7 +84,7 @@ public:
     virtual void addDimDiametric( const DL_DimensionData&,
             const DL_DimDiametricData& ) override {}
     virtual void addDimAngular( const DL_DimensionData&,
-            const DL_DimAngularData& ) override {}
+            const DL_DimAngular2LData& ) override {}
     virtual void addDimAngular3P( const DL_DimensionData&,
             const DL_DimAngular3PData& ) override {}
     virtual void addDimOrdinate( const DL_DimensionData&,

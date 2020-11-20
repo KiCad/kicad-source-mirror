@@ -1402,13 +1402,13 @@ struct DXFLIB_EXPORT DL_DimDiametricData
 /**
  * Angular Dimension Data.
  */
-struct DXFLIB_EXPORT DL_DimAngularData
+struct DXFLIB_EXPORT DL_DimAngular2LData
 {
     /**
      * Constructor.
      * Parameters: see member variables.
      */
-    DL_DimAngularData( double ddpx1, double ddpy1, double ddpz1,
+    DL_DimAngular2LData( double ddpx1, double ddpy1, double ddpz1,
             double ddpx2, double ddpy2, double ddpz2,
             double ddpx3, double ddpy3, double ddpz3,
             double ddpx4, double ddpy4, double ddpz4 )
@@ -1430,7 +1430,7 @@ struct DXFLIB_EXPORT DL_DimAngularData
         dpz4 = ddpz4;
     }
 
-    /*! X Coordinate of definition point 1. */
+    /*! X Coordinate of definition point 1. (extension line 1 end). */
     double dpx1;
 
     /*! Y Coordinate of definition point 1. */
@@ -1439,7 +1439,7 @@ struct DXFLIB_EXPORT DL_DimAngularData
     /*! Z Coordinate of definition point 1. */
     double dpz1;
 
-    /*! X Coordinate of definition point 2. */
+    /*! X Coordinate of definition point 2. (extension line 2 end). */
     double dpx2;
 
     /*! Y Coordinate of definition point 2. */
@@ -1448,7 +1448,7 @@ struct DXFLIB_EXPORT DL_DimAngularData
     /*! Z Coordinate of definition point 2. */
     double dpz2;
 
-    /*! X Coordinate of definition point 3. */
+    /*! X Coordinate of definition point 3. (center). */
     double dpx3;
 
     /*! Y Coordinate of definition point 3. */
