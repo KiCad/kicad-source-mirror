@@ -2047,7 +2047,7 @@ void DL_Dxf::addAttribute( DL_CreationInterface* creationInterface )
 DL_DimensionData DL_Dxf::getDimData()
 {
     // generic dimension data:
-    return DL_DimensionData(
+    DL_DimensionData ret(
             // def point
             getRealValue( 10, 0.0 ),
             getRealValue( 20, 0.0 ),
@@ -2070,6 +2070,10 @@ DL_DimensionData DL_Dxf::getDimData()
             getStringValue( 3, "" ),
             // angle
             getRealValue( 53, 0.0 ) );
+
+    ret.arrow1Flipped = getIntValue( 74, 0 ) == 1;
+    ret.arrow2Flipped = getIntValue( 75, 0 ) == 1;
+    return ret;
 }
 
 
@@ -3568,6 +3572,8 @@ void DL_Dxf::writeDimAligned( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        dw.dxfInt( 74, data.arrow1Flipped );
+        dw.dxfInt( 75, data.arrow2Flipped );
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 
@@ -3635,6 +3641,8 @@ void DL_Dxf::writeDimLinear( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        dw.dxfInt( 74, data.arrow1Flipped );
+        dw.dxfInt( 75, data.arrow2Flipped );
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 
@@ -3709,6 +3717,8 @@ void DL_Dxf::writeDimRadial( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        dw.dxfInt( 74, data.arrow1Flipped );
+        //dw.dxfInt(75, data.arrow2Flipped);
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 
@@ -3774,6 +3784,8 @@ void DL_Dxf::writeDimDiametric( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        dw.dxfInt( 74, data.arrow1Flipped );
+        dw.dxfInt( 75, data.arrow2Flipped );
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 
@@ -3839,6 +3851,8 @@ void DL_Dxf::writeDimAngular2L( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        dw.dxfInt( 74, data.arrow1Flipped );
+        dw.dxfInt( 75, data.arrow2Flipped );
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 
@@ -3912,6 +3926,8 @@ void DL_Dxf::writeDimAngular3P( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        dw.dxfInt( 74, data.arrow1Flipped );
+        dw.dxfInt( 75, data.arrow2Flipped );
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 
@@ -3988,6 +4004,8 @@ void DL_Dxf::writeDimOrdinate( DL_WriterA& dw,
     {
         dw.dxfInt( 71, data.attachmentPoint );
         dw.dxfInt( 72, data.lineSpacingStyle );     // opt
+        //dw.dxfInt(74, data.arrow1Flipped);
+        //dw.dxfInt(75, data.arrow2Flipped);
         dw.dxfReal( 41, data.lineSpacingFactor );   // opt
     }
 

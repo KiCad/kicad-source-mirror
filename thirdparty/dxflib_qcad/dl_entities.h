@@ -1240,6 +1240,8 @@ struct DXFLIB_EXPORT DL_DimensionData
      * Dimension scale (dimscale) style override.
      */
     double dimScale;
+    bool   arrow1Flipped;
+    bool   arrow2Flipped;
 };
 
 
