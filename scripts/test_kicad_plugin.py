@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # Test the KiCad plugin regarding some expected features.
 
@@ -13,14 +13,15 @@
 # 3) Entered following command line, script takes no arguments
 # $ PYTHONPATH=. <path_to>/test_kicad_plugin.py
 
-from pcbnew import IO_MGR, BOARD, FOOTPRINT, FPID, UTF8
+from __future__ import print_function
+from pcbnew import IO_MGR, BOARD, FOOTPRINT, LIB_ID, UTF8
 from os import rename as mv
 
 tmp_path = '/tmp'
 lib_path1 = "%s/lib1.pretty" % tmp_path
 lib_path2 = "%s/lib2.pretty" % tmp_path
 
-plugin = IO_MGR.PluginFind( IO_MGR.KICAD )
+plugin = IO_MGR.PluginFind( IO_MGR.KICAD_SEXP )
 
 # Expecting "KiCad":
 print( "Plugin Type: %s" % plugin.PluginName() )
@@ -46,7 +47,7 @@ board = BOARD()
 # The only way to construct a FOOTPRINT is to pass it a BOARD? Yep.
 module = FOOTPRINT( board )
 
-fpid = FPID( 'mine' )
+fpid = LIB_ID( '', 'mine' )
 
 module.SetFPID( fpid )
 
@@ -65,7 +66,7 @@ footprint = plugin.FootprintLoad( lib_path2, 'footprint' )
 
 fpid = footprint.GetFPID()
 fpid.SetLibNickname( UTF8( 'mylib' ) )
-name = fpid.Format().GetChars() # example to get the UTF8 char buffer
+name = fpid.Format( fpid ).GetChars() # example to get the UTF8 char buffer
 
 # Always after a FootprintLoad() the internal name should match the one used to load it.
 print( "Internal name should be 'footprint': '%s'" % name  )
@@ -79,7 +80,7 @@ fpid.SetLibNickname( UTF8( 'other_mylib' ) )
 
 # Always after a FootprintLoad() the internal name should match the one used to load it.
 # Example to print an UTF8 string
-print( "Internal name should be 'mine': '%s'" % fpid.Format() )
+print( "Internal name should be 'mine': '%s'" % fpid.Format( fpid ) )
 
 # As of 3-Dec-2013 this test is passed by KICAD_PLUGIN and Wayne is owed an atta boy!
 

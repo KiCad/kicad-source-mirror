@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 import os.path
 from pcbnew import *
 
@@ -40,7 +40,7 @@ pad_s1 = smdRectPad(module,size_150_200mm,wxPointMM((pads-1)*0.5+1.6,1.3),"0")
 module.Add(pad_s0)
 module.Add(pad_s1)
 
-e = EDGE_MODULE(module)
+e = FP_SHAPE(module)
 e.SetStart0(wxPointMM(-1,0))
 e.SetEnd0(wxPointMM(0,0))
 e.SetWidth(FromMM(0.2))
