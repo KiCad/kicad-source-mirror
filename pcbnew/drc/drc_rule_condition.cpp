@@ -63,7 +63,7 @@ bool DRC_RULE_CONDITION::EvaluateFor( const BOARD_ITEM* aItemA, const BOARD_ITEM
             } );
 
     BOARD_ITEM* a = const_cast<BOARD_ITEM*>( aItemA );
-    BOARD_ITEM* b = aItemB ? const_cast<BOARD_ITEM*>( aItemB ) : DELETED_BOARD_ITEM::GetInstance();
+    BOARD_ITEM* b = const_cast<BOARD_ITEM*>( aItemB );
 
     ctx.SetItems( a, b );
 

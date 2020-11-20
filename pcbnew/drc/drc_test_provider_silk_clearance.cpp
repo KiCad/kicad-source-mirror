@@ -199,11 +199,15 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
             };
 
     forEachGeometryItem( s_allBasicItems, LSET( 2, F_SilkS, B_SilkS ), addToSilkTree );
-    forEachGeometryItem( s_allBasicItems, LSET::FrontMask() | LSET::BackMask(), countTargets );
+    forEachGeometryItem( s_allBasicItems,
+                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
+                         countTargets );
 
     targets *= 2;  // One for adding to RTree; one for testing
 
-    forEachGeometryItem( s_allBasicItems, LSET::FrontMask() | LSET::BackMask(), addToTargetTree );
+    forEachGeometryItem( s_allBasicItems,
+                         LSET::FrontMask() | LSET::BackMask() | LSET( 2, Edge_Cuts, Margin ),
+                         addToTargetTree );
 
     reportAux( _("Testing %d silkscreen features against %d board items."),
                silkTree.size(),
@@ -219,6 +223,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
         DRC_RTREE::LAYER_PAIR( F_SilkS, F_Fab ),
         DRC_RTREE::LAYER_PAIR( F_SilkS, F_Cu ),
         DRC_RTREE::LAYER_PAIR( F_SilkS, Edge_Cuts ),
+        DRC_RTREE::LAYER_PAIR( F_SilkS, Margin ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_SilkS ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Mask ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Adhes ),
@@ -226,7 +231,8 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_CrtYd ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Fab ),
         DRC_RTREE::LAYER_PAIR( B_SilkS, B_Cu ),
-        DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts )
+        DRC_RTREE::LAYER_PAIR( B_SilkS, Edge_Cuts ),
+        DRC_RTREE::LAYER_PAIR( B_SilkS, Margin )
     };
 
     targetTree.QueryCollidingPairs( &silkTree, layerPairs, checkClearance, m_largestClearance,

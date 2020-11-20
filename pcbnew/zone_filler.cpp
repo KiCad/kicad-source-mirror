@@ -796,21 +796,29 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     auto knockoutGraphicClearance =
             [&]( BOARD_ITEM* aItem )
             {
-                // A item on the Edge_Cuts is always seen as on any layer:
-                if( !aItem->IsOnLayer( aLayer ) && !aItem->IsOnLayer( Edge_Cuts ) )
-                    return;
-
-                if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
+                // A item on the Edge_Cuts or Margin is always seen as on any layer:
+                if( aItem->IsOnLayer( aLayer )
+                        || aItem->IsOnLayer( Edge_Cuts )
+                        || aItem->IsOnLayer( Margin ) )
                 {
-                    int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aItem, aLayer );
-
-                    if( aItem->IsOnLayer( Edge_Cuts ) )
+                    if( aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
                     {
-                        gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aZone,
-                                                                aItem, Edge_Cuts ) );
-                    }
+                        int gap = evalRulesForItems( CLEARANCE_CONSTRAINT, aZone, aItem, aLayer );
 
-                    addKnockout( aItem, aLayer, gap, aItem->IsOnLayer( Edge_Cuts ), aHoles );
+                        if( aItem->IsOnLayer( Edge_Cuts ) )
+                        {
+                            gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT,
+                                                                    aZone, aItem, Edge_Cuts ) );
+                        }
+
+                        if( aItem->IsOnLayer( Margin ) )
+                        {
+                            gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT,
+                                                                    aZone, aItem, Margin ) );
+                        }
+
+                        addKnockout( aItem, aLayer, gap, aItem->IsOnLayer( Edge_Cuts ), aHoles );
+                    }
                 }
             };
 

@@ -188,7 +188,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                 return true;
             };
 
-    forEachGeometryItem( { PCB_SHAPE_T }, LSET( Edge_Cuts ), queryBoardOutlineItems );
+    forEachGeometryItem( { PCB_SHAPE_T }, LSET( 2, Edge_Cuts, Margin ), queryBoardOutlineItems );
     forEachGeometryItem( s_allBasicItemsButZones, LSET::AllCuMask(), queryBoardGeometryItems );
 
     for( const std::unique_ptr<PCB_SHAPE>& edge : edges )

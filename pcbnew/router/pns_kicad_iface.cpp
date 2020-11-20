@@ -1039,31 +1039,35 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
 
 bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aItem )
 {
-    if( aItem->GetLayer() != Edge_Cuts && !IsCopperLayer( aItem->GetLayer() ) )
-        return false;
-
-    // TODO: where do we handle filled polygons on copper layers?
-    if( aItem->GetShape() == S_POLYGON && aItem->IsFilled() )
-        return false;
-
-    for( SHAPE* shape : aItem->MakeEffectiveShapes() )
+    if( aItem->GetLayer() == Edge_Cuts
+            || aItem->GetLayer() == Margin
+            || IsCopperLayer( aItem->GetLayer() ) )
     {
-        std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
+        // TODO: where do we handle filled polygons on copper layers?
+        if( aItem->GetShape() == S_POLYGON && aItem->IsFilled() )
+            return false;
 
-        if( aItem->GetLayer() == Edge_Cuts )
-            solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
-        else
-            solid->SetLayer( aItem->GetLayer() );
+        for( SHAPE* shape : aItem->MakeEffectiveShapes() )
+        {
+            std::unique_ptr<PNS::SOLID> solid = std::make_unique<PNS::SOLID>();
 
-        solid->SetNet( -1 );
-        solid->SetParent( aItem );
-        solid->SetShape( shape );
-        solid->SetRoutable( false );
+            if( aItem->GetLayer() == Edge_Cuts || aItem->GetLayer() == Margin )
+                solid->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+            else
+                solid->SetLayer( aItem->GetLayer() );
 
-        aWorld->Add( std::move( solid ) );
+            solid->SetNet( -1 );
+            solid->SetParent( aItem );
+            solid->SetShape( shape );
+            solid->SetRoutable( false );
+
+            aWorld->Add( std::move( solid ) );
+        }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 

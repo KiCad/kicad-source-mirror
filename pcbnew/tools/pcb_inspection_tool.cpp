@@ -216,7 +216,8 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
 
     if( aClearanceType == CLEARANCE_CONSTRAINT )
     {
-        if( ( aA && aA->GetLayer() == Edge_Cuts ) || ( aB && aB->GetLayer() == Edge_Cuts ) )
+        if( ( aA && ( aA->GetLayerSet() & LSET( 2, Edge_Cuts, Margin ) ).any() )
+            || ( aB && ( aB->GetLayerSet() & LSET( 2, Edge_Cuts, Margin ) ).any() ) )
         {
             auto edgeConstraint = drcEngine.EvalRulesForItems( EDGE_CLEARANCE_CONSTRAINT, aA, aB,
                                                                aLayer, r );
@@ -321,13 +322,13 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         reportClearance( SILK_CLEARANCE_CONSTRAINT, layer, a, b, r );
     }
-    else if( !( a->GetLayerSet() & LSET( 2, layer, Edge_Cuts ) ).any() )
+    else if( !( a->GetLayerSet() & LSET( 3, layer, Edge_Cuts, Margin ) ).any() )
     {
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
                                      a->GetSelectMenuText( r->GetUnits() ),
                                      m_frame->GetBoard()->GetLayerName( layer ) ) );
     }
-    else if( !( b->GetLayerSet() & LSET( 2, layer, Edge_Cuts ) ).any() )
+    else if( !( b->GetLayerSet() & LSET( 3, layer, Edge_Cuts, Margin ) ).any() )
     {
         r->Report( wxString::Format( _( "%s not present on layer %s.  No clearance defined." ),
                                      b->GetSelectMenuText( r->GetUnits() ),
