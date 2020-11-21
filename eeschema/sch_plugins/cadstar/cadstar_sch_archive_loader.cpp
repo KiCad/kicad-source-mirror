@@ -1162,6 +1162,31 @@ wxString CADSTAR_SCH_ARCHIVE_LOADER::getNetName( const NET_SCH& aNet )
 }
 
 
+void CADSTAR_SCH_ARCHIVE_LOADER::loadGraphicStaightSegment( const wxPoint& aStartPoint,
+        const wxPoint& aEndPoint, const LINECODE_ID& aCadstarLineCodeID,
+        const LAYER_ID& aCadstarSheetID, const SCH_LAYER_ID& aKiCadSchLayerID,
+        const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
+        const double& aScalingFactor, const wxPoint& aTransformCentre, const bool& aMirrorInvert )
+{
+    SCH_LINE* segment = new SCH_LINE();
+
+    segment->SetLayer( aKiCadSchLayerID );
+    segment->SetLineWidth( KiROUND( getLineThickness( aCadstarLineCodeID ) * aScalingFactor ) );
+    segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
+
+    //Apply transforms
+    wxPoint startPoint = applyTransform( aStartPoint, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+            aTransformCentre, aMirrorInvert );
+    wxPoint endPoint = applyTransform( aEndPoint, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+            aTransformCentre, aMirrorInvert );
+
+    segment->SetStartPoint( startPoint );
+    segment->SetEndPoint( endPoint );
+
+    loadItemOntoKiCadSheet( aCadstarSheetID, segment );
+}
+
+
 void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
         LINECODE_ID aCadstarLineCodeID, LAYER_ID aCadstarSheetID, SCH_LAYER_ID aKiCadSchLayerID,
         const wxPoint& aMoveVector, const double& aRotationAngleDeciDeg,
@@ -1177,26 +1202,64 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
     {
         cur = &aCadstarVertices.at( i );
 
-        SCH_LINE* segment    = new SCH_LINE();
-        wxPoint   startPoint = getKiCadPoint( prev->End );
-        wxPoint   endPoint   = getKiCadPoint( cur->End );
+        wxPoint   startPoint  = getKiCadPoint( prev->End );
+        wxPoint   endPoint    = getKiCadPoint( cur->End );
+        wxPoint   centerPoint = getKiCadPoint( cur->Center );
+        bool      cw          = false;
 
-        segment->SetLayer( aKiCadSchLayerID );
-        segment->SetLineWidth( KiROUND( getLineThickness( aCadstarLineCodeID ) * aScalingFactor ) );
-        segment->SetLineStyle( getLineStyle( aCadstarLineCodeID ) );
+        if( cur->Type == VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE
+                || cur->Type == VERTEX_TYPE::CLOCKWISE_SEMICIRCLE )
+        {
+            centerPoint = ( startPoint + endPoint ) / 2;
+        }
 
-        //Apply transforms
-        startPoint = applyTransform( startPoint, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
-                aTransformCentre, aMirrorInvert );
-        endPoint   = applyTransform( endPoint, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
-                aTransformCentre, aMirrorInvert );
+        switch( cur->Type )
+        {
+        case VERTEX_TYPE::CLOCKWISE_SEMICIRCLE:
+        case VERTEX_TYPE::CLOCKWISE_ARC:
+            cw = true;
+            KI_FALLTHROUGH;
+        case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
+        case VERTEX_TYPE::ANTICLOCKWISE_ARC:
+        {
+            double arcStartAngle = getPolarAngle( startPoint - centerPoint );
+            double arcEndAngle   = getPolarAngle( endPoint - centerPoint );
+            double arcAngleDeciDeg = arcEndAngle - arcStartAngle;
 
-        segment->SetStartPoint( startPoint );
-        segment->SetEndPoint( endPoint );
+            if( cw )
+                arcAngleDeciDeg = NormalizeAnglePos( arcAngleDeciDeg );
+            else
+                arcAngleDeciDeg = NormalizeAngleNeg( arcAngleDeciDeg );
+
+            SHAPE_ARC tempArc( VECTOR2I(centerPoint), VECTOR2I(startPoint), arcAngleDeciDeg / 10.0 );
+            SHAPE_LINE_CHAIN arcSegments = tempArc.ConvertToPolyline( Millimeter2iu( 0.1 ) );
+
+            // Load the arc as a series of piece-wise segments
+
+            for( int i = 0; i < arcSegments.SegmentCount(); i++ )
+            {
+                wxPoint segStart = (wxPoint) arcSegments.Segment( i ).A;
+                wxPoint segEnd   = (wxPoint) arcSegments.Segment( i ).B;
+
+                loadGraphicStaightSegment( segStart, segEnd, aCadstarLineCodeID,
+                        aCadstarSheetID, aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg,
+                        aScalingFactor, aTransformCentre, aMirrorInvert );
+            }
+        }
+            break;
+
+        case VERTEX_TYPE::POINT:
+            loadGraphicStaightSegment( startPoint, endPoint, aCadstarLineCodeID, aCadstarSheetID,
+                    aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg, aScalingFactor,
+                    aTransformCentre, aMirrorInvert );
+            break;
+
+        default:
+            wxFAIL_MSG( "Unknown CADSTAR Vertex type" );
+        }
+
 
         prev = cur;
-
-        loadItemOntoKiCadSheet( aCadstarSheetID, segment );
     }
 }
 
