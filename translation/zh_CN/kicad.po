@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-13 10:46-0800\n"
-"PO-Revision-Date: 2020-11-16 21:45+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2020-11-23 21:48+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12394,7 +12394,7 @@ msgstr "输入实现 SCH_PLUGIN::Symbol*() 函数的 Python 符号。"
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "电源符号创建名为 '%s' 的全局标签"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:63
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -19002,7 +19002,7 @@ msgstr "电介质层列表"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
-msgstr ""
+msgstr "选择要从电路板堆叠中移除的介电层。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 msgid "Dielectric Layers"
@@ -21568,7 +21568,7 @@ msgstr "选择导出 IDF 文件名"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "*.emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:51
@@ -21821,7 +21821,7 @@ msgstr "保存 VRML 线路板文件"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "*.wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -21928,7 +21928,7 @@ msgstr "区分大小写"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "重新"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
@@ -21952,7 +21952,7 @@ msgstr "查找预览"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "重新启动搜索"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:307
 msgid ""
@@ -28965,27 +28965,27 @@ msgstr "没有 \"%s\" 封装在库 \"%s\" 里"
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2028
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "忽略多边形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1602
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "忽略导线，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1775
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "忽略文本，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1913
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "忽略矩形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2098
 #, c-format
 msgid "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "忽略圆形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:90
 #, c-format
@@ -31997,7 +31997,7 @@ msgstr "非活动图层将显示全彩色"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
-msgstr "尺寸"
+msgstr "暗显"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
 msgid "Non-active layers will be dimmed"
