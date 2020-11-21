@@ -381,16 +381,19 @@ public:
 
     /**
      * Stores an information to the system clipboard.
-     * @param aText is the information to be stored.
+     * @param aText is the information to be stored, expected UTF8 encoding.
+     * the text will be stored as Unicode string (not stored as UTF8 string)
      * @return False if error occurred.
      */
-    bool SaveClipboard( const std::string& aText );
+    bool SaveClipboard( const std::string& aTextUTF8 );
 
     /**
      * Returns the information currently stored in the system clipboard. If data stored in the
      * clipboard is in non-text format, empty string is returned.
+     * Note also the clipboard is expected containing unicode chars, not only ASCII7 chars.
+     * The returned string is UTF8 encoded
      */
-    std::string GetClipboard() const;
+    std::string GetClipboardUTF8() const;
 
     /**
      * Returns the view controls settings for the current tool or the general settings if there is

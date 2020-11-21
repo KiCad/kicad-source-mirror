@@ -971,11 +971,13 @@ void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu,
 }
 
 
-bool TOOL_MANAGER::SaveClipboard( const std::string& aText )
+bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
 {
     if( wxTheClipboard->Open() )
     {
-        wxTheClipboard->SetData( new wxTextDataObject( wxString( aText.c_str(), wxConvUTF8 ) ) );
+        // Store the UTF8 string as unicode string in clipboard:
+        wxTheClipboard->SetData( new wxTextDataObject( wxString( aTextUTF8.c_str(),
+                                                       wxConvUTF8 ) ) );
         wxTheClipboard->Close();
 
         return true;
@@ -985,7 +987,7 @@ bool TOOL_MANAGER::SaveClipboard( const std::string& aText )
 }
 
 
-std::string TOOL_MANAGER::GetClipboard() const
+std::string TOOL_MANAGER::GetClipboardUTF8() const
 {
     std::string result;
 
@@ -997,7 +999,9 @@ std::string TOOL_MANAGER::GetClipboard() const
             wxTextDataObject data;
             wxTheClipboard->GetData( data );
 
-            result = data.GetText().mb_str();
+            // The clipboard is expected containing a unicode string, so return it
+            // as UTF8 string
+            result = data.GetText().utf8_str();
         }
 
         wxTheClipboard->Close();

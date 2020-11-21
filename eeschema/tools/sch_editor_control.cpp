@@ -1353,7 +1353,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     }
 
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    std::string        text = m_toolMgr->GetClipboard();
+    std::string        text = m_toolMgr->GetClipboardUTF8();
 
     if( text.empty() )
         return 0;

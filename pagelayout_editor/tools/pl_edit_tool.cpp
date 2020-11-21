@@ -477,7 +477,7 @@ int PL_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
     PL_SELECTION&  selection = m_selectionTool->GetSelection();
     WS_DATA_MODEL& model = WS_DATA_MODEL::GetTheInstance();
-    std::string    sexpr = m_toolMgr->GetClipboard();
+    std::string    sexpr = m_toolMgr->GetClipboardUTF8();
 
     m_selectionTool->ClearSelection();
 

@@ -668,8 +668,8 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     if( !part || part->IsAlias() )
         return 0;
 
-    std::string         text = m_toolMgr->GetClipboard();
-    STRING_LINE_READER  reader( text, "Clipboard" );
+    std::string         text_utf8 = m_toolMgr->GetClipboardUTF8();
+    STRING_LINE_READER  reader( text_utf8, "Clipboard" );
     LIB_PART*           newPart;
 
     try
@@ -681,7 +681,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         // If it's not a part then paste as text
         newPart = new LIB_PART( "dummy_part" );
         LIB_TEXT* newText = new LIB_TEXT( newPart );
-        newText->SetText( text );
+        newText->SetText( wxString::FromUTF8( text_utf8 ) );
         newPart->AddDrawItem( newText );
     }
 
