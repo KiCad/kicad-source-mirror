@@ -50,7 +50,7 @@ TEXT_MOD_GRID_TABLE::TEXT_MOD_GRID_TABLE( EDA_UNITS_T aUserUnits, PCB_BASE_FRAME
     m_boolColAttr = new wxGridCellAttr;
     m_boolColAttr->SetRenderer( new wxGridCellBoolRenderer() );
     m_boolColAttr->SetEditor( new wxGridCellBoolEditor() );
-    m_boolColAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_BOTTOM );
+    m_boolColAttr->SetAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
     if( g_menuOrientations.IsEmpty() )
     {

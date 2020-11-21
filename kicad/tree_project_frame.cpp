@@ -278,6 +278,10 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         ext = GerberFileExtensionWildCard;
         break;
 
+    case TREE_GERBER_JOB_FILE:
+        ext = GerberJobFileExtension;
+        break;
+
     case TREE_HTML:
         ext = HtmlFileExtension;
         break;
@@ -534,6 +538,9 @@ bool TREE_PROJECT_FRAME::AddItemToTreeProject( const wxString& aName,
 
             if( ext == wxT( "" ) )
                 continue;
+
+            if( i == TREE_GERBER )  // For gerber files, the official ext is gbr
+                ext = "gbr";
 
             reg.Compile( wxString::FromAscii( "^.*\\" ) + ext +
                          wxString::FromAscii( "$" ), wxRE_ICASE );

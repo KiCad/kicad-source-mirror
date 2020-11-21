@@ -223,6 +223,7 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         break;
 
     case TREE_GERBER:
+    case TREE_GERBER_JOB_FILE:
     case TREE_DRILL:
     case TREE_DRILL_NC:
     case TREE_DRILL_XNC:

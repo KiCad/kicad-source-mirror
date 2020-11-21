@@ -1283,10 +1283,17 @@ void PCB_EDIT_FRAME::PythonSyncEnvironmentVariables()
 #if defined( KICAD_SCRIPTING )
     const ENV_VAR_MAP& varMap = Pgm().GetLocalEnvVariables();
 
+    // Set the environment variables for python scripts
+    // note: the string will be encoded UTF8 for python env
     for( ENV_VAR_MAP_CITER it = varMap.begin(); it != varMap.end(); ++it )
     {
         pcbnewUpdatePythonEnvVar( it->first, it->second.GetValue() );
     }
+
+    // Because the env vars can de modifed by the python scripts (rewritten in UTF8 encoding),
+    // regenerate them (in unicode wide chars) for our normal environment
+    for( auto& var : varMap )
+        wxSetEnv( var.first, var.second.GetValue() );
 #endif
 }
 
@@ -1297,6 +1304,10 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
     wxString evValue;
     wxGetEnv( PROJECT_VAR_NAME, &evValue );
     pcbnewUpdatePythonEnvVar( wxString( PROJECT_VAR_NAME ).ToStdString(), evValue );
+
+    // Because PROJECT_VAR_NAME can be modifed by the python scripts (rewritten in UTF8),
+    // regenerate it (in unicode wide chars) for our normal environment
+    wxSetEnv( PROJECT_VAR_NAME, evValue );
 #endif
 }
 
