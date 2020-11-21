@@ -82,11 +82,7 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 
 int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
-    {
-        checkPart( static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart() );
-    }
-    else if( m_frame->IsType( FRAME_SCH ) )
+    if( m_frame->IsType( FRAME_SCH ) )
     {
         if( m_ercDialog )
         {
@@ -135,10 +131,12 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 }
 
 
-void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
+int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 {
-    if( !aPart )
-        return;
+    LIB_PART* part = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurPart();
+
+    if( !part )
+        return 0;
 
     wxString    msg;
     const int   min_grid_size = 25;
@@ -146,12 +144,12 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
     const int   clamped_grid_size = ( grid_size < min_grid_size ) ? min_grid_size : grid_size;
     LIB_PINS    pinList;
 
-    aPart->GetPins( pinList );
+    part->GetPins( pinList );
 
     if( pinList.empty() )
     {
         DisplayInfoMessage( m_frame, _( "No pins!" ) );
-        return;
+        return 0;
     }
 
     // Sort pins by pin num, so 2 duplicate pins
@@ -176,9 +174,9 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
 
         dup_error++;
 
-        if( aPart->HasConversion() && next->GetConvert() )
+        if( part->HasConversion() && next->GetConvert() )
         {
-            if( aPart->GetUnitCount() <= 1 )
+            if( part->GetUnitCount() <= 1 )
             {
                 msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
                                            " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b> of converted" ),
@@ -206,7 +204,7 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         }
         else
         {
-            if( aPart->GetUnitCount() <= 1 )
+            if( part->GetUnitCount() <= 1 )
             {
                 msg = wxString::Format( _( "<b>Duplicate pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b>"
                                            " conflicts with pin %s \"%s\" at location <b>(%.3f, %.3f)</b>" ),
@@ -250,9 +248,9 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         // "pin" is off grid here.
         offgrid_error++;
 
-        if( aPart->HasConversion() && pin->GetConvert() )
+        if( part->HasConversion() && pin->GetConvert() )
         {
-            if( aPart->GetUnitCount() <= 1 )
+            if( part->GetUnitCount() <= 1 )
             {
                 msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
                                            "<b>(%.3f, %.3f)</b> of converted.<br>" ),
@@ -272,7 +270,7 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         }
         else
         {
-            if( aPart->GetUnitCount() <= 1 )
+            if( part->GetUnitCount() <= 1 )
             {
                 msg = wxString::Format( _( "<b>Off grid pin %s</b> \"%s\" at location "
                                            "<b>(%.3f, %.3f)</b>.<br>" ),
@@ -312,6 +310,8 @@ void EE_INSPECTION_TOOL::checkPart( LIB_PART* aPart )
         error_display.m_htmlWindow->SetPage( outmsg );
         error_display.ShowModal();
     }
+
+    return 0;
 }
 
 
@@ -400,6 +400,7 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 void EE_INSPECTION_TOOL::setTransitions()
 {
     Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::runSimulation.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );

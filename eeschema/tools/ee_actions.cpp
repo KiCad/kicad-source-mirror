@@ -45,6 +45,11 @@ TOOL_ACTION EE_ACTIONS::runERC( "eeschema.InspectionTool.runERC",
         _( "Electrical Rules Checker" ), _( "Perform electrical rules check" ),
         erc_xpm );
 
+TOOL_ACTION EE_ACTIONS::checkSymbol( "eeschema.InspectionTool.checkSymbol",
+        AS_GLOBAL, 0, "",
+        _( "Symbol Checker" ), _( "Show the symbol checker window" ),
+        erc_xpm );
+
 TOOL_ACTION EE_ACTIONS::runSimulation( "eeschema.EditorControl.runSimulation",
         AS_GLOBAL, 0, "",
         _( "Simulator..." ), _( "Simulate circuit in SPICE" ),

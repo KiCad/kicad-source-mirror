@@ -35,7 +35,8 @@
 #include <lib_id.h>
 #include <list>
 
-#include "zones.h"
+#include <zones.h>
+#include <convert_drawsegment_list_to_polygon.h>
 #include <fp_text.h>
 #include <zone.h>
 #include <functional>
@@ -669,8 +670,7 @@ public:
      * @remark sets the MALFORMED_F_COURTYARD and MALFORMED_B_COURTYARD status flags if the given
      *         courtyard layer does not contain a (single) closed shape
      */
-    void BuildPolyCourtyards( std::vector<wxPoint>* aDiscontinuities = nullptr,
-                              std::vector<wxPoint>* aIntersections = nullptr );
+    void BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 

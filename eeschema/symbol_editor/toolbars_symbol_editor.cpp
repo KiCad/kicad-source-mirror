@@ -118,7 +118,7 @@ void SYMBOL_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showDatasheet );
-    m_mainToolBar->Add( EE_ACTIONS::runERC );
+    m_mainToolBar->Add( EE_ACTIONS::checkSymbol );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showDeMorganStandard,  ACTION_TOOLBAR::TOGGLE );

@@ -149,7 +149,9 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
     inspectMenu->Add( EE_ACTIONS::showDatasheet );
-    inspectMenu->Add( EE_ACTIONS::runERC );
+
+    inspectMenu->AppendSeparator();
+    inspectMenu->Add( EE_ACTIONS::checkSymbol );
 
 
     //-- Preferences menu -----------------------------------------------

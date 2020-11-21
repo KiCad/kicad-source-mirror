@@ -1693,8 +1693,7 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
 }
 
 
-void FOOTPRINT::BuildPolyCourtyards( std::vector<wxPoint>* aDiscontinuities,
-                                     std::vector<wxPoint>* aIntersections )
+void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     m_poly_courtyard_front.RemoveAllContours();
     m_poly_courtyard_back.RemoveAllContours();
@@ -1718,19 +1717,13 @@ void FOOTPRINT::BuildPolyCourtyards( std::vector<wxPoint>* aDiscontinuities,
     if( !list_front.size() && !list_back.size() )
         return;
 
-    #define ARC_ERROR_MAX 0.02      /* error max in mm to approximate a arc by segments */
+    constexpr int errorMax = Millimeter2iu( 0.02 ); /* error max for polygonization */
 
-    if( !ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, Millimeter2iu( ARC_ERROR_MAX ),
-                                  aDiscontinuities, aIntersections ) )
-    {
+    if( !ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, errorMax, aErrorHandler ) )
         SetFlags( MALFORMED_F_COURTYARD );
-    }
 
-    if( !ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, Millimeter2iu( ARC_ERROR_MAX ),
-                                  aDiscontinuities, aIntersections ) )
-    {
+    if( !ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, errorMax, aErrorHandler ) )
         SetFlags( MALFORMED_B_COURTYARD );
-    }
 }
 
 

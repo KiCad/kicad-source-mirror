@@ -29,7 +29,7 @@
 
 
 class FOOTPRINT_EDIT_FRAME;
-
+class DIALOG_FOOTPRINT_CHECKER;
 
 /**
  * FOOTPRINT_EDITOR_TOOLS
@@ -69,6 +69,9 @@ public:
 
     int CleanupGraphics( const TOOL_EVENT& aEvent );
 
+    int CheckFootprint( const TOOL_EVENT& aEvent );
+    void DestroyCheckerDialog();
+
     /**
      * Edit the properties used for new pad creation.
      */
@@ -80,6 +83,7 @@ private:
 
 private:
     FOOTPRINT_EDIT_FRAME*      m_frame;
+    DIALOG_FOOTPRINT_CHECKER*  m_checkerDialog;
 
     // A private clipboard for cut/copy/past of an entire footprint
     std::unique_ptr<FOOTPRINT> m_copiedFootprint;

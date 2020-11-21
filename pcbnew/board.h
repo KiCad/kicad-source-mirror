@@ -588,16 +588,12 @@ public:
      * Any closed outline inside the main outline is a hole
      * All contours should be closed, i.e. have valid vertices to build a closed polygon
      * @param aOutlines The SHAPE_POLY_SET to fill in with outlines/holes.
-     * @param aDiscontinuities = an optional array of wxPoint giving the locations of
-     *                           discontinuities in the outline
-     * @param aIntersections = an optional array of wxPoint giving the locations of self-
-     *                         intersections in the outline
+     * @param aErrorHandler = an optional DRC_ITEM error handler
      *
      * @return true if success, false if a contour is not valid
      */
     bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                  std::vector<wxPoint>* aDiscontinuities = nullptr,
-                                  std::vector<wxPoint>* aIntersections = nullptr );
+                                  OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
     /**
      * Build a set of polygons which are the outlines of copper items (pads, tracks, vias, texts,

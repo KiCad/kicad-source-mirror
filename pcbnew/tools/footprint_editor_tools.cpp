@@ -36,12 +36,16 @@
 #include <project.h>
 #include <fp_lib_table.h>
 #include <dialogs/dialog_cleanup_graphics.h>
+#include <dialogs/dialog_footprint_checker.h>
 #include <footprint_wizard_frame.h>
 #include <kiway.h>
+#include <drc/drc_results_provider.h>
+
 
 FOOTPRINT_EDITOR_TOOLS::FOOTPRINT_EDITOR_TOOLS() :
     PCB_TOOL_BASE( "pcbnew.ModuleEditor" ),
-    m_frame( nullptr )
+    m_frame( nullptr ),
+    m_checkerDialog( nullptr )
 {
 }
 
@@ -54,6 +58,9 @@ FOOTPRINT_EDITOR_TOOLS::~FOOTPRINT_EDITOR_TOOLS()
 void FOOTPRINT_EDITOR_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<FOOTPRINT_EDIT_FRAME>();
+
+    if( m_checkerDialog )
+        DestroyCheckerDialog();
 }
 
 
@@ -454,6 +461,33 @@ int FOOTPRINT_EDITOR_TOOLS::CleanupGraphics( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_TOOLS::CheckFootprint( const TOOL_EVENT& aEvent )
+{
+    if( !m_checkerDialog )
+    {
+        m_checkerDialog = new DIALOG_FOOTPRINT_CHECKER( m_frame );
+
+        m_checkerDialog->Show( true );
+    }
+    else // The dialog is just not visible (because the user has double clicked on an error item)
+    {
+        m_checkerDialog->SetMarkersProvider( new BOARD_DRC_ITEMS_PROVIDER( m_frame->GetBoard() ) );
+        m_checkerDialog->Show( true );
+    }
+    return 0;
+}
+
+
+void FOOTPRINT_EDITOR_TOOLS::DestroyCheckerDialog()
+{
+    if( m_checkerDialog )
+    {
+        m_checkerDialog->Destroy();
+        m_checkerDialog = nullptr;
+    }
+}
+
+
 void FOOTPRINT_EDITOR_TOOLS::setTransitions()
 {
     Go( &FOOTPRINT_EDITOR_TOOLS::NewFootprint,         PCB_ACTIONS::newFootprint.MakeEvent() );
@@ -475,6 +509,8 @@ void FOOTPRINT_EDITOR_TOOLS::setTransitions()
     Go( &FOOTPRINT_EDITOR_TOOLS::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_TOOLS::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
+
+    Go( &FOOTPRINT_EDITOR_TOOLS::CheckFootprint,       PCB_ACTIONS::checkFootprint.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_TOOLS::PinLibrary,           ACTIONS::pinLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_TOOLS::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );

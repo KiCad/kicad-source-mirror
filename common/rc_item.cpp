@@ -439,6 +439,9 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         return;
     }
 
+    if( !m_rcItemsProvider )
+        return;
+
     int  lastGood = -1;
     bool found = false;
 

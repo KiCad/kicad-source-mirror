@@ -382,6 +382,10 @@ TOOL_ACTION PCB_ACTIONS::footprintProperties( "pcbnew.ModuleEditor.footprintProp
         _( "Footprint Properties..." ), "",
         module_options_xpm );
 
+TOOL_ACTION PCB_ACTIONS::checkFootprint( "pcbnew.ModuleEditor.checkFootprint",
+        AS_GLOBAL, 0, "",
+        _( "Footprint Checker" ), _( "Show the footprint checker window" ),
+        erc_xpm );
 
 // GLOBAL_EDIT_TOOL
 //

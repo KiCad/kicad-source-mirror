@@ -92,35 +92,17 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
             if( m_drcEngine->IsErrorLimitExceeded( DRCE_MALFORMED_COURTYARD) )
                 continue;
 
-            std::vector<wxPoint> discontinuities;
-            std::vector<wxPoint> intersections;
+            OUTLINE_ERROR_HANDLER errorHandler =
+                    [&]( const wxString& msg, BOARD_ITEM* , BOARD_ITEM* , const wxPoint& pt )
+                    {
+                        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
+                        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+                        drcItem->SetItems( footprint );
+                        reportViolation( drcItem, pt );
+                    };
 
-            // Run courtyard test again to get error locations
-            footprint->BuildPolyCourtyards( &discontinuities, &intersections);
-
-            for( wxPoint pt : discontinuities )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
-
-                m_msg.Printf( _( "(not a closed shape)" ) );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-                drcItem->SetItems( footprint );
-
-                reportViolation( drcItem, pt );
-            }
-
-            for( wxPoint pt : intersections )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
-
-                m_msg.Printf( _( "(self-intersecting)" ) );
-
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-                drcItem->SetItems( footprint );
-
-                reportViolation( drcItem, pt );
-            }
+            // Re-run courtyard tests to generate DRC_ITEMs
+            footprint->BuildPolyCourtyards( &errorHandler );
         }
         else if( footprint->GetPolyCourtyardFront().OutlineCount() == 0
                 && footprint->GetPolyCourtyardBack().OutlineCount() == 0 )

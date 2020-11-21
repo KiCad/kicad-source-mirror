@@ -49,6 +49,8 @@ public:
     int RunERC( const TOOL_EVENT& aEvent );
     void DestroyERCDialog();
 
+    int CheckSymbol( const TOOL_EVENT& aEvent );
+
     int RunSimulation( const TOOL_EVENT& aEvent );
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
@@ -56,8 +58,6 @@ public:
     int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
-    void checkPart( LIB_PART* aPart );
-
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 

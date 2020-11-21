@@ -82,6 +82,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( PCB_ACTIONS::footprintProperties );
     m_mainToolBar->Add( PCB_ACTIONS::defaultPadProperties );
+    m_mainToolBar->Add( PCB_ACTIONS::checkFootprint );
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_LOAD_FOOTPRINT_FROM_BOARD, wxEmptyString,

@@ -452,9 +452,8 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
 
 extern bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                           unsigned int aTolerance, wxString* aErrorText,
-                                           std::vector<wxPoint>* aDiscontinuities = nullptr,
-                                           std::vector<wxPoint>* aIntersections = nullptr );
+                                           int aTolerance,
+                                           OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
 
 bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
@@ -465,18 +464,28 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 
     if( m_board->IsFootprintHolder() )
     {
+        if( !m_board->GetFirstFootprint() )
+        {
+            if( aErrorMsg )
+                *aErrorMsg = _( "No footprint loaded." );
+
+            return false;
+        }
+
         success = BuildFootprintPolygonOutlines( m_board, m_board_poly,
-                                                 m_board->GetDesignSettings().m_MaxError, nullptr );
+                                                 m_board->GetDesignSettings().m_MaxError );
 
         // Make polygon strictly simple to avoid issues (especially in 3D viewer)
         m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
         if( !success && aErrorMsg )
-            *aErrorMsg = _( "Footprint outline is malformed. Run DRC for a full analysis." );
+        {
+            *aErrorMsg = _( "Footprint outline is malformed. Run Footprint Checker for a "
+                            "full analysis." );
+        }
     }
     else
     {
-
         success = m_board->GetBoardPolygonOutlines( m_board_poly );
 
         if( !success && aErrorMsg )

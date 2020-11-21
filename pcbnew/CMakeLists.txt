@@ -63,6 +63,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_dimension_properties_base.cpp
     dialogs/dialog_drc.cpp
     dialogs/dialog_drc_base.cpp
+    dialogs/dialog_footprint_checker.cpp
+    dialogs/dialog_footprint_checker_base.cpp
     dialogs/dialog_footprint_properties.cpp
     dialogs/dialog_footprint_properties_base.cpp
     dialogs/dialog_edit_footprint_for_fp_editor.cpp
