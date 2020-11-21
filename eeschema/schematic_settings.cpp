@@ -135,40 +135,25 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                             } ) );
                 }
 
-                auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-                if( cfg )
-                {
-                    // Save global fieldname templates
-                    STRING_FORMATTER sf;
-                    m_TemplateFieldNames.Format( &sf, 0, true );
-
-                    wxString record = FROM_UTF8( sf.GetString().c_str() );
-                    record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
-                    record.Replace( wxT("  "), wxT(" "), true );  // double space to single
-
-                    cfg->m_Drawing.field_names = record.ToStdString();
-                }
-
                 return ret;
             },
             [&]( const nlohmann::json& aJson )
             {
-                if( aJson.empty() || !aJson.is_array() )
-                    return;
-
-                m_TemplateFieldNames.DeleteAllFieldNameTemplates( false );
-
-                for( const nlohmann::json& entry : aJson )
+                if( !aJson.empty() && aJson.is_array() )
                 {
-                    if( !entry.contains( "name" ) || !entry.contains( "url" )
-                            || !entry.contains( "visible" ) )
-                        continue;
+                    m_TemplateFieldNames.DeleteAllFieldNameTemplates( false );
 
-                    TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
-                    field.m_URL     = entry["url"].get<bool>();
-                    field.m_Visible = entry["visible"].get<bool>();
-                    m_TemplateFieldNames.AddTemplateFieldName( field, false );
+                    for( const nlohmann::json& entry : aJson )
+                    {
+                        if( !entry.contains( "name" ) || !entry.contains( "url" )
+                                || !entry.contains( "visible" ) )
+                            continue;
+
+                        TEMPLATE_FIELDNAME field( entry["name"].get<wxString>() );
+                        field.m_URL     = entry["url"].get<bool>();
+                        field.m_Visible = entry["visible"].get<bool>();
+                        m_TemplateFieldNames.AddTemplateFieldName( field, false );
+                    }
                 }
 
                 auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );

@@ -58,8 +58,6 @@
 #include <sch_line.h>
 #include <lib_pin.h>
 #include <sch_draw_panel.h>
-#include <class_libentry.h>
-#include <eeschema_config.h>
 #include <kiface_i.h>
 #include <vector>
 #include <algorithm>

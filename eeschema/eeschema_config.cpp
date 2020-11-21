@@ -30,8 +30,6 @@
 #include <dialogs/panel_sym_color_settings.h>
 #include <dialogs/panel_sym_editing_options.h>
 #include <dialogs/dialog_schematic_setup.h>
-#include <eeschema_config.h>
-#include <erc_settings.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
 #include <panel_gal_display_options.h>
@@ -50,168 +48,10 @@
 #include <page_layout/ws_data_model.h>
 
 
-#define FieldNameTemplatesKey         wxT( "FieldNameTemplates" )
-
-
-PARAM_CFG_FIELDNAMES::PARAM_CFG_FIELDNAMES( TEMPLATES * ptparam, const wxChar* group ) :
-        PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
-{
-    m_Pt_param = ptparam;
-}
-
-void PARAM_CFG_FIELDNAMES::ReadParam( wxConfigBase* aConfig ) const
-{
-    if( !m_Pt_param || !aConfig )
-        return;
-
-    wxString templateFieldNames = aConfig->Read( FieldNameTemplatesKey, wxEmptyString );
-
-    if( !templateFieldNames.IsEmpty() )
-    {
-        TEMPLATE_FIELDNAMES_LEXER  lexer( TO_UTF8( templateFieldNames ) );
-
-        try
-        {
-            m_Pt_param->Parse( &lexer, false );
-        }
-        catch( const IO_ERROR& )
-        {
-            // @todo show error msg
-        }
-    }
-}
-
-void PARAM_CFG_FIELDNAMES::SaveParam( wxConfigBase* aConfig ) const
-{
-    if( !m_Pt_param || !aConfig )
-        return;
-
-    STRING_FORMATTER sf;
-    m_Pt_param->Format( &sf, 0, false );
-
-    wxString record = FROM_UTF8( sf.GetString().c_str() );
-    record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
-    record.Replace( wxT("  "), wxT(" "), true );  // double space to single
-
-    aConfig->Write( FieldNameTemplatesKey, record );
-}
-
-
-class PARAM_CFG_SEVERITIES : public PARAM_CFG
-{
-protected:
-    ERC_SETTINGS* m_Pt_param;   ///< Pointer to the parameter value
-
-public:
-    PARAM_CFG_SEVERITIES( ERC_SETTINGS* ptparam, const wxChar* group = nullptr ) :
-                          PARAM_CFG( wxEmptyString, PARAM_SEVERITIES, group )
-    {
-        m_Pt_param = ptparam;
-    }
-
-    void ReadParam( wxConfigBase* aConfig ) const override
-    {
-        if( !m_Pt_param || !aConfig )
-            return;
-
-        wxString oldPath = aConfig->GetPath();
-
-        // Read legacy settings first so that modern settings will overwrite them
-        bool flag;
-
-        if( aConfig->Read( wxT( "ERC_TestSimilarLabels" ), &flag, true ) )
-        {
-            if( flag )
-                m_Pt_param->m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_WARNING;
-            else
-                m_Pt_param->m_Severities[ ERCE_SIMILAR_LABELS ] = RPT_SEVERITY_IGNORE;
-        }
-
-        if( aConfig->Read( wxT( "ERC_CheckUniqueGlobalLabels" ), &flag, true ) )
-        {
-            if( flag )
-                m_Pt_param->m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_WARNING;
-            else
-                m_Pt_param->m_Severities[ ERCE_GLOBLABEL ] = RPT_SEVERITY_IGNORE;
-        }
-
-        if( aConfig->Read( wxT( "ERC_CheckBusDriverConflicts" ), &flag, true ) )
-        {
-            if( flag )
-                m_Pt_param->m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_WARNING;
-            else
-                m_Pt_param->m_Severities[ ERCE_DRIVER_CONFLICT ] = RPT_SEVERITY_IGNORE;
-        }
-
-        if( aConfig->Read( wxT( "ERC_CheckBusEntryConflicts" ), &flag, true ) )
-        {
-            if( flag )
-                m_Pt_param->m_Severities[ ERCE_BUS_ENTRY_CONFLICT ] = RPT_SEVERITY_WARNING;
-            else
-                m_Pt_param->m_Severities[ ERCE_BUS_ENTRY_CONFLICT ] = RPT_SEVERITY_IGNORE;
-        }
-
-        if( aConfig->Read( wxT( "ERC_CheckBusToBusConflicts" ), &flag, true ) )
-        {
-            if( flag )
-                m_Pt_param->m_Severities[ ERCE_BUS_TO_BUS_CONFLICT ] = RPT_SEVERITY_ERROR;
-            else
-                m_Pt_param->m_Severities[ ERCE_BUS_TO_BUS_CONFLICT ] = RPT_SEVERITY_IGNORE;
-        }
-
-        if( aConfig->Read( wxT( "ERC_CheckBusToNetConflicts" ), &flag, true ) )
-        {
-            if( flag )
-                m_Pt_param->m_Severities[ ERCE_BUS_TO_NET_CONFLICT ] = RPT_SEVERITY_ERROR;
-            else
-                m_Pt_param->m_Severities[ ERCE_BUS_TO_NET_CONFLICT ] = RPT_SEVERITY_IGNORE;
-        }
-
-        // TO DO: figure out what we're going to use as keys here so we can read/write these....
-
-        aConfig->SetPath( oldPath );
-    }
-
-    void SaveParam( wxConfigBase* aConfig ) const override
-    {
-        if( !m_Pt_param || !aConfig )
-            return;
-
-        wxString oldPath = aConfig->GetPath();
-
-        // TO DO: figure out what we're going to use as keys here so we can read/write these....
-
-        // TO DO: for now just write out the legacy ones so we don't lose them
-        // TO DO: remove this once the new scheme is in place
-        aConfig->Write( wxT( "ERC_TestSimilarLabels" ),
-                        m_Pt_param->IsTestEnabled( ERCE_SIMILAR_LABELS ) );
-        aConfig->Write( wxT( "ERC_CheckUniqueGlobalLabels" ),
-                        m_Pt_param->IsTestEnabled( ERCE_GLOBLABEL ) );
-        aConfig->Write( wxT( "ERC_CheckBusDriverConflicts" ),
-                        m_Pt_param->IsTestEnabled( ERCE_DRIVER_CONFLICT ) );
-        aConfig->Write( wxT( "ERC_CheckBusEntryConflicts" ),
-                        m_Pt_param->IsTestEnabled( ERCE_BUS_ENTRY_CONFLICT ) );
-        aConfig->Write( wxT( "ERC_CheckBusToBusConflicts" ),
-                        m_Pt_param->IsTestEnabled( ERCE_BUS_TO_BUS_CONFLICT ) );
-        aConfig->Write( wxT( "ERC_CheckBusToNetConflicts" ),
-                        m_Pt_param->IsTestEnabled( ERCE_BUS_TO_NET_CONFLICT ) );
-
-        aConfig->SetPath( oldPath );
-    }
-};
-
-
 /// Helper for all the old plotting/printing code while it still exists
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
     return Pgm().GetSettingsManager().GetColorSettings()->GetColor( aLayer );
-}
-
-
-// Color to draw items flagged invisible, in symbol_editor (they are invisible in Eeschema)
-COLOR4D GetInvisibleItemColor()
-{
-    return COLOR4D( DARKGRAY );
 }
 
 

@@ -29,6 +29,7 @@
 #include <bitmaps.h>
 #include <schematic.h>
 #include <panel_eeschema_template_fieldnames.h>
+#include <kiface_i.h>
 
 PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT_FRAME* aFrame,
                                                                         wxWindow* aWindow,
@@ -171,6 +172,24 @@ bool PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::TransferDataFromWindow()
 
     for( const TEMPLATE_FIELDNAME& field : m_fields )
         schematic.Settings().m_TemplateFieldNames.AddTemplateFieldName( field, m_global );
+
+    if( m_global )
+    {
+        auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+
+        if( cfg )
+        {
+            // Save global fieldname templates
+            STRING_FORMATTER sf;
+            schematic.Settings().m_TemplateFieldNames.Format( &sf, 0, true );
+
+            wxString record = FROM_UTF8( sf.GetString().c_str() );
+            record.Replace( wxT("\n"), wxT(""), true );   // strip all newlines
+            record.Replace( wxT("  "), wxT(" "), true );  // double space to single
+
+            cfg->m_Drawing.field_names = record.ToStdString();
+        }
+    }
 
     return true;
 }
