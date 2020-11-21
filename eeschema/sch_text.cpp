@@ -975,6 +975,19 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 }
 
 
+void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
+{
+    wxPoint pt = GetTextPos();
+    RotatePoint( &pt, aPosition, 900 );
+    wxPoint offset = pt - GetTextPos();
+
+    Rotate90( false );
+
+    SetTextPos( GetTextPos() + offset );
+    m_intersheetRefsField.SetTextPos( m_intersheetRefsField.GetTextPos() + offset );
+}
+
+
 void SCH_GLOBALLABEL::Rotate90( bool aClockwise )
 {
     SCH_TEXT::Rotate90( aClockwise );

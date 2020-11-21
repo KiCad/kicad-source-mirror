@@ -402,6 +402,7 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
+    void Rotate( wxPoint aPosition ) override;
     void Rotate90( bool aClockwise ) override;
     void MirrorSpinStyle( bool aLeftRight ) override;
 
