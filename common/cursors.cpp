@@ -366,12 +366,10 @@ const wxCursor& CURSOR_STORE::Get( KICURSOR aIdKey ) const
     const auto find_iter = m_store.find( aIdKey );
 
     if( find_iter != m_store.end() )
-    {
         return find_iter->second;
-    }
 
-    wxASSERT_MSG( false,
-            wxString::Format( "Could not find cursor with ID %d", static_cast<int>( aIdKey ) ) );
+    wxASSERT_MSG( false, wxString::Format( "Could not find cursor with ID %d",
+                                           static_cast<int>( aIdKey ) ) );
     return wxNullCursor;
 }
 

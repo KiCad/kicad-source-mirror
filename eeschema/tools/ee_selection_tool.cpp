@@ -105,6 +105,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
+        m_nonModifiedCursor( KICURSOR::ARROW ),
         m_isSymbolEditor( false ),
         m_isLibView( false ),
         m_unit( 0 ),
