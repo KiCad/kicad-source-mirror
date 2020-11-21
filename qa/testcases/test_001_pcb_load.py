@@ -60,6 +60,24 @@ class TestPCBLoad(unittest.TestCase):
         self.verify_text(text[1], 176149000, 64643000, pcbnew.B_Cu,
                          u'Actionneur\nPiezo New Amp\nV02')
 
+    def test_text_as_segments(self):
+        footprint = self.pcb.FindFootprintByReference("U1")
+        reference = footprint.Reference()
+        segments = [[p.x, p.y] for p in reference.TransformToSegmentList()]
+        expected_segments = [
+            [141901333, 69196857], [143340666, 69196857], [143340666, 69196857],
+            [143510000, 69142428], [143510000, 69142428], [143594666, 69088000],
+            [143594666, 69088000], [143679333, 68979142], [143679333, 68979142],
+            [143679333, 68761428], [143679333, 68761428], [143594666, 68652571],
+            [143594666, 68652571], [143510000, 68598142], [143510000, 68598142],
+            [143340666, 68543714], [143340666, 68543714], [141901333, 68543714],
+            [143679333, 67400714], [143679333, 68053857], [143679333, 67727285],
+            [141901333, 67727285], [141901333, 67727285], [142155333, 67836142],
+            [142155333, 67836142], [142324666, 67945000], [142324666, 67945000],
+            [142409333, 68053857]
+        ]
+        self.assertEqual(segments, expected_segments)
+
     def verify_text(self, text, x, y, layer, s):
         self.assertEquals(list(text.GetPosition()), [x, y])
         self.assertEquals(text.GetLayer(), layer)

@@ -50,6 +50,7 @@
 #include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
+#include <geometry/shape_poly_set.h>
 
 
 #include <wx/debug.h>         // for wxASSERT
@@ -580,8 +581,9 @@ static void addTextSegmToBuffer( int x0, int y0, int xf, int yf, void* aData )
 }
 
 
-void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const
+std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
 {
+    std::vector<wxPoint> cornerBuffer;
     wxSize size = GetTextSize();
 
     if( IsMirrored() )
@@ -605,15 +607,17 @@ void EDA_TEXT::TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuf
             wxString txt = strings_list.Item( ii );
             GRText( NULL, positions[ii], color, txt, GetDrawRotation(), size, GetHorizJustify(),
                     GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
-                    &aCornerBuffer );
+                    &cornerBuffer );
         }
     }
     else
     {
         GRText( NULL, GetTextPos(), color, GetText(), GetDrawRotation(), size, GetHorizJustify(),
                 GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
-                &aCornerBuffer );
+                &cornerBuffer );
     }
+
+    return cornerBuffer;
 }
 
 
@@ -621,8 +625,7 @@ std::shared_ptr<SHAPE_COMPOUND> EDA_TEXT::GetEffectiveTextShape( ) const
 {
     std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
     int penWidth = GetEffectiveTextPenWidth();
-    std::vector<wxPoint> pts;
-    TransformTextShapeToSegmentList( pts );
+    std::vector<wxPoint> pts = TransformToSegmentList();
 
     for( unsigned jj = 0; jj < pts.size(); jj += 2 )
         shape->AddShape( new SHAPE_SEGMENT( pts[jj], pts[jj+1], penWidth ) );

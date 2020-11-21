@@ -991,9 +991,7 @@ bool PNS_KICAD_IFACE_BASE::syncTextItem( PNS::NODE* aWorld, EDA_TEXT* aText, PCB
         return false;
 
     int textWidth = aText->GetEffectiveTextPenWidth();
-    std::vector<wxPoint> textShape;
-
-    aText->TransformTextShapeToSegmentList( textShape );
+    std::vector<wxPoint> textShape = aText->TransformToSegmentList();
 
     if( textShape.size() < 2 )
         return false;

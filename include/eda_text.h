@@ -280,10 +280,8 @@ public:
      *
      * Each segment is stored as 2 wxPoints: the starting point and the ending point
      * there are therefore 2*n points.
-     *
-     * @param aCornerBuffer = a buffer to store the polygon
      */
-    void TransformTextShapeToSegmentList( std::vector<wxPoint>& aCornerBuffer ) const;
+    std::vector<wxPoint> TransformToSegmentList() const;
 
     /**
      * Convert the text bounding box to a rectangular polygon depending on the text
