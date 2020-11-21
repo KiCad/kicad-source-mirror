@@ -239,6 +239,13 @@ void DIMENSION_BASE::Rotate( const wxPoint& aRotCentre, double aAngle )
 
     m_text.SetTextAngle( newAngle );
 
+    wxPoint pt = m_text.GetTextPos();
+    RotatePoint( &pt, aRotCentre, aAngle );
+    m_text.SetTextPos( pt );
+
+    RotatePoint( &m_start, aRotCentre, aAngle );
+    RotatePoint( &m_end, aRotCentre, aAngle );
+
     Update();
 }
 
