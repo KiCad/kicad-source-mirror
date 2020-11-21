@@ -107,9 +107,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
 
     if( Layout.VariantHierarchy.Variants.size() > 0 )
     {
-        wxLogWarning(
-                _( "The CADSTAR design contains variants which has no KiCad equivalent. All "
-                   "components have been loaded on top of each other. " ) );
+        wxLogWarning( wxString::Format(
+                _( "The CADSTAR design contains variants which has no KiCad equivalent. Only "
+                   "the master variant ('%s') was loaded." ),
+                Layout.VariantHierarchy.Variants.at( "V0" ).Name ) );
     }
 
     if( Layout.ReuseBlocks.size() > 0 )
@@ -1192,7 +1193,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 {
     for( std::pair<COMPONENT_ID, COMPONENT> compPair : Layout.Components )
     {
-        COMPONENT& comp = compPair.second;        
+        COMPONENT& comp = compPair.second;
+
+        if( !comp.VariantID.empty() && comp.VariantParentComponentID != comp.ID )
+            continue; // Only load master Variant
 
         auto fpIter = mLibraryMap.find( comp.SymdefID );
 

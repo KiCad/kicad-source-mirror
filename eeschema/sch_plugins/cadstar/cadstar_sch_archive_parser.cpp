@@ -650,8 +650,8 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "VSYMMASTER" ) )
         {
-            VariantParentSymbolID = GetXmlAttributeIDString( aNode, 0 );
-            VariantID             = GetXmlAttributeIDString( aNode, 1 );
+            VariantParentSymbolID = GetXmlAttributeIDString( cNode, 0 );
+            VariantID             = GetXmlAttributeIDString( cNode, 1 );
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
         {

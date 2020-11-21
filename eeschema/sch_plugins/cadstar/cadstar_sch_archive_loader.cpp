@@ -92,9 +92,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
-        wxLogWarning(
-                _( "The CADSTAR design contains variants which has no KiCad equivalent. All "
-                   "components have been loaded on top of each other. " ) );
+        wxLogWarning( wxString::Format(
+                _( "The CADSTAR design contains variants which has no KiCad equivalent. Only "
+                   "the master variant ('%s') was loaded." ),
+                Schematic.VariantHierarchy.Variants.at( "V0" ).Name ) );
     }
 
     if( Schematic.Groups.size() > 0 )
@@ -316,6 +317,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
     for( std::pair<SYMBOL_ID, SYMBOL> symPair : Schematic.Symbols )
     {
         SYMBOL sym = symPair.second;
+
+        if( !sym.VariantID.empty() && sym.VariantParentSymbolID != sym.ID )
+            continue; // Only load master Variant
 
         if( sym.IsComponent )
         {

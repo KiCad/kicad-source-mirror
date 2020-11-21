@@ -1846,8 +1846,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "VCOMPMASTER" ) )
         {
-            VariantParentComponentID = GetXmlAttributeIDString( aNode, 0 );
-            VariantID                = GetXmlAttributeIDString( aNode, 1 );
+            VariantParentComponentID = GetXmlAttributeIDString( cNode, 0 );
+            VariantID                = GetXmlAttributeIDString( cNode, 1 );
         }
         else if( cNodeName == wxT( "TEXTLOC" ) )
         {
