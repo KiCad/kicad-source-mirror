@@ -586,8 +586,8 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         if( courtyardError )
         {
             r->Report( "" );
-            r->Report( _( "Report may be incomplete: some footprint courtyards are malformed.  " )
-                       + "<a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
+            r->Report( _( "Report may be incomplete: some footprint courtyards are malformed." )
+                       + "  <a href='drc'>" + _( "Run DRC for a full analysis." ) + "</a>" );
         }
 
         auto constraint = drcEngine.EvalRulesForItems( DISALLOW_CONSTRAINT, item, nullptr,
