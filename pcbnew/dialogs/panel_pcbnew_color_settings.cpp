@@ -378,12 +378,9 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
 {
     m_colorNamespace = "board";
 
-    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-
-    mgr.ReloadColorSettings();
-
-    PCBNEW_SETTINGS* app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-    COLOR_SETTINGS*  current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
+    SETTINGS_MANAGER& mgr          = Pgm().GetSettingsManager();
+    PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
+    COLOR_SETTINGS*   current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
     createThemeList( app_settings->m_ColorTheme );
 
