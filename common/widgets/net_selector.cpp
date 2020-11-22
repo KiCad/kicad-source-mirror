@@ -172,7 +172,7 @@ public:
 
     void OnPopup() override
     {
-        // While it can sometimes be useful to keep the filter, it's always expected.
+        // While it can sometimes be useful to keep the filter, it's always unexpected.
         // Better to clear it.
         m_filterCtrl->Clear();
 
@@ -190,6 +190,7 @@ public:
     void Accept()
     {
         wxString  selectedNetName;
+        wxString  escapedNetName;
         wxString  remainingName;
         int       selection     = m_listBox->GetSelection();
         wxString  prefix        = CREATE_NET;
@@ -197,17 +198,26 @@ public:
         if( selection >= 0 )
             selectedNetName = m_listBox->GetString( (unsigned) selection );
 
-        if( selectedNetName.IsEmpty() || selectedNetName == m_indeterminateLabel )
+        auto it = m_unescapedNetNameMap.find( selectedNetName );
+
+        if( it != m_unescapedNetNameMap.end() )
+            escapedNetName = it->second;
+        else    // shouldn't happen....
+            escapedNetName = selectedNetName;
+
+        Dismiss();
+
+        if( escapedNetName.IsEmpty() || escapedNetName == m_indeterminateLabel )
         {
             m_selectedNetcode = -1;
             GetComboCtrl()->SetValue( m_indeterminateLabel );
         }
-        else if( selectedNetName == NO_NET )
+        else if( escapedNetName == NO_NET )
         {
             m_selectedNetcode = 0;
             GetComboCtrl()->SetValue( NO_NET );
         }
-        else if( selectedNetName.StartsWith( CREATE_NET, &remainingName ) &&
+        else if( escapedNetName.StartsWith( CREATE_NET, &remainingName ) &&
                 !remainingName.IsEmpty() )
         {
             // Remove the first character ':' and all whitespace
@@ -228,7 +238,7 @@ public:
             if( newnet->GetNet() > 0 )
             {
                 m_selectedNetcode = newnet->GetNet();
-                GetComboCtrl()->SetValue( remainingName );
+                GetComboCtrl()->SetValue( UnescapeString( remainingName ) );
             }
             else
             {
@@ -244,7 +254,7 @@ public:
         }
         else
         {
-            NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( selectedNetName );
+            NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( escapedNetName );
 
             if( netInfo == nullptr || netInfo->GetNet() == 0 )
             {
@@ -254,14 +264,12 @@ public:
             else
             {
                 m_selectedNetcode = netInfo->GetNet();
-                GetComboCtrl()->SetValue( selectedNetName );
+                GetComboCtrl()->SetValue( UnescapeString( escapedNetName ) );
             }
         }
 
         wxCommandEvent changeEvent( NET_SELECTED );
         wxPostEvent( GetComboCtrl(), changeEvent );
-
-        Dismiss();
     }
 
 protected:
@@ -300,6 +308,8 @@ protected:
         wxString      netstring = m_filterCtrl->GetValue().MakeLower();
         wxString      filter = netstring;
 
+        m_unescapedNetNameMap.clear();
+
         if( !filter.IsEmpty() )
             filter = wxT( "*" ) + filter + wxT( "*" );
 
@@ -310,9 +320,13 @@ protected:
                 wxString netname = UnescapeString( netinfo->GetNetname() );
 
                 if( filter.IsEmpty() || wxString( netname ).MakeLower().Matches( filter ) )
+                {
                     netNames.push_back( netname );
+                    m_unescapedNetNameMap[ netname ] = netinfo->GetNetname();
+                }
             }
         }
+
         std::sort( netNames.begin(), netNames.end() );
 
         // Special handling for <no net>
@@ -519,6 +533,8 @@ protected:
 
     int              m_selectedNetcode;
 
+    std::map<wxString, wxString> m_unescapedNetNameMap;
+
     wxEvtHandler*    m_focusHandler;
 };
 
@@ -601,14 +617,14 @@ void NET_SELECTOR::SetBoard( BOARD* aBoard )
 void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
 {
     m_netSelectorPopup->SetSelectedNetcode( aNetcode );
-    SetValue( m_netSelectorPopup->GetStringValue() );
+    SetValue( UnescapeString( m_netSelectorPopup->GetStringValue() ) );
 }
 
 
 void NET_SELECTOR::SetSelectedNet( const wxString& aNetname )
 {
     m_netSelectorPopup->SetSelectedNet( aNetname );
-    SetValue( m_netSelectorPopup->GetStringValue() );
+    SetValue( UnescapeString( m_netSelectorPopup->GetStringValue() ) );
 }
 
 
