@@ -787,7 +787,7 @@ double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
         scale = 1.0e-6;
         break;
 
-    case DXF_IMPORT_UNITS::MICROMETERS:
+    case DXF_IMPORT_UNITS::MICRONS:
         scale = 1.0e-3;
         break;
 
@@ -873,7 +873,7 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
             break;
 
         case 13:    // micrometers
-            m_currentUnit = DXF_IMPORT_UNITS::MICROMETERS;
+            m_currentUnit = DXF_IMPORT_UNITS::MICRONS;
             break;
 
         case 14:    // decimeters
