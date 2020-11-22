@@ -126,7 +126,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     for( auto& unitEntry : dxfUnitsMap )
         m_choiceDxfUnits->Append( unitEntry.second );
 
-    m_choiceDxfUnits->SetSelection( 0 );
+    m_choiceDxfUnits->SetSelection( m_dxfUnits );
 
     SetInitialFocus( m_textCtrlFileName );
     m_sdbSizerOK->SetDefault();
