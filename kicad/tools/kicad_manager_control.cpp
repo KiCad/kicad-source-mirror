@@ -349,6 +349,10 @@ public:
 
     virtual wxDirTraverseResult OnFile( const wxString& aSrcFilePath ) override
     {
+        // Recursion guard for a Save As to a location inside the source project.
+        if( aSrcFilePath.StartsWith( m_newProjectDirPath ) )
+            return wxDIR_CONTINUE;
+
         wxFileName destFile( aSrcFilePath );
         wxString   ext = destFile.GetExt();
         bool       atRoot = destFile.GetPath() == m_projectDirPath;
@@ -438,9 +442,13 @@ public:
         return wxDIR_CONTINUE;
     }
 
-    virtual wxDirTraverseResult OnDir( const wxString& dirPath ) override
+    virtual wxDirTraverseResult OnDir( const wxString& aSrcDirPath ) override
     {
-        wxFileName destDir( dirPath );
+        // Recursion guard for a Save As to a location inside the source project.
+        if( aSrcDirPath.StartsWith( m_newProjectDirPath ) )
+            return wxDIR_CONTINUE;
+
+        wxFileName destDir( aSrcDirPath );
         wxString   destDirPath = destDir.GetPathWithSep();
         wxUniChar  pathSep = wxFileName::GetPathSeparator();
 
@@ -542,8 +550,7 @@ int KICAD_MANAGER_CONTROL::SaveProjectAs( const TOOL_EVENT& aEvent )
     const wxString&   newProjectName = newProjectDir.GetName();
     wxDir             currentProjectDir( currentProjectDirPath );
 
-    SAVE_AS_TRAVERSER traverser( m_frame,
-                                 currentProjectDirPath, currentProjectName,
+    SAVE_AS_TRAVERSER traverser( m_frame, currentProjectDirPath, currentProjectName,
                                  newProjectDirPath, newProjectName );
 
     currentProjectDir.Traverse( traverser );
