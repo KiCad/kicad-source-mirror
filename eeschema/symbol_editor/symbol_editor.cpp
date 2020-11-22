@@ -726,10 +726,10 @@ void SYMBOL_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName )
     wxString  msg;
     wxString  lib = GetCurLib();
 
-    if( aOldName && *aOldName != m_my_part->GetName() )
+    if( !lib.IsEmpty() && aOldName && *aOldName != m_my_part->GetName() )
     {
         // Test the current library for name conflicts
-        if( !lib.empty() && m_libMgr->PartExists( m_my_part->GetName(), lib ) )
+        if( m_libMgr->PartExists( m_my_part->GetName(), lib ) )
         {
             msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
                         m_my_part->GetName(),
