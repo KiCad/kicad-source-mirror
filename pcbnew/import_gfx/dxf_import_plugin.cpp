@@ -56,7 +56,6 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
 {
     m_xOffset   = 0.0;          // X coord offset for conversion (in mm)
     m_yOffset   = 0.0;          // Y coord offset for conversion (in mm)
-    m_dxf2mm    = 1.0;          // The scale factor to convert DXF units to mm
     m_version   = 0;            // the dxf version, not yet used
     m_inBlock   = false;        // Discard blocks
     m_defaultThickness = 0.2;   // default thickness (in mm)
@@ -64,6 +63,7 @@ DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
     m_importAsFPShapes = true;
     m_minX = m_minY = std::numeric_limits<double>::max();
     m_maxX = m_maxY = std::numeric_limits<double>::min();
+    m_currentUnit = DXF_IMPORT_UNITS::DEFAULT;
 
     // placeholder layer so we can fallback to something later
     std::unique_ptr<DXF_IMPORT_LAYER> layer0 =
@@ -115,19 +115,19 @@ void DXF_IMPORT_PLUGIN::SetImporter( GRAPHICS_IMPORTER* aImporter )
 
 double DXF_IMPORT_PLUGIN::mapX( double aDxfCoordX )
 {
-    return SCALE_FACTOR( m_xOffset + ( aDxfCoordX * m_dxf2mm ) );
+    return SCALE_FACTOR( m_xOffset + ( aDxfCoordX * getCurrentUnitScale() ) );
 }
 
 
 double DXF_IMPORT_PLUGIN::mapY( double aDxfCoordY )
 {
-    return SCALE_FACTOR( m_yOffset - ( aDxfCoordY * m_dxf2mm ) );
+    return SCALE_FACTOR( m_yOffset - ( aDxfCoordY * getCurrentUnitScale() ) );
 }
 
 
 double DXF_IMPORT_PLUGIN::mapDim( double aDxfValue )
 {
-    return SCALE_FACTOR( aDxfValue * m_dxf2mm );
+    return SCALE_FACTOR( aDxfValue * getCurrentUnitScale() );
 }
 
 
@@ -323,16 +323,16 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 
     if( m_curr_entity.m_EntityParseStatus == 1 )    // This is the first vertex of an entity
     {
-        m_curr_entity.m_LastCoordinate.x = m_xOffset + vertex->x * m_dxf2mm;
-        m_curr_entity.m_LastCoordinate.y = m_yOffset - vertex->y * m_dxf2mm;
+        m_curr_entity.m_LastCoordinate.x  = m_xOffset + vertex->x * getCurrentUnitScale();
+        m_curr_entity.m_LastCoordinate.y  = m_yOffset - vertex->y * getCurrentUnitScale();
         m_curr_entity.m_PolylineStart = m_curr_entity.m_LastCoordinate;
         m_curr_entity.m_BulgeVertex = vertex->bulge;
         m_curr_entity.m_EntityParseStatus = 2;
         return;
     }
 
-    VECTOR2D seg_end( m_xOffset + vertex->x * m_dxf2mm,
-                         m_yOffset - vertex->y * m_dxf2mm );
+    VECTOR2D seg_end( m_xOffset + vertex->x * getCurrentUnitScale(),
+                      m_yOffset - vertex->y * getCurrentUnitScale() );
 
     if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
         insertLine( m_curr_entity.m_LastCoordinate, seg_end, lineWidth );
@@ -742,6 +742,79 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 }
 
 
+double DXF_IMPORT_PLUGIN::getCurrentUnitScale()
+{
+    double scale = 1.0;
+    switch( m_currentUnit )
+    {
+    case DXF_IMPORT_UNITS::INCHES:
+        scale = 25.4;
+        break;
+
+    case DXF_IMPORT_UNITS::FEET:
+        scale = 304.8;
+        break;
+
+    case DXF_IMPORT_UNITS::MILLIMETERS:
+        scale = 1.0;
+        break;
+
+    case DXF_IMPORT_UNITS::CENTIMETERS:
+        scale = 10.0;
+        break;
+
+    case DXF_IMPORT_UNITS::METERS:
+        scale = 1000.0;
+        break;
+
+    case DXF_IMPORT_UNITS::MICROINCHES:
+        scale = 2.54e-5;
+        break;
+
+    case DXF_IMPORT_UNITS::MILS:
+        scale = 0.0254;
+        break;
+
+    case DXF_IMPORT_UNITS::YARDS:
+        scale = 914.4;
+        break;
+
+    case DXF_IMPORT_UNITS::ANGSTROMS:
+        scale = 1.0e-7;
+        break;
+
+    case DXF_IMPORT_UNITS::NANOMETERS:
+        scale = 1.0e-6;
+        break;
+
+    case DXF_IMPORT_UNITS::MICROMETERS:
+        scale = 1.0e-3;
+        break;
+
+    case DXF_IMPORT_UNITS::DECIMETERS:
+        scale = 100.0;
+        break;
+
+    default:
+        // use the default of 1.0 for:
+        // 0: Unspecified Units
+        // 3: miles
+        // 7: kilometers
+        // 15: decameters
+        // 16: hectometers
+        // 17: gigameters
+        // 18: AU
+        // 19: lightyears
+        // 20: parsecs
+        scale = 1.0;
+        break;
+    }
+
+    return scale;
+}
+
+
+
 void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int code )
 {
     if( m_inBlock )
@@ -760,51 +833,51 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
         switch( value )
         {
         case 1:     // inches
-            m_dxf2mm = 25.4;
+            m_currentUnit = DXF_IMPORT_UNITS::INCHES;
             break;
 
         case 2:     // feet
-            m_dxf2mm = 304.8;
+            m_currentUnit = DXF_IMPORT_UNITS::FEET;
             break;
 
         case 4:     // mm
-            m_dxf2mm = 1.0;
+            m_currentUnit = DXF_IMPORT_UNITS::MILLIMETERS;
             break;
 
         case 5:     // centimeters
-            m_dxf2mm = 10.0;
+            m_currentUnit = DXF_IMPORT_UNITS::CENTIMETERS;
             break;
 
         case 6:     // meters
-            m_dxf2mm = 1000.0;
+            m_currentUnit = DXF_IMPORT_UNITS::METERS;
             break;
 
         case 8:     // microinches
-            m_dxf2mm = 2.54e-5;
+            m_currentUnit = DXF_IMPORT_UNITS::MICROINCHES;
             break;
 
         case 9:     // mils
-            m_dxf2mm = 0.0254;
+            m_currentUnit = DXF_IMPORT_UNITS::MILS;
             break;
 
         case 10:    // yards
-            m_dxf2mm = 914.4;
+            m_currentUnit = DXF_IMPORT_UNITS::YARDS;
             break;
 
         case 11:    // Angstroms
-            m_dxf2mm = 1.0e-7;
+            m_currentUnit = DXF_IMPORT_UNITS::ANGSTROMS;
             break;
 
         case 12:    // nanometers
-            m_dxf2mm = 1.0e-6;
+            m_currentUnit = DXF_IMPORT_UNITS::NANOMETERS;
             break;
 
         case 13:    // micrometers
-            m_dxf2mm = 1.0e-3;
+            m_currentUnit = DXF_IMPORT_UNITS::MICROMETERS;
             break;
 
         case 14:    // decimeters
-            m_dxf2mm = 100.0;
+            m_currentUnit = DXF_IMPORT_UNITS::DECIMETERS;
             break;
 
         default:
@@ -818,7 +891,7 @@ void DXF_IMPORT_PLUGIN::setVariableInt( const std::string& key, int value, int c
             // 18: AU
             // 19: lightyears
             // 20: parsecs
-            m_dxf2mm = 1.0;
+            m_currentUnit = DXF_IMPORT_UNITS::DEFAULT;
             break;
         }
 

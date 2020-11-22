@@ -83,6 +83,7 @@ private:
     static int           m_lineWidthUnits;
     static double        m_scaleImport;         // a scale factor to change the size of imported
                                                 // items m_scaleImport =1.0 means keep original size
+    static int           m_dxfUnits;
 
     // Virtual event handlers
     void onUnitPositionSelection( wxCommandEvent& event ) override;

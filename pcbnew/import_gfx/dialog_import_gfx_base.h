@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,10 +20,10 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/radiobut.h>
 #include <wx/valtext.h>
@@ -56,15 +56,17 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_DxfPcbYCoord;
 		wxStaticText* m_staticTextUnits;
 		wxChoice* m_DxfPcbPositionUnits;
-		wxStaticText* m_staticTextLineWidth;
-		wxTextCtrl* m_textCtrlLineWidth;
-		wxChoice* m_choiceUnitLineWidth;
 		wxStaticText* m_staticTextBrdlayer;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxStaticText* m_staticTextscale;
 		wxTextCtrl* m_textCtrlImportScale;
 		wxStaticLine* m_staticline1;
 		wxCheckBox* m_groupItems;
+		wxStaticText* m_staticTextLineWidth;
+		wxTextCtrl* m_textCtrlLineWidth;
+		wxChoice* m_choiceUnitLineWidth;
+		wxStaticText* m_staticTextLineWidth1;
+		wxChoice* m_choiceDxfUnits;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -75,8 +77,8 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		virtual void originOptionOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onAbsolutePlacement( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUnitPositionSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onUnitWidthSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onGroupItems( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUnitWidthSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

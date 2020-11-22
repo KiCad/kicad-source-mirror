@@ -158,6 +158,7 @@ public:
         int         origin_units;
         double      origin_x;
         double      origin_y;
+        int         dxf_units;
     };
 
     struct DIALOG_NETLIST

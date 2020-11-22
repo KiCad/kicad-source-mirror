@@ -132,6 +132,32 @@ public:
 };
 
 /**
+ * DXF Units enum with values as specified in DXF 2012 Specification
+ */
+enum class DXF_IMPORT_UNITS
+{
+    DEFAULT = 0,
+    INCHES = 1,
+    FEET = 2,
+    MILLIMETERS = 4,
+    CENTIMETERS = 5,
+    METERS = 6,
+    MICROINCHES = 8,
+    MILS = 9,
+    YARDS = 10,
+    ANGSTROMS = 11,
+    NANOMETERS = 12,
+    MICROMETERS = 13,
+    DECIMETERS = 14,
+    DECAMETERS = 15,
+    HECTOMETERS = 16,
+    GIGAMETERS = 17,
+    ASTRONOMICAL = 18,
+    LIGHTYEARS = 19,
+    PARSECS = 20
+};
+
+/**
  * This class import DXF ASCII files and convert basic entities to board entities.
  * It depends on the dxflib library.
  */
@@ -148,7 +174,6 @@ private:
     double      m_xOffset;           // X coord offset for conversion (in mm)
     double      m_yOffset;           // Y coord offset for conversion (in mm)
     double      m_defaultThickness;  // default line thickness for conversion (in mm)
-    double      m_dxf2mm;            // The scale factor to convert DXF units to mm
     int         m_brdLayer;          // The board layer to place imported DXF items
     int         m_version;           // the dxf version, not used here
     bool        m_inBlock;           // Are we parsing a block
@@ -161,6 +186,8 @@ private:
 
     double      m_minX, m_maxX;      // handles image size in mm
     double      m_minY, m_maxY;      // handles image size in mm
+
+    DXF_IMPORT_UNITS m_currentUnit;     // current unit during import
 
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
 
@@ -201,6 +228,15 @@ public:
         m_importAsFPShapes = aImportAsFootprintGraphic;
     }
 
+    /**
+     * Set the default units when importing DXFs
+     * DXFs can lack units by design which requires the importing software to make the decision
+     * @param aUnits is the default unit of the DXF to assume
+     */
+    void SetUnit( DXF_IMPORT_UNITS aUnit )
+    {
+        m_currentUnit = aUnit;
+    }
 
     /**
      * Set the default line width when importing dxf items like lines to Pcbnew.
@@ -259,6 +295,7 @@ private:
     double mapY( double aDxfCoordY );
     double mapDim( double aDxfValue );
     double lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer );
+    double getCurrentUnitScale();
 
     /**
      * Returns the import layer data

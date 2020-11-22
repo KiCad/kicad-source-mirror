@@ -338,6 +338,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             new PARAM<double>( "import_graphics.origin_y", &m_ImportGraphics.origin_y, 0 ) );
 
     m_params.emplace_back(
+            new PARAM<int>( "import_graphics.dxf_units", &m_ImportGraphics.dxf_units, 0 ) );
+
+    m_params.emplace_back(
             new PARAM<int>( "netlist.report_filter", &m_NetlistDialog.report_filter, -1 ) );
 
     m_params.emplace_back( new PARAM<bool>(

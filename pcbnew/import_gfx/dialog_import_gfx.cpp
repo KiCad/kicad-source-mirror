@@ -30,6 +30,8 @@
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 #include <board.h>
+#include <map>
+#include "dxf_import_plugin.h"
 
 #include <memory>
 
@@ -41,6 +43,16 @@ LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
 double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;     // Do not change the imported items size
 int DIALOG_IMPORT_GFX::m_originUnits = 0;          // millimeter
 int DIALOG_IMPORT_GFX::m_lineWidthUnits = 0;       // millimeter
+int DIALOG_IMPORT_GFX::m_dxfUnits = 0;              // first entry in the dxfUnits map below
+
+const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
+    { DXF_IMPORT_UNITS::DEFAULT, _( "Auto" ) },
+    { DXF_IMPORT_UNITS::INCHES, _( "Inches" ) },
+    { DXF_IMPORT_UNITS::MILLIMETERS, _( "Millimeters" ) },
+    { DXF_IMPORT_UNITS::MILS, _( "Mils" ) },
+    { DXF_IMPORT_UNITS::CENTIMETERS, _( "Centimeter" ) },
+    { DXF_IMPORT_UNITS::FEET, _( "Feet" ) },
+};
 
 
 DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic )
@@ -85,6 +97,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_originUnits          = cfg->m_ImportGraphics.origin_units;
     m_origin.x             = cfg->m_ImportGraphics.origin_x;
     m_origin.y             = cfg->m_ImportGraphics.origin_y;
+    m_dxfUnits             = cfg->m_ImportGraphics.dxf_units;
 
     m_choiceUnitLineWidth->SetSelection( m_lineWidthUnits );
     showPCBdefaultLineWidth();
@@ -110,6 +123,11 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         m_SelLayerBox->SetLayerSelection( m_layer );
     }
 
+    for( auto& unitEntry : dxfUnitsMap )
+        m_choiceDxfUnits->Append( unitEntry.second );
+
+    m_choiceDxfUnits->SetSelection( 0 );
+
     SetInitialFocus( m_textCtrlFileName );
     m_sdbSizerOK->SetDefault();
     GetSizer()->Fit( this );
@@ -130,6 +148,7 @@ DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
     cfg->m_ImportGraphics.origin_units          = m_originUnits;
     cfg->m_ImportGraphics.origin_x              = m_origin.x;
     cfg->m_ImportGraphics.origin_y              = m_origin.y;
+    cfg->m_ImportGraphics.dxf_units             = m_dxfUnits;
 }
 
 
@@ -269,12 +288,26 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
     m_lineWidthUnits = m_choiceUnitLineWidth->GetSelection();
     m_lineWidth = getPCBdefaultLineWidthMM();
 
+    m_dxfUnits = m_choiceDxfUnits->GetSelection();
+
     m_importer->SetLayer( PCB_LAYER_ID( m_layer ) );
 
     auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( m_filename ).GetExt() );
 
     if( plugin )
     {
+        DXF_IMPORT_PLUGIN* dxfPlugin = dynamic_cast<DXF_IMPORT_PLUGIN*>( plugin.get() );
+        if( dxfPlugin != nullptr )
+        {
+            auto it = dxfUnitsMap.begin();
+            std::advance( it, m_dxfUnits );
+
+            if( it == dxfUnitsMap.end() )
+                dxfPlugin->SetUnit( DXF_IMPORT_UNITS::DEFAULT );
+            else
+                dxfPlugin->SetUnit( it->first );
+        }
+
         // Set coordinates offset for import (offset is given in mm)
         m_importer->SetImportOffsetMM( m_origin );
         m_scaleImport =
