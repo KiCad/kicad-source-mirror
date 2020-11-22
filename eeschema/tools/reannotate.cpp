@@ -62,18 +62,17 @@ void ReannotateFromPCBNew( SCH_EDIT_FRAME* aFrame, std::string& aNetlist )
 
     BACK_ANNOTATE backAnno( aFrame,
                             reporter,
-                            false,       //aRelinkFootprints
-                            false,       //aProcessFootprints
-                            false,       //aProcessValues
-                            true,        //aProcessReferences
-                            false,       //aProcessNetNames
-                            false );     //aDryRun
+                            false,       // aRelinkFootprints
+                            false,       // aProcessFootprints
+                            false,       // aProcessValues
+                            true,        // aProcessReferences
+                            false,       // aProcessNetNames
+                            false );     // aDryRun
 
     if( !backAnno.BackAnnotateSymbols( aNetlist ) )
     {
-        aNetlist = _( "Errors reported by Eeschema:\n" )
-                        + reporter.m_string.ToStdString();     //Assume the worst
-        aNetlist += _( "\nAnnotation not performed!\n" );
+        aNetlist = _( "Errors reported by Eeschema:\n" ) + reporter.m_string.ToStdString();
+        aNetlist += _( "\nAnnotation not performed!\n" );     // Assume the worst
     }
     else
     {

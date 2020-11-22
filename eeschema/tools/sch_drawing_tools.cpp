@@ -70,7 +70,7 @@ bool SCH_DRAWING_TOOLS::Init()
                 return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
             };
 
-    auto& ctxMenu = m_menu.GetMenu();
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 2 );
 
     return true;
@@ -126,7 +126,8 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
     auto setCursor =
             [&]()
             {
-                m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING : KICURSOR::COMPONENT );
+                m_frame->GetCanvas()->SetCurrentCursor( component ? KICURSOR::MOVING
+                                                                  : KICURSOR::COMPONENT );
             };
 
     // Set initial cursor
@@ -293,7 +294,9 @@ int SCH_DRAWING_TOOLS::PlaceComponent(  const TOOL_EVENT& aEvent  )
             m_view->AddToPreview( component->Clone() );
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
         getViewControls()->SetAutoPan( component != nullptr );
@@ -399,7 +402,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+                                  _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
+                                  wxFD_OPEN );
 
                 if( dlg.ShowModal() != wxID_OK )
                     continue;
@@ -464,7 +468,9 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
         }
         else
+        {
             evt->SetPassEvent();
+        }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
         getViewControls()->SetAutoPan( image != nullptr );

@@ -314,28 +314,6 @@ void LIB_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
 }
 
 
-bool LIB_MOVE_TOOL::updateModificationPoint( EE_SELECTION& aSelection )
-{
-    if( m_moveInProgress && aSelection.HasReferencePoint() )
-        return false;
-
-    // When there is only one item selected, the reference point is its position...
-    if( aSelection.Size() == 1 )
-    {
-        LIB_ITEM* item =  static_cast<LIB_ITEM*>( aSelection.Front() );
-        aSelection.SetReferencePoint( item->GetPosition() );
-    }
-    // ...otherwise modify items with regard to the grid-snapped cursor position
-    else
-    {
-        m_cursor = getViewControls()->GetCursorPosition( true );
-        aSelection.SetReferencePoint( m_cursor );
-    }
-
-    return true;
-}
-
-
 void LIB_MOVE_TOOL::setTransitions()
 {
     Go( &LIB_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );

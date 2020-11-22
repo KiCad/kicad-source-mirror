@@ -59,10 +59,12 @@ bool LIB_DRAWING_TOOLS::Init()
 {
     EE_TOOL_BASE::Init();
 
-    auto isDrawingCondition = [] ( const SELECTION& aSel ) {
-        LIB_ITEM* item = (LIB_ITEM*) aSel.Front();
-        return item && item->IsNew();
-    };
+    auto isDrawingCondition =
+            [] ( const SELECTION& aSel )
+            {
+                LIB_ITEM* item = (LIB_ITEM*) aSel.Front();
+                return item && item->IsNew();
+            };
 
     m_menu.GetMenu().AddItem( EE_ACTIONS::finishDrawing, isDrawingCondition, 2 );
 
@@ -123,7 +125,9 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         if( evt->IsCancelInteractive() )
         {
             if( item )
+            {
                 cleanup();
+            }
             else
             {
                 m_frame->PopTool( tool );
@@ -261,7 +265,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDITOR_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    KICAD_T           type = aEvent.Parameter<KICAD_T>();
+    KICAD_T                 type = aEvent.Parameter<KICAD_T>();
 
     // We might be running as the same shape in another co-routine.  Make sure that one
     // gets whacked.
@@ -476,7 +480,9 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );

@@ -54,10 +54,6 @@ public:
 private:
     void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta );
 
-    ///> Returns the right modification point (e.g. for rotation), depending on the number of
-    ///> selected items.
-    bool updateModificationPoint( EE_SELECTION& aSelection );
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

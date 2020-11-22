@@ -245,19 +245,20 @@ int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
 {
     wxFindReplaceData* data = m_frame->GetFindReplaceData();
 
-    auto visit = [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
-                 {
-                     if( data && aItem->Matches( *data, aSheet ) )
-                     {
-                         aItem->SetForceVisible( true );
-                         m_selectionTool->BrightenItem( aItem );
-                     }
-                     else if( aItem->IsBrightened() )
-                     {
-                         aItem->SetForceVisible( false );
-                         m_selectionTool->UnbrightenItem( aItem );
-                     }
-                 };
+    auto visit =
+            [&]( EDA_ITEM* aItem, SCH_SHEET_PATH* aSheet )
+            {
+                if( data && aItem->Matches( *data, aSheet ) )
+                {
+                    aItem->SetForceVisible( true );
+                    m_selectionTool->BrightenItem( aItem );
+                }
+                else if( aItem->IsBrightened() )
+                {
+                    aItem->SetForceVisible( false );
+                    m_selectionTool->UnbrightenItem( aItem );
+                }
+            };
 
     if( aEvent.IsAction( &ACTIONS::find ) || aEvent.IsAction( &ACTIONS::findAndReplace )
         || aEvent.IsAction( &ACTIONS::updateFind ) )
@@ -377,8 +378,8 @@ int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
     }
 
     bool          searchAllSheets = !( data->GetFlags() & FR_CURRENT_SHEET_ONLY );
-    EE_SELECTION& selection = m_selectionTool->GetSelection();
-    SCH_SCREEN*   afterScreen = m_frame->GetScreen();
+    EE_SELECTION& selection       = m_selectionTool->GetSelection();
+    SCH_SCREEN*   afterScreen     = m_frame->GetScreen();
     SCH_ITEM*     afterItem       = dynamic_cast<SCH_ITEM*>( selection.Front() );
     SCH_ITEM*     item            = nullptr;
 
@@ -618,107 +619,107 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
     picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
 
     picker->SetClickHandler(
-        [this, simFrame] ( const VECTOR2D& aPosition )
-        {
-            EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            EDA_ITEM*          item = nullptr;
-            selTool->SelectPoint( aPosition, wiresAndPins, &item );
-
-            if( !item )
-                return false;
-
-            if( item->IsType( wires ) )
+            [this, simFrame]( const VECTOR2D& aPosition )
             {
-                if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
-                    simFrame->AddVoltagePlot( UnescapeString( conn->Name() ) );
-            }
-            else if( item->Type() == SCH_PIN_T )
-            {
-                SCH_PIN*       pin = (SCH_PIN*) item;
-                SCH_COMPONENT* comp = (SCH_COMPONENT*) item->GetParent();
-                wxString       param;
-                wxString       primitive;
+                EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                EDA_ITEM*          item = nullptr;
+                selTool->SelectPoint( aPosition, wiresAndPins, &item );
 
-                primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, comp, 0 );
-                primitive.LowerCase();
+                if( !item )
+                    return false;
 
-                if( primitive == "c" || primitive == "l" || primitive == "r" )
-                    param = wxT( "I" );
-                else if( primitive == "d" )
-                    param = wxT( "Id" );
-                else
-                    param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
+                if( item->IsType( wires ) )
+                {
+                    if( SCH_CONNECTION* conn = static_cast<SCH_ITEM*>( item )->Connection() )
+                        simFrame->AddVoltagePlot( UnescapeString( conn->Name() ) );
+                }
+                else if( item->Type() == SCH_PIN_T )
+                {
+                    SCH_PIN*       pin = (SCH_PIN*) item;
+                    SCH_COMPONENT* comp = (SCH_COMPONENT*) item->GetParent();
+                    wxString       param;
+                    wxString       primitive;
 
-                simFrame->AddCurrentPlot( comp->GetRef( &m_frame->GetCurrentSheet() ), param );
-            }
+                    primitive = NETLIST_EXPORTER_PSPICE::GetSpiceField( SF_PRIMITIVE, comp, 0 );
+                    primitive.LowerCase();
 
-            return true;
-        } );
+                    if( primitive == "c" || primitive == "l" || primitive == "r" )
+                        param = wxT( "I" );
+                    else if( primitive == "d" )
+                        param = wxT( "Id" );
+                    else
+                        param = wxString::Format( wxT( "I%s" ), pin->GetName().Lower() );
+
+                    simFrame->AddCurrentPlot( comp->GetRef( &m_frame->GetCurrentSheet() ), param );
+                }
+
+                return true;
+            } );
 
     picker->SetMotionHandler(
-        [this, picker] ( const VECTOR2D& aPos )
-        {
-            EE_COLLECTOR collector;
-            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetScreen(), wiresAndPins, (wxPoint) aPos );
-
-            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            selectionTool->GuessSelectionCandidates( collector, aPos );
-
-            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-            SCH_LINE* wire = dynamic_cast<SCH_LINE*>( item );
-
-            const SCH_CONNECTION* conn = nullptr;
-
-            if( wire )
+            [this, picker]( const VECTOR2D& aPos )
             {
-                item = nullptr;
-                conn = wire->Connection();
-            }
+                EE_COLLECTOR collector;
+                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+                collector.Collect( m_frame->GetScreen(), wiresAndPins, (wxPoint) aPos );
 
-            if( item && item->Type() == SCH_PIN_T )
-                picker->SetCursor( KICURSOR::CURRENT_PROBE );
-            else
-                picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                selectionTool->GuessSelectionCandidates( collector, aPos );
 
-            if( m_pickerItem != item )
-            {
+                EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+                SCH_LINE* wire = dynamic_cast<SCH_LINE*>( item );
 
-                if( m_pickerItem )
-                    selectionTool->UnbrightenItem( m_pickerItem );
+                const SCH_CONNECTION* conn = nullptr;
 
-                m_pickerItem = item;
+                if( wire )
+                {
+                    item = nullptr;
+                    conn = wire->Connection();
+                }
 
-                if( m_pickerItem )
-                    selectionTool->BrightenItem( m_pickerItem );
-            }
+                if( item && item->Type() == SCH_PIN_T )
+                    picker->SetCursor( KICURSOR::CURRENT_PROBE );
+                else
+                    picker->SetCursor( KICURSOR::VOLTAGE_PROBE );
 
-            if( m_frame->GetHighlightedConnection() != conn )
-            {
-                m_frame->SetHighlightedConnection( conn );
+                if( m_pickerItem != item )
+                {
 
-                TOOL_EVENT dummyEvent;
-                UpdateNetHighlighting( dummyEvent );
-            }
-        } );
+                    if( m_pickerItem )
+                        selectionTool->UnbrightenItem( m_pickerItem );
+
+                    m_pickerItem = item;
+
+                    if( m_pickerItem )
+                        selectionTool->BrightenItem( m_pickerItem );
+                }
+
+                if( m_frame->GetHighlightedConnection() != conn )
+                {
+                    m_frame->SetHighlightedConnection( conn );
+
+                    TOOL_EVENT dummyEvent;
+                    UpdateNetHighlighting( dummyEvent );
+                }
+            } );
 
     picker->SetFinalizeHandler(
-        [this] ( const int& aFinalState )
-        {
-            if( m_pickerItem )
-                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
-
-            if( m_frame->GetHighlightedConnection() )
+            [this]( const int& aFinalState )
             {
-                m_frame->SetHighlightedConnection( nullptr );
+                if( m_pickerItem )
+                    m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-                TOOL_EVENT dummyEvent;
-                UpdateNetHighlighting( dummyEvent );
-            }
+                if( m_frame->GetHighlightedConnection() )
+                {
+                    m_frame->SetHighlightedConnection( nullptr );
 
-            // Wake the selection tool after exiting to ensure the cursor gets updated
-            m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
-        } );
+                    TOOL_EVENT dummyEvent;
+                    UpdateNetHighlighting( dummyEvent );
+                }
+
+                // Wake the selection tool after exiting to ensure the cursor gets updated
+                m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
+            } );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
@@ -737,65 +738,65 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
     picker->SetCursor( KICURSOR::TUNE );
 
     picker->SetClickHandler(
-        [this] ( const VECTOR2D& aPosition )
-        {
-            EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            EDA_ITEM*          item;
-            selTool->SelectPoint( aPosition, fieldsAndComponents, &item );
-
-            if( !item )
-                return false;
-
-            if( item->Type() != SCH_COMPONENT_T )
+            [this]( const VECTOR2D& aPosition )
             {
-                item = item->GetParent();
+                EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                EDA_ITEM*          item;
+                selTool->SelectPoint( aPosition, fieldsAndComponents, &item );
+
+                if( !item )
+                    return false;
 
                 if( item->Type() != SCH_COMPONENT_T )
-                    return false;
-            }
+                {
+                    item = item->GetParent();
 
-            SIM_PLOT_FRAME* simFrame =
-                    (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
+                    if( item->Type() != SCH_COMPONENT_T )
+                        return false;
+                }
 
-            if( simFrame )
-                simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
+                SIM_PLOT_FRAME* simFrame =
+                        (SIM_PLOT_FRAME*) m_frame->Kiway().Player( FRAME_SIMULATOR, false );
 
-            return true;
-        } );
+                if( simFrame )
+                    simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
+
+                return true;
+            } );
 
     picker->SetMotionHandler(
-        [this] ( const VECTOR2D& aPos )
-        {
-            EE_COLLECTOR collector;
-            collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-            collector.Collect( m_frame->GetScreen(), fieldsAndComponents, (wxPoint) aPos );
-
-            EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-            selectionTool->GuessSelectionCandidates( collector, aPos );
-
-            EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
-
-            if( m_pickerItem != item )
+            [this]( const VECTOR2D& aPos )
             {
-                if( m_pickerItem )
-                    selectionTool->UnbrightenItem( m_pickerItem );
+                EE_COLLECTOR collector;
+                collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+                collector.Collect( m_frame->GetScreen(), fieldsAndComponents, (wxPoint) aPos );
 
-                m_pickerItem = item;
+                EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                selectionTool->GuessSelectionCandidates( collector, aPos );
 
-                if( m_pickerItem )
-                    selectionTool->BrightenItem( m_pickerItem );
-            }
-        } );
+                EDA_ITEM* item = collector.GetCount() == 1 ? collector[ 0 ] : nullptr;
+
+                if( m_pickerItem != item )
+                {
+                    if( m_pickerItem )
+                        selectionTool->UnbrightenItem( m_pickerItem );
+
+                    m_pickerItem = item;
+
+                    if( m_pickerItem )
+                        selectionTool->BrightenItem( m_pickerItem );
+                }
+            } );
 
     picker->SetFinalizeHandler(
-        [this] ( const int& aFinalState )
-        {
-            if( m_pickerItem )
-                m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+            [this]( const int& aFinalState )
+            {
+                if( m_pickerItem )
+                    m_toolMgr->GetTool<EE_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
-            // Wake the selection tool after exiting to ensure the cursor gets updated
-            m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
-        } );
+                // Wake the selection tool after exiting to ensure the cursor gets updated
+                m_toolMgr->RunAction( EE_ACTIONS::selectionActivate, false );
+            } );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
@@ -844,7 +845,9 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
                         conn = pins[0]->Connection();
                 }
                 else
+                {
                     conn = item->Connection();
+                }
             }
         }
     }
@@ -956,9 +959,7 @@ int SCH_EDITOR_CONTROL::AssignNetclass( const TOOL_EVENT& aEvent )
             NETCLASSPTR newNetclass = netSettings.m_NetClasses.Find( netclassName );
 
             if( newNetclass )
-            {
                 newNetclass->Add( netName );
-            }
 
             netSettings.m_NetClassAssignments[ netName ] = netclassName;
             netSettings.ResolveNetClassAssignments();

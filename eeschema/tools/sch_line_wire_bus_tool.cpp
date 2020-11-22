@@ -182,14 +182,18 @@ bool SCH_LINE_WIRE_BUS_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
-    auto wireOrBusTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->IsCurrentTool( EE_ACTIONS::drawWire )
-              || m_frame->IsCurrentTool( EE_ACTIONS::drawBus ) );
-    };
+    auto wireOrBusTool =
+            [this]( const SELECTION& aSel )
+            {
+                return ( m_frame->IsCurrentTool( EE_ACTIONS::drawWire )
+                      || m_frame->IsCurrentTool( EE_ACTIONS::drawBus ) );
+            };
 
-    auto lineTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->IsCurrentTool( EE_ACTIONS::drawLines ) );
-    };
+    auto lineTool =
+            [this]( const SELECTION& aSel )
+            {
+                return m_frame->IsCurrentTool( EE_ACTIONS::drawLines );
+            };
 
     auto belowRootSheetCondition =
             [&]( const SELECTION& aSel )
@@ -386,9 +390,9 @@ const SCH_SHEET_PIN* SCH_LINE_WIRE_BUS_TOOL::getSheetPin( const wxPoint& aPositi
 {
     SCH_SCREEN* screen = m_frame->GetScreen();
 
-    for( auto item : screen->Items().Overlapping( SCH_SHEET_T, aPosition ) )
+    for( SCH_ITEM* item : screen->Items().Overlapping( SCH_SHEET_T, aPosition ) )
     {
-        auto sheet = static_cast<SCH_SHEET*>( item );
+        SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
         for( SCH_SHEET_PIN* pin : sheet->GetPins() )
         {
@@ -405,7 +409,7 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
         wxPoint& aPosition )
 {
     wxCHECK_RET( aSegments.first && aSegments.second,
-            wxT( "Cannot compute break point of NULL line segment." ) );
+                 wxT( "Cannot compute break point of NULL line segment." ) );
 
     SCH_LINE* segment = aSegments.first;
     SCH_LINE* next_segment = aSegments.second;
@@ -415,7 +419,7 @@ void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_L
     int iDy = segment->GetEndPoint().y - segment->GetStartPoint().y;
 
     const SCH_SHEET_PIN* connectedPin = getSheetPin( segment->GetStartPoint() );
-    auto force = connectedPin ? connectedPin->GetEdge() : SHEET_UNDEFINED_SIDE;
+    SHEET_SIDE           force = connectedPin ? connectedPin->GetEdge() : SHEET_UNDEFINED_SIDE;
 
     if( force == SHEET_LEFT_SIDE || force == SHEET_RIGHT_SIDE )
     {
@@ -701,7 +705,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                     segment->SetEndPoint( cursorPos );
             }
 
-            for( auto wire : m_wires )
+            for( SCH_LINE* wire : m_wires )
             {
                 if( !wire->IsNull() )
                     m_view->AddToPreview( wire->Clone() );
@@ -752,15 +756,9 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::startSegments( int aType, const VECTOR2D& aPos
 
     switch ( aType )
     {
-    default:
-        segment = new SCH_LINE( aPos, LAYER_NOTES );
-        break;
-    case LAYER_WIRE:
-        segment = new SCH_LINE( aPos, LAYER_WIRE );
-        break;
-    case LAYER_BUS:
-        segment = new SCH_LINE( aPos, LAYER_BUS );
-        break;
+    default:         segment = new SCH_LINE( aPos, LAYER_NOTES ); break;
+    case LAYER_WIRE: segment = new SCH_LINE( aPos, LAYER_WIRE );  break;
+    case LAYER_BUS:  segment = new SCH_LINE( aPos, LAYER_BUS );   break;
     }
 
     // Give segments a parent so they find the default line/wire/bus widths
@@ -850,7 +848,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     std::vector< wxPoint > new_ends;
 
     // Check each new segment for possible junctions and add/split if needed
-    for( auto wire : m_wires )
+    for( SCH_LINE* wire : m_wires )
     {
         if( wire->HasFlag( SKIP_STRUCT ) )
             continue;
@@ -859,10 +857,10 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
 
         new_ends.insert( new_ends.end(), tmpends.begin(), tmpends.end() );
 
-        for( auto i : connections )
+        for( const wxPoint& pt : connections )
         {
-            if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), i ) )
-                new_ends.push_back( i );
+            if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), pt ) )
+                new_ends.push_back( pt );
         }
         itemList.PushItem( ITEM_PICKER( screen, wire, UNDO_REDO::NEWITEM ) );
     }
@@ -881,7 +879,7 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
         m_frame->SaveCopyForRepeatItem( m_wires.back() );
 
     // Add the new wires
-    for( auto wire : m_wires )
+    for( SCH_LINE* wire : m_wires )
     {
         wire->ClearFlags( IS_NEW | IS_MOVED );
         m_frame->AddToScreen( wire, screen );
@@ -899,24 +897,24 @@ void SCH_LINE_WIRE_BUS_TOOL::finishSegments()
     // Correct and remove segments that need to be merged.
     m_frame->SchematicCleanUp();
 
-    for( auto item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_COMPONENT_T ) )
     {
-        std::vector< wxPoint > pts = item->GetConnectionPoints();
+        std::vector<wxPoint> pts = item->GetConnectionPoints();
 
         if( pts.size() > 2 )
             continue;
 
-        for( auto i = pts.begin(); i != pts.end(); i++ )
+        for( auto pt = pts.begin(); pt != pts.end(); pt++ )
         {
-            for( auto j = i + 1; j != pts.end(); j++ )
-                m_frame->TrimWire( *i, *j );
+            for( auto secondPt = pt + 1; secondPt != pts.end(); secondPt++ )
+                m_frame->TrimWire( *pt, *secondPt );
         }
     }
 
-    for( auto i : new_ends )
+    for( const wxPoint& pt : new_ends )
     {
-        if( m_frame->GetScreen()->IsJunctionNeeded( i, true ) )
-            m_frame->AddJunction( m_frame->GetScreen(), i, true, false );
+        if( m_frame->GetScreen()->IsJunctionNeeded( pt, true ) )
+            m_frame->AddJunction( m_frame->GetScreen(), pt, true, false );
     }
 
     if( m_busUnfold.in_progress )
@@ -938,7 +936,7 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 
     for( unsigned ii = 0; ii < aSelection->GetSize(); ii++ )
     {
-        SCH_ITEM*            item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSelection->GetItem( ii ) );
 
         if( !item || !item->IsConnectable() )
             continue;
@@ -951,31 +949,34 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
         if( item->Type() == SCH_LINE_T )
         {
             SCH_LINE* line = (SCH_LINE*) item;
-            for( auto i : connections )
+
+            for( const wxPoint& pt : connections )
             {
-                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), i ) )
-                    pts.push_back( i );
+                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), pt ) )
+                    pts.push_back( pt );
             }
         }
         else
         {
             // Clean up any wires that short non-wire connections in the list
-            for( auto point = new_pts.begin(); point != new_pts.end(); point++ )
+            for( auto pt = new_pts.begin(); pt != new_pts.end(); pt++ )
             {
-                for( auto second_point = point + 1; second_point != new_pts.end(); second_point++ )
-                    m_frame->TrimWire( *point, *second_point );
+                for( auto secondPt = pt + 1; secondPt != new_pts.end(); secondPt++ )
+                    m_frame->TrimWire( *pt, *secondPt );
             }
         }
     }
 
     // We always have some overlapping connection points.  Drop duplicates here
-    std::sort( pts.begin(), pts.end(), []( const wxPoint& a, const wxPoint& b ) -> bool {
-        return a.x < b.x || ( a.x == b.x && a.y < b.y );
-    } );
+    std::sort( pts.begin(), pts.end(),
+               []( const wxPoint& a, const wxPoint& b ) -> bool
+               {
+                   return a.x < b.x || ( a.x == b.x && a.y < b.y );
+               } );
 
     pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
 
-    for( auto point : pts )
+    for( const wxPoint& point : pts )
     {
         if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
             m_frame->AddJunction( m_frame->GetScreen(), point, true, false );
