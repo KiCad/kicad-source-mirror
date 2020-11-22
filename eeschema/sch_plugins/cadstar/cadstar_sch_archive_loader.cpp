@@ -964,11 +964,26 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
 
     component->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
-    int compOrientation =
-            getComponentOrientation( aCadstarSymbol.OrientAngle, aComponentOrientationDeciDeg );
+    double compAngleDeciDeg = getAngleTenthDegree( aCadstarSymbol.OrientAngle );
+    int compOrientation  = 0;
 
     if( aCadstarSymbol.Mirror )
+    {
+        compAngleDeciDeg = -compAngleDeciDeg;
         compOrientation += COMPONENT_ORIENTATION_T::CMP_MIRROR_Y;
+    }
+
+    compOrientation += getComponentOrientation( compAngleDeciDeg, aComponentOrientationDeciDeg );
+
+    if( NormalizeAngle180( compAngleDeciDeg ) != NormalizeAngle180( aComponentOrientationDeciDeg ) )
+    {
+        wxLogError(
+                wxString::Format( _( "Symbol '%s' is rotated by an angle of %.1f degrees in the "
+                                     "original CADSTAR design but KiCad only supports rotation "
+                                     "angles multiples of 90 degrees. The connecting wires will "
+                                     "need manual fixing." ),
+                        aCadstarSymbol.ComponentRef.Designator, compAngleDeciDeg / 10.0 ) );
+    }
 
     component->SetOrientation( compOrientation );
     LIB_ID libId( mLibraryFileName.GetName(), aKiCadPart->GetName() );
@@ -1023,11 +1038,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolFieldAttribute(
 
 
 int CADSTAR_SCH_ARCHIVE_LOADER::getComponentOrientation(
-        long long aCadstarOrientAngle, double& aReturnedOrientationDeciDeg )
+        double aOrientAngleDeciDeg, double& aReturnedOrientationDeciDeg )
 {
     int compOrientation = COMPONENT_ORIENTATION_T::CMP_ORIENT_0;
 
-    int oDeg = (int) NormalizeAngle180( getAngleTenthDegree( aCadstarOrientAngle ) );
+    int oDeg = (int) NormalizeAngle180( aOrientAngleDeciDeg );
 
     if( oDeg >= -450 && oDeg <= 450 )
     {
@@ -1101,11 +1116,13 @@ CADSTAR_SCH_ARCHIVE_LOADER::POINT CADSTAR_SCH_ARCHIVE_LOADER::getLocationOfNetEl
         wxPoint pinOffset   = libpinPosition - libOrigin;
         wxPoint pinPosition = symbolOrigin + pinOffset;
 
+        double compAngleDeciDeg = getAngleTenthDegree( sym.OrientAngle );
+
         if( sym.Mirror )
             pinPosition.x = ( 2 * symbolOrigin.x ) - pinPosition.x;
 
         double adjustedOrientationDecideg;
-        getComponentOrientation( sym.OrientAngle, adjustedOrientationDecideg );
+        getComponentOrientation( compAngleDeciDeg, adjustedOrientationDecideg );
 
         RotatePoint( &pinPosition, symbolOrigin, -adjustedOrientationDecideg );
 

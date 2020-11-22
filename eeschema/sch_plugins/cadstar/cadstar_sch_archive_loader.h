@@ -135,8 +135,7 @@ private:
     void loadSymbolFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
             const double& aComponentOrientationDeciDeg, SCH_FIELD* aKiCadField );
 
-    int getComponentOrientation(
-            long long aCadstarOrientAngle, double& aReturnedOrientationDeciDeg );
+    int getComponentOrientation( double aOrientAngleDeciDeg, double& aReturnedOrientationDeciDeg );
 
     //Helper functions for loading nets
     POINT getLocationOfNetElement( const NET_SCH& aNet, const NETELEMENT_ID& aNetElementID );
@@ -213,7 +212,17 @@ private:
     */
     double getAngleTenthDegree( const long long& aCadstarAngle )
     {
-        return (double) aCadstarAngle / 100.0;
+        // CADSTAR v6 (which outputted Schematic Format Version 8) and earlier used 1/10 degree
+        // as the unit for angles/orientations. It is assumed that CADSTAR version 7 (i.e. Schematic
+        // Format Version 9 and later) is the version that introduced 1/1000 degree for angles.
+        if( Header.Format.Version > 8 )
+        {
+            return (double) aCadstarAngle / 100.0;
+        }
+        else
+        {
+            return (double) aCadstarAngle;
+        }
     }
 
     /**
@@ -223,7 +232,7 @@ private:
      */
     double getAngleDegrees( const long long& aCadstarAngle )
     {
-        return (double) aCadstarAngle / 1000.0;
+        return getAngleTenthDegree( aCadstarAngle ) / 10.0;
     }
 
     /**
