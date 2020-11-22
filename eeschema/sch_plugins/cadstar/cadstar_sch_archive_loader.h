@@ -43,6 +43,7 @@ class SCH_FIELD;
 class SCH_GLOBALLABEL;
 class SCH_HIERLABEL;
 class SCH_SHEET;
+class SCH_SHEET_PATH;
 class SCH_TEXT;
 class SCHEMATIC;
 
@@ -108,9 +109,9 @@ private:
 
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
-            SCH_SHEET* aParentSheet );
+            const SCH_SHEET_PATH& aParentSheet );
 
-    void loadChildSheets( LAYER_ID aCadstarSheetID );
+    void loadChildSheets( LAYER_ID aCadstarSheetID, const SCH_SHEET_PATH& aSheet );
 
     std::vector<LAYER_ID> findOrphanSheets();
 

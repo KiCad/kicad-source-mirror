@@ -38,6 +38,7 @@
 #include <sch_line.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
+#include <sch_sheet_path.h>
 #include <sch_text.h>
 #include <schematic.h>
 #include <trigo.h>
@@ -173,6 +174,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
 {
     const std::vector<LAYER_ID>& orphanSheets = findOrphanSheets();
+    SCH_SHEET_PATH               rootPath;
+    rootPath.push_back( mRootSheet );
+    mRootSheet->AddInstance( rootPath.Path() );
+    mRootSheet->SetPageNumber( rootPath, wxT( "1" ) );
 
     if( orphanSheets.size() > 1 )
     {
@@ -184,7 +189,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
             wxPoint pos( x * Mils2iu( 1000 ), y * Mils2iu( 1000 ) );
             wxSize  siz( Mils2iu( 1000 ), Mils2iu( 1000 ) );
 
-            loadSheetAndChildSheets( sheetID, pos, siz, mRootSheet );
+            loadSheetAndChildSheets( sheetID, pos, siz, rootPath );
 
             x += 2;
 
@@ -211,7 +216,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheets()
         mRootSheet->GetScreen()->SetFileName( fn.GetFullPath() );
 
         mSheetMap.insert( { rootSheetID, mRootSheet } );
-        loadChildSheets( rootSheetID );
+        loadChildSheets( rootSheetID, rootPath );
     }
     else
     {
@@ -1300,12 +1305,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
-        LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize, SCH_SHEET* aParentSheet )
+        LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize, const SCH_SHEET_PATH& aParentSheet )
 {
     wxCHECK_MSG( mSheetMap.find( aCadstarSheetID ) == mSheetMap.end(), , "Sheet already loaded!" );
 
-    SCH_SHEET*  sheet  = new SCH_SHEET( aParentSheet, aPosition );
+    SCH_SHEET*  sheet  = new SCH_SHEET( aParentSheet.Last(), aPosition );
     SCH_SCREEN* screen = new SCH_SCREEN( mSchematic );
+    SCH_SHEET_PATH instance( aParentSheet );
 
     sheet->SetSize( aSheetSize );
     sheet->SetScreen( screen );
@@ -1317,10 +1323,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
 
     sheetNameField.SetText( name );
 
-    wxFileName  loadedFilePath = wxFileName( Filename );
-    std::string filename       = wxString::Format(
-            "%s_%02d", loadedFilePath.GetName(), getSheetNumber( aCadstarSheetID ) )
-                                   .ToStdString();
+    int sheetNum = getSheetNumber( aCadstarSheetID );
+    wxString  loadedFilename = wxFileName( Filename ).GetName();
+    std::string filename = wxString::Format( "%s_%02d", loadedFilename, sheetNum ).ToStdString();
 
     ReplaceIllegalFileNameChars( &filename );
     filename += wxT( "." ) + KiCadSchematicFileExtension;
@@ -1328,15 +1333,21 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets(
     filenameField.SetText( filename );
     wxFileName fn( filename );
     sheet->GetScreen()->SetFileName( fn.GetFullPath() );
-    aParentSheet->GetScreen()->Append( sheet );
+    aParentSheet.Last()->GetScreen()->Append( sheet );
+    instance.push_back( sheet );
+    sheet->AddInstance( instance.Path() );
+
+    wxString pageNumStr = wxString::Format( "%d", getSheetNumber( aCadstarSheetID ) );
+    sheet->SetPageNumber( instance, pageNumStr );
 
     mSheetMap.insert( { aCadstarSheetID, sheet } );
 
-    loadChildSheets( aCadstarSheetID );
+    loadChildSheets( aCadstarSheetID, instance );
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets(
+        LAYER_ID aCadstarSheetID, const SCH_SHEET_PATH& aSheet )
 {
     wxCHECK_MSG( mSheetMap.find( aCadstarSheetID ) != mSheetMap.end(), ,
             "FIXME! Parent sheet should be loaded before attempting to load subsheets" );
@@ -1364,8 +1375,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID )
                         block.ID ) );
             }
 
-            loadSheetAndChildSheets( block.AssocLayerID, blockExtents.first, blockExtents.second,
-                    mSheetMap.at( aCadstarSheetID ) );
+            loadSheetAndChildSheets( block.AssocLayerID, blockExtents.first, blockExtents.second, aSheet );
 
             if( block.HasBlockLabel )
             {
