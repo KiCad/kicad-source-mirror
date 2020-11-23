@@ -38,7 +38,7 @@ DIALOG_UPDATE_FROM_PCB_BASE::DIALOG_UPDATE_FROM_PCB_BASE( wxWindow* parent, wxWi
 	sbSizerOptions->Add( fgSizer1, 1, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bUpperSizer->Add( sbSizerOptions, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bUpperSizer->Add( sbSizerOptions, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update") ), wxVERTICAL );
