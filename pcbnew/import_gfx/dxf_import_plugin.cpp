@@ -40,8 +40,38 @@
 
 
 /*
- * Important note: all DXF coordinates and sizes are converted to mm.
- * they will be converted to internal units later.
+ * Important notes
+ * 1. All output coordinates of this importer are in mm
+ * 2. DXFs have a concept of world (WCS) and object coordinates (OCS)
+   3. The following objects are world coordinates:
+        - Line
+        - Point
+        - Polyline (3D)
+        - Vertex (3D)
+        - Polymesh
+        - Polyface
+        - Viewport
+    4. The following entities are object coordinates
+        - Circle
+        - Arc
+        - Solid
+        - Trace
+        - Attrib
+        - Shape
+        - Insert
+        - Polyline (2D)
+        - Vertex (2D)
+        - LWPolyline
+        - Hatch
+        - Image
+        - Text
+ *   5. Object coordinates must be run through the arbtirary axis
+ *      translation even though they are 2D drawings and most of the time
+ *      the import is fine. Sometimes, agaisnt all logic, CAD tools like
+ *      SolidWorks may randomly insert circles "mirror" that must be unflipped
+ *      by following the object to world conversion
+ *    6. Blocks are virtual groups, blocks must be placed by a INSERT entity
+ *    7. Blocks may be repeated multiple times
  */
 
 
@@ -51,6 +81,7 @@
 
 //#define SCALE_FACTOR(x) millimeter2iu(x)  /* no longer used */
 #define SCALE_FACTOR(x) (x)
+
 
 DXF_IMPORT_PLUGIN::DXF_IMPORT_PLUGIN() : DL_CreationAdapter()
 {
@@ -342,18 +373,20 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 
     const DL_VertexData* vertex = &aData;
 
+    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D vertexCoords      = ocsToWcs( arbAxis, VECTOR3D( vertex->x, vertex->y, vertex->z ) );
+
     if( m_curr_entity.m_EntityParseStatus == 1 )    // This is the first vertex of an entity
     {
-        m_curr_entity.m_LastCoordinate.x  = m_xOffset + vertex->x * getCurrentUnitScale();
-        m_curr_entity.m_LastCoordinate.y  = m_yOffset - vertex->y * getCurrentUnitScale();
+        m_curr_entity.m_LastCoordinate.x  = mapX( vertexCoords.x );
+        m_curr_entity.m_LastCoordinate.y  = mapY( vertexCoords.y );
         m_curr_entity.m_PolylineStart = m_curr_entity.m_LastCoordinate;
         m_curr_entity.m_BulgeVertex = vertex->bulge;
         m_curr_entity.m_EntityParseStatus = 2;
         return;
     }
 
-    VECTOR2D seg_end( m_xOffset + vertex->x * getCurrentUnitScale(),
-                      m_yOffset - vertex->y * getCurrentUnitScale() );
+    VECTOR2D seg_end( mapX( vertexCoords.x ), mapY( vertexCoords.y ) );
 
     if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
         insertLine( m_curr_entity.m_LastCoordinate, seg_end, lineWidth );
@@ -370,6 +403,14 @@ void DXF_IMPORT_PLUGIN::endEntity()
 {
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
+
+    // skip 3d polylines we obviously can't support
+    // TODO: maybe inform the user somehow this was encountered?
+    if( m_curr_entity.m_EntityFlag & DL_POLYLINE3D )
+    {
+        m_curr_entity.Clear();
+        return;
+    }
 
     if( m_curr_entity.m_EntityType == DL_ENTITY_POLYLINE ||
         m_curr_entity.m_EntityType == DL_ENTITY_LWPOLYLINE )
@@ -420,8 +461,12 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     if( block == nullptr )
         return;
 
-    VECTOR2D translation( mapX( aData.ipx ), mapY( aData.ipy ) );
-    VECTOR2D scale( mapX( aData.sx ), mapY( aData.sy ) );
+    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D insertCoords      = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
+
+    VECTOR2D translation( mapX( insertCoords.x ), mapY( insertCoords.y ) );
+
+    // TODO: implement handling of scale
 
     for( auto& shape : block->m_buffer.GetShapes() )
     {
@@ -433,9 +478,13 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     }
 }
 
+
 void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 {
-    VECTOR2D          center( mapX( aData.cx ), mapY( aData.cy ) );
+    DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
+    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
+
+    VECTOR2D          center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
@@ -455,8 +504,11 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     if( m_currentBlock != nullptr )
         return;
 
+    DXF_ARBITRARY_AXIS arbAxis      = getArbitraryAxis( getExtrusion() );
+    VECTOR3D           centerCoords = ocsToWcs( arbAxis, VECTOR3D( aData.cx, aData.cy, aData.cz ) );
+
     // Init arc centre:
-    VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
+    VECTOR2D center( mapX( centerCoords.x ), mapY( centerCoords.y ) );
 
     // aData.anglex is in degrees.
     double  startangle = aData.angle1;
@@ -465,7 +517,8 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     // Init arc start point
     VECTOR2D startPoint( aData.radius, 0.0 );
     startPoint = startPoint.Rotate( startangle * M_PI / 180.0 );
-    VECTOR2D arcStart( mapX( startPoint.x + aData.cx ), mapY( startPoint.y + aData.cy ) );
+    VECTOR2D arcStart(
+            mapX( startPoint.x + centerCoords.x ), mapY( startPoint.y + centerCoords.y ) );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
     double angle = -( endangle - startangle );
@@ -489,8 +542,12 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
 void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
-    VECTOR2D refPoint( mapX( aData.ipx ), mapY( aData.ipy ) );
-    VECTOR2D secPoint( mapX( aData.apx ), mapY( aData.apy ) );
+    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D refPointCoords    = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
+    VECTOR3D secPointCoords    = ocsToWcs( arbAxis, VECTOR3D( aData.apx, aData.apy, aData.apz ) );
+
+    VECTOR2D refPoint( mapX( refPointCoords.x ), mapY( refPointCoords.y ) );
+    VECTOR2D secPoint( mapX( secPointCoords.x ), mapY( secPointCoords.y ) );
 
     if( aData.vJustification != 0 || aData.hJustification != 0 || aData.hJustification == 4 )
     {
@@ -670,7 +727,10 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
         text    = tmp;
     }
 
-    VECTOR2D textpos( mapX( aData.ipx ), mapY( aData.ipy ) );
+    DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
+    VECTOR3D textposCoords     = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
+
+    VECTOR2D textpos( mapX( textposCoords.x ), mapY( textposCoords.y ) );
 
     // Initialize text justifications:
     EDA_TEXT_HJUSTIFY_T hJustify = GR_TEXT_HJUSTIFY_LEFT;
@@ -1266,4 +1326,57 @@ void DXF_IMPORT_PLUGIN::updateImageLimits( const VECTOR2D& aPoint )
 
     m_minY = std::min( aPoint.y, m_minY );
     m_maxY = std::max( aPoint.y, m_maxY );
+}
+
+
+DXF_ARBITRARY_AXIS DXF_IMPORT_PLUGIN::getArbitraryAxis( DL_Extrusion* aData )
+{
+    VECTOR3D arbZ, arbX, arbY;
+
+    double direction[3];
+    aData->getDirection( direction );
+
+    arbZ = VECTOR3D( direction[0], direction[1], direction[2] ).Normalize();
+
+    if( ( abs( arbZ.x ) < ( 1.0 / 64.0 ) ) && ( abs( arbZ.y ) < ( 1.0 / 64.0 ) ) )
+    {
+        arbX = VECTOR3D( 0, 1, 0 ).Cross( arbZ ).Normalize();
+    }
+    else
+    {
+        arbX = VECTOR3D( 0, 0, 1 ).Cross( arbZ ).Normalize();
+    }
+
+    arbY = arbZ.Cross( arbX ).Normalize();
+
+    return DXF_ARBITRARY_AXIS{ arbX, arbY, arbZ };
+}
+
+
+VECTOR3D DXF_IMPORT_PLUGIN::wcsToOcs( const DXF_ARBITRARY_AXIS& arbitraryAxis, VECTOR3D point )
+{
+    double x, y, z;
+    x = point.x * arbitraryAxis.vecX.x + point.y * arbitraryAxis.vecX.y
+        + point.z * arbitraryAxis.vecX.z;
+    y = point.x * arbitraryAxis.vecY.x + point.y * arbitraryAxis.vecY.y
+        + point.z * arbitraryAxis.vecY.z;
+    z = point.x * arbitraryAxis.vecZ.x + point.y * arbitraryAxis.vecZ.y
+        + point.z * arbitraryAxis.vecZ.z;
+
+    return VECTOR3D( x, y, z );
+}
+
+
+VECTOR3D DXF_IMPORT_PLUGIN::ocsToWcs( const DXF_ARBITRARY_AXIS& arbitraryAxis, VECTOR3D point )
+{
+    VECTOR3D worldX = wcsToOcs( arbitraryAxis, VECTOR3D( 1, 0, 0 ) );
+    VECTOR3D worldY = wcsToOcs( arbitraryAxis, VECTOR3D( 0, 1, 0 ) );
+    VECTOR3D worldZ = wcsToOcs( arbitraryAxis, VECTOR3D( 0, 0, 1 ) );
+
+    double x, y, z;
+    x = point.x * worldX.x + point.y * worldX.y + point.z * worldX.z;
+    y = point.x * worldY.x + point.y * worldY.y + point.z * worldY.z;
+    z = point.x * worldZ.x + point.y * worldZ.y + point.z * worldZ.z;
+
+    return VECTOR3D( x, y, z );
 }

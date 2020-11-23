@@ -36,6 +36,9 @@ set( KIMATH_SRCS
     geometry/test_shape_poly_set_iterator.cpp
     geometry/test_poly_grid_partition.cpp
     geometry/test_shape_line_chain.cpp
+
+    math/test_vector2.cpp
+    math/test_vector3.cpp
 )
 
 add_executable( qa_kimath ${KIMATH_SRCS} )

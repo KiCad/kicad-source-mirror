@@ -30,6 +30,7 @@
 
 #include <dl_creationadapter.h>
 #include <dl_dxf.h>
+#include <math/vector3.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/wx.h>
 
@@ -177,6 +178,16 @@ enum class DXF_IMPORT_UNITS
 };
 
 /**
+ * Helper class representing the DXF specification's "arbitrary axis"
+ */
+struct DXF_ARBITRARY_AXIS
+{
+    VECTOR3D vecX;
+    VECTOR3D vecY;
+    VECTOR3D vecZ;
+};
+
+/**
  * This class import DXF ASCII files and convert basic entities to board entities.
  * It depends on the dxflib library.
  */
@@ -316,6 +327,18 @@ private:
     double mapDim( double aDxfValue );
     double lineWeightToWidth( int lw, DXF_IMPORT_LAYER* aLayer );
     double getCurrentUnitScale();
+
+    DXF_ARBITRARY_AXIS getArbitraryAxis( DL_Extrusion* aData );
+
+    /***
+     * Converts a given world coordinate point to object coordinate using the given arbitrary axis vectors
+     */
+    VECTOR3D wcsToOcs( const DXF_ARBITRARY_AXIS& arbitraryAxis, VECTOR3D point );
+
+    /***
+     * Converts a given object coordinate point to world coordinate using the given arbitrary axis vectors
+     */
+    VECTOR3D ocsToWcs( const DXF_ARBITRARY_AXIS& arbitraryAxis, VECTOR3D point );
 
     /**
      * Returns the import layer data
