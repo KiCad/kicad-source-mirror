@@ -132,6 +132,23 @@ public:
 };
 
 /**
+ * A helper class to hold layer settings temporarily during import
+ */
+class DXF_IMPORT_BLOCK
+{
+public:
+    wxString m_name;
+    double m_x, m_y;
+
+    DXF_IMPORT_BLOCK( wxString aName, double aX, double aY )
+    {
+        m_name = aName;
+        m_x = aX;
+        m_y = aY;
+    }
+};
+
+/**
  * DXF Units enum with values as specified in DXF 2012 Specification
  */
 enum class DXF_IMPORT_UNITS
@@ -176,7 +193,6 @@ private:
     double      m_defaultThickness;  // default line thickness for conversion (in mm)
     int         m_brdLayer;          // The board layer to place imported DXF items
     int         m_version;           // the dxf version, not used here
-    bool        m_inBlock;           // Are we parsing a block
     std::string m_codePage;          // The code page, not used here
     bool        m_importAsFPShapes;  // Use footprint items instead of board items when true.
                                      // true when the items are imported in the footprint editor
@@ -192,6 +208,8 @@ private:
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
 
     std::vector<std::unique_ptr<DXF_IMPORT_LAYER>> m_layers;    // List of layers as we import, used just to grab props for objects
+    std::vector<std::unique_ptr<DXF_IMPORT_BLOCK>> m_blocks;    // List of blocks as we import
+    DXF_IMPORT_BLOCK* m_currentBlock;
 
 public:
     DXF_IMPORT_PLUGIN();
@@ -350,6 +368,9 @@ private:
     //virtual void addLWPolyline( const DRW_LWPolyline& aData ) override;
     virtual void addText( const DL_TextData& aData ) override;
     virtual void addPolyline( const DL_PolylineData& aData ) override;
+
+    /* Inserts blocks where specified by insert data */
+    virtual void addInsert( const DL_InsertData& aData ) override;
 
     /** Called for every polyline vertex */
     virtual void addVertex( const DL_VertexData& aData ) override;
