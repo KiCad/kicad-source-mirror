@@ -449,6 +449,20 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                        "net power / symbol. The symbol was not loaded." ),
                     sym.ID ) );
         }
+
+        if( sym.ScaleRatioDenominator != 1 || sym.ScaleRatioNumerator != 1 )
+        {
+            wxString symbolName = sym.ComponentRef.Designator;
+
+            if( symbolName.empty() )
+                symbolName = wxString::Format( "ID: %s", sym.ID);
+
+            wxLogError( wxString::Format(
+                    _( "Symbol '%s' is scaled in the original CADSTAR schematic but this is not"
+                       "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
+                       "manual fixing." ),
+                    symbolName, sym.PartRef.RefID ) );
+        }
     }
 }
 

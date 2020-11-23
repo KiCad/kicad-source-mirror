@@ -677,6 +677,11 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
         {
             Fixed = true;
         }
+        else if( cNodeName == wxT( "SCALE" ) )
+        {
+            ScaleRatioNumerator   = GetXmlAttributeIDLong( cNode, 0 );
+            ScaleRatioDenominator = GetXmlAttributeIDLong( cNode, 1 );
+        }
         else if( cNodeName == wxT( "READABILITY" ) )
         {
             Readability = ParseReadability( cNode );

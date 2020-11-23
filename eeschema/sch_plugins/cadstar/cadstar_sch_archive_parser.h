@@ -260,6 +260,8 @@ public:
         long          OrientAngle = 0;
         bool          Mirror      = false;
         bool          Fixed       = false;
+        long          ScaleRatioNumerator = 1; ///< Symbols can be arbitrarily scaled in CADSTAR
+        long          ScaleRatioDenominator = 1;
         READABILITY   Readability = READABILITY::BOTTOM_TO_TOP;
 
         bool    IsComponent = false;
