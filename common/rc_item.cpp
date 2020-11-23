@@ -433,6 +433,9 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
     RC_TREE_NODE*  current_node = ToNode( m_view->GetCurrentItem() );
     const std::shared_ptr<RC_ITEM> current_item = current_node ? current_node->m_RcItem : nullptr;
 
+    /// Keep a vector of elements to free after wxWidgets is definitely done accessing them
+    std::vector<RC_TREE_NODE*> to_delete;
+
     if( aCurrentOnly && !current_item )
     {
         wxBell();
@@ -481,13 +484,13 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
             for( RC_TREE_NODE* child : m_tree[i]->m_Children )
             {
                 childItems.push_back( ToItem( child ) );
-                delete child;
+                to_delete.push_back( child );
             }
 
             m_tree[i]->m_Children.clear();
             ItemsDeleted( markerItem, childItems );
 
-            delete m_tree[i];
+            to_delete.push_back( m_tree[i] );
             m_tree.erase( m_tree.begin() + i );
             ItemDeleted( parentItem, markerItem );
         }
@@ -499,6 +502,9 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 
     if( m_view && aCurrentOnly && lastGood >= 0 )
         m_view->Select( ToItem( m_tree[ lastGood ] ) );
+
+    for( RC_TREE_NODE* item : to_delete )
+        delete( item );
 
     if( !aCurrentOnly )
         m_rcItemsProvider->DeleteAllItems( aIncludeExclusions, aDeep );
