@@ -20,6 +20,7 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
@@ -47,7 +48,7 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextFile;
 		wxTextCtrl* m_textCtrlFileName;
-		wxButton* m_buttonBrowse;
+		wxBitmapButton* m_browseButton;
 		wxRadioButton* m_rbInteractivePlacement;
 		wxRadioButton* m_rbAbsolutePlacement;
 		wxStaticText* m_staticTextXpos;

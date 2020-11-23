@@ -33,13 +33,11 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	bSizerFile->Add( m_textCtrlFileName, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_buttonBrowse = new wxButton( this, wxID_ANY, _("Browse"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonBrowse->SetToolTip( _("Only vectors will be imported.  Bitmaps and fonts will be ignored.") );
-
-	bSizerFile->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+	m_browseButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizerFile->Add( m_browseButton, 0, wxALL, 5 );
 
 
-	bSizerMain->Add( bSizerFile, 0, wxALL|wxEXPAND, 5 );
+	bSizerMain->Add( bSizerFile, 0, wxALL|wxEXPAND, 10 );
 
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Placement") ), wxVERTICAL );
@@ -49,7 +47,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	m_rbInteractivePlacement = new wxRadioButton( sbSizer2->GetStaticBox(), wxID_ANY, _("Interactive placement"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbInteractivePlacement->SetValue( true );
-	bSizerOptions->Add( m_rbInteractivePlacement, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerOptions->Add( m_rbInteractivePlacement, 0, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizerUserPos;
 	bSizerUserPos = new wxBoxSizer( wxHORIZONTAL );
@@ -60,7 +58,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerPosSettings;
 	bSizerPosSettings = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextXpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("X"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextXpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextXpos->Wrap( -1 );
 	bSizerPosSettings->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -77,7 +75,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	bSizerPosSettings->Add( m_DxfPcbXCoord, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextYpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextYpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextYpos->Wrap( -1 );
 	bSizerPosSettings->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -113,10 +111,10 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	bSizerOptions->Add( bSizerUserPos, 0, wxEXPAND, 5 );
 
 
-	sbSizer2->Add( bSizerOptions, 0, wxEXPAND|wxLEFT, 20 );
+	sbSizer2->Add( bSizerOptions, 0, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( sbSizer2, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerMain->Add( sbSizer2, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sbSizer1;
 	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Import Parameters") ), wxVERTICAL );
@@ -124,16 +122,13 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 
-
-	bSizer7->Add( 0, 0, 0, wxLEFT|wxRIGHT, 10 );
-
 	wxFlexGridSizer* fgSizerImportSettings;
 	fgSizerImportSettings = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgSizerImportSettings->AddGrowableCol( 1 );
 	fgSizerImportSettings->SetFlexibleDirection( wxBOTH );
 	fgSizerImportSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextBrdlayer = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Graphic layer"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBrdlayer = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Graphic layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdlayer->Wrap( -1 );
 	fgSizerImportSettings->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -143,7 +138,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
 
-	m_staticTextscale = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Import scale"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextscale = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Import scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextscale->Wrap( -1 );
 	fgSizerImportSettings->Add( m_staticTextscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -154,13 +149,13 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
 
 
-	bSizer7->Add( fgSizerImportSettings, 1, wxBOTTOM|wxEXPAND|wxRIGHT|wxTOP, 5 );
+	bSizer7->Add( fgSizerImportSettings, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
 	sbSizer1->Add( bSizer7, 1, wxEXPAND, 5 );
 
 	m_staticline1 = new wxStaticLine( sbSizer1->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sbSizer1->Add( m_staticline1, 0, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizer8;
 	bSizer8 = new wxBoxSizer( wxVERTICAL );
@@ -168,13 +163,13 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	m_groupItems = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Group items"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_groupItems->SetToolTip( _("Add all imported items into a new group") );
 
-	bSizer8->Add( m_groupItems, 0, wxBOTTOM|wxEXPAND|wxLEFT, 10 );
+	bSizer8->Add( m_groupItems, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	sbSizer1->Add( bSizer8, 0, wxALL|wxEXPAND, 5 );
+	sbSizer1->Add( bSizer8, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 
-	bSizerMain->Add( sbSizer1, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bSizerMain->Add( sbSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("DXF Parameters") ), wxVERTICAL );
@@ -182,16 +177,13 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizer81;
 	bSizer81 = new wxBoxSizer( wxHORIZONTAL );
 
-
-	bSizer81->Add( 0, 0, 0, wxLEFT|wxRIGHT, 10 );
-
 	wxFlexGridSizer* fgDxfImportSettings;
 	fgDxfImportSettings = new wxFlexGridSizer( 0, 3, 5, 5 );
 	fgDxfImportSettings->AddGrowableCol( 1 );
 	fgDxfImportSettings->SetFlexibleDirection( wxBOTH );
 	fgDxfImportSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextLineWidth = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default line width"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLineWidth = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLineWidth->Wrap( -1 );
 	fgDxfImportSettings->Add( m_staticTextLineWidth, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -204,9 +196,9 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	m_choiceUnitLineWidth->SetSelection( 0 );
 	fgDxfImportSettings->Add( m_choiceUnitLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextLineWidth1 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLineWidth1 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLineWidth1->Wrap( -1 );
-	fgDxfImportSettings->Add( m_staticTextLineWidth1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	fgDxfImportSettings->Add( m_staticTextLineWidth1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString m_choiceDxfUnitsChoices;
 	m_choiceDxfUnits = new wxChoice( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceDxfUnitsChoices, 0 );
@@ -223,10 +215,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	sbSizer3->Add( bSizer81, 1, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( sbSizer3, 1, wxALL|wxEXPAND, 5 );
-
-
-	bSizerMain->Add( 0, 0, 0, wxEXPAND, 5 );
+	bSizerMain->Add( sbSizer3, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
@@ -245,7 +234,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	this->Centre( wxBOTH );
 
 	// Connect Events
-	m_buttonBrowse->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onBrowseFiles ), NULL, this );
+	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onBrowseFiles ), NULL, this );
 	m_rbInteractivePlacement->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onInteractivePlacement ), NULL, this );
 	m_rbInteractivePlacement->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_rbAbsolutePlacement->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onAbsolutePlacement ), NULL, this );
@@ -258,7 +247,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 DIALOG_IMPORT_GFX_BASE::~DIALOG_IMPORT_GFX_BASE()
 {
 	// Disconnect Events
-	m_buttonBrowse->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onBrowseFiles ), NULL, this );
+	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onBrowseFiles ), NULL, this );
 	m_rbInteractivePlacement->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onInteractivePlacement ), NULL, this );
 	m_rbInteractivePlacement->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_IMPORT_GFX_BASE::originOptionOnUpdateUI ), NULL, this );
 	m_rbAbsolutePlacement->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_IMPORT_GFX_BASE::onAbsolutePlacement ), NULL, this );

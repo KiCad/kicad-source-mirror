@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,7 @@
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 #include <board.h>
+#include <bitmaps.h>
 #include <map>
 #include "dxf_import_plugin.h"
 
@@ -43,7 +44,7 @@ LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
 double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;     // Do not change the imported items size
 int DIALOG_IMPORT_GFX::m_originUnits = 0;          // millimeter
 int DIALOG_IMPORT_GFX::m_lineWidthUnits = 0;       // millimeter
-int DIALOG_IMPORT_GFX::m_dxfUnits = 0;              // first entry in the dxfUnits map below
+int DIALOG_IMPORT_GFX::m_dxfUnits = 0;             // first entry in the dxfUnits map below
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
     { DXF_IMPORT_UNITS::INCHES, _( "Inches" ) },
@@ -126,6 +127,8 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         m_choiceDxfUnits->Append( unitEntry.second );
 
     m_choiceDxfUnits->SetSelection( m_dxfUnits );
+
+    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     SetInitialFocus( m_textCtrlFileName );
     m_sdbSizerOK->SetDefault();
