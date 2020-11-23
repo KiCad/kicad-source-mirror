@@ -85,6 +85,7 @@ bool BACK_ANNOTATE::BackAnnotateSymbols( const std::string& aNetlist )
     return true;
 }
 
+
 bool BACK_ANNOTATE::FetchNetlistFromPCB( std::string& aNetlist )
 {
     if( Kiface().IsSingle() )

@@ -32,6 +32,7 @@
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB_SAVED_STATE
         DIALOG_UPDATE_FROM_PCB::s_savedDialogState{ true, true, true, true, false };
 
+
 DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
         : DIALOG_UPDATE_FROM_PCB_BASE( aParent ),
           m_frame( aParent ),
@@ -69,6 +70,7 @@ DIALOG_UPDATE_FROM_PCB::DIALOG_UPDATE_FROM_PCB( SCH_EDIT_FRAME* aParent )
     finishDialogSettings();
 }
 
+
 void DIALOG_UPDATE_FROM_PCB::updateData()
 {
     bool successfulRun = false;
@@ -90,15 +92,18 @@ void DIALOG_UPDATE_FROM_PCB::updateData()
     m_messagePanel->Flush( false );
 }
 
+
 bool DIALOG_UPDATE_FROM_PCB::TransferDataToWindow()
 {
     updateData();
     return true;
 }
 
+
 DIALOG_UPDATE_FROM_PCB::~DIALOG_UPDATE_FROM_PCB()
 {
 }
+
 
 void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
 {
@@ -130,6 +135,7 @@ void DIALOG_UPDATE_FROM_PCB::OnOptionChanged( wxCommandEvent& event )
         s_savedDialogState.UpdateNetNames = m_cbUpdateNetNames->GetValue();
 }
 
+
 void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
 {
     std::string netlist;
@@ -155,5 +161,5 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
             backAnno.PushNewLinksToPCB();
     }
 
-    m_messagePanel->Flush( true );
+    m_messagePanel->Flush( false );
 }

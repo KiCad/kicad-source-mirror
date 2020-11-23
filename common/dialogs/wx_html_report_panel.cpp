@@ -158,9 +158,14 @@ int WX_HTML_REPORT_PANEL::Count( int severityMask )
 {
     int count = 0;
 
-    for( const REPORT_LINE& reportLine : m_report )
-        if( severityMask & reportLine.severity )
-            count++;
+    for( const auto& reportLineArray : { m_report, m_reportHead, m_reportTail } )
+    {
+        for( const REPORT_LINE& reportLine : reportLineArray )
+        {
+            if( severityMask & reportLine.severity )
+                count++;
+        }
+    }
 
     return count;
 }
