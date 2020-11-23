@@ -357,11 +357,20 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
     wxString  msg;
 
     // Load new footprint.
-    msg.Printf( _( "%s footprint \"%s\" (from \"%s\") to \"%s\"" ),
-                m_updateMode ? _( "Update" ) : _( "Change" ),
-                aFootprint->GetReference(),
-                oldFPID.Format().c_str(),
-                aNewFPID.Format().c_str() );
+    if( m_updateMode )
+    {
+        msg.Printf( _( "Update footprint %s from '%s' to '%s'" ),
+                    aFootprint->GetReference(),
+                    oldFPID.Format().c_str(),
+                    aNewFPID.Format().c_str() );
+    }
+    else
+    {
+        msg.Printf( _( "Change footprint %s from '%s' to '%s'" ),
+                    aFootprint->GetReference(),
+                    oldFPID.Format().c_str(),
+                    aNewFPID.Format().c_str() );
+    }
 
     FOOTPRINT* newFootprint = m_parent->LoadFootprint( aNewFPID );
 
