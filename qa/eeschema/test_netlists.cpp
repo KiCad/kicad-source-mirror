@@ -146,15 +146,15 @@ void TEST_NETLISTS_FIXTURE::compareNetlists()
     NETLIST test;
 
     {
-        std::unique_ptr<NETLIST_READER> netlistReader(
-                NETLIST_READER::GetNetlistReader( &golden, getNetlistFileName(), wxEmptyString ) );
+        std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
+                                            &golden, getNetlistFileName(), wxEmptyString ) );
 
         BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
     }
 
     {
         std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
-                &test, getNetlistFileName( true ), wxEmptyString ) );
+                                            &test, getNetlistFileName( true ), wxEmptyString ) );
 
         BOOST_REQUIRE_NO_THROW( netlistReader->LoadNetlist() );
     }
