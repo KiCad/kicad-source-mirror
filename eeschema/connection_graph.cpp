@@ -274,8 +274,10 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels() const
 
 const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem )
 {
-    if( m_driver_name_cache.count( aItem ) )
-        return m_driver_name_cache.at( aItem );
+    auto it = m_driver_name_cache.find( aItem );
+
+    if( it != m_driver_name_cache.end() )
+        return it->second;
 
     switch( aItem->Type() )
     {
@@ -975,10 +977,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         connection->SetNetCode( code );
 
         CONNECTION_SUBGRAPH* subgraph;
+        auto                 jj = invisible_pin_subgraphs.find( code );
 
-        if( invisible_pin_subgraphs.count( code ) )
+        if( jj != invisible_pin_subgraphs.end() )
         {
-            subgraph = invisible_pin_subgraphs.at( code );
+            subgraph = jj->second;
             subgraph->AddItem( pin );
         }
         else
@@ -1101,15 +1104,15 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     bool     conflict    = false;
                     wxString global_name = connection->Name( true );
-                    size_t   count       = m_net_name_to_subgraphs_map.count( global_name );
+                    auto     kk          = m_net_name_to_subgraphs_map.find( global_name );
 
-                    if( count )
+                    if( kk != m_net_name_to_subgraphs_map.end() )
                     {
                         // A global will conflict if it is on the same sheet as this subgraph, since
                         // it would be connected by implicit local label linking
-                        auto& candidates = m_net_name_to_subgraphs_map.at( global_name );
+                        std::vector<CONNECTION_SUBGRAPH*>& candidates = kk->second;
 
-                        for( const auto& candidate : candidates )
+                        for( const CONNECTION_SUBGRAPH* candidate : candidates )
                         {
                             if( candidate->m_sheet == sheet )
                                 conflict = true;
@@ -1139,11 +1142,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         if( connection->IsBus() )
         {
-            int code = -1;
+            int  code = -1;
+            auto it   = m_bus_name_to_code_map.find( name );
 
-            if( m_bus_name_to_code_map.count( name ) )
+            if( it != m_bus_name_to_code_map.end() )
             {
-                code = m_bus_name_to_code_map.at( name );
+                code = it->second;
             }
             else
             {
@@ -1318,7 +1322,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     }
 
     // Update any subgraph that was invalidated above
-    for( auto subgraph : invalidated_subgraphs )
+    for( CONNECTION_SUBGRAPH* subgraph : invalidated_subgraphs )
     {
         if( subgraph->m_absorbed )
             continue;
@@ -1436,11 +1440,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         wxASSERT( conn->IsNet() );
 
-        for( const auto& it : subgraph->m_bus_parents )
+        for( const auto& ii : subgraph->m_bus_parents )
         {
-            SCH_CONNECTION* link_member = it.first.get();
+            SCH_CONNECTION* link_member = ii.first.get();
 
-            for( CONNECTION_SUBGRAPH* parent : it.second )
+            for( CONNECTION_SUBGRAPH* parent : ii.second )
             {
                 while( parent->m_absorbed )
                     parent = parent->m_absorbed_by;
@@ -1463,10 +1467,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                     match->Clone( *conn );
 
-                    if( !m_net_name_to_subgraphs_map.count( old_name ) )
+                    auto jj = m_net_name_to_subgraphs_map.find( old_name );
+
+                    if( jj == m_net_name_to_subgraphs_map.end() )
                         continue;
 
-                    for( CONNECTION_SUBGRAPH* old_sg : m_net_name_to_subgraphs_map.at( old_name ) )
+                    for( CONNECTION_SUBGRAPH* old_sg : jj->second )
                     {
                         while( old_sg->m_absorbed )
                             old_sg = old_sg->m_absorbed_by;
@@ -1547,14 +1553,16 @@ int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
 {
     int code;
 
-    if( m_net_name_to_code_map.count( aConnection.Name() ) )
-    {
-        code = m_net_name_to_code_map.at( aConnection.Name() );
-    }
-    else
+    auto it = m_net_name_to_code_map.find( aConnection.Name() );
+
+    if( it == m_net_name_to_code_map.end() )
     {
         code = m_last_net_code++;
         m_net_name_to_code_map[ aConnection.Name() ] = code;
+    }
+    else
+    {
+        code = it->second;
     }
 
     aConnection.SetNetCode( code );
@@ -1591,53 +1599,62 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     std::unordered_set<CONNECTION_SUBGRAPH*> visited;
     std::vector<SCH_CONNECTION*> stale_bus_members;
 
-    auto visit = [&] ( CONNECTION_SUBGRAPH* aParent ) {
-        for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
-        {
-            SCH_SHEET_PATH path = aParent->m_sheet;
-            path.push_back( pin->GetParent() );
-
-            if( !m_sheet_to_subgraphs_map.count( path ) )
-                continue;
-
-            for( CONNECTION_SUBGRAPH* candidate : m_sheet_to_subgraphs_map.at( path ) )
+    auto visit =
+            [&]( CONNECTION_SUBGRAPH* aParent )
             {
-                if( !candidate->m_strong_driver ||
-                    candidate->m_hier_ports.empty() ||
-                    visited.count( candidate ) )
-                    continue;
-
-                for( SCH_HIERLABEL* label : candidate->m_hier_ports )
+                for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
                 {
-                    if( candidate->GetNameForDriver( label ) == aParent->GetNameForDriver( pin ) )
+                    SCH_SHEET_PATH path = aParent->m_sheet;
+                    path.push_back( pin->GetParent() );
+
+                    auto it = m_sheet_to_subgraphs_map.find( path );
+
+                    if( it == m_sheet_to_subgraphs_map.end() )
+                        continue;
+
+                    for( CONNECTION_SUBGRAPH* candidate : it->second )
                     {
-                        wxLogTrace( ConnTrace, "%lu: found child %lu (%s)", aParent->m_code,
-                                    candidate->m_code, candidate->m_driver_connection->Name() );
+                        if( !candidate->m_strong_driver
+                            || candidate->m_hier_ports.empty()
+                            || visited.count( candidate ) )
+                        {
+                            continue;
+                        }
 
-                        candidate->m_hier_parent = aParent;
+                        for( SCH_HIERLABEL* label : candidate->m_hier_ports )
+                        {
+                            if( candidate->GetNameForDriver( label ) == aParent->GetNameForDriver( pin ) )
+                            {
+                                wxLogTrace( ConnTrace, "%lu: found child %lu (%s)", aParent->m_code,
+                                            candidate->m_code, candidate->m_driver_connection->Name() );
 
-                        search_list.push_back( candidate );
-                        break;
+                                candidate->m_hier_parent = aParent;
+
+                                search_list.push_back( candidate );
+                                break;
+                            }
+                        }
                     }
                 }
-            }
-        }
 
         for( SCH_HIERLABEL* label : aParent->m_hier_ports )
         {
             SCH_SHEET_PATH path = aParent->m_sheet;
             path.pop_back();
 
-            if( !m_sheet_to_subgraphs_map.count( path ) )
+            auto it = m_sheet_to_subgraphs_map.find( path );
+
+            if( it == m_sheet_to_subgraphs_map.end() )
                 continue;
 
-            for( CONNECTION_SUBGRAPH* candidate : m_sheet_to_subgraphs_map.at( path ) )
+            for( CONNECTION_SUBGRAPH* candidate : it->second )
             {
-                if( candidate->m_hier_pins.empty() ||
-                    visited.count( candidate ) ||
-                    ( candidate->m_driver_connection->Type() !=
-                      aParent->m_driver_connection->Type() ) )
+                if( candidate->m_hier_pins.empty()
+                    || visited.count( candidate )
+                    || candidate->m_driver_connection->Type() != aParent->m_driver_connection->Type() )
+                {
                     continue;
+                }
 
                 for( SCH_SHEET_PIN* pin : candidate->m_hier_pins )
                 {
@@ -1950,9 +1967,11 @@ SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember( SCH_CONNECTION* aBusConnection
 void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
                                             const wxString& aOldName )
 {
-    if( m_net_name_to_subgraphs_map.count( aOldName ) )
+    auto it = m_net_name_to_subgraphs_map.find( aOldName );
+
+    if( it != m_net_name_to_subgraphs_map.end() )
     {
-        auto& vec = m_net_name_to_subgraphs_map.at( aOldName );
+        std::vector<CONNECTION_SUBGRAPH*>& vec = it->second;
         vec.erase( std::remove( vec.begin(), vec.end(), aSubgraph ), vec.end() );
     }
 
@@ -1965,10 +1984,9 @@ void CONNECTION_GRAPH::recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph,
 
 std::shared_ptr<BUS_ALIAS> CONNECTION_GRAPH::GetBusAlias( const wxString& aName )
 {
-    if( m_bus_alias_cache.count( aName ) )
-        return m_bus_alias_cache.at( aName );
+    auto it = m_bus_alias_cache.find( aName );
 
-    return nullptr;
+    return it != m_bus_alias_cache.end() ? it->second : nullptr;
 }
 
 
@@ -2023,10 +2041,12 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName(
         const wxString& aNetName, const SCH_SHEET_PATH& aPath )
 {
-    if( !m_net_name_to_subgraphs_map.count( aNetName ) )
+    auto it = m_net_name_to_subgraphs_map.find( aNetName );
+
+    if( it == m_net_name_to_subgraphs_map.end() )
         return nullptr;
 
-    for( auto sg : m_net_name_to_subgraphs_map.at( aNetName ) )
+    for( CONNECTION_SUBGRAPH* sg : it->second )
     {
         // Cache is supposed to be valid by now
         wxASSERT( sg && !sg->m_absorbed && sg->m_driver_connection );
@@ -2041,21 +2061,21 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName(
 
 CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindFirstSubgraphByName( const wxString& aNetName )
 {
-    if( !m_net_name_to_subgraphs_map.count( aNetName ) )
+    auto it = m_net_name_to_subgraphs_map.find( aNetName );
+
+    if( it == m_net_name_to_subgraphs_map.end() )
         return nullptr;
 
-    wxASSERT( !m_net_name_to_subgraphs_map.at( aNetName ).empty() );
+    wxASSERT( !it->second.empty() );
 
-    return m_net_name_to_subgraphs_map.at( aNetName )[0];
+    return it->second[0];
 }
 
 
 CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem )
 {
-    if( !m_item_to_subgraph_map.count( aItem ) )
-        return nullptr;
-
-    CONNECTION_SUBGRAPH* ret = m_item_to_subgraph_map.at( aItem );
+    auto                 it  = m_item_to_subgraph_map.find( aItem );
+    CONNECTION_SUBGRAPH* ret = it != m_item_to_subgraph_map.end() ? it->second : nullptr;
 
     while( ret->m_absorbed )
         ret = ret->m_absorbed_by;
@@ -2634,9 +2654,11 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         // single instance connected to a single pin
         hasOtherConnections = ( pinCount < 2 );
 
-        if( m_net_name_to_subgraphs_map.count( name ) )
+        auto it = m_net_name_to_subgraphs_map.find( name );
+
+        if( it != m_net_name_to_subgraphs_map.end() )
         {
-            if( m_net_name_to_subgraphs_map.at( name ).size() > 1 || aSubgraph->m_multiple_drivers )
+            if( it->second.size() > 1 || aSubgraph->m_multiple_drivers )
                 hasOtherConnections = true;
         }
     }
@@ -2655,8 +2677,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     else
     {
         auto pair = std::make_pair( aSubgraph->m_sheet, name );
+        auto it = m_local_label_cache.find( pair );
 
-        if( m_local_label_cache.count( pair ) && m_local_label_cache.at( pair ).size() > 1 )
+        if( it != m_local_label_cache.end() && it->second.size() > 1 )
             hasOtherConnections = true;
     }
 
