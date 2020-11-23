@@ -50,11 +50,11 @@
 #include <i18n_utility.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>
-#include <geometry/shape_poly_set.h>
 
 
-#include <wx/debug.h>         // for wxASSERT
-#include <wx/wx.h>            // for wxPoint, wxString, wxArrayString, wxSize
+#include <wx/debug.h>           // for wxASSERT
+#include <wx/string.h>          // wxString, wxArrayString
+#include <wx/gdicmn.h>          // for wxPoint,wxSize
 
 class OUTPUTFORMATTER;
 class wxFindReplaceData;
