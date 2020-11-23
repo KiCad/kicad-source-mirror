@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-13 10:46-0800\n"
+"POT-Creation-Date: 2020-11-23 13:52-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -70,8 +70,16 @@ msgstr "Build board outline"
 msgid "Create layers"
 msgstr "Create layers"
 
-msgid "Board outline is not closed:"
-msgstr "Board outline is not closed:"
+msgid "No footprint loaded."
+msgstr "No footprint loaded."
+
+msgid ""
+"Footprint outline is malformed. Run Footprint Checker for a full analysis."
+msgstr ""
+"Footprint outline is malformed. Run Footprint Checker for a full analysis."
+
+msgid "Board outline is malformed. Run DRC for a full analysis."
+msgstr "Board outline is malformed. Run DRC for a full analysis."
 
 msgid "Create tracks and vias"
 msgstr "Create tracks and vias"
@@ -760,8 +768,8 @@ msgstr "Greyscale Picture"
 msgid "Black&&White Picture"
 msgstr "Black&&White Picture"
 
-msgid "Bitmap Info:"
-msgstr "Bitmap Info:"
+msgid "Bitmap Information"
+msgstr "Bitmap Information"
 
 msgid "Bitmap size:"
 msgstr "Bitmap size:"
@@ -784,8 +792,8 @@ msgstr "BPP:"
 msgid "bits"
 msgstr "bits"
 
-msgid "Output Parameters:"
-msgstr "Output Parameters:"
+msgid "Output Parameters"
+msgstr "Output Parameters"
 
 msgid "Lock height/width ratio"
 msgstr "Lock height/width ratio"
@@ -811,17 +819,17 @@ msgstr "Eeschema (.lib file)"
 msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod file)"
 
-msgid "PostScript (.ps file)"
-msgstr "PostScript (.ps file)"
+msgid "Postscript (.ps file)"
+msgstr "Postscript (.ps file)"
 
 msgid "Logo for title block (.kicad_wks file)"
 msgstr "Logo for title block (.kicad_wks file)"
 
-msgid "Format:"
-msgstr "Format:"
+msgid "Format"
+msgstr "Format"
 
-msgid "Image Options:"
-msgstr "Image Options:"
+msgid "Image Options"
+msgstr "Image Options"
 
 msgid "Black / White Threshold:"
 msgstr "Black / White Threshold:"
@@ -848,8 +856,8 @@ msgstr "User layer Eco1"
 msgid "User layer Eco2"
 msgstr "User layer Eco2"
 
-msgid "Board Layer for Outline:"
-msgstr "Board Layer for Outline:"
+msgid "Board Layer for Outline"
+msgstr "Board Layer for Outline"
 
 msgid ""
 "Choose the board layer to place the outline.\n"
@@ -2623,11 +2631,11 @@ msgstr "Unable to find a PDF viewer for “%s”"
 msgid ""
 "Cannot print '%s'.\n"
 "\n"
-"Unknown filetype."
+"Unknown file type."
 msgstr ""
 "Cannot print '%s'.\n"
 "\n"
-"Unknown filetype."
+"Unknown file type."
 
 #, c-format
 msgid "Cannot copy file \"%s\"."
@@ -4302,8 +4310,8 @@ msgstr "Absolute"
 msgid "Relative"
 msgstr "Relative"
 
-msgid "Path Type:"
-msgstr "Path Type:"
+msgid "Path Type"
+msgstr "Path Type"
 
 msgid "Ref"
 msgstr "Ref"
@@ -7132,8 +7140,8 @@ msgstr "Voltage"
 msgid "Current"
 msgstr "Current"
 
-msgid "Source type:"
-msgstr "Source type:"
+msgid "Source Type"
+msgstr "Source Type"
 
 msgid "Source"
 msgstr "Source"
@@ -8484,6 +8492,16 @@ msgid "Highlighted net: %s"
 msgstr "Highlighted net: %s"
 
 #, c-format
+msgid "Go to Page %s (%s)"
+msgstr "Go to Page %s (%s)"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Intersheet References"
+msgstr "Intersheet References"
+
+#, c-format
 msgid "Plugin \"%s\" does not implement the \"%s\" function."
 msgstr "Plugin “%s” does not implement the “%s” function."
 
@@ -8494,13 +8512,6 @@ msgstr "Plugin type “%s” is not found."
 #, c-format
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unknown SCH_FILE_T value: %d"
-
-#, c-format
-msgid "Go to Page %s (%s)"
-msgstr "Go to Page %s (%s)"
-
-msgid "Back"
-msgstr "Back"
 
 #, c-format
 msgid "Vertical Wire, length %s"
@@ -10149,8 +10160,8 @@ msgid "Footprint '%s' has no associated symbol."
 msgstr "Footprint '%s' has no associated symbol."
 
 #, c-format
-msgid "Pcb footprints '%s' and '%s' linked to same symbol."
-msgstr "Pcb footprints '%s' and '%s' linked to same symbol."
+msgid "Footprints '%s' and '%s' linked to same symbol."
+msgstr "Footprints '%s' and '%s' linked to same symbol."
 
 #, c-format
 msgid "Cannot find symbol for footprint '%s'."
@@ -10164,45 +10175,49 @@ msgid "Cannot relink footprints because schematic is not fully annotated."
 msgstr "Cannot relink footprints because schematic is not fully annotated."
 
 #, c-format
-msgid "Change \"%s\" reference designator to \"%s\"."
-msgstr "Change \"%s\" reference designator to \"%s\"."
+msgid "Change '%s' reference designator to '%s'."
+msgstr "Change '%s' reference designator to '%s'."
 
 #, c-format
-msgid "Change %s footprint from \"%s\" to \"%s\"."
-msgstr "Change %s footprint from “%s” to “%s”."
+msgid "Change %s footprint assignment from '%s' to '%s'."
+msgstr "Change %s footprint assignment from '%s' to '%s'."
 
 #, c-format
-msgid "Change %s value from \"%s\" to \"%s\"."
-msgstr "Change %s value from \"%s\" to \"%s\"."
+msgid "Change %s value from '%s' to '%s'."
+msgstr "Change %s value from '%s' to '%s'."
 
 #, c-format
-msgid "Cannot find \"%s\" pin \"%s\"."
-msgstr "Cannot find \"%s\" pin \"%s\"."
+msgid "Cannot find %s pin '%s'."
+msgstr "Cannot find %s pin '%s'."
 
 #, c-format
-msgid "Change \"%s\" labels to \"%s\"."
-msgstr "Change \"%s\" labels to \"%s\"."
+msgid "Change '%s' labels to '%s'."
+msgstr "Change '%s' labels to '%s'."
 
 #, c-format
-msgid "Change \"%s\" global labels to \"%s\"."
-msgstr "Change \"%s\" global labels to \"%s\"."
+msgid "Change '%s' global labels to '%s'."
+msgstr "Change '%s' global labels to '%s'."
 
 #, c-format
-msgid "Change \"%s\" hierarchical label to \"%s\"."
-msgstr "Change \"%s\" hierarchical label to \"%s\"."
+msgid "Change '%s' hierarchical label to '%s'."
+msgstr "Change '%s' hierarchical label to '%s'."
 
 #, c-format
-msgid ""
-"Net \"%s\" cannot be changed to \"%s\" because it is driven by a power pin."
-msgstr ""
-"Net \"%s\" cannot be changed to \"%s\" because it is driven by a power pin."
+msgid "Net %s cannot be changed to '%s' because it is driven by a power pin."
+msgstr "Net %s cannot be changed to '%s' because it is driven by a power pin."
 
 #, c-format
-msgid "Add label \"%s\" to net \"%s\"."
-msgstr "Add label \"%s\" to net \"%s\"."
+msgid "Add label '%s' to net %s."
+msgstr "Add label '%s' to net %s."
 
 msgid "Perform electrical rules check"
 msgstr "Perform electrical rules check"
+
+msgid "Symbol Checker"
+msgstr "Symbol Checker"
+
+msgid "Show the symbol checker window"
+msgstr "Show the symbol checker window"
 
 msgid "Simulator..."
 msgstr "Simulator..."
@@ -11404,70 +11419,11 @@ msgstr "X2 attr"
 msgid "Gerbview"
 msgstr "Gerbview"
 
-msgid "Layers"
-msgstr "Layers"
-
-msgid "Items"
-msgstr "Items"
-
-msgid "DCodes"
-msgstr "DCodes"
-
-msgid "Show DCodes identification"
-msgstr "Show DCodes identification"
-
-msgid "Negative Objects"
-msgstr "Negative Objects"
-
-msgid "Show negative objects in this color"
-msgstr "Show negative objects in this color"
-
-msgid "Show the (x,y) grid dots"
-msgstr "Show the (x,y) grid dots"
-
-msgid "Show worksheet"
-msgstr "Show worksheet"
-
-msgid "PCB Background"
-msgstr "PCB Background"
-
-msgid "Show All Layers"
-msgstr "Show All Layers"
-
-msgid "Hide All Layers But Active"
-msgstr "Hide All Layers But Active"
-
-msgid "Always Hide All Layers But Active"
-msgstr "Always Hide All Layers But Active"
-
-msgid "Hide All Layers"
-msgstr "Hide All Layers"
-
-msgid "Sort Layers if X2 Mode"
-msgstr "Sort Layers if X2 Mode"
-
 msgid "This job file uses an outdated format. Please recreate it."
 msgstr "This job file uses an outdated format. Please recreate it."
 
 msgid "Open Gerber Job File"
 msgstr "Open Gerber Job File"
-
-msgid "Change Layer Color for"
-msgstr "Change Layer Color for"
-
-msgid "Change Render Color for"
-msgstr "Change Render Color for"
-
-msgid ""
-"Left double click or middle click for color change, right click for menu"
-msgstr ""
-"Left double click or middle click for color change, right click for menu"
-
-msgid "Enable this for visibility"
-msgstr "Enable this for visibility"
-
-msgid "Left double click or middle click for color change"
-msgstr "Left double click or middle click for color change"
 
 msgid "Open Recent Gerber File"
 msgstr "Open Recent Gerber File"
@@ -11703,6 +11659,65 @@ msgstr "Highlight Aperture Type “%s”"
 
 msgid "Clarify selection"
 msgstr "Clarify selection"
+
+msgid "Layers"
+msgstr "Layers"
+
+msgid "Items"
+msgstr "Items"
+
+msgid "DCodes"
+msgstr "DCodes"
+
+msgid "Show DCodes identification"
+msgstr "Show DCodes identification"
+
+msgid "Negative Objects"
+msgstr "Negative Objects"
+
+msgid "Show negative objects in this color"
+msgstr "Show negative objects in this color"
+
+msgid "Show the (x,y) grid dots"
+msgstr "Show the (x,y) grid dots"
+
+msgid "Show worksheet"
+msgstr "Show worksheet"
+
+msgid "PCB Background"
+msgstr "PCB Background"
+
+msgid "Show All Layers"
+msgstr "Show All Layers"
+
+msgid "Hide All Layers But Active"
+msgstr "Hide All Layers But Active"
+
+msgid "Always Hide All Layers But Active"
+msgstr "Always Hide All Layers But Active"
+
+msgid "Hide All Layers"
+msgstr "Hide All Layers"
+
+msgid "Sort Layers if X2 Mode"
+msgstr "Sort Layers if X2 Mode"
+
+msgid "Change Layer Color for"
+msgstr "Change Layer Color for"
+
+msgid "Change Render Color for"
+msgstr "Change Render Color for"
+
+msgid ""
+"Left double click or middle click for color change, right click for menu"
+msgstr ""
+"Left double click or middle click for color change, right click for menu"
+
+msgid "Enable this for visibility"
+msgstr "Enable this for visibility"
+
+msgid "Left double click or middle click for color change"
+msgstr "Left double click or middle click for color change"
 
 msgid "-- mixed values --"
 msgstr "-- mixed values --"
@@ -12580,8 +12595,8 @@ msgstr "µA"
 msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
 
-msgid "Formula:"
-msgstr "Formula:"
+msgid "Formula"
+msgstr "Formula"
 
 msgid "Vout = Vref * (R1 + R2) / R2"
 msgstr "Vout = Vref * (R1 + R2) / R2"
@@ -12631,8 +12646,8 @@ msgstr "3 Terminal Type"
 msgid "Calculate"
 msgstr "Calculate"
 
-msgid "Regulator:"
-msgstr "Regulator:"
+msgid "Regulator"
+msgstr "Regulator"
 
 msgid "Regulators data file:"
 msgstr "Regulators data file:"
@@ -12706,9 +12721,6 @@ msgstr "R3"
 msgid "Messages:"
 msgstr "Messages:"
 
-msgid "Formula"
-msgstr "Formula"
-
 msgid "RF Attenuators"
 msgstr "RF Attenuators"
 
@@ -12739,8 +12751,8 @@ msgstr "E6"
 msgid "E12"
 msgstr "E12"
 
-msgid "Available Values:"
-msgstr "Available Values:"
+msgid "Available Values"
+msgstr "Available Values"
 
 msgid "Solutions"
 msgstr "Solutions"
@@ -12844,8 +12856,8 @@ msgstr "mu Rel:"
 msgid "mu Rel C:"
 msgstr "mu Rel C:"
 
-msgid "Component Parameters:"
-msgstr "Component Parameters:"
+msgid "Component Parameters"
+msgstr "Component Parameters"
 
 msgid "Zdiff = Zodd * 2"
 msgstr "Zdiff = Zodd * 2"
@@ -13570,6 +13582,33 @@ msgstr "NetName"
 msgid "NetClass"
 msgstr "NetClass"
 
+msgid "Rect"
+msgstr "Rect"
+
+msgid "Bezier Curve"
+msgstr "Bezier Curve"
+
+msgid "Polygon"
+msgstr "Polygon"
+
+msgid "all copper layers"
+msgstr "all copper layers"
+
+msgid "and others"
+msgstr "and others"
+
+msgid "no layers"
+msgstr "no layers"
+
+msgid "Position X"
+msgstr "Position X"
+
+msgid "Position Y"
+msgstr "Position Y"
+
+msgid "Locked"
+msgstr "Locked"
+
 #, c-format
 msgid "Dielectric %d"
 msgstr "Dielectric %d"
@@ -13844,43 +13883,6 @@ msgstr "Designation"
 msgid "Supplier and ref"
 msgstr "Supplier and ref"
 
-msgid "Rect"
-msgstr "Rect"
-
-msgid "Bezier Curve"
-msgstr "Bezier Curve"
-
-msgid "Polygon"
-msgstr "Polygon"
-
-msgid "all copper layers"
-msgstr "all copper layers"
-
-msgid "and others"
-msgstr "and others"
-
-msgid "no layers"
-msgstr "no layers"
-
-msgid "Position X"
-msgstr "Position X"
-
-msgid "Position Y"
-msgstr "Position Y"
-
-msgid "Locked"
-msgstr "Locked"
-
-msgid "Marker"
-msgstr "Marker"
-
-msgid "Violation"
-msgstr "Violation"
-
-#, c-format
-msgid "Marker (%s)"
-msgstr "Marker (%s)"
-
 msgid "Checking zone fills..."
 msgstr "Checking zone fills…"
 
@@ -13923,15 +13925,11 @@ msgstr "Convert lines to rectangle"
 msgid "Unknown cleanup action"
 msgstr "Unknown cleanup action"
 
-#, c-format
-msgid "Unable to find edge with an endpoint of (%s, %s)."
-msgstr "Unable to find edge with an endpoint of (%s, %s)."
+msgid "(not a closed shape)"
+msgstr "(not a closed shape)"
 
-msgid "No edges found on Edge.Cuts layer."
-msgstr "No edges found on Edge.Cuts layer."
-
-msgid "No footprint loaded"
-msgstr "No footprint loaded"
+msgid "(self-intersecting)"
+msgstr "(self-intersecting)"
 
 #, c-format
 msgid "%s not found"
@@ -15549,9 +15547,6 @@ msgstr "Export IDFv3"
 msgid "STEP export failed!  Please save the PCB and try again"
 msgstr "STEP export failed!  Please save the PCB and try again"
 
-msgid "Cannot determine the board outline."
-msgstr "Cannot determine the board outline."
-
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "File ‘%s’ already exists. Do you want overwrite this file?"
@@ -15816,6 +15811,12 @@ msgstr "Find Previous"
 msgid "Restart Search"
 msgstr "Restart Search"
 
+msgid "Run Checks"
+msgstr "Run Checks"
+
+msgid "Footprint Checker"
+msgstr "Footprint Checker"
+
 msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
@@ -15976,9 +15977,6 @@ msgstr "CSV"
 
 msgid "Gerber (very experimental)"
 msgstr "Gerber (very experimental)"
-
-msgid "Format"
-msgstr "Format"
 
 msgid "Separate files for front, back"
 msgstr "Separate files for front, back"
@@ -16391,6 +16389,9 @@ msgstr "Rectangle Properties"
 msgid "Line Segment Properties"
 msgstr "Line Segment Properties"
 
+msgid "Line width may not be 0 for unfilled shapes."
+msgstr "Line width may not be 0 for unfilled shapes."
+
 msgid "Modify drawing properties"
 msgstr "Modify drawing properties"
 
@@ -16417,6 +16418,9 @@ msgstr "Bezier Control Pt"
 
 msgid "Arc angle:"
 msgstr "Arc angle:"
+
+msgid "Filled shape"
+msgstr "Filled shape"
 
 msgid "Graphic Item Properties"
 msgstr "Graphic Item Properties"
@@ -17199,9 +17203,6 @@ msgstr "Control point 2"
 msgid "End point"
 msgstr "End point"
 
-msgid "Set thickness to 0 for a filled circle."
-msgstr "Set thickness to 0 for a filled circle."
-
 msgid "Move vector"
 msgstr "Move vector"
 
@@ -17211,14 +17212,8 @@ msgstr "Scaling factor:"
 msgid "Duplicate:"
 msgstr "Duplicate:"
 
-msgid "Outline thickness:"
-msgstr "Outline thickness:"
-
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
 msgstr "Coordinates are relative to anchor pad, rotated 0.0 deg."
-
-msgid "Set thickness to 0 for a filled polygon."
-msgstr "Set thickness to 0 for a filled polygon."
 
 msgid "Pad Properties"
 msgstr "Pad Properties"
@@ -18191,8 +18186,8 @@ msgstr "Show ratsnest with curved lines"
 msgid "Track Editing"
 msgstr "Track Editing"
 
-msgid "Track mouse drag behavior:"
-msgstr "Track mouse drag behavior:"
+msgid "Mouse drag track behavior:"
+msgstr "Mouse drag track behavior:"
 
 msgid ""
 "Choose the action to perform when dragging a track segment with the mouse"
@@ -18216,32 +18211,6 @@ msgid ""
 msgstr ""
 "Drags the nearest joint in the track without restricting the track angle."
 
-msgid "Options Editor..."
-msgstr "Options Editor…"
-
-msgid "Edit options"
-msgstr "Edit options"
-
-#, c-format
-msgid "Duplicate Nicknames \"%s\"."
-msgstr "Duplicate Nicknames “%s”."
-
-#, c-format
-msgid "Select %s Library"
-msgstr "Select %s Library"
-
-msgid "The following directories could not be opened: \n"
-msgstr "The following directories could not be opened: \n"
-
-msgid "Failed to open directories to look for libraries"
-msgstr "Failed to open directories to look for libraries"
-
-msgid "Add Existing"
-msgstr "Add Existing"
-
-msgid "Path Substitutions"
-msgstr "Path Substitutions"
-
 msgid "Internal Layers"
 msgstr "Internal Layers"
 
@@ -18263,6 +18232,35 @@ msgstr ""
 msgid "Default properties for new graphic items:"
 msgstr "Default properties for new graphic items:"
 
+msgid "Options Editor..."
+msgstr "Options Editor…"
+
+msgid "Edit options"
+msgstr "Edit options"
+
+msgid "Library Nickname Error"
+msgstr "Library Nickname Error"
+
+#, c-format
+msgid "Duplicate nicknames \"%s\"."
+msgstr "Duplicate nicknames \"%s\"."
+
+#, c-format
+msgid "Select %s Library"
+msgstr "Select %s Library"
+
+msgid "The following directories could not be opened: \n"
+msgstr "The following directories could not be opened: \n"
+
+msgid "Failed to open directories to look for libraries"
+msgstr "Failed to open directories to look for libraries"
+
+msgid "Add Existing"
+msgstr "Add Existing"
+
+msgid "Path Substitutions"
+msgstr "Path Substitutions"
+
 msgid "Icon"
 msgstr "Icon"
 
@@ -18272,11 +18270,8 @@ msgstr "Show button"
 msgid "Category"
 msgstr "Category"
 
-msgid "Page Origin"
-msgstr "Page Origin"
-
-msgid "Drill/Place Origin"
-msgstr "Drill/Place Origin"
+msgid "Page origin"
+msgstr "Page origin"
 
 msgid "Display Origin"
 msgstr "Display Origin"
@@ -18284,11 +18279,11 @@ msgstr "Display Origin"
 msgid "Select which origin is used for X,Y coordinate display."
 msgstr "Select which origin is used for X,Y coordinate display."
 
-msgid "Increases Right"
-msgstr "Increases Right"
+msgid "Increases right"
+msgstr "Increases right"
 
-msgid "Increases Left"
-msgstr "Increases Left"
+msgid "Increases left"
+msgstr "Increases left"
 
 msgid "X Axis"
 msgstr "X Axis"
@@ -18297,11 +18292,11 @@ msgid "Select which the direction on the screen in which the X axis increases."
 msgstr ""
 "Select which the direction on the screen in which the X axis increases."
 
-msgid "Increases Up"
-msgstr "Increases Up"
+msgid "Increases up"
+msgstr "Increases up"
 
-msgid "Increases Down"
-msgstr "Increases Down"
+msgid "Increases down"
+msgstr "Increases down"
 
 msgid "Y Axis"
 msgstr "Y Axis"
@@ -19022,8 +19017,8 @@ msgstr "Checking %s; edge clearance: %s."
 msgid "Checking %s."
 msgstr "Checking %s."
 
-msgid "Board and netclass clearances not applied to keepout zones"
-msgstr "Board and netclass clearances not applied to keepout zones"
+msgid "Board and netclass clearances apply only between copper items."
+msgstr "Board and netclass clearances apply only between copper items."
 
 msgid "Keepout constraint not met."
 msgstr "Keepout constraint not met."
@@ -19299,9 +19294,6 @@ msgstr "(nets %s and %s)"
 msgid "Checking footprint courtyard definitions..."
 msgstr "Checking footprint courtyard definitions..."
 
-msgid "(not a closed shape)"
-msgstr "(not a closed shape)"
-
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Checking footprints for overlapping courtyards..."
 
@@ -19390,8 +19382,8 @@ msgstr "Gathering length-constrained connections..."
 msgid "<unconstrained>"
 msgstr "<unconstrained>"
 
-msgid "(self-intersecting)"
-msgstr "(self-intersecting)"
+msgid "(no edges found on Edge.Cuts layer)"
+msgstr "(no edges found on Edge.Cuts layer)"
 
 #, c-format
 msgid "(layer %s)"
@@ -19463,13 +19455,6 @@ msgstr ""
 
 msgid "IDF Export Failed:\n"
 msgstr "IDF Export Failed:\n"
-
-msgid ""
-"Unable to calculate the board outlines; fall back to using the board "
-"boundary box."
-msgstr ""
-"Unable to calculate the board outlines; fall back to using the board "
-"boundary box."
 
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr "VRML Export Failed: Could not add holes to contours."
@@ -19582,15 +19567,15 @@ msgid "noname"
 msgstr "noname"
 
 msgid ""
-"If the zones on this board are refilled the Copper Edge Clearance\n"
-"setting will be used (see Board Setup > Design Rules).  This may\n"
-"result in different fills from previous Kicad versions which used\n"
-"the line thickness of the board boundary on the Edge Cuts layer."
+"If the zones on this board are refilled the Copper Edge Clearance setting "
+"will be used (see Board Setup > Design Rules).\n"
+"This may result in different fills from previous Kicad versions which used "
+"the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"If the zones on this board are refilled the Copper Edge Clearance\n"
-"setting will be used (see Board Setup → Design Rules).  This may\n"
-"result in different fills from previous Kicad versions which used\n"
-"the line thickness of the board boundary on the Edge Cuts layer."
+"If the zones on this board are refilled the Copper Edge Clearance setting "
+"will be used (see Board Setup > Design Rules).\n"
+"This may result in different fills from previous Kicad versions which used "
+"the line thicknesses of the board boundary on the Edge Cuts layer."
 
 msgid "Edge Clearance Warning"
 msgstr "Edge Clearance Warning"
@@ -19706,10 +19691,6 @@ msgstr "<no reference designator>"
 #, c-format
 msgid "Footprint %s"
 msgstr "Footprint %s"
-
-#, c-format
-msgid "Processing courtyard of \"%s\": %s"
-msgstr "Processing courtyard of “%s”: %s"
 
 msgid "Local Clearance"
 msgstr "Local Clearance"
@@ -20004,6 +19985,12 @@ msgstr ""
 "\n"
 "%s"
 
+msgid "Centimeter"
+msgstr "Centimeter"
+
+msgid "Feet"
+msgstr "Feet"
+
 msgid "Open File"
 msgstr "Open File"
 
@@ -20043,9 +20030,6 @@ msgstr "Select PCB grid units"
 msgid "Import Parameters"
 msgstr "Import Parameters"
 
-msgid "Line width (DXF import):"
-msgstr "Line width (DXF import):"
-
 msgid "Graphic layer:"
 msgstr "Graphic layer:"
 
@@ -20057,6 +20041,12 @@ msgstr "Group items"
 
 msgid "Add all imported items into a new group"
 msgstr "Add all imported items into a new group"
+
+msgid "DXF Parameters"
+msgstr "DXF Parameters"
+
+msgid "Default units:"
+msgstr "Default units:"
 
 msgid "Import Vector Graphics File"
 msgstr "Import Vector Graphics File"
@@ -20320,6 +20310,10 @@ msgid "Cannot update %s (footprint \"%s\" not found)."
 msgstr "Cannot update %s (footprint “%s” not found)."
 
 #, c-format
+msgid "Change %s footprint from \"%s\" to \"%s\"."
+msgstr "Change %s footprint from “%s” to “%s”."
+
+#, c-format
 msgid "Change %s reference designator to %s."
 msgstr "Change %s reference designator to %s."
 
@@ -20422,8 +20416,8 @@ msgstr ""
 "will not be consistent with the schematics."
 
 #, c-format
-msgid "Cannot find component with reference designator \"%s\" in netlist."
-msgstr "Cannot find component with reference designator \"%s\" in netlist."
+msgid "Cannot find component with ref '%s' in netlist."
+msgstr "Cannot find component with ref '%s' in netlist."
 
 #, c-format
 msgid ""
@@ -20702,6 +20696,16 @@ msgstr "Members"
 msgid "(not activated)"
 msgstr "(not activated)"
 
+msgid "Marker"
+msgstr "Marker"
+
+msgid "Violation"
+msgstr "Violation"
+
+#, c-format
+msgid "Marker (%s)"
+msgstr "Marker (%s)"
+
 msgid "Drawing"
 msgstr "Drawing"
 
@@ -20853,6 +20857,10 @@ msgstr ""
 "Eco1_User instead"
 
 #, c-format
+msgid "Non-Copper Pad '%s' has a hole. This should not happen"
+msgstr "Non-Copper Pad '%s' has a hole. This should not happen"
+
+#, c-format
 msgid ""
 "Non-Copper Pad '%s' uses a complex pad stack (kind %d). This should not "
 "happen"
@@ -20955,11 +20963,11 @@ msgstr ""
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via orroute keepout area. The area was not "
-"imported. "
+"imported."
 msgstr ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via orroute keepout area. The area was not "
-"imported. "
+"imported."
 
 #, c-format
 msgid ""
@@ -21215,8 +21223,8 @@ msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 
 #, c-format
-msgid "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
+msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
+msgstr "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 
 #, c-format
 msgid "Cannot convert \"%s\" to an integer"
@@ -21763,8 +21771,8 @@ msgid "Width %s, gap %s"
 msgstr "Width %s, gap %s"
 
 #, c-format
-msgid "Width %s, gap %s, via gap %s "
-msgstr "Width %s, gap %s, via gap %s "
+msgid "Width %s, gap %s, via gap %s"
+msgstr "Width %s, gap %s, via gap %s"
 
 msgid "Show board setup"
 msgstr "Show board setup"
@@ -22357,6 +22365,9 @@ msgstr "Export Footprint..."
 
 msgid "Footprint Properties..."
 msgstr "Footprint Properties..."
+
+msgid "Show the footprint checker window"
+msgstr "Show the footprint checker window"
 
 msgid "Update Footprint..."
 msgstr "Update Footprint…"
@@ -23260,6 +23271,12 @@ msgstr "Keepouts"
 msgid "Keepout resolution for:"
 msgstr "Keepout resolution for:"
 
+msgid "Report may be incomplete: some footprint courtyards are malformed."
+msgstr "Report may be incomplete: some footprint courtyards are malformed."
+
+msgid "Run DRC for a full analysis."
+msgstr "Run DRC for a full analysis."
+
 msgid "Item <b>disallowed</b> at current location."
 msgstr "Item <b>disallowed</b> at current location."
 
@@ -23817,15 +23834,21 @@ msgstr "HatchBorder Lines"
 msgid "Corner Count"
 msgstr "Corner Count"
 
-msgid "(Cutout)"
-msgstr "(Cutout)"
-
-msgid "(Rule Area)"
-msgstr "(Rule Area)"
+#, c-format
+msgid "Rule Area Cutout on %s"
+msgstr "Rule Area Cutout on %s"
 
 #, c-format
-msgid "Zone Outline %s on %s"
-msgstr "Zone Outline %s on %s"
+msgid "Zone Cutout on %s"
+msgstr "Zone Cutout on %s"
+
+#, c-format
+msgid "Rule Area on %s"
+msgstr "Rule Area on %s"
+
+#, c-format
+msgid "Zone %s on %s"
+msgstr "Zone %s on %s"
 
 msgid "Inherited"
 msgstr "Inherited"
@@ -23869,6 +23892,184 @@ msgstr "Refill %d Zones"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "Board outline is not closed:"
+#~ msgstr "Board outline is not closed:"
+
+#~ msgid "Bitmap Info:"
+#~ msgstr "Bitmap Info:"
+
+#~ msgid "Output Parameters:"
+#~ msgstr "Output Parameters:"
+
+#~ msgid "PostScript (.ps file)"
+#~ msgstr "PostScript (.ps file)"
+
+#~ msgid "Format:"
+#~ msgstr "Format:"
+
+#~ msgid "Image Options:"
+#~ msgstr "Image Options:"
+
+#~ msgid "Board Layer for Outline:"
+#~ msgstr "Board Layer for Outline:"
+
+#~ msgid ""
+#~ "Cannot print '%s'.\n"
+#~ "\n"
+#~ "Unknown filetype."
+#~ msgstr ""
+#~ "Cannot print '%s'.\n"
+#~ "\n"
+#~ "Unknown filetype."
+
+#~ msgid "Path Type:"
+#~ msgstr "Path Type:"
+
+#~ msgid "Source type:"
+#~ msgstr "Source type:"
+
+#~ msgid "Pcb footprints '%s' and '%s' linked to same symbol."
+#~ msgstr "Pcb footprints '%s' and '%s' linked to same symbol."
+
+#~ msgid "Change \"%s\" reference designator to \"%s\"."
+#~ msgstr "Change \"%s\" reference designator to \"%s\"."
+
+#~ msgid "Change %s value from \"%s\" to \"%s\"."
+#~ msgstr "Change %s value from \"%s\" to \"%s\"."
+
+#~ msgid "Cannot find \"%s\" pin \"%s\"."
+#~ msgstr "Cannot find \"%s\" pin \"%s\"."
+
+#~ msgid "Change \"%s\" labels to \"%s\"."
+#~ msgstr "Change \"%s\" labels to \"%s\"."
+
+#~ msgid "Change \"%s\" global labels to \"%s\"."
+#~ msgstr "Change \"%s\" global labels to \"%s\"."
+
+#~ msgid "Change \"%s\" hierarchical label to \"%s\"."
+#~ msgstr "Change \"%s\" hierarchical label to \"%s\"."
+
+#~ msgid ""
+#~ "Net \"%s\" cannot be changed to \"%s\" because it is driven by a power "
+#~ "pin."
+#~ msgstr ""
+#~ "Net \"%s\" cannot be changed to \"%s\" because it is driven by a power "
+#~ "pin."
+
+#~ msgid "Add label \"%s\" to net \"%s\"."
+#~ msgstr "Add label \"%s\" to net \"%s\"."
+
+#~ msgid "Formula:"
+#~ msgstr "Formula:"
+
+#~ msgid "Regulator:"
+#~ msgstr "Regulator:"
+
+#~ msgid "Available Values:"
+#~ msgstr "Available Values:"
+
+#~ msgid "Component Parameters:"
+#~ msgstr "Component Parameters:"
+
+#~ msgid "Unable to find edge with an endpoint of (%s, %s)."
+#~ msgstr "Unable to find edge with an endpoint of (%s, %s)."
+
+#~ msgid "No edges found on Edge.Cuts layer."
+#~ msgstr "No edges found on Edge.Cuts layer."
+
+#~ msgid "No footprint loaded"
+#~ msgstr "No footprint loaded"
+
+#~ msgid "Cannot determine the board outline."
+#~ msgstr "Cannot determine the board outline."
+
+#~ msgid "Set thickness to 0 for a filled circle."
+#~ msgstr "Set thickness to 0 for a filled circle."
+
+#~ msgid "Outline thickness:"
+#~ msgstr "Outline thickness:"
+
+#~ msgid "Set thickness to 0 for a filled polygon."
+#~ msgstr "Set thickness to 0 for a filled polygon."
+
+#~ msgid "Track mouse drag behavior:"
+#~ msgstr "Track mouse drag behavior:"
+
+#~ msgid "Duplicate Nicknames \"%s\"."
+#~ msgstr "Duplicate Nicknames “%s”."
+
+#~ msgid "Page Origin"
+#~ msgstr "Page Origin"
+
+#~ msgid "Drill/Place Origin"
+#~ msgstr "Drill/Place Origin"
+
+#~ msgid "Increases Right"
+#~ msgstr "Increases Right"
+
+#~ msgid "Increases Left"
+#~ msgstr "Increases Left"
+
+#~ msgid "Increases Up"
+#~ msgstr "Increases Up"
+
+#~ msgid "Increases Down"
+#~ msgstr "Increases Down"
+
+#~ msgid "Board and netclass clearances not applied to keepout zones"
+#~ msgstr "Board and netclass clearances not applied to keepout zones"
+
+#~ msgid ""
+#~ "Unable to calculate the board outlines; fall back to using the board "
+#~ "boundary box."
+#~ msgstr ""
+#~ "Unable to calculate the board outlines; fall back to using the board "
+#~ "boundary box."
+
+#~ msgid ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance\n"
+#~ "setting will be used (see Board Setup > Design Rules).  This may\n"
+#~ "result in different fills from previous Kicad versions which used\n"
+#~ "the line thickness of the board boundary on the Edge Cuts layer."
+#~ msgstr ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance\n"
+#~ "setting will be used (see Board Setup → Design Rules).  This may\n"
+#~ "result in different fills from previous Kicad versions which used\n"
+#~ "the line thickness of the board boundary on the Edge Cuts layer."
+
+#~ msgid "Processing courtyard of \"%s\": %s"
+#~ msgstr "Processing courtyard of “%s”: %s"
+
+#~ msgid "Line width (DXF import):"
+#~ msgstr "Line width (DXF import):"
+
+#~ msgid "Cannot find component with reference designator \"%s\" in netlist."
+#~ msgstr "Cannot find component with reference designator \"%s\" in netlist."
+
+#~ msgid ""
+#~ "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
+#~ "equivalent. The area is neither a via orroute keepout area. The area was "
+#~ "not imported. "
+#~ msgstr ""
+#~ "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
+#~ "equivalent. The area is neither a via orroute keepout area. The area was "
+#~ "not imported. "
+
+#~ msgid "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
+#~ msgstr "Ignoring a cricle since Eagle layer '%s' (%d) was not mapped"
+
+#~ msgid "Width %s, gap %s, via gap %s "
+#~ msgstr "Width %s, gap %s, via gap %s "
+
+#~ msgid "(Cutout)"
+#~ msgstr "(Cutout)"
+
+#~ msgid "(Rule Area)"
+#~ msgstr "(Rule Area)"
+
+#~ msgid "Zone Outline %s on %s"
+#~ msgstr "Zone Outline %s on %s"
 
 #~ msgid "Build board body"
 #~ msgstr "Build board body"
@@ -24594,9 +24795,6 @@ msgstr "[INFO] load failed: input line too long\n"
 
 #~ msgid "Create Postscript File"
 #~ msgstr "Create Postscript File"
-
-#~ msgid "Postscript (.ps file)"
-#~ msgstr "Postscript (.ps file)"
 
 #~ msgid "Temp"
 #~ msgstr "Temp"

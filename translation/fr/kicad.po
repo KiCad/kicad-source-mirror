@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-23 11:39+0100\n"
+"POT-Creation-Date: 2020-11-23 13:52-0800\n"
 "PO-Revision-Date: 2020-11-23 11:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -72,6 +72,7 @@ msgstr "Echelle"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1191
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1217
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1327
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 msgid "X:"
 msgstr "X:"
 
@@ -96,6 +97,7 @@ msgstr "X:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1202
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1228
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1338
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 msgid "Y:"
 msgstr "Y:"
 
@@ -1208,8 +1210,8 @@ msgstr "Changer l'affichage les couches ECO"
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:58
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:71
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:101
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:201
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mm"
 msgstr "mm"
 
@@ -1463,7 +1465,7 @@ msgstr "mm^3"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:129
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:143
 #: pagelayout_editor/pl_editor_frame.cpp:732
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:201
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "mils"
 msgstr "mils"
 
@@ -1546,7 +1548,7 @@ msgstr "Question"
 #: eeschema/sheet.cpp:567 eeschema/symbol_editor/symbol_editor.cpp:327
 #: eeschema/symbol_editor/symbol_editor.cpp:784
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:331
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:334
 #: pcbnew/plugins/kicad/pcb_parser.cpp:650
 msgid "Warning"
 msgstr "Avertissement"
@@ -3686,7 +3688,7 @@ msgstr "MIME type inconnu pour fichier doc \"%s\""
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:104
 #: pcbnew/dialogs/dialog_plot_base.cpp:356
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:49
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:50
 msgid "Inches"
 msgstr "Pouces"
 
@@ -3704,14 +3706,14 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:496 pagelayout_editor/pl_editor_frame.cpp:731
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:201
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
 msgid "inches"
 msgstr "pouces"
 
 #: common/eda_draw_frame.cpp:499
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:56
 #: pcbnew/dimension.cpp:338 pcbnew/footprint_wizard_frame.cpp:328
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:97
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:95
 msgid "Units"
 msgstr "Unités"
 
@@ -5673,7 +5675,7 @@ msgstr "Utiliser les pouces"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:102
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:51
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Mils"
 msgstr "Mils"
 
@@ -5688,7 +5690,7 @@ msgstr "Utiliser les mils"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:104
 #: pcbnew/dialogs/dialog_plot_base.cpp:356
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:50
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:51
 msgid "Millimeters"
 msgstr "Millimètres"
 
@@ -7021,7 +7023,7 @@ msgstr ""
 "%s et %s sont attachés aux mêmes éléments.  %s a été choisi comme label  "
 "pour créer la netliste."
 
-#: eeschema/connection_graph.cpp:2338
+#: eeschema/connection_graph.cpp:2358
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -7029,7 +7031,7 @@ msgstr ""
 "Le net %s est graphiquement connecté au bus %s, mais n’est pas un membre de "
 "ce bus"
 
-#: eeschema/connection_graph.cpp:2710
+#: eeschema/connection_graph.cpp:2733
 #, c-format
 msgid "Sheet port %s has no matching hierarchical label inside the sheet"
 msgstr ""
@@ -9628,6 +9630,7 @@ msgid "Select the color theme to use for plotting"
 msgstr "Sélectionner le thème de couleur à utiliser pour les tracés"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
 msgid "Default line width:"
 msgstr "Épaiss. ligne par défaut:"
 
@@ -11945,7 +11948,7 @@ msgstr ""
 "Voulez vous sauver le document courant avant de procéder?"
 
 #: eeschema/files-io.cpp:661 pcbnew/files.cpp:138
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:245
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:248
 msgid "All supported formats|"
 msgstr "Tous les formats supportés|"
 
@@ -15633,13 +15636,13 @@ msgstr ""
 msgid "No off grid or duplicate pins were found."
 msgstr "Pas de  pins doublées ou hors grille trouvées."
 
-#: eeschema/tools/ee_selection_tool.cpp:1388
+#: eeschema/tools/ee_selection_tool.cpp:1391
 #: pagelayout_editor/tools/pl_selection_tool.cpp:589
 #: pcbnew/tools/selection_tool.cpp:1668
 msgid "Select &All\tA"
 msgstr "Tout Sélectionner\tT"
 
-#: eeschema/tools/ee_selection_tool.cpp:1391
+#: eeschema/tools/ee_selection_tool.cpp:1394
 #: pcbnew/tools/selection_tool.cpp:1671
 msgid "&Expand Selection\tE"
 msgstr "&Expandre Sélection\tE"
@@ -16262,7 +16265,6 @@ msgid "Image name"
 msgstr "Nom Image"
 
 #: gerbview/gerber_file_image.cpp:345
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:136
 msgid "Graphic layer"
 msgstr "Couche graphique"
 
@@ -16795,7 +16797,6 @@ msgstr "Chemin template:"
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:36
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:220
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:36
 msgid "Browse"
 msgstr "Examiner"
 
@@ -17331,6 +17332,11 @@ msgstr "Erreur sur les  permissions d'accès ?"
 #, c-format
 msgid "Failed to delete '%s'"
 msgstr "Impossible de supprimer \"%s\""
+
+#: libs/kiplatform/msw/environment.cpp:46
+#, fuzzy, c-format
+msgid "Error code: %d"
+msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 msgid "Layout"
@@ -19218,7 +19224,7 @@ msgstr "mil"
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:48
 #: pcbnew/dialogs/dialog_export_step_base.cpp:79
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:65
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:101
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:99
 msgid "inch"
 msgstr "pouce"
 
@@ -25217,7 +25223,6 @@ msgid "+"
 msgstr "+"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:54
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:63
 msgid "X"
 msgstr "X"
 
@@ -28190,100 +28195,97 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:52
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:53
 msgid "Centimeter"
 msgstr "Centimètre"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:53
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Feet"
 msgstr "Pieds"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:247
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "Open File"
 msgstr "Ouverture Fichier"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:272
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:275
 msgid "No file selected!"
 msgstr "Pas de fichier sélectionné!"
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:283
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:286
 msgid "Please select a valid layer."
 msgstr "SVP, choisissez une couche valide."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:332
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:335
 msgid "Items in the imported file could not be handled properly."
 msgstr ""
 "Les éléments du fichier importé pourraient ne pas être pris en compte "
 "correctement."
 
-#: pcbnew/import_gfx/dialog_import_gfx.cpp:340
+#: pcbnew/import_gfx/dialog_import_gfx.cpp:343
 msgid "There is no plugin to handle this file type."
 msgstr "Il n'y a pas de plugin pour gérer ce type de fichier."
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:26
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:31
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:37
 msgid "Only vectors will be imported.  Bitmaps and fonts will be ignored."
 msgstr ""
 "Seuls les vecteurs seront importés.  Les bitmaps et les polices sont ignorés."
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:45
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:43
 msgid "Placement"
 msgstr "Placement"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:50
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:48
 msgid "Interactive placement"
 msgstr "Placement interactif"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:57
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:55
 msgid "At"
 msgstr "A"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:76
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:74
 msgid "DXF origin on PCB Grid, X Coordinate"
 msgstr "DXF origine sur la Ggrille PCB, Coordonnée X"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:80
-msgid "Y"
-msgstr "Y"
-
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:93
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:91
 msgid "DXF origin on PCB Grid, Y Coordinate"
 msgstr "DXF origine sur la Ggrille PCB, Coordonnée Y"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:105
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:103
 msgid "Select PCB grid units"
 msgstr "Sélectionnez unités de grille PCB"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:122
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:120
 msgid "Import Parameters"
 msgstr "Paramètres d'Importation"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:146
-msgid "Import scale"
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
+msgid "Graphic layer:"
+msgstr "Couche graphique:"
+
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:141
+#, fuzzy
+msgid "Import scale:"
 msgstr "Echelle d'importation"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:168
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:163
 msgid "Group items"
 msgstr "Grouper éléments"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:169
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:164
 msgid "Add all imported items into a new group"
 msgstr "Ajouter tous les éléments importés dans un nouveau groupe"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:180
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
 msgid "DXF Parameters"
 msgstr "Paramètres DXF"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:194
-msgid "Default line width"
-msgstr "Épaiss. ligne par défaut"
-
-#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:207
-msgid "Default units"
+#: pcbnew/import_gfx/dialog_import_gfx_base.cpp:199
+#, fuzzy
+msgid "Default units:"
 msgstr "Unités par défaut"
 
-#: pcbnew/import_gfx/dialog_import_gfx_base.h:86
+#: pcbnew/import_gfx/dialog_import_gfx_base.h:87
 msgid "Import Vector Graphics File"
 msgstr "Importer Fichier Graphique Vectoriel"
 
@@ -28763,14 +28765,14 @@ msgstr ""
 "Des erreurs se sont produites lors de la mise à jour de netliste. À moins "
 "que vous les fixiez, votre PCB ne sera pas identique au schéma."
 
-#: pcbnew/netlist_reader/kicad_netlist_reader.cpp:263
-#, c-format
-msgid "Cannot find component with reference designator \"%s\" in netlist."
+#: pcbnew/netlist_reader/kicad_netlist_reader.cpp:262
+#, fuzzy, c-format
+msgid "Cannot find component with ref '%s' in netlist."
 msgstr ""
 "Impossible de trouver le composant de référence schématique \"%s\" en "
 "netliste."
 
-#: pcbnew/netlist_reader/kicad_netlist_reader.cpp:425
+#: pcbnew/netlist_reader/kicad_netlist_reader.cpp:424
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2841
 #, c-format
 msgid ""
@@ -33356,24 +33358,28 @@ msgstr "Modifier les propriétés de la zone"
 msgid "Refill %d Zones"
 msgstr "Remplissage %d Zones"
 
+#: plugins/3d/vrml/vrml.cpp:219
+msgid "[INFO] load failed: input line too long\n"
+msgstr ""
+
+#~ msgid "Y"
+#~ msgstr "Y"
+
+#~ msgid "Default line width"
+#~ msgstr "Épaiss. ligne par défaut"
+
 #~ msgid "Line width (DXF import):"
 #~ msgstr "Largeur de ligne (import DXF):"
-
-#~ msgid "Graphic layer:"
-#~ msgstr "Couche graphique:"
 
 #~ msgid "Board outline is not closed:"
 #~ msgstr "Le contour du CI n'est pas fermé:"
 
-#, c-format
 #~ msgid "Change \"%s\" reference designator to \"%s\"."
 #~ msgstr "Change la référence schématique de \"%s\" en \"%s\"."
 
-#, c-format
 #~ msgid "Change %s value from \"%s\" to \"%s\"."
 #~ msgstr "Modifie valeur \"%s\" de \"%s\" en \"%s\"."
 
-#, c-format
 #~ msgid "Unable to find edge with an endpoint of (%s, %s)."
 #~ msgstr "Impossible de trouver un contour avec un point terminal à (%s, %s)."
 
@@ -33387,7 +33393,6 @@ msgstr "Remplissage %d Zones"
 #~ "Impossible de calculer le contour du CI. Par conséquent, le rectangle "
 #~ "d'encadrement du CI sera utilisé."
 
-#, c-format
 #~ msgid "Processing courtyard of \"%s\": %s"
 #~ msgstr "Traitement de la surface réservée de \"%s\": %s"
 
@@ -33397,7 +33402,6 @@ msgstr "Remplissage %d Zones"
 #~ msgid "(Rule Area)"
 #~ msgstr "(Surface avec Règles)"
 
-#, c-format
 #~ msgid "Zone Outline %s on %s"
 #~ msgstr "Contour de Zone %s sur %s"
 
@@ -33415,10 +33419,6 @@ msgstr "Remplissage %d Zones"
 
 #~ msgid "Drill/Place Origin"
 #~ msgstr "Origine de Perçage/Placement"
-
-#, fuzzy, c-format
-#~ msgid "Error code: %d"
-#~ msgstr "Erreur: "
 
 #~ msgid "Set thickness to 0 for a filled circle."
 #~ msgstr "Définissez l'épaisseur à 0 pour un cercle rempli."
