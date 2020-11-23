@@ -189,7 +189,6 @@ void KICAD_NETLIST_PARSER::parseNet()
     wxString   reference;
     wxString   pin_number;
     wxString   pin_function;
-    int        nodecount = 0;
 
     // The token net was read, so the next data is (code <number>)
     while( (token = NextTok()) != T_EOF )
@@ -211,10 +210,6 @@ void KICAD_NETLIST_PARSER::parseNet()
             NeedSYMBOLorNUMBER();
             name = FROM_UTF8( CurText() );
             NeedRIGHT();
-
-            if( name.IsEmpty() )      // Give a dummy net name like N-000109
-                name = wxT("N-00000") + code;
-
             break;
 
         case T_node:
@@ -253,21 +248,25 @@ void KICAD_NETLIST_PARSER::parseNet()
                 }
             }
 
-
-            component = m_netlist->GetComponentByReference( reference );
-
-            // Cannot happen if the netlist is valid.
-            if( component == NULL )
+            if( strtol( code, NULL, 10 ) >= 1 )
             {
-                wxString msg;
-                msg.Printf( _( "Cannot find component with reference designator \"%s\" in netlist." ),
-                               reference );
-                THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), m_lineReader->Line(),
-                                   m_lineReader->LineNumber(), m_lineReader->Length() );
-            }
+                if( name.IsEmpty() )      // Give a dummy net name like N-000009
+                    name = wxT("N-00000") + code;
 
-            component->AddNet( pin_number, name, pin_function );
-            nodecount++;
+                component = m_netlist->GetComponentByReference( reference );
+
+                // Cannot happen if the netlist is valid.
+                if( component == NULL )
+                {
+                    wxString msg;
+                    msg.Printf( _( "Cannot find component with ref '%s' in netlist." ),
+                                reference );
+                    THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), m_lineReader->Line(),
+                                       m_lineReader->LineNumber(), m_lineReader->Length() );
+                }
+
+                component->AddNet( pin_number, name, pin_function );
+            }
             break;
 
         default:
