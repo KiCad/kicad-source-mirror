@@ -204,7 +204,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	m_choiceUnitLineWidth->SetSelection( 0 );
 	fgDxfImportSettings->Add( m_choiceUnitLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextLineWidth1 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextLineWidth1 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, _("Default units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextLineWidth1->Wrap( -1 );
 	fgDxfImportSettings->Add( m_staticTextLineWidth1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 

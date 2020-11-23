@@ -46,7 +46,6 @@ int DIALOG_IMPORT_GFX::m_lineWidthUnits = 0;       // millimeter
 int DIALOG_IMPORT_GFX::m_dxfUnits = 0;              // first entry in the dxfUnits map below
 
 const std::map<DXF_IMPORT_UNITS, wxString> dxfUnitsMap = {
-    { DXF_IMPORT_UNITS::DEFAULT, _( "Auto" ) },
     { DXF_IMPORT_UNITS::INCHES, _( "Inches" ) },
     { DXF_IMPORT_UNITS::MILLIMETERS, _( "Millimeters" ) },
     { DXF_IMPORT_UNITS::MILS, _( "Mils" ) },
