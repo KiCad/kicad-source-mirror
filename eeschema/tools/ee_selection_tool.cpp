@@ -375,10 +375,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                              m_exclusive_or );
             }
         }
-
-        // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            // right click? if there is any object - show the context menu
             bool selectionCancelled = false;
 
             if( m_selection.Empty() ||
@@ -393,15 +392,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !selectionCancelled )
                 m_menu.ShowContextMenu( m_selection );
         }
-
-        // double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            // double click? Display the properties window
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
             if( m_selection.Empty() )
-                SelectPoint( evt->Position());
+                SelectPoint( evt->Position() );
 
             EDA_ITEM* item = m_selection.Front();
 
@@ -410,19 +408,18 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else
                 m_toolMgr->RunAction( EE_ACTIONS::properties );
         }
-
-        // Middle double click?  Do zoom to fit or zoom to objects
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
+            // Middle double click?  Do zoom to fit or zoom to objects
             if( m_exclusive_or ) // Is CTRL key down?
                 m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
             else
                 m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
         }
-
-        // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            // drag with LMB? Select multiple objects (or at least draw a selection box) or
+            // drag them
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
@@ -444,9 +441,17 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     // Yes -> run the move tool and wait till it finishes
                     if( m_isSymbolEditor )
-                        m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
+                    {
+                        auto libFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+                        // Cannot move any derived symbol elements for now.
+                        if( libFrame && libFrame->GetCurPart() && libFrame->GetCurPart()->IsRoot() )
+                            m_toolMgr->InvokeTool( "eeschema.SymbolMoveTool" );
+                    }
                     else
+                    {
                         m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
+                    }
                 }
                 else
                 {
@@ -455,10 +460,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
-
-        // context sub-menu selection?  Handle unit selection or bus unfolding
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
         {
+            // context sub-menu selection?  Handle unit selection or bus unfolding
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
                 && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
             {
@@ -476,7 +480,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
         }
-
         else if( evt->IsCancelInteractive() )
         {
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
@@ -484,7 +487,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             ClearSelection();
         }
-
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
@@ -492,7 +494,6 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             ClearSelection();
         }
-
         else if( evt->IsMotion() && !m_isSymbolEditor && m_frame->ToolStackIsEmpty() )
         {
             EE_COLLECTOR collector;
@@ -521,9 +522,10 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
         if( rolloverItem != lastRolloverItem )
         {
@@ -857,7 +859,8 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
         if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
         {
-            // Make sure we aren't clicking on the pin anchor itself, only the rest of the pin should select the symbol with this setting
+            // Make sure we aren't clicking on the pin anchor itself, only the rest of the
+            // pin should select the symbol with this setting
             // To avoid conflict with the auto-start wires option
             EE_GRID_HELPER grid( m_toolMgr );
             wxPoint        cursorPos = wxPoint( grid.BestSnapAnchor( aPos, nullptr ) );
@@ -1503,7 +1506,13 @@ bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where Eeschema layer/itemtype visibility will be handled
-    SYMBOL_EDIT_FRAME* symbeditFrame = dynamic_cast< SYMBOL_EDIT_FRAME* >( m_frame );
+    SYMBOL_EDIT_FRAME* symEditFrame = dynamic_cast< SYMBOL_EDIT_FRAME* >( m_frame );
+
+    // Do not allow selection of anything except fields when the current symbol in the symbol
+    // editor is a derived symbol.
+    if( symEditFrame && symEditFrame->GetCurPart() && symEditFrame->GetCurPart()->IsAlias()
+      && aItem->Type() != LIB_FIELD_T )
+        return false;
 
     switch( aItem->Type() )
     {
@@ -1526,14 +1535,14 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, bool checkVisibilityO
     case LIB_BEZIER_T:
     case LIB_PIN_T:
     {
-        if( symbeditFrame )
+        if( symEditFrame )
         {
             LIB_ITEM* lib_item = (LIB_ITEM*) aItem;
 
-            if( lib_item->GetUnit() && lib_item->GetUnit() != symbeditFrame->GetUnit() )
+            if( lib_item->GetUnit() && lib_item->GetUnit() != symEditFrame->GetUnit() )
                 return false;
 
-            if( lib_item->GetConvert() && lib_item->GetConvert() != symbeditFrame->GetConvert() )
+            if( lib_item->GetConvert() && lib_item->GetConvert() != symEditFrame->GetConvert() )
                 return false;
         }
 

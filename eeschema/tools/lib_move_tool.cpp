@@ -77,7 +77,8 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     EE_SELECTION& selection = m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 
-    if( selection.Empty() || m_moveInProgress )
+    if( !m_frame->GetCurPart() || m_frame->GetCurPart()->IsAlias()
+      || selection.Empty() || m_moveInProgress )
         return 0;
 
     std::string tool = aEvent.GetCommandStr().get();
