@@ -359,7 +359,7 @@ protected:
                 }
                 else
                 {
-                    msg.Printf( _( "Width %s, gap %s, via gap %s " ),
+                    msg.Printf( _( "Width %s, gap %s, via gap %s" ),
                                     MessageTextFromValue( units, diffPair.m_Width ),
                                     MessageTextFromValue( units, diffPair.m_Gap ),
                                     MessageTextFromValue( units, diffPair.m_ViaGap ) );

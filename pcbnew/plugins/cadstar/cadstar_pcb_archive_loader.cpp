@@ -697,7 +697,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryAreas( const SYMDEF_PCB& aComponent,
             wxLogError(
                     wxString::Format( _( "The CADSTAR area '%s' in library component '%s' does not "
                                          "have a KiCad equivalent. The area is neither a via or"
-                                         "route keepout area. The area was not imported. " ),
+                                         "route keepout area. The area was not imported." ),
                             area.ID, libName ) );
         }
     }
