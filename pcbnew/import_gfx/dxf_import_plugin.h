@@ -140,7 +140,7 @@ public:
     wxString m_name;
     double m_x, m_y;
 
-    GRAPHICS_IMPORTER_BUFFER buffer;
+    GRAPHICS_IMPORTER_BUFFER m_buffer;
 
     DXF_IMPORT_BLOCK( wxString aName, double aX, double aY )
     {

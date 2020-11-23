@@ -306,7 +306,7 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
     VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddLine( start, end, lineWidth );
 
     updateImageLimits( start );
@@ -423,7 +423,7 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     VECTOR2D translation( mapX( aData.ipx ), mapY( aData.ipy ) );
     VECTOR2D scale( mapX( aData.sx ), mapY( aData.sy ) );
 
-    for( auto& shape : block->buffer.GetShapes() )
+    for( auto& shape : block->m_buffer.GetShapes() )
     {
         std::unique_ptr<IMPORTED_SHAPE> newShape = shape->clone();
 
@@ -440,7 +440,7 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddCircle( center, mapDim( aData.radius ), lineWidth, false );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -477,7 +477,7 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddArc( center, arcStart, angle, lineWidth );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
@@ -599,7 +599,7 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     double sine = sin(angleInRads);
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddText( refPoint, text, textHeight, charWidth, textThickness, angle_degree,
                           hJustify, vJustify );
 
@@ -759,7 +759,7 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddText( textpos, text, textHeight, charWidth,
                           textThickness, angle_degree, hJustify, vJustify );
 
@@ -1094,7 +1094,7 @@ void DXF_IMPORT_PLUGIN::insertLine( const VECTOR2D& aSegStart,
     VECTOR2D end( SCALE_FACTOR( aSegEnd.x ), SCALE_FACTOR( aSegEnd.y ) );
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddLine( origin, end, aWidth );
 
     updateImageLimits( origin );
@@ -1171,7 +1171,7 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
     }
 
     GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
     bufferToUse->AddArc( center, arc_start, angle, aWidth );
 
     VECTOR2D radiusDelta( SCALE_FACTOR( radius ), SCALE_FACTOR( radius ) );
@@ -1252,7 +1252,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
             end = bezierControl2;
 
         GRAPHICS_IMPORTER_BUFFER* bufferToUse =
-                ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+                ( m_currentBlock != nullptr ) ? &m_currentBlock->m_buffer : &m_internalImporter;
         bufferToUse->AddSpline( start, bezierControl1, bezierControl2, end, aWidth );
     }
 #endif
