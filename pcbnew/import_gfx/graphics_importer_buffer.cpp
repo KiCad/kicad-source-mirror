@@ -74,6 +74,12 @@ void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D
 }
 
 
+void GRAPHICS_IMPORTER_BUFFER::AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape )
+{
+    m_shapes.push_back( std::move( aShape ) );
+}
+
+
 void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 {
     for( auto& shape : m_shapes )

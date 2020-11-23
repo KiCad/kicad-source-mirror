@@ -35,6 +35,10 @@ class IMPORTED_SHAPE
 public:
     virtual ~IMPORTED_SHAPE() {}
     virtual void ImportTo( GRAPHICS_IMPORTER& aImporter ) const = 0;
+
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const = 0;
+
+    virtual void Translate( const VECTOR2D& aVec ) = 0;
 };
 
 
@@ -53,10 +57,21 @@ public:
         aImporter.AddLine( m_start, m_end, m_width );
     }
 
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_LINE>( *this );
+    }
+
+    void Translate( const VECTOR2D& aVec ) override
+    {
+        m_start += aVec;
+        m_end += aVec;
+    }
+
 private:
-    const VECTOR2D m_start;
-    const VECTOR2D m_end;
-    double         m_width;
+    VECTOR2D m_start;
+    VECTOR2D m_end;
+    double   m_width;
 };
 
 
@@ -76,11 +91,21 @@ public:
         aImporter.AddCircle( m_center, m_radius, m_width, m_filled );
     }
 
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_CIRCLE>( *this );
+    }
+
+    void Translate( const VECTOR2D& aVec ) override
+    {
+        m_center += aVec;
+    }
+
 private:
-    const VECTOR2D m_center;
-    double         m_radius;
-    double         m_width;
-    bool           m_filled;
+    VECTOR2D m_center;
+    double   m_radius;
+    double   m_width;
+    bool     m_filled;
 };
 
 
@@ -100,11 +125,22 @@ public:
         aImporter.AddArc( m_center, m_start, m_angle, m_width );
     }
 
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_ARC>( *this );
+    }
+
+    void Translate( const VECTOR2D& aVec ) override
+    {
+        m_center += aVec;
+        m_start += aVec;
+    }
+
 private:
-    const VECTOR2D m_center;
-    const VECTOR2D m_start;
-    double         m_angle;
-    double         m_width;
+    VECTOR2D m_center;
+    VECTOR2D m_start;
+    double   m_angle;
+    double   m_width;
 };
 
 
@@ -122,8 +158,21 @@ public:
         aImporter.AddPolygon( m_vertices, m_width );
     }
 
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_POLYGON>( *this );
+    }
+
+    void Translate( const VECTOR2D& aVec ) override
+    {
+        for( auto& vertex : m_vertices )
+        {
+            vertex += aVec;
+        }
+    }
+
 private:
-    const std::vector<VECTOR2D> m_vertices;
+    std::vector<VECTOR2D> m_vertices;
     double                      m_width;
 };
 
@@ -151,8 +200,18 @@ public:
                     m_thickness, m_orientation, m_hJustify, m_vJustify );
     }
 
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_TEXT>( *this );
+    }
+
+    void Translate( const VECTOR2D& aVec ) override
+    {
+        m_origin += aVec;
+    }
+
 private:
-    const VECTOR2D      m_origin;
+    VECTOR2D            m_origin;
     const wxString      m_text;
     double              m_height;
     double              m_width;
@@ -181,12 +240,25 @@ public:
         aImporter.AddSpline( m_start, m_bezierControl1, m_bezierControl2, m_end, m_width );
     }
 
+    virtual std::unique_ptr<IMPORTED_SHAPE> clone() const override
+    {
+        return std::make_unique<IMPORTED_SPLINE>( *this );
+    }
+
+    void Translate( const VECTOR2D& aVec ) override
+    {
+        m_start += aVec;
+        m_bezierControl1 += aVec;
+        m_bezierControl2 += aVec;
+        m_end += aVec;
+    }
+
 private:
-    const VECTOR2D m_start;
-    const VECTOR2D m_bezierControl1;
-    const VECTOR2D m_bezierControl2;
-    const VECTOR2D m_end;
-    double         m_width;
+    VECTOR2D m_start;
+    VECTOR2D m_bezierControl1;
+    VECTOR2D m_bezierControl2;
+    VECTOR2D m_end;
+    double   m_width;
 };
 
 
@@ -209,6 +281,12 @@ public:
                     const VECTOR2D& BezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter );
+    void AddShape( std::unique_ptr<IMPORTED_SHAPE>& aShape );
+
+    std::list<std::unique_ptr<IMPORTED_SHAPE>>& GetShapes()
+    {
+        return m_shapes;
+    }
 
 protected:
     ///> List of imported shapes

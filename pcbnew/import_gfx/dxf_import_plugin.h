@@ -140,6 +140,8 @@ public:
     wxString m_name;
     double m_x, m_y;
 
+    GRAPHICS_IMPORTER_BUFFER buffer;
+
     DXF_IMPORT_BLOCK( wxString aName, double aX, double aY )
     {
         m_name = aName;
@@ -322,6 +324,14 @@ private:
      * @returns The given layer by name or the placeholder layer inserted in the constructor
      */
     DXF_IMPORT_LAYER* getImportLayer( const std::string& aLayerName );
+
+    /**
+     * Returns the import layer block
+     *
+     * @param aBlockName is the raw string from dxflib
+     * @returns The given block by name or nullptf if not found
+     */
+    DXF_IMPORT_BLOCK* getImportBlock( const std::string& aBlockName );
 
     // Functions to aid in the creation of a Polyline
     void insertLine( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd, int aWidth );

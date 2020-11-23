@@ -263,7 +263,10 @@ DXF_IMPORT_LAYER* DXF_IMPORT_PLUGIN::getImportLayer( const std::string& aLayerNa
     if( !layerName.IsEmpty() )
     {
         auto resultIt = std::find_if( m_layers.begin(), m_layers.end(),
-                [layerName]( const auto& it ) { return it->m_layerName == layerName; } );
+                                        [layerName]( const auto& it )
+                                        {
+                                            return it->m_layerName == layerName;
+                                        } );
 
         if( resultIt != m_layers.end() )
             layer = resultIt->get();
@@ -273,18 +276,38 @@ DXF_IMPORT_LAYER* DXF_IMPORT_PLUGIN::getImportLayer( const std::string& aLayerNa
 }
 
 
+DXF_IMPORT_BLOCK* DXF_IMPORT_PLUGIN::getImportBlock( const std::string& aBlockName )
+{
+    DXF_IMPORT_BLOCK* block     = nullptr;
+    wxString          blockName = wxString::FromUTF8( aBlockName.c_str() );
+
+    if( !blockName.IsEmpty() )
+    {
+        auto resultIt = std::find_if( m_blocks.begin(), m_blocks.end(),
+                                        [blockName]( const auto& it )
+                                        {
+                                            return it->m_name == blockName;
+                                        } );
+
+        if( resultIt != m_blocks.end() )
+            block = resultIt->get();
+    }
+
+    return block;
+}
+
+
 void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
     VECTOR2D start( mapX( aData.x1 ), mapY( aData.y1 ) );
     VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
 
-    m_internalImporter.AddLine( start, end, lineWidth );
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddLine( start, end, lineWidth );
 
     updateImageLimits( start );
     updateImageLimits( end );
@@ -311,9 +334,6 @@ void DXF_IMPORT_PLUGIN::addPolyline(const DL_PolylineData& aData )
 
 void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     if( m_curr_entity.m_EntityParseStatus == 0 )
         return;     // Error
 
@@ -379,7 +399,8 @@ void DXF_IMPORT_PLUGIN::addBlock( const DL_BlockData& aData )
 {
     wxString name = wxString::FromUTF8( aData.name.c_str() );
 
-    std::unique_ptr<DXF_IMPORT_BLOCK> block = std::make_unique<DXF_IMPORT_BLOCK>( name, aData.bpx, aData.bpy );
+    std::unique_ptr<DXF_IMPORT_BLOCK> block =
+            std::make_unique<DXF_IMPORT_BLOCK>( name, aData.bpx, aData.bpy );
 
     m_blocks.push_back( std::move( block ) );
 
@@ -394,21 +415,33 @@ void DXF_IMPORT_PLUGIN::endBlock()
 
 void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
 {
-    wxString blockName = wxString::FromUTF8( aData.name.c_str() );
+    DXF_IMPORT_BLOCK* block = getImportBlock( aData.name );
 
+    if( block == nullptr )
+        return;
 
+    VECTOR2D translation( mapX( aData.ipx ), mapY( aData.ipy ) );
+    VECTOR2D scale( mapX( aData.sx ), mapY( aData.sy ) );
+
+    for( auto& shape : block->buffer.GetShapes() )
+    {
+        std::unique_ptr<IMPORTED_SHAPE> newShape = shape->clone();
+
+        newShape->Translate( translation  );
+
+        m_internalImporter.AddShape( newShape );
+    }
 }
 
 void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     VECTOR2D          center( mapX( aData.cx ), mapY( aData.cy ) );
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
 
-    m_internalImporter.AddCircle( center, mapDim( aData.radius ), lineWidth, false );
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddCircle( center, mapDim( aData.radius ), lineWidth, false );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
 
@@ -442,7 +475,10 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
     double            lineWidth = lineWeightToWidth( attributes.getWidth(), layer );
-    m_internalImporter.AddArc( center, arcStart, angle, lineWidth );
+
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddArc( center, arcStart, angle, lineWidth );
 
     VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
 
@@ -453,9 +489,6 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
 void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     VECTOR2D refPoint( mapX( aData.ipx ), mapY( aData.ipy ) );
     VECTOR2D secPoint( mapX( aData.apx ), mapY( aData.apy ) );
 
@@ -565,8 +598,10 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
-    m_internalImporter.AddText( refPoint, text, textHeight, charWidth, textThickness,
-                                angle_degree, hJustify, vJustify );
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddText( refPoint, text, textHeight, charWidth, textThickness, angle_degree,
+                          hJustify, vJustify );
 
     // Calculate the boundary box and update the image limits:
     bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
@@ -596,9 +631,6 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 
 void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
     wxString    attrib, tmp;
 
@@ -725,8 +757,11 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
-    m_internalImporter.AddText( textpos, text, textHeight, charWidth,
-                                textThickness, angle_degree, hJustify, vJustify );
+
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddText( textpos, text, textHeight, charWidth,
+                          textThickness, angle_degree, hJustify, vJustify );
 
     bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
     bottomLeft.y = bottomLeft.x * sine + bottomLeft.y * cosine;
@@ -1057,7 +1092,10 @@ void DXF_IMPORT_PLUGIN::insertLine( const VECTOR2D& aSegStart,
 {
     VECTOR2D origin( SCALE_FACTOR( aSegStart.x ), SCALE_FACTOR( aSegStart.y ) );
     VECTOR2D end( SCALE_FACTOR( aSegEnd.x ), SCALE_FACTOR( aSegEnd.y ) );
-    m_internalImporter.AddLine( origin, end, aWidth );
+
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddLine( origin, end, aWidth );
 
     updateImageLimits( origin );
     updateImageLimits( end );
@@ -1132,7 +1170,9 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
         angle = -angle;
     }
 
-    m_internalImporter.AddArc( center, arc_start, angle, aWidth );
+    GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+            ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+    bufferToUse->AddArc( center, arc_start, angle, aWidth );
 
     VECTOR2D radiusDelta( SCALE_FACTOR( radius ), SCALE_FACTOR( radius ) );
 
@@ -1211,7 +1251,9 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
         else
             end = bezierControl2;
 
-        m_internalImporter.AddSpline( start, bezierControl1, bezierControl2, end , aWidth );
+        GRAPHICS_IMPORTER_BUFFER* bufferToUse =
+                ( m_currentBlock != nullptr ) ? &m_currentBlock->buffer : &m_internalImporter;
+        bufferToUse->AddSpline( start, bezierControl1, bezierControl2, end, aWidth );
     }
 #endif
 }
