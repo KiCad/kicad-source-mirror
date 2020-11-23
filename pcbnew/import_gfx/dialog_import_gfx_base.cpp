@@ -21,7 +21,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerFile;
 	bSizerFile = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextFile = new wxStaticText( this, wxID_ANY, _("File:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextFile = new wxStaticText( this, wxID_ANY, _("File"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFile->Wrap( -1 );
 	m_staticTextFile->SetToolTip( _("Only vectors will be imported.  Bitmaps and fonts will be ignored.") );
 
@@ -60,7 +60,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	wxBoxSizer* bSizerPosSettings;
 	bSizerPosSettings = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextXpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextXpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("X"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextXpos->Wrap( -1 );
 	bSizerPosSettings->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -77,7 +77,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	bSizerPosSettings->Add( m_DxfPcbXCoord, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextYpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextYpos = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Y"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextYpos->Wrap( -1 );
 	bSizerPosSettings->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -94,7 +94,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	bSizerPosSettings->Add( m_DxfPcbYCoord, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
-	m_staticTextUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnits = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextUnits->Wrap( -1 );
 	bSizerPosSettings->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
@@ -133,7 +133,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerImportSettings->SetFlexibleDirection( wxBOTH );
 	fgSizerImportSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextBrdlayer = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Graphic layer:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBrdlayer = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Graphic layer"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBrdlayer->Wrap( -1 );
 	fgSizerImportSettings->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -143,7 +143,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
 
-	m_staticTextscale = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Import scale:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextscale = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, _("Import scale"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextscale->Wrap( -1 );
 	fgSizerImportSettings->Add( m_staticTextscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
