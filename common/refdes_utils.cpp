@@ -57,7 +57,7 @@ int RefDesStringCompare( const wxString& aFirst, const wxString& aSecond )
     SplitString( strSWord, &strSWordBeg, &strSWordMid, &strSWordEnd );
 
     // Compare the Beginning section of the strings
-    int isEqual = strFWordBeg.CmpNoCase( strSWordBeg );
+    int isEqual = strFWordBeg.Cmp( strSWordBeg );
 
     if( isEqual > 0 )
         return 1;
@@ -78,7 +78,7 @@ int RefDesStringCompare( const wxString& aFirst, const wxString& aSecond )
             return -1;
         // If the first two sections are equal compare the endings
         else
-            return strFWordEnd.CmpNoCase( strSWordEnd );
+            return strFWordEnd.Cmp( strSWordEnd );
     }
 }
 
