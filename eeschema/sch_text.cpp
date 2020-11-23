@@ -1163,8 +1163,20 @@ void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
 
     CreateGraphicShape( aSettings, Poly, GetTextPos() + aOffset );
     GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
+
+    bool show = Schematic()->Settings().m_IntersheetRefsShow;
+    if ( show )
+        m_intersheetRefsField.Print( aSettings, aOffset );
 }
 
+void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter )
+{
+    SCH_TEXT::Plot( aPlotter );
+
+    bool show = Schematic()->Settings().m_IntersheetRefsShow;
+    if ( show )
+        m_intersheetRefsField.Plot( aPlotter );
+}
 
 void SCH_GLOBALLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
                                           std::vector<wxPoint>& aPoints, const wxPoint& Pos )

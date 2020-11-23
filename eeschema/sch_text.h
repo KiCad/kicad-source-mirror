@@ -434,6 +434,8 @@ public:
 
     void Print( RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
+    void Plot( PLOTTER* aPlotter ) override;
+
     SCH_FIELD* GetIntersheetRefs() { return &m_intersheetRefsField; }
     void SetIntersheetRefs( const SCH_FIELD& aField ) { m_intersheetRefsField = aField; }
 
