@@ -144,6 +144,21 @@ public:
 
     PART_SPTR SharedPtr() { return m_me; }
 
+    /**
+     * Function Duplicate
+     * Creates a copy of a LIB_PART and assigns unique KIIDs to the copy and its children
+     */
+    virtual LIB_PART* Duplicate() const
+    {
+        LIB_PART* dupe                    = new LIB_PART( *this, m_library );
+        const_cast<KIID&>( dupe->m_Uuid ) = KIID();
+
+        for( LIB_ITEM& item : dupe->m_drawings )
+            const_cast<KIID&>( item.m_Uuid ) = KIID();
+
+        return dupe;
+    }
+
 private:
     // We create a different set parent function for this class, so we hide
     // the inherited one.

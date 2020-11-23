@@ -1007,7 +1007,7 @@ SCH_COMPONENT* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol(
     component->SetOrientation( compOrientation );
     LIB_ID libId( mLibraryFileName.GetName(), aKiCadPart->GetName() );
     component->SetLibId( libId );
-    component->SetLibSymbol( new LIB_PART( *aKiCadPart ) );
+    component->SetLibSymbol( aKiCadPart->Duplicate() );
     component->SetUnit( getKiCadUnitNumberFromGate( aCadstarSymbol.GateID ) );
 
     if( mSheetMap.find( aCadstarSymbol.LayerID ) == mSheetMap.end() )

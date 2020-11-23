@@ -1209,9 +1209,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponents()
 
         FOOTPRINT* libFootprint = fpIter->second;
 
-        // copy constructor to clone the footprint from the library
-        FOOTPRINT* footprint = new FOOTPRINT( *libFootprint );
-        const_cast<KIID&>( footprint->m_Uuid ) = KIID();
+        // Use Duplicate() to ensure unique KIID for all objects
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( libFootprint->Duplicate() );
 
         mBoard->Add( footprint, ADD_MODE::APPEND );
 
@@ -1885,7 +1884,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
         for( PCB_LAYER_ID layer : layers )
         {
             txt->SetLayer( layer );
-            newtxt = new PCB_TEXT( *txt );
+            newtxt = static_cast<PCB_TEXT*>( txt->Duplicate() );
             mBoard->Add( newtxt, ADD_MODE::APPEND );
 
             if( !aCadstarGroupID.IsEmpty() )
@@ -2383,7 +2382,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
         if( !aFootprint->Value().GetText().IsEmpty() )
         {
             //copy the object
-            aFootprint->Add( new FP_TEXT( aFootprint->Value() ) );
+            aFootprint->Add( aFootprint->Value().Duplicate() );
         }
 
         aFootprint->SetValue( aAttributeValue );
