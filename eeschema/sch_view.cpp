@@ -94,7 +94,7 @@ void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
 
 void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 {
-    for( auto item : aScreen->Items() )
+    for( SCH_ITEM* item : aScreen->Items() )
         Add( item );
 
     m_worksheet.reset( new KIGFX::WS_PROXY_VIEW_ITEM( static_cast< int >( IU_PER_MILS ),

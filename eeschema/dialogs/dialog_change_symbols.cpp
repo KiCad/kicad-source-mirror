@@ -389,10 +389,6 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
             return false;
     }
 
-    // Use map as a cheap and dirty way to ensure library symbols are not updated multiple
-    // times in complex hierachies.
-    std::map<SCH_COMPONENT*, SCH_SCREEN*> symbolsToProcess;
-
     for( SCH_SHEET_PATH& instance : hierarchy )
     {
         SCH_SCREEN* screen = instance.LastScreen();
@@ -408,42 +404,36 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
             if( !isMatch( symbol, &instance ) )
                 continue;
 
-            // Shared symbols always have identical library symbols so don't add duplicates.
-            symbolsToProcess[symbol] = screen;
+            if( m_mode == MODE::UPDATE )
+            {
+                if( processSymbol( symbol, &instance, symbol->GetLibId(), appendToUndo ) )
+                    changed = true;
+            }
+            else
+            {
+                if( processSymbol( symbol, &instance, newId, appendToUndo ) )
+                    changed = true;
+            }
+
+            if( changed )
+                appendToUndo = true;
         }
     }
 
-    for( auto i : symbolsToProcess )
-    {
-        SCH_COMPONENT* symbol = i.first;
-
-        if( m_mode == MODE::UPDATE )
-        {
-            if( processSymbol( symbol, i.second, symbol->GetLibId(), appendToUndo ) )
-                changed = true;
-        }
-        else
-        {
-            if( processSymbol( symbol, i.second, newId, appendToUndo ) )
-                changed = true;
-        }
-
-        if( changed )
-            appendToUndo = true;
-    }
+    frame->GetCurrentSheet().UpdateAllScreenReferences();
 
     return changed;
 }
 
 
-bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* aScreen,
-        const LIB_ID& aNewId, bool aAppendToUndo )
+bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHEET_PATH* aInstance,
+                                           const LIB_ID& aNewId, bool aAppendToUndo )
 {
     wxCHECK( aSymbol, false );
-    wxCHECK( aScreen, false );
     wxCHECK( aNewId.IsValid(), false );
 
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+    SCH_SCREEN*     screen = aInstance->LastScreen();
 
     wxCHECK( frame, false );
 
@@ -459,12 +449,40 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
             references += " " + instance.m_Reference;
     }
 
-    msg.Printf( _( "%s %s \"%s\" from \"%s\" to \"%s\"" ),
-            ( m_mode == MODE::UPDATE ) ? _( "Update" ) : _( "Change" ),
-            ( aSymbol->GetInstanceReferences().size() == 1 ) ? _( "symbol" ) : _( "symbols" ),
-            references,
-            oldId.Format().c_str(),
-            aNewId.Format().c_str() );
+    if( m_mode == MODE::UPDATE )
+    {
+        if( aSymbol->GetInstanceReferences().size() == 1 )
+        {
+            msg.Printf( _( "Update symbol %s from '%s' to '%s'" ),
+                        references,
+                        oldId.Format().c_str(),
+                        aNewId.Format().c_str() );
+        }
+        else
+        {
+            msg.Printf( _( "Update symbols %s from '%s' to '%s'" ),
+                        references,
+                        oldId.Format().c_str(),
+                        aNewId.Format().c_str() );
+        }
+    }
+    else
+    {
+        if( aSymbol->GetInstanceReferences().size() == 1 )
+        {
+            msg.Printf( _( "Change symbol %s from '%s' to '%s'" ),
+                        references,
+                        oldId.Format().c_str(),
+                        aNewId.Format().c_str() );
+        }
+        else
+        {
+            msg.Printf( _( "Change symbols %s from '%s' to '%s'" ),
+                        references,
+                        oldId.Format().c_str(),
+                        aNewId.Format().c_str() );
+        }
+    }
 
     LIB_PART* libSymbol = frame->GetLibPart( aNewId );
 
@@ -486,8 +504,8 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
 
     // Removing the symbol needs to be done before the LIB_PART is changed to prevent stale
     // library symbols in the schematic file.
-    aScreen->Remove( aSymbol );
-    frame->SaveCopyInUndoList( aScreen, aSymbol, UNDO_REDO::CHANGED, aAppendToUndo );
+    screen->Remove( aSymbol );
+    frame->SaveCopyInUndoList( screen, aSymbol, UNDO_REDO::CHANGED, aAppendToUndo );
 
     if( aNewId != aSymbol->GetLibId() )
         aSymbol->SetLibId( aNewId );
@@ -515,14 +533,16 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
 
         if( libField )
         {
-            if( libField->GetText().IsEmpty() )
+            if( !libField->GetText().IsEmpty() || resetEmpty )
             {
-                if( resetEmpty )
+                if( i == REFERENCE_FIELD )
+                    aSymbol->SetRef( aInstance, libField->GetText() );
+                else if( i == VALUE_FIELD )
+                    aSymbol->SetValue( aInstance, libField->GetText() );
+                else if( i == FOOTPRINT_FIELD )
+                    aSymbol->SetFootprint( aInstance, libField->GetText() );
+                else
                     field->SetText( wxEmptyString );
-            }
-            else
-            {
-                field->SetText( libField->GetText() );
             }
 
             if( resetVis )
@@ -570,7 +590,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* a
         }
     }
 
-    aScreen->Append( aSymbol );
+    screen->Append( aSymbol );
     frame->GetCanvas()->GetView()->Update( aSymbol );
 
     msg += ": OK";

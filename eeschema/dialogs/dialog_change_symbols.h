@@ -71,8 +71,8 @@ private:
 
     bool isMatch( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aInstance );
     bool processMatchingSymbols();
-    bool processSymbol( SCH_COMPONENT* aSymbol, SCH_SCREEN* aScreen, const LIB_ID& aNewId,
-                        bool aAppendToUndo );
+    bool processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHEET_PATH* aInstance,
+                        const LIB_ID& aNewId, bool aAppendToUndo );
 
     SCH_COMPONENT* m_symbol;
     MODE           m_mode;
