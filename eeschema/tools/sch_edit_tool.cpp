@@ -192,9 +192,10 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_MARKER_T:
                 case SCH_JUNCTION_T:
                 case SCH_NO_CONNECT_T:
-                case SCH_LINE_T:
                 case SCH_PIN_T:
                     return false;
+                case SCH_LINE_T:
+                    return item->GetLayer() != LAYER_WIRE && item->GetLayer() != LAYER_BUS;
                 default:
                     return true;
                 }
@@ -445,6 +446,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             break;
         }
 
+        case SCH_LINE_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
