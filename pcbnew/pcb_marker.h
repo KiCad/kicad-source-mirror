@@ -79,6 +79,8 @@ public:
 
     GAL_LAYER_ID GetColorLayer() const;
 
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer ) const override;
+
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override

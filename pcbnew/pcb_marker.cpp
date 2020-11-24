@@ -31,6 +31,7 @@
 #include <layers_id_colors_and_visibility.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
+#include <geometry/shape_null.h>
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <drc/drc_item.h>
@@ -125,6 +126,14 @@ void PCB_MARKER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
         m_Pos.x = aCentre.x - ( m_Pos.x - aCentre.x );
     else
         m_Pos.y = aCentre.y - ( m_Pos.y - aCentre.y );
+}
+
+
+std::shared_ptr<SHAPE> PCB_MARKER::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    // Markers do not participate in the board geometry space, and therefore have no
+    // effectiven shape.
+    return std::make_shared<SHAPE_NULL>();
 }
 
 
