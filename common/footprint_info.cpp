@@ -103,7 +103,7 @@ void FOOTPRINT_LIST::DisplayErrors( wxTopLevelWindow* aWindow )
 
     wxString msg;
 
-    while( const std::unique_ptr<IO_ERROR>& error = PopError() )
+    while( std::unique_ptr<IO_ERROR> error = PopError() )
     {
         wxString tmp = error->Problem();
 
