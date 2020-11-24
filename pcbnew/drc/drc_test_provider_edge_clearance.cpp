@@ -148,15 +148,19 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( S_SEGMENT );
                     edges.back()->SetEndX( shape->GetStartX() );
+                    edges.back()->SetWidth( 0 );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( S_SEGMENT );
                     edges.back()->SetEndY( shape->GetStartY() );
+                    edges.back()->SetWidth( 0 );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( S_SEGMENT );
                     edges.back()->SetStartX( shape->GetEndX() );
+                    edges.back()->SetWidth( 0 );
                     edges.emplace_back( static_cast<PCB_SHAPE*>( shape->Clone() ) );
                     edges.back()->SetShape( S_SEGMENT );
                     edges.back()->SetStartY( shape->GetEndY() );
+                    edges.back()->SetWidth( 0 );
                     return true;
                 }
                 else if( shape->GetShape() == S_POLYGON )
@@ -171,6 +175,7 @@ bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::Run()
                         edges.back()->SetShape( S_SEGMENT );
                         edges.back()->SetStart((wxPoint) seg.A );
                         edges.back()->SetEnd((wxPoint) seg.B );
+                        edges.back()->SetWidth( 0 );
                     }
                 }
 
