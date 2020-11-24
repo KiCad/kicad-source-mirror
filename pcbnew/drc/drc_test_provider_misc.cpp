@@ -80,6 +80,9 @@ private:
 
 void DRC_TEST_PROVIDER_MISC::testOutline()
 {
+    SHAPE_POLY_SET boardOutlines;
+    bool           errorHandled = false;
+
     OUTLINE_ERROR_HANDLER errorHandler =
             [&]( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* itemB, const wxPoint& pt )
             {
@@ -89,22 +92,26 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 drcItem->SetItems( itemA, itemB );
 
                 reportViolation( drcItem, pt );
+                errorHandled = true;
             };
 
-    SHAPE_POLY_SET boardOutlines;
-
-    m_board->GetBoardPolygonOutlines( boardOutlines, &errorHandler );
-
-    if( boardOutlines.IsEmpty() )
+    if( !m_board->GetBoardPolygonOutlines( boardOutlines, &errorHandler ) )
     {
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
+        if( errorHandled )
+        {
+            // if there is an invalid outline, then there must be an outline
+        }
+        else
+        {
+            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_INVALID_OUTLINE );
 
-        m_msg.Printf( _( "(no edges found on Edge.Cuts layer)" ) );
+            m_msg.Printf( _( "(no edges found on Edge.Cuts layer)" ) );
 
-        drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
-        drcItem->SetItems( m_board );
+            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
+            drcItem->SetItems( m_board );
 
-        reportViolation( drcItem, m_board->GetBoundingBox().Centre() );
+            reportViolation( drcItem, m_board->GetBoundingBox().Centre() );
+        }
     }
 }
 

@@ -480,8 +480,8 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
 
         if( !success && aErrorMsg )
         {
-            *aErrorMsg = _( "Footprint outline is malformed. Run Footprint Checker for a "
-                            "full analysis." );
+            *aErrorMsg = _( "Footprint outline is missing or malformed. Run Footprint Checker for "
+                            "a full analysis." );
         }
     }
     else
@@ -489,7 +489,7 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
         success = m_board->GetBoardPolygonOutlines( m_board_poly );
 
         if( !success && aErrorMsg )
-            *aErrorMsg = _( "Board outline is malformed. Run DRC for a full analysis." );
+            *aErrorMsg = _( "Board outline is missing or malformed. Run DRC for a full analysis." );
     }
 
     return success;

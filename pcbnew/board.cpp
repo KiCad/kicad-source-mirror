@@ -1842,7 +1842,8 @@ bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE* aCurr
 }
 
 
-bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, OUTLINE_ERROR_HANDLER* aErrorHandler )
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
+                                     OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     bool success = BuildBoardPolygonOutlines( this, aOutlines, GetDesignSettings().m_MaxError,
                                               aErrorHandler );

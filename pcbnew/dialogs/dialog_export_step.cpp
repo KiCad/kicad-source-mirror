@@ -36,8 +36,6 @@
 #include <pcbnew_settings.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <widgets/text_ctrl_eval.h>
-#include <wx_html_report_panel.h>
-#include <convert_drawsegment_list_to_polygon.h>
 
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
@@ -245,9 +243,10 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     wxString msg;
 
     // Check if the board outline is continuous
-    if( !BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, Millimeter2iu( 0.01 ) ) )
+    if( !m_parent->GetBoard()->GetBoardPolygonOutlines( outline ) )
     {
-        DisplayErrorMessage( this, _( "Board outline is malformed. Run DRC for a full analysis." ) );
+        DisplayErrorMessage( this, _( "Board outline is missing or malformed. "
+                                      "Run DRC for a full analysis." ) );
         return;
     }
 
