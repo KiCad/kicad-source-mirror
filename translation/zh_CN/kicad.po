@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-23 21:48+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2020-11-25 14:29+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -153,9 +153,8 @@ msgstr "创建图层"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:470
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "未加载任何封装"
+msgstr "未加载任何封装。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
@@ -1273,9 +1272,8 @@ msgid "Black&&White Picture"
 msgstr "黑白图片"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
-#, fuzzy
 msgid "Bitmap Information"
-msgstr "信息"
+msgstr "位图信息"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
@@ -1310,9 +1308,8 @@ msgid "bits"
 msgstr "位"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters"
-msgstr "输出参数:"
+msgstr "输出参数"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1351,7 +1348,6 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod 文件)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Postscript (.ps file)"
 msgstr "Postscript (.ps 文件)"
 
@@ -1365,9 +1361,8 @@ msgid "Format"
 msgstr "格式"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options"
-msgstr "图片选项："
+msgstr "图片选项"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
@@ -1403,9 +1398,8 @@ msgid "User layer Eco2"
 msgstr "ECO2 用户层"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "电路板层概述："
+msgstr "轮廓板层"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -4219,13 +4213,13 @@ msgid "Unable to find a PDF viewer for \"%s\""
 msgstr "没有找到 PDF 浏览器 \"%s\""
 
 #: common/gestfich.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot print '%s'.\n"
 "\n"
 "Unknown file type."
 msgstr ""
-"无法打印 \"%s\"。\n"
+"无法打印 '%s'。\n"
 "\n"
 "未知文件类型。"
 
@@ -6549,9 +6543,8 @@ msgid "Relative"
 msgstr "相对"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type"
-msgstr "路径类型："
+msgstr "轨迹类型"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -10456,9 +10449,8 @@ msgid "Current"
 msgstr "电流"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:927
-#, fuzzy
 msgid "Source Type"
-msgstr "源类型："
+msgstr "源类型"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:935
 msgid "Source"
@@ -12306,9 +12298,8 @@ msgid "Back"
 msgstr "背面"
 
 #: eeschema/sch_field.cpp:515
-#, fuzzy
 msgid "Intersheet References"
-msgstr "表间参考"
+msgstr "插入图纸页参考"
 
 #: eeschema/sch_io_mgr.cpp:35 pcbnew/io_mgr.cpp:41
 #, c-format
@@ -14295,9 +14286,9 @@ msgid "Footprint '%s' has no associated symbol."
 msgstr "封装 '%s' 没有关联的符号。"
 
 #: eeschema/tools/backannotate.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Pcb 封装 '%s' 和 '%s' 链接到相同的符号。"
+msgstr "封装 '%s' 和 '%s' 链接到相同的符号。"
 
 #: eeschema/tools/backannotate.cpp:257
 #, c-format
@@ -14314,65 +14305,63 @@ msgid "Cannot relink footprints because schematic is not fully annotated."
 msgstr "无法重新链接封装，因为原理图未完全注释。"
 
 #: eeschema/tools/backannotate.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "更改 %s 的位号为 %s。"
+msgstr "更改 '%s' 的参考指示符为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "%s 的封装从 \"%s\" 更改为 \"%s\"。"
+msgstr "将 %s 的元件封装任务调度从 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "\"%s\" 的值从 \"%s\" 更改为 \"%s\"。"
+msgstr "将 %s 的值从 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "找不到 \"%s\" 引脚 \"%s\"。"
+msgstr "找不到 %s 引脚 '%s'。"
 
 # 可能会出现语序问题。待测试。
 #: eeschema/tools/backannotate.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' labels to '%s'."
-msgstr "将 \"%s\" 标签更改为 \"%s\"。"
+msgstr "将 '%s' 标签更改为 '%s'。"
 
 # 可能会出现语序问题。待测试。
 #: eeschema/tools/backannotate.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' global labels to '%s'."
-msgstr "将 \"%s\" 全局标签更改为 \"%s\"。"
+msgstr "更改 '%s' 全局标签至 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:550 eeschema/tools/backannotate.cpp:581
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' hierarchical label to '%s'."
-msgstr "将 \"%s\" 分层标签更改为 \"%s\"。"
+msgstr "更改 '%s' 分层标签为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s cannot be changed to '%s' because it is driven by a power pin."
-msgstr "网络 \"%s\" 无法更改为 \"%s\"，因为它由电源引脚驱动。"
+msgstr "网络 %s 无法更改为 '%s'，因为它由电源引脚驱动。"
 
 #: eeschema/tools/backannotate.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Add label '%s' to net %s."
-msgstr "将标签 \"%s\" 添加到网络 \"%s\"。"
+msgstr "添加标签 '%s' 到网络 %s。"
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
 msgstr "执行电气规则检查"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Symbol Checker"
-msgstr "符号位号"
+msgstr "符号检查器"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Show the symbol checker window"
-msgstr "显示设计规则检查器窗口"
+msgstr "显示符号检查器窗口"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -17620,9 +17609,8 @@ msgid "Calculate"
 msgstr "计算"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:201
-#, fuzzy
 msgid "Regulator"
-msgstr "稳压器："
+msgstr "稳压器"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:208
 msgid "Regulators data file:"
@@ -17769,9 +17757,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:493
-#, fuzzy
 msgid "Available Values"
-msgstr "可选值："
+msgstr "可选值"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:504
 msgid "Solutions"
@@ -17913,9 +17900,8 @@ msgid "mu Rel C:"
 msgstr "mu Rel C："
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:820
-#, fuzzy
 msgid "Component Parameters"
-msgstr "元件参数："
+msgstr "元件参数"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:858
 msgid "Zdiff = Zodd * 2"
@@ -21977,15 +21963,13 @@ msgid "Restart Search"
 msgstr "重新启动搜索"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
-#, fuzzy
 msgid "Run Checks"
-msgstr "运行 Cvpcb"
+msgstr "运行检查"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:55
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "封装浏览"
+msgstr "封装检查器"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:307
 msgid ""
@@ -22777,9 +22761,8 @@ msgstr "圆弧角度："
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1279
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1514
-#, fuzzy
 msgid "Filled shape"
-msgstr "填充所选形状"
+msgstr "填充形状"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:92
 msgid "Graphic Item Properties"
@@ -25068,9 +25051,8 @@ msgid "Track Editing"
 msgstr "布线编辑"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
-#, fuzzy
 msgid "Mouse drag track behavior:"
-msgstr "鼠标拖动行为："
+msgstr "鼠标拖动轨迹行为："
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:153
 msgid ""
@@ -25139,12 +25121,11 @@ msgstr "编辑选项"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:588
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "库编辑器"
+msgstr "库昵称错误"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate nicknames \"%s\"."
 msgstr "重复的昵称 \"%s\"。"
 
@@ -26307,9 +26288,8 @@ msgid "Checking %s."
 msgstr "检查 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:817
-#, fuzzy
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "电路板和网络类的间隙不适用于禁止区域"
+msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:860
 msgid "Keepout constraint not met."
@@ -26803,9 +26783,8 @@ msgid "<unconstrained>"
 msgstr "< 无约束 >"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:102
-#, fuzzy
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr "在电路板边框轮廓层上找不到边框。"
+msgstr "（在 Edge.Cuts 层上没有找到边框）"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:128
 #, c-format
@@ -27045,17 +27024,14 @@ msgid "noname"
 msgstr "无名称"
 
 #: pcbnew/files.cpp:510
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules).\n"
 "This may result in different fills from previous Kicad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果该板上的区域重新填充铜边缘间隙\n"
-"将使用设置（请参阅“电路板设置”>“设计规则”）。 这可能\n"
-"导致与之前使用的 KiCad 版本不同的填充\n"
-"板框图层上板边界的线宽。"
+"如果此电路板上的区域被重新填充，将使用 Copper Edge Clearance 设置 （见电路板配置 > 设计规则）\n"
+"这可能导致来自先前 Kicad 版本的不同填充，它们在 Edge Cuts 层上使用板边界的线厚度。"
 
 #: pcbnew/files.cpp:514
 msgid "Edge Clearance Warning"
@@ -27568,9 +27544,8 @@ msgstr ""
 "%s"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
-#, fuzzy
 msgid "Centimeter"
-msgstr "居中"
+msgstr "厘米"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Feet"
@@ -27646,14 +27621,12 @@ msgid "Add all imported items into a new group"
 msgstr "将所有导入的项目添加到新组中"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
-#, fuzzy
 msgid "DXF Parameters"
-msgstr "参数"
+msgstr "DXF 参数"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:199
-#, fuzzy
 msgid "Default units:"
-msgstr "默认是 1"
+msgstr "默认计量单位："
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:87
 msgid "Import Vector Graphics File"
@@ -28126,9 +28099,9 @@ msgid ""
 msgstr "网表更新发生错误。如果不能解决这些问题，电路板将无法与原理图保持一致。"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr "未能在网表中找到元件位号 \"%s\"。"
+msgstr "找不到网表中带 ref '%s' 的组件。"
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:424
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2841
@@ -28666,9 +28639,9 @@ msgstr ""
 "Altium 层 %d 上的非铜焊盘没有任何 KiCad 等效项。改为将其放在 Eco1_User 上"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1912
-#, fuzzy, c-format
+#, c-format
 msgid "Non-Copper Pad '%s' has a hole. This should not happen"
-msgstr "非铜焊盘 \"%s\" 使用复杂的焊盘堆叠（类型为 %d）。这不应该发生"
+msgstr "非铜焊盘 '%s' 有一个洞。这不应该发生"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1918
 #, c-format
@@ -28773,14 +28746,13 @@ msgstr ""
 "的设计规则。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via orroute keepout area. The area was not "
 "imported."
 msgstr ""
-"库元件 \"%s\" 中的 CADSTAR 区域 \"%s\" 没有 KiCad 等效项。该区域既不是过孔"
-"区，也不是布线禁区。未导入该区域。 "
+"库组件 '%s' 中的 CADSTAR 区域 '%s' 没有一个 Kicad 等价物。该区域既不是通道警戒区，也不是路线警戒区。该区域不是导入的。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:933
 #, c-format
@@ -29046,9 +29018,9 @@ msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 msgstr "忽略矩形，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2090
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr "忽略圆形，因为 Eagle 图层 '%s' (%d) 未映射"
+msgstr "忽略一个圆，因为 Eagle 图层 '%s' (%d) 未映射"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -29741,9 +29713,9 @@ msgid "Width %s, gap %s"
 msgstr "宽度 %s，间隙 %s"
 
 #: pcbnew/router/router_tool.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "宽度 %s，间隙 %s，过孔间隙 %s "
+msgstr "宽度 %s，间隙 %s，过孔间隙 %s"
 
 #: pcbnew/router/router_tool.cpp:746 pcbnew/router/router_tool.cpp:767
 msgid "Show board setup"
@@ -30524,9 +30496,8 @@ msgid "Footprint Properties..."
 msgstr "封装属性..."
 
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Show the footprint checker window"
-msgstr "显示设计规则检查器窗口"
+msgstr "显示封装检查器窗口"
 
 #: pcbnew/tools/pcb_actions.cpp:394
 msgid "Update Footprint..."
@@ -32472,24 +32443,24 @@ msgid "Corner Count"
 msgstr "拐角数"
 
 #: pcbnew/zone.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "规则区域属性"
+msgstr "%s 上的规则区域挖空"
 
 #: pcbnew/zone.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout on %s"
-msgstr "在 %s 区域边线 %s 上"
+msgstr "%s 上的区域挖空"
 
 #: pcbnew/zone.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area on %s"
-msgstr "规则区域"
+msgstr "%s上的规则区域"
 
 #: pcbnew/zone.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s on %s"
-msgstr "在 %s 区域边线 %s 上"
+msgstr "%s 上的区域%s"
 
 #: pcbnew/zone.cpp:1390
 msgid "Inherited"
