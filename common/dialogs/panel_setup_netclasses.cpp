@@ -174,7 +174,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     m_removeButton->SetBitmap( KiBitmap( trash_xpm ) );
 
     // wxFormBuilder doesn't include this event...
-    m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ), NULL, this );
+    m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,
+                             wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
+                             NULL, this );
 
     m_netclassGrid->EndBatch();
     m_membershipGrid->EndBatch();
@@ -190,7 +192,9 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
     m_netclassGrid->PopEventHandler( true );
     m_membershipGrid->PopEventHandler( true );
 
-    m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ), NULL, this );
+    m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                                wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
+                                NULL, this );
 }
 
 
@@ -525,6 +529,24 @@ void PANEL_SETUP_NETCLASSES::AdjustMembershipGridColumns( int aWidth )
     int classNameWidth = m_originalColWidths[ 0 ];
     m_membershipGrid->SetColSize( 1, m_originalColWidths[ 0 ] );
     m_membershipGrid->SetColSize( 0, std::max( aWidth - classNameWidth, classNameWidth ) );
+}
+
+
+void PANEL_SETUP_NETCLASSES::onmembershipPanelSize( wxSizeEvent& event )
+{
+    // When a class name choice widget is selected (activated), in
+    // wxGrid m_membershipGrid, resizing its wxGrid parent is not taken in account
+    // by the widget until it is deselected and stay in the old position.
+    // So we deselect it if this is the case
+    // Note also this is made here, not in OnSizeMembershipGrid because on Linux
+    // there are a lot of wxSizeEvent send to m_membershipGrid when opening a choice widget
+    int c_row = m_membershipGrid->GetGridCursorRow();
+    int c_col = m_membershipGrid->GetGridCursorCol();
+
+    if( c_row >= 0 && c_col == 1 )    // this means the class name choice widget is selected (opened)
+        m_membershipGrid->SetGridCursor( c_row, 0 );    // Close it
+
+    event.Skip();
 }
 
 

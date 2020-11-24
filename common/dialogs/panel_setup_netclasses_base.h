@@ -62,6 +62,7 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddNetclassClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveNetclassClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onmembershipPanelSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnShowAll( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnApplyFilters( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAssignAll( wxCommandEvent& event ) { event.Skip(); }

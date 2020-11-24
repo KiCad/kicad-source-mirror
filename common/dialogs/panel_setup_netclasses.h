@@ -47,7 +47,8 @@ private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
     void OnSizeNetclassGrid( wxSizeEvent& event ) override;
-    void OnSizeMembershipGrid( wxSizeEvent& event ) override;
+	void OnSizeMembershipGrid( wxSizeEvent& event ) override;
+    void onmembershipPanelSize( wxSizeEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent &event ) override;
     void OnNetclassGridCellChanging( wxGridEvent& event );
     void OnShowAll( wxCommandEvent& event ) override { doApplyFilters( true ); }
