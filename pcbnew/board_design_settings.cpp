@@ -412,9 +412,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             || !entry.contains( "via_gap" ) )
                         continue;
 
-                    int width   = Millimeter2iu( entry["width"].get<int>() );
-                    int gap     = Millimeter2iu( entry["gap"].get<int>() );
-                    int via_gap = Millimeter2iu( entry["via_gap"].get<int>() );
+                    int width   = Millimeter2iu( entry["width"].get<double>() );
+                    int gap     = Millimeter2iu( entry["gap"].get<double>() );
+                    int via_gap = Millimeter2iu( entry["via_gap"].get<double>() );
 
                     m_DiffPairDimensionsList.emplace_back(
                             DIFF_PAIR_DIMENSION( width, gap, via_gap ) );
