@@ -86,7 +86,7 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
     unsigned char* dst = rgbaBuffer;
     const unsigned char* ori = aImage.GetBuffer();
 
-    for( unsigned int i = 0; i < (aImage.GetWidth() * aImage.GetHeight()); ++i )
+    for( unsigned int i = 0; i < ( aImage.GetWidth() * aImage.GetHeight() ); ++i )
     {
         unsigned char v = *ori;
 

@@ -185,7 +185,7 @@ void InitTables()
 
 const wxArrayString& PinTypeNames()
 {
-    if( g_typeNames.empty())
+    if( g_typeNames.empty() )
         InitTables();
 
     return g_typeNames;
@@ -194,7 +194,7 @@ const wxArrayString& PinTypeNames()
 
 const std::vector<BITMAP_DEF>& PinTypeIcons()
 {
-    if( g_typeIcons.empty())
+    if( g_typeIcons.empty() )
         InitTables();
 
     return g_typeIcons;
@@ -203,7 +203,7 @@ const std::vector<BITMAP_DEF>& PinTypeIcons()
 
 const wxArrayString& PinShapeNames()
 {
-    if( g_shapeNames.empty())
+    if( g_shapeNames.empty() )
         InitTables();
 
     return g_shapeNames;
@@ -212,7 +212,7 @@ const wxArrayString& PinShapeNames()
 
 const std::vector<BITMAP_DEF>& PinShapeIcons()
 {
-    if( g_shapeIcons.empty())
+    if( g_shapeIcons.empty() )
         InitTables();
 
     return g_shapeIcons;
@@ -221,7 +221,7 @@ const std::vector<BITMAP_DEF>& PinShapeIcons()
 
 const wxArrayString& PinOrientationNames()
 {
-    if( g_orientationNames.empty())
+    if( g_orientationNames.empty() )
         InitTables();
 
     return g_orientationNames;
@@ -230,7 +230,7 @@ const wxArrayString& PinOrientationNames()
 
 const std::vector<BITMAP_DEF>& PinOrientationIcons()
 {
-    if( g_orientationIcons.empty())
+    if( g_orientationIcons.empty() )
         InitTables();
 
     return g_orientationIcons;

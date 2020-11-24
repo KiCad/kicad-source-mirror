@@ -156,7 +156,7 @@ void ACTION_PLUGINS::register_action( ACTION_PLUGIN* aAction )
     }
 
     // Load icon if supplied
-    if (!aAction->GetIconFileName().IsEmpty())
+    if( !aAction->GetIconFileName().IsEmpty() )
     {
         {
             wxLogNull eat_errors;

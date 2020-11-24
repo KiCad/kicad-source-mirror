@@ -218,7 +218,7 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
         if( component->GetAltFPID().empty() )
             continue;
 
-        if( component->GetFPID().IsLegacy() || component->GetAltFPID().IsLegacy())
+        if( component->GetFPID().IsLegacy() || component->GetAltFPID().IsLegacy() )
             continue;
 
         m_indexes.push_back( ii );

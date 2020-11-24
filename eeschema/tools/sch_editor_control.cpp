@@ -229,7 +229,7 @@ static wxFindReplaceData g_markersOnly;
 
 int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
 {
-    m_frame->ShowFindReplaceDialog( aEvent.IsAction( &ACTIONS::findAndReplace ));
+    m_frame->ShowFindReplaceDialog( aEvent.IsAction( &ACTIONS::findAndReplace ) );
     return UpdateFind( aEvent );
 }
 

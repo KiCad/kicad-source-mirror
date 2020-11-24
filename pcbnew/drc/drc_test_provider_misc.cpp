@@ -138,7 +138,7 @@ void DRC_TEST_PROVIDER_MISC::testDisabledLayers()
                     drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
                     drcItem->SetItems( item );
 
-                    reportViolation( drcItem, item->GetPosition());
+                    reportViolation( drcItem, item->GetPosition() );
                 }
                 return true;
             };
@@ -163,7 +163,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
 
-                    reportViolation( drcItem, item->GetPosition());
+                    reportViolation( drcItem, item->GetPosition() );
                 }
                 return true;
             };
@@ -198,7 +198,7 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
             drcItem->SetItems( text );
 
-            reportViolation( drcItem, text->GetPosition());
+            reportViolation( drcItem, text->GetPosition() );
         }
     }
 }

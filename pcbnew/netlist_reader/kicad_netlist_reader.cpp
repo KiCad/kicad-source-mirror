@@ -191,7 +191,7 @@ void KICAD_NETLIST_PARSER::parseNet()
     wxString   pin_function;
 
     // The token net was read, so the next data is (code <number>)
-    while( (token = NextTok()) != T_EOF )
+    while( (token = NextTok() ) != T_EOF )
     {
         if( token == T_RIGHT )
             break;
@@ -215,7 +215,7 @@ void KICAD_NETLIST_PARSER::parseNet()
         case T_node:
             pin_function.Clear();   // By default: no pin function.
 
-            while( (token = NextTok()) != T_EOF )
+            while( (token = NextTok() ) != T_EOF )
             {
                 if( token == T_RIGHT )
                     break;
@@ -303,7 +303,7 @@ void KICAD_NETLIST_PARSER::parseComponent()
     std::map<wxString, wxString> properties;
 
     // The token comp was read, so the next data is (ref P1)
-    while( (token = NextTok()) != T_RIGHT )
+    while( (token = NextTok() ) != T_RIGHT )
     {
         if( token == T_LEFT )
             token = NextTok();
@@ -466,7 +466,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
     int               pinCount = 0;
 
     // The last token read was libpart, so read the next token
-    while( (token = NextTok()) != T_RIGHT )
+    while( (token = NextTok() ) != T_RIGHT )
     {
         if( token == T_LEFT )
             token = NextTok();
@@ -487,7 +487,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
 
         case T_footprints:
             // Read all fp elements (footprint filter item)
-            while( (token = NextTok()) != T_RIGHT )
+            while( (token = NextTok() ) != T_RIGHT )
             {
                 if( token == T_LEFT )
                     token = NextTok();
@@ -502,7 +502,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
             break;
 
         case T_aliases:
-            while( (token = NextTok()) != T_RIGHT )
+            while( (token = NextTok() ) != T_RIGHT )
             {
                 if( token == T_LEFT )
                     token = NextTok();
@@ -517,7 +517,7 @@ void KICAD_NETLIST_PARSER::parseLibPartList()
             break;
 
         case T_pins:
-            while( (token = NextTok()) != T_RIGHT )
+            while( (token = NextTok() ) != T_RIGHT )
             {
                 if( token == T_LEFT )
                     token = NextTok();

@@ -231,13 +231,14 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool
             lc.Append( ( int ) p.x, ( int ) p.y );
         }
     }
-    break;
+        break;
+
     case MEANDER_STYLE_CHAMFER:
     {
         double radius = (double) aDir.EuclideanNorm();
         double correction = 0;
         if( m_dual && radius > m_meanCornerRadius )
-            correction = (double)(-2 * abs(m_baselineOffset)) * tan( 22.5 * M_PI / 180.0 );
+            correction = (double)( -2 * abs(m_baselineOffset) ) * tan( 22.5 * M_PI / 180.0 );
 
         VECTOR2D dir_cu = dir_u.Resize( correction );
         VECTOR2D dir_cv = dir_v.Resize( correction );
@@ -246,8 +247,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( VECTOR2D aP, VECTOR2D aDir, bool
         lc.Append( ( int ) p.x, ( int ) p.y );
         p = aP + dir_u + (dir_v + dir_cv) * ( aSide ? -1.0 : 1.0 );
         lc.Append( ( int ) p.x, ( int ) p.y );
-        break;
     }
+        break;
     }
 
     p = aP + dir_u + dir_v * ( aSide ? -1.0 : 1.0 );

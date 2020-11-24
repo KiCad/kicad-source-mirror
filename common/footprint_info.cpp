@@ -65,7 +65,7 @@ FOOTPRINT_INFO* FOOTPRINT_LIST::GetFootprintInfo( const wxString& aFootprintName
     wxCHECK_MSG( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) < 0, NULL,
                  wxString::Format( wxT( "\"%s\" is not a valid LIB_ID." ), aFootprintName ) );
 
-    return GetFootprintInfo( fpid.GetLibNickname(), fpid.GetLibItemName());
+    return GetFootprintInfo( fpid.GetLibNickname(), fpid.GetLibItemName() );
 }
 
 

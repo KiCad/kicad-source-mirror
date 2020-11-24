@@ -88,7 +88,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, item->GetPosition());
+                    reportViolation( drcItem, item->GetPosition() );
                 }
             };
 

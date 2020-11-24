@@ -64,24 +64,25 @@ void MEANDER_PLACER_BASE::UpdateSettings( const MEANDER_SETTINGS& aSettings )
 }
 
 
-void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin,
-                                            const VECTOR2I& aTuneStart,
-                                            const VECTOR2I& aCursorPos,
-                                            SHAPE_LINE_CHAIN& aPre,
-                                            SHAPE_LINE_CHAIN& aTuned,
-                                            SHAPE_LINE_CHAIN& aPost )
+void MEANDER_PLACER_BASE::cutTunedLine( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aTuneStart,
+                                        const VECTOR2I& aCursorPos, SHAPE_LINE_CHAIN& aPre,
+                                        SHAPE_LINE_CHAIN& aTuned, SHAPE_LINE_CHAIN& aPost )
 {
     VECTOR2I cp ( aCursorPos );
 
-    if ( cp == aTuneStart ) // we don't like tuning segments with 0 length
+    if( cp == aTuneStart ) // we don't like tuning segments with 0 length
     {
         int idx = aOrigin.FindSegment( cp );
+
         if( idx >= 0 )
         {
             const SEG& s = aOrigin.CSegment( idx );
             cp += (s.B - s.A).Resize(2);
-        } else
+        }
+        else
+        {
             cp += VECTOR2I (2, 5); // some arbitrary value that is not 45 degrees oriented
+        }
     }
 
     VECTOR2I n = aOrigin.NearestPoint( cp );
@@ -136,7 +137,9 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
                     m->Recalculate();
 
                     finished = true;
-                } else {
+                }
+                else
+                {
                     m->MakeEmpty();
                 }
             }
@@ -146,7 +149,7 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
     remaining = aElongation;
     int meanderCount = 0;
 
-    for(MEANDER_SHAPE* m : aTuned.Meanders())
+    for( MEANDER_SHAPE* m : aTuned.Meanders() )
     {
         if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
         {
@@ -170,7 +173,7 @@ void MEANDER_PLACER_BASE::tuneLineLength( MEANDERED_LINE& aTuned, long long int 
             if( m->Type() != MT_CORNER && m->Type() != MT_EMPTY )
             {
                 m->Resize( std::max( m->Amplitude() - balance / 2,
-                        (long long int) ( m_settings.m_minAmplitude ) ) );
+                           (long long int) m_settings.m_minAmplitude ) );
             }
         }
     }

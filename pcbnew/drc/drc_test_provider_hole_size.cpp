@@ -149,7 +149,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
         drcItem->SetItems( aPad );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        reportViolation( drcItem, aPad->GetPosition());
+        reportViolation( drcItem, aPad->GetPosition() );
     }
 }
 
@@ -191,7 +191,7 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
         drcItem->SetItems( via );
         drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-        reportViolation( drcItem, via->GetPosition());
+        reportViolation( drcItem, via->GetPosition() );
     }
 }
 

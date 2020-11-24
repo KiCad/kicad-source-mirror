@@ -1339,7 +1339,8 @@ bool PCB_EDIT_FRAME::ReannotateSchematic( std::string& aNetlist )
 
 bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
 {
-    if( !TestStandalone( )) {
+    if( !TestStandalone() )
+    {
         DisplayError( this, _( "Cannot update the PCB because Pcbnew is opened in stand-alone "
                                "mode. In order to create or update PCBs from schematics, you "
                                "must launch the KiCad project manager and create a project." ) );

@@ -735,7 +735,7 @@ protected:
         if( !aItem.IsOk() )
             return wxDataViewItem();
 
-        return wxDataViewItem( static_cast<const LIST_ITEM*>( aItem.GetID())->Parent() );
+        return wxDataViewItem( static_cast<const LIST_ITEM*>( aItem.GetID() )->Parent() );
     }
 
 
@@ -744,7 +744,7 @@ protected:
         if( !aItem.IsOk() )
             return true;
 
-        return static_cast<const LIST_ITEM*>( aItem.GetID())->GetIsGroup();
+        return static_cast<const LIST_ITEM*>( aItem.GetID() )->GetIsGroup();
     }
 
 

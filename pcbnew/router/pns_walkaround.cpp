@@ -227,15 +227,11 @@ const WALKAROUND::RESULT WALKAROUND::Route( const LINE& aInitialPath )
 
         auto old = path_cw.CLine();
 
-        if( clipToLoopStart( path_cw.Line() ))
-        {
+        if( clipToLoopStart( path_cw.Line() ) )
             s_cw = ALMOST_DONE;
-        }
 
-        if( clipToLoopStart( path_ccw.Line() ))
-        {
+        if( clipToLoopStart( path_ccw.Line() ) )
             s_ccw = ALMOST_DONE;
-        }
 
 
         if( s_cw != IN_PROGRESS )

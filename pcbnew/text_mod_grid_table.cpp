@@ -268,7 +268,7 @@ void TEXT_MOD_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
         text.SetTextHeight( ValueFromString( m_userUnits, aValue ) );
         break;
 
-    case TMC_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue ));
+    case TMC_THICKNESS:text.SetTextThickness( ValueFromString( m_userUnits, aValue ) );
         break;
 
     case TMC_ORIENTATION:

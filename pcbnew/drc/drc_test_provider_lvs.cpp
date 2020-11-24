@@ -108,7 +108,7 @@ void DRC_TEST_PROVIDER_LVS::testFootprints( NETLIST& aNetlist )
     for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
     {
         COMPONENT* component = aNetlist.GetComponent( ii );
-        FOOTPRINT* footprint = board->FindFootprintByReference( component->GetReference());
+        FOOTPRINT* footprint = board->FindFootprintByReference( component->GetReference() );
 
         if( footprint == nullptr )
         {

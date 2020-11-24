@@ -498,7 +498,7 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
                 drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
                 drce->SetItems( pad, otherPad );
 
-                reportViolation( drce, otherPad->GetPosition());
+                reportViolation( drce, otherPad->GetPosition() );
             }
 
             return true;

@@ -674,7 +674,7 @@ bool PCB_SHAPE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
             }
             else
             {
-                if( arc_hittest >= (3600.0 + GetAngle()) )
+                if( arc_hittest >= ( 3600.0 + GetAngle() ) )
                     return true;
             }
         }
@@ -1197,7 +1197,7 @@ bool PCB_SHAPE::IsPolyShapeValid() const
     if( GetPolyShape().OutlineCount() == 0 )
         return false;
 
-    const SHAPE_LINE_CHAIN& outline = ((SHAPE_POLY_SET&)GetPolyShape()).Outline( 0 );
+    const SHAPE_LINE_CHAIN& outline = ( (SHAPE_POLY_SET&)GetPolyShape() ).Outline( 0 );
 
     return outline.PointCount() > 2;
 }

@@ -222,10 +222,9 @@ END_EVENT_TABLE()
 
 
 
-NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
-                                          const wxString& title,
+NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook* parent, const wxString& title,
                                           NETLIST_TYPE_ID id_NetType ) :
-    wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
+        wxPanel( parent, -1, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL )
 {
     m_IdNetType           = id_NetType;
     m_pageNetFmtName      = title;
@@ -234,7 +233,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_IsCurrentFormat     = NULL;
     m_AdjustPassiveValues = NULL;
 
-    wxString netfmtName = ((NETLIST_DIALOG*)parent->GetParent())->m_DefaultNetFmtName;
+    wxString netfmtName = static_cast<NETLIST_DIALOG*>( parent->GetParent() )->m_DefaultNetFmtName;
 
     bool selected = m_pageNetFmtName == netfmtName;
 
@@ -262,7 +261,7 @@ NETLIST_PAGE_DIALOG::NETLIST_PAGE_DIALOG( wxNotebook*     parent,
     m_IsCurrentFormat->SetValue( selected );
 
     if( selected )
-        ((NETLIST_DIALOG*)parent->GetParent())->m_asFormatSelected = true;
+        ( (NETLIST_DIALOG*)parent->GetParent() )->m_asFormatSelected = true;
 }
 
 

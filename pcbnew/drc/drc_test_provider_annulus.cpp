@@ -133,7 +133,7 @@ bool DRC_TEST_PROVIDER_ANNULUS::Run()
                     drcItem->SetItems( item );
                     drcItem->SetViolatingRule( constraint.GetParentRule() );
 
-                    reportViolation( drcItem, via->GetPosition());
+                    reportViolation( drcItem, via->GetPosition() );
                 }
 
                 return true;

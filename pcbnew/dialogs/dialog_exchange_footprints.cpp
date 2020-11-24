@@ -345,7 +345,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
 
         if( m_updateMode )
         {
-            if( processFootprint( mod, mod->GetFPID()) )
+            if( processFootprint( mod, mod->GetFPID() ) )
                 change = true;
         }
         else
@@ -394,7 +394,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processFootprint( FOOTPRINT* aFootprint, const 
                                  m_resetTextItemLayers->GetValue(),
                                  m_resetTextItemEffects->GetValue(),
                                  m_resetFabricationAttrs->GetValue(),
-                                 m_reset3DModels->GetValue());
+                                 m_reset3DModels->GetValue() );
 
     if( aFootprint == m_currentFootprint )
         m_currentFootprint = newFootprint;

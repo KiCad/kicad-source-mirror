@@ -2667,7 +2667,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
         // For a hier label, check if the parent pin is connected
         if( aSubgraph->m_hier_parent &&
             ( aSubgraph->m_hier_parent->m_strong_driver ||
-                aSubgraph->m_hier_parent->m_drivers.size() > 1))
+                aSubgraph->m_hier_parent->m_drivers.size() > 1) )
         {
             // For now, a simple check: if there is more than one driver, the parent is probably
             // connected elsewhere (because at least one driver will be the hier pin itself)

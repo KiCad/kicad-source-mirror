@@ -420,7 +420,7 @@ FOOTPRINT* GPCB_FPL_CACHE::parseFOOTPRINT( LINE_READER* aLineReader )
     // well as value visible, so place the value right below the reference.
     footprint->Value().SetTextAngle( footprint->Reference().GetTextAngle() );
     footprint->Value().SetTextSize( footprint->Reference().GetTextSize() );
-    footprint->Value().SetTextThickness( footprint->Reference().GetTextThickness());
+    footprint->Value().SetTextThickness( footprint->Reference().GetTextThickness() );
     textPos.y += thsize * 13 / 10;  // 130% line height
     footprint->Value().SetTextPos( textPos );
     footprint->Value().SetPos0( textPos );

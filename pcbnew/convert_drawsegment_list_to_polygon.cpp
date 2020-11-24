@@ -277,7 +277,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             {
                 graphic->RebuildBezierToSegmentsPointsList( graphic->GetWidth() );
 
-                for( const wxPoint& pt : graphic->GetBezierPoints())
+                for( const wxPoint& pt : graphic->GetBezierPoints() )
                 {
                     if( pt.x < xmin.x )
                     {

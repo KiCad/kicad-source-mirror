@@ -1013,7 +1013,7 @@ const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles, bool aPinOnly )
     wxPoint        begin;
     wxPoint        end;
     int            nameTextOffset = 0;
-    bool           showName = !m_name.IsEmpty() && (m_name != wxT( "~" ));
+    bool           showName = !m_name.IsEmpty() && ( m_name != wxT( "~" ) );
     bool           showNum = !m_number.IsEmpty();
     int            minsizeV = TARGET_PIN_RADIUS;
 
@@ -1140,14 +1140,14 @@ wxString LIB_PIN::GetSelectMenuText( EDA_UNITS aUnits ) const
                                  m_number,
                                  m_name,
                                  GetElectricalTypeName(),
-                                 PinShapeGetText( m_shape ));
+                                 PinShapeGetText( m_shape ) );
     }
     else
     {
         return wxString::Format( _( "Pin %s [%s, %s]" ),
                                  m_number,
                                  GetElectricalTypeName(),
-                                 PinShapeGetText( m_shape ));
+                                 PinShapeGetText( m_shape ) );
     }
 }
 

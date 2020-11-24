@@ -1037,10 +1037,10 @@ bool SCH_SHEET::operator <( const SCH_ITEM& aItem ) const
 
     auto sheet = static_cast<const SCH_SHEET*>( &aItem );
 
-    if (m_fields[ SHEETNAME ].GetText() != sheet->m_fields[ SHEETNAME ].GetText())
+    if (m_fields[ SHEETNAME ].GetText() != sheet->m_fields[ SHEETNAME ].GetText() )
         return m_fields[ SHEETNAME ].GetText() < sheet->m_fields[ SHEETNAME ].GetText();
 
-    if (m_fields[ SHEETFILENAME ].GetText() != sheet->m_fields[ SHEETFILENAME ].GetText())
+    if (m_fields[ SHEETFILENAME ].GetText() != sheet->m_fields[ SHEETFILENAME ].GetText() )
         return m_fields[ SHEETFILENAME ].GetText() < sheet->m_fields[ SHEETFILENAME ].GetText();
 
     return false;

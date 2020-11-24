@@ -89,10 +89,10 @@ int main( int argc, char *argv[] )
 
     trackB.SetLayer( F_Cu );
 
-    trackA.SetWidth( Mils2iu( 10 ));
-    trackB.SetWidth( Mils2iu( 20 ));
+    trackA.SetWidth( Mils2iu( 10 ) );
+    trackB.SetWidth( Mils2iu( 20 ) );
 
-    testEvalExpr( "A.fromTo('U1', 'U3') && A.NetClass == 'DDR3_A' ", VAL(0),false, &trackA, &trackB );
+    testEvalExpr( "A.fromTo('U1', 'U3') && A.NetClass == 'DDR3_A' ", VAL(0), false, &trackA, &trackB );
 
     return 0;
 

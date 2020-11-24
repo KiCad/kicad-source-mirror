@@ -290,7 +290,8 @@ void PCB_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                     }
                     break;
 
-                case T_thickness:aText->SetTextThickness( parseBoardUnits( "text thickness" ));
+                case T_thickness:
+                    aText->SetTextThickness( parseBoardUnits( "text thickness" ) );
                     NeedRIGHT();
                     break;
 
@@ -2217,7 +2218,7 @@ PCB_SHAPE* PCB_PARSER::parsePCB_SHAPE()
 
         std::vector< wxPoint > pts;
 
-        while( (token = NextTok()) != T_RIGHT )
+        while( (token = NextTok() ) != T_RIGHT )
             pts.push_back( parseXY() );
 
         shape->SetPolyPoints( pts );
@@ -3394,7 +3395,7 @@ FP_SHAPE* PCB_PARSER::parseFP_SHAPE()
 
         std::vector< wxPoint > pts;
 
-        while( (token = NextTok()) != T_RIGHT )
+        while( (token = NextTok() ) != T_RIGHT )
             pts.push_back( parseXY() );
 
         shape->SetPolyPoints( pts );
@@ -4287,23 +4288,29 @@ VIA* PCB_PARSER::parseVIA()
             break;
 
         case T_layers:
-            {
-                PCB_LAYER_ID layer1, layer2;
-                NextTok();
-                layer1 = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
-                NextTok();
-                layer2 = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
-                via->SetLayerPair( layer1, layer2 );
-                NeedRIGHT();
-            }
+        {
+            PCB_LAYER_ID layer1, layer2;
+            NextTok();
+            layer1 = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
+            NextTok();
+            layer2 = lookUpLayer<PCB_LAYER_ID>( m_layerIndices );
+            via->SetLayerPair( layer1, layer2 );
+            NeedRIGHT();
+        }
             break;
 
         case T_net:
-            if(! via->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true))
-                THROW_IO_ERROR(
-                    wxString::Format( _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
-                                      CurSource(), CurLineNumber(), CurOffset() )
-                    );
+            if( !via->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
+            {
+                THROW_IO_ERROR( wxString::Format( _( "Invalid net ID in\n"
+                                                     "file: '%s'\n"
+                                                     "line: %d\n"
+                                                     "offset: %d" ),
+                                      CurSource(),
+                                      CurLineNumber(),
+                                      CurOffset() ) );
+            }
+
             NeedRIGHT();
             break;
 
@@ -4526,9 +4533,14 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                         m_board->SetModified();
                     }
                     else if( token == T_hatch )
+                    {
                         zone->SetFillMode( ZONE_FILL_MODE::HATCH_PATTERN );
+                    }
                     else
+                    {
                         zone->SetFillMode( ZONE_FILL_MODE::POLYGONS );
+                    }
+
                     NeedRIGHT();
                     break;
 
@@ -4582,7 +4594,8 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
                     NeedRIGHT();
                     break;
 
-                case T_thermal_bridge_width:zone->SetThermalReliefSpokeWidth( parseBoardUnits( T_thermal_bridge_width ));
+                case T_thermal_bridge_width:
+                    zone->SetThermalReliefSpokeWidth( parseBoardUnits( T_thermal_bridge_width ) );
                     NeedRIGHT();
                     break;
 

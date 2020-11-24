@@ -128,7 +128,7 @@ void PCB_EDIT_FRAME::RecreateBOMFileFromBoard( wxCommandEvent& aEvent )
         {
             cmp* current = *iter;
 
-            if( (current->m_Val == fp->GetValue()) && (current->m_fpid == fp->GetFPID()) )
+            if( current->m_Val == fp->GetValue() && current->m_fpid == fp->GetFPID() )
             {
                 current->m_Ref.Append( wxT( ", " ), 1 );
                 current->m_Ref.Append( fp->Reference().GetShownText() );

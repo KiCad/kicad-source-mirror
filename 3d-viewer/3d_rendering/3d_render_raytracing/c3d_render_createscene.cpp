@@ -829,7 +829,7 @@ void C3D_RENDER_RAYTRACING::Reload( REPORTER* aStatusReporter,
                         static_cast<const CBVHCONTAINER2D *>(ii->second);
 
                 // Only get the Solder mask layers
-                if( !((layer_id == B_Mask) || (layer_id == F_Mask)) )
+                if( !( layer_id == B_Mask || layer_id == F_Mask ) )
                     continue;
 
                 SFVEC3F layerColor;
@@ -1403,7 +1403,7 @@ void C3D_RENDER_RAYTRACING::load_3D_models( CCONTAINER &aDstContainer, bool aSki
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
     {
         if( !fp->Models().empty()
-                && m_boardAdapter.ShouldFPBeDisplayed((FOOTPRINT_ATTR_T) fp->GetAttributes()) )
+                && m_boardAdapter.ShouldFPBeDisplayed( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
         {
             double zpos = m_boardAdapter.GetModulesZcoord3DIU( fp->IsFlipped() );
 

@@ -110,7 +110,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_TEXT* aText,
         wxStringSplit( aText->GetShownText(), strings_list, '\n' );
         std::vector<wxPoint> positions;
         positions.reserve( strings_list.Count() );
-        aText->GetLinePositions( positions, strings_list.Count());
+        aText->GetLinePositions( positions, strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ++ii )
         {
@@ -494,8 +494,7 @@ void BOARD_ADAPTER::AddPadsWithClearanceToContainer( const FOOTPRINT* aFootprint
         // shape size and pos is the same as their hole:
         if( aSkipNPTHPadsWihNoCopper && ( pad->GetAttribute() == PAD_ATTRIB_NPTH ) )
         {
-            if( (pad->GetDrillSize() == pad->GetSize()) &&
-                (pad->GetOffset() == wxPoint( 0, 0 )) )
+            if( pad->GetDrillSize() == pad->GetSize() && pad->GetOffset() == wxPoint( 0, 0 ) )
             {
                 switch( pad->GetShape() )
                 {
@@ -735,7 +734,7 @@ void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape,
 
     default:
         wxFAIL_MSG( "BOARD_ADAPTER::AddShapeWithClearanceToContainer no implementation for "
-                    + PCB_SHAPE_TYPE_T_asString( aShape->GetShape()) );
+                    + PCB_SHAPE_TYPE_T_asString( aShape->GetShape() ) );
         break;
     }
 }

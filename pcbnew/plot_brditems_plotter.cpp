@@ -294,7 +294,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
     if( GetPlotReference() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotFootprintTextItem( textItem, getColor( textLayer ));
+        PlotFootprintTextItem( textItem, getColor( textLayer ) );
     }
 
     textItem = &aFootprint->Value();
@@ -303,7 +303,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
     if( GetPlotValue() && m_layerMask[textLayer]
         && ( textItem->IsVisible() || GetPlotInvisibleText() ) )
     {
-        PlotFootprintTextItem( textItem, getColor( textLayer ));
+        PlotFootprintTextItem( textItem, getColor( textLayer ) );
     }
 
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
@@ -330,7 +330,7 @@ void BRDITEMS_PLOTTER::PlotFootprintTextItems( FOOTPRINT* aFootprint )
         if( textItem->GetText() == wxT( "${VALUE}" ) && !GetPlotValue() )
             continue;
 
-        PlotFootprintTextItem( textItem, getColor( textLayer ));
+        PlotFootprintTextItem( textItem, getColor( textLayer ) );
     }
 }
 
@@ -483,7 +483,7 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
         radius = aMire->GetSize() / 2;
 
     // Draw the circle
-    draw.SetEnd( wxPoint( draw.GetStart().x + radius, draw.GetStart().y ));
+    draw.SetEnd( wxPoint( draw.GetStart().x + radius, draw.GetStart().y ) );
 
     PlotPcbShape( &draw );
 
@@ -505,12 +505,12 @@ void BRDITEMS_PLOTTER::PlotPcbTarget( PCB_TARGET* aMire )
     wxPoint mirePos( aMire->GetPosition() );
 
     // Draw the X or + shape:
-    draw.SetStart( wxPoint( mirePos.x - dx1, mirePos.y - dy1 ));
-    draw.SetEnd(   wxPoint( mirePos.x + dx1, mirePos.y + dy1 ));
+    draw.SetStart( wxPoint( mirePos.x - dx1, mirePos.y - dy1 ) );
+    draw.SetEnd(   wxPoint( mirePos.x + dx1, mirePos.y + dy1 ) );
     PlotPcbShape( &draw );
 
-    draw.SetStart( wxPoint( mirePos.x - dx2, mirePos.y - dy2 ));
-    draw.SetEnd(   wxPoint( mirePos.x + dx2, mirePos.y + dy2 ));
+    draw.SetStart( wxPoint( mirePos.x - dx2, mirePos.y - dy2 ) );
+    draw.SetEnd(   wxPoint( mirePos.x + dx2, mirePos.y + dy2 ) );
     PlotPcbShape( &draw );
 }
 
@@ -731,7 +731,7 @@ void BRDITEMS_PLOTTER::PlotPcbText( PCB_TEXT* aText )
         wxStringSplit( shownText, strings_list, '\n' );
         positions.reserve(  strings_list.Count() );
 
-        aText->GetLinePositions( positions, strings_list.Count());
+        aText->GetLinePositions( positions, strings_list.Count() );
 
         for( unsigned ii = 0; ii <  strings_list.Count(); ii++ )
         {

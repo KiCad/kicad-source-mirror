@@ -1103,14 +1103,14 @@ bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const
         {
             const VIA* via = static_cast<const VIA*>( aItem->Parent() );
 
-            return via->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
+            return via->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
         }
 
         case PCB_PAD_T:
         {
             const PAD* pad = static_cast<const PAD*>( aItem->Parent() );
 
-            return pad->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ));
+            return pad->FlashLayer( static_cast<PCB_LAYER_ID>( aLayer ) );
         }
 
         default:

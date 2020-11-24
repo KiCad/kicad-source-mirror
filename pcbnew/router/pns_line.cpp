@@ -222,7 +222,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
                 }
             }
         }
-        else if ( !a_in && !b_in )
+        else if( !a_in && !b_in )
         {
             int min_idx = INT_MAX;
             int max_idx = INT_MIN;
@@ -231,7 +231,7 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
             {
                 const SEG& os = aObstacle.CSegment(j);
 
-                if (os.Intersect(a))
+                if( os.Intersect(a) )
                 {
                     min_idx = std::min(min_idx, j);
                     max_idx = std::max(max_idx, j);

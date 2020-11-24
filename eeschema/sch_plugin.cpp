@@ -149,7 +149,7 @@ void SCH_PLUGIN::SymbolLibOptions( PROPERTIES* aListToAppendTo ) const
 
     (*aListToAppendTo)["username"] = UTF8( _(
         "User name for <b>login</b> to some special library server."
-        ));
+        ) );
 
     (*aListToAppendTo)["password"] = UTF8( _(
         "Password for <b>login</b> to some special library server."

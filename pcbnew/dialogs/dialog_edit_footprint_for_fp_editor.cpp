@@ -230,7 +230,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
 
     // Module Properties
 
-    m_AutoPlaceCtrl->SetSelection( (m_footprint->IsLocked()) ? 1 : 0 );
+    m_AutoPlaceCtrl->SetSelection( m_footprint->IsLocked() ? 1 : 0 );
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Enable hotkey move commands and Auto Placement" ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Disable hotkey move commands and Auto Placement" ) );
 
@@ -334,7 +334,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     m_modelsGrid->SetColSize( 1, m_modelsGrid->GetVisibleWidth( 1, true, false, false ) );
 
     Layout();
-    adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
+    adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
 
     return true;
 }
@@ -829,7 +829,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::adjustGridColumns( int aWidth )
 void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 {
     if( !m_itemsGrid->IsCellEditControlShown() && !m_modelsGrid->IsCellEditControlShown() )
-        adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
+        adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
 
     if( m_itemsGrid->IsCellEditControlShown() )
     {
@@ -889,7 +889,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_FOOTPRINT_FP_EDITOR::OnGridSize( wxSizeEvent& event )
 {
-    adjustGridColumns( event.GetSize().GetX());
+    adjustGridColumns( event.GetSize().GetX() );
 
     event.Skip();
 }

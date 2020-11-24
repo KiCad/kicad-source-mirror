@@ -89,7 +89,7 @@ bool GRAPHICS_CLEANER::isNullSegment( PCB_SHAPE* aSegment )
 
     default:
         wxFAIL_MSG( "GRAPHICS_CLEANER::isNullSegment unsupported PCB_SHAPE shape: "
-                    + PCB_SHAPE_TYPE_T_asString( aSegment->GetShape()) );
+                    + PCB_SHAPE_TYPE_T_asString( aSegment->GetShape() ) );
         return false;
     }
 }
@@ -128,7 +128,7 @@ bool GRAPHICS_CLEANER::areEquivalent( PCB_SHAPE* aShape1, PCB_SHAPE* aShape2 )
 
     default:
         wxFAIL_MSG( "GRAPHICS_CLEANER::areEquivalent unsupported PCB_SHAPE shape: "
-                    + PCB_SHAPE_TYPE_T_asString( aShape1->GetShape()) );
+                    + PCB_SHAPE_TYPE_T_asString( aShape1->GetShape() ) );
         return false;
     }
 }

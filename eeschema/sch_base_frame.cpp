@@ -295,7 +295,7 @@ void SCH_BASE_FRAME::createCanvas()
     }
 
     SetCanvas( new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_frameSize,
-                                   GetGalDisplayOptions(), m_canvasType ));
+                                   GetGalDisplayOptions(), m_canvasType ) );
     ActivateGalCanvas();
 }
 

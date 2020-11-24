@@ -1180,16 +1180,17 @@ void SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::AddPolyline( const SHAPE_LINE_CHAIN
 {
     if( !m_count )
     {
-        m_lastPoint = aPolyline.CPoint(0);
-        m_firstPoint = aPolyline.CPoint(0);
+        m_lastPoint = aPolyline.CPoint( 0 );
+        m_firstPoint = aPolyline.CPoint( 0 );
     }
 
     m_count += aPolyline.PointCount();
 
-    for (int i = 1; i < aPolyline.PointCount(); i++ )
+    for( int i = 1; i < aPolyline.PointCount(); i++ )
     {
         auto p = aPolyline.CPoint( i );
-        if( !processVertex( m_lastPoint, p ))
+
+        if( !processVertex( m_lastPoint, p ) )
             return;
 
         m_lastPoint = p;

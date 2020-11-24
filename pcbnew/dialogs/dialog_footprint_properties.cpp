@@ -403,7 +403,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     m_modelsGrid->SetColSize( 1, m_modelsGrid->GetVisibleWidth( 1, true, false, false ) );
 
     Layout();
-    adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
+    adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
 
     return true;
 }
@@ -856,7 +856,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::adjustGridColumns( int aWidth )
 void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 {
     if( !m_itemsGrid->IsCellEditControlShown() && !m_modelsGrid->IsCellEditControlShown() )
-        adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
+        adjustGridColumns( m_itemsGrid->GetRect().GetWidth() );
 
     // Handle a grid error.  This is delayed to OnUpdateUI so that we can change focus
     // even when the original validation was triggered from a killFocus event, and so
@@ -912,7 +912,7 @@ void DIALOG_FOOTPRINT_PROPERTIES::OnUpdateUI( wxUpdateUIEvent&  )
 
 void DIALOG_FOOTPRINT_PROPERTIES::OnGridSize( wxSizeEvent& aEvent )
 {
-    adjustGridColumns( aEvent.GetSize().GetX());
+    adjustGridColumns( aEvent.GetSize().GetX() );
 
     aEvent.Skip();
 }

@@ -1362,10 +1362,10 @@ static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, FOOTPRINT* a
     {
         // Reference and value
         if( aFootprint->Reference().IsVisible() )
-            export_vrml_fp_text( &aFootprint->Reference());
+            export_vrml_fp_text( &aFootprint->Reference() );
 
         if( aFootprint->Value().IsVisible() )
-            export_vrml_fp_text( &aFootprint->Value());
+            export_vrml_fp_text( &aFootprint->Value() );
 
         // Export footprint graphics
 
@@ -1374,7 +1374,7 @@ static void export_vrml_footprint( MODEL_VRML& aModel, BOARD* aPcb, FOOTPRINT* a
             switch( item->Type() )
             {
             case PCB_FP_TEXT_T:
-                export_vrml_fp_text( static_cast<FP_TEXT*>( item ));
+                export_vrml_fp_text( static_cast<FP_TEXT*>( item ) );
                 break;
 
             case PCB_FP_SHAPE_T:

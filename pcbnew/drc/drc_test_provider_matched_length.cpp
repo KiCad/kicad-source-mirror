@@ -288,20 +288,24 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
             ent.fromItem = nullptr;
             ent.toItem = nullptr;
 
-            for( auto citem : nitem.second )
+            for( BOARD_CONNECTED_ITEM* citem : nitem.second )
             {
-                if ( auto via = dyn_cast<VIA*>( citem ) )
+                if( citem->Type() == PCB_VIA_T )
                 {
                     ent.viaCount++;
-                    ent.totalVia += computeViaThruLength( via, nitem.second ); // fixme: via thru distance
+                    ent.totalVia += computeViaThruLength( static_cast<VIA*>( citem ), nitem.second );
                 }
-                else if ( TRACK* trk = dyn_cast<TRACK*>(citem ))
+                else if( citem->Type() == PCB_TRACE_T )
                 {
-                    ent.totalRoute += trk->GetLength();
+                    ent.totalRoute += static_cast<TRACK*>( citem )->GetLength();
                 }
-                else if ( PAD* pad = dyn_cast<PAD*>( citem ))
+                else if ( citem->Type() == PCB_ARC_T )
                 {
-                    ent.totalPadToDie += pad->GetPadToDieLength();
+                    ent.totalRoute += static_cast<ARC*>( citem )->GetLength();
+                }
+                else if( citem->Type() == PCB_PAD_T )
+                {
+                    ent.totalPadToDie += static_cast<PAD*>( citem )->GetPadToDieLength();
                 }
             }
 

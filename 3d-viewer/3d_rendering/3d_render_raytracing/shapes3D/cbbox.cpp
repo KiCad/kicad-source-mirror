@@ -245,9 +245,9 @@ bool CBBOX::Inside( const SFVEC3F &aPoint ) const
 {
     wxASSERT( IsInitialized() );
 
-    return (( aPoint.x >= m_min.x ) && ( aPoint.x <= m_max.x ) &&
-            ( aPoint.y >= m_min.y ) && ( aPoint.y <= m_max.y ) &&
-            ( aPoint.z >= m_min.z ) && ( aPoint.z <= m_max.z ));
+    return ( aPoint.x >= m_min.x ) && ( aPoint.x <= m_max.x ) &&
+           ( aPoint.y >= m_min.y ) && ( aPoint.y <= m_max.y ) &&
+           ( aPoint.z >= m_min.z ) && ( aPoint.z <= m_max.z );
 }
 
 

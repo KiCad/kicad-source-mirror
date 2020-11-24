@@ -627,7 +627,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetExcludeEdgeLayer( m_excludeEdgeLayerOpt->GetValue() );
     tempOptions.SetSubtractMaskFromSilk( m_subtractMaskFromSilk->GetValue() );
     tempOptions.SetPlotFrameRef( m_plotSheetRef->GetValue() );
-    tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue());
+    tempOptions.SetSketchPadsOnFabLayers( m_sketchPadsOnFabLayers->GetValue() );
     tempOptions.SetUseAuxOrigin( m_useAuxOriginCheckBox->GetValue() );
     tempOptions.SetPlotValue( m_plotModuleValueOpt->GetValue() );
     tempOptions.SetPlotReference( m_plotModuleRefOpt->GetValue() );

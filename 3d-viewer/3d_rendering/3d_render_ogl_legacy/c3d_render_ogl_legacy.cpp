@@ -1287,7 +1287,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
 
         if( !fp->Models().empty() )
         {
-            if( m_boardAdapter.ShouldFPBeDisplayed((FOOTPRINT_ATTR_T) fp->GetAttributes()) )
+            if( m_boardAdapter.ShouldFPBeDisplayed( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
             {
                 if( ( aRenderTopOrBot && !fp->IsFlipped() )
                  || ( !aRenderTopOrBot && fp->IsFlipped() ) )

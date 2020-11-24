@@ -1917,7 +1917,7 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                     m_controls->CaptureCursor( false );
                 };
 
-        if( evt->IsCancelInteractive())
+        if( evt->IsCancelInteractive() )
         {
             if( polyGeomMgr.IsPolygonInProgress() )
                 cleanup();

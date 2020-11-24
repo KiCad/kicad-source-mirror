@@ -99,7 +99,7 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::GetTextLines(wxGrid& grid,
                                                const wxRect& rect,
                                                int row, int col)
 {
-    dc.SetFont(attr.GetFont());
+    dc.SetFont( attr.GetFont() );
     const wxCoord maxWidth = rect.GetWidth();
 
     // Transform logical lines into physical ones, wrapping the longer ones.
@@ -215,7 +215,7 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
         n = 1;
     }
 
-    lines.push_back(word.substr(0, n));
+    lines.push_back( word.substr(0, n) );
 
     // Check if the remainder of the string fits in one line.
     //
@@ -225,6 +225,7 @@ GRIDCELL_AUTOWRAP_STRINGRENDERER::BreakWord(wxDC& dc,
     // recompute it.
     const wxString rest = word.substr(n);
     const wxCoord restWidth = dc.GetTextExtent(rest).x;
+
     if ( restWidth <= maxWidth )
     {
         line = rest;

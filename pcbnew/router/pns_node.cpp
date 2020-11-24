@@ -574,8 +574,11 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
         auto s = l.Arc( i );
         ARC* rarc;
 
-        if( !aAllowRedundant && ( rarc = findRedundantArc( s.GetP0(), s.GetP1(), aLine.Layers(), aLine.Net() ) ) )
+        if( !aAllowRedundant
+            && ( rarc = findRedundantArc( s.GetP0(), s.GetP1(), aLine.Layers(), aLine.Net() ) ) )
+        {
             aLine.Link( rarc );
+        }
         else
         {
             auto newarc = std::make_unique< ARC >( aLine, s );
@@ -594,8 +597,9 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
         if( s.A != s.B )
         {
             SEGMENT* rseg;
-            if( !aAllowRedundant &&
-                (rseg = findRedundantSegment( s.A, s.B, aLine.Layers(), aLine.Net() )) )
+
+            if( !aAllowRedundant
+                && ( rseg = findRedundantSegment( s.A, s.B, aLine.Layers(), aLine.Net() ) ) )
             {
                 // another line could be referencing this segment too :(
                 aLine.Link( rseg );
@@ -1311,9 +1315,13 @@ void NODE::AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask)
         INDEX::NET_ITEMS_LIST* l_root = m_root->m_index->GetItemsForNet( aNet );
 
         if( l_root )
-            for( INDEX::NET_ITEMS_LIST::iterator i = l_root->begin(); i!= l_root->end(); ++i )
-                if( !Overrides( *i ) && (*i)->OfKind( aKindMask ))
+        {
+            for( INDEX::NET_ITEMS_LIST::iterator i = l_root->begin(); i != l_root->end(); ++i )
+            {
+                if( !Overrides( *i ) && (*i)->OfKind( aKindMask ) )
                     aItems.insert( *i );
+            }
+        }
     }
 }
 
@@ -1359,9 +1367,11 @@ SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const
             const VECTOR2I a2( seg2->Seg().A );
             const VECTOR2I b2( seg2->Seg().B );
 
-            if( seg2->Layers().Start() == lr.Start() &&
-                ((A == a2 && B == b2) || (A == b2 && B == a2)) )
+            if( seg2->Layers().Start() == lr.Start()
+                    && ( ( A == a2 && B == b2 ) || ( A == b2 && B == a2 ) ) )
+            {
                 return seg2;
+            }
         }
     }
 
@@ -1374,7 +1384,7 @@ SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
 }
 
 ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
-                                     int aNet )
+                             int aNet )
 {
     JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
 
@@ -1390,9 +1400,11 @@ ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_R
             const VECTOR2I a2( seg2->Anchor( 0 ) );
             const VECTOR2I b2( seg2->Anchor( 1 ) );
 
-            if( seg2->Layers().Start() == lr.Start() &&
-                ((A == a2 && B == b2) || (A == b2 && B == a2)) )
+            if( seg2->Layers().Start() == lr.Start()
+                    && ( ( A == a2 && B == b2 ) || ( A == b2 && B == a2 ) ) )
+            {
                 return seg2;
+            }
         }
     }
 
@@ -1405,11 +1417,8 @@ ARC* NODE::findRedundantArc( ARC* aArc )
 }
 
 
-int NODE::QueryJoints( const BOX2I& aBox,
-                     std::vector<JOINT*>& aJoints,
-                     int aLayerMask,
-                     int aKindMask
-                 )
+int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, int aLayerMask,
+                       int aKindMask )
 {
     int n = 0;
 
@@ -1417,21 +1426,21 @@ int NODE::QueryJoints( const BOX2I& aBox,
 
     for( auto j = m_joints.begin(); j != m_joints.end(); ++j )
     {
-        if ( aBox.Contains(j->second.Pos()) && j->second.LinkCount ( aKindMask ) )
+        if( aBox.Contains( j->second.Pos() ) && j->second.LinkCount( aKindMask ) )
         {
             aJoints.push_back( &j->second );
             n++;
-
         }
     }
 
-    if ( isRoot() )
+    if( isRoot() )
         return n;
 
     for( auto j = m_root->m_joints.begin(); j != m_root->m_joints.end(); ++j )
     {
-        if( ! Overrides( &j->second) )
-        {   if ( aBox.Contains(j->second.Pos()) && j->second.LinkCount ( aKindMask ) )
+        if( !Overrides( &j->second) )
+        {
+            if( aBox.Contains( j->second.Pos() ) && j->second.LinkCount( aKindMask ) )
             {
                 aJoints.push_back( &j->second );
                 n++;
@@ -1440,8 +1449,6 @@ int NODE::QueryJoints( const BOX2I& aBox,
     }
 
     return n;
-
-
 }
 
 

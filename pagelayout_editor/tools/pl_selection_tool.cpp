@@ -133,7 +133,7 @@ int PL_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            SelectPoint( evt->Position());
+            SelectPoint( evt->Position() );
         }
 
         // right click? if there is any object - show the context menu

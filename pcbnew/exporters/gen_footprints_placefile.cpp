@@ -192,7 +192,7 @@ void DIALOG_GEN_FOOTPRINT_POSITION::OnOutputDirectoryBrowseClicked( wxCommandEve
 
     if( dialog.ShowModal() == wxID_YES )
     {
-        wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName()).GetPath();
+        wxString boardFilePath = ( (wxFileName) m_parent->GetBoard()->GetFileName() ).GetPath();
 
         if( !dirName.MakeRelativeTo( boardFilePath ) )
             wxMessageBox( _( "Cannot make path relative (target volume different from board file volume)!" ),

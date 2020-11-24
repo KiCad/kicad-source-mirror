@@ -80,8 +80,8 @@ void TEMPLATE_WIDGET::Unselect()
 void TEMPLATE_WIDGET::SetTemplate(PROJECT_TEMPLATE* aTemplate)
 {
     m_currTemplate = aTemplate;
-    m_staticTitle->SetLabel( *(aTemplate->GetTitle()) );
-    m_bitmapIcon->SetBitmap( *(aTemplate->GetIcon()) );
+    m_staticTitle->SetLabel( *(aTemplate->GetTitle() ) );
+    m_bitmapIcon->SetBitmap( *(aTemplate->GetIcon() ) );
 }
 
 

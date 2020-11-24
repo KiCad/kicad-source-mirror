@@ -103,7 +103,7 @@ void TEMPLATE_FIELDNAME::Parse( TEMPLATE_FIELDNAMES_LEXER* in )
 
     in->NeedLEFT();     // begin (name ...)
 
-    if( (tok = in->NextTok()) != T_name )
+    if( ( tok = in->NextTok() ) != T_name )
         in->Expecting( T_name );
 
     in->NeedSYMBOLorNUMBER();

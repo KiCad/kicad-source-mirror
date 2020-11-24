@@ -391,7 +391,7 @@ int FOOTPRINT_EDITOR_TOOLS::ExportFootprint( const TOOL_EVENT& aEvent )
 
 int FOOTPRINT_EDITOR_TOOLS::EditFootprint( const TOOL_EVENT& aEvent )
 {
-    m_frame->LoadFootprintFromLibrary( m_frame->GetTreeFPID());
+    m_frame->LoadFootprintFromLibrary( m_frame->GetTreeFPID() );
     return 0;
 }
 

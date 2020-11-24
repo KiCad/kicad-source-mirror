@@ -130,7 +130,8 @@ const ITEM_SET DRAGGER::findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& h
                 l.Reverse();
 
             rv.Add( l );
-        } else if ( item->OfKind( ITEM::VIA_T )) 
+        }
+        else if( item->OfKind( ITEM::VIA_T ) )
         {
             rv.Add( item );
         }

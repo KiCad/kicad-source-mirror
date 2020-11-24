@@ -70,7 +70,7 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     if( gerber->GetMessages().size() > 0 )
     {
         HTML_MESSAGE_BOX dlg( this, _("Errors") );
-        dlg.ListSet(gerber->GetMessages());
+        dlg.ListSet( gerber->GetMessages() );
         dlg.ShowModal();
     }
 

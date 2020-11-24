@@ -310,7 +310,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
 void LIB_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
 {
-    static_cast<LIB_ITEM*>( aItem )->Offset( mapCoords( aDelta ));
+    static_cast<LIB_ITEM*>( aItem )->Offset( mapCoords( aDelta ) );
     aItem->SetFlags( IS_MOVED );
 }
 

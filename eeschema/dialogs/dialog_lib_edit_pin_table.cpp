@@ -87,7 +87,7 @@ public:
     {
         wxString fieldValue;
 
-        if( pins.empty())
+        if( pins.empty() )
             return fieldValue;
 
         for( LIB_PIN* pin : pins )

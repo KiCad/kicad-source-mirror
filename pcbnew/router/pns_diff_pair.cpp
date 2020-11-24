@@ -390,7 +390,7 @@ bool DP_GATEWAYS::FitGateways( DP_GATEWAYS& aEntry, DP_GATEWAYS& aTarget,
 
 bool DP_GATEWAYS::checkDiagonalAlignment( const VECTOR2I& a, const VECTOR2I& b ) const
 {
-    VECTOR2I dir ( std::abs (a.x - b.x), std::abs ( a.y - b.y ));
+    VECTOR2I dir( std::abs (a.x - b.x), std::abs ( a.y - b.y ) );
 
     return (dir.x == 0 && dir.y != 0) || (dir.x == dir.y) || (dir.y == 0 && dir.x != 0);
 }

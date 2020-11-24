@@ -622,7 +622,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
     float delta_move = m_delta_move_step_factor * m_camera.ZoomGet();
 
     if( m_boardAdapter.GetFlag( FL_MOUSEWHEEL_PANNING ) )
-        delta_move *= (0.01f * event.GetWheelRotation());
+        delta_move *= 0.01f * event.GetWheelRotation();
     else
         if( event.GetWheelRotation() < 0 )
             delta_move = -delta_move;

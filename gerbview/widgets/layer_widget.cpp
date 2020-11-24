@@ -275,7 +275,7 @@ int LAYER_WIDGET::findLayerRow( LAYER_NUM aLayer ) const
         wxWindow* w = getLayerComp( row, 0 );
         wxASSERT( w );
 
-        if( aLayer == getDecodedId( w->GetId() ))
+        if( aLayer == getDecodedId( w->GetId() ) )
             return row;
     }
 
@@ -304,7 +304,7 @@ int LAYER_WIDGET::findRenderRow( int aId ) const
         wxWindow* w = getRenderComp( row, 0 );
         wxASSERT( w );
 
-        if( aId == getDecodedId( w->GetId() ))
+        if( aId == getDecodedId( w->GetId() ) )
             return row;
     }
 

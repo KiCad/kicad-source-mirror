@@ -1521,7 +1521,7 @@ void EAGLE_PLUGIN::orientFPText( FOOTPRINT* aFootprint, const EELEMENT& e, FP_TE
         double degrees = ( aFPText->GetTextAngle() + aFootprint->GetOrientation() ) / 10;
 
         // @todo there are a few more cases than these to contend with:
-        if( ( !aFPText->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ))
+        if( ( !aFPText->IsMirrored() && ( abs( degrees ) == 180 || abs( degrees ) == 270 ) )
          || ( aFPText->IsMirrored() && ( degrees == 360 ) ) )
         {
             // ETEXT::TOP_RIGHT:

@@ -995,7 +995,7 @@ bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
         if( ConfirmRevertDialog( this, msg ) )
         {
             Clear_Pcb( false );
-            AddFootprintToBoard( (FOOTPRINT*) m_revertModule->Clone());
+            AddFootprintToBoard( static_cast<FOOTPRINT*>( m_revertModule->Clone() ) );
 
             Zoom_Automatique( false );
 

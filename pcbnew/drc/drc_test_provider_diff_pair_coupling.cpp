@@ -447,7 +447,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                 drce->SetViolatingRule( maxUncoupledConstraint->GetParentRule() );
 
-                reportViolation( drce, (*it.second.itemsP.begin())->GetPosition() );
+                reportViolation( drce, ( *it.second.itemsP.begin() )->GetPosition() );
             }
         }
 

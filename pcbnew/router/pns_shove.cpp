@@ -1227,7 +1227,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveMainLoop()
     {
         // If we're shoving a free via then push a proxy LINE (with the via on the end) onto
         // the stack.
-        pushLineStack( LINE( *m_draggedVia ));
+        pushLineStack( LINE( *m_draggedVia ) );
     }
 
     while( !m_lineStack.empty() )
@@ -1460,7 +1460,7 @@ static VIA* findViaByHandle ( NODE *aNode, const VIA_HANDLE& handle )
 
     for( ITEM* item : jt->LinkList() )
     {
-        if ( item->OfKind( ITEM::VIA_T ))
+        if( item->OfKind( ITEM::VIA_T ) )
         {
             if( item->Net() == handle.net && item->Layers().Overlaps(handle.layers) )
                 return static_cast<VIA*>( item );
@@ -1511,7 +1511,7 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
 
     // Push the via to its new location
     //
-    st = pushOrShoveVia( viaToDrag, ( aWhere - viaToDrag->Pos()), 0 );
+    st = pushOrShoveVia( viaToDrag, ( aWhere - viaToDrag->Pos() ), 0 );
 
     // Shove any colliding objects out of the way
     //
