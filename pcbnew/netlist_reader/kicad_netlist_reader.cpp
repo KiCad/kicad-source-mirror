@@ -248,7 +248,7 @@ void KICAD_NETLIST_PARSER::parseNet()
                 }
             }
 
-            if( strtol( code, NULL, 10 ) >= 1 )
+            if( strtol( code.c_str(), NULL, 10 ) >= 1 )
             {
                 if( name.IsEmpty() )      // Give a dummy net name like N-000009
                     name = wxT("N-00000") + code;
