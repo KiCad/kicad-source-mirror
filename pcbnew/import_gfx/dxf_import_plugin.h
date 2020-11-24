@@ -152,6 +152,31 @@ public:
 };
 
 /**
+ * A helper class to hold style settings temporarily during import
+ */
+class DXF_IMPORT_STYLE
+{
+public:
+    wxString m_name;
+    double m_textHeight;
+    double m_widthFactor;
+    bool m_bold;
+    bool m_italic;
+
+    GRAPHICS_IMPORTER_BUFFER m_buffer;
+
+    DXF_IMPORT_STYLE( wxString aName, double aTextHeight, double aWidthFactor, bool aBold, bool aItalic )
+    {
+        m_name = aName;
+        m_textHeight = aTextHeight;
+        m_widthFactor = aWidthFactor;
+        m_bold = aBold;
+        m_italic = aItalic;
+    }
+};
+
+
+/**
  * DXF Units enum with values as specified in DXF 2012 Specification
  */
 enum class DXF_IMPORT_UNITS
@@ -222,6 +247,7 @@ private:
 
     std::vector<std::unique_ptr<DXF_IMPORT_LAYER>> m_layers;    // List of layers as we import, used just to grab props for objects
     std::vector<std::unique_ptr<DXF_IMPORT_BLOCK>> m_blocks;    // List of blocks as we import
+    std::vector<std::unique_ptr<DXF_IMPORT_STYLE>> m_styles;    // List of blocks as we import
     DXF_IMPORT_BLOCK* m_currentBlock;
 
 public:
@@ -352,9 +378,17 @@ private:
      * Returns the import layer block
      *
      * @param aBlockName is the raw string from dxflib
-     * @returns The given block by name or nullptf if not found
+     * @returns The given block by name or nullptr if not found
      */
     DXF_IMPORT_BLOCK* getImportBlock( const std::string& aBlockName );
+
+    /**
+     * Returns the import style
+     *
+     * @param aStyleName is the raw string from dxflib
+     * @returns The given style by name or nullptr if not found
+     */
+    DXF_IMPORT_STYLE* getImportStyle( const std::string& aStyleName );
 
     // Functions to aid in the creation of a Polyline
     void insertLine( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd, int aWidth );

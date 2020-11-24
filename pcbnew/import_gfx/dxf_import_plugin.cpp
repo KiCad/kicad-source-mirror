@@ -72,6 +72,9 @@
  *      by following the object to world conversion
  *    6. Blocks are virtual groups, blocks must be placed by a INSERT entity
  *    7. Blocks may be repeated multiple times
+ *    8. There is no sane way to make text look perfect like the original CAD.
+ *       DXF simply does mpt secifying text/font enough to make it portable.
+ *       We however make do try to get it somewhat close/visually appealing.
  */
 
 
@@ -328,6 +331,24 @@ DXF_IMPORT_BLOCK* DXF_IMPORT_PLUGIN::getImportBlock( const std::string& aBlockNa
 }
 
 
+DXF_IMPORT_STYLE* DXF_IMPORT_PLUGIN::getImportStyle( const std::string& aStyleName )
+{
+    DXF_IMPORT_STYLE* style     = nullptr;
+    wxString          styleName = wxString::FromUTF8( aStyleName.c_str() );
+
+    if( !styleName.IsEmpty() )
+    {
+        auto resultIt = std::find_if( m_styles.begin(), m_styles.end(),
+                [styleName]( const auto& it ) { return it->m_name == styleName; } );
+
+        if( resultIt != m_styles.end() )
+            style = resultIt->get();
+    }
+
+    return style;
+}
+
+
 void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 {
     DXF_IMPORT_LAYER* layer     = getImportLayer( attributes.getLayer() );
@@ -561,9 +582,15 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 
     wxString text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
 
+    DXF_IMPORT_STYLE* style = getImportStyle( aData.style.c_str() );
+
     double textHeight = mapDim( aData.height );
-    // The 0.9 factor gives a better height/width ratio with our font
+    // The 0.9 factor gives a better height/width base ratio with our font
     double charWidth = textHeight * 0.9;
+
+    if( style != nullptr )
+        charWidth *= style->m_widthFactor;
+
     double textWidth = charWidth * text.length();   // Rough approximation
     double textThickness = textHeight/8.0;          // Use a reasonable line thickness for this text
 
@@ -691,9 +718,15 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
     wxString    attrib, tmp;
 
+    DXF_IMPORT_STYLE* style      = getImportStyle( aData.style.c_str() );
+
     double textHeight = mapDim( aData.height );
-    // The 0.9 factor gives a better height/width ratio with our font
+
+    // The 0.9 factor gives a better height/width base ratio with our font
     double charWidth = textHeight * 0.9;
+    if( style != nullptr )
+        charWidth *= style->m_widthFactor;
+
     double textWidth = charWidth * text.length();   // Rough approximation
     double textThickness = textHeight/8.0;          // Use a reasonable line thickness for this text
 
@@ -1143,7 +1176,12 @@ wxString DXF_IMPORT_PLUGIN::toNativeString( const wxString& aData )
 
 void DXF_IMPORT_PLUGIN::addTextStyle( const DL_StyleData& aData )
 {
-    // TODO
+    wxString name = wxString::FromUTF8( aData.name.c_str() );
+
+    std::unique_ptr<DXF_IMPORT_STYLE> style =
+            std::make_unique<DXF_IMPORT_STYLE>( name, aData.fixedTextHeight, aData.widthFactor, aData.bold, aData.italic );
+
+    m_styles.push_back( std::move( style ) );
 }
 
 
