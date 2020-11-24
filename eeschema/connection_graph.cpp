@@ -2077,7 +2077,7 @@ CONNECTION_SUBGRAPH* CONNECTION_GRAPH::GetSubgraphForItem( SCH_ITEM* aItem )
     auto                 it  = m_item_to_subgraph_map.find( aItem );
     CONNECTION_SUBGRAPH* ret = it != m_item_to_subgraph_map.end() ? it->second : nullptr;
 
-    while( ret->m_absorbed )
+    while( ret && ret->m_absorbed )
         ret = ret->m_absorbed_by;
 
     return ret;
