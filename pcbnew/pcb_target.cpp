@@ -32,26 +32,26 @@
 #include <settings/settings_manager.h>
 #include <trigo.h>
 #include <i18n_utility.h>
-
+#include <geometry/shape_circle.h>
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
 {
-    m_Shape = 0;
-    m_Size  = Millimeter2iu( 5 );       // Gives a decent size
-    m_Width = Millimeter2iu( DEFAULT_COPPER_LINE_WIDTH );
-    m_layer = Edge_Cuts;                   // a target is on all layers
+    m_shape     = 0;
+    m_size      = Millimeter2iu( 5 );          // Gives a decent size
+    m_lineWidth = Millimeter2iu( DEFAULT_COPPER_LINE_WIDTH );
+    m_layer     = Edge_Cuts;                   // a target is on all layers
 }
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent, int aShape, PCB_LAYER_ID aLayer,
-        const wxPoint& aPos, int aSize, int aWidth ) :
+                        const wxPoint& aPos, int aSize, int aWidth ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
 {
-    m_Shape = aShape;
-    m_layer = aLayer;
-    m_Pos   = aPos;
-    m_Size  = aSize;
-    m_Width = aWidth;
+    m_shape     = aShape;
+    m_layer     = aLayer;
+    m_pos       = aPos;
+    m_size      = aSize;
+    m_lineWidth = aWidth;
 }
 
 
@@ -62,9 +62,9 @@ PCB_TARGET::~PCB_TARGET()
 
 bool PCB_TARGET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int dX = aPosition.x - m_Pos.x;
-    int dY = aPosition.y - m_Pos.y;
-    int radius = aAccuracy + ( m_Size / 2 );
+    int dX = aPosition.x - m_pos.x;
+    int dY = aPosition.y - m_pos.y;
+    int radius = aAccuracy + ( m_size / 2 );
     return abs( dX ) <= radius && abs( dY ) <= radius;
 }
 
@@ -83,16 +83,16 @@ bool PCB_TARGET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
 
 void PCB_TARGET::Rotate(const wxPoint& aRotCentre, double aAngle)
 {
-    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    RotatePoint( &m_pos, aRotCentre, aAngle );
 }
 
 
 void PCB_TARGET::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
-        m_Pos.x = aCentre.x - ( m_Pos.x - aCentre.x );
+        m_pos.x = aCentre.x - ( m_pos.x - aCentre.x );
     else
-        m_Pos.y = aCentre.y - ( m_Pos.y - aCentre.y );
+        m_pos.y = aCentre.y - ( m_pos.y - aCentre.y );
 
     SetLayer( FlipLayer( GetLayer() ) );
 }
@@ -101,12 +101,18 @@ void PCB_TARGET::Flip(const wxPoint& aCentre, bool aFlipLeftRight )
 const EDA_RECT PCB_TARGET::GetBoundingBox() const
 {
     EDA_RECT bBox;
-    bBox.SetX( m_Pos.x - m_Size/2 );
-    bBox.SetY( m_Pos.y - m_Size/2 );
-    bBox.SetWidth( m_Size );
-    bBox.SetHeight( m_Size );
+    bBox.SetX( m_pos.x - m_size / 2 );
+    bBox.SetY( m_pos.y - m_size / 2 );
+    bBox.SetWidth( m_size );
+    bBox.SetHeight( m_size );
 
     return bBox;
+}
+
+
+std::shared_ptr<SHAPE> PCB_TARGET::GetEffectiveShape( PCB_LAYER_ID aLayer ) const
+{
+    return std::make_shared<SHAPE_CIRCLE>( m_pos, m_size / 2 );
 }
 
 

@@ -34,10 +34,10 @@ class LINE_READER;
 
 class PCB_TARGET : public BOARD_ITEM
 {
-    int     m_Shape;            // bit 0 : 0 = draw +, 1 = draw X
-    int     m_Size;
-    int     m_Width;
-    wxPoint m_Pos;
+    int     m_shape;            // bit 0 : 0 = draw +, 1 = draw X
+    int     m_size;
+    int     m_lineWidth;
+    wxPoint m_pos;
 
 public:
     PCB_TARGET( BOARD_ITEM* aParent );
@@ -57,21 +57,21 @@ public:
         return aItem && PCB_TARGET_T == aItem->Type();
     }
 
-    void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
-    wxPoint GetPosition() const override { return m_Pos; }
+    void SetPosition( const wxPoint& aPos ) override { m_pos = aPos; }
+    wxPoint GetPosition() const override { return m_pos; }
 
-    void SetShape( int aShape )     { m_Shape = aShape; }
-    int GetShape() const            { return m_Shape; }
+    void SetShape( int aShape )     { m_shape = aShape; }
+    int GetShape() const            { return m_shape; }
 
-    void SetSize( int aSize )       { m_Size = aSize; }
-    int GetSize() const             { return m_Size; }
+    void SetSize( int aSize )       { m_size = aSize; }
+    int GetSize() const             { return m_size; }
 
-    void SetWidth( int aWidth )     { m_Width = aWidth; }
-    int GetWidth() const            { return m_Width; }
+    void SetWidth( int aWidth )     { m_lineWidth = aWidth; }
+    int GetWidth() const            { return m_lineWidth; }
 
     void Move( const wxPoint& aMoveVector ) override
     {
-        m_Pos += aMoveVector;
+        m_pos += aMoveVector;
     }
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
@@ -88,6 +88,8 @@ public:
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
+
+    std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 

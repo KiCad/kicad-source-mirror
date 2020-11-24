@@ -154,9 +154,7 @@ std::shared_ptr<SHAPE> BOARD_ITEM::GetEffectiveShape( PCB_LAYER_ID aLayer ) cons
 {
     std::shared_ptr<SHAPE> shape;
 
-    int unimplemented_get_effective_shape = 0;
-    assert( unimplemented_get_effective_shape );
-    (void) unimplemented_get_effective_shape;
+    wxFAIL_MSG( "GetEffectiveShape() not implemented for " + GetClass() );
 
     return shape;
 }
