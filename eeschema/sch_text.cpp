@@ -203,29 +203,11 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 {
     wxPoint pt = GetTextPos();
     RotatePoint( &pt, aPosition, 900 );
-    SetTextPos( pt );
+    wxPoint offset = pt - GetTextPos();
 
-    SetLabelSpinStyle( GetLabelSpinStyle().RotateCW() );
+    Rotate90( false );
 
-    if( this->Type() == SCH_TEXT_T )
-    {
-        int dy = 0;
-
-        switch( GetLabelSpinStyle() )
-        {
-        case LABEL_SPIN_STYLE::LEFT:
-        case LABEL_SPIN_STYLE::RIGHT:
-            dy = GetTextHeight();
-            break;
-        case LABEL_SPIN_STYLE::UP:
-        case LABEL_SPIN_STYLE::BOTTOM:
-        default:
-            dy = 0;
-            break;
-        }
-
-        SetTextY( GetTextPos().y + dy );
-    }
+    SetTextPos( GetTextPos() + offset );
 }
 
 

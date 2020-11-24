@@ -136,7 +136,30 @@ public:
     /// Returns the center point of the selection area bounding box.
     virtual VECTOR2I GetCenter() const
     {
-        return static_cast<VECTOR2I>( GetBoundingBox().Centre() );
+        KICAD_T labelTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
+        bool includeLabels = true;
+
+        // If the selection contains at least one non-label then don't include labels when
+        // calculating the centerpoint.
+
+        for( EDA_ITEM* item : m_items )
+        {
+            if( !item->IsType( labelTypes ) )
+            {
+                includeLabels = false;
+                break;
+            }
+        }
+
+        EDA_RECT bbox;
+
+        for( EDA_ITEM* item : m_items )
+        {
+            if( !item->IsType( labelTypes ) || includeLabels )
+                bbox.Merge( item->GetBoundingBox() );
+        }
+
+        return static_cast<VECTOR2I>( bbox.Centre() );
     }
 
     virtual const BOX2I ViewBBox() const override
