@@ -37,11 +37,11 @@
 #include <wx_html_report_panel.h>
 
 
-#define ID_MATCH_FP_ALL     4200
+#define ID_MATCH_FP_ALL      4200
 #define ID_MATCH_FP_SELECTED 4201
-#define ID_MATCH_FP_REF     4202
-#define ID_MATCH_FP_VAL     4203
-#define ID_MATCH_FP_ID      4204
+#define ID_MATCH_FP_REF      4202
+#define ID_MATCH_FP_VAL      4203
+#define ID_MATCH_FP_ID       4204
 
 
 int g_matchModeForUpdate           = ID_MATCH_FP_ALL;
@@ -49,11 +49,12 @@ int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
 int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 
-bool g_removeExtraTextItems[2]  = { false, false };
-bool g_resetTextItemLayers[2]   = { false, true };
-bool g_resetTextItemEffects[2]  = { false, true };
-bool g_resetFabricationAttrs[2] = { false, true };
-bool g_reset3DModels[2]         = { false, true };
+                               // { update, change }
+bool g_removeExtraTextItems[2]  = { false,  false  };
+bool g_resetTextItemLayers[2]   = { false,  true   };
+bool g_resetTextItemEffects[2]  = { false,  true   };
+bool g_resetFabricationAttrs[2] = { false,  true   };
+bool g_reset3DModels[2]         = { true,   true   };
 
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
@@ -75,9 +76,16 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
         m_matchSpecifiedID->SetLabel( _( "Change footprints with library id:" ) );
         m_resetTextItemLayers->SetLabel( _( "Update text layers and visibilities" ) );
         m_resetTextItemEffects->SetLabel( _( "Update text sizes, styles and positions" ) );
-        m_resetFabricationAttrs->SetLabel( _( "Update fabrications attributes" ) );
+        m_resetFabricationAttrs->SetLabel( _( "Update fabrication attributes" ) );
         m_reset3DModels->SetLabel( _( "Update 3D models" ) );
     }
+
+#if 0  // translator hint
+    wxString x = _( "Update/reset strings: there are two cases these descriptions need to cover: "
+                    "the user made overrides to a footprint on the PCB and wants to remove them, "
+                    "or the user made changes to the library footprint and wants to propagate "
+                    "them back to the PCB." );
+#endif
 
     if( m_updateMode )
     {

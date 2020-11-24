@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -98,16 +98,16 @@ DIALOG_EXCHANGE_FOOTPRINTS_BASE::DIALOG_EXCHANGE_FOOTPRINTS_BASE( wxWindow* pare
 
 	m_updateOptionsSizer->Add( m_removeExtraBox, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetTextItemLayers = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text layers and visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetTextItemLayers, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetTextItemEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset text sizes, styles and positions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetTextItemEffects, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFabricationAttrs = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset fabrication attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFabricationAttrs, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_reset3DModels = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset 3D models"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_reset3DModels, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
