@@ -174,9 +174,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     m_removeButton->SetBitmap( KiBitmap( trash_xpm ) );
 
     // wxFormBuilder doesn't include this event...
-    m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,
-                             wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
-                             NULL, this );
+    m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ), NULL, this );
 
     m_netclassGrid->EndBatch();
     m_membershipGrid->EndBatch();
@@ -192,9 +190,7 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
     m_netclassGrid->PopEventHandler( true );
     m_membershipGrid->PopEventHandler( true );
 
-    m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
-                                wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ),
-                                NULL, this );
+    m_netclassGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( PANEL_SETUP_NETCLASSES::OnNetclassGridCellChanging ), NULL, this );
 }
 
 
@@ -522,22 +518,12 @@ void PANEL_SETUP_NETCLASSES::OnSizeNetclassGrid( wxSizeEvent& event )
 
 void PANEL_SETUP_NETCLASSES::AdjustMembershipGridColumns( int aWidth )
 {
-    // When a class name choice widget is selected (activated), resizing
-    // the wxGrid parent is not taken in account by the widget until it is
-    // dselected. So we deselect it if this is the case
-    int c_row = m_membershipGrid->GetGridCursorRow();
-    int c_col = m_membershipGrid->GetGridCursorCol();
-
-    if( c_col == 1 )    // this means the class name choice widget is selected (opened)
-        m_membershipGrid->SetGridCursor( c_row, 0 );    // Close it
-
     // Account for scroll bars
     aWidth -= ( m_membershipGrid->GetSize().x - m_membershipGrid->GetClientSize().x );
 
-    int classNameWidth = m_originalColWidths[ 0 ];
     // Set className column width to original className width from netclasses grid
+    int classNameWidth = m_originalColWidths[ 0 ];
     m_membershipGrid->SetColSize( 1, m_originalColWidths[ 0 ] );
-
     m_membershipGrid->SetColSize( 0, std::max( aWidth - classNameWidth, classNameWidth ) );
 }
 
