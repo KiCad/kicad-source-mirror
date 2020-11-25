@@ -368,9 +368,6 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 
 void DXF_IMPORT_PLUGIN::addPolyline(const DL_PolylineData& aData )
 {
-    if( m_currentBlock != nullptr )
-        return;
-
     // Convert DXF Polylines into a series of KiCad Lines and Arcs.
     // A Polyline (as opposed to a LWPolyline) may be a 3D line or
     // even a 3D Mesh. The only type of Polyline which is guaranteed

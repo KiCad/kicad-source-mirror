@@ -163,8 +163,6 @@ public:
     bool m_bold;
     bool m_italic;
 
-    GRAPHICS_IMPORTER_BUFFER m_buffer;
-
     DXF_IMPORT_STYLE( wxString aName, double aTextHeight, double aWidthFactor, bool aBold, bool aItalic )
     {
         m_name = aName;
