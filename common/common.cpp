@@ -307,7 +307,9 @@ bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
 
     if( !wxFileName::DirExists( outputPath ) )
     {
-        if( wxMkdir( outputPath ) )
+        // Make every directory provided when the provided path doesn't exist
+        // Fixes GitLab Issue #6394
+        if( wxFileName::Mkdir( outputPath, wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
         {
             if( aReporter )
             {
