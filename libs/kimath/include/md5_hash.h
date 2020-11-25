@@ -32,8 +32,10 @@ public:
 
     /** @return Build a hexadecimal string from the 16 bytes of MD5_HASH
      *  Mainly for debug purposes.
+     * @param aCompactForm = false to generate a string with spaces between each byte (2 chars)
+     * = true to generate a string filled with 32 hexadecimal chars
      */
-    std::string Format();
+    std::string Format( bool aCompactForm = false );
 
 private:
     struct MD5_CTX {

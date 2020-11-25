@@ -521,10 +521,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             }
 
             // this string _must_ be unique for a given physical shape
-            snprintf( name, sizeof(name), "RoundRect%sPad_%.6gx%.6g_%.6g_um",
+            snprintf( name, sizeof(name), "RoundRect%sPad_%.6gx%.6g_%.6g_um_%f_%X",
                       uniqifier.c_str(),
                       IU2um( aPad->GetSize().x ),
-                      IU2um( aPad->GetSize().y ), IU2um( rradius ) );
+                      IU2um( aPad->GetSize().y ), IU2um( rradius ),
+                      doChamfer ? aPad->GetChamferRectRatio() : 0.0,
+                      doChamfer ? aPad->GetChamferPositions() : 0 );
 
             name[ sizeof(name) - 1 ] = 0;
 
@@ -573,11 +575,12 @@ PADSTACK* SPECCTRA_DB::makePADSTACK( BOARD* aBoard, PAD* aPad )
             }
 
             // this string _must_ be unique for a given physical shape, so try to make it unique
+            MD5_HASH hash  = pad_shape.GetHash();
             EDA_RECT rect = aPad->GetBoundingBox();
-            snprintf( name, sizeof(name), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um",
+            snprintf( name, sizeof(name), "Cust%sPad_%.6gx%.6g_%.6gx_%.6g_%d_um_%s",
                      uniqifier.c_str(), IU2um( aPad->GetSize().x ), IU2um( aPad->GetSize().y ),
                      IU2um( rect.GetWidth() ), IU2um( rect.GetHeight() ),
-                     (int)polygonal_shape.size() );
+                     (int)polygonal_shape.size(), hash.Format( true ).c_str() );
             name[ sizeof(name)-1 ] = 0;
 
             padstack->SetPadstackId( name );

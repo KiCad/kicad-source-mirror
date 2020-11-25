@@ -90,7 +90,7 @@ bool MD5_HASH::operator!=( const MD5_HASH& aOther ) const
 }
 
 
-std::string MD5_HASH::Format()
+std::string MD5_HASH::Format( bool aCompactForm )
 {
     std::string data;
 
@@ -109,7 +109,9 @@ std::string MD5_HASH::Format()
 
          data += msb;
          data += lsb;
-         data += ' ';
+
+        if( !aCompactForm )
+            data += ' ';
     }
 
     return data;
