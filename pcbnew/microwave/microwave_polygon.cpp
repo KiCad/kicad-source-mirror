@@ -162,19 +162,21 @@ void MWAVE_POLYGONAL_SHAPE_DLG::OnOkClick( wxCommandEvent& event )
 void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
 {
     static wxString lastpath;       // To remember the last open path during a session
+    wxString fullFileName;
     wxString mask = wxFileSelectorDefaultWildcardStr;
 
-    wxString FullFileName = EDA_FILE_SELECTOR( _( "Read descr shape file" ), lastpath,
-                                               FullFileName, wxEmptyString, mask, this,
-                                               wxFD_OPEN, true );
-    if( FullFileName.IsEmpty() )
+    fullFileName = EDA_FILE_SELECTOR( _( "Read descr shape file" ), lastpath,
+                                      fullFileName, wxEmptyString, mask, this,
+                                      wxFD_OPEN, true );
+
+    if( fullFileName.IsEmpty() )
         return;
 
-    wxFileName fn( FullFileName );
+    wxFileName fn( fullFileName );
     lastpath = fn.GetPath();
     PolyEdges.clear();
 
-    FILE* File = wxFopen( FullFileName, wxT( "rt" ) );
+    FILE* File = wxFopen( fullFileName, wxT( "rt" ) );
 
     if( File == NULL )
     {
@@ -185,7 +187,7 @@ void MWAVE_POLYGONAL_SHAPE_DLG::ReadDataShapeDescr( wxCommandEvent& event )
     double   unitconv = IU_PER_MM;
     ShapeScaleX = ShapeScaleY = 1.0;
 
-    FILE_LINE_READER fileReader( File, FullFileName );
+    FILE_LINE_READER fileReader( File, fullFileName );
     FILTER_READER reader( fileReader );
 
     LOCALE_IO   toggle;

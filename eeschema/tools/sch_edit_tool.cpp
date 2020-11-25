@@ -207,10 +207,11 @@ bool SCH_EDIT_TOOL::Init()
                 if( aSel.GetSize() == 0 )
                     return true;            // Show worksheet properties
 
-                SCH_ITEM*           firstItem = dynamic_cast<SCH_ITEM*>( aSel.Front() );
+                SCH_ITEM*           firstItem   = dynamic_cast<SCH_ITEM*>( aSel.Front() );
                 const EE_SELECTION* eeSelection = dynamic_cast<const EE_SELECTION*>( &aSel );
 
-                wxCHECK( firstItem, false );
+                if( !firstItem || !eeSelection )
+                    return false;
 
                 switch( firstItem->Type() )
                 {

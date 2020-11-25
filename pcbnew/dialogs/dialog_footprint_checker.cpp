@@ -87,14 +87,14 @@ void DIALOG_FOOTPRINT_CHECKER::runChecks()
     }
 
     OUTLINE_ERROR_HANDLER errorHandler =
-            [&]( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* itemB, const wxPoint& pt )
+            [&]( const wxString& aMsg, BOARD_ITEM* aItemA, BOARD_ITEM* aItemB, const wxPoint& aPt )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MALFORMED_COURTYARD );
 
-                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
-                drcItem->SetItems( itemA, itemB );
+                drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + aMsg );
+                drcItem->SetItems( aItemA, aItemB );
 
-                PCB_MARKER* marker = new PCB_MARKER( drcItem, pt );
+                PCB_MARKER* marker = new PCB_MARKER( drcItem, aPt );
                 board->Add( marker );
                 m_frame->GetCanvas()->GetView()->Add( marker );
             };

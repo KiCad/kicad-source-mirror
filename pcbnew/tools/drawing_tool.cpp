@@ -2032,14 +2032,14 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
                 evt->SetPassEvent();
             }
         }
-        else if( evt->IsAction( &ACTIONS::updateUnits ) )
+        /*else if( evt->IsAction( &ACTIONS::updateUnits ) )
         {
             // If we ever have an assistant here that reports dimensions, we'll want to
             // update its units here....
             // zoneAsst.SetUnits( frame()->GetUserUnits() );
             // m_view->Update( &zoneAsst );
             evt->SetPassEvent();
-        }
+        }*/
         else
         {
             evt->SetPassEvent();

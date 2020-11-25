@@ -165,7 +165,7 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 
     // Here a "suffix" == an extension with a preceding '.',
     // so skip the preceding '.' to get an extension
-    fn.SetExt( KIFACE_SUFFIX + 1 );         // + 1 => &KIFACE_SUFFIX[1]
+    fn.SetExt( &KIFACE_SUFFIX[1] );
 
     return fn.GetFullPath();
 }

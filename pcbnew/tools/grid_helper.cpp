@@ -609,7 +609,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
                     break;
 
                 case S_POLYGON:
-                    for( const VECTOR2I& p : shape->BuildPolyPointsList() )
+                    for( const wxPoint& p : shape->BuildPolyPointsList() )
                         addAnchor( p, CORNER | SNAPPABLE, shape );
 
                     break;
