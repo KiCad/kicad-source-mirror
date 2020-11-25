@@ -106,6 +106,10 @@ void KIUI::SelectReferenceNumber( wxTextEntry* aTextEntry )
     {
         aTextEntry->SetSelection( ref.find_first_of( '?' ), ref.find_last_of( '?' ) + 1 );
     }
+    else if( ref.find_first_of( '*' ) != ref.npos )
+    {
+        aTextEntry->SetSelection( ref.find_first_of( '*' ), ref.find_last_of( '*' ) + 1 );
+    }
     else
     {
         wxString num = ref;

@@ -329,6 +329,7 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style"></property>
+                                <event name="OnSetFocus">OnSetFocusText</event>
                                 <event name="OnTextEnter">OnOkClick</event>
                             </object>
                         </object>

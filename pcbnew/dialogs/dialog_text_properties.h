@@ -43,6 +43,13 @@ public:
     DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
     ~DIALOG_TEXT_PROPERTIES();
 
+    /**
+     * Used to select the variant part of some text fields (for instance, the question mark
+     * or number in a reference).
+     * @param event
+     */
+    virtual void OnSetFocusText( wxFocusEvent& event ) override;
+
 private:
     PCB_BASE_EDIT_FRAME* m_Parent;
     BOARD_ITEM*          m_item;        // FP_TEXT, PCB_TEXT, or DIMENSION

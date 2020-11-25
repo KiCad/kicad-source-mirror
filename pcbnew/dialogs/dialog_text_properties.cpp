@@ -48,8 +48,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
     m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
-    m_linesThickness( aParent, m_LineThicknessLabel, m_LineThicknessCtrl,
-                      m_LineThicknessUnits, true ),
+    m_linesThickness( aParent, m_LineThicknessLabel, m_LineThicknessCtrl, m_LineThicknessUnits,
+                      true ),
     m_OrientValidator( 1, &m_OrientValue )
 {
     wxString title;
@@ -224,6 +224,28 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
     {
         aEvent.Skip();
     }
+}
+
+
+void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
+{
+#ifdef __WXGTK__
+    // Force an update of the text control before setting the text selection
+    // This is needed because GTK seems to ignore the selection on first update
+    //
+    // Note that we can't do this on OSX as it tends to provoke Apple's
+    // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
+    // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
+    if( m_fieldId == REFERENCE_FIELD || m_fieldId == VALUE_FIELD || m_fieldId == SHEETNAME_V )
+        m_TextCtrl->Update();
+#endif
+
+    if( m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
+        KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
+    else
+        m_SingleLineText->SetSelection( -1, -1 );
+
+    event.Skip();
 }
 
 
