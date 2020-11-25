@@ -539,8 +539,8 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
-void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOARD* aBoard,
-                                           std::vector<BOARD_ITEM*>& aPastedItems )
+static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOARD* aBoard,
+                                                  std::vector<BOARD_ITEM*>& aPastedItems )
 {
     FOOTPRINT* editorFootprint = aBoard->GetFirstFootprint();
 
@@ -554,6 +554,10 @@ void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOARD* aBo
 
     aClipFootprint->Pads().clear();
 
+    // Not all graphic items can be added to the current footprint:
+    // Reference and value are already existing in the current footprint, and
+    // must be unique.
+    // So they will be skipped
     for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {
         if( item->Type() == PCB_FP_SHAPE_T )
@@ -568,12 +572,7 @@ void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOARD* aBo
             FP_TEXT* text = static_cast<FP_TEXT*>( item );
 
             if( text->GetType() != FP_TEXT::TEXT_is_DIVERS )
-                text->SetType( FP_TEXT::TEXT_is_DIVERS );
-
-            if( text->GetText() == "${VALUE}" )
-                text->SetText( aClipFootprint->GetValue() );
-            else if( text->GetText() == "${REFERENCE}" )
-                text->SetText( aClipFootprint->GetReference() );
+                continue;
 
             text->SetTextAngle( aClipFootprint->GetOrientation() );
 
@@ -594,32 +593,6 @@ void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOARD* aBo
     }
 
     aClipFootprint->Groups().clear();
-
-    if( !aClipFootprint->GetReference().IsEmpty() )
-    {
-        FP_TEXT* text = new FP_TEXT( aClipFootprint->Reference() );
-        text->SetType( FP_TEXT::TEXT_is_DIVERS );
-        text->SetTextAngle( aClipFootprint->GetOrientation() );
-
-        text->SetParent( nullptr );
-        text->SetLocalCoord();
-
-        text->SetParent( editorFootprint );
-        aPastedItems.push_back( text );
-    }
-
-    if( !aClipFootprint->GetValue().IsEmpty() )
-    {
-        FP_TEXT* text = new FP_TEXT( aClipFootprint->Value() );
-        text->SetType( FP_TEXT::TEXT_is_DIVERS );
-        text->SetTextAngle( aClipFootprint->GetOrientation() );
-
-        text->SetParent( nullptr );
-        text->SetLocalCoord();
-
-        text->SetParent( editorFootprint );
-        aPastedItems.push_back( text );
-    }
 }
 
 

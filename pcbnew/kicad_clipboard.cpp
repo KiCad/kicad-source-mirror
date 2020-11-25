@@ -100,6 +100,13 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isFoot
     {
         FOOTPRINT partialFootprint( m_board );
 
+        // Usefull to copy the selection to the board editor (if any), and provides
+        // a dummy lib id.
+        // Perhaps not a good Id, but better than a empty id
+        KIID dummy;
+        LIB_ID id( "clipboard", dummy.AsString() );
+        partialFootprint.SetFPID( id );
+
         for( const EDA_ITEM* item : aSelected )
         {
             const PCB_GROUP* group = dynamic_cast<const PCB_GROUP*>( item );
@@ -109,10 +116,6 @@ void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isFoot
                 clone = static_cast<BOARD_ITEM*>( group->DeepClone() );
             else
                 clone = static_cast<BOARD_ITEM*>( item->Clone() );
-
-            // Do not add reference/value - convert them to the common type
-            if( FP_TEXT* text = dyn_cast<FP_TEXT*>( clone ) )
-                text->SetType( FP_TEXT::TEXT_is_DIVERS );
 
             // If it is only a footprint, clear the nets from the pads
             if( PAD* pad = dyn_cast<PAD*>( clone ) )
