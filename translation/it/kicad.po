@@ -100,10 +100,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-13 16:57+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
-"source/it/>\n"
+"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/kicad/"
+"master-source/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -250,9 +250,8 @@ msgid "failed to open file"
 msgstr "fallita l'apertura file"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "Contorni scheda"
+msgstr "Crea contorni scheda"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
@@ -356,14 +355,12 @@ msgid "Loading..."
 msgstr "Caricamento..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Carica OpenGL: scheda"
+msgstr "Carica raytracing: scheda"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Carica OpenGL: strati"
+msgstr "Carica raytracing: strati"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
@@ -558,14 +555,14 @@ msgstr "Ritaglia la maschera di saldatura all'anello del via"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr "Piazzole non metallizzate in rame come semplice rame"
+msgstr "Piazzole non metallizzate in rame come rame"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
 msgstr ""
-"Mostra le piazzole metallizzate come metallizzate ma l'altro rame come "
-"materiale rame grezzo. (lento)"
+"Mostra le piazzole metallizzate come metallizzate ma le altre come rame. "
+"(lento)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
@@ -1504,7 +1501,7 @@ msgstr "Soglia bianco / nero:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Regola il livello di conversione da scala di grigi a bianco e nero."
+msgstr "Regola il livello di conversione da scala di grigi a bianco e nero"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:176
 #: gerbview/gerber_file_image.cpp:352
@@ -1662,7 +1659,7 @@ msgstr "Attenzione"
 
 #: common/confirm.cpp:155 common/confirm.cpp:182
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Non salvando, tutte le modifiche andranno perse."
+msgstr "Non salvando, tutte le modifiche andranno perse!"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:646
@@ -1776,11 +1773,11 @@ msgstr "GNU General Public License (GPL) versione 3 o successive"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr "Squadra di sviluppo principale"
+msgstr "Gruppo di sviluppo principale"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr "Squadra di sviluppo apprendisti"
+msgstr "Gruppo di sviluppo apprendisti"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -1792,7 +1789,7 @@ msgstr "Altri"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr "Squadra Librerie KiCad"
+msgstr "Gruppo Librerie KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -3627,7 +3624,7 @@ msgstr "Tutti"
 #: eeschema/dialogs/dialog_erc_base.cpp:80
 #: pcbnew/dialogs/dialog_drc_base.cpp:163
 msgid "Warnings"
-msgstr "Avvisi"
+msgstr "Avvisi:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
 msgid "Actions"
@@ -5790,7 +5787,7 @@ msgstr "Commuta unità"
 
 #: common/tool/actions.cpp:484
 msgid "Switch between imperial and metric units"
-msgstr "Commuta tra unità in pollici e millimetri"
+msgstr "Commuta tra unità in pollici e  millimetri"
 
 #: common/tool/actions.cpp:489
 msgid "Polar Coordinates"
@@ -6532,9 +6529,9 @@ msgid "Equivalence File Load Error"
 msgstr "Errore nel caricamento file equivalenze"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu equivalenze impronte/cmp trovate."
+msgstr "Trovate %lu equivalenze impronte/simbolo."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -9411,7 +9408,7 @@ msgstr "Incolla speciale"
 #: eeschema/dialogs/dialog_pin_properties.cpp:51
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
 msgid "Alternate Pin Name"
-msgstr "Nome pin alternativo"
+msgstr "Nome pin alternativo:"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:267
 msgid "Alternate pin definitions must have a name."
@@ -11548,8 +11545,8 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
-"Sono stati effettuati dei cambiamenti ad una o più librerie di simboli.\n"
-"I cambiamenti devono essere salvati o annullati prima che la tabela librerie "
+"Sono stati effettuati dei cambiamenti ad una o più librerie di simboli.  I "
+"cambiamenti devono essere salvati o annullati prima che la tabela librerie "
 "di simboli possa venire modificata."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:883
@@ -12782,7 +12779,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "Il simbolo di potenza crea una etichetta globale con nome \"%s\""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:64
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -14702,7 +14699,7 @@ msgstr ""
 "È necessario eseguire il gestore di progetti KiCad e creare un progetto."
 
 #: eeschema/tools/backannotate.cpp:159
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no associated symbol."
 msgstr "L'impronta \"%s\" non ha un simbolo associato."
 
@@ -14713,21 +14710,20 @@ msgstr ""
 "Le impronte del C.S. \"%s\" e \"%s\" sono collegate allo stesso simbolo"
 
 #: eeschema/tools/backannotate.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find symbol for footprint '%s'."
-msgstr "Impossibile trovare un simbolo per l'impronta \"%s\""
+msgstr "Impossibile trovare un simbolo per l'impronta \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find footprint for symbol '%s'."
-msgstr "Impossibile trovare un'impronta per il simbolo \"%s\""
+msgstr "Impossibile trovare un'impronta per il simbolo \"%s\"."
 
 #: eeschema/tools/backannotate.cpp:297
-#, fuzzy
 msgid "Cannot relink footprints because schematic is not fully annotated."
 msgstr ""
 "Impossibile ri-collegare le impronte perché lo schema non è completamente "
-"annotato"
+"annotato."
 
 #: eeschema/tools/backannotate.cpp:323
 #, fuzzy, c-format
@@ -15733,7 +15729,7 @@ msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:296
 msgid "No off grid or duplicate pins were found."
-msgstr "Non è stato trovato nessun piedino duplicato o fuori griglia."
+msgstr "Non è stato trovato nessun piedino duplicato o fuori griglia"
 
 #: eeschema/tools/ee_selection_tool.cpp:1391
 #: pagelayout_editor/tools/pl_selection_tool.cpp:589
@@ -15761,7 +15757,7 @@ msgstr "Impossibile salvare il file \"%s\"."
 
 #: eeschema/tools/lib_control.cpp:366
 msgid "Filename:"
-msgstr "Nome file:"
+msgstr "Nome file"
 
 #: eeschema/tools/lib_control.cpp:435 eeschema/tools/lib_control.cpp:473
 msgid "No schematic currently open."
@@ -20034,15 +20030,15 @@ msgstr ""
 "Le impronte lato retro avranno \"%s\" inserito come prefisso."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Prior to sorting by %s, the coordinates of which will be rounded to a %s, %s "
 "grid."
 msgstr ""
 "\n"
-"Prima di ordinare per %s, le coordinate verranno normalizzate alla griglia "
-"%s, %s. "
+"Prima di ordinare per %s, le coordinate verranno arrotondate ad una griglia "
+"%s, %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:368
 msgid "footprint location"
@@ -20183,9 +20179,8 @@ msgstr ""
 "Riannotazione fallita!\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
-#, fuzzy
 msgid "Aborted: too many errors"
-msgstr "Interrotto: troppi errori "
+msgstr "Interrotto: troppi errori"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
 msgid ""
@@ -21410,7 +21405,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:210
 msgid "Dimension Text"
-msgstr "Testo dimensione"
+msgstr "Testo dimensione:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:219
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101
@@ -22466,47 +22461,40 @@ msgid "No hits"
 msgstr "Nessun riscontro"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
-#, fuzzy
 msgid "Search for:"
-msgstr "&Cerca:"
+msgstr "Cerca:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
-#, fuzzy
 msgid "Match case"
-msgstr "Distingue &maiuscole dalle minuscole"
+msgstr "Distingue le maiuscole"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Da capo"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
-#, fuzzy
 msgid "Search footprint reference designators"
-msgstr "Mostra i riferimenti delle impronte"
+msgstr "Cerca i riferimenti impronte"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
-#, fuzzy
 msgid "Search footprint values"
-msgstr "Mostra i valori delle impronte"
+msgstr "Cerca valori impronte"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
-#, fuzzy
 msgid "Search other text items"
-msgstr "Altri elementi testo impronte"
+msgstr "Cerca altri elementi testo"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
-#, fuzzy
 msgid "Search DRC markers"
-msgstr "Mostra regole DRC"
+msgstr "Cerca marcatori DRC"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:98
-#, fuzzy
 msgid "Find Previous"
-msgstr "Anteprima di stampa"
+msgstr "Trova il precedente"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "Ricomincia la ricerca"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
 #, fuzzy
@@ -22827,7 +22815,7 @@ msgstr "Cartella d'uscita:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
-msgstr "Formato file forature"
+msgstr "Formato file forature:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:44
 msgid "Excellon"
@@ -22909,7 +22897,7 @@ msgstr "Gerber"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
 msgid "Map File Format"
-msgstr "Formato file mappa"
+msgstr "Formato file mappa:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:86
 msgid "Creates a drill map in PS, HPGL or other formats"
@@ -23080,7 +23068,7 @@ msgstr "Filtro strati"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:100
 msgid "Current layer:"
-msgstr "Strato corrente:"
+msgstr "Strato corrente"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:72
 msgid "Delete Items"
@@ -23305,12 +23293,10 @@ msgid "The arc angle cannot be zero."
 msgstr "L'angolo dell'arco non può essere zero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:383
-#, fuzzy
 msgid "The radius cannot be zero."
-msgstr "L'angolo dell'arco non può essere zero."
+msgstr "Il raggio non può essere zero."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:389
-#, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "Il rettangolo non può essere vuoto."
 
@@ -23333,7 +23319,7 @@ msgstr "Punto di c. Bezier"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:145
 msgid "Arc angle:"
-msgstr "Angolo dell'arco:"
+msgstr "Angolo dell'arco"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1279
@@ -24835,7 +24821,7 @@ msgstr "Deseleziona tutti gli strati in rame"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:457
 msgid "Select all Layers"
-msgstr "Seleziona tutti gli strati"
+msgstr "Seleziona tutti gli strati:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:461
 msgid "Deselect all Layers"
@@ -24968,9 +24954,8 @@ msgid "Walk around"
 msgstr "Aggira"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
-#, fuzzy
 msgid "Mode"
-msgstr "Modello"
+msgstr "Modalità"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:34
 msgid "Mouse drag behavior:"
@@ -25620,7 +25605,7 @@ msgid ""
 "Show or hide the track and via clearance area. If \"New track\" is selected, "
 "track clearance area is shown only when creating the track."
 msgstr ""
-"Mostra / nasconde l'area di distanza piste e via. Se «Nuova pista» è "
+"Mostra / nasconde l'area di distanza piste e via.  Se «Nuova pista» è "
 "selezionato, l'area di distanza viene mostrata solo mentre si crea la pista."
 
 #: pcbnew/dialogs/panel_display_options_base.cpp:67
@@ -28085,9 +28070,8 @@ msgid "Footprint '%s' deleted from library '%s'"
 msgstr "Impronta \"%s\" cancellata dalla libreria \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:612
-#, fuzzy
 msgid "No footprints to export!"
-msgstr "Nessuna impronta da raccogliere!"
+msgstr "Nessuna impronta da esportare!"
 
 #: pcbnew/footprint_libraries_utils.cpp:788
 #: pcbnew/footprint_viewer_frame.cpp:728
@@ -28125,7 +28109,7 @@ msgid "Component \"%s\" replaced in \"%s\""
 msgstr "Componente \"%s\" sostituto in \"%s\""
 
 #: pcbnew/footprint_libraries_utils.cpp:977
-#, fuzzy, c-format
+#, c-format
 msgid "Component \"%s\" added in \"%s\""
 msgstr "Componente \"%s\" aggiunto in \"%s\""
 
@@ -28246,7 +28230,7 @@ msgstr "Valore \"%s\" di %s"
 #: pcbnew/fp_text.cpp:342
 #, c-format
 msgid "Footprint Text '%s' of %s"
-msgstr "Testo impronta '%s' su %s"
+msgstr "Testo impronta \"%s\" su %s"
 
 #: pcbnew/generate_footprint_info.cpp:42
 msgid "Documentation"
@@ -28519,9 +28503,8 @@ msgid "Hyperlynx..."
 msgstr "Hyperlynx..."
 
 #: pcbnew/menubar_pcb_editor.cpp:153
-#, fuzzy
 msgid "Export Footprints to Library..."
-msgstr "&Raccogli impronte nella libreria..."
+msgstr "Esporta impronte nella libreria..."
 
 #: pcbnew/menubar_pcb_editor.cpp:154
 msgid ""
@@ -28532,9 +28515,8 @@ msgstr ""
 "(non rimuove le altre impronte presenti in questa libreria)"
 
 #: pcbnew/menubar_pcb_editor.cpp:158
-#, fuzzy
 msgid "Export Footprints to New Library..."
-msgstr "&Raccogli impronte in nuova libreria..."
+msgstr "Esporta impronte nella nuova libreria..."
 
 #: pcbnew/menubar_pcb_editor.cpp:159
 msgid ""
@@ -29324,7 +29306,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:1208
 #, c-format
 msgid "Polygon on Altium layer %d has no KiCad equivalent. Ignore it instead"
-msgstr "Il poligono sullo strato Altium %d non ha equivalente KiCad. Ignoralo"
+msgstr "Il poligono sullo strato Altium  %d non ha equivalente KiCad. Ignoralo"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1220
 #: pcbnew/plugins/altium/altium_pcb.cpp:1448
@@ -30874,7 +30856,7 @@ msgstr "Inserire raggio stondamento:"
 #: pcbnew/tools/edit_tool.cpp:738 pcbnew/tools/edit_tool.cpp:899
 #: pcbnew/tools/pcb_actions.cpp:302
 msgid "Fillet Tracks"
-msgstr "Piste di stondamento"
+msgstr "Piste di stondamento:"
 
 #: pcbnew/tools/edit_tool.cpp:747
 msgid ""
@@ -32516,7 +32498,7 @@ msgstr "Risoluzione distanza per:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:363
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "Gli elementi appartengono allo stesso collegamento. La distanza è 0."
+msgstr "Gli elementi appartengono allo stesso collegamento.  La distanza è 0."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:388
 msgid "Select an item for a constraints resolution report."
