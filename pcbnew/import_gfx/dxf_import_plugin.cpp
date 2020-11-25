@@ -491,6 +491,7 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
         std::unique_ptr<IMPORTED_SHAPE> newShape = shape->clone();
 
         newShape->Translate( translation  );
+        newShape->Scale( aData.sx, aData.sy );
 
         m_internalImporter.AddShape( newShape );
     }

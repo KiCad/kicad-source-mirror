@@ -39,6 +39,7 @@ public:
     virtual std::unique_ptr<IMPORTED_SHAPE> clone() const = 0;
 
     virtual void Translate( const VECTOR2D& aVec ) = 0;
+    virtual void Scale( double scaleX, double scaleY ) = 0;
 };
 
 
@@ -66,6 +67,14 @@ public:
     {
         m_start += aVec;
         m_end += aVec;
+    }
+
+    void Scale( double scaleX, double scaleY ) override
+    {
+        m_start.x *= scaleX;
+        m_start.y *= scaleY;
+        m_end.x *= scaleX;
+        m_end.y *= scaleY;
     }
 
 private:
@@ -99,6 +108,15 @@ public:
     void Translate( const VECTOR2D& aVec ) override
     {
         m_center += aVec;
+    }
+
+    void Scale( double scaleX, double scaleY ) override
+    {
+        m_center.x *= scaleX;
+        m_center.y *= scaleY;
+
+        // we really can't handle scalex != scaleY cleanly...it would be an ellipse
+        m_radius *= scaleX;
     }
 
 private:
@@ -136,6 +154,15 @@ public:
         m_start += aVec;
     }
 
+    void Scale( double scaleX, double scaleY ) override
+    {
+        m_center.x *= scaleX;
+        m_center.y *= scaleY;
+
+        m_start.x *= scaleX;
+        m_start.y *= scaleY;
+    }
+
 private:
     VECTOR2D m_center;
     VECTOR2D m_start;
@@ -168,6 +195,15 @@ public:
         for( auto& vertex : m_vertices )
         {
             vertex += aVec;
+        }
+    }
+
+    void Scale( double scaleX, double scaleY ) override
+    {
+        for( auto& vertex : m_vertices )
+        {
+            vertex.x *= scaleX;
+            vertex.y *= scaleY;
         }
     }
 
@@ -208,6 +244,12 @@ public:
     void Translate( const VECTOR2D& aVec ) override
     {
         m_origin += aVec;
+    }
+
+    void Scale( double scaleX, double scaleY ) override
+    {
+        m_origin.x *= scaleX;
+        m_origin.y *= scaleY;
     }
 
 private:
@@ -251,6 +293,18 @@ public:
         m_bezierControl1 += aVec;
         m_bezierControl2 += aVec;
         m_end += aVec;
+    }
+
+    void Scale( double scaleX, double scaleY ) override
+    {
+        m_start.x *= scaleX;
+        m_start.y *= scaleY;
+        m_bezierControl1.x *= scaleX;
+        m_bezierControl1.y *= scaleY;
+        m_bezierControl2.x *= scaleX;
+        m_bezierControl2.y *= scaleY;
+        m_end.x *= scaleX;
+        m_end.y *= scaleY;
     }
 
 private:
