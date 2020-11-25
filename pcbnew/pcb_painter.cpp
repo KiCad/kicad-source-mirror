@@ -229,41 +229,47 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
     const BOARD_CONNECTED_ITEM* conItem = dynamic_cast<const BOARD_CONNECTED_ITEM*> ( aItem );
 
+    // Marker shadows
+    if( aLayer == LAYER_MARKER_SHADOWS )
+        return m_backgroundColor.WithAlpha( 0.6 );
+
+    if( !item )
+        return m_layerColors[aLayer];
+
+    // Pad hole color is pad-type-specific: the background color for PTHs (which are assumed
+    // to have an annular ring) and the pad color for NPTHs (which are assumed *not* to have
+    // an annular ring).
+    // However, this means a PTH pad with *no* annular ring won't get drawn, so we need to
+    // special-case that.
+    // We have the opposite issue when printing in B&W: both a PTH hole and its annular ring
+    // will normally get assigned black, so we need to special-case that too.
+    if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
+    {
+        const PAD* pad = static_cast<const PAD*>( item );
+        bool       hasAnnularRing = pad->GetSizeX() > pad->GetDrillSizeX()
+                                        && pad->GetSizeY() > pad->GetDrillSizeY();
+
+        if( !hasAnnularRing && m_layerColors[aLayer] == m_layerColors[LAYER_PCB_BACKGROUND] )
+            aLayer = LAYER_MOD_TEXT_INVISIBLE;
+
+        if( hasAnnularRing && m_layerColors[aLayer] == m_layerColors[LAYER_PADS_TH] )
+            aLayer = LAYER_PCB_BACKGROUND;
+    }
+
     // Zones should pull from the copper layer
     if( item && item->Type() == PCB_ZONE_T && IsZoneLayer( aLayer ) )
         aLayer = aLayer - LAYER_ZONE_START;
 
-    // Marker shadows
-    if( aLayer == LAYER_MARKER_SHADOWS )
-    {
-        COLOR4D shadowColor = m_backgroundColor.WithAlpha( 0.6 );
-
-        if( item && item->IsSelected() )
-            shadowColor.Brighten( m_selectFactor );
-
-        return shadowColor;
-    }
-
     // Normal path: get the layer base color
     COLOR4D color = m_layerColors[aLayer];
 
-    if( item )
-    {
-        // Selection disambiguation
-        if( item->IsBrightened() )
-            return color.Brightened( m_selectFactor ).WithAlpha( 0.8 );
+    // Selection disambiguation
+    if( item->IsBrightened() )
+        return color.Brightened( m_selectFactor ).WithAlpha( 0.8 );
 
-        // Don't let pads that *should* be NPTHs get lost
-        if( item->Type() == PCB_PAD_T && dyn_cast<const PAD*>( item )->PadShouldBeNPTH() )
-            aLayer = LAYER_MOD_TEXT_INVISIBLE;
-
-        if( item->IsSelected() )
-            color = m_layerColorsSel[aLayer];
-    }
-    else
-    {
-        return m_layerColors[aLayer];
-    }
+    // Normal selection
+    if( item->IsSelected() )
+        color = m_layerColorsSel[aLayer];
 
     // Try to obtain the netcode for the item
     if( conItem )
@@ -875,15 +881,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
     // Pad drawing
     BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
-    COLOR4D                color;
-
-    // Pad hole color is pad-type-specific: the background color for plated holes and the
-    // pad color for NPTHs.  However if a pad is mis-marked as plated but has no annular ring
-    // then it will get "lost" in the background.
-    if( aLayer == LAYER_PADS_PLATEDHOLES && aPad->PadShouldBeNPTH() )
-        color = m_pcbSettings.GetColor( aPad, LAYER_NON_PLATEDHOLES );
-    else
-        color = m_pcbSettings.GetColor( aPad, aLayer );
+    COLOR4D                color = m_pcbSettings.GetColor( aPad, aLayer );
 
     if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
     {
@@ -910,6 +908,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             m_gal->DrawCircle( seg->GetSeg().A, getDrillSize( aPad ).x / 2 );
         else
             m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
+    }
+    else if( aLayer == LAYER_PADS_TH
+                && aPad->GetSizeX() <= aPad->GetDrillSizeX()
+                && aPad->GetSizeY() <= aPad->GetDrillSizeY() )
+    {
+        // no annular ring to draw
     }
     else
     {

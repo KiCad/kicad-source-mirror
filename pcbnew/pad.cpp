@@ -1081,13 +1081,6 @@ EDA_ITEM* PAD::Clone() const
 }
 
 
-bool PAD::PadShouldBeNPTH() const
-{
-    return( m_attribute == PAD_ATTRIB_PTH
-            && m_drill.x >= m_size.x && m_drill.y >= m_size.y );
-}
-
-
 void PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 0;

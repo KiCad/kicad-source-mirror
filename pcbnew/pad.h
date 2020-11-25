@@ -614,13 +614,6 @@ public:
     }
 
     /**
-     * A pad whose hole is the same size as the pad is a NPTH.  However, if the user
-     * fails to mark this correctly then the pad will become invisible on the board.
-     * This check allows us to special-case this error-condition.
-     */
-    bool PadShouldBeNPTH() const;
-
-    /**
      * Rebuilds the effective shape cache (and bounding box and radius) for the pad and clears
      * the dirty bit.
      */
