@@ -1149,7 +1149,9 @@ struct DXFLIB_EXPORT DL_DimensionData
         style( astyle ),
         angle( aangle ),
         linearFactor( alinearFactor ),
-        dimScale( adimScale )
+        dimScale( adimScale ),
+        arrow1Flipped( false ),
+        arrow2Flipped(false )
     {
     }
 

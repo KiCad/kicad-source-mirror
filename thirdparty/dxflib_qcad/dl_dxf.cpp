@@ -370,7 +370,7 @@ bool DL_Dxf::getStrippedLine( std::string& s, unsigned int size,
 bool DL_Dxf::stripWhiteSpace( char** s, bool stripSpace )
 {
     // last non-NULL char:
-    std::size_t lastChar = strlen( *s ) - 1;
+    int lastChar = strlen( *s ) - 1;
 
     // Is last character CR or LF?
     while( (lastChar >= 0)
