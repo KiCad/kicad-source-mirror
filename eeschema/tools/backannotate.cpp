@@ -35,6 +35,7 @@
 #include <kicad_string.h>
 #include <kiface_i.h>
 #include <wildcards_and_files_ext.h>
+#include <connection_graph.h>
 
 BACK_ANNOTATE::BACK_ANNOTATE( SCH_EDIT_FRAME* aFrame, REPORTER& aReporter, bool aRelinkFootprints,
                               bool aProcessFootprints, bool aProcessValues,
@@ -304,8 +305,7 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
 void BACK_ANNOTATE::applyChangelist()
 {
-    std::set<wxString> handledNetChanges;
-    wxString           msg;
+    wxString msg;
 
     // Apply changes from change list
     for( CHANGELIST_ITEM& item : m_changelist )
@@ -389,17 +389,13 @@ void BACK_ANNOTATE::applyChangelist()
                     continue;
                 }
 
-                SCH_CONNECTION* conn = pin->Connection( &ref.GetSheetPath() );
+                SCH_CONNECTION* connection = pin->Connection( &ref.GetSheetPath() );
 
-                wxString key = shortNetName + ref.GetSheetPath().PathAsString();
-
-                if( handledNetChanges.count( key ) )
-                    continue;
-                else
-                    handledNetChanges.insert( key );
-
-                if( conn && conn->Name( true ) != shortNetName )
-                    processNetNameChange( conn, conn->Name( true ), shortNetName );
+                if( connection && connection->Name( true ) != shortNetName )
+                {
+                    processNetNameChange( ref.GetFullRef(), pin, connection,
+                                          connection->Name( true ), shortNetName );
+                }
             }
         }
     }
@@ -482,115 +478,65 @@ static LABEL_SPIN_STYLE orientLabel( SCH_PIN* aPin )
 }
 
 
-void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString& aOldName,
-                                          const wxString& aNewName )
+void addConnections( SCH_ITEM* aItem, const SCH_SHEET_PATH& aSheetPath,
+                     std::set<SCH_ITEM*>& connectedItems )
 {
-    wxString  msg;
-    SCH_ITEM* driver = aConn->Driver();
+    if( connectedItems.insert( aItem ).second )
+    {
+        for( SCH_ITEM* connectedItem : aItem->ConnectedItems( aSheetPath ) )
+            addConnections( connectedItem, aSheetPath, connectedItems );
+    }
+}
 
-    auto editMatchingLabels =
-            [this]( SCH_SCREEN* aScreen, KICAD_T aType, const wxString& oldName,
-                    const wxString& newName )
-            {
-                for( SCH_ITEM* schItem : aScreen->Items().OfType( aType ) )
-                {
-                    SCH_TEXT* label = static_cast<SCH_TEXT*>( schItem );
 
-                    if( EscapeString( label->GetShownText(), CTX_NETNAME ) == oldName )
-                    {
-                        m_frame->SaveCopyInUndoList( aScreen, label, UNDO_REDO::CHANGED,
-                                                     m_appendUndo );
-                        m_appendUndo = true;
-                        static_cast<SCH_TEXT*>( label )->SetText( newName );
-                    }
-                }
-            };
+void BACK_ANNOTATE::processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
+                                          const SCH_CONNECTION* aConnection,
+                                          const wxString& aOldName, const wxString& aNewName )
+{
+    wxString msg;
+
+    // Find a physically-connected driver.  We can't use the SCH_CONNECTION's m_driver because
+    // it has already been resolved by merging subgraphs with the same label, etc., and our
+    // name change may cause that resolution to change.
+
+    std::set<SCH_ITEM*>           connectedItems;
+    SCH_ITEM*                     driver = nullptr;
+    CONNECTION_SUBGRAPH::PRIORITY driverPriority = CONNECTION_SUBGRAPH::PRIORITY::NONE;
+
+    addConnections( aPin, aConnection->Sheet(), connectedItems );
+
+    for( SCH_ITEM* item : connectedItems )
+    {
+        CONNECTION_SUBGRAPH::PRIORITY priority = CONNECTION_SUBGRAPH::GetDriverPriority( item );
+
+        if( priority > driverPriority )
+        {
+            driver = item;
+            driverPriority = priority;
+        }
+    }
 
     switch( driver->Type() )
     {
     case SCH_LABEL_T:
-        ++m_changesCount;
-        msg.Printf( _( "Change '%s' labels to '%s'." ), aOldName, aNewName );
-
-        if( !m_dryRun )
-        {
-            SCH_SHEET_PATH sheet = aConn->Sheet();
-            SCH_SCREEN*    screen = sheet.LastScreen();
-
-            for( SCH_ITEM* label : screen->Items().OfType( SCH_LABEL_T ) )
-            {
-                SCH_CONNECTION* conn = label->Connection( &sheet );
-
-                if( conn && conn->Driver() == driver )
-                {
-                    m_frame->SaveCopyInUndoList( screen, label, UNDO_REDO::CHANGED, m_appendUndo );
-                    m_appendUndo = true;
-                    static_cast<SCH_TEXT*>( label )->SetText( aNewName );
-                }
-            }
-        }
-
-        m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
-        break;
-
     case SCH_GLOBAL_LABEL_T:
-        ++m_changesCount;
-        msg.Printf( _( "Change '%s' global labels to '%s'." ), aOldName, aNewName );
-
-        if( !m_dryRun )
-        {
-            for( const SCH_SHEET_PATH& sheet : m_frame->Schematic().GetSheets() )
-                editMatchingLabels( sheet.LastScreen(), SCH_GLOBAL_LABEL_T, aOldName, aNewName );
-        }
-
-        m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
-        break;
-
     case SCH_HIER_LABEL_T:
-        ++m_changesCount;
-        msg.Printf( _( "Change '%s' hierarchical label to '%s'." ), aOldName, aNewName );
-
-        if( !m_dryRun )
-        {
-            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
-            editMatchingLabels( screen, SCH_HIER_LABEL_T, aOldName, aNewName );
-
-            SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( driver->GetParent() );
-            wxASSERT( sheet );
-
-            if( !sheet )
-                break;
-
-            screen = sheet->GetScreen();
-
-            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-            {
-                if( EscapeString( pin->GetShownText(), CTX_NETNAME ) == aOldName )
-                {
-                    m_frame->SaveCopyInUndoList( screen, pin, UNDO_REDO::CHANGED, m_appendUndo );
-                    m_appendUndo = true;
-                    static_cast<SCH_TEXT*>( pin )->SetText( aNewName );
-                }
-            }
-        }
-
-        m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
-        break;
-
     case SCH_SHEET_PIN_T:
         ++m_changesCount;
-        msg.Printf( _( "Change '%s' hierarchical label to '%s'." ), aOldName, aNewName );
+
+        msg.Printf( _( "Change %s pin %s net label from '%s' to '%s'." ),
+                    aRef,
+                    aPin->GetNumber(),
+                    aOldName,
+                    aNewName );
 
         if( !m_dryRun )
         {
-            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
+            SCH_SCREEN* screen = aConnection->Sheet().LastScreen();
+
             m_frame->SaveCopyInUndoList( screen, driver, UNDO_REDO::CHANGED, m_appendUndo );
             m_appendUndo = true;
             static_cast<SCH_TEXT*>( driver )->SetText( aNewName );
-
-            SCH_SHEET* sheet = static_cast<SCH_SHEET_PIN*>( driver )->GetParent();
-            screen = sheet->GetScreen();
-            editMatchingLabels( screen, SCH_HIER_LABEL_T, aOldName, aNewName );
         }
 
         m_reporter.ReportHead( msg, RPT_SEVERITY_ACTION );
@@ -612,7 +558,10 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
         }
 
         ++m_changesCount;
-        msg.Printf( _( "Add label '%s' to net %s." ), aNewName, aOldName );
+        msg.Printf( _( "Add label '%s' to %s pin %s net." ),
+                    aNewName,
+                    aRef,
+                    aPin->GetNumber() );
 
         if( !m_dryRun )
         {
@@ -624,7 +573,7 @@ void BACK_ANNOTATE::processNetNameChange( SCH_CONNECTION* aConn, const wxString&
             label->SetLabelSpinStyle( spin );
             label->SetFlags( IS_NEW );
 
-            SCH_SCREEN* screen = aConn->Sheet().LastScreen();
+            SCH_SCREEN* screen = aConnection->Sheet().LastScreen();
             m_frame->AddItemToScreenAndUndoList( screen, label, m_appendUndo );
             m_appendUndo = true;
         }

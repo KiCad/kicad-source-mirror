@@ -141,7 +141,8 @@ private:
     */
     void applyChangelist();
 
-    void processNetNameChange( SCH_CONNECTION* aConn, const wxString& aOldName,
+    void processNetNameChange( const wxString& aRef, SCH_PIN* aPin,
+                               const SCH_CONNECTION* aConnection, const wxString& aOldName,
                                const wxString& aNewName );
 };
 

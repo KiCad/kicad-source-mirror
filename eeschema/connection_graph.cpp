@@ -1359,14 +1359,15 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Recache remaining valid subgraphs by sheet path
     m_sheet_to_subgraphs_map.clear();
-    for( auto subgraph : m_driver_subgraphs )
+
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
         m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
 
     // Next time through the subgraphs, we do some post-processing to handle things like
     // connecting bus members to their neighboring subgraphs, and then propagate connections
     // through the hierarchy
 
-    for( auto subgraph : m_driver_subgraphs )
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
     {
         if( !subgraph->m_dirty )
             continue;
@@ -2038,8 +2039,8 @@ std::vector<const CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigrati
 }
 
 
-CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName(
-        const wxString& aNetName, const SCH_SHEET_PATH& aPath )
+CONNECTION_SUBGRAPH* CONNECTION_GRAPH::FindSubgraphByName( const wxString& aNetName,
+                                                           const SCH_SHEET_PATH& aPath )
 {
     auto it = m_net_name_to_subgraphs_map.find( aNetName );
 

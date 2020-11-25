@@ -310,7 +310,9 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     }
 
     if( !text.IsEmpty() )
+    {
         m_CurrentText->SetText( text );
+    }
     else if( !m_CurrentText->IsNew() )
     {
         DisplayError( this, _( "Empty Text!" ) );

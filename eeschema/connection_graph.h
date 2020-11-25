@@ -321,8 +321,7 @@ private:
     std::vector<CONNECTION_SUBGRAPH*> m_driver_subgraphs;
 
     // Cache to lookup subgraphs in m_driver_subgraphs by sheet path
-    std::unordered_map<SCH_SHEET_PATH,
-                       std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
+    std::unordered_map<SCH_SHEET_PATH, std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
 
     std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
 
@@ -337,8 +336,7 @@ private:
     std::map< std::pair<SCH_SHEET_PATH, wxString>,
               std::vector<const CONNECTION_SUBGRAPH*> > m_local_label_cache;
 
-    std::unordered_map<wxString,
-                       std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
+    std::unordered_map<wxString, std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
 
     std::map<SCH_ITEM*, CONNECTION_SUBGRAPH*> m_item_to_subgraph_map;
 
