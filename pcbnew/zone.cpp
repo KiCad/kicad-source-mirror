@@ -373,6 +373,27 @@ bool ZONE::GetFilledPolysUseThickness( PCB_LAYER_ID aLayer ) const
 }
 
 
+static SHAPE_POLY_SET g_nullPoly;
+
+
+MD5_HASH ZONE::GetHashValue( PCB_LAYER_ID aLayer )
+{
+    if( !m_filledPolysHash.count( aLayer ) )
+        return g_nullPoly.GetHash();
+    else
+        return m_filledPolysHash.at( aLayer );
+}
+
+
+void ZONE::BuildHashValue( PCB_LAYER_ID aLayer )
+{
+    if( !m_FilledPolysList.count( aLayer ) )
+        m_filledPolysHash[aLayer] = g_nullPoly.GetHash();
+    else
+        m_filledPolysHash[aLayer] = m_FilledPolysList.at( aLayer ).GetHash();
+}
+
+
 bool ZONE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     // Normally accuracy is zoom-relative, but for the generic HitTest we just use

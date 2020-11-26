@@ -817,28 +817,16 @@ public:
     bool   GetHV45() const { return m_hv45; }
     void   SetHV45( bool aConstrain ) { m_hv45 = aConstrain; }
 
-    /** @return the hash value previously calculated by BuildHashValue().
-     * used in zone filling calculations
+    /**
+     * Build the hash value of m_FilledPolysList, and store it internally in m_filledPolysHash.
+     * Used in zone filling calculations, to know if m_FilledPolysList is up to date.
      */
-    MD5_HASH GetHashValue( PCB_LAYER_ID aLayer )
-    {
-        if( !m_filledPolysHash.count( aLayer ) )
-            return MD5_HASH();
+    void BuildHashValue( PCB_LAYER_ID aLayer );
 
-        return m_filledPolysHash.at( aLayer );
-    }
-
-    /** Build the hash value of m_FilledPolysList, and store it internally
-     *  in m_filledPolysHash.
-     *  Used in zone filling calculations, to know if m_FilledPolysList is up to date.
+    /**
+     * @return the hash value previously calculated by BuildHashValue().
      */
-    void BuildHashValue( PCB_LAYER_ID aLayer )
-    {
-        if( !m_FilledPolysList.count( aLayer ) )
-            return;
-
-        m_filledPolysHash[aLayer] = m_FilledPolysList.at( aLayer ).GetHash();
-    }
+    MD5_HASH GetHashValue( PCB_LAYER_ID aLayer );
 
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
