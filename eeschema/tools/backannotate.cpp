@@ -285,9 +285,11 @@ void BACK_ANNOTATE::checkForUnusedSymbols()
 
             if( ref.GetSymbol()->GetIncludeOnBoard() )
             {
-                wxString msg = wxString::Format( _( "Cannot find footprint for symbol '%s'." ),
+                wxString msg = wxString::Format( _( "Footprint '%s' is not present on PCB. "
+                                                    "Corresponding symbols in schematic must be "
+                                                    "manually deleted (if desired)." ),
                                                  m_refs[i++].GetFullRef() );
-                m_reporter.ReportTail( msg, RPT_SEVERITY_ERROR );
+                m_reporter.ReportTail( msg, RPT_SEVERITY_WARNING );
             }
         }
 
