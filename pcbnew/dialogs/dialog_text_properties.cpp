@@ -237,7 +237,7 @@ void DIALOG_TEXT_PROPERTIES::OnSetFocusText( wxFocusEvent& event )
     // "[NSAlert runModal] may not be invoked inside of transaction begin/commit pair"
     // bug.  See: https://bugs.launchpad.net/kicad/+bug/1837225
     if( m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
-        m_TextCtrl->Update();
+        m_SingleLineText->Update();
 #endif
 
     if( m_fpText->GetType() == FP_TEXT::TEXT_is_REFERENCE )
