@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-19 21:34+0000\n"
+"PO-Revision-Date: 2020-11-26 15:24+0100\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
 "source/de/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Poedit 2.4.2\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -27969,7 +27969,7 @@ msgstr "FEHLER im Ausdruck."
 #: pcbnew/drc/drc_rule_parser.cpp:439
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "FEHLER: <a href='%d:%d'> %d '> %s </a> %s"
+msgstr "FEHLER: <a href='%d:%d'> %s </a> %s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:449
 #, c-format
@@ -30048,12 +30048,12 @@ msgstr "muss mm, in oder mil sein"
 #: pcbnew/pcb_group.cpp:289
 #, c-format
 msgid "Anonymous Group, %zu members"
-msgstr "Anonyme Gruppe, %z u Mitglieder"
+msgstr "Anonyme Gruppe, %zu Mitglieder"
 
 #: pcbnew/pcb_group.cpp:293
 #, c-format
 msgid "Group \"%s\", %zu members"
-msgstr "Gruppe \"%s\", %z u Mitglieder"
+msgstr "Gruppe \"%s\", %zu Mitglieder"
 
 #: pcbnew/pcb_group.cpp:307
 msgid "Anonymous"
