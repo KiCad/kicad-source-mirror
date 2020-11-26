@@ -78,7 +78,8 @@ public:
         return m_alternateShape;
     }
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0, int aLayer = -1 ) const override;
+    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+                                 int aLayer = -1 ) const override;
 
     void SetShape( SHAPE* shape )
     {

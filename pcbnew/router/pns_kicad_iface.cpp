@@ -1054,6 +1054,17 @@ bool PNS_KICAD_IFACE_BASE::syncGraphicalItem( PNS::NODE* aWorld, PCB_SHAPE* aIte
             else
                 solid->SetLayer( aItem->GetLayer() );
 
+            if( aItem->GetLayer() == Edge_Cuts )
+            {
+                switch( shape->Type() )
+                {
+                case SH_SEGMENT:    static_cast<SHAPE_SEGMENT*>( shape )->SetWidth( 0 );    break;
+                case SH_ARC:        static_cast<SHAPE_ARC*>( shape )->SetWidth( 0 );        break;
+                case SH_LINE_CHAIN: static_cast<SHAPE_LINE_CHAIN*>( shape )->SetWidth( 0 ); break;
+                default:            /* remaining shapes don't have width */                 break;
+                }
+            }
+
             solid->SetNet( -1 );
             solid->SetParent( aItem );
             solid->SetShape( shape );
