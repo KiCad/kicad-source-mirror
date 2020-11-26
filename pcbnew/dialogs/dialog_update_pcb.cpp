@@ -1,11 +1,7 @@
-/**
- * @file pcbnew/dialogs/dialog_update_pcb.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +32,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
-#include <board.h>
 #include <kiface_i.h>
-
-using namespace std::placeholders;
 
 
 bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;

@@ -74,16 +74,17 @@ END_EVENT_TABLE()
 
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
-        const wxPoint& pos, const wxSize& size, long style, const wxString& name )
-        : wxDialog( aParent, id, title, pos, size, style, name ),
-          KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
-          m_units( EDA_UNITS::MILLIMETRES ),
-          m_firstPaintEvent( true ),
-          m_initialFocusTarget( nullptr ),
-          m_qmodal_loop( nullptr ),
-          m_qmodal_showing( false ),
-          m_qmodal_parent_disabler( nullptr ),
-          m_parentFrame( nullptr )
+                          const wxPoint& pos, const wxSize& size, long style,
+                          const wxString& name ) :
+            wxDialog( aParent, id, title, pos, size, style, name ),
+            KIWAY_HOLDER( nullptr, KIWAY_HOLDER::DIALOG ),
+            m_units( EDA_UNITS::MILLIMETRES ),
+            m_firstPaintEvent( true ),
+            m_initialFocusTarget( nullptr ),
+            m_qmodal_loop( nullptr ),
+            m_qmodal_showing( false ),
+            m_qmodal_parent_disabler( nullptr ),
+            m_parentFrame( nullptr )
 {
     KIWAY_HOLDER* kiwayHolder = nullptr;
 

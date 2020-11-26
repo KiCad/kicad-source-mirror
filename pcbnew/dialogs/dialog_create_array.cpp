@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,9 +24,7 @@
 #include "dialogs/dialog_create_array.h"
 
 #include <base_units.h>
-
 #include <widgets/text_ctrl_eval.h>
-
 #include <board.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
@@ -42,67 +40,75 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
      * Construct with some sensible defaults.
      * In future, this could be loaded from config?
      */
-    CREATE_ARRAY_DIALOG_ENTRIES()
-            : m_optionsSet( true ),
-              m_gridNx( 5 ),
-              m_gridNy( 5 ),
-              m_gridDx( Millimeter2iu( 2.54 ) ),
-              m_gridDy( Millimeter2iu( 2.54 ) ),
-              m_gridOffsetX( 0 ),
-              m_gridOffsetY( 0 ),
-              m_gridStagger( 1 ),
-              m_gridStaggerType( 0 ),   // rows
-              m_gridNumberingAxis( 0 ), // h then v
-              m_gridNumberingReverseAlternate( false ),
-              m_gridNumberingStartSet( 1 ),    // use specified start
-              m_grid2dArrayNumbering( 0 ),     // linear numbering
-              m_gridPriAxisNumScheme( 0 ),     // numeric
-              m_gridSecAxisNumScheme( 0 ),     // numeric
-              m_gridPriNumberingOffset( "1" ), // numeric
-              m_gridSecNumberingOffset( "1" ), // numeric
-              m_gridPriAxisStep( 1 ),
-              m_gridSecAxisStep( 1 ),
-              m_circCentreX( 0 ),
-              m_circCentreY( 0 ),
-              m_circAngle( 0.0 ),
-              m_circCount( 4 ),
-              m_circNumberingStartSet( 1 ), // use specified start
-              m_gridCircNumScheme( 0 ),
-              m_circNumberingOffset( "1" ),
-              m_circNumberingStep( 1 ),
-              m_circRotate( false ),
-              m_arrayTypeTab( 0 ) // start on grid view
+    CREATE_ARRAY_DIALOG_ENTRIES() :
+            m_OptionsSet( true ),
+            m_GridNx( 5 ),
+            m_GridNy( 5 ),
+            m_GridDx( Millimeter2iu( 2.54 ) ),
+            m_GridDy( Millimeter2iu( 2.54 ) ),
+            m_GridOffsetX( 0 ),
+            m_GridOffsetY( 0 ),
+            m_GridStagger( 1 ),
+            m_GridStaggerType( 0 ),           // rows
+            m_GridNumberingAxis( 0 ),         // h then v
+            m_GridNumReverseAlt( false ),
+            m_GridNumStartSet( 1 ),           // use specified start
+            m_Grid2dArrayNumbering( 0 ),      // linear numbering
+            m_GridPrimaryAxisScheme( 0 ),     // numeric
+            m_GridSecondaryAxisScheme( 0 ),   // numeric
+            m_GridPrimaryNumOffset( "1" ),    // numeric
+            m_GridSecondaryNumOffset( "1" ),  // numeric
+            m_GridPrimaryAxisStep( 1 ),
+            m_GridSecondaryAxisStep( 1 ),
+            m_CircCentreX( 0 ),
+            m_CircCentreY( 0 ),
+            m_CircAngle( 0.0 ),
+            m_CircCount( 4 ),
+            m_CircNumStartSet( 1 ),           // use specified start
+            m_GridCircNumScheme( 0 ),
+            m_CircNumberingOffset( "1" ),
+            m_CircNumberingStep( 1 ),
+            m_CircRotatationStep( false ),
+            m_ArrayTypeTab( 0 )               // start on grid view
     {
     }
 
-    bool m_optionsSet;
+    bool     m_OptionsSet;
 
-    long m_gridNx, m_gridNy;
-    long m_gridDx, m_gridDy;
-    long m_gridOffsetX, m_gridOffsetY;
-    long m_gridStagger;
+    long     m_GridNx;
+    long     m_GridNy;
+    long     m_GridDx;
+    long     m_GridDy;
+    long     m_GridOffsetX;
+    long     m_GridOffsetY;
+    long     m_GridStagger;
 
-    long     m_gridStaggerType, m_gridNumberingAxis;
-    bool     m_gridNumberingReverseAlternate;
-    long     m_gridNumberingStartSet;
-    long     m_grid2dArrayNumbering;
-    long     m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
-    wxString m_gridPriNumberingOffset, m_gridSecNumberingOffset;
-    long     m_gridPriAxisStep, m_gridSecAxisStep;
+    long     m_GridStaggerType;
+    long     m_GridNumberingAxis;
+    bool     m_GridNumReverseAlt;
+    long     m_GridNumStartSet;
+    long     m_Grid2dArrayNumbering;
+    long     m_GridPrimaryAxisScheme;
+    long     m_GridSecondaryAxisScheme;
+    wxString m_GridPrimaryNumOffset;
+    wxString m_GridSecondaryNumOffset;
+    long     m_GridPrimaryAxisStep;
+    long     m_GridSecondaryAxisStep;
 
-    long     m_circCentreX, m_circCentreY;
-    long     m_circAngle;
-    long     m_circCount;
-    long     m_circNumberingStartSet;
-    long     m_gridCircNumScheme;
-    wxString m_circNumberingOffset;
-    long     m_circNumberingStep;
-    bool     m_circRotate;
-    long     m_arrayTypeTab;
+    long     m_CircCentreX;
+    long     m_CircCentreY;
+    long     m_CircAngle;
+    long     m_CircCount;
+    long     m_CircNumStartSet;
+    long     m_GridCircNumScheme;
+    wxString m_CircNumberingOffset;
+    long     m_CircNumberingStep;
+    bool     m_CircRotatationStep;
+    long     m_ArrayTypeTab;
 };
 
 // Persistent options settings
-static CREATE_ARRAY_DIALOG_ENTRIES saved_array_options;
+static CREATE_ARRAY_DIALOG_ENTRIES s_arrayOptions;
 
 /**
  * Local mapping for list-box <-> numbering type
@@ -137,20 +143,21 @@ static const std::vector<NUMBERING_LIST_DATA> numberingTypeData {
 };
 
 DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
-        std::unique_ptr<ARRAY_OPTIONS>& aSettings, bool enableNumbering, wxPoint aOrigPos )
-        : DIALOG_CREATE_ARRAY_BASE( aParent ),
-          m_settings( aSettings ),
-          m_originalItemPosition( aOrigPos ),
-          m_numberingEnabled( enableNumbering ),
-          m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
-          m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
-          m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
-          m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
-          m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
-          m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
-          m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
-          m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
-          m_cfg_persister( saved_array_options.m_optionsSet )
+                                          std::unique_ptr<ARRAY_OPTIONS>& aSettings,
+                                          bool enableNumbering, wxPoint aOrigPos ) :
+        DIALOG_CREATE_ARRAY_BASE( aParent ),
+        m_settings( aSettings ),
+        m_originalItemPosition( aOrigPos ),
+        m_numberingEnabled( enableNumbering ),
+        m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
+        m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
+        m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
+        m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
+        m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
+        m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
+        m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
+        m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
+        m_cfg_persister( s_arrayOptions.m_OptionsSet )
 {
     // Configure display origin transforms
     m_hSpacing.SetCoordType( ORIGIN_TRANSFORMS::REL_X_COORD );
@@ -178,47 +185,43 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_circAngle.SetUnits( EDA_UNITS::DEGREES );
 
     // bind grid options to persister
-    m_cfg_persister.Add( *m_entryNx, saved_array_options.m_gridNx );
-    m_cfg_persister.Add( *m_entryNy, saved_array_options.m_gridNy );
-    m_cfg_persister.Add( m_hSpacing, saved_array_options.m_gridDx );
-    m_cfg_persister.Add( m_vSpacing, saved_array_options.m_gridDy );
+    m_cfg_persister.Add( *m_entryNx, s_arrayOptions.m_GridNx );
+    m_cfg_persister.Add( *m_entryNy, s_arrayOptions.m_GridNy );
+    m_cfg_persister.Add( m_hSpacing, s_arrayOptions.m_GridDx );
+    m_cfg_persister.Add( m_vSpacing, s_arrayOptions.m_GridDy );
 
-    m_cfg_persister.Add( m_hOffset, saved_array_options.m_gridOffsetX );
-    m_cfg_persister.Add( m_vOffset, saved_array_options.m_gridOffsetY );
-    m_cfg_persister.Add( *m_entryStagger, saved_array_options.m_gridStagger );
+    m_cfg_persister.Add( m_hOffset, s_arrayOptions.m_GridOffsetX );
+    m_cfg_persister.Add( m_vOffset, s_arrayOptions.m_GridOffsetY );
+    m_cfg_persister.Add( *m_entryStagger, s_arrayOptions.m_GridStagger );
 
-    m_cfg_persister.Add( *m_radioBoxGridStaggerType, saved_array_options.m_gridStaggerType );
+    m_cfg_persister.Add( *m_radioBoxGridStaggerType, s_arrayOptions.m_GridStaggerType );
 
-    m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, saved_array_options.m_gridNumberingAxis );
-    m_cfg_persister.Add(
-            *m_checkBoxGridReverseNumbering, saved_array_options.m_gridNumberingReverseAlternate );
+    m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, s_arrayOptions.m_GridNumberingAxis );
+    m_cfg_persister.Add( *m_checkBoxGridReverseNumbering, s_arrayOptions.m_GridNumReverseAlt );
 
-    m_cfg_persister.Add( *m_rbGridStartNumberingOpt, saved_array_options.m_gridNumberingStartSet );
-    m_cfg_persister.Add(
-            *m_radioBoxGridNumberingScheme, saved_array_options.m_grid2dArrayNumbering );
-    m_cfg_persister.Add( *m_choicePriAxisNumbering, saved_array_options.m_gridPriAxisNumScheme );
-    m_cfg_persister.Add( *m_choiceSecAxisNumbering, saved_array_options.m_gridSecAxisNumScheme );
+    m_cfg_persister.Add( *m_rbGridStartNumberingOpt, s_arrayOptions.m_GridNumStartSet );
+    m_cfg_persister.Add( *m_radioBoxGridNumberingScheme, s_arrayOptions.m_Grid2dArrayNumbering );
+    m_cfg_persister.Add( *m_choicePriAxisNumbering, s_arrayOptions.m_GridPrimaryAxisScheme );
+    m_cfg_persister.Add( *m_choiceSecAxisNumbering, s_arrayOptions.m_GridSecondaryAxisScheme );
 
-    m_cfg_persister.Add(
-            *m_entryGridPriNumberingOffset, saved_array_options.m_gridPriNumberingOffset );
-    m_cfg_persister.Add(
-            *m_entryGridSecNumberingOffset, saved_array_options.m_gridSecNumberingOffset );
-    m_cfg_persister.Add( *m_entryGridPriNumberingStep, saved_array_options.m_gridPriAxisStep );
-    m_cfg_persister.Add( *m_entryGridSecNumberingStep, saved_array_options.m_gridSecAxisStep );
+    m_cfg_persister.Add( *m_entryGridPriNumberingOffset, s_arrayOptions.m_GridPrimaryNumOffset );
+    m_cfg_persister.Add( *m_entryGridSecNumberingOffset, s_arrayOptions.m_GridSecondaryNumOffset );
+    m_cfg_persister.Add( *m_entryGridPriNumberingStep, s_arrayOptions.m_GridPrimaryAxisStep );
+    m_cfg_persister.Add( *m_entryGridSecNumberingStep, s_arrayOptions.m_GridSecondaryAxisStep );
 
     // bind circular options to persister
-    m_cfg_persister.Add( m_hCentre, saved_array_options.m_circCentreX );
-    m_cfg_persister.Add( m_vCentre, saved_array_options.m_circCentreY );
-    m_cfg_persister.Add( m_circAngle, saved_array_options.m_circAngle );
-    m_cfg_persister.Add( *m_entryCircCount, saved_array_options.m_circCount );
-    m_cfg_persister.Add( *m_entryRotateItemsCb, saved_array_options.m_circRotate );
+    m_cfg_persister.Add( m_hCentre, s_arrayOptions.m_CircCentreX );
+    m_cfg_persister.Add( m_vCentre, s_arrayOptions.m_CircCentreY );
+    m_cfg_persister.Add( m_circAngle, s_arrayOptions.m_CircAngle );
+    m_cfg_persister.Add( *m_entryCircCount, s_arrayOptions.m_CircCount );
+    m_cfg_persister.Add( *m_entryRotateItemsCb, s_arrayOptions.m_CircRotatationStep );
 
-    m_cfg_persister.Add( *m_rbCircStartNumberingOpt, saved_array_options.m_circNumberingStartSet );
-    m_cfg_persister.Add( *m_choiceCircNumbering, saved_array_options.m_gridCircNumScheme );
-    m_cfg_persister.Add( *m_entryCircNumberingStart, saved_array_options.m_circNumberingOffset );
-    m_cfg_persister.Add( *m_entryCircNumberingStep, saved_array_options.m_circNumberingStep );
+    m_cfg_persister.Add( *m_rbCircStartNumberingOpt, s_arrayOptions.m_CircNumStartSet );
+    m_cfg_persister.Add( *m_choiceCircNumbering, s_arrayOptions.m_GridCircNumScheme );
+    m_cfg_persister.Add( *m_entryCircNumberingStart, s_arrayOptions.m_CircNumberingOffset );
+    m_cfg_persister.Add( *m_entryCircNumberingStep, s_arrayOptions.m_CircNumberingStep );
 
-    m_cfg_persister.Add( *m_gridTypeNotebook, saved_array_options.m_arrayTypeTab );
+    m_cfg_persister.Add( *m_gridTypeNotebook, s_arrayOptions.m_ArrayTypeTab );
 
     m_cfg_persister.RestoreConfigToControls();
 
@@ -248,8 +251,8 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
  * @param errors a list of errors to add any error to
  * @return valid
  */
-static bool validateLongEntry(
-        const wxTextEntry& entry, long& dest, const wxString& description, wxArrayString& errors )
+static bool validateLongEntry( const wxTextEntry& entry, long& dest, const wxString& description,
+                               wxArrayString& errors )
 {
     bool ok = true;
 
@@ -276,14 +279,15 @@ static bool validateLongEntry(
  * @return if all valid
  */
 static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& typeEntry,
-        const wxTextCtrl& aStepEntry, ARRAY_AXIS& aAxis, wxArrayString& errors )
+                                 const wxTextCtrl& aStepEntry, ARRAY_AXIS& aAxis,
+                                 wxArrayString& errors )
 {
-    const auto* typeData = static_cast<NUMBERING_LIST_DATA*>(
-            typeEntry.GetClientData( typeEntry.GetSelection() ) );
+    void*                      clientData = typeEntry.GetClientData( typeEntry.GetSelection() );
+    const NUMBERING_LIST_DATA* numberingData = static_cast<NUMBERING_LIST_DATA*>( clientData );
 
-    wxCHECK_MSG( typeData, false, "Failed to get client data from list control." );
+    wxCHECK_MSG( numberingData, false, "Failed to get client data from list control." );
 
-    aAxis.SetAxisType( typeData->m_numbering_type );
+    aAxis.SetAxisType( numberingData->m_numbering_type );
 
     const wxString text = offsetEntry.GetValue();
 
@@ -291,13 +295,10 @@ static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& 
 
     if( !ok )
     {
-        const wxString& alphabet = aAxis.GetAlphabet();
-
-        wxString err;
-        err.Printf( _( "Could not determine numbering start from \"%s\": "
-                       "expected value consistent with alphabet \"%s\"" ),
-                    text, alphabet );
-        errors.Add(err);
+        errors.Add( wxString::Format( _( "Could not determine numbering start from \"%s\": "
+                                         "expected value consistent with alphabet \"%s\"" ),
+                                      text,
+                                      aAxis.GetAlphabet() ) );
         return false;
     }
 

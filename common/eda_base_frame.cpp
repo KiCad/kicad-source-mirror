@@ -122,9 +122,10 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
 
 wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
 {
-    for( auto& iter : GetChildren() )
+    for( wxWindow* iter : GetChildren() )
     {
         DIALOG_SHIM* dlg = dynamic_cast<DIALOG_SHIM*>( iter );
+
         if( dlg && dlg->IsQuasiModal() )
             return dlg;
     }
@@ -134,6 +135,7 @@ wxWindow* EDA_BASE_FRAME::findQuasiModalDialog()
     if( m_ident == FRAME_SCH )
     {
         wxWindow* cvpcb = wxWindow::FindWindowByName( "CvpcbFrame" );
+
         if( cvpcb )
             return cvpcb;
     }
