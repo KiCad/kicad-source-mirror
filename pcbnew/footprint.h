@@ -281,6 +281,13 @@ public:
      */
     bool IsFlipped() const { return GetLayer() == B_Cu; }
 
+    /**
+     * A special IsOnLayer for footprints: return true if the footprint contains only items on the
+     * given layer, even if that layer is not one of the valid footprint layers F_Cu and B_Cu.
+     * This allows selection of "graphic" footprints that contain only silkscreen, for example.
+     */
+    bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
+
 // m_footprintStatus bits:
 #define FP_is_LOCKED        0x01        ///< footprint LOCKED: no autoplace allowed
 #define FP_is_PLACED        0x02        ///< In autoplace: footprint automatically placed

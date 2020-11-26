@@ -790,6 +790,29 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 }
 
 
+bool FOOTPRINT::IsOnLayer( PCB_LAYER_ID aLayer ) const
+{
+    // If we have any pads, fall back on normal checking
+    if( !m_pads.empty() )
+        return m_layer == aLayer;
+
+    // No pads?  Check if this entire footprint exists on the given layer
+    for( FP_ZONE* zone : m_fp_zones )
+    {
+        if( !zone->IsOnLayer( aLayer ) )
+            return false;
+    }
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( !item->IsOnLayer( aLayer ) )
+            return false;
+    }
+
+    return true;
+}
+
+
 bool FOOTPRINT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_RECT rect = m_boundingBox;//.GetBoundingBoxRotated( GetPosition(), m_Orient );
