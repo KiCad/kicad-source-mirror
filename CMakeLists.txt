@@ -632,7 +632,7 @@ if( KICAD_USE_EGL AND KICAD_USE_BUNDLED_GLEW AND UNIX AND NOT APPLE )
     # Set the standard package variables to point to our custom target to mimic the system version.
     set( GLEW_LIBRARIES glew )
     set( GLEW_FOUND TRUE )
-    include_directories( SYSTEM $<TARGET_PROPERTY:glew,PRIVATE_INCLUDE_DIRECTORIES> )
+    include_directories( SYSTEM $<TARGET_PROPERTY:glew,INCLUDE_DIRECTORIES> )
 else()
     find_package( GLEW REQUIRED )
     check_find_package_result( GLEW_FOUND "GLEW" )
