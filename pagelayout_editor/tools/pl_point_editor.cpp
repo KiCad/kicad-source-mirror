@@ -35,11 +35,13 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <status_popup.h>
 #include <page_layout/ws_draw_item.h>
+#include <page_layout/ws_data_item.h>
 #include <widgets/progress_reporter.h>
 
 #include "pl_editor_frame.h"
 #include "pl_editor_id.h"
 #include "pl_point_editor.h"
+#include "properties_frame.h"
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
 
@@ -315,14 +317,36 @@ void PL_POINT_EDITOR::updateItem() const
     if( !item )
         return;
 
+    WS_DATA_ITEM* dataItem = static_cast<WS_DRAW_ITEM_BASE*>( item )->GetPeer();
+
+    // the current item is perhaps not the main item if we have a set of
+    // repeated items.
+    // So we change the coordinate references in dataItem using move vectors
+    // of the start and end points that are the same for each repeated item
+
     switch( item->Type() )
     {
     case WSG_LINE_T:
     {
         WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
 
-        line->SetStart( (wxPoint) m_editPoints->Point( LINE_START ).GetPosition() );
-        line->SetEnd( (wxPoint) m_editPoints->Point( LINE_END ).GetPosition() );
+        wxPoint move_startpoint = (wxPoint) m_editPoints->Point( LINE_START ).GetPosition()
+                                  - line->GetStart();
+        wxPoint move_endpoint = (wxPoint) m_editPoints->Point( LINE_END ).GetPosition()
+                                - line->GetEnd();
+
+        dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + move_startpoint );
+        dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + move_endpoint );
+
+        for( WS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
+        {
+            WS_DRAW_ITEM_LINE* draw_line = static_cast<WS_DRAW_ITEM_LINE*>( draw_item );
+
+            draw_line->SetStart( draw_line->GetStart() + move_startpoint );
+            draw_line->SetEnd( draw_line->GetEnd() + move_endpoint );
+            getView()->Update( draw_item );
+        }
+
         break;
     }
 
@@ -337,8 +361,21 @@ void PL_POINT_EDITOR::updateItem() const
         pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
                          topLeft, topRight, botLeft, botRight );
 
-        rect->SetStart( (wxPoint) topLeft );
-        rect->SetEnd( (wxPoint) botRight );
+        wxPoint move_startpoint = (wxPoint) topLeft - rect->GetStart();
+        wxPoint move_endpoint = (wxPoint) botRight - rect->GetEnd();
+
+        dataItem->MoveStartPointToUi( dataItem->GetStartPosUi() + move_startpoint );
+        dataItem->MoveEndPointToUi( dataItem->GetEndPosUi() + move_endpoint );
+
+        for( WS_DRAW_ITEM_BASE* draw_item : dataItem->GetDrawItems() )
+        {
+            WS_DRAW_ITEM_RECT* draw_rect = (WS_DRAW_ITEM_RECT*) draw_item;
+
+            draw_rect->SetStart( draw_rect->GetStart() + move_startpoint );
+            draw_rect->SetEnd( draw_rect->GetEnd() + move_endpoint );
+            getView()->Update( draw_item );
+        }
+
         break;
     }
 
@@ -346,8 +383,12 @@ void PL_POINT_EDITOR::updateItem() const
         break;
     }
 
-    getView()->Update( item );
     m_frame->SetMsgPanel( item );
+
+    // The Properties frame will be updated. Avoid flicker during update:
+    m_frame->GetPropertiesFrame()->Freeze();
+    m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( dataItem );
+    m_frame->GetPropertiesFrame()->Thaw();
 }
 
 
