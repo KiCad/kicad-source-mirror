@@ -139,15 +139,15 @@ class DXF_IMPORT_BLOCK
 {
 public:
     wxString m_name;
-    double m_x, m_y;
+    double m_baseX, m_baseY;
 
     GRAPHICS_IMPORTER_BUFFER m_buffer;
 
     DXF_IMPORT_BLOCK( wxString aName, double aX, double aY )
     {
         m_name = aName;
-        m_x = aX;
-        m_y = aY;
+        m_baseX = aX;
+        m_baseY = aY;
     }
 };
 

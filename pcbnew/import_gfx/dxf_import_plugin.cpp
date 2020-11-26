@@ -483,8 +483,8 @@ void DXF_IMPORT_PLUGIN::addInsert( const DL_InsertData& aData )
     VECTOR3D insertCoords      = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
 
     VECTOR2D translation( mapX( insertCoords.x ), mapY( insertCoords.y ) );
+    translation -= VECTOR2D( mapX( block->m_baseX ), mapY( block->m_baseY ) );
 
-    // TODO: implement handling of scale
 
     for( auto& shape : block->m_buffer.GetShapes() )
     {
