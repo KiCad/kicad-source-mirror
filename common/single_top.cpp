@@ -226,6 +226,19 @@ struct APP_SINGLE_TOP : public wxApp
         return ret;
     }
 
+    int FilterEvent( wxEvent& aEvent ) override
+    {
+        if( aEvent.GetEventType() == wxEVT_SHOW )
+        {
+            wxShowEvent& event = static_cast<wxShowEvent&>( aEvent );
+            wxDialog*    dialog = dynamic_cast<wxDialog*>( event.GetEventObject() );
+
+            if( dialog && dialog->IsModal() )
+                Pgm().m_ModalDialogCount += event.IsShown() ? 1 : -1;
+        }
+
+        return Event_Skip;
+    }
 
 #if defined( DEBUG )
     /**

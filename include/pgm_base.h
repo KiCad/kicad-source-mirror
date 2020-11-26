@@ -340,6 +340,8 @@ public:
      */
     bool m_Printing;
 
+    int  m_ModalDialogCount;
+
 protected:
 
     /// Loads internal settings from COMMON_SETTINGS

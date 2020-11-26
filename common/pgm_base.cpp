@@ -101,6 +101,7 @@ PGM_BASE::PGM_BASE()
     m_pgm_checker = NULL;
     m_locale = NULL;
     m_Printing = false;
+    m_ModalDialogCount = 0;
 
     m_show_env_var_dialog = true;
 

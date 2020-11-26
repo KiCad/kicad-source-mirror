@@ -24,7 +24,6 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <dialog_update_pcb.h>
-
 #include <ratsnest/ratsnest_data.h>
 #include <wx_html_report_panel.h>
 #include <netlist_reader/pcb_netlist.h>
@@ -33,7 +32,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <kiface_i.h>
-
+#include <kiplatform/ui.h>
 
 bool DIALOG_UPDATE_PCB::m_warnForNoNetPads = false;
 
@@ -129,13 +128,20 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 void DIALOG_UPDATE_PCB::OnOptionChanged( wxCommandEvent& event )
 {
     if( m_initialized )
+    {
         PerformUpdate( true );
+        m_sdbSizer1OK->Enable( true );
+        m_sdbSizer1OK->SetDefault();
+    }
 }
 
 
 void DIALOG_UPDATE_PCB::OnUpdateClick( wxCommandEvent& event )
 {
-    m_messagePanel->SetLabel( _( "Changes Applied To PCB" ) );
+    m_messagePanel->SetLabel( _( "Changes Applied to PCB" ) );
     PerformUpdate( false );
+
     m_sdbSizer1Cancel->SetDefault();
+    // Widgets has a tendency to keep both buttons highlighted without the following:
+    m_sdbSizer1OK->Enable( false );
 }

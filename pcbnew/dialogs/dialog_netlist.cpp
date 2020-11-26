@@ -142,30 +142,24 @@ void DIALOG_NETLIST::OnOpenNetlistClick( wxCommandEvent& event )
 
 void DIALOG_NETLIST::OnUpdatePCB( wxCommandEvent& event )
 {
-    BOARD*     pcb = m_parent->GetBoard();
     wxFileName fn = m_NetlistFilenameCtrl->GetValue();
 
     if( !fn.IsOk() )
     {
-        wxMessageBox( _("Please, choose a valid netlist file.") );
+        wxMessageBox( _( "Please, choose a valid netlist file." ) );
         return;
     }
 
     if( !fn.FileExists() )
     {
-        wxMessageBox( _("The netlist file does not exist.") );
+        wxMessageBox( _( "The netlist file does not exist." ) );
         return;
     }
 
-    // Give the user a chance to bail out when making changes from a netlist.
-    if( pcb->IsEmpty() || IsOK( this, _( "The changes made cannot be undone.  "
-                                         "Are you sure you want to update the PCB?" ) ) )
-    {
-        m_MessageWindow->SetLabel( _( "Changes Applied To PCB" ) );
-        loadNetlist( false );
+    m_MessageWindow->SetLabel( _( "Changes Applied to PCB" ) );
+    loadNetlist( false );
 
-        m_sdbSizer1Cancel->SetDefault();
-    }
+    m_sdbSizer1Cancel->SetDefault();
 }
 
 

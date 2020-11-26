@@ -23,7 +23,8 @@
 #include <widgets/ui_common.h>
 
 #include <algorithm>
-#include <gal/color4d.h>
+#include <dialog_shim.h>
+#include <pgm_base.h>
 
 int KIUI::GetStdMargin()
 {
@@ -142,4 +143,10 @@ bool KIUI::IsInputControlFocused()
     wxDataViewCtrl*   dataViewCtrl = dynamic_cast<wxDataViewCtrl*>( focus );
 
     return ( textEntry || styledText || listBox || dataViewCtrl );
+}
+
+
+bool KIUI::IsModalDialogFocused()
+{
+    return Pgm().m_ModalDialogCount > 0;
 }

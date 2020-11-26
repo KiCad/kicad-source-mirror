@@ -501,7 +501,9 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 
 void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 {
-    bool shouldSetFocus = m_lostFocus && m_stealsFocus && !KIUI::IsInputControlFocused();
+    bool shouldSetFocus = m_lostFocus && m_stealsFocus
+                            && !KIUI::IsInputControlFocused()
+                            && !KIUI::IsModalDialogFocused();
 
 #if defined( _WIN32 )
     // Ensure we are the active foreground window before we attempt to steal focus
@@ -523,7 +525,9 @@ void EDA_DRAW_PANEL_GAL::OnEvent( wxEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::onEnter( wxMouseEvent& aEvent )
 {
-    bool shouldSetFocus = m_stealsFocus && !KIUI::IsInputControlFocused();
+    bool shouldSetFocus = m_stealsFocus
+                            && !KIUI::IsInputControlFocused()
+                            && !KIUI::IsModalDialogFocused();
 
 #if defined( _WIN32 )
     // Ensure we are the active foreground window before we attempt to steal focus

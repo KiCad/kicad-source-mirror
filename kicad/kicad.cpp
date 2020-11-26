@@ -307,6 +307,20 @@ struct APP_KICAD : public wxApp
         return -1;
     }
 
+    int FilterEvent( wxEvent& aEvent ) override
+    {
+        if( aEvent.GetEventType() == wxEVT_SHOW )
+        {
+            wxShowEvent& event = static_cast<wxShowEvent&>( aEvent );
+            wxDialog*    dialog = dynamic_cast<wxDialog*>( event.GetEventObject() );
+
+            if( dialog && dialog->IsModal() )
+                Pgm().m_ModalDialogCount += event.IsShown() ? 1 : -1;
+        }
+
+        return Event_Skip;
+    }
+
     /**
      * Set MacOS file associations.
      *

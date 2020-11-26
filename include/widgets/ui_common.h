@@ -74,6 +74,8 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry );
  */
 bool IsInputControlFocused();
 
+bool IsModalDialogFocused();
+
 }
 
 // Note: On windows, SEVERITY_ERROR collides with a system declaration,

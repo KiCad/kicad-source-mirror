@@ -27,7 +27,6 @@
 #include <kiway_player.h>
 #include <pgm_base.h>
 #include <tool/tool_manager.h>
-
 #include <kiplatform/ui.h>
 
 #include <wx/display.h>
@@ -320,9 +319,9 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
         selectAllInTextCtrls( GetChildren() );
 
         if( m_initialFocusTarget )
-            m_initialFocusTarget->SetFocus();
+            KIPLATFORM::UI::ForceFocus( m_initialFocusTarget );
         else
-            SetFocus();     // Focus the dialog itself
+            KIPLATFORM::UI::ForceFocus( this );     // Focus the dialog itself
 
         m_firstPaintEvent = false;
     }

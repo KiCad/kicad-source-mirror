@@ -159,6 +159,9 @@ void DIALOG_UPDATE_FROM_PCB::OnUpdateClick( wxCommandEvent& event )
 
         if( m_cbRelinkFootprints->GetValue() )
             backAnno.PushNewLinksToPCB();
+
+        m_sdbSizerCancel->SetDefault();
+        m_sdbSizerOK->Enable( false );
     }
 
     m_messagePanel->Flush( false );
