@@ -25,6 +25,7 @@
 
 #include <sch_plugins/cadstar/cadstar_sch_archive_loader.h>
 
+#include <bus_alias.h>
 #include <core/mirror.h>
 #include <eda_text.h>
 #include <lib_arc.h>
@@ -475,29 +476,66 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadBusses()
         bool   firstPt = true;
         VERTEX last;
 
-        for( const VERTEX& cur : bus.Shape.Vertices )
+        if( bus.LayerID != wxT( "NO_SHEET" ) )
         {
-            if( firstPt )
-            {
-                last    = cur;
-                firstPt = false;
-                continue;
-            }
+            SCH_SCREEN*                screen     = mSheetMap.at( bus.LayerID )->GetScreen();
+            std::shared_ptr<BUS_ALIAS> kiBusAlias = std::make_shared<BUS_ALIAS>();
 
-            if( bus.LayerID != wxT( "NO_SHEET" ) )
+            kiBusAlias->SetName( bus.Name );
+            kiBusAlias->SetParent( screen );
+            screen->AddBusAlias( kiBusAlias );
+            mBusesMap.insert( { bus.ID, kiBusAlias } );
+
+            SCH_LABEL* label = new SCH_LABEL();
+            label->SetText( wxT( "{" ) + bus.Name + wxT( "}" ) );
+            label->SetVisible( true );
+            screen->Append( label );
+
+            SHAPE_LINE_CHAIN busLineChain; // to compute nearest segment to bus label
+
+            for( const VERTEX& cur : bus.Shape.Vertices )
             {
+                busLineChain.Append( getKiCadPoint( cur.End ) );
+
+                if( firstPt )
+                {
+                    last    = cur;
+                    firstPt = false;
+
+                    if( !bus.HasBusLabel )
+                    {
+                        // Add a bus label on the starting point if the original CADSTAR design
+                        // does not have an explicit label
+                        label->SetPosition( getKiCadPoint( last.End ) );
+                    }
+
+                    continue;
+                }
+
+
                 SCH_LINE* kiBus = new SCH_LINE();
 
                 kiBus->SetStartPoint( getKiCadPoint( last.End ) );
                 kiBus->SetEndPoint( getKiCadPoint( cur.End ) );
                 kiBus->SetLayer( LAYER_BUS );
                 kiBus->SetLineWidth( getLineThickness( bus.LineCodeID ) );
+                screen->Append( kiBus );
 
                 last = cur;
+            }
 
-                mSheetMap.at( bus.LayerID )->GetScreen()->Append( kiBus );
+            if( bus.HasBusLabel )
+            {
+                //lets find the closest point in the busline to the label
+                VECTOR2I busLabelLoc = getKiCadPoint( bus.BusLabel.Position );
+                wxPoint  nearestPt   = (wxPoint) busLineChain.NearestPoint( busLabelLoc );
+
+                label->SetPosition( nearestPt );
+                applyTextSettings( bus.BusLabel.TextCodeID, bus.BusLabel.Alignment,
+                        bus.BusLabel.Justification, label );
             }
         }
+
     }
 }
 
@@ -554,6 +592,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         {
             NET_SCH::BUS_TERM busTerm = busPair.second;
             BUS               bus     = Schematic.Buses.at( busTerm.BusID );
+
+            if( !mBusesMap.at( bus.ID )->Contains( netName ) )
+                mBusesMap.at( bus.ID )->AddMember( netName );
 
             SCH_BUS_WIRE_ENTRY* busEntry =
                     new SCH_BUS_WIRE_ENTRY( getKiCadPoint( busTerm.FirstPoint ), false );

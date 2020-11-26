@@ -33,6 +33,7 @@
 #include <sch_io_mgr.h>
 #include <wx/filename.h>
 
+class BUS_ALIAS;
 class EDA_TEXT;
 class LABEL_SPIN_STYLE;
 class LIB_FIELD;
@@ -96,6 +97,7 @@ private:
             mPowerSymMap; ///< Map between Cadstar and KiCad Power Symbols
     std::map<SYMBOL_ID, SCH_GLOBALLABEL*>
             mGlobLabelMap; ///< Map between Cadstar and KiCad Global Labels
+    std::map<BUS_ID, std::shared_ptr<BUS_ALIAS>> mBusesMap; ///< Map between Cadstar and KiCad Buses
 
     void loadSheets();
     void loadHierarchicalSheetPins();
