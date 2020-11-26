@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,7 +21,6 @@
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/statline.h>
 #include <wx/slider.h>
 #include <wx/statbox.h>
 #include <wx/button.h>
@@ -50,7 +49,6 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_violateDrc;
 		wxCheckBox* m_suggestEnding;
 		wxCheckBox* m_optimizeDraggedTrack;
-		wxStaticLine* m_staticline1;
 		wxStaticText* m_effortLabel;
 		wxSlider* m_effort;
 		wxStaticText* m_lowLabel;

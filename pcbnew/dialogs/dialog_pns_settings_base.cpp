@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,13 +33,13 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	m_staticText4 = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("Mouse drag behavior:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxTOP|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_dragToolModeChoices[] = { _("Move item"), _("Interactive drag") };
 	int m_dragToolModeNChoices = sizeof( m_dragToolModeChoices ) / sizeof( wxString );
 	m_dragToolMode = new wxChoice( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dragToolModeNChoices, m_dragToolModeChoices, 0 );
 	m_dragToolMode->SetSelection( 0 );
-	fgSizer1->Add( m_dragToolMode, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	fgSizer1->Add( m_dragToolMode, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
 	bOptions->Add( fgSizer1, 1, wxEXPAND, 5 );
@@ -81,13 +81,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_suggestEnding = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Suggest track finish"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_suggestEnding->Enable( false );
 
-	bOptions->Add( m_suggestEnding, 0, wxALL, 5 );
+	bOptions->Add( m_suggestEnding, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_optimizeDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_optimizeDraggedTrack, 0, wxLEFT|wxRIGHT, 5 );
-
-	m_staticline1 = new wxStaticLine( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bOptions->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
+	bOptions->Add( m_optimizeDraggedTrack, 0, wxALL, 5 );
 
 	wxBoxSizer* bEffort;
 	bEffort = new wxBoxSizer( wxHORIZONTAL );
@@ -96,10 +93,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_effortLabel->Wrap( -1 );
 	m_effortLabel->SetToolTip( _("Defines how much time the router shall spend optimizing the routed/shoved traces.\nMore effort means cleaner routing (but slower), less effort means faster routing but somewhat jagged traces.") );
 
-	bEffort->Add( m_effortLabel, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bEffort->Add( m_effortLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 20 );
 
 
-	bEffort->Add( 0, 0, 0, wxEXPAND, 5 );
+	bEffort->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSlider;
 	bSlider = new wxBoxSizer( wxVERTICAL );
@@ -126,13 +123,13 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSliderLabels->Add( m_highLabel, 0, 0, 5 );
 
 
-	bSlider->Add( bSliderLabels, 1, wxEXPAND, 5 );
+	bSlider->Add( bSliderLabels, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bEffort->Add( bSlider, 1, wxEXPAND, 5 );
+	bEffort->Add( bSlider, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 
 
-	bOptions->Add( bEffort, 0, wxEXPAND, 5 );
+	bOptions->Add( bEffort, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	bMainSizer->Add( bOptions, 1, wxEXPAND|wxALL, 5 );
