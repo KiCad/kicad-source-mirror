@@ -915,8 +915,8 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( m_isDryRun )
     {
-        for( const auto& it : m_addedNets )
-            delete it.second;
+        for( const std::pair<wxString, NETINFO_ITEM*>& addedNet : m_addedNets )
+            delete addedNet.second;
 
         m_addedNets.clear();
     }
@@ -927,14 +927,6 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     msg.Printf( _( "Total warnings: %d, errors: %d." ), m_warningCount, m_errorCount );
     m_reporter->ReportTail( msg, RPT_SEVERITY_INFO );
-
-    if( m_errorCount )
-    {
-        m_reporter->ReportTail( _( "Errors occurred during the netlist update. Unless you fix them "
-                                   "your board will not be consistent with the schematics." ),
-                                RPT_SEVERITY_ERROR );
-        return false;
-    }
 
     return true;
 }
