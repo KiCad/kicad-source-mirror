@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-25 14:29+0000\n"
+"PO-Revision-Date: 2020-11-30 00:07+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -22420,7 +22420,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
 #: pcbnew/text_mod_grid_table.cpp:97
 msgid "Keep Upright"
-msgstr "Zachowaj pozycję pionową"
+msgstr "Zachowaj pion"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:105
 msgid "Position"
@@ -23062,7 +23062,7 @@ msgstr "Ustaw na wartość:"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:199
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:201
 msgid "Keep upright"
-msgstr "Zachowaj poz. pionową"
+msgstr "Zachowaj pion"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:223
 msgid "Set to layer default values:"
@@ -25211,7 +25211,7 @@ msgstr "Wpisz tekst jaki umieścić na wybranej warstwie."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:202
 msgid "Keep text upright"
-msgstr "Zachowaj tekst w pionie"
+msgstr "Zachowaj pozycję tekstu w pionie"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:229
 msgid "Parent footprint description"
