@@ -398,8 +398,19 @@ void WS_DRAW_ITEM_BITMAP::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint
 {
     WS_DATA_ITEM_BITMAP* bitmap = (WS_DATA_ITEM_BITMAP*) GetPeer();
 
-    if( bitmap->m_ImageBitmap )
-        bitmap->m_ImageBitmap->DrawBitmap( aSettings->GetPrintDC(), m_pos + aOffset );
+    if( !bitmap->m_ImageBitmap )
+        return;
+
+    // We are using here internal unit = 1 mil for historical reason
+    // the PixelScaleFactor in mils is:
+    double pix_scale = 1000.0 / bitmap->GetPPI();
+
+    double ps = bitmap->m_ImageBitmap->GetPixelScaleFactor();   // Store initial value
+
+    bitmap->m_ImageBitmap->SetPixelScaleFactor( pix_scale );
+    bitmap->m_ImageBitmap->DrawBitmap( aSettings->GetPrintDC(), m_pos + aOffset );
+
+    bitmap->m_ImageBitmap->SetPixelScaleFactor( ps );       // restore initial value
 }
 
 

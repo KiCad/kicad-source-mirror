@@ -732,6 +732,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
     {
         double scaleW = (double) lyWidth  / clamped_layout_size.x;
         double scaleH = (double) lyHeight / clamped_layout_size.y;
+        double scale = std::min( scaleW, scaleH );
 
         // Prepare DC.
         wxSize example_size( lyWidth + 1, lyHeight + 1 );
@@ -739,7 +740,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         memDC.SelectObject( *m_page_bitmap );
         memDC.SetClippingRegion( wxPoint( 0, 0 ), example_size );
         memDC.Clear();
-        memDC.SetUserScale( scaleW, scaleH );
+        memDC.SetUserScale( scale, scale );
 
         // Get logical page size and margins.
         PAGE_INFO pageDUMMY;
