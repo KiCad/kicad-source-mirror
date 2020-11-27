@@ -249,10 +249,25 @@ COLOR4D PCB_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) cons
         bool       hasAnnularRing = pad->GetSizeX() > pad->GetDrillSizeX()
                                         && pad->GetSizeY() > pad->GetDrillSizeY();
 
-        if( !hasAnnularRing && m_layerColors[aLayer] == m_layerColors[LAYER_PCB_BACKGROUND] )
+        if( !hasAnnularRing && m_layerColors[ aLayer ] == m_layerColors[ LAYER_PCB_BACKGROUND ] )
             aLayer = LAYER_MOD_TEXT_INVISIBLE;
 
-        if( hasAnnularRing && m_layerColors[aLayer] == m_layerColors[LAYER_PADS_TH] )
+        if( hasAnnularRing && m_layerColors[ aLayer ] == m_layerColors[ LAYER_PADS_TH ] )
+            aLayer = LAYER_PCB_BACKGROUND;
+    }
+    else if( aLayer == LAYER_VIAS_HOLES )
+    {
+        const VIA* via = static_cast<const VIA*>( item );
+        int        annularRingLayer;
+
+        if( via->GetViaType() == VIATYPE::MICROVIA )
+            annularRingLayer = LAYER_VIA_MICROVIA;
+        else if( via->GetViaType() == VIATYPE::BLIND_BURIED )
+            annularRingLayer = LAYER_VIA_BBLIND;
+        else
+            annularRingLayer = LAYER_VIA_THROUGH;
+
+        if( m_layerColors[ aLayer ] == m_layerColors[ annularRingLayer ] )
             aLayer = LAYER_PCB_BACKGROUND;
     }
 
