@@ -481,7 +481,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
             GetModel()->Remove( (BOARD_ITEM*) eda_item );
 
-            if( eda_item->Type() != PCB_NETINFO_T && eda_item->Type() != PCB_GROUP_T )
+            if( eda_item->Type() != PCB_NETINFO_T )
                 view->Remove( eda_item );
 
             break;
@@ -490,7 +490,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
             GetModel()->Add( (BOARD_ITEM*) eda_item );
 
-            if( eda_item->Type() != PCB_NETINFO_T && eda_item->Type() != PCB_GROUP_T )
+            if( eda_item->Type() != PCB_NETINFO_T )
                 view->Add( eda_item );
 
             if( eda_item->Type() == PCB_GROUP_T )

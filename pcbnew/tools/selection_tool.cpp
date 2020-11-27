@@ -1602,24 +1602,37 @@ void SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
-    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
-    {
-        if( item->IsSelected() )
-        {
-            EDA_ITEM* parent = item->GetParent();
+    bool enteredGroupFound = false;
 
-            // Flags on footprint children might be set only because the parent is selected.
-            if( parent && parent->Type() == PCB_FOOTPRINT_T && parent->IsSelected() )
+    INSPECTOR_FUNC inspector =
+            [&]( EDA_ITEM* item, void* testData )
+            {
+                if( item->IsSelected() )
+                {
+                    EDA_ITEM* parent = item->GetParent();
+
+                    // Flags on footprint children might be set only because the parent is
+                    // selected.
+                    if( parent && parent->Type() == PCB_FOOTPRINT_T && parent->IsSelected() )
+                        return SEARCH_RESULT::CONTINUE;
+
+                    highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
+                }
+
+                if( item == m_enteredGroup )
+                    enteredGroupFound = true;
+
                 return SEARCH_RESULT::CONTINUE;
-
-            highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
-        }
-
-        return SEARCH_RESULT::CONTINUE;
-    };
+            };
 
     board()->Visit( inspector, nullptr, m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                             : GENERAL_COLLECTOR::AllBoardItems );
+
+    if( !enteredGroupFound )
+    {
+        m_enteredGroupOverlay.Clear();
+        m_enteredGroup = nullptr;
+    }
 }
 
 

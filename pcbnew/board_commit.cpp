@@ -164,7 +164,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         board->Add( boardItem );        // handles connectivity
                 }
 
-                if( boardItem->Type() != PCB_NETINFO_T && boardItem->Type() != PCB_GROUP_T )
+                if( boardItem->Type() != PCB_NETINFO_T )
                     view->Add( boardItem );
 
                 break;
@@ -246,6 +246,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 break;
 
                 case PCB_GROUP_T:
+                    view->Remove( boardItem );
+
                     if( !( changeFlags & CHT_DONE ) )
                     {
                         if( m_isFootprintEditor )
