@@ -33,6 +33,7 @@
 #include <pcb_edit_frame.h>
 #include <board.h>
 #include <fp_shape.h>
+#include <pcb_text.h>
 #include <footprint.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
@@ -1626,45 +1627,76 @@ static double polygonArea( SHAPE_POLY_SET& aPolySet )
     return area;
 }
 
-// a helper function to add a rectangular polygon aRect to aPolySet
-static void addRect( SHAPE_POLY_SET& aPolySet, wxRect aRect )
-{
-    aPolySet.NewOutline();
 
-    aPolySet.Append( aRect.GetX(), aRect.GetY() );
-    aPolySet.Append( aRect.GetX()+aRect.width, aRect.GetY() );
-    aPolySet.Append( aRect.GetX()+aRect.width, aRect.GetY()+aRect.height );
-    aPolySet.Append( aRect.GetX(), aRect.GetY()+aRect.height );
+double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLECTOR& aCollector  )
+{
+    int textMargin = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+    SHAPE_POLY_SET poly;
+
+    if( aItem->Type() == PCB_FOOTPRINT_T )
+    {
+        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
+
+        return footprint->GetFootprintRect().GetArea();
+    }
+    else if( aItem->Type() == PCB_FP_TEXT_T )
+    {
+        const FP_TEXT* text = static_cast<const FP_TEXT*>( aItem );
+
+        text->TransformTextShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, textMargin,
+                                                        ARC_LOW_DEF, ERROR_OUTSIDE );
+    }
+    else
+    {
+        aItem->TransformShapeWithClearanceToPolygon( poly, UNDEFINED_LAYER, 0,
+                                                     ARC_LOW_DEF, ERROR_OUTSIDE );
+    }
+
+    poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    poly.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    return polygonArea( poly );
 }
+
 
 double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 {
-    double fpArea = GetFootprintRect().GetArea();
+    int textMargin = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+
+    SHAPE_POLY_SET footprintRegion( GetBoundingPoly() );
     SHAPE_POLY_SET coveredRegion;
-    addRect( coveredRegion, GetFootprintRect() );
 
-    // build list of holes (covered areas not available for selection)
-    SHAPE_POLY_SET holes;
+    TransformPadsWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                         ERROR_OUTSIDE );
 
-    for( PAD* pad : m_pads )
-        addRect( holes, pad->GetBoundingBox() );
-
-    addRect( holes, m_reference->GetBoundingBox() );
-    addRect( holes, m_value->GetBoundingBox() );
+    TransformFPShapesWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, textMargin,
+                                             ARC_LOW_DEF, ERROR_OUTSIDE,
+                                             true, /* include text */
+                                             false /* include shapes */ );
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
-        BOARD_ITEM* item = aCollector[i];
+        const BOARD_ITEM* item = aCollector[i];
 
         switch( item->Type() )
         {
-        case PCB_TEXT_T:
         case PCB_FP_TEXT_T:
+        case PCB_FP_SHAPE_T:
+            if( item->GetParent() != this )
+            {
+                item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 1,
+                                                            ARC_LOW_DEF, ERROR_OUTSIDE );
+            }
+            break;
+
+        case PCB_TEXT_T:
+        case PCB_SHAPE_T:
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-            addRect( holes, item->GetBoundingBox() );
+            item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 1,
+                                                        ARC_LOW_DEF, ERROR_OUTSIDE );
             break;
+
         default:
             break;
         }
@@ -1674,7 +1706,8 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
     try
     {
-        uncoveredRegion.BooleanSubtract( coveredRegion, holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        uncoveredRegion.BooleanSubtract( footprintRegion, coveredRegion,
+                                         SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         uncoveredRegion.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         uncoveredRegion.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
@@ -1684,9 +1717,10 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         return 1.0;
     }
 
+    double footprintRegionArea = polygonArea( footprintRegion );
     double uncoveredRegionArea = polygonArea( uncoveredRegion );
-    double coveredArea = fpArea - uncoveredRegionArea;
-    double ratio = ( coveredArea / fpArea );
+    double coveredArea = footprintRegionArea - uncoveredRegionArea;
+    double ratio = ( coveredArea / footprintRegionArea );
 
     return std::min( ratio, 1.0 );
 }

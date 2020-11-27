@@ -612,9 +612,9 @@ std::vector<wxPoint> EDA_TEXT::TransformToSegmentList() const
     }
     else
     {
-        GRText( NULL, GetTextPos(), color, GetText(), GetDrawRotation(), size, GetHorizJustify(),
-                GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToBuffer,
-                &cornerBuffer );
+        GRText( NULL, GetTextPos(), color, GetShownText(), GetDrawRotation(), size,
+                GetHorizJustify(), GetVertJustify(), penWidth, IsItalic(), forceBold,
+                addTextSegmToBuffer, &cornerBuffer );
     }
 
     return cornerBuffer;

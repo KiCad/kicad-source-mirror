@@ -231,7 +231,7 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
 {
     std::vector<FP_TEXT*> texts;  // List of FP_TEXT to convert
 
-    for( auto item : GraphicalItems() )
+    for( BOARD_ITEM* item : GraphicalItems() )
     {
         if( item->Type() == PCB_FP_TEXT_T && aIncludeText )
         {
@@ -262,25 +262,32 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
             texts.push_back( &Value() );
     }
 
-    prms.m_cornerBuffer = &aCornerBuffer;
-
-    for( FP_TEXT* textmod : texts )
+    for( FP_TEXT* text : texts )
     {
-        bool forceBold = true;
-        int  penWidth = 0;      // force max width for bold text
-
-        prms.m_textWidth  = textmod->GetEffectiveTextPenWidth() + ( 2 * aClearance );
-        prms.m_error = aError;
-        wxSize size = textmod->GetTextSize();
-
-        if( textmod->IsMirrored() )
-            size.x = -size.x;
-
-        GRText( NULL, textmod->GetTextPos(), BLACK, textmod->GetShownText(),
-                textmod->GetDrawRotation(), size, textmod->GetHorizJustify(),
-                textmod->GetVertJustify(), penWidth, textmod->IsItalic(), forceBold,
-                addTextSegmToPoly, &prms );
+        text->TransformTextShapeWithClearanceToPolygon( aCornerBuffer, aLayer, aClearance,
+                                                        aError, aErrorLoc );
     }
+}
+
+
+void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                        enum PCB_LAYER_ID aLayer,
+                                                        int aClearance, int aError,
+                                                        ERROR_LOC aErrorLoc ) const
+{
+    bool forceBold = true;
+    int  penWidth = 0;      // force max width for bold text
+
+    prms.m_cornerBuffer = &aCornerBuffer;
+    prms.m_textWidth  = GetEffectiveTextPenWidth() + ( 2 * aClearance );
+    prms.m_error = aError;
+    wxSize size = GetTextSize();
+
+    if( IsMirrored() )
+        size.x = -size.x;
+
+    GRText( NULL, GetTextPos(), BLACK, GetShownText(), GetDrawRotation(), size, GetHorizJustify(),
+            GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
 }
 
 

@@ -663,6 +663,8 @@ public:
      */
     double CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const;
 
+    static double GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLECTOR& aCollector );
+
     /// Return the initial comments block or NULL if none, without transfer of ownership.
     const wxArrayString* GetInitialComments() const { return m_initial_comments; }
 

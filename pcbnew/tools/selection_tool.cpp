@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <track.h>
 #include <footprint.h>
 #include <pcb_shape.h>
+#include <pcb_text.h>
 #include <zone.h>
 #include <collectors.h>
 #include <confirm.h>
@@ -46,7 +47,6 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-//#include <router/router_tool.h>
 #include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include <id.h>
@@ -161,7 +161,7 @@ bool SELECTION_TOOL::Init()
 
     // "Cancel" goes at the top of the context menu when a tool is active
     menu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-    menu.AddItem( PCB_ACTIONS::groupLeave,    inGroupCondition,    1);
+    menu.AddItem( PCB_ACTIONS::groupLeave,    inGroupCondition,    1 );
     menu.AddSeparator( 1 );
 
     if( frame )
@@ -2153,81 +2153,6 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
-static EDA_RECT getRect( const BOARD_ITEM* aItem )
-{
-    if( aItem->Type() == PCB_FOOTPRINT_T )
-        return static_cast<const FOOTPRINT*>( aItem )->GetFootprintRect();
-
-    return aItem->GetBoundingBox();
-}
-
-
-static double calcArea( const BOARD_ITEM* aItem )
-{
-    if( aItem->Type() == PCB_TRACE_T )
-    {
-        const TRACK* t = static_cast<const TRACK*>( aItem );
-        return ( t->GetWidth() + t->GetLength() ) * t->GetWidth();
-    }
-
-    return getRect( aItem ).GetArea();
-}
-
-
-/*static double calcMinArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
-{
-    double best = std::numeric_limits<double>::max();
-
-    if( !aCollector.GetCount() )
-        return 0.0;
-
-    for( int i = 0; i < aCollector.GetCount(); i++ )
-    {
-        BOARD_ITEM* item = aCollector[i];
-        if( item->Type() == aType )
-            best = std::min( best, calcArea( item ) );
-    }
-
-    return best;
-}*/
-
-
-static double calcMaxArea( GENERAL_COLLECTOR& aCollector, KICAD_T aType )
-{
-    double best = 0.0;
-
-    for( int i = 0; i < aCollector.GetCount(); i++ )
-    {
-        BOARD_ITEM* item = aCollector[i];
-        if( item->Type() == aType )
-            best = std::max( best, calcArea( item ) );
-    }
-
-    return best;
-}
-
-
-static inline double calcCommonArea( const BOARD_ITEM* aItem, const BOARD_ITEM* aOther )
-{
-    if( !aItem || !aOther )
-        return 0;
-
-    return getRect( aItem ).Common( getRect( aOther ) ).GetArea();
-}
-
-
-double calcRatio( double a, double b )
-{
-    if( a == 0.0 && b == 0.0 )
-        return 1.0;
-
-    if( b == 0.0 )
-        return std::numeric_limits<double>::max();
-
-    return a / b;
-}
-
-
 // The general idea here is that if the user clicks directly on a small item inside a larger
 // one, then they want the small item.  The quintessential case of this is clicking on a pad
 // within a footprint, but we also apply it for text within a footprint, footprints within
@@ -2247,24 +2172,6 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     std::set<BOARD_ITEM*> preferred;
     std::set<BOARD_ITEM*> rejected;
     wxPoint               where( aWhere.x, aWhere.y );
-
-    // footprints which are below this percentage of the largest footprint will be considered
-    // for selection; all others will not
-    constexpr double footprintToFootprintMinRatio = 0.20;
-    // pads which are below this percentage of their parent's area will exclude their parent
-    constexpr double padToFootprintMinRatio = 0.45;
-    // footprints containing items with items-to-footprint area ratio higher than this will be
-    // forced to stay on the list
-    constexpr double footprintMaxCoverRatio = 0.90;
-    constexpr double viaToPadMinRatio = 0.50;
-    constexpr double trackViaLengthRatio = 2.0;
-    constexpr double trackTrackLengthRatio = 0.3;
-    constexpr double textToFeatureMinRatio = 0.2;
-    constexpr double textToFootprintMinRatio = 0.4;
-    // If the common area of two compared items is above the following threshold, they cannot
-    // be rejected (it means they overlap and it might be hard to pick one by selecting
-    // its unique area).
-    constexpr double commonAreaRatio = 0.6;
 
     PCB_LAYER_ID activeLayer = (PCB_LAYER_ID) view()->GetTopLayer();
     LSET         silkLayers( 2, B_SilkS, F_SilkS );
@@ -2289,287 +2196,151 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
             for( BOARD_ITEM* item : preferred )
                 aCollector.Append( item );
+
             return;
         }
     }
 
-    // Zone edges are very specific; zone fills much less so.
-    if( aCollector.CountType( PCB_ZONE_T ) > 0 )
-    {
-        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
-        {
-            if( aCollector[i]->Type() == PCB_ZONE_T )
-            {
-                ZONE* zone = static_cast<ZONE*>( aCollector[i] );
+    // Prefer exact hits to sloppy ones
 
-                if( zone->HitTestForEdge( where, 5 * aCollector.GetGuide()->OnePixelInIU() ) )
-                    preferred.insert( zone );
-                else
-                    rejected.insert( zone );
-            }
-        }
+    constexpr int maxSlop = 5;
 
-        if( preferred.size() > 0 )
-        {
-            aCollector.Empty();
+    BOX2D viewportD = getView()->GetViewport();
+    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+    int   pixel = (int) aCollector.GetGuide()->OnePixelInIU();
+    int   minActual = INT_MAX;
+    SEG   loc( where, where );
 
-            for( BOARD_ITEM* item : preferred )
-                aCollector.Append( item );
-            return;
-        }
-    }
-
-    if( aCollector.CountType( PCB_FP_TEXT_T ) > 0 )
-    {
-        for( int i = 0; i < aCollector.GetCount(); ++i )
-        {
-            if( FP_TEXT* txt = dyn_cast<FP_TEXT*>( aCollector[i] ) )
-            {
-                double textArea = calcArea( txt );
-
-                for( int j = 0; j < aCollector.GetCount(); ++j )
-                {
-                    if( i == j )
-                        continue;
-
-                    BOARD_ITEM* item = aCollector[j];
-                    double itemArea = calcArea( item );
-                    double areaRatio = calcRatio( textArea, itemArea );
-                    double commonArea = calcCommonArea( txt, item );
-                    double itemCommonRatio = calcRatio( commonArea, itemArea );
-                    double txtCommonRatio = calcRatio( commonArea, textArea );
-
-                    if( item->Type() == PCB_FOOTPRINT_T )
-                    {
-                        // when text area is small compared to an overlapping footprint,
-                        // then it's a clear sign the text is the selection target
-                        if( areaRatio < textToFootprintMinRatio && itemCommonRatio < commonAreaRatio )
-                            rejected.insert( item );
-                    }
-
-                    switch( item->Type() )
-                    {
-                        case PCB_TRACE_T:
-                        case PCB_ARC_T:
-                        case PCB_PAD_T:
-                        case PCB_SHAPE_T:
-                        case PCB_VIA_T:
-                        case PCB_FOOTPRINT_T:
-                            if( areaRatio > textToFeatureMinRatio && txtCommonRatio < commonAreaRatio )
-                                rejected.insert( txt );
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-    }
-
-    if( aCollector.CountType( PCB_FP_SHAPE_T ) + aCollector.CountType( PCB_SHAPE_T ) > 1 )
-    {
-        // Prefer exact hits to sloppy ones
-        int accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
-        bool found = false;
-
-        for( int dist = 0; dist < accuracy; ++dist )
-        {
-            for( int i = 0; i < aCollector.GetCount(); ++i )
-            {
-                if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aCollector[i] ) )
-                {
-                    if( shape->HitTest( where, dist ) )
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-
-            if( found )
-            {
-                // throw out everything that is more sloppy than what we found
-                for( int i = 0; i < aCollector.GetCount(); ++i )
-                {
-                    if( PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( aCollector[i] ) )
-                    {
-                        if( !shape->HitTest( where, dist ) )
-                            rejected.insert( shape );
-                    }
-                }
-
-                // we're done now
-                break;
-            }
-        }
-    }
-
-    if( aCollector.CountType( PCB_PAD_T ) > 0 )
-    {
-        for( int i = 0; i < aCollector.GetCount(); ++i )
-        {
-            if( PAD* pad = dyn_cast<PAD*>( aCollector[i] ) )
-            {
-                FOOTPRINT* parent = pad->GetParent();
-                double ratio = calcRatio( calcArea( pad ), calcArea( parent ) );
-
-                // when pad area is small compared to the parent footprint,
-                // then it is a clear sign the pad is the selection target
-                if( ratio < padToFootprintMinRatio )
-                    rejected.insert( pad->GetParent() );
-            }
-        }
-    }
-
-    bool hasNonModules = false;
+    std::map<BOARD_ITEM*, int> itemsBySloppiness;
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
-        if( aCollector[i]->Type() != PCB_FOOTPRINT_T )
+        BOARD_ITEM* item = aCollector[i];
+        int         actualSlop = INT_MAX;
+
+        switch( item->Type() )
         {
-            hasNonModules = true;
+        case PCB_TEXT_T:
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+            text->GetEffectiveTextShape()->Collide( loc, maxSlop * pixel, &actualSlop );
+        }
+            break;
+
+        case PCB_FP_TEXT_T:
+        {
+            FP_TEXT* text = static_cast<FP_TEXT*>( item );
+            text->GetEffectiveTextShape()->Collide( loc, maxSlop * pixel, &actualSlop );
+        }
+            break;
+
+        case PCB_ZONE_T:
+        {
+            ZONE* zone = static_cast<ZONE*>( item );
+
+            // Zone borders are very specific
+            if( zone->HitTestForEdge( where, maxSlop * pixel / 2 ) )
+                actualSlop = 0;
+            else if( zone->HitTestForEdge( where, maxSlop * pixel ) )
+                actualSlop = maxSlop * pixel / 2;
+            else
+                item->GetEffectiveShape()->Collide( loc, maxSlop * pixel, &actualSlop );
+        }
+            break;
+
+        case PCB_FOOTPRINT_T:
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+
+            footprint->GetBoundingPoly().Collide( loc, maxSlop * pixel, &actualSlop );
+
+            // Consider footprints larger than the viewport only as a last resort
+            if( item->ViewBBox().GetHeight() > viewport.GetHeight()
+                        ||  item->ViewBBox().GetWidth() > viewport.GetWidth() )
+            {
+                actualSlop = INT_MAX / 2;
+            }
+        }
+            break;
+
+        default:
+            item->GetEffectiveShape()->Collide( loc, maxSlop * pixel, &actualSlop );
             break;
         }
+
+        itemsBySloppiness[ item ] = actualSlop;
+
+        if( actualSlop < minActual )
+            minActual = actualSlop;
     }
 
-    if( aCollector.CountType( PCB_FOOTPRINT_T ) > 0 )
+    // Prune sloppier items
+
+    for( std::pair<BOARD_ITEM*, int> pair : itemsBySloppiness )
     {
-        double maxArea = calcMaxArea( aCollector, PCB_FOOTPRINT_T );
-        BOX2D  viewportD = getView()->GetViewport();
-        BOX2I  viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
-        double maxCoverRatio = footprintMaxCoverRatio;
-
-        // FOOTPRINT::CoverageRatio() doesn't take zone handles & borders into account so just
-        // use a more aggressive cutoff point if zones are involved.
-        if(  aCollector.CountType( PCB_ZONE_T ) )
-            maxCoverRatio /= 2;
-
-        for( int i = 0; i < aCollector.GetCount(); ++i )
-        {
-            if( FOOTPRINT* footprint = dyn_cast<FOOTPRINT*>( aCollector[i] ) )
-            {
-                // filter out components larger than the viewport
-                if( footprint->ViewBBox().GetHeight() > viewport.GetHeight()
-                            ||  footprint->ViewBBox().GetWidth() > viewport.GetWidth() )
-                {
-                    rejected.insert( footprint );
-                }
-                // footprints completely covered with other features have no other
-                // means of selection, so must be kept
-                else if( footprint->CoverageRatio( aCollector ) > maxCoverRatio )
-                {
-                    rejected.erase( footprint );
-                }
-                // if a footprint is much smaller than the largest overlapping
-                // footprint then it should be considered for selection
-                else if( calcRatio( calcArea( footprint ), maxArea ) <= footprintToFootprintMinRatio )
-                {
-                    continue;
-                }
-                // reject ALL OTHER footprints if there's still something else left
-                // to select
-                else if( hasNonModules )
-                {
-                    rejected.insert( footprint );
-                }
-            }
-        }
+        if( pair.second > minActual + pixel )
+            aCollector.Transfer( pair.first );
     }
 
-    if( aCollector.CountType( PCB_VIA_T ) > 0 )
+    // If the user clicked on a small item within a much larger one then it's pretty clear
+    // they're trying to select the smaller one.
+
+    constexpr double sizeRatio = 1.3;
+
+    std::vector<std::pair<BOARD_ITEM*, double>> itemsByArea;
+
+    for( int i = 0; i < aCollector.GetCount(); ++i )
     {
-        for( int i = 0; i < aCollector.GetCount(); ++i )
+        BOARD_ITEM* item = aCollector[i];
+        double      area;
+
+        if( item->Type() == PCB_ZONE_T
+                && static_cast<ZONE*>( item )->HitTestForEdge( where, maxSlop * pixel / 2 ) )
         {
-            if( VIA* via = dyn_cast<VIA*>( aCollector[i] ) )
-            {
-                double viaArea = calcArea( via );
-
-                for( int j = 0; j < aCollector.GetCount(); ++j )
-                {
-                    if( i == j )
-                        continue;
-
-                    BOARD_ITEM* item = aCollector[j];
-                    double areaRatio = calcRatio( viaArea, calcArea( item ) );
-
-                    if( item->Type() == PCB_FOOTPRINT_T && areaRatio < padToFootprintMinRatio )
-                        rejected.insert( item );
-
-                    if( item->Type() == PCB_PAD_T && areaRatio < viaToPadMinRatio )
-                        rejected.insert( item );
-
-                    if( TRACK* track = dyn_cast<TRACK*>( item ) )
-                    {
-                        if( track->GetNetCode() != via->GetNetCode() )
-                            continue;
-
-                        double lenRatio = (double) ( track->GetLength() + track->GetWidth() ) /
-                                          (double) via->GetWidth();
-
-                        if( lenRatio > trackViaLengthRatio )
-                            rejected.insert( track );
-                    }
-                }
-            }
+            // Zone borders are very specific, so make them "small"
+            area = maxSlop * pixel * pixel;
         }
+        else
+        {
+            area = FOOTPRINT::GetCoverageArea( item, aCollector );
+        }
+
+        itemsByArea.emplace_back( item, area );
     }
 
-    int nTracks = aCollector.CountType( PCB_TRACE_T );
+    std::sort( itemsByArea.begin(), itemsByArea.end(),
+               []( const std::pair<BOARD_ITEM*, double>& lhs,
+                   const std::pair<BOARD_ITEM*, double>& rhs ) -> bool
+               {
+                   return lhs.second < rhs.second;
+               } );
 
-    if( nTracks > 0 )
+    bool rejecting = false;
+
+    for( int i = 1; i < (int) itemsByArea.size(); ++i )
     {
-        double maxLength = 0.0;
-        double minLength = std::numeric_limits<double>::max();
-        double maxArea = 0.0;
-        const TRACK* maxTrack = nullptr;
+        if( itemsByArea[i].second > itemsByArea[i-1].second * sizeRatio )
+            rejecting = true;
 
-        for( int i = 0; i < aCollector.GetCount(); ++i )
+        if( rejecting )
+            rejected.insert( itemsByArea[i].first );
+    }
+
+    // Special case: if a footprint is completely covered with other features then there's no
+    // way to select it -- so we need to leave it in the list for user disambiguation.
+
+    constexpr double maxCoverRatio = 0.75;
+
+    for( int i = 0; i < aCollector.GetCount(); ++i )
+    {
+        if( FOOTPRINT* footprint = dynamic_cast<FOOTPRINT*>( aCollector[i] ) )
         {
-            if( TRACK* track = dyn_cast<TRACK*>( aCollector[i] ) )
-            {
-                maxLength = std::max( track->GetLength(), maxLength );
-                maxLength = std::max( (double) track->GetWidth(), maxLength );
-
-                minLength = std::min( std::max( track->GetLength(), (double) track->GetWidth() ), minLength );
-
-                double area = track->GetLength() * track->GetWidth();
-
-                if( area > maxArea )
-                {
-                    maxArea = area;
-                    maxTrack = track;
-                }
-            }
-        }
-
-        if( maxLength > 0.0 && minLength / maxLength < trackTrackLengthRatio && nTracks > 1 )
-        {
-            for( int i = 0; i < aCollector.GetCount(); ++i )
-             {
-                if( TRACK* track = dyn_cast<TRACK*>( aCollector[i] ) )
-                {
-                    double ratio = std::max( (double) track->GetWidth(), track->GetLength() ) / maxLength;
-
-                    if( ratio > trackTrackLengthRatio )
-                        rejected.insert( track );
-                }
-            }
-        }
-
-        for( int j = 0; j < aCollector.GetCount(); ++j )
-        {
-            if( FOOTPRINT* footprint = dyn_cast<FOOTPRINT*>( aCollector[j] ) )
-            {
-                double ratio = calcRatio( maxArea, footprint->GetFootprintRect().GetArea() );
-
-                if( ratio < padToFootprintMinRatio
-                        && calcCommonArea( maxTrack, footprint ) < commonAreaRatio )
-                {
-                    rejected.insert( footprint );
-                }
-            }
+            if( footprint->CoverageRatio( aCollector ) > maxCoverRatio )
+                rejected.erase( footprint );
         }
     }
+
+    // Hopefully we've now got what the user wanted.
 
     if( (unsigned) aCollector.GetCount() > rejected.size() )  // do not remove everything
     {

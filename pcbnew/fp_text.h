@@ -198,6 +198,10 @@ public:
         return TextHitTest( aRect, aContained, aAccuracy );
     }
 
+    void TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                   PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                   int aError, ERROR_LOC aErrorLoc ) const;
+
     // @copydoc BOARD_ITEM::GetEffectiveShape
     virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 

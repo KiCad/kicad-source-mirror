@@ -335,7 +335,7 @@ public:
      */
     void SetGuide( const COLLECTORS_GUIDE* aGuide ) { m_Guide = aGuide; }
 
-    const COLLECTORS_GUIDE* GetGuide() { return m_Guide; }
+    const COLLECTORS_GUIDE* GetGuide() const { return m_Guide; }
 
     /**
      * @return int - The number if items which met the primary search criteria
