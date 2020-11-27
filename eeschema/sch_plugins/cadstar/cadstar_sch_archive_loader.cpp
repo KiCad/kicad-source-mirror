@@ -577,14 +577,30 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
         }
 
+        auto getHierarchicalLabel = [&]( NETELEMENT_ID aNode ) -> SCH_HIERLABEL*
+                                    {
+                                        if( aNode.Contains( "BLKT" ) )
+                                        {
+                                            NET_SCH::BLOCK_TERM blockTerm = net.BlockTerminals.at( aNode );
+                                            BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID, blockTerm.TerminalID );
+
+                                            if( mSheetPinMap.find( blockPinID )
+                                                    != mSheetPinMap.end() )
+                                            {
+                                                return mSheetPinMap.at( blockPinID );
+                                            }
+                                        }
+
+                                        return nullptr;
+                                    };
+
         //Add net name to all hierarchical pins (block terminals in CADSTAR)
         for( std::pair<NETELEMENT_ID, NET_SCH::BLOCK_TERM> blockPair : net.BlockTerminals )
         {
-            NET_SCH::BLOCK_TERM blockTerm = blockPair.second;
-            BLOCK_PIN_ID blockPinID = std::make_pair( blockTerm.BlockID, blockTerm.TerminalID );
+            SCH_HIERLABEL* label = getHierarchicalLabel( blockPair.first );
 
-            if( mSheetPinMap.find( blockPinID ) != mSheetPinMap.end() )
-                mSheetPinMap.at( blockPinID )->SetText( netName );
+            if(label)
+                label->SetText( netName );
         }
 
         // Load all bus entries and add net label if required
@@ -637,6 +653,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
         for( NET_SCH::CONNECTION_SCH conn : net.Connections )
         {
+            if( conn.LayerID == wxT( "NO_SHEET" ) )
+                continue; // No point loading virtual connections. KiCad handles that internally
+
             if( conn.Path.size() < 2 )
             {
                 //Implied straight line connection between the two elements
@@ -653,14 +672,91 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             bool      firstPt  = true;
             bool      secondPt = false;
-            POINT     last;
+            wxPoint   last;
             SCH_LINE* wire = nullptr;
+            
+            SHAPE_LINE_CHAIN wireChain; // Create a temp. line chain representing the connection
 
             for( POINT pt : conn.Path )
             {
+                wireChain.Append( getKiCadPoint( pt ) );
+            }
+
+            // AUTO-FIX SHEET PINS
+            //--------------------
+            // KiCad constrains the sheet pin on the edge of the sheet object whereas in
+            // CADSTAR it can be anywhere. Let's find the intersection of the wires with the sheet
+            // and place the hierarchical
+            std::vector<NETELEMENT_ID> nodes;
+            nodes.push_back( conn.StartNode );
+            nodes.push_back( conn.EndNode );
+
+            for( NETELEMENT_ID node : nodes )
+            {
+                SCH_HIERLABEL* sheetPin = getHierarchicalLabel( node );
+
+                if( sheetPin )
+                {
+                    if( sheetPin->Type() == SCH_SHEET_PIN_T
+                            && SCH_SHEET::ClassOf( sheetPin->GetParent() ) )
+                    {
+                        SCH_SHEET* parentSheet   = static_cast<SCH_SHEET*>( sheetPin->GetParent() );
+                        wxSize     sheetSize     = parentSheet->GetSize();
+                        wxPoint    sheetPosition = parentSheet->GetPosition();
+
+                        int leftSide  = sheetPosition.x;
+                        int rightSide = sheetPosition.x + sheetSize.x;
+                        int topSide   = sheetPosition.y;
+                        int botSide   = sheetPosition.y + sheetSize.y;
+
+                        SHAPE_LINE_CHAIN sheetEdge;
+
+                        sheetEdge.Append( leftSide, topSide );
+                        sheetEdge.Append( rightSide, topSide );
+                        sheetEdge.Append( rightSide, botSide );
+                        sheetEdge.Append( leftSide, botSide );
+                        sheetEdge.Append( leftSide, topSide );
+
+                        SHAPE_LINE_CHAIN::INTERSECTIONS wireToSheetIntersects;
+
+                        if( !wireChain.Intersect( sheetEdge, wireToSheetIntersects ) )
+                        {
+                            // The block terminal is outside the block shape in the original 
+                            // CADSTAR design. Since KiCad's Sheet Pin will already be constrained
+                            // on the edge, we will simply join to it with a straight line.
+                            if( node == conn.StartNode )
+                                wireChain = wireChain.Reverse();
+
+                            wireChain.Append( sheetPin->GetPosition() );
+                            
+                            if( node == conn.StartNode )
+                                wireChain = wireChain.Reverse();
+                        }
+                        else
+                        {
+                            // The block terminal is either inside or on the shape edge. Lets use the
+                            // first interection point
+                            VECTOR2I intsctPt   = wireToSheetIntersects.at( 0 ).p;
+                            int      intsctIndx = wireChain.FindSegment( intsctPt );
+                            wxASSERT_MSG( intsctIndx != -1, "Can't find intersecting segment" );
+
+                            if( node == conn.StartNode )
+                                wireChain.Replace( 0, intsctIndx, intsctPt );
+                            else
+                                wireChain.Replace( intsctIndx + 1, /*end index*/ -1, intsctPt );
+
+                            sheetPin->SetPosition( (wxPoint) intsctPt );
+                        }
+                    }
+                }
+            }
+
+            // Now we can load the wires            
+            for( const VECTOR2I pt : wireChain.CPoints() )
+            {
                 if( firstPt )
                 {
-                    last     = pt;
+                    last     = (wxPoint) pt;
                     firstPt  = false;
                     secondPt = true;
                     continue;
@@ -670,44 +766,54 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 {
                     secondPt = false;
 
+
+                    wxPoint          kiLast           = last;
+                    wxPoint          kiCurrent        = (wxPoint) pt;
+                    double           wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
+                    LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
+
                     if( netlabels.find( conn.StartNode ) != netlabels.end() )
                     {
-                        wxPoint          kiLast           = getKiCadPoint( last );
-                        wxPoint          kiCurrent        = getKiCadPoint( pt );
-                        double           wireangleDeciDeg = getPolarAngle( kiCurrent - kiLast );
-                        LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
                         netlabels.at( conn.StartNode )->SetLabelSpinStyle( spin );
                     }
+
+                    SCH_HIERLABEL* sheetPin = getHierarchicalLabel( conn.StartNode );
+
+                    if( sheetPin )
+                        sheetPin->SetLabelSpinStyle( spin );
                 }
 
+                wire = new SCH_LINE();
 
-                if( conn.LayerID != wxT( "NO_SHEET" ) )
-                {
-                    wire = new SCH_LINE();
+                wire->SetStartPoint( last );
+                wire->SetEndPoint( (wxPoint) pt );
+                wire->SetLayer( LAYER_WIRE );
 
-                    wire->SetStartPoint( getKiCadPoint( last ) );
-                    wire->SetEndPoint( getKiCadPoint( pt ) );
-                    wire->SetLayer( LAYER_WIRE );
+                if( !conn.ConnectionLineCode.IsEmpty() )
+                    wire->SetLineWidth( getLineThickness( conn.ConnectionLineCode ) );
 
-                    if( !conn.ConnectionLineCode.IsEmpty() )
-                        wire->SetLineWidth( getLineThickness( conn.ConnectionLineCode ) );
+                last = (wxPoint) pt;
 
-                    last = pt;
-
-                    mSheetMap.at( conn.LayerID )->GetScreen()->Append( wire );
-                }
+                mSheetMap.at( conn.LayerID )->GetScreen()->Append( wire );
             }
 
-            if( wire && netlabels.find( conn.EndNode ) != netlabels.end() )
+            //Fix labels on the end wire
+            if( wire )
             {
                 wxPoint          kiLast           = wire->GetEndPoint();
                 wxPoint          kiCurrent        = wire->GetStartPoint();
-                double           wireangleDeciDeg = getPolarAngle( kiCurrent - kiLast );
+                double           wireangleDeciDeg = getPolarAngle( kiLast - kiCurrent );
                 LABEL_SPIN_STYLE spin             = getSpinStyleDeciDeg( wireangleDeciDeg );
-                netlabels.at( conn.EndNode )->SetLabelSpinStyle( spin );
+
+                if( netlabels.find( conn.EndNode ) != netlabels.end() )
+                    netlabels.at( conn.EndNode )->SetLabelSpinStyle( spin );
+
+                SCH_HIERLABEL* sheetPin = getHierarchicalLabel( conn.EndNode );
+
+                if( sheetPin )
+                    sheetPin->SetLabelSpinStyle( spin );
             }
         }
-
 
         for( std::pair<NETELEMENT_ID, NET::JUNCTION> juncPair : net.Junctions )
         {
