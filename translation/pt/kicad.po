@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-02 21:02+0000\n"
+"PO-Revision-Date: 2020-11-30 00:07+0000\n"
 "Last-Translator: Hildo Guillardi Júnior <hildogjr@gmail.com>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.3.2-dev\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -175,6 +175,8 @@ msgstr "Nenhum footprint selecionado"
 msgid ""
 "Footprint outline is malformed. Run Footprint Checker for a full analysis."
 msgstr ""
+"O contorno do Footprint está malformado. Execute o Footprint Checker para "
+"uma análise completa."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:250
@@ -183,6 +185,8 @@ msgstr ""
 #: pcbnew/specctra_import_export/specctra_export.cpp:838
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
+"O contorno do Footprint está malformado. Execute o Footprint Checker para "
+"uma análise completa."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -3288,7 +3292,6 @@ msgid "Alt"
 msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
-#, fuzzy
 msgid "Zoom:"
 msgstr "Ampliação:"
 
@@ -31543,9 +31546,8 @@ msgid "Copy current pad's properties"
 msgstr "Copiar as propriedades atuais da ilha"
 
 #: pcbnew/tools/pcb_actions.cpp:491
-#, fuzzy
 msgid "Paste Default Pad Properties to Selected"
-msgstr "Propriedades de Ilha Padrão…"
+msgstr "Colar protpriedas padrão de Pad na seleção"
 
 #: pcbnew/tools/pcb_actions.cpp:492
 msgid "Replace the current pad's properties with those copied earlier"
