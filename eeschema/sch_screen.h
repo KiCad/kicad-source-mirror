@@ -412,7 +412,7 @@ public:
     void GetHierarchicalItems( std::vector<SCH_ITEM*>* aItems );
 
     /**
-     * Similar to GetItems().OfType( SCH_SHEET_T ), but return the sheets in a
+     * Similar to Items().OfType( SCH_SHEET_T ), but return the sheets in a
      * deterministic order (L-R, T-B) for sheet numbering.
      * @param aItems
      */
