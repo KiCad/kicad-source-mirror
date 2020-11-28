@@ -627,13 +627,10 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
-    if( !DIALOG_SHIM::TransferDataFromWindow() )
+    if( !m_itemsGrid->CommitPendingChanges() )
         return false;
 
-    if( !m_PanelGeneral->TransferDataFromWindow() )
-        return false;
-
-    if( !m_Panel3D->TransferDataFromWindow() )
+    if( !m_modelsGrid->CommitPendingChanges() )
         return false;
 
     auto view = m_frame->GetCanvas()->GetView();
