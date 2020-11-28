@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep  3 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -665,8 +665,6 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer15->Fit( m_pwrPwl );
 	m_powerNotebook->AddPage( m_pwrPwl, _("Piece-wise Linear"), false );
 	m_pwrFm = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_pwrFm->Hide();
-
 	wxFlexGridSizer* fgSizer11;
 	fgSizer11 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer11->AddGrowableCol( 1 );
@@ -758,8 +756,6 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer11->Fit( m_pwrFm );
 	m_powerNotebook->AddPage( m_pwrFm, _("FM"), false );
 	m_pwrAm = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_pwrAm->Hide();
-
 	wxFlexGridSizer* fgSizer12;
 	fgSizer12 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer12->AddGrowableCol( 1 );
@@ -844,8 +840,6 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 
 	m_powerNotebook->AddPage( m_pwrTransNoise, _("Transient noise"), false );
 	m_pwrRandom = new wxPanel( m_powerNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	m_pwrRandom->Hide();
-
 	wxFlexGridSizer* fgSizer13;
 	fgSizer13 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer13->AddGrowableCol( 1 );
