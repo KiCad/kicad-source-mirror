@@ -80,7 +80,7 @@ public:
         BOOST_REQUIRE( ok );
 
         // use an easier scale for test purposes
-        m_4tile.SetPixelScaleFactor( 2.0 );
+        m_4tile.SetPixelSizeIu( 2.0 );
         m_4tile.SetScale( 5.0 );
     }
 
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE( Empty )
     BOOST_CHECK_EQUAL( cempty.GetImageData(), nullptr );
     BOOST_CHECK_EQUAL( cempty.GetPPI(), 300 );
     BOOST_CHECK_EQUAL( cempty.GetScale(), 1.0 );
-    BOOST_CHECK_EQUAL( cempty.GetPixelScaleFactor(), 254000.0 / 300.0 );
+    BOOST_CHECK_EQUAL( cempty.GetPixelSizeIu(), 254000.0 / 300.0 );
 
     // can do this on an empty image
     empty.Rotate( true );
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE( BasicProps )
     BOOST_CHECK_EQUAL( img.GetScale(), 5.0 );
 
     // we changed this, make sure it's right
-    BOOST_CHECK_EQUAL( img.GetPixelScaleFactor(), 2.0 );
+    BOOST_CHECK_EQUAL( img.GetPixelSizeIu(), 2.0 );
 
     BOOST_CHECK( img.GetSizePixels() == size_4tile );
     BOOST_CHECK( img.GetSize() == size_4tile * 10 );
