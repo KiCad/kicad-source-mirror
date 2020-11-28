@@ -362,11 +362,11 @@ public:
      * Prints the page layout with the frame and the basic inscriptions.
      *
      * @param aScreen screen to draw
-     * @param aScale The mils to Iu conversion factor.
+     * @param aMils2Iu The mils to Iu conversion factor.
      * @param aFilename The filename to display in basic inscriptions.
      * @param aSheetLayer The layer displayed from pcbnew.
      */
-    void PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aScale,
+    void PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aMils2Iu,
                          const wxString &aFilename, const wxString &aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;

@@ -823,13 +823,13 @@ static const wxString productName = wxT( "KiCad E.D.A.  " );
 void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                       const wxString& aFullSheetName, const wxString& aFileName,
                       const TITLE_BLOCK& aTitleBlock, int aSheetCount, const wxString& aPageNumber,
-                      double aScalar, const PROJECT* aProject, const wxString& aSheetLayer,
+                      double aMils2Iu, const PROJECT* aProject, const wxString& aSheetLayer,
                       bool aIsFirstPage )
 {
     WS_DRAW_ITEM_LIST drawList;
 
     drawList.SetDefaultPenSize( aSettings->GetDefaultPenWidth() );
-    drawList.SetMilsToIUfactor( aScalar );
+    drawList.SetMilsToIUfactor( aMils2Iu );
     drawList.SetPageNumber( aPageNumber );
     drawList.SetSheetCount( aSheetCount );
     drawList.SetFileName( aFileName );
@@ -846,7 +846,7 @@ void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
 
 
 void EDA_DRAW_FRAME::PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
-                                     double aScalar, const wxString &aFilename,
+                                     double aMils2Iu, const wxString &aFilename,
                                      const wxString &aSheetLayer )
 {
     if( !m_showBorderAndTitleBlock )
@@ -862,7 +862,7 @@ void EDA_DRAW_FRAME::PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aS
     }
 
     PrintPageLayout( aSettings, GetPageSettings(), GetScreenDesc(), aFilename, GetTitleBlock(),
-                     aScreen->GetPageCount(), aScreen->GetPageNumber(), aScalar, &Prj(),
+                     aScreen->GetPageCount(), aScreen->GetPageNumber(), aMils2Iu, &Prj(),
                      aSheetLayer, aScreen->GetVirtualPageNumber() == 1 );
 
     if( origin.y > 0 )

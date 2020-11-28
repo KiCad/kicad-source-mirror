@@ -52,10 +52,10 @@ class BITMAP_BASE
 {
 private:
     double    m_scale;              // The scaling factor of the bitmap
-                                    // With m_pixelScaleFactor, controls the actual draw size
+                                    // With m_pixelSizeIu, controls the actual draw size
     wxImage*  m_image;              // the raw image data (png format)
     wxBitmap* m_bitmap;             // the bitmap used to draw/plot image
-    double    m_pixelScaleFactor;   // The scaling factor of the bitmap
+    double    m_pixelSizeIu;   // The scaling factor of the bitmap
                                     // to convert the bitmap size (in pixels)
                                     // to internal KiCad units
                                     // Usually does not change
@@ -77,8 +77,8 @@ public:
     /*
      * Accessors:
      */
-    double GetPixelScaleFactor() const { return m_pixelScaleFactor; }
-    void SetPixelScaleFactor( double aSF ) { m_pixelScaleFactor = aSF; }
+    double GetPixelSizeIu() const { return m_pixelSizeIu; }
+    void SetPixelSizeIu( double aPixSize ) { m_pixelSizeIu = aPixSize; }
 
     wxImage* GetImageData() { return m_image; }
     const wxImage* GetImageData() const { return m_image; }
@@ -114,8 +114,8 @@ public:
     /**
      * Function GetScalingFactor
      * @return the scaling factor from pixel size to actual draw size
-     * this scaling factor depends on m_pixelScaleFactor and m_scale
-     * m_pixelScaleFactor gives the scaling factor between a pixel size and
+     * this scaling factor depends on m_pixelSizeIu and m_scale
+     * m_pixelSizeIu gives the scaling factor between a pixel size and
      * the internal schematic units
      * m_scale is an user dependant value, and gives the "zoom" value
      *  m_scale = 1.0 = original size of bitmap.
@@ -124,7 +124,7 @@ public:
      */
     double GetScalingFactor() const
     {
-        return m_pixelScaleFactor * m_scale;
+        return m_pixelSizeIu * m_scale;
     }
 
 

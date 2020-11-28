@@ -202,8 +202,8 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
             continue;
 
         WS_DATA_ITEM_BITMAP* itemBM = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem );
-        itemBM->m_ImageBitmap->SetPixelScaleFactor( IU_PER_MILS * 1000 /
-                                                    itemBM->m_ImageBitmap->GetPPI() );
+        itemBM->m_ImageBitmap->SetPixelSizeIu( IU_PER_MILS * 1000 /
+                                               itemBM->m_ImageBitmap->GetPPI() );
     }
 
     m_parent->PrintWorkSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );

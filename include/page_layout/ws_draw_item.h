@@ -440,10 +440,15 @@ public:
     /**
      * Set the scalar to convert pages units (mils) to draw/plot units
      */
-    void SetMilsToIUfactor( double aScale )
+    void SetMilsToIUfactor( double aMils2Iu )
     {
-        m_milsToIu = aScale;
+        m_milsToIu = aMils2Iu;
     }
+
+    /**
+     * Get the scalar to convert pages units (mils) to draw/plot units
+     */
+    double GetMilsToIUfactor() { return m_milsToIu; }
 
     /**
      * Set the value of the sheet number.
@@ -512,7 +517,7 @@ public:
      *
      * Before calling this function, some parameters should be initialized by calling:
      *   SetPenSize( aPenWidth );
-     *   SetMilsToIUfactor( aScalar );
+     *   SetMilsToIUfactor( aMils2Iu );
      *   SetSheetNumber( aSheetNumber );
      *   SetSheetCount( aSheetCount );
      *   SetFileName( aFileName );

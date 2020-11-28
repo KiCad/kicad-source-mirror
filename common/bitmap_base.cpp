@@ -44,12 +44,12 @@
 
 BITMAP_BASE::BITMAP_BASE( const wxPoint& pos )
 {
-    m_scale  = 1.0;                 // 1.0 = original bitmap size
+    m_scale  = 1.0;                     // 1.0 = original bitmap size
     m_bitmap = NULL;
     m_image  = NULL;
-    m_ppi    = 300;                 // the bitmap definition. the default is 300PPI
-    m_pixelScaleFactor = 254000.0 / m_ppi;    // a value OK for bitmaps using 300 PPI
-                                              // for Eeschema which uses currently 254000PPI
+    m_ppi    = 300;                     // the bitmap definition. the default is 300PPI
+    m_pixelSizeIu = 254000.0 / m_ppi;   // a pixel size value OK for bitmaps using 300 PPI
+                                        // for Eeschema which uses currently 254000PPI
 }
 
 
@@ -57,7 +57,7 @@ BITMAP_BASE::BITMAP_BASE( const BITMAP_BASE& aSchBitmap )
 {
     m_scale = aSchBitmap.m_scale;
     m_ppi   = aSchBitmap.m_ppi;
-    m_pixelScaleFactor = aSchBitmap.m_pixelScaleFactor;
+    m_pixelSizeIu = aSchBitmap.m_pixelSizeIu;
 
     m_image = nullptr;
     m_bitmap = nullptr;
@@ -80,7 +80,7 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
     *m_bitmap = *aItem->m_bitmap;
     m_scale   = aItem->m_scale;
     m_ppi     = aItem->m_ppi;
-    m_pixelScaleFactor = aItem->m_pixelScaleFactor;
+    m_pixelSizeIu = aItem->m_pixelSizeIu;
 }
 
 

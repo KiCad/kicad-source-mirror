@@ -762,7 +762,11 @@ void WS_DATA_ITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::V
         if( j && !IsInsidePage( j ) )
             continue;
 
-        auto bitmap = new WS_DRAW_ITEM_BITMAP( this, j, GetStartPosUi( j ) );
+        double pix_size_iu = aCollector->GetMilsToIUfactor() * 1000 / m_ImageBitmap->GetPPI();
+        m_ImageBitmap->SetPixelSizeIu( pix_size_iu );
+
+        WS_DRAW_ITEM_BITMAP* bitmap = new WS_DRAW_ITEM_BITMAP( this, j, GetStartPosUi( j ) );
+
         bitmap->SetFlags( itemFlags[ j ] );
         m_drawItems.push_back( bitmap );
 
