@@ -53,10 +53,14 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataToWindow()
 
     std::vector<wxString> paths;
 
+    // SetValue does not fire the "OnRadioButton" event, so have to fabricate this
+    wxCommandEvent dummy;
+
     if( !m_manager->GetPreviousVersionPaths( &paths ) )
     {
         m_btnPrevVer->SetLabelText( _( "Import settings from a previous version (none found)" ) );
         m_btnUseDefaults->SetValue( true );
+        OnDefaultSelected( dummy );
     }
     else
     {
@@ -67,6 +71,7 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataToWindow()
 
         m_cbPath->SetSelection( 0 );
         m_btnPrevVer->SetValue( true );
+        OnPrevVerSelected( dummy );
     }
 
     Fit();
