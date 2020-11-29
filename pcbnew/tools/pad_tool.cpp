@@ -623,17 +623,17 @@ void PAD_TOOL::recombinePad( PAD* aPad )
 
                 for( BOARD_ITEM* item : board()->GetFirstFootprint()->GraphicalItems() )
                 {
-                    PCB_SHAPE* draw = dynamic_cast<PCB_SHAPE*>( item );
+                    PCB_SHAPE* shape = dynamic_cast<PCB_SHAPE*>( item );
 
-                    if( !draw || ( draw->GetEditFlags() & STRUCT_DELETED ) )
+                    if( !shape || ( shape->GetEditFlags() & STRUCT_DELETED ) )
                         continue;
 
-                    if( draw->GetLayer() != aLayer )
+                    if( shape->GetLayer() != aLayer )
                         continue;
 
                     SHAPE_POLY_SET drawPoly;
-                    draw->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0, maxError,
-                                                                ERROR_INSIDE );
+                    shape->TransformShapeWithClearanceToPolygon( drawPoly, aLayer, 0, maxError,
+                                                                 ERROR_INSIDE );
                     drawPoly.BooleanIntersection( padPoly, SHAPE_POLY_SET::PM_FAST );
 
                     if( !drawPoly.IsEmpty() )

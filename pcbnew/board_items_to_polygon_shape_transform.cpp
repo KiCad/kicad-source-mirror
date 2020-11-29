@@ -67,7 +67,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
     int maxError = GetDesignSettings().m_MaxError;
 
     // convert tracks and vias:
-    for( auto track : m_tracks )
+    for( TRACK* track : m_tracks )
     {
         if( !track->IsOnLayer( aLayer ) )
             continue;
@@ -76,7 +76,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
                                                      ERROR_INSIDE );
     }
 
-    // convert pads
+    // convert pads and other copper items in footprints
     for( FOOTPRINT* footprint : m_footprints )
     {
         footprint->TransformPadsWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
@@ -84,7 +84,15 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 
         // Micro-wave footprints may have items on copper layers
         footprint->TransformFPShapesWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                            ERROR_INSIDE );
+                                                            ERROR_INSIDE,
+                                                            true, /* include text */
+                                                            true  /* include shapes */ );
+
+        for( ZONE* zone : footprint->Zones() )
+        {
+            if( zone->GetLayerSet().test( aLayer ) )
+                zone->TransformSolidAreasShapesToPolygon( aLayer, aOutlines );
+        }
     }
 
     // convert copper zones
@@ -113,8 +121,8 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         case PCB_TEXT_T:
         {
             PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-            text->TransformShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
-                                                        ERROR_INSIDE );
+            text->TransformTextShapeWithClearanceToPolygon( aOutlines, aLayer, 0, maxError,
+                                                            ERROR_INSIDE );
         }
             break;
 
@@ -270,10 +278,16 @@ void FOOTPRINT::TransformFPShapesWithClearanceToPolygon( SHAPE_POLY_SET& aCorner
 }
 
 
+/**
+ * Function TransformTextShapeWithClearanceToPolygon
+ * Convert the text to a polygonSet describing the actual character strokes (one per segment).
+ * @aCornerBuffer = SHAPE_POLY_SET to store the polygon corners
+ * @aClearanceValue = the clearance around the text
+ * @aError = the maximum error to allow when approximating curves
+ */
 void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        enum PCB_LAYER_ID aLayer,
-                                                        int aClearance, int aError,
-                                                        ERROR_LOC aErrorLoc ) const
+                                                        PCB_LAYER_ID aLayer, int aClearance,
+                                                        int aError, ERROR_LOC aErrorLoc ) const
 {
     bool forceBold = true;
     int  penWidth = 0;      // force max width for bold text
@@ -288,6 +302,15 @@ void FP_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
     GRText( NULL, GetTextPos(), BLACK, GetShownText(), GetDrawRotation(), size, GetHorizJustify(),
             GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
+}
+
+
+void FP_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                    PCB_LAYER_ID aLayer, int aClearance,
+                                                    int aError, ERROR_LOC aErrorLoc,
+                                                    bool aIgnoreLineWidth ) const
+{
+    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &aCornerBuffer, aClearance );
 }
 
 
@@ -354,16 +377,15 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCorn
 
 
 /**
- * Function TransformShapeWithClearanceToPolygon
- * Convert the text shape to a set of polygons (one per segment).
+ * Function TransformTextShapeWithClearanceToPolygon
+ * Convert the text to a polygonSet describing the actual character strokes (one per segment).
  * @aCornerBuffer = SHAPE_POLY_SET to store the polygon corners
  * @aClearanceValue = the clearance around the text
  * @aError = the maximum error to allow when approximating curves
  */
-void PCB_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+void PCB_TEXT::TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                      PCB_LAYER_ID aLayer, int aClearanceValue,
-                                                     int aError, ERROR_LOC aErrorLoc,
-                                                     bool aIgnoreLineWidth ) const
+                                                     int aError, ERROR_LOC aErrorLoc ) const
 {
     wxSize size = GetTextSize();
 
@@ -398,6 +420,15 @@ void PCB_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuff
         GRText( NULL, GetTextPos(), color, GetShownText(), GetTextAngle(), size, GetHorizJustify(),
                 GetVertJustify(), penWidth, IsItalic(), forceBold, addTextSegmToPoly, &prms );
     }
+}
+
+
+void PCB_TEXT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                    PCB_LAYER_ID aLayer, int aClearance,
+                                                    int aError, ERROR_LOC aErrorLoc,
+                                                    bool aIgnoreLineWidth ) const
+{
+    EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon( &aCornerBuffer, aClearance );
 }
 
 

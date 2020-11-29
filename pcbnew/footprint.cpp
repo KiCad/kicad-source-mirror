@@ -34,12 +34,13 @@
 #include <board.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
+#include <pcb_marker.h>
 #include <footprint.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
 #include <i18n_utility.h>
 #include <convert_drawsegment_list_to_polygon.h>
-
+#include <geometry/convex_hull.h>
 
 FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         BOARD_ITEM_CONTAINER((BOARD_ITEM*) parent, PCB_FOOTPRINT_T ),
@@ -675,51 +676,51 @@ const EDA_RECT FOOTPRINT::GetBoundingBox( bool aIncludeInvisibleText ) const
 }
 
 
-/**
- * This is a bit hacky right now for performance reasons.
- *
- * We assume that most footprints will have features aligned to the axes in
- * the zero-rotation state.  Therefore, if the footprint is rotated, we
- * temporarily rotate back to zero, get the bounding box (excluding reference
- * and value text) and then rotate the resulting poly back to the correct
- * orientation.
- *
- * This is more accurate than using the AABB when most footprints are rotated
- * off of the axes, but less accurate than computing some kind of bounding hull.
- * We should consider doing that instead at some point in the future if we can
- * use a performant algorithm and cache the result to avoid extra computing.
- */
-SHAPE_POLY_SET FOOTPRINT::GetBoundingPoly() const
+SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
 {
-    SHAPE_POLY_SET poly;
-    double         orientation = GetOrientationRadians();
-    FOOTPRINT      temp = *this;
+    SHAPE_POLY_SET rawPolys;
 
-    temp.SetOrientation( 0.0 );
-    BOX2I area = temp.GetFootprintRect();
-
-    poly.NewOutline();
-
-    VECTOR2I p = area.GetPosition();
-    poly.Append( p );
-    p.x = area.GetRight();
-    poly.Append( p );
-    p.y = area.GetBottom();
-    poly.Append( p );
-    p.x = area.GetX();
-    poly.Append( p );
-
-    BOARD* board = GetBoard();
-    if( board )
+    for( BOARD_ITEM* item : m_drawings )
     {
-        int biggest_clearance = board->GetDesignSettings().GetBiggestClearanceValue();
-        poly.Inflate( biggest_clearance, 4 );
+        if( item->Type() == PCB_FP_SHAPE_T )
+        {
+            item->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                                        ERROR_OUTSIDE );
+        }
+
+        // We intentionally exclude footprint text from the bounding hull.
     }
 
-    poly.Inflate( Millimeter2iu( 0.01 ), 4 );
-    poly.Rotate( -orientation, m_pos );
+    for( PAD* pad : m_pads )
+    {
+        pad->TransformShapeWithClearanceToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
+                                                   ERROR_OUTSIDE );
+    }
 
-    return poly;
+    for( FP_ZONE* zone : m_fp_zones )
+    {
+        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        {
+            SHAPE_POLY_SET layerPoly = zone->GetFilledPolysList( layer );
+
+            for( int ii = 0; ii < layerPoly.OutlineCount(); ii++ )
+            {
+                const SHAPE_LINE_CHAIN& poly = layerPoly.COutline( ii );
+                rawPolys.AddOutline( poly );
+            }
+        }
+    }
+
+    std::vector<wxPoint> convex_hull;
+    BuildConvexHull( convex_hull, rawPolys );
+
+    SHAPE_POLY_SET hullPoly;
+    hullPoly.NewOutline();
+
+    for( const wxPoint& pt : convex_hull )
+        hullPoly.Append( pt );
+
+    return hullPoly;
 }
 
 
@@ -823,7 +824,7 @@ bool FOOTPRINT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 
 bool FOOTPRINT::HitTestAccurate( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return GetBoundingPoly().Collide( aPosition, aAccuracy );
+    return GetBoundingHull().Collide( aPosition, aAccuracy );
 }
 
 
@@ -1633,11 +1634,19 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
     int textMargin = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
     SHAPE_POLY_SET poly;
 
-    if( aItem->Type() == PCB_FOOTPRINT_T )
+    if( aItem->Type() == PCB_MARKER_T )
+    {
+        const PCB_MARKER* marker = static_cast<const PCB_MARKER*>( aItem );
+        SHAPE_LINE_CHAIN  markerShape;
+
+        marker->ShapeToPolygon( markerShape );
+        return markerShape.Area();
+    }
+    else if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
 
-        return footprint->GetFootprintRect().GetArea();
+        poly = footprint->GetBoundingHull();
     }
     else if( aItem->Type() == PCB_FP_TEXT_T )
     {
@@ -1662,7 +1671,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 {
     int textMargin = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
 
-    SHAPE_POLY_SET footprintRegion( GetBoundingPoly() );
+    SHAPE_POLY_SET footprintRegion( GetBoundingHull() );
     SHAPE_POLY_SET coveredRegion;
 
     TransformPadsWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
@@ -1683,7 +1692,7 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         case PCB_FP_SHAPE_T:
             if( item->GetParent() != this )
             {
-                item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 1,
+                item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0,
                                                             ARC_LOW_DEF, ERROR_OUTSIDE );
             }
             break;
@@ -1693,8 +1702,16 @@ double FOOTPRINT::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         case PCB_TRACE_T:
         case PCB_ARC_T:
         case PCB_VIA_T:
-            item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 1,
+            item->TransformShapeWithClearanceToPolygon( coveredRegion, UNDEFINED_LAYER, 0,
                                                         ARC_LOW_DEF, ERROR_OUTSIDE );
+            break;
+
+        case PCB_FOOTPRINT_T:
+            if( item != this )
+            {
+                const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( item );
+                coveredRegion.AddOutline( footprint->GetBoundingHull().Outline( 0 ) );
+            }
             break;
 
         default:

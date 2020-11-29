@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include <footprint.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
+#include <pcb_marker.h>
 #include <zone.h>
 #include <collectors.h>
 #include <confirm.h>
@@ -2265,7 +2266,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         {
             FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
 
-            footprint->GetBoundingPoly().Collide( loc, maxSlop * pixel, &actualSlop );
+            footprint->GetBoundingHull().Collide( loc, maxSlop * pixel, &actualSlop );
 
             // Consider footprints larger than the viewport only as a last resort
             if( item->ViewBBox().GetHeight() > viewport.GetHeight()
@@ -2273,6 +2274,17 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
             {
                 actualSlop = INT_MAX / 2;
             }
+        }
+            break;
+
+        case PCB_MARKER_T:
+        {
+            PCB_MARKER*      marker = static_cast<PCB_MARKER*>( item );
+            SHAPE_LINE_CHAIN polygon;
+
+            marker->ShapeToPolygon( polygon );
+            polygon.Move( marker->GetPos() );
+            polygon.Collide( loc, maxSlop * pixel, &actualSlop );
         }
             break;
 

@@ -82,7 +82,7 @@ void addTextSegmToContainer( int x0, int y0, int xf, int yf, void* aData )
 
 
 // Based on
-// void PCB_TEXT::TransformShapeWithClearanceToPolygon
+// void PCB_TEXT::TransformTextShapeWithClearanceToPolygon
 // board_items_to_polygon_shape_transform.cpp
 void BOARD_ADAPTER::AddShapeWithClearanceToContainer( const PCB_TEXT* aText,
                                                       CGENERICCONTAINER2D *aDstContainer,

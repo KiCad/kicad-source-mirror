@@ -631,7 +631,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // Add graphic items on copper layers (texts and other graphics)
-        for( auto item : m_board->Drawings() )
+        for( BOARD_ITEM* item : m_board->Drawings() )
         {
             if( !item->IsOnLayer( curr_layer_id ) )
                 continue;
@@ -683,9 +683,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 switch( item->Type() )
                 {
                 case PCB_SHAPE_T:
-                case PCB_TEXT_T:
                     item->TransformShapeWithClearanceToPolygon( *layerPoly, cur_layer_id, 0,
                                                                 ARC_HIGH_DEF, ERROR_INSIDE );
+                    break;
+
+                case PCB_TEXT_T:
+                {
+                    PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+                    text->TransformTextShapeWithClearanceToPolygon( *layerPoly, cur_layer_id, 0,
+                                                                    ARC_HIGH_DEF, ERROR_INSIDE );
+                }
                     break;
 
                 default:
@@ -781,7 +789,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( m_F_Cu_PlatedPads_poly && ( m_layers_poly.find( F_Cu ) != m_layers_poly.end() ) )
             {
                 SHAPE_POLY_SET *layerPoly_F_Cu = m_layers_poly[F_Cu];
-                layerPoly_F_Cu->BooleanSubtract( *m_F_Cu_PlatedPads_poly, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                layerPoly_F_Cu->BooleanSubtract( *m_F_Cu_PlatedPads_poly, SHAPE_POLY_SET::PM_FAST );
 
                 m_F_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
             }
@@ -789,7 +797,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             if( m_B_Cu_PlatedPads_poly && ( m_layers_poly.find( B_Cu ) != m_layers_poly.end() ) )
             {
                 SHAPE_POLY_SET *layerPoly_B_Cu = m_layers_poly[B_Cu];
-                layerPoly_B_Cu->BooleanSubtract( *m_B_Cu_PlatedPads_poly, SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
+                layerPoly_B_Cu->BooleanSubtract( *m_B_Cu_PlatedPads_poly, SHAPE_POLY_SET::PM_FAST );
 
                 m_B_Cu_PlatedPads_poly->Simplify( SHAPE_POLY_SET::PM_FAST );
             }
@@ -822,23 +830,25 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             size_t parallelThreadCount = std::min<size_t>(
                     std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
                     selected_layer_id.size() );
+
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
-                std::thread t = std::thread( [&nextItem, &threadsFinished, &selected_layer_id, this]()
-                {
-                    for( size_t i = nextItem.fetch_add( 1 );
-                                i < selected_layer_id.size();
-                                i = nextItem.fetch_add( 1 ) )
-                    {
-                        auto layerPoly = m_layers_poly.find( selected_layer_id[i] );
+                std::thread t = std::thread(
+                        [&nextItem, &threadsFinished, &selected_layer_id, this]()
+                        {
+                            for( size_t i = nextItem.fetch_add( 1 );
+                                        i < selected_layer_id.size();
+                                        i = nextItem.fetch_add( 1 ) )
+                            {
+                                auto layerPoly = m_layers_poly.find( selected_layer_id[i] );
 
-                        if( layerPoly != m_layers_poly.end() )
-                            // This will make a union of all added contours
-                            layerPoly->second->Simplify( SHAPE_POLY_SET::PM_FAST );
-                    }
+                                if( layerPoly != m_layers_poly.end() )
+                                    // This will make a union of all added contours
+                                    layerPoly->second->Simplify( SHAPE_POLY_SET::PM_FAST );
+                            }
 
-                    threadsFinished++;
-                } );
+                            threadsFinished++;
+                        } );
 
                 t.detach();
             }
@@ -927,27 +937,21 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-                AddShapeWithClearanceToContainer( (PCB_SHAPE*) item,
-                                                  layerContainer,
-                                                  curr_layer_id,
-                                                  0 );
+                AddShapeWithClearanceToContainer( static_cast<PCB_SHAPE*>( item ), layerContainer,
+                                                  curr_layer_id, 0 );
                 break;
 
             case PCB_TEXT_T:
-                AddShapeWithClearanceToContainer( (PCB_TEXT*) item,
-                                                  layerContainer,
-                                                  curr_layer_id,
-                                                  0 );
+                AddShapeWithClearanceToContainer( static_cast<PCB_TEXT*>( item ), layerContainer,
+                                                  curr_layer_id, 0 );
                 break;
 
             case PCB_DIM_ALIGNED_T:
             case PCB_DIM_CENTER_T:
             case PCB_DIM_ORTHOGONAL_T:
             case PCB_DIM_LEADER_T:
-                AddShapeWithClearanceToContainer( (DIMENSION_BASE*) item,
-                                                  layerContainer,
-                                                  curr_layer_id,
-                                                  0 );
+                AddShapeWithClearanceToContainer( static_cast<DIMENSION_BASE*>( item ),
+                                                  layerContainer, curr_layer_id, 0 );
                 break;
 
             default:
@@ -965,9 +969,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             switch( item->Type() )
             {
             case PCB_SHAPE_T:
-            case PCB_TEXT_T:
                 item->TransformShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
                                                             ARC_HIGH_DEF, ERROR_INSIDE );
+                break;
+
+            case PCB_TEXT_T:
+            {
+                PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
+
+                text->TransformTextShapeWithClearanceToPolygon( *layerPoly, curr_layer_id, 0,
+                                                                ARC_HIGH_DEF, ERROR_INSIDE );
+            }
                 break;
 
             default:

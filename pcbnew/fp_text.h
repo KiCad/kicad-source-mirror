@@ -198,6 +198,10 @@ public:
         return TextHitTest( aRect, aContained, aAccuracy );
     }
 
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
+                                               int aClearance, int aError, ERROR_LOC aErrorLoc,
+                                               bool aIgnoreLineWidth ) const override;
+
     void TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                    PCB_LAYER_ID aLayer, int aClearanceValue,
                                                    int aError, ERROR_LOC aErrorLoc ) const;

@@ -111,14 +111,18 @@ public:
     }
 
     /**
-     * Function TransformShapeWithClearanceToPolygon
-     * Convert the text shape to a set of polygons (one by segment)
+     * Function TransformTextShapeWithClearanceToPolygon
+     * Convert the text to a polygonSet describing the actual character strokes (one per segment).
      * Used in 3D viewer
      * Circles and arcs are approximated by segments
-     * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the text
-     * @param aError = deviation from true arc position to segment approx
+     * @aCornerBuffer = SHAPE_POLY_SET to store the polygon corners
+     * @aClearanceValue = the clearance around the text
+     * @aError = the maximum error to allow when approximating curves
      */
+    void TransformTextShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                                   PCB_LAYER_ID aLayer, int aClearanceValue,
+                                                   int aError, ERROR_LOC aErrorLoc ) const;
+
     void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, PCB_LAYER_ID aLayer,
                                                int aClearanceValue, int aError, ERROR_LOC aErrorLoc,
                                                bool aIgnoreLineWidth = false ) const override;

@@ -61,9 +61,7 @@ enum POLY_GEN_RET_CODES
 int polygon_gererator_main( int argc, char* argv[] )
 {
     if( argc < 2 )
-    {
         return KI_TEST::RET_CODES::BAD_CMDLINE;
-    }
 
     std::string filename;
 
@@ -73,22 +71,20 @@ int polygon_gererator_main( int argc, char* argv[] )
     auto brd = KI_TEST::ReadBoardFromFileOrStream( filename );
 
     if( !brd )
-    {
         return POLY_GEN_RET_CODES::LOAD_FAILED;
-    }
 
     for( unsigned net = 0; net < brd->GetNetCount(); net++ )
     {
-        for( auto track : brd->Tracks() )
+        for( TRACK* track : brd->Tracks() )
             process( track, net );
 
-        for( auto mod : brd->Footprints() )
+        for( FOOTPRINT* fp : brd->Footprints() )
         {
-            for( auto pad : mod->Pads() )
+            for( PAD* pad : fp->Pads() )
                 process( pad, net );
         }
 
-        for( auto zone : brd->Zones() )
+        for( ZONE* zone : brd->Zones() )
             process( zone, net );
     }
 

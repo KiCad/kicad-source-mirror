@@ -572,34 +572,24 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     switch( aItem->Type() )
     {
     case PCB_SHAPE_T:
-    {
-        PCB_SHAPE* shape = (PCB_SHAPE*) aItem;
-        shape->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
-                                                     ERROR_OUTSIDE, aIgnoreLineWidth );
-        break;
-    }
     case PCB_TEXT_T:
-    {
-        PCB_TEXT* text = (PCB_TEXT*) aItem;
-        text->TransformBoundingBoxWithClearanceToPolygon( &aHoles, aGap );
-        break;
-    }
     case PCB_FP_SHAPE_T:
-    {
-        FP_SHAPE* shape = (FP_SHAPE*) aItem;
-        shape->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
+        aItem->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
                                                      ERROR_OUTSIDE, aIgnoreLineWidth );
         break;
-    }
+
     case PCB_FP_TEXT_T:
     {
-        FP_TEXT* text = (FP_TEXT*) aItem;
+        FP_TEXT* text = static_cast<FP_TEXT*>( aItem );
 
         if( text->IsVisible() )
-            text->TransformBoundingBoxWithClearanceToPolygon( &aHoles, aGap );
-
-        break;
+        {
+            text->TransformShapeWithClearanceToPolygon( aHoles, aLayer, aGap, m_maxError,
+                                                        ERROR_OUTSIDE, aIgnoreLineWidth );
+        }
     }
+        break;
+
     default:
         break;
     }

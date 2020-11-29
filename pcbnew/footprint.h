@@ -173,7 +173,7 @@ public:
      * Returns a bounding polygon for the shapes and pads in the footprint
      * This operation is slower but more accurate than calculating a bounding box
      */
-    SHAPE_POLY_SET GetBoundingPoly() const;
+    SHAPE_POLY_SET GetBoundingHull() const;
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;
