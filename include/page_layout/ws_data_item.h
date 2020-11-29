@@ -327,12 +327,6 @@ public:
     virtual int GetPenSizeUi() override;
 
     /**
-     * move item to a new position
-     * @param aPosition = the new position of item
-     */
-    void MoveTo( DPOINT aPosition );
-
-    /**
      * Try to build text wihich is an increment of m_TextBase
      * has meaning only if m_TextBase is a basic text (one char)
      * If the basic char is a digit, build a number
@@ -364,14 +358,15 @@ public:
 
 
 class BITMAP_BASE;
+
 class WS_DATA_ITEM_BITMAP : public WS_DATA_ITEM
 {
 public:
     BITMAP_BASE* m_ImageBitmap;
 
 public:
-    WS_DATA_ITEM_BITMAP(BITMAP_BASE* aImage)
-        : WS_DATA_ITEM( WS_BITMAP )
+    WS_DATA_ITEM_BITMAP( BITMAP_BASE* aImage ) :
+            WS_DATA_ITEM( WS_BITMAP )
     {
         m_ImageBitmap = aImage;
     }

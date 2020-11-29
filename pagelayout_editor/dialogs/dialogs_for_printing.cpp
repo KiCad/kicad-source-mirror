@@ -76,8 +76,8 @@ class PLEDITOR_PREVIEW_FRAME : public wxPreviewFrame
 
 public:
     PLEDITOR_PREVIEW_FRAME( wxPrintPreview* aPreview, PL_EDITOR_FRAME* aParent,
-                       const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
-                       const wxSize& aSize = wxDefaultSize ) :
+                            const wxString& aTitle, const wxPoint& aPos = wxDefaultPosition,
+                            const wxSize& aSize = wxDefaultSize ) :
         wxPreviewFrame( aPreview, aParent, aTitle, aPos, aSize )
     {
         m_parent = aParent;
@@ -198,12 +198,11 @@ void PLEDITOR_PRINTOUT::PrintPage( int aPageNum )
 
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
     {
-        if( dataItem->GetType() != WS_DATA_ITEM::WS_BITMAP )
-            continue;
-
-        WS_DATA_ITEM_BITMAP* itemBM = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem );
-        itemBM->m_ImageBitmap->SetPixelSizeIu( IU_PER_MILS * 1000 /
-                                               itemBM->m_ImageBitmap->GetPPI() );
+        if( dataItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
+        {
+            BITMAP_BASE* bitmap = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
+            bitmap->SetPixelSizeIu( IU_PER_MILS * 1000 / bitmap->GetPPI() );
+        }
     }
 
     m_parent->PrintWorkSheet( &renderSettings, screen, IU_PER_MILS, wxEmptyString );

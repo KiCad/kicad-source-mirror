@@ -33,7 +33,6 @@
 #include <widgets/paged_dialog.h>
 #include <panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
-#include <view/view.h>
 #include <confirm.h>
 #include <kiplatform/app.h>
 #include <painter.h>
@@ -47,7 +46,6 @@
 #include <tool/picker_tool.h>
 #include <tool/zoom_tool.h>
 #include <widgets/infobar.h>
-#include <widgets/msgpanel.h>
 #include <settings/settings_manager.h>
 
 #include "dialogs/panel_pl_editor_color_settings.h"
@@ -103,7 +101,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Create GAL canvas
     auto* drawPanel = new PL_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_frameSize,
-                                             GetGalDisplayOptions(), EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+                                             GetGalDisplayOptions(),
+                                             EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
     SetCanvas( drawPanel );
 
     LoadSettings( config() );
@@ -340,7 +339,8 @@ void PL_EDITOR_FRAME::OnExit( wxCommandEvent& aEvent )
 bool PL_EDITOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
 {
     // Shutdown blocks must be determined and vetoed as early as possible
-    if( KIPLATFORM::APP::SupportsShutdownBlockReason() && aEvent.GetId() == wxEVT_QUERY_END_SESSION
+    if( KIPLATFORM::APP::SupportsShutdownBlockReason()
+            && aEvent.GetId() == wxEVT_QUERY_END_SESSION
             && IsContentModified() )
     {
         return false;
@@ -352,7 +352,10 @@ bool PL_EDITOR_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         wxString   msg      = _( "Save changes to \"%s\" before closing?" );
 
         if( !HandleUnsavedChanges( this, wxString::Format( msg, filename.GetFullName() ),
-                                   [&]() -> bool { return saveCurrentPageLayout(); } ) )
+                                   [&]() -> bool
+                                   {
+                                       return saveCurrentPageLayout();
+                                   } ) )
         {
             return false;
         }
@@ -763,7 +766,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 
     // Display corner reference for coord origin
     line.Printf( _("coord origin: %s"),
-                m_originSelectBox->GetString( m_originSelectChoice ).GetData() );
+                 m_originSelectBox->GetString( m_originSelectChoice ).GetData() );
     SetStatusText( line, 5 );
 
     // Display units
@@ -778,12 +781,11 @@ void PL_EDITOR_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
     for( WS_DATA_ITEM* dataItem : model.GetItems() )
     {
         // Ensure the scaling factor (used only in printing) of bitmaps is up to date
-        if( dataItem->GetType() != WS_DATA_ITEM::WS_BITMAP )
-            continue;
-
-        WS_DATA_ITEM_BITMAP* itemBM = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem );
-        itemBM->m_ImageBitmap->SetPixelSizeIu( IU_PER_MILS * 1000
-                                                    / itemBM->m_ImageBitmap->GetPPI() );
+        if( dataItem->GetType() == WS_DATA_ITEM::WS_BITMAP )
+        {
+            BITMAP_BASE* bitmap = static_cast<WS_DATA_ITEM_BITMAP*>( dataItem )->m_ImageBitmap;
+            bitmap->SetPixelSizeIu( IU_PER_MILS * 1000 / bitmap->GetPPI() );
+        }
     }
 
     PrintWorkSheet( aSettings, GetScreen(), IU_PER_MILS, wxEmptyString );
@@ -847,7 +849,8 @@ WS_DATA_ITEM* PL_EDITOR_FRAME::AddPageLayoutItem( int aType )
     case WS_DATA_ITEM::WS_BITMAP:
     {
         wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                              _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+                              _( "Image Files" ) + wxS( " " ) + wxImage::GetImageExtWildcard(),
+                              wxFD_OPEN );
 
         if( fileDlg.ShowModal() != wxID_OK )
             return NULL;
