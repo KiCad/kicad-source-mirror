@@ -413,6 +413,9 @@ void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetCanvas()->Refresh();
 }
 
 

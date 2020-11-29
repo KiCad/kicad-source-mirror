@@ -1378,9 +1378,6 @@ void SCH_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 
     ShowAllIntersheetRefs( settings.m_IntersheetRefsShow );
 
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
-    GetCanvas()->Refresh();
-
     RecreateToolbars();
     Layout();
     SendSizeEvent();
