@@ -755,15 +755,18 @@ void WS_DATA_ITEM_BITMAP::SyncDrawItems( WS_DRAW_ITEM_LIST* aCollector, KIGFX::V
         delete item;
     }
 
+    if( aCollector )
+    {
+        double pix_size_iu = aCollector->GetMilsToIUfactor() * 1000 / m_ImageBitmap->GetPPI();
+        m_ImageBitmap->SetPixelSizeIu( pix_size_iu );
+    }
+
     m_drawItems.clear();
 
     for( int j = 0; j < m_RepeatCount; j++ )
     {
         if( j && !IsInsidePage( j ) )
             continue;
-
-        double pix_size_iu = aCollector->GetMilsToIUfactor() * 1000 / m_ImageBitmap->GetPPI();
-        m_ImageBitmap->SetPixelSizeIu( pix_size_iu );
 
         WS_DRAW_ITEM_BITMAP* bitmap = new WS_DRAW_ITEM_BITMAP( this, j, GetStartPosUi( j ) );
 
