@@ -47,7 +47,6 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 
 	m_btnCustomPath = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnCustomPath->SetToolTip( wxT("Choose a different path") );
-	m_btnCustomPath->SetMinSize( wxSize( 30,29 ) );
 
 	bSizer5->Add( m_btnCustomPath, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
@@ -65,10 +64,10 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 	m_cbCopyLibraryTables->SetValue(true);
 	m_cbCopyLibraryTables->SetToolTip( wxT("When checked, the symbol and footprint library tables from the previous version will be imported into this version") );
 
-	bSizer6->Add( m_cbCopyLibraryTables, 0, wxALL, 5 );
+	bSizer6->Add( m_cbCopyLibraryTables, 0, wxBOTTOM|wxRIGHT|wxLEFT, 23 );
 
 	m_btnUseDefaults = new wxRadioButton( this, wxID_ANY, wxT("Start with default settings"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer6->Add( m_btnUseDefaults, 0, wxALL|wxEXPAND, 5 );
+	bSizer6->Add( m_btnUseDefaults, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_sizer->Add( bSizer6, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
