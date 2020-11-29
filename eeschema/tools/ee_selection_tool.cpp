@@ -307,7 +307,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         bool displayWireCursor = false;
-        KIID rolloverItem = niluuid;
+        KIID rolloverItem = lastRolloverItem;
         m_additive = m_subtractive = m_exclusive_or = false;
 
         if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
@@ -496,6 +496,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() && !m_isSymbolEditor && m_frame->ToolStackIsEmpty() )
         {
+            rolloverItem = niluuid;
             EE_COLLECTOR collector;
 
             // We are checking if we should display a pencil when hovering over anchors

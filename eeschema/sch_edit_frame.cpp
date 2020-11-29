@@ -1285,13 +1285,13 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
     if( settings.m_IntersheetRefsShow == true )
-        RecomputeIntersheetsRefs();
+        RecomputeIntersheetRefs();
 
     Schematic().ConnectionGraph()->Recalculate( list, true );
 }
 
 
-int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
+int SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 {
     std::map<wxString, std::set<wxString>>& pageRefsMap = Schematic().GetPageRefsMap();
 
@@ -1348,6 +1348,9 @@ int SCH_EDIT_FRAME::RecomputeIntersheetsRefs()
 
 void SCH_EDIT_FRAME::ShowAllIntersheetRefs( bool aShow )
 {
+    if( aShow )
+        RecomputeIntersheetRefs();
+
     SCH_SCREENS screens( Schematic().Root() );
 
     for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )

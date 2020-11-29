@@ -927,7 +927,12 @@ public:
      */
     void UpdateSymbolFromEditor( const LIB_PART& aSymbol );
 
-    int RecomputeIntersheetsRefs();
+    /**
+     * Update the schematic's page reference map for all global labels, and refresh the labels
+     * so that they are redrawn with up-to-date references.
+     * @return
+     */
+    int RecomputeIntersheetRefs();
 
     void ShowAllIntersheetRefs( bool aShow );
 

@@ -472,15 +472,18 @@ void SCH_FIELD::DoHypertextMenu( EDA_DRAW_FRAME* aFrame )
             std::sort( pageListCopy.begin(), pageListCopy.end() );
 
             for( const SCH_SHEET_PATH& sheet : Schematic()->GetSheets() )
-                sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
+            {
+                if( sheet.size() == 1 )
+                    sheetNames[ sheet.GetPageNumber() ] = _( "<root sheet>" );
+                else
+                    sheetNames[ sheet.GetPageNumber() ] = sheet.Last()->GetName();
+            }
 
             for( const wxString& pageNo : pageListCopy )
             {
-                wxString pageName = pageNo == "/" ? _( "Root" ) : sheetNames[ pageNo ];
-
                 menu.Append( -1, wxString::Format( _( "Go to Page %s (%s)" ),
                                                    pageNo,
-                                                   pageName ) );
+                                                   sheetNames[ pageNo ] ) );
             }
 
             menu.AppendSeparator();
