@@ -69,7 +69,10 @@ public:
 
     int GetWaitForEditingTimeOut() override;
 
-    void SetCurrentIntersectedBoardItem( BOARD_ITEM* aCurrentIntersectedBoardItem ) { m_currentIntersectedBoardItem = aCurrentIntersectedBoardItem; }
+    void SetCurrentIntersectedBoardItem( BOARD_ITEM* aCurrentIntersectedBoardItem )
+    {
+        m_currentIntersectedBoardItem = aCurrentIntersectedBoardItem;
+    }
 
 private:
     bool initializeOpenGL();

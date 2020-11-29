@@ -36,7 +36,6 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include "pcb_draw_panel_gal.h"
 
 BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
 {
@@ -56,6 +55,7 @@ BOARD_COMMIT::~BOARD_COMMIT()
 {
 }
 
+
 COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
 {
     // if aItem belongs a footprint, the full footprint will be saved
@@ -71,15 +71,18 @@ COMMIT& BOARD_COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
     return COMMIT::Stage( aItem, aChangeType );
 }
 
+
 COMMIT& BOARD_COMMIT::Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType )
 {
     return COMMIT::Stage( container, aChangeType );
 }
 
+
 COMMIT& BOARD_COMMIT::Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag )
 {
     return COMMIT::Stage( aItems, aModFlag );
 }
+
 
 void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool aSetDirtyBit )
 {
@@ -212,17 +215,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     break;
 
                 // Board items
-                case PCB_SHAPE_T:               // a shape (normally not on copper layers)
-                case PCB_TEXT_T:                // a text on a layer
-                case PCB_TRACE_T:               // a track segment (segment on a copper layer)
-                case PCB_ARC_T:                 // an arced track segment (segment on a copper layer)
-                case PCB_VIA_T:                 // a via (like track segment on a copper layer)
-                case PCB_DIM_ALIGNED_T:         // a dimension (graphic item)
+                case PCB_SHAPE_T:            // a shape (normally not on copper layers)
+                case PCB_TEXT_T:             // a text on a layer
+                case PCB_TRACE_T:            // a track segment (segment on a copper layer)
+                case PCB_ARC_T:              // an arced track segment (segment on a copper layer)
+                case PCB_VIA_T:              // a via (like track segment on a copper layer)
+                case PCB_DIM_ALIGNED_T:      // a dimension (graphic item)
                 case PCB_DIM_CENTER_T:
                 case PCB_DIM_ORTHOGONAL_T:
-                case PCB_DIM_LEADER_T:          // a leader dimension
-                case PCB_TARGET_T:              // a target (graphic item)
-                case PCB_MARKER_T:              // a marker used to show something
+                case PCB_DIM_LEADER_T:       // a leader dimension
+                case PCB_TARGET_T:           // a target (graphic item)
+                case PCB_MARKER_T:           // a marker used to show something
                 case PCB_ZONE_T:
                     view->Remove( boardItem );
 
@@ -310,7 +313,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
         }
     }
 
-    if ( !m_isFootprintEditor )
+    if( !m_isFootprintEditor )
     {
         size_t num_changes = m_changes.size();
 
@@ -451,8 +454,3 @@ void BOARD_COMMIT::Revert()
     clear();
 }
 
-bool BOARD_COMMIT::HasRemoveEntry( EDA_ITEM* aItem )
-{
-    COMMIT::COMMIT_LINE* line = findEntry( aItem );
-    return line != nullptr && line->m_type == CHT_REMOVE;
-}

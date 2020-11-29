@@ -366,7 +366,6 @@ void EDA_3D_CANVAS::DoRePaint()
     if( m_is_currently_painting.test_and_set() )
         return;
 
-
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
     {
@@ -389,8 +388,8 @@ void EDA_3D_CANVAS::DoRePaint()
     // !TODO: implement error reporter
     //WX_STRING_REPORTER errorReporter( &err_messages );
     INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
-    STATUSBAR_REPORTER activityReporter(
-            m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
+    STATUSBAR_REPORTER activityReporter( m_parentStatusBar,
+                                         (int) EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT );
 
     unsigned strtime = GetRunningMicroSecs();
 
@@ -463,11 +462,11 @@ void EDA_3D_CANVAS::DoRePaint()
 
         // It reverts back to OpenGL mode if it was requested a raytracing
         // render of the current scene. AND the mouse / camera is moving
-        if( ( m_mouse_is_moving ||
-              m_camera_is_moving ||
-              was_camera_changed ||
-              windows_size_changed ) &&
-            m_render_raytracing_was_requested )
+        if( ( m_mouse_is_moving
+                  || m_camera_is_moving
+                  || was_camera_changed
+                  || windows_size_changed )
+            && m_render_raytracing_was_requested )
         {
             m_render_raytracing_was_requested = false;
             m_3d_render = m_3d_render_ogl_legacy;
@@ -510,10 +509,12 @@ void EDA_3D_CANVAS::DoRePaint()
 
             if( ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
                     && m_3d_render_ogl_legacy->IsReloadRequestPending() )
+            {
                 reloadRaytracingForIntersectionCalculations = true;
+            }
 
-            requested_redraw = m_3d_render->Redraw(
-                    m_mouse_was_moved || m_camera_is_moving, &activityReporter, &warningReporter );
+            requested_redraw = m_3d_render->Redraw( m_mouse_was_moved || m_camera_is_moving,
+                                                    &activityReporter, &warningReporter );
 
             if( reloadRaytracingForIntersectionCalculations )
                 m_3d_render_raytracing->Reload( nullptr, nullptr, true );
