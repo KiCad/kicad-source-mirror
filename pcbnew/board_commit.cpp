@@ -360,7 +360,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     if( aSetDirtyBit )
         frame->OnModify();
     else
-        frame->Update3DView( false );
+        frame->Update3DView( true );
 
     frame->UpdateMsgPanel();
 

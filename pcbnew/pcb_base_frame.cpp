@@ -78,7 +78,7 @@ EDA_3D_VIEWER* PCB_BASE_FRAME::Get3DViewerFrame()
 }
 
 
-void PCB_BASE_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
+void PCB_BASE_FRAME::Update3DView( bool aReloadRequest, const wxString* aTitle )
 {
     EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
 
@@ -87,17 +87,9 @@ void PCB_BASE_FRAME::Update3DView( bool aForceReload, const wxString* aTitle )
         if( aTitle )
             draw3DFrame->SetTitle( *aTitle );
 
-        draw3DFrame->NewDisplay( aForceReload );
-    }
-}
+        if( aReloadRequest )
+            draw3DFrame->ReloadRequest();
 
-
-void PCB_BASE_FRAME::Redraw3Dview()
-{
-    EDA_3D_VIEWER* draw3DFrame = Get3DViewerFrame();
-
-    if( draw3DFrame )
-    {
         draw3DFrame->Redraw();
     }
 }

@@ -109,15 +109,8 @@ public:
      * Update the 3D view, if the viewer is opened by this frame
      * @param aTitle = the new title of the 3D frame, or nullptr
      * to do not change the frame title
-     * @return false if the 3D view cannot be updated (because the
-     * owner of the viewer is not this frame)
      */
-    virtual void Update3DView( bool aForceReload, const wxString* aTitle = nullptr );
-
-    /**
-     * Request a redraw of 3D-Viewer canvas
-     */
-    void Redraw3Dview();
+    virtual void Update3DView( bool aReloadRequest, const wxString* aTitle = nullptr );
 
     /**
      * Function LoadFootprint

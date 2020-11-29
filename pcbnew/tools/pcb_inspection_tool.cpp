@@ -624,7 +624,7 @@ int PCB_INSPECTION_TOOL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
     else
         m_frame->SendMessageToEESCHEMA( nullptr );
 
-    m_frame->Redraw3Dview();
+    m_frame->Update3DView( false );
 
     return 0;
 }
@@ -649,7 +649,7 @@ int PCB_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
         request3DviewRedraw = false;
 
     if( request3DviewRedraw )
-        m_frame->Redraw3Dview();
+        m_frame->Update3DView( false );
 
     return 0;
 }

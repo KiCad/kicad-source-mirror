@@ -1145,7 +1145,7 @@ void PCB_EDIT_FRAME::OnModify( )
 {
     PCB_BASE_FRAME::OnModify();
 
-    Update3DView( false );
+    Update3DView( true );
 
     m_ZoneFillsDirty = true;
 }

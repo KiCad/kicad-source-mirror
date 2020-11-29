@@ -467,7 +467,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 }
 
                 if( requestRedraw3Dview )
-                    editFrame->Redraw3Dview();
+                    editFrame->Update3DView( true );
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
             }
@@ -1471,7 +1471,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector,
-                                      EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+                                         EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             } );
 
     if( selection.Empty() )
