@@ -35,6 +35,7 @@
 
 #include <trigo.h>
 #include <macros.h>
+#include <math.h>
 #include <board.h>
 #include "common.h"
 
@@ -563,7 +564,9 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
     DXF_ARBITRARY_AXIS arbAxis = getArbitraryAxis( getExtrusion() );
     VECTOR3D refPointCoords    = ocsToWcs( arbAxis, VECTOR3D( aData.ipx, aData.ipy, aData.ipz ) );
-    VECTOR3D secPointCoords    = ocsToWcs( arbAxis, VECTOR3D( aData.apx, aData.apy, aData.apz ) );
+    VECTOR3D secPointCoords    = ocsToWcs( arbAxis, VECTOR3D( isnan( aData.apx ) ? 0 : aData.apx,
+                                                              isnan( aData.apy ) ? 0 : aData.apy,
+                                                              isnan( aData.apz ) ? 0 : aData.apz ) );
 
     VECTOR2D refPoint( mapX( refPointCoords.x ), mapY( refPointCoords.y ) );
     VECTOR2D secPoint( mapX( secPointCoords.x ), mapY( secPointCoords.y ) );
