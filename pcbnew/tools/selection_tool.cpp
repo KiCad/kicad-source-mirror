@@ -1010,7 +1010,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
 
     auto connectivity = board()->GetConnectivity();
-    auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types );
+    auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types, true );
 
     std::map<wxPoint, std::vector<TRACK*>> trackMap;
     std::map<wxPoint, VIA*>                viaMap;
