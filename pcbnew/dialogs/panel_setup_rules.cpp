@@ -237,6 +237,7 @@ void PANEL_SETUP_RULES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
                      "length "
                      "hole "
                      "hole_clearance "
+                     "hole_to_hole "
                      "silk_clearance "
                      "skew "
                      "track_width "

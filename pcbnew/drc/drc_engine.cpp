@@ -160,11 +160,15 @@ void DRC_ENGINE::loadImplicitRules()
     rule->AddConstraint( edgeClearanceConstraint );
 
     DRC_CONSTRAINT holeClearanceConstraint( HOLE_CLEARANCE_CONSTRAINT );
-    holeClearanceConstraint.Value().SetMin( bds.m_HoleToHoleMin );
+    holeClearanceConstraint.Value().SetMin( bds.m_HoleClearance );
     rule->AddConstraint( holeClearanceConstraint );
 
+    DRC_CONSTRAINT holeToHoleConstraint( HOLE_TO_HOLE_CONSTRAINT );
+    holeToHoleConstraint.Value().SetMin( bds.m_HoleToHoleMin );
+    rule->AddConstraint( holeToHoleConstraint );
+
     DRC_CONSTRAINT courtyardClearanceConstraint( COURTYARD_CLEARANCE_CONSTRAINT );
-    holeClearanceConstraint.Value().SetMin( 0 );
+    holeToHoleConstraint.Value().SetMin( 0 );
     rule->AddConstraint( courtyardClearanceConstraint );
 
     DRC_CONSTRAINT diffPairGapConstraint( DIFF_PAIR_GAP_CONSTRAINT );
@@ -427,7 +431,7 @@ void DRC_ENGINE::loadImplicitRules()
 
 static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 {
-    struct Formatter
+    struct FORMATTER
     {
         DRC_CONSTRAINT_TYPE_T type;
         wxString              name;
@@ -441,19 +445,22 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
                 const auto value = c.GetValue();
 
                 if ( value.HasMin() )
-                    str += wxString::Format(" min: %d", value.Min() );
+                    str += wxString::Format( " min: %d", value.Min() );
+
                 if ( value.HasOpt() )
-                    str += wxString::Format(" opt: %d", value.Opt() );
+                    str += wxString::Format( " opt: %d", value.Opt() );
+
                 if ( value.HasMax() )
-                    str += wxString::Format(" max: %d", value.Max() );
+                    str += wxString::Format( " max: %d", value.Max() );
 
                 return str;
             };
 
-    std::vector<Formatter> formats =
+    std::vector<FORMATTER> formats =
     {
         { CLEARANCE_CONSTRAINT,           "clearance",           formatMinMax },
         { HOLE_CLEARANCE_CONSTRAINT,      "hole_clearance",      formatMinMax },
+        { HOLE_TO_HOLE_CONSTRAINT,        "hole_to_hole",        formatMinMax },
         { EDGE_CLEARANCE_CONSTRAINT,      "edge_clearance",      formatMinMax },
         { HOLE_SIZE_CONSTRAINT,           "hole_size",           formatMinMax },
         { COURTYARD_CLEARANCE_CONSTRAINT, "courtyard_clearance", formatMinMax },
@@ -467,13 +474,15 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
         { VIA_COUNT_CONSTRAINT,           "via_count",           formatMinMax }
     };
 
-    for( auto& fmt : formats )
+    for( FORMATTER& fmt : formats )
     {
         if( fmt.type == constraint.m_Type )
         {
             wxString rv = fmt.name + " ";
+
             if( fmt.formatter )
                 rv += fmt.formatter( constraint );
+
             return rv;
         }
     }
@@ -1112,8 +1121,8 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 
     if( m_constraintMap.count( constraintID ) )
     {
-    for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[constraintID] )
-        rv.push_back( c->constraint );
+        for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[constraintID] )
+            rv.push_back( c->constraint );
     }
 
     return rv;

@@ -83,7 +83,8 @@
 #define DEFAULT_MINTHROUGHDRILL       0.3     // through holes (not micro vias) min drill diameter
 #define DEFAULT_MICROVIASMINSIZE      0.2     // micro vias (not vias) min diameter
 #define DEFAULT_MICROVIASMINDRILL     0.1     // micro vias (not vias) min drill diameter
-#define DEFAULT_HOLETOHOLEMIN         0.25    // separation between drilled hole edges
+#define DEFAULT_HOLETOHOLEMIN         0.25    // minimum web thickness between two drilled holes
+#define DEFAULT_HOLECLEARANCE         0.0     // copper-to-hole clearance
 
 #define DEFAULT_COPPEREDGECLEARANCE   0.01    // clearance between copper items and edge cuts
 #define LEGACY_COPPEREDGECLEARANCE   -0.01    // A flag to indicate the legacy method (based
@@ -239,7 +240,8 @@ public:
     int        m_MicroViasMinSize;          // micro vias min diameter
     int        m_MicroViasMinDrill;         // micro vias min drill diameter
     int        m_CopperEdgeClearance;
-    int        m_HoleToHoleMin;             // Min width of peninsula between two drilled holes
+    int        m_HoleClearance;             // Hole to copper clearance
+    int        m_HoleToHoleMin;             // Min width of web between two drilled holes
     int        m_SilkClearance;
 
     std::shared_ptr<DRC_ENGINE> m_DRCEngine;

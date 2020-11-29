@@ -264,7 +264,10 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     if( (int) token == DSN_RIGHT || token == T_EOF )
     {
         msg.Printf( _( "Missing constraint type.|  Expected %s." ),
-                        "'clearance', 'track_width', 'annular_width', 'hole', 'disallow'" );
+                        "'clearance', 'hole_clearance', 'edge_clearance', 'hole', 'hole_to_hole', "
+                        "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
+                        "'disallow', 'length', 'skew', 'via_count', 'diff_pair_gap' or "
+                        "'diff_pair_uncoupled'" );
         reportError( msg );
         return;
     }
@@ -275,6 +278,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_hole_clearance:      constraint.m_Type = HOLE_CLEARANCE_CONSTRAINT;           break;
     case T_edge_clearance:      constraint.m_Type = EDGE_CLEARANCE_CONSTRAINT;           break;
     case T_hole:                constraint.m_Type = HOLE_SIZE_CONSTRAINT;                break;
+    case T_hole_to_hole:        constraint.m_Type = HOLE_TO_HOLE_CONSTRAINT;             break;
     case T_courtyard_clearance: constraint.m_Type = COURTYARD_CLEARANCE_CONSTRAINT;      break;
     case T_silk_clearance:      constraint.m_Type = SILK_CLEARANCE_CONSTRAINT;           break;
     case T_track_width:         constraint.m_Type = TRACK_WIDTH_CONSTRAINT;              break;

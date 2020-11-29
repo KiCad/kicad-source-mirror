@@ -44,6 +44,7 @@ PANEL_SETUP_FEATURE_CONSTRAINTS::PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* 
         m_uviaMinSize( aFrame, m_uviaMinSizeLabel, m_uviaMinSizeCtrl, m_uviaMinSizeUnits, true ),
         m_uviaMinDrill( aFrame, m_uviaMinDrillLabel, m_uviaMinDrillCtrl, m_uviaMinDrillUnits, true ),
         m_holeToHoleMin( aFrame, m_HoleToHoleTitle, m_SetHoleToHoleCtrl, m_HoleToHoleUnits, true ),
+        m_holeClearance( aFrame, m_HoleClearanceLabel, m_HoleClearanceCtrl, m_HoleClearanceUnits, true ),
         m_edgeClearance( aFrame, m_EdgeClearanceLabel, m_EdgeClearanceCtrl, m_EdgeClearanceUnits, true ),
         m_silkClearance( aFrame, m_silkClearanceLabel, m_silkClearanceCtrl, m_silkClearanceUnits, true ),
         m_maxError( aFrame, m_maxErrorTitle, m_maxErrorCtrl, m_maxErrorUnits, true )
@@ -73,6 +74,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataToWindow()
     m_trackMinWidth.SetValue( m_BrdSettings->m_TrackMinWidth );
     m_viaMinAnnulus.SetValue( m_BrdSettings->m_ViasMinAnnulus );
     m_viaMinSize.SetValue(m_BrdSettings->m_ViasMinSize );
+    m_holeClearance.SetValue( m_BrdSettings->m_HoleClearance );
     m_edgeClearance.SetValue( m_BrdSettings->m_CopperEdgeClearance );
 
     m_throughHoleMin.SetValue( m_BrdSettings->m_MinThroughDrill );
@@ -101,6 +103,9 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     if( !m_viaMinSize.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
+    if( !m_holeClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
+        return false;
+
     if( !m_edgeClearance.Validate( 0, 10, EDA_UNITS::INCHES ) )
         return false;
 
@@ -126,6 +131,7 @@ bool PANEL_SETUP_FEATURE_CONSTRAINTS::TransferDataFromWindow()
     m_BrdSettings->m_TrackMinWidth = m_trackMinWidth.GetValue();
     m_BrdSettings->m_ViasMinAnnulus = m_viaMinAnnulus.GetValue();
     m_BrdSettings->m_ViasMinSize = m_viaMinSize.GetValue();
+    m_BrdSettings->m_HoleClearance = m_holeClearance.GetValue();
     m_BrdSettings->SetCopperEdgeClearance( m_edgeClearance.GetValue() );
 
     m_BrdSettings->m_MinThroughDrill = m_throughHoleMin.GetValue();

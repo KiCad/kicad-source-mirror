@@ -34,7 +34,7 @@
 /*
     Holes clearance test. Checks pad and via holes for their mechanical clearances.
     Generated errors:
-    - DRCE_HOLE_CLEARANCE
+    - DRCE_DRILLED_HOLES_TOO_CLOSE
 
     TODO: vias-in-smd-pads check
 */
@@ -99,14 +99,14 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
 
     DRC_CONSTRAINT worstClearanceConstraint;
 
-    if( m_drcEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, worstClearanceConstraint ) )
+    if( m_drcEngine->QueryWorstConstraint( HOLE_TO_HOLE_CONSTRAINT, worstClearanceConstraint ) )
     {
         m_largestClearance = worstClearanceConstraint.GetValue().Min();
-        reportAux( "Worst hole clearance : %d nm", m_largestClearance );
+        reportAux( "Worst hole to hole : %d nm", m_largestClearance );
     }
     else
     {
-        reportAux( "No hole clearance constraints found..." );
+        reportAux( "No hole to hole constraints found..." );
         return false;
     }
 
@@ -134,13 +134,11 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                item->ClearFlags( SKIP_STRUCT );
-
                 if( item->Type() == PCB_PAD_T )
                 {
                     PAD* pad = static_cast<PAD*>( item );
 
-                    // Check for round hole
+                    // We only care about drilled (ie: round) holes
                     if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
                         m_holeTree.Insert( item, m_largestClearance, F_Cu );
                 }
@@ -148,7 +146,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                 {
                     VIA* via = static_cast<VIA*>( item );
 
-                    // Check for drilled hole
+                    // We only care about mechanically drilled (ie: non-laser) holes
                     if( via->GetViaType() == VIATYPE::THROUGH )
                         m_holeTree.Insert( item, m_largestClearance, F_Cu );
                 }
@@ -177,62 +175,16 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
         if( !reportProgress( ii++, count, delta ) )
             break;
 
-        std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( via );
-
-        m_holeTree.QueryColliding( via, F_Cu, F_Cu,
-                // Filter:
-                [&]( BOARD_ITEM* other ) -> bool
-                {
-                    if( other->HasFlag( SKIP_STRUCT ) )
-                        return false;
-
-                    BOARD_ITEM* a = via;
-                    BOARD_ITEM* b = other;
-
-                    // store canonical order so we don't collide in both directions
-                    // (a:b and b:a)
-                    if( static_cast<void*>( a ) > static_cast<void*>( b ) )
-                        std::swap( a, b );
-
-                    if( checkedPairs.count( { a, b } ) )
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        checkedPairs[ { a, b } ] = 1;
-                        return true;
-                    }
-                },
-                // Visitor:
-                [&]( BOARD_ITEM* other ) -> bool
-                {
-                    return testHoleAgainstHole( via, holeShape.get(), other );
-                },
-                m_largestClearance );
-
-        via->SetFlags( SKIP_STRUCT );
-    }
-
-    checkedPairs.clear();
-
-    for( FOOTPRINT* footprint : m_board->Footprints() )
-    {
-        for( PAD* pad : footprint->Pads() )
+        // We only care about mechanically drilled (ie: non-laser) holes
+        if( via->GetViaType() == VIATYPE::THROUGH )
         {
-            if( !reportProgress( ii++, count, delta ) )
-                break;
+            std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( via );
 
-            std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( pad );
-
-            m_holeTree.QueryColliding( pad, F_Cu, F_Cu,
+            m_holeTree.QueryColliding( via, F_Cu, F_Cu,
                     // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
-                        if( other->HasFlag( SKIP_STRUCT ) )
-                            return false;
-
-                        BOARD_ITEM* a = pad;
+                        BOARD_ITEM* a = via;
                         BOARD_ITEM* b = other;
 
                         // store canonical order so we don't collide in both directions
@@ -253,11 +205,55 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::Run()
                     // Visitor:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
-                        return testHoleAgainstHole( pad, holeShape.get(), other );
+                        return testHoleAgainstHole( via, holeShape.get(), other );
                     },
                     m_largestClearance );
+        }
+    }
 
-            pad->SetFlags( SKIP_STRUCT );
+    checkedPairs.clear();
+
+    for( FOOTPRINT* footprint : m_board->Footprints() )
+    {
+        for( PAD* pad : footprint->Pads() )
+        {
+            if( !reportProgress( ii++, count, delta ) )
+                break;
+
+            // We only care about drilled (ie: round) holes
+            if( pad->GetDrillSize().x && pad->GetDrillSize().x == pad->GetDrillSize().y )
+            {
+                std::shared_ptr<SHAPE_CIRCLE> holeShape = getDrilledHoleShape( pad );
+
+                m_holeTree.QueryColliding( pad, F_Cu, F_Cu,
+                        // Filter:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            BOARD_ITEM* a = pad;
+                            BOARD_ITEM* b = other;
+
+                            // store canonical order so we don't collide in both directions
+                            // (a:b and b:a)
+                            if( static_cast<void*>( a ) > static_cast<void*>( b ) )
+                                std::swap( a, b );
+
+                            if( checkedPairs.count( { a, b } ) )
+                            {
+                                return false;
+                            }
+                            else
+                            {
+                                checkedPairs[ { a, b } ] = 1;
+                                return true;
+                            }
+                        },
+                        // Visitor:
+                        [&]( BOARD_ITEM* other ) -> bool
+                        {
+                            return testHoleAgainstHole( pad, holeShape.get(), other );
+                        },
+                        m_largestClearance );
+            }
         }
     }
 
@@ -291,7 +287,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
     {
         std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_DRILLED_HOLES_TOO_CLOSE );
 
-        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+        m_msg.Printf( _( "(%s min %s; actual %s)" ),
                       constraint.GetName(),
                       MessageTextFromValue( userUnits(), minClearance ),
                       MessageTextFromValue( userUnits(), actual ) );
@@ -315,7 +311,7 @@ int DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetNumPhases() const
 
 std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_CLEARANCE::GetConstraintTypes() const
 {
-    return { HOLE_CLEARANCE_CONSTRAINT };
+    return { HOLE_TO_HOLE_CONSTRAINT };
 }
 
 

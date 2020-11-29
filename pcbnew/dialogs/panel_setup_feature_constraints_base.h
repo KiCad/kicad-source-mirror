@@ -75,6 +75,10 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_ViaMinTitle;
 		wxTextCtrl* m_SetViasMinSizeCtrl;
 		wxStaticText* m_ViaMinUnits;
+		wxStaticBitmap* m_bitmapHoleClearance;
+		wxStaticText* m_HoleClearanceLabel;
+		wxTextCtrl* m_HoleClearanceCtrl;
+		wxStaticText* m_HoleClearanceUnits;
 		wxStaticBitmap* m_bitmapEdgeClearance;
 		wxStaticText* m_EdgeClearanceLabel;
 		wxTextCtrl* m_EdgeClearanceCtrl;

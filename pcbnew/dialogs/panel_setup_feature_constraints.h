@@ -50,6 +50,7 @@ public:
     UNIT_BINDER             m_uviaMinSize;
     UNIT_BINDER             m_uviaMinDrill;
     UNIT_BINDER             m_holeToHoleMin;
+    UNIT_BINDER             m_holeClearance;
     UNIT_BINDER             m_edgeClearance;
     UNIT_BINDER             m_silkClearance;
     UNIT_BINDER             m_maxError;

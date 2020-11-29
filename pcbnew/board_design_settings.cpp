@@ -142,6 +142,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_MicroViasMinSize    = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
     m_MicroViasMinDrill   = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
     m_CopperEdgeClearance = Millimeter2iu( DEFAULT_COPPEREDGECLEARANCE );
+    m_HoleClearance       = Millimeter2iu( DEFAULT_HOLECLEARANCE );
     m_HoleToHoleMin       = Millimeter2iu( DEFAULT_HOLETOHOLEMIN );
     m_SilkClearance       = Millimeter2iu( DEFAULT_SILKCLEARANCE );
 
@@ -222,6 +223,10 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_to_hole", &m_HoleToHoleMin,
             Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.00 ), Millimeter2iu( 10.0 ),
+            MM_PER_IU ) );
+
+    m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_hole_clearance", &m_HoleClearance,
+            Millimeter2iu( DEFAULT_HOLECLEARANCE ), Millimeter2iu( 0.00 ), Millimeter2iu( 100.0 ),
             MM_PER_IU ) );
 
     m_params.emplace_back( new PARAM_SCALED<int>( "rules.min_silk_clearance", &m_SilkClearance,
@@ -650,6 +655,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_MicroViasMinSize       = aOther.m_MicroViasMinSize;
     m_MicroViasMinDrill      = aOther.m_MicroViasMinDrill;
     m_CopperEdgeClearance    = aOther.m_CopperEdgeClearance;
+    m_HoleClearance          = aOther.m_HoleClearance;
     m_HoleToHoleMin          = aOther.m_HoleToHoleMin;
     m_SilkClearance          = aOther.m_SilkClearance;
     m_DRCSeverities          = aOther.m_DRCSeverities;
