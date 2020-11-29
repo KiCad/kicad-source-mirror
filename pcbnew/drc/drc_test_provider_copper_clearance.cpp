@@ -158,8 +158,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                item->ClearFlags( SKIP_STRUCT );
-
                 if( item->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( item )->IsVisible() )
                     return true;
 
@@ -410,9 +408,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
-                        if( other->HasFlag( SKIP_STRUCT ) )
-                            return false;
-
                         // It would really be better to know what particular nets a nettie
                         // should allow, but for now it is what it is.
                         if( isNetTie( other ) )
@@ -450,8 +445,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
 
             testItemAgainstZones( track, layer );
         }
-
-        track->SetFlags( SKIP_STRUCT );
     }
 }
 
@@ -595,9 +588,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
                         // Filter:
                         [&]( BOARD_ITEM* other ) -> bool
                         {
-                            if( other->HasFlag( SKIP_STRUCT ) )
-                                return false;
-
                             BOARD_ITEM* a = pad;
                             BOARD_ITEM* b = other;
 
@@ -625,8 +615,6 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadClearances( )
 
                 testItemAgainstZones( pad, layer );
             }
-
-            pad->SetFlags( SKIP_STRUCT );
         }
     }
 }
