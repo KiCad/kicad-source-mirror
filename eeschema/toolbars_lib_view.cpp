@@ -108,7 +108,7 @@ void LIB_VIEW_FRAME::ReCreateMenuBar()
     //
     ACTION_MENU* fileMenu = new ACTION_MENU( false, libControl );
 
-    fileMenu->AddClose( _( "Footprint Viewer" ) );
+    fileMenu->AddClose( _( "Symbol Viewer" ) );
 
 
     //-- View menu -----------------------------------------------------------

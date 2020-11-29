@@ -89,7 +89,7 @@ public:
     bool ReCreateListCmp();
 
     void DisplayLibInfos();
-    void OnCloseWindow( wxCloseEvent& Event );
+    void doCloseWindow() override;
     void CloseLibraryViewer( wxCommandEvent& event );
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;

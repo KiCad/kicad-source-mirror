@@ -66,7 +66,6 @@ int LIB_VIEW_FRAME::m_convert = 1;
 
 BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     // Window events
-    EVT_CLOSE( LIB_VIEW_FRAME::OnCloseWindow )
     EVT_SIZE( LIB_VIEW_FRAME::OnSize )
     EVT_ACTIVATE( LIB_VIEW_FRAME::OnActivate )
 
@@ -406,7 +405,7 @@ bool LIB_VIEW_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
 }
 
 
-void LIB_VIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
+void LIB_VIEW_FRAME::doCloseWindow()
 {
     GetCanvas()->StopDrawing();
 
@@ -799,7 +798,6 @@ void LIB_VIEW_FRAME::FinishModal()
 
     Close( true );
 }
-
 
 
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
