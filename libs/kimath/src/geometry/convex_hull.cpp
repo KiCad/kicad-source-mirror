@@ -60,9 +60,7 @@
 #include <geometry/shape_poly_set.h>
 #include <math/vector2d.h>              // for VECTOR2I
 #include <trigo.h>
-
 #include <algorithm>
-#include <wx/wx.h>
 
 
 typedef long long coord2_t;     // must be big enough to hold 2*max(|coordinate|)^2
@@ -133,15 +131,13 @@ void BuildConvexHull( std::vector<wxPoint>& aResult, const std::vector<wxPoint>&
 }
 
 
-void BuildConvexHull( std::vector<wxPoint>& aResult,
-                             const SHAPE_POLY_SET& aPolygons )
+void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons )
 {
     BuildConvexHull( aResult, aPolygons, wxPoint( 0, 0 ), 0.0 );
 }
 
 
-void BuildConvexHull( std::vector<wxPoint>& aResult,
-                      const SHAPE_POLY_SET& aPolygons,
+void BuildConvexHull( std::vector<wxPoint>& aResult, const SHAPE_POLY_SET& aPolygons,
                       wxPoint aPosition, double aRotation )
 {
     // Build the convex hull of the SHAPE_POLY_SET
@@ -152,12 +148,10 @@ void BuildConvexHull( std::vector<wxPoint>& aResult,
         const SHAPE_LINE_CHAIN& poly = aPolygons.COutline( cnt );
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
-        {
             buf.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
-        }
     }
 
-    BuildConvexHull(aResult, buf );
+    BuildConvexHull( aResult, buf );
 
     // Move and rotate the points according to aPosition and aRotation
 
