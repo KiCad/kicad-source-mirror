@@ -102,9 +102,14 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
     SCH_SHEET_LIST  sheetList;
 
     if( aPlotAll )
+    {
         sheetList.BuildSheetList( &m_parent->Schematic().Root(), true );
+        sheetList.SortByPageNumbers();
+    }
     else
+    {
         sheetList.push_back( m_parent->GetCurrentSheet() );
+    }
 
     REPORTER& reporter = m_MessagesBox->Reporter();
 

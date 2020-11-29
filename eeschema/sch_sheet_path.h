@@ -436,12 +436,25 @@ public:
      * Build the list of sheets and their sheet path from \a aSheet.
      *
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.
+     * 
+     * The list will be ordered as per #SCH_SCREEN::GetSheets which results in sheets being ordered
+     * in the legacy way of using the X and Y positions of the sheets.
+     * 
+     * @see #SortByPageNumbers to sort by page numbers
      *
      * @param aSheet is the starting sheet from which the list is built, or NULL
      *               indicating that g_RootSheet should be used.
      * @throw std::bad_alloc if the memory for the sheet path list could not be allocated.
      */
     void BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity );
+    
+    /**
+     * Sorts the list of sheets by page number. This should be called after #BuildSheetList
+     * 
+     * @param aUpdateVirtualPageNums If true, updates the virtual page numbers to match the new
+     * ordering
+     */
+    void SortByPageNumbers( bool aUpdateVirtualPageNums = true );
 
     bool NameExists( const wxString& aSheetName );
 

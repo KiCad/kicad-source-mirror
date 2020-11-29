@@ -57,9 +57,14 @@ void DIALOG_PLOT_SCHEMATIC::createPDFFile( bool aPlotAll, bool aPlotFrameRef,
     SCH_SHEET_LIST sheetList;
 
     if( aPlotAll )
+    {
         sheetList.BuildSheetList( &m_parent->Schematic().Root(), true );
+        sheetList.SortByPageNumbers();
+    }
     else
+    {
         sheetList.push_back( m_parent->GetCurrentSheet() );
+    }
 
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();

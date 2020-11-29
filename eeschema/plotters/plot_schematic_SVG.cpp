@@ -53,9 +53,14 @@ void DIALOG_PLOT_SCHEMATIC::createSVGFile( bool aPrintAll, bool aPrintFrameRef,
     SCH_SHEET_LIST  sheetList;
 
     if( aPrintAll )
+    {
         sheetList.BuildSheetList( &m_parent->Schematic().Root(), true );
+        sheetList.SortByPageNumbers();
+    }
     else
+    {
         sheetList.push_back( m_parent->GetCurrentSheet() );
+    }
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {

@@ -54,9 +54,14 @@ void DIALOG_PLOT_SCHEMATIC::CreateDXFFile( bool aPlotAll, bool aPlotFrameRef,
     SCH_SHEET_LIST sheetList;
 
     if( aPlotAll )
+    {
         sheetList.BuildSheetList( &schframe->Schematic().Root(), true );
+        sheetList.SortByPageNumbers();
+    }
     else
+    {
         sheetList.push_back( schframe->GetCurrentSheet() );
+    }
 
     REPORTER& reporter = m_MessagesBox->Reporter();
 

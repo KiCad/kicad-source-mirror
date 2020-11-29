@@ -426,7 +426,10 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
 SCH_SHEET_LIST::SCH_SHEET_LIST( SCH_SHEET* aSheet, bool aCheckIntegrity )
 {
     if( aSheet != NULL )
+    {
         BuildSheetList( aSheet, aCheckIntegrity );
+        SortByPageNumbers();
+    }
 }
 
 
@@ -474,6 +477,29 @@ void SCH_SHEET_LIST::BuildSheetList( SCH_SHEET* aSheet, bool aCheckIntegrity )
     }
 
     m_currentSheetPath.pop_back();
+}
+
+
+void SCH_SHEET_LIST::SortByPageNumbers( bool aUpdateVirtualPageNums )
+{
+    std::sort( begin(), end(), 
+        []( SCH_SHEET_PATH a, SCH_SHEET_PATH b ) -> bool 
+        {
+            wxString pageA = a.GetPageNumber();
+            wxString pageB = b.GetPageNumber();
+
+            return SCH_SHEET::ComparePageNum( pageA, pageB ) < 0;
+        } );
+
+    if( aUpdateVirtualPageNums )
+    {
+        int virtualPageNum = 1;
+
+        for( SCH_SHEET_PATH& sheet : *this )
+        {
+            sheet.SetVirtualPageNumber( virtualPageNum++ );
+        }
+    }
 }
 
 
