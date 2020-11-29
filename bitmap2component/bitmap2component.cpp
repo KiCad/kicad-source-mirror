@@ -490,9 +490,9 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
         if( paths->next == NULL || paths->next->sign == '+' )
         {
             // Substract holes to main polygon:
-            polyset_areas.Simplify( SHAPE_POLY_SET::PM_FAST );
-            polyset_holes.Simplify( SHAPE_POLY_SET::PM_FAST );
-            polyset_areas.BooleanSubtract( polyset_holes, SHAPE_POLY_SET::PM_FAST );
+            polyset_areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            polyset_holes.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            polyset_areas.BooleanSubtract( polyset_holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
             polyset_areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
             // Output current resulting polygon(s)
