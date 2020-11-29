@@ -2,15 +2,16 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
 # Kliment <kliment@0xfb.com>, 2020.
+# jonathan haas <jonathan.haas@live.de>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-19 21:34+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2020-11-30 00:06+0000\n"
+"Last-Translator: jonathan haas <jonathan.haas@live.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -163,14 +164,15 @@ msgstr "Lagen erstellen"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:470
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "Kein Footprint ausgewählt"
+msgstr "Kein Footprint ausgewählt."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
 "Footprint outline is malformed. Run Footprint Checker for a full analysis."
 msgstr ""
+"Die Grundrisskontur ist fehlerhaft. Führen Sie den Footprint Checker aus, um "
+"eine vollständige Analyse zu erhalten."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:250
@@ -179,6 +181,8 @@ msgstr ""
 #: pcbnew/specctra_import_export/specctra_export.cpp:838
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
+"Der Umriss des Boards ist fehlerhaft. Führen Sie DRC für eine vollständige "
+"Analyse aus."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -5210,7 +5214,7 @@ msgid "Comment"
 msgstr "Kommentar"
 
 #: common/page_layout/ws_draw_item.cpp:188
-#, fuzzy, c-format
+#, c-format
 msgid "Text '%s'"
 msgstr "Text '%s'"
 
@@ -13032,7 +13036,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "Das Power-Symbol erstellt eine globale Bezeichnung mit Namen '%s'"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:64
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -19986,6 +19990,8 @@ msgstr "Liste Dielektrikumslagen"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
 msgstr ""
+"Wählen Sie die dielektrische Schicht aus, die vom Stapel der Platine "
+"entfernt werden soll."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 #, fuzzy
@@ -22666,7 +22672,7 @@ msgstr "Wähle einen IDF-Export Dateinamen"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "* .emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:51
@@ -22927,7 +22933,7 @@ msgstr "Speichere VRML Platinendatei"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "* .wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -24193,7 +24199,7 @@ msgstr "Net wird verwendet. Trotzdem löschen?"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1904
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "Alle Netze in Gruppe '%s' löschen?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1927
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1928
@@ -24217,7 +24223,7 @@ msgstr "Platzhalter"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
-msgstr ""
+msgstr "RegEx"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
 #, fuzzy
@@ -24226,7 +24232,7 @@ msgstr "Platzhalter"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "RegEx Substr"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 msgid "Create Report..."
@@ -27709,9 +27715,9 @@ msgid "Checking %s; edge clearance: %s."
 msgstr "Überprüfen %s; Kantenabstand: %s."
 
 #: pcbnew/drc/drc_engine.cpp:810
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "%s wird geprüft"
+msgstr "%s wird geprüft."
 
 #: pcbnew/drc/drc_engine.cpp:817
 #, fuzzy
@@ -27999,9 +28005,9 @@ msgstr "Nicht erkanntes Element '%s'. | Erwartete Versionsnummer"
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:361 pcbnew/drc/drc_rule_parser.cpp:382
 #: pcbnew/drc/drc_rule_parser.cpp:403 pcbnew/drc/drc_rule_parser.cpp:507
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'."
-msgstr "Nicht erkanntes Element '%s'"
+msgstr "Nicht erkanntes Element '%s'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:157 pcbnew/drc/drc_rule_parser.cpp:236
 #: pcbnew/drc/drc_rule_parser.cpp:411
@@ -29091,7 +29097,7 @@ msgstr "Zentrieren"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Feet"
-msgstr ""
+msgstr "Fuß"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "Open File"
@@ -31268,7 +31274,7 @@ msgstr "Angepasst: Versatz "
 
 #: pcbnew/router/pns_router.cpp:209
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "Der Routing-Startpunkt verletzt die DRC."
 
 #: pcbnew/router/router_tool.cpp:85
 msgid "Undo last segment"
@@ -33607,7 +33613,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "Führen Sie DRC für eine vollständige Analyse aus."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:599
 msgid "Item <b>disallowed</b> at current location."
