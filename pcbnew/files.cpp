@@ -584,29 +584,28 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     bool converted =  pluginType != IO_MGR::LEGACY && pluginType != IO_MGR::KICAD_SEXP;
 
-    if( !converted )
+    // Loading a project should only be done under carefully considered circumstances.
+
+    // The calling code should know not to ask me here to change projects unless
+    // it knows what consequences that will have on other KIFACEs running and using
+    // this same PROJECT.  It can be very harmful if that calling code is stupid.
+    SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+    if( pro.GetFullPath() != mgr->Prj().GetProjectFullName() )
     {
-        // Loading a project should only be done under carefully considered circumstances.
+        // calls SaveProject
+        SaveProjectSettings();
 
-        // The calling code should know not to ask me here to change projects unless
-        // it knows what consequences that will have on other KIFACEs running and using
-        // this same PROJECT.  It can be very harmful if that calling code is stupid.
-        SETTINGS_MANAGER* mgr = GetSettingsManager();
+        mgr->UnloadProject( &mgr->Prj() );
 
-        if( pro.GetFullPath() != mgr->Prj().GetProjectFullName() )
-        {
-            // calls SaveProject
-            SaveProjectSettings();
+        mgr->LoadProject( pro.GetFullPath() );
 
-            mgr->UnloadProject( &mgr->Prj() );
-
-            mgr->LoadProject( pro.GetFullPath() );
-
-            // Do not allow saving a project if one doesn't exist.  This normally happens if we are
-            // standalone and opening a board that has been moved from its project folder.
-            if( !pro.Exists() )
-                Prj().SetReadOnly();
-        }
+        // Do not allow saving a project if one doesn't exist.  This normally happens if we are
+        // standalone and opening a board that has been moved from its project folder.
+        // For converted projects, we don't want to set the read-only flag because we want a project
+        // to be saved for the new file in case things like netclasses got migrated.
+        if( !pro.Exists() && !converted )
+            Prj().SetReadOnly();
     }
 
     if( is_new )
