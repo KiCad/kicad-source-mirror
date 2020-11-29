@@ -674,7 +674,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             bool      secondPt = false;
             wxPoint   last;
             SCH_LINE* wire = nullptr;
-            
+
             SHAPE_LINE_CHAIN wireChain; // Create a temp. line chain representing the connection
 
             for( POINT pt : conn.Path )
@@ -721,14 +721,14 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
                         if( !wireChain.Intersect( sheetEdge, wireToSheetIntersects ) )
                         {
-                            // The block terminal is outside the block shape in the original 
+                            // The block terminal is outside the block shape in the original
                             // CADSTAR design. Since KiCad's Sheet Pin will already be constrained
                             // on the edge, we will simply join to it with a straight line.
                             if( node == conn.StartNode )
                                 wireChain = wireChain.Reverse();
 
                             wireChain.Append( sheetPin->GetPosition() );
-                            
+
                             if( node == conn.StartNode )
                                 wireChain = wireChain.Reverse();
                         }
@@ -751,7 +751,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
                 }
             }
 
-            // Now we can load the wires            
+            // Now we can load the wires
             for( const VECTOR2I pt : wireChain.CPoints() )
             {
                 if( firstPt )
@@ -1381,9 +1381,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
     wxASSERT_MSG(
             prev->Type == VERTEX_TYPE::POINT, "First vertex should always be a point vertex" );
 
-    for( size_t i = 1; i < aCadstarVertices.size(); i++ )
+    for( size_t ii = 1; ii < aCadstarVertices.size(); ii++ )
     {
-        cur = &aCadstarVertices.at( i );
+        cur = &aCadstarVertices.at( ii );
 
         wxPoint   startPoint  = getKiCadPoint( prev->End );
         wxPoint   endPoint    = getKiCadPoint( cur->End );
@@ -1419,10 +1419,10 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
 
             // Load the arc as a series of piece-wise segments
 
-            for( int i = 0; i < arcSegments.SegmentCount(); i++ )
+            for( int jj = 0; jj < arcSegments.SegmentCount(); jj++ )
             {
-                wxPoint segStart = (wxPoint) arcSegments.Segment( i ).A;
-                wxPoint segEnd   = (wxPoint) arcSegments.Segment( i ).B;
+                wxPoint segStart = (wxPoint) arcSegments.Segment( jj ).A;
+                wxPoint segEnd   = (wxPoint) arcSegments.Segment( jj ).B;
 
                 loadGraphicStaightSegment( segStart, segEnd, aCadstarLineCodeID,
                         aCadstarSheetID, aKiCadSchLayerID, aMoveVector, aRotationAngleDeciDeg,
