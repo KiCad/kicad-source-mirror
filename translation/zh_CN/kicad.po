@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-25 14:29+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -159,7 +159,7 @@ msgstr "未加载任何封装。"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
 "Footprint outline is malformed. Run Footprint Checker for a full analysis."
-msgstr ""
+msgstr "封装轮廓不正确。运行封装检查器进行全面分析。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:250
@@ -167,7 +167,7 @@ msgstr ""
 #: pcbnew/exporters/export_vrml.cpp:835
 #: pcbnew/specctra_import_export/specctra_export.cpp:838
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "电路板轮廓不正确。运行DRC进行全面分析。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -20144,7 +20144,7 @@ msgstr "钻孔"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:265
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:214
 msgid "Generate Report File..."
-msgstr "正在生成报告文件..."
+msgstr "生成报告文件..."
 
 #: pcbnew/dialogs/dialog_board_statistics_base.h:66
 msgid "Board Statistics"
@@ -22719,7 +22719,7 @@ msgstr "线段属性"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "对于不填充的形状，线宽不能为0。"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
 msgid "Modify drawing properties"
@@ -31700,11 +31700,11 @@ msgstr "禁止区解析适用于:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:589
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr ""
+msgstr "报告可能不完整；某些封装的外框不正确。"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "运行 DRC 以进行全面分析。"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:599
 msgid "Item <b>disallowed</b> at current location."
