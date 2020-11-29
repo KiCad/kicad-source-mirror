@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_SYM_LIB_TABLE_BASE_H__
-#define __PANEL_SYM_LIB_TABLE_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -36,10 +35,10 @@ class WX_GRID;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_SYM_LIB_TABLE_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_SYM_LIB_TABLE_BASE : public wxPanel 
+class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxAuiNotebook* m_auinotebook;
 		wxPanel* m_global_panel;
@@ -56,7 +55,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		wxBitmapButton* m_move_down_button;
 		wxBitmapButton* m_delete_button;
 		WX_GRID* m_path_subs_grid;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void pageChangedHandler( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void appendRowHandler( wxCommandEvent& event ) { event.Skip(); }
@@ -65,13 +64,12 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		virtual void moveDownHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSizeGrid( wxSizeEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_SYM_LIB_TABLE_BASE();
-	
+
 };
 
-#endif //__PANEL_SYM_LIB_TABLE_BASE_H__
