@@ -460,7 +460,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
 
             wxLogError( wxString::Format(
                     _( "Symbol '%s' is scaled in the original CADSTAR schematic but this is not"
-                       "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
+                       " supported in KiCad. The symbol was loaded with 1:1 scale and may require "
                        "manual fixing." ),
                     symbolName, sym.PartRef.RefID ) );
         }
