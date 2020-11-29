@@ -793,6 +793,7 @@ void SCH_EDIT_FRAME::OnModify()
             } );
 
     GetCanvas()->Refresh();
+    UpdateHierarchyNavigator();
 }
 
 

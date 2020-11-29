@@ -1104,6 +1104,44 @@ void SCH_SHEET::SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& 
 }
 
 
+int SCH_SHEET::ComparePageNum( const wxString& aPageNumberA, const wxString aPageNumberB )
+{
+    if( aPageNumberA == aPageNumberB )
+        return 1;
+
+    // First sort numerically if the page numbers are integers
+    long pageA, pageB;
+    bool isIntegerPageA = aPageNumberA.ToLong( &pageA );
+    bool isIntegerPageB = aPageNumberB.ToLong( &pageB );
+
+    if( isIntegerPageA && isIntegerPageB )
+    {
+        if( pageA > pageB )
+            return 1;
+        else if( pageA == pageB )
+            return 0;
+        else
+            return -1;
+    }
+
+    // Numerical page numbers always before strings
+    if( isIntegerPageA )
+        return -1;
+    else if( isIntegerPageB )
+        return 1;
+
+    // If not numeric, then sort as strings
+    int result = aPageNumberA.Cmp( aPageNumberB );
+
+    if( result == 0 )
+        return 0;
+    else if( result > 0 )
+        return 1;
+
+    return -1;
+}
+
+
 #if defined(DEBUG)
 
 void SCH_SHEET::Show( int nestLevel, std::ostream& os ) const

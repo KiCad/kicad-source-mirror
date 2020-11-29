@@ -29,6 +29,7 @@
 
 #include <dialog_shim.h>
 #include <wx/imaglist.h>
+#include <wx/object.h> // wxRTTI macros
 #include <wx/treectrl.h>
 
 // The window name of the hierarchy navigator, used to find it
@@ -44,6 +45,10 @@ class HIERARCHY_NAVIG_DLG;
  */
 class HIERARCHY_TREE : public wxTreeCtrl
 {
+    // Need to use wxRTTI macros in order for OnCompareItems to work properly
+    // See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
+    wxDECLARE_ABSTRACT_CLASS( HIERARCHY_TREE );
+
 private:
     HIERARCHY_NAVIG_DLG* m_parent;
     wxImageList*         imageList;
@@ -93,6 +98,20 @@ private:
      * selected.
      */
     void onSelectSheetPath( wxTreeEvent& event );
+
+    /**
+     * getRootString
+     * @return String with page number in parenthesis
+     */
+    wxString getRootString();
+
+    /**
+     * formatPageString
+     * @param aName 
+     * @param aPage 
+     * @return String with page number in parenthesis
+    */
+    wxString formatPageString( wxString aName, wxString aPage );
 };
 
 #endif // HIERARCH_H

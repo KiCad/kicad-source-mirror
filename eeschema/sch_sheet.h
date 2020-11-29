@@ -610,6 +610,14 @@ public:
      */
     void SetPageNumber( const SCH_SHEET_PATH& aInstance, const wxString& aPageNumber );
 
+    /**
+     * @brief Compares page numbers of schematic sheets. Currently a basic 
+     * @param aPageNumberA 
+     * @param aPageNumberB 
+     * @return 0 if the page numbers are equal, -1 if aPageNumberA < aPageNumberB, 1 otherwise
+     */
+    static int ComparePageNum( const wxString& aPageNumberA, const wxString aPageNumberB );
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif

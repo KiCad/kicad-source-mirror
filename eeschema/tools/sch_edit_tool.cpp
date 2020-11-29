@@ -1717,7 +1717,7 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
     }
 
     wxString msg;
-    wxString sheetPath = instance.PathAsString();
+    wxString sheetPath = instance.PathHumanReadable( false );
     wxString pageNumber = instance.GetPageNumber();
 
     msg.Printf( _( "Enter page number for sheet path%s" ),

@@ -42,6 +42,7 @@
 #include <kiface_i.h>
 #include "eeschema_settings.h"
 
+#include <wx/object.h>
 #include <wx/wx.h>
 
 class HIERARCHY_NAVIG_DLG;
@@ -61,6 +62,11 @@ public:
     }
 };
 
+// Need to use wxRTTI macros in order for OnCompareItems to work properly
+// See: https://docs.wxwidgets.org/3.1/classwx_tree_ctrl.html#ab90a465793c291ca7aa827a576b7d146
+wxIMPLEMENT_ABSTRACT_CLASS( HIERARCHY_TREE, wxTreeCtrl );
+
+
 HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
                 wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
@@ -78,6 +84,7 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     AssignImageList( imageList );
 }
 
+
 HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SHIM( aParent, wxID_ANY, _( "Navigator" ), wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER, HIERARCHY_NAVIG_DLG_WNAME )
@@ -90,7 +97,7 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     m_nbsheets = 1;
 
     // root is the link to the main sheet.
-    wxTreeItemId root = m_Tree->AddRoot( _( "Root" ), 0, 1 );
+    wxTreeItemId root = m_Tree->AddRoot( getRootString(), 0, 1 );
     m_Tree->SetItemBold( root, true );
 
     m_list.push_back( &m_SchFrameEditor->Schematic().Root() );
@@ -156,7 +163,13 @@ void HIERARCHY_TREE::onChar( wxKeyEvent& event )
 
 int HIERARCHY_TREE::OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 )
 {
-    return GetItemText( item1 ).CmpNoCase( GetItemText( item2 ) );
+    SCH_SHEET_PATH* item1Path = &static_cast<TreeItemData*>( GetItemData( item1 ) )->m_SheetPath;
+    SCH_SHEET_PATH* item2Path = &static_cast<TreeItemData*>( GetItemData( item2 ) )->m_SheetPath;
+
+    wxString item1PageNo = item1Path->Last()->GetPageNumber( *item1Path );
+    wxString item2PageNo = item2Path->Last()->GetPageNumber( *item2Path );
+
+    return SCH_SHEET::ComparePageNum( item1PageNo, item2PageNo );
 }
 
 
@@ -170,11 +183,13 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
     for( SCH_ITEM* aItem : sheetChildren )
     {
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
-        wxString   sheetName = sheet->GetFields()[ SHEETNAME ].GetShownText();
+        aList->push_back( sheet );
+
+        wxString sheetName = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText(),
+                                               sheet->GetPageNumber( *aList ) );
         m_nbsheets++;
         wxTreeItemId menu;
         menu = m_Tree->AppendItem( *aPreviousmenu, sheetName, 0, 1 );
-        aList->push_back( sheet );
         m_Tree->SetItemData( menu, new TreeItemData( *aList ) );
 
         if( *aList == m_currSheet )
@@ -193,19 +208,39 @@ void HIERARCHY_NAVIG_DLG::buildHierarchyTree( SCH_SHEET_PATH* aList, wxTreeItemI
     m_Tree->SortChildren( *aPreviousmenu );
 }
 
+
 void HIERARCHY_NAVIG_DLG::UpdateHierarchyTree()
 {
     Freeze();
 
-    m_currSheet       = m_SchFrameEditor->GetCurrentSheet();
-    wxTreeItemId root = m_Tree->GetRootItem();
-    m_Tree->DeleteChildren( root );
+    // Disable selection events
+    Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
+    Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
+
+    m_currSheet = m_SchFrameEditor->GetCurrentSheet();
+    m_Tree->DeleteAllItems();
+    m_nbsheets = 1;
+
+    wxTreeItemId root = m_Tree->AddRoot( getRootString(), 0, 1 );
+    m_Tree->SetItemBold( root, true );
+
     m_list.clear();
     m_list.push_back( &m_SchFrameEditor->Schematic().Root() );
+    m_Tree->SetItemData( root, new TreeItemData( m_list ) );
+
+    if( m_SchFrameEditor->GetCurrentSheet().Last() == &m_SchFrameEditor->Schematic().Root() )
+        m_Tree->SelectItem( root );
+
     buildHierarchyTree( &m_list, &root );
+    m_Tree->ExpandAll();
+
+    // Enable selection events
+    Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
+    Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_NAVIG_DLG::onSelectSheetPath, this );
 
     Thaw();
 }
+
 
 void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
 {
@@ -222,6 +257,22 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
 
     if( !appSettings->m_Appearance.navigator_stays_open )
         Close( true );
+}
+
+
+wxString HIERARCHY_NAVIG_DLG::getRootString()
+{
+    SCH_SHEET*   rootSheet = &m_SchFrameEditor->Schematic().Root();
+    SCH_SHEET_PATH rootPath;
+    rootPath.push_back( rootSheet );
+
+    return formatPageString ( _( "Root" ), rootSheet->GetPageNumber( rootPath ) );
+}
+
+
+wxString HIERARCHY_NAVIG_DLG::formatPageString( wxString aName, wxString aPage )
+{
+    return aName + wxT( " " ) + wxString::Format( _( "(page %s)" ), aPage );
 }
 
 
