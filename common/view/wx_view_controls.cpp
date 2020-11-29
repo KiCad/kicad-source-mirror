@@ -253,6 +253,10 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
             const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
             m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
         }
+
+        // Refresh the zoom level and mouse position on message panel
+        // (mouse position has not changed, only the zoom level has changed):
+        refreshMouse();
     }
     else
     {
