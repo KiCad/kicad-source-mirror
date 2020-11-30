@@ -214,24 +214,29 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         TRACK_DRAG_ACTION dragAction = getEditFrame<PCB_BASE_FRAME>()->Settings().m_TrackDragAction;
         m_additive = m_subtractive = m_exclusive_or = false;
 
-        // OSX uses CTRL for context menu, and SHIFT is exclusive-or
 #ifdef __WXOSX_MAC__
-        if( evt->Modifier( MD_SHIFT ) )
-            m_exclusive_or = true;
-#else
-        if( evt->Modifier( MD_SHIFT ) && evt->Modifier( MD_CTRL ) )
+        if( evt->Modifier( MD_CTRL ) && evt->Modifier( MD_SHIFT ) )
             m_subtractive = true;
         else if( evt->Modifier( MD_SHIFT ) )
             m_additive = true;
         else if( evt->Modifier( MD_CTRL ) )
             m_exclusive_or = true;
+
+        m_skip_heuristics = evt->Modifier( MD_ALT );
+#else
+        if( evt->Modifier( MD_ALT ) && evt->Modifier( MD_SHIFT ) )
+            m_subtractive = true;
+        else if( evt->Modifier( MD_SHIFT ) )
+            m_additive = true;
+        else if( evt->Modifier( MD_ALT ) )
+            m_exclusive_or = true;
+
+        // Cannot use the Alt key on windows or the disambiguation context menu is immediately
+        // dismissed rendering it useless.
+        m_skip_heuristics = evt->Modifier( MD_CTRL );
 #endif
 
         bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
-
-        // Is the user requesting that the selection list include all possible
-        // items without removing less likely selection candidates
-        m_skip_heuristics = !!evt->Modifier( MD_ALT );
 
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
@@ -240,10 +245,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             selectPoint( evt->Position() );
         }
-
-        // Right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            // Right click? if there is any object - show the context menu
             bool selectionCancelled = false;
 
             if( m_selection.Empty() )
@@ -255,10 +259,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( !selectionCancelled )
                 m_menu.ShowContextMenu( m_selection );
         }
-
-        // Double click? Display the properties window
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
+            // Double click? Display the properties window
             m_frame->FocusOnItem( nullptr );
 
             if( m_selection.Empty() )
@@ -273,19 +276,18 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( PCB_ACTIONS::properties, true );
             }
         }
-
-        // Middle double click?  Do zoom to fit or zoom to objects
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
+            // Middle double click?  Do zoom to fit or zoom to objects
             if( m_exclusive_or ) // Is CTRL key down?
                 m_toolMgr->RunAction( ACTIONS::zoomFitObjects, true );
             else
                 m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
         }
-
-        // Drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
+            // Drag with LMB? Select multiple objects (or at least draw a selection box)
+            // or drag them
             m_frame->FocusOnItem( nullptr );
             m_toolMgr->ProcessEvent( EVENTS::InhibitSelectionEditing );
 
@@ -322,7 +324,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
-
         else if( evt->IsCancel() )
         {
             m_frame->FocusOnItem( nullptr );
@@ -335,9 +336,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( evt->FirstResponder() == this )
                 m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight );
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
 
 
         if( m_frame->ToolStackIsEmpty() )
