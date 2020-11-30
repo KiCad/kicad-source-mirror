@@ -76,43 +76,34 @@ public:
 
 private:
     bool initializeOpenGL();
-    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly, const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly,
+                                         const CBVHCONTAINER2D *aThroughHoles = nullptr );
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void ogl_set_arrow_material();
 
     void ogl_free_all_display_lists();
-    MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_lists_platedPads_F_Cu;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_lists_platedPads_B_Cu;
-    MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_outer;
-    MAP_OGL_DISP_LISTS      m_ogl_disp_lists_layers_holes_inner;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_board_with_holes;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_anti_board;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer;
+    MAP_OGL_DISP_LISTS      m_layers;
+    CLAYERS_OGL_DISP_LISTS* m_platedPads_F_Cu;
+    CLAYERS_OGL_DISP_LISTS* m_platedPads_B_Cu;
+    MAP_OGL_DISP_LISTS      m_layers_holes_outer;
+    MAP_OGL_DISP_LISTS      m_layers_holes_inner;
+    CLAYERS_OGL_DISP_LISTS* m_board;
+    CLAYERS_OGL_DISP_LISTS* m_board_with_holes;
+    CLAYERS_OGL_DISP_LISTS* m_anti_board;
+    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer;
+    CLAYERS_OGL_DISP_LISTS* m_through_holes_vias_outer;
+    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer_ring;
+    CLAYERS_OGL_DISP_LISTS* m_vias_and_pad_holes_outer_contourn_and_caps;
 
-    // User for body render
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer_with_npth;
-
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_vias_outer;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_outer_ring;
-    //CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_through_holes_vias_inner; // Not in use
-
-    // This is for pads holes of the footprints
-    //CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_vias_and_pad_holes_inner_contourn_and_caps;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_vias_and_pad_holes_outer_contourn_and_caps;
-
-    LIST_TRIANGLES m_triangles; // store pointers so can be deleted latter
-
+    LIST_TRIANGLES m_triangles;     ///< store pointers so can be deleted latter
     GLuint m_ogl_circle_texture;
 
-    GLuint m_ogl_disp_list_grid;    ///< oGL list that stores current grid
-
+    GLuint m_grid;                  ///< oGL list that stores current grid
     GRID3D_TYPE m_last_grid_type;   ///< Stores the last grid computed
 
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_via;
-    CLAYERS_OGL_DISP_LISTS* m_ogl_disp_list_pads_holes;
+    CLAYERS_OGL_DISP_LISTS* m_vias;
+    CLAYERS_OGL_DISP_LISTS* m_pad_holes;
 
     MAP_3DMODEL m_3dmodel_map;
 
