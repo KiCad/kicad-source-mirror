@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:07+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"PO-Revision-Date: 2020-12-02 21:37+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -27549,7 +27549,7 @@ msgstr "厘米"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Feet"
-msgstr ""
+msgstr "英尺"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "Open File"
