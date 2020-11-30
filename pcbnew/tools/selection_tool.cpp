@@ -267,17 +267,23 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        // Should selected items be added to the current selection or
-        // become the new selection (discarding previously selected items)
-        m_additive = evt->Modifier( MD_SHIFT );
-
-        // Should selected items be REMOVED from the current selection?
-        // This will be ignored if the SHIFT modifier is pressed
-        m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
+#ifdef __WXOSX_MAC__
+        if( evt->Modifier( MD_CTRL ) && evt->Modifier( MD_SHIFT ) )
+            m_subtractive = true;
+        else if( evt->Modifier( MD_CTRL ) )
+            m_additive = true;
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
-        m_skip_heuristics = !!evt->Modifier( MD_ALT );
+        m_skip_heuristics = evt->Modifier( MD_ALT );
+#else
+        if( evt->Modifier( MD_ALT ) && evt->Modifier( MD_SHIFT ) )
+            m_subtractive = true;
+        else if( evt->Modifier( MD_ALT ) )
+            m_additive = true;
+
+        m_skip_heuristics = evt->Modifier( MD_CTRL );
+#endif
 
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
