@@ -51,12 +51,12 @@ public:
      *
      * @param aPoint stores coordinates for EDIT_POINT.
      */
-    EDIT_POINT( const VECTOR2I& aPoint, EDA_ITEM* aConnection = nullptr ) :
-        m_position( aPoint ),
-        m_connection( aConnection ),
-        m_isActive( false ),
-        m_isHover( false ),
-        m_gridFree( false )
+    EDIT_POINT( const VECTOR2I& aPoint, std::pair<EDA_ITEM*, int> aConnected = { nullptr, 0 } ) :
+            m_position( aPoint ),
+            m_isActive( false ),
+            m_isHover( false ),
+            m_gridFree( false ),
+            m_connected( aConnected )
     {
     }
 
@@ -73,9 +73,12 @@ public:
         return m_position;
     }
 
-    virtual EDA_ITEM* GetConnection() const
+    /**
+     * Return a connected item record comprising an EDA_ITEM* and a STARTPOINT/ENDPOINT flag.
+     */
+    virtual std::pair<EDA_ITEM*, int> GetConnected() const
     {
-        return m_connection;
+        return m_connected;
     }
 
     /**
@@ -204,12 +207,13 @@ public:
 
 private:
     VECTOR2I  m_position;        // Position of EDIT_POINT
-
-    EDA_ITEM* m_connection;      // An optional item to a connected item.  Used to mimic
-                                 // polyLine behaviour with individual line segments.
     bool      m_isActive;        // True if this point is being manipulated
     bool      m_isHover;         // True if this point is being hovered over
     bool      m_gridFree;        // True if this point should not be snapped to the grid.
+
+    ///> An optional connected item record used to mimic polyLine behaviour with individual
+    /// line segments.
+    std::pair<EDA_ITEM*, int>                     m_connected;
 
     ///> Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
@@ -387,9 +391,9 @@ public:
      * Adds an EDIT_POINT.
      * @param aPoint are coordinates of the new point.
      */
-    void AddPoint( const VECTOR2I& aPoint, EDA_ITEM* aConnection = nullptr )
+    void AddPoint( const VECTOR2I& aPoint, std::pair<EDA_ITEM*, int> aConnected = { nullptr, 0 } )
     {
-        AddPoint( EDIT_POINT( aPoint, aConnection ) );
+        AddPoint( EDIT_POINT( aPoint, aConnected ) );
     }
 
     /**

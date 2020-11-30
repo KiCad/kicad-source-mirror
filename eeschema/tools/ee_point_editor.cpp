@@ -150,10 +150,10 @@ public:
         case SCH_LINE_T:
         {
             SCH_LINE* line = (SCH_LINE*) aItem;
-            SCH_LINE* connectedStart = nullptr;
-            SCH_LINE* connectedEnd = nullptr;
+            std::pair<EDA_ITEM*, int> connectedStart = { nullptr, STARTPOINT };
+            std::pair<EDA_ITEM*, int> connectedEnd = { nullptr, STARTPOINT };
 
-            for( auto test : frame->GetScreen()->Items().OfType( SCH_LINE_T ) )
+            for( SCH_ITEM* test : frame->GetScreen()->Items().OfType( SCH_LINE_T ) )
             {
                 if( test->GetLayer() != LAYER_NOTES )
                     continue;
@@ -161,28 +161,23 @@ public:
                 if( test == aItem )
                     continue;
 
-                auto testLine = static_cast<SCH_LINE*>( test );
-                testLine->ClearFlags( STARTPOINT | ENDPOINT );
+                SCH_LINE* testLine = static_cast<SCH_LINE*>( test );
 
                 if( testLine->GetStartPoint() == line->GetStartPoint() )
                 {
-                    connectedStart = testLine;
-                    testLine->SetFlags( STARTPOINT );
+                    connectedStart = { testLine, STARTPOINT };
                 }
                 else if( testLine->GetEndPoint() == line->GetStartPoint() )
                 {
-                    connectedStart = testLine;
-                    testLine->SetFlags( ENDPOINT );
+                    connectedStart = { testLine, ENDPOINT };
                 }
                 else if( testLine->GetStartPoint() == line->GetEndPoint() )
                 {
-                    connectedEnd = testLine;
-                    testLine->SetFlags( STARTPOINT );
+                    connectedEnd = { testLine, STARTPOINT };
                 }
                 else if( testLine->GetEndPoint() == line->GetEndPoint() )
                 {
-                    connectedEnd = testLine;
-                    testLine->SetFlags( ENDPOINT );
+                    connectedEnd = { testLine, ENDPOINT };
                 }
             }
 
@@ -612,28 +607,28 @@ void EE_POINT_EDITOR::updateParentItem() const
         line->SetStartPoint( (wxPoint) m_editPoints->Point( LINE_START ).GetPosition() );
         line->SetEndPoint( (wxPoint) m_editPoints->Point( LINE_END ).GetPosition() );
 
-        SCH_LINE* connection = (SCH_LINE*) ( m_editPoints->Point( LINE_START ).GetConnection() );
+        std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
 
-        if( connection )
+        if( connected.first )
         {
-            if( connection->HasFlag( STARTPOINT ) )
-                connection->SetStartPoint( line->GetPosition() );
-            else if( connection->HasFlag( ENDPOINT ) )
-                connection->SetEndPoint( line->GetPosition() );
+            if( connected.second == STARTPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( line->GetPosition() );
+            else if( connected.second == ENDPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetPosition() );
 
-            getView()->Update( connection, KIGFX::GEOMETRY );
+            getView()->Update( connected.first, KIGFX::GEOMETRY );
         }
 
-        connection = (SCH_LINE*) ( m_editPoints->Point( LINE_END ).GetConnection() );
+        connected = m_editPoints->Point( LINE_END ).GetConnected();
 
-        if( connection )
+        if( connected.first )
         {
-            if( connection->HasFlag( STARTPOINT ) )
-                connection->SetStartPoint( line->GetEndPoint() );
-            else if( connection->HasFlag( ENDPOINT ) )
-                connection->SetEndPoint( line->GetEndPoint() );
+            if( connected.second == STARTPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetStartPoint( line->GetEndPoint() );
+            else if( connected.second == ENDPOINT )
+                static_cast<SCH_LINE*>( connected.first )->SetEndPoint( line->GetEndPoint() );
 
-            getView()->Update( connection, KIGFX::GEOMETRY );
+            getView()->Update( connected.first, KIGFX::GEOMETRY );
         }
 
         break;
@@ -882,15 +877,15 @@ void EE_POINT_EDITOR::saveItemsToUndo()
 
         if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
         {
-            EDA_ITEM* connection = m_editPoints->Point( LINE_START ).GetConnection();
+            std::pair<EDA_ITEM*, int> connected = m_editPoints->Point( LINE_START ).GetConnected();
 
-            if( connection )
-                saveCopyInUndoList( (SCH_ITEM*) connection, UNDO_REDO::CHANGED, true );
+            if( connected.first )
+                saveCopyInUndoList( (SCH_ITEM*) connected.first, UNDO_REDO::CHANGED, true );
 
-            connection = m_editPoints->Point( LINE_END ).GetConnection();
+            connected = m_editPoints->Point( LINE_END ).GetConnected();
 
-            if( connection )
-                saveCopyInUndoList( (SCH_ITEM*) connection, UNDO_REDO::CHANGED, true );
+            if( connected.first )
+                saveCopyInUndoList( (SCH_ITEM*) connected.first, UNDO_REDO::CHANGED, true );
         }
     }
 }
