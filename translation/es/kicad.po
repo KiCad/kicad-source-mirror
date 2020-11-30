@@ -1,15 +1,16 @@
 # uLe <uestrada@mafu-robotics.de>, 2020.
 # Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>, 2020.
 # Iñigo Figuero Sanz <news@imagedworld.com>, 2020.
+# Echedey <echedeyla@hotmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-19 21:34+0000\n"
-"Last-Translator: Iñigo Figuero Sanz <news@imagedworld.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"Last-Translator: Echedey <echedeyla@hotmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -149,14 +150,15 @@ msgstr "Crear capas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:470
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "No se ha especificado huella"
+msgstr "No se ha especificado huella."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
 "Footprint outline is malformed. Run Footprint Checker for a full analysis."
 msgstr ""
+"El contorno de la huella está mal formado. Ejecute Footprint Checker para un "
+"análisis completo."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:250
@@ -165,6 +167,8 @@ msgstr ""
 #: pcbnew/specctra_import_export/specctra_export.cpp:838
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
+"El contorno de la placa está mal formado. Ejecute DRC para un análisis "
+"completo."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -12705,7 +12709,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "El símbolo de potencia crea una etiqueta global con el nombre '%s'"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:64
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -19801,7 +19805,7 @@ msgstr "Capa \"%s\" (subcapa %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:185
 msgid "Select dielectric layer to add to board stack up."
-msgstr ""
+msgstr "Seleccione la capa dieléctrica para añadir al apilado."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:186
 #, fuzzy
@@ -19810,7 +19814,7 @@ msgstr "Pérdidas dieléctricas:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
-msgstr ""
+msgstr "Seleccione la capa dieléctrica para eliminar del apilado."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 #, fuzzy
@@ -20171,7 +20175,7 @@ msgstr "Deshacer última acción"
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:542
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:784
 msgid "(not a closed shape)"
-msgstr ""
+msgstr "(no es una forma cerrada)"
 
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:814
 #: pcbnew/convert_drawsegment_list_to_polygon.cpp:826
@@ -20294,6 +20298,9 @@ msgid ""
 "\n"
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"Las huellas del lado frontal que comiencen con '%s' tendrán el prefijo "
+"eliminado."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:342
 #, c-format
@@ -20301,6 +20308,8 @@ msgid ""
 "\n"
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Las huellas del lado frontal tendrán \"%s\" insertado como prefijo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:352
 #, c-format
@@ -20308,6 +20317,9 @@ msgid ""
 "\n"
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
+"\n"
+"Las huellas del lado posterior que comiencen con '%s' tendrán el prefijo "
+"eliminado."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:358
 #, c-format
@@ -20315,6 +20327,8 @@ msgid ""
 "\n"
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
+"\n"
+"Las huellas del lado posterior tendrán insertado '%s' como prefijo."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:366
 #, c-format

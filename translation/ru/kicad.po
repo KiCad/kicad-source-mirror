@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-23 21:48+0000\n"
+"PO-Revision-Date: 2020-11-30 00:07+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -165,14 +165,15 @@ msgstr "Создание слоёв"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:470
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "Посад.место не выбрано"
+msgstr "Нет загруженных посад.мест."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
 "Footprint outline is malformed. Run Footprint Checker for a full analysis."
 msgstr ""
+"Контур посад.места имеет неудачную форму. Выполните проверку посад.места для "
+"получения полной информации."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:250
@@ -181,6 +182,8 @@ msgstr ""
 #: pcbnew/specctra_import_export/specctra_export.cpp:838
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
+"Контур платы имеет неудачную форму. Выполните проверку правил DRC для "
+"получения полной информации."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -1301,7 +1304,6 @@ msgid "Black&&White Picture"
 msgstr "Черно-белое изображение"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
-#, fuzzy
 msgid "Bitmap Information"
 msgstr "Информация"
 
@@ -1338,9 +1340,8 @@ msgid "bits"
 msgstr "бит"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters"
-msgstr "Параметры вывода:"
+msgstr "Параметры вывода"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1379,9 +1380,8 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Postscript (.ps file)"
-msgstr "PostScript (.ps файл)"
+msgstr "Postscript (.ps файл)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Logo for title block (.kicad_wks file)"
@@ -1393,9 +1393,8 @@ msgid "Format"
 msgstr "Формат"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options"
-msgstr "Параметры изображения:"
+msgstr "Параметры изображения"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
@@ -1431,9 +1430,8 @@ msgid "User layer Eco2"
 msgstr "Слой пользователя Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "Слои платы для контура:"
+msgstr "Слои платы для контура"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1894,7 +1892,8 @@ msgid ""
 "will only be temporarily overwritten."
 msgstr ""
 "Эта переменная окружения передана операционной системой при запуске "
-"приложения и временно переопределит настройки пользователя."
+"приложения\n"
+"и временно переопределит настройки пользователя."
 
 #: common/dialogs/dialog_configure_paths.cpp:343
 msgid ""
@@ -2221,7 +2220,8 @@ msgstr "Неправильный номер масштаба"
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
 msgstr ""
-"Изображение с таким масштабом становится слишком малым (%.2f мм или %1.f мил)"
+"Изображение с таким масштабом становится слишком малым (%.2f мм или %.1f "
+"мил)."
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
@@ -2229,7 +2229,7 @@ msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
 msgstr ""
-"Изображение с таким масштабом становится слишком большим (%.2f мм или %1.f "
+"Изображение с таким масштабом становится слишком большим (%.1f мм или %.2f "
 "мил). Продолжить?"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
@@ -2749,7 +2749,7 @@ msgstr "Установка точного масштаба по оси X"
 #: common/dialogs/dialog_print_generic_base.cpp:96
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:62
 msgid "Page Setup..."
-msgstr "Парам. страницы"
+msgstr "Парам. страницы..."
 
 #: common/dialogs/dialog_text_entry_base.cpp:22
 #: common/dialogs/dialog_unit_entry_base.cpp:22
@@ -3556,7 +3556,7 @@ msgstr "Сохранить..."
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
 "Нет возможности использовать OpenGL, изображение будет формироваться только "
-"программными средствами."
+"программными средствами"
 
 #: common/draw_panel_gal.cpp:244 common/draw_panel_gal.cpp:429
 msgid "Could not use OpenGL"
@@ -3659,7 +3659,8 @@ msgid ""
 "made?"
 msgstr ""
 "Возможны некоторые затруднения!\n"
-"При последнем редактировании файл \"%s\"\n"
+"При последнем редактировании файл\n"
+"\"%s\"\n"
 "не был корректно сохранён. Хотите восстановить последние изменения?"
 
 #: common/eda_base_frame.cpp:897
@@ -4135,11 +4136,11 @@ msgstr "Высота"
 
 #: common/eda_text.cpp:674
 msgid "Horizontal Justification"
-msgstr "Выравнивание по гориз.:"
+msgstr "Выравнивание по гориз."
 
 #: common/eda_text.cpp:676
 msgid "Vertical Justification"
-msgstr "Выравнивание по верт.:"
+msgstr "Выравнивание по верт."
 
 #: common/env_vars.cpp:70
 msgid ""
@@ -4313,7 +4314,7 @@ msgid "Unable to find a PDF viewer for \"%s\""
 msgstr "Не удалось найти PDF-просмотрщик для \"%s\""
 
 #: common/gestfich.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot print '%s'.\n"
 "\n"
@@ -4440,8 +4441,8 @@ msgstr "Не удалось загрузить kiface библиотеку \"%s\
 msgid ""
 "Could not read instance name and version symbol form kiface library \"%s\"."
 msgstr ""
-"Не удалось прочитать имя экземпляра и символ версии из kiface библиотеки \"%s"
-"\""
+"Не удалось прочитать имя экземпляра и символ версии из kiface библиотеки \"%"
+"s\"."
 
 #: common/kiway.cpp:272
 #, c-format
@@ -5143,7 +5144,7 @@ msgstr "Файл перевода для этого языка не устано
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr "Не удалось открыть файл '%s'."
+msgstr "Не удалось открыть файл '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1995
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2013
@@ -6657,9 +6658,8 @@ msgid "Relative"
 msgstr "Относительные"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type"
-msgstr "Тип путей:"
+msgstr "Тип путей"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -6801,8 +6801,8 @@ msgid ""
 "automatically assign footprint names from symbol values."
 msgstr ""
 "Настроить список файлов связей символ-посад.место (.equ). Эти файлы "
-"используются для автоматического назначения имени посад.места (FPID) по "
-"значениям из полей символа"
+"используются для автоматического назначения посад.места на основе значения "
+"символа."
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save to Schematic"
@@ -6855,7 +6855,7 @@ msgstr "Использовать фильтры посад.мест символ
 
 #: cvpcb/tools/cvpcb_actions.cpp:137
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr "Фильтровать список посад.мест согласно заданным в символе фильтрам."
+msgstr "Фильтровать список посад.мест согласно заданным в символе фильтрам"
 
 #: cvpcb/tools/cvpcb_actions.cpp:143
 msgid "Filter by pin count"
@@ -10631,9 +10631,8 @@ msgid "Current"
 msgstr "Ток"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:927
-#, fuzzy
 msgid "Source Type"
-msgstr "Тип источника:"
+msgstr "Тип источника"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:935
 msgid "Source"
@@ -10741,7 +10740,7 @@ msgid ""
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
 "Параметр позволяет добавлять символы для таких посад.мест печатной платы,\n"
-"как реперные знаки или логотипы, которых не должно быть в перечне элементов."
+"как реперные знаки или логотипы, которых не должно быть в перечне элементов"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:200
 msgid ""
@@ -10751,7 +10750,7 @@ msgid ""
 msgstr ""
 "Параметр позволяет добавлять символы, которые нужно указать только в перечне "
 "элементов,\n"
-"но исключить из печатной платы, например винты или корпус."
+"но исключить из печатной платы, например винты или корпус"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
@@ -11093,7 +11092,7 @@ msgstr "По умолчанию для новых элементов"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:46
 msgid "Sheet border:"
-msgstr "Контур листа: "
+msgstr "Контур листа:"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 msgid "Sheet background:"
@@ -11605,7 +11604,7 @@ msgstr "Вывод с флагом \"Не подключено\" имеет по
 #: eeschema/erc.cpp:535
 #, c-format
 msgid "Pins of type %s and %s are connected"
-msgstr "Вывод типа %s соединён с выводом типа %s."
+msgstr "Вывод типа %s соединён с выводом типа %s"
 
 #: eeschema/erc.cpp:601
 #, c-format
@@ -11894,8 +11893,7 @@ msgid ""
 "Error loading schematic \"%s\".\n"
 "%s"
 msgstr ""
-"Ошибка при загрузке библиотеки %s.\n"
-"\n"
+"Ошибка при загрузке библиотеки \"%s\".\n"
 "%s"
 
 #: eeschema/files-io.cpp:1025
@@ -12445,7 +12443,7 @@ msgstr "Следующие библиотеки не найдены:"
 
 #: eeschema/sch_edit_frame.cpp:302
 msgid "New schematic file is unsaved"
-msgstr "Новый файл схемы не сохранён."
+msgstr "Новый файл схемы не сохранён"
 
 #: eeschema/sch_edit_frame.cpp:630
 #: eeschema/symbol_editor/symbol_editor.cpp:1101
@@ -12513,7 +12511,6 @@ msgid "Back"
 msgstr "Низ"
 
 #: eeschema/sch_field.cpp:515
-#, fuzzy
 msgid "Intersheet References"
 msgstr "Обозначения листов"
 
@@ -12713,7 +12710,7 @@ msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
-"Символ '%s' ссылается на часть '%s', которую не удаётся найти в библиотеке. "
+"Символ '%s' ссылается на часть '%s', которую не удалось найти в библиотеке. "
 "Символ не загружен."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:348
@@ -14149,7 +14146,7 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:800
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:203
 msgid "Could not open the library file."
-msgstr "Не удалось открыть файл библиотеки"
+msgstr "Не удалось открыть файл библиотеки."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:869
 #: eeschema/symbol_tree_model_adapter.cpp:75
@@ -14173,7 +14170,7 @@ msgstr "Глобальная"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:948
 #: pcbnew/footprint_libraries_utils.cpp:499
 msgid "Choose the Library Table to add the library to:"
-msgstr "Выберите таблицу для добавления библиотеки"
+msgstr "Выберите таблицу для добавления библиотеки:"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:949
 msgid "Add To Library Table"
@@ -14448,7 +14445,7 @@ msgstr "Не удалось перечислить библиотеки \"%s\" (
 #, c-format
 msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 msgstr ""
-"Возникла ошибка \"%s\" при сохранении символа \"%s\" в библиотеку \"%s\"."
+"Возникла ошибка \"%s\" при сохранении символа \"%s\" в библиотеку \"%s\""
 
 #: eeschema/symbol_editor/symbol_library_manager.h:84
 msgid ""
@@ -14540,7 +14537,8 @@ msgid ""
 "You must launch the KiCad project manager and create a project."
 msgstr ""
 "Не удалось обновить плату, так как Eeschema открыта отдельно от менеджера "
-"проектов. Нужно запустить менеджер проектов KiCad и создать проект."
+"проектов.\n"
+"Нужно запустить менеджер проектов KiCad и создать проект."
 
 #: eeschema/tools/backannotate.cpp:159
 #, c-format
@@ -14548,9 +14546,9 @@ msgid "Footprint '%s' has no associated symbol."
 msgstr "Посад.место '%s' не связано ни с одним из сиволов."
 
 #: eeschema/tools/backannotate.cpp:192
-#, fuzzy, c-format
+#, c-format
 msgid "Footprints '%s' and '%s' linked to same symbol."
-msgstr "Посад.места \"%s\" и \"%s\" связаны с одним и тем же символом."
+msgstr "Посад.места '%s' и '%s' связаны с одним и тем же символом."
 
 #: eeschema/tools/backannotate.cpp:257
 #, c-format
@@ -14568,65 +14566,62 @@ msgstr ""
 "Не удалось переназначить посад.место, так как схема обозначена не полностью."
 
 #: eeschema/tools/backannotate.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "Обозначение %s изменено на %s."
+msgstr "Обозначение '%s' изменено на '%s'."
 
 #: eeschema/tools/backannotate.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "У %s посад.место изменено с \"%s\" на \"%s\"."
+msgstr "У %s посад.место изменено с '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "Значение %s изменено с %s на %s."
+msgstr "Значение %s изменено с '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "У %s не удалось найти вывод \"%s\"."
+msgstr "Не удалось найти у %s вывод '%s'."
 
 #: eeschema/tools/backannotate.cpp:512
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' labels to '%s'."
-msgstr "Метка \"%s\" изменена на \"%s\"."
+msgstr "Метка '%s' изменена на '%s'."
 
 #: eeschema/tools/backannotate.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' global labels to '%s'."
-msgstr "Глобальные метки \"%s\" изменены на \"%s\"."
+msgstr "Глобальные метки '%s' изменены на '%s'."
 
 #: eeschema/tools/backannotate.cpp:550 eeschema/tools/backannotate.cpp:581
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' hierarchical label to '%s'."
-msgstr "Иерархическая метка \"%s\" изменена на \"%s\"."
+msgstr "Иерархическая метка '%s' изменена на '%s'."
 
 #: eeschema/tools/backannotate.cpp:605
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s cannot be changed to '%s' because it is driven by a power pin."
 msgstr ""
-"Цепь \"%s\" не может быть заменена на \"%s\", так как подключена к силовому "
-"выводу."
+"Цепь %s не может быть заменена на '%s', так как подключена к силовому выводу."
 
 #: eeschema/tools/backannotate.cpp:614
-#, fuzzy, c-format
+#, c-format
 msgid "Add label '%s' to net %s."
-msgstr "Добавление метки \"%s\" для цепи \"%s\"."
+msgstr "Добавление метки '%s' для цепи %s."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
 msgstr "Выполнить проверку электрических правил"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Symbol Checker"
-msgstr "Обозначения символов"
+msgstr "Проверить символ"
 
 #: eeschema/tools/ee_actions.cpp:50
-#, fuzzy
 msgid "Show the symbol checker window"
-msgstr "Показать окно проверки электрических правил"
+msgstr "Показать окно проверки символа"
 
 #: eeschema/tools/ee_actions.cpp:55
 msgid "Simulator..."
@@ -15229,7 +15224,7 @@ msgstr "Множественное редактирование полей вс�
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Edit Symbol Library Links..."
-msgstr "Править ссылки на библиотеки символов"
+msgstr "Править ссылки на библиотеки символов..."
 
 #: eeschema/tools/ee_actions.cpp:543
 msgid "Edit links between schematic and library symbols"
@@ -15563,7 +15558,7 @@ msgid ""
 "<br>"
 msgstr ""
 "<b>Вывод %s не по сетке</b> \"%s\" с координатами <b>(%.3f, %.3f)</b> в "
-"символе %c."
+"символе %c.<br>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:296
 msgid "No off grid or duplicate pins were found."
@@ -15595,7 +15590,7 @@ msgstr "Не удалось сохранить файл \"%s\"."
 
 #: eeschema/tools/lib_control.cpp:366
 msgid "Filename:"
-msgstr "Выбор файла"
+msgstr "Файл:"
 
 #: eeschema/tools/lib_control.cpp:435 eeschema/tools/lib_control.cpp:473
 msgid "No schematic currently open."
@@ -15709,7 +15704,7 @@ msgstr "Присвоение класса цепей"
 
 #: eeschema/tools/sch_editor_control.cpp:942
 msgid "Select netclass:"
-msgstr "Выбор класса цепей: "
+msgstr "Выбор класса цепей:"
 
 #: eeschema/tools/sch_editor_control.cpp:1419
 #, c-format
@@ -16424,7 +16419,7 @@ msgstr "Экспорт данных в формате Pcbnew"
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear Current Layer..."
-msgstr "Очистить текущий слой"
+msgstr "Очистить текущий слой..."
 
 #: gerbview/tools/gerbview_actions.cpp:87
 msgid "Clear the selected graphic layer"
@@ -17663,7 +17658,7 @@ msgid ""
 "text placeholders will be replaced with preview data."
 msgstr ""
 "Показать форматную рамку в режиме просмотра:\n"
-"вместо меток форматирования отображаются данные основной надписи"
+"вместо меток форматирования отображаются данные основной надписи."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 msgid "Show title block in edit mode"
@@ -17675,7 +17670,7 @@ msgid ""
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
 "Показать форматную рамку в режиме редактирования:\n"
-"текст с метками форматирования ${keyword} отображается без изменений"
+"текст с метками форматирования ${keyword} отображается без изменений."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:466
 msgid "Error writing objects to clipboard"
@@ -17899,9 +17894,8 @@ msgid "Calculate"
 msgstr "Рассчитать"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:201
-#, fuzzy
 msgid "Regulator"
-msgstr "Стабилизатор:"
+msgstr "Стабилизатор"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:208
 msgid "Regulators data file:"
@@ -18048,9 +18042,8 @@ msgid "E12"
 msgstr "E12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:493
-#, fuzzy
 msgid "Available Values"
-msgstr "Доступные пути:"
+msgstr "Доступные ряды"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:504
 msgid "Solutions"
@@ -18192,9 +18185,8 @@ msgid "mu Rel C:"
 msgstr "mu отн. пров.:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:820
-#, fuzzy
 msgid "Component Parameters"
-msgstr "Параметры компонента:"
+msgstr "Параметры компонента"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:858
 msgid "Zdiff = Zodd * 2"
@@ -18380,7 +18372,7 @@ msgstr "Учитывая допустимое повышение темпера�
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1354
 msgid "Capacitance:"
-msgstr "Ёмкость"
+msgstr "Ёмкость:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1362
 msgid "pF"
@@ -19336,11 +19328,11 @@ msgstr "Диэлектрические параметры материала:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:39
 msgid "Epsilon R:"
-msgstr "Отн.диэл.прон."
+msgstr "Отн.диэл.прон.:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:43
 msgid "Loss Tg:"
-msgstr "Танг.угла диэл.потерь"
+msgstr "Танг.угла диэл.потерь:"
 
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:62
 msgid "Available materials:"
@@ -19813,7 +19805,7 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"Нижние посад.места начнутся с %s"
+"Нижние посад.места начнутся с %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 msgid "the last front footprint + 1"
@@ -19980,7 +19972,7 @@ msgstr ""
 "\n"
 "На плате %d пустых или неверных обозначений.\n"
 "Рекомендуется запустить проверку плавил проектирования DRC с отметкой\n"
-"'Проверять посад.места в схеме'\n"
+"'Проверять соответствия в схеме и на плате'\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:620
 #, c-format
@@ -20774,12 +20766,12 @@ msgstr "Штриховка"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:302
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:137
 msgid "Hatch width:"
-msgstr "Ширина штриха"
+msgstr "Ширина штриха:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:313
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:148
 msgid "Hatch gap:"
-msgstr "Ширина зазора"
+msgstr "Ширина зазора:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:324
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:159
@@ -20826,7 +20818,7 @@ msgstr "Что нужно делать с не подключёнными ост
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
 msgid "Below area limit"
-msgstr "Если площадь меньше..."
+msgstr "Если площадь меньше предела"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:355
 msgid "Minimum island size:"
@@ -21384,7 +21376,7 @@ msgstr "-------- DRC отменено пользователем.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:443
 msgid "Open the Board Setup... dialog"
-msgstr "Параметры платы..."
+msgstr "Открыть диалоговое окно параметров платы"
 
 #: pcbnew/dialogs/dialog_drc.cpp:609
 #, c-format
@@ -21432,7 +21424,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
-msgstr "Проверять на соответствие в схеме и на плате"
+msgstr "Проверять соответствие в схеме и на плате"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:77
 msgid "Tests Running..."
@@ -22214,7 +22206,7 @@ msgstr "Использовать относительные пути к файл
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:133
 msgid "Use paths for model files in board VRML file relative to the vrml file"
-msgstr "Указывать файлы моделей в VRML-файле платы в виде относительных путей."
+msgstr "Указывать файлы моделей в VRML-файле платы в виде относительных путей"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:137
 msgid "Plain PCB (no copper or silk)"
@@ -22324,15 +22316,13 @@ msgid "Restart Search"
 msgstr "Искать заново"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
-#, fuzzy
 msgid "Run Checks"
-msgstr "Запустить Cvpcb"
+msgstr "Проверить"
 
 #: pcbnew/dialogs/dialog_footprint_checker_base.h:55
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Footprint Checker"
-msgstr "Просмотрщик посад.мест"
+msgstr "Проверить посад.место"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:307
 msgid ""
@@ -23107,7 +23097,7 @@ msgstr "Свойства сегмента линии"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "Ширина линии не может быть нулевой для незаполненных фигур."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
 msgid "Modify drawing properties"
@@ -23149,9 +23139,8 @@ msgstr "Угол дуги:"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:156
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1279
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1514
-#, fuzzy
 msgid "Filled shape"
-msgstr "Заполнять выделенные фигуры"
+msgstr "Заполненная фигура"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.h:92
 msgid "Graphic Item Properties"
@@ -23693,7 +23682,7 @@ msgid ""
 "overlap"
 msgstr ""
 "Предупреждение: отв. конт.пл. больше самой конт.пл. или отв. и конт.пл. не "
-"пересекаются."
+"пересекаются"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1242
 msgid "Pad local clearance must be zero or greater than zero"
@@ -24107,8 +24096,9 @@ msgid ""
 msgstr ""
 "Это локальный зазор между данной конт.пл. и паяльной пастой.\n"
 "Если 0, то используется локальный зазор посад.места или глобальное значение."
-"Конечное значение зазора равно сумме этого значения и относительного "
-"зазора.\n"
+"\n"
+"Конечное значение зазора равно сумме этого значения и относительного зазора."
+"\n"
 "Отрицательное значение означает, что маска меньше конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:648
@@ -24123,6 +24113,7 @@ msgstr ""
 "Это локальный относительный зазор между данной конт.пл. и паяльной пастой.\n"
 "Значение 10 означает зазор в 10 процентов от размера конт.пл.\n"
 "Если 0, то используется локальный зазор посад.места или глобальное значение."
+"\n"
 "Конечное значение зазора равно сумме этого значения и обычного зазора.\n"
 "Отрицательное значение означает, что маска меньше конт.пл."
 
@@ -24160,7 +24151,7 @@ msgstr "Перечень примитивов:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:792
 msgid "Note: coordinates are relative to anchor pad, orientation 0."
-msgstr "Примечание: координаты относительно центра конт.пл., ориентация 0"
+msgstr "Примечание: координаты относительно центра конт.пл., ориентация 0."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:813
 msgid "Edit Primitive"
@@ -24799,7 +24790,7 @@ msgid ""
 msgstr ""
 "Когда включено, трассировщик пытается переместить препятствующие дорожки за "
 "неподвижные объекты (например конт.пл.) вместо того, чтобы \"отскакивать\" "
-"от препятствий назад."
+"от препятствий назад"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:61
 msgid "Remove redundant tracks"
@@ -25496,9 +25487,8 @@ msgid "Track Editing"
 msgstr "Редактирование дорожек"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
-#, fuzzy
 msgid "Mouse drag track behavior:"
-msgstr "Действие при перетаскивании:"
+msgstr "Действие при перетаскивании дорожки:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:153
 msgid ""
@@ -25542,7 +25532,7 @@ msgid ""
 "1/4 its width or height."
 msgstr ""
 "Текст станет нечитабельным с толщиной больше\n"
-"чем 1/4 ширины или толщины. "
+"чем 1/4 ширины или толщины."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:22
 msgid "Default text items for new footprints:"
@@ -25570,12 +25560,11 @@ msgstr "Редактировать параметры"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:588
-#, fuzzy
 msgid "Library Nickname Error"
-msgstr "Редактор библиотек"
+msgstr "Ошибка уникального имени библиотеки"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate nicknames \"%s\"."
 msgstr "Дублирование уникальных имён \"%s\"."
 
@@ -25613,7 +25602,6 @@ msgid "Category"
 msgstr "Категория"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
 msgstr "Начало координат листа"
 
@@ -25626,12 +25614,10 @@ msgid "Select which origin is used for X,Y coordinate display."
 msgstr "Выберите начало координат, используемые для отображения на экране."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases right"
 msgstr "Увеличивается слева направо"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases left"
 msgstr "Увеличивается справа налево"
 
@@ -25644,12 +25630,10 @@ msgid "Select which the direction on the screen in which the X axis increases."
 msgstr "Выберите направление оси X."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases up"
 msgstr "Увеличивается снизу вверх"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases down"
 msgstr "Увеличивается сверху вниз"
 
@@ -26429,7 +26413,7 @@ msgstr "User1"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:806
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:816
 msgid "User defined layer"
-msgstr "Пользовательский слой:"
+msgstr "Пользовательский слой"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:743
 msgid "User2"
@@ -26761,9 +26745,8 @@ msgid "Checking %s."
 msgstr "Проверяется %s."
 
 #: pcbnew/drc/drc_engine.cpp:817
-#, fuzzy
 msgid "Board and netclass clearances apply only between copper items."
-msgstr "Цвета цепей и классов цепей отображаются для всех элементов меди"
+msgstr "Зазоры платы и класса цепей применимы только к медным элементам."
 
 #: pcbnew/drc/drc_engine.cpp:860
 msgid "Keepout constraint not met."
@@ -27049,7 +27032,7 @@ msgstr "Неопознанный элемент '%s'.| Ожидалось выр
 #: pcbnew/drc/drc_rule_parser.cpp:249 pcbnew/drc/drc_rule_parser.cpp:318
 #: pcbnew/drc/drc_rule_parser.cpp:333 pcbnew/drc/drc_rule_parser.cpp:424
 msgid "Missing ')'."
-msgstr "Отсутствует ')'"
+msgstr "Отсутствует ')'."
 
 #: pcbnew/drc/drc_rule_parser.cpp:266
 #, c-format
@@ -27225,7 +27208,7 @@ msgstr "Проверка соответствия посад.мест на пл�
 
 #: pcbnew/drc/drc_test_provider_lvs.cpp:221
 msgid "No netlist provided, skipping LVS."
-msgstr "Отсутствует список цепей, пропускается проверка \"схема-плата\""
+msgstr "Отсутствует список цепей, пропускается проверка \"схема-плата\"."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:127
 #, c-format
@@ -27257,9 +27240,8 @@ msgid "<unconstrained>"
 msgstr "<неограничено>"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:102
-#, fuzzy
 msgid "(no edges found on Edge.Cuts layer)"
-msgstr "На слое Edge.Cuts сегментов не найдено."
+msgstr "(на слое Edge.Cuts сегментов не найдено)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:128
 #, c-format
@@ -27467,8 +27449,8 @@ msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
 msgstr ""
-"Создание проекта открывает возможность использовать правила проектирования, "
-"классы цепей и наборы слоёв"
+"Создание проекта позволит использовать правила проектирования, классы цепей "
+"и наборы слоёв"
 
 #: pcbnew/files.cpp:227
 msgid "Save Board File As"
@@ -27503,18 +27485,17 @@ msgid "noname"
 msgstr "безымянный"
 
 #: pcbnew/files.cpp:510
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules).\n"
 "This may result in different fills from previous Kicad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Если перезалить зоны меди, то будет использован параметр \"Зазор\n"
-"у края платы\" (см. Параметры платы > Правила проектирования).\n"
-"При этом новая форма зоны, может отличаться от той, что была\n"
-"сделана в предыдущих версиях KiCad, где в качестве зазора\n"
-"использовалась толщина контура платы."
+"Если перезалить зоны меди, то будет использован параметр \"Зазор у края "
+"платы\" (см. Параметры платы > Правила проектирования).\n"
+"При этом новая форма зоны, может отличаться от той, что была сделана в "
+"предыдущих версиях KiCad, где в качестве зазора использовалась толщина "
+"контура платы."
 
 #: pcbnew/files.cpp:514
 msgid "Edge Clearance Warning"
@@ -27926,7 +27907,7 @@ msgid ""
 msgstr ""
 "Не удалось загрузить посад.место '%s' из библиотеки '%s'.\n"
 "\n"
-"%s."
+"%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:913
 #, c-format
@@ -28029,13 +28010,12 @@ msgstr ""
 "%s"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:53
-#, fuzzy
 msgid "Centimeter"
-msgstr "Центр"
+msgstr "Сантиметры"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Feet"
-msgstr ""
+msgstr "Футы"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 msgid "Open File"
@@ -28047,7 +28027,7 @@ msgstr "Файл не выбран!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:286
 msgid "Please select a valid layer."
-msgstr "Укажите корректный слой"
+msgstr "Укажите корректный слой."
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:335
 msgid "Items in the imported file could not be handled properly."
@@ -28109,14 +28089,12 @@ msgid "Add all imported items into a new group"
 msgstr "Добавить все импортированные элементы в новую группу"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:175
-#, fuzzy
 msgid "DXF Parameters"
-msgstr "Настройки"
+msgstr "Настройки DXF"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:199
-#, fuzzy
 msgid "Default units:"
-msgstr "По умолчанию 1"
+msgstr "Ед.изм. по умолчанию:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:87
 msgid "Import Vector Graphics File"
@@ -28598,9 +28576,9 @@ msgstr ""
 "плата не будет соответствовать состоянию схемы."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:262
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr "Не удалось найти компонент с обозначением \"%s\" в списке цепей."
+msgstr "Не удалось найти компонент с обозначением '%s' в списке цепей."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:424
 #: pcbnew/plugins/kicad/pcb_parser.cpp:2841
@@ -28653,7 +28631,7 @@ msgstr "Не удалось открыть файл списка цепей \"%s
 
 #: pcbnew/netlist_reader/netlist.cpp:67
 msgid "Netlist Load Error."
-msgstr "Ошибка загрузки списка цепей"
+msgstr "Ошибка загрузки списка цепей."
 
 #: pcbnew/netlist_reader/netlist.cpp:77
 #, c-format
@@ -29165,11 +29143,9 @@ msgstr ""
 "размещена на слое Eco1_User"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1912
-#, fuzzy, c-format
+#, c-format
 msgid "Non-Copper Pad '%s' has a hole. This should not happen"
-msgstr ""
-"Не медная конт.пл. '%s' имеет сложную структуру (тип %d). Такого не должно "
-"быть"
+msgstr "Не медная конт.пл. '%s' имеет отверстие. Такого не должно быть"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1918
 #, c-format
@@ -29288,14 +29264,15 @@ msgstr ""
 "проектирования."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:698
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
 "equivalent. The area is neither a via orroute keepout area. The area was not "
 "imported."
 msgstr ""
-"Область CADSTAR '%s' не имеет аналога в KiCad. Области размещения не "
-"поддерживаются."
+"Область CADSTAR '%s' из библиотечного компонента '%s' не имеет аналога в "
+"KiCad. Область не является ни перех.отв., ни зоной запрета. Она не "
+"импортирована."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:933
 #, c-format
@@ -29589,10 +29566,10 @@ msgstr ""
 "KiCad."
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2090
-#, fuzzy, c-format
+#, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Пропускается проводник, так как слой Eagle '%s' (%d) не связан со слоем "
+"Пропускается окружность, так как слой Eagle '%s' (%d) не связан со слоем "
 "KiCad."
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
@@ -29940,7 +29917,7 @@ msgstr "Файл '%s' пуст."
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:3180
 #, c-format
 msgid "File '%s' is not a legacy library."
-msgstr "Файл '%s' не является библиотекой"
+msgstr "Файл '%s' не является библиотекой."
 
 #: pcbnew/plugins/pcad/pcb.cpp:49 pcbnew/plugins/pcad/pcb.cpp:59
 #: pcbnew/plugins/pcad/pcb.cpp:69
@@ -29982,7 +29959,7 @@ msgstr "Увеличить шаг"
 
 #: pcbnew/router/length_tuner_tool.cpp:74
 msgid "Increase meander spacing by one step."
-msgstr "Увеличить шаг меандра на единицу"
+msgstr "Увеличить шаг меандра на единицу."
 
 #: pcbnew/router/length_tuner_tool.cpp:80
 msgid "Decrease Spacing"
@@ -29990,7 +29967,7 @@ msgstr "Уменьшить шаг"
 
 #: pcbnew/router/length_tuner_tool.cpp:80
 msgid "Decrease meander spacing by one step."
-msgstr "Уменьшить шаг меандра на единицу"
+msgstr "Уменьшить шаг меандра на единицу."
 
 #: pcbnew/router/length_tuner_tool.cpp:86
 msgid "Increase Amplitude"
@@ -29998,7 +29975,7 @@ msgstr "Увеличить амплитуду"
 
 #: pcbnew/router/length_tuner_tool.cpp:86
 msgid "Increase meander amplitude by one step."
-msgstr "Увеличить амплитуду меандра на единицу"
+msgstr "Увеличить амплитуду меандра на единицу."
 
 #: pcbnew/router/length_tuner_tool.cpp:92
 msgid "Decrease Amplitude"
@@ -30006,7 +29983,7 @@ msgstr "Уменьшить амплитуду"
 
 #: pcbnew/router/length_tuner_tool.cpp:92
 msgid "Decrease meander amplitude by one step."
-msgstr "Уменьшить амплитуду меандра на единицу"
+msgstr "Уменьшить амплитуду меандра на единицу."
 
 #: pcbnew/router/length_tuner_tool.cpp:114
 msgid "Length Tuner"
@@ -30301,9 +30278,9 @@ msgid "Width %s, gap %s"
 msgstr "Ширина %s, зазор %s"
 
 #: pcbnew/router/router_tool.cpp:362
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s, gap %s, via gap %s"
-msgstr "Ширина %s, зазор перех.отв. %s"
+msgstr "Ширина %s, зазор %s, зазор перех.отв. %s"
 
 #: pcbnew/router/router_tool.cpp:746 pcbnew/router/router_tool.cpp:767
 msgid "Show board setup"
@@ -31092,9 +31069,8 @@ msgid "Footprint Properties..."
 msgstr "Свойства посад.места..."
 
 #: pcbnew/tools/pcb_actions.cpp:387
-#, fuzzy
 msgid "Show the footprint checker window"
-msgstr "Показать окно проверки электрических правил"
+msgstr "Показать окно проверки посад.места"
 
 #: pcbnew/tools/pcb_actions.cpp:394
 msgid "Update Footprint..."
@@ -31165,7 +31141,7 @@ msgstr "Очистка дорожек и перех.отв..."
 
 #: pcbnew/tools/pcb_actions.cpp:445
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "Очистить от ненужных, мешающих и пр. элементов"
+msgstr "Очистить от ненужных, мешающих и пр. элементов."
 
 #: pcbnew/tools/pcb_actions.cpp:450
 msgid "Cleanup Graphics..."
@@ -31922,7 +31898,7 @@ msgid ""
 "entire connections"
 msgstr ""
 "Выделить соединение или расширить выделение соединениями, конт.пл. или всей "
-"цепью."
+"цепью"
 
 #: pcbnew/tools/pcb_actions.cpp:1176
 msgid "Select All Tracks in Net"
@@ -32313,10 +32289,12 @@ msgstr "Разрешение области запрета для:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:589
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
+"Отчёт может быть неполным: некоторые посад.места имеют неудачную область "
+"установки."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "Выполните проверку правил DRC для получения полной информации."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:599
 msgid "Item <b>disallowed</b> at current location."
@@ -33028,7 +33006,7 @@ msgstr "Без зон меди"
 
 #: pcbnew/zone.cpp:558
 msgid "No footprints"
-msgstr "Без посад.мест."
+msgstr "Без посад.мест"
 
 #: pcbnew/zone.cpp:561
 msgid "Restrictions"
@@ -33060,24 +33038,24 @@ msgid "Corner Count"
 msgstr "Количество углов"
 
 #: pcbnew/zone.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "Свойства области запрета"
+msgstr "Область запрета обрезается на %s"
 
 #: pcbnew/zone.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout on %s"
-msgstr "Контур зоны %s на %s"
+msgstr "Зона обрезается на %s"
 
 #: pcbnew/zone.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area on %s"
-msgstr "Область запрета"
+msgstr "Область запрета на %s"
 
 #: pcbnew/zone.cpp:882
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s on %s"
-msgstr "Контур зоны %s на %s"
+msgstr "Зона %s на %s"
 
 #: pcbnew/zone.cpp:1390
 msgid "Inherited"
