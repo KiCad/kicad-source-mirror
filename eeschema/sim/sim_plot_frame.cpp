@@ -927,7 +927,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
             out.Write( wxString::Format( "Time%c", SEPARATOR ) );
 
             for( double v : trace->GetDataX() )
-                out.Write( wxString::Format( "%f%c", v, SEPARATOR ) );
+                out.Write( wxString::Format( "%g%c", v, SEPARATOR ) );
 
             out.Write( "\r\n" );
             timeWritten = true;
@@ -936,7 +936,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
         out.Write( wxString::Format( "%s%c", t.first, SEPARATOR ) );
 
         for( double v : trace->GetDataY() )
-            out.Write( wxString::Format( "%f%c", v, SEPARATOR ) );
+            out.Write( wxString::Format( "%g%c", v, SEPARATOR ) );
 
         out.Write( "\r\n" );
     }
