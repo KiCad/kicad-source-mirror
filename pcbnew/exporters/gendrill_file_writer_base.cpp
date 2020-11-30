@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
 
 /* Helper function for sorting hole list.
  * Compare function used for sorting holes type type (plated then not plated)
- * then by increasing diameter value and X value
+ * then by increasing diameter value and X then Y position
  */
 static bool CmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
 {
@@ -44,24 +44,9 @@ static bool CmpHoleSorting( const HOLE_INFO& a, const HOLE_INFO& b )
     if( a.m_Hole_Diameter != b.m_Hole_Diameter )
         return a.m_Hole_Diameter < b.m_Hole_Diameter;
 
-    // group by components when possible
-    const PAD* pada = dyn_cast<const PAD*>( a.m_ItemParent );
-    const PAD* padb = dyn_cast<const PAD*>( b.m_ItemParent );
-
-    if( pada && padb )
-    {
-        // cmp == 0 means the pads have the same parent, therfore the same reference
-        int cmp = pada->GetParent() - padb->GetParent();
-
-        if( cmp )
-            return cmp < 0;
-    }
-    else if( pada || padb )     // in this case, other item is a via. Sort via first
-    {
-        return padb != nullptr;
-    }
-
-    // At this point, sort by position, as last sort criteria
+    // At this point (same diameter), sort by X then Y position.
+    // This is optimal for drilling and make the file reproducible as long as holes
+    // have not changed, even if the data order has changed.
     if( a.m_Hole_Pos.x != b.m_Hole_Pos.x )
         return a.m_Hole_Pos.x < b.m_Hole_Pos.x;
 
@@ -155,7 +140,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
         }
     }
 
-    // Sort holes per increasing diameter value
+    // Sort holes per increasing diameter value (and for each dimater, by position)
     sort( m_holeListBuffer.begin(), m_holeListBuffer.end(), CmpHoleSorting );
 
     // build the tool list
