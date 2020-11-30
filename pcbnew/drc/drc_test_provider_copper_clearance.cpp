@@ -461,6 +461,10 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     if( other->Type() == PCB_FP_SHAPE_T && pad->GetParent() == other->GetParent() )
         testClearance = false;
 
+    // Track clearances are tested in testTrackClearances()
+    if( dynamic_cast<TRACK*>( other) )
+        testClearance = false;
+
     if( !testClearance && !testShorting && !testHoles )
         return false;
 
