@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:06+0000\n"
+"PO-Revision-Date: 2020-11-30 00:12+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -32810,7 +32810,7 @@ msgstr "Τα χρώματα net και netclass εμφανίζονται σε ό
 
 #: pcbnew/widgets/appearance_controls.cpp:658
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "Τα χρώματα καθαρού και netclass εμφανίζονται μόνο στη ρακέτα"
+msgstr "Τα χρώματα net και netclass εμφανίζονται μόνο στο ratsnest"
 
 #: pcbnew/widgets/appearance_controls.cpp:664
 msgid "Net and netclass colors are not shown"
