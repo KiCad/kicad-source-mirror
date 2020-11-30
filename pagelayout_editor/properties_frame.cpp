@@ -303,6 +303,14 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
 
     // The number of widgets was modified
     m_swItemProperties->Layout();
+#ifdef __WXGTK__
+    // This call is mandatory on wxGTK to initialize the right virtual size and therefore
+    // scrollbars, but for some reason, create issues on Windows (incorrect disply
+    // until the frame is resized). Joys of multiplatform dev.
+    m_swItemProperties->Fit();
+#endif
+    // send a size event to be sure scrollbars will be added/removed as needed
+    m_swItemProperties->PostSizeEvent();
     m_swItemProperties->Refresh();
 }
 
