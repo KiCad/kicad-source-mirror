@@ -457,8 +457,11 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     bool testShorting = !m_drcEngine->IsErrorLimitExceeded( DRCE_SHORTING_ITEMS );
     bool testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
 
+    FOOTPRINT* padParent = static_cast<FOOTPRINT*>( pad->GetParent() );
+    bool       isNetTie = padParent->IsNetTie();
+
     // Graphic items are allowed to act as net-ties within their own footprint
-    if( other->Type() == PCB_FP_SHAPE_T && pad->GetParent() == other->GetParent() )
+    if( isNetTie && other->Type() == PCB_FP_SHAPE_T && other->GetParent() == padParent )
         testClearance = false;
 
     // Track clearances are tested in testTrackClearances()
