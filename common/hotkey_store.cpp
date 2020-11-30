@@ -183,14 +183,23 @@ bool HOTKEY_STORE::CheckKeyConflicts( TOOL_ACTION* aAction, long aKey, HOTKEY** 
 {
     wxString sectionName = GetSectionName( aAction );
 
-    for( HOTKEY_SECTION& section: m_hk_sections )
+    // Create a fake "TOOL_ACTION" so we can get the section name for "Common" through the API.
+    // Simply declaring a wxString with the value "Common" works, but the goal is to futureproof
+    // the code here as much as possible.
+    TOOL_ACTION commonAction( "common.Control.Fake", AS_GLOBAL, 0, "", "", "", nullptr );
+    wxString    commonName = GetSectionName( &commonAction );
+
+    for( HOTKEY_SECTION& section : m_hk_sections )
     {
-        if( section.m_SectionName != sectionName )
+        // We can have the same hotkey in multiple sections (i.e. Kicad programs), but if a hotkey
+        // is in "Common" it can't be in any other section and vice versa.
+
+        if( !( section.m_SectionName == sectionName || section.m_SectionName == commonName ) )
             continue;
 
-        for( HOTKEY& hotkey: section.m_HotKeys )
+        for( HOTKEY& hotkey : section.m_HotKeys )
         {
-            if( hotkey.m_Actions[ 0 ] == aAction )
+            if( hotkey.m_Actions[0] == aAction )
                 continue;
 
             if( hotkey.m_EditKeycode == aKey )
