@@ -297,7 +297,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
     // This call is mandatory on wxGTK to initialize the right virtual size and therefore
     // scrollbars, but for some reason, create issues on Windows (incorrect disply
     // until the frame is resized). Joys of multiplatform dev.
-    m_swItemProperties->->Fit();
+    m_swItemProperties->Fit();
 #endif
     // send a size event to be sure scrollbars will be added/removed as needed
     m_swItemProperties->PostSizeEvent();
