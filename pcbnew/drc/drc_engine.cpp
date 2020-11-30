@@ -25,6 +25,7 @@
 
 #include <reporter.h>
 #include <widgets/progress_reporter.h>
+#include <kicad_string.h>
 #include <drc/drc_engine.h>
 #include <drc/drc_rule_parser.h>
 #include <drc/drc_rule.h>
@@ -750,8 +751,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                      a->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, overrideA ) ) )
+                                      EscapeHTML( a->GetSelectMenuText( UNITS ) ),
+                                      EscapeHTML( MessageTextFromValue( UNITS, overrideA ) ) ) )
         }
 
         if( bc && !a_is_non_copper && bc->GetLocalClearanceOverrides( nullptr ) > 0 )
@@ -760,8 +761,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
             REPORT( "" )
             REPORT( wxString::Format( _( "Local override on %s; clearance: %s." ),
-                                      b->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, overrideB ) ) )
+                                      EscapeHTML( b->GetSelectMenuText( UNITS ) ),
+                                      EscapeHTML( MessageTextFromValue( UNITS, overrideB ) ) ) )
         }
 
         if( overrideA || overrideB )
@@ -781,38 +782,38 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
                 if( aConstraintId == CLEARANCE_CONSTRAINT )
                 {
-                    int clearance = c->constraint.m_Value.Min();
+                    int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; clearance: %s." ),
-                                              c->constraint.GetName(),
-                                              MessageTextFromValue( UNITS, clearance ) ) )
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
                 }
                 else if( aConstraintId == COURTYARD_CLEARANCE_CONSTRAINT )
                 {
-                    int clearance = c->constraint.m_Value.Min();
+                    int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; courtyard clearance: %s." ),
-                                              c->constraint.GetName(),
-                                              MessageTextFromValue( UNITS, clearance ) ) )
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
                 }
                 else if( aConstraintId == SILK_CLEARANCE_CONSTRAINT )
                 {
-                    int clearance = c->constraint.m_Value.Min();
+                    int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; silk clearance: %s." ),
-                                              c->constraint.GetName(),
-                                              MessageTextFromValue( UNITS, clearance ) ) )
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
                 }
                 else if( aConstraintId == HOLE_CLEARANCE_CONSTRAINT )
                 {
-                    int clearance = c->constraint.m_Value.Min();
+                    int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; hole clearance: %s." ),
-                                              c->constraint.GetName(),
-                                              MessageTextFromValue( UNITS, clearance ) ) )
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
                 }
                 else if( aConstraintId == EDGE_CLEARANCE_CONSTRAINT )
                 {
-                    int clearance = c->constraint.m_Value.Min();
+                    int val = c->constraint.m_Value.Min();
                     REPORT( wxString::Format( _( "Checking %s; edge clearance: %s." ),
-                                              c->constraint.GetName(),
-                                              MessageTextFromValue( UNITS, clearance ) ) )
+                                              EscapeHTML( c->constraint.GetName() ),
+                                              EscapeHTML( MessageTextFromValue( UNITS, val ) ) ) )
                 }
                 else
                 {
@@ -882,7 +883,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                         else if( c->parentRule )
                         {
                             REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
-                                                      c->parentRule->m_LayerSource ) )
+                                                      EscapeHTML( c->parentRule->m_LayerSource ) ) )
                             REPORT( "Rule ignored." )
                         }
                         else
@@ -904,7 +905,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                     else if( c->parentRule )
                     {
                         REPORT( wxString::Format( _( "Rule layer \"%s\" not matched." ),
-                                                  c->parentRule->m_LayerSource ) )
+                                                  EscapeHTML( c->parentRule->m_LayerSource ) ) )
                         REPORT( "Rule ignored." )
                     }
                     else
@@ -933,7 +934,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
                     else
                     {
                         REPORT( wxString::Format( _( "Checking rule condition \"%s\"." ),
-                                                  c->condition->GetExpression() ) )
+                                                  EscapeHTML( c->condition->GetExpression() ) ) )
                     }
 
                     if( c->condition->EvaluateFor( a, b, aLayer, aReporter ) )
@@ -993,8 +994,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
-                                      a->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, localA ) ) )
+                                      EscapeHTML( a->GetSelectMenuText( UNITS ) ),
+                                      EscapeHTML( MessageTextFromValue( UNITS, localA ) ) ) )
 
             if( localA > clearance )
                 clearance = ac->GetLocalClearance( &m_msg );
@@ -1004,8 +1005,8 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
         {
             REPORT( "" )
             REPORT( wxString::Format( _( "Local clearance on %s; clearance: %s." ),
-                                      b->GetSelectMenuText( UNITS ),
-                                      MessageTextFromValue( UNITS, localB ) ) )
+                                      EscapeHTML( b->GetSelectMenuText( UNITS ) ),
+                                      EscapeHTML( MessageTextFromValue( UNITS, localB ) ) ) )
 
             if( localB > clearance )
                 clearance = bc->GetLocalClearance( &m_msg );

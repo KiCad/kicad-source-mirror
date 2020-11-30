@@ -301,11 +301,3 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( const wxString& aErrorKey )
 }
 
 
-wxString escapeHtml( wxString aString )
-{
-    aString.Replace( wxT("<"), wxT("&lt;") );
-    aString.Replace( wxT(">"), wxT("&gt;") );
-    return aString;
-}
-
-

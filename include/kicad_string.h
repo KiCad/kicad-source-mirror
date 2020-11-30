@@ -106,7 +106,7 @@ std::string EscapedUTF8( wxString aString );
 /**
  * Return a new wxString escaped for embedding in HTML.
  */
-wxString EscapedHTML( const wxString& aString );
+wxString EscapeHTML( const wxString& aString );
 
 /**
  * Read one line line from \a aFile.

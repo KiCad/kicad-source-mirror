@@ -104,19 +104,19 @@ public:
                     desc.RemoveLast( 1 );
             }
 
-            m_html.Replace( "__NAME__", EscapedHTML( name ) );
-            m_html.Replace( "__DESC__", EscapedHTML( desc ) );
+            m_html.Replace( "__NAME__", EscapeHTML( name ) );
+            m_html.Replace( "__DESC__", EscapeHTML( desc ) );
 
             wxString keywordsHtml = KeywordsFormat;
-            keywordsHtml.Replace( "__KEYWORDS__", EscapedHTML( keywords ) );
+            keywordsHtml.Replace( "__KEYWORDS__", EscapeHTML( keywords ) );
 
             wxString docHtml = DocFormat;
-            docHtml.Replace( "__HREF__", EscapedHTML( doc ) );
+            docHtml.Replace( "__HREF__", EscapeHTML( doc ) );
 
             if( doc.Length() > 75 )
                 doc = doc.Left( 72 ) + wxT( "..." );
 
-            docHtml.Replace( "__TEXT__", EscapedHTML( doc ) );
+            docHtml.Replace( "__TEXT__", EscapeHTML( doc ) );
 
             m_html.Replace( "__FIELDS__", keywordsHtml + docHtml );
         }

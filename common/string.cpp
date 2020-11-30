@@ -338,7 +338,7 @@ std::string EscapedUTF8( wxString aString )
 }
 
 
-wxString EscapedHTML( const wxString& aString )
+wxString EscapeHTML( const wxString& aString )
 {
     wxString converted;
 

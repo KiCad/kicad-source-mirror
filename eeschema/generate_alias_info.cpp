@@ -107,7 +107,7 @@ public:
 protected:
     void SetHtmlName()
     {
-        m_html.Replace( "__NAME__", EscapedHTML( m_symbol->GetName() ) );
+        m_html.Replace( "__NAME__", EscapeHTML( m_symbol->GetName() ) );
     }
 
 
@@ -130,9 +130,9 @@ protected:
                 root_desc = parent->GetDescription();
             }
 
-            m_html.Replace(
-                "__ALIASOF__", wxString::Format(
-                    AliasOfFormat, EscapedHTML( root_name ), EscapedHTML( root_desc ) ) );
+            m_html.Replace( "__ALIASOF__", wxString::Format(  AliasOfFormat,
+                                                              EscapeHTML( root_name ),
+                                                              EscapeHTML( root_desc ) ) );
         }
     }
 
@@ -141,7 +141,7 @@ protected:
     {
         wxString raw_desc = m_symbol->GetDescription();
 
-        m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapedHTML( raw_desc ) ) );
+        m_html.Replace( "__DESC__", wxString::Format( DescFormat, EscapeHTML( raw_desc ) ) );
     }
 
 
@@ -152,8 +152,7 @@ protected:
         if( keywords.empty() )
             m_html.Replace( "__KEY__", wxEmptyString );
         else
-            m_html.Replace( "__KEY__",
-                    wxString::Format( KeywordsFormat, EscapedHTML( keywords ) ) );
+            m_html.Replace( "__KEY__", wxString::Format( KeywordsFormat, EscapeHTML( keywords ) ) );
     }
 
 
@@ -163,7 +162,7 @@ protected:
         wxString text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );
         wxString fieldhtml = FieldFormat;
 
-        fieldhtml.Replace( "__NAME__", EscapedHTML( name ) );
+        fieldhtml.Replace( "__NAME__", EscapeHTML( name ) );
 
         switch( aField.GetId() )
         {
@@ -177,12 +176,12 @@ protected:
             else
             {
                 wxString datasheetlink = DatasheetLinkFormat;
-                datasheetlink.Replace( "__HREF__", EscapedHTML( text ) );
+                datasheetlink.Replace( "__HREF__", EscapeHTML( text ) );
 
                 if( text.Length() > 75 )
                     text = text.Left( 72 ) + wxT( "..." );
 
-                datasheetlink.Replace( "__TEXT__", EscapedHTML( text ) );
+                datasheetlink.Replace( "__TEXT__", EscapeHTML( text ) );
 
                 fieldhtml.Replace( "__VALUE__", datasheetlink );
             }
@@ -194,7 +193,7 @@ protected:
             return wxEmptyString;
 
         default:
-            fieldhtml.Replace( "__VALUE__", EscapedHTML( text ) );
+            fieldhtml.Replace( "__VALUE__", EscapeHTML( text ) );
         }
 
         return fieldhtml;

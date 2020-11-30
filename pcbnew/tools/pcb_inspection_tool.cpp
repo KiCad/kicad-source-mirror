@@ -34,6 +34,7 @@
 #include <drc/drc_engine.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <dialogs/dialog_constraints_reporter.h>
+#include <kicad_string.h>
 #include "pcb_inspection_tool.h"
 
 
@@ -304,7 +305,7 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
                 {
                     BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
                     s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
-                                                        cItem->GetNetClassName() );
+                                                        cItem->GetNetClass()->GetName() );
                 }
 
                 return s;
@@ -316,9 +317,9 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
-                                     m_frame->GetBoard()->GetLayerName( layer ),
-                                     getItemDescription( a ),
-                                     getItemDescription( b ) ) );
+                                     EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
 
         reportClearance( SILK_CLEARANCE_CONSTRAINT, layer, a, b, r );
     }
@@ -340,9 +341,9 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
         r->Report( wxString::Format( "<ul><li>%s %s</li><li>%s</li><li>%s</li></ul>",
                                      _( "Layer" ),
-                                     m_frame->GetBoard()->GetLayerName( layer ),
-                                     getItemDescription( a ),
-                                     getItemDescription( b ) ) );
+                                     EscapeHTML( m_frame->GetBoard()->GetLayerName( layer ) ),
+                                     EscapeHTML( getItemDescription( a ) ),
+                                     EscapeHTML( getItemDescription( b ) ) ) );
 
         BOARD_CONNECTED_ITEM* ac = a && a->IsConnected() ?
                                         static_cast<BOARD_CONNECTED_ITEM*>( a ) : nullptr;
@@ -429,12 +430,29 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
             courtyardError = true;
     }
 
+    WX_HTML_REPORT_BOX* r = nullptr;
+
+    auto getItemDescription =
+            [&]( BOARD_ITEM* aItem )
+            {
+                wxString s = aItem->GetSelectMenuText( r->GetUnits() );
+
+                if( aItem->IsConnected() )
+                {
+                    BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+                    s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
+                                                        cItem->GetNetClass()->GetName() );
+                }
+
+                return s;
+            };
+
     if( item->Type() == PCB_TRACE_T )
     {
-        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );
+        r = m_inspectConstraintsDialog->AddPage( _( "Track Width" ) );
 
         r->Report( "<h7>" + _( "Track width resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
+        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
@@ -468,10 +486,10 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
 
     if( item->Type() == PCB_VIA_T )
     {
-        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Via Diameter" ) );
+        r = m_inspectConstraintsDialog->AddPage( _( "Via Diameter" ) );
 
         r->Report( "<h7>" + _( "Via diameter resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
+        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
@@ -505,7 +523,7 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r = m_inspectConstraintsDialog->AddPage( _( "Via Annular Width" ) );
 
         r->Report( "<h7>" + _( "Via annular width resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
+        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
@@ -540,10 +558,10 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     if( ( item->Type() == PCB_PAD_T && static_cast<PAD*>( item )->GetDrillSize().x > 0 )
             || item->Type() == PCB_VIA_T )
     {
-        WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Hole Size" ) );
+        r = m_inspectConstraintsDialog->AddPage( _( "Hole Size" ) );
 
         r->Report( "<h7>" + _( "Hole diameter resolution for:" ) + "</h7>" );
-        r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
+        r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
         r->Report( "" );
 
         if( compileError )
@@ -569,10 +587,10 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
         r->Flush();
     }
 
-    WX_HTML_REPORT_BOX* r = m_inspectConstraintsDialog->AddPage( _( "Keepouts" ) );
+    r = m_inspectConstraintsDialog->AddPage( _( "Keepouts" ) );
 
     r->Report( "<h7>" + _( "Keepout resolution for:" ) + "</h7>" );
-    r->Report( "<ul><li>" + item->GetSelectMenuText( r->GetUnits() ) + "</li></ul>" );
+    r->Report( "<ul><li>" + EscapeHTML( getItemDescription( item ) ) + "</li></ul>" );
     r->Report( "" );
 
     if( compileError )
