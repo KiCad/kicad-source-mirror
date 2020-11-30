@@ -748,12 +748,14 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
 
     wxString fn( path.GetName() );
 
-    PROJECT_LOCAL_SETTINGS* settings = static_cast<PROJECT_LOCAL_SETTINGS*>(
-            RegisterSettings( new PROJECT_LOCAL_SETTINGS( m_projects[fullPath], fn ) ) );
+    PROJECT_LOCAL_SETTINGS* settings = new PROJECT_LOCAL_SETTINGS( m_projects[fullPath], fn );
+
+    if( aSetActive )
+        settings = static_cast<PROJECT_LOCAL_SETTINGS*>( RegisterSettings( settings ) );
 
     m_projects[fullPath]->setLocalSettings( settings );
 
-    if( m_kiway )
+    if( aSetActive && m_kiway )
         m_kiway->ProjectChanged();
 
     return success;
@@ -884,8 +886,8 @@ bool SETTINGS_MANAGER::loadProjectFile( PROJECT& aProject )
     wxFileName fullFn( aProject.GetProjectFullName() );
     wxString fn( fullFn.GetName() );
 
-    PROJECT_FILE* file =
-            static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ), false ) );
+    PROJECT_FILE* file = static_cast<PROJECT_FILE*>( RegisterSettings( new PROJECT_FILE( fn ),
+                                                                       false ) );
 
     m_project_files[aProject.GetProjectFullName()] = file;
 
