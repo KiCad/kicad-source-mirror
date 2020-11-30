@@ -286,7 +286,7 @@ wxString PCB_GROUP::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     if( m_name.empty() )
     {
-        return wxString::Format( _( "Anonymous Group, %zu members" ),
+        return wxString::Format( _( "Unnamed Group, %zu members" ),
                                  m_items.size() );
     }
 
@@ -304,9 +304,8 @@ BITMAP_DEF PCB_GROUP::GetMenuImage() const
 
 void PCB_GROUP::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Group" ), m_name.empty() ? _( "Anonymous" ) :
-                        wxString::Format( "\"%s\"", m_name ), DARKCYAN );
-    aList.emplace_back( _( "Members" ), wxString::Format( "%zu", m_items.size() ), BROWN );
+    aList.emplace_back( _( "Group" ), m_name.empty() ? _( "<unnamed>" ) : m_name );
+    aList.emplace_back( _( "Members" ), wxString::Format( "%zu", m_items.size() ) );
 }
 
 

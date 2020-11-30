@@ -107,21 +107,11 @@ void FP_SHAPE::SetDrawCoord()
 }
 
 
-// see class_edge_mod.h
 void FP_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString   msg;
     FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
 
-    if( !fp )
-        return;
-
-    BOARD* board = (BOARD*) fp->GetParent();
-
-    if( !board )
-        return;
-
-    aList.emplace_back( _( "Footprint" ), fp->GetReference(), DARKCYAN );
+    aList.emplace_back( _( "Footprint" ), fp ? fp->GetReference() : _( "<invalid>" ) );
 
     // append the features shared with the base class
     PCB_SHAPE::GetMsgPanelInfo( aFrame, aList );

@@ -106,30 +106,21 @@ void PCB_TEXT::SetTextAngle( double aAngle )
 
 void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString    msg;
+    EDA_UNITS units = aFrame->GetUserUnits();
 
     wxCHECK_RET( m_parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
-    aList.emplace_back( _( "PCB Text" ), GetShownText(), DARKGREEN );
+    aList.emplace_back( _( "PCB Text" ), GetShownText() );
 
-    aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    if( !IsMirrored() )
-        aList.emplace_back( _( "Mirror" ), _( "No" ), DARKGREEN );
-    else
-        aList.emplace_back( _( "Mirror" ), _( "Yes" ), DARKGREEN );
+    aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
 
-    msg.Printf( wxT( "%.1f" ), GetTextAngle() / 10.0 );
-    aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
+    aList.emplace_back( _( "Angle" ), wxString::Format( "%.1f", GetTextAngle() / 10.0 ) );
 
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );
-    aList.emplace_back( _( "Thickness" ), msg, MAGENTA );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.emplace_back( _( "Width" ), msg, RED );
-
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
-    aList.emplace_back( _( "Height" ), msg, RED );
+    aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
+    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
+    aList.emplace_back( _( "Height" ), MessageTextFromValue( units, GetTextHeight() ) );
 }
 
 

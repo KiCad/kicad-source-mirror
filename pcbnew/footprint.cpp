@@ -728,7 +728,7 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     wxString msg, msg2;
 
-    aList.emplace_back( m_reference->GetShownText(), m_value->GetShownText(), DARKCYAN );
+    aList.emplace_back( m_reference->GetShownText(), m_value->GetShownText() );
 
     if( aFrame->IsType( FRAME_FOOTPRINT_VIEWER )
         || aFrame->IsType( FRAME_FOOTPRINT_VIEWER_MODAL )
@@ -742,12 +742,11 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
         else
             msg = _( "Unknown" );
 
-        aList.emplace_back( _( "Last Change" ), msg, BROWN );
+        aList.emplace_back( _( "Last Change" ), msg );
     }
     else if( aFrame->IsType( FRAME_PCB_EDITOR ) )
     {
-        aList.emplace_back( _( "Board Side" ), IsFlipped() ? _( "Back (Flipped)" )
-                                                           : _( "Front" ), RED );
+        aList.emplace_back( _( "Board Side" ), IsFlipped() ? _( "Back (Flipped)" ) : _( "Front" ) );
     }
 
     auto addToken = []( wxString* aStr, const wxString& aAttr )
@@ -776,19 +775,18 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     if( m_attributes & FP_EXCLUDE_FROM_BOM )
         addToken( &attrs, _( "exclude from BOM" ) );
 
-    aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs, BROWN );
+    aList.emplace_back( _( "Status: " ) + status, _( "Attributes:" ) + wxS( " " ) + attrs );
 
-    msg.Printf( "%.4g", GetOrientationDegrees() );
-    aList.emplace_back( _( "Rotation" ), msg, BROWN );
+    aList.emplace_back( _( "Rotation" ), wxString::Format( "%.4g", GetOrientationDegrees() ) );
 
     msg.Printf( _( "Footprint: %s" ), m_fpid.Format().c_str() );
-    msg2.Printf( _( "3D-Shape: %s" ),
-                 m_3D_Drawings.empty() ? _( "none" ) : m_3D_Drawings.front().m_Filename );
-    aList.emplace_back( msg, msg2, BLUE );
+    msg2.Printf( _( "3D-Shape: %s" ), m_3D_Drawings.empty() ? _( "<none>" )
+                                                            : m_3D_Drawings.front().m_Filename );
+    aList.emplace_back( msg, msg2 );
 
     msg.Printf( _( "Doc: %s" ), m_doc );
     msg2.Printf( _( "Keywords: %s" ), m_keywords );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( msg, msg2 );
 }
 
 

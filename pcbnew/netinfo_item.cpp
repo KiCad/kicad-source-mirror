@@ -70,68 +70,64 @@ void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
 
 void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString  txt;
-    double    lengthnet = 0.0;      // This  is the length of tracks on pcb
-    double    lengthPadToDie = 0.0; // this is the length of internal ICs connections
+    wxString msg;
 
-    aList.emplace_back( _( "Net Name" ), GetNetname(), RED );
+    aList.emplace_back( _( "Net Name" ), UnescapeString( GetNetname() ) );
 
-    txt.Printf( wxT( "%d" ), GetNet() );
-    aList.emplace_back( _( "Net Code" ), txt, RED );
+    aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", GetNet() ) );
 
-    // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board
-    // can be NULL
+    // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board can be NULL
     BOARD * board = m_parent ? m_parent->GetBoard() : NULL;
 
-    if( board == NULL )
-        return;
-
-    int count = 0;
-
-    for( FOOTPRINT* footprint : board->Footprints() )
+    if( board )
     {
-        for( PAD* pad : footprint->Pads() )
+        int    count = 0;
+        double lengthNet = 0.0;      // This  is the length of tracks on pcb
+        double lengthPadToDie = 0.0; // this is the length of internal ICs connections
+
+        for( FOOTPRINT* footprint : board->Footprints() )
         {
-            if( pad->GetNetCode() == GetNet() )
+            for( PAD* pad : footprint->Pads() )
             {
-                count++;
-                lengthPadToDie += pad->GetPadToDieLength();
+                if( pad->GetNetCode() == GetNet() )
+                {
+                    count++;
+                    lengthPadToDie += pad->GetPadToDieLength();
+                }
             }
         }
-    }
 
-    txt.Printf( wxT( "%d" ), count );
-    aList.emplace_back( _( "Pads" ), txt, DARKGREEN );
+        aList.emplace_back( _( "Pads" ), wxString::Format( "%d", count ) );
 
-    count  = 0;
+        count  = 0;
 
-    for( TRACK* track : board->Tracks() )
-    {
-        if( track->Type() == PCB_VIA_T )
+        for( TRACK* track : board->Tracks() )
         {
-            if( track->GetNetCode() == GetNet() )
-                count++;
+            if( track->Type() == PCB_VIA_T )
+            {
+                if( track->GetNetCode() == GetNet() )
+                    count++;
+            }
+
+            if( track->Type() == PCB_TRACE_T )
+            {
+                if( track->GetNetCode() == GetNet() )
+                    lengthNet += track->GetLength();
+            }
         }
 
-        if( track->Type() == PCB_TRACE_T )
-        {
-            if( track->GetNetCode() == GetNet() )
-                lengthnet += track->GetLength();
-        }
+        aList.emplace_back( _( "Vias" ), wxString::Format( "%d", count ) );
+
+        // Displays the full net length (tracks on pcb + internal ICs connections ):
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet + lengthPadToDie );
+        aList.emplace_back( _( "Net Length" ), msg );
+
+        // Displays the net length of tracks only:
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthNet );
+        aList.emplace_back( _( "On Board" ), msg );
+
+        // Displays the net length of internal ICs connections (wires inside ICs):
+        msg = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie );
+        aList.emplace_back( _( "In Package" ), msg );
     }
-
-    txt.Printf( wxT( "%d" ), count );
-    aList.emplace_back( _( "Vias" ), txt, BLUE );
-
-    // Displays the full net length (tracks on pcb + internal ICs connections ):
-    txt = MessageTextFromValue( aFrame->GetUserUnits(), lengthnet + lengthPadToDie );
-    aList.emplace_back( _( "Net Length" ), txt, RED );
-
-    // Displays the net length of tracks only:
-    txt = MessageTextFromValue( aFrame->GetUserUnits(), lengthnet );
-    aList.emplace_back( _( "On Board" ), txt, RED );
-
-    // Displays the net length of internal ICs connections (wires inside ICs):
-    txt = MessageTextFromValue( aFrame->GetUserUnits(), lengthPadToDie );
-    aList.emplace_back( _( "In Package" ), txt, RED );
 }

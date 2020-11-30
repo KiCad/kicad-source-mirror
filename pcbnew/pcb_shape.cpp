@@ -465,82 +465,79 @@ FOOTPRINT* PCB_SHAPE::GetParentFootprint() const
 
 void PCB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS units = aFrame->GetUserUnits();
+    EDA_UNITS         units = aFrame->GetUserUnits();
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
-    wxString  msg;
+    wxString          msg;
 
-    msg = _( "Drawing" );
+    aList.emplace_back( _( "Type" ), _( "Drawing" ) );
 
-    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
-
-    wxString    shape = _( "Shape" );
+    wxString shape = _( "Shape" );
 
     switch( m_shape )
     {
     case S_CIRCLE:
-        aList.emplace_back( shape, _( "Circle" ), RED );
+        aList.emplace_back( shape, _( "Circle" ) );
 
         msg = MessageTextFromValue( units, GetLineLength( m_start, m_end ) );
-        aList.emplace_back( _( "Radius" ), msg, RED );
+        aList.emplace_back( _( "Radius" ), msg );
         break;
 
     case S_ARC:
-        aList.emplace_back( shape, _( "Arc" ), RED );
+        aList.emplace_back( shape, _( "Arc" ) );
+
         msg.Printf( wxT( "%.1f" ), m_angle / 10.0 );
-        aList.emplace_back( _( "Angle" ), msg, RED );
+        aList.emplace_back( _( "Angle" ), msg );
 
         msg = MessageTextFromValue( units, GetLineLength( m_start, m_end ) );
-        aList.emplace_back( _( "Radius" ), msg, RED );
+        aList.emplace_back( _( "Radius" ), msg );
         break;
 
     case S_CURVE:
-        aList.emplace_back( shape, _( "Curve" ), RED );
+        aList.emplace_back( shape, _( "Curve" ) );
 
         msg = MessageTextFromValue( units, GetLength() );
-        aList.emplace_back( _( "Length" ), msg, DARKGREEN );
+        aList.emplace_back( _( "Length" ), msg );
         break;
 
     case S_POLYGON:
-        aList.emplace_back( shape, _( "Polygon" ), RED );
+        aList.emplace_back( shape, _( "Polygon" ) );
 
         msg.Printf( "%d", GetPolyShape().Outline(0).PointCount() );
-        aList.emplace_back( _( "Points" ), msg, DARKGREEN );
+        aList.emplace_back( _( "Points" ), msg );
         break;
 
     case S_RECT:
-        aList.emplace_back( shape, _( "Rectangle" ), RED );
+        aList.emplace_back( shape, _( "Rectangle" ) );
 
         msg = MessageTextFromValue( units, std::abs( m_end.x - m_start.x ) );
-        aList.emplace_back( _( "Width" ), msg, DARKGREEN );
+        aList.emplace_back( _( "Width" ), msg );
 
         msg = MessageTextFromValue( units, std::abs( m_end.y - m_start.y ) );
-        aList.emplace_back( _( "Height" ), msg, DARKGREEN );
+        aList.emplace_back( _( "Height" ), msg );
         break;
 
     case S_SEGMENT:
     {
-        aList.emplace_back( shape, _( "Segment" ), RED );
+        aList.emplace_back( shape, _( "Segment" ) );
 
         msg = MessageTextFromValue( units, GetLineLength( m_start, m_end ) );
-        aList.emplace_back( _( "Length" ), msg, DARKGREEN );
+        aList.emplace_back( _( "Length" ), msg );
 
         // angle counter-clockwise from 3'o-clock
         const double deg = RAD2DEG( atan2( (double)( m_start.y - m_end.y ),
                                            (double)( m_end.x - m_start.x ) ) );
-        msg.Printf( wxT( "%.1f" ), deg );
-        aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
+        aList.emplace_back( _( "Angle" ), wxString::Format( "%.1f", deg ) );
     }
         break;
 
     default:
-        aList.emplace_back( shape, _( "Unrecognized" ), RED );
+        aList.emplace_back( shape, _( "Unrecognized" ) );
         break;
     }
 
-    aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    msg = MessageTextFromValue( units, m_width );
-    aList.emplace_back( _( "Width" ), msg, DARKCYAN );
+    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_width ) );
 }
 
 

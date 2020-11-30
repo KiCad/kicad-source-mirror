@@ -802,32 +802,23 @@ int PAD::GetEffectiveThermalGap( wxString* aSource ) const
 
 void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    EDA_UNITS              units = aFrame->GetUserUnits();
-    wxString               msg, msg2;
-    BOARD*                 board = GetBoard();
-    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
-    FOOTPRINT*             parentFootprint = static_cast<FOOTPRINT*>( m_parent );
+    EDA_UNITS  units = aFrame->GetUserUnits();
+    wxString   msg;
+    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
 
     if( parentFootprint )
-        aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference(), DARKCYAN );
+        aList.emplace_back( _( "Footprint" ), parentFootprint->GetReference() );
 
-    aList.emplace_back( _( "Pad" ), m_name, BROWN );
+    aList.emplace_back( _( "Pad" ), m_name );
 
     if( !GetPinFunction().IsEmpty() )
-        aList.emplace_back( _( "Pin Name" ), GetPinFunction(), BROWN );
+        aList.emplace_back( _( "Pin Name" ), GetPinFunction() );
 
-    aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ), DARKCYAN );
+    aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-    // Display the netclass name (a pad having a netcode = 0 (no net) use the
-    // default netclass for clearance):
-    if( m_netinfo->GetNet() <= 0 )
-        msg = bds.GetDefault()->GetName();
-    else
-        msg = GetNetClassName();
+    aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
 
-    aList.emplace_back( _( "NetClass" ), msg, CYAN );
-
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe(), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
     // Show the pad shape, attribute and property
     wxString props = ShowPadAttr();
@@ -837,30 +828,25 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     switch( GetProperty() )
     {
-    case PAD_PROP_NONE: break;
-    case PAD_PROP_BGA:              props += _("BGA" ); break;
-    case PAD_PROP_FIDUCIAL_GLBL:    props += _("Fiducial global" ); break;
-    case PAD_PROP_FIDUCIAL_LOCAL:   props += _("Fiducial local" ); break;
-    case PAD_PROP_TESTPOINT:        props += _("Test point" ); break;
-    case PAD_PROP_HEATSINK:         props += _("Heat sink" ); break;
-    case PAD_PROP_CASTELLATED:      props += _("Castellated" ); break;
+    case PAD_PROP_NONE:                                           break;
+    case PAD_PROP_BGA:            props += _("BGA" );             break;
+    case PAD_PROP_FIDUCIAL_GLBL:  props += _("Fiducial global" ); break;
+    case PAD_PROP_FIDUCIAL_LOCAL: props += _("Fiducial local" );  break;
+    case PAD_PROP_TESTPOINT:      props += _("Test point" );      break;
+    case PAD_PROP_HEATSINK:       props += _("Heat sink" );       break;
+    case PAD_PROP_CASTELLATED:    props += _("Castellated" );     break;
     }
 
-    aList.emplace_back( ShowPadShape(), props, DARKGREEN );
+    aList.emplace_back( ShowPadShape(), props );
 
-    if( (GetShape() == PAD_SHAPE_CIRCLE || GetShape() == PAD_SHAPE_OVAL )
-        && m_size.x == m_size.y )
+    if( ( GetShape() == PAD_SHAPE_CIRCLE || GetShape() == PAD_SHAPE_OVAL ) && m_size.x == m_size.y )
     {
-        msg = MessageTextFromValue( units, m_size.x );
-        aList.emplace_back( _( "Diameter" ), msg, RED );
+        aList.emplace_back( _( "Diameter" ), MessageTextFromValue( units, m_size.x ) );
     }
     else
     {
-        msg = MessageTextFromValue( units, m_size.x );
-        aList.emplace_back( _( "Width" ), msg, RED );
-
-        msg = MessageTextFromValue( units, m_size.y );
-        aList.emplace_back( _( "Height" ), msg, RED );
+        aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_size.x ) );
+        aList.emplace_back( _( "Height" ), MessageTextFromValue( units, m_size.y ) );
     }
 
     double fp_orient_degrees = parentFootprint ? parentFootprint->GetOrientationDegrees() : 0;
@@ -872,34 +858,37 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     else
         msg.Printf( wxT( "%.4g" ), GetOrientationDegrees() );
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Rotation" ), msg, LIGHTBLUE ) );
+    aList.emplace_back( _( "Rotation" ), msg );
 
     if( GetPadToDieLength() )
     {
         msg = MessageTextFromValue(units, GetPadToDieLength() );
-        aList.emplace_back( _( "Length in Package" ), msg, CYAN );
+        aList.emplace_back( _( "Length in Package" ), msg );
     }
 
-    msg = MessageTextFromValue( units, m_drill.x );
-
-    if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+    if( m_drill.x > 0 || m_drill.y > 0 )
     {
-        aList.emplace_back( _( "Drill" ), msg, RED );
-    }
-    else
-    {
-        msg = MessageTextFromValue( units, m_drill.x )
-               + wxT( "/" )
-               + MessageTextFromValue( units, m_drill.y );
-        aList.emplace_back( _( "Drill X / Y" ), msg, RED );
+        if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+        {
+            aList.emplace_back( _( "Drill" ),
+                                wxString::Format( "%s",
+                                                  MessageTextFromValue( units, m_drill.x ) ) );
+        }
+        else
+        {
+            aList.emplace_back( _( "Drill X / Y" ),
+                                wxString::Format( "%s / %s",
+                                                  MessageTextFromValue( units, m_drill.x ),
+                                                  MessageTextFromValue( units, m_drill.y ) ) );
+        }
     }
 
     wxString source;
     int      clearance = GetOwnClearance( GetLayer(), &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
-    msg2.Printf( _( "(from %s)" ), source );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                          MessageTextFromValue( units, clearance ) ),
+                        wxString::Format( _( "(from %s)" ), source ) );
 }
 
 

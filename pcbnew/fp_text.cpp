@@ -270,58 +270,41 @@ double FP_TEXT::GetDrawRotation() const
 }
 
 
-// see class_text_mod.h
 void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    FOOTPRINT* parentFootprint = static_cast<FOOTPRINT*>( m_parent );
-
-    if( parentFootprint == NULL )        // Happens in footprint editor, and for new texts
-        return;
-
-    wxString msg, Line;
+    FOOTPRINT* fp = static_cast<FOOTPRINT*>( m_parent );
+    wxString   msg;
 
     static const wxString text_type_msg[3] =
     {
         _( "Ref." ), _( "Value" ), _( "Text" )
     };
 
-    Line = parentFootprint->GetReference();
-    aList.emplace_back( _( "Footprint" ), Line, DARKCYAN );
+    aList.emplace_back( _( "Footprint" ), fp ? fp->GetReference() : _( "<invalid>" ) );
 
-    Line = GetShownText();
-    aList.emplace_back( _( "Text" ), Line, BROWN );
+    aList.emplace_back( _( "Text" ), GetShownText() );
 
     wxASSERT( m_Type >= TEXT_is_REFERENCE && m_Type <= TEXT_is_DIVERS );
-    aList.emplace_back( _( "Type" ), text_type_msg[m_Type], DARKGREEN );
+    aList.emplace_back( _( "Type" ), text_type_msg[m_Type] );
 
-    if( !IsVisible() )
-        msg = _( "No" );
-    else
-        msg = _( "Yes" );
-
-    aList.emplace_back( _( "Display" ), msg, DARKGREEN );
+    aList.emplace_back( _( "Display" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
     // Display text layer
-    aList.emplace_back( _( "Layer" ), GetLayerName(), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
 
-    if( IsMirrored() )
-        msg = _( "Yes" );
-    else
-        msg = _( "No" );
-
-    aList.emplace_back( _( "Mirror" ), msg, DARKGREEN );
+    aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
 
     msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
-    aList.emplace_back( _( "Angle" ), msg, DARKGREEN );
+    aList.emplace_back( _( "Angle" ), msg );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );
-    aList.emplace_back( _( "Thickness" ), msg, DARKGREEN );
+    aList.emplace_back( _( "Thickness" ), msg );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextWidth() );
-    aList.emplace_back( _( "Width" ), msg, RED );
+    aList.emplace_back( _( "Width" ), msg );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextHeight() );
-    aList.emplace_back( _( "Height" ), msg, RED );
+    aList.emplace_back( _( "Height" ), msg );
 }
 
 

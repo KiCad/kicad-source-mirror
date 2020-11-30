@@ -314,28 +314,28 @@ void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 
     wxCHECK_RET( m_parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
 
-    aList.emplace_back( _( "Dimension" ), m_text.GetShownText(), DARKGREEN );
+    aList.emplace_back( _( "Dimension" ), m_text.GetShownText() );
 
-    aList.emplace_back( _( "Prefix" ), GetPrefix(), BLUE );
+    aList.emplace_back( _( "Prefix" ), GetPrefix() );
 
     if( GetOverrideTextEnabled() )
     {
-        aList.emplace_back( _( "Override Text" ), GetOverrideText(), BLUE );
+        aList.emplace_back( _( "Override Text" ), GetOverrideText() );
     }
     else
     {
-        aList.emplace_back( _( "Value" ), GetValueText(), BLUE );
+        aList.emplace_back( _( "Value" ), GetValueText() );
 
         msg = "%" + wxString::Format( "1.%df", GetPrecision() );
-        aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ), BLUE );
+        aList.emplace_back( _( "Precision" ), wxString::Format( msg, 0.0 ) );
     }
 
-    aList.emplace_back( _( "Suffix" ), GetSuffix(), BLUE );
+    aList.emplace_back( _( "Suffix" ), GetSuffix() );
 
     EDA_UNITS units;
 
     GetUnits( units );
-    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units ), BLUE );
+    aList.emplace_back( _( "Units" ), GetAbbreviatedUnitsLabel( units ) );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     units = aFrame->GetUserUnits();
@@ -347,7 +347,7 @@ void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
                                            MessageTextFromValue( units, startCoord.x ),
                                            MessageTextFromValue( units, startCoord.y ) );
 
-        aList.emplace_back( start, wxEmptyString, DARKGREEN );
+        aList.emplace_back( start, wxEmptyString );
     }
     else
     {
@@ -360,10 +360,10 @@ void DIMENSION_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
                                            MessageTextFromValue( units, endCoord.x ),
                                            MessageTextFromValue( units, endCoord.y ) );
 
-        aList.emplace_back( start, end, DARKGREEN );
+        aList.emplace_back( start, end );
     }
 
-    aList.emplace_back( _( "Layer" ), GetLayerName(), DARKBROWN );
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
 }
 
 
@@ -954,7 +954,7 @@ void LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
 {
     wxString    msg;
 
-    aList.emplace_back( _( "Leader" ), m_text.GetShownText(), DARKGREEN );
+    aList.emplace_back( _( "Leader" ), m_text.GetShownText() );
 
     ORIGIN_TRANSFORMS originTransforms = aFrame->GetOriginTransforms();
     EDA_UNITS         units = aFrame->GetUserUnits();
@@ -964,9 +964,9 @@ void LEADER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM
                                        MessageTextFromValue( units, startCoord.x ),
                                        MessageTextFromValue( units, startCoord.y ) );
 
-    aList.emplace_back( start, wxEmptyString, DARKGREEN );
+    aList.emplace_back( start, wxEmptyString );
 
-    aList.emplace_back( _( "Layer" ), GetLayerName(), BLUE );
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
 }
 
 

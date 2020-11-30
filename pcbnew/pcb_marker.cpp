@@ -90,8 +90,8 @@ PCB_MARKER* PCB_MARKER::Deserialize( const wxString& data )
 
 void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Type" ), _( "Marker" ), DARKCYAN );
-    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage(), RED );
+    aList.emplace_back( _( "Type" ), _( "Marker" ) );
+    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage() );
 
     wxString  mainText;
     wxString  auxText;
@@ -110,7 +110,7 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
     if( auxItem )
         auxText = auxItem->GetSelectMenuText( aFrame->GetUserUnits() );
 
-    aList.emplace_back( mainText, auxText, DARKBROWN );
+    aList.emplace_back( mainText, auxText );
 }
 
 

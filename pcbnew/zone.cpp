@@ -543,7 +543,7 @@ bool ZONE::HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx, int* aHoleI
 void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     EDA_UNITS units = aFrame->GetUserUnits();
-    wxString  msg, msg2;
+    wxString  msg;
 
     if( GetIsRuleArea() )
         msg = _( "Rule Area" );
@@ -557,7 +557,7 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     if( m_CornerSelection != nullptr && m_CornerSelection->m_contour > 0 )
         msg << wxT( " " ) << _( "Cutout" );
 
-    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
+    aList.emplace_back( _( "Type" ), msg );
 
     if( GetIsRuleArea() )
     {
@@ -583,34 +583,12 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     }
     else if( IsOnCopperLayer() )
     {
-        if( GetNetCode() >= 0 )
-        {
-            NETINFO_ITEM* net = GetNet();
-            NETCLASS*     netclass = nullptr;
+        aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-            if( net )
-            {
-                if( net->GetNet() )
-                    netclass = GetNetClass();
-                else
-                    netclass = GetBoard()->GetDesignSettings().GetDefault();
-
-                msg = UnescapeString( net->GetNetname() );
-            }
-            else
-            {
-                msg = wxT( "<no name>" );
-            }
-
-            aList.emplace_back( _( "Net" ), msg, RED );
-
-            if( netclass )
-                aList.emplace_back( _( "NetClass" ), netclass->GetName(), DARKMAGENTA );
-        }
+        aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
 
         // Display priority level
-        msg.Printf( wxT( "%d" ), GetPriority() );
-        aList.emplace_back( _( "Priority" ), msg, BLUE );
+        aList.emplace_back( _( "Priority" ), wxString::Format( "%d", GetPriority() ) );
     }
 
     wxString layerDesc;
@@ -627,10 +605,10 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     if( count > 1 )
         layerDesc.Printf( _( "%s and %d more" ), layerDesc, count - 1 );
 
-    aList.emplace_back( _( "Layer" ), layerDesc, DARKGREEN );
+    aList.emplace_back( _( "Layer" ), layerDesc );
 
     if( !m_zoneName.empty() )
-        aList.emplace_back( _( "Name" ), m_zoneName, DARKMAGENTA );
+        aList.emplace_back( _( "Name" ), m_zoneName );
 
     switch( m_fillMode )
     {
@@ -639,17 +617,17 @@ void ZONE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>&
     default:                            msg = _( "Unknown" ); break;
     }
 
-    aList.emplace_back( _( "Fill Mode" ), msg, BROWN );
+    aList.emplace_back( _( "Fill Mode" ), msg );
 
     msg = MessageTextFromValue( units, m_area, true, EDA_DATA_TYPE::AREA );
-    aList.emplace_back( _( "Filled Area" ), msg, BLUE );
+    aList.emplace_back( _( "Filled Area" ), msg );
 
     wxString source;
     int      clearance = GetOwnClearance( GetLayer(), &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
-    msg2.Printf( _( "(from %s)" ), source );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                          MessageTextFromValue( units, clearance ) ),
+                        wxString::Format( _( "(from %s)" ), source ) );
 
     // Useful for statistics, especially when zones are complex the number of hatches
     // and filled polygons can explain the display and DRC calculation time:

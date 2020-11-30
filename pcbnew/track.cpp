@@ -597,22 +597,15 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 {
     EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
-    wxString  msg2;
-    wxString  source;
     BOARD*    board = GetBoard();
 
-    // Display basic infos
-    aList.emplace_back( _( "Type" ), _( "Track" ), DARKCYAN );
+    aList.emplace_back( _( "Type" ), _( "Track" ) );
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
-    // Display layer
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe(), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
-    // Display width
-    msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
-
-    aList.emplace_back( _( "Width" ), msg, DARKCYAN );
+    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, m_Width ) );
 
     // Display full track length (in Pcbnew)
     if( board )
@@ -623,31 +616,31 @@ void TRACK::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>
 
         std::tie( count, trackLen, lenPadToDie ) = board->GetTrackLength( *this );
 
-        msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen );
-        aList.emplace_back( _( "Length" ), msg, DARKCYAN );
+        aList.emplace_back( _( "Length" ), MessageTextFromValue( units, trackLen ) );
 
         if( lenPadToDie != 0 )
         {
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), lenPadToDie );
-            aList.emplace_back( _( "Pad To Die Length" ), msg, DARKCYAN );
+            msg = MessageTextFromValue( units, lenPadToDie );
+            aList.emplace_back( _( "Pad To Die Length" ), msg );
 
-            msg = MessageTextFromValue( aFrame->GetUserUnits(), trackLen + lenPadToDie );
-            aList.emplace_back( _( "Full Length" ), msg, DARKCYAN );
+            msg = MessageTextFromValue( units, trackLen + lenPadToDie );
+            aList.emplace_back( _( "Full Length" ), msg );
         }
     }
 
+    wxString source;
     int clearance = GetOwnClearance( GetLayer(), &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
-    msg2.Printf( _( "(from %s)" ), source );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                          MessageTextFromValue( units, clearance ) ),
+                        wxString::Format( _( "(from %s)" ), source ) );
 
     int minWidth, maxWidth;
     GetWidthConstraints( &minWidth, &maxWidth, &source );
 
-    msg.Printf( _( "Min Width: %s" ), MessageTextFromValue( units, minWidth ) );
-    msg2.Printf( _( "(from %s)" ), source );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( wxString::Format( _( "Min Width: %s" ),
+                                          MessageTextFromValue( units, minWidth ) ),
+                        wxString::Format( _( "(from %s)" ), source ) );
 }
 
 
@@ -655,10 +648,7 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 {
     EDA_UNITS units = aFrame->GetUserUnits();
     wxString  msg;
-    wxString  msg2;
-    wxString  source;
 
-    // Display basic infos
     switch( GetViaType() )
     {
     case VIATYPE::MICROVIA:     msg = _( "Micro Via" );        break;
@@ -667,35 +657,32 @@ void VIA::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     default:                    msg = _( "Via" );              break;
     }
 
-    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
+    aList.emplace_back( _( "Type" ), msg );
 
     GetMsgPanelInfoBase_Common( aFrame, aList );
 
-    // Display layer pair
-    aList.emplace_back( _( "Layer" ), layerMaskDescribe(), DARKGREEN );
+    aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
-    // Display width
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
-    // Display diameter value:
-    aList.emplace_back( _( "Diameter" ), msg, DARKCYAN );
+    aList.emplace_back( _( "Diameter" ), msg );
 
-    // Display drill value
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetDrillValue() );
 
-    aList.emplace_back( _( "Drill" ), msg, RED );
+    aList.emplace_back( _( "Drill" ), msg );
 
+    wxString  source;
     int clearance = GetOwnClearance( GetLayer(), &source );
 
-    msg.Printf( _( "Min Clearance: %s" ), MessageTextFromValue( units, clearance ) );
-    msg2.Printf( _( "(from %s)" ), source );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( wxString::Format( _( "Min Clearance: %s" ),
+                                          MessageTextFromValue( units, clearance ) ),
+                        wxString::Format( _( "(from %s)" ), source ) );
 
     int minAnnulus = GetMinAnnulus( GetLayer(), &source );
 
-    msg.Printf( _( "Min Annular Width: %s" ), MessageTextFromValue( units, minAnnulus ) );
-    msg2.Printf( _( "(from %s)" ), source );
-    aList.emplace_back( msg, msg2, BLACK );
+    aList.emplace_back( wxString::Format( _( "Min Annular Width: %s" ),
+                                          MessageTextFromValue( units, minAnnulus ) ),
+                        wxString::Format( _( "(from %s)" ), source ) );
 }
 
 
@@ -703,33 +690,11 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 {
     wxString msg;
 
-    // Display Net Name
-    if( GetBoard() )
-    {
-        NETINFO_ITEM* net = GetNet();
-        NETCLASS*     netclass = nullptr;
+    aList.emplace_back( _( "Net" ), UnescapeString( GetNetname() ) );
 
-        if( net )
-        {
-            if( net->GetNet() )
-                netclass = GetNetClass();
-            else
-                netclass = GetBoard()->GetDesignSettings().GetDefault();
+    aList.emplace_back( _( "NetClass" ), UnescapeString( GetNetClass()->GetName() ) );
 
-            msg = UnescapeString( net->GetNetname() );
-        }
-        else
-        {
-            msg = wxT( "<no name>" );
-        }
-
-        aList.emplace_back( _( "Net" ), msg, RED );
-
-        if( netclass )
-            aList.emplace_back( _( "NetClass" ), netclass->GetName(), DARKMAGENTA );
-    }
-
-#if 0   // Enable for debugging
+    #if 0   // Enable for debugging
     if( GetBoard() )
     {
         // Display net code:
