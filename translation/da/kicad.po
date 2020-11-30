@@ -1,11 +1,12 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-29 16:05-0800\n"
 "PO-Revision-Date: 2020-12-02 21:36+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: Jarl Gjessing <jarlgjessing@gmail.com>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/"
 "master-source/da/>\n"
 "Language: da\n"
@@ -17,30 +18,30 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:50
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Alle filer (*.*)|*.*"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Alle supporterede filer (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Tilgængelige veje:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "Konfigurer stier"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "Vælg 3D model"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr ""
+msgstr "Skalér"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:74
@@ -62,7 +63,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1327
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -87,27 +88,29 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1338
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
+#, fuzzy
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:782
 #: pcbnew/pad.cpp:875
 msgid "Rotation"
-msgstr ""
+msgstr "Rotation"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
+#, fuzzy
 msgid "Offset"
-msgstr ""
+msgstr "Offset"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "Gennemsigtighed"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -115,51 +118,53 @@ msgstr ""
 #: eeschema/dialogs/dialog_print_using_printer.cpp:275
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
 msgid "Preview"
-msgstr ""
+msgstr "Forhåndsvisning"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Ændre til isometrisk perpektiv"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "Genindlæs print og 3D modeller"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:333
 msgid "no such file"
-msgstr ""
+msgstr "ingen sådan fil"
 
 #: 3d-viewer/3d_cache/sg/ifsg_api.cpp:364
 msgid "failed to open file"
-msgstr ""
+msgstr "fejl ved åbning af fil"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
 msgid "Build board outline"
-msgstr ""
+msgstr "Lav print omrids"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
-msgstr ""
+msgstr "Opret lag"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:470
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
 msgid "No footprint loaded."
-msgstr ""
+msgstr "Intet aftryk indlæst"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"Omrids af aftryk mangler eller er forkert. Kør Aftryk Undersøger for en fuld "
+"analyse."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:248
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "Print omrids mangler eller er forkert. Kør DRC for en fuld analyse."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Opret baer og via's"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:711
 #, fuzzy
