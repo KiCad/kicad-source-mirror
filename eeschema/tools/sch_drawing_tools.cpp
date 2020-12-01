@@ -24,7 +24,6 @@
 
 #include "sch_drawing_tools.h"
 #include "ee_selection_tool.h"
-#include "ee_point_editor.h"
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <project.h>
@@ -48,6 +47,7 @@
 #include <dialogs/dialog_edit_line_style.h>
 #include <dialogs/dialog_junction_props.h>
 #include <dialogs/dialog_sheet_pin_properties.h>
+#include <kicad_string.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),
@@ -733,7 +733,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     DIALOG_LABEL_EDITOR dlg( m_frame, textItem );
 
     // Must be quasi modal for syntax help
-    if( dlg.ShowQuasiModal() != wxID_OK || textItem->GetText().IsEmpty() )
+    if( dlg.ShowQuasiModal() != wxID_OK || NoPrintableChars( textItem->GetText() ) )
     {
         delete textItem;
         return nullptr;
@@ -789,7 +789,7 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
     {
         DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, sheetPin );
 
-        if( dlg.ShowModal() != wxID_OK || sheetPin->GetText().IsEmpty()  )
+        if( dlg.ShowModal() != wxID_OK || NoPrintableChars( sheetPin->GetText() )  )
         {
             delete sheetPin;
             return nullptr;

@@ -23,14 +23,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "drawing_tool.h"
-#include "pcb_actions.h"
 #include <pcb_edit_frame.h>
 #include <confirm.h>
 #include <import_gfx/dialog_import_gfx.h>
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+#include <tools/grid_helper.h>
+#include <tools/selection_tool.h>
+#include <tools/tool_event_utils.h>
+#include <tools/zone_create_helper.h>
+#include <tools/drawing_tool.h>
 #include <geometry/geometry_utils.h>
 #include <board_commit.h>
 #include <scoped_set_reset.h>
@@ -39,24 +43,18 @@
 #include <status_popup.h>
 #include <dialogs/dialog_text_properties.h>
 #include <preview_items/arc_assistant.h>
-
 #include <board.h>
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <dimension.h>
 #include <zone.h>
 #include <footprint.h>
-
 #include <preview_items/two_point_assistant.h>
 #include <preview_items/two_point_geom_manager.h>
 #include <ratsnest/ratsnest_data.h>
-#include <tools/grid_helper.h>
-#include <tools/point_editor.h>
-#include <tools/selection_tool.h>
-#include <tools/tool_event_utils.h>
-#include <tools/zone_create_helper.h>
 #include <pcbnew_id.h>
 #include <dialogs/dialog_track_via_size.h>
+#include <kicad_string.h>
 
 using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
@@ -99,11 +97,15 @@ protected:
             VIA_DIMENSION via = bds.m_ViasDimensionsList[i];
 
             if( via.m_Drill > 0 )
+            {
                 msg.Printf( _("Via %s, drill %s" ),
                             MessageTextFromValue( units, via.m_Diameter ),
                             MessageTextFromValue( units, via.m_Drill ) );
+            }
             else
+            {
                 msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter ) );
+            }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -522,11 +524,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                     RunMainStack( [&]()
                                   {
-                                      cancelled = !textDialog.ShowModal()
-                                                    || fpText->GetText().IsEmpty();
+                                      cancelled = !textDialog.ShowModal();
                                   } );
 
-                    if( cancelled )
+                    if( cancelled || NoPrintableChars( fpText->GetText() ) )
                     {
                         delete text;
                         text = nullptr;
@@ -560,7 +561,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                                       m_frame->ShowTextPropertiesDialog( pcbText );
                                   } );
 
-                    if( pcbText->GetText().IsEmpty() )
+                    if( NoPrintableChars( pcbText->GetText() ) )
                         delete pcbText;
                     else
                         text = pcbText;

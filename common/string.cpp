@@ -362,6 +362,12 @@ wxString EscapeHTML( const wxString& aString )
 }
 
 
+bool NoPrintableChars( wxString aString )
+{
+    return aString.Trim( true ).Trim( false ).IsEmpty();
+}
+
+
 char* StrPurge( char* text )
 {
     static const char whitespace[] = " \t\n\r\f\v";

@@ -40,6 +40,7 @@
 #include <pgm_base.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
+#include <kicad_string.h>
 #include "ee_point_editor.h"
 
 static void* g_lastPinWeakPtr;
@@ -181,7 +182,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                     DIALOG_LIB_EDIT_TEXT dlg( m_frame, text );
 
-                    if( dlg.ShowModal() != wxID_OK )
+                    if( dlg.ShowModal() != wxID_OK || NoPrintableChars( text->GetText() ) )
                         delete text;
                     else
                         item = text;

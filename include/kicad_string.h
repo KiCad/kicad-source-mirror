@@ -116,6 +116,11 @@ wxString EscapeHTML( const wxString& aString );
 char* GetLine( FILE* aFile, char* Line, int* LineNum = NULL, int SizeLine = 255 );
 
 /**
+ * Return true if the string is empty or contains only whitespace.
+ */
+bool NoPrintableChars( wxString aString );
+
+/**
  * Remove leading and training spaces, tabs and end of line chars in \a text
  *
  * @return a pointer on the first n char in text
