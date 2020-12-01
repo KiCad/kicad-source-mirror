@@ -47,7 +47,12 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     int RunERC( const TOOL_EVENT& aEvent );
+    void ShowERCDialog();
     void DestroyERCDialog();
+
+    int PrevMarker( const TOOL_EVENT& aEvent );
+    int NextMarker( const TOOL_EVENT& aEvent );
+    int ExcludeMarker( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );
 

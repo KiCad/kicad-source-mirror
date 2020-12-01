@@ -82,6 +82,13 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 
 int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
 {
+    ShowERCDialog();
+    return 0;
+}
+
+
+void EE_INSPECTION_TOOL::ShowERCDialog()
+{
     if( m_frame->IsType( FRAME_SCH ) )
     {
         if( m_ercDialog )
@@ -99,8 +106,6 @@ int EE_INSPECTION_TOOL::RunERC( const TOOL_EVENT& aEvent )
             m_ercDialog->Show( true );
         }
     }
-
-    return 0;
 }
 
 
@@ -110,6 +115,49 @@ void EE_INSPECTION_TOOL::DestroyERCDialog()
         m_ercDialog->Destroy();
 
     m_ercDialog = nullptr;
+}
+
+
+int EE_INSPECTION_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
+{
+    if( m_ercDialog )
+    {
+        m_ercDialog->Show( true );
+        m_ercDialog->Raise();
+        m_ercDialog->PrevMarker();
+    }
+    else
+    {
+        ShowERCDialog();
+    }
+
+    return 0;
+}
+
+
+int EE_INSPECTION_TOOL::NextMarker( const TOOL_EVENT& aEvent )
+{
+    if( m_ercDialog )
+    {
+        m_ercDialog->Show( true );
+        m_ercDialog->Raise();
+        m_ercDialog->NextMarker();
+    }
+    else
+    {
+        ShowERCDialog();
+    }
+
+    return 0;
+}
+
+
+int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
+{
+    if( m_ercDialog )
+        m_ercDialog->ExcludeMarker();
+
+    return 0;
 }
 
 
@@ -400,6 +448,10 @@ int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 void EE_INSPECTION_TOOL::setTransitions()
 {
     Go( &EE_INSPECTION_TOOL::RunERC,              EE_ACTIONS::runERC.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::PrevMarker,          EE_ACTIONS::prevMarker.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::NextMarker,          EE_ACTIONS::nextMarker.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::ExcludeMarker,       EE_ACTIONS::excludeMarker.MakeEvent() );
+
     Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::runSimulation.MakeEvent() );
 

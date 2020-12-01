@@ -547,42 +547,76 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
                      _( "Open the Schematic Setup... dialog" ) );
     }
 
+    bool modified = false;
+
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
     case 1:
-        node->m_RcItem->GetParent()->SetExcluded( false );
+    {
+        SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() );
 
-        // Update view
-        static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
-        updateDisplayedCounts();
+        if( marker )
+        {
+            marker->SetExcluded( false );
+            m_parent->GetCanvas()->GetView()->Update( marker );
+
+            // Update view
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+            modified = true;
+        }
+    }
         break;
 
     case 2:
-        node->m_RcItem->GetParent()->SetExcluded( true );
+    {
+        SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() );
 
-        // Update view
-        if( m_severities & RPT_SEVERITY_EXCLUSION )
-            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
-        else
-            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
+        if( marker )
+        {
+            marker->SetExcluded( true );
+            m_parent->GetCanvas()->GetView()->Update( marker );
 
-        updateDisplayedCounts();
+            // Update view
+            if( m_severities & RPT_SEVERITY_EXCLUSION )
+                static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+            else
+                static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->DeleteCurrentItem( false );
+
+            modified = true;
+        }
+    }
         break;
 
     case 4:
         settings.SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_ERROR );
 
+        for( SCH_ITEM* item : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+                m_parent->GetCanvas()->GetView()->Update( marker );
+        }
+
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 5:
         settings.SetSeverity( rcItem->GetErrorCode(), RPT_SEVERITY_WARNING );
 
+        for( SCH_ITEM* item : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
+        {
+            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
+
+            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+                m_parent->GetCanvas()->GetView()->Update( marker );
+        }
+
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
-        updateDisplayedCounts();
+        modified = true;
         break;
 
     case 6:
@@ -597,7 +631,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
         // Rebuild model and view
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->SetProvider( m_markerProvider );
-        updateDisplayedCounts();
+        modified = true;
     }
         break;
 
@@ -608,6 +642,57 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
     case 8:
         m_parent->ShowSchematicSetupDialog( _( "Violation Severity" ) );
         break;
+    }
+
+    if( modified )
+    {
+        updateDisplayedCounts();
+        redrawDrawPanel();
+        m_parent->OnModify();
+    }
+}
+
+
+void DIALOG_ERC::PrevMarker()
+{
+    if( m_notebook->GetSelection() != 1 )
+        m_notebook->SetSelection( 1 );
+
+    m_markerTreeModel->PrevMarker();
+}
+
+
+void DIALOG_ERC::NextMarker()
+{
+    if( m_notebook->GetSelection() != 1 )
+        m_notebook->SetSelection( 1 );
+
+    m_markerTreeModel->NextMarker();
+}
+
+
+void DIALOG_ERC::ExcludeMarker()
+{
+    if( m_notebook->GetSelection() != 1 )
+        return;
+
+    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
+    SCH_MARKER*   marker = dynamic_cast<SCH_MARKER*>( node->m_RcItem->GetParent() );
+
+    if( marker && !marker->IsExcluded() )
+    {
+        marker->SetExcluded( true );
+        m_parent->GetCanvas()->GetView()->Update( marker );
+
+        // Update view
+        if( m_severities & RPT_SEVERITY_EXCLUSION )
+            m_markerTreeModel->ValueChanged( node );
+        else
+            m_markerTreeModel->DeleteCurrentItem( false );
+
+        updateDisplayedCounts();
+        redrawDrawPanel();
+        m_parent->OnModify();
     }
 }
 

@@ -223,7 +223,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
     inspectMenu->Add( EE_ACTIONS::runERC );
+    inspectMenu->Add( ACTIONS::prevMarker );
+    inspectMenu->Add( ACTIONS::nextMarker );
+    inspectMenu->Add( ACTIONS::excludeMarker );
+
 #ifdef KICAD_SPICE
+    inspectMenu->AppendSeparator();
     inspectMenu->Add( EE_ACTIONS::runSimulation );
 #endif
 

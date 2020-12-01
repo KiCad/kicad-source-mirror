@@ -667,6 +667,60 @@ void DIALOG_DRC::refreshBoardEditor()
 }
 
 
+void DIALOG_DRC::PrevMarker()
+{
+    if( m_Notebook->IsShown() )
+    {
+        switch( m_Notebook->GetSelection() )
+        {
+        case 0: m_markerTreeModel->PrevMarker();            break;
+        case 1: m_unconnectedTreeModel->PrevMarker();       break;
+        case 2: m_footprintWarningsTreeModel->PrevMarker(); break;
+        }
+    }
+}
+
+
+void DIALOG_DRC::NextMarker()
+{
+    if( m_Notebook->IsShown() )
+    {
+        switch( m_Notebook->GetSelection() )
+        {
+        case 0: m_markerTreeModel->NextMarker();            break;
+        case 1: m_unconnectedTreeModel->NextMarker();       break;
+        case 2: m_footprintWarningsTreeModel->NextMarker(); break;
+        }
+    }
+}
+
+
+void DIALOG_DRC::ExcludeMarker()
+{
+    if( !m_Notebook->IsShown() || m_Notebook->GetSelection() != 0 )
+        return;
+
+    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( m_markerDataView->GetCurrentItem() );
+    PCB_MARKER*   marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() );
+
+    if( marker && !marker->IsExcluded() )
+    {
+        marker->SetExcluded( true );
+        m_brdEditor->GetCanvas()->GetView()->Update( marker );
+
+        // Update view
+        if( m_severities & RPT_SEVERITY_EXCLUSION )
+            m_markerTreeModel->ValueChanged( node );
+        else
+            m_markerTreeModel->DeleteCurrentItem( false );
+
+        updateDisplayedCounts();
+        refreshBoardEditor();
+        m_brdEditor->OnModify();
+    }
+}
+
+
 void DIALOG_DRC::deleteAllMarkers( bool aIncludeExclusions )
 {
     // Clear current selection list to avoid selection of deleted items

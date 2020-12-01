@@ -84,6 +84,11 @@ public:
     static TOOL_ACTION replaceAll;
     static TOOL_ACTION updateFind;
 
+    // RC Lists
+    static TOOL_ACTION prevMarker;
+    static TOOL_ACTION nextMarker;
+    static TOOL_ACTION excludeMarker;
+
     // View controls
     static TOOL_ACTION zoomRedraw;
     static TOOL_ACTION zoomIn;

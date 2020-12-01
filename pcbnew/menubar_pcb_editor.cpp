@@ -362,11 +362,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
     inspectMenu->Add( PCB_ACTIONS::listNets );
-    inspectMenu->Add( ACTIONS::measureTool );
     inspectMenu->Add( PCB_ACTIONS::boardStatistics );
+    inspectMenu->Add( ACTIONS::measureTool );
 
     inspectMenu->AppendSeparator();
     inspectMenu->Add( PCB_ACTIONS::runDRC );
+    inspectMenu->Add( ACTIONS::prevMarker );
+    inspectMenu->Add( ACTIONS::nextMarker );
+    inspectMenu->Add( ACTIONS::excludeMarker );
+
+    inspectMenu->AppendSeparator();
     inspectMenu->Add( PCB_ACTIONS::inspectClearance );
     inspectMenu->Add( PCB_ACTIONS::inspectConstraints );
 

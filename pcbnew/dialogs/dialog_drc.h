@@ -55,6 +55,10 @@ public:
     void SetUnconnectedProvider( RC_ITEMS_PROVIDER* aProvider );
     void SetFootprintsProvider( RC_ITEMS_PROVIDER* aProvider );
 
+    void PrevMarker();
+    void NextMarker();
+    void ExcludeMarker();
+
 private:
     /**
      * Function writeReport

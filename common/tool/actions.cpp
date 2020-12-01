@@ -237,6 +237,26 @@ TOOL_ACTION ACTIONS::replaceAll( "common.Interactive.replaceAll",
 TOOL_ACTION ACTIONS::updateFind( "common.Control.updateFind",
         AS_GLOBAL );
 
+
+// Marker Controls
+TOOL_ACTION ACTIONS::prevMarker( "common.Checker.prevMarker",
+        AS_GLOBAL,
+        0, "",
+        _( "Previous Marker" ), _( "Go to previous marker in Checker window" ),
+        nullptr );
+
+TOOL_ACTION ACTIONS::nextMarker( "common.Checker.nextMarker",
+        AS_GLOBAL,
+        0, "",
+        _( "Next Marker" ), _( "Go to next marker in Checker window" ),
+        nullptr );
+
+TOOL_ACTION ACTIONS::excludeMarker( "common.Checker.excludeMarker",
+        AS_GLOBAL,
+        0, "",
+        _( "Exclude Marker" ), _( "Mark current violation in Checker window as an exclusion" ),
+        nullptr );
+
 // View Controls
 TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
         AS_GLOBAL,

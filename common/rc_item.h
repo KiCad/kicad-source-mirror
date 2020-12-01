@@ -237,6 +237,9 @@ public:
 
     void ExpandAll();
 
+    void PrevMarker();
+    void NextMarker();
+
     bool IsContainer( wxDataViewItem const& aItem ) const override;
 
     wxDataViewItem GetParent( wxDataViewItem const& aItem ) const override;

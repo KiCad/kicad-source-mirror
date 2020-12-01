@@ -117,6 +117,10 @@ public:
      */
     void RunTests( PROGRESS_REPORTER* aProgressReporter, bool aRefillZones,
                    bool aReportAllTrackErrors, bool aTestFootprints );
+
+    int PrevMarker( const TOOL_EVENT& aEvent );
+    int NextMarker( const TOOL_EVENT& aEvent );
+    int ExcludeMarker( const TOOL_EVENT& aEvent );
 };
 
 

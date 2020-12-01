@@ -514,6 +514,55 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
 }
 
 
+void RC_TREE_MODEL::PrevMarker()
+{
+    RC_TREE_NODE* currentNode = ToNode( m_view->GetCurrentItem() );
+    RC_TREE_NODE* prevMarker = nullptr;
+
+    while( currentNode && currentNode->m_Type != RC_TREE_NODE::MARKER )
+        currentNode = currentNode->m_Parent;
+
+    for( RC_TREE_NODE* candidate : m_tree )
+    {
+        if( candidate == currentNode )
+            break;
+        else
+            prevMarker = candidate;
+    }
+
+    if( prevMarker )
+        m_view->Select( ToItem( prevMarker ) );
+}
+
+
+void RC_TREE_MODEL::NextMarker()
+{
+    RC_TREE_NODE* currentNode = ToNode( m_view->GetCurrentItem() );
+
+    while( currentNode && currentNode->m_Type != RC_TREE_NODE::MARKER )
+        currentNode = currentNode->m_Parent;
+
+    RC_TREE_NODE* nextMarker = nullptr;
+    bool          trigger = currentNode == nullptr;
+
+    for( RC_TREE_NODE* candidate : m_tree )
+    {
+        if( candidate == currentNode )
+        {
+            trigger = true;
+        }
+        else if( trigger )
+        {
+            nextMarker = candidate;
+            break;
+        }
+    }
+
+    if( nextMarker )
+        m_view->Select( ToItem( nextMarker ) );
+}
+
+
 void RC_TREE_MODEL::onSizeView( wxSizeEvent& aEvent )
 {
     int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;

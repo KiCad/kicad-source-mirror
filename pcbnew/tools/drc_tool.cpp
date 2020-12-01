@@ -239,9 +239,55 @@ void DRC_TOOL::updatePointers()
 }
 
 
+int DRC_TOOL::PrevMarker( const TOOL_EVENT& aEvent )
+{
+    if( m_drcDialog )
+    {
+        m_drcDialog->Show( true );
+        m_drcDialog->Raise();
+        m_drcDialog->PrevMarker();
+    }
+    else
+    {
+        ShowDRCDialog( nullptr );
+    }
+
+    return 0;
+}
+
+
+int DRC_TOOL::NextMarker( const TOOL_EVENT& aEvent )
+{
+    if( m_drcDialog )
+    {
+        m_drcDialog->Show( true );
+        m_drcDialog->Raise();
+        m_drcDialog->NextMarker();
+    }
+    else
+    {
+        ShowDRCDialog( nullptr );
+    }
+
+    return 0;
+}
+
+
+int DRC_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
+{
+    if( m_drcDialog )
+        m_drcDialog->ExcludeMarker();
+
+    return 0;
+}
+
+
 void DRC_TOOL::setTransitions()
 {
     Go( &DRC_TOOL::ShowDRCDialog,              PCB_ACTIONS::runDRC.MakeEvent() );
+    Go( &DRC_TOOL::PrevMarker,                 ACTIONS::prevMarker.MakeEvent() );
+    Go( &DRC_TOOL::NextMarker,                 ACTIONS::nextMarker.MakeEvent() );
+    Go( &DRC_TOOL::ExcludeMarker,              ACTIONS::excludeMarker.MakeEvent() );
 }
 
 

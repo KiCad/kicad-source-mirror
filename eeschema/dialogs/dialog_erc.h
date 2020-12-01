@@ -57,6 +57,10 @@ public:
     void AdvancePhase( const wxString& aMessage ) override;
     void Report( const wxString& aMessage ) override;
 
+    void PrevMarker();
+    void NextMarker();
+    void ExcludeMarker();
+
 private:
     // from DIALOG_ERC_BASE:
     void OnCloseErcDialog( wxCloseEvent& event ) override;
