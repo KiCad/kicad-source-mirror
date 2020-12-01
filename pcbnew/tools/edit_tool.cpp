@@ -1397,8 +1397,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_FOOTPRINT_T )
                 {
                     m_commit->Modify( bItem->GetParent() );
-                    getView()->Remove( group );
-                    bItem->GetParent()->Remove( group );
+                    getView()->Remove( bItem );
+                    bItem->GetParent()->Remove( bItem );
                 }
                 else
                 {

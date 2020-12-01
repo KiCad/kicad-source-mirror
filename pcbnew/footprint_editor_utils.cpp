@@ -211,8 +211,13 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     }
     break;
 
+    case PCB_GROUP_T:
+        m_toolManager->RunAction( PCB_ACTIONS::groupProperties, true, aItem );
+        break;
+
     default:
-        wxASSERT( 0 );
+        wxFAIL_MSG( "FOOTPRINT_EDIT_FRAME::OnEditItemRequest: unsupported item type "
+                    + aItem->GetClass() );
         break;
     }
 }
