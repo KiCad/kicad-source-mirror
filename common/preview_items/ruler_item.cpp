@@ -109,11 +109,9 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
     // could start at a set number of MM, but that's not available in common
     aTickSpace = 1;
 
-    // convert to a round (mod-10) number of mils
-    if( aUnits == EDA_UNITS::INCHES )
-    {
+    // Convert to a round (mod-10) number of mils for imperial units
+    if( EDA_UNIT_UTILS::IsImperialUnit( aUnits ) )
         aTickSpace *= 2.54;
-    }
 
     int tickFormat = 0;
 
