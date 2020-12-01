@@ -743,7 +743,7 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         {
             WX_INFOBAR* infobar = frame()->GetInfoBar();
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                           _("Show board setup"), wxEmptyString );
+                                                           _( "Show board setup" ), wxEmptyString );
 
             button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                     [&]( wxHyperlinkEvent& aEvent )
@@ -764,7 +764,7 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         {
             WX_INFOBAR* infobar = frame()->GetInfoBar();
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                           _("Show board setup"), wxEmptyString );
+                                                           _( "Show board setup" ), wxEmptyString );
 
             button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                     [&]( wxHyperlinkEvent& aEvent )
@@ -818,8 +818,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         break;
 
     case VIATYPE::MICROVIA:
-        wxASSERT_MSG( !selectLayer,
-                "Unexpected select layer for microvia (microvia layers are implicit)" );
+        wxASSERT_MSG( !selectLayer, "Unexpected select layer for microvia (microvia layers are "
+                                    "implicit)" );
 
         if( currentLayer == F_Cu || currentLayer == In1_Cu )
         {
@@ -835,8 +835,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
         }
         else
         {
-            wxASSERT_MSG( false,
-                    "Invalid layer pair for microvia (must be on or adjacent to an outer layer)" );
+            wxASSERT_MSG( false, "Invalid layer pair for microvia (must be on or adjacent to an "
+                                 "outer layer)" );
         }
         break;
 

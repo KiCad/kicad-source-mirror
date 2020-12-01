@@ -20,6 +20,7 @@
  */
 
 #include <core/optional.h>
+#include <memory>
 
 #include "pns_arc.h"
 #include "pns_debug_decorator.h"
@@ -28,12 +29,8 @@
 #include "pns_router.h"
 #include "pns_shove.h"
 #include "pns_topology.h"
-#include "pns_utils.h"
 #include "pns_walkaround.h"
 
-#include <board_item.h>
-
-#include <memory>
 
 namespace PNS {
 
@@ -120,7 +117,6 @@ bool LINE_PLACER::handleSelfIntersections()
         return true;
     }
 
-
     tail.Intersect( head, ips );
 
     // no intesection points - nothing to reduce
@@ -182,7 +178,9 @@ bool LINE_PLACER::handlePullback()
     int n = tail.PointCount();
 
     if( n == 0 )
+    {
         return false;
+    }
     else if( n == 1 )
     {
         m_p_start = tail.CPoint( 0 );
@@ -309,9 +307,9 @@ bool LINE_PLACER::mergeHead()
     SHAPE_LINE_CHAIN& head = m_head.Line();
     SHAPE_LINE_CHAIN& tail = m_tail.Line();
 
-    const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE |
-                                DIRECTION_45::ANG_HALF_FULL |
-                                DIRECTION_45::ANG_UNDEFINED;
+    const int ForbiddenAngles = DIRECTION_45::ANG_ACUTE
+                                    | DIRECTION_45::ANG_HALF_FULL
+                                    | DIRECTION_45::ANG_UNDEFINED;
 
     head.Simplify();
     tail.Simplify();
@@ -491,12 +489,12 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
     // If we are allowing DRC violations, we don't push back to the hull
     if( !Settings().CanViolateDRC() )
     {
-        for( auto& obs : obstacles )
+        for( OBSTACLE& obs : obstacles )
         {
             int cl = m_currentNode->GetClearance( obs.m_item, &newHead );
-            auto hull = obs.m_item->Hull( cl, newHead.Width(), newHead.Layer() );
+            const SHAPE_LINE_CHAIN hull = obs.m_item->Hull( cl, newHead.Width(), newHead.Layer() );
 
-            auto nearest = hull.NearestPoint( aP );
+            VECTOR2I nearest = hull.NearestPoint( aP );
             Dbg()->AddLine( hull, 2, 10000 );
 
             if( ( nearest - aP ).EuclideanNorm() < newHead.Width() + cl )
@@ -581,16 +579,14 @@ bool LINE_PLACER::rhStopAtNearestObstacle( const VECTOR2I& aP, LINE& aNewHead )
 
     LINE l_cur = reduceToNearestObstacle( l0 );
 
-    const auto l_shape = l_cur.CLine();
+    const SHAPE_LINE_CHAIN l_shape = l_cur.CLine();
 
     if( l_shape.SegmentCount() == 0 )
-    {
         return false;
-    }
 
     if( l_shape.SegmentCount() == 1 )
     {
-        auto s = l_shape.CSegment( 0 );
+        SEG s = l_shape.CSegment( 0 );
 
         VECTOR2I dL( DIRECTION_45( s ).Left().ToVector() );
         VECTOR2I dR( DIRECTION_45( s ).Right().ToVector() );
@@ -691,17 +687,15 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
     if( status == SHOVE::SH_OK  || status == SHOVE::SH_HEAD_MODIFIED )
     {
         if( status == SHOVE::SH_HEAD_MODIFIED )
-        {
             l2 = m_shove->NewHead();
-        }
 
         optimizer.SetWorld( m_currentNode );
 
         int effortLevel = OPTIMIZER::MERGE_OBTUSE;
+
         if( Settings().SmartPads() )
-        {
             effortLevel = OPTIMIZER::SMART_PADS;
-        }
+
         optimizer.SetEffortLevel( effortLevel );
 
         optimizer.SetCollisionMask( ITEM::ANY_T );
@@ -818,7 +812,9 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
     LINE new_head;
 
     wxLogTrace( "PNS", "INIT-DIR: %s head: %d, tail: %d segs",
-            m_initial_direction.Format().c_str(), m_head.SegmentCount(), m_tail.SegmentCount() );
+                m_initial_direction.Format().c_str(),
+                m_head.SegmentCount(),
+                m_tail.SegmentCount() );
 
     for( i = 0; i < n_iter; i++ )
     {
@@ -921,10 +917,7 @@ bool LINE_PLACER::SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I
 
     SEGMENT* s_old = static_cast<SEGMENT*>( aSeg );
 
-    std::unique_ptr< SEGMENT > s_new[2] = {
-        Clone( *s_old ),
-        Clone( *s_old )
-    };
+    std::unique_ptr<SEGMENT> s_new[2] = { Clone( *s_old ), Clone( *s_old ) };
 
     s_new[0]->SetEnds( s_old->Seg().A, aP );
     s_new[1]->SetEnds( aP, s_old->Seg().B );
@@ -948,7 +941,8 @@ bool LINE_PLACER::SetLayer( int aLayer )
     {
         return false;
     }
-    else if( !m_startItem || ( m_startItem->OfKind( ITEM::VIA_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
+    else if( !m_startItem
+            || ( m_startItem->OfKind( ITEM::VIA_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
         m_head.Line().Clear();
@@ -1024,7 +1018,9 @@ void LINE_PLACER::initPlacement()
     setWorld( rootNode );
 
     wxLogTrace( "PNS", "world %p, intitial-direction %s layer %d",
-            m_world, m_direction.Format().c_str(), m_currentLayer );
+                m_world,
+                m_direction.Format().c_str(),
+                m_currentLayer );
 
     m_lastNode = NULL;
     m_currentNode = m_world;
@@ -1033,9 +1029,7 @@ void LINE_PLACER::initPlacement()
     m_shove.reset();
 
     if( m_currentMode == RM_Shove || m_currentMode == RM_Smart )
-    {
         m_shove = std::make_unique<SHOVE>( m_world->Branch(), Router() );
-    }
 }
 
 
@@ -1066,7 +1060,10 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
 
-    if( reachesEnd && eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth && current.SegmentCount() )
+    if( reachesEnd
+            && eiDepth >= 0
+            && aEndItem && latestNode->Depth() > eiDepth
+            && current.SegmentCount() )
     {
         SplitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
 
@@ -1102,7 +1099,9 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
                 pl.SetNet( m_currentNet );
             }
             else if (aEndItem->Net() <= 0 )
+            {
                 aEndItem->SetNet( m_currentNet );
+            }
         }
 
         // Collisions still prevent fixing unless "Allow DRC violations" is checked
@@ -1157,6 +1156,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
             auto       seg = std::make_unique<SEGMENT>( s, m_currentNet );
             seg->SetWidth( pl.Width() );
             seg->SetLayer( m_currentLayer );
+
             if( !m_lastNode->Add( std::move( seg ) ) )
                 lastSeg = nullptr;
         }
@@ -1175,13 +1175,10 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     }
 
     if( pl.EndsWithVia() )
-    {
         m_lastNode->Add( Clone( pl.Via() ) );
-    }
 
     if( realEnd && lastSeg )
         simplifyNewLine( m_lastNode, lastSeg );
-
 
     if( !realEnd )
     {
@@ -1205,10 +1202,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_lastNode = m_lastNode->Branch();
 
         if ( m_shove )
-        {
             m_shove->AddLockedSpringbackNode( m_currentNode );
-        }
-
 
         m_postureSolver.Clear();
         m_postureSolver.SetTolerance( m_head.Width() );
@@ -1291,7 +1285,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 
     for( int s = 0; s < aLatest.LinkCount(); s++ )
     {
-        auto seg = aLatest.GetLink(s);
+        LINKED_ITEM* seg = aLatest.GetLink(s);
         LINE ourLine = aNode->AssembleLine( seg );
         JOINT a, b;
         std::vector<LINE> lines;
@@ -1299,9 +1293,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
         aNode->FindLineEnds( ourLine, a, b );
 
         if( a == b )
-        {
             aNode->FindLineEnds( aLatest, a, b );
-        }
 
         aNode->FindLinesBetweenJoints( a, b, lines );
 
@@ -1324,7 +1316,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
         wxLogTrace( "PNS", "total segs removed: %d/%d", removedCount, total );
     }
 
-    for( auto s : toErase )
+    for( LINKED_ITEM* s : toErase )
         aNode->Remove( s );
 
     aNode->Remove( aLatest );
@@ -1382,7 +1374,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
     SHAPE_LINE_CHAIN l;
     int initial_radius = 0;
 
-    auto guessedDir = m_postureSolver.GetPosture( aP );
+    DIRECTION_45 guessedDir = m_postureSolver.GetPosture( aP );
 
     if( m_p_start == aP )
     {
@@ -1461,7 +1453,7 @@ bool LINE_PLACER::AbortPlacement()
     return true;
 }
 
-FIXED_TAIL::FIXED_TAIL ( int aLineCount )
+FIXED_TAIL::FIXED_TAIL( int aLineCount )
 {
 
 }
@@ -1476,7 +1468,8 @@ void FIXED_TAIL::Clear()
     m_stages.clear();
 }
 
-void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction, NODE *aNode )
+void FIXED_TAIL::AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
+                           NODE *aNode )
 {
     STAGE st;
     FIX_POINT pt;
@@ -1496,7 +1489,6 @@ bool FIXED_TAIL::PopStage( FIXED_TAIL::STAGE& aStage )
 {
     if( !m_stages.size() )
         return false;
-
 
     aStage = m_stages.back();
 
