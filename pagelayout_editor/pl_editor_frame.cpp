@@ -60,6 +60,7 @@
 #include "tools/pl_point_editor.h"
 #include "invoke_pl_editor_dialog.h"
 #include "tools/pl_editor_control.h"
+#include <zoom_defines.h>
 
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )

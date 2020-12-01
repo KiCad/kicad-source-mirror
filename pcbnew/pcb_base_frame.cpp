@@ -49,6 +49,8 @@
 #include <tools/pcb_actions.h>
 #include <tool/grid_menu.h>
 #include "cleanup_item.h"
+#include <zoom_defines.h>
+
 
 wxDEFINE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
@@ -566,7 +568,9 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    if( aCfg->m_Window.grid.sizes.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    // if( aCfg->m_Window.grid.sizes.empty() )
     {
         aCfg->m_Window.grid.sizes = { "1000 mil",
                                       "500 mil",
@@ -592,12 +596,11 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
                                       "0.01 mm" };
     }
 
-    if( aCfg->m_Window.zoom_factors.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    // if( aCfg->m_Window.zoom_factors.empty() )
     {
-        aCfg->m_Window.zoom_factors = { 0.035,
-                                        0.05,
-                                        0.08,
-                                        0.13,
+        aCfg->m_Window.zoom_factors = { 0.13,
                                         0.22,
                                         0.35,
                                         0.6,

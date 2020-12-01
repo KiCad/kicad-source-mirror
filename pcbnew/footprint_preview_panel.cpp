@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <view/view.h>
 #include <wx/stattext.h>
+#include <zoom_defines.h>
 
 /**
  * Threadsafe interface class between loader thread and panel class.
@@ -413,7 +414,9 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
-    if( cfg->m_Window.grid.sizes.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    // if( cfg->m_Window.grid.sizes.empty() )
     {
         cfg->m_Window.grid.sizes = { "1000 mil",
                                      "500 mil",
@@ -439,12 +442,11 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
                                      "0.01 mm" };
     }
 
-    if( cfg->m_Window.zoom_factors.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    //if( cfg->m_Window.zoom_factors.empty() )
     {
-        cfg->m_Window.zoom_factors = { 0.035,
-                                       0.05,
-                                       0.08,
-                                       0.13,
+        cfg->m_Window.zoom_factors = { 0.13,
                                        0.22,
                                        0.35,
                                        0.6,

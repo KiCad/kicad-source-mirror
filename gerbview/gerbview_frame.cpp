@@ -61,6 +61,7 @@
 #include "widgets/gbr_layer_box_selector.h"
 #include "widgets/gerbview_layer_widget.h"
 #include "widgets/dcode_selection_box.h"
+#include <zoom_defines.h>
 
 
 GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )

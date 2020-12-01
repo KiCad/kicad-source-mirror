@@ -46,6 +46,7 @@
 #include <widgets/paged_dialog.h>
 #include <wildcards_and_files_ext.h>
 #include <page_layout/ws_data_model.h>
+#include <zoom_defines.h>
 
 
 /// Helper for all the old plotting/printing code while it still exists

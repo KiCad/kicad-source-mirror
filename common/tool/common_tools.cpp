@@ -39,6 +39,7 @@
 #include <tool/tool_manager.h>
 #include <view/view.h>
 #include <view/view_controls.h>
+#include <zoom_defines.h>
 
 
 COMMON_TOOLS::COMMON_TOOLS() :

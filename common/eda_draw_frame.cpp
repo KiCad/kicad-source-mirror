@@ -57,6 +57,7 @@
 #include <wx/snglinst.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/ui_common.h>
+#include <zoom_defines.h>
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum size of the find/replace history stacks.
 
