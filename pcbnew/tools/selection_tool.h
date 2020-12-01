@@ -353,6 +353,8 @@ private:
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
+    int hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem, int aMaxDistance ) const;
+
     /**
      * Event handler to update the selection VIEW_ITEM.
      */

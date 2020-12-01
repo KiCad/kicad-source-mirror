@@ -2169,6 +2169,88 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
+int SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem,
+                                     int aMaxDistance ) const
+{
+    BOX2D viewportD = getView()->GetViewport();
+    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+    int   distance = INT_MAX;
+    SEG   loc( aWhere, aWhere );
+
+    switch( aItem->Type() )
+    {
+    case PCB_TEXT_T:
+    {
+        PCB_TEXT* text = static_cast<PCB_TEXT*>( aItem );
+        text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
+    }
+        break;
+
+    case PCB_FP_TEXT_T:
+    {
+        FP_TEXT* text = static_cast<FP_TEXT*>( aItem );
+        text->GetEffectiveTextShape()->Collide( loc, aMaxDistance, &distance );
+    }
+        break;
+
+    case PCB_ZONE_T:
+    {
+        ZONE* zone = static_cast<ZONE*>( aItem );
+
+        // Zone borders are very specific
+        if( zone->HitTestForEdge( aWhere, aMaxDistance / 2 ) )
+            distance = 0;
+        else if( zone->HitTestForEdge( aWhere, aMaxDistance ) )
+            distance = aMaxDistance / 2;
+        else
+            aItem->GetEffectiveShape()->Collide( loc, aMaxDistance, &distance );
+    }
+        break;
+
+    case PCB_FOOTPRINT_T:
+    {
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
+
+        footprint->GetBoundingHull().Collide( loc, aMaxDistance, &distance );
+
+        // Consider footprints larger than the viewport only as a last resort
+        if( aItem->ViewBBox().GetHeight() > viewport.GetHeight()
+            || aItem->ViewBBox().GetWidth() > viewport.GetWidth() )
+        {
+            distance = INT_MAX / 2;
+        }
+    }
+        break;
+
+    case PCB_MARKER_T:
+    {
+        PCB_MARKER*      marker = static_cast<PCB_MARKER*>( aItem );
+        SHAPE_LINE_CHAIN polygon;
+
+        marker->ShapeToPolygon( polygon );
+        polygon.Move( marker->GetPos() );
+        polygon.Collide( loc, aMaxDistance, &distance );
+    }
+        break;
+
+    case PCB_GROUP_T:
+    {
+        PCB_GROUP* group = static_cast<PCB_GROUP*>( aItem );
+
+        for( BOARD_ITEM* member : group->GetItems() )
+            distance = std::min( distance, hitTestDistance( aWhere, member, aMaxDistance ) );
+    }
+        break;
+
+    default:
+        aItem->GetEffectiveShape()->Collide( loc, aMaxDistance, &distance );
+        break;
+    }
+
+    return distance;
+}
+
+
 // The general idea here is that if the user clicks directly on a small item inside a larger
 // one, then they want the small item.  The quintessential case of this is clicking on a pad
 // within a footprint, but we also apply it for text within a footprint, footprints within
@@ -2219,93 +2301,29 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
     // Prefer exact hits to sloppy ones
 
-    constexpr int maxSlop = 5;
+    constexpr int MAX_SLOP = 5;
 
-    BOX2D viewportD = getView()->GetViewport();
-    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
-    int   pixel = (int) aCollector.GetGuide()->OnePixelInIU();
-    int   minActual = INT_MAX;
-    SEG   loc( where, where );
+    int pixel = (int) aCollector.GetGuide()->OnePixelInIU();
+    int minSlop = INT_MAX;
 
     std::map<BOARD_ITEM*, int> itemsBySloppiness;
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
         BOARD_ITEM* item = aCollector[i];
-        int         actualSlop = INT_MAX;
+        int         itemSlop = hitTestDistance( where, item, MAX_SLOP * pixel );
 
-        switch( item->Type() )
-        {
-        case PCB_TEXT_T:
-        {
-            PCB_TEXT* text = static_cast<PCB_TEXT*>( item );
-            text->GetEffectiveTextShape()->Collide( loc, maxSlop * pixel, &actualSlop );
-        }
-            break;
+        itemsBySloppiness[ item ] = itemSlop;
 
-        case PCB_FP_TEXT_T:
-        {
-            FP_TEXT* text = static_cast<FP_TEXT*>( item );
-            text->GetEffectiveTextShape()->Collide( loc, maxSlop * pixel, &actualSlop );
-        }
-            break;
-
-        case PCB_ZONE_T:
-        {
-            ZONE* zone = static_cast<ZONE*>( item );
-
-            // Zone borders are very specific
-            if( zone->HitTestForEdge( where, maxSlop * pixel / 2 ) )
-                actualSlop = 0;
-            else if( zone->HitTestForEdge( where, maxSlop * pixel ) )
-                actualSlop = maxSlop * pixel / 2;
-            else
-                item->GetEffectiveShape()->Collide( loc, maxSlop * pixel, &actualSlop );
-        }
-            break;
-
-        case PCB_FOOTPRINT_T:
-        {
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-
-            footprint->GetBoundingHull().Collide( loc, maxSlop * pixel, &actualSlop );
-
-            // Consider footprints larger than the viewport only as a last resort
-            if( item->ViewBBox().GetHeight() > viewport.GetHeight()
-                        ||  item->ViewBBox().GetWidth() > viewport.GetWidth() )
-            {
-                actualSlop = INT_MAX / 2;
-            }
-        }
-            break;
-
-        case PCB_MARKER_T:
-        {
-            PCB_MARKER*      marker = static_cast<PCB_MARKER*>( item );
-            SHAPE_LINE_CHAIN polygon;
-
-            marker->ShapeToPolygon( polygon );
-            polygon.Move( marker->GetPos() );
-            polygon.Collide( loc, maxSlop * pixel, &actualSlop );
-        }
-            break;
-
-        default:
-            item->GetEffectiveShape()->Collide( loc, maxSlop * pixel, &actualSlop );
-            break;
-        }
-
-        itemsBySloppiness[ item ] = actualSlop;
-
-        if( actualSlop < minActual )
-            minActual = actualSlop;
+        if( itemSlop < minSlop )
+            minSlop = itemSlop;
     }
 
     // Prune sloppier items
 
     for( std::pair<BOARD_ITEM*, int> pair : itemsBySloppiness )
     {
-        if( pair.second > minActual + pixel )
+        if( pair.second > minSlop + pixel )
             aCollector.Transfer( pair.first );
     }
 
@@ -2322,10 +2340,10 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         double      area;
 
         if( item->Type() == PCB_ZONE_T
-                && static_cast<ZONE*>( item )->HitTestForEdge( where, maxSlop * pixel / 2 ) )
+                && static_cast<ZONE*>( item )->HitTestForEdge( where, MAX_SLOP * pixel / 2 ) )
         {
             // Zone borders are very specific, so make them "small"
-            area = maxSlop * pixel * pixel;
+            area = MAX_SLOP * pixel * pixel;
         }
         else
         {

@@ -35,6 +35,7 @@
 #include <fp_shape.h>
 #include <pcb_text.h>
 #include <pcb_marker.h>
+#include <pcb_group.h>
 #include <footprint.h>
 #include <view/view.h>
 #include <geometry/shape_null.h>
@@ -1640,7 +1641,17 @@ double FOOTPRINT::GetCoverageArea( const BOARD_ITEM* aItem, const GENERAL_COLLEC
         marker->ShapeToPolygon( markerShape );
         return markerShape.Area();
     }
-    else if( aItem->Type() == PCB_FOOTPRINT_T )
+    else if( aItem->Type() == PCB_GROUP_T )
+    {
+        double combinedArea = 0.0;
+
+        for( BOARD_ITEM* member : static_cast<const PCB_GROUP*>( aItem )->GetItems() )
+            combinedArea += GetCoverageArea( member, aCollector );
+
+        return combinedArea;
+    }
+
+    if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
 
