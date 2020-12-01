@@ -50,7 +50,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Assign Footprints" ) );
 
-    //-- Preferences menu -----------------------------------------------
+    //-- Edit menu -----------------------------------------------------------
     //
     ACTION_MENU* editMenu = new ACTION_MENU( false, tool );
 
@@ -62,7 +62,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     editMenu->Add( ACTIONS::copy );
     editMenu->Add( ACTIONS::paste );
 
-    //-- Preferences menu -----------------------------------------------
+    //-- Preferences menu ----------------------------------------------------
     //
     ACTION_MENU* prefsMenu = new ACTION_MENU( false, tool );
 

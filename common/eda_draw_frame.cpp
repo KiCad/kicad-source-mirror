@@ -439,14 +439,6 @@ void EDA_DRAW_FRAME::AddStandardSubMenus( TOOL_MENU& aToolMenu )
     CONDITIONAL_MENU& aMenu = aToolMenu.GetMenu();
 
     aMenu.AddSeparator( 1000 );
-    aMenu.AddItem( ACTIONS::zoomCenter,    SELECTION_CONDITIONS::ShowAlways, 1000 );
-    aMenu.AddItem( ACTIONS::zoomIn,        SELECTION_CONDITIONS::ShowAlways, 1000 );
-    aMenu.AddItem( ACTIONS::zoomOut,       SELECTION_CONDITIONS::ShowAlways, 1000 );
-    aMenu.AddItem( ACTIONS::zoomFitScreen, SELECTION_CONDITIONS::ShowAlways, 1000 );
-    if( IsType( FRAME_SCH ) || IsType( FRAME_PCB_EDITOR ) )
-        aMenu.AddItem( ACTIONS::zoomFitObjects, SELECTION_CONDITIONS::ShowAlways, 1000 );
-
-    aMenu.AddSeparator( 1000 );
 
     auto zoomMenu = std::make_shared<ZOOM_MENU>( this );
     zoomMenu->SetTool( commonTools );
