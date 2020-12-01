@@ -915,7 +915,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
     if( m_isDryRun )
     {
-        for( const std::pair<wxString, NETINFO_ITEM*>& addedNet : m_addedNets )
+        for( const std::pair<const wxString, NETINFO_ITEM*>& addedNet : m_addedNets )
             delete addedNet.second;
 
         m_addedNets.clear();

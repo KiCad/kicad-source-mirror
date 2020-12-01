@@ -752,7 +752,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
 
             // Now we can load the wires
-            for( const VECTOR2I pt : wireChain.CPoints() )
+            for( const VECTOR2I& pt : wireChain.CPoints() )
             {
                 if( firstPt )
                 {

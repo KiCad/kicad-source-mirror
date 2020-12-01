@@ -79,14 +79,13 @@ PANEL_EESCHEMA_COLOR_SETTINGS::PANEL_EESCHEMA_COLOR_SETTINGS( SCH_BASE_FRAME* aF
 
     createSwatches();
 
-    KIGFX::GAL_DISPLAY_OPTIONS options;
-    options.ReadConfig( *common_settings, app_settings->m_Window, this );
-    options.m_forceDisplayCursor = false;
+    m_galDisplayOptions.ReadConfig( *common_settings, app_settings->m_Window, this );
+    m_galDisplayOptions.m_forceDisplayCursor = false;
 
     auto type = static_cast<EDA_DRAW_PANEL_GAL::GAL_TYPE>( app_settings->m_Graphics.canvas_type );
 
     m_preview = new SCH_PREVIEW_PANEL( this, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-                                       options, type );
+                                       m_galDisplayOptions, type );
     m_preview->SetStealsFocus( false );
     m_preview->ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     m_preview->GetGAL()->SetAxesEnabled( false );

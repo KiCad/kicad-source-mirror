@@ -22,6 +22,7 @@
 #define PANEL_EESCHEMA_COLOR_SETTINGS_H_
 
 #include <gal/color4d.h>
+#include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
 #include <panel_color_settings.h>
 
@@ -68,6 +69,8 @@ private:
     TITLE_BLOCK*               m_titleBlock;
     KIGFX::WS_PROXY_VIEW_ITEM* m_ws;
     std::vector<EDA_ITEM*>     m_previewItems;
+
+    KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
 
 private:
     void createPreviewItems();
