@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"PO-Revision-Date: 2020-12-02 21:37+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -4926,84 +4926,89 @@ msgstr "Đường viền Sheet"
 
 #: common/layer_id.cpp:123
 msgid "Sheet background"
-msgstr ""
+msgstr "Nền Sheet"
 
 #: common/layer_id.cpp:124 eeschema/sch_sheet.cpp:55
 msgid "Sheet name"
-msgstr ""
+msgstr "Tên Sheet"
 
 #: common/layer_id.cpp:125
 msgid "Sheet fields"
-msgstr ""
+msgstr "Trường Sheet"
 
 #: common/layer_id.cpp:126
 msgid "Sheet file name"
-msgstr ""
+msgstr "Tên tệp Sheet"
 
 #: common/layer_id.cpp:127
 msgid "Sheet label"
-msgstr ""
+msgstr "Nhãn Sheet"
 
 #: common/layer_id.cpp:128
 msgid "No connect symbol"
-msgstr ""
+msgstr "Không có symbol kết nối"
 
 #: common/layer_id.cpp:129
 msgid "ERC warning"
-msgstr ""
+msgstr "Cảnh báo ERC"
 
 #: common/layer_id.cpp:130
 msgid "ERC error"
-msgstr ""
+msgstr "Lỗi ERC"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:168
+#, fuzzy
 msgid "Helper items"
-msgstr ""
+msgstr "Khoản mục trợ giúp"
 
 #: common/layer_id.cpp:132 common/layer_id.cpp:169 common/tool/grid_menu.cpp:40
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
 #: pcbnew/widgets/appearance_controls.cpp:354
 msgid "Grid"
-msgstr ""
+msgstr "Lưới"
 
 #: common/layer_id.cpp:133
 msgid "Axes"
-msgstr ""
+msgstr "Trục"
 
 #: common/layer_id.cpp:134 common/layer_id.cpp:171
 #: gerbview/widgets/gerbview_layer_widget.cpp:105
 msgid "Background"
-msgstr ""
+msgstr "Nền"
 
 #: common/layer_id.cpp:135 common/layer_id.cpp:167
 msgid "Cursor"
-msgstr ""
+msgstr "Con trỏ"
 
 #: common/layer_id.cpp:136
 msgid "Highlighted items"
-msgstr ""
+msgstr "Phần tử được tô sáng"
 
 #: common/layer_id.cpp:137
+#, fuzzy
 msgid "Hidden item"
-msgstr ""
+msgstr "Ẩn phần tử"
 
 #: common/layer_id.cpp:138 common/layer_id.cpp:172
 msgid "Selection highlight"
-msgstr ""
+msgstr "Tô sáng phần lựa chọn"
 
 #: common/layer_id.cpp:139 common/layer_id.cpp:166
 #: gerbview/widgets/gerbview_layer_widget.cpp:104
 #: pcbnew/widgets/appearance_controls.cpp:353
+#, fuzzy
 msgid "Worksheet"
-msgstr ""
+msgstr "Worksheet"
 
 #: common/layer_id.cpp:143 pcbnew/widgets/appearance_controls.cpp:338
+#, fuzzy
 msgid "Footprints Front"
-msgstr ""
+msgstr "Footprints Front"
 
 #: common/layer_id.cpp:144 pcbnew/widgets/appearance_controls.cpp:339
+#, fuzzy
 msgid "Footprints Back"
-msgstr ""
+msgstr "Footprints Back"
 
 #: common/layer_id.cpp:145
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:28
@@ -5012,105 +5017,118 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Values"
-msgstr ""
+msgstr "Giá trị"
 
 #: common/layer_id.cpp:146 pcbnew/dialogs/dialog_board_reannotate_base.cpp:294
+#, fuzzy
 msgid "Reference Designators"
-msgstr ""
+msgstr "Reference Designators"
 
 #: common/layer_id.cpp:147
+#, fuzzy
 msgid "Footprint Text Front"
-msgstr ""
+msgstr "Footprint Text Front"
 
 #: common/layer_id.cpp:148
+#, fuzzy
 msgid "Footprint Text Back"
-msgstr ""
+msgstr "Footprint Text Back"
 
 #: common/layer_id.cpp:149 pcbnew/widgets/appearance_controls.cpp:344
 msgid "Hidden Text"
-msgstr ""
+msgstr "Văn bản Ẩn"
 
 #: common/layer_id.cpp:150
+#, fuzzy
 msgid "Pads Front"
-msgstr ""
+msgstr "Pads Front"
 
 #: common/layer_id.cpp:151
+#, fuzzy
 msgid "Pads Back"
-msgstr ""
+msgstr "Pads Back"
 
 #: common/layer_id.cpp:152
 msgid "Through Hole Pads"
-msgstr ""
+msgstr "Các Pad xuyên lỗ"
 
 #: common/layer_id.cpp:153 pcbnew/dialogs/dialog_global_deletion_base.cpp:40
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:27
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:27
 #: pcbnew/widgets/appearance_controls.cpp:333
+#, fuzzy
 msgid "Tracks"
-msgstr ""
+msgstr "Tracks"
 
 #: common/layer_id.cpp:154 pcbnew/track.cpp:666
 msgid "Through Via"
-msgstr ""
+msgstr "Via xuyên lỗ"
 
 #: common/layer_id.cpp:155
+#, fuzzy
 msgid "Bl/Buried Via"
-msgstr ""
+msgstr "Bl/Buried Via"
 
 #: common/layer_id.cpp:156 pcbnew/track.cpp:664
+#, fuzzy
 msgid "Micro Via"
-msgstr ""
+msgstr "Micro Via"
 
 #: common/layer_id.cpp:157
+#, fuzzy
 msgid "Via Holes"
-msgstr ""
+msgstr "Via Holes"
 
 #: common/layer_id.cpp:158
 msgid "Non Plated Holes"
-msgstr ""
+msgstr "Lỗ không được mạ"
 
 #: common/layer_id.cpp:159 pcbnew/dialogs/panel_edit_options_base.cpp:127
 #: pcbnew/widgets/appearance_controls.cpp:347
 #: pcbnew/widgets/appearance_controls.cpp:655
+#, fuzzy
 msgid "Ratsnest"
-msgstr ""
+msgstr "Ratsnest"
 
 #: common/layer_id.cpp:160 pcbnew/widgets/appearance_controls.cpp:348
 msgid "No-Connects"
-msgstr ""
+msgstr "Không kết nối"
 
 #: common/layer_id.cpp:161 pcbnew/widgets/appearance_controls.cpp:349
 msgid "DRC Warnings"
-msgstr ""
+msgstr "Cảnh báo DRC"
 
 #: common/layer_id.cpp:162 pcbnew/widgets/appearance_controls.cpp:350
 msgid "DRC Errors"
-msgstr ""
+msgstr "Lỗi DRC"
 
 #: common/layer_id.cpp:163 pcbnew/widgets/appearance_controls.cpp:351
 msgid "DRC Exclusions"
-msgstr ""
+msgstr "Loại trừ DRC"
 
 #: common/layer_id.cpp:164
 msgid "DRC Marker Shadows"
-msgstr ""
+msgstr "Đổ Bóng đánh dấu DRC"
 
 #: common/layer_id.cpp:165 pcbnew/widgets/appearance_controls.cpp:352
+#, fuzzy
 msgid "Anchors"
-msgstr ""
+msgstr "Anchors"
 
 #: common/layer_id.cpp:170
 msgid "Grid Axes"
-msgstr ""
+msgstr "Trục lưới"
 
 #: common/lib_id.cpp:284
+#, fuzzy
 msgid "Illegal character found in logical library name"
-msgstr ""
+msgstr "Tìm thấy ký tự bất hợp pháp trong tên thư viện lô-gic"
 
 #: common/lib_id.cpp:301
+#, fuzzy
 msgid "Illegal character found in revision"
-msgstr ""
+msgstr "Ký tự bất hợp pháp được tìm thấy trong bản sửa đổi"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:61
 #: eeschema/sch_pin.cpp:166 eeschema/symbol_editor/symbol_editor.cpp:1161
@@ -5126,58 +5144,60 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:204
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:215
 msgid "Unit"
-msgstr ""
+msgstr "Đơn vị"
 
 #: common/lib_tree_model_adapter.cpp:265
 msgid "Item"
-msgstr ""
+msgstr "Mục"
 
 #: common/libeval_compiler/libeval_compiler.cpp:565
 #, c-format
 msgid "Unrecognized character '%c'"
-msgstr ""
+msgstr "Ký tự không được nhận dạng '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:830
+#, fuzzy
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "không xác định parent của tham số hàm"
 
 #: common/libeval_compiler/libeval_compiler.cpp:844
+#, fuzzy
 msgid "Unknown parent of property"
-msgstr ""
+msgstr "Không xác định parent của thuộc tính"
 
 #: common/libeval_compiler/libeval_compiler.cpp:861
 #: common/libeval_compiler/libeval_compiler.cpp:889
 #: common/libeval_compiler/libeval_compiler.cpp:962
 #: common/libeval_compiler/libeval_compiler.cpp:1024
-#, c-format
+#, c-format, fuzzy
 msgid "Unrecognized item '%s'"
-msgstr ""
+msgstr "Phần tử không được nhận ra '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:866
 #: common/libeval_compiler/libeval_compiler.cpp:966
-#, c-format
+#, c-format, fuzzy
 msgid "Unrecognized property '%s'"
-msgstr ""
+msgstr "Thuộc tính không nhận ra '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:901
 #, c-format
 msgid "Unrecognized function '%s'"
-msgstr ""
+msgstr "Hàm không được ghi nhận '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:996
 #, c-format
 msgid "Missing units for '%s'| (%s)"
-msgstr ""
+msgstr "Thiếu đơn vị cho '%s'| (%s)"
 
 #: common/page_layout/page_layout_reader.cpp:853
 #, c-format
 msgid "The file \"%s\" was not fully read"
-msgstr ""
+msgstr "Tệp \"%s\" chưa được đọc đầy đủ"
 
 #: common/page_layout/ws_data_model_io.cpp:101
 #: common/page_layout/ws_data_model_io.cpp:129
 msgid "Error writing page layout design file"
-msgstr ""
+msgstr "Lỗi ghi tệp tin thiết kế bố trí trang"
 
 #: common/page_layout/ws_draw_item.cpp:114 eeschema/pin_type.cpp:79
 #: gerbview/gerber_draw_item.cpp:230 pcbnew/board_item.cpp:35
@@ -5185,100 +5205,101 @@ msgstr ""
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:76
 msgid "Line"
-msgstr ""
+msgstr "Dòng"
 
 #: common/page_layout/ws_draw_item.cpp:127
 #: common/page_layout/ws_draw_item.cpp:298
 msgid "Imported Shape"
-msgstr ""
+msgstr "Hình dạng đã được nhập"
 
 #: common/page_layout/ws_draw_item.cpp:137
 msgid "First Page Only"
-msgstr ""
+msgstr "Chỉ trang đầu tiên"
 
 #: common/page_layout/ws_draw_item.cpp:138
+#, fuzzy
 msgid "Subsequent Pages"
-msgstr ""
+msgstr "Subsequent Pages"
 
 #: common/page_layout/ws_draw_item.cpp:139
 msgid "All Pages"
-msgstr ""
+msgstr "Tất cả các trang"
 
 #: common/page_layout/ws_draw_item.cpp:142
 msgid "First Page Option"
-msgstr ""
+msgstr "Tùy chọn Trang Đầu tiên"
 
 #: common/page_layout/ws_draw_item.cpp:145
 msgid "Repeat Count"
-msgstr ""
+msgstr "Đếm Lặp lại"
 
 #: common/page_layout/ws_draw_item.cpp:148
 msgid "Repeat Label Increment"
-msgstr ""
+msgstr "Lặp lại Nhãn tăng dần"
 
 #: common/page_layout/ws_draw_item.cpp:154
 msgid "Repeat Position Increment"
-msgstr ""
+msgstr "Lặp lại vị trí tăng dần"
 
 #: common/page_layout/ws_draw_item.cpp:156
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:39
 msgid "Comment"
-msgstr ""
+msgstr "Chú thích"
 
 #: common/page_layout/ws_draw_item.cpp:188
 #, c-format
 msgid "Text '%s'"
-msgstr ""
+msgstr "Văn bản '%s'"
 
 #: common/page_layout/ws_draw_item.cpp:357 eeschema/lib_rectangle.cpp:259
 #, c-format
 msgid "Rectangle, width %s height %s"
-msgstr ""
+msgstr "Hình chữ nhật, chiều rộng %s chiều cao %s"
 
 #: common/page_layout/ws_draw_item.cpp:390
 #, c-format
 msgid "Line, length %s"
-msgstr ""
+msgstr "Đường thẳng, chiều dài %s"
 
 #: common/page_layout/ws_draw_item.cpp:446
 msgid "Page Limits"
-msgstr ""
+msgstr "Giới hạn Trang"
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose it"
-msgstr ""
+msgstr "Không tìm thấy trình soạn thảo mặc định, bạn phải chọn nó"
 
 #: common/pgm_base.cpp:186
 msgid "Executable file (*.exe)|*.exe"
-msgstr ""
+msgstr "Tệp thực thi (*.exe)|*.exe"
 
 #: common/pgm_base.cpp:188
 msgid "Executable file (*)|*"
-msgstr ""
+msgstr "Tệp thực thi (*)|*"
 
 #: common/pgm_base.cpp:198
 msgid "Select Preferred Editor"
-msgstr ""
+msgstr "Chọn Trình soạn thảo Ưu tiên"
 
 #: common/pgm_base.cpp:217
 #, c-format
 msgid "%s is already running. Continue?"
-msgstr ""
+msgstr "%s đã chạy rồi. Tiếp tục?"
 
 #: common/pgm_base.cpp:596
 msgid "This language is not supported by the operating system."
-msgstr ""
+msgstr "Ngôn ngữ này không được hỗ trợ bởi hệ điều hành."
 
 #: common/pgm_base.cpp:661
 msgid "The KiCad language file for this language is not installed."
-msgstr ""
+msgstr "Tệp ngôn ngữ KiCad cho ngôn ngữ này không được cài đặt."
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1979
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:240
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, c-format
 msgid "Cannot open file '%s'"
-msgstr ""
+msgstr "Không thể mở tệp '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:1995
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2013
@@ -5286,192 +5307,193 @@ msgstr ""
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2035
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2041
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "Tệp đã chọn không hợp lệ hoặc có thể bị hỏng!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2139
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "một số điểm không mong đợi trong '%s'. Tìm thấy %d nhưng mong đợi %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:38
 #, c-format
 msgid "Missing node '%s' in '%s'"
-msgstr ""
+msgstr "Thiếu nút '%s' trong '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:41
 #, c-format
 msgid "Unknown node '%s' in '%s'"
-msgstr ""
+msgstr "Nút không biết '%s' trong '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:44
 #, c-format
 msgid "Missing Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Thiếu tham số '%s' trong '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Tham số Không biết '%s' trong '%s'"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
 #, c-format
 msgid "Unable to parse '%s' in '%s'"
-msgstr ""
+msgstr "Không thể phân tích cú pháp '%s' trong '%s'"
 
 #: common/plugins/eagle/eagle_parser.cpp:115
 #, c-format
 msgid "Invalid size %lld: too large"
-msgstr ""
+msgstr "Kích thước không hợp lệ %lld: quá lớn"
 
 #: common/plugins/eagle/eagle_parser.cpp:277
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f"
-msgstr ""
+msgstr "Arc không hợp lệ với bán kính %f và góc %f"
 
 #: common/project.cpp:311 common/project.cpp:316
 msgid "Error loading project footprint library table"
-msgstr ""
+msgstr "Lỗi tải bảng thư viện footprint trong dự án"
 
 #: common/project/project_archiver.cpp:90
 msgid "Could not open archive file\n"
-msgstr ""
+msgstr "Không thể mở tệp lưu trữ\n"
 
 #: common/project/project_archiver.cpp:99
 msgid "Invalid archive file format\n"
-msgstr ""
+msgstr "Định dạng tệp lưu trữ không hợp lệ\n"
 
 #: common/project/project_archiver.cpp:110
 #, c-format
 msgid "Extracting file \"%s\"\n"
-msgstr ""
+msgstr "Đang giải nén tệp \"%s\"\n"
 
 #: common/project/project_archiver.cpp:146
 msgid "Error extracting file!\n"
-msgstr ""
+msgstr "Lỗi giải nén tập tin!\n"
 
 #: common/project/project_archiver.cpp:195
 #, c-format
 msgid "Unable to create archive file \"%s\"\n"
-msgstr ""
+msgstr "Không thể tạo tệp lưu trữ \"%s\"\n"
 
 #: common/project/project_archiver.cpp:235
 #, c-format
 msgid "Archive file \"%s\"\n"
-msgstr ""
+msgstr "Tệp lưu trữ\"%s\"\n"
 
 #: common/project/project_archiver.cpp:245
 #, c-format
 msgid "Archive file \"%s\": Failed!\n"
-msgstr ""
+msgstr "Tệp lưu trữ \"%s\": Thất bại!\n"
 
 #: common/project/project_archiver.cpp:271
 #, c-format
 msgid "Zip archive \"%s\" created (%s uncompressed, %s compressed)\n"
-msgstr ""
+msgstr "Kho lưu trữ zip \"%s\" được tạo (%s không nén, %s nén)\n"
 
 #: common/rc_item.cpp:328
 msgid "Excluded "
-msgstr ""
+msgstr "Loại trừ "
 
 #: common/rc_item.cpp:332
 msgid "Error: "
-msgstr ""
+msgstr "Lỗi: "
 
 #: common/rc_item.cpp:333
 msgid "Warning: "
-msgstr ""
+msgstr "Cảnh báo: "
 
 #: common/richio.cpp:171
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
-msgstr ""
+msgstr "Không thể mở tên tệp \"%s\" để đọc"
 
 #: common/richio.cpp:205 common/richio.cpp:300
 msgid "Maximum line length exceeded"
-msgstr ""
+msgstr "Chiều dài dòng tối đa vượt quá"
 
 #: common/richio.cpp:267
 msgid "Line length exceeded"
-msgstr ""
+msgstr "Chiều dài dòng vượt quá"
 
 #: common/richio.cpp:551
 msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
-msgstr ""
+msgstr "OUTPUTSTREAM_OUTPUTFORMATTER lỗi ghi"
 
 #: common/settings/color_settings.cpp:312
+#, fuzzy
 msgid "(Footprints)"
-msgstr ""
+msgstr "(Footprints)"
 
 #: common/settings/color_settings.cpp:364
 msgid "KiCad Default"
-msgstr ""
+msgstr "Mặc định Kicad"
 
 #: common/settings/color_settings.cpp:369
 msgid "KiCad Classic"
-msgstr ""
+msgstr "KiCad cổ điển"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
 msgid "Field%d"
-msgstr ""
+msgstr "Trường%d"
 
 #: common/tool/action_menu.cpp:206
 #, c-format
 msgid "Close %s"
-msgstr ""
+msgstr "Đóng %s"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
-msgstr ""
+msgstr "Thoát"
 
 #: common/tool/action_menu.cpp:219
 #, c-format
 msgid "Quit %s"
-msgstr ""
+msgstr "Thoát khỏi %s"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
-msgstr ""
+msgstr "Mới..."
 
 #: common/tool/actions.cpp:41
 msgid "Create a new document in the editor"
-msgstr ""
+msgstr "Tạo tài liệu mới trong trình soạn thảo"
 
 #: common/tool/actions.cpp:47
 msgid "New Library..."
-msgstr ""
+msgstr "Thư viện Mới..."
 
 #: common/tool/actions.cpp:47
 msgid "Create a new library folder"
-msgstr ""
+msgstr "Tạo thư mục thư viện mới"
 
 #: common/tool/actions.cpp:53
 msgid "Add Library..."
-msgstr ""
+msgstr "Thêm Thư viện..."
 
 #: common/tool/actions.cpp:53
 msgid "Add an existing library folder"
-msgstr ""
+msgstr "Thêm thư mục thư viện hiện có"
 
 #: common/tool/actions.cpp:59
 msgid "Open..."
-msgstr ""
+msgstr "Mở..."
 
 #: common/tool/actions.cpp:59
 msgid "Open existing document"
-msgstr ""
+msgstr "Mở tài liệu hiện có"
 
 #: common/tool/actions.cpp:65
 msgid "Save changes"
-msgstr ""
+msgstr "Lưu thay đổi"
 
 #: common/tool/actions.cpp:71
 msgid "Save As..."
-msgstr ""
+msgstr "Lưu với tên..."
 
 #: common/tool/actions.cpp:71
 msgid "Save current document to another location"
-msgstr ""
+msgstr "Lưu tài liệu hiện tại vào vị trí khác"
 
 #: common/tool/actions.cpp:77
 msgid "Save Copy As..."
