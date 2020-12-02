@@ -482,28 +482,11 @@ void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
                                       "0.10 mm" };
     }
 
-    if( aCfg->m_Window.zoom_factors.empty() )
+    // Currently values read from config file are not used because the user cannot
+    // change this config
+    // if( aCfg->m_Window.zoom_factors.empty() )
     {
-        aCfg->m_Window.zoom_factors = { 0.022,
-                                        0.035,
-                                        0.05,
-                                        0.08,
-                                        0.13,
-                                        0.22,
-                                        0.35,
-                                        0.6,
-                                        1.0,
-                                        2.2,
-                                        3.5,
-                                        5.0,
-                                        8.0,
-                                        13.0,
-                                        22.0,
-                                        35.0,
-                                        50.0,
-                                        80.0,
-                                        130.0,
-                                        220.0 };
+        aCfg->m_Window.zoom_factors = { ZOOM_LIST_PL_EDITOR };
     }
 
     for( double& factor : aCfg->m_Window.zoom_factors )

@@ -72,3 +72,16 @@
 // Adjusted to display zoom level ~ 1 when the screen shows a 1:1 image.
 // Obviously depends on the monitor, but this is an acceptable value.
 #define ZOOM_COEFF 1.1
+
+// List of predefined zooms used in zoom in/out from hotkeys and toolbar
+#define ZOOM_LIST_GERBER 0.022, 0.035, 0.05, 0.08, 0.13, 0.22, 0.35, 0.6, 1.0,\
+                         2.2, 3.5, 5.0, 8.0, 13.0, 22.0, 35.0, 50.0, 80.0, 130.0, 220.0
+
+#define ZOOM_LIST_PCBNEW 0.13, 0.22, 0.35, 0.6, 1.0, 1.5, 2.2, 3.5, 5.0, 8.0, 13.0,\
+                         20.0, 35.0, 50.0, 80.0, 130.0, 220.0, 300.0
+
+#define ZOOM_LIST_PL_EDITOR 0.022, 0.035, 0.05, 0.08, 0.13, 0.22, 0.35, 0.6, 1.0, 2.2,\
+                            3.5, 5.0, 8.0, 13.0, 22.0, 35.0, 50.0, 80.0, 130.0, 220.0
+
+#define ZOOM_LIST_EESCHEMA 0.05, 0.07, 0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0,\
+                           3.0, 4.5, 6.5, 10.0, 15.0, 20.0, 30.0, 45.0, 65.0, 100.0
