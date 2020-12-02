@@ -352,6 +352,44 @@ bool WS_DRAW_ITEM_RECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
+bool WS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_RECT sel = aRect;
+
+    if ( aAccuracy )
+        sel.Inflate( aAccuracy );
+
+    if( aContained )
+        return sel.Contains( GetBoundingBox() );
+
+    // For greedy we need to check each side of the rect as we're pretty much always inside the
+    // rect which defines the worksheet frame.
+    EDA_RECT side = GetBoundingBox();
+    side.SetHeight( 0 );
+
+    if( sel.Intersects( side ) )
+        return true;
+
+    side.SetY( GetBoundingBox().GetBottom() );
+
+    if( sel.Intersects( side ) )
+        return true;
+
+    side = GetBoundingBox();
+    side.SetWidth( 0 );
+
+    if( sel.Intersects( side ) )
+        return true;
+
+    side.SetX( GetBoundingBox().GetRight() );
+
+    if( sel.Intersects( side ) )
+        return true;
+
+    return false;
+}
+
+
 wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 {
     return wxString::Format( _( "Rectangle, width %s height %s" ),

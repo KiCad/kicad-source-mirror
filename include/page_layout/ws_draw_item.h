@@ -226,6 +226,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
