@@ -139,18 +139,19 @@ static TICK_FORMAT getTickFormatForScale( double aScale, double& aTickSpace, EDA
  * @param aLine line vector
  * @param aMinorTickLen length of minor ticks in IU
  */
-void drawTicksAlongLine( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
                          double aMinorTickLen, EDA_UNITS aUnits, bool aDrawingDropShadows )
 {
+    KIGFX::GAL* gal = aView->GetGAL();
     VECTOR2D    tickLine = aLine.Rotate( -M_PI_2 );
     double      tickSpace;
-    TICK_FORMAT tickF = getTickFormatForScale( aGal->GetWorldScale(), tickSpace, aUnits );
+    TICK_FORMAT tickF = getTickFormatForScale( gal->GetWorldScale(), tickSpace, aUnits );
 
     // number of ticks in whole ruler
     int         numTicks = (int) std::ceil( aLine.EuclideanNorm() / tickSpace );
 
     // work out which way up the tick labels go
-    TEXT_DIMS   textDims = SetConstantGlyphHeight( aGal, -1 );
+    TEXT_DIMS   textDims = SetConstantGlyphHeight( gal, -1 );
     double      textThickness = textDims.StrokeWidth;
     double      labelAngle = -tickLine.Angle();
     double      textOffset = 0;
@@ -166,17 +167,26 @@ void drawTicksAlongLine( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR
 
     if( aLine.Angle() > 0 )
     {
-        aGal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
     }
     else
     {
-        aGal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_RIGHT );
         labelAngle += M_PI;
     }
+
+    BOX2D viewportD = aView->GetViewport();
+    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+
+    viewport.Inflate( majorTickLen * 2 );   // Doesn't have to be accurate, just big enough not
+                                            // to exclude anything that should be partially drawn
 
     for( int i = 0; i < numTicks; ++i )
     {
         const VECTOR2D tickPos = aOrigin + aLine.Resize( tickSpace * i );
+
+        if( !viewport.Contains( tickPos ) )
+            continue;
 
         double length = aMinorTickLen;
         bool drawLabel = false;
@@ -192,14 +202,14 @@ void drawTicksAlongLine( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR
             length *= midTickLengthFactor;
         }
 
-        aGal->SetLineWidth( textThickness / 2 );
-        aGal->DrawLine( tickPos, tickPos + tickLine.Resize( length ) );
+        gal->SetLineWidth( textThickness / 2 );
+        gal->DrawLine( tickPos, tickPos + tickLine.Resize( length ) );
 
         if( drawLabel )
         {
             wxString label = DimensionLabel( "", tickSpace * i, aUnits, false );
-            aGal->SetLineWidth( textThickness );
-            aGal->StrokeText( label, tickPos + labelOffset, labelAngle );
+            gal->SetLineWidth( textThickness );
+            gal->StrokeText( label, tickPos + labelOffset, labelAngle );
         }
     }
 }
@@ -215,18 +225,29 @@ void drawTicksAlongLine( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR
  * @param aTickLen length of ticks in IU
  * @param aNumDivisions number of parts to divide the line into
  */
-void drawBacksideTicks( KIGFX::GAL* aGal, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
+void drawBacksideTicks( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECTOR2D& aLine,
                         double aTickLen, int aNumDivisions, bool aDrawingDropShadows )
 {
+    KIGFX::GAL*    gal = aView->GetGAL();
     const double   backTickSpace = aLine.EuclideanNorm() / aNumDivisions;
     const VECTOR2D backTickVec = aLine.Rotate( M_PI_2 ).Resize( aTickLen );
-    TEXT_DIMS      textDims = SetConstantGlyphHeight( aGal, -1 );
+    TEXT_DIMS      textDims = SetConstantGlyphHeight( gal, -1 );
+
+    BOX2D viewportD = aView->GetViewport();
+    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+
+    viewport.Inflate( aTickLen * 4 );   // Doesn't have to be accurate, just big enough not to
+                                        // exclude anything that should be partially drawn
 
     for( int i = 0; i < aNumDivisions + 1; ++i )
     {
         const VECTOR2D backTickPos = aOrigin + aLine.Resize( backTickSpace * i );
-        aGal->SetLineWidth( getTickLineWidth( textDims, aDrawingDropShadows ) );
-        aGal->DrawLine( backTickPos, backTickPos + backTickVec );
+
+        if( !viewport.Contains( backTickPos ) )
+            continue;
+
+        gal->SetLineWidth( getTickLineWidth( textDims, aDrawingDropShadows ) );
+        gal->DrawLine( backTickPos, backTickPos + backTickVec );
     }
 }
 
@@ -297,9 +318,9 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     const double minorTickLen = 5.0 / gal->GetWorldScale();
     const double majorTickLen = minorTickLen * majorTickLengthFactor;
 
-    drawTicksAlongLine( gal, origin, rulerVec, minorTickLen, m_userUnits, drawingDropShadows );
+    drawTicksAlongLine( aView, origin, rulerVec, minorTickLen, m_userUnits, drawingDropShadows );
 
-    drawBacksideTicks( gal, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
+    drawBacksideTicks( aView, origin, rulerVec, majorTickLen, 2, drawingDropShadows );
 
     // draw the back of the origin "crosshair"
     gal->DrawLine( origin, origin + rulerVec.Resize( -minorTickLen * midTickLengthFactor ) );
