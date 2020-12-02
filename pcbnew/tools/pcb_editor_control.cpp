@@ -58,6 +58,7 @@
 #include <project/project_file.h> // LAST_PATH_TYPE
 #include <tool/tool_manager.h>
 #include <tools/tool_event_utils.h>
+#include <router/router_tool.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
 #include <wildcards_and_files_ext.h>
@@ -574,6 +575,24 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
         }
 
         commit.Push( "Increase Track Width" );
+        return 0;
+    }
+
+    ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
+
+    if( routerTool && routerTool->IsToolActive()
+            && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
+    {
+        int widthIndex = designSettings.GetDiffPairIndex() + 1;
+
+        // If we go past the last track width entry in the list, start over at the beginning
+        if( widthIndex >= (int) designSettings.m_DiffPairDimensionsList.size() )
+            widthIndex = 0;
+
+        designSettings.SetDiffPairIndex( widthIndex );
+        designSettings.UseCustomDiffPairDimensions( false );
+
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
     }
     else
     {
@@ -581,9 +600,7 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 
         // If we go past the last track width entry in the list, start over at the beginning
         if( widthIndex >= (int) designSettings.m_TrackWidthList.size() )
-        {
             widthIndex = 0;
-        }
 
         designSettings.SetTrackWidthIndex( widthIndex );
         designSettings.UseCustomTrackViaSize( false );
@@ -626,19 +643,32 @@ int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
         }
 
         commit.Push( "Decrease Track Width" );
+        return 0;
+    }
+
+    ROUTER_TOOL* routerTool = m_toolMgr->GetTool<ROUTER_TOOL>();
+
+    if( routerTool && routerTool->IsToolActive()
+            && routerTool->Router()->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR )
+    {
+        int widthIndex = designSettings.GetDiffPairIndex() - 1;
+
+        // If we get to the lowest entry start over at the highest
+        if( widthIndex < 0 )
+            widthIndex = designSettings.m_DiffPairDimensionsList.size() - 1;
+
+        designSettings.SetDiffPairIndex( widthIndex );
+        designSettings.UseCustomDiffPairDimensions( false );
+
+        m_toolMgr->RunAction( PCB_ACTIONS::trackViaSizeChanged, true );
     }
     else
     {
-        int widthIndex = 0; // Assume we only have a single track width entry
+        int widthIndex = designSettings.GetTrackWidthIndex() - 1;
 
-        // If there are more, cycle through them backwards
-        if( designSettings.m_TrackWidthList.size() > 0 )
-        {
-            widthIndex = designSettings.GetTrackWidthIndex() - 1;
-            // If we get to the lowest entry start over at the highest
-            if( widthIndex < 0 )
-                widthIndex = designSettings.m_TrackWidthList.size() - 1;
-        }
+        // If we get to the lowest entry start over at the highest
+        if( widthIndex < 0 )
+            widthIndex = designSettings.m_TrackWidthList.size() - 1;
 
         designSettings.SetTrackWidthIndex( widthIndex );
         designSettings.UseCustomTrackViaSize( false );
