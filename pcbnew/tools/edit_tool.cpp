@@ -81,9 +81,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
 
             // case 1: handle locking
             if( ( aFlags & EXCLUDE_LOCKED ) && fp && fp->IsLocked() )
-            {
                 aCollector.Remove( item );
-            }
 
             // case 2: selection contains both the footprint and its pads - remove the pads
             if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
@@ -157,11 +155,10 @@ SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool 
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
-    wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
+    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
     auto inFootprintEditor =
-            [ this ] ( const SELECTION& aSelection )
+            [ this ]( const SELECTION& aSelection )
             {
                 return m_isFootprintEditor;
             };
@@ -170,20 +167,20 @@ bool EDIT_TOOL::Init()
                                         && SELECTION_CONDITIONS::Count( 1 );
 
     auto noActiveToolCondition =
-            [ this ] ( const SELECTION& aSelection )
+            [ this ]( const SELECTION& aSelection )
             {
                 return frame()->ToolStackIsEmpty();
             };
 
     auto notMovingCondition =
-            [ this ] ( const SELECTION& aSelection )
+            [ this ]( const SELECTION& aSelection )
             {
                 return !frame()->IsCurrentTool( PCB_ACTIONS::move )
                        && !frame()->IsCurrentTool( PCB_ACTIONS::moveWithReference );
             };
 
     auto noItemsCondition =
-            [ this ] ( const SELECTION& aSelections ) -> bool
+            [ this ]( const SELECTION& aSelections ) -> bool
             {
                 return frame()->GetBoard() && !frame()->GetBoard()->IsEmpty();
             };
@@ -578,7 +575,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             }
 
-            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false, new VECTOR2I( movement ) );
+            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false,
+                                  new VECTOR2I( movement ) );
         }
 
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
@@ -668,9 +666,11 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
     for( EDA_ITEM* item : selection )
     {
-        if( auto via = dyn_cast<VIA*>( item ) )
+        if( item->Type() == PCB_VIA_T )
         {
-            m_commit->Modify( item );
+            VIA* via = static_cast<VIA*>( item );
+
+            m_commit->Modify( via );
 
             int new_width;
             int new_drill;
@@ -691,9 +691,11 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             via->SetDrill( new_drill );
             via->SetWidth( new_width );
         }
-        else if ( TRACK* track = dyn_cast<TRACK*>( item ) )
+        else if( item->Type() == PCB_TRACE_T || item->Type() == PCB_ARC_T )
         {
-            m_commit->Modify( item );
+            TRACK* track = dynamic_cast<TRACK*>( item );
+
+            m_commit->Modify( track );
 
             int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
             track->SetWidth( new_width );
@@ -720,12 +722,13 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     static long long filletRadiusIU = 0;
 
     auto& selection = m_selectionTool->RequestSelection(
-        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-        {
-                EditToolSelectionFilter(
-                        aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
-        },
-        nullptr, !m_dragging );
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            {
+                EditToolSelectionFilter( aCollector,
+                                         EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
+            },
+            nullptr, !m_dragging );
 
     if( selection.Size() < 2 )
     {
@@ -734,8 +737,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    WX_UNIT_ENTRY_DIALOG dia(
-            frame(), _( "Enter fillet radius:" ), _( "Fillet Tracks" ), filletRadiusIU );
+    WX_UNIT_ENTRY_DIALOG dia( frame(), _( "Enter fillet radius:" ), _( "Fillet Tracks" ),
+                              filletRadiusIU );
 
     if( dia.ShowModal() == wxID_CANCEL )
         return 0;
@@ -776,40 +779,40 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
         }        
 
         auto processFilletOp = 
-            [&]( bool aStartPoint ) 
-            {
-                wxPoint anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
-
-                std::vector<BOARD_CONNECTED_ITEM*> itemsOnAnchor =
-                    board()->GetConnectivity()->GetConnectedItemsAtAnchor( track, VECTOR2I( anchor ),
-                                                                   track_types );
-
-                if( itemsOnAnchor.size() > 0 && selection.Contains( itemsOnAnchor.at( 0 ) )
-                        && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
+                [&]( bool aStartPoint )
                 {
-                    TRACK* trackOther = dyn_cast<TRACK*>( itemsOnAnchor.at( 0 ) );
+                    wxPoint anchor = ( aStartPoint ) ? track->GetStart() : track->GetEnd();
+                    auto connectivity = board()->GetConnectivity();
+                    auto itemsOnAnchor = connectivity->GetConnectedItemsAtAnchor( track, anchor,
+                                                                                  track_types );
 
-                    // Make sure we don't fillet the same pair of tracks twice
-                    if( processedTracks.find( trackOther ) == processedTracks.end() )
+                    if( itemsOnAnchor.size() > 0
+                            && selection.Contains( itemsOnAnchor.at( 0 ) )
+                            && itemsOnAnchor.at( 0 )->Type() == PCB_TRACE_T )
                     {
-                        if( itemsOnAnchor.size() == 1 )
+                        TRACK* trackOther = dyn_cast<TRACK*>( itemsOnAnchor.at( 0 ) );
+
+                        // Make sure we don't fillet the same pair of tracks twice
+                        if( processedTracks.find( trackOther ) == processedTracks.end() )
                         {
-                            FILLET_OP filletOp;
-                            filletOp.t1      = track;
-                            filletOp.t2      = trackOther;
-                            filletOp.t1Start = aStartPoint;
-                            filletOp.t2Start = track->IsPointOnEnds( filletOp.t2->GetStart() );
-                            filletOperations.push_back( filletOp );
-                        }
-                        else
-                        {
-                            // User requested to fillet these two tracks but not possible as there are other
-                            // elements connected at that point
-                            didOneAttemptFail = true;
+                            if( itemsOnAnchor.size() == 1 )
+                            {
+                                FILLET_OP filletOp;
+                                filletOp.t1      = track;
+                                filletOp.t2      = trackOther;
+                                filletOp.t1Start = aStartPoint;
+                                filletOp.t2Start = track->IsPointOnEnds( filletOp.t2->GetStart() );
+                                filletOperations.push_back( filletOp );
+                            }
+                            else
+                            {
+                                // User requested to fillet these two tracks but not possible as there are other
+                                // elements connected at that point
+                                didOneAttemptFail = true;
+                            }
                         }
                     }
-                }
-            };
+                };
         
         processFilletOp( true ); // on the start point of track
         processFilletOp( false ); // on the end point of track
@@ -842,20 +845,21 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
             wxPoint t1newPoint, t2newPoint;
 
-            auto setIfPointOnSeg = []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest ) 
-                                   {
-                                       VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
+            auto setIfPointOnSeg =
+                    []( wxPoint& aPointToSet, SEG aSegment, VECTOR2I aVecToTest )
+                    {
+                        VECTOR2I segToVec = aSegment.NearestPoint( aVecToTest ) - aVecToTest;
 
-                                       // Find out if we are on the segment (minimum precision)
-                                       if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
-                                       {
-                                           aPointToSet.x = aVecToTest.x;
-                                           aPointToSet.y = aVecToTest.y;
-                                           return true;
-                                       }
+                        // Find out if we are on the segment (minimum precision)
+                        if( segToVec.EuclideanNorm() < SHAPE_ARC::MIN_PRECISION_IU )
+                        {
+                            aPointToSet.x = aVecToTest.x;
+                            aPointToSet.y = aVecToTest.y;
+                            return true;
+                        }
 
-                                       return false;
-                                   };
+                        return false;
+                    };
 
             //Do not draw a fillet if the end points of the arc are not within the track segments
             if( !setIfPointOnSeg( t1newPoint, t1Seg, sArc.GetP0() )
@@ -900,18 +904,12 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
     //select the newly created arcs
     for( BOARD_ITEM* item : itemsToAddToSelection )
-    {
         m_selectionTool->AddItemToSel( item );
-    }
 
     if( !operationPerformedOnAtLeastOne )
-    {
         frame()->ShowInfoBarMsg( _( "Unable to fillet the selected track segments." ) );
-    }
     else if( didOneAttemptFail )
-    {
         frame()->ShowInfoBarMsg( _( "Some of the track segments could not be filleted." ) );
-    }
 
     return 0;
 }
@@ -977,7 +975,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             },
             nullptr, ! m_dragging );
 
@@ -1078,7 +1077,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             },
             nullptr, !m_dragging );
 
@@ -1176,7 +1176,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             },
             nullptr, !m_dragging );
 
@@ -1259,10 +1260,11 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
     {
         selectionCopy = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
-            } );
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                {
+                    EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                             sTool );
+                } );
     }
 
     bool isHover = selectionCopy.IsHover();
@@ -1279,8 +1281,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
 
     // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
-    // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be done
-    // in the copyToClipboard() routine
+    // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be
+    // done in the copyToClipboard() routine
     if( !isCut )
     {
         // Second RequestSelection removes locked items but keeps a copy of their pointers
@@ -1571,7 +1573,8 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             } );
 
     if( selection.Empty() )
@@ -1703,7 +1706,8 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS, sTool );
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                                         sTool );
             } );
 
     if( selection.Empty() )
@@ -1730,7 +1734,8 @@ void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELEC
 }
 
 
-void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
+                                 SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
@@ -1898,9 +1903,9 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
     if( !copyToClipboard( aEvent ) )
     {
-        // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
-        // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be done
-        // in the copyToClipboard() routine
+        // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items
+        // that were copied to the clipboard, no more, no fewer.  Filtering for locked item, if
+        // any will be done in the copyToClipboard() routine
         TOOL_EVENT evt( aEvent.Category(), aEvent.Action(), TOOL_ACTION_SCOPE::AS_GLOBAL );
         evt.SetParameter( PCB_ACTIONS::REMOVE_FLAGS::CUT );
         Remove( evt );
