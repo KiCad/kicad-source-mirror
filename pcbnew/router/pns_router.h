@@ -159,7 +159,7 @@ public:
 
     void FlipPosture();
 
-    void SwitchLayer( int layer );
+    bool SwitchLayer( int layer );
 
     void ToggleViaPlacement();
     void SetOrthoMode( bool aEnable );

@@ -648,7 +648,19 @@ static PCB_LAYER_ID getTargetLayerFromEvent( const TOOL_EVENT& aEvent )
 }
 
 
+int ROUTER_TOOL::onLayerCommand( const TOOL_EVENT& aEvent )
+{
+    return handleLayerSwitch( aEvent, false );
+}
+
+
 int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
+{
+    return handleLayerSwitch( aEvent, true );
+}
+
+
+int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 {
     if( !IsToolActive() )
         return 0;
@@ -699,6 +711,13 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
             if( targetLayer == currentLayer )
                 return 0;
         }
+    }
+
+    if( !aForceVia && m_router && m_router->SwitchLayer( targetLayer ) )
+    {
+        updateEndItem( aEvent );
+        m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+        return 0;
     }
 
     BOARD_DESIGN_SETTINGS& bds        = board()->GetDesignSettings();
@@ -1042,12 +1061,6 @@ void ROUTER_TOOL::performRouting()
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
-            updateEndItem( *evt );
-            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
-        }
-        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
-        {
-            m_router->SwitchLayer( frame()->GetActiveLayer() );
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );        // refresh
         }
@@ -1739,40 +1752,40 @@ void ROUTER_TOOL::setTransitions()
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceThroughVia.MakeEvent() );
     Go( &ROUTER_TOOL::onViaCommand,           ACT_SelLayerAndPlaceBlindVia.MakeEvent() );
 
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerTop.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner1.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner2.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner3.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner4.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner5.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner6.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner7.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner8.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner9.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner10.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner11.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner12.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner13.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner14.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner15.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner16.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner17.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner18.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner19.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner20.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner21.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner22.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner23.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner24.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner25.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner26.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner27.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner28.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner29.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerInner30.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerBottom.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerNext.MakeEvent() );
-    Go( &ROUTER_TOOL::onViaCommand,           PCB_ACTIONS::layerPrev.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerTop.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner1.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner2.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner3.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner4.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner5.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner6.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner7.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner8.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner9.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner10.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner11.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner12.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner13.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner14.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner15.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner16.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner17.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner18.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner19.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner20.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner21.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner22.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner23.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner24.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner25.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner26.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner27.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner28.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner29.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerInner30.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerBottom.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerNext.MakeEvent() );
+    Go( &ROUTER_TOOL::onLayerCommand,         PCB_ACTIONS::layerPrev.MakeEvent() );
 
     Go( &ROUTER_TOOL::CustomTrackWidthDialog, ACT_CustomTrackWidth.MakeEvent() );
     Go( &ROUTER_TOOL::onTrackViaSizeChanged,  PCB_ACTIONS::trackViaSizeChanged.MakeEvent() );

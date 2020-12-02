@@ -60,10 +60,12 @@ private:
     void breakTrack();
 
     void handleCommonEvents( const TOOL_EVENT& evt );
+    int handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia );
 
     int getStartLayer( const PNS::ITEM* aItem );
     void switchLayerOnViaPlacement();
 
+    int onLayerCommand( const TOOL_EVENT& aEvent );
     int onViaCommand( const TOOL_EVENT& aEvent );
     int onTrackViaSizeChanged( const TOOL_EVENT& aEvent );
 

@@ -942,7 +942,8 @@ bool LINE_PLACER::SetLayer( int aLayer )
         return false;
     }
     else if( !m_startItem
-            || ( m_startItem->OfKind( ITEM::VIA_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
+            || ( m_startItem->OfKind( ITEM::VIA_T ) && m_startItem->Layers().Overlaps( aLayer ) )
+            || ( m_startItem->OfKind( ITEM::SOLID_T ) && m_startItem->Layers().Overlaps( aLayer ) ) )
     {
         m_currentLayer = aLayer;
         m_head.Line().Clear();

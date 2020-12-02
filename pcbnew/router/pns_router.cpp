@@ -479,16 +479,12 @@ void ROUTER::FlipPosture()
 }
 
 
-void ROUTER::SwitchLayer( int aLayer )
+bool ROUTER::SwitchLayer( int aLayer )
 {
-    switch( m_state )
-    {
-    case ROUTE_TRACK:
-        m_placer->SetLayer( aLayer );
-        break;
-    default:
-        break;
-    }
+    if( m_state == ROUTE_TRACK )
+        return m_placer->SetLayer( aLayer );
+
+    return false;
 }
 
 
