@@ -5,6 +5,8 @@
   <id>org.kicad_pcb.kicad</id>
   <name>KiCad</name>
 
+  <launchable type="desktop-id">kicad.desktop</launchable>
+
   <project_license>GPL-3.0-or-later</project_license>
   <metadata_license>CC-BY-SA-4.0</metadata_license>
 
