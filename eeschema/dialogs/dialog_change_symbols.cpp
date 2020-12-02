@@ -101,8 +101,6 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
             m_fieldsBox->Check( i, true );
     }
 
-    updateFieldsList();
-
     m_messagePanel->SetLazyUpdate( true );
 
     if( aSymbol && aSymbol->IsSelected() )
@@ -116,6 +114,8 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
         else
             m_matchByReference->SetValue( true );
     }
+
+    updateFieldsList();
 
     if( m_mode == MODE::CHANGE )
     {
@@ -269,18 +269,10 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             if( !isMatch( symbol, &instance ) )
                 continue;
 
-            LIB_PART* libSymbol = frame->GetLibPart( symbol->GetLibId() );
+            std::vector<SCH_FIELD>& fields = symbol->GetFields();
 
-            if( !libSymbol )
-                continue;
-
-            std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
-
-            LIB_FIELDS libFields;
-            flattenedSymbol->GetFields( libFields );
-
-            for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
-                fieldNames.insert( libFields[i].GetName() );
+            for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
+                fieldNames.insert( fields[i].GetName() );
         }
     }
 
