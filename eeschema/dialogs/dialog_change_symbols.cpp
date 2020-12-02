@@ -387,12 +387,13 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
         wxCHECK2( screen, continue );
 
+        std::vector<SCH_COMPONENT*> components;
+
         for( SCH_ITEM* item : screen->Items().OfType( SCH_COMPONENT_T ) )
+            components.push_back( static_cast<SCH_COMPONENT*>( item ) );
+
+        for( SCH_COMPONENT* symbol : components )
         {
-            SCH_COMPONENT* symbol = dynamic_cast<SCH_COMPONENT*>( item );
-
-            wxCHECK2( symbol, continue );
-
             if( !isMatch( symbol, &instance ) )
                 continue;
 
