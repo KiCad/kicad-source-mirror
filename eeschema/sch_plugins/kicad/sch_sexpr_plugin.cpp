@@ -587,16 +587,6 @@ void SCH_SEXPR_PLUGIN::Format( SCH_SHEET* aSheet )
     m_out->Print( 0, "(kicad_sch (version %d) (generator eeschema)\n\n",
                   SEXPR_SCHEMATIC_FILE_VERSION );
 
-    // Root sheet must have a permanent UUID.
-    // if( aSheet->IsRootSheet() && aSheet->m_Uuid.IsLegacyTimestamp() )
-    //     const_cast<KIID&>( aSheet->m_Uuid ).ConvertTimestampToUuid();
-
-    // m_out->Print( 1, "(uuid %s)\n\n", m_out->Quotew( aSheet->m_Uuid.AsString() ).c_str() );
-
-    m_out->Print( 1, "(page %d %d)\n\n",
-                  screen->GetVirtualPageNumber(),
-                  screen->GetPageCount() );
-
     screen->GetPageSettings().Format( m_out, 1, 0 );
     m_out->Print( 0, "\n" );
     screen->GetTitleBlock().Format( m_out, 1, 0 );
