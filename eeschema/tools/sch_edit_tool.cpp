@@ -722,6 +722,10 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
+    // Update R-Tree for modified items
+    for( EDA_ITEM* selected : selection )
+        updateItem( selected, true );
+
     if( item->IsMoving() )
     {
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
