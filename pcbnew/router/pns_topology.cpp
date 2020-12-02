@@ -116,10 +116,12 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
     }
     else
     {
-        int anchor;
-
         TOPOLOGY topo( tmpNode.get() );
-        ITEM* it = topo.NearestUnconnectedItem( jt, &anchor );
+        int anchor = 0;
+        ITEM* it = nullptr;
+
+        if( jt->Net() > 0 )
+            it = topo.NearestUnconnectedItem( jt, &anchor );
 
         if( !it )
             return false;

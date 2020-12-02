@@ -927,7 +927,7 @@ bool ROUTER_TOOL::prepareInteractive()
 
     editFrame->SetActiveLayer( ToLAYER_ID( routingLayer ) );
 
-    if( m_startItem && m_startItem->Net() >= 0 )
+    if( m_startItem && m_startItem->Net() > 0 )
         highlightNet( true, m_startItem->Net() );
 
     controls()->ForceCursorPosition( false );

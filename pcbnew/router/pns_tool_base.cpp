@@ -315,7 +315,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     VECTOR2I mousePos = controls()->GetMousePosition();
 
     if( m_router->Settings().Mode() != RM_MarkObstacles &&
-        ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 ) )
+        ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() <= 0 ) )
     {
         m_endSnapPoint = snapToItem( snapEnabled, nullptr, mousePos );
         controls()->ForceCursorPosition( true, m_endSnapPoint );

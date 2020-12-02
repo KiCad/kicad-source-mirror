@@ -36,7 +36,7 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
     const SHAPE*        shapeB = aOther->Shape();
 
     // same nets? no collision!
-    if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
+    if( aDifferentNetsOnly && m_net == aOther->m_net && m_net > 0 && aOther->m_net > 0 )
         return false;
 
     // check if we are not on completely different layers first
