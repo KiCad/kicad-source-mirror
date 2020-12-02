@@ -805,11 +805,7 @@ if( KICAD_SCRIPTING_MODULES )
         add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingPythonDirectoryCreation )
         set( PYMOD_EXT "so" )
     else()  # only linux remains among supported platforms
-        add_library( pcbnew_python MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
-        target_link_libraries( pcbnew_python ${PCBNEW_KIFACE_LIBRARIES} )
-        set_target_properties( pcbnew_python PROPERTIES OUTPUT_NAME pcbnew PREFIX "_" SUFFIX ".so" )
-        install( TARGETS pcbnew_python DESTINATION ${PYTHON_DEST} COMPONENT binary )
-
+        install( FILES ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.kiface DESTINATION ${PYTHON_DEST} COMPONENT binary RENAME "_pcbnew.so" )
         set( PYMOD_EXT "so" )
     endif()
 
@@ -824,18 +820,16 @@ if( KICAD_SCRIPTING_MODULES )
             DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
             )
     else()
-
-
-    # For phase 1, copy _pcbnew.kiface to the python module.
-    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-        DEPENDS pcbnew_kiface
-        COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
-        COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
-        )
-    add_custom_target(
-        pcbnew_python_module ALL
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-        )
+        # For phase 1, copy _pcbnew.kiface to the python module.
+        add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+            DEPENDS pcbnew_kiface
+            COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
+            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
+            )
+        add_custom_target(
+            pcbnew_python_module ALL
+            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+            )
     endif()
 
 endif()
