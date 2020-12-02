@@ -23,7 +23,7 @@
  */
 
 /**
- * @file tree_project_frame.h
+ * @file PROJECT_TREE_PANE.h
  */
 
 
@@ -39,29 +39,30 @@
 
 
 class KICAD_MANAGER_FRAME;
-class TREEPROJECT_ITEM;
-class TREEPROJECTFILES;
+class PROJECT_TREE_ITEM;
+class PROJECT_TREE;
 
-/** TREE_PROJECT_FRAME
+/** PROJECT_TREE_PANE
  * Window to display the tree files
  */
-class TREE_PROJECT_FRAME : public wxSashLayoutWindow
+class PROJECT_TREE_PANE : public wxSashLayoutWindow
 {
-    friend class TREEPROJECT_ITEM;
+    friend class PROJECT_TREE_ITEM;
+
 public:
     KICAD_MANAGER_FRAME*    m_Parent;
-    TREEPROJECTFILES*       m_TreeProject;
+    PROJECT_TREE*           m_TreeProject;
 
 private:
     bool                    m_isRenaming; // Are we in the process of renaming a file
     wxTreeItemId            m_root;
     std::vector<wxString>   m_filters;
     wxFileSystemWatcher*    m_watcher; // file system watcher
-    TREEPROJECT_ITEM*       m_selectedItem;
+    PROJECT_TREE_ITEM*      m_selectedItem;
 
 public:
-    TREE_PROJECT_FRAME( KICAD_MANAGER_FRAME* parent );
-    ~TREE_PROJECT_FRAME();
+    PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent );
+    ~PROJECT_TREE_PANE();
 
     /**
      * Create or modify the tree showing project file names
@@ -90,15 +91,15 @@ protected:
      * Note this is not necessary the "clicked" item,
      * because when expanding, collapsing an item this item is not selected
      */
-    std::vector<TREEPROJECT_ITEM*> GetSelectedData();
+    std::vector<PROJECT_TREE_ITEM*> GetSelectedData();
 
     /**
      * Function GetItemIdData
      * return the item data corresponding to a wxTreeItemId identifier
      * @param  aId = the wxTreeItemId identifier.
-     * @return a TREEPROJECT_ITEM pointer corresponding to item id aId
+     * @return a PROJECT_TREE_ITEM pointer corresponding to item id aId
      */
-    TREEPROJECT_ITEM* GetItemIdData( wxTreeItemId aId );
+    PROJECT_TREE_ITEM* GetItemIdData( wxTreeItemId aId );
 
 private:
     /**
@@ -166,7 +167,7 @@ private:
     void OnIdle( wxIdleEvent &aEvent );
 
     /**
-     * Function AddItemToTreeProject
+     * Function AddItemToProjectTree
      * @brief  Add the file or directory aName to the project tree
      * @param aName = the filename or the directory name to add in tree
      * @param aRoot = the wxTreeItemId item where to add sub tree items
@@ -175,8 +176,8 @@ private:
      *                   false to stop file add.
      * @return the Id for the new tree item
      */
-    wxTreeItemId AddItemToTreeProject( const wxString& aName, wxTreeItemId& aRoot,
-            bool aCanResetFileWatcher = true, bool aRecurse = true );
+    wxTreeItemId AddItemToProjectTree( const wxString& aName, wxTreeItemId& aRoot,
+                                       bool aCanResetFileWatcher = true, bool aRecurse = true );
 
     /**
      * Function findSubdirTreeItem

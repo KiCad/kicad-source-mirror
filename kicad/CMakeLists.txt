@@ -24,9 +24,9 @@ set( KICAD_SRCS
     kicad_settings.cpp
     menubar.cpp
     project_template.cpp
-    tree_project_frame.cpp
-    treeprojectfiles.cpp
-    treeproject_item.cpp
+    project_tree_pane.cpp
+    project_tree.cpp
+    project_tree_item.cpp
     tools/kicad_manager_actions.cpp
     tools/kicad_manager_control.cpp
     )

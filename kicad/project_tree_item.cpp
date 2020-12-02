@@ -22,9 +22,7 @@
  */
 
 /**
- * @file treeproject_item.cpp
- *
- * @brief Class TREEPROJECT_ITEM is a derived  class from wxTreeItemData and
+ * @brief Class PROJECT_TREE_ITEM is a derived class from wxTreeItemData and
  * store info about a file or directory shown in the KiCad tree project files
  */
 
@@ -39,15 +37,15 @@
 #include <tools/kicad_manager_actions.h>
 
 #include "kicad_manager_frame.h"
-#include "treeprojectfiles.h"
+#include "project_tree.h"
 #include "pgm_kicad.h"
-#include "tree_project_frame.h"
-#include "treeproject_item.h"
+#include "project_tree_pane.h"
+#include "project_tree_item.h"
 #include "kicad_id.h"
 
 
-TREEPROJECT_ITEM::TREEPROJECT_ITEM( TREE_FILE_TYPE type, const wxString& data,
-                                    wxTreeCtrl* parent ) :
+PROJECT_TREE_ITEM::PROJECT_TREE_ITEM( TREE_FILE_TYPE type, const wxString& data,
+                                      wxTreeCtrl* parent ) :
     wxTreeItemData()
 {
     m_parent = parent;
@@ -59,7 +57,7 @@ TREEPROJECT_ITEM::TREEPROJECT_ITEM( TREE_FILE_TYPE type, const wxString& data,
 }
 
 
-void TREEPROJECT_ITEM::SetState( int state )
+void PROJECT_TREE_ITEM::SetState( int state )
 {
     wxImageList* imglist     = m_parent->GetImageList();
     int          treeEnumMax = static_cast<int>( TREE_FILE_TYPE::MAX );
@@ -68,25 +66,25 @@ void TREEPROJECT_ITEM::SetState( int state )
         return;
 
     m_state   = state;
-    int imgid = static_cast<int>( m_Type ) - 1 + state * ( treeEnumMax - 1 );
+    int imgid = static_cast<int>( m_type ) - 1 + state * ( treeEnumMax - 1 );
     m_parent->SetItemImage( GetId(), imgid );
     m_parent->SetItemImage( GetId(), imgid, wxTreeItemIcon_Selected );
 }
 
 
-const wxString TREEPROJECT_ITEM::GetDir() const
+const wxString PROJECT_TREE_ITEM::GetDir() const
 {
-    if( TREE_FILE_TYPE::DIRECTORY == m_Type )
+    if( TREE_FILE_TYPE::DIRECTORY == m_type )
         return GetFileName();
 
     return wxFileName( GetFileName() ).GetPath();
 }
 
 
-bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
+bool PROJECT_TREE_ITEM::Rename( const wxString& name, bool check )
 {
     // this is broken & unsafe to use on linux.
-    if( m_Type == TREE_FILE_TYPE::DIRECTORY )
+    if( m_type == TREE_FILE_TYPE::DIRECTORY )
         return false;
 
     if( name.IsEmpty() )
@@ -104,9 +102,8 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
     if( newFile == GetFileName() )
         return false;
 
-    wxString    ext = TREE_PROJECT_FRAME::GetFileExt( GetType() );
-
-    wxRegEx     reg( wxT( "^.*\\" ) + ext + wxT( "$" ), wxRE_ICASE );
+    wxString ext = PROJECT_TREE_PANE::GetFileExt( GetType() );
+    wxRegEx  reg( wxT( "^.*\\" ) + ext + wxT( "$" ), wxRE_ICASE );
 
     if( check && !ext.IsEmpty() && !reg.Matches( newFile ) )
     {
@@ -129,7 +126,7 @@ bool TREEPROJECT_ITEM::Rename( const wxString& name, bool check )
 }
 
 
-void TREEPROJECT_ITEM::Delete()
+void PROJECT_TREE_ITEM::Delete()
 {
     wxString errMsg;
 
@@ -144,13 +141,13 @@ void TREEPROJECT_ITEM::Delete()
 }
 
 
-void TREEPROJECT_ITEM::Print()
+void PROJECT_TREE_ITEM::Print()
 {
     PrintFile( GetFileName() );
 }
 
 
-void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
+void PROJECT_TREE_ITEM::Activate( PROJECT_TREE_PANE* aTreePrjFrame )
 {
     wxString             sep = wxFileName::GetPathSeparator();
     wxString             fullFileName = GetFileName();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras
- * Copyright (C) 2004-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,48 +22,51 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef TREEPROJECT_ITEM_H_
-#define TREEPROJECT_ITEM_H_
+#ifndef PROJECT_TREE_ITEM_H
+#define PROJECT_TREE_ITEM_H
 
 
 #include <wx/treebase.h>
 
 #include "tree_file_type.h"
 
-class TREE_PROJECT_FRAME;
+class PROJECT_TREE_PANE;
 class wxTreeCtrl;
 
 /**
- * TREEPROJECT_ITEM
+ * PROJECT_TREE_ITEM
  * handles one item (a file or a directory name) for the tree file
  */
-class TREEPROJECT_ITEM : public wxTreeItemData
+class PROJECT_TREE_ITEM : public wxTreeItemData
 {
 public:
 
-    TREEPROJECT_ITEM( TREE_FILE_TYPE type, const wxString& data,
-                      wxTreeCtrl* parent );
+    PROJECT_TREE_ITEM( TREE_FILE_TYPE type, const wxString& data, wxTreeCtrl* parent );
 
-    TREEPROJECT_ITEM() : m_parent( NULL ) { }
+    PROJECT_TREE_ITEM() :
+            m_parent( NULL )
+    { }
 
-    TREEPROJECT_ITEM( const TREEPROJECT_ITEM& src ) :
-        m_Type( src.m_Type ), m_file_name( src.m_file_name ), m_parent( src.m_parent )
+    PROJECT_TREE_ITEM( const PROJECT_TREE_ITEM& src ) :
+            m_type( src.m_type ),
+            m_file_name( src.m_file_name ),
+            m_parent( src.m_parent )
     {
         SetState( src.m_state );
-        m_IsPopulated = false;
+        m_isPopulated = false;
     }
 
-    TREE_FILE_TYPE GetType() const                { return m_Type; }
-    void SetType( TREE_FILE_TYPE aType )          { m_Type = aType; }
+    TREE_FILE_TYPE GetType() const              { return m_type; }
+    void SetType( TREE_FILE_TYPE aType )        { m_type = aType; }
 
     const wxString& GetFileName() const         { return m_file_name; }
     void SetFileName( const wxString& name )    { m_file_name = name; }
 
-    bool IsRootFile() const                     { return m_IsRootFile; }
-    void SetRootFile( bool aValue )             { m_IsRootFile = aValue; }
+    bool IsRootFile() const                     { return m_isRootFile; }
+    void SetRootFile( bool aValue )             { m_isRootFile = aValue; }
 
-    bool IsPopulated() const                    { return m_IsPopulated; }
-    void SetPopulated( bool aValue )            { m_IsPopulated = aValue; }
+    bool IsPopulated() const                    { return m_isPopulated; }
+    void SetPopulated( bool aValue )            { m_isPopulated = aValue; }
 
     /**
      * @return the path of an item.
@@ -75,17 +78,17 @@ public:
     bool Rename( const wxString& name, bool check = true );
     void Delete();
     void Print();
-    void Activate( TREE_PROJECT_FRAME* aTreePrjFrame );
+    void Activate( PROJECT_TREE_PANE* aTreePrjFrame );
     void SetState( int state );
 
 
 private:
-    TREE_FILE_TYPE    m_Type;         // = TREE_PROJECT, TREE_DIRECTORY ...
+    TREE_FILE_TYPE  m_type;         // = TREE_PROJECT, TREE_DIRECTORY ...
     wxString        m_file_name;    // Filename for a file, or directory name
-    bool            m_IsRootFile;   // True if m_Filename is a root schematic (same name as project)
-    bool            m_IsPopulated;  // True if the name is a directory, and its content was read
+    bool            m_isRootFile;   // True if m_Filename is a root schematic (same name as project)
+    bool            m_isPopulated;  // True if the name is a directory, and its content was read
     wxTreeCtrl*     m_parent;
     int             m_state;
 };
 
-#endif  // TREEPROJECT_ITEM_H_
+#endif  // PROJECT_TREE_ITEM_H

@@ -22,43 +22,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
- * file treeprojectfiles.h
- */
-
-#ifndef TREEPROJECTFILES_H
-#define TREEPROJECTFILES_H
+#ifndef PROJECT_TREE_H
+#define PROJECT_TREE_H
 
 
 #include <wx/treectrl.h>
 
 #include "tree_file_type.h"
 
-class TREE_PROJECT_FRAME;
+class PROJECT_TREE_PANE;
 
-/** TREEPROJECTFILES
+/** PROJECT_TREE
  * This is the class to show (as a tree) the files in the project directory
  */
-class TREEPROJECTFILES : public wxTreeCtrl
+class PROJECT_TREE : public wxTreeCtrl
 {
-    DECLARE_DYNAMIC_CLASS( TREEPROJECTFILES )
+    DECLARE_DYNAMIC_CLASS( PROJECT_TREE )
+
 private:
-    TREE_PROJECT_FRAME* m_Parent;
-    wxImageList*     m_ImageList;
+    PROJECT_TREE_PANE* m_projectTreePane;
+    wxImageList*       m_imageList;
 
 public:
+    PROJECT_TREE_PANE* GetProjectTreePane() const { return m_projectTreePane; }
 
-    TREE_PROJECT_FRAME* GetParent() const
-    {
-        return m_Parent;
-    }
+    PROJECT_TREE( PROJECT_TREE_PANE* parent );
+    ~PROJECT_TREE();
 
-
-    TREEPROJECTFILES( TREE_PROJECT_FRAME* parent );
-    ~TREEPROJECTFILES();
 private:
     /* overridden sort function */
     int OnCompareItems( const wxTreeItemId& item1, const wxTreeItemId& item2 ) override;
 };
 
-#endif  // TREEPROJECTFILES_H
+#endif  // PROJECT_TREE_H

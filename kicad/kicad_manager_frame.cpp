@@ -25,7 +25,7 @@
 
 #include "kicad_id.h"
 #include "pgm_kicad.h"
-#include "tree_project_frame.h"
+#include "project_tree_pane.h"
 #include <bitmaps.h>
 #include <build_version.h>
 #include <eda_base_frame.h>
@@ -117,7 +117,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     LoadSettings( config() );
 
     // Left window: is the box which display tree project
-    m_leftWin = new TREE_PROJECT_FRAME( this );
+    m_leftWin = new PROJECT_TREE_PANE( this );
 
     // Add the wxTextCtrl showing all messages from KiCad:
     m_messagesBox = new wxTextCtrl( this, wxID_ANY, wxEmptyString,

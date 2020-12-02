@@ -21,10 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file tree_file_types.h
- */
-
 
 #ifndef TREE_FILE_TYPE_H
 #define TREE_FILE_TYPE_H
@@ -32,7 +28,7 @@
 // Identify the type of files handled by KiCad manager
 //
 // When changing this enum  please verify (and perhaps update)
-// TREE_PROJECT_FRAME::GetFileExt(),
+// PROJECT_TREE_PANE::GetFileExt(),
 // s_AllowedExtensionsToList[]
 enum class TREE_FILE_TYPE
 {

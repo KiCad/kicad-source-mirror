@@ -29,8 +29,8 @@
 #include <wx/process.h>
 #include <kiway_player.h>
 
-class TREEPROJECTFILES;
-class TREE_PROJECT_FRAME;
+class PROJECT_TREE;
+class PROJECT_TREE_PANE;
 class ACTION_TOOLBAR;
 class KICAD_SETTINGS;
 class EDA_BASE_FRAME;
@@ -185,7 +185,7 @@ private:
     bool m_openSavedWindows;
 
 private:
-    TREE_PROJECT_FRAME* m_leftWin;
+    PROJECT_TREE_PANE* m_leftWin;
     ACTION_TOOLBAR*     m_launcher;
     wxTextCtrl*         m_messagesBox;
     ACTION_TOOLBAR*     m_mainToolBar;
