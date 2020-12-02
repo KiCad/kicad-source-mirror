@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:12+0000\n"
+"PO-Revision-Date: 2020-12-02 21:37+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -13092,6 +13092,8 @@ msgid ""
 "Symbol library '%s' not found and no fallback cache library available.  "
 "Unable to link library symbol."
 msgstr ""
+"Η βιβλιοθήκη συμβόλων '%s' δεν βρέθηκε και δεν υπάρχει διαθέσιμη εναλλακτική "
+"βιβλιοθήκη προσωρινής μνήμης.  Αδύνατη η σύνδεση του συμβόλου βιβλιοθήκης."
 
 #: eeschema/sch_screen.cpp:639
 #, fuzzy, c-format
@@ -13197,7 +13199,7 @@ msgstr "Ιεραρχική Ετικέτα %s"
 
 #: eeschema/sch_text.cpp:1498 pcbnew/dialogs/panel_setup_rules.cpp:448
 msgid "Syntax Help"
-msgstr ""
+msgstr "Βοήθεια σύνταξης"
 
 #: eeschema/sch_text_help_md.h:2
 msgid ""
@@ -13414,6 +13416,7 @@ msgstr "%s, %s, %s, ή %s"
 #: eeschema/sch_validators.cpp:181
 msgid "The reference designator cannot contain text variable references"
 msgstr ""
+"Ο προσδιοριστής αναφοράς δεν μπορεί να περιέχει αναφορές μεταβλητής κειμένου"
 
 #: eeschema/sch_validators.cpp:188
 msgid "Field Validation Error"
@@ -13809,7 +13812,7 @@ msgstr "Χρόνος"
 
 #: eeschema/sim/spice_simulator.cpp:59
 msgid "DC Sweep"
-msgstr ""
+msgstr "Σάρωση DC"
 
 #: eeschema/sim/spice_simulator.cpp:71
 #, fuzzy
@@ -13858,7 +13861,7 @@ msgstr "Βιβλιοθήκες"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:213
 msgid "Library changes are unsaved"
-msgstr ""
+msgstr "Οι αλλαγές στη βιβλιοθήκη δεν είναι αποθηκευμένες"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:514
 #, fuzzy
@@ -14044,6 +14047,8 @@ msgid ""
 "Derived symbols must be save in the same library\n"
 "that the parent symbol exists."
 msgstr ""
+"Τα παράγωγα σύμβολα πρέπει να αποθηκεύονται στην ίδια βιβλιοθήκη\n"
+"που υπάρχει το γονικό σύμβολο."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:776
 #, c-format
@@ -14848,7 +14853,7 @@ msgstr "Ανάθεση Κλάσης Δικτύου"
 
 #: eeschema/tools/ee_actions.cpp:430
 msgid "Assign a netclass to the net of the selected wire"
-msgstr ""
+msgstr "Εκχωρήστε ένα netclass στο net του επιλεγμένου καλωδίου"
 
 #: eeschema/tools/ee_actions.cpp:435
 msgid "DeMorgan Conversion"
@@ -15403,7 +15408,7 @@ msgstr "Τοποθέτηση Ακροδέκτη Οπωσδήποτε"
 
 #: eeschema/tools/reannotate.cpp:74
 msgid "Errors reported by Eeschema:\n"
-msgstr ""
+msgstr "Σφάλματα που αναφέρθηκαν από το Eeschema:\n"
 
 #: eeschema/tools/reannotate.cpp:75
 msgid ""
@@ -15482,7 +15487,7 @@ msgstr ""
 
 #: eeschema/tools/sch_editor_control.cpp:916
 msgid "Net must be labeled to assign a netclass."
-msgstr ""
+msgstr "Το Net πρέπει να φέρει ετικέτα για να εκχωρήσει ένα netclass."
 
 #: eeschema/tools/sch_editor_control.cpp:928
 #, fuzzy
@@ -15548,7 +15553,7 @@ msgstr "Να μη γίνει εξαγωγή"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:227
 msgid "Gerbers with known layers: "
-msgstr ""
+msgstr "Gerbers με γνωστά επίπεδα: "
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:229
 #, fuzzy
@@ -16120,7 +16125,7 @@ msgstr ""
 
 #: gerbview/rs274d.cpp:645
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
-msgstr ""
+msgstr "Μη έγκυρο αρχείο Gerber: λείπει η εντολή G74 ή G75 arc"
 
 #: gerbview/rs274x.cpp:229
 #, c-format
@@ -16517,7 +16522,7 @@ msgstr "Ενεργό"
 
 #: include/libeval_compiler/libeval_compiler.h:290
 msgid "Malformed expression"
-msgstr ""
+msgstr "Λανθασμένη έκφραση"
 
 #: include/panel_hotkeys_editor.h:63
 #, fuzzy
@@ -16526,11 +16531,11 @@ msgstr "Ορισμός όλων των συντομεύσεων στις προ�
 
 #: include/widgets/infobar.h:100
 msgid "Hide this message."
-msgstr ""
+msgstr "Απόκρυψη αυτού του μηνύματος."
 
 #: include/widgets/resettable_panel.h:54
 msgid "Reset all settings on this page to their default"
-msgstr ""
+msgstr "Επαναφέρετε όλες τις ρυθμίσεις σε αυτήν τη σελίδα στις προεπιλεγμένες"
 
 #: kicad/dialogs/dialog_template_selector.cpp:126
 msgid "<html><h1>Template Selector</h1></html>"
@@ -29939,7 +29944,7 @@ msgstr "Άγνωστο επίπεδο PCad %u"
 
 #: pcbnew/plugins/pcad/pcb.cpp:747
 msgid "KiCad only supports 32 signal layers"
-msgstr ""
+msgstr "Το KiCad υποστηρίζει μόνο 32 επίπεδα σημάτων"
 
 #: pcbnew/router/length_tuner_tool.cpp:57
 msgid "New Track"
@@ -30078,7 +30083,7 @@ msgstr ";"
 #: pcbnew/router/pns_kicad_iface.cpp:944
 #, c-format
 msgid "%s is malformed."
-msgstr ""
+msgstr "Το %s έχει λανθασμένη μορφή."
 
 #: pcbnew/router/pns_kicad_iface.cpp:947
 #, fuzzy
@@ -30122,7 +30127,7 @@ msgstr "Ρυθμισμένο: απόκλιση "
 
 #: pcbnew/router/pns_router.cpp:209
 msgid "The routing start point violates DRC."
-msgstr ""
+msgstr "Το σημείο εκκίνησης του δρομολογητή παραβιάζει το DRC."
 
 #: pcbnew/router/router_tool.cpp:85
 msgid "Undo last segment"
@@ -30211,7 +30216,7 @@ msgstr "Εναλλαγή στάσης του δρόμου που δρομολο�
 
 #: pcbnew/router/router_tool.cpp:152
 msgid "Switch Corner Rounding"
-msgstr ""
+msgstr "Εναλλαγή Στρογγυλοποίησης Γωνίας"
 
 #: pcbnew/router/router_tool.cpp:153
 #, fuzzy
@@ -30295,7 +30300,7 @@ msgstr "Πλάτος %s, κενό via %s"
 #: pcbnew/router/router_tool.cpp:356
 #, c-format
 msgid "Width %s, gap %s"
-msgstr ""
+msgstr "Πλάτος %s, κενό %s"
 
 #: pcbnew/router/router_tool.cpp:362
 #, c-format
@@ -30512,7 +30517,7 @@ msgstr "Μετατροπή σχήματος σε zone"
 
 #: pcbnew/tools/convert_tool.cpp:555
 msgid "Convert polygons to lines"
-msgstr ""
+msgstr "Μετατροπή πολυγώνων σε γραμμές"
 
 #: pcbnew/tools/convert_tool.cpp:646
 #, fuzzy
@@ -30594,7 +30599,7 @@ msgstr "Επεξεργασία πλάτους δρόμων/μέγεθους via"
 
 #: pcbnew/tools/edit_tool.cpp:733
 msgid "A minimum of two straight track segments must be selected."
-msgstr ""
+msgstr "Πρέπει να επιλεγούν τουλάχιστον δύο ευθύγραμμα τμήματα διαδρόμων."
 
 #: pcbnew/tools/edit_tool.cpp:738
 msgid "Enter fillet radius:"
@@ -30610,6 +30615,8 @@ msgid ""
 "A radius of zero was entered.\n"
 "The fillet operation was not performed."
 msgstr ""
+"Εισήχθη ακτίνα μηδέν.\n"
+"Η λειτουργία fillet δεν πραγματοποιήθηκε."
 
 #: pcbnew/tools/edit_tool.cpp:909
 msgid "Unable to fillet the selected track segments."
@@ -30661,7 +30668,7 @@ msgstr "_αντιγραφή"
 
 #: pcbnew/tools/group_tool.cpp:115
 msgid "Modified group"
-msgstr ""
+msgstr "Τροποποιημένη ομάδα"
 
 #: pcbnew/tools/group_tool.cpp:175
 msgid "Grouping"
@@ -30669,11 +30676,11 @@ msgstr "Ομαδοποίηση"
 
 #: pcbnew/tools/group_tool.cpp:197
 msgid "Group is in inconsistent state:"
-msgstr ""
+msgstr "Η ομάδα βρίσκεται σε ασυνεπή κατάσταση:"
 
 #: pcbnew/tools/group_tool.cpp:280
 msgid "Click on new member..."
-msgstr ""
+msgstr "Κάντε κλικ στο νέο μέλος ..."
 
 #: pcbnew/tools/pad_tool.cpp:126
 msgid "Paste Pad Properties"
@@ -30703,12 +30710,12 @@ msgstr "Τοποθέτηση έδρας"
 #: pcbnew/tools/pad_tool.cpp:538
 #, c-format
 msgid "Pad Edit Mode.  Press %s again to exit."
-msgstr ""
+msgstr "Λειτουργία επεξεργασίας Pad.  Πατήστε ξανά %s για έξοδο."
 
 #: pcbnew/tools/pad_tool.cpp:541
 #, c-format
 msgid "Pad Edit Mode.  Press %s to exit."
-msgstr ""
+msgstr "Λειτουργία επεξεργασίας Pad.  Πατήστε %s για έξοδο."
 
 #: pcbnew/tools/pad_tool.cpp:607
 msgid "Edit pad shapes"
@@ -31189,7 +31196,7 @@ msgstr "Γραφικά..."
 
 #: pcbnew/tools/pcb_actions.cpp:451
 msgid "Cleanup redundant items, etc."
-msgstr ""
+msgstr "Καθαρισμός περιττών στοιχείων κ.λπ."
 
 #: pcbnew/tools/pcb_actions.cpp:458
 msgid "Add Microwave Gap"
@@ -31483,7 +31490,7 @@ msgstr "Αφαίρεση αντικειμένων από ομάδα"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 msgid "Enter Group"
-msgstr ""
+msgstr "Εισαγωγή στην ομάδα"
 
 #: pcbnew/tools/pcb_actions.cpp:672
 #, fuzzy
@@ -31866,6 +31873,8 @@ msgstr "Περιγράμματα Διάκενου"
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
+"Εμφάνιση ανάλυσης διακένου για το ενεργό επίπεδο μεταξύ δύο επιλεγμένων "
+"αντικειμένων"
 
 #: pcbnew/tools/pcb_actions.cpp:1046
 #, fuzzy
@@ -31874,7 +31883,7 @@ msgstr "Θέση Σχετική με..."
 
 #: pcbnew/tools/pcb_actions.cpp:1047
 msgid "Show constraints resolution for the selected object"
-msgstr ""
+msgstr "Εμφάνιση ανάλυσης περιορισμών για το επιλεγμένο αντικείμενο"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "Geographical Reannotate..."
@@ -31926,18 +31935,16 @@ msgid "Aligns selected items to the right edge"
 msgstr "Στοίχιση επιλεγμένων στοιχείων στο δεξί άκρο"
 
 #: pcbnew/tools/pcb_actions.cpp:1087
-#, fuzzy
 msgid "Align to Vertical Center"
-msgstr "Στοίχιση στο Κέντρο"
+msgstr "Στοίχιση στο Κέντρο Κάθετα"
 
 #: pcbnew/tools/pcb_actions.cpp:1088
 msgid "Aligns selected items to the vertical center"
 msgstr "Στοίχιση επιλεγμένων στοιχείων στο κατακόρυφο κέντρο"
 
 #: pcbnew/tools/pcb_actions.cpp:1092
-#, fuzzy
 msgid "Align to Horizontal Center"
-msgstr "Στοίχιση στο Κέντρο"
+msgstr "Στοίχιση στο Κέντρο Οριζόντια"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
 msgid "Aligns selected items to the horizontal center"
@@ -31970,9 +31977,8 @@ msgstr ""
 "άλλο αντικείμενο"
 
 #: pcbnew/tools/pcb_actions.cpp:1170
-#, fuzzy
 msgid "Select/Expand Connection"
-msgstr "Επιλογή Σύνδεσης"
+msgstr "Επιλογή/Επέκταση Σύνδεσης"
 
 #: pcbnew/tools/pcb_actions.cpp:1171
 msgid ""
@@ -31991,28 +31997,26 @@ msgid "Selects all tracks & vias belonging to the same net."
 msgstr "Επιλέγει όλους τους δρόμους και τα via που ανήκουν στο ίδιο δίκτυο."
 
 #: pcbnew/tools/pcb_actions.cpp:1182
-#, fuzzy
 msgid "Deselect All Tracks in Net"
-msgstr "Επιλογή Όλων Των Δρόμων στο Δίκτυο"
+msgstr "Αποεπιλογή Όλων Των Διαδρόμων στο Net"
 
 #: pcbnew/tools/pcb_actions.cpp:1183
-#, fuzzy
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Επιλέγει όλους τους δρόμους και τα via που ανήκουν στο ίδιο δίκτυο."
+msgstr "Αποεπιλέγει όλους τους διαδρόμους και τα via που ανήκουν στο ίδιο net."
 
 #: pcbnew/tools/pcb_actions.cpp:1189
-#, fuzzy
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "Επιλέγει όλα τα αποτυπώματα και τους δρόμους στο σχηματικό φύλλο"
+msgstr ""
+"Επιλέγει όλα τα αποτυπώματα και τους διαδρόμους στο φύλλο του σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1194
 msgid "Items in Same Hierarchical Sheet"
 msgstr "Αντικειμενα στο ίδιο Ιεραρχικό Φύλλο"
 
 #: pcbnew/tools/pcb_actions.cpp:1195
-#, fuzzy
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "Επιλέγει όλα τα αποτυπώματα και τους δρόμους στο ίδιο σχηματικό φύλλο"
+msgstr ""
+"Επιλέγει όλα τα αποτυπώματα και τους διαδρόμους στο ίδιο φύλλο του σχηματικού"
 
 #: pcbnew/tools/pcb_actions.cpp:1200
 msgid "Filter Selection..."
