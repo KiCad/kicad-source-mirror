@@ -37,6 +37,7 @@
 #include "pl_editor_settings.h"
 #include "tools/pl_actions.h"
 #include "tools/pl_selection_tool.h"
+#include <zoom_defines.h>
 
 using namespace std::placeholders;
 
@@ -58,7 +59,8 @@ PL_DRAW_PANEL_GAL::PL_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindo
     m_painter->GetSettings()->LoadColors( settingsManager.GetColorSettings( cfg->m_ColorTheme ) );
 
     m_view->SetPainter( m_painter.get() );
-    m_view->SetScaleLimits( 20.0, 0.05 );    // This fixes the zoom in and zoom out limits
+    // This fixes the zoom in and zoom out limits
+    m_view->SetScaleLimits( ZOOM_MAX_LIMIT_PLEDITOR, ZOOM_MIN_LIMIT_PLEDITOR );
 
     setDefaultLayerDeps();
 

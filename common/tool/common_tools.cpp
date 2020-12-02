@@ -219,7 +219,7 @@ int COMMON_TOOLS::ZoomInOutCenter( const TOOL_EVENT& aEvent )
 
 int COMMON_TOOLS::doZoomInOut( bool aDirection, bool aCenterOnCursor )
 {
-    double zoom = getView()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+    double zoom = getView()->GetGAL()->GetZoomFactor();
 
     // Step must be AT LEAST 1.3
     if( aDirection )
@@ -254,6 +254,7 @@ int COMMON_TOOLS::doZoomInOut( bool aDirection, bool aCenterOnCursor )
             idx = 0;        // if we ran off the end then peg to the end
     }
 
+    // Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
     return doZoomToPreset( idx + 1, aCenterOnCursor );
 }
 
@@ -401,7 +402,7 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
         idx--;
     }
 
-    double scale = zoomList[idx] * ZOOM_COEFF;
+    double scale = zoomList[idx];
 
     if( aCenterOnCursor )
     {

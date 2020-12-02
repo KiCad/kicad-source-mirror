@@ -24,58 +24,10 @@
 
 #pragma once
 
-/*  ZOOM LIMITS
-
-    The largest distance that we (and Kicad) can support is INT_MAX, since it represents
-    distance often in a wxCoord or wxSize. As a scalar, a distance is always
-    positive. Because int is 32 bits and INT_MAX is
-    2147483647. The most difficult distance for a virtual (world) cartesian
-    space is the hypotenuse, or diagonal measurement at a 45 degree angle. This
-    puts the most stress on the distance magnitude within the bounded virtual
-    space. So if we allow this distance to be our constraint of <= INT_MAX, this
-    constraint then propagates to the maximum distance in X and in Y that can be
-    supported on each axis. Remember that the hypotenuse of a 1x1 square is
-    sqrt( 1x1 + 1x1 ) = sqrt(2) = 1.41421356.
-
-    hypotenuse of any square = sqrt(2) * deltaX;
-
-    Let maximum supported hypotenuse be INT_MAX, then:
-
-    MAX_AXIS = INT_MAX / sqrt(2) = 2147483647 / 1.41421356 = 1518500251
-
-    This maximum distance is imposed by wxWidgets, not by KiCad. The imposition
-    comes in the form of the data structures used in the graphics API at the
-    wxDC level. Obviously when we are not interacting with wx we can use double
-    to compute distances larger than this. For example the computation of the
-    total length of a net, can and should be done in double, since it might
-    actually be longer than a single diagonal line.
-
-    The next choice is what to use for internal units (IU), sometimes called
-    world units.  If nanometers, then the virtual space must be limited to
-    about 1.5 x 1.5 meters square.  This is 1518500251 divided by 1e9 nm/meter.
-
-    The maximum zoom factor then depends on the client window size.  If we ask
-    wx to handle something outside INT_MIN to INT_MAX, there are unreported
-    problems in the non-Debug build because wxRound() goes silent.
-
-    Let:
-        const double MAX_AXIS = 1518500251;
-
-    Then a maximum zoom factor for a screen of 1920 pixels wide is
-        1518500251 / 1920 = 790885.
-
-    The largest zoom factor allowed is therefore ~ 300 (which computes to 762000).
-*/
-
-#define MAX_ZOOM_FACTOR 300.0
-
-// Adjusted to display zoom level ~ 1 when the screen shows a 1:1 image.
-// Obviously depends on the monitor, but this is an acceptable value.
-#define ZOOM_COEFF 1.1
-
-// List of predefined zooms used in zoom in/out from hotkeys and toolbar
-#define ZOOM_LIST_GERBER 0.022, 0.035, 0.05, 0.08, 0.13, 0.22, 0.35, 0.6, 1.0,\
-                         2.2, 3.5, 5.0, 8.0, 13.0, 22.0, 35.0, 50.0, 80.0, 130.0, 220.0
+// List of predefined zooms used in zoom in/out from hotkeys, context menu and toolbar
+// Zooming using mouse wheel can have different limits
+#define ZOOM_LIST_GERBVIEW 0.022, 0.035, 0.05, 0.08, 0.13, 0.22, 0.35, 0.6, 1.0,\
+                           2.2, 3.5, 5.0, 8.0, 13.0, 22.0, 35.0, 50.0, 80.0, 130.0, 220.0
 
 #define ZOOM_LIST_PCBNEW 0.13, 0.22, 0.35, 0.6, 1.0, 1.5, 2.2, 3.5, 5.0, 8.0, 13.0,\
                          20.0, 35.0, 50.0, 80.0, 130.0, 220.0, 300.0
@@ -85,3 +37,27 @@
 
 #define ZOOM_LIST_EESCHEMA 0.05, 0.07, 0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0,\
                            3.0, 4.5, 6.5, 10.0, 15.0, 20.0, 30.0, 45.0, 65.0, 100.0
+
+// Zoom scale limits for zoom (especially mouse wheel)
+// the limits can differ from zoom list because the zoom list cannot be as long as
+// we want because the zoom list is displayed in menus.
+// But zoom by mouse wheel is limited mainly by the usability
+
+// Scale limits for zoom  for Eeschema
+#define ZOOM_MAX_LIMIT_EESCHEMA 100
+#define ZOOM_MIN_LIMIT_EESCHEMA 0.01
+
+#define ZOOM_MAX_LIMIT_EESCHEMA_PREVIEW 20
+#define ZOOM_MIN_LIMIT_EESCHEMA_PREVIEW 0.5
+
+// Scale limits for zoom for pl_editor
+#define ZOOM_MAX_LIMIT_PLEDITOR 20
+#define ZOOM_MIN_LIMIT_PLEDITOR 0.05
+
+// Scale limits for zoom for gerbview
+#define ZOOM_MAX_LIMIT_GERBVIEW 220
+#define ZOOM_MIN_LIMIT_GERBVIEW 0.02
+
+// Scale limits for zoom (especially mouse wheel) for Pcbnew
+#define ZOOM_MAX_LIMIT_PCBNEW 5000
+#define ZOOM_MIN_LIMIT_PCBNEW 0.1

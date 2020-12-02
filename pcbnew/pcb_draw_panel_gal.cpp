@@ -43,10 +43,12 @@
 #include <confirm.h>
 
 #include <gal/graphics_abstraction_layer.h>
+#include <zoom_defines.h>
 
 #include <functional>
 #include <memory>
 #include <thread>
+
 using namespace std::placeholders;
 
 const LAYER_NUM GAL_LAYER_ORDER[] =
@@ -135,6 +137,8 @@ PCB_DRAW_PANEL_GAL::PCB_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWin
 
     m_painter = std::make_unique<KIGFX::PCB_PAINTER>( m_gal );
     m_view->SetPainter( m_painter.get() );
+    // This fixes the zoom in and zoom out limits:
+    m_view->SetScaleLimits( ZOOM_MAX_LIMIT_PCBNEW, ZOOM_MIN_LIMIT_PCBNEW );
 
     setDefaultLayerOrder();
     setDefaultLayerDeps();

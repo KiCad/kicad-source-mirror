@@ -357,7 +357,7 @@ void EDA_DRAW_FRAME::UpdateZoomSelectBox()
     if( m_zoomSelectBox == NULL )
         return;
 
-    double zoom = m_canvas->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+    double zoom = m_canvas->GetGAL()->GetZoomFactor();
 
     m_zoomSelectBox->Clear();
     m_zoomSelectBox->Append( _( "Zoom Auto" ) );
@@ -383,7 +383,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
     int current = 0;    // display Auto if no match found
 
     // check for a match within 1%
-    double zoom = GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+    double zoom = GetCanvas()->GetGAL()->GetZoomFactor();
 
     for( unsigned i = 0; i < config()->m_Window.zoom_factors.size(); i++ )
     {
@@ -520,7 +520,7 @@ const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 {
     // returns a human readable value which can be displayed as zoom
     // level indicator in dialogs.
-    double zoom = m_canvas->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+    double zoom = m_canvas->GetGAL()->GetZoomFactor();
     return wxString::Format( wxT( "Z %.2f" ), zoom );
 }
 

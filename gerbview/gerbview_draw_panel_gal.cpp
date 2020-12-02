@@ -22,6 +22,7 @@
 #include <view/wx_view_controls.h>
 #include <gerbview_painter.h>
 #include <page_layout/ws_proxy_view_item.h>
+#include <zoom_defines.h>
 
 #include <gerbview_frame.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -29,9 +30,11 @@
 
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
+#include <zoom_defines.h>
 
 #include <functional>
 #include <memory>
+
 using namespace std::placeholders;
 
 
@@ -46,6 +49,8 @@ EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalTy
 
     m_painter = std::make_unique<KIGFX::GERBVIEW_PAINTER>( m_gal );
     m_view->SetPainter( m_painter.get() );
+    // This fixes the zoom in and zoom out limits:
+    m_view->SetScaleLimits( ZOOM_MAX_LIMIT_GERBVIEW, ZOOM_MIN_LIMIT_GERBVIEW );
 
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 

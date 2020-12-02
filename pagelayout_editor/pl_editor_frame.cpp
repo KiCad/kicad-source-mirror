@@ -489,9 +489,6 @@ void PL_EDITOR_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         aCfg->m_Window.zoom_factors = { ZOOM_LIST_PL_EDITOR };
     }
 
-    for( double& factor : aCfg->m_Window.zoom_factors )
-        factor = std::min( factor, MAX_ZOOM_FACTOR );
-
     PL_EDITOR_SETTINGS* cfg = dynamic_cast<PL_EDITOR_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );
 

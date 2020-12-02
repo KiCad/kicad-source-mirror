@@ -603,9 +603,6 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
         aCfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
-    for( double& factor : aCfg->m_Window.zoom_factors )
-        factor = std::min( factor, MAX_ZOOM_FACTOR );
-
     // Some, but not all derived classes have a PCBNEW_SETTINGS.
     PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( aCfg );
 

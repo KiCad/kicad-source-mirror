@@ -449,9 +449,6 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
         cfg->m_Window.zoom_factors = { ZOOM_LIST_PCBNEW };
     }
 
-    for( double& factor : cfg->m_Window.zoom_factors )
-        factor = std::min( factor, MAX_ZOOM_FACTOR );
-
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> gal_opts;
 
     gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();

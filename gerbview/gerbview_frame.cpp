@@ -301,11 +301,8 @@ void GERBVIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 
     if( aCfg->m_Window.zoom_factors.empty() )
     {
-        aCfg->m_Window.zoom_factors = { ZOOM_LIST_GERBER };
+        aCfg->m_Window.zoom_factors = { ZOOM_LIST_GERBVIEW };
     }
-
-    for( double& factor : aCfg->m_Window.zoom_factors )
-        factor = std::min( factor, MAX_ZOOM_FACTOR );
 
     GERBVIEW_SETTINGS* cfg = dynamic_cast<GERBVIEW_SETTINGS*>( aCfg );
     wxCHECK( cfg, /*void*/ );

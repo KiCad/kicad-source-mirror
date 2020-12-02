@@ -60,7 +60,7 @@ OPT_TOOL_EVENT ZOOM_MENU::eventHandler( const wxMenuEvent& aEvent )
 
 void ZOOM_MENU::update()
 {
-    double zoom = m_parent->GetCanvas()->GetGAL()->GetZoomFactor() / ZOOM_COEFF;
+    double zoom = m_parent->GetCanvas()->GetGAL()->GetZoomFactor();
 
     const std::vector<double>& zoomList = m_parent->config()->m_Window.zoom_factors;
 

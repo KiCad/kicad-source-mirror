@@ -48,6 +48,7 @@
 
 #include <sch_base_frame.h>
 #include <sch_painter.h>
+#include <zoom_defines.h>
 
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -74,7 +75,8 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_painter->GetSettings()->LoadColors( cs );
 
     m_view->SetPainter( m_painter.get() );
-    m_view->SetScaleLimits( 1000.0, 0.0001 );    // This fixes the zoom in and zoom out limits
+    // This fixes the zoom in and zoom out limits:
+    m_view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA, ZOOM_MIN_LIMIT_EESCHEMA );
     m_view->SetMirror( false, false );
 
     // Early initialization of the canvas background color,

@@ -33,6 +33,7 @@
 #include <sch_edit_frame.h>
 #include <settings/settings_manager.h>
 #include <preview_items/selection_area.h>
+#include <zoom_defines.h>
 
 #include <functional>
 
@@ -55,7 +56,8 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     m_painter->GetSettings()->LoadColors( Pgm().GetSettingsManager().GetColorSettings() );
 
     m_view->SetPainter( m_painter.get() );
-    m_view->SetScaleLimits( 20000.0, 0.002 );
+    // This fixes the zoom in and zoom out limits:
+    m_view->SetScaleLimits( ZOOM_MAX_LIMIT_EESCHEMA_PREVIEW, ZOOM_MIN_LIMIT_EESCHEMA_PREVIEW );
     m_view->SetMirror( false, false );
 
     setDefaultLayerOrder();

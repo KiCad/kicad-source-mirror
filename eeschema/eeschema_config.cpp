@@ -200,11 +200,6 @@ void SCH_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     {
         aCfg->m_Window.zoom_factors = { ZOOM_LIST_EESCHEMA };
     }
-
-    // ensure factors < MAX_ZOOM_FACTOR (useful only when the user will be
-    // able to change/edit the factor list
-    for( double& factor : aCfg->m_Window.zoom_factors )
-        factor = std::min( factor, MAX_ZOOM_FACTOR );
 }
 
 
