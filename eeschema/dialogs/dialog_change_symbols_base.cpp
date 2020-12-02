@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jul 27 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -58,7 +58,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	matchSizerMargins->Add( m_matchSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	m_mainSizer->Add( matchSizerMargins, 0, wxEXPAND|wxLEFT, 5 );
+	m_mainSizer->Add( matchSizerMargins, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	m_mainSizer->Add( 0, 8, 0, wxEXPAND, 5 );
@@ -91,7 +91,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	wxBoxSizer* bSizerUpdate;
 	bSizerUpdate = new wxBoxSizer( wxHORIZONTAL );
 
-	m_updateFieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Reset Fields") ), wxVERTICAL );
+	m_updateFieldsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update/reset Fields") ), wxVERTICAL );
 
 	wxArrayString m_fieldsBoxChoices;
 	m_fieldsBox = new wxCheckListBox( m_updateFieldsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_fieldsBoxChoices, wxLB_NEEDED_SB );
@@ -114,7 +114,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	bSizerUpdate->Add( m_updateFieldsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 8 );
 
-	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Options") ), wxVERTICAL );
+	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxVERTICAL );
 
 	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
@@ -127,13 +127,13 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	m_updateOptionsSizer->Add( 0, 15, 0, wxEXPAND, 5 );
 
-	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
 
-	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset field sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
 
-	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldPositions, 0, wxBOTTOM|wxRIGHT, 4 );
 
 

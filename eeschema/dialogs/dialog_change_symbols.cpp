@@ -119,7 +119,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
 
     if( m_mode == MODE::CHANGE )
     {
-        m_updateFieldsSizer->GetStaticBox()->SetLabel( _( "Update Fields") );
+        m_updateFieldsSizer->GetStaticBox()->SetLabel( _( "Update Fields" ) );
         m_removeExtraBox->SetLabel( _( "Remove fields if not in new symbol" ) );
         m_resetEmptyFields->SetLabel( _( "Reset fields if empty in new symbol" ) );
         m_resetFieldVisibilities->SetLabel( _( "Update field visibilities" ) );
