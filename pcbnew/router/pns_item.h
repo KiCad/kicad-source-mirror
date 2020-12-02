@@ -41,7 +41,8 @@ enum LineMarker {
     MK_VIOLATION    = ( 1 << 3 ),
     MK_LOCKED       = ( 1 << 4 ),
     MK_DP_COUPLED   = ( 1 << 5 ),
-    MK_ALT_SHAPE    = ( 1 << 6 )
+    MK_ALT_SHAPE    = ( 1 << 6 )    // For instance, a simple annular ring when the pad has
+                                    // been dropped from a layer.
 };
 
 

@@ -609,8 +609,10 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, in
 class PNS_PCBNEW_DEBUG_DECORATOR: public PNS::DEBUG_DECORATOR
 {
 public:
-    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = NULL ): PNS::DEBUG_DECORATOR(),
-        m_view( NULL ), m_items( NULL )
+    PNS_PCBNEW_DEBUG_DECORATOR( KIGFX::VIEW* aView = NULL ) :
+            PNS::DEBUG_DECORATOR(),
+            m_view( NULL ),
+            m_items( NULL )
     {
         SetView( aView );
     }
@@ -636,7 +638,7 @@ public:
         m_view->Add( m_items );
     }
 
-    void AddPoint( VECTOR2I aP, int aColor,  const std::string aName = "") override
+    void AddPoint( VECTOR2I aP, int aColor, const std::string aName = "" ) override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -652,7 +654,7 @@ public:
         AddLine( l, aColor, 10000 );
     }
 
-    void AddBox( BOX2I aB, int aColor,  const std::string aName = "" ) override
+    void AddBox( BOX2I aB, int aColor, const std::string aName = "" ) override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -668,7 +670,7 @@ public:
         AddLine( l, aColor, 10000 );
     }
 
-    void AddSegment( SEG aS, int aColor,  const std::string aName = "") override
+    void AddSegment( SEG aS, int aColor, const std::string aName = "" ) override
     {
         SHAPE_LINE_CHAIN l;
 
@@ -678,7 +680,8 @@ public:
         AddLine( l, aColor, 10000 );
     }
 
-    void AddDirections( VECTOR2D aP, int aMask, int aColor,  const std::string aName = "") override
+    void AddDirections( VECTOR2D aP, int aMask, int aColor,
+                        const std::string aName = "" ) override
     {
         BOX2I b( aP - VECTOR2I( 10000, 10000 ), VECTOR2I( 20000, 20000 ) );
 
@@ -693,7 +696,8 @@ public:
         }
     }
 
-    void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth,  const std::string aName = "" ) override
+    void AddLine( const SHAPE_LINE_CHAIN& aLine, int aType, int aWidth,
+                  const std::string aName = "" ) override
     {
         if( !m_view )
             return;

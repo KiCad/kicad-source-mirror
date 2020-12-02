@@ -277,7 +277,7 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
 
     bool obstacleIsHead = false;
 
-    for( auto s : aObstacle.Links() )
+    for( LINKED_ITEM* s : aObstacle.Links() )
     {
         if( s->Marker() & MK_HEAD )
         {
@@ -302,7 +302,10 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
         int clearance = getClearance( &aCurrent, &aObstacle ) + 1;
 
 #ifdef DEBUG
-        Dbg()->Message( wxString::Format( "shove process-single: cur net %d obs %d cl %d", aCurrent.Net(), aObstacle.Net(), clearance ) );
+        Dbg()->Message( wxString::Format( "shove process-single: cur net %d obs %d cl %d",
+                                          aCurrent.Net(),
+                                          aObstacle.Net(),
+                                          clearance ) );
 #endif
 
         HULL_SET hulls;
@@ -643,7 +646,7 @@ NODE* SHOVE::reduceSpringback( const ITEM_SET& aHeadSet, VIA_HANDLE& aDraggedVia
     {
         SPRINGBACK_TAG& spTag = m_nodeStack.back();
 
-        auto obs = spTag.m_node->CheckColliding( aHeadSet );
+        OPT<OBSTACLE> obs = spTag.m_node->CheckColliding( aHeadSet );
 
         if( !obs && !spTag.m_locked )
         {
@@ -870,7 +873,8 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
             // hole-to-hole is a mechanical constraint (broken drill bits), not an electrical
             // one, so it has to be checked irrespective of matching nets.
 
-            // temporarily removed hole-to-hole collision check due to conflicts with the springback algorithm...
+            // temporarily removed hole-to-hole collision check due to conflicts with the
+            // springback algorithm...
             // we need to figure out a better solution here - TW
             holeCollision = false; //rr->CollideHoles( &currentLine->Via(), aObstacleVia, true, &mtvHoles );
         }
@@ -1015,7 +1019,7 @@ void SHOVE::unwindLineStack( ITEM* aItem )
     {
         LINE* l = static_cast<LINE*>( aItem );
 
-        for( auto seg : l->Links() )
+        for( LINKED_ITEM* seg : l->Links() )
             unwindLineStack( seg );
     }
 }
@@ -1048,7 +1052,7 @@ void SHOVE::popLineStack( )
     {
         bool found = false;
 
-        for( auto s : l.Links() )
+        for( LINKED_ITEM* s : l.Links() )
         {
             if( i->ContainsLink( s ) )
             {
@@ -1479,12 +1483,10 @@ SHOVE::SHOVE_STATUS SHOVE::ShoveDraggingVia( const VIA_HANDLE aOldVia, const VEC
     m_newHead = OPT_LINE();
     m_draggedVia = NULL;
 
-    auto viaToDrag = findViaByHandle( m_currentNode, aOldVia );
+    VIA* viaToDrag = findViaByHandle( m_currentNode, aOldVia );
 
     if( !viaToDrag )
-    {
         return SH_INCOMPLETE;
-    }
 
     // Pop NODEs containing previous shoves which are no longer necessary
     ITEM_SET headSet;

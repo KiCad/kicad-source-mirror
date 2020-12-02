@@ -406,12 +406,13 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
         {
             if( aItem->Kind() == ITEM::SEGMENT_T )
             {
-                anchor = m_gridHelper->AlignToSegment( aP, static_cast<SEGMENT*>( li )->Seg() );
+                SEGMENT* seg = static_cast<SEGMENT*>( li );
+                anchor = m_gridHelper->AlignToSegment( aP, seg->Seg() );
             }
             else if( aItem->Kind() == ITEM::ARC_T )
             {
-                anchor = m_gridHelper->AlignToArc( aP,
-                        *static_cast<const SHAPE_ARC*>( static_cast<ARC*>( li )->Shape() ) );
+                ARC* arc = static_cast<ARC*>( li );
+                anchor = m_gridHelper->AlignToArc( aP, *static_cast<const SHAPE_ARC*>( arc->Shape() ) );
             }
         }
 

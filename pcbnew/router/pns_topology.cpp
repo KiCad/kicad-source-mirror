@@ -109,7 +109,8 @@ bool TOPOLOGY::LeadingRatLine( const LINE* aTrack, SHAPE_LINE_CHAIN& aRatLine )
     if( !jt )
        return false;
 
-    if( ( !track.EndsWithVia() && jt->LinkCount() >= 2 ) || ( track.EndsWithVia() && jt->LinkCount() >= 3 ) ) // we got something connected
+    if( ( !track.EndsWithVia() && jt->LinkCount() >= 2 )
+            || ( track.EndsWithVia() && jt->LinkCount() >= 3 ) ) // we got something connected
     {
         end = jt->Pos();
     }

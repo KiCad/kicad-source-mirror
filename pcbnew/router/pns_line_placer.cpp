@@ -1091,8 +1091,8 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
         if( aEndItem )
         {
-            // The user has indicated a connection should be made.  If either the
-            // trace or endItem is netless, then allow the connection by adopting the net of the other.
+            // The user has indicated a connection should be made.  If either the trace or
+            // endItem is net-less, then allow the connection by adopting the net of the other.
             if( m_currentNet <= 0 )
             {
                 m_currentNet = aEndItem->Net();
@@ -1238,8 +1238,8 @@ bool LINE_PLACER::UnfixRoute()
     m_currentLayer = st.pts[0].layer;
     m_head.SetLayer( m_currentLayer );
     m_tail.SetLayer( m_currentLayer );
-    m_head.RemoveVia( );
-    m_tail.RemoveVia( );
+    m_head.RemoveVia();
+    m_tail.RemoveVia();
 
     if (m_shove)
     {
@@ -1306,7 +1306,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 
             if( !( line.ContainsLink( seg ) ) && line.SegmentCount() )
             {
-                for( auto ss : line.Links() )
+                for( LINKED_ITEM* ss : line.Links() )
                     toErase.insert( ss );
 
                 removedCount++;

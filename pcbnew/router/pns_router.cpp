@@ -337,7 +337,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
         m_iface->DisplayItem( item, -1, clearance, aDragging );
     }
 
-    for( auto item : removed )
+    for( ITEM* item : removed )
         m_iface->HideItem( item );
 }
 
@@ -348,9 +348,7 @@ void ROUTER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
     // Change track/via size settings
     if( m_state == ROUTE_TRACK)
-    {
         m_placer->UpdateSizes( m_sizes );
-    }
 }
 
 
@@ -390,10 +388,10 @@ void ROUTER::CommitRouting( NODE* aNode )
 
     aNode->GetUpdatedItems( removed, added );
 
-    for( auto item : removed )
+    for( ITEM* item : removed )
         m_iface->RemoveItem( item );
 
-    for( auto item : added )
+    for( ITEM* item : added )
         m_iface->AddItem( item );
 
     m_iface->Commit();
@@ -406,9 +404,7 @@ bool ROUTER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
     bool rv = false;
 
     if( m_logger )
-    {
         m_logger->Log( LOGGER::EVT_FIX, aP, aEndItem );
-    }
 
     switch( m_state )
     {
