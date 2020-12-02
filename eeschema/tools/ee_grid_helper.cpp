@@ -174,12 +174,12 @@ VECTOR2I EE_GRID_HELPER::AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg )
     return nearest;
 }
 
-VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, const std::vector<SCH_ITEM*>& aItems )
+VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, const EE_SELECTION& aItems )
 {
     clearAnchors();
 
-    for( SCH_ITEM* item : aItems )
-        computeAnchors( item, aMousePos, true );
+    for( EDA_ITEM* item : aItems )
+        computeAnchors( static_cast<SCH_ITEM*>( item ), aMousePos, true );
 
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
@@ -220,12 +220,12 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, const std::v
 
 
 std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
-                                                 const std::vector<SCH_ITEM*>& aSkip ) const
+                                                  const EE_SELECTION& aSkip ) const
 {
-    std::set<SCH_ITEM*> items;
+    std::set<SCH_ITEM*>                       items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
 
-    KIGFX::VIEW*                  view = m_toolMgr->GetView();
+    KIGFX::VIEW* view = m_toolMgr->GetView();
 
     view->Query( aArea, selectedItems );
 
@@ -234,16 +234,12 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
         SCH_ITEM* item = static_cast<SCH_ITEM*>( it.first );
 
         // The item must be visible and on an active layer
-        if( view->IsVisible( item )
-                && item->ViewGetLOD( it.second, view ) < view->GetScale() )
-        {
+        if( view->IsVisible( item ) && item->ViewGetLOD( it.second, view ) < view->GetScale() )
             items.insert ( item );
-        }
     }
 
-
-    for( SCH_ITEM* skipItem : aSkip )
-        items.erase( skipItem );
+    for( EDA_ITEM* skipItem : aSkip )
+        items.erase( static_cast<SCH_ITEM*>( skipItem ) );
 
     return items;
 }
@@ -251,12 +247,15 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
 
 VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, SCH_ITEM* aDraggedItem )
 {
-    return BestSnapAnchor( aOrigin, LSET::AllLayersMask(), { aDraggedItem } );
+    EE_SELECTION draggedItems;
+    draggedItems.Add( aDraggedItem );
+
+    return BestSnapAnchor( aOrigin, LSET::AllLayersMask(), draggedItems );
 }
 
 
 VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-                                      const std::vector<SCH_ITEM*>& aSkip )
+                                         const EE_SELECTION& aSkip )
 {
     int snapDist      = GetGrid().x;
     int snapRange     = snapDist;
@@ -270,7 +269,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aL
         computeAnchors( item, aOrigin );
 
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
-    VECTOR2I nearestGrid = Align( aOrigin );
+    VECTOR2I nearestGrid = m_enableGrid ? Align( aOrigin ) : aOrigin;
 
     if( nearest )
         snapDist = nearest->Distance( aOrigin );
@@ -309,7 +308,6 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aL
 
     if( nearest && m_enableSnap )
     {
-
         if( snapDist <= snapRange )
         {
             m_viewSnapPoint.SetPosition( wxPoint( nearest->pos ) );

@@ -109,9 +109,9 @@ static const KICAD_T movableItems[] =
 
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+    EESCHEMA_SETTINGS*    cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    EE_GRID_HELPER   grid( m_toolMgr );
+    EE_GRID_HELPER        grid( m_toolMgr );
 
     m_anchorPos.reset();
 
@@ -179,10 +179,15 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     do
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &EE_ACTIONS::moveActivate ) || evt->IsAction( &EE_ACTIONS::restartMove )
-                || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
-                || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
+        if( evt->IsAction( &EE_ACTIONS::moveActivate )
+                || evt->IsAction( &EE_ACTIONS::restartMove )
+                || evt->IsAction( &EE_ACTIONS::move )
+                || evt->IsAction( &EE_ACTIONS::drag )
+                || evt->IsMotion()
+                || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
@@ -312,12 +317,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( m_frame->GetMoveWarpsCursor() )
                     {
                         // User wants to warp the mouse
-                        std::vector<SCH_ITEM*> items;
-
-                        for( EDA_ITEM* item : selection )
-                            items.push_back( static_cast<SCH_ITEM*>( item ) );
-
-                        m_cursor = grid.BestDragOrigin( m_cursor, items );
+                        m_cursor = grid.BestDragOrigin( m_cursor, selection );
                     }
                     else
                     {
@@ -325,7 +325,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_cursor = getViewControls()->GetCursorPosition( true );
                     }
                 }
-
 
                 controls->SetCursorPosition( m_cursor, false );
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
@@ -338,7 +337,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             //------------------------------------------------------------------------
             // Follow the mouse
             //
-            m_cursor = controls->GetCursorPosition();
+            m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
+                                            LSET::AllLayersMask(), selection );
+
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;
 

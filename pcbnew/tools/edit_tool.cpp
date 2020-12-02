@@ -614,12 +614,10 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
             break; // finish -- we moved exactly, so we are finished
         }
-
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             break; // finish
         }
-
         else
         {
             evt->SetPassEvent();

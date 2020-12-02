@@ -29,6 +29,7 @@
 #include <vector>
 #include <math/vector2d.h>
 #include <origin_viewitem.h>
+#include <ee_selection.h>
 
 class LSET;
 class SCH_ITEM;
@@ -60,11 +61,11 @@ public:
 
     VECTOR2I AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg );
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, const std::vector<SCH_ITEM*>& aItem );
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, const EE_SELECTION& aItems );
 
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, SCH_ITEM* aDraggedItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-                             const std::vector<SCH_ITEM*>& aSkip = {} );
+                             const EE_SELECTION& aSkip = {} );
 
     void SetSkipPoint( const VECTOR2I& aPoint )
     {
@@ -79,15 +80,9 @@ public:
         m_skipPoint = VECTOR2I( std::numeric_limits<int>::min(), std::numeric_limits<int>::min() );
     }
 
-    void SetSnap( bool aSnap )
-    {
-        m_enableSnap = aSnap;
-    }
-
-    void SetSnapLine( bool aSnap )
-    {
-        m_enableSnapLine = aSnap;
-    }
+    void SetSnap( bool aSnap ) { m_enableSnap = aSnap; }
+    void SetUseGrid( bool aSnapToGrid ) { m_enableGrid = aSnapToGrid; }
+    void SetSnapLine( bool aSnap ) { m_enableSnapLine = aSnap; }
 
 private:
     enum ANCHOR_FLAGS {
@@ -117,10 +112,7 @@ private:
         }
     };
 
-    std::vector<ANCHOR> m_anchors;
-
-    std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea,
-                                        const std::vector<SCH_ITEM*>& aSkip ) const;
+    std::set<SCH_ITEM*> queryVisible( const BOX2I& aArea, const EE_SELECTION& aSkip ) const;
 
     void addAnchor( const VECTOR2I& aPos, int aFlags, SCH_ITEM* aItem )
     {
@@ -144,15 +136,18 @@ private:
         m_anchors.clear();
     }
 
-    TOOL_MANAGER* m_toolMgr;
-    OPT<VECTOR2I> m_auxAxis;
+    std::vector<ANCHOR>    m_anchors;
 
-    bool          m_enableSnap;      // If true, allow snapping to other items on the layers
-    bool          m_enableSnapLine;  // If true, allow drawing lines from snap points
-    ANCHOR*       m_snapItem;        // Pointer to the currently snapped item in m_anchors
-                                     //   (NULL if not snapped)
-    VECTOR2I      m_skipPoint;       // When drawing a line, we avoid snapping to the source point
+    TOOL_MANAGER*          m_toolMgr;
+    OPT<VECTOR2I>          m_auxAxis;
 
+    bool                   m_enableSnap;     // Allow snapping to other items on the layers
+    bool                   m_enableGrid;     // If true, allow snapping to grid
+    bool                   m_enableSnapLine; // Allow drawing lines from snap points
+    ANCHOR*                m_snapItem;       // Pointer to the currently snapped item in m_anchors
+                                             //   (NULL if not snapped)
+    VECTOR2I               m_skipPoint;      // When drawing a line, we avoid snapping to the source
+                                             //   point
     KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
     KIGFX::ORIGIN_VIEWITEM m_viewSnapLine;
     KIGFX::ORIGIN_VIEWITEM m_viewAxis;
