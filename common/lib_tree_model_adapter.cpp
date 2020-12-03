@@ -139,17 +139,25 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 {
     {
-        // DO NOT REMOVE THE FREEZE/THAW. This freeze/thaw is a flag for this model adapter
-        // that tells it when it shouldn't trust any of the data in the model. When set, it will
-        // not return invalid data to the UI, since this invalid data can cause crashes.
-        // This is different than the update locker, which locks the UI aspects only.
         wxWindowUpdateLocker updateLock( m_widget );
+
+        // This collapse is required before the call to "Freeze()" below.  Once Freeze()
+        // is called, GetParent() will return nullptr.  While this works for some calls, it
+        // segfaults when we have our first library expanded.
+        // The tree will be expanded again below when we get our matches
+        if( !aSearch.IsNull() )
+            m_widget->Collapse( wxDataViewItem( &*m_tree.Children[0] ) );
 
         // Even with the updateLock, wxWidgets sometimes ties its knickers in
         // a knot when trying to run a wxdataview_selection_changed_callback()
         // on a row that has been deleted.
         // https://bugs.launchpad.net/kicad/+bug/1756255
         m_widget->UnselectAll();
+
+        // DO NOT REMOVE THE FREEZE/THAW. This freeze/thaw is a flag for this model adapter
+        // that tells it when it shouldn't trust any of the data in the model. When set, it will
+        // not return invalid data to the UI, since this invalid data can cause crashes.
+        // This is different than the update locker, which locks the UI aspects only.
         Freeze();
         BeforeReset();
 
