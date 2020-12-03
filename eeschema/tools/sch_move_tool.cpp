@@ -172,6 +172,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     bool        chain_commands = false;
     TOOL_EVENT* evt = const_cast<TOOL_EVENT*>( &aEvent );
     VECTOR2I    prevPos;
+    int         snapLayer = UNDEFINED_LAYER;
 
     m_cursor = controls->GetCursorPosition();
 
@@ -247,6 +248,21 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 for( EDA_ITEM* item : selection )
                 {
+                    if( static_cast<SCH_ITEM*>( item )->IsConnectable() )
+                    {
+                        if( snapLayer == LAYER_GRAPHICS )
+                            snapLayer = LAYER_ANY;
+                        else
+                            snapLayer = LAYER_CONNECTABLE;
+                    }
+                    else
+                    {
+                        if( snapLayer == LAYER_CONNECTABLE )
+                            snapLayer = LAYER_ANY;
+                        else
+                            snapLayer = LAYER_GRAPHICS;
+                    }
+
                     if( item->IsNew() )
                     {
                         if( item->HasFlag( TEMP_SELECTED ) && m_isDragOperation )
@@ -317,7 +333,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( m_frame->GetMoveWarpsCursor() )
                     {
                         // User wants to warp the mouse
-                        m_cursor = grid.BestDragOrigin( m_cursor, selection );
+                        m_cursor = grid.BestDragOrigin( m_cursor, snapLayer, selection );
                     }
                     else
                     {
@@ -338,7 +354,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             // Follow the mouse
             //
             m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition( false ),
-                                            LSET::AllLayersMask(), selection );
+                                            snapLayer, selection );
 
             VECTOR2I delta( m_cursor - prevPos );
             m_anchorPos = m_cursor;

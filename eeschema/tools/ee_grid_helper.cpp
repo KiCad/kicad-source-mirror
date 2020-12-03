@@ -23,6 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * EE_GRID_HELPER
+ *
+ * A helper class for doing grid and object snapping.
+ *
+ * It shares its roots with PCBNew's GRID_HELPER, but uses the layers architecture to split
+ * connectable items from graphic items.
+ */
+
 #include <functional>
 using namespace std::placeholders;
 
@@ -174,7 +183,8 @@ VECTOR2I EE_GRID_HELPER::AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg )
     return nearest;
 }
 
-VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, const EE_SELECTION& aItems )
+VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, int aLayer,
+                                         const EE_SELECTION& aItems )
 {
     clearAnchors();
 
@@ -184,9 +194,9 @@ VECTOR2I EE_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, const EE_SEL
     double worldScale = m_toolMgr->GetView()->GetGAL()->GetWorldScale();
     double lineSnapMinCornerDistance = 50.0 / worldScale;
 
-    ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, LSET::AllLayersMask() );
-    ANCHOR* nearestCorner = nearestAnchor( aMousePos, CORNER, LSET::AllLayersMask() );
-    ANCHOR* nearestOrigin = nearestAnchor( aMousePos, ORIGIN, LSET::AllLayersMask() );
+    ANCHOR* nearestOutline = nearestAnchor( aMousePos, OUTLINE, aLayer );
+    ANCHOR* nearestCorner = nearestAnchor( aMousePos, CORNER, aLayer );
+    ANCHOR* nearestOrigin = nearestAnchor( aMousePos, ORIGIN, aLayer );
     ANCHOR* best = NULL;
     double minDist = std::numeric_limits<double>::max();
 
@@ -245,20 +255,20 @@ std::set<SCH_ITEM*> EE_GRID_HELPER::queryVisible( const BOX2I& aArea,
 }
 
 
-VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, SCH_ITEM* aDraggedItem )
+VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SCH_ITEM* aSkip )
 {
-    EE_SELECTION draggedItems;
-    draggedItems.Add( aDraggedItem );
+    EE_SELECTION skipItems;
+    skipItems.Add( aSkip );
 
-    return BestSnapAnchor( aOrigin, LSET::AllLayersMask(), draggedItems );
+    return BestSnapAnchor( aOrigin, aLayer, skipItems );
 }
 
 
-VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
                                          const EE_SELECTION& aSkip )
 {
     int snapDist      = GetGrid().x;
-    int snapRange     = snapDist;
+    int snapRange     = SNAP_RANGE * IU_PER_MILS;
 
     BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
               VECTOR2I( snapRange, snapRange ) );
@@ -268,7 +278,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aL
     for( SCH_ITEM* item : queryVisible( bb, aSkip ) )
         computeAnchors( item, aOrigin );
 
-    ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
+    ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayer );
     VECTOR2I nearestGrid = m_enableGrid ? Align( aOrigin ) : aOrigin;
 
     if( nearest )
@@ -358,7 +368,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM* aItem, const VECTOR2I& aRefPos, b
     {
         std::vector<wxPoint> pts = aItem->GetConnectionPoints();
 
-        for( auto pt : pts )
+        for( const wxPoint& pt : pts )
             addAnchor( VECTOR2I( pt ), SNAPPABLE | CORNER, aItem );
 
         break;
@@ -371,7 +381,7 @@ void EE_GRID_HELPER::computeAnchors( SCH_ITEM* aItem, const VECTOR2I& aRefPos, b
 
 
 EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlags,
-                                                 LSET aMatchLayers )
+                                                       int aMatchLayer )
 {
     double  minDist = std::numeric_limits<double>::max();
     ANCHOR* best = NULL;
@@ -379,6 +389,11 @@ EE_GRID_HELPER::ANCHOR* EE_GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int
     for( ANCHOR& a : m_anchors )
     {
         if( ( aFlags & a.flags ) != aFlags )
+            continue;
+
+        if( aMatchLayer == LAYER_CONNECTABLE && !a.item->IsConnectable() )
+            continue;
+        else if( aMatchLayer == LAYER_GRAPHICS && a.item->IsConnectable() )
             continue;
 
         double dist = a.Distance( aPos );

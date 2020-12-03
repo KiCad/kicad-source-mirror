@@ -342,7 +342,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( collector.GetCount() == 1 && !m_isSymbolEditor && !modifier_enabled )
                 {
                     // Check if we want to auto start wires
-                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
+                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(),
+                                                                     LAYER_CONNECTABLE, nullptr );
 
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
@@ -507,7 +508,8 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( collector.GetCount() == 1 && !modifier_enabled )
                 {
-                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(), nullptr );
+                    VECTOR2I snappedCursorPos = grid.BestSnapAnchor( evt->Position(),
+                                                                     LAYER_CONNECTABLE, nullptr );
 
                     if( m_frame->eeconfig()->m_Drawing.auto_start_wires
                             && collector[0]->IsPointClickableAnchor( (wxPoint) snappedCursorPos ) )
@@ -864,10 +866,12 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             // pin should select the symbol with this setting
             // To avoid conflict with the auto-start wires option
             EE_GRID_HELPER grid( m_toolMgr );
-            wxPoint        cursorPos = wxPoint( grid.BestSnapAnchor( aPos, nullptr ) );
+            wxPoint        cursorPos = wxPoint( grid.BestSnapAnchor( aPos, LAYER_CONNECTABLE,
+                                                                     nullptr ) );
 
-            if( !m_isSymbolEditor && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol
-                && !other->IsPointClickableAnchor( cursorPos ) )
+            if( !m_isSymbolEditor
+                    && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol
+                    && !other->IsPointClickableAnchor( cursorPos ) )
             {
                 collector.Transfer( other );
             }

@@ -406,7 +406,7 @@ const SCH_SHEET_PIN* SCH_LINE_WIRE_BUS_TOOL::getSheetPin( const wxPoint& aPositi
 
 
 void SCH_LINE_WIRE_BUS_TOOL::computeBreakPoint( const std::pair<SCH_LINE*, SCH_LINE*>& aSegments,
-        wxPoint& aPosition )
+                                                wxPoint& aPosition )
 {
     wxCHECK_RET( aSegments.first && aSegments.second,
                  wxT( "Cannot compute break point of NULL line segment." ) );
@@ -503,10 +503,13 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
-
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        wxPoint cursorPos = wxPoint( grid.BestSnapAnchor(
-                evt->IsPrime() ? evt->Position() : controls->GetMousePosition(), nullptr ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+
+        wxPoint cursorPos = evt->IsPrime() ? (wxPoint) evt->Position()
+                                           : (wxPoint) controls->GetMousePosition();
+
+        cursorPos = (wxPoint) grid.BestSnapAnchor( cursorPos, LAYER_CONNECTABLE, nullptr );
         controls->ForceCursorPosition( true, cursorPos );
 
         bool forceHV = m_frame->eeconfig()->m_Drawing.hv_lines_only;
@@ -516,7 +519,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
                 {
                     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-                    for( auto wire : m_wires )
+                    for( SCH_LINE* wire : m_wires )
                         delete wire;
 
                     m_wires.clear();

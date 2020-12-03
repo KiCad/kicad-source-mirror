@@ -75,4 +75,7 @@
 ///< The intersheets references suffix string
 #define DEFAULT_IREF_SUFFIX "]"
 
+///< Radius of snap "gravity well"
+#define SNAP_RANGE 55
+
 #endif

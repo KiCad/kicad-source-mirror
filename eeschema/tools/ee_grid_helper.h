@@ -23,6 +23,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/**
+ * EE_GRID_HELPER
+ *
+ * A helper class for doing grid and object snapping.
+ *
+ * It shares its roots with PCBNew's GRID_HELPER, but uses the layers architecture to split
+ * connectable items from graphic items.
+ */
+
 #ifndef __GRID_HELPER_H
 #define __GRID_HELPER_H
 
@@ -35,7 +44,17 @@ class LSET;
 class SCH_ITEM;
 class SEG;
 
-class EE_GRID_HELPER {
+
+enum EE_GRID_HELPER_LAYERS : int
+{
+    LAYER_ANY = SCH_LAYER_ID_END + 1,
+    LAYER_CONNECTABLE,
+    LAYER_GRAPHICS
+};
+
+
+class EE_GRID_HELPER
+{
 public:
 
     EE_GRID_HELPER( TOOL_MANAGER* aToolMgr );
@@ -61,11 +80,10 @@ public:
 
     VECTOR2I AlignToWire( const VECTOR2I& aPoint, const SEG& aSeg );
 
-    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, const EE_SELECTION& aItems );
+    VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, int aLayer, const EE_SELECTION& aItems );
 
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, SCH_ITEM* aDraggedItem );
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
-                             const EE_SELECTION& aSkip = {} );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SCH_ITEM* aDraggedItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, const EE_SELECTION& aSkip = {} );
 
     void SetSkipPoint( const VECTOR2I& aPoint )
     {
@@ -119,7 +137,7 @@ private:
         m_anchors.emplace_back( ANCHOR( aPos, aFlags, aItem ) );
     }
 
-    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
+    ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, int aMatchLayer );
 
     /**
      * computeAnchors inserts the local anchor points in to the grid helper for the specified

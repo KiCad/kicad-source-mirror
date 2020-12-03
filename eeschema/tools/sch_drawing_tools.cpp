@@ -24,6 +24,7 @@
 
 #include "sch_drawing_tools.h"
 #include "ee_selection_tool.h"
+#include "ee_grid_helper.h"
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <project.h>
@@ -806,16 +807,20 @@ SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createSheetPin( SCH_SHEET* aSheet, SCH_HIERLAB
 
 int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    SCH_ITEM* item          = nullptr;
+    SCH_ITEM*             item = nullptr;
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+
     bool      isImportMode  = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
     bool      isText        = aEvent.IsAction( &EE_ACTIONS::placeSchematicText );
     bool      isGlobalLabel = aEvent.IsAction( &EE_ACTIONS::placeGlobalLabel );
     bool      isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
     bool      isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
     KICAD_T   type          = aEvent.Parameter<KICAD_T>();
+    int       snapLayer     = isText ? LAYER_GRAPHICS : LAYER_CONNECTABLE;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    getViewControls()->ShowCursor( true );
+    controls->ShowCursor( true );
 
     std::string tool = aEvent.GetCommandStr().get();
     m_frame->PushTool( tool );
@@ -849,8 +854,11 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
 
-        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetCursorPosition( false ), snapLayer,
+                                                  item );
 
         auto cleanup =
                 [&] ()
@@ -956,7 +964,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
 
                 // Restore cursor after dialog
-                getViewControls()->WarpCursor( getViewControls()->GetCursorPosition(), true );
+                controls->WarpCursor( controls->GetCursorPosition(), true );
 
                 if( item )
                 {
@@ -969,7 +977,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     setCursor();
                 }
 
-                getViewControls()->SetCursorPosition( cursorPos, false );
+                controls->SetCursorPosition( cursorPos, false );
             }
 
             // ... and second click places:
@@ -1020,8 +1028,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a footprint to be placed
-        getViewControls()->SetAutoPan( item != nullptr );
-        getViewControls()->CaptureCursor( item != nullptr );
+        controls->SetAutoPan( item != nullptr );
+        controls->CaptureCursor( item != nullptr );
     }
 
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
