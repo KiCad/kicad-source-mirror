@@ -361,8 +361,9 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::saveAll,
                         ENABLE( libMgrModifiedCond ) );
     mgr->SetConditions( ACTIONS::save,
-                        ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
-    mgr->SetConditions( EE_ACTIONS::saveInSchematic,  ENABLE( libMgrModifiedCond ) );
+                        ENABLE( libMgrModifiedCond ||
+                                ( haveSymbolCond && modifiedDocumentCondition ) ) );
+    mgr->SetConditions( EE_ACTIONS::saveInSchematic, ENABLE( libMgrModifiedCond ) );
     mgr->SetConditions( ACTIONS::undo,
                         ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,
