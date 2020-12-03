@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-02 21:37+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2020-12-05 01:29+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -25163,7 +25163,6 @@ msgid "Category"
 msgstr "类别"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
-#, fuzzy
 msgid "Page origin"
 msgstr "图框原点"
 
@@ -25176,12 +25175,10 @@ msgid "Select which origin is used for X,Y coordinate display."
 msgstr "选择用于 X，Y 坐标显示的原点。"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases right"
 msgstr "向右增加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
-#, fuzzy
 msgid "Increases left"
 msgstr "向左增加"
 
@@ -25194,12 +25191,10 @@ msgid "Select which the direction on the screen in which the X axis increases."
 msgstr "选择屏幕上 X 轴增加的方向。"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases up"
 msgstr "向上增加"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
-#, fuzzy
 msgid "Increases down"
 msgstr "向下增加"
 
@@ -26289,7 +26284,7 @@ msgstr "检查 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:817
 msgid "Board and netclass clearances apply only between copper items."
-msgstr ""
+msgstr "电路板和网类间隙仅适用于铜项目之间。"
 
 #: pcbnew/drc/drc_engine.cpp:860
 msgid "Keepout constraint not met."
@@ -31704,7 +31699,7 @@ msgstr "报告可能不完整；某些封装的外框不正确。"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
 msgid "Run DRC for a full analysis."
-msgstr "运行 DRC 以进行全面分析。"
+msgstr "运行 DRC 进行全面分析。"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:599
 msgid "Item <b>disallowed</b> at current location."
