@@ -98,6 +98,14 @@ option( KICAD_SPICE
     "Build KiCad with internal Spice simulator."
     ON )
 
+option( KICAD_BUILD_I18N
+    "Buid the translations."
+    ON )
+
+option( KICAD_I18N_UNIX_STRICT_PATH
+    "Use standard Unix locale lookup path (default OFF)."
+    OFF )
+
 # Not supported by all platforms (for instance mingw)
 option( KICAD_SANITIZE
     "Build KiCad with sanitizer options. WARNING: Not compatible with gold linker"
@@ -614,6 +622,10 @@ include( ExternalProject )
 #================================================
 include( CheckFindPackageResult )
 
+if( KICAD_BUILD_I18N )
+    find_package( Gettext REQUIRED )
+endif()
+
 #
 # Find OpenGL library, required
 #
@@ -1068,7 +1080,13 @@ add_subdirectory( utils )
 add_subdirectory( qa )
 
 # Resources
-if ( KICAD_INSTALL_DEMOS )
-add_subdirectory( demos )
+if( KICAD_INSTALL_DEMOS )
+    add_subdirectory( demos )
 endif ( KICAD_INSTALL_DEMOS )
+
+# I18n Translations
+if( KICAD_BUILD_I18N )
+    add_subdirectory( translation )
+endif()
+
 add_subdirectory( template )

@@ -116,3 +116,36 @@ macro( add_conffiles )
         set( CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/conffiles )
     endif()
 endmacro( add_conffiles )
+
+
+# Function translate_language
+#
+# This is a function to add the targets and install step for translating a language
+#
+# Arguments:
+#  - LANG is the code for the language (which must be the same as the directory name)
+#  - OUT_FILE is the file (including directory) to save the translations to
+function( translate_language LANG OUT_FILE)
+    # Make the output directory (if it doesn't already exist)
+    get_filename_component( OUT_DIR ${OUT_FILE} DIRECTORY )
+
+    file( MAKE_DIRECTORY ${OUT_DIR} )
+
+    add_custom_command(
+        OUTPUT ${OUT_FILE}
+        COMMAND ${GETTEXT_MSGFMT_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/${LANG}/kicad.po
+                -o ${OUT_FILE}
+        COMMENT "Building translation library for ${LANG}"
+        )
+
+    if( UNIX AND KICAD_I18N_UNIX_STRICT_PATH )
+        install( FILES ${OUT_FILE}
+                DESTINATION ${KICAD_I18N_PATH}/${LANG}/LC_MESSAGES
+                COMPONENT resources )
+    else()
+        install( FILES ${OUT_FILE}
+                DESTINATION ${KICAD_I18N_PATH}/${LANG}
+                COMPONENT resources )
+    endif()
+endfunction()
