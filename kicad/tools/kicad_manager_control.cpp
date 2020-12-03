@@ -597,7 +597,10 @@ int KICAD_MANAGER_CONTROL::ShowPlayer( const TOOL_EVENT& aEvent )
     KIWAY_PLAYER* player;
 
     // Prevent multiple KIWAY_PLAYER loading at one time
-    const std::lock_guard<std::mutex> lock( m_loading );
+    if( !m_loading.try_lock() )
+        return -1;
+
+    const std::lock_guard<std::mutex> lock( m_loading, std::adopt_lock );
 
     try
     {
