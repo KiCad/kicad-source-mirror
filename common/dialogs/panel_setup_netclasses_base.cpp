@@ -23,7 +23,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizerUpper;
 	sbSizerUpper = new wxStaticBoxSizer( new wxStaticBox( m_netclassesPane, wxID_ANY, _("Net Classes") ), wxVERTICAL );
 
-	sbSizerUpper->SetMinSize( wxSize( -1,200 ) );
+	sbSizerUpper->SetMinSize( wxSize( -1,140 ) );
 	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_DEFAULT|wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
@@ -85,7 +85,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassesPane->SetSizer( sbSizerUpper );
 	m_netclassesPane->Layout();
 	sbSizerUpper->Fit( m_netclassesPane );
-	bMargins->Add( m_netclassesPane, 4, wxALL|wxEXPAND, 5 );
+	bMargins->Add( m_netclassesPane, 2, wxALL|wxEXPAND, 5 );
 
 	m_membershipPane = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxStaticBoxSizer* sbMembership;
