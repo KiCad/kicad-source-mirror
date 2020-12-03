@@ -366,14 +366,6 @@ void DRC_ENGINE::loadImplicitRules()
 
     // 3) keepout area rules
 
-    auto addKeepoutConstraint =
-            [&rule]( int aConstraint )
-            {
-                DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
-                disallowConstraint.m_DisallowFlags = aConstraint;
-                rule->AddConstraint( disallowConstraint );
-            };
-
     std::vector<ZONE*> keepoutZones;
 
     for( ZONE* zone : m_board->Zones() )
@@ -410,20 +402,26 @@ void DRC_ENGINE::loadImplicitRules()
 
         rule->m_LayerCondition = zone->GetLayerSet();
 
+        int disallowFlags = 0;
+
         if( zone->GetDoNotAllowTracks() )
-            addKeepoutConstraint( DRC_DISALLOW_TRACKS );
+            disallowFlags |= DRC_DISALLOW_TRACKS;
 
         if( zone->GetDoNotAllowVias() )
-            addKeepoutConstraint( DRC_DISALLOW_VIAS );
+            disallowFlags |= DRC_DISALLOW_VIAS;
 
         if( zone->GetDoNotAllowPads() )
-            addKeepoutConstraint( DRC_DISALLOW_PADS );
+            disallowFlags |= DRC_DISALLOW_PADS;
 
         if( zone->GetDoNotAllowCopperPour() )
-            addKeepoutConstraint( DRC_DISALLOW_ZONES );
+            disallowFlags |= DRC_DISALLOW_ZONES;
 
         if( zone->GetDoNotAllowFootprints() )
-            addKeepoutConstraint( DRC_DISALLOW_FOOTPRINTS );
+            disallowFlags |= DRC_DISALLOW_FOOTPRINTS;
+
+        DRC_CONSTRAINT disallowConstraint( DISALLOW_CONSTRAINT );
+        disallowConstraint.m_DisallowFlags = disallowFlags;
+        rule->AddConstraint( disallowConstraint );
     }
 
     ReportAux( wxString::Format( "Building %d implicit netclass rules",

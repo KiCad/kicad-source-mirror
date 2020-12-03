@@ -113,6 +113,21 @@ int PCB_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
 }
 
 
+wxString PCB_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
+{
+    wxString s = aItem->GetSelectMenuText( m_frame->GetUserUnits() );
+
+    if( aItem->IsConnected() )
+    {
+        BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
+        s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
+                                            cItem->GetNetClass()->GetName() );
+    }
+
+    return s;
+};
+
+
 void PCB_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, PAD* aPad, REPORTER* r )
 {
     ENUM_MAP<ZONE_CONNECTION> connectionEnum = ENUM_MAP<ZONE_CONNECTION>::Instance();
@@ -296,21 +311,6 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     else if( !a->IsConnected() && b->IsConnected() )
         std::swap( a, b );
 
-    auto getItemDescription =
-            [&]( BOARD_ITEM* aItem )
-            {
-                wxString s = aItem->GetSelectMenuText( r->GetUnits() );
-
-                if( aItem->IsConnected() )
-                {
-                    BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
-                    s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
-                                                        cItem->GetNetClass()->GetName() );
-                }
-
-                return s;
-            };
-
     if( layer == F_SilkS || layer == B_SilkS )
     {
         r->Report( "<h7>" + _( "Silkscreen clearance resolution for:" ) + "</h7>" );
@@ -431,21 +431,6 @@ int PCB_INSPECTION_TOOL::InspectConstraints( const TOOL_EVENT& aEvent )
     }
 
     WX_HTML_REPORT_BOX* r = nullptr;
-
-    auto getItemDescription =
-            [&]( BOARD_ITEM* aItem )
-            {
-                wxString s = aItem->GetSelectMenuText( r->GetUnits() );
-
-                if( aItem->IsConnected() )
-                {
-                    BOARD_CONNECTED_ITEM* cItem = static_cast<BOARD_CONNECTED_ITEM*>( aItem );
-                    s += wxS( " " ) + wxString::Format( _( "[netclass %s]" ),
-                                                        cItem->GetNetClass()->GetName() );
-                }
-
-                return s;
-            };
 
     if( item->Type() == PCB_TRACE_T )
     {

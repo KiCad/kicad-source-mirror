@@ -135,6 +135,8 @@ private:
     void reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType, PCB_LAYER_ID aLayer,
                           BOARD_ITEM* aA, BOARD_ITEM* aB, REPORTER* r );
 
+    wxString getItemDescription( BOARD_ITEM* aItem );
+
 private:
     PCB_EDIT_FRAME* m_frame;    // Pointer to the currently used edit frame.
 

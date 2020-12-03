@@ -290,11 +290,11 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
     case T_diff_pair_gap:       constraint.m_Type = DIFF_PAIR_GAP_CONSTRAINT;            break;
     case T_diff_pair_uncoupled: constraint.m_Type = DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT;  break;
     default:
-    // fixme: message
         msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                     FromUTF8(),
-                    "'clearance', 'track_width', 'annular_width', 'hole', 'disallow'."
-                   );
+                    "'clearance', 'hole_clearance', 'edge_clearance', 'hole', hole_to_hole',"
+                    "'courtyard_clearance', 'silk_clearance', 'track_width', 'annular_width', "
+                    "'disallow', 'length', 'skew', 'diff_pair_gap' or 'diff_pair_uncoupled'." );
         reportError( msg );
     }
 
@@ -325,9 +325,8 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
             default:
                 msg.Printf( _( "Unrecognized item '%s'.| Expected %s." ),
                             FromUTF8(),
-                            "'track', 'via', 'micro_via', 'blind_via', 'pad', 'zone', 'text', "
-                            "'graphic', 'hole'."
-                            );
+                            "'track', 'via', 'micro_via', 'buried_via', 'pad', 'zone', 'text', "
+                            "'graphic', 'hole' or 'footprint'." );
                 reportError( msg );
                 break;
             }
@@ -336,6 +335,7 @@ void DRC_RULES_PARSER::parseConstraint( DRC_RULE* aRule )
         if( (int) CurTok() != DSN_RIGHT )
             reportError( _( "Missing ')'." ) );
 
+        aRule->AddConstraint( constraint );
         return;
     }
 
