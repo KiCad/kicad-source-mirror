@@ -1949,9 +1949,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
         {
             shape = new PCB_SHAPE( aContainer );
             shape->SetShape( S_POLYGON );
-            shape->SetFilled( true );
         }
 
+        shape->SetFilled( true );
         shape->SetPolyShape( getPolySetFromCadstarShape( aCadstarShape, -1, aContainer, aMoveVector,
                              aRotationAngle, aScalingFactor, aTransformCentre, aMirrorInvert ) );
         shape->SetWidth( aLineThickness );

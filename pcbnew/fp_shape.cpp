@@ -142,9 +142,10 @@ void FP_SHAPE::SetAngle( double aAngle, bool aUpdateEnd )
 {
     // Mark as depreciated.
     // m_Angle does not define the arc anymore
-    // m_Angle must be >= -360 and <= +360 degrees
-    m_angle = NormalizeAngle360Max( aAngle );
+    // Update the parent class (updates the global m_ThirdPoint)
+    PCB_SHAPE::SetAngle( aAngle, aUpdateEnd );
 
+    // Also update the local m_ThirdPoint0 if requested
     if( aUpdateEnd )
     {
         m_ThirdPoint0 = m_End0;
