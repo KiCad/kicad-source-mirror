@@ -281,7 +281,8 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
     m_part = m_comp->GetPartRef().get();
 
     // GetPartRef() now points to the cached part in the schematic, which should always be
-    // there
+    // there for usual cases, but can be null when opening old schematics not storing the part
+    // so we need to handle m_part == nullptr
     wxASSERT( m_part );
 
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
@@ -320,7 +321,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_fieldsGrid->ShowHideColumns( m_shownColumns );
     }
 
-    if( m_part->HasConversion() )
+    if( m_part && m_part->HasConversion() )
     {
         // DeMorgan conversions are a subclass of alternate pin assignments, so don't allow
         // free-form alternate assignments as well.  (We won't know how to map the alternates
@@ -449,7 +450,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_unitChoice->Enable( false );
     }
 
-    if( m_part->HasConversion() )
+    if( m_part && m_part->HasConversion() )
     {
         if( m_comp->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
             m_cbAlternateSymbol->SetValue( true );
@@ -483,8 +484,11 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_cbExcludeFromBom->SetValue( !m_comp->GetIncludeInBom() );
     m_cbExcludeFromBoard->SetValue( !m_comp->GetIncludeOnBoard() );
 
-    m_ShowPinNumButt->SetValue( m_part->ShowPinNumbers() );
-    m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
+    if( m_part )
+    {
+        m_ShowPinNumButt->SetValue( m_part->ShowPinNumbers() );
+        m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
+    }
 
     // Set the component's library name.
     m_tcLibraryID->SetLabelText( m_comp->GetLibId().Format() );
@@ -627,8 +631,11 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     case 2: m_comp->SetOrientation( CMP_MIRROR_Y ); break;
     }
 
-    m_part->SetShowPinNames( m_ShowPinNameButt->GetValue() );
-    m_part->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
+    if( m_part )
+    {
+        m_part->SetShowPinNames( m_ShowPinNameButt->GetValue() );
+        m_part->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
+    }
 
     // Restore m_Flag modified by SetUnit() and other change settings
     m_comp->ClearFlags();
