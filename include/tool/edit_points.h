@@ -30,12 +30,11 @@
 
 #include <list>
 #include <deque>
-
-#include "edit_constraints.h"
-
 #include <memory>
 
+#include "edit_constraints.h"
 #include <view/view.h>
+
 
 /**
  * EDIT_POINT
@@ -55,7 +54,7 @@ public:
             m_position( aPoint ),
             m_isActive( false ),
             m_isHover( false ),
-            m_gridFree( false ),
+            m_gridConstraint( SNAP_TO_GRID ),
             m_connected( aConnected )
     {
     }
@@ -188,8 +187,8 @@ public:
     bool IsHover() const { return m_isHover; }
     void SetHover( bool aHover = true ) { m_isHover = aHover; }
 
-    bool IsGridFree() const { return m_gridFree; }
-    void SetGridFree( bool aGridFree = true ) { m_gridFree = aGridFree; }
+    GRID_CONSTRAINT_TYPE GetGridConstraint() const { return m_gridConstraint; }
+    void SetGridConstraint( GRID_CONSTRAINT_TYPE aConstraint ) { m_gridConstraint = aConstraint; }
 
     bool operator==( const EDIT_POINT& aOther ) const
     {
@@ -206,10 +205,10 @@ public:
     static const int HOVER_SIZE = 5;
 
 private:
-    VECTOR2I  m_position;        // Position of EDIT_POINT
-    bool      m_isActive;        // True if this point is being manipulated
-    bool      m_isHover;         // True if this point is being hovered over
-    bool      m_gridFree;        // True if this point should not be snapped to the grid.
+    VECTOR2I             m_position;        // Position of EDIT_POINT
+    bool                 m_isActive;        // True if this point is being manipulated
+    bool                 m_isHover;         // True if this point is being hovered over
+    GRID_CONSTRAINT_TYPE m_gridConstraint;  // Describes the grid snapping behavior.
 
     ///> An optional connected item record used to mimic polyLine behaviour with individual
     /// line segments.
@@ -241,8 +240,7 @@ public:
         m_origin( aOrigin ),
         m_end( aEnd )
     {
-        // Don't snap the line center to the grid
-        SetGridFree();
+        SetGridConstraint( SNAP_BY_GRID );
     }
 
     ///> @copydoc EDIT_POINT::GetPosition()

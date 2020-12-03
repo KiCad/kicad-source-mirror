@@ -32,6 +32,15 @@ class EDIT_POINT;
 class EDIT_LINE;
 class EDIT_POINTS;
 
+
+enum GRID_CONSTRAINT_TYPE
+{
+    IGNORE_GRID,
+    SNAP_TO_GRID,
+    SNAP_BY_GRID    // Keep it on grid if it started on grid (treat x and y independently)
+};
+
+
 /**
  * EDIT_CONSTRAINT
  *

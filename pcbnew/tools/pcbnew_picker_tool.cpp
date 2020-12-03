@@ -67,7 +67,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         setCursor();
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
         controls->ForceCursorPosition(true, cursorPos );
 

@@ -171,7 +171,7 @@ public:
                 points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
                                                                      points->Point( ARC_CENTER ) ) );
 
-                points->Point( ARC_MID ).SetGridFree();
+                points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
                 break;
 
             case S_CIRCLE:
@@ -437,11 +437,13 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     while( TOOL_EVENT* evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( editFrame->IsGridVisible() );
+        grid.SetUseGrid( view->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
 
         if( !m_editPoints || evt->IsSelectionEvent() ||
                 evt->Matches( EVENTS::InhibitSelectionEditing ) )
+        {
             break;
+        }
 
         EDIT_POINT* prevHover = m_hoveredPoint;
 
@@ -469,14 +471,46 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             //TODO: unify the constraints to solve simultaneously instead of sequentially
-            if( m_editedPoint->IsGridFree() )
+            switch( m_editedPoint->GetGridConstraint() )
             {
+            case IGNORE_GRID:
                 m_editedPoint->SetPosition( evt->Position() );
-            }
-            else
-            {
+                break;
+
+            case SNAP_TO_GRID:
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(), snapLayers,
                                                                  { item } ) );
+                break;
+
+            case SNAP_BY_GRID:
+            {
+                VECTOR2I start = m_editedPoint->GetPosition();
+                VECTOR2I startGrid = grid.BestSnapAnchor( start, snapLayers, { item } );
+                VECTOR2I end = evt->Position();
+                VECTOR2I endGrid = grid.BestSnapAnchor( end, snapLayers, { item } );
+
+                if( start == startGrid )
+                {
+                    end = endGrid;
+                }
+                else if( start.x == startGrid.x )
+                {
+                    end.x = endGrid.x;
+
+                    if( abs( end.y - start.y ) < grid.GetGrid().y )
+                        end.y = start.y;
+                }
+                else if( start.y == startGrid.y )
+                {
+                    end.y = endGrid.y;
+
+                    if( abs( end.x - start.x ) < grid.GetGrid().x )
+                        end.x = start.x;
+                }
+
+                m_editedPoint->SetPosition( end );
+            }
+                break;
             }
 
             // The alternative constraint limits to 45°
@@ -487,12 +521,13 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             else
                 m_editedPoint->ApplyConstraint();
 
-            if( !m_editedPoint->IsGridFree() )
+            if( m_editedPoint->GetGridConstraint() == SNAP_TO_GRID )
             {
                 m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
                                                                  snapLayers, { item } ) );
             }
 
+            controls->ForceCursorPosition( true, m_editedPoint->GetPosition() );
             updateItem();
             updatePoints();
         }
