@@ -1165,6 +1165,7 @@ void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset 
     GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
 
     bool show = Schematic()->Settings().m_IntersheetRefsShow;
+
     if ( show )
         m_intersheetRefsField.Print( aSettings, aOffset );
 }
@@ -1174,6 +1175,7 @@ void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter )
     SCH_TEXT::Plot( aPlotter );
 
     bool show = Schematic()->Settings().m_IntersheetRefsShow;
+
     if ( show )
         m_intersheetRefsField.Plot( aPlotter );
 }
