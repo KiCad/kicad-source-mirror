@@ -686,7 +686,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
             if( !added )
             {
-                netCodeTxt.Printf( "%d", i );
+                netCodeTxt.Printf( "%d", i + 1 );
 
                 if( net_record->first == "no_connect_" )
                     net_record->first += netCodeTxt;
