@@ -56,14 +56,14 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
     m_through_holes_outer = NULL;
     m_through_holes_outer_ring = NULL;
     m_through_holes_vias_outer = NULL;
-    //m_ogl_disp_list_through_holes_vias_inner = NULL;
+    //m_through_holes_vias_inner = NULL;
     m_vias = NULL;
     m_pad_holes = NULL;
     m_vias_and_pad_holes_outer_contourn_and_caps = NULL;
 
     m_ogl_circle_texture = 0;
     m_grid = 0;
-    m_last_grid_type = GRID3D_TYPE::NONE;
+    m_last_grid_type     = GRID3D_TYPE::NONE;
     m_currentIntersectedBoardItem = nullptr;
     m_board_with_holes = nullptr;
 
@@ -681,7 +681,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
     // Display copper and tech layers
     // /////////////////////////////////////////////////////////////////////////
-    for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers.begin(); ii != m_layers.end();  ++ii )
+    for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers.begin(); ii != m_layers.end(); ++ii )
     {
         const PCB_LAYER_ID layer_id = (PCB_LAYER_ID)(ii->first);
 
@@ -725,9 +725,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                     ( m_platedPads_F_Cu || m_platedPads_B_Cu ) )
                     setPlatedCopperAndDepthOffset( layer_id );
 
-                if( layer_id == F_Cu  && m_platedPads_F_Cu )
+                if( layer_id == F_Cu && m_platedPads_F_Cu )
                 {
-
                     m_platedPads_F_Cu->DrawAllCameraCulled( m_camera.GetPos().z,
                                                             drawMiddleSegments );
                 }
@@ -796,7 +795,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 }
                 else
                 {
-                    pLayerDispList->DrawAllCameraCulledSubtractLayer( m_through_holes_outer,
+                    pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
+                                                                      m_through_holes_outer,
                                                                       m_anti_board );
 
                     // Draw copper plated pads
@@ -810,8 +810,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                     if( layer_id == F_Cu && m_platedPads_F_Cu )
                     {
                         m_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                             m_through_holes_outer,
-                                                                             m_anti_board );
+                                                                              m_through_holes_outer,
+                                                                              m_anti_board );
                     }
                     else if( layer_id == B_Cu && m_platedPads_B_Cu )
                     {
@@ -831,13 +831,14 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             CLAYERS_OGL_DISP_LISTS* throughHolesOuter =
                     m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
                         && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
-                        && ( layer_id == B_SilkS || layer_id == F_SilkS ) ? m_through_holes_outer_ring
-                                                                          : m_through_holes_outer;
+                        && ( layer_id == B_SilkS || layer_id == F_SilkS )
+                            ? m_through_holes_outer_ring
+                            : m_through_holes_outer;
 
             if( throughHolesOuter )
             {
                 throughHolesOuter->ApplyScalePosition( pLayerDispList->GetZBot(),
-                                                       pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
             CLAYERS_OGL_DISP_LISTS* anti_board = m_anti_board;
@@ -848,7 +849,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             if( anti_board )
             {
                 anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
-                                                pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
+                        pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
             if( !skipRenderHoles
@@ -869,7 +870,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             {
                 if( !skipRenderHoles
                     && throughHolesOuter
-                        && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
+                    && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
                                                                       throughHolesOuter, anti_board );
@@ -1246,8 +1247,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
         {
             if( m_boardAdapter.ShouldFPBeDisplayed( (FOOTPRINT_ATTR_T) fp->GetAttributes() ) )
             {
-                if( (  aRenderTopOrBot && !fp->IsFlipped() )
-                 || ( !aRenderTopOrBot &&  fp->IsFlipped() ) )
+                if( ( aRenderTopOrBot && !fp->IsFlipped() )
+                 || ( !aRenderTopOrBot && fp->IsFlipped() ) )
                 {
                     render_3D_footprint( fp, aRenderTransparentOnly, isIntersected );
                 }
@@ -1290,7 +1291,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
 
         glTranslatef( pos.x * m_boardAdapter.BiuTo3Dunits(),
                       -pos.y * m_boardAdapter.BiuTo3Dunits(),
-                      zpos );
+                       zpos );
 
         if( aFootprint->GetOrientation() )
             glRotated((double) aFootprint->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
