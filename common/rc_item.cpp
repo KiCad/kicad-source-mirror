@@ -446,7 +446,7 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         return;
 
     int  lastGood = -1;
-    bool found = false;
+    bool itemDeleted = false;
 
     if( m_view )
     {
@@ -461,19 +461,17 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         MARKER_BASE*             marker = rcItem->GetParent();
         bool                     excluded = marker ? marker->IsExcluded() : false;
 
+        if( aCurrentOnly && itemDeleted && lastGood >= 0 )
+            break;
+
         if( aCurrentOnly && rcItem != current_item )
         {
-            if( found && lastGood >= 0 )
-                break;
-
             lastGood = i;
             continue;
         }
 
         if( excluded && !aIncludeExclusions )
             continue;
-
-        found = true;
 
         if( i < (int) m_tree.size() )   // Careful; tree is truncated for large datasets
         {
@@ -498,6 +496,11 @@ void RC_TREE_MODEL::DeleteItems( bool aCurrentOnly, bool aIncludeExclusions, boo
         // Only deep delete the current item here; others will be done through the
         // DeleteAllItems() call below, which is more efficient.
         m_rcItemsProvider->DeleteItem( i, aDeep && aCurrentOnly );
+
+        if( lastGood > i )
+            lastGood--;
+
+        itemDeleted = true;
     }
 
     if( m_view && aCurrentOnly && lastGood >= 0 )
