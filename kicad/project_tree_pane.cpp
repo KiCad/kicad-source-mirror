@@ -851,8 +851,12 @@ void PROJECT_TREE_PANE::OnIdle( wxIdleEvent& aEvent )
     // This makes it ideal to launch a new window without starting Focus wars.
     if( m_selectedItem != nullptr )
     {
-        m_selectedItem->Activate( this );
-        m_selectedItem = nullptr;
+        // Activate launches a window which may run the event loop on top of us
+        // and cause OnIdle here to get called again, so be sure to block off the activation condition first
+        PROJECT_TREE_ITEM* item = m_selectedItem;
+        m_selectedItem          = nullptr;
+
+        item->Activate( this );
     }
 }
 
