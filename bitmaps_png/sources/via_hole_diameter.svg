@@ -1,158 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="27.733334"
-   width="27.733334"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.92.0 r15299"
-   sodipodi:docname="via_hole_diameter.svg"
-   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/via_hole_diameter.png"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
-  <metadata
-     id="metadata40">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1033"
-     id="namedview38"
-     showgrid="true"
-     inkscape:snap-to-guides="false"
-     inkscape:snap-grids="false"
-     inkscape:zoom="10.865385"
-     inkscape:cx="-6.077603"
-     inkscape:cy="9.0089853"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     inkscape:snap-nodes="true"
-     inkscape:lockguides="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3017"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.53333333"
-       spacingy="0.53333333"
-       originx="0"
-       originy="0" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <filter
-       id="c"
-       height="1.3651"
-       width="1.2097"
-       y="-0.18257"
-       x="-0.10484"
-       style="color-interpolation-filters:sRGB">
-      <feGaussianBlur
-         stdDeviation="1.5978799"
-         id="feGaussianBlur7" />
-    </filter>
-    <filter
-       id="d"
-       height="1.4696"
-       width="1.4809999"
-       y="-0.23481999"
-       x="-0.24049"
-       style="color-interpolation-filters:sRGB">
-      <feGaussianBlur
-         stdDeviation="1.5978799"
-         id="feGaussianBlur10" />
-    </filter>
+  <defs>
+    <style>.cls-1,.cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#e61c50;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#1a81c4;}.cls-3{fill:#f29100;}.cls-4{fill:#b9b9b9;}.cls-5{stroke:#545454;}.cls-6{fill:#545454;}</style>
   </defs>
-  <path
-     style="fill:#333392;fill-opacity:1;stroke:#333392;stroke-width:1.23479998px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 0.33278778,0.33278768 27.399987,27.399987"
-     id="path5185"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path3951"
-     d="M 2.1333333,25.6 13.866667,13.866667"
-     style="fill:none;stroke:#dc0000;stroke-width:5.41538477;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;stroke:#00a000;stroke-width:5.41538477;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 13.866667,13.866667 25.6,2.1333337"
-     id="path3949"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:#b0b302;fill-opacity:1;stroke:#000509;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 6.9333333,13.866667 v 0 0 c 0,3.829174 3.1041587,6.933333 6.9333337,6.933333 1.914586,0 3.64792,-0.776039 4.902607,-2.030726 C 20.023961,17.514587 20.8,15.781253 20.8,13.866667 c 0,-3.829175 -3.104159,-6.9333337 -6.933333,-6.9333337 -1.914587,0 -3.64792,0.7760398 -4.9026073,2.0307263 C 7.7093728,10.218746 6.9333333,11.95208 6.9333333,13.866667 Z"
-     id="path4034"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccscsscc" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#4848ff;fill-opacity:1;stroke:#4848ff;stroke-width:1.40799117px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m 26.797819,22.715963 -7.96491,-3.9824 3.982401,7.964799"
-     id="path5191"
-     inkscape:connector-curvature="0" />
-  <path
-     id="path3086"
-     style="fill:#4848ff;fill-opacity:1;stroke:#4848ff;stroke-width:1.052;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 3.7125559,15.354369 15.354551,3.7123708"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:#4848ff;fill-opacity:1;stroke:#4848ff;stroke-width:1.052;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 12.279002,23.92133 23.920997,12.279337"
-     id="path3088"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#4848ff;fill-opacity:1;stroke:#4848ff;stroke-width:1.42173636px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="M 0.89497533,4.9460085 9.0382422,8.9175525 4.9666087,0.9744639"
-     id="path5195"
-     inkscape:connector-curvature="0"
-     inkscape:transform-center-x="-18.180742"
-     inkscape:transform-center-y="-4.4048411" />
+  <title>via_hole_diameter</title>
+  <line class="cls-1" x1="8.0468" y1="17.9542" x2="1.9966" y2="24.0045"/>
+  <line class="cls-2" x1="17.9463" y1="8.0547" x2="23.9966" y2="2.0045"/>
+  <circle class="cls-3" cx="12.9965" cy="13.0045" r="7"/>
+  <circle class="cls-4" cx="12.9965" cy="13.0045" r="3.1111"/>
+  <line class="cls-5" x1="4.306" y1="16.7111" x2="16.7298" y2="4.2873"/>
+  <line class="cls-5" x1="9.2927" y1="21.6979" x2="21.7165" y2="9.2741"/>
+  <line class="cls-5" x1="18.6366" y1="18.6884" x2="21.6928" y2="21.7446"/>
+  <polygon class="cls-6" points="18.31 20.416 15.504 15.556 20.364 18.362 18.31 20.416"/>
+  <line class="cls-5" x1="4.1825" y1="4.2342" x2="7.2446" y2="7.2963"/>
+  <polygon class="cls-6" points="5.517 7.623 10.377 10.429 7.571 5.569 5.517 7.623"/>
 </svg>

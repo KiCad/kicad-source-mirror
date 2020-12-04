@@ -1,103 +1,41 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="26"
-   height="26"
-   viewBox="0 0 26 26"
-   id="svg2"
-   version="1.1"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="exchange.svg">
-  <defs
-     id="defs4" />
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="31.678384"
-     inkscape:cx="8.8896137"
-     inkscape:cy="12.786491"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     units="px"
-     inkscape:snap-nodes="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1054"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4136" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata7">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-1026.3622)">
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#0055d4;stroke-width:3.02103829;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 0.9270033,1033.812 c 0.0810872,0 0.1612135,0 0.2404052,0 4.7021758,-0.048 6.114054,0.1625 9.4916765,4.3871 3.434506,4.2958 3.679466,5.4278 8.576585,5.4561"
-       id="path4775"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cssc" />
-    <path
-       sodipodi:nodetypes="cccc"
-       style="fill:#0055d4;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 19.064444,1039.8823 c 0.04032,0.2869 0.0086,7.9955 0.0086,7.9955 l 5.969317,-3.959 z"
-       id="path4777"
-       inkscape:connector-curvature="0" />
-    <g
-       id="g4814"
-       transform="matrix(0.51587956,0,0,0.57087929,58.308068,436.3046)"
-       style="stroke-width:5.52808809;stroke-miterlimit:4;stroke-dasharray:none">
-      <g
-         id="g4140"
-         transform="matrix(0.99982649,0,0,1.0580944,-0.01522967,-60.400248)">
-        <path
-           sodipodi:nodetypes="cc"
-           inkscape:connector-curvature="0"
-           style="fill:#333333;fill-rule:evenodd;stroke:#333333;stroke-width:5.52808809;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           d="m -88.767266,24.517255 c 4.273044,-4.306161 4.638373,-4.201183 12.689525,-4.23903"
-           id="path4812"
-           transform="translate(0,1026.3622)" />
-        <path
-           sodipodi:nodetypes="csc"
-           inkscape:connector-curvature="0"
-           style="fill:none;fill-rule:evenodd;stroke:#333333;stroke-width:5.52808809;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           d="m -111.04465,1062.9599 c 0.38495,0 0.75638,0.01 1.11521,0.01 7.16823,0.042 9.30739,-0.3036 13.792212,-4.4445"
-           id="path4775-6" />
-        <path
-           sodipodi:nodetypes="cccc"
-           style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.52808809;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           d="m -76.244767,1053.6327 c 0.07774,-0.06 0.07774,-14.0057 0.07774,-14.0057 l 11.688341,7.0455 z"
-           id="path4777-2"
-           inkscape:connector-curvature="0" />
-      </g>
-    </g>
-  </g>
+  <defs>
+    <style>.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}.cls-3{fill:#e61c50;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#fff;}</style>
+    <linearGradient id="Безымянный_градиент_19" x1="12.2163" y1="18" x2="21.2782" y2="18" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ececec"/>
+      <stop offset="1" stop-color="#c6c6c5"/>
+    </linearGradient>
+    <linearGradient id="Безымянный_градиент_19-2" x1="11.9269" y1="15.8216" x2="24.2653" y2="15.8216" xlink:href="#Безымянный_градиент_19"/>
+  </defs>
+  <title>exchange</title>
+  <polygon class="cls-1" points="3.239 12.318 1.491 13.892 1.491 18.914 21.472 18.914 21.487 4.058 1.491 4.058 1.491 8.573 3.239 10.147 3.239 12.318"/>
+  <rect class="cls-2" x="15.0323" y="15.8554" width="4.3692" height="6.117"/>
+  <rect class="cls-2" x="3.6837" y="15.8554" width="4.3693" height="6.117"/>
+  <rect class="cls-2" x="9.3559" y="15.8554" width="4.3692" height="6.117"/>
+  <rect class="cls-2" x="15.0323" y="1" width="4.3692" height="6.1169"/>
+  <rect class="cls-2" x="3.6837" y="1" width="4.3693" height="6.1169"/>
+  <rect class="cls-2" x="9.3559" y="1" width="4.3692" height="6.1169"/>
+  <ellipse class="cls-3" cx="18" cy="18" rx="7.0066" ry="7"/>
+  <path class="cls-4" d="M14.1834,20.66H12.698a.4817.4817,0,1,1,0-.9633h1.4854a.9569.9569,0,0,0,.6812-.2823l3.51-3.51a1.9138,1.9138,0,0,1,1.3622-.5644h1.0593a.4817.4817,0,1,1,0,.9633H19.7372a.9565.9565,0,0,0-.6811.2823l-3.51,3.51A1.9138,1.9138,0,0,1,14.1834,20.66Z"/>
+  <polygon class="cls-5" points="20.128 16.801 23.784 15.822 20.128 14.842 20.128 16.801"/>
+  <path class="cls-6" d="M20.7965,20.66H19.7372a1.9138,1.9138,0,0,1-1.3622-.5644l-3.51-3.51a.9569.9569,0,0,0-.6812-.2823H12.698a.4817.4817,0,1,1,0-.9633h1.4854a1.9138,1.9138,0,0,1,1.3623.5644l3.51,3.51a.9565.9565,0,0,0,.6811.2823h1.0593a.4817.4817,0,1,1,0,.9633Z"/>
+  <polygon class="cls-6" points="20.128 21.158 23.784 20.178 20.128 19.199 20.128 21.158"/>
 </svg>

@@ -1,0 +1,55 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#d8d8d8;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}.cls-4{fill:#b9b9b9;}.cls-5{fill:none;stroke:#e61c50;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title>export_to_pcbnew</title>
+  <path class="cls-1" d="M3.6663,1.0009H14.333a2.6664,2.6664,0,0,1,2.6664,2.6664V14.3317a2.6664,2.6664,0,0,1-2.6664,2.6664H3.6664A2.6664,2.6664,0,0,1,1,14.3317V3.6672A2.6663,2.6663,0,0,1,3.6663,1.0009Z"/>
+  <path class="cls-2" d="M6.9805,7.1969H4.0514L1.0034,4.15l0-.4259s.0015-.2548.0113-.3391c.01-.0886.07-.35.07-.35L4.4019,6.3508H6.9805Z"/>
+  <rect class="cls-2" x="6.602" y="5.9267" width="2.7302" height="1.6375"/>
+  <rect class="cls-2" x="6.602" y="9.4756" width="2.7302" height="1.6374"/>
+  <rect class="cls-2" x="6.602" y="13.0243" width="2.7302" height="1.6376"/>
+  <rect class="cls-2" x="12.9683" y="13.9025" width="2.7301" height="1.6375"/>
+  <rect class="cls-2" x="12.9683" y="9.8123" width="2.7301" height="1.6374"/>
+  <rect class="cls-2" x="12.9683" y="5.7221" width="2.7301" height="1.6374"/>
+  <rect class="cls-2" x="12.9683" y="2.3051" width="2.7301" height="1.6375"/>
+  <path class="cls-2" d="M6.9805,3.63H4.0514L2.0038,1.5832s.2539-.1864.3451-.2384a2.8365,2.8365,0,0,1,.4248-.1884L4.4019,2.7841H6.9805Z"/>
+  <rect class="cls-2" x="6.602" y="2.3779" width="2.7302" height="1.6375"/>
+  <polygon class="cls-2" points="13.014 15.161 11.892 15.161 10.971 14.24 10.971 9.034 11.817 9.034 11.817 13.889 12.243 14.315 13.014 14.315 13.014 15.161"/>
+  <rect class="cls-2" x="10.971" y="1" width="0.8463" height="6.3142"/>
+  <rect class="cls-2" x="15.6167" y="10.2482" width="1.3833" height="0.846"/>
+  <polygon class="cls-2" points="3.765 17 3.394 17 2.918 16.884 2.918 15.16 4.678 13.401 6.638 13.401 6.638 14.247 5.028 14.247 3.765 15.51 3.765 17"/>
+  <rect class="cls-2" x="4.039" y="9.8565" width="2.5721" height="0.8461"/>
+  <path class="cls-3" d="M12.7226,8.1741A1.3332,1.3332,0,1,1,11.3894,6.841,1.3331,1.3331,0,0,1,12.7226,8.1741Z"/>
+  <path class="cls-2" d="M12.3387,8.1741a.9494.9494,0,1,1-.9493-.9493A.9493.9493,0,0,1,12.3387,8.1741Z"/>
+  <path class="cls-3" d="M4.5125,10.2793A1.3333,1.3333,0,1,1,3.1793,8.9462,1.3332,1.3332,0,0,1,4.5125,10.2793Z"/>
+  <path class="cls-2" d="M4.1285,10.2793A.9494.9494,0,1,1,3.1793,9.33.9492.9492,0,0,1,4.1285,10.2793Z"/>
+  <path class="cls-4" d="M11.6719,9.008H22.3356a2.6662,2.6662,0,0,1,2.6662,2.6662V22.3407a2.6662,2.6662,0,0,1-2.6662,2.6662H11.672a2.6663,2.6663,0,0,1-2.6663-2.6663V11.6742A2.6662,2.6662,0,0,1,11.6719,9.008Z"/>
+  <path class="cls-2" d="M19.2488,25.0064V16.5578H21.188l.5629.5631h3.2529V12.4285H21.7509l-.5629.5631H20.1871l-.9383-.9384V9.0089H11.67a2.6662,2.6662,0,0,0-2.666,2.6666V22.34a2.6662,2.6662,0,0,0,2.666,2.6665Z"/>
+  <polygon class="cls-4" points="22.133 15.108 19.254 15.108 17.107 12.961 17.107 9.009 17.869 9.009 17.869 12.646 19.569 14.347 22.133 14.347 22.133 15.108"/>
+  <polygon class="cls-4" points="17.552 25.008 16.791 25.008 16.791 16.833 14.422 14.463 14.422 9.009 15.183 9.009 15.183 14.148 17.552 16.517 17.552 25.008"/>
+  <polygon class="cls-4" points="14.855 25.008 14.093 25.008 14.093 16.833 11.724 14.463 11.724 9.009 12.486 9.009 12.486 14.148 14.855 16.517 14.855 25.008"/>
+  <rect class="cls-4" x="11.6238" y="20.1712" width="0.7616" height="4.8368"/>
+  <path class="cls-3" d="M13.3257,18.8884a1.333,1.333,0,1,1-1.333-1.3333A1.3331,1.3331,0,0,1,13.3257,18.8884Z"/>
+  <path class="cls-4" d="M12.9419,18.8884a.9492.9492,0,1,1-.9492-.9494A.9493.9493,0,0,1,12.9419,18.8884Z"/>
+  <path class="cls-3" d="M24.3689,14.7826a1.333,1.333,0,1,1-1.333-1.3333A1.3331,1.3331,0,0,1,24.3689,14.7826Z"/>
+  <path class="cls-4" d="M23.985,14.7826a.9492.9492,0,1,1-.9491-.9494A.9492.9492,0,0,1,23.985,14.7826Z"/>
+  <polyline class="cls-5" points="10.167 21.546 3.997 21.546 3.997 15.935"/>
+  <polyline class="cls-5" points="7.79 19.12 10.216 21.546 7.79 23.973"/>
+</svg>

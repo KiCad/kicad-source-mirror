@@ -1,0 +1,35 @@
+<svg id="Слой_1" data-name="Слой 1"
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+    <metadata id="metadata43">
+        <rdf:RDF>
+            <cc:Work rdf:about="">
+                <dc:format>image/svg+xml</dc:format>
+                <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+                <dc:title></dc:title>
+                <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+            </cc:Work>
+            <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+                <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+                <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+                <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+                <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+                <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            </cc:License>
+        </rdf:RDF>
+    </metadata>
+    <defs>
+        <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-3{fill:#fff;}.cls-4{fill:#e61c50;}.cls-5{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+    </defs>
+    <title>post_rpt</title>
+    <rect class="cls-1" x="4.049" y="1" width="17.9372" height="17.9833" rx="2.9934"/>
+    <rect class="cls-2" x="1.0001" y="3.9995" width="18.7099" height="9.2299"/>
+    <path class="cls-3" d="M3.07,10.9365H1.9965V9.9H3.07Z"/>
+    <path class="cls-3" d="M6.8119,7.1,6.351,7.082a.96.96,0,0,0-.5264.1338.8793.8793,0,0,0-.3252.377v3.3437H4.4213V6.126h.9844l.0712.6982a1.5456,1.5456,0,0,1,.4678-.5781,1.0838,1.0838,0,0,1,.6582-.209.9823.9823,0,0,1,.1826.0156,1.4452,1.4452,0,0,1,.1543.0381Z"/>
+    <path class="cls-3" d="M11.77,8.6914a2.7166,2.7166,0,0,1-.4922,1.6934,1.625,1.625,0,0,1-1.37.6455,1.68,1.68,0,0,1-.7227-.1475,1.4832,1.4832,0,0,1-.541-.4307v2.334H7.5658V6.126H8.475l.1064.6045a1.6071,1.6071,0,0,1,.5567-.5157,1.5582,1.5582,0,0,1,.7558-.1777,1.5937,1.5937,0,0,1,1.3819.7051A3.1693,3.1693,0,0,1,11.77,8.5977Zm-1.0732-.0957a2.3439,2.3439,0,0,0-.2774-1.2051.9.9,0,0,0-.8271-.4687,1.0651,1.0651,0,0,0-.5713.1445,1.0532,1.0532,0,0,0-.377.4014V9.6387a.9969.9969,0,0,0,.377.3886,1.1373,1.1373,0,0,0,.58.1358.9249.9249,0,0,0,.8232-.4063,1.8858,1.8858,0,0,0,.2725-1.0683Z"/>
+    <path class="cls-3" d="M14.0492,4.957V6.126h.86v.8008h-.86V9.585a.582.582,0,0,0,.1279.4248.4692.4692,0,0,0,.3418.1269,1.0134,1.0134,0,0,0,.1729-.0156.9933.9933,0,0,0,.1592-.043l.1162.792a1.2639,1.2639,0,0,1-.3282.1172,1.8184,1.8184,0,0,1-.3955.043,1.2309,1.2309,0,0,1-.9306-.35A1.53,1.53,0,0,1,12.976,9.585V6.9268h-.7325V6.126h.7325V4.957Z"/>
+    <ellipse class="cls-4" cx="18.0075" cy="17.9961" rx="6.9924" ry="7.0039"/>
+    <line class="cls-5" x1="18.1112" y1="14.6254" x2="18.1112" y2="21.6293"/>
+    <polyline class="cls-5" points="15.362 17.16 18.111 14.406 20.861 17.16"/>
+</svg>

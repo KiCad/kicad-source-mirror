@@ -1,0 +1,26 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#545454;}</style>
+  </defs>
+  <title>about_2</title>
+  <circle class="cls-1" cx="13" cy="13" r="11"/>
+  <path class="cls-2" d="M14.6388,18.7157c-.6868-.0475-.8933-.3222-.86-1.0169a2.597,2.597,0,0,1,.0818-.55c.3168-1.1763.6724-2.3429.958-3.5265.6073-2.5166-1.0665-3.2731-2.6951-2.8733-.4778.1173-.9506.2457-1.43.3925-.5126.1567-.8777.3648-.8241,1.0133a1.3542,1.3542,0,0,0,.1859-.0219c1.6756-.4476,2.1509-.0044,1.7336,1.6611-.2911,1.1616-.6692,2.302-.941,3.4675a2.0437,2.0437,0,0,0,2.3412,2.7264,9.9337,9.9337,0,0,0,2.0983-.5031.7257.7257,0,0,0,.6044-.8664A8.3055,8.3055,0,0,1,14.6388,18.7157Z"/>
+  <path class="cls-2" d="M14.3686,9.2288a1.6724,1.6724,0,0,0,1.7679-1.604A1.7006,1.7006,0,0,0,14.373,6.0014,1.727,1.727,0,0,0,12.5607,7.649,1.7147,1.7147,0,0,0,14.3686,9.2288Z"/>
+</svg>

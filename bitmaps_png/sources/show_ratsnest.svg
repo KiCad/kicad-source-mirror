@@ -1,0 +1,29 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}</style>
+  </defs>
+  <title>show_ratsnest</title>
+  <path class="cls-1" d="M5.0022,1H21a4,4,0,0,1,4,4V21a4,4,0,0,1-4,4H5.0021a4,4,0,0,1-4-4V5a4,4,0,0,1,4-4Z"/>
+  <path class="cls-2" d="M9.8824,9.499a.5.5,0,0,1-.1963-.96L24.0505,2.4108s.23.297.3271.4435c.074.112.2247.4048.2247.4048a.4934.4934,0,0,1-.0525.0261L10.0787,9.459A.5013.5013,0,0,1,9.8824,9.499Z"/>
+  <path class="cls-2" d="M13.0908,24.9992l0-.0033L10.3755,8.916a.5057.5057,0,0,0-.5761-.41.5.5,0,0,0-.41.5762l2.6879,15.9172Z"/>
+  <path class="cls-2" d="M10.0894,8.5439,1,4.9557V6.0294L9.6754,9.4541a.4922.4922,0,0,0,.207.0449.5.5,0,0,0,.207-.9551Z"/>
+  <path class="cls-3" d="M12.7432,8.999A2.8084,2.8084,0,1,1,9.9347,6.19,2.8086,2.8086,0,0,1,12.7432,8.999Z"/>
+  <path class="cls-1" d="M11.9345,8.999a2,2,0,1,1-2-2A2,2,0,0,1,11.9345,8.999Z"/>
+</svg>

@@ -1,224 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.0"
-   id="svg2"
-   inkscape:version="0.91 r"
-   sodipodi:docname="color_materials.svg"
-   style="enable-background:new">
-  <metadata
-     id="metadata22">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-        <dc:creator>
-          <cc:Agent>
-            <dc:title>Mario Luzeiro</dc:title>
-          </cc:Agent>
-        </dc:creator>
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs20">
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient4429">
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0.94059408"
-         offset="0"
-         id="stop4431" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="1"
-         id="stop4433" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4410"
-       inkscape:collect="always">
-      <stop
-         id="stop4412"
-         offset="0"
-         style="stop-color:#000000;stop-opacity:0.81188118" />
-      <stop
-         id="stop4414"
-         offset="1"
-         style="stop-color:#00899e;stop-opacity:0" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient4263">
-      <stop
-         style="stop-color:#00899e;stop-opacity:1"
-         offset="0"
-         id="stop4404" />
-      <stop
-         style="stop-color:#224978;stop-opacity:0"
-         offset="1"
-         id="stop4406" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4171"
-       inkscape:collect="always">
-      <stop
-         id="stop4354"
-         offset="0"
-         style="stop-color:#222222;stop-opacity:1" />
-      <stop
-         id="stop4356"
-         offset="1"
-         style="stop-color:#999999;stop-opacity:0;" />
-    </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4171"
-       id="radialGradient4177"
-       cx="62.693848"
-       cy="249.76643"
-       fx="62.693848"
-       fy="249.76643"
-       r="18.40678"
-       gradientTransform="matrix(0.74896559,0,0,0.07651944,-34.013191,26.473603)"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4263"
-       id="linearGradient4193"
-       x1="66.142006"
-       y1="236.71046"
-       x2="56.624855"
-       y2="221.82526"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.73866768,0,0,0.73866768,-35.880282,-139.94492)" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4410"
-       id="linearGradient4193-3"
-       x1="66.648979"
-       y1="250.7836"
-       x2="63.997211"
-       y2="243.3222"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.73866768,0,0,0.73866768,-35.880282,-139.94492)" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4429"
-       id="radialGradient4437"
-       cx="22.330507"
-       cy="16.008472"
-       fx="22.330507"
-       fy="16.008472"
-       r="2.5"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.7058814,-1.2443754,0.64766612,0.88786851,-39.877413,43.036375)" />
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}</style>
   </defs>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1053"
-     id="namedview18"
-     showgrid="true"
-     inkscape:zoom="27.812867"
-     inkscape:cx="13.50152"
-     inkscape:cy="10.522812"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer5"
-     showborder="true"
-     borderlayer="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4156" />
-  </sodipodi:namedview>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="ShadowBottom"
-     transform="translate(0,-22)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="Sphere"
-     transform="translate(0,-22)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer4"
-     inkscape:label="ShadowTop"
-     transform="translate(0,-22)" />
-  <g
-     inkscape:groupmode="layer"
-     id="layer5"
-     inkscape:label="Shininess"
-     transform="translate(0,-22)">
-    <g
-       id="g4161"
-       transform="matrix(1.0078241,0,0,1.0078241,-0.10126248,0.02781289)">
-      <ellipse
-         style="opacity:1;fill:url(#radialGradient4177);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
-         id="path4169"
-         cx="12.942337"
-         cy="45.585587"
-         rx="13.786043"
-         ry="1.4084764" />
-      <circle
-         style="opacity:0.9;fill:url(#linearGradient4193);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
-         id="path4183"
-         cx="13.020506"
-         cy="34.63987"
-         r="10.879697" />
-      <circle
-         style="opacity:0.9;fill:url(#linearGradient4193-3);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;enable-background:new"
-         id="path4183-1"
-         cx="13.020506"
-         cy="34.63987"
-         r="10.879697" />
-      <rect
-         ry="1.8466692"
-         rx="1.8466692"
-         y="24.194799"
-         x="3.3164594"
-         height="10.534941"
-         width="10.534941"
-         id="rect4427"
-         style="opacity:1;fill:url(#radialGradient4437);fill-opacity:1;stroke:none;stroke-width:4;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-    </g>
-  </g>
+  <title>color_materials</title>
+  <path class="cls-1" d="M21.3605,21.3535A12.47,12.47,0,0,1,2.8854,20.414a7.7259,7.7259,0,0,1-.9176-8.763,5.46,5.46,0,0,1,6.661-2.3145,14.2659,14.2659,0,0,0,3.8284.9078,3.2452,3.2452,0,0,0,3.4709-3.8919,5.5076,5.5076,0,0,0-.8184-1.78,2.2723,2.2723,0,0,1,.0821-2.79,2.18,2.18,0,0,1,2.67-.5526,12.48,12.48,0,0,1,4.7576,18.591C22.2227,20.3493,21.7811,20.8435,21.3605,21.3535ZM4.5738,18.8159a2.0031,2.0031,0,0,0,2.8238.03A2.0445,2.0445,0,0,0,7.38,16.01,2.0166,2.0166,0,0,0,4.6041,16,1.9669,1.9669,0,0,0,4.5738,18.8159Zm14.57-7.1678a2.0348,2.0348,0,0,0-.0378,2.834,2.0138,2.0138,0,0,0,2.8243.0022,1.9661,1.9661,0,0,0,.0368-2.7653A2.0056,2.0056,0,0,0,19.1439,11.6481Zm-6.1783,7.7a2.0265,2.0265,0,0,0-2.8315-.0046,1.9958,1.9958,0,0,0,2.8075,2.8374A2.0266,2.0266,0,0,0,12.9656,19.348ZM16.1283,17.13a1.9753,1.9753,0,0,0,.0183,2.8174,2.009,2.009,0,0,0,2.8247-.0412,2.0449,2.0449,0,0,0-.013-2.7887A2.0239,2.0239,0,0,0,16.1283,17.13ZM19.077,7.9136a1.5357,1.5357,0,1,0,.1261-2.1914A1.5265,1.5265,0,0,0,19.077,7.9136Z"/>
 </svg>

@@ -1,89 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.0"
-   id="svg2"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="ercwarn.svg">
-  <metadata
-     id="metadata23">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
-     id="namedview21"
-     showgrid="true"
-     inkscape:zoom="21.730769"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2987"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <filter
-       id="a"
-       color-interpolation-filters="sRGB">
-      <feGaussianBlur
-         stdDeviation="0.7125797"
-         id="feGaussianBlur7" />
-    </filter>
+  <defs>
+    <style>.cls-1{fill:#f29100;}.cls-2{fill:#fff;}</style>
   </defs>
-  <g
-     id="g2988"
-     transform="matrix(0.54167,0,0,0.54167,-0.09951095,0.04034769)">
-    <rect
-       rx="1.8461424"
-       ry="1.8461424"
-       height="42.461277"
-       width="42.461277"
-       y="2.6947262"
-       x="2.9529252"
-       id="rect11"
-       style="fill:#fdfd40;fill-rule:evenodd;stroke:#78781e;stroke-width:1.78753781;stroke-linejoin:round" />
-    <g
-       transform="scale(0.93726738,1.0669314)"
-       style="font-size:37.49069595px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#f9f9f9;fill-opacity:1;stroke:#78781e;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;font-family:OpenSymbol;-inkscape-font-specification:Sans Bold"
-       id="text2988">
-      <path
-         d="m 6.1051296,7.7166663 6.8939754,0 3.939415,19.0336207 5.909122,-19.0336207 5.909123,0 5.909122,19.0336207 3.939415,-19.0336207 6.893975,0 -6.893975,29.4155957 -7.87883,0 -4.924268,-19.033621 -4.924269,19.033621 -7.87883,0 L 6.1051296,7.7166663"
-         id="path2990"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cccccccccccccc" />
-    </g>
-  </g>
+  <title>ercwarn</title>
+  <path class="cls-1" d="M24.7285,20.7433,14.9738,3.1548a2.2829,2.2829,0,0,0-3.97.0018L1.2705,20.7452A2.2071,2.2071,0,0,0,3.2562,24H22.7438A2.2072,2.2072,0,0,0,24.7285,20.7433Z"/>
+  <path class="cls-2" d="M11.7587,17.7994a4.0575,4.0575,0,0,1,.2778-1.7264,5.0045,5.0045,0,0,1,1.1952-1.3042,7.6172,7.6172,0,0,0,1.044-1.2283,2.3029,2.3029,0,0,0,.3876-1.2958,1.7422,1.7422,0,0,0-.4418-1.2705,1.6827,1.6827,0,0,0-1.2592-.4516,1.8626,1.8626,0,0,0-1.1875.3841,1.3583,1.3583,0,0,0-.4882,1.1354h-1.97l-.0246-.0506a2.7865,2.7865,0,0,1,1.0059-2.3427,4.0848,4.0848,0,0,1,2.6648-.84,3.94,3.94,0,0,1,2.7576.9033,3.2227,3.2227,0,0,1,.9892,2.5072,3.4829,3.4829,0,0,1-.6184,1.988,7.6808,7.6808,0,0,1-1.5625,1.6757,1.9305,1.9305,0,0,0-.6014.802,3.8483,3.8483,0,0,0-.1225,1.1143Zm2.0794,3.478H11.75V19.31h2.0879Z"/>
 </svg>

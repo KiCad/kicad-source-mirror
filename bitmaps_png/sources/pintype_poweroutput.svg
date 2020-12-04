@@ -1,76 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="16"
-   width="16"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="pintype_powerinput.svg">
-  <metadata
-     id="metadata22">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs20" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
-     id="namedview18"
-     showgrid="true"
-     inkscape:zoom="24.969708"
-     inkscape:cx="4.6159119"
-     inkscape:cy="9.2257789"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       type="xygrid"
-       id="grid2999"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <path
-     d="M 1,0 1,16"
-     id="path12"
-     inkscape:connector-curvature="0"
-     style="fill:none;stroke:#1a1a1a;stroke-width:2;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-     sodipodi:nodetypes="cc" />
-  <path
-     d="M 2,8 14,8"
-     id="path14"
-     inkscape:connector-curvature="0"
-     style="fill:none;stroke:#1a1a1a;stroke-width:4;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:none;stroke:#1a1a1a;stroke-width:4;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:connector-curvature="0"
-     id="path3982"
-     d="m 9,2 5,6 -5,6" />
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title>pintype_poweroutput</title>
+  <path class="cls-1" d="M24.64,14.3854c.0378-.0569.0637-.1188.0967-.178a2.4671,2.4671,0,0,0,.1325-.2521,2.41,2.41,0,0,0,.076-.2447c.0222-.0739.05-.1447.0656-.2213a2.51,2.51,0,0,0,0-.9786c-.0151-.0767-.0437-.1478-.0659-.2219a2.3978,2.3978,0,0,0-.0757-.2441,2.4364,2.4364,0,0,0-.133-.253c-.0327-.059-.0584-.12-.0962-.1771a2.5219,2.5219,0,0,0-.3147-.3847L18.2744,5.1787a2.5,2.5,0,0,0-3.5351,3.5352L16.5254,10.5H2.76c-1.3809,0-1.1637,1.1191-1.1637,2.5S1.3789,15.5,2.76,15.5H16.5254l-1.7861,1.7861a2.5,2.5,0,1,0,3.5351,3.5352L24.3257,14.77A2.5219,2.5219,0,0,0,24.64,14.3854Z"/>
+  <line class="cls-2" x1="2.0031" y1="24" x2="2.0031" y2="2"/>
 </svg>

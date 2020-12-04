@@ -1174,14 +1174,12 @@ TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectCo
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0, "",
         _( "Select All Tracks in Net" ),
-        _( "Selects all tracks & vias belonging to the same net." ),
-        mode_track_xpm );
+        _( "Selects all tracks & vias belonging to the same net." ) );
 
 TOOL_ACTION PCB_ACTIONS::deselectNet( "pcbnew.InteractiveSelection.DeselectNet",
         AS_GLOBAL, 0, "",
         _( "Deselect All Tracks in Net" ),
-        _( "Deselects all tracks & vias belonging to the same net." ),
-        mode_track_xpm );
+        _( "Deselects all tracks & vias belonging to the same net." ) );
 
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL, 0, "",

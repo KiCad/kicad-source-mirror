@@ -1,26 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0">
- <defs>
-  <radialGradient id="h" gradientUnits="userSpaceOnUse" cy="36.421" cx="24.837" gradientTransform="matrix(1 0 0 .53672 0 16.873)" r="15.645">
-   <stop offset="0"/>
-   <stop stop-opacity="0" offset="1"/>
-  </radialGradient>
-  <linearGradient id="e" y2="16.375" gradientUnits="userSpaceOnUse" x2="25.446" y1="20.688" x1="25.446">
-   <stop stop-color="#edd400" offset="0"/>
-   <stop stop-color="#fce94f" offset="1"/>
-  </linearGradient>
-  <linearGradient id="f" y2="55.692" gradientUnits="userSpaceOnUse" x2="18.072" y1="29.705" x1="21.677">
-   <stop stop-color="#fff" offset="0"/>
-   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
-  </linearGradient>
-  <linearGradient id="g" y2="13.526" gradientUnits="userSpaceOnUse" x2="25.561" gradientTransform="matrix(-1.4306,0,0,1.4302,50.646,2.3548)" y1="8.7344" x1="15.457">
-   <stop stop-color="#fff" offset="0"/>
-   <stop stop-color="#fff" stop-opacity="0" offset="1"/>
-  </linearGradient>
- </defs>
- <g transform="matrix(-1,0,0,1,45.961,0)">
-  <path opacity="0.13" style="color:#000000" d="m40.482 36.421a15.645 8.3969 0 1 1 -31.289 0 15.645 8.3969 0 1 1 31.289 0z" fill-rule="evenodd" transform="matrix(1.4797 0 0 -.87235 -13.551 72.567)" fill="url(#h)"/>
-  <path style="color:#000000" d="m17.425 41.893c-17.141-9.451-7.4894-29.484 8.997-29.327v-8.0665l16.078 14.058-16.078 14.744v-8.729c-10.235-0.41516-14.742 7.267-5.7723 13.363 2.5671 1.7448 0.78878 6.1707-3.2252 3.9575z" stroke="#c4a000" display="block" fill="url(#e)"/>
-  <path opacity=".61798" style="color:#000000" d="m27.438 6.6875v5.875c-0.0084 0.54875-0.45125 0.99157-1 1-7.83-0.074-13.983 4.682-16.157 10.438-2.1736 5.756-0.5775 12.491 7.657 17.031 0.85018 0.46877 1.4658 0.51573 1.875 0.4375 0.40918-0.07823 0.66761-0.29706 0.84375-0.59375 0.35229-0.59337 0.30018-1.5074-0.5625-2.0938-2.3572-1.6022-3.9089-3.351-4.6875-5.1562-0.77857-1.8052-0.73982-3.6723 0.03125-5.25 1.5421-3.1553 5.654-5.0306 11.031-4.8125 0.53652 0.02478 0.96101 0.46297 0.96875 1v6.4375l13.562-12.439-13.562-11.874z" stroke="url(#f)" display="block" fill="none"/>
-  <path opacity=".45" d="m41.66 18.605c-18.55-3.13-28.895 2.15-32.795 10.436-0.1537-12.643 12.963-16.32 18.09-15.932l-0.016-7.507 14.721 13.003z" fill-rule="evenodd" fill="url(#g)"/>
- </g>
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#545454;}</style>
+  </defs>
+  <title>undo</title>
+  <path class="cls-1" d="M12.1209,25c-.0665,0-.1321-.001-.2-.002a10.7977,10.7977,0,0,1-7.6376-3.3339,1.0033,1.0033,0,1,1,1.4422-1.3952,8.892,8.892,0,0,0,12.78-12.3665A8.8622,8.8622,0,0,0,5.95,7.6768,1.0035,1.0035,0,0,1,4.5586,6.2305a10.6175,10.6175,0,0,1,7.7522-3.0572A10.9,10.9,0,0,1,22.9982,14.2809,10.8985,10.8985,0,0,1,12.1209,25Z"/>
+  <path class="cls-1" d="M9.6954,10.46a.993.993,0,0,1-.3043-.0471L3.6976,8.5922A1.0049,1.0049,0,0,1,3,7.6346v-5.63a1.0019,1.0019,0,1,1,2.0038,0v4.896L10,8.498A1.0051,1.0051,0,0,1,9.6954,10.46Z"/>
 </svg>

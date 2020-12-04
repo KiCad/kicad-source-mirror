@@ -1,75 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="add_dashed_line.svg">
-  <metadata
-     id="metadata50">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1054"
-     id="namedview48"
-     showgrid="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="1.9755307"
-     inkscape:cy="10.816808"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     inkscape:snap-to-guides="false"
-     inkscape:snap-grids="true"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3006"
-       empspacing="5"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <path
-     style="fill:none;stroke:#0000cf;stroke-width:1.93373311;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:0;stroke-dasharray:3.86746634, 1.93373317;stroke-dashoffset:6.23999977;stroke-opacity:0.94117647"
-     d="M -49.640706,22.333943 -30.441372,3.6141321"
-     id="path2990"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <rect
-     style="opacity:1;fill:none;fill-opacity:0.94117647;fill-rule:nonzero;stroke:#0000cf;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.79999995;stroke-dasharray:4,2;stroke-dashoffset:1;stroke-opacity:0.94117647"
-     id="rect4149"
-     width="17.963491"
-     height="18.023216"
-     x="4.0413499"
-     y="4.0034022" />
+  <defs>
+    <style>.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;stroke-dasharray:2 4;}.cls-2{fill:#1a81c4;}</style>
+  </defs>
+  <title>add_dashed_line</title>
+  <polygon class="cls-1" points="4.673 22.325 8.326 12.405 3.544 3.583 22.321 7.665 19.479 18.938 4.673 22.325"/>
+  <path class="cls-2" d="M10.7968,12.4882A2.6633,2.6633,0,1,1,8.1335,9.825,2.6633,2.6633,0,0,1,10.7968,12.4882Z"/>
+  <path class="cls-2" d="M22.201,18.9871a2.6633,2.6633,0,1,1-2.6632-2.6633A2.6633,2.6633,0,0,1,22.201,18.9871Z"/>
+  <path class="cls-2" d="M7.3367,22.3251a2.6633,2.6633,0,1,1-2.6633-2.6633A2.6632,2.6632,0,0,1,7.3367,22.3251Z"/>
+  <path class="cls-2" d="M24.9846,7.665a2.6633,2.6633,0,1,1-2.6635-2.6633A2.6634,2.6634,0,0,1,24.9846,7.665Z"/>
+  <path class="cls-2" d="M6.3379,3.6259A2.6633,2.6633,0,1,1,3.6744.9627,2.6633,2.6633,0,0,1,6.3379,3.6259Z"/>
 </svg>

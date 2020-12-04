@@ -1,0 +1,29 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#d8d8d8;}.cls-3{fill:#e61c50;}.cls-4{fill:#f29100;}</style>
+  </defs>
+  <title>select_layer_add_via</title>
+  <polygon class="cls-1" points="13 25 5 18.5 13 12 21 18.5 13 25"/>
+  <polygon class="cls-2" points="13 21.333 5 14.833 13 8.333 21 14.833 13 21.333"/>
+  <polygon class="cls-3" points="13 17.667 5 11.167 13 4.667 21 11.167 13 17.667"/>
+  <polygon class="cls-2" points="13 14 5 7.5 13 1 21 7.5 13 14"/>
+  <path class="cls-4" d="M15.7761,4.506a4.0949,4.0949,0,0,0-5.3012-.1827l-.0362.0287A4.095,4.095,0,1,0,15.5266,10.77l.0361-.0286A4.0949,4.0949,0,0,0,15.7761,4.506ZM15,10.04l-.0282.0223a3.1955,3.1955,0,1,1-3.97-5.0081l.0282-.0223A3.1955,3.1955,0,0,1,15,10.04Z"/>
+  <path class="cls-4" d="M14.6468,5.7432a2.4291,2.4291,0,0,0-3.1447-.1084l-.0215.017a2.4291,2.4291,0,1,0,3.0182,3.8069l.0214-.0169A2.4291,2.4291,0,0,0,14.6468,5.7432ZM13.5359,8.215l-.0076.006a.8563.8563,0,1,1-1.0639-1.342l.0076-.006a.8563.8563,0,0,1,1.0639,1.342Z"/>
+</svg>

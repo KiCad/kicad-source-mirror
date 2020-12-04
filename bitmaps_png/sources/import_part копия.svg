@@ -1,0 +1,26 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:none;stroke:#1a81c4;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-2{fill:#545454;}</style>
+  </defs>
+  <title>import_part копия</title>
+  <line class="cls-1" x1="21.696" y1="13" x2="24" y2="13"/>
+  <polygon class="cls-1" points="2 21 14.939 21 21.696 13 14.939 5 2 5 2 21"/>
+  <path class="cls-2" d="M11.5339,15.5215H7.0046L5.98,18.3057H4.488L8.6686,7.4951H9.9225l4.1133,10.8106H12.5436ZM7.4577,14.2959h3.6387L9.3141,9.374H9.2692Z"/>
+</svg>

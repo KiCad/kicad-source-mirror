@@ -634,7 +634,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     #define MODELS_3D_CONTRIBUTION _( "3D models by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Maui",
                                       wxEmptyString,
-                                      wxEmptyString,
+                                      "https://gitlab.com/kicad/libraries/kicad-packages3D-generator",
                                       MODELS_3D_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( three_d_xpm ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( "GitLab contributors",
@@ -653,7 +653,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     #define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( "Scripts by Thomas Pointhuber",
                                       wxEmptyString,
-                                      wxEmptyString,
+                                      "https://gitlab.com/kicad/libraries/kicad-footprint-generator",
                                       FOOTPRINT_LIB_CONTRIBUTION,
                                       aInfo.CreateKiBitmap( edit_module_xpm ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( "GitLab contributors",
@@ -664,6 +664,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
 
     // Program credits for icons
     #define ICON_CONTRIBUTION _( "Icons by" )
+    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Aleksandr Zyrianov" ),
+                                      wxEmptyString,
+                                      wxEmptyString,
+                                      ICON_CONTRIBUTION,
+                                      aInfo.CreateKiBitmap( svg_file_xpm ) ) );
     aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                       wxEmptyString,
                                       wxEmptyString,

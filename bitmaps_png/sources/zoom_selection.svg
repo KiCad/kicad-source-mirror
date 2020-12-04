@@ -1,147 +1,26 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="26"
-   height="26"
-   id="svg2"
-   sodipodi:version="0.32"
-   inkscape:version="0.48.4 r9939"
-   version="1.0"
-   sodipodi:docname="zoom_selection.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
-  <defs
-     id="defs4">
-    <linearGradient
-       id="StandardGradient"
-       gradientTransform="scale(1.0003344,0.9996657)"
-       x1="10.558969"
-       y1="3.0148761"
-       x2="10.558969"
-       y2="19.285688"
-       gradientUnits="userSpaceOnUse">
-      <stop
-         id="stop3309"
-         offset="0"
-         style="stop-color:#000000;stop-opacity:0.86274511;" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0.47058824;"
-         offset="1"
-         id="stop3311" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#StandardGradient"
-       id="linearGradient3031"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.2478294,0,0,1.18389,0.28239592,-4.4878088)"
-       x1="10.558969"
-       y1="3.0148761"
-       x2="10.558969"
-       y2="19.285688" />
-  </defs>
-  <sodipodi:namedview
-     id="base"
-     pagecolor="#ffffff"
-     bordercolor="#9a9a9a"
-     borderopacity="1"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:zoom="21.730769"
-     inkscape:cx="14.518584"
-     inkscape:cy="8.4442478"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer3"
-     showgrid="true"
-     inkscape:showpageshadow="false"
-     showguides="true"
-     inkscape:guide-bbox="true"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:snap-to-guides="true"
-     inkscape:snap-grids="true">
-    <sodipodi:guide
-       orientation="0,1"
-       position="26.278146,128"
-       id="guide2385" />
-    <sodipodi:guide
-       orientation="1,0"
-       position="128,54.082119"
-       id="guide2387" />
-    <inkscape:grid
-       type="xygrid"
-       id="grid3672"
-       visible="true"
-       enabled="true"
-       empspacing="2"
-       snapvisiblegridlinesonly="true" />
-    <sodipodi:guide
-       orientation="0.70710678,0.70710678"
-       position="26,0"
-       id="guide3780" />
-    <sodipodi:guide
-       orientation="-0.70710678,0.70710678"
-       position="26,26"
-       id="guide3824" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata7">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:groupmode="layer"
-     id="layer3"
-     inkscape:label="Cross"
-     style="display:inline"
-     transform="translate(0,4)">
-    <path
-       sodipodi:type="arc"
-       style="fill:none;stroke:#333333;stroke-width:1.50000000000000000;stroke-miterlimit:4;stroke-dasharray:none"
-       id="path3766"
-       sodipodi:cx="10"
-       sodipodi:cy="10"
-       sodipodi:rx="8"
-       sodipodi:ry="8"
-       d="M 18,10 A 8,8 0 1 1 2,10 8,8 0 1 1 18,10 z"
-       transform="translate(3,-1)" />
-    <path
-       style="fill:none;stroke:#333333;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 19,19 3,3"
-       id="path3782"
-       inkscape:connector-curvature="0"
-       transform="translate(0,-4)"
-       sodipodi:nodetypes="cc" />
-    <path
-       transform="translate(0,-4)"
-       inkscape:connector-curvature="0"
-       id="path3784"
-       d="M 26,26 22,22"
-       style="fill:none;stroke:#333333;stroke-width:4;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       sodipodi:nodetypes="cc" />
-    <path
-       inkscape:connector-curvature="0"
-       style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#444643;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path20"
-       d="m 16.633004,9.6275809 -2.825849,0.2036495 1.603297,2.9775506 c -0.02548,0.560074 -0.941482,1.043553 -1.374255,0.687127 l -1.603792,-2.82469 -1.985778,1.705618 0.02573,-7.9683416 z"
-       sodipodi:nodetypes="cccccccc" />
-  </g>
+  <defs>
+    <style>.cls-1{fill:#1a81c4;}.cls-2{fill:#545454;}</style>
+  </defs>
+  <title>zoom_selection</title>
+  <polygon class="cls-1" points="12.641 12.633 18.89 10.639 7.278 7.27 10.646 18.883 12.641 12.633"/>
+  <path class="cls-2" d="M11.5508,22.0943A10.5531,10.5531,0,1,1,19.0151,4.0806h0a10.55,10.55,0,0,1-7.4643,18.0137Zm0-19.0879A8.5381,8.5381,0,1,0,17.592,5.5037,8.5157,8.5157,0,0,0,11.5508,3.0064Z"/>
+  <path class="cls-2" d="M24.0059,24.999a.9968.9968,0,0,1-.7071-.2929l-5.7451-5.7452a1.0164,1.0164,0,0,1,1.4141-1.414l5.7451,5.7451a1,1,0,0,1-.707,1.707Z"/>
 </svg>

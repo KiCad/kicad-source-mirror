@@ -1,94 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.0"
-   id="svg2"
-   inkscape:version="0.91 r"
-   sodipodi:docname="edit_text.svg">
-  <metadata
-     id="metadata19">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1053"
-     id="namedview17"
-     showgrid="true"
-     inkscape:zoom="27.812867"
-     inkscape:cx="9.1588461"
-     inkscape:cy="13.521416"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4147" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <radialGradient
-       id="a"
-       gradientUnits="userSpaceOnUse"
-       cy="30.778"
-       cx="24.843"
-       gradientTransform="matrix(0.77957108,0,0,0.368368,-6.3202625,5.5086961)"
-       r="23">
-      <stop
-         stop-color="#fff"
-         offset="0"
-         id="stop7" />
-      <stop
-         stop-color="#eeeeec"
-         offset="1"
-         id="stop9" />
-    </radialGradient>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#e61c50;}.cls-4{fill:#fff;}</style>
   </defs>
-  <rect
-     rx="0.53952605"
-     ry="0.57765639"
-     height="13.444292"
-     width="23.54409"
-     y="6.2234845"
-     x="1.2740157"
-     id="rect11"
-     style="fill:url(#a);stroke:#888a85;stroke-width:0.54137486;stroke-linecap:round;stroke-dashoffset:1.39999998" />
-  <path
-     d="m 8.3230629,15.537255 -2.9240471,0 -0.4614374,1.443648 -1.8797255,0 2.6860403,-7.9242553 2.2294902,0 2.6860406,7.9242553 -1.879726,0 -0.4566567,-1.443588 m -2.4577651,-1.603071 1.9866171,0 -0.990902,-3.019879 -0.9957151,3.019879 m 8.5679288,1.820673 c 0.37239,10e-7 0.655736,-0.148607 0.850003,-0.445844 0.197522,-0.297226 0.296286,-0.7289 0.296291,-1.29504 -5e-6,-0.566146 -0.09877,-0.997819 -0.296291,-1.295039 -0.194294,-0.297221 -0.477631,-0.445839 -0.850003,-0.445845 -0.372389,6e-6 -0.767975,0.150392 -0.96871,0.451151 -0.197534,0.297233 -0.296297,0.727139 -0.296292,1.289757 -5e-6,0.562612 0.09875,0.994298 0.296292,1.29504 0.200758,0.297227 0.596327,0.445845 0.96871,0.445845 m -1.265002,-3.848015 c 0.239616,-0.34676 0.614133,-0.601529 0.905612,-0.764308 0.291426,-0.166302 0.626593,-0.249454 1.005448,-0.24946 0.67028,6e-6 1.22078,0.291924 1.65145,0.87575 0.43067,0.580308 0.646003,1.328685 0.646003,2.245124 -5e-6,0.916439 -0.215339,1.666597 -0.646003,2.250409 -0.430685,0.580302 -0.98117,0.870467 -1.65145,0.870467 -0.378871,0 -0.714022,-0.08139 -1.005448,-0.244155 -0.291436,-0.166306 -0.665948,-0.422843 -0.905612,-0.76959 l 0,0.859837 -1.738879,0 0,-7.8410539 1.738879,0 0,2.7670529 m 9.896189,-0.684688 0,1.549809 c -0.236392,-0.176918 -0.474386,-0.307837 -0.71402,-0.392764 -0.236391,-0.08491 -0.48249,-0.127378 -0.738297,-0.127378 -0.485725,5e-6 -0.864601,0.155697 -1.136615,0.467076 -0.26877,0.307846 -0.403154,0.739528 -0.403154,1.29504 0,0.555535 0.134384,0.989013 0.403154,1.300383 0.272004,0.307843 0.650869,0.461767 1.136615,0.461767 0.271994,1e-6 0.529433,-0.04423 0.772306,-0.13269 0.246092,-0.08844 0.47277,-0.21938 0.680011,-0.392763 l 0,1.555154 c -0.27201,0.109689 -0.548895,0.191075 -0.830589,0.244153 -0.278488,0.05662 -0.558577,0.08492 -0.840325,0.08492 -0.981171,0 -1.74861,-0.274225 -2.30232,-0.822669 -0.553977,-0.552049 -0.830431,-1.317875 -0.830431,-2.298082 0,-0.980148 0.27686,-1.744455 0.830592,-2.292922 0.553708,-0.551989 1.32115,-0.828014 2.30232,-0.828014 0.284956,6e-6 0.565047,0.02831 0.840323,0.08492 0.278475,0.05307 0.555315,0.134459 0.830592,0.244153"
-     id="path13"
-     inkscape:connector-curvature="0"
-     style="fill:#2e3436" />
-  <rect
-     rx="0"
-     ry="0"
-     height="12.323932"
-     width="22.486179"
-     y="6.7836623"
-     x="1.7972176"
-     id="rect15"
-     style="fill:none;stroke:#ffffff;stroke-width:0.54137486;stroke-linecap:round;stroke-linejoin:round;stroke-dashoffset:1.39999998" />
+  <title>edit_text</title>
+  <rect class="cls-1" x="0.9852" y="1" width="20.9958" height="20.9958" rx="3.4993"/>
+  <path class="cls-2" d="M17.5909,5.6421H12.8047V19.3588H10.1614V5.6421H5.3752V3.521H17.5909Z"/>
+  <path class="cls-3" d="M25.0065,18A7.0065,7.0065,0,1,1,18,11,7.0032,7.0032,0,0,1,25.0065,18Z"/>
+  <path class="cls-4" d="M22.2344,14.4566l-.5127-.5127a.8176.8176,0,0,0-1.1561,0l-5.3335,5.3337,1.6688,1.6689,5.3335-5.3338A.8176.8176,0,0,0,22.2344,14.4566Z"/>
+  <polygon class="cls-4" points="14.58 19.929 14.174 21.983 16.249 21.598 15.433 20.789 14.58 19.929"/>
 </svg>

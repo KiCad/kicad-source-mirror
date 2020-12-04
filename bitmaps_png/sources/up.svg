@@ -1,70 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.0"
-   id="svg2"
-   inkscape:version="0.92.0 r15299"
-   sodipodi:docname="up.svg">
-  <metadata
-     id="metadata28">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1033"
-     id="namedview26"
-     showgrid="false"
-     inkscape:zoom="14.913306"
-     inkscape:cx="16.24453"
-     inkscape:cy="8.0817039"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2" />
-  <defs
-     id="defs4" />
-  <g
-     id="g4203"
-     transform="matrix(1,0,0,-1,-39.035684,29.139269)">
-    <path
-       inkscape:connector-curvature="0"
-       id="path18-6"
-       d="m 42.922488,15.034538 8.940805,10.24623 8.895846,-10.24623 H 56.496196 V 6.8639878 h -9.238181 v 8.1705502 h -4.335581 z"
-       style="color:#000000;fill:#5599ff;fill-opacity:1;stroke:#002255;stroke-width:0.54167002;stroke-opacity:1" />
-    <path
-       sodipodi:nodetypes="cccccc"
-       inkscape:connector-curvature="0"
-       id="path20-2"
-       d="m 47.531016,7.1313561 8.662632,-0.043551 -0.01306,0.9392646 C 53.457625,10.189864 50.558625,10.229171 47.487249,7.979689 L 47.5308,7.1313561 Z"
-       style="color:#000000;opacity:0.35393001;fill:#5599ff;fill-opacity:1;stroke:#002255;stroke-opacity:1" />
-    <path
-       inkscape:connector-curvature="0"
-       id="path22-9"
-       d="M 44.082258,15.567 51.874722,24.513222 59.566436,15.567 H 55.916664 V 7.4056578 H 47.80353 V 15.567 h -3.720731 z"
-       style="color:#000000;opacity:0.35400008;fill:#5599ff;fill-opacity:1;stroke:#002255;stroke-width:0.54167002;stroke-opacity:1" />
-  </g>
+  <defs>
+    <style>.cls-1{fill:#1a81c4;}</style>
+  </defs>
+  <title>up</title>
+  <polygon class="cls-1" points="24 10.996 13 2 2 10.996 8.855 10.996 8.855 24 17.118 24 17.118 10.996 24 10.996"/>
 </svg>

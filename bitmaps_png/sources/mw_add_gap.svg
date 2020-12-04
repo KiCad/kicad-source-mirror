@@ -1,107 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   viewBox="0 0 26 26"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="mw_add_gap.svg">
-  <metadata
-     id="metadata100">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     id="namedview98"
-     showgrid="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="5.6640092"
-     inkscape:cy="12.08561"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3020"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <path
-     style="opacity:1;fill:#333333;stroke:#333333;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 0.5,23.5 25,0"
-     id="path5185"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#333333;stroke:#333333;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m 23.5,25 -5,-1.5 5,-1.5"
-     id="path5191"
-     inkscape:connector-curvature="0" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#333333;stroke:#333333;stroke-width:1px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m 2.5,22 5,1.5 -5,1.5"
-     id="path5195"
-     inkscape:connector-curvature="0" />
-  <path
-     sodipodi:nodetypes="cc"
-     style="fill:#333333;stroke:#333333;stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 8.5,14.5 0,11"
-     id="path5197"
-     inkscape:connector-curvature="0" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path5199"
-     d="m 17.5,14.5 0,11"
-     style="fill:#333333;stroke:#333333;stroke-width:0.99999994px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     sodipodi:nodetypes="cc" />
-  <rect
-     style="fill:#c92727;fill-opacity:1;stroke:none"
-     id="rect5276"
-     width="9"
-     height="9"
-     x="0"
-     y="3" />
-  <rect
-     y="3"
-     x="17"
-     height="9"
-     width="9"
-     id="rect5278"
-     style="fill:#c92727;fill-opacity:1;stroke:none" />
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-3{fill:#1a81c4;}</style>
+  </defs>
+  <title>mw_add_gap</title>
+  <path class="cls-1" d="M4.7781,15.6052a.5612.5612,0,0,0,.397-.9581l-3.2088-3.21a.5613.5613,0,1,0-.7938.7938l3.2088,3.21A.56.56,0,0,0,4.7781,15.6052Z"/>
+  <path class="cls-1" d="M15.1074,5.3831a.5612.5612,0,0,0,.3969-.9581L12.2391,1.1584a.5613.5613,0,0,0-.7938.7938l3.2652,3.2666A.56.56,0,0,0,15.1074,5.3831Z"/>
+  <line class="cls-2" x1="8.8791" y1="5.6751" x2="5.661" y2="8.8932"/>
+  <polygon class="cls-1" points="7.151 5.349 12.011 2.543 9.206 7.403 7.151 5.349"/>
+  <polygon class="cls-1" points="5.334 7.165 2.529 12.025 7.389 9.22 5.334 7.165"/>
+  <polygon class="cls-3" points="24.992 7.417 20.983 11.478 15.27 5.822 19.279 1.76 24.992 7.417"/>
+  <polygon class="cls-3" points="11.464 20.945 7.456 25.006 1.743 19.349 5.752 15.287 11.464 20.945"/>
 </svg>

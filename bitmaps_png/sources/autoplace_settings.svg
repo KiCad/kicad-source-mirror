@@ -1,0 +1,27 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:none;stroke:#1a81c4;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title>autoplace_settings</title>
+  <path class="cls-1" d="M17.585,5.0547,13.7009,1.304l-.02-.0188-.02-.02a.94.94,0,0,0-.1684-.1076.9712.9712,0,0,0-.1258-.08.9963.9963,0,0,0-1.12.2134L8.457,5.2148A1,1,0,0,0,9.8965,6.6035L11.99,4.4359,12,13.001A1,1,0,0,0,13,14h.001A1,1,0,0,0,14,12.999l-.01-8.6352,2.2063,2.13A1,1,0,1,0,17.585,5.0547Z"/>
+  <rect class="cls-1" x="1" y="13" width="24" height="12" rx="1.2372"/>
+  <path class="cls-2" d="M16.289,15.8178H13.7117v7.3864H12.2883V15.8178H9.711V14.6756h6.578Z"/>
+  <line class="cls-3" x1="1.9722" y1="10" x2="24.0278" y2="10"/>
+</svg>

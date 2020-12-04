@@ -1,15 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="64" width="64" version="1.1">
- <defs>
-  <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="17.014" cx="18.418" gradientTransform="matrix(.97244 -.10566 .050523 .465 -.35195 9.5854)" r="27.987">
-   <stop stop-color="#89d5f8" offset="0"/>
-   <stop stop-color="#00899e" offset="1"/>
-  </radialGradient>
- </defs>
- <g stroke-linejoin="bevel" stroke="#004c5b">
-  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m4.215 18.77 37.115 7.3804v36.311l-35.432-9.368-1.683-34.323z"/>
-  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m40.916 26.084 17.186-19.341 0.364 36.445-17.004 19.34-0.546-36.444z"/>
-  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m27.238 1.3658 30.794 5.3791-17.291 19.511-36.482-7.374 22.979-17.516z"/>
-  <path style="color:#000000" d="m27.273 2.0909 1.0909 33.182 29.364 7.2727" stroke-dashoffset="1.7292" stroke-dasharray="4.32293653, 2.16146827" stroke-width="2.1615" fill="none"/>
-  <path style="color:#000000" d="m28.273 35.273-22 17.363" stroke-dasharray="4.322, 2.161" stroke-width="2.161" fill="url(#a)"/>
- </g>
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1,.cls-2,.cls-3,.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke-dasharray:3.0817 3.0817;}.cls-3{stroke-dasharray:2.8302 2.8302;}.cls-4{stroke-dasharray:2.8252 2.8252;}</style>
+  </defs>
+  <title>axis3d</title>
+  <polyline class="cls-1" points="23.501 7.642 23.501 18.392 13.001 24.5 12.999 24.5 2.499 18.392 2.499 7.642"/>
+  <polyline class="cls-1" points="23.501 7.637 13.001 13.745 12.999 13.745 2.499 7.637"/>
+  <polyline class="cls-1" points="2.499 7.608 12.999 1.5 13.001 1.5 23.501 7.608"/>
+  <line class="cls-1" x1="12.9986" y1="13.7452" x2="12.9986" y2="24.5"/>
+  <line class="cls-1" x1="13.0013" y1="1.5" x2="13.0001" y2="3"/>
+  <line class="cls-2" x1="12.9978" y1="6.0817" x2="12.9941" y2="10.7043"/>
+  <polyline class="cls-1" points="12.993 12.245 12.992 13.745 14.364 14.352"/>
+  <line class="cls-3" x1="16.9521" y1="15.4962" x2="20.8348" y2="17.213"/>
+  <line class="cls-1" x1="22.129" y1="17.7852" x2="23.501" y2="18.3917"/>
+  <line class="cls-1" x1="2.499" y1="18.3917" x2="3.8706" y2="17.7844"/>
+  <line class="cls-4" x1="6.4539" y1="16.6404" x2="10.3286" y2="14.9245"/>
+  <line class="cls-1" x1="11.6202" y1="14.3525" x2="12.9918" y2="13.7452"/>
 </svg>

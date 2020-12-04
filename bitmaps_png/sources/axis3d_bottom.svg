@@ -1,16 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="64" width="64" version="1.1">
- <defs>
-  <radialGradient id="a" gradientUnits="userSpaceOnUse" cy="65.832" cx="16.675" gradientTransform="matrix(.95824 -.19642 .1424 .69469 -6.1635 -4.022)" r="27.987">
-   <stop stop-color="#89d5f8" offset="0"/>
-   <stop stop-color="#00899e" offset="1"/>
-  </radialGradient>
- </defs>
- <g stroke-linejoin="bevel" stroke="#004c5b">
-  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m4.215 18.77 37.115 7.3804v36.311l-35.614-10.641-1.501-33.05z"/>
-  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m40.916 26.084 17.186-19.341-1.091 32.808-15.549 22.977-0.546-36.444z"/>
-  <path style="color:#000000" stroke-width="2.1615" fill="#fff" d="m27.056 2.2749 30.976 4.47-17.291 19.511-36.482-7.374 22.797-16.607z"/>
-  <path style="color:#000000" stroke-width="2.1615" fill="url(#a)" d="m56.979 39.146-15.551 23.28-35.652-10.531 22.516-18.949l28.687 6.2z"/>
-  <path style="color:#000000" d="m27.938 33.282-0.603-30.607" stroke-dasharray="4.322, 2.161" stroke-width="2.161" fill="url(#a)"/>
-  <path style="color:#000000" stroke-width="2.1615" fill="url(#a)" d="m41 60.882 0.075-25.738"/>
- </g>
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#39b4ea;stroke:#1a81c4;}.cls-1,.cls-2,.cls-3{stroke-linecap:round;stroke-linejoin:round;}.cls-2,.cls-3{fill:none;stroke:#545454;}.cls-3{stroke-dasharray:3.0817 3.0817;}</style>
+  </defs>
+  <title>axis3d_bottom</title>
+  <polygon class="cls-1" points="23.501 18.392 12.992 13.745 2.499 18.392 12.999 24.5 23.501 18.392"/>
+  <polyline class="cls-2" points="23.501 7.642 23.501 18.392 13.001 24.5 12.999 24.5 2.499 18.392 2.499 7.642"/>
+  <polyline class="cls-2" points="23.501 7.637 13.001 13.745 12.999 13.745 2.499 7.637"/>
+  <polyline class="cls-2" points="2.499 7.608 12.999 1.5 13.001 1.5 23.501 7.608"/>
+  <line class="cls-2" x1="12.9986" y1="13.7452" x2="12.9986" y2="24.5"/>
+  <line class="cls-2" x1="13.0013" y1="1.5" x2="13.0001" y2="3"/>
+  <line class="cls-3" x1="12.9978" y1="6.0817" x2="12.9941" y2="10.7043"/>
+  <line class="cls-2" x1="12.9929" y1="12.2452" x2="12.9918" y2="13.7452"/>
 </svg>

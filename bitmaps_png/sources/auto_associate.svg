@@ -1,0 +1,39 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2,.cls-3,.cls-4,.cls-7{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke:#e61c50;}.cls-2,.cls-3,.cls-4{stroke-width:0.9549px;}.cls-3{stroke:#1a81c4;}.cls-4{stroke:#0f71a8;}.cls-5{fill:#1a81c4;}.cls-6{fill:#e61c50;}.cls-7{stroke:#fff;stroke-width:2px;}</style>
+  </defs>
+  <title>auto_associate</title>
+  <rect class="cls-1" x="1" y="1" width="20.9958" height="20.9958" rx="3.4993"/>
+  <polyline class="cls-2" points="12.524 3.317 10.873 4.968 11.81 7.587 7.27 4.917"/>
+  <line class="cls-2" x1="9.9284" y1="9.4679" x2="7.2587" y2="4.9287"/>
+  <line class="cls-2" x1="9.9166" y1="9.4797" x2="5.3774" y2="6.81"/>
+  <line class="cls-2" x1="8.0354" y1="11.3609" x2="5.3657" y2="6.8217"/>
+  <line class="cls-2" x1="8.0237" y1="11.3726" x2="3.4844" y2="8.7029"/>
+  <polyline class="cls-2" points="3.473 8.715 4.651 11.19 2.986 12.855"/>
+  <path class="cls-3" d="M18.257,8.5741a1.2747,1.2747,0,1,1,0-1.8027A1.2747,1.2747,0,0,1,18.257,8.5741Z"/>
+  <circle class="cls-3" cx="8.3188" cy="16.7097" r="1.2747"/>
+  <line class="cls-4" x1="16.9958" y1="8.0208" x2="15.5061" y2="9.5106"/>
+  <line class="cls-4" x1="8.6296" y1="16.387" x2="10.1194" y2="14.8972"/>
+  <rect class="cls-5" x="10.7716" y="8.0292" width="4.0066" height="8.425" transform="translate(12.3982 -5.4477) rotate(45.001)"/>
+  <path class="cls-6" d="M25.0065,18A7.0065,7.0065,0,1,1,18,11,7.0032,7.0032,0,0,1,25.0065,18Z"/>
+  <path class="cls-7" d="M18.2893,17.7107h0a1.6461,1.6461,0,0,1,0-2.3279l.8383-.8382a1.6458,1.6458,0,0,1,2.3278,0h0a1.6458,1.6458,0,0,1,0,2.3278l-.8382.8383A1.6461,1.6461,0,0,1,18.2893,17.7107Z"/>
+  <path class="cls-7" d="M14.5446,21.4554h0a1.6458,1.6458,0,0,1,0-2.3278l.8382-.8383a1.6461,1.6461,0,0,1,2.3279,0h0a1.6461,1.6461,0,0,1,0,2.3279l-.8383.8382A1.6458,1.6458,0,0,1,14.5446,21.4554Z"/>
+  <line class="cls-7" x1="18.83" y1="17.17" x2="17.1297" y2="18.8703"/>
+</svg>

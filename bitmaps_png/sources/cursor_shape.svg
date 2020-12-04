@@ -1,166 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="cursor_shape.svg">
-  <metadata
-     id="metadata30">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     id="namedview28"
-     showgrid="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="14.083965"
-     inkscape:cy="11.257956"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3761"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <radialGradient
-       id="c"
-       gradientUnits="userSpaceOnUse"
-       cy="36.812"
-       cx="25.375"
-       gradientTransform="matrix(1,0,0,0.45357,0,20.115)"
-       r="17.5">
-      <stop
-         offset="0"
-         id="stop7"
-         style="stop-color:#748b06;stop-opacity:1;" />
-      <stop
-         stop-opacity="0"
-         offset="1"
-         id="stop9" />
-    </radialGradient>
-    <radialGradient
-       id="d"
-       gradientUnits="userSpaceOnUse"
-       cy="24.149"
-       cx="17.813999"
-       gradientTransform="matrix(-4.378,0,4.8624e-8,3.6749,144.59,-83.252)"
-       r="9.125">
-      <stop
-         stop-color="#fff"
-         offset="0"
-         id="stop12"
-         style="stop-color:#d0df86;stop-opacity:1;" />
-      <stop
-         stop-color="#b6b6b6"
-         offset="1"
-         id="stop14" />
-    </radialGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#d"
-       id="radialGradient2993"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-4.6642765,0,5.1803514e-8,3.6277497,94.665752,-79.397716)"
-       cx="17.813999"
-       cy="24.149"
-       r="9.125" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#c"
-       id="radialGradient2996"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(1.1134389,0,0,0.28779166,-0.84065924,32.08251)"
-       cx="25.375"
-       cy="36.812"
-       r="17.5" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#d"
-       id="radialGradient3030"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(-4.6642765,0,5.1803514e-8,3.6277497,94.665752,-79.397716)"
-       cx="17.813999"
-       cy="24.149"
-       r="9.125" />
+  <defs>
+    <style>.cls-1{fill:url(#Безымянный_градиент_19);}.cls-2{fill:url(#Безымянный_градиент_19-2);}.cls-3{fill:url(#Безымянный_градиент_19-3);}.cls-4{fill:url(#Безымянный_градиент_19-4);}.cls-5{fill:#1a81c4;}.cls-6{fill:#545454;}</style>
+    <linearGradient id="Безымянный_градиент_19" x1="12.7662" y1="2.0027" x2="12.7662" y2="10.3611" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ececec"/>
+      <stop offset="1" stop-color="#c6c6c5"/>
+    </linearGradient>
+    <linearGradient id="Безымянный_градиент_19-2" x1="12.7525" y1="23.0164" x2="12.7525" y2="14.658" xlink:href="#Безымянный_градиент_19"/>
+    <linearGradient id="Безымянный_градиент_19-3" x1="15.5046" y1="2.2432" x2="15.5046" y2="10.6016" gradientTransform="translate(25.5094 -2.5136) rotate(90)" xlink:href="#Безымянный_градиент_19"/>
+    <linearGradient id="Безымянный_градиент_19-4" x1="15.4919" y1="23.5134" x2="15.4919" y2="14.8985" gradientTransform="translate(25.5094 -2.5136) rotate(90)" xlink:href="#Безымянный_градиент_19"/>
   </defs>
-  <path
-     sodipodi:nodetypes="cc"
-     style="fill:none;stroke:#808080;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 9,24.5 9,1.5"
-     id="path3766"
-     inkscape:connector-curvature="0" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path3764"
-     d="M 24.5,9 1.5,9"
-     style="fill:none;stroke:#808080;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="cc"
-     inkscape:connector-curvature="0"
-     id="path3806"
-     d="M 3,9 15,9"
-     style="fill:none;stroke:#f2f2f2;stroke-width:1.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  <path
-     inkscape:connector-curvature="0"
-     style="fill:#f2f2f2;fill-opacity:1;fill-rule:evenodd;stroke:#444643;stroke-width:0.73012775;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="path20"
-     d="m 21.717814,19.309006 -4.228147,0.304709 2.398916,4.45513 c -0.03812,0.838006 -1.408681,1.561405 -2.056214,1.028107 L 15.43271,20.870538 12.46151,23.422551 12.5,11.5 z"
-     sodipodi:nodetypes="cccccccc" />
-  <path
-     sodipodi:nodetypes="cc"
-     style="fill:none;stroke:#f2f2f2;stroke-width:1.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 9,3 9,15"
-     id="path3808"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:none;stroke:#333333;stroke-width:1.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 4,9 14,9"
-     id="path2992"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     inkscape:connector-curvature="0"
-     id="path3762"
-     d="M 9,4 9,14"
-     style="fill:none;stroke:#333333;stroke-width:1.7;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     sodipodi:nodetypes="cc" />
+  <title>cursor_shape</title>
+  <path class="cls-1" d="M12.7662,10.3611a1,1,0,0,1-1-1V3.0027a1,1,0,1,1,2,0V9.3611A.9994.9994,0,0,1,12.7662,10.3611Z"/>
+  <path class="cls-2" d="M12.7525,23.0164a1,1,0,0,1-1-1V15.658a1,1,0,0,1,2,0v6.3584A.9994.9994,0,0,1,12.7525,23.0164Z"/>
+  <path class="cls-3" d="M22.2662,13.991H15.9078a1,1,0,0,1,0-2h6.3584a1,1,0,0,1,0,2Z"/>
+  <path class="cls-4" d="M9.6109,13.9783H2.996a1,1,0,0,1,0-2H9.6109a1,1,0,0,1,0,2Z"/>
+  <path class="cls-5" d="M12.7623,17.9861a1,1,0,0,1-1-1v-8a1,1,0,0,1,2,0v8A1,1,0,0,1,12.7623,17.9861Z"/>
+  <path class="cls-5" d="M16.7623,13.9861h-8a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
+  <path class="cls-6" d="M13.76,13.9836l4.1029,10.0137,1.3865-3.0426c.5772.5679,1.4264,1.4078,2.1685,2.1407a1.2338,1.2338,0,0,0,1.747-.0135h0a1.2337,1.2337,0,0,0-.0113-1.7439c-.7421-.7331-1.5925-1.5744-2.1712-2.1441l3.0206-1.4349Z"/>
 </svg>

@@ -1,108 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.0"
-   id="svg2"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="drag.svg">
-  <metadata
-     id="metadata76">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1855"
-     inkscape:window-height="1056"
-     id="namedview74"
-     showgrid="true"
-     inkscape:zoom="14.75"
-     inkscape:cx="12.558395"
-     inkscape:cy="11.203176"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       type="xygrid"
-       id="grid4237" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#radialGradient5361"
-       id="radialGradient4573"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0,0.37076388,-0.43563543,0,7.6367444,702.0663)"
-       cx="-1872.6962"
-       cy="-25.046564"
-       fx="-1872.6962"
-       fy="-25.046564"
-       r="16.955999" />
-    <radialGradient
-       id="radialGradient5361"
-       gradientUnits="userSpaceOnUse"
-       cy="20.493999"
-       cx="35.292999"
-       gradientTransform="matrix(0,-0.84302,1.0202,0,-4.8963249,41.059418)"
-       r="16.955999">
-      <stop
-         stop-color="#73d216"
-         offset="0"
-         id="stop5363"
-         style="stop-color:#09caca;stop-opacity:1" />
-      <stop
-         stop-color="#4e9a06"
-         offset="1"
-         id="stop5365"
-         style="stop-color:#0ff1f4;stop-opacity:1" />
-    </radialGradient>
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:#1a81c4;}.cls-3{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}</style>
   </defs>
-  <path
-     style="fill:none;fill-rule:evenodd;stroke:#008000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 21.680133,29.609385 13.067797,13.067797 -4.1084232,2.245435"
-     id="path4142"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccc" />
-  <path
-     style="opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:#ff0000;stroke-width:1.80725944;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="path4146"
-     sodipodi:type="arc"
-     sodipodi:cx="12.955356"
-     sodipodi:cy="12.98305"
-     sodipodi:rx="2.7808931"
-     sodipodi:ry="2.6426475"
-     sodipodi:start="3.1699543"
-     sodipodi:end="3.1206487"
-     sodipodi:open="true"
-     d="m 10.175581,12.908111 a 2.7808931,2.6426475 0 0 1 2.824365,-2.567368 2.7808931,2.6426475 0 0 1 2.736284,2.652108 2.7808931,2.6426475 0 0 1 -2.75691,2.632749 2.7808931,2.6426475 0 0 1 -2.804248,-2.587206" />
-  <path
-     inkscape:connector-curvature="0"
-     style="color:#000000;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;fill:url(#radialGradient4573);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.79829806;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate"
-     d="m 18.480178,0.39912685 -1.586625,1.89001375 -1.585777,1.8900138 1.885765,0 0,2.0540333 -2.05488,0 0,-1.8849144 -1.889164,1.5857756 -1.890013,1.5857753 1.890013,1.5866239 1.889164,1.5857759 0,-1.8857632 2.05488,0 0,2.0540292 -1.885765,0 1.585777,1.890013 1.586625,1.890014 1.585776,-1.890014 1.585776,-1.890013 -1.885765,0 0,-2.0540292 2.05488,0 0,1.8857632 1.890014,-1.5857759 1.890014,-1.5866239 -1.890014,-1.5857753 -1.890014,-1.5857756 0,1.8849144 -2.05488,0 0,-2.0540333 1.885765,0 -1.585776,-1.8900138 -1.585776,-1.89001375 z"
-     id="path5230" />
+  <title>drag</title>
+  <path class="cls-1" d="M1,20a.9987.9987,0,0,1,.63-.9287l12.3916-4.9345L18.0491,1.6928a1,1,0,0,1,1.9023.6152L15.78,15.2a.9984.9984,0,0,1-.581.621L2.37,20.9291a.999.999,0,0,1-1.2988-.5586A.9889.9889,0,0,1,1,20Z"/>
+  <path class="cls-2" d="M14.88,17.9215a3,3,0,1,1,3-3A3,3,0,0,1,14.88,17.9215Z"/>
+  <path class="cls-1" d="M14.8284,14.8917,18.86,25l1.3865-3.0426c.5772.5679,1.4264,1.4078,2.1685,2.1407a1.2338,1.2338,0,0,0,1.747-.0135h0A1.2337,1.2337,0,0,0,24.15,22.34c-.7421-.7331-1.5925-1.5744-2.1712-2.1441L25,18.7612Z"/>
+  <path class="cls-3" d="M9.2794,17.1235A6.0022,6.0022,0,0,1,16.6376,9.217"/>
 </svg>

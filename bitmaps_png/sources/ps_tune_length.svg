@@ -1,119 +1,24 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   width="26"
-   height="26"
-   id="svg2">
-  <metadata
-     id="metadata50">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs4">
-    <marker
-       refX="0"
-       refY="0"
-       orient="auto"
-       id="Arrow1Send"
-       style="overflow:visible">
-      <path
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
-         transform="matrix(-0.2,0,0,-0.2,-1.2,0)"
-         id="path3806"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt" />
-    </marker>
-    <marker
-       refX="0"
-       refY="0"
-       orient="auto"
-       id="Arrow1Sstart"
-       style="overflow:visible">
-      <path
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
-         transform="matrix(0.2,0,0,0.2,1.2,0)"
-         id="path3803"
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt" />
-    </marker>
-    <marker
-       refX="0"
-       refY="0"
-       orient="auto"
-       id="h"
-       style="overflow:visible">
-      <path
-         d="M 8.7186,4.0337 -2.2074,0.016 8.7186,-4.0017 c -1.7455,2.3721 -1.7354,5.6175 -6e-7,8.0354 z"
-         transform="scale(0.6,0.6)"
-         id="path10"
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round" />
-    </marker>
-    <marker
-       refX="0"
-       refY="0"
-       orient="auto"
-       id="g"
-       style="overflow:visible">
-      <path
-         d="M 8.7186,4.0337 -2.2074,0.016 8.7186,-4.0017 c -1.7455,2.3721 -1.7354,5.6175 -6e-7,8.0354 z"
-         transform="scale(-0.6,-0.6)"
-         id="path13"
-         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round" />
-    </marker>
-    <filter
-       x="-0.10484"
-       y="-0.18257"
-       width="1.2097"
-       height="1.3651"
-       color-interpolation-filters="sRGB"
-       id="d">
-      <feGaussianBlur
-         id="feGaussianBlur7"
-         stdDeviation="1.5978799" />
-    </filter>
+  <defs>
+    <style>.cls-1{fill:none;stroke:#1a81c4;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
-  <g
-     transform="matrix(0,-1,1,0,11.875,40.71875)"
-     id="g4681">
-    <path
-       d="m 20.21875,-3.375 0,12.5"
-       id="path5185"
-       style="fill:#333333;stroke:#333333;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <path
-       d="m 22.71875,5.1249992 -2.5,6.0000008 -2.5,-6.0000008"
-       id="path5195"
-       style="fill:#333333;stroke:none" />
-    <path
-       d="m 23.71875,11.625 -8,0"
-       id="path3819"
-       style="fill:#333333;stroke:#333333;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <path
-       d="m 22.71875,-1.875 -2.5,-6.0000008 -2.5,6.0000008"
-       id="path3821"
-       style="fill:#333333;stroke:none" />
-    <path
-       d="m 35.71875,-8.3750008 -20,0"
-       id="path3823"
-       style="fill:#333333;stroke:#333333;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  </g>
-  <path
-     d="m 3,3 5.5,0 9.5,12 6,0"
-     id="path3002"
-     style="fill:none;stroke:#008000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-  <g
-     transform="translate(25,-4)"
-     id="g3998" />
+  <title>ps_tune_length</title>
+  <path class="cls-1" d="M2.0058,14.0061h.9986a1,1,0,0,1,1,.9956L4.0156,17.52a1.49,1.49,0,0,0,1.49,1.49h.0176a1.49,1.49,0,0,0,1.49-1.49L7.0025,8.9925A1.99,1.99,0,0,1,8.9925,7h.0162a1.99,1.99,0,0,1,1.99,1.99V15a1,1,0,0,0,1,1H14a1,1,0,0,0,1-1V8.98a1.99,1.99,0,0,1,1.99-1.99h.02A1.99,1.99,0,0,1,19,8.98V15a1,1,0,0,0,1,1h1a1,1,0,0,0,1-1V14a1,1,0,0,1,1-1h.9942"/>
 </svg>

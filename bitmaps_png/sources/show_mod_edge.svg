@@ -1,139 +1,39 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   viewBox="0 0 26 26"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="show_mod_edge.svg">
-  <metadata
-     id="metadata100">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
-     id="namedview98"
-     showgrid="true"
-     inkscape:zoom="8.390094"
-     inkscape:cx="48.703577"
-     inkscape:cy="2.4714647"
-     inkscape:window-x="0"
-     inkscape:window-y="29"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     inkscape:snap-to-guides="false"
-     inkscape:snap-grids="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3048"
-       empspacing="1"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <path
-     style="fill:none;stroke:#333333;stroke-width:3.20885444;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 5.1898981,19.509253 -2.2956383,10e-7 0,-12.9763667 15.2709472,0"
-     id="rect3926-9"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc" />
-  <path
-     style="fill:none;stroke:#333333;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 4.4968538,11.105348 3.5,0 0,4 -3.5,0"
-     id="path3928-0"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc" />
-  <rect
-     style="fill:#00c921;fill-opacity:1;stroke:none"
-     transform="matrix(0,-1,1,0,0,0)"
-     height="4.0238314"
-     width="4.0274086"
-     y="2.9655175"
-     x="-4.0310011"
-     id="rect73-56-0" />
-  <rect
-     style="fill:#00c921;fill-opacity:1;stroke:none"
-     transform="matrix(0,-1,1,0,0,0)"
-     height="4.0238314"
-     width="4.0274086"
-     y="2.8748004"
-     x="-25.987505"
-     id="rect73-56-0-3" />
-  <rect
-     style="fill:#00c921;fill-opacity:1;stroke:none"
-     transform="matrix(0,-1,1,0,0,0)"
-     height="4.0238314"
-     width="4.0274086"
-     y="16.939005"
-     x="-3.9972868"
-     id="rect73-56-0-55" />
-  <rect
-     style="fill:#00c921;fill-opacity:1;stroke:none"
-     transform="matrix(0,-1,1,0,0,0)"
-     height="4.0238314"
-     width="4.0274086"
-     y="10.026091"
-     x="-4.056881"
-     id="rect73-56-0-39" />
-  <rect
-     style="fill:#00c921;fill-opacity:1;stroke:none"
-     transform="matrix(0,-1,1,0,0,0)"
-     height="4.0238314"
-     width="4.0274086"
-     y="10.026091"
-     x="-26.106693"
-     id="rect73-56-0-3-2" />
-  <rect
-     style="fill:#00c921;fill-opacity:1;stroke:none"
-     transform="matrix(0,-1,1,0,0,0)"
-     height="4.0238314"
-     width="4.0274086"
-     y="16.998598"
-     x="-26.166288"
-     id="rect73-56-0-3-29" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:0.69999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 19.686268,7.6331321 3.214097,-0.06394 0,10.9977819 -14.7522099,-0.06394"
-     id="path3968"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc" />
-  <path
-     style="fill:none;stroke:#000000;stroke-width:0.69999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 19.970073,5.4846017 5.13407,0.055967 -0.119397,15.0550293 -18.5040224,0.115554"
-     id="path3966"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccc" />
-  <path
-     style="fill:none;stroke:#9c9c9c;stroke-width:1.50000000000000000;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 24.705327,1.8786343 1.5861399,24.819039"
-     id="path3856-5"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:#7a7a7a;}.cls-3{fill:#b9b9b9;}.cls-4{fill:#686868;}.cls-5{fill:#329dd8;}.cls-6{fill:#1a81c4;}</style>
+  </defs>
+  <title>show_mod_edge</title>
+  <path class="cls-1" d="M21.9905,8.0012v9.9614H4.4587V8.0012H21.9905m1-1H3.4587V18.9626H22.9905V7.0012Z"/>
+  <path class="cls-1" d="M23.9669,5.998V19.9741H1.9951V5.998H23.9669m1-1H.9951V20.9741H24.9669V4.998Z"/>
+  <polygon class="cls-2" points="4.934 21.04 1.003 21.04 1.003 4.962 20.979 4.962 4.934 21.04"/>
+  <polygon class="cls-3" points="6.987 18.951 3.456 18.951 3.456 6.993 18.953 6.993 6.987 18.951"/>
+  <rect class="cls-1" x="3.4381" y="11.3941" width="3.7246" height="3.2134"/>
+  <polygon class="cls-4" points="1.003 4.962 3.456 6.993 3.456 18.951 1.003 21.04 1.003 4.962"/>
+  <path class="cls-5" d="M6.6816,6.8066a.9994.9994,0,0,1-1-1V1.9977a1,1,0,0,1,2,0V5.8066A.9993.9993,0,0,1,6.6816,6.8066Z"/>
+  <path class="cls-5" d="M13.3271,6.8066a.9994.9994,0,0,1-1-1V1.9977a1,1,0,0,1,2,0V5.8066A.9993.9993,0,0,1,13.3271,6.8066Z"/>
+  <path class="cls-5" d="M19.3522,6.59a.998.998,0,0,1-.3786-.7838V1.9977a1,1,0,1,1,2,0V5.0862S19.5227,6.7258,19.3522,6.59Z"/>
+  <path class="cls-6" d="M6.6816,6.8066a.9994.9994,0,0,1-1-1V4.0186a1,1,0,0,1,2,0v1.788A.9993.9993,0,0,1,6.6816,6.8066Z"/>
+  <path class="cls-6" d="M13.3271,6.8066a.9994.9994,0,0,1-1-1V4.0186a1,1,0,0,1,2,0v1.788A.9993.9993,0,0,1,13.3271,6.8066Z"/>
+  <path class="cls-6" d="M19.2664,6.5139a.9969.9969,0,0,1-.2928-.7073V4.0186a1,1,0,1,1,2,0v.943S19.4473,6.6948,19.2664,6.5139Z"/>
+  <path class="cls-1" d="M6.6816,25.0215a1,1,0,0,1-1-1V20.2852a1,1,0,0,1,2,0v3.7363A.9994.9994,0,0,1,6.6816,25.0215Z"/>
+  <path class="cls-1" d="M13.3271,25.0215a1,1,0,0,1-1-1V20.2852a1,1,0,0,1,2,0v3.7363A.9994.9994,0,0,1,13.3271,25.0215Z"/>
+  <path class="cls-1" d="M19.9736,25.0215a1,1,0,0,1-1-1V20.2852a1,1,0,0,1,2,0v3.7363A.9994.9994,0,0,1,19.9736,25.0215Z"/>
+  <path class="cls-6" d="M1.4966,25.0034a.5.5,0,0,1-.3535-.8535L24.15,1.143a.5.5,0,0,1,.707.7071L1.85,24.8569A.4983.4983,0,0,1,1.4966,25.0034Z"/>
 </svg>

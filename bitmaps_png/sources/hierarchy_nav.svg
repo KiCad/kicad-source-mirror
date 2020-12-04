@@ -1,137 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.0"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="hierarchy_nav.svg">
-  <metadata
-     id="metadata91">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     id="namedview89"
-     showgrid="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     inkscape:snap-grids="true"
-     inkscape:snap-to-guides="false"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3790"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <path
-     style="fill:none;stroke:#464646;stroke-width:1.2;stroke-linecap:butt;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 3.5,7.5 0,15 3.5,0"
-     id="path3778"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccc" />
-  <path
-     style="fill:none;stroke:#464646;stroke-width:1.2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 7,13.5 -4,0 0,0"
-     id="path3780"
-     inkscape:connector-curvature="0" />
-  <rect
-     height="0"
-     width="1.1118"
-     y="-107.651"
-     x="21.122999"
-     id="rect61"
-     style="opacity:0.57787003;fill:#ffffff" />
-  <rect
-     height="0"
-     width="1.1118"
-     y="-138.26001"
-     x="-17.93"
-     id="rect63"
-     style="opacity:0.57787003;fill:#ffffff" />
-  <rect
-     height="0"
-     width="1.1118"
-     y="-92.348999"
-     x="-258.62"
-     id="rect67"
-     style="opacity:0.57787003;fill:#ffffff" />
-  <rect
-     height="0"
-     width="1.1118"
-     y="-315.22"
-     x="-958.79999"
-     id="rect83"
-     style="opacity:0.57787003;fill:#ffffff" />
-  <rect
-     height="0"
-     width="1.1118"
-     y="-345.82001"
-     x="-997.85999"
-     id="rect85"
-     style="opacity:0.57787003;fill:#ffffff" />
-  <rect
-     style="fill:#fafafa;fill-opacity:1;stroke:#828282;stroke-width:1.19999999999999996;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="rect3772"
-     width="23"
-     height="6"
-     x="1.5"
-     y="1.5"
-     rx="0.5"
-     ry="0.5" />
-  <rect
-     y="11.5"
-     x="7.4999962"
-     height="5.0000043"
-     width="17.000004"
-     id="rect3774"
-     style="fill:#fafafa;fill-opacity:1;stroke:#828282;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     rx="0.5"
-     ry="0.5" />
-  <rect
-     style="fill:#fafafa;fill-opacity:1;stroke:#828282;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     id="rect3776"
-     width="17.000002"
-     height="5"
-     x="7.4999981"
-     y="20.5"
-     rx="0.5"
-     ry="0.5" />
+  <defs>
+    <style>.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#b9b9b9;}</style>
+  </defs>
+  <title>hierarchy_nav</title>
+  <polyline class="cls-1" points="2.504 6.991 2.504 13.079 4.532 13.079"/>
+  <polyline class="cls-1" points="6.014 21.969 4.532 21.969 4.532 13.079 5.948 13.079"/>
+  <rect class="cls-2" x="1" y="1" width="24" height="6.0127"/>
+  <rect class="cls-2" x="6.0138" y="9.9937" width="18.9862" height="6.0126"/>
+  <rect class="cls-2" x="6.0138" y="18.9873" width="18.9862" height="6.0127"/>
 </svg>

@@ -1,144 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="add_pin.svg">
-  <metadata
-     id="metadata87">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1600"
-     inkscape:window-height="849"
-     id="namedview85"
-     showgrid="true"
-     inkscape:snap-grids="false"
-     inkscape:zoom="22.961538"
-     inkscape:cx="6.0536012"
-     inkscape:cy="9.0424516"
-     inkscape:window-x="0"
-     inkscape:window-y="29"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="g3019"
-     inkscape:snap-to-guides="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3832"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <g
-     id="g3003">
-    <g
-       id="g17"
-       transform="matrix(2.4566,0,0,2.2316,-37.589,-61.022)">
-      <rect
-         style="fill-opacity:0"
-         id="rect19"
-         x="0"
-         y="0"
-         width="16"
-         height="16" />
-    </g>
-    <g
-       id="g47"
-       transform="matrix(2.6586,0,0,2.1996,5.9761,-10.078)">
-      <rect
-         style="fill-opacity:0"
-         id="rect49"
-         x="0"
-         y="0"
-         width="16"
-         height="16" />
-    </g>
-    <g
-       transform="matrix(2.4482476,0,0,2.4295429,2.830298,-7.57155)"
-       id="g69">
-      <rect
-         height="16"
-         width="16"
-         y="0"
-         x="0"
-         id="rect71"
-         style="fill-opacity:0" />
-    </g>
-    <g
-       transform="matrix(2.4482476,0,0,2.4295429,5.162342,-14.86007)"
-       id="g73">
-      <rect
-         height="16"
-         width="16"
-         y="0"
-         x="0"
-         id="rect75"
-         style="fill-opacity:0" />
-    </g>
-    <g
-       id="g3019"
-       transform="matrix(-1,0,0,1,26,0)">
-      <path
-         sodipodi:type="arc"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#800000;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-         id="path3003"
-         sodipodi:cx="20"
-         sodipodi:cy="13"
-         sodipodi:rx="4"
-         sodipodi:ry="4"
-         d="m 24,13 c 0,2.209139 -1.790861,4 -4,4 -2.209139,0 -4,-1.790861 -4,-4 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z" />
-      <path
-         style="fill:none;stroke:#800000;stroke-width:2.29987168;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-         d="m 15,12.978224 -13,0"
-         id="path3771"
-         inkscape:connector-curvature="0" />
-      <g
-         transform="scale(0.96416518,1.0371667)"
-         style="font-size:13.19809723px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-         id="text3773">
-        <path
-           d="m 8.6145655,1.7225244 -1.6302518,4.0624666 3.2066743,0 -1.5312528,-4.0204761 m -0.7346597,-1.74432723 1.4757638,0 3.6668547,9.62146443 -1.44366,0 -1.102285,-2.8041223 -3.9757125,0.04199 -0.9216058,2.7621319 -1.4178234,-0.04199 3.7184682,-9.57947403"
-           id="path2999"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccccccccccc" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" height="26" width="26" version="1.1" id="svg2" inkscape:version="0.48.3.1 r9886" sodipodi:docname="add_pin.svg">
+   <metadata id="metadata87">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title />
+         </cc:Work>
+      </rdf:RDF>
+   </metadata>
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1600" inkscape:window-height="849" id="namedview85" showgrid="true" inkscape:snap-grids="false" inkscape:zoom="22.961538" inkscape:cx="6.0536012" inkscape:cy="9.0424516" inkscape:window-x="0" inkscape:window-y="29" inkscape:window-maximized="1" inkscape:current-layer="g3019" inkscape:snap-to-guides="false">
+      <inkscape:grid type="xygrid" id="grid3832" empspacing="2" visible="true" enabled="true" snapvisiblegridlinesonly="true" />
+   </sodipodi:namedview>
+   <defs id="defs4" />
+   <g id="g3003">
+      <g id="g17" transform="matrix(2.4566,0,0,2.2316,-37.589,-61.022)">
+         <rect style="fill-opacity:0" id="rect19" x="0" y="0" width="16" height="16" />
       </g>
-      <g
-         transform="scale(-0.98817647,1.011965)"
-         style="font-size:12.87740231px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol"
-         id="text3777">
-        <path
-           d="m -10.327327,23.635474 2.0749717,0 0,-7.161797 -2.2573177,0.452721 0,-1.156954 2.2447421,-0.452721 1.2701344,0 0,8.318751 2.0749721,0 0,1.068925 -5.4075026,0 0,-1.068925"
-           style="font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
-           id="path3002" />
+      <g id="g47" transform="matrix(2.6586,0,0,2.1996,5.9761,-10.078)">
+         <rect style="fill-opacity:0" id="rect49" x="0" y="0" width="16" height="16" />
       </g>
-    </g>
-  </g>
+      <g transform="matrix(2.4482476,0,0,2.4295429,2.830298,-7.57155)" id="g69">
+         <rect height="16" width="16" y="0" x="0" id="rect71" style="fill-opacity:0" />
+      </g>
+      <g transform="matrix(2.4482476,0,0,2.4295429,5.162342,-14.86007)" id="g73">
+         <rect height="16" width="16" y="0" x="0" id="rect75" style="fill-opacity:0" />
+      </g>
+      <g id="g3019" transform="matrix(-1,0,0,1,26,0)">
+         <path sodipodi:type="arc" style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#800000;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0" id="path3003" sodipodi:cx="20" sodipodi:cy="13" sodipodi:rx="4" sodipodi:ry="4" d="m 24,13 c 0,2.209139 -1.790861,4 -4,4 -2.209139,0 -4,-1.790861 -4,-4 0,-2.209139 1.790861,-4 4,-4 2.209139,0 4,1.790861 4,4 z" />
+         <path style="fill:none;stroke:#800000;stroke-width:2.29987168;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" d="m 15,12.978224 -13,0" id="path3771" inkscape:connector-curvature="0" />
+         <g transform="scale(0.96416518,1.0371667)" style="font-size:13.19809723px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol" id="text3773">
+            <path d="m 8.6145655,1.7225244 -1.6302518,4.0624666 3.2066743,0 -1.5312528,-4.0204761 m -0.7346597,-1.74432723 1.4757638,0 3.6668547,9.62146443 -1.44366,0 -1.102285,-2.8041223 -3.9757125,0.04199 -0.9216058,2.7621319 -1.4178234,-0.04199 3.7184682,-9.57947403" id="path2999" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccccc" />
+         </g>
+         <g transform="scale(-0.98817647,1.011965)" style="font-size:12.87740231px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:OpenSymbol;-inkscape-font-specification:OpenSymbol" id="text3777">
+            <path d="m -10.327327,23.635474 2.0749717,0 0,-7.161797 -2.2573177,0.452721 0,-1.156954 2.2447421,-0.452721 1.2701344,0 0,8.318751 2.0749721,0 0,1.068925 -5.4075026,0 0,-1.068925" style="font-family:Ubuntu;-inkscape-font-specification:Ubuntu" id="path3002" />
+         </g>
+      </g>
+   </g>
 </svg>

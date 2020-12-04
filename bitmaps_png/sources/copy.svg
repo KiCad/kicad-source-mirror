@@ -1,29 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48" version="1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
- <defs>
-  <radialGradient id="f" gradientUnits="userSpaceOnUse" cy="42.078" cx="24.307" gradientTransform="matrix(1 0 0 .28492 0 30.089)" r="15.822">
-   <stop offset="0"/>
-   <stop stop-opacity="0" offset="1"/>
-  </radialGradient>
-  <linearGradient id="e" y2="-3" gradientUnits="userSpaceOnUse" x2="11" gradientTransform="matrix(.97545 0 0 1.0603 1.262 .9029)" y1="17" x1="11">
-   <stop stop-color="#f0f0ee" offset="0"/>
-   <stop stop-color="#dedede" offset="1"/>
-  </linearGradient>
- </defs>
- <g transform="matrix(1.1296,0,0,1.1477,-4.977,-5.0864)">
-  <g id="d" transform="matrix(1.4737 0 0 1.4737 1.0464 .26316)">
-   <path opacity=".47253" style="color:#000000" d="m40.128 42.078a15.822 4.5078 0 1 1 -31.643 0 15.822 4.5078 0 1 1 31.643 0z" fill-rule="evenodd" transform="matrix(.60045 0 0 .4516 -3.095 1.1763)" fill="url(#f)"/>
-   <rect style="color:#000000" rx="1.0179" ry="1.0179" height="16.964" width="15.607" stroke="#888a85" stroke-miterlimit="10.433" y="3.5536" x="3.7006" stroke-width=".67857" fill="url(#e)"/>
-   <rect style="color:#000000" rx=".33929" ry=".33929" height="15.607" width="14.129" stroke="#fff" stroke-miterlimit="10.433" y="4.2321" x="4.5" stroke-width=".67857" fill="none"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="5.9286" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="7.2857" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="8.6429" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="10" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="11.357" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="12.714" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="6.1071" y="16.786" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="14.071" x="6.0756" fill="#91938e"/>
-   <rect style="color:#000000" height=".67857" width="10.857" y="15.429" x="6.0756" fill="#91938e"/>
-  </g>
-  <use xlink:href="#d" transform="translate(15,12)" height="32" width="32" y="0" x="0"/>
- </g>
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}</style>
+  </defs>
+  <title>copy</title>
+  <path class="cls-1" d="M4.2616.9859H17.3933a3.2829,3.2829,0,0,1,3.2829,3.2829V17.4007a3.2829,3.2829,0,0,1-3.2829,3.2829H4.2617A3.2831,3.2831,0,0,1,.9786,17.4V4.2689A3.283,3.283,0,0,1,4.2616.9859Z"/>
+  <path class="cls-2" d="M8.5687,5.2989H21.7a3.283,3.283,0,0,1,3.283,3.283V21.7135A3.2831,3.2831,0,0,1,21.7,24.9966H8.5689a3.2831,3.2831,0,0,1-3.2831-3.2831V8.5818A3.2829,3.2829,0,0,1,8.5687,5.2989Z"/>
 </svg>

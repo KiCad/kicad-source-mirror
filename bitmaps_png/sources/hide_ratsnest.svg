@@ -1,0 +1,26 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}</style>
+  </defs>
+  <title>hide_ratsnest</title>
+  <path class="cls-1" d="M5.0022,1H21a4,4,0,0,1,4,4V21a4,4,0,0,1-4,4H5.0021a4,4,0,0,1-4-4V5a4,4,0,0,1,4-4Z"/>
+  <path class="cls-2" d="M12.7432,8.999A2.8084,2.8084,0,1,1,9.9347,6.19,2.8086,2.8086,0,0,1,12.7432,8.999Z"/>
+  <path class="cls-1" d="M11.9345,8.999a2,2,0,1,1-2-2A2,2,0,0,1,11.9345,8.999Z"/>
+</svg>

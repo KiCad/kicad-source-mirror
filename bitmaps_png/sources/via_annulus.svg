@@ -1,147 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="27.733334"
-   width="27.733334"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
-   sodipodi:docname="via_annulus.svg"
-   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/via_annulus.png"
-   inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
-  <metadata
-     id="metadata40">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="4"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="800"
-     id="namedview38"
-     showgrid="true"
-     inkscape:snap-to-guides="false"
-     inkscape:snap-grids="true"
-     inkscape:zoom="15.365975"
-     inkscape:cx="-0.95490294"
-     inkscape:cy="10.009448"
-     inkscape:window-x="0"
-     inkscape:window-y="1"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     inkscape:snap-nodes="true"
-     showguides="false">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3017"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.53333333"
-       spacingy="0.53333333"
-       originx="0"
-       originy="0" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <filter
-       id="c"
-       height="1.3651"
-       width="1.2097"
-       y="-0.18257"
-       x="-0.10484"
-       style="color-interpolation-filters:sRGB">
-      <feGaussianBlur
-         stdDeviation="1.5978799"
-         id="feGaussianBlur7" />
-    </filter>
-    <filter
-       id="d"
-       height="1.4696"
-       width="1.4809999"
-       y="-0.23481999"
-       x="-0.24049"
-       style="color-interpolation-filters:sRGB">
-      <feGaussianBlur
-         stdDeviation="1.5978799"
-         id="feGaussianBlur10" />
-    </filter>
+  <defs>
+    <style>.cls-1{fill:#e61c50;}.cls-2{fill:#1a81c4;}.cls-3{fill:#f29100;}.cls-4{fill:#b9b9b9;}.cls-5{fill:#545454;}</style>
   </defs>
-  <path
-     inkscape:connector-curvature="0"
-     id="path3951"
-     d="M 2.1333333,25.6 13.866667,13.866667"
-     style="fill:none;stroke:#dc0000;stroke-width:5.41538477;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;stroke:#00a000;stroke-width:5.41538477;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 13.866667,13.866667 25.6,2.1333337"
-     id="path3949"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:#f2f2e7;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 7.4666666,13.866667 v 0 0 c 0,3.553409 2.8909154,6.434016 6.4570414,6.434016 1.783061,0 3.397322,-0.720152 4.565817,-1.88448 1.168495,-1.164328 1.891223,-2.772832 1.891223,-4.549536 0,-3.55341 -2.890915,-6.4340167 -6.45704,-6.4340167 -1.783062,0 -3.397323,0.7201519 -4.5658179,1.8844797 -1.1684949,1.164328 -1.8912235,2.772832 -1.8912235,4.549537 z"
-     id="path4034" />
-  <path
-     style="opacity:1;fill:#333333;stroke:#333390;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M -0.2795195,-0.27951961 8,8.0000004"
-     id="path5185"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#5555c3;fill-opacity:1;stroke:#5555c3;stroke-width:1.06666672px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="M 1.6418901,4.6588789 7.6758677,7.6758678 4.6588789,1.64189"
-     id="path5195"
-     inkscape:connector-curvature="0" />
-  <path
-     sodipodi:nodetypes="cc"
-     inkscape:connector-curvature="0"
-     id="path3086"
-     d="M 1.6560954,14.250237 14.250342,1.6559925"
-     style="fill:#333333;stroke:#5555c3;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-  <path
-     sodipodi:nodetypes="cc"
-     inkscape:connector-curvature="0"
-     id="path6032"
-     d="M 10.666667,10.666667 21.333333,21.333334"
-     style="opacity:1;fill:#333333;stroke:#333390;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#5555c3;fill-opacity:1;stroke:#5555c3;stroke-width:1.06666672px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m 17.298244,14.281213 -6.033977,-3.016989 3.016989,6.033977"
-     id="path5191"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:#333390;fill-opacity:1;stroke:#5555c3;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 3.8603825,17.713948 17.714056,3.8602849"
-     id="path3088"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc"
-     inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/path3088.png"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90" />
+  <title>via_annulus</title>
+  <path class="cls-1" d="M2,25a1,1,0,0,1-.707-1.707l6.05-6.05a1,1,0,0,1,1.414,1.414l-6.05,6.05A.9967.9967,0,0,1,2,25Z"/>
+  <path class="cls-2" d="M17.95,9.05a1,1,0,0,1-.707-1.707l6.05-6.05a1,1,0,0,1,1.414,1.414l-6.05,6.05A.9967.9967,0,0,1,17.95,9.05Z"/>
+  <circle class="cls-3" cx="13" cy="13" r="6.9999"/>
+  <circle class="cls-4" cx="13" cy="13" r="3.1111"/>
+  <path class="cls-5" d="M1.5176,14.4141a.5.5,0,0,1-.3535-.8536L13.5879,1.1367a.5.5,0,0,1,.707.7071L1.8711,14.2676A.4987.4987,0,0,1,1.5176,14.4141Z"/>
+  <path class="cls-5" d="M4.9668,17.8633a.5.5,0,0,1-.3535-.8535L17.0371,4.5859a.5.5,0,1,1,.707.7071L5.32,17.7168A.4981.4981,0,0,1,4.9668,17.8633Z"/>
+  <path class="cls-5" d="M17.0205,17.5645a.4986.4986,0,0,1-.3535-.1465l-2.71-2.71a.5.5,0,1,1,.7071-.707l2.71,2.71a.5.5,0,0,1-.3535.8536Z"/>
+  <polygon class="cls-5" points="13.984 16.082 11.178 11.222 16.038 14.028 13.984 16.082"/>
+  <path class="cls-5" d="M4.4561,5a.4984.4984,0,0,1-.3536-.1465L1.1594,1.91a.5.5,0,0,1,.707-.707L4.81,4.1465A.5.5,0,0,1,4.4561,5Z"/>
+  <polygon class="cls-5" points="2.728 4.826 7.588 7.632 4.782 2.772 2.728 4.826"/>
 </svg>

@@ -1,0 +1,32 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#545454;}.cls-2{fill:#545454;}.cls-3{fill:#b9b9b9;}.cls-4{stroke:#333;stroke-width:2px;}</style>
+  </defs>
+  <title>set_origin</title>
+  <polyline class="cls-1" points="22 22.5 3.522 22.5 3.537 6.582"/>
+  <polygon class="cls-2" points="4.989 7.575 3.542 2.153 2.084 7.572 4.989 7.575"/>
+  <line class="cls-1" x1="4.9768" y1="22.5" x2="20.5471" y2="22.5"/>
+  <polygon class="cls-2" points="19.556 23.953 24.977 22.5 19.556 21.047 19.556 23.953"/>
+  <path class="cls-3" d="M10.9461,10.49a5.5254,5.5254,0,1,1,5.5254,5.5253A5.5254,5.5254,0,0,1,10.9461,10.49Z"/>
+  <path class="cls-2" d="M21.9968,10.4976a5.5254,5.5254,0,0,0-5.5179-5.5328L16.4715,10.49Z"/>
+  <path class="cls-2" d="M10.9462,10.4658a5.5253,5.5253,0,0,0,5.5008,5.55l.0245-5.5252Z"/>
+  <line class="cls-4" x1="16.4802" y1="3.9999" x2="16.4802" y2="16.9804"/>
+  <line class="cls-4" x1="22.9704" y1="10.4902" x2="9.99" y2="10.4902"/>
+</svg>

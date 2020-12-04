@@ -1,177 +1,38 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="grid_select.svg">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1301"
-     inkscape:window-height="744"
-     id="namedview68"
-     showgrid="true"
-     inkscape:snap-grids="true"
-     inkscape:snap-to-guides="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="65"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2">
-    <inkscape:grid
-       spacingy="0.5px"
-       spacingx="0.5px"
-       type="xygrid"
-       id="grid3049"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata72">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs70">
-    <marker
-       inkscape:stockid="Arrow2MstartDt"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow2MstartDt"
-       style="overflow:visible">
-      <path
-         inkscape:connector-curvature="0"
-         id="path3102"
-         style="stroke-linejoin:round;fill-rule:evenodd;stroke:#d40000;stroke-width:0.625;fill:#d40000"
-         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         transform="scale(0.6,0.6)" />
-    </marker>
-    <marker
-       inkscape:stockid="Arrow2Mendan"
-       orient="auto"
-       refY="0"
-       refX="0"
-       id="Arrow2Mendan"
-       style="overflow:visible">
-      <path
-         inkscape:connector-curvature="0"
-         id="path3105"
-         style="stroke-linejoin:round;fill-rule:evenodd;stroke:#d40000;stroke-width:0.625;fill:#d40000"
-         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
-         transform="scale(-0.6,-0.6)" />
-    </marker>
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:none;stroke:#1a81c4;stroke-linecap:round;stroke-linejoin:round;}.cls-3{fill:#1a81c4;}</style>
   </defs>
-  <g
-     id="g3002"
-     transform="translate(-0.5,0)"
-     style="fill:#333333">
-    <g
-       transform="translate(0,1)"
-       id="g3209"
-       style="fill:#333333">
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10"
-         d="M 6,3 A 1.5,1.5022534 0 0 1 3,3 1.5,1.5022534 0 1 1 6,3 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-9"
-         d="M 12,3 A 1.5,1.5022534 0 0 1 9,3 1.5,1.5022534 0 1 1 12,3 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-4"
-         d="m 18,3 a 1.5,1.5022534 0 0 1 -3,0 1.5,1.5022534 0 1 1 3,0 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-7"
-         d="m 24,3 a 1.5,1.5022534 0 0 1 -3,0 1.5,1.5022534 0 1 1 3,0 z" />
-    </g>
-    <g
-       id="g3209-5"
-       transform="translate(0,13)"
-       style="fill:#333333">
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-71"
-         d="M 6,3 A 1.5,1.5022534 0 0 1 3,3 1.5,1.5022534 0 1 1 6,3 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-9-33"
-         d="M 12,3 A 1.5,1.5022534 0 0 1 9,3 1.5,1.5022534 0 1 1 12,3 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-4-3"
-         d="m 18,3 a 1.5,1.5022534 0 0 1 -3,0 1.5,1.5022534 0 1 1 3,0 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-7-8"
-         d="m 24,3 a 1.5,1.5022534 0 0 1 -3,0 1.5,1.5022534 0 1 1 3,0 z" />
-    </g>
-    <g
-       id="g3209-8"
-       transform="translate(0,19)"
-       style="fill:#333333">
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-3"
-         d="M 6,3 A 1.5,1.5022534 0 0 1 3,3 1.5,1.5022534 0 1 1 6,3 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-9-5"
-         d="M 12,3 A 1.5,1.5022534 0 0 1 9,3 1.5,1.5022534 0 1 1 12,3 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-4-6"
-         d="m 18,3 a 1.5,1.5022534 0 0 1 -3,0 1.5,1.5022534 0 1 1 3,0 z" />
-      <path
-         style="fill-rule:evenodd;fill:#333333"
-         inkscape:connector-curvature="0"
-         id="path10-7-59"
-         d="m 24,3 a 1.5,1.5022534 0 0 1 -3,0 1.5,1.5022534 0 1 1 3,0 z" />
-    </g>
-  </g>
-  <path
-     inkscape:connector-curvature="0"
-     style="marker-end:url(#Arrow2Mendan);marker-start:url(#Arrow2MstartDt);stroke:#d40000;stroke-dasharray:none;stroke-miterlimit:0;stroke-width:1;marker-mid:none;fill:none"
-     id="path44"
-     d="m 4,9.5 18,0"
-     sodipodi:nodetypes="cc" />
+  <title>grid_select</title>
+  <rect class="cls-1" x="1.5861" y="1.5881" width="2.8297" height="2.8297" transform="translate(3.0024 -1.2424) rotate(45.0014)"/>
+  <rect class="cls-1" x="8.2522" y="1.5881" width="2.8297" height="2.8297" transform="translate(4.955 -5.9562) rotate(45.0012)"/>
+  <rect class="cls-1" x="14.9183" y="1.5881" width="2.8297" height="2.8297" transform="translate(6.9076 -10.67) rotate(45.0014)"/>
+  <rect class="cls-1" x="21.5843" y="1.5881" width="2.8297" height="2.8297" transform="translate(8.8597 -15.3833) rotate(45)"/>
+  <rect class="cls-1" x="1.5861" y="14.9309" width="2.8297" height="2.8297" transform="translate(12.4374 2.6658) rotate(45.0014)"/>
+  <rect class="cls-1" x="8.2522" y="14.9309" width="2.8297" height="2.8297" transform="translate(14.3899 -2.048) rotate(45.0012)"/>
+  <rect class="cls-1" x="14.9183" y="14.9309" width="2.8297" height="2.8297" transform="translate(16.3426 -6.7617) rotate(45.0014)"/>
+  <rect class="cls-1" x="21.5843" y="14.9309" width="2.8297" height="2.8297" transform="translate(18.2945 -11.4753) rotate(45)"/>
+  <rect class="cls-1" x="1.5861" y="21.6023" width="2.8297" height="2.8297" transform="translate(17.155 4.6199) rotate(45.0014)"/>
+  <rect class="cls-1" x="8.2522" y="21.6023" width="2.8297" height="2.8297" transform="translate(19.1074 -0.0939) rotate(45.0012)"/>
+  <rect class="cls-1" x="14.9183" y="21.6023" width="2.8297" height="2.8297" transform="translate(21.0601 -4.8076) rotate(45.0014)"/>
+  <rect class="cls-1" x="21.5843" y="21.6023" width="2.8297" height="2.8297" transform="translate(23.0119 -9.5213) rotate(45)"/>
+  <line class="cls-2" x1="7.7219" y1="9.7288" x2="18.3555" y2="9.7288"/>
+  <polygon class="cls-3" points="9.208 11.908 1.077 9.729 9.208 7.55 9.208 11.908"/>
+  <polygon class="cls-3" points="16.869 11.908 25 9.729 16.869 7.55 16.869 11.908"/>
 </svg>

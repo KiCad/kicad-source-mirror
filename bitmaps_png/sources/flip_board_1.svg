@@ -1,0 +1,26 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}</style>
+  </defs>
+  <title>flip_board_1</title>
+  <polygon class="cls-1" points="1.491 24.5 24.491 24.5 24.509 1.5 1.491 1.5 1.491 24.5"/>
+  <path class="cls-2" d="M10.6764,15.7656H6.6122L5.7861,18.19H4.032L7.8462,7.81H9.4853l3.7712,10.38H11.4954Zm-3.5652-1.447h3.0732L8.68,9.8853h-.043Z"/>
+  <path class="cls-2" d="M14.4606,18.19V7.81h3.45a4.4953,4.4953,0,0,1,2.6951.7091,2.4591,2.4591,0,0,1,.969,2.1211,2.0839,2.0839,0,0,1-.406,1.262,2.3994,2.3994,0,0,1-1.126.8271,2.3168,2.3168,0,0,1,1.426.891A2.63,2.63,0,0,1,21.968,15.21a2.667,2.667,0,0,1-.9561,2.2211,4.1333,4.1333,0,0,1-2.6371.7591Zm1.7331-6.0093h1.91a1.9472,1.9472,0,0,0,1.272-.3821,1.3121,1.3121,0,0,0,.4671-1.079,1.3475,1.3475,0,0,0-.4921-1.1451,2.3518,2.3518,0,0,0-1.44-.374H16.1937Zm0,1.29V16.8h2.1811a2.0844,2.0844,0,0,0,1.383-.409,1.4624,1.4624,0,0,0,.4841-1.1841,1.86,1.86,0,0,0-.406-1.2811,1.62,1.62,0,0,0-1.2691-.455Z"/>
+</svg>

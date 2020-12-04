@@ -1,0 +1,25 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:#fff;}</style>
+  </defs>
+  <title>ercwarn_ver2</title>
+  <path class="cls-1" d="M21,1H5A4,4,0,0,0,1,5V21a4,4,0,0,0,4,4H21a4,4,0,0,0,4-4V5A4,4,0,0,0,21,1Z"/>
+  <path class="cls-2" d="M8.9357,16.5564v.0206l.0113-.0507L11.9832,5.3841h2.0242l3.0663,11.1723.0113.0733.0112-.1034L19.4947,5.3841h2.4945l-3.61,15.2318H16.0729L13.0367,9.6844h-.0621L9.9271,20.6159H7.6114L4.0108,5.3841H6.5053Z"/>
+</svg>

@@ -1,196 +1,27 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="24"
-   height="24"
-   viewBox="0 0 24 24"
-   version="1.1"
-   id="svg3803"
-   sodipodi:docname="visibility.svg"
-   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)">
-  <metadata
-     id="metadata3809">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs
-     id="defs3807" />
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1370"
-     id="namedview3805"
-     showgrid="false"
-     showguides="true"
-     inkscape:guide-bbox="true"
-     inkscape:zoom="45.254834"
-     inkscape:cx="-4.3168652"
-     inkscape:cy="15.336071"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg3803">
-    <sodipodi:guide
-       position="0,0"
-       orientation="0,24"
-       id="guide3862"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="24,0"
-       orientation="-24,0"
-       id="guide3864"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="24,24"
-       orientation="0,-24"
-       id="guide3866"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="0,24"
-       orientation="24,0"
-       id="guide3868"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="3.335608,16.474179"
-       orientation="0,1"
-       id="guide3872"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="6.9364841,18.795302"
-       orientation="0,1"
-       id="guide3874"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="1,12.010067"
-       orientation="1,0"
-       id="guide3876"
-       inkscape:locked="false"
-       inkscape:label=""
-       inkscape:color="rgb(0,0,255)" />
-    <sodipodi:guide
-       position="22.959732,12.010067"
-       orientation="1,0"
-       id="guide3878"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="11.321966,19.51172"
-       orientation="0,1"
-       id="guide3910"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="12,14.295302"
-       orientation="1,0"
-       id="guide3915"
-       inkscape:locked="false"
-       inkscape:label=""
-       inkscape:color="rgb(0,0,255)" />
-    <sodipodi:guide
-       position="8.3999893,19.167397"
-       orientation="1,0"
-       id="guide4765"
-       inkscape:locked="false" />
-    <sodipodi:guide
-       position="15.6,21.898213"
-       orientation="1,0"
-       id="guide4767"
-       inkscape:locked="false"
-       inkscape:label=""
-       inkscape:color="rgb(0,0,255)" />
-    <sodipodi:guide
-       position="24,24"
-       orientation="1,0"
-       id="guide4784"
-       inkscape:locked="false" />
-  </sodipodi:namedview>
-  <path
-     d="M0 0h24v24H0z"
-     fill="none"
-     id="path3799" />
-  <path
-     d="m 11.959732,5.1644295 c -5.0000005,0 -9.2700005,2.8303087 -11.00000046,6.8255035 1.72999996,3.995195 5.99999996,6.825504 11.00000046,6.825504 5,0 9.27,-2.830309 11,-6.825504 -1.73,-3.9951948 -6,-6.8255035 -11,-6.8255035 z m 0,11.3758395 c -2.7600005,0 -5.0000005,-2.03855 -5.0000005,-4.550336 0,-2.5117854 2.24,-4.5503357 5.0000005,-4.5503357 2.76,0 5,2.0385503 5,4.5503357 0,2.511786 -2.24,4.550336 -5,4.550336 z m 0,-7.2805375 c -1.66,0 -3.0000005,1.2194895 -3.0000005,2.7302015 0,1.510712 1.3400005,2.730202 3.0000005,2.730202 1.66,0 3,-1.21949 3,-2.730202 0,-1.510712 -1.34,-2.7302015 -3,-2.7302015 z"
-     id="path3801"
-     inkscape:connector-curvature="0"
-     style="stroke-width:0.95397437" />
-  <rect
-     style="stroke-width:0.89999998;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-     id="rect4742"
-     width="1.5100671"
-     height="3.6040268"
-     x="-2.3988652"
-     y="4.2705975"
-     ry="0.0195265"
-     transform="rotate(-40.846397)" />
-  <rect
-     style="stroke-width:0.89999998;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-     id="rect4742-5"
-     width="1.5100671"
-     height="3.6040268"
-     x="5.4401145"
-     y="3.1494057"
-     ry="0.0195265"
-     transform="rotate(-14.26516)" />
-  <rect
-     style="stroke-width:0.89999998;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-     id="rect4742-6"
-     width="1.5100671"
-     height="3.6040268"
-     x="11.323424"
-     y="0.88057196"
-     ry="0.0195265"
-     transform="rotate(0.01862949)" />
-  <rect
-     style="stroke-width:0.89999998;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-     id="rect4742-5-2"
-     width="1.5100671"
-     height="3.6040268"
-     x="-17.841269"
-     y="-2.7698705"
-     ry="0.0195265"
-     transform="matrix(-0.96916574,-0.24640974,-0.24640974,0.96916574,0,0)" />
-  <rect
-     style="stroke-width:0.89999998;stroke-miterlimit:4;stroke-dasharray:none;paint-order:stroke fill markers"
-     id="rect4742-9"
-     width="1.5100671"
-     height="3.6040268"
-     x="-20.526423"
-     y="-11.402325"
-     ry="0.0195265"
-     transform="matrix(-0.75646568,-0.65403339,-0.65403339,0.75646568,0,0)" />
+  <defs>
+    <style>.cls-1{fill:#545454;}.cls-2{fill:#f5f5f5;}</style>
+  </defs>
+  <title>visibility</title>
+  <circle class="cls-1" cx="13" cy="13" r="12"/>
+  <path class="cls-2" d="M22.7206,13S18.3685,18.2839,13,18.2839,3.2794,13,3.2794,13,7.6315,7.7159,13,7.7159,22.7206,13,22.7206,13Z"/>
+  <circle class="cls-1" cx="13" cy="13" r="3.5966"/>
+  <path class="cls-2" d="M15.2422,13A2.2421,2.2421,0,1,1,13,10.7559,2.2431,2.2431,0,0,1,15.2422,13Z"/>
 </svg>

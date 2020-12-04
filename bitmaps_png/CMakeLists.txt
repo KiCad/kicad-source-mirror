@@ -295,7 +295,6 @@ set( BMAPS_MID
     mirror_h
     mirror_v
     mode_module
-    mode_track
     module_check
     module_editor
     module_wizard

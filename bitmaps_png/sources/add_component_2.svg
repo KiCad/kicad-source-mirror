@@ -1,0 +1,30 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}</style>
+  </defs>
+  <title>add_component_2</title>
+  <polygon class="cls-1" points="3.5 13.952 1.5 15.753 1.5 21.5 24.5 21.5 24.517 4.5 1.5 4.5 1.5 9.666 3.5 11.467 3.5 13.952"/>
+  <rect class="cls-2" x="16.9959" y="18" width="5" height="7"/>
+  <rect class="cls-2" x="4.009" y="18" width="5" height="7"/>
+  <rect class="cls-2" x="10.5" y="18" width="5" height="7"/>
+  <rect class="cls-2" x="16.9959" y="1" width="5" height="7"/>
+  <rect class="cls-2" x="4.009" y="1" width="5" height="7"/>
+  <rect class="cls-2" x="10.5" y="1" width="5" height="7"/>
+</svg>

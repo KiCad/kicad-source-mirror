@@ -1,123 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   id="svg2"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="via_sketch.svg">
-  <metadata
-     id="metadata40">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="744"
-     id="namedview38"
-     showgrid="true"
-     inkscape:snap-to-guides="false"
-     inkscape:snap-grids="true"
-     inkscape:zoom="11.480769"
-     inkscape:cx="-12.942973"
-     inkscape:cy="11.330808"
-     inkscape:window-x="0"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     inkscape:snap-nodes="true"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3017"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5px"
-       spacingy="0.5px" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <filter
-       id="c"
-       height="1.3651"
-       width="1.2097"
-       color-interpolation-filters="sRGB"
-       y="-0.18257"
-       x="-0.10484">
-      <feGaussianBlur
-         stdDeviation="1.5978799"
-         id="feGaussianBlur7" />
-    </filter>
-    <filter
-       id="d"
-       height="1.4696"
-       width="1.4809999"
-       color-interpolation-filters="sRGB"
-       y="-0.23481999"
-       x="-0.24049">
-      <feGaussianBlur
-         stdDeviation="1.5978799"
-         id="feGaussianBlur10" />
-    </filter>
+  <defs>
+    <style>.cls-1{fill:#e61c50;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#1a81c4;}.cls-4{fill:#f29100;}.cls-5{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}</style>
   </defs>
-  <path
-     inkscape:connector-curvature="0"
-     id="path3951"
-     d="M 26,26 13,13"
-     style="fill:none;stroke:#dc0000;stroke-width:6;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;stroke:#00a000;stroke-width:6;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 13,13 0,0"
-     id="path3949"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
-  <path
-     style="fill:none;fill-opacity:0.69803921999999996;stroke:#4d4d4d;stroke-width:1.50000000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 17.596194 8.4038059 C 18.772463 9.5800746 19.5 11.205075 19.5 13 L 19.5 13 L 19.5 13 C 19.5 16.589851 16.589851 19.5 13 19.5 C 11.205075 19.5 9.5800746 18.772463 8.4038059 17.596194 "
-     id="path4034" />
-  <path
-     sodipodi:type="arc"
-     style="fill:#b4b400;fill-opacity:1;stroke:none"
-     id="path4036"
-     sodipodi:cx="13"
-     sodipodi:cy="13"
-     sodipodi:rx="3"
-     sodipodi:ry="3"
-     d="m 16,13 a 3,3 0 1 1 -6,0 3,3 0 1 1 6,0 z" />
-  <path
-     style="fill:#b3b3b3;fill-opacity:1;stroke:#4d4d4d;stroke-width:1.50000000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 8.4038059 17.596194 C 7.2275373 16.419925 6.5 14.794925 6.5 13 C 6.5 9.4101491 9.4101491 6.5 13 6.5 C 14.794925 6.5 16.419925 7.2275373 17.596194 8.4038059 "
-     id="path4029" />
-  <path
-     style="fill:none;stroke:#b3b3b3;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 24.5,1.5 -23,23"
-     id="path3856"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cc" />
+  <title>via_sketch</title>
+  <path class="cls-1" d="M2,25a1,1,0,0,1-.707-1.707l9.0233-9.0243c.3906-.3907.6715-.0387,1.0621.3519s.7426.6715.352,1.0621L2.707,24.707A.9967.9967,0,0,1,2,25Z"/>
+  <path class="cls-2" d="M9.398,8.858l8.0469,7.6648-.3441.8565A6,6,0,0,1,8.538,8.9876l.86-.13m.3352-1.0618L8.05,8.05a7,7,0,1,0,9.9,9.8994l.6763-1.6828-8.8925-8.47Z"/>
+  <path class="cls-2" d="M11.2489,11.8188l3.0272,2.8628a2.1118,2.1118,0,0,1-3.0272-2.8628m.08-1.3009L10.8,10.8a3.1111,3.1111,0,1,0,4.4,4.4l.4464-.5989-4.3172-4.0827Z"/>
+  <path class="cls-3" d="M17.9492,9.05a1,1,0,0,1-.707-1.707l6.0508-6.05a1,1,0,0,1,1.414,1.414l-6.0507,6.05A.9971.9971,0,0,1,17.9492,9.05Z"/>
+  <path class="cls-4" d="M8.05,8.05a7,7,0,0,1,9.9,9.9"/>
+  <path class="cls-2" d="M10.8,10.8a3.1111,3.1111,0,0,1,4.4,4.4"/>
+  <line class="cls-5" x1="1.4979" y1="1.4979" x2="24.5021" y2="24.5021"/>
 </svg>

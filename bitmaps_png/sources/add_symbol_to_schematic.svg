@@ -1,0 +1,30 @@
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
+    <rdf:RDF>
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs>
+    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#e61c50;}.cls-4{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title>add_symbol_to_schematic</title>
+  <path class="cls-1" d="M4.5009,1H18.4986a3.5,3.5,0,0,1,3.5,3.5v14a3.5,3.5,0,0,1-3.5,3.5H4.5008a3.5,3.5,0,0,1-3.5-3.5V4.5A3.5,3.5,0,0,1,4.5009,1Z"/>
+  <path class="cls-2" d="M19.9658,10.791H18.3874L5.8848,2.5332a.7617.7617,0,0,0-1.182.6356V6.2177H3.1783a.7623.7623,0,0,0,0,1.5245H4.7028v7.6222H3.1783a.7622.7622,0,0,0,0,1.5244H4.7028v3.0489a.7616.7616,0,0,0,1.182.6357l12.5026-8.2579h1.5784a.7623.7623,0,0,0,0-1.5245ZM6.2272,18.52V4.5861l10.549,6.9672Z"/>
+  <path class="cls-2" d="M7.7241,10.0288h1.773a.7622.7622,0,1,0,0-1.5244H7.7241a.7622.7622,0,0,0,0,1.5244Z"/>
+  <path class="cls-2" d="M9.5277,12.8194v-.2516a.7623.7623,0,0,0-1.5245,0v.2516H7.7524a.7622.7622,0,0,0,0,1.5244h.2508v.2509a.7623.7623,0,0,0,1.5245,0v-.2509h.2508a.7622.7622,0,0,0,0-1.5244Z"/>
+  <path class="cls-3" d="M25.0065,18A7.0065,7.0065,0,1,1,18,11,7.0032,7.0032,0,0,1,25.0065,18Z"/>
+  <line class="cls-4" x1="18.1038" y1="14.6312" x2="18.1038" y2="21.6312"/>
+  <polyline class="cls-4" points="15.349 17.164 18.104 14.412 20.859 17.164"/>
+</svg>

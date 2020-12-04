@@ -1,100 +1,28 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="26"
-   width="26"
-   version="1.1"
-   viewBox="0 0 26 26"
-   id="svg2"
-   inkscape:version="0.92.0 r15299"
-   sodipodi:docname="router_len_tuner_amplitude_incr.svg">
-  <metadata
-     id="metadata100">
+<svg id="Слой_1" data-name="Слой 1"
+  xmlns:cc="http://creativecommons.org/ns#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <metadata id="metadata43">
     <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+      <cc:Work rdf:about="">
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
+      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1033"
-     id="namedview98"
-     showgrid="true"
-     inkscape:zoom="33.329864"
-     inkscape:cx="13"
-     inkscape:cy="9.1082419"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg2"
-     showguides="true"
-     inkscape:guide-bbox="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3020"
-       empspacing="2"
-       visible="true"
-       enabled="true"
-       snapvisiblegridlinesonly="true"
-       spacingx="0.5"
-       spacingy="0.5"
-       originx="0"
-       originy="0" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4" />
-  <path
-     style="fill:none;stroke:#c92727;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="M 0,9 C 0,9 0,9 3,9 5.5,9 5,12.5 5,15.5 5,17 6,18 7,18 8,18 9,17 9,15.5 9,13.323674 9,11.902478 9,9 9,6.5 9,6.003952 9,3.5 9,2 10.125,1 11,1 c 1,0 2,1 2,2.5 0,2.1572982 0,3.5 0,5.5 0,2.857624 0,4.414048 0,6.5 0,1.5 1,2.5 2,2.5 1,0 2,-1 2,-2.5 C 17,13.530692 17.0625,11.625 17,9 16.9375,6.375 17,5.4792009 17,3.5 17,2 18,1 19,1 c 1,0 2,1 2,2.5 0,3 -0.5,5.5 2,5.5 2.236068,0 3,0 3,0"
-     id="path4206"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccczssssssssssssssc" />
-  <path
-     style="opacity:1;fill:#000000;stroke:#000000;stroke-width:0.88465172px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
-     d="M 8,0.4130434 V 18.413043"
-     id="path5185-0"
-     inkscape:connector-curvature="0" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#040404;stroke:#030303;stroke-width:0.88465172px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;fill-opacity:1"
-     d="M 6.5,14.5 8,18.413043 9.5,14.5"
-     id="path5191-5"
-     inkscape:connector-curvature="0" />
-  <path
-     sodipodi:nodetypes="ccc"
-     style="fill:#000000;stroke:#000000;stroke-width:0.885;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
-     d="M 9.5,4.3260869 8,0.4130434 6.5,4.3260869"
-     id="path5195-1"
-     inkscape:connector-curvature="0" />
-  <text
-     xml:space="preserve"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:35.70942688px;line-height:595.15710449px;font-family:Arial;-inkscape-font-specification:Arial;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.97578549px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     x="7.8550882"
-     y="29.399878"
-     id="text4495"
-     transform="scale(0.97585394,1.0247435)"><tspan
-       sodipodi:role="line"
-       id="tspan4493"
-       x="7.8550882"
-       y="29.399878"
-       style="stroke-width:2.97578549px">+</tspan></text>
+  <defs>
+    <style>.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#1a81c4;stroke-width:2px;}.cls-2{stroke:#545454;}.cls-3{fill:#545454;}</style>
+  </defs>
+  <title>router_len_tuner_amplitude_incr</title>
+  <path class="cls-1" d="M24.0459,19.3305V10.489a2.386,2.386,0,0,0-2.2642-2.4913h0a2.3511,2.3511,0,0,0-2.2642,2.4585V21.439A2.3857,2.3857,0,0,1,17.2532,23.93h0A2.3858,2.3858,0,0,1,14.989,21.439V4.5059a2.3859,2.3859,0,0,0-2.2642-2.4913h0a2.3858,2.3858,0,0,0-2.2641,2.4913v16.966a2.386,2.386,0,0,1-2.2642,2.4913h0a2.386,2.386,0,0,1-2.2643-2.4913V16.1634a1.3179,1.3179,0,0,0-1.318-1.3179"/>
+  <line class="cls-2" x1="5.416" y1="24.5" x2="1.5" y2="24.5"/>
+  <line class="cls-2" x1="9.921" y1="1.5" x2="1.5041" y2="1.5"/>
+  <line class="cls-2" x1="2.5059" y1="23.972" x2="2.5059" y2="6.4268"/>
+  <polygon class="cls-3" points="3.959 7.417 2.506 1.997 1.053 7.417 3.959 7.417"/>
 </svg>
