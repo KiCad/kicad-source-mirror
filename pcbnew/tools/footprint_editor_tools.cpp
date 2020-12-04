@@ -312,7 +312,7 @@ int FOOTPRINT_EDITOR_TOOLS::CutCopyFootprint( const TOOL_EVENT& aEvent )
         m_copiedFootprint.reset( m_frame->LoadFootprint( fpID ) );
 
     if( aEvent.IsAction( &PCB_ACTIONS::cutFootprint ) )
-        DeleteFootprint(aEvent );
+        DeleteFootprint( aEvent );
 
     return 0;
 }

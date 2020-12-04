@@ -91,9 +91,6 @@
 typedef LEGACY_PLUGIN::BIU      BIU;
 
 
-#define VERSION_ERROR_FORMAT    _( "File \"%s\" is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file." )
-
-
 typedef unsigned                LEG_MASK;
 
 #define FIRST_LAYER             0
@@ -547,9 +544,9 @@ void LEGACY_PLUGIN::checkVersion()
 #if !defined(DEBUG)
     if( ver > LEGACY_BOARD_FILE_VERSION )
     {
-        // "File \"%s\" is format version: %d.\nI only support format version <= %d.\nPlease upgrade Pcbnew to load this file."
-        m_error.Printf( VERSION_ERROR_FORMAT,
-            m_reader->GetSource().GetData(), ver, LEGACY_BOARD_FILE_VERSION );
+        m_error.Printf( _( "File '%s' has an unrecognized version: %d." ),
+                        m_reader->GetSource().GetData(),
+                        ver );
         THROW_IO_ERROR( m_error );
     }
 #endif
@@ -3011,62 +3008,6 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
 }
 
 
-void LEGACY_PLUGIN::SaveFP3DModels( const FOOTPRINT* aFootprint ) const
-{
-    auto sM = aFootprint->Models().begin();
-    auto eM = aFootprint->Models().end();
-
-    while( sM != eM )
-    {
-        if( sM->m_Filename.empty() )
-        {
-            ++sM;
-            continue;
-        }
-
-        fprintf( m_fp, "$SHAPE3D\n" );
-
-        fprintf( m_fp, "Na %s\n", EscapedUTF8( sM->m_Filename ).c_str() );
-
-        fprintf(m_fp,
-#if defined(DEBUG)
-            // use old formats for testing, just to verify compatibility
-            // using "diff", then switch to more concise form for release builds.
-                "Sc %lf %lf %lf\n",
-#else
-            "Sc %.10g %.10g %.10g\n",
-#endif
-                sM->m_Scale.x,
-                sM->m_Scale.y,
-                sM->m_Scale.z );
-
-        fprintf(m_fp,
-#if defined(DEBUG)
-                "Of %lf %lf %lf\n",
-#else
-            "Of %.10g %.10g %.10g\n",
-#endif
-                sM->m_Offset.x,
-                sM->m_Offset.y,
-                sM->m_Offset.z );
-
-        fprintf(m_fp,
-#if defined(DEBUG)
-                "Ro %lf %lf %lf\n",
-#else
-            "Ro %.10g %.10g %.10g\n",
-#endif
-                sM->m_Rotation.x,
-                sM->m_Rotation.y,
-                sM->m_Rotation.z );
-
-        fprintf( m_fp, "$EndSHAPE3D\n" );
-
-        ++sM;
-    }
-}
-
-
 //-----<FOOTPRINT LIBRARY FUNCTIONS>--------------------------------------------
 
 /*
@@ -3388,7 +3329,8 @@ FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
 }
 
 
-bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties )
+bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath,
+                                        const PROPERTIES* aProperties )
 {
     wxFileName fn = aLibraryPath;
 
@@ -3399,9 +3341,8 @@ bool LEGACY_PLUGIN::FootprintLibDelete( const wxString& aLibraryPath, const PROP
     // we don't want that.  we want bare metal portability with no UI here.
     if( wxRemove( aLibraryPath ) )
     {
-        THROW_IO_ERROR( wxString::Format(
-            _( "library \"%s\" cannot be deleted" ),
-            aLibraryPath.GetData() ) );
+        THROW_IO_ERROR( wxString::Format( _( "library \"%s\" cannot be deleted" ),
+                                          aLibraryPath.GetData() ) );
     }
 
     if( m_cache && m_cache->m_lib_path == aLibraryPath )

@@ -63,6 +63,8 @@ class LEGACY_PLUGIN : public PLUGIN
     friend struct LP_CACHE;
 
 public:
+    LEGACY_PLUGIN();
+    ~LEGACY_PLUGIN();
 
     //-----<PLUGIN API>---------------------------------------------------------
 
@@ -77,7 +79,7 @@ public:
     }
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-            const PROPERTIES* aProperties = NULL ) override;
+                 const PROPERTIES* aProperties = NULL ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
                              bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
@@ -94,50 +96,16 @@ public:
 
     //-----</PLUGIN API>--------------------------------------------------------
 
-    typedef int     BIU;
-
-    LEGACY_PLUGIN();
-    ~LEGACY_PLUGIN();
+    typedef int BIU;
 
     void SetReader( LINE_READER* aReader )      { m_reader = aReader; }
-    void SetFilePtr( FILE* aFile )              { m_fp = aFile; }
-
-    void SaveFP3DModels( const FOOTPRINT* aFootprint ) const;
 
     // return the new .kicad_pcb layer id from the old (legacy) layer id
     static PCB_LAYER_ID leg_layer2new( int cu_count, LAYER_NUM aLayerNum );
 
-    static LSET     leg_mask2new( int cu_count, unsigned aMask );
+    static LSET leg_mask2new( int cu_count, unsigned aMask );
 
 protected:
-
-    int               m_cu_count;
-
-    wxString          m_error;      ///< for throwing exceptions
-    BOARD*            m_board;      ///< which BOARD, no ownership here
-    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
-
-    LINE_READER*      m_reader;     ///< no ownership here.
-    FILE*             m_fp;         ///< no ownership here.
-
-    wxString          m_field;      ///< reused to stuff FOOTPRINT fields.
-    int               m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
-    LP_CACHE*         m_cache;
-    bool              m_showLegacyZoneWarning;
-
-    NETINFO_MAPPING*  m_mapping;    ///< mapping for net codes, so only not empty nets
-                                    ///< are stored with consecutive integers as net codes
-    std::vector<int>  m_netCodes;   ///< net codes mapping for boards being loaded
-
-    /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
-    void    init( const PROPERTIES* aProperties );
-
-    double  biuToDisk;              ///< convert from BIUs to disk engineering units
-                                    ///< with this scale factor
-
-    double  diskToBiu;              ///< convert from disk engineering units to BIUs
-                                    ///< with this scale factor
-
     ///> Converts net code using the mapping table if available,
     ///> otherwise returns unchanged net code
     inline int getNetCode( int aNetCode )
@@ -218,6 +186,34 @@ protected:
 
     /// we only cache one footprint library for now, this determines which one.
     void cacheLib( const wxString& aLibraryPath );
+
+protected:
+    int               m_cu_count;
+
+    wxString          m_error;      ///< for throwing exceptions
+    BOARD*            m_board;      ///< which BOARD, no ownership here
+    const PROPERTIES* m_props;      ///< passed via Save() or Load(), no ownership, may be NULL.
+
+    LINE_READER*      m_reader;     ///< no ownership here.
+    FILE*             m_fp;         ///< no ownership here.
+
+    wxString          m_field;      ///< reused to stuff FOOTPRINT fields.
+    int               m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
+    LP_CACHE*         m_cache;
+    bool              m_showLegacyZoneWarning;
+
+    NETINFO_MAPPING*  m_mapping;    ///< mapping for net codes, so only not empty nets
+                                    ///< are stored with consecutive integers as net codes
+    std::vector<int>  m_netCodes;   ///< net codes mapping for boards being loaded
+
+    /// initialize PLUGIN like a constructor would, and futz with fresh BOARD if needed.
+    void    init( const PROPERTIES* aProperties );
+
+    double  biuToDisk;              ///< convert from BIUs to disk engineering units
+                                    ///< with this scale factor
+
+    double  diskToBiu;              ///< convert from disk engineering units to BIUs
+                                    ///< with this scale factor
 };
 
 #endif  // LEGACY_PLUGIN_H_

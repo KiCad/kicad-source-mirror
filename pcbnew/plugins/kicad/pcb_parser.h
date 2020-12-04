@@ -335,7 +335,7 @@ public:
 
     PCB_PARSER( LINE_READER* aReader = NULL ) :
         PCB_LEXER( aReader ),
-        m_board( 0 ),
+        m_board( nullptr ),
         m_resetKIIDs( false )
     {
         init();

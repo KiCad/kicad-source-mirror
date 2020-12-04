@@ -37,43 +37,35 @@
 #include <memory.h>
 #include <tools/pcbnew_selection.h>
 
-class CLIPBOARD_PARSER : public PCB_PARSER
-{
-public:
-    CLIPBOARD_PARSER( LINE_READER* aReader = NULL ): PCB_PARSER( aReader ) {};
-
-    FOOTPRINT* parseFOOTPRINT( wxArrayString* aInitialComments )
-    {
-       return PCB_PARSER::parseFOOTPRINT( aInitialComments );
-    }
-};
 
 class CLIPBOARD_IO : public PCB_IO
 {
-
 public:
-    /* Saves the entire board to the clipboard formatted using the PCB_IO formatting */
+    CLIPBOARD_IO();
+    ~CLIPBOARD_IO();
+
+    /*
+     * Saves the entire board to the clipboard formatted using the PCB_IO formatting
+     */
     void Save( const wxString& aFileName, BOARD* aBoard,
-                const PROPERTIES* aProperties = NULL ) override;
-    /* Writes all the settings of the BOARD* set by setBoard() and then adds all
-     * the BOARD_ITEM* found in selection formatted by PCB_IO to clipboard as a text
+               const PROPERTIES* aProperties = NULL ) override;
+
+    /*
+     * Writes all the settings of the BOARD* set by setBoard() and then adds all the
+     * BOARD_ITEMs found in selection formatted by PCB_IO to clipboard as sexpr text
      */
     void SaveSelection( const PCBNEW_SELECTION& selected, bool isFootprintEditor );
 
     BOARD_ITEM* Parse();
 
-    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties = NULL ) override;
-    CLIPBOARD_IO();
-    ~CLIPBOARD_IO();
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
+                 const PROPERTIES* aProperties = NULL ) override;
 
     void SetBoard( BOARD* aBoard );
-    STRING_FORMATTER* GetFormatter();
 
 private:
-    void writeHeader( BOARD* aBoard );
-
     STRING_FORMATTER m_formatter;
-    CLIPBOARD_PARSER* m_parser;
+    PCB_PARSER*      m_parser;
 };
 
 

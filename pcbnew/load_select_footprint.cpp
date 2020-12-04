@@ -306,6 +306,7 @@ FOOTPRINT* PCB_BASE_FRAME::loadFootprint( const LIB_ID& aFootprintId )
     wxCHECK_MSG( fptbl, NULL, wxT( "Cannot look up LIB_ID in NULL FP_LIB_TABLE." ) );
 
     FOOTPRINT *footprint = nullptr;
+
     try
     {
         footprint = fptbl->FootprintLoadWithOptionalNickname( aFootprintId );
