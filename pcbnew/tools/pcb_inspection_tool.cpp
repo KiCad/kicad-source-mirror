@@ -228,6 +228,17 @@ void PCB_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
         return;
     }
 
+    for( ZONE* zone : m_frame->GetBoard()->Zones() )
+        zone->CacheBoundingBox();
+
+    for( FOOTPRINT* footprint : m_frame->GetBoard()->Footprints() )
+    {
+        for( ZONE* zone : footprint->Zones() )
+            zone->CacheBoundingBox();
+
+        footprint->BuildPolyCourtyards();
+    }
+
     int clearance = 0;
 
     if( aClearanceType == CLEARANCE_CONSTRAINT )
@@ -283,10 +294,40 @@ int PCB_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
 
+    if( a->Type() == PCB_GROUP_T )
+    {
+        PCB_GROUP* ag = static_cast<PCB_GROUP*>( a );
+
+        if( ag->GetItems().empty() )
+        {
+            m_frame->ShowInfoBarError( _( "Cannot generate clearance report on empty group." ) );
+            return 0;
+        }
+
+        a = *ag->GetItems().begin();
+    }
+
+    if( b->Type() == PCB_GROUP_T )
+    {
+        PCB_GROUP* bg = static_cast<PCB_GROUP*>( a );
+
+        if( bg->GetItems().empty() )
+        {
+            m_frame->ShowInfoBarError( _( "Cannot generate clearance report on empty group." ) );
+            return 0;
+        }
+
+        a = *bg->GetItems().begin();
+    }
+
     if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )
+    {
         layer = a->GetLayer();
+    }
     else if( b->Type() == PCB_TRACE_T || b->Type() == PCB_ARC_T )
+    {
         layer = b->GetLayer();
+    }
     else if( a->Type() == PCB_PAD_T && static_cast<PAD*>( a )->GetAttribute() == PAD_ATTRIB_SMD )
     {
         PAD* pad = static_cast<PAD*>( a );
