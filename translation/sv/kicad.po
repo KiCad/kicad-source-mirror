@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-19 21:34+0000\n"
+"PO-Revision-Date: 2020-12-05 01:29+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -142,9 +142,8 @@ msgid "failed to open file"
 msgstr "misslyckades att öppna fil"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:282
-#, fuzzy
 msgid "Build board outline"
-msgstr "Styrelsens konturer"
+msgstr "Bygg styrelsens konturer"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:448
 msgid "Create layers"
@@ -152,14 +151,15 @@ msgstr "Skapa lager"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:470
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
-#, fuzzy
 msgid "No footprint loaded."
-msgstr "Inget bibliotek angivet."
+msgstr "Inget fotavtryck laddat."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:483
 msgid ""
 "Footprint outline is malformed. Run Footprint Checker for a full analysis."
 msgstr ""
+"Fotavtryckens disposition är felaktig. Kör Footprint Checker för en "
+"fullständig analys."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:492
 #: pcbnew/dialogs/dialog_export_step.cpp:250
@@ -167,7 +167,7 @@ msgstr ""
 #: pcbnew/exporters/export_vrml.cpp:835
 #: pcbnew/specctra_import_export/specctra_export.cpp:838
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr ""
+msgstr "Styrelsens översikt är felaktig. Kör DRC för en fullständig analys."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:224
 msgid "Create tracks and vias"
@@ -248,14 +248,12 @@ msgid "Loading..."
 msgstr "Läser in..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:494
-#, fuzzy
 msgid "Load Raytracing: board"
-msgstr "Ladda OpenGL: kretskort"
+msgstr "Ladda Raytracing: styrelse"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:708
-#, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "Ladda OpenGL: lager"
+msgstr "Ladda Raytracing: lager"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:363
 #, c-format
@@ -366,9 +364,8 @@ msgstr "Återställ Standardinställningar"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:434
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Inställningar"
+msgstr "Inställningar..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:265
@@ -416,9 +413,8 @@ msgid "Reload board"
 msgstr "Ladda om kretskort"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
-#, fuzzy
 msgid "Copy 3D image to clipboard"
-msgstr "Kopiera 3D bild till urklipp"
+msgstr "Kopiera 3D-bild till urklipp"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
@@ -614,7 +610,6 @@ msgid "Procedural textures"
 msgstr "Procedurella strukturer"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
-#, fuzzy
 msgid "Add floor"
 msgstr "Lägg till fält"
 
@@ -1270,7 +1265,6 @@ msgstr "Fel vid tilldelning av minne för potrace-bitmapp"
 #: gerbview/files.cpp:422 gerbview/readgerb.cpp:72
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1065
 #: pcbnew/dialogs/dialog_drc_base.cpp:157
-#, fuzzy
 msgid "Errors"
 msgstr "Fel"
 
@@ -1287,9 +1281,8 @@ msgid "Black&&White Picture"
 msgstr "Svart/Vit Bild"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
-#, fuzzy
 msgid "Bitmap Information"
-msgstr "Information"
+msgstr "Bitmapinformation"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
@@ -1324,9 +1317,8 @@ msgid "bits"
 msgstr "bitar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters"
-msgstr "Utgångs Parametrar:"
+msgstr "Utgångs Parametrar"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1365,7 +1357,6 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod-fil)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Postscript (.ps file)"
 msgstr "PostScript (.ps fil)"
 
@@ -1375,14 +1366,12 @@ msgstr "Logotyp för titelblock (fil .kicad_wks)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:50
-#, fuzzy
 msgid "Format"
-msgstr "Normal"
+msgstr "Format"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options"
-msgstr "Bild Alternativ:"
+msgstr "Bild Alternativ"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
@@ -13261,7 +13250,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "Power-symbolen skapar en global etikett med namnet '%s'"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:64
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -20436,7 +20425,7 @@ msgstr "Radera lager %d"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:235
 msgid "Select dielectric layer to remove from board stack up."
-msgstr ""
+msgstr "Välj dielektriskt lager för att ta bort från kartong."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:236
 #, fuzzy
@@ -23142,7 +23131,7 @@ msgstr "Välj ett IDF-exportfilnamn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
 msgid "*.emn"
-msgstr ""
+msgstr "* .emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:51
@@ -23420,7 +23409,7 @@ msgstr "Spara VRML-kortfil"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "*.wrl"
-msgstr ""
+msgstr "* .wrl"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:31
 msgid "Footprint 3D model path:"
@@ -23538,7 +23527,7 @@ msgstr "Skilj p? versaler/gemena"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Slå in"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -23567,7 +23556,7 @@ msgstr "Förhandsgranskning"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "Starta om sökningen"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
 #, fuzzy
@@ -24401,7 +24390,7 @@ msgstr "Egenskaper för linjesegment"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "Linjebredden kanske inte är 0 för ofyllda former."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
 #, fuzzy
@@ -24732,7 +24721,7 @@ msgstr "Net används. Radera ändå?"
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1904
 #, c-format
 msgid "Delete all nets in group '%s'?"
-msgstr ""
+msgstr "Radera alla nät i gruppen '%s'?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1927
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1928
@@ -24758,7 +24747,7 @@ msgstr "Jokertecken"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:56
 msgid "RegEx"
-msgstr ""
+msgstr "RegEx"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:57
 #, fuzzy
@@ -24767,7 +24756,7 @@ msgstr "Jokertecken"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:58
 msgid "RegEx Substr"
-msgstr ""
+msgstr "RegEx Substr"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:97
 #, fuzzy
@@ -29592,7 +29581,7 @@ msgstr "Centrera"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:54
 msgid "Feet"
-msgstr ""
+msgstr "Fötter"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:250
 #, fuzzy
@@ -31186,27 +31175,27 @@ msgstr "Inget \"%s\" paket i biblioteket \"%s\""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2020
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorera en polygon eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1594
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorerar en tråd eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1767
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorerar en text eftersom Eagle-lagret '%s' (%d) inte har kartlagts"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1905
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorerar en rektangé eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2090
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignorerar en cirkel eftersom Eagle-lagret '%s' (%d) inte var kartlagt"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -34127,11 +34116,11 @@ msgstr "Radera spår"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:589
 msgid "Report may be incomplete: some footprint courtyards are malformed."
-msgstr ""
+msgstr "Rapporten kan vara ofullständig: vissa fotavtryck gårdar är felaktiga."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
 msgid "Run DRC for a full analysis."
-msgstr ""
+msgstr "Kör DRC för en fullständig analys."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:599
 msgid "Item <b>disallowed</b> at current location."
