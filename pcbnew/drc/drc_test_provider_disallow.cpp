@@ -77,6 +77,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             [&]( BOARD_ITEM* item )
             {
                 auto constraint = m_drcEngine->EvalRulesForItems( DISALLOW_CONSTRAINT, item );
+
                 if( constraint.m_DisallowFlags )
                 {
                     std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_ALLOWED_ITEMS );
