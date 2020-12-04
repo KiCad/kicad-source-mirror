@@ -267,11 +267,17 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer, SC
 VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
                                          const EE_SELECTION& aSkip )
 {
-    int snapDist      = GetGrid().x;
-    int snapRange     = SNAP_RANGE * IU_PER_MILS;
+    constexpr int snapRange = SNAP_RANGE * IU_PER_MILS;
 
-    BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
-              VECTOR2I( snapRange, snapRange ) );
+    VECTOR2I pt = aOrigin;
+    VECTOR2I snapDist( snapRange, snapRange );
+    bool     snapLineX = false;
+    bool     snapLineY = false;
+    bool     snapPoint = false;
+    bool     gridChecked = false;
+
+    BOX2I    bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ),
+                 VECTOR2I( snapRange, snapRange ) );
 
     clearAnchors();
 
@@ -281,63 +287,92 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
     ANCHOR*  nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayer );
     VECTOR2I nearestGrid = m_enableGrid ? Align( aOrigin ) : aOrigin;
 
-    if( nearest )
-        snapDist = nearest->Distance( aOrigin );
-
-    if( m_snapItem && m_enableSnapLine && m_enableSnap )
+    if( m_enableSnapLine && m_snapItem && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
     {
-        bool snapLine = false;
-        int x_dist = std::abs( m_viewSnapLine.GetPosition().x - aOrigin.x );
-        int y_dist = std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y );
-
-        /// Allows de-snapping from the line if you are closer to another snap point
-        if( x_dist < snapRange && x_dist < snapDist )
+        if( std::abs( m_viewSnapLine.GetPosition().x - aOrigin.x ) < snapDist.x )
         {
-            nearestGrid.x = m_viewSnapLine.GetPosition().x;
-            snapLine      = true;
+            pt.x = m_viewSnapLine.GetPosition().x;
+            snapDist.x = std::abs( m_viewSnapLine.GetPosition().x - aOrigin.x );
+            snapLineX = true;
         }
 
-        if( y_dist < snapRange && y_dist < snapDist )
+        if( std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y ) < snapDist.y )
         {
-            nearestGrid.y = m_viewSnapLine.GetPosition().y;
-            snapLine      = true;
+            pt.y = m_viewSnapLine.GetPosition().y;
+            snapDist.y = std::abs( m_viewSnapLine.GetPosition().y - aOrigin.y );
+            snapLineY = true;
         }
 
-        if( snapLine && m_skipPoint != VECTOR2I( m_viewSnapLine.GetPosition() ) )
+        if( m_enableGrid && std::abs( nearestGrid.x - aOrigin.x ) < snapDist.x )
         {
-            m_viewSnapLine.SetEndPosition( nearestGrid );
-
-            if( m_toolMgr->GetView()->IsVisible( &m_viewSnapLine ) )
-                m_toolMgr->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );
-            else
-                m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, true );
-
-            return nearestGrid;
+            pt.x = nearestGrid.x;
+            snapDist.x = std::abs( nearestGrid.x - aOrigin.x );
+            snapLineX = false;
         }
+
+        if( m_enableGrid && std::abs( nearestGrid.y - aOrigin.y ) < snapDist.y )
+        {
+            pt.y = nearestGrid.y;
+            snapDist.x = std::abs( nearestGrid.y - aOrigin.y );
+            snapLineY = false;
+        }
+
+        gridChecked = true;
     }
 
-    if( nearest && m_enableSnap )
+    if( m_enableSnap && nearest && nearest->Distance( aOrigin ) < snapDist.EuclideanNorm() )
     {
-        if( snapDist <= snapRange )
+        pt = nearest->pos;
+        snapDist.x = std::abs( nearest->pos.x - aOrigin.x );
+        snapDist.y = std::abs( nearest->pos.y - aOrigin.y );
+        snapLineX = snapLineY = false;
+        snapPoint = true;
+
+        if( m_enableGrid && ( nearestGrid - aOrigin ).EuclideanNorm() < snapDist.EuclideanNorm() )
         {
-            m_viewSnapPoint.SetPosition( wxPoint( nearest->pos ) );
-            m_viewSnapLine.SetPosition( wxPoint( nearest->pos ) );
-            m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
-
-            if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
-                m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
-            else
-                m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, true );
-
-            m_snapItem = nearest;
-            return nearest->pos;
+            pt = nearestGrid;
+            snapDist.x = std::abs( nearestGrid.x - aOrigin.x );
+            snapDist.y = std::abs( nearestGrid.y - aOrigin.y );
+            snapPoint = false;
         }
+
+        gridChecked = true;
     }
 
-    m_snapItem = nullptr;
-    m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
-    m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
-    return nearestGrid;
+    if( m_enableGrid && !gridChecked )
+        pt = nearestGrid;
+
+    if( snapLineX || snapLineY )
+    {
+        m_viewSnapLine.SetEndPosition( pt );
+
+        if( m_toolMgr->GetView()->IsVisible( &m_viewSnapLine ) )
+            m_toolMgr->GetView()->Update( &m_viewSnapLine, KIGFX::GEOMETRY );
+        else
+            m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, true );
+    }
+    else if( snapPoint )
+    {
+        m_snapItem = nearest;
+        m_viewSnapPoint.SetPosition( (wxPoint) pt );
+        m_viewSnapLine.SetPosition( (wxPoint) pt );
+
+        m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
+
+        if( m_toolMgr->GetView()->IsVisible( &m_viewSnapPoint ) )
+            m_toolMgr->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
+        else
+            m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, true );
+    }
+    else
+    {
+        m_snapItem = nullptr;
+
+        m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
+        m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
+    }
+
+    return pt;
 }
 
 
