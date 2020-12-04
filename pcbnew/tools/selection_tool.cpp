@@ -267,35 +267,72 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
+        // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
+        // Due to the fact ALT key modifier cannot be useed freely on Windows, actoins
+        // are different on OSX and others
+        // No modifier = select items and deselect previous selection
+        // ALT (on OSX) = skip heuristic and show full selection choice
+        // ALT (on other) = do nothing (same as no modifier)
+        //
+        // CTRL (on OSX) = add selected items to the current selection
+        // CTRL (on others) = skip heuristic and show full selection choice
+        //
+        // SHIFT (on OSX) = do nothing (same as no modifier)
+        // SHIFT (on other) = add selected items to the current selection
+        //
+        // CTRL+SHIFT (on OSX) = remove selected items from the current selection
+        // CTRL+SHIFT (on others) = highlight net
+        //
+        // CTRL+ALT  (on OSX) =  highlight net
+        // CTRL+ALT  (on others) = do nothing (same as no modifier)
+
 #ifdef __WXOSX_MAC__
-        if( evt->Modifier( MD_CTRL ) && evt->Modifier( MD_SHIFT ) )
-            m_subtractive = true;
-        else if( evt->Modifier( MD_CTRL ) )
-            m_additive = true;
+        m_subtractive = evt->Modifier( MD_CTRL ) &&
+                        evt->Modifier( MD_SHIFT ) &&
+                        !evt->Modifier( MD_ALT );
+
+        m_additive = evt->Modifier( MD_CTRL ) &&
+                     !evt->Modifier( MD_SHIFT ) &&
+                     !evt->Modifier( MD_ALT );
 
         // Is the user requesting that the selection list include all possible
         // items without removing less likely selection candidates
-        m_skip_heuristics = evt->Modifier( MD_ALT );
-#else
-        if( evt->Modifier( MD_ALT ) && evt->Modifier( MD_SHIFT ) )
-            m_subtractive = true;
-        else if( evt->Modifier( MD_ALT ) )
-            m_additive = true;
+        m_skip_heuristics = evt->Modifier( MD_ALT ) &&
+                            !evt->Modifier( MD_SHIFT ) &&
+                            !evt->Modifier( MD_ALT );
 
-        m_skip_heuristics = evt->Modifier( MD_CTRL );
+        bool highlight_modifier = evt->Modifier( MD_CTRL ) &&
+                                  evt->Modifier( MD_ALT ) &&
+                                  !evt->Modifier( MD_SHIFT );
+#else
+        m_subtractive = evt->Modifier( MD_ALT ) &&
+                        evt->Modifier( MD_SHIFT ) &&
+                        !evt->Modifier( MD_CTRL );
+
+        m_additive = evt->Modifier( MD_SHIFT ) &&
+                     !evt->Modifier( MD_ALT ) &&
+                     !evt->Modifier( MD_CTRL );
+
+        m_skip_heuristics = evt->Modifier( MD_CTRL ) &&
+                            !evt->Modifier( MD_ALT ) &&
+                            !evt->Modifier( MD_SHIFT );
+
+        bool highlight_modifier = evt->Modifier( MD_CTRL )
+                                  && evt->Modifier( MD_SHIFT )
+                                  && !evt->Modifier( MD_ALT );
 #endif
 
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            if( evt->Modifier( MD_CTRL ) && !m_editModules )
+            if( highlight_modifier && !m_editModules )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
             }
             else
             {
                 // If no modifier keys are pressed, clear the selection
-                if( !m_additive )
+                if( !m_additive && !m_subtractive )
                     clearSelection();
 
                 selectPoint( evt->Position() );
@@ -476,7 +513,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aForce )
     }
     else
     {
-        if( !m_additive )
+        if( !m_additive && !m_subtractive)
             clearSelection();
 
         // Prevent selection of invisible or inactive items
@@ -550,7 +587,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     if( collector.GetCount() == 0 )
     {
-        if( !m_additive && anyCollected )
+        if( !m_additive && !m_subtractive && anyCollected )
         {
             clearSelection();
         }
