@@ -212,38 +212,89 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         bool dragAlwaysSelects = getEditFrame<PCB_BASE_FRAME>()->GetDragSelects();
         TRACK_DRAG_ACTION dragAction = getEditFrame<PCB_BASE_FRAME>()->Settings().m_TrackDragAction;
-        m_additive = m_subtractive = m_exclusive_or = false;
+
+        // on left click, a selection is made, depending on modifiers ALT, SHIFT, CTRL:
+        // Due to the fact ALT key modifier cannot be useed freely on Winows and Linux,
+        // actions are different on OSX and others OS
+        // Especially, ALT key cannot be used to force showing the full selection choice
+        // context menu (the menu is immediately closed on Windows )
+        //
+        // No modifier = select items and deselect previous selection
+        // ALT (on OSX) = skip heuristic and show full selection choice
+        // ALT (on others) = exclusive OR of selected items (inverse selection)
+        //
+        // CTRL (on OSX) = exclusive OR of selected items (inverse selection)
+        // CTRL (on others) = skip heuristic and show full selection choice
+        //
+        // SHIFT = add selected items to the current selection
+        //
+        // CTRL+SHIFT (on OSX) = remove selected items to the current selection
+        // CTRL+SHIFT (on others) = highlight net
+        //
+        // CTRL+ALT (on OSX) = highlight net
+        // CTRL+ALT (on others) = do nothing (same as no modifier)
+        //
+        // SHIFT+ALT (on OSX) =  do nothing (same as no modifier)
+        // SHIFT+ALT (on others) = remove selected items to the current selection
 
 #ifdef __WXOSX_MAC__
-        if( evt->Modifier( MD_CTRL ) && evt->Modifier( MD_SHIFT ) )
-            m_subtractive = true;
-        else if( evt->Modifier( MD_SHIFT ) )
-            m_additive = true;
-        else if( evt->Modifier( MD_CTRL ) )
-            m_exclusive_or = true;
+        m_subtractive = evt->Modifier( MD_CTRL ) &&
+                        evt->Modifier( MD_SHIFT ) &&
+                        !evt->Modifier( MD_ALT );
 
-        m_skip_heuristics = evt->Modifier( MD_ALT );
+        m_additive = evt->Modifier( MD_SHIFT ) &&
+                     !evt->Modifier( MD_CTRL ) &&
+                     !evt->Modifier( MD_ALT );
+
+        m_exclusive_or = evt->Modifier( MD_CTRL ) &&
+                         !evt->Modifier( MD_SHIFT ) &&
+                         !evt->Modifier( MD_ALT );
+
+        m_skip_heuristics = evt->Modifier( MD_ALT ) &&
+                            !evt->Modifier( MD_SHIFT ) &&
+                            !evt->Modifier( MD_CTRL );
+
+        bool highlight_modifier = evt->Modifier( MD_CTRL )
+                                  && evt->Modifier( MD_ALT )
+                                  && !evt->Modifier( MD_SHIFT );
 #else
-        if( evt->Modifier( MD_ALT ) && evt->Modifier( MD_SHIFT ) )
-            m_subtractive = true;
-        else if( evt->Modifier( MD_SHIFT ) )
-            m_additive = true;
-        else if( evt->Modifier( MD_ALT ) )
-            m_exclusive_or = true;
+        m_subtractive = evt->Modifier( MD_ALT ) &&
+                        evt->Modifier( MD_SHIFT ) &&
+                        !evt->Modifier( MD_CTRL );
+
+        m_additive = evt->Modifier( MD_SHIFT ) &&
+                     !evt->Modifier( MD_ALT ) &&
+                     !evt->Modifier( MD_CTRL );
+
+        m_exclusive_or = evt->Modifier( MD_ALT ) &&
+                         !evt->Modifier( MD_SHIFT ) &&
+                         !evt->Modifier( MD_CTRL );
 
         // Cannot use the Alt key on windows or the disambiguation context menu is immediately
         // dismissed rendering it useless.
-        m_skip_heuristics = evt->Modifier( MD_CTRL );
+        m_skip_heuristics = evt->Modifier( MD_CTRL ) &&
+                            !evt->Modifier( MD_SHIFT ) &&
+                            !evt->Modifier( MD_ALT );
+
+        bool highlight_modifier = evt->Modifier( MD_CTRL )
+                                  && evt->Modifier( MD_SHIFT )
+                                  && !evt->Modifier( MD_ALT );
 #endif
 
         bool modifier_enabled = m_subtractive || m_additive || m_exclusive_or;
+        PCB_BASE_FRAME* frame = getEditFrame<PCB_BASE_FRAME>();
+        bool brd_editor = frame && frame->IsType( FRAME_PCB_EDITOR );
 
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
-            m_frame->FocusOnItem( nullptr );
-
-            selectPoint( evt->Position() );
+            if( highlight_modifier && brd_editor )
+                m_toolMgr->RunAction( PCB_ACTIONS::highlightNet, true );
+            else
+            {
+                m_frame->FocusOnItem( nullptr );
+                selectPoint( evt->Position() );
+            }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
