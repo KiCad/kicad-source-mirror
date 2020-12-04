@@ -80,7 +80,7 @@ static int GetLastPinNumSize()
 }
 
 
-extern void IncrementLabelMember( wxString& name, int aIncrement );
+extern bool IncrementLabelMember( wxString& name, int aIncrement );
 
 
 LIB_PIN_TOOL::LIB_PIN_TOOL() :

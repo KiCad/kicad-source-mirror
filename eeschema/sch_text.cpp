@@ -51,15 +51,18 @@
 using KIGFX::SCH_RENDER_SETTINGS;
 
 
-void IncrementLabelMember( wxString& name, int aIncrement )
+bool IncrementLabelMember( wxString& name, int aIncrement )
 {
     int  ii, nn;
     long number = 0;
 
-    ii = name.Len() - 1; nn = 0;
+    ii = name.Len() - 1;
+    nn = 0;
+
+    // No number found, but simply repeating the same label is valid
 
     if( !wxIsdigit( name.GetChar( ii ) ) )
-        return;
+        return true;
 
     while( ii >= 0 && wxIsdigit( name.GetChar( ii ) ) )
     {
@@ -67,14 +70,23 @@ void IncrementLabelMember( wxString& name, int aIncrement )
         nn++;
     }
 
-    ii++;   /* digits are starting at ii position */
+    ii++; /* digits are starting at ii position */
     wxString litt_number = name.Right( nn );
 
     if( litt_number.ToLong( &number ) )
     {
         number += aIncrement;
-        name.Remove( ii ); name << number;
+
+        // Don't let result go below zero
+
+        if( number > -1 )
+        {
+            name.Remove( ii );
+            name << number;
+            return true;
+        }
     }
+    return false;
 }
 
 
@@ -149,11 +161,15 @@ EDA_ITEM* SCH_TEXT::Clone() const
 }
 
 
-void SCH_TEXT::IncrementLabel( int aIncrement )
+bool SCH_TEXT::IncrementLabel( int aIncrement )
 {
     wxString text = GetText();
-    IncrementLabelMember( text, aIncrement );
-    SetText(text );
+    bool ReturnVal = IncrementLabelMember( text, aIncrement );
+    
+    if( ReturnVal )
+        SetText( text );
+
+    return ReturnVal;
 }
 
 

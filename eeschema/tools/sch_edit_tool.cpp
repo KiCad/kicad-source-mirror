@@ -904,7 +904,11 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
             if( dynamic_cast<SCH_TEXT*>( newItem ) )
             {
                 SCH_TEXT* text = static_cast<SCH_TEXT*>( newItem );
-                text->IncrementLabel( cfg->m_Drawing.repeat_label_increment );
+
+                // If incrementing tries to go below zero, tell user why the value is repeated
+
+                if( !text->IncrementLabel( cfg->m_Drawing.repeat_label_increment ) )
+                    m_frame->ShowInfoBarMsg( _( "Label value cannot go below zero" ) );
             }
 
             newItem->Move( wxPoint( Mils2iu( cfg->m_Drawing.default_repeat_offset_x ),

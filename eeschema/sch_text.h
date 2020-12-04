@@ -221,7 +221,7 @@ public:
      *
      * @param aIncrement = the increment value to add to the number ending the text.
      */
-    void IncrementLabel( int aIncrement );
+    bool IncrementLabel( int aIncrement );
 
     /**
      * Set a spin or rotation angle, along with specific horizontal and vertical justification
