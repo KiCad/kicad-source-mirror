@@ -1009,8 +1009,9 @@ bool DIALOG_NET_INSPECTOR::netFilterMatches( NETINFO_ITEM* aNet ) const
 {
     // Note: the filtering is case insensitive.
 
+    // Show no-connect nets only if specifically asked for by filter
     if( m_netFilter.empty() )
-        return true;
+        return !aNet->GetNetname().StartsWith( "no_connect_" );
 
     wxString net_str = UnescapeString( aNet->GetNetname() ).Upper();
 

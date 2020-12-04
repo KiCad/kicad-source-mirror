@@ -861,6 +861,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             if( displayNetname )
             {
                 wxString netname = UnescapeString( aPad->GetShortNetname() );
+
+                if( netname.StartsWith( "no_connect_" ) )
+                    netname = "x";
+
                 // calculate the size of net name text:
                 double tsize = 1.5 * padsize.x / netname.Length();
                 tsize = std::min( tsize, size );

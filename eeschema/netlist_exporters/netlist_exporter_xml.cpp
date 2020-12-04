@@ -578,9 +578,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
     typedef std::pair<SCH_PIN*, SCH_SHEET_PATH>             MEMBER_RECORD;
     typedef std::pair<wxString, std::vector<MEMBER_RECORD>> NET_RECORD;
     std::vector<NET_RECORD*> nets;
-
-    // Pre-allocate the no-net node
-    nets.emplace_back( new NET_RECORD() );
+    std::vector<NET_RECORD*> noConnects;
 
     for( const auto& it : m_schematic->ConnectionGraph()->GetNetMap() )
     {
@@ -593,7 +591,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
         if( !subgraphs[0]->m_strong_driver && subgraphs[0]->m_no_connect )
         {
-            net_record = nets[0];
+            noConnects.emplace_back( new NET_RECORD( "no_connect_", std::vector<MEMBER_RECORD>() ) );
+            net_record = noConnects.back();
         }
         else
         {
@@ -624,6 +623,15 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             }
         }
     }
+
+    // Netlist ordering: Net name, then ref des, then pin name
+    std::sort( nets.begin(), nets.end(),
+               []( const NET_RECORD* a, const NET_RECORD*b )
+               {
+                   return StrNumCmp( a->first, b->first ) < 0;
+               } );
+
+    nets.insert( nets.end(), noConnects.begin(), noConnects.end() );
 
     for( int i = 0; i < (int) nets.size(); ++i )
     {
@@ -678,8 +686,12 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
             if( !added )
             {
-                xnets->AddChild( xnet = node( "net" ) );
                 netCodeTxt.Printf( "%d", i );
+
+                if( net_record->first == "no_connect_" )
+                    net_record->first += netCodeTxt;
+
+                xnets->AddChild( xnet = node( "net" ) );
                 xnet->AddAttribute( "code", netCodeTxt );
                 xnet->AddAttribute( "name", net_record->first );
 
