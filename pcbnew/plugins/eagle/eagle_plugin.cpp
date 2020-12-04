@@ -2847,7 +2847,9 @@ FOOTPRINT* EAGLE_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
         return NULL;
 
     // Return a copy of the template
-    return (FOOTPRINT*) it->second->Duplicate();
+    FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate();
+    copy->SetParent( nullptr );
+    return copy;
 }
 
 

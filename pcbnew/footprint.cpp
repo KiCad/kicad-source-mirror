@@ -155,13 +155,10 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_3D_Drawings = aFootprint.m_3D_Drawings;
 
     m_doc         = aFootprint.m_doc;
-    m_keywords     = aFootprint.m_keywords;
+    m_keywords    = aFootprint.m_keywords;
     m_properties  = aFootprint.m_properties;
 
     m_arflag = 0;
-
-    // Ensure auxiliary data is up to date
-    CalculateBoundingBox();
 
     m_initial_comments = aFootprint.m_initial_comments ?
                          new wxArrayString( *aFootprint.m_initial_comments ) : nullptr;

@@ -3325,7 +3325,9 @@ FOOTPRINT* LEGACY_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
     }
 
     // Return copy of already loaded FOOTPRINT
-    return (FOOTPRINT*) it->second->Duplicate();
+    FOOTPRINT* copy = (FOOTPRINT*) it->second->Duplicate();
+    copy->SetParent( nullptr );
+    return copy;
 }
 
 

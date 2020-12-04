@@ -936,7 +936,15 @@ FOOTPRINT* GPCB_PLUGIN::FootprintLoad( const wxString& aLibraryPath,
                                        const PROPERTIES* aProperties )
 {
     const FOOTPRINT* footprint = getFootprint( aLibraryPath, aFootprintName, aProperties, true );
-    return footprint ? (FOOTPRINT*) footprint->Duplicate() : nullptr;
+
+    if( footprint )
+    {
+        FOOTPRINT* copy = (FOOTPRINT*) footprint->Duplicate();
+        copy->SetParent( nullptr );
+        return copy;
+    }
+
+    return nullptr;
 }
 
 
