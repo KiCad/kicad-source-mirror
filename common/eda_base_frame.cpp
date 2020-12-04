@@ -683,23 +683,35 @@ void EDA_BASE_FRAME::PrintMsg( const wxString& text )
 }
 
 
-void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg )
+void EDA_BASE_FRAME::ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton )
 {
     m_infoBar->RemoveAllButtons();
+
+    if( aShowCloseButton )
+        m_infoBar->AddCloseButton();
+
     GetInfoBar()->ShowMessageFor( aErrorMsg, 8000, wxICON_ERROR );
 }
 
 
-void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg )
+void EDA_BASE_FRAME::ShowInfoBarWarning( const wxString& aWarningMsg, bool aShowCloseButton )
 {
     m_infoBar->RemoveAllButtons();
+
+    if( aShowCloseButton )
+        m_infoBar->AddCloseButton();
+
     GetInfoBar()->ShowMessageFor( aWarningMsg, 8000, wxICON_WARNING );
 }
 
 
-void EDA_BASE_FRAME::ShowInfoBarMsg( const wxString& aMsg )
+void EDA_BASE_FRAME::ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton )
 {
     m_infoBar->RemoveAllButtons();
+
+    if( aShowCloseButton )
+        m_infoBar->AddCloseButton();
+
     GetInfoBar()->ShowMessageFor( aMsg, 10000, wxICON_INFORMATION );
 }
 

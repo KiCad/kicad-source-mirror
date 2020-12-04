@@ -330,11 +330,40 @@ public:
 
     void PrintMsg( const wxString& text );
 
+    /**
+     * @return the WX_INFOBAR that can be displayed on the top of the canvas
+     */
     WX_INFOBAR* GetInfoBar() { return m_infoBar; }
 
-    void ShowInfoBarError( const wxString& aErrorMsg );
-    void ShowInfoBarWarning( const wxString& aWarningMsg );
-    void ShowInfoBarMsg( const wxString& aMsg );
+    /**
+     * Show the WX_INFOBAR displayed on the top of the canvas with a message
+     * and a Error icon on the left of the infobar. The infobar will be closed
+     * after a timeaout
+     * @param aErrorMsg is the message to display
+     * @param aShowCloseButton = true to show a close button on the right of the
+     * WX_INFOBAR
+     */
+    void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false );
+
+    /**
+     * Show the WX_INFOBAR displayed on the top of the canvas with a message
+     * and a Warning icon on the left of the infobar. The infobar will be closed
+     * after a timeaout
+     * @param aErrorMsg is the message to display
+     * @param aShowCloseButton = true to show a close button on the right of the
+     * WX_INFOBAR
+     */
+    void ShowInfoBarWarning( const wxString& aWarningMsg, bool aShowCloseButton = false );
+
+    /**
+     * Show the WX_INFOBAR displayed on the top of the canvas with a message
+     * and a Info icon on the left of the infobar. The infobar will be closed
+     * after a timeaout
+     * @param aErrorMsg is the message to display
+     * @param aShowCloseButton = true to show a close button on the right of the
+     * WX_INFOBAR
+     */
+    void ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton = false );
 
     /**
      * Returns the settings object used in SaveSettings(), and is overloaded in
