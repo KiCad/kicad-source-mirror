@@ -461,8 +461,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
     bool       isNetTie = padParent->IsNetTie();
 
     // Graphic items are allowed to act as net-ties within their own footprint
-    if( isNetTie && other->Type() == PCB_FP_SHAPE_T && other->GetParent() == padParent )
+    if( isNetTie
+            && ( other->Type() == PCB_FP_SHAPE_T || other->Type() == PCB_PAD_T )
+            && other->GetParent() == padParent )
+    {
         testClearance = false;
+    }
 
     // Track clearances are tested in testTrackClearances()
     if( dynamic_cast<TRACK*>( other) )
