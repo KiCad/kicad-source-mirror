@@ -30,7 +30,7 @@
 #include <wx/menu.h>
 #include <tool/tool_action.h>
 #include <dialog_shim.h>
-
+#include <wx/dcclient.h>
 
 /**
  * Menu IDs for the hotkey context menu
@@ -451,12 +451,9 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     if( !m_readOnly )
         command_header << " " << _( "(double-click to edit)" );
 
-    AppendColumn( command_header, wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT,
-                  wxCOL_RESIZABLE | wxCOL_SORTABLE );
-    AppendColumn( _( "Hotkey" ), wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT,
-                  wxCOL_RESIZABLE | wxCOL_SORTABLE );
-    AppendColumn( _( "Description" ), wxCOL_WIDTH_AUTOSIZE, wxALIGN_LEFT,
-                  wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+    AppendColumn( _( "Description" ), 900, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     GetDataView()->SetIndent( 10 );
 
     if( !m_readOnly )
@@ -488,6 +485,9 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
         m_hk_store.ResetAllHotkeysToOriginal();
 
     UpdateFromClientData();
+
+    GetDataView()->GetColumn( 0 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    GetDataView()->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     Thaw();
 }
 
@@ -524,6 +524,9 @@ void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
     }
 
     UpdateFromClientData();
+
+    GetDataView()->GetColumn( 0 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    GetDataView()->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     Thaw();
 }
 
