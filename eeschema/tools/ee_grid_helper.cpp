@@ -366,8 +366,6 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
     }
     else
     {
-        m_snapItem = nullptr;
-
         m_toolMgr->GetView()->SetVisible( &m_viewSnapPoint, false );
         m_toolMgr->GetView()->SetVisible( &m_viewSnapLine, false );
     }
