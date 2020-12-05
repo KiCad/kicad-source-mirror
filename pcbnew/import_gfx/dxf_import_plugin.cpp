@@ -33,6 +33,7 @@
 #include <wx/arrstr.h>
 #include <wx/regex.h>
 
+#include <cmath>    // isnan
 #include <trigo.h>
 #include <macros.h>
 #include <class_board.h>
@@ -399,7 +400,8 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
         return;
 
     VECTOR2D refPoint( mapX( aData.ipx ), mapY( aData.ipy ) );
-    VECTOR2D secPoint( mapX( aData.apx ), mapY( aData.apy ) );
+    VECTOR2D secPoint( mapX( std::isnan( aData.apx ) ? 0 : aData.apx ), 
+                       mapY( std::isnan( aData.apy ) ? 0 : aData.apy ) );
 
     if( aData.vJustification != 0 || aData.hJustification != 0 || aData.hJustification == 4 )
     {
