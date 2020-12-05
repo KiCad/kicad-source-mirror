@@ -106,6 +106,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 {
                     item->SetFlags( HOLE_PROXY );
                     doCheckItem( item );
+                    item->ClearFlags( HOLE_PROXY );
                 }
 
                 return true;
