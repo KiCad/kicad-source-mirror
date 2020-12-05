@@ -2343,6 +2343,7 @@ void APPEARANCE_CONTROLS::OnColorSwatchChanged( wxCommandEvent& aEvent )
     KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
     view->UpdateLayerColor( layer );
     view->UpdateLayerColor( GetNetnameLayer( layer ) );
+    view->UpdateLayerColor( ZONE_LAYER_FOR( layer ) );
 
     // Update the bitmap of the layer box
     if( m_frame->IsType( FRAME_PCB_EDITOR ) )
