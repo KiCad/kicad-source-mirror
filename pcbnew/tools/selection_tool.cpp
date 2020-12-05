@@ -2423,7 +2423,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     // Special case: if a footprint is completely covered with other features then there's no
     // way to select it -- so we need to leave it in the list for user disambiguation.
 
-    constexpr double maxCoverRatio = 0.75;
+    constexpr double maxCoverRatio = 0.70;
 
     for( int i = 0; i < aCollector.GetCount(); ++i )
     {
