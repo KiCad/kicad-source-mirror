@@ -231,11 +231,11 @@ TOOL_MANAGER::~TOOL_MANAGER()
 void TOOL_MANAGER::RegisterTool( TOOL_BASE* aTool )
 {
     wxASSERT_MSG( m_toolNameIndex.find( aTool->GetName() ) == m_toolNameIndex.end(),
-            wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
+                  wxT( "Adding two tools with the same name may result in unexpected behaviour.") );
     wxASSERT_MSG( m_toolIdIndex.find( aTool->GetId() ) == m_toolIdIndex.end(),
-            wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
+                  wxT( "Adding two tools with the same ID may result in unexpected behaviour.") );
     wxASSERT_MSG( m_toolTypes.find( typeid( *aTool ).name() ) == m_toolTypes.end(),
-            wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
+                  wxT( "Adding two tools of the same type may result in unexpected behaviour.") );
 
     m_toolOrder.push_back( aTool );
 
@@ -257,8 +257,8 @@ bool TOOL_MANAGER::InvokeTool( TOOL_ID aToolId )
     if( tool && tool->GetType() == INTERACTIVE )
         return invokeTool( tool );
 
-    wxLogTrace( kicadTraceToolStack,
-            "TOOL_MANAGER::InvokeTool - No interactive tool with ID %d", aToolId );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::InvokeTool - no tool with ID %d",
+                                     aToolId );
 
     return false;       // there is no tool with the given id
 }
@@ -271,8 +271,8 @@ bool TOOL_MANAGER::InvokeTool( const std::string& aToolName )
     if( tool && tool->GetType() == INTERACTIVE )
         return invokeTool( tool );
 
-    wxLogTrace( kicadTraceToolStack,
-            "TOOL_MANAGER::InvokeTool - No interactive tool with name %s", aToolName );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::InvokeTool - no tool with name %s",
+                                     aToolName );
 
     return false;       // there is no tool with the given name
 }
@@ -284,7 +284,7 @@ bool TOOL_MANAGER::RunAction( const std::string& aActionName, bool aNow, void* a
 
     if( !action )
     {
-        wxASSERT_MSG( false, wxString::Format( wxT( "Could not find action %s." ), aActionName ) );
+        wxASSERT_MSG( false, wxString::Format( "Could not find action %s.", aActionName ) );
         return false;
     }
 
@@ -451,8 +451,8 @@ void TOOL_MANAGER::ShutdownTool( TOOL_ID aToolId )
     if( tool && tool->GetType() == INTERACTIVE )
         ShutdownTool( tool );
 
-    wxLogTrace( kicadTraceToolStack,
-            "TOOL_MANAGER::ShutdownTool - No interactive tool with ID %d", aToolId );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::ShutdownTool - no tool with ID %d",
+                                     aToolId );
 }
 
 
@@ -463,8 +463,8 @@ void TOOL_MANAGER::ShutdownTool( const std::string& aToolName )
     if( tool && tool->GetType() == INTERACTIVE )
         ShutdownTool( tool );
 
-    wxLogTrace( kicadTraceToolStack,
-            "TOOL_MANAGER::ShutdownTool - No interactive tool with name %s", aToolName );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::ShutdownTool - no tool with name %s",
+                                     aToolName );
 }
 
 
@@ -490,9 +490,8 @@ void TOOL_MANAGER::ShutdownTool( TOOL_BASE* aTool )
 
             if( st->cofunc )
             {
-                wxLogTrace( kicadTraceToolStack,
-                        "TOOL_MANAGER::ShutdownTool - Shutting down tool %s",
-                        st->theTool->GetName() );
+                wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER shutting down tool %s",
+                                                 st->theTool->GetName() );
 
                 setActiveState( st );
                 bool end = !st->cofunc->Resume();
@@ -563,8 +562,8 @@ void TOOL_MANAGER::InitTools()
 
         if( !tool->Init() )
         {
-            wxMessageBox( wxString::Format( "Initialization of tool \"%s\" failed",
-                                            tool->GetName() ) );
+            wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER initialization of tool '%s' failed",
+                                             tool->GetName() );
 
             // Unregister the tool
             setActiveState( nullptr );
@@ -649,7 +648,7 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
 {
     bool handled = false;
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal - %s", aEvent.Format() );
+    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER dispatching %s", aEvent.Format() );
 
     auto it = m_activeTools.begin();
 
@@ -683,9 +682,9 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             st->pendingWait = false;
             st->waitEvents.clear();
 
-            wxLogTrace( kicadTraceToolStack,
-                    "TOOL_MANAGER::dispatchInternal - Waking tool %s for event: %s",
-                    st->theTool->GetName(), aEvent.Format() );
+            wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER waking tool %s for event: %s",
+                                             st->theTool->GetName(),
+                                             aEvent.Format() );
 
             setActiveState( st );
             bool end = !st->cofunc->Resume();
@@ -699,9 +698,9 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             // If the tool did not request the event be passed to other tools, we're done
             if( !st->wakeupEvent.PassEvent() )
             {
-                wxLogTrace( kicadTraceToolStack,
-                        "TOOL_MANAGER::dispatchInternal - %s stopped passing event: %s",
-                        st->theTool->GetName(), aEvent.Format() );
+                wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER %s stopped passing event %s",
+                                                 st->theTool->GetName(),
+                                                 aEvent.Format() );
 
                 return true;
             }
@@ -743,9 +742,9 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
                     // as the state changes, the transition table has to be set up again
                     st->transitions.clear();
 
-                    wxLogTrace( kicadTraceToolStack,
-                            "TOOL_MANAGER::dispatchInternal - Running tool %s for event: %s",
-                            st->theTool->GetName(), aEvent.Format() );
+                    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER running tool %s for event %s",
+                                                     st->theTool->GetName(),
+                                                     aEvent.Format() );
 
                     // got match? Run the handler.
                     setActiveState( st );
@@ -769,8 +768,10 @@ bool TOOL_MANAGER::dispatchInternal( const TOOL_EVENT& aEvent )
             break;      // only the first tool gets the event
     }
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::dispatchInternal - Handled: %s  %s",
-            ( handled ? "true" : "false" ), aEvent.Format() );
+    if( handled )
+        wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER handled %s", aEvent.Format() );
+    else
+        wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER didn't handle %s", aEvent.Format() );
 
     return handled;
 }
@@ -796,9 +797,9 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 
         if( tool != m_toolNameIndex.end() )
         {
-            wxLogTrace( kicadTraceToolStack,
-                    "TOOL_MANAGER::dispatchActivation - Running tool %s for event: %s",
-                    tool->second->theTool->GetName(), aEvent.Format() );
+            wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER running tool %s for event %s",
+                                             tool->second->theTool->GetName(),
+                                             aEvent.Format() );
 
             runTool( tool->second->theTool );
             return true;
@@ -977,7 +978,7 @@ bool TOOL_MANAGER::SaveClipboard( const std::string& aTextUTF8 )
     {
         // Store the UTF8 string as unicode string in clipboard:
         wxTheClipboard->SetData( new wxTextDataObject( wxString( aTextUTF8.c_str(),
-                                                       wxConvUTF8 ) ) );
+                                                                 wxConvUTF8 ) ) );
         wxTheClipboard->Close();
 
         return true;
@@ -1135,8 +1136,10 @@ bool TOOL_MANAGER::processEvent( const TOOL_EVENT& aEvent )
         }
     }
 
-    wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER::processEvent - Handled: %s  %s",
-            ( handled ? "true" : "false" ), aEvent.Format() );
+    if( handled )
+        wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER handled %s", aEvent.Format() );
+    else
+        wxLogTrace( kicadTraceToolStack, "TOOL_MANAGER didn't handle %s", aEvent.Format() );
 
     return handled;
 }
