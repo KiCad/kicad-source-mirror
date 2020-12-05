@@ -1025,9 +1025,15 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 {
                     const SHAPE_RECT* r = (SHAPE_RECT*) shape;
 
-                    m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
+                    // At this point, if margin.x < 0 the actual rectangle size is
+                    // smaller than SHAPE_RECT r (the pad size was not modifed)
+                    if( margin.x < 0 )
+                        m_gal->DrawRectangle( r->GetPosition() - margin,
+                                              r->GetPosition() + r->GetSize() + margin );
+                    else
+                        m_gal->DrawRectangle( r->GetPosition(), r->GetPosition() + r->GetSize() );
 
-                    if( margin.x > 0 )
+                    if( margin.x > 0 )  // We draw a roudned rect shape
                     {
                         m_gal->DrawSegment( r->GetPosition(),
                                             r->GetPosition() + VECTOR2I( r->GetWidth(), 0 ),
