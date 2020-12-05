@@ -37,7 +37,15 @@ PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALO
         m_Frame( aFrame )
 {
     m_MagneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) != nullptr );
-    m_FlipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) != nullptr );\
+    m_FlipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) != nullptr );
+
+#ifdef __WXOSX_MAC__
+    m_fgSizerLMB_OSX->Show( true );
+    m_fgSizerLMBWinLin->Show( false );
+#else
+    m_fgSizerLMB_OSX->Show( false );
+    m_fgSizerLMBWinLin->Show( true );
+#endif
 
     m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) ? 1 : 0 );
 }

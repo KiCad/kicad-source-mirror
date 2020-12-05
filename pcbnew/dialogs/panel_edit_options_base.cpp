@@ -50,7 +50,133 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	fgSizer12->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
-	bOptionsSizer->Add( fgSizer12, 1, wxEXPAND|wxTOP, 5 );
+	bOptionsSizer->Add( fgSizer12, 0, wxEXPAND|wxTOP, 5 );
+
+
+	bOptionsSizer->Add( 0, 30, 0, 0, 5 );
+
+	wxStaticBoxSizer* sbSizerMouseCmdWinLin;
+	sbSizerMouseCmdWinLin = new wxStaticBoxSizer( new wxStaticBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
+
+	m_staticText181 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Left mouse click action depends on  3 modifier keys:\nAlt, Shift, Ctrl/Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText181->Wrap( -1 );
+	sbSizerMouseCmdWinLin->Add( m_staticText181, 0, wxALL, 5 );
+
+	m_staticline11 = new wxStaticLine( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	sbSizerMouseCmdWinLin->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
+
+	m_fgSizerLMBWinLin = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgSizerLMBWinLin->SetFlexibleDirection( wxBOTH );
+	m_fgSizerLMBWinLin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText61 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("No modifier"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText61->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText61, 0, wxALL, 5 );
+
+	m_staticText71 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Item/block selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText71->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText71, 0, wxALL, 5 );
+
+	m_staticText81 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText81->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText81, 0, wxALL, 5 );
+
+	m_staticText91 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection added to current selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText91->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText91, 0, wxALL, 5 );
+
+	m_staticText121 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("SHIFT+ALT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText121->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText121, 0, wxALL, 5 );
+
+	m_staticText131 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection removed from current selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText131->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText131, 0, wxALL, 5 );
+
+	m_staticText101 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText101->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText101, 0, wxALL, 5 );
+
+	m_staticText111 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Show full disambiguation context menu"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText111->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText111, 0, wxALL, 5 );
+
+	m_staticText141 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("ALT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText141->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText141, 0, wxALL, 5 );
+
+	m_staticText151 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Toggle new selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText151, 0, wxALL, 5 );
+
+	m_staticText161 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL+SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText161->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText161, 0, wxALL, 5 );
+
+	m_staticText171 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText171->Wrap( -1 );
+	m_fgSizerLMBWinLin->Add( m_staticText171, 0, wxALL, 5 );
+
+
+	sbSizerMouseCmdWinLin->Add( m_fgSizerLMBWinLin, 1, wxEXPAND, 5 );
+
+	m_fgSizerLMB_OSX = new wxFlexGridSizer( 0, 2, 0, 0 );
+	m_fgSizerLMB_OSX->SetFlexibleDirection( wxBOTH );
+	m_fgSizerLMB_OSX->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticText6 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("No modifier"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText6->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText6, 0, wxALL, 5 );
+
+	m_staticText7 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Item/block selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText7->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText7, 0, wxALL, 5 );
+
+	m_staticText8 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText8->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText8, 0, wxALL, 5 );
+
+	m_staticText9 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection added to current selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText9, 0, wxALL, 5 );
+
+	m_staticText12 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL+SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText12, 0, wxALL, 5 );
+
+	m_staticText13 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection removed from current selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText13, 0, wxALL, 5 );
+
+	m_staticText10 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("ALT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText10, 0, wxALL, 5 );
+
+	m_staticText11 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Show full disambiguation context menu"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText11, 0, wxALL, 5 );
+
+	m_staticText14 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText14, 0, wxALL, 5 );
+
+	m_staticText15 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Toggle new selection"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText15->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText15, 0, wxALL, 5 );
+
+	m_staticText16 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL+ALT"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText16, 0, wxALL, 5 );
+
+	m_staticText17 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17->Wrap( -1 );
+	m_fgSizerLMB_OSX->Add( m_staticText17, 0, wxALL, 5 );
+
+
+	sbSizerMouseCmdWinLin->Add( m_fgSizerLMB_OSX, 1, wxEXPAND, 5 );
+
+
+	bOptionsSizer->Add( sbSizerMouseCmdWinLin, 1, wxEXPAND, 5 );
 
 
 	bMiddleLeftSizer->Add( bOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -160,7 +286,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizer41->Add( m_rbTrackDragMove, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizer41->Add( 0, 3, 1, wxEXPAND, 5 );
+	sbSizer41->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_rbTrackDrag45 = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Drag (45 degree mode)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbTrackDrag45->SetToolTip( _("Drags the track segment while keeping connected tracks at 45 degrees.") );
@@ -168,7 +294,7 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	sbSizer41->Add( m_rbTrackDrag45, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizer41->Add( 0, 3, 1, wxEXPAND, 5 );
+	sbSizer41->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	m_rbTrackDragFree = new wxRadioButton( sbSizer41->GetStaticBox(), wxID_ANY, _("Drag (free angle)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rbTrackDragFree->SetToolTip( _("Drags the nearest joint in the track without restricting the track angle.") );

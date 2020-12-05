@@ -19,6 +19,7 @@
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/statbox.h>
 #include <wx/panel.h>
 #include <wx/choice.h>
@@ -45,6 +46,34 @@ class PANEL_EDIT_OPTIONS_BASE : public wxPanel
 		wxCheckBox* m_FlipLeftRight;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
+		wxStaticText* m_staticText181;
+		wxStaticLine* m_staticline11;
+		wxFlexGridSizer* m_fgSizerLMBWinLin;
+		wxStaticText* m_staticText61;
+		wxStaticText* m_staticText71;
+		wxStaticText* m_staticText81;
+		wxStaticText* m_staticText91;
+		wxStaticText* m_staticText121;
+		wxStaticText* m_staticText131;
+		wxStaticText* m_staticText101;
+		wxStaticText* m_staticText111;
+		wxStaticText* m_staticText141;
+		wxStaticText* m_staticText151;
+		wxStaticText* m_staticText161;
+		wxStaticText* m_staticText171;
+		wxFlexGridSizer* m_fgSizerLMB_OSX;
+		wxStaticText* m_staticText6;
+		wxStaticText* m_staticText7;
+		wxStaticText* m_staticText8;
+		wxStaticText* m_staticText9;
+		wxStaticText* m_staticText12;
+		wxStaticText* m_staticText13;
+		wxStaticText* m_staticText10;
+		wxStaticText* m_staticText11;
+		wxStaticText* m_staticText14;
+		wxStaticText* m_staticText15;
+		wxStaticText* m_staticText16;
+		wxStaticText* m_staticText17;
 		wxSimplebook* m_optionsBook;
 		wxStaticText* m_staticText2;
 		wxChoice* m_magneticPadChoice;
