@@ -2261,15 +2261,13 @@ int SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem,
     case PCB_FOOTPRINT_T:
     {
         FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aItem );
+        EDA_RECT   bbox = footprint->GetFootprintRect();
 
         footprint->GetBoundingHull().Collide( loc, aMaxDistance, &distance );
 
         // Consider footprints larger than the viewport only as a last resort
-        if( aItem->ViewBBox().GetHeight() > viewport.GetHeight()
-            || aItem->ViewBBox().GetWidth() > viewport.GetWidth() )
-        {
+        if( bbox.GetHeight() > viewport.GetHeight() || bbox.GetWidth() > viewport.GetWidth() )
             distance = INT_MAX / 2;
-        }
     }
         break;
 
