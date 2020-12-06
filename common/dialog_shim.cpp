@@ -299,6 +299,7 @@ static void selectAllInTextCtrls( wxWindowList& children )
             rect.Inflate( std::max( 0, minSize.x - rect.GetWidth() ),
                           std::max( 0, minSize.y - rect.GetHeight() ) );
 
+            child->SetMinSize( rect.GetSize() );
             child->SetSize( rect );
         }
 #endif
