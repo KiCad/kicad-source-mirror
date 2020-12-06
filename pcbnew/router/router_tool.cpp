@@ -1610,6 +1610,14 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             {
                 wxBell();
             }
+            else
+            {
+                evt->SetPassEvent();
+            }
+        }
+        else
+        {
+            evt->SetPassEvent();
         }
     }
 
