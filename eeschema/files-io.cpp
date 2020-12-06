@@ -527,7 +527,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             OnModify();
         }
 
-        GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
         RecalculateConnections( GLOBAL_CLEANUP );
         ClearUndoRedoList();
         GetScreen()->m_Initialized = true;
@@ -595,15 +594,12 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     if( !LoadSheetFromFile( GetCurrentSheet().Last(), &GetCurrentSheet(), fullFileName ) )
         return false;
 
-    SCH_SCREENS screens( GetCurrentSheet().Last() );
-    screens.TestDanglingEnds();
-
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     SetSheetNumberAndCount();
 
     SyncView();
-    HardRedraw();   // Full reinit of the current screen and the display.
     OnModify();
+    HardRedraw();   // Full reinit of the current screen and the display.
 
     return true;
 }

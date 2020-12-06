@@ -320,7 +320,7 @@ public:
      * Test all of the connectable objects in the schematic for unused connection points.
      * @return True if any connection state changes were made.
      */
-    bool TestDanglingEnds();
+    void TestDanglingEnds();
 
     /**
      * Send a message to Pcbnew via a socket connection.

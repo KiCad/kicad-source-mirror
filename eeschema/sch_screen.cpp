@@ -975,10 +975,10 @@ void SCH_SCREEN::GetSheets( std::vector<SCH_ITEM*>* aItems )
 }
 
 
-bool SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath )
+void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
+                                   std::function<void( SCH_ITEM* )>* aChangedHandler )
 {
-    std::vector< DANGLING_END_ITEM > endPoints;
-    bool hasStateChanged = false;
+    std::vector<DANGLING_END_ITEM> endPoints;
 
     for( SCH_ITEM* item : Items() )
         item->GetEndPoints( endPoints );
@@ -986,10 +986,11 @@ bool SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath )
     for( SCH_ITEM* item : Items() )
     {
         if( item->UpdateDanglingState( endPoints, aPath ) )
-            hasStateChanged = true;
+        {
+            if( aChangedHandler )
+                (*aChangedHandler)( item );
+        }
     }
-
-    return hasStateChanged;
 }
 
 
@@ -1317,43 +1318,9 @@ void SCH_SCREENS::UpdateSymbolLinks( REPORTER* aReporter )
     SCH_SHEET_LIST sheets = sch->GetSheets();
 
     // All of the library symbols have been replaced with copies so the connection graph
-    // pointer are stale.
+    // pointers are stale.
     if( sch->ConnectionGraph() )
         sch->ConnectionGraph()->Recalculate( sheets, true );
-}
-
-
-void SCH_SCREENS::TestDanglingEnds()
-{
-    std::vector<SCH_SCREEN*> screens;
-    for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-        screens.push_back( screen );
-
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-            screens.size() );
-
-    std::atomic<size_t> nextScreen( 0 );
-    std::vector<std::future<size_t>> returns( parallelThreadCount );
-
-    auto update_lambda = [&screens, &nextScreen]() -> size_t
-    {
-        for( auto i = nextScreen++; i < screens.size(); i = nextScreen++ )
-            screens[i]->TestDanglingEnds();
-
-        return 1;
-    };
-
-    if( parallelThreadCount == 1 )
-        update_lambda();
-    else
-    {
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( std::launch::async, update_lambda );
-
-        // Finalize the threads
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii].wait();
-    }
 }
 
 

@@ -601,8 +601,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_SCH_REFRESH:
     {
-        SCH_SCREENS schematic( Schematic().Root() );
-        schematic.TestDanglingEnds();
+        TestDanglingEnds();
 
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();

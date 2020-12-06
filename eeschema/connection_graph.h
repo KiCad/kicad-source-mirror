@@ -254,8 +254,10 @@ public:
      *
      * @param aSheetList is the list of possibly modified sheets
      * @param aUnconditional is true if an unconditional full recalculation should be done
+     * @param aChangedItemHandler an optional handler to receive any changed items
      */
-    void Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional = false );
+    void Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional = false,
+                      std::function<void( SCH_ITEM* )>* aChangedItemHandler = nullptr );
 
     /**
      * Returns a bus alias pointer for the given name if it exists (from cache)

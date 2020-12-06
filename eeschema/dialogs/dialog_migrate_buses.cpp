@@ -180,7 +180,7 @@ void DIALOG_MIGRATE_BUSES::onItemSelected( wxListEvent& aEvent )
     {
         sheet.UpdateAllScreenReferences();
         m_frame->Schematic().SetCurrentSheet( sheet );
-        sheet.LastScreen()->TestDanglingEnds();
+        m_frame->TestDanglingEnds();
     }
 
     auto pos = driver->GetPosition();

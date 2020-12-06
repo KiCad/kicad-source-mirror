@@ -319,9 +319,10 @@ public:
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
      * @param aPath is a sheet path to pass to UpdateDanglingState if desired
-     * @return True if any connection state changes were made.
+     * @param aChangedHandler an optional callback to make on each changed item
      */
-    bool TestDanglingEnds( const SCH_SHEET_PATH* aPath = nullptr );
+    void TestDanglingEnds( const SCH_SHEET_PATH* aPath = nullptr,
+                           std::function<void( SCH_ITEM* )>* aChangedHandler = nullptr );
 
     /**
      * Return all wires and junctions connected to \a aSegment which are not connected any
@@ -584,8 +585,6 @@ public:
      *                  messages into.
      */
     void UpdateSymbolLinks( REPORTER* aReporter = nullptr );
-
-    void TestDanglingEnds();
 
     /**
      * Test all of the schematic symbols to see if all #LIB_ID objects library nickname is not

@@ -66,25 +66,15 @@ std::vector<wxPoint> SCH_EDIT_FRAME::GetSchematicConnections()
 }
 
 
-bool SCH_EDIT_FRAME::TestDanglingEnds()
+void SCH_EDIT_FRAME::TestDanglingEnds()
 {
-    std::vector<DANGLING_END_ITEM> endPoints;
-    bool hasStateChanged = false;
+    std::function<void( SCH_ITEM* )> changeHandler =
+            [&]( SCH_ITEM* aChangedItem ) -> void
+            {
+                GetCanvas()->GetView()->Update( aChangedItem, KIGFX::REPAINT );
+            };
 
-    for( auto item : GetScreen()->Items() )
-        item->GetEndPoints( endPoints );
-
-    for( auto item : GetScreen()->Items() )
-    {
-        if( item->UpdateDanglingState( endPoints ) )
-        {
-            GetCanvas()->GetView()->Update( item, KIGFX::REPAINT );
-            hasStateChanged = true;
-        }
-        item->GetEndPoints( endPoints );
-    }
-
-    return hasStateChanged;
+    GetScreen()->TestDanglingEnds( nullptr, &changeHandler );
 }
 
 

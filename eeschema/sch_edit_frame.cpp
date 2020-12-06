@@ -1288,7 +1288,13 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     if( settings.m_IntersheetRefsShow == true )
         RecomputeIntersheetRefs();
 
-    Schematic().ConnectionGraph()->Recalculate( list, true );
+    std::function<void( SCH_ITEM* )> changeHandler =
+            [&]( SCH_ITEM* aChangedItem ) -> void
+            {
+                GetCanvas()->GetView()->Update( aChangedItem, KIGFX::REPAINT );
+            };
+
+    Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
 }
 
 

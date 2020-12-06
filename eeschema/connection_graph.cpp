@@ -424,7 +424,8 @@ void CONNECTION_GRAPH::Reset()
 }
 
 
-void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional )
+void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnconditional,
+                                    std::function<void( SCH_ITEM* )>* aChangedItemHandler )
 {
     PROF_COUNTER recalc_time( "CONNECTION_GRAPH::Recalculate" );
 
@@ -450,7 +451,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
         updateItemConnectivity( sheet, items );
 
         // UpdateDanglingState() also adds connected items for SCH_TEXT
-        sheet.LastScreen()->TestDanglingEnds( &sheet );
+        sheet.LastScreen()->TestDanglingEnds( &sheet, aChangedItemHandler );
     }
 
     if( wxLog::IsAllowedTraceMask( ConnProfileMask ) )
