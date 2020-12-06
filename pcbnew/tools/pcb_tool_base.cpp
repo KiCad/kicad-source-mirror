@@ -230,6 +230,10 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 aPlacer->SnapItem( newItem.get() );
                 view()->Update( &preview );
             }
+            else
+            {
+                evt->SetPassEvent();
+            }
         }
         else if( newItem && evt->IsMotion() )
         {
