@@ -181,7 +181,8 @@ TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.place
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL,
         MD_SHIFT + MD_CTRL + 'N', LEGACY_HK_NAME( "Place the Footprint Anchor" ),
-        _( "Place the Footprint Anchor" ), "",
+        _( "Place the Footprint Anchor" ),
+        _( "Set the coordinate origin point (anchor) of the footprint" ),
         anchor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
