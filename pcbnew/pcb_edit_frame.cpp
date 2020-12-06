@@ -1538,7 +1538,8 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
 
     DIALOG_FOOTPRINT_PROPERTIES* dlg = new DIALOG_FOOTPRINT_PROPERTIES( this, aFootprint );
 
-    int retvalue = dlg->ShowModal();
+    // Must be QuasiModal for Configure Paths > Help
+    int retvalue = dlg->ShowQuasiModal();
     /*
      * retvalue =
      *   FP_PROPS_UPDATE_FP to show Update Footprints dialog

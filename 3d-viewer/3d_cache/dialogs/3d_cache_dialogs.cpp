@@ -38,7 +38,8 @@ bool S3D::Select3DModel( wxWindow* aParent, S3D_CACHE* aCache, wxString& prevMod
 
     DLG_SELECT_3DMODEL dm( aParent, aCache, aModel, prevModelSelectDir, prevModelWildcard );
 
-    return dm.ShowModal() == wxID_OK;
+    // Use QuasiModal so that Configure3DPaths (and its help window) will work
+    return dm.ShowQuasiModal() == wxID_OK;
 }
 
 
