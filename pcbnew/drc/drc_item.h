@@ -51,7 +51,6 @@ enum PCB_DRC_CODE {
     DRCE_VIA_DIAMETER,                   // Via diameter checks (min/max)
     DRCE_PADSTACK,                       // something is wrong with a pad or via stackup
     DRCE_TOO_SMALL_MICROVIA_DRILL,       // Too small micro via drill
-    DRCE_KEEPOUT,                        // A disallowed object is inside a keepout
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
     DRCE_MISSING_COURTYARD,              // footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,            // footprint has a courtyard but malformed
@@ -120,6 +119,12 @@ private:
     /// A list of all DRC_ITEM types which are valid error codes
     static std::vector<std::reference_wrapper<RC_ITEM>> allItemTypes;
 
+    static DRC_ITEM heading_electrical;
+    static DRC_ITEM heading_DFM;
+    static DRC_ITEM heading_schematic_parity;
+    static DRC_ITEM heading_signal_integrity;
+    static DRC_ITEM heading_misc;
+
     static DRC_ITEM unconnectedItems;
     static DRC_ITEM shortingItems;
     static DRC_ITEM itemsNotAllowed;
@@ -138,7 +143,6 @@ private:
     static DRC_ITEM viaDiameter;
     static DRC_ITEM padstack;
     static DRC_ITEM microviaDrillTooSmall;
-    static DRC_ITEM keepout;
     static DRC_ITEM courtyardsOverlap;
     static DRC_ITEM missingCourtyard;
     static DRC_ITEM malformedCourtyard;

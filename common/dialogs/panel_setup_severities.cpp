@@ -49,6 +49,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 
     wxFlexGridSizer* gridSizer = new wxFlexGridSizer( 0, 2, 0, 5 );
     gridSizer->SetFlexibleDirection( wxBOTH );
+    gridSizer->SetVGap( 5 );
 
     for( const RC_ITEM& item : m_items )
     {
@@ -58,13 +59,23 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         if( m_pinMapSpecialCase && errorCode == m_pinMapSpecialCase->GetErrorCode() )
             continue;
 
-        // When msg is empty, for some reason, the current errorCode is not supported
-        // by the RC_ITEM aDummyItem.
-        // Skip this errorCode.
-        if( !msg.IsEmpty() )
+        if( errorCode == 0 )
+        {
+            wxStaticText* heading = new wxStaticText( scrollWin, wxID_ANY, msg );
+            wxFont        headingFont = heading->GetFont();
+
+            heading->SetFont( headingFont.Bold() );
+
+            gridSizer->AddSpacer( 5 );  // col 1
+            gridSizer->AddSpacer( 5 );  // col 2
+
+            gridSizer->Add( heading, 0, wxALIGN_BOTTOM | wxALL, 4  );
+            gridSizer->AddSpacer( 0 );  // col 2
+        }
+        else if( !msg.IsEmpty() )   // items with no message are for internal use only
         {
             wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
-            gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
+            gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 15  );
 
             // OSX can't handle more than 100 radio buttons in a single window (yes, seriously),
             // so we have to create a window for each set
@@ -76,15 +87,15 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
                 m_buttonMap[ errorCode ][i] = new wxRadioButton( radioPanel,
                                                                  baseID + errorCode * 10 + i,
                                                                  severities[i],
-                                                                 wxDefaultPosition,
-                                                                 wxDefaultSize,
+                                                                 wxDefaultPosition, wxDefaultSize,
                                                                  i == 0 ? wxRB_GROUP : 0 );
-                radioSizer->Add( m_buttonMap[ errorCode ][i], 0, wxRIGHT | wxEXPAND, 30 );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 0,
+                                 wxRIGHT | wxALIGN_CENTER_VERTICAL, 30 );
             }
 
             radioPanel->SetSizer( radioSizer );
             radioPanel->Layout();
-            gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
+            gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL  );
         }
     }
 
@@ -96,7 +107,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
         wxString msg                = m_pinMapSpecialCase->GetErrorText();
 
         wxStaticText* errorLabel = new wxStaticText( scrollWin, wxID_ANY, msg + wxT( ":" ) );
-        gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
+        gridSizer->Add( errorLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 15  );
 
         wxPanel*    radioPanel = new wxPanel( scrollWin );
         wxBoxSizer* radioSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -113,16 +124,16 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
                 m_buttonMap[ errorCode ][i] = new wxRadioButton( radioPanel,
                                                                  baseID + errorCode * 10 + i,
                                                                  pinMapSeverities[i],
-                                                                 wxDefaultPosition,
-                                                                 wxDefaultSize,
+                                                                 wxDefaultPosition, wxDefaultSize,
                                                                  i == 0 ? wxRB_GROUP : 0 );
-                radioSizer->Add( m_buttonMap[ errorCode ][i], 0, wxEXPAND );
+                radioSizer->Add( m_buttonMap[ errorCode ][i], 0,
+                                 wxEXPAND | wxALIGN_CENTER_VERTICAL );
             }
         }
 
         radioPanel->SetSizer( radioSizer );
         radioPanel->Layout();
-        gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL | wxALL | wxEXPAND, 4  );
+        gridSizer->Add( radioPanel, 0, wxALIGN_CENTER_VERTICAL  );
     }
 
     scrollWin->SetSizer( gridSizer );

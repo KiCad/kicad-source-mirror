@@ -38,6 +38,13 @@
 
 // NOTE: Avoid changing the settings key for a DRC item after it has been created
 
+
+DRC_ITEM DRC_ITEM::heading_electrical( 0, _( "Electrical" ), "" );
+DRC_ITEM DRC_ITEM::heading_DFM( 0, _( "Design For Manufacturing" ), "" );
+DRC_ITEM DRC_ITEM::heading_schematic_parity( 0, _( "Schematic Parity" ), "" );
+DRC_ITEM DRC_ITEM::heading_signal_integrity( 0, _( "Signal Integrity" ), "" );
+DRC_ITEM DRC_ITEM::heading_misc( 0, _( "Miscellaneous" ), "" );
+
 DRC_ITEM DRC_ITEM::unconnectedItems( DRCE_UNCONNECTED_ITEMS,
         _( "Unconnected items" ),
         wxT( "unconnected_items" ) );
@@ -109,10 +116,6 @@ DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
 DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_TOO_SMALL_MICROVIA_DRILL,
         _( "Micro via drill too small" ),
         wxT( "microvia_drill_too_small" ) );
-
-DRC_ITEM DRC_ITEM::keepout( DRCE_KEEPOUT,
-        _( "Keepout violation" ),
-        wxT( "keepout" ) );
 
 DRC_ITEM DRC_ITEM::courtyardsOverlap( DRCE_OVERLAPPING_FOOTPRINTS,
         _( "Courtyards overlap" ),
@@ -191,43 +194,51 @@ DRC_ITEM DRC_ITEM::diffPairUncoupledLengthTooLong( DRCE_DIFF_PAIR_UNCOUPLED_LENG
         wxT( "diff_pair_uncoupled_length_too_long" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
-            DRC_ITEM::unconnectedItems,
+            DRC_ITEM::heading_electrical,
             DRC_ITEM::shortingItems,
-            DRC_ITEM::itemsNotAllowed,
-            DRC_ITEM::clearance,
             DRC_ITEM::tracksCrossing,
-            DRC_ITEM::copperEdgeClearance,
-            DRC_ITEM::zonesIntersect,
-            DRC_ITEM::zoneHasEmptyNet,
+            DRC_ITEM::clearance,
             DRC_ITEM::viaDangling,
             DRC_ITEM::trackDangling,
-            DRC_ITEM::holeNearHole,
+
+            DRC_ITEM::heading_DFM,
+            DRC_ITEM::copperEdgeClearance,
             DRC_ITEM::holeClearance,
+            DRC_ITEM::holeNearHole,
             DRC_ITEM::trackWidth,
             DRC_ITEM::annularWidth,
             DRC_ITEM::drillTooSmall,
-            DRC_ITEM::padstack,
             DRC_ITEM::microviaDrillTooSmall,
-            DRC_ITEM::keepout,
             DRC_ITEM::courtyardsOverlap,
             DRC_ITEM::missingCourtyard,
             DRC_ITEM::malformedCourtyard,
-            DRC_ITEM::pthInsideCourtyard,
-            DRC_ITEM::npthInsideCourtyard,
-            DRC_ITEM::itemOnDisabledLayer,
             DRC_ITEM::invalidOutline,
+
+            DRC_ITEM::heading_schematic_parity,
             DRC_ITEM::duplicateFootprints,
             DRC_ITEM::missingFootprint,
             DRC_ITEM::extraFootprint,
             DRC_ITEM::netConflict,
-            DRC_ITEM::unresolvedVariable,
-            DRC_ITEM::silkOverlaps,
-            DRC_ITEM::silkMaskClearance,
+            DRC_ITEM::unconnectedItems,
+
+            DRC_ITEM::heading_signal_integrity,
             DRC_ITEM::lengthOutOfRange,
             DRC_ITEM::skewOutOfRange,
             DRC_ITEM::tooManyVias,
             DRC_ITEM::diffPairGapOutOfRange,
-            DRC_ITEM::diffPairUncoupledLengthTooLong
+            DRC_ITEM::diffPairUncoupledLengthTooLong,
+
+            DRC_ITEM::heading_misc,
+            DRC_ITEM::itemsNotAllowed,
+            DRC_ITEM::silkOverlaps,
+            DRC_ITEM::silkMaskClearance,
+            DRC_ITEM::zonesIntersect,
+            DRC_ITEM::zoneHasEmptyNet,
+            DRC_ITEM::padstack,
+            DRC_ITEM::pthInsideCourtyard,
+            DRC_ITEM::npthInsideCourtyard,
+            DRC_ITEM::itemOnDisabledLayer,
+            DRC_ITEM::unresolvedVariable,
         } );
 
 
@@ -253,7 +264,6 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
     case DRCE_TOO_SMALL_MICROVIA_DRILL: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );
-    case DRCE_KEEPOUT:                  return std::make_shared<DRC_ITEM>( keepout );
     case DRCE_OVERLAPPING_FOOTPRINTS:   return std::make_shared<DRC_ITEM>( courtyardsOverlap );
     case DRCE_MISSING_COURTYARD:        return std::make_shared<DRC_ITEM>( missingCourtyard );
     case DRCE_MALFORMED_COURTYARD:      return std::make_shared<DRC_ITEM>( malformedCourtyard );
