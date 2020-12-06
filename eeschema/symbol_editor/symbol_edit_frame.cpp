@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/hyperlink.h>
 #include <base_screen.h>
 #include <class_library.h>
 #include <confirm.h>
@@ -695,14 +696,44 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
     m_SyncPinEdit = aPart && aPart->IsRoot() && aPart->IsMulti() && !aPart->UnitsLocked();
 
+    WX_INFOBAR* infobar = GetInfoBar();
+
     if( IsSymbolFromSchematic() )
     {
         wxString msg;
         msg.Printf( _( "Editing symbol %s from schematic.  Saving will update the schematic "
                        "only." ), m_reference );
 
-        GetInfoBar()->RemoveAllButtons();
-        GetInfoBar()->ShowMessage( msg, wxICON_INFORMATION );
+        infobar->RemoveAllButtons();
+        infobar->ShowMessage( msg, wxICON_INFORMATION );
+    }
+    else if( m_my_part && m_my_part->IsAlias() )
+    {
+        wxString parentPartName = m_my_part->GetParent().lock()->GetName();
+        wxString msg;
+        wxString link;
+
+        msg.Printf( _( "Symbol %s is derived from %s.  Symbol graphics will not be editable." ),
+                    partName,
+                    parentPartName );
+
+        link.Printf( _( "Open %s" ), parentPartName );
+
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [&]( wxHyperlinkEvent& aEvent )
+                {
+                    LoadSymbolFromCurrentLib( m_my_part->GetParent().lock()->GetName(),
+                                              GetUnit(), GetConvert() );
+                } ) );
+
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+        infobar->ShowMessage( msg, wxICON_INFORMATION );
+    }
+    else
+    {
+        infobar->Dismiss();
     }
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
