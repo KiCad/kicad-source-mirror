@@ -129,15 +129,15 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 { "otherItems", true }
             } ) );
 
-    m_params.emplace_back( new PARAM_ENUM<PCB_LAYER_ID>(
-            "board.active_layer", &m_ActiveLayer, F_Cu, PCBNEW_LAYER_ID_START, F_Fab ) );
+    m_params.emplace_back( new PARAM_ENUM<PCB_LAYER_ID>( "board.active_layer",
+                           &m_ActiveLayer, F_Cu, PCBNEW_LAYER_ID_START, F_Fab ) );
 
     m_params.emplace_back( new PARAM<wxString>( "board.active_layer_preset",
-            &m_ActiveLayerPreset, "" ) );
+                           &m_ActiveLayerPreset, "" ) );
 
     m_params.emplace_back( new PARAM_ENUM<HIGH_CONTRAST_MODE>( "board.high_contrast_mode",
-            &m_ContrastModeDisplay, HIGH_CONTRAST_MODE::NORMAL, HIGH_CONTRAST_MODE::NORMAL,
-            HIGH_CONTRAST_MODE::HIDDEN ) );
+                           &m_ContrastModeDisplay, HIGH_CONTRAST_MODE::NORMAL,
+                           HIGH_CONTRAST_MODE::NORMAL, HIGH_CONTRAST_MODE::HIDDEN ) );
 
     m_params.emplace_back( new PARAM<double>( "board.opacity.tracks", &m_TrackOpacity, 1.0 ) );
     m_params.emplace_back( new PARAM<double>( "board.opacity.vias", &m_ViaOpacity, 1.0 ) );
@@ -157,8 +157,8 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     // TODO: move the rest of PCB_DISPLAY_OPTIONS that are project-specific in here
 #if 0
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "board.zone_display_mode",
-            &m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_OUTLINED,
-            ZONE_DISPLAY_MODE::SHOW_FILLED ) );
+                           &m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED,
+                           ZONE_DISPLAY_MODE::SHOW_OUTLINED, ZONE_DISPLAY_MODE::SHOW_FILLED ) );
 #endif
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
@@ -197,6 +197,7 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                 for( const nlohmann::json& file : aVal )
                 {
                     PROJECT_FILE_STATE fileState;
+
                     try
                     {
                         SetIfPresent( file, "name", fileState.fileName );
