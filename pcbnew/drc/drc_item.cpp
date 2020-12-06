@@ -98,10 +98,6 @@ DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_TOO_SMALL_DRILL,
         _( "Drill too small" ),
         wxT( "drill_too_small" ) );
 
-DRC_ITEM DRC_ITEM::viaHoleLargerThanPad( DRCE_VIA_HOLE_BIGGER,
-        _( "Via hole larger than diameter" ),
-        wxT( "via_hole_larger_than_pad" ) );
-
 DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
         _( "Via diameter" ),
         wxT( "via_diameter" ) );
@@ -210,7 +206,6 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::trackWidth,
             DRC_ITEM::annularWidth,
             DRC_ITEM::drillTooSmall,
-            DRC_ITEM::viaHoleLargerThanPad,
             DRC_ITEM::padstack,
             DRC_ITEM::microviaDrillTooSmall,
             DRC_ITEM::keepout,
@@ -255,7 +250,6 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
     case DRCE_ANNULAR_WIDTH:                  return std::make_shared<DRC_ITEM>( annularWidth );
     case DRCE_TOO_SMALL_DRILL:          return std::make_shared<DRC_ITEM>( drillTooSmall );
-    case DRCE_VIA_HOLE_BIGGER:          return std::make_shared<DRC_ITEM>( viaHoleLargerThanPad );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
     case DRCE_TOO_SMALL_MICROVIA_DRILL: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );

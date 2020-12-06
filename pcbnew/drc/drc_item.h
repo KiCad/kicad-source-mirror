@@ -48,7 +48,6 @@ enum PCB_DRC_CODE {
     DRCE_TRACK_WIDTH,                    // Track width is too small or too large
     DRCE_ANNULAR_WIDTH,                  // Via size and drill leave annulus too small or too large
     DRCE_TOO_SMALL_DRILL,                // Too small via or pad drill
-    DRCE_VIA_HOLE_BIGGER,                // via's hole is bigger than its diameter
     DRCE_VIA_DIAMETER,                   // Via diameter checks (min/max)
     DRCE_PADSTACK,                       // something is wrong with a pad or via stackup
     DRCE_TOO_SMALL_MICROVIA_DRILL,       // Too small micro via drill
@@ -136,7 +135,6 @@ private:
     static DRC_ITEM trackWidth;
     static DRC_ITEM annularWidth;
     static DRC_ITEM drillTooSmall;
-    static DRC_ITEM viaHoleLargerThanPad;
     static DRC_ITEM viaDiameter;
     static DRC_ITEM padstack;
     static DRC_ITEM microviaDrillTooSmall;
