@@ -363,6 +363,8 @@ set( BMAPS_MID
     post_drill
     preference
     print_button
+    project
+    project_kicad
     ps_diff_pair
     ps_diff_pair_gap
     ps_diff_pair_tune_length

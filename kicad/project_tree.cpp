@@ -52,8 +52,8 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList = new wxImageList( iconsize.x, iconsize.y, true,
                                    static_cast<int>( TREE_FILE_TYPE::MAX ) );
 
-    m_imageList->Add( KiBitmap( new_project_xpm ) );            // TREE_LEGACY_PROJECT
-    m_imageList->Add( KiBitmap( new_project_xpm ) );            // TREE_JSON_PROJECT
+    m_imageList->Add( KiBitmap( project_xpm ) );                // TREE_LEGACY_PROJECT
+    m_imageList->Add( KiBitmap( project_kicad_xpm ) );          // TREE_JSON_PROJECT
     m_imageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_LEGACY_SCHEMATIC
     m_imageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SEXPR_SCHEMATIC
     m_imageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_LEGACY_PCB
