@@ -567,6 +567,12 @@ void DIALOG_CONFIGURE_PATHS::OnGridSize( wxSizeEvent& event )
 
 void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
 {
+    if( m_helpDialog )
+    {
+        m_helpDialog->ShowModeless();
+        return;
+    }
+
     wxString msg = _( "Enter the name and value for each environment variable.  Grey entries "
                       "are names that have been defined externally at the system or user "
                       "level.  Environment variables defined at the system or user level "
@@ -588,9 +594,11 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
 
     }
 
-    HTML_MESSAGE_BOX* dlg = new HTML_MESSAGE_BOX( nullptr, _( "Environment Variable Help" ) );
-    dlg->SetDialogSizeInDU( 400, 250 );
+    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, _( "Environment Variable Help" ) );
+    m_helpDialog->SetDialogSizeInDU( 400, 250 );
 
-    dlg->AddHTML_Text( msg );
-    dlg->ShowModeless();
+    m_helpDialog->AddHTML_Text( msg );
+    m_helpDialog->ShowModeless();
+
+    // m_helpDialog will be destroyed when closing the dialog
 }
