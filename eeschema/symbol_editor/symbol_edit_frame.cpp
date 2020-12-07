@@ -672,8 +672,9 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
-
+    GetCanvas()->GetView()->Clear();
     delete m_my_part;
+
     m_my_part = aPart;
 
     // select the current component in the tree widget
