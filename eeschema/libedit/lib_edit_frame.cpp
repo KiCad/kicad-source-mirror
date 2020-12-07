@@ -965,6 +965,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
         return;
 
     GetScreen()->SetCurItem( nullptr );
+    GetCanvas()->GetView()->Clear();
 
     if( m_my_part != aPart )
     {
