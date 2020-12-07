@@ -1158,6 +1158,14 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
     PNS::ROUTER_MODE mode = aEvent.Parameter<PNS::ROUTER_MODE>();
     PCB_EDIT_FRAME*  frame = getEditFrame<PCB_EDIT_FRAME>();
 
+    if( m_router->RoutingInProgress() )
+    {
+        if( m_router->Mode() == mode )
+            return 0;
+        else
+            m_router->StopRouting();
+    }
+
     // Deselect all items
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
@@ -1239,12 +1247,6 @@ int ROUTER_TOOL::MainLoop( const TOOL_EVENT& aEvent )
               || evt->IsAction( &PCB_ACTIONS::routeSingleTrack )
               || evt->IsAction( &PCB_ACTIONS::routeDiffPair ) )
         {
-            if( evt->IsAction( &PCB_ACTIONS::routeSingleTrack )
-             || evt->IsAction( &PCB_ACTIONS::routeDiffPair ) )
-            {
-                mode = evt->Parameter<PNS::ROUTER_MODE>();
-            }
-
             updateStartItem( *evt );
 
             if( evt->HasPosition() )
