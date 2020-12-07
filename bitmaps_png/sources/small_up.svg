@@ -12,14 +12,18 @@
   <metadata id="metadata43">
     <rdf:RDF>
       <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
         <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
         <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
         <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
         <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
         <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>

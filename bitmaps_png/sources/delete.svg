@@ -1,27 +1,105 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="delete.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1732"
+     inkscape:window-height="1254"
+     id="namedview18"
+     showgrid="true"
+     inkscape:zoom="19.771793"
+     inkscape:cx="2.443535"
+     inkscape:cy="9.6806269"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid843" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#e61c50;}.cls-2{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-3{fill:#545454;}</style>
+  <defs
+     id="defs5">
+    <style
+       id="style3">.cls-1{fill:#e61c50;}.cls-2{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-3{fill:#545454;}</style>
   </defs>
-  <title>delete</title>
-  <path class="cls-1" d="M21.95,21.95a7,7,0,1,1,0-9.8994A7,7,0,0,1,21.95,21.95Z"/>
-  <line class="cls-2" x1="19.4704" y1="14.5209" x2="14.5207" y2="19.4706"/>
-  <line class="cls-2" x1="19.4704" y1="19.4706" x2="14.5207" y2="14.5209"/>
-  <path class="cls-3" d="M2.0283,1.9782l13.9406,5.56L11.7725,9.45c.7832.796,1.9417,1.9672,2.9525,2.9907a1.7016,1.7016,0,0,1-.0187,2.4095h0a1.7015,1.7015,0,0,1-2.4052-.0156C11.29,13.8114,10.13,12.6386,9.344,11.84l-1.979,4.166Z"/>
+  <title
+     id="title7">delete</title>
+  <g
+     id="g857"
+     transform="translate(1.05,1.05)">
+    <path
+       class="cls-1"
+       d="m 21.95,21.95 a 7,7 0 1 1 0,-9.8994 7,7 0 0 1 0,9.8994 z"
+       id="path9" />
+    <g
+       id="g851">
+      <line
+         class="cls-2"
+         x1="19.4704"
+         y1="14.5209"
+         x2="14.5207"
+         y2="19.4706"
+         id="line11" />
+      <line
+         class="cls-2"
+         x1="19.4704"
+         y1="19.4706"
+         x2="14.5207"
+         y2="14.5209"
+         id="line13" />
+    </g>
+  </g>
+  <path
+     class="cls-3"
+     d="m 5,2 11.044342,10.162501 -4.602179,0.291004 c 0.448152,1.022828 1.113273,2.529962 1.693021,3.846455 a 1.7016,1.7016 0 0 1 -0.876051,2.244678 v 0 A 1.7015,1.7015 0 0 1 10.017368,17.673017 C 9.4372342,16.356696 8.7712809,14.847532 8.3214393,13.821279 l -3.3335708,3.187364 z"
+     id="path15" />
 </svg>

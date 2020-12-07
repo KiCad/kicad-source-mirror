@@ -1,35 +1,44 @@
-<svg id="Слой_1" data-name="Слой 1"
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:svg="http://www.w3.org/2000/svg"
   xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26">
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 26 26" version="1.1" sodipodi:docname="add_arc.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1664" inkscape:window-height="1337" id="namedview1001" showgrid="false" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" />
   <metadata id="metadata43">
     <rdf:RDF>
       <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
+        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
+      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
         <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
         <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
         <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
         <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
         <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1,.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#545454;}.cls-2{stroke:url(#Безымянный_градиент_19);}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#1a81c4;}</style>
+  <defs id="defs984">
+    <style id="style976">.cls-1,.cls-2,.cls-3{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#545454;}.cls-2{stroke:url(#Безымянный_градиент_19);}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#1a81c4;}</style>
     <linearGradient id="Безымянный_градиент_19" x1="4" y1="3.2797" x2="4" y2="23" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ececec"/>
-      <stop offset="1" stop-color="#c6c6c5"/>
+      <stop offset="0" stop-color="#ececec" id="stop978" />
+      <stop offset="1" stop-color="#c6c6c5" id="stop980" />
     </linearGradient>
-    <linearGradient id="Безымянный_градиент_19-2" x1="22.8125" y1="22" x2="3" y2="22" xlink:href="#Безымянный_градиент_19"/>
+    <linearGradient id="Безымянный_градиент_19-2" x1="22.8125" y1="22" x2="3" y2="22" xlink:href="#Безымянный_градиент_19" />
   </defs>
-  <title>add_arc</title>
-  <path class="cls-1" d="M4,4H4A18,18,0,0,1,22,22h0"/>
-  <line class="cls-2" x1="4" y1="22" x2="4" y2="4.2797"/>
-  <line class="cls-3" x1="21.8125" y1="22" x2="4" y2="22"/>
-  <path class="cls-4" d="M25,22a3,3,0,1,1-3-3A3,3,0,0,1,25,22Z"/>
-  <circle class="cls-4" cx="4" cy="22" r="2.9999"/>
-  <path class="cls-4" d="M7,4A3,3,0,1,1,4,1,3,3,0,0,1,7,4Z"/>
+  <title id="title986">add_arc</title>
+  <path class="cls-1" d="M4,4H4A18,18,0,0,1,22,22h0" id="path988" />
+  <line class="cls-2" x1="4" y1="22" x2="4" y2="4.2797" id="line990" />
+  <line class="cls-3" x1="21.8125" y1="22" x2="4" y2="22" id="line992" />
+  <path class="cls-4" d="M25,22a3,3,0,1,1-3-3A3,3,0,0,1,25,22Z" id="path994" />
+  <circle class="cls-4" cx="4" cy="22" r="2.9999" id="circle996" />
+  <path class="cls-4" d="M7,4A3,3,0,1,1,4,1,3,3,0,0,1,7,4Z" id="path998" />
 </svg>

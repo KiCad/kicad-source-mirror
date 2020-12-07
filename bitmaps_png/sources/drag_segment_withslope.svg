@@ -1,38 +1,50 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26">
-  <metadata id="metadata43">
-    <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
-      </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs>
-    <style>.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#545454;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#e61c50;stroke-width:2px;}.cls-5{fill:#1a81c4;}.cls-6{fill:#545454;}</style>
-    <linearGradient id="Безымянный_градиент_19" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ececec"/>
-      <stop offset="1" stop-color="#c6c6c5"/>
-    </linearGradient>
-    <linearGradient id="Безымянный_градиент_19-2" x1="18.3398" y1="4.006" x2="18.3398" y2="13.6785" xlink:href="#Безымянный_градиент_19"/>
-  </defs>
-  <title>drag_segment_withslope</title>
-  <path class="cls-1" d="M8.6988,11.6243a6.3519,6.3519,0,0,1,9.8127-4.2462"/>
-  <path class="cls-2" d="M2.05,19.7449a1.0426,1.0426,0,0,1-.74-1.7767l5.2545-6.0664a1.0425,1.0425,0,1,1,1.48,1.4682L2.7907,19.4364A1.04,1.04,0,0,1,2.05,19.7449Z"/>
-  <path class="cls-3" d="M14.7314,13.6785a1.0426,1.0426,0,0,1-.74-1.7767L21.208,4.3142a1.0425,1.0425,0,0,1,1.48,1.4682L15.4716,13.37A1.0389,1.0389,0,0,1,14.7314,13.6785Z"/>
-  <line class="cls-4" x1="7.3045" y1="12.6358" x2="14.731" y2="12.6358"/>
-  <path class="cls-5" d="M14.9669,15.7754a3.1278,3.1278,0,1,1,3.1279-3.1279A3.1279,3.1279,0,0,1,14.9669,15.7754Z"/>
-  <path class="cls-6" d="M14.8284,12.878,18.86,22.9858l1.3865-3.0426c.5772.5679,1.4264,1.4078,2.1685,2.1407a1.2338,1.2338,0,0,0,1.747-.0135h0a1.2337,1.2337,0,0,0-.0113-1.7439c-.7421-.7331-1.5925-1.5744-2.1712-2.1441L25,16.7475Z"/>
-  <path class="cls-6" d="M5.0169,6.218h.6312v.6689H5.0169V7.9983h-.83V6.8869H2.0429l-.02-.5082,2.137-3.3748h.8575Zm-2.1713,0H4.1868V4.1908l-.0206-.0069-.0686.1475Z"/>
-  <path class="cls-6" d="M6.3581,5.7652l.2882-2.7613H9.2841v.72H7.3392l-.1509,1.252a1.3233,1.3233,0,0,1,.3413-.18,1.3928,1.3928,0,0,1,.4373-.0772,1.37,1.37,0,0,1,1.1011.446,1.81,1.81,0,0,1,.3979,1.2383,1.73,1.73,0,0,1-.4185,1.2005A1.5421,1.5421,0,0,1,7.8366,8.07a1.7311,1.7311,0,0,1-1.1131-.3619,1.195,1.195,0,0,1-.4374-1.0274L6.293,6.664l.7786-.0275A.7393.7393,0,0,0,7.2843,7.2a.77.77,0,0,0,.5523.2013.6938.6938,0,0,0,.5917-.2727,1.1763,1.1763,0,0,0,.2041-.7221,1.2068,1.2068,0,0,0-.2093-.7358.6979.6979,0,0,0-.5968-.283.921.921,0,0,0-.5094.1127.6326.6326,0,0,0-.2418.323Z"/>
-  <path class="cls-6" d="M10.2514,3.8546a.8992.8992,0,0,1,.2659-.65.8613.8613,0,0,1,.64-.2727.8429.8429,0,0,1,.63.2727.9052.9052,0,0,1,.2624.65.8764.8764,0,0,1-.2624.6415.8559.8559,0,0,1-.63.2641.9048.9048,0,0,1-.9056-.9056Zm.4768,0a.4065.4065,0,0,0,.1252.3036.4194.4194,0,0,0,.3036.1218.4133.4133,0,0,0,.4185-.4254.4334.4334,0,0,0-.1218-.3121.3956.3956,0,0,0-.2967-.1269.4108.4108,0,0,0-.3036.1269A.4274.4274,0,0,0,10.7282,3.8546Z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 26 26" version="1.1" sodipodi:docname="drag_segment_withslope.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2713" inkscape:window-height="1680" id="namedview34" showgrid="true" inkscape:zoom="39.543587" inkscape:cx="8.372243" inkscape:cy="9.6746486" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1">
+      <inkscape:grid type="xygrid" id="grid1558" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>drag_segment_withslope</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs11">
+      <style id="style3">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#545454;}.cls-2{fill:url(#Безымянный_градиент_19);}.cls-3{fill:url(#Безымянный_градиент_19-2);}.cls-4{stroke:#e61c50;stroke-width:2px;}.cls-5{fill:#1a81c4;}.cls-6{fill:#545454;}</style>
+      <linearGradient id="Безымянный_градиент_19" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientUnits="userSpaceOnUse">
+         <stop offset="0" stop-color="#ececec" id="stop5" />
+         <stop offset="1" stop-color="#c6c6c5" id="stop7" />
+      </linearGradient>
+      <linearGradient id="Безымянный_градиент_19-2" x1="18.3398" y1="4.006" x2="18.3398" y2="13.6785" xlink:href="#Безымянный_градиент_19" gradientTransform="translate(0.26900005,0.36419964)" />
+      <linearGradient inkscape:collect="always" xlink:href="#Безымянный_градиент_19" id="linearGradient1560" gradientUnits="userSpaceOnUse" x1="1.0078" y1="15.6693" x2="8.3475" y2="15.6693" gradientTransform="translate(0.26900005,0.36419964)" />
+   </defs>
+   <title id="title13">drag_segment_withslope</title>
+   <path class="cls-1" d="M 8.9678001,11.9885 A 6.3519,6.3519 0 0 1 18.7805,7.7422996" id="path15" />
+   <path class="cls-2" d="m 2.3190001,20.1091 a 1.0426,1.0426 0 0 1 -0.74,-1.7767 l 5.2545,-6.0664 a 1.0425,1.0425 0 1 1 1.48,1.4682 l -5.2538,6.0664 a 1.04,1.04 0 0 1 -0.7407,0.3085 z" id="path17" style="fill:url(#linearGradient1560)" />
+   <path class="cls-3" d="m 15.0004,14.0427 a 1.0426,1.0426 0 0 1 -0.74,-1.7767 L 21.477,4.6783996 a 1.0425,1.0425 0 0 1 1.48,1.4682 L 15.7406,13.7342 a 1.0389,1.0389 0 0 1 -0.7402,0.3085 z" id="path19" style="fill:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19-2)" />
+   <line class="cls-4" x1="7.5735002" y1="13" x2="15" y2="13" id="line21" />
+   <path class="cls-5" d="M 15.108104,15.884 A 3,3 0 1 1 18.1082,12.883904 3.0000959,3.0000959 0 0 1 15.108104,15.884 Z" id="path23" style="stroke-width:1" />
+   <path class="cls-6" d="m 15,13 -9.32e-4,10.882159 2.415252,-2.312217 c 0.325669,0.741356 0.803185,1.836142 1.220872,2.791856 a 1.2338,1.2338 0 0 0 1.627633,0.634824 v 0 a 1.2337,1.2337 0 0 0 0.635719,-1.623937 c -0.417615,-0.955901 -0.895724,-2.05243 -1.222119,-2.796018 l 3.337183,-0.213478 z" id="path25" />
+   <path class="cls-6" d="M5.0169,6.218h.6312v.6689H5.0169V7.9983h-.83V6.8869H2.0429l-.02-.5082,2.137-3.3748h.8575Zm-2.1713,0H4.1868V4.1908l-.0206-.0069-.0686.1475Z" id="path27" />
+   <path class="cls-6" d="M6.3581,5.7652l.2882-2.7613H9.2841v.72H7.3392l-.1509,1.252a1.3233,1.3233,0,0,1,.3413-.18,1.3928,1.3928,0,0,1,.4373-.0772,1.37,1.37,0,0,1,1.1011.446,1.81,1.81,0,0,1,.3979,1.2383,1.73,1.73,0,0,1-.4185,1.2005A1.5421,1.5421,0,0,1,7.8366,8.07a1.7311,1.7311,0,0,1-1.1131-.3619,1.195,1.195,0,0,1-.4374-1.0274L6.293,6.664l.7786-.0275A.7393.7393,0,0,0,7.2843,7.2a.77.77,0,0,0,.5523.2013.6938.6938,0,0,0,.5917-.2727,1.1763,1.1763,0,0,0,.2041-.7221,1.2068,1.2068,0,0,0-.2093-.7358.6979.6979,0,0,0-.5968-.283.921.921,0,0,0-.5094.1127.6326.6326,0,0,0-.2418.323Z" id="path29" />
+   <path class="cls-6" d="M10.2514,3.8546a.8992.8992,0,0,1,.2659-.65.8613.8613,0,0,1,.64-.2727.8429.8429,0,0,1,.63.2727.9052.9052,0,0,1,.2624.65.8764.8764,0,0,1-.2624.6415.8559.8559,0,0,1-.63.2641.9048.9048,0,0,1-.9056-.9056Zm.4768,0a.4065.4065,0,0,0,.1252.3036.4194.4194,0,0,0,.3036.1218.4133.4133,0,0,0,.4185-.4254.4334.4334,0,0,0-.1218-.3121.3956.3956,0,0,0-.2967-.1269.4108.4108,0,0,0-.3036.1269A.4274.4274,0,0,0,10.7282,3.8546Z" id="path31" />
 </svg>
