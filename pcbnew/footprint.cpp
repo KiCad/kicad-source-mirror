@@ -492,7 +492,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 }
 
 
-void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem )
+void FOOTPRINT::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode )
 {
     switch( aBoardItem->Type() )
     {

@@ -33,7 +33,15 @@
 enum class ADD_MODE
 {
     INSERT,
-    APPEND
+    APPEND,
+    BULK_APPEND,
+    BULK_INSERT
+};
+
+enum class REMOVE_MODE
+{
+    NORMAL,
+    BULK
 };
 
 /**
@@ -58,7 +66,7 @@ public:
     /**
      * @brief Removes an item from the container.
      */
-    virtual void Remove( BOARD_ITEM* aItem ) = 0;
+    virtual void Remove( BOARD_ITEM* aItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) = 0;
 
     /**
      * @brief Removes an item from the container and deletes it.

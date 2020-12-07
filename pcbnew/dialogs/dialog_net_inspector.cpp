@@ -1188,6 +1188,15 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
 }
 
 
+void DIALOG_NET_INSPECTOR::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem )
+{
+    for( BOARD_ITEM* item : aBoardItem )
+    {
+        OnBoardItemAdded( aBoard, item );
+    }
+}
+
+
 void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
@@ -1242,6 +1251,16 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
 }
 
 
+void DIALOG_NET_INSPECTOR::OnBoardItemsRemoved(
+        BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    for( BOARD_ITEM* item : aBoardItems )
+    {
+        OnBoardItemRemoved( aBoard, item );
+    }
+}
+
+
 void DIALOG_NET_INSPECTOR::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) != nullptr
@@ -1250,6 +1269,14 @@ void DIALOG_NET_INSPECTOR::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoard
         buildNetsList();
         m_netsList->Refresh();
     }
+}
+
+
+void DIALOG_NET_INSPECTOR::OnBoardItemsChanged(
+        BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    buildNetsList();
+    m_netsList->Refresh();
 }
 
 

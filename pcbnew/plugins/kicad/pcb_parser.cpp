@@ -537,6 +537,9 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
 
     parseHeader();
 
+    std::vector<BOARD_ITEM*> bulkAddedItems;
+    BOARD_ITEM* item = nullptr;
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
@@ -588,28 +591,40 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         case T_gr_poly:
         case T_gr_circle:
         case T_gr_rect:
-            m_board->Add( parsePCB_SHAPE(), ADD_MODE::APPEND );
+            item = parsePCB_SHAPE();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_gr_text:
-            m_board->Add( parsePCB_TEXT(), ADD_MODE::APPEND );
+            item = parsePCB_TEXT();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_dimension:
-            m_board->Add( parseDIMENSION(), ADD_MODE::APPEND );
+            item = parseDIMENSION();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_module:      // legacy token
         case T_footprint:
-            m_board->Add( parseFOOTPRINT(), ADD_MODE::APPEND );
+            item = parseFOOTPRINT();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_segment:
-            m_board->Add( parseTRACK(), ADD_MODE::APPEND );
+            item = parseTRACK();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_arc:
-            m_board->Add( parseARC(), ADD_MODE::APPEND );
+            item = parseARC();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_group:
@@ -617,15 +632,21 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_via:
-            m_board->Add( parseVIA(), ADD_MODE::APPEND );
+            item = parseVIA();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_zone:
-            m_board->Add( parseZONE( m_board ), ADD_MODE::APPEND );
+            item = parseZONE( m_board );
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         case T_target:
-            m_board->Add( parsePCB_TARGET(), ADD_MODE::APPEND );
+            item = parsePCB_TARGET();
+            m_board->Add( item, ADD_MODE::BULK_APPEND );
+            bulkAddedItems.push_back( item );
             break;
 
         default:
@@ -634,6 +655,9 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             THROW_PARSE_ERROR( err, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
         }
     }
+
+    if( bulkAddedItems.size() > 0 )
+        m_board->FinalizeBulkAdd( bulkAddedItems );
 
     m_board->SetProperties( properties );
 

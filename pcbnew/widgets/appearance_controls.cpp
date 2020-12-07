@@ -955,10 +955,23 @@ void APPEARANCE_CONTROLS::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIte
 }
 
 
+void APPEARANCE_CONTROLS::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    handleBoardItemsChanged();
+}
+
+
 void APPEARANCE_CONTROLS::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
     if( aBoardItem->Type() == PCB_NETINFO_T )
         handleBoardItemsChanged();
+}
+
+
+void APPEARANCE_CONTROLS::OnBoardItemsRemoved(
+        BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    handleBoardItemsChanged();
 }
 
 
@@ -968,6 +981,12 @@ void APPEARANCE_CONTROLS::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardI
         handleBoardItemsChanged();
 }
 
+
+void APPEARANCE_CONTROLS::OnBoardItemsChanged(
+        BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    handleBoardItemsChanged();
+}
 
 
 void APPEARANCE_CONTROLS::handleBoardItemsChanged()

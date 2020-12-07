@@ -206,9 +206,15 @@ public:
 
     void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
 
+    void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+
     void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
 
+    void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
+
     void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) override;
+
+    void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems ) override;
 
     ///> Updates the colors on all the widgets from the new chosen color theme
     void OnColorThemeChanged();

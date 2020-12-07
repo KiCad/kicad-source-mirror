@@ -129,7 +129,7 @@ public:
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
     ///> @copydoc BOARD_ITEM_CONTAINER::Remove()
-    void Remove( BOARD_ITEM* aItem ) override;
+    void Remove( BOARD_ITEM* aItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
 
     /**
      * Function ClearAllNets

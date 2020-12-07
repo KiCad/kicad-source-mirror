@@ -157,9 +157,12 @@ class BOARD_LISTENER
 public:
     virtual ~BOARD_LISTENER() { }
     virtual void OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
+    virtual void OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem ) { }
     virtual void OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
+    virtual void OnBoardItemsRemoved( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem ) { }
     virtual void OnBoardNetSettingsChanged( BOARD& aBoard ) { }
     virtual void OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem ) { }
+    virtual void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem ) { }
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) { }
 };
 
@@ -338,7 +341,17 @@ public:
 
     void Add( BOARD_ITEM* aItem, ADD_MODE aMode = ADD_MODE::INSERT ) override;
 
-    void Remove( BOARD_ITEM* aBoardItem ) override;
+    void Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
+
+    /**
+     * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for listeners
+     */
+    void FinalizeBulkAdd( std::vector<BOARD_ITEM*>& aNewItems );
+
+    /**
+     * Must be used if Remove() is used using a BULK_x REMOVE_MODE to generate a change event for listeners
+     */
+    void FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems );
 
     /**
      * Gets the first footprint on the board or nullptr.
@@ -1115,6 +1128,12 @@ public:
       * been modified in some way.
       */
     void OnItemChanged( BOARD_ITEM* aItem );
+
+    /**
+      * Notify the board and its listeners that an item on the board has
+      * been modified in some way.
+      */
+    void OnItemsChanged( std::vector<BOARD_ITEM*>& aItems );
 
     /*
      * Consistency check of internal m_groups structure.

@@ -96,6 +96,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     SELECTION_TOOL*     selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     bool                itemsDeselected = false;
 
+    std::vector<BOARD_ITEM*> bulkAddedItems;
+    std::vector<BOARD_ITEM*> bulkRemovedItems;
+    std::vector<BOARD_ITEM*> itemsChanged;
+
     if( Empty() )
         return;
 
@@ -164,7 +168,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         undoList.PushItem( ITEM_PICKER( nullptr, boardItem, UNDO_REDO::NEWITEM ) );
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Add( boardItem );        // handles connectivity
+                    {
+                        board->Add( boardItem, ADD_MODE::BULK_INSERT ); // handles connectivity
+                        bulkAddedItems.push_back( boardItem );
+                    }
                 }
 
                 if( boardItem->Type() != PCB_NETINFO_T )
@@ -230,7 +237,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     view->Remove( boardItem );
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Remove( boardItem );
+                    {
+                        board->Remove( boardItem, REMOVE_MODE::BULK );
+                        bulkRemovedItems.push_back( boardItem );
+                    }
 
                     break;
 
@@ -244,7 +254,10 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     footprint->ClearFlags();
 
                     if( !( changeFlags & CHT_DONE ) )
-                        board->Remove( footprint );        // handles connectivity
+                    {
+                        board->Remove( footprint, REMOVE_MODE::BULK ); // handles connectivity
+                        bulkRemovedItems.push_back( footprint );
+                    }
                 }
                 break;
 
@@ -256,13 +269,17 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                         if( m_isFootprintEditor )
                             board->GetFirstFootprint()->Remove( boardItem );
                         else
-                            board->Remove( boardItem );
+                        {
+                            board->Remove( boardItem, REMOVE_MODE::BULK );
+                            bulkRemovedItems.push_back( boardItem );
+                        }
                     }
                     break;
 
                 // Metadata items
                 case PCB_NETINFO_T:
-                    board->Remove( boardItem );
+                    board->Remove( boardItem, REMOVE_MODE::BULK );
+                    bulkRemovedItems.push_back( boardItem );
                     break;
 
                 default:                        // other types do not need to (or should not) be handled
@@ -298,7 +315,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                             });
                 }
 
-                board->OnItemChanged( boardItem );
+                itemsChanged.push_back( boardItem );
 
                 // if no undo entry is needed, the copy would create a memory leak
                 if( !aCreateUndoEntry )
@@ -312,6 +329,15 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 break;
         }
     }
+
+    if( bulkAddedItems.size() > 0 )
+        board->FinalizeBulkAdd( bulkAddedItems );
+
+    if( bulkRemovedItems.size() > 0 )
+        board->FinalizeBulkRemove( bulkRemovedItems );
+
+    if( itemsChanged.size() > 0 )
+        board->OnItemsChanged( itemsChanged );
 
     if( !m_isFootprintEditor )
     {
@@ -397,6 +423,10 @@ void BOARD_COMMIT::Revert()
     BOARD* board = (BOARD*) m_toolMgr->GetModel();
     auto connectivity = board->GetConnectivity();
 
+    std::vector<BOARD_ITEM*> bulkAddedItems;
+    std::vector<BOARD_ITEM*> bulkRemovedItems;
+    std::vector<BOARD_ITEM*> itemsChanged;
+
     for( auto it = m_changes.rbegin(); it != m_changes.rend(); ++it )
     {
         COMMIT_LINE& ent = *it;
@@ -413,7 +443,8 @@ void BOARD_COMMIT::Revert()
 
             view->Remove( item );
             connectivity->Remove( item );
-            board->Remove( item );
+            board->Remove( item, REMOVE_MODE::BULK );
+            bulkRemovedItems.push_back( item );
             break;
 
         case CHT_REMOVE:
@@ -422,7 +453,8 @@ void BOARD_COMMIT::Revert()
 
             view->Add( item );
             connectivity->Add( item );
-            board->Add( item );
+            board->Add( item, ADD_MODE::INSERT );
+            bulkAddedItems.push_back( item );
             break;
 
         case CHT_MODIFY:
@@ -435,6 +467,8 @@ void BOARD_COMMIT::Revert()
             view->Add( item );
             connectivity->Add( item );
             board->OnItemChanged( item );
+            itemsChanged.push_back( item );
+
             delete copy;
             break;
         }
@@ -444,6 +478,15 @@ void BOARD_COMMIT::Revert()
             break;
         }
     }
+
+    if( bulkAddedItems.size() > 0 )
+        board->FinalizeBulkAdd( bulkAddedItems );
+
+    if( bulkRemovedItems.size() > 0 )
+        board->FinalizeBulkRemove( bulkRemovedItems );
+
+    if( itemsChanged.size() > 0 )
+        board->OnItemsChanged( itemsChanged );
 
     if ( !m_isFootprintEditor )
         connectivity->RecalculateRatsnest();

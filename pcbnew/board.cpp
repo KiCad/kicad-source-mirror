@@ -590,7 +590,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
             return;
         }
 
-        if( aMode == ADD_MODE::APPEND )
+        if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_tracks.push_back( static_cast<TRACK*>( aBoardItem ) );
         else
             m_tracks.push_front( static_cast<TRACK*>( aBoardItem ) );
@@ -598,7 +598,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
         break;
 
     case PCB_FOOTPRINT_T:
-        if( aMode == ADD_MODE::APPEND )
+        if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_footprints.push_back( static_cast<FOOTPRINT*>( aBoardItem ) );
         else
             m_footprints.push_front( static_cast<FOOTPRINT*>( aBoardItem ) );
@@ -612,7 +612,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     case PCB_SHAPE_T:
     case PCB_TEXT_T:
     case PCB_TARGET_T:
-        if( aMode == ADD_MODE::APPEND )
+        if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
@@ -635,11 +635,24 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     aBoardItem->ClearEditFlags();
     m_connectivity->Add( aBoardItem );
 
-    InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
+    if( aMode != ADD_MODE::BULK_INSERT && aMode != ADD_MODE::BULK_APPEND )
+        InvokeListeners( &BOARD_LISTENER::OnBoardItemAdded, *this, aBoardItem );
 }
 
 
-void BOARD::Remove( BOARD_ITEM* aBoardItem )
+void BOARD::FinalizeBulkAdd( std::vector<BOARD_ITEM*>& aNewItems )
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemsAdded, *this, aNewItems );
+}
+
+
+void BOARD::FinalizeBulkRemove( std::vector<BOARD_ITEM*>& aRemovedItems )
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemsRemoved, *this, aRemovedItems );
+}
+
+
+void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 {
     // find these calls and fix them!  Don't send me no stinking' NULL.
     wxASSERT( aBoardItem );
@@ -716,7 +729,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
 
     m_connectivity->Remove( aBoardItem );
 
-    InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aBoardItem );
+    if( aRemoveMode != REMOVE_MODE::BULK )
+        InvokeListeners( &BOARD_LISTENER::OnBoardItemRemoved, *this, aBoardItem );
 }
 
 
@@ -1953,6 +1967,12 @@ void BOARD::RemoveListener( BOARD_LISTENER* aListener )
 void BOARD::OnItemChanged( BOARD_ITEM* aItem )
 {
     InvokeListeners( &BOARD_LISTENER::OnBoardItemChanged, *this, aItem );
+}
+
+
+void BOARD::OnItemsChanged( std::vector<BOARD_ITEM*>& aItems )
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardItemsChanged, *this, aItems );
 }
 
 
