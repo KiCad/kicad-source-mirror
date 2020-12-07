@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -197,7 +197,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 	m_OptionPartsLocked = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("All units are not interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPartsLocked->SetToolTip( _("Check this option when creating multiple unit symbols and all units are not interchangeable") );
+	m_OptionPartsLocked->SetToolTip( _("Check this option to allow symbols with multiple units to have different\nelements.  Uncheck this option when all symbol units are identical except\nfor pin numbers.") );
 
 	sbSizerSymbol->Add( m_OptionPartsLocked, 0, wxALL, 5 );
 
