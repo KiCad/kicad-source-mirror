@@ -46,7 +46,7 @@ private:
     wxRegEx           m_netClassRegex;
     wxRegEx           m_netNameRegex;
 
-    HTML_MESSAGE_BOX* m_helpDialog;
+    HTML_MESSAGE_BOX* m_helpWindow;
 
 public:
     PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );

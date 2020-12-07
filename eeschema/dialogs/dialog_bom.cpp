@@ -174,9 +174,11 @@ void BOM_CFG_PARSER::parseGenerator()
 class DIALOG_BOM : public DIALOG_BOM_BASE
 {
 private:
-    SCH_EDIT_FRAME*   m_parent;
-    BOM_GENERATOR_ARRAY  m_generators;
-    bool              m_initialized;
+    SCH_EDIT_FRAME*     m_parent;
+    BOM_GENERATOR_ARRAY m_generators;
+    bool                m_initialized;
+
+    HTML_MESSAGE_BOX*   m_helpWindow;
 
 public:
     DIALOG_BOM( SCH_EDIT_FRAME* parent );
@@ -224,11 +226,11 @@ int InvokeDialogCreateBOM( SCH_EDIT_FRAME* aCaller )
 
 
 DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
-    DIALOG_BOM_BASE( parent )
+        DIALOG_BOM_BASE( parent ),
+        m_parent( parent ),
+        m_initialized( false ),
+        m_helpWindow( nullptr )
 {
-    m_parent = parent;
-    m_initialized = false;
-
     m_buttonAddGenerator->SetBitmap( KiBitmap( small_plus_xpm ) );
     m_buttonDelGenerator->SetBitmap( KiBitmap( trash_xpm ) );
     m_buttonEdit->SetBitmap( KiBitmap( small_edit_xpm ) );
@@ -252,6 +254,9 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_BOM::~DIALOG_BOM()
 {
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
+
     // TODO(JE) maybe unpack this into JSON instead of sexpr
 
     // Save the plugin descriptions in config.
@@ -593,16 +598,20 @@ void DIALOG_BOM::OnEditGenerator( wxCommandEvent& event )
 
 void DIALOG_BOM::OnHelp( wxCommandEvent& event )
 {
-    HTML_MESSAGE_BOX* help_Dlg = new HTML_MESSAGE_BOX( nullptr,
-                                                       _( "Bill of Material Generation Help" ) );
+    if( m_helpWindow )
+    {
+        m_helpWindow->ShowModeless();
+        return;
+    }
 
-    help_Dlg->SetDialogSizeInDU( 500, 350 );
+    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Bill of Material Generation Help" ) );
+    m_helpWindow->SetDialogSizeInDU( 500, 350 );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( s_bomHelpInfo ), html_txt );
 
-    help_Dlg->m_htmlWindow->AppendToPage( html_txt );
-    help_Dlg->ShowModeless();
+    m_helpWindow->m_htmlWindow->AppendToPage( html_txt );
+    m_helpWindow->ShowModeless();
 }
 
 

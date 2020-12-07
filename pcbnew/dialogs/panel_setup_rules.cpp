@@ -43,7 +43,7 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFr
         m_Parent( aParent ),
         m_frame( aFrame ),
         m_scintillaTricks( nullptr ),
-        m_helpDialog( nullptr )
+        m_helpWindow( nullptr )
 {
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "()" ) );
 
@@ -67,8 +67,8 @@ PANEL_SETUP_RULES::~PANEL_SETUP_RULES( )
 {
     delete m_scintillaTricks;
 
-    if( m_helpDialog )
-        m_helpDialog->Destroy();
+    if( m_helpWindow )
+        m_helpWindow->Destroy();
 };
 
 
@@ -438,6 +438,12 @@ bool PANEL_SETUP_RULES::TransferDataFromWindow()
 
 void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
 {
+    if( m_helpWindow )
+    {
+        m_helpWindow->ShowModeless();
+        return;
+    }
+
     wxString msg =
 #include "dialogs/panel_setup_rules_help_md.h"
     ;
@@ -446,12 +452,12 @@ void PANEL_SETUP_RULES::OnSyntaxHelp( wxHyperlinkEvent& aEvent )
     msg.Replace( "Ctrl+", "Cmd+" );
 #endif
 
-    m_helpDialog = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
-    m_helpDialog->SetDialogSizeInDU( 320, 320 );
+    m_helpWindow = new HTML_MESSAGE_BOX( nullptr, _( "Syntax Help" ) );
+    m_helpWindow->SetDialogSizeInDU( 320, 320 );
 
     wxString html_txt;
     ConvertMarkdown2Html( wxGetTranslation( msg ), html_txt );
-    m_helpDialog->m_htmlWindow->AppendToPage( html_txt );
+    m_helpWindow->m_htmlWindow->AppendToPage( html_txt );
 
-    m_helpDialog->ShowModeless();
+    m_helpWindow->ShowModeless();
 }
