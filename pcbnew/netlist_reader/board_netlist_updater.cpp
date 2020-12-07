@@ -242,92 +242,92 @@ FOOTPRINT* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, FOOTPRINT
 }
 
 
-bool BOARD_NETLIST_UPDATER::updateComponentParameters( FOOTPRINT* aPcbComponent,
-                                                       COMPONENT* aNewComponent )
+bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
+                                                       COMPONENT* aNetlistComponent )
 {
     wxString msg;
 
     // Create a copy only if the footprint has not been added during this update
-    FOOTPRINT* copy = m_commit.GetStatus( aPcbComponent ) ? nullptr
-                                                          : (FOOTPRINT*) aPcbComponent->Clone();
+    FOOTPRINT* copy = m_commit.GetStatus( aPcbFootprint ) ? nullptr
+                                                          : (FOOTPRINT*) aPcbFootprint->Clone();
     bool       changed = false;
 
     // Test for reference designator field change.
-    if( aPcbComponent->GetReference() != aNewComponent->GetReference() )
+    if( aPcbFootprint->GetReference() != aNetlistComponent->GetReference() )
     {
         msg.Printf( _( "Change %s reference designator to %s." ),
-                    aPcbComponent->GetReference(),
-                    aNewComponent->GetReference() );
+                    aPcbFootprint->GetReference(),
+                    aNetlistComponent->GetReference() );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         if ( !m_isDryRun )
         {
             changed = true;
-            aPcbComponent->SetReference( aNewComponent->GetReference() );
+            aPcbFootprint->SetReference( aNetlistComponent->GetReference() );
         }
     }
 
     // Test for value field change.
-    if( aPcbComponent->GetValue() != aNewComponent->GetValue() )
+    if( aPcbFootprint->GetValue() != aNetlistComponent->GetValue() )
     {
         msg.Printf( _( "Change %s value from %s to %s." ),
-                    aPcbComponent->GetReference(),
-                    aPcbComponent->GetValue(),
-                    aNewComponent->GetValue() );
+                    aPcbFootprint->GetReference(),
+                    aPcbFootprint->GetValue(),
+                    aNetlistComponent->GetValue() );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         if( !m_isDryRun )
         {
             changed = true;
-            aPcbComponent->SetValue( aNewComponent->GetValue() );
+            aPcbFootprint->SetValue( aNetlistComponent->GetValue() );
         }
     }
 
     // Test for time stamp change.
-    if( aPcbComponent->GetPath() != aNewComponent->GetPath() )
+    if( aPcbFootprint->GetPath() != aNetlistComponent->GetPath() )
     {
         msg.Printf( _( "Update %s symbol association from %s to %s." ),
-                    aPcbComponent->GetReference(),
-                    aPcbComponent->GetPath().AsString(),
-                    aNewComponent->GetPath().AsString() );
+                    aPcbFootprint->GetReference(),
+                    aPcbFootprint->GetPath().AsString(),
+                    aNetlistComponent->GetPath().AsString() );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         if( !m_isDryRun )
         {
             changed = true;
-            aPcbComponent->SetPath( aNewComponent->GetPath() );
+            aPcbFootprint->SetPath( aNetlistComponent->GetPath() );
         }
     }
 
-    if( aPcbComponent->GetProperties() != aNewComponent->GetProperties() )
+    if( aPcbFootprint->GetProperties() != aNetlistComponent->GetProperties() )
     {
         msg.Printf( _( "Update %s properties." ),
-                    aPcbComponent->GetReference() );
+                    aPcbFootprint->GetReference() );
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
 
         if( !m_isDryRun )
         {
             changed = true;
-            aPcbComponent->SetProperties( aNewComponent->GetProperties() );
+            aPcbFootprint->SetProperties( aNetlistComponent->GetProperties() );
         }
     }
 
-    if( ( aNewComponent->GetProperties().count( "exclude_from_bom" ) > 0 )
-            != ( ( aPcbComponent->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
+    if( ( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) > 0 )
+            != ( ( aPcbFootprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 ) )
     {
-        int attributes = aPcbComponent->GetAttributes();
+        int attributes = aPcbFootprint->GetAttributes();
 
-        if( aNewComponent->GetProperties().count( "exclude_from_bom" ) )
+        if( aNetlistComponent->GetProperties().count( "exclude_from_bom" ) )
         {
             attributes |= FP_EXCLUDE_FROM_BOM;
             msg.Printf( _( "Setting %s 'exclude from BOM' fabrication attribute." ),
-                        aPcbComponent->GetReference() );
+                        aPcbFootprint->GetReference() );
         }
         else
         {
             attributes &= ~FP_EXCLUDE_FROM_BOM;
             msg.Printf( _( "Removing %s 'exclude from BOM' fabrication attribute." ),
-                        aPcbComponent->GetReference() );
+                        aPcbFootprint->GetReference() );
         }
 
         m_reporter->Report( msg, RPT_SEVERITY_ACTION );
@@ -335,12 +335,12 @@ bool BOARD_NETLIST_UPDATER::updateComponentParameters( FOOTPRINT* aPcbComponent,
         if( !m_isDryRun )
         {
             changed = true;
-            aPcbComponent->SetAttributes( attributes );
+            aPcbFootprint->SetAttributes( attributes );
         }
     }
 
     if( changed && copy )
-        m_commit.Modified( aPcbComponent, copy );
+        m_commit.Modified( aPcbFootprint, copy );
     else
         delete copy;
 
@@ -844,7 +844,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 {
                     footprintMap[ component ] = tmp;
 
-                    updateComponentParameters( tmp, component );
+                    updateFootprintParameters( tmp, component );
                     updateComponentPadConnections( tmp, component );
                 }
 
@@ -866,7 +866,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
             {
                 footprintMap[ component ] = tmp;
 
-                updateComponentParameters( tmp, component );
+                updateFootprintParameters( tmp, component );
                 updateComponentPadConnections( tmp, component );
             }
         }

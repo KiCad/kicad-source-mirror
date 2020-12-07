@@ -147,7 +147,7 @@ private:
     FOOTPRINT* replaceComponent( NETLIST& aNetlist, FOOTPRINT* aPcbComponent,
                                  COMPONENT* aNewComponent );
 
-    bool updateComponentParameters( FOOTPRINT* aPcbComponent, COMPONENT* aNewComponent );
+    bool updateFootprintParameters( FOOTPRINT* aPcbFootprint, COMPONENT* aNetlistComponent );
 
     bool updateComponentPadConnections( FOOTPRINT* aPcbComponent, COMPONENT* aNewComponent );
 
