@@ -24,6 +24,8 @@
 #ifndef MINOPTMAX_PROTO_H
 #define MINOPTMAX_PROTO_H
 
+#include <limits>
+
 template<class T=int>
 class MINOPTMAX
 {
