@@ -64,6 +64,7 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 {
     m_frame     = aParent;
     m_footprint = aFootprint;
+    m_returnValue = FP_PROPS_CANCEL;
 
     // Configure display origin transforms
     m_posX.SetCoordType( ORIGIN_TRANSFORMS::ABS_X_COORD );
@@ -202,25 +203,29 @@ DIALOG_FOOTPRINT_PROPERTIES::~DIALOG_FOOTPRINT_PROPERTIES()
 
 void DIALOG_FOOTPRINT_PROPERTIES::EditFootprint( wxCommandEvent&  )
 {
-    EndModal( FP_PROPS_EDIT_BOARD_FP );
+    m_returnValue = FP_PROPS_EDIT_BOARD_FP;
+    Close();
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES::EditLibraryFootprint( wxCommandEvent&  )
 {
-    EndModal( FP_PROPS_EDIT_LIBRARY_FP );
+    m_returnValue = FP_PROPS_EDIT_LIBRARY_FP;
+    Close();
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES::UpdateFootprint( wxCommandEvent&  )
 {
-    EndModal( FP_PROPS_UPDATE_FP );
+    m_returnValue = FP_PROPS_UPDATE_FP;
+    Close();
 }
 
 
 void DIALOG_FOOTPRINT_PROPERTIES::ChangeFootprint( wxCommandEvent&  )
 {
-    EndModal( FP_PROPS_CHANGE_FP );
+    m_returnValue = FP_PROPS_CHANGE_FP;
+    Close();
 }
 
 
@@ -754,7 +759,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     if( m_footprint->GetEditFlags() == 0 )    // i.e. not edited, or moved
         commit.Push( _( "Modify footprint properties" ) );
 
-    SetReturnCode( FP_PROPS_OK );
+    m_returnValue = FP_PROPS_OK;
     return true;
 }
 

@@ -40,6 +40,18 @@ class PANEL_PREV_3D;
 
 class DIALOG_FOOTPRINT_PROPERTIES: public DIALOG_FOOTPRINT_PROPERTIES_BASE
 {
+public:
+    // The dialog can be closed for several reasons.
+    enum FP_PROPS_RETVALUE
+    {
+        FP_PROPS_CANCEL,
+        FP_PROPS_UPDATE_FP,
+        FP_PROPS_CHANGE_FP,
+        FP_PROPS_OK,
+        FP_PROPS_EDIT_BOARD_FP,
+        FP_PROPS_EDIT_LIBRARY_FP
+    };
+
 private:
     PCB_EDIT_FRAME*                  m_frame;
     FOOTPRINT*                       m_footprint;
@@ -67,17 +79,7 @@ private:
 
     bool                             m_inSelect;
     std::vector<bool>                m_macHack;
-
-public:
-    // The dialog can be closed for several reasons.
-    enum FP_PROPS_RETVALUE
-    {
-        FP_PROPS_UPDATE_FP,
-        FP_PROPS_CHANGE_FP,
-        FP_PROPS_OK,
-        FP_PROPS_EDIT_BOARD_FP,
-        FP_PROPS_EDIT_LIBRARY_FP
-    };
+    enum FP_PROPS_RETVALUE           m_returnValue; // the option that closed the dialog
 
 public:
     // Constructor and destructor
@@ -88,6 +90,9 @@ public:
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+    /// @return the value depending on the way the dialog was closed:
+    enum FP_PROPS_RETVALUE GetReturnValue() { return m_returnValue; }
 
 private:
     // virtual event functions

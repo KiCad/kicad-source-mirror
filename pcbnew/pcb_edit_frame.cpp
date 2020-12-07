@@ -1536,21 +1536,20 @@ void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
     if( aFootprint == NULL )
         return;
 
-    DIALOG_FOOTPRINT_PROPERTIES* dlg = new DIALOG_FOOTPRINT_PROPERTIES( this, aFootprint );
+    DIALOG_FOOTPRINT_PROPERTIES dlg( this, aFootprint );
 
-    // Must be modal because we destroy the dialog on return.
-    int retvalue = dlg->ShowModal();
+    // We use quasi modal to allow displaying help dialogs.
+    dlg.ShowQuasiModal();
+    DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_RETVALUE retvalue = dlg.GetReturnValue();
     /*
      * retvalue =
      *   FP_PROPS_UPDATE_FP to show Update Footprints dialog
      *   FP_PROPS_CHANGE_FP to show Chanage Footprints dialog
      *   FP_PROPS_OK for normal edit
+     *   FP_PROPS_CANCEL if aborted
      *   FP_PROPS_EDIT_BOARD_FP to load board footprint into Footprint Editor
      *   FP_PROPS_EDIT_LIBRARY_FP to load library footprint into Footprint Editor
      */
-
-    dlg->Close();
-    dlg->Destroy();
 
     if( retvalue == DIALOG_FOOTPRINT_PROPERTIES::FP_PROPS_OK )
     {
