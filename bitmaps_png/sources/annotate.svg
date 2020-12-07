@@ -1,35 +1,141 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="annotate.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1946"
+     inkscape:window-height="1400"
+     id="namedview965"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="12.922037"
+     inkscape:cy="15.783589"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g1560">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1552" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:none;stroke:#e61c50;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#e61c50;}.cls-3{fill:#b9b9b9;}.cls-4{fill:#545454;}</style>
+  <defs
+     id="defs946">
+    <marker
+       style="overflow:visible"
+       id="Arrow2Sstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow2Sstart"
+       inkscape:isstock="true">
+      <path
+         transform="scale(0.3) translate(-2.3,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#e61c50;stroke-opacity:1;fill:#e61c50;fill-opacity:1"
+         id="path1592" />
+    </marker>
+    <style
+       id="style944">.cls-1{fill:none;stroke:#e61c50;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#e61c50;}.cls-3{fill:#b9b9b9;}.cls-4{fill:#545454;}</style>
   </defs>
-  <title>annotate</title>
-  <line class="cls-1" x1="13" y1="13.5201" x2="13" y2="8.9631"/>
-  <polygon class="cls-2" points="14.162 12.728 13 17.064 11.838 12.728 14.162 12.728"/>
-  <rect class="cls-3" x="6" y="1.0019" width="14" height="8"/>
-  <path class="cls-4" d="M12.084,5.2764V7.61h-.9365V1.9854h2.0742a2.2173,2.2173,0,0,1,1.4521.4248,1.4861,1.4861,0,0,1,.5127,1.2128,1.2578,1.2578,0,0,1-.2256.752,1.5437,1.5437,0,0,1-.6572.5039,1.1755,1.1755,0,0,1,.6826.4922,1.5927,1.5927,0,0,1,.208.8408V6.68a1.9009,1.9009,0,0,0,.0616.4824.6761.6761,0,0,0,.208.3594V7.61H14.501a.6294.6294,0,0,1-.1992-.4014,3.4031,3.4031,0,0,1-.044-.5371V6.22a.9509.9509,0,0,0-.2461-.6885.9012.9012,0,0,0-.6787-.2548Zm0-.753h1.0869a1.2693,1.2693,0,0,0,.8213-.2168.812.812,0,0,0,.2578-.66.8787.8787,0,0,0-.2539-.667,1.0889,1.0889,0,0,0-.7744-.2412H12.084Z"/>
-  <rect class="cls-3" x="6" y="17.0039" width="14" height="8"/>
-  <path class="cls-2" d="M10.0879,21.2783v2.334H9.1514v-5.625h2.0742a2.2173,2.2173,0,0,1,1.4521.4248A1.4861,1.4861,0,0,1,13.19,19.625a1.258,1.258,0,0,1-.2256.752,1.5438,1.5438,0,0,1-.6572.5039,1.175,1.175,0,0,1,.6826.4921,1.593,1.593,0,0,1,.208.8409v.4677a1.9068,1.9068,0,0,0,.0616.4825.6758.6758,0,0,0,.208.3593v.0889h-.9629a.6292.6292,0,0,1-.1992-.4014,3.4031,3.4031,0,0,1-.044-.5371v-.4521a.9507.9507,0,0,0-.2461-.6885.9012.9012,0,0,0-.6787-.2549Zm0-.7529h1.0869a1.27,1.27,0,0,0,.8213-.2168.8124.8124,0,0,0,.2578-.66A.8789.8789,0,0,0,12,18.9814a1.0889,1.0889,0,0,0-.7744-.2412H10.0879Z"/>
-  <path class="cls-2" d="M16.1367,23.6123H15.2V18.8789H14.06v-.6914l2.0771-.2Z"/>
+  <title
+     id="title948">annotate</title>
+  <path
+     id="line950"
+     style="fill:none;stroke:#e61c50;stroke-linecap:round;stroke-linejoin:round;marker-start:url(#Arrow2Sstart)"
+     d="M 13,15.372751 13,8.9631004"
+     sodipodi:nodetypes="cc" />
+  <g
+     id="g1550"
+     transform="translate(-0.01909304,8.9300146)">
+    <rect
+       class="cls-3"
+       x="6.019093"
+       y="-7.9300146"
+       width="14"
+       height="8"
+       id="rect954-4"
+       style="fill:#b9b9b9" />
+    <text
+       xml:space="preserve"
+       style="font-size:10.6667px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
+       x="12.555091"
+       y="-0.12200258"
+       id="text1530"><tspan
+         sodipodi:role="line"
+         id="tspan1528"
+         x="12.555091"
+         y="-0.12200258"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:10.6667px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#545454;fill-opacity:1">R</tspan></text>
+  </g>
+  <g
+     id="g1560"
+     transform="translate(-0.01909256,24.930015)">
+    <rect
+       class="cls-3"
+       x="6.019093"
+       y="-7.9300146"
+       width="14"
+       height="8"
+       id="rect1554"
+       style="fill:#b9b9b9" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:condensed;font-size:10.6667px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Condensed';letter-spacing:0px;word-spacing:0px"
+       x="13.48842"
+       y="-0.12200258"
+       id="text1558"><tspan
+         sodipodi:role="line"
+         id="tspan1556"
+         x="13.48842"
+         y="-0.12200258"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:semi-condensed;font-size:10.6667px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Semi-Condensed';text-align:center;text-anchor:middle;fill:#1a81c4;fill-opacity:1">R1</tspan></text>
+  </g>
 </svg>
