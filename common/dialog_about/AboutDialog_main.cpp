@@ -30,7 +30,7 @@
 
 /* Used icons:
  *  show_3d_xpm;      // 3D icon
- *  edit_module_xpm;
+ *  module_xpm;
  *  icon_kicad_xpm;   // Icon of the application
  */
 #include <bitmaps.h>
@@ -655,12 +655,12 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                       wxEmptyString,
                                       "https://gitlab.com/kicad/libraries/kicad-footprint-generator",
                                       FOOTPRINT_LIB_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( edit_module_xpm ) ) );
+                                      aInfo.CreateKiBitmap( module_xpm ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( "GitLab contributors",
                                       wxEmptyString,
                                       "https://gitlab.com/kicad/libraries/kicad-footprints/-/graphs/master",
                                       FOOTPRINT_LIB_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( edit_module_xpm ) ) );
+                                      aInfo.CreateKiBitmap( module_xpm ) ) );
 
     // Program credits for icons
     #define ICON_CONTRIBUTION _( "Icons by" )

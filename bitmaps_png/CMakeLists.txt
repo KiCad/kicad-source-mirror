@@ -205,7 +205,6 @@ set( BMAPS_MID
     edit_comp_footprint
     edit_comp_ref
     edit_comp_value
-    edit_module
     editor
     edit_cmp_symb_links
     edit_text
