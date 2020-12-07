@@ -40,11 +40,11 @@
      inkscape:window-height="983"
      id="namedview18"
      showgrid="true"
-     inkscape:zoom="22.961538"
-     inkscape:cx="6.0536012"
-     inkscape:cy="13"
-     inkscape:window-x="4343"
-     inkscape:window-y="159"
+     inkscape:zoom="22.627417"
+     inkscape:cx="6.9326904"
+     inkscape:cy="12.932153"
+     inkscape:window-x="1690"
+     inkscape:window-y="874"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2"
      inkscape:snap-grids="true"
@@ -58,32 +58,32 @@
        enabled="true"
        snapvisiblegridlinesonly="true" />
   </sodipodi:namedview>
+  <g
+     transform="matrix(1.7227623,0,0,1.7642347,-18.963766,1.822873)"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.504px;line-height:125%;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;opacity:1;fill:#545454;fill-opacity:1;stroke:none;stroke-width:0.5736"
+     id="text3857-6">
+    <text
+       xml:space="preserve"
+       style="font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#545454;fill-opacity:1;stroke-width:0.5736"
+       x="13"
+       y="11"
+       id="text5125-0"
+       transform="scale(1.011965,0.98817647)"><tspan
+         sodipodi:role="line"
+         id="tspan5123-9"
+         x="13"
+         y="11"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#545454;fill-opacity:1;stroke-width:0.5736">A</tspan></text>
+  </g>
   <text
      xml:space="preserve"
      style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
      x="-5.4915252"
      y="28.288136"
      id="text3840">           </text>
-  <g
-     transform="matrix(0.98817647,0,0,1.011965,-5.36,6)"
-     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:34.504px;line-height:125%;font-family:'Ubuntu Mono';-inkscape-font-specification:'Ubuntu Mono';letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-     id="text3857">
-    <text
-       xml:space="preserve"
-       style="font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
-       x="13"
-       y="11"
-       id="text5125"
-       transform="scale(1.011965,0.98817647)"><tspan
-         sodipodi:role="line"
-         id="tspan5123"
-         x="13"
-         y="11"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:16px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold'">A</tspan></text>
-  </g>
   <path
-     style="fill:none;stroke:#1a81c4;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-     d="m 2.5,21.5 21,0"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 2.5,23.980056 h 21"
      id="path2987"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cc" />
