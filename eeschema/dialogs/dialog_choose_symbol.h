@@ -50,9 +50,8 @@ class SCH_DRAW_PANEL;
 
 
 /**
- * Dialog class to select a component from the libraries. This is the master
- * View class in a Model-View-Adapter (mediated MVC) architecture. The other
- * pieces are in:
+ * Dialog class to select a symbol from the libraries. This is the master View class in a
+ * Model-View-Adapter (mediated MVC) architecture. The other pieces are in:
  *
  * - Adapter: CMP_TREE_MODEL_ADAPTER in common/cmp_tree_model_adapter.h
  * - Model: CMP_TREE_NODE and descendants in common/cmp_tree_model.h
@@ -73,7 +72,7 @@ class SCH_DRAW_PANEL;
  *         adapter->AddLibrary( nickname );
  *
  *     // Create and display dialog
- *     DIALOG_CHOOSE_COMPONENT dlg( this, title, adapter, 1 );
+ *     DIALOG_CHOOSE_SYMBOL dlg( this, title, adapter, 1 );
  *     bool selected = ( dlg.ShowModal() != wxID_CANCEL );
  *
  *     // Receive part
@@ -85,7 +84,7 @@ class SCH_DRAW_PANEL;
  *     }
  *
  */
-class DIALOG_CHOOSE_COMPONENT : public DIALOG_SHIM
+class DIALOG_CHOOSE_SYMBOL : public DIALOG_SHIM
 {
 public:
     /**
@@ -103,12 +102,12 @@ public:
      *                          disabled. This forces aAllowFieldEdits false too.
      * @param aAllowBrowser     show a Select with Browser button
      */
-    DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                             wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
-                             int aDeMorganConvert, bool aAllowFieldEdits, bool aShowFootprints,
-                             bool aAllowBrowser );
+    DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                          wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
+                          int aDeMorganConvert, bool aAllowFieldEdits, bool aShowFootprints,
+                          bool aAllowBrowser );
 
-    ~DIALOG_CHOOSE_COMPONENT();
+    ~DIALOG_CHOOSE_SYMBOL();
 
     /**
      * To be called after this dialog returns from ShowModal().

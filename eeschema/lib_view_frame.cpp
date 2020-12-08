@@ -28,7 +28,7 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
-#include <dialog_choose_component.h>
+#include <dialog_choose_symbol.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
@@ -802,7 +802,7 @@ void LIB_VIEW_FRAME::FinishModal()
 
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
-    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
+    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
 
     // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
     if( !dialogLock.try_lock() )
@@ -828,7 +828,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     wxString dialogTitle;
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, m_convert, false, false, false );
+    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, adapter, m_convert, false, false, false );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;

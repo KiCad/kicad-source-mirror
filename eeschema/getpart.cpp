@@ -37,7 +37,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 
-#include <dialog_choose_component.h>
+#include <dialog_choose_symbol.h>
 #include <symbol_tree_model_adapter.h>
 
 PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParent,
@@ -94,7 +94,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
                                                      const LIB_ID* aHighlight,
                                                      bool aAllowFields )
 {
-    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
+    std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
     wxString                     dialogTitle;
     SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
 
@@ -153,8 +153,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     else
         dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
 
-    DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapter, aConvert, aAllowFields,
-                                 aShowFootprints, aUseLibBrowser );
+    DIALOG_CHOOSE_SYMBOL dlg( this, dialogTitle, adapter, aConvert, aAllowFields, aShowFootprints,
+                              aUseLibBrowser );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return PICKED_SYMBOL();

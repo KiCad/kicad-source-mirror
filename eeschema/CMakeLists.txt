@@ -55,7 +55,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_fields_editor_global_base.cpp
     dialogs/dialog_change_symbols.cpp
     dialogs/dialog_change_symbols_base.cpp
-    dialogs/dialog_choose_component.cpp
+    dialogs/dialog_choose_symbol.cpp
     dialogs/dialog_lib_symbol_properties.cpp
     dialogs/dialog_lib_symbol_properties_base.cpp
     dialogs/dialog_edit_components_libid.cpp

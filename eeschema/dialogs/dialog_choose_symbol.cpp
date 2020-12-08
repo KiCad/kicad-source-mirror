@@ -25,11 +25,10 @@
 #include <algorithm>
 #include <class_libentry.h>
 #include <class_library.h>
-#include <dialog_choose_component.h>
+#include <dialog_choose_symbol.h>
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <sch_base_frame.h>
-#include <symbol_lib_table.h>
 #include <template_fieldnames.h>
 #include <widgets/footprint_preview_widget.h>
 #include <widgets/footprint_select_widget.h>
@@ -44,13 +43,13 @@
 #include <wx/timer.h>
 #include <wx/utils.h>
 
-std::mutex DIALOG_CHOOSE_COMPONENT::g_Mutex;
+std::mutex DIALOG_CHOOSE_SYMBOL::g_Mutex;
 
 
-DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                                  wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
-                                                  int aDeMorganConvert, bool aAllowFieldEdits,
-                                                  bool aShowFootprints, bool aAllowBrowser )
+DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+                                            wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& aAdapter,
+                                            int aDeMorganConvert, bool aAllowFieldEdits,
+                                            bool aShowFootprints, bool aAllowBrowser )
         : DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
           m_symbol_preview( nullptr ),
@@ -171,51 +170,55 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     SetInitialFocus( m_tree->GetFocusTarget() );
     okButton->SetDefault();
 
-    Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
-    Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
-    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
+    Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
+    Bind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
+    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
 
     if( m_browser_button )
     {
-        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
-                                &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
+        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED, &DIALOG_CHOOSE_SYMBOL::OnUseBrowser,
+                                this );
     }
 
     if( m_fp_sel_ctrl )
     {
-        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
-                             &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnFootprintSelected,
+                             this );
     }
 
     if( m_details )
     {
-        m_details->Connect( wxEVT_CHAR_HOOK,
-                            wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
+        m_details->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ),
                             NULL, this );
     }
 }
 
 
-DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
+DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
 {
-    Unbind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
-    Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this );
-    Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
-    Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
+    Unbind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_SYMBOL::OnInitDialog, this );
+    Unbind( wxEVT_TIMER, &DIALOG_CHOOSE_SYMBOL::OnCloseTimer, this );
+    Unbind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentPreselected, this );
+    Unbind( COMPONENT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnComponentSelected, this );
 
     if( m_browser_button )
+    {
         m_browser_button->Unbind( wxEVT_COMMAND_BUTTON_CLICKED,
-                                  &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
+                                  &DIALOG_CHOOSE_SYMBOL::OnUseBrowser, this );
+    }
 
     if( m_fp_sel_ctrl )
-        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED,
-                               &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+    {
+        m_fp_sel_ctrl->Unbind( EVT_FOOTPRINT_SELECTED, &DIALOG_CHOOSE_SYMBOL::OnFootprintSelected,
+                               this );
+    }
 
     if( m_details )
+    {
         m_details->Disconnect( wxEVT_CHAR_HOOK,
-                               wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
-                               NULL, this );
+                               wxKeyEventHandler( DIALOG_CHOOSE_SYMBOL::OnCharHook ), NULL, this );
+    }
 
     // I am not sure the following two lines are necessary, but they will not hurt anyone
     m_dbl_click_timer->Stop();
@@ -238,7 +241,7 @@ DIALOG_CHOOSE_COMPONENT::~DIALOG_CHOOSE_COMPONENT()
 }
 
 
-wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
+wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
 {
     wxPanel*                     panel = new wxPanel( aParent );
     wxBoxSizer*                  sizer = new wxBoxSizer( wxVERTICAL );
@@ -303,7 +306,7 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
+void DIALOG_CHOOSE_SYMBOL::OnInitDialog( wxInitDialogEvent& aEvent )
 {
     if( m_fp_preview && m_fp_preview->IsInitialized() )
     {
@@ -316,7 +319,7 @@ void DIALOG_CHOOSE_COMPONENT::OnInitDialog( wxInitDialogEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnCharHook( wxKeyEvent& e )
+void DIALOG_CHOOSE_SYMBOL::OnCharHook( wxKeyEvent& e )
 {
     if( m_details && e.GetKeyCode() == 'C' && e.ControlDown() &&
         !e.AltDown() && !e.ShiftDown() && !e.MetaDown() )
@@ -336,13 +339,13 @@ void DIALOG_CHOOSE_COMPONENT::OnCharHook( wxKeyEvent& e )
 }
 
 
-LIB_ID DIALOG_CHOOSE_COMPONENT::GetSelectedLibId( int* aUnit ) const
+LIB_ID DIALOG_CHOOSE_SYMBOL::GetSelectedLibId( int* aUnit ) const
 {
     return m_tree->GetSelectedLibId( aUnit );
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnUseBrowser( wxCommandEvent& aEvent )
+void DIALOG_CHOOSE_SYMBOL::OnUseBrowser( wxCommandEvent& aEvent )
 {
     m_external_browser_requested = true;
 
@@ -355,7 +358,7 @@ void DIALOG_CHOOSE_COMPONENT::OnUseBrowser( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
+void DIALOG_CHOOSE_SYMBOL::OnCloseTimer( wxTimerEvent& aEvent )
 {
     // Hack handler because of eaten MouseUp event. See
     // DIALOG_CHOOSE_COMPONENT::OnComponentSelected for the beginning
@@ -367,7 +370,7 @@ void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
     {
         // Mouse hasn't been raised yet, so fire the timer again. Otherwise the
         // purpose of this timer is defeated.
-        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_SYMBOL::DblClickDelay );
     }
     else
     {
@@ -381,7 +384,7 @@ void DIALOG_CHOOSE_COMPONENT::OnCloseTimer( wxTimerEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
+void DIALOG_CHOOSE_SYMBOL::ShowFootprintFor( LIB_ID const& aLibId )
 {
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
@@ -410,7 +413,7 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprintFor( LIB_ID const& aLibId )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
+void DIALOG_CHOOSE_SYMBOL::ShowFootprint( wxString const& aName )
 {
     if( !m_fp_preview || !m_fp_preview->IsInitialized() )
         return;
@@ -437,7 +440,7 @@ void DIALOG_CHOOSE_COMPONENT::ShowFootprint( wxString const& aName )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
+void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
 {
     if( !m_fp_sel_ctrl )
         return;
@@ -484,7 +487,7 @@ void DIALOG_CHOOSE_COMPONENT::PopulateFootprintSelector( LIB_ID const& aLibId )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
+void DIALOG_CHOOSE_SYMBOL::OnFootprintSelected( wxCommandEvent& aEvent )
 {
     m_fp_override = aEvent.GetString();
 
@@ -501,7 +504,7 @@ void DIALOG_CHOOSE_COMPONENT::OnFootprintSelected( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
+void DIALOG_CHOOSE_SYMBOL::OnComponentPreselected( wxCommandEvent& aEvent )
 {
     int unit = 0;
 
@@ -526,7 +529,7 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentPreselected( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_CHOOSE_COMPONENT::OnComponentSelected( wxCommandEvent& aEvent )
+void DIALOG_CHOOSE_SYMBOL::OnComponentSelected( wxCommandEvent& aEvent )
 {
     if( m_tree->GetSelectedLibId().IsValid() )
     {
@@ -542,7 +545,7 @@ void DIALOG_CHOOSE_COMPONENT::OnComponentSelected( wxCommandEvent& aEvent )
         //
         // See DIALOG_CHOOSE_COMPONENT::OnCloseTimer for the other end of this
         // spaghetti noodle.
-        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_COMPONENT::DblClickDelay );
+        m_dbl_click_timer->StartOnce( DIALOG_CHOOSE_SYMBOL::DblClickDelay );
     }
 }
 
