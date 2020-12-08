@@ -430,22 +430,22 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
     }
 
     txt.Printf( wxT( "%d" ), board->GetPadCount() );
-    aList.emplace_back( _( "Pads" ), txt, DARKGREEN );
+    aList.emplace_back( _( "Pads" ), txt );
 
     txt.Printf( wxT( "%d" ), viasCount );
-    aList.emplace_back( _( "Vias" ), txt, DARKGREEN );
+    aList.emplace_back( _( "Vias" ), txt );
 
     txt.Printf( wxT( "%d" ), trackSegmentsCount );
-    aList.emplace_back( _( "Track Segments" ), txt, DARKGREEN );
+    aList.emplace_back( _( "Track Segments" ), txt );
 
     txt.Printf( wxT( "%d" ), board->GetNodesCount() );
-    aList.emplace_back( _( "Nodes" ), txt, DARKCYAN );
+    aList.emplace_back( _( "Nodes" ), txt );
 
     txt.Printf( wxT( "%d" ), board->GetNetCount() - 1 /* don't include "No Net" in count */ );
-    aList.emplace_back( _( "Nets" ), txt, RED );
+    aList.emplace_back( _( "Nets" ), txt );
 
     txt.Printf( wxT( "%d" ), board->GetConnectivity()->GetUnconnectedCount() );
-    aList.emplace_back( _( "Unrouted" ), txt, BLUE );
+    aList.emplace_back( _( "Unrouted" ), txt );
 }
 
 

@@ -399,12 +399,12 @@ void LIB_ARC::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), m_Width );
 
-    aList.emplace_back( _( "Line Width" ), msg, BLUE );
+    aList.emplace_back( _( "Line Width" ), msg );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
                 bBox.GetOrigin().y, bBox.GetEnd().x, bBox.GetEnd().y );
 
-    aList.emplace_back( _( "Bounding Box" ), msg, BROWN );
+    aList.emplace_back( _( "Bounding Box" ), msg );
 }
 
 

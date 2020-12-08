@@ -706,17 +706,17 @@ int SCH_SHEET::CountSheets() const
 
 void SCH_SHEET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList )
 {
-    aList.emplace_back( _( "Sheet Name" ), m_fields[ SHEETNAME ].GetText(), CYAN );
+    aList.emplace_back( _( "Sheet Name" ), m_fields[ SHEETNAME ].GetText() );
 
     if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame ) )
     {
         SCH_SHEET_PATH path = schframe->GetCurrentSheet();
         path.push_back( this );
 
-        aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable( false ), BLUE );
+        aList.emplace_back( _( "Hierarchical Path" ), path.PathHumanReadable( false ) );
     }
 
-    aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText(), BROWN );
+    aList.emplace_back( _( "File Name" ), m_fields[ SHEETFILENAME ].GetText() );
 }
 
 

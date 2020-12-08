@@ -664,7 +664,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     wxString text;
 
     msg = ShowGBRShape();
-    aList.emplace_back( _( "Type" ), msg, DARKCYAN );
+    aList.emplace_back( _( "Type" ), msg );
 
     // Display D_Code value with its attributes for items using a DCode:
     if( m_Shape == GBR_POLYGON )    // Has no DCode, but can have an attribute
@@ -691,28 +691,28 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
 
     // Display graphic layer name
     msg = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
-    aList.emplace_back( _( "Graphic Layer" ), msg, DARKGREEN );
+    aList.emplace_back( _( "Graphic Layer" ), msg );
 
     // Display item rotation
     // The full rotation is Image rotation + m_lyrRotation
     // but m_lyrRotation is specific to this object
     // so we display only this parameter
     msg.Printf( wxT( "%f" ), m_lyrRotation );
-    aList.emplace_back( _( "Rotation" ), msg, BLUE );
+    aList.emplace_back( _( "Rotation" ), msg );
 
     // Display item polarity (item specific)
     msg = m_LayerNegative ? _("Clear") : _("Dark");
-    aList.emplace_back( _( "Polarity" ), msg, BLUE );
+    aList.emplace_back( _( "Polarity" ), msg );
 
     // Display mirroring (item specific)
     msg.Printf( wxT( "A:%s B:%s" ),
                 m_mirrorA ? _("Yes") : _("No"),
                 m_mirrorB ? _("Yes") : _("No"));
-    aList.emplace_back( _( "Mirror" ), msg, DARKRED );
+    aList.emplace_back( _( "Mirror" ), msg );
 
     // Display AB axis swap (item specific)
     msg = m_swapAxis ? wxT( "A=Y B=X" ) : wxT( "A=X B=Y" );
-    aList.emplace_back( _( "AB axis" ), msg, DARKRED );
+    aList.emplace_back( _( "AB axis" ), msg );
 
     // Display net info, if exists
     if( m_netAttributes.m_NetAttribType == GBR_NETLIST_METADATA::GBR_NETINFO_UNSPECIFIED )
@@ -752,7 +752,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
         cmp_pad_msg << " " << m_netAttributes.m_Cmpref;
     }
 
-    aList.emplace_back( net_msg, cmp_pad_msg, DARKCYAN );
+    aList.emplace_back( net_msg, cmp_pad_msg );
 }
 
 
