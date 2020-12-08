@@ -50,8 +50,14 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
+#if 1
+    m_auiManager = nullptr;
+    SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
+    SetEffectDuration( 300 );
+#else
     // Don't use any effects since they leave the sizer area visible under the infobar
     SetShowHideEffects( wxSHOW_EFFECT_NONE, wxSHOW_EFFECT_NONE );
+#endif
 
     // The infobar seems to start too small, so increase its height
     int sx, sy;

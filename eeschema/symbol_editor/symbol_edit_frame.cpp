@@ -697,6 +697,9 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
     m_SyncPinEdit = aPart && aPart->IsRoot() && aPart->IsMulti() && !aPart->UnitsLocked();
 
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    RebuildView();
+
     WX_INFOBAR* infobar = GetInfoBar();
 
     if( IsSymbolFromSchematic() )
@@ -736,9 +739,6 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     {
         infobar->Dismiss();
     }
-
-    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    RebuildView();
 }
 
 
