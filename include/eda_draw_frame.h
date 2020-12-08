@@ -432,6 +432,15 @@ public:
     void SetMsgPanel( EDA_ITEM* aItem );
 
     /**
+     * Helper function that erases the msg panel and then appends a single message
+     *
+     * @param aTextUpper - The message upper text.
+     * @param aTextLower - The message lower text.
+     * @param aPadding - Number of spaces to pad between messages.
+     */
+    void SetMsgPanel( const wxString& aTextUpper, const wxString& aTextLower, int aPadding = 6 );
+
+    /**
      * Redraw the message panel.
      */
     virtual void UpdateMsgPanel();

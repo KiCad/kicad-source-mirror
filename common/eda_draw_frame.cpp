@@ -621,6 +621,18 @@ void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
 }
 
 
+void EDA_DRAW_FRAME::SetMsgPanel(
+        const wxString& aTextUpper, const wxString& aTextLower, int aPadding )
+{
+    if( m_messagePanel )
+    {
+        m_messagePanel->EraseMsgBox();
+
+        m_messagePanel->AppendMessage( aTextUpper, aTextLower, aPadding );
+    }
+}
+
+
 void EDA_DRAW_FRAME::SetMsgPanel( EDA_ITEM* aItem )
 {
     wxCHECK_RET( aItem, wxT( "Invalid EDA_ITEM pointer.  Bad programmer." ) );

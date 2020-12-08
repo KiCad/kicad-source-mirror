@@ -845,7 +845,6 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     GetSettingsManager()->SaveProject();
 
-    ClearMsgPanel();
 
     wxString    upperTxt;
     wxString    lowerTxt;
@@ -868,7 +867,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
         lowerTxt.Printf( _( "Failed to create temporary file \"%s\"" ), tempFile.GetFullPath() );
 
-        AppendMsgPanel( upperTxt, lowerTxt, CYAN );
+        SetMsgPanel( upperTxt, lowerTxt );
 
         // In case we started a file but didn't fully write it, clean up
         wxRemoveFile( tempFile.GetFullPath() );
@@ -887,7 +886,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
         lowerTxt.Printf( _( "Failed to rename temporary file \"%s\"" ), tempFile.GetFullPath() );
 
-        AppendMsgPanel( upperTxt, lowerTxt, CYAN );
+        SetMsgPanel( upperTxt, lowerTxt );
 
         return false;
     }
@@ -917,7 +916,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
 
     lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), pcbFileName.GetFullPath() );
 
-    AppendMsgPanel( upperTxt, lowerTxt, CYAN );
+    SetStatusText( lowerTxt, 0 );
 
     GetScreen()->ClrModify();
     GetScreen()->ClrSave();

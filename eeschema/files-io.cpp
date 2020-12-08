@@ -132,7 +132,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
         DisplayError( this, msg );
 
         msg.Printf( _( "Failed to create temporary file \"%s\"" ), tempFile.GetFullPath() );
-        AppendMsgPanel( wxEmptyString, msg, CYAN );
+        SetMsgPanel( wxEmptyString, msg );
 
         // In case we started a file but didn't fully write it, clean up
         wxRemoveFile( tempFile.GetFullPath() );
@@ -153,7 +153,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to rename temporary file \"%s\"" ), tempFile.GetFullPath() );
-            AppendMsgPanel( wxEmptyString, msg, CYAN );
+            SetMsgPanel( wxEmptyString, msg );
         }
     }
 
@@ -284,7 +284,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     SetStatusText( wxEmptyString );
-    ClearMsgPanel();
 
     SCH_IO_MGR::SCH_FILE_T schFileType = SCH_IO_MGR::GuessPluginTypeFromSchPath( fullFileName );
 
@@ -399,7 +398,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to load \"%s\"" ), fullFileName );
-            AppendMsgPanel( wxEmptyString, msg, CYAN );
+            SetMsgPanel( wxEmptyString, msg );
 
             return false;
         }
@@ -996,7 +995,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             DisplayError( this, msg );
 
             msg.Printf( _( "Failed to load \"%s\"" ), aFileName );
-            AppendMsgPanel( wxEmptyString, msg, CYAN );
+            SetMsgPanel( wxEmptyString, msg );
 
             return false;
         }
