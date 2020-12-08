@@ -699,12 +699,12 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
     {
         // Display net code:
         msg.Printf( wxT( "%d" ), GetNetCode() );
-        aList.emplace_back( _( "NetCode" ), msg, RED );
+        aList.emplace_back( _( "NetCode" ), msg );
     }
 
     // Display the flags:
     msg.Printf( wxT( "0x%08X" ), m_flags );
-    aList.emplace_back( wxT( "Flags" ), msg, BLUE );
+    aList.emplace_back( wxT( "Flags" ), msg );
 
     // Display start and end positions:
     msg.Printf( wxT( "%d %d" ), m_Start.x, m_Start.y );

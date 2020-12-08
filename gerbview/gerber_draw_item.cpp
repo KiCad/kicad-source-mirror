@@ -687,7 +687,7 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_
             text = apertDescr->m_AperFunction;
     }
 
-    aList.emplace_back( msg, text, RED );
+    aList.emplace_back( msg, text );
 
     // Display graphic layer name
     msg = GERBER_FILE_IMAGE_LIST::GetImagesList().GetDisplayName( GetLayer(), true );
