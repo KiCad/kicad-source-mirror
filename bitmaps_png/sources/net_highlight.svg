@@ -1,44 +1,144 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="net_highlight.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:export-filename="/tmp/net_highlight.png"
+   inkscape:export-xdpi="1890.46"
+   inkscape:export-ydpi="1890.46">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3386"
+     inkscape:window-height="1803"
+     id="namedview34"
+     showgrid="true"
+     inkscape:zoom="55.923077"
+     inkscape:cx="6.35622"
+     inkscape:cy="14.307059"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid1566" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1,.cls-2,.cls-5,.cls-6{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#1a81c4;}.cls-2{stroke:#e61c50;}.cls-3{fill:#b9b9b9;}.cls-4{fill:#f29100;}.cls-5{stroke:url(#Безымянный_градиент_19);}.cls-6{stroke:url(#Безымянный_градиент_3);}</style>
-    <linearGradient id="Безымянный_градиент_19" x1="9.2548" y1="1.007" x2="9.2548" y2="25" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ececec"/>
-      <stop offset="1" stop-color="#c6c6c5"/>
+  <defs
+     id="defs15">
+    <style
+       id="style3">.cls-1,.cls-2,.cls-5,.cls-6{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#1a81c4;}.cls-2{stroke:#e61c50;}.cls-3{fill:#b9b9b9;}.cls-4{fill:#f29100;}.cls-5{stroke:url(#Безымянный_градиент_19);}.cls-6{stroke:url(#Безымянный_градиент_3);}</style>
+    <linearGradient
+       id="Безымянный_градиент_19"
+       x1="9.2548"
+       y1="1.007"
+       x2="9.2548"
+       y2="25"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ececec"
+         id="stop5" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop7" />
     </linearGradient>
-    <linearGradient id="Безымянный_градиент_3" x1="16.1155" y1="7.8618" x2="16.1155" y2="25" gradientUnits="userSpaceOnUse">
-      <stop offset="0.2526" stop-color="#ececec"/>
-      <stop offset="1" stop-color="#c6c6c5"/>
+    <linearGradient
+       id="Безымянный_градиент_3"
+       x1="16.1155"
+       y1="7.8618"
+       x2="16.1155"
+       y2="25"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0.2526"
+         stop-color="#ececec"
+         id="stop10" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop12" />
     </linearGradient>
   </defs>
-  <title>net_highlight</title>
-  <polyline class="cls-1" points="24 2 17 8.927 12.413 8.927"/>
-  <polyline class="cls-2" points="7.641 10.979 2 15.846 2 24"/>
-  <path class="cls-3" d="M13.6221,9.4516a3.786,3.786,0,1,1-3.786-3.7859A3.7859,3.7859,0,0,1,13.6221,9.4516Z"/>
-  <path class="cls-4" d="M12.6756,9.4516A2.8395,2.8395,0,1,1,9.8361,6.6121,2.84,2.84,0,0,1,12.6756,9.4516Z"/>
-  <path class="cls-3" d="M12.0446,9.4516A2.2085,2.2085,0,1,1,9.8361,7.2431,2.2085,2.2085,0,0,1,12.0446,9.4516Z"/>
-  <polyline class="cls-5" points="2.01 2.007 11.504 2.007 16.5 7.256 16.5 24"/>
-  <polyline class="cls-6" points="8 24 8 18.764 12.229 14.708 18.385 14.708 24.231 8.862"/>
+  <title
+     id="title17">net_highlight</title>
+  <path
+     id="polyline19"
+     style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="M 24,2 17,9 H 12"
+     sodipodi:nodetypes="ccc" />
+  <path
+     id="polyline21"
+     style="fill:none;stroke:#e61c50;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="m 7,11 -5,5 v 8 -8 z"
+     sodipodi:nodetypes="ccccc" />
+  <path
+     class="cls-3"
+     d="M13.6221,9.4516a3.786,3.786,0,1,1-3.786-3.7859A3.7859,3.7859,0,0,1,13.6221,9.4516Z"
+     id="path23" />
+  <path
+     class="cls-4"
+     d="m 13.3361,9.4517 a 3.5000001,3.5 0 1 1 -3.4999983,-3.5 3.5006164,3.5006163 0 0 1 3.4999983,3.5 z"
+     id="path25"
+     style="stroke-width:1" />
+  <path
+     class="cls-3"
+     d="M12.0446,9.4516A2.2085,2.2085,0,1,1,9.8361,7.2431,2.2085,2.2085,0,0,1,12.0446,9.4516Z"
+     id="path27" />
+  <path
+     id="polyline29"
+     style="fill:none;stroke:#a6a6a6;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="M 2.4749242,2.007 12,2 17,7 v 17"
+     sodipodi:nodetypes="cccc" />
+  <path
+     id="polyline31"
+     style="fill:none;stroke:#cccccc;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+     d="m 8,24 v -5 l 4,-4 h 6 l 6,-6"
+     sodipodi:nodetypes="ccccc" />
 </svg>
