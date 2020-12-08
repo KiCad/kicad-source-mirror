@@ -581,7 +581,7 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
             continue;
 
         m_out->Print( aNestLevel, "(net %d %s)\n",
-                                  m_mapping->Translate( net->GetNet() ),
+                                  m_mapping->Translate( net->GetNetCode() ),
                                   m_out->Quotew( net->GetNetname() ).c_str() );
     }
 

@@ -537,7 +537,7 @@ int PNS_PCBNEW_RULE_RESOLVER::DpCoupledNet( int aNet )
         if( !net )
             return -1;
 
-        return net->GetNet();
+        return net->GetNetCode();
     }
 
     return -1;
@@ -599,8 +599,8 @@ bool PNS_PCBNEW_RULE_RESOLVER::DpNetPair( const PNS::ITEM* aItem, int& aNetP, in
     if( !netInfoP || !netInfoN )
         return false;
 
-    aNetP = netInfoP->GetNet();
-    aNetN = netInfoN->GetNet();
+    aNetP = netInfoP->GetNetCode();
+    aNetN = netInfoN->GetNetCode();
 
     return true;
 }

@@ -293,7 +293,7 @@ void PCB_PAD::AddToFootprint( FOOTPRINT* aFootprint, int aRotation, bool aEncaps
             m_board->Add( netinfo );
         }
 
-        pad->SetNetCode( netinfo->GetNet() );
+        pad->SetNetCode( netinfo->GetNetCode() );
     }
 
     if( !aEncapsulatedPad )

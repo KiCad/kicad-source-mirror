@@ -440,7 +440,7 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
         net = m_Parent->GetBoard()->FindNet( netname );
     }
 
-    m_settings.m_NetcodeSelection = net ? net->GetNet() : 0;
+    m_settings.m_NetcodeSelection = net ? net->GetNetCode() : 0;
 
     m_settings.m_Name = m_tcZoneName->GetValue();
 

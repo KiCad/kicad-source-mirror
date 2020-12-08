@@ -98,7 +98,7 @@ public:
      */
     int GetNetCode() const
     {
-        return m_netinfo ? m_netinfo->GetNet() : -1;
+        return m_netinfo ? m_netinfo->GetNetCode() : -1;
     }
 
     /**

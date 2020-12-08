@@ -245,7 +245,7 @@ void NET_GRID_TABLE::Rebuild()
 
     for( const std::pair<const wxString, NETINFO_ITEM*>& pair : nets )
     {
-        int netCode =  pair.second->GetNet();
+        int netCode = pair.second->GetNetCode();
 
         if( netCode > 0 && !pair.first.StartsWith( "no_connect_" ) )
         {
@@ -2480,9 +2480,9 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
         {
             if( net->GetNetClass() == defaultClass )
             {
-                manager->RunAction( action, true, net->GetNet() );
+                manager->RunAction( action, true, net->GetNetCode() );
 
-                int row = m_netsTable->GetRowByNetcode( net->GetNet() );
+                int row = m_netsTable->GetRowByNetcode( net->GetNetCode() );
 
                 if( row >= 0 )
                     m_netsTable->SetValueAsBool( row, NET_GRID_TABLE::COL_VISIBILITY, aShow );
@@ -2497,7 +2497,7 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
         {
             if( NETINFO_ITEM* net = nets.GetNetItem( member ) )
             {
-                int code = net->GetNet();
+                int code = net->GetNetCode();
                 manager->RunAction( action, true, code );
 
                 int row = m_netsTable->GetRowByNetcode( code );
@@ -2639,7 +2639,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                                 return;
 
                             static bool first = true;
-                            int code = aItem->GetNet();
+                            int code = aItem->GetNetCode();
 
                             if( first )
                             {
@@ -2673,7 +2673,7 @@ void APPEARANCE_CONTROLS::onNetclassContextMenu( wxCommandEvent& aEvent )
                             if( !aItem )
                                 return;
 
-                            int code = aItem->GetNet();
+                            int code = aItem->GetNetCode();
                             m_frame->GetToolManager()->RunAction( action, true, code );
                         } );
             }

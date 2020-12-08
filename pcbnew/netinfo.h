@@ -110,11 +110,7 @@ public:
     {
     }
 
-    /**
-     * Function SetClass
-     * sets \a aNetclass into this NET
-     */
-    void SetClass( const NETCLASSPTR& aNetClass );
+    void SetNetClass( const NETCLASSPTR& aNetClass );
 
     /**
      * Function GetNetClass
@@ -127,21 +123,12 @@ public:
         return m_netClass.get();
     }
 
-    /**
-     * Function GetClassName
-     * returns the class name
-     */
-    wxString GetClassName() const
+    wxString GetNetClassName() const
     {
         return m_netClass ? m_netClass->GetName() : NETCLASS::Default;
     }
 
-    /**
-     * Function GetNet
-     * @return int - the netcode
-     */
-    int GetNet() const { return m_netCode; }
-
+    int GetNetCode() const { return m_netCode; }
     void SetNetCode( int aNetCode ) { m_netCode = aNetCode; }
 
     /**
@@ -172,7 +159,6 @@ public:
     }
 
     bool IsCurrent() const { return m_isCurrent; }
-
     void SetIsCurrent( bool isCurrent ) { m_isCurrent = isCurrent; }
 
     /**
@@ -190,7 +176,7 @@ public:
      */
     void Clear()
     {
-        SetClass( NETCLASSPTR() );
+        SetNetClass( NETCLASSPTR());
     }
 
     BOARD* GetParent() const

@@ -1235,13 +1235,13 @@ int DRC_ENGINE::IsNetADiffPair( BOARD* aBoard, NETINFO_ITEM* aNet, int& aNetP, i
 
         if( polarity > 0 )
         {
-            aNetP = aNet->GetNet();
-            aNetN = net->GetNet();
+            aNetP = aNet->GetNetCode();
+            aNetN = net->GetNetCode();
         }
         else
         {
-            aNetP = net->GetNet();
-            aNetN = aNet->GetNet();
+            aNetP = net->GetNetCode();
+            aNetN = aNet->GetNetCode();
         }
 
         return true;

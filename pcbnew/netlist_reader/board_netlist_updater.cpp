@@ -804,7 +804,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // Mark all nets (except <no net>) as stale; we'll update those to current that
         // we find in the netlist
         for( NETINFO_ITEM* net : m_board->GetNetInfo() )
-            net->SetIsCurrent( net->GetNet() == 0 );
+            net->SetIsCurrent( net->GetNetCode() == 0 );
     }
 
     for( unsigned i = 0; i < aNetlist.GetCount(); i++ )

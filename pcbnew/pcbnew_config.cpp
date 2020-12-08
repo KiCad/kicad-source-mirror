@@ -94,7 +94,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     for( const wxString& hidden : localSettings.m_HiddenNets )
     {
         if( NETINFO_ITEM* net = nets.GetNetItem( hidden ) )
-            hiddenNets.insert( net->GetNet() );
+            hiddenNets.insert( net->GetNetCode() );
     }
 
     std::map<int, KIGFX::COLOR4D>& netColors = rs->GetNetColorMap();
@@ -106,7 +106,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
             continue;
 
         if( NETINFO_ITEM* net = nets.GetNetItem( pair.first ) )
-            netColors[net->GetNet()] = pair.second;
+            netColors[ net->GetNetCode() ] = pair.second;
     }
 
     std::map<wxString, KIGFX::COLOR4D>& netclassColors = rs->GetNetclassColorMap();

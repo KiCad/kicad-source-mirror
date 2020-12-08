@@ -294,7 +294,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
                         key.parentRule = constraint.GetParentRule();
 
-                        if( refNet->GetNet() == key.netN )
+                        if( refNet->GetNetCode() == key.netN )
                             dpRuleMatches[key].itemsN.insert( citem );
                         else
                             dpRuleMatches[key].itemsP.insert( citem );

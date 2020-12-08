@@ -121,7 +121,7 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
     switch( aItem->Type() )
     {
     case PCB_NETINFO_T:
-        MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNet() );
+        MarkNetAsDirty( static_cast<NETINFO_ITEM*>( aItem )->GetNetCode() );
         break;
 
     case PCB_FOOTPRINT_T:

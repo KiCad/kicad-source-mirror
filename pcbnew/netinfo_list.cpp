@@ -129,7 +129,7 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 
     if( sameName != NULL )
     {
-        aNewElement->m_netCode = sameName->GetNet();
+        aNewElement->m_netCode = sameName->GetNetCode();
 
         return;
     }
@@ -142,11 +142,11 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 
     // net names & codes are supposed to be unique
     assert( GetNetItem( aNewElement->GetNetname() ) == NULL );
-    assert( GetNetItem( aNewElement->GetNet() ) == NULL );
+    assert( GetNetItem( aNewElement->GetNetCode() ) == NULL );
 
     // add an entry for fast look up by a net name using a map
     m_netNames.insert( std::make_pair( aNewElement->GetNetname(), aNewElement ) );
-    m_netCodes.insert( std::make_pair( aNewElement->GetNet(), aNewElement ) );
+    m_netCodes.insert( std::make_pair( aNewElement->GetNetCode(), aNewElement ) );
 }
 
 
@@ -171,7 +171,7 @@ void NETINFO_LIST::Show() const
     {
         wxLogDebug( "[%d]: netcode:%d  netname:<%s>\n",
                     i++,
-                    it->second->GetNet(),
+                    it->second->GetNetCode(),
                     TO_UTF8( it->second->GetNetname() ) );
     }
 }

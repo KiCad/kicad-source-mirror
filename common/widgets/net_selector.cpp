@@ -117,7 +117,7 @@ public:
 
         NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( m_selectedNetcode );
 
-        if( netInfo && netInfo->GetNet() > 0 )
+        if( netInfo && netInfo->GetNetCode() > 0 )
             return netInfo->GetNetname();
 
         return NO_NET;
@@ -149,7 +149,7 @@ public:
     void SetSelectedNet( const wxString& aNetname )
     {
         if( m_netinfoList && m_netinfoList->GetNetItem( aNetname ) )
-            m_selectedNetcode = m_netinfoList->GetNetItem( aNetname )->GetNet();
+            m_selectedNetcode = m_netinfoList->GetNetItem( aNetname )->GetNetCode();
     }
 
     wxString GetSelectedNetname()
@@ -235,9 +235,9 @@ public:
 
             rebuildList();
 
-            if( newnet->GetNet() > 0 )
+            if( newnet->GetNetCode() > 0 )
             {
-                m_selectedNetcode = newnet->GetNet();
+                m_selectedNetcode = newnet->GetNetCode();
                 GetComboCtrl()->SetValue( UnescapeString( remainingName ) );
             }
             else
@@ -256,14 +256,14 @@ public:
         {
             NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( escapedNetName );
 
-            if( netInfo == nullptr || netInfo->GetNet() == 0 )
+            if( netInfo == nullptr || netInfo->GetNetCode() == 0 )
             {
                 m_selectedNetcode = 0;
                 GetComboCtrl()->SetValue( NO_NET );
             }
             else
             {
-                m_selectedNetcode = netInfo->GetNet();
+                m_selectedNetcode = netInfo->GetNetCode();
                 GetComboCtrl()->SetValue( UnescapeString( escapedNetName ) );
             }
         }
@@ -315,7 +315,7 @@ protected:
 
         for( NETINFO_ITEM* netinfo : *m_netinfoList )
         {
-            if( netinfo->GetNet() > 0 && netinfo->IsCurrent() )
+            if( netinfo->GetNetCode() > 0 && netinfo->IsCurrent() )
             {
                 wxString netname = UnescapeString( netinfo->GetNetname() );
 

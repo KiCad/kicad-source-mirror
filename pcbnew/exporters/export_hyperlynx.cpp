@@ -578,8 +578,8 @@ bool HYPERLYNX_EXPORTER::writeNets()
 
     for( const auto netInfo : m_board->GetNetInfo() )
     {
-        int netcode = netInfo->GetNet();
-        bool isNullNet = netInfo->GetNet() <= 0 || netInfo->GetNetname().IsEmpty();
+        int netcode = netInfo->GetNetCode();
+        bool isNullNet = netInfo->GetNetCode() <= 0 || netInfo->GetNetname().IsEmpty();
 
         if( isNullNet )
             continue;

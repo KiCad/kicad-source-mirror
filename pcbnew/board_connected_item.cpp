@@ -68,7 +68,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetEffectiveNetclass() const
 {
     // NB: we must check the net first, as when it is 0 GetNetClass() will return the
     // orphaned net netclass, not the default netclass.
-    if( !m_netinfo || m_netinfo->GetNet() == 0 )
+    if( !m_netinfo || m_netinfo->GetNetCode() == 0 )
         return GetBoard()->GetDesignSettings().GetDefault();
     else
         return GetNetClass();
@@ -116,7 +116,7 @@ NETCLASS* BOARD_CONNECTED_ITEM::GetNetClass() const
 wxString BOARD_CONNECTED_ITEM::GetNetClassName() const
 {
     if( m_netinfo )
-        return m_netinfo->GetClassName();
+        return m_netinfo->GetNetClassName();
     else
         return wxEmptyString;
 }

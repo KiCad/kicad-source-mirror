@@ -1299,8 +1299,8 @@ static std::vector<int> padCountListByNet;
 // For same pad count, sort by alphabetic names
 static bool sortNetsByNodes( const NETINFO_ITEM* a, const NETINFO_ITEM* b )
 {
-    int countA = padCountListByNet[a->GetNet()];
-    int countB = padCountListByNet[b->GetNet()];
+    int countA = padCountListByNet[ a->GetNetCode() ];
+    int countB = padCountListByNet[ b->GetNetCode() ];
 
     if( countA == countB )
         return a->GetNetname() < b->GetNetname();
@@ -1329,7 +1329,7 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
 
     for( NETINFO_ITEM* net : m_NetInfo )
     {
-        int netcode = net->GetNet();
+        int netcode = net->GetNetCode();
 
         if( netcode > 0 && net->IsCurrent() )
         {
@@ -1404,7 +1404,7 @@ void BOARD::SynchronizeNetsAndNetClasses()
         const wxString& netname = net->GetNetname();
         const wxString& netclassName = netSettings->GetNetclassName( netname );
 
-        net->SetClass( netClasses.Find( netclassName ) );
+        net->SetNetClass( netClasses.Find( netclassName ) );
     }
 
     BOARD_DESIGN_SETTINGS& bds = GetDesignSettings();
@@ -1441,7 +1441,7 @@ int BOARD::SetAreasNetCodesFromNetNames()
 
             if( net )
             {
-                zone->SetNetCode( net->GetNet() );
+                zone->SetNetCode( net->GetNetCode() );
             }
             else
             {

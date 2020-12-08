@@ -729,8 +729,8 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
     if( !event.Dragging() &&
         ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY ) )
     {
-        STATUSBAR_REPORTER activityReporter(
-                m_parentStatusBar, static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
+        STATUSBAR_REPORTER reporter( m_parentStatusBar,
+                                     static_cast<int>( EDA_3D_VIEWER_STATUSBAR::STATUS_TEXT ) );
 
         RAY mouseRay = getRayAtCurrrentMousePosition();
 
@@ -754,10 +754,10 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
                     if( pad && pad->IsOnCopperLayer() )
                     {
-                        activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
-                                                                   pad->GetNet()->GetNetname(),
-                                                                   pad->GetNet()->GetClassName(),
-                                                                   pad->GetName() ) );
+                        reporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
+                                                           pad->GetNet()->GetNetname(),
+                                                           pad->GetNet()->GetNetClassName(),
+                                                           pad->GetName() ) );
                     }
                 }
                 break;
@@ -767,7 +767,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
                     FOOTPRINT* footprint = dynamic_cast<FOOTPRINT *>( intersectedBoardItem );
 
                     if( footprint )
-                        activityReporter.Report( footprint->GetReference() );
+                        reporter.Report( footprint->GetReference() );
                 }
                 break;
 
@@ -779,9 +779,9 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
                     if( track )
                     {
-                        activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                                   track->GetNet()->GetNetname(),
-                                                                   track->GetNet()->GetClassName() ) );
+                        reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                           track->GetNet()->GetNetname(),
+                                                           track->GetNet()->GetNetClassName() ) );
                     }
                 }
                 break;
@@ -792,9 +792,9 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
                     if( zone && zone->IsOnCopperLayer() )
                     {
-                        activityReporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                                   zone->GetNet()->GetNetname(),
-                                                                   zone->GetNet()->GetClassName() ) );
+                        reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                           zone->GetNet()->GetNetname(),
+                                                           zone->GetNet()->GetNetClassName() ) );
                     }
                 }
                 break;
@@ -811,7 +811,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
                 m_3d_render_ogl_legacy->SetCurrentIntersectedBoardItem( nullptr );
                 Request_refresh();
 
-                activityReporter.Report( "" );
+                reporter.Report( "" );
             }
 
             m_currentIntersectedBoardItem = nullptr;

@@ -2794,14 +2794,14 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
         if( mNetClassMap.find( csNet.RouteCodeID ) != mNetClassMap.end() )
         {
             NETCLASSPTR netclass = mNetClassMap.at( csNet.RouteCodeID );
-            netInfo->SetClass( netclass );
+            netInfo->SetNetClass( netclass );
         }
         else
         {
             ROUTECODE   rc = getRouteCode( csNet.RouteCodeID );
             NETCLASSPTR netclass( new ::NETCLASS( rc.Name ) );
             netclass->SetTrackWidth( getKiCadLength( rc.OptimalWidth ) );
-            netInfo->SetClass( netclass );
+            netInfo->SetNetClass( netclass );
             mNetClassMap.insert( { csNet.RouteCodeID, netclass } );
         }
 

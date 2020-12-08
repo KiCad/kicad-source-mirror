@@ -2048,7 +2048,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
         {
             // net 0 should be already in list, so store this net
             // if it is not the net 0, or if the net 0 does not exists.
-            if( net && ( net->GetNet() > 0 || m_board->FindNet( 0 ) == NULL ) )
+            if( net && ( net->GetNetCode() > 0 || m_board->FindNet( 0 ) == NULL ) )
             {
                 m_board->Add( net );
 
@@ -2056,7 +2056,7 @@ void LEGACY_PLUGIN::loadNETINFO_ITEM()
                 if( (int)m_netCodes.size() <= netCode )
                     m_netCodes.resize( netCode+1 );
 
-                m_netCodes[netCode] = net->GetNet();
+                m_netCodes[netCode] = net->GetNetCode();
                 net = NULL;
             }
             else

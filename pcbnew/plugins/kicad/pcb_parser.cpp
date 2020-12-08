@@ -2015,7 +2015,7 @@ void PCB_PARSER::parseNETINFO_ITEM()
         m_board->Add( net );
 
         // Store the new code mapping
-        pushValueIntoMap( netCode, net->GetNet() );
+        pushValueIntoMap( netCode, net->GetNetCode() );
     }
 }
 
@@ -4914,7 +4914,9 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         NETINFO_ITEM* net = m_board->FindNet( netnameFromfile );
 
         if( net )   // An existing net has the same net name. use it for the zone
-            zone->SetNetCode( net->GetNet() );
+        {
+            zone->SetNetCode( net->GetNetCode() );
+        }
         else    // Not existing net: add a new net to keep trace of the zone netname
         {
             int newnetcode = m_board->GetNetCount();
@@ -4922,9 +4924,9 @@ ZONE* PCB_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
             m_board->Add( net );
 
             // Store the new code mapping
-            pushValueIntoMap( newnetcode, net->GetNet() );
+            pushValueIntoMap( newnetcode, net->GetNetCode() );
             // and update the zone netcode
-            zone->SetNetCode( net->GetNet() );
+            zone->SetNetCode( net->GetNetCode() );
         }
     }
 

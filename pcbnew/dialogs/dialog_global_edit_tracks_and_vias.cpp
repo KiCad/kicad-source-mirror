@@ -229,7 +229,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
     if( g_filterByNetclass && m_netclassFilter->SetStringSelection( g_netclassFilter ) )
         m_netclassFilterOpt->SetValue( true );
     else if( item )
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetClassName() );
+        m_netclassFilter->SetStringSelection( item->GetNet()->GetNetClassName() );
 
     if( g_filterByNet && m_brd->FindNet( g_netFilter ) != NULL )
     {
@@ -237,7 +237,9 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
         m_netFilterOpt->SetValue( true );
     }
     else if( item )
+    {
         m_netFilter->SetSelectedNetcode( item->GetNetCode() );
+    }
 
     if( g_filterByLayer && m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
         m_layerFilterOpt->SetValue( true );

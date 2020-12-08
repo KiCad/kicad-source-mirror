@@ -104,7 +104,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
 
     if( net )   // net == NULL should not occur
-        aZone->SetNetCode( net->GetNet() );
+        aZone->SetNetCode( net->GetNetCode() );
 
     // Combine zones if possible
     GetBoard()->OnAreaPolygonModified( &s_AuxiliaryList, aZone );

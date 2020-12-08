@@ -129,7 +129,7 @@ public:
 
     int GetNetCode() const
     {
-        return GetIsGroup() ? ( 0 - int( m_group_number ) - 1 ) : m_net->GetNet();
+        return GetIsGroup() ? ( 0 - int( m_group_number ) - 1 ) : m_net->GetNetCode();
     }
 
     const wxString& GetNetName() const { return m_net_name; }
@@ -336,7 +336,7 @@ public:
     OPT<LIST_ITEM_ITER> findItem( NETINFO_ITEM* aNet )
     {
         if( aNet != nullptr )
-            return findItem( aNet->GetNet() );
+            return findItem( aNet->GetNetCode() );
         else
             return {};
     }
@@ -1090,7 +1090,7 @@ void DIALOG_NET_INSPECTOR::updateDisplayedRowValues( const OPT<LIST_ITEM_ITER>& 
 
 wxString DIALOG_NET_INSPECTOR::formatNetCode( const NETINFO_ITEM* aNet ) const
 {
-    return wxString::Format( "%.3d", aNet->GetNet() );
+    return wxString::Format( "%.3d", aNet->GetNetCode() );
 }
 
 
@@ -1124,7 +1124,7 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
             std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( net );
 
             // the new net could have some pads already assigned, count them.
-            new_item->SetPadCount( m_brd->GetNodesCount( net->GetNet() ) );
+            new_item->SetPadCount( m_brd->GetNodesCount( net->GetNetCode() ) );
 
             m_data_model->addItem( std::move( new_item ) );
         }
@@ -1328,7 +1328,7 @@ void DIALOG_NET_INSPECTOR::updateNet( NETINFO_ITEM* aNet )
 
     OPT<LIST_ITEM_ITER> cur_net_row = m_data_model->findItem( aNet );
 
-    const unsigned int node_count = m_brd->GetNodesCount( aNet->GetNet() );
+    const unsigned int node_count = m_brd->GetNodesCount( aNet->GetNetCode() );
 
     if( node_count == 0 && !m_cbShowZeroPad->IsChecked() )
     {
@@ -1414,7 +1414,7 @@ std::unique_ptr<DIALOG_NET_INSPECTOR::LIST_ITEM> DIALOG_NET_INSPECTOR::buildNewI
 
     new_item->SetPadCount( aPadCount );
 
-    const auto cn_items = std::equal_range( aCNItems.begin(), aCNItems.end(), aNet->GetNet(),
+    const auto cn_items = std::equal_range( aCNItems.begin(), aCNItems.end(), aNet->GetNetCode(),
                                             NETCODE_CMP_LESS() );
 
     for( auto i = cn_items.first; i != cn_items.second; ++i )

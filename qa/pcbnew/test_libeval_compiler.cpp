@@ -158,8 +158,8 @@ BOOST_AUTO_TEST_CASE( IntrospectedProperties )
     auto net1info = new NETINFO_ITEM( &brd, "net1", 1);
     auto net2info = new NETINFO_ITEM( &brd, "net2", 2);
 
-    net1info->SetClass( netclass1 );
-    net2info->SetClass( netclass2 );
+    net1info->SetNetClass( netclass1 );
+    net2info->SetNetClass( netclass2 );
 
     TRACK trackA(&brd);
     TRACK trackB(&brd);

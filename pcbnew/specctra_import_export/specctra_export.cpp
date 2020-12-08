@@ -1328,7 +1328,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         for( unsigned ii = 0; ii < aBoard->GetNetCount(); ii++ )
         {
             NETINFO_ITEM*   net     = aBoard->FindNet( ii );
-            int             netcode = net->GetNet();
+            int             netcode = net->GetNetCode();
 
             if( netcode > 0 )
                 m_nets[ netcode ]->net_id = TO_UTF8( net->GetNetname() );

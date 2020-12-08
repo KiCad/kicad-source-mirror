@@ -61,7 +61,7 @@ NETINFO_ITEM::~NETINFO_ITEM()
 }
 
 
-void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
+void NETINFO_ITEM::SetNetClass( const NETCLASSPTR& aNetClass )
 {
     wxCHECK( m_parent, /* void */ );
     m_netClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().GetNetClasses().GetDefault();
@@ -74,7 +74,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
 
     aList.emplace_back( _( "Net Name" ), UnescapeString( GetNetname() ) );
 
-    aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", GetNet() ) );
+    aList.emplace_back( _( "Net Code" ), wxString::Format( "%d", GetNetCode() ) );
 
     // Warning: for netcode == NETINFO_LIST::ORPHANED, the parent or the board can be NULL
     BOARD * board = m_parent ? m_parent->GetBoard() : NULL;
@@ -89,7 +89,7 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
         {
             for( PAD* pad : footprint->Pads() )
             {
-                if( pad->GetNetCode() == GetNet() )
+                if( pad->GetNetCode() == GetNetCode() )
                 {
                     count++;
                     lengthPadToDie += pad->GetPadToDieLength();
@@ -105,13 +105,13 @@ void NETINFO_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANE
         {
             if( track->Type() == PCB_VIA_T )
             {
-                if( track->GetNetCode() == GetNet() )
+                if( track->GetNetCode() == GetNetCode() )
                     count++;
             }
 
             if( track->Type() == PCB_TRACE_T )
             {
-                if( track->GetNetCode() == GetNet() )
+                if( track->GetNetCode() == GetNetCode() )
                     lengthNet += track->GetLength();
             }
         }

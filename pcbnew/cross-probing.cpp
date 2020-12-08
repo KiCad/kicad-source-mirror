@@ -97,7 +97,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         if( netinfo )
         {
-            netcode = netinfo->GetNet();
+            netcode = netinfo->GetNetCode();
 
             MSG_PANEL_ITEMS items;
             netinfo->GetMsgPanelInfo( this, items );
@@ -126,14 +126,14 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
                     SetMsgPanel( items );
                     first = false;
 
-                    pcb->SetHighLightNet( netinfo->GetNet() );
-                    renderSettings->SetHighlight( true, netinfo->GetNet() );
+                    pcb->SetHighLightNet( netinfo->GetNetCode() );
+                    renderSettings->SetHighlight( true, netinfo->GetNetCode() );
                     multiHighlight = true;
                 }
                 else
                 {
-                    pcb->SetHighLightNet( netinfo->GetNet(), true );
-                    renderSettings->SetHighlight( true, netinfo->GetNet(), true );
+                    pcb->SetHighLightNet( netinfo->GetNetCode(), true );
+                    renderSettings->SetHighlight( true, netinfo->GetNetCode(), true );
                 }
             }
         }

@@ -91,7 +91,7 @@ void CONNECTIVITY_DATA::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
 
     for( NETINFO_ITEM* net : aBoard->GetNetInfo() )
         if( net->GetNetClass()->GetName() != NETCLASS::Default )
-            m_netclassMap[net->GetNet()] = net->GetNetClass()->GetName();
+            m_netclassMap[ net->GetNetCode() ] = net->GetNetClass()->GetName();
 
     RecalculateRatsnest();
 }
@@ -108,7 +108,10 @@ void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
 
 void CONNECTIVITY_DATA::Move( const VECTOR2I& aDelta )
 {
-    m_connAlgo->ForEachAnchor( [&aDelta] ( CN_ANCHOR& anchor ) { anchor.Move( aDelta ); } );
+    m_connAlgo->ForEachAnchor( [&aDelta]( CN_ANCHOR& anchor )
+                               {
+                                   anchor.Move( aDelta );
+                               } );
 }
 
 

@@ -416,7 +416,9 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
             NETINFO_ITEM* netinfo = aBoard->FindNet( netName );
 
             if( netinfo )
-                netoutCode = netinfo->GetNet();
+            {
+                netoutCode = netinfo->GetNetCode();
+            }
             else  // else netCode remains 0
             {
                 // int breakhere = 1;
@@ -468,7 +470,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
                 NETINFO_ITEM* netvia = aBoard->FindNet( netName );
 
                 if( netvia )
-                    netCode = netvia->GetNet();
+                    netCode = netvia->GetNetCode();
 
                 // else netCode remains 0
             }

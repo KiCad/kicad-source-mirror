@@ -890,7 +890,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
             msg.Printf( "NoConnection%d", NbNoConn++ );
         }
 
-        if( net->GetNet() <= 0 )  // dummy netlist (no connection)
+        if( net->GetNetCode() <= 0 )  // dummy netlist (no connection)
             continue;
 
         msg = wxT( "SIGNAL \"" ) + escapeString( net->GetNetname() ) + "\"";
@@ -902,7 +902,7 @@ static void CreateSignalsSection( FILE* aFile, BOARD* aPcb )
         {
             for( PAD* pad : footprint->Pads() )
             {
-                if( pad->GetNetCode() != net->GetNet() )
+                if( pad->GetNetCode() != net->GetNetCode() )
                     continue;
 
                 msg.Printf( wxT( "NODE \"%s\" \"%s\"" ),
