@@ -41,6 +41,7 @@ static const ENV_VAR::ENV_VAR_LIST predefinedEnvVars = {
     "KICAD6_TEMPLATE_DIR",
     "KICAD_USER_TEMPLATE_DIR",
     "KICAD_PTEMPLATES",
+    "KICAD6_3RD_PARTY",
 };
 
 
@@ -78,6 +79,9 @@ static void initialiseEnvVarHelp( STRING_MAP& aMap )
     aMap["KICAD_USER_TEMPLATE_DIR"] =
         _( "Optional. Can be defined if you want to create your own project "
            "templates folder.");
+    aMap["KICAD6_3RD_PARTY"] =
+        _( "A directory containing 3rd party plugins, libraries and other "
+           "downloadable content.");
     aMap["KIPRJMOD"] =
         _("Internally defined by KiCad (cannot be edited) and is set "
           "to the absolute path of the currently loaded project file.  This environment "

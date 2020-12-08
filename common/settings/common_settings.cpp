@@ -522,6 +522,8 @@ void COMMON_SETTINGS::InitializeEnvironment()
 
     addVar( wxT( "KICAD_USER_TEMPLATE_DIR" ), PATHS::GetUserTemplatesPath() );
 
+    addVar( wxT( "KICAD6_3RD_PARTY" ), PATHS::GetDefault3rdPartyPath() );
+
     path = basePath;
     path.AppendDir( wxT( "library" ) );
     addVar( wxT( "KICAD6_SYMBOL_DIR" ), path.GetFullPath() );

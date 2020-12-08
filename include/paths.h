@@ -82,6 +82,11 @@ public:
     static wxString GetStockEDALibraryPath();
 
     /**
+     * Gets the default path for PCM packages
+     */
+    static wxString GetDefault3rdPartyPath();
+
+    /**
      * Gets the stock (install) scripting path
      */
     static wxString GetStockScriptingPath();

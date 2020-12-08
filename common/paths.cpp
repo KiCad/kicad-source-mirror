@@ -126,6 +126,15 @@ wxString PATHS::GetDefaultUser3DModelsPath()
     return tmp.GetPath();
 }
 
+wxString PATHS::GetDefault3rdPartyPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( "3rdparty" );
+
+    return tmp.GetPath();
+}
 
 wxString PATHS::GetDefaultUserProjectsPath()
 {
@@ -309,6 +318,7 @@ void PATHS::EnsureUserPathsExist()
     EnsurePathExists( GetDefaultUserSymbolsPath() );
     EnsurePathExists( GetDefaultUserFootprintsPath() );
     EnsurePathExists( GetDefaultUser3DModelsPath() );
+    EnsurePathExists( GetDefault3rdPartyPath() );
 }
 
 
