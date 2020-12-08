@@ -33,13 +33,13 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	m_staticText4 = new wxStaticText( bOptions->GetStaticBox(), wxID_ANY, _("Mouse drag behavior:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxString m_dragToolModeChoices[] = { _("Move item"), _("Interactive drag") };
 	int m_dragToolModeNChoices = sizeof( m_dragToolModeChoices ) / sizeof( wxString );
 	m_dragToolMode = new wxChoice( bOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_dragToolModeNChoices, m_dragToolModeChoices, 0 );
 	m_dragToolMode->SetSelection( 0 );
-	fgSizer1->Add( m_dragToolMode, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_dragToolMode, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bOptions->Add( fgSizer1, 1, wxEXPAND, 5 );
@@ -84,7 +84,7 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bOptions->Add( m_suggestEnding, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_optimizeDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptions->Add( m_optimizeDraggedTrack, 0, wxALL, 5 );
+	bOptions->Add( m_optimizeDraggedTrack, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bEffort;
 	bEffort = new wxBoxSizer( wxHORIZONTAL );
@@ -96,13 +96,15 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bEffort->Add( m_effortLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 20 );
 
 
-	bEffort->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bEffort->Add( 5, 0, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSlider;
 	bSlider = new wxBoxSizer( wxVERTICAL );
 
 	m_effort = new wxSlider( bOptions->GetStaticBox(), wxID_ANY, 1, 0, 2, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_BOTTOM|wxSL_HORIZONTAL|wxSL_TOP );
-	bSlider->Add( m_effort, 1, wxEXPAND, 5 );
+	m_effort->SetMinSize( wxSize( -1,28 ) );
+
+	bSlider->Add( m_effort, 1, wxEXPAND|wxTOP, 5 );
 
 	wxBoxSizer* bSliderLabels;
 	bSliderLabels = new wxBoxSizer( wxHORIZONTAL );
@@ -126,10 +128,10 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSlider->Add( bSliderLabels, 0, wxEXPAND|wxBOTTOM, 5 );
 
 
-	bEffort->Add( bSlider, 1, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
+	bEffort->Add( bSlider, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bOptions->Add( bEffort, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
+	bOptions->Add( bEffort, 0, wxEXPAND|wxALL, 5 );
 
 
 	bMainSizer->Add( bOptions, 1, wxEXPAND|wxALL, 5 );
