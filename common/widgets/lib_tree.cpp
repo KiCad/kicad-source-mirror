@@ -110,12 +110,6 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
 
-    if( m_query_ctrl )
-    {
-        m_query_ctrl->Bind( wxEVT_SET_FOCUS, &LIB_TREE::onFocus, this );
-        m_query_ctrl->Bind( wxEVT_KILL_FOCUS, &LIB_TREE::onKillFocus, this );
-    }
-
     Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
 
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
