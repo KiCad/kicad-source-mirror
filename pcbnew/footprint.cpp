@@ -94,13 +94,16 @@ FOOTPRINT::FOOTPRINT( const FOOTPRINT& aFootprint ) :
     m_thermalWidth = aFootprint.m_thermalWidth;
     m_thermalGap = aFootprint.m_thermalGap;
 
+    std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
+
     // Copy reference and value.
     m_reference = new FP_TEXT( *aFootprint.m_reference );
     m_reference->SetParent( this );
+    ptrMap[ aFootprint.m_reference ] = m_reference;
+
     m_value = new FP_TEXT( *aFootprint.m_value );
     m_value->SetParent( this );
-
-    std::map<BOARD_ITEM*, BOARD_ITEM*> ptrMap;
+    ptrMap[ aFootprint.m_value ] = m_value;
 
     // Copy pads
     for( PAD* pad : aFootprint.Pads() )

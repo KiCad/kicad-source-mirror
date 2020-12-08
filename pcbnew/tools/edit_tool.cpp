@@ -1396,6 +1396,14 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
             {
                 if( bItem->GetParent() && bItem->GetParent()->Type() == PCB_FOOTPRINT_T )
                 {
+                    // Silently ignore delete of Reference or Value if they happen to be in
+                    // group.
+                    if( bItem->Type() == PCB_FP_TEXT_T )
+                    {
+                        if( static_cast<FP_TEXT*>( bItem )->GetType() != FP_TEXT::TEXT_is_DIVERS )
+                            return;
+                    }
+
                     m_commit->Modify( bItem->GetParent() );
                     getView()->Remove( bItem );
                     bItem->GetParent()->Remove( bItem );
