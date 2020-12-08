@@ -675,10 +675,10 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 
             if( via->GetViaType() == VIATYPE::MICROVIA )
             {
-                NETINFO_ITEM* net = via->GetNet();
+                NETCLASS* netClass = via->GetNetClass();
 
-                new_width = net->GetMicroViaSize();
-                new_drill = net->GetMicroViaDrillSize();
+                new_width = netClass->GetuViaDiameter();
+                new_drill = netClass->GetuViaDrill();
             }
             else
             {

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -135,83 +135,6 @@ public:
     {
         return m_netClass ? m_netClass->GetName() : NETCLASS::Default;
     }
-
-#if 1
-
-    /**
-     * Function GetTrackWidth
-     * returns the width of tracks used to route this net.
-     */
-    int GetTrackWidth()
-    {
-        wxASSERT( m_netClass );
-        return m_netClass->GetTrackWidth();
-    }
-
-    /**
-     * Function GetViaSize
-     * returns the size of vias used to route this net
-     */
-    int GetViaSize()
-    {
-        wxASSERT( m_netClass );
-        return m_netClass->GetViaDiameter();
-    }
-
-    /**
-     * Function GetMicroViaSize
-     * returns the size of vias used to route this net
-     */
-    int GetMicroViaSize()
-    {
-        wxASSERT( m_netClass );
-        return m_netClass->GetuViaDiameter();
-    }
-
-    /**
-     * Function GetViaDrillSize
-     * returns the size of via drills used to route this net
-     */
-    int GetViaDrillSize()
-    {
-        wxASSERT( m_netClass );
-        return m_netClass->GetViaDrill();
-    }
-
-    /**
-     * Function GetViaDrillSize
-     * returns the size of via drills used to route this net
-     */
-    int GetMicroViaDrillSize()
-    {
-        wxASSERT( m_netClass );
-        return m_netClass->GetuViaDrill();
-    }
-
-
-#if 0
-
-    /**
-     * Function GetViaMinSize
-     * returns the Minimum value for via sizes (used in DRC)
-     */
-    int GetViaMinSize()
-    {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetViaMinSize();
-    }
-
-#endif
-
-    /**
-     * Function GetClearance
-     */
-    int GetClearance()
-    {
-        return m_netClass ? m_netClass->GetClearance() : 0;
-    }
-
-#endif
 
     /**
      * Function GetNet

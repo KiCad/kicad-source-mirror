@@ -24,7 +24,6 @@
 
 #include <pcb_edit_frame.h>
 #include <pcbnew_id.h>
-#include <board_design_settings.h>
 #include <track.h>
 #include <tools/pcb_actions.h>
 #include <tool/tool_manager.h>
@@ -33,19 +32,15 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,
                                            bool               aUseNetclassValue )
 {
-    int           initial_width;
-    int           new_width;
-    int           initial_drill = -1;
-    int           new_drill = -1;
-    NETINFO_ITEM* net = NULL;
-
-    if( aUseNetclassValue )
-        net = aTrackItem->GetNet();
+    int initial_width;
+    int new_width;
+    int initial_drill = -1;
+    int new_drill = -1;
 
     initial_width = aTrackItem->GetWidth();
 
-    if( net )
-        new_width = net->GetTrackWidth();
+    if( aUseNetclassValue )
+        new_width = aTrackItem->GetNetClass()->GetTrackWidth();
     else
         new_width = GetDesignSettings().GetCurrentTrackWidth();
 
@@ -53,37 +48,18 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     {
         const VIA *via = static_cast<const VIA *>( aTrackItem );
 
-        // Micro vias have a size only defined in their netclass
-        // (no specific values defined by a table of specific value)
-        // Ensure the netclass is accessible:
-        if( via->GetViaType() == VIATYPE::MICROVIA && net == NULL )
-            net = aTrackItem->GetNet();
-
-        // Get the draill value, regardless it is default or specific
+        // Get the drill value, regardless it is default or specific
         initial_drill = via->GetDrillValue();
 
-        if( net )
+        if( aUseNetclassValue || via->GetViaType() == VIATYPE::MICROVIA )
         {
-            new_width = net->GetViaSize();
-            new_drill = net->GetViaDrillSize();
+            new_width = aTrackItem->GetNetClass()->GetViaDiameter();
+            new_drill = aTrackItem->GetNetClass()->GetViaDrill();
         }
         else
         {
             new_width = GetDesignSettings().GetCurrentViaSize();
             new_drill = GetDesignSettings().GetCurrentViaDrill();
-        }
-
-        if( via->GetViaType() == VIATYPE::MICROVIA )
-        {
-            if( net )
-            {
-                new_width = net->GetMicroViaSize();
-                new_drill = net->GetMicroViaDrillSize();
-            }
-            else
-            {
-                // Should not occur
-            }
         }
 
         // Old versions set a drill value <= 0, when the default netclass it used
@@ -112,6 +88,7 @@ void PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
             {
                 // Set new drill value. Note: currently microvias have only a default drill value
                 VIA *via = static_cast<VIA *>( aTrackItem );
+
                 if( new_drill > 0 )
                     via->SetDrill( new_drill );
                 else
