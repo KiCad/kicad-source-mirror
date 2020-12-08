@@ -154,18 +154,6 @@ LIB_TREE::~LIB_TREE()
 }
 
 
-void LIB_TREE::onFocus( wxFocusEvent& aEvent )
-{
-    m_label = "OnFOCUS";
-}
-
-
-void LIB_TREE::onKillFocus( wxFocusEvent& aEvent )
-{
-    m_label = "OnKILLFOCUS";
-}
-
-
 LIB_ID LIB_TREE::GetSelectedLibId( int* aUnit ) const
 {
     auto sel = m_tree_ctrl->GetSelection();

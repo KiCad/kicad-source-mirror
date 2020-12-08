@@ -155,9 +155,6 @@ protected:
      */
     void setState( const STATE& aState );
 
-    void onFocus( wxFocusEvent& aEvent );
-    void onKillFocus( wxFocusEvent& aEvent );
-
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryEnter( wxCommandEvent& aEvent );
     void onQueryCharHook( wxKeyEvent& aEvent );
