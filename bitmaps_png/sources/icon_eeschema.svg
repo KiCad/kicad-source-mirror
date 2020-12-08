@@ -32,12 +32,12 @@
      id="namedview44"
      showgrid="true"
      inkscape:zoom="11.313709"
-     inkscape:cx="33.45918"
-     inkscape:cy="50.720553"
+     inkscape:cx="15.385373"
+     inkscape:cy="43.074835"
      inkscape:window-x="299"
      inkscape:window-y="334"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
+     inkscape:current-layer="g903"
      inkscape:snap-global="true">
     <inkscape:grid
        type="xygrid"
@@ -103,12 +103,12 @@
        style="fill:#e5d7c7;fill-opacity:1;stroke:none;stroke-width:1;stroke-opacity:1" />
     <line
        class="cls-2"
-       x1="23.5"
+       x1="23"
        y1="10.112628"
-       x2="23.5"
+       x2="23"
        y2="26.852335"
        id="line11"
-       style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
     <line
        class="cls-3"
        x1="17.28804"
@@ -144,7 +144,7 @@
        x2="11.960479"
        y2="34.5"
        id="line21"
-       style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
     <line
        class="cls-2"
        x1="15.539998"
@@ -152,15 +152,15 @@
        x2="15.539998"
        y2="40.775616"
        id="line23"
-       style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none" />
     <line
        class="cls-5"
-       x1="22.604219"
-       y1="19.5"
-       x2="33.013058"
-       y2="19.5"
+       x1="22"
+       y1="19"
+       x2="32.408836"
+       y2="19"
        id="line25"
-       style="stroke-width:0.999999;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none" />
     <line
        class="cls-4"
        x1="23.5"
@@ -168,29 +168,29 @@
        x2="23.5"
        y2="41.997341"
        id="line27"
-       style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
     <path
        class="cls-6"
-       d="M 25.26,19.379899 A 1.8799999,1.8799999 0 1 1 23.380202,17.5 1.8799999,1.8799999 0 0 1 25.26,19.379899 Z"
+       d="M 24.76,18.879899 A 1.8799999,1.8799999 0 1 1 22.880202,17 1.8799999,1.8799999 0 0 1 24.76,18.879899 Z"
        id="path29"
        style="stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none" />
     <rect
        class="cls-7"
-       x="20.239998"
+       x="20"
        y="0.49999997"
-       width="5.6399994"
+       width="6"
        height="10.339999"
        id="rect31"
        style="fill:#db295b;fill-opacity:1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none"
        ry="0.46999997" />
     <path
        id="line35"
-       style="fill:none;stroke:#333333;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 23.5,27 -7.960001,4.519998"
+       style="fill:none;stroke:#333333;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 23,27 -7.460001,4.519998"
        sodipodi:nodetypes="cc" />
     <path
        id="line37"
-       style="fill:none;stroke:#333333;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;stroke:#333333;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        d="M 22.191062,41.099911 15.539999,37.159998"
        sodipodi:nodetypes="cc" />
     <line
@@ -200,7 +200,7 @@
        x2="14.900987"
        y2="34.5"
        id="line41"
-       style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
     <path
        sodipodi:type="star"
        style="fill:#db295b;fill-opacity:1;stroke:#db295b;stroke-width:0.11046;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -217,25 +217,25 @@
        inkscape:randomized="0"
        d="m 11.438044,14.360697 c 0.08769,0 1.797742,2.961888 1.753894,3.037834 -0.04385,0.07595 -3.4639417,0.07595 -3.507789,0 -0.043847,-0.07595 1.6662,-3.037834 1.753895,-3.037834 z"
        inkscape:transform-center-y="-0.73247214"
-       transform="matrix(-1.1273119,1.9525616,-1.2592262,-0.72701458,54.893911,30.185269)"
+       transform="matrix(-1.1273119,1.9525616,-1.2592262,-0.72701458,55.477608,30.606951)"
        inkscape:transform-center-x="0.34991295" />
     <line
        class="cls-4"
        x1="46.559998"
-       y1="19.5"
+       y1="19"
        x2="37.16"
-       y2="19.5"
+       y2="19"
        id="line879"
-       style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
     <rect
        class="cls-7"
-       x="16.48"
-       y="-40.919998"
-       width="5.6399994"
-       height="11.279999"
+       x="16"
+       y="-42"
+       width="6"
+       height="12"
        transform="rotate(90)"
        id="rect33"
        style="fill:#db295b;fill-opacity:1;stroke-width:1"
-       ry="0.46999997" />
+       ry="0.5" />
   </g>
 </svg>
