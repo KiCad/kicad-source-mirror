@@ -104,7 +104,7 @@ public:
      */
     void RefreshLibTree();
 
-    void SetFocus() override;
+    wxWindow* GetFocusTarget();
 
 protected:
     /**
@@ -154,6 +154,9 @@ protected:
      * Restores the component tree widget state from an object.
      */
     void setState( const STATE& aState );
+
+    void onFocus( wxFocusEvent& aEvent );
+    void onKillFocus( wxFocusEvent& aEvent );
 
     void onQueryText( wxCommandEvent& aEvent );
     void onQueryEnter( wxCommandEvent& aEvent );

@@ -158,15 +158,17 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
                                       horizPixelsFromDU( 220 ) );
 
         if( m_vsplitter )
+        {
             m_vsplitter->SetSashPosition( panelCfg.sash_pos_v > 0 ? panelCfg.sash_pos_v :
                                           vertPixelsFromDU( 230 ) );
+        }
 
         wxSize dlgSize( panelCfg.width > 0 ? panelCfg.width : horizPixelsFromDU( 390 ),
                         panelCfg.height > 0 ? panelCfg.height : vertPixelsFromDU( 300 ) );
         SetSize( dlgSize );
     }
 
-    SetInitialFocus( m_tree );
+    SetInitialFocus( m_tree->GetFocusTarget() );
     okButton->SetDefault();
 
     Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
@@ -175,17 +177,23 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
 
     if( m_browser_button )
+    {
         m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
                                 &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
+    }
 
     if( m_fp_sel_ctrl )
+    {
         m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
                              &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
+    }
 
     if( m_details )
+    {
         m_details->Connect( wxEVT_CHAR_HOOK,
                             wxKeyEventHandler( DIALOG_CHOOSE_COMPONENT::OnCharHook ),
                             NULL, this );
+    }
 }
 
 

@@ -110,6 +110,12 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
 
+    if( m_query_ctrl )
+    {
+        m_query_ctrl->Bind( wxEVT_SET_FOCUS, &LIB_TREE::onFocus, this );
+        m_query_ctrl->Bind( wxEVT_KILL_FOCUS, &LIB_TREE::onKillFocus, this );
+    }
+
     Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
 
     // If wxTextCtrl::SetHint() is called before binding wxEVT_TEXT, the event
@@ -145,6 +151,18 @@ LIB_TREE::~LIB_TREE()
     m_adapter->SaveColWidths();
 
     m_adapter->SavePinnedItems();
+}
+
+
+void LIB_TREE::onFocus( wxFocusEvent& aEvent )
+{
+    m_label = "OnFOCUS";
+}
+
+
+void LIB_TREE::onKillFocus( wxFocusEvent& aEvent )
+{
+    m_label = "OnKILLFOCUS";
 }
 
 
@@ -224,12 +242,12 @@ void LIB_TREE::RefreshLibTree()
 }
 
 
-void LIB_TREE::SetFocus()
+wxWindow* LIB_TREE::GetFocusTarget()
 {
     if( m_query_ctrl )
-        m_query_ctrl->SetFocus();
+        return m_query_ctrl;
     else
-        m_tree_ctrl->SetFocus();
+        return m_tree_ctrl;
 }
 
 

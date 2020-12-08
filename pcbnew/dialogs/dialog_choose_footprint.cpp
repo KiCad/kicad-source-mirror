@@ -134,7 +134,7 @@ DIALOG_CHOOSE_FOOTPRINT::DIALOG_CHOOSE_FOOTPRINT( PCB_BASE_FRAME* aParent,
             horizPixelsFromDU( 340 ) : cfg->m_FootprintChooser.height;
     SetSize( wxSize( w, h ) );
 
-    SetInitialFocus( m_tree );
+    SetInitialFocus( m_tree->GetFocusTarget() );
     okButton->SetDefault();
 }
 
