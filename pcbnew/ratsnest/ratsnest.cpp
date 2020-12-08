@@ -41,19 +41,9 @@
 void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
 {
     GetBoard()->GetConnectivity()->RecalculateRatsnest();
-    ClearMsgPanel();
 
     if( aDisplayStatus )
     {
-        std::shared_ptr<CONNECTIVITY_DATA> conn = m_pcb->GetConnectivity();
-        wxString                           msg;
-
-        msg.Printf( wxT( " %d" ), conn->GetPadCount() );
-        AppendMsgPanel( _( "Pads" ), msg );
-
-        msg.Printf( wxT( " %d" ), conn->GetNetCount() - 1 /* Don't include "No Net" in count */ );
-        AppendMsgPanel( _( "Nets" ), msg );
-
         SetMsgPanel( m_pcb );
     }
 }
