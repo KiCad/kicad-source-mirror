@@ -247,7 +247,7 @@ void NET_GRID_TABLE::Rebuild()
     {
         int netCode =  pair.second->GetNet();
 
-        if( netCode > 0 )
+        if( netCode > 0 && !pair.first.StartsWith( "no_connect_" ) )
         {
             COLOR4D color = netColors.count( netCode ) ? netColors.at( netCode ) :
                             COLOR4D::UNSPECIFIED;
