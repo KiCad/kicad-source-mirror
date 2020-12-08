@@ -40,18 +40,18 @@
 /*********************************************************/
 
 NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCode ) :
-    BOARD_ITEM( aParent, PCB_NETINFO_T ),
-    m_NetCode( aNetCode ),
-    m_isCurrent( true ),
-    m_Netname( aNetName ),
-    m_ShortNetname( m_Netname.AfterLast( '/' ) )
+        BOARD_ITEM( aParent, PCB_NETINFO_T ),
+        m_netCode( aNetCode ),
+        m_isCurrent( true ),
+        m_netname( aNetName ),
+        m_shortNetname( m_netname.AfterLast( '/' ) )
 {
     m_parent = aParent;
 
     if( aParent )
-        m_NetClass = aParent->GetDesignSettings().GetNetClasses().GetDefault();
+        m_netClass = aParent->GetDesignSettings().GetNetClasses().GetDefault();
     else
-        m_NetClass = std::make_shared<NETCLASS>( "<invalid>" );
+        m_netClass = std::make_shared<NETCLASS>( "<invalid>" );
 }
 
 
@@ -64,7 +64,7 @@ NETINFO_ITEM::~NETINFO_ITEM()
 void NETINFO_ITEM::SetClass( const NETCLASSPTR& aNetClass )
 {
     wxCHECK( m_parent, /* void */ );
-    m_NetClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().GetNetClasses().GetDefault();
+    m_netClass = aNetClass ? aNetClass : m_parent->GetDesignSettings().GetNetClasses().GetDefault();
 }
 
 

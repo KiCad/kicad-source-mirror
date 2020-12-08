@@ -30,7 +30,8 @@
 
 
 // Constructor and destructor
-NETINFO_LIST::NETINFO_LIST( BOARD* aParent ) : m_Parent( aParent )
+NETINFO_LIST::NETINFO_LIST( BOARD* aParent ) :
+        m_parent( aParent )
 {
     // Make sure that the unconnected net has number 0
     AppendNet( new NETINFO_ITEM( aParent, wxEmptyString, 0 ) );
@@ -99,7 +100,7 @@ void NETINFO_LIST::RemoveNet( NETINFO_ITEM* aNet )
         }
     }
 
-    m_newNetCode = std::min( m_newNetCode, aNet->m_NetCode - 1 );
+    m_newNetCode = std::min( m_newNetCode, aNet->m_netCode - 1 );
 }
 
 
@@ -128,15 +129,15 @@ void NETINFO_LIST::AppendNet( NETINFO_ITEM* aNewElement )
 
     if( sameName != NULL )
     {
-        aNewElement->m_NetCode = sameName->GetNet();
+        aNewElement->m_netCode = sameName->GetNet();
 
         return;
     }
     // be sure that net codes are consecutive
     // negative net code means that it has to be auto assigned
-    else if( ( aNewElement->m_NetCode != (int) m_netCodes.size() ) || ( aNewElement->m_NetCode < 0 ) )
+    else if( aNewElement->m_netCode != (int) m_netCodes.size() || aNewElement->m_netCode < 0 )
     {
-        aNewElement->m_NetCode = getFreeNetCode();
+        aNewElement->m_netCode = getFreeNetCode();
     }
 
     // net names & codes are supposed to be unique
@@ -155,8 +156,8 @@ void NETINFO_LIST::buildListOfNets()
     for( NETINFO_ITEM* net : *this )
         net->Clear();
 
-    m_Parent->SynchronizeNetsAndNetClasses( );
-    m_Parent->SetAreasNetCodesFromNetNames();
+    m_parent->SynchronizeNetsAndNetClasses( );
+    m_parent->SetAreasNetCodesFromNetNames();
 }
 
 

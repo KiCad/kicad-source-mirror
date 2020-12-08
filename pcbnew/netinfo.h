@@ -67,20 +67,17 @@ class NETINFO_ITEM : public BOARD_ITEM
     friend class NETINFO_LIST;
 
 private:
-    int m_NetCode;              ///< A number equivalent to the net name.
-                                ///< Used for fast comparisons in ratsnest and DRC computations.
+    int         m_netCode;         ///< A number equivalent to the net name.
+    wxString    m_netname;         ///< Full net name like /sheet/subsheet/vout used by Eeschema.
+    wxString    m_shortNetname;    ///< short net name, like vout from /sheet/subsheet/vout.
 
-    bool m_isCurrent;           ///< Indicates the net is currently in use.  We still store those
-                                ///< that are not during a session for undo/redo and to keep
-                                ///< netclass membership information.
+    NETCLASSPTR m_netClass;
 
-    wxString m_Netname;         ///< Full net name like /mysheet/mysubsheet/vout used by Eeschema
+    bool        m_isCurrent;       ///< Indicates the net is currently in use.  We still store
+                                   ///< those that are not during a session for undo/redo and to
+                                   ///< keep netclass membership information.
 
-    wxString m_ShortNetname;    ///< short net name, like vout from /mysheet/mysubsheet/vout
-
-    NETCLASSPTR m_NetClass;
-
-    BOARD*  m_parent;           ///< The parent board the net belongs to.
+    BOARD*      m_parent;          ///< The parent board the net belongs to.
 
 public:
 
@@ -127,7 +124,7 @@ public:
      */
     NETCLASS* GetNetClass()
     {
-        return m_NetClass.get();
+        return m_netClass.get();
     }
 
     /**
@@ -136,7 +133,7 @@ public:
      */
     wxString GetClassName() const
     {
-        return m_NetClass ? m_NetClass->GetName() : NETCLASS::Default;
+        return m_netClass ? m_netClass->GetName() : NETCLASS::Default;
     }
 
 #if 1
@@ -147,8 +144,8 @@ public:
      */
     int GetTrackWidth()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetTrackWidth();
+        wxASSERT( m_netClass );
+        return m_netClass->GetTrackWidth();
     }
 
     /**
@@ -157,8 +154,8 @@ public:
      */
     int GetViaSize()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetViaDiameter();
+        wxASSERT( m_netClass );
+        return m_netClass->GetViaDiameter();
     }
 
     /**
@@ -167,8 +164,8 @@ public:
      */
     int GetMicroViaSize()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetuViaDiameter();
+        wxASSERT( m_netClass );
+        return m_netClass->GetuViaDiameter();
     }
 
     /**
@@ -177,8 +174,8 @@ public:
      */
     int GetViaDrillSize()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetViaDrill();
+        wxASSERT( m_netClass );
+        return m_netClass->GetViaDrill();
     }
 
     /**
@@ -187,8 +184,8 @@ public:
      */
     int GetMicroViaDrillSize()
     {
-        wxASSERT( m_NetClass );
-        return m_NetClass->GetuViaDrill();
+        wxASSERT( m_netClass );
+        return m_netClass->GetuViaDrill();
     }
 
 
@@ -211,7 +208,7 @@ public:
      */
     int GetClearance()
     {
-        return m_NetClass ? m_NetClass->GetClearance() : 0;
+        return m_netClass ? m_netClass->GetClearance() : 0;
     }
 
 #endif
@@ -220,21 +217,21 @@ public:
      * Function GetNet
      * @return int - the netcode
      */
-    int GetNet() const { return m_NetCode; }
+    int GetNet() const { return m_netCode; }
 
-    void SetNetCode( int aNetCode ) { m_NetCode = aNetCode; }
+    void SetNetCode( int aNetCode ) { m_netCode = aNetCode; }
 
     /**
      * Function GetNetname
      * @return const wxString&, a reference to the full netname
      */
-    const wxString& GetNetname() const { return m_Netname; }
+    const wxString& GetNetname() const { return m_netname; }
 
     /**
      * Function GetShortNetname
      * @return const wxString &, a reference to the short netname
      */
-    const wxString& GetShortNetname() const { return m_ShortNetname; }
+    const wxString& GetShortNetname() const { return m_shortNetname; }
 
     /**
      * Function SetNetname
@@ -243,12 +240,12 @@ public:
      */
     void SetNetname( const wxString& aNewName )
     {
-        m_Netname = aNewName;
+        m_netname = aNewName;
 
         if( aNewName.Contains( "/" ) )
-            m_ShortNetname = aNewName.AfterLast( '/' );
+            m_shortNetname = aNewName.AfterLast( '/' );
         else
-            m_ShortNetname = aNewName;
+            m_shortNetname = aNewName;
     }
 
     bool IsCurrent() const { return m_isCurrent; }
@@ -358,7 +355,7 @@ public:
 
     private:
         std::map<int, int>::const_iterator m_iterator;
-        const NETINFO_MAPPING* m_mapping;
+        const NETINFO_MAPPING*             m_mapping;
     };
 
     /**
@@ -393,11 +390,9 @@ public:
     }
 
 private:
-    ///> Board for which mapping is prepared
-    const BOARD* m_board;
-
-    ///> Map that allows saving net codes with consecutive numbers (for compatibility reasons)
-    std::map<int, int> m_netMapping;
+    const BOARD*       m_board;         ///> Board for which mapping is prepared
+    std::map<int, int> m_netMapping;    ///> Map that allows saving net codes with consecutive
+                                        ///> numbers (for compatibility reasons)
 };
 
 
@@ -559,7 +554,7 @@ public:
 
     BOARD* GetParent() const
     {
-        return m_Parent;
+        return m_parent;
     }
 
 private:
@@ -582,12 +577,13 @@ private:
      */
     int getFreeNetCode();
 
-    BOARD* m_Parent;
+private:
+    BOARD*       m_parent;
 
     NETNAMES_MAP m_netNames;        ///< map of <wxString, NETINFO_ITEM*>, is NETINFO_ITEM owner
     NETCODES_MAP m_netCodes;        ///< map of <int, NETINFO_ITEM*> is NOT owner
 
-    int m_newNetCode;               ///< possible value for new net code assignment
+    int          m_newNetCode;      ///< possible value for new net code assignment
 };
 
 #endif  // CLASS_NETINFO_
