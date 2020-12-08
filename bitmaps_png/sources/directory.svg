@@ -25,14 +25,18 @@
      inkscape:window-width="2004"
      inkscape:window-height="1466"
      id="namedview10167"
-     showgrid="false"
+     showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="13"
      inkscape:cy="13"
-     inkscape:window-x="1488"
-     inkscape:window-y="127"
+     inkscape:window-x="138"
+     inkscape:window-y="69"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid10730" />
+  </sodipodi:namedview>
   <metadata
      id="metadata43">
     <rdf:RDF>

@@ -9,12 +9,10 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 16 16"
+   viewBox="0 0 26 26"
    version="1.1"
-   sodipodi:docname="folder.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   width="16"
-   height="16">
+   sodipodi:docname="directory_open.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -28,13 +26,15 @@
      inkscape:window-height="1603"
      id="namedview9483"
      showgrid="true"
-     inkscape:zoom="39.543587"
-     inkscape:cx="12.550317"
-     inkscape:cy="10.76419"
-     inkscape:window-x="442"
-     inkscape:window-y="200"
+     inkscape:zoom="19.771794"
+     inkscape:cx="15.314849"
+     inkscape:cy="28.285144"
+     inkscape:window-x="505"
+     inkscape:window-y="157"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0"
+     inkscape:snap-global="true">
     <inkscape:grid
        type="xygrid"
        id="grid10046" />
@@ -77,20 +77,19 @@
      id="title9474">folder</title>
   <path
      class="cls-1"
-     d="M 12.7094,16 H 3.1030667 c -1.3456,0 -2.4364,-1.0908 -2.4364,-1.769733 V 2 C 0.6666667,0.5969333 1.2636,0 2,0 H 5.1840667 C 5.7462432,8.0477183e-6 6.3021047,0.11851762 6.8154,0.3478 L 9,1.4795414 C 9.3421899,1.6323932 10.070889,1.9999915 10.445666,2 H 14 c 0.735305,-1.469e-4 1.331329,0.5958947 1.331466,1.3312 l 0.0019,10.044867 C 15.333602,14.825225 14.158558,16 12.7094,16 Z"
+     d="M 19.090047,25 5.9665158,25 C 2.3289756,25 1.0259535,21.953637 1.0259535,20.935237 L 1.0259535,4 c 0,-2.1046 0.8954,-3 2,-3 h 4.7761 c 0.8432626,1.3e-5 1.6770525,0.1777773 2.4469935,0.5217 l 3.8169,1.705 c 0.513285,0.2292778 1.069135,0.3477873 1.6313,0.3478 h 5.3315 c 1.102958,-2.209e-4 1.9972,0.8938416 1.9972,1.9968 v 15.4928 c 0,2.173738 -1.762162,3.9359 -3.9359,3.9359 z"
      id="path9476"
-     style="stroke-width:0.999996"
      sodipodi:nodetypes="ssssscccccsss" />
   <path
      class="cls-2"
-     d="M 2.3800272,3 H 13.586227 c 0.589104,-6e-7 1.08664,1.1596141 1.08664,2.9304774 v 0.02005 H 1.3333333 v -0.02005 C 1.3333333,4.1596144 1.7909235,3 2.3800272,3 Z"
+     d="M 4.5221125,5.4995207 H 20.513135 c 0.840639,0 1.522112,-0.049551 1.522112,5.3299453 v 0.03331 H 3 v -0.03331 C 3,5.5072538 3.6814732,5.4995207 4.5221125,5.4995207 Z"
      id="path9478"
-     style="stroke-width:0.999996"
-     sodipodi:nodetypes="scsccss" />
+     style="stroke-width:0.999999"
+     sodipodi:nodetypes="sssccss" />
   <path
      class="cls-3"
-     d="M 1.3333333,5 H 14.666667 C 15.403047,5.0000002 16,5.5969538 16,6.3333333 V 13.333333 C 16,14.806093 14.806093,16 13.333333,16 H 2.6666667 C 1.1939072,16 0,14.806092 0,13.333333 V 6.3333333 C 0,5.5969537 0.59695365,5 1.3333333,5 Z"
+     d="M 3.9862554,10 H 23.012218 c 1.104569,0 2,0.745033 2,1.664078 v 10.34045 c 0,1.83809 -1.790861,2.995472 -4,2.995472 H 5.9862554 c -2.2091389,0 -4,-0.939036 -4,-2.985581 V 11.664078 c 0,-0.919571 0.8954306,-1.664078 2,-1.664078 z"
      id="path9480"
-     style="stroke-width:0.999996"
-     sodipodi:nodetypes="scsssssss" />
+     style="stroke-width:1"
+     sodipodi:nodetypes="sssssssss" />
 </svg>

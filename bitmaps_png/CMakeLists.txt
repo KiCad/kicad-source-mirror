@@ -195,6 +195,8 @@ set( BMAPS_MID
     delete
     directory
     directory_browser
+    directory_close
+    directory_open
     distribute_horizontal
     distribute_vertical
     down
