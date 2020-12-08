@@ -685,14 +685,14 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         default:          THROW_IO_ERROR( wxT( "CANCEL" ) );
         }
 
-        auto visitItem = [&]( BOARD_ITEM* item )
+        auto visitItem = [&]( BOARD_ITEM* curr_item )
                             {
-                                if( item->GetLayer() == Rescue )
+                                if( curr_item->GetLayer() == Rescue )
                                 {
                                     if( deleteItems )
-                                        deleteList.push_back( item );
+                                        deleteList.push_back( curr_item );
                                     else
-                                        item->SetLayer( Cmts_User );
+                                        curr_item->SetLayer( Cmts_User );
                                 }
                             };
 
@@ -734,8 +734,8 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         for( BOARD_ITEM* drawing : m_board->Drawings() )
             visitItem( drawing );
 
-        for( BOARD_ITEM* item : deleteList )
-            m_board->Delete( item );
+        for( BOARD_ITEM* curr_item : deleteList )
+            m_board->Delete( curr_item );
 
         m_undefinedLayers.clear();
     }

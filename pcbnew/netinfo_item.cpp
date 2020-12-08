@@ -42,9 +42,9 @@
 NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCode ) :
         BOARD_ITEM( aParent, PCB_NETINFO_T ),
         m_netCode( aNetCode ),
-        m_isCurrent( true ),
         m_netname( aNetName ),
-        m_shortNetname( m_netname.AfterLast( '/' ) )
+        m_shortNetname( m_netname.AfterLast( '/' ) ),
+        m_isCurrent( true )
 {
     m_parent = aParent;
 
