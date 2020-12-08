@@ -156,7 +156,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         else
         {
             OnNewPageLayout();
-            msg.Printf( _( "File \"%s\" loaded" ), filename );
+            msg.Printf( _( "File \"%s\" saved." ), filename );
             SetStatusText( msg );
         }
     }
@@ -170,7 +170,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         }
         else
         {
-            msg.Printf( _("File \"%s\" written"), filename );
+            msg.Printf( _("File \"%s\" saved."), filename );
             SetStatusText( msg );
         }
         break;
@@ -201,7 +201,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         else
         {
-            msg.Printf( _("File \"%s\" written"), filename );
+            msg.Printf( _("File \"%s\" saved."), filename );
             SetStatusText( msg );
 
             if( GetCurrentFileName().IsEmpty() )

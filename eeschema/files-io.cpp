@@ -182,7 +182,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SHEET* aSheet, bool aSaveUnderNewName )
         screen->ClrSave();
         screen->ClrModify();
 
-        msg.Printf( _( "File %s saved" ),  screen->GetFileName() );
+        msg.Printf( _( "File \"%s\" saved." ),  screen->GetFileName() );
         SetStatusText( msg, 0 );
     }
     else

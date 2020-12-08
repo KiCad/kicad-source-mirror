@@ -914,7 +914,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     if( autoSaveFileName.FileExists() )
         wxRemoveFile( autoSaveFileName.GetFullPath() );
 
-    lowerTxt.Printf( _( "Wrote board file: \"%s\"" ), pcbFileName.GetFullPath() );
+    lowerTxt.Printf( _( "File \"%s\" saved." ), pcbFileName.GetFullPath() );
 
     SetStatusText( lowerTxt, 0 );
 
