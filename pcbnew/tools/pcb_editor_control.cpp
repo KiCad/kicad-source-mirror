@@ -927,7 +927,8 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
         {
             fp->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
             selection().SetReferencePoint( cursorPos );
-            getView()->Update( & selection()  );
+            getView()->Update( &selection() );
+            getView()->Update( fp );
         }
         else if( fp && evt->IsAction( &PCB_ACTIONS::properties ) )
         {
