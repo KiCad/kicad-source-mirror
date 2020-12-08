@@ -121,12 +121,6 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 }
 
 
-void SCH_VIEW::DisplaySheet( SCH_SHEET* aSheet )
-{
-    DisplaySheet( aSheet->GetScreen() );
-}
-
-
 void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
 {
     Clear();
@@ -138,7 +132,7 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
     LIB_PART* drawnPart = aPart;
 
     // Draw the mandatory fields for aliases and parent symbols.
-    for( auto& item : aPart->GetDrawItems() )
+    for( LIB_ITEM& item : aPart->GetDrawItems() )
     {
         if( item.Type() != LIB_FIELD_T )
             continue;
@@ -163,7 +157,7 @@ void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
         drawnPart = parent.get();
     }
 
-    for( auto& item : drawnPart->GetDrawItems() )
+    for( LIB_ITEM& item : drawnPart->GetDrawItems() )
     {
         // Don't show parent symbol fields.  Users may be confused by shown fields that can not
         // be edited.

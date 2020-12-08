@@ -79,7 +79,6 @@ public:
 
     void Cleanup();
 
-    void DisplaySheet( SCH_SHEET* aSheet );
     void DisplaySheet( SCH_SCREEN* aScreen );
     void DisplayComponent( LIB_PART* aPart );
 
