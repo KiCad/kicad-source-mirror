@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,6 +67,8 @@ DIALOG_LIB_NEW_COMPONENT_BASE::DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, 
 	bSizer17->Add( m_checkIsPowerSymbol, 0, wxALL, 5 );
 
 	m_checkLockItems = new wxCheckBox( this, wxID_ANY, _("Units are not interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkLockItems->SetToolTip( _("Check this option to allow symbols with multiple units to have different\nelements.  Uncheck this option when all symbol units are identical except\nfor pin numbers.") );
+
 	bSizer17->Add( m_checkLockItems, 0, wxALL, 5 );
 
 

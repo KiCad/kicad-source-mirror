@@ -14,6 +14,7 @@
         <property name="file">dialog_edit_component_in_lib_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_EDIT_COMPONENT_IN_LIBRARY_FBP</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -45,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE</property>
             <property name="pos"></property>
-            <property name="size">855,579</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Library Symbol Properties</property>
@@ -128,7 +130,7 @@
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">General</property>
-                                    <property name="select">1</property>
+                                    <property name="select">0</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -308,6 +310,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -340,7 +343,7 @@
                                                                     <property name="maximum_size"></property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
-                                                                    <property name="minimum_size">30,29</property>
+                                                                    <property name="minimum_size">-1,-1</property>
                                                                     <property name="moveable">1</property>
                                                                     <property name="name">m_bpAdd</property>
                                                                     <property name="pane_border">1</property>
@@ -381,6 +384,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -413,7 +417,7 @@
                                                                     <property name="maximum_size"></property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
-                                                                    <property name="minimum_size">30,29</property>
+                                                                    <property name="minimum_size">-1,-1</property>
                                                                     <property name="moveable">1</property>
                                                                     <property name="name">m_bpMoveUp</property>
                                                                     <property name="pane_border">1</property>
@@ -454,6 +458,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -486,7 +491,7 @@
                                                                     <property name="maximum_size"></property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
-                                                                    <property name="minimum_size">30,29</property>
+                                                                    <property name="minimum_size">-1,-1</property>
                                                                     <property name="moveable">1</property>
                                                                     <property name="name">m_bpMoveDown</property>
                                                                     <property name="pane_border">1</property>
@@ -537,6 +542,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -569,7 +575,7 @@
                                                                     <property name="maximum_size"></property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
-                                                                    <property name="minimum_size">30,29</property>
+                                                                    <property name="minimum_size">-1,-1</property>
                                                                     <property name="moveable">1</property>
                                                                     <property name="name">m_bpDelete</property>
                                                                     <property name="pane_border">1</property>
@@ -628,7 +634,7 @@
                                                             <property name="vgap">3</property>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -1353,7 +1359,7 @@
                                                                             <property name="style"></property>
                                                                             <property name="subclass"></property>
                                                                             <property name="toolbar_pane">0</property>
-                                                                            <property name="tooltip">Check this option when creating multiple unit symbols and all units are not interchangeable</property>
+                                                                            <property name="tooltip">Check this option to allow symbols with multiple units to have different&#x0A;elements.  Uncheck this option when all symbol units are identical except&#x0A;for pin numbers.</property>
                                                                             <property name="validator_data_type"></property>
                                                                             <property name="validator_style">wxFILTER_NONE</property>
                                                                             <property name="validator_type">wxDefaultValidator</property>
@@ -1809,7 +1815,7 @@
                                 <object class="notebookpage" expanded="1">
                                     <property name="bitmap"></property>
                                     <property name="label">Aliases</property>
-                                    <property name="select">0</property>
+                                    <property name="select">1</property>
                                     <object class="wxPanel" expanded="1">
                                         <property name="BottomDockable">1</property>
                                         <property name="LeftDockable">1</property>
@@ -2022,6 +2028,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2054,7 +2061,7 @@
                                                                     <property name="maximum_size"></property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
-                                                                    <property name="minimum_size">30,29</property>
+                                                                    <property name="minimum_size">-1,-1</property>
                                                                     <property name="moveable">1</property>
                                                                     <property name="name">m_addAliasButton</property>
                                                                     <property name="pane_border">1</property>
@@ -2105,6 +2112,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -2137,7 +2145,7 @@
                                                                     <property name="maximum_size"></property>
                                                                     <property name="min_size"></property>
                                                                     <property name="minimize_button">0</property>
-                                                                    <property name="minimum_size">30,29</property>
+                                                                    <property name="minimum_size">-1,-1</property>
                                                                     <property name="moveable">1</property>
                                                                     <property name="name">m_deleteAliasButton</property>
                                                                     <property name="pane_border">1</property>
@@ -2955,6 +2963,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -3000,7 +3009,7 @@
                                                                     <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
                                                                     <property name="show">1</property>
-                                                                    <property name="size">30,30</property>
+                                                                    <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
@@ -3028,6 +3037,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -3073,7 +3083,7 @@
                                                                     <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
                                                                     <property name="show">1</property>
-                                                                    <property name="size">30,30</property>
+                                                                    <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
@@ -3111,6 +3121,7 @@
                                                                     <property name="aui_name"></property>
                                                                     <property name="aui_position"></property>
                                                                     <property name="aui_row"></property>
+                                                                    <property name="auth_needed">0</property>
                                                                     <property name="best_size"></property>
                                                                     <property name="bg"></property>
                                                                     <property name="bitmap"></property>
@@ -3156,7 +3167,7 @@
                                                                     <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
                                                                     <property name="show">1</property>
-                                                                    <property name="size">30,30</property>
+                                                                    <property name="size">-1,-1</property>
                                                                     <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
@@ -3214,6 +3225,7 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
+                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>

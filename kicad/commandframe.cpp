@@ -130,7 +130,7 @@ void LAUNCHER_PANEL::AddButton( wxWindowID aId, const wxBitmap& aBitmap, const w
 
     m_width += buttSize.x + BUTTON_SEPARATION;
 
-    auto btn = new wxBitmapButton( this, aId, aBitmap, wxDefaultPosition, buttSize );
+    auto btn = new wxBitmapButton( this, aId, aBitmap, wxDefaultPosition, wxDefaultSize );
 
     btn->SetToolTip( aToolTip );
 

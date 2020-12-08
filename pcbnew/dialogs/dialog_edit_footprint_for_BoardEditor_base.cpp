@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 10 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -83,20 +83,16 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
-
 	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
 
 
 	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
-
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerTexts->Add( bButtonSize, 0, wxEXPAND, 5 );
+	sbSizerTexts->Add( bButtonSize, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_PanelPropertiesBoxSizer->Add( sbSizerTexts, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -448,21 +444,15 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	bSizer3DButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_buttonAdd->SetMinSize( wxSize( 30,29 ) );
-
-	bSizer3DButtons->Add( m_buttonAdd, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer3DButtons->Add( m_buttonAdd, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_buttonBrowse->SetMinSize( wxSize( 30,29 ) );
-
 	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_buttonRemove->SetMinSize( wxSize( 30,29 ) );
-
 	bSizer3DButtons->Add( m_buttonRemove, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
@@ -502,16 +492,16 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_libraryIDLabel->Wrap( -1 );
 	m_libraryIDLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxBOTTOM|wxRIGHT|wxLEFT, 3 );
+	fgSizerSymbolRef->Add( m_libraryIDLabel, 0, wxLEFT|wxRIGHT, 3 );
 
 	m_staticLibraryID = new wxStaticText( this, wxID_ANY, _("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticLibraryID->Wrap( -1 );
 	m_staticLibraryID->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	fgSizerSymbolRef->Add( m_staticLibraryID, 0, wxBOTTOM, 3 );
+	fgSizerSymbolRef->Add( m_staticLibraryID, 0, 0, 3 );
 
 
-	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bSizerButtons->Add( fgSizerSymbolRef, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
 
 	m_sdbSizerStdButtons = new wxStdDialogButtonSizer();
 	m_sdbSizerStdButtonsOK = new wxButton( this, wxID_OK );

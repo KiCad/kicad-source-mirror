@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_CONFIGURE_PATHS_BASE_H__
-#define __DIALOG_CONFIGURE_PATHS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -20,10 +19,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -38,7 +37,7 @@ class WX_GRID;
 class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		WX_GRID* m_EnvVars;
 		wxBitmapButton* m_btnAddEnvVar;
@@ -53,7 +52,7 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
 		wxButton* m_sdbSizerHelp;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnGridCellChange( wxGridEvent& event ) { event.Skip(); }
@@ -66,13 +65,12 @@ class DIALOG_CONFIGURE_PATHS_BASE : public DIALOG_SHIM
 		virtual void OnSearchPathMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteSearchPath( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Paths"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Paths"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_CONFIGURE_PATHS_BASE();
-	
+
 };
 
-#endif //__DIALOG_CONFIGURE_PATHS_BASE_H__

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/wx_grid.h"
@@ -14,19 +14,19 @@
 DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
-	
+
 	wxBoxSizer* top_sizer;
 	top_sizer = new wxBoxSizer( wxVERTICAL );
-	
+
 	m_grid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	
+
 	// Grid
 	m_grid->CreateGrid( 5, 10 );
 	m_grid->EnableEditing( true );
 	m_grid->EnableGridLines( true );
 	m_grid->EnableDragGridSize( false );
 	m_grid->SetMargins( 0, 0 );
-	
+
 	// Columns
 	m_grid->SetColSize( 0, 66 );
 	m_grid->SetColSize( 1, 84 );
@@ -51,78 +51,72 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::DIALOG_LIB_EDIT_PIN_TABLE_BASE( wxWindow* parent
 	m_grid->SetColLabelValue( 7, _("Length") );
 	m_grid->SetColLabelValue( 8, _("X Position") );
 	m_grid->SetColLabelValue( 9, _("Y Position") );
-	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
+	m_grid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
 	// Rows
 	m_grid->EnableDragRowSize( false );
 	m_grid->SetRowLabelSize( 0 );
-	m_grid->SetRowLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
-	
+	m_grid->SetRowLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
+
 	// Label Appearance
-	
+
 	// Cell Defaults
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( 720,240 ) );
-	
+
 	top_sizer->Add( m_grid, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
-	
+
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
-	
-	m_addButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_addButton->SetMinSize( wxSize( 30,29 ) );
-	
+
+	m_addButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer2->Add( m_addButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-	
-	
+
+
 	bSizer2->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-	
-	m_deleteButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_deleteButton->SetMinSize( wxSize( 30,29 ) );
-	
+
+	m_deleteButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer2->Add( m_deleteButton, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 10 );
-	
+
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer2->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
-	
+
 	m_cbGroup = new wxCheckBox( this, wxID_ANY, _("Group by name"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer2->Add( m_cbGroup, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
-	
-	m_refreshButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_refreshButton->SetMinSize( wxSize( 30,29 ) );
-	
+
+	m_refreshButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	bSizer2->Add( m_refreshButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 10 );
-	
+
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizer2->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
-	
+
 	m_staticText1 = new wxStaticText( this, wxID_ANY, _("Pin numbers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
 	bSizer2->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxALL, 10 );
-	
+
 	m_summary = new wxStaticText( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_summary->Wrap( -1 );
 	bSizer2->Add( m_summary, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	
+
 	m_Buttons = new wxStdDialogButtonSizer();
 	m_ButtonsOK = new wxButton( this, wxID_OK );
 	m_Buttons->AddButton( m_ButtonsOK );
 	m_ButtonsCancel = new wxButton( this, wxID_CANCEL );
 	m_Buttons->AddButton( m_ButtonsCancel );
 	m_Buttons->Realize();
-	
+
 	bSizer2->Add( m_Buttons, 0, wxEXPAND, 5 );
-	
-	
+
+
 	top_sizer->Add( bSizer2, 0, wxEXPAND|wxLEFT, 5 );
-	
-	
+
+
 	this->SetSizer( top_sizer );
 	this->Layout();
 	top_sizer->Fit( this );
-	
+
 	this->Centre( wxBOTH );
-	
+
 	// Connect Events
 	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnClose ) );
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnUpdateUI ) );
@@ -147,5 +141,5 @@ DIALOG_LIB_EDIT_PIN_TABLE_BASE::~DIALOG_LIB_EDIT_PIN_TABLE_BASE()
 	m_cbGroup->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
 	m_refreshButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnRebuildRows ), NULL, this );
 	m_ButtonsCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_LIB_EDIT_PIN_TABLE_BASE::OnCancel ), NULL, this );
-	
+
 }

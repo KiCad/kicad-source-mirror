@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bLeftSizer->Add( m_lbPlugins, 1, wxEXPAND, 5 );
 
 
-	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
+	bUpperSizer->Add( bLeftSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bRightSizer;
 	bRightSizer = new wxBoxSizer( wxVERTICAL );
@@ -56,7 +56,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bRightSizer->Add( m_Messages, 1, wxEXPAND|wxLEFT, 5 );
 
 
-	bUpperSizer->Add( bRightSizer, 2, wxEXPAND|wxRIGHT|wxTOP, 10 );
+	bUpperSizer->Add( bRightSizer, 2, wxEXPAND|wxRIGHT|wxTOP, 5 );
 
 
 	bMainSizer->Add( bUpperSizer, 2, wxEXPAND|wxALL, 5 );
@@ -64,13 +64,13 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	wxBoxSizer* bPluginButtons;
 	bPluginButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonAddPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_buttonAddPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonAddPlugin->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 	m_buttonAddPlugin->SetToolTip( _("Add a new plugin and its command line to the list") );
 
 	bPluginButtons->Add( m_buttonAddPlugin, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_buttonEdit = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_buttonEdit = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonEdit->SetToolTip( _("Edit the plugin file in the text editor") );
 
 	bPluginButtons->Add( m_buttonEdit, 0, wxRIGHT, 5 );
@@ -78,13 +78,13 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	bPluginButtons->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_buttonDelPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_buttonDelPlugin = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonDelPlugin->SetToolTip( _("Remove the current plugin from list") );
 
 	bPluginButtons->Add( m_buttonDelPlugin, 0, wxRIGHT, 5 );
 
 
-	bMainSizer->Add( bPluginButtons, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( bPluginButtons, 0, wxALL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bbottomSizer;
 	bbottomSizer = new wxBoxSizer( wxVERTICAL );
@@ -105,7 +105,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 	bbottomSizer->Add( m_checkBoxShowConsole, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
-	bMainSizer->Add( bbottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( bbottomSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bMainSizer->Add( m_staticline2, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -124,6 +124,7 @@ DIALOG_BOM_BASE::DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -133,22 +133,22 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_append_button->SetToolTip( _("Add empty row to table") );
 
 	bSizer51->Add( m_append_button, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_browse_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_browse_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_browse_button->SetToolTip( _("Add existing library to table") );
 
 	bSizer51->Add( m_browse_button, 0, wxRIGHT, 5 );
 
-	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_up_button->SetToolTip( _("Move up") );
 
 	bSizer51->Add( m_move_up_button, 0, wxRIGHT, 5 );
 
-	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_move_down_button->SetToolTip( _("Move down") );
 
 	bSizer51->Add( m_move_down_button, 0, wxRIGHT, 5 );
@@ -156,13 +156,13 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	bSizer51->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_delete_button->SetToolTip( _("Remove library from table") );
 
 	bSizer51->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	m_top_sizer->Add( bSizer51, 0, 0, 8 );
+	m_top_sizer->Add( bSizer51, 0, wxBOTTOM, 5 );
 
 
 	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
@@ -207,6 +207,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 
 	this->SetSizer( bSizer1 );
 	this->Layout();
+	bSizer1->Fit( this );
 
 	// Connect Events
 	m_auinotebook->Connect( wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler( PANEL_SYM_LIB_TABLE_BASE::pageChangedHandler ), NULL, this );

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -59,29 +59,24 @@ PANEL_PCBNEW_ACTION_PLUGINS_BASE::PANEL_PCBNEW_ACTION_PLUGINS_BASE( wxWindow* pa
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_moveUpButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_moveUpButton->SetMinSize( wxSize( 30,30 ) );
-
 	bButtonsSizer->Add( m_moveUpButton, 0, wxLEFT|wxRIGHT, 5 );
 
 	m_moveDownButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_moveDownButton->SetMinSize( wxSize( 30,30 ) );
-
 	bButtonsSizer->Add( m_moveDownButton, 0, wxRIGHT, 5 );
 
 
 	bButtonsSizer->Add( 0, 0, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_reloadButton = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	m_reloadButton->SetMinSize( wxSize( 30,30 ) );
-
 	bButtonsSizer->Add( m_reloadButton, 0, wxLEFT|wxRIGHT, 5 );
 
 
-	bPanelSizer->Add( bButtonsSizer, 0, wxEXPAND, 0 );
+	bPanelSizer->Add( bButtonsSizer, 0, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bPanelSizer );
 	this->Layout();
+	bPanelSizer->Fit( this );
 
 	// Connect Events
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_CLICK, wxGridEventHandler( PANEL_PCBNEW_ACTION_PLUGINS_BASE::OnGridCellClick ), NULL, this );

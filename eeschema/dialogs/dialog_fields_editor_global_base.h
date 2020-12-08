@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_FIELDS_EDITOR_GLOBAL_BASE_H__
-#define __DIALOG_FIELDS_EDITOR_GLOBAL_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -20,10 +19,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/dataview.h>
@@ -42,7 +41,7 @@ class WX_GRID;
 class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxSplitterWindow* m_splitter1;
 		wxPanel* m_leftPanel;
@@ -56,7 +55,7 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnGroupComponentsToggled( wxCommandEvent& event ) { event.Skip(); }
@@ -69,13 +68,12 @@ class DIALOG_FIELDS_EDITOR_GLOBAL_BASE : public DIALOG_SHIM
 		virtual void OnTableItemContextMenu( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnSaveAndContinue( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancel( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Fields"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER ); 
+
+		DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Fields"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxRESIZE_BORDER );
 		~DIALOG_FIELDS_EDITOR_GLOBAL_BASE();
-	
+
 };
 
-#endif //__DIALOG_FIELDS_EDITOR_GLOBAL_BASE_H__

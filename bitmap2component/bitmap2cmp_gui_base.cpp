@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -38,7 +38,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	brightSizer = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerInfo;
-	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Bitmap Info:") ), wxVERTICAL );
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Bitmap Info") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerInfo;
 	fgSizerInfo = new wxFlexGridSizer( 0, 4, 0, 0 );
@@ -99,12 +99,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 	fgSizerInfo->Add( m_staticTextBPI, 0, wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_DPIValueX = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DPIValueX->SetMinSize( wxSize( 40,-1 ) );
+	m_DPIValueX->SetMinSize( wxSize( 45,-1 ) );
 
 	fgSizerInfo->Add( m_DPIValueX, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_DPIValueY = new wxTextCtrl( sbSizerInfo->GetStaticBox(), wxID_ANY, _("300"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_DPIValueY->SetMinSize( wxSize( 40,-1 ) );
+	m_DPIValueY->SetMinSize( wxSize( 45,-1 ) );
 
 	fgSizerInfo->Add( m_DPIValueY, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
@@ -128,12 +128,12 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	wxString m_radioBoxFormatChoices[] = { _("Eeschema (.lib file)"), _("Pcbnew (.kicad_mod file)"), _("Postscript (.ps file)"), _("Logo for title block (.kicad_wks file)") };
 	int m_radioBoxFormatNChoices = sizeof( m_radioBoxFormatChoices ) / sizeof( wxString );
-	m_radioBoxFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format:"), wxDefaultPosition, wxDefaultSize, m_radioBoxFormatNChoices, m_radioBoxFormatChoices, 1, wxRA_SPECIFY_COLS );
+	m_radioBoxFormat = new wxRadioBox( m_panelRight, wxID_ANY, _("Format"), wxDefaultPosition, wxDefaultSize, m_radioBoxFormatNChoices, m_radioBoxFormatChoices, 1, wxRA_SPECIFY_COLS );
 	m_radioBoxFormat->SetSelection( 1 );
 	brightSizer->Add( m_radioBoxFormat, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer2;
-	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options:") ), wxVERTICAL );
+	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( m_panelRight, wxID_ANY, _("Image Options") ), wxVERTICAL );
 
 	m_ThresholdText = new wxStaticText( sbSizer2->GetStaticBox(), wxID_ANY, _("Black / White Threshold:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ThresholdText->Wrap( -1 );
@@ -152,7 +152,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	wxString m_radio_PCBLayerChoices[] = { _("Front silk screen"), _("Front solder mask"), _("User layer Eco1"), _("User layer Eco2") };
 	int m_radio_PCBLayerNChoices = sizeof( m_radio_PCBLayerChoices ) / sizeof( wxString );
-	m_radio_PCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline:"), wxDefaultPosition, wxDefaultSize, m_radio_PCBLayerNChoices, m_radio_PCBLayerChoices, 1, wxRA_SPECIFY_COLS );
+	m_radio_PCBLayer = new wxRadioBox( m_panelRight, wxID_ANY, _("Board Layer for Outline"), wxDefaultPosition, wxDefaultSize, m_radio_PCBLayerNChoices, m_radio_PCBLayerChoices, 1, wxRA_SPECIFY_COLS );
 	m_radio_PCBLayer->SetSelection( 3 );
 	m_radio_PCBLayer->SetToolTip( _("Choose the board layer to place the outline.\nThe 2 invisible fields reference and value are always placed on the silk screen layer.") );
 
@@ -167,6 +167,7 @@ BM2CMP_FRAME_BASE::BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id, const wxS
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 	m_statusBar = this->CreateStatusBar( 1, wxSTB_SIZEGRIP, wxID_ANY );
 
 	// Connect Events

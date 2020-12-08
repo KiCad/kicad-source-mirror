@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -84,19 +84,16 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	m_bpAdd = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpAdd->SetToolTip( _("Add field") );
-	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 
 	bButtonSize->Add( m_bpAdd, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_bpMoveUp = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveUp->SetToolTip( _("Move up") );
-	m_bpMoveUp->SetMinSize( wxSize( 30,29 ) );
 
 	bButtonSize->Add( m_bpMoveUp, 0, wxRIGHT, 5 );
 
 	m_bpMoveDown = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpMoveDown->SetToolTip( _("Move down") );
-	m_bpMoveDown->SetMinSize( wxSize( 30,29 ) );
 
 	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
 
@@ -105,7 +102,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	m_bpDelete = new wxBitmapButton( sbSizer4->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_bpDelete->SetToolTip( _("Delete field") );
-	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 10 );
 
@@ -127,7 +123,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxStaticText* staticNameLabel;
 	staticNameLabel = new wxStaticText( m_PanelBasic, wxID_ANY, _("Symbol name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticNameLabel->Wrap( -1 );
-	fgSizerFPID->Add( staticNameLabel, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( staticNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 	m_SymbolNameCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerFPID->Add( m_SymbolNameCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -188,7 +184,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND, 5 );
 
 	m_OptionPartsLocked = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("All units are not interchangeable"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPartsLocked->SetToolTip( _("Check this option when creating multiple unit symbols and all units are not interchangeable") );
+	m_OptionPartsLocked->SetToolTip( _("Check this option to allow symbols with multiple units to have different\nelements.  Uncheck this option when all symbol units are identical except\nfor pin numbers.") );
 
 	sbSizerSymbol->Add( m_OptionPartsLocked, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -260,7 +256,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelBasic->SetSizer( bSizerBasicPanel );
 	m_PanelBasic->Layout();
 	bSizerBasicPanel->Fit( m_PanelBasic );
-	m_NoteBook->AddPage( m_PanelBasic, _("General"), true );
+	m_NoteBook->AddPage( m_PanelBasic, _("General"), false );
 	m_PanelAlias = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizerMainPanelAlias;
 	bSizerMainPanelAlias = new wxBoxSizer( wxHORIZONTAL );
@@ -281,7 +277,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	m_addAliasButton = new wxBitmapButton( m_PanelAlias, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_addAliasButton->SetToolTip( _("Add alias") );
-	m_addAliasButton->SetMinSize( wxSize( 30,29 ) );
 
 	bSizerButtons->Add( m_addAliasButton, 0, wxALL, 5 );
 
@@ -290,7 +285,6 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	m_deleteAliasButton = new wxBitmapButton( m_PanelAlias, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_deleteAliasButton->SetToolTip( _("Delete alias") );
-	m_deleteAliasButton->SetMinSize( wxSize( 30,29 ) );
 
 	bSizerButtons->Add( m_deleteAliasButton, 0, wxALL, 5 );
 
@@ -388,7 +382,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_PanelAlias->SetSizer( bSizerMainPanelAlias );
 	m_PanelAlias->Layout();
 	bSizerMainPanelAlias->Fit( m_PanelAlias );
-	m_NoteBook->AddPage( m_PanelAlias, _("Aliases"), false );
+	m_NoteBook->AddPage( m_PanelAlias, _("Aliases"), true );
 	m_PanelFootprintFilter = new wxPanel( m_NoteBook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bPanelFpFilterBoxSizer;
 	bPanelFpFilterBoxSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -408,12 +402,12 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bFpFilterRightBoxSizer;
 	bFpFilterRightBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_addFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_addFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_addFilterButton->SetToolTip( _("Add footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 
-	m_editFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_editFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_editFilterButton->SetToolTip( _("Edit footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_editFilterButton, 0, wxALL, 5 );
@@ -421,7 +415,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	bFpFilterRightBoxSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_deleteFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW|0 );
+	m_deleteFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_deleteFilterButton->SetToolTip( _("Delete footprint filter") );
 
 	bFpFilterRightBoxSizer->Add( m_deleteFilterButton, 0, wxALL, 5 );
@@ -470,6 +464,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnUpdateUI ) );

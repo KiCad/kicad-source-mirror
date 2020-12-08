@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 10 2019)
+// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -76,20 +76,16 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	buttonBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_addButton = new wxBitmapButton( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_addButton->SetMinSize( wxSize( 30,29 ) );
-
 	buttonBoxSizer->Add( m_addButton, 0, wxRIGHT, 5 );
 
 
 	buttonBoxSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	m_removeButton = new wxBitmapButton( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
-	m_removeButton->SetMinSize( wxSize( 30,29 ) );
-
 	buttonBoxSizer->Add( m_removeButton, 0, wxRIGHT|wxLEFT, 5 );
 
 
-	sbSizerUpper->Add( buttonBoxSizer, 0, wxTOP|wxEXPAND, 2 );
+	sbSizerUpper->Add( buttonBoxSizer, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_netclassesPane->SetSizer( sbSizerUpper );
