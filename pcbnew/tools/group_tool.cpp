@@ -171,7 +171,7 @@ class GROUP_CONTEXT_MENU : public ACTION_MENU
 public:
     GROUP_CONTEXT_MENU( ) : ACTION_MENU( true )
     {
-        SetIcon( locked_xpm ); // fixme
+        SetIcon( group_xpm ); // fixme
         SetTitle( _( "Grouping" ) );
 
         Add( PCB_ACTIONS::groupCreate );

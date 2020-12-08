@@ -245,6 +245,12 @@ set( BMAPS_MID
     grid_select
     grid_select_axis
     grid
+    group
+    group_add
+    group_enter
+    group_leave
+    group_remove
+    group_ungroup
     hammer
     help
     hidden_pin
