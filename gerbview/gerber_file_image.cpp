@@ -337,27 +337,27 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     aMainFrame->ClearMsgPanel();
 
     // Display Image name (Image specific)
-    aMainFrame->AppendMsgPanel( _( "Image name" ), m_ImageName, CYAN );
+    aMainFrame->AppendMsgPanel( _( "Image name" ), m_ImageName );
 
     // Display graphic layer number used to draw this Image
     // (not a Gerber parameter but is also image specific)
     msg.Printf( wxT( "%d" ), m_GraphicLayer + 1 );
-    aMainFrame->AppendMsgPanel( _( "Graphic layer" ), msg, BROWN );
+    aMainFrame->AppendMsgPanel( _( "Graphic layer" ), msg );
 
     // Display Image rotation (Image specific)
     msg.Printf( wxT( "%d" ), m_ImageRotation );
-    aMainFrame->AppendMsgPanel( _( "Img Rot." ), msg, CYAN );
+    aMainFrame->AppendMsgPanel( _( "Img Rot." ), msg );
 
     // Display Image polarity (Image specific)
     msg = m_ImageNegative ? _("Negative") : _("Normal");
-    aMainFrame->AppendMsgPanel( _( "Polarity" ), msg, BROWN );
+    aMainFrame->AppendMsgPanel( _( "Polarity" ), msg );
 
     // Display Image justification and offset for justification (Image specific)
     msg = m_ImageJustifyXCenter ? _("Center") : _("Normal");
-    aMainFrame->AppendMsgPanel( _( "X Justify" ), msg, DARKRED );
+    aMainFrame->AppendMsgPanel( _( "X Justify" ), msg );
 
     msg = m_ImageJustifyYCenter ? _("Center") : _("Normal");
-    aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg, DARKRED );
+    aMainFrame->AppendMsgPanel( _( "Y Justify" ), msg );
 
     switch( aMainFrame->GetUserUnits() )
     {
@@ -381,7 +381,7 @@ void GERBER_FILE_IMAGE::DisplayImageInfo(  GERBVIEW_FRAME* aMainFrame  )
     }
 
 
-    aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg, DARKRED );
+    aMainFrame->AppendMsgPanel( _( "Image Justify Offset" ), msg );
 }
 
 

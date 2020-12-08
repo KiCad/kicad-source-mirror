@@ -49,10 +49,10 @@ void PCB_BASE_FRAME::Compile_Ratsnest( bool aDisplayStatus )
         wxString                           msg;
 
         msg.Printf( wxT( " %d" ), conn->GetPadCount() );
-        AppendMsgPanel( _( "Pads" ), msg, RED );
+        AppendMsgPanel( _( "Pads" ), msg );
 
         msg.Printf( wxT( " %d" ), conn->GetNetCount() - 1 /* Don't include "No Net" in count */ );
-        AppendMsgPanel( _( "Nets" ), msg, CYAN );
+        AppendMsgPanel( _( "Nets" ), msg );
 
         SetMsgPanel( m_pcb );
     }

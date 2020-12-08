@@ -521,7 +521,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
                 DisplayErrorMessage( this, msg, ioe.What() );
 
                 msg.Printf( _( "Failed to save schematic \"%s\"" ), newAbsoluteFilename );
-                m_frame->AppendMsgPanel( wxEmptyString, msg, CYAN );
+                m_frame->SetMsgPanel( wxEmptyString, msg );
 
                 return false;
             }

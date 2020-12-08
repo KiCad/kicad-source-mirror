@@ -356,8 +356,7 @@ bool SCH_PRINTOUT::OnPrintPage( int page )
 
     wxString msg;
     msg.Printf( _( "Print page %d" ), page );
-    m_parent->ClearMsgPanel();
-    m_parent->AppendMsgPanel( msg, wxEmptyString, CYAN );
+    m_parent->SetMsgPanel( msg, wxEmptyString );
 
     SCH_SCREEN*     screen       = m_parent->GetScreen();
     SCH_SHEET_PATH  oldsheetpath = m_parent->GetCurrentSheet();
