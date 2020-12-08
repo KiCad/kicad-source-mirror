@@ -168,7 +168,7 @@ void SYMBOL_EDIT_FRAME::RollbackSymbolFromUndo()
     delete undoCommand;
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
     part->ClearFlags( UR_TRANSIENT );
-    SetCurPart( part );
+    SetCurPart( part, false );
 
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     selTool->RebuildSelection();

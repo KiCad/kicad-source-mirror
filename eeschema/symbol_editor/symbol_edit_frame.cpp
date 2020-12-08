@@ -669,7 +669,7 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
 }
 
 
-void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
+void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 {
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
     GetCanvas()->GetView()->Clear();
@@ -690,6 +690,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     }
 
     wxString partName = m_my_part ? m_my_part->GetName() : wxString();
+    bool     isAlias = !IsSymbolFromSchematic() && m_my_part && m_my_part->IsAlias();
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
@@ -698,7 +699,18 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     m_SyncPinEdit = aPart && aPart->IsRoot() && aPart->IsMulti() && !aPart->UnitsLocked();
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
-    RebuildView();
+
+    GetRenderSettings()->m_ShowUnit = m_unit;
+    GetRenderSettings()->m_ShowConvert = m_convert;
+    GetRenderSettings()->m_ShowDisabled = isAlias;
+    GetCanvas()->DisplayComponent( m_my_part );
+    GetCanvas()->GetView()->HideWorksheet();
+    GetCanvas()->GetView()->ClearHiddenFlags();
+
+    if( aUpdateZoom )
+        m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
+
+    GetCanvas()->Refresh();
 
     WX_INFOBAR* infobar = GetInfoBar();
 
@@ -711,7 +723,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
         infobar->RemoveAllButtons();
         infobar->ShowMessage( msg, wxICON_INFORMATION );
     }
-    else if( m_my_part && m_my_part->IsAlias() )
+    else if( isAlias )
     {
         wxString parentPartName = m_my_part->GetParent().lock()->GetName();
         wxString msg;
@@ -1041,7 +1053,7 @@ void SYMBOL_EDIT_FRAME::emptyScreen()
 {
     m_treePane->GetLibTree()->Unselect();
     SetCurLib( wxEmptyString );
-    SetCurPart( nullptr );
+    SetCurPart( nullptr, false );
     SetScreen( m_dummyScreen );
     ClearUndoRedoList();
     m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
@@ -1259,7 +1271,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>
     wxCHECK( symbol, /* void */ );
 
     if( m_my_part )
-        SetCurPart( nullptr );
+        SetCurPart( nullptr, false );
 
     m_isSymbolFromSchematic = true;
     m_reference = aReference;
@@ -1270,9 +1282,8 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>
     SCH_SCREEN* tmpScreen = new SCH_SCREEN();
 
     SetScreen( tmpScreen );
-    SetCurPart( symbol.release() );
+    SetCurPart( symbol.release(), true );
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     ReCreateMenuBar();
     ReCreateHToolbar();
 

@@ -247,7 +247,7 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString&
     SCH_SCREEN* part_screen = m_libMgr->GetScreen( lib_part->GetName(), aLibrary );
 
     SetScreen( part_screen );
-    SetCurPart( new LIB_PART( *lib_part ) );
+    SetCurPart( new LIB_PART( *lib_part ), true );
     SetCurLib( aLibrary );
 
     if( rebuildMenuAndToolbar )
@@ -257,7 +257,6 @@ bool SYMBOL_EDIT_FRAME::LoadOneLibraryPartAux( LIB_PART* aEntry, const wxString&
         GetInfoBar()->Dismiss();
     }
 
-    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
     updateTitle();
     RebuildSymbolUnitsList();
     SetShowDeMorgan( GetCurPart()->HasConversion() );

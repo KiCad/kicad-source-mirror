@@ -151,7 +151,7 @@ public:
     /**
      * Take ownership of aPart and notes that it is the one currently being edited.
      */
-    void SetCurPart( LIB_PART* aPart );
+    void SetCurPart( LIB_PART* aPart, bool aUpdateZoom );
 
     SYMBOL_LIBRARY_MANAGER& GetLibManager();
 
