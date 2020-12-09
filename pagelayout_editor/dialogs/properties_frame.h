@@ -72,6 +72,8 @@ class PROPERTIES_FRAME : public PANEL_PROPERTIES_BASE
     UNIT_BINDER m_textCtrlTopMarginBinder;
     UNIT_BINDER m_textCtrlBottomMarginBinder;
 
+    UNIT_BINDER m_textCtrlThicknessBinder;
+
 public:
     PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent );
     ~PROPERTIES_FRAME();

@@ -93,6 +93,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxBoxSizer* m_SizerLineThickness;
 		wxStaticText* m_staticTextThickness;
 		wxTextCtrl* m_textCtrlThickness;
+		wxStaticText* m_TextLineThicknessUnits;
 		wxStaticText* m_staticTextInfoThickness;
 		wxBoxSizer* m_SizerRotation;
 		wxStaticText* m_staticTextRot;

@@ -347,6 +347,10 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizerLineThickness->Add( m_textCtrlThickness, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
+	m_TextLineThicknessUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_TextLineThicknessUnits->Wrap( -1 );
+	m_SizerLineThickness->Add( m_TextLineThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+
 	m_staticTextInfoThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 for default"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoThickness->Wrap( -1 );
 	m_SizerLineThickness->Add( m_staticTextInfoThickness, 0, wxALIGN_CENTER|wxBOTTOM|wxRIGHT|wxLEFT, 5 );

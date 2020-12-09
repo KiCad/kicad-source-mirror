@@ -56,7 +56,8 @@ PROPERTIES_FRAME::PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent ) :
         m_textCtrlLeftMarginBinder( aParent, m_staticTextLeftMargin, m_textCtrlLeftMargin, m_TextLeftMarginUnits ),
         m_textCtrlRightMarginBinder( aParent, m_staticTextDefRightMargin, m_textCtrlRightMargin, m_TextRightMarginUnits ),
         m_textCtrlTopMarginBinder( aParent, m_staticTextTopMargin, m_textCtrlTopMargin, m_TextTopMarginUnits ),
-        m_textCtrlBottomMarginBinder( aParent, m_staticTextBottomMargin, m_textCtrlBottomMargin, m_TextBottomMarginUnits )
+        m_textCtrlBottomMarginBinder( aParent, m_staticTextBottomMargin, m_textCtrlBottomMargin, m_TextBottomMarginUnits ),
+        m_textCtrlThicknessBinder( aParent, m_staticTextThickness, m_textCtrlThickness, m_TextLineThicknessUnits )
 {
     m_parent = aParent;
 
@@ -208,8 +209,8 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
     case LT_CORNER: m_comboBoxCornerEnd->SetSelection( 1 ); break;
     }
 
-    msg.Printf( wxT("%.3f"), aItem->m_LineWidth );
-    m_textCtrlThickness->SetValue( msg );
+    m_textCtrlThicknessBinder.SetDoubleValue(
+            From_User_Unit( EDA_UNITS::MILLIMETRES, aItem->m_LineWidth ) );
 
     // Now, set prms more specific to WS_DATA_ITEM types
     // For a given type, disable widgets which are not relevant,
@@ -388,8 +389,7 @@ bool PROPERTIES_FRAME::CopyPrmsFromPanelToItem( WS_DATA_ITEM* aItem )
     }
 
     // Import thickness
-    msg = m_textCtrlThickness->GetValue();
-    aItem->m_LineWidth = DoubleValueFromString( EDA_UNITS::UNSCALED, msg );
+    aItem->m_LineWidth = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlThicknessBinder.GetValue() );
 
     // Import Start point
     aItem->m_Pos.m_Pos.x = To_User_Unit( EDA_UNITS::MILLIMETRES, m_textCtrlPosXBinder.GetValue() );
