@@ -254,6 +254,9 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer3->Add( m_comboBoxCornerPos, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
 	sbSizerPos->Add( fgSizer3, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
@@ -304,6 +307,9 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	fgSizer4->Add( m_comboBoxCornerEnd, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
+	fgSizer4->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
 	m_sbSizerEndPosition->Add( fgSizer4, 0, wxEXPAND|wxRIGHT, 5 );
 
 
@@ -311,20 +317,34 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 
 	m_SizerLineThickness = new wxBoxSizer( wxHORIZONTAL );
 
+	wxFlexGridSizer* fgSizer10;
+	fgSizer10 = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizer10->SetFlexibleDirection( wxBOTH );
+	fgSizer10->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
 	m_staticTextThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Line width:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_staticTextThickness->Wrap( -1 );
-	m_SizerLineThickness->Add( m_staticTextThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizer10->Add( m_staticTextThickness, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textCtrlThickness = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_SizerLineThickness->Add( m_textCtrlThickness, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer10->Add( m_textCtrlThickness, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT, 5 );
 
 	m_TextLineThicknessUnits = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TextLineThicknessUnits->Wrap( -1 );
-	m_SizerLineThickness->Add( m_TextLineThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+	fgSizer10->Add( m_TextLineThicknessUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxLEFT, 5 );
+
+
+	fgSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_staticTextInfoThickness = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 for default"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextInfoThickness->Wrap( -1 );
-	m_SizerLineThickness->Add( m_staticTextInfoThickness, 0, wxALIGN_CENTER|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer10->Add( m_staticTextInfoThickness, 0, wxALIGN_CENTER|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	fgSizer10->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	m_SizerLineThickness->Add( fgSizer10, 1, wxEXPAND, 5 );
 
 
 	m_SizerItemProperties->Add( m_SizerLineThickness, 0, 0, 5 );
