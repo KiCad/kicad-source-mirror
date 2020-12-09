@@ -1,29 +1,85 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="config.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2081"
+     inkscape:window-height="1645"
+     id="namedview12"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="13"
+     inkscape:cy="13"
+     inkscape:window-x="99"
+     inkscape:window-y="211"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid838"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#b2b2ff"
+       opacity="0.1254902" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#b9b9b9;}</style>
+  <defs
+     id="defs5">
+    <style
+       id="style3">.cls-1{fill:#b9b9b9;}</style>
   </defs>
-  <title>config</title>
-  <path class="cls-1" d="M24.5027,15.6783l-2.2508-1.5525-.0267.046a8.5837,8.5837,0,0,0,.1231-1.1772,8.5826,8.5826,0,0,0-.1311-1.252l.0132.0218,2.2334-1.5756a1.12,1.12,0,0,0,.3282-1.4969L22.78,5.3226a1.212,1.212,0,0,0-1.5076-.4785l-2.5355,1.07.022.0368a9.3539,9.3539,0,0,0-2.2685-1.2959L16.19,2.0209A1.1743,1.1743,0,0,0,15.0079,1H10.9747A1.1746,1.1746,0,0,0,9.7923,2.0209L9.49,4.6661a9.34,9.34,0,0,0-2.3462,1.377l.032-.0551L4.6292,4.9445a1.2115,1.2115,0,0,0-1.5025.494l-1.9745,3.39a1.1211,1.1211,0,0,0,.3451,1.4936l2.2508,1.5525.049-.0842a8.6269,8.6269,0,0,0-.1259,1.2046,8.6161,8.6161,0,0,0,.1362,1.3037L3.77,14.2355,1.5367,15.8112a1.12,1.12,0,0,0-.3287,1.4967L3.22,20.6774a1.2122,1.2122,0,0,0,1.5076.4785l2.5358-1.07-.052-.0868a9.349,9.349,0,0,0,2.2968,1.3287l.3026,2.651A1.1739,1.1739,0,0,0,10.9925,25h4.0331a1.1742,1.1742,0,0,0,1.1821-1.0209l.3028-2.65a9.3438,9.3438,0,0,0,2.3407-1.3631l-.0274.0464,2.5474,1.0435a1.2113,1.2113,0,0,0,1.5023-.4939l1.9743-3.39A1.1209,1.1209,0,0,0,24.5027,15.6783ZM13.01,17.2761a4.3642,4.3642,0,0,1-4.4423-4.2815A4.3643,4.3643,0,0,1,13.01,8.7131a4.3639,4.3639,0,0,1,4.442,4.2815A4.3639,4.3639,0,0,1,13.01,17.2761Z"/>
+  <title
+     id="title7">config</title>
+  <path
+     class="cls-1"
+     d="M24.5027,15.6783l-2.2508-1.5525-.0267.046a8.5837,8.5837,0,0,0,.1231-1.1772,8.5826,8.5826,0,0,0-.1311-1.252l.0132.0218,2.2334-1.5756a1.12,1.12,0,0,0,.3282-1.4969L22.78,5.3226a1.212,1.212,0,0,0-1.5076-.4785l-2.5355,1.07.022.0368a9.3539,9.3539,0,0,0-2.2685-1.2959L16.19,2.0209A1.1743,1.1743,0,0,0,15.0079,1H10.9747A1.1746,1.1746,0,0,0,9.7923,2.0209L9.49,4.6661a9.34,9.34,0,0,0-2.3462,1.377l.032-.0551L4.6292,4.9445a1.2115,1.2115,0,0,0-1.5025.494l-1.9745,3.39a1.1211,1.1211,0,0,0,.3451,1.4936l2.2508,1.5525.049-.0842a8.6269,8.6269,0,0,0-.1259,1.2046,8.6161,8.6161,0,0,0,.1362,1.3037L3.77,14.2355,1.5367,15.8112a1.12,1.12,0,0,0-.3287,1.4967L3.22,20.6774a1.2122,1.2122,0,0,0,1.5076.4785l2.5358-1.07-.052-.0868a9.349,9.349,0,0,0,2.2968,1.3287l.3026,2.651A1.1739,1.1739,0,0,0,10.9925,25h4.0331a1.1742,1.1742,0,0,0,1.1821-1.0209l.3028-2.65a9.3438,9.3438,0,0,0,2.3407-1.3631l-.0274.0464,2.5474,1.0435a1.2113,1.2113,0,0,0,1.5023-.4939l1.9743-3.39A1.1209,1.1209,0,0,0,24.5027,15.6783ZM13.01,17.2761a4.3642,4.3642,0,0,1-4.4423-4.2815A4.3643,4.3643,0,0,1,13.01,8.7131a4.3639,4.3639,0,0,1,4.442,4.2815A4.3639,4.3639,0,0,1,13.01,17.2761Z"
+     id="path9"
+     style="fill:#545454;fill-opacity:1" />
 </svg>
