@@ -48,6 +48,7 @@ public:
      * @param aValue is the control used to edit or display the given value (wxTextCtrl,
      *               wxComboBox, wxStaticText, etc.).
      * @param aUnitLabel is the units label displayed after the text input widget
+     * can be nullptr
      * @param aUseMils specifies the use of mils for imperial units (instead of inches)
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */

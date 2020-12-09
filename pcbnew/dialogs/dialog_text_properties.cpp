@@ -65,7 +65,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
     m_linesThickness( aParent, m_LinesThicknessLabel, m_LinesThicknessCtrl,
                       m_LinesThicknessUnits, true ),
-    m_OrientValidator( 1, &m_OrientValue )
+    m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr, true )
 {
     wxString title;
 
@@ -140,9 +140,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_LayerSelectionCtrl->Resync();
 
     m_OrientValue = 0.0;
-    m_OrientValidator.SetRange( -360.0, 360.0 );
-    m_OrientCtrl->SetValidator( m_OrientValidator );
-    m_OrientValidator.SetWindow( m_OrientCtrl );
+    m_orientation.SetUnits( DEGREES );
 
     // Handle decimal separators in combo dropdown
     for( size_t i = 0; i < m_OrientCtrl->GetCount(); ++i )
@@ -344,7 +342,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_Italic->SetValue( m_edaText->IsItalic() );
     EDA_TEXT_HJUSTIFY_T hJustify = m_edaText->GetHorizJustify();
     m_JustifyChoice->SetSelection( (int) hJustify + 1 );
-    m_OrientValue = m_edaText->GetTextAngleDegrees();
+    m_OrientValue = m_edaText->GetTextAngle();
+    m_orientation.SetValue( m_OrientValue );
     m_Mirrored->SetValue( m_edaText->IsMirrored() );
 
     if( m_modText )
@@ -436,7 +435,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_edaText->SetVisible( m_Visible->GetValue() );
     m_edaText->SetItalic( m_Italic->GetValue() );
-    m_edaText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
+    m_OrientValue = m_orientation.GetValue();
+    NORMALIZE_ANGLE_180( m_OrientValue );
+    m_edaText->SetTextAngle( m_OrientValue );
     m_edaText->SetMirrored( m_Mirrored->GetValue() );
 
     if( m_modText )
