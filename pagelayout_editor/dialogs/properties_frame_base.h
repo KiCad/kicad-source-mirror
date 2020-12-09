@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Jun  3 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,10 +23,10 @@
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
-#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
@@ -56,18 +56,18 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextVjust;
 		wxChoice* m_choiceVjustify;
 		wxCheckBox* m_checkBoxItalic;
-		wxStaticText* m_staticTexTsizeX;
+		wxStaticText* m_staticTextTsizeX;
 		wxStaticText* m_staticTextTsizeY;
 		wxTextCtrl* m_textCtrlTextSizeX;
-		wxStaticText* m_units1;
+		wxStaticText* m_TextTextSizeXUnits;
 		wxTextCtrl* m_textCtrlTextSizeY;
-		wxStaticText* m_units11;
+		wxStaticText* m_TextTextSizeYUnits;
 		wxStaticText* m_staticTextConstraintX;
 		wxStaticText* m_staticTextConstraintY;
 		wxTextCtrl* m_textCtrlConstraintX;
-		wxStaticText* m_units111;
+		wxStaticText* m_TextConstraintXUnits;
 		wxTextCtrl* m_textCtrlConstraintY;
-		wxStaticText* m_units1111;
+		wxStaticText* m_TextConstraintYUnits;
 		wxStaticText* m_staticTextSizeInfo;
 		wxStaticLine* m_staticline6;
 		wxStaticText* m_staticTextComment;
@@ -75,19 +75,19 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_staticTextPosX;
 		wxTextCtrl* m_textCtrlPosX;
-		wxStaticText* m_units12;
+		wxStaticText* m_TextPosXUnits;
 		wxStaticText* m_staticTextPosY;
 		wxTextCtrl* m_textCtrlPosY;
-		wxStaticText* m_units121;
+		wxStaticText* m_TextPosYUnits;
 		wxStaticText* m_staticTextOrgPos;
 		wxComboBox* m_comboBoxCornerPos;
 		wxBoxSizer* m_SizerEndPosition;
 		wxStaticText* m_staticTextEndX;
 		wxTextCtrl* m_textCtrlEndX;
-		wxStaticText* m_units1211;
+		wxStaticText* m_TextEndXUnits;
 		wxStaticText* m_staticTextEndY;
 		wxTextCtrl* m_textCtrlEndY;
-		wxStaticText* m_units12111;
+		wxStaticText* m_TextEndYUnits;
 		wxStaticText* m_staticTextOrgEnd;
 		wxComboBox* m_comboBoxCornerEnd;
 		wxBoxSizer* m_SizerLineThickness;
@@ -108,9 +108,9 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextStepX;
 		wxStaticText* m_staticTextStepY;
 		wxTextCtrl* m_textCtrlStepX;
-		wxStaticText* m_units121111;
+		wxStaticText* m_TextStepXUnits;
 		wxTextCtrl* m_textCtrlStepY;
-		wxStaticText* m_units1211111;
+		wxStaticText* m_TextStepYUnits;
 		wxStaticLine* m_staticline8;
 		wxButton* m_buttonOK;
 		wxScrolledWindow* m_swGeneralOpts;
@@ -118,30 +118,30 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextDefTsX;
 		wxStaticText* m_staticTextDefTsY;
 		wxTextCtrl* m_textCtrlDefaultTextSizeX;
-		wxStaticText* m_units14;
+		wxStaticText* m_TextDefaultTextSizeXUnits;
 		wxTextCtrl* m_textCtrlDefaultTextSizeY;
-		wxStaticText* m_units141;
+		wxStaticText* m_TextDefaultTextSizeYUnits;
 		wxStaticText* m_staticTextDefLineW;
-		wxStaticText* m_staticText22;
+		wxStaticText* m_staticTextDefTextThickness;
 		wxTextCtrl* m_textCtrlDefaultLineWidth;
-		wxStaticText* m_staticText221;
+		wxStaticText* m_TextDefaultLineWidthUnits;
 		wxTextCtrl* m_textCtrlDefaultTextThickness;
-		wxStaticText* m_staticText2211;
+		wxStaticText* m_TextDefaultTextThicknessUnits;
 		wxButton* m_buttonDefault;
 		wxStaticLine* m_staticline9;
 		wxStaticText* m_staticTextMargins;
 		wxStaticText* m_staticTextLeftMargin;
 		wxStaticText* m_staticTextDefRightMargin;
 		wxTextCtrl* m_textCtrlLeftMargin;
-		wxStaticText* m_units142;
+		wxStaticText* m_TextLeftMarginUnits;
 		wxTextCtrl* m_textCtrlRightMargin;
-		wxStaticText* m_units143;
+		wxStaticText* m_TextRightMarginUnits;
 		wxStaticText* m_staticTextTopMargin;
 		wxStaticText* m_staticTextBottomMargin;
 		wxTextCtrl* m_textCtrlTopMargin;
-		wxStaticText* m_units1431;
-		wxTextCtrl* m_textCtrlDefaultBottomMargin;
-		wxStaticText* m_units1432;
+		wxStaticText* m_TextTopMarginUnits;
+		wxTextCtrl* m_textCtrlBottomMargin;
+		wxStaticText* m_TextBottomMarginUnits;
 		wxButton* m_buttonGeneralOptsOK;
 
 		// Virtual event handlers, overide them in your derived class

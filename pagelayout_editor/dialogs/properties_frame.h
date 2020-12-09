@@ -30,6 +30,7 @@
 #define  _PROPERTIES_FRAME_H
 
 #include "dialogs/properties_frame_base.h"
+#include <widgets/unit_binder.h>
 
 class WS_DATA_ITEM;
 class PL_EDITOR_FRAME;
@@ -43,6 +44,33 @@ class PROPERTIES_FRAME : public PANEL_PROPERTIES_BASE
 {
     PL_EDITOR_FRAME*  m_parent;
     SCINTILLA_TRICKS* m_scintillaTricks;
+
+    UNIT_BINDER m_textCtrlTextSizeXBinder;
+    UNIT_BINDER m_textCtrlTextSizeYBinder;
+
+    UNIT_BINDER m_textCtrlConstraintXBinder;
+    UNIT_BINDER m_textCtrlConstraintYBinder;
+
+    UNIT_BINDER m_textCtrlPosXBinder;
+    UNIT_BINDER m_textCtrlPosYBinder;
+
+    UNIT_BINDER m_textCtrlEndXBinder;
+    UNIT_BINDER m_textCtrlEndYBinder;
+
+    UNIT_BINDER m_textCtrlStepXBinder;
+    UNIT_BINDER m_textCtrlStepYBinder;
+
+    UNIT_BINDER m_textCtrlDefaultTextSizeXBinder;
+    UNIT_BINDER m_textCtrlDefaultTextSizeYBinder;
+
+    UNIT_BINDER m_textCtrlDefaultLineWidthBinder;
+    UNIT_BINDER m_textCtrlDefaultTextThicknessBinder;
+
+    UNIT_BINDER m_textCtrlLeftMarginBinder;
+    UNIT_BINDER m_textCtrlRightMarginBinder;
+
+    UNIT_BINDER m_textCtrlTopMarginBinder;
+    UNIT_BINDER m_textCtrlBottomMarginBinder;
 
 public:
     PROPERTIES_FRAME( PL_EDITOR_FRAME* aParent );
