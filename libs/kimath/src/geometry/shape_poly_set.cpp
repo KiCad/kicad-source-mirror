@@ -2251,7 +2251,6 @@ void SHAPE_POLY_SET:: GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes )
     {
         for ( auto& tri : tpoly->Triangles() )
         {
-            SHAPE *s = static_cast<SHAPE*> ( &tri );
             aSubshapes.push_back( &tri );
         }
     }

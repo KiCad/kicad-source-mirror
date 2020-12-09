@@ -103,7 +103,7 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const VECTOR2I& aP, int aClearance, int* aA
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
     VECTOR2I nearest;
 
-    for( int i = 0; i < GetSegmentCount(); i++ )
+    for( size_t i = 0; i < GetSegmentCount(); i++ )
     {
         const SEG& s = GetSegment( i );
         VECTOR2I pn = s.NearestPoint( aP );
@@ -170,7 +170,7 @@ bool SHAPE_LINE_CHAIN_BASE::Collide( const SEG& aSeg, int aClearance, int* aActu
     SEG::ecoord clearance_sq = SEG::Square( aClearance );
     VECTOR2I nearest;
 
-    for( int i = 0; i < GetSegmentCount(); i++ )
+    for( size_t i = 0; i < GetSegmentCount(); i++ )
     {
         const SEG& s = GetSegment( i );
         SEG::ecoord dist_sq =s.SquaredDistance( aSeg );
@@ -354,7 +354,7 @@ SEG::ecoord SHAPE_LINE_CHAIN_BASE::SquaredDistance( const VECTOR2I& aP, bool aOu
     if( IsClosed() && PointInside( aP ) && !aOutlineOnly )
         return 0;
 
-    for( int s = 0; s < GetSegmentCount(); s++ )
+    for( size_t s = 0; s < GetSegmentCount(); s++ )
         d = std::min( d, GetSegment( s ).SquaredDistance( aP ) );
 
     return d;
@@ -726,7 +726,7 @@ int SHAPE_LINE_CHAIN_BASE::EdgeContainingPoint( const VECTOR2I& aPt, int aAccura
 	    return ( hypot( dist.x, dist.y ) <= aAccuracy + 1 ) ? 0 : -1;
     }
 
-    for( int i = 0; i < GetSegmentCount(); i++ )
+    for( size_t i = 0; i < GetSegmentCount(); i++ )
     {
         const SEG s = GetSegment( i );
 

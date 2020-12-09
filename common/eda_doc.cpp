@@ -90,7 +90,8 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
 #endif
 
     // Is an internet url
-    static const wxChar* url_header[] = {
+    static const std::vector<wxString> url_header =
+    {
         wxT( "http:" ),
         wxT( "https:" ),
         wxT( "ftp:" ),
@@ -103,7 +104,7 @@ bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT
 
     for( const wxString& proc : url_header)
     {
-        if( docname.First( proc ) == 0 )   // looks like an internet url
+        if( docname.StartsWith( proc ) )   // looks like an internet url
         {
             wxURI uri( docname );
             wxLaunchDefaultBrowser( uri.BuildURI() );

@@ -184,7 +184,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
     }
     else
     {
-        for( int s = 0; s < aB.GetSegmentCount(); s++ )
+        for( size_t s = 0; s < aB.GetSegmentCount(); s++ )
         {
             int collision_dist = 0;
             VECTOR2I pn;
@@ -222,7 +222,7 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_LINE_CHAIN_BASE&
             SHAPE_CIRCLE cmoved( aA );
             VECTOR2I f_total( 0, 0 );
 
-            for( int s = 0; s < aB.GetSegmentCount(); s++ )
+            for( size_t s = 0; s < aB.GetSegmentCount(); s++ )
             {
                 VECTOR2I f = pushoutForce( cmoved, aB.GetSegment( s ), aClearance );
                 cmoved.SetCenter( cmoved.GetCenter() + f );
@@ -272,7 +272,7 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
     }
     else
     {
-        for( int i = 0; i < aB.GetSegmentCount(); i++ )
+        for( size_t i = 0; i < aB.GetSegmentCount(); i++ )
         {
             int collision_dist = 0;
             VECTOR2I pn;
@@ -327,7 +327,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
     }
     else
     {
-        for( int s = 0; s < aB.GetSegmentCount(); s++ )
+        for( size_t s = 0; s < aB.GetSegmentCount(); s++ )
         {
             int collision_dist = 0;
             VECTOR2I pn;
@@ -501,7 +501,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 {
     switch( aA->Type() )
     {
-    case SH_NULL: 
+    case SH_NULL:
         return false;
 
     case SH_RECT:
@@ -555,7 +555,7 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
 
         case SH_ARC:
             return CollCaseReversed<SHAPE_CIRCLE, SHAPE_ARC>( aA, aB, aClearance, aActual, aLocation, aMTV );
-    
+
         case SH_NULL:
             return false;
 
@@ -805,7 +805,7 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
     {
         return collideSingleShapes( aA, aB, aClearance, aActual, aLocation, aMTV );
     }
-    
+
     if( colliding )
     {
         if( aLocation )

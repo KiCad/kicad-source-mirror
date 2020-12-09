@@ -920,7 +920,7 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
     if( aVia->IsLocked() )
         via->Mark( PNS::MK_LOCKED );
 
-    return std::move( via );
+    return via;
 }
 
 

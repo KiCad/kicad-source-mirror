@@ -131,45 +131,56 @@ static bool commonParallelProjection( SEG p, SEG n, SEG &pClip, SEG& nClip )
 
 
 struct DIFF_PAIR_KEY
+{
+    bool operator<( const DIFF_PAIR_KEY& b ) const
     {
-        bool operator<( const DIFF_PAIR_KEY& b ) const
+        if( netP < b.netP )
         {
-            if( netP < b.netP )
-                return true;
-            else if( netP > b.netP )
-                return false;
-            else // netP == b.netP
-            {
-                if( netN < b.netN )
-                    return true;
-                else if( netN > b.netN )
-                    return false;
-                else
-                    return parentRule < b.parentRule;
-            }
+            return true;
         }
+        else if( netP > b.netP )
+        {
+            return false;
+        }
+        else // netP == b.netP
+        {
+            if( netN < b.netN )
+                return true;
+            else if( netN > b.netN )
+                return false;
+            else
+                return parentRule < b.parentRule;
+        }
+    }
 
-        int       netP, netN;
-        DRC_RULE* parentRule;
-    };
+    int       netP, netN;
+    DRC_RULE* parentRule;
+};
 
-    struct DIFF_PAIR_COUPLED_SEGMENTS
-    {
-        SEG coupledN, coupledP;
-        TRACK* parentN, *parentP;
-        int computedGap;
-        PCB_LAYER_ID layer;
-        bool couplingOK;
-    };
+struct DIFF_PAIR_COUPLED_SEGMENTS
+{
+    SEG          coupledN;
+    SEG          coupledP;
+    TRACK*       parentN;
+    TRACK*       parentP;
+    int          computedGap;
+    PCB_LAYER_ID layer;
+    bool         couplingOK;
 
-    struct DIFF_PAIR_ITEMS
-    {
-        std::set<BOARD_CONNECTED_ITEM*> itemsP, itemsN;
-        std::vector<DIFF_PAIR_COUPLED_SEGMENTS> coupled;
-        int totalCoupled;
-        int totalLengthN;
-        int totalLengthP;
-    };
+    DIFF_PAIR_COUPLED_SEGMENTS() :
+        parentN( nullptr ),
+        parentP( nullptr )
+    {}
+};
+
+struct DIFF_PAIR_ITEMS
+{
+    std::set<BOARD_CONNECTED_ITEM*> itemsP, itemsN;
+    std::vector<DIFF_PAIR_COUPLED_SEGMENTS> coupled;
+    int totalCoupled;
+    int totalLengthN;
+    int totalLengthP;
+};
 
 static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree )
 {

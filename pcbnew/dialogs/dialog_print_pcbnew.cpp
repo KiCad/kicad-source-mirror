@@ -428,11 +428,7 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
     }
     else
     {
-        // This should always work, but in case it doesn't we fall back on default colors
-        if( PCB_BASE_EDIT_FRAME* pcbframe = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_parent ) )
-            settings()->m_colorSettings = pcbframe->GetColorSettings();
-        else
-            settings()->m_colorSettings = m_parent->GetColorSettings();
+        settings()->m_colorSettings = m_parent->GetColorSettings();
     }
 
     DIALOG_PRINT_GENERIC::saveSettings();

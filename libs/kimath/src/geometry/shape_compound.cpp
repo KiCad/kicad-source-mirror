@@ -82,7 +82,7 @@ const BOX2I SHAPE_COMPOUND::BBox( int aClearance ) const
 
     bb = m_shapes[0]->BBox();
 
-    for( int i = 1; i < m_shapes.size(); i++ )
+    for( size_t i = 1; i < m_shapes.size(); i++ )
         bb.Merge( m_shapes[i]->BBox() );
 
     return bb;
