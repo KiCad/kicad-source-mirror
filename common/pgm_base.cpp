@@ -62,8 +62,9 @@
 
 
 /**
- * LanguagesList
- * Note: because this list is not created on the fly, wxTranslation
+ * Current list of languages supported by KiCad.
+ *
+ * @note Because this list is not created on the fly, wxTranslation
  * must be called when a language name must be displayed after translation.
  * Do not change this behavior, because m_Lang_Label is also used as key in config
  */
@@ -297,7 +298,8 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
-    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s",
+                envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KISYS3DMOD
@@ -317,7 +319,8 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetFullPath() );
-    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s",
+                envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_TEMPLATE_DIR
@@ -368,7 +371,8 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
-    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName,
+                envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_USER_TEMPLATE_DIR
@@ -390,7 +394,8 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
-    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s",
+                envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_SYMBOLS
@@ -410,7 +415,8 @@ bool PGM_BASE::InitPgm()
     }
 
     envVarItem.SetValue( tmpFileName.GetPath() );
-    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s", envVarName, envVarItem.GetValue() );
+    wxLogTrace( traceEnvVars, "PGM_BASE::InitPgm: Setting entry %s = %s",
+                envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
     GetSettingsManager().Load( GetCommonSettings() );
@@ -491,7 +497,8 @@ void PGM_BASE::loadCommonSettings()
     for( const auto& it : GetCommonSettings()->m_Env.vars )
     {
         wxString key( it.first.c_str(), wxConvUTF8 );
-        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Found entry %s = %s", key, it.second );
+        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Found entry %s = %s",
+                    key, it.second );
 
         // Do not store the env var PROJECT_VAR_NAME ("KIPRJMOD") definition if for some reason
         // it is found in config. (It is reserved and defined as project path)
@@ -501,7 +508,8 @@ void PGM_BASE::loadCommonSettings()
         if( m_local_env_vars[ key ].GetDefinedExternally() )
             continue;
 
-        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Updating entry %s = %s", key, it.second );
+        wxLogTrace( traceEnvVars, "PGM_BASE::loadCommonSettings: Updating entry %s = %s",
+                    key, it.second );
 
         m_local_env_vars[ key ] = ENV_VAR_ITEM( it.second, wxGetEnv( it.first, nullptr ) );
     }
@@ -542,7 +550,8 @@ void PGM_BASE::SaveCommonSettings()
                 continue;
 
             wxLogTrace( traceEnvVars,
-                        "PGM_BASE::SaveCommonSettings: Saving environment variable config entry %s as %s",
+                        "PGM_BASE::SaveCommonSettings: Saving environment variable config "
+                        "entry %s as %s",
                         m_local_env_var.first, m_local_env_var.second.GetValue() );
 
             std::string key( m_local_env_var.first.ToUTF8() );
@@ -606,7 +615,7 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
     if( !first_time )
     {
         // If we are here, the user has selected another language.
-        // Therefore the new prefered language name is stored in common config.
+        // Therefore the new preferred language name is stored in common config.
         // Do NOT store the wxWidgets language Id, it can change between wxWidgets
         // versions, for a given language
         wxString languageSel;
@@ -626,26 +635,12 @@ bool PGM_BASE::SetLanguage( wxString& aErrMsg, bool first_time )
         cfg->SaveToFile( GetSettingsManager().GetPathForSettingsFile( cfg ) );
     }
 
-    // Test if floating point notation is working (bug encountered in cross compilation)
-    // Make a conversion double <=> string
-    double dtst = 0.5;
-    wxString msg;
-
-    msg << dtst;
-    double result;
-    msg.ToDouble( &result );
-
-    // string to double encode/decode does not work! Bug detected:
-    // Disable floating point localization:
-    if( result != dtst )
-        setlocale( LC_NUMERIC, "C" );
-
     // Try adding the dictionary if it is not currently loaded
     if( !m_locale->IsLoaded( dictionaryName ) )
         m_locale->AddCatalog( dictionaryName );
 
     // Verify the Kicad dictionary was loaded properly
-    // However, for the English language, the dictionnary is not mandatory, as
+    // However, for the English language, the dictionary is not mandatory, as
     // all messages are already in English, just restricted to ASCII7 chars,
     // the verification is skipped.
     if( !m_locale->IsLoaded( dictionaryName ) && m_language_id != wxLANGUAGE_ENGLISH )
