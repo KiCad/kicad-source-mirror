@@ -28,6 +28,7 @@
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/scrolwin.h>
+#include <wx/statbox.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
 
@@ -115,32 +116,29 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticLine* m_staticline8;
 		wxButton* m_buttonOK;
 		wxScrolledWindow* m_swGeneralOpts;
-		wxStaticText* m_staticTextDefVal;
 		wxStaticText* m_staticTextDefTsX;
-		wxStaticText* m_staticTextDefTsY;
 		wxTextCtrl* m_textCtrlDefaultTextSizeX;
 		wxStaticText* m_TextDefaultTextSizeXUnits;
+		wxStaticText* m_staticTextDefTsY;
 		wxTextCtrl* m_textCtrlDefaultTextSizeY;
 		wxStaticText* m_TextDefaultTextSizeYUnits;
 		wxStaticText* m_staticTextDefLineW;
-		wxStaticText* m_staticTextDefTextThickness;
 		wxTextCtrl* m_textCtrlDefaultLineWidth;
 		wxStaticText* m_TextDefaultLineWidthUnits;
+		wxStaticText* m_staticTextDefTextThickness;
 		wxTextCtrl* m_textCtrlDefaultTextThickness;
 		wxStaticText* m_TextDefaultTextThicknessUnits;
 		wxButton* m_buttonDefault;
-		wxStaticLine* m_staticline9;
-		wxStaticText* m_staticTextMargins;
 		wxStaticText* m_staticTextLeftMargin;
-		wxStaticText* m_staticTextDefRightMargin;
 		wxTextCtrl* m_textCtrlLeftMargin;
 		wxStaticText* m_TextLeftMarginUnits;
+		wxStaticText* m_staticTextDefRightMargin;
 		wxTextCtrl* m_textCtrlRightMargin;
 		wxStaticText* m_TextRightMarginUnits;
 		wxStaticText* m_staticTextTopMargin;
-		wxStaticText* m_staticTextBottomMargin;
 		wxTextCtrl* m_textCtrlTopMargin;
 		wxStaticText* m_TextTopMarginUnits;
+		wxStaticText* m_staticTextBottomMargin;
 		wxTextCtrl* m_textCtrlBottomMargin;
 		wxStaticText* m_TextBottomMarginUnits;
 		wxButton* m_buttonGeneralOptsOK;
