@@ -116,6 +116,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
+    ReCreateOptToolbar();
 
     // Create the infobar
     m_infoBar = new WX_INFOBAR( this, &m_auimgr );
@@ -157,6 +158,8 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar,
                       EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_optionsToolBar,
+                      EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_messagePanel,
                       EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
     m_auimgr.AddPane( m_infoBar,

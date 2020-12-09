@@ -153,4 +153,22 @@ void PL_EDITOR_FRAME::ReCreateVToolbar()
 
 void PL_EDITOR_FRAME::ReCreateOptToolbar()
 {
+    if( m_optionsToolBar )
+    {
+        m_optionsToolBar->ClearToolbar();
+    }
+    else
+    {
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
+                                               wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar->SetAuiManager( &m_auimgr );
+    }
+
+    m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::inchesUnits, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::milsUnits, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::millimetersUnits, ACTION_TOOLBAR::TOGGLE );
+
+    m_optionsToolBar->KiRealize();
 }
