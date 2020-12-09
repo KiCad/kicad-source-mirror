@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"PO-Revision-Date: 2020-12-10 23:29+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
 "master-source/pt/>\n"
@@ -514,7 +514,7 @@ msgstr "Exibir camadas de adesivo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
 msgid "User Layers (not shown in realistic mode)"
-msgstr "Camadas do usuários (não exibido no modo realístico)"
+msgstr "Camadas do utilizador (não exibido no modo realístico)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -576,7 +576,7 @@ msgstr "Anti Serrilhamento"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr "Desabilitar"
+msgstr "Desativar"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "2x"
@@ -605,19 +605,19 @@ msgstr "Enquanto movendo"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
-msgstr "Desabilitar anti serrilhamento da imagem"
+msgstr "Desativar anti serrilhamento da imagem"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 msgid "Disable thickness"
-msgstr "Desabilitar espessura"
+msgstr "Desativar espessura"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr "Desabilitar vias"
+msgstr "Desativar vias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
-msgstr "Desabilitar furos"
+msgstr "Desativar furos"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
@@ -1436,11 +1436,11 @@ msgstr "Máscara de solda frontal"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco1"
-msgstr "Camada de usuário Eco1"
+msgstr "Camada de utilizador Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:182
 msgid "User layer Eco2"
-msgstr "Camada de usuário Eco2"
+msgstr "Camada de utilizador Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 #, fuzzy
@@ -1675,9 +1675,8 @@ msgid "Report or examine bugs - "
 msgstr "Reportar ou examinar bugs - "
 
 #: common/dialog_about/AboutDialog_main.cpp:160
-#, fuzzy
 msgid "KiCad users group and community"
-msgstr "Comunidade e grupos de usuários KiCad"
+msgstr "Comunidade e grupos de utilizador KiCad"
 
 #: common/dialog_about/AboutDialog_main.cpp:165
 msgid "KiCad forum - "
@@ -1957,9 +1956,9 @@ msgid ""
 "are ignored."
 msgstr ""
 "Entre com o nome e o valor de cada variável de ambiente.  Entradas em cinza "
-"são de nomes definidos externamente pelo sistema ou usuário.  Variáveis de "
-"ambiente definidas pelo sistema ou usuário tem precedência em relação às "
-"definidas nesta tabela, isto significa que, neste caso, os valores desta "
+"são de nomes definidos externamente pelo sistema ou utilizador.  Variáveis "
+"de ambiente definidas pelo sistema ou utilizador tem precedência em relação "
+"às definidas nesta tabela, isto significa que, neste caso, os valores desta "
 "tabela serão ignorados."
 
 #: common/dialogs/dialog_configure_paths.cpp:576
@@ -2202,7 +2201,7 @@ msgstr "Corrente"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
-msgstr "Grade Definida pelo Usuário"
+msgstr "Grade Definida pelo utilizador"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:91
 msgid "Size X:"
@@ -2349,7 +2348,7 @@ msgstr "Tabloide 279x432 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:77
 msgid "User (Custom)"
-msgstr "Usuário (Customizado)"
+msgstr "Utilizador (Customizado)"
 
 #: common/dialogs/dialog_page_settings.cpp:105
 msgid "Preview Settings"
@@ -2916,7 +2915,7 @@ msgid ""
 msgstr ""
 "Intervalo após a primeira alteração para a criação do arquivo de backup da "
 "placa de circuito em disco.\n"
-"Se definido em 0, o backup automático será desabilitado"
+"Se definido em 0, o backup automático será desativado"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 #: common/dialogs/panel_common_settings_base.cpp:253
@@ -3003,7 +3002,7 @@ msgstr "Outro:"
 
 #: common/dialogs/panel_common_settings_base.cpp:143
 msgid "User Interface"
-msgstr "Interface do Usuário"
+msgstr "Interface do utilizador"
 
 #: common/dialogs/panel_common_settings_base.cpp:150
 msgid "Icon scale:"
@@ -3114,7 +3113,7 @@ msgid ""
 "be deleted (set to 0 for no limit)"
 msgstr ""
 "Se o tamanho total dos arquivos de backup cresce acima deste limite, os "
-"backups antigos serão excluídos (use 0 para desabilitar)"
+"backups antigos serão excluídos (use 0 para desativar)"
 
 #: common/dialogs/panel_common_settings_base.cpp:266
 msgid "MB"
@@ -3730,7 +3729,7 @@ msgstr "Polegadas"
 #: common/eda_draw_frame.cpp:253
 #, fuzzy
 msgid "Edit User Grid..."
-msgstr "Editar grade do usuário..."
+msgstr "Editar grade do utilizador..."
 
 #: common/eda_draw_frame.cpp:362
 msgid "Zoom Auto"
@@ -4731,12 +4730,12 @@ msgstr "Comentários"
 #: common/layer_id.cpp:78
 #, fuzzy
 msgid "User.Eco1"
-msgstr "Camada de usuário Eco1"
+msgstr "Camada de utilizador Eco1"
 
 #: common/layer_id.cpp:79
 #, fuzzy
 msgid "User.Eco2"
-msgstr "Camada de usuário Eco2"
+msgstr "Camada de utilizador Eco2"
 
 #: common/layer_id.cpp:80
 #, fuzzy
@@ -4768,39 +4767,39 @@ msgstr "Fabricação traseira"
 
 #: common/layer_id.cpp:90
 msgid "User.1"
-msgstr "Do usuário 1"
+msgstr "Do utilizador 1"
 
 #: common/layer_id.cpp:91
 msgid "User.2"
-msgstr "Do usuário 2"
+msgstr "Do utilizador 2"
 
 #: common/layer_id.cpp:92
 msgid "User.3"
-msgstr "Do usuário 3"
+msgstr "Do utilizador 3"
 
 #: common/layer_id.cpp:93
 msgid "User.4"
-msgstr "Do usuário 4"
+msgstr "Do utilizador 4"
 
 #: common/layer_id.cpp:94
 msgid "User.5"
-msgstr "Do usuário 5"
+msgstr "Do utilizador 5"
 
 #: common/layer_id.cpp:95
 msgid "User.6"
-msgstr "Do usuário 6"
+msgstr "Do utilizador 6"
 
 #: common/layer_id.cpp:96
 msgid "User.7"
-msgstr "Do usuário 7"
+msgstr "Do utilizador 7"
 
 #: common/layer_id.cpp:97
 msgid "User.8"
-msgstr "Do usuário 8"
+msgstr "Do utilizador 8"
 
 #: common/layer_id.cpp:98
 msgid "User.9"
-msgstr "Do usuário 9"
+msgstr "Do utilizador 9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:653
 msgid "Rescue"
@@ -6048,7 +6047,7 @@ msgstr "Via: %s (%s)"
 #: common/tool/grid_menu.cpp:104
 #, fuzzy, c-format
 msgid "User grid: %s (%s)"
-msgstr "Grade do usuário: %.2f mils (%.4f mm)"
+msgstr "Grade do utilizador: %.2f mils (%.4f mm)"
 
 #: common/tool/zoom_menu.cpp:48
 #, c-format
@@ -10711,7 +10710,7 @@ msgstr "Fonte"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:942
 msgid "Disable symbol for simulation"
-msgstr "Desabilitar símbolo durante a simulação"
+msgstr "Desativar símbolo durante a simulação"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:948
 msgid "Alternate node sequence:"
@@ -12780,12 +12779,14 @@ msgstr ""
 #: eeschema/sch_plugin.cpp:151 pcbnew/plugin.cpp:159
 msgid "User name for <b>login</b> to some special library server."
 msgstr ""
-"Nome de usuário para <b>conectar-se</b> a algum servidor de biblioteca "
+"Nome de utilizador para <b>conectar-se</b> a algum servidor de biblioteca "
 "especial."
 
 #: eeschema/sch_plugin.cpp:155 pcbnew/plugin.cpp:163
 msgid "Password for <b>login</b> to some special library server."
-msgstr "Senha para <b>conectar-se</b> a algum servidor de biblioteca especial."
+msgstr ""
+"Palavra-passe para <b>conectar-se</b> a algum servidor de biblioteca "
+"especial."
 
 #: eeschema/sch_plugin.cpp:163
 msgid ""
@@ -13323,8 +13324,8 @@ msgstr "atributos de texto do campo do componente devem ter 3 caracteres"
 #, c-format
 msgid "user does not have permission to read library document file \"%s\""
 msgstr ""
-"usuário não tem permissão para ler o arquivo de documento da biblioteca \"%s"
-"\""
+"utilizador não tem permissão para ler o arquivo de documento da biblioteca \""
+"%s\""
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:2672
 msgid "symbol document library file is empty"
@@ -17105,7 +17106,7 @@ msgstr "Modelos do Sistema"
 
 #: kicad/tools/kicad_manager_control.cpp:164
 msgid "User Templates"
-msgstr "Modelos do Usuário"
+msgstr "Modelos do utilizador"
 
 #: kicad/tools/kicad_manager_control.cpp:173
 msgid "No project template was selected.  Cannot generate new project."
@@ -17482,7 +17483,7 @@ msgstr "Largura máxima:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:169
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:181
 msgid "Set to 0 to disable this constraint"
-msgstr "Definir em 0 para desabilitar essa restrição"
+msgstr "Definir em 0 para desativar essa restrição"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:179
 msgid "Maximum height:"
@@ -19647,7 +19648,7 @@ msgstr "OSP"
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:58
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:77
 msgid "User defined"
-msgstr "Definido pelo Usuário"
+msgstr "Definido pelo utilizador"
 
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:71
 msgid "Green"
@@ -20044,7 +20045,7 @@ msgstr "Girar Valor"
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
 #, fuzzy
 msgid "Aborted: too many errors"
-msgstr "Abortado pelo usuário"
+msgstr "Abortado pelo utilizador"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
 #, fuzzy
@@ -22108,7 +22109,7 @@ msgstr "Origem da grade"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:49
 msgid "User defined origin"
-msgstr "Origem definida pelo usuário"
+msgstr "Origem definida pelo utilizador"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:52
 msgid "Board center origin"
@@ -22116,7 +22117,7 @@ msgstr "Origem do centro da placa"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:61
 msgid "User defined origin:"
-msgstr "Origem definida pelo usuário:"
+msgstr "Origem definida pelo utilizador:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:130
 msgid "Other options:"
@@ -22461,8 +22462,8 @@ msgid ""
 "Component can be freely moved and auto placed. User can arbitrarily select "
 "and edit component's pads."
 msgstr ""
-"O componente pode ser livremente movido e auto-posicionado. O usuário pode "
-"selecionar arbitrariamente e editar as ilhas do componente."
+"O componente pode ser livremente movido e auto-posicionado. O utilizador "
+"pode selecionar arbitrariamente e editar as ilhas do componente."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:309
 #, fuzzy
@@ -22777,7 +22778,7 @@ msgid ""
 "Used mostly by users who make the boards themselves."
 msgstr ""
 "Não recomendado.\n"
-"Utilizado principalmente por usuários que fazem as próprias placas."
+"Utilizado principalmente por utilizadores que fazem as próprias placas."
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:55
 msgid "Minimal header"
@@ -24967,7 +24968,7 @@ msgid ""
 "When disabled, vias are treated as un-movable objects and hugged instead of "
 "shoved."
 msgstr ""
-"Quando desabilitado, vias serão tratadas como objetos imóveis e serão "
+"Quando desativado, vias serão tratadas como objetos imóveis e serão "
 "contornadas ao invés de empurradas."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
@@ -26140,9 +26141,8 @@ msgid "32"
 msgstr "32"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:45
-#, fuzzy
 msgid "Add User Defined Layer"
-msgstr "Grade Definida pelo Usuário"
+msgstr "Grade Definida pelo utilizador"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:63
 msgid "If you want a courtyard layer for the front side of the board"
@@ -27179,7 +27179,7 @@ msgstr "Ilha dentro de uma área de afastamento"
 
 #: pcbnew/drc/drc_item.cpp:142
 msgid "Item on a disabled layer"
-msgstr "Item em uma camada desabilitada"
+msgstr "Item em uma camada desativada"
 
 #: pcbnew/drc/drc_item.cpp:146
 #, fuzzy
@@ -27560,7 +27560,7 @@ msgstr "Contorno da Placa...\n"
 #: pcbnew/drc/drc_test_provider_misc.cpp:209
 #, fuzzy
 msgid "Checking disabled layers..."
-msgstr "Itens em camadas desabilitadas…\n"
+msgstr "Itens em camadas desativadas…"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:214
 #, fuzzy
@@ -29880,7 +29880,7 @@ msgstr "Biblioteca \"%s\" somente para leitura"
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:973
 #, c-format
 msgid "user does not have permission to delete directory \"%s\""
-msgstr "o usuário não tem permissão para excluir o diretório \"%s\""
+msgstr "o utilizador não tem permissão para excluir o diretório \"%s\""
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:981
 #, c-format
@@ -29987,7 +29987,7 @@ msgstr "não foi possível sobrescrever o caminho da biblioteca \"%s\""
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2404
 #, fuzzy, c-format
 msgid "User does not have permission to delete directory \"%s\"."
-msgstr "o usuário não tem permissão para excluir o diretório \"%s\""
+msgstr "o utilizador não tem permissão para excluir o diretório \"%s\""
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2412
 #, fuzzy, c-format
@@ -33229,7 +33229,7 @@ msgstr "Comentários explicativos"
 #: pcbnew/widgets/appearance_controls.cpp:1438
 #: pcbnew/widgets/appearance_controls.cpp:1439
 msgid "User defined meaning"
-msgstr "Significado definido pelo usuário"
+msgstr "Significado definido pelo utilizador"
 
 #: pcbnew/widgets/appearance_controls.cpp:1440
 msgid "Board's perimeter definition"
