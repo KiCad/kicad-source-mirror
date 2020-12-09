@@ -281,7 +281,7 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WS_DATA_ITEM* aItem )
 
     m_SizerTextOptions->Show( aItem->GetType() == WS_DATA_ITEM::WS_TEXT );
 
-    m_SizerEndPosition->Show( aItem->GetType() == WS_DATA_ITEM::WS_SEGMENT
+    m_sbSizerEndPosition->Show( aItem->GetType() == WS_DATA_ITEM::WS_SEGMENT
                            || aItem->GetType() == WS_DATA_ITEM::WS_RECT );
 
     m_SizerLineThickness->Show( aItem->GetType() != WS_DATA_ITEM::WS_BITMAP );

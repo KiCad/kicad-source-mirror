@@ -23,12 +23,12 @@
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/combobox.h>
+#include <wx/statbox.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/scrolwin.h>
-#include <wx/statbox.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
 
@@ -58,22 +58,22 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxChoice* m_choiceVjustify;
 		wxCheckBox* m_checkBoxItalic;
 		wxStaticText* m_staticTextTsizeX;
-		wxStaticText* m_staticTextTsizeY;
 		wxTextCtrl* m_textCtrlTextSizeX;
 		wxStaticText* m_TextTextSizeXUnits;
+		wxStaticText* m_staticTextTsizeY;
 		wxTextCtrl* m_textCtrlTextSizeY;
 		wxStaticText* m_TextTextSizeYUnits;
 		wxStaticText* m_staticTextConstraintX;
-		wxStaticText* m_staticTextConstraintY;
 		wxTextCtrl* m_textCtrlConstraintX;
 		wxStaticText* m_TextConstraintXUnits;
+		wxStaticText* m_staticTextConstraintY;
 		wxTextCtrl* m_textCtrlConstraintY;
 		wxStaticText* m_TextConstraintYUnits;
 		wxStaticText* m_staticTextSizeInfo;
 		wxStaticLine* m_staticline6;
 		wxStaticText* m_staticTextComment;
 		wxTextCtrl* m_textCtrlComment;
-		wxStaticLine* m_staticline2;
+		wxStaticBoxSizer* sbSizerPos;
 		wxStaticText* m_staticTextPosX;
 		wxTextCtrl* m_textCtrlPosX;
 		wxStaticText* m_TextPosXUnits;
@@ -82,7 +82,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_TextPosYUnits;
 		wxStaticText* m_staticTextOrgPos;
 		wxComboBox* m_comboBoxCornerPos;
-		wxBoxSizer* m_SizerEndPosition;
+		wxStaticBoxSizer* m_sbSizerEndPosition;
 		wxStaticText* m_staticTextEndX;
 		wxTextCtrl* m_textCtrlEndX;
 		wxStaticText* m_TextEndXUnits;
@@ -102,18 +102,16 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxBoxSizer* m_SizerPPI;
 		wxStaticText* m_staticTextBitmapPPI1;
 		wxTextCtrl* m_textCtrlBitmapPPI;
-		wxStaticLine* m_staticline111;
 		wxStaticText* m_staticTextRepeatCnt;
-		wxStaticText* m_staticTextInclabel;
 		wxTextCtrl* m_textCtrlRepeatCount;
+		wxStaticText* m_staticTextInclabel;
 		wxTextCtrl* m_textCtrlTextIncrement;
 		wxStaticText* m_staticTextStepX;
-		wxStaticText* m_staticTextStepY;
 		wxTextCtrl* m_textCtrlStepX;
 		wxStaticText* m_TextStepXUnits;
+		wxStaticText* m_staticTextStepY;
 		wxTextCtrl* m_textCtrlStepY;
 		wxStaticText* m_TextStepYUnits;
-		wxStaticLine* m_staticline8;
 		wxButton* m_buttonOK;
 		wxScrolledWindow* m_swGeneralOpts;
 		wxStaticText* m_staticTextDefTsX;
