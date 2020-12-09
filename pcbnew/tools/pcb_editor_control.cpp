@@ -125,7 +125,7 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
     m_frame( nullptr )
 {
     m_placeOrigin = std::make_unique<KIGFX::ORIGIN_VIEWITEM>( KIGFX::COLOR4D( 0.8, 0.0, 0.0, 1.0 ),
-                                                KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
+                                                              KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
 }
 
 
@@ -149,17 +149,23 @@ void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 
 bool PCB_EDITOR_CONTROL::Init()
 {
-    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( !m_frame->ToolStackIsEmpty() );
-    };
+    auto activeToolCondition =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return ( !m_frame->ToolStackIsEmpty() );
+            };
 
-    auto inactiveStateCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->ToolStackIsEmpty() && aSel.Size() == 0 );
-    };
+    auto inactiveStateCondition =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return ( m_frame->ToolStackIsEmpty() && aSel.Size() == 0 );
+            };
 
-    auto placeModuleCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->IsCurrentTool( PCB_ACTIONS::placeModule ) && aSel.GetSize() == 0 );
-    };
+    auto placeModuleCondition =
+            [ this ] ( const SELECTION& aSel )
+            {
+                return m_frame->IsCurrentTool( PCB_ACTIONS::placeModule ) && aSel.GetSize() == 0;
+            };
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -196,7 +202,7 @@ bool PCB_EDITOR_CONTROL::Init()
         toolMenu.AddSubMenu( zoneMenu );
         toolMenu.AddSubMenu( lockMenu );
 
-        menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 100 );
+        menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::NotEmpty, 100 );
 
         menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_T ), 200 );
     }
