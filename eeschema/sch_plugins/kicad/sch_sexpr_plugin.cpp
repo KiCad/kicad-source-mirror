@@ -1442,6 +1442,10 @@ void SCH_SEXPR_PLUGIN_CACHE::Load()
                  wxString::Format( "Cannot use relative file paths in sexpr plugin to "
                                    "open library \"%s\".", m_libFileName.GetFullPath() ) );
 
+    // The current locale must use period as the decimal point.
+    wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",
+              LOCALE_IO toggle );
+
     wxLogTrace( traceSchLegacyPlugin, "Loading sexpr symbol library file \"%s\"",
                 m_libFileName.GetFullPath() );
 
@@ -1510,6 +1514,10 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
                                          int aNestLevel, const wxString& aLibName )
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_PART pointer." );
+
+    // The current locale must use period as the decimal point.
+    wxCHECK2( wxLocale::GetInfo( wxLOCALE_DECIMAL_POINT, wxLOCALE_CAT_NUMBER ) == ".",
+              LOCALE_IO toggle );
 
     int lastFieldId;
     LIB_FIELDS fields;
