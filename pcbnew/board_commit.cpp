@@ -388,8 +388,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     else
         frame->Update3DView( true );
 
-    frame->UpdateMsgPanel();
-
     clear();
 }
 
