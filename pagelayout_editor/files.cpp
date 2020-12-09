@@ -126,7 +126,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         if( ! InsertPageLayoutDescrFile( filename ) )
         {
             msg.Printf( _( "Unable to load %s file" ), filename );
-            wxMessageBox( msg );
+            DisplayErrorMessage( this, msg );
         }
         else
         {
@@ -151,7 +151,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         if( ! LoadPageLayoutDescrFile( filename ) )
         {
             msg.Printf( _( "Unable to load %s file" ), filename );
-            wxMessageBox( msg );
+            DisplayErrorMessage( this, msg );
         }
         else
         {
@@ -166,7 +166,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         if( !SavePageLayoutDescrFile( filename ) )
         {
             msg.Printf( _( "Unable to write \"%s\"" ), filename );
-            wxMessageBox( msg );
+            DisplayErrorMessage( this, msg );
         }
         else
         {
@@ -195,8 +195,8 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
         if( !SavePageLayoutDescrFile( filename ) )
         {
-            msg.Printf( _("Unable to create \"%s\""), filename );
-            wxMessageBox( msg );
+            msg.Printf( _( "Unable to create \"%s\"" ), filename );
+            DisplayErrorMessage( this, msg );
         }
 
         else
@@ -211,7 +211,6 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     default:
-        wxMessageBox( wxT( "File_io: unexpected command id" ) );
         break;
     }
 }
