@@ -544,8 +544,9 @@ public:
 
     void deleteAllItems()
     {
+        BeforeReset();
         m_items.clear();
-        Cleared();
+        AfterReset();
     }
 
 
