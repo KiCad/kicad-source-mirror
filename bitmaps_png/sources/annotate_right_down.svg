@@ -1,42 +1,91 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="26"
+   width="26"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="annotate_right_down.svg">
+  <metadata
+     id="metadata29">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:none;stroke:#e61c50;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#e61c50;}.cls-3{fill:#b9b9b9;}.cls-4{fill:#545454;}</style>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1301"
+     inkscape:window-height="744"
+     id="namedview27"
+     showgrid="true"
+     inkscape:zoom="6.9532167"
+     inkscape:cx="-23.452066"
+     inkscape:cy="19.011301"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g11">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2987"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <filter
+       id="a"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         stdDeviation="5.4804575"
+         id="feGaussianBlur7" />
+    </filter>
   </defs>
-  <title>annotate_right_down</title>
-  <line class="cls-1" x1="9.0975" y1="15.2322" x2="20.9646" y2="8.3124"/>
-  <polygon class="cls-2" points="10.368 15.837 6.036 17.017 9.197 13.829 10.368 15.837"/>
-  <rect class="cls-3" x="1" y="1.0019" width="10" height="8"/>
-  <path class="cls-4" d="M3.1211,5.2764V7.61H2.1846V1.9854H4.2588A2.2173,2.2173,0,0,1,5.7109,2.41,1.4861,1.4861,0,0,1,6.2236,3.623a1.2578,1.2578,0,0,1-.2256.752,1.5431,1.5431,0,0,1-.6572.5039,1.1755,1.1755,0,0,1,.6826.4922,1.5927,1.5927,0,0,1,.208.8408V6.68a1.9054,1.9054,0,0,0,.0616.4824.6761.6761,0,0,0,.208.3594V7.61H5.5381a.6294.6294,0,0,1-.1992-.4014,3.4031,3.4031,0,0,1-.044-.5371V6.22a.9509.9509,0,0,0-.2461-.6885A.9012.9012,0,0,0,4.37,5.2764Zm0-.753H4.208a1.2693,1.2693,0,0,0,.8213-.2168.812.812,0,0,0,.2578-.66.8787.8787,0,0,0-.2539-.667,1.0889,1.0889,0,0,0-.7744-.2412H3.1211Z"/>
-  <path class="cls-4" d="M9.17,7.61H8.2334V2.877H7.0928V2.1855l2.0771-.2Z"/>
-  <rect class="cls-3" x="15.0076" y="1.0019" width="10" height="8"/>
-  <rect class="cls-3" x="1" y="17" width="10" height="8"/>
-  <rect class="cls-3" x="15.0076" y="17" width="10" height="8"/>
-  <line class="cls-1" x1="12.7114" y1="4.9888" x2="10.1877" y2="4.9888"/>
-  <polygon class="cls-2" points="12.018 3.972 15.812 4.989 12.018 6.006 12.018 3.972"/>
-  <line class="cls-1" x1="12.7114" y1="21.0142" x2="10.8284" y2="21.0142"/>
-  <polygon class="cls-2" points="12.018 19.997 15.812 21.014 12.018 22.031 12.018 19.997"/>
-  <path class="cls-4" d="M16.9082,21.5244v2.334h-.9365v-5.625h2.0742a2.2173,2.2173,0,0,1,1.4521.4248,1.4861,1.4861,0,0,1,.5127,1.2129,1.2581,1.2581,0,0,1-.2255.7519,1.5442,1.5442,0,0,1-.6573.504,1.175,1.175,0,0,1,.6826.4921,1.5931,1.5931,0,0,1,.2081.8409v.4677a1.9067,1.9067,0,0,0,.0615.4825.6758.6758,0,0,0,.208.3593v.0889h-.9629a.6294.6294,0,0,1-.1992-.4014,3.4031,3.4031,0,0,1-.044-.5371v-.4521a.9507.9507,0,0,0-.2461-.6885.9012.9012,0,0,0-.6787-.2549Zm0-.7529h1.0869a1.27,1.27,0,0,0,.8213-.2168.8124.8124,0,0,0,.2578-.66.8785.8785,0,0,0-.2539-.667,1.0889,1.0889,0,0,0-.7744-.2412H16.9082Z"/>
-  <path class="cls-4" d="M23.7705,21.8535h.709v.7529h-.709v1.252h-.9326v-1.252H20.43l-.0235-.5722,2.4-3.8008h.9639Zm-2.4394,0h1.5068V19.5693l-.0234-.0068-.0772.166Z"/>
+  <g
+     id="g11"
+     transform="matrix(0.28648887,0.04837496,-0.04384193,0.25964309,1.3389478,-25.643151)">
+    <g
+       id="g2989"
+       transform="matrix(0.18059106,0.57322067,0.4708254,-0.18059106,1.724559,99.448621)">
+      <path
+         d="m 34.321,26.857 c 11.72,107.25 39.47,196.69 61.459,78.893 13.63,-112.28 39.73,-84.752 56.12,26.02"
+         id="path13"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#333333;stroke-width:6.89179993" />
+      <path
+         sodipodi:nodetypes="cccc"
+         d="m 132.41581,120.30954 33.93774,-6.32305 -10.66527,44.35293 z"
+         id="path15"
+         inkscape:connector-curvature="0"
+         style="fill:#333333;stroke:#333333" />
+      <path
+         sodipodi:nodetypes="cccc"
+         d="M 20.243052,48.774241 54.180793,42.451188 42.942466,83.059446 z"
+         id="path17"
+         inkscape:connector-curvature="0"
+         style="fill:#333333;stroke:#333333" />
+    </g>
+  </g>
 </svg>
