@@ -38,6 +38,10 @@
 
 // NOTE: Avoid changing the settings key for an ERC item after it has been created
 
+ERC_ITEM ERC_ITEM::heading_connections( 0, _( "Connections" ), "" );
+ERC_ITEM ERC_ITEM::heading_conflicts( 0, _( "Conflicts" ), "" );
+ERC_ITEM ERC_ITEM::heading_misc( 0, _( "Miscellaneous" ), "" );
+
 ERC_ITEM ERC_ITEM::duplicateSheetName( ERCE_DUPLICATE_SHEET_NAME,
         _( "Duplicate sheet names within a given sheet" ),
         wxT( "duplicate_sheet_names" ) );
@@ -63,7 +67,7 @@ ERC_ITEM ERC_ITEM::pinTableError( ERCE_PIN_TO_PIN_ERROR,
         wxT( "pin_to_pin" ) );
 
 ERC_ITEM ERC_ITEM::hierLabelMismatch( ERCE_HIERACHICAL_LABEL,
-        _( "Mismatch between hierarchical labels and pins sheets" ),
+        _( "Mismatch between hierarchical labels and sheet pins" ),
         wxT( "hier_label_mismatch" ) );
 
 ERC_ITEM ERC_ITEM::noConnectConnected( ERCE_NOCONNECT_CONNECTED,
@@ -87,11 +91,11 @@ ERC_ITEM ERC_ITEM::similarLabels( ERCE_SIMILAR_LABELS,
         wxT( "similar_labels" ) );
 
 ERC_ITEM ERC_ITEM::differentUnitFootprint( ERCE_DIFFERENT_UNIT_FP,
-        _( "Different footprint assigned in another unit of the same component" ),
+        _( "Different footprint assigned in another unit of the symbol" ),
         wxT( "different_unit_footprint" ) );
 
 ERC_ITEM ERC_ITEM::differentUnitNet( ERCE_DIFFERENT_UNIT_NET,
-        _( "Different net assigned to a shared pin in another unit of the same component" ),
+        _( "Different net assigned to a shared pin in another unit of the symbol" ),
         wxT( "different_unit_net" ) );
 
 ERC_ITEM ERC_ITEM::busDefinitionConflict( ERCE_BUS_ALIAS_CONFLICT,
@@ -131,28 +135,33 @@ ERC_ITEM ERC_ITEM::libSymbolIssues( ERCE_LIB_SYMBOL_ISSUES,
         wxT( "lib_symbol_issues" ) );
 
 std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
-                 ERC_ITEM::duplicateSheetName,
+                 ERC_ITEM::heading_connections,
                  ERC_ITEM::pinNotConnected,
                  ERC_ITEM::pinNotDriven,
                  ERC_ITEM::powerpinNotDriven,
-                 ERC_ITEM::pinTableWarning,
-                 ERC_ITEM::hierLabelMismatch,
                  ERC_ITEM::noConnectConnected,
                  ERC_ITEM::noConnectDangling,
                  ERC_ITEM::labelDangling,
                  ERC_ITEM::globalLabelDangling,
                  ERC_ITEM::wireDangling,
-                 ERC_ITEM::similarLabels,
-                 ERC_ITEM::differentUnitFootprint,
+
+                 ERC_ITEM::heading_conflicts,
+                 ERC_ITEM::pinTableWarning,
                  ERC_ITEM::differentUnitNet,
-                 ERC_ITEM::busDefinitionConflict,
+                 ERC_ITEM::duplicateSheetName,
+                 ERC_ITEM::hierLabelMismatch,
                  ERC_ITEM::multipleNetNames,
-                 ERC_ITEM::netNotBusMember,
-                 ERC_ITEM::busLabelSyntax,
+                 ERC_ITEM::busDefinitionConflict,
                  ERC_ITEM::busToBusConflict,
                  ERC_ITEM::busToNetConflict,
+                 ERC_ITEM::netNotBusMember,
+
+                 ERC_ITEM::heading_misc,
                  ERC_ITEM::unresolvedVariable,
+                 ERC_ITEM::similarLabels,
+                 ERC_ITEM::busLabelSyntax,
                  ERC_ITEM::libSymbolIssues,
+                 ERC_ITEM::differentUnitFootprint,
          } );
 
 

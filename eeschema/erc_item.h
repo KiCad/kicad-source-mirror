@@ -63,6 +63,10 @@ private:
     /// A list of all ERC_ITEM types which are valid error codes
     static std::vector<std::reference_wrapper<RC_ITEM>> allItemTypes;
 
+    static ERC_ITEM heading_connections;
+    static ERC_ITEM heading_conflicts;
+    static ERC_ITEM heading_misc;
+
     static ERC_ITEM duplicateSheetName;
     static ERC_ITEM pinNotConnected;
     static ERC_ITEM pinNotDriven;
