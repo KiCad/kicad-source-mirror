@@ -1301,7 +1301,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         PCB_GROUP* parentGroup = static_cast<BOARD_ITEM*>( item )->GetParentGroup();
 
         if( parentGroup )
+        {
+            m_commit->Modify( parentGroup );
             parentGroup->RemoveItem( static_cast<BOARD_ITEM*>( item ) );
+        }
 
         switch( item->Type() )
         {
