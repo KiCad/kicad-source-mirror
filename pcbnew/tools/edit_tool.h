@@ -203,14 +203,18 @@ private:
     bool pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
+    int onSelectionEvent( const TOOL_EVENT& aEvent );
 
 private:
-    SELECTION_TOOL* m_selectionTool;   // Selection tool used for obtaining selected items
-    bool            m_dragging;        // Indicates objects are being dragged right now
-    bool            m_lockedSelected;  // Determines if we prompt before removing locked objects
-    VECTOR2I        m_cursor;          // Last cursor position (needed for getModificationPoint()
-                                       // to avoid changes of edit reference point).
-    std::unique_ptr<BOARD_COMMIT> m_commit;
+    SELECTION_TOOL* m_selectionTool;     // Selection tool used for obtaining selected items
+
+    bool      m_dragging;                // Indicates objects are being dragged right now
+    bool      m_dismissInfobarOnNextSel;
+    bool      m_forceDeleteLockedItems;  // Delete even locked items if set
+    VECTOR2I  m_cursor;                  // Last cursor position (needed for getModificationPoint()
+                                         // to avoid changes of edit reference point).
+
+    std::unique_ptr<BOARD_COMMIT>         m_commit;
 
     std::unique_ptr<STATUS_TEXT_POPUP>    m_statusPopup;
 };

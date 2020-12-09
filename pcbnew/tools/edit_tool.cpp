@@ -55,6 +55,8 @@
 #include <functional>
 using namespace std::placeholders;
 #include "kicad_clipboard.h"
+#include <wx/hyperlink.h>
+#include <widgets/infobar.h>
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
@@ -120,10 +122,11 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
 
 
 EDIT_TOOL::EDIT_TOOL() :
-    PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
-    m_selectionTool( NULL ),
-    m_dragging( false ),
-    m_lockedSelected( false )
+        PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
+        m_selectionTool( NULL ),
+        m_dragging( false ),
+        m_dismissInfobarOnNextSel( false ),
+        m_forceDeleteLockedItems( false )
 {
 }
 
@@ -625,7 +628,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
-    m_lockedSelected = false;
+    m_forceDeleteLockedItems = false;
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
     controls->SetAutoPan( false );
@@ -1279,9 +1282,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
 
     // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
-    // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be
+    // were copied to the clipboard, no more, no fewer.  Any filtering for locked items will be
     // done in the copyToClipboard() routine
-    if( !isCut )
+    if( !m_forceDeleteLockedItems && !isCut )
     {
         // Second RequestSelection removes locked items but keeps a copy of their pointers
         selectionCopy = m_selectionTool->RequestSelection(
@@ -1443,28 +1446,33 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
         m_commit->Push( _( "Delete" ) );
 
-    if( !m_lockedSelected && !lockedItems.empty() )
+    if( !m_forceDeleteLockedItems && !lockedItems.empty() )
     {
-        ///> Popup nag for deleting locked items
-        m_lockedSelected = true;
         m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &lockedItems );
-        m_statusPopup->SetText( _( "Locked items cannot be deleted" ) );
-        m_statusPopup->PopupFor( 2000 );
-        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
-        Activate();
+        WX_INFOBAR* infobar = frame()->GetInfoBar();
+        wxString    msg = _( "Locked items in the selection were not deleted." );
+        wxString    link = _( "Delete locked items" );
 
-        while( m_lockedSelected && m_statusPopup->IsShown() )
-        {
-            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-            Wait();
-        }
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [&]( wxHyperlinkEvent& aEvent )
+                {
+                    m_forceDeleteLockedItems = true;
+                    {
+                        m_toolMgr->RunAction( ACTIONS::doDelete, true );
+                    }
+                    m_forceDeleteLockedItems = false;
 
-        // Ensure statusPopup is hidden after use
-        m_statusPopup->Hide();
+                    frame()->GetInfoBar()->Dismiss();
+                    m_dismissInfobarOnNextSel = false;
+                } ) );
+
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+        infobar->ShowMessageFor( msg, 4000, wxICON_INFORMATION );
+        m_dismissInfobarOnNextSel = true;
     }
-
-    m_lockedSelected = false;
 
     return 0;
 }
@@ -1924,6 +1932,18 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 }
 
 
+int EDIT_TOOL::onSelectionEvent( const TOOL_EVENT& aEvent )
+{
+    if( m_dismissInfobarOnNextSel )
+    {
+        frame()->GetInfoBar()->Dismiss();
+        m_dismissInfobarOnNextSel = false;
+    }
+
+    return 0;
+}
+
+
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
@@ -1948,6 +1968,9 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,     PCB_ACTIONS::copyWithReference.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );
+
+    Go( &EDIT_TOOL::onSelectionEvent,    EVENTS::SelectedEvent );
+    Go( &EDIT_TOOL::onSelectionEvent,    EVENTS::UnselectedEvent );
 }
 
 
