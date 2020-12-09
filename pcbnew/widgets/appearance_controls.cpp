@@ -948,22 +948,44 @@ void APPEARANCE_CONTROLS::OnBoardNetSettingsChanged( BOARD& aBoard )
 }
 
 
+bool APPEARANCE_CONTROLS::doesBoardItemNeedRebuild( BOARD_ITEM* aBoardItem )
+{
+    return aBoardItem->Type() == PCB_NETINFO_T;
+}
+
+
+bool APPEARANCE_CONTROLS::doesBoardItemNeedRebuild( std::vector<BOARD_ITEM*>& aBoardItems )
+{
+    bool rebuild = std::any_of( aBoardItems.begin(), aBoardItems.end(),
+                                []( const BOARD_ITEM* a )
+                                {
+                                    return a->Type() == PCB_NETINFO_T;
+                                } );
+
+
+    return rebuild;
+}
+
+
 void APPEARANCE_CONTROLS::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
-    if( aBoardItem->Type() == PCB_NETINFO_T )
+    if( doesBoardItemNeedRebuild( aBoardItem ) )
         handleBoardItemsChanged();
 }
 
 
 void APPEARANCE_CONTROLS::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
-    handleBoardItemsChanged();
+    if( doesBoardItemNeedRebuild( aBoardItems ) )
+    {
+        handleBoardItemsChanged();
+    }
 }
 
 
 void APPEARANCE_CONTROLS::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
-    if( aBoardItem->Type() == PCB_NETINFO_T )
+    if( doesBoardItemNeedRebuild( aBoardItem ) )
         handleBoardItemsChanged();
 }
 
@@ -971,13 +993,16 @@ void APPEARANCE_CONTROLS::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardI
 void APPEARANCE_CONTROLS::OnBoardItemsRemoved(
         BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
-    handleBoardItemsChanged();
+    if( doesBoardItemNeedRebuild( aBoardItems ) )
+    {
+        handleBoardItemsChanged();
+    }
 }
 
 
 void APPEARANCE_CONTROLS::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
-    if( aBoardItem->Type() == PCB_NETINFO_T )
+    if( doesBoardItemNeedRebuild( aBoardItem ) )
         handleBoardItemsChanged();
 }
 
@@ -985,7 +1010,10 @@ void APPEARANCE_CONTROLS::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardI
 void APPEARANCE_CONTROLS::OnBoardItemsChanged(
         BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
 {
-    handleBoardItemsChanged();
+    if( doesBoardItemNeedRebuild( aBoardItems ) )
+    {
+        handleBoardItemsChanged();
+    }
 }
 
 

@@ -463,6 +463,10 @@ private:
     void idleFocusHandler( wxIdleEvent& aEvent );
 
     void onReadOnlySwatch();
+
+    bool doesBoardItemNeedRebuild( BOARD_ITEM* aBoardItem );
+
+    bool doesBoardItemNeedRebuild( std::vector<BOARD_ITEM*>& aBoardItems );
 };
 
 #endif
