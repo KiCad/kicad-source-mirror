@@ -667,7 +667,7 @@ void PL_EDITOR_FRAME::DisplayGridMsg()
 void PL_EDITOR_FRAME::UpdateStatusBar()
 {
     // Display Zoom level:
-    EDA_DRAW_FRAME::UpdateStatusBar();
+    SetStatusText( GetZoomLevelIndicator(), 1 );
 
     // coordinate origin can be the paper Top Left corner, or each of 4 page corners
     wxPoint originCoord = ReturnCoordOriginCorner();
@@ -706,7 +706,6 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     double   dXpos = To_User_Unit( GetUserUnits(), coord.x * Xsign );
     double   dYpos = To_User_Unit( GetUserUnits(), coord.y * Ysign );
 
-    wxString pagesizeformatter = _( "Page size: width %.4g height %.4g" );
     wxString absformatter = wxT( "X %.4g  Y %.4g" );
     wxString locformatter = wxT( "dx %.4g  dy %.4g" );
 
@@ -720,13 +719,6 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     }
 
     wxString line;
-
-    // Display page size
-    #define MILS_TO_MM (25.4/1000)
-    DSIZE size = GetPageSettings().GetSizeMils();
-    size = size * MILS_TO_MM;
-    line.Printf( pagesizeformatter, size.x, size.y );
-    SetStatusText( line, 0 );
 
     // Display abs coordinates
     line.Printf( absformatter, dXpos, dYpos );

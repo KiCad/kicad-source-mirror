@@ -159,7 +159,10 @@ int PL_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_frame->ClearMsgPanel();
+        MSG_PANEL_ITEMS msgItems;
+        m_frame->GetPageLayout().GetMsgPanelInfo( m_frame, msgItems );
+        m_frame->SetMsgPanel( msgItems );
+
         m_frame->GetPropertiesFrame()->CopyPrmsFromItemToPanel( nullptr );
     }
 

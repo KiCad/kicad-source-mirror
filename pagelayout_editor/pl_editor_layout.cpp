@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <climits>
 
+#include <eda_draw_frame.h>
 #include <eda_item.h>
 #include <eda_rect.h>
 #include "pl_editor_layout.h"
@@ -44,10 +45,22 @@ PL_EDITOR_LAYOUT::~PL_EDITOR_LAYOUT()
 {
 }
 
+
 EDA_RECT PL_EDITOR_LAYOUT::ComputeBoundingBox()
 {
     EDA_RECT bbox;
 
     SetBoundingBox( bbox );
     return bbox;
+}
+
+
+void PL_EDITOR_LAYOUT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    DSIZE size = GetPageSettings().GetSizeIU();
+
+    aList.emplace_back( _( "Page Width" ), MessageTextFromValue( aFrame->GetUserUnits(), size.x ) );
+
+    aList.emplace_back(
+            _( "Page Height" ), MessageTextFromValue( aFrame->GetUserUnits(), size.y ) );
 }
