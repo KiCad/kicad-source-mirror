@@ -211,22 +211,9 @@ void AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage )
 
     wxItemKind menu_type = aMenu->GetKind();
 
-    if( useImagesInMenus )
+    if( useImagesInMenus && menu_type != wxITEM_CHECK && menu_type != wxITEM_RADIO  )
     {
-        if( menu_type == wxITEM_CHECK || menu_type == wxITEM_RADIO )
-        {
-    #if defined(  __WINDOWS__ )
-            aMenu->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
-            // A workaround to a strange bug on Windows, wx Widgets 3.0:
-            // size of bitmaps is not taken in account for wxITEM_{CHECK,RADIO} menu
-            // unless we call SetFont
-            aMenu->SetFont( *wxNORMAL_FONT );
-    #endif
-        }
-        else if( menu_type != wxITEM_RADIO )
-        {
-            aMenu->SetBitmap( aImage );
-        }
+        aMenu->SetBitmap( aImage );
     }
 }
 
