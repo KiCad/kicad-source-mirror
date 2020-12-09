@@ -468,7 +468,6 @@ set( BMAPS_MID
     via_sketch
     via_diameter
     via_hole_diameter
-    warning
     width_track_via
     width_track
     zip
