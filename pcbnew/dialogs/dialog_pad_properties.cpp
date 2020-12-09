@@ -125,12 +125,12 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_tcCornerRadius, m_cornerRadiusUnits, true ),
     m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits, true ),
     m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits, true ),
-    m_OrientValidator( 1, &m_OrientValue ),
     m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true ),
     m_maskClearance( aParent, m_maskClearanceLabel, m_maskClearanceCtrl, m_maskClearanceUnits, true ),
     m_pasteClearance( aParent, m_pasteClearanceLabel, m_pasteClearanceCtrl, m_pasteClearanceUnits, true ),
     m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true ),
-    m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits, true )
+    m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits, true ),
+    m_rotationUB( aParent, m_PadOrientText, m_orientation, nullptr, true )
 {
     m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
                                 // from the footprint editor to set default pad setup
@@ -139,9 +139,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
 
     m_PadNetSelector->SetNetInfo( &m_board->GetNetInfo() );
 
-    m_OrientValidator.SetRange( -360.0, 360.0 );
-    m_orientation->SetValidator( m_OrientValidator );
-    m_OrientValidator.SetWindow( m_orientation );
+    m_rotationUB.SetUnits( DEGREES );
 
     m_cbShowPadOutline->SetValue( m_sketchPreview );
 
@@ -697,16 +695,14 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_dummyPad->SetOrientation( angle );
     }
 
+    // Pad Orient
     angle = m_dummyPad->GetOrientation();
-
     NORMALIZE_ANGLE_180( angle );    // ? normalizing is in D_PAD::SetOrientation()
+    // Note: use ChangeValue() instead of SetValue() so that we don't generate events
+    m_orientation->ChangeValue( StringFromValue( DEGREES, angle ) );
 
     // Set layers used by this pad: :
     setPadLayersList( m_dummyPad->GetLayerSet() );
-
-    // Pad Orient
-    // Note: use ChangeValue() instead of SetValue() so that we don't generate events
-    m_orientation->ChangeValue( StringFromValue( DEGREES, angle ) );
 
     switch( m_dummyPad->GetShape() )
     {
@@ -1561,7 +1557,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     if( !m_spokeWidth.Validate( 0, INT_MAX ) )
         return false;
 
-    m_OrientValidator.TransferFromWindow();
+    m_OrientValue = m_rotationUB.GetValue();
+    NORMALIZE_ANGLE_180( m_OrientValue );
 
     aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
     aPad->SetShape( code_shape[m_PadShape->GetSelection()] );
@@ -1674,7 +1671,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
     }
 
     aPad->SetOffset( wxPoint( m_offsetX.GetValue(), m_offsetY.GetValue() ) );
-    aPad->SetOrientation( m_OrientValue * 10.0 );
+    aPad->SetOrientation( m_OrientValue );
     aPad->SetName( m_PadNumCtrl->GetValue() );
     aPad->SetNetCode( m_PadNetSelector->GetSelectedNetcode() );
 

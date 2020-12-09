@@ -88,11 +88,11 @@ private:
     UNIT_BINDER m_trapDelta;
     UNIT_BINDER m_cornerRadius;
     UNIT_BINDER m_holeX, m_holeY;
-    wxFloatingPointValidator<double>    m_OrientValidator;
-    double      m_OrientValue;
     UNIT_BINDER m_clearance;
     UNIT_BINDER m_maskClearance, m_pasteClearance;
     UNIT_BINDER m_spokeWidth, m_thermalGap;
+    UNIT_BINDER m_rotationUB;
+    double      m_OrientValue;
 
 private:
     void prepareCanvas();       // Initialize the canvases (legacy or gal) to display the pad
