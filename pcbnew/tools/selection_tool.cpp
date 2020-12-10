@@ -103,7 +103,6 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
-        m_locked( true ),
         m_enteredGroup( nullptr ),
         m_priv( std::make_unique<PRIV>() )
 {
@@ -175,7 +174,6 @@ bool SELECTION_TOOL::Init()
 void SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
-    m_locked = true;
 
     if( m_enteredGroup )
         ExitGroup();
@@ -475,10 +473,19 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
         m_selection.ClearReferencePoint();
     }
 
-    if ( aConfirmLockedItems && CheckLock() == SELECTION_LOCKED )
+    if( aConfirmLockedItems )
     {
-        ClearSelection();
-        return m_selection;
+        // Check if the selection contains locked items
+        for( EDA_ITEM* item : m_selection )
+        {
+            if( static_cast<BOARD_ITEM*>( item )->IsLocked() )
+            {
+                if( !IsOK( m_frame, _( "Selection contains locked items.  Continue anyway?" ) ) )
+                    ClearSelection();
+
+                break;
+            }
+        }
     }
 
     if( aClientFilter )
@@ -818,50 +825,6 @@ bool SELECTION_TOOL::selectMultiple()
     m_toolMgr->ProcessEvent( EVENTS::UninhibitSelectionEditing );
 
     return cancelled;
-}
-
-
-SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
-{
-    if( !m_locked || m_isFootprintEditor )
-        return SELECTION_UNLOCKED;
-
-    bool containsLocked = false;
-
-    // Check if the selection contains locked items
-    for( EDA_ITEM* item : m_selection )
-    {
-        switch( item->Type() )
-        {
-        case PCB_FOOTPRINT_T:
-            if( static_cast<FOOTPRINT*>( item )->IsLocked() )
-                containsLocked = true;
-            break;
-
-        case PCB_FP_SHAPE_T:
-        case PCB_FP_TEXT_T:
-        case PCB_FP_ZONE_T:
-            if( static_cast<FOOTPRINT*>( item->GetParent() )->IsLocked() )
-                containsLocked = true;
-            break;
-
-        default:    // suppress warnings
-            break;
-        }
-    }
-
-    if( containsLocked )
-    {
-        if( IsOK( m_frame, _( "Selection contains locked items. Do you want to continue?" ) ) )
-        {
-            m_locked = false;
-            return SELECTION_LOCK_OVERRIDE;
-        }
-        else
-            return SELECTION_LOCKED;
-    }
-
-    return SELECTION_UNLOCKED;
 }
 
 
@@ -1641,8 +1604,6 @@ void SELECTION_TOOL::ClearSelection( bool aQuietMode )
     m_selection.SetIsHover( false );
     m_selection.ClearReferencePoint();
 
-    m_locked = true;
-
     // Inform other potentially interested tools
     if( !aQuietMode )
     {
@@ -2089,9 +2050,6 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, &m_selection );
-
-    if( m_selection.Empty() )
-        m_locked = true;
 }
 
 

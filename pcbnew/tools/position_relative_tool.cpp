@@ -64,11 +64,15 @@ bool POSITION_RELATIVE_TOOL::Init()
 
 int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_FRAME*         editFrame = getEditFrame<PCB_BASE_FRAME>();
+    PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;

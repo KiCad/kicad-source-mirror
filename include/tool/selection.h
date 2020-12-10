@@ -293,12 +293,5 @@ protected:
     using VIEW_GROUP::Remove;
 };
 
-enum SELECTION_LOCK_FLAGS
-{
-    SELECTION_UNLOCKED = 0,
-    SELECTION_LOCK_OVERRIDE = 1,
-    SELECTION_LOCKED = 2
-};
-
 
 #endif

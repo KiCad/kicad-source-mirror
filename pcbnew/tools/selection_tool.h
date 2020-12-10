@@ -98,9 +98,6 @@ public:
     PCBNEW_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
             std::vector<BOARD_ITEM*>* aFiltered = nullptr, bool aConfirmLockedItems = false );
 
-    ///> Checks if the user has agreed to modify locked items for the given selection.
-    SELECTION_LOCK_FLAGS CheckLock();
-
     ///> Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
 
@@ -384,7 +381,6 @@ private:
     bool m_exclusive_or;          // Items' selection state should be toggled
     bool m_multiple;              // Multiple selection mode is active
     bool m_skip_heuristics;       // Heuristics are not allowed when choosing item under cursor
-    bool m_locked;                // Other tools are not allowed to modify locked items
 
     PCB_GROUP*        m_enteredGroup;          // If non-null, selections are limited to
                                                // members of this group

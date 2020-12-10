@@ -475,7 +475,6 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_exclusive_or( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
-        m_locked( true ),
         m_enteredGroup( NULL ),
         m_priv( nullptr )
 {
@@ -562,13 +561,6 @@ bool SELECTION_TOOL::selectMultiple()
 {
 
     return false;
-}
-
-
-SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
-{
-
-    return SELECTION_UNLOCKED;
 }
 
 

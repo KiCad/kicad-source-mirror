@@ -139,12 +139,15 @@ int ALIGN_DISTRIBUTE_TOOL::selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECT
 
 
 template< typename T >
-size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked, T aCompare )
+size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked,
+                                             T aCompare )
 {
 
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+            } );
 
     if( selection.Size() <= 1 )
         return 0;
@@ -152,7 +155,10 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_
     std::vector<BOARD_ITEM*> lockedItems;
     selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED, sTool ); }, &lockedItems );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED, sTool );
+            },
+            &lockedItems );
 
     aItems = GetBoundingBoxes( selection );
     aLocked = GetBoundingBoxes( lockedItems );
@@ -395,7 +401,11 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     if( selection.Size() <= 1 )
         return 0;
@@ -497,7 +507,11 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool ); } );
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     if( selection.Size() <= 1 )
         return 0;

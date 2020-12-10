@@ -123,8 +123,6 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
-
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
                     BOARD_ITEM* item = aCollector[i];
@@ -366,9 +364,6 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector,
-                                         EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
-
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
                     BOARD_ITEM* item = aCollector[i];
@@ -399,7 +394,9 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                     }
                 }
-            } );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -563,9 +560,6 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector,
-                                         EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS, sTool );
-
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
                     BOARD_ITEM* item = aCollector[i];
@@ -577,7 +571,9 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                         aCollector.Remove( item );
                     }
                 }
-            } );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     EDA_ITEM* source = selection.Front();
     VECTOR2I start, end, mid;

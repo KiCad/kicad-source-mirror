@@ -301,10 +301,15 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &PCB_ACTIONS::dragFreeAngle ) )
         mode |= PNS::DM_FREE_ANGLE;
 
-    // deal with locked items (override lock or abort the operation)
-    SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
+    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            {
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
-    if( lockFlags == SELECTION_LOCKED )
+    if( selection.Empty() )
         return 0;
 
     invokeInlineRouter( mode );
@@ -361,12 +366,14 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     VECTOR2I pickedReferencePoint;
 
     // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
-    // the item_layers when a pad is the selection front (ie: will become curr_tiem).
+    // the item_layers when a pad is the selection front.
     selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
-            } );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -474,13 +481,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             else if( !m_dragging && !evt->IsAction( &ACTIONS::refreshPreview ) )
             {
                 // Prepare to start dragging
-
-                // deal with locked items (override lock or abort the operation)
-                SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
-
-                if( lockFlags == SELECTION_LOCKED )
-                    break;
-
                 if( !( evt->IsAction( &PCB_ACTIONS::move )
                        || evt->IsAction( &PCB_ACTIONS::moveWithReference ) )
                     && isInteractiveDragEnabled() )
@@ -663,7 +663,9 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
-            } );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     for( EDA_ITEM* item : selection )
     {
@@ -725,11 +727,11 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector,
-                                         EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr, !m_dragging );
+            nullptr,
+            !m_dragging /* confirm if contains locked items */ );
 
     if( selection.Size() < 2 )
     {
@@ -979,7 +981,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr, ! m_dragging );
+            nullptr,
+            !m_dragging /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1081,7 +1084,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr, !m_dragging );
+            nullptr,
+            !m_dragging /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1180,7 +1184,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr, !m_dragging );
+            nullptr,
+            !m_dragging /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1489,10 +1494,11 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector,
-                                         EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
+                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
-            } );
+            },
+            nullptr,
+            true /* confirm if contains locked items */ );
 
     if( selection.Empty() )
         return 0;
