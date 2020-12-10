@@ -187,7 +187,8 @@ wxString MessageTextFromValue( EDA_UNITS aUnits, double aValue, bool aAddUnitLab
         break;
 
     case EDA_UNITS::DEGREES:
-        format = wxT( "%.1f" );
+        // 3 digits in mantissa should be good for rotation in degree
+        format = wxT( "%.3f" );
         break;
 
     case EDA_UNITS::UNSCALED:

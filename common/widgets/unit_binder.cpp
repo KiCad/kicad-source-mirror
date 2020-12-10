@@ -35,11 +35,11 @@
 
 wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
-UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValue,
+UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindow* aValueCtrl,
                           wxStaticText* aUnitLabel, bool allowEval ) :
         m_frame( aParent ),
         m_label( aLabel ),
-        m_value( aValue ),
+        m_valueCtrl( aValueCtrl ),
         m_unitLabel( aUnitLabel ),
         m_eval( aParent->GetUserUnits() ),
         m_originTransforms( aParent->GetOriginTransforms() ),
@@ -47,12 +47,13 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
 {
     m_units     = aParent->GetUserUnits();
     m_dataType  = EDA_DATA_TYPE::DISTANCE;
-    m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
+    m_precision = 0;
+    m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_valueCtrl );
     m_needsEval = false;
     m_selStart  = 0;
     m_selEnd    = 0;
 
-    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( textEntry )
     {
@@ -60,10 +61,11 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent, wxStaticText* aLabel, wxWindo
         textEntry->ChangeValue( wxT( "0" ) );
     }
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+    if( m_unitLabel )
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 
-    m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
-    m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
+    m_valueCtrl->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
+    m_valueCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
     Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), NULL, this );
 
     m_frame->Connect( UNITS_CHANGED, wxCommandEventHandler( UNIT_BINDER::onUnitsChanged ), nullptr, this );
@@ -79,14 +81,24 @@ UNIT_BINDER::~UNIT_BINDER()
 void UNIT_BINDER::SetUnits( EDA_UNITS aUnits )
 {
     m_units = aUnits;
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+
+    if( m_unitLabel )
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+}
+
+
+void UNIT_BINDER::SetPrecision( int aLength )
+{
+    m_precision = std::min( aLength, 6 );
 }
 
 
 void UNIT_BINDER::SetDataType( EDA_DATA_TYPE aDataType )
 {
     m_dataType = aDataType;
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+
+    if( m_unitLabel )
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
@@ -104,7 +116,7 @@ void UNIT_BINDER::onUnitsChanged( wxCommandEvent& aEvent )
 
 void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 {
-    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( m_allowEval && textEntry )
     {
@@ -125,7 +137,7 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
 void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 {
-    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( m_allowEval && textEntry )
     {
@@ -168,16 +180,16 @@ wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 {
     if( !m_errorMessage.IsEmpty() )
-        DisplayError( m_value->GetParent(), m_errorMessage );
+        DisplayError( m_valueCtrl->GetParent(), m_errorMessage );
 
     m_errorMessage = wxEmptyString;
-    m_value->SetFocus();
+    m_valueCtrl->SetFocus();
 }
 
 
 bool UNIT_BINDER::Validate( double aMin, double aMax, EDA_UNITS aUnits )
 {
-    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    wxTextEntry* textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( !textEntry
             || textEntry->GetValue() == INDETERMINATE_ACTION
@@ -231,14 +243,15 @@ void UNIT_BINDER::SetValue( int aValue )
 void UNIT_BINDER::SetDoubleValue( double aValue )
 {
     double displayValue = m_originTransforms.ToDisplay( aValue, m_coordType );
+    displayValue = setPrecision( displayValue, false );
     SetValue( StringFromValue( m_units, displayValue, false, m_dataType ) );
 }
 
 
 void UNIT_BINDER::SetValue( wxString aValue )
 {
-    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_value );
+    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
 
     if( textEntry )
         textEntry->SetValue( aValue );
@@ -248,7 +261,8 @@ void UNIT_BINDER::SetValue( wxString aValue )
     if( m_allowEval )
         m_eval.Clear();
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+    if( m_unitLabel )
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
@@ -262,8 +276,8 @@ void UNIT_BINDER::ChangeValue( int aValue )
 
 void UNIT_BINDER::ChangeValue( const wxString& aValue )
 {
-    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_value );
+    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
 
     if( textEntry )
         textEntry->ChangeValue( aValue );
@@ -273,14 +287,15 @@ void UNIT_BINDER::ChangeValue( const wxString& aValue )
     if( m_allowEval )
         m_eval.Clear();
 
-    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
+    if( m_unitLabel )
+        m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_dataType ) );
 }
 
 
 long long int UNIT_BINDER::GetValue()
 {
-    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_value );
+    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
     wxString      value;
 
     if( textEntry )
@@ -300,10 +315,26 @@ long long int UNIT_BINDER::GetValue()
 }
 
 
+double UNIT_BINDER::setPrecision( double aValue, bool aValueUsesUserUnits )
+{
+    if( m_precision > 1 )
+    {
+        int scale = pow( 10, m_precision );
+        long long tmp = aValueUsesUserUnits ? aValue : To_User_Unit( m_units, aValue ) * scale;
+        aValue = static_cast<double>( tmp ) / scale;
+
+        if( !aValueUsesUserUnits )
+            aValue = From_User_Unit( m_units, aValue );
+    }
+
+    return aValue;
+}
+
+
 double UNIT_BINDER::GetDoubleValue()
 {
-    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_value );
+    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
     wxString      value;
 
     if( textEntry )
@@ -323,13 +354,15 @@ double UNIT_BINDER::GetDoubleValue()
     }
 
     double displayValue = DoubleValueFromString( m_units, value, m_dataType );
+    displayValue = setPrecision( displayValue, false );
+
     return m_originTransforms.FromDisplay( displayValue, m_coordType );
 }
 
 
 bool UNIT_BINDER::IsIndeterminate() const
 {
-    wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_value );
+    wxTextEntry* te = dynamic_cast<wxTextEntry*>( m_valueCtrl );
 
     if( te )
         return te->GetValue() == INDETERMINATE_STATE || te->GetValue() == INDETERMINATE_ACTION;
@@ -340,8 +373,8 @@ bool UNIT_BINDER::IsIndeterminate() const
 
 wxString UNIT_BINDER::GetOriginalText() const
 {
-    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_value );
-    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_value );
+    wxTextEntry*  textEntry = dynamic_cast<wxTextEntry*>( m_valueCtrl );
+    wxStaticText* staticText = dynamic_cast<wxStaticText*>( m_valueCtrl );
 
     if( m_allowEval )
         return m_eval.OriginalText();
@@ -363,30 +396,38 @@ void UNIT_BINDER::SetLabel( const wxString& aLabel )
 void UNIT_BINDER::Enable( bool aEnable )
 {
     m_label->Enable( aEnable );
-    m_value->Enable( aEnable );
-    m_unitLabel->Enable( aEnable );
+    m_valueCtrl->Enable( aEnable );
+
+    if( m_unitLabel )
+        m_unitLabel->Enable( aEnable );
 }
 
 
 void UNIT_BINDER::Show( bool aShow, bool aResize )
 {
     m_label->Show( aShow );
-    m_value->Show( aShow );
-    m_unitLabel->Show( aShow );
+    m_valueCtrl->Show( aShow );
+
+    if( m_unitLabel )
+        m_unitLabel->Show( aShow );
 
     if( aResize )
     {
         if( aShow )
         {
             m_label->SetSize( -1, -1 );
-            m_value->SetSize( -1, -1 );
-            m_unitLabel->SetSize( -1, -1 );
+            m_valueCtrl->SetSize( -1, -1 );
+
+            if( m_unitLabel )
+                m_unitLabel->SetSize( -1, -1 );
         }
         else
         {
             m_label->SetSize( 0, 0 );
-            m_value->SetSize( 0, 0 );
-            m_unitLabel->SetSize( 0, 0 );
+            m_valueCtrl->SetSize( 0, 0 );
+
+            if( m_unitLabel )
+                m_unitLabel->SetSize( 0, 0 );
         }
     }
 }

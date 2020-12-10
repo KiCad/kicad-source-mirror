@@ -47,23 +47,32 @@ public:
      * @param aParent is the parent EDA_DRAW_FRAME.
      * @param aLabel is the static text used to label the text input widget (note: the label
      *               text, trimmed of its colon, will also be used in error messages)
-     * @param aValue is the control used to edit or display the given value (wxTextCtrl,
+     * @param aValueCtrl is the control used to edit or display the given value (wxTextCtrl,
      *               wxComboBox, wxStaticText, etc.).
      * @param aUnitLabel is the units label displayed after the text input widget
+     * Can be nullptr.
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */
     UNIT_BINDER( EDA_DRAW_FRAME* aParent,
-                 wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
+                 wxStaticText* aLabel, wxWindow* aValueCtrl, wxStaticText* aUnitLabel,
                  bool aAllowEval = true );
 
     ~UNIT_BINDER() override;
 
     /**
-     * Function SetUnits
      * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
      * used to set to DEGREES for angular controls.
      */
     virtual void SetUnits( EDA_UNITS aUnits );
+
+    /**
+     * Normally not needed, but can be used to set the precision when using
+     * internal units that are floats (not integers) like DEGREES or PERCENT.
+     * Not used for integer values in IU
+     * @param aLength is the number of digits for mantissa (0 = no truncation)
+     * must be <= 6
+     */
+    virtual void SetPrecision( int aLength );
 
     /**
      * Used to override the datatype of the displayed property (default is DISTANCE)
@@ -84,6 +93,8 @@ public:
      * Function SetDoubleValue
      * Sets new value (in Internal Units) for the text field, taking care of units conversion.
      * @param aValue is the new value.
+     * the initialized value will be truncated according to the precision set by SetPrecision()
+     * (if not <= 0)
      */
     virtual void SetDoubleValue( double aValue );
 
@@ -106,6 +117,8 @@ public:
     /**
      * Function GetValue
      * Returns the current value in Internal Units.
+     * the returned value will be truncated according to the precision set by
+     * SetPrecision() (if not <= 0)
      */
     virtual double GetDoubleValue();
 
@@ -178,16 +191,28 @@ protected:
 
     void onUnitsChanged( wxCommandEvent& aEvent );
 
+    /** When m_precision > 0 truncate the value aValue to show only
+     * m_precision digits in mantissa.
+     * used in GetDoubleValue to return a rounded value.
+     * Mainly for units set to DEGREES.
+     * @param aValue is the value to modify.
+     * @param aValueUsesUserUnits must be set to true if aValue is a user value,
+     * and set to false if aValue is a internal unit value.
+     * @return the "rounded" value.
+     */
+    double setPrecision( double aValue, bool aValueUsesUserUnits );
+
     EDA_DRAW_FRAME*   m_frame;
 
     ///> The bound widgets
     wxStaticText*     m_label;
-    wxWindow*         m_value;
-    wxStaticText*     m_unitLabel;
+    wxWindow*         m_valueCtrl;
+    wxStaticText*     m_unitLabel;  // Can be nullptr
 
     ///> Currently used units.
     EDA_UNITS         m_units;
     EDA_DATA_TYPE     m_dataType;
+    int               m_precision;     // 0 to 6
 
     ///> Validation support.
     wxString          m_errorMessage;
