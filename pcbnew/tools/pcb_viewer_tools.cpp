@@ -197,6 +197,9 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     if( IsFootprintFrame() && !frame()->GetModel() )
         return 0;
 
+    if( frame()->IsCurrentTool( ACTIONS::measureTool ) )
+        return 0;
+
     auto& view     = *getView();
     auto& controls = *getViewControls();
 
@@ -221,7 +224,7 @@ int PCB_VIEWER_TOOLS::MeasureTool( const TOOL_EVENT& aEvent )
     controls.CaptureCursor( false );
     
     auto setCursor = 
-            [&]() 
+            [&]()
             { 
                 frame()->GetCanvas()->SetCurrentCursor( KICURSOR::MEASURE );
             };
