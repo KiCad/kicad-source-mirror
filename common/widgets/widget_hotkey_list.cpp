@@ -55,8 +55,8 @@ class WIDGET_HOTKEY_CLIENT_DATA : public wxClientData
     HOTKEY&  m_changed_hotkey;
 
 public:
-    WIDGET_HOTKEY_CLIENT_DATA( HOTKEY& aChangedHotkey )
-        :   m_changed_hotkey( aChangedHotkey )
+    WIDGET_HOTKEY_CLIENT_DATA( HOTKEY& aChangedHotkey ) :
+            m_changed_hotkey( aChangedHotkey )
     {}
 
     HOTKEY& GetChangedHotkey() { return m_changed_hotkey; }
@@ -72,8 +72,8 @@ class HK_PROMPT_DIALOG : public DIALOG_SHIM
 
 public:
     HK_PROMPT_DIALOG( wxWindow* aParent, wxWindowID aId, const wxString& aTitle,
-            const wxString& aName, const wxString& aCurrentKey )
-        :   DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
+                      const wxString& aName, const wxString& aCurrentKey ) :
+            DIALOG_SHIM( aParent, aId, aTitle, wxDefaultPosition, wxDefaultSize )
     {
         wxPanel* panel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
         wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
@@ -89,7 +89,8 @@ public:
          */
 
         wxStaticText* inst_label = new wxStaticText( panel, wxID_ANY, wxEmptyString,
-                wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE_HORIZONTAL );
+                                                     wxDefaultPosition, wxDefaultSize,
+                                                     wxALIGN_CENTRE_HORIZONTAL );
 
         inst_label->SetLabelText( _( "Press a new hotkey, or press Esc to cancel..." ) );
         sizer->Add( inst_label, 0, wxALL, 5 );
@@ -127,13 +128,11 @@ public:
 
         SetMinClientSize( GetClientSize() );
 
-        // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events,
-        // including specials like Tab and Return, are received, particularly
-        // on MSW.
+        // Binding both EVT_CHAR and EVT_CHAR_HOOK ensures that all key events, including
+        // specials like Tab and Return, are received, particularly on MSW.
         panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
         panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
     }
-
 
     /**
      * End the dialog whether modal or quasimodal
@@ -146,9 +145,8 @@ public:
             EndModal( aRtnCode );
     }
 
-
     static wxKeyEvent PromptForKey( wxWindow* aParent, const wxString& aName,
-            const wxString& aCurrentKey )
+                                    const wxString& aCurrentKey )
     {
         HK_PROMPT_DIALOG dialog( aParent, wxID_ANY, _( "Set Hotkey" ), aName, aCurrentKey );
 
@@ -158,22 +156,20 @@ public:
             return wxKeyEvent();
     }
 
-
 protected:
     void OnCharHook( wxKeyEvent& aEvent ) override
     {
-        // On certain platforms, EVT_CHAR_HOOK is the only handler that receives
-        // certain "special" keys. However, it doesn't always receive "normal"
-        // keys correctly. For example, with a US keyboard, it sees ? as shift+/.
+        // On certain platforms, EVT_CHAR_HOOK is the only handler that receives certain
+        // "special" keys. However, it doesn't always receive "normal" keys correctly. For
+        // example, with a US keyboard, it sees ? as shift+/.
         //
-        // Untangling these incorrect keys would be too much trouble, so we bind
-        // both events, and simply skip the EVT_CHAR_HOOK if it receives a
-        // "normal" key.
+        // Untangling these incorrect keys would be too much trouble, so we bind both events,
+        // and simply skip the EVT_CHAR_HOOK if it receives a "normal" key.
 
         const enum wxKeyCode skipped_keys[] =
         {
-            WXK_NONE,    WXK_SHIFT,  WXK_ALT, WXK_CONTROL, WXK_CAPITAL,
-            WXK_NUMLOCK, WXK_SCROLL, WXK_RAW_CONTROL
+            WXK_NONE, WXK_SHIFT, WXK_ALT, WXK_CONTROL, WXK_CAPITAL, WXK_NUMLOCK, WXK_SCROLL,
+            WXK_RAW_CONTROL
         };
 
         int key = aEvent.GetKeyCode();
@@ -201,7 +197,6 @@ protected:
             OnChar( aEvent );
         }
     }
-
 
     void OnChar( wxKeyEvent& aEvent )
     {
@@ -235,10 +230,12 @@ public:
 
         // Match in the (translated) filter string
         const auto normedInfo = wxGetTranslation( aHotkey.m_Actions[ 0 ]->GetLabel() ).Upper();
+
         if( normedInfo.Contains( m_normalised_filter_str ) )
             return true;
 
         const wxString keyName = KeyNameFromKeyCode( aHotkey.m_EditKeycode );
+
         if( keyName.Upper().Contains( m_normalised_filter_str ) )
             return true;
 
@@ -246,8 +243,7 @@ public:
     }
 
 private:
-
-    bool m_valid;
+    bool     m_valid;
     wxString m_normalised_filter_str;
 };
 
@@ -441,8 +437,8 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 
 
 WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore,
-                                        bool aReadOnly )
-    :   wxTreeListCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
+                                        bool aReadOnly ) :
+        wxTreeListCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
         m_hk_store( aHotkeyStore ),
         m_readOnly( aReadOnly )
 {

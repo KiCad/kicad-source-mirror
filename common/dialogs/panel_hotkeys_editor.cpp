@@ -113,7 +113,8 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             wxID_RESET,
             _( "Undo All Changes" ),
             _( "Undo all changes made so far in this dialog" ),
-            [this]( wxCommandEvent& ){
+            [this]( wxCommandEvent& )
+            {
                 m_hotkeyListCtrl->ResetAllHotkeys( false );
             }
         },
@@ -121,7 +122,8 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
             wxID_ANY,
             _( "Import Hotkeys..." ),
             _( "Import hotkey definitions from an external file, replacing the current values" ),
-            [this]( wxCommandEvent& ){
+            [this]( wxCommandEvent& )
+            {
                 ImportHotKeys();
             }
         }
