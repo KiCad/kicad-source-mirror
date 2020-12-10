@@ -521,6 +521,31 @@ or:
         };
 ~~~~~~~~~~~~~
 
+## 4.11 Class Definition Layout ## {#class_defs}
+When defining classes member variables should be placed at the bottom
+and methods should be placed above the member variables.  The scope
+ordering of the class should be public, protect, then private.  Do not
+redefine the same scope multiple times in a row.  Here is an example
+class definition:
+
+~~~~~~~~~~~~~{.cpp}
+    class FOO
+    {
+    public:
+        FOO();
+        void FooPublicMethod();
+
+    protected:
+        void fooProtectedMethod();
+
+    private:
+        void fooPrivateMethod();
+
+    // Private not redefined here unless no private methods.
+    int m_privateMemberVariable;
+    };
+~~~~~~~~~~~~~
+
 
 # 5. License Statement # {#license_statement}
 There is a the file copyright.h which you can copy into the top of
