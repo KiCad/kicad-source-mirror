@@ -22,17 +22,27 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1480"
-     inkscape:window-height="1049"
-     id="namedview48"
-     showgrid="false"
-     inkscape:zoom="27.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
+     inkscape:window-width="1599"
+     inkscape:window-height="1126"
+     id="namedview42"
+     showgrid="true"
+     inkscape:zoom="19.771793"
+     inkscape:cx="9.5512171"
+     inkscape:cy="14.00407"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:current-layer="g981"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid846"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#aaaaff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -43,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>library</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -65,129 +75,253 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3,.cls-6{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-3{stroke:#b9b9b9;stroke-width:0.75px;}.cls-4{fill:#1a81c4;}.cls-5{fill:#e61c50;}.cls-6{stroke:#f5f5f5;stroke-width:2px;}</style>
+       id="style3">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:none;stroke:#b9b9b9;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-4{fill:#1a81c4;}</style>
   </defs>
   <title
-     id="title7">lib_next</title>
-  <rect
-     class="cls-2"
-     x="2.8437"
-     y="4.394"
-     width="4.6301"
-     height="13.8903"
-     id="rect11" />
-  <line
-     class="cls-3"
-     x1="3.9909"
-     y1="9.1333"
-     x2="6.3334"
-     y2="9.1333"
-     id="line13" />
-  <line
-     class="cls-3"
-     x1="3.9909"
-     y1="16.4392"
-     x2="6.3334"
-     y2="16.4392"
-     id="line15" />
-  <line
-     class="cls-3"
-     x1="3.9909"
-     y1="7.6396"
-     x2="6.3334"
-     y2="7.6396"
-     id="line17" />
-  <line
-     class="cls-3"
-     x1="3.9909"
-     y1="6.1458"
-     x2="6.3334"
-     y2="6.1458"
-     id="line19" />
-  <rect
-     class="cls-2"
-     x="8.3647"
-     y="4.394"
-     width="4.6301"
-     height="13.8903"
-     id="rect21" />
-  <line
-     class="cls-3"
-     x1="9.5119"
-     y1="9.1333"
-     x2="11.8544"
-     y2="9.1333"
-     id="line23" />
-  <line
-     class="cls-3"
-     x1="9.5119"
-     y1="16.4392"
-     x2="11.8544"
-     y2="16.4392"
-     id="line25" />
-  <line
-     class="cls-3"
-     x1="9.5119"
-     y1="7.6396"
-     x2="11.8544"
-     y2="7.6396"
-     id="line27" />
-  <line
-     class="cls-3"
-     x1="9.5119"
-     y1="6.1458"
-     x2="11.8544"
-     y2="6.1458"
-     id="line29" />
-  <rect
-     class="cls-4"
-     x="15.5485"
-     y="4.6387"
-     width="4.6301"
-     height="13.8903"
-     transform="matrix(0.9606, -0.2779, 0.2779, 0.9606, -2.5152, 5.4196)"
-     id="rect31" />
-  <line
-     class="cls-3"
-     x1="16.1287"
-     y1="9.7893"
-     x2="18.379"
-     y2="9.1384"
-     id="line33" />
-  <line
-     class="cls-3"
-     x1="18.1588"
-     y1="16.8075"
-     x2="20.4091"
-     y2="16.1566"
-     id="line35" />
-  <line
-     class="cls-3"
-     x1="15.7137"
-     y1="8.3544"
-     x2="17.9639"
-     y2="7.7035"
-     id="line37" />
-  <line
-     class="cls-3"
-     x1="15.2986"
-     y1="6.9195"
-     x2="17.5488"
-     y2="6.2686"
-     id="line39" />
-  <path
-     class="cls-5"
-     d="M25.0065,18A7.0065,7.0065,0,1,1,18,11,7.0032,7.0032,0,0,1,25.0065,18Z"
-     id="path41" />
-  <line
-     class="cls-6"
-     x1="21.4941"
-     y1="18.0215"
-     x2="14.4941"
-     y2="18.0215"
-     id="line43" />
-  <polyline
-     class="cls-6"
-     points="18.961 15.266 21.714 18.022 18.961 20.776"
-     id="polyline45" />
+     id="title7">library</title>
+  <g
+     id="g865">
+    <g
+       id="g933">
+      <g
+         id="g853">
+        <rect
+           class="cls-2"
+           x="2"
+           y="3"
+           width="5"
+           height="20"
+           id="rect11"
+           style="stroke-width:1" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="9.4176998"
+           x2="5.8388996"
+           y2="9.4176998"
+           id="line13" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="17.769501"
+           x2="5.8388996"
+           y2="17.769501"
+           id="line15" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="7.7101998"
+           x2="5.8388996"
+           y2="7.7101998"
+           id="line17" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="6.0026002"
+           x2="5.8388996"
+           y2="6.0026002"
+           id="line19" />
+      </g>
+      <rect
+         class="cls-2"
+         x="2"
+         y="3"
+         width="5"
+         height="20"
+         id="rect855"
+         style="stroke-width:1" />
+      <path
+         id="line863"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 3.5,5.5 h 2"
+         sodipodi:nodetypes="cc" />
+      <path
+         id="path888"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 3.5,7.5 h 2"
+         sodipodi:nodetypes="cc" />
+      <path
+         id="path890"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 3.5,9.5 h 2"
+         sodipodi:nodetypes="cc" />
+      <path
+         id="path892"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="M 3,19.5 H 6"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g957"
+       transform="translate(6)">
+      <g
+         id="g945">
+        <rect
+           class="cls-2"
+           x="2"
+           y="3"
+           width="5"
+           height="20"
+           id="rect935"
+           style="stroke-width:1" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="9.4176998"
+           x2="5.8388996"
+           y2="9.4176998"
+           id="line937" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="17.769501"
+           x2="5.8388996"
+           y2="17.769501"
+           id="line939" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="7.7101998"
+           x2="5.8388996"
+           y2="7.7101998"
+           id="line941" />
+        <line
+           class="cls-3"
+           x1="3.1611004"
+           y1="6.0026002"
+           x2="5.8388996"
+           y2="6.0026002"
+           id="line943" />
+      </g>
+      <rect
+         class="cls-2"
+         x="2"
+         y="3"
+         width="5"
+         height="20"
+         id="rect947"
+         style="stroke-width:1" />
+      <path
+         id="path949"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 3.5,5.5 h 2"
+         sodipodi:nodetypes="cc" />
+      <path
+         id="path951"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 3.5,7.5 h 2"
+         sodipodi:nodetypes="cc" />
+      <path
+         id="path953"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 3.5,9.5 h 2"
+         sodipodi:nodetypes="cc" />
+      <path
+         id="path955"
+         style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         d="M 3,19.5 H 6"
+         sodipodi:nodetypes="cc" />
+    </g>
+    <g
+       id="g981"
+       transform="translate(17)">
+      <g
+         id="g994"
+         inkscape:transform-center-x="0.63442536"
+         inkscape:transform-center-y="-10.226851"
+         transform="rotate(-17.467171,2.5047981,19.73537)">
+        <g
+           id="g969">
+          <rect
+             class="cls-2"
+             x="2"
+             y="3"
+             width="5"
+             height="20"
+             id="rect959"
+             style="stroke-width:1" />
+          <line
+             class="cls-3"
+             x1="3.1611004"
+             y1="9.4176998"
+             x2="5.8388996"
+             y2="9.4176998"
+             id="line961" />
+          <line
+             class="cls-3"
+             x1="3.1611004"
+             y1="17.769501"
+             x2="5.8388996"
+             y2="17.769501"
+             id="line963" />
+          <line
+             class="cls-3"
+             x1="3.1611004"
+             y1="7.7101998"
+             x2="5.8388996"
+             y2="7.7101998"
+             id="line965" />
+          <line
+             class="cls-3"
+             x1="3.1611004"
+             y1="6.0026002"
+             x2="5.8388996"
+             y2="6.0026002"
+             id="line967" />
+        </g>
+        <rect
+           class="cls-2"
+           x="2"
+           y="3"
+           width="5"
+           height="20"
+           id="rect971"
+           style="fill:#1a81c4;fill-opacity:1;stroke-width:1" />
+        <path
+           id="path973"
+           style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 3.5,5.5 h 2"
+           sodipodi:nodetypes="cc" />
+        <path
+           id="path975"
+           style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 3.5,7.5 h 2"
+           sodipodi:nodetypes="cc" />
+        <path
+           id="path977"
+           style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="m 3.5,9.5 h 2"
+           sodipodi:nodetypes="cc" />
+        <path
+           id="path979"
+           style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+           d="M 3,19.5 H 6"
+           sodipodi:nodetypes="cc" />
+      </g>
+      <g
+         id="g1009"
+         transform="matrix(0.99907229,0,0,0.99907223,-0.03711142,0.2868779)"
+         style="stroke-width:1.00092">
+        <path
+           class="cls-5"
+           d="m 9.0455,18.724 a 7.0065,7.0065 0 1 1 -7.0065,-7 7.0032,7.0032 0 0 1 7.0065,7 z"
+           id="path41"
+           style="fill:#e61c50;stroke-width:1.00092" />
+        <line
+           class="cls-6"
+           x1="5.5331011"
+           y1="18.745499"
+           x2="-1.4669003"
+           y2="18.745499"
+           id="line43"
+           style="fill:none;stroke:#f5f5f5;stroke-width:2.00186px;stroke-linecap:round;stroke-linejoin:round" />
+        <polyline
+           class="cls-6"
+           points="18.961 15.266 21.714 18.022 18.961 20.776"
+           id="polyline45"
+           style="fill:none;stroke:#f5f5f5;stroke-width:2.00186px;stroke-linecap:round;stroke-linejoin:round"
+           transform="translate(-15.961,0.724)" />
+      </g>
+    </g>
+  </g>
 </svg>
