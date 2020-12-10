@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 26 26"
    version="1.1"
-   sodipodi:docname="module.svg"
+   sodipodi:docname="module_library_list.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -130,12 +130,12 @@
      style="stroke-width:1" />
   <path
      class="cls-4"
-     d="m 25.999997,18.993507 a 7,6.9999996 0 1 1 -7.0001,-6.993506 6.996803,6.9968025 0 0 1 7.0001,6.993506 z"
+     d="m 24.999997,17.993507 a 7,6.9999996 0 1 1 -7.0001,-6.993506 6.996803,6.9968025 0 0 1 7.0001,6.993506 z"
      id="path27"
      style="fill:#e61c50;stroke-width:0.999996" />
   <path
      class="cls-5"
-     d="M 18.3623,21.9375 H 22 V 23 h -4.959 v -7.9366 h 1.3213 z"
+     d="M 17.3623,20.9375 H 21 V 22 h -4.959 v -7.9366 h 1.3213 z"
      id="path29"
      style="fill:#ffffff" />
 </svg>
