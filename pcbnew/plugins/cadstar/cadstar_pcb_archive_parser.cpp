@@ -41,7 +41,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
     {
         if( cNode->GetName() == wxT( "HEADER" ) )
         {
-            Header.Parse( cNode );
+            Header.Parse( cNode, &mContext );
 
             switch( Header.Resolution )
             {
@@ -72,11 +72,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
         {
-            Assignments.Parse( cNode );
+            Assignments.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "LIBRARY" ) )
         {
-            Library.Parse( cNode );
+            Library.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "DEFAULTS" ) )
         {
@@ -86,11 +86,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "PARTS" ) )
         {
-            Parts.Parse( cNode );
+            Parts.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "LAYOUT" ) )
         {
-            Layout.Parse( cNode );
+            Layout.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "DISPLAY" ) )
         {
@@ -108,7 +108,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::Parse()
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::ASSIGNMENTS::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::ASSIGNMENTS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "ASSIGNMENTS" ) );
 
@@ -120,13 +120,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::ASSIGNMENTS::Parse( XNODE* aNode )
     for( ; cNode; cNode = cNode->GetNext() )
     {
         if( cNode->GetName() == wxT( "LAYERDEFS" ) )
-            Layerdefs.Parse( cNode );
+            Layerdefs.Parse( cNode, aContext );
         else if( cNode->GetName() == wxT( "CODEDEFS" ) )
-            Codedefs.Parse( cNode );
+            Codedefs.Parse( cNode, aContext );
         else if( cNode->GetName() == wxT( "TECHNOLOGY" ) )
-            Technology.Parse( cNode );
+            Technology.Parse( cNode, aContext );
         else if( cNode->GetName() == wxT( "GRIDS" ) )
-            Grids.Parse( cNode );
+            Grids.Parse( cNode, aContext );
         else if( cNode->GetName() == wxT( "NETCLASSEDITATTRIBSETTINGS" ) )
             NetclassEditAttributeSettings = true;
         else if( cNode->GetName() == wxT( "SPCCLASSEDITATTRIBSETTINGS" ) )
@@ -137,7 +137,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::ASSIGNMENTS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "LAYERDEFS" ) );
 
@@ -169,13 +169,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode )
         else if( nodeName == wxT( "MATERIAL" ) )
         {
             MATERIAL material;
-            material.Parse( cNode );
+            material.Parse( cNode, aContext );
             Materials.insert( std::make_pair( material.ID, material ) );
         }
         else if( nodeName == wxT( "LAYER" ) )
         {
             LAYER layer;
-            layer.Parse( cNode );
+            layer.Parse( cNode, aContext );
             Layers.insert( std::make_pair( layer.ID, layer ) );
         }
         else if( nodeName == wxT( "SWAPPAIR" ) )
@@ -193,7 +193,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERDEFS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::RULESET::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::RULESET::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "RULESET" ) );
 
@@ -217,7 +217,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::RULESET::Parse( XNODE* aNode )
         else if( nodeName == wxT( "SPACINGCODE" ) )
         {
             SPACINGCODE spacingcode;
-            spacingcode.Parse( cNode );
+            spacingcode.Parse( cNode, aContext );
             SpacingCodes.insert( std::make_pair( spacingcode.ID, spacingcode ) );
         }
         else
@@ -228,7 +228,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::RULESET::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::CODEDEFS_PCB::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::CODEDEFS_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "CODEDEFS" ) );
 
@@ -238,49 +238,49 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CODEDEFS_PCB::Parse( XNODE* aNode )
     {
         wxString nodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) ) // in CADSTAR_ARCHIVE_PARSER::CODEDEFS
+        if( ParseSubNode( cNode, aContext ) ) // in CADSTAR_ARCHIVE_PARSER::CODEDEFS
         {
         }
         else if( nodeName == wxT( "COPPERCODE" ) )
         {
             COPPERCODE coppercode;
-            coppercode.Parse( cNode );
+            coppercode.Parse( cNode, aContext );
             CopperCodes.insert( std::make_pair( coppercode.ID, coppercode ) );
         }
         else if( nodeName == wxT( "SPACINGCODE" ) )
         {
             SPACINGCODE spacingcode;
-            spacingcode.Parse( cNode );
+            spacingcode.Parse( cNode, aContext );
             SpacingCodes.insert( std::make_pair( spacingcode.ID, spacingcode ) );
         }
         else if( nodeName == wxT( "RULESET" ) )
         {
             RULESET ruleset;
-            ruleset.Parse( cNode );
+            ruleset.Parse( cNode, aContext );
             Rulesets.insert( std::make_pair( ruleset.ID, ruleset ) );
         }
         else if( nodeName == wxT( "PADCODE" ) )
         {
             PADCODE padcode;
-            padcode.Parse( cNode );
+            padcode.Parse( cNode, aContext );
             PadCodes.insert( std::make_pair( padcode.ID, padcode ) );
         }
         else if( nodeName == wxT( "VIACODE" ) )
         {
             VIACODE viacode;
-            viacode.Parse( cNode );
+            viacode.Parse( cNode, aContext );
             ViaCodes.insert( std::make_pair( viacode.ID, viacode ) );
         }
         else if( nodeName == wxT( "LAYERPAIR" ) )
         {
             LAYERPAIR layerpair;
-            layerpair.Parse( cNode );
+            layerpair.Parse( cNode, aContext );
             LayerPairs.insert( std::make_pair( layerpair.ID, layerpair ) );
         }
         else if( nodeName == wxT( "SPCCLASSSPACE" ) )
         {
             SPCCLASSSPACE spcclassspace;
-            spcclassspace.Parse( cNode );
+            spcclassspace.Parse( cNode, aContext );
             SpacingClasses.push_back( spcclassspace );
         }
         else
@@ -291,7 +291,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::CODEDEFS_PCB::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "MATERIAL" ) );
 
@@ -331,15 +331,15 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode )
 
         if( nodeName == wxT( "RELPERMIT" ) )
         {
-            ParseChildEValue( iNode, Permittivity );
+            ParseChildEValue( iNode, aContext, Permittivity );
         }
         else if( nodeName == wxT( "LOSSTANGENT" ) )
         {
-            ParseChildEValue( iNode, LossTangent );
+            ParseChildEValue( iNode, aContext, LossTangent );
         }
         else if( nodeName == wxT( "RESISTIVITY" ) )
         {
-            ParseChildEValue( iNode, Resistivity );
+            ParseChildEValue( iNode, aContext, Resistivity );
         }
         else
         {
@@ -349,7 +349,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::MATERIAL::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "LAYER" ) );
 
@@ -555,7 +555,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYER::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPREASSIGN::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPREASSIGN::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COPREASSIGN" ) );
 
@@ -565,7 +565,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPREASSIGN::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPPERCODE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPPERCODE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COPPERCODE" ) );
 
@@ -581,7 +581,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPERCODE::Parse( XNODE* aNode )
         if( cNode->GetName() == wxT( "COPREASSIGN" ) )
         {
             CADSTAR_PCB_ARCHIVE_PARSER::COPREASSIGN reassign;
-            reassign.Parse( cNode );
+            reassign.Parse( cNode, aContext );
             Reassigns.push_back( reassign );
         }
         else
@@ -592,7 +592,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPERCODE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::REASSIGN::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::REASSIGN::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "SPACEREASSIGN" ) );
 
@@ -603,7 +603,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::REASSIGN::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "SPACINGCODE" ) );
 
@@ -619,7 +619,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPACINGCODE::Parse( XNODE* aNode )
         if( cNodeName == wxT( "SPACEREASSIGN" ) )
         {
             REASSIGN reassign;
-            reassign.Parse( cNode );
+            reassign.Parse( cNode, aContext );
             Reassigns.push_back( reassign );
         }
         else
@@ -648,7 +648,7 @@ bool CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::IsPadShape( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( IsPadShape( aNode ) );
 
@@ -719,14 +719,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_SHAPE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "PADREASSIGN" ) );
 
     LayerID = GetXmlAttributeIDString( aNode, 0 );
 
     if( PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
-        Shape.Parse( aNode->GetChildren() );
+        Shape.Parse( aNode->GetChildren(), aContext );
     else
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
 
@@ -734,7 +734,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADREASSIGN::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "PADCODE" ) );
 
@@ -750,7 +750,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode )
 
         if( PAD_SHAPE::IsPadShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "CLEARANCE" ) )
         {
@@ -796,7 +796,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "PADREASSIGN" ) )
         {
             PADREASSIGN reassign;
-            reassign.Parse( cNode );
+            reassign.Parse( cNode, aContext );
             Reassigns.insert( std::make_pair( reassign.LayerID, reassign.Shape ) );
         }
         else
@@ -807,14 +807,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADCODE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::VIAREASSIGN::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::VIAREASSIGN::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "VIAREASSIGN" ) );
 
     LayerID = GetXmlAttributeIDString( aNode, 0 );
 
     if( PAD_SHAPE::IsPadShape( aNode->GetChildren() ) )
-        Shape.Parse( aNode->GetChildren() );
+        Shape.Parse( aNode->GetChildren(), aContext );
     else
         THROW_UNKNOWN_NODE_IO_ERROR( aNode->GetChildren()->GetName(), aNode->GetName() );
 
@@ -822,7 +822,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIAREASSIGN::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "VIACODE" ) );
 
@@ -838,7 +838,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode )
 
         if( PAD_SHAPE::IsPadShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "CLEARANCE" ) )
         {
@@ -866,7 +866,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "VIAREASSIGN" ) )
         {
             VIAREASSIGN reassign;
-            reassign.Parse( cNode );
+            reassign.Parse( cNode, aContext );
             Reassigns.insert( std::make_pair( reassign.LayerID, reassign.Shape ) );
         }
         else
@@ -877,7 +877,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::VIACODE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::LAYERPAIR::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::LAYERPAIR::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "LAYERPAIR" ) );
 
@@ -905,7 +905,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYERPAIR::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::SPCCLASSSPACE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::SPCCLASSSPACE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "SPCCLASSSPACE" ) );
 
@@ -916,7 +916,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SPCCLASSSPACE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "TECHNOLOGY" ) );
 
@@ -926,7 +926,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TECHNOLOGY_SECTION::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) ) //CADSTAR_ARCHIVE_PARSER::SETTINGS
+        if( ParseSubNode( cNode, aContext ) ) //CADSTAR_ARCHIVE_PARSER::SETTINGS
         {
         }
         else if( cNodeName == wxT( "MINROUTEWIDTH" ) )
@@ -990,7 +990,7 @@ CADSTAR_PCB_ARCHIVE_PARSER::PAD_SIDE CADSTAR_PCB_ARCHIVE_PARSER::GetPadSide(
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COMPCOPPER" ) );
 
@@ -1010,7 +1010,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode )
 
         if( !shapeIsInitialised && Shape.IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
             shapeIsInitialised = true;
         }
         else if( cNodeName == wxT( "SWAPRULE" ) )
@@ -1044,7 +1044,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_COPPER::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COMPAREA" ) );
 
@@ -1065,7 +1065,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode )
 
         if( !shapeIsInitialised && SHAPE::IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
             shapeIsInitialised = true;
         }
         else if( cNodeName == wxT( "SWAPRULE" ) )
@@ -1099,7 +1099,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_AREA::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PAD_EXITS::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::PAD_EXITS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "EXITS" ) );
 
@@ -1136,7 +1136,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PAD_EXITS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_PAD::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_PAD::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "PAD" ) );
 
@@ -1159,20 +1159,20 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT_PAD::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "FIRSTPAD" ) )
             FirstPad = true;
         else if( cNodeName == wxT( "EXITS" ) )
-            Exits.Parse( cNode );
+            Exits.Parse( cNode, aContext );
         else if( cNodeName == wxT( "PADIDENTIFIER" ) )
             Identifier = GetXmlAttributeIDString( cNode, 0 );
         else if( cNodeName == wxT( "PCBONLYPAD" ) )
             PCBonlyPad = true;
         else if( cNodeName == wxT( "PT" ) )
-            Position.Parse( cNode );
+            Position.Parse( cNode, aContext );
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
     }
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::ARROW::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::ARROW::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "DIMARROW" ) );
     bool arrowStyleInitialised = false;
@@ -1231,7 +1231,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::ARROW::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "DIMTEXT" ) );
 
@@ -1256,7 +1256,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::TEXTFORMAT::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::EXTENSION_LINE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::EXTENSION_LINE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "EXTLINE" ) );
 
@@ -1276,9 +1276,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::EXTENSION_LINE::Parse( XNODE* aNode 
             ++noOfPoints;
 
             if( noOfPoints == 1 )
-                Start.Parse( cNode );
+                Start.Parse( cNode, aContext );
             else
-                End.Parse( cNode );
+                End.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "SUPPRESSFIRST" ) )
         {
@@ -1309,7 +1309,7 @@ bool CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::IsLine( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( IsLine( aNode ) );
 
@@ -1357,11 +1357,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::LINE::Parse( XNODE* aNode )
             ++noOfPoints;
 
             if( noOfPoints == 1 )
-                Start.Parse( cNode );
+                Start.Parse( cNode, aContext );
             else if( noOfPoints == 2 )
-                End.Parse( cNode );
+                End.Parse( cNode, aContext );
             else
-                Centre.Parse( cNode );
+                Centre.Parse( cNode, aContext );
         }
         else if( Type == TYPE::LEADERLINE && cNodeName == wxT( "LEADERANG" ) )
         {
@@ -1392,7 +1392,7 @@ bool CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::IsDimension( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( IsDimension( aNode ) );
 
@@ -1452,27 +1452,27 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
         }
         else if( !arrowParsed && cNodeName == wxT( "DIMARROW" ) )
         {
-            Arrow.Parse( cNode );
+            Arrow.Parse( cNode, aContext );
             arrowParsed = true;
         }
         else if( !textFormatParsed && cNodeName == wxT( "DIMTEXT" ) )
         {
-            TextParams.Parse( cNode );
+            TextParams.Parse( cNode, aContext );
             textFormatParsed = true;
         }
         else if( !extLineParsed && cNodeName == wxT( "EXTLINE" ) )
         {
-            ExtensionLineParams.Parse( cNode );
+            ExtensionLineParams.Parse( cNode, aContext );
             extLineParsed = true;
         }
         else if( !lineParsed && LINE::IsLine( cNode ) )
         {
-            Line.Parse( cNode );
+            Line.Parse( cNode, aContext );
             lineParsed = true;
         }
         else if( !textParsed && cNodeName == wxT( "TEXT" ) )
         {
-            Text.Parse( cNode );
+            Text.Parse( cNode, aContext );
             textParsed = true;
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -1485,7 +1485,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else
         {
@@ -1495,11 +1495,11 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "SYMDEF" ) );
 
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
 
     wxString rest;
 
@@ -1518,7 +1518,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
         {
             continue;
         }
@@ -1529,19 +1529,19 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "COMPCOPPER" ) )
         {
             COMPONENT_COPPER compcopper;
-            compcopper.Parse( cNode );
+            compcopper.Parse( cNode, aContext );
             ComponentCoppers.push_back( compcopper );
         }
         else if( cNodeName == wxT( "COMPAREA" ) )
         {
             COMPONENT_AREA area;
-            area.Parse( cNode );
+            area.Parse( cNode, aContext );
             ComponentAreas.insert( std::make_pair( area.ID, area ) );
         }
         else if( cNodeName == wxT( "PAD" ) )
         {
             COMPONENT_PAD pad;
-            pad.Parse( cNode );
+            pad.Parse( cNode, aContext );
             ComponentPads.insert( std::make_pair( pad.ID, pad ) );
         }
         else if( cNodeName == wxT( "DIMENSIONS" ) )
@@ -1553,7 +1553,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
                 if( DIMENSION::IsDimension( dimensionNode ) )
                 {
                     DIMENSION dim;
-                    dim.Parse( dimensionNode );
+                    dim.Parse( dimensionNode, aContext );
                     Dimensions.insert( std::make_pair( dim.ID, dim ) );
                 }
                 else
@@ -1573,7 +1573,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::SYMDEF_PCB::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "LIBRARY" ) );
 
@@ -1586,7 +1586,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode )
         if( cNodeName == wxT( "SYMDEF" ) )
         {
             SYMDEF_PCB symdef;
-            symdef.Parse( cNode );
+            symdef.Parse( cNode, aContext );
             ComponentDefinitions.insert( std::make_pair( symdef.ID, symdef ) );
         }
         else
@@ -1597,7 +1597,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LIBRARY::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "BOARD" ) );
 
@@ -1617,13 +1617,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode )
 
         if( !shapeIsInitialised && SHAPE::IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
             shapeIsInitialised = true;
         }
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attr;
-            attr.Parse( cNode );
+            attr.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -1636,7 +1636,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else
         {
@@ -1646,7 +1646,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::BOARD::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "AREA" ) );
 
@@ -1668,7 +1668,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode )
 
         if( !shapeIsInitialised && SHAPE::IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
             shapeIsInitialised = true;
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -1710,12 +1710,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attr;
-            attr.Parse( cNode );
+            attr.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
         else
@@ -1726,7 +1726,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::AREA::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "PINATTR" ) );
 
@@ -1741,7 +1741,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode )
         if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attrVal;
-            attrVal.Parse( cNode );
+            attrVal.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attrVal.AttributeID, attrVal ) );
         }
         else if( cNodeName == wxT( "TESTLAND" ) )
@@ -1756,7 +1756,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PIN_ATTRIBUTE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "PADEXCEPTION" ) );
 
@@ -1775,7 +1775,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "EXITS" ) )
         {
             OverrideExits = true;
-            Exits.Parse( cNode );
+            Exits.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "SIDE" ) )
         {
@@ -1795,7 +1795,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::PADEXCEPTION::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COMP" ) );
 
@@ -1813,7 +1813,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
 
         if( !originParsed && cNodeName == wxT( "PT" ) )
         {
-            Origin.Parse( cNode );
+            Origin.Parse( cNode, aContext );
             originParsed = true;
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
@@ -1822,7 +1822,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "TESTPOINT" ) )
         {
@@ -1852,19 +1852,19 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "TEXTLOC" ) )
         {
             TEXT_LOCATION textloc;
-            textloc.Parse( cNode );
+            textloc.Parse( cNode, aContext );
             TextLocations.insert( std::make_pair( textloc.AttributeID, textloc ) );
         }
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attrVal;
-            attrVal.Parse( cNode );
+            attrVal.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attrVal.AttributeID, attrVal ) );
         }
         else if( cNodeName == wxT( "PINATTR" ) )
         {
             PIN_ATTRIBUTE pinAttr;
-            pinAttr.Parse( cNode );
+            pinAttr.Parse( cNode, aContext );
             PinAttributes.insert( std::make_pair( pinAttr.Pin, pinAttr ) );
         }
         else if( cNodeName == wxT( "COMPPINLABEL" ) )
@@ -1876,7 +1876,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COMPONENT::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "PADEXCEPTION" ) )
         {
             PADEXCEPTION padExcept;
-            padExcept.Parse( cNode );
+            padExcept.Parse( cNode, aContext );
             PadExceptions.insert( std::make_pair( padExcept.ID, padExcept ) );
         }
         else
@@ -1910,7 +1910,7 @@ CADSTAR_PCB_ARCHIVE_PARSER::TESTLAND_SIDE CADSTAR_PCB_ARCHIVE_PARSER::ParseTestl
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::TRUNK::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::TRUNK::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "TRUNK" ) );
 
@@ -1919,7 +1919,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TRUNK::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::PIN::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::PIN::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "PIN" ) );
 
@@ -1930,14 +1930,14 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::PIN::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
     XNODE* cNode = aNode->GetChildren();
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
             continue;
         else if( cNode->GetName() == wxT( "TRUNKREF" ) )
             TrunkID = GetXmlAttributeIDString( cNode, 0 );
@@ -1947,7 +1947,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::JUNCTION_PCB::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "VIA" ) );
 
@@ -1962,13 +1962,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( cNodeName == wxT( "PT" ) )
-            Location.Parse( cNode );
+            Location.Parse( cNode, aContext );
         else if( cNodeName == wxT( "FIX" ) )
             Fixed = true;
         else if( cNodeName == wxT( "GROUPREF" ) )
             GroupID = GetXmlAttributeIDString( cNode, 0 );
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         else if( cNodeName == wxT( "TESTLAND" ) )
             TestlandSide = ParseTestlandSide( cNode );
         else if( cNode->GetName() == wxT( "TRUNKREF" ) )
@@ -1979,7 +1979,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::VIA::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COPTERM" ) );
 
@@ -1989,7 +1989,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::COPPER_TERMINAL::Parse( XNODE* aNode )
 }
 
 
-XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode )
+XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "ROUTEWIDTH" ) );
 
@@ -2005,13 +2005,13 @@ XNODE* CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE_VERTEX::Parse( XNODE* aNode )
     if( !VERTEX::IsVertex( nextNode ) )
         THROW_UNKNOWN_NODE_IO_ERROR( nextNode->GetName(), wxT( "ROUTE_VERTEX" ) );
 
-    Vertex.Parse( nextNode );
+    Vertex.Parse( nextNode, aContext );
 
     return nextNode;
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "ROUTE" ) );
 
@@ -2028,12 +2028,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode )
         if( !startPointParsed && cNodeName == wxT( "PT" ) )
         {
             startPointParsed = true;
-            StartPoint.Parse( cNode );
+            StartPoint.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "ROUTEWIDTH" ) )
         {
             ROUTE_VERTEX rtVert;
-            cNode = rtVert.Parse( cNode );
+            cNode = rtVert.Parse( cNode, aContext );
             RouteVertices.push_back( rtVert );
         }
         else
@@ -2044,9 +2044,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::ROUTE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
 
     //Parse child nodes
     XNODE* cNode       = aNode->GetChildren();
@@ -2056,13 +2056,13 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
         {
             continue;
         }
         else if( !Unrouted && !routeParsed && cNodeName == wxT( "ROUTE" ) )
         {
-            Route.Parse( cNode );
+            Route.Parse( cNode, aContext );
             routeParsed = true;
         }
         else if( !routeParsed && cNodeName == wxT( "UNROUTE" ) )
@@ -2082,9 +2082,9 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::CONNECTION_PCB::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
 
     //Parse child nodes
     XNODE* cNode = aNode->GetChildren();
@@ -2096,35 +2096,35 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::Parse( XNODE* aNode )
         if( cNodeName == wxT( "JPT" ) )
         {
             JUNCTION_PCB jpt;
-            jpt.Parse( cNode );
+            jpt.Parse( cNode, aContext );
             Junctions.insert( std::make_pair( jpt.ID, jpt ) );
         }
-        else if( ParseSubNode( cNode ) )
+        else if( ParseSubNode( cNode, aContext ) )
         {
             continue;
         }
         else if( cNodeName == wxT( "PIN" ) )
         {
             PIN pin;
-            pin.Parse( cNode );
+            pin.Parse( cNode, aContext );
             Pins.insert( std::make_pair( pin.ID, pin ) );
         }
         else if( cNodeName == wxT( "VIA" ) )
         {
             VIA via;
-            via.Parse( cNode );
+            via.Parse( cNode, aContext );
             Vias.insert( std::make_pair( via.ID, via ) );
         }
         else if( cNodeName == wxT( "COPTERM" ) )
         {
             COPPER_TERMINAL cterm;
-            cterm.Parse( cNode );
+            cterm.Parse( cNode, aContext );
             CopperTerminals.insert( std::make_pair( cterm.ID, cterm ) );
         }
         else if( cNodeName == wxT( "CONN" ) )
         {
             CONNECTION_PCB conn;
-            conn.Parse( cNode );
+            conn.Parse( cNode, aContext );
             Connections.push_back( conn );
         }
         else
@@ -2135,7 +2135,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::NET_PCB::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "POURING" ) );
 
@@ -2212,7 +2212,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::POURING::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "TEMPLATE" ) );
 
@@ -2232,12 +2232,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode )
 
         if( !shapeParsed && SHAPE::IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
             shapeParsed = true;
         }
         else if( !pouringParsed && cNodeName == wxT( "POURING" ) )
         {
-            Pouring.Parse( cNode );
+            Pouring.Parse( cNode, aContext );
             pouringParsed = true;
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -2250,12 +2250,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attr;
-            attr.Parse( cNode );
+            attr.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
         else
@@ -2266,7 +2266,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::TEMPLATE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "TERM" ) );
 
@@ -2281,7 +2281,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNod
 
         if( !locationParsed && cNodeName == wxT( "PT" ) )
         {
-            Location.Parse( cNode );
+            Location.Parse( cNode, aContext );
             locationParsed = true;
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -2296,7 +2296,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::COPPER_TERM::Parse( XNODE* aNod
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "NETREF" ) );
 
@@ -2311,7 +2311,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::Parse( XNODE* aNode )
         if( cNodeName == wxT( "TERM" ) )
         {
             COPPER_TERM term;
-            term.Parse( cNode );
+            term.Parse( cNode, aContext );
             CopperTerminals.insert( std::make_pair( term.ID, term ) );
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -2326,7 +2326,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::NETREF::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "COPPER" ) );
 
@@ -2344,12 +2344,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode )
 
         if( !shapeParsed && SHAPE::IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
             shapeParsed = true;
         }
         else if( !netRefParsed && cNodeName == wxT( "NETREF" ) )
         {
-            NetRef.Parse( cNode );
+            NetRef.Parse( cNode, aContext );
             netRefParsed = true;
         }
         else if( cNodeName == wxT( "FIX" ) )
@@ -2362,7 +2362,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "POURED" ) )
         {
@@ -2371,7 +2371,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attr;
-            attr.Parse( cNode );
+            attr.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attr.AttributeID, attr ) );
         }
         else
@@ -2382,7 +2382,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::COPPER::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "DRILLTABLE" ) );
 
@@ -2398,7 +2398,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode )
 
         if( !positionParsed && cNodeName == wxT( "PT" ) )
         {
-            Position.Parse( cNode );
+            Position.Parse( cNode, aContext );
             positionParsed = true;
         }
         else if( cNodeName == wxT( "ORIENT" ) )
@@ -2423,7 +2423,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else
         {
@@ -2433,7 +2433,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DRILL_TABLE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
+void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "LAYOUT" ) );
 
@@ -2461,73 +2461,73 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "GROUP" ) )
         {
             GROUP group;
-            group.Parse( cNode );
+            group.Parse( cNode, aContext );
             Groups.insert( std::make_pair( group.ID, group ) );
         }
         else if( cNodeName == wxT( "REUSEBLOCK" ) )
         {
             REUSEBLOCK reuseblock;
-            reuseblock.Parse( cNode );
+            reuseblock.Parse( cNode, aContext );
             ReuseBlocks.insert( std::make_pair( reuseblock.ID, reuseblock ) );
         }
         else if( cNodeName == wxT( "BOARD" ) )
         {
             BOARD board;
-            board.Parse( cNode );
+            board.Parse( cNode, aContext );
             Boards.insert( std::make_pair( board.ID, board ) );
         }
         else if( cNodeName == wxT( "FIGURE" ) )
         {
             FIGURE figure;
-            figure.Parse( cNode );
+            figure.Parse( cNode, aContext );
             Figures.insert( std::make_pair( figure.ID, figure ) );
         }
         else if( cNodeName == wxT( "AREA" ) )
         {
             AREA area;
-            area.Parse( cNode );
+            area.Parse( cNode, aContext );
             Areas.insert( std::make_pair( area.ID, area ) );
         }
         else if( cNodeName == wxT( "COMP" ) )
         {
             COMPONENT comp;
-            comp.Parse( cNode );
+            comp.Parse( cNode, aContext );
             Components.insert( std::make_pair( comp.ID, comp ) );
         }
         else if( cNodeName == wxT( "TRUNK" ) )
         {
             TRUNK trunk;
-            trunk.Parse( cNode );
+            trunk.Parse( cNode, aContext );
             Trunks.insert( std::make_pair( trunk.ID, trunk ) );
         }
         else if( cNodeName == wxT( "NET" ) )
         {
             NET_PCB net;
-            net.Parse( cNode );
+            net.Parse( cNode, aContext );
             Nets.insert( std::make_pair( net.ID, net ) );
         }
         else if( cNodeName == wxT( "TEMPLATE" ) )
         {
             TEMPLATE temp;
-            temp.Parse( cNode );
+            temp.Parse( cNode, aContext );
             Templates.insert( std::make_pair( temp.ID, temp ) );
         }
         else if( cNodeName == wxT( "COPPER" ) )
         {
             COPPER copper;
-            copper.Parse( cNode );
+            copper.Parse( cNode, aContext );
             Coppers.insert( std::make_pair( copper.ID, copper ) );
         }
         else if( cNodeName == wxT( "TEXT" ) )
         {
             TEXT txt;
-            txt.Parse( cNode );
+            txt.Parse( cNode, aContext );
             Texts.insert( std::make_pair( txt.ID, txt ) );
         }
         else if( cNodeName == wxT( "DOCSYMBOL" ) )
         {
             DOCUMENTATION_SYMBOL docsym;
-            docsym.Parse( cNode );
+            docsym.Parse( cNode, aContext );
             DocumentationSymbols.insert( std::make_pair( docsym.ID, docsym ) );
         }
         else if( !dimensionsParsed && cNodeName == wxT( "DIMENSIONS" ) )
@@ -2539,7 +2539,7 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
                 if( DIMENSION::IsDimension( dimensionNode ) )
                 {
                     DIMENSION dim;
-                    dim.Parse( dimensionNode );
+                    dim.Parse( dimensionNode, aContext );
                     Dimensions.insert( std::make_pair( dim.ID, dim ) );
                 }
                 else
@@ -2553,12 +2553,12 @@ void CADSTAR_PCB_ARCHIVE_PARSER::LAYOUT::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "DRILLTABLE" ) )
         {
             DRILL_TABLE drilltable;
-            drilltable.Parse( cNode );
+            drilltable.Parse( cNode, aContext );
             DrillTables.insert( std::make_pair( drilltable.ID, drilltable ) );
         }
         else if( cNodeName == wxT( "VHIERARCHY" ) )
         {
-            VariantHierarchy.Parse( cNode );
+            VariantHierarchy.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "ERRORMARK" ) )
         {

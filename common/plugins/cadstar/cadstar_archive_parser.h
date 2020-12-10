@@ -118,19 +118,101 @@ public:
      * larger in KiCad.
      */
     static const double TXT_HEIGHT_RATIO;
+    
+    /**
+     * These are speccial fields in text objects enclosed between the tokens '<@' and '@>' such as
+     * <@[FIELD_NAME][FIELD_VALUE]@>. For example: "<@DESIGN TITLEProject Title@>"
+     */
+    enum class TEXT_FIELD_NAME
+    {
+        DESIGN_TITLE,
+        SHORT_JOBNAME,
+        LONG_JOBNAME,
+        NUM_OF_SHEETS,
+        SHEET_NUMBER,
+        SHEET_NAME,
+        VARIANT_NAME,
+        VARIANT_DESCRIPTION,
+        REG_USER,
+        COMPANY_NAME,
+        CURRENT_USER,
+        DATE,
+        TIME,
+        MACHINE_NAME,
+        FROM_FILE,
+        DISTANCE,
+        UNITS_SHORT,
+        UNITS_ABBREV,
+        UNITS_FULL,
+        HYPERLINK,
+        NONE ///< Synthetic for flagging
+    };
 
-    struct FORMAT
+    /**
+     * Map between CADSTAR fields and KiCad text variables. This is used as a lookup
+     */
+    static const std::map<TEXT_FIELD_NAME, wxString> CadstarToKicadFieldsMap;
+
+
+    struct PARSER_CONTEXT
+    {
+        /**
+         * CADSTAR doesn't have user defined text fields but does allow loading text from a
+         * file. This map stores all the text items that exist in the original CADSTAR design. They
+         * will be replaced by a text variable of the form ${FROM_FILE_[filename]_[extension]} 
+         */
+        std::map<wxString, wxString> FilenamesToTextMap;
+
+        /**
+         * KiCad doesn't support hyperlinks but we use this map to display warning messages
+         * after import. First element = Display Text. Second element = Hyperlink
+         */
+        std::map<wxString, wxString> TextToHyperlinksMap;
+
+        /**
+         * Values for the text field elements used in the CADSTAR design extracted from the
+         * text element instances
+         */
+        std::map<TEXT_FIELD_NAME, wxString> TextFieldToValuesMap;
+
+        /**
+         * Text fields need to be updated in CADSTAR and it is possible that they are not
+         * consistent accross text elements.
+         */
+        std::set<TEXT_FIELD_NAME> InconsistentTextFields;
+    };
+
+
+    PARSER_CONTEXT mContext;
+
+    /**
+     * @brief Replaces CADSTAR fields for the equivalent in KiCad and stores the field values
+     * in aParserContext
+     * @param aTextString Text string to parse
+     * @param aParserContext PARSER_CONTEXT in which to store the values of the found fields
+     * @return 
+     */
+    static wxString ParseTextFields( wxString aTextString, PARSER_CONTEXT* aParserContext );
+
+
+    struct PARSER
+    {
+        virtual void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) = 0;
+    };
+
+
+    struct FORMAT : PARSER
     {
         wxString Type;
         long     SomeInt; ///< It is unclear what this parameter is used for
         long     Version; ///< Archive version number (e.g. for PCB: 19=> CADSTAR 17.0 archive,
                           ///<  20=> CADSTAR 18.0 archive, 21 => CADSTAR 2018.0 / 2019.0 / 2020.0,
                           ///<  etc.)
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TIMESTAMP
+    struct TIMESTAMP : PARSER
     {
         long Year;
         long Month;
@@ -139,7 +221,7 @@ public:
         long Minute;
         long Second;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     //Note: there are possibly several other resolutions, but HUNDREDTH MICRON is only one known
@@ -149,7 +231,7 @@ public:
     };
 
 
-    struct HEADER
+    struct HEADER : PARSER
     {
         FORMAT     Format;
         wxString   JobFile;
@@ -158,26 +240,26 @@ public:
         RESOLUTION Resolution;
         TIMESTAMP  Timestamp;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct VARIANT ///< Nodename = "VARIANT" or "VMASTER" (master variant
+    struct VARIANT : PARSER ///< Nodename = "VARIANT" or "VMASTER" (master variant
     {
         VARIANT_ID ID          = wxEmptyString;
         VARIANT_ID ParentID    = wxEmptyString; ///< if empty, then this one is the master
         wxString   Name        = wxEmptyString;
         wxString   Description = wxEmptyString;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct VARIANT_HIERARCHY
+    struct VARIANT_HIERARCHY : PARSER
     {
         std::map<VARIANT_ID, VARIANT> Variants;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -191,34 +273,34 @@ public:
     };
 
 
-    struct LINECODE
+    struct LINECODE : PARSER
     {
         LINECODE_ID ID;
         wxString    Name;
         long        Width;
         LINESTYLE   Style;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct HATCH
+    struct HATCH : PARSER
     {
         long Step;
         long LineWidth;
         long OrientAngle; ///< 1/1000 of a Degree
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct HATCHCODE
+    struct HATCHCODE : PARSER
     {
         HATCHCODE_ID       ID;
         wxString           Name;
         std::vector<HATCH> Hatches;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -226,7 +308,7 @@ public:
     static const long FONT_BOLD   = 700;
 
 
-    struct FONT
+    struct FONT : PARSER
     {
         wxString Name  = wxT( "CADSTAR" );
         long Modifier1 = FONT_NORMAL; ///< It seems this is related to weight. 400=Normal, 700=Bold.
@@ -237,11 +319,11 @@ public:
                        ///< characters in order to improve the appearance of the text"
         bool Italic = false;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TEXTCODE
+    struct TEXTCODE : PARSER
     {
         TEXTCODE_ID ID;
         wxString    Name;
@@ -252,11 +334,11 @@ public:
                     ///< a different aspect ratio.
         FONT Font;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct ROUTEREASSIGN
+    struct ROUTEREASSIGN : PARSER
     {
         LAYER_ID LayerID;
         long     OptimalWidth;
@@ -264,11 +346,11 @@ public:
         long     MaxWidth;
         long     NeckedWidth;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct ROUTECODE
+    struct ROUTECODE : PARSER
     {
         ROUTECODE_ID ID;
         wxString     Name;
@@ -279,41 +361,41 @@ public:
 
         std::vector<ROUTEREASSIGN> RouteReassigns;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
     /**
      * @brief Represents a floating value in E notation
      */
-    struct EVALUE
+    struct EVALUE : PARSER
     {
         long Base     = 0;
         long Exponent = 0;
 
-        void   Parse( XNODE* aNode );
+        void   Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         double GetDouble();
     };
 
     /**
      * @brief Represents a point in x,y coordinates
      */
-    struct POINT : wxPoint
+    struct POINT : wxPoint, PARSER
     {
         POINT() : wxPoint( UNDEFINED_VALUE, UNDEFINED_VALUE )
         {
         }
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct LONGPOINT
+    struct LONGPOINT : PARSER
     {
         long x = UNDEFINED_VALUE;
         long y = UNDEFINED_VALUE;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -330,24 +412,24 @@ public:
      * @brief Represents a vertex in a shape. E.g. A circle is made by two semicircles with the same
      * center point.
      */
-    struct VERTEX
+    struct VERTEX : PARSER
     {
         VERTEX_TYPE Type;
         POINT       Center;
         POINT       End;
 
         static bool IsVertex( XNODE* aNode );
-        void        Parse( XNODE* aNode );
+        void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
      * @brief Represents a cutout in a closed shape (e.g. OUTLINE)
      */
-    struct CUTOUT
+    struct CUTOUT : PARSER
     {
         std::vector<VERTEX> Vertices;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -360,7 +442,7 @@ public:
     };
 
 
-    struct SHAPE
+    struct SHAPE : PARSER
     {
         SHAPE_TYPE          Type;
         std::vector<VERTEX> Vertices;
@@ -368,7 +450,7 @@ public:
         wxString            HatchCodeID; ///< Only Applicable for HATCHED Type
 
         static bool IsShape( XNODE* aNode );
-        void        Parse( XNODE* aNode );
+        void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -405,7 +487,7 @@ public:
     };
 
 
-    struct GRID
+    struct GRID : PARSER
     {
         GRID_TYPE Type;
         wxString  Name;
@@ -415,11 +497,11 @@ public:
                           ///< more details)
 
         static bool IsGrid( XNODE* aNode );
-        void        Parse( XNODE* aNode );
+        void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct GRIDS
+    struct GRIDS : PARSER
     {
         GRID WorkingGrid;
         GRID ScreenGrid;             ///< From CADSTAR Help: "There is one Screen Grid, which is
@@ -432,11 +514,11 @@ public:
                                      ///< set up on the Display dialog within Options(File menu)."
         std::vector<GRID> UserGrids; ///< List of predefined grids created by the user
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SETTINGS
+    struct SETTINGS : PARSER
     {
         UNITS Units;                  ///< Units to display for linear dimensions
         long  UnitDisplPrecision;     ///< Number of decimal points to display for linear dimensions
@@ -454,9 +536,10 @@ public:
         LONGPOINT               DesignRef; ///< Appears to be 0,0 always
         LONGPOINT               DesignLimit;
 
-        bool         ParseSubNode( XNODE* aChildNode );
-        virtual void Parse( XNODE* aNode );
+        bool         ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
+        virtual void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
+
 
 
     /**
@@ -568,7 +651,7 @@ public:
     };
 
 
-    struct ATTRIBUTE_LOCATION
+    struct ATTRIBUTE_LOCATION : PARSER
     {
         TEXTCODE_ID   TextCodeID;
         LAYER_ID      LayerID;
@@ -584,9 +667,9 @@ public:
                               ///< Note that this is different from BOTTOM_LEFT (which is bottom
                               ///< left of the whole text block)
 
-        void         ParseIdentifiers( XNODE* aNode );
-        bool         ParseSubNode( XNODE* aChildNode );
-        virtual void Parse( XNODE* aNode );
+        void         ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
+        bool         ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
+        virtual void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -594,23 +677,23 @@ public:
      * @brief NOTE from CADSTAR help: To convert a Part Definition Attribute into a hyperlink, prefix
      * the attribute name with "Link "
      */
-    struct ATTRNAME
+    struct ATTRNAME : PARSER
     {
-        struct COLUMNORDER
+        struct COLUMNORDER : PARSER
         {
             long ID;
             long Order;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
-        struct COLUMNWIDTH
+        struct COLUMNWIDTH : PARSER
         {
             long ID;
             long Width;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         ATTRIBUTE_ID ID;
@@ -631,11 +714,11 @@ public:
         std::vector<COLUMNWIDTH> ColumnWidths;
         bool                     ColumnInvisible = false;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct ATTRIBUTE_VALUE
+    struct ATTRIBUTE_VALUE : PARSER
     {
         ATTRIBUTE_ID AttributeID;
         wxString     Value;
@@ -644,7 +727,7 @@ public:
                                           ///< i.e. is displayed
         ATTRIBUTE_LOCATION AttributeLocation;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -663,30 +746,30 @@ public:
         }
         ATTRIBUTE_ID AttributeID;
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct NETCLASS
+    struct NETCLASS : PARSER
     {
         NETCLASS_ID                  ID;
         wxString                     Name;
         std::vector<ATTRIBUTE_VALUE> Attributes;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SPCCLASSNAME
+    struct SPCCLASSNAME : PARSER
     {
         SPACING_CLASS_ID ID;
         wxString         Name;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct CODEDEFS
+    struct CODEDEFS : PARSER
     {
         std::map<LINECODE_ID, LINECODE>          LineCodes;
         std::map<HATCHCODE_ID, HATCHCODE>        HatchCodes;
@@ -696,8 +779,7 @@ public:
         std::map<NETCLASS_ID, NETCLASS>          NetClasses;
         std::map<SPACING_CLASS_ID, SPCCLASSNAME> SpacingClassNames;
 
-        bool         ParseSubNode( XNODE* aChildNode );
-        virtual void Parse( XNODE* aNode ) = 0;
+        bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
     };
 
     /**
@@ -721,7 +803,7 @@ public:
     static SWAP_RULE ParseSwapRule( XNODE* aNode );
 
 
-    struct REUSEBLOCK
+    struct REUSEBLOCK : PARSER
     {
         REUSEBLOCK_ID ID;
         wxString      Name;
@@ -729,14 +811,14 @@ public:
         bool     Mirror      = false;
         long     OrientAngle = 0;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
     /**
      * @brief References an element from a design reuse block
      */
-    struct REUSEBLOCKREF
+    struct REUSEBLOCKREF : PARSER
     {
         REUSEBLOCK_ID ReuseBlockID = wxEmptyString;
         wxString ItemReference = wxEmptyString; ///< For Components, this references the designator
@@ -745,11 +827,11 @@ public:
                                                 ///< coppers and templates, this parameter is blank.
 
         bool IsEmpty(); ///< Determines if this is empty (i.e. no design reuse associated)
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct GROUP
+    struct GROUP : PARSER
     {
         GROUP_ID ID;
         wxString Name;
@@ -759,11 +841,11 @@ public:
                                            ///< is part of another GROUP
         REUSEBLOCKREF ReuseBlockRef;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct FIGURE
+    struct FIGURE : PARSER
     {
         FIGURE_ID   ID;
         LINECODE_ID LineCodeID;
@@ -776,11 +858,11 @@ public:
         bool          Fixed    = false;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TEXT
+    struct TEXT : PARSER
     {
         TEXT_ID       ID;
         wxString      Text; //TODO: Need to lex/parse to identify design fields and hyperlinks
@@ -801,11 +883,11 @@ public:
         GROUP_ID      GroupID = wxEmptyString; ///< If not empty, this FIGURE is part of a group
         REUSEBLOCKREF ReuseBlockRef;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SYMDEF
+    struct SYMDEF : PARSER
     {
         SYMDEF_ID ID;
         wxString  ReferenceName; ///< This is the name which identifies the symbol in the library
@@ -831,13 +913,12 @@ public:
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< These attributes might also
                                                                  ///< have a location
 
-        void         ParseIdentifiers( XNODE* aNode );
-        bool         ParseSubNode( XNODE* aChildNode );
-        virtual void Parse( XNODE* aNode ) = 0;
+        void ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
+        bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
     };
 
 
-    struct PART
+    struct PART : PARSER
     {
         enum class PIN_TYPE
         {
@@ -857,20 +938,20 @@ public:
         static PIN_TYPE GetPinType( XNODE* aNode );
 
 
-        struct DEFINITION ///< "PARTDEFINITION" node name
+        struct DEFINITION : PARSER ///< "PARTDEFINITION" node name
         {
-            struct GATE ///< "GATEDEFINITION" node name
+            struct GATE : PARSER ///< "GATEDEFINITION" node name
             {
                 GATE_ID  ID;        ///< Usually "A", "B", "C", etc.
                 wxString Name;      ///< Symbol name in the symbol library
                 wxString Alternate; ///< Symbol alternate name in the symbol library
                 long     PinCount;  ///< Number of pins (terminals) in the symbol
 
-                void Parse( XNODE* aNode );
+                void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
 
-            struct PIN ///< "PARTDEFINITIONPIN" node name
+            struct PIN : PARSER ///< "PARTDEFINITIONPIN" node name
             {
                 /**
                  * @brief Positioning of pin names can be in one of four quadrants
@@ -924,30 +1005,30 @@ public:
                                              ///< the symbol is added to a schematic design
                                              ///< subnode="PINPOSITION"
 
-                void Parse( XNODE* aNode );
+                void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
 
-            struct PIN_EQUIVALENCE ///< "PINEQUIVALENCE" Node name (represents "Equivalence")
+            struct PIN_EQUIVALENCE : PARSER ///< "PINEQUIVALENCE" Node name
             {
                 std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< All the pins in this vector are
                                                             ///< equivalent and can be swapped with
                                                             ///< each other
 
-                void Parse( XNODE* aNode );
+                void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
 
-            struct SWAP_GATE ///< "SWAPGATE" Node name (represents an "Element")
+            struct SWAP_GATE : PARSER ///< "SWAPGATE" Node name (represents an "Element")
             {
                 std::vector<PART_DEFINITION_PIN_ID> PinIDs; ///< The pins in this vector
                                                             ///< describe a "gate"
 
-                void Parse( XNODE* aNode );
+                void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
 
-            struct SWAP_GROUP
+            struct SWAP_GROUP : PARSER
             {
                 wxString GateName =
                         wxEmptyString; ///< Optional. If not empty, should match the Name
@@ -968,7 +1049,7 @@ public:
                                                   ///< *all* in another swap gate defined in this
                                                   ///< vector
 
-                void Parse( XNODE* aNode );
+                void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
             wxString Name; ///< This name can be different to the PART name
@@ -995,18 +1076,18 @@ public:
             std::vector<PIN_EQUIVALENCE> PinEquivalences;
             std::vector<SWAP_GROUP>      SwapGroups;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
-        struct PART_PIN ///< "PARTPIN" node name
+        struct PART_PIN : PARSER ///< "PARTPIN" node name
         {
             PART_PIN_ID ID;
             wxString    Name       = wxEmptyString;
             PIN_TYPE    Type       = PIN_TYPE::UNCOMMITTED;
             wxString    Identifier = wxEmptyString;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
@@ -1028,21 +1109,21 @@ public:
                                                                  ///< whilst others are defined in
                                                                  ///< the part itself
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct PARTS
+    struct PARTS : PARSER
     {
         std::map<PART_ID, PART> PartDefinitions;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct NET
+    struct NET : PARSER
     {
-        struct JUNCTION ///< "JPT" nodename.
+        struct JUNCTION : PARSER ///< "JPT" nodename.
         {
             NETELEMENT_ID ID; ///< First character is "J"
             LAYER_ID      LayerID;
@@ -1052,13 +1133,13 @@ public:
             REUSEBLOCKREF ReuseBlockRef;
             bool          Fixed = false;
 
-            void         ParseIdentifiers( XNODE* aNode );
-            bool         ParseSubNode( XNODE* aChildNode );
-            virtual void Parse( XNODE* aNode );
+            void         ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
+            bool         ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
+            virtual void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
-        struct CONNECTION ///< "CONN" nodename
+        struct CONNECTION : PARSER ///< "CONN" nodename
         {
             NETELEMENT_ID StartNode;
             NETELEMENT_ID EndNode;
@@ -1072,9 +1153,8 @@ public:
             std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues; ///< It is possible to add
                                                                      ///< attributes solely to a
                                                                      ///< particular connection
-            void         ParseIdentifiers( XNODE* aNode );
-            bool         ParseSubNode( XNODE* aChildNode );
-            virtual void Parse( XNODE* aNode ) = 0;
+            void ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
+            bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
 
             virtual ~CONNECTION() {}
         };
@@ -1097,13 +1177,12 @@ public:
                 wxEmptyString; ///< The net might not have a spacing class, in which case it will
                                ///< be wxEmptyString ("SPACINGCLASS" subnode)
 
-        void         ParseIdentifiers( XNODE* aNode );
-        bool         ParseSubNode( XNODE* aChildNode );
-        virtual void Parse( XNODE* aNode ) = 0;
+        void ParseIdentifiers( XNODE* aNode, PARSER_CONTEXT* aContext );
+        bool ParseSubNode( XNODE* aChildNode, PARSER_CONTEXT* aContext );
     };
 
 
-    struct DOCUMENTATION_SYMBOL
+    struct DOCUMENTATION_SYMBOL : PARSER
     {
         DOCUMENTATION_SYMBOL_ID ID;
 
@@ -1129,7 +1208,7 @@ public:
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -1200,7 +1279,7 @@ public:
      * @param aValueToParse
      * @throw IO_ERROR if unable to parse or node is not an EVALUE
      */
-    static void ParseChildEValue( XNODE* aNode, EVALUE& aValueToParse );
+    static void ParseChildEValue( XNODE* aNode, PARSER_CONTEXT* aContext, EVALUE& aValueToParse );
 
     /**
      * @brief if no childs are present, it just returns an empty
@@ -1214,8 +1293,8 @@ public:
      *         - aTestAllChildNodes is true and one of the child nodes is not a valid POINT object
      *         - aExpectedNumPoints is non-negative and the number of POINT objects found is different
      */
-    static std::vector<POINT> ParseAllChildPoints( XNODE* aNode, bool aTestAllChildNodes = false,
-            int aExpectedNumPoints = UNDEFINED_VALUE );
+    static std::vector<POINT> ParseAllChildPoints( XNODE* aNode, PARSER_CONTEXT* aContext,
+            bool aTestAllChildNodes = false, int aExpectedNumPoints = UNDEFINED_VALUE );
 
     /**
      * @brief if no childs are present, it just returns an empty
@@ -1229,7 +1308,7 @@ public:
      *         - aTestAllChildNodes is true and one of the child nodes is not a valid VERTEX object
      */
     static std::vector<VERTEX> ParseAllChildVertices(
-            XNODE* aNode, bool aTestAllChildNodes = false );
+            XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
 
     /**
      * @brief if no childs are present, it just returns an empty
@@ -1243,7 +1322,7 @@ public:
      *         - aTestAllChildNodes is true and one of the child nodes is not a valid CUTOUT object
      */
     static std::vector<CUTOUT> ParseAllChildCutouts(
-            XNODE* aNode, bool aTestAllChildNodes = false );
+            XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
 }; // class CADSTAR_ARCHIVE_PARSER
 
 #endif // CADSTAR_ARCHIVE_PARSER_H_

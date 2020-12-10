@@ -86,7 +86,7 @@ public:
     };
 
 
-    struct MATERIAL
+    struct MATERIAL : PARSER
     {
         MATERIAL_ID         ID;
         wxString            Name;
@@ -95,7 +95,7 @@ public:
         EVALUE              LossTangent;
         EVALUE              Resistivity; ///< x10^-8 ohm*metre
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -147,7 +147,7 @@ public:
     };
 
 
-    struct LAYER
+    struct LAYER : PARSER
     {
         LAYER_ID          ID;
         wxString          Name;
@@ -166,48 +166,48 @@ public:
         bool         ReferencePlane = false;
         bool         VariantLayer   = false;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct LAYERDEFS
+    struct LAYERDEFS : PARSER
     {
         std::map<MATERIAL_ID, MATERIAL> Materials;
         std::map<LAYER_ID, LAYER>       Layers;
         std::vector<LAYER_ID>           LayerStack;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct COPREASSIGN
+    struct COPREASSIGN : PARSER
     {
         LAYER_ID LayerID;
         long     CopperWidth;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct COPPERCODE
+    struct COPPERCODE : PARSER
     {
         COPPERCODE_ID            ID;
         wxString                 Name;
         long                     CopperWidth;
         std::vector<COPREASSIGN> Reassigns;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SPACINGCODE
+    struct SPACINGCODE : PARSER
     {
-        struct REASSIGN
+        struct REASSIGN : PARSER
         {
             LAYER_ID LayerID;
             long     Spacing;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         /**
@@ -252,7 +252,7 @@ public:
         long                  Spacing;
         std::vector<REASSIGN> Reassigns; ///< Can have different spacings on differnt layers
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -270,7 +270,7 @@ public:
     };
 
 
-    struct PAD_SHAPE
+    struct PAD_SHAPE : PARSER
     {
         PAD_SHAPE_TYPE ShapeType;
         long           Size            = UNDEFINED_VALUE;
@@ -280,20 +280,20 @@ public:
         long           OrientAngle     = 0; ///< 1/1000 of a Degree
 
         static bool IsPadShape( XNODE* aNode );
-        void        Parse( XNODE* aNode );
+        void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct PADREASSIGN
+    struct PADREASSIGN : PARSER
     {
         LAYER_ID  LayerID;
         PAD_SHAPE Shape;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct PADCODE
+    struct PADCODE : PARSER
     {
         PADCODE_ID ID;
         wxString   Name;
@@ -310,20 +310,20 @@ public:
 
         std::map<LAYER_ID, PAD_SHAPE> Reassigns;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct VIAREASSIGN
+    struct VIAREASSIGN : PARSER
     {
         LAYER_ID  LayerID;
         PAD_SHAPE Shape;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct VIACODE
+    struct VIACODE : PARSER
     {
         VIACODE_ID ID;
         wxString   Name;
@@ -335,11 +335,11 @@ public:
 
         std::map<LAYER_ID, PAD_SHAPE> Reassigns;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct LAYERPAIR
+    struct LAYERPAIR : PARSER
     {
         LAYERPAIR_ID      ID;
         wxString          Name;
@@ -347,22 +347,22 @@ public:
         PHYSICAL_LAYER_ID PhysicalLayerEnd;
         VIACODE_ID        ViacodeID;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SPCCLASSSPACE
+    struct SPCCLASSSPACE : PARSER
     {
         SPACING_CLASS_ID SpacingClassID1;
         SPACING_CLASS_ID SpacingClassID2;
         LAYER_ID         LayerID; ///< Normally LAY0, which corresponds to (All Layers)
         long             Spacing;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct RULESET
+    struct RULESET : PARSER
     {
         RULESET_ID   ID;
         wxString     Name;
@@ -377,7 +377,7 @@ public:
         std::map<SPACINGCODE_ID, SPACINGCODE>
                 SpacingCodes; ///< Overrides these spacing rules in the specific
                               ///< area.
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -392,7 +392,7 @@ public:
                                    LayerPairs; ///< Default vias to use between pairs of layers
         std::vector<SPCCLASSSPACE> SpacingClasses;
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -415,11 +415,11 @@ public:
         bool BackOffJunctions   = false;
         bool BackOffWidthChange = false;
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct ASSIGNMENTS
+    struct ASSIGNMENTS : PARSER
     {
         LAYERDEFS          Layerdefs;
         CODEDEFS_PCB       Codedefs;
@@ -428,14 +428,14 @@ public:
         bool               NetclassEditAttributeSettings     = false; //< Unclear what this does
         bool               SpacingclassEditAttributeSettings = false; //< Unclear what this does
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
      * @brief A shape of copper in the component footprint. For KiCad import, this could
      * be converted to a custom shaped pad (as long as AssociatedPadIDs is not empty)
      */
-    struct COMPONENT_COPPER
+    struct COMPONENT_COPPER : PARSER
     {
         COPPERCODE_ID       CopperCodeID;
         LAYER_ID            LayerID;
@@ -443,7 +443,7 @@ public:
         SWAP_RULE           SwapRule = SWAP_RULE::BOTH;
         std::vector<PAD_ID> AssociatedPadIDs;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
@@ -452,7 +452,7 @@ public:
      * no operations are carried out and where no items are placed by operations such as Placement
      * and Routing."
      */
-    struct COMPONENT_AREA
+    struct COMPONENT_AREA : PARSER
     {
         COMP_AREA_ID ID;
         LINECODE_ID  LineCodeID;
@@ -469,7 +469,7 @@ public:
                                ///< by the Auto Router and Route Editor options as the area within
                                ///< which no vias are placed during automatic routing."
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
@@ -506,7 +506,7 @@ public:
      * at an angle): it is relative to the component as a whole. This is confusing, considering this
      * property belongs to the pad...
      */
-    struct PAD_EXITS
+    struct PAD_EXITS : PARSER
     {
         bool FreeAngle = false;
         bool North     = false;
@@ -518,11 +518,11 @@ public:
         bool West      = false;
         bool NorthWest = false;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct COMPONENT_PAD
+    struct COMPONENT_PAD : PARSER
     {
         PAD_ID     ID;
         POINT      Position; ///< Pad position within the component's coordinate frame.
@@ -549,13 +549,13 @@ public:
                                  ///< incorrectly acting on mechanical pads / components that only
                                  ///< appear in the PCB design."
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
      * @brief Linear, leader (radius/diameter) or angular dimension
      */
-    struct DIMENSION
+    struct DIMENSION : PARSER
     {
         enum class TYPE
         {
@@ -580,7 +580,7 @@ public:
         };
 
 
-        struct ARROW //"DIMARROW"
+        struct ARROW : PARSER //"DIMARROW"
         {
             enum class STYLE
             {
@@ -602,7 +602,7 @@ public:
             long  LowerAngle;  ///< token="ARROWANGLEB"
             long  ArrowLength; ///< The length of the angled lines that make up the arrow head
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         /**
@@ -619,7 +619,7 @@ public:
          * Note: the token is "DIMTEXT" in the CADSTAR format, but this has been renamed to
          * TEXTFORMAT in the cadstar2kicadplugin for ease of understanding.
          */
-        struct TEXTFORMAT
+        struct TEXTFORMAT : PARSER
         {
             enum class STYLE ///< Token "TXTSTYLE"
             {
@@ -634,11 +634,11 @@ public:
             long  TextOffset; ///< Specifies how far above the line the text is (doesn't have
                               ///< an effect on actual position!)
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
-        struct EXTENSION_LINE ///< Token "EXTLINE"
+        struct EXTENSION_LINE : PARSER ///< Token "EXTLINE"
         {
             LINECODE_ID LineCodeID;
 
@@ -649,11 +649,11 @@ public:
             bool  SuppressFirst = false; ///< If true, excludes the first extension line (only
                                          ///< shows extension line at end)
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
-        struct LINE ///< Token can be either "LEADERLINE", "LINEARLINE" or "ANGULARLINE"
+        struct LINE : PARSER ///< Token can be either "LEADERLINE", "LINEARLINE" or "ANGULARLINE"
         {
             enum class TYPE
             {
@@ -688,7 +688,7 @@ public:
                                                               ///< leader line [param6]
 
             static bool IsLine( XNODE* aNode );
-            void        Parse( XNODE* aNode );
+            void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         TYPE         Type;
@@ -710,7 +710,7 @@ public:
         REUSEBLOCKREF ReuseBlockRef;
 
         static bool IsDimension( XNODE* aNode );
-        void        Parse( XNODE* aNode );
+        void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
@@ -781,19 +781,19 @@ public:
         std::map<PAD_ID, COMPONENT_PAD>        ComponentPads;
         std::map<DIMENSION_ID, DIMENSION>      Dimensions; ///< inside "DIMENSIONS" subnode
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct LIBRARY
+    struct LIBRARY : PARSER
     {
         std::map<SYMDEF_ID, SYMDEF_PCB> ComponentDefinitions;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct BOARD
+    struct BOARD : PARSER
     {
         BOARD_ID                                ID;
         LINECODE_ID                             LineCodeID;
@@ -805,7 +805,7 @@ public:
         REUSEBLOCKREF ReuseBlockRef;           ///< Normally BOARD cannot be part of a reuseblock,
                                                ///< but included for completeness
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
@@ -815,7 +815,7 @@ public:
      * and Routing. [...]
      * More than one function can be assigned to an area."
      */
-    struct AREA
+    struct AREA : PARSER
     {
         AREA_ID     ID;
         LINECODE_ID LineCodeID;
@@ -849,7 +849,7 @@ public:
         REUSEBLOCKREF ReuseBlockRef;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -865,17 +865,17 @@ public:
     static TESTLAND_SIDE ParseTestlandSide( XNODE* aNode );
 
 
-    struct PIN_ATTRIBUTE
+    struct PIN_ATTRIBUTE : PARSER
     {
         PART_DEFINITION_PIN_ID                  Pin;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
         TESTLAND_SIDE                           TestlandSide = TESTLAND_SIDE::NONE;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct PADEXCEPTION
+    struct PADEXCEPTION : PARSER
     {
         PAD_ID     ID;
         PADCODE_ID PadCode      = wxEmptyString; ///< If not empty, override padcode
@@ -886,11 +886,11 @@ public:
         bool       OverrideOrientation = false;
         long       OrientAngle         = 0;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct COMPONENT
+    struct COMPONENT : PARSER
     {
         COMPONENT_ID ID;
         wxString     Name; ///< Designator e.g. "C1", "R1", etc.
@@ -922,38 +922,38 @@ public:
         std::map<PAD_ID, PADEXCEPTION>                  PadExceptions; ///< Override pad definitions
                                                                        ///< for this instance
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TRUNK
+    struct TRUNK : PARSER
     {
         TRUNK_ID ID;
         wxString Definition; // TODO: more work required to fully parse the TRUNK structure
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
     struct NET_PCB : CADSTAR_ARCHIVE_PARSER::NET
     {
-        struct PIN ///< "PIN" nodename (represents a PAD in a PCB component)
+        struct PIN : PARSER ///< "PIN" nodename (represents a PAD in a PCB component)
         {
             NETELEMENT_ID ID; ///< First character is "P"
             COMPONENT_ID  ComponentID;
             PAD_ID        PadID;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
         
         struct JUNCTION_PCB : CADSTAR_ARCHIVE_PARSER::NET::JUNCTION ///< "JPT" nodename
         {
             TRUNK_ID TrunkID; ///< TRUNKREF Statements
 
-            void Parse( XNODE* aNode ) override;
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct VIA ///< "VIA" nodename
+        struct VIA : PARSER ///< "VIA" nodename
         {
             NETELEMENT_ID ID; ///< First character is "V"
             VIACODE_ID    ViaCodeID;
@@ -965,35 +965,35 @@ public:
             TESTLAND_SIDE TestlandSide = TESTLAND_SIDE::NONE;
             bool          Fixed        = false;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct COPPER_TERMINAL ///< "COPTERM" nodename
+        struct COPPER_TERMINAL : PARSER ///< "COPTERM" nodename
         {
             NETELEMENT_ID  ID; ///< First two character are "CT"
             COPPER_ID      CopperID;
             COPPER_TERM_ID CopperTermNum;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct ROUTE_VERTEX ///< Two sibbling nodes: first node being "ROUTEWIDTH" and next
-                            ///< node being a VERTEX (e.g. PT, CWARC, etc.)
+        struct ROUTE_VERTEX ///< Two sibbling nodes: first node being "ROUTEWIDTH" and
+                            ///< next node being a VERTEX (e.g. PT, CWARC, etc.)
         {
             long   RouteWidth;
             bool   Fixed = false;
             VERTEX Vertex;
 
-            XNODE* Parse( XNODE* aNode ); ///< Returns a pointer to the last node
+            XNODE* Parse( XNODE* aNode, PARSER_CONTEXT* aContext ); ///< Returns a pointer to the last node
         };
 
-        struct ROUTE ///< "ROUTE" nodename
+        struct ROUTE : PARSER ///< "ROUTE" nodename
         {
             LAYER_ID                  LayerID = wxEmptyString;
             POINT                     StartPoint;
             std::vector<ROUTE_VERTEX> RouteVertices;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         struct CONNECTION_PCB : CADSTAR_ARCHIVE_PARSER::NET::CONNECTION ///< "CONN" nodename
@@ -1007,7 +1007,7 @@ public:
             LAYER_ID UnrouteLayerID = wxEmptyString; ///< See Unrouted member variable.
             TRUNK_ID TrunkID;                        ///< TRUNKREF Statements
 
-            void Parse( XNODE* aNode ) override;
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         std::map<NETELEMENT_ID, PIN>             Pins;
@@ -1016,7 +1016,7 @@ public:
         std::map<NETELEMENT_ID, COPPER_TERMINAL> CopperTerminals;
         std::vector<CONNECTION_PCB>              Connections;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
     /**
@@ -1025,9 +1025,9 @@ public:
      * has indeed been "poured", there will be one or more separate COPPER objects linked to the
      * TEMPLATE via COPPER::PouredTemplateID
      */
-    struct TEMPLATE
+    struct TEMPLATE : PARSER
     {
-        struct POURING
+        struct POURING : PARSER
         {
             enum class COPPER_FILL_TYPE
             {
@@ -1089,7 +1089,7 @@ public:
             COPPER_FILL_TYPE FillType    = COPPER_FILL_TYPE::FILLED; ///< Assume solid fill
             HATCHCODE_ID     HatchCodeID = wxEmptyString; ///< Only for FillType = HATCHED
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         TEMPLATE_ID   ID;
@@ -1105,28 +1105,28 @@ public:
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct COPPER
+    struct COPPER : PARSER
     {
-        struct NETREF
+        struct NETREF : PARSER
         {
-            struct COPPER_TERM
+            struct COPPER_TERM : PARSER
             {
                 COPPER_TERM_ID ID;
                 POINT          Location;
                 bool           Fixed = false;
 
-                void Parse( XNODE* aNode );
+                void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
             };
 
             NET_ID                                NetID = wxEmptyString;
             std::map<COPPER_TERM_ID, COPPER_TERM> CopperTerminals;
             bool                                  Fixed = false;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         COPPER_ID     ID;
@@ -1142,7 +1142,7 @@ public:
 
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -1154,7 +1154,7 @@ public:
     };
 
 
-    struct DRILL_TABLE
+    struct DRILL_TABLE : PARSER
     {
         DRILL_TABLE_ID ID;
         LAYER_ID       LayerID;
@@ -1167,11 +1167,11 @@ public:
                                                     ///< is part of a group
         REUSEBLOCKREF ReuseBlockRef;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct LAYOUT
+    struct LAYOUT : PARSER
     {
         NETSYNCH NetSynch = NETSYNCH::UNDEFINED;
 
@@ -1193,7 +1193,7 @@ public:
         std::map<DRILL_TABLE_ID, DRILL_TABLE>                   DrillTables;
         VARIANT_HIERARCHY                                       VariantHierarchy;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 

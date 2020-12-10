@@ -41,7 +41,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
     {
         if( cNode->GetName() == wxT( "HEADER" ) )
         {
-            Header.Parse( cNode );
+            Header.Parse( cNode, &mContext );
 
             switch( Header.Resolution )
             {
@@ -56,11 +56,11 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "ASSIGNMENTS" ) )
         {
-            Assignments.Parse( cNode );
+            Assignments.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "LIBRARY" ) )
         {
-            Library.Parse( cNode );
+            Library.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "DEFAULTS" ) )
         {
@@ -70,15 +70,15 @@ void CADSTAR_SCH_ARCHIVE_PARSER::Parse()
         }
         else if( cNode->GetName() == wxT( "PARTS" ) )
         {
-            Parts.Parse( cNode );
+            Parts.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "SHEETS" ) )
         {
-            Sheets.Parse( cNode );
+            Sheets.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "SCHEMATIC" ) )
         {
-            Schematic.Parse( cNode );
+            Schematic.Parse( cNode, &mContext );
         }
         else if( cNode->GetName() == wxT( "DISPLAY" ) )
         {
@@ -140,7 +140,7 @@ bool CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::IsTermShape( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( IsTermShape( aNode ), );
 
@@ -198,7 +198,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL_SHAPE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::TERMINALCODE::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::TERMINALCODE::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "TERMINALCODE" ), );
 
@@ -213,7 +213,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINALCODE::Parse( XNODE* aNode )
         wxString cNodeName = cNode->GetName();
 
         if( TERMINAL_SHAPE::IsTermShape( cNode ) )
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
         else if( cNodeName == wxT( "FILLED" ) )
             Filled = true;
         else
@@ -222,7 +222,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINALCODE::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::CODEDEFS_SCM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::CODEDEFS_SCM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "CODEDEFS" ), );
 
@@ -232,14 +232,14 @@ void CADSTAR_SCH_ARCHIVE_PARSER::CODEDEFS_SCM::Parse( XNODE* aNode )
     {
         wxString nodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) ) // in CADSTAR_ARCHIVE_PARSER::CODEDEFS
+        if( ParseSubNode( cNode, aContext ) ) // in CADSTAR_ARCHIVE_PARSER::CODEDEFS
         {
             continue;
         }
         else if( nodeName == wxT( "TERMINALCODE" ) )
         {
             TERMINALCODE termcode;
-            termcode.Parse( cNode );
+            termcode.Parse( cNode, aContext );
             TerminalCodes.insert( std::make_pair( termcode.ID, termcode ) );
         }
         else
@@ -250,7 +250,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::CODEDEFS_SCM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::ASSIGNMENTS_SCM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::ASSIGNMENTS_SCM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "ASSIGNMENTS" ), );
 
@@ -261,16 +261,16 @@ void CADSTAR_SCH_ARCHIVE_PARSER::ASSIGNMENTS_SCM::Parse( XNODE* aNode )
     {
         if( cNode->GetName() == wxT( "CODEDEFS" ) )
         {
-            Codedefs.Parse( cNode );
+            Codedefs.Parse( cNode, aContext );
         }
         else if( cNode->GetName() == wxT( "SETTINGS" ) )
         {
             settingsParsed = true;
-            Settings.Parse( cNode );
+            Settings.Parse( cNode, aContext );
         }
         else if( cNode->GetName() == wxT( "GRIDS" ) )
         {
-            Grids.Parse( cNode );
+            Grids.Parse( cNode, aContext );
         }
         else if( cNode->GetName() == wxT( "NETCLASSEDITATTRIBSETTINGS" ) )
         {
@@ -291,7 +291,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::ASSIGNMENTS_SCM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "TERMINAL" ), );
 
@@ -311,14 +311,14 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMINAL::Parse( XNODE* aNode )
         if( cNodeName == wxT( "ORIENT" ) )
             OrientAngle = GetXmlAttributeIDLong( cNode, 0 );
         else if( cNodeName == wxT( "PT" ) )
-            Position.Parse( cNode );
+            Position.Parse( cNode, aContext );
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNodeName, location );
     }
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::PIN_NUM_LABEL_LOC::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::PIN_NUM_LABEL_LOC::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "PINLABELLOC" )
                      || aNode->GetName() == wxT( "PINNUMNAMELOC" ), );
@@ -331,7 +331,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PIN_NUM_LABEL_LOC::Parse( XNODE* aNode )
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
             continue;
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
@@ -342,11 +342,11 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PIN_NUM_LABEL_LOC::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SYMDEF_SCM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SYMDEF_SCM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SYMDEF" ), );
 
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
 
     XNODE* cNode = aNode->GetChildren();
 
@@ -354,26 +354,26 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMDEF_SCM::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
         {
             continue;
         }
         else if( cNodeName == wxT( "TERMINAL" ) )
         {
             TERMINAL term;
-            term.Parse( cNode );
+            term.Parse( cNode, aContext );
             Terminals.insert( std::make_pair( term.ID, term ) );
         }
         else if( cNodeName == wxT( "PINLABELLOC" ) )
         {
             PIN_NUM_LABEL_LOC loc;
-            loc.Parse( cNode );
+            loc.Parse( cNode, aContext );
             PinLabelLocations.insert( std::make_pair( loc.TerminalID, loc ) );
         }
         else if( cNodeName == wxT( "PINNUMNAMELOC" ) )
         {
             PIN_NUM_LABEL_LOC loc;
-            loc.Parse( cNode );
+            loc.Parse( cNode, aContext );
             PinNumberLocations.insert( std::make_pair( loc.TerminalID, loc ) );
         }
         else
@@ -387,7 +387,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMDEF_SCM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::LIBRARY_SCM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::LIBRARY_SCM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "LIBRARY" ), );
 
@@ -400,7 +400,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::LIBRARY_SCM::Parse( XNODE* aNode )
         if( cNodeName == wxT( "SYMDEF" ) )
         {
             SYMDEF_SCM symdef;
-            symdef.Parse( cNode );
+            symdef.Parse( cNode, aContext );
             SymbolDefinitions.insert( std::make_pair( symdef.ID, symdef ) );
         }
         else
@@ -411,7 +411,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::LIBRARY_SCM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SHEETS::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SHEETS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SHEETS" ), );
 
@@ -434,7 +434,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SHEETS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::COMP::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::COMP::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "COMP" ), );
 
@@ -450,7 +450,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::COMP::Parse( XNODE* aNode )
         }
         else if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
-            AttrLoc.Parse( cNode );
+            AttrLoc.Parse( cNode, aContext );
             HasLocation = true;
         }
         else
@@ -461,7 +461,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::COMP::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::PARTREF::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::PARTREF::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "PARTREF" ), );
 
@@ -477,7 +477,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PARTREF::Parse( XNODE* aNode )
         }
         else if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
-            AttrLoc.Parse( cNode );
+            AttrLoc.Parse( cNode, aContext );
             HasLocation = true;
         }
         else
@@ -488,7 +488,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::PARTREF::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::TERMATTR::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::TERMATTR::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "TERMATTR" ), /* void */ );
 
@@ -501,7 +501,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMATTR::Parse( XNODE* aNode )
     {
         if( !attrParsed && cNode->GetName() == wxT( "ATTR" ) )
         {
-            Value.Parse( cNode );
+            Value.Parse( cNode, aContext );
             attrParsed = true;
         }
         else
@@ -512,7 +512,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::TERMATTR::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SYMPINNAME" ) || aNode->GetName() == wxT( "SYMPINLABEL" ), );
 
@@ -525,7 +525,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode )
     {
         if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
-            AttrLoc.Parse( cNode );
+            AttrLoc.Parse( cNode, aContext );
             HasLocation = true;
         }
         else
@@ -536,7 +536,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMPINNAME_LABEL::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "PINNUM" ), );
 
@@ -549,7 +549,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode )
     {
         if( cNode->GetName() == wxT( "ATTRLOC" ) )
         {
-            AttrLoc.Parse( cNode );
+            AttrLoc.Parse( cNode, aContext );
             HasLocation = true;
         }
         else
@@ -560,7 +560,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::PIN_NUM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SYMBOLVARIANT" ), );
 
@@ -588,7 +588,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOLVARIANT::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SIGNALREFERENCELINK::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SIGNALREFERENCELINK::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SIGNALREFERENCELINK" ), );
 
@@ -600,7 +600,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGNALREFERENCELINK::Parse( XNODE* aNode )
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
             continue;
         else if( cNode->GetName() == wxT( "SIGREFTEXT" ) )
             Text = GetXmlAttributeIDString( aNode, 0 );
@@ -613,7 +613,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGNALREFERENCELINK::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SYMBOL" ), );
 
@@ -631,17 +631,17 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
 
         if( !originParsed && cNodeName == wxT( "PT" ) )
         {
-            Origin.Parse( cNode );
+            Origin.Parse( cNode, aContext );
             originParsed = true;
         }
         else if( cNodeName == wxT( "COMP" ) )
         {
-            ComponentRef.Parse( cNode );
+            ComponentRef.Parse( cNode, aContext );
             IsComponent = true;
         }
         else if( cNodeName == wxT( "PARTREF" ) )
         {
-            PartRef.Parse( cNode );
+            PartRef.Parse( cNode, aContext );
             HasPartRef = true;
         }
         else if( cNodeName == wxT( "PARTNAMENOTVISIBLE" ) )
@@ -659,11 +659,11 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "SIGNALREFERENCELINK" ) )
         {
-            SigRefLink.Parse( cNode );
+            SigRefLink.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "ORIENT" ) )
         {
@@ -693,36 +693,36 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "SYMBOLVARIANT" ) )
         {
             IsSymbolVariant = true;
-            SymbolVariant.Parse( cNode );
+            SymbolVariant.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "TERMATTR" ) )
         {
             TERMATTR termattr;
-            termattr.Parse( cNode );
+            termattr.Parse( cNode, aContext );
             TerminalAttributes.insert( std::make_pair( termattr.TerminalID, termattr ) );
         }
         else if( cNodeName == wxT( "SYMPINLABEL" ) )
         {
             SYMPINNAME_LABEL sympinname;
-            sympinname.Parse( cNode );
+            sympinname.Parse( cNode, aContext );
             PinLabels.insert( std::make_pair( sympinname.TerminalID, sympinname ) );
         }
         else if( cNodeName == wxT( "SYMPINNAME" ) )
         {
             SYMPINNAME_LABEL sympinname;
-            sympinname.Parse( cNode );
+            sympinname.Parse( cNode, aContext );
             PinNames.insert( std::make_pair( sympinname.TerminalID, sympinname ) );
         }
         else if( cNodeName == wxT( "PINNUM" ) )
         {
             PIN_NUM pinNum;
-            pinNum.Parse( cNode );
+            pinNum.Parse( cNode, aContext );
             PinNumbers.insert( std::make_pair( pinNum.TerminalID, pinNum ) );
         }
         else if( cNodeName == wxT( "ATTR" ) )
         {
             ATTRIBUTE_VALUE attrVal;
-            attrVal.Parse( cNode );
+            attrVal.Parse( cNode, aContext );
             AttributeValues.insert( std::make_pair( attrVal.AttributeID, attrVal ) );
         }
         else
@@ -736,7 +736,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SYMBOL::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SIGLOC::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SIGLOC::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SIGLOC" ), );
 
@@ -747,7 +747,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGLOC::Parse( XNODE* aNode )
 
     for( ; cNode; cNode = cNode->GetNext() )
     {
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
             continue;
         else
             THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
@@ -758,7 +758,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SIGLOC::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "BUS" ), );
 
@@ -774,7 +774,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode )
 
         if( SHAPE::IsShape( cNode ) )
         {
-            Shape.Parse( cNode );
+            Shape.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "BUSNAME" ) )
         {
@@ -786,7 +786,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode )
             {
                 if( subNode->GetName() == wxT( "SIGLOC" ) )
                 {
-                    BusLabel.Parse( subNode );
+                    BusLabel.Parse( subNode, aContext );
                     HasBusLabel = true;
                 }
                 else
@@ -803,7 +803,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BUS::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "BLOCK" ), );
 
@@ -839,7 +839,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
             {
                 if( subNode->GetName() == wxT( "ATTRLOC" ) )
                 {
-                    BlockLabel.Parse( subNode );
+                    BlockLabel.Parse( subNode, aContext );
                     HasBlockLabel = true;
                 }
                 else
@@ -851,13 +851,13 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
         else if( cNodeName == wxT( "TERMINAL" ) )
         {
             TERMINAL term;
-            term.Parse( cNode );
+            term.Parse( cNode, aContext );
             Terminals.insert( std::make_pair( term.ID, term ) );
         }
         else if( cNodeName == wxT( "FIGURE" ) )
         {
             FIGURE figure;
-            figure.Parse( cNode );
+            figure.Parse( cNode, aContext );
             Figures.insert( std::make_pair( figure.ID, figure ) );
         }
         else
@@ -868,7 +868,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::BLOCK::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::SYM_TERM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::SYM_TERM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "TERM" ) );
 
@@ -885,7 +885,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::SYM_TERM::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "SIGLOC" ) )
         {
-            NetLabel.Parse( cNode );
+            NetLabel.Parse( cNode, aContext );
             HasNetLabel = true;
         }
         else
@@ -896,7 +896,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::SYM_TERM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "BUSTERM" ) );
 
@@ -914,19 +914,19 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "SIGLOC" ) )
         {
-            NetLabel.Parse( cNode );
+            NetLabel.Parse( cNode, aContext );
             HasNetLabel = true;
         }
         else if( cNodeName == wxT( "PT" ) )
         {
             if( !firstPointParsed )
             {
-                FirstPoint.Parse( cNode );
+                FirstPoint.Parse( cNode, aContext );
                 firstPointParsed = true;
             }
             else if( !secondPointParsed )
             {
-                SecondPoint.Parse( cNode );
+                SecondPoint.Parse( cNode, aContext );
                 secondPointParsed = true;
             }
             else
@@ -945,7 +945,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BUS_TERM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BLOCK_TERM::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BLOCK_TERM::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "BLOCKTERM" ) );
 
@@ -961,7 +961,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BLOCK_TERM::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "SIGLOC" ) )
         {
-            NetLabel.Parse( cNode );
+            NetLabel.Parse( cNode, aContext );
             HasNetLabel = true;
         }
         else
@@ -972,9 +972,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::BLOCK_TERM::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
     LayerID = GetXmlAttributeIDString( aNode, 3 );
 
     XNODE* cNode = aNode->GetChildren();
@@ -983,13 +983,13 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode )
     {
         wxString cNodeName = cNode->GetName();
 
-        if( ParseSubNode( cNode ) )
+        if( ParseSubNode( cNode, aContext ) )
         {
             continue;
         }
         else if( cNodeName == wxT( "PATH" ) )
         {
-            Path = ParseAllChildPoints( cNode, true );
+            Path = ParseAllChildPoints( cNode, aContext, true );
         }
         else if( cNodeName == wxT( "GROUPREF" ) )
         {
@@ -997,7 +997,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode )
         }
         else if( cNodeName == wxT( "REUSEBLOCKREF" ) )
         {
-            ReuseBlockRef.Parse( cNode );
+            ReuseBlockRef.Parse( cNode, aContext );
         }
         else if( cNodeName == wxT( "CONLINECODE" ) )
         {
@@ -1011,9 +1011,9 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::CONNECTION_SCH::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    ParseIdentifiers( aNode );
+    ParseIdentifiers( aNode, aContext );
 
     //Parse child nodes
     XNODE* cNode = aNode->GetChildren();
@@ -1025,41 +1025,41 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode )
         if( cNodeName == wxT( "JPT" ) )
         {
             JUNCTION_SCH jpt;
-            jpt.Parse( cNode );
+            jpt.Parse( cNode, aContext );
             Junctions.insert( std::make_pair( jpt.ID, jpt ) );
         }
-        else if( ParseSubNode( cNode ) )
+        else if( ParseSubNode( cNode, aContext ) )
         {
             continue;
         }
         else if( cNodeName == wxT( "TERM" ) )
         {
             SYM_TERM pin;
-            pin.Parse( cNode );
+            pin.Parse( cNode, aContext );
             Terminals.insert( std::make_pair( pin.ID, pin ) );
         }
         else if( cNodeName == wxT( "BUSTERM" ) )
         {
             BUS_TERM bt;
-            bt.Parse( cNode );
+            bt.Parse( cNode, aContext );
             BusTerminals.insert( std::make_pair( bt.ID, bt ) );
         }
         else if( cNodeName == wxT( "BLOCKTERM" ) )
         {
             BLOCK_TERM bt;
-            bt.Parse( cNode );
+            bt.Parse( cNode, aContext );
             BlockTerminals.insert( std::make_pair( bt.ID, bt ) );
         }
         else if( cNodeName == wxT( "DANGLER" ) )
         {
             DANGLER dang;
-            dang.Parse( cNode );
+            dang.Parse( cNode, aContext );
             Danglers.insert( std::make_pair( dang.ID, dang ) );
         }
         else if( cNodeName == wxT( "CONN" ) )
         {
             CONNECTION_SCH conn;
-            conn.Parse( cNode );
+            conn.Parse( cNode, aContext );
             Connections.push_back( conn );
         }
         else
@@ -1070,7 +1070,7 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxCHECK( aNode->GetName() == wxT( "SCHEMATIC" ), );
 
@@ -1083,60 +1083,60 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode )
         if( cNodeName == wxT( "GROUP" ) )
         {
             GROUP group;
-            group.Parse( cNode );
+            group.Parse( cNode, aContext );
             Groups.insert( std::make_pair( group.ID, group ) );
         }
         else if( cNodeName == wxT( "REUSEBLOCK" ) )
         {
             REUSEBLOCK reuseblock;
-            reuseblock.Parse( cNode );
+            reuseblock.Parse( cNode, aContext );
             ReuseBlocks.insert( std::make_pair( reuseblock.ID, reuseblock ) );
         }
         else if( cNodeName == wxT( "FIGURE" ) )
         {
             FIGURE figure;
-            figure.Parse( cNode );
+            figure.Parse( cNode, aContext );
             Figures.insert( std::make_pair( figure.ID, figure ) );
         }
         else if( cNodeName == wxT( "SYMBOL" ) )
         {
             SYMBOL sym;
-            sym.Parse( cNode );
+            sym.Parse( cNode, aContext );
             Symbols.insert( std::make_pair( sym.ID, sym ) );
         }
         else if( cNodeName == wxT( "BUS" ) )
         {
             BUS bus;
-            bus.Parse( cNode );
+            bus.Parse( cNode, aContext );
             Buses.insert( std::make_pair( bus.ID, bus ) );
         }
         else if( cNodeName == wxT( "BLOCK" ) )
         {
             BLOCK block;
-            block.Parse( cNode );
+            block.Parse( cNode, aContext );
             Blocks.insert( std::make_pair( block.ID, block ) );
         }
         else if( cNodeName == wxT( "NET" ) )
         {
             NET_SCH net;
-            net.Parse( cNode );
+            net.Parse( cNode, aContext );
             Nets.insert( std::make_pair( net.ID, net ) );
         }
         else if( cNodeName == wxT( "TEXT" ) )
         {
             TEXT txt;
-            txt.Parse( cNode );
+            txt.Parse( cNode, aContext );
             Texts.insert( std::make_pair( txt.ID, txt ) );
         }
         else if( cNodeName == wxT( "DOCSYMBOL" ) )
         {
             DOCUMENTATION_SYMBOL docsym;
-            docsym.Parse( cNode );
+            docsym.Parse( cNode, aContext );
             DocumentationSymbols.insert( std::make_pair( docsym.ID, docsym ) );
         }
         else if( cNodeName == wxT( "VHIERARCHY" ) )
         {
-            VariantHierarchy.Parse( cNode );
+            VariantHierarchy.Parse( cNode, aContext );
         }
         else
         {
@@ -1146,16 +1146,16 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::JUNCTION_SCH::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::JUNCTION_SCH::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( aNode );
+    CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( aNode, aContext );
 
     TerminalCodeID = GetXmlAttributeIDString( aNode, 1 );
     LayerID        = GetXmlAttributeIDString( aNode, 2 );
 }
 
 
-void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::DANGLER::Parse( XNODE* aNode )
+void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::DANGLER::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
     wxASSERT( aNode->GetName() == wxT( "DANGLER" ) );
 
@@ -1172,12 +1172,12 @@ void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::DANGLER::Parse( XNODE* aNode )
 
         if( cNodeName == wxT( "SIGLOC" ) )
         {
-            NetLabel.Parse( cNode );
+            NetLabel.Parse( cNode, aContext );
             HasNetLabel = true;
         }
         else if( !positionParsed && cNodeName == wxT( "PT" ) )
         {
-            Position.Parse( cNode );
+            Position.Parse( cNode, aContext );
             positionParsed = true;
         }
         else

@@ -79,7 +79,7 @@ public:
     static TERMINAL_SHAPE_TYPE ParseTermShapeType( const wxString& aShapeStr );
 
 
-    struct TERMINAL_SHAPE
+    struct TERMINAL_SHAPE : PARSER
     {
         TERMINAL_SHAPE_TYPE ShapeType;
         long                Size            = UNDEFINED_VALUE;
@@ -89,18 +89,18 @@ public:
         long                OrientAngle     = 0; ///< 1/1000 of a Degree
 
         static bool IsTermShape( XNODE* aNode );
-        void        Parse( XNODE* aNode );
+        void        Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TERMINALCODE
+    struct TERMINALCODE : PARSER
     {
         TERMINALCODE_ID ID;
         wxString        Name;
         TERMINAL_SHAPE  Shape;
         bool            Filled = false;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -108,11 +108,11 @@ public:
     {
         std::map<TERMINALCODE_ID, TERMINALCODE> TerminalCodes;
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct ASSIGNMENTS_SCM
+    struct ASSIGNMENTS_SCM : PARSER
     {
         CODEDEFS_SCM Codedefs;
         GRIDS        Grids;
@@ -120,18 +120,18 @@ public:
         bool         NetclassEditAttributeSettings     = false; //< Unclear what this does
         bool         SpacingclassEditAttributeSettings = false; //< Unclear what this does
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TERMINAL
+    struct TERMINAL : PARSER
     {
         TERMINAL_ID     ID;
         TERMINALCODE_ID TerminalCodeID;
         POINT           Position; ///< Pad position within the component's coordinate frame.
         long            OrientAngle = 0;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -139,7 +139,7 @@ public:
     {
         TERMINAL_ID TerminalID;
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -150,71 +150,71 @@ public:
         std::map<TERMINAL_ID, PIN_NUM_LABEL_LOC> PinNumberLocations;
 
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct LIBRARY_SCM
+    struct LIBRARY_SCM : PARSER
     {
         std::map<SYMDEF_ID, SYMDEF_SCM> SymbolDefinitions;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SHEETS
+    struct SHEETS : PARSER
     {
         std::map<LAYER_ID, SHEET_NAME> SheetNames;
         std::vector<LAYER_ID>          SheetOrder; ///< A vector to also store the order in which
                                                    ///< sheets are to be displayed
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct COMP
+    struct COMP : PARSER
     {
         wxString           Designator  = wxEmptyString;
         bool               ReadOnly    = false;
         bool               HasLocation = false;
         ATTRIBUTE_LOCATION AttrLoc;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct PARTREF
+    struct PARTREF : PARSER
     {
         PART_ID            RefID       = wxEmptyString;
         bool               ReadOnly    = false;
         bool               HasLocation = false;
         ATTRIBUTE_LOCATION AttrLoc;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct TERMATTR
+    struct TERMATTR : PARSER
     {
         TERMINAL_ID        TerminalID;
         ATTRIBUTE_VALUE    Value;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SYMPINNAME_LABEL
+    struct SYMPINNAME_LABEL : PARSER
     {
         TERMINAL_ID        TerminalID;
         wxString           NameOrLabel;
         bool               HasLocation = false;
         ATTRIBUTE_LOCATION AttrLoc;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SYMBOLVARIANT
+    struct SYMBOLVARIANT : PARSER
     {
         enum class TYPE
         {
@@ -226,7 +226,7 @@ public:
         TYPE     Type;
         wxString Reference;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -235,20 +235,20 @@ public:
         wxString Text; ///< This contains the numbers of the other sheets where the
                        ///< signal reference is present separated by commas
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SYMBOL
+    struct SYMBOL : PARSER
     {
-        struct PIN_NUM
+        struct PIN_NUM : PARSER
         {
             TERMINAL_ID        TerminalID;
             long               PinNum;
             bool               HasLocation = false;
             ATTRIBUTE_LOCATION AttrLoc;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         SYMBOL_ID     ID;
@@ -289,7 +289,7 @@ public:
                                                             ///< but only allowing numerical values
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE> AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -298,11 +298,11 @@ public:
      */
     struct SIGLOC : CADSTAR_ARCHIVE_PARSER::ATTRIBUTE_LOCATION
     {
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct BUS
+    struct BUS : PARSER
     {
         BUS_ID      ID;
         LINECODE_ID LineCodeID;
@@ -312,11 +312,11 @@ public:
         bool        HasBusLabel = false;
         SIGLOC      BusLabel;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct BLOCK
+    struct BLOCK : PARSER
     {
         enum class TYPE
         {
@@ -336,7 +336,7 @@ public:
         std::map<TERMINAL_ID, TERMINAL> Terminals;
         std::map<FIGURE_ID, FIGURE>     Figures;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
@@ -346,10 +346,10 @@ public:
         {
             TERMINALCODE_ID TerminalCodeID; ///< Usually a circle, but size can be varied
 
-            void Parse( XNODE* aNode ) override;
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct SYM_TERM ///< "TERM" nodename (represents a pin in a SCH symbol)
+        struct SYM_TERM : PARSER ///< "TERM" nodename (represents a pin in a SCH symbol)
         {
             NETELEMENT_ID ID; ///< First character is "P"
             SYMBOL_ID     SymbolID;
@@ -357,10 +357,10 @@ public:
             bool          HasNetLabel = false;
             SIGLOC        NetLabel;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct BUS_TERM ///< "BUSTERM" nodename (represents a connetion to a bus)
+        struct BUS_TERM : PARSER ///< "BUSTERM" nodename (represents a connetion to a bus)
         {
             NETELEMENT_ID ID; ///< First two characters "BT"
             BUS_ID        BusID;
@@ -369,10 +369,10 @@ public:
             bool          HasNetLabel = false;
             SIGLOC        NetLabel;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
-        struct BLOCK_TERM ///< "BLOCKTERM" nodename (represents a connetion to a block)
+        struct BLOCK_TERM : PARSER ///< "BLOCKTERM" nodename (represents a connetion to a block)
         {
             NETELEMENT_ID ID; ///< First four characters "BLKT"
             BLOCK_ID      BlockID;
@@ -380,11 +380,11 @@ public:
             bool          HasNetLabel = false;
             SIGLOC        NetLabel;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
 
-        struct DANGLER ///< "DANGLER" nodename (represents a dangling wire)
+        struct DANGLER : PARSER ///< "DANGLER" nodename (represents a dangling wire)
         {
             NETELEMENT_ID   ID; ///< First character "D"
             TERMINALCODE_ID TerminalCodeID;
@@ -393,7 +393,7 @@ public:
             bool            HasNetLabel = false;
             SIGLOC          NetLabel;
 
-            void Parse( XNODE* aNode );
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         struct CONNECTION_SCH : CADSTAR_ARCHIVE_PARSER::NET::CONNECTION ///< "CONN" nodename
@@ -404,7 +404,7 @@ public:
             REUSEBLOCKREF      ReuseBlockRef;
             LINECODE_ID        ConnectionLineCode;
 
-            void Parse( XNODE* aNode ) override;
+            void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };
 
         std::map<NETELEMENT_ID, JUNCTION_SCH> Junctions;
@@ -414,11 +414,11 @@ public:
         std::map<NETELEMENT_ID, DANGLER>      Danglers;
         std::vector<CONNECTION_SCH>           Connections;
 
-        void Parse( XNODE* aNode ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
-    struct SCHEMATIC
+    struct SCHEMATIC : PARSER
     {
         std::map<GROUP_ID, GROUP>                               Groups;
         std::map<REUSEBLOCK_ID, REUSEBLOCK>                     ReuseBlocks;
@@ -432,7 +432,7 @@ public:
         VARIANT_HIERARCHY                                       VariantHierarchy;
         std::map<ATTRIBUTE_ID, ATTRIBUTE_VALUE>                 AttributeValues;
 
-        void Parse( XNODE* aNode );
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
     };
 
 
