@@ -526,7 +526,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 
 
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                                    std::vector<BOARD_ITEM*>* aFiltered,
                                                     bool aConfirmLockedItems )
 {
 

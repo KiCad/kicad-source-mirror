@@ -90,13 +90,14 @@ public:
     /**
      * Function RequestSelection()
      *
-     * Returns the current selection set, filtered according to aFlags
-     * and aClientFilter.
+     * Returns the current selection set, filtered according to aFlags and aClientFilter.
      * If the set is empty, performs the legacy-style hover selection.
-     * @param aFiltered is an optional vector, that is filled with items removed by the filter
+     *
+     * @param aConfirmLockedItems if true the user will be prompted if they want to drop locked
+     *                            items from the selection or override the locks
      */
     PCBNEW_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-            std::vector<BOARD_ITEM*>* aFiltered = nullptr, bool aConfirmLockedItems = false );
+                                        bool aConfirmLockedItems = false );
 
     ///> Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );

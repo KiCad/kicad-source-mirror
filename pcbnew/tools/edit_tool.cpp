@@ -124,9 +124,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
 EDIT_TOOL::EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
         m_selectionTool( NULL ),
-        m_dragging( false ),
-        m_dismissInfobarOnNextSel( false ),
-        m_forceDeleteLockedItems( false )
+        m_dragging( false )
 {
 }
 
@@ -306,8 +304,7 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -372,8 +369,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -628,7 +624,6 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     } while( ( evt = Wait() ) ); // Assignment (instead of equality test) is intentional
 
-    m_forceDeleteLockedItems = false;
     controls->ForceCursorPosition( false );
     controls->ShowCursor( false );
     controls->SetAutoPan( false );
@@ -664,8 +659,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     for( EDA_ITEM* item : selection )
     {
@@ -730,8 +724,7 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr,
-            !m_dragging /* confirm if contains locked items */ );
+            !m_dragging /* prompt user regarding locked items */ );
 
     if( selection.Size() < 2 )
     {
@@ -981,8 +974,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr,
-            !m_dragging /* confirm if contains locked items */ );
+            !m_dragging /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1084,8 +1076,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr,
-            !m_dragging /* confirm if contains locked items */ );
+            !m_dragging /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1184,8 +1175,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr,
-            !m_dragging /* confirm if contains locked items */ );
+            !m_dragging /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1258,7 +1248,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
     bool isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
 
-    // If we are in a "Cut" operation, then the copied selection exists already
+    // If we are in a "Cut" operation, then the copied selection exists already and we want to
+    // delete exactly that; no more, no fewer.  Any filtering for locked items must be done in
+    // the copyToClipboard() routine.
     if( isCut )
     {
         selectionCopy = m_selectionTool->GetSelection();
@@ -1270,7 +1262,8 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
                 {
                     EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                              sTool );
-                } );
+                },
+                true /* prompt user regarding locked items */ );
     }
 
     bool isHover = selectionCopy.IsHover();
@@ -1285,21 +1278,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     if( selectionCopy.Empty() )
         return 0;
-
-    // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
-    // were copied to the clipboard, no more, no fewer.  Any filtering for locked items will be
-    // done in the copyToClipboard() routine
-    if( !m_forceDeleteLockedItems && !isCut )
-    {
-        // Second RequestSelection removes locked items but keeps a copy of their pointers
-        selectionCopy = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-                {
-                    EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED, sTool );
-                },
-                &lockedItems );
-    }
-
 
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -1451,34 +1429,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
         m_commit->Push( _( "Delete" ) );
 
-    if( !m_forceDeleteLockedItems && !lockedItems.empty() )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &lockedItems );
-
-        WX_INFOBAR* infobar = frame()->GetInfoBar();
-        wxString    msg = _( "Locked items in the selection were not deleted." );
-        wxString    link = _( "Delete locked items" );
-
-        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
-        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [&]( wxHyperlinkEvent& aEvent )
-                {
-                    m_forceDeleteLockedItems = true;
-                    {
-                        m_toolMgr->RunAction( ACTIONS::doDelete, true );
-                    }
-                    m_forceDeleteLockedItems = false;
-
-                    frame()->GetInfoBar()->Dismiss();
-                    m_dismissInfobarOnNextSel = false;
-                } ) );
-
-        infobar->RemoveAllButtons();
-        infobar->AddButton( button );
-        infobar->ShowMessageFor( msg, 4000, wxICON_INFORMATION );
-        m_dismissInfobarOnNextSel = true;
-    }
-
     return 0;
 }
 
@@ -1497,8 +1447,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
                                          sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -1938,18 +1887,6 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 }
 
 
-int EDIT_TOOL::onSelectionEvent( const TOOL_EVENT& aEvent )
-{
-    if( m_dismissInfobarOnNextSel )
-    {
-        frame()->GetInfoBar()->Dismiss();
-        m_dismissInfobarOnNextSel = false;
-    }
-
-    return 0;
-}
-
-
 void EDIT_TOOL::setTransitions()
 {
     Go( &EDIT_TOOL::GetAndPlace,         PCB_ACTIONS::getAndPlace.MakeEvent() );
@@ -1974,9 +1911,6 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::copyToClipboard,     ACTIONS::copy.MakeEvent() );
     Go( &EDIT_TOOL::copyToClipboard,     PCB_ACTIONS::copyWithReference.MakeEvent() );
     Go( &EDIT_TOOL::cutToClipboard,      ACTIONS::cut.MakeEvent() );
-
-    Go( &EDIT_TOOL::onSelectionEvent,    EVENTS::SelectedEvent );
-    Go( &EDIT_TOOL::onSelectionEvent,    EVENTS::UnselectedEvent );
 }
 
 

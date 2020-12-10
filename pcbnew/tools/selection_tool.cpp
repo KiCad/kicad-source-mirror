@@ -40,6 +40,7 @@ using namespace std::placeholders;
 #include <confirm.h>
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
+#include <dialog_locked_items_query.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
@@ -461,7 +462,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
 
 
 PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                                    std::vector<BOARD_ITEM*>* aFiltered,
                                                     bool aConfirmLockedItems )
 {
     bool selectionEmpty = m_selection.Empty();
@@ -475,14 +475,36 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 
     if( aConfirmLockedItems )
     {
-        // Check if the selection contains locked items
+        std::vector<BOARD_ITEM*> lockedItems;
+
         for( EDA_ITEM* item : m_selection )
         {
-            if( static_cast<BOARD_ITEM*>( item )->IsLocked() )
-            {
-                if( !IsOK( m_frame, _( "Selection contains locked items.  Continue anyway?" ) ) )
-                    ClearSelection();
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
+            if( boardItem->IsLocked() )
+                lockedItems.push_back( boardItem );
+        }
+
+        if( !lockedItems.empty() )
+        {
+            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size() );
+
+            switch( dlg.ShowModal() )
+            {
+            case wxID_OK:
+                // remove locked items from selection
+                for( BOARD_ITEM* item : lockedItems )
+                    unselect( item );
+
+                break;
+
+            case wxID_CANCEL:
+                // cancel operation
+                ClearSelection();
+                break;
+
+            case wxID_APPLY:
+                // continue with operation with current selection
                 break;
             }
         }
@@ -523,9 +545,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 
             if( disposition == BEFORE )
             {
-                if( aFiltered )
-                    aFiltered->push_back( item );
-
                 unhighlight( item, SELECTED, &m_selection );
             }
         }

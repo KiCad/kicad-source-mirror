@@ -395,8 +395,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
                     }
                 }
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
@@ -572,8 +571,7 @@ int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
                     }
                 }
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     EDA_ITEM* source = selection.Front();
     VECTOR2I start, end, mid;

@@ -142,23 +142,28 @@ template< typename T >
 size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked,
                                              T aCompare )
 {
-
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
 
-    if( selection.Size() <= 1 )
-        return 0;
-
     std::vector<BOARD_ITEM*> lockedItems;
+
+    for( EDA_ITEM* item : selection )
+    {
+        BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+        if( boardItem->IsLocked() )
+            lockedItems.push_back( boardItem );
+    }
+
     selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED, sTool );
             },
-            &lockedItems );
+            true /* prompt user regarding locked items */ );
 
     aItems = GetBoundingBoxes( selection );
     aLocked = GetBoundingBoxes( lockedItems );
@@ -174,17 +179,25 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     ALIGNMENT_RECTS itemsToAlign;
     ALIGNMENT_RECTS locked_items;
 
-    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetTop() < right.second.GetTop() ); } ) )
+    if( !GetSelections( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            {
+                return ( left.second.GetTop() < right.second.GetTop() );
+            } ) )
+    {
         return 0;
+    }
 
     BOARD_COMMIT commit( m_frame );
     commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetTop = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
-            { return aVal.second.GetTop(); } );
+    int targetTop = selectTarget( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT& aVal )
+            {
+                return aVal.second.GetTop();
+            } );
 
     // Move the selected items
-    for( auto& i : itemsToAlign )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToAlign )
     {
         int difference = targetTop - i.second.GetTop();
         BOARD_ITEM* item = i.first;
@@ -207,17 +220,25 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     ALIGNMENT_RECTS itemsToAlign;
     ALIGNMENT_RECTS locked_items;
 
-    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetBottom() < right.second.GetBottom() ); } ) )
+    if( !GetSelections( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            {
+                return ( left.second.GetBottom() < right.second.GetBottom() );
+            } ) )
+    {
         return 0;
+    }
 
     BOARD_COMMIT commit( m_frame );
     commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetBottom = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
-            { return aVal.second.GetBottom(); } );
+    auto targetBottom = selectTarget( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT& aVal )
+            {
+                return aVal.second.GetBottom();
+            } );
 
     // Move the selected items
-    for( auto& i : itemsToAlign )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToAlign )
     {
         int difference = targetBottom - i.second.GetBottom();
         BOARD_ITEM* item = i.first;
@@ -255,17 +276,25 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
     ALIGNMENT_RECTS itemsToAlign;
     ALIGNMENT_RECTS locked_items;
 
-    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetLeft() < right.second.GetLeft() ); } ) )
+    if( !GetSelections( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            {
+                return ( left.second.GetLeft() < right.second.GetLeft() );
+            } ) )
+    {
         return 0;
+    }
 
     BOARD_COMMIT commit( m_frame );
     commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetLeft = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
-            { return aVal.second.GetLeft(); } );
+    auto targetLeft = selectTarget( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT& aVal )
+            {
+                return aVal.second.GetLeft();
+            } );
 
     // Move the selected items
-    for( auto& i : itemsToAlign )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToAlign )
     {
         int difference = targetLeft - i.second.GetLeft();
         BOARD_ITEM* item = i.first;
@@ -303,17 +332,25 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     ALIGNMENT_RECTS itemsToAlign;
     ALIGNMENT_RECTS locked_items;
 
-    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetRight() < right.second.GetRight() ); } ) )
+    if( !GetSelections( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            {
+                return ( left.second.GetRight() < right.second.GetRight() );
+            } ) )
+    {
         return 0;
+    }
 
     BOARD_COMMIT commit( m_frame );
     commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetRight = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
-            { return aVal.second.GetRight(); } );
+    auto targetRight = selectTarget( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT& aVal )
+            {
+                return aVal.second.GetRight();
+            } );
 
     // Move the selected items
-    for( auto& i : itemsToAlign )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToAlign )
     {
         int difference = targetRight - i.second.GetRight();
         BOARD_ITEM* item = i.first;
@@ -336,17 +373,25 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
     ALIGNMENT_RECTS itemsToAlign;
     ALIGNMENT_RECTS locked_items;
 
-    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetCenter().x < right.second.GetCenter().x ); } ) )
+    if( !GetSelections( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            {
+                return ( left.second.GetCenter().x < right.second.GetCenter().x );
+            } ) )
+    {
         return 0;
+    }
 
     BOARD_COMMIT commit( m_frame );
     commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetX = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
-            { return aVal.second.GetCenter().x; } );
+    auto targetX = selectTarget( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT& aVal )
+            {
+                return aVal.second.GetCenter().x;
+            } );
 
     // Move the selected items
-    for( auto& i : itemsToAlign )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToAlign )
     {
         int difference = targetX - i.second.GetCenter().x;
         BOARD_ITEM* item = i.first;
@@ -369,17 +414,25 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
     ALIGNMENT_RECTS itemsToAlign;
     ALIGNMENT_RECTS locked_items;
 
-    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetCenter().y < right.second.GetCenter().y ); } ) )
+    if( !GetSelections( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            {
+                return ( left.second.GetCenter().y < right.second.GetCenter().y );
+            } ) )
+    {
         return 0;
+    }
 
     BOARD_COMMIT commit( m_frame );
     commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetY = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
-            { return aVal.second.GetCenter().y; } );
+    auto targetY = selectTarget( itemsToAlign, locked_items,
+            []( const ALIGNMENT_RECT& aVal )
+            {
+                return aVal.second.GetCenter().y;
+            } );
 
     // Move the selected items
-    for( auto& i : itemsToAlign )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToAlign )
     {
         int difference = targetY - i.second.GetCenter().y;
         BOARD_ITEM* item = i.first;
@@ -404,8 +457,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Size() <= 1 )
         return 0;
@@ -418,7 +470,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
             [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetRight() > right.second.GetRight() ); } );
+            {
+                return ( left.second.GetRight() > right.second.GetRight() );
+            } );
     const auto lastItem = itemsToDistribute.begin()->first;
 
     const auto maxRight = itemsToDistribute.begin()->second.GetRight();
@@ -426,12 +480,14 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
             [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetX() < right.second.GetX() ); } );
+            {
+                return ( left.second.GetX() < right.second.GetX() );
+            } );
     const auto minX = itemsToDistribute.begin()->second.GetX();
     auto totalGap = maxRight - minX;
     int totalWidth = 0;
 
-    for( auto& i : itemsToDistribute )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
         totalWidth += i.second.GetWidth();
     }
@@ -454,12 +510,13 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 
 
 void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& itemsToDistribute,
-                                                          const BOARD_ITEM* lastItem, int totalGap ) const
+                                                          const BOARD_ITEM* lastItem,
+                                                          int totalGap ) const
 {
     const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
     auto targetX = itemsToDistribute.begin()->second.GetX();
 
-    for( auto& i : itemsToDistribute )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
         BOARD_ITEM* item = i.first;
 
@@ -482,13 +539,15 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
 {
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
             [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-            { return ( left.second.GetCenter().x < right.second.GetCenter().x ); } );
+            {
+                return ( left.second.GetCenter().x < right.second.GetCenter().x );
+            } );
     const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().x
                           - itemsToDistribute.begin()->second.GetCenter().x;
     const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
     auto targetX = itemsToDistribute.begin()->second.GetCenter().x;
 
-    for( auto& i : itemsToDistribute )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
         BOARD_ITEM* item = i.first;
 
@@ -510,8 +569,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Size() <= 1 )
         return 0;
@@ -524,20 +582,24 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
         [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-        { return ( left.second.GetBottom() > right.second.GetBottom() ); } );
+        {
+            return ( left.second.GetBottom() > right.second.GetBottom() );
+        } );
     const auto maxBottom = itemsToDistribute.begin()->second.GetBottom();
     const auto lastItem = itemsToDistribute.begin()->first;
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
         [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-        { return ( left.second.GetCenter().y < right.second.GetCenter().y ); } );
+        {
+            return ( left.second.GetCenter().y < right.second.GetCenter().y );
+        } );
     auto minY = itemsToDistribute.begin()->second.GetY();
 
     auto totalGap = maxBottom - minY;
     int totalHeight = 0;
 
-    for( auto& i : itemsToDistribute )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
         totalHeight += i.second.GetHeight();
     }
@@ -565,7 +627,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsTo
     const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
     auto targetY = itemsToDistribute.begin()->second.GetY();
 
-    for( auto& i : itemsToDistribute )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
         BOARD_ITEM* item = i.first;
 
@@ -588,13 +650,15 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& item
 {
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
         [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
-        { return ( left.second.GetCenter().y < right.second.GetCenter().y ); } );
+        {
+            return ( left.second.GetCenter().y < right.second.GetCenter().y );
+        } );
     const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().y
                           - itemsToDistribute.begin()->second.GetCenter().y;
     const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
     auto targetY = itemsToDistribute.begin()->second.GetCenter().y;
 
-    for( auto& i : itemsToDistribute )
+    for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
         BOARD_ITEM* item = i.first;
 

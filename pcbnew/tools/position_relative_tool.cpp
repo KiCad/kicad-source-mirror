@@ -71,8 +71,7 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
             {
                 EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             },
-            nullptr,
-            true /* confirm if contains locked items */ );
+            true /* prompt user regarding locked items */ );
 
     if( selection.Empty() )
         return 0;
