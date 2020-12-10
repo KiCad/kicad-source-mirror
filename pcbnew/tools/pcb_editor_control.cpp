@@ -1022,7 +1022,7 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
     if( modified )
     {
-        commit.Push( aMode == ON ? _( "Lock" ) : _( "Unock" ) );
+        commit.Push( aMode == ON ? _( "Lock" ) : _( "Unlock" ) );
         m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
         m_frame->OnModify();
     }
