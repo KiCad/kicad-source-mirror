@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 26 26"
    version="1.1"
-   sodipodi:docname="remove_from_group.svg"
+   sodipodi:docname="group.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -22,17 +22,27 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1719"
-     inkscape:window-height="1107"
-     id="namedview7947"
-     showgrid="false"
+     inkscape:window-width="2064"
+     inkscape:window-height="1587"
+     id="namedview30"
+     showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="13"
      inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="1423"
+     inkscape:window-y="176"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -43,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>ungroup</dc:title>
+        <dc:title>group</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -63,93 +73,63 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs7912">
+     id="defs7">
     <style
-       id="style7910">.cls-1,.cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2{stroke:#b9b9b9;}.cls-2{stroke-dasharray:4 4;}.cls-3{fill:#545454;}.cls-4{fill:#e61c50;}.cls-5{stroke:#f5f5f5;stroke-width:2px;}</style>
+       id="style5">.cls-1,.cls-2{fill:none;stroke:#b9b9b9;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke-dasharray:5 5;}.cls-3{fill:#545454;}</style>
   </defs>
   <title
-     id="title7914">ungroup</title>
-  <polyline
-     class="cls-1"
-     points="20.5 17.5 20.5 20.5 17.5 20.5"
-     id="polyline7916" />
-  <line
-     class="cls-2"
-     x1="13.5"
-     y1="20.5"
-     x2="7.5"
-     y2="20.5"
-     id="line7918" />
-  <polyline
-     class="cls-1"
-     points="5.5 20.5 2.5 20.5 2.5 17.5"
-     id="polyline7920" />
-  <line
-     class="cls-2"
-     x1="2.5"
-     y1="13.5"
-     x2="2.5"
-     y2="7.5"
-     id="line7922" />
-  <polyline
-     class="cls-1"
-     points="2.5 5.5 2.5 2.5 5.5 2.5"
-     id="polyline7924" />
-  <line
-     class="cls-2"
-     x1="9.5"
-     y1="2.5"
-     x2="15.5"
-     y2="2.5"
-     id="line7926" />
-  <polyline
-     class="cls-1"
-     points="17.5 2.5 20.5 2.5 20.5 5.5"
-     id="polyline7928" />
-  <line
-     class="cls-2"
-     x1="20.5"
-     y1="9.5"
-     x2="20.5"
-     y2="15.5"
-     id="line7930" />
+     id="title9">group</title>
+  <rect
+     style="fill:none;stroke:#545454;stroke-linejoin:round;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:3.5"
+     id="rect859"
+     width="21"
+     height="21"
+     x="2.5"
+     y="2.5"
+     rx="0" />
   <rect
      class="cls-3"
-     x="1.0012"
-     y="19"
-     width="3"
-     height="3"
-     id="rect7932" />
+     x="1.0019"
+     y="20.999998"
+     width="3.9981005"
+     height="3.9991004"
+     id="rect27"
+     style="stroke-width:1" />
   <rect
      class="cls-3"
-     x="1"
-     y="1"
-     width="3"
-     height="3"
-     id="rect7934" />
+     x="1.0005"
+     y="1.0009"
+     width="3.9995003"
+     height="3.9990997"
+     id="rect29"
+     style="stroke-width:1" />
   <rect
      class="cls-3"
-     x="19.0006"
-     y="19"
-     width="3"
-     height="3"
-     id="rect7936" />
+     x="21.0005"
+     y="21.0009"
+     width="3.9995003"
+     height="3.9991004"
+     id="rect31"
+     style="stroke-width:0.999999" />
   <rect
      class="cls-3"
-     x="18.9994"
-     y="1"
-     width="3"
-     height="3"
-     id="rect7938" />
+     x="21"
+     y="1.0009"
+     width="3.9980996"
+     height="3.9990997"
+     id="rect33"
+     style="stroke-width:1" />
   <path
      class="cls-4"
-     d="M22.9513,22.948a7.0032,7.0032,0,1,1,0-9.9038A7.0034,7.0034,0,0,1,22.9513,22.948Z"
-     id="path7940" />
+     d="m 23.95645,23.957771 a 7.0032,7.0032 0 1 1 0,-9.9038 7.0034,7.0034 0 0 1 0,9.9038 z"
+     id="path7940"
+     style="fill:#e61c50" />
   <line
      class="cls-5"
-     x1="21.496372"
-     y1="17.991751"
-     x2="14.493328"
-     y2="17.991749"
-     id="line7942" />
+     x1="22.501522"
+     y1="19.001522"
+     x2="15.498478"
+     y2="19.00152"
+     id="line7942"
+     style="fill:none;stroke:#f5f5f5;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
 </svg>
