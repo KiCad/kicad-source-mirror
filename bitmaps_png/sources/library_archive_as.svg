@@ -1,56 +1,237 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="library_archive_as.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1581"
+     inkscape:window-height="1083"
+     id="namedview66"
+     showgrid="false"
+     inkscape:zoom="27.961538"
+     inkscape:cx="13"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1" />
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#d8d8d8;}.cls-2,.cls-3,.cls-7,.cls-8{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke:#1a81c4;}.cls-2,.cls-3{stroke-width:0.9549px;}.cls-3{stroke:#0f71a8;}.cls-4{fill:#1a81c4;}.cls-5{fill:#b9b9b9;}.cls-6{fill:#545454;}.cls-7{stroke:#b9b9b9;stroke-width:0.5px;}.cls-8{stroke:#e61c50;stroke-width:2px;}.cls-9{fill:#e61c50;}.cls-10{fill:#fff;}</style>
+  <defs
+     id="defs5">
+    <style
+       id="style3">.cls-1{fill:#d8d8d8;}.cls-2,.cls-3,.cls-7,.cls-8{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-2{stroke:#1a81c4;}.cls-2,.cls-3{stroke-width:0.9549px;}.cls-3{stroke:#0f71a8;}.cls-4{fill:#1a81c4;}.cls-5{fill:#b9b9b9;}.cls-6{fill:#545454;}.cls-7{stroke:#b9b9b9;stroke-width:0.5px;}.cls-8{stroke:#e61c50;stroke-width:2px;}.cls-9{fill:#e61c50;}.cls-10{fill:#fff;}</style>
   </defs>
-  <title>library_archive_as</title>
-  <path class="cls-1" d="M3.6662.9995H14.3328a2.6667,2.6667,0,0,1,2.6667,2.6667V14.3328a2.6667,2.6667,0,0,1-2.6667,2.6667H3.6661A2.6666,2.6666,0,0,1,.9995,14.3329V3.6662A2.6667,2.6667,0,0,1,3.6662.9995Z"/>
-  <path class="cls-2" d="M14.1062,4.9565a1.2747,1.2747,0,1,1,0-1.8027A1.2747,1.2747,0,0,1,14.1062,4.9565Z"/>
-  <circle class="cls-2" cx="4.168" cy="13.092" r="1.2747"/>
-  <line class="cls-3" x1="12.845" y1="4.4032" x2="11.3553" y2="5.893"/>
-  <line class="cls-3" x1="4.4788" y1="12.7694" x2="5.9686" y2="11.2796"/>
-  <rect class="cls-4" x="6.6208" y="4.4116" width="4.0066" height="8.425" transform="translate(8.6243 -3.5722) rotate(45.001)"/>
-  <path class="cls-5" d="M11.3177,10.9951H20.651a2.3332,2.3332,0,0,1,2.3332,2.3332v9.3332a2.3333,2.3333,0,0,1-2.3333,2.3333H11.3178a2.3333,2.3333,0,0,1-2.3333-2.3333V13.3283A2.3332,2.3332,0,0,1,11.3177,10.9951Z"/>
-  <rect class="cls-6" x="10.5448" y="13.9403" width="2.8632" height="8.5894"/>
-  <line class="cls-7" x1="11.2542" y1="16.871" x2="12.7028" y2="16.871"/>
-  <line class="cls-7" x1="11.2542" y1="21.3888" x2="12.7028" y2="21.3888"/>
-  <line class="cls-7" x1="11.2542" y1="15.9473" x2="12.7028" y2="15.9473"/>
-  <line class="cls-7" x1="11.2542" y1="15.0236" x2="12.7028" y2="15.0236"/>
-  <rect class="cls-6" x="13.7812" y="13.9403" width="2.8631" height="8.5894"/>
-  <line class="cls-7" x1="14.4906" y1="16.871" x2="15.9391" y2="16.871"/>
-  <line class="cls-7" x1="14.4906" y1="21.3888" x2="15.9391" y2="21.3888"/>
-  <line class="cls-7" x1="14.4906" y1="15.9473" x2="15.9391" y2="15.9473"/>
-  <line class="cls-7" x1="14.4906" y1="15.0236" x2="15.9391" y2="15.0236"/>
-  <rect class="cls-4" x="17.9696" y="13.6601" width="2.8631" height="8.5894" transform="translate(-4.2247 6.0974) rotate(-16.1315)"/>
-  <line class="cls-7" x1="18.3284" y1="16.8451" x2="19.7199" y2="16.4426"/>
-  <line class="cls-7" x1="19.5837" y1="21.185" x2="20.9753" y2="20.7825"/>
-  <line class="cls-7" x1="18.0718" y1="15.9578" x2="19.4632" y2="15.5553"/>
-  <line class="cls-7" x1="17.8151" y1="15.0705" x2="19.2065" y2="14.668"/>
-  <polyline class="cls-8" points="10.167 21.546 3.997 21.546 3.997 15.935"/>
-  <polyline class="cls-8" points="7.79 19.12 10.216 21.546 7.79 23.973"/>
-  <rect class="cls-9" x="14.7661" y="13.2098" width="10.217" height="4.806"/>
-  <path class="cls-10" d="M17.9166,17.0817h-.5142l-1.3715-2.2628-.0128.0052v2.2576h-.5159V13.983h.5159l1.3715,2.26.0128-.0043V13.983h.5142Z"/>
-  <path class="cls-10" d="M20.462,15.6873H19.1093v.979h1.5689v.4154H18.5934V13.983h2.07v.4154H19.1093v.8743H20.462Z"/>
-  <path class="cls-10" d="M21.8633,16.256V16.26l.0017-.011.618-2.2662h.4121l.624,2.273.0017.0153.0025-.0221.4879-2.2662h.5073l-.7347,3.0987h-.469l-.6172-2.2236h-.0128l-.62,2.2236h-.4716l-.7321-3.0987h.5074Z"/>
+  <title
+     id="title7">library_archive_as</title>
+  <path
+     class="cls-2"
+     d="M14.1062,4.9565a1.2747,1.2747,0,1,1,0-1.8027A1.2747,1.2747,0,0,1,14.1062,4.9565Z"
+     id="path11" />
+  <circle
+     class="cls-2"
+     cx="4.168"
+     cy="13.092"
+     r="1.2747"
+     id="circle13" />
+  <line
+     class="cls-3"
+     x1="12.845"
+     y1="4.4032"
+     x2="11.3553"
+     y2="5.893"
+     id="line15" />
+  <line
+     class="cls-3"
+     x1="4.4788"
+     y1="12.7694"
+     x2="5.9686"
+     y2="11.2796"
+     id="line17" />
+  <rect
+     class="cls-4"
+     x="6.6208"
+     y="4.4116"
+     width="4.0066"
+     height="8.425"
+     transform="translate(8.6243 -3.5722) rotate(45.001)"
+     id="rect19" />
+  <rect
+     class="cls-6"
+     x="10.5448"
+     y="13.9403"
+     width="2.8632"
+     height="8.5894"
+     id="rect23" />
+  <line
+     class="cls-7"
+     x1="11.2542"
+     y1="16.871"
+     x2="12.7028"
+     y2="16.871"
+     id="line25" />
+  <line
+     class="cls-7"
+     x1="11.2542"
+     y1="21.3888"
+     x2="12.7028"
+     y2="21.3888"
+     id="line27" />
+  <line
+     class="cls-7"
+     x1="11.2542"
+     y1="15.9473"
+     x2="12.7028"
+     y2="15.9473"
+     id="line29" />
+  <line
+     class="cls-7"
+     x1="11.2542"
+     y1="15.0236"
+     x2="12.7028"
+     y2="15.0236"
+     id="line31" />
+  <rect
+     class="cls-6"
+     x="13.7812"
+     y="13.9403"
+     width="2.8631"
+     height="8.5894"
+     id="rect33" />
+  <line
+     class="cls-7"
+     x1="14.4906"
+     y1="16.871"
+     x2="15.9391"
+     y2="16.871"
+     id="line35" />
+  <line
+     class="cls-7"
+     x1="14.4906"
+     y1="21.3888"
+     x2="15.9391"
+     y2="21.3888"
+     id="line37" />
+  <line
+     class="cls-7"
+     x1="14.4906"
+     y1="15.9473"
+     x2="15.9391"
+     y2="15.9473"
+     id="line39" />
+  <line
+     class="cls-7"
+     x1="14.4906"
+     y1="15.0236"
+     x2="15.9391"
+     y2="15.0236"
+     id="line41" />
+  <rect
+     class="cls-4"
+     x="17.9696"
+     y="13.6601"
+     width="2.8631"
+     height="8.5894"
+     transform="translate(-4.2247 6.0974) rotate(-16.1315)"
+     id="rect43" />
+  <line
+     class="cls-7"
+     x1="18.3284"
+     y1="16.8451"
+     x2="19.7199"
+     y2="16.4426"
+     id="line45" />
+  <line
+     class="cls-7"
+     x1="19.5837"
+     y1="21.185"
+     x2="20.9753"
+     y2="20.7825"
+     id="line47" />
+  <line
+     class="cls-7"
+     x1="18.0718"
+     y1="15.9578"
+     x2="19.4632"
+     y2="15.5553"
+     id="line49" />
+  <line
+     class="cls-7"
+     x1="17.8151"
+     y1="15.0705"
+     x2="19.2065"
+     y2="14.668"
+     id="line51" />
+  <polyline
+     class="cls-8"
+     points="10.167 21.546 3.997 21.546 3.997 15.935"
+     id="polyline53" />
+  <polyline
+     class="cls-8"
+     points="7.79 19.12 10.216 21.546 7.79 23.973"
+     id="polyline55" />
+  <rect
+     class="cls-9"
+     x="14.7661"
+     y="13.2098"
+     width="10.217"
+     height="4.806"
+     id="rect57" />
+  <path
+     class="cls-10"
+     d="M17.9166,17.0817h-.5142l-1.3715-2.2628-.0128.0052v2.2576h-.5159V13.983h.5159l1.3715,2.26.0128-.0043V13.983h.5142Z"
+     id="path59" />
+  <path
+     class="cls-10"
+     d="M20.462,15.6873H19.1093v.979h1.5689v.4154H18.5934V13.983h2.07v.4154H19.1093v.8743H20.462Z"
+     id="path61" />
+  <path
+     class="cls-10"
+     d="M21.8633,16.256V16.26l.0017-.011.618-2.2662h.4121l.624,2.273.0017.0153.0025-.0221.4879-2.2662h.5073l-.7347,3.0987h-.469l-.6172-2.2236h-.0128l-.62,2.2236h-.4716l-.7321-3.0987h.5074Z"
+     id="path63" />
 </svg>

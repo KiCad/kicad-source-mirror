@@ -1,32 +1,123 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="libedit.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2143"
+     inkscape:window-height="1561"
+     id="namedview18"
+     showgrid="true"
+     inkscape:zoom="6.9903846"
+     inkscape:cx="35.470723"
+     inkscape:cy="43.672936"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid843"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#a5a5ff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}</style>
+  <defs
+     id="defs5">
+    <style
+       id="style3">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}</style>
   </defs>
-  <title>libedit</title>
-  <path class="cls-1" d="M5.0009,1h16a4,4,0,0,1,4,4v16a4,4,0,0,1-4,4H5.001a4,4,0,0,1-4-4v-16A4,4,0,0,1,5.0009,1Z"/>
-  <path class="cls-2" d="M22.0343,12.18H20.3355L6.8787,3.2916a.82.82,0,0,0-1.2722.6842V7.2573H3.9656a.82.82,0,0,0,0,1.6408H5.6065v8.204H3.9656a.82.82,0,0,0,0,1.6407H5.6065v3.2815a.82.82,0,0,0,1.2722.6843l13.4568-8.8881h1.6988a.82.82,0,0,0,0-1.6409ZM7.2472,20.4989V5.5012L18.6012,13Z"/>
-  <path class="cls-2" d="M8.8584,11.3593h1.9082a.82.82,0,1,0,0-1.6408H8.8584a.82.82,0,0,0,0,1.6408Z"/>
-  <path class="cls-2" d="M10.8,14.3629V14.092a.82.82,0,1,0-1.6408,0v.2709h-.27a.82.82,0,0,0,0,1.6406h.27v.27a.82.82,0,1,0,1.6408,0v-.27h.27a.82.82,0,1,0,0-1.6406Z"/>
+  <title
+     id="title7">libedit</title>
+  <path
+     class="cls-2"
+     d="m 9.1408058,12.45553 h 1.9022302 a 0.8178335,0.8178335 0 1 0 0,-1.635667 H 9.1408058 a 0.8178335,0.8178335 0 0 0 0,1.635667 z"
+     id="path13"
+     style="stroke-width:1" />
+  <path
+     class="cls-2"
+     d="m 11.076332,15.449733 v -0.270052 a 0.81783365,0.81783365 0 1 0 -1.6356673,0 v 0.270052 H 9.1715094 a 0.817734,0.817734 0 0 0 0,1.635468 h 0.2691553 v 0.269155 a 0.81783365,0.81783365 0 1 0 1.6356673,0 v -0.269155 h 0.269155 a 0.817734,0.817734 0 1 0 0,-1.635468 z"
+     id="path15"
+     style="stroke-width:1" />
+  <path
+     style="fill:#e5d7c7;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6,2.6857138 V 23.314285 L 21.47143,13 Z"
+     id="path2231"
+     sodipodi:nodetypes="cccc" />
+  <path
+     style="fill:none;stroke:#db295b;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 7.6285715,8.1142854 H 10.58197"
+     id="path2229" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 21.742858,13 H 25"
+     id="path2233"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 1.9285718,7.0285674 6,7.0285711"
+     id="path2235"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 1.9285718,18.428572 H 6"
+     id="path2237"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#db295b;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 7.6285715,17.342857 H 10.58197"
+     id="path2301" />
+  <path
+     style="fill:none;stroke:#db295b;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 9.1052704,18.819556 V 15.866158"
+     id="path2303" />
 </svg>
