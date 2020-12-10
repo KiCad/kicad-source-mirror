@@ -1034,6 +1034,10 @@ void DXF_PLOTTER::Text( const wxPoint&              aPos,
                         overlining = !overlining;
                     }
                 }
+                else if( ch == ' ' || ch == '}' || ch == ')' )
+                {
+                    overlining = false;
+                }
 
                 putc( ch, m_outputFile );
             }

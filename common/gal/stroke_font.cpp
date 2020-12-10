@@ -356,6 +356,9 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
 
             glyphSize = baseGlyphSize;
             yOffset = 0;
+
+            // Tab ends an overbar
+            in_overbar = false;
         }
         else if( *chIt == '~' )
         {
@@ -409,6 +412,11 @@ void STROKE_FONT::drawSingleLineText( const UTF8& aText )
             glyphSize = baseGlyphSize;
             yOffset = 0;
             continue;
+        }
+        // Overbar syntax is less precise so we have to have some special cases
+        else if( in_overbar && ( *chIt == ' ' || *chIt == '}' || *chIt == ')' ) )
+        {
+            in_overbar = false;
         }
 
         // Index into bounding boxes table
@@ -550,8 +558,8 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
             // Add the remaining space (between 0 and 3 spaces)
             curX += addlSpace;
 
-            // Tab ends a super- or subscript
-            curScale = 1.0;
+            // Tab ends an overbar
+            in_overbar = false;
         }
         else if( *it == '~' )
         {
@@ -590,6 +598,11 @@ VECTOR2D STROKE_FONT::ComputeStringBoundaryLimits( const UTF8& aText, const VECT
             in_super_or_subscript = false;
             curScale = 1.0;
             continue;
+        }
+        // Overbar syntax is less precise so we have to have some special cases
+        else if( in_overbar && ( *it == ' ' || *it == '}' || *it == ')' ) )
+        {
+            in_overbar = false;
         }
 
         // Index in the bounding boxes table

@@ -1297,6 +1297,10 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2D& aPosition,
                 overbar = !overbar;
             }
         }
+        else if( c == ' ' || c == '}' || c == ')' )
+        {
+            overbar = false;
+        }
 
         if( wasOverbar && !overbar )
         {
