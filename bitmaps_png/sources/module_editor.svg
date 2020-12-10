@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 26 26"
    version="1.1"
-   sodipodi:docname="module_editor.svg"
+   sodipodi:docname="module.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -22,25 +22,21 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2544"
+     inkscape:window-height="1803"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:zoom="45.254834"
+     inkscape:cx="20.779733"
+     inkscape:cy="22.341449"
+     inkscape:window-x="1077"
+     inkscape:window-y="173"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
-       id="grid855"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#9999ff"
-       opacity="0.1254902"
-       empspacing="2" />
+       id="grid873" />
   </sodipodi:namedview>
   <metadata
      id="metadata43">
@@ -52,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>module_editor</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -80,60 +76,74 @@
      id="title7">module_editor</title>
   <polygon
      class="cls-1"
-     points="2.995 12.325 1.247 13.899 1.247 18.922 21.516 18.922 21.531 4.063 1.247 4.063 1.247 8.578 2.995 10.153 2.995 12.325"
-     id="polygon9" />
+     points="21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 "
+     id="polygon9"
+     transform="matrix(1.1338986,0,0,1.1442747,0.08337226,-0.1958747)"
+     style="stroke-width:0.877906" />
   <rect
      class="cls-2"
-     x="14.7902"
-     y="15.8625"
-     width="4.37"
-     height="6.1181"
-     id="rect11" />
-  <rect
-     class="cls-2"
-     x="3.4394"
-     y="15.8625"
-     width="4.3702"
-     height="6.1181"
-     id="rect13" />
-  <rect
-     class="cls-2"
-     x="9.1127"
-     y="15.8625"
-     width="4.37"
-     height="6.1181"
-     id="rect15" />
-  <rect
-     class="cls-2"
-     x="14.7902"
+     x="3.9605565"
      y="1.0043"
-     width="4.37"
-     height="6.1181"
-     id="rect17" />
+     width="5.0280428"
+     height="6.9999995"
+     id="rect19"
+     style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="3.4394"
+     x="10.960556"
      y="1.0043"
-     width="4.3702"
-     height="6.1181"
-     id="rect19" />
+     width="5.0280428"
+     height="6.9999995"
+     id="rect875"
+     style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="9.1127"
+     x="17.960556"
      y="1.0043"
-     width="4.37"
-     height="6.1181"
-     id="rect21" />
-  <path
+     width="5.0280428"
+     height="6.9999995"
+     id="rect877"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="3.9605565"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect879"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="10.960556"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect881"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="17.960556"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect883"
+     style="stroke-width:1" />
+  <circle
      class="cls-3"
-     d="M25.0065,18A7.0065,7.0065,0,1,1,18,11,7.0032,7.0032,0,0,1,25.0065,18Z"
-     id="path23" />
+     cx="19"
+     cy="19"
+     id="ellipse22"
+     style="fill:#e61c50;stroke-width:0.999999"
+     r="7" />
   <path
      class="cls-4"
-     d="M22.2344,14.4566l-.5127-.5127a.8176.8176,0,0,0-1.1561,0l-5.3335,5.3337,1.6688,1.6689,5.3335-5.3338A.8176.8176,0,0,0,22.2344,14.4566Z"
-     id="path25" />
-  <polygon
-     class="cls-4"
-     points="14.58 19.929 14.174 21.983 16.249 21.598 15.433 20.789 14.58 19.929"
-     id="polygon27" />
+     d="m 23.0604,15.4736 -0.5127,-0.5127 c -0.319274,-0.319185 -0.836826,-0.319185 -1.1561,0 L 16.3312,19.989095 18,21.657995 23.0604,16.6297 c 0.319185,-0.319274 0.319185,-0.836826 0,-1.1561 z"
+     id="path25"
+     style="fill:#ffffff"
+     sodipodi:nodetypes="ccccccc" />
+  <path
+     id="polygon27"
+     style="fill:#ffffff"
+     d="m 15,23 2.618297,-0.379925 C 16.999003,22.00636 15.997274,20.996257 15.428199,20.420549 Z"
+     sodipodi:nodetypes="cccc" />
 </svg>

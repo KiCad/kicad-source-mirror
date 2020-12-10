@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 26 26"
    version="1.1"
-   sodipodi:docname="module_filtered_list.svg"
+   sodipodi:docname="module.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -22,17 +22,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2292"
-     inkscape:window-height="1324"
-     id="namedview40"
-     showgrid="false"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259972"
-     inkscape:cy="13"
-     inkscape:window-x="1163"
-     inkscape:window-y="74"
+     inkscape:window-width="2544"
+     inkscape:window-height="1803"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="45.254834"
+     inkscape:cx="20.779733"
+     inkscape:cy="22.341449"
+     inkscape:window-x="1077"
+     inkscape:window-y="173"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid873" />
+  </sodipodi:namedview>
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -43,7 +48,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>module_editor</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -65,100 +70,117 @@
   <defs
      id="defs5">
     <style
-       id="style3">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}.cls-4{fill:#e61c50;}.cls-5{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+       id="style3">.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}.cls-3{fill:#e61c50;}.cls-4{fill:#fff;}</style>
   </defs>
   <title
-     id="title7">module_filtered_list</title>
-  <path
+     id="title7">module_editor</title>
+  <polygon
+     class="cls-1"
+     points="21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 "
+     id="polygon9"
+     transform="matrix(1.1338986,0,0,1.1442747,0.08337226,-0.1958747)"
+     style="stroke-width:0.877906" />
+  <rect
      class="cls-2"
-     d="M18.6286,17.0812H4.3611a.3517.3517,0,0,1-.3519-.352V13.194a.3534.3534,0,0,1,.1162-.2612L5.24,11.9292V10.7139L4.1254,9.71a.3535.3535,0,0,1-.1162-.2613V6.2713a.3517.3517,0,0,1,.3519-.3519H18.64a.352.352,0,0,1,.352.3526l-.011,10.458A.3516.3516,0,0,1,18.6286,17.0812ZM4.7131,16.3773H18.2773l.01-9.754H4.7131V9.2924l1.1143,1.0035a.3534.3534,0,0,1,.1161.2613v1.5287a.3532.3532,0,0,1-.1161.2613L4.7131,13.3509Zm.8786-4.2914h0Z"
-     id="path11" />
+     x="3.9605565"
+     y="1.0043"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect19"
+     style="stroke-width:1" />
   <rect
-     class="cls-3"
-     x="13.8944"
-     y="14.5763"
-     width="3.076"
-     height="4.3064"
-     id="rect13" />
+     class="cls-2"
+     x="10.960556"
+     y="1.0043"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect875"
+     style="stroke-width:1" />
   <rect
-     class="cls-3"
-     x="5.9046"
-     y="14.5763"
-     width="3.0762"
-     height="4.3064"
-     id="rect15" />
+     class="cls-2"
+     x="17.960556"
+     y="1.0043"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect877"
+     style="stroke-width:1" />
   <rect
-     class="cls-3"
-     x="9.8981"
-     y="14.5763"
-     width="3.0759"
-     height="4.3064"
-     id="rect17" />
+     class="cls-2"
+     x="3.9605565"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect879"
+     style="stroke-width:1" />
   <rect
-     class="cls-3"
-     x="13.8944"
-     y="4.1177"
-     width="3.076"
-     height="4.3065"
-     id="rect19" />
+     class="cls-2"
+     x="10.960556"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect881"
+     style="stroke-width:1" />
   <rect
+     class="cls-2"
+     x="17.960556"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect883"
+     style="stroke-width:1" />
+  <circle
      class="cls-3"
-     x="5.9046"
-     y="4.1177"
-     width="3.0762"
-     height="4.3065"
-     id="rect21" />
-  <rect
-     class="cls-3"
-     x="9.8981"
-     y="4.1177"
-     width="3.0759"
-     height="4.3065"
-     id="rect23" />
-  <path
-     class="cls-4"
-     d="M24.969,18a7.0065,7.0065,0,1,1-7.0066-7A7.0033,7.0033,0,0,1,24.969,18Z"
-     id="path25" />
+     cx="19"
+     cy="19"
+     id="ellipse22"
+     style="fill:#e61c50;stroke-width:0.999999"
+     r="7" />
   <line
      class="cls-5"
-     x1="17.2061"
-     y1="15.008"
-     x2="21.3412"
-     y2="15.008"
-     id="line27" />
+     x1="18"
+     y1="15.9029"
+     x2="22.135098"
+     y2="15.9029"
+     id="line27"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="14.5134"
-     y1="15.008"
-     x2="14.5134"
-     y2="15.008"
-     id="line29" />
+     x1="15.307299"
+     y1="15.9029"
+     x2="15.307299"
+     y2="15.9029"
+     id="line29"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="17.2061"
-     y1="18.1051"
-     x2="21.3412"
-     y2="18.1051"
-     id="line31" />
+     x1="18"
+     y1="19"
+     x2="22.135098"
+     y2="19"
+     id="line31"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="14.5134"
-     y1="18.1051"
-     x2="14.5134"
-     y2="18.1051"
-     id="line33" />
+     x1="15.307299"
+     y1="19"
+     x2="15.307299"
+     y2="19"
+     id="line33"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="17.2061"
-     y1="21.2258"
-     x2="21.3412"
-     y2="21.2258"
-     id="line35" />
+     x1="18"
+     y1="22.120699"
+     x2="22.135098"
+     y2="22.120699"
+     id="line35"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="14.5134"
-     y1="21.2258"
-     x2="14.5134"
-     y2="21.2258"
-     id="line37" />
+     x1="15.307299"
+     y1="22.120699"
+     x2="15.307299"
+     y2="22.120699"
+     id="line37"
+     style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
 </svg>

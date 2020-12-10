@@ -1,43 +1,149 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 26 26">
-  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0">
-    <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 26 26"
+   version="1.1"
+   sodipodi:docname="module.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2544"
+     inkscape:window-height="1803"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="45.254834"
+     inkscape:cx="20.779733"
+     inkscape:cy="22.341449"
+     inkscape:window-x="1077"
+     inkscape:window-y="173"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid873" />
   </sodipodi:namedview>
-  <metadata id="metadata43">
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>module_editor</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}.cls-4{fill:#e61c50;}.cls-5{fill:#fff;}</style>
+  <defs
+     id="defs5">
+    <style
+       id="style3">.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}.cls-3{fill:#e61c50;}.cls-4{fill:#fff;}</style>
   </defs>
-  <title>module_pin_filtered_list</title>
-  <path class="cls-1" d="M4.501,1h14a3.5,3.5,0,0,1,3.5,3.5v14a3.5,3.5,0,0,1-3.5,3.5h-14a3.5,3.5,0,0,1-3.5-3.5V4.5A3.5,3.5,0,0,1,4.501,1Z"/>
-  <path class="cls-2" d="M18.6286,17.0812H4.3611a.3517.3517,0,0,1-.3519-.352V13.194a.3534.3534,0,0,1,.1162-.2612L5.24,11.9292V10.7139L4.1254,9.71a.3535.3535,0,0,1-.1162-.2613V6.2713a.3517.3517,0,0,1,.3519-.3519H18.64a.352.352,0,0,1,.352.3526l-.011,10.458A.3516.3516,0,0,1,18.6286,17.0812ZM4.7131,16.3773H18.2773l.01-9.754H4.7131V9.2924l1.1143,1.0035a.3534.3534,0,0,1,.1161.2613v1.5287a.3532.3532,0,0,1-.1161.2613L4.7131,13.3509Zm.8786-4.2914h0Z"/>
-  <rect class="cls-3" x="13.8944" y="14.5763" width="3.076" height="4.3064"/>
-  <rect class="cls-3" x="5.9046" y="14.5763" width="3.0762" height="4.3064"/>
-  <rect class="cls-3" x="9.8981" y="14.5763" width="3.0759" height="4.3064"/>
-  <rect class="cls-3" x="13.8944" y="4.1177" width="3.076" height="4.3065"/>
-  <rect class="cls-3" x="5.9046" y="4.1177" width="3.0762" height="4.3065"/>
-  <rect class="cls-3" x="9.8981" y="4.1177" width="3.0759" height="4.3065"/>
-  <path class="cls-4" d="M24.969,18a7.0065,7.0065,0,1,1-7.0066-7A7.0033,7.0033,0,0,1,24.969,18Z"/>
-  <path class="cls-5" d="M18.3269,19.3672H17.1033L16.69,21.6016H15.782l.4131-2.2344H14.9392v-.8613h1.419L16.6736,16.8H15.3523v-.8672h1.4844l.4238-2.2676h.9082l-.4238,2.2676h1.2178l.4238-2.2676h.9141l-.4248,2.2676h1.1308V16.8H19.7127l-.3154,1.7061h1.2021v.8613H19.2342l-.4131,2.2344h-.9082Zm-1.06-.8613H18.49L18.8045,16.8H17.5818Z"/>
+  <title
+     id="title7">module_editor</title>
+  <polygon
+     class="cls-1"
+     points="21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 "
+     id="polygon9"
+     transform="matrix(1.1338986,0,0,1.1442747,0.08337226,-0.1958747)"
+     style="stroke-width:0.877906" />
+  <rect
+     class="cls-2"
+     x="3.9605565"
+     y="1.0043"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect19"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="10.960556"
+     y="1.0043"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect875"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="17.960556"
+     y="1.0043"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect877"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="3.9605565"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect879"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="10.960556"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect881"
+     style="stroke-width:1" />
+  <rect
+     class="cls-2"
+     x="17.960556"
+     y="18.004299"
+     width="5.0280428"
+     height="6.9999995"
+     id="rect883"
+     style="stroke-width:1" />
+  <circle
+     class="cls-3"
+     cx="19"
+     cy="19"
+     id="ellipse22"
+     style="fill:#e61c50;stroke-width:0.999999"
+     r="7" />
+  <text
+     xml:space="preserve"
+     style="font-size:12px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
+     x="14.752274"
+     y="23.449924"
+     id="text1218"><tspan
+       sodipodi:role="line"
+       id="tspan1216"
+       x="14.752274"
+       y="23.449924"
+       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#ffffff;fill-opacity:1">#</tspan></text>
 </svg>
