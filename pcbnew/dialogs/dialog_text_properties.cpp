@@ -393,7 +393,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     default: break;
     }
 
-    m_Parent->Refresh();
 
     if( pushCommit )
         commit.Push( _( "Change text properties" ) );

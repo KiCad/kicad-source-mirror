@@ -123,7 +123,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
 {
     switch( aItem->Type() )
     {
-    case PCB_TEXT_T:ShowTextPropertiesDialog( aItem );
+    case PCB_TEXT_T:
+        ShowTextPropertiesDialog( aItem );
         break;
 
     case PCB_PAD_T:
