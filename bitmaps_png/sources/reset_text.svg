@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2649"
+     inkscape:window-height="1486"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.7957029"
-     inkscape:cy="13.851893"
+     inkscape:zoom="55.923076"
+     inkscape:cx="11.990848"
+     inkscape:cy="12.638027"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -81,8 +81,9 @@
      id="title159529">reset_text</title>
   <path
      class="cls-2"
-     d="M 16.1937,5.3867 H 11.6772 V 18.3306 H 9.1829 V 5.3867 H 4.6663 V 3.3852 h 11.5274 z"
-     id="path159533" />
+     d="M 16,6 H 12 V 18 H 9 V 6 H 5 V 3 h 11 z"
+     id="path159533"
+     sodipodi:nodetypes="ccccccccc" />
   <ellipse
      class="cls-3"
      cx="16.977501"
@@ -92,11 +93,12 @@
      id="ellipse159535" />
   <path
      class="cls-4"
-     d="m 13.11,17.2093 h 6.3317 A 1.6684,1.6684 0 0 0 21.11,15.5409 v 0 a 1.6683,1.6683 0 0 0 -1.6683,-1.6683"
-     id="path159537" />
+     d="m 13,17 c 0,0 3.532192,0.0071 5.973892,0.0071 C 20,17.007105 20.998615,16.5 20.999189,15.463783 21,14 19,14 19,14"
+     id="path159537"
+     sodipodi:nodetypes="cssc" />
   <polyline
      class="cls-4"
      points="16.643 20.964 13.89 18.209 16.643 15.454"
      id="polyline159539"
-     transform="translate(-1,-1)" />
+     transform="translate(-1,-1.1770202)" />
 </svg>
