@@ -26,9 +26,9 @@
      inkscape:window-height="1286"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="13.980769"
+     inkscape:cx="9.0014276"
+     inkscape:cy="12.046659"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -95,5 +95,6 @@
      class="cls-2"
      points="2 22.01 12.997 22.01 12.997 8.997 24 8.997"
      id="polyline158420"
-     transform="translate(-1,-1)" />
+     transform="translate(-1,-1)"
+     style="stroke:#e61c50;stroke-opacity:1" />
 </svg>
