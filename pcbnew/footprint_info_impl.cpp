@@ -343,8 +343,9 @@ FOOTPRINT_LIST_IMPL::~FOOTPRINT_LIST_IMPL()
 
 void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
 {
-    wxFFileOutputStream outStream( aFilePath );
-    wxTextOutputStream txtStream( outStream );
+    wxFileName          tmpFileName = wxFileName::CreateTempFileName( aFilePath );
+    wxFFileOutputStream outStream( tmpFileName.GetFullPath() );
+    wxTextOutputStream  txtStream( outStream );
 
     if( !outStream.IsOk() )
     {
@@ -365,6 +366,14 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
     }
 
     txtStream.Flush();
+    outStream.Close();
+
+    if( !wxRenameFile( tmpFileName.GetFullPath(), aFilePath, true ) )
+    {
+        // cleanup incase rename failed
+        // its also not the end of the world since this is just a cache file
+        wxRemoveFile( tmpFileName.GetFullPath() );
+    }
 }
 
 
