@@ -545,7 +545,7 @@ TOOL_ACTION EE_ACTIONS::editSymbolLibraryLinks( "eeschema.EditorControl.editSymb
 
 TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprints",
         AS_GLOBAL, 0, "",
-        _( "Assign Footprints..." ), _( "Run Cvpcb" ),
+        _( "Assign Footprints..." ), _( "Run footprint assignment tool" ),
         cvpcb_xpm );
 
 TOOL_ACTION EE_ACTIONS::importFPAssignments( "eeschema.EditorControl.importFPAssignments",
@@ -595,7 +595,7 @@ TOOL_ACTION EE_ACTIONS::drawSheetOnClipboard( "eeschema.EditorControl.drawSheetO
 
 TOOL_ACTION EE_ACTIONS::showPcbNew( "eeschema.EditorControl.showPcbNew",
         AS_GLOBAL, 0, "",
-        _( "Switch to PCB Editor" ), _( "Open PCB in Pcbnew" ),
+        _( "Switch to PCB Editor" ), _( "Open PCB in board editor" ),
         pcbnew_xpm );
 
 TOOL_ACTION EE_ACTIONS::exportNetlist( "eeschema.EditorControl.exportNetlist",
@@ -610,7 +610,7 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
 
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, 0, "",
-        _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),
+        _( "Highlight on PCB" ), _( "Highlight corresponding items in PcbNew" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
