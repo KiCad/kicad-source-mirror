@@ -52,8 +52,7 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     if( !GFootprintList.GetCount() )
     {
-        wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
-        GFootprintList.ReadCacheFromFile( &footprintInfoCache );
+        GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
     }
 }
 
@@ -70,8 +69,7 @@ void PCB_BASE_EDIT_FRAME::doCloseWindow()
 
     if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
     {
-        wxTextFile footprintInfoCache( Prj().GetProjectPath() + "fp-info-cache" );
-        GFootprintList.WriteCacheToFile( &footprintInfoCache );
+        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + "fp-info-cache" );
     }
 
     // Close the project if we are standalone, so it gets cleaned up properly
