@@ -154,9 +154,9 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM_SET aStartItems, int aDragM
     m_dragger->SetMode( aDragMode );
     m_dragger->SetWorld( m_world.get() );
     m_dragger->SetLogger( m_logger );
-    m_dragger->SetDebugDecorator ( m_iface->GetDebugDecorator () );
+    m_dragger->SetDebugDecorator( m_iface->GetDebugDecorator() );
 
-    if( m_dragger->Start ( aP, aStartItems ) )
+    if( m_dragger->Start( aP, aStartItems ) )
     {
         m_state = DRAG_SEGMENT;
     }
@@ -236,7 +236,7 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
 
     m_placer->UpdateSizes( m_sizes );
     m_placer->SetLayer( aLayer );
-    m_placer->SetDebugDecorator( m_iface->GetDebugDecorator () );
+    m_placer->SetDebugDecorator( m_iface->GetDebugDecorator() );
     m_placer->SetLogger( m_logger );
 
     if( m_logger )
@@ -331,7 +331,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
 
     aNode->GetUpdatedItems( removed, added );
 
-    for( auto item : added )
+    for( ITEM* item : added )
     {
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
         m_iface->DisplayItem( item, -1, clearance, aDragging );
@@ -452,7 +452,7 @@ void ROUTER::StopRouting()
         m_placer->GetModifiedNets( nets );
 
         // Update the ratsnest with new changes
-        for ( auto n : nets )
+        for( int n : nets )
             m_iface->UpdateNet( n );
     }
 
@@ -567,7 +567,7 @@ void ROUTER::BreakSegment( ITEM *aItem, const VECTOR2I& aP )
 
     LINE_PLACER placer( this );
 
-    if ( placer.SplitAdjacentSegments( node, aItem, aP ) )
+    if( placer.SplitAdjacentSegments( node, aItem, aP ) )
     {
         CommitRouting( node );
     }
