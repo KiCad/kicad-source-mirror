@@ -39,10 +39,6 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         PCB_BASE_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
                         m_rotationAngle( 900 ), m_undoRedoBlocked( false )
 {
-    if( !GFootprintList.GetCount() )
-    {
-        GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
-    }
 }
 
 PCB_BASE_EDIT_FRAME::~PCB_BASE_EDIT_FRAME()

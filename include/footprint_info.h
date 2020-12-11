@@ -228,6 +228,14 @@ public:
     }
 
     /**
+	 * Clears the footprint info cache
+     */
+    void Clear()
+    {
+        m_list.clear();
+    }
+
+    /**
      * Get info for a module by id.
      */
     FOOTPRINT_INFO* GetModuleInfo( const wxString& aFootprintId );

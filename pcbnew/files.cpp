@@ -58,6 +58,7 @@
 #include <wx/stdpaths.h>
 #include <pcb_layer_widget.h>
 #include <wx/wupdlock.h>
+#include "footprint_info_impl.h"
 
 
 //#define     USE_INSTRUMENTATION     1
@@ -468,6 +469,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         LoadProjectSettings();
     }
 
+    // Clear the cache footprint list which may be project specific
+    GFootprintList.Clear();
+
     if( is_new )
     {
         OnModify();
@@ -517,6 +521,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
         }
 
+        if( GFootprintList.GetCount() == 0 )
+        {
+            GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
+        }
 
         // 6.0 TODO: some settings didn't make it into the board file in 5.1 so as not to
         // change the file format.  For 5.1 we must copy them across from the config-initialized
