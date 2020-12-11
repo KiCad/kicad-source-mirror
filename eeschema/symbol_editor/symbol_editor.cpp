@@ -574,18 +574,21 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
 
 void SYMBOL_EDIT_FRAME::Save()
 {
-    LIB_ID libId = getTargetLibId();
+    LIB_ID          libId = getTargetLibId();
     const wxString& libName = libId.GetLibNickname();
     const wxString& partName = libId.GetLibItemName();
 
-    if( partName.IsEmpty() )
+    if( !libName.IsEmpty() && m_libMgr->IsLibraryReadOnly( libName ) )
+    {
+        wxString msg = wxString::Format( _( "Symbol library '%s' is not writeable." ), libName );
+        wxString msg2 = _( "You must save to a different location." );
+
+        if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
+            saveLibrary( libName, true );
+    }
+    else if( partName.IsEmpty() )
     {
         saveLibrary( libName, false );
-    }
-    else if( !libName.IsEmpty() && m_libMgr->IsLibraryReadOnly( libName ) )
-    {
-        // Force a "Save As..." if the modified library is read only.
-        saveLibrary( libName, true );
     }
     else
     {
@@ -1079,19 +1082,19 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
 bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
 {
-    wxString msg;
-    bool doSave = true;
-    int dirtyCount = 0;
-    bool applyToAll = false;
-    bool retv = true;
+    wxString msg, msg2;
+    bool     doSave = true;
+    int      dirtyCount = 0;
+    bool     applyToAll = false;
+    bool     retv = true;
 
-    for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+    for( const wxString& libNickname : m_libMgr->GetLibraryNames() )
     {
         if( m_libMgr->IsLibraryModified( libNickname ) )
             dirtyCount++;
     }
 
-    for( const auto& libNickname : m_libMgr->GetLibraryNames() )
+    for( const wxString& libNickname : m_libMgr->GetLibraryNames() )
     {
         if( m_libMgr->IsLibraryModified( libNickname ) )
         {
@@ -1112,18 +1115,38 @@ bool SYMBOL_EDIT_FRAME::saveAllLibraries( bool aRequireConfirmation )
             {
                 // If saving under existing name fails then do a Save As..., and if that
                 // fails then cancel close action.
-                if( m_libMgr->IsLibraryReadOnly( libNickname ) )
-                {
-                    m_infoBar->Dismiss();
-                    msg.Printf( _( "Library \"%s\" is read only and must be saved as a "
-                                   "different library." ), libNickname );
-                    m_infoBar->ShowMessageFor( msg, 3000, wxICON_EXCLAMATION );
-                    retv = false;
-                    continue;
-                }
 
-                if( saveLibrary( libNickname, false ) )
-                    continue;
+                if( !m_libMgr->IsLibraryReadOnly( libNickname ) )
+                {
+                    if( saveLibrary( libNickname, false ) )
+                        continue;
+                }
+                else
+                {
+                    msg.Printf( _( "Symbol library '%s' is not writeable." ), libNickname );
+                    msg2 = _( "You must save to a different location." );
+
+                    if( dirtyCount == 1 )
+                    {
+                        if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) != wxID_OK )
+                        {
+                            retv = false;
+                            continue;
+                        }
+                    }
+                    else
+                    {
+                        m_infoBar->Dismiss();
+                        m_infoBar->ShowMessageFor( msg + wxS( "  " ) + msg2,
+                                                   2000, wxICON_EXCLAMATION );
+
+                        while( m_infoBar->IsShown() )
+                            wxSafeYield();
+
+                        retv = false;
+                        continue;
+                    }
+                }
 
                 if( !saveLibrary( libNickname, true ) )
                     retv = false;

@@ -348,12 +348,10 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             const wxString& libName  = libId.GetLibNickname();
             const wxString& partName = libId.GetLibItemName();
 
-            bool readOnly = libName.IsEmpty() || m_libMgr->IsLibraryReadOnly( libName );
-
             if( partName.IsEmpty() )
-                return ( !readOnly && m_libMgr->IsLibraryModified( libName ) );
+                return ( m_libMgr->IsLibraryModified( libName ) );
             else
-                return ( !readOnly && m_libMgr->IsPartModified( partName, libName ) );
+                return ( m_libMgr->IsPartModified( partName, libName ) );
         };
 
     mgr->SetConditions( ACTIONS::saveAll,

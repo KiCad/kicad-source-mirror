@@ -67,7 +67,7 @@ bool SYMBOL_LIBRARY_MANAGER::HasModifications() const
 {
     for( const auto& lib : m_libs )
     {
-        if( lib.second.IsModified() && !IsLibraryReadOnly( lib.first ) )
+        if( lib.second.IsModified() )
             return true;
     }
 

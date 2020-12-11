@@ -46,22 +46,30 @@ bool LIB_CONTROL::Init()
         CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
         SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
 
-        auto libSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
-            LIB_ID sel = editFrame->GetTreeLIBID();
-            return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
-        };
-        auto pinnedLibSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
-            LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
-            return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
-        };
-        auto unpinnedLibSelectedCondition = [ editFrame ] (const SELECTION& aSel ) {
-            LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
-            return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
-        };
-        auto symbolSelectedCondition = [ editFrame ] ( const SELECTION& aSel ) {
-            LIB_ID sel = editFrame->GetTreeLIBID();
-            return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
-        };
+        auto libSelectedCondition =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    LIB_ID sel = editFrame->GetTreeLIBID();
+                    return !sel.GetLibNickname().empty() && sel.GetLibItemName().empty();
+                };
+        auto pinnedLibSelectedCondition =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
+                    return current && current->m_Type == LIB_TREE_NODE::LIB && current->m_Pinned;
+                };
+        auto unpinnedLibSelectedCondition =
+                [ editFrame ](const SELECTION& aSel )
+                {
+                    LIB_TREE_NODE* current = editFrame->GetCurrentTreeNode();
+                    return current && current->m_Type == LIB_TREE_NODE::LIB && !current->m_Pinned;
+                };
+        auto symbolSelectedCondition =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    LIB_ID sel = editFrame->GetTreeLIBID();
+                    return !sel.GetLibNickname().empty() && !sel.GetLibItemName().empty();
+                };
 
         ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );

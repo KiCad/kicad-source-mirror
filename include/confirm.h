@@ -159,8 +159,8 @@ bool IsOK( wxWindow* aParent, const wxString& aMessage );
  * @return wxID_OK or wxID_CANCEL depending on the button the user selected.
  */
 int OKOrCancelDialog( wxWindow* aParent, const wxString& aWarning, const wxString& aMessage,
-                      const wxString& aDetailedMessage, const wxString& aOKLabel,
-                      const wxString& aCancelLabel, bool* aApplyToAll );
+                      wxString aDetailedMessage = wxEmptyString, wxString aOKLabel = wxEmptyString,
+                      wxString aCancelLabel = wxEmptyString, bool* aApplyToAll = nullptr );
 
 
 
