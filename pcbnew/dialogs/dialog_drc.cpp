@@ -303,6 +303,28 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
     const KIID&   itemID = node ? RC_TREE_MODEL::ToUUID( aEvent.GetItem() ) : niluuid;
     BOARD_ITEM*   item = board->GetItem( itemID );
 
+    auto getActiveLayers =
+            []( BOARD_ITEM* aItem ) -> LSET
+            {
+                if( aItem->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( aItem );
+                    LSET layers;
+
+                    for( int layer : aItem->GetLayerSet().Seq() )
+                    {
+                        if( pad->FlashLayer( layer ) )
+                            layers.set( layer );
+                    }
+
+                    return layers;
+                }
+                else
+                {
+                    return aItem->GetLayerSet();
+                }
+            };
+
     if( item && node )
     {
         PCB_LAYER_ID             principalLayer = item->GetLayer();
@@ -335,16 +357,16 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
             BOARD_ITEM*  d = board->GetItem( rc_item->GetAuxItem3ID() );
 
             if( a )
-                violationLayers &= a->GetLayerSet();
+                violationLayers &= getActiveLayers( a );
 
             if( b )
-                violationLayers &= b->GetLayerSet();
+                violationLayers &= getActiveLayers( b );
 
             if( c )
-                violationLayers &= c->GetLayerSet();
+                violationLayers &= getActiveLayers( c );
 
             if( d )
-                violationLayers &= d->GetLayerSet();
+                violationLayers &= getActiveLayers( d );
         }
 
         if( violationLayers.count() )
