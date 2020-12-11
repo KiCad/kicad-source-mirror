@@ -541,8 +541,8 @@ class definition:
     private:
         void fooPrivateMethod();
 
-    // Private not redefined here unless no private methods.
-    int m_privateMemberVariable;
+        // Private not redefined here unless no private methods.
+        int m_privateMemberVariable;
     };
 ~~~~~~~~~~~~~
 
