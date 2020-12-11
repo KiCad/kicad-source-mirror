@@ -53,6 +53,7 @@ EE_GRID_HELPER::EE_GRID_HELPER( TOOL_MANAGER* aToolMgr ) :
 {
     m_enableSnap = true;
     m_enableSnapLine = true;
+    m_enableGrid = true;
     m_snapItem = nullptr;
     KIGFX::VIEW* view = m_toolMgr->GetView();
 

@@ -116,7 +116,8 @@ static const TOOL_ACTION ACT_PlaceMicroVia( "pcbnew.InteractiveRouter.PlaceMicro
         _( "Place Microvia" ), _( "Adds a microvia at the end of currently routed track." ),
         via_microvia_xpm, AF_NONE, (void*) VIA_ACTION_FLAGS::MICROVIA );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
+static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia(
+        "pcbnew.InteractiveRouter.SelLayerAndPlaceVia",
         AS_CONTEXT,
         '<', LEGACY_HK_NAME( "Select Layer and Add Through Via" ),
         _( "Select Layer and Place Through Via..." ),
@@ -124,7 +125,8 @@ static const TOOL_ACTION ACT_SelLayerAndPlaceThroughVia( "pcbnew.InteractiveRout
         select_w_layer_xpm, AF_NONE,
         (void*) ( VIA_ACTION_FLAGS::VIA | VIA_ACTION_FLAGS::SELECT_LAYER ) );
 
-static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia( "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
+static const TOOL_ACTION ACT_SelLayerAndPlaceBlindVia(
+        "pcbnew.InteractiveRouter.SelLayerAndPlaceBlindVia",
         AS_CONTEXT,
         MD_ALT + '<', LEGACY_HK_NAME( "Select Layer and Add Blind/Buried Via" ),
         _( "Select Layer and Place Blind/Buried Via..." ),
@@ -488,6 +490,7 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
         case '0':
         {
             auto logger = m_router->Logger();
+
             if( ! logger )
                 return;
 
@@ -502,17 +505,18 @@ void ROUTER_TOOL::handleCommonEvents( const TOOL_EVENT& aEvent )
                 if( evt.item && evt.item->Parent() )
                     id = evt.item->Parent()->m_Uuid.AsString();
 
-                fprintf(f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type, (const char*) id.c_str() );
+                fprintf( f, "event %d %d %d %s\n", evt.p.x, evt.p.y, evt.type,
+                         (const char*) id.c_str() );
             }
 
-            fclose(f);
+            fclose( f );
 
             // Export as *.kicad_pcb format, using a strategy which is specifically chosen
             // as an example on how it could also be used to send it to the system clipboard.
 
             PCB_IO  pcb_io;
 
-            pcb_io.Save("/tmp/pns.dump", m_iface->GetBoard(), nullptr );
+            pcb_io.Save( "/tmp/pns.dump", m_iface->GetBoard(), nullptr );
 
             break;
         }
@@ -662,6 +666,8 @@ int ROUTER_TOOL::onViaCommand( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
 {
+    wxCHECK( m_router, 0 );
+
     if( !IsToolActive() )
         return 0;
 
@@ -747,7 +753,7 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
             targetLayer = frame()->SelectLayer( static_cast<PCB_LAYER_ID>( currentLayer ),
                                                 LSET::AllNonCuMask(), dlgPosition );
 
-            // Reset the cursor to the position where the event occured
+            // Reset the cursor to the position where the event occurred
             controls()->SetCursorPosition( aEvent.HasPosition() ? aEvent.Position() : dlgPosition );
         }
     }
@@ -1010,7 +1016,7 @@ void ROUTER_TOOL::performRouting()
     {
         setCursor();
 
-        // Don't crash if we missed an operation that cancelled routing.
+        // Don't crash if we missed an operation that canceled routing.
         if( !m_router->RoutingInProgress() )
         {
             if( evt->IsCancelInteractive() )

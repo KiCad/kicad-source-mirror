@@ -43,8 +43,8 @@
     - DRCE_TOO_MANY_VIAS
     Todo:
     - arc support.
-    - improve recognition of coupled segments (now anything that's parallel is considered coupled, causing
-      DRC errors on meanders)
+    - improve recognition of coupled segments (now anything that's parallel is considered
+      coupled, causing DRC errors on meanders)
 */
 
 namespace test {
@@ -169,7 +169,10 @@ struct DIFF_PAIR_COUPLED_SEGMENTS
 
     DIFF_PAIR_COUPLED_SEGMENTS() :
         parentN( nullptr ),
-        parentP( nullptr )
+        parentP( nullptr ),
+        computedGap( 0 ),
+        layer( UNDEFINED_LAYER ),
+        couplingOK( false )
     {}
 };
 
@@ -349,7 +352,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         wxString nameP = niP->GetNetname();
         wxString nameN = niN->GetNetname();
 
-        reportAux( wxString::Format( "Rule '%s', DP: (+) %s - (-) %s", it.first.parentRule->m_Name, nameP, nameN ) );
+        reportAux( wxString::Format( "Rule '%s', DP: (+) %s - (-) %s",
+                                     it.first.parentRule->m_Name, nameP, nameN ) );
 
         extractDiffPairCoupledItems( it.second, copperTree );
 
@@ -359,8 +363,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 
         drc_dbg(10, "       coupled prims : %d\n", (int) it.second.coupled.size() );
 
-        OPT<DRC_CONSTRAINT> gapConstraint = it.first.parentRule->FindConstraint( DIFF_PAIR_GAP_CONSTRAINT );
-        OPT<DRC_CONSTRAINT> maxUncoupledConstraint = it.first.parentRule->FindConstraint( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT );
+        OPT<DRC_CONSTRAINT> gapConstraint =
+                it.first.parentRule->FindConstraint( DIFF_PAIR_GAP_CONSTRAINT );
+        OPT<DRC_CONSTRAINT> maxUncoupledConstraint =
+                it.first.parentRule->FindConstraint( DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT );
 
         for( auto& item : it.second.itemsN )
         {
@@ -401,7 +407,8 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 overlay->Line( cpair.coupledN );
             }
 
-            drc_dbg(10, "               len %d gap %d l %d\n", length, gap, cpair.parentP->GetLayer() );
+            drc_dbg( 10, "               len %d gap %d l %d\n", length, gap,
+                     cpair.parentP->GetLayer() );
 
             if( gapConstraint )
             {
@@ -411,7 +418,6 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     insideRange = false;
                 if ( val.HasMax() && gap > val.Max() )
                     insideRange = false;
-
 
 //                if(val.HasMin() && val.HasMax() )
   //                  drc_dbg(10, "Vmin %d vmax %d\n", val.Min(), val.Max() );
@@ -424,10 +430,10 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
         }
 
         int totalLen = std::max( it.second.totalLengthN, it.second.totalLengthP );
-            reportAux( wxString::Format( "   - coupled length: %s, total length: %s",
+        reportAux( wxString::Format( "   - coupled length: %s, total length: %s",
 
-            MessageTextFromValue( userUnits(), it.second.totalCoupled ),
-            MessageTextFromValue( userUnits(), totalLen ) ) );
+                                     MessageTextFromValue( userUnits(), it.second.totalCoupled ),
+                                     MessageTextFromValue( userUnits(), totalLen ) ) );
 
         int totalUncoupled = totalLen - it.second.totalCoupled;
 
@@ -471,16 +477,16 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                     auto val = gapConstraint->GetValue();
                     auto drcItem = DRC_ITEM::Create( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE );
 
-                    m_msg = drcItem->GetErrorText() + " (" + gapConstraint->GetParentRule()->m_Name + " ";
+                    m_msg = drcItem->GetErrorText() + " (" +
+                            gapConstraint->GetParentRule()->m_Name + " ";
 
                     if( val.HasMin() )
                         m_msg += wxString::Format( _( "minimum gap: %s; " ),
-                        MessageTextFromValue( userUnits(), val.Min() ) );
+                                                   MessageTextFromValue( userUnits(), val.Min() ) );
 
                     if( val.HasMax() )
                         m_msg += wxString::Format( _( "maximum gap: %s; " ),
-                        MessageTextFromValue( userUnits(), val.Max() ) );
-
+                                                   MessageTextFromValue( userUnits(), val.Max() ) );
 
                     m_msg += wxString::Format( _( "actual: %s)" ),
                         MessageTextFromValue( userUnits(), cpair.computedGap ) );

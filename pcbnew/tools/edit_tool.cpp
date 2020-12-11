@@ -692,6 +692,8 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
         {
             TRACK* track = dynamic_cast<TRACK*>( item );
 
+            wxCHECK( track, 0 );
+
             m_commit->Modify( track );
 
             int new_width = board()->GetDesignSettings().GetCurrentTrackWidth();
