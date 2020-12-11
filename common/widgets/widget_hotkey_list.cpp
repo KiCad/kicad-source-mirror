@@ -132,6 +132,7 @@ public:
         // specials like Tab and Return, are received, particularly on MSW.
         panel->Bind( wxEVT_CHAR, &HK_PROMPT_DIALOG::OnChar, this );
         panel->Bind( wxEVT_CHAR_HOOK, &HK_PROMPT_DIALOG::OnCharHook, this );
+        SetInitialFocus( panel );
     }
 
     /**
@@ -482,8 +483,14 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 
     UpdateFromClientData();
 
-    GetDataView()->GetColumn( 0 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    GetDataView()->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    wxDataViewColumn* col = GetDataView()->GetColumn( 0 );
+    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    col->SetWidth( col->GetWidth() );
+
+    col = GetDataView()->GetColumn( 1 );
+    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    col->SetWidth( col->GetWidth() );
+
     Thaw();
 }
 
@@ -491,6 +498,15 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 bool WIDGET_HOTKEY_LIST::TransferDataToControl()
 {
     updateShownItems( "" );
+
+    wxDataViewColumn* col = GetDataView()->GetColumn( 0 );
+    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    col->SetWidth( col->GetWidth() );
+
+    col = GetDataView()->GetColumn( 1 );
+    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
+    col->SetWidth( col->GetWidth() );
+
     return true;
 }
 
@@ -520,9 +536,6 @@ void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
     }
 
     UpdateFromClientData();
-
-    GetDataView()->GetColumn( 0 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    GetDataView()->GetColumn( 1 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     Thaw();
 }
 
