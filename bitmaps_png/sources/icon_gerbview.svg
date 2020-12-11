@@ -25,16 +25,16 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="3840"
-     inkscape:window-height="2099"
+     inkscape:window-height="2136"
      id="namedview1713"
      showgrid="true"
      inkscape:zoom="22.627417"
      inkscape:cx="23.338529"
      inkscape:cy="28.856349"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="3840"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="Слой_1"
+     inkscape:current-layer="g953"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
@@ -108,7 +108,7 @@
        style="stroke-width:1" />
     <rect
        class="cls-2"
-       x="9.5"
+       x="9"
        y="11"
        width="8"
        height="5"
@@ -118,13 +118,13 @@
        clip-path="none" />
     <path
        class="cls-2"
-       d="M 26,8.999579 A 2.9999999,3 0 1 1 23.000421,6 2.9993683,2.9993683 0 0 1 26,8.999579 Z"
+       d="M 26.5,8.999579 A 2.9999999,3 0 1 1 23.500421,6 2.9993683,2.9993683 0 0 1 26.5,8.999579 Z"
        id="path1706"
        style="stroke-width:1"
        clip-path="none" />
     <rect
        class="cls-2"
-       x="9.5"
+       x="9"
        y="1"
        width="8"
        height="5"
@@ -134,7 +134,7 @@
        clip-path="none" />
     <rect
        class="cls-2"
-       x="9.5"
+       x="9"
        y="21"
        width="8"
        height="5"
@@ -144,7 +144,7 @@
        clip-path="none" />
     <rect
        class="cls-2"
-       x="28.5"
+       x="29"
        y="11"
        width="8"
        height="5"
@@ -154,7 +154,7 @@
        clip-path="none" />
     <rect
        class="cls-2"
-       x="28.5"
+       x="29"
        y="1"
        width="8"
        height="5"
@@ -164,7 +164,7 @@
        clip-path="none" />
     <rect
        class="cls-2"
-       x="28.5"
+       x="29"
        y="21"
        width="8"
        height="5"
@@ -174,7 +174,7 @@
        clip-path="none" />
     <path
        style="fill:none;stroke:#b9b9b9;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 23,-3 V 18.917205 L 27.582795,23.5 H 32"
+       d="M 23.5,-3 V 18.917205 L 28.082795,23.5 H 32.5"
        id="path2292"
        clip-path="none"
        sodipodi:nodetypes="cccc" />
@@ -190,7 +190,7 @@
        clip-path="none" />
     <path
        style="fill:none;stroke:#b9b9b9;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 14,3.5 v -9"
+       d="m 13.5,3.5 v -9"
        id="path2298"
        clip-path="none" />
     <path
@@ -223,20 +223,46 @@
        id="path2312"
        clip-path="none"
        sodipodi:nodetypes="ccccccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:18.9582px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;stroke-width:1"
+       x="-0.20797093"
+       y="45.080811"
+       id="text3156"><tspan
+         sodipodi:role="line"
+         id="tspan3154"
+         x="-0.20797093"
+         y="45.080811"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont Bold';fill:#545454;fill-opacity:1;stroke-width:1">Ki</tspan></text>
+    <rect
+       class="cls-3"
+       x="-1.767767"
+       y="56.922096"
+       width="3"
+       height="4.5"
+       transform="rotate(-45)"
+       id="rect15"
+       style="display:inline;fill:#e61c50;fill-opacity:1;stroke:none;stroke-width:0.999999;stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       class="cls-4"
+       d="m 45.221149,45.690137 c -0.917627,0.999971 -2.357405,0.825367 -3.333716,-0.150988 l -2.424505,-2.335569 3.181918,-3.182043 2.42463,2.335693 c 0.928991,1.116698 1.079517,2.321801 0.151673,3.332907 z"
+       id="path17"
+       style="display:inline;fill:#e61c50;stroke-width:0.999999"
+       sodipodi:nodetypes="sccccs" />
     <g
-       id="g3168"
-       transform="translate(-1.0068521,0.2613513)">
-      <text
-         xml:space="preserve"
-         style="font-size:18.9582px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;stroke-width:1"
-         x="27.064117"
-         y="43.715401"
-         id="text3156"><tspan
-           sodipodi:role="line"
-           id="tspan3154"
-           x="27.064117"
-           y="43.715401"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont Bold';fill:#b9b9b9;fill-opacity:1;stroke-width:1">Ki</tspan></text>
+       id="g1151"
+       transform="matrix(5.6692914,0,0,5.6692914,15.208368,14.965765)"
+       style="display:inline;stroke-width:0.705556;stroke-miterlimit:4;stroke-dasharray:none">
+      <path
+         class="cls-4"
+         d="M 4.4965422,2.6443224 A 1.3229166,1.3227877 0 1 1 2.6265028,2.6452072 1.3222936,1.3221647 0 0 1 4.4965422,2.6443224 Z"
+         id="path19"
+         style="fill:#e61c50;stroke-width:0.705556;stroke-miterlimit:4;stroke-dasharray:none" />
+      <path
+         class="cls-5"
+         d="m 4.185597,2.9567851 a 0.88194443,0.88194443 0 1 1 -1.2472633,0 0.88194443,0.88194443 0 0 1 1.2472633,0 z"
+         id="path21"
+         style="fill:#ffffff;stroke-width:0.705555;stroke-miterlimit:4;stroke-dasharray:none" />
     </g>
     <path
        style="fill:none;stroke:#b9b9b9;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
