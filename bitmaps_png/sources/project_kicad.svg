@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="project.svg"
+   sodipodi:docname="project_kicad.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -25,14 +25,24 @@
      inkscape:window-width="1534"
      inkscape:window-height="1005"
      id="namedview2452"
-     showgrid="false"
-     inkscape:zoom="13.980769"
-     inkscape:cx="4.4427368"
-     inkscape:cy="17.498756"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="8.651591"
+     inkscape:cy="13.112088"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g3046" />
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid240596"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#b4b4ff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -146,12 +156,14 @@
          style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:condensed;font-size:8px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold Condensed';letter-spacing:0px;word-spacing:0px"
          x="12.720841"
          y="-1.0218115"
-         id="text1558"><tspan
-           sodipodi:role="line"
-           x="12.720841"
-           y="-1.0218115"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont Bold';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1"
-           id="tspan3039">K</tspan></text>
+         id="text1558">
+            <tspan
+   sodipodi:role="line"
+   x="12.720841"
+   y="-1.0218115"
+   style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:8px;font-family:'Tiresias LPfont';-inkscape-font-specification:'Tiresias LPfont Bold';text-align:center;text-anchor:middle;fill:#ffffff;fill-opacity:1"
+   id="tspan3039">K</tspan>
+         </text>
     </g>
   </g>
 </svg>

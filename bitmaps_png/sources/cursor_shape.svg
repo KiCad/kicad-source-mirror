@@ -10,7 +10,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="cursor_shape.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
@@ -60,8 +60,8 @@
      id="namedview2367"
      showgrid="true"
      inkscape:zoom="45.254834"
-     inkscape:cx="12.402071"
-     inkscape:cy="11.624552"
+     inkscape:cx="10.543725"
+     inkscape:cy="13.371759"
      inkscape:window-x="1453"
      inkscape:window-y="97"
      inkscape:window-maximized="0"
@@ -171,12 +171,12 @@
      id="g1564">
     <path
        style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 0.52,12.499724 H 25.48"
+       d="m 0.52,12.499724 22.972201,0"
        id="path1558"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#b9b9b9;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 12.5,25.48 V 0.52000085"
+       d="m 12.5,23.497496 0,-22.97749515"
        id="path1560"
        sodipodi:nodetypes="cc" />
   </g>

@@ -1,38 +1,110 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 26 26">
-  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0">
-    <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="auto_track_width.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="9.3396593"
+     inkscape:cy="13.576558"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
   </sodipodi:namedview>
-  <metadata id="metadata43">
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke:#545454;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#b9b9b9;}.cls-3{fill:#1a81c4;}</style>
+  <defs
+     id="defs115972">
+    <style
+       id="style115970">.cls-1,.cls-2,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-4{stroke:#545454;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#b9b9b9;}.cls-3{fill:#1a81c4;}</style>
   </defs>
-  <title>auto_track_width</title>
-  <path class="cls-1" d="M10.7362,22.0041H6.0273a4,4,0,0,1-4-4V3.0458"/>
-  <path class="cls-2" d="M15.3456,22.0041h4.7088a4,4,0,0,0,4-4V3.0458"/>
-  <circle class="cls-3" cx="13" cy="22.0041" r="3"/>
-  <line class="cls-4" x1="8.4892" y1="9.5" x2="17.5108" y2="9.5"/>
-  <line class="cls-4" x1="8.4892" y1="12.5" x2="17.5108" y2="12.5"/>
+  <title
+     id="title115974">auto_track_width</title>
+  <path
+     class="cls-1"
+     d="M 9.7362,21.0041 H 5.0273 a 4,4 0 0 1 -4,-4 V 2.0458"
+     id="path115976" />
+  <path
+     class="cls-2"
+     d="m 14.3456,21.0041 h 4.7088 a 4,4 0 0 0 4,-4 V 2.0458"
+     id="path115978" />
+  <circle
+     class="cls-3"
+     cx="12"
+     cy="21.004101"
+     r="3"
+     id="circle115980" />
+  <line
+     class="cls-4"
+     x1="7.4891996"
+     y1="8.5"
+     x2="16.510799"
+     y2="8.5"
+     id="line115982" />
+  <line
+     class="cls-4"
+     x1="7.4891996"
+     y1="11.5"
+     x2="16.510799"
+     y2="11.5"
+     id="line115984" />
 </svg>

@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="group.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -27,7 +27,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="13"
+     inkscape:cx="3.3259971"
      inkscape:cy="13"
      inkscape:window-x="0"
      inkscape:window-y="37"
@@ -80,41 +80,41 @@
   <title
      id="title9">group</title>
   <rect
-     style="fill:none;stroke:#545454;stroke-linejoin:round;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:6,2;stroke-dashoffset:2.3"
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:6, 2;stroke-dashoffset:2.3"
      id="rect859"
      width="21"
      height="21"
-     x="2.5"
-     y="2.5"
+     x="1.5"
+     y="1.5"
      rx="0" />
   <rect
      class="cls-3"
-     x="1.0019"
-     y="20.999998"
+     x="0.0018999577"
+     y="19.999998"
      width="3.9981005"
      height="3.9991004"
      id="rect27"
      style="stroke-width:1" />
   <rect
      class="cls-3"
-     x="1.0005"
-     y="1.0009"
+     x="0.00049996376"
+     y="0.00090003014"
      width="3.9995003"
      height="3.9990997"
      id="rect29"
      style="stroke-width:1" />
   <rect
      class="cls-3"
-     x="21"
-     y="20.999998"
+     x="20"
+     y="19.999998"
      width="3.9995003"
      height="3.9991004"
      id="rect31"
      style="stroke-width:0.999999" />
   <rect
      class="cls-3"
-     x="21"
-     y="1.0009"
+     x="20"
+     y="0.00090003014"
      width="3.9980996"
      height="3.9990997"
      id="rect33"

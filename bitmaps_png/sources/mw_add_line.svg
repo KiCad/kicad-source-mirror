@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="mw_add_line.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -27,12 +27,13 @@
      id="namedview22"
      showgrid="false"
      inkscape:zoom="27.961538"
-     inkscape:cx="13"
+     inkscape:cx="3.3259971"
      inkscape:cy="13"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -71,14 +72,16 @@
      id="title7">mw_add_line</title>
   <path
      class="cls-1"
-     d="M1.5,12.3537H4.0852a2,2,0,0,1,2,2v4.81a1.8083,1.8083,0,0,0,1.8083,1.8083h0a1.8083,1.8083,0,0,0,1.8082-1.8083V6.8366A1.8082,1.8082,0,0,1,11.51,5.0283h0a1.8083,1.8083,0,0,1,1.8082,1.8083V19.14a1.8082,1.8082,0,0,0,1.8082,1.8082h0A1.8082,1.8082,0,0,0,16.9346,19.14V6.8128a1.7846,1.7846,0,0,1,1.8082-1.7845h0A1.8083,1.8083,0,0,1,20.551,6.8366v3.6966a2,2,0,0,0,2,2H24.5"
+     d="m 0.5,11.3537 h 2.5852 a 2,2 0 0 1 2,2 v 4.81 a 1.8083,1.8083 0 0 0 1.8083,1.8083 v 0 A 1.8083,1.8083 0 0 0 8.7017,18.1637 V 5.8366 A 1.8082,1.8082 0 0 1 10.51,4.0283 v 0 a 1.8083,1.8083 0 0 1 1.8082,1.8083 V 18.14 a 1.8082,1.8082 0 0 0 1.8082,1.8082 v 0 A 1.8082,1.8082 0 0 0 15.9346,18.14 V 5.8128 a 1.7846,1.7846 0 0 1 1.8082,-1.7845 v 0 a 1.8083,1.8083 0 0 1 1.8082,1.8083 v 3.6966 a 2,2 0 0 0 2,2 H 23.5"
      id="path9" />
   <polygon
      class="cls-2"
-     points="4.477 14.241 1.686 14.259 1.667 10.327 4.458 10.309 4.477 14.241"
-     id="polygon11" />
+     points="1.686,14.259 1.667,10.327 4.458,10.309 4.477,14.241 "
+     id="polygon11"
+     transform="translate(-1,-1)" />
   <polygon
      class="cls-2"
-     points="21.693 10.468 24.484 10.449 24.503 14.382 21.712 14.4 21.693 10.468"
-     id="polygon19" />
+     points="24.484,10.449 24.503,14.382 21.712,14.4 21.693,10.468 "
+     id="polygon19"
+     transform="translate(-1,-1)" />
 </svg>

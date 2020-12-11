@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="cursor.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -56,8 +56,8 @@
      id="namedview1694"
      showgrid="true"
      inkscape:zoom="22.627417"
-     inkscape:cx="11.63481"
-     inkscape:cy="12.159625"
+     inkscape:cx="8.4991411"
+     inkscape:cy="13.284211"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -76,7 +76,7 @@
      id="title1689">cursor</title>
   <path
      class="cls-1"
-     d="m 8,5 4.18e-4,13.636621 3.013224,-2.910219 c 0.40646,0.927255 1.002473,2.296662 1.523834,3.492113 a 1.5317443,1.5317443 0 0 0 2.031021,0.78694 v 0 a 1.5537557,1.5537557 0 0 0 0.792899,-2.03839 C 14.840175,16.77142 14.243405,15.399854 13.836027,14.469757 L 18,14.184675 Z"
+     d="m 7,4 4.18e-4,13.636621 3.013224,-2.910219 c 0.40646,0.927255 1.002473,2.296662 1.523834,3.492113 a 1.5317443,1.5317443 0 0 0 2.031021,0.78694 v 0 a 1.5537557,1.5537557 0 0 0 0.792899,-2.03839 C 13.840175,15.77142 13.243405,14.399854 12.836027,13.469757 L 17,13.184675 Z"
      id="path1691"
      style="stroke-width:1" />
 </svg>

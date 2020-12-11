@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="library_table.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -27,8 +27,8 @@
      id="namedview42"
      showgrid="true"
      inkscape:zoom="19.771793"
-     inkscape:cx="19.693608"
-     inkscape:cy="22.042194"
+     inkscape:cx="9.3162965"
+     inkscape:cy="14.139015"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -82,7 +82,8 @@
   <g
      id="g865">
     <g
-       id="g933">
+       id="g933"
+       transform="translate(-1,-1)">
       <g
          id="g853">
         <rect
@@ -153,7 +154,7 @@
     </g>
     <g
        id="g957"
-       transform="translate(6)">
+       transform="translate(5,-1)">
       <g
          id="g945">
         <rect
@@ -229,7 +230,7 @@
          id="g994"
          inkscape:transform-center-x="0.63442536"
          inkscape:transform-center-y="-10.226851"
-         transform="rotate(-17.467171,2.5047981,19.73537)">
+         transform="rotate(-17.467171,-1.2499555,22.490124)">
         <g
            id="g969">
           <rect
@@ -308,7 +309,7 @@
            transform="matrix(3.7830372,0,0,3.7830374,-17.441616,-0.81990154)">
           <g
              id="g1652"
-             transform="matrix(0.99905805,0,0,0.99999999,-0.13921064,-0.12375551)"
+             transform="matrix(0.99905805,0,0,0.99999999,-0.40379397,-0.38833884)"
              style="stroke-width:1.00139">
             <ellipse
                class="cls-5"
@@ -320,7 +321,7 @@
                style="fill:#e61c50;stroke-width:0.264708" />
             <polygon
                class="cls-7"
-               points="14.43,17.173 14.43,14.621 21.416,14.621 21.522,17.173 "
+               points="14.43,14.621 21.416,14.621 21.522,17.173 14.43,17.173 "
                id="polygon47"
                style="fill:#ffffff;stroke-width:0.81912"
                transform="matrix(0.33576565,0,0,0.31103056,-1.0086401,-0.71111954)" />

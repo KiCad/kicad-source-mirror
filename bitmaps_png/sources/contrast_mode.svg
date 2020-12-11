@@ -10,7 +10,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="contrast_mode.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
@@ -59,9 +59,9 @@
      inkscape:window-height="1697"
      id="namedview3143"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="12.138301"
-     inkscape:cy="13.857949"
+     inkscape:zoom="42.45587"
+     inkscape:cx="8.705838"
+     inkscape:cy="12.015355"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -69,7 +69,12 @@
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
-       id="grid3708" />
+       id="grid3708"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#c1c1ff"
+       opacity="0.1254902"
+       empspacing="2" />
   </sodipodi:namedview>
   <defs
      id="defs3124">
@@ -98,44 +103,54 @@
        x2="15.113"
        y2="8.9949"
        xlink:href="#Безымянный_градиент_19" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Безымянный_градиент_19"
+       id="linearGradient241408"
+       gradientUnits="userSpaceOnUse"
+       x1="18"
+       y1="21.4931"
+       x2="5.1177"
+       y2="21.4931"
+       gradientTransform="translate(-1,-1)" />
   </defs>
   <title
      id="title3126">contrast_mode</title>
-  <polyline
-     class="cls-1"
-     points="17 24 15 18.986 6.118 18.986"
-     id="polyline3128" />
-  <polyline
-     class="cls-2"
-     points="12.092 14 19 14 23 24"
-     id="polyline3130" />
+  <path
+     id="polyline3128"
+     style="fill:none;stroke:url(#linearGradient241408);stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="M 16,22 14,17.986 H 5.118"
+     sodipodi:nodetypes="ccc" />
+  <path
+     id="polyline3130"
+     style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="M 11.092,13 H 17 l 5,9"
+     sodipodi:nodetypes="ccc" />
   <polyline
      class="cls-2"
      points="3 3 7 14 12.092 14"
-     id="polyline3132" />
+     id="polyline3132"
+     transform="translate(-1,-1)" />
   <line
      class="cls-3"
-     x1="16.113"
-     y1="8.9949"
-     x2="23"
-     y2="8.9949"
-     id="line3134" />
+     x1="15.113001"
+     y1="7.9948997"
+     x2="22"
+     y2="7.9948997"
+     id="line3134"
+     style="stroke:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19-2)" />
   <path
      class="cls-4"
-     d="M16.3767,9.9951H11a.9988.9988,0,0,1-.9482-.6836l-2-5.9951a1,1,0,1,1,1.8964-.6328l1.7725,5.3115h5.3338c.5527,0,.2963.5129.0352,1A6.8531,6.8531,0,0,1,16.3767,9.9951Z"
+     d="M 15.3767,8.9951 H 10 A 0.9988,0.9988 0 0 1 9.0518,8.3115 l -2,-5.9951 A 1,1 0 1 1 8.9482,1.6836 l 1.7725,5.3115 h 5.3338 c 0.5527,0 0.2963,0.5129 0.0352,1 a 6.8531,6.8531 0 0 1 -0.713,1 z"
      id="path3136" />
   <path
      class="cls-4"
-     d="M6.98,19.9863H3a1,1,0,0,1,0-2H7.9038C8.4565,17.9863,7.5327,19.9863,6.98,19.9863Z"
-     id="path3138" />
-  <line
-     class="cls-5"
-     x1="23.5"
-     y1="1.5"
-     x2="2.5"
-     y2="24.5"
+     d="M 5.5184569,19.003563 2,18.9863 c -1.33331671,-0.0065 -1.33333275,-2 0,-2 h 4.9038 c 0.5527,0 -0.8326498,2.019975 -1.3853431,2.017263 z"
+     id="path3138"
+     sodipodi:nodetypes="sssss" />
+  <path
      id="line3140"
-     style="stroke-width:1.5;stroke-miterlimit:4;stroke-dasharray:none"
-     inkscape:export-xdpi="96"
-     inkscape:export-ydpi="96" />
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 23,1 1,23"
+     sodipodi:nodetypes="cc" />
 </svg>

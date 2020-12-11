@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_symbol_to_schematic.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -26,13 +26,14 @@
      inkscape:window-height="1413"
      id="namedview24"
      showgrid="true"
-     inkscape:zoom="19.771793"
-     inkscape:cx="16.421014"
-     inkscape:cy="30.860724"
+     inkscape:zoom="55.923076"
+     inkscape:cx="6.1684633"
+     inkscape:cy="10.138419"
      inkscape:window-x="1510"
      inkscape:window-y="217"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g880">
+     inkscape:current-layer="g893"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid882"
@@ -85,61 +86,63 @@
        id="g893">
       <path
          class="cls-2"
-         d="m 5.5263319,6.336774 h 1.90223 a 0.8178335,0.8178335 0 1 0 0,-1.6356666 h -1.90223 a 0.8178335,0.8178335 0 0 0 0,1.6356666 z"
+         d="m 4.5263319,5.336774 h 1.90223 a 0.8178335,0.8178335 0 1 0 0,-1.6356666 h -1.90223 a 0.8178335,0.8178335 0 0 0 0,1.6356666 z"
          id="path13-3"
          style="fill:#545454;stroke-width:1" />
       <path
          class="cls-2"
-         d="M 7.4618579,9.330977 V 9.060925 a 0.81783365,0.81783365 0 1 0 -1.6356671,0 V 9.330977 H 5.5570355 a 0.817734,0.817734 0 0 0 0,1.635468 H 5.8261908 V 11.2356 a 0.81783365,0.81783365 0 1 0 1.6356671,0 v -0.269155 h 0.269155 a 0.817734,0.817734 0 1 0 0,-1.635468 z"
+         d="M 6.4618579,8.330977 V 8.060925 a 0.81783365,0.81783365 0 1 0 -1.6356671,0 V 8.330977 H 4.5570355 a 0.817734,0.817734 0 0 0 0,1.635468 H 4.8261908 V 10.2356 a 0.81783365,0.81783365 0 1 0 1.6356671,0 V 9.966445 h 0.269155 a 0.817734,0.817734 0 1 0 0,-1.635468 z"
          id="path15-6"
          style="fill:#545454;stroke-width:1" />
       <path
          style="fill:#b9b9b9;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 2.3855261,-3.4330418 V 17.195529 L 17.856956,6.881244 Z"
+         d="M 1.3855261,-4.4330418 V 16.195529 L 16.856956,5.881244 Z"
          id="path2231"
          sodipodi:nodetypes="cccc" />
       <path
          style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 4.0140976,1.9955298 H 6.9674961"
-         id="path2229" />
+         d="m 3.385526,1.381244 h 3"
+         id="path2229"
+         sodipodi:nodetypes="cc" />
       <path
          style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 18.128384,6.881244 h 3.257142"
+         d="m 17.128384,5.881244 h 3.257142"
          id="path2233"
          sodipodi:nodetypes="cc" />
       <path
          style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -1.6859021,0.90981176 4.0714282,3.7e-6"
+         d="m -2.614474,-0.118756 4,3.7e-6"
          id="path2235"
          sodipodi:nodetypes="cc" />
       <path
          style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M -1.6859021,12.309816 H 2.3855261"
+         d="M -2.614474,11.881244 H 1.3858148"
          id="path2237"
          sodipodi:nodetypes="cc" />
       <path
          style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 4.0140976,11.224101 H 6.9674961"
+         d="M 3.4321275,9.881244 H 6.385526"
          id="path2301" />
       <path
          style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 5.4907965,12.7008 V 9.747402"
+         d="M 4.9088264,11.357943 V 8.404545"
          id="path2303" />
     </g>
   </g>
   <path
      class="cls-3"
-     d="M25.0065,18A7.0065,7.0065,0,1,1,18,11,7.0032,7.0032,0,0,1,25.0065,18Z"
+     d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
      id="path17" />
   <line
      class="cls-4"
-     x1="18.1038"
-     y1="14.6312"
-     x2="18.1038"
-     y2="21.6312"
+     x1="17.1038"
+     y1="13.6312"
+     x2="17.1038"
+     y2="20.631201"
      id="line19" />
   <polyline
      class="cls-4"
      points="15.349 17.164 18.104 14.412 20.859 17.164"
-     id="polyline21" />
+     id="polyline21"
+     transform="translate(-1,-1)" />
 </svg>

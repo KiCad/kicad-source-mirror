@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="lib_previous.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -27,10 +27,10 @@
      id="namedview42"
      showgrid="true"
      inkscape:zoom="19.771793"
-     inkscape:cx="9.5512171"
-     inkscape:cy="14.00407"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:cx="10.7486"
+     inkscape:cy="16.049319"
+     inkscape:window-x="90"
+     inkscape:window-y="751"
      inkscape:window-maximized="0"
      inkscape:current-layer="g1009"
      inkscape:document-rotation="0">
@@ -82,7 +82,8 @@
   <g
      id="g865">
     <g
-       id="g933">
+       id="g933"
+       transform="translate(-1,-1)">
       <g
          id="g853">
         <rect
@@ -153,7 +154,7 @@
     </g>
     <g
        id="g957"
-       transform="translate(6)">
+       transform="translate(5,-1)">
       <g
          id="g945">
         <rect
@@ -229,7 +230,7 @@
          id="g994"
          inkscape:transform-center-x="0.63442536"
          inkscape:transform-center-y="-10.226851"
-         transform="rotate(-17.467171,2.5047981,19.73537)">
+         transform="rotate(-17.467171,-1.2499555,22.490124)">
         <g
            id="g969">
           <rect
@@ -304,15 +305,15 @@
          style="stroke-width:1.00092">
         <path
            class="cls-5"
-           d="m 9.0455,18.724 a 7.0065,7.0065 0 1 1 -7.0065,-7 7.0032,7.0032 0 0 1 7.0065,7 z"
+           d="M 7.0436428,16.722142 A 7.0065,7.0065 0 1 1 0.03714283,9.7221424 7.0032,7.0032 0 0 1 7.0436428,16.722142 Z"
            id="path41"
            style="fill:#e61c50;stroke-width:1.00092" />
         <line
            class="cls-6"
-           x1="-1.2470428"
-           y1="18.745499"
-           x2="5.7529588"
-           y2="18.745499"
+           x1="-3.2488999"
+           y1="16.743641"
+           x2="3.7511017"
+           y2="16.743641"
            id="line43"
            style="fill:none;stroke:#f5f5f5;stroke-width:2.00186px;stroke-linecap:round;stroke-linejoin:round" />
         <polyline
@@ -320,7 +321,7 @@
            points="18.961 15.266 21.714 18.022 18.961 20.776"
            id="polyline45"
            style="fill:none;stroke:#f5f5f5;stroke-width:2.00186px;stroke-linecap:round;stroke-linejoin:round"
-           transform="matrix(-1,0,0,1,20.247058,0.724)" />
+           transform="matrix(-1,0,0,1,18.2452,-1.2778573)" />
       </g>
     </g>
   </g>

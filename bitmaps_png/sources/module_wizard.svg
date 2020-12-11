@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="module.svg"
+   sodipodi:docname="module_wizard.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -27,7 +27,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="45.254834"
-     inkscape:cx="20.779733"
+     inkscape:cx="14.802471"
      inkscape:cy="22.341449"
      inkscape:window-x="1077"
      inkscape:window-y="173"
@@ -76,62 +76,62 @@
      id="title7">module_editor</title>
   <polygon
      class="cls-1"
-     points="21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 "
+     points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 "
      id="polygon9"
-     transform="matrix(1.1338986,0,0,1.1442747,0.08337226,-0.1958747)"
+     transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)"
      style="stroke-width:0.877906" />
   <rect
      class="cls-2"
-     x="3.9605565"
-     y="1.0043"
+     x="2.9605565"
+     y="0.0042999983"
      width="5.0280428"
      height="6.9999995"
      id="rect19"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="10.960556"
-     y="1.0043"
+     x="9.960556"
+     y="0.0042999983"
      width="5.0280428"
      height="6.9999995"
      id="rect875"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="17.960556"
-     y="1.0043"
+     x="16.960556"
+     y="0.0042999983"
      width="5.0280428"
      height="6.9999995"
      id="rect877"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="3.9605565"
-     y="18.004299"
+     x="2.9605565"
+     y="17.004299"
      width="5.0280428"
      height="6.9999995"
      id="rect879"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="10.960556"
-     y="18.004299"
+     x="9.960556"
+     y="17.004299"
      width="5.0280428"
      height="6.9999995"
      id="rect881"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="17.960556"
-     y="18.004299"
+     x="16.960556"
+     y="17.004299"
      width="5.0280428"
      height="6.9999995"
      id="rect883"
      style="stroke-width:1" />
   <polygon
      class="cls-3"
-     points="17.667,22.578 13.13,24.963 13.997,19.912 10.327,16.335 15.399,15.598 17.667,11.002 19.935,15.598 25.007,16.335 21.337,19.912 22.203,24.963 "
+     points="19.935,15.598 25.007,16.335 21.337,19.912 22.203,24.963 17.667,22.578 13.13,24.963 13.997,19.912 10.327,16.335 15.399,15.598 17.667,11.002 "
      id="polygon23"
      style="fill:#e61c50"
-     transform="translate(0.673,0.665)" />
+     transform="translate(-1.327,-1.0256406)" />
 </svg>

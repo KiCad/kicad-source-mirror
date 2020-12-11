@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="module.svg"
+   sodipodi:docname="module_pin_filtered_list.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -26,9 +26,9 @@
      inkscape:window-height="1803"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="45.254834"
-     inkscape:cx="20.779733"
-     inkscape:cy="22.341449"
+     inkscape:zoom="16"
+     inkscape:cx="3.2424173"
+     inkscape:cy="38.533212"
      inkscape:window-x="1077"
      inkscape:window-y="173"
      inkscape:window-maximized="0"
@@ -76,74 +76,74 @@
      id="title7">module_editor</title>
   <polygon
      class="cls-1"
-     points="21.516,18.922 21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 "
+     points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 "
      id="polygon9"
-     transform="matrix(1.1338986,0,0,1.1442747,0.08337226,-0.1958747)"
+     transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)"
      style="stroke-width:0.877906" />
   <rect
      class="cls-2"
-     x="3.9605565"
-     y="1.0043"
+     x="2.9605565"
+     y="0.0042999983"
      width="5.0280428"
      height="6.9999995"
      id="rect19"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="10.960556"
-     y="1.0043"
+     x="9.960556"
+     y="0.0042999983"
      width="5.0280428"
      height="6.9999995"
      id="rect875"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="17.960556"
-     y="1.0043"
+     x="16.960556"
+     y="0.0042999983"
      width="5.0280428"
      height="6.9999995"
      id="rect877"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="3.9605565"
-     y="18.004299"
+     x="2.9605565"
+     y="17.004299"
      width="5.0280428"
      height="6.9999995"
      id="rect879"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="10.960556"
-     y="18.004299"
+     x="9.960556"
+     y="17.004299"
      width="5.0280428"
      height="6.9999995"
      id="rect881"
      style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="17.960556"
-     y="18.004299"
+     x="16.960556"
+     y="17.004299"
      width="5.0280428"
      height="6.9999995"
      id="rect883"
      style="stroke-width:1" />
   <circle
      class="cls-3"
-     cx="19"
-     cy="19"
+     cx="17"
+     cy="17"
      id="ellipse22"
      style="fill:#e61c50;stroke-width:0.999999"
      r="7" />
   <text
      xml:space="preserve"
      style="font-size:12px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
-     x="14.752274"
-     y="23.449924"
+     x="13.189774"
+     y="21.449924"
      id="text1218"><tspan
        sodipodi:role="line"
        id="tspan1216"
-       x="14.752274"
-       y="23.449924"
+       x="13.189774"
+       y="21.449924"
        style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#ffffff;fill-opacity:1">#</tspan></text>
 </svg>

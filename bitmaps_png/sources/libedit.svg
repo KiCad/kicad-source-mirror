@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="libedit.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -26,13 +26,14 @@
      inkscape:window-height="1561"
      id="namedview18"
      showgrid="true"
-     inkscape:zoom="6.9903846"
-     inkscape:cx="35.470723"
-     inkscape:cy="43.672936"
+     inkscape:zoom="39.543587"
+     inkscape:cx="8.1738802"
+     inkscape:cy="13.38599"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid843"
@@ -80,44 +81,44 @@
      id="title7">libedit</title>
   <path
      class="cls-2"
-     d="m 9.1408058,12.45553 h 1.9022302 a 0.8178335,0.8178335 0 1 0 0,-1.635667 H 9.1408058 a 0.8178335,0.8178335 0 0 0 0,1.635667 z"
+     d="m 8.1408058,11.45553 h 1.9022302 a 0.8178335,0.8178335 0 1 0 0,-1.635667 H 8.1408058 a 0.8178335,0.8178335 0 0 0 0,1.635667 z"
      id="path13"
      style="stroke-width:1" />
   <path
      class="cls-2"
-     d="m 11.076332,15.449733 v -0.270052 a 0.81783365,0.81783365 0 1 0 -1.6356673,0 v 0.270052 H 9.1715094 a 0.817734,0.817734 0 0 0 0,1.635468 h 0.2691553 v 0.269155 a 0.81783365,0.81783365 0 1 0 1.6356673,0 v -0.269155 h 0.269155 a 0.817734,0.817734 0 1 0 0,-1.635468 z"
+     d="m 10.076332,14.449733 v -0.270052 a 0.81783365,0.81783365 0 1 0 -1.6356673,0 v 0.270052 H 8.1715094 a 0.817734,0.817734 0 0 0 0,1.635468 h 0.2691553 v 0.269155 a 0.81783365,0.81783365 0 1 0 1.6356673,0 v -0.269155 h 0.269155 a 0.817734,0.817734 0 1 0 0,-1.635468 z"
      id="path15"
      style="stroke-width:1" />
   <path
      style="fill:#e5d7c7;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 6,2.6857138 V 23.314285 L 21.47143,13 Z"
+     d="M 5,1.6857138 V 22.314285 L 20.47143,12 Z"
      id="path2231"
      sodipodi:nodetypes="cccc" />
   <path
      style="fill:none;stroke:#db295b;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 7.6285715,8.1142854 H 10.58197"
+     d="M 7.0466015,7.5 H 10"
      id="path2229" />
   <path
      style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 21.742858,13 H 25"
+     d="M 20.742858,12 H 23"
      id="path2233"
      sodipodi:nodetypes="cc" />
   <path
      style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 1.9285718,7.0285674 6,7.0285711"
+     d="m 1,6 4,3.7e-6"
      id="path2235"
      sodipodi:nodetypes="cc" />
   <path
      style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 1.9285718,18.428572 H 6"
+     d="M 0.98821157,18 H 5.0116474"
      id="path2237"
      sodipodi:nodetypes="cc" />
   <path
      style="fill:none;stroke:#db295b;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 7.6285715,17.342857 H 10.58197"
+     d="M 7.0233011,16.476699 H 9.9766996"
      id="path2301" />
   <path
      style="fill:none;stroke:#db295b;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 9.1052704,18.819556 V 15.866158"
+     d="M 8.5,17.953398 V 15"
      id="path2303" />
 </svg>

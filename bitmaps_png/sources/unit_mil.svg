@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="unit_mils.svg"
+   sodipodi:docname="unit_mil.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -27,12 +27,13 @@
      id="namedview22"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="12.896403"
-     inkscape:cy="13.297716"
+     inkscape:cx="12.758468"
+     inkscape:cy="12.763801"
      inkscape:window-x="1476"
      inkscape:window-y="293"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid851" />
@@ -174,20 +175,20 @@
   <text
      xml:space="preserve"
      style="font-size:11.8667px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;opacity:1"
-     x="13.01238"
-     y="13.963709"
+     x="11.797802"
+     y="12.963709"
      id="text849"><tspan
        sodipodi:role="line"
        id="tspan847"
-       x="13.01238"
-       y="13.963709"
+       x="11.797802"
+       y="12.963709"
        style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:11.8667px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';text-align:center;text-anchor:middle;fill:#545454;fill-opacity:1">mil</tspan></text>
   <line
      class="cls-1"
-     x1="21.4521"
-     y1="17.8393"
-     x2="4.5479"
-     y2="17.8393"
+     x1="20.452101"
+     y1="16.8393"
+     x2="3.5479002"
+     y2="16.8393"
      id="line9"
      style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;marker-start:url(#Arrow2Sstart);marker-end:url(#Arrow2Send)" />
 </svg>

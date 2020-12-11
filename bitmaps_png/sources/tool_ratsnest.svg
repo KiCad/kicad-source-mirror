@@ -1,39 +1,105 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 26 26">
-  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0">
-    <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="tool_ratsnest.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="45.254834"
+     inkscape:cx="13.677957"
+     inkscape:cy="10.037197"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
   </sodipodi:namedview>
-  <metadata id="metadata43">
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}</style>
+  <defs
+     id="defs27361">
+    <style
+       id="style27359">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3{fill:#1a81c4;}</style>
   </defs>
-  <title>tool_ratsnest</title>
-  <rect class="cls-1" x="1" y="1" width="24" height="24" rx="4"/>
-  <path class="cls-2" d="M9.8809,9.499a.5.5,0,0,1-.1963-.96L24.05,2.4108s.23.297.3271.4435c.074.112.2247.4048.2247.4048a.5014.5014,0,0,1-.0524.0261L10.0771,9.459A.5008.5008,0,0,1,9.8809,9.499Z"/>
-  <path class="cls-2" d="M13.09,24.9992v-.0033L10.374,8.916a.5056.5056,0,0,0-.5761-.41.5.5,0,0,0-.41.5761l2.6882,15.9172Z"/>
-  <path class="cls-2" d="M10.0879,8.5439.9976,4.9557V6.0294L9.6738,9.4541a.4927.4927,0,0,0,.2071.0449.5.5,0,0,0,.207-.9551Z"/>
-  <path class="cls-3" d="M12.742,8.999A2.8088,2.8088,0,1,1,9.9332,6.19,2.8087,2.8087,0,0,1,12.742,8.999Z"/>
-  <circle class="cls-1" cx="9.9332" cy="8.999" r="2"/>
+  <title
+     id="title27363">tool_ratsnest</title>
+  <path
+     class="cls-2"
+     d="M 8.8809,8.499 C 8.3363794,8.4993715 8.1836408,7.7524074 8.6846,7.539 L 24,1 c 0,0.5 0,0.6003549 0,1.0671268 C 19.046834,4.2428719 14.053975,6.3358937 9.0771,8.459 c -0.06204,0.026405 -0.1287741,0.04001 -0.1962,0.04 z"
+     id="path27367"
+     sodipodi:nodetypes="cccccc" />
+  <path
+     class="cls-2"
+     d="M 12.09,23.9992 V 23.9959 L 9.374,7.916 a 0.5056,0.5056 0 0 0 -0.5761,-0.41 0.5,0.5 0 0 0 -0.41,0.5761 l 2.6882,15.9172 z"
+     id="path27369" />
+  <path
+     class="cls-2"
+     d="M 9.0879,7.5439 -0.0024,3.9557 V 5.0294 L 8.6738,8.4541 A 0.4927,0.4927 0 0 0 8.8809,8.499 0.5,0.5 0 0 0 9.0879,7.5439 Z"
+     id="path27371" />
+  <path
+     class="cls-3"
+     d="M 11.742,7.999 A 2.8088,2.8088 0 1 1 8.9332,5.19 2.8087,2.8087 0 0 1 11.742,7.999 Z"
+     id="path27373" />
+  <circle
+     class="cls-1"
+     cx="8.9331999"
+     cy="7.9989996"
+     r="2"
+     id="circle27375" />
 </svg>

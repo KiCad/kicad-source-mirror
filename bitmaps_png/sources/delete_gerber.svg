@@ -1,58 +1,231 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 26 26">
-  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0">
-    <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="delete_gerber.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="19.771793"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
   </sodipodi:namedview>
-  <metadata id="metadata43">
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#b9b9b9;}.cls-2{fill:#e8e8e8;}.cls-3{fill:#545454;}.cls-4{fill:#1a81c4;}.cls-5{fill:#e61c50;}.cls-6{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  <defs
+     id="defs881">
+    <style
+       id="style879">.cls-1{fill:#b9b9b9;}.cls-2{fill:#e8e8e8;}.cls-3{fill:#545454;}.cls-4{fill:#1a81c4;}.cls-5{fill:#e61c50;}.cls-6{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
   </defs>
-  <title>delete_gerber</title>
-  <path class="cls-1" d="M4.1476.9976H16.75a3.151,3.151,0,0,1,3.151,3.151v12.606a3.151,3.151,0,0,1-3.151,3.151H4.1477a3.151,3.151,0,0,1-3.151-3.151V4.1485A3.1509,3.1509,0,0,1,4.1476.9976Z"/>
-  <path class="cls-2" d="M5.1959,2.0458H17.798a3.151,3.151,0,0,1,3.151,3.151V17.8029a3.151,3.151,0,0,1-3.151,3.151H5.1958A3.1509,3.1509,0,0,1,2.0449,17.803V5.1968A3.151,3.151,0,0,1,5.1959,2.0458Z"/>
-  <rect class="cls-3" x="3.0948" y="3.096" width="18.9041" height="18.9081" rx="3.151"/>
-  <path class="cls-1" d="M10.1611,10.4194H6.7L3.0988,6.818l0-.5034s.0018-.3012.0133-.4008c.0121-.1048.0828-.414.0828-.414l3.92,3.92h3.0468Z"/>
-  <rect class="cls-1" x="9.7139" y="8.9181" width="3.2258" height="1.9354"/>
-  <rect class="cls-1" x="9.7139" y="13.1127" width="3.2258" height="1.9354"/>
-  <rect class="cls-1" x="9.7139" y="17.3072" width="3.2258" height="1.9355"/>
-  <rect class="cls-1" x="17.2359" y="18.3452" width="3.2258" height="1.9354"/>
-  <rect class="cls-1" x="17.2359" y="13.5107" width="3.2258" height="1.9354"/>
-  <rect class="cls-1" x="17.2359" y="8.6762" width="3.2258" height="1.9354"/>
-  <rect class="cls-1" x="17.2359" y="4.6375" width="3.2258" height="1.9354"/>
-  <path class="cls-1" d="M10.1611,6.2036H6.7L4.2808,3.7842s.3-.22.4078-.2818A3.3455,3.3455,0,0,1,5.1905,3.28L7.1143,5.2036h3.0468Z"/>
-  <rect class="cls-1" x="9.7139" y="4.7235" width="3.2258" height="1.9355"/>
-  <polygon class="cls-1" points="17.29 19.833 15.965 19.833 14.876 18.744 14.876 12.59 15.876 12.59 15.876 18.33 16.379 18.833 17.29 18.833 17.29 19.833"/>
-  <rect class="cls-1" x="14.876" y="3.0949" width="1" height="7.4632"/>
-  <rect class="cls-1" x="20.3652" y="14.0259" width="1.6344" height="1"/>
-  <polygon class="cls-1" points="6.361 22.006 5.923 22.006 5.361 21.869 5.361 19.832 7.44 17.752 9.757 17.752 9.757 18.752 7.854 18.752 6.361 20.246 6.361 22.006"/>
-  <rect class="cls-1" x="6.6855" y="13.563" width="3.0391" height="1"/>
-  <path class="cls-4" d="M16.9456,11.5744A1.5753,1.5753,0,1,1,15.37,9.9987,1.5754,1.5754,0,0,1,16.9456,11.5744Z"/>
-  <path class="cls-1" d="M16.492,11.5744a1.1217,1.1217,0,1,1-1.1216-1.122A1.1217,1.1217,0,0,1,16.492,11.5744Z"/>
-  <circle class="cls-4" cx="5.6697" cy="14.0627" r="1.5755"/>
-  <path class="cls-1" d="M6.7913,14.0627A1.1217,1.1217,0,1,1,5.67,12.9407,1.1217,1.1217,0,0,1,6.7913,14.0627Z"/>
-  <circle class="cls-5" cx="18" cy="17.9939" r="7"/>
-  <line class="cls-6" x1="20.4689" y1="15.5251" x2="15.5191" y2="20.4749"/>
-  <line class="cls-6" x1="20.4689" y1="20.4749" x2="15.5191" y2="15.5251"/>
+  <title
+     id="title883">delete_gerber</title>
+  <path
+     class="cls-1"
+     d="M 3.1476,-0.0024 H 15.75 a 3.151,3.151 0 0 1 3.151,3.151 v 12.606 a 3.151,3.151 0 0 1 -3.151,3.151 H 3.1477 a 3.151,3.151 0 0 1 -3.151,-3.151 V 3.1485 a 3.1509,3.1509 0 0 1 3.1509,-3.1509 z"
+     id="path885" />
+  <path
+     class="cls-2"
+     d="M 4.1959,1.0458 H 16.798 a 3.151,3.151 0 0 1 3.151,3.151 v 12.6061 a 3.151,3.151 0 0 1 -3.151,3.151 H 4.1958 A 3.1509,3.1509 0 0 1 1.0449,16.803 V 4.1968 a 3.151,3.151 0 0 1 3.151,-3.151 z"
+     id="path887" />
+  <rect
+     class="cls-3"
+     x="2.0948"
+     y="2.096"
+     width="18.9041"
+     height="18.9081"
+     rx="3.151"
+     id="rect889" />
+  <path
+     class="cls-1"
+     d="M 9.1611,9.4194 H 5.7 L 2.0988,5.818 V 5.3146 c 0,0 0.0018,-0.3012 0.0133,-0.4008 0.0121,-0.1048 0.0828,-0.414 0.0828,-0.414 l 3.92,3.92 h 3.0468 z"
+     id="path891" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="7.9181004"
+     width="3.2258"
+     height="1.9354"
+     id="rect893" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="12.1127"
+     width="3.2258"
+     height="1.9354"
+     id="rect895" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="16.307199"
+     width="3.2258"
+     height="1.9355"
+     id="rect897" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="17.3452"
+     width="3.2258"
+     height="1.9354"
+     id="rect899" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="12.5107"
+     width="3.2258"
+     height="1.9354"
+     id="rect901" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="7.6761999"
+     width="3.2258"
+     height="1.9354"
+     id="rect903" />
+  <rect
+     class="cls-1"
+     x="16.235901"
+     y="3.6374998"
+     width="3.2258"
+     height="1.9354"
+     id="rect905" />
+  <path
+     class="cls-1"
+     d="M 9.1611,5.2036 H 5.7 L 3.2808,2.7842 c 0,0 0.3,-0.22 0.4078,-0.2818 A 3.3455,3.3455 0 0 1 4.1905,2.28 l 1.9238,1.9236 h 3.0468 z"
+     id="path907" />
+  <rect
+     class="cls-1"
+     x="8.7138996"
+     y="3.7234998"
+     width="3.2258"
+     height="1.9355"
+     id="rect909" />
+  <polygon
+     class="cls-1"
+     points="15.965,19.833 14.876,18.744 14.876,12.59 15.876,12.59 15.876,18.33 16.379,18.833 17.29,18.833 17.29,19.833 "
+     id="polygon911"
+     transform="translate(-1,-1)" />
+  <rect
+     class="cls-1"
+     x="13.876"
+     y="2.0948999"
+     width="1"
+     height="7.4632001"
+     id="rect913" />
+  <rect
+     class="cls-1"
+     x="19.3652"
+     y="13.0259"
+     width="1.6344"
+     height="1"
+     id="rect915" />
+  <polygon
+     class="cls-1"
+     points="5.923,22.006 5.361,21.869 5.361,19.832 7.44,17.752 9.757,17.752 9.757,18.752 7.854,18.752 6.361,20.246 6.361,22.006 "
+     id="polygon917"
+     transform="translate(-1,-1)" />
+  <rect
+     class="cls-1"
+     x="5.6855001"
+     y="12.563"
+     width="3.0390999"
+     height="1"
+     id="rect919" />
+  <path
+     class="cls-4"
+     d="M 15.9456,10.5744 A 1.5753,1.5753 0 1 1 14.37,8.9987 a 1.5754,1.5754 0 0 1 1.5756,1.5757 z"
+     id="path921" />
+  <path
+     class="cls-1"
+     d="m 15.492,10.5744 a 1.1217,1.1217 0 1 1 -1.1216,-1.122 1.1217,1.1217 0 0 1 1.1216,1.122 z"
+     id="path923" />
+  <circle
+     class="cls-4"
+     cx="4.6697001"
+     cy="13.0627"
+     r="1.5755"
+     id="circle925" />
+  <path
+     class="cls-1"
+     d="M 5.7913,13.0627 A 1.1217,1.1217 0 1 1 4.67,11.9407 1.1217,1.1217 0 0 1 5.7913,13.0627 Z"
+     id="path927" />
+  <circle
+     class="cls-5"
+     cx="17"
+     cy="16.9939"
+     r="7"
+     id="circle929" />
+  <line
+     class="cls-6"
+     x1="19.468901"
+     y1="14.5251"
+     x2="14.5191"
+     y2="19.474899"
+     id="line931" />
+  <line
+     class="cls-6"
+     x1="19.468901"
+     y1="19.474899"
+     x2="14.5191"
+     y2="14.5251"
+     id="line933" />
 </svg>

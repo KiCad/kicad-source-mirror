@@ -1,41 +1,122 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 26 26">
-  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0">
-    <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="convert.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="12.618883"
+     inkscape:cy="11.603131"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
   </sodipodi:namedview>
-  <metadata id="metadata43">
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1,.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke-width:2px;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#1a81c4;}.cls-5{fill:#545454;}</style>
+  <defs
+     id="defs723">
+    <style
+       id="style721">.cls-1,.cls-4{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke-width:2px;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#1a81c4;}.cls-5{fill:#545454;}</style>
   </defs>
-  <title>convert</title>
-  <line class="cls-1" x1="4.0008" y1="7.0115" x2="22.0013" y2="4.0021"/>
-  <polygon class="cls-2" points="4 19.453 13 24.037 21.964 14.016 4 19.453"/>
-  <path class="cls-3" d="M13,25.0371a.99.99,0,0,1-.4541-.1094l-9-4.5839A1,1,0,0,1,3.71,18.4961l17.9638-5.4375a1,1,0,0,1,1.0352,1.624L13.7451,24.7041A.9976.9976,0,0,1,13,25.0371ZM6.6689,19.69l6.0987,3.1065,6.0752-6.792Z"/>
-  <path class="cls-3" d="M7.0008,7.0115a3,3,0,1,1-3-3A3,3,0,0,1,7.0008,7.0115Z"/>
-  <path class="cls-3" d="M25.0013,4.0021a3,3,0,1,1-3-3A3,3,0,0,1,25.0013,4.0021Z"/>
-  <path class="cls-3" d="M16,5.4971a3,3,0,1,1-3-3A3,3,0,0,1,16,5.4971Z"/>
-  <line class="cls-4" x1="13" y1="9.4899" x2="13" y2="16.3459"/>
-  <polygon class="cls-5" points="11.547 15.355 13 20.776 14.453 15.355 11.547 15.355"/>
+  <title
+     id="title725">convert</title>
+  <line
+     class="cls-1"
+     x1="3.0008001"
+     y1="6.0114999"
+     x2="21.001301"
+     y2="3.0021"
+     id="line727" />
+  <polygon
+     class="cls-2"
+     points="13,24.037 21.964,14.016 4,19.453 "
+     id="polygon729"
+     transform="translate(-1,-1)" />
+  <path
+     class="cls-3"
+     d="m 12,24.0371 a 0.99,0.99 0 0 1 -0.4541,-0.1094 l -9,-4.5839 A 1,1 0 0 1 2.71,17.4961 l 17.9638,-5.4375 a 1,1 0 0 1 1.0352,1.624 L 12.7451,23.7041 A 0.9976,0.9976 0 0 1 12,24.0371 Z M 5.6689,18.69 l 6.0987,3.1065 6.0752,-6.792 z"
+     id="path731" />
+  <path
+     class="cls-3"
+     d="m 6.0008,6.0115 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     id="path733" />
+  <path
+     class="cls-3"
+     d="m 24.0013,3.0021 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     id="path735" />
+  <path
+     class="cls-3"
+     d="m 15,4.4971 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     id="path737" />
+  <line
+     class="cls-4"
+     x1="12"
+     y1="8.4898996"
+     x2="12"
+     y2="15.3459"
+     id="line739" />
+  <polygon
+     class="cls-5"
+     points="13,20.776 14.453,15.355 11.547,15.355 "
+     id="polygon741"
+     transform="translate(-1,-1)" />
 </svg>

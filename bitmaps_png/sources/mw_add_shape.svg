@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="mw_add_shape.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -56,12 +56,13 @@
      id="namedview13"
      showgrid="false"
      inkscape:zoom="27.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
+     inkscape:cx="10.094152"
+     inkscape:cy="12.992888"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0" />
   <defs
      id="defs4">
     <style
@@ -71,10 +72,11 @@
      id="title6">mw_add_shape</title>
   <path
      class="cls-1"
-     d="M24.9466,22.4473l-5.42-1.4526v.9526H2.9922L3.006,7.4207l.9527.0009L2.5114,2,1.0534,7.4187l.9525.0009L1.9912,22.4464a.5.5,0,0,0,.5.5009h17.035V23.9Z"
+     d="m 23.9466,21.4473 -5.42,-1.4526 v 0.9526 H 1.9922 L 2.006,6.4207 2.9587,6.4216 1.5114,1 0.0534,6.4187 1.0059,6.4196 0.9912,21.4464 a 0.5,0.5 0 0 0 0.5,0.5009 h 17.035 V 22.9 Z"
      id="path8" />
   <polygon
      class="cls-2"
-     points="12.97 19.961 5.97 9.951 14.973 3.948 19.995 7.045 12.97 19.961"
-     id="polygon10" />
+     points="5.97,9.951 14.973,3.948 19.995,7.045 12.97,19.961 "
+     id="polygon10"
+     transform="translate(-1,-1)" />
 </svg>

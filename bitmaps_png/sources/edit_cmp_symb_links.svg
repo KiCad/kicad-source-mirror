@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="edit_cmp_symb_links.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -26,13 +26,14 @@
      inkscape:window-height="984"
      id="namedview24"
      showgrid="true"
-     inkscape:zoom="9.8858967"
-     inkscape:cx="-9.5601062"
-     inkscape:cy="14.289531"
+     inkscape:zoom="19.771793"
+     inkscape:cx="12.140122"
+     inkscape:cy="11.453803"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="g893"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid873"
@@ -80,7 +81,7 @@
      id="title7">edit_cmp_symb_links</title>
   <g
      id="g893"
-     transform="translate(2.8752681,6.331526)">
+     transform="translate(1.8752681,5.331526)">
     <path
        class="cls-2"
        d="m 5.5263319,6.336774 h 1.90223 a 0.8178335,0.8178335 0 1 0 0,-1.6356666 h -1.90223 a 0.8178335,0.8178335 0 0 0 0,1.6356666 z"
@@ -98,7 +99,7 @@
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 4.0140976,1.9955298 H 6.9674961"
+       d="M 4.1247319,2.168474 H 7.0781304"
        id="path2229" />
     <path
        style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -107,33 +108,34 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m -1.6859021,0.90981176 4.0714282,3.7e-6"
+       d="m -0.8752681,0.668474 h 3"
        id="path2235"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M -1.6859021,12.309816 H 2.3855261"
+       d="M -0.8752681,12.668474 H 1.883796"
        id="path2237"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 4.0140976,11.224101 H 6.9674961"
+       d="M 4.148033,11.145173 H 7.1014315"
        id="path2301" />
     <path
        style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 5.4907965,12.7008 V 9.747402"
+       d="M 5.6247319,12.621872 V 9.668474"
        id="path2303" />
   </g>
   <path
      class="cls-3"
-     d="M25.0026,18a7.0065,7.0065,0,1,1-7.0066-7A7.0032,7.0032,0,0,1,25.0026,18Z"
+     d="m 24.0026,17 a 7.0065,7.0065 0 1 1 -7.0066,-7 7.0032,7.0032 0 0 1 7.0066,7 z"
      id="path17" />
   <path
      class="cls-4"
-     d="M22.2344,14.4566l-.5127-.5127a.8176.8176,0,0,0-1.1561,0l-5.3335,5.3337,1.6688,1.6689,5.3335-5.3338A.8176.8176,0,0,0,22.2344,14.4566Z"
+     d="m 21.2344,13.4566 -0.5127,-0.5127 a 0.8176,0.8176 0 0 0 -1.1561,0 l -5.3335,5.3337 1.6688,1.6689 5.3335,-5.3338 a 0.8176,0.8176 0 0 0 0,-1.1561 z"
      id="path19" />
   <polygon
      class="cls-4"
-     points="14.58 19.929 14.174 21.983 16.249 21.598 15.433 20.789 14.58 19.929"
-     id="polygon21" />
+     points="14.174,21.983 16.249,21.598 15.433,20.789 14.58,19.929 "
+     id="polygon21"
+     transform="translate(-1,-1)" />
 </svg>

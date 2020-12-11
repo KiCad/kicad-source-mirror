@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="net_highlight.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
@@ -30,12 +30,13 @@
      id="namedview34"
      showgrid="true"
      inkscape:zoom="55.923077"
-     inkscape:cx="6.35622"
-     inkscape:cy="14.307059"
+     inkscape:cx="8.6452944"
+     inkscape:cy="11.629465"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid1566" />
@@ -111,34 +112,34 @@
   <path
      id="polyline19"
      style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 24,2 17,9 H 12"
+     d="M 23,1 16,8 H 11"
      sodipodi:nodetypes="ccc" />
   <path
      id="polyline21"
      style="fill:none;stroke:#e61c50;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="m 7,11 -5,5 v 8 -8 z"
+     d="m 6,10 -5,5 v 8 -8 z"
      sodipodi:nodetypes="ccccc" />
   <path
      class="cls-3"
-     d="M13.6221,9.4516a3.786,3.786,0,1,1-3.786-3.7859A3.7859,3.7859,0,0,1,13.6221,9.4516Z"
+     d="m 12.6221,8.4516 a 3.786,3.786 0 1 1 -3.786,-3.7859 3.7859,3.7859 0 0 1 3.786,3.7859 z"
      id="path23" />
   <path
      class="cls-4"
-     d="m 13.3361,9.4517 a 3.5000001,3.5 0 1 1 -3.4999983,-3.5 3.5006164,3.5006163 0 0 1 3.4999983,3.5 z"
+     d="m 12.3361,8.4517 a 3.5000001,3.5 0 1 1 -3.4999983,-3.5 3.5006164,3.5006163 0 0 1 3.4999983,3.5 z"
      id="path25"
      style="stroke-width:1" />
   <path
      class="cls-3"
-     d="M12.0446,9.4516A2.2085,2.2085,0,1,1,9.8361,7.2431,2.2085,2.2085,0,0,1,12.0446,9.4516Z"
+     d="M 11.0446,8.4516 A 2.2085,2.2085 0 1 1 8.8361,6.2431 2.2085,2.2085 0 0 1 11.0446,8.4516 Z"
      id="path27" />
   <path
      id="polyline29"
      style="fill:none;stroke:#a6a6a6;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="M 2.4749242,2.007 12,2 17,7 v 17"
+     d="M 1.4749242,1.007 11,1 16,6 v 17"
      sodipodi:nodetypes="cccc" />
   <path
      id="polyline31"
      style="fill:none;stroke:#cccccc;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
-     d="m 8,24 v -5 l 4,-4 h 6 l 6,-6"
+     d="m 7,23 v -5 l 4,-4 h 6 l 6,-6"
      sodipodi:nodetypes="ccccc" />
 </svg>

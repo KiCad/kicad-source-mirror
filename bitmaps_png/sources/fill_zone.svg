@@ -1,48 +1,159 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 26 26">
-  <metadata id="metadata43">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="fill_zone.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1842"
+     inkscape:window-height="1064"
+     id="namedview117310"
+     showgrid="true"
+     inkscape:zoom="30.291667"
+     inkscape:cx="9.9524124"
+     inkscape:cy="12.914842"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid240612"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#ababff"
+       opacity="0.1254902"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#595959;}.cls-2{fill:#666;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#f29100;}.cls-6,.cls-9{fill:#b9b9b9;}.cls-7{fill:#545454;}.cls-8{fill:#1a81c4;opacity:0.8;}.cls-10,.cls-9{stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-10{fill:none;}.cls-11{fill:#e61c50;}</style>
-    <linearGradient id="Безымянный_градиент_19" x1="14.5755" y1="20.0557" x2="14.5755" y2="18.0694" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#ececec"/>
-      <stop offset="1" stop-color="#c6c6c5"/>
+  <defs
+     id="defs117277">
+    <style
+       id="style117269">.cls-1{fill:#595959;}.cls-2{fill:#666;}.cls-3{fill:url(#Безымянный_градиент_19);}.cls-4{fill:url(#Безымянный_градиент_19-2);}.cls-5{fill:#f29100;}.cls-6,.cls-9{fill:#b9b9b9;}.cls-7{fill:#545454;}.cls-8{fill:#1a81c4;opacity:0.8;}.cls-10,.cls-9{stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75px;}.cls-10{fill:none;}.cls-11{fill:#e61c50;}</style>
+    <linearGradient
+       id="Безымянный_градиент_19"
+       x1="14.5755"
+       y1="20.0557"
+       x2="14.5755"
+       y2="18.0694"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0"
+         stop-color="#ececec"
+         id="stop117271" />
+      <stop
+         offset="1"
+         stop-color="#c6c6c5"
+         id="stop117273" />
     </linearGradient>
-    <linearGradient id="Безымянный_градиент_19-2" x1="15.5084" y1="20.0557" x2="15.5084" y2="18.0694" xlink:href="#Безымянный_градиент_19"/>
+    <linearGradient
+       id="Безымянный_градиент_19-2"
+       x1="15.5084"
+       y1="20.0557"
+       x2="15.5084"
+       y2="18.0694"
+       xlink:href="#Безымянный_градиент_19"
+       gradientTransform="translate(-1,-1)" />
   </defs>
-  <title>fill_zone</title>
-  <path class="cls-1" d="M15.0273,17.428a.6662.6662,0,0,1-.6666-.6667V14.1038a.6649.6649,0,0,1,.2-.4765l1.0325-1.0092a.6677.6677,0,0,1,.4662-.19h2.1114a.6667.6667,0,0,1,0,1.3334h-1.84l-.6374.623v2.3769A.6662.6662,0,0,1,15.0273,17.428Z"/>
-  <path class="cls-2" d="M21.558,22.2158a.6646.6646,0,0,1-.4714-.1953l-.9466-.9459a.6662.6662,0,0,1-.1953-.4714V15.5348a.6667.6667,0,1,1,1.3333,0v4.7924l.7514.7506a.6667.6667,0,0,1-.4714,1.138Z"/>
-  <rect class="cls-3" x="14.2422" y="18.0694" width="0.6667" height="1.9863"/>
-  <rect class="cls-4" x="15.1751" y="18.0694" width="0.6667" height="1.9863"/>
-  <circle class="cls-5" cx="20.6116" cy="13.0948" r="2.4402"/>
-  <path class="cls-6" d="M21.6962,13.0948A1.0846,1.0846,0,1,1,20.6116,12.01,1.0846,1.0846,0,0,1,21.6962,13.0948Z"/>
-  <path class="cls-7" d="M14.1782,15.4365H15.85a.4975.4975,0,0,1,.4975.4975v1.6718a.4974.4974,0,0,1-.4974.4974H14.1781a.4974.4974,0,0,1-.4974-.4974V15.934A.4975.4975,0,0,1,14.1782,15.4365Z"/>
-  <path class="cls-8" d="M22.3333,9H11.6666A2.6667,2.6667,0,0,0,9,11.6666V22.3333A2.6667,2.6667,0,0,0,11.6666,25H22.3333A2.6667,2.6667,0,0,0,25,22.3333V11.6666A2.6667,2.6667,0,0,0,22.3333,9Zm-8.231,14.1385A2.241,2.241,0,0,1,13.006,22.07h1.0963Zm1.8555-.0173-.0076.0132V22.07h1.07A2.2444,2.2444,0,0,1,15.9578,23.1211Zm4.6538-6.693a3.322,3.322,0,0,1-3.1637-2.3334h-.98l-.44.43v.6146a.82.82,0,0,1,.6537.7949v1.6719a.82.82,0,0,1-.6537.7949v.7372a2.247,2.247,0,0,1,1.0256,1.0843H12.9757a2.2448,2.2448,0,0,1,1.0516-1.0987V18.406a.82.82,0,0,1-.68-.8V15.9339a.82.82,0,0,1,.68-.8v-1.03a1.0053,1.0053,0,0,1,.3015-.7155L15.3607,12.38a.9953.9953,0,0,1,.6992-.2851h1.388a3.3266,3.3266,0,1,1,3.1637,4.3334Z"/>
-  <path class="cls-7" d="M14.1781,19.9153H15.85a.4974.4974,0,0,1,.4974.4974v1.6718a.4975.4975,0,0,1-.4975.4975H14.1782a.4975.4975,0,0,1-.4975-.4975V20.4127A.4974.4974,0,0,1,14.1781,19.9153Z"/>
-  <path class="cls-9" d="M3.4239,4.1163h9.7425a0,0,0,0,1,0,0v10.073a1.3569,1.3569,0,0,1-1.3569,1.3569H4.7808a1.3569,1.3569,0,0,1-1.3569-1.3569V4.1163a0,0,0,0,1,0,0Z" transform="translate(9.3815 -2.986) rotate(45.0005)"/>
-  <path class="cls-10" d="M10.7153,9.5274a1.4964,1.4964,0,1,1,0-2.1162A1.4963,1.4963,0,0,1,10.7153,9.5274Z"/>
-  <line class="cls-10" x1="8.5991" y1="7.4112" x2="2.5657" y2="1.3778"/>
-  <path class="cls-11" d="M13.843,12.9963c0-1.1507,2.0834-4.1454,2.0834-4.1454S18.01,11.8456,18.01,12.9963a2.0834,2.0834,0,0,1-4.1668,0Z"/>
-  <path class="cls-11" d="M11.9806,4.9071a5.2234,5.2234,0,0,1,4.21,4.2267l.07.3114L15.9176,8.86Z"/>
+  <title
+     id="title117279">fill_zone</title>
+  <path
+     class="cls-1"
+     d="m 14.0273,16.428 a 0.6662,0.6662 0 0 1 -0.6666,-0.6667 v -2.6575 a 0.6649,0.6649 0 0 1 0.2,-0.4765 l 1.0325,-1.0092 a 0.6677,0.6677 0 0 1 0.4662,-0.19 h 2.1114 a 0.6667,0.6667 0 0 1 0,1.3334 h -1.84 l -0.6374,0.623 v 2.3769 a 0.6662,0.6662 0 0 1 -0.6661,0.6666 z"
+     id="path117281" />
+  <path
+     class="cls-2"
+     d="M 20.558,21.2158 A 0.6646,0.6646 0 0 1 20.0866,21.0205 L 19.14,20.0746 a 0.6662,0.6662 0 0 1 -0.1953,-0.4714 v -5.0684 a 0.6667,0.6667 0 1 1 1.3333,0 v 4.7924 l 0.7514,0.7506 a 0.6667,0.6667 0 0 1 -0.4714,1.138 z"
+     id="path117283" />
+  <circle
+     class="cls-5"
+     cx="19.611601"
+     cy="12.0948"
+     r="2.4402001"
+     id="circle117289" />
+  <path
+     class="cls-6"
+     d="M 20.6962,12.0948 A 1.0846,1.0846 0 1 1 19.6116,11.01 1.0846,1.0846 0 0 1 20.6962,12.0948 Z"
+     id="path117291" />
+  <path
+     class="cls-7"
+     d="M 13.1782,14.4365 H 14.85 a 0.4975,0.4975 0 0 1 0.4975,0.4975 v 1.6718 a 0.4974,0.4974 0 0 1 -0.4974,0.4974 h -1.672 A 0.4974,0.4974 0 0 1 12.6807,16.6058 V 14.934 a 0.4975,0.4975 0 0 1 0.4975,-0.4975 z"
+     id="path117293" />
+  <path
+     class="cls-8"
+     d="M 21.3333,8 H 10.6666 A 2.6667,2.6667 0 0 0 8,10.6666 V 21.3333 A 2.6667,2.6667 0 0 0 10.6666,24 H 21.3333 A 2.6667,2.6667 0 0 0 24,21.3333 V 10.6666 A 2.6667,2.6667 0 0 0 21.3333,8 Z m -8.231,14.1385 A 2.241,2.241 0 0 1 12.006,21.07 h 1.0963 z m 1.8555,-0.0173 -0.0076,0.0132 V 21.07 h 1.07 a 2.2444,2.2444 0 0 1 -1.0624,1.0511 z m 4.6538,-6.693 a 3.322,3.322 0 0 1 -3.1637,-2.3334 h -0.98 l -0.44,0.43 v 0.6146 a 0.82,0.82 0 0 1 0.6537,0.7949 v 1.6719 a 0.82,0.82 0 0 1 -0.6537,0.7949 v 0.7372 a 2.247,2.247 0 0 1 1.0256,1.0843 h -4.0778 a 2.2448,2.2448 0 0 1 1.0516,-1.0987 V 17.406 a 0.82,0.82 0 0 1 -0.68,-0.8 v -1.6721 a 0.82,0.82 0 0 1 0.68,-0.8 v -1.03 a 1.0053,1.0053 0 0 1 0.3015,-0.7155 L 14.3607,11.38 a 0.9953,0.9953 0 0 1 0.6992,-0.2851 h 1.388 a 3.3266,3.3266 0 1 1 3.1637,4.3334 z"
+     id="path117295" />
+  <path
+     class="cls-7"
+     d="M 13.1781,18.9153 H 14.85 a 0.4974,0.4974 0 0 1 0.4974,0.4974 v 1.6718 a 0.4975,0.4975 0 0 1 -0.4975,0.4975 h -1.6717 a 0.4975,0.4975 0 0 1 -0.4975,-0.4975 v -1.6718 a 0.4974,0.4974 0 0 1 0.4974,-0.4974 z"
+     id="path117297" />
+  <path
+     class="cls-9"
+     d="M 7.8918527,1.3457223 14.78078,8.2347702 7.6580317,15.357395 a 1.3569,1.3569 0 0 1 -1.9189464,-1.7e-5 L 0.76908723,10.387293 a 1.3569,1.3569 0 0 1 1.674e-5,-1.9189463 z"
+     id="path117299" />
+  <path
+     class="cls-10"
+     d="m 9.7153,8.5274 a 1.4964,1.4964 0 1 1 0,-2.1162 1.4963,1.4963 0 0 1 0,2.1162 z"
+     id="path117301" />
+  <line
+     class="cls-10"
+     x1="7.5991001"
+     y1="6.4112"
+     x2="1.5657001"
+     y2="0.37779999"
+     id="line117303" />
+  <path
+     class="cls-11"
+     d="m 12.843,11.9963 c 0,-1.1507 2.0834,-4.1454 2.0834,-4.1454 0,0 2.0836,2.9947 2.0836,4.1454 a 2.0834,2.0834 0 0 1 -4.1668,0 z"
+     id="path117305" />
+  <path
+     class="cls-11"
+     d="m 10.9806,3.9071 a 5.2234,5.2234 0 0 1 4.21,4.2267 l 0.07,0.3114 -0.343,-0.5852 z"
+     id="path117307" />
 </svg>

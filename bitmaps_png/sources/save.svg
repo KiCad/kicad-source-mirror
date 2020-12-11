@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="save.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -39,7 +39,7 @@
      id="namedview27"
      showgrid="true"
      inkscape:zoom="32"
-     inkscape:cx="26.196385"
+     inkscape:cx="17.74326"
      inkscape:cy="11.455139"
      inkscape:window-x="504"
      inkscape:window-y="376"
@@ -65,12 +65,12 @@
   <path
      id="polygon10"
      style="fill:#1a81c4;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 23.5,8 v 15.5 h -21 l 2e-7,-20.9999999 L 18,2.5 Z"
+     d="m 22.5,7 v 15.5 h -21 l 2e-7,-20.9999999 L 17,1.5 Z"
      sodipodi:nodetypes="cccccc" />
   <rect
      class="cls-3"
-     x="7"
-     y="3"
+     x="6"
+     y="2"
      width="7"
      height="6"
      id="rect12"
@@ -78,21 +78,21 @@
   <path
      id="line16"
      style="fill:none;stroke:#1a81c4;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round"
-     d="m 10.5,2.5 v 4"
+     d="m 9.5,1.5 v 4"
      sodipodi:nodetypes="cc" />
   <rect
      style="fill:#b9b9b9;stroke:none;stroke-linejoin:round"
      id="rect844"
      width="11"
      height="7"
-     x="7"
-     y="15" />
+     x="6"
+     y="14" />
   <line
      class="cls-4"
-     x1="6.4523964"
-     y1="17.5"
-     x2="19.204153"
-     y2="17.5"
+     x1="5.4523964"
+     y1="16.5"
+     x2="18.204153"
+     y2="16.5"
      id="line18"
      style="stroke-width:0.999998" />
 </svg>

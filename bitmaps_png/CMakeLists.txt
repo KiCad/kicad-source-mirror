@@ -56,7 +56,7 @@ option( MAINTAIN_PNGS
 
 # Plan for three sizes of bitmaps:
 # SMALL - for menus         - 16 x 16
-# MID   - for toolbars      - 26 x 26
+# MID   - for toolbars      - 24 x 24
 # BIG   - for program icons - 48 x 48
 # which are given on three basename lists: BMAPS_SMALL, BMAPS_MID,and BMAPS_BIG
 # respectively.  The basename is without file extension and without path.
@@ -674,7 +674,7 @@ if( MAINTAIN_PNGS )
     # these 3 cmake commands for each desired bitmap size set, repeat as needed:
     bitmap_dir( 16 16 "${BMAPS_SMALL}" )
 
-    bitmap_dir( 26 26 "${BMAPS_MID}" )
+    bitmap_dir( 24 24 "${BMAPS_MID}" )
 
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
 
@@ -693,8 +693,8 @@ foreach( bmn ${BMAPS_SMALL} )
 endforeach()
 
 foreach( bmn ${BMAPS_MID} )
-    #message( "library add cpp_26/${bmn}.cpp" )
-    list( APPEND CPP_LIST cpp_26/${bmn}.cpp )
+    #message( "library add cpp_24/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
 endforeach()
 
 foreach( bmn ${BMAPS_BIG} )

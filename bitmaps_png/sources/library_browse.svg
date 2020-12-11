@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="library_browse.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -27,12 +27,12 @@
      id="namedview42"
      showgrid="true"
      inkscape:zoom="19.771793"
-     inkscape:cx="19.693608"
-     inkscape:cy="22.042194"
+     inkscape:cx="17.220987"
+     inkscape:cy="11.46304"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g1561"
+     inkscape:current-layer="g1158"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
@@ -82,7 +82,8 @@
   <g
      id="g865">
     <g
-       id="g933">
+       id="g933"
+       transform="translate(-1,-1)">
       <g
          id="g853">
         <rect
@@ -153,7 +154,7 @@
     </g>
     <g
        id="g957"
-       transform="translate(6)">
+       transform="translate(5,-1)">
       <g
          id="g945">
         <rect
@@ -229,7 +230,7 @@
          id="g994"
          inkscape:transform-center-x="0.63442536"
          inkscape:transform-center-y="-10.226851"
-         transform="rotate(-17.467171,2.5047981,19.73537)">
+         transform="rotate(-17.467171,-1.2499555,22.490124)">
         <g
            id="g969">
           <rect
@@ -308,7 +309,7 @@
            transform="matrix(3.7830372,0,0,3.7830374,-17.441616,-0.81990154)">
           <g
              id="g1158"
-             transform="translate(0.34294785,0.19959242)">
+             transform="translate(0.07836452,-0.06499091)">
             <rect
                class="cls-3"
                x="-0.27787447"
@@ -320,9 +321,10 @@
                style="fill:#e61c50;fill-opacity:1;stroke:none;stroke-width:0.264583" />
             <path
                class="cls-4"
-               d="m 6.465739,6.5162742 v 0 A 0.44096605,0.39687174 45.000002 0 1 5.873283,6.4850942 L 5.2496688,5.8614798 5.8109237,5.3002028 6.43456,5.923839 a 0.44096605,0.39687174 45.000002 0 1 0.031179,0.5924352 z"
+               d="M 6.2653548,6.3000808 C 6.1034958,6.4764645 5.8495348,6.4456665 5.6773245,6.2734483 L 5.2496688,5.8614798 5.8109237,5.3002028 6.2386015,5.7121931 c 0.1638636,0.196973 0.1904149,0.4095397 0.026753,0.5878877 z"
                id="path17"
-               style="fill:#e61c50;stroke-width:0.264583" />
+               style="fill:#e61c50;stroke-width:0.264583"
+               sodipodi:nodetypes="sccccs" />
             <g
                id="g1151"
                transform="translate(0.97143363,0.88064296)">

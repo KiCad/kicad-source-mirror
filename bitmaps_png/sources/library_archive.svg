@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="library_archive.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -26,13 +26,14 @@
      inkscape:window-height="933"
      id="namedview58"
      showgrid="false"
-     inkscape:zoom="27.961538"
-     inkscape:cx="13"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:zoom="22.627417"
+     inkscape:cx="9.4646552"
+     inkscape:cy="11.136986"
+     inkscape:window-x="1689"
+     inkscape:window-y="140"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1" />
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0" />
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -71,148 +72,150 @@
      id="title7">library_archive</title>
   <path
      class="cls-2"
-     d="M14.1142,4.9593a1.2747,1.2747,0,1,1,0-1.8027A1.2747,1.2747,0,0,1,14.1142,4.9593Z"
+     d="m 13.1142,3.9593 a 1.2747,1.2747 0 1 1 0,-1.8027 1.2747,1.2747 0 0 1 0,1.8027 z"
      id="path11" />
   <circle
      class="cls-2"
-     cx="4.176"
-     cy="13.0948"
+     cx="3.1760001"
+     cy="12.0948"
      r="1.2747"
      id="circle13" />
   <line
      class="cls-3"
-     x1="12.853"
-     y1="4.406"
-     x2="11.3633"
-     y2="5.8958"
+     x1="11.853"
+     y1="3.4060001"
+     x2="10.3633"
+     y2="4.8958001"
      id="line15" />
   <line
      class="cls-3"
-     x1="4.4868"
-     y1="12.7722"
-     x2="5.9766"
-     y2="11.2824"
+     x1="3.4868002"
+     y1="11.7722"
+     x2="4.9766002"
+     y2="10.2824"
      id="line17" />
   <rect
      class="cls-4"
-     x="6.6288"
-     y="4.4144"
-     width="4.0066"
-     height="8.425"
-     transform="translate(8.6286 -3.577) rotate(45.001)"
+     x="8.7864561"
+     y="-4.2163"
+     width="4.0065999"
+     height="8.4250002"
+     transform="rotate(45.001)"
      id="rect19" />
   <rect
      class="cls-6"
-     x="10.7758"
-     y="12.3637"
-     width="3.2722"
-     height="9.8166"
+     x="9.7757998"
+     y="11.3637"
+     width="3.2722001"
+     height="9.8165998"
      id="rect23" />
   <line
      class="cls-7"
-     x1="11.5866"
-     y1="15.7131"
-     x2="13.2421"
-     y2="15.7131"
+     x1="10.5866"
+     y1="14.7131"
+     x2="12.2421"
+     y2="14.7131"
      id="line25" />
   <line
      class="cls-7"
-     x1="11.5866"
-     y1="20.8764"
-     x2="13.2421"
-     y2="20.8764"
+     x1="10.5866"
+     y1="19.8764"
+     x2="12.2421"
+     y2="19.8764"
      id="line27" />
   <line
      class="cls-7"
-     x1="11.5866"
-     y1="14.6574"
-     x2="13.2421"
-     y2="14.6574"
+     x1="10.5866"
+     y1="13.6574"
+     x2="12.2421"
+     y2="13.6574"
      id="line29" />
   <line
      class="cls-7"
-     x1="11.5866"
-     y1="13.6017"
-     x2="13.2421"
-     y2="13.6017"
+     x1="10.5866"
+     y1="12.6017"
+     x2="12.2421"
+     y2="12.6017"
      id="line31" />
   <rect
      class="cls-6"
-     x="14.4746"
-     y="12.3637"
-     width="3.2722"
-     height="9.8166"
+     x="13.4746"
+     y="11.3637"
+     width="3.2722001"
+     height="9.8165998"
      id="rect33" />
   <line
      class="cls-7"
-     x1="15.2853"
-     y1="15.7131"
-     x2="16.9408"
-     y2="15.7131"
+     x1="14.2853"
+     y1="14.7131"
+     x2="15.9408"
+     y2="14.7131"
      id="line35" />
   <line
      class="cls-7"
-     x1="15.2853"
-     y1="20.8764"
-     x2="16.9408"
-     y2="20.8764"
+     x1="14.2853"
+     y1="19.8764"
+     x2="15.9408"
+     y2="19.8764"
      id="line37" />
   <line
      class="cls-7"
-     x1="15.2853"
-     y1="14.6574"
-     x2="16.9408"
-     y2="14.6574"
+     x1="14.2853"
+     y1="13.6574"
+     x2="15.9408"
+     y2="13.6574"
      id="line39" />
   <line
      class="cls-7"
-     x1="15.2853"
-     y1="13.6017"
-     x2="16.9408"
-     y2="13.6017"
+     x1="14.2853"
+     y1="12.6017"
+     x2="15.9408"
+     y2="12.6017"
      id="line41" />
   <rect
      class="cls-4"
-     x="19.2615"
-     y="12.0434"
-     width="3.2722"
+     x="13.045622"
+     y="15.943955"
+     width="3.2722001"
      height="9.8167"
-     transform="translate(-3.8873 6.4741) rotate(-16.1325)"
+     transform="rotate(-16.1325)"
      id="rect43" />
   <line
      class="cls-7"
-     x1="19.6715"
-     y1="15.6835"
-     x2="21.2618"
-     y2="15.2235"
+     x1="18.671499"
+     y1="14.6835"
+     x2="20.261801"
+     y2="14.2235"
      id="line45" />
   <line
      class="cls-7"
-     x1="21.1062"
-     y1="20.6435"
-     x2="22.6966"
-     y2="20.1834"
+     x1="20.106199"
+     y1="19.643499"
+     x2="21.6966"
+     y2="19.183399"
      id="line47" />
   <line
      class="cls-7"
-     x1="19.3782"
-     y1="14.6694"
-     x2="20.9685"
-     y2="14.2094"
+     x1="18.378201"
+     y1="13.6694"
+     x2="19.9685"
+     y2="13.2094"
      id="line49" />
   <line
      class="cls-7"
-     x1="19.0848"
-     y1="13.6553"
-     x2="20.6751"
-     y2="13.1953"
+     x1="18.084801"
+     y1="12.6553"
+     x2="19.6751"
+     y2="12.1953"
      id="line51" />
   <polyline
      class="cls-8"
      points="10.175 21.549 4.005 21.549 4.005 15.938"
-     id="polyline53" />
+     id="polyline53"
+     transform="translate(-1,-1)" />
   <polyline
      class="cls-8"
      points="7.798 19.123 10.224 21.549 7.798 23.976"
-     id="polyline55" />
+     id="polyline55"
+     transform="translate(-1,-1)" />
 </svg>

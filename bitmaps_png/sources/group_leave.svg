@@ -9,9 +9,9 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="group.svg"
+   sodipodi:docname="group_leave.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -27,7 +27,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="13"
+     inkscape:cx="3.3259971"
      inkscape:cy="13"
      inkscape:window-x="1423"
      inkscape:window-y="176"
@@ -80,53 +80,53 @@
   <title
      id="title9">group</title>
   <rect
-     style="fill:none;stroke:#545454;stroke-linejoin:round;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:4,2;stroke-dashoffset:3.5"
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:4, 2;stroke-dashoffset:3.5"
      id="rect859"
      width="21"
      height="21"
-     x="2.5"
-     y="2.5"
+     x="1.5"
+     y="1.5"
      rx="0" />
   <rect
      class="cls-3"
-     x="1.0019"
-     y="20.999998"
+     x="0.0018999577"
+     y="19.999998"
      width="3.9981005"
      height="3.9991004"
      id="rect27"
      style="stroke-width:1" />
   <rect
      class="cls-3"
-     x="1.0005"
-     y="1.0009"
+     x="0.00049996376"
+     y="0.00090003014"
      width="3.9995003"
      height="3.9990997"
      id="rect29"
      style="stroke-width:1" />
   <rect
      class="cls-3"
-     x="21.0005"
-     y="21.0009"
+     x="20.0005"
+     y="20.0009"
      width="3.9995003"
      height="3.9991004"
      id="rect31"
      style="stroke-width:0.999999" />
   <rect
      class="cls-3"
-     x="21"
-     y="1.0009"
+     x="20"
+     y="0.00090003014"
      width="3.9980996"
      height="3.9990997"
      id="rect33"
      style="stroke-width:1" />
   <path
      class="cls-4"
-     d="m 23.95645,23.957771 a 7.0032,7.0032 0 1 1 0,-9.9038 7.0034,7.0034 0 0 1 0,9.9038 z"
+     d="m 21.95645,21.957771 a 7.0032,7.0032 0 1 1 0,-9.9038 7.0034,7.0034 0 0 1 0,9.9038 z"
      id="path7940"
      style="fill:#e61c50" />
   <g
      id="g9325"
-     transform="matrix(0,-1,-1,0,36.871,37.194)"
+     transform="matrix(0,-1,-1,0,34.871,35.194)"
      style="fill:none;stroke:#f5f5f5;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">
     <polyline
        class="cls-5"

@@ -1,55 +1,252 @@
-<svg id="Слой_1" data-name="Слой 1"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:cc="http://creativecommons.org/ns#"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns="http://www.w3.org/2000/svg"
-  xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" viewBox="0 0 26 26">
-  <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="13" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0">
-    <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="grid_select_axis.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="9.0288817"
+     inkscape:cy="14.03559"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
   </sodipodi:namedview>
-  <metadata id="metadata43">
+  <metadata
+     id="metadata43">
     <rdf:RDF>
-      <cc:Work rdf:about="">
-        <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
         <dc:format>image/svg+xml</dc:format>
-        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title>add_arc</dc:title>
       </cc:Work>
-      <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
       </cc:License>
     </rdf:RDF>
   </metadata>
-  <defs>
-    <style>.cls-1{fill:#545454;}.cls-2,.cls-3{fill:none;stroke-miterlimit:10;}.cls-2{stroke:#1a81c4;}.cls-3{stroke:#b9b9b9;}.cls-4{fill:#1a81c4;}</style>
+  <defs
+     id="defs25113">
+    <style
+       id="style25111">.cls-1{fill:#545454;}.cls-2,.cls-3{fill:none;stroke-miterlimit:10;}.cls-2{stroke:#1a81c4;}.cls-3{stroke:#b9b9b9;}.cls-4{fill:#1a81c4;}</style>
   </defs>
-  <title>grid копия</title>
-  <rect class="cls-1" x="1.5861" y="1.5881" width="2.8297" height="2.8297" transform="translate(3.0024 -1.2424) rotate(45.0014)"/>
-  <rect class="cls-1" x="14.9183" y="1.5881" width="2.8297" height="2.8297" transform="translate(6.9076 -10.67) rotate(45.0014)"/>
-  <rect class="cls-1" x="21.5843" y="1.5881" width="2.8297" height="2.8297" transform="translate(8.8597 -15.3833) rotate(45)"/>
-  <rect class="cls-1" x="1.5861" y="8.2595" width="2.8297" height="2.8297" transform="translate(7.7199 0.7117) rotate(45.0014)"/>
-  <rect class="cls-1" x="14.9183" y="8.2595" width="2.8297" height="2.8297" transform="translate(11.6251 -8.7158) rotate(45.0014)"/>
-  <rect class="cls-1" x="21.5843" y="8.2595" width="2.8297" height="2.8297" transform="translate(13.5771 -13.4293) rotate(45)"/>
-  <rect class="cls-1" x="1.5861" y="21.6023" width="2.8297" height="2.8297" transform="translate(17.155 4.6199) rotate(45.0014)"/>
-  <rect class="cls-1" x="14.9183" y="21.6023" width="2.8297" height="2.8297" transform="translate(21.0601 -4.8076) rotate(45.0014)"/>
-  <rect class="cls-1" x="21.5843" y="21.6023" width="2.8297" height="2.8297" transform="translate(23.0119 -9.5213) rotate(45)"/>
-  <line class="cls-2" x1="9.667" y1="10.0807" x2="9.667" y2="16.3457"/>
-  <line class="cls-3" x1="9.667" y1="3.7456" x2="9.667" y2="9.6743"/>
-  <line class="cls-3" x1="16.0766" y1="16.3457" x2="22.5525" y2="16.3457"/>
-  <line class="cls-2" x1="10.5862" y1="16.3457" x2="15.185" y2="16.3457"/>
-  <line class="cls-2" x1="9.6946" y1="22.6338" x2="9.6946" y2="16.3689"/>
-  <line class="cls-2" x1="8.7754" y1="16.3689" x2="4.1766" y2="16.3689"/>
-  <rect class="cls-1" x="8.2522" y="1.5881" width="2.8297" height="2.8297" transform="translate(4.955 -5.9562) rotate(45.0012)"/>
-  <rect class="cls-1" x="8.2522" y="8.2595" width="2.8297" height="2.8297" transform="translate(9.6724 -4.0021) rotate(45.0012)"/>
-  <rect class="cls-4" x="8.2522" y="14.9309" width="2.8297" height="2.8297" transform="translate(14.3899 -2.048) rotate(45.0012)"/>
-  <rect class="cls-1" x="14.9183" y="14.9309" width="2.8297" height="2.8297" transform="translate(16.3426 -6.7617) rotate(45.0014)"/>
-  <rect class="cls-1" x="21.5843" y="14.9309" width="2.8297" height="2.8297" transform="translate(18.2945 -11.4753) rotate(45)"/>
-  <rect class="cls-1" x="1.5861" y="14.9309" width="2.8297" height="2.8297" transform="translate(12.4374 2.6658) rotate(45.0014)"/>
-  <rect class="cls-1" x="8.2522" y="21.6023" width="2.8297" height="2.8297" transform="translate(19.1074 -0.0939) rotate(45.0012)"/>
+  <title
+     id="title25115">grid копия</title>
+  <rect
+     class="cls-1"
+     x="1.416321"
+     y="-1.4134227"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25117" />
+  <rect
+     class="cls-1"
+     x="10.608459"
+     y="-10.606116"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25119" />
+  <rect
+     class="cls-1"
+     x="15.557203"
+     y="-15.55429"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect25121" />
+  <rect
+     class="cls-1"
+     x="6.1843848"
+     y="3.3544185"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25123" />
+  <rect
+     class="cls-1"
+     x="15.376595"
+     y="-5.8382082"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25125" />
+  <rect
+     class="cls-1"
+     x="20.325171"
+     y="-10.786332"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect25127" />
+  <rect
+     class="cls-1"
+     x="15.56885"
+     y="12.738305"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25129" />
+  <rect
+     class="cls-1"
+     x="24.760984"
+     y="3.545748"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25131" />
+  <rect
+     class="cls-1"
+     x="29.709381"
+     y="-1.4021457"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect25133" />
+  <line
+     class="cls-2"
+     x1="8.5"
+     y1="9.0806999"
+     x2="8.5"
+     y2="15.345699"
+     id="line25135" />
+  <line
+     class="cls-3"
+     x1="8.5"
+     y1="2.7456"
+     x2="8.5"
+     y2="8.6743002"
+     id="line25137" />
+  <line
+     class="cls-3"
+     x1="15.076599"
+     y1="15.488754"
+     x2="21.5525"
+     y2="15.488754"
+     id="line25139" />
+  <line
+     class="cls-2"
+     x1="9.5861998"
+     y1="15.488754"
+     x2="14.185"
+     y2="15.488754"
+     id="line25141" />
+  <line
+     class="cls-2"
+     x1="8.5"
+     y1="21.633801"
+     x2="8.5"
+     y2="15.3689"
+     id="line25143" />
+  <line
+     class="cls-2"
+     x1="7.7754002"
+     y1="15.511956"
+     x2="3.1766"
+     y2="15.511956"
+     id="line25145" />
+  <rect
+     class="cls-1"
+     x="6.011755"
+     y="-6.0091195"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect25147" />
+  <rect
+     class="cls-1"
+     x="10.77982"
+     y="-1.2412549"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect25149" />
+  <rect
+     class="cls-4"
+     x="15.446728"
+     y="3.4254575"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect25151" />
+  <rect
+     class="cls-1"
+     x="20.144657"
+     y="-1.0703657"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25153" />
+  <rect
+     class="cls-1"
+     x="25.093138"
+     y="-6.0183735"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45)"
+     id="rect25155" />
+  <rect
+     class="cls-1"
+     x="10.952451"
+     y="8.1222591"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0014)"
+     id="rect25157" />
+  <rect
+     class="cls-1"
+     x="20.164213"
+     y="8.142746"
+     width="2.8297"
+     height="2.8297"
+     transform="rotate(45.0012)"
+     id="rect25159" />
 </svg>

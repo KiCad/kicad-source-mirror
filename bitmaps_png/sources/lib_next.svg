@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 26 26"
+   viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="lib_next.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
@@ -27,10 +27,10 @@
      id="namedview42"
      showgrid="true"
      inkscape:zoom="19.771793"
-     inkscape:cx="9.5512171"
-     inkscape:cy="14.00407"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:cx="14.554686"
+     inkscape:cy="15.611268"
+     inkscape:window-x="86"
+     inkscape:window-y="145"
      inkscape:window-maximized="0"
      inkscape:current-layer="g981"
      inkscape:document-rotation="0">
@@ -82,7 +82,8 @@
   <g
      id="g865">
     <g
-       id="g933">
+       id="g933"
+       transform="translate(-1,-1)">
       <g
          id="g853">
         <rect
@@ -153,7 +154,7 @@
     </g>
     <g
        id="g957"
-       transform="translate(6)">
+       transform="translate(5,-1)">
       <g
          id="g945">
         <rect
@@ -229,7 +230,7 @@
          id="g994"
          inkscape:transform-center-x="0.63442536"
          inkscape:transform-center-y="-10.226851"
-         transform="rotate(-17.467171,2.5047981,19.73537)">
+         transform="rotate(-17.467171,-1.2499555,22.490124)">
         <g
            id="g969">
           <rect
@@ -300,7 +301,7 @@
       </g>
       <g
          id="g1009"
-         transform="matrix(0.99907229,0,0,0.99907223,-0.03711142,0.2868779)"
+         transform="matrix(0.99907229,0,0,0.99907223,-2.0371114,-1.7131221)"
          style="stroke-width:1.00092">
         <path
            class="cls-5"
