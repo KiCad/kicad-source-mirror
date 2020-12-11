@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004-2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 2010-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
     m_linesThickness( aParent, m_LineThicknessLabel, m_LineThicknessCtrl, m_LineThicknessUnits,
                       true ),
-    m_OrientValidator( 1, &m_OrientValue )
+    m_orientation( aParent, m_OrientLabel, m_OrientCtrl, nullptr, false )
 {
     wxString title;
 
@@ -114,17 +114,15 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_LayerSelectionCtrl->Resync();
 
     m_OrientValue = 0.0;
-    m_OrientValidator.SetRange( -360.0, 360.0 );
-    m_OrientCtrl->SetValidator( m_OrientValidator );
-    m_OrientValidator.SetWindow( m_OrientCtrl );
+    m_orientation.SetUnits( EDA_UNITS::DEGREES );
+    m_orientation.SetPrecision( 3 );
 
-    // Handle decimal separators in combo dropdown
-    for( size_t i = 0; i < m_OrientCtrl->GetCount(); ++i )
-    {
-        wxString item = m_OrientCtrl->GetString( i );
-        item.Replace( '.', localeconv()->decimal_point[0] );
-        m_OrientCtrl->SetString( i, item );
-    }
+    // Set predefined rotations in combo dropdown, according to the locale
+    // floating point separator notation
+    double rot_list[] = { 0.0, 90.0, -90.0, 180.0 };
+
+    for( size_t ii = 0; ii < m_OrientCtrl->GetCount() && ii < 4; ++ii )
+        m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
@@ -302,7 +300,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     m_Italic->SetValue( m_edaText->IsItalic() );
     EDA_TEXT_HJUSTIFY_T hJustify = m_edaText->GetHorizJustify();
     m_JustifyChoice->SetSelection( (int) hJustify + 1 );
-    m_OrientValue = m_edaText->GetTextAngleDegrees();
+    m_OrientValue = m_edaText->GetTextAngle();
+    m_orientation.SetDoubleValue( m_OrientValue );
     m_Mirrored->SetValue( m_edaText->IsMirrored() );
 
     if( m_fpText )
@@ -379,7 +378,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_edaText->SetVisible( m_Visible->GetValue() );
     m_edaText->SetItalic( m_Italic->GetValue() );
-    m_edaText->SetTextAngle( KiROUND( m_OrientValue * 10.0 ) );
+    m_OrientValue = m_orientation.GetDoubleValue();
+    m_edaText->SetTextAngle( m_OrientValue );
     m_edaText->SetMirrored( m_Mirrored->GetValue() );
 
     if( m_fpText )

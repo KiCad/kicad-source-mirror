@@ -294,7 +294,7 @@ void FP_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
 
-    msg.Printf( wxT( "%.1f" ), GetTextAngleDegrees() );
+    msg.Printf( wxT( "%g" ), GetTextAngleDegrees() );
     aList.emplace_back( _( "Angle" ), msg );
 
     msg = MessageTextFromValue( aFrame->GetUserUnits(), GetTextThickness() );

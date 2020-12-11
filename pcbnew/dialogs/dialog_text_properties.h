@@ -62,9 +62,8 @@ private:
     UNIT_BINDER          m_thickness;
     UNIT_BINDER          m_posX;
     UNIT_BINDER          m_posY;
-    UNIT_BINDER          m_linesThickness;  // lines thikness for dimension graphic
-
-    wxFloatingPointValidator<double>    m_OrientValidator;
+    UNIT_BINDER          m_linesThickness;  // lines thickness for dimension graphic
+    UNIT_BINDER          m_orientation;     // rotation in degrees
     double               m_OrientValue;
 
     bool TransferDataToWindow() override;

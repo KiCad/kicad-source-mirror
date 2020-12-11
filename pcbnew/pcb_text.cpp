@@ -108,15 +108,13 @@ void PCB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 {
     EDA_UNITS units = aFrame->GetUserUnits();
 
-    wxCHECK_RET( m_parent != NULL, wxT( "PCB_TEXT::GetMsgPanelInfo() m_Parent is NULL." ) );
-
     aList.emplace_back( _( "PCB Text" ), GetShownText() );
 
     aList.emplace_back( _( "Layer" ), GetLayerName() );
 
     aList.emplace_back( _( "Mirror" ), IsMirrored() ? _( "Yes" ) : _( "No" ) );
 
-    aList.emplace_back( _( "Angle" ), wxString::Format( "%.1f", GetTextAngle() / 10.0 ) );
+    aList.emplace_back( _( "Angle" ), wxString::Format( "%g", GetTextAngleDegrees() ) );
 
     aList.emplace_back( _( "Thickness" ), MessageTextFromValue( units, GetTextThickness() ) );
     aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetTextWidth() ) );
