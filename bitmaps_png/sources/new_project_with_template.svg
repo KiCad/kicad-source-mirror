@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2085"
+     inkscape:window-height="1526"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.6600937"
-     inkscape:cy="12.425616"
+     inkscape:zoom="39.543586"
+     inkscape:cx="16.622225"
+     inkscape:cy="10.721344"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -103,41 +103,31 @@
      transform="translate(-1,-1)" />
   <rect
      class="cls-4"
-     x="10.076"
-     y="8.3957005"
-     width="13.9903"
-     height="15.6123"
+     x="11"
+     y="9"
+     width="13.066299"
+     height="15.007999"
      id="rect25959" />
   <rect
      class="cls-1"
-     x="9.2502003"
-     y="7.6279001"
-     width="13.9903"
-     height="16.414801"
-     id="rect25961" />
+     x="10"
+     y="8"
+     width="13"
+     height="16"
+     id="rect25961"
+     ry="0.023177056" />
   <rect
      class="cls-5"
-     x="8.4098997"
-     y="6.7616"
-     width="13.9903"
-     height="17.281099"
+     x="8"
+     y="7"
+     width="14"
+     height="17"
      id="rect25963" />
   <path
      class="cls-3"
-     d="M 9.3073,10.0347 H 7.5691 a 0.8233,0.8233 0 1 1 0,-1.6465 h 1.7382 a 0.8233,0.8233 0 1 1 0,1.6465 z"
-     id="path25965" />
-  <path
-     class="cls-3"
-     d="M 9.3073,14.168 H 7.5691 a 0.8233,0.8233 0 1 1 0,-1.6465 h 1.7382 a 0.8233,0.8233 0 1 1 0,1.6465 z"
-     id="path25967" />
-  <path
-     class="cls-3"
-     d="M 9.3073,18.3021 H 7.5691 a 0.8233,0.8233 0 0 1 0,-1.6466 h 1.7382 a 0.8233,0.8233 0 0 1 0,1.6466 z"
-     id="path25969" />
-  <path
-     class="cls-3"
-     d="M 9.3073,22.4362 H 7.5691 a 0.8233,0.8233 0 0 1 0,-1.6466 h 1.7382 a 0.8233,0.8233 0 1 1 0,1.6466 z"
-     id="path25971" />
+     d="M 9.143887,9.9999395 H 7.356113 a 0.84678076,1 0 1 1 0,-1.9998786 h 1.787774 a 0.84678076,1 0 1 1 0,1.9998786 z"
+     id="path25965"
+     style="stroke-width:1" />
   <path
      class="cls-2"
      d="m 16.0689,12.3269 h -3.593 a 0.4117,0.4117 0 0 1 0,-0.8233 h 3.593 a 0.4117,0.4117 0 0 1 0,0.8233 z"
@@ -150,14 +140,34 @@
      class="cls-2"
      d="m 20.0092,16.1908 h -7.5333 a 0.4116,0.4116 0 0 1 0,-0.8232 h 7.5333 a 0.4116,0.4116 0 1 1 0,0.8232 z"
      id="path25977" />
-  <polyline
-     class="cls-6"
-     points="10.167 21.546 3.997 21.546 3.997 15.935"
-     id="polyline25979"
-     transform="translate(-1,-1)" />
-  <polyline
-     class="cls-6"
-     points="7.79 19.12 10.216 21.546 7.79 23.973"
-     id="polyline25981"
-     transform="translate(-1,-1)" />
+  <path
+     class="cls-3"
+     d="M 9,14 H 7.212226 a 0.84678076,1 0 1 1 0,-1.999879 H 9 A 0.84678076,1 0 1 1 9,14 Z"
+     id="path849"
+     style="stroke-width:1" />
+  <path
+     class="cls-3"
+     d="M 9,18 H 7.212226 a 0.84678076,1 0 1 1 0,-1.999879 H 9 A 0.84678076,1 0 1 1 9,18 Z"
+     id="path851"
+     style="stroke-width:1" />
+  <path
+     class="cls-3"
+     d="M 8.856113,22.00006 H 7.068339 a 0.84678076,1 0 1 1 0,-1.999879 h 1.787774 a 0.84678076,1 0 1 1 0,1.999879 z"
+     id="path853"
+     style="stroke-width:1" />
+  <g
+     id="g2044"
+     transform="matrix(1.3253403,0,0,0.99999998,-2.1475037,-1.1011537)"
+     style="display:inline;stroke-width:0.868633">
+    <path
+       style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#e61c50;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.73727px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+       d="m 4.0058594,13.4375 c -0.5522847,0 -0.7895589,0.578174 -1,1 -0.6590225,1.321 -0.8054951,3.169119 -0.6184761,4.38539 0.3256833,2.118067 1.5908746,2.631602 2.9404947,2.984886 C 7,22.245481 10.175781,21.04883 10.175781,21.04883 c 0.549555,-0.05484 1,-0.447715 1,-1 0,-0.552285 -0.447715,-1 -1,-1 0,0 -3.0894053,-0.122415 -4.3079676,-1.340978 C 4.780913,16.62095 5,15.5 5.0058594,14.4375 c 0.0026,-0.471397 -0.4477153,-1 -1,-1 z"
+       id="path2020"
+       sodipodi:nodetypes="sassssssss" />
+    <path
+       id="polyline1446"
+       style="fill:none;stroke:#e61c50;stroke-width:1.73726;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 8.0337885,17.101154 2.4259995,2.999382 -2.4259995,3.000618"
+       sodipodi:nodetypes="ccc" />
+  </g>
 </svg>
