@@ -270,46 +270,39 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
-    int tl = getView()->GetTopLayer();
+    int      tl = getView()->GetTopLayer();
     VECTOR2I cp = controls()->GetCursorPosition( !aEvent.Modifier( MD_SHIFT ) );
     VECTOR2I p;
+    GAL*     gal = m_toolMgr->GetView()->GetGAL();
 
     controls()->ForceCursorPosition( false );
-    m_gridHelper->SetUseGrid( m_toolMgr->GetView()->GetGAL()->GetGridSnapping() );
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
-    bool snapEnabled = true;
-
     if( aEvent.IsMotion() || aEvent.IsClick() )
-    {
-        snapEnabled = !aEvent.Modifier( MD_SHIFT );
         p = aEvent.Position();
-    }
     else
-    {
         p = cp;
-    }
 
     m_startItem = pickSingleItem( p, -1, -1, aIgnorePads );
 
-    if( !snapEnabled && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
+    if( m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;
 
-    m_startSnapPoint = snapToItem( snapEnabled, m_startItem, p );
+    m_startSnapPoint = snapToItem( m_startItem, p );
 
     if( checkSnap( m_startItem ) )
-    {
         controls()->ForceCursorPosition( true, m_startSnapPoint );
-    }
 }
 
 
 void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
-    int layer;
-    bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
-    m_gridHelper->SetUseGrid( m_toolMgr->GetView()->GetGAL()->GetGridSnapping() );
-    m_gridHelper->SetSnap( snapEnabled );
+    int  layer;
+    GAL* gal = m_toolMgr->GetView()->GetGAL();
+
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     controls()->ForceCursorPosition( false );
     VECTOR2I mousePos = controls()->GetMousePosition();
@@ -317,7 +310,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     if( m_router->Settings().Mode() != RM_MarkObstacles &&
         ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 ) )
     {
-        m_endSnapPoint = snapToItem( snapEnabled, nullptr, mousePos );
+        m_endSnapPoint = snapToItem( nullptr, mousePos );
         controls()->ForceCursorPosition( true, m_endSnapPoint );
         m_endItem = nullptr;
 
@@ -344,7 +337,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
     if( checkSnap( endItem ) )
     {
         m_endItem = endItem;
-        m_endSnapPoint = snapToItem( snapEnabled, endItem, mousePos );
+        m_endSnapPoint = snapToItem( endItem, mousePos );
     }
     else
     {
@@ -369,11 +362,9 @@ ROUTER *TOOL_BASE::Router() const
 }
 
 
-const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
+const VECTOR2I TOOL_BASE::snapToItem( ITEM* aItem, VECTOR2I aP )
 {
-    VECTOR2I anchor;
-
-    if( !aItem || !aEnabled || !m_iface->IsItemVisible( aItem ) )
+    if( !aItem || !m_iface->IsItemVisible( aItem ) )
     {
         return m_gridHelper->Align( aP );
     }
@@ -381,12 +372,10 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
     switch( aItem->Kind() )
     {
     case ITEM::SOLID_T:
-        anchor = static_cast<SOLID*>( aItem )->Pos();
-        break;
+        return static_cast<SOLID*>( aItem )->Pos();
 
     case ITEM::VIA_T:
-        anchor = static_cast<VIA*>( aItem )->Pos();
-        break;
+        return static_cast<VIA*>( aItem )->Pos();
 
     case ITEM::SEGMENT_T:
     case ITEM::ARC_T:
@@ -400,30 +389,27 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
 
         if( distA_sq < w_sq || distB_sq < w_sq )
         {
-            anchor = distA_sq < distB_sq ? A : B;
+            return ( distA_sq < distB_sq ) ? A : B;
         }
-        else // TODO(snh): Clean this up
+        // TODO(snh): Clean this up
+        else if( aItem->Kind() == ITEM::SEGMENT_T )
         {
-            if( aItem->Kind() == ITEM::SEGMENT_T )
-            {
-                SEGMENT* seg = static_cast<SEGMENT*>( li );
-                anchor = m_gridHelper->AlignToSegment( aP, seg->Seg() );
-            }
-            else if( aItem->Kind() == ITEM::ARC_T )
-            {
-                ARC* arc = static_cast<ARC*>( li );
-                anchor = m_gridHelper->AlignToArc( aP, *static_cast<const SHAPE_ARC*>( arc->Shape() ) );
-            }
+            SEGMENT* seg = static_cast<SEGMENT*>( li );
+            return m_gridHelper->AlignToSegment( aP, seg->Seg() );
         }
-
-        break;
+        else if( aItem->Kind() == ITEM::ARC_T )
+        {
+            ARC* arc = static_cast<ARC*>( li );
+            return m_gridHelper->AlignToArc( aP, *static_cast<const SHAPE_ARC*>( arc->Shape() ) );
+        }
     }
+        break;
 
     default:
         break;
     }
 
-    return anchor;
+    return m_gridHelper->Align( aP );
 }
 
 }

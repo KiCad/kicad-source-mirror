@@ -1509,11 +1509,15 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             return 0;
     }
 
+    GAL*     gal = m_toolMgr->GetView()->GetGAL();
     VECTOR2I p0 = controls()->GetCursorPosition( false );
     VECTOR2I p = p0;
 
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
+
     if( startItem )
-        p = snapToItem( true, startItem, p0 );
+        p = snapToItem( startItem, p0 );
 
     int dragMode = aEvent.Parameter<int64_t> ();
 
@@ -1653,7 +1657,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() != 1 )
         return 0;
@@ -1670,20 +1674,23 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     m_startItem = m_router->GetWorld()->FindItemByParent( item );
 
     TOOL_MANAGER* toolManager = frame()->GetToolManager();
+    GAL*          gal = toolManager->GetView()->GetGAL();
+
+    m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.Modifier( MD_ALT )  );
+    m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     if( toolManager->IsContextMenuActive() )
     {
         // If we're here from a context menu then we need to get the position of the
         // cursor when the context menu was invoked.  This is used to figure out the
         // break point on the track.
-        VECTOR2I CurrPos = toolManager->GetMenuCursorPos();
-        m_startSnapPoint = snapToItem( true, m_startItem, toolManager->GetMenuCursorPos() );
+        m_startSnapPoint = snapToItem( m_startItem, toolManager->GetMenuCursorPos() );
     }
     else
     {
         // If we're here from a hotkey, then get the current mouse position so we know
         // where to break the track.
-        m_startSnapPoint = snapToItem( true, m_startItem, controls()->GetCursorPosition() );
+        m_startSnapPoint = snapToItem( m_startItem, controls()->GetCursorPosition() );
     }
 
     if( m_startItem && m_startItem->IsLocked() )
