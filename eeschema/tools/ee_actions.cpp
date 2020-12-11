@@ -615,12 +615,12 @@ TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCros
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
         AS_GLOBAL, 0, "",
-        _( "Show Hidden Pins" ), _( "Switch display of hidden pins" ),
+        _( "Show Hidden Pins" ), _( "Toggle display of hidden pins" ),
         hidden_pin_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenFields( "eeschema.EditorControl.showHiddenFields",
         AS_GLOBAL, 0, "",
-        _( "Show Hidden Fields" ), "",
+        _( "Show Hidden Fields" ), _( "Toggle display of hidden text fields" ),
         nullptr );
 
 TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
@@ -644,12 +644,12 @@ TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.NavigateTool.leaveSheet",
 
 TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.NavigateTool.navigateHierarchy",
         AS_GLOBAL, 0, "",
-        _( "Show Hierarchy Navigator" ), "",
+        _( "Hierarchy Navigator" ), _( "Show schematic sheet hierarchy" ),
         hierarchy_nav_xpm );
 
 TOOL_ACTION EE_ACTIONS::hypertextCommand( "eeschema.NavigateTool.hypertextCommand",
         AS_GLOBAL, 0, "",
-        _( "Navigate to page" ), "",
+        _( "Navigate to page" ), _( "Navigate to page" ),
         nullptr );
 
 
