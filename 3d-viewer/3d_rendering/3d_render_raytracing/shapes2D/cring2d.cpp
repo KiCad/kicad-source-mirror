@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,8 @@
 
 
 CRING2D::CRING2D( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
-        const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::RING, aBoardItem )
+                  const BOARD_ITEM& aBoardItem ) :
+        COBJECT2D( OBJECT2D_TYPE::RING, aBoardItem )
 {
     wxASSERT( aInnerRadius < aOuterRadius );
 
@@ -51,7 +51,6 @@ CRING2D::CRING2D( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius
     m_bbox.ScaleNextUp();
     m_centroid = m_bbox.GetCenter();
 
-
     wxASSERT( m_bbox.IsInitialized() );
 }
 
@@ -65,7 +64,7 @@ bool CRING2D::Overlaps( const CBBOX2D &aBBox ) const
 
 bool CRING2D::Intersects( const CBBOX2D &aBBox ) const
 {
-    // !TODO: check the inside for a great improovment
+    // !TODO: check the inside for a great improvement
     return aBBox.Intersects( m_center, m_outer_radius_squared );
 }
 
@@ -86,7 +85,6 @@ bool CRING2D::Intersect( const RAYSEG2D &aSegRay,
 
     // solving the quadratic equation for t at the pts of intersection
     // dd*t^2 + (2*qd)*t + (qq-r^2) = 0
-
     const float discriminantsqr = qd * qd - qq;
     const float discriminantsqr_outer = discriminantsqr + m_outer_radius_squared;
 
@@ -129,10 +127,14 @@ bool CRING2D::Intersect( const RAYSEG2D &aSegRay,
                 }
             }
             else
+            {
                 return false;
+            }
         }
         else
+        {
             return false;
+        }
     }
 
     wxASSERT( (t > 0.0f) && (t <= aSegRay.m_Length) );
@@ -196,8 +198,7 @@ bool CRING2D::IsPointInside( const SFVEC2F &aPoint ) const
 
     const float dot = glm::dot( v, v );
 
-    if( (dot <= m_outer_radius_squared) &&
-        (dot >= m_inner_radius_squared) )
+    if( (dot <= m_outer_radius_squared) && (dot >= m_inner_radius_squared) )
         return true;
 
     return false;

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,11 +93,11 @@ void CBBOX2D::Reset()
 
 void CBBOX2D::Union( const SFVEC2F &aPoint )
 {
-    // get the minimun value between the added point and the existent bounding box
+    // get the minimum value between the added point and the existent bounding box
     m_min.x =  fminf( m_min.x, aPoint.x );
     m_min.y =  fminf( m_min.y, aPoint.y );
 
-    // get the maximun value between the added point and the existent bounding box
+    // get the maximum value between the added point and the existent bounding box
     m_max.x =  fmaxf( m_max.x, aPoint.x );
     m_max.y =  fmaxf( m_max.y, aPoint.y );
 }
@@ -105,12 +105,12 @@ void CBBOX2D::Union( const SFVEC2F &aPoint )
 
 void CBBOX2D::Union( const CBBOX2D &aBBox )
 {
-    // get the minimun value between the added bounding box and
+    // get the minimum value between the added bounding box and
     // the existent bounding box
     m_min.x =  fminf( m_min.x, aBBox.m_min.x );
     m_min.y =  fminf( m_min.y, aBBox.m_min.y );
 
-    // get the maximun value between the added bounding box and
+    // get the maximum value between the added bounding box and
     // the existent bounding box
     m_max.x =  fmaxf( m_max.x, aBBox.m_max.x );
     m_max.y =  fmaxf( m_max.y, aBBox.m_max.y );

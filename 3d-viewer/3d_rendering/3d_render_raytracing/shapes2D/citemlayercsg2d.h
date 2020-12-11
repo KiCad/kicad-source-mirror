@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,13 @@
 #include "cobject2d.h"
 #include <vector>
 
+
+#define CSGITEM_EMPTY 0
+#define CSGITEM_FULL (COBJECT2D *)((size_t)(-1))
+
 /**
- *  This class is used to make constructive solig geometry for items
- *  objects on layers.
+ *  Make constructive solid geometry for items objects on layers.
+ *
  *  The operation is in the form (A - B) /\ C
  *  For almost all of the layers it translate something like:
  *  A (a via, a track, pad, polygon), B (a via hole, a THT hole, .. ),
@@ -71,17 +75,8 @@
  *  Layers.Paste =    P - 0 /\ BODY
  *  Layers.Silk  =    S - 0 /\ BODY
  */
-
-#define CSGITEM_EMPTY 0
-#define CSGITEM_FULL (COBJECT2D *)((size_t)(-1))
-
 class  CITEMLAYERCSG2D : public COBJECT2D
 {
-private:
-    const COBJECT2D                *m_objectA;
-    std::vector<const COBJECT2D *> *m_objectB;
-    const COBJECT2D                *m_objectC;
-
 public:
     CITEMLAYERCSG2D( const COBJECT2D *aObjectA,
                      std::vector<const COBJECT2D *> *aObjectB,
@@ -96,7 +91,11 @@ public:
     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
     bool IsPointInside( const SFVEC2F &aPoint ) const override;
-};
 
+private:
+    const COBJECT2D                *m_objectA;
+    std::vector<const COBJECT2D *> *m_objectB;
+    const COBJECT2D                *m_objectC;
+};
 
 #endif // _CITEMLAYERCSG2D_H_

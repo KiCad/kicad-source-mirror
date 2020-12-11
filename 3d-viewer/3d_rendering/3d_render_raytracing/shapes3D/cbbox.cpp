@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,12 +105,12 @@ void CBBOX::Reset()
 
 void CBBOX::Union( const SFVEC3F &aPoint )
 {
-    // get the minimun value between the added point and the existent bounding box
+    // get the minimum value between the added point and the existent bounding box
     m_min.x =  fminf( m_min.x, aPoint.x );
     m_min.y =  fminf( m_min.y, aPoint.y );
     m_min.z =  fminf( m_min.z, aPoint.z );
 
-    // get the maximun value between the added point and the existent bounding box
+    // get the maximum value between the added point and the existent bounding box
     m_max.x =  fmaxf( m_max.x, aPoint.x );
     m_max.y =  fmaxf( m_max.y, aPoint.y );
     m_max.z =  fmaxf( m_max.z, aPoint.z );
@@ -121,12 +121,12 @@ void CBBOX::Union( const CBBOX &aBBox )
 {
     wxASSERT( aBBox.IsInitialized() );
 
-    // get the minimun value between the added bounding box and the existent bounding box
+    // get the minimum value between the added bounding box and the existent bounding box
     m_min.x =  fmin( m_min.x, aBBox.m_min.x );
     m_min.y =  fmin( m_min.y, aBBox.m_min.y );
     m_min.z =  fmin( m_min.z, aBBox.m_min.z );
 
-    // get the maximun value between the added bounding box and the existent bounding box
+    // get the maximum value between the added bounding box and the existent bounding box
     m_max.x =  fmax( m_max.x, aBBox.m_max.x );
     m_max.y =  fmax( m_max.y, aBBox.m_max.y );
     m_max.z =  fmax( m_max.z, aBBox.m_max.z );
@@ -397,5 +397,5 @@ void CBBOX::ApplyTransformationAA( glm::mat4 aTransformMatrix )
 void CBBOX::debug() const
 {
     wxLogDebug( "min(%f, %f, %f) - max(%f, %f, %f)\n", m_min.x, m_min.y, m_min.z,
-            m_max.x, m_max.y, m_max.z );
+                m_max.x, m_max.y, m_max.z );
 }

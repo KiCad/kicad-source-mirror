@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,7 @@
 
 
 /**
- * CBBOX
- * manages a bounding box defined by two SFVEC2F min max points.
+ * Manage a bounding box defined by two SFVEC2F min max points.
  */
 struct CBBOX2D
 {
@@ -43,23 +42,22 @@ struct CBBOX2D
 public:
 
     /**
-     * Constructor CBBOX2D
-     * Create with default values a bounding box (not inizialized)
+     * Create with default values a bounding box (not initialized).
      */
     CBBOX2D();
 
     /**
-     * Constructor CBBOX2D
-     * Initialize a bounding box with a given point
-     * @param aPbInit a point for the bounding box initialization
+     * Initialize a bounding box with a given point.
+     *
+     * @param aPbInit a point for the bounding box initialization.
      */
     explicit CBBOX2D( const SFVEC2F &aPbInit );
 
     /**
-     * Constructor CBBOX2D
-     * Initialize a bounding box with a minimon and a maximun point
-     * @param aPbMin the minimun point to initialize the bounding box
-     * @param aPbMax the maximun point to initialize the bounding box
+     * Initialize a bounding box with a minimum and a maximum point.
+     *
+     * @param aPbMin the minimum point to initialize the bounding box.
+     * @param aPbMax the maximum point to initialize the bounding box.
      */
     CBBOX2D( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax );
 
@@ -67,138 +65,130 @@ public:
 
 
     /**
-     * Function Set
-     * Set bounding box with new parameters
-     * @param aPbMin the minimun point to initialize the bounding box
-     * @param aPbMax the maximun point to initialize the bounding box
+     * Set bounding box with new parameters.
+     *
+     * @param aPbMin the minimum point to initialize the bounding box.
+     * @param aPbMax the maximum point to initialize the bounding box.
      */
     void Set( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax );
 
     /**
-     * Function Set
-     * Set bounding box based on another bounding box
-     * @param CBBOX2D a bounding box to initialize this one
+     * Set bounding box based on another bounding box.
+     *
+     * @param CBBOX2D a bounding box to initialize this one.
      */
     void Set( const CBBOX2D &aBBox );
 
     /**
-     * Function Union
-     * recalculate the bounding box adding a point
+     * Recalculate the bounding box adding a point.
+     *
      * @param aPoint the point to be bounded
      */
     void Union( const SFVEC2F &aPoint );
 
     /**
-     * Function Union
-     * recalculate the bounding box adding other bounding box
-     * @param aBBox the bounding box to be bounded
+     * Recalculate the bounding box adding other bounding box.
+     *
+     * @param aBBox the bounding box to be bounded.
      */
     void Union( const CBBOX2D &aBBox );
 
     /**
-     * Function Scale
-     * scales a bounding box by its center
+     * Scale a bounding box by its center.
+     *
      * @param aScale scale factor to apply
      */
     void Scale( float aScale );
 
     /**
-     * Function ScaleNextUp
-     * scales a bounding box to the next float representation making it larger
+     * Scale a bounding box to the next float representation making it larger.
      */
     void ScaleNextUp();
 
     /**
-     * Function ScaleNextDown
-     * scales a bounding box to the next float representation making it smaller
+     * Scale a bounding box to the next float representation making it smaller.
      */
     void ScaleNextDown();
 
     /**
-     * Function Intersects
-     * test if a bounding box intersects this box
-     * @param aBBox the bounding box to check if it inversects
+     * Test if a bounding box intersects this box.
+     *
+     * @param aBBox the bounding box to check if it intersects.
      */
     bool Intersects( const CBBOX2D &aBBox ) const;
 
     /**
-     * Function Intersects
-     * test if a circle intersects this box
-     * @param aBBox the bounding box to check if it intersects
+     * Test if a circle intersects this box.
+     *
+     * @param aBBox the bounding box to check if it intersects.
      */
     bool Intersects( const SFVEC2F &aCenter, float aRadiusSquared ) const;
 
     /**
-     * Function Inside
-     * check is a point is inside this bounding box
-     * @param aPoint point to test
+     * Check is a point is inside this bounding box.
+     *
+     * @param aPoint point to test.
      */
     bool Inside( const SFVEC2F &aPoint ) const;
 
     /**
-     * Function Area
-     * calculate the area of a bounding box
-     * @return float - area of this bounding box
+     * Calculate the area of a bounding box.
+     *
+     * @return area of this bounding box.
      */
     float Area() const;
 
     /**
-     * Function IsInitialized
-     * check if this bounding box is already initialized
-     * @return bool - return true if it was initialized, false if otherwise
+     * Check if this bounding box is already initialized.
+     *
+     * @return True if it was initialized, otherwise false.
      */
     bool IsInitialized() const;
 
     /**
-     * Function Reset
-     * reset the bounding box to zero and de-initialized it
+     * Reset the bounding box to zero and uninitialize it.
      */
     void Reset();
 
     /**
-     * Function GetCenter
-     * return the center point of the bounding box
-     * @return SFVEC2F - the position of the center of this bounding box
+     * Return the center point of the bounding box.
+     *
+     * @return the position of the center of this bounding box.
      */
     SFVEC2F GetCenter() const;
 
     /**
-     * Function GetExtent
      * @return SFVEC2F - max-min
      */
     SFVEC2F GetExtent() const;
 
     /**
-     * Function Min
-     * return the minimun vertex pointer
-     * @return SFVEC2F - the minimun vertice position
+     * Return the minimum vertex point.
+     *
+     * @return the minimum vertex position.
      */
     const SFVEC2F &Min() const { return m_min; }
 
     /**
-     * Function Max
-     * return the maximum vertex pointer
-     * @return SFVEC2F - the maximun vertice position
+     * Return the maximum vertex point.
+     * @return the maximum vertex position.
      */
     const SFVEC2F &Max() const { return m_max; }
 
 
     /**
-     * Function MaxDimension
-     * @return the index of the max dimention (0=x, 1=y)
+     * @return the index of the max dimension (0=x, 1=y)
      */
     unsigned int MaxDimension() const;
 
     /**
-     * Function Perimeter
-     * @return the surface are of the box
+     * @return the surface area of the box
      */
     float Perimeter() const;
 
     /**
-     * Function Intersect
-     * @param aRay = ray to intersect the box
-     * @param t = distance point of the ray of the intersection (if true)
+     * @param aRay ray to intersect the box
+     * @param t distance point of the ray of the intersection (if true)
      * @return true if the ray hits the box
      */
     bool Intersect( const RAY2D &aRay, float *t ) const;

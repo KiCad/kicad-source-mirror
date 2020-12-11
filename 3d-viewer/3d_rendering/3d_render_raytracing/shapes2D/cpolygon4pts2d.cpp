@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,9 @@
 
 
 CPOLYGON4PTS2D::CPOLYGON4PTS2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVEC2F& v3,
-        const SFVEC2F& v4, const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::POLYGON4PT, aBoardItem )
-{/*
+                                const SFVEC2F& v4, const BOARD_ITEM& aBoardItem ) :
+        COBJECT2D( OBJECT2D_TYPE::POLYGON4PT, aBoardItem )
+{ /*
     if( (v1.x > v2.x) || (v1.y < v2.y) )
     {
         m_segments[0] = v4;
@@ -44,20 +44,20 @@ CPOLYGON4PTS2D::CPOLYGON4PTS2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVE
     }
     else
     {*/
-        m_segments[0] = v1;
-        m_segments[1] = v4;
-        m_segments[2] = v3;
-        m_segments[3] = v2;
-   // }
+    m_segments[0] = v1;
+    m_segments[1] = v4;
+    m_segments[2] = v3;
+    m_segments[3] = v2;
+    // }
 
     unsigned int i;
     unsigned int j = 4 - 1;
 
     for( i = 0; i < 4; j = i++ )
     {
-        SFVEC2F slope = m_segments[j] - m_segments[i];
+        SFVEC2F slope      = m_segments[j] - m_segments[i];
         m_precalc_slope[i] = slope;
-        m_seg_normal[i] = glm::normalize( SFVEC2F( -slope.y, +slope.x ) );
+        m_seg_normal[i]    = glm::normalize( SFVEC2F( -slope.y, +slope.x ) );
     }
 
     m_bbox.Reset();
@@ -76,7 +76,7 @@ CPOLYGON4PTS2D::CPOLYGON4PTS2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVE
 }
 
 
-bool CPOLYGON4PTS2D::Intersects( const CBBOX2D &aBBox ) const
+bool CPOLYGON4PTS2D::Intersects( const CBBOX2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
 
@@ -125,37 +125,37 @@ bool CPOLYGON4PTS2D::Intersects( const CBBOX2D &aBBox ) const
 }
 
 
-bool CPOLYGON4PTS2D::Overlaps( const CBBOX2D &aBBox ) const
+bool CPOLYGON4PTS2D::Overlaps( const CBBOX2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return true;
 }
 
 
-bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D &aSegRay,
-                                float *aOutT,
-                                SFVEC2F *aNormalOut ) const
+bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
-    bool  hited = false;
+    bool         hited = false;
     unsigned int hitIndex;
-    float bestHitT;
+    float        bestHitT;
 
     for( unsigned int i = 0; i < 4; i++ )
     {
         float t;
 
         if( aSegRay.IntersectSegment( m_segments[i], m_precalc_slope[i], &t ) )
-            if( (hited == false) || ( t < bestHitT) )
+        {
+            if( ( hited == false ) || ( t < bestHitT ) )
             {
-                hited = true;
+                hited    = true;
                 hitIndex = i;
                 bestHitT = t;
             }
+        }
     }
 
     if( hited )
     {
-        wxASSERT( (bestHitT >= 0.0f) && (bestHitT <= 1.0f) );
+        wxASSERT( ( bestHitT >= 0.0f ) && ( bestHitT <= 1.0f ) );
 
         if( aOutT )
             *aOutT = bestHitT;
@@ -170,7 +170,7 @@ bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D &aSegRay,
 }
 
 
-INTERSECTION_RESULT CPOLYGON4PTS2D::IsBBoxInside( const CBBOX2D &aBBox ) const
+INTERSECTION_RESULT CPOLYGON4PTS2D::IsBBoxInside( const CBBOX2D& aBBox ) const
 {
     // !TODO:
 
@@ -178,29 +178,28 @@ INTERSECTION_RESULT CPOLYGON4PTS2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 }
 
 
-bool CPOLYGON4PTS2D::IsPointInside( const SFVEC2F &aPoint ) const
+bool CPOLYGON4PTS2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     unsigned int i;
-    unsigned int j = 4 - 1;
-    bool  oddNodes = false;
+    unsigned int j        = 4 - 1;
+    bool         oddNodes = false;
 
     for( i = 0; i < 4; j = i++ )
     {
         const float polyJY = m_segments[j].y;
         const float polyIY = m_segments[i].y;
 
-        if( ((polyIY <= aPoint.y) && (polyJY >= aPoint.y)) ||
-            ((polyJY <= aPoint.y) && (polyIY >= aPoint.y))
-          )
+        if( ( ( polyIY <= aPoint.y ) && ( polyJY >= aPoint.y ) )
+          || ( ( polyJY <= aPoint.y ) && ( polyIY >= aPoint.y ) ) )
         {
             const float polyJX = m_segments[j].x;
             const float polyIX = m_segments[i].x;
 
-            if( (polyIX <= aPoint.x) || (polyJX <= aPoint.x) )
+            if( ( polyIX <= aPoint.x ) || ( polyJX <= aPoint.x ) )
             {
-                oddNodes ^= ( ( polyIX +
-                                ( ( aPoint.y - polyIY ) / ( polyJY - polyIY ) ) *
-                                ( polyJX - polyIX ) ) < aPoint.x );
+                oddNodes ^= ( ( polyIX + ( ( aPoint.y - polyIY ) / ( polyJY - polyIY ) )
+                              * ( polyJX - polyIX ) )
+                            < aPoint.x );
             }
         }
     }

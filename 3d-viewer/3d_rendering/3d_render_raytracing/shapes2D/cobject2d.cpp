@@ -67,6 +67,6 @@ void COBJECT2D_STATS::PrintStats()
     for( auto& objectType : objectTypeNames )
     {
         wxLogDebug( "  %20s  %u\n", objectType.second,
-                m_counter[static_cast<int>( objectType.first )] );
+                    m_counter[static_cast<int>( objectType.first )] );
     }
 }

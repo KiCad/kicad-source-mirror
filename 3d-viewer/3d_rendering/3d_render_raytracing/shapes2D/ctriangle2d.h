@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,17 +38,6 @@
 
 class  CTRIANGLE2D : public COBJECT2D
 {
-private:
-    SFVEC2F p1;
-    SFVEC2F p2;
-    SFVEC2F p3;
-
-    float m_inv_denominator;
-    float m_p2y_minus_p3y;
-    float m_p3x_minus_p2x;
-    float m_p3y_minus_p1y;
-    float m_p1x_minus_p3x;
-
 public:
     CTRIANGLE2D ( const SFVEC2F &aV1,
                   const SFVEC2F &aV2,
@@ -65,6 +54,17 @@ public:
     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
     bool IsPointInside( const SFVEC2F &aPoint ) const override;
+
+private:
+    SFVEC2F p1;
+    SFVEC2F p2;
+    SFVEC2F p3;
+
+    float m_inv_denominator;
+    float m_p2y_minus_p3y;
+    float m_p3x_minus_p2x;
+    float m_p3y_minus_p1y;
+    float m_p1x_minus_p3x;
 };
 
 

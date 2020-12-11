@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +28,7 @@
  */
 
 #include "croundseg.h"
+
 
 CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D& aSeg2D, float aZmin, float aZmax )
         : COBJECT( OBJECT3D_TYPE::ROUNDSEG ), m_segment( aSeg2D.m_segment )
@@ -60,7 +61,7 @@ CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D& aSeg2D, float aZmin, float aZmax )
 
 bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 {
-    // Top / Botton plane
+    // Top / Bottom plane
     // /////////////////////////////////////////////////////////////////////////
     float zPlanePos = aRay.m_dirIsNeg[2]? m_bbox.Max().z : m_bbox.Min().z;
 
@@ -279,7 +280,7 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
 bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
 {
-    // Top / Botton plane
+    // Top / Bottom plane
     // /////////////////////////////////////////////////////////////////////////
     const float zPlanePos = aRay.m_dirIsNeg[2]? m_bbox.Max().z : m_bbox.Min().z;
 
@@ -434,7 +435,7 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
 
 bool CROUNDSEG::Intersects( const CBBOX &aBBox ) const
 {
-    //!TODO: improove
+    //!TODO: improve
     return m_bbox.Intersects( aBBox );
 }
 

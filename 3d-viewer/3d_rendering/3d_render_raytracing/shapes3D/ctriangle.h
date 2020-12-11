@@ -39,16 +39,15 @@
 /**
  * A triangle object
  */
-class  CTRIANGLE : public COBJECT
+class CTRIANGLE : public COBJECT
 {
-
 public:
     CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3 );
 
     CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3,
                const SFVEC3F &aFaceNormal );
 
-    CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3, 
+    CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3,
                const SFVEC3F &aN1, const SFVEC3F &aN2, const SFVEC3F &aN3 );
 
     void SetColor( const SFVEC3F &aColor );
@@ -72,7 +71,6 @@ public:
 private:
     void pre_calc_const();
 
-private:
     SFVEC3F m_normal[3];                // 36
     SFVEC3F m_vertex[3];                // 36
     SFVEC3F m_n;                        // 12

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,26 +34,26 @@
 #include <wx/debug.h>
 
 #include <wx/glcanvas.h>    // CALLBACK definition, needed on Windows
-                            // alse needed on OSX to define __DARWIN__
+                            // also needed on OSX to define __DARWIN__
 #include <geometry/polygon_triangulation.h>
 #include "../../../3d_fastmath.h"
 
 
-CTRIANGLE2D::CTRIANGLE2D(
-        const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F& aV3, const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::TRIANGLE, aBoardItem )
+CTRIANGLE2D::CTRIANGLE2D( const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F& aV3,
+                          const BOARD_ITEM& aBoardItem ) :
+        COBJECT2D( OBJECT2D_TYPE::TRIANGLE, aBoardItem )
 {
     p1 = aV1;
     p2 = aV2;
     p3 = aV3;
 
     // Pre-Calc values
-    m_inv_denominator = 1.0f / ( (p2.y - p3.y) * (p1.x - p3.x) +
-                                 (p3.x - p2.x) * (p1.y - p3.y));
-    m_p2y_minus_p3y = (p2.y - p3.y);
-    m_p3x_minus_p2x = (p3.x - p2.x);
-    m_p3y_minus_p1y = (p3.y - p1.y);
-    m_p1x_minus_p3x = (p1.x - p3.x);
+    m_inv_denominator = 1.0f / ( ( p2.y - p3.y ) * ( p1.x - p3.x ) +
+                                 ( p3.x - p2.x ) * ( p1.y - p3.y ) );
+    m_p2y_minus_p3y = ( p2.y - p3.y );
+    m_p3x_minus_p2x = ( p3.x - p2.x );
+    m_p3y_minus_p1y = ( p3.y - p1.y );
+    m_p1x_minus_p3x = ( p1.x - p3.x );
 
     m_bbox.Reset();
     m_bbox.Union( aV1 );
@@ -70,6 +70,7 @@ bool CTRIANGLE2D::Intersects( const CBBOX2D &aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return false;
+
     //!TODO: Optimize
     return true;
 }
@@ -94,6 +95,7 @@ INTERSECTION_RESULT CTRIANGLE2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return INTERSECTION_RESULT::MISSES;
+
     // !TODO:
     return INTERSECTION_RESULT::MISSES;
 }
@@ -129,6 +131,9 @@ void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
                                               float aBiuTo3DunitsScale ,
                                               const BOARD_ITEM &aBoardItem )
 {
+    VECTOR2I a;
+    VECTOR2I b;
+    VECTOR2I c;
 
     aPolyList.CacheTriangulation( false );
     const double conver_d = (double)aBiuTo3DunitsScale;
@@ -139,9 +144,6 @@ void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
 
         for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
         {
-            VECTOR2I a;
-            VECTOR2I b;
-            VECTOR2I c;
             triPoly->GetTriangle( i, a, b, c );
 
             aDstContainer.Add( new CTRIANGLE2D( SFVEC2F( a.x * conver_d,
@@ -152,6 +154,5 @@ void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
                                                         -c.y * conver_d ),
                                                 aBoardItem ) );
         }
-
     }
 }

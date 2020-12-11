@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,17 +33,13 @@
 #include "cobject2d.h"
 
 /**
- *  This handles simple polygons with 4 points. Used for pads.
- *  (rectangles, trapezoids, with rotation.etc)
- *  This is a simplified version of the cpolygon2d class
+ * Simple polygons with 4 points.
+ *
+ * Used for footprint pads. (rectangles, trapezoids, with rotation.etc).  This is a
+ * simplified version of the #CPOLYGON2D class.
  */
 class  CPOLYGON4PTS2D : public COBJECT2D
 {
-private:
-    SFVEC2F m_segments[4];
-    SFVEC2F m_precalc_slope[4];
-    SFVEC2F m_seg_normal[4];
-
 public:
     CPOLYGON4PTS2D( const SFVEC2F &v1,
                     const SFVEC2F &v2,
@@ -67,6 +63,11 @@ public:
     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
     bool IsPointInside( const SFVEC2F &aPoint ) const override;
+
+private:
+    SFVEC2F m_segments[4];
+    SFVEC2F m_precalc_slope[4];
+    SFVEC2F m_seg_normal[4];
 };
 
 

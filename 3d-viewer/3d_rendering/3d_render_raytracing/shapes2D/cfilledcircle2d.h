@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,17 +35,11 @@
 class  CFILLEDCIRCLE2D : public COBJECT2D
 {
 public:
+    CFILLEDCIRCLE2D( const SFVEC2F &aCenter, float aRadius, const BOARD_ITEM &aBoardItem );
+
     float GetRadius() const { return m_radius; }
     const SFVEC2F &GetCenter() const { return m_center; }
     float GetRadiusSquared() const { return m_radius_squared; }
-
-private:
-    SFVEC2F m_center;
-    float   m_radius;
-    float   m_radius_squared;
-
-public:
-    CFILLEDCIRCLE2D( const SFVEC2F &aCenter, float aRadius, const BOARD_ITEM &aBoardItem );
 
     // Imported from COBJECT2D
     bool Overlaps( const CBBOX2D &aBBox ) const override;
@@ -53,6 +47,11 @@ public:
     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
     bool IsPointInside( const SFVEC2F &aPoint ) const override;
+
+private:
+    SFVEC2F m_center;
+    float   m_radius;
+    float   m_radius_squared;
 };
 
 

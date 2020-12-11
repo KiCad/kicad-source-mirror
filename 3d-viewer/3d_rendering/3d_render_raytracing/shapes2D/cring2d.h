@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,16 @@
 class  CRING2D : public COBJECT2D
 {
 public:
+    CRING2D( const SFVEC2F &aCenter, float aInnerRadius, float aOuterRadius,
+             const BOARD_ITEM &aBoardItem );
+
+    // Imported from COBJECT2D
+    bool Overlaps( const CBBOX2D &aBBox ) const override;
+    bool Intersects( const CBBOX2D &aBBox ) const override;
+    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
+    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+
     const SFVEC2F &GetCenter() const { return m_center; }
     float GetInnerRadius() const { return m_inner_radius; }
     float GetOuterRadius() const { return m_outer_radius; }
@@ -48,17 +58,6 @@ private:
     float   m_outer_radius;
     float   m_inner_radius_squared;
     float   m_outer_radius_squared;
-
-public:
-    CRING2D( const SFVEC2F &aCenter, float aInnerRadius, float aOuterRadius,
-             const BOARD_ITEM &aBoardItem );
-
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
 };
 
 

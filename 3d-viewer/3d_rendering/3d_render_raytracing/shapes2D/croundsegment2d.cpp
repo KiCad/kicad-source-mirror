@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,9 +31,10 @@
 #include <wx/debug.h>
 
 
-CROUNDSEGMENT2D::CROUNDSEGMENT2D(
-        const SFVEC2F& aStart, const SFVEC2F& aEnd, float aWidth, const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::ROUNDSEG, aBoardItem ), m_segment( aStart, aEnd )
+CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F& aStart, const SFVEC2F& aEnd, float aWidth,
+                                  const BOARD_ITEM& aBoardItem ) :
+        COBJECT2D( OBJECT2D_TYPE::ROUNDSEG, aBoardItem ),
+        m_segment( aStart, aEnd )
 {
     wxASSERT( aStart != aEnd );
 
@@ -41,8 +42,7 @@ CROUNDSEGMENT2D::CROUNDSEGMENT2D(
     m_radius_squared = m_radius * m_radius;
     m_width = aWidth;
 
-    SFVEC2F leftRadiusOffset( -m_segment.m_Dir.y * m_radius,
-                               m_segment.m_Dir.x * m_radius );
+    SFVEC2F leftRadiusOffset( -m_segment.m_Dir.y * m_radius, m_segment.m_Dir.x * m_radius );
 
     m_leftStart = aStart + leftRadiusOffset;
     m_leftEnd   = aEnd   + leftRadiusOffset;
@@ -72,11 +72,8 @@ bool CROUNDSEGMENT2D::Intersects( const CBBOX2D &aBBox ) const
     if( !m_bbox.Intersects( aBBox ) )
         return false;
 
-    if( (aBBox.Max().x > m_bbox.Max().x) &&
-        (aBBox.Max().y > m_bbox.Max().y) &&
-        (aBBox.Min().x < m_bbox.Min().x) &&
-        (aBBox.Min().y < m_bbox.Min().y)
-        )
+    if( ( aBBox.Max().x > m_bbox.Max().x ) && ( aBBox.Max().y > m_bbox.Max().y )
+      && ( aBBox.Min().x < m_bbox.Min().x ) && ( aBBox.Min().y < m_bbox.Min().y ) )
         return true;
 
     SFVEC2F v[4];
@@ -172,20 +169,24 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
     if( rightSegmentHit )
     {
         if( !start_is_inside )
-        if( (hitted == false) || (rightSegT < closerHitT) )
         {
-            closerHitT = rightSegT;
-            closerHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
-        }
+            if( (hitted == false) || (rightSegT < closerHitT) )
+            {
+                closerHitT = rightSegT;
+                closerHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
+            }
 
-        if( start_is_inside )
-        if( (hitted == false) || (rightSegT > farHitT) )
-        {
-            farHitT = rightSegT;
-            farHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
-        }
+            if( start_is_inside )
+            {
+                if( (hitted == false) || (rightSegT > farHitT) )
+                {
+                    farHitT = rightSegT;
+                    farHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
+                }
+            }
 
-        hitted = true;
+            hitted = true;
+        }
     }
 
     float   circleStart_T0;
@@ -202,17 +203,21 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
         if( circleStart_T0 > 0.0f )
         {
             if( !start_is_inside )
-            if( (hitted == false) || (circleStart_T0 < closerHitT) )
             {
-                closerHitT = circleStart_T0;
-                closerHitNormal = circleStart_N0;
+                if( (hitted == false) || (circleStart_T0 < closerHitT) )
+                {
+                    closerHitT = circleStart_T0;
+                    closerHitNormal = circleStart_N0;
+                }
             }
 
             if( start_is_inside )
-            if( (hitted == false) || (circleStart_T1 > farHitT) )
             {
-                farHitT = circleStart_T1;
-                farHitNormal = circleStart_N1;
+                if( (hitted == false) || (circleStart_T1 > farHitT) )
+                {
+                    farHitT = circleStart_T1;
+                    farHitNormal = circleStart_N1;
+                }
             }
         }
         else
@@ -241,17 +246,21 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
         if( circleEnd_T0 > 0.0f )
         {
             if( !start_is_inside )
-            if( (hitted == false) || (circleEnd_T0 < closerHitT) )
             {
-                closerHitT = circleEnd_T0;
-                closerHitNormal = circleEnd_N0;
+                if( (hitted == false) || (circleEnd_T0 < closerHitT) )
+                {
+                    closerHitT = circleEnd_T0;
+                    closerHitNormal = circleEnd_N0;
+                }
             }
 
             if( start_is_inside )
-            if( (hitted == false) || (circleEnd_T1 > farHitT) )
             {
-                farHitT = circleEnd_T1;
-                farHitNormal = circleEnd_N1;
+                if( (hitted == false) || (circleEnd_T1 > farHitT) )
+                {
+                    farHitT = circleEnd_T1;
+                    farHitNormal = circleEnd_N1;
+                }
             }
         }
         else

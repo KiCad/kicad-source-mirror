@@ -36,6 +36,7 @@ COBJECT3D_STATS *COBJECT3D_STATS::s_instance = 0;
 
 static const CBLINN_PHONG_MATERIAL s_defaultMaterial = CBLINN_PHONG_MATERIAL();
 
+
 COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
 {
     m_obj_type = aObjType;
@@ -69,6 +70,6 @@ void COBJECT3D_STATS::PrintStats()
     for( auto& objectType : objectTypeNames )
     {
         wxLogDebug( "  %20s  %u\n", objectType.second,
-                m_counter[static_cast<int>( objectType.first )] );
+                    m_counter[static_cast<int>( objectType.first )] );
     }
 }

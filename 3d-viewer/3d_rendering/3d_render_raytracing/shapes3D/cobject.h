@@ -48,22 +48,9 @@ enum class OBJECT3D_TYPE
 };
 
 
-class  COBJECT
+class COBJECT
 {
-protected:
-    CBBOX   m_bbox;
-    SFVEC3F m_centroid;
-    OBJECT3D_TYPE m_obj_type;
-    const CMATERIAL *m_material;
-
-    BOARD_ITEM *m_boardItem;
-
-    // m_modelTransparency combines the material and model opacity
-    // 0.0 full opaque, 1.0 full transparent.
-    float m_modelTransparency;
-
 public:
-
     explicit COBJECT( OBJECT3D_TYPE aObjType );
 
     const void SetBoardItem( BOARD_ITEM *aBoardItem ) { m_boardItem = aBoardItem; }
@@ -77,32 +64,29 @@ public:
 
     const CMATERIAL *GetMaterial() const { return m_material; }
     float GetModelTransparency() const { return m_modelTransparency; }
-    void SetModelTransparency( float aModelTransparency ) { m_modelTransparency = aModelTransparency; }
+    void SetModelTransparency( float aModelTransparency )
+    {
+        m_modelTransparency = aModelTransparency;
+    }
 
     virtual SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const = 0;
 
     virtual ~COBJECT() {}
 
-    /** Function Intersects
-     * @brief Intersects - a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅)
+    /**
+     * Intersects - a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅).
+     *
      * It intersects if the result intersection is not null
-     * @param aBBox
-     * @return
      */
     virtual bool Intersects( const CBBOX &aBBox ) const = 0;
 
 
-    /** Functions Intersect
-     * @brief Intersect
-     * @param aRay
-     * @param aHitInfo
+    /**
      * @return true if the aRay intersects the object
      */
     virtual bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const = 0;
 
-    /** Functions Intersect for shadow test
-     * @brief Intersect
-     * @param aRay
+    /**
      * @param aMaxDistance - max distance of the test
      * @return true if the aRay intersects the object
      */
@@ -111,6 +95,18 @@ public:
     const CBBOX &GetBBox() const { return m_bbox; }
 
     const SFVEC3F &GetCentroid() const { return m_centroid; }
+
+protected:
+    CBBOX m_bbox;
+    SFVEC3F m_centroid;
+    OBJECT3D_TYPE m_obj_type;
+    const CMATERIAL *m_material;
+
+    BOARD_ITEM *m_boardItem;
+
+    // m_modelTransparency combines the material and model opacity
+    // 0.0 full opaque, 1.0 full transparent.
+    float m_modelTransparency;
 };
 
 
@@ -148,9 +144,8 @@ private:
     COBJECT3D_STATS(){ ResetStats(); }
     COBJECT3D_STATS( const COBJECT3D_STATS &old );
     const COBJECT3D_STATS &operator=( const COBJECT3D_STATS &old );
-    ~COBJECT3D_STATS(){}
+    ~COBJECT3D_STATS() {}
 
-private:
     unsigned int m_counter[static_cast<int>( OBJECT3D_TYPE::MAX )];
 
     static COBJECT3D_STATS *s_instance;

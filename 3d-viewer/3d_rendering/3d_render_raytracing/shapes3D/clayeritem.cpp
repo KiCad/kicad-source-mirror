@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,12 +199,11 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 else
                 {
                     // At this point, the ray miss the two planes but it still
-                    // hits the box. It means that the rays are "(almost)paralell"
+                    // hits the box. It means that the rays are "(almost)parallel"
                     // to the planes, so must calc the intersection
                 }
             }
         }
-
 
         SFVEC3F boxHitPointStart = aRay.at( tBBoxStart );
         SFVEC3F boxHitPointEnd = aRay.at( tBBoxEnd );
@@ -431,7 +430,7 @@ bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
             else
             {
                 // At this point, the ray miss the two planes but it still
-                // hits the box. It means that the rays are "(almost)paralell"
+                // hits the box. It means that the rays are "(almost)parallel"
                 // to the planes, so must calc the intersection
             }
         }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,23 +37,6 @@ class  CROUNDSEGMENT2D : public COBJECT2D
 
 friend class CROUNDSEG;
 
-private:
-    RAYSEG2D m_segment;
-
-    SFVEC2F  m_leftStart;
-    SFVEC2F  m_leftEnd;
-    SFVEC2F  m_leftEndMinusStart;
-    SFVEC2F  m_leftDir;
-
-    SFVEC2F  m_rightStart;
-    SFVEC2F  m_rightEnd;
-    SFVEC2F  m_rightEndMinusStart;
-    SFVEC2F  m_rightDir;
-
-    float    m_radius;
-    float    m_radius_squared;
-    float    m_width;
-
 public:
     CROUNDSEGMENT2D( const SFVEC2F &aStart, const SFVEC2F &aEnd, float aWidth,
                      const BOARD_ITEM &aBoardItem );
@@ -83,15 +66,32 @@ public:
     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
     bool IsPointInside( const SFVEC2F &aPoint ) const override;
+
+private:
+    RAYSEG2D m_segment;
+
+    SFVEC2F  m_leftStart;
+    SFVEC2F  m_leftEnd;
+    SFVEC2F  m_leftEndMinusStart;
+    SFVEC2F  m_leftDir;
+
+    SFVEC2F  m_rightStart;
+    SFVEC2F  m_rightEnd;
+    SFVEC2F  m_rightEndMinusStart;
+    SFVEC2F  m_rightDir;
+
+    float    m_radius;
+    float    m_radius_squared;
+    float    m_width;
 };
 
 static const float s_min_dot = (FLT_EPSILON * 4.0f * FLT_EPSILON * 4.0f) ;
 
 /**
- * @brief Segment_is_a_circle - check if segment start and end is very close to each other
- * should used to check if the segment should be converted to a circle instead
- * @param aStart
- * @param aEnd
+ * Check if segment start and end is very close to each other.
+ *
+ * This should used to check if the segment should be converted to a circle instead.
+ *
  * @return true is it is better to convert the segment to circle
  */
 inline bool Is_segment_a_circle( const SFVEC2F &aStart, const SFVEC2F &aEnd )
@@ -99,7 +99,7 @@ inline bool Is_segment_a_circle( const SFVEC2F &aStart, const SFVEC2F &aEnd )
     const SFVEC2F vec = aEnd - aStart;
 
     return (aStart == aEnd) ||
-            // This is the same as calc the lenght squared (without the sqrt)
+            // This is the same as calc the length squared (without the sqrt)
             // and compare with a small value
             ( glm::dot( vec, vec ) <= s_min_dot );
 }

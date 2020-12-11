@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,16 +33,9 @@
 #include "cobject.h"
 #include "../shapes2D/croundsegment2d.h"
 
-/**
- *
- */
 class  CROUNDSEG : public COBJECT
 {
-
 public:
-    /**
-     * Constructor CROUNDSEG
-     */
     CROUNDSEG( const CROUNDSEGMENT2D &aSeg2D, float aZmin, float aZmax );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
@@ -69,6 +62,7 @@ private:
     SFVEC3F m_diffusecolor;
 };
 
+
 #if 0
 /**
  * This is a object similar to a round segment but with a ring
@@ -77,9 +71,6 @@ private:
 class  COBLONGRING : public COBJECT
 {
 public:
-    /**
-     * Constructor CROUNDSEG
-     */
     CROUNDSEG( const SFVEC2F &aStart,
                const SFVEC2F &aEnd,
                float aInnerRadius,
@@ -109,4 +100,5 @@ private:
     float    m_seglen_over_two_squared;
 };
 #endif
+
 #endif // _CROUNDSEG_H_

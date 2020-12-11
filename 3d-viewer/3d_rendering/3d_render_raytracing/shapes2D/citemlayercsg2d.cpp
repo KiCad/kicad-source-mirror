@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,13 +31,15 @@
 #include "3d_fastmath.h"
 #include <wx/debug.h>
 
+
 CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D* aObjectA,
-        std::vector<const COBJECT2D*>* aObjectB, const COBJECT2D* aObjectC,
-        const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::CSG, aBoardItem ),
-          m_objectA( aObjectA ),
-          m_objectB( aObjectB ),
-          m_objectC( aObjectC )
+                                  std::vector<const COBJECT2D*>* aObjectB,
+                                  const COBJECT2D* aObjectC,
+                                  const BOARD_ITEM& aBoardItem ) :
+        COBJECT2D( OBJECT2D_TYPE::CSG, aBoardItem ),
+        m_objectA( aObjectA ),
+        m_objectB( aObjectB ),
+        m_objectC( aObjectC )
 {
     wxASSERT( aObjectA );
 
@@ -52,8 +54,7 @@ CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D* aObjectA,
 
 CITEMLAYERCSG2D::~CITEMLAYERCSG2D()
 {
-    if( ((void*)m_objectB != CSGITEM_EMPTY) &&
-        ((void*)m_objectB != CSGITEM_FULL) )
+    if( ( (void*) m_objectB != CSGITEM_EMPTY ) && ( (void*) m_objectB != CSGITEM_FULL ) )
     {
         delete m_objectB;
         m_objectB = NULL;
@@ -61,31 +62,30 @@ CITEMLAYERCSG2D::~CITEMLAYERCSG2D()
 }
 
 
-bool CITEMLAYERCSG2D::Intersects( const CBBOX2D &aBBox ) const
+bool CITEMLAYERCSG2D::Intersects( const CBBOX2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
-    // !TODO: improove this implementation
+    // !TODO: improve this implementation
     //return false;
 }
 
 
-bool CITEMLAYERCSG2D::Overlaps( const CBBOX2D &aBBox ) const
+bool CITEMLAYERCSG2D::Overlaps( const CBBOX2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return false;
 }
 
+
 // Based on ideas and implementation by Nick Chapman
 // http://homepages.paradise.net.nz/nickamy/raytracer/raytracer.htm
-bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
-                                 float *aOutT,
-                                 SFVEC2F *aNormalOut ) const
+bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
     if( m_objectA->GetObjectType() == OBJECT2D_TYPE::DUMMYBLOCK )
         return false;
 
-    SFVEC2F currentRayPos = aSegRay.m_Start;
-    SFVEC2F currentNormal;
+    SFVEC2F  currentRayPos = aSegRay.m_Start;
+    SFVEC2F  currentNormal;
     RAYSEG2D currentRay = aSegRay;
 
     if( !m_objectA->IsPointInside( aSegRay.m_Start ) )
@@ -102,7 +102,6 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
 
     //wxASSERT( (currentRayDist >= 0.0f) && (currentRayDist <= 1.0f) );
 
-
     // move through the union of subtracted regions
     if( m_objectB )
     {
@@ -113,15 +112,14 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
             //check against all subbed objects
             for( unsigned int i = 0; i < m_objectB->size(); ++i )
             {
-                if( ( (const COBJECT2D *)( *m_objectB)[i] )->IsPointInside( currentRayPos ) )
+                if( ( (const COBJECT2D*) ( *m_objectB )[i] )->IsPointInside( currentRayPos ) )
                 {
                     // ray point is inside a subtracted region,  so move it to the end of the
                     // subtracted region
-                    float hitDist;
+                    float   hitDist;
                     SFVEC2F tmpNormal;
-                    if( !( (const COBJECT2D *)( *m_objectB)[i] )->Intersect( currentRay,
-                                                                             &hitDist,
-                                                                             &tmpNormal ) )
+                    if( !( (const COBJECT2D*) ( *m_objectB )[i] )
+                                    ->Intersect( currentRay, &hitDist, &tmpNormal ) )
                         return false; // ray hit main object but did not leave subtracted volume
 
                     wxASSERT( hitDist <= 1.0f );
@@ -130,7 +128,8 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
                     {
                         wasCrossedSubVol = true;
 
-                        currentRayPos = currentRay.atNormalized( glm::min( hitDist + 0.0001f, 1.0f ) );
+                        currentRayPos =
+                                currentRay.atNormalized( glm::min( hitDist + 0.0001f, 1.0f ) );
 
                         currentRay = RAYSEG2D( currentRayPos, aSegRay.m_End );
 
@@ -148,13 +147,15 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D &aSegRay,
         *aNormalOut = currentNormal;
 
     if( aOutT )
-        *aOutT      = glm::min( glm::max( glm::length( currentRayPos - aSegRay.m_Start ) / aSegRay.m_Length, 0.0f ), 1.0f );
+        *aOutT = glm::min(
+                glm::max( glm::length( currentRayPos - aSegRay.m_Start ) / aSegRay.m_Length, 0.0f ),
+                1.0f );
 
     return true;
 }
 
 
-INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D &aBBox ) const
+INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D& aBBox ) const
 {
 
     // !TODO:
@@ -163,19 +164,20 @@ INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 }
 
 
-bool CITEMLAYERCSG2D::IsPointInside( const SFVEC2F &aPoint ) const
+bool CITEMLAYERCSG2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     // Perform the operation (A - B) /\ C
-
     if( m_objectA->IsPointInside( aPoint ) )
     {
 
-        if( m_objectB != CSGITEM_EMPTY)
-            for( unsigned int i = 0; i< m_objectB->size(); i++ )
+        if( m_objectB != CSGITEM_EMPTY )
+        {
+            for( unsigned int i = 0; i < m_objectB->size(); i++ )
             {
-                if( (*m_objectB)[i]->IsPointInside( aPoint ) )
+                if( ( *m_objectB )[i]->IsPointInside( aPoint ) )
                     return false;
             }
+        }
 
         // !TODO: not yet implemented
         //if( m_objectC && m_objectC != CSGITEM_FULL )

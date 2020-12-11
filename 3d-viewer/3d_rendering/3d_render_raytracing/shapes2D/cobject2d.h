@@ -61,57 +61,44 @@ enum class OBJECT2D_TYPE
 
 class  COBJECT2D
 {
-protected:
-    CBBOX2D          m_bbox;
-    SFVEC2F          m_centroid;
-    OBJECT2D_TYPE    m_obj_type;
-
-    const BOARD_ITEM &m_boardItem;
 public:
-
     COBJECT2D( OBJECT2D_TYPE aObjType, const BOARD_ITEM &aBoardItem );
     virtual ~COBJECT2D() {}
 
     const BOARD_ITEM &GetBoardItem() const { return m_boardItem; }
 
-    /** Function Overlaps
-     * @brief Test if the box overlaps the object
+    /**
+     * Test if the box overlaps the object.
+     *
      * Conformance
-     * The function overlaps implements function Overlaps from the OGC
-     * Simple Feature Specification.
-     * http://www.opengeospatial.org/standards/sfa
+     * Implements the Overlaps function from the OGC Simple Feature Specification at
+     * http://www.opengeospatial.org/standards/sfa.
      * a.Overlaps(b) ⇔ ( dim(I(a)) = dim(I(b)) = dim(I(a) ∩ I(b))) ∧ (a ∩ b ≠ a) ∧ (a ∩ b ≠ b)
-     * It means that the result dimension of an overlap is the same dimentions
+     * It means that the result dimension of an overlap is the same dimensions
      * of the bounding box (so the overlap cannot be a point or a line) and one
      * of the boxes cannot full contain the other box.
+     *
      * @param aBBox - The bounding box to test
      * @return true if the BBox intersects the object or is inside it
      */
     virtual bool Overlaps( const CBBOX2D &aBBox ) const = 0;
 
-    /** Function Intersects
-     * @brief Intersects - a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅)
-     * It intersects if the result intersection is not null
-     * @param aBBox
-     * @return
+    /**
+     * a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅)
      */
     virtual bool Intersects( const CBBOX2D &aBBox ) const = 0;
 
-    /** Function Intersect
-     * @brief Intersect
-     * @param aSegRay
+    /**
      * @param aOutT a value between 0.0 and 1.0 in relation to the time of the
      * hit of the segment
-     * @param aNormalOut
-     * @return
      */
     virtual bool Intersect( const RAYSEG2D &aSegRay,
                             float *aOutT,
                             SFVEC2F *aNormalOut ) const = 0;
 
     /**
-     * Function IsBBoxInside
-     * @brief Tests if the bounding is out, intersects or is complety inside
+     * Test this object if it's completely outside, intersects, or is completely inside \a aBBox.
+     *
      * @return INTERSECTION_RESULT
      */
     virtual INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const = 0;
@@ -123,12 +110,17 @@ public:
     const SFVEC2F &GetCentroid() const { return m_centroid; }
 
     OBJECT2D_TYPE GetObjectType() const { return m_obj_type; }
+
+protected:
+    CBBOX2D          m_bbox;
+    SFVEC2F          m_centroid;
+    OBJECT2D_TYPE    m_obj_type;
+
+    const BOARD_ITEM &m_boardItem;
 };
 
 
 
-/// Implements a class for object statistics
-/// using Singleton pattern
 class COBJECT2D_STATS
 {
 public:
@@ -163,7 +155,6 @@ private:
     const COBJECT2D_STATS &operator=( const COBJECT2D_STATS &old );
     ~COBJECT2D_STATS(){}
 
-private:
     unsigned int m_counter[static_cast<int>( OBJECT2D_TYPE::MAX )];
 
     static COBJECT2D_STATS *s_instance;

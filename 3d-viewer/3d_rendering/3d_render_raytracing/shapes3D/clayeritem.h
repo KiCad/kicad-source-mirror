@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,11 +36,7 @@
 
 class  CLAYERITEM : public COBJECT
 {
-protected:
-    const COBJECT2D *m_object2d;
-
 public:
-
     CLAYERITEM( const COBJECT2D *aObject2D, float aZMin, float aZMax );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
@@ -50,6 +46,9 @@ public:
     bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
     bool Intersects( const CBBOX &aBBox ) const override;
     SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+
+protected:
+    const COBJECT2D *m_object2d;
 
 private:
     SFVEC3F m_diffusecolor;
