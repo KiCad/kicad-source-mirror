@@ -147,7 +147,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
         Given a netname, return its netcode
         """
         net = self.GetNetsByName()[netname]
-        return net.GetNet()
+        return net.GetNetCode()
 
     def GetAllNetClasses(self):
         """
