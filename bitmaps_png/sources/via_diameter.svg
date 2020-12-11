@@ -1,146 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
-   version="1.1"
-   sodipodi:docname="via_diameter.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
-     id="namedview30"
-     showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="12.449935"
-     inkscape:cy="10.676605"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid_kicad"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#9999ff"
-       opacity="0.13"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata43">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs27539">
-    <style
-       id="style27537">.cls-1,.cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#e61c50;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#1a81c4;}.cls-3{fill:#f29100;}.cls-4{fill:#b9b9b9;}.cls-5{stroke:#545454;}.cls-6{fill:#545454;}</style>
-  </defs>
-  <title
-     id="title27541">via_diameter</title>
-  <line
-     class="cls-1"
-     x1="7.0467997"
-     y1="16.954201"
-     x2="0.99660003"
-     y2="23.004499"
-     id="line27543" />
-  <line
-     class="cls-2"
-     x1="16.946301"
-     y1="7.0546999"
-     x2="22.996599"
-     y2="1.0044999"
-     id="line27545" />
-  <circle
-     class="cls-3"
-     cx="11.9965"
-     cy="12.0045"
-     r="7"
-     id="circle27547" />
-  <circle
-     class="cls-4"
-     cx="11.9965"
-     cy="12.0045"
-     r="3.1111"
-     id="circle27549" />
-  <line
-     class="cls-5"
-     x1="0.51380002"
-     y1="12.919"
-     x2="12.9377"
-     y2="0.49520004"
-     id="line27551" />
-  <line
-     class="cls-5"
-     x1="11.0699"
-     y1="23.475"
-     x2="23.4937"
-     y2="11.0512"
-     id="line27553" />
-  <line
-     class="cls-5"
-     x1="20.460699"
-     y1="20.512501"
-     x2="23.516899"
-     y2="23.568701"
-     id="line27555" />
-  <polygon
-     class="cls-6"
-     points="18.328,18.38 23.188,21.186 21.134,23.24 "
-     id="polygon27557"
-     transform="translate(-1,-1)" />
-  <line
-     class="cls-5"
-     x1="0.39040005"
-     y1="0.44210005"
-     x2="3.4524002"
-     y2="3.5042"
-     id="line27559" />
-  <polygon
-     class="cls-6"
-     points="7.585,7.636 4.779,2.776 2.725,4.831 "
-     id="polygon27561"
-     transform="translate(-1,-1)" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="via_diameter.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="12.449935" inkscape:cy="10.676605" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
+      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs27539">
+      <style id="style27537">.cls-1,.cls-2,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#bf2641;}.cls-1,.cls-2{stroke-width:2px;}.cls-2{stroke:#1a81c4;}.cls-3{fill:#f29100;}.cls-4{fill:#b9b9b9;}.cls-5{stroke:#545454;}.cls-6{fill:#545454;}</style>
+   </defs>
+   <title id="title27541">via_diameter</title>
+   <line class="cls-1" x1="7.0467997" y1="16.954201" x2="0.99660003" y2="23.004499" id="line27543" />
+   <line class="cls-2" x1="16.946301" y1="7.0546999" x2="22.996599" y2="1.0044999" id="line27545" />
+   <circle class="cls-3" cx="11.9965" cy="12.0045" r="7" id="circle27547" />
+   <circle class="cls-4" cx="11.9965" cy="12.0045" r="3.1111" id="circle27549" />
+   <line class="cls-5" x1="0.51380002" y1="12.919" x2="12.9377" y2="0.49520004" id="line27551" />
+   <line class="cls-5" x1="11.0699" y1="23.475" x2="23.4937" y2="11.0512" id="line27553" />
+   <line class="cls-5" x1="20.460699" y1="20.512501" x2="23.516899" y2="23.568701" id="line27555" />
+   <polygon class="cls-6" points="18.328,18.38 23.188,21.186 21.134,23.24 " id="polygon27557" transform="translate(-1,-1)" />
+   <line class="cls-5" x1="0.39040005" y1="0.44210005" x2="3.4524002" y2="3.5042" id="line27559" />
+   <polygon class="cls-6" points="7.585,7.636 4.779,2.776 2.725,4.831 " id="polygon27561" transform="translate(-1,-1)" />
 </svg>

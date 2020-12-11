@@ -1,142 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
-   version="1.1"
-   sodipodi:docname="show_zone_outline_only.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1917"
-     inkscape:window-height="1459"
-     id="namedview42"
-     showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid240579"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#b8b8ff"
-       opacity="0.1254902"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata43">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs11">
-    <style
-       id="style3">.cls-1{fill:none;stroke:#1a81c4;stroke-miterlimit:10;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#545454;}.cls-7{fill:#e61c50;}.cls-8{fill:#f5f5f5;}</style>
-    <linearGradient
-       id="Безымянный_градиент_19"
-       x1="8.3372"
-       y1="15.5299"
-       x2="8.3372"
-       y2="12.9228"
-       gradientUnits="userSpaceOnUse">
-      <stop
-         offset="0"
-         stop-color="#ececec"
-         id="stop5" />
-      <stop
-         offset="1"
-         stop-color="#c6c6c5"
-         id="stop7" />
-    </linearGradient>
-    <linearGradient
-       id="Безымянный_градиент_19-2"
-       x1="9.5617"
-       y1="15.5299"
-       x2="9.5617"
-       y2="12.9228"
-       xlink:href="#Безымянный_градиент_19" />
-  </defs>
-  <title
-     id="title13">show_zone_disable копия</title>
-  <polyline
-     class="cls-1"
-     points="4.514 17.172 7.208 17.172 13.329 17.172"
-     id="polyline15"
-     transform="translate(-1,-1)" />
-  <line
-     class="cls-1"
-     x1="7.9216003"
-     y1="20.315599"
-     x2="7.9216003"
-     y2="16.0956"
-     id="line17" />
-  <path
-     class="cls-2"
-     d="M 11.1541,8.0186 A 2.3887,2.3887 0 0 1 11.4216,9.12 v 2.1943 A 2.3916,2.3916 0 0 1 10.9653,12.7217 4.4066,4.4066 0 1 1 4.8787,12.7191 2.3709,2.3709 0 0 1 4.4216,11.3143 V 9.12 A 2.3981,2.3981 0 0 1 5.3051,7.26 V 6.718 A 2.6387,2.6387 0 0 1 6.0972,4.8391 L 7.4508,3.5162 A 2.615,2.615 0 0 1 9.2853,2.7686 h 11.64 L 20.923,2.7568 A 3.49,3.49 0 0 0 17.5197,0.0192 h -14 a 3.5,3.5 0 0 0 -3.5,3.5 v 14 a 3.5,3.5 0 0 0 3.5,3.5 h 14 a 3.5,3.5 0 0 0 3.5,-3.5 V 8.0186 Z"
-     id="path19" />
-  <path
-     class="cls-3"
-     d="M 7.93,11.0811 A 0.8745,0.8745 0 0 1 7.055,10.2061 V 6.718 A 0.8728,0.8728 0 0 1 7.3182,6.0926 L 8.6736,4.7681 A 0.8759,0.8759 0 0 1 9.2855,4.5186 h 10.6461 a 0.875,0.875 0 0 1 0,1.75 H 9.6416 L 8.805,7.0863 v 3.12 A 0.8744,0.8744 0 0 1 7.93,11.0811 Z"
-     id="path21" />
-  <rect
-     class="cls-6"
-     x="6.1627998"
-     y="8.4672003"
-     width="3.5"
-     height="3.5"
-     rx="0.65289998"
-     id="rect27" />
-  <path
-     class="cls-6"
-     d="m 6.8083,14.3456 h 2.1944 a 0.6528,0.6528 0 0 1 0.6528,0.6528 v 2.1943 A 0.6529,0.6529 0 0 1 9.0026,17.8456 H 6.8084 A 0.6529,0.6529 0 0 1 6.1555,17.1927 v -2.1943 a 0.6528,0.6528 0 0 1 0.6528,-0.6528 z"
-     id="path29" />
-  <path
-     class="cls-1"
-     d="M 21.0192,8.0186 H 11.1541 A 2.3887,2.3887 0 0 1 11.4216,9.12 v 2.1943 A 2.3916,2.3916 0 0 1 10.9653,12.7217 4.4066,4.4066 0 1 1 4.8787,12.7191 2.3709,2.3709 0 0 1 4.4216,11.3143 V 9.12 A 2.3981,2.3981 0 0 1 5.3051,7.26 V 6.718 A 2.6387,2.6387 0 0 1 6.0972,4.8391 L 7.4508,3.5162 A 2.615,2.615 0 0 1 9.2853,2.7686 h 11.64"
-     id="path31" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="show_zone_outline_only.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1917" inkscape:window-height="1459" id="namedview42" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+      <inkscape:grid type="xygrid" id="grid240579" spacingx="0.5" spacingy="0.5" color="#b8b8ff" opacity="0.1254902" empspacing="2" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs11">
+      <style id="style3">.cls-1{fill:none;stroke:#1a81c4;stroke-miterlimit:10;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#595959;}.cls-4{fill:url(#Безымянный_градиент_19);}.cls-5{fill:url(#Безымянный_градиент_19-2);}.cls-6{fill:#545454;}.cls-7{fill:#bf2641;}.cls-8{fill:#f5f5f5;}</style>
+      <linearGradient id="Безымянный_градиент_19" x1="8.3372" y1="15.5299" x2="8.3372" y2="12.9228" gradientUnits="userSpaceOnUse">
+         <stop offset="0" stop-color="#ececec" id="stop5" />
+         <stop offset="1" stop-color="#c6c6c5" id="stop7" />
+      </linearGradient>
+      <linearGradient id="Безымянный_градиент_19-2" x1="9.5617" y1="15.5299" x2="9.5617" y2="12.9228" xlink:href="#Безымянный_градиент_19" />
+   </defs>
+   <title id="title13">show_zone_disable копия</title>
+   <polyline class="cls-1" points="4.514 17.172 7.208 17.172 13.329 17.172" id="polyline15" transform="translate(-1,-1)" />
+   <line class="cls-1" x1="7.9216003" y1="20.315599" x2="7.9216003" y2="16.0956" id="line17" />
+   <path class="cls-2" d="M 11.1541,8.0186 A 2.3887,2.3887 0 0 1 11.4216,9.12 v 2.1943 A 2.3916,2.3916 0 0 1 10.9653,12.7217 4.4066,4.4066 0 1 1 4.8787,12.7191 2.3709,2.3709 0 0 1 4.4216,11.3143 V 9.12 A 2.3981,2.3981 0 0 1 5.3051,7.26 V 6.718 A 2.6387,2.6387 0 0 1 6.0972,4.8391 L 7.4508,3.5162 A 2.615,2.615 0 0 1 9.2853,2.7686 h 11.64 L 20.923,2.7568 A 3.49,3.49 0 0 0 17.5197,0.0192 h -14 a 3.5,3.5 0 0 0 -3.5,3.5 v 14 a 3.5,3.5 0 0 0 3.5,3.5 h 14 a 3.5,3.5 0 0 0 3.5,-3.5 V 8.0186 Z" id="path19" />
+   <path class="cls-3" d="M 7.93,11.0811 A 0.8745,0.8745 0 0 1 7.055,10.2061 V 6.718 A 0.8728,0.8728 0 0 1 7.3182,6.0926 L 8.6736,4.7681 A 0.8759,0.8759 0 0 1 9.2855,4.5186 h 10.6461 a 0.875,0.875 0 0 1 0,1.75 H 9.6416 L 8.805,7.0863 v 3.12 A 0.8744,0.8744 0 0 1 7.93,11.0811 Z" id="path21" />
+   <rect class="cls-6" x="6.1627998" y="8.4672003" width="3.5" height="3.5" rx="0.65289998" id="rect27" />
+   <path class="cls-6" d="m 6.8083,14.3456 h 2.1944 a 0.6528,0.6528 0 0 1 0.6528,0.6528 v 2.1943 A 0.6529,0.6529 0 0 1 9.0026,17.8456 H 6.8084 A 0.6529,0.6529 0 0 1 6.1555,17.1927 v -2.1943 a 0.6528,0.6528 0 0 1 0.6528,-0.6528 z" id="path29" />
+   <path class="cls-1" d="M 21.0192,8.0186 H 11.1541 A 2.3887,2.3887 0 0 1 11.4216,9.12 v 2.1943 A 2.3916,2.3916 0 0 1 10.9653,12.7217 4.4066,4.4066 0 1 1 4.8787,12.7191 2.3709,2.3709 0 0 1 4.4216,11.3143 V 9.12 A 2.3981,2.3981 0 0 1 5.3051,7.26 V 6.718 A 2.6387,2.6387 0 0 1 6.0972,4.8391 L 7.4508,3.5162 A 2.615,2.615 0 0 1 9.2853,2.7686 h 11.64" id="path31" />
 </svg>

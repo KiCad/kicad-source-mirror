@@ -1,128 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
-   version="1.1"
-   sodipodi:docname="via_annulus.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
-     id="namedview30"
-     showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid_kicad"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#9999ff"
-       opacity="0.13"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata43">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs27493">
-    <style
-       id="style27491">.cls-1{fill:#e61c50;}.cls-2{fill:#1a81c4;}.cls-3{fill:#f29100;}.cls-4{fill:#b9b9b9;}.cls-5{fill:#545454;}</style>
-  </defs>
-  <title
-     id="title27495">via_annulus</title>
-  <path
-     class="cls-1"
-     d="M 1,24 A 1,1 0 0 1 0.293,22.293 l 6.05,-6.05 a 1,1 0 0 1 1.414,1.414 l -6.05,6.05 A 0.9967,0.9967 0 0 1 1,24 Z"
-     id="path27497" />
-  <path
-     class="cls-2"
-     d="M 16.95,8.05 A 1,1 0 0 1 16.243,6.343 l 6.05,-6.05 a 1,1 0 0 1 1.414,1.414 l -6.05,6.05 A 0.9967,0.9967 0 0 1 16.95,8.05 Z"
-     id="path27499" />
-  <circle
-     class="cls-3"
-     cx="12"
-     cy="12"
-     r="6.9998999"
-     id="circle27501" />
-  <circle
-     class="cls-4"
-     cx="12"
-     cy="12"
-     r="3.1111"
-     id="circle27503" />
-  <path
-     class="cls-5"
-     d="M 0.5176,13.4141 A 0.5,0.5 0 0 1 0.1641,12.5605 L 12.5879,0.1367 a 0.5,0.5 0 0 1 0.707,0.7071 L 0.8711,13.2676 a 0.4987,0.4987 0 0 1 -0.3535,0.1465 z"
-     id="path27505" />
-  <path
-     class="cls-5"
-     d="M 3.9668,16.8633 A 0.5,0.5 0 0 1 3.6133,16.0098 L 16.0371,3.5859 a 0.5,0.5 0 1 1 0.707,0.7071 L 4.32,16.7168 a 0.4981,0.4981 0 0 1 -0.3532,0.1465 z"
-     id="path27507" />
-  <path
-     class="cls-5"
-     d="M 16.0205,16.5645 A 0.4986,0.4986 0 0 1 15.667,16.418 l -2.71,-2.71 a 0.5,0.5 0 1 1 0.7071,-0.707 l 2.71,2.71 a 0.5,0.5 0 0 1 -0.3535,0.8536 z"
-     id="path27509" />
-  <polygon
-     class="cls-5"
-     points="11.178,11.222 16.038,14.028 13.984,16.082 "
-     id="polygon27511"
-     transform="translate(-1,-1)" />
-  <path
-     class="cls-5"
-     d="M 3.4561,4 A 0.4984,0.4984 0 0 1 3.1025,3.8535 L 0.1594,0.91 A 0.5,0.5 0 0 1 0.8664,0.203 L 3.81,3.1465 A 0.5,0.5 0 0 1 3.4561,4 Z"
-     id="path27513" />
-  <polygon
-     class="cls-5"
-     points="7.588,7.632 4.782,2.772 2.728,4.826 "
-     id="polygon27515"
-     transform="translate(-1,-1)" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="via_annulus.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
+      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>add_arc</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs27493">
+      <style id="style27491">.cls-1{fill:#bf2641;}.cls-2{fill:#1a81c4;}.cls-3{fill:#f29100;}.cls-4{fill:#b9b9b9;}.cls-5{fill:#545454;}</style>
+   </defs>
+   <title id="title27495">via_annulus</title>
+   <path class="cls-1" d="M 1,24 A 1,1 0 0 1 0.293,22.293 l 6.05,-6.05 a 1,1 0 0 1 1.414,1.414 l -6.05,6.05 A 0.9967,0.9967 0 0 1 1,24 Z" id="path27497" />
+   <path class="cls-2" d="M 16.95,8.05 A 1,1 0 0 1 16.243,6.343 l 6.05,-6.05 a 1,1 0 0 1 1.414,1.414 l -6.05,6.05 A 0.9967,0.9967 0 0 1 16.95,8.05 Z" id="path27499" />
+   <circle class="cls-3" cx="12" cy="12" r="6.9998999" id="circle27501" />
+   <circle class="cls-4" cx="12" cy="12" r="3.1111" id="circle27503" />
+   <path class="cls-5" d="M 0.5176,13.4141 A 0.5,0.5 0 0 1 0.1641,12.5605 L 12.5879,0.1367 a 0.5,0.5 0 0 1 0.707,0.7071 L 0.8711,13.2676 a 0.4987,0.4987 0 0 1 -0.3535,0.1465 z" id="path27505" />
+   <path class="cls-5" d="M 3.9668,16.8633 A 0.5,0.5 0 0 1 3.6133,16.0098 L 16.0371,3.5859 a 0.5,0.5 0 1 1 0.707,0.7071 L 4.32,16.7168 a 0.4981,0.4981 0 0 1 -0.3532,0.1465 z" id="path27507" />
+   <path class="cls-5" d="M 16.0205,16.5645 A 0.4986,0.4986 0 0 1 15.667,16.418 l -2.71,-2.71 a 0.5,0.5 0 1 1 0.7071,-0.707 l 2.71,2.71 a 0.5,0.5 0 0 1 -0.3535,0.8536 z" id="path27509" />
+   <polygon class="cls-5" points="11.178,11.222 16.038,14.028 13.984,16.082 " id="polygon27511" transform="translate(-1,-1)" />
+   <path class="cls-5" d="M 3.4561,4 A 0.4984,0.4984 0 0 1 3.1025,3.8535 L 0.1594,0.91 A 0.5,0.5 0 0 1 0.8664,0.203 L 3.81,3.1465 A 0.5,0.5 0 0 1 3.4561,4 Z" id="path27513" />
+   <polygon class="cls-5" points="7.588,7.632 4.782,2.772 2.728,4.826 " id="polygon27515" transform="translate(-1,-1)" />
 </svg>

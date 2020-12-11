@@ -1,156 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
-   version="1.1"
-   sodipodi:docname="contrast_mode.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
-   inkscape:export-filename="/home/seth/code/kicad/kicad_bitmaps/bitmaps_png/sources/contrast_mode.png"
-   inkscape:export-xdpi="1890.4615"
-   inkscape:export-ydpi="1890.4615">
-  <metadata
-     id="metadata3145">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>contrast_mode</dc:title>
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="2861"
-     inkscape:window-height="1697"
-     id="namedview3143"
-     showgrid="true"
-     inkscape:zoom="42.45587"
-     inkscape:cx="8.705838"
-     inkscape:cy="12.015355"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid3708"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#c1c1ff"
-       opacity="0.1254902"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <defs
-     id="defs3124">
-    <style
-       id="style3116">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2,.cls-3{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#1a81c4;}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#e61c50;}.cls-5{stroke:#545454;}</style>
-    <linearGradient
-       id="Безымянный_градиент_19"
-       x1="18"
-       y1="21.4931"
-       x2="5.1177"
-       y2="21.4931"
-       gradientUnits="userSpaceOnUse">
-      <stop
-         offset="0"
-         stop-color="#ececec"
-         id="stop3118" />
-      <stop
-         offset="1"
-         stop-color="#c6c6c5"
-         id="stop3120" />
-    </linearGradient>
-    <linearGradient
-       id="Безымянный_градиент_19-2"
-       x1="24"
-       y1="8.9949"
-       x2="15.113"
-       y2="8.9949"
-       xlink:href="#Безымянный_градиент_19" />
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#Безымянный_градиент_19"
-       id="linearGradient241408"
-       gradientUnits="userSpaceOnUse"
-       x1="18"
-       y1="21.4931"
-       x2="5.1177"
-       y2="21.4931"
-       gradientTransform="translate(-1,-1)" />
-  </defs>
-  <title
-     id="title3126">contrast_mode</title>
-  <path
-     id="polyline3128"
-     style="fill:none;stroke:url(#linearGradient241408);stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 16,22 14,17.986 H 5.118"
-     sodipodi:nodetypes="ccc" />
-  <path
-     id="polyline3130"
-     style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 11.092,13 H 17 l 5,9"
-     sodipodi:nodetypes="ccc" />
-  <polyline
-     class="cls-2"
-     points="3 3 7 14 12.092 14"
-     id="polyline3132"
-     transform="translate(-1,-1)" />
-  <line
-     class="cls-3"
-     x1="15.113001"
-     y1="7.9948997"
-     x2="22"
-     y2="7.9948997"
-     id="line3134"
-     style="stroke:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19-2)" />
-  <path
-     class="cls-4"
-     d="M 15.3767,8.9951 H 10 A 0.9988,0.9988 0 0 1 9.0518,8.3115 l -2,-5.9951 A 1,1 0 1 1 8.9482,1.6836 l 1.7725,5.3115 h 5.3338 c 0.5527,0 0.2963,0.5129 0.0352,1 a 6.8531,6.8531 0 0 1 -0.713,1 z"
-     id="path3136" />
-  <path
-     class="cls-4"
-     d="M 5.5184569,19.003563 2,18.9863 c -1.33331671,-0.0065 -1.33333275,-2 0,-2 h 4.9038 c 0.5527,0 -0.8326498,2.019975 -1.3853431,2.017263 z"
-     id="path3138"
-     sodipodi:nodetypes="sssss" />
-  <path
-     id="line3140"
-     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 23,1 1,23"
-     sodipodi:nodetypes="cc" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="contrast_mode.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)" inkscape:export-filename="/home/seth/code/kicad/kicad_bitmaps/bitmaps_png/sources/contrast_mode.png" inkscape:export-xdpi="1890.4615" inkscape:export-ydpi="1890.4615">
+   <metadata id="metadata3145">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>contrast_mode</dc:title>
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2861" inkscape:window-height="1697" id="namedview3143" showgrid="true" inkscape:zoom="42.45587" inkscape:cx="8.705838" inkscape:cy="12.015355" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+      <inkscape:grid type="xygrid" id="grid3708" spacingx="0.5" spacingy="0.5" color="#c1c1ff" opacity="0.1254902" empspacing="2" />
+   </sodipodi:namedview>
+   <defs id="defs3124">
+      <style id="style3116">.cls-1,.cls-2,.cls-3,.cls-5{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1,.cls-2,.cls-3{stroke-width:2px;}.cls-1{stroke:url(#Безымянный_градиент_19);}.cls-2{stroke:#1a81c4;}.cls-3{stroke:url(#Безымянный_градиент_19-2);}.cls-4{fill:#bf2641;}.cls-5{stroke:#545454;}</style>
+      <linearGradient id="Безымянный_градиент_19" x1="18" y1="21.4931" x2="5.1177" y2="21.4931" gradientUnits="userSpaceOnUse">
+         <stop offset="0" stop-color="#ececec" id="stop3118" />
+         <stop offset="1" stop-color="#c6c6c5" id="stop3120" />
+      </linearGradient>
+      <linearGradient id="Безымянный_градиент_19-2" x1="24" y1="8.9949" x2="15.113" y2="8.9949" xlink:href="#Безымянный_градиент_19" />
+      <linearGradient inkscape:collect="always" xlink:href="#Безымянный_градиент_19" id="linearGradient241408" gradientUnits="userSpaceOnUse" x1="18" y1="21.4931" x2="5.1177" y2="21.4931" gradientTransform="translate(-1,-1)" />
+   </defs>
+   <title id="title3126">contrast_mode</title>
+   <path id="polyline3128" style="fill:none;stroke:url(#linearGradient241408);stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" d="M 16,22 14,17.986 H 5.118" sodipodi:nodetypes="ccc" />
+   <path id="polyline3130" style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" d="M 11.092,13 H 17 l 5,9" sodipodi:nodetypes="ccc" />
+   <polyline class="cls-2" points="3 3 7 14 12.092 14" id="polyline3132" transform="translate(-1,-1)" />
+   <line class="cls-3" x1="15.113001" y1="7.9948997" x2="22" y2="7.9948997" id="line3134" style="stroke:url(#%D0%91%D0%B5%D0%B7%D1%8B%D0%BC%D1%8F%D0%BD%D0%BD%D1%8B%D0%B9_%D0%B3%D1%80%D0%B0%D0%B4%D0%B8%D0%B5%D0%BD%D1%82_19-2)" />
+   <path class="cls-4" d="M 15.3767,8.9951 H 10 A 0.9988,0.9988 0 0 1 9.0518,8.3115 l -2,-5.9951 A 1,1 0 1 1 8.9482,1.6836 l 1.7725,5.3115 h 5.3338 c 0.5527,0 0.2963,0.5129 0.0352,1 a 6.8531,6.8531 0 0 1 -0.713,1 z" id="path3136" />
+   <path class="cls-4" d="M 5.5184569,19.003563 2,18.9863 c -1.33331671,-0.0065 -1.33333275,-2 0,-2 h 4.9038 c 0.5527,0 -0.8326498,2.019975 -1.3853431,2.017263 z" id="path3138" sodipodi:nodetypes="sssss" />
+   <path id="line3140" style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" d="M 23,1 1,23" sodipodi:nodetypes="cc" />
 </svg>

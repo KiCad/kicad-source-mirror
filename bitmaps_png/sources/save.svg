@@ -1,98 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
-   version="1.1"
-   sodipodi:docname="save.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <metadata
-     id="metadata29">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>save</dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="2339"
-     inkscape:window-height="1524"
-     id="namedview27"
-     showgrid="true"
-     inkscape:zoom="32"
-     inkscape:cx="17.74326"
-     inkscape:cy="11.455139"
-     inkscape:window-x="504"
-     inkscape:window-y="376"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid836"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#a1a1ff"
-       opacity="0.1254902"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <style
-       id="style2">.cls-1,.cls-3{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-2,.cls-3,.cls-4{stroke:#1a81c4;}.cls-2,.cls-3,.cls-4,.cls-6{stroke-linecap:round;stroke-linejoin:round;}.cls-4,.cls-6{fill:none;}.cls-5{fill:#e61c50;}.cls-6{stroke:#fff;stroke-width:2px;}</style>
-  </defs>
-  <title
-     id="title6">save</title>
-  <path
-     id="polygon10"
-     style="fill:#1a81c4;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 22.5,7 v 15.5 h -21 l 2e-7,-20.9999999 L 17,1.5 Z"
-     sodipodi:nodetypes="cccccc" />
-  <rect
-     class="cls-3"
-     x="6"
-     y="2"
-     width="7"
-     height="6"
-     id="rect12"
-     style="stroke:none;stroke-width:0.999998" />
-  <path
-     id="line16"
-     style="fill:none;stroke:#1a81c4;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round"
-     d="m 9.5,1.5 v 4"
-     sodipodi:nodetypes="cc" />
-  <rect
-     style="fill:#b9b9b9;stroke:none;stroke-linejoin:round"
-     id="rect844"
-     width="11"
-     height="7"
-     x="6"
-     y="14" />
-  <line
-     class="cls-4"
-     x1="5.4523964"
-     y1="16.5"
-     x2="18.204153"
-     y2="16.5"
-     id="line18"
-     style="stroke-width:0.999998" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="save.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <metadata id="metadata29">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>save</dc:title>
+         </cc:Work>
+      </rdf:RDF>
+   </metadata>
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2339" inkscape:window-height="1524" id="namedview27" showgrid="true" inkscape:zoom="32" inkscape:cx="17.74326" inkscape:cy="11.455139" inkscape:window-x="504" inkscape:window-y="376" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+      <inkscape:grid type="xygrid" id="grid836" spacingx="0.5" spacingy="0.5" color="#a1a1ff" opacity="0.1254902" empspacing="2" />
+   </sodipodi:namedview>
+   <defs id="defs4">
+      <style id="style2">.cls-1,.cls-3{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-2,.cls-3,.cls-4{stroke:#1a81c4;}.cls-2,.cls-3,.cls-4,.cls-6{stroke-linecap:round;stroke-linejoin:round;}.cls-4,.cls-6{fill:none;}.cls-5{fill:#bf2641;}.cls-6{stroke:#fff;stroke-width:2px;}</style>
+   </defs>
+   <title id="title6">save</title>
+   <path id="polygon10" style="fill:#1a81c4;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none" d="m 22.5,7 v 15.5 h -21 l 2e-7,-20.9999999 L 17,1.5 Z" sodipodi:nodetypes="cccccc" />
+   <rect class="cls-3" x="6" y="2" width="7" height="6" id="rect12" style="stroke:none;stroke-width:0.999998" />
+   <path id="line16" style="fill:none;stroke:#1a81c4;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round" d="m 9.5,1.5 v 4" sodipodi:nodetypes="cc" />
+   <rect style="fill:#b9b9b9;stroke:none;stroke-linejoin:round" id="rect844" width="11" height="7" x="6" y="14" />
+   <line class="cls-4" x1="5.4523964" y1="16.5" x2="18.204153" y2="16.5" id="line18" style="stroke-width:0.999998" />
 </svg>

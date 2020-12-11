@@ -1,155 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
-   version="1.1"
-   sodipodi:docname="modview_icon.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="2740"
-     inkscape:window-height="1603"
-     id="namedview30"
-     showgrid="true"
-     inkscape:zoom="19.771793"
-     inkscape:cx="-15.084713"
-     inkscape:cy="20.394526"
-     inkscape:window-x="3989"
-     inkscape:window-y="89"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid873" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata43">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>module_editor</dc:title>
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs5">
-    <style
-       id="style3">.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}.cls-3{fill:#e61c50;}.cls-4{fill:#fff;}</style>
-  </defs>
-  <title
-     id="title7">module_editor</title>
-  <polygon
-     class="cls-1"
-     points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 "
-     id="polygon9"
-     transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)"
-     style="stroke-width:0.877906" />
-  <rect
-     class="cls-2"
-     x="2.9605565"
-     y="0.0042999983"
-     width="5.0280428"
-     height="6.9999995"
-     id="rect19"
-     style="stroke-width:1" />
-  <rect
-     class="cls-2"
-     x="9.960556"
-     y="0.0042999983"
-     width="5.0280428"
-     height="6.9999995"
-     id="rect875"
-     style="stroke-width:1" />
-  <rect
-     class="cls-2"
-     x="16.960556"
-     y="0.0042999983"
-     width="5.0280428"
-     height="6.9999995"
-     id="rect877"
-     style="stroke-width:1" />
-  <rect
-     class="cls-2"
-     x="2.9605565"
-     y="17.004299"
-     width="5.0280428"
-     height="6.9999995"
-     id="rect879"
-     style="stroke-width:1" />
-  <rect
-     class="cls-2"
-     x="9.960556"
-     y="17.004299"
-     width="5.0280428"
-     height="6.9999995"
-     id="rect881"
-     style="stroke-width:1" />
-  <rect
-     class="cls-2"
-     x="16.960556"
-     y="17.004299"
-     width="5.0280428"
-     height="6.9999995"
-     id="rect883"
-     style="stroke-width:1" />
-  <rect
-     class="cls-3"
-     x="-1.0503352"
-     y="25.845144"
-     width="2"
-     height="3"
-     transform="rotate(-45)"
-     id="rect117325"
-     style="fill:#f93a70" />
-  <path
-     class="cls-4"
-     d="m 23.4624,23.5335 v 0 a 2,2 0 0 1 -2.8285,0 l -2.8284,-2.8284 2.8284,-2.8285 2.8285,2.8285 a 2,2 0 0 1 0,2.8284 z"
-     id="path117327"
-     style="fill:#e61c50" />
-  <path
-     class="cls-4"
-     d="M 18.4188,8.5812 A 7.0065,7.0065 0 1 1 8.5146,8.5859 7.0032,7.0032 0 0 1 18.4188,8.5812 Z"
-     id="path117329"
-     style="fill:#e61c50" />
-  <path
-     class="cls-5"
-     d="M 17,10 A 5,5 0 1 1 9.9289,10 5,5 0 0 1 17,10 Z"
-     id="path117331"
-     style="fill:#ffffff" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="modview_icon.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2740" inkscape:window-height="1603" id="namedview30" showgrid="true" inkscape:zoom="19.771793" inkscape:cx="-15.084713" inkscape:cy="20.394526" inkscape:window-x="3989" inkscape:window-y="89" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
+      <inkscape:grid type="xygrid" id="grid873" />
+   </sodipodi:namedview>
+   <metadata id="metadata43">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title>module_editor</dc:title>
+         </cc:Work>
+         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
+            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+         </cc:License>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs5">
+      <style id="style3">.cls-1{fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;}.cls-2{fill:#1a81c4;}.cls-3{fill:#bf2641;}.cls-4{fill:#fff;}</style>
+   </defs>
+   <title id="title7">module_editor</title>
+   <polygon class="cls-1" points="21.531,4.063 1.247,4.063 1.247,8.578 2.995,10.153 2.995,12.325 1.247,13.899 1.247,18.922 21.516,18.922 " id="polygon9" transform="matrix(1.1338986,0,0,1.1442747,-0.91662774,-1.1958747)" style="stroke-width:0.877906" />
+   <rect class="cls-2" x="2.9605565" y="0.0042999983" width="5.0280428" height="6.9999995" id="rect19" style="stroke-width:1" />
+   <rect class="cls-2" x="9.960556" y="0.0042999983" width="5.0280428" height="6.9999995" id="rect875" style="stroke-width:1" />
+   <rect class="cls-2" x="16.960556" y="0.0042999983" width="5.0280428" height="6.9999995" id="rect877" style="stroke-width:1" />
+   <rect class="cls-2" x="2.9605565" y="17.004299" width="5.0280428" height="6.9999995" id="rect879" style="stroke-width:1" />
+   <rect class="cls-2" x="9.960556" y="17.004299" width="5.0280428" height="6.9999995" id="rect881" style="stroke-width:1" />
+   <rect class="cls-2" x="16.960556" y="17.004299" width="5.0280428" height="6.9999995" id="rect883" style="stroke-width:1" />
+   <rect class="cls-3" x="-1.0503352" y="25.845144" width="2" height="3" transform="rotate(-45)" id="rect117325" style="fill:#bf2641" />
+   <path class="cls-4" d="m 23.4624,23.5335 v 0 a 2,2 0 0 1 -2.8285,0 l -2.8284,-2.8284 2.8284,-2.8285 2.8285,2.8285 a 2,2 0 0 1 0,2.8284 z" id="path117327" style="fill:#bf2641" />
+   <path class="cls-4" d="M 18.4188,8.5812 A 7.0065,7.0065 0 1 1 8.5146,8.5859 7.0032,7.0032 0 0 1 18.4188,8.5812 Z" id="path117329" style="fill:#bf2641" />
+   <path class="cls-5" d="M 17,10 A 5,5 0 1 1 9.9289,10 5,5 0 0 1 17,10 Z" id="path117331" style="fill:#ffffff" />
 </svg>
