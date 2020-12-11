@@ -610,7 +610,7 @@ TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
 
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, 0, "",
-        _( "Highlight on PCB" ), _( "Highlight corresponding items in PcbNew" ),
+        _( "Highlight on PCB" ), _( "Highlight corresponding items in board editor" ),
         select_same_sheet_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
