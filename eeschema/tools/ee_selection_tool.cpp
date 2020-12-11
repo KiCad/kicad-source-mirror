@@ -153,6 +153,12 @@ bool EE_SELECTION_TOOL::Init()
     auto connectedSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( connectedTypes );
     auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
 
+    auto schEditSheetPageNumberCondition =
+            [this] ( const SELECTION& aSel )
+            {
+                return ( !m_isSymbolEditor && !m_isLibView ) && ( E_C::Empty || ( E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T ) ) );
+            };
+
     auto schEditCondition =
             [this] ( const SELECTION& aSel )
             {
@@ -164,7 +170,7 @@ bool EE_SELECTION_TOOL::Init()
             {
                 SCH_EDIT_FRAME* schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
-                return ( schEditFrame&&
+                return ( schEditFrame &&
                          schEditFrame->GetCurrentSheet().Last() !=
                          &schEditFrame->Schematic().Root() );
             };
@@ -201,7 +207,7 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 250 );
     menu.AddItem( EE_ACTIONS::assignNetclass,     connectedSelection && EE_CONDITIONS::Idle, 250 );
-    menu.AddItem( EE_ACTIONS::editPageNumber,     E_C::Empty || sheetSelection, 250 );
+    menu.AddItem( EE_ACTIONS::editPageNumber,     schEditSheetPageNumberCondition, 250 );
 
     menu.AddSeparator( 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );
