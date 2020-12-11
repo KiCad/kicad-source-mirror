@@ -355,7 +355,6 @@ set( BMAPS_MID
     part_properties
     paste
     pcbnew
-    pcbcalculator
     pcb_offset
     pin2pin
     pin_size_to
