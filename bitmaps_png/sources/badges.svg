@@ -29,7 +29,7 @@
      inkscape:cx="1.7007478"
      inkscape:cy="28.447902"
      inkscape:document-units="px"
-     inkscape:current-layer="layer16"
+     inkscape:current-layer="layer6"
      inkscape:document-rotation="0"
      showgrid="true"
      units="px"
@@ -305,7 +305,7 @@
      inkscape:groupmode="layer"
      id="layer16"
      inkscape:label="magnifying glass"
-     style="display:inline">
+     style="display:none">
     <path
        class="cls-4"
        d="M 6.7685677,6.7646702 C 6.6062038,6.9353952 6.3514505,6.9055852 6.1787032,6.7388902 L 5.7497134,6.3401392 6.3127192,5.7968682 6.741731,6.1956412 c 0.1643745,0.190654 0.1910085,0.396401 0.026837,0.569028 z"
@@ -585,21 +585,21 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="arrow_to"
-     style="display:none">
+     style="display:inline">
     <g
        id="g2044"
-       transform="matrix(0.26458333,0,0,0.26458333,-0.3434291,0.23781994)">
+       transform="matrix(0.35066296,0,0,0.26458333,-0.75009474,0.50240315)"
+       style="display:inline;stroke-width:0.868633">
       <path
-         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#e61c50;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+         style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#e61c50;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.73727px;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
          d="m 4.0058594,13.4375 c -0.5522847,0 -0.7895589,0.578174 -1,1 -0.6590225,1.321 -0.8054951,3.169119 -0.6184761,4.38539 0.3256833,2.118067 1.5908746,2.631602 2.9404947,2.984886 C 7,22.245481 10.175781,21.04883 10.175781,21.04883 c 0.549555,-0.05484 1,-0.447715 1,-1 0,-0.552285 -0.447715,-1 -1,-1 0,0 -3.0894053,-0.122415 -4.3079676,-1.340978 C 4.780913,16.62095 5,15.5 5.0058594,14.4375 c 0.0026,-0.471397 -0.4477153,-1 -1,-1 z"
          id="path2020"
          sodipodi:nodetypes="sassssssss" />
-      <polyline
-         class="cls-8"
-         points="7.798 19.123 10.224 21.549 7.798 23.976"
+      <path
          id="polyline1446"
-         transform="matrix(1,0,0,1.2363487,1.0053546e-8,-6.5415425)"
-         style="fill:none;stroke:#e61c50;stroke-width:1.7987;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;stroke:#e61c50;stroke-width:1.73726;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 8.0337885,17.101154 2.4259995,2.999382 -2.4259995,3.000618"
+         sodipodi:nodetypes="ccc" />
     </g>
   </g>
   <g
