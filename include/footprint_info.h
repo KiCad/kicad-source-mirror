@@ -205,6 +205,14 @@ public:
     }
 
     /**
+     * @return Clears the footprint info cache
+     */
+    void Clear()
+    {
+        m_list.clear();
+    }
+
+    /**
      * Get info for a footprint by id.
      */
     FOOTPRINT_INFO* GetFootprintInfo( const wxString& aFootprintName );

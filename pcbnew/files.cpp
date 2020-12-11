@@ -54,6 +54,7 @@
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/eagle/eagle_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
+#include "footprint_info_impl.h"
 
 
 //#define     USE_INSTRUMENTATION     1
@@ -608,6 +609,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             Prj().SetReadOnly();
     }
 
+    // Clear the cache footprint list which may be project specific
+    GFootprintList.Clear();
+
     if( is_new )
     {
         // Link the existing blank board to the new project
@@ -676,6 +680,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         SetBoard( loadedBoard );
+
+        if( GFootprintList.GetCount() == 0 )
+        {
+            GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
+        }
 
         if( loadedBoard->m_LegacyDesignSettingsLoaded )
         {

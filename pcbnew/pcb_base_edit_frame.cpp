@@ -50,10 +50,6 @@ PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
         m_selectionFilterPanel( nullptr ),
         m_appearancePanel( nullptr )
 {
-    if( !GFootprintList.GetCount() )
-    {
-        GFootprintList.ReadCacheFromFile( Prj().GetProjectPath() + "fp-info-cache" );
-    }
 }
 
 
