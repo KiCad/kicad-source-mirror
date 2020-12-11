@@ -37,6 +37,8 @@
 #include <pgm_base.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>
+#include <wx/txtstrm.h>
+#include <wx/wfstream.h>
 
 #include <thread>
 #include <mutex>
@@ -339,59 +341,55 @@ FOOTPRINT_LIST_IMPL::~FOOTPRINT_LIST_IMPL()
 }
 
 
-void FOOTPRINT_LIST_IMPL::WriteCacheToFile( wxTextFile* aCacheFile )
+void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
 {
-    if( aCacheFile->Exists() )
-    {
-        if( !aCacheFile->Open() )
-            return;
+    wxFFileOutputStream outStream( aFilePath );
+    wxTextOutputStream txtStream( outStream );
 
-        aCacheFile->Clear();
-    }
-    else
+    if( !outStream.IsOk() )
     {
-        if( !aCacheFile->Create() )
-            return;
+        return;
     }
 
-    aCacheFile->AddLine( wxString::Format( "%lld", m_list_timestamp ) );
+    txtStream << wxString::Format( "%lld", m_list_timestamp ) << endl;
 
-    for( auto& fpinfo : m_list )
+    for( std::unique_ptr<FOOTPRINT_INFO>& fpinfo : m_list )
     {
-        aCacheFile->AddLine( fpinfo->GetLibNickname() );
-        aCacheFile->AddLine( fpinfo->GetName() );
-        aCacheFile->AddLine( EscapeString( fpinfo->GetDescription() ) );
-        aCacheFile->AddLine( EscapeString( fpinfo->GetKeywords() ) );
-        aCacheFile->AddLine( wxString::Format( "%d", fpinfo->GetOrderNum() ) );
-        aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetPadCount() ) );
-        aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetUniquePadCount() ) );
+        txtStream << fpinfo->GetLibNickname() << endl;
+        txtStream << fpinfo->GetName() << endl;
+        txtStream << EscapeString( fpinfo->GetDescription() ) << endl;
+        txtStream << EscapeString( fpinfo->GetKeywords() ) << endl;
+        txtStream << wxString::Format( "%d", fpinfo->GetOrderNum() ) << endl;
+        txtStream << wxString::Format( "%u", fpinfo->GetPadCount() ) << endl;
+        txtStream << wxString::Format( "%u", fpinfo->GetUniquePadCount() ) << endl;
     }
 
-    aCacheFile->Write();
-    aCacheFile->Close();
+    txtStream.Flush();
 }
 
 
-void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( wxTextFile* aCacheFile )
+void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( const wxString& aFilePath )
 {
+    wxTextFile cacheFile( aFilePath );
+
     m_list_timestamp = 0;
     m_list.clear();
 
     try
     {
-        if( aCacheFile->Exists() && aCacheFile->Open() )
+        if( cacheFile.Exists() && cacheFile.Open() )
         {
-            aCacheFile->GetFirstLine().ToLongLong( &m_list_timestamp );
+            cacheFile.GetFirstLine().ToLongLong( &m_list_timestamp );
 
-            while( aCacheFile->GetCurrentLine() + 6 < aCacheFile->GetLineCount() )
+            while( cacheFile.GetCurrentLine() + 6 < cacheFile.GetLineCount() )
             {
-                wxString libNickname = aCacheFile->GetNextLine();
-                wxString name = aCacheFile->GetNextLine();
-                wxString description = UnescapeString( aCacheFile->GetNextLine() );
-                wxString keywords = UnescapeString( aCacheFile->GetNextLine() );
-                int orderNum = wxAtoi( aCacheFile->GetNextLine() );
-                unsigned int padCount = (unsigned) wxAtoi( aCacheFile->GetNextLine() );
-                unsigned int uniquePadCount = (unsigned) wxAtoi( aCacheFile->GetNextLine() );
+                wxString     libNickname    = cacheFile.GetNextLine();
+                wxString     name           = cacheFile.GetNextLine();
+                wxString     description    = UnescapeString( cacheFile.GetNextLine() );
+                wxString     keywords       = UnescapeString( cacheFile.GetNextLine() );
+                int          orderNum       = wxAtoi( cacheFile.GetNextLine() );
+                unsigned int padCount       = (unsigned) wxAtoi( cacheFile.GetNextLine() );
+                unsigned int uniquePadCount = (unsigned) wxAtoi( cacheFile.GetNextLine() );
 
                 auto* fpinfo = new FOOTPRINT_INFO_IMPL( libNickname, name, description, keywords,
                                                         orderNum, padCount, uniquePadCount );
@@ -409,6 +407,6 @@ void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( wxTextFile* aCacheFile )
     if( m_list.size() == 0 )
         m_list_timestamp = 0;
 
-    if( aCacheFile->IsOpened() )
-        aCacheFile->Close();
+    if( cacheFile.IsOpened() )
+        cacheFile.Close();
 }

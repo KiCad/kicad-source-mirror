@@ -117,8 +117,8 @@ public:
     FOOTPRINT_LIST_IMPL();
     virtual ~FOOTPRINT_LIST_IMPL();
 
-    void WriteCacheToFile( wxTextFile* aFile ) override;
-    void ReadCacheFromFile( wxTextFile* aFile ) override;
+    void WriteCacheToFile( const wxString& aFilePath ) override;
+    void ReadCacheFromFile( const wxString& aFilePath ) override;
 
     bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
                              PROGRESS_REPORTER* aProgressReporter = nullptr ) override;
