@@ -141,31 +141,19 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     CreateMenuBar();
     ReCreateMainToolbar();
 
-    // Create the infobar
-    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
-
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar,
-                      EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_infoBar,
-                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
-    m_auimgr.AddPane( m_canvas,
-                      EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+                      .Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" )
+                      .Center() );
 
-    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hidding it.
+    // Call Update() to fix all pane default sizes.
     m_auimgr.Update();
 
-    // We don't want the infobar displayed right away
-    m_auimgr.GetPane( "InfoBar" ).Hide();
-    m_auimgr.Update();
-
-    if( m_canvas )
-    {
-        m_canvas->SetInfoBar( m_infoBar );
-        m_canvas->SetStatusBar( status_bar );
-    }
+    m_infoBar = new WX_INFOBAR( m_canvas );
+    m_canvas->SetInfoBar( m_infoBar );
+    m_canvas->SetStatusBar( status_bar );
 
     // Fixes bug in Windows (XP and possibly others) where the canvas requires the focus
     // in order to receive mouse events.  Otherwise, the user has to click somewhere on

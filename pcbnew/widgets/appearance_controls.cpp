@@ -2773,7 +2773,7 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
             [&]( wxHyperlinkEvent& aEvent )
             {
                  wxCommandEvent dummy;
-                m_frame->OnPreferences( dummy );
+                 m_frame->OnPreferences( dummy );
             } ) );
 
     infobar->RemoveAllButtons();

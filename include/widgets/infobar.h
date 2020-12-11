@@ -26,7 +26,6 @@
 #include <wx/wx.h>
 
 
-class wxAuiManager;
 class wxHyperlinkCtrl;
 
 
@@ -77,7 +76,7 @@ public:
      * @param aMgr is the AUI manager that this infobar is added to
      * @param aWinId is the ID for this infobar object
      */
-    WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr = nullptr, wxWindowID aWinid = wxID_ANY );
+    WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid = wxID_ANY );
 
     ~WX_INFOBAR();
 
@@ -199,17 +198,12 @@ protected:
      */
     void OnTimer( wxTimerEvent& aEvent );
 
-    /**
-     * Update the AUI pane to show or hide this infobar.
-     *
-     * @param aShow is true to show the pane
-     */
-    void UpdateAuiLayout( bool aShow );
+    void onSize( wxSizeEvent& aEvent );
 
+protected:
     int           m_showTime;       ///< The time to show the infobar. 0 = don't auto hide
     bool          m_updateLock;     ///< True if this infobar requested the UI update
     wxTimer*      m_showTimer;      ///< The timer counting the autoclose period
-    wxAuiManager* m_auiManager;     ///< The AUI manager that contains this infobar
 
     DECLARE_EVENT_TABLE()
 };

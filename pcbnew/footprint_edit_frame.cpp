@@ -197,43 +197,48 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     SetActiveLayer( F_SilkS );
 
-    // Create the infobar
-    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
-
     m_auimgr.SetManagedWindow( this );
 
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
 #if !defined( _WIN32 )
-    // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds of graphical glitches
+    // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds
+    // of graphical glitches
     auiFlags |= wxAUI_MGR_LIVE_RESIZE;
 #endif
     m_auimgr.SetFlags( auiFlags );
 
-    // Horizontal items; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer( 6 ) );
-    m_auimgr.AddPane( m_infoBar,
-                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    // Rows; layers 4 - 6
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+                      .Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+                      .Bottom().Layer( 6 ) );
 
-    // Vertical items; layers 1 - 3
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer( 3 ) );
-    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(2)
-                      .Caption( _( "Libraries" ) ).MinSize( 250, 400 ).Resizable() );
+    // Columns; layers 1 - 3
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+                      .Left().Layer( 3 ) );
+    m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" )
+                      .Left().Layer(2)
+                      .Caption( _( "Libraries" ) )
+                      .MinSize( 250, 400 ).Resizable() );
 
-    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(2) );
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
+                      .Right().Layer(2) );
 
-    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" ).Right().Layer( 3 )
+    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
+                      .Right().Layer( 3 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
-    m_auimgr.AddPane( m_selectionFilterPanel,
-                      EDA_PANE().Palette().Name( "SelectionFilter" ).Right().Layer( 3 )
-                      .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
+    m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Palette().Name( "SelectionFilter" )
+                      .Right().Layer( 3 ).Position( 2 )
+                      .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 160, -1 ).BestSize( m_selectionFilterPanel->GetBestSize() ) );
+
+    // Center
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
+                      .Center() );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
     m_auimgr.GetPane( "SelectionFilter" ).dock_proportion = 0;
-
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     ActivateGalCanvas();
 
@@ -242,13 +247,10 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
                                           wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 
-    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hidding it.
+    // Call Update() to fix all pane default sizes.
     m_auimgr.Update();
 
-    // We don't want the infobar displayed right away
-    m_auimgr.GetPane( "InfoBar" ).Hide();
-    m_auimgr.Update();
+    m_infoBar = new WX_INFOBAR( GetCanvas() );
 
     if( m_settings->m_LibWidth > 0 )
     {

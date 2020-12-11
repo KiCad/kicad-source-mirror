@@ -221,9 +221,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_selectionFilterPanel = new PANEL_SELECTION_FILTER( this );
 
-    // Create the infobar
-    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
-
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
 
     m_auimgr.SetManagedWindow( this );
@@ -235,34 +232,34 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 #endif
     m_auimgr.SetFlags( auiFlags );
 
-    // Horizontal items; layers 4 - 6
-    m_auimgr.AddPane( m_mainToolBar,
-                      EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_auxiliaryToolBar,
-                      EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(5) );
-    m_auimgr.AddPane( m_messagePanel,
-                      EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
-    m_auimgr.AddPane( m_infoBar,
-                      EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
+    // Rows; layers 4 - 6
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
+                      .Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" )
+                      .Top().Layer( 5 ) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
+                      .Bottom().Layer( 6 ) );
 
-    // Vertical items; layers 1 - 3
-    m_auimgr.AddPane( m_optionsToolBar,
-                      EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+    // Columns; layers 1 - 3
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
+                      .Left().Layer( 3 ) );
 
-    m_auimgr.AddPane( m_drawToolBar,
-                      EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(3) );
+    m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" )
+                      .Right().Layer( 3 ) );
 
-    m_auimgr.AddPane( m_appearancePanel,
-                      EDA_PANE().Name( "LayersManager" ).Right().Layer( 4 )
+    m_auimgr.AddPane( m_appearancePanel, EDA_PANE().Name( "LayersManager" )
+                      .Right().Layer( 4 )
                       .Caption( _( "Appearance" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( m_selectionFilterPanel,
-                      EDA_PANE().Name( "SelectionFilter" ).Right().Layer( 4 )
-                      .Caption( _( "Selection Filter" ) ).PaneBorder( false ).Position( 2 )
+    m_auimgr.AddPane( m_selectionFilterPanel, EDA_PANE().Name( "SelectionFilter" )
+                      .Right().Layer( 4 ).Position( 2 )
+                      .Caption( _( "Selection Filter" ) ).PaneBorder( false )
                       .MinSize( 180, -1 ).BestSize( 180, -1 ) );
 
-    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    // Center
+    m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
+                      .Center() );
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
@@ -275,9 +272,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
                                           wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 
-    // Call Update() to fix all pane default sizes, especially the "InfoBar" pane before
-    // hidding it.
+    // Call Update() to fix all pane default sizes.
     m_auimgr.Update();
+
+    m_infoBar = new WX_INFOBAR( GetCanvas() );
 
     if( PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( config() ) )
     {
@@ -299,10 +297,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
         m_appearancePanel->SetTabIndex( settings->m_AuiPanels.appearance_panel_tab );
     }
-
-    // We don't want the infobar displayed right away
-    m_auimgr.GetPane( "InfoBar" ).Hide();
-    m_auimgr.Update();
 
     GetToolManager()->RunAction( ACTIONS::zoomFitScreen, false );
 

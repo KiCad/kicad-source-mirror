@@ -89,11 +89,9 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
     m_dummyFootprint = new FOOTPRINT( *aFootprint );
     m_dummyBoard->Add( m_dummyFootprint );
 
-    // Create the infobar
-    m_infobar = new WX_INFOBAR( this );
-
     // Create the 3D canvas
-    m_previewPane = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+    m_previewPane = new EDA_3D_CANVAS( this,
+                                       COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
                                        m_dummyBoard, m_boardAdapter, m_currentCamera,
                                        aFrame->Prj().Get3DCacheManager() );
 
@@ -119,9 +117,8 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
     m_SizerPanelView->Add( m_infobar, 0, wxEXPAND, 0 );
     m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
 
-    // Tell the canvas about the infobar
-    if( m_infobar )
-        m_previewPane->SetInfoBar( m_infobar );
+    m_infobar = new WX_INFOBAR( this );
+    m_previewPane->SetInfoBar( m_infobar );
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
         Connect( eventType, wxMenuEventHandler( PANEL_PREV_3D::OnMenuEvent ), NULL, this );

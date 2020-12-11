@@ -762,7 +762,8 @@ int ROUTER_TOOL::handleLayerSwitch( const TOOL_EVENT& aEvent, bool aForceVia )
         {
             WX_INFOBAR* infobar = frame()->GetInfoBar();
             wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
-                                                           _( "Show board setup" ), wxEmptyString );
+                                                           _( "Show board setup" ),
+                                                           wxEmptyString );
 
             button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                     [&]( wxHyperlinkEvent& aEvent )
