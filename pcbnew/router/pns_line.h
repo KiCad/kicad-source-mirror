@@ -238,6 +238,9 @@ public:
 
     const VIA& Via() const { return m_via; }
 
+    void SetViaDiameter( int aDiameter ) { m_via.SetDiameter( aDiameter ); }
+    void SetViaDrill( int aDrill ) { m_via.SetDrill( aDrill ); }
+
     virtual void Mark( int aMarker ) const override;
     virtual void Unmark( int aMarker = -1 ) const override;
     virtual int Marker() const override;

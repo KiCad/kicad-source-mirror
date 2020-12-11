@@ -1342,14 +1342,19 @@ void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
 
 void LINE_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 {
-    // initPlacement will kill the tail, don't do that unless the track size has changed
-    if( !m_idle && aSizes.TrackWidth() != m_sizes.TrackWidth() )
-    {
-        m_sizes = aSizes;
-        initPlacement();
-    }
-
     m_sizes = aSizes;
+
+    if( !m_idle )
+    {
+        m_head.SetWidth( m_sizes.TrackWidth() );
+        m_tail.SetWidth( m_sizes.TrackWidth() );
+
+        if( m_head.EndsWithVia() )
+        {
+            m_head.SetViaDiameter( m_sizes.ViaDiameter() );
+            m_head.SetViaDrill( m_sizes.ViaDrill() );
+        }
+    }
 }
 
 
