@@ -26,9 +26,9 @@
      inkscape:window-height="1803"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="16"
-     inkscape:cx="3.2424173"
-     inkscape:cy="38.533212"
+     inkscape:zoom="22.627417"
+     inkscape:cx="12.939275"
+     inkscape:cy="28.509808"
      inkscape:window-x="1077"
      inkscape:window-y="173"
      inkscape:window-maximized="0"
@@ -36,7 +36,12 @@
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
-       id="grid873" />
+       id="grid873"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#d6d6ff"
+       opacity="0.1254902"
+       empspacing="2" />
   </sodipodi:namedview>
   <metadata
      id="metadata43">
@@ -135,15 +140,22 @@
      id="ellipse22"
      style="fill:#e61c50;stroke-width:0.999999"
      r="7" />
-  <text
-     xml:space="preserve"
-     style="font-size:12px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px"
-     x="13.189774"
-     y="21.449924"
-     id="text1218"><tspan
-       sodipodi:role="line"
-       id="tspan1216"
-       x="13.189774"
-       y="21.449924"
-       style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Semi-Bold';fill:#ffffff;fill-opacity:1">#</tspan></text>
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 14.767438,21 1.146151,-8 v 0"
+     id="path5467" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 13.602236,15.5 h 7"
+     id="path5469"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 13,18.5 h 7"
+     id="path5471"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ffffff;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 17.776225,21 1.146151,-8 v 0"
+     id="path5473" />
 </svg>

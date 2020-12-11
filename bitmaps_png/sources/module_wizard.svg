@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2544"
+     inkscape:window-width="2600"
      inkscape:window-height="1803"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="45.254834"
-     inkscape:cx="14.802471"
-     inkscape:cy="22.341449"
+     inkscape:cx="14.39596"
+     inkscape:cy="14.299933"
      inkscape:window-x="1077"
      inkscape:window-y="173"
      inkscape:window-maximized="0"
@@ -130,8 +130,8 @@
      style="stroke-width:1" />
   <polygon
      class="cls-3"
-     points="19.935,15.598 25.007,16.335 21.337,19.912 22.203,24.963 17.667,22.578 13.13,24.963 13.997,19.912 10.327,16.335 15.399,15.598 17.667,11.002 "
+     points="10.327,16.335 15.399,15.598 17.667,11.002 19.935,15.598 25.007,16.335 21.337,19.912 22.203,24.963 17.667,22.578 13.13,24.963 13.997,19.912 "
      id="polygon23"
      style="fill:#e61c50"
-     transform="translate(-1.327,-1.0256406)" />
+     transform="translate(-1.1723203,-1.0256406)" />
 </svg>

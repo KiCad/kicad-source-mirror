@@ -27,7 +27,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="45.254834"
-     inkscape:cx="14.802471"
+     inkscape:cx="8.825209"
      inkscape:cy="22.341449"
      inkscape:window-x="1077"
      inkscape:window-y="173"
@@ -138,17 +138,17 @@
   <line
      class="cls-5"
      x1="16"
-     y1="13.9029"
+     y1="14"
      x2="20.135098"
-     y2="13.9029"
+     y2="14"
      id="line27"
      style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="13.307299"
-     y1="13.9029"
-     x2="13.307299"
-     y2="13.9029"
+     x1="13.506168"
+     y1="14"
+     x2="13.506168"
+     y2="14"
      id="line29"
      style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
@@ -161,26 +161,26 @@
      style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="13.307299"
+     x1="13.506168"
      y1="17"
-     x2="13.307299"
+     x2="13.506168"
      y2="17"
      id="line33"
      style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
      x1="16"
-     y1="20.120699"
+     y1="20"
      x2="20.135098"
-     y2="20.120699"
+     y2="20"
      id="line35"
      style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
   <line
      class="cls-5"
-     x1="13.307299"
-     y1="20.120699"
-     x2="13.307299"
-     y2="20.120699"
+     x1="13.550362"
+     y1="20"
+     x2="13.550362"
+     y2="20"
      id="line37"
      style="fill:none;stroke:#ffffff;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
 </svg>

@@ -27,8 +27,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="39.543587"
-     inkscape:cx="1.1452361"
-     inkscape:cy="21.211996"
+     inkscape:cx="14.165845"
+     inkscape:cy="18.116446"
      inkscape:window-x="1077"
      inkscape:window-y="173"
      inkscape:window-maximized="0"
@@ -138,6 +138,6 @@
   <path
      id="polyline27"
      style="fill:none;stroke:#f5f5f5;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="m 21,15 -5,5 -3,-3"
+     d="m 21,14 c -2.357185,1.67684 -4.004038,4.029011 -5,7 -0.849847,-1.153817 -1.572836,-2.437587 -3,-3"
      sodipodi:nodetypes="ccc" />
 </svg>
