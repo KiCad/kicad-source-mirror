@@ -130,7 +130,7 @@ TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicat
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
         AS_GLOBAL, 0, "",
         _( "Delete" ), _( "Remove the selected symbol from its library" ),
-        delete_xpm );
+        trash24_xpm );
 
 TOOL_ACTION EE_ACTIONS::cutSymbol( "eeschema.SymbolLibraryControl.cutSymbol",
         AS_GLOBAL, 0, "",

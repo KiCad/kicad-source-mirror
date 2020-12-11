@@ -351,7 +351,7 @@ TOOL_ACTION PCB_ACTIONS::editFootprint( "pcbnew.ModuleEditor.editFootprint",
 TOOL_ACTION PCB_ACTIONS::deleteFootprint( "pcbnew.ModuleEditor.deleteFootprint",
         AS_GLOBAL, 0, "",
         _( "Delete Footprint from Library" ), "",
-        delete_xpm );
+        trash24_xpm );
 
 TOOL_ACTION PCB_ACTIONS::cutFootprint( "pcbnew.ModuleEditor.cutFootprint",
         AS_GLOBAL, 0, "",

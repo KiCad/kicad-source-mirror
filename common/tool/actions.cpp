@@ -185,7 +185,7 @@ TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
         AS_GLOBAL,
         WXK_DELETE, LEGACY_HK_NAME( "Delete Item" ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
-        delete_xpm );
+        trash24_xpm );
 
 TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
         AS_GLOBAL, 0, "",

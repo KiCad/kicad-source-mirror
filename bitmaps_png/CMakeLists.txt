@@ -449,6 +449,7 @@ set( BMAPS_MID
     three_d
     tool_ratsnest
     tools
+    trash24
     undo
     unit_inch
     unit_mil
