@@ -738,8 +738,14 @@ void DIFF_PAIR_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
     if( !m_idle )
     {
-        initPlacement();
-        Move( m_currentEnd, NULL );
+        m_currentTrace.SetWidth( m_sizes.DiffPairWidth() );
+        m_currentTrace.SetGap( m_sizes.DiffPairGap() );
+
+        if( m_currentTrace.EndsWithVias() )
+        {
+            m_currentTrace.SetViaDiameter( m_sizes.ViaDiameter() );
+            m_currentTrace.SetViaDrill( m_sizes.ViaDrill() );
+        }
     }
 }
 

@@ -260,13 +260,14 @@ class DP_GATEWAYS
 /**
  * DIFF_PAIR
  *
- * Basic class for a differential pair. Stores two PNS_LINEs (for positive and negative nets, respectively),
- * the gap and coupling constraints.
+ * Basic class for a differential pair. Stores two PNS_LINEs (for positive and negative nets,
+ * respectively), the gap and coupling constraints.
  **/
-class DIFF_PAIR : public LINK_HOLDER {
-
+class DIFF_PAIR : public LINK_HOLDER
+{
 public:
-    struct COUPLED_SEGMENTS {
+    struct COUPLED_SEGMENTS
+    {
         COUPLED_SEGMENTS ( const SEG& aCoupledP, const SEG& aParentP, int aIndexP,
                            const SEG& aCoupledN, const SEG& aParentN, int aIndexN ) :
             coupledP( aCoupledP ),
@@ -287,7 +288,9 @@ public:
 
     typedef std::vector<COUPLED_SEGMENTS> COUPLED_SEGMENTS_VEC;
 
-    DIFF_PAIR() : LINK_HOLDER( ITEM::DIFF_PAIR_T ), m_hasVias( false )
+    DIFF_PAIR() :
+        LINK_HOLDER( ITEM::DIFF_PAIR_T ),
+        m_hasVias( false )
     {
         // Initialize some members, to avoid uninitialized variables.
         m_net_p = 0;
@@ -315,7 +318,7 @@ public:
         m_chamferLimit = 0;
     }
 
-    DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ):
+    DIFF_PAIR( const SHAPE_LINE_CHAIN &aP, const SHAPE_LINE_CHAIN& aN, int aGap = 0 ) :
         LINK_HOLDER( ITEM::DIFF_PAIR_T ),
         m_n( aN ),
         m_p( aP ),
@@ -333,7 +336,7 @@ public:
         m_chamferLimit = 0;
     }
 
-    DIFF_PAIR( const LINE &aLineP, const LINE &aLineN, int aGap = 0 ):
+    DIFF_PAIR( const LINE &aLineP, const LINE &aLineN, int aGap = 0 ) :
         LINK_HOLDER( ITEM::DIFF_PAIR_T ),
         m_line_p( aLineP ),
         m_line_n( aLineN ),
@@ -398,6 +401,8 @@ public:
     void SetWidth( int aWidth )
     {
         m_width = aWidth;
+        m_n.SetWidth( aWidth );
+        m_p.SetWidth( aWidth );
     }
 
     int Width() const { return m_width; }
@@ -428,6 +433,18 @@ public:
     bool EndsWithVias() const
     {
         return m_hasVias;
+    }
+
+    void SetViaDiameter( int aDiameter )
+    {
+        m_via_p.SetDiameter( aDiameter );
+        m_via_n.SetDiameter( aDiameter );
+    }
+
+    void SetViaDrill( int aDrill )
+    {
+        m_via_p.SetDrill( aDrill );
+        m_via_n.SetDrill( aDrill );
     }
 
     int NetP() const
