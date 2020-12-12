@@ -104,8 +104,11 @@ public:
     /**
      * Updates the SYMBOL_LIBRARY_MANAGER data to synchronize with Symbol Library Table.
      */
-    void Sync( bool aForce = false, std::function<void(int, int, const wxString&)> aProgressCallback
-            = [](int, int, const wxString&){} );
+    void Sync( bool aForce = false,
+               std::function<void( int, int, const wxString& )> aProgressCallback
+                    = []( int, int, const wxString& )
+                      {
+                      } );
 
     int GetHash() const;
 
@@ -481,7 +484,6 @@ private:
     wxString           m_currentPart;  ///< Currently modified library
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
-
 };
 
 #endif /* SYMBOL_LIBRARY_MANAGER_H */

@@ -178,7 +178,7 @@ bool SYMBOL_LIBRARY_MANAGER::SaveLibrary( const wxString& aLibrary, const wxStri
         PROPERTIES properties;
         properties.emplace( SCH_LEGACY_PLUGIN::PropBuffering, "" );
 
-        for( auto part : getOriginalParts( aLibrary ) )
+        for( LIB_PART* part : getOriginalParts( aLibrary ) )
         {
             LIB_PART* newSymbol;
 

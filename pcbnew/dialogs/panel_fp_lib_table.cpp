@@ -780,7 +780,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( fileType.m_IsFile )
     {
         wxFileDialog dlg( this, title, cfg->m_lastFootprintLibDir, wxEmptyString,
-                fileType.m_FileFilter, wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
+                          fileType.m_FileFilter,
+                          wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         int result = dlg.ShowModal();
 
@@ -794,7 +795,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     else
     {
         wxDirDialog dlg( nullptr, title, cfg->m_lastFootprintLibDir,
-                wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         int result = dlg.ShowModal();
 
@@ -817,11 +818,11 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                 traverser.GetPaths( failedDirs );
                 wxString detailedMsg = _( "The following directories could not be opened: \n" );
 
-                for( auto& path : failedDirs )
+                for( const wxString& path : failedDirs )
                     detailedMsg << path << "\n";
 
                 DisplayErrorMessage( this, _( "Failed to open directories to look for libraries" ),
-                        detailedMsg );
+                                     detailedMsg );
             }
         }
         else
@@ -854,8 +855,11 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = ( OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
-                        detailedMsg, _( "Skip" ), _( "Add Anyway" ), &applyToAll ) == wxID_CANCEL );
+                addDuplicates = ( OKOrCancelDialog( this, warning,
+                                                    wxString::Format( msg, nickname ),
+                                                    detailedMsg,
+                                                    _( "Skip" ), _( "Add Anyway" ),
+                                                    &applyToAll ) == wxID_CANCEL );
             }
 
             doAdd = addDuplicates;
