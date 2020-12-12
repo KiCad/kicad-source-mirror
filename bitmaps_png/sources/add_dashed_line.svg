@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_dashed_line.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -27,7 +27,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="13.980769"
-     inkscape:cx="6.6501338"
+     inkscape:cx="-7.1187798"
      inkscape:cy="20.563411"
      inkscape:window-x="0"
      inkscape:window-y="37"
@@ -79,29 +79,11 @@
   </defs>
   <title
      id="title27979">add_dashed_line</title>
-  <polygon
-     class="cls-1"
-     points="8.326,12.405 3.544,3.583 22.321,7.665 19.479,18.938 4.673,22.325 "
+  <path
      id="polygon27981"
-     transform="translate(-1,-1)" />
-  <path
-     class="cls-2"
-     d="M 9.7968,11.4882 A 2.6633,2.6633 0 1 1 7.1335,8.825 2.6633,2.6633 0 0 1 9.7968,11.4882 Z"
-     id="path27983" />
-  <path
-     class="cls-2"
-     d="m 21.201,17.9871 a 2.6633,2.6633 0 1 1 -2.6632,-2.6633 2.6633,2.6633 0 0 1 2.6632,2.6633 z"
-     id="path27985" />
-  <path
-     class="cls-2"
-     d="M 6.3367,21.3251 A 2.6633,2.6633 0 1 1 3.6734,18.6618 2.6632,2.6632 0 0 1 6.3367,21.3251 Z"
-     id="path27987" />
-  <path
-     class="cls-2"
-     d="M 23.9846,6.665 A 2.6633,2.6633 0 1 1 21.3211,4.0017 2.6634,2.6634 0 0 1 23.9846,6.665 Z"
-     id="path27989" />
-  <path
-     class="cls-2"
-     d="M 5.3379,2.6259 A 2.6633,2.6633 0 1 1 2.6744,-0.0373 2.6633,2.6633 0 0 1 5.3379,2.6259 Z"
-     id="path27991" />
+     transform="translate(-1,-1)"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2, 4;stroke-dashoffset:0"
+     d="M 11,15 3,4 22,7 19.479,18.938 4.673,22.325 Z"
+     class="cls-1"
+     sodipodi:nodetypes="cccccc" />
 </svg>

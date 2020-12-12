@@ -28,7 +28,7 @@
      showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="-3.5584597"
-     inkscape:cy="13"
+     inkscape:cy="4.8133837"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
@@ -79,15 +79,19 @@
   </defs>
   <title
      id="title157963">label</title>
+  <text
+     xml:space="preserve"
+     style="font-size:40px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px"
+     x="6.7458234"
+     y="15.560363"
+     id="text15403"><tspan
+       sodipodi:role="line"
+       id="tspan15401"
+       x="6.7458234"
+       y="15.560363"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#545454;fill-opacity:1">A</tspan></text>
   <path
-     class="cls-1"
-     d="M 14.64695,13.330128 H 9.246107 L 8.0244191,16.650049 H 6.2452362 L 11.230276,3.7592156 h 1.495186 L 17.630263,16.650172 H 15.850896 Z M 9.7863509,11.869014 H 14.125246 L 12,6 h -0.05353 z"
-     id="path157965"
-     style="stroke-width:0.613913" />
-  <path
-     class="cls-2"
-     d="M 0,20 C -0.64305803,19.37003 -0.18755,18.293101 0.72200873,18.293 H 23.193216 c 1.361445,0 1.361445,2 0,2 H 0.72200873 C 0.45110426,20.293378 0.19123459,20.18792 0,20 Z"
-     id="path157967"
-     sodipodi:nodetypes="ccsscc"
-     style="stroke-width:1.01049" />
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 0,18 H 24"
+     id="path15966" />
 </svg>

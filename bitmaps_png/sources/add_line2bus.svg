@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_line2bus.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="22.627417"
      inkscape:cx="11.148307"
      inkscape:cy="10.769802"
-     inkscape:window-x="1281"
-     inkscape:window-y="400"
-     inkscape:window-maximized="0"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -80,27 +80,27 @@
   <title
      id="title115673">add_line2bus</title>
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 21,1 V 23"
+     style="fill:none;stroke:#545454;stroke-width:2.93102;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 21.486134,1.5 v 21"
      id="path241460"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 2.5000001,2.5 H 11"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2.0138639,2.9861362 H 10.513866"
      id="path241451" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:1px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 2.5,8.5 h 9"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2.0138638,11.019065 H 11.013866"
      id="path241453"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#1a81c4;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 11.5,8.5 9.5,10"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 11.5,11.063259 21,21.063252"
      id="path241455"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#1a81c4;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 11.5,2.5 9.5,10"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 11.5,3.0303304 21,13.030328"
      id="path241457"
      sodipodi:nodetypes="cc" />
 </svg>

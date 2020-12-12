@@ -80,13 +80,17 @@
   <title
      id="title7">noconn</title>
   <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 0,12 H 12"
+     id="path16613" />
+  <path
      id="line9"
-     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 17.333333,6.6666667 6.6666667,17.333333"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 16.5,7.5 -9,9"
      sodipodi:nodetypes="cc" />
   <path
      id="line11"
-     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 17.333333,17.333333 6.6666667,6.6666667"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 16.5,16.5 -9,-9"
      sodipodi:nodetypes="cc" />
 </svg>
