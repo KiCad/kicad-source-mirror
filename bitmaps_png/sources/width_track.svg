@@ -22,12 +22,12 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="3000"
+     inkscape:window-height="1635"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:cx="-11.855571"
      inkscape:cy="13"
      inkscape:window-x="0"
      inkscape:window-y="37"
@@ -79,47 +79,51 @@
   </defs>
   <title
      id="title160376">width_track</title>
-  <polyline
-     class="cls-1"
-     points="24 2 18.877 12.936 7.353 12.936 2 24"
+  <path
      id="polyline160378"
-     transform="translate(-1,-1)" />
+     style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+     d="M 23,1 17,12 H 7 L 1,23"
+     sodipodi:nodetypes="cccc" />
   <line
      class="cls-2"
-     x1="9.2150002"
-     y1="10.4302"
-     x2="14.785"
-     y2="10.4302"
-     id="line160380" />
+     x1="8.9300003"
+     y1="10"
+     x2="14.5"
+     y2="10"
+     id="line160380"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <line
      class="cls-2"
-     x1="12"
-     y1="1.5204"
-     x2="12"
-     y2="5.8508"
-     id="line160382" />
+     x1="14.5"
+     y1="14"
+     x2="8.9300003"
+     y2="14"
+     id="line160386"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     class="cls-5"
+     d="M 11,7 A 0.66792456,0.66792456 0 0 1 10.803747,6.5260948 l 3.79e-4,-5.57826204 a 0.67006878,0.67006878 0 0 1 1.339935,-2e-7 l 9.5e-5,5.57873594 A 0.67006878,0.67006878 0 0 1 11,7 Z"
+     id="path27513"
+     style="fill:#545454;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
   <polygon
-     class="cls-3"
-     points="13,11.281 14.453,5.86 11.547,5.86 "
-     id="polygon160384"
-     transform="translate(-1,-1)" />
-  <line
-     class="cls-2"
-     x1="14.785"
-     y1="13.4286"
-     x2="9.2150002"
-     y2="13.4286"
-     id="line160386" />
-  <line
-     class="cls-2"
-     x1="12"
-     y1="22.338301"
-     x2="12"
-     y2="18.0079"
-     id="line160388" />
+     class="cls-5"
+     points="11.178,11.222 16.038,14.028 13.984,16.082 "
+     id="polygon858"
+     transform="matrix(-1.5444005,-0.7071068,1.5444005,-0.7071068,11.37411,25.225551)"
+     style="fill:#545454;stroke:none;stroke-width:0.676648;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     class="cls-5"
+     d="m 11.885734,16.96757 a 0.66792456,0.66792456 0 0 1 0.196253,0.473905 l -3.79e-4,5.578262 a 0.67006878,0.67006878 0 0 1 -1.339935,0 l -9.5e-5,-5.578736 a 0.67006878,0.67006878 0 0 1 1.144156,-0.473431 z"
+     id="path849"
+     style="fill:#545454;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:transform-center-x="0.031084036"
+     inkscape:transform-center-y="5.1871657" />
   <polygon
-     class="cls-3"
-     points="13,14.578 11.547,19.999 14.453,19.999 "
-     id="polygon160390"
-     transform="translate(-1,-1)" />
+     class="cls-5"
+     points="16.038,14.028 13.984,16.082 11.178,11.222 "
+     id="polygon851"
+     transform="matrix(1.5444005,0.7071068,-1.5444005,0.7071068,11.511624,-1.25798)"
+     style="fill:#545454;stroke:none;stroke-width:0.676648;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     inkscape:transform-center-x="-0.00080347549"
+     inkscape:transform-center-y="2.2541221" />
 </svg>
