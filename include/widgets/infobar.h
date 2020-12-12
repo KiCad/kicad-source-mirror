@@ -179,24 +179,24 @@ protected:
      * KIEVT_SHOW_INFOBAR. The message is stored inside the string field, and the
      * icon flag is stored inside the int field.
      */
-    void OnShowInfoBar( wxCommandEvent& aEvent );
+    void onShowInfoBar( wxCommandEvent& aEvent );
 
     /**
      * Event handler for dismissing the infobar using a wxCommandEvent of the type
      * KIEVT_DISMISS_INFOBAR.
      */
-    void OnDismissInfoBar( wxCommandEvent& aEvent );
+    void onDismissInfoBar( wxCommandEvent& aEvent );
 
     /**
      * Event handler for the close button.
      * This is bound to ID_CLOSE_INFOBAR on the infobar.
      */
-    void OnCloseButton( wxCommandEvent& aEvent );
+    void onCloseButton( wxCommandEvent& aEvent );
 
     /**
      * Event handler for the automatic closing timer.
      */
-    void OnTimer( wxTimerEvent& aEvent );
+    void onTimer( wxTimerEvent& aEvent );
 
     void onSize( wxSizeEvent& aEvent );
 

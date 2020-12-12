@@ -32,11 +32,11 @@ wxDEFINE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
 wxDEFINE_EVENT( KIEVT_DISMISS_INFOBAR, wxCommandEvent );
 
 BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
-    EVT_COMMAND( wxID_ANY, KIEVT_SHOW_INFOBAR,    WX_INFOBAR::OnShowInfoBar )
-    EVT_COMMAND( wxID_ANY, KIEVT_DISMISS_INFOBAR, WX_INFOBAR::OnDismissInfoBar )
+    EVT_COMMAND( wxID_ANY, KIEVT_SHOW_INFOBAR,    WX_INFOBAR::onShowInfoBar )
+    EVT_COMMAND( wxID_ANY, KIEVT_DISMISS_INFOBAR, WX_INFOBAR::onDismissInfoBar )
 
-    EVT_BUTTON( ID_CLOSE_INFOBAR, WX_INFOBAR::OnCloseButton )
-    EVT_TIMER(  ID_CLOSE_INFOBAR, WX_INFOBAR::OnTimer )
+    EVT_BUTTON( ID_CLOSE_INFOBAR, WX_INFOBAR::onCloseButton )
+    EVT_TIMER(  ID_CLOSE_INFOBAR, WX_INFOBAR::onTimer )
 END_EVENT_TABLE()
 
 
@@ -233,7 +233,7 @@ void WX_INFOBAR::RemoveAllButtons()
 }
 
 
-void WX_INFOBAR::OnShowInfoBar( wxCommandEvent& aEvent )
+void WX_INFOBAR::onShowInfoBar( wxCommandEvent& aEvent )
 {
     RemoveAllButtons();
     AddCloseButton();
@@ -241,19 +241,19 @@ void WX_INFOBAR::OnShowInfoBar( wxCommandEvent& aEvent )
 }
 
 
-void WX_INFOBAR::OnDismissInfoBar( wxCommandEvent& aEvent )
+void WX_INFOBAR::onDismissInfoBar( wxCommandEvent& aEvent )
 {
     Dismiss();
 }
 
 
-void WX_INFOBAR::OnCloseButton( wxCommandEvent& aEvent )
+void WX_INFOBAR::onCloseButton( wxCommandEvent& aEvent )
 {
     Dismiss();
 }
 
 
-void WX_INFOBAR::OnTimer( wxTimerEvent& aEvent )
+void WX_INFOBAR::onTimer( wxTimerEvent& aEvent )
 {
     // Reset and clear the timer
     m_showTimer->Stop();
