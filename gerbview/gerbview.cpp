@@ -35,6 +35,7 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <wildcards_and_files_ext.h>
+#include <wx/ffile.h>
 
 using json = nlohmann::json;
 
@@ -207,12 +208,12 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                 }
             }
 
-            wxFile destJobFile( destFile.GetFullPath(), wxFile::write );
+            wxFFile destJobFile( destFile.GetFullPath(), "wb" );
 
             if( destJobFile.IsOpened() )
                 success = destJobFile.Write( js.dump( 0 ) );
 
-            // wxFile dtor will close the file
+            // wxFFile dtor will close the file
         }
         catch( ... )
         {

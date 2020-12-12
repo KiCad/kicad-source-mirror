@@ -45,6 +45,7 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
 #include <eeschema_settings.h>
+#include <wx/ffile.h>
 
 SIM_PLOT_TYPE operator|( SIM_PLOT_TYPE aFirst, SIM_PLOT_TYPE aSecond )
 {
@@ -1099,7 +1100,7 @@ void SIM_PLOT_FRAME::menuSaveCsv( wxCommandEvent& event )
     if( saveDlg.ShowModal() == wxID_CANCEL )
         return;
 
-    wxFile out( saveDlg.GetPath(), wxFile::write );
+    wxFFile out( saveDlg.GetPath(), "wb" );
     bool timeWritten = false;
 
     for( const auto& t : CurrentPlot()->GetTraces() )

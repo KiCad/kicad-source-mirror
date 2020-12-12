@@ -36,6 +36,7 @@
 #include <page_layout/ws_draw_item.h>
 #include <page_layout/ws_painter.h>
 #include <page_layout/page_layout_reader_lexer.h>
+#include <wx/ffile.h>
 
 #include <wx/file.h>
 #include <wx/mstream.h>
@@ -837,7 +838,7 @@ void WS_DATA_MODEL::SetPageLayout( const wxString& aFullFileName, bool Append )
         }
     }
 
-    wxFile wksFile( fullFileName );
+    wxFFile wksFile( fullFileName, "rb" );
 
     if( ! wksFile.IsOpened() )
     {

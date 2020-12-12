@@ -27,6 +27,7 @@
 #include <gal/color4d.h>
 #include <wx/clipbrd.h>
 #include <kicad_string.h>
+#include <wx/ffile.h>
 
 WX_HTML_REPORT_PANEL::WX_HTML_REPORT_PANEL( wxWindow* parent,
                                             wxWindowID id,
@@ -335,7 +336,7 @@ void WX_HTML_REPORT_PANEL::onBtnSaveToFile( wxCommandEvent& event )
     if( fn.GetExt().IsEmpty() )
         fn.SetExt( "txt" );
 
-    wxFile f( fn.GetFullPath(), wxFile::write );
+    wxFFile f( fn.GetFullPath(), "wb" );
 
     if( !f.IsOpened() )
     {

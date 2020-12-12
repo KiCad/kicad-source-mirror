@@ -23,6 +23,7 @@
  */
 
 #include "bom_plugins.h"
+#include <wx/ffile.h>
 
 BOM_GENERATOR_HANDLER::BOM_GENERATOR_HANDLER( const wxString& aFile )
     : m_file( aFile )
@@ -95,7 +96,7 @@ wxString BOM_GENERATOR_HANDLER::readHeader( const wxString& aEndSection )
     if( aEndSection.IsEmpty() )
         return wxEmptyString;
 
-    wxFile fdata( m_file.GetFullPath() );        // dtor will close the file
+    wxFFile fdata( m_file.GetFullPath(), "rb" );        // dtor will close the file
     wxString data;
 
     if( !fdata.ReadAll( &data ) )

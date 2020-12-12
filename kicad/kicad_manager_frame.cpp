@@ -49,6 +49,8 @@
 #include <tools/kicad_manager_control.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/app_progress_dialog.h>
+#include <wx/ffile.h>
+
 
 #ifdef __WXMAC__
 #include <MacTypes.h>
@@ -474,11 +476,11 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
             if( !wxFileName::FileExists( srcFileName )
                 || !wxCopyFile( srcFileName, destFileName.GetFullPath() ) )
             {
-                wxFile file( destFileName.GetFullPath(), wxFile::write );
+                wxFFile file( destFileName.GetFullPath(), "wb" );
 
                 if( file.IsOpened() )
                     file.Write( wxT( "{\n}\n") );
-                // wxFile dtor will close the file
+                // wxFFile dtor will close the file
             }
         }
     }
@@ -494,7 +496,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
         // If a <project>.kicad_sch file does not exist, create a "stub" file ( minimal schematic file )
         if( !fn.FileExists() )
         {
-            wxFile file( fn.GetFullPath(), wxFile::write );
+            wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
                 file.Write( wxT( "(kicad_sch (version 20200310) (host eeschema \"unknown\")\n"
@@ -502,7 +504,7 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
                                  "  (symbol_instances)\n)\n" ) );
 
 
-            // wxFile dtor will close the file
+            // wxFFile dtor will close the file
         }
 
         // If a <project>.kicad_pcb or <project>.brd file does not exist,
@@ -513,12 +515,12 @@ void KICAD_MANAGER_FRAME::CreateNewProject( const wxFileName& aProjectFileName, 
 
         if( !fn.FileExists() && !leg_fn.FileExists() )
         {
-            wxFile file( fn.GetFullPath(), wxFile::write );
+            wxFFile file( fn.GetFullPath(), "wb" );
 
             if( file.IsOpened() )
                 file.Write( wxT( "(kicad_pcb (version 4) (host kicad \"dummy file\") )\n" ) );
 
-            // wxFile dtor will close the file
+            // wxFFile dtor will close the file
         }
     }
 

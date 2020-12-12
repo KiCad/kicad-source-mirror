@@ -43,6 +43,7 @@
 #include <sexpr/sexpr_parser.h>
 #include <kiface_ids.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
+#include <wx/ffile.h>
 
 #include <schematic.h>
 #include <connection_graph.h>
@@ -377,12 +378,12 @@ void IFACE::SaveFileAs( const wxString& aProjectBasePath, const wxString& aProje
                     }
                 } );
 
-            wxFile destNetList( destFile.GetFullPath(), wxFile::write );
+            wxFFile destNetList( destFile.GetFullPath(), "wb" );
 
             if( destNetList.IsOpened() )
                 success = destNetList.Write( sexpr->AsString( 0 ) );
 
-            // wxFile dtor will close the file
+            // wxFFile dtor will close the file
         }
         catch( ... )
         {

@@ -335,7 +335,7 @@ void ReadHotKeyConfig( wxString fileName, std::map<std::string, int>& aHotKeys )
     if( !wxFile::Exists( fileName ) )
         return;
 
-    wxFile file( fileName, wxFile::OpenMode::read );
+    wxFFile file( fileName, "rb" );
 
     if( !file.IsOpened() )       // There is a problem to open file
         return;
@@ -418,15 +418,13 @@ int ReadLegacyHotkeyConfigFile( const wxString& aFilename, std::map<std::string,
     if( !wxFile::Exists( fn.GetFullPath() ) )
         return 0;
 
-    wxFile cfgfile( fn.GetFullPath() );
+    wxFFile cfgfile( fn.GetFullPath(), "rb" );
 
     if( !cfgfile.IsOpened() )       // There is a problem to open file
         return 0;
 
     // get length
-    cfgfile.SeekEnd();
-    wxFileOffset size = cfgfile.Tell();
-    cfgfile.Seek( 0 );
+    wxFileOffset size = cfgfile.Length();
 
     // read data
     std::vector<char> buffer( size );

@@ -57,6 +57,7 @@
 #include <widgets/infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <page_layout/ws_data_model.h>
+#include <wx/ffile.h>
 #include <wx/stdpaths.h>
 #include <tools/ee_inspection_tool.h>
 
@@ -927,9 +928,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
             wxFileName layoutfn( Prj().GetProjectPath(), BASE_SCREEN::m_PageLayoutDescrFileName );
-            wxFile layoutfile;
+            wxFFile layoutfile;
 
-            if( layoutfile.Create( layoutfn.GetFullPath() ) )
+            if( layoutfile.Open( layoutfn.GetFullPath(), "wb" ) )
             {
                 layoutfile.Write( WS_DATA_MODEL::EmptyLayout() );
                 layoutfile.Close();
