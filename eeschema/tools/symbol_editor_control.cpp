@@ -26,7 +26,7 @@
 #include <sch_painter.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
-#include <tools/lib_control.h>
+#include <tools/symbol_editor_control.h>
 #include <symbol_edit_frame.h>
 #include <lib_view_frame.h>
 #include <symbol_tree_model_adapter.h>
@@ -35,7 +35,7 @@
 #include <confirm.h>
 
 
-bool LIB_CONTROL::Init()
+bool SYMBOL_EDITOR_CONTROL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -104,7 +104,7 @@ bool LIB_CONTROL::Init()
 }
 
 
-int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 {
     bool createNew = aEvent.IsAction( &ACTIONS::newLibrary );
 
@@ -115,7 +115,7 @@ int LIB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -130,7 +130,7 @@ int LIB_CONTROL::EditSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -146,7 +146,7 @@ int LIB_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::Save( const TOOL_EVENT& aEvt )
+int SYMBOL_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvt )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -164,7 +164,7 @@ int LIB_CONTROL::Save( const TOOL_EVENT& aEvt )
 }
 
 
-int LIB_CONTROL::Revert( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->Revert();
@@ -173,7 +173,7 @@ int LIB_CONTROL::Revert( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->ExportPart();
@@ -182,7 +182,7 @@ int LIB_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
+int SYMBOL_EDITOR_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -199,7 +199,7 @@ int LIB_CONTROL::CutCopyDelete( const TOOL_EVENT& aEvt )
 }
 
 
-int LIB_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -211,7 +211,7 @@ int LIB_CONTROL::DuplicateSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 {
     int convert = aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard ) ?
             LIB_ITEM::LIB_CONVERT::BASE : LIB_ITEM::LIB_CONVERT::DEMORGAN;
@@ -237,7 +237,7 @@ int LIB_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -255,7 +255,7 @@ int LIB_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -273,7 +273,7 @@ int LIB_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -285,7 +285,7 @@ int LIB_CONTROL::ShowComponentTree( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 {
     KIGFX::SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
     renderSettings->m_ShowPinsElectricalType = !renderSettings->m_ShowPinsElectricalType;
@@ -298,7 +298,7 @@ int LIB_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
         return 0;
@@ -310,7 +310,7 @@ int LIB_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ExportView( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
         return 0;
@@ -350,7 +350,7 @@ int LIB_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
         return 0;
@@ -395,7 +395,7 @@ int LIB_CONTROL::ExportSymbolAsSVG( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 {
     LIB_PART* part = nullptr;
     LIB_ID    libId;
@@ -462,7 +462,7 @@ int LIB_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_CONTROL::UpdateSymbolInSchematic( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::UpdateSymbolInSchematic( const TOOL_EVENT& aEvent )
 {
     wxCHECK( m_isSymbolEditor, 0 );
 
@@ -494,38 +494,37 @@ int LIB_CONTROL::UpdateSymbolInSchematic( const TOOL_EVENT& aEvent )
 }
 
 
-void LIB_CONTROL::setTransitions()
+void SYMBOL_EDITOR_CONTROL::setTransitions()
 {
-    Go( &LIB_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
-    Go( &LIB_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
-    Go( &LIB_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::newLibrary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddLibrary,            ACTIONS::addLibrary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::newSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbol,             EE_ACTIONS::importSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
 
-    Go( &LIB_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
-    Go( &LIB_CONTROL::Save,                  ACTIONS::saveAs.MakeEvent() );     // for libraries
-    Go( &LIB_CONTROL::Save,                  ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
-    Go( &LIB_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
-    Go( &LIB_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
-    Go( &LIB_CONTROL::UpdateSymbolInSchematic,
-            EE_ACTIONS::saveInSchematic.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAs.MakeEvent() );     // for libraries
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::UpdateSymbolInSchematic, EE_ACTIONS::saveInSchematic.MakeEvent() );
 
-    Go( &LIB_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
-    Go( &LIB_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
-    Go( &LIB_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
-    Go( &LIB_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );
-    Go( &LIB_CONTROL::AddSymbolToSchematic,  EE_ACTIONS::addSymbolToSchematic.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::duplicateSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::deleteSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic,  EE_ACTIONS::addSymbolToSchematic.MakeEvent() );
 
-    Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
-    Go( &LIB_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganStandard.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::OnDeMorgan,            EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
 
-    Go( &LIB_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
-    Go( &LIB_CONTROL::PinLibrary,            ACTIONS::pinLibrary.MakeEvent() );
-    Go( &LIB_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
-    Go( &LIB_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
-    Go( &LIB_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowElectricalTypes,   EE_ACTIONS::showElectricalTypes.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::PinLibrary,            ACTIONS::pinLibrary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ShowComponentTree,     EE_ACTIONS::showComponentTree.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 }

@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef LIB_DRAWING_TOOLS_H
-#define LIB_DRAWING_TOOLS_H
+#ifndef SYMBOL_EDITOR_DRAWING_TOOLS_H
+#define SYMBOL_EDITOR_DRAWING_TOOLS_H
 
 #include <tools/ee_tool_base.h>
 
@@ -32,16 +32,16 @@ class SYMBOL_EDIT_FRAME;
 
 
 /**
- * LIB_DRAWING_TOOLS
+ * SYMBOL_EDITOR_DRAWING_TOOLS
  *
  * Tool responsible for drawing/placing items (body outlines, pins, etc.)
  */
 
-class LIB_DRAWING_TOOLS : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_DRAWING_TOOLS : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
-    LIB_DRAWING_TOOLS();
-    ~LIB_DRAWING_TOOLS() override { }
+    SYMBOL_EDITOR_DRAWING_TOOLS();
+    ~SYMBOL_EDITOR_DRAWING_TOOLS() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -62,9 +62,6 @@ public:
     bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
 
 private:
-    int doTwoClickPlace( KICAD_T aType, bool aImmediateMode );
-
-    ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
@@ -74,4 +71,4 @@ private:
     bool      m_drawSpecificUnit;
 };
 
-#endif /* LIB_DRAWING_TOOLS_H */
+#endif /* SYMBOL_EDITOR_DRAWING_TOOLS_H */

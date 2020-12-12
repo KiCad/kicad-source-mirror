@@ -27,11 +27,11 @@
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <eda_item.h>
-#include "lib_move_tool.h"
-#include "lib_pin_tool.h"
+#include "symbol_editor_move_tool.h"
+#include "symbol_editor_pin_tool.h"
 
 
-LIB_MOVE_TOOL::LIB_MOVE_TOOL() :
+SYMBOL_EDITOR_MOVE_TOOL::SYMBOL_EDITOR_MOVE_TOOL() :
         EE_TOOL_BASE( "eeschema.SymbolMoveTool" ),
         m_moveInProgress( false ),
         m_moveOffset( 0, 0 )
@@ -39,7 +39,7 @@ LIB_MOVE_TOOL::LIB_MOVE_TOOL() :
 }
 
 
-bool LIB_MOVE_TOOL::Init()
+bool SYMBOL_EDITOR_MOVE_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
@@ -54,7 +54,7 @@ bool LIB_MOVE_TOOL::Init()
 }
 
 
-void LIB_MOVE_TOOL::Reset( RESET_REASON aReason )
+void SYMBOL_EDITOR_MOVE_TOOL::Reset( RESET_REASON aReason )
 {
     EE_TOOL_BASE::Reset( aReason );
 
@@ -66,7 +66,7 @@ void LIB_MOVE_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
@@ -258,7 +258,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( selection.GetSize() == 1 && selection.Front()->Type() == LIB_PIN_T )
             {
-                LIB_PIN_TOOL* pinTool = m_toolMgr->GetTool<LIB_PIN_TOOL>();
+                SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
 
                 if( !pinTool->PlacePin( (LIB_PIN*) selection.Front() ) )
                     restore_state = true;
@@ -308,15 +308,15 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void LIB_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
+void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta )
 {
     static_cast<LIB_ITEM*>( aItem )->Offset( mapCoords( aDelta ) );
     aItem->SetFlags( IS_MOVED );
 }
 
 
-void LIB_MOVE_TOOL::setTransitions()
+void SYMBOL_EDITOR_MOVE_TOOL::setTransitions()
 {
-    Go( &LIB_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
-    Go( &LIB_MOVE_TOOL::Main,               EE_ACTIONS::symbolMoveActivate.MakeEvent() );
+    Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
+    Go( &SYMBOL_EDITOR_MOVE_TOOL::Main,               EE_ACTIONS::symbolMoveActivate.MakeEvent() );
 }

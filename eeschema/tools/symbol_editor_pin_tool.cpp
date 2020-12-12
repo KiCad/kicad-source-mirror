@@ -31,7 +31,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
-#include "lib_pin_tool.h"
+#include "symbol_editor_pin_tool.h"
 
 
 static ELECTRICAL_PINTYPE g_LastPinType          = ELECTRICAL_PINTYPE::PT_INPUT;
@@ -83,13 +83,13 @@ static int GetLastPinNumSize()
 extern bool IncrementLabelMember( wxString& name, int aIncrement );
 
 
-LIB_PIN_TOOL::LIB_PIN_TOOL() :
+SYMBOL_EDITOR_PIN_TOOL::SYMBOL_EDITOR_PIN_TOOL() :
         EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.PinEditing" )
 {
 }
 
 
-bool LIB_PIN_TOOL::Init()
+bool SYMBOL_EDITOR_PIN_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
@@ -106,7 +106,7 @@ bool LIB_PIN_TOOL::Init()
 }
 
 
-bool LIB_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
+bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 {
     DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
 
@@ -188,7 +188,7 @@ bool LIB_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 }
 
 
-bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
+bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
 {
     LIB_PART* part = m_frame->GetCurPart();
     bool      ask_for_pin = true;   // Test for another pin in same position in other units
@@ -261,7 +261,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
 /*
  * Create a new pin.
  */
-LIB_PIN* LIB_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart )
+LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart )
 {
     aPart->ClearTempFlags();
 
@@ -294,7 +294,7 @@ LIB_PIN* LIB_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart )
 }
 
 
-void LIB_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
+void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
 {
     int      ii;
     LIB_PIN* newPin;
@@ -333,7 +333,7 @@ void LIB_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
 }
 
 
-int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 {
     LIB_PART*     part = m_frame->GetCurPart();
     EE_SELECTION& selection = m_selectionTool->GetSelection();
@@ -372,7 +372,7 @@ int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 
 
 // Create a new pin based on the previous pin with an incremented pin number.
-LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
+LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 {
     LIB_PIN* pin = (LIB_PIN*) aSourcePin->Clone();
     wxPoint  step;
@@ -410,10 +410,10 @@ LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 }
 
 
-void LIB_PIN_TOOL::setTransitions()
+void SYMBOL_EDITOR_PIN_TOOL::setTransitions()
 {
-    Go( &LIB_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinLength.MakeEvent() );
-    Go( &LIB_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNameSize.MakeEvent() );
-    Go( &LIB_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNumSize.MakeEvent() );
+    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinLength.MakeEvent() );
+    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNameSize.MakeEvent() );
+    Go( &SYMBOL_EDITOR_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNumSize.MakeEvent() );
 }
 

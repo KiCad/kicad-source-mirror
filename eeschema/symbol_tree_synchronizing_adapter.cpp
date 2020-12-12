@@ -27,7 +27,7 @@
 #include <symbol_library_manager.h>
 #include <symbol_lib_table.h>
 #include <class_libentry.h>
-#include <tools/lib_control.h>
+#include <tools/symbol_editor_control.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
@@ -51,7 +51,7 @@ SYMBOL_TREE_SYNCHRONIZING_ADAPTER::SYMBOL_TREE_SYNCHRONIZING_ADAPTER( SYMBOL_EDI
 
 TOOL_INTERACTIVE* SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
 {
-    return m_frame->GetToolManager()->GetTool<LIB_CONTROL>();
+    return m_frame->GetToolManager()->GetTool<SYMBOL_EDITOR_CONTROL>();
 }
 
 

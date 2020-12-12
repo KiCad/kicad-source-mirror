@@ -27,8 +27,8 @@
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/lib_drawing_tools.h>
-#include <tools/lib_pin_tool.h>
+#include <tools/symbol_editor_drawing_tools.h>
+#include <tools/symbol_editor_pin_tool.h>
 #include <class_libentry.h>
 #include <bitmaps.h>
 #include <lib_text.h>
@@ -46,7 +46,7 @@
 static void* g_lastPinWeakPtr;
 
 
-LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
+SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         EE_TOOL_BASE<SYMBOL_EDIT_FRAME>( "eeschema.SymbolDrawing" ),
         m_lastTextAngle( 0.0 ),
         m_lastFillStyle( FILL_TYPE::NO_FILL ),
@@ -56,7 +56,7 @@ LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
 }
 
 
-bool LIB_DRAWING_TOOLS::Init()
+bool SYMBOL_EDITOR_DRAWING_TOOLS::Init()
 {
     EE_TOOL_BASE::Init();
 
@@ -73,14 +73,14 @@ bool LIB_DRAWING_TOOLS::Init()
 }
 
 
-int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
-    KICAD_T        type = aEvent.Parameter<KICAD_T>();
-    auto*          settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    LIB_PIN_TOOL*  pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
-    VECTOR2I       cursorPos;
-    EDA_ITEM*      item   = nullptr;
-    bool           isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
+    KICAD_T   type = aEvent.Parameter<KICAD_T>();
+    auto*     settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
+    auto*     pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() : nullptr;
+    VECTOR2I  cursorPos;
+    EDA_ITEM* item   = nullptr;
+    bool      isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
@@ -263,7 +263,7 @@ int LIB_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDITOR_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     KICAD_T                 type = aEvent.Parameter<KICAD_T>();
@@ -424,7 +424,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
     getViewControls()->ShowCursor( true );
 
@@ -491,9 +491,9 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
-    LIB_PIN_TOOL* pinTool = m_toolMgr->GetTool<LIB_PIN_TOOL>();
+    SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
     LIB_PART*     part = m_frame->GetCurPart();
     LIB_PIN*      sourcePin = nullptr;
 
@@ -522,14 +522,14 @@ int LIB_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 }
 
 
-void LIB_DRAWING_TOOLS::setTransitions()
+void SYMBOL_EDITOR_DRAWING_TOOLS::setTransitions()
 {
-    Go( &LIB_DRAWING_TOOLS::TwoClickPlace,        EE_ACTIONS::placeSymbolPin.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::TwoClickPlace,        EE_ACTIONS::placeSymbolText.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolRectangle.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolCircle.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolArc.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolLines.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::PlaceAnchor,          EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::RepeatDrawItem,       EE_ACTIONS::repeatDrawItem.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,  EE_ACTIONS::placeSymbolPin.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace,  EE_ACTIONS::placeSymbolText.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolRectangle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolCircle.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolArc.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape,      EE_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor,    EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
+    Go( &SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem, EE_ACTIONS::repeatDrawItem.MakeEvent() );
 }

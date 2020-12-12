@@ -252,11 +252,11 @@ set( EESCHEMA_SRCS
     tools/ee_point_editor.cpp
     tools/ee_selection.cpp
     tools/ee_selection_tool.cpp
-    tools/lib_control.cpp
-    tools/lib_drawing_tools.cpp
-    tools/lib_edit_tool.cpp
-    tools/lib_move_tool.cpp
-    tools/lib_pin_tool.cpp
+    tools/symbol_editor_control.cpp
+    tools/symbol_editor_drawing_tools.cpp
+    tools/symbol_editor_edit_tool.cpp
+    tools/symbol_editor_move_tool.cpp
+    tools/symbol_editor_pin_tool.cpp
     tools/reannotate.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp

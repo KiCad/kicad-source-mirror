@@ -25,13 +25,12 @@
 #include <tool/tool_manager.h>
 #include <tool/picker_tool.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/lib_pin_tool.h>
-#include <tools/lib_drawing_tools.h>
-#include <tools/lib_move_tool.h>
+#include <tools/symbol_editor_pin_tool.h>
+#include <tools/symbol_editor_drawing_tools.h>
+#include <tools/symbol_editor_move_tool.h>
 #include <ee_actions.h>
 #include <bitmaps.h>
 #include <confirm.h>
-#include <sch_view.h>
 #include <symbol_edit_frame.h>
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>
@@ -40,23 +39,23 @@
 #include <dialogs/dialog_lib_edit_pin_table.h>
 #include <sch_plugins/kicad/sch_sexpr_plugin.h>
 #include <lib_text.h>
-#include "lib_edit_tool.h"
+#include "symbol_editor_edit_tool.h"
 #include <math/util.h>      // for KiROUND
 
 
-LIB_EDIT_TOOL::LIB_EDIT_TOOL() :
+SYMBOL_EDITOR_EDIT_TOOL::SYMBOL_EDITOR_EDIT_TOOL() :
         EE_TOOL_BASE( "eeschema.SymbolEditTool" ),
         m_pickerItem( nullptr )
 {
 }
 
 
-bool LIB_EDIT_TOOL::Init()
+bool SYMBOL_EDITOR_EDIT_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
-    LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
-    LIB_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<LIB_MOVE_TOOL>();
+    SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
+    SYMBOL_EDITOR_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SYMBOL_EDITOR_MOVE_TOOL>();
 
     wxASSERT_MSG( drawingTools, "eeschema.SymbolDrawing tool is not available" );
 
@@ -127,7 +126,7 @@ bool LIB_EDIT_TOOL::Init()
 }
 
 
-int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection();
 
@@ -171,7 +170,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection();
 
@@ -234,7 +233,7 @@ static KICAD_T nonFields[] =
 };
 
 
-int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     LIB_PART* part = m_frame->GetCurPart();
     auto      items = m_selectionTool->RequestSelection( nonFields ).GetItems();
@@ -298,7 +297,7 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     std::string  tool = aEvent.GetCommandStr().get();
     PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
@@ -376,7 +375,7 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection();
 
@@ -397,7 +396,7 @@ int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
         case LIB_PIN_T:
         {
-            LIB_PIN_TOOL* pinTool = m_toolMgr->GetTool<LIB_PIN_TOOL>();
+            SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
 
             if( pinTool )
                 pinTool->EditPinProperties( (LIB_PIN*) item );
@@ -431,7 +430,7 @@ int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 }
 
 
-void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
+void SYMBOL_EDITOR_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
 {
     if( aItem == NULL )
         return;
@@ -460,7 +459,7 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 
-    LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
+    SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     drawingTools->SetDrawSpecificConvert( !dialog.GetApplyToAllConversions() );
     drawingTools->SetDrawSpecificUnit( !dialog.GetApplyToAllUnits() );
 
@@ -470,7 +469,7 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
 }
 
 
-void LIB_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
+void SYMBOL_EDITOR_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
 {
     if ( ( aItem == NULL ) || ( aItem->Type() != LIB_TEXT_T ) )
         return;
@@ -486,7 +485,7 @@ void LIB_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
 }
 
 
-void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
+void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 {
     if( aField == NULL )
         return;
@@ -535,7 +534,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
 }
 
 
-void LIB_EDIT_TOOL::editSymbolProperties()
+void SYMBOL_EDITOR_EDIT_TOOL::editSymbolProperties()
 {
     LIB_PART*     part = m_frame->GetCurPart();
     bool          partLocked = part->UnitsLocked();
@@ -559,7 +558,7 @@ void LIB_EDIT_TOOL::editSymbolProperties()
     // to the best value
     if( partLocked != part->UnitsLocked() )
     {
-        LIB_DRAWING_TOOLS* tools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
+        SYMBOL_EDITOR_DRAWING_TOOLS* tools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
 
         // Enable synchronized pin edit mode for symbols with interchangeable units
         m_frame->m_SyncPinEdit = !part->UnitsLocked();
@@ -572,7 +571,7 @@ void LIB_EDIT_TOOL::editSymbolProperties()
 }
 
 
-int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
     LIB_PART* part = m_frame->GetCurPart();
 
@@ -595,7 +594,7 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 {
     m_frame->GetSymbolFromUndoList();
 
@@ -606,7 +605,7 @@ int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 {
     m_frame->GetSymbolFromRedoList();
 
@@ -617,7 +616,7 @@ int LIB_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 {
     int retVal = Copy( aEvent );
 
@@ -628,7 +627,7 @@ int LIB_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 {
     LIB_PART*     part = m_frame->GetCurPart();
     EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
@@ -664,7 +663,7 @@ int LIB_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 {
     LIB_PART*           part = m_frame->GetCurPart();
 
@@ -729,7 +728,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
-int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
     LIB_PART*     part = m_frame->GetCurPart();
     EE_SELECTION& selection = m_selectionTool->RequestSelection( nonFields );
@@ -770,23 +769,23 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 }
 
 
-void LIB_EDIT_TOOL::setTransitions()
+void SYMBOL_EDITOR_EDIT_TOOL::setTransitions()
 {
-    Go( &LIB_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Cut,                ACTIONS::cut.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Copy,               ACTIONS::copy.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Cut,                ACTIONS::cut.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Copy,               ACTIONS::copy.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Duplicate,          ACTIONS::duplicate.MakeEvent() );
 
-    Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::DoDelete,           ACTIONS::doDelete.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::DeleteItemCursor,   ACTIONS::deleteTool.MakeEvent() );
 
-    Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
+    Go( &SYMBOL_EDITOR_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
 }

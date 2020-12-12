@@ -28,7 +28,7 @@
 #include <dialog_lib_edit_text.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <pgm_base.h>
-#include <tools/lib_drawing_tools.h>
+#include <tools/symbol_editor_drawing_tools.h>
 
 
 DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT* aText ) :
@@ -91,7 +91,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
     else
     {
         auto* cfg = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-        LIB_DRAWING_TOOLS* tools = m_parent->GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
+        auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
 
         m_textSize.SetValue( Mils2iu( cfg->m_Defaults.text_size ) );
 
@@ -147,7 +147,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
         }
 
         // Record settings used for next time:
-        LIB_DRAWING_TOOLS* tools = m_parent->GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
+        auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
         tools->SetLastTextAngle( m_graphicText->GetTextAngle() );
         tools->SetDrawSpecificConvert( !m_CommonConvert->GetValue() );
         tools->SetDrawSpecificUnit( !m_CommonUnit->GetValue() );

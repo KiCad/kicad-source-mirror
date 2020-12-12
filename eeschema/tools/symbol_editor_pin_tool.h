@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_LIB_PIN_TOOL_H
-#define KICAD_LIB_PIN_TOOL_H
+#ifndef SYMBOL_EDITOR_PIN_TOOL_H
+#define SYMBOL_EDITOR_PIN_TOOL_H
 
 #include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
@@ -32,11 +32,11 @@
 class SYMBOL_EDIT_FRAME;
 
 
-class LIB_PIN_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_PIN_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
-    LIB_PIN_TOOL();
-    ~LIB_PIN_TOOL() override { }
+    SYMBOL_EDITOR_PIN_TOOL();
+    ~SYMBOL_EDITOR_PIN_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -55,4 +55,4 @@ private:
     void setTransitions() override;
 };
 
-#endif //KICAD_LIB_PIN_TOOL_H
+#endif // SYMBOL_EDITOR_PIN_TOOL_H

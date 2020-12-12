@@ -110,7 +110,7 @@ TOOL_ACTION EE_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSele
         AS_GLOBAL );
 
 
-// LIB_CONTROL
+// SYMBOL_EDITOR_CONTROL
 //
 TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
         AS_GLOBAL, 0, "",
@@ -196,7 +196,7 @@ TOOL_ACTION EE_ACTIONS::saveInSchematic( "eeschema.SymbolLibraryControl.saveInSc
         save_symbol_to_schematic_xpm );
 
 
-// LIB_DRAWING_TOOLS
+// SYMBOL_EDITOR_DRAWING_TOOLS
 //
 TOOL_ACTION EE_ACTIONS::placeSymbolPin( "eeschema.SymbolDrawing.placeSymbolPin",
         AS_GLOBAL,
@@ -239,7 +239,7 @@ TOOL_ACTION EE_ACTIONS::finishDrawing( "eeschema.SymbolDrawing.finishDrawing",
         _( "Finish Drawing" ), _( "Finish drawing shape" ),
         checked_ok_xpm, AF_NONE );
 
-// LIB_PIN_TOOL
+// SYMBOL_EDITOR_PIN_TOOL
 //
 TOOL_ACTION EE_ACTIONS::pushPinLength( "eeschema.PinEditing.pushPinLength",
         AS_GLOBAL, 0, "",

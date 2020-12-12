@@ -50,7 +50,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
-#include <tools/lib_control.h>
+#include <tools/symbol_editor_control.h>
 #include <tools/ee_inspection_tool.h>
 #include <view/view_controls.h>
 
@@ -234,7 +234,7 @@ void LIB_VIEW_FRAME::setupTools()
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );  // manage show datasheet
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );   // manage context menu
-    m_toolManager->RegisterTool( new LIB_CONTROL );
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );
 
     m_toolManager->InitTools();
 

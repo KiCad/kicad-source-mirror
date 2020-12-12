@@ -22,59 +22,52 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_LIB_EDIT_TOOL_H
-#define KICAD_LIB_EDIT_TOOL_H
+#ifndef SYMBOL_EDITOR_MOVE_TOOL_H
+#define SYMBOL_EDITOR_MOVE_TOOL_H
 
 #include <tools/ee_tool_base.h>
-
+#include <symbol_edit_frame.h>
 
 class SYMBOL_EDIT_FRAME;
+class EE_SELECTION_TOOL;
 
 
-class LIB_EDIT_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
+class SYMBOL_EDITOR_MOVE_TOOL : public EE_TOOL_BASE<SYMBOL_EDIT_FRAME>
 {
 public:
-    LIB_EDIT_TOOL();
-    ~LIB_EDIT_TOOL() override { }
+    SYMBOL_EDITOR_MOVE_TOOL();
+    ~SYMBOL_EDITOR_MOVE_TOOL() override { }
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    int Rotate( const TOOL_EVENT& aEvent );
-    int Mirror( const TOOL_EVENT& aEvent );
-
-    int Duplicate( const TOOL_EVENT& aEvent );
-
-    int Properties( const TOOL_EVENT& aEvent );
-    int PinTable( const TOOL_EVENT& aEvent );
-
-    int Undo( const TOOL_EVENT& aEvent );
-    int Redo( const TOOL_EVENT& aEvent );
-    int Cut( const TOOL_EVENT& aEvent );
-    int Copy( const TOOL_EVENT& aEvent );
-    int Paste( const TOOL_EVENT& aEvent );
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
 
     /**
-     * Function DoDelete()
+     * Function Main()
      *
-     * Deletes the selected items, or the item under the cursor.
+     * Runs an interactive move of the selected items, or the item under the cursor.
      */
-    int DoDelete( const TOOL_EVENT& aEvent );
-
-    ///> Runs the deletion tool.
-    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+    int Main( const TOOL_EVENT& aEvent );
 
 private:
-    void editGraphicProperties( LIB_ITEM* aItem );
-    void editTextProperties( LIB_ITEM* aItem );
-    void editFieldProperties( LIB_FIELD* aField );
-    void editSymbolProperties();
+    void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
-    EDA_ITEM* m_pickerItem;
+    ///> Flag determining if anything is being dragged right now
+    bool        m_moveInProgress;
+
+    ///> Used for chaining commands
+    VECTOR2I    m_moveOffset;
+
+    ///> Last cursor position (needed for getModificationPoint() to avoid changes
+    ///> of edit reference point).
+    VECTOR2I    m_cursor;
+    VECTOR2I    m_anchorPos;
 };
 
-#endif //KICAD_LIB_EDIT_TOOL_H
+#endif // SYMBOL_EDITOR_MOVE_TOOL_H

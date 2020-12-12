@@ -57,11 +57,11 @@
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_point_editor.h>
 #include <tools/ee_selection_tool.h>
-#include <tools/lib_control.h>
-#include <tools/lib_drawing_tools.h>
-#include <tools/lib_edit_tool.h>
-#include <tools/lib_move_tool.h>
-#include <tools/lib_pin_tool.h>
+#include <tools/symbol_editor_control.h>
+#include <tools/symbol_editor_drawing_tools.h>
+#include <tools/symbol_editor_edit_tool.h>
+#include <tools/symbol_editor_move_tool.h>
+#include <tools/symbol_editor_pin_tool.h>
 #include <widgets/app_progress_dialog.h>
 #include <widgets/infobar.h>
 #include <widgets/lib_tree.h>
@@ -293,12 +293,12 @@ void SYMBOL_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
     m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
-    m_toolManager->RegisterTool( new LIB_PIN_TOOL );
-    m_toolManager->RegisterTool( new LIB_DRAWING_TOOLS );
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_PIN_TOOL );
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
-    m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
-    m_toolManager->RegisterTool( new LIB_EDIT_TOOL );
-    m_toolManager->RegisterTool( new LIB_CONTROL );
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_MOVE_TOOL );
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_EDIT_TOOL );
+    m_toolManager->RegisterTool( new SYMBOL_EDITOR_CONTROL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

@@ -27,7 +27,7 @@
 #include <confirm.h>
 #include <widgets/infobar.h>
 #include <tools/ee_actions.h>
-#include <tools/lib_drawing_tools.h>
+#include <tools/symbol_editor_drawing_tools.h>
 #include <symbol_edit_frame.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -994,7 +994,7 @@ void SYMBOL_EDIT_FRAME::LoadPart( const wxString& aAlias, const wxString& aLibra
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
-    LIB_DRAWING_TOOLS* tools = GetToolManager()->GetTool<LIB_DRAWING_TOOLS>();
+    SYMBOL_EDITOR_DRAWING_TOOLS* tools = GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     tools->SetDrawSpecificUnit( part->UnitsLocked() );
 
     LoadOneLibraryPartAux( part, aLibrary, aUnit, 0 );
