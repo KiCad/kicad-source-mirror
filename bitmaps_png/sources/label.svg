@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="label.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:cx="-3.5584597"
      inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -81,10 +81,13 @@
      id="title157963">label</title>
   <path
      class="cls-1"
-     d="M 16.413,15.59 H 7.6156 l -1.99,5.4078 H 2.7275 L 10.8476,0 h 2.4355 l 7.9894,20.998 H 18.3741 Z M 8.4956,13.21 h 7.0676 L 12.1014,3.65 h -0.0872 z"
-     id="path157965" />
+     d="M 14.64695,13.330128 H 9.246107 L 8.0244191,16.650049 H 6.2452362 L 11.230276,3.7592156 h 1.495186 L 17.630263,16.650172 H 15.850896 Z M 9.7863509,11.869014 H 14.125246 L 12,6 h -0.05353 z"
+     id="path157965"
+     style="stroke-width:0.613913" />
   <path
      class="cls-2"
-     d="m 0.2974,23.7079 a 1,1 0 0 1 0.7071,-1.707 h 22.0072 a 1,1 0 1 1 0,2 H 1.0045 a 0.9963,0.9963 0 0 1 -0.7071,-0.293 z"
-     id="path157967" />
+     d="M 0,20 C -0.64305803,19.37003 -0.18755,18.293101 0.72200873,18.293 H 23.193216 c 1.361445,0 1.361445,2 0,2 H 0.72200873 C 0.45110426,20.293378 0.19123459,20.18792 0,20 Z"
+     id="path157967"
+     sodipodi:nodetypes="ccsscc"
+     style="stroke-width:1.01049" />
 </svg>

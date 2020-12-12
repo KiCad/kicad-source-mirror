@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="noconn.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2017"
-     inkscape:window-height="1521"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview14"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="39.543586"
+     inkscape:cx="4.1350035"
+     inkscape:cy="10.948538"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
     <inkscape:grid
@@ -82,11 +82,11 @@
   <path
      id="line9"
      style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 19,5 5,19"
+     d="M 17.333333,6.6666667 6.6666667,17.333333"
      sodipodi:nodetypes="cc" />
   <path
      id="line11"
      style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-     d="M 19,19 5,5"
+     d="M 17.333333,17.333333 6.6666667,6.6666667"
      sodipodi:nodetypes="cc" />
 </svg>

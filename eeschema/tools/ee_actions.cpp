@@ -263,7 +263,7 @@ TOOL_ACTION EE_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
         AS_GLOBAL,
         'A', LEGACY_HK_NAME( "Add Symbol" ),
         _( "Add Symbol" ), _( "Add a symbol" ),
-        import_part_xpm, AF_ACTIVATE );
+        add_component_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
         AS_GLOBAL,
@@ -293,7 +293,7 @@ TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Add Label" ),
         _( "Add Label" ), _( "Add a net label" ),
-        add_line_label_xpm, AF_ACTIVATE, (void*) SCH_LABEL_T );
+        label_xpm, AF_ACTIVATE, (void*) SCH_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
