@@ -35,11 +35,14 @@ class SHAPE_CIRCLE : public SHAPE
 {
 public:
     SHAPE_CIRCLE() :
-        SHAPE( SH_CIRCLE ), m_radius( 0 )
+        SHAPE( SH_CIRCLE ),
+        m_radius( 0 )
     {}
 
     SHAPE_CIRCLE( const VECTOR2I& aCenter, int aRadius ) :
-        SHAPE( SH_CIRCLE ), m_radius( aRadius ), m_center( aCenter )
+        SHAPE( SH_CIRCLE ),
+        m_radius( aRadius ),
+        m_center( aCenter )
     {}
 
     SHAPE_CIRCLE( const SHAPE_CIRCLE& aOther ) :
@@ -122,8 +125,9 @@ public:
     {
         return true;
     }
+
 private:
-    int m_radius;
+    int      m_radius;
     VECTOR2I m_center;
 };
 

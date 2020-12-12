@@ -59,7 +59,7 @@ public:
     }
 
     bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
-            VECTOR2I* aLocation = nullptr ) const override
+                  VECTOR2I* aLocation = nullptr ) const override
     {
         return SHAPE::Collide( aShape, aClearance, aActual, aLocation );
     }

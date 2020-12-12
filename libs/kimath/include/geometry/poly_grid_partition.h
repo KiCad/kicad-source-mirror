@@ -59,8 +59,29 @@
 
 class POLY_GRID_PARTITION
 {
-private:
+public:
+    POLY_GRID_PARTITION( const SHAPE_LINE_CHAIN& aPolyOutline, int gridSize )
+    {
+        build( aPolyOutline, gridSize );
+    }
 
+    int ContainsPoint( const VECTOR2I& aP, int aClearance = 0 )    // const
+    {
+        if( containsPoint(aP) )
+            return 1;
+
+        if( aClearance > 0 )
+            return checkClearance ( aP, aClearance );
+
+        return 0;
+    }
+
+    const BOX2I& BBox() const
+    {
+        return m_bbox;
+    }
+
+private:
     enum HASH_FLAG
     {
         LEAD_EDGE  = 1,
@@ -91,6 +112,111 @@ private:
             return a.A.x + a.B.x + a.A.y + a.B.y;
         }
     };
+
+    int containsPoint( const VECTOR2I& aP, bool debug = false ) const
+    {
+        const auto gridPoint = poly2grid( aP );
+
+        if( !m_bbox.Contains( aP ) )
+            return 0;
+
+        SCAN_STATE state;
+        const EDGE_LIST& cell = m_grid[ m_gridSize * gridPoint.y + gridPoint.x ];
+
+        scanCell( state, cell, aP, gridPoint.x, gridPoint.y );
+
+        if( state.nearest < 0 )
+        {
+            state = SCAN_STATE();
+
+            for( int d = 1; d <= m_gridSize; d++ )
+            {
+                int xl  = gridPoint.x - d;
+                int xh  = gridPoint.x + d;
+
+                if( xl >= 0 )
+                {
+                    const EDGE_LIST& cell2 = m_grid[ m_gridSize * gridPoint.y + xl ];
+                    scanCell( state, cell2, aP, xl, gridPoint.y );
+
+                    if( state.nearest >= 0 )
+                        break;
+                }
+
+                if( xh < m_gridSize )
+                {
+                    const EDGE_LIST& cell2 = m_grid[ m_gridSize * gridPoint.y + xh ];
+                    scanCell( state, cell2, aP, xh, gridPoint.y );
+
+                    if( state.nearest >= 0 )
+                        break;
+                }
+            }
+        }
+
+        #ifdef TOM_EXTRA_VERBOSE
+        printf("Nearest: %d prev: %d dmax %d\n", state.nearest, state.nearest_prev, state.dist_max );
+        #endif
+
+        if( state.nearest < 0 )
+            return 0;
+
+        if( state.dist_max == 0 )
+            return 1;
+
+
+        // special case for diagonal 'slits', e.g. two segments that partially overlap each other.
+        // Just love handling degeneracy... As I can't find any reliable way of fixing it for the moment,
+        // let's fall back to the good old O(N) point-in-polygon test
+        if( state.nearest_prev >= 0 && state.dist_max == state.dist_prev )
+        {
+            int d = std::abs( state.nearest_prev - state.nearest );
+
+            if( (d == 1) && ( (m_flags[state.nearest_prev] & m_flags[state.nearest]) == 0 ) )
+            {
+                return m_outline.PointInside( aP );
+            }
+        }
+
+        if( state.dist_max > 0 )
+        {
+            return m_flags[state.nearest] & LEAD_EDGE ? 1 : 0;
+        }
+        else
+        {
+            return m_flags[state.nearest] & TRAIL_EDGE ? 1 : 0;
+        }
+    }
+
+    bool checkClearance( const VECTOR2I& aP, int aClearance )
+    {
+        int gx0 = poly2gridX( aP.x - aClearance - 1);
+        int gx1 = poly2gridX( aP.x + aClearance + 1);
+        int gy0 = poly2gridY( aP.y - aClearance - 1);
+        int gy1 = poly2gridY( aP.y + aClearance + 1);
+
+        using ecoord = VECTOR2I::extended_type;
+
+        ecoord dist = (ecoord) aClearance * aClearance;
+
+        for ( int gx = gx0; gx <= gx1; gx++ )
+        {
+            for ( int gy = gy0; gy <= gy1; gy++ )
+            {
+                const auto& cell = m_grid [ m_gridSize * gy + gx];
+                for ( auto index : cell )
+                {
+                    const auto& seg = m_outline.Segment( index );
+
+                    if ( seg.SquaredDistance(aP) <= dist )
+                        return true;
+
+                }
+            }
+
+        }
+        return false;
+    }
 
     // convertes grid cell coordinates to the polygon coordinates
     const VECTOR2I grid2poly( const VECTOR2I& p ) const
@@ -405,141 +531,11 @@ private:
         }
     }
 
-public:
-
-    POLY_GRID_PARTITION( const SHAPE_LINE_CHAIN& aPolyOutline, int gridSize )
-    {
-        build( aPolyOutline, gridSize );
-    }
-
-    int containsPoint( const VECTOR2I& aP, bool debug = false ) const
-    {
-        const auto gridPoint = poly2grid( aP );
-
-        if( !m_bbox.Contains( aP ) )
-            return 0;
-
-        SCAN_STATE state;
-        const EDGE_LIST& cell = m_grid[ m_gridSize * gridPoint.y + gridPoint.x ];
-
-        scanCell( state, cell, aP, gridPoint.x, gridPoint.y );
-
-        if( state.nearest < 0 )
-        {
-            state = SCAN_STATE();
-
-            for( int d = 1; d <= m_gridSize; d++ )
-            {
-                int xl  = gridPoint.x - d;
-                int xh  = gridPoint.x + d;
-
-                if( xl >= 0 )
-                {
-                    const EDGE_LIST& cell2 = m_grid[ m_gridSize * gridPoint.y + xl ];
-                    scanCell( state, cell2, aP, xl, gridPoint.y );
-
-                    if( state.nearest >= 0 )
-                        break;
-                }
-
-                if( xh < m_gridSize )
-                {
-                    const EDGE_LIST& cell2 = m_grid[ m_gridSize * gridPoint.y + xh ];
-                    scanCell( state, cell2, aP, xh, gridPoint.y );
-
-                    if( state.nearest >= 0 )
-                        break;
-                }
-            }
-        }
-
-        #ifdef TOM_EXTRA_VERBOSE
-        printf("Nearest: %d prev: %d dmax %d\n", state.nearest, state.nearest_prev, state.dist_max );
-        #endif
-
-        if( state.nearest < 0 )
-            return 0;
-
-        if( state.dist_max == 0 )
-            return 1;
-
-
-        // special case for diagonal 'slits', e.g. two segments that partially overlap each other. 
-        // Just love handling degeneracy... As I can't find any reliable way of fixing it for the moment,
-        // let's fall back to the good old O(N) point-in-polygon test
-        if( state.nearest_prev >= 0 && state.dist_max == state.dist_prev )
-        {
-            int d = std::abs( state.nearest_prev - state.nearest );
-
-            if( (d == 1) && ( (m_flags[state.nearest_prev] & m_flags[state.nearest]) == 0 ) )
-            {
-                return m_outline.PointInside( aP );
-            }
-        }
-
-        if( state.dist_max > 0 )
-        {
-            return m_flags[state.nearest] & LEAD_EDGE ? 1 : 0;
-        }
-        else
-        {
-            return m_flags[state.nearest] & TRAIL_EDGE ? 1 : 0;
-        }
-    }
-
-    bool checkClearance( const VECTOR2I& aP, int aClearance )
-    {
-        int gx0 = poly2gridX( aP.x - aClearance - 1);
-        int gx1 = poly2gridX( aP.x + aClearance + 1);
-        int gy0 = poly2gridY( aP.y - aClearance - 1);
-        int gy1 = poly2gridY( aP.y + aClearance + 1);
-
-        using ecoord = VECTOR2I::extended_type;
-
-        ecoord dist = (ecoord) aClearance * aClearance;
-
-        for ( int gx = gx0; gx <= gx1; gx++ )
-        {
-            for ( int gy = gy0; gy <= gy1; gy++ )
-            {
-                const auto& cell = m_grid [ m_gridSize * gy + gx];
-                for ( auto index : cell )
-                {
-                    const auto& seg = m_outline.Segment( index );
-
-                    if ( seg.SquaredDistance(aP) <= dist )
-                        return true;
-
-                }
-            }
-
-        }
-        return false;
-    }
-
-
-
-    int ContainsPoint( const VECTOR2I& aP, int aClearance = 0 )    // const
-    {
-        if( containsPoint(aP) )
-            return 1;
-
-        if( aClearance > 0 )
-            return checkClearance ( aP, aClearance );
-
-        return 0;
-    }
-
-    const BOX2I& BBox() const
-    {
-        return m_bbox;
-    }
-
 private:
-    int m_gridSize;
-    SHAPE_LINE_CHAIN m_outline;
-    BOX2I m_bbox;
-    std::vector<int> m_flags;
+    int                    m_gridSize;
+    SHAPE_LINE_CHAIN       m_outline;
+    BOX2I                  m_bbox;
+    std::vector<int>       m_flags;
     std::vector<EDGE_LIST> m_grid;
 };
 

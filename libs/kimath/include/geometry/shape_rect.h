@@ -39,7 +39,9 @@ public:
      * Creates an empty (0-sized) rectangle
      */
     SHAPE_RECT() :
-        SHAPE( SH_RECT ), m_w( 0 ), m_h( 0 )
+        SHAPE( SH_RECT ),
+        m_w( 0 ),
+        m_h( 0 )
     {}
 
     /**
@@ -47,7 +49,10 @@ public:
      * Creates a rectangle defined by top-left corner (aX0, aY0), width aW and height aH.
      */
     SHAPE_RECT( int aX0, int aY0, int aW, int aH ) :
-        SHAPE( SH_RECT ), m_p0( aX0, aY0 ), m_w( aW ), m_h( aH )
+        SHAPE( SH_RECT ),
+        m_p0( aX0, aY0 ),
+        m_w( aW ),
+        m_h( aH )
     {}
 
     /**
@@ -55,7 +60,10 @@ public:
      * Creates a rectangle defined by top-left corner aP0, width aW and height aH.
      */
     SHAPE_RECT( const VECTOR2I& aP0, int aW, int aH ) :
-        SHAPE( SH_RECT ), m_p0( aP0 ), m_w( aW ), m_h( aH )
+        SHAPE( SH_RECT ),
+        m_p0( aP0 ),
+        m_w( aW ),
+        m_h( aH )
     {}
 
     SHAPE_RECT( const SHAPE_RECT& aOther ) :
@@ -188,14 +196,9 @@ public:
     virtual const std::string Format( ) const override;
 
 private:
-    ///> Top-left corner
-    VECTOR2I m_p0;
-
-    ///> Width
-    int m_w;
-
-    ///> Height
-    int m_h;
+    VECTOR2I m_p0;      ///> Top-left corner
+    int      m_w;       ///> Width
+    int      m_h;       ///> Height
 };
 
 #endif // __SHAPE_RECT_H

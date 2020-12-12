@@ -63,1348 +63,1348 @@
  */
 class SHAPE_POLY_SET : public SHAPE
 {
+public:
+    ///> represents a single polygon outline with holes. The first entry is the outline,
+    ///> the remaining (if any), are the holes
+    ///> N.B. SWIG only supports typedef, so avoid c++ 'using' keyword
+    typedef std::vector<SHAPE_LINE_CHAIN> POLYGON;
+
+    class TRIANGULATED_POLYGON
+    {
     public:
-        ///> represents a single polygon outline with holes. The first entry is the outline,
-        ///> the remaining (if any), are the holes
-        ///> N.B. SWIG only supports typedef, so avoid c++ 'using' keyword
-        typedef std::vector<SHAPE_LINE_CHAIN> POLYGON;
-
-        class TRIANGULATED_POLYGON
+        struct TRI : public SHAPE_LINE_CHAIN_BASE
         {
-        public:
-            struct TRI : public SHAPE_LINE_CHAIN_BASE
+            TRI( int _a = 0, int _b = 0, int _c = 0, TRIANGULATED_POLYGON* aParent = nullptr ) :
+                SHAPE_LINE_CHAIN_BASE( SH_POLY_SET_TRIANGLE ),
+                a( _a ),
+                b( _b ),
+                c( _c ),
+                parent( aParent )
             {
-                TRI( int _a = 0, int _b = 0, int _c = 0, TRIANGULATED_POLYGON* aParent = nullptr ) :
-                    SHAPE_LINE_CHAIN_BASE( SH_POLY_SET_TRIANGLE ),
-                    a( _a ), b( _b ), c( _c ), parent( aParent )
+            }
+
+            virtual void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override {};
+
+            virtual void Move( const VECTOR2I& aVector ) override {};
+
+            virtual bool IsSolid() const override { return true; }
+
+            virtual bool IsClosed() const override { return true; }
+
+            virtual const BOX2I BBox( int aClearance = 0 ) const override;
+
+            virtual const VECTOR2I GetPoint( int aIndex ) const override
+            {
+                switch(aIndex)
                 {
+                    case 0: return parent->m_vertices[a];
+                    case 1: return parent->m_vertices[b];
+                    case 2: return parent->m_vertices[c];
+                    default: assert(false);
                 }
+                return VECTOR2I(0, 0);
+            }
 
-                virtual void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override {};
-
-                virtual void Move( const VECTOR2I& aVector ) override {};
-
-                virtual bool IsSolid() const override { return true; }
-
-                virtual bool IsClosed() const override { return true; }
-
-                virtual const BOX2I BBox( int aClearance = 0 ) const override;
-
-                virtual const VECTOR2I GetPoint( int aIndex ) const override
+            virtual const SEG GetSegment( int aIndex ) const override
+            {
+                switch(aIndex)
                 {
-                    switch(aIndex)
-                    {
-                        case 0: return parent->m_vertices[a];
-                        case 1: return parent->m_vertices[b];
-                        case 2: return parent->m_vertices[c];
-                        default: assert(false);
-                    }
-                    return VECTOR2I(0, 0);
+                    case 0: return SEG( parent->m_vertices[a], parent->m_vertices[b] );
+                    case 1: return SEG( parent->m_vertices[b], parent->m_vertices[c] );
+                    case 2: return SEG( parent->m_vertices[c], parent->m_vertices[a] );
+                    default: assert(false);
                 }
-
-                virtual const SEG GetSegment( int aIndex ) const override
-                {
-                    switch(aIndex)
-                    {
-                        case 0: return SEG( parent->m_vertices[a], parent->m_vertices[b] );
-                        case 1: return SEG( parent->m_vertices[b], parent->m_vertices[c] );
-                        case 2: return SEG( parent->m_vertices[c], parent->m_vertices[a] );
-                        default: assert(false);
-                    }
-                    return SEG();
-                }
-
-                virtual size_t GetPointCount() const override { return 3; }
-                virtual size_t GetSegmentCount() const override { return 3; }
-
-
-                int a, b, c;
-                TRIANGULATED_POLYGON* parent;
-            };
-
-            TRIANGULATED_POLYGON();
-            TRIANGULATED_POLYGON( const TRIANGULATED_POLYGON& aOther );
-            ~TRIANGULATED_POLYGON();
-
-            void Clear()
-            {
-                m_vertices.clear();
-                m_triangles.clear();
+                return SEG();
             }
 
-            void GetTriangle( int index, VECTOR2I& a, VECTOR2I& b, VECTOR2I& c ) const
-            {
-                auto tri = m_triangles[ index ];
-                a = m_vertices[ tri.a ];
-                b = m_vertices[ tri.b ];
-                c = m_vertices[ tri.c ];
-            }
+            virtual size_t GetPointCount() const override { return 3; }
+            virtual size_t GetSegmentCount() const override { return 3; }
 
-            TRIANGULATED_POLYGON& operator=( const TRIANGULATED_POLYGON& aOther );
 
-            void AddTriangle( int a, int b, int c );
-            
-            void AddVertex( const VECTOR2I& aP )
-            {
-                m_vertices.push_back( aP );
-            }
-
-            size_t GetTriangleCount() const
-            {
-                return m_triangles.size();
-            }
-
-            std::deque<TRI>& Triangles()
-            {
-                return m_triangles;
-            }
-
-            size_t GetVertexCount() const
-            {
-                return m_vertices.size();
-            }
-
-            void Move( const VECTOR2I& aVec )
-            {
-                for( auto& vertex : m_vertices )
-                    vertex += aVec;
-            }
-
-        private:
-
-            std::deque<TRI> m_triangles;
-            std::deque<VECTOR2I> m_vertices;
+            int a, b, c;
+            TRIANGULATED_POLYGON* parent;
         };
 
-        /**
-         * Struct VERTEX_INDEX
-         *
-         * Structure to hold the necessary information in order to index a vertex on a
-         * SHAPE_POLY_SET object: the polygon index, the contour index relative to the polygon and
-         * the vertex index relative the contour.
-         */
-        typedef struct VERTEX_INDEX
+        TRIANGULATED_POLYGON();
+        TRIANGULATED_POLYGON( const TRIANGULATED_POLYGON& aOther );
+        ~TRIANGULATED_POLYGON();
+
+        void Clear()
         {
-            int m_polygon;   /*!< m_polygon is the index of the polygon. */
-            int m_contour;   /*!< m_contour is the index of the contour relative to the polygon. */
-            int m_vertex;    /*!< m_vertex is the index of the vertex relative to the contour. */
+            m_vertices.clear();
+            m_triangles.clear();
+        }
 
-            VERTEX_INDEX() : m_polygon(-1), m_contour(-1), m_vertex(-1)
-            {
-            }
-        } VERTEX_INDEX;
-
-        /**
-         * ITERATOR_TEMPLATE
-         *
-         * Base class for iterating over all vertices in a given SHAPE_POLY_SET.
-         */
-        template <class T>
-        class ITERATOR_TEMPLATE
+        void GetTriangle( int index, VECTOR2I& a, VECTOR2I& b, VECTOR2I& c ) const
         {
-        public:
+            auto tri = m_triangles[ index ];
+            a = m_vertices[ tri.a ];
+            b = m_vertices[ tri.b ];
+            c = m_vertices[ tri.c ];
+        }
 
-            /**
-             * Function IsEndContour.
-             * @return bool - true if the current vertex is the last one of the current contour
-             *              (outline or hole); false otherwise.
-             */
-            bool IsEndContour() const
-            {
-                return m_currentVertex + 1 == m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount();
-            }
+        TRIANGULATED_POLYGON& operator=( const TRIANGULATED_POLYGON& aOther );
 
-            /**
-             * Function IsLastOutline.
-             * @return bool - true if the current outline is the last one; false otherwise.
-             */
-            bool IsLastPolygon() const
-            {
-                return m_currentPolygon == m_lastPolygon;
-            }
+        void AddTriangle( int a, int b, int c );
 
-            operator bool() const
-            {
-                if( m_currentPolygon < m_lastPolygon )
-                    return true;
+        void AddVertex( const VECTOR2I& aP )
+        {
+            m_vertices.push_back( aP );
+        }
 
-                if( m_currentPolygon != m_poly->OutlineCount() - 1 )
-                    return false;
+        size_t GetTriangleCount() const
+        {
+            return m_triangles.size();
+        }
 
-                const auto& currentPolygon = m_poly->CPolygon( m_currentPolygon );
+        std::deque<TRI>& Triangles()
+        {
+            return m_triangles;
+        }
 
-                return m_currentContour < (int) currentPolygon.size() - 1
-                           || m_currentVertex < currentPolygon[m_currentContour].PointCount();
-            }
+        size_t GetVertexCount() const
+        {
+            return m_vertices.size();
+        }
 
-            /**
-             * Function Advance
-             * advances the indices of the current vertex/outline/contour, checking whether the
-             * vertices in the holes have to be iterated through
-             */
-            void Advance()
-            {
-                // Advance vertex index
-                m_currentVertex ++;
+        void Move( const VECTOR2I& aVec )
+        {
+            for( auto& vertex : m_vertices )
+                vertex += aVec;
+        }
 
-                // Check whether the user wants to iterate through the vertices of the holes
-                // and behave accordingly
-                if( m_iterateHoles )
-                {
-                    // If the last vertex of the contour was reached, advance the contour index
-                    if( m_currentVertex >= m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
-                    {
-                        m_currentVertex = 0;
-                        m_currentContour++;
+    private:
+        std::deque<TRI>      m_triangles;
+        std::deque<VECTOR2I> m_vertices;
+    };
 
-                        // If the last contour of the current polygon was reached, advance the
-                        // outline index
-                        int totalContours = m_poly->CPolygon( m_currentPolygon ).size();
+    /**
+     * Struct VERTEX_INDEX
+     *
+     * Structure to hold the necessary information in order to index a vertex on a
+     * SHAPE_POLY_SET object: the polygon index, the contour index relative to the polygon and
+     * the vertex index relative the contour.
+     */
+    typedef struct VERTEX_INDEX
+    {
+        int m_polygon;   /*!< m_polygon is the index of the polygon. */
+        int m_contour;   /*!< m_contour is the index of the contour relative to the polygon. */
+        int m_vertex;    /*!< m_vertex is the index of the vertex relative to the contour. */
 
-                        if( m_currentContour >= totalContours )
-                        {
-                            m_currentContour = 0;
-                            m_currentPolygon++;
-                        }
-                    }
-                }
-                else
-                {
-                    // If the last vertex of the outline was reached, advance to the following polygon
-                    if( m_currentVertex >= m_poly->CPolygon( m_currentPolygon )[0].PointCount() )
-                    {
-                        m_currentVertex = 0;
-                        m_currentPolygon++;
-                    }
-                }
-            }
+        VERTEX_INDEX() :
+            m_polygon(-1),
+            m_contour(-1),
+            m_vertex(-1)
+        {
+        }
+    } VERTEX_INDEX;
 
-            void operator++( int dummy )
-            {
-                Advance();
-            }
-
-            void operator++()
-            {
-                Advance();
-            }
-
-            const T& Get()
-            {
-                return m_poly->Polygon( m_currentPolygon )[m_currentContour].CPoint(
-                        m_currentVertex );
-            }
-
-            const T& operator*()
-            {
-                return Get();
-            }
-
-            const T* operator->()
-            {
-                return &Get();
-            }
-
-            /**
-             * Function GetIndex
-             * @return VERTEX_INDEX - indices of the current polygon, contour and vertex.
-             */
-            VERTEX_INDEX GetIndex()
-            {
-                VERTEX_INDEX index;
-
-                index.m_polygon = m_currentPolygon;
-                index.m_contour = m_currentContour;
-                index.m_vertex = m_currentVertex;
-
-                return index;
-            }
-
-
-        private:
-            friend class SHAPE_POLY_SET;
-
-            SHAPE_POLY_SET* m_poly;
-            int m_currentPolygon;
-            int m_currentContour;
-            int m_currentVertex;
-            int m_lastPolygon;
-            bool m_iterateHoles;
-        };
+    /**
+     * ITERATOR_TEMPLATE
+     *
+     * Base class for iterating over all vertices in a given SHAPE_POLY_SET.
+     */
+    template <class T>
+    class ITERATOR_TEMPLATE
+    {
+    public:
 
         /**
-         * SEGMENT_ITERATOR_TEMPLATE
-         *
-         * Base class for iterating over all segments in a given SHAPE_POLY_SET.
+         * Function IsEndContour.
+         * @return bool - true if the current vertex is the last one of the current contour
+         *              (outline or hole); false otherwise.
          */
-        template <class T>
-        class SEGMENT_ITERATOR_TEMPLATE
+        bool IsEndContour() const
         {
-        public:
-            /**
-             * Function IsLastOutline.
-             * @return bool - true if the current outline is the last one.
-             */
-            bool IsLastPolygon() const
-            {
-                return m_currentPolygon == m_lastPolygon;
-            }
+            return m_currentVertex + 1 == m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount();
+        }
 
-            operator bool() const
-            {
-                return m_currentPolygon <= m_lastPolygon;
-            }
+        /**
+         * Function IsLastOutline.
+         * @return bool - true if the current outline is the last one; false otherwise.
+         */
+        bool IsLastPolygon() const
+        {
+            return m_currentPolygon == m_lastPolygon;
+        }
 
-            /**
-             * Function Advance
-             * advances the indices of the current vertex/outline/contour, checking whether the
-             * vertices in the holes have to be iterated through
-             */
-            void Advance()
-            {
-                // Advance vertex index
-                m_currentSegment++;
-                int last;
+        operator bool() const
+        {
+            if( m_currentPolygon < m_lastPolygon )
+                return true;
 
-                // Check whether the user wants to iterate through the vertices of the holes
-                // and behave accordingly
-                if( m_iterateHoles )
-                {
-                    last = m_poly->CPolygon( m_currentPolygon )[m_currentContour].SegmentCount();
-
-                    // If the last vertex of the contour was reached, advance the contour index
-                    if( m_currentSegment >= last )
-                    {
-                        m_currentSegment = 0;
-                        m_currentContour++;
-
-                        // If the last contour of the current polygon was reached, advance the
-                        // outline index
-                        int totalContours = m_poly->CPolygon( m_currentPolygon ).size();
-
-                        if( m_currentContour >= totalContours )
-                        {
-                            m_currentContour = 0;
-                            m_currentPolygon++;
-                        }
-                    }
-                }
-                else
-                {
-                    last = m_poly->CPolygon( m_currentPolygon )[0].SegmentCount();
-                    // If the last vertex of the outline was reached, advance to the following
-                    // polygon
-                    if( m_currentSegment >= last )
-                    {
-                        m_currentSegment = 0;
-                        m_currentPolygon++;
-                    }
-                }
-            }
-
-            void operator++( int dummy )
-            {
-                Advance();
-            }
-
-            void operator++()
-            {
-                Advance();
-            }
-
-            T Get()
-            {
-                return m_poly->Polygon( m_currentPolygon )[m_currentContour].Segment( m_currentSegment );
-            }
-
-            T operator*()
-            {
-                return Get();
-            }
-
-            /**
-             * Function GetIndex
-             * @return VERTEX_INDEX - indices of the current polygon, contour and vertex.
-             */
-            VERTEX_INDEX GetIndex()
-            {
-                VERTEX_INDEX index;
-
-                index.m_polygon = m_currentPolygon;
-                index.m_contour = m_currentContour;
-                index.m_vertex = m_currentSegment;
-
-                return index;
-            }
-
-            /**
-             * Function IsAdjacent
-             * @param  aOther is an iterator pointing to another segment.
-             * @return        bool - true if both iterators point to the same segment of the same
-             *                     contour of the same polygon of the same polygon set; false
-             *                     otherwise.
-             */
-            bool IsAdjacent( SEGMENT_ITERATOR_TEMPLATE<T> aOther )
-            {
-                // Check that both iterators point to the same contour of the same polygon of the
-                // same polygon set
-                if( m_poly == aOther.m_poly && m_currentPolygon == aOther.m_currentPolygon &&
-                    m_currentContour == aOther.m_currentContour )
-                {
-                    // Compute the total number of segments
-                    int numSeg;
-                    numSeg = m_poly->CPolygon( m_currentPolygon )[m_currentContour].SegmentCount();
-
-                    // Compute the difference of the segment indices. If it is exactly one, they
-                    // are adjacent. The only missing case where they also are adjacent is when
-                    // the segments are the first and last one, in which case the difference
-                    // always equals the total number of segments minus one.
-                    int indexDiff = abs( m_currentSegment - aOther.m_currentSegment );
-
-                    return ( indexDiff == 1 ) || ( indexDiff == (numSeg - 1) );
-                }
-
+            if( m_currentPolygon != m_poly->OutlineCount() - 1 )
                 return false;
+
+            const auto& currentPolygon = m_poly->CPolygon( m_currentPolygon );
+
+            return m_currentContour < (int) currentPolygon.size() - 1
+                       || m_currentVertex < currentPolygon[m_currentContour].PointCount();
+        }
+
+        /**
+         * Function Advance
+         * advances the indices of the current vertex/outline/contour, checking whether the
+         * vertices in the holes have to be iterated through
+         */
+        void Advance()
+        {
+            // Advance vertex index
+            m_currentVertex ++;
+
+            // Check whether the user wants to iterate through the vertices of the holes
+            // and behave accordingly
+            if( m_iterateHoles )
+            {
+                // If the last vertex of the contour was reached, advance the contour index
+                if( m_currentVertex >= m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
+                {
+                    m_currentVertex = 0;
+                    m_currentContour++;
+
+                    // If the last contour of the current polygon was reached, advance the
+                    // outline index
+                    int totalContours = m_poly->CPolygon( m_currentPolygon ).size();
+
+                    if( m_currentContour >= totalContours )
+                    {
+                        m_currentContour = 0;
+                        m_currentPolygon++;
+                    }
+                }
+            }
+            else
+            {
+                // If the last vertex of the outline was reached, advance to the following polygon
+                if( m_currentVertex >= m_poly->CPolygon( m_currentPolygon )[0].PointCount() )
+                {
+                    m_currentVertex = 0;
+                    m_currentPolygon++;
+                }
+            }
+        }
+
+        void operator++( int dummy )
+        {
+            Advance();
+        }
+
+        void operator++()
+        {
+            Advance();
+        }
+
+        const T& Get()
+        {
+            return m_poly->Polygon( m_currentPolygon )[m_currentContour].CPoint( m_currentVertex );
+        }
+
+        const T& operator*()
+        {
+            return Get();
+        }
+
+        const T* operator->()
+        {
+            return &Get();
+        }
+
+        /**
+         * Function GetIndex
+         * @return VERTEX_INDEX - indices of the current polygon, contour and vertex.
+         */
+        VERTEX_INDEX GetIndex()
+        {
+            VERTEX_INDEX index;
+
+            index.m_polygon = m_currentPolygon;
+            index.m_contour = m_currentContour;
+            index.m_vertex = m_currentVertex;
+
+            return index;
+        }
+
+    private:
+        friend class SHAPE_POLY_SET;
+
+        SHAPE_POLY_SET* m_poly;
+        int             m_currentPolygon;
+        int             m_currentContour;
+        int             m_currentVertex;
+        int             m_lastPolygon;
+        bool            m_iterateHoles;
+    };
+
+    /**
+     * SEGMENT_ITERATOR_TEMPLATE
+     *
+     * Base class for iterating over all segments in a given SHAPE_POLY_SET.
+     */
+    template <class T>
+    class SEGMENT_ITERATOR_TEMPLATE
+    {
+    public:
+        /**
+         * Function IsLastOutline.
+         * @return bool - true if the current outline is the last one.
+         */
+        bool IsLastPolygon() const
+        {
+            return m_currentPolygon == m_lastPolygon;
+        }
+
+        operator bool() const
+        {
+            return m_currentPolygon <= m_lastPolygon;
+        }
+
+        /**
+         * Function Advance
+         * advances the indices of the current vertex/outline/contour, checking whether the
+         * vertices in the holes have to be iterated through
+         */
+        void Advance()
+        {
+            // Advance vertex index
+            m_currentSegment++;
+            int last;
+
+            // Check whether the user wants to iterate through the vertices of the holes
+            // and behave accordingly
+            if( m_iterateHoles )
+            {
+                last = m_poly->CPolygon( m_currentPolygon )[m_currentContour].SegmentCount();
+
+                // If the last vertex of the contour was reached, advance the contour index
+                if( m_currentSegment >= last )
+                {
+                    m_currentSegment = 0;
+                    m_currentContour++;
+
+                    // If the last contour of the current polygon was reached, advance the
+                    // outline index
+                    int totalContours = m_poly->CPolygon( m_currentPolygon ).size();
+
+                    if( m_currentContour >= totalContours )
+                    {
+                        m_currentContour = 0;
+                        m_currentPolygon++;
+                    }
+                }
+            }
+            else
+            {
+                last = m_poly->CPolygon( m_currentPolygon )[0].SegmentCount();
+                // If the last vertex of the outline was reached, advance to the following
+                // polygon
+                if( m_currentSegment >= last )
+                {
+                    m_currentSegment = 0;
+                    m_currentPolygon++;
+                }
+            }
+        }
+
+        void operator++( int dummy )
+        {
+            Advance();
+        }
+
+        void operator++()
+        {
+            Advance();
+        }
+
+        T Get()
+        {
+            return m_poly->Polygon( m_currentPolygon )[m_currentContour].Segment( m_currentSegment );
+        }
+
+        T operator*()
+        {
+            return Get();
+        }
+
+        /**
+         * Function GetIndex
+         * @return VERTEX_INDEX - indices of the current polygon, contour and vertex.
+         */
+        VERTEX_INDEX GetIndex()
+        {
+            VERTEX_INDEX index;
+
+            index.m_polygon = m_currentPolygon;
+            index.m_contour = m_currentContour;
+            index.m_vertex = m_currentSegment;
+
+            return index;
+        }
+
+        /**
+         * Function IsAdjacent
+         * @param  aOther is an iterator pointing to another segment.
+         * @return        bool - true if both iterators point to the same segment of the same
+         *                     contour of the same polygon of the same polygon set; false
+         *                     otherwise.
+         */
+        bool IsAdjacent( SEGMENT_ITERATOR_TEMPLATE<T> aOther )
+        {
+            // Check that both iterators point to the same contour of the same polygon of the
+            // same polygon set
+            if( m_poly == aOther.m_poly && m_currentPolygon == aOther.m_currentPolygon &&
+                m_currentContour == aOther.m_currentContour )
+            {
+                // Compute the total number of segments
+                int numSeg;
+                numSeg = m_poly->CPolygon( m_currentPolygon )[m_currentContour].SegmentCount();
+
+                // Compute the difference of the segment indices. If it is exactly one, they
+                // are adjacent. The only missing case where they also are adjacent is when
+                // the segments are the first and last one, in which case the difference
+                // always equals the total number of segments minus one.
+                int indexDiff = abs( m_currentSegment - aOther.m_currentSegment );
+
+                return ( indexDiff == 1 ) || ( indexDiff == (numSeg - 1) );
             }
 
-        private:
-            friend class SHAPE_POLY_SET;
-
-            SHAPE_POLY_SET* m_poly;
-            int m_currentPolygon;
-            int m_currentContour;
-            int m_currentSegment;
-            int m_lastPolygon;
-            bool m_iterateHoles;
-        };
-
-        // Iterator and const iterator types to visit polygon's points.
-        typedef ITERATOR_TEMPLATE<VECTOR2I> ITERATOR;
-        typedef ITERATOR_TEMPLATE<const VECTOR2I> CONST_ITERATOR;
-
-        // Iterator and const iterator types to visit polygon's edges.
-        typedef SEGMENT_ITERATOR_TEMPLATE<SEG> SEGMENT_ITERATOR;
-        typedef SEGMENT_ITERATOR_TEMPLATE<const SEG> CONST_SEGMENT_ITERATOR;
-
-        SHAPE_POLY_SET();
-
-        /**
-         * Construct a SHAPE_POLY_SET with the first outline given by aOutline.
-         *
-         * @param aOutline is a closed outline
-         */
-        SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline );
-
-        /**
-         * Copy constructor SHAPE_POLY_SET
-         * Performs a deep copy of \p aOther into \p this.
-         * @param aOther is the SHAPE_POLY_SET object that will be copied.
-         */
-        SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther );
-
-        ~SHAPE_POLY_SET();
-
-        /**
-         * Function GetRelativeIndices
-         *
-         * Converts a global vertex index ---i.e., a number that globally identifies a vertex in a
-         * concatenated list of all vertices in all contours--- and get the index of the vertex
-         * relative to the contour relative to the polygon in which it is.
-         * @param  aGlobalIdx  is the global index of the corner whose structured index wants to
-         *                     be found
-         * @param  aRelativeIndices is a pointer to the set of relative indices to store.
-         * @return bool - true if the global index is correct and the information in
-         *              aRelativeIndices is valid; false otherwise.
-         */
-        bool GetRelativeIndices( int aGlobalIdx, VERTEX_INDEX* aRelativeIndices) const;
-
-        /**
-         * Function GetGlobalIndex
-         * computes the global index of a vertex from the relative indices of polygon, contour and
-         * vertex.
-         * @param  aRelativeIndices is the set of relative indices.
-         * @param  aGlobalIdx       [out] is the computed global index.
-         * @return bool - true if the relative indices are correct; false otherwise. The computed
-         *              global index is returned in the \p aGlobalIdx reference.
-         */
-        bool GetGlobalIndex( VERTEX_INDEX aRelativeIndices, int& aGlobalIdx );
-
-        /// @copydoc SHAPE::Clone()
-        SHAPE* Clone() const override;
-
-        ///> Creates a new empty polygon in the set and returns its index
-        int NewOutline();
-
-        ///> Creates a new hole in a given outline
-        int NewHole( int aOutline = -1 );
-
-        ///> Adds a new outline to the set and returns its index
-        int AddOutline( const SHAPE_LINE_CHAIN& aOutline );
-
-        ///> Adds a new hole to the given outline (default: last) and returns its index
-        int AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
-
-        ///> Appends a vertex at the end of the given outline/hole (default: the last outline)
-        /**
-         * Function Append
-         * adds a new vertex to the contour indexed by \p aOutline and \p aHole (defaults to the
-         * outline of the last polygon).
-         * @param  x                 is the x coordinate of the new vertex.
-         * @param  y                 is the y coordinate of the new vertex.
-         * @param  aOutline          is the index of the polygon.
-         * @param  aHole             is the index of the hole (-1 for the main outline),
-         * @param  aAllowDuplication is a flag to indicate whether it is allowed to add this
-         *                           corner even if it is duplicated.
-         * @return int - the number of corners of the selected contour after the addition.
-         */
-        int Append( int x, int y, int aOutline = -1, int aHole = -1,
-                    bool aAllowDuplication = false );
-
-        ///> Merges polygons from two sets.
-        void Append( const SHAPE_POLY_SET& aSet );
-
-        ///> Appends a vertex at the end of the given outline/hole (default: the last outline)
-        void Append( const VECTOR2I& aP, int aOutline = -1, int aHole = -1 );
-
-        /**
-         * Function InsertVertex
-         * Adds a vertex in the globally indexed position aGlobalIndex.
-         * @param aGlobalIndex is the global index of the position in which teh new vertex will be
-         *                     inserted.
-         * @param aNewVertex   is the new inserted vertex.
-         */
-        void InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex );
-
-        ///> Returns the index-th vertex in a given hole outline within a given outline
-        const VECTOR2I& CVertex( int aIndex, int aOutline, int aHole ) const;
-
-        ///> Returns the aGlobalIndex-th vertex in the poly set
-        const VECTOR2I& CVertex( int aGlobalIndex ) const;
-
-        ///> Returns the index-th vertex in a given hole outline within a given outline
-        const VECTOR2I& CVertex( VERTEX_INDEX aIndex ) const;
-
-        /**
-         * Returns the global indexes of the previous and the next corner
-         * of the aGlobalIndex-th corner of a contour in the polygon set.
-         * they are often aGlobalIndex-1 and aGlobalIndex+1, but not for the first and last
-         * corner of the contour.
-         * @param  aGlobalIndex is index of the corner, globally indexed between all edges in all
-         *                      contours
-         * @param aPrevious - the globalIndex of the previous corner of the same contour.
-         * @param aNext - the globalIndex of the next corner of the same contour.
-         * @return true if OK, false if aGlobalIndex is out of range
-         */
-        bool GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext );
-
-
-        /**
-         * Function IsPolygonSelfIntersecting.
-         * Checks whether the aPolygonIndex-th polygon in the set is self intersecting.
-         * @param  aPolygonIndex index of the polygon that wants to be checked.
-         * @return bool - true if the aPolygonIndex-th polygon is self intersecting, false
-         *              otherwise.
-         */
-        bool IsPolygonSelfIntersecting( int aPolygonIndex ) const;
-
-        /**
-         * Function IsSelfIntersecting
-         * Checks whether any of the polygons in the set is self intersecting.
-         * @return bool - true if any of the polygons is self intersecting, false otherwise.
-         */
-        bool IsSelfIntersecting() const;
-
-        ///> Returns the number of triangulated polygons
-        unsigned int TriangulatedPolyCount() const { return m_triangulatedPolys.size(); }
-
-        ///> Returns the number of outlines in the set
-        int OutlineCount() const { return m_polys.size(); }
-
-        ///> Returns the number of vertices in a given outline/hole
-        int VertexCount( int aOutline = -1, int aHole = -1 ) const;
-
-        ///> Returns the number of holes in a given outline
-        int HoleCount( int aOutline ) const
-        {
-            if( ( aOutline < 0 ) || (aOutline >= (int)m_polys.size()) || (m_polys[aOutline].size() < 2) )
-                return 0;
-
-            // the first polygon in m_polys[aOutline] is the main contour,
-            // only others are holes:
-            return m_polys[aOutline].size() - 1;
+            return false;
         }
 
-        ///> Returns the reference to aIndex-th outline in the set
-        SHAPE_LINE_CHAIN& Outline( int aIndex )
-        {
-            return m_polys[aIndex][0];
-        }
+    private:
+        friend class SHAPE_POLY_SET;
 
-        /**
-         * Function Subset
-         * returns a subset of the polygons in this set, the ones between aFirstPolygon and
-         * aLastPolygon.
-         * @param  aFirstPolygon is the first polygon to be included in the returned set.
-         * @param  aLastPolygon  is the first polygon to be excluded of the returned set.
-         * @return SHAPE_POLY_SET - a set containing the polygons between aFirstPolygon (included)
-         *                        and aLastPolygon (excluded).
-         */
-        SHAPE_POLY_SET Subset( int aFirstPolygon, int aLastPolygon );
+        SHAPE_POLY_SET* m_poly;
+        int             m_currentPolygon;
+        int             m_currentContour;
+        int             m_currentSegment;
+        int             m_lastPolygon;
+        bool            m_iterateHoles;
+    };
 
-        SHAPE_POLY_SET UnitSet( int aPolygonIndex )
-        {
-            return Subset( aPolygonIndex, aPolygonIndex + 1 );
-        }
+    // Iterator and const iterator types to visit polygon's points.
+    typedef ITERATOR_TEMPLATE<VECTOR2I> ITERATOR;
+    typedef ITERATOR_TEMPLATE<const VECTOR2I> CONST_ITERATOR;
 
-        ///> Returns the reference to aHole-th hole in the aIndex-th outline
-        SHAPE_LINE_CHAIN& Hole( int aOutline, int aHole )
-        {
-            return m_polys[aOutline][aHole + 1];
-        }
+    // Iterator and const iterator types to visit polygon's edges.
+    typedef SEGMENT_ITERATOR_TEMPLATE<SEG> SEGMENT_ITERATOR;
+    typedef SEGMENT_ITERATOR_TEMPLATE<const SEG> CONST_SEGMENT_ITERATOR;
 
-        ///> Returns the aIndex-th subpolygon in the set
-        POLYGON& Polygon( int aIndex )
-        {
-            return m_polys[aIndex];
-        }
+    SHAPE_POLY_SET();
 
-        const POLYGON& Polygon( int aIndex ) const
-        {
-            return m_polys[aIndex];
-        }
+    /**
+     * Construct a SHAPE_POLY_SET with the first outline given by aOutline.
+     *
+     * @param aOutline is a closed outline
+     */
+    SHAPE_POLY_SET( const SHAPE_LINE_CHAIN& aOutline );
 
-        const TRIANGULATED_POLYGON* TriangulatedPolygon( int aIndex ) const
-        {
-            return m_triangulatedPolys[aIndex].get();
-        }
+    /**
+     * Copy constructor SHAPE_POLY_SET
+     * Performs a deep copy of \p aOther into \p this.
+     * @param aOther is the SHAPE_POLY_SET object that will be copied.
+     */
+    SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther );
 
-        const SHAPE_LINE_CHAIN& COutline( int aIndex ) const
-        {
-            return m_polys[aIndex][0];
-        }
+    ~SHAPE_POLY_SET();
 
-        const SHAPE_LINE_CHAIN& CHole( int aOutline, int aHole ) const
-        {
-            return m_polys[aOutline][aHole + 1];
-        }
+    SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& );
 
-        const POLYGON& CPolygon( int aIndex ) const
-        {
-            return m_polys[aIndex];
-        }
+    void CacheTriangulation( bool aPartition = true );
+    bool IsTriangulationUpToDate() const;
 
-        /**
-         * Function Iterate
-         * returns an object to iterate through the points of the polygons between \p aFirst and
-         * \p aLast.
-         * @param  aFirst        is the first polygon whose points will be iterated.
-         * @param  aLast         is the last polygon whose points will be iterated.
-         * @param  aIterateHoles is a flag to indicate whether the points of the holes should be
-         *                       iterated.
-         * @return ITERATOR - the iterator object.
-         */
-        ITERATOR Iterate( int aFirst, int aLast, bool aIterateHoles = false )
-        {
-            ITERATOR iter;
+    MD5_HASH GetHash() const;
 
-            iter.m_poly = this;
-            iter.m_currentPolygon = aFirst;
-            iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
-            iter.m_currentContour = 0;
-            iter.m_currentVertex = 0;
-            iter.m_iterateHoles = aIterateHoles;
+    virtual bool HasIndexableSubshapes() const override;
 
-            return iter;
-        }
+    virtual size_t GetIndexableSubshapeCount() const override;
 
-        /**
-         * Function Iterate
-         * @param  aOutline the index of the polygon to be iterated.
-         * @return ITERATOR - an iterator object to visit all points in the main outline of the
-         *                  aOutline-th polygon, without visiting the points in the holes.
-         */
-        ITERATOR Iterate( int aOutline )
-        {
-            return Iterate( aOutline, aOutline );
-        }
+    virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override;
 
-        /**
-         * Function IterateWithHoles
-         * @param  aOutline the index of the polygon to be iterated.
-         * @return ITERATOR - an iterator object to visit all points in the main outline of the
-         *                  aOutline-th polygon, visiting also the points in the holes.
-         */
-        ITERATOR IterateWithHoles( int aOutline )
-        {
-            return Iterate( aOutline, aOutline, true );
-        }
+    /**
+     * Function GetRelativeIndices
+     *
+     * Converts a global vertex index ---i.e., a number that globally identifies a vertex in a
+     * concatenated list of all vertices in all contours--- and get the index of the vertex
+     * relative to the contour relative to the polygon in which it is.
+     * @param  aGlobalIdx  is the global index of the corner whose structured index wants to
+     *                     be found
+     * @param  aRelativeIndices is a pointer to the set of relative indices to store.
+     * @return bool - true if the global index is correct and the information in
+     *              aRelativeIndices is valid; false otherwise.
+     */
+    bool GetRelativeIndices( int aGlobalIdx, VERTEX_INDEX* aRelativeIndices) const;
 
-        /**
-         * Function Iterate
-         * @return ITERATOR - an iterator object to visit all points in all outlines of the set,
-         *                  without visiting the points in the holes.
-         */
-        ITERATOR Iterate()
-        {
-            return Iterate( 0, OutlineCount() - 1 );
-        }
+    /**
+     * Function GetGlobalIndex
+     * computes the global index of a vertex from the relative indices of polygon, contour and
+     * vertex.
+     * @param  aRelativeIndices is the set of relative indices.
+     * @param  aGlobalIdx       [out] is the computed global index.
+     * @return bool - true if the relative indices are correct; false otherwise. The computed
+     *              global index is returned in the \p aGlobalIdx reference.
+     */
+    bool GetGlobalIndex( VERTEX_INDEX aRelativeIndices, int& aGlobalIdx );
 
-        /**
-         * Function IterateWithHoles
-         * @return ITERATOR - an iterator object to visit all points in all outlines of the set,
-         *                  visiting also the points in the holes.
-         */
-        ITERATOR IterateWithHoles()
-        {
-            return Iterate( 0, OutlineCount() - 1, true );
-        }
+    /// @copydoc SHAPE::Clone()
+    SHAPE* Clone() const override;
+
+    ///> Creates a new empty polygon in the set and returns its index
+    int NewOutline();
+
+    ///> Creates a new hole in a given outline
+    int NewHole( int aOutline = -1 );
+
+    ///> Adds a new outline to the set and returns its index
+    int AddOutline( const SHAPE_LINE_CHAIN& aOutline );
+
+    ///> Adds a new hole to the given outline (default: last) and returns its index
+    int AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline = -1 );
+
+    ///> Appends a vertex at the end of the given outline/hole (default: the last outline)
+    /**
+     * Function Append
+     * adds a new vertex to the contour indexed by \p aOutline and \p aHole (defaults to the
+     * outline of the last polygon).
+     * @param  x                 is the x coordinate of the new vertex.
+     * @param  y                 is the y coordinate of the new vertex.
+     * @param  aOutline          is the index of the polygon.
+     * @param  aHole             is the index of the hole (-1 for the main outline),
+     * @param  aAllowDuplication is a flag to indicate whether it is allowed to add this
+     *                           corner even if it is duplicated.
+     * @return int - the number of corners of the selected contour after the addition.
+     */
+    int Append( int x, int y, int aOutline = -1, int aHole = -1,
+                bool aAllowDuplication = false );
+
+    ///> Merges polygons from two sets.
+    void Append( const SHAPE_POLY_SET& aSet );
+
+    ///> Appends a vertex at the end of the given outline/hole (default: the last outline)
+    void Append( const VECTOR2I& aP, int aOutline = -1, int aHole = -1 );
+
+    /**
+     * Function InsertVertex
+     * Adds a vertex in the globally indexed position aGlobalIndex.
+     * @param aGlobalIndex is the global index of the position in which teh new vertex will be
+     *                     inserted.
+     * @param aNewVertex   is the new inserted vertex.
+     */
+    void InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex );
+
+    ///> Returns the index-th vertex in a given hole outline within a given outline
+    const VECTOR2I& CVertex( int aIndex, int aOutline, int aHole ) const;
+
+    ///> Returns the aGlobalIndex-th vertex in the poly set
+    const VECTOR2I& CVertex( int aGlobalIndex ) const;
+
+    ///> Returns the index-th vertex in a given hole outline within a given outline
+    const VECTOR2I& CVertex( VERTEX_INDEX aIndex ) const;
+
+    /**
+     * Returns the global indexes of the previous and the next corner
+     * of the aGlobalIndex-th corner of a contour in the polygon set.
+     * they are often aGlobalIndex-1 and aGlobalIndex+1, but not for the first and last
+     * corner of the contour.
+     * @param  aGlobalIndex is index of the corner, globally indexed between all edges in all
+     *                      contours
+     * @param aPrevious - the globalIndex of the previous corner of the same contour.
+     * @param aNext - the globalIndex of the next corner of the same contour.
+     * @return true if OK, false if aGlobalIndex is out of range
+     */
+    bool GetNeighbourIndexes( int aGlobalIndex, int* aPrevious, int* aNext );
 
 
-        CONST_ITERATOR CIterate( int aFirst, int aLast, bool aIterateHoles = false ) const
-        {
-            CONST_ITERATOR iter;
+    /**
+     * Function IsPolygonSelfIntersecting.
+     * Checks whether the aPolygonIndex-th polygon in the set is self intersecting.
+     * @param  aPolygonIndex index of the polygon that wants to be checked.
+     * @return bool - true if the aPolygonIndex-th polygon is self intersecting, false
+     *              otherwise.
+     */
+    bool IsPolygonSelfIntersecting( int aPolygonIndex ) const;
 
-            iter.m_poly = const_cast<SHAPE_POLY_SET*>( this );
-            iter.m_currentPolygon = aFirst;
-            iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
-            iter.m_currentContour = 0;
-            iter.m_currentVertex = 0;
-            iter.m_iterateHoles = aIterateHoles;
+    /**
+     * Function IsSelfIntersecting
+     * Checks whether any of the polygons in the set is self intersecting.
+     * @return bool - true if any of the polygons is self intersecting, false otherwise.
+     */
+    bool IsSelfIntersecting() const;
 
-            return iter;
-        }
+    ///> Returns the number of triangulated polygons
+    unsigned int TriangulatedPolyCount() const { return m_triangulatedPolys.size(); }
 
-        CONST_ITERATOR CIterate( int aOutline ) const
-        {
-            return CIterate( aOutline, aOutline );
-        }
+    ///> Returns the number of outlines in the set
+    int OutlineCount() const { return m_polys.size(); }
 
-        CONST_ITERATOR CIterateWithHoles( int aOutline ) const
-        {
-            return CIterate( aOutline, aOutline, true );
-        }
+    ///> Returns the number of vertices in a given outline/hole
+    int VertexCount( int aOutline = -1, int aHole = -1 ) const;
 
-        CONST_ITERATOR CIterate() const
-        {
-            return CIterate( 0, OutlineCount() - 1 );
-        }
+    ///> Returns the number of holes in a given outline
+    int HoleCount( int aOutline ) const
+    {
+        if( ( aOutline < 0 ) || (aOutline >= (int)m_polys.size()) || (m_polys[aOutline].size() < 2) )
+            return 0;
 
-        CONST_ITERATOR CIterateWithHoles() const
-        {
-            return CIterate( 0, OutlineCount() - 1, true );
-        }
+        // the first polygon in m_polys[aOutline] is the main contour,
+        // only others are holes:
+        return m_polys[aOutline].size() - 1;
+    }
 
-        ITERATOR IterateFromVertexWithHoles( int aGlobalIdx )
-        {
-            // Build iterator
-            ITERATOR iter = IterateWithHoles();
+    ///> Returns the reference to aIndex-th outline in the set
+    SHAPE_LINE_CHAIN& Outline( int aIndex )
+    {
+        return m_polys[aIndex][0];
+    }
 
-            // Get the relative indices of the globally indexed vertex
-            VERTEX_INDEX indices;
+    /**
+     * Function Subset
+     * returns a subset of the polygons in this set, the ones between aFirstPolygon and
+     * aLastPolygon.
+     * @param  aFirstPolygon is the first polygon to be included in the returned set.
+     * @param  aLastPolygon  is the first polygon to be excluded of the returned set.
+     * @return SHAPE_POLY_SET - a set containing the polygons between aFirstPolygon (included)
+     *                        and aLastPolygon (excluded).
+     */
+    SHAPE_POLY_SET Subset( int aFirstPolygon, int aLastPolygon );
 
-            if( !GetRelativeIndices( aGlobalIdx, &indices ) )
-                throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+    SHAPE_POLY_SET UnitSet( int aPolygonIndex )
+    {
+        return Subset( aPolygonIndex, aPolygonIndex + 1 );
+    }
 
-            // Adjust where the iterator is pointing
-            iter.m_currentPolygon = indices.m_polygon;
-            iter.m_currentContour = indices.m_contour;
-            iter.m_currentVertex = indices.m_vertex;
+    ///> Returns the reference to aHole-th hole in the aIndex-th outline
+    SHAPE_LINE_CHAIN& Hole( int aOutline, int aHole )
+    {
+        return m_polys[aOutline][aHole + 1];
+    }
 
-            return iter;
-        }
+    ///> Returns the aIndex-th subpolygon in the set
+    POLYGON& Polygon( int aIndex )
+    {
+        return m_polys[aIndex];
+    }
 
-        ///> Returns an iterator object, for iterating between aFirst and aLast outline, with or
-        /// without holes (default: without)
-        SEGMENT_ITERATOR IterateSegments( int aFirst, int aLast, bool aIterateHoles = false )
-        {
-            SEGMENT_ITERATOR iter;
+    const POLYGON& Polygon( int aIndex ) const
+    {
+        return m_polys[aIndex];
+    }
 
-            iter.m_poly = this;
-            iter.m_currentPolygon = aFirst;
-            iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
-            iter.m_currentContour = 0;
-            iter.m_currentSegment = 0;
-            iter.m_iterateHoles = aIterateHoles;
+    const TRIANGULATED_POLYGON* TriangulatedPolygon( int aIndex ) const
+    {
+        return m_triangulatedPolys[aIndex].get();
+    }
 
-            return iter;
-        }
+    const SHAPE_LINE_CHAIN& COutline( int aIndex ) const
+    {
+        return m_polys[aIndex][0];
+    }
 
-        ///> Returns an iterator object, for iterating between aFirst and aLast outline, with or
-        /// without holes (default: without)
-        CONST_SEGMENT_ITERATOR CIterateSegments( int aFirst, int aLast,
-                                                 bool aIterateHoles = false ) const
-        {
-            CONST_SEGMENT_ITERATOR iter;
+    const SHAPE_LINE_CHAIN& CHole( int aOutline, int aHole ) const
+    {
+        return m_polys[aOutline][aHole + 1];
+    }
 
-            iter.m_poly = const_cast<SHAPE_POLY_SET*>( this );
-            iter.m_currentPolygon = aFirst;
-            iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
-            iter.m_currentContour = 0;
-            iter.m_currentSegment = 0;
-            iter.m_iterateHoles = aIterateHoles;
+    const POLYGON& CPolygon( int aIndex ) const
+    {
+        return m_polys[aIndex];
+    }
 
-            return iter;
-        }
+    /**
+     * Function Iterate
+     * returns an object to iterate through the points of the polygons between \p aFirst and
+     * \p aLast.
+     * @param  aFirst        is the first polygon whose points will be iterated.
+     * @param  aLast         is the last polygon whose points will be iterated.
+     * @param  aIterateHoles is a flag to indicate whether the points of the holes should be
+     *                       iterated.
+     * @return ITERATOR - the iterator object.
+     */
+    ITERATOR Iterate( int aFirst, int aLast, bool aIterateHoles = false )
+    {
+        ITERATOR iter;
 
-        ///> Returns an iterator object, for iterating aPolygonIdx-th polygon edges
-        SEGMENT_ITERATOR IterateSegments( int aPolygonIdx )
-        {
-            return IterateSegments( aPolygonIdx, aPolygonIdx );
-        }
+        iter.m_poly = this;
+        iter.m_currentPolygon = aFirst;
+        iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
+        iter.m_currentContour = 0;
+        iter.m_currentVertex = 0;
+        iter.m_iterateHoles = aIterateHoles;
 
-        ///> Returns an iterator object, for iterating aPolygonIdx-th polygon edges
-        CONST_SEGMENT_ITERATOR CIterateSegments( int aPolygonIdx ) const
-        {
-            return CIterateSegments( aPolygonIdx, aPolygonIdx );
-        }
+        return iter;
+    }
 
-        ///> Returns an iterator object, for all outlines in the set (no holes)
-        SEGMENT_ITERATOR IterateSegments()
-        {
-            return IterateSegments( 0, OutlineCount() - 1 );
-        }
+    /**
+     * Function Iterate
+     * @param  aOutline the index of the polygon to be iterated.
+     * @return ITERATOR - an iterator object to visit all points in the main outline of the
+     *                  aOutline-th polygon, without visiting the points in the holes.
+     */
+    ITERATOR Iterate( int aOutline )
+    {
+        return Iterate( aOutline, aOutline );
+    }
 
-        ///> Returns an iterator object, for all outlines in the set (with holes)
-        SEGMENT_ITERATOR IterateSegmentsWithHoles()
-        {
-            return IterateSegments( 0, OutlineCount() - 1, true );
-        }
+    /**
+     * Function IterateWithHoles
+     * @param  aOutline the index of the polygon to be iterated.
+     * @return ITERATOR - an iterator object to visit all points in the main outline of the
+     *                  aOutline-th polygon, visiting also the points in the holes.
+     */
+    ITERATOR IterateWithHoles( int aOutline )
+    {
+        return Iterate( aOutline, aOutline, true );
+    }
 
-        ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
-        SEGMENT_ITERATOR IterateSegmentsWithHoles( int aOutline )
-        {
-            return IterateSegments( aOutline, aOutline, true );
-        }
+    /**
+     * Function Iterate
+     * @return ITERATOR - an iterator object to visit all points in all outlines of the set,
+     *                  without visiting the points in the holes.
+     */
+    ITERATOR Iterate()
+    {
+        return Iterate( 0, OutlineCount() - 1 );
+    }
 
-        ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
-        CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles() const
-        {
-            return CIterateSegments( 0, OutlineCount() - 1, true );
-        }
+    /**
+     * Function IterateWithHoles
+     * @return ITERATOR - an iterator object to visit all points in all outlines of the set,
+     *                  visiting also the points in the holes.
+     */
+    ITERATOR IterateWithHoles()
+    {
+        return Iterate( 0, OutlineCount() - 1, true );
+    }
 
-        ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
-        CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles( int aOutline ) const
-        {
-            return CIterateSegments( aOutline, aOutline, true );
-        }
 
-        /** operations on polygons use a aFastMode param
-         * if aFastMode is PM_FAST (true) the result can be a weak polygon
-         * if aFastMode is PM_STRICTLY_SIMPLE (false) (default) the result is (theorically) a strictly
-         * simple polygon, but calculations can be really significantly time consuming
-         * Most of time PM_FAST is preferable.
-         * PM_STRICTLY_SIMPLE can be used in critical cases (Gerber output for instance)
-         */
-        enum POLYGON_MODE
-        {
-            PM_FAST = true,
-            PM_STRICTLY_SIMPLE = false
-        };
+    CONST_ITERATOR CIterate( int aFirst, int aLast, bool aIterateHoles = false ) const
+    {
+        CONST_ITERATOR iter;
 
-        ///> Performs boolean polyset union
-        ///> For aFastMode meaning, see function booleanOp
-        void BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+        iter.m_poly = const_cast<SHAPE_POLY_SET*>( this );
+        iter.m_currentPolygon = aFirst;
+        iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
+        iter.m_currentContour = 0;
+        iter.m_currentVertex = 0;
+        iter.m_iterateHoles = aIterateHoles;
 
-        ///> Performs boolean polyset difference
-        ///> For aFastMode meaning, see function booleanOp
-        void BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+        return iter;
+    }
 
-        ///> Performs boolean polyset intersection
-        ///> For aFastMode meaning, see function booleanOp
-        void BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+    CONST_ITERATOR CIterate( int aOutline ) const
+    {
+        return CIterate( aOutline, aOutline );
+    }
 
-        ///> Performs boolean polyset union between a and b, store the result in it self
-        ///> For aFastMode meaning, see function booleanOp
-        void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
-                         POLYGON_MODE aFastMode );
+    CONST_ITERATOR CIterateWithHoles( int aOutline ) const
+    {
+        return CIterate( aOutline, aOutline, true );
+    }
 
-        ///> Performs boolean polyset difference between a and b, store the result in it self
-        ///> For aFastMode meaning, see function booleanOp
-        void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+    CONST_ITERATOR CIterate() const
+    {
+        return CIterate( 0, OutlineCount() - 1 );
+    }
+
+    CONST_ITERATOR CIterateWithHoles() const
+    {
+        return CIterate( 0, OutlineCount() - 1, true );
+    }
+
+    ITERATOR IterateFromVertexWithHoles( int aGlobalIdx )
+    {
+        // Build iterator
+        ITERATOR iter = IterateWithHoles();
+
+        // Get the relative indices of the globally indexed vertex
+        VERTEX_INDEX indices;
+
+        if( !GetRelativeIndices( aGlobalIdx, &indices ) )
+            throw( std::out_of_range( "aGlobalIndex-th vertex does not exist" ) );
+
+        // Adjust where the iterator is pointing
+        iter.m_currentPolygon = indices.m_polygon;
+        iter.m_currentContour = indices.m_contour;
+        iter.m_currentVertex = indices.m_vertex;
+
+        return iter;
+    }
+
+    ///> Returns an iterator object, for iterating between aFirst and aLast outline, with or
+    /// without holes (default: without)
+    SEGMENT_ITERATOR IterateSegments( int aFirst, int aLast, bool aIterateHoles = false )
+    {
+        SEGMENT_ITERATOR iter;
+
+        iter.m_poly = this;
+        iter.m_currentPolygon = aFirst;
+        iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
+        iter.m_currentContour = 0;
+        iter.m_currentSegment = 0;
+        iter.m_iterateHoles = aIterateHoles;
+
+        return iter;
+    }
+
+    ///> Returns an iterator object, for iterating between aFirst and aLast outline, with or
+    /// without holes (default: without)
+    CONST_SEGMENT_ITERATOR CIterateSegments( int aFirst, int aLast,
+                                             bool aIterateHoles = false ) const
+    {
+        CONST_SEGMENT_ITERATOR iter;
+
+        iter.m_poly = const_cast<SHAPE_POLY_SET*>( this );
+        iter.m_currentPolygon = aFirst;
+        iter.m_lastPolygon = aLast < 0 ? OutlineCount() - 1 : aLast;
+        iter.m_currentContour = 0;
+        iter.m_currentSegment = 0;
+        iter.m_iterateHoles = aIterateHoles;
+
+        return iter;
+    }
+
+    ///> Returns an iterator object, for iterating aPolygonIdx-th polygon edges
+    SEGMENT_ITERATOR IterateSegments( int aPolygonIdx )
+    {
+        return IterateSegments( aPolygonIdx, aPolygonIdx );
+    }
+
+    ///> Returns an iterator object, for iterating aPolygonIdx-th polygon edges
+    CONST_SEGMENT_ITERATOR CIterateSegments( int aPolygonIdx ) const
+    {
+        return CIterateSegments( aPolygonIdx, aPolygonIdx );
+    }
+
+    ///> Returns an iterator object, for all outlines in the set (no holes)
+    SEGMENT_ITERATOR IterateSegments()
+    {
+        return IterateSegments( 0, OutlineCount() - 1 );
+    }
+
+    ///> Returns an iterator object, for all outlines in the set (with holes)
+    SEGMENT_ITERATOR IterateSegmentsWithHoles()
+    {
+        return IterateSegments( 0, OutlineCount() - 1, true );
+    }
+
+    ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
+    SEGMENT_ITERATOR IterateSegmentsWithHoles( int aOutline )
+    {
+        return IterateSegments( aOutline, aOutline, true );
+    }
+
+    ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
+    CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles() const
+    {
+        return CIterateSegments( 0, OutlineCount() - 1, true );
+    }
+
+    ///> Returns an iterator object, for the aOutline-th outline in the set (with holes)
+    CONST_SEGMENT_ITERATOR CIterateSegmentsWithHoles( int aOutline ) const
+    {
+        return CIterateSegments( aOutline, aOutline, true );
+    }
+
+    /** operations on polygons use a aFastMode param
+     * if aFastMode is PM_FAST (true) the result can be a weak polygon
+     * if aFastMode is PM_STRICTLY_SIMPLE (false) (default) the result is (theorically) a strictly
+     * simple polygon, but calculations can be really significantly time consuming
+     * Most of time PM_FAST is preferable.
+     * PM_STRICTLY_SIMPLE can be used in critical cases (Gerber output for instance)
+     */
+    enum POLYGON_MODE
+    {
+        PM_FAST = true,
+        PM_STRICTLY_SIMPLE = false
+    };
+
+    ///> Performs boolean polyset union
+    ///> For aFastMode meaning, see function booleanOp
+    void BooleanAdd( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+
+    ///> Performs boolean polyset difference
+    ///> For aFastMode meaning, see function booleanOp
+    void BooleanSubtract( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+
+    ///> Performs boolean polyset intersection
+    ///> For aFastMode meaning, see function booleanOp
+    void BooleanIntersection( const SHAPE_POLY_SET& b, POLYGON_MODE aFastMode );
+
+    ///> Performs boolean polyset union between a and b, store the result in it self
+    ///> For aFastMode meaning, see function booleanOp
+    void BooleanAdd( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                     POLYGON_MODE aFastMode );
+
+    ///> Performs boolean polyset difference between a and b, store the result in it self
+    ///> For aFastMode meaning, see function booleanOp
+    void BooleanSubtract( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
+                          POLYGON_MODE aFastMode );
+
+    ///> Performs boolean polyset intersection between a and b, store the result in it self
+    ///> For aFastMode meaning, see function booleanOp
+    void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                               POLYGON_MODE aFastMode );
 
-        ///> Performs boolean polyset intersection between a and b, store the result in it self
-        ///> For aFastMode meaning, see function booleanOp
-        void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
-                                  POLYGON_MODE aFastMode );
-
-        enum CORNER_STRATEGY    ///< define how inflate transform build inflated polygon
-        {
-            ALLOW_ACUTE_CORNERS,    ///< just inflate the polygon. Acute angles create spikes
-            CHAMFER_ACUTE_CORNERS,  ///< Acute angles are chamfered
-            ROUND_ACUTE_CORNERS,    ///< Acute angles are rounded
-            CHAMFER_ALL_CORNERS,    ///< All angles are chamfered.
-                                    ///< The distance between new and old polygon edges is not
-                                    ///< constant, but do not change a lot
-            ROUND_ALL_CORNERS       ///< All angles are rounded.
-                                    ///< The distance between new and old polygon edges is constant
-        };
-
-        /**
-         * Performs outline inflation/deflation.  Polygons can have holes, but not linked holes
-         * with main outlines, if aFactor < 0.  For those use InflateWithLinkedHoles() to avoid
-         * odd corners where the link segments meet the outline.
-         *
-         * @param aAmount - number of units to offset edges
-         * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
-         * @param aCornerStrategy - ALLOW_ACUTE_CORNERS to preserve all angles,
-         *                          CHOP_ACUTE_CORNERS to chop angles less than 90°,
-         *                          ROUND_ACUTE_CORNERS to round off angles less than 90°,
-         *                          ROUND_ALL_CORNERS to round regardless of angles
-         */
-        void Inflate( int aAmount, int aCircleSegmentsCount,
-                      CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS );
-
-        void Deflate( int aAmount, int aCircleSegmentsCount,
-                      CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS )
-        {
-            Inflate( -aAmount, aCircleSegmentsCount, aCornerStrategy );
-        }
-
-        /**
-         * Performs outline inflation/deflation, using round corners.  Polygons can have holes,
-         * and/or linked holes with main outlines.  The resulting polygons are laso polygons with
-         * linked holes to main outlines.  For aFastMode meaning, see function booleanOp  .
-         */
-        void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
-
-        ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures"
-        ///> connecting the outer ring to the inner holes
-        ///> For aFastMode meaning, see function booleanOp
-        void Fracture( POLYGON_MODE aFastMode );
-
-        ///> Converts a single outline slitted ("fractured") polygon into a set ouf outlines
-        ///> with holes.
-        void Unfracture( POLYGON_MODE aFastMode );
-
-        ///> Returns true if the polygon set has any holes.
-        bool HasHoles() const;
-
-        ///> Returns true if the polygon set has any holes tha share a vertex.
-        bool HasTouchingHoles() const;
-
-
-        ///> Simplifies the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
-        ///> For aFastMode meaning, see function booleanOp
-        void Simplify( POLYGON_MODE aFastMode );
-
-        /**
-         * Function NormalizeAreaOutlines
-         * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
-         * Removes null segments.
-         * @return int - the polygon count (always >= 1, because there is at least one polygon)
-         *             There are new polygons only if the polygon count is > 1.
-         */
-        int NormalizeAreaOutlines();
-
-        /// @copydoc SHAPE::Format()
-        const std::string Format() const override;
-
-        /// @copydoc SHAPE::Parse()
-        bool Parse( std::stringstream& aStream ) override;
-
-        /// @copydoc SHAPE::Move()
-        void Move( const VECTOR2I& aVector ) override;
-
-        /**
-         * Mirrors the line points about y or x (or both)
-         * @param aX If true, mirror about the y axis (flip x coordinate)
-         * @param aY If true, mirror about the x axis
-         * @param aRef sets the reference point about which to mirror
-         */
-        void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
-
-        /**
-         * Function Rotate
-         * rotates all vertices by a given angle
-         * @param aCenter is the rotation center
-         * @param aAngle rotation angle in radians
-         */
-        void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
-
-        /// @copydoc SHAPE::IsSolid()
-        bool IsSolid() const override
-        {
-            return true;
-        }
-
-        const BOX2I BBox( int aClearance = 0 ) const override;
-
-        /**
-         * Function PointOnEdge()
-         *
-         * Checks if point aP lies on an edge or vertex of some of the outlines or holes.
-         * @param aP is the point to check.
-         * @return bool - true if the point lies on the edge of any polygon.
-         */
-        bool PointOnEdge( const VECTOR2I& aP ) const;
-
-        /**
-         * Function Collide()
-         *
-         * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance,
-         * indicating a collision.
-         * @param aShape shape to check collision against
-         * @param aClearance minimum clearance
-         * @param aActual [out] an optional pointer to an int to store the actual distance in the
-         *                event of a collision.
-         * @param aLocation [out] an option pointer to a point to store a nearby location in the
-         *                  event of a collision.
-         * @return true, if there is a collision.
-         */
-        bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
-                      VECTOR2I* aLocation = nullptr ) const override;
-
-        /**
-         * Function Collide
-         * Checks whether the point aP is either inside or on the edge of the polygon set.
-         *
-         * Note that prior to Jul 2020 we considered the edge to *not* be part of the polygon.
-         * However, most other shapes (rects, circles, segments, etc.) include their edges and
-         * the difference was causing issues when used for DRC.
-         *
-         * (FWIW, SHAPE_LINE_CHAIN was a split personality, with Collide() including its edges
-         * but PointInside() not.  That has also been corrected.)
-         *
-         * @param  aP         is the VECTOR2I point whose collision with respect to the poly set
-         *                    will be tested.
-         * @param  aClearance is the security distance; if the point lies closer to the polygon
-         *                    than aClearance distance, then there is a collision.
-         * @param aActual an optional pointer to an int to store the actual distance in the event
-         *                of a collision.
-         * @return bool - true if the point aP collides with the polygon; false in any other case.
-         */
-        bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
-                      VECTOR2I* aLocation = nullptr ) const override;
-
-        /**
-         * Function Collide
-         * Checks whether the segment aSeg collides with the polygon set (or its edge).
-         *
-         * Note that prior to Jul 2020 we considered the edge to *not* be part of the polygon.
-         * However, most other shapes (rects, circles, segments, etc.) include their edges and
-         * the difference was causing issues when used for DRC.
-         *
-         * (FWIW, SHAPE_LINE_CHAIN was a split personality, with Collide() including its edges
-         * but PointInside() not.  That has also been corrected.)
-         *
-         * @param  aSeg       is the SEG segment whose collision with respect to the poly set
-         *                    will be tested.
-         * @param  aClearance is the security distance; if the segment passes closer to the polygon
-         *                    than aClearance distance, then there is a collision.
-         * @param aActual an optional pointer to an int to store the actual distance in the event
-         *                of a collision.
-         * @return bool - true if the segment aSeg collides with the polygon;
-         *                    false in any other case.
-         */
-        bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
-                      VECTOR2I* aLocation = nullptr ) const override;
-
-        /**
-         * Function CollideVertex
-         * Checks whether aPoint collides with any vertex of any of the contours of the polygon.
-         * @param  aPoint     is the VECTOR2I point whose collision with respect to the polygon
-         *                    will be tested.
-         * @param  aClearance is the security distance; if \p aPoint lies closer to a vertex than
-         *                    aClearance distance, then there is a collision.
-         * @param aClosestVertex is the index of the closes vertex to \p aPoint.
-         * @return bool - true if there is a collision, false in any other case.
-         */
-        bool CollideVertex( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
-                            int aClearance = 0 ) const;
-
-        /**
-         * Function CollideEdge
-         * Checks whether aPoint collides with any edge of any of the contours of the polygon.
-         * @param  aPoint     is the VECTOR2I point whose collision with respect to the polygon
-         *                    will be tested.
-         * @param  aClearance is the security distance; if \p aPoint lies closer to a vertex than
-         *                    aClearance distance, then there is a collision.
-         * @param aClosestVertex is the index of the closes vertex to \p aPoint.
-         * @return bool - true if there is a collision, false in any other case.
-         */
-        bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
-                          int aClearance = 0 ) const;
-
-        /**
-         * Constructs BBoxCaches for Contains(), below.  These caches MUST be built before a
-         * group of calls to Contains().  They are NOT kept up-to-date by editing actions.
-         */
-        void BuildBBoxCaches();
-
-        const BOX2I BBoxFromCaches() const;
-
-        /**
-         * Returns true if a given subpolygon contains the point aP
-         *
-         * @param aP is the point to check
-         * @param aSubpolyIndex is the subpolygon to check, or -1 to check all
-         * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
-         *                       editing in between, but the caller MUST cache the bbox caches
-         *                       before calling (via BuildBBoxCaches(), above)
-         * @return true if the polygon contains the point
-         */
-        bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, int aAccuracy = 0,
-                       bool aUseBBoxCaches = false ) const;
-
-        ///> Returns true if the set is empty (no polygons at all)
-        bool IsEmpty() const
-        {
-            return m_polys.size() == 0;
-        }
-
-        /**
-         * Function RemoveVertex
-         * deletes the aGlobalIndex-th vertex.
-         * @param aGlobalIndex is the global index of the to-be-removed vertex.
-         */
-        void RemoveVertex( int aGlobalIndex );
-
-        /**
-         * Function RemoveVertex
-         * deletes the vertex indexed by aIndex (index of polygon, contour and vertex).
-         * @param aRelativeIndices is the set of relative indices of the to-be-removed vertex.
-         */
-        void RemoveVertex( VERTEX_INDEX aRelativeIndices );
-
-        ///> Removes all outlines & holes (clears) the polygon set.
-        void RemoveAllContours();
-
-        /**
-         * Function RemoveContour
-         * deletes the aContourIdx-th contour of the aPolygonIdx-th polygon in the set.
-         * @param aContourIdx is the index of the contour in the aPolygonIdx-th polygon to be
-         *                    removed.
-         * @param aPolygonIdx is the index of the polygon in which the to-be-removed contour is.
-         *                    Defaults to the last polygon in the set.
-         */
-        void RemoveContour( int aContourIdx, int aPolygonIdx = -1 );
-
-        /**
-         * Function RemoveNullSegments
-         * looks for null segments; ie, segments whose ends are exactly the same and deletes them.
-         * @return int - the number of deleted segments.
-         */
-        int RemoveNullSegments();
-
-        /**
-         * Function SetVertex
-         * Accessor function to set the position of a specific point
-         * @param aIndex VERTEX_INDEX of the point to move
-         * @param aPos destination position of the specified point
-         */
-        void SetVertex( const VERTEX_INDEX& aIndex, const VECTOR2I& aPos );
-
-        /**
-         * Sets the vertex based on the global index.  Throws if the index
-         * doesn't exist
-         * @param aGlobalIndex global index of the to-be-moved vertex
-         * @param aPos New position on the vertex
-         */
-        void SetVertex( int aGlobalIndex, const VECTOR2I& aPos );
-
-        ///> Returns total number of vertices stored in the set.
-        int TotalVertices() const;
-
-        ///> Deletes aIdx-th polygon from the set
-        void DeletePolygon( int aIdx );
-
-        /**
-         * Function Chamfer
-         * returns a chamfered version of the aIndex-th polygon.
-         * @param aDistance is the chamfering distance.
-         * @param aIndex is the index of the polygon to be chamfered.
-         * @return POLYGON - A polygon containing the chamfered version of the aIndex-th polygon.
-         */
-        POLYGON ChamferPolygon( unsigned int aDistance, int aIndex );
-
-        /**
-         * Function Fillet
-         * returns a filleted version of the aIndex-th polygon.
-         * @param aRadius is the fillet radius.
-         * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
-         * @param aIndex is the index of the polygon to be filleted
-         * @return POLYGON - A polygon containing the filleted version of the aIndex-th polygon.
-         */
-        POLYGON FilletPolygon( unsigned int aRadius, int aErrorMax, int aIndex );
-
-        /**
-         * Function Chamfer
-         * returns a chamfered version of the polygon set.
-         * @param aDistance is the chamfering distance.
-         * @return SHAPE_POLY_SET - A set containing the chamfered version of this set.
-         */
-        SHAPE_POLY_SET Chamfer( int aDistance );
-
-        /**
-         * Function Fillet
-         * returns a filleted version of the polygon set.
-         * @param aRadius is the fillet radius.
-         * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
-         * @return SHAPE_POLY_SET - A set containing the filleted version of this set.
-         */
-        SHAPE_POLY_SET Fillet( int aRadius, int aErrorMax );
-
-        /**
-         * Function DistanceToPolygon
-         * computes the minimum distance between the aIndex-th polygon and aPoint.
-         * @param  aPoint is the point whose distance to the aIndex-th polygon has to be measured.
-         * @param  aIndex is the index of the polygon whose distace to aPoint has to be measured.
-         * @param  aNearest [out] an optional pointer to be filled in with the point on the
-         *                  polyset which is closest to aPoint.
-         * @return int -  The minimum distance between aPoint and all the segments of the aIndex-th
-         *                polygon. If the point is contained in the polygon, the distance is zero.
-         */
-        SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex,
-                                              VECTOR2I* aNearest ) const;
-
-        /**
-         * Function DistanceToPolygon
-         * computes the minimum distance between the aIndex-th polygon and aSegment with a
-         * possible width.
-         * @param  aSegment is the segment whose distance to the aIndex-th polygon has to be
-         *                  measured.
-         * @param  aIndex   is the index of the polygon whose distace to aPoint has to be measured.
-         * @param  aNearest [out] an optional pointer to be filled in with the point on the
-         *                  polyset which is closest to aSegment.
-         * @return int -    The minimum distance between aSegment and all the segments of the
-         *                  aIndex-th polygon. If the point is contained in the polygon, the
-         *                  distance is zero.
-         */
-        SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex,
-                                              VECTOR2I* aNearest) const;
-
-        /**
-         * Function SquaredDistance
-         * computes the minimum distance squared between aPoint and all the polygons in the set.
-         * Squared distances are used because they avoid the cost of doing square-roots.
-         * @param  aPoint is the point whose distance to the set has to be measured.
-         * @param  aNearest [out] an optional pointer to be filled in with the point on the
-         *                  polyset which is closest to aPoint.
-         * @return The minimum distance squared between aPoint and all the polygons in the set.
-         *         If the point is contained in any of the polygons, the distance is zero.
-         */
-        SEG::ecoord SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest = nullptr ) const;
-
-        /**
-         * Function SquaredDistance
-         * computes the minimum distance squared between aSegment and all the polygons in the set.
-         * Squared distances are used because they avoid the cost of doing square-roots.
-         * @param  aSegment is the segment whose distance to the polygon set has to be measured.
-         * @param  aSegmentWidth is the width of the segment; defaults to zero.
-         * @param  aNearest [out] an optional pointer to be filled in with the point on the
-         *                  polyset which is closest to aSegment.
-         * @return  The minimum distance squared between aSegment and all the polygons in the set.
-         *          If the point is contained in the polygon, the distance is zero.
-         */
-        SEG::ecoord SquaredDistance( const SEG& aSegment, VECTOR2I* aNearest = nullptr ) const;
-
-        /**
-         * Function IsVertexInHole.
-         * checks whether the aGlobalIndex-th vertex belongs to a hole.
-         * @param  aGlobalIdx is the index of the vertex.
-         * @return bool - true if the globally indexed aGlobalIdx-th vertex belongs to a hole.
-         */
-        bool IsVertexInHole( int aGlobalIdx );
-
-    private:
-        void fractureSingle( POLYGON& paths );
-        void unfractureSingle ( POLYGON& path );
-        void importTree( ClipperLib::PolyTree* tree );
-
-        /** Function booleanOp
-         * this is the engine to execute all polygon boolean transforms
-         * (AND, OR, ... and polygon simplification (merging overlaping  polygons)
-         * @param aType is the transform type ( see ClipperLib::ClipType )
-         * @param aOtherShape is the SHAPE_LINE_CHAIN to combine with me.
-         * @param aFastMode is an option to choose if the result can be a weak polygon
-         * or a stricty simple polygon.
-         * if aFastMode is PM_FAST the result can be a weak polygon
-         * if aFastMode is PM_STRICTLY_SIMPLE (default) the result is (theorically) a strictly
-         * simple polygon, but calculations can be really significantly time consuming
-         */
-        void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
-                        POLYGON_MODE aFastMode );
-
-        void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
-                        const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
-
-        /**
-         * containsSingle function
-         * Checks whether the point aP is inside the aSubpolyIndex-th polygon of the polyset. If
-         * the points lies on an edge, the polygon is considered to contain it.
-         * @param  aP            is the VECTOR2I point whose position with respect to the inside of
-         *                       the aSubpolyIndex-th polygon will be tested.
-         * @param  aSubpolyIndex is an integer specifying which polygon in the set has to be
-         *                       checked.
-         * @param  aAccuracy     accuracy in internal units
-         * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
-         *                       editing in between, but the caller MUST cache the bbox caches
-         *                       before calling (via BuildBBoxCaches(), above)
-         * @return bool - true if aP is inside aSubpolyIndex-th polygon; false in any other
-         *         case.
-         */
-        bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, int aAccuracy,
-                             bool aUseBBoxCaches = false ) const;
-
-        /**
-         * Operations ChamferPolygon and FilletPolygon are computed under the private chamferFillet
-         * method; this enum is defined to make the necessary distinction when calling this method
-         * from the public ChamferPolygon and FilletPolygon methods.
-         */
-        enum CORNER_MODE
-        {
-            CHAMFERED,
-            FILLETED
-        };
-
-        /**
-         * Function chamferFilletPolygon
-         * Returns the camfered or filleted version of the aIndex-th polygon in the set, depending
-         * on the aMode selected
-         * @param  aMode     represent which action will be taken: CORNER_MODE::CHAMFERED will
-         *                   return a chamfered version of the polygon, CORNER_MODE::FILLETED will
-         *                   return a filleted version of the polygon.
-         * @param  aDistance is the chamfering distance if aMode = CHAMFERED; if aMode = FILLETED,
-         *                   is the filleting radius.
-         * @param  aIndex    is the index of the polygon that will be chamfered/filleted.
-         * @param  aErrorMax is the maximum allowable deviation of the polygon from the circle
-         *                   if aMode = FILLETED. If aMode = CHAMFERED, it is unused.
-         * @return POLYGON - the chamfered/filleted version of the polygon.
-         */
-        POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
-                                      int aIndex, int aErrorMax );
-
-        ///> Returns true if the polygon set has any holes that touch share a vertex.
-        bool hasTouchingHoles( const POLYGON& aPoly ) const;
-
-        typedef std::vector<POLYGON> POLYSET;
-
-        POLYSET m_polys;
-
-    public:
-
-        SHAPE_POLY_SET& operator=( const SHAPE_POLY_SET& );
-
-        void CacheTriangulation( bool aPartition = true );
-        bool IsTriangulationUpToDate() const;
-
-        MD5_HASH GetHash() const;
-
-        virtual bool HasIndexableSubshapes() const override;
-
-        virtual size_t GetIndexableSubshapeCount() const override;
-
-        virtual void GetIndexableSubshapes( std::vector<SHAPE*>& aSubshapes ) override;
-
-    private:
-
-        MD5_HASH checksum() const;
-
-        std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
-        bool m_triangulationValid = false;
-        MD5_HASH m_hash;
-
+    enum CORNER_STRATEGY    ///< define how inflate transform build inflated polygon
+    {
+        ALLOW_ACUTE_CORNERS,    ///< just inflate the polygon. Acute angles create spikes
+        CHAMFER_ACUTE_CORNERS,  ///< Acute angles are chamfered
+        ROUND_ACUTE_CORNERS,    ///< Acute angles are rounded
+        CHAMFER_ALL_CORNERS,    ///< All angles are chamfered.
+                                ///< The distance between new and old polygon edges is not
+                                ///< constant, but do not change a lot
+        ROUND_ALL_CORNERS       ///< All angles are rounded.
+                                ///< The distance between new and old polygon edges is constant
+    };
+
+    /**
+     * Performs outline inflation/deflation.  Polygons can have holes, but not linked holes
+     * with main outlines, if aFactor < 0.  For those use InflateWithLinkedHoles() to avoid
+     * odd corners where the link segments meet the outline.
+     *
+     * @param aAmount - number of units to offset edges
+     * @param aCircleSegmentsCount - number of segments per 360° to use in curve approx
+     * @param aCornerStrategy - ALLOW_ACUTE_CORNERS to preserve all angles,
+     *                          CHOP_ACUTE_CORNERS to chop angles less than 90°,
+     *                          ROUND_ACUTE_CORNERS to round off angles less than 90°,
+     *                          ROUND_ALL_CORNERS to round regardless of angles
+     */
+    void Inflate( int aAmount, int aCircleSegmentsCount,
+                  CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS );
+
+    void Deflate( int aAmount, int aCircleSegmentsCount,
+                  CORNER_STRATEGY aCornerStrategy = ROUND_ALL_CORNERS )
+    {
+        Inflate( -aAmount, aCircleSegmentsCount, aCornerStrategy );
+    }
+
+    /**
+     * Performs outline inflation/deflation, using round corners.  Polygons can have holes,
+     * and/or linked holes with main outlines.  The resulting polygons are laso polygons with
+     * linked holes to main outlines.  For aFastMode meaning, see function booleanOp  .
+     */
+    void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
+
+    ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures"
+    ///> connecting the outer ring to the inner holes
+    ///> For aFastMode meaning, see function booleanOp
+    void Fracture( POLYGON_MODE aFastMode );
+
+    ///> Converts a single outline slitted ("fractured") polygon into a set ouf outlines
+    ///> with holes.
+    void Unfracture( POLYGON_MODE aFastMode );
+
+    ///> Returns true if the polygon set has any holes.
+    bool HasHoles() const;
+
+    ///> Returns true if the polygon set has any holes tha share a vertex.
+    bool HasTouchingHoles() const;
+
+
+    ///> Simplifies the polyset (merges overlapping polys, eliminates degeneracy/self-intersections)
+    ///> For aFastMode meaning, see function booleanOp
+    void Simplify( POLYGON_MODE aFastMode );
+
+    /**
+     * Function NormalizeAreaOutlines
+     * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s)
+     * Removes null segments.
+     * @return int - the polygon count (always >= 1, because there is at least one polygon)
+     *             There are new polygons only if the polygon count is > 1.
+     */
+    int NormalizeAreaOutlines();
+
+    /// @copydoc SHAPE::Format()
+    const std::string Format() const override;
+
+    /// @copydoc SHAPE::Parse()
+    bool Parse( std::stringstream& aStream ) override;
+
+    /// @copydoc SHAPE::Move()
+    void Move( const VECTOR2I& aVector ) override;
+
+    /**
+     * Mirrors the line points about y or x (or both)
+     * @param aX If true, mirror about the y axis (flip x coordinate)
+     * @param aY If true, mirror about the x axis
+     * @param aRef sets the reference point about which to mirror
+     */
+    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
+
+    /**
+     * Function Rotate
+     * rotates all vertices by a given angle
+     * @param aCenter is the rotation center
+     * @param aAngle rotation angle in radians
+     */
+    void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } ) override;
+
+    /// @copydoc SHAPE::IsSolid()
+    bool IsSolid() const override
+    {
+        return true;
+    }
+
+    const BOX2I BBox( int aClearance = 0 ) const override;
+
+    /**
+     * Function PointOnEdge()
+     *
+     * Checks if point aP lies on an edge or vertex of some of the outlines or holes.
+     * @param aP is the point to check.
+     * @return bool - true if the point lies on the edge of any polygon.
+     */
+    bool PointOnEdge( const VECTOR2I& aP ) const;
+
+    /**
+     * Function Collide()
+     *
+     * Checks if the boundary of shape (this) lies closer to the shape aShape than aClearance,
+     * indicating a collision.
+     * @param aShape shape to check collision against
+     * @param aClearance minimum clearance
+     * @param aActual [out] an optional pointer to an int to store the actual distance in the
+     *                event of a collision.
+     * @param aLocation [out] an option pointer to a point to store a nearby location in the
+     *                  event of a collision.
+     * @return true, if there is a collision.
+     */
+    bool Collide( const SHAPE* aShape, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override;
+
+    /**
+     * Function Collide
+     * Checks whether the point aP is either inside or on the edge of the polygon set.
+     *
+     * Note that prior to Jul 2020 we considered the edge to *not* be part of the polygon.
+     * However, most other shapes (rects, circles, segments, etc.) include their edges and
+     * the difference was causing issues when used for DRC.
+     *
+     * (FWIW, SHAPE_LINE_CHAIN was a split personality, with Collide() including its edges
+     * but PointInside() not.  That has also been corrected.)
+     *
+     * @param  aP         is the VECTOR2I point whose collision with respect to the poly set
+     *                    will be tested.
+     * @param  aClearance is the security distance; if the point lies closer to the polygon
+     *                    than aClearance distance, then there is a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
+     * @return bool - true if the point aP collides with the polygon; false in any other case.
+     */
+    bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override;
+
+    /**
+     * Function Collide
+     * Checks whether the segment aSeg collides with the polygon set (or its edge).
+     *
+     * Note that prior to Jul 2020 we considered the edge to *not* be part of the polygon.
+     * However, most other shapes (rects, circles, segments, etc.) include their edges and
+     * the difference was causing issues when used for DRC.
+     *
+     * (FWIW, SHAPE_LINE_CHAIN was a split personality, with Collide() including its edges
+     * but PointInside() not.  That has also been corrected.)
+     *
+     * @param  aSeg       is the SEG segment whose collision with respect to the poly set
+     *                    will be tested.
+     * @param  aClearance is the security distance; if the segment passes closer to the polygon
+     *                    than aClearance distance, then there is a collision.
+     * @param aActual an optional pointer to an int to store the actual distance in the event
+     *                of a collision.
+     * @return bool - true if the segment aSeg collides with the polygon;
+     *                    false in any other case.
+     */
+    bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                  VECTOR2I* aLocation = nullptr ) const override;
+
+    /**
+     * Function CollideVertex
+     * Checks whether aPoint collides with any vertex of any of the contours of the polygon.
+     * @param  aPoint     is the VECTOR2I point whose collision with respect to the polygon
+     *                    will be tested.
+     * @param  aClearance is the security distance; if \p aPoint lies closer to a vertex than
+     *                    aClearance distance, then there is a collision.
+     * @param aClosestVertex is the index of the closes vertex to \p aPoint.
+     * @return bool - true if there is a collision, false in any other case.
+     */
+    bool CollideVertex( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
+                        int aClearance = 0 ) const;
+
+    /**
+     * Function CollideEdge
+     * Checks whether aPoint collides with any edge of any of the contours of the polygon.
+     * @param  aPoint     is the VECTOR2I point whose collision with respect to the polygon
+     *                    will be tested.
+     * @param  aClearance is the security distance; if \p aPoint lies closer to a vertex than
+     *                    aClearance distance, then there is a collision.
+     * @param aClosestVertex is the index of the closes vertex to \p aPoint.
+     * @return bool - true if there is a collision, false in any other case.
+     */
+    bool CollideEdge( const VECTOR2I& aPoint, VERTEX_INDEX& aClosestVertex,
+                      int aClearance = 0 ) const;
+
+    /**
+     * Constructs BBoxCaches for Contains(), below.  These caches MUST be built before a
+     * group of calls to Contains().  They are NOT kept up-to-date by editing actions.
+     */
+    void BuildBBoxCaches();
+
+    const BOX2I BBoxFromCaches() const;
+
+    /**
+     * Returns true if a given subpolygon contains the point aP
+     *
+     * @param aP is the point to check
+     * @param aSubpolyIndex is the subpolygon to check, or -1 to check all
+     * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
+     *                       editing in between, but the caller MUST cache the bbox caches
+     *                       before calling (via BuildBBoxCaches(), above)
+     * @return true if the polygon contains the point
+     */
+    bool Contains( const VECTOR2I& aP, int aSubpolyIndex = -1, int aAccuracy = 0,
+                   bool aUseBBoxCaches = false ) const;
+
+    ///> Returns true if the set is empty (no polygons at all)
+    bool IsEmpty() const
+    {
+        return m_polys.size() == 0;
+    }
+
+    /**
+     * Function RemoveVertex
+     * deletes the aGlobalIndex-th vertex.
+     * @param aGlobalIndex is the global index of the to-be-removed vertex.
+     */
+    void RemoveVertex( int aGlobalIndex );
+
+    /**
+     * Function RemoveVertex
+     * deletes the vertex indexed by aIndex (index of polygon, contour and vertex).
+     * @param aRelativeIndices is the set of relative indices of the to-be-removed vertex.
+     */
+    void RemoveVertex( VERTEX_INDEX aRelativeIndices );
+
+    ///> Removes all outlines & holes (clears) the polygon set.
+    void RemoveAllContours();
+
+    /**
+     * Function RemoveContour
+     * deletes the aContourIdx-th contour of the aPolygonIdx-th polygon in the set.
+     * @param aContourIdx is the index of the contour in the aPolygonIdx-th polygon to be
+     *                    removed.
+     * @param aPolygonIdx is the index of the polygon in which the to-be-removed contour is.
+     *                    Defaults to the last polygon in the set.
+     */
+    void RemoveContour( int aContourIdx, int aPolygonIdx = -1 );
+
+    /**
+     * Function RemoveNullSegments
+     * looks for null segments; ie, segments whose ends are exactly the same and deletes them.
+     * @return int - the number of deleted segments.
+     */
+    int RemoveNullSegments();
+
+    /**
+     * Function SetVertex
+     * Accessor function to set the position of a specific point
+     * @param aIndex VERTEX_INDEX of the point to move
+     * @param aPos destination position of the specified point
+     */
+    void SetVertex( const VERTEX_INDEX& aIndex, const VECTOR2I& aPos );
+
+    /**
+     * Sets the vertex based on the global index.  Throws if the index
+     * doesn't exist
+     * @param aGlobalIndex global index of the to-be-moved vertex
+     * @param aPos New position on the vertex
+     */
+    void SetVertex( int aGlobalIndex, const VECTOR2I& aPos );
+
+    ///> Returns total number of vertices stored in the set.
+    int TotalVertices() const;
+
+    ///> Deletes aIdx-th polygon from the set
+    void DeletePolygon( int aIdx );
+
+    /**
+     * Function Chamfer
+     * returns a chamfered version of the aIndex-th polygon.
+     * @param aDistance is the chamfering distance.
+     * @param aIndex is the index of the polygon to be chamfered.
+     * @return POLYGON - A polygon containing the chamfered version of the aIndex-th polygon.
+     */
+    POLYGON ChamferPolygon( unsigned int aDistance, int aIndex );
+
+    /**
+     * Function Fillet
+     * returns a filleted version of the aIndex-th polygon.
+     * @param aRadius is the fillet radius.
+     * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
+     * @param aIndex is the index of the polygon to be filleted
+     * @return POLYGON - A polygon containing the filleted version of the aIndex-th polygon.
+     */
+    POLYGON FilletPolygon( unsigned int aRadius, int aErrorMax, int aIndex );
+
+    /**
+     * Function Chamfer
+     * returns a chamfered version of the polygon set.
+     * @param aDistance is the chamfering distance.
+     * @return SHAPE_POLY_SET - A set containing the chamfered version of this set.
+     */
+    SHAPE_POLY_SET Chamfer( int aDistance );
+
+    /**
+     * Function Fillet
+     * returns a filleted version of the polygon set.
+     * @param aRadius is the fillet radius.
+     * @param aErrorMax is the maximum allowable deviation of the polygon from the circle
+     * @return SHAPE_POLY_SET - A set containing the filleted version of this set.
+     */
+    SHAPE_POLY_SET Fillet( int aRadius, int aErrorMax );
+
+    /**
+     * Function DistanceToPolygon
+     * computes the minimum distance between the aIndex-th polygon and aPoint.
+     * @param  aPoint is the point whose distance to the aIndex-th polygon has to be measured.
+     * @param  aIndex is the index of the polygon whose distace to aPoint has to be measured.
+     * @param  aNearest [out] an optional pointer to be filled in with the point on the
+     *                  polyset which is closest to aPoint.
+     * @return int -  The minimum distance between aPoint and all the segments of the aIndex-th
+     *                polygon. If the point is contained in the polygon, the distance is zero.
+     */
+    SEG::ecoord SquaredDistanceToPolygon( VECTOR2I aPoint, int aIndex,
+                                          VECTOR2I* aNearest ) const;
+
+    /**
+     * Function DistanceToPolygon
+     * computes the minimum distance between the aIndex-th polygon and aSegment with a
+     * possible width.
+     * @param  aSegment is the segment whose distance to the aIndex-th polygon has to be
+     *                  measured.
+     * @param  aIndex   is the index of the polygon whose distace to aPoint has to be measured.
+     * @param  aNearest [out] an optional pointer to be filled in with the point on the
+     *                  polyset which is closest to aSegment.
+     * @return int -    The minimum distance between aSegment and all the segments of the
+     *                  aIndex-th polygon. If the point is contained in the polygon, the
+     *                  distance is zero.
+     */
+    SEG::ecoord SquaredDistanceToPolygon( const SEG& aSegment, int aIndex,
+                                          VECTOR2I* aNearest) const;
+
+    /**
+     * Function SquaredDistance
+     * computes the minimum distance squared between aPoint and all the polygons in the set.
+     * Squared distances are used because they avoid the cost of doing square-roots.
+     * @param  aPoint is the point whose distance to the set has to be measured.
+     * @param  aNearest [out] an optional pointer to be filled in with the point on the
+     *                  polyset which is closest to aPoint.
+     * @return The minimum distance squared between aPoint and all the polygons in the set.
+     *         If the point is contained in any of the polygons, the distance is zero.
+     */
+    SEG::ecoord SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest = nullptr ) const;
+
+    /**
+     * Function SquaredDistance
+     * computes the minimum distance squared between aSegment and all the polygons in the set.
+     * Squared distances are used because they avoid the cost of doing square-roots.
+     * @param  aSegment is the segment whose distance to the polygon set has to be measured.
+     * @param  aSegmentWidth is the width of the segment; defaults to zero.
+     * @param  aNearest [out] an optional pointer to be filled in with the point on the
+     *                  polyset which is closest to aSegment.
+     * @return  The minimum distance squared between aSegment and all the polygons in the set.
+     *          If the point is contained in the polygon, the distance is zero.
+     */
+    SEG::ecoord SquaredDistance( const SEG& aSegment, VECTOR2I* aNearest = nullptr ) const;
+
+    /**
+     * Function IsVertexInHole.
+     * checks whether the aGlobalIndex-th vertex belongs to a hole.
+     * @param  aGlobalIdx is the index of the vertex.
+     * @return bool - true if the globally indexed aGlobalIdx-th vertex belongs to a hole.
+     */
+    bool IsVertexInHole( int aGlobalIdx );
+
+private:
+    void fractureSingle( POLYGON& paths );
+    void unfractureSingle ( POLYGON& path );
+    void importTree( ClipperLib::PolyTree* tree );
+
+    /** Function booleanOp
+     * this is the engine to execute all polygon boolean transforms
+     * (AND, OR, ... and polygon simplification (merging overlaping  polygons)
+     * @param aType is the transform type ( see ClipperLib::ClipType )
+     * @param aOtherShape is the SHAPE_LINE_CHAIN to combine with me.
+     * @param aFastMode is an option to choose if the result can be a weak polygon
+     * or a stricty simple polygon.
+     * if aFastMode is PM_FAST the result can be a weak polygon
+     * if aFastMode is PM_STRICTLY_SIMPLE (default) the result is (theorically) a strictly
+     * simple polygon, but calculations can be really significantly time consuming
+     */
+    void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
+                    POLYGON_MODE aFastMode );
+
+    void booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aShape,
+                    const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
+
+    /**
+     * containsSingle function
+     * Checks whether the point aP is inside the aSubpolyIndex-th polygon of the polyset. If
+     * the points lies on an edge, the polygon is considered to contain it.
+     * @param  aP            is the VECTOR2I point whose position with respect to the inside of
+     *                       the aSubpolyIndex-th polygon will be tested.
+     * @param  aSubpolyIndex is an integer specifying which polygon in the set has to be
+     *                       checked.
+     * @param  aAccuracy     accuracy in internal units
+     * @param aUseBBoxCaches gives faster performance when multiple calls are made with no
+     *                       editing in between, but the caller MUST cache the bbox caches
+     *                       before calling (via BuildBBoxCaches(), above)
+     * @return bool - true if aP is inside aSubpolyIndex-th polygon; false in any other
+     *         case.
+     */
+    bool containsSingle( const VECTOR2I& aP, int aSubpolyIndex, int aAccuracy,
+                         bool aUseBBoxCaches = false ) const;
+
+    /**
+     * Operations ChamferPolygon and FilletPolygon are computed under the private chamferFillet
+     * method; this enum is defined to make the necessary distinction when calling this method
+     * from the public ChamferPolygon and FilletPolygon methods.
+     */
+    enum CORNER_MODE
+    {
+        CHAMFERED,
+        FILLETED
+    };
+
+    /**
+     * Function chamferFilletPolygon
+     * Returns the camfered or filleted version of the aIndex-th polygon in the set, depending
+     * on the aMode selected
+     * @param  aMode     represent which action will be taken: CORNER_MODE::CHAMFERED will
+     *                   return a chamfered version of the polygon, CORNER_MODE::FILLETED will
+     *                   return a filleted version of the polygon.
+     * @param  aDistance is the chamfering distance if aMode = CHAMFERED; if aMode = FILLETED,
+     *                   is the filleting radius.
+     * @param  aIndex    is the index of the polygon that will be chamfered/filleted.
+     * @param  aErrorMax is the maximum allowable deviation of the polygon from the circle
+     *                   if aMode = FILLETED. If aMode = CHAMFERED, it is unused.
+     * @return POLYGON - the chamfered/filleted version of the polygon.
+     */
+    POLYGON chamferFilletPolygon( CORNER_MODE aMode, unsigned int aDistance,
+                                  int aIndex, int aErrorMax );
+
+    ///> Returns true if the polygon set has any holes that touch share a vertex.
+    bool hasTouchingHoles( const POLYGON& aPoly ) const;
+
+    MD5_HASH checksum() const;
+
+private:
+    typedef std::vector<POLYGON> POLYSET;
+
+    POLYSET  m_polys;
+
+    std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
+
+    bool     m_triangulationValid = false;
+    MD5_HASH m_hash;
 };
 
 #endif

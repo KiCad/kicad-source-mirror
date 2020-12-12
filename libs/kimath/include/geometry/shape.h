@@ -82,7 +82,8 @@ public:
      * Creates an empty shape of type aType
      */
 
-    SHAPE_BASE( SHAPE_TYPE aType ) : m_type( aType )
+    SHAPE_BASE( SHAPE_TYPE aType ) :
+        m_type( aType )
     {}
 
     // Destructor
@@ -121,24 +122,20 @@ protected:
  */
 class SHAPE : public SHAPE_BASE
 {
-protected:
-    typedef VECTOR2I::extended_type ecoord;
-
 public:
     /**
      * Constructor
      *
      * Creates an empty shape of type aType
      */
-
-    SHAPE( SHAPE_TYPE aType ) : SHAPE_BASE( aType )
+    SHAPE( SHAPE_TYPE aType ) :
+        SHAPE_BASE( aType )
     {}
 
     // Destructor
     virtual ~SHAPE()
     {}
 
-  
     /**
      * Function Clone()
      *
@@ -173,8 +170,8 @@ public:
      *                  event of a collision.
      * @return true, if there is a collision.
      */
-    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0,
-                          int* aActual = nullptr, VECTOR2I* aLocation = nullptr ) const
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const
     {
         return Collide( SEG( aP, aP ), aClearance, aActual, aLocation );
     }
@@ -248,13 +245,17 @@ public:
     virtual bool Parse( std::stringstream& aStream );
 
     virtual const std::string Format( ) const;
+
+protected:
+    typedef VECTOR2I::extended_type ecoord;
 };
 
 
 class SHAPE_LINE_CHAIN_BASE : public SHAPE
 {
 public:
-    SHAPE_LINE_CHAIN_BASE( SHAPE_TYPE aType ) : SHAPE( aType )
+    SHAPE_LINE_CHAIN_BASE( SHAPE_TYPE aType ) :
+        SHAPE( aType )
     {
     }
 
@@ -273,8 +274,8 @@ public:
      *                of a collision.
      * @return true, when a collision has been found
      */
-    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0,
-                          int* aActual = nullptr, VECTOR2I* aLocation = nullptr ) const override;
+    virtual bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const override;
 
     /**
      * Function Collide()
@@ -287,8 +288,8 @@ public:
      * @return true, when a collision has been found
      */
 
-    virtual bool Collide( const SEG& aSeg, int aClearance = 0,
-                          int* aActual = nullptr, VECTOR2I* aLocation = nullptr ) const override;
+    virtual bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
+                          VECTOR2I* aLocation = nullptr ) const override;
 
     SEG::ecoord SquaredDistance( const VECTOR2I& aP, bool aOutlineOnly = false ) const;
 

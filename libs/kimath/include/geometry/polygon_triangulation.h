@@ -58,18 +58,41 @@
 
 class PolygonTriangulation
 {
-
 public:
-
     PolygonTriangulation( SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult ) :
         m_result( aResult )
     {};
+
+    bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
+    {
+        m_bbox = aPoly.BBox();
+        m_result.Clear();
+
+        if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
+            return false;
+
+        /// Place the polygon Vertices into a circular linked list
+        /// and check for lists that have only 0, 1 or 2 elements and
+        /// therefore cannot be polygons
+        Vertex* firstVertex = createList( aPoly );
+        if( !firstVertex || firstVertex->prev == firstVertex->next )
+            return false;
+
+        firstVertex->updateList();
+
+        auto retval = earcutList( firstVertex );
+        m_vertices.clear();
+        return retval;
+    }
 
 private:
     struct Vertex
     {
         Vertex( size_t aIndex, double aX, double aY, PolygonTriangulation* aParent ) :
-                i( aIndex ), x( aX ), y( aY ), parent( aParent )
+                i( aIndex ),
+                x( aX ),
+                y( aY ),
+                parent( aParent )
         {
         }
         Vertex& operator=( const Vertex& ) = delete;
@@ -135,7 +158,6 @@ private:
             nextZ = NULL;
             prevZ = NULL;
         }
-
 
         void updateOrder()
         {
@@ -231,10 +253,6 @@ private:
         Vertex* prevZ = nullptr;
         Vertex* nextZ = nullptr;
     };
-
-    BOX2I m_bbox;
-    std::deque<Vertex> m_vertices;
-    SHAPE_POLY_SET::TRIANGULATED_POLYGON& m_result;
 
     /**
      * Calculate the Morton code of the Vertex
@@ -653,30 +671,10 @@ private:
         return p;
     }
 
-
-public:
-
-    bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
-    {
-        m_bbox = aPoly.BBox();
-        m_result.Clear();
-
-        if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
-            return false;
-
-        /// Place the polygon Vertices into a circular linked list
-        /// and check for lists that have only 0, 1 or 2 elements and
-        /// therefore cannot be polygons
-        Vertex* firstVertex = createList( aPoly );
-        if( !firstVertex || firstVertex->prev == firstVertex->next )
-            return false;
-
-        firstVertex->updateList();
-
-        auto retval = earcutList( firstVertex );
-        m_vertices.clear();
-        return retval;
-    }
+private:
+    BOX2I                                 m_bbox;
+    std::deque<Vertex>                    m_vertices;
+    SHAPE_POLY_SET::TRIANGULATED_POLYGON& m_result;
 };
 
 #endif //__POLYGON_TRIANGULATION_H

@@ -41,7 +41,9 @@ public:
     static const int MIN_PRECISION_IU = 4;
 
     SHAPE_ARC() :
-        SHAPE( SH_ARC ), m_width( 0 ) {};
+        SHAPE( SH_ARC ),
+        m_width( 0 )
+    {};
 
     /**
      * SHAPE_ARC ctor.
@@ -50,8 +52,8 @@ public:
      * @param aCenterAngle is the arc angle in degrees
      * @param aWidth is the arc line thickness
      */
-    SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
-               double aCenterAngle, int aWidth = 0 );
+    SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint, double aCenterAngle,
+               int aWidth = 0 );
 
     /**
      * SHAPE_ARC ctor.
@@ -60,8 +62,8 @@ public:
      * @param aArcMid is the arc mid point
      * @param aWidth is the arc line thickness
      */
-    SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
-               const VECTOR2I& aArcEnd, int aWidth );
+    SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid, const VECTOR2I& aArcEnd,
+               int aWidth );
    
     /**
      * SHAPE_ARC ctor.
@@ -145,7 +147,6 @@ public:
     const SHAPE_LINE_CHAIN ConvertToPolyline( double aAccuracy = 0.005 * PCB_IU_PER_MM ) const;
 
 private:
-
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) const
     {
         return ( ecoord{ aC.y } - aA.y ) * ( ecoord{ aB.x } - aA.x ) >
@@ -154,13 +155,13 @@ private:
 
     void update_bbox();
 
-
+private:
     VECTOR2I m_start;
     VECTOR2I m_mid;
     VECTOR2I m_end;
 
-    int m_width;
-    BOX2I m_bbox;
+    int      m_width;
+    BOX2I    m_bbox;
 };
 
 #endif

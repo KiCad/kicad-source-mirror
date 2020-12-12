@@ -60,8 +60,8 @@ public:
      * Creates a segment between (aX1, aY1) and (aX2, aY2)
      */
     SEG( int aX1, int aY1, int aX2, int aY2 ) :
-        A ( VECTOR2I( aX1, aY1 ) ),
-        B ( VECTOR2I( aX2, aY2 ) )
+        A( VECTOR2I( aX1, aY1 ) ),
+        B( VECTOR2I( aX2, aY2 ) )
     {
         m_index = -1;
     }
@@ -70,7 +70,9 @@ public:
      * Constructor
      * Creates a segment between (aA) and (aB)
      */
-    SEG( const VECTOR2I& aA, const VECTOR2I& aB ) : A( aA ), B( aB )
+    SEG( const VECTOR2I& aA, const VECTOR2I& aB ) :
+        A( aA ),
+        B( aB )
     {
         m_index = -1;
     }
@@ -82,7 +84,9 @@ public:
      * @param aB reference to the end point in the parent shape
      * @param aIndex index of the segment within the parent shape
      */
-    SEG( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) : A( aA ), B( aB )
+    SEG( const VECTOR2I& aA, const VECTOR2I& aB, int aIndex ) :
+        A( aA ),
+        B( aB )
     {
         m_index = aIndex;
     }
@@ -90,7 +94,10 @@ public:
     /**
      * Copy constructor
      */
-    SEG( const SEG& aSeg ) : A( aSeg.A ), B( aSeg.B ), m_index( aSeg.m_index )
+    SEG( const SEG& aSeg ) :
+        A( aSeg.A ),
+        B( aSeg.B ),
+        m_index( aSeg.m_index )
     {
     }
 
@@ -289,6 +296,7 @@ public:
 
         if( Contains( aSeg.A ) || Contains( aSeg.B ) )
             return true;
+
         if( aSeg.Contains( A ) || aSeg.Contains( B ) )
             return true;
 
@@ -355,6 +363,7 @@ public:
 private:
     bool ccw( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I &aC ) const;
 
+private:
     ///> index withing the parent shape (used when m_is_local == false)
     int m_index;
 };
