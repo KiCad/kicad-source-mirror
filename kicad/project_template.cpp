@@ -254,7 +254,7 @@ bool PROJECT_TEMPLATE::CreateProject( wxFileName& aNewProjectPath, wxString* aEr
 
 wxString* PROJECT_TEMPLATE::GetTitle()
 {
-    wxFileInputStream input( GetHtmlFile().GetFullPath() );
+    wxFFileInputStream input( GetHtmlFile().GetFullPath() );
     wxString separator( wxT( "\x9" ) );
     wxTextInputStream text( input, separator, wxConvUTF8 );
 

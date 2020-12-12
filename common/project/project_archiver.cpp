@@ -83,7 +83,7 @@ static bool CopyStreamData( wxInputStream& inputStream, wxOutputStream& outputSt
 bool PROJECT_ARCHIVER::Unarchive( const wxString& aSrcFile, const wxString& aDestDir,
                                   REPORTER& aReporter )
 {
-    wxFileInputStream stream( aSrcFile );
+    wxFFileInputStream stream( aSrcFile );
 
     if( !stream.IsOk() )
     {

@@ -996,7 +996,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
 
         case FMT_STEPZ:
         {
-            wxFileInputStream ifile( aFileName );
+            wxFFileInputStream ifile( aFileName );
             wxFileName outFile( aFileName );
 
             outFile.SetPath( wxStandardPaths::Get().GetTempDir() );
@@ -1012,7 +1012,7 @@ bool PCBMODEL::getModelLabel( const std::string& aFileName, TRIPLET aScale, TDF_
             }
 
             {
-                wxFileOutputStream ofile( outFile.GetFullPath() );
+                wxFFileOutputStream ofile( outFile.GetFullPath() );
 
                 if( !ofile.IsOk() )
                 {

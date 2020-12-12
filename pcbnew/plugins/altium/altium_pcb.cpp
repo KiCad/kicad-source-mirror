@@ -1160,7 +1160,7 @@ void ALTIUM_PCB::ParseModelsData( const CFB::CompoundFileReader& aReader,
         wxMemoryInputStream stepStream( stepContent.get(), stepSize );
         wxZlibInputStream   zlibInputStream( stepStream );
 
-        wxFileOutputStream outputStream( storagePath.GetFullPath() );
+        wxFFileOutputStream outputStream( storagePath.GetFullPath() );
         outputStream.Write( zlibInputStream );
         outputStream.Close();
 

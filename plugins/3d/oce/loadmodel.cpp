@@ -271,7 +271,7 @@ enum FormatType
 FormatType fileType( const char* aFileName )
 {
     wxFileName fname( wxString::FromUTF8Unchecked( aFileName ) );
-    wxFileInputStream ifile( fname.GetFullPath() );
+    wxFFileInputStream ifile( fname.GetFullPath() );
 
     if( !ifile.IsOk() )
         return FMT_NONE;
@@ -460,7 +460,7 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
 bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
 {
     wxFileName fname( wxString::FromUTF8Unchecked( aFileName ) );
-    wxFileInputStream ifile( fname.GetFullPath() );
+    wxFFileInputStream ifile( fname.GetFullPath() );
 
     wxFileName outFile( fname );
 
@@ -473,7 +473,7 @@ bool readSTEPZ( Handle(TDocStd_Document)& m_doc, const char* aFileName )
         return false;
 
     {
-        wxFileOutputStream ofile( outFile.GetFullPath() );
+        wxFFileOutputStream ofile( outFile.GetFullPath() );
 
         if( !ofile.IsOk() )
             return false;

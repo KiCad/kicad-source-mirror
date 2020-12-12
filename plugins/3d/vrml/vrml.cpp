@@ -167,7 +167,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
 
     if( aFileName.Upper().EndsWith( "WRZ" ) )
     {
-        wxFileInputStream ifile( aFileName );
+        wxFFileInputStream ifile( aFileName );
         tmpfilename = wxFileName( aFileName );
 
         tmpfilename.SetPath( wxStandardPaths::Get().GetTempDir() );
@@ -179,7 +179,7 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
             return nullptr;
 
         {
-            wxFileOutputStream ofile( tmpfilename.GetFullPath() );
+            wxFFileOutputStream ofile( tmpfilename.GetFullPath() );
 
             if( !ofile.IsOk() )
                 return nullptr;
