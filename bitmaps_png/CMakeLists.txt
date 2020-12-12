@@ -382,6 +382,7 @@ set( BMAPS_MID
     read_setup
     recent
     redo
+    refresh24
     reload2
     reload
     render_mode

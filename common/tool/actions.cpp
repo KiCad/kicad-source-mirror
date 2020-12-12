@@ -267,7 +267,7 @@ TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
 #endif
         LEGACY_HK_NAME( "Zoom Redraw" ),
         _( "Refresh" ), _( "Refresh" ),
-        refresh_xpm );
+        refresh24_xpm );
 
 TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL,
