@@ -689,10 +689,9 @@ static bool collideSingleShapes( const SHAPE* aA, const SHAPE* aB, int aClearanc
         break;
     }
 
-    bool unsupported_collision = true;
-    (void) unsupported_collision;   // make gcc quiet
-
-    wxASSERT( unsupported_collision == false );
+    wxFAIL_MSG( wxString::Format( "Unsupported collision: %s with %s",
+                                  SHAPE_TYPE_asString( aA->Type() ),
+                                  SHAPE_TYPE_asString( aB->Type() ) ) );
 
     return false;
 }
