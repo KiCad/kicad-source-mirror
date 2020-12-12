@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="hierarchy_nav.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="3.3259971"
      inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -83,31 +83,36 @@
      class="cls-1"
      points="2.504 6.991 2.504 13.079 4.532 13.079"
      id="polyline25219"
-     transform="translate(-1,-1)" />
+     transform="translate(-1.504,-0.991)"
+     style="stroke:#1a81c4;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stroke-linecap:square;stroke-linejoin:round" />
   <polyline
      class="cls-1"
      points="6.014 21.969 4.532 21.969 4.532 13.079 5.948 13.079"
      id="polyline25221"
-     transform="translate(-1,-1)" />
+     transform="translate(-1.532,-0.969)"
+     style="stroke:#1a81c4;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;stroke-linecap:square;stroke-linejoin:round" />
   <rect
      class="cls-2"
      x="0"
      y="0"
      width="24"
      height="6.0127001"
-     id="rect25223" />
+     id="rect25223"
+     style="fill:#545454;fill-opacity:1" />
   <rect
      class="cls-2"
      x="5.0138001"
      y="8.9937"
      width="18.9862"
      height="6.0125999"
-     id="rect25225" />
+     id="rect25225"
+     style="fill:#545454;fill-opacity:1" />
   <rect
      class="cls-2"
      x="5.0138001"
      y="17.987301"
      width="18.9862"
      height="6.0127001"
-     id="rect25227" />
+     id="rect25227"
+     style="fill:#545454;fill-opacity:1" />
 </svg>
