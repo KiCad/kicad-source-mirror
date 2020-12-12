@@ -181,6 +181,7 @@ set( BMAPS_MID
     color_materials
     component_select_unit
     config
+    convert
     copy
     copy_pad_settings
     cursor_shape
