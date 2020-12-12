@@ -1609,7 +1609,7 @@ void SHAPE_POLY_SET::Move( const VECTOR2I& aVector )
             path.Move( aVector );
     }
 
-    for( auto& tri : m_triangulatedPolys )
+    for( std::unique_ptr<TRIANGULATED_POLYGON>& tri : m_triangulatedPolys )
         tri->Move( aVector );
 
     m_hash = checksum();
@@ -1621,9 +1621,7 @@ void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
     for( POLYGON& poly : m_polys )
     {
         for( SHAPE_LINE_CHAIN& path : poly )
-        {
             path.Mirror( aX, aY, aRef );
-        }
     }
 }
 
@@ -1745,7 +1743,7 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistance( VECTOR2I aPoint, VECTOR2I* aNearest
 {
     SEG::ecoord currentDistance_sq;
     SEG::ecoord minDistance_sq = VECTOR2I::ECOORD_MAX;
-    VECTOR2I nearest;
+    VECTOR2I    nearest;
 
     // Iterate through all the polygons and get the minimum distance.
     for( unsigned int polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
@@ -1770,13 +1768,13 @@ SEG::ecoord SHAPE_POLY_SET::SquaredDistance( const SEG& aSegment, VECTOR2I* aNea
 {
     SEG::ecoord currentDistance_sq;
     SEG::ecoord minDistance_sq = VECTOR2I::ECOORD_MAX;
-    VECTOR2I nearest;
+    VECTOR2I    nearest;
 
     // Iterate through all the polygons and get the minimum distance.
     for( unsigned int polygonIdx = 0; polygonIdx < m_polys.size(); polygonIdx++ )
     {
         currentDistance_sq = SquaredDistanceToPolygon( aSegment, polygonIdx,
-                                                    aNearest ? &nearest : nullptr );
+                                                       aNearest ? &nearest : nullptr );
 
         if( currentDistance_sq < minDistance_sq )
         {
@@ -1997,8 +1995,10 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     if( aOther.IsTriangulationUpToDate() )
     {
         for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
-            m_triangulatedPolys.push_back(
-                    std::make_unique<TRIANGULATED_POLYGON>( *aOther.TriangulatedPolygon( i ) ) );
+        {
+            const TRIANGULATED_POLYGON* poly = aOther.TriangulatedPolygon( i );
+            m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>( *poly ) );
+        }
 
         m_hash = aOther.GetHash();
         m_triangulationValid = true;
@@ -2024,14 +2024,14 @@ bool SHAPE_POLY_SET::IsTriangulationUpToDate() const
     if( !m_hash.IsValid() )
         return false;
 
-    auto hash = checksum();
+    MD5_HASH hash = checksum();
 
     return hash == m_hash;
 }
 
 
-static void partitionPolyIntoRegularCellGrid(
-        const SHAPE_POLY_SET& aPoly, int aSize, SHAPE_POLY_SET& aOut )
+static void partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aPoly, int aSize,
+                                              SHAPE_POLY_SET& aOut )
 {
     BOX2I bb = aPoly.BBox();
 
@@ -2057,6 +2057,7 @@ static void partitionPolyIntoRegularCellGrid(
     SHAPE_POLY_SET ps1( aPoly ), ps2( aPoly ), maskSetOdd, maskSetEven;
 
     for( int yy = 0; yy < n_cells_y; yy++ )
+    {
         for( int xx = 0; xx < n_cells_x; xx++ )
         {
             VECTOR2I p;
@@ -2082,6 +2083,7 @@ static void partitionPolyIntoRegularCellGrid(
             else
                 maskSetEven.AddOutline( mask );
         }
+    }
 
     ps1.BooleanIntersection( maskSetOdd, SHAPE_POLY_SET::PM_FAST );
     ps2.BooleanIntersection( maskSetEven, SHAPE_POLY_SET::PM_FAST );
@@ -2089,10 +2091,9 @@ static void partitionPolyIntoRegularCellGrid(
     ps2.Fracture( SHAPE_POLY_SET::PM_FAST );
 
     aOut = ps1;
+
     for( int i = 0; i < ps2.OutlineCount(); i++ )
-    {
         aOut.AddOutline( ps2.COutline( i ) );
-    }
 
     if( !aOut.OutlineCount() )
         aOut = aPoly;
@@ -2124,8 +2125,10 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition )
     SHAPE_POLY_SET tmpSet;
 
     if( aPartition )
+    {
         // This partitions into regularly-sized grids (1cm in pcbnew)
         partitionPolyIntoRegularCellGrid( *this, 1e7, tmpSet );
+    }
     else
     {
         tmpSet = *this;

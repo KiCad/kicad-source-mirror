@@ -321,7 +321,8 @@ public:
     void SetOutline( SHAPE_POLY_SET* aOutline ) { m_Poly = aOutline; }
 
     // @copydoc BOARD_ITEM::GetEffectiveShape
-    virtual std::shared_ptr<SHAPE> GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
+    virtual std::shared_ptr<SHAPE>
+    GetEffectiveShape( PCB_LAYER_ID aLayer = UNDEFINED_LAYER ) const override;
 
     /**
      * Function HitTest
@@ -350,10 +351,10 @@ public:
      * @return true if aRefPos is inside a zone cutout
      */
     bool HitTestCutout( const VECTOR2I& aRefPos, int* aOutlineIdx = nullptr,
-            int* aHoleIdx = nullptr ) const;
+                        int* aHoleIdx = nullptr ) const;
 
     bool HitTestCutout( const wxPoint& aRefPos, int* aOutlineIdx = nullptr,
-            int* aHoleIdx = nullptr ) const
+                        int* aHoleIdx = nullptr ) const
     {
         return HitTestCutout( VECTOR2I( aRefPos.x, aRefPos.y ), aOutlineIdx, aHoleIdx );
     }
@@ -587,7 +588,9 @@ public:
             }
         }
         else
+        {
             throw( std::out_of_range( "aCornerIndex-th vertex does not exist" ) );
+        }
     }
 
     /**
