@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="trash.svg"
+   sodipodi:docname="trash24.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -22,8 +22,8 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2443"
+     inkscape:window-height="1715"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
@@ -79,44 +79,46 @@
   </defs>
   <title
      id="title27399">trash</title>
-  <polygon
-     class="cls-1"
-     points="20,24.026 24,1.974 2,1.974 6,24.026 "
-     id="polygon27401"
-     transform="translate(-1,-1)" />
-  <line
-     class="cls-1"
-     x1="2.125"
-     y1="5.9668999"
-     x2="21.807301"
-     y2="5.9668999"
-     id="line27403" />
-  <line
-     class="cls-1"
-     x1="3.4445"
-     y1="11.6533"
-     x2="20.604099"
-     y2="11.6533"
-     id="line27405" />
-  <line
-     class="cls-1"
-     x1="4.487"
-     y1="17.339701"
-     x2="19.607599"
-     y2="17.339701"
-     id="line27407" />
-  <line
-     class="cls-1"
-     x1="7.9896002"
-     y1="1.2402"
-     x2="8.9896002"
-     y2="22.6766"
-     id="line27409" />
-  <line
-     class="cls-1"
-     x1="16.059"
-     y1="1.1932001"
-     x2="15.059"
-     y2="22.629601"
-     id="line27411" />
+  <path
+     id="path3871"
+     style="fill:#f2f2f2;fill-opacity:1;stroke:#333333;stroke-width:1.5088;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 3.2775734,3.5025271 6.507243,21.541657 c 3.706138,0.99738 7.296659,1.014327 10.76557,0 L 20.502484,3.5025271"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccc" />
+  <path
+     style="fill:none;stroke:#333333;stroke-width:3.01761;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 2.5167266,2.6816225 c 6.1204036,1.0952864 12.4826764,0.9129747 18.9832734,0"
+     id="path3087"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:none;stroke:#333333;stroke-width:1.5088;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 10.275193,21.541657 8.6603566,3.5025271"
+     id="path3859"
+     inkscape:connector-curvature="0" />
+  <path
+     inkscape:connector-curvature="0"
+     id="path3865"
+     d="M 13.504865,21.541657 15.119698,3.5025271"
+     style="fill:none;stroke:#333333;stroke-width:1.5088;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="cc" />
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:none;stroke:#333333;stroke-width:1.5088;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 19.425927,7.9624304 c -5.040985,1.0571182 -10.063247,0.9535117 -15.0717976,0"
+     id="path3873"
+     inkscape:connector-curvature="0" />
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:none;stroke:#333333;stroke-width:1.5088;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 18.887648,12.488844 c -4.567984,0.953459 -9.0625924,1.057167 -13.4569611,0"
+     id="path3877"
+     inkscape:connector-curvature="0" />
+  <path
+     inkscape:connector-curvature="0"
+     id="path3879"
+     d="m 17.811092,17.01525 c -3.912414,1.050036 -7.8627587,0.960882 -11.8421263,0"
+     style="fill:none;stroke:#333333;stroke-width:1.5088;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="cc" />
 </svg>
