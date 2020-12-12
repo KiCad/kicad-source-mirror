@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,7 @@ int CMATERIAL::m_default_reflections_recursive_levels = 3;
 // that contribute to the illumination of that point
 #define AMBIENT_FACTOR  (1.0f / 6.0f)
 #define SPECULAR_FACTOR 1.0f
+
 
 CMATERIAL::CMATERIAL()
 {
@@ -170,7 +171,6 @@ SFVEC3F CBOARDNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) const
     // http://www.fooplot.com/#W3sidHlwZSI6MCwiZXEiOiJzaW4oc2luKHNpbih4KSoxLjkpKjEuNSkiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC45NjIxMDU3MDgwNzg1MjYyIiwiNy45NzE0MjYyNjc2MDE0MyIsIi0yLjUxNzYyMDM1MTQ4MjQ0OSIsIjIuOTc5OTM3Nzg3Mzk3NTMwMyJdLCJzaXplIjpbNjQ2LDM5Nl19XQ--
 
     // Implement a texture as the "measling crazing blistering" method of FR4
-
     const float x = glm::sin( glm::sin( hitPos.x ) * 1.5f ) * 0.06f;
     const float y = glm::sin( glm::sin( hitPos.y ) * 1.5f ) * 0.03f;
     const float z = -(x + y) + glm::sin( hitPos.z ) * 0.06f;
@@ -198,10 +198,14 @@ SFVEC3F CCOPPERNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) cons
 
         SFVEC3F hitPos = aHitInfo.m_HitPoint * m_scale;
 
-        const float noise = (s_perlinNoise.noise( hitPos.x + boardNormal.y + aRay.m_Origin.x * 0.2f,
-                                                  hitPos.y + boardNormal.x ) - 0.5f) * 2.0f;
+        const float noise =
+                ( s_perlinNoise.noise( hitPos.x + boardNormal.y + aRay.m_Origin.x * 0.2f,
+                          hitPos.y + boardNormal.x )
+                        - 0.5f )
+                * 2.0f;
 
-        float scratchPattern = (s_perlinNoise.noise( noise + hitPos.x / 100.0f, hitPos.y  * 100.0f ) - 0.5f);
+        float scratchPattern =
+                ( s_perlinNoise.noise( noise + hitPos.x / 100.0f, hitPos.y * 100.0f ) - 0.5f );
 
         const float x = scratchPattern * 0.14f;
         const float y = (noise + noise * scratchPattern) * 0.14f;
@@ -209,7 +213,9 @@ SFVEC3F CCOPPERNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) cons
         return SFVEC3F( x, y, - ( x + y ) ) + boardNormal * 0.25f;
     }
     else
-        return SFVEC3F(0.0f);
+    {
+        return SFVEC3F( 0.0f );
+    }
 }
 
 
@@ -228,7 +234,9 @@ SFVEC3F CSOLDERMASKNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) 
         return copperNormal * 0.05f;
     }
     else
+    {
         return SFVEC3F(0.0f);
+    }
 }
 
 
@@ -344,7 +352,8 @@ SFVEC3F CSILKSCREENNORMAL::Generate( const RAY &aRay, const HITINFO &aHitInfo ) 
                                               hitPos.y * 1.2f,
                                               hitPos.z );
 
-    SFVEC3F t = glm::abs( ( 1.8f / ( SFVEC3F( noise1, noise2, hitPos.z ) + 0.4f ) ) - 1.5f ) - 0.25f;
+    SFVEC3F t =
+            glm::abs( ( 1.8f / ( SFVEC3F( noise1, noise2, hitPos.z ) + 0.4f ) ) - 1.5f ) - 0.25f;
     t = t * t * t * 0.1f;
 
     return t;

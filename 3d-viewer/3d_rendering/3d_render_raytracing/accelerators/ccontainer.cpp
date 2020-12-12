@@ -36,13 +36,12 @@ CGENERICCONTAINER::CGENERICCONTAINER()
     m_bbox.Reset();
 }
 
+
 void CGENERICCONTAINER::Clear()
 {
     if( !m_objects.empty() )
     {
-        for( LIST_OBJECT::iterator ii = m_objects.begin();
-             ii != m_objects.end();
-             ++ii )
+        for( LIST_OBJECT::iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
         {
             delete *ii;
             *ii = NULL;
@@ -69,9 +68,7 @@ void CGENERICCONTAINER::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
     {
         unsigned int i = 0;
 
-        for( LIST_OBJECT::const_iterator ii = m_objects.begin();
-             ii != m_objects.end();
-             ++ii )
+        for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
         {
             wxASSERT( (*ii) != NULL );
 
@@ -89,11 +86,9 @@ bool CCONTAINER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
     bool hitted = false;
 
-    for( LIST_OBJECT::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ++ii )
+    for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
-        const COBJECT *object = static_cast<const COBJECT *>(*ii);
+        const COBJECT *object = static_cast<const COBJECT *>( *ii );
 
         if( object->Intersect( aRay, aHitInfo) )
             hitted = true;
@@ -105,14 +100,13 @@ bool CCONTAINER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
 bool CCONTAINER::IntersectP( const RAY &aRay, float aMaxDistance ) const
 {
+    /// @todo Determine what to do with this commented out code.
 /*
     if( !m_bbox.Inside( aRay.m_Origin ) )
         if( !m_bbox.Intersect( aRay ) )
             return false;
 */
-    for( LIST_OBJECT::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ++ii )
+    for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
         const COBJECT *object = static_cast<const COBJECT *>(*ii);
 

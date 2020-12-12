@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2002 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,8 +32,8 @@
  * Original copyright notice:
  *
  * Perlin_Noise
- * Here you could find the code for "Perlin noise in C++11", for more informations visit the project webpage:
- * http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/
+ * Here you could find the code for "Perlin noise in C++11", for more information visit the
+ * project webpage at http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/
  * You could use this program under the terms of GPL v3, for more details see:
  * http://www.gnu.org/copyleft/gpl.html
  * Copyright 2012 Sol from www.solarianprogrammer.com
@@ -79,7 +79,7 @@ PerlinNoise::PerlinNoise()
     std::copy_n( p.begin(), oldsize, p.begin() + oldsize );
 }
 
-// Generate a new permutation vector based on the value of seed
+
 PerlinNoise::PerlinNoise( unsigned int seed )
 {
     p.resize( 256 );
@@ -90,7 +90,7 @@ PerlinNoise::PerlinNoise( unsigned int seed )
     // Initialize a random engine with seed
     std::default_random_engine engine( seed );
 
-    // Suffle  using the above random engine
+    // Shuffle using the above random engine
     std::shuffle( p.begin(), p.end(), engine );
 
     // Duplicate the permutation vector
@@ -98,6 +98,7 @@ PerlinNoise::PerlinNoise( unsigned int seed )
     p.resize( 2 * p.size() );
     std::copy_n( p.begin(), oldsize, p.begin() + oldsize );
 }
+
 
 float PerlinNoise::noise( float x, float y, float z ) const
 {

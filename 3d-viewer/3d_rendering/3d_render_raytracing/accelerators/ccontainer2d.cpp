@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,10 +35,6 @@
 #include <wx/debug.h>
 
 
-// /////////////////////////////////////////////////////////////////////////////
-// CGENERICCONTAINER2
-// /////////////////////////////////////////////////////////////////////////////
-
 CGENERICCONTAINER2D::CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType )
 {
     m_bbox.Reset();
@@ -67,16 +63,13 @@ CGENERICCONTAINER2D::~CGENERICCONTAINER2D()
 }
 
 
-
-
-// /////////////////////////////////////////////////////////////////////////////
-// CCONTAINER2D
-// /////////////////////////////////////////////////////////////////////////////
-
 CCONTAINER2D::CCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::CONTAINER )
 {
 
 }
+
+
+/// @todo Determine what to do with this commented out code.
 /*
 
 bool CCONTAINER2D::Intersects( const CBBOX2D &aBBox ) const
@@ -149,21 +142,16 @@ bool CCONTAINER2D::IsPointInside( const SFVEC2F &aPoint ) const
 void CCONTAINER2D::GetListObjectsIntersects( const CBBOX2D & aBBox,
                                              CONST_LIST_OBJECT2D &aOutList ) const
 {
-    // !TODO:
+    /// @todo Determine what to do with this code.
 }
 
 
 bool CCONTAINER2D::IntersectAny( const RAYSEG2D &aSegRay ) const
 {
-    // !TODO:
+    /// @todo Determine what what needs done because someone wrote TODO here.
     return false;
 }
 
-
-
-// /////////////////////////////////////////////////////////////////////////////
-// CBVHCONTAINER2D
-// /////////////////////////////////////////////////////////////////////////////
 
 CBVHCONTAINER2D::CBVHCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::BVHCONTAINER )
 {
@@ -173,6 +161,8 @@ CBVHCONTAINER2D::CBVHCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::BVHCONT
     m_Tree = NULL;
 }
 
+
+/// @todo Determine what to do with this commented out code.
 /*
 bool CBVHCONTAINER2D::Intersects( const CBBOX2D &aBBox ) const
 {
@@ -246,11 +236,13 @@ bool CBVHCONTAINER2D::IsPointInside( const SFVEC2F &aPoint ) const
 }
 */
 
+
 void CBVHCONTAINER2D::Clear()
 {
     CGENERICCONTAINER2D::Clear();
     destroy();
 }
+
 
 void CBVHCONTAINER2D::destroy()
 {
@@ -260,6 +252,7 @@ void CBVHCONTAINER2D::destroy()
     {
         delete *ii;
     }
+
     m_elements_to_delete.clear();
     m_Tree = nullptr;
     m_isInitialized = false;
@@ -292,11 +285,9 @@ void CBVHCONTAINER2D::BuildBVH()
     m_elements_to_delete.push_back( m_Tree );
     m_Tree->m_BBox = m_bbox;
 
-    for( LIST_OBJECT2D::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ++ii )
+    for( LIST_OBJECT2D::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
-        m_Tree->m_LeafList.push_back( static_cast<const COBJECT2D *>(*ii) );
+        m_Tree->m_LeafList.push_back( static_cast<const COBJECT2D *>( *ii ) );
     }
 
     recursiveBuild_MIDDLE_SPLIT( m_Tree );
@@ -310,21 +301,23 @@ void CBVHCONTAINER2D::BuildBVH()
 // "Split in the middle of the longest Axis"
 // "Creates a binary tree with Top-Down approach.
 //  Fastest BVH building, but least [speed] accuracy."
-
 static bool sortByCentroid_X( const COBJECT2D *a, const COBJECT2D *b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
+
 
 static bool sortByCentroid_Y( const COBJECT2D *a, const COBJECT2D *b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
 
+
 static bool sortByCentroid_Z( const COBJECT2D *a, const COBJECT2D *b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
+
 
 void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeParent )
 {
@@ -345,7 +338,7 @@ void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeP
         leftNode->m_LeafList.clear();
         rightNode->m_LeafList.clear();
 
-        // Decide wich axis to split
+        // Decide which axis to split
         const unsigned int axis_to_split = aNodeParent->m_BBox.MaxDimension();
 
         // Divide the objects
@@ -453,6 +446,7 @@ bool CBVHCONTAINER2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
 
     return false;
 }
+
 
 void CBVHCONTAINER2D::GetListObjectsIntersects( const CBBOX2D &aBBox,
                                                 CONST_LIST_OBJECT2D &aOutList ) const

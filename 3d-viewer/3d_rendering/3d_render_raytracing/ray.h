@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,8 @@ struct RAYSEG2D
     float DistanceToPointSquared( const SFVEC2F &aPoint ) const;
 
     /**
-     * Function atNormalized - returns the position at t
+     * Return the position at \a t.
+     *
      * t - value 0.0 ... 1.0
      */
     SFVEC2F atNormalized( float t ) const { return m_Start + m_End_minus_start * t; }

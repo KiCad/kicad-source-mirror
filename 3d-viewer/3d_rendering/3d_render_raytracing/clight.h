@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,11 @@
 #include "ray.h"
 #include "hitinfo.h"
 
-/// A base light class to derive to implement other light classes
-class  CLIGHT
+
+/**
+ * A base light class to derive to implement other light classes.
+ */
+class CLIGHT
 {
 public:
     CLIGHT() { m_castShadow = true; }
@@ -42,12 +45,13 @@ public:
     virtual ~CLIGHT() {}
 
     /**
-     * @brief GetLightParameters - Get parameters from this light
+     * Get parameters from this light.
+     *
      * @param aHitPoint: input hit position
-     * @param aOutVectorToLight: a vector that points from the hit
-     * position in direction to the light
-     * @param aOutLightColor: the color of this light
-     * @param aOutDistance: the distance from the point to the light
+     * @param aOutVectorToLight a vector that points from the hit
+     *                          position in direction to the light
+     * @param aOutLightColor the color of this light
+     * @param aOutDistance the distance from the point to the light
      */
     virtual void GetLightParameters( const SFVEC3F &aHitPoint,
                                      SFVEC3F &aOutVectorToLight,
@@ -62,11 +66,11 @@ protected:
 };
 
 
-/// Point light based on:
-/// http://ogldev.atspace.co.uk/www/tutorial20/tutorial20.html
-class  CPOINTLIGHT : public CLIGHT
+/**
+ * Point light based on http://ogldev.atspace.co.uk/www/tutorial20/tutorial20.html.
+ */
+class CPOINTLIGHT : public CLIGHT
 {
-
 public:
     CPOINTLIGHT( const SFVEC3F &aPos, const SFVEC3F &aColor )
     {
@@ -79,7 +83,6 @@ public:
     }
 
     // Imported functions from CLIGHT
-
     void GetLightParameters( const SFVEC3F &aHitPoint,
                              SFVEC3F &aOutVectorToLight,
                              SFVEC3F &aOutLightColor,
@@ -110,8 +113,10 @@ private:
 };
 
 
-/// Directional light - a light based only on a direction vector
-class  CDIRECTIONALLIGHT : public CLIGHT
+/**
+ * A light based only on a direction vector.
+ */
+class CDIRECTIONALLIGHT : public CLIGHT
 {
 public:
     CDIRECTIONALLIGHT( const SFVEC3F &aDir, const SFVEC3F &aColor )
@@ -123,13 +128,12 @@ public:
     }
 
     /**
-     * @brief SetDirection - Set directional light orientation
+     * @brief SetDirection Set directional light orientation
      * @param aDir: vector from the light
      */
     void SetDirection( const SFVEC3F &aDir ) { m_inv_direction = -aDir; }
 
     // Imported functions from CLIGHT
-
     void GetLightParameters( const SFVEC3F &aHitPoint,
                              SFVEC3F &aOutVectorToLight,
                              SFVEC3F &aOutLightColor,
@@ -143,7 +147,7 @@ public:
     }
 
 private:
-    SFVEC3F m_inv_direction;        ///< oposite direction of the light
+    SFVEC3F m_inv_direction;        ///< opposite direction of the light
     SFVEC3F m_color;                ///< light color
 };
 
@@ -151,7 +155,11 @@ private:
 typedef std::list< CLIGHT * > LIST_LIGHT;
 
 
-/// A light contariner. It will add lights and remove it in the end
+/**
+ * A light container. It will add lights and remove it in the end.
+ *
+ * @todo Do we really need this object? Wouldn't it be cleaner to just use std::list directly?
+ */
 class  CLIGHTCONTAINER
 {
 public:
@@ -177,7 +185,6 @@ public:
             m_lights.clear();
         }
     }
-
 
     /**
      * @brief Add - Add a light to the container

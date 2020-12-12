@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,6 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
     m_dirIsNeg[1] = m_Dir.y < 0.0f;
     m_dirIsNeg[2] = m_Dir.z < 0.0f;
 
-
     // ray slope
 
     // "Fast Ray / Axis-Aligned Bounding Box Overlap Tests using Ray Slopes"
@@ -94,12 +93,12 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
             {
                 m_Classification = RAY_CLASSIFICATION::MMP;
             }
-            else//( m_Dir.z >= 0 )
+            else
             {
                 m_Classification = RAY_CLASSIFICATION::MMO;
             }
         }
-        else//( m_Dir.y >= 0 )
+        else
         {
             if( m_Dir.z < 0 )
             {
@@ -107,7 +106,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
                 if( m_Dir.y == 0 )
                     m_Classification = RAY_CLASSIFICATION::MOM;
             }
-            else//( m_Dir.z >= 0 )
+            else
             {
                 if( ( m_Dir.y == 0 ) && ( m_Dir.z == 0 ) )
                     m_Classification = RAY_CLASSIFICATION::MOO;
@@ -120,7 +119,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
             }
         }
     }
-    else//( m_Dir.x >= 0 )
+    else
     {
         if( m_Dir.y < 0 )
         {
@@ -130,7 +129,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
                 if( m_Dir.x == 0 )
                     m_Classification = RAY_CLASSIFICATION::OMM;
             }
-            else//( m_Dir.z >= 0 )
+            else
             {
                 if( ( m_Dir.x == 0 ) && ( m_Dir.z == 0 ) )
                     m_Classification = RAY_CLASSIFICATION::OMO;
@@ -142,7 +141,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
                     m_Classification = RAY_CLASSIFICATION::PMP;
             }
         }
-        else//( m_Dir.y >= 0 )
+        else
         {
             if( m_Dir.z < 0 )
             {
@@ -155,7 +154,7 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
                 else
                     m_Classification = RAY_CLASSIFICATION::PPM;
             }
-            else//( m_Dir.z > 0 )
+            else
             {
                 if( m_Dir.x == 0 )
                 {
@@ -196,14 +195,14 @@ bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
 
         SFVEC2F pq = aStartB - aStartA;
 
-        float t = (pq.x * aEnd_minus_startB.y - pq.y * aEnd_minus_startB.x) * inv_rxs;
+        float t = ( pq.x * aEnd_minus_startB.y - pq.y * aEnd_minus_startB.x ) * inv_rxs;
 
-        if( (t < 0.0f) || (t > 1.0f) )
+        if( ( t < 0.0f ) || ( t > 1.0f ) )
             return false;
 
-        float u = (pq.x * aEnd_minus_startA.y - pq.y * aEnd_minus_startA.x) * inv_rxs;
+        float u = ( pq.x * aEnd_minus_startA.y - pq.y * aEnd_minus_startA.x ) * inv_rxs;
 
-        if( (u < 0.0f) || (u > 1.0f) )
+        if( ( u < 0.0f ) || ( u > 1.0f ) )
             return false;
 
         return true;
@@ -213,8 +212,9 @@ bool IntersectSegment( const SFVEC2F &aStartA, const SFVEC2F &aEnd_minus_startA,
 }
 
 
-// !TODO: not tested
-bool RAY::IntersectSphere( const SFVEC3F &aCenter, float aRadius, float &aOutT0, float &aOutT1 ) const
+/// @todo: not tested
+bool RAY::IntersectSphere( const SFVEC3F &aCenter, float aRadius, float &aOutT0,
+                           float &aOutT1 ) const
 {
 /*
     // Ray-sphere intersection: algebraic
@@ -279,13 +279,13 @@ RAYSEG2D::RAYSEG2D( const SFVEC2F& s, const SFVEC2F& e )
     m_End_minus_start = e - s;
     m_Length = glm::length( m_End_minus_start );
     m_Dir = glm::normalize( m_End_minus_start );
-    m_InvDir = (1.0f / m_Dir);
+    m_InvDir = ( 1.0f / m_Dir );
 
-    if( fabs(m_Dir.x) < FLT_EPSILON )
-        m_InvDir.x = NextFloatDown(FLT_MAX);
+    if( fabs( m_Dir.x ) < FLT_EPSILON )
+        m_InvDir.x = NextFloatDown( FLT_MAX );
 
-    if( fabs(m_Dir.y) < FLT_EPSILON )
-        m_InvDir.y = NextFloatDown(FLT_MAX);
+    if( fabs( m_Dir.y ) < FLT_EPSILON )
+        m_InvDir.y = NextFloatDown( FLT_MAX );
 
     m_DOT_End_minus_start = glm::dot( m_End_minus_start, m_End_minus_start );
 }
@@ -295,8 +295,7 @@ bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart,
                                  const SFVEC2F &aEnd_minus_start,
                                  float *aOutT ) const
 {
-    float rxs = m_End_minus_start.x *
-                aEnd_minus_start.y - m_End_minus_start.y *
+    float rxs = m_End_minus_start.x * aEnd_minus_start.y - m_End_minus_start.y *
             aEnd_minus_start.x;
 
     if( std::abs( rxs ) >  glm::epsilon<float>() )
@@ -305,14 +304,14 @@ bool RAYSEG2D::IntersectSegment( const SFVEC2F &aStart,
 
         const SFVEC2F pq = aStart - m_Start;
 
-        const float t = (pq.x * aEnd_minus_start.y - pq.y * aEnd_minus_start.x) * inv_rxs;
+        const float t = ( pq.x * aEnd_minus_start.y - pq.y * aEnd_minus_start.x ) * inv_rxs;
 
-        if( (t < 0.0f) || (t > 1.0f) )
+        if( ( t < 0.0f ) || ( t > 1.0f ) )
             return false;
 
-        float u = (pq.x * m_End_minus_start.y - pq.y * m_End_minus_start.x) * inv_rxs;
+        float u = ( pq.x * m_End_minus_start.y - pq.y * m_End_minus_start.x ) * inv_rxs;
 
-        if( (u < 0.0f) || (u > 1.0f) )
+        if( ( u < 0.0f ) || ( u > 1.0f ) )
             return false;
 
         *aOutT = t;
@@ -335,7 +334,9 @@ float RAYSEG2D::DistanceToPointSquared( const SFVEC2F &aPoint ) const
         return glm::dot( p, p );
 
     if( m_DOT_End_minus_start <= c1 )
+    {
         p = aPoint - m_End;
+    }
     else
     {
         const float b = c1 / m_DOT_End_minus_start;
@@ -373,16 +374,14 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
     if( discriminantsqr < FLT_EPSILON )
         return false;
 
-
     // Otherwise check and make sure that the intersections occur on the ray (t
     // > 0) and return the closer one
     const float discriminant = std::sqrt( discriminantsqr );
-    const float t1 = (-qd - discriminant);
-    const float t2 = (-qd + discriminant);
+    const float t1           = ( -qd - discriminant );
+    const float t2           = ( -qd + discriminant );
 
-    if( (( t1 < 0.0f ) || ( t1 > m_Length ) ) &&
-        (( t2 < 0.0f ) || ( t2 > m_Length ) ) )
-        return false;// Neither intersection was in the ray's half line.
+    if( ( ( t1 < 0.0f ) || ( t1 > m_Length ) ) && ( ( t2 < 0.0f ) || ( t2 > m_Length ) ) )
+        return false; // Neither intersection was in the ray's half line.
 
     // Convert the intersection to a normalized
     *aOutT0 = t1 / m_Length;
@@ -391,8 +390,8 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
     SFVEC2F hitPointT1 = at( t1 );
     SFVEC2F hitPointT2 = at( t2 );
 
-    *aOutNormalT0 = (hitPointT1 - aCenter) / aRadius;
-    *aOutNormalT1 = (hitPointT2 - aCenter) / aRadius;
+    *aOutNormalT0 = ( hitPointT1 - aCenter ) / aRadius;
+    *aOutNormalT1 = ( hitPointT2 - aCenter ) / aRadius;
 
     return true;
 }
@@ -401,5 +400,5 @@ bool RAYSEG2D::IntersectCircle( const SFVEC2F &aCenter,
 void RAY::debug() const
 {
     wxLogDebug( "O(%f, %f, %f) D(%f, %f, %f)\n", m_Origin.x, m_Origin.y, m_Origin.z,
-            m_Dir.x,    m_Dir.y,    m_Dir.z );
+                m_Dir.x, m_Dir.y, m_Dir.z );
 }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,8 @@ typedef enum
     RT_RENDER_STATE_POST_PROCESS_BLUR_AND_FINISH,
     RT_RENDER_STATE_FINISH,
     RT_RENDER_STATE_MAX
-}RT_RENDER_STATE;
+} RT_RENDER_STATE;
+
 
 class C3D_RENDER_RAYTRACING : public C3D_RENDER_BASE
 {
@@ -69,7 +70,8 @@ public:
 
     int GetWaitForEditingTimeOut() override;
 
-    void Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter, bool aOnlyLoadCopperAndShapes );
+    void Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter,
+                 bool aOnlyLoadCopperAndShapes );
 
     BOARD_ITEM *IntersectBoardItem( const RAY &aRay );
 
@@ -106,6 +108,43 @@ private:
     // Materials
     void setupMaterials();
 
+    SFVEC3F shadeHit( const SFVEC3F &aBgColor,
+                      const RAY &aRay,
+                      HITINFO &aHitInfo,
+                      bool aIsInsideObject,
+                      unsigned int aRecursiveLevel,
+                      bool is_testShadow ) const;
+
+    /**
+     * Create one or more 3D objects form a 2D object and Z positions.
+     *
+     * It tries to optimize some types of objects that will be faster to trace than the
+     * CLAYERITEM object.
+     */
+    void create_3d_object_from( CCONTAINER &aDstContainer,
+                                const COBJECT2D *aObject2D,
+                                float aZMin, float aZMax,
+                                const CMATERIAL *aMaterial,
+                                const SFVEC3F &aObjColor );
+
+    void add_3D_vias_and_pads_to_container();
+    void insert3DViaHole( const VIA* aVia );
+    void insert3DPadHole( const PAD* aPad );
+    void load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation );
+    void add_3D_models( CCONTAINER &aDstContainer,
+                        const S3DMODEL *a3DModel,
+                        const glm::mat4 &aModelMatrix,
+                        float aFPOpacity,
+                        bool aSkipMaterialInformation,
+                        BOARD_ITEM *aBoardItem );
+
+    MODEL_MATERIALS *get_3D_model_material( const S3DMODEL *a3DModel );
+
+    void initialize_block_positions();
+
+    void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
+    void render_preview( GLubyte *ptrPBO );
+
     struct
     {
         CBLINN_PHONG_MATERIAL m_Paste;
@@ -115,7 +154,7 @@ private:
         CBLINN_PHONG_MATERIAL m_Copper;
         CBLINN_PHONG_MATERIAL m_NonPlatedCopper;
         CBLINN_PHONG_MATERIAL m_Floor;
-    }m_materials;
+    } m_materials;
 
     CBOARDNORMAL        m_board_normal_perturbator;
     CCOPPERNORMAL       m_copper_normal_perturbator;
@@ -127,13 +166,6 @@ private:
     CSILKSCREENNORMAL   m_silkscreen_normal_perturbator;
 
     bool m_isPreview;
-
-    SFVEC3F shadeHit( const SFVEC3F &aBgColor,
-                      const RAY &aRay,
-                      HITINFO &aHitInfo,
-                      bool aIsInsideObject,
-                      unsigned int aRecursiveLevel,
-                      bool is_testShadow ) const;
 
     /// State used on quality render
     RT_RENDER_STATE m_rt_render_state;
@@ -151,6 +183,7 @@ private:
     CDIRECTIONALLIGHT *m_camera_light;
 
     bool m_opengl_support_vertex_buffer_object;
+
     GLuint m_pboId;
     GLuint m_pboDataSize;
 
@@ -193,36 +226,12 @@ private:
     unsigned int m_xoffset;
     unsigned int m_yoffset;
 
-    // Statistics
-    unsigned int m_stats_converted_dummy_to_plane;
-    unsigned int m_stats_converted_roundsegment2d_to_roundsegment;
-
-    void create_3d_object_from( CCONTAINER &aDstContainer,
-                                const COBJECT2D *aObject2D,
-                                float aZMin, float aZMax,
-                                const CMATERIAL *aMaterial,
-                                const SFVEC3F &aObjColor );
-
-    void add_3D_vias_and_pads_to_container();
-    void insert3DViaHole( const VIA* aVia );
-    void insert3DPadHole( const PAD* aPad );
-    void load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation );
-    void add_3D_models( CCONTAINER &aDstContainer,
-                        const S3DMODEL *a3DModel,
-                        const glm::mat4 &aModelMatrix,
-                        float aFPOpacity,
-                        bool aSkipMaterialInformation,
-                        BOARD_ITEM *aBoardItem );
-
-    MODEL_MATERIALS *get_3D_model_material( const S3DMODEL *a3DModel );
-
     /// Stores materials of the 3D models
     MAP_MODEL_MATERIALS m_model_materials;
 
-    void initialize_block_positions();
-
-    void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void render_preview( GLubyte *ptrPBO );
+    // Statistics
+    unsigned int m_stats_converted_dummy_to_plane;
+    unsigned int m_stats_converted_roundsegment2d_to_roundsegment;
 };
 
 #define USE_SRGB_SPACE

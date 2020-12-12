@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,24 +96,25 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
                       const SFVEC3F &aDirectionDisplacementFactor )
 {
     unsigned int i = 0;
+
     for( unsigned int y = 0; y < RAYPACKET_DIM; ++y )
-    for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
     {
-        SFVEC3F rayOrigin;
-        SFVEC3F rayDir;
+        for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
+        {
+            SFVEC3F rayOrigin;
+            SFVEC3F rayDir;
 
-        aCamera.MakeRay( SFVEC2I( aWindowsPosition.x + x,
-                                  aWindowsPosition.y + y ),
-                         rayOrigin, rayDir );
+            aCamera.MakeRay( SFVEC2I( aWindowsPosition.x + x, aWindowsPosition.y + y ),
+                             rayOrigin, rayDir );
 
-        const SFVEC3F randVector = SFVEC3F( Fast_RandFloat() * aDirectionDisplacementFactor.x,
-                                            Fast_RandFloat() * aDirectionDisplacementFactor.y,
-                                            Fast_RandFloat() * aDirectionDisplacementFactor.z );
+            const SFVEC3F randVector = SFVEC3F( Fast_RandFloat() * aDirectionDisplacementFactor.x,
+                                                Fast_RandFloat() * aDirectionDisplacementFactor.y,
+                                                Fast_RandFloat() * aDirectionDisplacementFactor.z );
 
-        m_ray[i].Init( rayOrigin,
-                       glm::normalize( rayDir + randVector ) );
+            m_ray[i].Init( rayOrigin, glm::normalize( rayDir + randVector ) );
 
-        i++;
+            i++;
+        }
     }
 
     wxASSERT( i == RAYPACKET_RAYS_PER_PACKET );
@@ -170,6 +171,7 @@ void RAYPACKET_InitRays( const CCAMERA &aCamera,
         }
     }
 }
+
 
 void RAYPACKET_InitRays_with2DDisplacement( const CCAMERA &aCamera,
                                             const SFVEC2F &aWindowsPosition,

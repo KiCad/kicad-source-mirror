@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ class  CBVH_PBRT : public CGENERICACCELERATOR
 {
 public:
     CBVH_PBRT( const CGENERICCONTAINER& aObjectContainer, int aMaxPrimsInNode = 4,
-            SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
+               SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
 
     ~CBVH_PBRT();
 
@@ -148,8 +148,7 @@ private:
                                  int end,
                                  int *totalNodes );
 
-    int flattenBVHTree( BVHBuildNode *node,
-                        uint32_t *offset );
+    int flattenBVHTree( BVHBuildNode *node, uint32_t *offset );
 
     // BVH Private Data
     const int           m_maxPrimsInNode;

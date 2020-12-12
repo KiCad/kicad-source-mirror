@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +38,8 @@ typedef std::list<COBJECT2D *> LIST_OBJECT2D;
 typedef std::list<const COBJECT2D *> CONST_LIST_OBJECT2D;
 
 
-class  CGENERICCONTAINER2D
+class CGENERICCONTAINER2D
 {
-protected:
-    CBBOX2D m_bbox;
-    LIST_OBJECT2D m_objects;
-
 public:
     explicit CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType );
 
@@ -51,7 +47,7 @@ public:
 
     void Add( COBJECT2D *aObject )
     {
-        if( aObject ) // Only add if it is a valid pointer
+        if( aObject )
         {
             std::lock_guard<std::mutex> lock( m_lock );
             m_objects.push_back( aObject );
@@ -69,26 +65,32 @@ public:
     const LIST_OBJECT2D &GetList() const { return m_objects; }
 
     /**
-     * @brief GetListObjectsIntersects - Get a list of objects that intersects a bbox
-     * @param aBBox - a bbox to make the query
-     * @param aOutList - A list of objects that intersects the bbox
+     * Get a list of objects that intersects a bounding box.
+     *
+     * @param aBBox The bounding box to test.
+     * @param aOutList The list of objects that intersects the bounding box.
      */
     virtual void GetListObjectsIntersects( const CBBOX2D & aBBox,
                                            CONST_LIST_OBJECT2D &aOutList ) const = 0;
 
     /**
-     * @brief IntersectAny - Intersect and check if a segment ray hits a object or is inside it
-     * @param aSegRay - a segment to intersect with objects
-     * @return true - if it hits any of the objects or is inside any object
+     * Intersect and check if a segment ray hits a object or is inside it.
+     *
+     * @param aSegRay The segment to intersect with objects.
+     * @return true if it hits any of the objects or is inside any object.
      */
     virtual bool IntersectAny( const RAYSEG2D &aSegRay ) const = 0;
+
+protected:
+    CBBOX2D m_bbox;
+    LIST_OBJECT2D m_objects;
 
 private:
     std::mutex m_lock;
 };
 
 
-class  CCONTAINER2D : public CGENERICCONTAINER2D
+class CCONTAINER2D : public CGENERICCONTAINER2D
 {
 public:
     CCONTAINER2D();
@@ -111,7 +113,7 @@ struct BVH_CONTAINER_NODE_2D
 };
 
 
-class  CBVHCONTAINER2D : public CGENERICCONTAINER2D
+class CBVHCONTAINER2D : public CGENERICCONTAINER2D
 {
 public:
     CBVHCONTAINER2D();
@@ -121,11 +123,13 @@ public:
 
     void Clear() override;
 
-private:
-    bool m_isInitialized;
-    std::list<BVH_CONTAINER_NODE_2D *> m_elements_to_delete;
-    BVH_CONTAINER_NODE_2D   *m_Tree;
+    // Imported from CGENERICCONTAINER2D
+    void GetListObjectsIntersects( const CBBOX2D & aBBox,
+                                   CONST_LIST_OBJECT2D &aOutList ) const override;
 
+    bool IntersectAny( const RAYSEG2D &aSegRay ) const override;
+
+private:
     void destroy();
     void recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeParent );
     void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D *aNode,
@@ -134,13 +138,10 @@ private:
     bool recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
                                 const RAYSEG2D &aSegRay ) const;
 
-public:
+    bool m_isInitialized;
+    std::list<BVH_CONTAINER_NODE_2D *> m_elements_to_delete;
+    BVH_CONTAINER_NODE_2D* m_Tree;
 
-    // Imported from CGENERICCONTAINER2D
-    void GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                   CONST_LIST_OBJECT2D &aOutList ) const override;
-
-    bool IntersectAny( const RAYSEG2D &aSegRay ) const override;
 };
 
 #endif // _CCONTAINER2D_H_

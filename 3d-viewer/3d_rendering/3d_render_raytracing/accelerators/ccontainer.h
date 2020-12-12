@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,12 +38,9 @@ typedef std::list<COBJECT *> LIST_OBJECT;
 typedef std::vector<COBJECT *> VECTOR_OBJECT;
 typedef std::vector<const COBJECT *> CONST_VECTOR_OBJECT;
 
-class  CGENERICCONTAINER
-{
-protected:
-    CBBOX       m_bbox;
-    LIST_OBJECT m_objects;
 
+class CGENERICCONTAINER
+{
 public:
     CGENERICCONTAINER();
 
@@ -51,7 +48,7 @@ public:
 
     void Add( COBJECT *aObject )
     {
-        if( aObject ) // Only add if it is a valid pointer
+        if( aObject )
         {
             m_objects.push_back( aObject );
             m_bbox.Union( aObject->GetBBox() );
@@ -69,11 +66,13 @@ public:
     virtual bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const = 0;
     virtual bool IntersectP( const RAY &aRay, float aMaxDistance ) const = 0;
 
-private:
+protected:
+    CBBOX       m_bbox;
+    LIST_OBJECT m_objects;
 };
 
 
-class  CCONTAINER : public CGENERICCONTAINER
+class CCONTAINER : public CGENERICCONTAINER
 {
 public:
     bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;

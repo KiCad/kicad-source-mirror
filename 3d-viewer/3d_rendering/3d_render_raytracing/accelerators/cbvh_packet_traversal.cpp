@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,18 +52,18 @@ static inline unsigned int getFirstHit( const RAYPACKET &aRayPacket,
 {
     float hitT;
 
-    if( aBBox.Intersect( aRayPacket.m_ray[ia], &hitT ) )
-        if( hitT < aHitInfoPacket[ia].m_HitInfo.m_tHit )
-            return ia;
+    if( aBBox.Intersect( aRayPacket.m_ray[ia], &hitT )
+      && ( hitT < aHitInfoPacket[ia].m_HitInfo.m_tHit ) )
+        return ia;
 
     if( !aRayPacket.m_Frustum.Intersect( aBBox ) )
         return RAYPACKET_RAYS_PER_PACKET;
 
     for( unsigned int i = ia + 1; i < RAYPACKET_RAYS_PER_PACKET; ++i )
     {
-        if( aBBox.Intersect( aRayPacket.m_ray[i], &hitT ) )
-            if( hitT < aHitInfoPacket[i].m_HitInfo.m_tHit )
-                return i;
+        if( aBBox.Intersect( aRayPacket.m_ray[i], &hitT )
+          && ( hitT < aHitInfoPacket[i].m_HitInfo.m_tHit ) )
+            return i;
     }
 
     return RAYPACKET_RAYS_PER_PACKET;
@@ -81,9 +81,9 @@ static inline unsigned int getLastHit( const RAYPACKET &aRayPacket,
     {
         float hitT;
 
-        if( aBBox.Intersect( aRayPacket.m_ray[ie], &hitT ) )
-            if( hitT < aHitInfoPacket[ie].m_HitInfo.m_tHit )
-                return ie + 1;
+        if( aBBox.Intersect( aRayPacket.m_ray[ie], &hitT )
+          && ( hitT < aHitInfoPacket[ie].m_HitInfo.m_tHit ) )
+            return ie + 1;
     }
 
     return ia + 1;
@@ -94,8 +94,7 @@ static inline unsigned int getLastHit( const RAYPACKET &aRayPacket,
 // http://cseweb.ucsd.edu/~ravir/whitted.pdf
 
 // Ranged Traversal
-bool CBVH_PBRT::Intersect( const RAYPACKET &aRayPacket,
-                           HITINFO_PACKET *aHitInfoPacket ) const
+bool CBVH_PBRT::Intersect( const RAYPACKET &aRayPacket, HITINFO_PACKET *aHitInfoPacket ) const
 {
     if( m_nodes == NULL )
         return false;
@@ -185,9 +184,9 @@ static inline unsigned int getLastHit( const RAYPACKET &aRayPacket,
     {
         float hitT;
 
-        if( aBBox.Intersect( aRayPacket.m_ray[ aRayIndex[ie] ], &hitT ) )
-            if( hitT < aHitInfoPacket[ aRayIndex[ie] ].m_HitInfo.m_tHit )
-                return ie + 1;
+        if( aBBox.Intersect( aRayPacket.m_ray[ aRayIndex[ie] ], &hitT )
+          && ( hitT < aHitInfoPacket[ aRayIndex[ie] ].m_HitInfo.m_tHit ) )
+            return ie + 1;
     }
 
     return ia + 1;
@@ -209,17 +208,16 @@ static inline unsigned int partRays( const RAYPACKET &aRayPacket,
     for( unsigned int i = 0; i < ia; ++i )
     {
         float hitT;
-        if( aBBox.Intersect( aRayPacket.m_ray[ aRayIndex[i] ], &hitT ) )
-            if( hitT < aHitInfoPacket[ aRayIndex[i] ].m_HitInfo.m_tHit )
-                std::swap( aRayIndex[ie++], aRayIndex[i] );
+        if( aBBox.Intersect( aRayPacket.m_ray[ aRayIndex[i] ], &hitT )
+          && ( hitT < aHitInfoPacket[ aRayIndex[i] ].m_HitInfo.m_tHit ) )
+            std::swap( aRayIndex[ie++], aRayIndex[i] );
     }
 
     return ie;
 }
 
 
-bool CBVH_PBRT::Intersect( const RAYPACKET &aRayPacket,
-                           HITINFO_PACKET *aHitInfoPacket ) const
+bool CBVH_PBRT::Intersect( const RAYPACKET &aRayPacket, HITINFO_PACKET *aHitInfoPacket ) const
 {
     bool anyHitted = false;
     int todoOffset = 0, nodeNum = 0;
@@ -265,9 +263,8 @@ bool CBVH_PBRT::Intersect( const RAYPACKET &aRayPacket,
                         {
                             unsigned int idx = I[i];
 
-                            bool hitted = obj->Intersect(
-                                        aRayPacket.m_ray[idx],
-                                        aHitInfoPacket[idx].m_HitInfo );
+                            bool hitted = obj->Intersect( aRayPacket.m_ray[idx],
+                                                          aHitInfoPacket[idx].m_HitInfo );
 
                             if( hitted )
                             {

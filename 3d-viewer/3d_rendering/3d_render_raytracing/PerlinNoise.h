@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
  *
  * Perlin_Noise
  * "Here you could find the code for "Perlin noise in C++11",
- *  for more informations visit the project webpage:
+ *  for more information visit the project webpage:
  * http://solarianprogrammer.com/2012/07/18/perlin-noise-cpp-11/
  * You could use this program under the terms of GPL v3, for more details see:
  * http://www.gnu.org/copyleft/gpl.html
@@ -54,14 +54,15 @@
 
 class PerlinNoise
 {
-    // The permutation vector
-    std::vector<int> p;
-
 public:
-    // Initialize with the reference values for the permutation vector
+    /**
+     * Initialize with the reference values for the permutation vector.
+     */
     PerlinNoise();
 
-    // Generate a new permutation vector based on the value of seed
+    /**
+     * Generate a new permutation vector based on the value of seed.
+     */
     PerlinNoise( unsigned int seed );
 
     // Returns between 0.0f and 1.0f
@@ -73,6 +74,9 @@ private:
     float lerp( float t, float a, float b ) const;
     float grad( int hash, float x, float y, float z ) const;
     float grad( int hash, float x, float y ) const;
+
+    // The permutation vector
+    std::vector<int> p;
 };
 
 #endif
