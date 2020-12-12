@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-02 21:37+0000\n"
+"PO-Revision-Date: 2020-12-13 16:51+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -1596,7 +1596,7 @@ msgstr "Xác nhận"
 #: pcbnew/footprint_libraries_utils.cpp:879
 #: pcbnew/footprint_libraries_utils.cpp:1115
 msgid "Description"
-msgstr "Mô tả:"
+msgstr "Mô tả"
 
 #: common/dialog_about/AboutDialog_main.cpp:118
 msgid ""
@@ -5497,325 +5497,341 @@ msgstr "Lưu tài liệu hiện tại vào vị trí khác"
 
 #: common/tool/actions.cpp:77
 msgid "Save Copy As..."
-msgstr ""
+msgstr "Lưu bản sao dưới dạng ..."
 
 #: common/tool/actions.cpp:77
 msgid "Save a copy of the current document to another location"
-msgstr ""
+msgstr "Lưu bản sao của tài liệu hiện tại vào một vị trí khác"
 
 #: common/tool/actions.cpp:83
 msgid "Save All"
-msgstr ""
+msgstr "Lưu tất cả"
 
 #: common/tool/actions.cpp:83
 msgid "Save all changes"
-msgstr ""
+msgstr "Lưu tất cả các thay đổi"
 
 #: common/tool/actions.cpp:89
 msgid "Throw away changes"
-msgstr ""
+msgstr "Bỏ những thay đổi"
 
 #: common/tool/actions.cpp:95
 msgid "Page Settings..."
-msgstr ""
+msgstr "Cài đặt trang..."
 
 #: common/tool/actions.cpp:95
 msgid "Settings for paper size and title block info"
-msgstr ""
+msgstr "Cài đặt cho kích thước giấy và thông tin khối tiêu đề"
 
 #: common/tool/actions.cpp:101 kicad/tree_project_frame.cpp:800
 msgid "Print..."
-msgstr ""
+msgstr "In..."
 
 #: common/tool/actions.cpp:107
+#, fuzzy
 msgid "Plot..."
-msgstr ""
+msgstr "Bản vẽ..."
 
 #: common/tool/actions.cpp:107 pcbnew/dialogs/dialog_plot.cpp:61
 #: pcbnew/dialogs/dialog_plot_base.h:153
 msgid "Plot"
-msgstr ""
+msgstr "Bản vẽ"
 
 #: common/tool/actions.cpp:113
 msgid "Close the current editor"
-msgstr ""
+msgstr "Đóng trình chỉnh sửa hiện tại"
 
 #: common/tool/actions.cpp:120
 msgid "Cancel current tool"
-msgstr ""
+msgstr "Hủy công cụ hiện tại"
 
 #: common/tool/actions.cpp:126
+#, fuzzy
 msgid "Show Context Menu"
-msgstr ""
+msgstr "Hiển thị Menu ngữ cảnh"
 
 #: common/tool/actions.cpp:126
 msgid "Perform the right-mouse-button action"
-msgstr ""
+msgstr "Thực hiện thao tác chuột phải"
 
 #: common/tool/actions.cpp:135
 msgid "Undo"
-msgstr ""
+msgstr "Hoàn tác"
 
 #: common/tool/actions.cpp:135
 msgid "Undo last edit"
-msgstr ""
+msgstr "Hoàn tác chỉnh sửa cuối cùng"
 
 #: common/tool/actions.cpp:146
 msgid "Redo"
-msgstr ""
+msgstr "Làm lại"
 
 #: common/tool/actions.cpp:146
 msgid "Redo last edit"
-msgstr ""
+msgstr "Làm lại lần chỉnh sửa cuối cùng"
 
 #: common/tool/actions.cpp:152
+#, fuzzy
 msgid "Cut selected item(s) to clipboard"
-msgstr ""
+msgstr "Cắt (các) phần tử đã chọn vào bộ nhớ tạm"
 
 #: common/tool/actions.cpp:158
+#, fuzzy
 msgid "Copy selected item(s) to clipboard"
-msgstr ""
+msgstr "ửSao chép (các) phần tử đã chọn vào bộ nhớ tạm"
 
 #: common/tool/actions.cpp:164
+#, fuzzy
 msgid "Paste items(s) from clipboard"
-msgstr ""
+msgstr "Dán (các) mục từ bộ nhớ tạm"
 
 #: common/tool/actions.cpp:170
+#, fuzzy
 msgid "Select all items on screen"
-msgstr ""
+msgstr "Chọn tất cả các phần tử trên màn hình"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
-msgstr ""
+msgstr "Dán đặc biệt ..."
 
 #: common/tool/actions.cpp:175
+#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr ""
+msgstr "Dán (các) phần tử từ bộ nhớ tạm bằng các tùy chọn"
 
 #: common/tool/actions.cpp:181 eeschema/tools/ee_actions.cpp:127
 msgid "Duplicate"
-msgstr ""
+msgstr "Nhân bản"
 
 #: common/tool/actions.cpp:181
 msgid "Duplicates the selected item(s)"
-msgstr ""
+msgstr "Nhân đôi (các) khoản phần tử đã chọn"
 
 #: common/tool/actions.cpp:187 eeschema/tools/ee_actions.cpp:132
 #: kicad/tree_project_frame.cpp:792 pcbnew/plugins/kicad/pcb_parser.cpp:653
 #: pcbnew/tools/edit_tool.cpp:1433
 msgid "Delete"
-msgstr ""
+msgstr "Xóa bỏ"
 
 #: common/tool/actions.cpp:187
 msgid "Deletes selected item(s)"
-msgstr ""
+msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
 #: common/tool/actions.cpp:192
+#, fuzzy
 msgid "Interactive Delete Tool"
-msgstr ""
+msgstr "Công cụ Xóa Tương tác"
 
 #: common/tool/actions.cpp:192
+#, fuzzy
 msgid "Delete clicked items"
-msgstr ""
+msgstr "Xóa các mục đã nhấp"
 
 #: common/tool/actions.cpp:199
 msgid "Change Edit Method"
-msgstr ""
+msgstr "Thay đổi phương pháp chỉnh sửa"
 
 #: common/tool/actions.cpp:199
 msgid "Change edit method constraints"
-msgstr ""
+msgstr "Thay đổi các ràng buộc của phương pháp chỉnh sửa"
 
 #: common/tool/actions.cpp:204 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 msgid "Find"
-msgstr ""
+msgstr "Tìm"
 
 #: common/tool/actions.cpp:204
 msgid "Find text"
-msgstr ""
+msgstr "Tìm văn bản"
 
 #: common/tool/actions.cpp:210 eeschema/dialogs/dialog_schematic_find.cpp:44
 msgid "Find and Replace"
-msgstr ""
+msgstr "Tìm và Thay thế"
 
 #: common/tool/actions.cpp:210
 msgid "Find and replace text"
-msgstr ""
+msgstr "Tìm và thay thế văn bản"
 
 #: common/tool/actions.cpp:216 pcbnew/dialogs/dialog_find_base.cpp:93
 msgid "Find Next"
-msgstr ""
+msgstr "Tìm tiếp theo"
 
 #: common/tool/actions.cpp:216
+#, fuzzy
 msgid "Find next match"
-msgstr ""
+msgstr "Tìm phù hợp tiếp theo"
 
 #: common/tool/actions.cpp:222
 msgid "Find Next Marker"
-msgstr ""
+msgstr "Tìm Điểm đánh dấu Tiếp theo"
 
 #: common/tool/actions.cpp:228
 msgid "Replace and Find Next"
-msgstr ""
+msgstr "Thay thế và Tìm Tiếp"
 
 #: common/tool/actions.cpp:228
 msgid "Replace current match and find next"
-msgstr ""
+msgstr "Thay thế phù hợp hiện tại và tìm tiếp theo"
 
 #: common/tool/actions.cpp:234
 msgid "Replace All"
-msgstr ""
+msgstr "Thay thế Tất cả"
 
 #: common/tool/actions.cpp:234
 msgid "Replace all matches"
-msgstr ""
+msgstr "Thay thế tất cả các kết quả phù hợp"
 
 #: common/tool/actions.cpp:249
 msgid "Refresh"
-msgstr ""
+msgstr "Làm tươi"
 
 #: common/tool/actions.cpp:260
 msgid "Zoom to Fit"
-msgstr ""
+msgstr "Thu phóng để vừa"
 
 #: common/tool/actions.cpp:265
 msgid "Zoom to Objects"
-msgstr ""
+msgstr "Thu phóng đến Đối tượng"
 
 #: common/tool/actions.cpp:276
 msgid "Zoom In at Cursor"
-msgstr ""
+msgstr "Phóng to tại Con trỏ"
 
 #: common/tool/actions.cpp:287
 msgid "Zoom Out at Cursor"
-msgstr ""
+msgstr "Phóng to tại Con trỏ"
 
 #: common/tool/actions.cpp:293 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:79
 msgid "Zoom In"
-msgstr ""
+msgstr "Phóng to"
 
 #: common/tool/actions.cpp:299 common/widgets/mathplot.cpp:1763
 #: eeschema/sim/sim_plot_frame_base.cpp:83
 msgid "Zoom Out"
-msgstr ""
+msgstr "Thu nhỏ"
 
 #: common/tool/actions.cpp:311
 msgid "Zoom to Selection"
-msgstr ""
+msgstr "Thu phóng đến Vùng chọn"
 
 #: common/tool/actions.cpp:324
 msgid "Cursor Up"
-msgstr ""
+msgstr "Con trỏ lên"
 
 #: common/tool/actions.cpp:330
 msgid "Cursor Down"
-msgstr ""
+msgstr "Con trỏ xuống"
 
 #: common/tool/actions.cpp:336
 msgid "Cursor Left"
-msgstr ""
+msgstr "Con trỏ trái"
 
 #: common/tool/actions.cpp:342
 msgid "Cursor Right"
-msgstr ""
+msgstr "Con trỏ phải"
 
 #: common/tool/actions.cpp:349
 msgid "Cursor Up Fast"
-msgstr ""
+msgstr "Con trỏ lên nhanh"
 
 #: common/tool/actions.cpp:355
 msgid "Cursor Down Fast"
-msgstr ""
+msgstr "Con trỏ xuống nhanh"
 
 #: common/tool/actions.cpp:361
 msgid "Cursor Left Fast"
-msgstr ""
+msgstr "Con chạy Nhanh Trái"
 
 #: common/tool/actions.cpp:367
 msgid "Cursor Right Fast"
-msgstr ""
+msgstr "Con trỏ phải nhanh"
 
 #: common/tool/actions.cpp:373
 msgid "Click"
-msgstr ""
+msgstr "Nhấp chuột"
 
 #: common/tool/actions.cpp:373
 msgid "Performs left mouse button click"
-msgstr ""
+msgstr "Thực hiện bấm nút chuột trái"
 
 #: common/tool/actions.cpp:379
 msgid "Double-click"
-msgstr ""
+msgstr "Nhấn đúp chuột"
 
 #: common/tool/actions.cpp:379
 msgid "Performs left mouse button double-click"
-msgstr ""
+msgstr "Thực hiện bấm nút chuột trái"
 
 #: common/tool/actions.cpp:387
 msgid "Pin Library"
-msgstr ""
+msgstr "Thư viện Pin"
 
 #: common/tool/actions.cpp:392
+#, fuzzy
 msgid "Unpin Library"
-msgstr ""
+msgstr "Thư viện unpin"
 
 #: common/tool/actions.cpp:398
+#, fuzzy
 msgid "Pan Up"
-msgstr ""
+msgstr "Xoay lên"
 
 #: common/tool/actions.cpp:404
+#, fuzzy
 msgid "Pan Down"
-msgstr ""
+msgstr "Xoay xuống"
 
 #: common/tool/actions.cpp:410
 msgid "Pan Left"
-msgstr ""
+msgstr "Xoay trái"
 
 #: common/tool/actions.cpp:416
+#, fuzzy
 msgid "Pan Right"
-msgstr ""
+msgstr "Xoay phải"
 
 #: common/tool/actions.cpp:423
+#, fuzzy
 msgid "Switch to Fast Grid 1"
-msgstr ""
+msgstr "Chuyển sang Fast Grid 1"
 
 #: common/tool/actions.cpp:428
+#, fuzzy
 msgid "Switch to Fast Grid 2"
-msgstr ""
+msgstr "Chuyển sang Fast Grid 2"
 
 #: common/tool/actions.cpp:433
 msgid "Switch to Next Grid"
-msgstr ""
+msgstr "Chuyển sang Lưới tiếp theo"
 
 #: common/tool/actions.cpp:437
 msgid "Switch to Previous Grid"
-msgstr ""
+msgstr "Chuyển sang Lưới Trước"
 
 #: common/tool/actions.cpp:442
 msgid "Set the grid origin point"
-msgstr ""
+msgstr "Đặt điểm gốc của lưới"
 
 #: common/tool/actions.cpp:455
 msgid "Show Grid"
-msgstr ""
+msgstr "Hiển thị lưới"
 
 #: common/tool/actions.cpp:455
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "Hiển thị các chấm hoặc đường lưới trong cửa sổ chỉnh sửa"
 
 #: common/tool/actions.cpp:460
 msgid "Grid Properties..."
-msgstr ""
+msgstr "Thuộc tính lưới ..."
 
 #: common/tool/actions.cpp:460
 msgid "Set grid dimensions"
-msgstr ""
+msgstr "Đặt kích thước lưới"
 
 #: common/tool/actions.cpp:465
 msgid "Use inches"
-msgstr ""
+msgstr "Sử dụng inch"
 
 #: common/tool/actions.cpp:470
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5823,11 +5839,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:52
 msgid "Mils"
-msgstr ""
+msgstr "Mils"
 
 #: common/tool/actions.cpp:470
 msgid "Use mils"
-msgstr ""
+msgstr "Sử dụng mils"
 
 #: common/tool/actions.cpp:475
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5838,84 +5854,88 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:87
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:51
 msgid "Millimeters"
-msgstr ""
+msgstr "Milimét"
 
 #: common/tool/actions.cpp:475
 msgid "Use millimeters"
-msgstr ""
+msgstr "Sử dụng milimét"
 
 #: common/tool/actions.cpp:484
 msgid "Switch units"
-msgstr ""
+msgstr "Chuyển đổi đơn vị"
 
 #: common/tool/actions.cpp:484
 msgid "Switch between imperial and metric units"
-msgstr ""
+msgstr "Chuyển đổi giữa đơn vị đo lường Anh và hệ mét"
 
 #: common/tool/actions.cpp:489
 msgid "Polar Coordinates"
-msgstr ""
+msgstr "Tọa độ cực"
 
 #: common/tool/actions.cpp:489
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr ""
+msgstr "Chuyển đổi giữa hệ tọa độ cực và hệ tọa độ Cartesian"
 
 #: common/tool/actions.cpp:495
 msgid "Reset Local Coordinates"
-msgstr ""
+msgstr "Đặt lại tọa độ cục bộ"
 
 #: common/tool/actions.cpp:501
 msgid "Always Show Cursor"
-msgstr ""
+msgstr "Luôn hiển thị con trỏ"
 
 #: common/tool/actions.cpp:501
 msgid "Display crosshairs even in selection tool"
-msgstr ""
+msgstr "Hiển thị chữ thập ngay cả trong công cụ lựa chọn"
 
 #: common/tool/actions.cpp:506
 msgid "Full-Window Crosshairs"
-msgstr ""
+msgstr "Crosshairs toàn cửa sổ"
 
 #: common/tool/actions.cpp:506
+#, fuzzy
 msgid "Switch display of full-window crosshairs"
-msgstr ""
+msgstr "Chuyển đổi màn hình của chữ thập toàn cửa sổ"
 
 #: common/tool/actions.cpp:512
 msgid "Single Layer View Mode"
-msgstr ""
+msgstr "Chế độ xem một lớp"
 
 #: common/tool/actions.cpp:512
+#, fuzzy
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Chuyển đổi các lớp không hoạt động giữa bình thường và mờ"
 
 #: common/tool/actions.cpp:516
 msgid "Single Layer View Mode (3-state)"
-msgstr ""
+msgstr "Chế độ xem một lớp (3 trạng thái)"
 
 #: common/tool/actions.cpp:517
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "Chuyển đổi các lớp không hoạt động giữa bình thường, mờ và ẩn"
 
 #: common/tool/actions.cpp:521
+#, fuzzy
 msgid "Select item(s)"
-msgstr ""
+msgstr "Chọn (các) khoản mục"
 
 #: common/tool/actions.cpp:528
 msgid "Measure Tool"
-msgstr ""
+msgstr "Công cụ đo lường"
 
 #: common/tool/actions.cpp:528
+#, fuzzy
 msgid "Interactively measure distance between points"
-msgstr ""
+msgstr "Tương tác đo khoảng cách giữa các điểm"
 
 #: common/tool/actions.cpp:537
 msgid "Show 3D viewer window"
-msgstr ""
+msgstr "Hiển thị cửa sổ trình xem 3D"
 
 #: common/tool/actions.cpp:542 eeschema/lib_view_frame.cpp:102
 #: eeschema/lib_view_frame.cpp:896
 msgid "Symbol Library Browser"
-msgstr ""
+msgstr "Trình duyệt Thư viện Symbol"
 
 #: common/tool/actions.cpp:542
 msgid "Browse symbol libraries"
