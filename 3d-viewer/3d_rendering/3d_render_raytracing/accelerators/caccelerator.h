@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,11 +34,8 @@
 #include "../raypacket.h"
 
 
-class  CGENERICACCELERATOR
+class CGENERICACCELERATOR
 {
-protected:
-    CBBOX       m_bbox;
-
 public:
     CGENERICACCELERATOR( );
     virtual ~CGENERICACCELERATOR();
@@ -53,6 +50,9 @@ public:
                             HITINFO_PACKET *aHitInfoPacket ) const = 0;
 
     virtual bool IntersectP( const RAY &aRay, float aMaxDistance ) const = 0;
+
+protected:
+    CBBOX       m_bbox;
 };
 
 #endif // _CACCELERATOR_H_
