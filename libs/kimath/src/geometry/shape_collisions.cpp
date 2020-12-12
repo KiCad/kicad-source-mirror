@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,8 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-#include <assert.h>                               // for assert
 #include <cmath>
 #include <limits.h>                               // for INT_MAX
 
@@ -38,6 +37,7 @@
 #include <math/vector2d.h>
 
 typedef VECTOR2I::extended_type ecoord;
+
 
 static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_CIRCLE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
@@ -72,9 +72,9 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
     const VECTOR2I c = aB.GetCenter();
     const VECTOR2I p0 = aA.GetPosition();
     const VECTOR2I size = aA.GetSize();
-    const int r = aB.GetRadius();
-    const int min_dist = aClearance + r;
-    const ecoord min_dist_sq = SEG::Square( min_dist );
+    const int      r = aB.GetRadius();
+    const int      min_dist = aClearance + r;
+    const ecoord   min_dist_sq = SEG::Square( min_dist );
 
     const VECTOR2I vts[] =
     {
@@ -85,7 +85,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_CIRCLE& aB, int aC
         VECTOR2I( p0.x,          p0.y )
     };
 
-    ecoord nearest_side_dist_sq = VECTOR2I::ECOORD_MAX;
+    ecoord   nearest_side_dist_sq = VECTOR2I::ECOORD_MAX;
     VECTOR2I nearest;
 
     bool inside = c.x >= p0.x && c.x <= ( p0.x + size.x )
@@ -260,7 +260,9 @@ static inline bool Collide( const SHAPE_CIRCLE& aA, const SHAPE_SEGMENT& aSeg, i
 static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CHAIN_BASE& aB,
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    // TODO: why doesn't this handle MTV?
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
 
     int closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -315,7 +317,9 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
 static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    // TODO: why doesn't this handle MTV?
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
 
     int closest_dist = INT_MAX;
     VECTOR2I nearest;
@@ -367,15 +371,17 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN_BASE& a
 }
 
 
-static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aSeg, int aClearance,
+static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    if( aA.Collide( aSeg.GetSeg(), aClearance + aSeg.GetWidth() / 2, aActual, aLocation ) )
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
+    if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
     {
         if( aActual )
-            *aActual = std::max( 0, *aActual - aSeg.GetWidth() / 2 );
-
-        // TODO: why doesn't this handle MTV?
+            *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
 
         return true;
     }
@@ -387,12 +393,14 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_SEGMENT& aSeg, int
 static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
     {
         if( aActual )
             *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
-
-        // TODO: why doesn't this handle MTV?
 
         return true;
     }
@@ -404,12 +412,14 @@ static inline bool Collide( const SHAPE_SEGMENT& aA, const SHAPE_SEGMENT& aB, in
 static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_SEGMENT& aB,
                             int aClearance, int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    wxASSERT_MSG( !aMTV, wxString::Format( "MTV not implemented for %s : %s collisions",
+                                           aA.Type(),
+                                           aB.Type() ) );
+
     if( aA.Collide( aB.GetSeg(), aClearance + aB.GetWidth() / 2, aActual, aLocation ) )
     {
         if( aActual )
             *aActual = std::max( 0, *aActual - aB.GetWidth() / 2 );
-
-        // TODO: why doesn't this handle MTV?
 
         return true;
     }
@@ -424,17 +434,20 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aCle
     return Collide( aA.Outline(), aB.Outline(), aClearance, aActual, aLocation, aMTV );
 }
 
+
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const auto lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+
     return Collide( lc, aB.Outline(), aClearance, aActual, aLocation, aMTV );
 }
+
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const auto lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
     bool rv = Collide( aB, lc, aClearance, aActual, aLocation, aMTV );
 
     if( rv && aMTV )
@@ -443,35 +456,43 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
     return rv;
 }
 
+
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const auto lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+
     return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
 }
+
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const auto lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
+
     return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
 }
+
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const auto lc = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
     return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
 }
 
+
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
-    const auto lcA = aA.ConvertToPolyline();
-    const auto lcB = aB.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lcA = aA.ConvertToPolyline();
+    const SHAPE_LINE_CHAIN lcB = aB.ConvertToPolyline();
+
     return Collide( lcA, lcB, aClearance, aActual, aLocation, aMTV );
 }
+
 
 template<class T_a, class T_b>
 inline bool CollCase( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
@@ -481,6 +502,7 @@ inline bool CollCase( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aAc
     return Collide( *static_cast<const T_a*>( aA ), *static_cast<const T_b*>( aB ),
                     aClearance, aActual, aLocation, aMTV);
 }
+
 
 template<class T_a, class T_b>
 inline bool CollCaseReversed ( const SHAPE* aA, const SHAPE* aB, int aClearance, int* aActual,
@@ -819,6 +841,7 @@ static bool collideShapes( const SHAPE* aA, const SHAPE* aB, int aClearance, int
 
     return colliding;
 }
+
 
 bool SHAPE::Collide( const SHAPE* aShape, int aClearance, VECTOR2I* aMTV ) const
 {
