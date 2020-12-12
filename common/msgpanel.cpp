@@ -43,6 +43,10 @@ EDA_MSG_PANEL::EDA_MSG_PANEL( wxWindow* aParent, int aId,
 {
     SetFont( wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT ) );
     SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE ) );
+
+    // informs wx not to paint the background itself as we will paint it later in erase()
+    SetBackgroundStyle( wxBG_STYLE_PAINT );
+
     m_last_x = 0;
 
     m_fontSize = computeFontSize();
