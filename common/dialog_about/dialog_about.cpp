@@ -54,7 +54,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     wxASSERT( aParent != nullptr );
 
     // TODO: Change these to 16x16 versions when available
-    m_images = new wxImageList( 26, 26, false, 9 );
+    m_images = new wxImageList( 24, 24, false, 9 );
 
     m_images->Add( KiBitmap( info_xpm ) );         // INFORMATION
     m_images->Add( KiBitmap( recent_xpm ) );       // VERSION
