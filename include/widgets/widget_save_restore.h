@@ -38,7 +38,8 @@ class UNIT_BINDER;
 class WIDGET_SAVE_RESTORE
 {
 public:
-    WIDGET_SAVE_RESTORE( bool& aValidFlag ) : m_valid( aValidFlag )
+    WIDGET_SAVE_RESTORE( bool& aValidFlag ) :
+        m_valid( aValidFlag )
     {
     }
 
@@ -116,27 +117,33 @@ private:
     };
 
     union CONTROL {
-        CONTROL( wxCheckBox* aCtrl ) : m_checkbox( aCtrl )
+        CONTROL( wxCheckBox* aCtrl ) :
+            m_checkbox( aCtrl )
         {
         }
 
-        CONTROL( wxChoice* aCtrl ) : m_choice( aCtrl )
+        CONTROL( wxChoice* aCtrl ) :
+            m_choice( aCtrl )
         {
         }
 
-        CONTROL( wxNotebook* aCtrl ) : m_notebook( aCtrl )
+        CONTROL( wxNotebook* aCtrl ) :
+            m_notebook( aCtrl )
         {
         }
 
-        CONTROL( wxRadioBox* aCtrl ) : m_radiobox( aCtrl )
+        CONTROL( wxRadioBox* aCtrl ) :
+            m_radiobox( aCtrl )
         {
         }
 
-        CONTROL( wxTextCtrl* aCtrl ) : m_textctrl( aCtrl )
+        CONTROL( wxTextCtrl* aCtrl ) :
+            m_textctrl( aCtrl )
         {
         }
 
-        CONTROL( UNIT_BINDER* aCtrl ) : m_unit_binder( aCtrl )
+        CONTROL( UNIT_BINDER* aCtrl ) :
+            m_unit_binder( aCtrl )
         {
         }
 
@@ -149,19 +156,23 @@ private:
     };
 
     union DATA {
-        DATA( long* aDest ) : m_long( aDest )
+        DATA( long* aDest ) :
+            m_long( aDest )
         {
         }
 
-        DATA( bool* aDest ) : m_bool( aDest )
+        DATA( bool* aDest ) :
+            m_bool( aDest )
         {
         }
 
-        DATA( wxString* aDest ) : m_str( aDest )
+        DATA( wxString* aDest ) :
+            m_str( aDest )
         {
         }
 
-        DATA( double* aDest ) : m_double( aDest )
+        DATA( double* aDest ) :
+            m_double( aDest )
         {
         }
 
@@ -177,8 +188,10 @@ private:
     struct WIDGET_CTRL_T
     {
         template <typename CTRL_T, typename DEST_T>
-        WIDGET_CTRL_T( WIDGET_CTRL_TYPE_T aType, CTRL_T& aCtrl, DEST_T& aDest )
-                : m_type( aType ), m_control( &aCtrl ), m_dest( &aDest )
+        WIDGET_CTRL_T( WIDGET_CTRL_TYPE_T aType, CTRL_T& aCtrl, DEST_T& aDest ) :
+            m_type( aType ),
+            m_control( &aCtrl ),
+            m_dest( &aDest )
         {
         }
 

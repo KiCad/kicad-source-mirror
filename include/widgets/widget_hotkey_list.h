@@ -39,97 +39,6 @@ class WIDGET_HOTKEY_CLIENT_DATA;
 
 class WIDGET_HOTKEY_LIST : public wxTreeListCtrl
 {
-    HOTKEY_STORE&  m_hk_store;
-    bool           m_readOnly;
-
-    wxTreeListItem m_context_menu_item;
-
-    /**
-     * Method GetHKClientData
-     * Return the WIDGET_HOTKEY_CLIENT_DATA for the given item, or NULL if the item is invalid.
-     */
-    WIDGET_HOTKEY_CLIENT_DATA* GetHKClientData( wxTreeListItem aItem );
-
-    /**
-     * Get the WIDGET_HOTKEY_CLIENT_DATA form an item and assert if it isn't found. This is for
-     * use when the data not being present indicates an error.
-     */
-    WIDGET_HOTKEY_CLIENT_DATA* getExpectedHkClientData( wxTreeListItem aItem );
-
-    /**
-     * Method UpdateFromClientData
-     * Refresh the visible text on the widget from the rows' client data objects.
-     */
-    void UpdateFromClientData();
-
-    /**
-     * Method updateShownItems
-     *
-     * Update the items shown in the widget based on a given filter string.
-     *
-     * @param aFilterStr the string to filter with. Empty means no filter.
-     */
-    void updateShownItems( const wxString& aFilterStr );
-
-    /**
-     * Attempt to change the given hotkey to the given key code.
-     *
-     * If the hotkey conflicts, the user is prompted to change anyway (and in doing so, unset
-     * the conflicting key), or cancel the attempt.
-     *
-     * @param aHotkey the change-able hotkey to try to change
-     * @param aKey the key code to change it to
-     */
-    void changeHotkey( HOTKEY& aHotkey, long aKey );
-
-protected:
-    /**
-     * Method EditItem
-     * Prompt the user for a new hotkey given a list item.
-     */
-    void EditItem( wxTreeListItem aItem );
-
-    /**
-     * Method ResetItem
-     * Reset the item to either the default, the value when the dialog was opened, or none.
-     */
-    void ResetItem( wxTreeListItem aItem, int aResetId );
-
-    /**
-     * Method OnActivated
-     * Handle activation of a row.
-     */
-    void OnActivated( wxTreeListEvent& aEvent );
-
-    /**
-     * Method OnContextMenu
-     * Handle right-click on a row.
-     */
-    void OnContextMenu( wxTreeListEvent& aEvent );
-
-    /**
-     * Method OnMenu
-     * Handle activation of a context menu item.
-     */
-    void OnMenu( wxCommandEvent& aEvent );
-
-    /**
-     * Method ResolveKeyConflicts
-     * Check if we can set a hotkey, and prompt the user if there is a conflict between keys.
-     * The key code should already have been checked that it's not for the same entry as it's
-     * current in, or else this method will prompt for the self-change.
-     *
-     * The method will do conflict resolution depending on aSectionTag.
-     * g_CommonSectionTag means the key code must only be checkd with the aSectionTag section
-     * and g_CommonSectionTag section.
-     *
-     * @param aKey - key to check
-     * @param aActionName - name of the action into which the key is proposed to be installed
-     *
-     * @return true iff the user accepted the overwrite or no conflict existed
-     */
-    bool ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey );
-
 public:
     /**
      * Constructor WIDGET_HOTKEY_LIST
@@ -176,6 +85,99 @@ public:
      * Map a keypress event to the correct key code for use as a hotkey.
      */
     static long MapKeypressToKeycode( const wxKeyEvent& aEvent );
+
+protected:
+    /**
+     * Method editItem
+     * Prompt the user for a new hotkey given a list item.
+     */
+    void editItem( wxTreeListItem aItem );
+
+    /**
+     * Method resetItem
+     * Reset the item to either the default, the value when the dialog was opened, or none.
+     */
+    void resetItem( wxTreeListItem aItem, int aResetId );
+
+    /**
+     * Method onActivated
+     * Handle activation of a row.
+     */
+    void onActivated( wxTreeListEvent& aEvent );
+
+    /**
+     * Method onContextMenu
+     * Handle right-click on a row.
+     */
+    void onContextMenu( wxTreeListEvent& aEvent );
+
+    /**
+     * Method onMenu
+     * Handle activation of a context menu item.
+     */
+    void onMenu( wxCommandEvent& aEvent );
+
+    /**
+     * Method resolveKeyConflicts
+     * Check if we can set a hotkey, and prompt the user if there is a conflict between keys.
+     * The key code should already have been checked that it's not for the same entry as it's
+     * current in, or else this method will prompt for the self-change.
+     *
+     * The method will do conflict resolution depending on aSectionTag.
+     * g_CommonSectionTag means the key code must only be checkd with the aSectionTag section
+     * and g_CommonSectionTag section.
+     *
+     * @param aKey - key to check
+     * @param aActionName - name of the action into which the key is proposed to be installed
+     *
+     * @return true iff the user accepted the overwrite or no conflict existed
+     */
+    bool resolveKeyConflicts( TOOL_ACTION* aAction, long aKey );
+
+private:
+    /**
+     * Method getHKClientData
+     * Return the WIDGET_HOTKEY_CLIENT_DATA for the given item, or NULL if the item is invalid.
+     */
+    WIDGET_HOTKEY_CLIENT_DATA* getHKClientData( wxTreeListItem aItem );
+
+    /**
+     * Get the WIDGET_HOTKEY_CLIENT_DATA form an item and assert if it isn't found. This is for
+     * use when the data not being present indicates an error.
+     */
+    WIDGET_HOTKEY_CLIENT_DATA* getExpectedHkClientData( wxTreeListItem aItem );
+
+    /**
+     * Method updateFromClientData
+     * Refresh the visible text on the widget from the rows' client data objects.
+     */
+    void updateFromClientData();
+
+    /**
+     * Method updateShownItems
+     *
+     * Update the items shown in the widget based on a given filter string.
+     *
+     * @param aFilterStr the string to filter with. Empty means no filter.
+     */
+    void updateShownItems( const wxString& aFilterStr );
+
+    /**
+     * Attempt to change the given hotkey to the given key code.
+     *
+     * If the hotkey conflicts, the user is prompted to change anyway (and in doing so, unset
+     * the conflicting key), or cancel the attempt.
+     *
+     * @param aHotkey the change-able hotkey to try to change
+     * @param aKey the key code to change it to
+     */
+    void changeHotkey( HOTKEY& aHotkey, long aKey );
+
+private:
+    HOTKEY_STORE&  m_hk_store;
+    bool           m_readOnly;
+
+    wxTreeListItem m_context_menu_item;
 };
 
 #endif // __widget_hotkey_list__

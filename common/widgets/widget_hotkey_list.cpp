@@ -249,7 +249,7 @@ private:
 };
 
 
-WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::GetHKClientData( wxTreeListItem aItem )
+WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getHKClientData( wxTreeListItem aItem )
 {
     if( aItem.IsOk() )
     {
@@ -265,7 +265,7 @@ WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::GetHKClientData( wxTreeListItem a
 
 WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getExpectedHkClientData( wxTreeListItem aItem )
 {
-    const auto hkdata = GetHKClientData( aItem );
+    const auto hkdata = getHKClientData( aItem );
 
     // This probably means a hotkey-only action is being attempted on
     // a row that is not a hotkey (like a section heading)
@@ -275,11 +275,11 @@ WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getExpectedHkClientData( wxTreeLi
 }
 
 
-void WIDGET_HOTKEY_LIST::UpdateFromClientData()
+void WIDGET_HOTKEY_LIST::updateFromClientData()
 {
     for( wxTreeListItem i = GetFirstItem(); i.IsOk(); i = GetNextItem( i ) )
     {
-        WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( i );
+        WIDGET_HOTKEY_CLIENT_DATA* hkdata = getHKClientData( i );
 
         if( hkdata )
         {
@@ -311,13 +311,13 @@ void WIDGET_HOTKEY_LIST::changeHotkey( HOTKEY& aHotkey, long aKey )
 
     if( exists && aHotkey.m_EditKeycode != aKey )
     {
-        if( aKey == 0 || ResolveKeyConflicts( aHotkey.m_Actions[ 0 ], aKey ) )
+        if( aKey == 0 || resolveKeyConflicts( aHotkey.m_Actions[ 0 ], aKey ) )
             aHotkey.m_EditKeycode = aKey;
     }
 }
 
 
-void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
+void WIDGET_HOTKEY_LIST::editItem( wxTreeListItem aItem )
 {
     WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
 
@@ -333,12 +333,12 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
     if( key )
     {
         changeHotkey( hkdata->GetChangedHotkey(), key );
-        UpdateFromClientData();
+        updateFromClientData();
     }
 }
 
 
-void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem, int aResetId )
+void WIDGET_HOTKEY_LIST::resetItem( wxTreeListItem aItem, int aResetId )
 {
     WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
 
@@ -354,24 +354,24 @@ void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem, int aResetId )
     else if( aResetId == ID_DEFAULT )
         changeHotkey( changed_hk, changed_hk.m_Actions[ 0 ]->GetDefaultHotKey() );
 
-    UpdateFromClientData();
+    updateFromClientData();
 }
 
 
-void WIDGET_HOTKEY_LIST::OnActivated( wxTreeListEvent& aEvent )
+void WIDGET_HOTKEY_LIST::onActivated( wxTreeListEvent& aEvent )
 {
-    EditItem( aEvent.GetItem() );
+    editItem( aEvent.GetItem());
 }
 
 
-void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
+void WIDGET_HOTKEY_LIST::onContextMenu( wxTreeListEvent& aEvent )
 {
     // Save the active event for use in OnMenu
     m_context_menu_item = aEvent.GetItem();
 
     wxMenu menu;
 
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( m_context_menu_item );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getHKClientData( m_context_menu_item );
 
     // Some actions only apply if the row is hotkey data
     if( hkdata )
@@ -387,18 +387,16 @@ void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
 }
 
 
-void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
+void WIDGET_HOTKEY_LIST::onMenu( wxCommandEvent& aEvent )
 {
     switch( aEvent.GetId() )
     {
-    case ID_EDIT_HOTKEY:
-        EditItem( m_context_menu_item );
+    case ID_EDIT_HOTKEY:editItem( m_context_menu_item );
         break;
 
     case ID_RESET:
     case ID_CLEAR:
-    case ID_DEFAULT:
-        ResetItem( m_context_menu_item, aEvent.GetId() );
+    case ID_DEFAULT:resetItem( m_context_menu_item, aEvent.GetId());
         break;
 
     default:
@@ -407,7 +405,7 @@ void WIDGET_HOTKEY_LIST::OnMenu( wxCommandEvent& aEvent )
 }
 
 
-bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
+bool WIDGET_HOTKEY_LIST::resolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
 {
     HOTKEY* conflictingHotKey = nullptr;
 
@@ -429,7 +427,7 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( TOOL_ACTION* aAction, long aKey )
     {
         // Reset the other hotkey
         conflictingHotKey->m_EditKeycode = 0;
-        UpdateFromClientData();
+        updateFromClientData();
         return true;
     }
 
@@ -456,9 +454,9 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     if( !m_readOnly )
     {
         // The event only apply if the widget is in editable mode
-        Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
-        Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
-        Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
+        Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::onActivated, this );
+        Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::onContextMenu, this );
+        Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::onMenu, this );
     }
 }
 
@@ -481,7 +479,7 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
     else
         m_hk_store.ResetAllHotkeysToOriginal();
 
-    UpdateFromClientData();
+    updateFromClientData();
 
     wxDataViewColumn* col = GetDataView()->GetColumn( 0 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
@@ -535,7 +533,7 @@ void WIDGET_HOTKEY_LIST::updateShownItems( const wxString& aFilterStr )
         Expand( parent );
     }
 
-    UpdateFromClientData();
+    updateFromClientData();
     Thaw();
 }
 
