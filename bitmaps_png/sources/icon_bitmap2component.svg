@@ -9,10 +9,17 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 24 24"
+   viewBox="0 0 48 48"
    version="1.1"
    sodipodi:docname="icon_bitmap2component.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   width="48"
+   height="48">
+  <path
+     class="cls-1"
+     d="m 8,-0.0013 h 32 a 8,8.026722 0 0 1 8,8.026722 v 32.111704 a 8,8.026722 0 0 1 -8,8.026722 H 8 A 8,8.026722 0 0 1 1.125e-8,40.137126 V 8.026024 A 8,8.026722 0 0 1 8,-0.0013 Z"
+     id="path157661"
+     style="stroke-width:1" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +29,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2847"
+     inkscape:window-height="1534"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:zoom="11.313709"
+     inkscape:cx="-7.6236198"
+     inkscape:cy="42.64498"
+     inkscape:window-x="146"
+     inkscape:window-y="501"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -76,282 +83,132 @@
      id="defs157657">
     <style
        id="style157655">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}</style>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath991">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.999999px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         d="M 1,22.500371 24.964897,-1.2376972 1,-1.2724678 Z"
+         id="path993"
+         sodipodi:nodetypes="cccc" />
+    </clipPath>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath1015">
+      <path
+         class="cls-1"
+         d="m 8,-0.0013 h 32 a 8,8.026722 0 0 1 8,8.026722 v 32.111704 a 8,8.026722 0 0 1 -8,8.026722 H 8 A 8,8.026722 0 0 1 1.125e-8,40.137126 V 8.026024 A 8,8.026722 0 0 1 8,-0.0013 Z"
+         id="path1017"
+         style="stroke-width:1" />
+    </clipPath>
   </defs>
   <title
      id="title157659">icon_bitmap2component</title>
+  <g
+     id="g4595"
+     transform="matrix(1.1030313,0,0,1.1030334,17.056867,20.281519)"
+     style="stroke-width:0.906592">
+    <g
+       id="g964"
+       transform="matrix(2,0,0,2,-23.520851,-15.701467)"
+       style="stroke-width:0.453296">
+      <path
+         class="cls-2"
+         d="m 5.3885,17.382 4.8369,-9.3941 a 1.0508,1.0508 0 0 1 1.749,-0.1825 l 4.9165,6.0372 a 1.0509,1.0509 0 0 0 1.5964,0.0388 l 1.32,-1.4693 a 1.0508,1.0508 0 0 1 1.6628,0.13 l 3.1145,4.7944 A 0.5253,0.5253 0 0 1 24.144,18.148 H 5.8556 A 0.5253,0.5253 0 0 1 5.3885,17.382 Z"
+         id="path4007"
+         style="fill:#1a81c4;fill-opacity:1;stroke-width:0.453296" />
+      <circle
+         class="cls-2"
+         cx="18.5231"
+         cy="4.527"
+         id="circle4009"
+         style="fill:#f29100;fill-opacity:1;stroke-width:0.453296"
+         r="2.6747999" />
+    </g>
+  </g>
+  <g
+     id="g983"
+     transform="matrix(2,0,0,2.019111,-2,2.5692537)"
+     style="stroke-width:0.497628"
+     clip-path="url(#clipPath991)">
+    <g
+       id="g4595-3"
+       transform="matrix(1.1030313,0,0,1.1030334,-3.4436842,0.00589049)"
+       style="stroke-width:0.451145">
+      <path
+         class="cls-2"
+         d="m 5.3885,17.382 4.8369,-9.3941 a 1.0508,1.0508 0 0 1 1.749,-0.1825 l 4.9165,6.0372 a 1.0509,1.0509 0 0 0 1.5964,0.0388 l 1.32,-1.4693 a 1.0508,1.0508 0 0 1 1.6628,0.13 l 3.1145,4.7944 A 0.5253,0.5253 0 0 1 24.144,18.148 H 5.8556 A 0.5253,0.5253 0 0 1 5.3885,17.382 Z"
+         id="path4007-6"
+         style="fill:#545454;fill-opacity:1;stroke-width:0.451145" />
+      <circle
+         class="cls-2"
+         cx="18.5231"
+         cy="4.527"
+         r="2.6747999"
+         id="circle4009-7"
+         style="fill:#545454;fill-opacity:1;stroke-width:0.451145" />
+    </g>
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 4,20.5 V 2.5"
+       id="path918" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 7,20.5 V 2.5"
+       id="path922" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 10,20.5 V 2.5"
+       id="path924" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 13,20.5 V 2.5"
+       id="path928" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 16,20 V 2"
+       id="path930" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 19,20 V 2"
+       id="path934" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 22,20 V 2"
+       id="path936" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.497628px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 22.5,20.5 H 4.5"
+       id="path938" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 22,17.5 H 4"
+       id="path940" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 22,14.5 H 4"
+       id="path942" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 22,11.5 H 4"
+       id="path944" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 21.5,8.5 H 3.5"
+       id="path946" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 21.5,5.5 H 3.5"
+       id="path948" />
+    <path
+       style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 21.5,2.5 H 3.5"
+       id="path950" />
+  </g>
   <path
-     class="cls-1"
-     d="m 4,-0.0013 h 16 a 4,4 0 0 1 4,4 v 16.0024 a 4,4 0 0 1 -4,4 H 4 a 4,4 0 0 1 -4,-4 V 3.999 a 4,4 0 0 1 4,-4.0003 z"
-     id="path157661" />
-  <path
-     class="cls-2"
-     d="m 7.23,13.4016 v 1.6372 h 1.5 c 0.0465,-0.0866 0.0866,-0.1755 0.1416,-0.2594 v -1.3778 z"
-     id="path157663" />
-  <rect
-     class="cls-2"
-     x="11.6062"
-     y="11.2187"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157665" />
-  <path
-     class="cls-2"
-     d="M 8.498,15.5846 H 7.23 v 1.6371 h 1.1875 a 2.4428,2.4428 0 0 1 -0.02,-1.3025 3.1484,3.1484 0 0 1 0.1005,-0.3346 z"
-     id="path157667" />
-  <path
-     class="cls-2"
-     d="M 17.6239,4.1243 V 3.2168 A 5.8049,5.8049 0 0 0 15.9827,2.6323 v 1.492 z"
-     id="path157669" />
-  <path
-     class="cls-2"
-     d="m 13.7945,5.698 a 2.3786,2.3786 0 0 1 1.6412,0.6036 V 4.67 h -1.6412 z"
-     id="path157671" />
-  <path
-     class="cls-2"
-     d="m 6.6826,12.0717 a 5.8568,5.8568 0 0 0 -0.85,0.7842 h 0.85 z"
-     id="path157673" />
-  <path
-     class="cls-2"
-     d="M 11.0592,10.4644 A 12.0519,12.0519 0 0 0 9.8358,10.673 h 1.2234 z"
-     id="path157675" />
-  <rect
-     class="cls-2"
-     x="9.4180002"
-     y="11.2187"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157677" />
-  <path
-     class="cls-2"
-     d="M 10.3123,8.1063 A 2.6556,2.6556 0 0 1 10.9329,6.8529 H 9.418 v 1.2534 z"
-     id="path157679" />
-  <path
-     class="cls-2"
-     d="M 11.6062,6.2706 A 3.46,3.46 0 0 1 13.2474,5.7072 V 4.67 h -1.6412 z"
-     id="path157681" />
-  <rect
-     class="cls-2"
-     x="9.4180002"
-     y="4.6700001"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157683" />
-  <path
-     class="cls-2"
-     d="m 9.418,14.1347 c 0.1028,-0.1008 0.2006,-0.2034 0.3185,-0.2993 a 4.0319,4.0319 0 0 1 0.6621,-0.4338 H 9.418 Z"
-     id="path157685" />
-  <path
-     class="cls-2"
-     d="m 12.8714,10.3606 c -0.4437,0 -0.8538,0.0329 -1.2652,0.0645 v 0.2479 h 1.6412 v -0.3124 z"
-     id="path157687" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="4.6700001"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157689" />
-  <rect
-     class="cls-2"
-     x="18.171"
-     y="6.8529"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157691" />
-  <polygon
-     class="cls-2"
-     points="19.171,11.673 20.561,11.673 20.812,10.415 20.812,10.036 19.171,10.036 "
-     id="polygon157693"
-     transform="translate(-1,-1)" />
-  <path
-     class="cls-2"
-     d="m 18.171,4.67 v 1.6372 h 1.6412 V 5.5707 A 3.9809,3.9809 0 0 0 19.3365,4.67 Z"
-     id="path157695" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="17.7675"
-     width="1.6411999"
-     height="1.6371"
-     id="rect157697" />
-  <polygon
-     class="cls-2"
-     points="19.69,16.039 20.017,14.402 19.171,14.402 19.171,16.039 "
-     id="polygon157699"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-2"
-     points="19.171,13.856 20.125,13.856 20.452,12.219 19.171,12.219 "
-     id="polygon157701"
-     transform="translate(-1,-1)" />
-  <path
-     class="cls-2"
-     d="M 18.8855,4.1243 A 5.1729,5.1729 0 0 0 18.171,3.54 v 0.5846 z"
-     id="path157703" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="13.4016"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157705" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="6.8529"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157707" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="15.5846"
-     width="1.6411999"
-     height="1.6371"
-     id="rect157709" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="11.2187"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157711" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="9.0358"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157713" />
-  <rect
-     class="cls-2"
-     x="7.2297001"
-     y="6.8529"
-     width="1.6411999"
-     height="1.2534"
-     id="rect157715" />
-  <path
-     class="cls-2"
-     d="M 8.8709,17.8492 C 8.8378,17.825 8.8125,17.7942 8.7823,17.7675 H 7.23 v 1.6371 h 1.6409 z"
-     id="path157717" />
-  <path
-     class="cls-2"
-     d="m 4.2243,17.7675 a 4.2825,4.2825 0 0 0 0.27,1.2456 v -1.2456 z"
-     id="path157719" />
-  <path
-     class="cls-2"
-     d="m 7.23,19.95 v 1.3713 a 5.9427,5.9427 0 0 0 1.4724,0.1912 c 0.0566,0 0.1122,-0.0091 0.1688,-0.0108 V 19.95 Z"
-     id="path157721" />
-  <path
-     class="cls-2"
-     d="M 4.1878,17.2217 H 4.4944 V 15.5846 H 4.4458 c -0.0347,0.1378 -0.0877,0.26 -0.116,0.4028 a 6.99,6.99 0 0 0 -0.142,1.2343 z"
-     id="path157723" />
-  <path
-     class="cls-2"
-     d="m 5.0414,19.95 v 0.0321 l 0.0087,0.0137 a 3.8335,3.8335 0 0 0 1.6325,1.168 V 19.95 Z"
-     id="path157725" />
-  <rect
-     class="cls-2"
-     x="5.0414"
-     y="15.5846"
-     width="1.6411999"
-     height="1.6371"
-     id="rect157727" />
-  <rect
-     class="cls-2"
-     x="5.0414"
-     y="17.7675"
-     width="1.6411999"
-     height="1.6371"
-     id="rect157729" />
-  <path
-     class="cls-2"
-     d="m 6.6826,15.0388 v -1.6372 h -1.294 a 6.1333,6.1333 0 0 0 -0.3472,0.6128 v 1.0244 z"
-     id="path157731" />
-  <rect
-     class="cls-2"
-     x="15.9827"
-     y="19.950399"
-     width="1.6411999"
-     height="1.2065001"
-     id="rect157733" />
-  <path
-     class="cls-2"
-     d="m 18.581,15.5846 h -0.41 v 1.6371 h 0.09 c 0.0188,-0.0971 0.0295,-0.1853 0.05,-0.2846 z"
-     id="path157735" />
-  <path
-     class="cls-2"
-     d="m 13.9,19.95 c 0,0.0238 -0.0031,0.0476 -0.0026,0.0714 a 11.2038,11.2038 0 0 0 0.0758,1.1351 H 15.436 V 19.95 Z"
-     id="path157737" />
-  <path
-     class="cls-2"
-     d="m 13.92,19.4046 h 1.5156 v -1.6371 h -1.6411 v 1.2674 c 0.0456,-0.0472 0.1,-0.084 0.1443,-0.1323 -0.015,0.1674 -0.0115,0.3347 -0.0188,0.502 z"
-     id="path157739" />
-  <path
-     class="cls-2"
-     d="M 11.0592,19.95 H 9.418 v 1.5169 a 5.8707,5.8707 0 0 0 1.6412,-0.474 z"
-     id="path157741" />
-  <path
-     class="cls-2"
-     d="m 11.6062,20.7218 a 9.34,9.34 0 0 0 1.1854,-0.7714 h -1.1854 z"
-     id="path157743" />
-  <path
-     class="cls-2"
-     d="m 13.2474,17.1484 c -0.0364,0.0252 -0.0764,0.0486 -0.1138,0.0733 h 0.1138 z"
-     id="path157745" />
-  <path
-     class="cls-2"
-     d="M 6.4315,8.1063 H 6.6826 V 6.9646 A 5.3078,5.3078 0 0 0 6.3974,8.0051 Z"
-     id="path157747" />
-  <polygon
-     class="cls-2"
-     points="15.946,14.402 15.616,16.039 16.436,16.039 16.436,14.402 "
-     id="polygon157749"
-     transform="translate(-1,-1)" />
-  <rect
-     class="cls-2"
-     x="13.7945"
-     y="11.2187"
-     width="1.6411999"
-     height="1.6372"
-     id="rect157751" />
-  <path
-     class="cls-2"
-     d="M 8.8709,12.8559 V 11.2187 H 8.12 a 7.4806,7.4806 0 0 0 -0.89,0.4607 v 1.1765 z"
-     id="path157753" />
-  <path
-     class="cls-2"
-     d="M 13.2474,17.7675 H 12.18 a 5.5388,5.5388 0 0 1 -0.5736,0.2168 v 1.42 h 1.6412 z"
-     id="path157755" />
-  <path
-     class="cls-2"
-     d="m 11.0592,18.1222 a 4.2834,4.2834 0 0 1 -0.7971,0.0855 3.1016,3.1016 0 0 1 -0.8441,-0.11 v 1.3069 h 1.6412 z"
-     id="path157757" />
-  <path
-     class="cls-2"
-     d="m 15.4357,15.5846 h -0.93 l -0.1087,0.5382 a 4.879,4.879 0 0 1 -0.6026,0.6027 v 0.4962 h 1.6412 z"
-     id="path157759" />
-  <path
-     class="cls-2"
-     d="M 8.8709,6.3072 V 4.67 H 8.3338 A 6.5656,6.5656 0 0 0 7.23,5.8943 v 0.4129 z"
-     id="path157761" />
-  <rect
-     class="cls-2"
-     x="13.7945"
-     y="10.3606"
-     width="1.6411999"
-     height="0.31240001"
-     id="rect157763" />
-  <path
-     class="cls-2"
-     d="m 9.418,4.1243 h 1.6412 V 3.0566 A 8.2615,8.2615 0 0 0 9.418,3.8553 Z"
-     id="path157765" />
-  <path
-     class="cls-2"
-     d="M 15.4357,4.1243 V 2.5552 A 8.174,8.174 0 0 0 14.5603,2.4871 h -0.21 c -0.1912,0.0017 -0.37,0.0259 -0.5559,0.0365 v 1.6007 z"
-     id="path157767" />
-  <path
-     class="cls-2"
-     d="M 13.2474,4.1243 V 2.5592 a 9.7988,9.7988 0 0 0 -1.6412,0.3025 v 1.2626 z"
-     id="path157769" />
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m 2.5,45.5 43,-43"
+     id="path995"
+     sodipodi:nodetypes="cc"
+     clip-path="url(#clipPath1015)" />
 </svg>
