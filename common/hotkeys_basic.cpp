@@ -36,6 +36,8 @@
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>
 #include <wx/tokenzr.h>
+#include <wx/txtstrm.h>
+#include <wx/wfstream.h>
 #include <tool/tool_action.h>
 
 
@@ -375,10 +377,15 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
 
     // Write entire hotkey set
     //
-    wxFile file( fn.GetFullPath(), wxFile::OpenMode::write );
+
+    wxFFileOutputStream outStream( fn.GetFullPath() );
+    wxTextOutputStream  txtStream( outStream, wxEOL_UNIX );
 
     for( const auto& ii : hotkeys )
-        file.Write( wxString::Format( "%s\t%s\n", ii.first, KeyNameFromKeyCode( ii.second ) ) );
+        txtStream << wxString::Format( "%s\t%s", ii.first, KeyNameFromKeyCode( ii.second ) ) << endl;
+
+    txtStream.Flush();
+    outStream.Close();
 
     return 1;
 }
