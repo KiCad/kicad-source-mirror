@@ -186,9 +186,9 @@ SCH_CONNECTION* SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet,
     {
         connection = new SCH_CONNECTION( this );
         m_connection_map.insert( std::make_pair( aSheet, connection ) );
-        connection->SetGraph( aGraph );
     }
 
+    connection->SetGraph( aGraph );
     connection->SetSheet( aSheet );
     return connection;
 }

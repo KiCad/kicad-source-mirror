@@ -176,9 +176,16 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
     // Cache driver connection
     if( m_driver )
+    {
         m_driver_connection = m_driver->Connection( &m_sheet );
+        m_driver_connection->ConfigureFromLabel( GetNameForDriver( m_driver ) );
+        m_driver_connection->SetDriver( m_driver );
+        m_driver_connection->ClearDirty();
+    }
     else
+    {
         m_driver_connection = nullptr;
+    }
 
     if( aCreateMarkers && m_multiple_drivers )
     {
@@ -849,23 +856,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 }
             }
 
-            if( !subgraph->ResolveDrivers() )
-            {
-                subgraph->m_dirty = false;
-            }
-            else
-            {
-                // Now the subgraph has only one driver
-                SCH_ITEM* driver = subgraph->m_driver;
-                SCH_SHEET_PATH sheet = subgraph->m_sheet;
-                SCH_CONNECTION* connection = driver->Connection( &sheet );
-
-                connection->ConfigureFromLabel( subgraph->GetNameForDriver( driver ) );
-                connection->SetDriver( driver );
-                connection->ClearDirty();
-
-                subgraph->m_dirty = false;
-            }
+            subgraph->ResolveDrivers();
+            subgraph->m_dirty = false;
         }
 
         return 1;
