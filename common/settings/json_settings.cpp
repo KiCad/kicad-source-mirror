@@ -33,6 +33,8 @@
 #include <wx/debug.h>
 #include <wx/fileconf.h>
 #include <wx/filename.h>
+#include <wx/ffile.h>
+
 
 const wxChar* const traceSettings = wxT( "KICAD_SETTINGS" );
 
@@ -390,7 +392,7 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
         std::stringstream buffer;
         buffer << std::setw( 2 ) << *this << std::endl;
 
-        wxFile   file( path.GetFullPath(), wxFile::write );
+        wxFFile   file( path.GetFullPath(), "wb" );
 
         if( !file.IsOpened() || !file.Write( buffer.str().c_str(), buffer.str().size() ) )
         {
