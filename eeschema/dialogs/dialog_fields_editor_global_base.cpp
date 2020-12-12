@@ -18,7 +18,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 
-	m_splitterMainWindow = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_LIVE_UPDATE );
+	m_splitterMainWindow = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE|wxSP_NO_XP_THEME );
 	m_splitterMainWindow->SetMinimumPaneSize( 200 );
 
 	m_leftPanel = new wxPanel( m_splitterMainWindow, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
@@ -28,11 +28,11 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	wxBoxSizer* bGroupSizer;
 	bGroupSizer = new wxBoxSizer( wxHORIZONTAL );
 
-    m_groupSymbolsBox = new wxCheckBox( m_leftPanel, OPT_GROUP_COMPONENTS, _( "Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_groupSymbolsBox->SetValue( true);
-	m_groupSymbolsBox->SetToolTip( _( "Group components together based on common properties") );
+	m_groupSymbolsBox = new wxCheckBox( m_leftPanel, OPT_GROUP_COMPONENTS, _("Group symbols"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_groupSymbolsBox->SetValue(true);
+	m_groupSymbolsBox->SetToolTip( _("Group symbols together based on common properties") );
 
-	bGroupSizer->Add( m_groupSymbolsBox, 0, wxALL | wxEXPAND, 5 );
+	bGroupSizer->Add( m_groupSymbolsBox, 0, wxALL|wxEXPAND, 5 );
 
 
 	bGroupSizer->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 10 );
@@ -43,15 +43,15 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	bGroupSizer->Add( m_bRefresh, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bLeftSizer->Add( bGroupSizer, 0, wxALL|wxBOTTOM|wxEXPAND|wxTOP, 2 );
+	bLeftSizer->Add( bGroupSizer, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 2 );
 
 	m_fieldsCtrl = new wxDataViewListCtrl( m_leftPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fieldsCtrl->SetMinSize( wxSize( -1,220 ) );
 
-	bLeftSizer->Add( m_fieldsCtrl, 1, wxALL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_fieldsCtrl, 1, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_addFieldButton = new wxButton( m_leftPanel, wxID_ANY, _("Add Field..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bLeftSizer->Add( m_addFieldButton, 0, wxALL|wxEXPAND, 5 );
+	bLeftSizer->Add( m_addFieldButton, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 
 	m_leftPanel->SetSizer( bLeftSizer );
@@ -87,7 +87,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_grid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_grid->SetMinSize( wxSize( 400,240 ) );
 
-	bRightSizer->Add( m_grid, 1, wxALL|wxEXPAND, 5 );
+	bRightSizer->Add( m_grid, 1, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 
 
 	m_rightPanel->SetSizer( bRightSizer );

@@ -187,7 +187,6 @@ protected:
     // A map of compID : fieldSet, where fieldSet is a map of fieldName : fieldValue
     std::map< KIID, std::map<wxString, wxString> > m_dataStore;
 
-
 public:
     FIELDS_EDITOR_GRID_DATA_MODEL( SCH_EDIT_FRAME* aFrame, SCH_REFERENCE_LIST& aSymbolsList ) :
             m_frame( aFrame ),
@@ -198,7 +197,6 @@ public:
     {
         m_symbolsList.SplitReferences();
     }
-
 
     void AddColumn( const wxString& aFieldName )
     {
@@ -211,12 +209,10 @@ public:
         }
     }
 
-
     int GetNumberRows() override { return m_rows.size(); }
 
     // Columns are fieldNames + quantity column
     int GetNumberCols() override { return (int) m_fieldNames.size() + 1; }
-
 
     wxString GetColLabelValue( int aCol ) override
     {
@@ -228,7 +224,6 @@ public:
             return m_fieldNames[ aCol ];
     }
 
-
     wxString GetCanonicalColLabel( int aCol )
     {
         if( aCol == QUANTITY_COLUMN )
@@ -237,12 +232,10 @@ public:
             return m_fieldNames[ aCol ];
     }
 
-
     bool IsEmptyCell( int aRow, int aCol ) override
     {
         return false;   // don't allow adjacent cell overflow, even if we are actually empty
     }
-
 
     wxString GetValue( int aRow, int aCol ) override
     {
@@ -283,8 +276,8 @@ public:
             {
                 const KIID& symbolID = ref.GetSymbol()->m_Uuid;
 
-                if( !m_dataStore.count( symbolID ) ||
-                    !m_dataStore[ symbolID ].count( m_fieldNames[ aCol ] ) )
+                if( !m_dataStore.count( symbolID )
+                        || !m_dataStore[ symbolID ].count( m_fieldNames[ aCol ] ) )
                 {
                     return INDETERMINATE_STATE;
                 }
@@ -304,25 +297,26 @@ public:
         {
             // Remove duplicates (other units of multi-unit parts)
             std::sort( references.begin(), references.end(),
-                []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
-                {
-                    wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                    wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                    return UTIL::RefDesStringCompare( l_ref, r_ref ) < 0;
-                } );
+                    []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                    {
+                        wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                        wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                        return UTIL::RefDesStringCompare( l_ref, r_ref ) < 0;
+                    } );
 
             auto logicalEnd = std::unique( references.begin(), references.end(),
-                []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
-                {
-                    // If unannotated then we can't tell what units belong together
-                    // so we have to leave them all
-                    if( l.GetRefNumber() == wxT( "?" ) )
-                        return false;
+                    []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                    {
+                        // If unannotated then we can't tell what units belong together
+                        // so we have to leave them all
+                        if( l.GetRefNumber() == wxT( "?" ) )
+                            return false;
 
-                    wxString l_ref( l.GetRef() << l.GetRefNumber() );
-                    wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                    return l_ref == r_ref;
-                } );
+                        wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                        wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                        return l_ref == r_ref;
+                    } );
+
             references.erase( logicalEnd, references.end() );
         }
 
@@ -338,7 +332,6 @@ public:
         return fieldValue;
     }
 
-
     void SetValue( int aRow, int aCol, const wxString &aValue ) override
     {
         if( aCol == REFERENCE_FIELD || aCol == QUANTITY_COLUMN )
@@ -353,7 +346,6 @@ public:
         m_edited = true;
     }
 
-
     static bool cmp( const DATA_MODEL_ROW& lhGroup, const DATA_MODEL_ROW& rhGroup,
                      FIELDS_EDITOR_GRID_DATA_MODEL* dataModel, int sortCol, bool ascending )
     {
@@ -365,13 +357,14 @@ public:
 
         // N.B. To meet the iterator sort conditions, we cannot simply invert the truth
         // to get the opposite sort.  i.e. ~(a<b) != (a>b)
-        auto local_cmp = [ ascending ]( const auto a, const auto b )
-        {
-            if( ascending )
-                return a < b;
-            else
-                return a > b;
-        };
+        auto local_cmp =
+                [ ascending ]( const auto a, const auto b )
+                {
+                    if( ascending )
+                        return a < b;
+                    else
+                        return a > b;
+                };
 
         // Primary sort key is sortCol; secondary is always REFERENCE (column 0)
 
@@ -385,9 +378,10 @@ public:
             return local_cmp( UTIL::RefDesStringCompare( lhRef, rhRef ), 0 );
         }
         else
+        {
             return local_cmp( ValueStringCompare( lhs, rhs ), 0 );
+        }
     }
-
 
     void Sort( int aColumn, bool ascending )
     {
@@ -408,7 +402,6 @@ public:
         ExpandAfterSort();
     }
 
-
     bool unitMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef )
     {
         // If items are unannotated then we can't tell if they're units of the same symbol or not
@@ -417,7 +410,6 @@ public:
 
         return ( lhRef.GetRef() == rhRef.GetRef() && lhRef.GetRefNumber() == rhRef.GetRefNumber() );
     }
-
 
     bool groupMatch( const SCH_REFERENCE& lhRef, const SCH_REFERENCE& rhRef,
                      wxDataViewListCtrl* fieldsCtrl )
@@ -456,7 +448,6 @@ public:
         return matchFound;
     }
 
-
     void RebuildRows( wxCheckBox* aGroupSymbolsBox, wxDataViewListCtrl* aFieldsCtrl )
     {
         if ( GetView() )
@@ -477,7 +468,7 @@ public:
             bool          matchFound = false;
 
             // See if we already have a row which this symbol fits into
-            for( auto& row : m_rows )
+            for( DATA_MODEL_ROW& row : m_rows )
             {
                 // all group members must have identical refs so just use the first one
                 SCH_REFERENCE rowRef = row.m_Refs[ 0 ];
@@ -508,17 +499,16 @@ public:
         }
     }
 
-
     void ExpandRow( int aRow )
     {
         std::vector<DATA_MODEL_ROW> children;
 
-        for( auto& ref : m_rows[ aRow ].m_Refs )
+        for( SCH_REFERENCE& ref : m_rows[ aRow ].m_Refs )
         {
             bool matchFound = false;
 
             // See if we already have a child group which this symbol fits into
-            for( auto& child : children )
+            for( DATA_MODEL_ROW& child : children )
             {
                 // group members are by definition all matching, so just check
                 // against the first member
@@ -550,7 +540,6 @@ public:
         GetView()->ProcessTableMessage( msg );
     }
 
-
     void CollapseRow( int aRow )
     {
         auto firstChild = m_rows.begin() + aRow + 1;
@@ -570,7 +559,6 @@ public:
         GetView()->ProcessTableMessage( msg );
     }
 
-
     void ExpandCollapseRow( int aRow )
     {
         DATA_MODEL_ROW& group = m_rows[ aRow ];
@@ -580,7 +568,6 @@ public:
         else if( group.m_Flag == GROUP_EXPANDED )
             CollapseRow( aRow );
     }
-
 
     void CollapseForSort()
     {
@@ -594,7 +581,6 @@ public:
         }
     }
 
-
     void ExpandAfterSort()
     {
         for( size_t i = 0; i < m_rows.size(); ++i )
@@ -603,7 +589,6 @@ public:
                 ExpandRow( i );
         }
     }
-
 
     void ApplyData()
     {
@@ -656,7 +641,6 @@ public:
         m_edited = false;
     }
 
-
     int GetDataWidth( int aCol )
     {
         int width = 0;
@@ -703,12 +687,16 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     m_bRefresh->SetBitmap( KiBitmap( refresh_xpm ) );
 
-    m_fieldsCtrl->AppendTextColumn(   _( "Field" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 0, wxALIGN_CENTER,
-                                      0 );
+    m_fieldsCtrl->AppendTextColumn( _( "Field" ), wxDATAVIEW_CELL_INERT, 0,
+                                    wxALIGN_LEFT, 0 );
+    m_fieldsCtrl->AppendToggleColumn( _( "Show" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
+                                      wxALIGN_CENTER, 0 );
     m_fieldsCtrl->AppendToggleColumn( _( "Group By" ), wxDATAVIEW_CELL_ACTIVATABLE, 0,
                                       wxALIGN_CENTER, 0 );
-    m_fieldsCtrl->AppendTextColumn(   _( "Name" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+
+    // GTK asserts if the number of columns doesn't match the data, but we still don't want
+    // to display the canonical names.  So we'll insert a column for them, but keep it 0 width.
+    m_fieldsCtrl->AppendTextColumn( _( "Name" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
 
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
@@ -731,24 +719,19 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // Now that the fields are loaded we can set the initial location of the splitter
     // based on the list width.  Again, SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails us on GTK.
     int nameColWidth = 0;
-    m_canonicalNameColWidth = 0;
 
     for( int row = 0; row < m_fieldsCtrl->GetItemCount(); ++row )
     {
         const wxString& fieldName = m_fieldsCtrl->GetTextValue( row, DISPLAY_NAME_COLUMN );
         nameColWidth = std::max( nameColWidth, KIUI::GetTextSize( fieldName, m_fieldsCtrl ).x );
-        const wxString& canon_Name = m_fieldsCtrl->GetTextValue( row, CANONICAL_NAME_COLUMN );
-        m_canonicalNameColWidth = std::max( m_canonicalNameColWidth,
-                                            KIUI::GetTextSize( canon_Name, m_fieldsCtrl ).x );
     }
 
-    m_canonicalNameColWidth += COLUMN_MARGIN;
-
-    int fieldsMinWidth = nameColWidth + m_canonicalNameColWidth +
-                         m_groupByColWidth + m_showColWidth;
+    int fieldsMinWidth = nameColWidth + m_groupByColWidth + m_showColWidth;
 
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( m_canonicalNameColWidth );
+
+    // This is used for data only.  Don't show it to the user.
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( 0 );
 
     m_splitterMainWindow->SetMinimumPaneSize( fieldsMinWidth );
     m_splitterMainWindow->SetSashPosition( fieldsMinWidth + 40 );
@@ -1111,14 +1094,18 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnColSort( wxGridEvent& aEvent )
     int sortCol = aEvent.GetCol();
     bool ascending;
 
-    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the
-    // event, and if we ask it will give us pre-event info.
+    // This is bonkers, but wxWidgets doesn't tell us ascending/descending in the event, and
+    // if we ask it will give us pre-event info.
     if( m_grid->IsSortingBy( sortCol ) )
+    {
         // same column; invert ascending
         ascending = !m_grid->IsSortOrderAscending();
+    }
     else
+    {
         // different column; start with ascending
         ascending = true;
+    }
 
     m_dataModel->Sort( sortCol, ascending );
     m_grid->ForceRefresh();
@@ -1188,14 +1175,13 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableItemContextMenu( wxGridEvent& event )
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnSizeFieldList( wxSizeEvent& event )
 {
-    int nameColWidth = event.GetSize().GetX() - m_showColWidth
-                       - m_groupByColWidth - m_canonicalNameColWidth - 8;
+    int nameColWidth = event.GetSize().GetX() - m_showColWidth - m_groupByColWidth - 8;
 
     // GTK loses its head and messes these up when resizing the splitter bar:
     m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN )->SetWidth( m_showColWidth );
     m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN )->SetWidth( m_groupByColWidth );
 
-    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( m_canonicalNameColWidth );
+    m_fieldsCtrl->GetColumn( CANONICAL_NAME_COLUMN )->SetWidth( 0 );
     m_fieldsCtrl->GetColumn( DISPLAY_NAME_COLUMN )->SetWidth( nameColWidth );
 
     event.Skip();
@@ -1223,7 +1209,10 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnClose( wxCloseEvent& event )
     if( m_dataModel->IsEdited() )
     {
         if( !HandleUnsavedChanges( this, _( "Save changes?" ),
-                                   [&]()->bool { return TransferDataFromWindow(); } ) )
+                                   [&]()->bool
+                                   {
+                                       return TransferDataFromWindow();
+                                   } ) )
         {
             event.Veto();
             return;
