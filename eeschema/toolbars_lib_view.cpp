@@ -26,7 +26,6 @@
 #include "eeschema_id.h"
 #include "lib_view_frame.h"
 #include "sch_painter.h"
-#include <symbol_lib_table.h>
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
@@ -49,10 +48,9 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     }
 
     m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-                            KiScaledBitmap( add_component_xpm, this ),
-                            _( "Select symbol to browse" ) );
+                            KiScaledBitmap( library_browse_xpm, this ),
+                            _( "Choose symbol" ) );
 
-    m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
                             KiScaledBitmap( lib_previous_xpm, this ),
                             _( "Display previous symbol" ) );
