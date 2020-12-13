@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="eeschema.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:cx="-3.5584597"
      inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -86,7 +86,8 @@
      width="23.998501"
      height="23.961901"
      rx="3.9967"
-     id="rect116807" />
+     id="rect116807"
+     style="fill:#e5d7c7;fill-opacity:1" />
   <line
      class="cls-2"
      x1="11.5315"
@@ -94,34 +95,6 @@
      x2="11.5315"
      y2="13.5286"
      id="line116809" />
-  <line
-     class="cls-3"
-     x1="8.5166998"
-     y1="7.7657003"
-     x2="3.3786001"
-     y2="7.7657003"
-     id="line116811" />
-  <line
-     class="cls-3"
-     x1="8.5166998"
-     y1="6.0791001"
-     x2="5.3141999"
-     y2="6.0791001"
-     id="line116813" />
-  <line
-     class="cls-3"
-     x1="18.705"
-     y1="17.587099"
-     x2="13.5668"
-     y2="17.587099"
-     id="line116815" />
-  <line
-     class="cls-3"
-     x1="16.7693"
-     y1="15.9004"
-     x2="13.5668"
-     y2="15.9004"
-     id="line116817" />
   <line
      class="cls-4"
      x1="0"
@@ -160,7 +133,8 @@
      y="0"
      width="3.9998"
      height="4.6382999"
-     id="rect116829" />
+     id="rect116829"
+     style="fill:#db295b;fill-opacity:1" />
   <rect
      class="cls-7"
      x="7.5346999"
@@ -168,7 +142,8 @@
      width="3.9935999"
      height="7.8471999"
      transform="rotate(90)"
-     id="rect116831" />
+     id="rect116831"
+     style="fill:#db295b;fill-opacity:1" />
   <line
      class="cls-2"
      x1="11.5315"
@@ -186,7 +161,8 @@
   <path
      class="cls-7"
      d="m 9.3823,21.4436 1.4212,-2.0158 a 0.7382,0.7382 0 0 1 1.32,0.25 l 0.3829,1.5775 a 0.9,0.9 0 0 1 -0.7489,1.1034 l -1.6681,0.2377 A 0.7367,0.7367 0 0 1 9.3823,21.4436 Z"
-     id="path116837" />
+     id="path116837"
+     style="fill:#db295b;fill-opacity:1" />
   <line
      class="cls-2"
      x1="4.5956998"
