@@ -43,6 +43,7 @@ public:
         mLayerMappingHandler     = aLayerMappingHandler;
         mLogLayerWarnings        = aLogLayerWarnings;
         mBoard                   = nullptr;
+        mProject                 = nullptr;
         mDesignCenter.x          = 0;
         mDesignCenter.y          = 0;
         mDoneCopperWarning       = false;
@@ -67,13 +68,14 @@ public:
      * @brief Loads a CADSTAR PCB Archive file into the KiCad BOARD object given
      * @param aBoard
      */
-    void Load( ::BOARD* aBoard );
+    void Load( ::BOARD* aBoard, ::PROJECT* aProject );
 
 
 private:
     LAYER_MAPPING_HANDLER            mLayerMappingHandler; ///< Callback to get layer mapping
     bool                             mLogLayerWarnings;    ///< Used in loadBoardStackup()
     ::BOARD*                         mBoard;
+    ::PROJECT*                       mProject;
     std::map<LAYER_ID, PCB_LAYER_ID> mLayermap;          ///< Map between Cadstar and KiCad Layers.
                                                          ///< Populated by loadBoardStackup().
     std::map<SYMDEF_ID, FOOTPRINT*>  mLibraryMap;        ///< Map between Cadstar and KiCad

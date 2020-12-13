@@ -663,7 +663,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             unsigned startTime = GetRunningMicroSecs();
 #endif
 
-            loadedBoard = pi->Load( fullFileName, NULL, &props );
+            loadedBoard = pi->Load( fullFileName, NULL, &props, &Prj() );
 
 #if USE_INSTRUMENTATION
             unsigned stopTime = GetRunningMicroSecs();

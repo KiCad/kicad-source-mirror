@@ -41,9 +41,11 @@
 #include <limits> // std::numeric_limits
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
+void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard, ::PROJECT* aProject )
 {
     mBoard = aBoard;
+    mProject = aProject;
+
     Parse();
 
     LONGPOINT designLimit = Assignments.Technology.DesignLimit;
@@ -1672,11 +1674,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTextVariables()
             return true;
         };
 
-    PROJECT* pj = mBoard->GetProject();
-
-    if( pj )
+    if( mProject )
     {
-        std::map<wxString, wxString>& txtVars = pj->GetTextVars();
+        std::map<wxString, wxString>& txtVars = mProject->GetTextVars();
 
         // Most of the design text fields can be derived from other elements
         if( Layout.VariantHierarchy.Variants.size() > 0 )
@@ -1707,7 +1707,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTextVariables()
     }
     else
     {
-        wxLogError( _( "Text Variables could not be set as there is no project attached." ) );
+        wxLogError( _( "Text Variables could not be set as there is no project loaded." ) );
     }
 }
 
