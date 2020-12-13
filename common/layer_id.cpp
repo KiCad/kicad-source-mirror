@@ -124,7 +124,7 @@ wxString LayerName( int aLayer )
     case LAYER_SHEETNAME:               return _( "Sheet names" );
     case LAYER_SHEETFIELDS:             return _( "Sheet fields" );
     case LAYER_SHEETFILENAME:           return _( "Sheet file names" );
-    case LAYER_SHEETLABEL:              return _( "Sheet labels" );
+    case LAYER_SHEETLABEL:              return _( "Sheet pins" );
     case LAYER_NOCONNECT:               return _( "No-connect symbols" );
     case LAYER_ERC_WARN:                return _( "ERC warnings" );
     case LAYER_ERC_ERR:                 return _( "ERC errors" );

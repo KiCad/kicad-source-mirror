@@ -298,7 +298,7 @@ TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
         'H', LEGACY_HK_NAME( "Add Hierarchical Label" ),
-        _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ),
+        _( "Add Hierarchical Label" ), _( "Add a hierarchical label" ),
         add_hierarchical_label_xpm, AF_ACTIVATE, (void*) SCH_HIER_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
