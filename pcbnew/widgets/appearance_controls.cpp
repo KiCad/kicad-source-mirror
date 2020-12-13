@@ -1537,7 +1537,7 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
 
     AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_COPPER_LAYERS,
                  _( "Show All Copper Layers" ),
-                 KiBitmap( select_layer_pair_xpm ) );
+                 KiBitmap( show_all_copper_layers_xpm ) );
     AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_COPPER_LAYERS,
                  _( "Hide All Copper Layers" ),
                  KiBitmap( show_no_copper_layers_xpm ) );
@@ -1551,10 +1551,10 @@ void APPEARANCE_CONTROLS::rebuildLayerContextMenu()
     m_layerContextMenu->AppendSeparator();
 
     AddMenuItem( m_layerContextMenu, ID_SHOW_ALL_NON_COPPER, _( "Show All Non Copper Layers" ),
-                 KiBitmap( select_w_layer_xpm ) );
+                 KiBitmap( show_no_copper_layers_xpm ) );
 
     AddMenuItem( m_layerContextMenu, ID_HIDE_ALL_NON_COPPER, _( "Hide All Non Copper Layers" ),
-                 KiBitmap( show_no_copper_layers_xpm ) );
+                 KiBitmap( show_all_copper_layers_xpm ) );
 
     m_layerContextMenu->AppendSeparator();
 
