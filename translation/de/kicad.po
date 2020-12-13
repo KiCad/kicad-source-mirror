@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-13 16:53+0000\n"
-"Last-Translator: jonathan haas <jonathan.haas@live.de>\n"
+"PO-Revision-Date: 2020-12-13 18:17+0000\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -207,7 +207,7 @@ msgstr "Erstelle technische Lagen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1059
 msgid "Build BVH for holes and vias"
-msgstr "Baue BVH für Bohrungen und Vias"
+msgstr "Baue BVH für Bohrungen und DuKos"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:431
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
@@ -236,7 +236,7 @@ msgstr "Lade OpenGL: Platine"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:535
 msgid "Load OpenGL: holes and vias"
-msgstr "Lade OpenGL: Bohrungen und Vias"
+msgstr "Lade OpenGL: Bohrungen und DuKos"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:622
 msgid "Load OpenGL: layers"
@@ -460,7 +460,7 @@ msgstr "Subtrahiere Lötstoppmaske von Siebdruckmaske"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr "Positionsdruck an Via-Restring abschneiden"
+msgstr "Positionsdruck an DuKo-Restring abschneiden"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
@@ -611,7 +611,7 @@ msgstr "Linienstärke ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr "Vias ausschalten"
+msgstr "DuKos ausschalten"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
@@ -1345,9 +1345,8 @@ msgid "bits"
 msgstr "Bits"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:104
-#, fuzzy
 msgid "Output Parameters"
-msgstr "Ausgabeparameter:"
+msgstr "Ausgabeparameter"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:109
 msgid "Lock height/width ratio"
@@ -1386,9 +1385,8 @@ msgid "Pcbnew (.kicad_mod file)"
 msgstr "Pcbnew (.kicad_mod Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
-#, fuzzy
 msgid "Postscript (.ps file)"
-msgstr "PostScript (.ps Datei)"
+msgstr "Postscript (.ps Datei)"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:158
 msgid "Logo for title block (.kicad_wks file)"
@@ -1400,9 +1398,8 @@ msgid "Format"
 msgstr "Format"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:165
-#, fuzzy
 msgid "Image Options"
-msgstr "Grafikeigenschaften:"
+msgstr "Grafikeigenschaften"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:167
 msgid "Black / White Threshold:"
@@ -1440,9 +1437,8 @@ msgid "User layer Eco2"
 msgstr "Benutzerlage Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
-#, fuzzy
 msgid "Board Layer for Outline"
-msgstr "Platinenlage für Umriss:"
+msgstr "Platinenlage für Umriss"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -2186,9 +2182,8 @@ msgid "a page"
 msgstr "Eine Seite"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
-#, fuzzy
 msgid "Current Grid"
-msgstr "Strom"
+msgstr "Aktuelles Raster"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
@@ -2785,9 +2780,8 @@ msgid "Reveal Themes in Finder"
 msgstr "Im Dateimanager anzeigen"
 
 #: common/dialogs/panel_color_settings.cpp:130
-#, fuzzy
 msgid "New theme name:"
-msgstr "Themenname:"
+msgstr "Neuer Themenname:"
 
 #: common/dialogs/panel_color_settings.cpp:130
 msgid "Add Color Theme"
@@ -3204,9 +3198,8 @@ msgid "Pick the zoom speed automatically"
 msgstr "Wählen Sie die Zoomgeschwindigkeit automatisch"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
-#, fuzzy
 msgid "Auto pan speed:"
-msgstr "Autoplatzieren %s"
+msgstr "Automatische Schwenkgeschwindigkeit:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
@@ -3215,9 +3208,8 @@ msgstr ""
 "entfernen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:89
-#, fuzzy
 msgid "Mouse Buttons"
-msgstr "Maus-Ziehen Verhalten"
+msgstr "Maus-Tasten"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:97
 msgid "Middle button drag:"
@@ -3225,9 +3217,8 @@ msgstr "Ziehen der mittleren Taste:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
-#, fuzzy
 msgid "Pan"
-msgstr "Pin"
+msgstr "Schwenk"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
@@ -3282,24 +3273,21 @@ msgid "Shift"
 msgstr "Umsch."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:151
-#, fuzzy
 msgid "Alt"
-msgstr "an"
+msgstr "Alt"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:155
 #, fuzzy
 msgid "Zoom:"
-msgstr "Zoom: "
+msgstr "Zoom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:171
-#, fuzzy
 msgid "Pan up / down:"
-msgstr "Oben/Unten schwenken"
+msgstr "Oben/Unten schwenken:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
-#, fuzzy
 msgid "Pan left / right:"
-msgstr "Links/Rechts schwenken"
+msgstr "Links/Rechts schwenken:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:206
 msgid "Pan left/right with horizontal touchpad or scroll wheel movement"
@@ -3399,14 +3387,12 @@ msgstr ""
 "Bohrdurchmesser"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:47
-#, fuzzy
 msgid "DP Width"
-msgstr "Breite"
+msgstr "DP-Breite"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:48
-#, fuzzy
 msgid "DP Gap"
-msgstr "Abstand dPair"
+msgstr "Abstand DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:49
 msgid "Wire Thickness"
@@ -3600,19 +3586,19 @@ msgid "clipboard"
 msgstr "Zwischenablage"
 
 #: common/dsnlexer.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting %s"
-msgstr "Erwartete Zeichen \"%s\""
+msgstr "Erwarte %s"
 
 #: common/dsnlexer.cpp:332
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting '%s'"
-msgstr "Ausführung '%s'"
+msgstr "Erwarte '%s'"
 
 #: common/dsnlexer.cpp:340
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected %s"
-msgstr "Unerwartete Zeichen \"%s\""
+msgstr "Unerwartes %s"
 
 #: common/dsnlexer.cpp:348
 #, c-format
@@ -3620,9 +3606,9 @@ msgid "%s is a duplicate"
 msgstr "%s ist ein Duplikat"
 
 #: common/dsnlexer.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected '%s'"
-msgstr "Unerwartete Zeichen \"%s\""
+msgstr "Unerwartetes \"%s\""
 
 #: common/dsnlexer.cpp:401
 #, fuzzy, c-format
@@ -3737,9 +3723,9 @@ msgid "Zoom Auto"
 msgstr "Zoom Auto"
 
 #: common/eda_draw_frame.cpp:369
-#, fuzzy, c-format
+#, c-format
 msgid "Zoom %.2f"
-msgstr "Zoom: %.2f"
+msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:496 pagelayout_editor/pl_editor_frame.cpp:731
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:193
@@ -3813,9 +3799,8 @@ msgid "Pad"
 msgstr "Pad"
 
 #: common/eda_item.cpp:263 common/eda_item.cpp:266
-#, fuzzy
 msgid "Graphic Shape"
-msgstr "Grafische Darstellung"
+msgstr "Grafikform"
 
 #: common/eda_item.cpp:264
 msgid "Board Text"
@@ -3826,9 +3811,8 @@ msgid "Footprint Text"
 msgstr "Footprinttext"
 
 #: common/eda_item.cpp:267 common/eda_item.cpp:276
-#, fuzzy
 msgid "Zone"
-msgstr "Flächen"
+msgstr "Zone"
 
 #: common/eda_item.cpp:268 pcbnew/track.cpp:605
 msgid "Track"
@@ -3837,7 +3821,7 @@ msgstr "Leiterbahn"
 #: common/eda_item.cpp:269 pcbnew/dialogs/dialog_board_statistics.cpp:481
 #: pcbnew/track.cpp:667
 msgid "Via"
-msgstr "Via"
+msgstr "DuKo"
 
 #: common/eda_item.cpp:270
 msgid "Board Marker"
@@ -3872,15 +3856,13 @@ msgid "Item List"
 msgstr "Elemente"
 
 #: common/eda_item.cpp:278
-#, fuzzy
 msgid "Net Info"
-msgstr "Netz-ID"
+msgstr "Netzinfo"
 
 #: common/eda_item.cpp:279 pcbnew/pcb_group.cpp:307
 #: pcbnew/tools/pcb_actions.cpp:657
-#, fuzzy
 msgid "Group"
-msgstr "Gruppieren nach"
+msgstr "Gruppe"
 
 #: common/eda_item.cpp:281
 #, fuzzy
@@ -3907,9 +3889,8 @@ msgid "Bus Entry"
 msgstr "Buseingang hinzufügen"
 
 #: common/eda_item.cpp:286
-#, fuzzy
 msgid "Graphic Line"
-msgstr "Grafische Lage"
+msgstr "Grafische Linie"
 
 #: common/eda_item.cpp:287 eeschema/sch_bitmap.cpp:201
 msgid "Bitmap"
@@ -3980,9 +3961,8 @@ msgid "Circle"
 msgstr "Kreis"
 
 #: common/eda_item.cpp:308
-#, fuzzy
 msgid "Symbol Text"
-msgstr "Bauteilname"
+msgstr "Symboltext"
 
 #: common/eda_item.cpp:309 common/page_layout/ws_draw_item.cpp:118
 #: eeschema/lib_rectangle.h:54
@@ -4009,19 +3989,16 @@ msgid "Pin"
 msgstr "Pin"
 
 #: common/eda_item.cpp:313
-#, fuzzy
 msgid "Symbol Field"
-msgstr "Bauteilfelder"
+msgstr "Bauteilfeld"
 
 #: common/eda_item.cpp:315
-#, fuzzy
 msgid "Gerber Layout"
-msgstr "Gerber X2"
+msgstr "Gerber Layout"
 
 #: common/eda_item.cpp:316
-#, fuzzy
 msgid "Draw Item"
-msgstr "Element ziehen"
+msgstr "Element zeichnen"
 
 #: common/eda_item.cpp:317 common/page_layout/ws_draw_item.cpp:131
 #: common/page_layout/ws_draw_item.cpp:440 eeschema/sch_bitmap.h:133
@@ -4193,14 +4170,12 @@ msgid "Height"
 msgstr "Höhe"
 
 #: common/eda_text.cpp:674
-#, fuzzy
 msgid "Horizontal Justification"
-msgstr "Abstand horizontal:"
+msgstr "Horizontale Ausrichtung"
 
 #: common/eda_text.cpp:676
-#, fuzzy
 msgid "Vertical Justification"
-msgstr "Ausrichtung:"
+msgstr "Vertikale Ausrichtung"
 
 #: common/env_vars.cpp:70
 msgid ""
@@ -4262,7 +4237,7 @@ msgid "%s in \"%s\", line %d, offset %d"
 msgstr "%s in \"%s\", Zeile %d, Offset %d"
 
 #: common/exceptions.cpp:109
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file, as it was created with a more\n"
 "recent version than the one you are running.\n"
@@ -4273,11 +4248,11 @@ msgid ""
 "Full error text:\n"
 "%s"
 msgstr ""
-"KiCad konnte diese Datei nicht öffnen, da sie mit einer neueren Version als "
-"der aktuell benutzten erstellt wurde. Um die Datei öffnen zu können müssen "
-"Sie KiCad auf eine neuere Version aktualisieren.\n"
+"KiCad konnte diese Datei nicht öffnen, da sie mit einer neueren Version\n"
+"als der aktuell benutzten erstellt wurde. Um die Datei öffnen zu können\n"
+"müssen Sie KiCad auf eine neuere Version aktualisieren.\n"
 "\n"
-"Die benötigte KiCad Version (oder neuer): %s\n"
+"Die benötigte KiCad Version (oder neuer) lautet: %s\n"
 "\n"
 "Der komplette Fehlertext:\n"
 "%s"
@@ -4304,9 +4279,8 @@ msgid "This path:"
 msgstr "Dieser Pfad: "
 
 #: common/filename_resolver.cpp:488
-#, fuzzy
 msgid "Existing path:"
-msgstr "Existierender Pfad: "
+msgstr "Existierender Pfad:"
 
 #: common/filename_resolver.cpp:490
 msgid "Bad alias (duplicate name)"
@@ -4543,16 +4517,13 @@ msgstr ""
 "'"
 
 #: common/kiway.cpp:385 common/kiway.cpp:389 common/kiway.cpp:393
-#, fuzzy
 msgid "Error loading editor"
-msgstr ""
-"Fehler beim Einlesen der Netzliste.\n"
-"%s"
+msgstr "Fehler beim Laden des Editors"
 
 #: common/kiway.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to switch language to %s"
-msgstr "Kann \"%s\" nicht schreiben"
+msgstr "Konnte nicht auf Sprache %s wechseln"
 
 #: common/languages_menu.cpp:49
 msgid "Set Language"
@@ -4599,143 +4570,116 @@ msgid "In9.Cu"
 msgstr "In9.Cu"
 
 #: common/layer_id.cpp:42
-#, fuzzy
 msgid "In10.Cu"
-msgstr "In10"
+msgstr "In10.Cu"
 
 #: common/layer_id.cpp:43
-#, fuzzy
 msgid "In11.Cu"
-msgstr "In11"
+msgstr "In11.Cu"
 
 #: common/layer_id.cpp:44
-#, fuzzy
 msgid "In12.Cu"
-msgstr "In12"
+msgstr "In12.Cu"
 
 #: common/layer_id.cpp:45
-#, fuzzy
 msgid "In13.Cu"
-msgstr "In13"
+msgstr "In13.Cu"
 
 #: common/layer_id.cpp:46
-#, fuzzy
 msgid "In14.Cu"
-msgstr "In14"
+msgstr "In14.Cu"
 
 #: common/layer_id.cpp:47
-#, fuzzy
 msgid "In15.Cu"
-msgstr "In15"
+msgstr "In15.Cu"
 
 #: common/layer_id.cpp:48
-#, fuzzy
 msgid "In16.Cu"
-msgstr "In16"
+msgstr "In16.Cu"
 
 #: common/layer_id.cpp:49
-#, fuzzy
 msgid "In17.Cu"
-msgstr "In17"
+msgstr "In17.Cu"
 
 #: common/layer_id.cpp:50
-#, fuzzy
 msgid "In18.Cu"
-msgstr "In18"
+msgstr "In18.Cu"
 
 #: common/layer_id.cpp:51
-#, fuzzy
 msgid "In19.Cu"
-msgstr "In19"
+msgstr "In19.Cu"
 
 #: common/layer_id.cpp:52
-#, fuzzy
 msgid "In20.Cu"
-msgstr "In20"
+msgstr "In20.Cu"
 
 #: common/layer_id.cpp:53
-#, fuzzy
 msgid "In21.Cu"
-msgstr "In21"
+msgstr "In21.Cu"
 
 #: common/layer_id.cpp:54
-#, fuzzy
 msgid "In22.Cu"
-msgstr "In22"
+msgstr "In22.Cu"
 
 #: common/layer_id.cpp:55
-#, fuzzy
 msgid "In23.Cu"
-msgstr "In23"
+msgstr "In23.Cu"
 
 #: common/layer_id.cpp:56
-#, fuzzy
 msgid "In24.Cu"
-msgstr "In24"
+msgstr "In24.Cu"
 
 #: common/layer_id.cpp:57
-#, fuzzy
 msgid "In25.Cu"
-msgstr "In25"
+msgstr "In25.Cu"
 
 #: common/layer_id.cpp:58
-#, fuzzy
 msgid "In26.Cu"
-msgstr "In26"
+msgstr "In26.Cu"
 
 #: common/layer_id.cpp:59
-#, fuzzy
 msgid "In27.Cu"
-msgstr "In27"
+msgstr "In27.Cu"
 
 #: common/layer_id.cpp:60
-#, fuzzy
 msgid "In28.Cu"
-msgstr "In28"
+msgstr "In28.Cu"
 
 #: common/layer_id.cpp:61
-#, fuzzy
 msgid "In29.Cu"
-msgstr "In29"
+msgstr "In29.Cu"
 
 #: common/layer_id.cpp:62
-#, fuzzy
 msgid "In30.Cu"
-msgstr "In30"
+msgstr "In30.Cu"
 
 #: common/layer_id.cpp:63
 msgid "B.Cu"
 msgstr "B.Cu."
 
 #: common/layer_id.cpp:66
-#, fuzzy
 msgid "B.Adhesive"
-msgstr "Rückseitiger Kleber"
+msgstr "R. Kleber"
 
 #: common/layer_id.cpp:67
-#, fuzzy
 msgid "F.Adhesive"
-msgstr "Vorderseitiger Kleber"
+msgstr "V. Kleber"
 
 #: common/layer_id.cpp:68
-#, fuzzy
 msgid "B.Paste"
-msgstr "Einfügen"
+msgstr "R. Lötpaste"
 
 #: common/layer_id.cpp:69
-#, fuzzy
 msgid "F.Paste"
-msgstr "Einfügen"
+msgstr "V. Lötpaste"
 
 #: common/layer_id.cpp:70
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Bestückungsdruck"
+msgstr "R. Bestückungsdruck"
 
 #: common/layer_id.cpp:71
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "Bestückungsdruck"
+msgstr "V. Bestückungsdruck"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4746,44 +4690,36 @@ msgid "F.Mask"
 msgstr "F.Mask"
 
 #: common/layer_id.cpp:76
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Zeichnungen"
+msgstr "Nutzer.Zeichnungen"
 
 #: common/layer_id.cpp:77
-#, fuzzy
 msgid "User.Comments"
-msgstr "Kommentar"
+msgstr "Nutzer.Kommentare"
 
 #: common/layer_id.cpp:78
-#, fuzzy
 msgid "User.Eco1"
-msgstr "Benutzerlage Eco1"
+msgstr "Nutzer.Eco1"
 
 #: common/layer_id.cpp:79
-#, fuzzy
 msgid "User.Eco2"
-msgstr "Benutzerlage Eco2"
+msgstr "Nutzer.Eco2"
 
 #: common/layer_id.cpp:80
-#, fuzzy
 msgid "Edge.Cuts"
-msgstr "Edge Cuts (Platinenumriss)"
+msgstr "Platinenumriss"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:679
-#, fuzzy
 msgid "Margin"
-msgstr "Margin_Lage"
+msgstr "Außenabstand"
 
 #: common/layer_id.cpp:84
-#, fuzzy
 msgid "F.Courtyard"
-msgstr "Sperrbereiche"
+msgstr "V. Sperrbereiche"
 
 #: common/layer_id.cpp:85
-#, fuzzy
 msgid "B.Courtyard"
-msgstr "Sperrbereiche"
+msgstr "R. Sperrbereiche"
 
 #: common/layer_id.cpp:86
 msgid "F.Fab"
@@ -4794,49 +4730,40 @@ msgid "B.Fab"
 msgstr "B.Fab"
 
 #: common/layer_id.cpp:90
-#, fuzzy
 msgid "User.1"
-msgstr "Benutzer"
+msgstr "Nutzer.1"
 
 #: common/layer_id.cpp:91
-#, fuzzy
 msgid "User.2"
-msgstr "Benutzer"
+msgstr "Nutzer.2"
 
 #: common/layer_id.cpp:92
-#, fuzzy
 msgid "User.3"
-msgstr "Benutzer"
+msgstr "Nutzer.3"
 
 #: common/layer_id.cpp:93
-#, fuzzy
 msgid "User.4"
-msgstr "Benutzer"
+msgstr "Nutzer.4"
 
 #: common/layer_id.cpp:94
-#, fuzzy
 msgid "User.5"
-msgstr "Benutzer"
+msgstr "Nutzer.5"
 
 #: common/layer_id.cpp:95
-#, fuzzy
 msgid "User.6"
-msgstr "Benutzer"
+msgstr "Nutzer.6"
 
 #: common/layer_id.cpp:96
-#, fuzzy
 msgid "User.7"
-msgstr "Benutzer"
+msgstr "Nutzer.7"
 
 #: common/layer_id.cpp:97
-#, fuzzy
 msgid "User.8"
-msgstr "Benutzer"
+msgstr "Nutzer.8"
 
 #: common/layer_id.cpp:98
-#, fuzzy
 msgid "User.9"
-msgstr "Benutzer"
+msgstr "Nutzer.9"
 
 #: common/layer_id.cpp:101 pcbnew/plugins/kicad/pcb_parser.cpp:653
 msgid "Rescue"
@@ -4853,9 +4780,8 @@ msgid "Bus"
 msgstr "Bus"
 
 #: common/layer_id.cpp:107
-#, fuzzy
 msgid "Bus Junction"
-msgstr "Knotenpunkt"
+msgstr "Busknotenpunkt"
 
 #: common/layer_id.cpp:109 eeschema/sch_text.cpp:654
 msgid "Label"
@@ -4942,9 +4868,8 @@ msgid "ERC error"
 msgstr "ERC-Fehler"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:168
-#, fuzzy
 msgid "Helper items"
-msgstr "Element entfernen"
+msgstr "Hilfselemente"
 
 #: common/layer_id.cpp:132 common/layer_id.cpp:169 common/tool/grid_menu.cpp:40
 #: gerbview/widgets/gerbview_layer_widget.cpp:103
@@ -5049,9 +4974,8 @@ msgid "Micro Via"
 msgstr "Mikro-DuKo"
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via Holes"
-msgstr "Bohrlöcher"
+msgstr "Durchkontaktierungsbohrungen"
 
 #: common/layer_id.cpp:158
 msgid "Non Plated Holes"
@@ -5076,9 +5000,8 @@ msgid "DRC Errors"
 msgstr "DRC-Fehler"
 
 #: common/layer_id.cpp:163 pcbnew/widgets/appearance_controls.cpp:351
-#, fuzzy
 msgid "DRC Exclusions"
-msgstr "Ausschlüsse"
+msgstr "DRC Ausnahmen"
 
 #: common/layer_id.cpp:164
 msgid "DRC Marker Shadows"
@@ -5089,9 +5012,8 @@ msgid "Anchors"
 msgstr "Anker"
 
 #: common/layer_id.cpp:170
-#, fuzzy
 msgid "Grid Axes"
-msgstr "Raster Einstellungen"
+msgstr "Gitterachsen"
 
 #: common/lib_id.cpp:284
 msgid "Illegal character found in logical library name"
@@ -5230,9 +5152,8 @@ msgid "Line, length %s"
 msgstr "Linie, Länge %s"
 
 #: common/page_layout/ws_draw_item.cpp:446
-#, fuzzy
 msgid "Page Limits"
-msgstr "Anzeige von Seitenrändern"
+msgstr "Seitenlimits"
 
 #: common/pgm_base.cpp:166
 msgid "No default editor found, you must choose it"
@@ -5396,14 +5317,12 @@ msgid "(Footprints)"
 msgstr "Footprints"
 
 #: common/settings/color_settings.cpp:364
-#, fuzzy
 msgid "KiCad Default"
-msgstr "Voreinstellung"
+msgstr "KiCad-Standard"
 
 #: common/settings/color_settings.cpp:369
-#, fuzzy
 msgid "KiCad Classic"
-msgstr "2 Lagen"
+msgstr "KiCad Classic"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
@@ -5411,18 +5330,18 @@ msgid "Field%d"
 msgstr "Feld%d"
 
 #: common/tool/action_menu.cpp:206
-#, fuzzy, c-format
+#, c-format
 msgid "Close %s"
-msgstr "Schließen"
+msgstr "%s schließen"
 
 #: common/tool/action_menu.cpp:218 common/tool/actions.cpp:113
 msgid "Quit"
 msgstr "Beenden"
 
 #: common/tool/action_menu.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "Quit %s"
-msgstr "Beenden"
+msgstr "%s beenden"
 
 #: common/tool/actions.cpp:41
 msgid "New..."
@@ -5551,25 +5470,20 @@ msgid "Copy selected item(s) to clipboard"
 msgstr "Ausgewählte(s) Element(e) und in die Zwischenablage kopieren"
 
 #: common/tool/actions.cpp:164
-#, fuzzy
 msgid "Paste items(s) from clipboard"
-msgstr ""
-"Ausschneiden des ausgewählten Element(s) und in die Zwischenablage kopieren"
+msgstr "Element(e) aus Zwischenablage einfügen"
 
 #: common/tool/actions.cpp:170
-#, fuzzy
 msgid "Select all items on screen"
-msgstr "Alle Zellen auswählen"
+msgstr "Alle Elemente auf dem Bildschirm auswählen"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
 msgstr "Spezielles Einfügen..."
 
 #: common/tool/actions.cpp:175
-#, fuzzy
 msgid "Paste item(s) from clipboard with options"
-msgstr ""
-"Einfügen des Inhalts aus der Zwischenablage in den Schaltplan mit Optionen"
+msgstr "Einfügen von Element(en) aus Zwischenablage mit Optionen"
 
 #: common/tool/actions.cpp:181 eeschema/tools/ee_actions.cpp:127
 msgid "Duplicate"
@@ -5598,14 +5512,12 @@ msgid "Delete clicked items"
 msgstr "Löschen des selektierten Elements"
 
 #: common/tool/actions.cpp:199
-#, fuzzy
 msgid "Change Edit Method"
-msgstr "Zu Text ändern"
+msgstr "Bearbeitungsmethode ändern"
 
 #: common/tool/actions.cpp:199
-#, fuzzy
 msgid "Change edit method constraints"
-msgstr "Ändere Footprints"
+msgstr "Einschränkungen der Bearbeitungsmethode ändern"
 
 #: common/tool/actions.cpp:204 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
@@ -5661,9 +5573,8 @@ msgid "Zoom to Fit"
 msgstr "Darstellung an den Bildschirm anpassen"
 
 #: common/tool/actions.cpp:265
-#, fuzzy
 msgid "Zoom to Objects"
-msgstr "Keine Objekte"
+msgstr "Auf Objekte zoomen"
 
 #: common/tool/actions.cpp:276
 msgid "Zoom In at Cursor"
@@ -5796,9 +5707,8 @@ msgid "Set grid dimensions"
 msgstr "Rastergröße setzen"
 
 #: common/tool/actions.cpp:465
-#, fuzzy
 msgid "Use inches"
-msgstr "Zoll"
+msgstr "Zoll benutzen"
 
 #: common/tool/actions.cpp:470
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5809,9 +5719,8 @@ msgid "Mils"
 msgstr "Mil"
 
 #: common/tool/actions.cpp:470
-#, fuzzy
 msgid "Use mils"
-msgstr "sq. mils"
+msgstr "Mils benutzen"
 
 #: common/tool/actions.cpp:475
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:120
@@ -5833,9 +5742,8 @@ msgid "Switch units"
 msgstr "Umschalten mil/mm"
 
 #: common/tool/actions.cpp:484
-#, fuzzy
 msgid "Switch between imperial and metric units"
-msgstr "Umschalten Einheiten Millimeter und Zoll"
+msgstr "Zwischen imperialen und metrischen Einheiten umschalten"
 
 #: common/tool/actions.cpp:489
 msgid "Polar Coordinates"
@@ -5866,9 +5774,8 @@ msgid "Switch display of full-window crosshairs"
 msgstr "Umschalten zu Anzeige mit einem Fenster füllenden Fadenkreuz"
 
 #: common/tool/actions.cpp:512
-#, fuzzy
 msgid "Single Layer View Mode"
-msgstr "Lagen sortieren wenn im X2-Modus"
+msgstr "Einzelne-Lage-Ansichtsmodus"
 
 #: common/tool/actions.cpp:512
 msgid "Toggle inactive layers between normal and dimmed"
@@ -5942,9 +5849,8 @@ msgid "Update PCB from Schematic..."
 msgstr "Aktualisiere PCB aus dem Schaltplan..."
 
 #: common/tool/actions.cpp:563
-#, fuzzy
 msgid "Update PCB with changes made to schematic"
-msgstr "Aktualisiere PCB Design mit dem aktuellen Schaltplan."
+msgstr "PCB mit Änderungen am Schaltplan aktualisieren"
 
 #: common/tool/actions.cpp:568
 msgid "Update Schematic from PCB..."
@@ -6033,9 +5939,8 @@ msgid "Open \"Contribute to KiCad\" in a web browser"
 msgstr "\"Zu KiCad beitragen\" im Webbrowser öffnen"
 
 #: common/tool/actions.cpp:625
-#, fuzzy
 msgid "Report Bug"
-msgstr "&Fehler melden"
+msgstr "Fehler melden"
 
 #: common/tool/common_control.cpp:197
 #, c-format
@@ -6069,9 +5974,9 @@ msgid "Get involved with KiCad"
 msgstr "Beteilige Dich an KiCad"
 
 #: common/tool/grid_menu.cpp:93
-#, fuzzy, c-format
+#, c-format
 msgid "Grid: %s (%s)"
-msgstr "DuKo: %s (%s)"
+msgstr "Gitter: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
@@ -6174,9 +6079,8 @@ msgid "Min grid spacing:"
 msgstr "Minimaler Rasterabstand:"
 
 #: common/widgets/gal_options_panel.cpp:135
-#, fuzzy
 msgid "Snap to Grid:"
-msgstr "Auf Pads einrasten:"
+msgstr "Am Raster ausrichten:"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6187,9 +6091,8 @@ msgid "Always"
 msgstr "Immer"
 
 #: common/widgets/gal_options_panel.cpp:139
-#, fuzzy
 msgid "When grid shown"
-msgstr "Rasterursprung setzen"
+msgstr "Wenn Gitter angezeigt wird"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6354,9 +6257,8 @@ msgid "KiCad legacy symbol library files"
 msgstr "KiCad Legacy Bauteilbibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:199
-#, fuzzy
 msgid "All KiCad symbol library files"
-msgstr "KiCad Bauteilbibliotheksdateien"
+msgstr "Alle KiCad Bauteilbibliotheksdateien"
 
 #: common/wildcards_and_files_ext.cpp:205
 msgid "KiCad project files"
@@ -6418,7 +6320,7 @@ msgstr "Eagle Ver. 6.x XML PCB Dateien"
 #: common/wildcards_and_files_ext.cpp:288
 #, fuzzy
 msgid "CADSTAR PCB Archive files"
-msgstr "Archivdatei \"%s\""
+msgstr "CADSTAR PCB-Archivdateien"
 
 #: common/wildcards_and_files_ext.cpp:293
 msgid "P-Cad 200x ASCII PCB files"
@@ -6437,9 +6339,8 @@ msgid "Altium Circuit Maker PCB files"
 msgstr "Altium Circuit Maker PCB Dateien"
 
 #: common/wildcards_and_files_ext.cpp:313
-#, fuzzy
 msgid "Fabmaster PCB files"
-msgstr "Altium Designer PCB Dateien"
+msgstr "Fabmaster PCB-Dateien"
 
 #: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint files"
@@ -15038,9 +14939,9 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Ändere Wert %s von %s zu %s."
 
 #: eeschema/tools/backannotate.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find %s pin '%s'."
-msgstr "Konnte die Netzliste \"%s\" nicht öffnen."
+msgstr "Kann %s Pin '%s' nicht finden."
 
 #: eeschema/tools/backannotate.cpp:512
 #, fuzzy, c-format
@@ -15996,7 +15897,8 @@ msgid ""
 "converted"
 msgstr ""
 "<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b> in Einheiten %c "
+"und %c von konvertiert"
 
 #: eeschema/tools/ee_inspection_tool.cpp:209
 #, c-format
@@ -16014,7 +15916,8 @@ msgid ""
 "with pin %s \"%s\" at location <b>(%.3f, %.3f)</b> in units %c and %c"
 msgstr ""
 "<b>Pin-Duplikat %s</b> \"%s\" an Position <b>(%.3f, %.3f)</b> steht in "
-"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"Konflikt mit Pin %s \"%s\" an Position <b>(%.3f, %.3f)</b> in Einheiten %c "
+"und %c"
 
 #: eeschema/tools/ee_inspection_tool.cpp:255
 #, fuzzy, c-format
@@ -16360,9 +16263,9 @@ msgid "Deselect all"
 msgstr "Alle Lagen abwählen"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
-msgstr "Wähle Arbeitslage:"
+msgstr "Wähle Lage: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:171
 #: pcbnew/board_connected_item.cpp:159 pcbnew/board_connected_item.cpp:160
@@ -17750,9 +17653,9 @@ msgid "Delete File"
 msgstr "Datei löschen"
 
 #: kicad/tree_project_frame.cpp:853
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %lu items?"
-msgstr "Möchten Sie wirklich '%s' entfernen?"
+msgstr "Möchten Sie wirklich %lu Elemente löschen?"
 
 #: kicad/tree_project_frame.cpp:854
 #, fuzzy
@@ -17794,9 +17697,9 @@ msgid "Failed to delete '%s'"
 msgstr "Konnte \"%s\" nicht erstellen"
 
 #: libs/kiplatform/msw/environment.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Fehler: "
+msgstr "Fehlercode: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:223
 msgid "Layout"
@@ -19007,7 +18910,7 @@ msgstr ""
 "Warnung:\n"
 "DuKo Durchmesser >= Durchmesser Durchgangsloch.\n"
 "Einige Parameter können innerhalb einer Kupferfläche\n"
-"für ein Via nicht berechnet werden."
+"für eine DuKo nicht berechnet werden."
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1454
 msgid "Current:"
@@ -20029,7 +19932,7 @@ msgid ""
 "Board thickness %s differs from stackup thickness %s\n"
 "Allowed max error %s"
 msgstr ""
-"Die Platinenstärke % s unterscheidet sich von der Stärke des Aufbaus %s.\n"
+"Die Platinenstärke %s unterscheidet sich von der Stärke des Aufbaus %s\n"
 "Zulässiger maximaler Fehler %s"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1206
@@ -21108,7 +21011,7 @@ msgstr "Beschichtet"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:235
 msgid "Via/Pad"
-msgstr "Via/Pad"
+msgstr "DuKo/Pad"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:236
 msgid "Start Layer"
@@ -24193,9 +24096,9 @@ msgid "Net name cannot be empty."
 msgstr "Der Variablenname darf nicht leer sein."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1887
-#, fuzzy, c-format
+#, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Net wird verwendet. Trotzdem löschen?"
+msgstr "Netz '%s' wird verwendet. Trotzdem löschen?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1904
 #, c-format
@@ -24419,9 +24322,9 @@ msgid "Select a corner to delete."
 msgstr "Ecke zum Löschen wählen."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Footprint %s (%s), %s, rotiert %.1f Grad"
+msgstr "Footprint %s (%s), %s, rotiert %g Grad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:473
 #: pcbnew/dialogs/dialog_text_properties.cpp:260
@@ -25885,31 +25788,28 @@ msgid "Layers:"
 msgstr "Lagen:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:38
-#, fuzzy
 msgid "Basic Rules"
-msgstr "Design-Regeln"
+msgstr "Grundregeln"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:42
 msgid "Keep out tracks"
-msgstr "Sperrfläche Leiterbahnen"
+msgstr "Leiterbahnen fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:45
 msgid "Keep out vias"
-msgstr "Sperrfläche Vias"
+msgstr "DuKos fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:48
-#, fuzzy
 msgid "Keep out pads"
-msgstr "Sperrfläche Vias"
+msgstr "Pads fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:51
 msgid "Keep out copper pours"
-msgstr "Sperrbereiche für Kupferfüllungen"
+msgstr "Kupferfüllungen fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:57
-#, fuzzy
 msgid "Keep out footprints"
-msgstr "Keine Footprints."
+msgstr "Footprints fernhalten"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:63
 msgid "Constrain outline to H, V and 45 deg"
@@ -26045,7 +25945,7 @@ msgstr "DuKo Bohrdurchmesser muss kleiner als der DuKo Durchmesser sein"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:419
 msgid "Via start layer and end layer cannot be the same"
-msgstr "Start Lage und End Lage für Via können nicht gleich sein"
+msgstr "Startlage und Endlage für DuKos können nicht gleich sein"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:572
 msgid "Edit track/via properties"
@@ -27667,7 +27567,7 @@ msgstr "Keine Beschränkung"
 
 #: pcbnew/drc/drc_engine.cpp:183
 msgid "board setup micro-via constraints"
-msgstr "Board-Setup Micro-Via-Einschränkungen"
+msgstr "Board-Setup Micro-DuKo-Einschränkungen"
 
 #: pcbnew/drc/drc_engine.cpp:229 pcbnew/drc/drc_engine.cpp:256
 #: pcbnew/drc/drc_engine.cpp:284 pcbnew/drc/drc_engine.cpp:312
@@ -27876,9 +27776,8 @@ msgid "Micro via drill too small"
 msgstr "Mikro-DuKo Bohrdurchmesser zu klein"
 
 #: pcbnew/drc/drc_item.cpp:118
-#, fuzzy
 msgid "Keepout violation"
-msgstr "Sperrfläche Vias"
+msgstr "Sperrflächen-Verstoß"
 
 #: pcbnew/drc/drc_item.cpp:122
 msgid "Courtyards overlap"
@@ -28247,26 +28146,26 @@ msgid "No netlist provided, skipping LVS."
 msgstr "Keine Netzliste bereitgestellt, LVS wird übersprungen."
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "Mindestlänge: %s; aktuell: %s)"
+msgstr "(%s Mindestlänge: %s; aktuell: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "maximale Länge: %s; aktuell: %s)"
+msgstr "(%s maximale Länge: %s; aktuell: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
 msgstr ""
-"maximaler Versatz: %s; tatsächlicher Versatz: %s; durchschnittliche "
-"Nettolänge: %s; tatsächliche Nettolänge: %s)"
+"(%s maximaler Versatz: %s; tatsächlich: %s; durchschnittliche Nettolänge: %s;"
+" tatsächlich: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "(%s maximale Breite %s; tatsächliche %s)"
+msgstr "(%s maximale Breite: %d; tatsächlich: %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:229
 msgid "Gathering length-constrained connections..."
@@ -28673,9 +28572,9 @@ msgid "Attributes:"
 msgstr "Attribute"
 
 #: pcbnew/footprint.cpp:783
-#, fuzzy, c-format
+#, c-format
 msgid "3D-Shape: %s"
-msgstr "3D-Form"
+msgstr "3D-Form: %s"
 
 #: pcbnew/footprint.cpp:784
 #, fuzzy
@@ -29854,13 +29753,13 @@ msgstr "Bohrung X / Y"
 #: pcbnew/zone.cpp:629
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
-msgstr "Minimaler Abstand"
+msgstr "Mindestabstand: %s"
 
 #: pcbnew/pad.cpp:901 pcbnew/track.cpp:642 pcbnew/track.cpp:649
 #: pcbnew/track.cpp:691 pcbnew/track.cpp:697 pcbnew/zone.cpp:630
 #, fuzzy, c-format
 msgid "(from %s)"
-msgstr "von "
+msgstr "(aus %s)"
 
 #: pcbnew/pad.cpp:1032
 msgid "Trap"
@@ -30285,11 +30184,9 @@ msgstr ""
 "stattdessen"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1912
-#, fuzzy, c-format
+#, c-format
 msgid "Non-Copper Pad '%s' has a hole. This should not happen"
-msgstr ""
-"Nicht-Kupfer-Pad '%s' verwendet einen komplexen Padaufbau (Typ %d). Dies "
-"sollte nicht passieren"
+msgstr "Nicht-Kupfer-Pad '%s' hat ein Loch. Dies sollte nicht passieren"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:1918
 #, c-format
@@ -30450,11 +30347,9 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1120
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1130
-#, fuzzy, c-format
+#, c-format
 msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
-msgstr ""
-"Dimension auf Altium Lage %d hat kein KiCad Äquivalent. Ablage auf Eco1_User "
-"stattdessen."
+msgstr "Dimension ID %s hat kein KiCad Äquivalent. Dies wurde nicht importiert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1169
 #, c-format
@@ -31445,14 +31340,14 @@ msgid "Specify custom differential pair dimensions"
 msgstr "Definition von Benutzerdefinierten Differentialpaardimensionen"
 
 #: pcbnew/router/router_tool.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s"
-msgstr "Breite "
+msgstr "Breite %s"
 
 #: pcbnew/router/router_tool.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Width %s, via gap %s"
-msgstr ", DuKo Abstand "
+msgstr "Breite %s, DuKo Abstand %s"
 
 #: pcbnew/router/router_tool.cpp:356
 #, c-format
@@ -31744,7 +31639,7 @@ msgstr "Selbstüberschneidende Polygone sind nicht zulässig"
 
 #: pcbnew/tools/drawing_tool.cpp:2373
 msgid "Place via"
-msgstr "Via platzieren"
+msgstr "DuKo platzieren"
 
 #: pcbnew/tools/drc_tool.cpp:161
 #, fuzzy
@@ -32608,11 +32503,11 @@ msgstr "Auf vorherige Leiterbahnbreite schalten"
 
 #: pcbnew/tools/pcb_actions.cpp:601
 msgid "Increase Via Size"
-msgstr "Größe Via erhöhen"
+msgstr "Größe DuKo erhöhen"
 
 #: pcbnew/tools/pcb_actions.cpp:606
 msgid "Decrease Via Size"
-msgstr "Größe Via verkleinern"
+msgstr "Größe DuKo verkleinern"
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Merge Zones"
@@ -32826,7 +32721,7 @@ msgstr "Pads als Umriss darstellen"
 
 #: pcbnew/tools/pcb_actions.cpp:782
 msgid "Sketch Vias"
-msgstr "Vias skizzieren"
+msgstr "DuKo skizzieren"
 
 #: pcbnew/tools/pcb_actions.cpp:782
 msgid "Show vias in outline mode"
@@ -33429,7 +33324,7 @@ msgstr "Einstelluungen"
 #: pcbnew/tools/pcb_inspection_tool.cpp:123
 #, fuzzy, c-format
 msgid "Zone connection type: %s."
-msgstr "Verbindungstyp:"
+msgstr "Zonenverbindungstyp: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:126
 #: pcbnew/tools/pcb_inspection_tool.cpp:160
@@ -33452,7 +33347,7 @@ msgstr "Pad ist kein PTH-Pad; Verbindung wird sein: %s."
 #: pcbnew/tools/pcb_inspection_tool.cpp:155
 #, fuzzy, c-format
 msgid "Zone thermal relief: %s."
-msgstr "Thermische Abführungen"
+msgstr "Thermische Entlastung der Zone: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:162
 #, c-format
@@ -33462,7 +33357,7 @@ msgstr "Überschrieben von %s; thermisches Relief: %s."
 #: pcbnew/tools/pcb_inspection_tool.cpp:171
 #, fuzzy, c-format
 msgid "Zone clearance: %s."
-msgstr "Abstände Flächen zu Flächen...\n"
+msgstr "Zonenabstand: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:180
 #, c-format
@@ -33470,9 +33365,9 @@ msgid "Overridden by larger thermal relief from %s;clearance: %s."
 msgstr "Überschrieben durch größere thermische Entlastung von %s; Abstand: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:189
-#, fuzzy, c-format
+#, c-format
 msgid "Clearance: %s."
-msgstr "Abstandsmaß:"
+msgstr "Abstandsmaß: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:210
 #: pcbnew/tools/pcb_inspection_tool.cpp:443
@@ -33487,7 +33382,7 @@ msgstr ""
 #: pcbnew/tools/pcb_inspection_tool.cpp:237
 #, fuzzy, c-format
 msgid "Resolved clearance: %s."
-msgstr "Padabstandsfläche:"
+msgstr "Aufgelöste Freigabe: %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:249
 msgid "Select two items for a clearance resolution report."
@@ -33501,7 +33396,7 @@ msgstr "Abstandsmaß"
 #: pcbnew/tools/pcb_inspection_tool.cpp:306
 #, fuzzy, c-format
 msgid "[netclass %s]"
-msgstr "DuKo Netzklassen Werte"
+msgstr "[Netzklasse %s]"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:315
 #, fuzzy
@@ -33597,7 +33492,7 @@ msgstr "Lochdurchmesserauflösung für:"
 #: pcbnew/tools/pcb_inspection_tool.cpp:566
 #, fuzzy, c-format
 msgid "Hole constraint: min %s."
-msgstr "Keine Beschränkung"
+msgstr "Lochbeschränkung: min %s."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:572
 #, fuzzy
@@ -33605,14 +33500,13 @@ msgid "Keepouts"
 msgstr "Sperrfläche"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:574
-#, fuzzy
 msgid "Keepout resolution for:"
-msgstr "Sperrfläche Vias"
+msgstr "Sperrflächen-Lösung für:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:589
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
-"Der Bericht ist möglicherweise unvollständig: Einige Footprint-Courtyards "
+"Der Bericht ist möglicherweise unvollständig: Einige Footprint-Sperrbereiche "
 "sind fehlerhaft."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
@@ -33767,14 +33661,14 @@ msgid "Unfill All Zones"
 msgstr "Alle Flächenfüllungen entfernen"
 
 #: pcbnew/track.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Blind/Buried Via %s on %s"
-msgstr "Blinde/Vergrabene DuKo %s %s auf %s - %s"
+msgstr "Blinde/Vergrabene DuKo %s auf %s"
 
 #: pcbnew/track.cpp:86
-#, fuzzy, c-format
+#, c-format
 msgid "Micro Via %s on %s"
-msgstr "Micro DuKo %s %s auf %s - %s"
+msgstr "Micro DuKo %s auf %s"
 
 #: pcbnew/track.cpp:87
 #, fuzzy, c-format
@@ -33793,7 +33687,7 @@ msgstr "Volle Länge"
 #: pcbnew/track.cpp:648
 #, fuzzy, c-format
 msgid "Min Width: %s"
-msgstr "- Breite: "
+msgstr "Min Breite: %s"
 
 #: pcbnew/track.cpp:665
 msgid "Blind/Buried Via"
@@ -33809,9 +33703,9 @@ msgid "NetCode"
 msgstr "Netz-Code"
 
 #: pcbnew/track.cpp:878
-#, fuzzy, c-format
+#, c-format
 msgid "Track %s on %s, length %s"
-msgstr "Leiterbahn %s %s auf %s, Länge: %s"
+msgstr "Leiterbahn %s auf %s, Länge %s"
 
 #: pcbnew/track.cpp:1063 pcbnew/track.cpp:1080
 #, fuzzy
