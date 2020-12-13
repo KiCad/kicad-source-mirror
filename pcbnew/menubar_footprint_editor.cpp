@@ -188,10 +188,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::placeText );
+    placeMenu->Add( PCB_ACTIONS::drawLine );
     placeMenu->Add( PCB_ACTIONS::drawArc );
     placeMenu->Add( PCB_ACTIONS::drawRectangle );
     placeMenu->Add( PCB_ACTIONS::drawCircle );
-    placeMenu->Add( PCB_ACTIONS::drawLine );
     placeMenu->Add( PCB_ACTIONS::drawPolygon );
     placeMenu->Add( PCB_ACTIONS::drawRuleArea );
 

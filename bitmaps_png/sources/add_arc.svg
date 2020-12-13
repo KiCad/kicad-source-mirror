@@ -13,7 +13,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_arc.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,15 +23,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2735"
-     inkscape:window-height="1757"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview1001"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="-8.1182947"
-     inkscape:cy="13"
+     inkscape:zoom="16.397042"
+     inkscape:cx="6.7109761"
+     inkscape:cy="16.211576"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -100,36 +100,7 @@
      id="title986">add_arc</title>
   <path
      class="cls-1"
-     d="m 3,3 v 0 a 18,18 0 0 1 18,18 v 0"
-     id="path988" />
-  <line
-     class="cls-2"
-     x1="3"
-     y1="21"
-     x2="3"
-     y2="3.2796998"
-     id="line990"
-     style="stroke:#ececec;stroke-opacity:1" />
-  <line
-     class="cls-3"
-     x1="20.8125"
-     y1="21"
-     x2="3"
-     y2="21"
-     id="line992"
-     style="stroke:#ececec;stroke-opacity:1" />
-  <path
-     class="cls-4"
-     d="m 24,21 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
-     id="path994" />
-  <circle
-     class="cls-4"
-     cx="3"
-     cy="21"
-     r="2.9999001"
-     id="circle996" />
-  <path
-     class="cls-4"
-     d="M 6,3 A 3,3 0 1 1 3,0 3,3 0 0 1 6,3 Z"
-     id="path998" />
+     d="m 3,22 v 0 A 19,19 0 0 1 22,3 v 0"
+     id="path988"
+     style="stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_graphical_polygon.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="14.87974"
+     inkscape:cx="6.8897535"
+     inkscape:cy="12.248596"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,33 +79,21 @@
   </defs>
   <title
      id="title28001">add_graphical_polygon</title>
-  <polygon
-     class="cls-1"
-     points="19.244,4.984 22.05,17 4.814,22 3.95,4 "
-     id="polygon28003"
-     transform="translate(-1,-1)" />
-  <circle
-     class="cls-2"
-     cx="3.0005999"
-     cy="3"
-     r="2.9999001"
-     id="circle28005" />
-  <circle
-     class="cls-2"
-     cx="4"
-     cy="21"
-     r="3"
-     id="circle28007" />
-  <circle
-     class="cls-2"
-     cx="21"
-     cy="16"
-     r="3"
-     id="circle28009" />
-  <circle
-     class="cls-2"
-     cx="18"
-     cy="4"
-     r="3"
-     id="circle28011" />
+  <path
+     sodipodi:type="star"
+     style="fill:#c1c1c1;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
+     id="path5446"
+     sodipodi:sides="5"
+     sodipodi:cx="12"
+     sodipodi:cy="13"
+     sodipodi:r1="10"
+     sodipodi:r2="8.0901699"
+     sodipodi:arg1="-1.5707963"
+     sodipodi:arg2="-0.9424778"
+     inkscape:flatsided="true"
+     inkscape:rounded="0"
+     inkscape:randomized="0"
+     d="m 12,3 9.510565,6.9098303 -3.632713,11.1803397 -11.7557047,0 L 2.4894349,9.9098298 Z"
+     inkscape:transform-center-y="-0.93610351"
+     transform="matrix(0.93233957,0,0,0.98030056,0.81194429,0.31182069)" />
 </svg>

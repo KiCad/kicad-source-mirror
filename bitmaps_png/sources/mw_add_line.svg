@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="mw_add_line.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,18 +22,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1584"
-     inkscape:window-height="1199"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview22"
-     showgrid="false"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     showgrid="true"
+     inkscape:zoom="20.228637"
+     inkscape:cx="10.757225"
+     inkscape:cy="13.462972"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0" />
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid840" />
+  </sodipodi:namedview>
   <metadata
      id="metadata43">
     <rdf:RDF>
@@ -72,16 +76,8 @@
      id="title7">mw_add_line</title>
   <path
      class="cls-1"
-     d="m 0.5,11.3537 h 2.5852 a 2,2 0 0 1 2,2 v 4.81 a 1.8083,1.8083 0 0 0 1.8083,1.8083 v 0 A 1.8083,1.8083 0 0 0 8.7017,18.1637 V 5.8366 A 1.8082,1.8082 0 0 1 10.51,4.0283 v 0 a 1.8083,1.8083 0 0 1 1.8082,1.8083 V 18.14 a 1.8082,1.8082 0 0 0 1.8082,1.8082 v 0 A 1.8082,1.8082 0 0 0 15.9346,18.14 V 5.8128 a 1.7846,1.7846 0 0 1 1.8082,-1.7845 v 0 a 1.8083,1.8083 0 0 1 1.8082,1.8083 v 3.6966 a 2,2 0 0 0 2,2 H 23.5"
-     id="path9" />
-  <polygon
-     class="cls-2"
-     points="1.686,14.259 1.667,10.327 4.458,10.309 4.477,14.241 "
-     id="polygon11"
-     transform="translate(-1,-1)" />
-  <polygon
-     class="cls-2"
-     points="24.484,10.449 24.503,14.382 21.712,14.4 21.693,10.468 "
-     id="polygon19"
-     transform="translate(-1,-1)" />
+     d="M 0.95999998,12.000467 2,12 c 1,-4.49e-4 2.000104,1 2.000104,1.835 v 4.33 c 0,0.958749 0.9432518,1.836038 1.902,1.83505 l 0.098,-1.01e-4 c 0.9587107,-9.88e-4 2,-0.791238 2,-1.749949 V 5.75 C 8.000051,4.7912294 8.9433334,4 9.902104,4 h 0.196 c 0.958711,0 1.902,0.7912888 1.902,1.75 v 12.5 c 0,0.958696 0.943302,1.75 1.902,1.75 h 0.196 c 0.958695,0 1.902,-0.791304 1.902,-1.75 V 5.75 c -3e-5,-0.9550643 0.946935,-1.75 1.902,-1.75 h 0.196 c 0.958711,0 1.902,0.7912889 1.902,1.75 v 4.33 C 20.000104,11 20.939613,12 22,12 h 1"
+     id="path9"
+     style="fill:none;fill-opacity:1;stroke:#1a81c4;stroke-width:1.92;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="csssssscssssssscsssssc" />
 </svg>

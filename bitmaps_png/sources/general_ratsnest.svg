@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="general_ratsnest.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
+     inkscape:zoom="26.841039"
      inkscape:cx="13.700078"
      inkscape:cy="14.290971"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -94,41 +94,49 @@
   <path
      class="cls-3"
      d="M 7.379,5.8873 A 2.8088,2.8088 0 1 1 4.57,3.0785 2.8087,2.8087 0 0 1 7.379,5.8873 Z"
-     id="path24987" />
+     id="path24987"
+     style="fill:#545454;fill-opacity:1" />
   <circle
      class="cls-1"
      cx="4.5702"
      cy="5.8873"
      r="2"
-     id="circle24989" />
+     id="circle24989"
+     style="fill:#ffffff;fill-opacity:1" />
   <path
      class="cls-3"
      d="M 20.366,7.4359 A 2.8088,2.8088 0 1 1 17.5571,4.6271 2.8088,2.8088 0 0 1 20.366,7.4359 Z"
-     id="path24991" />
+     id="path24991"
+     style="fill:#545454;fill-opacity:1" />
   <circle
      class="cls-1"
      cx="17.5571"
      cy="7.4358997"
      r="2"
-     id="circle24993" />
+     id="circle24993"
+     style="fill:#ffffff;fill-opacity:1" />
   <path
      class="cls-3"
      d="M 21.5626,17.8184 A 2.8088,2.8088 0 1 1 18.7538,15.01 2.8087,2.8087 0 0 1 21.5626,17.8184 Z"
-     id="path24995" />
+     id="path24995"
+     style="fill:#545454;fill-opacity:1" />
   <circle
      class="cls-1"
      cx="18.753799"
      cy="17.818399"
      r="2"
-     id="circle24997" />
+     id="circle24997"
+     style="fill:#ffffff;fill-opacity:1" />
   <path
      class="cls-3"
      d="M 8.6108,19.2966 A 2.8088,2.8088 0 1 1 5.802,16.4878 2.8087,2.8087 0 0 1 8.6108,19.2966 Z"
-     id="path24999" />
+     id="path24999"
+     style="fill:#545454;fill-opacity:1" />
   <circle
      class="cls-1"
      cx="5.802"
      cy="19.2966"
      r="2"
-     id="circle25001" />
+     id="circle25001"
+     style="fill:#ffffff;fill-opacity:1" />
 </svg>
