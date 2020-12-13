@@ -54,6 +54,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		wxBitmapButton* m_move_up_button;
 		wxBitmapButton* m_move_down_button;
 		wxBitmapButton* m_delete_button;
+		wxButton* m_convertLegacy;
 		WX_GRID* m_path_subs_grid;
 
 		// Virtual event handlers, overide them in your derived class
@@ -63,6 +64,7 @@ class PANEL_SYM_LIB_TABLE_BASE : public wxPanel
 		virtual void moveUpHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void moveDownHandler( wxCommandEvent& event ) { event.Skip(); }
 		virtual void deleteRowHandler( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onConvertLegacyLibraries( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSizeGrid( wxSizeEvent& event ) { event.Skip(); }
 
 

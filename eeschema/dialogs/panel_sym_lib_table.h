@@ -24,6 +24,7 @@
 #include <dialogs/dialog_edit_library_tables.h>
 #include <panel_sym_lib_table_base.h>
 
+
 class SYMBOL_LIB_TABLE;
 class SYMBOL_LIB_TABLE_GRID;
 
@@ -35,10 +36,9 @@ class PANEL_SYM_LIB_TABLE : public PANEL_SYM_LIB_TABLE_BASE
 {
 
 public:
-    PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
+    PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* m_project,
                          SYMBOL_LIB_TABLE* aGlobal, const wxString& aGlobalTablePath,
-                         SYMBOL_LIB_TABLE* aProject, const wxString& aProjectTablePath,
-                         const wxString& m_projectBasePath );
+                         SYMBOL_LIB_TABLE* aProject, const wxString& aProjectTablePath );
     virtual ~PANEL_SYM_LIB_TABLE();
 
 private:
@@ -57,6 +57,7 @@ private:
     void moveDownHandler( wxCommandEvent& event ) override;
     void onSizeGrid( wxSizeEvent& event ) override;
     void adjustPathSubsGridColumns( int aWidth );
+    void onConvertLegacyLibraries( wxCommandEvent& event ) override;
 
     bool TransferDataFromWindow() override;
 
@@ -64,10 +65,8 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
 
-    // Caller's tables are modified only on OK button and successful verification.
-    SYMBOL_LIB_TABLE*    m_globalTable;
-    SYMBOL_LIB_TABLE*    m_projectTable;
-    wxString             m_projectBasePath;
+    bool convertLibrary( const wxString& aLibrary, const wxString& legacyFilepath,
+                         const wxString& newFilepath );
 
     SYMBOL_LIB_TABLE_GRID* global_model() const;
 
@@ -75,10 +74,16 @@ private:
 
     SYMBOL_LIB_TABLE_GRID* cur_model() const;
 
+private:
+    // Caller's tables are modified only on OK button and successful verification.
+    SYMBOL_LIB_TABLE*           m_globalTable;
+    SYMBOL_LIB_TABLE*           m_projectTable;
+    PROJECT*                    m_project;
+
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
 
-    WX_GRID*         m_cur_grid;     ///< changed based on tab choice
-    static size_t    m_pageNdx;      ///< Remember the last notebook page selected during a session
+    WX_GRID*                    m_cur_grid;     ///< changed based on tab choice
+    static size_t               m_pageNdx;      ///< Remember the last notebook page selected
 };
 
 

@@ -40,9 +40,9 @@
 #include <kiway.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
-
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <sch_file_versions.h>
 
 
 // clang-format off
@@ -67,39 +67,6 @@ enum {
     ID_PANEL_SYM_LIB_KICAD = ID_END_EESCHEMA_ID_LIST,
     ID_PANEL_SYM_LIB_LEGACY,
 };
-
-
-/**
- * Map with event id as the key to supported file types that will be listed for the add
- * a library option.
- */
-static const std::map<int, supportedFileType>& fileTypes()
-{
-    static const std::map<int, supportedFileType> fileTypes =
-    {
-        { ID_PANEL_SYM_LIB_LEGACY,
-            {
-                "KiCad legacy symbol library file (*.lib)",
-                LegacySymbolLibFileWildcard(),
-                "",
-                true,
-                SCH_IO_MGR::SCH_LEGACY
-            }
-        },
-        {
-            ID_PANEL_SYM_LIB_KICAD,
-            {
-                "KiCad s-expression symbol library file (*.kicad_sym)",
-                KiCadSymbolLibFileWildcard(),
-                "",
-                true,
-                SCH_IO_MGR::SCH_KICAD
-            }
-        }
-    };
-
-    return fileTypes;
-}
 
 
 /**
@@ -204,21 +171,20 @@ protected:
 };
 
 
-PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
-                                          SYMBOL_LIB_TABLE* aGlobal,
+PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject ,
+                                          SYMBOL_LIB_TABLE* aGlobalTable,
                                           const wxString& aGlobalTablePath,
-                                          SYMBOL_LIB_TABLE* aProject,
-                                          const wxString& aProjectTablePath,
-                                          const wxString& aProjectBasePath ) :
+                                          SYMBOL_LIB_TABLE* aProjectTable,
+                                          const wxString& aProjectTablePath ) :
     PANEL_SYM_LIB_TABLE_BASE( aParent ),
-    m_globalTable( aGlobal ),
-    m_projectTable( aProject ),
-    m_projectBasePath( aProjectBasePath ),
+    m_globalTable( aGlobalTable ),
+    m_projectTable( aProjectTable ),
+    m_project( aProject ),
     m_parent( aParent )
 {
     // wxGrid only supports user owned tables if they exist past end of ~wxGrid(),
     // so make it a grid owned table.
-    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *aGlobal ), true );
+    m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_globalTable ), true );
 
     // For user info, shows the table filenames:
     m_GblTableFilename->SetLabel( aGlobalTablePath );
@@ -232,7 +198,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     if( cfg->m_lastSymbolLibDir.IsEmpty() )
     {
-        cfg->m_lastSymbolLibDir = m_projectBasePath;
+        cfg->m_lastSymbolLibDir = m_project->GetProjectPath();
     }
 
     auto setupGrid =
@@ -256,8 +222,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
                                      + "|" + KiCadSymbolLibFileWildcard()
                                      + "|" + LegacySymbolLibFileWildcard();
                 attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &cfg->m_lastSymbolLibDir,
-                                                            wildcards,
-                                                            true, m_projectBasePath ) );
+                                                            wildcards, true,
+                                                            m_project->GetProjectPath() ) );
                 aGrid->SetColAttr( COL_URI, attr );
 
                 attr = new wxGridCellAttr;
@@ -287,10 +253,10 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     setupGrid( m_global_grid );
 
-    if( aProject )
+    if( m_projectTable )
     {
         m_PrjTableFilename->SetLabel( aProjectTablePath );
-        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *aProject ), true );
+        m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_projectTable ), true );
         setupGrid( m_project_grid );
     }
     else
@@ -535,13 +501,13 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
                 if( SCH_IO_MGR::GetLibraryFileExtension( pluginType ).Lower() == fn.GetExt().Lower() )
                 {
                     m_cur_grid->SetCellValue( last_row, COL_TYPE,
-                            SCH_IO_MGR::ShowType( pluginType ) );
+                                              SCH_IO_MGR::ShowType( pluginType ) );
                     break;
                 }
             }
 
             // try to use path normalized to an environmental variable or project path
-            wxString path = NormalizePath( filePath, &envVars, m_projectBasePath );
+            wxString path = NormalizePath( filePath, &envVars, m_project->GetProjectPath() );
 
             // Do not use the project path in the global library table.  This will almost
             // assuredly be wrong for a different project.
@@ -695,6 +661,119 @@ void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
         m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
         m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
     }
+}
+
+
+void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
+{
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
+    wxArrayInt selectedRows = m_cur_grid->GetSelectedRows();
+
+    if( selectedRows.empty() )
+        selectedRows.push_back( m_cur_grid->GetGridCursorRow() );
+
+    wxArrayInt legacyRows;
+    wxString   legacyType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY );
+    wxString   kicadType = SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_KICAD );
+    wxString   msg;
+
+    for( int row : selectedRows )
+    {
+        if( m_cur_grid->GetCellValue( row, COL_TYPE ) == legacyType )
+            legacyRows.push_back( row );
+    }
+
+    if( legacyRows.size() <= 0 )
+    {
+        wxMessageBox( _( "Select one or more table rows containing legacy libraries to save as "
+                         "current format (*.kicad_sym)." ) );
+        return;
+    }
+    else
+    {
+        if( legacyRows.size() == 1 )
+        {
+            msg.Printf( _( "Save '%s' as current format (*.kicad_sym) and "
+                           "replace legacy entry in table?" ),
+                        m_cur_grid->GetCellValue( legacyRows[0], COL_NICKNAME ) );
+        }
+        else
+        {
+            msg.Printf( _( "Save %d legacy libraries as current format (*.kicad_sym) and "
+                           "replace legacy entries in table?" ),
+                        legacyRows.size() );
+        }
+
+        if( !IsOK( m_parent, msg ) )
+            return;
+    }
+
+    for( int row : legacyRows )
+    {
+        wxString   libName = m_cur_grid->GetCellValue( row, COL_NICKNAME );
+        wxString   relPath = m_cur_grid->GetCellValue( row, COL_URI );
+        wxString   resolvedPath = ExpandEnvVarSubstitutions( relPath, m_project );
+        wxFileName legacyLib( resolvedPath );
+
+        if( !legacyLib.Exists() )
+        {
+            msg.Printf( _( "Library '%s' not found." ), relPath );
+            DisplayErrorMessage( this, msg );
+            continue;
+        }
+
+        wxFileName newLib( resolvedPath );
+        newLib.SetExt( "kicad_sym" );
+
+        if( convertLibrary( libName, legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        {
+            relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
+                                     m_project );
+
+            m_cur_grid->SetCellValue( row, COL_URI, relPath );
+            m_cur_grid->SetCellValue( row, COL_TYPE, kicadType );
+        }
+        else
+        {
+            msg.Printf( _( "Failed to save symbol library file '%s'." ), newLib.GetFullPath() );
+            DisplayErrorMessage( this, msg );
+        }
+    }
+}
+
+
+bool PANEL_SYM_LIB_TABLE::convertLibrary( const wxString& aLibrary, const wxString& legacyFilepath,
+                                          const wxString& newFilepath )
+{
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER legacyPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    std::vector<LIB_PART*>          parts;
+    std::vector<LIB_PART*>          newParts;
+
+    try
+    {
+        // Write a stub file; SaveSymbol() expects something to be there already.
+        FILE_OUTPUTFORMATTER* formatter = new FILE_OUTPUTFORMATTER( newFilepath );
+
+        formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_converter))",
+                          SEXPR_SYMBOL_LIB_FILE_VERSION );
+
+        // This will write the file
+        delete formatter;
+
+        legacyPI->EnumerateSymbolLib( parts, legacyFilepath );
+
+        for( LIB_PART* part : parts )
+            kicadPI->SaveSymbol( newFilepath, new LIB_PART( *part ) );
+    }
+    catch( ... )
+    {
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -882,9 +961,8 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 
     DIALOG_EDIT_LIBRARY_TABLES dlg( aParent, _( "Symbol Libraries" ) );
 
-    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, globalTable, globalTablePath,
-                                               projectTable, projectTableFn.GetFullPath(),
-                                               aKiway->Prj().GetProjectPath() ) );
+    dlg.InstallPanel( new PANEL_SYM_LIB_TABLE( &dlg, &aKiway->Prj(), globalTable, globalTablePath,
+                                               projectTable, projectTableFn.GetFullPath() ) );
 
     if( dlg.ShowModal() == wxID_CANCEL )
     {

@@ -20,6 +20,8 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_top_sizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Libraries by Scope") ), wxVERTICAL );
 
 	m_notebook = new wxNotebook( m_top_sizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook->SetMinSize( wxSize( 400,-1 ) );
+
 	m_global_panel = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* m_global_sizer;
 	m_global_sizer = new wxBoxSizer( wxVERTICAL );
@@ -126,7 +128,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_project_sizer->Fit( m_project_panel );
 	m_notebook->AddPage( m_project_panel, _("Project Specific Libraries"), false );
 
-	m_top_sizer->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
+	m_top_sizer->Add( m_notebook, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
 	wxBoxSizer* bSizer51;
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
@@ -160,7 +162,13 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bSizer51->Add( m_delete_button, 0, wxBOTTOM|wxRIGHT, 5 );
 
 
-	m_top_sizer->Add( bSizer51, 0, 0, 8 );
+	bSizer51->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_convertLegacy = new wxButton( m_top_sizer->GetStaticBox(), wxID_ANY, _("Migrate Libraries..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer51->Add( m_convertLegacy, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	m_top_sizer->Add( bSizer51, 0, wxEXPAND, 8 );
 
 
 	bSizer1->Add( m_top_sizer, 1, wxALL|wxEXPAND, 5 );
@@ -214,6 +222,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_convertLegacy->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::onConvertLegacyLibraries ), NULL, this );
 	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SYM_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 }
 
@@ -226,6 +235,7 @@ PANEL_SYM_LIB_TABLE_BASE::~PANEL_SYM_LIB_TABLE_BASE()
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_convertLegacy->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SYM_LIB_TABLE_BASE::onConvertLegacyLibraries ), NULL, this );
 	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SYM_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 
 }
