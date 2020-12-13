@@ -57,7 +57,7 @@ TOOL_ACTION ACTIONS::open( "common.Control.open",
         AS_GLOBAL,
         MD_CTRL + 'O', LEGACY_HK_NAME( "Open" ),
         _( "Open..." ), _( "Open existing document" ),
-        folder_xpm );
+        directory_open_xpm );
 
 TOOL_ACTION ACTIONS::save( "common.Control.save",
         AS_GLOBAL,
