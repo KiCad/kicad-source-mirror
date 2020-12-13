@@ -979,7 +979,14 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
     // we deflate areas in polygons, to avoid after subtracting initial shapes
     // having small artifacts due to approximations during polygon transforms
-    areas.BooleanSubtract( initialPolys, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    // *Do not use* here the option PM_STRICTLY_SIMPLE that can create very long calculation
+    // time in many cases
+    areas.BooleanSubtract( initialPolys, SHAPE_POLY_SET::PM_FAST);
+
+    // Ensure the remaining polygons are strictly simple to be sure Inflate and Fracture
+    // are using the cleaned polygons and no holes linked to main outlines in polygons
+    // for Simplify()
+    areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     // Slightly inflate polygons to avoid any gap between them and other shapes,
     // These gaps are created by arc to segments approximations
@@ -1021,7 +1028,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     }
 #endif
 }
-
 
 
 /** Set up most plot options for plotting a board (especially the viewport)
