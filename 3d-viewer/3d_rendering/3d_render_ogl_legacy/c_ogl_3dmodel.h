@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,62 +37,71 @@
 #include "../3d_render_raytracing/shapes3D/cbbox.h"
 #include "../../3d_enums.h"
 
-///
-class  C_OGL_3DMODEL
+class C_OGL_3DMODEL
 {
 public:
     /**
-     * @brief C_OGL_3DMODEL - Load a 3d model. This must be called inside a gl context
-     * @param a3DModel: a 3d model data to load.
-     * @param aMaterialMode: a mode to render the materials of the model
+     * Load a 3d model.
+     *
+     * @note This must be called inside a gl context.
+     * @param a3DModel a 3d model data to load.
+     * @param aMaterialMode a mode to render the materials of the model.
      */
     C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialMode );
 
     ~C_OGL_3DMODEL();
 
     /**
-     * @brief Draw_opaque - render the model into the current context
+     * Render the model into the current context.
      */
-    void Draw_opaque( bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const { Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor ); }
+    void Draw_opaque( bool aUseSelectedMaterial,
+                      SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
+    {
+        Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor );
+    }
 
     /**
-     * @brief Draw_transparent - render the model into the current context
+     * Render the model into the current context.
      */
-    void Draw_transparent( float aOpacity, bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const { Draw( true, aOpacity, aUseSelectedMaterial, aSelectionColor ); }
+    void Draw_transparent( float aOpacity, bool aUseSelectedMaterial,
+                           SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
+    {
+        Draw( true, aOpacity, aUseSelectedMaterial, aSelectionColor );
+    }
 
     /**
-     * @brief Have_opaque - return true if have opaque meshs to render
+     * Return true if have opaque meshes to render.
      */
     bool Have_opaque() const { return m_have_opaque_meshes; }
 
     /**
-     * @brief Have_transparent - return true if have transparent meshs to render
+     * Return true if have transparent mesh's to render.
      */
     bool Have_transparent() const { return m_have_transparent_meshes; }
 
     /**
-     * @brief Draw_bbox - draw main bounding box of the model
+     * Draw main bounding box of the model.
      */
     void Draw_bbox() const;
 
     /**
-     * @brief Draw_bboxes - draw individual bounding boxes of each mesh
+     * Draw individual bounding boxes of each mesh.
      */
     void Draw_bboxes() const;
 
     /**
-     * @brief GetBBox - Get main bbox
-     * @return the main model bbox
+     * Get the main bounding box.
+     * @return the main model bounding box.
      */
     const CBBOX &GetBBox() const { return m_model_bbox; }
 
     /**
-     * @brief BeginDrawMulti - set some basic render states before drawing multiple models
+     * Set some basic render states before drawing multiple models.
      */
     static void BeginDrawMulti( bool aUseColorInformation );
 
     /**
-     * @brief EndDrawMulti - cleanup render states after drawing multiple models
+     * Cleanup render states after drawing multiple models.
      */
     static void EndDrawMulti();
 
@@ -155,7 +164,8 @@ private:
                           VERTEX *aVtxOut, GLuint *aIdxOut,
                           const glm::vec4 &aColor );
 
-    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial, SFVEC3F aSelectionColor ) const;
+    void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
+               SFVEC3F aSelectionColor ) const;
 };
 
 #endif // _C_OGL_3DMODEL_H_

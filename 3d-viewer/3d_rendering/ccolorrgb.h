@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,16 +45,18 @@ union CCOLORRGB
 
     CCOLORRGB( const SFVEC3F &aColor );
     CCOLORRGB() { r = 0; g = 0; b = 0; }
-    CCOLORRGB( unsigned char aR, unsigned char aG, unsigned char aB ) { r = aR;
-                                                                        g = aG;
-                                                                        b = aB; }
+    CCOLORRGB( unsigned char aR, unsigned char aG, unsigned char aB )
+    {
+        r = aR;
+        g = aG;
+        b = aB;
+    }
 };
+
 
 CCOLORRGB BlendColor( const CCOLORRGB &aC1, const CCOLORRGB &aC2 );
 CCOLORRGB BlendColor( const CCOLORRGB &aC1, const CCOLORRGB &aC2, const CCOLORRGB &aC3 );
-CCOLORRGB BlendColor( const CCOLORRGB &aC1,
-                      const CCOLORRGB &aC2,
-                      const CCOLORRGB &aC3,
+CCOLORRGB BlendColor( const CCOLORRGB &aC1, const CCOLORRGB &aC2, const CCOLORRGB &aC3,
                       const CCOLORRGB &aC4 );
 
 #endif   // CCOLORRGB_H

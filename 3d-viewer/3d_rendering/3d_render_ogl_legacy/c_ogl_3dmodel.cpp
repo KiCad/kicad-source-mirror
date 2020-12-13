@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,11 +37,16 @@
 #include <wx/debug.h>
 #include <chrono>
 
+
+/*
+ * Flag to enable connectivity profiling
+ * @ingroup trace_env_vars
+ */
 const wxChar * C_OGL_3DMODEL::m_logTrace = wxT( "KI_TRACE_EDA_OGL_3DMODEL" );
 
-void C_OGL_3DMODEL::MakeBbox( const CBBOX &aBox, unsigned int aIdxOffset,
-                              VERTEX *aVtxOut, GLuint *aIdxOut,
-                              const glm::vec4 &aColor )
+
+void C_OGL_3DMODEL::MakeBbox( const CBBOX &aBox, unsigned int aIdxOffset, VERTEX *aVtxOut,
+                              GLuint *aIdxOut, const glm::vec4 &aColor )
 {
     aVtxOut[0].m_pos = { aBox.Min().x, aBox.Min().y, aBox.Min().z };
     aVtxOut[1].m_pos = { aBox.Max().x, aBox.Min().y, aBox.Min().z };
@@ -78,8 +83,8 @@ void C_OGL_3DMODEL::MakeBbox( const CBBOX &aBox, unsigned int aIdxOffset,
     #undef bbox_line
 }
 
-C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
-                              MATERIAL_MODE aMaterialMode )
+
+C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialMode )
 {
     wxLogTrace( m_logTrace, wxT( "C_OGL_3DMODEL::C_OGL_3DMODEL %u meshes %u materials" ),
                 static_cast<unsigned int>( a3DModel.m_MeshesSize ),
@@ -152,8 +157,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
         mesh_group.m_vertices.resize( mesh_group.m_vertices.size() + mesh.m_VertexSize );
 
         // copy vertex data and update the bounding box.
-        // use material color for mesh bounding box or some sort of average
-        // vertex color.
+        // use material color for mesh bounding box or some sort of average vertex color.
         glm::vec3 avg_color = material.m_Diffuse;
 
         for( unsigned int vtx_i = 0; vtx_i < mesh.m_VertexSize; ++vtx_i )
@@ -233,11 +237,11 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
         {
             if( mesh.m_FaceIdx[idx_i] >= mesh.m_VertexSize )
             {
-              wxLogTrace( m_logTrace, wxT( " index %u out of range (%u)" ),
-                          static_cast<unsigned int>( mesh.m_FaceIdx[idx_i] ),
-                          static_cast<unsigned int>( mesh.m_VertexSize ) );
+                wxLogTrace( m_logTrace, wxT( " index %u out of range (%u)" ),
+                            static_cast<unsigned int>( mesh.m_FaceIdx[idx_i] ),
+                            static_cast<unsigned int>( mesh.m_VertexSize ) );
 
-             // FIXME: should skip this triangle
+                // FIXME: should skip this triangle
             }
 
             mesh_group.m_indices[idx_offset + idx_i] = mesh.m_FaceIdx[idx_i] + vtx_offset;
@@ -276,7 +280,6 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
         glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof( GLuint ) * bbox_tmp_indices.size(),
                       bbox_tmp_indices.data(), GL_STATIC_DRAW );
     }
-
 
     // merge the mesh group geometry data.
     unsigned int total_vertex_count = 0;
@@ -368,6 +371,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel,
                    end_time - start_time).count() );
 }
 
+
 void C_OGL_3DMODEL::BeginDrawMulti( bool aUseColorInformation )
 {
     glEnableClientState( GL_VERTEX_ARRAY );
@@ -383,6 +387,7 @@ void C_OGL_3DMODEL::BeginDrawMulti( bool aUseColorInformation )
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 }
 
+
 void C_OGL_3DMODEL::EndDrawMulti()
 {
     glDisable( GL_COLOR_MATERIAL );
@@ -396,11 +401,11 @@ void C_OGL_3DMODEL::EndDrawMulti()
 }
 
 
-void C_OGL_3DMODEL::Draw(bool aTransparent, float aOpacity, bool aUseSelectedMaterial , SFVEC3F aSelectionColor ) const
+void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
+                          SFVEC3F aSelectionColor ) const
 {
     if( aOpacity <= FLT_EPSILON )
         return;
-
 
     if( !glBindBuffer )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to draw" );
@@ -428,37 +433,34 @@ void C_OGL_3DMODEL::Draw(bool aTransparent, float aOpacity, bool aUseSelectedMat
     glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, (const float*)&param.x );
 
     // BeginDrawMulti();
-
     for( auto& mat : m_materials )
     {
-        if( ( mat.IsTransparent() != aTransparent ) &&
-            ( aOpacity >= 1.0f ) )
+        if( ( mat.IsTransparent() != aTransparent ) && ( aOpacity >= 1.0f ) )
             continue;
 
         switch( m_material_mode )
         {
-            case MATERIAL_MODE::NORMAL:
-                OGL_SetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
+        case MATERIAL_MODE::NORMAL:
+            OGL_SetMaterial( mat, aOpacity, aUseSelectedMaterial, aSelectionColor );
             break;
 
-            case MATERIAL_MODE::DIFFUSE_ONLY:
-                OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse, aOpacity );
+        case MATERIAL_MODE::DIFFUSE_ONLY:
+            OGL_SetDiffuseOnlyMaterial( mat.m_Diffuse, aOpacity );
             break;
 
-            case MATERIAL_MODE::CAD_MODE:
-                OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
+        case MATERIAL_MODE::CAD_MODE:
+            OGL_SetDiffuseOnlyMaterial( MaterialDiffuseToColorCAD( mat.m_Diffuse ), aOpacity );
             break;
 
-            default:
+        default:
             break;
         }
 
         glDrawElements( GL_TRIANGLES, mat.m_render_idx_count, m_index_buffer_type,
                         reinterpret_cast<const void*>( mat.m_render_idx_buffer_offset ) );
     }
-
-    // EndDrawMulti();
 }
+
 
 C_OGL_3DMODEL::~C_OGL_3DMODEL()
 {

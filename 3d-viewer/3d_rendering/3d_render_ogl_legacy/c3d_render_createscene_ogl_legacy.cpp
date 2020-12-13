@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,8 +44,7 @@ void C3D_RENDER_OGL_LEGACY::add_object_to_triangle_layer( const CFILLEDCIRCLE2D 
     const float texture_factor = (8.0f / (float)SIZE_OF_CIRCLE_TEXTURE) + 1.0f;
     const float f = (sqrtf(2.0f) / 2.0f) * radius * texture_factor;
 
-    // Top and Bot segments ends are just triangle semi-circles, so need to add
-    // it in duplicated
+    // Top and Bot segments ends are just triangle semi-circles, so need to add it in duplicated.
     aDstLayer->m_layer_top_segment_ends->AddTriangle( SFVEC3F( center.x + f, center.y, aZtop ),
                                                       SFVEC3F( center.x - f, center.y, aZtop ),
                                                       SFVEC3F( center.x, center.y - f, aZtop ) );
@@ -96,7 +95,7 @@ void C3D_RENDER_OGL_LEGACY::generate_ring_contour( const SFVEC2F &aCenter,
     for( int ii = 0; ii < 3600; ii += delta )
     {
         float angle = (float)( aInvertOrder ? ( 3600 - ii ) : ii )
-                            * 2.0f * glm::pi<float>() / 3600.0f;
+                               * 2.0f * glm::pi<float>() / 3600.0f;
         const SFVEC2F rotatedDir = SFVEC2F( cos( angle ), sin( angle ) );
 
         aInnerContourResult.emplace_back( aCenter.x + rotatedDir.x * aInnerRadius,
@@ -133,7 +132,6 @@ void C3D_RENDER_OGL_LEGACY::add_object_to_triangle_layer( const CRING2D * aRing,
                            false );
 
     // This will add the top and bot quads that will form the approximated ring
-
     for( unsigned int i = 0; i < ( innerContour.size() - 1 ); ++i )
     {
         const SFVEC2F &vi0 = innerContour[i + 0];
@@ -182,11 +180,11 @@ void C3D_RENDER_OGL_LEGACY::add_object_to_triangle_layer( const CROUNDSEGMENT2D 
     const SFVEC2F& start       = aSeg->GetStart();
     const SFVEC2F& end         = aSeg->GetEnd();
 
-    const float texture_factor = (12.0f / (float)SIZE_OF_CIRCLE_TEXTURE) + 1.0f;
-    const float texture_factorF= ( 6.0f / (float)SIZE_OF_CIRCLE_TEXTURE) + 1.0f;
+    const float texture_factor  = ( 12.0f / (float) SIZE_OF_CIRCLE_TEXTURE ) + 1.0f;
+    const float texture_factorF = ( 6.0f / (float) SIZE_OF_CIRCLE_TEXTURE ) + 1.0f;
 
     const float radius_of_the_square = sqrtf( aSeg->GetRadiusSquared() * 2.0f );
-    const float radius_triangle_factor = (radius_of_the_square - radius) / radius;
+    const float radius_triangle_factor = ( radius_of_the_square - radius ) / radius;
 
     const SFVEC2F factorS = SFVEC2F( -rightDir.y * radius * radius_triangle_factor,
                                       rightDir.x * radius * radius_triangle_factor );
@@ -295,9 +293,7 @@ CLAYERS_OGL_DISP_LISTS *C3D_RENDER_OGL_LEGACY::generate_holes_display_list(
         }
 
         // Note: he can have a aListHolesObject2d whith holes but without countours
-        // eg: when there are only NPTH on the list and the contours were not
-        // added
-
+        // eg: when there are only NPTH on the list and the contours were not added
         if( aPoly.OutlineCount() > 0 )
         {
             layerTriangles->AddToMiddleContourns( aPoly, aZbot, aZtop,
@@ -386,8 +382,8 @@ C3D_RENDER_OGL_LEGACY::generateLayerListFromContainer( const CBVHCONTAINER2D *aC
         layerTriangles->AddToMiddleContourns( *aPolyList, layer_z_bot, layer_z_top,
                                               m_boardAdapter.BiuTo3Dunits(), false, aThroughHoles );
     }
+
     // Create display list
-    // /////////////////////////////////////////////////////////////////////
     return new CLAYERS_OGL_DISP_LISTS( *layerTriangles, m_ogl_circle_texture, layer_z_bot,
                                        layer_z_top );
 }
@@ -421,7 +417,7 @@ CLAYERS_OGL_DISP_LISTS* C3D_RENDER_OGL_LEGACY::createBoard( const SHAPE_POLY_SET
              itemOnLayer != listBoardObject2d.end();
              ++itemOnLayer )
         {
-            const COBJECT2D *object2d_A = static_cast<const COBJECT2D *>(*itemOnLayer);
+            const COBJECT2D* object2d_A = static_cast<const COBJECT2D*>( *itemOnLayer );
 
             wxASSERT( object2d_A->GetObjectType() == OBJECT2D_TYPE::TRIANGLE );
 
@@ -470,8 +466,6 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
         aStatusReporter->Report( _( "Load OpenGL: board" ) );
 
     // Create Board
-    // /////////////////////////////////////////////////////////////////////////
-
     m_board = createBoard( m_boardAdapter.GetBoardPoly(), &m_boardAdapter.GetThroughHole_Inner() );
 
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
@@ -495,22 +489,20 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     board_poly_with_holes.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(),
                                            SHAPE_POLY_SET::PM_FAST );
 
-
     m_board_with_holes = createBoard( board_poly_with_holes );
 
     if( m_anti_board )
         m_anti_board->SetItIsTransparent( true );
 
     // Create Through Holes and vias
-    // /////////////////////////////////////////////////////////////////////////
-
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: holes and vias" ) );
 
     SHAPE_POLY_SET outerPolyTHT = m_boardAdapter.GetThroughHole_Outer_poly();
 
     if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-        outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+        outerPolyTHT.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
+                                          SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
     m_through_holes_outer = generate_holes_display_list(
             m_boardAdapter.GetThroughHole_Outer().GetList(),
@@ -538,13 +530,12 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                 false );
     }
 
-    // Not in use
+    /// @todo Determine what to do with this commented out code.
     //m_ogl_disp_list_through_holes_vias_inner = generate_holes_display_list(
     //      m_boardAdapter.GetThroughHole_Vias_Inner().GetList(),
     //      m_boardAdapter.GetThroughHole_Vias_Inner_poly(),
     //      1.0f, 0.0f,
     //      false );
-
     const MAP_POLY & innerMapHoles = m_boardAdapter.GetPolyMapHoles_Inner();
     const MAP_POLY & outerMapHoles = m_boardAdapter.GetPolyMapHoles_Outer();
 
@@ -557,13 +548,11 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
         float layer_z_bot = 0.0f;
         float layer_z_top = 0.0f;
 
-        for( MAP_POLY::const_iterator ii = outerMapHoles.begin();
-             ii != outerMapHoles.end();
-             ++ii )
+        for( MAP_POLY::const_iterator ii = outerMapHoles.begin(); ii != outerMapHoles.end(); ++ii )
         {
             PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
-            const SHAPE_POLY_SET *poly = static_cast<const SHAPE_POLY_SET *>(ii->second);
-            const CBVHCONTAINER2D *container = map_holes.at( layer_id );
+            const SHAPE_POLY_SET*  poly = static_cast<const SHAPE_POLY_SET*>( ii->second );
+            const CBVHCONTAINER2D* container = map_holes.at( layer_id );
 
             get_layer_z_pos( layer_id, layer_z_top, layer_z_bot );
 
@@ -572,13 +561,11 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
                                                                           layer_z_bot, false );
         }
 
-        for( MAP_POLY::const_iterator ii = innerMapHoles.begin();
-             ii != innerMapHoles.end();
-             ++ii )
+        for( MAP_POLY::const_iterator ii = innerMapHoles.begin(); ii != innerMapHoles.end(); ++ii )
         {
-            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
-            const SHAPE_POLY_SET *poly = static_cast<const SHAPE_POLY_SET *>(ii->second);
-            const CBVHCONTAINER2D *container = map_holes.at( layer_id );
+            PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>( ii->first );
+            const SHAPE_POLY_SET* poly = static_cast<const SHAPE_POLY_SET*>( ii->second );
+            const CBVHCONTAINER2D* container = map_holes.at( layer_id );
 
             get_layer_z_pos( layer_id, layer_z_top, layer_z_bot );
 
@@ -592,7 +579,6 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     generate_3D_Vias_and_Pads();
 
     // Add layers maps
-
     if( aStatusReporter )
         aStatusReporter->Report( _( "Load OpenGL: layers" ) );
 
@@ -602,12 +588,12 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
          ii != m_boardAdapter.GetMapLayers().end();
          ++ii )
     {
-        PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>(ii->first);
+        PCB_LAYER_ID layer_id = static_cast<PCB_LAYER_ID>( ii->first );
 
         if( !m_boardAdapter.Is3DLayerEnabled( layer_id ) )
             continue;
 
-        const CBVHCONTAINER2D *container2d = static_cast<const CBVHCONTAINER2D *>(ii->second);
+        const CBVHCONTAINER2D* container2d = static_cast<const CBVHCONTAINER2D*>( ii->second );
 
         SHAPE_POLY_SET polyListSubtracted;
         SHAPE_POLY_SET *aPolyList = nullptr;
@@ -621,14 +607,16 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             if( ( layer_id != B_Paste ) && ( layer_id != F_Paste ) &&
                 m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
             {
-                polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(), SHAPE_POLY_SET::PM_FAST );
+                polyListSubtracted.BooleanIntersection( m_boardAdapter.GetBoardPoly(),
+                                                        SHAPE_POLY_SET::PM_FAST );
 
                 if( ( layer_id != B_Mask ) && ( layer_id != F_Mask ) )
                 {
                     polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly(),
                                                         SHAPE_POLY_SET::PM_FAST );
-                    polyListSubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(),
-                                                        SHAPE_POLY_SET::PM_FAST );
+                    polyListSubtracted.BooleanSubtract(
+                            m_boardAdapter.GetThroughHole_Outer_poly_NPTH(),
+                            SHAPE_POLY_SET::PM_FAST );
                 }
 
                 if( m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) )
@@ -650,14 +638,15 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             aPolyList = &polyListSubtracted;
         }
 
-        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer( container2d, aPolyList,
-                                                                          layer_id,
-                                                                          &m_boardAdapter.GetThroughHole_Inner() );
+        CLAYERS_OGL_DISP_LISTS* oglList = generateLayerListFromContainer(
+                container2d, aPolyList,
+                layer_id,
+                &m_boardAdapter.GetThroughHole_Inner() );
 
         if( oglList != nullptr )
             m_layers[layer_id] = oglList;
 
-    }// for each layer on
+    }
 
     if( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
         m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
@@ -672,8 +661,9 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
             polySubtracted.BooleanSubtract( m_boardAdapter.GetThroughHole_Outer_poly_NPTH(),
                                             SHAPE_POLY_SET::PM_FAST );
 
-            m_platedPads_F_Cu = generateLayerListFromContainer( m_boardAdapter.GetPlatedPads_Front(),
-                                                                &polySubtracted, F_Cu );
+            m_platedPads_F_Cu = generateLayerListFromContainer(
+                    m_boardAdapter.GetPlatedPads_Front(),
+                    &polySubtracted, F_Cu );
         }
 
         if( m_boardAdapter.GetPolyPlatedPads_Back() )
@@ -692,7 +682,6 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER* aStatusReporter, REPORTER* aWarnin
     }
 
     // Load 3D models
-    // /////////////////////////////////////////////////////////////////////////
     if( aStatusReporter )
         aStatusReporter->Report( _( "Loading 3D models" ) );
 
@@ -784,14 +773,14 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
     if( m_boardAdapter.GetStats_Nr_Vias() )
     {
         const unsigned int reserve_nr_triangles_estimation =
-                m_boardAdapter.GetNrSegmentsCircle( m_boardAdapter.GetStats_Med_Via_Hole_Diameter3DU() ) *
-                8 *
-                m_boardAdapter.GetStats_Nr_Vias();
+                m_boardAdapter.GetNrSegmentsCircle(
+                        m_boardAdapter.GetStats_Med_Via_Hole_Diameter3DU() ) * 8 *
+                        m_boardAdapter.GetStats_Nr_Vias();
 
-        CLAYER_TRIANGLES *layerTriangleVIA = new CLAYER_TRIANGLES( reserve_nr_triangles_estimation );
+        CLAYER_TRIANGLES *layerTriangleVIA =
+                new CLAYER_TRIANGLES( reserve_nr_triangles_estimation );
 
         // Insert plated vertical holes inside the board
-        // /////////////////////////////////////////////////////////////////////////
 
         // Insert vias holes (vertical cylinders)
         for( auto track : m_boardAdapter.GetBoard()->Tracks() )
@@ -800,10 +789,10 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
             {
                 const VIA *via = static_cast<const VIA*>(track);
 
-                const float  holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3Dunits();
-                const float  thickness = m_boardAdapter.GetCopperThickness3DU();
-                const int    nrSegments = m_boardAdapter.GetNrSegmentsCircle( via->GetDrillValue() );
-                const float  hole_inner_radius = holediameter / 2.0f;
+                const float holediameter = via->GetDrillValue() * m_boardAdapter.BiuTo3Dunits();
+                const float thickness = m_boardAdapter.GetCopperThickness3DU();
+                const int nrSegments = m_boardAdapter.GetNrSegmentsCircle( via->GetDrillValue() );
+                const float hole_inner_radius = holediameter / 2.0f;
 
                 const SFVEC2F via_center( via->GetStart().x * m_boardAdapter.BiuTo3Dunits(),
                                           -via->GetStart().y * m_boardAdapter.BiuTo3Dunits() );
@@ -921,17 +910,11 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
 }
 
 
-/*
- * This function will get models from the cache and load it to openGL lists
- * in the form of C_OGL_3DMODEL. So this map of models will work as a local
- * cache for this render. (cache based on C_OGL_3DMODEL with associated
- * openGL lists in GPU memory)
- */
 void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER* aStatusReporter )
 {
     if( !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL )
-            && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
-            && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )
+      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_NORMAL_INSERT )
+      && !m_boardAdapter.GetFlag( FL_FP_ATTRIBUTES_VIRTUAL ) )
     {
         return;
     }

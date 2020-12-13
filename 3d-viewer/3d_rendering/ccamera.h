@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,6 @@ enum class PROJECTION_TYPE
 };
 
 /**
- * Frustum structure
  * Frustum is a implementation based on a tutorial by
  * http://www.lighthouse3d.com/tutorials/view-frustum-culling/
  */
@@ -71,21 +70,19 @@ enum class CAMERA_INTERPOLATION
 
 
 /**
- *  Class CCAMERA
- *  is a virtual class used to derive CCAMERA objects from.
+ *  A class used to derive camera objects from.
  *
- *  It must be derived to other classes to implement a real camera object.
+ *  It must be derived by other classes to implement a real camera object.
  */
 class CCAMERA
 {
-
- public:
-
+public:
     /**
-     * @brief CCAMERA initialize a camera
-     * @param aRangeScale: it will be expected that the board will have a
-     * -aRangeScale/2 to +aRangeScale/2
-     * it will initialize the initial Z position with aRangeScale
+     * Initialize a camera.
+     *
+     * @param aRangeScale it will be expected that the board will have a
+     *                    -aRangeScale/2 to +aRangeScale/2.  It will initialize the
+     *                    Z position with aRangeScale.
      */
     explicit CCAMERA( float aRangeScale );
 
@@ -95,8 +92,8 @@ class CCAMERA
 
 
     /**
-     *  Function GetRotationMatrix
-     *  Get the rotation matrix to be applied in a transformation camera
+     *  Get the rotation matrix to be applied in a transformation camera.
+     *
      *  @return the rotation matrix of the camera
      */
     const glm::mat4 GetRotationMatrix() const;
@@ -115,7 +112,8 @@ class CCAMERA
     float GetNear() const { return m_frustum.nearD; }
     float GetFar() const { return m_frustum.farD; }
 
-    void SetBoardLookAtPos( const SFVEC3F &aBoardPos ) {
+    void SetBoardLookAtPos( const SFVEC3F &aBoardPos )
+    {
         if( m_board_lookat_pos_init != aBoardPos )
         {
             m_board_lookat_pos_init = aBoardPos;
@@ -125,7 +123,8 @@ class CCAMERA
 
     virtual void SetLookAtPos( const SFVEC3F &aLookAtPos ) = 0;
 
-    void SetLookAtPos_T1( const SFVEC3F &aLookAtPos ) {
+    void SetLookAtPos_T1( const SFVEC3F &aLookAtPos )
+    {
         m_lookat_pos_t1 = aLookAtPos;
     }
 
@@ -144,7 +143,6 @@ class CCAMERA
 
     virtual void Pan_T1( const SFVEC3F &aDeltaOffsetInc )  = 0;
 
-
     /**
      *  Reset the camera to initial state
      */
@@ -155,8 +153,7 @@ class CCAMERA
     void ResetXYpos_T1();
 
     /**
-     *  It updates the current mouse position without make any new recalculations
-     *  on camera.
+     *  Update the current mouse position without make any new calculations on camera.
      */
     void SetCurMousePosition( const wxPoint &aPosition );
 
@@ -164,9 +161,9 @@ class CCAMERA
     PROJECTION_TYPE GetProjection() { return m_projectionType; }
 
     /**
-     * @brief SetCurWindowSize - update the windows size of the camera
-     * @param aSize
-     * @return true if the windows size changed since last time
+     * Update the windows size of the camera.
+     *
+     * @return true if the windows size changed since last time.
      */
     bool SetCurWindowSize( const wxSize &aSize );
 
@@ -187,13 +184,14 @@ class CCAMERA
     void RotateZ_T1( float aAngleInRadians );
 
     /**
-     * @brief SetT0_and_T1_current_T - This will set T0 and T1 with the current values
+     * This will set T0 and T1 with the current values.
      */
     virtual void SetT0_and_T1_current_T();
 
     /**
-     * @brief Interpolate - It will update the matrix to interpolate  between T0 and T1 values
-     * @param t the interpolation time, between 0.0f and 1.0f (it will clamp if >1)
+     * It will update the matrix to interpolate between T0 and T1 values.
+     *
+     * @param t the interpolation time, between 0.0f and 1.0f (it will clamp if >1).
      */
     virtual void Interpolate( float t );
 
@@ -203,44 +201,43 @@ class CCAMERA
     }
 
     /**
-     *  Function ParametersChanged
-     *  @return true if some of the parameters in camera was changed,
-     *  it will reset the flag
+     *  @return true if some of the parameters in camera was changed, it will reset the flag.
      */
     bool ParametersChanged();
 
     /**
-     *  Function ParametersChangedQuery
-     *  @return true if some of the parameters in camera was changed,
-     *  it will NOT reset the flag
+     *  @return true if some of the parameters in camera was changed, it will NOT reset the flag.
      */
     bool ParametersChangedQuery() const { return m_parametersChanged; }
 
     /**
-     * @brief MakeRay - Make a ray based on a windows screen position
-     * @param aWindowPos: the windows buffer position
-     * @param aOutOrigin: out origin position of the ray
-     * @param aOutDirection: out direction
+     * Make a ray based on a windows screen position.
+     *
+     * @param aWindowPos the windows buffer position.
+     * @param aOutOrigin out origin position of the ray.
+     * @param aOutDirection out direction
      */
     void MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
 
     /**
-     * @brief MakeRay - Make a ray based on a windows screen position, it will interpolate based on the float aWindowPos
-     * @param aWindowPos: the windows buffer position (float value)
-     * @param aOutOrigin: out origin position of the ray
-     * @param aOutDirection: out direction
+     * Make a ray based on a windows screen position, it will interpolate based on the
+     * \a aWindowPos.
+     *
+     * @param aWindowPos the windows buffer position (float value).
+     * @param aOutOrigin out origin position of the ray.
+     * @param aOutDirection out direction.
      */
     void MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
 
     /**
-     * @brief MakeRayAtCurrrentMousePosition - Make a ray based on the latest mouse position
-     * @param aOutOrigin: out origin position of the ray
-     * @param aOutDirection: out direction
+     * Make a ray based on the latest mouse position.
+     *
+     * @param aOutOrigin out origin position of the ray.
+     * @param aOutDirection out direction.
      */
     void MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
 
- protected:
-
+protected:
     void rebuildProjection();
     void updateFrustum();
     void updateViewMatrix();
@@ -248,25 +245,26 @@ class CCAMERA
     void updateRotationMatrix();
 
     /**
-     * @brief m_range_scale - the nominal range expected to be used in the camera.
+     * The nominal range expected to be used in the camera.
+     *
      * It will be used to initialize the Z position
      */
     float m_range_scale;
 
     /**
-     *  3D zoom value (Min 0.0 ... Max 1.0)
+     * 3D zoom value (Min 0.0 ... Max 1.0)
      */
     float m_zoom;
     float m_zoom_t0;
     float m_zoom_t1;
 
     /**
-     *  The window size that this camera is working.
+     * The window size that this camera is working.
      */
     SFVEC2I m_windowSize;
 
     /**
-     *  The last mouse position in the screen
+     * The last mouse position in the screen
      */
     wxPoint m_lastPosition;
 
@@ -295,39 +293,38 @@ class CCAMERA
     SFVEC3F m_lookat_pos;
     SFVEC3F m_lookat_pos_t0;
     SFVEC3F m_lookat_pos_t1;
-    SFVEC3F m_board_lookat_pos_init;    ///< Default boardlookat position (the board center)
+    SFVEC3F m_board_lookat_pos_init;    ///< Default boardlookat position (the board center).
 
-    SFVEC3F m_rotate_aux;               ///< Stores the rotation angle auxiliar
+    SFVEC3F m_rotate_aux;               ///< Stores the rotation angle auxiliary.
     SFVEC3F m_rotate_aux_t0;
     SFVEC3F m_rotate_aux_t1;
 
     CAMERA_INTERPOLATION m_interpolation_mode;
 
     /**
-     *  Precalc values array used to calc ray for each pixel
-     *  (constant for the same window size)
+     * Precalc values array used to calc ray for each pixel (constant for the same window size).
      */
     std::vector< float > m_scr_nX;
     std::vector< float > m_scr_nY;
 
     /**
-     *  Precalc values array used to calc ray for each pixel,
-     *  for X and Y axis of each new camera position
+     * Precalc values array used to calc ray for each pixel, for X and Y axis of each new
+     * camera position.
      */
     std::vector< SFVEC3F > m_right_nX;
     std::vector< SFVEC3F > m_up_nY;
 
-
     /**
-     *  Set to true if any of the parameters in the camera was changed
+     * Set to true if any of the parameters in the camera was changed
      */
     bool m_parametersChanged;
 
     /**
-     *  Trace mask used to enable or disable the trace output of this class.
-     *  The debug output can be turned on by setting the WXTRACE environment variable to
-     *  "KI_TRACE_CCAMERA".  See the wxWidgets documentation on wxLogTrace for
-     *  more information.
+     * Trace mask used to enable or disable the trace output of this class.
+     *
+     * The debug output can be turned on by setting the WXTRACE environment variable to
+     * "KI_TRACE_CCAMERA".  See the wxWidgets documentation on wxLogTrace for
+     * more information.
      */
     static const wxChar *m_logTrace;
 };

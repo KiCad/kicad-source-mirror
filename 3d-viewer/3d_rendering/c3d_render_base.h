@@ -42,50 +42,46 @@
  */
 class C3D_RENDER_BASE
 {
-
-
-    // Operations
 public:
-
     explicit C3D_RENDER_BASE( BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera );
 
     virtual ~C3D_RENDER_BASE() = 0;
 
     /**
-     * @brief SetCurWindowSize - Before each render, the canvas will tell the
-     * render what is the size of its windows, so render can take actions if it
-     * changed.
-     * @param aSize: the current size of the render window
+     * Before each render, the canvas will tell the render what is the size of its windows,
+     * so render can take actions if it changed.
+     *
+     * @param aSize the current size of the render window
      */
     virtual void SetCurWindowSize( const wxSize &aSize ) = 0;
 
     /**
-     * @brief Redraw - Ask to redraw the view
-     * @param aIsMoving: if the user is moving the scene, it should be render in
-     * preview mode
-     * @param aStatusReporter: a pointer to the status progress reporter
-     * @return it will return true if the render would like to redraw again
+     * Redraw the view.
+     *
+     * @param aIsMoving if the user is moving the scene, it should be render in preview mode.
+     * @param aStatusReporter a pointer to the status progress reporter.
+     * @return true if the render would like to redraw again.
      */
     virtual bool Redraw( bool aIsMoving, REPORTER* aStatusReporter = NULL,
                          REPORTER* aWarningReporter = NULL ) = 0;
 
     /**
-     * @brief ReloadRequest - !TODO: this must be reviewed to add flags to
-     * improve specific render
+     * @todo This must be reviewed to add flags to improve specific render.
      */
     void ReloadRequest() { m_reloadRequested = true; }
 
     /**
-     * @brief IsReloadRequestPending - Query if there is a pending reload request
+     * Query if there is a pending reload request.
+     *
      * @return true if it wants to reload, false if there is no reload pending
      */
     bool IsReloadRequestPending() const { return m_reloadRequested; }
 
     /**
-     * @brief GetWaitForEditingTimeOut - Give the interface the time (in ms)
-     * that it should wait for editing or movements before
-     * (this works for display preview mode)
-     * @return a value in miliseconds
+     * Give the interface the time (in ms) that it should wait for editing or movements before
+     * (this works for display preview mode).
+     *
+     * @return a value in milliseconds
      */
     virtual int GetWaitForEditingTimeOut() = 0;
 
@@ -97,27 +93,24 @@ public:
      */
     void SetBusyIndicatorFactory( BUSY_INDICATOR::FACTORY aNewFactory );
 
-    // Attributes
-
 protected:
     /**
-     * Return a created busy indicator, if a factory has been set, else
-     * a null pointer.
+     * Return a created busy indicator, if a factory has been set, else a null pointer.
      */
     std::unique_ptr<BUSY_INDICATOR> CreateBusyIndicator() const;
 
-    /// settings refrence in use for this render
+    ///< Settings reference in use for this render.
     BOARD_ADAPTER& m_boardAdapter;
 
     CCAMERA&       m_camera;
 
-    /// flag if the opengl specific for this render was already initialized
+    ///< Flag if the opengl specific for this render was already initialized.
     bool m_is_opengl_initialized;
 
-    /// !TODO: this must be reviewed in order to flag change types
+    ///< @todo This must be reviewed in order to flag change types.
     bool m_reloadRequested;
 
-    /// The window size that this camera is working.
+    ///< The window size that this camera is working.
     wxSize m_windowSize;
 
     /**
@@ -129,7 +122,7 @@ protected:
     static const wxChar *m_logTrace;
 
 private:
-    /// Factory that returns a suitable busy indicator for the context.
+    ///< Factory that returns a suitable busy indicator for the context.
     BUSY_INDICATOR::FACTORY m_busyIndicatorFactory;
 };
 

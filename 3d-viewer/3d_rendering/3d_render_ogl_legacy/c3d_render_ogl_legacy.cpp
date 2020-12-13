@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,8 +34,8 @@
 #include <base_units.h>
 
 /**
-  * Scale conversion from 3d model units to pcb units
-  */
+ * Scale conversion from 3d model units to pcb units
+ */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
 C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& aCamera ) :
@@ -144,7 +144,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_arrows()
     glLoadIdentity();
 
     const glm::mat4 TranslationMatrix = glm::translate( glm::mat4(1.0f),
-                                                        SFVEC3F( 0.0f, 0.0f, -(arrow_size * 2.75f) ) );
+                                                        SFVEC3F( 0.0f, 0.0f,
+                                                                 -(arrow_size * 2.75f) ) );
 
     const glm::mat4 ViewMatrix = TranslationMatrix * m_camera.GetRotationMatrix();
 
@@ -202,7 +203,8 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 
         // Non plated copper (raw copper)
         m_materials.m_NonPlatedCopper.m_Ambient = SFVEC3F( 0.191f, 0.073f, 0.022f );
-        m_materials.m_NonPlatedCopper.m_Diffuse = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f,  50.0f / 255.0f );
+        m_materials.m_NonPlatedCopper.m_Diffuse = SFVEC3F( 184.0f / 255.0f, 115.0f / 255.0f,
+                                                           50.0f / 255.0f );
         m_materials.m_NonPlatedCopper.m_Specular = SFVEC3F( 0.256f, 0.137f, 0.086f );
         m_materials.m_NonPlatedCopper.m_Shininess = 0.1f * 128.0f;
         m_materials.m_NonPlatedCopper.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
@@ -221,7 +223,6 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 
         m_materials.m_Paste.m_Shininess = 0.1f * 128.0f;
         m_materials.m_Paste.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-
 
         // Silk screen material mixed with silk screen color
         m_materials.m_SilkSTop.m_Ambient = SFVEC3F( m_boardAdapter.m_SilkScreenColorTop.r,
@@ -320,73 +321,74 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 {
     switch( aLayerID )
     {
-        case F_Mask:
-        case B_Mask:
+    case F_Mask:
+    case B_Mask:
+    {
+        const SFVEC4F layerColor = get_layer_color( aLayerID );
+
+        m_materials.m_SolderMask.m_Diffuse = layerColor;
+
+        // Convert Opacity to Transparency
+        m_materials.m_SolderMask.m_Transparency = 1.0f - layerColor.a;
+
+        if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
         {
-            const SFVEC4F layerColor = get_layer_color( aLayerID );
+            m_materials.m_SolderMask.m_Ambient = m_materials.m_SolderMask.m_Diffuse * 0.3f;
 
-            m_materials.m_SolderMask.m_Diffuse = layerColor;
-            m_materials.m_SolderMask.m_Transparency = 1.0f - layerColor.a; // Convert Opacity to Transparency
-
-            if( m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) )
-            {
-                m_materials.m_SolderMask.m_Ambient = m_materials.m_SolderMask.m_Diffuse * 0.3f;
-
-                m_materials.m_SolderMask.m_Specular = m_materials.m_SolderMask.m_Diffuse *
-                                                      m_materials.m_SolderMask.m_Diffuse;
-            }
-
-            OGL_SetMaterial( m_materials.m_SolderMask, 1.0f );
-            break;
+            m_materials.m_SolderMask.m_Specular =
+                    m_materials.m_SolderMask.m_Diffuse * m_materials.m_SolderMask.m_Diffuse;
         }
 
-        case B_Paste:
-        case F_Paste:
-            m_materials.m_Paste.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_Paste, 1.0f );
-            break;
+        OGL_SetMaterial( m_materials.m_SolderMask, 1.0f );
+        break;
+    }
 
-        case B_SilkS:
-            m_materials.m_SilkSBot.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SilkSBot, 1.0f );
-            break;
-
-        case F_SilkS:
-            m_materials.m_SilkSTop.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_SilkSTop, 1.0f );
-            break;
-
-        case B_Adhes:
-        case F_Adhes:
-        case Dwgs_User:
-        case Cmts_User:
-        case Eco1_User:
-        case Eco2_User:
-        case Edge_Cuts:
-        case Margin:
-        case B_CrtYd:
-        case F_CrtYd:
-        case B_Fab:
-        case F_Fab:
-            m_materials.m_Plastic.m_Diffuse = get_layer_color( aLayerID );
-
-            m_materials.m_Plastic.m_Ambient = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.05f,
-                                                       m_materials.m_Plastic.m_Diffuse.g * 0.05f,
-                                                       m_materials.m_Plastic.m_Diffuse.b * 0.05f );
-
-            m_materials.m_Plastic.m_Specular = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.7f,
-                                                        m_materials.m_Plastic.m_Diffuse.g * 0.7f,
-                                                        m_materials.m_Plastic.m_Diffuse.b * 0.7f );
-
-            m_materials.m_Plastic.m_Shininess = 0.078125f * 128.0f;
-            m_materials.m_Plastic.m_Emissive = SFVEC3F( 0.0f, 0.0f, 0.0f );
-            OGL_SetMaterial( m_materials.m_Plastic, 1.0f );
+    case B_Paste:
+    case F_Paste:
+        m_materials.m_Paste.m_Diffuse = get_layer_color( aLayerID );
+        OGL_SetMaterial( m_materials.m_Paste, 1.0f );
         break;
 
-        default:
-            m_materials.m_Copper.m_Diffuse = get_layer_color( aLayerID );
-            OGL_SetMaterial( m_materials.m_Copper, 1.0f );
+    case B_SilkS:
+        m_materials.m_SilkSBot.m_Diffuse = get_layer_color( aLayerID );
+        OGL_SetMaterial( m_materials.m_SilkSBot, 1.0f );
+        break;
 
+    case F_SilkS:
+        m_materials.m_SilkSTop.m_Diffuse = get_layer_color( aLayerID );
+        OGL_SetMaterial( m_materials.m_SilkSTop, 1.0f );
+        break;
+
+    case B_Adhes:
+    case F_Adhes:
+    case Dwgs_User:
+    case Cmts_User:
+    case Eco1_User:
+    case Eco2_User:
+    case Edge_Cuts:
+    case Margin:
+    case B_CrtYd:
+    case F_CrtYd:
+    case B_Fab:
+    case F_Fab:
+        m_materials.m_Plastic.m_Diffuse = get_layer_color( aLayerID );
+
+        m_materials.m_Plastic.m_Ambient = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.05f,
+                                                   m_materials.m_Plastic.m_Diffuse.g * 0.05f,
+                                                   m_materials.m_Plastic.m_Diffuse.b * 0.05f );
+
+        m_materials.m_Plastic.m_Specular = SFVEC3F( m_materials.m_Plastic.m_Diffuse.r * 0.7f,
+                                                    m_materials.m_Plastic.m_Diffuse.g * 0.7f,
+                                                    m_materials.m_Plastic.m_Diffuse.b * 0.7f );
+
+        m_materials.m_Plastic.m_Shininess = 0.078125f * 128.0f;
+        m_materials.m_Plastic.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
+        OGL_SetMaterial( m_materials.m_Plastic, 1.0f );
+        break;
+
+    default:
+        m_materials.m_Copper.m_Diffuse = get_layer_color( aLayerID );
+        OGL_SetMaterial( m_materials.m_Copper, 1.0f );
         break;
     }
 }
@@ -400,48 +402,48 @@ SFVEC4F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
     {
         switch( aLayerID )
         {
-            case B_Adhes:
-            case F_Adhes:
-                break;
+        case B_Adhes:
+        case F_Adhes:
+            break;
 
-            case B_Mask:
-                layerColor = m_boardAdapter.m_SolderMaskColorBot;
-                break;
-            case F_Mask:
-                layerColor = m_boardAdapter.m_SolderMaskColorTop;
-                break;
+        case B_Mask:
+            layerColor = m_boardAdapter.m_SolderMaskColorBot;
+            break;
+        case F_Mask:
+            layerColor = m_boardAdapter.m_SolderMaskColorTop;
+            break;
 
-            case B_Paste:
-            case F_Paste:
-                layerColor = m_boardAdapter.m_SolderPasteColor;
-                break;
+        case B_Paste:
+        case F_Paste:
+            layerColor = m_boardAdapter.m_SolderPasteColor;
+            break;
 
-            case B_SilkS:
-                layerColor = m_boardAdapter.m_SilkScreenColorBot;
-                break;
-            case F_SilkS:
-                layerColor = m_boardAdapter.m_SilkScreenColorTop;
-                break;
+        case B_SilkS:
+            layerColor = m_boardAdapter.m_SilkScreenColorBot;
+            break;
+        case F_SilkS:
+            layerColor = m_boardAdapter.m_SilkScreenColorTop;
+            break;
 
-            case Dwgs_User:
-            case Cmts_User:
-            case Eco1_User:
-            case Eco2_User:
-            case Edge_Cuts:
-            case Margin:
-                break;
+        case Dwgs_User:
+        case Cmts_User:
+        case Eco1_User:
+        case Eco2_User:
+        case Edge_Cuts:
+        case Margin:
+            break;
 
-            case B_CrtYd:
-            case F_CrtYd:
-                break;
+        case B_CrtYd:
+        case F_CrtYd:
+            break;
 
-            case B_Fab:
-            case F_Fab:
-                break;
+        case B_Fab:
+        case F_Fab:
+            break;
 
-            default:
-                layerColor = m_boardAdapter.m_CopperColor;
-                break;
+        default:
+            layerColor = m_boardAdapter.m_CopperColor;
+            break;
         }
     }
 
@@ -453,7 +455,6 @@ void init_lights(void)
 {
     // Setup light
     // https://www.opengl.org/sdk/docs/man2/xhtml/glLight.xml
-    // /////////////////////////////////////////////////////////////////////////
     const GLfloat ambient[]   = { 0.084f, 0.084f, 0.084f, 1.0f };
     const GLfloat diffuse0[]  = { 0.3f, 0.3f, 0.3f, 1.0f };
     const GLfloat specular0[] = { 0.5f, 0.5f, 0.5f, 1.0f };
@@ -480,7 +481,6 @@ void init_lights(void)
     glLightfv( GL_LIGHT1, GL_DIFFUSE,  diffuse12 );
     glLightfv( GL_LIGHT1, GL_SPECULAR, specular12 );
     glLightfv( GL_LIGHT1, GL_POSITION, position );
-
 
     // defines a directional light that points along the positive z-axis
     position[2] = -position[2];
@@ -521,7 +521,9 @@ void C3D_RENDER_OGL_LEGACY::unsetDepthOffset()
 void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
 {
     m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
-    m_materials.m_EpoxyBoard.m_Transparency = 1.0f - m_boardAdapter.m_BoardBodyColor.a; // opacity to transparency
+
+    // opacity to transparency
+    m_materials.m_EpoxyBoard.m_Transparency = 1.0f - m_boardAdapter.m_BoardBodyColor.a;
 
     OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
 
@@ -581,12 +583,10 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     setupMaterials();
 
     // Initial setup
-    // /////////////////////////////////////////////////////////////////////////
     glDepthFunc( GL_LESS );
     glEnable( GL_CULL_FACE );
     glFrontFace( GL_CCW );    // This is the OpenGL default
     glEnable( GL_NORMALIZE ); // This allow OpenGL to normalize the normals after transformations
-
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) && aIsMoving )
@@ -595,7 +595,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glEnable( GL_MULTISAMPLE );
 
     // clear color and depth buffers
-    // /////////////////////////////////////////////////////////////////////////
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glClearDepth( 1.0f );
     glClearStencil( 0x00 );
@@ -604,26 +603,19 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     OGL_ResetTextureStateDefaults();
 
     // Draw the background ( rectangle with color gradient)
-    // /////////////////////////////////////////////////////////////////////////
     OGL_DrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop ),
                         SFVEC3F( m_boardAdapter.m_BgColorBot ) );
 
     glEnable( GL_DEPTH_TEST );
 
-
     // Set projection and modelview matrixes
-    // /////////////////////////////////////////////////////////////////////////
     glMatrixMode( GL_PROJECTION );
     glLoadMatrixf( glm::value_ptr( m_camera.GetProjectionMatrix() ) );
-
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glLoadMatrixf( glm::value_ptr( m_camera.GetViewMatrix() ) );
 
-
     // Position the headlight
-    // /////////////////////////////////////////////////////////////////////////
-
     setLight_Front( true );
     setLight_Top( true );
     setLight_Bottom( true );
@@ -680,30 +672,26 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         m_pad_holes->DrawAll();
 
     // Display copper and tech layers
-    // /////////////////////////////////////////////////////////////////////////
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers.begin(); ii != m_layers.end(); ++ii )
     {
-        const PCB_LAYER_ID layer_id = (PCB_LAYER_ID)(ii->first);
+        const PCB_LAYER_ID layer_id = ( PCB_LAYER_ID )( ii->first );
 
         // Mask layers are not processed here because they are a special case
         if( (layer_id == B_Mask) || (layer_id == F_Mask) )
             continue;
 
-        // Do not show inner layers when it is displaying the board
-        // and board body is full opaque
+        // Do not show inner layers when it is displaying the board and board body is full opaque
         if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) &&
             ( m_boardAdapter.m_BoardBodyColor.a > 0.99f ) )
         {
-            if( (layer_id > F_Cu) && (layer_id < B_Cu) )
+            if( ( layer_id > F_Cu ) && ( layer_id < B_Cu ) )
                 continue;
         }
 
         glPushMatrix();
 
-        // !TODO: if we want to increase the separation between layers
+        /// @todo Determine what to do with this commented out code.
         //glScalef( 1.0f, 1.0f, 3.0f );
-
-
         CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>(ii->second);
 
         if( (layer_id >= F_Cu) && (layer_id <= B_Cu) )
@@ -720,7 +708,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                 pLayerDispList->DrawAllCameraCulled( m_camera.GetPos().z, drawMiddleSegments );
 
                 // Draw copper plated pads
-
                 if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
                     ( m_platedPads_F_Cu || m_platedPads_B_Cu ) )
                     setPlatedCopperAndDepthOffset( layer_id );
@@ -756,7 +743,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
                 if( m_layers_holes_outer.find( layer_id ) != m_layers_holes_outer.end() )
                 {
-                    const CLAYERS_OGL_DISP_LISTS* viasHolesLayer = m_layers_holes_outer.at( layer_id );
+                    const CLAYERS_OGL_DISP_LISTS* viasHolesLayer =
+                            m_layers_holes_outer.at( layer_id );
 
                     wxASSERT( viasHolesLayer != NULL );
 
@@ -777,17 +765,19 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
                         if( layer_id == F_Cu && m_platedPads_F_Cu )
                         {
-                            m_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                                 m_through_holes_outer,
-                                                                                 viasHolesLayer,
-                                                                                 m_anti_board );
+                            m_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer(
+                                    drawMiddleSegments,
+                                    m_through_holes_outer,
+                                    viasHolesLayer,
+                                    m_anti_board );
                         }
                         else if( layer_id == B_Cu && m_platedPads_B_Cu )
                         {
-                            m_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                                 m_through_holes_outer,
-                                                                                 viasHolesLayer,
-                                                                                 m_anti_board );
+                            m_platedPads_B_Cu->DrawAllCameraCulledSubtractLayer(
+                                    drawMiddleSegments,
+                                    m_through_holes_outer,
+                                    viasHolesLayer,
+                                    m_anti_board );
                         }
 
                         unsetDepthOffset();
@@ -800,7 +790,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                                                       m_anti_board );
 
                     // Draw copper plated pads
-
                     if( ( ( layer_id == F_Cu ) || ( layer_id == B_Cu ) ) &&
                         ( m_platedPads_F_Cu || m_platedPads_B_Cu ) )
                     {
@@ -810,8 +799,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                     if( layer_id == F_Cu && m_platedPads_F_Cu )
                     {
                         m_platedPads_F_Cu->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
-                                                                              m_through_holes_outer,
-                                                                              m_anti_board );
+                                                                             m_through_holes_outer,
+                                                                             m_anti_board );
                     }
                     else if( layer_id == B_Cu && m_platedPads_B_Cu )
                     {
@@ -837,7 +826,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
             if( throughHolesOuter )
             {
-                throughHolesOuter->ApplyScalePosition( pLayerDispList->GetZBot(),
+                throughHolesOuter->ApplyScalePosition(
+                        pLayerDispList->GetZBot(),
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
@@ -848,15 +838,16 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
             if( anti_board )
             {
-                anti_board->ApplyScalePosition( pLayerDispList->GetZBot(),
+                anti_board->ApplyScalePosition(
+                        pLayerDispList->GetZBot(),
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
             if( !skipRenderHoles
-                    && m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK )
-                    && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
-                    && ( ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
-                      || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
+              && m_boardAdapter.GetFlag( FL_SUBTRACT_MASK_FROM_SILK )
+              && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
+              && ( ( layer_id == B_SilkS && m_layers.find( B_Mask ) != m_layers.end() )
+                 || ( layer_id == F_SilkS && m_layers.find( F_Mask ) != m_layers.end() ) ) )
             {
                 const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS) ? B_Mask : F_Mask;
 
@@ -873,7 +864,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                     && ( layer_id == B_SilkS || layer_id == F_SilkS ) )
                 {
                     pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments, nullptr,
-                                                                      throughHolesOuter, anti_board );
+                                                                      throughHolesOuter,
+                                                                      anti_board );
                 }
                 else
                 {
@@ -892,19 +884,16 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     }
 
     // Render 3D Models (Non-transparent)
-    // /////////////////////////////////////////////////////////////////////////
     render_3D_models( false, false );
     render_3D_models( true, false );
 
     // Display board body
-    // /////////////////////////////////////////////////////////////////////////
     if( m_boardAdapter.GetFlag( FL_SHOW_BOARD_BODY ) )
     {
         render_board_body( skipRenderHoles );
     }
 
     // Display transparent mask layers
-    // /////////////////////////////////////////////////////////////////////////
     if( m_boardAdapter.GetFlag( FL_SOLDERMASK ) )
     {
         //setLight_Top( true );
@@ -938,12 +927,9 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
 
     // Render 3D Models (Transparent)
-    // /////////////////////////////////////////////////////////////////////////
     // !TODO: this can be optimized. If there are no transparent models (or no opacity),
     // then there is no need to make this function call.
-
     glDepthMask( GL_FALSE );
-
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
@@ -975,8 +961,6 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glDepthMask( GL_TRUE );
 
     // Render Grid
-    // /////////////////////////////////////////////////////////////////////////
-
     if( m_boardAdapter.GridGet() != GRID3D_TYPE::NONE )
     {
         glDisable( GL_LIGHTING );
@@ -987,15 +971,12 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glEnable( GL_LIGHTING );
     }
 
-
     // Render 3D arrows
-    // /////////////////////////////////////////////////////////////////////////
     if( m_boardAdapter.GetFlag( FL_AXIS ) )
         render_3D_arrows();
 
     // Return back to the original viewport (this is important if we want
     // to take a screenshot after the render)
-    // /////////////////////////////////////////////////////////////////////////
     glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
 
     return false;
@@ -1016,11 +997,12 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
     if( !circleImage )
         return false;
 
-    circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 2) - 0,
-                               (SIZE_OF_CIRCLE_TEXTURE / 2) - 0,
-                               (SIZE_OF_CIRCLE_TEXTURE / 2) - 4,
+    circleImage->CircleFilled( ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0,
+                               ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 0,
+                               ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 4,
                                0xFF );
 
+    /// @todo Determine what to do with this commented out code.
     //circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1,
     //                           (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1,
     //                           (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 2, 0xFF );
@@ -1043,7 +1025,6 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
 
     // Use this mode if you want see the triangle lines (debug proposes)
     //glPolygonMode( GL_FRONT_AND_BACK,  GL_LINE );
-
     m_is_opengl_initialized = true;
 
     return true;
@@ -1078,7 +1059,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers.begin(); ii != m_layers.end(); ++ii )
     {
-        CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>(ii->second);
+        CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>( ii->second );
         delete pLayerDispList;
     }
 
@@ -1090,23 +1071,21 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
     delete m_platedPads_B_Cu;
     m_platedPads_B_Cu = nullptr;
 
-
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers_holes_outer.begin();
          ii != m_layers_holes_outer.end();
          ++ii )
     {
-        CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>(ii->second);
+        CLAYERS_OGL_DISP_LISTS* pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>( ii->second );
         delete pLayerDispList;
     }
 
     m_layers_holes_outer.clear();
 
-
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers_holes_inner.begin();
          ii != m_layers_holes_inner.end();
          ++ii )
     {
-        CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>(ii->second);
+        CLAYERS_OGL_DISP_LISTS* pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>( ii->second );
         delete pLayerDispList;
     }
 
@@ -1119,7 +1098,6 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     m_triangles.clear();
 
-
     for( MAP_3DMODEL::const_iterator ii = m_3dmodel_map.begin(); ii != m_3dmodel_map.end(); ++ii )
     {
         C_OGL_3DMODEL *pointer = static_cast<C_OGL_3DMODEL*>(ii->second);
@@ -1127,7 +1105,6 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
     }
 
     m_3dmodel_map.clear();
-
 
     delete m_board;
     m_board = nullptr;
@@ -1155,9 +1132,9 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer(PCB_LAYER_ID aLayerID, float aZPosition,
-                                                     bool aDrawMiddleSegments,
-                                                     bool aSkipRenderHoles )
+void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer( PCB_LAYER_ID aLayerID, float aZPosition,
+                                                      bool aDrawMiddleSegments,
+                                                      bool aSkipRenderHoles )
 {
     wxASSERT( (aLayerID == B_Mask) || (aLayerID == F_Mask) );
 
@@ -1228,8 +1205,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
         const bool isIntersected = ( fp == m_currentIntersectedBoardItem );
 
         if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) && !isIntersected
-                && ( ( aRenderSelectedOnly && !fp->IsSelected() )
-                    || ( !aRenderSelectedOnly && fp->IsSelected() ) ) )
+          && ( ( aRenderSelectedOnly && !fp->IsSelected() )
+             || ( !aRenderSelectedOnly && fp->IsSelected() ) ) )
         {
             continue;
         }
@@ -1238,7 +1215,6 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
         {
             glEnable( GL_POLYGON_OFFSET_LINE );
             glPolygonOffset( 8.0, 1.0 );
-
             glPolygonMode( GL_FRONT, GL_LINE );
             glLineWidth( 6 );
         }
@@ -1267,8 +1243,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot,
-                                              bool aRenderTransparentOnly )
+void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot, bool aRenderTransparentOnly )
 {
     if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
         render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, true );
@@ -1291,10 +1266,10 @@ void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
 
         glTranslatef( pos.x * m_boardAdapter.BiuTo3Dunits(),
                       -pos.y * m_boardAdapter.BiuTo3Dunits(),
-                       zpos );
+                      zpos );
 
         if( aFootprint->GetOrientation() )
-            glRotated((double) aFootprint->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
+            glRotated( (double) aFootprint->GetOrientation() / 10.0, 0.0, 0.0, 1.0 );
 
         if( aFootprint->IsFlipped() )
         {
@@ -1381,8 +1356,6 @@ void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
 }
 
 
-// create a 3D grid to an OpenGL display list: an horizontal grid (XY plane and Z = 0,
-// and a vertical grid (XZ plane and Y = 0)
 void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
 {
     if( glIsList( m_grid ) )

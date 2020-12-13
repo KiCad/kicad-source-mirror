@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,7 +54,7 @@ typedef std::map< wxString, C_OGL_3DMODEL * > MAP_3DMODEL;
 #define SIZE_OF_CIRCLE_TEXTURE 1024
 
 /**
- * @brief The C3D_RENDER_OGL_LEGACY class render the board using openGL legacy mode
+ * Object to render the board using openGL legacy mode.
  */
 class C3D_RENDER_OGL_LEGACY : public C3D_RENDER_BASE
 {
@@ -63,7 +63,6 @@ public:
 
     ~C3D_RENDER_OGL_LEGACY();
 
-    // Imported from C3D_RENDER_BASE
     void SetCurWindowSize( const wxSize &aSize ) override;
     bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
 
@@ -75,43 +74,6 @@ public:
     }
 
 private:
-    bool initializeOpenGL();
-    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly,
-                                         const CBVHCONTAINER2D *aThroughHoles = nullptr );
-    void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
-
-    void ogl_set_arrow_material();
-
-    void ogl_free_all_display_lists();
-    MAP_OGL_DISP_LISTS      m_layers;
-    CLAYERS_OGL_DISP_LISTS* m_platedPads_F_Cu;
-    CLAYERS_OGL_DISP_LISTS* m_platedPads_B_Cu;
-    MAP_OGL_DISP_LISTS      m_layers_holes_outer;
-    MAP_OGL_DISP_LISTS      m_layers_holes_inner;
-    CLAYERS_OGL_DISP_LISTS* m_board;
-    CLAYERS_OGL_DISP_LISTS* m_board_with_holes;
-    CLAYERS_OGL_DISP_LISTS* m_anti_board;
-    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer;
-    CLAYERS_OGL_DISP_LISTS* m_through_holes_vias_outer;
-    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer_ring;
-    CLAYERS_OGL_DISP_LISTS* m_vias_and_pad_holes_outer_contourn_and_caps;
-
-    LIST_TRIANGLES m_triangles;     ///< store pointers so can be deleted latter
-    GLuint m_ogl_circle_texture;
-
-    GLuint m_grid;                  ///< oGL list that stores current grid
-    GRID3D_TYPE m_last_grid_type;   ///< Stores the last grid computed
-
-    CLAYERS_OGL_DISP_LISTS* m_vias;
-    CLAYERS_OGL_DISP_LISTS* m_pad_holes;
-
-    MAP_3DMODEL m_3dmodel_map;
-
-    BOARD_ITEM* m_currentIntersectedBoardItem;
-
-    SHAPE_POLY_SET m_anti_board_poly; ///< negative polygon representation of the board outline
-
-private:
     CLAYERS_OGL_DISP_LISTS *generate_holes_display_list( const LIST_OBJECT2D &aListHolesObject2d,
                                                          const SHAPE_POLY_SET &aPoly,
                                                          float aZtop,
@@ -120,9 +82,9 @@ private:
                                                          const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
     CLAYERS_OGL_DISP_LISTS*  generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
-                                                            const SHAPE_POLY_SET *aPolyList,
-                                                            PCB_LAYER_ID aLayerId,
-                                                            const CBVHCONTAINER2D *aThroughHoles = nullptr );
+                                                             const SHAPE_POLY_SET *aPolyList,
+                                                             PCB_LAYER_ID aLayerId,
+                                                             const CBVHCONTAINER2D *aThroughHoles = nullptr );
 
     void add_triangle_top_bot( CLAYER_TRIANGLES *aDst,
                                const SFVEC2F &v0,
@@ -185,13 +147,19 @@ private:
 
     void generate_3D_Vias_and_Pads();
 
+    /**
+     * Load footprint models from the cache and load it to openGL lists in the form of
+     * #C_OGL_3DMODEL objects.
+     *
+     * This map of models will work as a local cache for this render. (cache based on
+     * C_OGL_3DMODEL with associated openGL lists in GPU memory)
+     */
     void load_3D_models( REPORTER* aStatusReporter );
 
     /**
-     * @brief render_3D_models
-     * @param aRenderTopOrBot - true will render Top, false will render bottom
-     * @param aRenderTransparentOnly - true will render only the transparent
-     * objects, false will render opaque
+     * @param aRenderTopOrBot true will render Top, false will render bottom
+     * @param aRenderTransparentOnly true will render only the transparent objects, false will
+     *                               render opaque
      */
     void render_3D_models( bool aRenderTopOrBot, bool aRenderTransparentOnly );
 
@@ -207,6 +175,11 @@ private:
 
     void render_3D_arrows();
 
+    /**
+     * Create a 3D grid to an OpenGL display list.
+     *
+     * A horizontal grid (XY plane and Z = 0, and a vertical grid (XZ plane and Y = 0).
+     */
     void generate_new_3DGrid( GRID3D_TYPE aGridType );
 
     // Materials
@@ -215,6 +188,18 @@ private:
     void setCopperMaterial();
     void setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id );
     void unsetDepthOffset();
+
+    void set_layer_material( PCB_LAYER_ID aLayerID );
+    SFVEC4F get_layer_color( PCB_LAYER_ID aLayerID );
+
+    bool initializeOpenGL();
+    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly,
+                                         const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
+
+    void ogl_set_arrow_material();
+
+    void ogl_free_all_display_lists();
 
     struct
     {
@@ -227,11 +212,35 @@ private:
         SMATERIAL m_Copper;
         SMATERIAL m_Plastic;
         SMATERIAL m_GrayMaterial;
-    }m_materials;
+    } m_materials;
 
-    void set_layer_material( PCB_LAYER_ID aLayerID );
-    SFVEC4F get_layer_color( PCB_LAYER_ID aLayerID );
+    MAP_OGL_DISP_LISTS      m_layers;
+    CLAYERS_OGL_DISP_LISTS* m_platedPads_F_Cu;
+    CLAYERS_OGL_DISP_LISTS* m_platedPads_B_Cu;
+    MAP_OGL_DISP_LISTS      m_layers_holes_outer;
+    MAP_OGL_DISP_LISTS      m_layers_holes_inner;
+    CLAYERS_OGL_DISP_LISTS* m_board;
+    CLAYERS_OGL_DISP_LISTS* m_board_with_holes;
+    CLAYERS_OGL_DISP_LISTS* m_anti_board;
+    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer;
+    CLAYERS_OGL_DISP_LISTS* m_through_holes_vias_outer;
+    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer_ring;
+    CLAYERS_OGL_DISP_LISTS* m_vias_and_pad_holes_outer_contourn_and_caps;
+
+    LIST_TRIANGLES m_triangles;     ///< store pointers so can be deleted latter
+    GLuint m_ogl_circle_texture;
+
+    GLuint m_grid;                  ///< oGL list that stores current grid
+    GRID3D_TYPE m_last_grid_type;   ///< Stores the last grid computed
+
+    CLAYERS_OGL_DISP_LISTS* m_vias;
+    CLAYERS_OGL_DISP_LISTS* m_pad_holes;
+
+    MAP_3DMODEL m_3dmodel_map;
+
+    BOARD_ITEM* m_currentIntersectedBoardItem;
+
+    SHAPE_POLY_SET m_anti_board_poly; ///< negative polygon representation of the board outline
 };
 
 #endif // C3D_RENDER_OGL_LEGACY_H_
-

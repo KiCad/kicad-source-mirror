@@ -33,11 +33,14 @@
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.
+ *
  *  The debug output can be turned on by setting the WXTRACE environment variable to
  *  "KI_TRACE_3D_RENDER".  See the wxWidgets documentation on wxLogTrace for
  *  more information.
+ *
+ * @ingroup trace_env_vars
  */
-const wxChar * C3D_RENDER_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
+const wxChar* C3D_RENDER_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
 
 
 C3D_RENDER_BASE::C3D_RENDER_BASE( BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera ) :

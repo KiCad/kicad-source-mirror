@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,9 @@
 #include <thread>
 #include <chrono>
 
+
 #ifndef CLAMP
-#define CLAMP(n, min, max) {if( n < min ) n=min; else if( n > max ) n = max;}
+#define CLAMP( n, min, max ) {if( n < min ) n=min; else if( n > max ) n = max;}
 #endif
 
 
@@ -80,28 +81,27 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
     int x = *aXo;
     int y = *aYo;
 
-    switch(m_wraping)
+    switch( m_wraping )
     {
     case IMAGE_WRAP::CLAMP:
-        x =  (x < 0 )?0:x;
-        x =  (x >= (int)(m_width - 1))?(m_width - 1):x;
-        y =  (y < 0)?0:y;
-        y =  (y >= (int)(m_height - 1))?(m_height - 1):y;
+        x = ( x < 0 ) ? 0 : x;
+        x = ( x >= (int) ( m_width - 1 ) ) ? ( m_width - 1 ) : x;
+        y = ( y < 0 ) ? 0 : y;
+        y = ( y >= (int) ( m_height - 1 ) ) ? ( m_height - 1 ) : y;
         break;
 
     case IMAGE_WRAP::WRAP:
-        x = (x < 0)?((m_width - 1)+x):x;
-        x = (x >= (int)(m_width - 1))?(x - m_width):x;
-        y = (y < 0)?((m_height - 1)+y):y;
-        y = (y >= (int)(m_height - 1))?(y - m_height):y;
+        x = ( x < 0 ) ? ( ( m_width - 1 ) + x ) : x;
+        x = ( x >= (int) ( m_width - 1 ) ) ? ( x - m_width ) : x;
+        y = ( y < 0 ) ? ( ( m_height - 1 ) + y ) : y;
+        y = ( y >= (int) ( m_height - 1 ) ) ? ( y - m_height ) : y;
         break;
 
     default:
         break;
     }
 
-    if( (x < 0) || (x >= (int)m_width) ||
-        (y < 0) || (y >= (int)m_height) )
+    if( ( x < 0 ) || ( x >= (int) m_width ) || ( y < 0 ) || ( y >= (int) m_height ) )
         return false;
 
     *aXo = x;
@@ -109,6 +109,7 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
 
     return true;
 }
+
 
 void CIMAGE::plot8CircleLines( int aCx, int aCy, int aX, int aY, unsigned char aValue )
 {
@@ -137,10 +138,8 @@ unsigned char CIMAGE::Getpixel( int aX, int aY ) const
 
 void CIMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
 {
-    if( ( aY < 0 ) ||
-        ( aY >= (int)m_height ) ||
-        ( ( aXStart < 0 ) && ( aXEnd < 0) ) ||
-        ( ( aXStart >= (int)m_width ) && ( aXEnd >= (int)m_width) ) )
+    if( ( aY < 0 ) || ( aY >= (int) m_height ) || ( ( aXStart < 0 ) && ( aXEnd < 0 ) )
+      || ( ( aXStart >= (int) m_width ) && ( aXEnd >= (int) m_width ) ) )
         return;
 
     if( aXStart > aXEnd )
@@ -159,7 +158,7 @@ void CIMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
         aXEnd = m_width - 1;
 
     unsigned char* pixelPtr = &m_pixels[aXStart + aY * m_width];
-    unsigned char* pixelPtrEnd = pixelPtr + (unsigned int)((aXEnd - aXStart) + 1);
+    unsigned char* pixelPtrEnd = pixelPtr + (unsigned int) ( ( aXEnd - aXStart ) + 1 );
 
     while( pixelPtr < pixelPtrEnd )
     {
@@ -168,9 +167,10 @@ void CIMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
     }
 }
 
+
 // Based on paper
 // http://web.engr.oregonstate.edu/~sllu/bcircle.pdf
-void CIMAGE::CircleFilled(int aCx, int aCy, int aRadius, unsigned char aValue)
+void CIMAGE::CircleFilled( int aCx, int aCy, int aRadius, unsigned char aValue )
 {
     int x = aRadius;
     int y = 0;
@@ -185,7 +185,7 @@ void CIMAGE::CircleFilled(int aCx, int aCy, int aRadius, unsigned char aValue)
         radiusError += yChange;
         yChange += 2;
 
-        if( (2 * radiusError + xChange) > 0 )
+        if( ( 2 * radiusError + xChange ) > 0 )
         {
             x--;
             radiusError += xChange;
@@ -213,15 +213,15 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
     }
     else
     {
-        if( (aImgA == NULL) || (aImgB == NULL) )
+        if( ( aImgA == NULL ) || ( aImgB == NULL ) )
             return;
     }
 
-    switch(aOperation)
+    switch( aOperation )
     {
     case IMAGE_OP::RAW:
         memcpy( m_pixels, aImgA->m_pixels, m_wxh );
-    break;
+        break;
 
     case IMAGE_OP::ADD:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -234,7 +234,7 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 
             m_pixels[it] = aV;
         }
-    break;
+        break;
 
     case IMAGE_OP::SUB:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -247,7 +247,7 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 
             m_pixels[it] = aV;
         }
-    break;
+        break;
 
     case IMAGE_OP::DIF:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -257,7 +257,7 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 
             m_pixels[it] = abs( aV - bV );
         }
-    break;
+        break;
 
     case IMAGE_OP::MUL:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -265,30 +265,31 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
             aV = aImgA->m_pixels[it];
             bV = aImgB->m_pixels[it];
 
-            m_pixels[it] = (unsigned char)((((float)aV / 255.0f) * ((float)bV / 255.0f)) * 255);
+            m_pixels[it] =
+                    (unsigned char) ( ( ( (float) aV / 255.0f ) * ( (float) bV / 255.0f ) ) * 255 );
         }
-    break;
+        break;
 
     case IMAGE_OP::AND:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] & aImgB->m_pixels[it];
         }
-    break;
+        break;
 
     case IMAGE_OP::OR:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] | aImgB->m_pixels[it];
         }
-    break;
+        break;
 
     case IMAGE_OP::XOR:
         for( unsigned int it = 0;it < m_wxh; it++ )
         {
             m_pixels[it] = aImgA->m_pixels[it] ^ aImgB->m_pixels[it];
         }
-    break;
+        break;
 
     case IMAGE_OP::BLEND50:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -298,7 +299,7 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 
             m_pixels[it] = (aV + bV) / 2;
         }
-    break;
+        break;
 
     case IMAGE_OP::MIN:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -308,7 +309,7 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 
             m_pixels[it] = (aV < bV)?aV:bV;
         }
-    break;
+        break;
 
     case IMAGE_OP::MAX:
         for( unsigned int it = 0;it < m_wxh; it++ )
@@ -318,12 +319,13 @@ void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOpera
 
             m_pixels[it] = (aV > bV)?aV:bV;
         }
-    break;
+        break;
 
     default:
-    break;
+        break;
     }
 }
+
 
 // TIP: If you want create or test filters you can use GIMP
 // with a generic convolution matrix and get the values from there.
@@ -465,10 +467,10 @@ static const S_FILTER FILTERS[] =   {
 // clang-format on
 
 
-// !TODO: This functions can be optimized slipting it between the edges and
-//        do it without use the getpixel function.
-//        Optimization can be done to m_pixels[ix + iy * m_width]
-//        but keep in mind the parallel process of the algorithm
+/// @todo: This function can be optimized slipping it between the edges and
+///        do it without use the getpixel function.
+///        Optimization can be done to m_pixels[ix + iy * m_width]
+///        but keep in mind the parallel process of the algorithm
 void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
 {
     S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
@@ -486,8 +488,8 @@ void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
         std::thread t = std::thread( [&]()
         {
             for( size_t iy = nextRow.fetch_add( 1 );
-                        iy < m_height;
-                        iy = nextRow.fetch_add( 1 ) )
+                 iy < m_height;
+                 iy = nextRow.fetch_add( 1 ) )
             {
                 for( size_t ix = 0; ix < m_width; ix++ )
                 {
@@ -508,7 +510,8 @@ void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
                     v /= filter.div;
                     v += filter.offset;
                     CLAMP(v, 0, 255);
-                    //TODO: This needs to write to a separate buffer
+
+                    /// @todo This needs to write to a separate buffer.
                     m_pixels[ix + iy * m_width] = v;
                 }
             }

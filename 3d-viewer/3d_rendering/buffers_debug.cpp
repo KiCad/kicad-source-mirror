@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,18 +31,12 @@
 #include <wx/image.h>   // Used for save an image to disk
 
 /**
- * @brief dbg_save_rgb_buffer
- * @param aFileName
- * @param aRGBpixelBuffer: from wxWidget documentation
+ * @param aRGBpixelBuffer from the wxWidgets documentation
  * "The data given must have the size (width*height*3).
  *  The data must have been allocated with malloc(), NOT with operator new."
- * @param aXSize
- * @param aYSize
  */
-static void dbg_save_rgb_buffer( const wxString& aFileName,
-                                 unsigned char *aRGBpixelBuffer,
-                                 unsigned int aXSize,
-                                 unsigned int aYSize )
+static void dbg_save_rgb_buffer( const wxString& aFileName, unsigned char *aRGBpixelBuffer,
+                                 unsigned int aXSize, unsigned int aYSize )
 {
     wxImage image( aXSize, aYSize );
     image.SetData( aRGBpixelBuffer );
@@ -52,10 +46,8 @@ static void dbg_save_rgb_buffer( const wxString& aFileName,
 }
 
 
-void DBG_SaveBuffer( const wxString& aFileName,
-                     const unsigned char *aInBuffer,
-                     unsigned int aXSize,
-                     unsigned int aYSize )
+void DBG_SaveBuffer( const wxString& aFileName, const unsigned char *aInBuffer,
+                     unsigned int aXSize, unsigned int aYSize )
 {
     const unsigned int wxh = aXSize * aYSize;
 
@@ -75,10 +67,8 @@ void DBG_SaveBuffer( const wxString& aFileName,
 }
 
 
-void DBG_SaveBuffer( const wxString& aFileName,
-                     const float *aInBuffer,
-                     unsigned int aXSize,
-                     unsigned int aYSize )
+void DBG_SaveBuffer( const wxString& aFileName, const float *aInBuffer,
+                     unsigned int aXSize, unsigned int aYSize )
 {
     const unsigned int wxh = aXSize * aYSize;
 
@@ -86,8 +76,7 @@ void DBG_SaveBuffer( const wxString& aFileName,
 
     for( unsigned int i = 0; i < wxh; ++i )
     {
-        const unsigned char v = (unsigned char)glm::min( (int)(aInBuffer[i] * 255.0f),
-                                                         255 );
+        const unsigned char v = (unsigned char)glm::min( (int)(aInBuffer[i] * 255.0f), 255 );
 
         // Set RGB value with all same values intensities
         pixelbuffer[i * 3 + 0] = v;
@@ -99,10 +88,8 @@ void DBG_SaveBuffer( const wxString& aFileName,
 }
 
 
-void DBG_SaveBuffer( const wxString& aFileName,
-                     const SFVEC3F *aInBuffer,
-                     unsigned int aXSize,
-                     unsigned int aYSize )
+void DBG_SaveBuffer( const wxString& aFileName, const SFVEC3F *aInBuffer,
+                     unsigned int aXSize, unsigned int aYSize )
 {
     const unsigned int wxh = aXSize * aYSize;
 
@@ -114,19 +101,17 @@ void DBG_SaveBuffer( const wxString& aFileName,
         const unsigned int ix3 = i * 3;
 
         // Set RGB value with all same values intensities
-        pixelbuffer[ix3 + 0] = (unsigned char)glm::min( (int)(v.r * 255.0f), 255 );
-        pixelbuffer[ix3 + 1] = (unsigned char)glm::min( (int)(v.g * 255.0f), 255 );
-        pixelbuffer[ix3 + 2] = (unsigned char)glm::min( (int)(v.b * 255.0f), 255 );
+        pixelbuffer[ix3 + 0] = (unsigned char) glm::min( (int) ( v.r * 255.0f ), 255 );
+        pixelbuffer[ix3 + 1] = (unsigned char) glm::min( (int) ( v.g * 255.0f ), 255 );
+        pixelbuffer[ix3 + 2] = (unsigned char) glm::min( (int) ( v.b * 255.0f ), 255 );
     }
 
     dbg_save_rgb_buffer( aFileName, pixelbuffer, aXSize, aYSize );
 }
 
 
-void DBG_SaveNormalsBuffer( const wxString& aFileName,
-                            const SFVEC3F *aInNormalsBuffer,
-                            unsigned int aXSize,
-                            unsigned int aYSize )
+void DBG_SaveNormalsBuffer( const wxString& aFileName, const SFVEC3F *aInNormalsBuffer,
+                            unsigned int aXSize, unsigned int aYSize )
 {
     const unsigned int wxh = aXSize * aYSize;
 
@@ -138,9 +123,9 @@ void DBG_SaveNormalsBuffer( const wxString& aFileName,
         const unsigned int ix3 = i * 3;
 
         // Set RGB value with all same values intensities
-        pixelbuffer[ix3 + 0] = (unsigned char)glm::min( (int)((v.r + 1.0f) * 127.0f), 255 );
-        pixelbuffer[ix3 + 1] = (unsigned char)glm::min( (int)((v.g + 1.0f) * 127.0f), 255 );
-        pixelbuffer[ix3 + 2] = (unsigned char)glm::min( (int)((v.b + 1.0f) * 127.0f), 255 );
+        pixelbuffer[ix3 + 0] = (unsigned char) glm::min( (int) ( ( v.r + 1.0f ) * 127.0f ), 255 );
+        pixelbuffer[ix3 + 1] = (unsigned char) glm::min( (int) ( ( v.g + 1.0f ) * 127.0f ), 255 );
+        pixelbuffer[ix3 + 2] = (unsigned char) glm::min( (int) ( ( v.b + 1.0f ) * 127.0f ), 255 );
     }
 
     dbg_save_rgb_buffer( aFileName, pixelbuffer, aXSize, aYSize );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,15 +43,14 @@ inline void normalise2PI( float& aAngle )
 
 
 /**
- *  Trace mask used to enable or disable the trace output of this class.
- *  The debug output can be turned on by setting the WXTRACE environment variable to
- *  "KI_TRACE_CCAMERA".  See the wxWidgets documentation on wxLogTrace for
- *  more information.
+ * @ingroup trace_env_vars
  */
 const wxChar *CCAMERA::m_logTrace = wxT( "KI_TRACE_CCAMERA" );
 
+
 #define MIN_ZOOM 0.10f
 #define MAX_ZOOM 1.25f
+
 
 CCAMERA::CCAMERA( float aRangeScale )
 {
@@ -107,7 +106,6 @@ void CCAMERA::Reset_T1()
     m_rotate_aux_t1        = SFVEC3F( 0.0f );
     m_lookat_pos_t1        = m_board_lookat_pos_init;
 
-
     // Since 0 = 2pi, we want to reset the angle to be the closest
     // one to where we currently are. That ensures that we rotate
     // the board around the smallest distance getting there.
@@ -162,14 +160,12 @@ const glm::mat4 CCAMERA::GetRotationMatrix() const
 
 void CCAMERA::rebuildProjection()
 {
-    if( (m_windowSize.x == 0) ||
-        (m_windowSize.y == 0) )
+    if( ( m_windowSize.x == 0 ) || ( m_windowSize.y == 0 ) )
         return;
 
     m_frustum.ratio = (float) m_windowSize.x / (float)m_windowSize.y;
 
     // Consider that we can render double the length multiplied by the 2/sqrt(2)
-    //
     m_frustum.farD = glm::length( m_camera_pos_init ) * 2.0f * ( 2.0f * sqrtf( 2.0f ) );
 
     switch( m_projectionType )
@@ -181,7 +177,6 @@ void CCAMERA::rebuildProjection()
 
         // Ratio width / height of the window display
         m_frustum.angle = 45.0f * m_zoom;
-
 
         m_projectionMatrix = glm::perspective( glm::radians( m_frustum.angle ),
                                                m_frustum.ratio,
@@ -209,7 +204,7 @@ void CCAMERA::rebuildProjection()
         const float orthoReductionFactor = glm::length( m_camera_pos_init ) *
                                            m_zoom * m_zoom * 0.5f;
 
-        // Initialize Projection Matrix for Ortographic View
+        // Initialize Projection Matrix for Orthographic View
         m_projectionMatrix = glm::ortho( -m_frustum.ratio * orthoReductionFactor,
                                           m_frustum.ratio * orthoReductionFactor,
                                          -orthoReductionFactor,
@@ -226,8 +221,7 @@ void CCAMERA::rebuildProjection()
         break;
     }
 
-    if ( (m_windowSize.x > 0) &&
-         (m_windowSize.y > 0) )
+    if( ( m_windowSize.x > 0 ) && ( m_windowSize.y > 0 ) )
     {
         m_scr_nX.resize( m_windowSize.x + 1 );
         m_scr_nY.resize( m_windowSize.y + 1 );
@@ -275,7 +269,6 @@ void CCAMERA::updateFrustum()
 
     m_pos   = SFVEC3F( m_viewMatrixInverse * glm::vec4( SFVEC3F( 0.0, 0.0, 0.0 ), 1.0 ) );
 
-
     /*
      * Frustum is a implementation based on a tutorial by
      * http://www.lighthouse3d.com/tutorials/view-frustum-culling/
@@ -297,8 +290,7 @@ void CCAMERA::updateFrustum()
     m_frustum.fbl = m_frustum.fc - m_up * m_frustum.fh - m_right * m_frustum.fw;
     m_frustum.fbr = m_frustum.fc - m_up * m_frustum.fh + m_right * m_frustum.fw;
 
-    if ( (m_windowSize.x > 0) &&
-         (m_windowSize.y > 0) )
+    if( ( m_windowSize.x > 0 ) && ( m_windowSize.y > 0 ) )
     {
         // Reserve size for precalc values
         m_right_nX.resize( m_windowSize.x + 1 );
@@ -307,27 +299,25 @@ void CCAMERA::updateFrustum()
         // Precalc X values for camera -> ray generation
         const SFVEC3F right_nw = m_right * m_frustum.nw;
 
-        for( unsigned int x = 0; x < ((unsigned int)m_windowSize.x + 1); ++x )
+        for( unsigned int x = 0; x < ( (unsigned int) m_windowSize.x + 1 ); ++x )
             m_right_nX[x] = right_nw * m_scr_nX[x];
 
         // Precalc Y values for camera -> ray generation
         const SFVEC3F up_nh = m_up * m_frustum.nh;
 
-        for( unsigned int y = 0; y < ((unsigned int)m_windowSize.y + 1); ++y )
+        for( unsigned int y = 0; y < ( (unsigned int) m_windowSize.y + 1 ); ++y )
             m_up_nY[y] = up_nh * m_scr_nY[y];
     }
 }
 
 
-void CCAMERA::MakeRay( const SFVEC2I &aWindowPos,
-                       SFVEC3F &aOutOrigin,
+void CCAMERA::MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin,
                        SFVEC3F &aOutDirection ) const
 {
     wxASSERT( aWindowPos.x < m_windowSize.x );
     wxASSERT( aWindowPos.y < m_windowSize.y );
 
-    const SFVEC3F up_plus_right = m_up_nY[aWindowPos.y] +
-                                  m_right_nX[aWindowPos.x];
+    const SFVEC3F up_plus_right = m_up_nY[aWindowPos.y] + m_right_nX[aWindowPos.x];
 
     switch( m_projectionType )
     {
@@ -345,7 +335,8 @@ void CCAMERA::MakeRay( const SFVEC2I &aWindowPos,
 }
 
 
-void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const
+void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin,
+                       SFVEC3F &aOutDirection ) const
 {
     wxASSERT( aWindowPos.x < (float)m_windowSize.x );
     wxASSERT( aWindowPos.y < (float)m_windowSize.y );
@@ -376,11 +367,9 @@ void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &
 }
 
 
-void CCAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin,
-                                              SFVEC3F &aOutDirection ) const
+void CCAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const
 {
-    const SFVEC2I windowPos = SFVEC2I( m_lastPosition.x,
-                                       m_windowSize.y - m_lastPosition.y );
+    const SFVEC2I windowPos = SFVEC2I( m_lastPosition.x, m_windowSize.y - m_lastPosition.y );
 
     if( ( 0 < windowPos.x ) && ( windowPos.x < m_windowSize.x ) &&
         ( 0 < windowPos.y ) && ( windowPos.y < m_windowSize.y ) )
@@ -477,12 +466,15 @@ void CCAMERA::ZoomReset()
 
 bool CCAMERA::Zoom( float aFactor )
 {
-    if ( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 ) || aFactor == 1 )
+    if( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 )
+      || aFactor == 1 )
         return false;
 
     m_zoom /= aFactor;
+
     if( m_zoom <= MIN_ZOOM )
         m_zoom = MIN_ZOOM;
+
     if( m_zoom >= MAX_ZOOM )
         m_zoom = MAX_ZOOM;
 
@@ -494,15 +486,19 @@ bool CCAMERA::Zoom( float aFactor )
     return true;
 }
 
+
 bool CCAMERA::Zoom_T1( float aFactor )
 {
-    if( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 ) || aFactor == 1 )
+    if( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 )
+      || aFactor == 1 )
         return false;
 
     m_zoom_t1 = m_zoom / aFactor;
-    if (m_zoom_t1 < MIN_ZOOM )
+
+    if( m_zoom_t1 < MIN_ZOOM )
         m_zoom_t1 = MIN_ZOOM;
-    if (m_zoom_t1 > MAX_ZOOM )
+
+    if( m_zoom_t1 > MAX_ZOOM )
         m_zoom_t1 = MAX_ZOOM;
 
     m_camera_pos_t1.z = m_camera_pos_init.z * m_zoom_t1;

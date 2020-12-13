@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,24 +35,22 @@
 
 class CTRACK_BALL : public CCAMERA
 {
-
- public:
-
+public:
     explicit CTRACK_BALL( float aRangeScale );
 
     virtual ~CTRACK_BALL()
     {
     }
 
-    void Drag( const wxPoint &aNewMousePosition ) override;
+    void Drag( const wxPoint& aNewMousePosition ) override;
 
-    void Pan( const wxPoint &aNewMousePosition ) override;
+    void Pan( const wxPoint& aNewMousePosition ) override;
 
-    void Pan( const SFVEC3F &aDeltaOffsetInc ) override;
+    void Pan( const SFVEC3F& aDeltaOffsetInc ) override;
 
-    void Pan_T1( const SFVEC3F &aDeltaOffsetInc ) override;
+    void Pan_T1( const SFVEC3F& aDeltaOffsetInc ) override;
 
-    void SetLookAtPos( const SFVEC3F &aLookAtPos ) override;
+    void SetLookAtPos( const SFVEC3F& aLookAtPos ) override;
 
     void Reset() override;
 
@@ -62,8 +60,7 @@ class CTRACK_BALL : public CCAMERA
 
     void Interpolate( float t ) override;
 
- private:
-
+private:
     /**
      *  quarternion of the trackball
      */

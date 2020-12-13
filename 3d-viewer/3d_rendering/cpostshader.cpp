@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,17 +75,13 @@ void CPOSTSHADER::UpdateSize( const SFVEC2UI &aSize )
 }
 
 
-void CPOSTSHADER::SetPixelData( unsigned int x,
-                                unsigned int y,
-                                const SFVEC3F &aNormal,
-                                const SFVEC3F &aColor,
-                                const SFVEC3F &aHitPosition,
-                                float aDepth,
-                                float aShadowAttFactor )
+void CPOSTSHADER::SetPixelData( unsigned int x, unsigned int y, const SFVEC3F &aNormal,
+                                const SFVEC3F &aColor, const SFVEC3F &aHitPosition,
+                                float aDepth, float aShadowAttFactor )
 {
     wxASSERT( x < m_size.x );
     wxASSERT( y < m_size.y );
-    wxASSERT( (aShadowAttFactor >= 0.0f) && (aShadowAttFactor <= 1.0f) );
+    wxASSERT( ( aShadowAttFactor >= 0.0f ) && ( aShadowAttFactor <= 1.0f ) );
 
     const unsigned int idx = x + y * m_size.x;
 
@@ -109,11 +105,16 @@ void CPOSTSHADER::SetPixelData( unsigned int x,
 
 void CPOSTSHADER::destroy_buffers()
 {
-    delete[] m_normals;           m_normals = nullptr;
-    delete[] m_color;             m_color = nullptr;
-    delete[] m_depth;             m_depth = nullptr;
-    delete[] m_shadow_att_factor; m_shadow_att_factor = nullptr;
-    delete[] m_wc_hitposition;    m_wc_hitposition = nullptr;
+    delete[] m_normals;
+    m_normals = nullptr;
+    delete[] m_color;
+    m_color = nullptr;
+    delete[] m_depth;
+    m_depth = nullptr;
+    delete[] m_shadow_att_factor;
+    m_shadow_att_factor = nullptr;
+    delete[] m_wc_hitposition;
+    m_wc_hitposition = nullptr;
 }
 
 
@@ -195,7 +196,6 @@ void CPOSTSHADER::DebugBuffersOutputAsImages() const
     DBG_SaveNormalsBuffer( "m_normals", m_normals, m_size.x, m_size.y );
 
     // Normalize depth
-    // /////////////////////////////////////////////////////////////////////////
     float *normalizedDepth = (float*) malloc( m_size.x * m_size.y * sizeof( float ) );
 
     float *normalizedDepthPTr = normalizedDepth;

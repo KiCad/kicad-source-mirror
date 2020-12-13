@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,13 +28,13 @@
  * @brief it run only once and only in debug build
  */
 
-#include <wx/debug.h>
-#include "3d_render_raytracing/shapes3D/cbbox.h"
+#include "3d_render_raytracing/cfrustum.h"
 #include "3d_render_raytracing/shapes2D/cbbox2d.h"
 #include "3d_render_raytracing/shapes2D/cfilledcircle2d.h"
-#include "3d_render_raytracing/shapes2D/croundsegment2d.h"
 #include "3d_render_raytracing/shapes2D/cpolygon2d.h"
-#include "3d_render_raytracing/cfrustum.h"
+#include "3d_render_raytracing/shapes2D/croundsegment2d.h"
+#include "3d_render_raytracing/shapes3D/cbbox.h"
+#include <wx/debug.h>
 
 //#ifdef DEBUG
 #if 0
@@ -42,13 +42,12 @@ static bool s_Run_Test_Cases = true;
 
 void Run_3d_viewer_test_cases()
 {
-    if( s_Run_Test_Cases == false)
+    if( s_Run_Test_Cases == false )
         return;
 
     s_Run_Test_Cases = true;
 
     // Test CBBOX2D
-    // /////////////////////////////////////////////////////////////////////////
     CBBOX2D bbox2d_A;
     CBBOX2D bbox2d_B;
 
@@ -66,7 +65,7 @@ void Run_3d_viewer_test_cases()
     wxASSERT( bbox2d_A.MaxDimension() == 0 );
     wxASSERT( bbox2d_A.Perimeter() == 0.0f );
     */
-    bbox2d_A.Set( SFVEC2F(1.0f, -1.0f), SFVEC2F(-1.0f, 1.0f) );
+    bbox2d_A.Set( SFVEC2F( 1.0f, -1.0f ), SFVEC2F( -1.0f, 1.0f ) );
 
     wxASSERT( bbox2d_A.IsInitialized() == true );
     wxASSERT( bbox2d_A.Area() == 4.0f );
@@ -120,24 +119,21 @@ void Run_3d_viewer_test_cases()
     wxASSERT( bbox2d_A.MaxDimension() == 0 );
     wxASSERT( bbox2d_A.Perimeter() == 20.0f );
 
-    bbox2d_A.Set( SFVEC2F(-1.0f, -1.0f), SFVEC2F(1.0f, 1.0f) );
-    bbox2d_B.Set( SFVEC2F(-2.0f, -2.0f), SFVEC2F(2.0f, 2.0f) );
-    wxASSERT(  bbox2d_A.Intersects( bbox2d_B ) == true );
-    wxASSERT(  bbox2d_B.Intersects( bbox2d_A ) == true );
+    bbox2d_A.Set( SFVEC2F( -1.0f, -1.0f ), SFVEC2F( 1.0f, 1.0f ) );
+    bbox2d_B.Set( SFVEC2F( -2.0f, -2.0f ), SFVEC2F( 2.0f, 2.0f ) );
+    wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == true );
+    wxASSERT( bbox2d_B.Intersects( bbox2d_A ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 1.0f, 1.0f), SFVEC2F(1.0f, 1.0f) );
-    wxASSERT(  bbox2d_A.Intersects( bbox2d_B ) == true );
+    bbox2d_B.Set( SFVEC2F( 1.0f, 1.0f ), SFVEC2F( 1.0f, 1.0f ) );
+    wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 1.1f, 1.1f), SFVEC2F(2.0f, 2.0f) );
+    bbox2d_B.Set( SFVEC2F( 1.1f, 1.1f ), SFVEC2F( 2.0f, 2.0f ) );
     wxASSERT(  bbox2d_A.Intersects( bbox2d_B ) == false );
 
-    bbox2d_B.Set( SFVEC2F(-0.5f, -0.5f), SFVEC2F(0.5f, 0.5f) );
-    wxASSERT(  bbox2d_A.Intersects( bbox2d_B ) == true );
-
+    bbox2d_B.Set( SFVEC2F(-0.5f, -0.5f ), SFVEC2F( 0.5f, 0.5f ) );
+    wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == true );
 
     // Test CFILLEDCIRCLE2D
-    // /////////////////////////////////////////////////////////////////////////
-
     CFILLEDCIRCLE2D filledCircle2d( SFVEC2F( 2.0f, 2.0f ), 1.0f );
 
     wxASSERT( filledCircle2d.IsPointInside( SFVEC2F( 2.0f, 2.0f ) ) == true );
@@ -151,39 +147,37 @@ void Run_3d_viewer_test_cases()
     wxASSERT( filledCircle2d.IsPointInside( SFVEC2F( 2.6f, 2.6f ) ) == true );
     wxASSERT( filledCircle2d.IsPointInside( SFVEC2F( 1.2f, 1.2f ) ) == false );
 
-    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f), SFVEC2F( 4.0f, 4.0f) );
+    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f ), SFVEC2F( 4.0f, 4.0f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 1.5f, 1.5f), SFVEC2F( 2.5f, 2.5f) );
+    bbox2d_B.Set( SFVEC2F( 1.5f, 1.5f ), SFVEC2F( 2.5f, 2.5f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
     // A box that does not intersect the sphere but still intersect the bbox of the sphere
-    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f), SFVEC2F( 1.2f, 1.2f) );
+    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f ), SFVEC2F( 1.2f, 1.2f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == false );
 
-    bbox2d_B.Set( SFVEC2F(-1.0f, -1.0f), SFVEC2F( 0.5f, 0.5f) );
+    bbox2d_B.Set( SFVEC2F(-1.0f, -1.0f ), SFVEC2F( 0.5f, 0.5f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == false );
 
-    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f), SFVEC2F( 2.0f, 2.0f) );
+    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f ), SFVEC2F( 2.0f, 2.0f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f), SFVEC2F( 2.0f, 4.0f) );
+    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f ), SFVEC2F( 2.0f, 4.0f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 2.0f, 0.0f), SFVEC2F( 4.0f, 4.0f) );
+    bbox2d_B.Set( SFVEC2F( 2.0f, 0.0f ), SFVEC2F( 4.0f, 4.0f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 0.0f, 2.0f), SFVEC2F( 4.0f, 4.0f) );
+    bbox2d_B.Set( SFVEC2F( 0.0f, 2.0f ), SFVEC2F( 4.0f, 4.0f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
-    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f), SFVEC2F( 4.0f, 2.0f) );
+    bbox2d_B.Set( SFVEC2F( 0.0f, 0.0f ), SFVEC2F( 4.0f, 2.0f ) );
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
 
     // Test CROUNDSEGMENT2D
-    // /////////////////////////////////////////////////////////////////////////
-
-    CROUNDSEGMENT2D roundSegment2d( SFVEC2F(-1.0f, 0.0f), SFVEC2F( 1.0f, 0.0f), 2.0f);
+    CROUNDSEGMENT2D roundSegment2d( SFVEC2F( -1.0f, 0.0f ), SFVEC2F( 1.0f, 0.0f ), 2.0f );
 
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 0.0f, 0.0f ) ) == true );
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 1.0f, 0.0f ) ) == true );
@@ -200,52 +194,50 @@ void Run_3d_viewer_test_cases()
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 1.8f, 0.8f ) ) == false );
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 1.8f,-0.8f ) ) == false );
 
-    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F(-1.8f, 0.8f ) ) == false );
-    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F(-1.8f,-0.8f ) ) == false );
+    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( -1.8f, 0.8f ) ) == false );
+    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( -1.8f,-0.8f ) ) == false );
 
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 1.6f, 0.6f ) ) == true );
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 1.6f,-0.6f ) ) == true );
 
-    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F(-1.6f, 0.6f ) ) == true );
-    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F(-1.6f,-0.6f ) ) == true );
+    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( -1.6f, 0.6f ) ) == true );
+    wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( -1.6f,-0.6f ) ) == true );
 
     bbox2d_A.Set( SFVEC2F(-2.0f,-1.0f), SFVEC2F( 2.0f, 1.0f) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == true );
 
-    bbox2d_A.Set( SFVEC2F(-2.1f,-1.1f), SFVEC2F( 2.1f, 1.1f) );
+    bbox2d_A.Set( SFVEC2F(-2.1f,-1.1f ), SFVEC2F( 2.1f, 1.1f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == true );
 
-    bbox2d_A.Set( SFVEC2F(-1.9f,-0.9f), SFVEC2F( 1.9f, 0.9f) );
+    bbox2d_A.Set( SFVEC2F( -1.9f,-0.9f ), SFVEC2F( 1.9f, 0.9f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == true );
 
-    bbox2d_A.Set( SFVEC2F(-1.0f,-1.0f), SFVEC2F( 1.0f, 1.0f) );
+    bbox2d_A.Set( SFVEC2F( -1.0f,-1.0f ), SFVEC2F( 1.0f, 1.0f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == true );
 
-    bbox2d_A.Set( SFVEC2F(-1.0f,-0.5f), SFVEC2F( 1.0f, 0.5f) );
+    bbox2d_A.Set( SFVEC2F( -1.0f,-0.5f ), SFVEC2F( 1.0f, 0.5f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == true );
 
-    bbox2d_A.Set( SFVEC2F(-4.0f,-0.5f), SFVEC2F(-3.0f, 0.5f) );
+    bbox2d_A.Set( SFVEC2F( -4.0f,-0.5f ), SFVEC2F( -3.0f, 0.5f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == false );
 
-    bbox2d_A.Set( SFVEC2F( 1.8f, 0.8f), SFVEC2F( 2.0f, 1.0f) );
+    bbox2d_A.Set( SFVEC2F( 1.8f, 0.8f ), SFVEC2F( 2.0f, 1.0f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == false );
 
-    bbox2d_A.Set( SFVEC2F(-2.0f, 0.8f), SFVEC2F(-1.8f, 1.0f) );
+    bbox2d_A.Set( SFVEC2F( -2.0f, 0.8f ), SFVEC2F( -1.8f, 1.0f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == false );
 
-    bbox2d_A.Set( SFVEC2F(-2.0f,-1.0f), SFVEC2F(-1.8f,-0.8f) );
+    bbox2d_A.Set( SFVEC2F( -2.0f, -1.0f ), SFVEC2F( -1.8f, -0.8f ) );
     wxASSERT( roundSegment2d.Intersects( bbox2d_A ) == false );
 
     // Test CPOLYGON2D
-    // /////////////////////////////////////////////////////////////////////////
     Polygon2d_TestModule();
 #if 0
     // Test Frustum
-    // /////////////////////////////////////////////////////////////////////////
     {
     CFRUSTUM frustum;
 
-    SFVEC3F ori = SFVEC3F(0.0, 0.0, 0.0);
+    SFVEC3F ori = SFVEC3F( 0.0, 0.0, 0.0 );
 
     float z = 10.0;
 /*
@@ -296,40 +288,38 @@ void Run_3d_viewer_test_cases()
     const RAY bottomLeft(  ori, glm::normalize( ori - SFVEC3F(+1.0,-1.0, z) ) );
     const RAY bottomRight( ori, glm::normalize( ori - SFVEC3F(-1.0,-1.0, z) ) );
 
-
-
     frustum.GenerateFrustum( topLeft, topRight, bottomLeft, bottomRight );
 
     CBBOX bbox3d;
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f,  z), SFVEC3F(+1.0f,+1.0f, z  + 1.0f) );
+    bbox3d.Set( SFVEC3F( -1.0f, -1.0f, z ), SFVEC3F( +1.0f, +1.0f, z + 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f,  z+z), SFVEC3F(+1.0f,+1.0f, z+z + 1.0f) );
+    bbox3d.Set( SFVEC3F( -1.0f, -1.0f,  z + z ), SFVEC3F( +1.0f, +1.0f, z + z + 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f,  1.0f), SFVEC3F(0.0f,0.0f, 2.0f) );
+    bbox3d.Set( SFVEC3F( -1.0f, -1.0f, 1.0f ), SFVEC3F( 0.0f, 0.0f, 2.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f, -z-1.0f), SFVEC3F(+1.0f,+1.0f, -z) );
+    bbox3d.Set( SFVEC3F( -1.0f, -1.0f, -z - 1.0f ), SFVEC3F( +1.0f, +1.0f, -z ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
 
-    bbox3d.Set( SFVEC3F(z-1.0f, z-1.0f,  0.0), SFVEC3F(z+1.0f,z+1.0f, 1.0) );
+    bbox3d.Set( SFVEC3F( z - 1.0f, z - 1.0f, 0.0 ), SFVEC3F( z + 1.0f, z + 1.0f, 1.0 ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
 
-    bbox3d.Set( SFVEC3F(-z, -z,  0.0), SFVEC3F( -1.0f,-1.0f, 1.0f) );
+    bbox3d.Set( SFVEC3F( -z, -z, 0.0), SFVEC3F( -1.0f, -1.0f, 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
 
-    bbox3d.Set( SFVEC3F(-z, -z,  -1.0f), SFVEC3F(+z,+z, 1.0f) );
+    bbox3d.Set( SFVEC3F( -z, -z, -1.0f ), SFVEC3F( +z, +z, 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-z, -z,  z-1), SFVEC3F(+z,+z, z+1.0f) );
+    bbox3d.Set( SFVEC3F( -z, -z, z-1 ), SFVEC3F( +z, +z, z + 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F( 0.5, 0.5,  0.0), SFVEC3F( 2.0, 2.0, z) );
+    bbox3d.Set( SFVEC3F( 0.5, 0.5, 0.0 ), SFVEC3F( 2.0, 2.0, z ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F( 1.1, 1.0,  0.0), SFVEC3F( 2.0, 2.0, z) );
+    bbox3d.Set( SFVEC3F( 1.1, 1.0, 0.0 ), SFVEC3F( 2.0, 2.0, z ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
     }
     {
@@ -337,46 +327,46 @@ void Run_3d_viewer_test_cases()
 
     float z = 10.0;
 
-    SFVEC3F ori = SFVEC3F(0.0, 0.0, z);
+    SFVEC3F ori = SFVEC3F( 0.0, 0.0, z );
 
-    const RAY topLeft(     ori, glm::normalize( SFVEC3F(-1.0, 1.0, 0.0) - ori ) );
-    const RAY topRight(    ori, glm::normalize( SFVEC3F(+1.0, 1.0, 0.0) - ori ) );
-    const RAY bottomLeft(  ori, glm::normalize( SFVEC3F(-1.0,-1.0, 0.0) - ori ) );
-    const RAY bottomRight( ori, glm::normalize( SFVEC3F(+1.0,-1.0, 0.0) - ori ) );
+    const RAY topLeft( ori, glm::normalize( SFVEC3F( -1.0, 1.0, 0.0 ) - ori ) );
+    const RAY topRight( ori, glm::normalize( SFVEC3F( +1.0, 1.0, 0.0 ) - ori ) );
+    const RAY bottomLeft( ori, glm::normalize( SFVEC3F( -1.0, -1.0, 0.0 ) - ori ) );
+    const RAY bottomRight( ori, glm::normalize( SFVEC3F( +1.0, -1.0, 0.0 ) - ori ) );
 
     frustum.GenerateFrustum( topLeft, topRight, bottomLeft, bottomRight );
 
     CBBOX bbox3d;
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f,  -z), SFVEC3F(+1.0f,+1.0f, -z + 1.0f) );
+    bbox3d.Set( SFVEC3F( -1.0f, -1.0f, -z), SFVEC3F( +1.0f, +1.0f, -z + 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f,  -(z+z)), SFVEC3F(+1.0f,+1.0f, -(z+z + 1.0f)) );
+    bbox3d.Set( SFVEC3F( -1.0f, -1.0f, -( z + z ) ), SFVEC3F( +1.0f, +1.0f, -( z + z + 1.0f ) ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-1.0f, -1.0f,  1.0f), SFVEC3F(0.0f,0.0f, 2.0f) );
+    bbox3d.Set( SFVEC3F(- 1.0f, -1.0f, 1.0f ), SFVEC3F( 0.0f, 0.0f, 2.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
     // !TODO: The frustum alg is not excluse all the the situations
     //bbox3d.Set( SFVEC3F(-1.0f, -1.0f, z+1.0f), SFVEC3F(+1.0f,+1.0f, +z+2.0f) );
     //wxASSERT( frustum.Intersect( bbox3d ) == false );
 
-    bbox3d.Set( SFVEC3F(z-1.0f, z-1.0f,  0.0), SFVEC3F(z+1.0f,z+1.0f, 1.0) );
+    bbox3d.Set( SFVEC3F( z - 1.0f, z - 1.0f, 0.0), SFVEC3F( z + 1.0f, z + 1.0f, 1.0 ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
 
-    bbox3d.Set( SFVEC3F(-z, -z,  0.0), SFVEC3F( -1.0f,-1.0f, 1.0f) );
+    bbox3d.Set( SFVEC3F( -z, -z, 0.0 ), SFVEC3F( -1.0f,-1.0f, 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
 
-    bbox3d.Set( SFVEC3F(-z, -z,  -1.0f), SFVEC3F(+z,+z, 1.0f) );
+    bbox3d.Set( SFVEC3F( -z, -z, -1.0f ), SFVEC3F( +z, +z, 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F(-z, -z,  -(z-1)), SFVEC3F(+z,+z, -(z+1.0f)) );
+    bbox3d.Set( SFVEC3F( -z, -z, -( z - 1 ) ), SFVEC3F( +z, +z, -( z + 1.0f ) ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F( 0.5, 0.5,  0.0), SFVEC3F( 2.0, 2.0, z) );
+    bbox3d.Set( SFVEC3F( 0.5, 0.5, 0.0 ), SFVEC3F( 2.0, 2.0, z ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
 
-    bbox3d.Set( SFVEC3F( 1.1, 1.0,  0.0), SFVEC3F( 2.0, 2.0, z) );
+    bbox3d.Set( SFVEC3F( 1.1, 1.0, 0.0 ), SFVEC3F( 2.0, 2.0, z ) );
     wxASSERT( frustum.Intersect( bbox3d ) == false );
     }
 #endif

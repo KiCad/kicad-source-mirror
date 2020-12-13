@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,15 +34,14 @@
 #include "cpostshader.h"
 
 
-class  CPOSTSHADER_SSAO : public CPOSTSHADER
+class CPOSTSHADER_SSAO : public CPOSTSHADER
 {
 public:
     explicit CPOSTSHADER_SSAO( const CCAMERA &aCamera );
-    //~CPOSTSHADER_SSAO();
 
-    // Imported from CPOSTSHADER
     SFVEC3F Shade(const SFVEC2I &aShaderPos ) const override;
-    SFVEC3F ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor, const SFVEC3F &aShadeColor ) const override;
+    SFVEC3F ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor,
+                             const SFVEC3F &aShadeColor ) const override;
 
     SFVEC3F Blur( const SFVEC2I& aShaderPos ) const;
 
@@ -57,31 +56,25 @@ public:
     }
 
 private:
-    SFVEC3F posFromDepth( const SFVEC2F &coord ) const;
+    SFVEC3F posFromDepth( const SFVEC2F& coord ) const;
 
-    float ec_depth( const SFVEC2F &tc ) const;
+    float ec_depth( const SFVEC2F& tc ) const;
 
-    float aoFF( const SFVEC2I &aShaderPos,
-                const SFVEC3F &ddiff,
-                const SFVEC3F &cnorm,
-                const float aShadowAtSamplePos,
-                const float aShadowAtCenterPos,
-                int c1,
-                int c2 ) const;
+    float aoFF( const SFVEC2I& aShaderPos, const SFVEC3F& ddiff, const SFVEC3F& cnorm,
+                const float aShadowAtSamplePos, const float aShadowAtCenterPos,
+                int c1, int c2 ) const;
 
-    float giFF( const SFVEC2I &aShaderPos,
-                const SFVEC3F &ddiff,
-                const SFVEC3F &cnorm,
-                const float aShadow,
-                int c1,
-                int c2 ) const;
+    float giFF( const SFVEC2I& aShaderPos, const SFVEC3F& ddiff, const SFVEC3F& cnorm,
+                const float aShadow, int c1, int c2 ) const;
 
     /**
-     * @brief giColorCurve - Apply a curve transformation to the original color
-     * it will atenuate the bright colors (works as a gamma function):
+     * Apply a curve transformation to the original color.
+     *
+     * It will attenuate the bright colors (works as a gamma function):
      * http://fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAtKDEvKHgqMS4wKzEuMCkpK3gqMC4zMCIsImNvbG9yIjoiIzAwMDAwMCJ9LHsidHlwZSI6MTAwMCwid2luZG93IjpbIi0wLjA2MjE4NDYxNTM4NDYxNTUwNSIsIjEuMTQyOTg0NjE1Mzg0NjE0NiIsIi0wLjEyNzA5OTk5OTk5OTk5OTc3IiwiMS4xMzI2Il19XQ--
-     * @param aColor input color
-     * @return transformated color
+     *
+     * @param aColor input color.
+     * @return transformed color.
      */
     SFVEC3F giColorCurve( const SFVEC3F &aColor ) const;
 

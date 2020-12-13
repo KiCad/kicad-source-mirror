@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ CTRACK_BALL::CTRACK_BALL( float aRangeScale ) : CCAMERA( aRangeScale )
 }
 
 
-void CTRACK_BALL::Drag( const wxPoint &aNewMousePosition )
+void CTRACK_BALL::Drag( const wxPoint& aNewMousePosition )
 {
     m_parametersChanged = true;
 
@@ -58,11 +58,10 @@ void CTRACK_BALL::Drag( const wxPoint &aNewMousePosition )
     //  the mouse, scaled so they are from (-1.0 ... 1.0)."
     const float zoom = 1.0f;
 
-    trackball( spin_quat,
-               zoom * (2.0 * m_lastPosition.x - m_windowSize.x) / m_windowSize.x,
-               zoom * (m_windowSize.y - 2.0 * m_lastPosition.y) / m_windowSize.y,
-               zoom * (2.0 * aNewMousePosition.x - m_windowSize.x) / m_windowSize.x,
-               zoom * ( m_windowSize.y - 2.0 * aNewMousePosition.y ) / m_windowSize.y);
+    trackball( spin_quat, zoom * ( 2.0 * m_lastPosition.x - m_windowSize.x ) / m_windowSize.x,
+               zoom * ( m_windowSize.y - 2.0 * m_lastPosition.y ) / m_windowSize.y,
+               zoom * ( 2.0 * aNewMousePosition.x - m_windowSize.x ) / m_windowSize.x,
+               zoom * ( m_windowSize.y - 2.0 * aNewMousePosition.y ) / m_windowSize.y );
 
     add_quats( spin_quat, m_quat, m_quat );
 
@@ -78,7 +77,7 @@ void CTRACK_BALL::Drag( const wxPoint &aNewMousePosition )
 }
 
 
-void CTRACK_BALL::SetLookAtPos( const SFVEC3F &aLookAtPos )
+void CTRACK_BALL::SetLookAtPos( const SFVEC3F& aLookAtPos )
 {
     if( m_lookat_pos != aLookAtPos )
     {
@@ -92,13 +91,13 @@ void CTRACK_BALL::SetLookAtPos( const SFVEC3F &aLookAtPos )
 }
 
 
-void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
+void CTRACK_BALL::Pan( const wxPoint& aNewMousePosition )
 {
     m_parametersChanged = true;
 
     if( m_projectionType == PROJECTION_TYPE::ORTHO )
     {
-        // With the ortographic projection, there is just a zoom factor
+        // With the orthographic projection, there is just a zoom factor
         const float panFactor = m_zoom / 37.5f; // Magic number from CCAMERA::rebuildProjection
         m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x );
         m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y );
@@ -107,7 +106,8 @@ void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
     {
         // Unproject the coordinates using the precomputed frustum tangent (zoom level dependent)
         const float panFactor = -m_camera_pos.z *  m_frustum.tang * 2;
-        m_camera_pos.x -= panFactor * m_frustum.ratio * ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
+        m_camera_pos.x -= panFactor * m_frustum.ratio *
+                ( m_lastPosition.x - aNewMousePosition.x ) / m_windowSize.x;
         m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y ) / m_windowSize.y;
     }
 
@@ -116,7 +116,7 @@ void CTRACK_BALL::Pan( const wxPoint &aNewMousePosition )
 }
 
 
-void CTRACK_BALL::Pan( const SFVEC3F &aDeltaOffsetInc )
+void CTRACK_BALL::Pan( const SFVEC3F& aDeltaOffsetInc )
 {
     m_parametersChanged = true;
 
@@ -127,7 +127,7 @@ void CTRACK_BALL::Pan( const SFVEC3F &aDeltaOffsetInc )
 }
 
 
-void CTRACK_BALL::Pan_T1( const SFVEC3F &aDeltaOffsetInc )
+void CTRACK_BALL::Pan_T1( const SFVEC3F& aDeltaOffsetInc )
 {
     m_camera_pos_t1 = m_camera_pos + aDeltaOffsetInc;
 }
@@ -165,7 +165,7 @@ void CTRACK_BALL::Interpolate( float t )
     wxASSERT( t >= 0.0f );
 
     // Limit t o 1.0
-    t = (t > 1.0f)?1.0f:t;
+    t = ( t > 1.0f ) ? 1.0f : t;
 
     switch( m_interpolation_mode )
     {
