@@ -79,7 +79,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_ModeColorOption->SetSelection( 0 );
 	gbSizer1->Add( m_ModeColorOption, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALL, 5 );
 
-	m_plotBackgroundColor = new wxCheckBox( sbOptions->GetStaticBox(), wxID_ANY, _("Plot sheet background color"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotBackgroundColor = new wxCheckBox( sbOptions->GetStaticBox(), wxID_ANY, _("Plot background color"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotBackgroundColor->SetToolTip( _("Plot the background color if the output format supports it") );
 
 	gbSizer1->Add( m_plotBackgroundColor, wxGBPosition( 3, 0 ), wxGBSpan( 1, 3 ), wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );

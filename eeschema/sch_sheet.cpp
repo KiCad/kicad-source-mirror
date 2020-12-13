@@ -554,9 +554,19 @@ void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     wxDC*     DC = aSettings->GetPrintDC();
     wxPoint   pos = m_pos + aOffset;
     int       lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    COLOR4D   color = GetBorderColor();
+    COLOR4D   background = GetBackgroundColor();
+    COLOR4D   border = GetBorderColor();
 
-    GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, color );
+    if( background == COLOR4D::UNSPECIFIED )
+        background = aSettings->GetLayerColor( LAYER_SHEET_BACKGROUND );
+
+    if( border == COLOR4D::UNSPECIFIED )
+        border = aSettings->GetLayerColor( LAYER_SHEET );
+
+    if( background != COLOR4D::UNSPECIFIED && background != COLOR4D::WHITE )
+        GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, background );
+
+    GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, border );
 
     for( SCH_FIELD& field : m_fields )
         field.Print( aSettings, aOffset );
