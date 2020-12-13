@@ -29,6 +29,7 @@
  */
 
 
+#include <wx/filefn.h>
 #include <wx/filename.h>
 #include <wx/dir.h>
 
@@ -62,11 +63,12 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
 
 
     wxFileName sch( schdlg.GetPath() );
-
     sch.SetExt( aSchFileExtension );
 
-    wxFileName pro = sch;
+    wxFileName pcb( sch );
+    pcb.SetExt( aPcbFileExtension );
 
+    wxFileName pro( sch );
     pro.SetExt( ProjectFileExtension );
 
     wxString protitle = _( "KiCad Project Destination" );
@@ -105,25 +107,36 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
         }
     }
 
-    wxFileName  pcb( sch );
+    
     std::string packet;
 
     pro.SetExt( ProjectFileExtension );
-    pcb.SetExt( aPcbFileExtension ); // enforce extension
 
     if( !pro.IsAbsolute() )
         pro.MakeAbsolute();
+
+    wxFileName schCopy( pro );
+    schCopy.SetExt( aSchFileExtension );
+
+    if( sch.Exists() )
+        wxCopyFile( sch.GetFullPath(), schCopy.GetFullPath(), true );
+
+    wxFileName pcbCopy( pro );
+    pcbCopy.SetExt( aPcbFileExtension );
+
+    if( pcb.Exists() )
+        wxCopyFile( pcb.GetFullPath(), pcbCopy.GetFullPath(), true );
 
     // Close the project and make the new one
     CloseProject( true );
     CreateNewProject( pro.GetFullPath(), false /* Don't create stub files */ );
     LoadProject( pro );
 
-    if( sch.FileExists() )
+    if( schCopy.FileExists() )
     {
         KIWAY_PLAYER* schframe = Kiway().Player( FRAME_SCH, true );
 
-        packet = StrPrintf( "%d\n%s", aSchFileType, TO_UTF8( sch.GetFullPath() ) );
+        packet = StrPrintf( "%d\n%s", aSchFileType, TO_UTF8( schCopy.GetFullPath() ) );
         schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE, packet, this );
 
         if( !schframe->IsShown() )
@@ -134,16 +147,18 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
             schframe->Iconize( false );
 
         schframe->Raise();
+
+        wxRemoveFile( schCopy.GetFullPath() );
     }
 
-    if( pcb.FileExists() )
+    if( pcbCopy.FileExists() )
     {
         KIWAY_PLAYER* pcbframe = Kiway().Player( FRAME_PCB_EDITOR, true );
 
         if( !pcbframe->IsVisible() )
             pcbframe->Show( true );
 
-        packet = StrPrintf( "%d\n%s", aPcbFileType, TO_UTF8( pcb.GetFullPath() ) );
+        packet = StrPrintf( "%d\n%s", aPcbFileType, TO_UTF8( pcbCopy.GetFullPath() ) );
         pcbframe->Kiway().ExpressMail( FRAME_PCB_EDITOR, MAIL_IMPORT_FILE, packet, this );
 
         // On Windows, Raise() does not bring the window on screen, when iconized
@@ -151,6 +166,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
             pcbframe->Iconize( false );
 
         pcbframe->Raise();
+
+        wxRemoveFile( pcbCopy.GetFullPath() );
     }
 
     ReCreateTreePrj();
