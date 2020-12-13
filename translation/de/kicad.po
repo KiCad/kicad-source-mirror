@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-13 16:51+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"PO-Revision-Date: 2020-12-13 16:53+0000\n"
+"Last-Translator: jonathan haas <jonathan.haas@live.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -30711,21 +30711,22 @@ msgstr "Ignoriere ein Polygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
+"Ignoriere eine Verbindung, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1767
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignoriere ein Text, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1905
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignoriere ein Rechteck, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2090
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignoriere ein Kreis, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -33611,6 +33612,8 @@ msgstr "Sperrfläche Vias"
 #: pcbnew/tools/pcb_inspection_tool.cpp:589
 msgid "Report may be incomplete: some footprint courtyards are malformed."
 msgstr ""
+"Der Bericht ist möglicherweise unvollständig: Einige Footprint-Courtyards "
+"sind fehlerhaft."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:590
 msgid "Run DRC for a full analysis."
