@@ -30705,7 +30705,7 @@ msgstr "Kein \"%s\" Package in Bibliothek \"%s\""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2020
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignoriere ein Pogygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
+msgstr "Ignoriere ein Polygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1594
 #, c-format
