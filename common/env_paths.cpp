@@ -22,9 +22,8 @@
 
 #include <env_paths.h>
 
-static bool normalizeAbsolutePaths( const wxFileName& aPathA,
-                                        const wxFileName& aPathB,
-                                        wxString*         aResultPath )
+static bool normalizeAbsolutePaths( const wxFileName& aPathA, const wxFileName& aPathB,
+                                    wxString* aResultPath )
 {
     wxCHECK_MSG( aPathA.IsAbsolute(), false, aPathA.GetPath() + " is not an absolute path." );
     wxCHECK_MSG( aPathB.IsAbsolute(), false, aPathB.GetPath() + " is not an absolute path." );
@@ -66,7 +65,7 @@ static bool normalizeAbsolutePaths( const wxFileName& aPathA,
 
 
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
-        const wxString& aProjectPath )
+                        const wxString& aProjectPath )
 {
     wxFileName envPath;
     wxString   varName;
@@ -125,12 +124,12 @@ wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars
 
 
 wxString NormalizePath( const wxFileName& aFilePath, const ENV_VAR_MAP* aEnvVars,
-        const PROJECT* aProject )
+                        const PROJECT* aProject )
 {
-  if( aProject )
-    return NormalizePath( aFilePath, aEnvVars, aProject->GetProjectPath() );
-  else
-    return NormalizePath( aFilePath, aEnvVars, "" );
+    if( aProject )
+        return NormalizePath( aFilePath, aEnvVars, aProject->GetProjectPath() );
+    else
+        return NormalizePath( aFilePath, aEnvVars, "" );
 }
 
 
@@ -149,7 +148,7 @@ static wxString createFilePath( const wxString& aPath, const wxString& aFileName
 
 
 wxString ResolveFile( const wxString& aFileName, const ENV_VAR_MAP* aEnvVars,
-        const PROJECT* aProject )
+                      const PROJECT* aProject )
 {
     wxFileName full( aFileName );
 
