@@ -26,6 +26,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include <math/box2.h>
 #include <eda_item.h>       // FILL_TYPE
 #include <plotter.h>
@@ -108,9 +109,42 @@ public:
 protected:
     void penControl( char plume );
 
+    /// Start a new HPGL_ITEM if necessary, keeping the current one if it exists.
+    ///
+    /// @param location - location of the item
+    ///
+    /// @return whether a new item was made
+    bool startItem( DPOINT location );
+
+    /// Flush the current HPGL_ITEM and clear out the current item pointer.
+    void flushItem( );
+
+    /// Start a new HPGL_ITEM with the given string if necessary, or append the
+    /// string to the current item.
+    ///
+    /// @param location - location of the item, if a new one is made
+    /// @param content - content substring
+    ///
+    /// @return whether a new item was made
+    bool startOrAppendItem( DPOINT location, wxString const & content );
+
     int    penSpeed;
     int    penNumber;
     double penDiameter;
+    PLOT_DASH_TYPE dashType;
+
+    struct HPGL_ITEM
+    {
+        DPOINT loc_start;
+        DPOINT loc_end;
+        bool lift_after;
+        int pen;
+        PLOT_DASH_TYPE dashType;
+        wxString content;
+    };
+
+    std::list<HPGL_ITEM> m_items;
+    HPGL_ITEM * m_current_item;
 };
 
 
