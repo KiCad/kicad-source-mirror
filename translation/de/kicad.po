@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:06+0000\n"
+"PO-Revision-Date: 2020-12-13 16:51+0000\n"
 "Last-Translator: jonathan haas <jonathan.haas@live.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Weblate 4.4-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -23044,7 +23044,7 @@ msgstr "&Groß-/Kleinschreibung beachten"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr ""
+msgstr "Umbrechen"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 #, fuzzy
@@ -23073,7 +23073,7 @@ msgstr "Druckvorschau"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:101
 msgid "Restart Search"
-msgstr ""
+msgstr "Suche neustarten"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:46
 #, fuzzy
@@ -23878,7 +23878,7 @@ msgstr "Liniensegmenteigenschaften"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr ""
+msgstr "Linienbreite darf für ungefüllte Flächen nicht 0 sein."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
 msgid "Modify drawing properties"
@@ -30704,7 +30704,7 @@ msgstr "Kein \"%s\" Package in Bibliothek \"%s\""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2020
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr ""
+msgstr "Ignoriere ein Pogygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1594
 #, c-format
