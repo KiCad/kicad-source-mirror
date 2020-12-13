@@ -1668,3 +1668,17 @@ void SCH_SCREENS::BuildClientSheetPathList()
         }
     }
 }
+
+
+bool SCH_SCREENS::IsModified() const
+{
+    for( const SCH_SCREEN* screen : m_screens )
+    {
+        if( screen->IsModify() )
+            return true;
+    }
+
+    return false;
+}
+
+

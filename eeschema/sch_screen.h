@@ -652,6 +652,13 @@ public:
      */
     bool CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const;
 
+    /**
+     * Check if this screen list has any modified screens.
+     *
+     * @return true if there are any modified screens in this list.
+     */
+    bool IsModified() const;
+
 private:
     void addScreenToList( SCH_SCREEN* aScreen );
     void buildScreenList( SCH_SHEET* aSheet);

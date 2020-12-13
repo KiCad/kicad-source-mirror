@@ -813,9 +813,9 @@ void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 {
-    SCH_SHEET_LIST sheetList( g_RootSheet );
+    SCH_SCREENS screenList( g_RootSheet );
 
-    aEvent.Enable( sheetList.IsModified() );
+    aEvent.Enable( screenList.IsModified() );
 }
 
 
