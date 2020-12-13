@@ -91,6 +91,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( ::SCHEMATIC* aSchematic, ::SCH_SHEET* aRo
     loadFigures();
     loadTexts();
     loadDocumentationSymbols();
+    loadTextVariables();
 
     if( Schematic.VariantHierarchy.Variants.size() > 0 )
     {
@@ -907,6 +908,66 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadDocumentationSymbols()
 
             loadItemOntoKiCadSheet( docSym.LayerID, kiTxt );
         }
+    }
+}
+
+
+void CADSTAR_SCH_ARCHIVE_LOADER::loadTextVariables()
+{
+    auto findAndReplaceTextField = [&]( TEXT_FIELD_NAME aField, wxString aValue ) {
+        if( mContext.TextFieldToValuesMap.find( aField ) != mContext.TextFieldToValuesMap.end() )
+        {
+            if( mContext.TextFieldToValuesMap.at( aField ) != aValue )
+            {
+                mContext.TextFieldToValuesMap.at( aField ) = aValue;
+                mContext.InconsistentTextFields.insert( aField );
+                return false;
+            }
+        }
+        else
+        {
+            mContext.TextFieldToValuesMap.insert( { aField, aValue } );
+        }
+
+        return true;
+    };
+
+    PROJECT* pj = &mSchematic->Prj();
+
+    if( pj )
+    {
+        std::map<wxString, wxString>& txtVars = pj->GetTextVars();
+
+        // Most of the design text fields can be derived from other elements
+        if( Schematic.VariantHierarchy.Variants.size() > 0 )
+        {
+            VARIANT loadedVar = Schematic.VariantHierarchy.Variants.begin()->second;
+
+            findAndReplaceTextField( TEXT_FIELD_NAME::VARIANT_NAME, loadedVar.Name );
+            findAndReplaceTextField( TEXT_FIELD_NAME::VARIANT_DESCRIPTION, loadedVar.Description );
+        }
+
+        findAndReplaceTextField( TEXT_FIELD_NAME::DESIGN_TITLE, Header.JobTitle );
+
+        for( std::pair<TEXT_FIELD_NAME, wxString> txtvalue : mContext.TextFieldToValuesMap )
+        {
+            wxString varName  = CadstarToKicadFieldsMap.at( txtvalue.first );
+            wxString varValue = txtvalue.second;
+
+            txtVars.insert( { varName, varValue } );
+        }
+
+        for( std::pair<wxString, wxString> txtvalue : mContext.FilenamesToTextMap )
+        {
+            wxString varName  = txtvalue.first;
+            wxString varValue = txtvalue.second;
+
+            txtVars.insert( { varName, varValue } );
+        }
+    }
+    else
+    {
+        wxLogError( _( "Text Variables could not be set as there is no project attached." ) );
     }
 }
 

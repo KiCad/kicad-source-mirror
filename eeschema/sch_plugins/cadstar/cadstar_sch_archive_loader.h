@@ -108,6 +108,7 @@ private:
     void loadFigures();
     void loadTexts();
     void loadDocumentationSymbols();
+    void loadTextVariables();
 
     //Helper Functions for loading sheets
     void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, wxPoint aPosition, wxSize aSheetSize,
