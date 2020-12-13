@@ -3,13 +3,14 @@
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
 # Kliment <kliment@0xfb.com>, 2020.
 # jonathan haas <jonathan.haas@live.de>, 2020.
+# Jonathan Haas <haasjona@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
 "PO-Revision-Date: 2020-12-13 16:51+0000\n"
-"Last-Translator: jonathan haas <jonathan.haas@live.de>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -25721,7 +25722,7 @@ msgstr "Optimiert das Ziehen der Spur"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid "Optimizer effort:"
-msgstr "Otimierungseinsatz:"
+msgstr "Optimierungseinsatz:"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
 msgid ""
