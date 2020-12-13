@@ -417,7 +417,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuActionPlugins->Add( _( "Open Plugin Directory" ),
                                _( "Opens the directory in the default system file manager" ),
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
-                               directory_open_xmp );
+                               directory_open_xpm );
 #endif
     // Populate the Action Plugin sub-menu: Must be done before Add
     // Since the object is cloned by Add
