@@ -95,7 +95,7 @@ private:
 
     // PDF
     void    createPDFFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
-    void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotFrameRef);
+    void    plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen, bool aPlotWorksheet);
     void    setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen );
 
     /**

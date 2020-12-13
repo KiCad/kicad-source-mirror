@@ -549,34 +549,6 @@ void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
-{
-    wxDC*     DC = aSettings->GetPrintDC();
-    wxPoint   pos = m_pos + aOffset;
-    int       lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    COLOR4D   background = GetBackgroundColor();
-    COLOR4D   border = GetBorderColor();
-
-    if( background == COLOR4D::UNSPECIFIED )
-        background = aSettings->GetLayerColor( LAYER_SHEET_BACKGROUND );
-
-    if( border == COLOR4D::UNSPECIFIED )
-        border = aSettings->GetLayerColor( LAYER_SHEET );
-
-    if( background != COLOR4D::UNSPECIFIED && background != COLOR4D::WHITE )
-        GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, background );
-
-    GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, border );
-
-    for( SCH_FIELD& field : m_fields )
-        field.Print( aSettings, aOffset );
-
-    /* Draw text : SheetLabel */
-    for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Print( aSettings, aOffset );
-}
-
-
 const EDA_RECT SCH_SHEET::GetBodyBoundingBox() const
 {
     wxPoint  end;
@@ -959,17 +931,12 @@ bool SCH_SHEET::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy )
 
 void SCH_SHEET::Plot( PLOTTER* aPlotter )
 {
-    wxString    Text;
-    wxPoint     pos;
-
-    bool override = false;
-
-    if( KIGFX::SCH_RENDER_SETTINGS* settings =
-                    dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() ) )
-        override = settings->m_OverrideItemColors;
-
-    COLOR4D borderColor     = GetBorderColor();
-    COLOR4D backgroundColor = GetBackgroundColor();
+    wxString msg;
+    wxPoint  pos;
+    auto*    settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    bool     override = settings ? settings->m_OverrideItemColors : false;
+    COLOR4D  borderColor = GetBorderColor();
+    COLOR4D  backgroundColor = GetBackgroundColor();
 
     if( override || borderColor == COLOR4D::UNSPECIFIED )
         borderColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET );
@@ -980,7 +947,9 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     aPlotter->SetColor( backgroundColor );
     // Do not fill shape in B&W mode, otherwise texts are unreadable
     bool fill = aPlotter->GetColorMode();
-    aPlotter->Rect( m_pos, m_pos + m_size, fill ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL, 1.0 );
+
+    aPlotter->Rect( m_pos, m_pos + m_size, fill ? FILL_TYPE::FILLED_SHAPE : FILL_TYPE::NO_FILL,
+                    1.0 );
 
     aPlotter->SetColor( borderColor );
 
@@ -1007,6 +976,39 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
     /* Draw texts : SheetLabel */
     for( SCH_SHEET_PIN* sheetPin : m_pins )
         sheetPin->Plot( aPlotter );
+}
+
+
+void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+{
+    wxDC*     DC = aSettings->GetPrintDC();
+    wxPoint   pos = m_pos + aOffset;
+    int       lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    auto*     settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+    bool      override = settings ? settings->m_OverrideItemColors : false;
+    COLOR4D   border = GetBorderColor();
+    COLOR4D   background = GetBackgroundColor();
+
+    if( override || border == COLOR4D::UNSPECIFIED )
+        border = aSettings->GetLayerColor( LAYER_SHEET );
+
+    if( override || background == COLOR4D::UNSPECIFIED )
+        background = aSettings->GetLayerColor( LAYER_SHEET_BACKGROUND );
+
+    if( background != COLOR4D::UNSPECIFIED )
+    {
+        GRFilledRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, 0,
+                      background, background );
+    }
+
+    GRRect( nullptr, DC, pos.x, pos.y, pos.x + m_size.x, pos.y + m_size.y, lineWidth, border );
+
+    for( SCH_FIELD& field : m_fields )
+        field.Print( aSettings, aOffset );
+
+    /* Draw text : SheetLabel */
+    for( SCH_SHEET_PIN* sheetPin : m_pins )
+        sheetPin->Print( aSettings, aOffset );
 }
 
 

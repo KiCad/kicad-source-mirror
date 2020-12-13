@@ -155,9 +155,8 @@ void DIALOG_PLOT_SCHEMATIC::restoreEnvironment( PDF_PLOTTER* aPlotter,
 }
 
 
-void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
-                                             SCH_SCREEN* aScreen,
-                                             bool aPlotFrameRef )
+void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
+                                             bool aPlotWorksheet )
 {
     if( m_plotBackgroundColor->GetValue() )
     {
@@ -167,15 +166,17 @@ void DIALOG_PLOT_SCHEMATIC::plotOneSheetPDF( PLOTTER* aPlotter,
         aPlotter->Rect( wxPoint( 0, 0 ), end, FILL_TYPE::FILLED_SHAPE, 1.0 );
     }
 
-    if( aPlotFrameRef )
+    if( aPlotWorksheet )
     {
+        COLOR4D color = COLOR4D::BLACK;
+
+        if( aPlotter->GetColorMode() )
+            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET );
+
         PlotWorkSheet( aPlotter, &aScreen->Schematic()->Prj(), m_parent->GetTitleBlock(),
                        m_parent->GetPageSettings(), aScreen->GetPageNumber(),
-                       aScreen->GetPageCount(), m_parent->GetScreenDesc(),
-                       aScreen->GetFileName(),
-                       aPlotter->GetColorMode() ?
-                       aPlotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_WORKSHEET ) :
-                       COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
+                       aScreen->GetPageCount(), m_parent->GetScreenDesc(), aScreen->GetFileName(),
+                       color, aScreen->GetVirtualPageNumber() == 1 );
     }
 
     aScreen->Plot( aPlotter );

@@ -602,11 +602,15 @@ bool SCH_TEXT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 
 void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
-    static std::vector<wxPoint> Poly;
-    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( GetLayer() );
-    int penWidth = GetEffectiveTextPenWidth( aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    static std::vector<wxPoint> s_poly;
 
-    penWidth = std::max( penWidth, aPlotter->RenderSettings()->GetMinPenWidth() );
+    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
+    SCH_CONNECTION*  connection = Connection();
+    int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
+    COLOR4D          color = settings->GetLayerColor( layer );
+    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+
+    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
     if( IsMultilineAllowed() )
@@ -635,10 +639,10 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     }
 
     // Draw graphic symbol for global or hierarchical labels
-    CreateGraphicShape( aPlotter->RenderSettings(), Poly, GetTextPos() );
+    CreateGraphicShape( aPlotter->RenderSettings(), s_poly, GetTextPos() );
 
-    if( Poly.size() )
-        aPlotter->PlotPoly( Poly, FILL_TYPE::NO_FILL, penWidth );
+    if( s_poly.size() )
+        aPlotter->PlotPoly( s_poly, FILL_TYPE::NO_FILL, penWidth );
 }
 
 
@@ -1152,21 +1156,21 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
 
 void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    static std::vector <wxPoint> Poly;
+    static std::vector<wxPoint> s_poly;
 
-    wxDC*   DC = aSettings->GetPrintDC();
-    COLOR4D color = aSettings->GetLayerColor( m_layer );
-    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
+    SCH_CONNECTION* connection = Connection();
+    int             layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
+    wxDC*           DC = aSettings->GetPrintDC();
+    COLOR4D         color = aSettings->GetLayerColor( layer );
+    int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    wxPoint         text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
     EDA_TEXT::Print( aSettings, text_offset, color );
 
-    CreateGraphicShape( aSettings, Poly, GetTextPos() + aOffset );
-    GRPoly( nullptr, DC, Poly.size(), &Poly[0], false, penWidth, color, color );
+    CreateGraphicShape( aSettings, s_poly, GetTextPos() + aOffset );
+    GRPoly( nullptr, DC, s_poly.size(), &s_poly[0], false, penWidth, color, color );
 
-    bool show = Schematic()->Settings().m_IntersheetRefsShow;
-
-    if ( show )
+    if( Schematic()->Settings().m_IntersheetRefsShow )
         m_intersheetRefsField.Print( aSettings, aOffset );
 }
 
