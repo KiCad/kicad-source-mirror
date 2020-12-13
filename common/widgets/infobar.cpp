@@ -51,8 +51,11 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid )
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
     SetEffectDuration( 300 );
 
-    // Prevent draw flicker observed on windows
+#ifndef __WXOSX__
+    // Prevent draw flicker observed on windows.  (Sadly wxWidgets didn't think this was worth
+    // a NOP on OSX so it has to be conditionally compiled.)
     SetDoubleBuffered( true );
+#endif
 
     // The infobar seems to start too small, so increase its height
     int sx, sy;
