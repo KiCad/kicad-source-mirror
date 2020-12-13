@@ -51,6 +51,9 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid )
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
     SetEffectDuration( 300 );
 
+    // Prevent draw flicker observed on windows
+    SetDoubleBuffered( true );
+
     // The infobar seems to start too small, so increase its height
     int sx, sy;
     GetSize( &sx, &sy );
