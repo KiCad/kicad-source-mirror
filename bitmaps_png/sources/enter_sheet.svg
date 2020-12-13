@@ -28,7 +28,7 @@
       </rdf:RDF>
    </metadata>
    <defs id="defs116847">
-      <style id="style116845">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#545454;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#d8d8d8;}.cls-4{stroke:#bf2641;stroke-width:2px;}</style>
+      <style id="style116845">.cls-1,.cls-4{fill:none;stroke-linecap:round;stroke-linejoin:round;}.cls-1{stroke:#545454;}.cls-2{fill:#545454;}.cls-3{fill:#545454;}.cls-4{stroke:#bf2641;stroke-width:2px;}</style>
    </defs>
    <title id="title116849">enter_sheet</title>
    <polyline class="cls-1" points="4.532 13.317 4.532 21.969 6.014 21.969" id="polyline116851" transform="translate(-1,-1)" />

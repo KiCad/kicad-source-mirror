@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="auto_track_width.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.3396593"
-     inkscape:cy="13.576558"
+     inkscape:zoom="11.525209"
+     inkscape:cx="7.6754187"
+     inkscape:cy="12.398897"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -86,7 +86,8 @@
   <path
      class="cls-2"
      d="m 14.3456,21.0041 h 4.7088 a 4,4 0 0 0 4,-4 V 2.0458"
-     id="path115978" />
+     id="path115978"
+     style="stroke-width:1.99937008;stroke-miterlimit:4;stroke-dasharray:none;stroke:#545454;stroke-opacity:1" />
   <circle
      class="cls-3"
      cx="12"
