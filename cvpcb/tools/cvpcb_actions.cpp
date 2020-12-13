@@ -89,15 +89,15 @@ TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( "cvpcb.Control.changeFocusLeft",
 // Actions to navigate the component list
 TOOL_ACTION CVPCB_ACTIONS::gotoNextNA( "cvpcb.Control.GotoNextNA",
         AS_GLOBAL, 0, "",
-        _( "Select next unassociated symbol" ),
-        _( "Select next unassociated symbol" ),
+        _( "Select next unassigned symbol" ),
+        _( "Select next symbol with no footprint assignment" ),
         right_xpm, AF_NONE,
         (void*) CVPCB_MAINFRAME::ITEM_NEXT );
 
 TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA",
         AS_GLOBAL, 0, "",
-        _( "Select previous unassociated symbol" ),
-        _( "Select previous unassociated symbol" ),
+        _( "Select previous unassigned symbol" ),
+        _( "Select previous symbol with no footprint assignment" ),
         left_xpm, AF_NONE,
         (void*) CVPCB_MAINFRAME::ITEM_PREV );
 
@@ -106,14 +106,14 @@ TOOL_ACTION CVPCB_ACTIONS::gotoPreviousNA( "cvpcb.Control.GotoPreviousNA",
 TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Association.Associate",
         AS_GLOBAL,
         WXK_RETURN, "",
-        _( "Associate footprint" ),
-        _( "Associate selected footprint with selected components" ),
+        _( "Assign footprint" ),
+        _( "Assign footprint to selected symbols" ),
         auto_associe_xpm );
 
 TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Association.AutoAssociate",
         AS_GLOBAL, 0, "",
-        _( "Automatically associate footprints" ),
-        _( "Perform automatic footprint association" ),
+        _( "Automatically assign footprints" ),
+        _( "Perform automatic footprint assignment" ),
         auto_associe_xpm );
 
 TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Association.Delete",

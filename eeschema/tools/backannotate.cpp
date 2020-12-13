@@ -158,7 +158,7 @@ void BACK_ANNOTATE::getPcbModulesFromString( const std::string& aPayload )
 
             if( path == "" )
             {
-                msg.Printf( _( "Footprint '%s' has no associated symbol." ),
+                msg.Printf( _( "Footprint '%s' has no assigned symbol." ),
                             ref );
                 m_reporter.ReportHead( msg, RPT_SEVERITY_WARNING );
                 continue;
