@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-13 16:51+0000\n"
+"PO-Revision-Date: 2020-12-13 18:17+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -3608,8 +3608,8 @@ msgstr ""
 "To je poněkud rozpačité!\n"
 "Zdá se, že když jste naposled upravovali soubor\n"
 "\"%s\"\n"
-",\n"
-"nebyl správně uložen. Chcete se vrátit k naposled uloženým úpravám?"
+"nebyl správně uložen. Přejete si obnovit poslední uložené úpravy, které jste "
+"provedli?"
 
 #: common/eda_base_frame.cpp:897
 msgid "The auto save file could not be renamed to the board file name."
@@ -8206,9 +8206,8 @@ msgid "Filter items by parent symbol library id:"
 msgstr "Filtrování položek podle ID nadřazené knihovny symbolů:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
-#, fuzzy
 msgid "Filter items by parent symbol type:"
-msgstr "Z nadřazeného pouzdra"
+msgstr "Filtrování položek podle typu nadřazeného symbolu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
 #, fuzzy
@@ -8331,6 +8330,7 @@ msgstr ""
 "Nelze kopírovat soubor globální tabulky symbolu knihovny:\n"
 "\n"
 " \"%s\"\n"
+"\n"
 ":do:\n"
 "\n"
 "\"%s\"."
@@ -8601,9 +8601,8 @@ msgid "Exclude from board"
 msgstr "Vyloučit z desky"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:101
-#, fuzzy
 msgid "Pin name position offset:"
-msgstr "Posun textu vývodu"
+msgstr "Posun názvu v popisu vývodu:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:118
 msgid "Show pin number text"
@@ -14033,15 +14032,12 @@ msgid "An error \"%s\" occurred saving symbol \"%s\" to library \"%s\""
 msgstr "Při ukládání symbolu \"%s\" do knihovny \"%s\" došlo k chybě \"%s\""
 
 #: eeschema/symbol_editor/symbol_library_manager.h:84
-#, fuzzy
 msgid ""
 "Not all symbol libraries could be loaded.  Use the Manage Symbol\n"
 "Libraries dialog to adjust paths and add or remove libraries."
 msgstr ""
-"Soubor knihovny \"%s\" nebyl nalezen.\n"
-"\n"
-"Pomocí dialogového okna Správa knihoven symbolů můžete opravit cestu (nebo "
-"odstranit knihovnu)."
+"Nelze načíst všechny knihovny. Použijte dialog Správa knihoven\n"
+"symbolů upravit cesty a přidat nebo odebrat knihovny."
 
 #: eeschema/symbol_editor/toolbars_symbol_editor.cpp:71
 msgid "Import existing drawings"
@@ -14744,9 +14740,8 @@ msgid "Cleanup Sheet Pins"
 msgstr "Vyčistit vývody listu"
 
 #: eeschema/tools/ee_actions.cpp:470
-#, fuzzy
 msgid "Delete unreferenced sheet pins"
-msgstr "Výchozí označení reference:"
+msgstr "Odstranit vývody listu bez reference"
 
 #: eeschema/tools/ee_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:432
 #, fuzzy
@@ -20357,9 +20352,8 @@ msgstr "Mezera šrafování:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:324
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:159
-#, fuzzy
 msgid "Smoothing effort:"
-msgstr "Třídění sítí"
+msgstr "Vyhlazování:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:326
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:161
@@ -23894,9 +23888,8 @@ msgid "Plot footprint values"
 msgstr "Kreslit hodnoty pouzder"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:84
-#, fuzzy
 msgid "Plot reference designators"
-msgstr "Výchozí označení reference:"
+msgstr "Vykreslit označení reference"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
 msgid "Force plotting of invisible values / refs"
@@ -28476,9 +28469,8 @@ msgid "Pad To Die Length"
 msgstr "Délka od plošky po čip"
 
 #: pcbnew/pad.cpp:1400
-#, fuzzy
 msgid "Local Soldermask Margin"
-msgstr "Izolační mezera masky:"
+msgstr "Okraj místní pájecí masky"
 
 #: pcbnew/pad.cpp:1408
 msgid "Thermal Relief Spoke Width"
@@ -29371,9 +29363,8 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4514
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2583
-#, fuzzy
 msgid "Legacy Zone Warning"
-msgstr "Upozornění zastaralosti:"
+msgstr "Varování starší zóny"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:94
 #, c-format
@@ -31840,9 +31831,8 @@ msgid "[netclass %s]"
 msgstr "[třída spojů %s]"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:315
-#, fuzzy
 msgid "Silkscreen clearance resolution for:"
-msgstr "Izolační mezera porušení"
+msgstr "Rozlišení izolační mezery potisku pro:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:327
 #: pcbnew/tools/pcb_inspection_tool.cpp:333
@@ -31851,9 +31841,8 @@ msgid "%s not present on layer %s.  No clearance defined."
 msgstr "%s není na vrstvě %s.  Není definována izolační mezera."
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:339
-#, fuzzy
 msgid "Clearance resolution for:"
-msgstr "Izolační mezera porušení"
+msgstr "Rozlišení izolační mezery pro:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:363
 msgid "Items belong to the same net. Clearance is 0."
@@ -31905,9 +31894,8 @@ msgid "Via Annular Width"
 msgstr "Šířka prstence prokovu"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:507
-#, fuzzy
 msgid "Via annular width resolution for:"
-msgstr "Izolační mezera porušení"
+msgstr "Rozlišení šířky prstence prokovu pro:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:532
 #, c-format
@@ -31933,9 +31921,8 @@ msgid "Keepouts"
 msgstr "Bez via"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:574
-#, fuzzy
 msgid "Keepout resolution for:"
-msgstr "Bez via"
+msgstr "Rozlišení zakázané zóny pro:"
 
 #: pcbnew/tools/pcb_inspection_tool.cpp:589
 msgid "Report may be incomplete: some footprint courtyards are malformed."
