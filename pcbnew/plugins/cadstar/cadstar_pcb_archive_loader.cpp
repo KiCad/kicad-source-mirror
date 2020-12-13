@@ -32,6 +32,7 @@
 #include <fp_shape.h>
 #include <footprint.h>
 #include <pcb_text.h>
+#include <project.h>
 #include <track.h>
 #include <zone.h>
 #include <convert_basic_shapes_to_polygon.h>
@@ -96,7 +97,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     loadTemplates();
     loadCoppers();
     loadNets();
-
+    loadTextVariables();    
 
     if( Layout.Trunks.size() > 0 )
     {
@@ -109,8 +110,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard )
     {
         wxLogWarning( wxString::Format(
                 _( "The CADSTAR design contains variants which has no KiCad equivalent. Only "
-                   "the master variant ('%s') was loaded." ),
-                Layout.VariantHierarchy.Variants.at( "V0" ).Name ) );
+                   "the variant '%s' was loaded." ),
+                Layout.VariantHierarchy.Variants.begin()->second.Name ) );
     }
 
     if( Layout.ReuseBlocks.size() > 0 )
@@ -1644,6 +1645,69 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
                 footprint->Pads().at( pin.PadID - (long) 1 )->SetNet( getKiCadNet( net.ID ) );
             }
         }
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::loadTextVariables()
+{
+    auto findAndReplaceTextField = 
+        [&]( TEXT_FIELD_NAME aField, wxString aValue ) 
+        {
+            if( mContext.TextFieldToValuesMap.find( aField ) != 
+                mContext.TextFieldToValuesMap.end() )
+            {
+                if( mContext.TextFieldToValuesMap.at( aField ) != aValue )
+                {
+                    mContext.TextFieldToValuesMap.at( aField ) = aValue;
+                    mContext.InconsistentTextFields.insert( aField );
+                    return false;
+                }
+            }
+            else
+            {
+                mContext.TextFieldToValuesMap.insert( { aField, aValue } );                
+            }
+
+            return true;
+        };
+
+    PROJECT* pj = mBoard->GetProject();
+
+    if( pj )
+    {
+        std::map<wxString, wxString>& txtVars = pj->GetTextVars();
+
+        // Most of the design text fields can be derived from other elements
+        if( Layout.VariantHierarchy.Variants.size() > 0 )
+        {
+            VARIANT loadedVar = Layout.VariantHierarchy.Variants.begin()->second;
+
+            findAndReplaceTextField( TEXT_FIELD_NAME::VARIANT_NAME, loadedVar.Name );
+            findAndReplaceTextField( TEXT_FIELD_NAME::VARIANT_DESCRIPTION, loadedVar.Description );
+        }
+
+        findAndReplaceTextField( TEXT_FIELD_NAME::DESIGN_TITLE, Header.JobTitle );
+
+        for( std::pair<TEXT_FIELD_NAME, wxString> txtvalue : mContext.TextFieldToValuesMap )
+        {
+            wxString varName  = CadstarToKicadFieldsMap.at( txtvalue.first );
+            wxString varValue = txtvalue.second;
+
+            txtVars.insert( { varName, varValue } );
+        }
+
+        for( std::pair<wxString, wxString> txtvalue : mContext.FilenamesToTextMap )
+        {
+            wxString varName  = txtvalue.first;
+            wxString varValue = txtvalue.second;
+
+            txtVars.insert( { varName, varValue } );
+        }
+    }
+    else
+    {
+        wxLogError( _( "Text Variables could not be set as there is no project attached." ) );
     }
 }
 

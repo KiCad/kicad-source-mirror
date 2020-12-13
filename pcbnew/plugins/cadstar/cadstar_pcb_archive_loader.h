@@ -127,6 +127,7 @@ private:
     void loadTemplates();
     void loadCoppers();
     void loadNets();
+    void loadTextVariables();
 
     // Helper functions for element loading:
     void logBoardStackupWarning( const wxString& aCadstarLayerName,
