@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file class_libentry.h
- */
-
 #ifndef CLASS_LIBENTRY_H
 #define CLASS_LIBENTRY_H
 
@@ -96,43 +92,7 @@ struct PART_UNITS
  */
 class LIB_PART : public EDA_ITEM, public LIB_TREE_ITEM
 {
-    ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
-    PART_SPTR           m_me;
-    PART_REF            m_parent;           ///< Use for inherited symbols.
-
-    LIB_ID              m_libId;
-
-    int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to 0
-                                            ///< to draw the pin name above the pin.
-    bool                m_unitsLocked;      ///< True if part has multiple units and changing
-                                            ///< one unit does not automatically change another unit.
-    bool                m_showPinNames;     ///< Determines if part pin names are visible.
-    bool                m_showPinNumbers;   ///< Determines if part pin numbers are visible.
-    bool                m_includeInBom;     ///< Determines if symbol should be included in
-                                            ///< schematic BOM.
-    bool                m_includeOnBoard;   ///< Determines if symbol should be excluded from
-                                            ///< netlist when updating board.
-    timestamp_t         m_dateLastEdition;  ///< Date of the last modification.
-    LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
-    int                 m_unitCount;        ///< Number of units (parts) per package.
-    LIB_ITEMS_CONTAINER m_drawings;         ///< Drawing items of this part.
-    wxArrayString       m_footprintFilters; /**< List of suitable footprint names for the
-                                                 part (wild card names accepted). */
-    PART_LIB*           m_library;          ///< Library the part belongs to if any.
-    wxString            m_name;             ///< Symbol name.
-    wxString            m_description;      ///< documentation for info
-    wxString            m_keyWords;         ///< keyword list (used for search for parts by keyword)
-
-    static int  m_subpartIdSeparator;       ///< the separator char between
-                                            ///< the subpart id and the reference like U1A
-                                            ///< ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
-    static int  m_subpartFirstId;           ///< the ASCII char value to calculate the subpart
-                                            ///< symbol id from the part number: only 'A', 'a'
-                                            ///< or '1' can be used, other values have no sense.
-    void deleteAllFields();
-
 public:
-
     LIB_PART( const wxString& aName, LIB_PART* aParent = nullptr, PART_LIB* aLibrary = nullptr );
 
     /**
@@ -142,6 +102,7 @@ public:
 
     virtual ~LIB_PART();
 
+    ///< http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
     PART_SPTR SharedPtr() { return m_me; }
 
     /**
@@ -159,13 +120,6 @@ public:
         return dupe;
     }
 
-private:
-    // We create a different set parent function for this class, so we hide
-    // the inherited one.
-    using EDA_ITEM::SetParent;
-
-public:
-
     void SetParent( LIB_PART* aParent = nullptr );
     PART_REF& GetParent() { return m_parent; }
 
@@ -182,19 +136,31 @@ public:
 
     wxString GetLibNickname() const override { return GetLibraryName(); }
 
-    void SetDescription( const wxString& aDescription )
+    void SetDescription( const wxString& aDescription ) { m_description = aDescription; }
+
+    wxString GetDescription() override
     {
-        m_description = aDescription;
+        if( m_description.IsEmpty() && IsAlias() )
+        {
+            if( PART_SPTR parent = m_parent.lock() )
+                return parent->GetDescription();
+        }
+
+        return m_description;
     }
 
-    wxString GetDescription() override { return m_description; }
+    void SetKeyWords( const wxString& aKeyWords ) { m_keyWords = aKeyWords; }
 
-    void SetKeyWords( const wxString& aKeyWords )
+    wxString GetKeyWords() const
     {
-        m_keyWords = aKeyWords;
-    }
+        if( m_keyWords.IsEmpty() && IsAlias() )
+        {
+            if( PART_SPTR parent = m_parent.lock() )
+                return parent->GetKeyWords();
+        }
 
-    wxString GetKeyWords() const { return m_keyWords; }
+        return m_keyWords;
+    }
 
     wxString GetSearchText() override;
 
@@ -206,15 +172,22 @@ public:
 
     const wxString GetLibraryName() const;
 
-    PART_LIB* GetLib()              { return m_library; }
+    PART_LIB* GetLib()                { return m_library; }
     void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
 
-    timestamp_t GetDateLastEdition() const { return m_dateLastEdition; }
+    timestamp_t GetLastModDate() const { return m_lastModDate; }
 
-    wxArrayString GetFootprints() const { return m_footprintFilters; }
-    void SetFootprintFilters( const wxArrayString& aFootprintFilters )
+    void SetFPFilters( const wxArrayString& aFilters ) { m_fpFilters = aFilters; }
+
+    wxArrayString GetFPFilters() const
     {
-        m_footprintFilters = aFootprintFilters;
+        if( m_fpFilters.IsEmpty() && IsAlias() )
+        {
+            if( PART_SPTR parent = m_parent.lock() )
+                return parent->GetFPFilters();
+        }
+
+        return m_fpFilters;
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -391,7 +364,6 @@ public:
         return (LIB_PIN*) GetNextDrawItem( (LIB_ITEM*) aItem, LIB_PIN_T );
     }
 
-
     /**
      * Return a list of pin object pointers from the draw item list.
      *
@@ -458,6 +430,7 @@ public:
      */
     void ClearTempFlags();
     void ClearEditFlags();
+
     /**
      * Locate a draw object.
      *
@@ -666,6 +639,47 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    // We create a different set parent function for this class, so we hide the inherited one.
+    using EDA_ITEM::SetParent;
+
+    void deleteAllFields();
+
+private:
+    PART_SPTR           m_me;
+    PART_REF            m_parent;           ///< Use for inherited symbols.
+    LIB_ID              m_libId;
+    timestamp_t         m_lastModDate;
+
+    int                 m_unitCount;        ///< Number of units (parts) per package.
+    bool                m_unitsLocked;      ///< True if part has multiple units and changing one
+                                            ///< unit does not automatically change another unit.
+
+    int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to
+                                            ///< 0 to draw the pin name above the pin.
+    bool                m_showPinNames;
+    bool                m_showPinNumbers;
+
+    bool                m_includeInBom;
+    bool                m_includeOnBoard;
+    LIBRENTRYOPTIONS    m_options;          ///< Special part features such as POWER or NORMAL.)
+
+    LIB_ITEMS_CONTAINER m_drawings;
+
+    PART_LIB*           m_library;
+    wxString            m_name;
+    wxString            m_description;
+    wxString            m_keyWords;         ///< Search keywords
+    wxArrayString       m_fpFilters;        ///< List of suitable footprint names for the
+                                            ///<  part (wild card names accepted).
+
+    static int  m_subpartIdSeparator;       ///< the separator char between
+                                            ///< the subpart id and the reference like U1A
+                                            ///< ( m_subpartIdSeparator = 0 ) or U1.A or U1-A
+    static int  m_subpartFirstId;           ///< the ASCII char value to calculate the subpart
+                                            ///< symbol id from the part number: only 'A', 'a'
+                                            ///< or '1' can be used, other values have no sense.
 };
 
 #endif  //  CLASS_LIBENTRY_H

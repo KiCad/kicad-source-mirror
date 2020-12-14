@@ -88,13 +88,13 @@ LIB_PART::LIB_PART( const wxString& aName, LIB_PART* aParent, PART_LIB* aLibrary
     m_includeInBom( true ),
     m_includeOnBoard( true )
 {
-    m_dateLastEdition     = 0;
-    m_unitCount           = 1;
-    m_pinNameOffset       = Mils2iu( DEFAULT_PIN_NAME_OFFSET );
-    m_options             = ENTRY_NORMAL;
-    m_unitsLocked         = false;
-    m_showPinNumbers      = true;
-    m_showPinNames        = true;
+    m_lastModDate    = 0;
+    m_unitCount      = 1;
+    m_pinNameOffset  = Mils2iu( DEFAULT_PIN_NAME_OFFSET );
+    m_options        = ENTRY_NORMAL;
+    m_unitsLocked    = false;
+    m_showPinNumbers = true;
+    m_showPinNames   = true;
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
@@ -119,21 +119,21 @@ LIB_PART::LIB_PART( const LIB_PART& aPart, PART_LIB* aLibrary ) :
 {
     LIB_ITEM* newItem;
 
-    m_library             = aLibrary;
-    m_name                = aPart.m_name;
-    m_footprintFilters    = wxArrayString( aPart.m_footprintFilters );
-    m_unitCount           = aPart.m_unitCount;
-    m_unitsLocked         = aPart.m_unitsLocked;
-    m_pinNameOffset       = aPart.m_pinNameOffset;
-    m_showPinNumbers      = aPart.m_showPinNumbers;
-    m_includeInBom        = aPart.m_includeInBom;
-    m_includeOnBoard      = aPart.m_includeOnBoard;
-    m_showPinNames        = aPart.m_showPinNames;
-    m_dateLastEdition     = aPart.m_dateLastEdition;
-    m_options             = aPart.m_options;
-    m_libId               = aPart.m_libId;
-    m_description         = aPart.m_description;
-    m_keyWords            = aPart.m_keyWords;
+    m_library        = aLibrary;
+    m_name           = aPart.m_name;
+    m_fpFilters      = wxArrayString( aPart.m_fpFilters );
+    m_unitCount      = aPart.m_unitCount;
+    m_unitsLocked    = aPart.m_unitsLocked;
+    m_pinNameOffset  = aPart.m_pinNameOffset;
+    m_showPinNumbers = aPart.m_showPinNumbers;
+    m_includeInBom   = aPart.m_includeInBom;
+    m_includeOnBoard = aPart.m_includeOnBoard;
+    m_showPinNames   = aPart.m_showPinNames;
+    m_lastModDate    = aPart.m_lastModDate;
+    m_options        = aPart.m_options;
+    m_libId          = aPart.m_libId;
+    m_description    = aPart.m_description;
+    m_keyWords       = aPart.m_keyWords;
 
     ClearSelected();
 
@@ -174,21 +174,21 @@ const LIB_PART& LIB_PART::operator=( const LIB_PART& aPart )
 
     LIB_ITEM* newItem;
 
-    m_library             = aPart.m_library;
-    m_name                = aPart.m_name;
-    m_footprintFilters    = wxArrayString( aPart.m_footprintFilters );
-    m_unitCount           = aPart.m_unitCount;
-    m_unitsLocked         = aPart.m_unitsLocked;
-    m_pinNameOffset       = aPart.m_pinNameOffset;
-    m_showPinNumbers      = aPart.m_showPinNumbers;
-    m_showPinNames        = aPart.m_showPinNames;
-    m_includeInBom        = aPart.m_includeInBom;
-    m_includeOnBoard      = aPart.m_includeOnBoard;
-    m_dateLastEdition     = aPart.m_dateLastEdition;
-    m_options             = aPart.m_options;
-    m_libId               = aPart.m_libId;
-    m_description         = aPart.m_description;
-    m_keyWords            = aPart.m_keyWords;
+    m_library        = aPart.m_library;
+    m_name           = aPart.m_name;
+    m_fpFilters      = wxArrayString( aPart.m_fpFilters );
+    m_unitCount      = aPart.m_unitCount;
+    m_unitsLocked    = aPart.m_unitsLocked;
+    m_pinNameOffset  = aPart.m_pinNameOffset;
+    m_showPinNumbers = aPart.m_showPinNumbers;
+    m_showPinNames   = aPart.m_showPinNames;
+    m_includeInBom   = aPart.m_includeInBom;
+    m_includeOnBoard = aPart.m_includeOnBoard;
+    m_lastModDate    = aPart.m_lastModDate;
+    m_options        = aPart.m_options;
+    m_libId          = aPart.m_libId;
+    m_description    = aPart.m_description;
+    m_keyWords       = aPart.m_keyWords;
 
     m_drawings.clear();
 
@@ -258,12 +258,12 @@ int LIB_PART::Compare( const LIB_PART& aRhs ) const
         ++rhsItem;
     }
 
-    if( m_footprintFilters.GetCount() != aRhs.m_footprintFilters.GetCount() )
-        return m_footprintFilters.GetCount() - aRhs.m_footprintFilters.GetCount();
+    if( m_fpFilters.GetCount() != aRhs.m_fpFilters.GetCount() )
+        return m_fpFilters.GetCount() - aRhs.m_fpFilters.GetCount();
 
-    for( size_t i = 0; i < m_footprintFilters.GetCount(); i++ )
+    for( size_t i = 0; i < m_fpFilters.GetCount(); i++ )
     {
-        retv = m_footprintFilters[i].Cmp( aRhs.m_footprintFilters[i] );
+        retv = m_fpFilters[i].Cmp( aRhs.m_fpFilters[i] );
 
         if( retv )
             return retv;
@@ -382,9 +382,9 @@ std::unique_ptr< LIB_PART > LIB_PART::Flatten() const
             }
         }
 
-        retv->SetKeyWords( m_keyWords );
-        retv->SetDescription( m_description );
-        retv->SetFootprintFilters( m_footprintFilters );
+        retv->SetKeyWords( m_keyWords.IsEmpty() ? parent->GetKeyWords() : m_keyWords );
+        retv->SetDescription( m_description.IsEmpty() ? parent->GetDescription() : m_description );
+        retv->SetFPFilters( m_fpFilters.IsEmpty() ? parent->GetFPFilters() : m_fpFilters );
     }
     else
     {

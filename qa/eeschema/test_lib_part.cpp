@@ -289,17 +289,17 @@ BOOST_AUTO_TEST_CASE( Compare )
 
     // Footprint filter array comparison tests.
     wxArrayString footPrintFilters;
-    BOOST_CHECK( m_part_no_data.GetFootprints() == footPrintFilters );
+    BOOST_CHECK( m_part_no_data.GetFPFilters() == footPrintFilters );
     footPrintFilters.Add( "b" );
-    testPart.SetFootprintFilters( footPrintFilters );
+    testPart.SetFPFilters( footPrintFilters );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
-    m_part_no_data.SetFootprintFilters( footPrintFilters );
+    m_part_no_data.SetFPFilters( footPrintFilters );
     footPrintFilters.Clear();
-    testPart.SetFootprintFilters( footPrintFilters );
+    testPart.SetFPFilters( footPrintFilters );
     BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
     footPrintFilters.Clear();
-    m_part_no_data.SetFootprintFilters( footPrintFilters );
-    testPart.SetFootprintFilters( footPrintFilters );
+    m_part_no_data.SetFPFilters( footPrintFilters );
+    testPart.SetFPFilters( footPrintFilters );
 
     // Description string tests.
     m_part_no_data.SetDescription( "b" );

@@ -474,7 +474,7 @@ void DIALOG_CHOOSE_SYMBOL::PopulateFootprintSelector( LIB_ID const& aLibId )
         symbol->GetPins( temp_pins );
 
         m_fp_sel_ctrl->FilterByPinCount( temp_pins.size() );
-        m_fp_sel_ctrl->FilterByFootprintFilters( symbol->GetFootprints(), true );
+        m_fp_sel_ctrl->FilterByFootprintFilters( symbol->GetFPFilters(), true );
         m_fp_sel_ctrl->SetDefaultFootprint( fp_name );
         m_fp_sel_ctrl->UpdateList();
         m_fp_sel_ctrl->Enable();

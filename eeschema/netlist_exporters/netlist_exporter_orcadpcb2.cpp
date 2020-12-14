@@ -79,7 +79,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             CreatePinList( comp, &sheet );
 
-            if( comp->GetPartRef() && comp->GetPartRef()->GetFootprints().GetCount() != 0  )
+            if( comp->GetPartRef() && comp->GetPartRef()->GetFPFilters().GetCount() != 0  )
                 cmpList.push_back( SCH_REFERENCE( comp, comp->GetPartRef().get(), sheet ) );
 
             footprint = comp->GetFootprint( &sheet, true );

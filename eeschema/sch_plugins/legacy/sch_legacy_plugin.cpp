@@ -3704,7 +3704,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_PART>& a
     {
         if( strCompare( "$ENDFPLIST", line, &line ) )
         {
-            aPart->SetFootprintFilters( footprintFilters );
+            aPart->SetFPFilters( footprintFilters );
             return;
         }
 
@@ -3797,7 +3797,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
                       aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
                       aSymbol->IsPower() ? 'P' : 'N' );
 
-    timestamp_t dateModified = aSymbol->GetDateLastEdition();
+    timestamp_t dateModified = aSymbol->GetLastModDate();
 
     if( dateModified != 0 )
     {
@@ -3853,7 +3853,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
         aFormatter.Print( 0, "\n" );
     }
 
-    wxArrayString footprints = aSymbol->GetFootprints();
+    wxArrayString footprints = aSymbol->GetFPFilters();
 
     // Write the footprint filter list
     if( footprints.GetCount() != 0 )

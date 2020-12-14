@@ -813,7 +813,7 @@ void SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_PART>& aSymbol )
         while( tokenizer.HasMoreTokens() )
             filters.Add( tokenizer.GetNextToken() );
 
-        aSymbol->SetFootprintFilters( filters );
+        aSymbol->SetFPFilters( filters );
     }
     else if( name == "ki_locked" )
     {

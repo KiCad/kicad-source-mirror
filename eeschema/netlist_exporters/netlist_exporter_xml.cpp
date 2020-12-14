@@ -486,15 +486,13 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
             xlibpart->AddChild( node( "docs",  lcomp->GetDatasheetField().GetText() ) );
 
         // Write the footprint list
-        if( lcomp->GetFootprints().GetCount() )
+        if( lcomp->GetFPFilters().GetCount() )
         {
             XNODE*  xfootprints;
             xlibpart->AddChild( xfootprints = node( "footprints" ) );
 
-            for( unsigned i=0; i<lcomp->GetFootprints().GetCount(); ++i )
-            {
-                xfootprints->AddChild( node( "fp", lcomp->GetFootprints()[i] ) );
-            }
+            for( unsigned i = 0; i < lcomp->GetFPFilters().GetCount(); ++i )
+                xfootprints->AddChild( node( "fp", lcomp->GetFPFilters()[i] ) );
         }
 
         //----- show the fields here ----------------------------------

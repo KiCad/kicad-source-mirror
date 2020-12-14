@@ -174,7 +174,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_PinsNameInsideButt->SetValue( m_libEntry->GetPinNameOffset() != 0 );
     m_pinNameOffset.SetValue( m_libEntry->GetPinNameOffset() );
 
-    wxArrayString tmp = m_libEntry->GetFootprints();
+    wxArrayString tmp = m_libEntry->GetFPFilters();
     m_FootprintFilterListBox->Append( tmp );
 
     // Populate the list of root parts for inherited objects.
@@ -376,7 +376,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
         m_libEntry->SetPinNameOffset( 0 );   // pin text outside the body (name is on the pin)
     }
 
-    m_libEntry->SetFootprintFilters( m_FootprintFilterListBox->GetStrings() );
+    m_libEntry->SetFPFilters( m_FootprintFilterListBox->GetStrings());
 
     m_Parent->UpdateAfterSymbolProperties( &oldName );
 
