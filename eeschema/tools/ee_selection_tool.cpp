@@ -402,7 +402,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
             // double click? Display the properties window
-            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+            if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
             if( m_selection.Empty() )
@@ -427,7 +427,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             // drag with LMB? Select multiple objects (or at least draw a selection box) or
             // drag them
-            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+            if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
             if( modifier_enabled || ( m_selection.Empty() && m_frame->GetDragSelects() ) )
@@ -449,7 +449,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // Yes -> run the move tool and wait till it finishes
                     if( m_isSymbolEditor )
                     {
-                        auto libFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+                        SYMBOL_EDIT_FRAME* libFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
                         // Cannot move any derived symbol elements for now.
                         if( libFrame && libFrame->GetCurPart() && libFrame->GetCurPart()->IsRoot() )
@@ -489,14 +489,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsCancelInteractive() )
         {
-            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+            if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
             ClearSelection();
         }
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
-            if( auto schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+            if( SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
                 schframe->FocusOnItem( nullptr );
 
             ClearSelection();
@@ -803,7 +803,7 @@ int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 
     selectedItems.insert( selectedItems.end(), sheetPins.begin(), sheetPins.end() );
 
-    for( auto& item_pair : selectedItems )
+    for( const std::pair<KIGFX::VIEW_ITEM*, int>& item_pair : selectedItems )
     {
         if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( item_pair.first ) )
         {
@@ -1200,9 +1200,9 @@ int EE_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     EDA_ITEMS items;
 
     m_frame->GetScreen()->ClearDrawingState();
-    auto conns = m_frame->GetScreen()->MarkConnections( line );
+    std::set<SCH_ITEM*> conns = m_frame->GetScreen()->MarkConnections( line );
 
-    for( auto item : conns )
+    for( SCH_ITEM* item : conns )
         select( item );
 
     if( m_selection.GetSize() > 1 )
@@ -1673,7 +1673,7 @@ bool EE_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
-    for( auto item : m_selection )
+    for( EDA_ITEM* item : m_selection )
     {
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item
