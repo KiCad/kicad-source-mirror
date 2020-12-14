@@ -644,7 +644,7 @@ TOOL_ACTION ACTIONS::reportBug( "common.SuiteControl.reportBug",
         AS_GLOBAL, 0, "",
         _( "Report Bug" ),
         _( "Report a problem with KiCad" ),
-        drc_xpm );
+        bug_xpm );
 
 
 // System-wide selection Events

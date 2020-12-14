@@ -169,6 +169,7 @@ set( BMAPS_MID
     bom
     break_line
     browse_files
+    bug
     bus_definition_tool
     calculator
     cancel
