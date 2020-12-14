@@ -119,7 +119,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     // Give an icon
     wxIcon  icon;
-    icon.CopyFromBitmap( KiBitmap( library_browse_xpm ) );
+    icon.CopyFromBitmap( KiBitmap( library_browser_xpm ) );
     SetIcon( icon );
 
     m_libListWidth = 200;

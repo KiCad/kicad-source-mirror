@@ -560,7 +560,7 @@ TOOL_ACTION ACTIONS::show3DViewer( "common.Control.show3DViewer",
 TOOL_ACTION ACTIONS::showSymbolBrowser( "common.Control.showSymbolBrowser",
         AS_GLOBAL, 0, "",
         _( "Symbol Library Browser" ), _( "Browse symbol libraries" ),
-        library_browse_xpm, AF_NONE, (void*) FRAME_SCH_VIEWER );
+        library_browser_xpm, AF_NONE, (void*) FRAME_SCH_VIEWER );
 
 TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
         AS_GLOBAL, 0, "",
@@ -570,7 +570,7 @@ TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
 TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
         AS_GLOBAL, 0, "",
         _( "Footprint Library Browser" ), _( "Browse footprint libraries" ),
-        modview_icon_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_VIEWER );
+        footprint_browser_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_VIEWER );
 
 TOOL_ACTION ACTIONS::showFootprintEditor( "common.Control.showFootprintEditor",
         AS_GLOBAL, 0, "",

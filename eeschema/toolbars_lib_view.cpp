@@ -48,7 +48,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     }
 
     m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
-                            KiScaledBitmap( library_browse_xpm, this ),
+                            KiScaledBitmap( library_browser_xpm, this ),
                             _( "Choose symbol" ) );
 
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,

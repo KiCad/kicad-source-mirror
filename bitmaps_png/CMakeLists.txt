@@ -238,6 +238,7 @@ set( BMAPS_MID
     flag
     flag_remove
     flip_board
+    footprint_browser
     footprint_text
     gbr_select_mode2
     gerber_job_file
@@ -288,7 +289,7 @@ set( BMAPS_MID
     libedit
     lib_next
     lib_previous
-    library_browse
+    library_browser
     library_archive
     library_archive_as
     library
@@ -312,7 +313,6 @@ set( BMAPS_MID
     module_pin_filtered_list
     module_library_list
     module
-    modview_icon
     morgan1
     morgan2
     move_exactly
