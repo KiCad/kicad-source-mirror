@@ -428,7 +428,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     for( const std::shared_ptr<DRC_ITEM>& item : violations )
     {
-        SEVERITY severity = static_cast<SEVERITY>( bds.GetSeverity( item->GetErrorCode() ) );
+        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
     }
 
@@ -436,7 +436,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     for( const std::shared_ptr<DRC_ITEM>& item : unconnected )
     {
-        SEVERITY severity = static_cast<SEVERITY>( bds.GetSeverity( item->GetErrorCode() ) );
+        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
     }
 
@@ -444,7 +444,7 @@ bool WriteDRCReport( BOARD* aBoard, const wxString& aFileName, EDA_UNITS aUnits,
 
     for( const std::shared_ptr<DRC_ITEM>& item : footprints )
     {
-        SEVERITY severity = static_cast<SEVERITY>( bds.GetSeverity( item->GetErrorCode() ) );
+        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( aUnits, severity, itemMap ) ) );
     }
 

@@ -628,7 +628,7 @@ void PCB_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-int PCB_BASE_FRAME::GetSeverity( int aErrorCode ) const
+SEVERITY PCB_BASE_FRAME::GetSeverity( int aErrorCode ) const
 {
     if( aErrorCode >= CLEANUP_FIRST )
         return RPT_SEVERITY_ACTION;

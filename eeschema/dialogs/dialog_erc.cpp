@@ -802,7 +802,7 @@ bool DIALOG_ERC::writeReport( const wxString& aFullFileName )
         {
             const SCH_MARKER* marker = static_cast<const SCH_MARKER*>( aItem );
             RC_ITEM*          item = marker->GetRCItem().get();
-            SEVERITY          severity = (SEVERITY)settings.GetSeverity( item->GetErrorCode() );
+            SEVERITY          severity = settings.GetSeverity( item->GetErrorCode() );
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;

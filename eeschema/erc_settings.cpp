@@ -107,15 +107,13 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                 for( const RC_ITEM& item : ERC_ITEM::GetItemsWithSeverities() )
                 {
-                    int code = item.GetErrorCode();
+                    wxString name = item.GetSettingsKey();
+                    int      code = item.GetErrorCode();
 
-                    if( !m_Severities.count( code ) )
+                    if( name.IsEmpty() || m_Severities.count( code ) == 0 )
                         continue;
 
-                    wxString name = item.GetSettingsKey();
-
-                    ret[std::string( name.ToUTF8() )] =
-                            SeverityToString( static_cast<SEVERITY>( m_Severities[code] ) );
+                    ret[std::string( name.ToUTF8() )] = SeverityToString( m_Severities[code] );
                 }
 
                 return ret;
@@ -223,7 +221,7 @@ ERC_SETTINGS::~ERC_SETTINGS()
 }
 
 
-int ERC_SETTINGS::GetSeverity( int aErrorCode ) const
+SEVERITY ERC_SETTINGS::GetSeverity( int aErrorCode ) const
 {
     // Special-case pin-to-pin errors:
     // Ignore-or-not is controlled by ERCE_PIN_TO_PIN_WARNING (for both)
@@ -254,7 +252,7 @@ int ERC_SETTINGS::GetSeverity( int aErrorCode ) const
 }
 
 
-void ERC_SETTINGS::SetSeverity( int aErrorCode, int aSeverity )
+void ERC_SETTINGS::SetSeverity( int aErrorCode, SEVERITY aSeverity )
 {
     m_Severities[ aErrorCode ] = aSeverity;
 }
@@ -280,7 +278,7 @@ void SHEETLIST_ERC_ITEMS_PROVIDER::SetSeverities( int aSeverities )
         for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            int markerSeverity;
+            SEVERITY    markerSeverity;
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;
@@ -312,7 +310,7 @@ int SHEETLIST_ERC_ITEMS_PROVIDER::GetCount( int aSeverity )
         for( SCH_ITEM* aItem : sheetList[i].LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( aItem );
-            int markerSeverity;
+            SEVERITY    markerSeverity;
 
             if( marker->GetMarkerType() != MARKER_BASE::MARKER_ERC )
                 continue;

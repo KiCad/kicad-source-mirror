@@ -386,7 +386,7 @@ public:
         return GetScreen()->m_Active_Layer;
     }
 
-    int GetSeverity( int aErrorCode ) const override;
+    SEVERITY GetSeverity( int aErrorCode ) const override;
 
     virtual void OnDisplayOptionsChanged() {}
 

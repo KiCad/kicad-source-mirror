@@ -245,7 +245,7 @@ public:
     int        m_SilkClearance;
 
     std::shared_ptr<DRC_ENGINE> m_DRCEngine;
-    std::map<int, int>          m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
+    std::map<int, SEVERITY>     m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
     std::set<wxString>          m_DrcExclusions;
 
     /*
@@ -368,7 +368,7 @@ public:
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
 
-    int GetSeverity( int aDRCErrorCode );
+    SEVERITY GetSeverity( int aDRCErrorCode );
 
     /**
      * returns true if the DRC error code's severity is SEVERITY_IGNORE

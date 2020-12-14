@@ -63,7 +63,7 @@ public:
 
         for( PCB_MARKER* marker : m_board->Markers() )
         {
-            int markerSeverity;
+            SEVERITY markerSeverity;
 
             if( marker->IsExcluded() )
                 markerSeverity = RPT_SEVERITY_EXCLUSION;
@@ -86,7 +86,7 @@ public:
 
         for( PCB_MARKER* marker : m_board->Markers() )
         {
-            int markerSeverity;
+            SEVERITY markerSeverity;
 
             if( marker->IsExcluded() )
                 markerSeverity = RPT_SEVERITY_EXCLUSION;
@@ -159,7 +159,7 @@ public:
 
         if( m_sourceVector )
         {
-            for( auto item : *m_sourceVector )
+            for( const std::shared_ptr<DRC_ITEM>& item : *m_sourceVector )
             {
                 if( bds.GetSeverity( item->GetErrorCode() ) & aSeverities )
                     m_filteredVector.push_back( item );
@@ -177,7 +177,7 @@ public:
 
         if( m_sourceVector )
         {
-            for( auto item : *m_sourceVector )
+            for( const std::shared_ptr<DRC_ITEM>& item : *m_sourceVector )
             {
                 if( bds.GetSeverity( item->GetErrorCode() ) == aSeverity )
                     count++;

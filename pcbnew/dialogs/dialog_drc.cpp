@@ -779,7 +779,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     for( int i = 0; i < count; ++i )
     {
         const std::shared_ptr<RC_ITEM>& item = m_markersProvider->GetItem( i );
-        SEVERITY severity = (SEVERITY) bds.GetSeverity( item->GetErrorCode() );
+        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
     }
@@ -791,7 +791,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     for( int i = 0; i < count; ++i )
     {
         const std::shared_ptr<RC_ITEM>& item = m_unconnectedItemsProvider->GetItem( i );
-        SEVERITY severity = (SEVERITY) bds.GetSeverity( item->GetErrorCode() );
+        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
     }
@@ -803,7 +803,7 @@ bool DIALOG_DRC::writeReport( const wxString& aFullFileName )
     for( int i = 0; i < count; ++i )
     {
         const std::shared_ptr<RC_ITEM>& item = m_footprintWarningsProvider->GetItem( i );
-        SEVERITY severity = (SEVERITY) bds.GetSeverity( item->GetErrorCode() );
+        SEVERITY severity = bds.GetSeverity( item->GetErrorCode() );
 
         fprintf( fp, "%s", TO_UTF8( item->ShowReport( units, severity, itemMap ) ) );
     }

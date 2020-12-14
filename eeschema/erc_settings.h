@@ -116,9 +116,9 @@ public:
         return GetSeverity( aErrorCode ) != RPT_SEVERITY_IGNORE;
     }
 
-    int GetSeverity( int aErrorCode ) const;
+    SEVERITY GetSeverity( int aErrorCode ) const;
 
-    void SetSeverity( int aErrorCode, int aSeverity );
+    void SetSeverity( int aErrorCode, SEVERITY aSeverity );
 
     void ResetPinMap();
 
@@ -154,8 +154,8 @@ public:
 
 public:
 
-    std::map<int, int> m_Severities;
-    std::set<wxString> m_ErcExclusions;
+    std::map<int, SEVERITY> m_Severities;
+    std::set<wxString>      m_ErcExclusions;
 
     PIN_ERROR m_PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 

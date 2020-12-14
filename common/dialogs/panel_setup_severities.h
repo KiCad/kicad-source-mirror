@@ -37,7 +37,7 @@ class wxRadioButton;
 class PANEL_SETUP_SEVERITIES : public wxPanel
 {
 private:
-    std::map<int, int>& m_severities;
+    std::map<int, SEVERITY>& m_severities;
 
     /// A list of item templates (to get descriptive text and error codes from)
     std::vector<std::reference_wrapper<RC_ITEM>> m_items;
@@ -57,10 +57,10 @@ public:
      */
     PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
                             std::vector<std::reference_wrapper<RC_ITEM>> aItems,
-                            std::map<int, int>& aSeverities,
+                            std::map<int, SEVERITY>& aSeverities,
                             RC_ITEM* aPinMapSpecialCase = nullptr );
 
-    void ImportSettingsFrom( std::map<int, int>& aSettings );
+    void ImportSettingsFrom( std::map<int, SEVERITY>& aSettings );
 
 private:
     bool TransferDataToWindow() override;

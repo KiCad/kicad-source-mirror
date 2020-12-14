@@ -252,7 +252,7 @@ public:
 
     SETTINGS_MANAGER* GetSettingsManager() const { return m_settingsManager; }
 
-    virtual int GetSeverity( int aErrorCode ) const { return RPT_SEVERITY_UNDEFINED; }
+    virtual SEVERITY GetSeverity( int aErrorCode ) const { return RPT_SEVERITY_UNDEFINED; }
 
     /**
      * Override the default process event handler to implement the auto save feature.

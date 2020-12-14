@@ -30,7 +30,7 @@
 
 PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
                                                 std::vector<std::reference_wrapper<RC_ITEM>> aItems,
-                                                std::map<int, int>& aSeverities,
+                                                std::map<int, SEVERITY>& aSeverities,
                                                 RC_ITEM* aPinMapSpecialCase ) :
         wxPanel( aParent->GetTreebook() ),
         m_severities( aSeverities ),
@@ -147,7 +147,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
 }
 
 
-void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, int>& aSettings )
+void PANEL_SETUP_SEVERITIES::ImportSettingsFrom( std::map<int, SEVERITY>& aSettings )
 {
     for( const RC_ITEM& item : m_items )
     {
@@ -222,7 +222,7 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
         if( !m_buttonMap[ errorCode ][0] )  // this entry does not actually exist
             continue;
 
-        int severity = RPT_SEVERITY_UNDEFINED;
+        SEVERITY severity = RPT_SEVERITY_UNDEFINED;
 
         if( m_buttonMap[ errorCode ][0]->GetValue() )
             severity = RPT_SEVERITY_ERROR;
@@ -236,8 +236,8 @@ bool PANEL_SETUP_SEVERITIES::TransferDataFromWindow()
 
     if( m_pinMapSpecialCase )
     {
-        int pinMapCode = m_pinMapSpecialCase->GetErrorCode();
-        int severity   = RPT_SEVERITY_UNDEFINED;
+        int      pinMapCode = m_pinMapSpecialCase->GetErrorCode();
+        SEVERITY severity   = RPT_SEVERITY_UNDEFINED;
 
         if( m_buttonMap[ pinMapCode ][0]->GetValue() )
             severity = RPT_SEVERITY_ERROR;

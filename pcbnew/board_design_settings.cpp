@@ -261,15 +261,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                 for( const RC_ITEM& item : DRC_ITEM::GetItemsWithSeverities() )
                 {
-                    int code = item.GetErrorCode();
+                    wxString name = item.GetSettingsKey();
+                    int      code = item.GetErrorCode();
 
-                    if( !m_DRCSeverities.count( code ) )
+                    if( name.IsEmpty() || m_DRCSeverities.count( code ) == 0 )
                         continue;
 
-                    wxString name = item.GetSettingsKey();
-
-                    ret[std::string( name.ToUTF8() )] =
-                            SeverityToString( static_cast<SEVERITY>( m_DRCSeverities[code] ) );
+                    ret[std::string( name.ToUTF8() )] = SeverityToString( m_DRCSeverities[code] );
                 }
 
                 return ret;
@@ -838,7 +836,7 @@ bool BOARD_DESIGN_SETTINGS::LoadFromFile( const wxString& aDirectory )
 }
 
 
-int BOARD_DESIGN_SETTINGS::GetSeverity( int aDRCErrorCode )
+SEVERITY BOARD_DESIGN_SETTINGS::GetSeverity( int aDRCErrorCode )
 {
     return m_DRCSeverities[ aDRCErrorCode ];
 }
