@@ -556,7 +556,7 @@ TOOL_ACTION PCB_ACTIONS::exportSpecctraDSN( "pcbnew.EditorControl.exportSpecctra
 TOOL_ACTION PCB_ACTIONS::generateGerbers( "pcbnew.EditorControl.generateGerbers",
         AS_GLOBAL, 0, "",
         _( "Gerbers (.gbr)..." ), _( "Generate Gerbers for fabrication" ),
-        post_compo_xpm );
+        post_gerber_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateDrillFiles( "pcbnew.EditorControl.generateDrillFiles",
         AS_GLOBAL, 0, "",

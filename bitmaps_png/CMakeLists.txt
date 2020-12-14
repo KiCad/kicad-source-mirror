@@ -369,6 +369,7 @@ set( BMAPS_MID
     polar_coord
     post_compo
     post_drill
+    post_gerber
     preference
     print_button
     project
