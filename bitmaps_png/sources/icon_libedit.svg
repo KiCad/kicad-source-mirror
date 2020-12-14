@@ -28,13 +28,14 @@
      inkscape:window-height="1567"
      id="namedview1630"
      showgrid="true"
-     inkscape:zoom="6.9903846"
-     inkscape:cx="48.968242"
-     inkscape:cy="45.454604"
+     inkscape:zoom="19.771793"
+     inkscape:cx="16.632017"
+     inkscape:cy="43.477896"
      inkscape:window-x="4824"
      inkscape:window-y="196"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid2225"
@@ -83,35 +84,36 @@
   <title
      id="title1619">icon_libedit</title>
   <path
-     style="fill:#e5d7c7;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 10,4 V 42 L 38.5,23 Z"
+     style="fill:#e5d7c7;fill-opacity:1;stroke:#545454;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 9.5,4 v 39 l 29,-19.5 z"
      id="path2231"
      sodipodi:nodetypes="cccc" />
   <path
-     style="fill:none;stroke:#db295b;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 13,14 h 5.440471"
+     style="fill:none;stroke:#db295b;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 13.5,15.5 h 5.801126"
      id="path2229" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 39,23 h 6"
+     style="fill:none;stroke:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 39,23.5 h 6"
      id="path2233"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 2.5000009,11.999993 10,12"
+     style="fill:none;stroke:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2.0000009,11.499993 9.5,11.5"
      id="path2235"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 2.5,33 H 10"
+     style="fill:none;stroke:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2,34.5 H 9.5"
      id="path2237"
      sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#db295b;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 13,31 h 5.440471"
-     id="path2301" />
+     style="fill:none;stroke:#db295b;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 13.5,30.500001 6,-1e-6"
+     id="path839"
+     sodipodi:nodetypes="cc" />
   <path
-     style="fill:none;stroke:#db295b;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 15.720235,33.720235 v -5.44047"
-     id="path2303" />
+     style="fill:none;stroke:#db295b;stroke-width:3;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 16.5,33.301126 V 27.5"
+     id="path841" />
 </svg>
