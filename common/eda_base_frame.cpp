@@ -289,10 +289,10 @@ void EDA_BASE_FRAME::LoadSettings( wxConfigBase* aCfg )
     int displayIndex = wxDisplay::GetFromPoint( m_FramePos );
 
     if( displayIndex == wxNOT_FOUND )
-	{
+    {
         displayIndex = 0;
         m_FramePos = wxDefaultPosition;
-	}
+    }
 
     wxDisplay display( displayIndex );
     wxRect clientSize = display.GetClientArea();
