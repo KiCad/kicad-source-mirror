@@ -26,9 +26,9 @@
      inkscape:window-height="2099"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="55.923076"
-     inkscape:cx="15.306728"
-     inkscape:cy="8.7333879"
+     inkscape:zoom="27.961538"
+     inkscape:cx="8.6776086"
+     inkscape:cy="17.435351"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="1"
@@ -236,101 +236,104 @@
   </defs>
   <title
      id="title116805">eeschema</title>
-  <rect
-     class="cls-1"
-     x="0.0015000105"
-     y="0.036599994"
-     width="23.998501"
-     height="23.961901"
-     rx="3.9967"
-     id="rect116807"
-     style="fill:#e5d7c7;fill-opacity:1"
-     clip-path="url(#clipPath893)" />
-  <line
-     class="cls-2"
-     x1="11"
-     y1="4.0893002"
-     x2="11"
-     y2="12.9796"
-     id="line116809"
-     clip-path="url(#clipPath889)" />
-  <line
-     class="cls-4"
-     x1="0"
-     y1="17.118433"
-     x2="7"
-     y2="17.118433"
-     id="line116819"
-     style="stroke:#333333;stroke-opacity:1"
-     clip-path="url(#clipPath885)" />
-  <line
-     class="cls-2"
-     x1="7"
-     y1="13.750501"
-     x2="7"
-     y2="20.5"
-     id="line116821"
-     clip-path="url(#clipPath881)" />
-  <line
-     class="cls-5"
-     x1="11.025412"
-     y1="9.0254278"
-     x2="22.970589"
-     y2="9.0254278"
-     id="line116823"
-     clip-path="url(#clipPath877)" />
-  <line
-     class="cls-4"
-     x1="11"
-     y1="24"
-     x2="11"
-     y2="21.3134"
-     id="line116825"
-     style="stroke:#333333;stroke-opacity:1"
-     clip-path="url(#clipPath873)" />
-  <path
-     class="cls-6"
-     d="m 13.499997,8.9962238 a 2.5,2.4999996 0 1 1 -2.5,-2.4962231 2.4981116,2.4981114 0 0 1 2.5,2.4962231 z"
-     id="path116827"
-     style="stroke-width:1.3488"
-     clip-path="url(#clipPath869)" />
-  <rect
-     class="cls-7"
-     x="9"
-     y="-1"
-     width="4"
-     height="5"
-     id="rect116829"
-     style="fill:#db295b;fill-opacity:1;stroke-width:1.03829"
-     clip-path="url(#clipPath865)" />
-  <rect
-     class="cls-7"
-     x="7"
-     y="-25.763723"
-     width="4"
-     height="8"
-     transform="rotate(90)"
-     id="rect116831"
-     style="fill:#db295b;fill-opacity:1;stroke-width:1.0105"
-     clip-path="url(#clipPath861)" />
-  <path
-     id="line116833"
-     style="fill:none;stroke:#333333;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 11,13 7.2127004,15.638401"
-     sodipodi:nodetypes="cc"
-     clip-path="url(#clipPath857)" />
-  <line
-     class="cls-2"
-     x1="10.946701"
-     y1="20.546101"
-     x2="7.0954003"
-     y2="18.332399"
-     id="line116835"
-     clip-path="url(#clipPath853)" />
-  <path
-     class="cls-7"
-     d="m 8.9826113,20.80519 1.4211947,-2.0158 a 0.7382,0.7382 0 0 1 1.32,0.25 l 0.3829,1.5775 a 0.9,0.9 0 0 1 -0.7489,1.1034 l -1.6680947,0.2377 a 0.7367,0.7367 0 0 1 -0.7071,-1.1528 z"
-     id="path116837"
-     style="fill:#db295b;fill-opacity:1"
-     clip-path="url(#clipPath849)" />
+  <g
+     id="g880">
+    <rect
+       class="cls-1"
+       x="0.0015000105"
+       y="0.036599994"
+       width="23.998501"
+       height="23.961901"
+       rx="3.9967"
+       id="rect116807"
+       style="fill:#e5d7c7;fill-opacity:1"
+       clip-path="url(#clipPath893)" />
+    <line
+       class="cls-2"
+       x1="11"
+       y1="4.0893002"
+       x2="11"
+       y2="12.9796"
+       id="line116809"
+       clip-path="url(#clipPath889)" />
+    <line
+       class="cls-4"
+       x1="0"
+       y1="17.118433"
+       x2="7"
+       y2="17.118433"
+       id="line116819"
+       style="stroke:#333333;stroke-opacity:1"
+       clip-path="url(#clipPath885)" />
+    <line
+       class="cls-2"
+       x1="7"
+       y1="13.750501"
+       x2="7"
+       y2="20.5"
+       id="line116821"
+       clip-path="url(#clipPath881)" />
+    <line
+       class="cls-5"
+       x1="11.025412"
+       y1="9.0254278"
+       x2="22.970589"
+       y2="9.0254278"
+       id="line116823"
+       clip-path="url(#clipPath877)" />
+    <line
+       class="cls-4"
+       x1="11"
+       y1="24"
+       x2="11"
+       y2="21.3134"
+       id="line116825"
+       style="stroke:#333333;stroke-opacity:1"
+       clip-path="url(#clipPath873)" />
+    <path
+       class="cls-6"
+       d="m 13.499997,8.9962238 a 2.5,2.4999996 0 1 1 -2.5,-2.4962231 2.4981116,2.4981114 0 0 1 2.5,2.4962231 z"
+       id="path116827"
+       style="stroke-width:1.3488"
+       clip-path="url(#clipPath869)" />
+    <rect
+       class="cls-7"
+       x="9"
+       y="-1"
+       width="4"
+       height="5"
+       id="rect116829"
+       style="fill:#bf2641;fill-opacity:1;stroke-width:1.03829"
+       clip-path="url(#clipPath865)" />
+    <rect
+       class="cls-7"
+       x="7"
+       y="-25.763723"
+       width="4"
+       height="8"
+       transform="rotate(90)"
+       id="rect116831"
+       style="fill:#bf2641;fill-opacity:1;stroke-width:1.0105"
+       clip-path="url(#clipPath861)" />
+    <path
+       id="line116833"
+       style="fill:none;stroke:#333333;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
+       d="M 11,13 7.2127004,15.638401"
+       sodipodi:nodetypes="cc"
+       clip-path="url(#clipPath857)" />
+    <line
+       class="cls-2"
+       x1="10.946701"
+       y1="20.546101"
+       x2="7.0954003"
+       y2="18.332399"
+       id="line116835"
+       clip-path="url(#clipPath853)" />
+    <path
+       class="cls-7"
+       d="m 8.9826113,20.80519 1.4211947,-2.0158 a 0.7382,0.7382 0 0 1 1.32,0.25 l 0.3829,1.5775 a 0.9,0.9 0 0 1 -0.7489,1.1034 l -1.6680947,0.2377 a 0.7367,0.7367 0 0 1 -0.7071,-1.1528 z"
+       id="path116837"
+       style="fill:#bf2641;fill-opacity:1"
+       clip-path="url(#clipPath849)" />
+  </g>
 </svg>

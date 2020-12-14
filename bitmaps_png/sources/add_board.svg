@@ -1,47 +1,238 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="add_board.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
-      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
-   </sodipodi:namedview>
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>add_arc</dc:title>
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs27840">
-      <style id="style27838">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3,.cls-6{fill:none;}.cls-3{stroke:#b9b9b9;stroke-miterlimit:10;stroke-width:0.9553px;}.cls-4{fill:#1a81c4;}.cls-5{fill:#bf2641;}.cls-6{stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
-   </defs>
-   <title id="title27842">add_board</title>
-   <rect class="cls-1" x="0.0010999441" y="0" width="21.003201" height="21.003201" rx="3.5005" id="rect27844" />
-   <path class="cls-2" d="M 13.4505,21.0025 V 9.9113 h 2.5462 l 0.7391,0.7392 h 4.2711 V 4.49 h -4.2711 l -0.7391,0.7393 h -1.3142 l -1.232,-1.232 V 0.0013 H 3.4991 a 3.5006,3.5006 0 0 0 -3.5,3.5006 v 14 a 3.5005,3.5005 0 0 0 3.5005,3.5005 z" id="path27846" />
-   <polyline class="cls-3" points="12.139 1.001 12.139 5.983 14.664 8.509 18.237 8.509" id="polyline27848" transform="translate(-1,-1)" />
-   <polyline class="cls-3" points="8.612 1.001 8.612 7.954 11.723 11.065 11.723 22.004" id="polyline27850" transform="translate(-1,-1)" />
-   <polyline class="cls-3" points="5.07 1.001 5.07 7.954 8.181 11.065 8.181 22.004" id="polyline27852" transform="translate(-1,-1)" />
-   <line class="cls-3" x1="3.9386001" y1="21.004101" x2="3.9386001" y2="14.6546" id="line27854" />
-   <path class="cls-4" d="m 5.6734,12.9709 a 1.75,1.75 0 1 1 -1.75,-1.75 1.75,1.75 0 0 1 1.75,1.75 z" id="path27856" />
-   <path class="cls-1" d="M 5.1694,12.9709 A 1.2463,1.2463 0 1 1 3.9232,11.7245 1.2462,1.2462 0 0 1 5.1694,12.9709 Z" id="path27858" />
-   <path class="cls-4" d="m 20.1733,7.5808 a 1.75,1.75 0 1 1 -1.75,-1.75 1.75,1.75 0 0 1 1.75,1.75 z" id="path27860" />
-   <path class="cls-1" d="M 19.6693,7.5808 A 1.2463,1.2463 0 1 1 18.4231,6.3345 1.2463,1.2463 0 0 1 19.6693,7.5808 Z" id="path27862" />
-   <circle class="cls-5" cx="17" cy="16.9939" r="7" id="circle27864" />
-   <line class="cls-6" x1="16.993999" y1="13.4939" x2="16.993999" y2="20.4939" id="line27866" />
-   <line class="cls-6" x1="20.493999" y1="16.9939" x2="13.494" y2="16.9939" id="line27868" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="add_board.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1609"
+     inkscape:window-height="1286"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs27840">
+    <style
+       id="style27838">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}.cls-3,.cls-6{fill:none;}.cls-3{stroke:#b9b9b9;stroke-miterlimit:10;stroke-width:0.9553px;}.cls-4{fill:#1a81c4;}.cls-5{fill:#bf2641;}.cls-6{stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath954">
+      <rect
+         style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+         id="rect956"
+         width="21"
+         height="21"
+         x="-33"
+         y="-2"
+         ry="3.4854646" />
+    </clipPath>
+  </defs>
+  <title
+     id="title27842">add_board</title>
+  <g
+     id="g952"
+     clip-path="url(#clipPath954)"
+     transform="translate(33.00181,1.9988756)">
+    <rect
+       class="cls-1"
+       x="1.4020385e-07"
+       y="0"
+       width="24"
+       height="24"
+       rx="0"
+       id="rect9"
+       style="fill:#2cb22c;fill-opacity:1;stroke:none;stroke-width:0.571427;stroke-opacity:1"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-2)" />
+    <path
+       class="cls-2"
+       d="m 9.7142857,24 v -1.714286 l 4.0000003,-4 V 12.571429 L 14.285714,12 h 4 l 2.285715,1.714286 H 24 V 4.5714286 H 20.571429 L 18.285714,6.2857143 H 16.571429 L 14.5,4 V 0 C 9.9949374,-0.001605 2.029505,0.001245 -0.0020687,0.001285 0,3.25 0,24 0,24 c 1.5,-0.02777 4.0236148,0 9.7142857,0 z"
+       id="path11"
+       sodipodi:nodetypes="ccccccccccccccccc"
+       style="fill:#006400;fill-opacity:1;stroke-width:0.571427"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-2)" />
+    <path
+       style="fill:none;stroke:#2cb22c;stroke-width:2.28571;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 20.571429,9.1428571 H 14.857143 L 11.428571,5.7142857 v -6.8571428"
+       id="path2253"
+       sodipodi:nodetypes="cccc"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-2)" />
+    <path
+       style="fill:none;stroke:#2cb22c;stroke-width:3.23249;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 0,14.5 H 2"
+       id="path892"
+       sodipodi:nodetypes="cc"
+       clip-path="none"
+       transform="matrix(2.1875,0,0,0.875,-33,-2.0750619)" />
+    <path
+       style="fill:none;stroke:#2cb22c;stroke-width:2.85714;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 5.2135977,25.142857 V 21.714286 L 9.7850263,17.142857 V 11.428571 L 5.2135977,6.8571429 v -7.42857147"
+       id="path2265"
+       sodipodi:nodetypes="cccccc"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-32.561898,-2)" />
+    <rect
+       style="fill:#006400;fill-opacity:1;stroke:none;stroke-width:2.65576;stroke-linecap:round;stroke-linejoin:round"
+       id="rect878"
+       width="6"
+       height="5"
+       x="17"
+       y="14"
+       rx="0"
+       ry="0.80000001"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <rect
+       style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:1.5333;stroke-linecap:round;stroke-linejoin:round"
+       id="rect880"
+       width="4"
+       height="3"
+       x="18"
+       y="15"
+       rx="0"
+       ry="1"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <rect
+       style="fill:#006400;fill-opacity:1;stroke:none;stroke-width:2.65576;stroke-linecap:round;stroke-linejoin:round"
+       id="rect882"
+       width="6"
+       height="5"
+       x="17"
+       y="20"
+       rx="0"
+       ry="0.80000001"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <rect
+       style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:1.5333;stroke-linecap:round;stroke-linejoin:round"
+       id="rect884"
+       width="4"
+       height="3"
+       x="18"
+       y="21"
+       rx="0"
+       ry="0.96360058"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <path
+       style="fill:none;stroke:#2cb22c;stroke-width:1.14285;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 18,16.5 H 16"
+       id="path886"
+       sodipodi:nodetypes="cc"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <path
+       style="fill:none;stroke:#2cb22c;stroke-width:1.14285;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 24,16.5 H 22"
+       id="path888"
+       sodipodi:nodetypes="cc"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <path
+       style="fill:none;stroke:#2cb22c;stroke-width:2.28571;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 20,14 v 1"
+       id="path890"
+       sodipodi:nodetypes="cc"
+       clip-path="none"
+       transform="matrix(0.875,0,0,0.875,-33,-1.25)" />
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path936"
+       cx="-28.1875"
+       cy="10.6875"
+       r="1.6027977"
+       clip-path="none" />
+    <circle
+       style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="circle938"
+       cx="-14.137123"
+       cy="5.9967451"
+       r="1.6027977"
+       clip-path="none" />
+  </g>
+  <circle
+     class="cls-5"
+     cx="17"
+     cy="16.9939"
+     r="7"
+     id="circle27864" />
+  <line
+     class="cls-6"
+     x1="16.993999"
+     y1="13.4939"
+     x2="16.993999"
+     y2="20.4939"
+     id="line27866" />
+  <line
+     class="cls-6"
+     x1="20.493999"
+     y1="16.9939"
+     x2="13.494"
+     y2="16.9939"
+     id="line27868" />
 </svg>
