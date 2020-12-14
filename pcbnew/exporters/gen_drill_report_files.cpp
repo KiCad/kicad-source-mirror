@@ -28,6 +28,7 @@
  */
 
 #include <plotter.h>
+#include <plotters_specific.h>
 #include <eda_item.h>
 #include <gr_text.h>
 #include <confirm.h>

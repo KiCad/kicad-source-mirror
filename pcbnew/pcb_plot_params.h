@@ -25,7 +25,7 @@
 
 #include <wx/wx.h>
 #include <outline_mode.h>
-#include <plotters_specific.h>
+#include <plotter.h>
 #include <layers_id_colors_and_visibility.h>
 
 class COLOR_SETTINGS;

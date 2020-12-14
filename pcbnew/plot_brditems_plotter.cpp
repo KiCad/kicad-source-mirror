@@ -38,6 +38,7 @@
 #include <math/util.h>                        // for KiROUND, Clamp
 #include <math/vector2d.h>                    // for VECTOR2I
 #include <plotter.h>
+#include <plotters_specific.h>
 #include <trigo.h>
 
 #include <board_design_settings.h>            // for BOARD_DESIGN_SETTINGS

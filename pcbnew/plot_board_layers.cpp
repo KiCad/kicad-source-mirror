@@ -47,6 +47,7 @@
 #include <dimension.h>
 
 #include <pcbplot.h>
+#include <plotters_specific.h>
 #include <pcb_painter.h>
 #include <gbr_metadata.h>
 

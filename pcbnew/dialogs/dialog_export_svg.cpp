@@ -37,6 +37,7 @@
 #include <wx_html_report_panel.h>
 #include <bitmaps.h>
 #include <widgets/unit_binder.h>
+#include <plotters/plotters_pslike.h>
 
 class DIALOG_EXPORT_SVG : public DIALOG_EXPORT_SVG_BASE
 {
