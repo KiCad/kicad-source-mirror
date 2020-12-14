@@ -922,7 +922,7 @@ void PANEL_SETUP_LAYERS::onUpdateAddUserDefinedLayer( wxUpdateUIEvent& event )
 {
     wxArrayString availableUserDefinedLayers = getAvailableUserDefinedLayers();
 
-    event.Enable( m_PresetsChoice->GetSelection() == 0 && !availableUserDefinedLayers.IsEmpty() );
+    event.Enable( !availableUserDefinedLayers.IsEmpty() );
 }
 
 
