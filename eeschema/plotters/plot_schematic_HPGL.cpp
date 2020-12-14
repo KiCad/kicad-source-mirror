@@ -203,6 +203,9 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
     plotter->SetColorMode( getModeColor() );
     plotter->SetViewport( aPlot0ffset, IU_PER_MILS/10, aScale, false );
 
+    // TODO this could be configurable
+    plotter->SetTargetChordLength( Millimeter2iu( 0.6 ) );
+
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );
 

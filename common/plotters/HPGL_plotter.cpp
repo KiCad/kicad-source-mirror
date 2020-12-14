@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -204,6 +204,10 @@
 #include "plotter_hpgl.h"
 
 
+/// Compute the distance between two DPOINT points.
+static double dpoint_dist( DPOINT a, DPOINT b );
+
+
 // The hpgl command to close a polygon def, fill it and plot outline:
 // PM 2; ends the polygon definition and closes it if not closed
 // FP;   fills the polygon
@@ -215,8 +219,10 @@ static const char hpgl_end_polygon_cmd[] = "PM 2; FP; EP;\n";
 static const double PLUsPERDECIMIL = 0.1016;
 
 HPGL_PLOTTER::HPGL_PLOTTER()
-    : dashType( PLOT_DASH_TYPE::SOLID ),
-      m_current_item( nullptr )
+        : arcTargetChordLength( 0 ),
+          arcMinChordDegrees( 5.0 ),
+          dashType( PLOT_DASH_TYPE::SOLID ),
+          m_current_item( nullptr )
 {
     SetPenSpeed( 40 );      // Default pen speed = 40 cm/s; Pen speed is *always* in cm
     SetPenNumber( 1 );      // Default pen num = 1
@@ -238,6 +244,12 @@ void HPGL_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
 }
 
 
+void HPGL_PLOTTER::SetTargetChordLength( double chord_len )
+{
+    arcTargetChordLength = userToDeviceSize( chord_len );
+}
+
+
 /**
  * At the start of the HPGL plot pen speed and number are requested
  */
@@ -255,7 +267,7 @@ bool HPGL_PLOTTER::StartPlot()
 
 
 /**
- * HPGL end of plot: pen return and release
+ * HPGL end of plot: sort and emit graphics, pen return and release
  */
 bool HPGL_PLOTTER::EndPlot()
 {
@@ -263,47 +275,38 @@ bool HPGL_PLOTTER::EndPlot()
     fputs( "PU;", m_outputFile );
 
     flushItem();
-    if( m_items.size() > 0 ) {
+    sortItems( m_items );
 
-        DPOINT loc = m_items.begin()->loc_start;
-        bool pen_up = true;
+    if( m_items.size() > 0 )
+    {
+        DPOINT         loc          = m_items.begin()->loc_start;
+        bool           pen_up       = true;
         PLOT_DASH_TYPE current_dash = PLOT_DASH_TYPE::SOLID;
-        int current_pen = penNumber;
+        int            current_pen  = penNumber;
 
-        for( HPGL_ITEM const & item: m_items ) {
-            if( item.loc_start != loc || pen_up ) {
-                if( !pen_up ) {
+        for( HPGL_ITEM const& item : m_items )
+        {
+            if( item.loc_start != loc || pen_up )
+            {
+                if( !pen_up )
+                {
                     fputs( "PU;", m_outputFile );
                     pen_up = true;
                 }
 
-                fprintf(
-                    m_outputFile,
-                    "PA %.0f,%.0f;",
-                    item.loc_start.x, item.loc_start.y
-                );
+                fprintf( m_outputFile, "PA %.0f,%.0f;", item.loc_start.x, item.loc_start.y );
             }
 
-            if( item.dashType != current_dash ) {
+            if( item.dashType != current_dash )
+            {
                 current_dash = item.dashType;
-                switch( item.dashType ) {
-                case PLOT_DASH_TYPE::DASH:
-                    fputs( "LT -2 4 1;", m_outputFile );
-                    break;
-                case PLOT_DASH_TYPE::DOT:
-                    fputs( "LT -1 2 1;", m_outputFile );
-                    break;
-                case PLOT_DASH_TYPE::DASHDOT:
-                    fputs( "LT -4 6 1;", m_outputFile );
-                    break;
-                default:
-                    fputs( "LT;", m_outputFile );
-                    break;
-                }
+                fputs( lineTypeCommand( item.dashType ), m_outputFile );
             }
 
-            if( item.pen != current_pen ) {
-                if( !pen_up ) {
+            if( item.pen != current_pen )
+            {
+                if( !pen_up )
+                {
                     fputs( "PU;", m_outputFile );
                     pen_up = true;
                 }
@@ -311,17 +314,32 @@ bool HPGL_PLOTTER::EndPlot()
                 current_pen = item.pen;
             }
 
-            if( pen_up ) {
+            if( pen_up && !item.lift_before )
+            {
                 fputs( "PD;", m_outputFile );
                 pen_up = false;
+            }
+            else if( !pen_up && item.lift_before )
+            {
+                fputs( "PU;", m_outputFile );
+                pen_up = true;
             }
 
             fputs( item.content, m_outputFile );
 
-            if( item.lift_after ) {
+            if( !item.pen_returns )
+            {
+                // Assume commands drop the pen
+                pen_up = false;
+            }
+
+            if( item.lift_after )
+            {
                 fputs( "PU;", m_outputFile );
                 pen_up = true;
-            } else {
+            }
+            else
+            {
                 loc = item.loc_end;
             }
             fputs( "\n", m_outputFile );
@@ -340,26 +358,23 @@ void HPGL_PLOTTER::SetPenDiameter( double diameter )
     penDiameter = diameter;
 }
 
-/**
- * HPGL rectangle: fill not supported
- */
 void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, int width )
 {
     wxASSERT( m_outputFile );
+
     DPOINT p1dev = userToDeviceCoordinates( p1 );
     DPOINT p2dev = userToDeviceCoordinates( p2 );
 
     MoveTo( p1 );
-    startOrAppendItem( p1dev,
-        wxString::Format(
-            "EA %.0f,%.0f;", p2dev.x, p2dev.y
-        )
-    );
 
-    // Don't know where the pen is, so lift it
-    // TODO this might actually be documented, this could be optimized to
-    // m_current->item->loc_end = ?
-    m_current_item->lift_after = true;
+    if( fill == FILL_TYPE::FILLED_SHAPE )
+    {
+        startOrAppendItem( p1dev, wxString::Format( "RA %.0f,%.0f;", p2dev.x, p2dev.y ) );
+    }
+
+    startOrAppendItem( p1dev, wxString::Format( "EA %.0f,%.0f;", p2dev.x, p2dev.y ) );
+
+    m_current_item->loc_end = m_current_item->loc_start;
     PenFinish();
 }
 
@@ -373,30 +388,36 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
     DPOINT center_dev = userToDeviceCoordinates( centre );
     SetCurrentLineWidth( width );
 
+    double const circumf             = 2.0 * M_PI * radius;
+    double const target_chord_length = arcTargetChordLength;
+    double       chord_degrees       = 360.0 * target_chord_length / circumf;
+
+    if( chord_degrees < arcMinChordDegrees )
+    {
+        chord_degrees = arcMinChordDegrees;
+    }
+    else if( chord_degrees > 45 )
+    {
+        chord_degrees = 45;
+    }
+
     if( fill == FILL_TYPE::FILLED_SHAPE )
     {
         // Draw the filled area
         MoveTo( centre );
-        startOrAppendItem(
-            center_dev,
-            wxString::Format(
-                "PM 0;CI %g;%s", radius, hpgl_end_polygon_cmd
-            )
-        );
-        m_current_item->lift_after = true;
+        startOrAppendItem( center_dev, wxString::Format( "PM 0;CI %g,%g;%s", radius, chord_degrees,
+                                               hpgl_end_polygon_cmd ) );
+        m_current_item->lift_before = true;
+        m_current_item->pen_returns = true;
         PenFinish();
     }
 
     if( radius > 0 )
     {
         MoveTo( centre );
-        startOrAppendItem(
-            center_dev,
-            wxString::Format(
-                "CI %g;", radius
-            )
-        );
-        m_current_item->lift_after = true;
+        startOrAppendItem( center_dev, wxString::Format( "CI %g,%g;", radius, chord_degrees ) );
+        m_current_item->lift_before = true;
+        m_current_item->pen_returns = true;
         PenFinish();
     }
 }
@@ -439,7 +460,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
             LineTo( aCornerList[0] );
 
         m_current_item->content << hpgl_end_polygon_cmd; // Close, fill polygon and draw outlines
-        m_current_item->lift_after = true;
+        m_current_item->pen_returns = true;
     }
     else if( aWidth > 0 )
     {
@@ -461,71 +482,28 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 }
 
 
-/**
- * Pen control logic (remove redundant pen activations)
- */
-void HPGL_PLOTTER::penControl( char plume )
-{
-    m_penState = plume;
-    /*
-    wxASSERT( m_outputFile );
-
-    switch( plume )
-    {
-    case 'U':
-
-        if( m_penState != 'U' )
-        {
-            fputs( "PU;", m_outputFile );
-            m_penState = 'U';
-        }
-
-        break;
-
-    case 'D':
-
-        if( m_penState != 'D' )
-        {
-            fputs( "PD;", m_outputFile );
-            m_penState = 'D';
-        }
-
-        break;
-
-    case 'Z':
-        fputs( "PU;", m_outputFile );
-        m_penState        = 'U';
-        m_penLastpos.x    = -1;
-        m_penLastpos.y    = -1;
-        break;
-    }
-    */
-}
-
-
 void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
 {
     wxASSERT( m_outputFile );
 
     if( plume == 'Z' )
     {
-        penControl( 'Z' );
+        m_penState = 'Z';
         flushItem();
         return;
     }
 
-    penControl( plume );
     DPOINT pos_dev = userToDeviceCoordinates( pos );
     DPOINT lastpos_dev = userToDeviceCoordinates( m_penLastpos );
 
     if( plume == 'U' )
     {
-        penControl( 'U' );
+        m_penState = 'U';
         flushItem();
     }
     else if( plume == 'D' )
     {
-        penControl( 'D' );
+        m_penState = 'D';
         startOrAppendItem(
             lastpos_dev,
             wxString::Format(
@@ -547,24 +525,7 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
 void HPGL_PLOTTER::SetDash( PLOT_DASH_TYPE dashed )
 {
     dashType = dashed;
-/*
-    wxASSERT( m_outputFile );
-
-    switch( dashed )
-    {
-    case PLOT_DASH_TYPE::DASH:
-        fprintf( m_outputFile, "LT -2 4 1;\n" );
-        break;
-    case PLOT_DASH_TYPE::DOT:
-        fprintf( m_outputFile, "LT -1 2 1;\n" );
-        break;
-    case PLOT_DASH_TYPE::DASHDOT:
-        fprintf( m_outputFile, "LT -4 6 1;\n" );
-        break;
-    default:
-        fputs( "LT;\n", m_outputFile );
-    }
-    */
+    flushItem();
 }
 
 
@@ -603,6 +564,19 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
     if( radius <= 0 )
         return;
 
+    double const circumf             = 2.0 * M_PI * userToDeviceSize( radius );
+    double const target_chord_length = arcTargetChordLength;
+    double       chord_degrees       = 360.0 * target_chord_length / circumf;
+
+    if( chord_degrees < arcMinChordDegrees )
+    {
+        chord_degrees = arcMinChordDegrees;
+    }
+    else if( chord_degrees > 45 )
+    {
+        chord_degrees = 45;
+    }
+
     DPOINT centre_dev = userToDeviceCoordinates( centre );
 
     if( m_plotMirror )
@@ -619,13 +593,8 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
     cmap.y  = centre.y - KiROUND( sindecideg( radius, StAngle ) );
     DPOINT  cmap_dev = userToDeviceCoordinates( cmap );
 
-    startOrAppendItem(
-        cmap_dev,
-        wxString::Format(
-            "AA %.0f,%.0f",
-            centre_dev.x, centre_dev.y
-        )
-    );
+    startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g", centre_dev.x,
+                                         centre_dev.y, angle, chord_degrees ) );
 
     // TODO We could compute the final position instead...
     m_current_item->lift_after = true;
@@ -699,21 +668,18 @@ void HPGL_PLOTTER::FlashPadCircle( const wxPoint& pos, int diametre,
         // Gives a correct current starting point for the circle
         MoveTo( wxPoint( pos.x+radius, pos.y ) );
         // Plot filled area and its outline
-        startOrAppendItem(
-            userToDeviceCoordinates( wxPoint( pos.x+radius, pos.y ) ),
-            wxString::Format(
-                "PM 0; PA %.0f,%.0f;CI %.0f;%s",
-                pos_dev.x, pos_dev.y, rsize, hpgl_end_polygon_cmd
-            )
-        );
+        startOrAppendItem( userToDeviceCoordinates( wxPoint( pos.x + radius, pos.y ) ),
+                wxString::Format( "PM 0; PA %.0f,%.0f;CI %.0f;%s", pos_dev.x, pos_dev.y, rsize,
+                        hpgl_end_polygon_cmd ) );
+        m_current_item->lift_before = true;
+        m_current_item->pen_returns = true;
     }
     else
     {
         // Draw outline only:
-        startOrAppendItem(
-            pos_dev,
-            wxString::Format( "CI %.0f;", rsize )
-        );
+        startOrAppendItem( pos_dev, wxString::Format( "CI %.0f;", rsize ) );
+        m_current_item->lift_before = true;
+        m_current_item->pen_returns = true;
     }
 
     PenFinish();
@@ -855,28 +821,113 @@ bool HPGL_PLOTTER::startItem( DPOINT location )
 }
 
 
-void HPGL_PLOTTER::flushItem( )
+void HPGL_PLOTTER::flushItem()
 {
     m_current_item = nullptr;
 }
 
 
-bool HPGL_PLOTTER::startOrAppendItem( DPOINT location, wxString const & content )
+bool HPGL_PLOTTER::startOrAppendItem( DPOINT location, wxString const& content )
 {
-    if( m_current_item == nullptr ) {
-        HPGL_ITEM item = {
-            location,
-            location,
-            false,
-            penNumber,
-            dashType,
-            content
-        };
+    if( m_current_item == nullptr )
+    {
+        HPGL_ITEM item = { location, location, false, false, false, penNumber, dashType, content };
         m_items.push_back( item );
         m_current_item = &m_items.back();
         return true;
-    } else {
+    }
+    else
+    {
         m_current_item->content << content;
         return false;
     }
+}
+
+void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
+{
+    if( items.size() < 2 )
+    {
+        return;
+    }
+
+    std::list<HPGL_ITEM> target;
+
+    // Plot items are sorted to improve print time on mechanical plotters. This
+    // means
+    //  1) Avoid excess pen-switching - once a pen is selected, keep printing
+    //      with it until no more items using that pen remain.
+    //  2) Within the items for one pen, avoid bouncing back and forth around
+    //      the page; items should be sequenced with nearby items.
+    //
+    // This is essentially a variant of the Travelling Salesman Problem where
+    // the cities are themselves edges that must be traversed. This is of course
+    // a famously NP-Hard problem and this particular variant has a monstrous
+    // number of "cities". For now, we're using a naive nearest-neighbor search,
+    // which is less than optimal but (usually!) better than nothing, very
+    // simple to implement, and fast enough.
+    //
+    // Items are moved one at a time from `items` into `target`, searching
+    // each time for the first one matching the above criteria. Then, all of
+    // `target` is moved back into `items`.
+
+    // Get the first one started
+    HPGL_ITEM last_item = items.front();
+    items.pop_front();
+    target.emplace_back( last_item );
+
+    while( !items.empty() )
+    {
+        auto best_it = items.begin();
+        double best_dist = dpoint_dist( last_item.loc_end, best_it->loc_start );
+
+        for( auto search_it = best_it; search_it != items.end(); search_it++ )
+        {
+            // Immediately forget an item as "best" if another one is a better
+            // pen match
+            if( best_it->pen != last_item.pen && search_it->pen == last_item.pen )
+            {
+                best_it = search_it;
+                continue;
+            }
+
+            double const dist = dpoint_dist( last_item.loc_end, search_it->loc_start );
+            if( dist < best_dist )
+            {
+                best_it   = search_it;
+                best_dist = dist;
+                continue;
+            }
+        }
+
+        target.emplace_back( *best_it );
+        last_item = *best_it;
+        items.erase( best_it );
+    }
+
+    items.splice( items.begin(), target );
+}
+
+wxString HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
+{
+    switch( linetype )
+    {
+    case PLOT_DASH_TYPE::DASH:
+        return "LT -2 4 1;";
+        break;
+    case PLOT_DASH_TYPE::DOT:
+        return "LT -1 2 1;";
+        break;
+    case PLOT_DASH_TYPE::DASHDOT:
+        return "LT -4 6 1;";
+        break;
+    default:
+        return "LT;";
+        break;
+    }
+}
+
+static double dpoint_dist( DPOINT a, DPOINT b )
+{
+    DPOINT diff = a - b;
+    return sqrt( diff.x * diff.x + diff.y * diff.y );
 }

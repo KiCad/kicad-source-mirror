@@ -25,10 +25,11 @@
 
 #pragma once
 
-#include <vector>
 #include <list>
+#include <vector>
+
+#include <eda_item.h>             // FILL_TYPE
 #include <math/box2.h>
-#include <eda_item.h>       // FILL_TYPE
 #include <plotter.h>
 
 
@@ -46,6 +47,12 @@ public:
     {
         return wxString( wxT( "plt" ) );
     }
+
+    /// Set the target length of chords used to draw approximated circles and
+    /// arcs.
+    ///
+    /// @param chord_len - chord length in IUs
+    void SetTargetChordLength( double chord_len );
 
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
@@ -107,8 +114,6 @@ public:
                             double aOrient, OUTLINE_MODE aTraceMode, void* aData ) override;
 
 protected:
-    void penControl( char plume );
-
     /// Start a new HPGL_ITEM if necessary, keeping the current one if it exists.
     ///
     /// @param location - location of the item
@@ -117,7 +122,7 @@ protected:
     bool startItem( DPOINT location );
 
     /// Flush the current HPGL_ITEM and clear out the current item pointer.
-    void flushItem( );
+    void flushItem();
 
     /// Start a new HPGL_ITEM with the given string if necessary, or append the
     /// string to the current item.
@@ -126,25 +131,56 @@ protected:
     /// @param content - content substring
     ///
     /// @return whether a new item was made
-    bool startOrAppendItem( DPOINT location, wxString const & content );
+    bool startOrAppendItem( DPOINT location, wxString const& content );
 
     int    penSpeed;
     int    penNumber;
     double penDiameter;
+    double         arcTargetChordLength;
+    double         arcMinChordDegrees;
     PLOT_DASH_TYPE dashType;
 
     struct HPGL_ITEM
     {
-        DPOINT loc_start;
-        DPOINT loc_end;
-        bool lift_after;
-        int pen;
+        /// Location the pen should start at
+        DPOINT         loc_start;
+
+        /// Location the pen will be at when it finishes. If this is not known,
+        /// leave it equal to loc_start and set lift_after.
+        DPOINT         loc_end;
+
+        /// Whether the command should be executed with the pen lifted
+        bool           lift_before;
+
+        /// Whether the pen must be lifted after the command. If the location of the pen
+        /// is not known, this must be set (so that another command starting at loc_end
+        /// is not immediately executed with no lift).
+        bool           lift_after;
+
+        /// Whether the pen returns to its original state after the command. Otherwise,
+        /// the pen is assumed to be down following the command.
+        bool           pen_returns;
+
+        /// Pen number for this command
+        int            pen;
+
+        /// Line style for this command
         PLOT_DASH_TYPE dashType;
-        wxString content;
+
+        /// Text of the command
+        wxString       content;
     };
 
+    /// Sort a list of HPGL items to improve plotting speed on mechanical plotters.
+    ///
+    /// @param items - items to sort
+    static void sortItems( std::list<HPGL_ITEM>& items );
+
+    /// Return the plot command corresponding to a line type
+    static wxString lineTypeCommand( PLOT_DASH_TYPE linetype );
+
     std::list<HPGL_ITEM> m_items;
-    HPGL_ITEM * m_current_item;
+    HPGL_ITEM*           m_current_item;
 };
 
 
