@@ -50,6 +50,11 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
     m_statusPanel->SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
     m_statusPanel->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
 
+    // Set our background so wx doesn't render a normal control background momentarily when rapidly
+    // navigating with arrow keys
+    SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
+    SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
+
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
     m_outerSizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
     m_outerSizer->Add( m_statusPanel, 1, wxALL | wxEXPAND, 0 );
