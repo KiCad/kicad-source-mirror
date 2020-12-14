@@ -152,12 +152,13 @@ int EDA_3D_CONTROLLER::RotateView( const TOOL_EVENT& aEvent )
 
     switch( aEvent.Parameter<ROTATION_DIR>() )
     {
-    case ROTATION_DIR::X_NEG: m_camera->RotateX( -rotIncrement ); break;
-    case ROTATION_DIR::X_POS: m_camera->RotateX( rotIncrement );  break;
-    case ROTATION_DIR::Y_NEG: m_camera->RotateY( -rotIncrement ); break;
-    case ROTATION_DIR::Y_POS: m_camera->RotateY( rotIncrement );  break;
-    case ROTATION_DIR::Z_NEG: m_camera->RotateZ( -rotIncrement ); break;
-    case ROTATION_DIR::Z_POS: m_camera->RotateZ( rotIncrement );  break;
+    case ROTATION_DIR::X_CW: m_camera->RotateX( -rotIncrement ); break;
+    case ROTATION_DIR::X_CCW: m_camera->RotateX( rotIncrement );  break;
+    /// Y rotations are backward b/c the RHR has Y pointing into the screen
+    case ROTATION_DIR::Y_CW: m_camera->RotateY( rotIncrement ); break;
+    case ROTATION_DIR::Y_CCW: m_camera->RotateY( -rotIncrement );  break;
+    case ROTATION_DIR::Z_CW: m_camera->RotateZ( -rotIncrement ); break;
+    case ROTATION_DIR::Z_CCW: m_camera->RotateZ( rotIncrement );  break;
     default:                wxFAIL;                             break;
     }
 

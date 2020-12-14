@@ -399,12 +399,12 @@ set( BMAPS_MID
     router_len_tuner_dist_incr
     rotate_ccw
     rotate_cw
-    rotate_neg_x
-    rotate_pos_x
-    rotate_neg_y
-    rotate_pos_y
-    rotate_neg_z
-    rotate_pos_z
+    rotate_ccw_x
+    rotate_cw_x
+    rotate_ccw_y
+    rotate_cw_y
+    rotate_ccw_z
+    rotate_cw_z
     save_as
     save_symbol_to_schematic
     save_fp_to_board

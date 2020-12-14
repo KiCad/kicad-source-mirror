@@ -46,32 +46,32 @@ TOOL_ACTION EDA_3D_ACTIONS::pivotCenter( "3DViewer.Control.pivotCenter",
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCW( "3DViewer.Control.rotateXclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate X Clockwise" ), _( "Rotate X Clockwise" ),
-        rotate_neg_x_xpm, AF_NONE, (void*) ROTATION_DIR::X_NEG );
+        rotate_cw_x_xpm, AF_NONE, (void*) ROTATION_DIR::X_CW );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateXCCW( "3DViewer.Control.rotateXcounterclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate X Counterclockwise" ), _( "Rotate X Counterclockwise" ),
-        rotate_pos_x_xpm, AF_NONE, (void*) ROTATION_DIR::X_POS );
+        rotate_ccw_x_xpm, AF_NONE, (void*) ROTATION_DIR::X_CCW );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateYCW( "3DViewer.Control.rotateYclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Y Clockwise" ), _( "Rotate Y Clockwise" ),
-        rotate_neg_y_xpm, AF_NONE, (void*) ROTATION_DIR::Y_NEG );
+        rotate_cw_y_xpm, AF_NONE, (void*) ROTATION_DIR::Y_CW );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateYCCW( "3DViewer.Control.rotateYcounterclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Y Counterclockwise" ), _( "Rotate Y Counterclockwise" ),
-        rotate_pos_y_xpm, AF_NONE, (void*) ROTATION_DIR::Y_POS );
+        rotate_ccw_y_xpm, AF_NONE, (void*) ROTATION_DIR::Y_CCW );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateZCW( "3DViewer.Control.rotateZclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Z Clockwise" ), _( "Rotate Z Clockwise" ),
-        rotate_neg_z_xpm, AF_NONE, (void*) ROTATION_DIR::Z_NEG );
+        rotate_cw_z_xpm, AF_NONE, (void*) ROTATION_DIR::Z_CW );
 
 TOOL_ACTION EDA_3D_ACTIONS::rotateZCCW( "3DViewer.Control.rotateZcounterclockwise",
         AS_GLOBAL, 0, "",
         _( "Rotate Z Counterclockwise" ), _( "Rotate Z Counterclockwise" ),
-        rotate_pos_z_xpm, AF_NONE, (void*) ROTATION_DIR::Z_POS );
+        rotate_ccw_z_xpm, AF_NONE, (void*) ROTATION_DIR::Z_CCW );
 
 TOOL_ACTION EDA_3D_ACTIONS::moveLeft( "3DViewer.Control.moveLeft",
         AS_ACTIVE,

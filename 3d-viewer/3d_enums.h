@@ -78,12 +78,12 @@ enum DISPLAY3D_FLG
 /// Rotation direction for the 3d canvas
 enum class ROTATION_DIR
 {
-    X_NEG,
-    X_POS,
-    Y_NEG,
-    Y_POS,
-    Z_NEG,
-    Z_POS
+    X_CW,
+    X_CCW,
+    Y_CW,
+    Y_CCW,
+    Z_CW,
+    Z_CCW
 };
 
 
