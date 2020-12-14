@@ -1127,7 +1127,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         {
             m_menu.ShowContextMenu( selection() );
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             // Place the imported drawings
             for( BOARD_ITEM* item : newItems )
@@ -1189,7 +1189,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
                                                   LSET::AllLayersMask() );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsClick( BUT_LEFT ) )
+        if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             FOOTPRINT*   footprint = (FOOTPRINT*) m_frame->GetModel();
             BOARD_COMMIT commit( m_frame );
@@ -2109,7 +2109,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             view->Query( bbox, items );
 
-            for( auto it : items )
+            for( std::pair<KIGFX::VIEW_ITEM*, int> it : items )
             {
                 BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 

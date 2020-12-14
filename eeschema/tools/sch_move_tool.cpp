@@ -440,7 +440,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle drop
         //
-        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsMouseUp( BUT_LEFT )
+                || evt->IsClick( BUT_LEFT )
+                || evt->IsDblClick( BUT_LEFT ) )
         {
             break; // Finish
         }

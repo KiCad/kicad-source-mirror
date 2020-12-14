@@ -149,7 +149,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
                 break;
             }
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
             if( !newItem )
             {

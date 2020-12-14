@@ -103,7 +103,9 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::MOVING );
 
-        if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
+        if( evt->IsAction( &EE_ACTIONS::move )
+                || evt->IsMotion()
+                || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &ACTIONS::refreshPreview )
                 || evt->IsAction( &EE_ACTIONS::symbolMoveActivate ) )
         {
@@ -254,7 +256,9 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //------------------------------------------------------------------------
         // Handle drop
         //
-        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsMouseUp( BUT_LEFT )
+                || evt->IsClick( BUT_LEFT )
+                || evt->IsDblClick( BUT_LEFT ) )
         {
             if( selection.GetSize() == 1 && selection.Front()->Type() == LIB_PIN_T )
             {
