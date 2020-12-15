@@ -137,7 +137,14 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
             delete m_buttonList[ii][jj];
             wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, event_id,
                                                       KiBitmap( bitmap_butt ), wxPoint( x, y ) );
+
+            // On the mac, the button sizes are reliably 4 pixels smaller (maybe due to corner rounding)
+            // than can be displayed by the bitmap
+#ifdef __WXMAC__
+            btn->SetSize( btn->GetSize().x + 8, btn->GetSize().y + 4 );
+#else
             btn->SetSize( btn->GetSize().x + 4, btn->GetSize().y );
+#endif
             m_buttonList[ii][jj] = btn;
             setDRCMatrixButtonState( m_buttonList[ii][jj], diag );
         }
