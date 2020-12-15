@@ -114,11 +114,11 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
     // Run the viewer control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "3DViewer.Control" );
 
-    m_SizerPanelView->Add( m_infobar, 0, wxEXPAND, 0 );
-    m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
-
     m_infobar = new WX_INFOBAR( this );
     m_previewPane->SetInfoBar( m_infobar );
+
+    m_SizerPanelView->Add( m_infobar, 0, wxEXPAND, 0 );
+    m_SizerPanelView->Add( m_previewPane, 1, wxEXPAND, 5 );
 
     for( wxEventType eventType : { wxEVT_MENU_OPEN, wxEVT_MENU_CLOSE, wxEVT_MENU_HIGHLIGHT } )
         Connect( eventType, wxMenuEventHandler( PANEL_PREV_3D::OnMenuEvent ), NULL, this );
