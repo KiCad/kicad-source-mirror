@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1868"
+     inkscape:window-height="1215"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="3.3259971"
      inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="1427"
+     inkscape:window-y="50"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -82,5 +82,6 @@
   <path
      class="cls-1"
      d="M 20,0 H 4 A 4,4 0 0 0 0,4 v 16 a 4,4 0 0 0 4,4 h 16 a 4,4 0 0 0 4,-4 V 4 A 4,4 0 0 0 20,0 Z"
-     id="path24643" />
+     id="path24643"
+     style="fill:#2cb22c;fill-opacity:1" />
 </svg>
