@@ -13,7 +13,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="contrast_mode.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
    inkscape:export-filename="/home/seth/code/kicad/kicad_bitmaps/bitmaps_png/sources/contrast_mode.png"
    inkscape:export-xdpi="1890.4615"
    inkscape:export-ydpi="1890.4615">
@@ -55,15 +55,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="3840"
+     inkscape:window-height="2099"
      id="namedview3143"
      showgrid="true"
      inkscape:zoom="42.45587"
-     inkscape:cx="4.1717182"
+     inkscape:cx="4.0539489"
      inkscape:cy="12.015355"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="37"
      inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -127,7 +127,7 @@
      id="title3126">contrast_mode</title>
   <path
      id="polyline3128"
-     style="fill:none;stroke:#545454;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#848484;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 16.5,22.5 14,17.491366 H 5.118"
      sodipodi:nodetypes="ccc" />
   <path
@@ -148,7 +148,7 @@
      x2="22.5"
      y2="7.5238228"
      id="line3134"
-     style="stroke:#545454;stroke-width:3.09707;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+     style="stroke:#848484;stroke-width:3.09707;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   <path
      class="cls-4"
      d="m 15.047108,8.4818142 -5,-0.0049 C 9.6167807,8.4771034 9.2347098,8.2016514 9.0989078,7.7933142 l -2,-5.9951 c -0.4710159,-1.28838267 1.4993519,-1.94586453 1.8964,-0.6328 l 1.7725002,5.3115 6.476528,0.025711 C 17.797031,6.5048193 16.5,6.9764461 16,7.4764461 15.792741,7.8304469 15.314225,8.1704919 15.047108,8.4818142 Z"
