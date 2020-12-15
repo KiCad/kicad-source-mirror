@@ -847,7 +847,7 @@ void WS_DATA_MODEL::SetPageLayout( const wxString& aFullFileName, bool Append )
         return;
     }
 
-    int filelen = wksFile.Length();
+    size_t filelen = wksFile.Length();
     char * buffer = new char[filelen+10];
 
     if( wksFile.Read( buffer, filelen ) != filelen )
