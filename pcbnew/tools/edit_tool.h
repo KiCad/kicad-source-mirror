@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2013-2020 CERN
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -37,25 +38,13 @@ class BOARD_ITEM;
 class CONNECTIVITY_DATA;
 class STATUS_TEXT_POPUP;
 
-namespace KIGFX {
-    namespace PREVIEW {
+namespace KIGFX
+{
+    namespace PREVIEW
+    {
         class RULER_ITEM;
     }
 }
-
-/**
- * Function EditToolSelectionFilter
- *
- * A CLIENT_SELECTION_FILTER which promotes pad selections to their parent footprints and
- * optionally excludes locked items and/or transient items (such as markers).
- */
-
-#define EXCLUDE_LOCKED              0x0001
-#define EXCLUDE_LOCKED_PADS         0x0002
-#define EXCLUDE_TRANSIENTS          0x0004
-#define INCLUDE_PADS_AND_FOOTPRINTS 0x0008
-
-void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTION_TOOL* sTool );
 
 
 class SPECIAL_TOOLS_CONTEXT_MENU : public CONDITIONAL_MENU
@@ -64,11 +53,11 @@ public:
     SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool );
 };
 
-    /**
+/**
  * EDIT_TOOL
  *
- * The interactive edit tool. Allows one to move, rotate, flip and change properties of items selected
- * using the pcbnew.InteractiveSelection tool.
+ * The interactive edit tool. Allows one to move, rotate, flip and change properties of items s
+ * elected using the pcbnew.InteractiveSelection tool.
  */
 
 class EDIT_TOOL : public PCB_TOOL_BASE
@@ -162,7 +151,8 @@ public:
      * Function FootprintFilter()
      * A selection filter which prunes the selection to contain only items of type PCB_MODULE_T
      */
-    static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool );
+    static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
+                                 SELECTION_TOOL* sTool );
 
     /**
      * Function PadFilter()
@@ -170,6 +160,9 @@ public:
      */
     static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool );
 
+    BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
+
+private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
@@ -187,9 +180,6 @@ public:
      */
     int cutToClipboard( const TOOL_EVENT& aEvent );
 
-    BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
-
-private:
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     bool updateModificationPoint( PCBNEW_SELECTION& aSelection );
@@ -204,15 +194,12 @@ private:
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
 private:
-    SELECTION_TOOL* m_selectionTool;     // Selection tool used for obtaining selected items
-
-    bool      m_dragging;                // Indicates objects are being dragged right now
-    VECTOR2I  m_cursor;                  // Last cursor position (needed for getModificationPoint()
-                                         // to avoid changes of edit reference point).
-
-    std::unique_ptr<BOARD_COMMIT>         m_commit;
-
-    std::unique_ptr<STATUS_TEXT_POPUP>    m_statusPopup;
+    SELECTION_TOOL*               m_selectionTool;
+    std::unique_ptr<BOARD_COMMIT> m_commit;
+    bool                          m_dragging;   // Indicates objects are currently being dragged
+    VECTOR2I                      m_cursor;     // Last cursor position (so getModificationPoint()
+                                                // can avoid changes of edit reference point).
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };
 
 #endif

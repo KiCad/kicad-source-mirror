@@ -131,6 +131,18 @@ PAD& PAD::operator=( const PAD &aOther )
 }
 
 
+bool PAD::IsLocked() const
+{
+    if( GetParent() )
+    {
+        FOOTPRINT* fp = static_cast<FOOTPRINT*>( GetParent() );
+        return fp->IsLocked() || fp->PadsLocked();
+    }
+
+    return false;
+};
+
+
 LSET PAD::PTHMask()
 {
     static LSET saved = LSET::AllCuMask() | LSET( 2, F_Mask, B_Mask );

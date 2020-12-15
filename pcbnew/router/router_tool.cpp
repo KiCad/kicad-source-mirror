@@ -1504,17 +1504,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             itemsToDrag.Add( startItem );
     }
 
-    if( startItem && startItem->IsLocked() )
-    {
-        KIDIALOG dlg( frame(), _( "The selected item is locked." ), _( "Confirmation" ),
-                      wxOK | wxCANCEL | wxICON_WARNING );
-        dlg.SetOKLabel( _( "Drag Anyway" ) );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return 0;
-    }
-
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
     VECTOR2I p0 = controls()->GetCursorPosition( false );
     VECTOR2I p = p0;

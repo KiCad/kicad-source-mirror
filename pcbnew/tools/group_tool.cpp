@@ -287,7 +287,6 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
             const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
                     []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
                     {
-                        EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
                     } );
 
             if( sel.Empty() )

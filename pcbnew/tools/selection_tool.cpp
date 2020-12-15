@@ -473,43 +473,6 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
         m_selection.ClearReferencePoint();
     }
 
-    if( aConfirmLockedItems )
-    {
-        std::vector<BOARD_ITEM*> lockedItems;
-
-        for( EDA_ITEM* item : m_selection )
-        {
-            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
-
-            if( boardItem->IsLocked() )
-                lockedItems.push_back( boardItem );
-        }
-
-        if( !lockedItems.empty() )
-        {
-            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size() );
-
-            switch( dlg.ShowModal() )
-            {
-            case wxID_OK:
-                // remove locked items from selection
-                for( BOARD_ITEM* item : lockedItems )
-                    unselect( item );
-
-                break;
-
-            case wxID_CANCEL:
-                // cancel operation
-                ClearSelection();
-                break;
-
-            case wxID_APPLY:
-                // continue with operation with current selection
-                break;
-            }
-        }
-    }
-
     if( aClientFilter )
     {
         enum DISPOSITION { BEFORE = 1, AFTER, BOTH };
@@ -565,6 +528,43 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
         }
 
         m_frame->GetCanvas()->ForceRefresh();
+    }
+
+    if( aConfirmLockedItems )
+    {
+        std::vector<BOARD_ITEM*> lockedItems;
+
+        for( EDA_ITEM* item : m_selection )
+        {
+            BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
+
+            if( boardItem->IsLocked() )
+                lockedItems.push_back( boardItem );
+        }
+
+        if( !lockedItems.empty() )
+        {
+            DIALOG_LOCKED_ITEMS_QUERY dlg( frame(), lockedItems.size() );
+
+            switch( dlg.ShowModal() )
+            {
+            case wxID_OK:
+                // remove locked items from selection
+                for( BOARD_ITEM* item : lockedItems )
+                    unselect( item );
+
+                break;
+
+            case wxID_CANCEL:
+                // cancel operation
+                ClearSelection();
+                break;
+
+            case wxID_APPLY:
+                // continue with operation with current selection
+                break;
+            }
+        }
     }
 
     return m_selection;
@@ -627,8 +627,8 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     m_selection.ClearReferencePoint();
 
-    // Allow the client to do tool- or action-specific filtering to see if we
-    // can get down to a single item
+    // Allow the client to do tool- or action-specific filtering to see if we can get down
+    // to a single item
     if( aClientFilter )
         aClientFilter( aWhere, collector, this );
 
@@ -639,9 +639,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( collector.GetCount() > 1 && !m_skip_heuristics )
-    {
         GuessSelectionCandidates( collector, aWhere );
-    }
 
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )

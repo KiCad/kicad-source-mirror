@@ -105,6 +105,8 @@ public:
 
     FOOTPRINT* GetParent() const;
 
+    bool IsLocked() const override;
+
     /**
      * Imports the pad settings from aMasterPad.
      * The result is "this" has the same settinds (sizes, shapes ... )

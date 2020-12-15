@@ -47,7 +47,6 @@
 #include <pad_naming.h>
 #include <view/view_controls.h>
 #include <connectivity/connectivity_algo.h>
-#include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_items.h>
 #include <confirm.h>
 #include <bitmaps.h>
@@ -63,62 +62,6 @@ using namespace std::placeholders;
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <zone_filler.h>
-
-
-void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags,
-                              SELECTION_TOOL* selectionTool )
-{
-    // Iterate from the back so we don't have to worry about removals.
-    for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-    {
-        BOARD_ITEM* item = aCollector[ i ];
-
-        if( ( aFlags & EXCLUDE_LOCKED ) && item->IsLocked() )
-        {
-            aCollector.Remove( item );
-        }
-        else if( item->Type() == PCB_FP_ZONE_T )
-        {
-            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item->GetParent() );
-
-            // case 1: handle locking
-            if( ( aFlags & EXCLUDE_LOCKED ) && fp && fp->IsLocked() )
-                aCollector.Remove( item );
-
-            // case 2: selection contains both the footprint and its pads - remove the pads
-            if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
-                aCollector.Remove( item );
-        }
-        else if( item->Type() == PCB_PAD_T )
-        {
-            FOOTPRINT* fp = static_cast<FOOTPRINT*>( item->GetParent() );
-
-            // case 1: handle locking
-            if( ( aFlags & EXCLUDE_LOCKED ) && fp && fp->IsLocked() )
-            {
-                aCollector.Remove( item );
-            }
-            else if( ( aFlags & EXCLUDE_LOCKED_PADS ) && fp && fp->PadsLocked() )
-            {
-                // Pad locking is considerably "softer" than item locking
-                aCollector.Remove( item );
-
-                if( !fp->IsLocked() && !aCollector.HasItem( fp ) )
-                    aCollector.Append( fp );
-            }
-
-            // case 2: selection contains both the footprint and its pads - remove the pads
-            if( !( aFlags & INCLUDE_PADS_AND_FOOTPRINTS ) && fp && aCollector.HasItem( fp ) )
-                aCollector.Remove( item );
-        }
-        else if( ( aFlags & EXCLUDE_TRANSIENTS ) && item->Type() == PCB_MARKER_T )
-        {
-            aCollector.Remove( item );
-        }
-    }
-
-    selectionTool->FilterCollectorForGroups( aCollector );
-}
 
 
 EDIT_TOOL::EDIT_TOOL() :
@@ -302,7 +245,22 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[ i ];
+
+                    // We don't operate on pads; convert them to footprint selections
+                    if( item->Type() == PCB_PAD_T )
+                    {
+                        aCollector.Remove( item );
+
+                        if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
+                            aCollector.Append( item->GetParent() );
+                    }
+                }
+
+                sTool->FilterCollectorForGroups( aCollector );
             },
             true /* prompt user regarding locked items */ );
 
@@ -352,22 +310,37 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[ i ];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             } );
 
     if( m_dragging || selection.Empty() )
         return 0;
 
     LSET     item_layers = selection.GetSelectionLayers();
-    bool     unselect    = selection.IsHover(); // N.B. This must be saved before the re-selection below
+    bool     unselect    = selection.IsHover(); // N.B. This must be saved before the re-selection
+                                                // below
     VECTOR2I pickedReferencePoint;
 
-    // Now filter out locked pads.  We cannot do this in the first RequestSelection() as we need
-    // the item_layers when a pad is the selection front.
+    // Now filter out locked and grouped items.  We cannot do this in the first RequestSelection()
+    // as we need the item_layers when a pad is the selection front.
     selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[ i ];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -657,7 +630,14 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[ i ];
+
+                    if( !dynamic_cast<TRACK*>( item ) )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -723,15 +703,20 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( !dynamic_cast<TRACK*>( item ) )
+                        aCollector.Remove( item );
+                }
             },
             !m_dragging /* prompt user regarding locked items */ );
 
     if( selection.Size() < 2 )
     {
-        frame()->ShowInfoBarMsg(
-                _( "A minimum of two straight track segments must be selected." ) );
+        frame()->ShowInfoBarMsg( _( "At least two straight track segments must be selected." ) );
         return 0;
     }
 
@@ -804,8 +789,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
                             }
                             else
                             {
-                                // User requested to fillet these two tracks but not possible as there are other
-                                // elements connected at that point
+                                // User requested to fillet these two tracks but not possible as
+                                // there are other elements connected at that point
                                 didOneAttemptFail = true;
                             }
                         }
@@ -919,7 +904,6 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     const PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
             } );
 
     // Tracks & vias are treated in a special way:
@@ -973,8 +957,6 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
             },
             !m_dragging /* prompt user regarding locked items */ );
 
@@ -989,7 +971,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( IsFootprintEditor() )
         m_commit->Modify( selection.Front() );
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         if( !item->IsNew() && !IsFootprintEditor() )
         {
@@ -1075,8 +1057,6 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
             },
             !m_dragging /* prompt user regarding locked items */ );
 
@@ -1174,8 +1154,22 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    // We don't operate on pads; convert them to footprint selections
+                    if( item->Type() == PCB_PAD_T )
+                    {
+                        aCollector.Remove( item );
+
+                        if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
+                            aCollector.Append( item->GetParent() );
+                    }
+                }
+
+                sTool->FilterCollectorForGroups( aCollector );
             },
             !m_dragging /* prompt user regarding locked items */ );
 
@@ -1262,8 +1256,6 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         selectionCopy = m_selectionTool->RequestSelection(
                 []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
                 {
-                    EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                             sTool );
                 },
                 true /* prompt user regarding locked items */ );
     }
@@ -1446,8 +1438,14 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -1544,12 +1542,31 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     bool increment = aEvent.IsAction( &PCB_ACTIONS::duplicateIncrement );
 
     // Be sure that there is at least one item that we can modify
-    const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
-            } );
+    const auto& selection =
+            m_isFootprintEditor ? m_selectionTool->RequestSelection(
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    {
+                    } )
+            /*is board editor*/ : m_selectionTool->RequestSelection(
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    {
+                        // Iterate from the back so we don't have to worry about removals.
+                        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+                        {
+                            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
+
+                            // Promote pad selections to footprint selections
+                            if( item->Type() == PCB_PAD_T )
+                            {
+                                aCollector.Remove( item );
+
+                                if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
+                                    aCollector.Append( item->GetParent() );
+                            }
+                        }
+
+                        sTool->FilterCollectorForGroups( aCollector );
+                    } );
 
     if( selection.Empty() )
         return 0;
@@ -1677,12 +1694,31 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
-            {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
-            } );
+    const auto& selection =
+            m_isFootprintEditor ? m_selectionTool->RequestSelection(
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    {
+                    } )
+            /*is board editor*/ : m_selectionTool->RequestSelection(
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    {
+                        // Iterate from the back so we don't have to worry about removals.
+                        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+                        {
+                            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
+
+                            // Promote pad selections to footprint selections
+                            if( item->Type() == PCB_PAD_T )
+                            {
+                                aCollector.Remove( item );
+
+                                if( item->GetParent() && !aCollector.HasItem( item->GetParent() ) )
+                                    aCollector.Append( item->GetParent() );
+                            }
+                        }
+
+                        sTool->FilterCollectorForGroups( aCollector );
+                    } );
 
     if( selection.Empty() )
         return 0;
@@ -1834,9 +1870,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS,
-                                         sTool );
-            } );
+            },
+            aEvent.IsAction( &ACTIONS::cut ) /* prompt user regarding locked items */ );
 
     if( !selection.Empty() )
     {

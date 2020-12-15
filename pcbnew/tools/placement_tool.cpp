@@ -145,7 +145,14 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             } );
 
     std::vector<BOARD_ITEM*> lockedItems;
@@ -161,7 +168,14 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_
     selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -455,7 +469,14 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -567,7 +588,14 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 

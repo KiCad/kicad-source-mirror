@@ -69,7 +69,14 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     const auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
             {
-                EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS, sTool );
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( item->Type() == PCB_MARKER_T )
+                        aCollector.Remove( item );
+                }
             },
             true /* prompt user regarding locked items */ );
 
@@ -145,9 +152,6 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
             const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
                     []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
                     {
-                        EditToolSelectionFilter( aCollector,
-                                                 EXCLUDE_TRANSIENTS | INCLUDE_PADS_AND_FOOTPRINTS,
-                                                 sTool );
                     } );
 
             if( sel.Empty() )

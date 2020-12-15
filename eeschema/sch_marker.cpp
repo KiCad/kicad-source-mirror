@@ -175,23 +175,19 @@ BITMAP_DEF SCH_MARKER::GetMenuImage() const
 
 void SCH_MARKER::Rotate( wxPoint aPosition )
 {
-    RotatePoint( &m_Pos, aPosition, 900 );
+    // Marker geometry isn't user-editable
 }
 
 
 void SCH_MARKER::MirrorX( int aXaxis_position )
 {
-    m_Pos.y -= aXaxis_position;
-    m_Pos.y  = -m_Pos.y;
-    m_Pos.y += aXaxis_position;
+    // Marker geometry isn't user-editable
 }
 
 
 void SCH_MARKER::MirrorY( int aYaxis_position )
 {
-    m_Pos.x -= aYaxis_position;
-    m_Pos.x  = -m_Pos.x;
-    m_Pos.x += aYaxis_position;
+    // Marker geometry isn't user-editable
 }
 
 

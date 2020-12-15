@@ -114,18 +114,15 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 }
 
 
-void PCB_MARKER::Rotate( const wxPoint& aRotCentre, double aAngle)
+void PCB_MARKER::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
-    RotatePoint( &m_Pos, aRotCentre, aAngle );
+    // Marker geometry isn't user-editable
 }
 
 
 void PCB_MARKER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
-    if( aFlipLeftRight )
-        m_Pos.x = aCentre.x - ( m_Pos.x - aCentre.x );
-    else
-        m_Pos.y = aCentre.y - ( m_Pos.y - aCentre.y );
+    // Marker geometry isn't user-editable
 }
 
 
