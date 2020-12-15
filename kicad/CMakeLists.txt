@@ -65,6 +65,10 @@ if( UNIX )
         )
 endif()
 
+if( WIN32 )
+	list( APPEND EXTRA_KICAD_LIBS "Shlwapi" )
+endif()
+
 if( APPLE )
     set_target_properties( kicad PROPERTIES
         MACOSX_BUNDLE_INFO_PLIST ${PROJECT_BINARY_DIR}/kicad/Info.plist
@@ -79,6 +83,7 @@ else()
         gal
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}
+		${EXTRA_KICAD_LIBS}
         )
 endif()
 
