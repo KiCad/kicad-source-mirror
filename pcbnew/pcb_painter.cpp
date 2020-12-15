@@ -1395,7 +1395,7 @@ void PCB_PAINTER::draw( const FP_TEXT* aText, int aLayer )
     if( aText->IsSelected() )
     {
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->SetStrokeColor( m_pcbSettings.GetColor( nullptr, LAYER_ANCHOR ) );
         m_gal->DrawLine( position, aText->GetParent()->GetPosition() );
     }
 }
