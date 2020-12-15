@@ -432,7 +432,7 @@ TOOL_ACTION PCB_ACTIONS::editTextAndGraphics( "pcbnew.GlobalEdit.editTextAndGrap
         AS_GLOBAL, 0, "",
         _( "Edit Text & Graphics Properties..." ),
         _( "Edit Text and graphics properties globally across board" ),
-        reset_text_xpm );
+        text_edit_xpm );
 
 TOOL_ACTION PCB_ACTIONS::globalDeletions( "pcbnew.GlobalEdit.globalDeletions",
         AS_GLOBAL, 0, "",

@@ -474,7 +474,7 @@ TOOL_ACTION EE_ACTIONS::editTextAndGraphics( "eeschema.InteractiveEdit.editTextA
         AS_GLOBAL, 0, "",
         _( "Edit Text & Graphics Properties..." ),
         _( "Edit text and graphics properties globally across schematic" ),
-        reset_text_xpm );
+        text_edit_xpm );
 
 TOOL_ACTION EE_ACTIONS::symbolProperties( "eeschema.InteractiveEdit.symbolProperties",
         AS_GLOBAL, 0, "",

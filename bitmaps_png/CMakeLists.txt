@@ -389,7 +389,6 @@ set( BMAPS_MID
     reload2
     reload
     render_mode
-    reset_text
     rescue
     right
     router_len_tuner
@@ -448,6 +447,7 @@ set( BMAPS_MID
     swap_layer
     switch_corner_rounding_shape
     text
+    text_edit
     text_sketch
     three_d
     tool_ratsnest

@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="text.svg"
+   sodipodi:docname="text_edit.svg"
    inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -53,7 +53,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>text</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -84,4 +84,29 @@
      d="M 20,5 H 14 V 22 H 10 V 5 H 4 V 2 h 16 z"
      id="path27353"
      sodipodi:nodetypes="ccccccccc" />
+  <ellipse
+     class="cls-3"
+     cx="17"
+     cy="17"
+     id="circle843"
+     style="display:inline;fill:#ffffff;fill-opacity:1;stroke-width:0.999999"
+     r="7.9999995" />
+  <circle
+     class="cls-3"
+     cx="17.000002"
+     cy="17.000002"
+     id="ellipse22-5"
+     style="display:inline;fill:#bf2641;stroke-width:0.999999"
+     r="7" />
+  <path
+     class="cls-4"
+     d="M 21.539701,13 20.89452,12.354822 c -0.401771,-0.40166 -1.053052,-0.40166 -1.454825,0 l -5.316089,5.34082 2.100005,2.100132 5.31609,-5.340946 c 0.401658,-0.401772 0.401658,-1.053056 0,-1.454828 z"
+     id="path25-6"
+     style="display:inline;fill:#ffffff;stroke-width:0.999999"
+     sodipodi:nodetypes="ccccccc" />
+  <path
+     id="polygon27"
+     style="display:inline;fill:#ffffff;stroke-width:0.999999"
+     d="m 13,21 h 3 c -0.779315,-0.772295 -2.28388,-2.275534 -3,-3 z"
+     sodipodi:nodetypes="cccc" />
 </svg>
