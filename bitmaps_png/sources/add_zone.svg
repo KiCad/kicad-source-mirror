@@ -41,7 +41,7 @@
    id="namedview32"
    inkscape:current-layer="Слой_1"
    inkscape:cx="9.8707278"
-   inkscape:cy="11.653086"
+   inkscape:cy="8.6725754"
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
@@ -59,7 +59,9 @@
    type="xygrid"
    spacingx="0.5"
    spacingy="0.5"
-   empspacing="2" />
+   empspacing="2"
+   color="#ceceff"
+   opacity="0.1254902" />
 </sodipodi:namedview>
 <title
    id="title13">add_zone_2</title>
@@ -72,5 +74,5 @@
    sodipodi:nodetypes="ccccccc" />
 <path
    id="path2776"
-   style="fill:#545454;fill-opacity:1;stroke:#ffffff;stroke-width:1.63193;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
-   d="m 17.005368,5.1337525 a 2.0635231,2.010251 0 0 0 -2.064453,2.0117187 2.0635231,2.010251 0 0 0 2.064453,2.0097657 2.0635231,2.010251 0 0 0 1.78125,-0.9980469 h 3.185547 c 0.04089,0 0.07422,-0.033333 0.07422,-0.074219 V 6.2314088 c 0,-0.040886 -0.03333,-0.074219 -0.07422,-0.074219 H 18.80029 A 2.0635231,2.010251 0 0 0 17.005368,5.1337525 Z" /></svg>
+   style="fill:#545454;fill-opacity:1;stroke:#ffffff;stroke-width:2.2;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+   d="m 16.928614,8.976565 a 2.0635231,2.010251 0 0 0 -2.064453,2.011718 2.0635231,2.010251 0 0 0 2.064453,2.009766 2.0635231,2.010251 0 0 0 1.78125,-0.998047 h 3.185547 c 0.04089,0 0.07422,-0.03333 0.07422,-0.07422 V 10.07422 C 21.969631,10.03333 21.936301,10 21.895411,10 H 18.723536 A 2.0635231,2.010251 0 0 0 16.928614,8.976565 Z" /></svg>

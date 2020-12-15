@@ -1,33 +1,105 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="save_as.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <metadata id="metadata29">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>save</dc:title>
-         </cc:Work>
-      </rdf:RDF>
-   </metadata>
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="2332" inkscape:window-height="1747" id="namedview27" showgrid="true" inkscape:zoom="19.771793" inkscape:cx="-8.3188008" inkscape:cy="20.096417" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:current-layer="Слой_1" inkscape:document-rotation="0">
-      <inkscape:grid type="xygrid" id="grid853" spacingx="0.5" spacingy="0.5" empspacing="2" color="#a8a8ff" opacity="0.1254902" />
-   </sodipodi:namedview>
-   <defs id="defs4">
-      <style id="style2">.cls-1,.cls-3{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-2,.cls-3,.cls-4{stroke:#1a81c4;}.cls-2,.cls-3,.cls-4,.cls-6{stroke-linecap:round;stroke-linejoin:round;}.cls-4,.cls-6{fill:none;}.cls-5{fill:#bf2641;}.cls-6{stroke:#fff;stroke-width:2px;}</style>
-   </defs>
-   <title id="title6">save</title>
-   <path id="polygon10" style="fill:#1a81c4;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none" d="M 22.5,6.9999994 V 22.5 H 1.4999998 l 2e-7,-21 15.5,-1e-7 z" sodipodi:nodetypes="cccccc" />
-   <rect class="cls-3" x="6" y="1.9999995" width="7" height="6" id="rect12" style="fill:#b9b9b9;stroke:none;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round" />
-   <path id="line16" style="fill:none;stroke:#1a81c4;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round" d="m 9.5,1.4999999 v 4" sodipodi:nodetypes="cc" />
-   <rect style="fill:#b9b9b9;stroke:none;stroke-linejoin:round" id="rect844" width="11" height="7" x="6" y="14.000001" />
-   <line class="cls-4" x1="5.4523964" y1="16.5" x2="18.204153" y2="16.5" id="line18" style="fill:none;stroke:#1a81c4;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round" />
-   <path class="cls-5" d="m 23.9961,16.9968 a 6.9925,6.9925 0 1 1 -6.9926,-7.0039 6.9982,6.9982 0 0 1 6.9926,7.0039 z" id="path20" />
-   <polyline class="cls-6" points="21.865 19.871 15.694 19.871 15.694 14.26" id="polyline22" transform="translate(-1,-1)" />
-   <polyline class="cls-6" points="19.487 17.444 21.913 19.871 19.487 22.297" id="polyline24" transform="translate(-1,-1)" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="save_as.svg"
+   inkscape:version="1.0.1 (1.0.1+r74)">
+  <metadata
+     id="metadata29">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>save</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     id="namedview27"
+     showgrid="true"
+     inkscape:zoom="39.543586"
+     inkscape:cx="0.31612939"
+     inkscape:cy="11.776561"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid853"
+       spacingx="0.5"
+       spacingy="0.5"
+       empspacing="2"
+       color="#a8a8ff"
+       opacity="0.1254902" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1,.cls-3{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-2,.cls-3,.cls-4{stroke:#1a81c4;}.cls-2,.cls-3,.cls-4,.cls-6{stroke-linecap:round;stroke-linejoin:round;}.cls-4,.cls-6{fill:none;}.cls-5{fill:#bf2641;}.cls-6{stroke:#fff;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title6">save</title>
+  <path
+     id="polygon10"
+     style="fill:#545454;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 22.5,7 v 15.5 h -21 l 2e-7,-20.9999999 L 17,1.5 Z"
+     sodipodi:nodetypes="cccccc" />
+  <rect
+     class="cls-3"
+     x="6"
+     y="2"
+     width="7"
+     height="6"
+     id="rect12"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.999998;stroke-linecap:round;stroke-linejoin:round" />
+  <path
+     id="line16"
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 11.5,1.5 v 4"
+     sodipodi:nodetypes="cc" />
+  <rect
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-linejoin:round"
+     id="rect844"
+     width="11"
+     height="7"
+     x="6"
+     y="14" />
+  <path
+     class="cls-5"
+     d="m 23.9961,16.9968 a 6.9925,6.9925 0 1 1 -6.9926,-7.0039 6.9982,6.9982 0 0 1 6.9926,7.0039 z"
+     id="path20"
+     style="stroke:#ffffff;stroke-opacity:1;stroke-width:1.1;stroke-miterlimit:4;stroke-dasharray:none" />
+  <polyline
+     class="cls-6"
+     points="21.865 19.871 15.694 19.871 15.694 14.26"
+     id="polyline22"
+     transform="translate(-1,-1)" />
+  <polyline
+     class="cls-6"
+     points="19.487 17.444 21.913 19.871 19.487 22.297"
+     id="polyline24"
+     transform="translate(-1,-1)" />
 </svg>

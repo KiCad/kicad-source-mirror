@@ -12,7 +12,7 @@
    viewBox="0 0 16 16"
    version="1.1"
    sodipodi:docname="folder.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="1.0.1 (1.0.1+r74)"
    width="16"
    height="16">
   <sodipodi:namedview
@@ -24,17 +24,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2261"
-     inkscape:window-height="1603"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview9483"
      showgrid="true"
      inkscape:zoom="39.543587"
-     inkscape:cx="12.550317"
+     inkscape:cx="7.682271"
      inkscape:cy="10.76419"
-     inkscape:window-x="442"
-     inkscape:window-y="200"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid10046" />
@@ -85,12 +86,12 @@
      class="cls-2"
      d="M 2.3800272,3 H 13.586227 c 0.589104,-6e-7 1.08664,1.1596141 1.08664,2.9304774 v 0.02005 H 1.3333333 v -0.02005 C 1.3333333,4.1596144 1.7909235,3 2.3800272,3 Z"
      id="path9478"
-     style="stroke-width:0.999996"
+     style="stroke-width:0.999996;fill:#ffffff;fill-opacity:1"
      sodipodi:nodetypes="scsccss" />
   <path
      class="cls-3"
      d="M 1.3333333,5 H 14.666667 C 15.403047,5.0000002 16,5.5969538 16,6.3333333 V 13.333333 C 16,14.806093 14.806093,16 13.333333,16 H 2.6666667 C 1.1939072,16 0,14.806092 0,13.333333 V 6.3333333 C 0,5.5969537 0.59695365,5 1.3333333,5 Z"
      id="path9480"
-     style="stroke-width:0.999996"
+     style="stroke-width:0.999996;fill:#545454;fill-opacity:1"
      sodipodi:nodetypes="scsssssss" />
 </svg>
