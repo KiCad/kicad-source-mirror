@@ -15,7 +15,7 @@
    style="enable-background:new 0 0 24 24;"
    xml:space="preserve"
    sodipodi:docname="add_keepout_area.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"><metadata
+   inkscape:version="1.0.1 (1.0.1+r74)"><metadata
    id="metadata866"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title><cc:license
@@ -36,18 +36,25 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1280"
-   inkscape:window-height="715"
+   inkscape:window-width="2560"
+   inkscape:window-height="1371"
    id="namedview862"
-   showgrid="false"
-   inkscape:zoom="20.310517"
-   inkscape:cx="12"
-   inkscape:cy="12"
+   showgrid="true"
+   inkscape:zoom="40.621034"
+   inkscape:cx="8.210331"
+   inkscape:cy="11.638473"
    inkscape:window-x="0"
-   inkscape:window-y="23"
+   inkscape:window-y="0"
    inkscape:window-maximized="1"
    inkscape:current-layer="Layer_1"
-   inkscape:document-rotation="0" />
+   inkscape:document-rotation="0"><inkscape:grid
+     type="xygrid"
+     id="grid4149"
+     spacingx="0.5"
+     spacingy="0.5"
+     empspacing="2"
+     color="#ceceff"
+     opacity="0.1254902" /></sodipodi:namedview>
 <style
    type="text/css"
    id="style833">
@@ -57,7 +64,8 @@
 <g
    id="Слой_1"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
-   sodipodi:docname="add_keepout_area.svg">
+   sodipodi:docname="add_keepout_area.svg"
+   transform="rotate(-90,12,12)">
 	
 		<sodipodi:namedview
    bordercolor="#666666"
@@ -126,37 +134,43 @@
 	</sodipodi:namedview>
 	<title
    id="title842">add_keepout_area</title>
+	<path
+   id="polygon844"
+   style="fill:#545454"
+   d="M 2.1,20.5 14,8.5 h 2.5 l -13,13.4 z"
+   class="st0"
+   sodipodi:nodetypes="ccccc" />
 	<polygon
    class="st0"
-   points="3.5,21.9 2.1,20.5 11.2,11.4 12.7,12.7  "
-   id="polygon844" />
-	<polygon
-   class="st0"
-   points="2.5,16.9 2.5,14.1 12,4.6 12,7.4  "
+   points="2.5,14.1 12,4.6 12,7.4 2.5,16.9 "
    id="polygon846" />
 	<polygon
    class="st0"
-   points="2.5,10.9 2.5,8.1 8.1,2.5 10.9,2.5  "
+   points="2.5,8.1 8.1,2.5 10.9,2.5 2.5,10.9 "
    id="polygon848" />
 	<polygon
    class="st0"
-   points="2.5,4.9 2.5,2.5 5,2.5  "
+   points="2.5,2.5 5,2.5 2.5,4.9 "
    id="polygon850" />
+	<path
+   id="polygon852"
+   style="fill:#545454"
+   d="M 7.1,21.5 20,8.5 h 1.5 V 10 L 9.9,21.5 Z"
+   class="st0"
+   sodipodi:nodetypes="cccccc" />
 	<polygon
    class="st0"
-   points="9.9,21.5 7.1,21.5 16.6,12 19.4,12  "
-   id="polygon852" />
-	<polygon
-   class="st0"
-   points="15.9,21.5 13.1,21.5 21.5,13.1 21.5,15.9  "
+   points="13.1,21.5 21.5,13.1 21.5,15.9 15.9,21.5 "
    id="polygon854" />
 	<polygon
    class="st0"
-   points="21.5,21.5 19.1,21.5 21.5,19.1  "
+   points="19.1,21.5 21.5,19.1 21.5,21.5 "
    id="polygon856" />
-	<polygon
+	<path
+   id="polygon858"
+   style="fill:none;stroke:#545454"
+   d="m 11.5,2.5 h -9 v 19 h 19 v -13 h -10 z"
    class="st1"
-   points="11.5,12.5 11.5,2.5 2.5,2.5 2.5,21.5 21.5,21.5 21.5,12.5  "
-   id="polygon858" />
+   sodipodi:nodetypes="ccccccc" />
 </g>
 </svg>

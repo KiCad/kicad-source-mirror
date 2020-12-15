@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="Слой_1"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   inkscape:version="1.0.1 (1.0.1+r74)"
    sodipodi:docname="add_zone.svg"
    x="0px"
    y="0px"
@@ -45,23 +45,32 @@
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-height="715"
-   inkscape:window-maximized="0"
-   inkscape:window-width="1280"
+   inkscape:window-height="1371"
+   inkscape:window-maximized="1"
+   inkscape:window-width="2560"
    inkscape:window-x="0"
-   inkscape:window-y="23"
+   inkscape:window-y="0"
    inkscape:zoom="26.841039"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
 	<inkscape:grid
    id="grid857"
-   type="xygrid" />
+   type="xygrid"
+   spacingx="0.5"
+   spacingy="0.5"
+   empspacing="2" />
 </sodipodi:namedview>
 <title
    id="title13">add_zone_2</title>
-<polygon
+<path
+   id="polygon838"
+   transform="rotate(-90,12,12)"
+   style="fill:#1a81c4;stroke:#1a81c4"
+   d="m 11.5,2.5 h -9 v 19 h 19 v -13 h -10 z"
    class="st0"
-   points="11.5,12.5 11.5,2.5 2.5,2.5 2.5,21.5 21.5,21.5 21.5,12.5 "
-   id="polygon838" />
-</svg>
+   sodipodi:nodetypes="ccccccc" />
+<path
+   id="path2776"
+   style="fill:#545454;fill-opacity:1;stroke:#ffffff;stroke-width:1.63193;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+   d="m 17.005368,5.1337525 a 2.0635231,2.010251 0 0 0 -2.064453,2.0117187 2.0635231,2.010251 0 0 0 2.064453,2.0097657 2.0635231,2.010251 0 0 0 1.78125,-0.9980469 h 3.185547 c 0.04089,0 0.07422,-0.033333 0.07422,-0.074219 V 6.2314088 c 0,-0.040886 -0.03333,-0.074219 -0.07422,-0.074219 H 18.80029 A 2.0635231,2.010251 0 0 0 17.005368,5.1337525 Z" /></svg>
