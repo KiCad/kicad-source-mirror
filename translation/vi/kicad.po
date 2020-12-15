@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-13 16:51+0000\n"
+"PO-Revision-Date: 2020-12-16 17:41+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
 "master-source/vi/>\n"
@@ -5939,131 +5939,133 @@ msgstr "Trình duyệt Thư viện Symbol"
 
 #: common/tool/actions.cpp:542
 msgid "Browse symbol libraries"
-msgstr ""
+msgstr "Duyệt qua các thư viện symbol"
 
 #: common/tool/actions.cpp:547 eeschema/eeschema_config.cpp:227
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:109
 #: eeschema/symbol_editor/symbol_editor.cpp:66
 msgid "Symbol Editor"
-msgstr ""
+msgstr "Trình soạn thảo Symbol"
 
 #: common/tool/actions.cpp:547
 msgid "Create, delete and edit symbols"
-msgstr ""
+msgstr "Tạo, xóa và chỉnh sửa các ký hiệu điện tử"
 
 #: common/tool/actions.cpp:552 pcbnew/footprint_viewer_frame.cpp:107
 #: pcbnew/footprint_viewer_frame.cpp:997
 msgid "Footprint Library Browser"
-msgstr ""
+msgstr "Trình duyệt Thư viện Footprint"
 
 #: common/tool/actions.cpp:552
 msgid "Browse footprint libraries"
-msgstr ""
+msgstr "Duyệt qua thư viện footprint"
 
 #: common/tool/actions.cpp:557 pcbnew/footprint_edit_frame.cpp:118
 #: pcbnew/footprint_edit_frame.cpp:760 pcbnew/footprint_edit_frame.cpp:877
 #: pcbnew/menubar_footprint_editor.cpp:100
 msgid "Footprint Editor"
-msgstr ""
+msgstr "Trình chỉnh sửa Footprint"
 
 #: common/tool/actions.cpp:557
 msgid "Create, delete and edit footprints"
-msgstr ""
+msgstr "Tạo, xóa và chỉnh sửa footprint"
 
 #: common/tool/actions.cpp:563
 msgid "Update PCB from Schematic..."
-msgstr ""
+msgstr "Cập nhật PCB từ Schematic ..."
 
 #: common/tool/actions.cpp:563
 msgid "Update PCB with changes made to schematic"
-msgstr ""
+msgstr "Cập nhật PCB với các thay đổi được thực hiện đối với sơ đồ mạch"
 
 #: common/tool/actions.cpp:568
 msgid "Update Schematic from PCB..."
-msgstr ""
+msgstr "Cập nhật sơ đồ mạch từ PCB..."
 
 #: common/tool/actions.cpp:568
 msgid "Update schematic with changes made to PCB"
-msgstr ""
+msgstr "Cập nhật sơ đồ mạch với các thay đổi được thực hiện đối với PCB"
 
 #: common/tool/actions.cpp:573
 msgid "Accelerated Graphics"
-msgstr ""
+msgstr "Đồ họa nâng cao"
 
 #: common/tool/actions.cpp:573
+#, fuzzy
 msgid "Use hardware-accelerated graphics (recommended)"
-msgstr ""
+msgstr "Sử dụng đồ họa tăng tốc phần cứng (khuyến cáo)"
 
 #: common/tool/actions.cpp:578
 msgid "Standard Graphics"
-msgstr ""
+msgstr "Đồ họa tiêu chuẩn"
 
 #: common/tool/actions.cpp:578
 msgid "Use software graphics (fall-back)"
-msgstr ""
+msgstr "Sử dụng đồ họa phần mềm (dự phòng)"
 
 #: common/tool/actions.cpp:583
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:392
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 msgid "Configure Paths..."
-msgstr ""
+msgstr "Cấu hình Đường dẫn..."
 
 #: common/tool/actions.cpp:583
 msgid "Edit path configuration environment variables"
-msgstr ""
+msgstr "Chỉnh sửa các biến môi trường cấu hình đường dẫn"
 
 #: common/tool/actions.cpp:588
 msgid "Manage Symbol Libraries..."
-msgstr ""
+msgstr "Quản lý Thư viện Symbol ..."
 
 #: common/tool/actions.cpp:589
 msgid "Edit the global and project symbol library lists"
-msgstr ""
+msgstr "Chỉnh sửa danh sách thư viện symbol toàn cục và trong dự án"
 
 #: common/tool/actions.cpp:594
 msgid "Manage Footprint Libraries..."
-msgstr ""
+msgstr "Quản lý Thư viện Footprint ..."
 
 #: common/tool/actions.cpp:595
 msgid "Edit the global and project footprint library lists"
-msgstr ""
+msgstr "Chỉnh sửa danh sách thư viện footprint toàn cục và trong dự án"
 
 #: common/tool/actions.cpp:600
 msgid "Getting Started with KiCad"
-msgstr ""
+msgstr "Bắt đầu với KiCad"
 
 #: common/tool/actions.cpp:601
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr ""
+msgstr "Mở hướng dẫn \"Bắt đầu trong KiCad\" cho người mới bắt đầu"
 
 #: common/tool/actions.cpp:606
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:594
 msgid "Help"
-msgstr ""
+msgstr "Trợ giúp"
 
 #: common/tool/actions.cpp:607
 msgid "Open product documentation in a web browser"
-msgstr ""
+msgstr "Mở tài liệu sản phẩm trong trình duyệt web"
 
 #: common/tool/actions.cpp:613
 msgid "List Hotkeys..."
-msgstr ""
+msgstr "Liệt kê các phím nóng ..."
 
 #: common/tool/actions.cpp:614
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr ""
+msgstr "Hiển thị bảng phím nóng hiện tại và các lệnh tương ứng"
 
 #: common/tool/actions.cpp:619
+#, fuzzy
 msgid "Get Involved"
-msgstr ""
+msgstr "Tham gia vào"
 
 #: common/tool/actions.cpp:620
 msgid "Open \"Contribute to KiCad\" in a web browser"
-msgstr ""
+msgstr "Mở \"Đóng góp cho KiCad\" trong trình duyệt web"
 
 #: common/tool/actions.cpp:625
 msgid "Report Bug"
-msgstr ""
+msgstr "Báo cáo lỗi"
 
 #: common/tool/common_control.cpp:197
 #, c-format
@@ -6073,11 +6075,15 @@ msgid ""
 "or\n"
 "%s could not be found."
 msgstr ""
+"Tệp trợ giúp Html hoặc pdf \n"
+"%s\n"
+"Hoặc\n"
+"%s không thể tìm thấy."
 
 #: common/tool/common_control.cpp:211
 #, c-format
 msgid "Help file \"%s\" could not be found."
-msgstr ""
+msgstr "Không tìm thấy tệp trợ giúp \"%s\""
 
 #: common/tool/common_control.cpp:234
 #, c-format
@@ -6085,93 +6091,97 @@ msgid ""
 "Could not launch the default browser.\n"
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
+"Không thể khởi chạy trình duyệt mặc định.\n"
+"Để biết thông tin về cách trợ giúp dự án KiCad, hãy truy cập %s"
 
 #: common/tool/common_control.cpp:237
 msgid "Get involved with KiCad"
-msgstr ""
+msgstr "Tham gia với KiCad"
 
 #: common/tool/grid_menu.cpp:93
 #, c-format
 msgid "Grid: %s (%s)"
-msgstr ""
+msgstr "Lưới: %s (%s)"
 
 #: common/tool/grid_menu.cpp:104
 #, c-format
 msgid "User grid: %s (%s)"
-msgstr ""
+msgstr "Lưới người dùng: %s (%s)"
 
 #: common/tool/zoom_menu.cpp:48
 #, c-format
 msgid "Zoom: %.2f"
-msgstr ""
+msgstr "Thu phóng: %.2f"
 
 #: common/validators.cpp:250
 #, c-format
 msgid "Incorrect value: %s"
-msgstr ""
+msgstr "Giá trị không chính xác: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "Mục nhập chứa khoảng trắng theo sau."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "Mục nhập chứa khoảng trắng ở đầu."
 
 #: common/validators.cpp:302
 #, c-format
 msgid "\"%s\" is not a valid library identifier format."
-msgstr ""
+msgstr "\"%s\" không phải là định dạng số nhận dạng thư viện hợp lệ."
 
 #: common/validators.cpp:309
+#, fuzzy
 msgid "Library Identifier Validation Error"
-msgstr ""
+msgstr "Lỗi xác thực mã định danh thư viện"
 
 #: common/validators.cpp:356
 msgid "Invalid signal name"
-msgstr ""
+msgstr "Tên tín hiệu không hợp lệ"
 
 #: common/validators.cpp:367
 msgid "Signal names cannot contain CR or LF characters"
-msgstr ""
+msgstr "Tên tín hiệu không được chứa các ký tự CR hoặc LF"
 
 #: common/validators.cpp:370
 msgid "Signal names cannot contain spaces"
-msgstr ""
+msgstr "Tên tín hiệu không được chứa khoảng trắng"
 
 #: common/view/view.cpp:548
+#, fuzzy
 msgid "Mirroring for Y axis is not supported yet"
-msgstr ""
+msgstr "Phản chiếu cho trục Y chưa được hỗ trợ"
 
 #: common/widgets/footprint_preview_widget.cpp:103
 msgid "Footprint not found"
-msgstr ""
+msgstr "Không tìm thấy Footprint"
 
 #: common/widgets/footprint_select_widget.cpp:80 cvpcb/cvpcb_mainframe.cpp:793
 #: pcbnew/footprint_edit_frame.cpp:785 pcbnew/load_select_footprint.cpp:205
 msgid "Loading Footprint Libraries"
-msgstr ""
+msgstr "Đang tải Thư viện Footprint"
 
 #: common/widgets/footprint_select_widget.cpp:228
 msgid "No default footprint"
-msgstr ""
+msgstr "Không có footprint mặc định"
 
 #: common/widgets/footprint_select_widget.cpp:233
 #: common/widgets/footprint_select_widget.cpp:234
 msgid "Other..."
-msgstr ""
+msgstr "Khác..."
 
 #: common/widgets/gal_options_panel.cpp:81
 msgid "Grid Options"
-msgstr ""
+msgstr "Tùy chọn Lưới"
 
 #: common/widgets/gal_options_panel.cpp:86
 msgid "Dots"
-msgstr ""
+msgstr "Dấu chấm"
 
 #: common/widgets/gal_options_panel.cpp:87
 msgid "Lines"
-msgstr ""
+msgstr "Dòng"
 
 #: common/widgets/gal_options_panel.cpp:88
 msgid "Small crosses"
@@ -6179,11 +6189,11 @@ msgstr ""
 
 #: common/widgets/gal_options_panel.cpp:92
 msgid "Grid Style"
-msgstr ""
+msgstr "Kiểu Lưới"
 
 #: common/widgets/gal_options_panel.cpp:104
 msgid "Grid thickness:"
-msgstr ""
+msgstr "Độ dày lưới:"
 
 #: common/widgets/gal_options_panel.cpp:115
 #: common/widgets/gal_options_panel.cpp:131
