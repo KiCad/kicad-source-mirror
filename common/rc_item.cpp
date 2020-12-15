@@ -331,6 +331,12 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
         {
         case RPT_SEVERITY_ERROR:   prefix += _( "Error: " ); break;
         case RPT_SEVERITY_WARNING: prefix += _( "Warning: " ); break;
+
+        case RPT_SEVERITY_UNDEFINED:
+        case RPT_SEVERITY_INFO:
+        case RPT_SEVERITY_ACTION:
+        case RPT_SEVERITY_IGNORE:
+            break;
         }
 
         aVariant = prefix + rcItem->GetErrorMessage();
