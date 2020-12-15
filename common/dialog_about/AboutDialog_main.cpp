@@ -667,23 +667,19 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddArtist( new CONTRIBUTOR( wxT( "Aleksandr Zyrianov" ),
                                       wxEmptyString,
                                       wxEmptyString,
-                                      ICON_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( svg_file_xpm ) ) );
+                                      ICON_CONTRIBUTION ) );
     aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
                                       wxEmptyString,
                                       wxEmptyString,
-                                      ICON_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( svg_file_xpm ) ) );
+                                      ICON_CONTRIBUTION ) );
     aInfo.AddArtist( new CONTRIBUTOR( "Konstantin Baranovskiy",
                                       wxEmptyString,
                                       wxEmptyString,
-                                      ICON_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( svg_file_xpm ) ) );
+                                      ICON_CONTRIBUTION ) );
     aInfo.AddArtist( new CONTRIBUTOR( "Fabrizio Tappero",
                                       wxEmptyString,
                                       wxEmptyString,
-                                      ICON_CONTRIBUTION,
-                                      aInfo.CreateKiBitmap( svg_file_xpm ) ) );
+                                      ICON_CONTRIBUTION ) );
 
     // Program credits for package developers.
     aInfo.AddPackager( new CONTRIBUTOR( "Steven Falco" ) );

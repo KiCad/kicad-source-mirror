@@ -60,19 +60,19 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_SEXPR_PCB
     m_imageList->Add( KiBitmap( icon_gerbview_small_xpm ) );    // TREE_GERBER
     m_imageList->Add( KiBitmap( gerber_job_file_xpm ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
-    m_imageList->Add( KiBitmap( html_xpm ) );                   // TREE_HTML
-    m_imageList->Add( KiBitmap( datasheet_xpm ) );              // TREE_PDF
+    m_imageList->Add( KiBitmap( file_html_xpm ) );              // TREE_HTML
+    m_imageList->Add( KiBitmap( file_pdf_xpm ) );               // TREE_PDF
     m_imageList->Add( KiBitmap( editor_xpm ) );                 // TREE_TXT
     m_imageList->Add( KiBitmap( netlist_xpm ) );                // TREE_NET
     m_imageList->Add( KiBitmap( unknown_xpm ) );                // TREE_UNKNOWN
     m_imageList->Add( KiBitmap( directory_xpm ) );              // TREE_DIRECTORY
     m_imageList->Add( KiBitmap( icon_cvpcb_small_xpm ) );       // TREE_CMP_LINK
     m_imageList->Add( KiBitmap( tools_xpm ) );                  // TREE_REPORT
-    m_imageList->Add( KiBitmap( post_compo_xpm ) );             // TREE_POS
-    m_imageList->Add( KiBitmap( post_drill_xpm ) );             // TREE_DRILL
-    m_imageList->Add( KiBitmap( post_drill_xpm ) );             // TREE_DRILL_NC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( post_drill_xpm ) );             // TREE_DRILL_XNC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( svg_file_xpm ) );               // TREE_SVG
+    m_imageList->Add( KiBitmap( file_pos_xpm ) );               // TREE_POS
+    m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL
+    m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL_NC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( file_svg_xpm ) );               // TREE_SVG
     m_imageList->Add( KiBitmap( pagelayout_load_xpm ) );        // TREE_PAGE_LAYOUT_DESCR
     m_imageList->Add( KiBitmap( module_xpm ) );                 // TREE_FOOTPRINT_FILE
     m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SCHEMATIC_LIBFILE

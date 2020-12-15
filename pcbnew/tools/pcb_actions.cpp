@@ -573,17 +573,17 @@ TOOL_ACTION PCB_ACTIONS::generateReportFile( "pcbnew.EditorControl.generateRepor
         AS_GLOBAL, 0, "",
         _( "Footprint Report (.rpt)..." ),
         _( "Create report of all footprints from current board" ),
-        tools_xpm );
+        post_rpt_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateD356File( "pcbnew.EditorControl.generateD356File",
         AS_GLOBAL, 0, "",
         _( "IPC-D-356 Netlist File..." ), _( "Generate IPC-D-356 netlist file" ),
-        netlist_xpm );
+        post_d356_xpm );
 
 TOOL_ACTION PCB_ACTIONS::generateBOM( "pcbnew.EditorControl.generateBOM",
         AS_GLOBAL, 0, "",
         _( "BOM..." ), _( "Create bill of materials from board" ),
-        bom_xpm );
+        post_bom_xpm );
 
 // Track & via size control
 TOOL_ACTION PCB_ACTIONS::trackWidthInc( "pcbnew.EditorControl.trackWidthInc",

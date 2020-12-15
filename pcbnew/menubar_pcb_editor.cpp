@@ -134,7 +134,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     submenuExport->Add( PCB_ACTIONS::exportSpecctraDSN );
     submenuExport->Add( _( "GenCAD..." ), _( "Export GenCAD board representation" ),
-                        ID_GEN_EXPORT_FILE_GENCADFORMAT, export_xpm );
+                        ID_GEN_EXPORT_FILE_GENCADFORMAT, post_gencad_xpm );
     submenuExport->Add( _( "VRML..." ), _( "Export VRML 3D board representation" ),
                         ID_GEN_EXPORT_FILE_VRML, export3d_xpm );
     submenuExport->Add( _( "IDFv3..." ), _( "Export IDF 3D board representation" ),

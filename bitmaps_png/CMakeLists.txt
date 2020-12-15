@@ -231,7 +231,16 @@ set( BMAPS_MID
     export_step
     export
     fabrication
+    file_bom
+    file_drl
+    file_dsn
     file_footprint
+    file_gbr
+    file_html
+    file_idf
+    file_pdf
+    file_pos
+    file_svg
     fill_zone
     find
     find_replace
@@ -264,7 +273,6 @@ set( BMAPS_MID
     hotkeys
     hole_to_hole_clearance
     hole_to_copper_clearance
-    html
     icon
     icon_cvpcb_small
     icon_gerbview_small
@@ -367,9 +375,13 @@ set( BMAPS_MID
     plot_svg
     plus
     polar_coord
+    post_bom
     post_compo
+    post_d356
     post_drill
+    post_gencad
     post_gerber
+    post_rpt
     preference
     print_button
     project
@@ -443,7 +455,6 @@ set( BMAPS_MID
     show_all_front_layers
     show_all_back_layers
     spreadsheet
-    svg_file
     swap_layer
     switch_corner_rounding_shape
     text

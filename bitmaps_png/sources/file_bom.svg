@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="file_bom.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="3232"
+     inkscape:window-height="1659"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="39.543586"
+     inkscape:cx="7.9729999"
+     inkscape:cy="10.415266"
+     inkscape:window-x="3957"
+     inkscape:window-y="166"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:snap-global="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>bom</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs116228">
+    <style
+       id="style116226">.cls-1{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-3{fill:#fff;}.cls-4{fill:#bf2641;}.cls-5{fill:none;stroke:#f5f5f5;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style>
+  </defs>
+  <title
+     id="title116230">bom</title>
+  <rect
+     class="cls-1"
+     x="3"
+     y="0"
+     width="21"
+     height="24"
+     rx="3.5045271"
+     id="rect116232"
+     style="stroke-width:0.999999" />
+  <rect
+     class="cls-2"
+     x="0"
+     y="2"
+     width="19"
+     height="9"
+     id="rect116234"
+     style="stroke-width:0.999998" />
+  <path
+     class="cls-3"
+     d="M 1.8224,9.3618999 H 0.90050001 v -0.89 H 1.8224 Z"
+     id="path116236" />
+  <path
+     class="cls-3"
+     d="M 6.869138,7.2983966 A 2.509309,2.4932686 0 0 1 6.4171273,8.8530882 1.5070244,1.497391 0 0 1 5.1438942,9.4418863 1.4634235,1.4540688 0 0 1 4.4255527,9.2751064 1.3993107,1.3903659 0 0 1 3.9158728,8.7863976 l -0.097511,0.570018 H 2.9835002 V 2.9999999 H 3.9777303 V 5.4485591 A 1.4202521,1.4111734 0 0 1 4.4685093,5.0171508 1.3979147,1.3889787 0 0 1 5.1353029,4.86627 1.4694374,1.4600442 0 0 1 6.4169126,5.5102346 2.9329682,2.9142197 0 0 1 6.8689233,7.2129259 Z M 5.8759818,7.2130326 A 2.2919486,2.2772977 0 0 0 5.637895,6.1011667 0.79899249,0.79388505 0 0 0 4.8861547,5.6771212 0.98316885,0.97688409 0 0 0 4.3313704,5.8240539 1.034502,1.0278891 0 0 0 3.977945,6.2314535 V 8.0809709 A 0.97210753,0.96589348 0 0 0 4.3293299,8.4905047 1.0175341,1.0110297 0 0 0 4.8945313,8.6353033 0.82175948,0.81650651 0 0 0 5.642298,8.2747472 1.7950483,1.7835737 0 0 0 5.8761966,7.2983966 Z"
+     id="path116238"
+     style="stroke-width:1" />
+  <path
+     class="cls-3"
+     d="M 7.2306,7.2252532 A 2.25,2.2830764 0 0 1 7.7335,5.6913303 1.73,1.755432 0 0 1 9.1154,5.0908305 1.7269,1.7522865 0 0 1 10.506,5.6913303 2.2332,2.2660294 0 0 1 11.0128,7.2252532 v 0.082292 A 2.2454,2.2784087 0 0 1 10.506,8.849383 1.7271,1.7524894 0 0 1 9.1232,9.4419682 1.7378,1.7633467 0 0 1 7.7332,8.8454257 2.2465,2.2795249 0 0 1 7.2303,7.3075455 Z m 0.9248,0.080263 a 1.8445,1.8716153 0 0 0 0.2363,0.9978565 0.8893,0.90237324 0 0 0 1.4551,0 1.7919,1.818242 0 0 0 0.2442,-0.9978565 V 7.22434 a 1.7693,1.7953098 0 0 0 -0.2442,-0.9868978 0.8789,0.89182036 0 0 0 -1.4551,0 A 1.8351,1.8620771 0 0 0 8.1554,7.22434 Z"
+     id="path116240"
+     style="stroke-width:1" />
+  <path
+     class="cls-3"
+     d="m 12.860856,5.2300999 0.0511,0.5381 a 1.4317515,1.4009 0 0 1 0.517961,-0.4541 1.5239379,1.4911 0 0 1 0.719606,-0.16 1.2985819,1.2706 0 0 1 0.70867,0.1836 1.1321966,1.1078 0 0 1 0.444069,0.55 1.4695663,1.4379 0 0 1 0.513056,-0.5391 1.3831032,1.3533 0 0 1 0.747507,-0.1943 1.2407354,1.214 0 0 1 1.001582,0.4258 2.0095008,1.9662 0 0 1 0.367928,1.2929 v 2.4893 h -0.946188 v -2.4936 a 1.1918828,1.1662 0 0 0 -0.18468,-0.7412 0.68587937,0.6711 0 0 0 -0.554958,-0.2138 0.81444981,0.7969 0 0 0 -0.513975,0.16 0.92360182,0.9037 0 0 0 -0.303439,0.4317 c 0,0.038 10e-4,0.0712 0.004,0.1 a 0.76774338,0.7512 0 0 1 0.0041,0.08 v 2.6768 h -0.946188 v -2.4935 a 1.1745084,1.1492 0 0 0 -0.188666,-0.7314 0.67647676,0.6619 0 0 0 -0.554958,-0.2236 0.98614961,0.9649 0 0 0 -0.488016,0.1093 0.8184357,0.8008 0 0 0 -0.31744,0.3067 v 3.0322 h -0.946086 v -4.1318 z"
+     id="path116242"
+     style="stroke-width:1" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 6,13 H 21"
+     id="path859" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6,17 H 21"
+     id="path861" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6,21 H 21"
+     id="path863" />
+</svg>
