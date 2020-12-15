@@ -167,10 +167,10 @@ void LIB_RECTANGLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, v
     if( forceNoFill && m_Fill != FILL_TYPE::NO_FILL && penWidth == 0 )
         return;
 
-    wxDC*   DC      = aSettings->GetPrintDC();
-    COLOR4D color   = aSettings->GetLayerColor( LAYER_DEVICE );
-    wxPoint pt1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
-    wxPoint pt2 = aTransform.TransformCoordinate( m_End ) + aOffset;
+    wxDC*   DC     = aSettings->GetPrintDC();
+    COLOR4D color  = aSettings->GetLayerColor( LAYER_DEVICE );
+    wxPoint pt1    = aTransform.TransformCoordinate( m_Pos ) + aOffset;
+    wxPoint pt2    = aTransform.TransformCoordinate( m_End ) + aOffset;
 
     if( forceNoFill || m_Fill == FILL_TYPE::NO_FILL )
     {

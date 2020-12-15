@@ -713,10 +713,10 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 {
     std::vector<SCH_COMPONENT*> symbols;
 
-    for( auto item : Items().OfType( SCH_COMPONENT_T ) )
+    for( SCH_ITEM* item : Items().OfType( SCH_COMPONENT_T ) )
         symbols.push_back( static_cast<SCH_COMPONENT*>( item ) );
 
-    for( auto symbol : symbols )
+    for( SCH_COMPONENT* symbol : symbols )
     {
         // Changing the symbol may adjust the bbox of the symbol; remove and reinsert it afterwards.
         m_rtree.remove( symbol );
@@ -738,11 +738,11 @@ void SCH_SCREEN::UpdateLocalLibSymbolLinks()
 void SCH_SCREEN::Print( RENDER_SETTINGS* aSettings )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
-    std::vector< SCH_ITEM* > junctions;
-    std::vector<SCH_ITEM*>   bitmaps;
-    std::vector<SCH_ITEM*>   other;
+    std::vector<SCH_ITEM*> junctions;
+    std::vector<SCH_ITEM*> bitmaps;
+    std::vector<SCH_ITEM*> other;
 
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
     {
         if( item->IsMoving() || item->IsResized() )
             continue;
@@ -765,13 +765,13 @@ void SCH_SCREEN::Print( RENDER_SETTINGS* aSettings )
                     return a->Type() > b->Type();
                } );
 
-    for( auto item : bitmaps )
+    for( SCH_ITEM* item : bitmaps )
         item->Print( aSettings, wxPoint( 0, 0 ) );
 
-    for( auto item : other )
+    for( SCH_ITEM* item : other )
         item->Print( aSettings, wxPoint( 0, 0 ) );
 
-    for( auto item : junctions )
+    for( SCH_ITEM* item : junctions )
         item->Print( aSettings, wxPoint( 0, 0 ) );
 }
 
@@ -797,12 +797,14 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
     }
 
     /// Sort to ensure plot-order consistency with screen drawing
-    std::sort( other.begin(), other.end(), []( const SCH_ITEM* a, const SCH_ITEM* b ) {
-        if( a->Type() == b->Type() )
-            return a->GetLayer() > b->GetLayer();
+    std::sort( other.begin(), other.end(),
+               []( const SCH_ITEM* a, const SCH_ITEM* b )
+               {
+                    if( a->Type() == b->Type() )
+                        return a->GetLayer() > b->GetLayer();
 
-        return a->Type() > b->Type();
-    } );
+                    return a->Type() > b->Type();
+                } );
 
     int defaultPenWidth = aPlotter->RenderSettings()->GetDefaultPenWidth();
 
@@ -831,7 +833,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter )
 
 void SCH_SCREEN::ClearDrawingState()
 {
-    for( auto item : Items() )
+    for( SCH_ITEM* item : Items() )
         item->ClearTempFlags();
 }
 
@@ -868,6 +870,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const wxPoint& aPosition, SCH_COMPONENT** aSymbol,
                 if( candidate->GetPinPhysicalPosition( pin ) == aPosition )
                     break;
             }
+
             if( pin )
                 break;
         }

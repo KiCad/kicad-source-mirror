@@ -503,8 +503,8 @@ void LIB_PART::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aM
 }
 
 
-void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert,
-                     const wxPoint& aOffset, const TRANSFORM& aTransform )
+void LIB_PART::Plot( PLOTTER* aPlotter, int aUnit, int aConvert, const wxPoint& aOffset,
+                     const TRANSFORM& aTransform )
 {
     wxASSERT( aPlotter != NULL );
 
