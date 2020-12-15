@@ -748,13 +748,14 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 {
     if( m_part )
     {
-        wxString symbolName;
-        LIB_FIELDS fields;
+        wxString                symbolName;
+        std::vector<LIB_FIELD*> fields;
+
         m_part->GetFields( fields );
 
-        for( const LIB_FIELD& libField : fields )
+        for( const LIB_FIELD* libField : fields )
         {
-            int idx = libField.GetId();
+            int idx = libField->GetId();
             SCH_FIELD* schField;
 
             if( idx == REFERENCE_FIELD && !aResetRef )
@@ -766,11 +767,11 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             }
             else
             {
-                schField = FindField( libField.GetCanonicalName() );
+                schField = FindField( libField->GetCanonicalName() );
 
                 if( !schField )
                 {
-                    wxString  fieldName = libField.GetCanonicalName();
+                    wxString  fieldName = libField->GetCanonicalName();
                     SCH_FIELD newField( wxPoint( 0, 0), GetFieldCount(), this, fieldName );
                     schField = AddField( newField );
                 }
@@ -778,8 +779,8 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 
             if( aResetStyle )
             {
-                schField->ImportValues( libField );
-                schField->SetTextPos( m_pos + libField.GetTextPos() );
+                schField->ImportValues( *libField );
+                schField->SetTextPos( m_pos + libField->GetTextPos() );
             }
 
             if( idx == VALUE_FIELD )
@@ -793,7 +794,7 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
             }
             else
             {
-                schField->SetText( libField.GetText() );
+                schField->SetText( libField->GetText() );
             }
         }
     }

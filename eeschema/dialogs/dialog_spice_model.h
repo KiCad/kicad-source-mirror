@@ -38,8 +38,10 @@
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
 public:
-    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS* aSchFields );
-    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, LIB_FIELDS* aLibFields );
+    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent,
+                        std::vector<SCH_FIELD>* aSchFields );
+    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent,
+                        std::vector<LIB_FIELD>* aLibFields );
 
 private:
     /**
@@ -124,8 +126,8 @@ private:
     SCH_COMPONENT& m_component;
 
     ///> Fields from the component properties dialog
-    SCH_FIELDS* m_schfields;
-    LIB_FIELDS* m_libfields;
+    std::vector<SCH_FIELD>* m_schfields;
+    std::vector<LIB_FIELD>* m_libfields;
     bool m_useSchFields;
 
     ///> Temporary field values

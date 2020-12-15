@@ -215,6 +215,4 @@ private:
             LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
 };
 
-typedef std::vector< LIB_FIELD > LIB_FIELDS;
-
 #endif  //  CLASS_LIBENTRY_FIELDS_H

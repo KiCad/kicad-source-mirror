@@ -297,8 +297,6 @@ class SCH_SEXPR_PLUGIN_CACHE
     int             m_versionMinor;
     SCH_LIB_TYPE    m_libType; // Is this cache a component or symbol library.
 
-    static FILL_TYPE   parseFillMode( LINE_READER& aReader, const char* aLine,
-                                   const char** aOutput );
     LIB_PART*       removeSymbol( LIB_PART* aAlias );
 
     static void     saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
@@ -308,7 +306,8 @@ class SCH_SEXPR_PLUGIN_CACHE
                                 int aNestLevel = 0 );
     static void     saveCircle( LIB_CIRCLE* aCircle, OUTPUTFORMATTER& aFormatter,
                                 int aNestLevel = 0 );
-    static void     saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
+    static void     saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter,
+                               int aNestLevel = 0 );
     static void     savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
     static void     savePolyLine( LIB_POLYLINE* aPolyLine, OUTPUTFORMATTER& aFormatter,
                                   int aNestLevel = 0 );
@@ -1520,7 +1519,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
               LOCALE_IO toggle );
 
     int lastFieldId;
-    LIB_FIELDS fields;
+    std::vector<LIB_FIELD*> fields;
     std::string name = aFormatter.Quotew( aSymbol->GetLibId().Format().wx_str() );
     std::string unitName = aSymbol->GetLibId().GetLibItemName();
 
@@ -1575,10 +1574,10 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         aSymbol->GetFields( fields );
 
-        for( LIB_FIELD& field : fields )
-            saveField( &field, aFormatter, aNestLevel + 1 );
+        for( const LIB_FIELD* field : fields )
+            saveField( field, aFormatter, aNestLevel + 1 );
 
-        lastFieldId = fields.back().GetId() + 1;
+        lastFieldId = fields.back()->GetId() + 1;
 
         // @todo At some point in the future the lock status (all units interchangeable) should
         // be set deterministically.  For now a custom lock propertery is used to preserve the
@@ -1594,13 +1593,14 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         // Save the draw items grouped by units.
         std::vector<PART_UNITS> units = aSymbol->GetUnitDrawItems();
-        std::sort( units.begin(), units.end(), []( const PART_UNITS& a, const PART_UNITS& b )
-           {
-                if( a.m_unit == b.m_unit )
-                    return a.m_convert < b.m_convert;
+        std::sort( units.begin(), units.end(),
+                   []( const PART_UNITS& a, const PART_UNITS& b )
+                   {
+                        if( a.m_unit == b.m_unit )
+                            return a.m_convert < b.m_convert;
 
-                return a.m_unit < b.m_unit;
-           } );
+                        return a.m_unit < b.m_unit;
+                   } );
 
         for( auto unit : units )
         {
@@ -1629,10 +1629,10 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         aSymbol->GetFields( fields );
 
-        for( LIB_FIELD& field : fields )
-            saveField( &field, aFormatter, aNestLevel + 1 );
+        for( const LIB_FIELD* field : fields )
+            saveField( field, aFormatter, aNestLevel + 1 );
 
-        lastFieldId = fields.back().GetId() + 1;
+        lastFieldId = fields.back()->GetId() + 1;
 
         saveDcmInfoAsFields( aSymbol, aFormatter, aNestLevel, lastFieldId );
     }
@@ -1730,8 +1730,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTE
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
-                                      OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter,
                                       int aNestLevel )
 {
     wxCHECK_RET( aArc && aArc->Type() == LIB_ARC_T, "Invalid LIB_ARC object." );
@@ -1837,8 +1836,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
-                                        OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter,
                                         int aNestLevel )
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
@@ -1956,8 +1954,7 @@ void SCH_SEXPR_PLUGIN_CACHE::savePolyLine( LIB_POLYLINE* aPolyLine,
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
-                                            OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle, OUTPUTFORMATTER& aFormatter,
                                             int aNestLevel )
 {
     wxCHECK_RET( aRectangle && aRectangle->Type() == LIB_RECTANGLE_T,
@@ -1976,8 +1973,7 @@ void SCH_SEXPR_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
 }
 
 
-void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText,
-                                       OUTPUTFORMATTER& aFormatter,
+void SCH_SEXPR_PLUGIN_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter,
                                        int aNestLevel )
 {
     wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );

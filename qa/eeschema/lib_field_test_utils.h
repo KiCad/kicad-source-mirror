@@ -47,9 +47,9 @@ struct print_log_value<LIB_FIELD>
 };
 
 template <>
-struct print_log_value<LIB_FIELDS>
+struct print_log_value<std::vector<LIB_FIELD>>
 {
-    inline void operator()( std::ostream& os, LIB_FIELDS const& f )
+    inline void operator()( std::ostream& os, std::vector<LIB_FIELD> const& f )
     {
         os << "LIB_FIELDS[ " << f.size() << " ]";
     }
@@ -96,7 +96,7 @@ bool FieldNameIdMatches( const LIB_FIELD& aField, const std::string& aExpectedNa
  * @param  aFields the fields to check
  * @return         true if valid
  */
-bool AreDefaultFieldsCorrect( const LIB_FIELDS& aFields )
+bool AreDefaultFieldsCorrect( const std::vector<LIB_FIELD>& aFields )
 {
     const unsigned expectedCount = NumFieldType::MANDATORY_FIELDS;
     if( aFields.size() < expectedCount )

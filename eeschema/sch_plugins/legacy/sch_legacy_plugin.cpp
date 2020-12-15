@@ -514,11 +514,11 @@ class SCH_LEGACY_PLUGIN_CACHE
     static void     saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter );
     static void     saveBezier( LIB_BEZIER* aBezier, OUTPUTFORMATTER& aFormatter );
     static void     saveCircle( LIB_CIRCLE* aCircle, OUTPUTFORMATTER& aFormatter );
-    static void     saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter );
-    static void     savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter );
+    static void     saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter );
+    static void     savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter );
     static void     savePolyLine( LIB_POLYLINE* aPolyLine, OUTPUTFORMATTER& aFormatter );
     static void     saveRectangle( LIB_RECTANGLE* aRectangle, OUTPUTFORMATTER& aFormatter );
-    static void     saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter );
+    static void     saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter );
 
     friend SCH_LEGACY_PLUGIN;
 
@@ -3811,17 +3811,15 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
         aFormatter.Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
     }
 
-    LIB_FIELDS fields;
+    std::vector<LIB_FIELD*> fields;
     aSymbol->GetFields( fields );
 
     // Mandatory fields:
     // may have their own save policy so there is a separate loop for them.
     // Empty fields are saved, because the user may have set visibility,
     // size and orientation
-    for( int i = 0;  i < MANDATORY_FIELDS;  ++i )
-    {
-        saveField( &fields[i], aFormatter );
-    }
+    for( int i = 0; i < MANDATORY_FIELDS; ++i )
+        saveField( fields[i], aFormatter );
 
     // User defined fields:
     // may have their own save policy so there is a separate loop for them.
@@ -3833,10 +3831,10 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
         // There is no need to save empty fields, i.e. no reason to preserve field
         // names now that fields names come in dynamically through the template
         // fieldnames.
-        if( !fields[i].GetText().IsEmpty() )
+        if( !fields[i]->GetText().IsEmpty() )
         {
-            fields[i].SetId( fieldId++ );
-            saveField( &fields[i], aFormatter );
+            fields[i]->SetId( fieldId++ );
+            saveField( fields[i], aFormatter );
         }
     }
 
@@ -3846,9 +3844,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
         aFormatter.Print( 0, "ALIAS" );
 
         for( unsigned i = 0; i < aliasNames.GetCount(); i++ )
-        {
             aFormatter.Print( 0, " %s", TO_UTF8( aliasNames[i] ) );
-        }
 
         aFormatter.Print( 0, "\n" );
     }
@@ -3861,9 +3857,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
         aFormatter.Print( 0, "$FPLIST\n" );
 
         for( unsigned i = 0; i < footprints.GetCount(); i++ )
-        {
             aFormatter.Print( 0, " %s\n", TO_UTF8( footprints[i] ) );
-        }
 
         aFormatter.Print( 0, "$ENDFPLIST\n" );
     }
@@ -3880,39 +3874,15 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
         {
             switch( item.Type() )
             {
-            case LIB_FIELD_T:              // Fields have already been saved above.
-                continue;
-
-            case LIB_ARC_T:
-                saveArc( (LIB_ARC*) &item, aFormatter );
-                break;
-
-            case LIB_BEZIER_T:
-                saveBezier( (LIB_BEZIER*) &item, aFormatter );
-                break;
-
-            case LIB_CIRCLE_T:
-                saveCircle( ( LIB_CIRCLE* ) &item, aFormatter );
-                break;
-
-            case LIB_PIN_T:
-                savePin( (LIB_PIN* ) &item, aFormatter );
-                break;
-
-            case LIB_POLYLINE_T:
-                savePolyLine( ( LIB_POLYLINE* ) &item, aFormatter );
-                break;
-
-            case LIB_RECTANGLE_T:
-                saveRectangle( ( LIB_RECTANGLE* ) &item, aFormatter );
-                break;
-
-            case LIB_TEXT_T:
-                saveText( ( LIB_TEXT* ) &item, aFormatter );
-                break;
-
             default:
-                ;
+            case LIB_FIELD_T:     /* Fields have already been saved above. */            break;
+            case LIB_ARC_T:       saveArc( (LIB_ARC*) &item, aFormatter );               break;
+            case LIB_BEZIER_T:    saveBezier( (LIB_BEZIER*) &item, aFormatter );         break;
+            case LIB_CIRCLE_T:    saveCircle( ( LIB_CIRCLE* ) &item, aFormatter );       break;
+            case LIB_PIN_T:       savePin( (LIB_PIN* ) &item, aFormatter );              break;
+            case LIB_POLYLINE_T:  savePolyLine( ( LIB_POLYLINE* ) &item, aFormatter );   break;
+            case LIB_RECTANGLE_T: saveRectangle( ( LIB_RECTANGLE* ) &item, aFormatter ); break;
+            case LIB_TEXT_T:      saveText( ( LIB_TEXT* ) &item, aFormatter );           break;
             }
         }
 
@@ -3923,8 +3893,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aF
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc,
-                                       OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::saveArc( LIB_ARC* aArc, OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aArc && aArc->Type() == LIB_ARC_T, "Invalid LIB_ARC object." );
 
@@ -3974,8 +3943,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveCircle( LIB_CIRCLE* aCircle,
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
-                                         OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
@@ -4022,8 +3990,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveField( LIB_FIELD* aField,
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
-                                       OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
 
@@ -4032,49 +3999,17 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
     switch( aPin->GetType() )
     {
     default:
-    case ELECTRICAL_PINTYPE::PT_INPUT:
-        Etype = 'I';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_OUTPUT:
-        Etype = 'O';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_BIDI:
-        Etype = 'B';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_TRISTATE:
-        Etype = 'T';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_PASSIVE:
-        Etype = 'P';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_UNSPECIFIED:
-        Etype = 'U';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_POWER_IN:
-        Etype = 'W';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_POWER_OUT:
-        Etype = 'w';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR:
-        Etype = 'C';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_OPENEMITTER:
-        Etype = 'E';
-        break;
-
-    case ELECTRICAL_PINTYPE::PT_NC:
-        Etype = 'N';
-        break;
+    case ELECTRICAL_PINTYPE::PT_INPUT:         Etype = 'I'; break;
+    case ELECTRICAL_PINTYPE::PT_OUTPUT:        Etype = 'O'; break;
+    case ELECTRICAL_PINTYPE::PT_BIDI:          Etype = 'B'; break;
+    case ELECTRICAL_PINTYPE::PT_TRISTATE:      Etype = 'T'; break;
+    case ELECTRICAL_PINTYPE::PT_PASSIVE:       Etype = 'P'; break;
+    case ELECTRICAL_PINTYPE::PT_UNSPECIFIED:   Etype = 'U'; break;
+    case ELECTRICAL_PINTYPE::PT_POWER_IN:      Etype = 'W'; break;
+    case ELECTRICAL_PINTYPE::PT_POWER_OUT:     Etype = 'w'; break;
+    case ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR: Etype = 'C'; break;
+    case ELECTRICAL_PINTYPE::PT_OPENEMITTER:   Etype = 'E'; break;
+    case ELECTRICAL_PINTYPE::PT_NC:            Etype = 'N'; break;
     }
 
     if( !aPin->GetName().IsEmpty() )
@@ -4097,48 +4032,21 @@ void SCH_LEGACY_PLUGIN_CACHE::savePin( LIB_PIN* aPin,
 
     switch( aPin->GetShape() )
     {
-    case GRAPHIC_PINSHAPE::LINE:
-        break;
-
-    case GRAPHIC_PINSHAPE::INVERTED:
-        aFormatter.Print( 0, "I" );
-        break;
-
-    case GRAPHIC_PINSHAPE::CLOCK:
-        aFormatter.Print( 0, "C" );
-        break;
-
-    case GRAPHIC_PINSHAPE::INVERTED_CLOCK:
-        aFormatter.Print( 0, "IC" );
-        break;
-
-    case GRAPHIC_PINSHAPE::INPUT_LOW:
-        aFormatter.Print( 0, "L" );
-        break;
-
-    case GRAPHIC_PINSHAPE::CLOCK_LOW:
-        aFormatter.Print( 0, "CL" );
-        break;
-
-    case GRAPHIC_PINSHAPE::OUTPUT_LOW:
-        aFormatter.Print( 0, "V" );
-        break;
-
-    case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK:
-        aFormatter.Print( 0, "F" );
-        break;
-
-    case GRAPHIC_PINSHAPE::NONLOGIC:
-        aFormatter.Print( 0, "X" );
-        break;
-
-    default:
-        assert( !"Invalid pin shape" );
+    case GRAPHIC_PINSHAPE::LINE:                                            break;
+    case GRAPHIC_PINSHAPE::INVERTED:           aFormatter.Print( 0, "I" );  break;
+    case GRAPHIC_PINSHAPE::CLOCK:              aFormatter.Print( 0, "C" );  break;
+    case GRAPHIC_PINSHAPE::INVERTED_CLOCK:     aFormatter.Print( 0, "IC" ); break;
+    case GRAPHIC_PINSHAPE::INPUT_LOW:          aFormatter.Print( 0, "L" );  break;
+    case GRAPHIC_PINSHAPE::CLOCK_LOW:          aFormatter.Print( 0, "CL" ); break;
+    case GRAPHIC_PINSHAPE::OUTPUT_LOW:         aFormatter.Print( 0, "V" );  break;
+    case GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK: aFormatter.Print( 0, "F" );  break;
+    case GRAPHIC_PINSHAPE::NONLOGIC:           aFormatter.Print( 0, "X" );  break;
+    default:                                   wxFAIL_MSG( "Invalid pin shape" );
     }
 
     aFormatter.Print( 0, "\n" );
 
-    aPin->ClearFlags( IS_CHANGED );
+    const_cast<LIB_PIN*>( aPin )->ClearFlags( IS_CHANGED );
 }
 
 
@@ -4176,8 +4084,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveRectangle( LIB_RECTANGLE* aRectangle,
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::saveText( LIB_TEXT* aText,
-                                        OUTPUTFORMATTER& aFormatter )
+void SCH_LEGACY_PLUGIN_CACHE::saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );
 

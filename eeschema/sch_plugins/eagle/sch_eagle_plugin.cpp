@@ -1151,14 +1151,14 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
             component->MirrorY( einstance.x.ToSchUnits() );
     }
 
-    LIB_FIELDS partFields;
+    std::vector<LIB_FIELD*> partFields;
     part->GetFields( partFields );
 
-    for( auto const& field : partFields )
+    for( const LIB_FIELD* field : partFields )
     {
-        component->GetField( field.GetId() )->ImportValues( field );
-        component->GetField( field.GetId() )
-                ->SetTextPos( component->GetPosition() + field.GetTextPos() );
+        component->GetField( field->GetId() )->ImportValues( *field );
+        component->GetField( field->GetId() )->SetTextPos( component->GetPosition()
+                                                            + field->GetTextPos() );
     }
 
     // If there is no footprint assigned, then prepend the reference value

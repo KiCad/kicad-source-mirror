@@ -829,6 +829,12 @@ void LIB_PART::deleteAllFields()
 }
 
 
+void LIB_PART::AddField( LIB_FIELD* aField )
+{
+    AddDrawItem( aField );
+}
+
+
 void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
 {
     deleteAllFields();
@@ -844,31 +850,36 @@ void LIB_PART::SetFields( const std::vector <LIB_FIELD>& aFields )
 }
 
 
-void LIB_PART::GetFields( LIB_FIELDS& aList )
+void LIB_PART::GetFields( std::vector<LIB_FIELD*>& aList )
 {
-    LIB_FIELD*  field;
-
-    // Grab the MANDATORY_FIELDS first, in expected order given by
-    // enum NumFieldType
-    for( int id=0;  id<MANDATORY_FIELDS;  ++id )
-    {
-        field = GetField( id );
-
-        // the MANDATORY_FIELDS are exactly that in RAM.
-        wxASSERT( field );
-
-        aList.push_back( *field );
-    }
+    // Grab the MANDATORY_FIELDS first, in expected order given by enum NumFieldType
+    for( int id = 0; id < MANDATORY_FIELDS; ++id )
+        aList.push_back( GetField( id ) );
 
     // Now grab all the rest of fields.
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
-        field = ( LIB_FIELD* ) &item;
+        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
-        if( field->IsMandatory() )
-            continue;  // was added above
+        if( !field->IsMandatory() )
+            aList.push_back( field );
+    }
+}
 
-        aList.push_back( *field );
+
+void LIB_PART::GetFields( std::vector<LIB_FIELD>& aList )
+{
+    // Grab the MANDATORY_FIELDS first, in expected order given by enum NumFieldType
+    for( int id = 0; id < MANDATORY_FIELDS; ++id )
+        aList.push_back( *GetField( id ) );
+
+    // Now grab all the rest of fields.
+    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    {
+        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
+
+        if( !field->IsMandatory() )
+            aList.push_back( *field );
     }
 }
 

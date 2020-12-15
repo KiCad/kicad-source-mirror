@@ -458,10 +458,10 @@ XNODE* NETLIST_EXPORTER_XML::makeLibraries()
 
 XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 {
-    XNODE*      xlibparts = node( "libparts" );   // auto_ptr
+    XNODE*                  xlibparts = node( "libparts" );   // auto_ptr
 
-    LIB_PINS    pinList;
-    LIB_FIELDS  fieldList;
+    LIB_PINS                pinList;
+    std::vector<LIB_FIELD*> fieldList;
 
     m_libraries.clear();
 
@@ -502,13 +502,13 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
         XNODE*     xfields;
         xlibpart->AddChild( xfields = node( "fields" ) );
 
-        for( unsigned i=0;  i<fieldList.size();  ++i )
+        for( const LIB_FIELD* field : fieldList )
         {
-            if( !fieldList[i].GetText().IsEmpty() )
+            if( !field->GetText().IsEmpty() )
             {
                 XNODE*     xfield;
-                xfields->AddChild( xfield = node( "field", fieldList[i].GetText() ) );
-                xfield->AddAttribute( "name", fieldList[i].GetCanonicalName() );
+                xfields->AddChild( xfield = node( "field", field->GetText() ) );
+                xfield->AddAttribute( "name", field->GetCanonicalName() );
             }
         }
 

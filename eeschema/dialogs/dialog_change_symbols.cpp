@@ -237,22 +237,12 @@ void DIALOG_CHANGE_SYMBOLS::launchNewIdSymbolBrowser( wxCommandEvent& aEvent )
 void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-
-    wxCHECK( frame, /* void */ );
-
-    LIB_ID          newId;
     SCH_SHEET_LIST  hierarchy = frame->Schematic().GetSheets();
 
-    if( m_mode == MODE::CHANGE )
-    {
-        newId.Parse( m_newId->GetValue(), LIB_ID::ID_SCH );
-
-        if( !newId.IsValid() )
-            return;
-    }
-
-    // Load new non-mandatory fields from the library parts of all matching symbols
-    std::set<wxString> fieldNames;
+    // Load non-mandatory fields from all matching symbols and their library parts
+    std::vector<SCH_FIELD*> fields;
+    std::vector<LIB_FIELD*> libFields;
+    std::set<wxString>      fieldNames;
 
     for( SCH_SHEET_PATH& instance : hierarchy )
     {
@@ -269,10 +259,43 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
             if( !isMatch( symbol, &instance ) )
                 continue;
 
-            std::vector<SCH_FIELD>& fields = symbol->GetFields();
+            symbol->GetFields( fields, false );
 
             for( unsigned i = MANDATORY_FIELDS; i < fields.size(); ++i )
-                fieldNames.insert( fields[i].GetName() );
+                fieldNames.insert( fields[i]->GetName() );
+
+            if( m_mode == MODE::UPDATE && symbol->GetPartRef() )
+            {
+                symbol->GetPartRef()->Flatten()->GetFields( libFields );
+
+                for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+                    fieldNames.insert( libFields[i]->GetName() );
+            }
+        }
+    }
+
+    // Load non-mandatory fields from the change-to library part
+    if( m_mode == MODE::CHANGE )
+    {
+        LIB_ID newId;
+
+        newId.Parse( m_newId->GetValue(), LIB_ID::ID_SCH );
+
+        if( newId.IsValid() )
+        {
+            LIB_PART* libSymbol = frame->GetLibPart( newId );
+
+            if( libSymbol )
+            {
+                std::unique_ptr<LIB_PART> flattenedPart = libSymbol->Flatten();
+
+                flattenedPart->GetFields( libFields );
+
+                for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
+                    fieldNames.insert( libFields[i]->GetName() );
+
+                libFields.clear();  // flattenedPart is about to go out of scope...
+            }
         }
     }
 
@@ -486,7 +509,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
         return false;
     }
 
-    std::unique_ptr< LIB_PART > flattenedSymbol = libSymbol->Flatten();
+    std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
 
     if( flattenedSymbol->GetUnitCount() < aSymbol->GetUnit() )
     {
@@ -535,7 +558,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
                 else if( i == FOOTPRINT_FIELD )
                     aSymbol->SetFootprint( aInstance, libField->GetText() );
                 else
-                    field->SetText( wxEmptyString );
+                    field->SetText( libField->GetText() );
             }
 
             if( resetVis )
@@ -550,9 +573,7 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
             }
 
             if( resetPositions )
-            {
                 field->SetTextPos( aSymbol->GetPosition() + libField->GetTextPos() );
-            }
         }
         else if( i >= MANDATORY_FIELDS && removeExtras )
         {
@@ -561,12 +582,12 @@ bool DIALOG_CHANGE_SYMBOLS::processSymbol( SCH_COMPONENT* aSymbol, const SCH_SHE
         }
     }
 
-    LIB_FIELDS libFields;
+    std::vector<LIB_FIELD*> libFields;
     libSymbol->GetFields( libFields );
 
     for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
     {
-        LIB_FIELD& libField = libFields[i];
+        const LIB_FIELD& libField = *libFields[i];
 
         if( !alg::contains( m_updateFields, libField.GetName() ) )
             continue;

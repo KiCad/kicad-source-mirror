@@ -202,32 +202,31 @@ protected:
 
     void SetHtmlFieldTable()
     {
-        wxString fieldtable;
-        LIB_FIELDS fields;
+        wxString                fieldtable;
+        std::vector<LIB_FIELD*> fields;
+
         m_symbol->GetFields( fields );
 
-        for( auto const & field: fields )
-        {
-            fieldtable += GetHtmlFieldRow( field );
-        }
+        for( const LIB_FIELD* field: fields )
+            fieldtable += GetHtmlFieldRow( *field );
 
         if( m_symbol->IsAlias() )
         {
-            std::shared_ptr< LIB_PART > parent = m_symbol->GetParent().lock();
+            std::shared_ptr<LIB_PART> parent = m_symbol->GetParent().lock();
 
             // Append all of the unique parent fields if this is an alias.
             if( parent )
             {
-                LIB_FIELDS parentFields;
+                std::vector<LIB_FIELD*> parentFields;
 
                 parent->GetFields( parentFields );
 
-                for( auto const& parentField : parentFields )
+                for( const LIB_FIELD* parentField : parentFields )
                 {
-                    if( m_symbol->FindField( parentField.GetCanonicalName() ) )
+                    if( m_symbol->FindField( parentField->GetCanonicalName() ) )
                         continue;
 
-                    fieldtable += GetHtmlFieldRow( parentField );
+                    fieldtable += GetHtmlFieldRow( *parentField );
                 }
             }
         }

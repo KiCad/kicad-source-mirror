@@ -1014,10 +1014,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymDefIntoLibrary( const SYMDEF_ID& aSymdef
         if( !field )
         {
             field = new LIB_FIELD( aPart, FIELD1 );
-            std::vector<LIB_FIELD> partFields;
-            aPart->GetFields( partFields );
-            partFields.push_back( *field );
-            aPart->SetFields( partFields );
+            aPart->AddField( field );
         }
 
         field->SetName( "Part Name" );

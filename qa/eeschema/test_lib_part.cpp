@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
  */
 BOOST_AUTO_TEST_CASE( DefaultFields )
 {
-    LIB_FIELDS fields;
+    std::vector<LIB_FIELD> fields;
     m_part_no_data.GetFields( fields );
 
     // Should get the 4 default fields
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
  */
 BOOST_AUTO_TEST_CASE( AddedFields )
 {
-    LIB_FIELDS fields;
+    std::vector<LIB_FIELD> fields;
     m_part_no_data.GetFields( fields );
 
     // Ctor takes non-const ref (?!)

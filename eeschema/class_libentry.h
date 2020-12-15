@@ -255,7 +255,14 @@ public:
      *
      * @param aList - List to add fields to
      */
-    void GetFields( LIB_FIELDS& aList );
+    void GetFields( std::vector<LIB_FIELD*>& aList );
+    void GetFields( std::vector<LIB_FIELD>& aList );
+
+    /**
+     * Add a field.  Takes ownership of the pointer.
+     * @param aField
+     */
+    void AddField( LIB_FIELD* aField );
 
     /**
      * Find a field within this part matching \a aFieldName and returns it

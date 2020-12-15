@@ -372,9 +372,7 @@ bool SCH_FIELD::IsReplaceable() const
 
         if( m_id == VALUE_FIELD )
         {
-            LIB_PART* part = parentSymbol->GetPartRef().get();
-
-            if( part && part->IsPower() )
+            if( parentSymbol->GetPartRef() && parentSymbol->GetPartRef()->IsPower() )
                 return false;
         }
     }

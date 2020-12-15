@@ -113,10 +113,15 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
 }
 
 
-DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, LIB_FIELDS* aFields )
-    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_schfields( nullptr ),
-      m_libfields( aFields ), m_useSchFields( false ),
-      m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
+DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent,
+                                        std::vector<LIB_FIELD>* aFields ) :
+        DIALOG_SPICE_MODEL_BASE( aParent ),
+        m_component( aComponent ),
+        m_schfields( nullptr ),
+        m_libfields( aFields ),
+        m_useSchFields( false ),
+        m_spiceEmptyValidator( true ),
+        m_notEmptyValidator( wxFILTER_EMPTY )
 {
     Init();
 }
