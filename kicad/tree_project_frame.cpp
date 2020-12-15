@@ -1071,23 +1071,22 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
     wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
 
     // Prepare file watcher:
-	#ifdef _WIN32
-	if( PathIsNetworkPathW( prj_dir.wc_str() ) )
-	{
-		// Don't support network shares for now
-		// SAMBA passes bad events to Windows and wxWidgets idiotically asserts 
-		// rather than accepting vlaid event IDs
-		// Windows Server shares do not have this problem
-		m_Parent->SetStatusText( _( "Project on network share, auto refresh not available" ), 0 );
-		return;
-	}
-	else
-	{
-		m_Parent->SetStatusText( _( "" ), 0 );
-	}
-	#endif
-	
-	
+    #ifdef _WIN32
+    if( PathIsNetworkPathW( prj_dir.wc_str() ) )
+    {
+        // Don't support network shares for now
+        // SAMBA passes bad events to Windows and wxWidgets idiotically asserts 
+        // rather than accepting vlaid event IDs
+        // Windows Server shares do not have this problem
+        m_Parent->SetStatusText( _( "Project on network share, auto refresh not available" ), 0 );
+        return;
+    }
+    else
+    {
+        m_Parent->SetStatusText( _( "" ), 0 );
+    }
+    #endif
+    
     if( m_watcher )
     {
         m_watcher->RemoveAll();
