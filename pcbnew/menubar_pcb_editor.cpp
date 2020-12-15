@@ -423,8 +423,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #endif
     // Populate the Action Plugin sub-menu: Must be done before Add
     // Since the object is cloned by Add
-    buildActionPluginMenus( submenuActionPlugins );
     submenuActionPlugins->AppendSeparator();
+    buildActionPluginMenus( submenuActionPlugins );
 
     toolsMenu->AppendSeparator();
     toolsMenu->Add( submenuActionPlugins );

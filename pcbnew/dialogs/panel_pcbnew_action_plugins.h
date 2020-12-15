@@ -45,9 +45,19 @@ public:
     void OnMoveDownButtonClick( wxCommandEvent& event ) override;
 
     /**
+     * Opens user's action plugin directory
+     */
+    void OnOpenDirectoryButtonClick( wxCommandEvent& event ) override;
+
+    /**
      * Reloads plugins and updates grid
      */
     void OnReloadButtonClick( wxCommandEvent& event ) override;
+
+    /**
+     * Shows plugin import errors
+     */
+    void OnShowErrorsButtonClick( wxCommandEvent& event ) override;
 
 private:
 

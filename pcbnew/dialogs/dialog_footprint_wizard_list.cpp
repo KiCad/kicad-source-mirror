@@ -186,28 +186,6 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::onShowTrace( wxCommandEvent& event )
     wxString trace;
     pcbnewGetWizardsBackTrace( trace );
 
-    // Filter message before displaying them
-    // a trace starts by "Traceback" and is followed by 2 useless lines
-    // for our purpose
-    wxArrayString traces;
-    wxStringSplit( trace, traces, '\n' );
-
-    // Build the filtered message (remove useless lines)
-    trace.Clear();
-
-    for( unsigned ii = 0; ii < traces.Count(); ++ii )
-    {
-        if( traces[ii].Contains( "Traceback" ) )
-        {
-            ii += 2;    // Skip this line and next lines which are related to pcbnew.py module
-
-            if( !trace.IsEmpty() )  // Add separator for the next trace block
-                trace << "\n**********************************\n";
-        }
-        else
-            trace += traces[ii] + "\n";
-    }
-
     // Now display the filtered trace in our dialog
     // (a simple wxMessageBox is really not suitable for long messages)
     DIALOG_FOOTPRINT_WIZARD_LOG logWindow( this );

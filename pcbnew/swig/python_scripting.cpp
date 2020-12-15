@@ -35,6 +35,7 @@
 #include <eda_base_frame.h>
 #include <gal/color4d.h>
 #include <trace_helpers.h>
+#include <kicad_string.h>
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -328,9 +329,31 @@ void pcbnewGetScriptsSearchPaths( wxString& aNames )
 }
 
 
-void pcbnewGetWizardsBackTrace( wxString& aNames )
+void pcbnewGetWizardsBackTrace( wxString& aTrace )
 {
-    pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetWizardsBackTrace", aNames );
+    pcbnewRunPythonMethodWithReturnedString( "pcbnew.GetWizardsBackTrace", aTrace );
+
+    // Filter message before displaying them
+    // a trace starts by "Traceback" and is followed by 2 useless lines
+    // for our purpose
+    wxArrayString traces;
+    wxStringSplit( aTrace, traces, '\n' );
+
+    // Build the filtered message (remove useless lines)
+    aTrace.Clear();
+
+    for( unsigned ii = 0; ii < traces.Count(); ++ii )
+    {
+        if( traces[ii].Contains( "Traceback" ) )
+        {
+            ii += 2; // Skip this line and next lines which are related to pcbnew.py module
+
+            if( !aTrace.IsEmpty() ) // Add separator for the next trace block
+                aTrace << "\n**********************************\n";
+        }
+        else
+            aTrace += traces[ii] + "\n";
+    }
 }
 
 

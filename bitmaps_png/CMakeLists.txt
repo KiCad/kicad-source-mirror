@@ -106,6 +106,7 @@ set( BMAPS_SMALL
     small_refresh
     small_trash
     small_up
+    small_warning
     tree_nosel
     tree_sel
     triangle_down
@@ -603,7 +604,7 @@ function( svg2png inputFile outFile pngWidth pngHeight )
     add_custom_command(
         OUTPUT ${outFile}
         # this Inkscape command line is for old Inkscape version < 1.0
-        # COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile}
+        # COMMAND ${Inkscape_EXECUTABLE} --without-gui --export-area-snap -f ${inputFile} --export-png ${outFile} -w ${pngWidth} -h ${pngHeight} > ${logfile}
 
         # this Inkscape command line is for Inkscape >= 1.0
         COMMAND ${Inkscape_EXECUTABLE} --export-area-snap --export-type="png" ${inputFile} --export-filename ${outFile}

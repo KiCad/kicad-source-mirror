@@ -22,12 +22,20 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <panel_pcbnew_action_plugins.h>
+#include <dialog_footprint_wizard_list.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/grid_icon_text_helpers.h>
 #include <bitmaps.h>
 #include <action_plugin.h>
 #include <grid_tricks.h>
 #include <widgets/wx_grid.h>
+
+#if defined( KICAD_SCRIPTING ) || defined( KICAD_SCRIPTING_WXPYTHON )
+#include <python_scripting.h>
+#else
+// Dummy functions, actually defined in python_scripting.h when KICAD_SCRIPTING is enabled
+static void pcbnewGetWizardsBackTrace( wxString& aText ) {}
+#endif
 
 #define GRID_CELL_MARGIN 4
 
@@ -41,7 +49,9 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame
 
     m_moveUpButton->SetBitmap( KiBitmap( small_up_xpm ) );
     m_moveDownButton->SetBitmap( KiBitmap( small_down_xpm ) );
+    m_openDirectoryButton->SetBitmap( KiBitmap( small_folder_xpm ) );
     m_reloadButton->SetBitmap( KiBitmap( small_refresh_xpm ) );
+    m_showErrorsButton->SetBitmap( KiBitmap( small_warning_xpm ) );
 }
 
 
@@ -207,5 +217,36 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
 
     m_grid->Thaw();
 
+    // Show errors button should be disabled if there are no errors.
+    wxString trace;
+    pcbnewGetWizardsBackTrace( trace );
+    if( trace.empty() )
+    {
+        m_showErrorsButton->Disable();
+        m_showErrorsButton->Hide();
+    }
+    else
+    {
+        m_showErrorsButton->Enable();
+        m_showErrorsButton->Show();
+    }
+
     return true;
+}
+
+void PANEL_PCBNEW_ACTION_PLUGINS::OnOpenDirectoryButtonClick( wxCommandEvent& event )
+{
+    m_frame->PythonPluginsShowFolder();
+}
+
+void PANEL_PCBNEW_ACTION_PLUGINS::OnShowErrorsButtonClick( wxCommandEvent& event )
+{
+    wxString trace;
+    pcbnewGetWizardsBackTrace( trace );
+
+    // Now display the filtered trace in our dialog
+    // (a simple wxMessageBox is really not suitable for long messages)
+    DIALOG_FOOTPRINT_WIZARD_LOG logWindow( this );
+    logWindow.m_Message->SetValue( trace );
+    logWindow.ShowModal();
 }
