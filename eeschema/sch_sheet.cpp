@@ -985,7 +985,7 @@ void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
     wxPoint   pos = m_pos + aOffset;
     int       lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
     auto*     settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
-    bool      override = settings ? settings->m_OverrideItemColors : false;
+    bool      override = settings && settings->m_OverrideItemColors;
     COLOR4D   border = GetBorderColor();
     COLOR4D   background = GetBackgroundColor();
 
@@ -994,6 +994,9 @@ void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 
     if( override || background == COLOR4D::UNSPECIFIED )
         background = aSettings->GetLayerColor( LAYER_SHEET_BACKGROUND );
+
+    if( GetGRForceBlackPenState() )     // printing in black & white
+        background = COLOR4D::UNSPECIFIED;
 
     if( background != COLOR4D::UNSPECIFIED )
     {
