@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-11-30 00:07+0000\n"
+"PO-Revision-Date: 2020-12-16 17:41+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -15982,7 +15982,7 @@ msgstr "Инструмент %d не определён"
 #: gerbview/excellon_read_drill_file.cpp:843
 #, c-format
 msgid "Unknown Excellon G Code: &lt;%s&gt;"
-msgstr "Неизвестный Excellon G код: \"%s\";"
+msgstr "Неизвестный Excellon G код: \"%s\""
 
 #: gerbview/export_to_pcbnew.cpp:67
 #, c-format
