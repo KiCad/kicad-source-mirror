@@ -25,16 +25,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="15.839192"
-     inkscape:cx="1.7007478"
-     inkscape:cy="28.447902"
+     inkscape:zoom="63.356768"
+     inkscape:cx="17.429992"
+     inkscape:cy="24.149469"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer19"
      inkscape:document-rotation="0"
      showgrid="true"
      units="px"
-     inkscape:window-width="2777"
-     inkscape:window-height="1510"
+     inkscape:window-width="2903"
+     inkscape:window-height="1573"
      inkscape:window-x="4021"
      inkscape:window-y="32"
      inkscape:window-maximized="0">
@@ -543,6 +543,34 @@
   </g>
   <g
      inkscape:groupmode="layer"
+     id="layer19"
+     inkscape:label="chain">
+    <path
+       class="cls-3"
+       d="M 6.8791668,5.0270835 A 1.8538031,1.8538031 0 1 1 5.0253636,3.1750002 1.85293,1.85293 0 0 1 6.8791668,5.0270835 Z"
+       id="path867"
+       style="fill:#bf2641;stroke-width:0.264583" />
+    <path
+       class="cls-4"
+       d="m 5.1019076,4.9505395 v 0 a 0.43553063,0.43553063 0 0 1 0,-0.6159235 L 5.3237078,4.1128422 a 0.43545125,0.43545125 0 0 1 0.6158971,0 v 0 a 0.43545125,0.43545125 0 0 1 0,0.6158971 L 5.7178311,4.9505395 a 0.43553063,0.43553063 0 0 1 -0.6159235,0 z"
+       id="path869"
+       style="fill:none;stroke:#ffffff;stroke-width:0.529167px;stroke-linecap:round;stroke-linejoin:round" />
+    <path
+       class="cls-4"
+       d="m 4.1111224,5.9413248 v 0 a 0.43545125,0.43545125 0 0 1 0,-0.6158972 L 4.3328961,5.1036274 a 0.43553063,0.43553063 0 0 1 0.6159236,0 v 0 a 0.43553063,0.43553063 0 0 1 0,0.6159236 L 4.7270195,5.9413248 a 0.43545125,0.43545125 0 0 1 -0.6158971,0 z"
+       id="path871"
+       style="fill:none;stroke:#ffffff;stroke-width:0.529167px;stroke-linecap:round;stroke-linejoin:round" />
+    <line
+       class="cls-4"
+       x1="5.2449679"
+       y1="4.8074789"
+       x2="4.7950969"
+       y2="5.25735"
+       id="line873"
+       style="fill:none;stroke:#ffffff;stroke-width:0.529167px;stroke-linecap:round;stroke-linejoin:round" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="browse"
      style="display:none">
@@ -585,7 +613,7 @@
      inkscape:groupmode="layer"
      id="layer6"
      inkscape:label="arrow_to"
-     style="display:inline">
+     style="display:none">
     <g
        id="g2044"
        transform="matrix(0.35066296,0,0,0.26458333,-0.75009474,0.50240315)"
