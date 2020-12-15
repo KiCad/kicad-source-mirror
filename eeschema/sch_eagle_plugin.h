@@ -198,7 +198,7 @@ private:
     std::vector<VECTOR2I> m_wireIntersections;
 
     ///> Wires and labels of a single connection (segment in Eagle nomenclature)
-    typedef struct {
+    typedef struct SEG_DESC {
         ///> Tests if a particular label is attached to any of the stored segments
         const SEG* LabelAttached( const SCH_TEXT* aLabel ) const;
 
