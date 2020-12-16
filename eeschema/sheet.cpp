@@ -880,7 +880,7 @@ SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
 
     sheet->SetFlags( IS_NEW | IS_RESIZED );
     sheet->SetTimeStamp( GetNewTimeStamp() );
-    sheet->SetParent( GetScreen() );
+    sheet->SetParent( GetCurrentSheet().Last() );
     sheet->SetScreen( NULL );
 
     // need to check if this is being added to the GetDrawItems().
