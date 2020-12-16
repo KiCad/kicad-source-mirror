@@ -118,6 +118,8 @@ void DIALOG_FIND::search( bool aDirection )
     int         index;
     wxString    msg;
     wxString    searchString;
+    bool        endIsReached = false;
+    bool        isFirstSearch = false;
 
     // Add/move the search string to the top of the list if it isn't already there
     searchString = m_searchCombo->GetValue();
@@ -268,6 +270,7 @@ void DIALOG_FIND::search( bool aDirection )
         }
 
         m_upToDate = true;
+        isFirstSearch = true;
 
         if( aDirection )
             m_it = m_hitList.begin();
@@ -282,21 +285,23 @@ void DIALOG_FIND::search( bool aDirection )
     {
         m_frame->SetStatusText( wxEmptyString );
     }
-    else if( m_it != m_hitList.end() )
+    else
     {
         if( aDirection )
         {
-            m_it++;
+            if( m_it != m_hitList.end() && !isFirstSearch )
+                m_it++;
 
             if( m_it == m_hitList.end() )
             {
                 if( m_wrap->GetValue() )
+                {
                     m_it = m_hitList.begin();
+                }
                 else
                 {
-                    m_frame->SetStatusText( wxEmptyString );
-                    m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
-                    return;
+                    endIsReached = true;
+                    m_it--; // point to the last REAL result
                 }
             }
         }
@@ -305,23 +310,31 @@ void DIALOG_FIND::search( bool aDirection )
             if( m_it == m_hitList.begin() )
             {
                 if( m_wrap->GetValue() )
-                {
                     m_it = m_hitList.end();
-                }
                 else
-                {
-                    m_frame->SetStatusText( wxEmptyString );
-                    m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
-                    return;
-                }
+                    endIsReached = true;
             }
 
-            m_it--;
+            if( m_it != m_hitList.begin() )
+                m_it--;
         }
     }
 
     // Display the item
-    if( m_it != m_hitList.end() )
+    if( m_hitList.empty() )
+    {
+        m_frame->SetStatusText( wxEmptyString );
+        msg.Printf( _( "\"%s\" not found" ), searchString );
+        m_frame->ShowInfoBarMsg( msg );
+    }
+    if( endIsReached )
+    {
+        m_frame->SetStatusText( wxEmptyString );
+        m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
+
+        m_status->SetLabel( _( "No hits" ) );
+    }
+    else
     {
         m_frame->GetToolManager()->RunAction( PCB_ACTIONS::selectItem, true, *m_it );
         m_frame->FocusOnLocation( ( *m_it )->GetPosition() );
@@ -329,18 +342,9 @@ void DIALOG_FIND::search( bool aDirection )
         msg.Printf( _( "\"%s\" found" ), searchString );
         m_frame->SetStatusText( msg );
 
-        msg.Printf( _( "Hit(s): %ld / %lu" ), std::distance( m_hitList.begin(), m_it ),
+        msg.Printf( _( "Hit(s): %ld / %lu" ), std::distance( m_hitList.begin(), m_it ) + 1,
                 m_hitList.size() );
         m_status->SetLabel( msg );
-    }
-    else
-    {
-        m_frame->SetStatusText( wxEmptyString );
-
-        msg.Printf( _( "\"%s\" not found" ), searchString );
-        m_frame->ShowInfoBarMsg( msg );
-
-        m_status->SetLabel( _( "No hits" ) );
     }
 
     if( m_highlightCallback )
