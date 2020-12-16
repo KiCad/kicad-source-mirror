@@ -38,3 +38,10 @@ bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 
     return retVal;
 }
+
+
+bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
+{
+    // placeholder, we "nerf" behavior if its a network path so return false by default
+    return false;
+}

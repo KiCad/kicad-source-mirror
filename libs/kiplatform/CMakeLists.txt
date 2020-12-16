@@ -18,6 +18,10 @@ elseif( WIN32 )
         msw/environment.cpp
         msw/ui.cpp
         )
+
+    set( PLATFORM_LIBS
+        "Shlwapi"
+        )
 elseif( UNIX )
     set( PLATFORM_SRCS
         gtk/app.cpp

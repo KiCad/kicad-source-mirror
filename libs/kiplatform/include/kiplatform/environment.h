@@ -33,5 +33,15 @@ namespace KIPLATFORM
          * @return true if the operation succeeds, false if it fails (see the contents of aError)
          */
         bool MoveToTrash( const wxString& aPath, wxString& aError );
+
+        /**
+         * Determines if a given path is a network shared file apth
+         * On Windows for example, any form of path is accepted drive map or UNC
+         *
+         * @param aPath is any kind of file path to be tested
+         *
+         * @return true if given path is on a network location
+         */
+        bool IsNetworkPath( const wxString& aPath );
     }
 }

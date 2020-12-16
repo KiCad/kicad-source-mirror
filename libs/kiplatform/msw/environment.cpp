@@ -24,6 +24,7 @@
 
 #include <Windows.h>
 #include <shellapi.h>
+#include <shlwapi.h>
 
 bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
 {
@@ -48,4 +49,10 @@ bool KIPLATFORM::ENV::MoveToTrash( const wxString& aPath, wxString& aError )
     }
 
     return true;
+}
+
+
+bool KIPLATFORM::ENV::IsNetworkPath( const wxString& aPath )
+{
+    return ::PathIsNetworkPathW( aPath.wc_str() );
 }
