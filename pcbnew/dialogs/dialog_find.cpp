@@ -327,7 +327,7 @@ void DIALOG_FIND::search( bool aDirection )
         msg.Printf( _( "\"%s\" not found" ), searchString );
         m_frame->ShowInfoBarMsg( msg );
     }
-    if( endIsReached )
+    else if( endIsReached )
     {
         m_frame->SetStatusText( wxEmptyString );
         m_frame->ShowInfoBarMsg( _( "No more items to show" ) );
