@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-16 17:41+0000\n"
+"PO-Revision-Date: 2020-12-17 19:29+0000\n"
 "Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -24746,7 +24746,7 @@ msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:549
 msgid "Fabrication Property:"
-msgstr "Fertigungseigenrschaften"
+msgstr "Fertigungseigenschaften:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:551
 #, fuzzy
@@ -29850,9 +29850,8 @@ msgid "Thermal Relief"
 msgstr "Thermische Abführung [Alle]"
 
 #: pcbnew/pad.cpp:1414
-#, fuzzy
 msgid "Fabrication Property"
-msgstr "Fertigungseigenrschaften"
+msgstr "Fertigungseigenschaften"
 
 #: pcbnew/pad.cpp:1417
 #, fuzzy
