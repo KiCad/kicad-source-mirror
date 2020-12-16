@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_graphical_polygon.svg"
-   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="2310"
+     inkscape:window-height="1299"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="14.87974"
      inkscape:cx="6.8897535"
      inkscape:cy="12.248596"
      inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-y="37"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -80,20 +80,9 @@
   <title
      id="title28001">add_graphical_polygon</title>
   <path
-     sodipodi:type="star"
-     style="fill:#c1c1c1;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-     id="path5446"
-     sodipodi:sides="5"
-     sodipodi:cx="12"
-     sodipodi:cy="13"
-     sodipodi:r1="10"
-     sodipodi:r2="8.0901699"
-     sodipodi:arg1="-1.5707963"
-     sodipodi:arg2="-0.9424778"
-     inkscape:flatsided="true"
-     inkscape:rounded="0"
-     inkscape:randomized="0"
-     d="m 12,3 9.510565,6.9098303 -3.632713,11.1803397 -11.7557047,0 L 2.4894349,9.9098298 Z"
-     inkscape:transform-center-y="-0.93610351"
-     transform="matrix(0.93233957,0,0,0.98030056,0.81194429,0.31182069)" />
+     id="polygon27981"
+     style="fill:#c1c1c1;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
+     d="M 10,14 2,3 21,6 18.479,17.938 3.673,21.325 Z"
+     class="cls-1"
+     sodipodi:nodetypes="cccccc" />
 </svg>
