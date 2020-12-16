@@ -69,8 +69,10 @@ static std::mutex mutex3D_cacheManager;
 static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB ) noexcept
 {
     for( int i = 0; i < 20; ++i )
+    {
         if( shaA[i] != shaB[i] )
             return false;
+    }
 
     return true;
 }
@@ -123,13 +125,6 @@ static const wxString sha1ToWXString( const unsigned char* aSHA1Sum )
 
 class S3D_CACHE_ENTRY
 {
-private:
-    // prohibit assignment and default copy constructor
-    S3D_CACHE_ENTRY( const S3D_CACHE_ENTRY& source );
-    S3D_CACHE_ENTRY& operator=( const S3D_CACHE_ENTRY& source );
-
-    wxString m_CacheBaseName;  // base name of cache file (a SHA1 digest)
-
 public:
     S3D_CACHE_ENTRY();
     ~S3D_CACHE_ENTRY();
@@ -142,6 +137,13 @@ public:
     std::string   pluginInfo;   // PluginName:Version string
     SCENEGRAPH*   sceneData;
     S3DMODEL*     renderData;
+
+private:
+    // prohibit assignment and default copy constructor
+    S3D_CACHE_ENTRY( const S3D_CACHE_ENTRY& source );
+    S3D_CACHE_ENTRY& operator=( const S3D_CACHE_ENTRY& source );
+
+    wxString m_CacheBaseName;  // base name of cache file (a SHA1 digest)
 };
 
 
@@ -266,7 +268,8 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
                 if( NULL != mi->second->renderData )
                     S3D::Destroy3DModel( &mi->second->renderData );
 
-                mi->second->sceneData = m_Plugins->Load3DModel( full3Dpath, mi->second->pluginInfo );
+                mi->second->sceneData = m_Plugins->Load3DModel( full3Dpath,
+                                                                mi->second->pluginInfo );
             }
         }
 
@@ -317,7 +320,6 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
         {
             if( aCachePtr )
                 *aCachePtr = ep;
-
         }
 
         return NULL;
@@ -377,11 +379,11 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
         return false;
     }
 
-    #ifdef _WIN32
+#ifdef _WIN32
     FILE* fp = _wfopen( aFileName.wc_str(), L"rb" );
-    #else
+#else
     FILE* fp = fopen( aFileName.ToUTF8(), "rb" );
-    #endif
+#endif
 
     if( NULL == fp )
         return false;
@@ -506,7 +508,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
     }
 
     return S3D::WriteCache( fname.ToUTF8(), true, (SGNODE*)aCacheItem->sceneData,
-        aCacheItem->pluginInfo.c_str() );
+                            aCacheItem->pluginInfo.c_str() );
 }
 
 
@@ -553,11 +555,11 @@ bool S3D_CACHE::Set3DConfigDir( const wxString& aConfigDir )
     // 3. MSWin: AppData\Local\kicad\3d
     wxString cacheDir;
 
-#if defined(_WIN32)
+#if defined( _WIN32 )
     wxStandardPaths::Get().UseAppInfo( wxStandardPaths::AppInfo_None );
     cacheDir = wxStandardPaths::Get().GetUserLocalDataDir();
     cacheDir.append( "\\kicad\\3d" );
-#elif defined(__APPLE)
+#elif defined( __APPLE )
     cacheDir = "${HOME}/Library/Caches/kicad/3d";
 #else   // assume Linux
     cacheDir = ExpandEnvVarSubstitutions( "${XDG_CACHE_HOME}", nullptr );
@@ -727,6 +729,7 @@ void S3D_CACHE::CleanCacheDir( int aNumDaysOld )
         }
     }
 }
+
 
 S3D_CACHE* PROJECT::Get3DCacheManager( bool aUpdateProjDir )
 {

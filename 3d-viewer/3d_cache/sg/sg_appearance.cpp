@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +30,8 @@
 #include "3d_cache/sg/sg_appearance.h"
 #include "3d_cache/sg/sg_helpers.h"
 
-SGAPPEARANCE::SGAPPEARANCE( SGNODE* aParent ) : SGNODE( aParent)
+
+SGAPPEARANCE::SGAPPEARANCE( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_APPEARANCE;
 
@@ -39,36 +41,28 @@ SGAPPEARANCE::SGAPPEARANCE( SGNODE* aParent ) : SGNODE( aParent)
     transparency = 0.0f;
     diffuse.SetColor( 0.8f, 0.8f, 0.8f );
 
-    if( NULL != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
     {
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] inappropriate parent to SGAPPEARANCE (type ";
-        ostr << aParent->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SGAPPEARANCE (type %s )",
+                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
     }
-    else if( NULL != aParent && S3D::SGTYPE_SHAPE == aParent->GetNodeType() )
+    else if( nullptr != aParent && S3D::SGTYPE_SHAPE == aParent->GetNodeType() )
     {
         m_Parent->AddChildNode( this );
     }
-
-    return;
 }
 
 
 SGAPPEARANCE::~SGAPPEARANCE()
 {
-    return;
 }
 
 
 bool SGAPPEARANCE::SetParent( SGNODE* aParent, bool notify )
 {
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
     {
         if( aParent == m_Parent )
             return true;
@@ -77,14 +71,14 @@ bool SGAPPEARANCE::SetParent( SGNODE* aParent, bool notify )
         if( notify )
             m_Parent->unlinkChildNode( this );
 
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-        if( NULL == aParent )
+        if( nullptr == aParent )
             return true;
     }
 
     // only a SGSHAPE may be parent to a SGAPPEARANCE
-    if( NULL != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
         return false;
 
     m_Parent = aParent;
@@ -104,17 +98,7 @@ bool SGAPPEARANCE::SetEmissive( float aRVal, float aGVal, float aBVal )
 
 bool SGAPPEARANCE::SetEmissive( const SGCOLOR* aRGBColor )
 {
-    if( NULL == aRGBColor )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aRGBColor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK_MSG( aRGBColor, false, "NULL pointer passed for aRGBColor" );
 
     return emissive.SetColor( aRGBColor );
 }
@@ -134,17 +118,7 @@ bool SGAPPEARANCE::SetDiffuse( float aRVal, float aGVal, float aBVal )
 
 bool SGAPPEARANCE::SetDiffuse( const SGCOLOR* aRGBColor )
 {
-    if( NULL == aRGBColor )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aRGBColor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK_MSG( aRGBColor, false, "NULL pointer passed for aRGBColor" );
 
     return diffuse.SetColor( aRGBColor );
 }
@@ -164,17 +138,7 @@ bool SGAPPEARANCE::SetSpecular( float aRVal, float aGVal, float aBVal )
 
 bool SGAPPEARANCE::SetSpecular( const SGCOLOR* aRGBColor )
 {
-    if( NULL == aRGBColor )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aRGBColor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK_MSG( aRGBColor, false, "NULL pointer passed for aRGBColor" );
 
     return specular.SetColor( aRGBColor );
 }
@@ -193,17 +157,7 @@ bool SGAPPEARANCE::SetAmbient( float aRVal, float aGVal, float aBVal )
 
 bool SGAPPEARANCE::SetAmbient( const SGCOLOR* aRGBColor )
 {
-    if( NULL == aRGBColor )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aRGBColor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK_MSG( aRGBColor, false, "NULL pointer passed for aRGBColor" );
 
     return ambient.SetColor( aRGBColor );
 }
@@ -215,66 +169,46 @@ bool SGAPPEARANCE::SetAmbient( const SGCOLOR& aRGBColor )
 }
 
 
-SGNODE* SGAPPEARANCE::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
+SGNODE* SGAPPEARANCE::FindNode( const char* aNodeName, const SGNODE* aCaller) noexcept
 {
-    if( NULL == aNodeName || 0 == aNodeName[0] )
-        return NULL;
+    if( nullptr == aNodeName || 0 == aNodeName[0] )
+        return nullptr;
 
     if( !m_Name.compare( aNodeName ) )
         return this;
 
-    return NULL;
+    return nullptr;
 }
 
 
 void SGAPPEARANCE::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
-
-    return;
+    wxCHECK_MSG( aCaller, /* void */,
+                 "unexpected code branch; node should have no children or refs" );
 }
 
 
 void SGAPPEARANCE::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
-
-    return;
+    wxCHECK_MSG( aCaller, /* void */,
+                 "unexpected code branch; node should have no children or refs" );
 }
 
 
 bool SGAPPEARANCE::AddRefNode( SGNODE* aNode ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] this node does not accept children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
+    wxCHECK_MSG( aNode, false, "this node does not accept children or refs" );
 
+    // This is redundant but it keeps gcc from generating a warning on debug builds.
     return false;
 }
 
 
 bool SGAPPEARANCE::AddChildNode( SGNODE* aNode ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] this node does not accept children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
+    wxCHECK_MSG( aNode, false, "this node does not accept children or refs" );
 
+    // This is redundant but it keeps gcc from generating a warning on debug builds.
     return false;
 }
 
@@ -368,26 +302,16 @@ bool SGAPPEARANCE::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 
 bool SGAPPEARANCE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
-    if( NULL == parentNode )
+    if( nullptr == parentNode )
     {
-        if( NULL == m_Parent )
-        {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] corrupt data; m_aParent is NULL";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
-
-            return false;
-        }
+        wxCHECK_MSG( m_Parent, false, "corrupt data; m_aParent is NULL" );
 
         SGNODE* np = m_Parent;
 
-        while( NULL != np->GetParent() )
+        while( nullptr != np->GetParent() )
             np = np->GetParent();
 
-        if( np->WriteCache( aFile, NULL ) )
+        if( np->WriteCache( aFile, nullptr ) )
         {
             m_written = true;
             return true;
@@ -396,34 +320,19 @@ bool SGAPPEARANCE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         return false;
     }
 
-    if( parentNode != m_Parent )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK_MSG( parentNode == m_Parent, false, "corrupt data; parentNode != m_aParent" );
 
     if( !aFile.good() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad stream";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream", __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
 
     aFile << "[" << GetName() << "]";
     S3D::WriteColor( aFile, ambient );
-    aFile.write( (char*)&shininess, sizeof(shininess) );
-    aFile.write( (char*)&transparency, sizeof(transparency) );
+    aFile.write( (char*) &shininess, sizeof( shininess ) );
+    aFile.write( (char*) &transparency, sizeof( transparency ) );
     S3D::WriteColor( aFile, diffuse );
     S3D::WriteColor( aFile, emissive );
     S3D::WriteColor( aFile, specular );
@@ -439,8 +348,8 @@ bool SGAPPEARANCE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 bool SGAPPEARANCE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
     S3D::ReadColor( aFile, ambient );
-    aFile.read( (char*)&shininess, sizeof(shininess) );
-    aFile.read( (char*)&transparency, sizeof(transparency) );
+    aFile.read( (char*) &shininess, sizeof( shininess ) );
+    aFile.read( (char*) &transparency, sizeof( transparency ) );
     S3D::ReadColor( aFile, diffuse );
     S3D::ReadColor( aFile, emissive );
     S3D::ReadColor( aFile, specular );

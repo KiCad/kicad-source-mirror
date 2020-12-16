@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,20 +36,14 @@ SGCOLOR::SGCOLOR()
     red = 0.0;
     green = 0.0;
     blue = 0.0;
-
-    return;
 }
 
 SGCOLOR::SGCOLOR( float aRVal, float aGVal, float aBVal )
 {
     if( !checkRange( aRVal, aGVal, aBVal ) )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid value passed to constructor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid value passed to constructor",
+                    __FILE__, __FUNCTION__, __LINE__ );
         red = 0.0;
         green = 0.0;
         blue = 0.0;
@@ -58,7 +53,6 @@ SGCOLOR::SGCOLOR( float aRVal, float aGVal, float aBVal )
     red = aRVal;
     green = aGVal;
     blue = aBVal;
-    return;
 }
 
 
@@ -67,7 +61,6 @@ void SGCOLOR::GetColor( float& aRedVal, float& aGreenVal, float& aBlueVal ) cons
     aRedVal = red;
     aGreenVal = green;
     aBlueVal = blue;
-    return;
 }
 
 
@@ -76,28 +69,16 @@ void SGCOLOR::GetColor( SGCOLOR& aColor ) const noexcept
     aColor.red = red;
     aColor.green = green;
     aColor.blue = blue;
-    return;
 }
 
 
 void SGCOLOR::GetColor( SGCOLOR* aColor ) const noexcept
 {
-    if( NULL == aColor )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aColor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return;
-    }
+    wxCHECK_MSG( aColor, /* void */, "NULL pointer passed for aRGBColor" );
 
     aColor->red = red;
     aColor->green = green;
     aColor->blue = blue;
-    return;
 }
 
 
@@ -125,17 +106,7 @@ bool SGCOLOR::SetColor( const SGCOLOR& aColor ) noexcept
 
 bool SGCOLOR::SetColor( const SGCOLOR* aColor ) noexcept
 {
-    if( NULL == aColor )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aColor";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK_MSG( aColor, false, "NULL pointer passed for aRGBColor" );
 
     red = aColor->red;
     green = aColor->green;
@@ -150,36 +121,25 @@ bool SGCOLOR::checkRange( float aRedVal, float aGreenVal, float aBlueVal ) const
 
     if( aRedVal < 0.0 || aRedVal > 1.0 )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid RED value: " << aRedVal;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid RED value: %g",
+                    __FILE__, __FUNCTION__, __LINE__, aRedVal );
+
         ok = false;
     }
 
     if( aGreenVal < 0.0 || aGreenVal > 1.0 )
     {
-#ifdef DEBUG
-        if( ok )
-        {
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d\n", __FILE__, __FUNCTION__, __LINE__ );
-        }
-        wxLogTrace( MASK_3D_SG, " * [BUG] invalid GREEN value: %f\n", aGreenVal );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid GREEN value: %g",
+                    __FILE__, __FUNCTION__, __LINE__, aGreenVal );
+
         ok = false;
     }
 
     if( aBlueVal < 0.0 || aBlueVal > 1.0 )
     {
-#ifdef DEBUG
-        if( ok )
-        {
-            wxLogTrace( MASK_3D_SG, "%s:%s:%d\n", __FILE__, __FUNCTION__, __LINE__ );
-        }
-        wxLogTrace( MASK_3D_SG, " * [BUG] invalid BLUE value: %f\n", aBlueVal );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid BLUE value: %g",
+                    __FILE__, __FUNCTION__, __LINE__, aBlueVal );
+
         ok = false;
     }
 
@@ -192,7 +152,6 @@ SGPOINT::SGPOINT()
     x = 0.0;
     y = 0.0;
     z = 0.0;
-    return;
 }
 
 
@@ -209,7 +168,6 @@ void SGPOINT::GetPoint( double& aXVal, double& aYVal, double& aZVal ) noexcept
     x = aXVal;
     y = aYVal;
     z = aZVal;
-    return;
 }
 
 
@@ -218,28 +176,16 @@ void SGPOINT::GetPoint( SGPOINT& aPoint ) noexcept
     x = aPoint.x;
     y = aPoint.y;
     z = aPoint.z;
-    return;
 }
 
 
 void SGPOINT::GetPoint( SGPOINT* aPoint ) noexcept
 {
-    if( NULL == aPoint )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aPoint";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return;
-    }
+    wxCHECK_MSG( aPoint, /* void */, "NULL pointer passed for aPoint" );
 
     x = aPoint->x;
     y = aPoint->y;
     z = aPoint->z;
-    return;
 }
 
 
@@ -248,7 +194,6 @@ void SGPOINT::SetPoint( double aXVal, double aYVal, double aZVal ) noexcept
     x = aXVal;
     y = aYVal;
     z = aZVal;
-    return;
 }
 
 
@@ -257,7 +202,6 @@ void SGPOINT::SetPoint( const SGPOINT& aPoint ) noexcept
     x = aPoint.x;
     y = aPoint.y;
     z = aPoint.z;
-    return;
 }
 
 
@@ -266,7 +210,6 @@ SGVECTOR::SGVECTOR()
     vx = 0.0;
     vy = 0.0;
     vz = 1.0;
-    return;
 }
 
 
@@ -276,7 +219,6 @@ SGVECTOR::SGVECTOR( double aXVal, double aYVal, double aZVal )
     vy = aYVal;
     vz = aZVal;
     normalize();
-    return;
 }
 
 
@@ -285,7 +227,6 @@ void SGVECTOR::GetVector( double& aXVal, double& aYVal, double& aZVal ) const no
     aXVal = vx;
     aYVal = vy;
     aZVal = vz;
-    return;
 }
 
 
@@ -295,14 +236,12 @@ void SGVECTOR::SetVector( double aXVal, double aYVal, double aZVal )
     vy = aYVal;
     vz = aZVal;
     normalize();
-    return;
 }
 
 
 void SGVECTOR::SetVector( const SGVECTOR& aVector )
 {
     aVector.GetVector( vx, vy, vz );
-    return;
 }
 
 
@@ -313,10 +252,9 @@ void SGVECTOR::normalize( void ) noexcept
     double dz = vz * vz;
     double dv2 = sqrt( dx + dy + dz );
 
-    if( (dx + dy + dz) < 1e-8 )
+    if( ( dx + dy + dz ) < 1e-8 )
     {
-        // use the default; the numbers are too small
-        // to be believable
+        // use the default; the numbers are too small to be believable
         vx = 0.0;
         vy = 0.0;
         vz = 1.0;
@@ -326,8 +264,6 @@ void SGVECTOR::normalize( void ) noexcept
     vx /= dv2;
     vy /= dv2;
     vz /= dv2;
-
-    return;
 }
 
 
@@ -336,5 +272,4 @@ SGVECTOR& SGVECTOR::operator=( const SGVECTOR& source ) noexcept
     vx = source.vx;
     vy = source.vy;
     vz = source.vz;
-    return *this;
 }

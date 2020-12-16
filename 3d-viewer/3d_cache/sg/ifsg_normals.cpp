@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,53 +31,42 @@
 #include "3d_cache/sg/sg_normals.h"
 
 
-extern char BadObject[];
-extern char BadOperand[];
 extern char BadParent[];
 extern char WrongParent[];
 
 
 IFSG_NORMALS::IFSG_NORMALS( bool create )
 {
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !create )
         return;
 
-    m_node = new SGNORMALS( NULL );
+    m_node = new SGNORMALS( nullptr );
 
     if( m_node )
         m_node->AssociateWrapper( &m_node );
-
-    return;
 }
 
 
 IFSG_NORMALS::IFSG_NORMALS( SGNODE* aParent )
 {
-    m_node = new SGNORMALS( NULL );
+    m_node = new SGNORMALS( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( aParent ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -84,39 +74,29 @@ IFSG_NORMALS::IFSG_NORMALS( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
-    #ifdef DEBUG
+#ifdef DEBUG
     if( ! pp )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
     }
-    #endif
+#endif
 
-    m_node = new SGNORMALS( NULL );
+    m_node = new SGNORMALS( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( pp ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -125,7 +105,7 @@ bool IFSG_NORMALS::Attach( SGNODE* aNode )
     if( m_node )
         m_node->DisassociateWrapper( &m_node );
 
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !aNode )
         return false;
@@ -151,17 +131,12 @@ bool IFSG_NORMALS::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid SGNODE parent (";
-        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        ostr << ") to SGNORMALS";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid SGNODE parent (%s) to SGNORMALS",
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
         delete m_node;
-        m_node = NULL;
+        m_node = nullptr;
         return false;
     }
 
@@ -175,17 +150,7 @@ bool IFSG_NORMALS::NewNode( IFSG_NODE& aParent )
 {
     SGNODE* np = aParent.GetRawPtr();
 
-    if( NULL == np )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( np, false );
 
     return NewNode( np );
 }
@@ -193,74 +158,34 @@ bool IFSG_NORMALS::NewNode( IFSG_NODE& aParent )
 
 bool IFSG_NORMALS::GetNormalList( size_t& aListSize, SGVECTOR*& aNormalList )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGNORMALS*)m_node)->GetNormalList( aListSize, aNormalList );
+    return ( (SGNORMALS*) m_node )->GetNormalList( aListSize, aNormalList );
 }
 
 
 bool IFSG_NORMALS::SetNormalList( size_t aListSize, const SGVECTOR* aNormalList )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGNORMALS*)m_node)->SetNormalList( aListSize, aNormalList );
+    ( (SGNORMALS*) m_node )->SetNormalList( aListSize, aNormalList );
     return true;
 }
 
 
 bool IFSG_NORMALS::AddNormal( double aXValue, double aYValue, double aZValue )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGNORMALS*)m_node)->AddNormal( aXValue, aYValue, aZValue );
+    ( (SGNORMALS*) m_node )->AddNormal( aXValue, aYValue, aZValue );
     return true;
 }
 
 
 bool IFSG_NORMALS::AddNormal( const SGVECTOR& aNormal )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGNORMALS*)m_node)->AddNormal( aNormal );
+    ( (SGNORMALS*) m_node )->AddNormal( aNormal );
     return true;
 }

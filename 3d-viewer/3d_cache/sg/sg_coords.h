@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,6 @@
 
 /**
  * @file sg_coords.h
- * defines a vertex coordinate set for a scenegraph object
  */
 
 #ifndef SG_COORDS_H
@@ -34,17 +34,17 @@
 
 class SGFACESET;
 
+/**
+ * Define a vertex coordinate set for a scenegraph object.
+ */
 class SGCOORDS : public SGNODE
 {
 public:
-    std::vector< SGPOINT > coords;
+    SGCOORDS( SGNODE* aParent );
+    virtual ~SGCOORDS();
 
     void unlinkChildNode( const SGNODE* aNode ) noexcept override;
     void unlinkRefNode( const SGNODE* aNode ) noexcept override;
-
-public:
-    SGCOORDS( SGNODE* aParent );
-    virtual ~SGCOORDS();
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
@@ -58,17 +58,18 @@ public:
     void AddCoord( const SGPOINT& aPoint );
 
     /**
-     * Function CalcNormals
-     * calculates normals for this coordinate list and sets the
-     * normals list in the parent SGFACESET
+     * Calculate normals for this coordinate list and sets the normals list in the
+     * parent #SGFACESET.
      */
-    bool CalcNormals( SGFACESET* callingNode, SGNODE** aPtr = NULL );
+    bool CalcNormals( SGFACESET* callingNode, SGNODE** aPtr = nullptr );
 
     void ReNameNodes( void ) override;
     bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) override;
 
     bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
     bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
+
+    std::vector< SGPOINT > coords;
 };
 
 #endif  // SG_COORDS_H

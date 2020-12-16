@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,52 +31,42 @@
 #include "3d_cache/sg/sg_faceset.h"
 
 
-extern char BadObject[];
 extern char BadParent[];
 extern char WrongParent[];
 
 
 IFSG_FACESET::IFSG_FACESET( bool create )
 {
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !create )
         return ;
 
-    m_node = new SGFACESET( NULL );
+    m_node = new SGFACESET( nullptr );
 
     if( m_node )
         m_node->AssociateWrapper( &m_node );
-
-    return;
 }
 
 
 IFSG_FACESET::IFSG_FACESET( SGNODE* aParent )
 {
-    m_node = new SGFACESET( NULL );
+    m_node = new SGFACESET( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( aParent ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -83,39 +74,29 @@ IFSG_FACESET::IFSG_FACESET( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
-    #ifdef DEBUG
+#ifdef DEBUG
     if( ! pp )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
     }
-    #endif
+#endif
 
-    m_node = new SGFACESET( NULL );
+    m_node = new SGFACESET( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( pp ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -124,7 +105,7 @@ bool IFSG_FACESET::Attach( SGNODE* aNode )
     if( m_node )
         m_node->DisassociateWrapper( &m_node );
 
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !aNode )
         return false;
@@ -150,17 +131,12 @@ bool IFSG_FACESET::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid SGNODE parent (";
-        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        ostr << ") to SGFACESET";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] invalid SGNODE parent (%s) to SGFACESET",
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
         delete m_node;
-        m_node = NULL;
+        m_node = nullptr;
         return false;
     }
 
@@ -174,17 +150,7 @@ bool IFSG_FACESET::NewNode( IFSG_NODE& aParent )
 {
     SGNODE* np = aParent.GetRawPtr();
 
-    if( NULL == np )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( np, false );
 
     return NewNode( np );
 }
@@ -193,7 +159,7 @@ bool IFSG_FACESET::NewNode( IFSG_NODE& aParent )
 bool IFSG_FACESET::CalcNormals( SGNODE** aPtr )
 {
     if( m_node )
-        return ((SGFACESET*)m_node)->CalcNormals( aPtr );
+        return ( (SGFACESET*) m_node )->CalcNormals( aPtr );
 
     return false;
 }

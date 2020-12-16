@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,52 +30,42 @@
 #include "3d_cache/sg/sg_colors.h"
 
 
-extern char BadObject[];
 extern char BadParent[];
 extern char WrongParent[];
 
 
 IFSG_COLORS::IFSG_COLORS( bool create )
 {
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !create )
-        return ;
+        return;
 
-    m_node = new SGCOLORS( NULL );
+    m_node = new SGCOLORS( nullptr );
 
     if( m_node )
         m_node->AssociateWrapper( &m_node );
-
-    return;
 }
 
 
 IFSG_COLORS::IFSG_COLORS( SGNODE* aParent )
 {
-    m_node = new SGCOLORS( NULL );
+    m_node = new SGCOLORS( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( aParent ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d", __FILE__, __FUNCTION__, __LINE__ );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -82,39 +73,28 @@ IFSG_COLORS::IFSG_COLORS( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
-    #ifdef DEBUG
-    if( ! pp )
-    {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    }
-    #endif
+#ifdef DEBUG
+    if( !pp )
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
+#endif
 
-    m_node = new SGCOLORS( NULL );
+    m_node = new SGCOLORS( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( pp ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__,
+                        WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -123,7 +103,7 @@ bool IFSG_COLORS::Attach( SGNODE* aNode )
     if( m_node )
         m_node->DisassociateWrapper( &m_node );
 
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !aNode )
         return false;
@@ -149,17 +129,12 @@ bool IFSG_COLORS::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid SGNODE parent (";
-        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        ostr << ") to SGCOLORS";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [BUG] invalid SGNODE parent (%s) to SGCOLORS",
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
         delete m_node;
-        m_node = NULL;
+        m_node = nullptr;
         return false;
     }
 
@@ -173,17 +148,7 @@ bool IFSG_COLORS::NewNode( IFSG_NODE& aParent )
 {
     SGNODE* np = aParent.GetRawPtr();
 
-    if( NULL == np )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( np, false );
 
     return NewNode( np );
 }
@@ -191,37 +156,17 @@ bool IFSG_COLORS::NewNode( IFSG_NODE& aParent )
 
 bool IFSG_COLORS::GetColorList( size_t& aListSize, SGCOLOR*& aColorList )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGCOLORS*)m_node)->GetColorList( aListSize, aColorList );
+    return ( (SGCOLORS*) m_node )->GetColorList( aListSize, aColorList );
 }
 
 
 bool IFSG_COLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGCOLORS*)m_node)->SetColorList( aListSize, aColorList );
+    ( (SGCOLORS*) m_node )->SetColorList( aListSize, aColorList );
 
     return true;
 }
@@ -229,19 +174,9 @@ bool IFSG_COLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 
 bool IFSG_COLORS::AddColor( double aRedValue, double aGreenValue, double aBlueValue )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGCOLORS*)m_node)->AddColor( aRedValue, aGreenValue, aBlueValue );
+    ( (SGCOLORS*) m_node )->AddColor( aRedValue, aGreenValue, aBlueValue );
 
     return true;
 }
@@ -249,19 +184,9 @@ bool IFSG_COLORS::AddColor( double aRedValue, double aGreenValue, double aBlueVa
 
 bool IFSG_COLORS::AddColor( const SGCOLOR& aColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGCOLORS*)m_node)->AddColor( aColor );
+    ( (SGCOLORS*) m_node )->AddColor( aColor );
 
     return true;
 }

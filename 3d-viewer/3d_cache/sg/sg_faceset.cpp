@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,37 +34,31 @@
 #include "3d_cache/sg/sg_coordindex.h"
 #include "3d_cache/sg/sg_helpers.h"
 
+
 SGFACESET::SGFACESET( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_FACESET;
-    m_Colors = NULL;
-    m_Coords = NULL;
-    m_CoordIndices = NULL;
-    m_Normals = NULL;
-    m_RColors = NULL;
-    m_RCoords = NULL;
-    m_RNormals = NULL;
+    m_Colors = nullptr;
+    m_Coords = nullptr;
+    m_CoordIndices = nullptr;
+    m_Normals = nullptr;
+    m_RColors = nullptr;
+    m_RCoords = nullptr;
+    m_RNormals = nullptr;
     valid = false;
     validated = false;
 
-    if( NULL != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
     {
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] inappropriate parent to SGFACESET (type ";
-        ostr << aParent->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SGFACESET (type %s)",
+                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
     }
-    else if( NULL != aParent && S3D::SGTYPE_SHAPE == aParent->GetNodeType() )
+    else if( nullptr != aParent && S3D::SGTYPE_SHAPE == aParent->GetNodeType() )
     {
         m_Parent->AddChildNode( this );
     }
-
-    return;
 }
 
 
@@ -73,57 +68,55 @@ SGFACESET::~SGFACESET()
     if( m_RColors )
     {
         m_RColors->delNodeRef( this );
-        m_RColors = NULL;
+        m_RColors = nullptr;
     }
 
     if( m_RCoords )
     {
         m_RCoords->delNodeRef( this );
-        m_RCoords = NULL;
+        m_RCoords = nullptr;
     }
 
     if( m_RNormals )
     {
         m_RNormals->delNodeRef( this );
-        m_RNormals = NULL;
+        m_RNormals = nullptr;
     }
 
     // delete owned objects
     if( m_Colors )
     {
-        m_Colors->SetParent( NULL, false );
+        m_Colors->SetParent( nullptr, false );
         delete m_Colors;
-        m_Colors = NULL;
+        m_Colors = nullptr;
     }
 
     if( m_Coords )
     {
-        m_Coords->SetParent( NULL, false );
+        m_Coords->SetParent( nullptr, false );
         delete m_Coords;
-        m_Coords = NULL;
+        m_Coords = nullptr;
     }
 
     if( m_Normals )
     {
-        m_Normals->SetParent( NULL, false );
+        m_Normals->SetParent( nullptr, false );
         delete m_Normals;
-        m_Normals = NULL;
+        m_Normals = nullptr;
     }
 
     if( m_CoordIndices )
     {
-        m_CoordIndices->SetParent( NULL, false );
+        m_CoordIndices->SetParent( nullptr, false );
         delete m_CoordIndices;
-        m_CoordIndices = NULL;
+        m_CoordIndices = nullptr;
     }
-
-    return;
 }
 
 
 bool SGFACESET::SetParent( SGNODE* aParent, bool notify )
 {
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
     {
         if( aParent == m_Parent )
             return true;
@@ -132,14 +125,14 @@ bool SGFACESET::SetParent( SGNODE* aParent, bool notify )
         if( notify )
             m_Parent->unlinkChildNode( this );
 
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-        if( NULL == aParent )
+        if( nullptr == aParent )
             return true;
     }
 
     // only a SGSHAPE may be parent to a SGFACESET
-    if( NULL != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_SHAPE != aParent->GetNodeType() )
         return false;
 
     m_Parent = aParent;
@@ -153,13 +146,13 @@ bool SGFACESET::SetParent( SGNODE* aParent, bool notify )
 
 SGNODE* SGFACESET::FindNode(const char *aNodeName, const SGNODE *aCaller)
 {
-    if( NULL == aNodeName || 0 == aNodeName[0] )
-        return NULL;
+    if( nullptr == aNodeName || 0 == aNodeName[0] )
+        return nullptr;
 
     if( !m_Name.compare( aNodeName ) )
         return this;
 
-    SGNODE* np = NULL;
+    SGNODE* np = nullptr;
 
     if( m_Colors )
     {
@@ -194,8 +187,8 @@ SGNODE* SGFACESET::FindNode(const char *aNodeName, const SGNODE *aCaller)
     }
 
     // query the parent if appropriate
-    if( aCaller == m_Parent || NULL == m_Parent )
-        return NULL;
+    if( aCaller == m_Parent || nullptr == m_Parent )
+        return nullptr;
 
     return m_Parent->FindNode( aNodeName, this );
 }
@@ -203,7 +196,7 @@ SGNODE* SGFACESET::FindNode(const char *aNodeName, const SGNODE *aCaller)
 
 void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     valid = false;
@@ -213,25 +206,25 @@ void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
     {
         if( aNode == m_Colors )
         {
-            m_Colors = NULL;
+            m_Colors = nullptr;
             return;
         }
 
         if( aNode == m_Coords )
         {
-            m_Coords = NULL;
+            m_Coords = nullptr;
             return;
         }
 
         if( aNode == m_Normals )
         {
-            m_Normals = NULL;
+            m_Normals = nullptr;
             return;
         }
 
         if( aNode == m_CoordIndices )
         {
-            m_CoordIndices = NULL;
+            m_CoordIndices = nullptr;
             return;
         }
     }
@@ -240,66 +233,46 @@ void SGFACESET::unlinkNode( const SGNODE* aNode, bool isChild )
         if( aNode == m_RColors )
         {
             delNodeRef( this );
-            m_RColors = NULL;
+            m_RColors = nullptr;
             return;
         }
 
         if( aNode == m_RCoords )
         {
             delNodeRef( this );
-            m_RCoords = NULL;
+            m_RCoords = nullptr;
             return;
         }
 
         if( aNode == m_RNormals )
         {
             delNodeRef( this );
-            m_RNormals = NULL;
+            m_RNormals = nullptr;
             return;
         }
     }
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] unlinkNode() did not find its target";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
-
-    return;
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] unlinkNode() did not find its target",
+                __FILE__, __FUNCTION__, __LINE__ );
 }
 
 
 void SGFACESET::unlinkChildNode( const SGNODE* aNode )
 {
     unlinkNode( aNode, true );
-    return;
 }
 
 
 void SGFACESET::unlinkRefNode( const SGNODE* aNode )
 {
     unlinkNode( aNode, false );
-    return;
 }
 
 
 
 bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aNode";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( aNode, false );
 
     valid = false;
     validated = false;
@@ -310,12 +283,8 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Colors && aNode != m_RColors )
             {
-                #ifdef DEBUG
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [BUG] assigning multiple Colors nodes";
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-                #endif
+                wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] assigning multiple Colors nodes",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -343,12 +312,8 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Coords && aNode != m_RCoords )
             {
-                #ifdef DEBUG
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [BUG] assigning multiple Coords nodes";
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-                #endif
+                wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] assigning multiple Colors nodes",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -376,12 +341,8 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Normals && aNode != m_RNormals )
             {
-                #ifdef DEBUG
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [BUG] assigning multiple Normals nodes";
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-                #endif
+                wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] assigning multiple Normals nodes",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -409,12 +370,8 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_CoordIndices )
             {
-                #ifdef DEBUG
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [BUG] assigning multiple CoordIndex nodes";
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-                #endif
+                wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] assigning multiple CoordIndex nodes",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -428,16 +385,9 @@ bool SGFACESET::addNode( SGNODE* aNode, bool isChild )
         return true;
     }
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] object '" << aNode->GetName();
-        ostr << "' (type " << aNode->GetNodeType();
-        ostr << ") is not a valid type for this object (" << aNode->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] object type '%s' is not a valid type for "
+                "this object '%d'", __FILE__, __FUNCTION__, __LINE__, aNode->GetName(),
+                aNode->GetNodeType() );
 
     return false;
 }
@@ -477,15 +427,12 @@ void SGFACESET::ReNameNodes( void )
     // rename all Normals and Indices
     if( m_Normals )
         m_Normals->ReNameNodes();
-
-    return;
 }
 
 
 bool SGFACESET::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
-    if( ( NULL == m_Coords && NULL == m_RCoords )
-        || ( NULL == m_CoordIndices ) )
+    if( ( nullptr == m_Coords && nullptr == m_RCoords ) || ( nullptr == m_CoordIndices ) )
     {
         return false;
     }
@@ -540,26 +487,16 @@ bool SGFACESET::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 
 bool SGFACESET::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
-    if( NULL == parentNode )
+    if( nullptr == parentNode )
     {
-        if( NULL == m_Parent )
-        {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] corrupt data; m_aParent is NULL";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
-
-            return false;
-        }
+        wxCHECK( m_Parent, false );
 
         SGNODE* np = m_Parent;
 
-        while( NULL != np->GetParent() )
+        while( nullptr != np->GetParent() )
             np = np->GetParent();
 
-        if( np->WriteCache( aFile, NULL ) )
+        if( np->WriteCache( aFile, nullptr ) )
         {
             m_written = true;
             return true;
@@ -568,38 +505,23 @@ bool SGFACESET::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         return false;
     }
 
-    if( parentNode != m_Parent )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( parentNode == m_Parent, false );
 
     if( !aFile.good() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad stream";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream", __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
 
     // check if any references are unwritten and swap parents if so
-    if( NULL != m_RCoords && !m_RCoords->isWritten() )
+    if( nullptr != m_RCoords && !m_RCoords->isWritten() )
         m_RCoords->SwapParent( this );
 
-    if( NULL != m_RNormals && !m_RNormals->isWritten() )
+    if( nullptr != m_RNormals && !m_RNormals->isWritten() )
         m_RNormals->SwapParent( this );
 
-    if( NULL != m_RColors && !m_RColors->isWritten() )
+    if( nullptr != m_RColors && !m_RColors->isWritten() )
         m_RColors->SwapParent( this );
 
     aFile << "[" << GetName() << "]";
@@ -611,35 +533,35 @@ bool SGFACESET::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         items[i] = 0;
 
     i = 0;
-    if( NULL != m_Coords )
+    if( nullptr != m_Coords )
         items[i] = true;
 
     ++i;
-    if( NULL != m_RCoords )
+    if( nullptr != m_RCoords )
         items[i] = true;
 
     ++i;
-    if( NULL != m_CoordIndices )
+    if( nullptr != m_CoordIndices )
         items[i] = true;
 
     ++i;
-    if( NULL != m_Normals )
+    if( nullptr != m_Normals )
         items[i] = true;
 
     ++i;
-    if( NULL != m_RNormals )
+    if( nullptr != m_RNormals )
         items[i] = true;
 
     ++i;
-    if( NULL != m_Colors )
+    if( nullptr != m_Colors )
         items[i] = true;
 
     ++i;
-    if( NULL != m_RColors )
+    if( nullptr != m_RColors )
         items[i] = true;
 
     for( int jj = 0; jj < NITEMS; ++jj )
-        aFile.write( (char*)&items[jj], sizeof(bool) );
+        aFile.write( (char*) &items[jj], sizeof( bool ) );
 
     if( items[0] )
         m_Coords->WriteCache( aFile, this );
@@ -672,16 +594,11 @@ bool SGFACESET::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
 bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
-    if( m_Coords || m_RCoords || m_CoordIndices
-        || m_Colors || m_RColors
-        || m_Normals || m_RNormals )
+    if( m_Coords || m_RCoords || m_CoordIndices || m_Colors || m_RColors || m_Normals
+      || m_RNormals )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] non-empty node";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] non-empty node",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -690,18 +607,13 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     bool items[NITEMS];
 
     for( int i = 0; i < NITEMS; ++i )
-        aFile.read( (char*)&items[i], sizeof(bool) );
+        aFile.read( (char*) &items[i], sizeof( bool ) );
 
-    if( ( items[0] && items[1] ) || ( items[3] && items[4] )
-        || ( items[5] && items[6] ) )
+    if( ( items[0] && items[1] ) || ( items[3] && items[4] ) || ( items[5] && items[6] ) )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] corrupt data; multiple item definitions at position ";
-        ostr << aFile.tellg();
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] corrupt data; multiple item definitions at position %d",
+                    __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
         return false;
     }
@@ -712,13 +624,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COORDS != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child coords tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child coords tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -728,13 +636,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !m_Coords->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading coords '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; corrupt data while reading coords '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -744,13 +648,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COORDS != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref coords tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref coords tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -759,26 +659,18 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref coords '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; cannot find ref coords '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
 
         if( S3D::SGTYPE_COORDS != np->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not SGCOORDS '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; type is not SGCOORDS '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -791,13 +683,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COORDINDEX != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad coord index tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad coord index tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -807,13 +695,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !m_CoordIndices->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading coord index '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data while reading coord index '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -823,13 +707,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_NORMALS != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child normals tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child normals tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -839,13 +719,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !m_Normals->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading normals '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data while reading normals '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -855,13 +731,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_NORMALS != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref normals tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref normals tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -870,26 +742,18 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref normals '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt: cannot find ref normals '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
 
         if( S3D::SGTYPE_NORMALS != np->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not SGNORMALS '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt: type is not SGNORMALS '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -902,13 +766,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COLORS != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child colors tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child colors tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -918,13 +778,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !m_Colors->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading colors '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data while reading colors '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -934,13 +790,9 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_COLORS != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref colors tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref colors tag at position %d",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
             return false;
         }
@@ -949,26 +801,18 @@ bool SGFACESET::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref colors '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: cannot find ref colors '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
 
         if( S3D::SGTYPE_COLORS != np->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not SGCOLORS '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: type is not SGCOLORS '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -991,16 +835,14 @@ bool SGFACESET::validate( void )
         return valid;
 
     // ensure we have at least coordinates and their normals
-    if( (NULL == m_Coords && NULL == m_RCoords)
-        || (NULL == m_Normals && NULL == m_RNormals)
-        || (NULL == m_CoordIndices) )
+    if( ( nullptr == m_Coords && nullptr == m_RCoords )
+      || ( nullptr == m_Normals && nullptr == m_RNormals )
+      || ( nullptr == m_CoordIndices ) )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad model; no vertices, vertex indices, or normals";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] bad model; no vertices, vertex indices, or normals",
+                    __FILE__, __FUNCTION__, __LINE__ );
+
         validated = true;
         valid = false;
         return false;
@@ -1009,21 +851,18 @@ bool SGFACESET::validate( void )
     // check that there are >3 vertices
     SGCOORDS* coords = m_Coords;
 
-    if( NULL == coords )
+    if( nullptr == coords )
         coords = m_RCoords;
 
     size_t nCoords = 0;
-    SGPOINT* lCoords = NULL;
+    SGPOINT* lCoords = nullptr;
     coords->GetCoordsList( nCoords, lCoords );
 
     if( nCoords < 3 )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad model; fewer than 3 vertices";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad model; fewer than 3 vertices",
+                    __FILE__, __FUNCTION__, __LINE__ );
+
         validated = true;
         valid = false;
         return false;
@@ -1031,17 +870,15 @@ bool SGFACESET::validate( void )
 
     // check that nVertices is divisible by 3 (facets are triangles)
     size_t nCIdx = 0;
-    int* lCIdx = NULL;
+    int* lCIdx = nullptr;
     m_CoordIndices->GetIndices( nCIdx, lCIdx );
 
     if( nCIdx < 3 || ( nCIdx % 3 > 0 ) )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad model; no vertex indices or not multiple of 3";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] bad model; no vertex indices or not multiple of 3",
+                    __FILE__, __FUNCTION__, __LINE__ );
+
         validated = true;
         valid = false;
         return false;
@@ -1052,12 +889,9 @@ bool SGFACESET::validate( void )
     {
         if( lCIdx[i] < 0 || lCIdx[i] >= (int)nCoords )
         {
-#ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad model; vertex index out of bounds";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad model; vertex index out of bounds",
+                        __FILE__, __FUNCTION__, __LINE__ );
+
             validated = true;
             valid = false;
             return false;
@@ -1066,23 +900,21 @@ bool SGFACESET::validate( void )
 
     // check that there are as many normals as vertices
     size_t nNorms = 0;
-    SGVECTOR* lNorms = NULL;
+    SGVECTOR* lNorms = nullptr;
     SGNORMALS* pNorms = m_Normals;
 
-    if( NULL == pNorms )
+    if( nullptr == pNorms )
         pNorms = m_RNormals;
 
     pNorms->GetNormalList( nNorms, lNorms );
 
     if( nNorms != nCoords )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad model; number of normals (" << nNorms;
-        ostr << ") does not match number of vertices (" << nCoords << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] bad model; number of normals (%ul) does not match "
+                    "number of vertices (%ul)", __FILE__, __FUNCTION__, __LINE__,
+                    static_cast<unsigned long>( nNorms ), static_cast<unsigned long>( nCoords ) );
+
         validated = true;
         valid = false;
         return false;
@@ -1091,14 +923,14 @@ bool SGFACESET::validate( void )
     // if there are colors then ensure there are as many colors as vertices
     SGCOLORS* pColors = m_Colors;
 
-    if( NULL == pColors )
+    if( nullptr == pColors )
         pColors = m_RColors;
 
-    if( NULL != pColors )
+    if( nullptr != pColors )
     {
         // we must have at least as many colors as vertices
         size_t nColor = 0;
-        SGCOLOR* pColor = NULL;
+        SGCOLOR* pColor = nullptr;
         pColors->GetColorList( nColor, pColor );
     }
 
@@ -1112,8 +944,6 @@ void SGFACESET::GatherCoordIndices( std::vector< int >& aIndexList )
 {
     if( m_CoordIndices )
         m_CoordIndices->GatherCoordIndices( aIndexList );
-
-    return;
 }
 
 
@@ -1124,7 +954,7 @@ bool SGFACESET::CalcNormals( SGNODE** aPtr )
     if( m_RCoords )
         coords = m_RCoords;
 
-    if( NULL == coords || coords->coords.empty() )
+    if( nullptr == coords || coords->coords.empty() )
         return false;
 
     if( m_Normals && !m_Normals->norms.empty( ) )

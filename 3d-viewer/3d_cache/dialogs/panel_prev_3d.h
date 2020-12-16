@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2015-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,22 +79,29 @@ public:
 
     ~PANEL_PREV_3D();
 
-private:
-    EDA_3D_CANVAS*           m_previewPane;
-    WX_INFOBAR*              m_infobar;
-    BOARD_ADAPTER            m_boardAdapter;
-    CCAMERA&                 m_currentCamera;
-    CTRACK_BALL              m_trackBallCamera;
+    /**
+     * The TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
+     * events aren't captured by the menus themselves.
+     */
+    void OnMenuEvent( wxMenuEvent& aEvent );
 
-    BOARD*                   m_dummyBoard;
-    FOOTPRINT*               m_dummyFootprint;
+    wxWindow* GetToolCanvas() const override { return m_previewPane; }
 
-    std::vector<FP_3DMODEL>* m_parentModelList;
-    int                      m_selected;   /// Index into m_parentInfoList
+    BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
+    CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
-    EDA_UNITS m_userUnits;
+    /**
+     * Set the currently selected index in the model list so that the scale/rotation/offset
+     * controls can be updated.
+     */
+    void SetSelectedModel( int idx );
 
-    // Methods of the class
+    /**
+     * Copy shapes from the current shape list which are flagged for preview to the copy of
+     * footprint that is on the preview dummy board.
+     */
+    void UpdateDummyFootprint( bool aRelaodRequired = true );
+
 private:
     /**
      * Load 3D relevant settings from the user configuration
@@ -102,8 +109,7 @@ private:
     void loadCommonSettings();
 
     /**
-     * @brief updateOrientation - it will receive the events from editing the fields
-     * @param event
+     * It will receive the events from editing the fields.
      */
     void updateOrientation( wxCommandEvent &event ) override;
 
@@ -188,29 +194,20 @@ private:
         m_previewPane->SetView3D( ID_VIEW3D_BOTTOM );
     }
 
-public:
-    /**
-     * The TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
-     * events aren't captured by the menus themselves.
-     */
-    void OnMenuEvent( wxMenuEvent& aEvent );
+private:
+    EDA_3D_CANVAS*           m_previewPane;
+    WX_INFOBAR*              m_infobar;
+    BOARD_ADAPTER            m_boardAdapter;
+    CCAMERA&                 m_currentCamera;
+    CTRACK_BALL              m_trackBallCamera;
 
-    wxWindow* GetToolCanvas() const override { return m_previewPane; }
+    BOARD*                   m_dummyBoard;
+    FOOTPRINT*               m_dummyFootprint;
 
-    BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
-    CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
+    std::vector<FP_3DMODEL>* m_parentModelList;
+    int                      m_selected;   /// Index into m_parentInfoList
 
-    /**
-     * @brief SetSelectedModel - Sets the currently selected index in the model list so that
-     * the scale/rotation/offset controls can be updated.
-     */
-    void SetSelectedModel( int idx );
-
-    /**
-     * @brief UpdateDummyFootprint - copy shapes from the current shape list which are flagged
-     * for preview to the copy of footprint that is on the preview dummy board
-     */
-    void UpdateDummyFootprint( bool aRelaodRequired = true );
+    EDA_UNITS m_userUnits;
 };
 
 #endif  // PANEL_PREV_MODEL_H

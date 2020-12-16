@@ -130,7 +130,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
     // The rounded-button style used has a small border on the left/right sides.
     // This is automatically fixed in wx for buttons with a bitmap < 20, but not
     // when the bitmap is set to be 26x26.
-    wxSize borderFix = wxSize(4, 4);
+    wxSize borderFix = wxSize( 4, 4 );
 
     m_bpvTop->SetMinSize( m_bpvTop->GetSize() + borderFix );
     m_bpvFront->SetMinSize( m_bpvFront->GetSize() + borderFix );
@@ -175,9 +175,9 @@ void PANEL_PREV_3D::loadCommonSettings()
 
 
 /**
- * @brief rotationFromString
- * Ensure -MAX_ROTATION <= rotation <= MAX_ROTATION
- * aRotation will be normalized between -MAX_ROTATION and MAX_ROTATION
+ * Ensure -MAX_ROTATION <= rotation <= MAX_ROTATION.
+ *
+ * @param \a aRotation will be normalized between -MAX_ROTATION and MAX_ROTATION.
  */
 static double rotationFromString( const wxString& aValue )
 {
@@ -229,7 +229,6 @@ void PANEL_PREV_3D::SetSelectedModel( int idx )
 
         // Use ChangeValue() instead of SetValue().  It's not the user making the change, so we
         // don't want to generate wxEVT_GRID_CELL_CHANGED events.
-
         xscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.x ) );
         yscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.y ) );
         zscale->ChangeValue( formatScaleValue( modelInfo.m_Scale.z ) );

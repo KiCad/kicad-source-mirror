@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,24 +45,17 @@ SCENEGRAPH::SCENEGRAPH( SGNODE* aParent ) : SGNODE( aParent )
     scale.y = 1.0;
     scale.z = 1.0;
 
-    if( NULL != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
     {
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] inappropriate parent to SCENEGRAPH (type ";
-        ostr << aParent->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SCENEGRAPH (type %d)" ,
+                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
     }
-    else if( NULL != aParent && S3D::SGTYPE_TRANSFORM == aParent->GetNodeType() )
+    else if( nullptr != aParent && S3D::SGTYPE_TRANSFORM == aParent->GetNodeType() )
     {
         m_Parent->AddChildNode( this );
     }
-
-    return;
 }
 
 
@@ -74,14 +68,12 @@ SCENEGRAPH::~SCENEGRAPH()
     // delete owned objects
     DEL_OBJS( SCENEGRAPH, m_Transforms );
     DEL_OBJS( SGSHAPE, m_Shape );
-
-    return;
 }
 
 
 bool SCENEGRAPH::SetParent( SGNODE* aParent, bool notify )
 {
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
     {
         if( aParent == m_Parent )
             return true;
@@ -90,14 +82,14 @@ bool SCENEGRAPH::SetParent( SGNODE* aParent, bool notify )
         if( notify )
             m_Parent->unlinkChildNode( this );
 
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-        if( NULL == aParent )
+        if( nullptr == aParent )
             return true;
     }
 
     // only a transform may be parent to a transform
-    if( NULL != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
         return false;
 
     m_Parent = aParent;
@@ -111,8 +103,8 @@ bool SCENEGRAPH::SetParent( SGNODE* aParent, bool notify )
 
 SGNODE* SCENEGRAPH::FindNode(const char *aNodeName, const SGNODE *aCaller)
 {
-    if( NULL == aNodeName || 0 == aNodeName[0] )
-        return NULL;
+    if( nullptr == aNodeName || 0 == aNodeName[0] )
+        return nullptr;
 
     if( !m_Name.compare( aNodeName ) )
         return this;
@@ -121,8 +113,8 @@ SGNODE* SCENEGRAPH::FindNode(const char *aNodeName, const SGNODE *aCaller)
     FIND_NODE( SGSHAPE, aNodeName, m_Shape, aCaller );
 
     // query the parent if appropriate
-    if( aCaller == m_Parent || NULL == m_Parent )
-        return NULL;
+    if( aCaller == m_Parent || nullptr == m_Parent )
+        return nullptr;
 
     return m_Parent->FindNode( aNodeName, this );
 }
@@ -130,33 +122,26 @@ SGNODE* SCENEGRAPH::FindNode(const char *aNodeName, const SGNODE *aCaller)
 
 void SCENEGRAPH::unlinkNode( const SGNODE* aNode, bool isChild )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     switch( aNode->GetNodeType() )
     {
-        case S3D::SGTYPE_TRANSFORM:
-            UNLINK_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
-            break;
+    case S3D::SGTYPE_TRANSFORM:
+        UNLINK_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms,
+                     isChild );
+        break;
 
-        case S3D::SGTYPE_SHAPE:
-            UNLINK_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
-            break;
+    case S3D::SGTYPE_SHAPE:
+        UNLINK_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] unlinkNode() did not find its target";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
-
-    return;
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] unlinkNode() did not find its target",
+                __FILE__, __FUNCTION__, __LINE__ );
 }
 
 
@@ -176,30 +161,13 @@ void SCENEGRAPH::unlinkRefNode( const SGNODE* aNode )
 
 bool SCENEGRAPH::addNode( SGNODE* aNode, bool isChild )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aNode";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( aNode, false );
 
     ADD_NODE( S3D::SGTYPE_TRANSFORM, SCENEGRAPH, aNode, m_Transforms, m_RTransforms, isChild );
     ADD_NODE( S3D::SGTYPE_SHAPE, SGSHAPE, aNode, m_Shape, m_RShape, isChild );
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] object '" << aNode->GetName();
-        ostr << "' is not a valid type for this object (" << aNode->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] object '%s' is not a valid type for this object (%d)",
+                __FILE__, __FUNCTION__, __LINE__, aNode->GetName(), aNode->GetNodeType() );
 
     return false;
 }
@@ -237,7 +205,7 @@ void SCENEGRAPH::ReNameNodes( void )
             ++sL;
         }
 
-    } while(0);
+    } while( 0 );
 
     // rename all transforms
     do
@@ -251,16 +219,13 @@ void SCENEGRAPH::ReNameNodes( void )
             ++sL;
         }
 
-    } while(0);
-
-    return;
+    } while( 0 );
 }
 
 
 bool SCENEGRAPH::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
-    if( m_Transforms.empty() && m_RTransforms.empty()
-        && m_Shape.empty() && m_RShape.empty() )
+    if( m_Transforms.empty() && m_RTransforms.empty() && m_Shape.empty() && m_RShape.empty() )
     {
         return false;
     }
@@ -366,14 +331,14 @@ bool SCENEGRAPH::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 
 bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
-    if( NULL == parentNode && NULL != m_Parent )
+    if( nullptr == parentNode && nullptr != m_Parent )
     {
         SGNODE* np = m_Parent;
 
-        while( NULL != np->GetParent() )
+        while( nullptr != np->GetParent() )
             np = np->GetParent();
 
-        if( np->WriteCache( aFile, NULL ) )
+        if( np->WriteCache( aFile, nullptr ) )
         {
             m_written = true;
             return true;
@@ -382,19 +347,9 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         return false;
     }
 
-    if( parentNode != m_Parent )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( parentNode == m_Parent, false );
 
-        return false;
-    }
-
-    if( NULL == m_Parent )
+    if( nullptr == m_Parent )
     {
         // ensure unique node names
         ResetNodeIndex();
@@ -403,12 +358,7 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
     if( aFile.fail() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad stream";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream", __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -464,12 +414,8 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
     {
         if( !m_Transforms[i]->WriteCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad stream while writing child transforms";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream while writing child transforms",
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -477,21 +423,19 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
     // write referenced transform names
     asize = m_RTransforms.size();
+
     for( i = 0; i < asize; ++i )
         aFile << "[" << m_RTransforms[i]->GetName() << "]";
 
     // write child shapes
     asize = m_Shape.size();
+
     for( i = 0; i < asize; ++i )
     {
         if( !m_Shape[i]->WriteCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad stream while writing child shapes";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream while writing child shapes",
+                        __FILE__, __FUNCTION__, __LINE__ );
 
             return false;
         }
@@ -499,6 +443,7 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
     // write referenced transform names
     asize = m_RShape.size();
+
     for( i = 0; i < asize; ++i )
         aFile << "[" << m_RShape[i]->GetName() << "]";
 
@@ -512,33 +457,20 @@ bool SCENEGRAPH::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
 bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
-    if( !m_Transforms.empty() || !m_RTransforms.empty()
-        || !m_Shape.empty() || !m_RShape.empty() )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] non-empty node";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( m_Transforms.empty() && m_RTransforms.empty() && m_Shape.empty() && m_RShape.empty(),
+             false );
 
     std::string name;   // name of the node
 
-    if( NULL == parentNode )
+    if( nullptr == parentNode )
     {
         // we need to read the tag and verify its type
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; tag mismatch at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; tag mismatch at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -572,13 +504,10 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child transform tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child transform tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -588,13 +517,10 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading transform '";
-            ostr << name << "' pos " << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data while reading transform %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -605,13 +531,10 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_TRANSFORM != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref transform tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref transform tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -620,26 +543,20 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref transform '";
-            ostr << name << "' pos " << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: cannot find ref transform at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
 
         if( S3D::SGTYPE_TRANSFORM != sp->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not TRANSFORM '";
-            ostr << name << "' pos " << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: type is not TRANSFORM at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -652,13 +569,10 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_SHAPE != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child shape tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child shape tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -668,13 +582,10 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading shape '";
-            ostr << name << "' pos " << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; corrupt data while reading shape at "
+                        "position %ul", __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -685,13 +596,10 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_SHAPE != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref shape tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref shape tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -700,26 +608,20 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !sp )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref shape '";
-            ostr << name << "' pos " << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: cannot find ref shape at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
 
         if( S3D::SGTYPE_SHAPE != sp->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not SGSHAPE '";
-            ostr << name << "' pos " << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: type is not SGSHAPE at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -734,21 +636,27 @@ bool SCENEGRAPH::ReadCache( std::istream& aFile, SGNODE* parentNode )
 }
 
 
-bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
-                      S3D::MATLIST& materials, std::vector< SMESH >& meshes )
+bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform, S3D::MATLIST& materials,
+                          std::vector< SMESH >& meshes )
 {
     // calculate the accumulated transform
     double rX, rY, rZ;
+
     // rotation
     rotation_axis.GetVector( rX, rY, rZ );
     glm::dmat4 rM = glm::rotate( glm::dmat4( 1.0 ), rotation_angle, glm::dvec3( rX, rY, rZ ) );
+
     // translation
-    glm::dmat4 tM = glm::translate( glm::dmat4( 1.0 ), glm::dvec3( translation.x, translation.y, translation.z ) );
+    glm::dmat4 tM = glm::translate( glm::dmat4( 1.0 ), glm::dvec3( translation.x, translation.y,
+                                                                   translation.z ) );
     // center
     glm::dmat4 cM = glm::translate( glm::dmat4( 1.0 ), glm::dvec3( center.x, center.y, center.z ) );
-    glm::dmat4 ncM = glm::translate( glm::dmat4( 1.0 ), glm::dvec3( -center.x, -center.y, -center.z ) );
+    glm::dmat4 ncM = glm::translate( glm::dmat4( 1.0 ), glm::dvec3( -center.x, -center.y,
+                                                                  -center.z ) );
+
     // scale
     glm::dmat4 sM = glm::scale( glm::dmat4( 1.0 ), glm::dvec3( scale.x, scale.y, scale.z ) );
+
     // scaleOrientation
     scale_axis.GetVector( rX, rY, rZ );
     glm::dmat4 srM = glm::rotate( glm::dmat4( 1.0 ), scale_angle, glm::dvec3( rX, rY, rZ ) );
@@ -760,7 +668,7 @@ bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
     // tx0 = tM * cM * rM * srM * sM * nsrM * ncM
     glm::dmat4 tx0;
 
-    if( NULL != aTransform )
+    if( nullptr != aTransform )
         tx0  = (*aTransform) * tM * cM * rM * srM * sM * nsrM * ncM;
     else
         tx0  = tM * cM * rM * srM * sM * nsrM * ncM;
@@ -788,7 +696,7 @@ bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
             ++sL;
         }
 
-    } while(0);
+    } while( 0 );
 
     // prepare all transforms
     do
@@ -811,7 +719,7 @@ bool SCENEGRAPH::Prepare( const glm::dmat4* aTransform,
             ++sL;
         }
 
-    } while(0);
+    } while( 0 );
 
     return ok;
 }

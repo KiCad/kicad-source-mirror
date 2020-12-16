@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,14 +33,11 @@ SGCOORDINDEX::SGCOORDINDEX( SGNODE* aParent ) : SGINDEX( aParent )
     {
         m_Parent->AddChildNode( this );
     }
-
-    return;
 }
 
 
 SGCOORDINDEX::~SGCOORDINDEX()
 {
-    return;
 }
 
 
@@ -49,6 +47,4 @@ void SGCOORDINDEX::GatherCoordIndices( std::vector< int >& aIndexList )
         return;
 
     aIndexList.insert( aIndexList.end(), index.begin(), index.end() );
-
-    return;
 }

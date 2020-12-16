@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,6 @@
 
 /**
  * @file sg_shape.h
- * defines a complex 3D shape for a scenegraph object
  */
 
 
@@ -36,8 +36,33 @@
 class SGAPPEARANCE;
 class SGFACESET;
 
+/**
+ * Define a complex 3D shape for a scenegraph object.
+ */
 class SGSHAPE : public SGNODE
 {
+public:
+    SGSHAPE( SGNODE* aParent );
+    virtual ~SGSHAPE();
+
+    virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
+
+    SGNODE* FindNode(const char* aNodeName, const SGNODE* aCaller) override;
+    bool AddRefNode( SGNODE* aNode ) override;
+    bool AddChildNode( SGNODE* aNode ) override;
+
+    void ReNameNodes( void ) override;
+    bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) override;
+
+    bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
+    bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
+
+    bool Prepare( const glm::dmat4* aTransform, S3D::MATLIST& materials,
+                  std::vector< SMESH >& meshes );
+
+    void unlinkChildNode( const SGNODE* aNode ) override;
+    void unlinkRefNode( const SGNODE* aNode ) override;
+
 private:
     void unlinkNode( const SGNODE* aNode, bool isChild );
     bool addNode( SGNODE* aNode, bool isChild );
@@ -50,28 +75,6 @@ public:
     // referenced nodes
     SGAPPEARANCE* m_RAppearance;
     SGFACESET*    m_RFaceSet;
-
-    void unlinkChildNode( const SGNODE* aNode ) override;
-    void unlinkRefNode( const SGNODE* aNode ) override;
-
-public:
-    SGSHAPE( SGNODE* aParent );
-    virtual ~SGSHAPE();
-
-    virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
-
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) override;
-    bool AddRefNode( SGNODE* aNode ) override;
-    bool AddChildNode( SGNODE* aNode ) override;
-
-    void ReNameNodes( void ) override;
-    bool WriteVRML( std::ostream& aFile, bool aReuseFlag ) override;
-
-    bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
-    bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
-
-    bool Prepare( const glm::dmat4* aTransform,
-        S3D::MATLIST& materials, std::vector< SMESH >& meshes );
 };
 
 /*

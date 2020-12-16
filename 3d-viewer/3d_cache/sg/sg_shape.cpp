@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,29 +40,22 @@
 SGSHAPE::SGSHAPE( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_SHAPE;
-    m_Appearance = NULL;
-    m_RAppearance = NULL;
-    m_FaceSet = NULL;
-    m_RFaceSet = NULL;
+    m_Appearance = nullptr;
+    m_RAppearance = nullptr;
+    m_FaceSet = nullptr;
+    m_RFaceSet = nullptr;
 
-    if( NULL != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
     {
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] inappropriate parent to SGSHAPE (type ";
-        ostr << aParent->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SGSHAPE (type %d)",
+                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
     }
-    else if( NULL != aParent && S3D::SGTYPE_TRANSFORM == aParent->GetNodeType() )
+    else if( nullptr != aParent && S3D::SGTYPE_TRANSFORM == aParent->GetNodeType() )
     {
         m_Parent->AddChildNode( this );
     }
-
-    return;
 }
 
 
@@ -71,37 +65,35 @@ SGSHAPE::~SGSHAPE()
     if( m_RAppearance )
     {
         m_RAppearance->delNodeRef( this );
-        m_RAppearance = NULL;
+        m_RAppearance = nullptr;
     }
 
     if( m_RFaceSet )
     {
         m_RFaceSet->delNodeRef( this );
-        m_RFaceSet = NULL;
+        m_RFaceSet = nullptr;
     }
 
     // delete objects
     if( m_Appearance )
     {
-        m_Appearance->SetParent( NULL, false );
+        m_Appearance->SetParent( nullptr, false );
         delete m_Appearance;
-        m_Appearance = NULL;
+        m_Appearance = nullptr;
     }
 
     if( m_FaceSet )
     {
-        m_FaceSet->SetParent( NULL, false );
+        m_FaceSet->SetParent( nullptr, false );
         delete m_FaceSet;
-        m_FaceSet = NULL;
+        m_FaceSet = nullptr;
     }
-
-    return;
 }
 
 
 bool SGSHAPE::SetParent( SGNODE* aParent, bool notify )
 {
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
     {
         if( aParent == m_Parent )
             return true;
@@ -110,14 +102,14 @@ bool SGSHAPE::SetParent( SGNODE* aParent, bool notify )
         if( notify )
             m_Parent->unlinkChildNode( this );
 
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-        if( NULL == aParent )
+        if( nullptr == aParent )
             return true;
     }
 
     // only a SGTRANSFORM may be parent to a SGSHAPE
-    if( NULL != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_TRANSFORM != aParent->GetNodeType() )
         return false;
 
     m_Parent = aParent;
@@ -129,17 +121,17 @@ bool SGSHAPE::SetParent( SGNODE* aParent, bool notify )
 }
 
 
-SGNODE* SGSHAPE::FindNode(const char *aNodeName, const SGNODE *aCaller)
+SGNODE* SGSHAPE::FindNode( const char* aNodeName, const SGNODE* aCaller )
 {
-    if( NULL == aNodeName || 0 == aNodeName[0] )
-        return NULL;
+    if( nullptr == aNodeName || 0 == aNodeName[0] )
+        return nullptr;
 
     if( !m_Name.compare( aNodeName ) )
         return this;
 
-    SGNODE* tmp = NULL;
+    SGNODE* tmp = nullptr;
 
-    if( NULL != m_Appearance )
+    if( nullptr != m_Appearance )
     {
         tmp = m_Appearance->FindNode( aNodeName, this );
 
@@ -149,7 +141,7 @@ SGNODE* SGSHAPE::FindNode(const char *aNodeName, const SGNODE *aCaller)
         }
     }
 
-    if( NULL != m_FaceSet )
+    if( nullptr != m_FaceSet )
     {
         tmp = m_FaceSet->FindNode( aNodeName, this );
 
@@ -160,8 +152,8 @@ SGNODE* SGSHAPE::FindNode(const char *aNodeName, const SGNODE *aCaller)
     }
 
     // query the parent if appropriate
-    if( aCaller == m_Parent || NULL == m_Parent )
-        return NULL;
+    if( aCaller == m_Parent || nullptr == m_Parent )
+        return nullptr;
 
     return m_Parent->FindNode( aNodeName, this );
 }
@@ -169,20 +161,20 @@ SGNODE* SGSHAPE::FindNode(const char *aNodeName, const SGNODE *aCaller)
 
 void SGSHAPE::unlinkNode( const SGNODE* aNode, bool isChild )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     if( isChild )
     {
         if( aNode == m_Appearance )
         {
-            m_Appearance = NULL;
+            m_Appearance = nullptr;
             return;
         }
 
         if( aNode == m_FaceSet )
         {
-            m_FaceSet = NULL;
+            m_FaceSet = nullptr;
             return;
         }
     }
@@ -191,58 +183,38 @@ void SGSHAPE::unlinkNode( const SGNODE* aNode, bool isChild )
         if( aNode == m_RAppearance )
         {
             delNodeRef( this );
-            m_RAppearance = NULL;
+            m_RAppearance = nullptr;
             return;
         }
 
         if( aNode == m_RFaceSet )
         {
             delNodeRef( this );
-            m_RFaceSet = NULL;
+            m_RFaceSet = nullptr;
             return;
         }
     }
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] unlinkNode() did not find its target";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
-
-    return;
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] unlinkNode() did not find its target",
+                __FILE__, __FUNCTION__, __LINE__ );
 }
 
 
 void SGSHAPE::unlinkChildNode( const SGNODE* aNode )
 {
     unlinkNode( aNode, true );
-    return;
 }
 
 
 void SGSHAPE::unlinkRefNode( const SGNODE* aNode )
 {
     unlinkNode( aNode, false );
-    return;
 }
 
 
 bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL pointer passed for aNode";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( aNode, false );
 
     if( S3D::SGTYPE_APPEARANCE == aNode->GetNodeType() )
     {
@@ -250,12 +222,8 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_Appearance && aNode != m_RAppearance )
             {
-                #ifdef DEBUG
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [BUG] assigning multiple Appearance nodes";
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-                #endif
+                wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] assigning multiple Appearance nodes",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -283,12 +251,8 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
         {
             if( aNode != m_FaceSet && aNode != m_RFaceSet )
             {
-                #ifdef DEBUG
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [BUG] assigning multiple FaceSet nodes";
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-                #endif
+                wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] assigning multiple FaceSet nodes",
+                            __FILE__, __FUNCTION__, __LINE__ );
 
                 return false;
             }
@@ -310,15 +274,8 @@ bool SGSHAPE::addNode( SGNODE* aNode, bool isChild )
         return true;
     }
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] object '" << aNode->GetName();
-        ostr << "' is not a valid type for this object (" << aNode->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] object %s is not a valid type for this object (%d)",
+                __FILE__, __FUNCTION__, __LINE__, aNode->GetName(), aNode->GetNodeType() );
 
     return false;
 }
@@ -351,15 +308,12 @@ void SGSHAPE::ReNameNodes( void )
     // rename FaceSet
     if( m_FaceSet )
         m_FaceSet->ReNameNodes();
-
-    return;
 }
 
 
 bool SGSHAPE::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 {
-    if( !m_Appearance && !m_RAppearance
-        && !m_FaceSet && !m_RFaceSet )
+    if( !m_Appearance && !m_RAppearance && !m_FaceSet && !m_RFaceSet )
     {
         return false;
     }
@@ -402,26 +356,16 @@ bool SGSHAPE::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 
 bool SGSHAPE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
-    if( NULL == parentNode )
+    if( nullptr == parentNode )
     {
-        if( NULL == m_Parent )
-        {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] corrupt data; m_aParent is NULL";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
-
-            return false;
-        }
+        wxCHECK( m_Parent, false );
 
         SGNODE* np = m_Parent;
 
-        while( NULL != np->GetParent() )
+        while( nullptr != np->GetParent() )
             np = np->GetParent();
 
-        if( np->WriteCache( aFile, NULL ) )
+        if( np->WriteCache( aFile, nullptr ) )
         {
             m_written = true;
             return true;
@@ -430,35 +374,20 @@ bool SGSHAPE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         return false;
     }
 
-    if( parentNode != m_Parent )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( parentNode == m_Parent, false );
 
     if( !aFile.good() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad stream";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] bad stream", __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
 
     // check if any references are unwritten and swap parents if so
-    if( NULL != m_RAppearance && !m_RAppearance->isWritten() )
+    if( nullptr != m_RAppearance && !m_RAppearance->isWritten() )
         m_RAppearance->SwapParent(this);
 
-    if( NULL != m_RFaceSet && !m_RFaceSet->isWritten() )
+    if( nullptr != m_RFaceSet && !m_RFaceSet->isWritten() )
         m_RFaceSet->SwapParent( this );
 
     aFile << "[" << GetName() << "]";
@@ -470,19 +399,23 @@ bool SGSHAPE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         items[i] = 0;
 
     i = 0;
-    if( NULL != m_Appearance )
+
+    if( nullptr != m_Appearance )
         items[i] = true;
 
     ++i;
-    if( NULL != m_RAppearance )
+
+    if( nullptr != m_RAppearance )
         items[i] = true;
 
     ++i;
-    if( NULL != m_FaceSet )
+
+    if( nullptr != m_FaceSet )
         items[i] = true;
 
     ++i;
-    if( NULL != m_RFaceSet )
+
+    if( nullptr != m_RFaceSet )
         items[i] = true;
 
     for( int jj = 0; jj < NITEMS; ++jj )
@@ -510,17 +443,8 @@ bool SGSHAPE::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
 bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
-    if( m_Appearance || m_RAppearance || m_FaceSet || m_RFaceSet )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] non-empty node";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( m_Appearance == nullptr && m_RAppearance == nullptr && m_FaceSet == nullptr &&
+             m_RFaceSet == nullptr, false );
 
     #define NITEMS 4
     bool items[NITEMS];
@@ -530,13 +454,9 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
     if( ( items[0] && items[1] ) || ( items[2] && items[3] ) )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] corrupt data; multiple item definitions at position ";
-        ostr << aFile.tellg();
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] corrupt data; multiple item definitions at position %ul",
+                    __FILE__, __FUNCTION__, __LINE__, static_cast<unsigned long>( aFile.tellg() ) );
 
         return false;
     }
@@ -547,13 +467,10 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_APPEARANCE != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child apperance tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child appearance tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -563,13 +480,8 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !m_Appearance->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading appearance '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] corrupt data while reading appearance '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -579,13 +491,10 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_APPEARANCE != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref appearance tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref appearance tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -594,26 +503,18 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref appearance '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: cannot find ref appearance '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
 
         if( S3D::SGTYPE_APPEARANCE != np->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not SGAPPEARANCE '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: type is not SGAPPEARANCE '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -626,13 +527,10 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_FACESET != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad child face set tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad child face set tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -642,13 +540,9 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !m_FaceSet->ReadCache( aFile, this ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data while reading face set '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data while reading face set '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -658,13 +552,10 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
     {
         if( S3D::SGTYPE_FACESET != S3D::ReadTag( aFile, name ) )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data; bad ref face set tag at position ";
-            ostr << aFile.tellg();
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; bad ref face set tag at position %ul",
+                        __FILE__, __FUNCTION__, __LINE__,
+                        static_cast<unsigned long>( aFile.tellg() ) );
 
             return false;
         }
@@ -673,26 +564,18 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 
         if( !np )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: cannot find ref face set '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: cannot find ref face set '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
 
         if( S3D::SGTYPE_FACESET != np->GetNodeType() )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] corrupt data: type is not SGFACESET '";
-            ostr << name << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data: type is not SGFACESET '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, name );
 
             return false;
         }
@@ -708,8 +591,8 @@ bool SGSHAPE::ReadCache( std::istream& aFile, SGNODE* parentNode )
 }
 
 
-bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
-    S3D::MATLIST& materials, std::vector< SMESH >& meshes )
+bool SGSHAPE::Prepare( const glm::dmat4* aTransform, S3D::MATLIST& materials,
+                       std::vector< SMESH >& meshes )
 {
     SMESH m;
     S3D::INIT_SMESH( m );
@@ -717,28 +600,25 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
     SGAPPEARANCE* pa = m_Appearance;
     SGFACESET* pf = m_FaceSet;
 
-    if( NULL == pa )
+    if( nullptr == pa )
         pa = m_RAppearance;
 
-    if( NULL == pf )
+    if( nullptr == pf )
         pf = m_RFaceSet;
 
     // no face sets = nothing to render, which is valid though pointless
-    if( NULL == pf )
+    if( nullptr == pf )
         return true;
 
     if( !pf->validate() )
     {
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad model; inconsistent data";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad model; inconsistent data",
+                    __FILE__, __FUNCTION__, __LINE__ );
+
         return true;
     }
 
-    if( NULL == pa )
+    if( nullptr == pa )
     {
         m.m_MaterialIdx = 0;
     }
@@ -761,22 +641,22 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
     SGCOORDINDEX* vidx = pf->m_CoordIndices;
     SGNORMALS* pn = pf->m_Normals;
 
-    if( NULL == pc )
+    if( nullptr == pc )
         pc = pf->m_RColors;
 
-    if( NULL == pv )
+    if( nullptr == pv )
         pv = pf->m_RCoords;
 
-    if( NULL == pn )
+    if( nullptr == pn )
         pn = pf->m_RNormals;
 
     // set the vertex points and indices
     size_t nCoords = 0;
-    SGPOINT* pCoords = NULL;
+    SGPOINT* pCoords = nullptr;
     pv->GetCoordsList( nCoords, pCoords );
 
     size_t nColors = 0;
-    SGCOLOR* pColors = NULL;
+    SGCOLOR* pColors = nullptr;
 
     if( pc )
     {
@@ -785,20 +665,18 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
 
         if( nColors < nCoords )
         {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] bad model; not enough colors per vertex (";
-            ostr << nColors << " vs " << nCoords << ")";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] bad model; not enough colors per vertex (%ul vs %ul)",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<unsigned long>( nColors ),
+                        static_cast<unsigned long>( nCoords ) );
+
             return true;
         }
     }
 
     // set the vertex indices
     size_t nvidx = 0;
-    int*   lv = NULL;
+    int*   lv = nullptr;
     vidx->GetIndices( nvidx, lv );
 
     // note: reduce the vertex set to include only the referenced vertices
@@ -819,17 +697,14 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
 
     if( vertices.size() < 3 )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad model; not enough vertices";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad model; not enough vertices",
+                    __FILE__, __FUNCTION__, __LINE__ );
+
         return true;
     }
 
     // construct the final vertex/color list
-    SFVEC3F* lColors = NULL;
+    SFVEC3F* lColors = nullptr;
     SFVEC3F* lCoords = new SFVEC3F[ vertices.size() ];
     int ti;
 
@@ -838,7 +713,6 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
         lColors = new SFVEC3F[vertices.size()];
         m.m_Color = lColors;
     }
-
 
     if( pc )
     {
@@ -877,7 +751,7 @@ bool SGSHAPE::Prepare( const glm::dmat4* aTransform,
 
     // set the per-vertex normals
     size_t nNorms = 0;
-    SGVECTOR* pNorms = NULL;
+    SGVECTOR* pNorms = nullptr;
     double x, y, z;
 
     pn->GetNormalList( nNorms, pNorms );

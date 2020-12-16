@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,6 @@
 
 /**
  * @file sg_coordindex.h
- * defines an coordinate index set for a scenegraph object
  */
 
 #ifndef SG_COORDINDEX_H
@@ -32,14 +32,12 @@
 #include "3d_cache/sg/sg_index.h"
 
 /**
- * SGCOORDINDEX
- * is a class which maintains a coordinate index list. Users
- * must ensure that coordinate indices are specified as
- * triplets (triangular faces) since no checking is performed.
- * In instances where it is not possible to determine which
- * side of the triangle is to be rendered (for example IGES
- * entities) then the user must supply each triplet in both
- * point orders.
+ * An object to maintain a coordinate index list.
+ *
+ * Users must ensure that coordinate indices are specified as triplets (triangular faces)
+ * since no checking is performed.  In instances where it is not possible to determine which
+ * side of the triangle is to be rendered (for example IGES entities) then the user must
+ * supply each triplet in both point orders.
  */
 class SGCOORDINDEX : public SGINDEX
 {
@@ -48,9 +46,7 @@ public:
     virtual ~SGCOORDINDEX();
 
     /**
-     * Function GatherCoordIndices
-     * adds all coordinate indices to the given list
-     * in preparation for a normals calculation
+     * Add all coordinate indices to the given list in preparation for a normals calculation.
      */
     void GatherCoordIndices( std::vector< int >& aIndexList );
 };

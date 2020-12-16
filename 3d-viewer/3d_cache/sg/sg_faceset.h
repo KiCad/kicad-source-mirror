@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,6 @@
 
 /**
  * @file sg_faceset.h
- * defines an indexed face set for a scenegraph
  */
 
 
@@ -40,38 +40,18 @@ class SGNORMALS;
 class SGCOLORINDEX;
 class SGCOORDINDEX;
 
+/**
+ * Define an indexed face set for a scenegraph.
+ */
 class SGFACESET : public SGNODE
 {
-private:
-    bool valid;
-    bool validated;
-    void unlinkNode( const SGNODE* aNode, bool isChild );
-    bool addNode( SGNODE* aNode, bool isChild );
-
-public:
-    // owned objects
-    SGCOLORS*       m_Colors;
-    SGCOORDS*       m_Coords;
-    SGCOORDINDEX*   m_CoordIndices;
-    SGNORMALS*      m_Normals;
-
-    // referenced objects
-    SGCOLORS*       m_RColors;
-    SGCOORDS*       m_RCoords;
-    SGNORMALS*      m_RNormals;
-
-    void unlinkChildNode( const SGNODE* aNode ) override;
-    void unlinkRefNode( const SGNODE* aNode ) override;
-    // validate the data held by this face set
-    bool validate( void );
-
 public:
     SGFACESET( SGNODE* aParent );
     virtual ~SGFACESET();
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode( const char *aNodeName, const SGNODE *aCaller ) override;
+    SGNODE* FindNode( const char* aNodeName, const SGNODE* aCaller ) override;
     bool AddRefNode( SGNODE* aNode ) override;
     bool AddChildNode( SGNODE* aNode ) override;
 
@@ -84,11 +64,34 @@ public:
     bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
 
     /**
-     * Function GatherCoordIndices
-     * adds all internal coordinate indices to the given list
-     * in preparation for a normals calculation
+     * Add all internal coordinate indices to the given list in preparation for a normals
+     * calculation.
      */
     void GatherCoordIndices( std::vector< int >& aIndexList );
+
+    void unlinkChildNode( const SGNODE* aNode ) override;
+    void unlinkRefNode( const SGNODE* aNode ) override;
+
+    // validate the data held by this face set
+    bool validate( void );
+
+    // owned objects
+    SGCOLORS*       m_Colors;
+    SGCOORDS*       m_Coords;
+    SGCOORDINDEX*   m_CoordIndices;
+    SGNORMALS*      m_Normals;
+
+    // referenced objects
+    SGCOLORS*       m_RColors;
+    SGCOORDS*       m_RCoords;
+    SGNORMALS*      m_RNormals;
+
+private:
+    bool valid;
+    bool validated;
+    void unlinkNode( const SGNODE* aNode, bool isChild );
+    bool addNode( SGNODE* aNode, bool isChild );
+
 };
 
 /*

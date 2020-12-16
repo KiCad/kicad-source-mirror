@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +24,6 @@
 
 /**
  * @file scenegraph.h
- * defines the basic data set required to represent a 3D model;
- * this model must remain compatible with VRML2.0 in order to
- * facilitate VRML export of scene graph data created by available
- * 3D plugins.
  */
 
 
@@ -38,37 +35,17 @@
 
 class SGSHAPE;
 
+/**
+ * Define the basic data set required to represent a 3D model.
+ *
+ * This model must remain compatible with VRML2.0 in order to facilitate VRML export of
+ * scene graph data created by available 3D plugins.
+ */
 class SCENEGRAPH : public SGNODE
 {
-private:
-    // The following are items which may be defined for reuse
-    // in a VRML output file. They do not necessarily correspond
-    // to the use of DEF within a VRML input file; it is the
-    // responsibility of the plugin to perform any necessary
-    // conversions to comply with the restrictions imposed by
-    // this scene graph structure
-    std::vector< SCENEGRAPH* > m_Transforms;   // local Transform nodes
-    std::vector< SGSHAPE* > m_Shape;           // local Shape nodes
-
-    std::vector< SCENEGRAPH* > m_RTransforms;   // referenced Transform nodes
-    std::vector< SGSHAPE* > m_RShape;           // referenced Shape nodes
-
-    void unlinkNode( const SGNODE* aNode, bool isChild );
-    bool addNode( SGNODE* aNode, bool isChild );
-
 public:
     void unlinkChildNode( const SGNODE* aNode ) override;
     void unlinkRefNode( const SGNODE* aNode ) override;
-
-public:
-    // note: order of transformation is Translate, Rotate, Offset
-    SGPOINT  center;
-    SGPOINT  translation;
-    SGVECTOR rotation_axis;
-    double   rotation_angle;    // radians
-    SGPOINT  scale;
-    SGVECTOR scale_axis;
-    double   scale_angle;       // radians
 
     SCENEGRAPH( SGNODE* aParent );
     virtual ~SCENEGRAPH();
@@ -84,8 +61,35 @@ public:
     bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
     bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
 
-    bool Prepare( const glm::dmat4* aTransform,
-        S3D::MATLIST& materials, std::vector< SMESH >& meshes );
+    bool Prepare( const glm::dmat4* aTransform, S3D::MATLIST& materials,
+                  std::vector< SMESH >& meshes );
+
+private:
+    void unlinkNode( const SGNODE* aNode, bool isChild );
+    bool addNode( SGNODE* aNode, bool isChild );
+
+public:
+    // note: order of transformation is Translate, Rotate, Offset
+    SGPOINT  center;
+    SGPOINT  translation;
+    SGVECTOR rotation_axis;
+    double   rotation_angle;    // radians
+    SGPOINT  scale;
+    SGVECTOR scale_axis;
+    double   scale_angle;       // radians
+
+private:
+    // The following are items which may be defined for reuse
+    // in a VRML output file. They do not necessarily correspond
+    // to the use of DEF within a VRML input file; it is the
+    // responsibility of the plugin to perform any necessary
+    // conversions to comply with the restrictions imposed by
+    // this scene graph structure
+    std::vector< SCENEGRAPH* > m_Transforms;   // local Transform nodes
+    std::vector< SGSHAPE* > m_Shape;           // local Shape nodes
+
+    std::vector< SCENEGRAPH* > m_RTransforms;   // referenced Transform nodes
+    std::vector< SGSHAPE* > m_RShape;           // referenced Shape nodes
 };
 
 /*

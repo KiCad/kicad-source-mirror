@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,16 +41,35 @@ class SCENEGRAPH;
 
 class S3D_PLUGIN_MANAGER
 {
+public:
+    S3D_PLUGIN_MANAGER();
+    virtual ~S3D_PLUGIN_MANAGER();
+
+    /**
+     * Return the list of file filters; this will contain at least the default
+     * "All Files (*.*)|*.*" and the file filters supported by any available plugins.
+     *
+     * @return a pointer to the internal filter list.
+     */
+    std::list< wxString > const* GetFileFilters( void ) const noexcept;
+
+    SCENEGRAPH* Load3DModel( const wxString& aFileName, std::string& aPluginInfo );
+
+    /**
+     * Iterate through all discovered plugins and closes them to reclaim memory.
+     *
+     * The individual plugins will be automatically reloaded as calls are made to load
+     * specific models.
+     */
+    void ClosePlugins( void );
+
+    /**
+     * Check the given tag and returns true if the plugin named in the tag is not loaded
+     * or the plugin is loaded and the version matches.
+     */
+    bool CheckTag( const char* aTag );
+
 private:
-    /// list of discovered plugins
-    std::list< KICAD_PLUGIN_LDR_3D* > m_Plugins;
-
-    /// mapping of extensions to available plugins
-    std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* > m_ExtMap;
-
-    /// list of file filters
-    std::list< wxString > m_FileFilters;
-
     /// load plugins
     void loadPlugins( void );
 
@@ -68,36 +88,14 @@ private:
     /// add entries to the extension map
     void addExtensionMap( KICAD_PLUGIN_LDR_3D* aPlugin );
 
-public:
-    S3D_PLUGIN_MANAGER();
-    virtual ~S3D_PLUGIN_MANAGER();
+    /// list of discovered plugins
+    std::list< KICAD_PLUGIN_LDR_3D* > m_Plugins;
 
-    /**
-     * Function GetFileFilters
-     * returns the list of file filters; this will contain at least
-     * the default "All Files (*.*)|*.*" and the file filters supported
-     * by any available plugins
-     *
-     * @return a pointer to the internal filter list
-     */
-    std::list< wxString > const* GetFileFilters( void ) const noexcept;
+    /// mapping of extensions to available plugins
+    std::multimap< const wxString, KICAD_PLUGIN_LDR_3D* > m_ExtMap;
 
-    SCENEGRAPH* Load3DModel( const wxString& aFileName, std::string& aPluginInfo );
-
-    /**
-     * Function ClosePlugins
-     * iterates through all discovered plugins and closes them to
-     * reclaim memory. The individual plugins will be automatically
-     * reloaded as calls are made to load specific models.
-     */
-    void ClosePlugins( void );
-
-    /**
-     * Function CheckTag
-     * checks the given tag and returns true if the plugin named in the tag
-     * is not loaded or the plugin is loaded and the version matches
-     */
-    bool CheckTag( const char* aTag );
+    /// list of file filters
+    std::list< wxString > m_FileFilters;
 };
 
 #endif  // PLUGIN_MANAGER_3D_H

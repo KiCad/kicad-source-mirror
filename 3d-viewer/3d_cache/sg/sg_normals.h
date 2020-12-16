@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,6 @@
 
 /**
  * @file sg_normals.h
- * defines a set of vertex normals for a scene graph object
  */
 
 #ifndef SG_NORMALS_H
@@ -32,21 +32,18 @@
 #include <vector>
 #include "3d_cache/sg/sg_node.h"
 
+/**
+ * Define a set of vertex normals for a scene graph object
+ */
 class SGNORMALS : public SGNODE
 {
-public:
-    std::vector< SGVECTOR > norms;
-
-    void unlinkChildNode( const SGNODE* aNode ) noexcept override;
-    void unlinkRefNode( const SGNODE* aNode ) noexcept override;
-
 public:
     SGNORMALS( SGNODE* aParent );
     virtual ~SGNORMALS();
 
     virtual bool SetParent( SGNODE* aParent, bool notify = true ) override;
 
-    SGNODE* FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept override;
+    SGNODE* FindNode( const char* aNodeName, const SGNODE* aCaller ) noexcept override;
     bool AddRefNode( SGNODE* aNode ) noexcept override;
     bool AddChildNode( SGNODE* aNode ) noexcept override;
 
@@ -60,6 +57,11 @@ public:
 
     bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
     bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
+
+    void unlinkChildNode( const SGNODE* aNode ) noexcept override;
+    void unlinkRefNode( const SGNODE* aNode ) noexcept override;
+
+    std::vector< SGVECTOR > norms;
 };
 
 #endif  // SG_NORMALS_H

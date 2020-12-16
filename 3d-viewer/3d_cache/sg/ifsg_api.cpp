@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +37,6 @@
 #include "3d_cache/sg/sg_helpers.h"
 
 
-#ifdef DEBUG
-static char BadNode[] = " * [BUG] NULL pointer passed for aNode\n";
-#endif
-
 // version format of the cache file
 #define SG_VERSION_TAG "VERSION:2"
 
@@ -73,15 +70,13 @@ static void formatMaterial( SMATERIAL& mat, SGAPPEARANCE const* app )
 
     mat.m_Shininess = app->shininess;
     mat.m_Transparency = app->transparency;
-
-    return;
 }
 
 
 bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
-    bool reuse, bool renameNodes )
+                     bool reuse, bool renameNodes )
 {
-    if( NULL == filename || filename[0] == 0 )
+    if( nullptr == filename || filename[0] == 0 )
         return false;
 
     wxString ofile = wxString::FromUTF8Unchecked( filename );
@@ -96,42 +91,15 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
             return false;
     }
 
-    if( NULL == aTopNode )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] NULL pointer passed for aTopNode";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return false;
-    }
-
-    if( S3D::SGTYPE_TRANSFORM != aTopNode->GetNodeType() )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] aTopNode is not a SCENEGRAPH object";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return false;
-    }
+    wxCHECK( aTopNode && aTopNode->GetNodeType() == S3D::SGTYPE_TRANSFORM, false );
 
     OPEN_OSTREAM( op, filename );
 
     if( op.fail() )
     {
-        wxString errmsg;
-        errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        errmsg << " * [INFO] " << "failed to open file" << " '" << filename << "'";
-        wxLogTrace( MASK_3D_SG, errmsg );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [INFO] failed to open file '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, filename );
+
         return false;
     }
 
@@ -154,10 +122,8 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
     CLOSE_STREAM( op );
 
-    wxString errmsg;
-    errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    errmsg << " * [INFO] " << "problems encountered writing file" << " '" << filename << "'";
-    wxLogTrace( MASK_3D_SG, errmsg );
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [INFO] problems encountered writing file '%s'",
+                __FILE__, __FUNCTION__, __LINE__, filename );
 
     return false;
 }
@@ -165,102 +131,44 @@ bool S3D::WriteVRML( const char* filename, bool overwrite, SGNODE* aTopNode,
 
 void S3D::ResetNodeIndex( SGNODE* aNode )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << BadNode;
-            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return;
-    }
+    wxCHECK( aNode, /* void */ );
 
     aNode->ResetNodeIndex();
-
-    return;
 }
 
 
 void S3D::RenameNodes( SGNODE* aNode )
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << BadNode;
-            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return;
-    }
+    wxCHECK( aNode, /* void */ );
 
     aNode->ReNameNodes();
-
-    return;
 }
 
 
 void S3D::DestroyNode( SGNODE* aNode ) noexcept
 {
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << BadNode;
-            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return;
-    }
+    wxCHECK( aNode, /* void */ );
 
     delete aNode;
-
-    return;
 }
 
 
 bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
-    const char* aPluginInfo )
+                      const char* aPluginInfo )
 {
-    if( NULL == aFileName || aFileName[0] == 0 )
+    if( nullptr == aFileName || aFileName[0] == 0 )
         return false;
 
     wxString ofile = wxString::FromUTF8Unchecked( aFileName );
 
-    if( NULL == aNode )
-    {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << BadNode;
-            wxLogTrace( MASK_3D_SG, "%s", ostr.str().c_str() );
-        } while( 0 );
-        #endif
-
-        return false;
-    }
-
+    wxCHECK( aNode, false );
 
     if( wxFileName::Exists( ofile ) )
     {
         if( !overwrite )
         {
-            wxString errmsg;
-            errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            errmsg << " * [INFO] " << "file exists; not overwriting" << " '";
-            errmsg << aFileName << "'";
-            wxLogTrace( MASK_3D_SG, errmsg );
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] file exists not overwriting '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, aFileName );
 
             return false;
         }
@@ -268,11 +176,9 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
         // make sure we make no attempt to write a directory
         if( !wxFileName::FileExists( aFileName ) )
         {
-            wxString errmsg;
-            errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            errmsg << " * [INFO] " << "specified path is a directory" << " '";
-            errmsg << aFileName << "'";
-            wxLogTrace( MASK_3D_SG, errmsg );
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] specified path is a directory '%s'",
+                        __FILE__, __FUNCTION__, __LINE__, aFileName );
+
             return false;
         }
     }
@@ -281,34 +187,26 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
 
     if( output.fail() )
     {
-        wxString errmsg;
-        errmsg << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        errmsg << " * [INFO] " << "failed to open file" << " '" << aFileName << "'";
-        wxLogTrace( MASK_3D_SG, errmsg );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to open file '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, aFileName );
+
         return false;
     }
 
     output << "(" << SG_VERSION_TAG << ")";
 
-    if( NULL != aPluginInfo && aPluginInfo[0] != 0 )
+    if( nullptr != aPluginInfo && aPluginInfo[0] != 0 )
         output << "(" << aPluginInfo << ")";
     else
         output << "(INTERNAL:0.0.0.0)";
 
-    bool rval = aNode->WriteCache( output, NULL );
+    bool rval = aNode->WriteCache( output, nullptr );
     CLOSE_STREAM( output );
 
     if( !rval )
     {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] problems encountered writing cache file '";
-            ostr << aFileName << "'";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] problems encountered writing cache file '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, aFileName );
 
         // delete the defective file
         wxRemoveFile( ofile );
@@ -319,39 +217,29 @@ bool S3D::WriteCache( const char* aFileName, bool overwrite, SGNODE* aNode,
 
 
 SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
-        bool (*aTagCheck)( const char*, void* ) )
+                        bool (*aTagCheck)( const char*, void* ) )
 {
-    if( NULL == aFileName || aFileName[0] == 0 )
-        return NULL;
+    if( nullptr == aFileName || aFileName[0] == 0 )
+        return nullptr;
 
     wxString ofile = wxString::FromUTF8Unchecked( aFileName );
 
     if( !wxFileName::FileExists( aFileName ) )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "no such file" );
-        ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
-        ostr << aFileName << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] no such file '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, aFileName );
 
-        return NULL;
+        return nullptr;
     }
 
-    SGNODE* np = new SCENEGRAPH( NULL );
+    SGNODE* np = new SCENEGRAPH( nullptr );
 
-    if( NULL == np )
+    if( nullptr == np )
     {
-        #ifdef DEBUG
-        do {
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [INFO] failed to instantiate SCENEGRAPH";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        } while( 0 );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to instantiate SCENEGRAPH",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
-        return NULL;
+        return nullptr;
     }
 
     OPEN_ISTREAM( file, aFileName );
@@ -359,13 +247,11 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
     if( file.fail() )
     {
         delete np;
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = _( "failed to open file" );
-        ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
-        ostr << aFileName << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        return NULL;
+
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] failed to open file '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, aFileName );
+
+        return nullptr;
     }
 
     // from SG_VERSION_TAG 1, read the version tag; if it's not the expected tag
@@ -378,18 +264,12 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
         if( '(' != schar )
         {
-            #ifdef DEBUG
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] corrupt data; missing left parenthesis at position ";
-                ostr << file.tellg();
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; missing left parenthesis at position '%d'",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( file.tellg() ) );
 
             CLOSE_STREAM( file );
-            return NULL;
+            return nullptr;
         }
 
         file.get( schar );
@@ -403,7 +283,7 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
         if( name.compare( SG_VERSION_TAG ) )
         {
             CLOSE_STREAM( file );
-            return NULL;
+            return nullptr;
         }
 
     } while( 0 );
@@ -418,18 +298,12 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
         if( '(' != schar )
         {
-            #ifdef DEBUG
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << " * [INFO] corrupt data; missing left parenthesis at position ";
-                ostr << file.tellg();
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-            #endif
+            wxLogTrace( MASK_3D_SG,
+                        "%s:%s:%d * [INFO] corrupt data; missing left parenthesis at position '%d'",
+                        __FILE__, __FUNCTION__, __LINE__, static_cast<int>( file.tellg() ) );
 
             CLOSE_STREAM( file );
-            return NULL;
+            return nullptr;
         }
 
         file.get( schar );
@@ -441,27 +315,26 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
         }
 
         // check the plugin tag
-        if( NULL != aTagCheck && NULL != aPluginMgr && !aTagCheck( name.c_str(), aPluginMgr ) )
+        if( nullptr != aTagCheck && nullptr != aPluginMgr
+          && !aTagCheck( name.c_str(), aPluginMgr ) )
         {
             CLOSE_STREAM( file );
-            return NULL;
+            return nullptr;
         }
 
     } while( 0 );
 
-    bool rval = np->ReadCache( file, NULL );
+    bool rval = np->ReadCache( file, nullptr );
     CLOSE_STREAM( file );
 
     if( !rval )
     {
         delete np;
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        wxString errmsg = "problems encountered reading cache file";
-        ostr << " * [INFO] " << errmsg.ToUTF8() << " '";
-        ostr << aFileName << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        return NULL;
+
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] problems encountered reading cache file '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, aFileName );
+
+        return nullptr;
     }
 
     return np;
@@ -470,11 +343,11 @@ SGNODE* S3D::ReadCache( const char* aFileName, void* aPluginMgr,
 
 S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
 {
-    if( NULL == aNode )
-        return NULL;
+    if( nullptr == aNode )
+        return nullptr;
 
     if( aNode->GetNodeType() != S3D::SGTYPE_TRANSFORM )
-        return NULL;
+        return nullptr;
 
     S3D::MATLIST materials;
     std::vector< SMESH > meshes;
@@ -484,7 +357,7 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
     // gray in hopes that it may help highlight faulty models; this color is
     // also typical of MCAD applications. When a model has no associated
     // material color it shall be assigned the index 0.
-    SGAPPEARANCE app( NULL );
+    SGAPPEARANCE app( nullptr );
     app.ambient = SGCOLOR( 0.6f, 0.6f, 0.6f );
     app.diffuse = SGCOLOR( 0.6f, 0.6f, 0.6f );
     app.specular = app.diffuse;
@@ -494,10 +367,10 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
     materials.matorder.push_back( &app );
     materials.matmap.insert( std::pair< SGAPPEARANCE const*, int >( &app, 0 ) );
 
-    if( aNode->Prepare( NULL, materials, meshes ) )
+    if( aNode->Prepare( nullptr, materials, meshes ) )
     {
         if( meshes.empty() )
-            return NULL;
+            return nullptr;
 
         S3DMODEL* model = S3D::New3DModel();
 
@@ -529,35 +402,31 @@ S3DMODEL* S3D::GetModel( SCENEGRAPH* aNode )
     for( size_t i = 0; i < j; ++i )
         S3D::Free3DMesh( meshes[i] );
 
-    return NULL;
+    return nullptr;
 }
 
 
 void S3D::Destroy3DModel( S3DMODEL** aModel )
 {
-    if( NULL == aModel || NULL == *aModel )
+    if( nullptr == aModel || nullptr == *aModel )
         return;
 
     S3DMODEL* m = *aModel;
     S3D::FREE_S3DMODEL( *m );
     delete m;
-    *aModel = NULL;
-
-    return;
+    *aModel = nullptr;
 }
 
 
 void Free3DModel( S3DMODEL& aModel )
 {
     S3D::FREE_S3DMODEL( aModel );
-    return;
 }
 
 
 void S3D::Free3DMesh( SMESH& aMesh )
 {
     S3D::FREE_SMESH( aMesh );
-    return;
 }
 
 
@@ -572,20 +441,17 @@ S3DMODEL* S3D::New3DModel( void )
 void S3D::Init3DMaterial( SMATERIAL& aMat )
 {
     S3D::INIT_SMATERIAL( aMat );
-    return;
 }
 
 
 void S3D::Init3DMesh( SMESH& aMesh )
 {
     S3D::INIT_SMESH( aMesh );
-
-    return;
 }
 
 
-void S3D::GetLibVersion( unsigned char* Major, unsigned char* Minor,
-    unsigned char* Patch, unsigned char* Revision ) noexcept
+void S3D::GetLibVersion( unsigned char* Major, unsigned char* Minor, unsigned char* Patch,
+                         unsigned char* Revision ) noexcept
 {
     if( Major )
         *Major = KICADSG_VERSION_MAJOR;
@@ -598,8 +464,6 @@ void S3D::GetLibVersion( unsigned char* Major, unsigned char* Minor,
 
     if( Patch )
         *Patch = KICADSG_VERSION_PATCH;
-
-    return;
 }
 
 
@@ -626,7 +490,7 @@ SGVECTOR S3D::CalcTriNorm( const SGPOINT& p1, const SGPOINT& p2, const SGPOINT& 
 
 S3D::SGTYPES S3D::GetSGNodeType( SGNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return SGTYPE_END;
 
     return aNode->GetNodeType();
@@ -635,8 +499,8 @@ S3D::SGTYPES S3D::GetSGNodeType( SGNODE* aNode )
 
 SGNODE* S3D::GetSGNodeParent( SGNODE* aNode )
 {
-    if( NULL == aNode )
-        return NULL;
+    if( nullptr == aNode )
+        return nullptr;
 
     return aNode->GetParent();
 }
@@ -644,7 +508,7 @@ SGNODE* S3D::GetSGNodeParent( SGNODE* aNode )
 
 bool S3D::AddSGNodeRef( SGNODE* aParent, SGNODE* aChild )
 {
-    if( NULL == aParent || NULL == aChild )
+    if( nullptr == aParent || nullptr == aChild )
         return false;
 
     return aParent->AddRefNode( aChild );
@@ -653,7 +517,7 @@ bool S3D::AddSGNodeRef( SGNODE* aParent, SGNODE* aChild )
 
 bool S3D::AddSGNodeChild( SGNODE* aParent, SGNODE* aChild )
 {
-    if( NULL == aParent || NULL == aChild )
+    if( nullptr == aParent || nullptr == aChild )
         return false;
 
     return aParent->AddChildNode( aChild );
@@ -662,10 +526,8 @@ bool S3D::AddSGNodeChild( SGNODE* aParent, SGNODE* aChild )
 
 void S3D::AssociateSGNodeWrapper( SGNODE* aObject, SGNODE** aRefPtr )
 {
-    if( NULL == aObject || NULL == aRefPtr || aObject != *aRefPtr )
+    if( nullptr == aObject || nullptr == aRefPtr || aObject != *aRefPtr )
         return;
 
     aObject->AssociateWrapper( aRefPtr );
-
-    return;
 }

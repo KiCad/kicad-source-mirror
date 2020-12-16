@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,6 @@
 
 /**
  * @file sg_appearance.h
- * defines the generic material appearance of a scenegraph object
  */
 
 #ifndef SG_APPEARANCE_H
@@ -31,20 +31,15 @@
 
 #include "3d_cache/sg/sg_node.h"
 
+/**
+ * Defines the generic material appearance of a scenegraph object.
+ */
 class SGAPPEARANCE : public SGNODE
 {
 public:
-    float shininess;    // default 0.2
-    float transparency; // default 0.0
-    SGCOLOR ambient;    // default 0.05317 0.17879 0.01804
-    SGCOLOR diffuse;    // default 0.8 0.8 0.8
-    SGCOLOR emissive;   // default 0.0 0.0 0.0
-    SGCOLOR specular;   // default 0.0 0.0 0.0
-
     void unlinkChildNode( const SGNODE* aNode ) noexcept override;
     void unlinkRefNode( const SGNODE* aNode ) noexcept override;
 
-public:
     SGAPPEARANCE( SGNODE* aParent );
     virtual ~SGAPPEARANCE();
 
@@ -75,6 +70,14 @@ public:
 
     bool WriteCache( std::ostream& aFile, SGNODE* parentNode ) override;
     bool ReadCache( std::istream& aFile, SGNODE* parentNode ) override;
+
+    float shininess;    // default 0.2
+    float transparency; // default 0.0
+    SGCOLOR ambient;    // default 0.05317 0.17879 0.01804
+    SGCOLOR diffuse;    // default 0.8 0.8 0.8
+    SGCOLOR emissive;   // default 0.0 0.0 0.0
+    SGCOLOR specular;   // default 0.0 0.0 0.0
+
 };
 
 #endif  // SG_APPEARANCE_H

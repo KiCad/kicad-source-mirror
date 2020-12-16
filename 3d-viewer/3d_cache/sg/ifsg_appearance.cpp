@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,55 +30,42 @@
 #include "3d_cache/sg/sg_appearance.h"
 
 
-extern char BadObject[];
-extern char BadOperand[];
 extern char BadParent[];
 extern char WrongParent[];
 
 
 IFSG_APPEARANCE::IFSG_APPEARANCE( bool create )
 {
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !create )
         return ;
 
-    m_node = new SGAPPEARANCE( NULL );
+    m_node = new SGAPPEARANCE( nullptr );
 
     if( m_node )
         m_node->AssociateWrapper( &m_node );
-
-    return;
 }
 
 
 IFSG_APPEARANCE::IFSG_APPEARANCE( SGNODE* aParent )
 {
-    m_node = new SGAPPEARANCE( NULL );
+    m_node = new SGAPPEARANCE( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( aParent ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            do {
-                std::ostringstream ostr;
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-                ostr << WrongParent;
-                wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            } while( 0 );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -85,39 +73,29 @@ IFSG_APPEARANCE::IFSG_APPEARANCE( IFSG_NODE& aParent )
 {
     SGNODE* pp = aParent.GetRawPtr();
 
-    #ifdef DEBUG
+#ifdef DEBUG
     if( ! pp )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
     }
-    #endif
+#endif
 
-    m_node = new SGAPPEARANCE( NULL );
+    m_node = new SGAPPEARANCE( nullptr );
 
     if( m_node )
     {
         if( !m_node->SetParent( pp ) )
         {
             delete m_node;
-            m_node = NULL;
+            m_node = nullptr;
 
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << WrongParent;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+            wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, WrongParent );
 
             return;
         }
 
         m_node->AssociateWrapper( &m_node );
     }
-
-    return;
 }
 
 
@@ -126,7 +104,7 @@ bool IFSG_APPEARANCE::Attach( SGNODE* aNode )
     if( m_node )
         m_node->DisassociateWrapper( &m_node );
 
-    m_node = NULL;
+    m_node = nullptr;
 
     if( !aNode )
         return false;
@@ -152,17 +130,12 @@ bool IFSG_APPEARANCE::NewNode( SGNODE* aParent )
 
     if( aParent != m_node->GetParent() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid SGNODE parent (";
-        ostr << aParent->GetNodeTypeName( aParent->GetNodeType() );
-        ostr << ") to SGAPPEARANCE";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [BUG] invalid SGNODE parent (%s) to SGAPPEARANCE",
+                    __FILE__, __FUNCTION__, __LINE__,
+                    aParent->GetNodeTypeName( aParent->GetNodeType() ) );
 
         delete m_node;
-        m_node = NULL;
+        m_node = nullptr;
         return false;
     }
 
@@ -176,17 +149,7 @@ bool IFSG_APPEARANCE::NewNode( IFSG_NODE& aParent )
 {
     SGNODE* np = aParent.GetRawPtr();
 
-    if( NULL == np )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadParent;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( np, false );
 
     return NewNode( np );
 }
@@ -194,247 +157,113 @@ bool IFSG_APPEARANCE::NewNode( IFSG_NODE& aParent )
 
 bool IFSG_APPEARANCE::SetEmissive( float aRVal, float aGVal, float aBVal )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject << "\n";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetEmissive( aRVal, aGVal, aBVal );
+    return ( (SGAPPEARANCE*) m_node )->SetEmissive( aRVal, aGVal, aBVal );
 }
 
 
 bool IFSG_APPEARANCE::SetEmissive( const SGCOLOR* aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject << "\n";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetEmissive( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetEmissive( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetEmissive( const SGCOLOR& aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetEmissive( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetEmissive( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetDiffuse( float aRVal, float aGVal, float aBVal )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetDiffuse( aRVal, aGVal, aBVal );
+    return ( (SGAPPEARANCE*) m_node )->SetDiffuse( aRVal, aGVal, aBVal );
 }
 
 
 bool IFSG_APPEARANCE::SetDiffuse( const SGCOLOR* aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetDiffuse( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetDiffuse( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetDiffuse( const SGCOLOR& aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetDiffuse( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetDiffuse( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetSpecular( float aRVal, float aGVal, float aBVal )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetSpecular( aRVal, aGVal, aBVal );
+    return ( (SGAPPEARANCE*) m_node )->SetSpecular( aRVal, aGVal, aBVal );
 }
 
 
 bool IFSG_APPEARANCE::SetSpecular( const SGCOLOR* aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetSpecular( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetSpecular( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetSpecular( const SGCOLOR& aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetSpecular( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetSpecular( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetAmbient( float aRVal, float aGVal, float aBVal )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetAmbient( aRVal, aGVal, aBVal );
+    return ( (SGAPPEARANCE*) m_node )->SetAmbient( aRVal, aGVal, aBVal );
 }
 
 
 bool IFSG_APPEARANCE::SetAmbient( const SGCOLOR* aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetAmbient( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetAmbient( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetAmbient( const SGCOLOR& aRGBColor )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGAPPEARANCE*)m_node)->SetAmbient( aRGBColor );
+    return ( (SGAPPEARANCE*) m_node )->SetAmbient( aRGBColor );
 }
 
 
 bool IFSG_APPEARANCE::SetShininess( float aShininess ) noexcept
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( m_node, false );
 
     if( aShininess < 0 || aShininess > 1.0 )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] shininess out of range [0..1]";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d  * [BUG] shininess out of range [0..1]",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
 
-    ((SGAPPEARANCE*)m_node)->shininess = aShininess;
+    ( (SGAPPEARANCE*) m_node )->shininess = aShininess;
 
     return true;
 }
@@ -442,31 +271,17 @@ bool IFSG_APPEARANCE::SetShininess( float aShininess ) noexcept
 
 bool IFSG_APPEARANCE::SetTransparency( float aTransparency ) noexcept
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( m_node, false );
 
     if( aTransparency < 0 || aTransparency > 1.0 )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] transparency out of range [0..1]";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] transparency out of range [0..1]",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
 
-    ((SGAPPEARANCE*)m_node)->transparency = aTransparency;
+    ( (SGAPPEARANCE*) m_node )->transparency = aTransparency;
 
     return true;
 }

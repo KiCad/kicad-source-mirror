@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,41 +29,34 @@
 #include "3d_cache/sg/sg_colors.h"
 #include "3d_cache/sg/sg_helpers.h"
 
+
 SGCOLORS::SGCOLORS( SGNODE* aParent ) : SGNODE( aParent )
 {
     m_SGtype = S3D::SGTYPE_COLORS;
 
-    if( NULL != aParent && S3D::SGTYPE_FACESET != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_FACESET != aParent->GetNodeType() )
     {
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-#ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] inappropriate parent to SGCOLORS (type ";
-        ostr << aParent->GetNodeType() << ")";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-#endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] inappropriate parent to SGCOLORS (type %s)",
+                    __FILE__, __FUNCTION__, __LINE__, aParent->GetNodeType() );
     }
-    else if( NULL != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
+    else if( nullptr != aParent && S3D::SGTYPE_FACESET == aParent->GetNodeType() )
     {
         m_Parent->AddChildNode( this );
     }
-
-    return;
 }
 
 
 SGCOLORS::~SGCOLORS()
 {
     colors.clear();
-    return;
 }
 
 
 bool SGCOLORS::SetParent( SGNODE* aParent, bool notify )
 {
-    if( NULL != m_Parent )
+    if( nullptr != m_Parent )
     {
         if( aParent == m_Parent )
             return true;
@@ -71,14 +65,14 @@ bool SGCOLORS::SetParent( SGNODE* aParent, bool notify )
         if( notify )
             m_Parent->unlinkChildNode( this );
 
-        m_Parent = NULL;
+        m_Parent = nullptr;
 
-        if( NULL == aParent )
+        if( nullptr == aParent )
             return true;
     }
 
     // only a SGFACESET may be parent to a SGCOLORS
-    if( NULL != aParent && S3D::SGTYPE_FACESET != aParent->GetNodeType() )
+    if( nullptr != aParent && S3D::SGTYPE_FACESET != aParent->GetNodeType() )
         return false;
 
     m_Parent = aParent;
@@ -90,52 +84,33 @@ bool SGCOLORS::SetParent( SGNODE* aParent, bool notify )
 }
 
 
-SGNODE* SGCOLORS::FindNode(const char *aNodeName, const SGNODE *aCaller) noexcept
+SGNODE* SGCOLORS::FindNode(const char* aNodeName, const SGNODE *aCaller) noexcept
 {
-    if( NULL == aNodeName || 0 == aNodeName[0] )
-        return NULL;
+    if( nullptr == aNodeName || 0 == aNodeName[0] )
+        return nullptr;
 
     if( !m_Name.compare( aNodeName ) )
         return this;
 
-    return NULL;
+    return nullptr;
 }
 
 
 void SGCOLORS::unlinkChildNode( const SGNODE* aCaller ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
-
-    return;
+    wxCHECK( aCaller, /* void */ );
 }
 
 
 void SGCOLORS::unlinkRefNode( const SGNODE* aCaller ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] unexpected code branch; node should have no children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
-
-    return;
+    wxCHECK( aCaller, /* void */ );
 }
 
 
 bool SGCOLORS::AddRefNode( SGNODE* aNode ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] this node does not accept children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
+    wxCHECK( aNode, false );
 
     return false;
 }
@@ -143,12 +118,7 @@ bool SGCOLORS::AddRefNode( SGNODE* aNode ) noexcept
 
 bool SGCOLORS::AddChildNode( SGNODE* aNode ) noexcept
 {
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] this node does not accept children or refs";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
+    wxCHECK( aNode, false );
 
     return false;
 }
@@ -159,7 +129,7 @@ bool SGCOLORS::GetColorList( size_t& aListSize, SGCOLOR*& aColorList )
     if( colors.empty() )
     {
         aListSize = 0;
-        aColorList = NULL;
+        aColorList = nullptr;
         return false;
     }
 
@@ -173,7 +143,7 @@ void SGCOLORS::SetColorList( size_t aListSize, const SGCOLOR* aColorList )
 {
     colors.clear();
 
-    if( 0 == aListSize || NULL == aColorList )
+    if( 0 == aListSize || nullptr == aColorList )
         return;
 
     for( size_t i = 0; i < aListSize; ++i )
@@ -267,26 +237,16 @@ bool SGCOLORS::WriteVRML( std::ostream& aFile, bool aReuseFlag )
 
 bool SGCOLORS::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 {
-    if( NULL == parentNode )
+    if( nullptr == parentNode )
     {
-        if( NULL == m_Parent )
-        {
-            #ifdef DEBUG
-            std::ostringstream ostr;
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-            ostr << " * [BUG] corrupt data; m_aParent is NULL";
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
-
-            return false;
-        }
+        wxCHECK( m_Parent, false );
 
         SGNODE* np = m_Parent;
 
-        while( NULL != np->GetParent() )
+        while( nullptr != np->GetParent() )
             np = np->GetParent();
 
-        if( np->WriteCache( aFile, NULL ) )
+        if( np->WriteCache( aFile, nullptr ) )
         {
             m_written = true;
             return true;
@@ -295,26 +255,11 @@ bool SGCOLORS::WriteCache( std::ostream& aFile, SGNODE* parentNode )
         return false;
     }
 
-    if( parentNode != m_Parent )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] corrupt data; parentNode != m_aParent";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( parentNode == m_Parent, false );
 
     if( !aFile.good() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] bad stream";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] bad stream", __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -336,20 +281,10 @@ bool SGCOLORS::WriteCache( std::ostream& aFile, SGNODE* parentNode )
 
 bool SGCOLORS::ReadCache( std::istream& aFile, SGNODE* parentNode )
 {
-    if( !colors.empty() )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] non-empty node";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return false;
-    }
+    wxCHECK( colors.empty(), false );
 
     size_t ncolors;
-    aFile.read( (char*)&ncolors, sizeof(size_t) );
+    aFile.read( (char*) &ncolors, sizeof( size_t ) );
     SGCOLOR tmp;
 
     if( aFile.fail() )

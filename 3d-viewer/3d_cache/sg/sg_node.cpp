@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +31,7 @@
 
 #include "3d_cache/sg/sg_node.h"
 #include "plugins/3dapi/c3dmodel.h"
+
 
 static const std::string node_names[S3D::SGTYPE_END + 1] = {
     "TXFM",
@@ -68,19 +70,15 @@ static void getNodeName( S3D::SGTYPES nodeType, std::string& aName )
     std::ostringstream ostr;
     ostr << node_names[nodeType] << "_" << seqNum;
     aName = ostr.str();
-
-    return;
 }
 
 
 SGNODE::SGNODE( SGNODE* aParent )
 {
     m_Parent = aParent;
-    m_Association = NULL;
+    m_Association = nullptr;
     m_written = false;
     m_SGtype = S3D::SGTYPE_END;
-
-    return;
 }
 
 
@@ -90,7 +88,7 @@ SGNODE::~SGNODE()
         m_Parent->unlinkChildNode( this );
 
     if( m_Association )
-        *m_Association = NULL;
+        *m_Association = nullptr;
 
     std::list< SGNODE* >::iterator sBP = m_BackPointers.begin();
     std::list< SGNODE* >::iterator eBP = m_BackPointers.end();
@@ -100,8 +98,6 @@ SGNODE::~SGNODE()
         (*sBP)->unlinkRefNode( this );
         ++sBP;
     }
-
-    return;
 }
 
 
@@ -122,10 +118,10 @@ bool SGNODE::SwapParent( SGNODE* aNewParent )
     if( aNewParent == m_Parent )
         return true;
 
-    if( NULL == aNewParent )
+    if( nullptr == aNewParent )
         return false;
 
-    if( NULL == m_Parent )
+    if( nullptr == m_Parent )
     {
         if( aNewParent->AddChildNode( this ) )
             return true;
@@ -138,7 +134,7 @@ bool SGNODE::SwapParent( SGNODE* aNewParent )
 
     SGNODE* oldParent = m_Parent;
     m_Parent->unlinkChildNode( this );
-    m_Parent = NULL;
+    m_Parent = nullptr;
     aNewParent->unlinkRefNode( this );
     aNewParent->AddChildNode( this );
     oldParent->AddRefNode( this );
@@ -156,18 +152,16 @@ const char* SGNODE::GetName( void )
 }
 
 
-void SGNODE::SetName( const char *aName )
+void SGNODE::SetName( const char* aName )
 {
-    if( NULL == aName || 0 == aName[0] )
+    if( nullptr == aName || 0 == aName[0] )
         getNodeName( m_SGtype, m_Name );
     else
         m_Name = aName;
-
-    return;
 }
 
 
-const char * SGNODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const noexcept
+const char* SGNODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const noexcept
 {
     return node_names[aNodeType].c_str();
 }
@@ -175,7 +169,7 @@ const char * SGNODE::GetNodeTypeName( S3D::SGTYPES aNodeType ) const noexcept
 
 void SGNODE::addNodeRef( SGNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     std::list< SGNODE* >::iterator np =
@@ -185,13 +179,12 @@ void SGNODE::addNodeRef( SGNODE* aNode )
         return;
 
     m_BackPointers.push_back( aNode );
-    return;
 }
 
 
 void SGNODE::delNodeRef( const SGNODE* aNode )
 {
-    if( NULL == aNode )
+    if( nullptr == aNode )
         return;
 
     std::list< SGNODE* >::iterator np =
@@ -203,62 +196,28 @@ void SGNODE::delNodeRef( const SGNODE* aNode )
         return;
     }
 
-    #ifdef DEBUG
-    std::ostringstream ostr;
-    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-    ostr << " * [BUG] delNodeRef() did not find its target\n";
-    ostr << " * This Node Type: " << m_SGtype << ", Referenced node type: ";
-    ostr << aNode->GetNodeType() << "\n";
-    wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    #endif
-
-    return;
+    wxLogTrace( MASK_3D_SG, "%s:%s:%d * [BUG] delNodeRef() did not find its target, "
+                "this node type %d, referenced node type %d", __FILE__, __FUNCTION__, __LINE__,
+                m_SGtype, aNode->GetNodeType() );
 }
 
 
 void SGNODE::AssociateWrapper( SGNODE** aWrapperRef ) noexcept
 {
-    if( NULL == aWrapperRef )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] NULL handle";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return;
-    }
-
-    if( *aWrapperRef != this )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] handle value does not match this object's pointer";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return;
-    }
+    wxCHECK( aWrapperRef && *aWrapperRef == this, /* void */ );
 
     // if there is an existing association then break it and emit a warning
     // just in case the behavior is undesired
     if( m_Association )
     {
-        *m_Association = NULL;
+        *m_Association = nullptr;
 
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [WARNING] association being broken with previous wrapper";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [WARNING] association being broken with previous wrapper",
+                    __FILE__, __FUNCTION__, __LINE__ );
     }
 
     m_Association = aWrapperRef;
-
-    return;
 }
 
 void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef ) noexcept
@@ -266,38 +225,11 @@ void SGNODE::DisassociateWrapper( SGNODE** aWrapperRef ) noexcept
     if( !m_Association )
         return;
 
-    if( !aWrapperRef )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] invalid handle value aWrapperRef";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( aWrapperRef, /* void */ );
 
-        return;
-    }
+    wxCHECK( *aWrapperRef == *m_Association && aWrapperRef == m_Association, /* void */ );
 
-    if( *aWrapperRef != *m_Association || aWrapperRef != m_Association )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] *aWrapperRef (" << *aWrapperRef;
-        ostr << ") does not match *m_Association (" << *m_Association << ") in type ";
-        ostr << node_names[ m_SGtype] << "\n";
-        ostr << " * [INFO] OR aWrapperRef(" << aWrapperRef << ") != m_Association(";
-        ostr << m_Association << ")\n";
-        ostr << " * [INFO] node name: " << GetName();
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
-
-        return;
-    }
-
-    m_Association = NULL;
-
-    return;
+    m_Association = nullptr;
 }
 
 
@@ -305,8 +237,6 @@ void SGNODE::ResetNodeIndex( void ) noexcept
 {
     for( int i = 0; i < (int)S3D::SGTYPE_END; ++i )
         node_counts[i] = 1;
-
-    return;
 }
 
 
@@ -314,28 +244,7 @@ bool S3D::GetMatIndex( MATLIST& aList, SGNODE* aNode, int& aIndex )
 {
     aIndex = 0;
 
-    if( NULL == aNode || S3D::SGTYPE_APPEARANCE != aNode->GetNodeType() )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        ostr.str( "" );
-
-        if( NULL == aNode )
-        {
-            wxLogTrace( MASK_3D_SG, " * [BUG] aNode is NULL\n" );
-        }
-        else
-        {
-            ostr << " * [BUG] invalid node type (" << aNode->GetNodeType();
-            ostr << "), expected " << S3D::SGTYPE_APPEARANCE;
-            wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        }
-        #endif
-
-        return false;
-    }
+    wxCHECK( aNode && S3D::SGTYPE_APPEARANCE == aNode->GetNodeType(), false );
 
     SGAPPEARANCE* node = (SGAPPEARANCE*)aNode;
 
@@ -374,66 +283,62 @@ void S3D::INIT_S3DMODEL( S3DMODEL& aModel ) noexcept
 }
 
 
-void S3D::FREE_SMESH( SMESH& aMesh) noexcept
+void S3D::FREE_SMESH( SMESH& aMesh ) noexcept
 {
-    if( NULL != aMesh.m_Positions )
+    if( nullptr != aMesh.m_Positions )
     {
         delete [] aMesh.m_Positions;
-        aMesh.m_Positions = NULL;
+        aMesh.m_Positions = nullptr;
     }
 
-    if( NULL != aMesh.m_Normals )
+    if( nullptr != aMesh.m_Normals )
     {
         delete [] aMesh.m_Normals;
-        aMesh.m_Normals = NULL;
+        aMesh.m_Normals = nullptr;
     }
 
-    if( NULL != aMesh.m_Texcoords )
+    if( nullptr != aMesh.m_Texcoords )
     {
         delete [] aMesh.m_Texcoords;
-        aMesh.m_Texcoords = NULL;
+        aMesh.m_Texcoords = nullptr;
     }
 
-    if( NULL != aMesh.m_Color )
+    if( nullptr != aMesh.m_Color )
     {
         delete [] aMesh.m_Color;
-        aMesh.m_Color = NULL;
+        aMesh.m_Color = nullptr;
     }
 
-    if( NULL != aMesh.m_FaceIdx )
+    if( nullptr != aMesh.m_FaceIdx )
     {
         delete [] aMesh.m_FaceIdx;
-        aMesh.m_FaceIdx = NULL;
+        aMesh.m_FaceIdx = nullptr;
     }
 
     aMesh.m_VertexSize = 0;
     aMesh.m_FaceIdxSize = 0;
     aMesh.m_MaterialIdx = 0;
-
-    return;
 }
 
 
 void S3D::FREE_S3DMODEL( S3DMODEL& aModel )
 {
-    if( NULL != aModel.m_Materials )
+    if( nullptr != aModel.m_Materials )
     {
         delete [] aModel.m_Materials;
-        aModel.m_Materials = NULL;
+        aModel.m_Materials = nullptr;
     }
 
     aModel.m_MaterialsSize = 0;
 
-    if( NULL != aModel.m_Meshes )
+    if( nullptr != aModel.m_Meshes )
     {
         for( unsigned int i = 0; i < aModel.m_MeshesSize; ++i )
             FREE_SMESH( aModel.m_Meshes[i] );
 
         delete [] aModel.m_Meshes;
-        aModel.m_Meshes = NULL;
+        aModel.m_Meshes = nullptr;
     }
 
     aModel.m_MeshesSize = 0;
-
-    return;
 }

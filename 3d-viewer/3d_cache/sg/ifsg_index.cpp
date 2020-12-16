@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,51 +31,24 @@
 #include "3d_cache/sg/sg_coordindex.h"
 
 
-extern char BadObject[];
-extern char BadOperand[];
-extern char BadParent[];
-extern char WrongParent[];
-
-
 IFSG_INDEX::IFSG_INDEX() : IFSG_NODE()
 {
-    return;
 }
 
 
 bool IFSG_INDEX::GetIndices( size_t& nIndices, int*& aIndexList )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    return ((SGINDEX*)m_node)->GetIndices( nIndices, aIndexList );
+    return ( (SGINDEX*) m_node )->GetIndices( nIndices, aIndexList );
 }
 
 
 bool IFSG_INDEX::SetIndices( size_t nIndices, int* aIndexList )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGINDEX*)m_node)->SetIndices( nIndices, aIndexList );
+    ( (SGINDEX*) m_node )->SetIndices( nIndices, aIndexList );
 
     return true;
 }
@@ -82,19 +56,9 @@ bool IFSG_INDEX::SetIndices( size_t nIndices, int* aIndexList )
 
 bool IFSG_INDEX::AddIndex( int aIndex )
 {
-    if( NULL == m_node )
-    {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << BadObject;
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+    wxCHECK( m_node, false );
 
-        return false;
-    }
-
-    ((SGINDEX*)m_node)->AddIndex( aIndex );
+    ( (SGINDEX*) m_node )->AddIndex( aIndex );
 
     return true;
 }

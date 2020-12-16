@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +34,6 @@
 #include "3d_cache/sg/sg_node.h"
 
 
-// formats a floating point number for text output to a VRML file
 void S3D::FormatFloat( std::string& result, double value )
 {
     if( value < 1e-8 &&  value > -1e-8 )
@@ -52,7 +52,6 @@ void S3D::FormatFloat( std::string& result, double value )
     size_t p = result.find( '.' );
 
     // trim trailing 0 if appropriate
-
     if( std::string::npos == p )
         return;
 
@@ -60,28 +59,26 @@ void S3D::FormatFloat( std::string& result, double value )
 
     if( std::string::npos == p )
     {
-        while( '0' == *(result.rbegin()) )
+        while( '0' == *( result.rbegin() ) )
             result.erase( result.size() - 1 );
 
         return;
     }
 
-    if( '0' != result.at( p -1 ) )
+    if( '0' != result.at( p - 1 ) )
         return;
 
     // trim all 0 to the left of 'p'
     std::string tmp = result.substr( p );
     result = result.substr( 0, p );
 
-    while( '0' == *(result.rbegin()) )
+    while( '0' == *( result.rbegin() ) )
         result.erase( result.size() - 1 );
 
     result.append( tmp );
-
-    return;
 }
 
-// format orientation data for VRML output
+
 void S3D::FormatOrientation( std::string& result, const SGVECTOR& axis, double rotation )
 {
     double aX;
@@ -100,11 +97,9 @@ void S3D::FormatOrientation( std::string& result, const SGVECTOR& axis, double r
     FormatFloat( tmp, rotation );
     result.append( " " );
     result.append( tmp );
-
-    return;
 }
 
-// format point data for VRML output
+
 void S3D::FormatPoint( std::string& result, const SGPOINT& point )
 {
     FormatFloat( result, point.x );
@@ -117,12 +112,9 @@ void S3D::FormatPoint( std::string& result, const SGPOINT& point )
     FormatFloat( tmp, point.z );
     result.append( " " );
     result.append( tmp );
-
-    return;
 }
 
 
-// format vector data for VRML output
 void S3D::FormatVector( std::string& result, const SGVECTOR& aVector )
 {
     double X, Y, Z;
@@ -137,12 +129,9 @@ void S3D::FormatVector( std::string& result, const SGVECTOR& aVector )
     FormatFloat( tmp, Z );
     result.append( " " );
     result.append( tmp );
-
-    return;
 }
 
 
-// format Color data for VRML output
 void S3D::FormatColor( std::string& result, const SGCOLOR& aColor )
 {
     float R, G, B;
@@ -157,16 +146,14 @@ void S3D::FormatColor( std::string& result, const SGCOLOR& aColor )
     FormatFloat( tmp, B );
     result.append( " " );
     result.append( tmp );
-
-    return;
 }
 
 
 bool S3D::WritePoint( std::ostream& aFile, const SGPOINT& aPoint )
 {
-    aFile.write( (char*)&aPoint.x, sizeof(aPoint.x) );
-    aFile.write( (char*)&aPoint.y, sizeof(aPoint.y) );
-    aFile.write( (char*)&aPoint.z, sizeof(aPoint.z) );
+    aFile.write( (char*) &aPoint.x, sizeof( aPoint.x ) );
+    aFile.write( (char*) &aPoint.y, sizeof( aPoint.y ) );
+    aFile.write( (char*) &aPoint.z, sizeof( aPoint.z ) );
 
     if( aFile.fail() )
         return false;
@@ -179,9 +166,9 @@ bool S3D::WriteVector( std::ostream& aFile, const SGVECTOR& aVector )
 {
     double x, y, z;
     aVector.GetVector( x, y, z );
-    aFile.write( (char*)&x, sizeof(double) );
-    aFile.write( (char*)&y, sizeof(double) );
-    aFile.write( (char*)&z, sizeof(double) );
+    aFile.write( (char*) &x, sizeof( double ) );
+    aFile.write( (char*) &y, sizeof( double ) );
+    aFile.write( (char*) &z, sizeof( double ) );
 
     if( aFile.fail() )
         return false;
@@ -194,9 +181,9 @@ bool S3D::WriteColor( std::ostream& aFile, const SGCOLOR& aColor )
 {
     float r, g, b;
     aColor.GetColor( r, g, b );
-    aFile.write( (char*)&r, sizeof(float) );
-    aFile.write( (char*)&g, sizeof(float) );
-    aFile.write( (char*)&b, sizeof(float) );
+    aFile.write( (char*) &r, sizeof( float ) );
+    aFile.write( (char*) &g, sizeof( float ) );
+    aFile.write( (char*) &b, sizeof( float ) );
 
     if( aFile.fail() )
         return false;
@@ -212,13 +199,9 @@ S3D::SGTYPES S3D::ReadTag( std::istream& aFile, std::string& aName )
 
     if( '[' != schar )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] corrupt data; missing left bracket at position ";
-        ostr << aFile.tellg();
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] corrupt data; missing left bracket at position %d",
+                    __FILE__, __FUNCTION__, __LINE__, static_cast<int>( aFile.tellg() ) );
 
         return S3D::SGTYPE_END;
     }
@@ -234,12 +217,9 @@ S3D::SGTYPES S3D::ReadTag( std::istream& aFile, std::string& aName )
 
     if( schar != ']' )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] corrupt data; could not find right bracket";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] corrupt data; could not find right bracket",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return S3D::SGTYPE_END;
     }
@@ -249,13 +229,9 @@ S3D::SGTYPES S3D::ReadTag( std::istream& aFile, std::string& aName )
 
     if( std::string::npos == upos )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] corrupt data; no underscore in name '";
-        ostr << name << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] corrupt data; no underscore in name '%s'",
+                    __FILE__, __FUNCTION__, __LINE__, name );
 
         return S3D::SGTYPE_END;
     }
@@ -279,15 +255,9 @@ S3D::SGTYPES S3D::ReadTag( std::istream& aFile, std::string& aName )
             return types[i];
     }
 
-    #ifdef DEBUG
-    do {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] corrupt data; no node type matching '";
-        ostr << name << "'";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-    } while( 0 );
-    #endif
+    wxLogTrace( MASK_3D_SG,
+                "%s:%s:%d * [INFO] corrupt data; no node type matching '%s'",
+                __FILE__, __FUNCTION__, __LINE__, name );
 
     return S3D::SGTYPE_END;
 }
@@ -295,9 +265,9 @@ S3D::SGTYPES S3D::ReadTag( std::istream& aFile, std::string& aName )
 
 bool S3D::ReadPoint( std::istream& aFile, SGPOINT& aPoint )
 {
-    aFile.read( (char*)&aPoint.x, sizeof( aPoint.x ) );
-    aFile.read( (char*)&aPoint.y, sizeof( aPoint.y ) );
-    aFile.read( (char*)&aPoint.z, sizeof( aPoint.z ) );
+    aFile.read( (char*) &aPoint.x, sizeof( aPoint.x ) );
+    aFile.read( (char*) &aPoint.y, sizeof( aPoint.y ) );
+    aFile.read( (char*) &aPoint.z, sizeof( aPoint.z ) );
 
     if( aFile.fail() )
         return false;
@@ -309,9 +279,9 @@ bool S3D::ReadPoint( std::istream& aFile, SGPOINT& aPoint )
 bool S3D::ReadVector( std::istream& aFile, SGVECTOR& aVector )
 {
     double x, y, z;
-    aFile.read( (char*)&x, sizeof(double) );
-    aFile.read( (char*)&y, sizeof(double) );
-    aFile.read( (char*)&z, sizeof(double) );
+    aFile.read( (char*) &x, sizeof( double ) );
+    aFile.read( (char*) &y, sizeof( double ) );
+    aFile.read( (char*) &z, sizeof( double ) );
     aVector.SetVector( x, y, z );
 
     if( aFile.fail() )
@@ -324,9 +294,9 @@ bool S3D::ReadVector( std::istream& aFile, SGVECTOR& aVector )
 bool S3D::ReadColor( std::istream& aFile, SGCOLOR& aColor )
 {
     float r, g, b;
-    aFile.read( (char*)&r, sizeof(float) );
-    aFile.read( (char*)&g, sizeof(float) );
-    aFile.read( (char*)&b, sizeof(float) );
+    aFile.read( (char*) &r, sizeof( float ) );
+    aFile.read( (char*) &g, sizeof( float ) );
+    aFile.read( (char*) &b, sizeof( float ) );
     aColor.SetColor( r, g, b );
 
     if( aFile.fail() )
@@ -376,24 +346,19 @@ static void calcTriad( glm::dvec3* pts, glm::dvec3& tri )
 
     // normal * 2 * area
     tri = glm::cross( pts[1] - pts[0], pts[2] - pts[0] );
-
-    return;
 }
 
 
-bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
-    std::vector< int >& index, std::vector< SGVECTOR >& norms )
+bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords, std::vector< int >& index,
+                               std::vector< SGVECTOR >& norms )
 {
     size_t vsize = coords.size();
 
     if( vsize < 3 )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] invalid vertex set (fewer than 3 vertices)";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [INFO] invalid vertex set (fewer than 3 vertices)",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -402,24 +367,16 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
 
     if( 0 != isize % 3 || index.empty() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] invalid index set (not multiple of 3)";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] invalid index set (not multiple of 3)",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
 
     if( !norms.empty() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [INFO] normals set is not empty";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG, "%s:%s:%d * [INFO] normals set is not empty",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
@@ -435,15 +392,14 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
         p2 = index[i++];
         p3 = index[i++];
 
-        if( p1 < 0 || p1 >= (int)vsize || p2 < 0 || p2 >= (int)vsize ||
-            p3 < 0 || p3 >= (int)vsize )
+        if( p1 < 0 || p1 >= (int)vsize || p2 < 0 || p2 >= (int)vsize || p3 < 0 || p3 >= (int)vsize )
         {
-            #ifdef DEBUG
+#ifdef DEBUG
             std::ostringstream ostr;
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
             ostr << " * [INFO] invalid index set; index out of bounds";
             wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-            #endif
+#endif
 
             return false;
         }
@@ -525,12 +481,9 @@ bool S3D::CalcTriangleNormals( std::vector< SGPOINT > coords,
 
     if( norms.size() != coords.size() )
     {
-        #ifdef DEBUG
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << " * [BUG] number of normals does not equal number of vertices";
-        wxLogTrace( MASK_3D_SG, "%s\n", ostr.str().c_str() );
-        #endif
+        wxLogTrace( MASK_3D_SG,
+                    "%s:%s:%d * [BUG] number of normals does not equal number of vertices",
+                    __FILE__, __FUNCTION__, __LINE__ );
 
         return false;
     }
