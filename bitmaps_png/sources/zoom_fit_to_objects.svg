@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="zoom_fit_to_objects.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (1.0.1+r74)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
      inkscape:cx="8.3791386"
      inkscape:cy="9.5627092"
      inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -90,25 +90,24 @@
      id="path160569"
      style="stroke-width:1" />
   <rect
-     class="cls-2"
+     class="cls-1"
      x="5"
-     y="5"
-     width="9.9954996"
-     height="10.0099"
-     id="rect160571"
-     style="stroke-width:1" />
-  <rect
-     class="cls-1"
-     x="7"
-     y="8"
-     width="4"
-     height="1"
-     id="rect160573" />
-  <rect
-     class="cls-1"
-     x="9"
      y="11"
-     width="4"
-     height="1"
-     id="rect160575" />
+     width="5"
+     height="4"
+     id="rect160573-3"
+     style="fill:#545454"
+     ry="0.81210256" />
+  <ellipse
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-linecap:square;paint-order:stroke fill markers"
+     id="path6788"
+     cx="8.0125294"
+     cy="7.0566769"
+     rx="2.5125294"
+     ry="2.5566769" />
+  <path
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 16.5,12 12,4 v 8 z"
+     id="path6792"
+     sodipodi:nodetypes="cccc" />
 </svg>
