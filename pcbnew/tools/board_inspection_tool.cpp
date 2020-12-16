@@ -115,6 +115,10 @@ int BOARD_INSPECTION_TOOL::ShowStatisticsDialog( const TOOL_EVENT& aEvent )
 
 wxString BOARD_INSPECTION_TOOL::getItemDescription( BOARD_ITEM* aItem )
 {
+    // Null items have no description
+    if( !aItem )
+        return wxString();
+
     wxString s = aItem->GetSelectMenuText( m_frame->GetUserUnits() );
 
     if( aItem->IsConnected() )
@@ -309,7 +313,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
 
     if( b->Type() == PCB_GROUP_T )
     {
-        PCB_GROUP* bg = static_cast<PCB_GROUP*>( a );
+        PCB_GROUP* bg = static_cast<PCB_GROUP*>( b );
 
         if( bg->GetItems().empty() )
         {
@@ -317,7 +321,7 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
             return 0;
         }
 
-        a = *bg->GetItems().begin();
+        b = *bg->GetItems().begin();
     }
 
     if( a->Type() == PCB_TRACE_T || a->Type() == PCB_ARC_T )

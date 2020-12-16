@@ -314,7 +314,7 @@ VECTOR2I EE_GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, int aLayer,
         if( m_enableGrid && std::abs( nearestGrid.y - aOrigin.y ) < snapDist.y )
         {
             pt.y = nearestGrid.y;
-            snapDist.x = std::abs( nearestGrid.y - aOrigin.y );
+            snapDist.y = std::abs( nearestGrid.y - aOrigin.y );
             snapLineY = false;
         }
 

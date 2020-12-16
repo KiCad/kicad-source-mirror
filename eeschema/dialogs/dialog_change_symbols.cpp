@@ -237,6 +237,9 @@ void DIALOG_CHANGE_SYMBOLS::launchNewIdSymbolBrowser( wxCommandEvent& aEvent )
 void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 {
     SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+
+    wxCHECK( frame, /* void */ );
+
     SCH_SHEET_LIST  hierarchy = frame->Schematic().GetSheets();
 
     // Load non-mandatory fields from all matching symbols and their library parts

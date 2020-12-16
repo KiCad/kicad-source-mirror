@@ -146,9 +146,9 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
-            auto        it = ErcSettings().m_ErcExclusions.find( marker->Serialize() );
+            auto        it = settings.m_ErcExclusions.find( marker->Serialize() );
 
-            if( it != ErcSettings().m_ErcExclusions.end() )
+            if( it != settings.m_ErcExclusions.end() )
             {
                 marker->SetExcluded( true );
                 settings.m_ErcExclusions.erase( it );
