@@ -266,10 +266,14 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
             if( m_mode == MODE::UPDATE && symbol->GetPartRef() )
             {
-                symbol->GetPartRef()->Flatten()->GetFields( libFields );
+                std::unique_ptr<LIB_PART> flattenedPart = symbol->GetPartRef()->Flatten();
+
+                flattenedPart->GetFields( libFields );
 
                 for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
                     fieldNames.insert( libFields[i]->GetName() );
+
+                libFields.clear();  // flattenedPart is about to go out of scope...
             }
         }
     }
