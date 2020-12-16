@@ -170,23 +170,22 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
     {
         if( !start_is_inside )
         {
-            if( (hitted == false) || (rightSegT < closerHitT) )
+            if( ( hitted == false ) || ( rightSegT < closerHitT ) )
             {
                 closerHitT = rightSegT;
                 closerHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
             }
-
-            if( start_is_inside )
-            {
-                if( (hitted == false) || (rightSegT > farHitT) )
-                {
-                    farHitT = rightSegT;
-                    farHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
-                }
-            }
-
-            hitted = true;
         }
+        else
+        {
+            if( ( hitted == false ) || ( rightSegT > farHitT ) )
+            {
+                farHitT = rightSegT;
+                farHitNormal = SFVEC2F( -m_rightDir.y,  m_rightDir.x );
+            }
+        }
+
+        hitted = true;
     }
 
     float   circleStart_T0;
@@ -210,8 +209,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
                     closerHitNormal = circleStart_N0;
                 }
             }
-
-            if( start_is_inside )
+            else
             {
                 if( (hitted == false) || (circleStart_T1 > farHitT) )
                 {
@@ -253,8 +251,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
                     closerHitNormal = circleEnd_N0;
                 }
             }
-
-            if( start_is_inside )
+            else
             {
                 if( (hitted == false) || (circleEnd_T1 > farHitT) )
                 {
@@ -323,17 +320,11 @@ INTERSECTION_RESULT CROUNDSEGMENT2D::IsBBoxInside( const CBBOX2D &aBBox ) const
     isInside[3] = IsPointInside( v[3] );
 
     // Check if all points are inside the circle
-    if( isInside[0] &&
-        isInside[1] &&
-        isInside[2] &&
-        isInside[3] )
+    if( isInside[0] && isInside[1] && isInside[2] && isInside[3] )
         return INTERSECTION_RESULT::FULL_INSIDE;
 
     // Check if any point is inside the circle
-    if( isInside[0] ||
-        isInside[1] ||
-        isInside[2] ||
-        isInside[3] )
+    if( isInside[0] || isInside[1] || isInside[2] || isInside[3] )
         return INTERSECTION_RESULT::INTERSECTS;
 
     return INTERSECTION_RESULT::MISSES;

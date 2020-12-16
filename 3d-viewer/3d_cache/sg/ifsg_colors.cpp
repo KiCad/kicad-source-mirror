@@ -74,8 +74,11 @@ IFSG_COLORS::IFSG_COLORS( IFSG_NODE& aParent )
     SGNODE* pp = aParent.GetRawPtr();
 
 #ifdef DEBUG
+    // Braces needed due to dangling else warning from wxLogTrace macro
     if( !pp )
+    {
         wxLogTrace( MASK_3D_SG, "%s:%s:%d %s", __FILE__, __FUNCTION__, __LINE__, BadParent );
+    }
 #endif
 
     m_node = new SGCOLORS( nullptr );
