@@ -1,9 +1,10 @@
+# minimum clang-format 10
 BasedOnStyle: LLVM
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: true
-AlignOperands: Align
+AlignOperands: true
 AlignTrailingComments: true
 AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
