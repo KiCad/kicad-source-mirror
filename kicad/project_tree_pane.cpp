@@ -36,6 +36,7 @@
 #include <menus_helpers.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
+#include <kiplatform/environment.h>
 
 #include "project_tree_item.h"
 #include "project_tree.h"
@@ -1109,6 +1110,24 @@ void PROJECT_TREE_PANE::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
 
 void PROJECT_TREE_PANE::FileWatcherReset()
 {
+    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
+
+    #if defined( _WIN32 )
+    if( KIPLATFORM::ENV::IsNetworkPath( prj_dir ) )
+    {
+        // Due to a combination of a bug in SAMBA sending bad change event IDs
+        // and wxWidgets choosing to fault on an invalid event ID instead of sanely ignoring them
+        // We need to avoid spawning a filewatcher. Unforunately this punishes corporate environments
+        // with Windows Server shares :/
+        m_Parent->SetStatusText( _( "Network path: not monitoring folder changes" ), 0 );
+        return;
+    }
+    else
+    {
+        m_Parent->SetStatusText( _( "Local path: monitoring folder changes" ), 0 );
+    }
+    #endif
+
     // Prepare file watcher:
     if( m_watcher )
     {
@@ -1121,7 +1140,6 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     }
 
     // We can see wxString under a debugger, not a wxFileName
-    wxString prj_dir = wxPathOnly( m_Parent->GetProjectFileName() );
     wxFileName fn;
     fn.AssignDir( prj_dir );
     fn.DontFollowLink();
