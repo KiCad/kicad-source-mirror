@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="print_button.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/print_button.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="11.909947"
+     inkscape:cx="15.986976"
      inkscape:cy="12.20024"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,7 +84,7 @@
      id="title159363">print_button</title>
   <path
      id="polygon159365"
-     style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#5a5a5a;stroke-opacity:1"
      transform="translate(-1,-1)"
      d="m 5.5,16.5 v -14 h 15 v 12 l -2.167,2.632 z"
      class="cls-1"
@@ -93,34 +96,29 @@
      transform="translate(-1,-1)" />
   <path
      class="cls-3"
-     d="M 2.7087,5.0046 H 21.2913 A 2.7087,2.7087 0 0 1 24,7.7133 V 16.01 H 0 V 7.7133 A 2.7087,2.7087 0 0 1 2.7087,5.0046 Z"
-     id="path159369" />
+     d="M 2.7087,6.0046 H 21.2913 A 2.7087,2.7087 0 0 1 24,8.7133 V 17.01 H 0 V 8.7133 A 2.7087,2.7087 0 0 1 2.7087,6.0046 Z"
+     id="path159369"
+     style="fill:#606060;fill-opacity:1"
+     inkscape:connector-curvature="0" />
   <path
      id="polygon159371"
-     style="fill:#ffffff;fill-opacity:1;stroke:#545454;stroke-opacity:1"
-     transform="translate(-1,-1)"
-     d="M 5.5,23.5 V 12 l 15,-0.5 v 9 l -3,3 z"
+     style="fill:#ffffff;fill-opacity:1;stroke:#5a5a5a;stroke-width:1;stroke-opacity:1"
+     d="M 4.5,22.500001 V 11.5 h 15 v 8.130435 l -3,2.869566 z"
      class="cls-1"
-     sodipodi:nodetypes="cccccc" />
+     sodipodi:nodetypes="cccccc"
+     inkscape:connector-curvature="0" />
   <polygon
      class="cls-2"
      points="21,21.249 18.333,24 18.333,21.249 "
      id="polygon159373"
      transform="matrix(1.4634506,0,0,1.2722643,-10.829439,-8.0343438)"
-     style="fill:#545454;fill-opacity:1" />
+     style="fill:#5a5a5a;fill-opacity:1" />
   <rect
      class="cls-4"
-     x="2.6666999"
-     y="10.6062"
-     width="18.666599"
-     height="1.3757"
-     id="rect159375" />
-  <path
-     class="cls-5"
-     d="M 19.871,7.5459 A 0.667,0.667 0 1 1 19.2044,6.8581 0.6775,0.6775 0 0 1 19.871,7.5459 Z"
-     id="path159377" />
-  <path
-     class="cls-2"
-     d="M 22.4405,7.5459 A 0.667,0.667 0 1 1 21.7738,6.8581 0.6776,0.6776 0 0 1 22.4405,7.5459 Z"
-     id="path159379" />
+     x="3"
+     y="10.969748"
+     width="17.999998"
+     height="1.0302514"
+     id="rect159375"
+     style="fill:#bf2641;fill-opacity:1;stroke-width:0.99999988" />
 </svg>
