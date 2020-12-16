@@ -30,7 +30,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <board_item.h>
-#include <tools/pcbnew_selection.h>
+#include <tools/pcb_selection.h>
 
 /*!
  * Class that performs array creation by producing a dialog to gather parameters and then
@@ -40,7 +40,7 @@ class ARRAY_CREATOR
 {
 public:
     ARRAY_CREATOR( PCB_BASE_FRAME& aParent, bool aIsFootprintEditor,
-                   const PCBNEW_SELECTION& aSelection ) :
+                   const PCB_SELECTION& aSelection ) :
             m_parent( aParent ),
             m_isFootprintEditor( aIsFootprintEditor ),
             m_selection( aSelection )
@@ -54,9 +54,9 @@ public:
     void Invoke();
 
 private:
-    PCB_BASE_FRAME&         m_parent;
-    bool                    m_isFootprintEditor;
-    const PCBNEW_SELECTION& m_selection;
+    PCB_BASE_FRAME&      m_parent;
+    bool                 m_isFootprintEditor;
+    const PCB_SELECTION& m_selection;
 };
 
 #endif /* ARRAY_CREATOR_H_ */

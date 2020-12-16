@@ -29,7 +29,7 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <status_popup.h>
 
 
@@ -152,13 +152,14 @@ public:
      * A selection filter which prunes the selection to contain only items of type PCB_MODULE_T
      */
     static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
-                                 SELECTION_TOOL* sTool );
+                                 PCB_SELECTION_TOOL* sTool );
 
     /**
      * Function PadFilter()
      * A selection filter which prunes the selection to contain only items of type PCB_PAD_T
      */
-    static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool );
+    static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
+                           PCB_SELECTION_TOOL* sTool );
 
     BOARD_COMMIT* GetCurrentCommit() const { return m_commit.get(); }
 
@@ -182,7 +183,7 @@ private:
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
-    bool updateModificationPoint( PCBNEW_SELECTION& aSelection );
+    bool updateModificationPoint( PCB_SELECTION& aSelection );
 
     bool invokeInlineRouter( int aDragMode );
     bool isInteractiveDragEnabled() const;
@@ -194,7 +195,7 @@ private:
                              const wxString& aCanceledMessage, VECTOR2I& aReferencePoint );
 
 private:
-    SELECTION_TOOL*               m_selectionTool;
+    PCB_SELECTION_TOOL*           m_selectionTool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
     bool                          m_dragging;   // Indicates objects are currently being dragged
     VECTOR2I                      m_cursor;     // Last cursor position (so getModificationPoint()

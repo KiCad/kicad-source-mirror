@@ -48,7 +48,7 @@
 class PCB_TOOL_BASE;
 class PCB_EDIT_FRAME;
 class PCB_DISPLAY_OPTIONS;
-class PCBNEW_SELECTION;
+class PCB_SELECTION;
 
 struct INTERACTIVE_PLACER_BASE
 {
@@ -168,9 +168,9 @@ protected:
 
     PCB_DRAW_PANEL_GAL* canvas() const;
 
-    const PCBNEW_SELECTION& selection() const;
+    const PCB_SELECTION& selection() const;
 
-    PCBNEW_SELECTION& selection();
+    PCB_SELECTION& selection();
 
 protected:
     bool m_isFootprintEditor;

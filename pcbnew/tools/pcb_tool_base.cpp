@@ -29,7 +29,7 @@
 #include <footprint.h>
 #include <pcb_draw_panel_gal.h>
 #include <pcbnew_settings.h>
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include "pcb_actions.h"
 #include "tool_event_utils.h"
 
@@ -51,7 +51,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( const std::string& aTool,
     controls()->ShowCursor( true );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    PCBNEW_SELECTION preview;
+    PCB_SELECTION preview;
     view()->Add( &preview );
 
     aPlacer->m_board = board();
@@ -292,17 +292,17 @@ PCB_DRAW_PANEL_GAL* PCB_TOOL_BASE::canvas() const
 }
 
 
-const PCBNEW_SELECTION& PCB_TOOL_BASE::selection() const
+const PCB_SELECTION& PCB_TOOL_BASE::selection() const
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     return selTool->GetSelection();
 }
 
 
-PCBNEW_SELECTION& PCB_TOOL_BASE::selection()
+PCB_SELECTION& PCB_TOOL_BASE::selection()
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     return selTool->GetSelection();
 }

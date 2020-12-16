@@ -34,7 +34,7 @@
 #include <pgm_base.h>
 #include <bitmaps.h>
 #include <reporter.h>
-#include <tools/pcb_editor_control.h>
+#include <tools/board_editor_control.h>
 #include <board.h>
 #include <footprint.h>
 #include <wildcards_and_files_ext.h>
@@ -452,7 +452,7 @@ bool DIALOG_GEN_FOOTPRINT_POSITION::CreateAsciiFiles()
 }
 
 
-int PCB_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::GeneratePosFile( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_GEN_FOOTPRINT_POSITION dlg( editFrame );

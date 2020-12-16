@@ -37,22 +37,20 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
-#include <preview_items/selection_area.h>
 #include <painter.h>
 #include <bitmaps.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <tools/pcbnew_selection.h>
+#include <tools/pcb_selection.h>
 #include <connectivity/connectivity_data.h>
-#include "selection_tool.h"
-#include "pcb_bright_box.h"
+#include "pcb_selection_tool.h"
 #include "pcb_actions.h"
 
 #include "plugins/kicad/kicad_plugin.h"
 
 
 
-EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool aFootprintsOnly ) const
+EDA_ITEM* PCB_SELECTION::GetTopLeftItem( bool aFootprintsOnly ) const
 {
     EDA_ITEM* topLeftItem = nullptr;
 
@@ -86,7 +84,7 @@ EDA_ITEM* PCBNEW_SELECTION::GetTopLeftItem( bool aFootprintsOnly ) const
 }
 
 
-const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
+const KIGFX::VIEW_GROUP::ITEMS PCB_SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;
 
@@ -143,7 +141,7 @@ const KIGFX::VIEW_GROUP::ITEMS PCBNEW_SELECTION::updateDrawList() const
 }
 
 
-const LSET PCBNEW_SELECTION::GetSelectionLayers()
+const LSET PCB_SELECTION::GetSelectionLayers()
 {
     LSET retval;
 

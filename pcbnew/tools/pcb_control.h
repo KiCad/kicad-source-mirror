@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCBNEW_CONTROL_H
-#define PCBNEW_CONTROL_H
+#ifndef PCB_CONTROL_H
+#define PCB_CONTROL_H
 
 #include <io_mgr.h>
 #include <memory>
@@ -36,16 +36,16 @@ namespace KIGFX {
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
 /**
- * PCBNEW_CONTROL
+ * PCB_CONTROL
  *
  * Handles actions that are shared between different frames in pcbnew.
  */
 
-class PCBNEW_CONTROL : public PCB_TOOL_BASE
+class PCB_CONTROL : public PCB_TOOL_BASE
 {
 public:
-    PCBNEW_CONTROL();
-    ~PCBNEW_CONTROL();
+    PCB_CONTROL();
+    ~PCB_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;

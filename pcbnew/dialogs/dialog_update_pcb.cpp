@@ -30,7 +30,6 @@
 #include <netlist_reader/board_netlist_updater.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
 #include <kiface_i.h>
 #include <kiplatform/ui.h>
 

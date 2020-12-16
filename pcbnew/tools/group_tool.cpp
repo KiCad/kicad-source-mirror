@@ -23,9 +23,9 @@
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/group_tool.h>
-#include <tools/pcbnew_picker_tool.h>
+#include <tools/pcb_picker_tool.h>
 #include <status_popup.h>
 #include <board_commit.h>
 #include <bitmaps.h>
@@ -188,8 +188,8 @@ public:
 private:
     void update() override
     {
-        SELECTION_TOOL* selTool = getToolManager()->GetTool<SELECTION_TOOL>();
-        BOARD* board = selTool->GetBoard();
+        PCB_SELECTION_TOOL* selTool = getToolManager()->GetTool<PCB_SELECTION_TOOL>();
+        BOARD*              board = selTool->GetBoard();
 
         const auto& selection = selTool->GetSelection();
 
@@ -229,7 +229,7 @@ bool GROUP_TOOL::Init()
     m_frame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     // Find the selection tool, so they can cooperate
-    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     auto groupMenu = std::make_shared<GROUP_CONTEXT_MENU>();
     groupMenu->SetTool( this );
@@ -267,10 +267,10 @@ int GROUP_TOOL::GroupProperties( const TOOL_EVENT& aEvent )
 
 int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
 {
-    std::string         tool = "pcbnew.EditGroups.selectNewMember";
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    STATUS_TEXT_POPUP   statusPopup( frame() );
-    bool                done = false;
+    std::string       tool = "pcbnew.EditGroups.selectNewMember";
+    PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+    STATUS_TEXT_POPUP statusPopup( frame() );
+    bool              done = false;
 
     if( m_propertiesDialog )
         m_propertiesDialog->Show( false );
@@ -284,8 +284,9 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-            const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
-                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
+                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
+                        PCB_SELECTION_TOOL* sTool )
                     {
                     } );
 
@@ -344,10 +345,10 @@ int GROUP_TOOL::PickNewMember( const TOOL_EVENT& aEvent  )
 
 int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD*                  board     = getModel<BOARD>();
-    PCB_GROUP*              group     = nullptr;
+    PCB_SELECTION_TOOL*  selTool   = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+    BOARD*               board     = getModel<BOARD>();
+    PCB_GROUP*           group     = nullptr;
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
@@ -394,14 +395,14 @@ int GROUP_TOOL::Group( const TOOL_EVENT& aEvent )
 
 int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 {
-    const PCBNEW_SELECTION&  selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const PCB_SELECTION&     selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
     BOARD*                   board     = getModel<BOARD>();
     std::vector<BOARD_ITEM*> members;
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
 
-    PCBNEW_SELECTION selCopy = selection;
+    PCB_SELECTION selCopy = selection;
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     for( EDA_ITEM* item : selCopy )
@@ -452,9 +453,9 @@ int GROUP_TOOL::Ungroup( const TOOL_EVENT& aEvent )
 
 int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD_COMMIT            commit( m_frame );
+    PCB_SELECTION_TOOL*  selTool   = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+    BOARD_COMMIT         commit( m_frame );
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
@@ -489,8 +490,8 @@ int GROUP_TOOL::RemoveFromGroup( const TOOL_EVENT& aEvent )
 
 int GROUP_TOOL::EnterGroup( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*         selTool   = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
+    PCB_SELECTION_TOOL*  selTool   = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
 
     if( selection.GetSize() == 1 && selection[0]->Type() == PCB_GROUP_T )
         selTool->EnterGroup();
@@ -501,7 +502,7 @@ int GROUP_TOOL::EnterGroup( const TOOL_EVENT& aEvent )
 
 int GROUP_TOOL::LeaveGroup( const TOOL_EVENT& aEvent )
 {
-    m_toolMgr->GetTool<SELECTION_TOOL>()->ExitGroup( true /* Select the group */ );
+    m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->ExitGroup( true /* Select the group */ );
     return 0;
 }
 

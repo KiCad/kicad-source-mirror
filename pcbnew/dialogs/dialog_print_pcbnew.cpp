@@ -33,7 +33,7 @@
 #include <board.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/pcbnew_control.h>
+#include <tools/pcb_control.h>
 #include <dialog_print_generic.h>
 #include <pcbnew_printout.h>
 
@@ -435,7 +435,7 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
 }
 
 
-int PCBNEW_CONTROL::Print( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::Print( const TOOL_EVENT& aEvent )
 {
     // Selection affects the origin item visibility
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );

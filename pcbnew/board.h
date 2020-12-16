@@ -34,7 +34,7 @@
 #include <netinfo.h>
 #include <pcb_plot_params.h>
 #include <title_block.h>
-#include <tools/pcbnew_selection.h>
+#include <tools/pcb_selection.h>
 
 class BOARD_COMMIT;
 class PCB_BASE_FRAME;
@@ -1163,6 +1163,6 @@ public:
      * Check which selection tool group operations are legal given the selection.
      * @return bit field of legal ops.
      */
-    GroupLegalOpsField GroupLegalOps( const PCBNEW_SELECTION& selection ) const;
+    GroupLegalOpsField GroupLegalOps( const PCB_SELECTION& selection ) const;
 };
 #endif      // CLASS_BOARD_H_

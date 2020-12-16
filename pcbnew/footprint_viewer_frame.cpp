@@ -52,9 +52,9 @@
 #include <tools/pcb_viewer_tools.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_editor_conditions.h>
-#include <tools/pcbnew_control.h>
-#include <tools/pcbnew_picker_tool.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_control.h>
+#include <tools/pcb_picker_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/tokenzr.h>
 
@@ -203,11 +203,11 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_CONTROL );
+    m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );    // for std context menus (zoom & grid)
     m_toolManager->RegisterTool( new COMMON_CONTROL );
-    m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL ); // for setting grid origin
+    m_toolManager->RegisterTool( new PCB_PICKER_TOOL ); // for setting grid origin
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
 
@@ -293,7 +293,7 @@ FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 
 SELECTION& FOOTPRINT_VIEWER_FRAME::GetCurrentSelection()
 {
-    return m_toolManager->GetTool<SELECTION_TOOL>()->GetSelection();
+    return m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 }
 
 

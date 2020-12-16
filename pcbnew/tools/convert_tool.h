@@ -29,7 +29,7 @@
 #include <tool/tool_interactive.h>
 
 class CONDITIONAL_MENU;
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 class PCB_BASE_FRAME;
 
 
@@ -89,9 +89,9 @@ private:
      */
     static SHAPE_POLY_SET makePolysFromRects( const std::deque<EDA_ITEM*>& aItems );
 
-    SELECTION_TOOL*   m_selectionTool;
-    CONDITIONAL_MENU* m_menu;
-    PCB_BASE_FRAME*   m_frame;
+    PCB_SELECTION_TOOL* m_selectionTool;
+    CONDITIONAL_MENU*   m_menu;
+    PCB_BASE_FRAME*     m_frame;
 };
 
 #endif

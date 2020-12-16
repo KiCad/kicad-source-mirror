@@ -34,7 +34,7 @@
 #include <board_commit.h>
 #include <dialogs/dialog_push_pad_properties.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/edit_tool.h>
 #include <dialogs/dialog_enum_pads.h>
@@ -65,7 +65,7 @@ void PAD_TOOL::Reset( RESET_REASON aReason )
 
 bool PAD_TOOL::Init()
 {
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     if( selTool )
     {
@@ -107,9 +107,9 @@ bool PAD_TOOL::Init()
 
 int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 {
-    auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool.GetSelection();
-    const PAD&  masterPad = frame()->GetDesignSettings().m_Pad_Master;
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+    const PAD&           masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
     BOARD_COMMIT commit( frame() );
 
@@ -134,10 +134,9 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 
 int PAD_TOOL::copyPadSettings( const TOOL_EVENT& aEvent )
 {
-    auto& selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool.GetSelection();
-
-    PAD& masterPad = frame()->GetDesignSettings().m_Pad_Master;
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+    PAD&                 masterPad = frame()->GetDesignSettings().m_Pad_Master;
 
     // can only copy from a single pad
     if( selection.Size() == 1 )
@@ -209,9 +208,9 @@ static void doPushPadProperties( BOARD& board, const PAD& aSrcPad, BOARD_COMMIT&
 
 int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 {
-    auto&       selTool = *m_toolMgr->GetTool<SELECTION_TOOL>();
-    const auto& selection = selTool.GetSelection();
-    PAD*        srcPad;
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+    PAD*                 srcPad;
 
     if( selection.Size() == 1 && selection[0]->Type() == PCB_PAD_T )
         srcPad = static_cast<PAD*>( selection[0] );
@@ -510,7 +509,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
 {
     PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
     WX_INFOBAR*         infoBar = frame()->GetInfoBar();
-    PCBNEW_SELECTION&   selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PCB_SELECTION&      selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
     wxString            msg;
 
     if( m_editPad != niluuid )

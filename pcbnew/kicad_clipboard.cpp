@@ -58,7 +58,7 @@ void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 }
 
 
-void CLIPBOARD_IO::SaveSelection( const PCBNEW_SELECTION& aSelected, bool isFootprintEditor )
+void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootprintEditor )
 {
     VECTOR2I refPoint( 0, 0 );
 

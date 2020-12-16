@@ -26,14 +26,14 @@
 #define ALIGN_DISTRIBUTE_TOOL_H_
 
 #include <tool/tool_interactive.h>
-#include <tools/pcbnew_selection.h>
+#include <tools/pcb_selection.h>
 #include <board_item.h>
 #include <pcb_base_frame.h>
 
 using ALIGNMENT_RECT = std::pair<BOARD_ITEM*, EDA_RECT>;
 using ALIGNMENT_RECTS = std::vector<ALIGNMENT_RECT>;
 
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 
 class ALIGN_DISTRIBUTE_TOOL : public TOOL_INTERACTIVE
 {
@@ -101,7 +101,6 @@ public:
     void setTransitions() override;
 
 private:
-
     /**
      * Function GetSelections()
      * Populates two vectors with the sorted selection and sorted locked items
@@ -129,12 +128,6 @@ private:
      */
     int doAlignRight();
 
-    SELECTION_TOOL* m_selectionTool;
-
-    ACTION_MENU* m_placementMenu;
-
-    PCB_BASE_FRAME* m_frame;
-
     /**
      * Check a selection to ensure locks are valid for alignment.
      *
@@ -143,7 +136,7 @@ private:
      * We also check the lock of a pad's parent as we will not move pads independently of
      * the parent footprint
      */
-    int checkLockedStatus( const PCBNEW_SELECTION &selection ) const;
+    int checkLockedStatus( const PCB_SELECTION &selection ) const;
 
     /**
      * Distributes selected items using an even spacing between the centers of their bounding boxes
@@ -180,6 +173,11 @@ private:
     void doDistributeGapsVertically( ALIGNMENT_RECTS &itemsToDistribute,
                                      const BOARD_ITEM *lastItem,
                                      int totalGap ) const;
+
+private:
+    PCB_SELECTION_TOOL*  m_selectionTool;
+    ACTION_MENU*         m_placementMenu;
+    PCB_BASE_FRAME*      m_frame;
 };
 
 #endif /* ALIGN_DISTRIBUTE_TOOL_H_ */

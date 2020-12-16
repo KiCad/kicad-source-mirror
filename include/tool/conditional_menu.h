@@ -30,7 +30,7 @@
 #include <list>
 #include <wx/wx.h>
 
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 class TOOL_ACTION;
 class TOOL_INTERACTIVE;
 

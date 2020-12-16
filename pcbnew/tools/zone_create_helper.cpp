@@ -29,7 +29,7 @@
 #include <board_commit.h>
 #include <pcb_painter.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <zone_filler.h>
 
 ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, PARAMS& aParams ):
@@ -65,7 +65,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     zoneInfo.m_Zone_45_Only = ( m_params.m_leaderMode == POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
 
     // If we don't have a net from highlighing, maybe we can get one from the selection
-    SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selectionTool = m_tool.GetManager()->GetTool<PCB_SELECTION_TOOL>();
 
     if( selectionTool && !selectionTool->GetSelection().Empty()
             && zoneInfo.m_NetcodeSelection == -1 )

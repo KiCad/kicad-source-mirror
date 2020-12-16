@@ -35,7 +35,7 @@
 #include <footprint.h>
 #include <plugins/kicad/pcb_parser.h>
 #include <memory.h>
-#include <tools/pcbnew_selection.h>
+#include <tools/pcb_selection.h>
 
 
 class CLIPBOARD_IO : public PCB_IO
@@ -54,7 +54,7 @@ public:
      * Writes all the settings of the BOARD* set by setBoard() and then adds all the
      * BOARD_ITEMs found in selection formatted by PCB_IO to clipboard as sexpr text
      */
-    void SaveSelection( const PCBNEW_SELECTION& selected, bool isFootprintEditor );
+    void SaveSelection( const PCB_SELECTION& selected, bool isFootprintEditor );
 
     BOARD_ITEM* Parse();
 

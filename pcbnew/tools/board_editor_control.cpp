@@ -22,11 +22,11 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include "pcb_editor_control.h"
+#include "board_editor_control.h"
 #include "drawing_tool.h"
 #include "pcb_actions.h"
-#include "pcbnew_picker_tool.h"
-#include "selection_tool.h"
+#include "pcb_picker_tool.h"
+#include "pcb_selection_tool.h"
 #include "edit_tool.h"
 #include "tool/tool_event.h"
 #include <bitmaps.h>
@@ -120,7 +120,7 @@ public:
 };
 
 
-PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
+BOARD_EDITOR_CONTROL::BOARD_EDITOR_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.EditorControl" ),
     m_frame( nullptr )
 {
@@ -129,12 +129,12 @@ PCB_EDITOR_CONTROL::PCB_EDITOR_CONTROL() :
 }
 
 
-PCB_EDITOR_CONTROL::~PCB_EDITOR_CONTROL()
+BOARD_EDITOR_CONTROL::~BOARD_EDITOR_CONTROL()
 {
 }
 
 
-void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
+void BOARD_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_EDIT_FRAME>();
 
@@ -147,7 +147,7 @@ void PCB_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-bool PCB_EDITOR_CONTROL::Init()
+bool BOARD_EDITOR_CONTROL::Init()
 {
     auto activeToolCondition =
             [ this ] ( const SELECTION& aSel )
@@ -188,7 +188,7 @@ bool PCB_EDITOR_CONTROL::Init()
 
     // Add the PCB control menus to relevant other tools
 
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     if( selTool )
     {
@@ -233,42 +233,42 @@ bool PCB_EDITOR_CONTROL::Init()
 }
 
 
-int PCB_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_NEW_BOARD );
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::Open( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::Open( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_LOAD_FILE );
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_SAVE_BOARD );
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::SaveAs( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_SAVE_BOARD_AS );
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::SaveCopyAs( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::SaveCopyAs( const TOOL_EVENT& aEvent )
 {
     m_frame->Files_io_from_id( ID_COPY_BOARD_AS );
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 {
     PICKED_ITEMS_LIST   undoCmd;
     WS_PROXY_UNDO_ITEM* undoItem = new WS_PROXY_UNDO_ITEM( m_frame );
@@ -288,28 +288,28 @@ int PCB_EDITOR_CONTROL::PageSettings( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::Plot( const TOOL_EVENT& aEvent )
 {
     m_frame->ToPlotter( ID_GEN_PLOT );
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::BoardSetup( const TOOL_EVENT& aEvent )
 {
     getEditFrame<PCB_EDIT_FRAME>()->ShowBoardSetupDialog();
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::ImportNetlist( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ImportNetlist( const TOOL_EVENT& aEvent )
 {
     getEditFrame<PCB_EDIT_FRAME>()->InstallNetlistFrame();
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
 {
     wxString fullFileName = frame()->GetBoard()->GetFileName();
     wxString path;
@@ -329,7 +329,7 @@ int PCB_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
 {
     wxString    fullFileName = m_frame->GetLastPath( LAST_PATH_SPECCTRADSN );
     wxFileName  fn;
@@ -356,7 +356,7 @@ int PCB_EDITOR_CONTROL::ExportSpecctraDSN( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
 
@@ -375,7 +375,7 @@ int PCB_EDITOR_CONTROL::GenerateFabFiles( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 {
     int      errors = 0;
     wxString details;
@@ -492,7 +492,7 @@ int PCB_EDITOR_CONTROL::RepairBoard( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
 {
     NETLIST netlist;
 
@@ -505,7 +505,7 @@ int PCB_EDITOR_CONTROL::UpdatePCBFromSchematic( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-int PCB_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
 {
     if( Kiface().IsSingle() )
     {
@@ -528,21 +528,21 @@ int PCB_EDITOR_CONTROL::UpdateSchematicFromPCB( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ShowEeschema( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ShowEeschema( const TOOL_EVENT& aEvent )
 {
     m_frame->RunEeschema();
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
 {
     getEditFrame<PCB_EDIT_FRAME>()->ToggleLayersManager();
     return 0;
 }
 
 
-int PCB_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 {
 #if defined( KICAD_SCRIPTING_WXPYTHON )
     m_frame->ScriptingConsoleEnableDisable();
@@ -552,11 +552,11 @@ int PCB_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 
 
 // Track & via size control
-int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
     constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
     {
@@ -618,11 +618,11 @@ int PCB_EDITOR_CONTROL::TrackWidthInc( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
     constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
     {
@@ -686,11 +686,11 @@ int PCB_EDITOR_CONTROL::TrackWidthDec( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
     constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
     {
@@ -735,11 +735,11 @@ int PCB_EDITOR_CONTROL::ViaSizeInc( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 {
     BOARD_DESIGN_SETTINGS& designSettings = getModel<BOARD>()->GetDesignSettings();
     constexpr KICAD_T      types[] = { PCB_TRACE_T, PCB_VIA_T, EOT };
-    PCBNEW_SELECTION&      selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    PCB_SELECTION&         selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( m_frame->ToolStackIsEmpty() && SELECTION_CONDITIONS::OnlyTypes( types )( selection ) )
     {
@@ -792,7 +792,7 @@ int PCB_EDITOR_CONTROL::ViaSizeDec( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 {
     FOOTPRINT*            fp = aEvent.Parameter<FOOTPRINT*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -956,29 +956,29 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ToggleLockSelected( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ToggleLockSelected( const TOOL_EVENT& aEvent )
 {
     return modifyLockSelected( TOGGLE );
 }
 
 
-int PCB_EDITOR_CONTROL::LockSelected( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::LockSelected( const TOOL_EVENT& aEvent )
 {
     return modifyLockSelected( ON );
 }
 
 
-int PCB_EDITOR_CONTROL::UnlockSelected( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::UnlockSelected( const TOOL_EVENT& aEvent )
 {
     return modifyLockSelected( OFF );
 }
 
 
-int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
+int BOARD_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 {
-    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
-    BOARD_COMMIT            commit( m_frame );
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
+    BOARD_COMMIT         commit( m_frame );
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true );
@@ -1031,7 +1031,7 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 }
 
 
-int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
@@ -1180,11 +1180,11 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE*>& aOriginZones,
 }
 
 
-int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 {
-    const PCBNEW_SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
-    BOARD*                  board = getModel<BOARD>();
-    BOARD_COMMIT            commit( m_frame );
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
+    BOARD*               board = getModel<BOARD>();
+    BOARD_COMMIT         commit( m_frame );
 
     if( selection.Size() < 2 )
         return 0;
@@ -1238,10 +1238,10 @@ int PCB_EDITOR_CONTROL::ZoneMerge( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*  selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
 
     // because this pops up the zone editor, it would be confusing to handle multiple zones,
     // so just handle single selections containing exactly one zone
@@ -1289,10 +1289,10 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*  selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const SELECTION& selection = selTool->RequestSelection( EDIT_TOOL::FootprintFilter );
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->RequestSelection( EDIT_TOOL::FootprintFilter );
 
     if( selection.Empty() )
         return 0;
@@ -1318,8 +1318,8 @@ int PCB_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                           EDA_ITEM* originViewItem, const VECTOR2D& aPosition )
+void BOARD_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                             EDA_ITEM* originViewItem, const VECTOR2D& aPosition )
 {
     aFrame->GetDesignSettings().m_AuxOrigin = (wxPoint) aPosition;
     originViewItem->SetPosition( (wxPoint) aPosition );
@@ -1328,10 +1328,10 @@ void PCB_EDITOR_CONTROL::DoSetDrillOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* a
 }
 
 
-int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
-    std::string         tool = aEvent.GetCommandStr().get();
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
+    std::string      tool = aEvent.GetCommandStr().get();
+    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     // Deactivate other tools; particularly important if another PICKER is currently running
     Activate();
@@ -1350,7 +1350,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 }
 
 
-int PCB_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
 {
     view()->SetMirror( !view()->IsMirroredX(), false );
     view()->RecacheAllItems();
@@ -1360,57 +1360,57 @@ int PCB_EDITOR_CONTROL::FlipPcbView( const TOOL_EVENT& aEvent )
 }
 
 
-void PCB_EDITOR_CONTROL::setTransitions()
+void BOARD_EDITOR_CONTROL::setTransitions()
 {
-    Go( &PCB_EDITOR_CONTROL::New,                      ACTIONS::doNew.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Open,                     ACTIONS::open.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Save,                     ACTIONS::save.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::SaveAs,                   ACTIONS::saveAs.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::SaveCopyAs,               ACTIONS::saveCopyAs.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::PageSettings,             ACTIONS::pageSettings.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::Plot,                     ACTIONS::plot.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::New,                    ACTIONS::doNew.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::Open,                   ACTIONS::open.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::Save,                   ACTIONS::save.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::SaveAs,                 ACTIONS::saveAs.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::SaveCopyAs,             ACTIONS::saveCopyAs.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::PageSettings,           ACTIONS::pageSettings.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::Plot,                   ACTIONS::plot.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::BoardSetup,               PCB_ACTIONS::boardSetup.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ImportNetlist,            PCB_ACTIONS::importNetlist.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ImportSpecctraSession,    PCB_ACTIONS::importSpecctraSession.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ExportSpecctraDSN,        PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GenerateDrillFiles,       PCB_ACTIONS::generateDrillFiles.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,         PCB_ACTIONS::generateGerbers.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GeneratePosFile,          PCB_ACTIONS::generatePosFile.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,         PCB_ACTIONS::generateReportFile.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,         PCB_ACTIONS::generateD356File.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::GenerateFabFiles,         PCB_ACTIONS::generateBOM.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::BoardSetup,             PCB_ACTIONS::boardSetup.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ImportNetlist,          PCB_ACTIONS::importNetlist.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ImportSpecctraSession,  PCB_ACTIONS::importSpecctraSession.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ExportSpecctraDSN,      PCB_ACTIONS::exportSpecctraDSN.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateDrillFiles,     PCB_ACTIONS::generateDrillFiles.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateGerbers.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GeneratePosFile,        PCB_ACTIONS::generatePosFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateReportFile.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateD356File.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::GenerateFabFiles,       PCB_ACTIONS::generateBOM.MakeEvent() );
 
     // Track & via size control
-    Go( &PCB_EDITOR_CONTROL::TrackWidthInc,            PCB_ACTIONS::trackWidthInc.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::TrackWidthDec,            PCB_ACTIONS::trackWidthDec.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ViaSizeInc,               PCB_ACTIONS::viaSizeInc.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ViaSizeDec,               PCB_ACTIONS::viaSizeDec.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::TrackWidthInc,          PCB_ACTIONS::trackWidthInc.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::TrackWidthDec,          PCB_ACTIONS::trackWidthDec.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ViaSizeInc,             PCB_ACTIONS::viaSizeInc.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ViaSizeDec,             PCB_ACTIONS::viaSizeDec.MakeEvent() );
 
     // Zone actions
-    Go( &PCB_EDITOR_CONTROL::ZoneMerge,                PCB_ACTIONS::zoneMerge.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ZoneDuplicate,            PCB_ACTIONS::zoneDuplicate.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ZoneMerge,              PCB_ACTIONS::zoneMerge.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ZoneDuplicate,          PCB_ACTIONS::zoneDuplicate.MakeEvent() );
 
     // Placing tools
-    Go( &PCB_EDITOR_CONTROL::PlaceTarget,              PCB_ACTIONS::placeTarget.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::PlaceModule,              PCB_ACTIONS::placeModule.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::DrillOrigin,              PCB_ACTIONS::drillOrigin.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::PlaceTarget,            PCB_ACTIONS::placeTarget.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::PlaceModule,            PCB_ACTIONS::placeModule.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::DrillOrigin,            PCB_ACTIONS::drillOrigin.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::EditFpInFpEditor,         PCB_ACTIONS::editFpInFpEditor.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::EditFpInFpEditor,       PCB_ACTIONS::editFpInFpEditor.MakeEvent() );
 
     // Other
-    Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,       PCB_ACTIONS::toggleLock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::LockSelected,             PCB_ACTIONS::lock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UnlockSelected,           PCB_ACTIONS::unlock.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ToggleLockSelected,     PCB_ACTIONS::toggleLock.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::LockSelected,           PCB_ACTIONS::lock.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UnlockSelected,         PCB_ACTIONS::unlock.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::UpdatePCBFromSchematic,   ACTIONS::updatePcbFromSchematic.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::UpdateSchematicFromPCB,   ACTIONS::updateSchematicFromPcb.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ShowEeschema,             PCB_ACTIONS::showEeschema.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ToggleLayersManager,      PCB_ACTIONS::showLayersManager.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::TogglePythonConsole,      PCB_ACTIONS::showPythonConsole.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::FlipPcbView,              PCB_ACTIONS::flipBoard.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::RepairBoard,              PCB_ACTIONS::repairBoard.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UpdatePCBFromSchematic, ACTIONS::updatePcbFromSchematic.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::UpdateSchematicFromPCB, ACTIONS::updateSchematicFromPcb.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ShowEeschema,           PCB_ACTIONS::showEeschema.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::ToggleLayersManager,    PCB_ACTIONS::showLayersManager.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::TogglePythonConsole,    PCB_ACTIONS::showPythonConsole.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::FlipPcbView,            PCB_ACTIONS::flipBoard.MakeEvent() );
+    Go( &BOARD_EDITOR_CONTROL::RepairBoard,            PCB_ACTIONS::repairBoard.MakeEvent() );
 }
 
 
-const int PCB_EDITOR_CONTROL::WIDTH_STEP = 100000;
+const int BOARD_EDITOR_CONTROL::WIDTH_STEP = 100000;

@@ -26,13 +26,13 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include "dialogs/dialog_position_relative.h"
 #include "dialogs/dialog_position_relative_base.h"
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 class DIALOG_POSITION_RELATIVE;
 
 /**
@@ -87,18 +87,17 @@ public:
     void setTransitions() override;
 
 private:
-    DIALOG_POSITION_RELATIVE* m_dialog;
+    DIALOG_POSITION_RELATIVE*     m_dialog;
 
-    ///> Selection tool used for obtaining selected items
-    SELECTION_TOOL*  m_selectionTool;
-    PCBNEW_SELECTION m_selection;
+    PCB_SELECTION_TOOL*           m_selectionTool;
+    PCB_SELECTION                 m_selection;
 
     std::unique_ptr<BOARD_COMMIT> m_commit;
 
-    EDA_ITEM* m_anchor_item;
-    wxPoint   m_anchor;
+    EDA_ITEM*                     m_anchor_item;
+    wxPoint                       m_anchor;
 
-    wxPoint   m_translation;
+    wxPoint                       m_translation;
 };
 
 #endif

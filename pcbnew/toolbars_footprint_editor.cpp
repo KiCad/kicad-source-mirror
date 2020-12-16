@@ -29,7 +29,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <pcb_layer_box_selector.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
@@ -200,7 +200,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::toggleFootprintTree, ACTION_TOOLBAR::TOGGLE );
 
-    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
     gridMenu->Add( ACTIONS::gridProperties );
     m_optionsToolBar->AddToolContextMenu( ACTIONS::toggleGrid, std::move( gridMenu ) );

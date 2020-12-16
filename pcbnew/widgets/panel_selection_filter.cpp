@@ -20,7 +20,7 @@
 
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <widgets/panel_selection_filter.h>
 
 
@@ -30,7 +30,7 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
         m_onlyCheckbox( nullptr )
 {
     wxASSERT( m_frame );
-    m_tool = m_frame->GetToolManager()->GetTool<SELECTION_TOOL>();
+    m_tool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     wxASSERT( m_tool );
 
     SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();

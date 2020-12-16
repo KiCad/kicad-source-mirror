@@ -45,7 +45,7 @@
 #include "3d_cache/dialogs/3d_cache_dialogs.h"
 #include <settings/settings_manager.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 
 #include <fp_lib_table.h>
 
@@ -635,7 +635,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
     }
 
     // Remove text items:
-    SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
 
     for( FP_TEXT* item: items_to_remove )
     {

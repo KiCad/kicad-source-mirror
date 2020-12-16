@@ -38,9 +38,9 @@
 #include <tool/selection_conditions.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/edit_tool.h>
-#include <tools/pcbnew_picker_tool.h>
+#include <tools/pcb_picker_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/grid_helper.h>
 #include <tools/pad_tool.h>
@@ -99,7 +99,7 @@ SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool 
 bool EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     auto inFootprintEditor =
             [ this ]( const SELECTION& aSelection )
@@ -175,8 +175,8 @@ bool EDIT_TOOL::Init()
 
 int EDIT_TOOL::GetAndPlace( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    FOOTPRINT*      fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
+    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    FOOTPRINT*          fp = getEditFrame<PCB_BASE_FRAME>()->GetFootprintFromBoardByReference();
 
     if( fp )
     {
@@ -242,8 +242,8 @@ int EDIT_TOOL::Drag( const TOOL_EVENT& aEvent )
     if( aEvent.IsAction( &PCB_ACTIONS::dragFreeAngle ) )
         mode |= PNS::DM_FREE_ANGLE;
 
-    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -307,8 +307,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -331,7 +331,7 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
     // Now filter out locked and grouped items.  We cannot do this in the first RequestSelection()
     // as we need the item_layers when a pad is the selection front.
     selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -627,8 +627,8 @@ int EDIT_TOOL::doMoveSelection( TOOL_EVENT aEvent, bool aPickReference )
 
 int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -700,8 +700,8 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
     // Store last used fillet radius to allow pressing "enter" if repeat fillet is required
     static long long filletRadiusIU = 0;
 
-    auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -900,9 +900,9 @@ int EDIT_TOOL::FilletTracks( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_EDIT_FRAME*    editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-    const PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
             } );
 
@@ -954,8 +954,8 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
             },
             !m_dragging /* prompt user regarding locked items */ );
@@ -1054,8 +1054,8 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
             },
             !m_dragging /* prompt user regarding locked items */ );
@@ -1151,8 +1151,8 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -1240,7 +1240,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     Activate();
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
-    PCBNEW_SELECTION selectionCopy;
+    PCB_SELECTION selectionCopy;
     bool isCut = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::CUT;
     bool isAlt = aEvent.Parameter<PCB_ACTIONS::REMOVE_FLAGS>() == PCB_ACTIONS::REMOVE_FLAGS::ALT;
 
@@ -1254,7 +1254,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     else
     {
         selectionCopy = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                 {
                 },
                 true /* prompt user regarding locked items */ );
@@ -1435,8 +1435,8 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    const PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -1544,11 +1544,11 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can modify
     const auto& selection =
             m_isFootprintEditor ? m_selectionTool->RequestSelection(
-                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                     {
                     } )
             /*is board editor*/ : m_selectionTool->RequestSelection(
-                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                     {
                         // Iterate from the back so we don't have to worry about removals.
                         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
@@ -1649,7 +1649,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                         });
             }
 
-            // Clear the selection flag here, otherwise the SELECTION_TOOL
+            // Clear the selection flag here, otherwise the PCB_SELECTION_TOOL
             // will not properly select it later on
             dupe_item->ClearSelected();
 
@@ -1696,11 +1696,11 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 
     const auto& selection =
             m_isFootprintEditor ? m_selectionTool->RequestSelection(
-                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                     {
                     } )
             /*is board editor*/ : m_selectionTool->RequestSelection(
-                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+                    []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
                     {
                         // Iterate from the back so we don't have to worry about removals.
                         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
@@ -1732,7 +1732,8 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 }
 
 
-void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
+                           PCB_SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
@@ -1745,7 +1746,7 @@ void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELEC
 
 
 void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
-                                 SELECTION_TOOL* sTool )
+                                 PCB_SELECTION_TOOL* sTool )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
     {
@@ -1757,7 +1758,7 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 }
 
 
-bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
+bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
 {
     if( m_dragging && aSelection.HasReferencePoint() )
         return false;
@@ -1783,9 +1784,9 @@ bool EDIT_TOOL::updateModificationPoint( PCBNEW_SELECTION& aSelection )
 bool EDIT_TOOL::pickReferencePoint( const wxString& aTooltip, const wxString& aSuccessMessage,
                                     const wxString& aCanceledMessage, VECTOR2I& aReferencePoint )
 {
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    OPT<VECTOR2I>       pickedPoint;
-    bool                done = false;
+    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+    OPT<VECTOR2I>    pickedPoint;
+    bool             done = false;
 
     m_statusPopup->SetText( aTooltip );
 
@@ -1867,8 +1868,8 @@ int EDIT_TOOL::copyToClipboard( const TOOL_EVENT& aEvent )
     frame()->PushTool( tool );
     Activate();
 
-    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
             },
             aEvent.IsAction( &ACTIONS::cut ) /* prompt user regarding locked items */ );

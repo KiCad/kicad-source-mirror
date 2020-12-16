@@ -44,7 +44,7 @@ using namespace std::placeholders;
 #include "board_netlist_updater.h"
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <project/project_file.h>  // LAST_PATH_TYPE
 
 
@@ -120,8 +120,8 @@ void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aR
         // Now fix a reference point to move the footprints.
         // We use the first footprint in list as reference point
         // The graphic cursor will be on this fp when moving the footprints.
-        SELECTION_TOOL*   selTool = GetToolManager()->GetTool<SELECTION_TOOL>();
-        PCBNEW_SELECTION& selection = selTool->GetSelection();
+        PCB_SELECTION_TOOL* selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+        PCB_SELECTION&      selection = selTool->GetSelection();
         selection.SetReferencePoint( newFootprints[0]->GetPosition() );
     }
 

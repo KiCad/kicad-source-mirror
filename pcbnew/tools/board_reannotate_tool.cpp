@@ -1,7 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2020 Brian Piccioni brian@documenteddesigns.com
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * @author Brian Piccioni <brian@documenteddesigns.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,21 +23,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCBNEW_SELECTION_H
-#define PCBNEW_SELECTION_H
+#include <tool/tool_manager.h>
+#include <wx/filedlg.h>
+#include <wx/wx.h>
+#include <tools/board_reannotate_tool.h>
 
-#include <layers_id_colors_and_visibility.h>
-#include <tool/selection.h>
 
-
-class PCBNEW_SELECTION : public SELECTION
+BOARD_REANNOTATE_TOOL::BOARD_REANNOTATE_TOOL() :
+     PCB_TOOL_BASE( "pcbnew.ReannotateTool" ),
+     m_frame( nullptr )
 {
-public:
-    EDA_ITEM* GetTopLeftItem( bool aFootprintsOnly = false ) const override;
-    
-    const KIGFX::VIEW_GROUP::ITEMS updateDrawList() const override;
+}
 
-    const LSET GetSelectionLayers();
-};
 
-#endif  //  PCBNEW_SELECTION_H
+bool BOARD_REANNOTATE_TOOL::Init()
+{
+    return true;
+}
+
+
+void BOARD_REANNOTATE_TOOL::Reset( RESET_REASON aReason )
+{
+    m_frame = getEditFrame<PCB_EDIT_FRAME>();
+}
+
+
+int BOARD_REANNOTATE_TOOL::ShowReannotateDialog( const TOOL_EVENT& aEvent )
+{
+    DIALOG_BOARD_REANNOTATE dialog( m_frame );
+    dialog.ShowModal();
+    return 0;
+}
+
+
+void BOARD_REANNOTATE_TOOL::setTransitions()
+{
+    Go( &BOARD_REANNOTATE_TOOL::ShowReannotateDialog, PCB_ACTIONS::boardReannotate.MakeEvent() );
+}

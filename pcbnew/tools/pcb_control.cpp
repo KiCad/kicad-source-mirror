@@ -25,9 +25,9 @@
 
 #include "edit_tool.h"
 #include "pcb_actions.h"
-#include "pcbnew_control.h"
-#include "pcbnew_picker_tool.h"
-#include "selection_tool.h"
+#include "pcb_control.h"
+#include "pcb_picker_tool.h"
+#include "pcb_selection_tool.h"
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 #include <board_commit.h>
@@ -61,7 +61,7 @@ extern bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileN
 extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 
-PCBNEW_CONTROL::PCBNEW_CONTROL() :
+PCB_CONTROL::PCB_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.Control" ),
     m_frame( nullptr ),
     m_pickerItem( nullptr )
@@ -70,12 +70,12 @@ PCBNEW_CONTROL::PCBNEW_CONTROL() :
 }
 
 
-PCBNEW_CONTROL::~PCBNEW_CONTROL()
+PCB_CONTROL::~PCB_CONTROL()
 {
 }
 
 
-void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
+void PCB_CONTROL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
@@ -89,7 +89,7 @@ void PCBNEW_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-int PCBNEW_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_FOOTPRINT_EDITOR ) || m_frame->IsType( FRAME_PCB_EDITOR ) )
     {
@@ -103,7 +103,7 @@ int PCBNEW_CONTROL::AddLibrary( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::Quit( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::Quit( const TOOL_EVENT& aEvent )
 {
     m_frame->Close( false );
     return 0;
@@ -116,7 +116,7 @@ template<class T> void Flip( T& aValue )
 }
 
 
-int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
@@ -135,7 +135,7 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
@@ -161,7 +161,7 @@ int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
@@ -180,7 +180,7 @@ int PCBNEW_CONTROL::ViaDisplayMode( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
@@ -210,7 +210,7 @@ int PCBNEW_CONTROL::ZoneDisplayMode( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
@@ -225,7 +225,7 @@ int PCBNEW_CONTROL::HighContrastMode( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
@@ -251,7 +251,7 @@ int PCBNEW_CONTROL::HighContrastModeCycle( const TOOL_EVENT& aEvent )
 
 
 // Layer control
-int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 {
     m_frame->SwitchLayer( NULL, aEvent.Parameter<PCB_LAYER_ID>() );
 
@@ -259,11 +259,11 @@ int PCBNEW_CONTROL::LayerSwitch( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_FRAME* editFrame = m_frame;
+    PCB_BASE_FRAME* editFrame  = m_frame;
     BOARD*          brd        = board();
-    LAYER_NUM layer = editFrame->GetActiveLayer();
+    LAYER_NUM       layer      = editFrame->GetActiveLayer();
     LAYER_NUM       startLayer = layer;
 
     if( layer < F_Cu || layer > B_Cu )
@@ -285,11 +285,11 @@ int PCBNEW_CONTROL::LayerNext( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 {
-    PCB_BASE_FRAME* editFrame = m_frame;
+    PCB_BASE_FRAME* editFrame  = m_frame;
     BOARD*          brd        = board();
-    LAYER_NUM layer = editFrame->GetActiveLayer();
+    LAYER_NUM       layer      = editFrame->GetActiveLayer();
     LAYER_NUM       startLayer = layer;
 
     if( layer < F_Cu || layer > B_Cu )
@@ -313,7 +313,7 @@ int PCBNEW_CONTROL::LayerPrev( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 {
     LAYER_NUM currentLayer = m_frame->GetActiveLayer();
     PCB_SCREEN* screen = m_frame->GetScreen();
@@ -333,7 +333,7 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 #define ALPHA_MAX 1.00
 #define ALPHA_STEP 0.05
 
-int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 {
     auto settings = m_frame->GetColorSettings();
 
@@ -359,7 +359,7 @@ int PCBNEW_CONTROL::LayerAlphaInc( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 {
     auto settings = m_frame->GetColorSettings();
 
@@ -386,8 +386,8 @@ int PCBNEW_CONTROL::LayerAlphaDec( const TOOL_EVENT& aEvent )
 
 
 // Grid control
-void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
-                                      EDA_ITEM* originViewItem, const VECTOR2D& aPoint )
+void PCB_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
+                                   EDA_ITEM* originViewItem, const VECTOR2D& aPoint )
 {
     aFrame->GetDesignSettings().m_GridOrigin = (wxPoint) aPoint;
     aView->GetGAL()->SetGridOrigin( aPoint );
@@ -397,7 +397,7 @@ void PCBNEW_CONTROL::DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame
 }
 
 
-int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 {
     VECTOR2D* origin = aEvent.Parameter<VECTOR2D*>();
 
@@ -412,8 +412,8 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
         if( m_isFootprintEditor && !getEditFrame<PCB_BASE_EDIT_FRAME>()->GetModel() )
             return 0;
 
-        std::string         tool = aEvent.GetCommandStr().get();
-        PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
+        std::string      tool = aEvent.GetCommandStr().get();
+        PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
         // Deactivate other tools; particularly important if another PICKER is currently running
         Activate();
@@ -433,7 +433,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 {
     m_frame->SaveCopyInUndoList( m_gridOrigin.get(), UNDO_REDO::GRIDORIGIN );
     DoSetGridOrigin( getView(), m_frame, m_gridOrigin.get(), VECTOR2D( 0, 0 ) );
@@ -444,13 +444,13 @@ int PCBNEW_CONTROL::GridResetOrigin( const TOOL_EVENT& aEvent )
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
-int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     if( m_isFootprintEditor && !m_frame->GetBoard()->GetFirstFootprint() )
         return 0;
 
-    std::string         tool = aEvent.GetCommandStr().get();
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
+    std::string      tool = aEvent.GetCommandStr().get();
+    PCB_PICKER_TOOL* picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
 
     m_pickerItem = nullptr;
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -474,7 +474,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
                     return true;
                 }
 
-                SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+                PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
                 selectionTool->UnbrightenItem( m_pickerItem );
                 selectionTool->AddItemToSel( m_pickerItem, true /*quiet mode*/ );
                 m_toolMgr->RunAction( ACTIONS::doDelete, true );
@@ -487,10 +487,10 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     picker->SetMotionHandler(
         [this] ( const VECTOR2D& aPos )
         {
-            BOARD* board = m_frame->GetBoard();
-            SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+            BOARD*                   board = m_frame->GetBoard();
+            PCB_SELECTION_TOOL*      selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
             GENERAL_COLLECTORS_GUIDE guide = m_frame->GetCollectorsGuide();
-            GENERAL_COLLECTOR collector;
+            GENERAL_COLLECTOR        collector;
             collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
 
             if( m_isFootprintEditor )
@@ -527,7 +527,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
         [this] ( const int& aFinalState )
         {
             if( m_pickerItem )
-                m_toolMgr->GetTool<SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
+                m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->UnbrightenItem( m_pickerItem );
 
             // Wake the selection tool after exiting to ensure the cursor gets updated
             m_toolMgr->RunAction( PCB_ACTIONS::selectionActivate, false );
@@ -596,7 +596,7 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
 }
 
 
-int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
     BOARD_ITEM* clipItem = pi.Parse();
@@ -716,7 +716,7 @@ int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 {
     int open_ctl;
     wxString fileName;
@@ -737,7 +737,7 @@ int PCBNEW_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 }
 
 
-// Helper function for PCBNEW_CONTROL::placeBoardItems()
+// Helper function for PCB_CONTROL::placeBoardItems()
 template<typename T>
 static void moveUnflaggedItems( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
@@ -796,7 +796,7 @@ static void moveUnflaggedItems( ZONES& aList, std::vector<BOARD_ITEM*>& aTarget,
 
 
 
-int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
+int PCB_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
 {
     // items are new if the current board is not the board source
     bool isNew = board() != aBoard;
@@ -808,8 +808,8 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
     moveUnflaggedItems( aBoard->Zones(), items, isNew );
 
     // Subtlety: When selecting a group via the mouse,
-    // SELECTION_TOOL::highlightInternal runs, which does a SetSelected() on all
-    // descendants. In PCBNEW_CONTROL::placeBoardItems, below, we skip that and
+    // PCB_SELECTION_TOOL::highlightInternal runs, which does a SetSelected() on all
+    // descendants. In PCB_CONTROL::placeBoardItems, below, we skip that and
     // mark items non-recursively.  That works because the saving of the
     // selection created aBoard that has the group and all descendents in it.
     moveUnflaggedItems( aBoard->Groups(), items, isNew );
@@ -818,15 +818,14 @@ int PCBNEW_CONTROL::placeBoardItems( BOARD* aBoard, bool aAnchorAtOrigin  )
 }
 
 
-int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
-                                     bool aAnchorAtOrigin )
+int PCB_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsNew,
+                                  bool aAnchorAtOrigin )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    EDIT_TOOL*      editTool = m_toolMgr->GetTool<EDIT_TOOL>();
-
-    PCBNEW_SELECTION& selection = selectionTool->GetSelection();
+    PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    EDIT_TOOL*          editTool = m_toolMgr->GetTool<EDIT_TOOL>();
+    PCB_SELECTION&      selection = selectionTool->GetSelection();
 
     for( BOARD_ITEM* item : aItems )
     {
@@ -873,7 +872,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
         else
             editTool->GetCurrentCommit()->Added( item );
 
-        // Matching the logic of SELECTION_TOOL::select for PCB_GROUP_T, there
+        // Matching the logic of PCB_SELECTION_TOOL::select for PCB_GROUP_T, there
         // is a distinction between which items are SetSelected and which are in
         // the selection object.  Top-level groups or items not in groups are
         // added to the selection object (via selection.Add(), below), but all
@@ -909,7 +908,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
 }
 
 
-int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
+int PCB_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 {
     PCB_EDIT_FRAME* editFrame = dynamic_cast<PCB_EDIT_FRAME*>( m_frame );
 
@@ -999,7 +998,7 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 }
 
 
-int PCBNEW_CONTROL::Undo( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::Undo( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
     wxCommandEvent       dummy;
@@ -1011,7 +1010,7 @@ int PCBNEW_CONTROL::Undo( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::Redo( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
     wxCommandEvent       dummy;
@@ -1023,10 +1022,10 @@ int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
-    SELECTION_TOOL*   selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    PCBNEW_SELECTION& selection = selTool->GetSelection();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION&      selection = selTool->GetSelection();
 
     if( selection.GetSize() == 1 )
     {
@@ -1089,81 +1088,81 @@ int PCBNEW_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
-void PCBNEW_CONTROL::setTransitions()
+void PCB_CONTROL::setTransitions()
 {
-    Go( &PCBNEW_CONTROL::AddLibrary,           ACTIONS::newLibrary.MakeEvent() );
-    Go( &PCBNEW_CONTROL::AddLibrary,           ACTIONS::addLibrary.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Print,                ACTIONS::print.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
+    Go( &PCB_CONTROL::AddLibrary,           ACTIONS::newLibrary.MakeEvent() );
+    Go( &PCB_CONTROL::AddLibrary,           ACTIONS::addLibrary.MakeEvent() );
+    Go( &PCB_CONTROL::Print,                ACTIONS::print.MakeEvent() );
+    Go( &PCB_CONTROL::Quit,                 ACTIONS::quit.MakeEvent() );
 
     // Display modes
-    Go( &PCBNEW_CONTROL::TrackDisplayMode,      PCB_ACTIONS::trackDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToggleRatsnest,        PCB_ACTIONS::showRatsnest.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToggleRatsnest,        PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ViaDisplayMode,        PCB_ACTIONS::viaDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );
+    Go( &PCB_CONTROL::TrackDisplayMode,      PCB_ACTIONS::trackDisplayMode.MakeEvent() );
+    Go( &PCB_CONTROL::ToggleRatsnest,        PCB_ACTIONS::showRatsnest.MakeEvent() );
+    Go( &PCB_CONTROL::ToggleRatsnest,        PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
+    Go( &PCB_CONTROL::ViaDisplayMode,        PCB_ACTIONS::viaDisplayMode.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
+    Go( &PCB_CONTROL::ZoneDisplayMode,       PCB_ACTIONS::zoneDisplayToggle.MakeEvent() );
+    Go( &PCB_CONTROL::HighContrastMode,      ACTIONS::highContrastMode.MakeEvent() );
+    Go( &PCB_CONTROL::HighContrastModeCycle, ACTIONS::highContrastModeCycle.MakeEvent() );
 
     // Layer control
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner2.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner3.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner4.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner5.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner6.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner7.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner8.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner9.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner10.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner11.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner12.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner13.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner14.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner15.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner16.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner17.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner18.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner19.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner20.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner21.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner22.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner23.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner24.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner25.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner26.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner27.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner28.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner29.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner30.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,          PCB_ACTIONS::layerBottom.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerNext,            PCB_ACTIONS::layerNext.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerPrev,            PCB_ACTIONS::layerPrev.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerToggle,          PCB_ACTIONS::layerToggle.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaInc,        PCB_ACTIONS::layerAlphaInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerTop.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner1.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner2.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner3.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner4.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner5.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner6.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner7.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner8.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner9.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner10.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner11.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner12.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner13.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner14.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner15.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner16.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner17.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner18.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner19.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner20.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner21.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner22.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner23.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner24.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner25.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner26.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner27.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner28.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner29.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerInner30.MakeEvent() );
+    Go( &PCB_CONTROL::LayerSwitch,          PCB_ACTIONS::layerBottom.MakeEvent() );
+    Go( &PCB_CONTROL::LayerNext,            PCB_ACTIONS::layerNext.MakeEvent() );
+    Go( &PCB_CONTROL::LayerPrev,            PCB_ACTIONS::layerPrev.MakeEvent() );
+    Go( &PCB_CONTROL::LayerToggle,          PCB_ACTIONS::layerToggle.MakeEvent() );
+    Go( &PCB_CONTROL::LayerAlphaInc,        PCB_ACTIONS::layerAlphaInc.MakeEvent() );
+    Go( &PCB_CONTROL::LayerAlphaDec,        PCB_ACTIONS::layerAlphaDec.MakeEvent() );
 
     // Grid control
-    Go( &PCBNEW_CONTROL::GridSetOrigin,        ACTIONS::gridSetOrigin.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridResetOrigin,      ACTIONS::gridResetOrigin.MakeEvent() );
+    Go( &PCB_CONTROL::GridSetOrigin,        ACTIONS::gridSetOrigin.MakeEvent() );
+    Go( &PCB_CONTROL::GridResetOrigin,      ACTIONS::gridResetOrigin.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::Undo,                 ACTIONS::undo.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Redo,                 ACTIONS::redo.MakeEvent() );
+    Go( &PCB_CONTROL::Undo,                 ACTIONS::undo.MakeEvent() );
+    Go( &PCB_CONTROL::Redo,                 ACTIONS::redo.MakeEvent() );
 
     // Miscellaneous
-    Go( &PCBNEW_CONTROL::DeleteItemCursor,     ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCB_CONTROL::DeleteItemCursor,     ACTIONS::deleteTool.MakeEvent() );
 
     // Append control
-    Go( &PCBNEW_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );
+    Go( &PCB_CONTROL::AppendBoardFromFile,  PCB_ACTIONS::appendBoard.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::Paste,                ACTIONS::paste.MakeEvent() );
+    Go( &PCB_CONTROL::Paste,                ACTIONS::paste.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::SelectedEvent );
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::UnselectedEvent );
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );
-    Go( &PCBNEW_CONTROL::UpdateMessagePanel,   EVENTS::SelectedItemsModified );
+    Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::SelectedEvent );
+    Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::UnselectedEvent );
+    Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::ClearedEvent );
+    Go( &PCB_CONTROL::UpdateMessagePanel,   EVENTS::SelectedItemsModified );
 }

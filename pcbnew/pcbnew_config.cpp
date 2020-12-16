@@ -32,7 +32,7 @@
 #include <panel_pcbnew_action_plugins.h>
 #include <panel_pcbnew_display_origin.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <page_layout/ws_data_model.h>
 #include <pcbplot.h>
 #include <pcb_painter.h>
@@ -117,7 +117,8 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
 
     m_appearancePanel->SetUserLayerPresets( project.m_LayerPresets );
 
-    SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+    PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();
 
     filterOpts = localSettings.m_SelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( filterOpts );
@@ -213,8 +214,10 @@ void PCB_EDIT_FRAME::SaveProjectSettings()
             pair.second->SetPcbColor( netclassColors.at( pair.first ) );
     }
 
-    SELECTION_FILTER_OPTIONS& filterOpts = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
-    localSettings.m_SelectionFilter      = filterOpts;
+    PCB_SELECTION_TOOL*       selTool = GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    SELECTION_FILTER_OPTIONS& filterOpts = selTool->GetFilter();
+
+    localSettings.m_SelectionFilter = filterOpts;
 
     if( !Prj().IsNullProject() )
         GetSettingsManager()->SaveProject();

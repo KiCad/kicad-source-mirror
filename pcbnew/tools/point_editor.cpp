@@ -32,7 +32,7 @@ using namespace std::placeholders;
 #include <geometry/seg.h>
 #include <confirm.h>
 #include "pcb_actions.h"
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include "point_editor.h"
 #include "grid_helper.h"
 #include <board_commit.h>
@@ -338,7 +338,7 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
 bool POINT_EDITOR::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
 
@@ -397,7 +397,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( !m_selectionTool || aEvent.Matches( EVENTS::InhibitSelectionEditing ) )
         return 0;
 
-    const PCBNEW_SELECTION& selection = m_selectionTool->GetSelection();
+    const PCB_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || selection.Front()->GetEditFlags() )
         return 0;

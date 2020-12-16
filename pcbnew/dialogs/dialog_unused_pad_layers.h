@@ -30,14 +30,13 @@
 
 class COMMIT;
 class PCB_BASE_FRAME;
-class PCBNEW_SELECTION;
+class PCB_SELECTION;
 
 class DIALOG_UNUSED_PAD_LAYERS : public DIALOG_UNUSED_PAD_LAYERS_BASE
 {
 public:
-    DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
-            const PCBNEW_SELECTION& aItems,
-            COMMIT& aCommit  );
+    DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent, const PCB_SELECTION& aItems,
+                              COMMIT& aCommit  );
 
 private:
     bool TransferDataFromWindow() override;
@@ -47,9 +46,9 @@ private:
    void syncImages( wxCommandEvent& aEvent ) override;
    void onScopeChange( wxCommandEvent& aEvent ) override;
 
-   PCB_BASE_FRAME*         m_frame;
-   const PCBNEW_SELECTION& m_items;   // List of items to be modified.
-   COMMIT&                 m_commit;  // An undo record to add any changes to.
+   PCB_BASE_FRAME*      m_frame;
+   const PCB_SELECTION& m_items;     // List of items to be modified.
+   COMMIT&              m_commit;    // An undo record to add any changes to.
 };
 
 #endif // __dialog_remove_unused_pads__

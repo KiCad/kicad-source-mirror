@@ -26,11 +26,11 @@
 #include "tools/footprint_editor_tools.h"
 #include "tools/pad_tool.h"
 #include "tools/pcb_actions.h"
-#include "tools/pcbnew_control.h"
-#include "tools/pcbnew_picker_tool.h"
+#include "tools/pcb_control.h"
+#include "tools/pcb_picker_tool.h"
 #include "tools/placement_tool.h"
 #include "tools/point_editor.h"
-#include "tools/selection_tool.h"
+#include "tools/pcb_selection_tool.h"
 #include <3d_viewer/eda_3d_viewer.h>
 #include <bitmaps.h>
 #include <board.h>
@@ -312,7 +312,7 @@ bool FOOTPRINT_EDIT_FRAME::IsContentModified()
 
 SELECTION& FOOTPRINT_EDIT_FRAME::GetCurrentSelection()
 {
-    return m_toolManager->GetTool<SELECTION_TOOL>()->GetSelection();
+    return m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 }
 
 
@@ -511,7 +511,7 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     m_displayOptions  = cfg->m_Display;
     m_defaultLibWidth = cfg->m_LibWidth;
 
-    GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
+    GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter() = cfg->m_SelectionFilter;
     m_selectionFilterPanel->SetCheckboxesFromFilter( cfg->m_SelectionFilter );
 }
 
@@ -526,7 +526,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     cfg->m_DesignSettings    = GetDesignSettings();
     cfg->m_Display           = m_displayOptions;
     cfg->m_LibWidth          = m_treePane->GetSize().x;
-    cfg->m_SelectionFilter   = GetToolManager()->GetTool<SELECTION_TOOL>()->GetFilter();
+    cfg->m_SelectionFilter   = GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetFilter();
     cfg->m_LayerPresets      = m_appearancePanel->GetUserLayerPresets();
     cfg->m_ActiveLayerPreset = m_appearancePanel->GetActiveLayerPreset();
 
@@ -901,28 +901,28 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
 
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );            // copy/paste
+    m_toolManager->RegisterTool( new PCB_CONTROL );            // copy/paste
     m_toolManager->RegisterTool( new FOOTPRINT_EDITOR_TOOLS );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
-    m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
+    m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
     m_toolManager->RegisterTool( new PCB_VIEWER_TOOLS );
     m_toolManager->RegisterTool( new GROUP_TOOL );
     m_toolManager->RegisterTool( new CONVERT_TOOL );
 
-    m_toolManager->GetTool<SELECTION_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PCB_SELECTION_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<EDIT_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<PAD_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<DRAWING_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<POINT_EDITOR>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<PCBNEW_CONTROL>()->SetIsFootprintEditor( true );
-    m_toolManager->GetTool<PCBNEW_PICKER_TOOL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PCB_CONTROL>()->SetIsFootprintEditor( true );
+    m_toolManager->GetTool<PCB_PICKER_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<POSITION_RELATIVE_TOOL>()->SetIsFootprintEditor( true );
     m_toolManager->GetTool<GROUP_TOOL>()->SetIsFootprintEditor( true );
 

@@ -314,7 +314,7 @@ private:
 
     std::map<wxString, APPEARANCE_SETTING*> m_netclassSettingsMap;
 
-    // TODO(JE) Move preset storage to the PCBNEW_CONTROL tool
+    // TODO(JE) Move preset storage to the PCB_CONTROL tool
 
     // Storage for all layer presets
     std::map<wxString, LAYER_PRESET> m_layerPresets;

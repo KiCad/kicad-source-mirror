@@ -40,7 +40,7 @@
 #include <frame_type.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 
 #define SORTXFIRST 0b000       //Sort on X
 #define SORTYFIRST 0b100       //Sort on Y
@@ -107,7 +107,7 @@ private:
     PCB_EDIT_FRAME*  m_frame;
     FOOTPRINTS       m_footprints;
     PCB_SCREEN*      m_screen;
-    PCBNEW_SELECTION m_selection;
+    PCB_SELECTION    m_selection;
 
     std::vector<RefDesChange>  m_changeArray;
     std::vector<RefDesInfo>    m_frontFootprints;

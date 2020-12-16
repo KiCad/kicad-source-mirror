@@ -39,7 +39,7 @@ using namespace std::placeholders;
 #include <tool/tool_manager.h>
 #include <tool/tool_menu.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/grid_helper.h>
 
 #include "router_tool.h"
@@ -1437,7 +1437,7 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 bool ROUTER_TOOL::CanInlineDrag()
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
-    const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() == 1 )
     {
@@ -1457,7 +1457,7 @@ bool ROUTER_TOOL::CanInlineDrag()
 
 int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const PCB_SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Empty() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, NeighboringSegmentFilter );
@@ -1652,7 +1652,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
 int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
 {
-    const SELECTION& selection = m_toolMgr->GetTool<SELECTION_TOOL>()->GetSelection();
+    const SELECTION& selection = m_toolMgr->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( selection.Size() != 1 )
         return 0;

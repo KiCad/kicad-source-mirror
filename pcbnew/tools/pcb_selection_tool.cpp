@@ -37,7 +37,6 @@ using namespace std::placeholders;
 #include <pcb_marker.h>
 #include <zone.h>
 #include <collectors.h>
-#include <confirm.h>
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
 #include <dialog_locked_items_query.h>
@@ -53,7 +52,7 @@ using namespace std::placeholders;
 #include <footprint_viewer_frame.h>
 #include <id.h>
 #include "tool_event_utils.h"
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include "pcb_bright_box.h"
 #include "pcb_actions.h"
 
@@ -89,14 +88,14 @@ private:
 /**
  * Private implementation of firewalled private data
  */
-class SELECTION_TOOL::PRIV
+class PCB_SELECTION_TOOL::PRIV
 {
 public:
     DIALOG_FILTER_SELECTION::OPTIONS m_filterOpts;
 };
 
 
-SELECTION_TOOL::SELECTION_TOOL() :
+PCB_SELECTION_TOOL::PCB_SELECTION_TOOL() :
         PCB_TOOL_BASE( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ),
         m_additive( false ),
@@ -121,14 +120,14 @@ SELECTION_TOOL::SELECTION_TOOL() :
 }
 
 
-SELECTION_TOOL::~SELECTION_TOOL()
+PCB_SELECTION_TOOL::~PCB_SELECTION_TOOL()
 {
     getView()->Remove( &m_selection );
     getView()->Remove( &m_enteredGroupOverlay );
 }
 
 
-bool SELECTION_TOOL::Init()
+bool PCB_SELECTION_TOOL::Init()
 {
     auto frame = getEditFrame<PCB_BASE_FRAME>();
 
@@ -172,7 +171,7 @@ bool SELECTION_TOOL::Init()
 }
 
 
-void SELECTION_TOOL::Reset( RESET_REASON aReason )
+void PCB_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
@@ -204,7 +203,7 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -419,7 +418,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::EnterGroup()
+void PCB_SELECTION_TOOL::EnterGroup()
 {
     wxCHECK_RET( m_selection.GetSize() == 1 && m_selection[0]->Type() == PCB_GROUP_T,
                  "EnterGroup called when selection is not a single group" );
@@ -439,7 +438,7 @@ void SELECTION_TOOL::EnterGroup()
 }
 
 
-void SELECTION_TOOL::ExitGroup( bool aSelectGroup )
+void PCB_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 {
     // Only continue if there is a group entered
     if( m_enteredGroup == nullptr )
@@ -455,14 +454,14 @@ void SELECTION_TOOL::ExitGroup( bool aSelectGroup )
 }
 
 
-PCBNEW_SELECTION& SELECTION_TOOL::GetSelection()
+PCB_SELECTION& PCB_SELECTION_TOOL::GetSelection()
 {
     return m_selection;
 }
 
 
-PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                                    bool aConfirmLockedItems )
+PCB_SELECTION& PCB_SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
+                                                     bool aConfirmLockedItems )
 {
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
@@ -571,7 +570,7 @@ PCBNEW_SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aCli
 }
 
 
-const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
+const GENERAL_COLLECTORS_GUIDE PCB_SELECTION_TOOL::getCollectorsGuide() const
 {
     GENERAL_COLLECTORS_GUIDE guide( board()->GetVisibleLayers(),
                                     (PCB_LAYER_ID) view()->GetTopLayer(), view() );
@@ -598,9 +597,9 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
 }
 
 
-bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
-                                  bool* aSelectionCancelledFlag,
-                                  CLIENT_SELECTION_FILTER aClientFilter )
+bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
+                                      bool* aSelectionCancelledFlag,
+                                      CLIENT_SELECTION_FILTER aClientFilter )
 {
     GENERAL_COLLECTORS_GUIDE   guide = getCollectorsGuide();
     GENERAL_COLLECTOR          collector;
@@ -700,7 +699,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 }
 
 
-bool SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aClientFilter )
+bool PCB_SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aClientFilter )
 {
     if( aForceSelect || m_selection.Empty() )
     {
@@ -712,7 +711,7 @@ bool SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aC
 }
 
 
-bool SELECTION_TOOL::selectMultiple()
+bool PCB_SELECTION_TOOL::selectMultiple()
 {
     bool cancelled = false;     // Was the tool cancelled while it was running?
     m_multiple = true;          // Multiple selection mode is active
@@ -845,7 +844,7 @@ bool SELECTION_TOOL::selectMultiple()
 }
 
 
-int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
     CLIENT_SELECTION_FILTER aClientFilter = aEvent.Parameter<CLIENT_SELECTION_FILTER>();
 
@@ -855,7 +854,7 @@ int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     ClearSelection();
 
@@ -863,7 +862,7 @@ int SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 {
     std::vector<BOARD_ITEM*>* items = aEvent.Parameter<std::vector<BOARD_ITEM*>*>();
 
@@ -880,14 +879,14 @@ int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 {
     AddItemToSel( aEvent.Parameter<BOARD_ITEM*>() );
     return 0;
 }
 
 
-int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
 
@@ -916,7 +915,7 @@ int SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
+void PCB_SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
 {
     if( aItem )
     {
@@ -929,7 +928,7 @@ void SELECTION_TOOL::AddItemToSel( BOARD_ITEM* aItem, bool aQuietMode )
 }
 
 
-int SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 {
     std::vector<BOARD_ITEM*>* items = aEvent.Parameter<std::vector<BOARD_ITEM*>*>();
 
@@ -946,14 +945,14 @@ int SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
 {
     RemoveItemFromSel( aEvent.Parameter<BOARD_ITEM*>() );
     return 0;
 }
 
 
-void SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
+void PCB_SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
 {
     if( aItem )
     {
@@ -965,19 +964,20 @@ void SELECTION_TOOL::RemoveItemFromSel( BOARD_ITEM* aItem, bool aQuietMode )
 }
 
 
-void SELECTION_TOOL::BrightenItem( BOARD_ITEM* aItem )
+void PCB_SELECTION_TOOL::BrightenItem( BOARD_ITEM* aItem )
 {
     highlight( aItem, BRIGHTENED );
 }
 
 
-void SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
+void PCB_SELECTION_TOOL::UnbrightenItem( BOARD_ITEM* aItem )
 {
     unhighlight( aItem, BRIGHTENED );
 }
 
 
-void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
+                          PCB_SELECTION_TOOL* sTool )
 {
     // Narrow the collection down to a single BOARD_CONNECTED_ITEM for each represented net.
     // All other items types are removed.
@@ -996,7 +996,7 @@ void connectedItemFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector, SELECT
 }
 
 
-int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
     unsigned initialCount = 0;
 
@@ -1038,8 +1038,8 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
-                                            STOP_CONDITION aStopCondition )
+void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
+                                                STOP_CONDITION aStopCondition )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
 
@@ -1156,7 +1156,7 @@ void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
 }
 
 
-void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
+void PCB_SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, EOT };
     auto connectivity = board()->GetConnectivity();
@@ -1167,7 +1167,7 @@ void SELECTION_TOOL::selectAllItemsOnNet( int aNetCode, bool aSelect )
 }
 
 
-int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 {
     bool select = aEvent.IsAction( &PCB_ACTIONS::selectNet );
 
@@ -1202,7 +1202,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
+void PCB_SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 {
     std::list<FOOTPRINT*> footprintList;
 
@@ -1295,7 +1295,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetPath )
 }
 
 
-void SELECTION_TOOL::zoomFitSelection()
+void PCB_SELECTION_TOOL::zoomFitSelection()
 {
     //Should recalculate the view to zoom in on the selection
     auto selectionBox = m_selection.GetBoundingBox();
@@ -1319,7 +1319,7 @@ void SELECTION_TOOL::zoomFitSelection()
 }
 
 
-int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
     ClearSelection( true /*quiet mode*/ );
     wxString sheetPath = *aEvent.Parameter<wxString*>();
@@ -1335,7 +1335,7 @@ int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 {
     if( !selectCursor( true ) )
         return 0;
@@ -1373,7 +1373,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
+void PCB_SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 {
     bool cleared = false;
 
@@ -1402,10 +1402,10 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 }
 
 
-int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 {
     DIALOG_FIND dlg( m_frame );
-    dlg.SetCallback( std::bind( &SELECTION_TOOL::findCallback, this, _1 ) );
+    dlg.SetCallback( std::bind( &PCB_SELECTION_TOOL::findCallback, this, _1 ) );
     dlg.ShowModal();
 
     return 0;
@@ -1480,7 +1480,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
 }
 
 
-int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 {
     const BOARD&                      board = *getModel<BOARD>();
     DIALOG_FILTER_SELECTION::OPTIONS& opts = m_priv->m_filterOpts;
@@ -1512,7 +1512,7 @@ int SELECTION_TOOL::filterSelection( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
+void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 {
     if( aCollector.GetCount() == 0 )
         return;
@@ -1532,7 +1532,7 @@ void SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 }
 
 
-bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
+bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 {
     if( aItem->IsLocked() && !m_filter.lockedItems )
         return false;
@@ -1608,7 +1608,7 @@ bool SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::ClearSelection( bool aQuietMode )
+void PCB_SELECTION_TOOL::ClearSelection( bool aQuietMode )
 {
     if( m_selection.Empty() )
         return;
@@ -1630,7 +1630,7 @@ void SELECTION_TOOL::ClearSelection( bool aQuietMode )
 }
 
 
-void SELECTION_TOOL::RebuildSelection()
+void PCB_SELECTION_TOOL::RebuildSelection()
 {
     m_selection.Clear();
 
@@ -1668,7 +1668,7 @@ void SELECTION_TOOL::RebuildSelection()
 }
 
 
-int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
     GENERAL_COLLECTOR* collector = aEvent.Parameter<GENERAL_COLLECTOR*>();
 
@@ -1678,12 +1678,12 @@ int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 }
 
 
-bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxString& aTitle )
+bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxString& aTitle )
 {
-    BOARD_ITEM*      current = nullptr;
-    PCBNEW_SELECTION highlightGroup;
-    bool             selectAll = false;
-    bool             expandSelection = false;
+    BOARD_ITEM*   current = nullptr;
+    PCB_SELECTION highlightGroup;
+    bool          selectAll = false;
+    bool          expandSelection = false;
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );
@@ -1817,7 +1817,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
 }
 
 
-BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
+BOARD_ITEM* PCB_SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector )
 {
     int count = aCollector->GetPrimaryCount();     // try to use preferred layer
 
@@ -1854,7 +1854,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
+bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
 
@@ -2045,7 +2045,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
 }
 
 
-void SELECTION_TOOL::select( BOARD_ITEM* aItem )
+void PCB_SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
     {
@@ -2064,13 +2064,13 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 }
 
 
-void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
+void PCB_SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, &m_selection );
 }
 
 
-void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
+void PCB_SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
 {
     highlightInternal( aItem, aMode, aGroup, false );
 
@@ -2083,8 +2083,8 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* 
 }
 
 
-void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
-                                        PCBNEW_SELECTION* aSelectionViewGroup, bool isChild )
+void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
+                                            PCB_SELECTION* aSelectionViewGroup, bool isChild )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
@@ -2121,7 +2121,7 @@ void SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
 }
 
 
-void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION* aGroup )
+void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
 {
     unhighlightInternal( aItem, aMode, aGroup, false );
 
@@ -2134,8 +2134,8 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCBNEW_SELECTION
 }
 
 
-void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
-                                          PCBNEW_SELECTION* aSelectionViewGroup, bool isChild )
+void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
+                                              PCB_SELECTION* aSelectionViewGroup, bool isChild )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();
@@ -2176,7 +2176,7 @@ void SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
 }
 
 
-bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
+bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
     VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
@@ -2195,8 +2195,8 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 }
 
 
-int SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem,
-                                     int aMaxDistance ) const
+int PCB_SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem,
+                                         int aMaxDistance ) const
 {
     BOX2D viewportD = getView()->GetViewport();
     BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
@@ -2288,8 +2288,8 @@ int SELECTION_TOOL::hitTestDistance( const wxPoint& aWhere, BOARD_ITEM* aItem,
 // We currently check for pads and text mostly covering a footprint, but we don't check for
 // smaller footprints mostly covering a larger footprint.
 //
-void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
-                                               const VECTOR2I& aWhere ) const
+void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
+                                                   const VECTOR2I& aWhere ) const
 {
     std::set<BOARD_ITEM*> preferred;
     std::set<BOARD_ITEM*> rejected;
@@ -2419,7 +2419,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 }
 
 
-void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const
+void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) const
 {
     std::unordered_set<BOARD_ITEM*> toAdd;
 
@@ -2456,7 +2456,7 @@ void SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector ) c
 }
 
 
-int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 {
     getView()->Update( &m_selection );
     getView()->Update( &m_enteredGroupOverlay );
@@ -2465,7 +2465,7 @@ int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 }
 
 
-int SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
+int PCB_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
     ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
     CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
@@ -2480,30 +2480,30 @@ int SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 }
 
 
-void SELECTION_TOOL::setTransitions()
+void PCB_SELECTION_TOOL::setTransitions()
 {
-    Go( &SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
 
-    Go( &SELECTION_TOOL::Main,                PCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SELECTION_TOOL::CursorSelection,     PCB_ACTIONS::selectionCursor.MakeEvent() );
-    Go( &SELECTION_TOOL::ClearSelection,      PCB_ACTIONS::selectionClear.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::Main,                PCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::CursorSelection,     PCB_ACTIONS::selectionCursor.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::ClearSelection,      PCB_ACTIONS::selectionClear.MakeEvent() );
 
-    Go( &SELECTION_TOOL::SelectItem,          PCB_ACTIONS::selectItem.MakeEvent() );
-    Go( &SELECTION_TOOL::SelectItems,         PCB_ACTIONS::selectItems.MakeEvent() );
-    Go( &SELECTION_TOOL::UnselectItem,        PCB_ACTIONS::unselectItem.MakeEvent() );
-    Go( &SELECTION_TOOL::UnselectItems,       PCB_ACTIONS::unselectItems.MakeEvent() );
-    Go( &SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectItem,          PCB_ACTIONS::selectItem.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectItems,         PCB_ACTIONS::selectItems.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::UnselectItem,        PCB_ACTIONS::unselectItem.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::UnselectItems,       PCB_ACTIONS::unselectItems.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
 
-    Go( &SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
 
-    Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
-    Go( &SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
-    Go( &SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
-    Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
-    Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
+    Go( &PCB_SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::expandConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectNet,           PCB_ACTIONS::deselectNet.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
+    Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
 
-    Go( &SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
 }

@@ -137,7 +137,7 @@ DIALOG_BOARD_REANNOTATE::DIALOG_BOARD_REANNOTATE( PCB_EDIT_FRAME* aParentFrame )
 
     m_sortButtons[m_sortCode]->SetValue( true );
 
-    m_selection = m_frame->GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
+    m_selection = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 
     if( !m_selection.Empty() )
         m_annotationChoice = AnnotationChoice::AnnotateSelected;

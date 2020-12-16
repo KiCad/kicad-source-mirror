@@ -57,8 +57,8 @@
 #include <tool/common_tools.h>
 #include <tool/selection.h>
 #include <tool/zoom_tool.h>
-#include <tools/selection_tool.h>
-#include <tools/pcbnew_picker_tool.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_picker_tool.h>
 #include <tools/point_editor.h>
 #include <tools/edit_tool.h>
 #include <tools/group_tool.h>
@@ -66,12 +66,12 @@
 #include <tools/global_edit_tool.h>
 #include <tools/convert_tool.h>
 #include <tools/drawing_tool.h>
-#include <tools/pcbnew_control.h>
-#include <tools/pcb_editor_control.h>
-#include <tools/pcb_inspection_tool.h>
+#include <tools/pcb_control.h>
+#include <tools/board_editor_control.h>
+#include <tools/board_inspection_tool.h>
 #include <tools/pcb_editor_conditions.h>
 #include <tools/pcb_viewer_tools.h>
-#include <tools/pcb_reannotate_tool.h>
+#include <tools/board_reannotate_tool.h>
 #include <tools/placement_tool.h>
 #include <tools/pad_tool.h>
 #include <microwave/microwave_tool.h>
@@ -430,7 +430,7 @@ bool PCB_EDIT_FRAME::isAutoSaveRequired() const
 
 SELECTION& PCB_EDIT_FRAME::GetCurrentSelection()
 {
-    return m_toolManager->GetTool<SELECTION_TOOL>()->GetSelection();
+    return m_toolManager->GetTool<PCB_SELECTION_TOOL>()->GetSelection();
 }
 
 
@@ -446,9 +446,9 @@ void PCB_EDIT_FRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new COMMON_CONTROL );
     m_toolManager->RegisterTool( new COMMON_TOOLS );
-    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new PCBNEW_PICKER_TOOL );
+    m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new LENGTH_TUNER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
@@ -456,10 +456,10 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
-    m_toolManager->RegisterTool( new PCB_INSPECTION_TOOL );
-    m_toolManager->RegisterTool( new PCB_REANNOTATE_TOOL );
+    m_toolManager->RegisterTool( new PCB_CONTROL );
+    m_toolManager->RegisterTool( new BOARD_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new BOARD_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new BOARD_REANNOTATE_TOOL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new MICROWAVE_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );

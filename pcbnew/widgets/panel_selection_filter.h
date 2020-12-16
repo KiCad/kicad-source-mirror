@@ -24,7 +24,7 @@
 #include <widgets/panel_selection_filter_base.h>
 
 
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 struct SELECTION_FILTER_OPTIONS;
 
 
@@ -47,11 +47,10 @@ private:
 
     void onPopupSelection( wxCommandEvent& aEvent );
 
+private:
     PCB_BASE_EDIT_FRAME* m_frame;
-
-    SELECTION_TOOL* m_tool;
-
-    wxCheckBox* m_onlyCheckbox;
+    PCB_SELECTION_TOOL*  m_tool;
+    wxCheckBox*          m_onlyCheckbox;
 };
 
 

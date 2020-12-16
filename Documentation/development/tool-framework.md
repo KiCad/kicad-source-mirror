@@ -443,7 +443,7 @@ Below you will find the contents of useless_tool.cpp:
     {
         // we will call actions on the selection tool to get the current
         // selection. The selection tools will handle item disambiguation
-        SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+        PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
         assert( selectionTool );
 
         // call the actions

@@ -26,7 +26,7 @@
 #include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <view/view.h>
 #include <board_commit.h>
 #include <tools/pcb_tool_base.h>
@@ -93,7 +93,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     PCB_BASE_FRAME*     frame = (PCB_BASE_FRAME*) m_toolMgr->GetToolHolder();
     auto                connectivity = board->GetConnectivity();
     std::set<EDA_ITEM*> savedModules;
-    SELECTION_TOOL*     selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     bool                itemsDeselected = false;
 
     std::vector<BOARD_ITEM*> bulkAddedItems;
@@ -489,7 +489,7 @@ void BOARD_COMMIT::Revert()
     if ( !m_isFootprintEditor )
         connectivity->RecalculateRatsnest();
 
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     selTool->RebuildSelection();
 
     clear();

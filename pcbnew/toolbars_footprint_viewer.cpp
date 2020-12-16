@@ -26,7 +26,7 @@
 #include <tool/action_toolbar.h>
 #include <tool/conditional_menu.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/pcb_actions.h>
 #include "footprint_viewer_frame.h"
 #include "pcbnew_id.h"
@@ -143,7 +143,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 {
-    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();

@@ -39,9 +39,9 @@ using namespace std::placeholders;
 #include <pcbnew_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
-#include <tools/selection_tool.h>
-#include <tools/pcbnew_control.h>
-#include <tools/pcb_editor_control.h>
+#include <tools/pcb_selection_tool.h>
+#include <tools/pcb_control.h>
+#include <tools/board_editor_control.h>
 #include <page_layout/ws_proxy_undo_item.h>
 
 /* Functions to undo and redo edit commands.
@@ -559,9 +559,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             image->SetPosition( eda_item->GetPosition() );
 
             if( aList->GetPickedItemStatus( ii ) == UNDO_REDO::DRILLORIGIN )
-                PCB_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );
+                BOARD_EDITOR_CONTROL::DoSetDrillOrigin( view, this, item, origin );
             else
-                PCBNEW_CONTROL::DoSetGridOrigin( view, this, item, origin );
+                PCB_CONTROL::DoSetGridOrigin( view, this, item, origin );
         }
         break;
 
@@ -592,7 +592,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
         Compile_Ratsnest( false );
     }
 
-    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     selTool->RebuildSelection();
 
     GetBoard()->SanitizeNetcodes();

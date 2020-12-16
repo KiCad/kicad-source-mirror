@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __BOARD_STATISTICS_TOOL_H
-#define __BOARD_STATISTICS_TOOL_H
+#ifndef BOARD_INSPECTION_TOOL_H
+#define BOARD_INSPECTION_TOOL_H
 
 #include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_net_inspector.h>
@@ -51,14 +51,14 @@ protected:
 
 
 /**
- * PCB_INSPECTION_TOOL
+ * BOARD_INSPECTION_TOOL
  *
  * Tool for pcb inspection.
  */
-class PCB_INSPECTION_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
+class BOARD_INSPECTION_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
 {
 public:
-    PCB_INSPECTION_TOOL();
+    BOARD_INSPECTION_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -152,4 +152,4 @@ private:
     std::unique_ptr<DIALOG_CONSTRAINTS_REPORTER> m_inspectConstraintsDialog;
 };
 
-#endif //__BOARD_STATISTICS_TOOL_H
+#endif //BOARD_INSPECTION_TOOL_H

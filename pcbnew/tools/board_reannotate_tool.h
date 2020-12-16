@@ -32,10 +32,10 @@
 #include <tools/pcb_tool_base.h>
 
 
-class PCB_REANNOTATE_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
+class BOARD_REANNOTATE_TOOL : public wxEvtHandler, public PCB_TOOL_BASE
 {
 public:
-    PCB_REANNOTATE_TOOL();
+    BOARD_REANNOTATE_TOOL();
 
     bool Init() override;
     void Reset( RESET_REASON aReason ) override;

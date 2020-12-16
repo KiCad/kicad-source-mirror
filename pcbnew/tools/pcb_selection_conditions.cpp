@@ -23,7 +23,7 @@
  */
 
 #include "pcb_selection_conditions.h"
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include <board_connected_item.h>
 #include <pcb_shape.h>
 

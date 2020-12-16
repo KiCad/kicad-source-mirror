@@ -2085,7 +2085,7 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
 }
 
 
-BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCBNEW_SELECTION& selection ) const
+BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCB_SELECTION& selection ) const
 {
     GroupLegalOpsField legalOps = { false, false, false, false, false, false };
 

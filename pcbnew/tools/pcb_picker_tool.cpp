@@ -23,22 +23,22 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "pcbnew_picker_tool.h"
+#include "pcb_picker_tool.h"
 #include "pcb_actions.h"
 #include "grid_helper.h"
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 
 
-PCBNEW_PICKER_TOOL::PCBNEW_PICKER_TOOL()
+PCB_PICKER_TOOL::PCB_PICKER_TOOL()
     : PCB_TOOL_BASE( "pcbnew.InteractivePicker" )
 {
     reset();
 }
 
 
-int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
+int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_BASE_FRAME*       frame = getEditFrame<PCB_BASE_FRAME>();
@@ -142,7 +142,7 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            PCBNEW_SELECTION dummy;
+            PCB_SELECTION dummy;
             m_menu.ShowContextMenu( dummy );
         }
 
@@ -171,13 +171,13 @@ int PCBNEW_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void PCBNEW_PICKER_TOOL::setTransitions()
+void PCB_PICKER_TOOL::setTransitions()
 {
-    Go( &PCBNEW_PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
+    Go( &PCB_PICKER_TOOL::Main, ACTIONS::pickerTool.MakeEvent() );
 }
 
 
-void PCBNEW_PICKER_TOOL::reset()
+void PCB_PICKER_TOOL::reset()
 {
     m_layerMask = LSET::AllLayersMask();
     m_cursor    = KICURSOR::ARROW;
@@ -190,7 +190,7 @@ void PCBNEW_PICKER_TOOL::reset()
 }
 
 
-void PCBNEW_PICKER_TOOL::setControls()
+void PCB_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 

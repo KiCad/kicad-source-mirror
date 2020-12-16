@@ -26,12 +26,12 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include "dialogs/dialog_group_properties_base.h"
 
 class BOARD_COMMIT;
 class BOARD_ITEM;
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 class DIALOG_GROUP_PROPERTIES;
 
 class GROUP_TOOL : public PCB_TOOL_BASE
@@ -75,7 +75,7 @@ private:
 private:
     PCB_BASE_EDIT_FRAME*          m_frame;
     DIALOG_GROUP_PROPERTIES*      m_propertiesDialog;
-    SELECTION_TOOL*               m_selectionTool;
+    PCB_SELECTION_TOOL*           m_selectionTool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 

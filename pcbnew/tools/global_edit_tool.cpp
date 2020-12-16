@@ -50,7 +50,7 @@ void GLOBAL_EDIT_TOOL::Reset( RESET_REASON aReason )
 bool GLOBAL_EDIT_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     return true;
 }
@@ -58,10 +58,10 @@ bool GLOBAL_EDIT_TOOL::Init()
 
 int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 {
-    PCBNEW_SELECTION& selection = m_selectionTool->GetSelection();
-    FOOTPRINT*        footprint = nullptr;
-    bool              updateMode = false;
-    bool              currentMode = false;
+    PCB_SELECTION& selection = m_selectionTool->GetSelection();
+    FOOTPRINT*     footprint = nullptr;
+    bool           updateMode = false;
+    bool           currentMode = false;
 
     if( aEvent.HasPosition() )
         selection = m_selectionTool->RequestSelection( EDIT_TOOL::FootprintFilter );
@@ -199,8 +199,8 @@ int GLOBAL_EDIT_TOOL::CleanupGraphics( const TOOL_EVENT& aEvent )
 int GLOBAL_EDIT_TOOL::RemoveUnusedPads( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
-    PCBNEW_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+    PCB_SELECTION&  selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 sTool->FilterCollectorForGroups( aCollector );
             } );

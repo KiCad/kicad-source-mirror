@@ -28,7 +28,7 @@
 #include <connectivity/connectivity_data.h>
 #include <pcb_layer_box_selector.h>
 #include <tool/tool_manager.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/global_edit_tool.h>
 #include "dialog_global_edit_tracks_and_vias_base.h"
 
@@ -220,8 +220,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::buildNetclassesGrid()
 
 bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
-    PCBNEW_SELECTION& selection = m_parent->GetToolManager()->GetTool<SELECTION_TOOL>()->GetSelection();
-    auto              item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
+    PCB_SELECTION_TOOL*   selTool = m_parent->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
+    PCB_SELECTION&        selection = selTool->GetSelection();
+    BOARD_CONNECTED_ITEM* item = dynamic_cast<BOARD_CONNECTED_ITEM*>( selection.Front() );
 
     m_tracks->SetValue( g_modifyTracks );
     m_vias->SetValue( g_modifyVias );

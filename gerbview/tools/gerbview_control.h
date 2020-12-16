@@ -27,7 +27,7 @@ class EDA_DRAW_PANEL_GAL;
 class GERBVIEW_FRAME;
 
 /**
- * PCBNEW_CONTROL
+ * GERBVIEW_CONTROL
  *
  * Handles actions that are shared between different frames in pcbnew.
  */

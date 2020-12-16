@@ -24,7 +24,7 @@
  */
 
 #include <kicad_string.h>
-#include <tools/pcb_inspection_tool.h>
+#include <tools/board_inspection_tool.h>
 #include <board.h>
 #include <track.h>
 #include <dialog_net_inspector.h>

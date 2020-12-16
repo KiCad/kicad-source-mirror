@@ -25,7 +25,7 @@
 
 #include <dialogs/dialog_track_via_properties.h>
 #include <pcb_layer_box_selector.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <track.h>
 #include <pcb_edit_frame.h>
 #include <confirm.h>
@@ -34,7 +34,7 @@
 #include <macros.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
-                                                          const PCBNEW_SELECTION& aItems,
+                                                          const PCB_SELECTION& aItems,
                                                           COMMIT& aCommit ) :
     DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),

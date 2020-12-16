@@ -27,9 +27,9 @@ using namespace std::placeholders;
 
 #include "position_relative_tool.h"
 #include "pcb_actions.h"
-#include "selection_tool.h"
+#include "pcb_selection_tool.h"
 #include "edit_tool.h"
-#include "pcbnew_picker_tool.h"
+#include "pcb_picker_tool.h"
 #include <dialogs/dialog_position_relative.h>
 #include <status_popup.h>
 #include <board_commit.h>
@@ -56,7 +56,7 @@ void POSITION_RELATIVE_TOOL::Reset( RESET_REASON aReason )
 bool POSITION_RELATIVE_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
 
     return m_selectionTool != nullptr;
 }
@@ -67,7 +67,7 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
     PCB_BASE_FRAME* editFrame = getEditFrame<PCB_BASE_FRAME>();
 
     const auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 // Iterate from the back so we don't have to worry about removals.
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
@@ -136,10 +136,10 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint aPosAnchor, wxPoi
 
 int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent  )
 {
-    std::string         tool = "pcbnew.PositionRelative.selectReferenceItem";
-    PCBNEW_PICKER_TOOL* picker = m_toolMgr->GetTool<PCBNEW_PICKER_TOOL>();
-    STATUS_TEXT_POPUP   statusPopup( frame() );
-    bool                done = false;
+    std::string       tool = "pcbnew.PositionRelative.selectReferenceItem";
+    PCB_PICKER_TOOL*  picker = m_toolMgr->GetTool<PCB_PICKER_TOOL>();
+    STATUS_TEXT_POPUP statusPopup( frame() );
+    bool              done = false;
 
     Activate();
 
@@ -149,8 +149,9 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
         [&]( const VECTOR2D& aPoint ) -> bool
         {
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-            const PCBNEW_SELECTION& sel = m_selectionTool->RequestSelection(
-                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            const PCB_SELECTION& sel = m_selectionTool->RequestSelection(
+                    []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
+                        PCB_SELECTION_TOOL* sTool )
                     {
                     } );
 

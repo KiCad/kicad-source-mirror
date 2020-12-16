@@ -38,7 +38,7 @@
 #include <tool/tool_manager.h>
 #include <tools/edit_tool.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 
 #include "convert_tool.h"
 
@@ -63,7 +63,7 @@ using P_S_C = PCB_SELECTION_CONDITIONS;
 
 bool CONVERT_TOOL::Init()
 {
-    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
     m_frame         = getEditFrame<PCB_BASE_FRAME>();
 
     // Create a context menu and make it available through selection tool
@@ -121,7 +121,7 @@ int CONVERT_TOOL::LinesToPoly( const TOOL_EVENT& aEvent )
     FOOTPRINT* parentFootprint = nullptr;
 
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
@@ -362,7 +362,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromRects( const std::deque<EDA_ITEM*>& aI
 int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {
@@ -557,7 +557,7 @@ int CONVERT_TOOL::PolyToLines( const TOOL_EVENT& aEvent )
 int CONVERT_TOOL::SegmentToArc( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
             {
                 for( int i = aCollector.GetCount() - 1; i >= 0; --i )
                 {

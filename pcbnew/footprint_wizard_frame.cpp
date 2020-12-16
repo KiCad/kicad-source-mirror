@@ -48,8 +48,8 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/action_toolbar.h>
 #include <tool/common_tools.h>
-#include "tools/selection_tool.h"
-#include "tools/pcbnew_control.h"
+#include "tools/pcb_selection_tool.h"
+#include "tools/pcb_control.h"
 #include "tools/pcb_actions.h"
 
 
@@ -145,8 +145,8 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
     gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
 
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->RegisterTool( new SELECTION_TOOL );  // for std context menus (zoom & grid)
+    m_toolManager->RegisterTool( new PCB_CONTROL );
+    m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );  // for std context menus (zoom & grid)
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->InitTools();
 

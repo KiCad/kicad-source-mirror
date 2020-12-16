@@ -31,7 +31,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/grid_helper.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_create_helper.h>
 #include <tools/drawing_tool.h>
@@ -648,7 +648,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     const BOARD_DESIGN_SETTINGS& boardSettings = m_board->GetDesignSettings();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    PCBNEW_SELECTION preview;
+    PCB_SELECTION preview;
 
     m_view->Add( &preview );
 
@@ -1020,7 +1020,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 
     std::vector<BOARD_ITEM*> newItems;          // all new items, including group
     std::vector<BOARD_ITEM*> selectedItems;     // the group, or newItems if no group
-    PCBNEW_SELECTION         preview;
+    PCB_SELECTION            preview;
     BOARD_COMMIT             commit( m_frame );
     PCB_GROUP*               group = nullptr;
 
@@ -1262,7 +1262,7 @@ bool DRAWING_TOOL::drawSegment( const std::string& aTool, PCB_SHAPE** aGraphic,
     KIGFX::PREVIEW::TWO_POINT_ASSISTANT twoPointAsst( twoPointManager, userUnits, geomShape );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    PCBNEW_SELECTION preview;
+    PCB_SELECTION preview;
     m_view->Add( &preview );
     m_view->Add( &twoPointAsst );
 
@@ -1556,7 +1556,7 @@ bool DRAWING_TOOL::drawArc( const std::string& aTool, PCB_SHAPE** aGraphic, bool
     KIGFX::PREVIEW::ARC_ASSISTANT arcAsst( arcManager, m_frame->GetUserUnits() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
-    PCBNEW_SELECTION preview;
+    PCB_SELECTION preview;
     m_view->Add( &preview );
     m_view->Add( &arcAsst );
     GRID_HELPER grid( m_toolMgr, m_frame->GetMagneticItemsSettings() );
@@ -1776,8 +1776,8 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE** aZone )
     if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::GRAPHIC_POLYGON )
         return true;
 
-    SELECTION_TOOL*         selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    const PCBNEW_SELECTION& selection = selTool->GetSelection();
+    PCB_SELECTION_TOOL*  selTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
+    const PCB_SELECTION& selection = selTool->GetSelection();
 
     if( selection.Empty() )
     {

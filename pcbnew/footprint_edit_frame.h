@@ -31,7 +31,6 @@ class FP_LIB_TABLE;
 class FOOTPRINT_TREE_PANE;
 class SYMBOL_LIBRARY_MANAGER;
 class FOOTPRINT_EDITOR_SETTINGS;
-class PCBNEW_SELECTION;
 
 namespace PCB { struct IFACE; }     // A KIFACE_I coded in pcbnew.c
 

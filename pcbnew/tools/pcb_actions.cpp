@@ -530,7 +530,7 @@ TOOL_ACTION PCB_ACTIONS::defaultPadProperties( "pcbnew.PadTool.defaultPadPropert
         options_pad_xpm );
 
 
-// PCB_EDITOR_CONTROL
+// BOARD_EDITOR_CONTROL
 //
 TOOL_ACTION PCB_ACTIONS::boardSetup( "pcbnew.EditorControl.boardSetup",
         AS_GLOBAL, 0, "",
@@ -722,7 +722,7 @@ TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         eeschema_xpm );
 
 
-// PCBNEW_CONTROL
+// PCB_CONTROL
 //
 
 TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
@@ -1139,7 +1139,7 @@ TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem( "pcbnew.PositionRelative.se
         AS_GLOBAL );
 
 
-// SELECTION_TOOL
+// PCB_SELECTION_TOOL
 //
 TOOL_ACTION PCB_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
         AS_GLOBAL, 0, "", "", "", nullptr, AF_ACTIVATE );   // No description, not shown anywhere

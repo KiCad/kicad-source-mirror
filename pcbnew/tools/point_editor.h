@@ -32,7 +32,7 @@
 #include <memory>
 
 
-class SELECTION_TOOL;
+class PCB_SELECTION_TOOL;
 class SHAPE_POLY_SET;
 
 /**
@@ -69,7 +69,7 @@ public:
 
 private:
     ///> Selection tool used for obtaining selected items
-    SELECTION_TOOL* m_selectionTool;
+    PCB_SELECTION_TOOL* m_selectionTool;
 
     ///> Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;

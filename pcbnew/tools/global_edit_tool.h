@@ -26,7 +26,7 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <status_popup.h>
 
 
@@ -70,7 +70,7 @@ private:
     void setTransitions() override;
 
 private:
-    SELECTION_TOOL*               m_selectionTool;
+    PCB_SELECTION_TOOL*           m_selectionTool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
 };
 

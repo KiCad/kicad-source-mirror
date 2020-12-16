@@ -29,7 +29,7 @@
 #include <track.h>
 #include <pad.h>
 #include <pcb_edit_frame.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 
 enum SCOPE : int
 {
@@ -46,7 +46,7 @@ enum PAD_ACTION : int
 
 
 DIALOG_UNUSED_PAD_LAYERS::DIALOG_UNUSED_PAD_LAYERS( PCB_BASE_FRAME* aParent,
-                                                    const PCBNEW_SELECTION& aItems,
+                                                    const PCB_SELECTION& aItems,
                                                     COMMIT& aCommit  )
     : DIALOG_UNUSED_PAD_LAYERS_BASE( aParent ),
       m_frame( aParent ),

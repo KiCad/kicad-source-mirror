@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SELECTION_TOOL_H
-#define __SELECTION_TOOL_H
+#ifndef PCB_SELECTION_TOOL_H
+#define PCB_SELECTION_TOOL_H
 
 #include <memory>
 
@@ -35,7 +35,7 @@
 #include <tool/tool_menu.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/pcb_tool_base.h>
-#include <tools/pcbnew_selection.h>
+#include <tools/pcb_selection.h>
 
 class PCB_BASE_FRAME;
 class BOARD_ITEM;
@@ -47,11 +47,11 @@ namespace KIGFX
 }
 
 
-typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, SELECTION_TOOL* );
+typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, PCB_SELECTION_TOOL* );
 
 
 /**
- * SELECTION_TOOL
+ * PCB_SELECTION_TOOL
  *
  * Our sample selection tool: currently supports:
  * - pick single objects (click LMB)
@@ -61,11 +61,11 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR&, SE
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-class SELECTION_TOOL : public PCB_TOOL_BASE
+class PCB_SELECTION_TOOL : public PCB_TOOL_BASE
 {
 public:
-    SELECTION_TOOL();
-    ~SELECTION_TOOL();
+    PCB_SELECTION_TOOL();
+    ~PCB_SELECTION_TOOL();
 
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;
@@ -85,7 +85,7 @@ public:
      *
      * Returns the set of currently selected items.
      */
-    PCBNEW_SELECTION& GetSelection();
+    PCB_SELECTION& GetSelection();
 
     /**
      * Function RequestSelection()
@@ -96,8 +96,8 @@ public:
      * @param aConfirmLockedItems if true the user will be prompted if they want to drop locked
      *                            items from the selection or override the locks
      */
-    PCBNEW_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-                                        bool aConfirmLockedItems = false );
+    PCB_SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
+                                     bool aConfirmLockedItems = false );
 
     ///> Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
@@ -334,7 +334,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup = nullptr );
+    void highlight( BOARD_ITEM* aItem, int aHighlightMode, PCB_SELECTION* aGroup = nullptr );
 
     /**
      * Function unhighlight()
@@ -343,7 +343,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aGroup = nullptr );
+    void unhighlight( BOARD_ITEM* aItem, int aHighlightMode, PCB_SELECTION* aGroup = nullptr );
 
     /**
      * Function selectionContains()
@@ -366,14 +366,14 @@ private:
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
 private:
-    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aSelectionViewGroup,
-        bool isChild);
+    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode,
+                            PCB_SELECTION* aSelectionViewGroup, bool isChild);
 
-    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode, PCBNEW_SELECTION* aSelectionViewGroup,
-        bool isChild);
+    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode,
+                              PCB_SELECTION* aSelectionViewGroup, bool isChild);
 
     PCB_BASE_FRAME*  m_frame;     // Pointer to the parent frame
-    PCBNEW_SELECTION m_selection; // Current state of selection
+    PCB_SELECTION    m_selection; // Current state of selection
 
     SELECTION_FILTER_OPTIONS m_filter;
 
@@ -393,4 +393,4 @@ private:
     std::unique_ptr<PRIV> m_priv;
 };
 
-#endif /* __SELECTION_TOOL_H */
+#endif /* PCB_SELECTION_TOOL_H */

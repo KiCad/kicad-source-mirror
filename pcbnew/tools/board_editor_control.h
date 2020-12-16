@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PCB_EDITOR_CONTROL_H
-#define PCB_EDITOR_CONTROL_H
+#ifndef BOARD_EDITOR_CONTROL_H
+#define BOARD_EDITOR_CONTROL_H
 
 #include <tools/pcb_tool_base.h>
 #include <tool/tool_menu.h>
@@ -35,15 +35,15 @@ namespace KIGFX {
 class PCB_EDIT_FRAME;
 
 /**
- * PCB_EDITOR_CONTROL
+ * BOARD_EDITOR_CONTROL
  *
  * Handles actions specific to the board editor in pcbnew.
  */
-class PCB_EDITOR_CONTROL : public PCB_TOOL_BASE
+class BOARD_EDITOR_CONTROL : public PCB_TOOL_BASE
 {
 public:
-    PCB_EDITOR_CONTROL();
-    ~PCB_EDITOR_CONTROL();
+    BOARD_EDITOR_CONTROL();
+    ~BOARD_EDITOR_CONTROL();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;

@@ -30,7 +30,7 @@
 #include <gendrill_Excellon_writer.h>
 #include <gendrill_gerber_writer.h>
 #include <bitmaps.h>
-#include <tools/pcb_editor_control.h>
+#include <tools/board_editor_control.h>
 #include <board.h>
 #include <track.h>
 #include <footprint.h>
@@ -50,7 +50,7 @@ static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
 /* This function displays the dialog frame for drill tools
  */
-int PCB_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
+int BOARD_EDITOR_CONTROL::GenerateDrillFiles( const TOOL_EVENT& aEvent )
 {
     PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
     DIALOG_GENDRILL dlg( editFrame, editFrame );

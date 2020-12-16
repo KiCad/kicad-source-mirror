@@ -22,20 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PICKER_TOOL_H
-#define PICKER_TOOL_H
+#ifndef PCB_PICKER_TOOL_H
+#define PCB_PICKER_TOOL_H
 
 #include <boost/optional/optional.hpp>
 #include <tools/pcb_tool_base.h>
 
 /**
- * @brief Generic tool for picking a point.
+ * @brief Generic tool for picking an item.
  */
-class PCBNEW_PICKER_TOOL : public PCB_TOOL_BASE
+class PCB_PICKER_TOOL : public PCB_TOOL_BASE
 {
 public:
-    PCBNEW_PICKER_TOOL();
-    ~PCBNEW_PICKER_TOOL() override { }
+    PCB_PICKER_TOOL();
+    ~PCB_PICKER_TOOL() override { }
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
@@ -130,4 +130,4 @@ private:
     OPT<VECTOR2D>         m_picked;
 };
 
-#endif /* PICKER_TOOL_H */
+#endif /* PCB_PICKER_TOOL_H */

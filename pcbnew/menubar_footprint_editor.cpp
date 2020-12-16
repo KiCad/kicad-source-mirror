@@ -32,13 +32,13 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <board.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <widgets/wx_menubar.h>
 
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 {
-    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
+    PCB_SELECTION_TOOL* selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar*  oldMenuBar = GetMenuBar();

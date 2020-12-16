@@ -46,7 +46,7 @@
 #include <render_settings.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
-#include <tools/selection_tool.h>
+#include <tools/pcb_selection_tool.h>
 #include <netlist_reader/netlist_reader.h>
 
 /* Execute a remote command send by Eeschema via a socket,

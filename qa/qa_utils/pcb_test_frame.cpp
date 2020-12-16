@@ -155,7 +155,7 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
     m_pcbActions = std::make_unique<TEST_ACTIONS>( );
     m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get(), m_pcbActions.get() );
 
-    //m_toolManager->RegisterTool( new SELECTION_TOOL );
+    //m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
     createUserTools();
 
     m_toolManager->InitTools();

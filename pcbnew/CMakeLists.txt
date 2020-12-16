@@ -323,6 +323,9 @@ set( PCBNEW_CLASS_SRCS
 
     ratsnest/ratsnest.cpp
 
+    tools/board_editor_control.cpp
+    tools/board_inspection_tool.cpp
+    tools/board_reannotate_tool.cpp
     tools/convert_tool.cpp
     tools/drawing_tool.cpp
     tools/drc_tool.cpp
@@ -332,18 +335,15 @@ set( PCBNEW_CLASS_SRCS
     tools/footprint_editor_tools.cpp
     tools/pad_tool.cpp
     tools/pcb_bright_box.cpp
-    tools/pcb_editor_control.cpp
-    tools/pcb_inspection_tool.cpp
-    tools/pcb_reannotate_tool.cpp   
+    tools/pcb_control.cpp
+    tools/pcb_picker_tool.cpp
+    tools/pcb_selection.cpp
     tools/pcb_selection_conditions.cpp
+    tools/pcb_selection_tool.cpp
     tools/pcb_tool_base.cpp
-    tools/pcbnew_control.cpp
-    tools/pcbnew_picker_tool.cpp
-    tools/pcbnew_selection.cpp
     tools/placement_tool.cpp
     tools/point_editor.cpp
     tools/position_relative_tool.cpp
-    tools/selection_tool.cpp
     tools/tool_event_utils.cpp
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
