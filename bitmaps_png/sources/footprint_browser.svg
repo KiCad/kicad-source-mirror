@@ -147,18 +147,18 @@
     <path
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="sccccs"
-       style="fill:#c22341;stroke-width:1.00092733;fill-opacity:1"
+       style="fill:#c22341;fill-opacity:1;stroke-width:1.00092733"
        id="path2817"
-       d="M 6.857189,23.067956 C 6.2448704,23.735222 5.2841265,23.618712 4.6326485,22.967204 L 3.0148111,21.408712 5.1380592,19.28538 6.7559803,20.843955 c 0.619902,0.745156 0.7203466,1.549304 0.1012087,2.224001 z"
+       d="M 7.162202,23.370209 C 6.5124046,24.078317 5.4928555,23.954675 4.8015019,23.26329 l -1.7168621,-1.653884 2.2532079,-2.253298 1.7169509,1.653973 c 0.657845,0.790765 0.7644375,1.644134 0.1074034,2.360128 z"
        class="cls-4" />
     <g
        transform="matrix(3.7830372,0,0,3.7830374,-13.47019,2.2657407)"
        id="g2823">
       <path
          inkscape:connector-curvature="0"
-         style="opacity:1;fill:none;stroke:#c22340;stroke-width:0.52916664;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="opacity:1;fill:none;stroke:#c22340;stroke-width:0.63499999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="path2819"
-         d="m 4.3515401,2.2334681 a 1.5109127,1.5106759 0 1 1 -2.1357859,0.00101 1.5102013,1.5099645 0 0 1 2.1357859,-0.00101 z"
+         d="M 4.3134957,2.271524 A 1.4570598,1.4568993 0 1 1 2.2538348,2.272498 1.4563738,1.4562132 0 0 1 4.3134957,2.271524 Z"
          class="cls-4" />
       <path
          inkscape:connector-curvature="0"
@@ -169,13 +169,13 @@
     </g>
     <g
        id="g851"
-       transform="matrix(2.5857917,0,0,2.5857919,-9.5382541,6.2197613)"
-       style="opacity:1;fill:#ffffff;fill-opacity:0.50196078;stroke:none;stroke-width:1.46435511">
+       transform="matrix(2.3621654,0,0,2.3621656,-8.8058418,6.9577514)"
+       style="opacity:1;fill:#ffffff;fill-opacity:0.4509804;stroke:none;stroke-width:1.60298574">
       <path
          class="cls-5"
          d="m 4.5707641,2.0043869 a 1.8322519,1.8324268 0 1 1 -2.5912073,0 1.8322519,1.8324268 0 0 1 2.5912073,0 z"
          id="path849"
-         style="fill:#ffffff;fill-opacity:0.50196078;stroke:none;stroke-width:0.23225267;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:#ffffff;fill-opacity:0.4509804;stroke:none;stroke-width:0.25424007;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          inkscape:connector-curvature="0" />
     </g>
     <rect
