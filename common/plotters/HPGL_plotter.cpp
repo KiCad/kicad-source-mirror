@@ -319,7 +319,14 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
     if( aCornerList.size() <= 1 )
         return;
 
-    SetCurrentLineWidth( aWidth );
+    // Width less than zero is occasionally used to create background-only
+    // polygons. Don't set that as the plotter line width, that'll cause
+    // trouble. Also, later, skip plotting the outline if this is the case.
+    if( aWidth > 0 )
+    {
+        SetCurrentLineWidth( aWidth );
+    }
+
     MoveTo( aCornerList[0] );
 
     if( aFill == FILL_TYPE::FILLED_SHAPE )
@@ -338,7 +345,7 @@ void HPGL_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
         fprintf( m_outputFile, hpgl_end_polygon_cmd );   // Close, fill polygon and draw outlines
     }
-    else
+    else if( aWidth > 0 )
     {
         // Plot only the polygon outline.
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
