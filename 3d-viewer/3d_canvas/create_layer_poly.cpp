@@ -60,7 +60,7 @@ void BOARD_ADAPTER::buildPadShapeThickOutlineAsPolygon( const PAD* aPad,
 }
 
 
-void BOARD_ADAPTER::transformFPShapesToPolygon( const FOOTPRINT *aFootprint, PCB_LAYER_ID aLayer,
+void BOARD_ADAPTER::transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
                                                 SHAPE_POLY_SET& aCornerBuffer ) const
 {
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )

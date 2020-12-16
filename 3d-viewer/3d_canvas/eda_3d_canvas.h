@@ -47,13 +47,14 @@ class C3D_RENDER_OGL_LEGACY;
  */
 class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 {
- public:
+public:
     /**
-     *  @brief EDA_3D_CANVAS - Creates a new 3D Canvas with a attribute list
-     *  @param aParent: the parent creator of this canvas
-     *  @param aAttribList: a list of openGL options created by GetOpenGL_AttributesList
-     *  @param aBoard: The board
-     *  @param aSettings: the settings options to be used by this canvas
+     *  Create a new 3D Canvas with an attribute list.
+     *
+     *  @param aParent the parent creator of this canvas.
+     *  @param aAttribList a list of openGL options created by GetOpenGL_AttributesList.
+     *  @param aBoard The board.
+     *  @param aSettings the settings options to be used by this canvas.
      */
     EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
                    BOARD_ADAPTER& aSettings, CCAMERA& aCamera, S3D_CACHE* a3DCachePointer );
@@ -61,11 +62,12 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     ~EDA_3D_CANVAS();
 
     /**
-     * Function SetEventDispatcher()
-     * Sets a dispatcher that processes events and forwards them to tools.
-     * @param aEventDispatcher is the object that will be used for dispatching events.
-     * DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
+     * Set a dispatcher that processes events and forwards them to tools.
+     *
+     * #DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
      * handlers from the DRAW_PANEL_GAL and parent frame.
+     *
+     * @param aEventDispatcher is the object that will be used for dispatching events.
      */
     void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher );
 
@@ -82,8 +84,9 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     void ReloadRequest( BOARD *aBoard = NULL, S3D_CACHE *aCachePointer = NULL );
 
     /**
-     * @brief IsReloadRequestPending - Query if there is a pending reload request
-     * @return true if it wants to reload, false if there is no reload pending
+     * Query if there is a pending reload request.
+     *
+     * @return true if it wants to reload, false if there is no reload pending.
      */
     bool IsReloadRequestPending() const
     {
@@ -94,7 +97,7 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     }
 
     /**
-     * @brief RenderRaytracingRequest - Request to render the current view in Raytracing mode
+     * Request to render the current view in Raytracing mode.
      */
     void RenderRaytracingRequest();
 
@@ -105,51 +108,59 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     void GetScreenshot( wxImage &aDstImage );
 
     /**
-     * @brief SetView3D - Helper function to call view commands
-     * @param aKeycode: ascii key commands
-     * @return true if the key code was handled,
-     *  false if no command found for this code.
+     * Helper function to call view commands.
+     *
+     * @param aKeycode ascii key commands.
+     * @return true if the key code was handled, false if no command found for this code.
      */
     bool SetView3D( int aKeycode );
 
     /**
-     * @brief AnimationEnabledSet - Enable or disable camera animation when switching to a pre-defined view
-     * @param aAnimationEnabled: Animation enabled state to set
+     * Enable or disable camera animation when switching to a pre-defined view.
+     *
+     * @param aAnimationEnabled animation enabled state to set.
      */
     void AnimationEnabledSet( bool aAnimationEnabled ) { m_animation_enabled = aAnimationEnabled; }
 
     /**
-     * @brief AnimationEnabledGet - Returns whether camera animation is enabled when switching to a pre-defined view
-     * @return true if animation is enabled
+     * Return whether camera animation is enabled when switching to a pre-defined view.
+     *
+     * @return true if animation is enabled.
      */
     bool AnimationEnabledGet() const { return m_animation_enabled; }
 
     /**
-     * @brief MovingSpeedMultiplierSet - Set the camera animation moving speed multiplier option
-     * @param aMovingSpeedMultiplier: One of the possible integer options: [1,2,3,4,5]
+     * Set the camera animation moving speed multiplier option.
+     *
+     * @param aMovingSpeedMultiplier one of the possible integer options: [1,2,3,4,5].
      */
-    void MovingSpeedMultiplierSet( int aMovingSpeedMultiplier ) { m_moving_speed_multiplier = aMovingSpeedMultiplier; }
+    void MovingSpeedMultiplierSet( int aMovingSpeedMultiplier )
+    {
+        m_moving_speed_multiplier = aMovingSpeedMultiplier;
+    }
 
     /**
-     * @brief MovingSpeedMultiplierGet - Return the current camera animation moving speed multiplier option
-     * @return current moving speed multiplier option, one of [1,2,3,4,5]
+     * Return the current camera animation moving speed multiplier option.
+     *
+     * @return current moving speed multiplier option, one of [1,2,3,4,5].
      */
     int MovingSpeedMultiplierGet() const { return m_moving_speed_multiplier; }
 
     /**
-     * @brief RenderEngineChanged - Notify that the render engine was changed
+     * Notify that the render engine was changed.
      */
     void RenderEngineChanged();
 
     /**
-     * @brief DisplayStatus - Update the status bar with the position information
+     * Update the status bar with the position information.
      */
     void DisplayStatus();
 
     /**
-     * @brief Request_refresh - Schedule a refresh update of the canvas
-     * @param aRedrawImmediately - true will request a redraw, false will
-     * schedule a redraw, after a short timeout.
+     * Schedule a refresh update of the canvas.
+     *
+     * @param aRedrawImmediately true will request a redraw, false will schedule a redraw
+     *                           after a short timeout.
      */
     void Request_refresh( bool aRedrawImmediately = true );
 
@@ -159,14 +170,16 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
     void OnEvent( wxEvent& aEvent );
 
 private:
-    /** Called by a wxPaintEvent event
+    /**
+     * Called by a wxPaintEvent event
      */
     void OnPaint( wxPaintEvent& aEvent );
 
     /**
      * The actual function to repaint the canvas.
-     * It is usually called by OnPaint() but because it does not use a wxPaintDC
-     * it can be called outside a wxPaintEvent
+     *
+     * It is usually called by OnPaint() but because it does not use a wxPaintDC it can be
+     * called outside a wxPaintEvent
      */
     void DoRePaint();
 
@@ -192,52 +205,50 @@ private:
 
     DECLARE_EVENT_TABLE()
 
- private:
     /**
-     * @brief stop_editingTimeOut_Timer - stop the editing time, so it will not timeout
+     *Stop the editing time so it will not timeout.
      */
     void stop_editingTimeOut_Timer();
 
     /**
-     * @brief restart_editingTimeOut_Timer - reset the editing timer
+     * Reset the editing timer.
      */
     void restart_editingTimeOut_Timer();
 
     /**
-     * @brief request_start_moving_camera - start a camera movement
-     * @param aMovingSpeed: the time speed
-     * @param aRenderPivot: if it should display pivot cursor while move
+     * Start a camera movement.
+     *
+     * @param aMovingSpeed the time speed.
+     * @param aRenderPivot if it should display pivot cursor while move.
      */
     void request_start_moving_camera( float aMovingSpeed = 2.0f, bool aRenderPivot = true );
 
     /**
-     * @brief move_pivot_based_on_cur_mouse_position -
-     * This function hits a ray to the board and start a moviment
+     * This function hits a ray to the board and start a movement.
      */
     void move_pivot_based_on_cur_mouse_position();
 
     /**
-     * @brief render_pivot - render the pivot cursor
-     * @param t: time between 0.0 and 1.0
-     * @param aScale: scale to apply on the cursor
+     * Render the pivot cursor.
+     *
+     * @param t time between 0.0 and 1.0.
+     * @param aScale scale to apply on the cursor.
      */
     void render_pivot( float t, float aScale );
 
     /**
-     * @brief initializeOpenGL
-     * @return if OpenGL initialization succeed
+     * @return true if OpenGL initialization succeeded.
      */
     bool initializeOpenGL();
 
     /**
-     * @brief releaseOpenGL - free created targets and openGL context
+     * Free created targets and openGL context.
      */
     void releaseOpenGL();
 
     RAY getRayAtCurrrentMousePosition();
 
- private:
-
+private:
     TOOL_DISPATCHER*       m_eventDispatcher;
     wxStatusBar*           m_parentStatusBar;         // Parent statusbar to report progress
     WX_INFOBAR*            m_parentInfoBar;
@@ -246,7 +257,7 @@ private:
     bool                   m_is_opengl_initialized;
     bool                   m_is_opengl_version_supported;
 
-    wxTimer                m_editing_timeout_timer;   // Expires after some time signalling that
+    wxTimer                m_editing_timeout_timer;   // Expires after some time signaling that
                                                       // the mouse / keyboard movements are over
     wxTimer                m_redraw_trigger_timer;    // Used to schedule a redraw event
     std::atomic_flag       m_is_currently_painting;   // Avoid drawing twice at the same time

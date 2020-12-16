@@ -62,6 +62,7 @@ const wxChar * EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
 
 const float EDA_3D_CANVAS::m_delta_move_step_factor = 0.7f;
 
+
 // A custom event, used to call DoRePaint during an idle time
 wxDEFINE_EVENT( wxEVT_REFRESH_CUSTOM_COMMAND, wxEvent);
 
@@ -287,8 +288,7 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
 
         if( ( major == 1 ) && ( minor < 5 ) )
         {
-            wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL not supported.",
-                        __WXFUNCTION__ );
+            wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL not supported.", __WXFUNCTION__ );
 
             m_is_opengl_version_supported = false;
         }
@@ -414,7 +414,6 @@ void EDA_3D_CANVAS::DoRePaint()
     const bool windows_size_changed = m_camera.SetCurWindowSize( clientSize );
 
     // Initialize openGL if need
-    // /////////////////////////////////////////////////////////////////////////
     if( !m_is_opengl_initialized )
     {
         if( !initializeOpenGL() )
@@ -427,8 +426,8 @@ void EDA_3D_CANVAS::DoRePaint()
 
         if( !m_is_opengl_version_supported )
         {
-            warningReporter.Report( _( "Your OpenGL version is not supported. Minimum required is 1.5" ),
-                                    RPT_SEVERITY_ERROR );
+            warningReporter.Report( _( "Your OpenGL version is not supported. Minimum required "
+                                       "is 1.5" ), RPT_SEVERITY_ERROR );
 
             warningReporter.Finalize();
         }
@@ -462,11 +461,9 @@ void EDA_3D_CANVAS::DoRePaint()
 
         // It reverts back to OpenGL mode if it was requested a raytracing
         // render of the current scene. AND the mouse / camera is moving
-        if( ( m_mouse_is_moving
-                  || m_camera_is_moving
-                  || was_camera_changed
-                  || windows_size_changed )
-            && m_render_raytracing_was_requested )
+        if( ( m_mouse_is_moving || m_camera_is_moving || was_camera_changed
+            || windows_size_changed )
+          && m_render_raytracing_was_requested )
         {
             m_render_raytracing_was_requested = false;
             m_3d_render = m_3d_render_ogl_legacy;
@@ -508,7 +505,7 @@ void EDA_3D_CANVAS::DoRePaint()
             bool reloadRaytracingForIntersectionCalculations = false;
 
             if( ( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
-                    && m_3d_render_ogl_legacy->IsReloadRequestPending() )
+              && m_3d_render_ogl_legacy->IsReloadRequestPending() )
             {
                 reloadRaytracingForIntersectionCalculations = true;
             }
@@ -748,58 +745,58 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
             switch( intersectedBoardItem->Type() )
             {
-                case PCB_PAD_T:
-                {
-                    PAD* pad = dynamic_cast<PAD*>( intersectedBoardItem );
+            case PCB_PAD_T:
+            {
+                PAD* pad = dynamic_cast<PAD*>( intersectedBoardItem );
 
-                    if( pad && pad->IsOnCopperLayer() )
-                    {
-                        reporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
-                                                           pad->GetNet()->GetNetname(),
-                                                           pad->GetNet()->GetNetClassName(),
-                                                           pad->GetName() ) );
-                    }
+                if( pad && pad->IsOnCopperLayer() )
+                {
+                    reporter.Report( wxString::Format( _( "Net %s\tNetClass %s\tPadName %s" ),
+                                                       pad->GetNet()->GetNetname(),
+                                                       pad->GetNet()->GetNetClassName(),
+                                                       pad->GetName() ) );
                 }
+            }
                 break;
 
-                case PCB_FOOTPRINT_T:
-                {
-                    FOOTPRINT* footprint = dynamic_cast<FOOTPRINT *>( intersectedBoardItem );
+            case PCB_FOOTPRINT_T:
+            {
+                FOOTPRINT* footprint = dynamic_cast<FOOTPRINT *>( intersectedBoardItem );
 
-                    if( footprint )
-                        reporter.Report( footprint->GetReference() );
-                }
+                if( footprint )
+                    reporter.Report( footprint->GetReference() );
+            }
                 break;
 
-                case PCB_TRACE_T:
-                case PCB_VIA_T:
-                case PCB_ARC_T:
-                {
-                    TRACK* track = dynamic_cast<TRACK *>( intersectedBoardItem );
+            case PCB_TRACE_T:
+            case PCB_VIA_T:
+            case PCB_ARC_T:
+            {
+                TRACK* track = dynamic_cast<TRACK *>( intersectedBoardItem );
 
-                    if( track )
-                    {
-                        reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                           track->GetNet()->GetNetname(),
-                                                           track->GetNet()->GetNetClassName() ) );
-                    }
+                if( track )
+                {
+                    reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                       track->GetNet()->GetNetname(),
+                                                       track->GetNet()->GetNetClassName() ) );
                 }
+            }
                 break;
 
-                case PCB_ZONE_T:
-                {
-                    ZONE* zone = dynamic_cast<ZONE*>( intersectedBoardItem );
+            case PCB_ZONE_T:
+            {
+                ZONE* zone = dynamic_cast<ZONE*>( intersectedBoardItem );
 
-                    if( zone && zone->IsOnCopperLayer() )
-                    {
-                        reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
-                                                           zone->GetNet()->GetNetname(),
-                                                           zone->GetNet()->GetNetClassName() ) );
-                    }
+                if( zone && zone->IsOnCopperLayer() )
+                {
+                    reporter.Report( wxString::Format( _( "Net %s\tNetClass %s" ),
+                                                       zone->GetNet()->GetNetname(),
+                                                       zone->GetNet()->GetNetClassName() ) );
                 }
+            }
                 break;
 
-                default:
+            default:
                 break;
             }
         }
@@ -941,7 +938,7 @@ void EDA_3D_CANVAS::request_start_moving_camera( float aMovingSpeed, bool aRende
         return;
     }
 
-    // Map speed multipler option to actual multiplier value
+    // Map speed multiplier option to actual multiplier value
     // [1,2,3,4,5] -> [0.25, 0.5, 1, 2, 4]
     aMovingSpeed *= ( 1 << m_moving_speed_multiplier ) / 8.0f;
 

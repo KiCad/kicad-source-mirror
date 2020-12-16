@@ -61,7 +61,7 @@
  *
  * @ingroup trace_env_vars
  */
-const wxChar * EDA_3D_VIEWER::m_logTrace = wxT( "KI_TRACE_EDA_3D_VIEWER" );
+const wxChar* EDA_3D_VIEWER::m_logTrace = wxT( "KI_TRACE_EDA_3D_VIEWER" );
 
 
 BEGIN_EVENT_TABLE( EDA_3D_VIEWER, EDA_BASE_FRAME )
@@ -107,7 +107,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     wxStatusBar *status_bar = CreateStatusBar( arrayDim( status_dims ) );
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
-    m_canvas = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( m_boardAdapter.AntiAliasingGet() ),
+    m_canvas = new EDA_3D_CANVAS( this,
+                                  COGL_ATT_LIST::GetAttributesList( m_boardAdapter.AntiAliasingGet() ),
                                   aParent->GetBoard(), m_boardAdapter, m_currentCamera,
                                   Prj().Get3DCacheManager() );
 
@@ -143,10 +144,8 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
 
     m_auimgr.SetManagedWindow( this );
 
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
-                      .Top().Layer( 6 ) );
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" )
-                      .Center() );
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
     // Call Update() to fix all pane default sizes.
     m_auimgr.Update();
@@ -260,12 +259,14 @@ void EDA_3D_VIEWER::NewDisplay( bool aForceImmediateRedraw )
         m_canvas->Refresh();
 }
 
+
 void EDA_3D_VIEWER::Redraw()
 {
     // Only update in OpenGL for an interactive interaction
     if( m_boardAdapter.RenderEngineGet() == RENDER_ENGINE::OPENGL_LEGACY )
         m_canvas->Request_refresh( true );
 }
+
 
 void EDA_3D_VIEWER::refreshRender()
 {
@@ -274,6 +275,7 @@ void EDA_3D_VIEWER::refreshRender()
     else
         NewDisplay( true );
 }
+
 
 void EDA_3D_VIEWER::Exit3DFrame( wxCommandEvent &event )
 {
@@ -329,7 +331,8 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     case ID_MENU3D_BGCOLOR_TOP:
-        if( Set3DColorFromUser( m_boardAdapter.m_BgColorTop, _( "Background Color, Top" ), nullptr ) )
+        if( Set3DColorFromUser( m_boardAdapter.m_BgColorTop, _( "Background Color, Top" ),
+                                nullptr ) )
             refreshRender();
         return;
 
@@ -455,30 +458,37 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
             };
 
     set_color( colors->GetColor( LAYER_3D_BACKGROUND_BOTTOM ), m_boardAdapter.m_BgColorBot );
-    set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ),    m_boardAdapter.m_BgColorTop );
-    set_color( colors->GetColor( LAYER_3D_BOARD ),             m_boardAdapter.m_BoardBodyColor );
-    set_color( colors->GetColor( LAYER_3D_COPPER ),            m_boardAdapter.m_CopperColor );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ), m_boardAdapter.m_SilkScreenColorBot );
-    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ),    m_boardAdapter.m_SilkScreenColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_boardAdapter.m_SolderMaskColorBot );
-    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ),        m_boardAdapter.m_SolderMaskColorTop );
-    set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ),       m_boardAdapter.m_SolderPasteColor );
+    set_color( colors->GetColor( LAYER_3D_BACKGROUND_TOP ), m_boardAdapter.m_BgColorTop );
+    set_color( colors->GetColor( LAYER_3D_BOARD ), m_boardAdapter.m_BoardBodyColor );
+    set_color( colors->GetColor( LAYER_3D_COPPER ), m_boardAdapter.m_CopperColor );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_BOTTOM ),
+               m_boardAdapter.m_SilkScreenColorBot );
+    set_color( colors->GetColor( LAYER_3D_SILKSCREEN_TOP ), m_boardAdapter.m_SilkScreenColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ), m_boardAdapter.m_SolderMaskColorBot );
+    set_color( colors->GetColor( LAYER_3D_SOLDERMASK ), m_boardAdapter.m_SolderMaskColorTop );
+    set_color( colors->GetColor( LAYER_3D_SOLDERPASTE ), m_boardAdapter.m_SolderPasteColor );
 
     if( cfg )
     {
-        m_boardAdapter.m_raytrace_lightColorCamera = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorCamera );
-        m_boardAdapter.m_raytrace_lightColorTop = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorTop );
-        m_boardAdapter.m_raytrace_lightColorBottom = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorBottom );
+        m_boardAdapter.m_raytrace_lightColorCamera =
+                m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorCamera );
+        m_boardAdapter.m_raytrace_lightColorTop =
+                m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorTop );
+        m_boardAdapter.m_raytrace_lightColorBottom =
+                m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColorBottom );
 
         m_boardAdapter.m_raytrace_lightColor.resize( cfg->m_Render.raytrace_lightColor.size() );
-        m_boardAdapter.m_raytrace_lightSphericalCoords.resize( cfg->m_Render.raytrace_lightColor.size() );
+        m_boardAdapter.m_raytrace_lightSphericalCoords.resize(
+                cfg->m_Render.raytrace_lightColor.size() );
 
         for( size_t i = 0; i < cfg->m_Render.raytrace_lightColor.size(); ++i )
         {
-            m_boardAdapter.m_raytrace_lightColor[i] = m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColor[i] );
+            m_boardAdapter.m_raytrace_lightColor[i] =
+                    m_boardAdapter.GetColor( cfg->m_Render.raytrace_lightColor[i] );
 
-            SFVEC2F sphericalCoord = SFVEC2F( ( cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
-                                                cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
+            SFVEC2F sphericalCoord =
+                    SFVEC2F( ( cfg->m_Render.raytrace_lightElevation[i] + 90.0f ) / 180.0f,
+                             cfg->m_Render.raytrace_lightAzimuth[i] / 180.0f );
 
             sphericalCoord.x = glm::clamp( sphericalCoord.x, 0.0f, 1.0f );
             sphericalCoord.y = glm::clamp( sphericalCoord.y, 0.0f, 2.0f );
@@ -495,7 +505,8 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( FL_RENDER_OPENGL_COPPER_THICKNESS,          opengl_copper_thickness );
         TRANSFER_SETTING( FL_RENDER_OPENGL_SHOW_MODEL_BBOX,           opengl_show_model_bbox );
         TRANSFER_SETTING( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE,        opengl_AA_disableOnMove );
-        TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, opengl_thickness_disableOnMove );
+        TRANSFER_SETTING( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
+                          opengl_thickness_disableOnMove );
         TRANSFER_SETTING( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,      opengl_vias_disableOnMove );
         TRANSFER_SETTING( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,     opengl_holes_disableOnMove );
 
@@ -524,20 +535,26 @@ void EDA_3D_VIEWER::LoadSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( FL_RENDER_PLATED_PADS_AS_PLATED,    renderPlatedPadsAsPlated );
 
         m_boardAdapter.GridSet( static_cast<GRID3D_TYPE>( cfg->m_Render.grid_type ) );
-        m_boardAdapter.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
+        m_boardAdapter.AntiAliasingSet(
+                static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode ) );
 
-        m_boardAdapter.m_opengl_selectionColor = m_boardAdapter.GetColor( cfg->m_Render.opengl_selection_color );
+        m_boardAdapter.m_opengl_selectionColor =
+                m_boardAdapter.GetColor( cfg->m_Render.opengl_selection_color );
 
         m_boardAdapter.m_raytrace_nrsamples_shadows = cfg->m_Render.raytrace_nrsamples_shadows;
-        m_boardAdapter.m_raytrace_nrsamples_reflections = cfg->m_Render.raytrace_nrsamples_reflections;
-        m_boardAdapter.m_raytrace_nrsamples_refractions = cfg->m_Render.raytrace_nrsamples_refractions;
+        m_boardAdapter.m_raytrace_nrsamples_reflections =
+                cfg->m_Render.raytrace_nrsamples_reflections;
+        m_boardAdapter.m_raytrace_nrsamples_refractions =
+                cfg->m_Render.raytrace_nrsamples_refractions;
 
         m_boardAdapter.m_raytrace_spread_shadows = cfg->m_Render.raytrace_spread_shadows;
         m_boardAdapter.m_raytrace_spread_reflections = cfg->m_Render.raytrace_spread_reflections;
         m_boardAdapter.m_raytrace_spread_refractions = cfg->m_Render.raytrace_spread_refractions;
 
-        m_boardAdapter.m_raytrace_recursivelevel_refractions = cfg->m_Render.raytrace_recursivelevel_refractions;
-        m_boardAdapter.m_raytrace_recursivelevel_reflections = cfg->m_Render.raytrace_recursivelevel_reflections;
+        m_boardAdapter.m_raytrace_recursivelevel_refractions =
+                cfg->m_Render.raytrace_recursivelevel_refractions;
+        m_boardAdapter.m_raytrace_recursivelevel_reflections =
+                cfg->m_Render.raytrace_recursivelevel_reflections;
 
         // When opening the 3D viewer, we use the opengl mode, not the ray tracing engine
         // because the ray tracing is very time consumming, and can be seen as not working
@@ -582,13 +599,14 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
                 // in config file, that appears always modified.
                 // So we must compare the SFVEC4F old and new values and update only
                 // actual changes.
-                SFVEC4F newSFVEC4Fcolor( float(colors->GetColor( aTarget ).r),
-                                         float(colors->GetColor( aTarget ).g),
-                                         float(colors->GetColor( aTarget ).b),
-                                         float(colors->GetColor( aTarget ).a) );
+                SFVEC4F newSFVEC4Fcolor( float( colors->GetColor( aTarget ).r ),
+                                         float( colors->GetColor( aTarget ).g ),
+                                         float( colors->GetColor( aTarget ).b ),
+                                         float( colors->GetColor( aTarget ).a ) );
 
                 if( aSource != newSFVEC4Fcolor )
-                    colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b, aSource.a ) );
+                    colors->SetColor( aTarget, COLOR4D( aSource.r, aSource.g, aSource.b,
+                                                        aSource.a ) );
             };
 
     save_color( m_boardAdapter.m_BgColorBot,         LAYER_3D_BACKGROUND_BOTTOM );
@@ -615,29 +633,39 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
                     aTarget = COLOR4D( aSource.r, aSource.g, aSource.b, 1.0 );
                 };
 
-        save_color( m_boardAdapter.m_raytrace_lightColorCamera, cfg->m_Render.raytrace_lightColorCamera );
+        save_color( m_boardAdapter.m_raytrace_lightColorCamera,
+                    cfg->m_Render.raytrace_lightColorCamera );
 
-        save_color( m_boardAdapter.m_raytrace_lightColorTop, cfg->m_Render.raytrace_lightColorTop );
-        save_color( m_boardAdapter.m_raytrace_lightColorBottom, cfg->m_Render.raytrace_lightColorBottom );
+        save_color( m_boardAdapter.m_raytrace_lightColorTop,
+                    cfg->m_Render.raytrace_lightColorTop );
+        save_color( m_boardAdapter.m_raytrace_lightColorBottom,
+                    cfg->m_Render.raytrace_lightColorBottom );
 
         for( size_t i = 0; i < cfg->m_Render.raytrace_lightColor.size(); ++i )
         {
-            save_color( m_boardAdapter.m_raytrace_lightColor[i], cfg->m_Render.raytrace_lightColor[i] );
+            save_color( m_boardAdapter.m_raytrace_lightColor[i],
+                        cfg->m_Render.raytrace_lightColor[i] );
 
-            cfg->m_Render.raytrace_lightElevation[i] = (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].x * 180.0f - 90.0f );
-            cfg->m_Render.raytrace_lightAzimuth[i] = (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].y * 180.0f );
+            cfg->m_Render.raytrace_lightElevation[i] =
+                    (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].x * 180.0f - 90.0f );
+            cfg->m_Render.raytrace_lightAzimuth[i] =
+                    (int)( m_boardAdapter.m_raytrace_lightSphericalCoords[i].y * 180.0f );
         }
 
         cfg->m_Render.raytrace_nrsamples_shadows = m_boardAdapter.m_raytrace_nrsamples_shadows;
-        cfg->m_Render.raytrace_nrsamples_reflections = m_boardAdapter.m_raytrace_nrsamples_reflections;
-        cfg->m_Render.raytrace_nrsamples_refractions = m_boardAdapter.m_raytrace_nrsamples_refractions;
+        cfg->m_Render.raytrace_nrsamples_reflections =
+                m_boardAdapter.m_raytrace_nrsamples_reflections;
+        cfg->m_Render.raytrace_nrsamples_refractions =
+                m_boardAdapter.m_raytrace_nrsamples_refractions;
 
         cfg->m_Render.raytrace_spread_shadows = m_boardAdapter.m_raytrace_spread_shadows;
         cfg->m_Render.raytrace_spread_reflections = m_boardAdapter.m_raytrace_spread_reflections;
         cfg->m_Render.raytrace_spread_refractions = m_boardAdapter.m_raytrace_spread_refractions;
 
-        cfg->m_Render.raytrace_recursivelevel_refractions = m_boardAdapter.m_raytrace_recursivelevel_refractions;
-        cfg->m_Render.raytrace_recursivelevel_reflections = m_boardAdapter.m_raytrace_recursivelevel_reflections;
+        cfg->m_Render.raytrace_recursivelevel_refractions =
+                m_boardAdapter.m_raytrace_recursivelevel_refractions;
+        cfg->m_Render.raytrace_recursivelevel_reflections =
+                m_boardAdapter.m_raytrace_recursivelevel_reflections;
 
 #define TRANSFER_SETTING( field, flag ) cfg->m_Render.field = m_boardAdapter.GetFlag( flag )
 
@@ -657,7 +685,8 @@ void EDA_3D_VIEWER::SaveSettings( APP_SETTINGS_BASE *aCfg )
         TRANSFER_SETTING( opengl_AA_disableOnMove,        FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_copper_thickness,        FL_RENDER_OPENGL_COPPER_THICKNESS );
         TRANSFER_SETTING( opengl_show_model_bbox,         FL_RENDER_OPENGL_SHOW_MODEL_BBOX );
-        TRANSFER_SETTING( opengl_thickness_disableOnMove, FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE );
+        TRANSFER_SETTING( opengl_thickness_disableOnMove,
+                          FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_vias_disableOnMove,      FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE );
         TRANSFER_SETTING( opengl_holes_disableOnMove,     FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE );
 
@@ -696,6 +725,7 @@ void EDA_3D_VIEWER::SynchroniseColoursWithBoard()
     BOARD*                 brd       = GetBoard();
     const FAB_LAYER_COLOR* stdColors = GetColorStandardList();
     wxColour               color;
+
     if( brd )
     {
         const BOARD_STACKUP& stckp = brd->GetDesignSettings().GetStackupDescriptor();
@@ -856,7 +886,7 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
     else
     {
         if( !screenshotImage.SaveFile( fullFileName,
-                             fmt_is_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
+                                       fmt_is_jpeg ? wxBITMAP_TYPE_JPEG : wxBITMAP_TYPE_PNG ) )
             wxMessageBox( _( "Can't save file" ) );
 
         screenshotImage.Destroy();
@@ -882,7 +912,8 @@ bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
     KIGFX::COLOR4D newcolor;
     KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, aColor.a );
 
-    DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors, aDefaultColor );
+    DIALOG_COLOR_PICKER picker( this, oldcolor, aAllowOpacityControl, aPredefinedColors,
+                                aDefaultColor );
 
     if( picker.ShowModal() != wxID_OK )
         return false;
@@ -908,7 +939,8 @@ bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 241.0/255.0, 241.0/255.0, 241.0/255.0, "White" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 4.0/255.0, 18.0/255.0, 21.0/255.0, "Dark" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ), &colors, false, colors[0].m_Color ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SilkScreenColorTop, _( "Silkscreen Color" ),
+                            &colors, false, colors[0].m_Color ) )
     {
         m_boardAdapter.m_SilkScreenColorBot = m_boardAdapter.m_SilkScreenColorTop;
 
@@ -927,20 +959,24 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
 
     colors.push_back( CUSTOM_COLOR_ITEM(  20/255.0,  51/255.0,  36/255.0, 0.83, "Green" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  91/255.0, 168/255.0,  12/255.0, 0.83, "Light Green" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, 0.83, "Saturated Green" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  13/255.0, 104/255.0,  11/255.0, 0.83,
+                                          "Saturated Green" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, 0.83, "Red" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, 0.83, "Red Light Orange" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, 0.83,
+                                         "Red Light Orange" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, 0.83, "Red 2" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(   2/255.0,  59/255.0, 162/255.0, 0.83, "Blue" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  54/255.0,  79/255.0, 116/255.0, 0.83, "Light blue 1" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  61/255.0,  85/255.0, 130/255.0, 0.83, "Light blue 2" ) );
-    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, 0.83, "Green blue (dark)" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  21/255.0,  70/255.0,  80/255.0, 0.83,
+                                          "Green blue (dark)" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  11/255.0,  11/255.0,  11/255.0, 0.83, "Black" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, 0.83, "White" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, 0.83, "Purple" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  32/255.0,   2/255.0,  53/255.0, 0.83, "Purple Dark" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ), &colors, true, colors[0].m_Color ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderMaskColorTop, _( "Solder Mask Color" ),
+                            &colors, true, colors[0].m_Color ) )
     {
         m_boardAdapter.m_SolderMaskColorBot = m_boardAdapter.m_SolderMaskColorTop;
 
@@ -962,7 +998,8 @@ bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 160/255.0, 160/255.0, "Tin" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors, false, colors[0].m_Color ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_CopperColor, _( "Copper Color" ), &colors, false,
+                            colors[0].m_Color ) )
     {
         refreshRender();
 
@@ -977,7 +1014,8 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
 {
     CUSTOM_COLORS_LIST colors;
 
-    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, 0.9, "FR4 natural, dark" ) );
+    colors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, 0.9,
+                                          "FR4 natural, dark" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, 0.9, "FR4 natural" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, 0.9, "brown/red" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, 0.9, "brown 1" ) );
@@ -986,7 +1024,8 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, 0.9, "green 1" ) );
     colors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, 0.9, "green 2" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors, true, colors[0].m_Color ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_BoardBodyColor, _( "Board Body Color" ), &colors,
+                            true, colors[0].m_Color ) )
     {
         refreshRender();
 
@@ -1005,7 +1044,8 @@ bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
     colors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
     colors.push_back( CUSTOM_COLOR_ITEM(  90/255.0,  90/255.0,  90/255.0, "grey 2" ) );
 
-    if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors, false, colors[0].m_Color ) )
+    if( Set3DColorFromUser( m_boardAdapter.m_SolderPasteColor, _( "Solder Paste Color" ), &colors,
+                            false, colors[0].m_Color ) )
     {
         refreshRender();
 

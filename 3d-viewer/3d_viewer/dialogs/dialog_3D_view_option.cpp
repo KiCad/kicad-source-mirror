@@ -39,10 +39,6 @@ public:
         return static_cast<EDA_3D_VIEWER*>( DIALOG_SHIM::GetParent() );
     }
 
-private:
-    BOARD_ADAPTER& m_settings;
-    EDA_3D_CANVAS* m_canvas;
-
     void initDialog();
 
     void OnCheckEnableAnimation( wxCommandEvent& WXUNUSED( event ) ) override;
@@ -55,6 +51,10 @@ private:
     bool TransferDataToWindow() override;
 
     void TransferColorDataToWindow();
+
+private:
+    BOARD_ADAPTER& m_settings;
+    EDA_3D_CANVAS* m_canvas;
 };
 
 
@@ -103,11 +103,13 @@ void DIALOG_3D_VIEW_OPTIONS::initDialog()
     m_bitmapClipSilkOnViaAnnulus->SetBitmap( KiBitmap( use_3D_copper_thickness_xpm ) );
 }
 
+
 void DIALOG_3D_VIEW_OPTIONS::OnCheckEnableAnimation( wxCommandEvent& event )
 {
     m_staticAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
     m_sliderAnimationSpeed->Enable( m_checkBoxEnableAnimation->GetValue() );
 }
+
 
 void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
 {
@@ -129,7 +131,8 @@ void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
     {
         m_settings.m_raytrace_lightColor[i] = SFVEC3F( 0.168f );
 
-        m_settings.m_raytrace_lightSphericalCoords[i].x = ( (float)default_elevation[i] + 90.0f ) / 180.0f;
+        m_settings.m_raytrace_lightSphericalCoords[i].x =
+                ( (float)default_elevation[i] + 90.0f ) / 180.0f;
 
         m_settings.m_raytrace_lightSphericalCoords[i].y = (float)default_azimuth[i] / 180.0f;
     }
@@ -137,13 +140,12 @@ void DIALOG_3D_VIEW_OPTIONS::OnLightsResetToDefaults( wxCommandEvent& event )
     TransferColorDataToWindow();
 }
 
+
 void DIALOG_3D_VIEW_OPTIONS::TransferColorDataToWindow()
 {
     auto Transfer_color = [] ( const SFVEC3F& aSource, wxColourPickerCtrl *aTarget )
     {
-        aTarget->SetColour( wxColour( aSource.r * 255,
-                                      aSource.g * 255,
-                                      aSource.b * 255, 255 ) );
+        aTarget->SetColour( wxColour( aSource.r * 255, aSource.g * 255, aSource.b * 255, 255 ) );
     };
 
     Transfer_color( m_settings.m_raytrace_lightColorCamera, m_colourPickerCameraLight );
@@ -162,24 +164,41 @@ void DIALOG_3D_VIEW_OPTIONS::TransferColorDataToWindow()
 
     Transfer_color( m_settings.m_opengl_selectionColor, m_colourPickerSelection );
 
-    m_spinCtrlLightElevation1->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[0].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation2->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[1].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation3->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[2].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation4->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[3].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation5->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[4].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation6->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[5].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation7->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[6].x * 180.0f - 90.0f ) );
-    m_spinCtrlLightElevation8->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[7].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation1->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[0].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation2->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[1].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation3->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[2].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation4->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[3].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation5->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[4].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation6->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[5].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation7->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[6].x * 180.0f - 90.0f ) );
+    m_spinCtrlLightElevation8->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[7].x * 180.0f - 90.0f ) );
 
-    m_spinCtrlLightAzimuth1->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[0].y * 180.0f ) );
-    m_spinCtrlLightAzimuth2->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[1].y * 180.0f ) );
-    m_spinCtrlLightAzimuth3->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[2].y * 180.0f ) );
-    m_spinCtrlLightAzimuth4->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[3].y * 180.0f ) );
-    m_spinCtrlLightAzimuth5->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[4].y * 180.0f ) );
-    m_spinCtrlLightAzimuth6->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[5].y * 180.0f ) );
-    m_spinCtrlLightAzimuth7->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[6].y * 180.0f ) );
-    m_spinCtrlLightAzimuth8->SetValue( (int)( m_settings.m_raytrace_lightSphericalCoords[7].y * 180.0f ) );
+    m_spinCtrlLightAzimuth1->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[0].y * 180.0f ) );
+    m_spinCtrlLightAzimuth2->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[1].y * 180.0f ) );
+    m_spinCtrlLightAzimuth3->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[2].y * 180.0f ) );
+    m_spinCtrlLightAzimuth4->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[3].y * 180.0f ) );
+    m_spinCtrlLightAzimuth5->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[4].y * 180.0f ) );
+    m_spinCtrlLightAzimuth6->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[5].y * 180.0f ) );
+    m_spinCtrlLightAzimuth7->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[6].y * 180.0f ) );
+    m_spinCtrlLightAzimuth8->SetValue(
+            (int)( m_settings.m_raytrace_lightSphericalCoords[7].y * 180.0f ) );
 }
+
 
 bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
 {
@@ -200,36 +219,51 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataToWindow()
     m_checkBoxECO->SetValue( m_settings.GetFlag( FL_ECO ) );
     m_checkBoxSubtractMaskFromSilk->SetValue( m_settings.GetFlag( FL_SUBTRACT_MASK_FROM_SILK ) );
     m_checkBoxClipSilkOnViaAnnulus->SetValue( m_settings.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) );
-    m_checkBoxRenderPlatedPadsAsPlated->SetValue( m_settings.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) );
+    m_checkBoxRenderPlatedPadsAsPlated->SetValue(
+            m_settings.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) );
 
     // OpenGL options
     m_checkBoxCuThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
     m_checkBoxBoundingBoxes->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
     m_checkBoxDisableAAMove->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveThickness->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveVias->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
-    m_checkBoxDisableMoveHoles->SetValue( m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveThickness->SetValue(
+            m_settings.GetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveVias->SetValue(
+            m_settings.GetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE ) );
+    m_checkBoxDisableMoveHoles->SetValue(
+            m_settings.GetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE ) );
     m_choiceAntiAliasing->SetSelection( static_cast<int>( m_settings.AntiAliasingGet() ) );
 
     // Raytracing options
-    m_checkBoxRaytracing_renderShadows->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
+    m_checkBoxRaytracing_renderShadows->SetValue(
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
     m_checkBoxRaytracing_addFloor->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-    m_checkBoxRaytracing_showRefractions->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-    m_checkBoxRaytracing_showReflections->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-    m_checkBoxRaytracing_postProcessing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
-    m_checkBoxRaytracing_antiAliasing->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-    m_checkBoxRaytracing_proceduralTextures->SetValue( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
+    m_checkBoxRaytracing_showRefractions->SetValue(
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
+    m_checkBoxRaytracing_showReflections->SetValue(
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
+    m_checkBoxRaytracing_postProcessing->SetValue(
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
+    m_checkBoxRaytracing_antiAliasing->SetValue(
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
+    m_checkBoxRaytracing_proceduralTextures->SetValue(
+            m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
 
     m_spinCtrl_NrSamples_Shadows->SetValue( m_settings.m_raytrace_nrsamples_shadows );
     m_spinCtrl_NrSamples_Reflections->SetValue( m_settings.m_raytrace_nrsamples_reflections );
     m_spinCtrl_NrSamples_Refractions->SetValue( m_settings.m_raytrace_nrsamples_refractions );
 
-    m_spinCtrlDouble_SpreadFactor_Shadows->SetValue( m_settings.m_raytrace_spread_shadows * 100.0f );
-    m_spinCtrlDouble_SpreadFactor_Reflections->SetValue( m_settings.m_raytrace_spread_reflections * 100.0f );
-    m_spinCtrlDouble_SpreadFactor_Refractions->SetValue( m_settings.m_raytrace_spread_refractions * 100.0f );
+    m_spinCtrlDouble_SpreadFactor_Shadows->SetValue(
+            m_settings.m_raytrace_spread_shadows * 100.0f );
+    m_spinCtrlDouble_SpreadFactor_Reflections->SetValue(
+            m_settings.m_raytrace_spread_reflections * 100.0f );
+    m_spinCtrlDouble_SpreadFactor_Refractions->SetValue(
+            m_settings.m_raytrace_spread_refractions * 100.0f );
 
-    m_spinCtrlRecursiveLevel_Reflections->SetValue( m_settings.m_raytrace_recursivelevel_reflections );
-    m_spinCtrlRecursiveLevel_Refractions->SetValue( m_settings.m_raytrace_recursivelevel_refractions );
+    m_spinCtrlRecursiveLevel_Reflections->SetValue(
+            m_settings.m_raytrace_recursivelevel_reflections );
+    m_spinCtrlRecursiveLevel_Refractions->SetValue(
+            m_settings.m_raytrace_recursivelevel_refractions );
 
     TransferColorDataToWindow();
 
@@ -256,7 +290,8 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_ZONE, m_checkBoxAreas->GetValue() );
     m_settings.SetFlag( FL_SUBTRACT_MASK_FROM_SILK, m_checkBoxSubtractMaskFromSilk->GetValue() );
     m_settings.SetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS, m_checkBoxClipSilkOnViaAnnulus->GetValue() );
-    m_settings.SetFlag( FL_RENDER_PLATED_PADS_AS_PLATED, m_checkBoxRenderPlatedPadsAsPlated->GetValue() );
+    m_settings.SetFlag( FL_RENDER_PLATED_PADS_AS_PLATED,
+                        m_checkBoxRenderPlatedPadsAsPlated->GetValue() );
 
     // Set 3D shapes visibility
     m_settings.SetFlag( FL_FP_ATTRIBUTES_NORMAL, m_checkBox3DshapesTH->GetValue() );
@@ -275,38 +310,52 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
     m_settings.SetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS, m_checkBoxCuThickness->GetValue() );
     m_settings.SetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX, m_checkBoxBoundingBoxes->GetValue() );
     m_settings.SetFlag( FL_RENDER_OPENGL_AA_DISABLE_ON_MOVE, m_checkBoxDisableAAMove->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE, m_checkBoxDisableMoveThickness->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE, m_checkBoxDisableMoveVias->GetValue() );
-    m_settings.SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE, m_checkBoxDisableMoveHoles->GetValue() );
-    m_settings.AntiAliasingSet( static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() ) );
+    m_settings.SetFlag( FL_RENDER_OPENGL_THICKNESS_DISABLE_ON_MOVE,
+                        m_checkBoxDisableMoveThickness->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_VIAS_DISABLE_ON_MOVE,
+                        m_checkBoxDisableMoveVias->GetValue() );
+    m_settings.SetFlag( FL_RENDER_OPENGL_HOLES_DISABLE_ON_MOVE,
+                        m_checkBoxDisableMoveHoles->GetValue() );
+    m_settings.AntiAliasingSet(
+            static_cast<ANTIALIASING_MODE>( m_choiceAntiAliasing->GetSelection() ) );
 
     // Raytracing options
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS, m_checkBoxRaytracing_renderShadows->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR, m_checkBoxRaytracing_addFloor->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS, m_checkBoxRaytracing_showRefractions->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS, m_checkBoxRaytracing_showReflections->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING, m_checkBoxRaytracing_postProcessing->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING, m_checkBoxRaytracing_antiAliasing->GetValue() );
-    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES, m_checkBoxRaytracing_proceduralTextures->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_SHADOWS,
+                        m_checkBoxRaytracing_renderShadows->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_BACKFLOOR,
+                        m_checkBoxRaytracing_addFloor->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFRACTIONS,
+                        m_checkBoxRaytracing_showRefractions->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_REFLECTIONS,
+                        m_checkBoxRaytracing_showReflections->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING,
+                        m_checkBoxRaytracing_postProcessing->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING,
+                        m_checkBoxRaytracing_antiAliasing->GetValue() );
+    m_settings.SetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES,
+                        m_checkBoxRaytracing_proceduralTextures->GetValue() );
 
     m_settings.m_raytrace_nrsamples_shadows = m_spinCtrl_NrSamples_Shadows->GetValue();
     m_settings.m_raytrace_nrsamples_reflections = m_spinCtrl_NrSamples_Reflections->GetValue();
     m_settings.m_raytrace_nrsamples_refractions= m_spinCtrl_NrSamples_Refractions->GetValue();
 
-    m_settings.m_raytrace_spread_shadows = static_cast<float>( m_spinCtrlDouble_SpreadFactor_Shadows->GetValue() ) / 100.0f;
-    m_settings.m_raytrace_spread_reflections = static_cast<float>( m_spinCtrlDouble_SpreadFactor_Reflections->GetValue() ) / 100.0f;
-    m_settings.m_raytrace_spread_refractions = static_cast<float>( m_spinCtrlDouble_SpreadFactor_Refractions->GetValue() ) / 100.0f;
+    m_settings.m_raytrace_spread_shadows =
+            static_cast<float>( m_spinCtrlDouble_SpreadFactor_Shadows->GetValue() ) / 100.0f;
+    m_settings.m_raytrace_spread_reflections =
+            static_cast<float>( m_spinCtrlDouble_SpreadFactor_Reflections->GetValue() ) / 100.0f;
+    m_settings.m_raytrace_spread_refractions =
+            static_cast<float>( m_spinCtrlDouble_SpreadFactor_Refractions->GetValue() ) / 100.0f;
 
-    m_settings.m_raytrace_recursivelevel_reflections = m_spinCtrlRecursiveLevel_Reflections->GetValue();
-    m_settings.m_raytrace_recursivelevel_refractions = m_spinCtrlRecursiveLevel_Refractions->GetValue();
+    m_settings.m_raytrace_recursivelevel_reflections =
+            m_spinCtrlRecursiveLevel_Reflections->GetValue();
+    m_settings.m_raytrace_recursivelevel_refractions =
+            m_spinCtrlRecursiveLevel_Refractions->GetValue();
 
     auto Transfer_color = [] ( SFVEC3F& aTarget, wxColourPickerCtrl *aSource )
     {
         const wxColour color = aSource->GetColour();
 
-        aTarget = SFVEC3F( color.Red() / 255.0f,
-                           color.Green() / 255.0f,
-                           color.Blue() / 255.0f );
+        aTarget = SFVEC3F( color.Red() / 255.0f, color.Green() / 255.0f, color.Blue() / 255.0f );
     };
 
     Transfer_color( m_settings.m_raytrace_lightColorCamera, m_colourPickerCameraLight );
@@ -324,14 +373,22 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
 
     Transfer_color( m_settings.m_opengl_selectionColor, m_colourPickerSelection );
 
-    m_settings.m_raytrace_lightSphericalCoords[0].x = ( m_spinCtrlLightElevation1->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[1].x = ( m_spinCtrlLightElevation2->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[2].x = ( m_spinCtrlLightElevation3->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[3].x = ( m_spinCtrlLightElevation4->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[4].x = ( m_spinCtrlLightElevation5->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[5].x = ( m_spinCtrlLightElevation6->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[6].x = ( m_spinCtrlLightElevation7->GetValue() + 90.0f ) / 180.0f;
-    m_settings.m_raytrace_lightSphericalCoords[7].x = ( m_spinCtrlLightElevation8->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[0].x =
+            ( m_spinCtrlLightElevation1->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[1].x =
+            ( m_spinCtrlLightElevation2->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[2].x =
+            ( m_spinCtrlLightElevation3->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[3].x =
+            ( m_spinCtrlLightElevation4->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[4].x =
+            ( m_spinCtrlLightElevation5->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[5].x =
+            ( m_spinCtrlLightElevation6->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[6].x =
+            ( m_spinCtrlLightElevation7->GetValue() + 90.0f ) / 180.0f;
+    m_settings.m_raytrace_lightSphericalCoords[7].x =
+            ( m_spinCtrlLightElevation8->GetValue() + 90.0f ) / 180.0f;
 
     m_settings.m_raytrace_lightSphericalCoords[0].y = m_spinCtrlLightAzimuth1->GetValue() / 180.0f;
     m_settings.m_raytrace_lightSphericalCoords[1].y = m_spinCtrlLightAzimuth2->GetValue() / 180.0f;
@@ -344,11 +401,11 @@ bool DIALOG_3D_VIEW_OPTIONS::TransferDataFromWindow()
 
     for( size_t i = 0; i < m_settings.m_raytrace_lightSphericalCoords.size(); ++i )
     {
-        m_settings.m_raytrace_lightSphericalCoords[i].x = glm::clamp( m_settings.m_raytrace_lightSphericalCoords[i].x,
-                                                                      0.0f, 1.0f );
+        m_settings.m_raytrace_lightSphericalCoords[i].x =
+                glm::clamp( m_settings.m_raytrace_lightSphericalCoords[i].x, 0.0f, 1.0f );
 
-        m_settings.m_raytrace_lightSphericalCoords[i].y = glm::clamp( m_settings.m_raytrace_lightSphericalCoords[i].y,
-                                                                      0.0f, 2.0f );
+        m_settings.m_raytrace_lightSphericalCoords[i].y =
+                glm::clamp( m_settings.m_raytrace_lightSphericalCoords[i].y, 0.0f, 2.0f );
     }
 
     // Camera Options

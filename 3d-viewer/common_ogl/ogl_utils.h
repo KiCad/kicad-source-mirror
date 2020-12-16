@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,9 @@
  */
 
 /**
- * @file  ogl_utils.h
- * @brief implements generic openGL functions that are common to any openGL target
+ * @file ogl_utils.h
+ *
+ * Implements generic OpenGL functions that are common to any OpenGL target.
  */
 
 #ifndef OGL_UTILS_H_
@@ -34,52 +35,45 @@
 #include "3d_rendering/cimage.h"
 #include <plugins/3dapi/c3dmodel.h>
 
-
 /**
- * @brief OGL_SetMaterial - Set OpenGL materials
- * @param aMaterial: a material structure with parameters to set
- * @param aOpacity: main model opacity 0.0 full transparente, 1.0 full opaque
- * @param aUseSelectedMaterial: if material should be set for selection mode
- * @param aSelectionColor: material to use for selection in case it is enabled
+ * Set OpenGL materials.
+ *
+ * @param aMaterial a material structure with parameters to set.
+ * @param aOpacity main model opacity 0.0 full transparent, 1.0 full opaque.
+ * @param aUseSelectedMaterial if material should be set for selection mode.
+ * @param aSelectionColor material to use for selection in case it is enabled.
  */
-void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity, bool aUseSelectedMaterial = false, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
-
+void OGL_SetMaterial( const SMATERIAL& aMaterial, float aOpacity,
+                      bool aUseSelectedMaterial = false,
+                      SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) );
 
 /**
- * @brief OGL_SetDiffuseOnlyMaterial - sets only the diffuse color and keep other
- * parameters with default values
- * @param aMaterialDiffuse: the diffese color to assign to material properties
+ * Sets only the diffuse color and keep other parameters with default values.
+ *
+ * @param aMaterialDiffuse the diffuse color to assign to material properties.
  */
-void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity );
-
+void OGL_SetDiffuseOnlyMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity );
 
 /**
- * @brief OGL_LoadTexture - generate a new OpenGL texture
- * @param aImage: a image to generate the texture from
- * @return the OpenGL texture index created
+ * Generate a new OpenGL texture.
+ *
+ * @param aImage a image to generate the texture from.
+ * @return the OpenGL texture index created.
  */
-GLuint OGL_LoadTexture( const CIMAGE &aImage );
-
+GLuint OGL_LoadTexture( const CIMAGE& aImage );
 
 /**
- * @brief OGL_GetScreenshot - got the pixel data of current OpenGL image
- * @param aDstImage: the output image. the image must be destroyed to free the data
+ * Get the pixel data of current OpenGL image.
+ *
+ * @param aDstImage the output image. the image must be destroyed to free the data.
  */
-void OGL_GetScreenshot( wxImage &aDstImage );
+void OGL_GetScreenshot( wxImage& aDstImage );
 
-
-/**
- * @brief OGL_DrawBackground
- * @param aTopColor
- * @param aBotColor
- */
-void OGL_DrawBackground( const SFVEC3F &aTopColor, const SFVEC3F &aBotColor );
-
+void OGL_DrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor );
 
 /**
- * @brief OGL_ResetTextureStateDefaults - resets to default state the texture settings
+ * Reset to default state the texture settings.
  */
 void OGL_ResetTextureStateDefaults();
-
 
 #endif // OGL_UTILS_H_

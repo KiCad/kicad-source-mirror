@@ -43,6 +43,8 @@
  *  The debug output can be turned on by setting the WXTRACE environment variable to
  *  "KI_TRACE_EDA_CINFO3D_VISU".  See the wxWidgets documentation on wxLogTrace for
  *  more information.
+ *
+ * @ingroup trace_env_vars
  */
 const wxChar *BOARD_ADAPTER::m_logTrace = wxT( "KI_TRACE_EDA_CINFO3D_VISU" );
 
@@ -238,6 +240,7 @@ void BOARD_ADAPTER::SetFlag( DISPLAY3D_FLG aFlag, bool aState )
     m_drawFlags[aFlag] = aState;
 }
 
+
 bool BOARD_ADAPTER::ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const
 {
     if( aFPAttributes & FP_SMD )
@@ -253,10 +256,12 @@ bool BOARD_ADAPTER::ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const
 #define COPPER_THICKNESS KiROUND( 0.035 * IU_PER_MM )   // for 35 um
 #define TECH_LAYER_THICKNESS KiROUND( 0.04 * IU_PER_MM )
 
+
 int BOARD_ADAPTER::GetHolePlatingThicknessBIU() const noexcept
 {
     return m_board->GetDesignSettings().GetHolePlatingThickness();
 }
+
 
 unsigned int BOARD_ADAPTER::GetNrSegmentsCircle( float aDiameter3DU ) const
 {
@@ -295,7 +300,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
 
     // Calculates the board bounding box (board outlines + items)
     // to ensure any item, even outside the board outlines can be seen
-
     bool boardEdgesOnly = true;
 
     if( m_board->IsFootprintHolder() || !GetFlag( FL_USE_REALISTIC_MODE )
@@ -322,7 +326,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     if( m_copperLayersCount < 2 )
         m_copperLayersCount = 2;
 
-    // Calculate the convertion to apply to all positions.
+    // Calculate the conversion to apply to all positions.
     m_biuTo3Dunits = RANGE_SCALE_3D / std::max( m_boardSize.x, m_boardSize.y );
 
     m_epoxyThickness3DU = m_board->GetDesignSettings().GetBoardThickness() * m_biuTo3Dunits;
@@ -423,17 +427,14 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
         m_layerZcoordBottom[layer_id] = zposBottom;
     }
 
-    m_boardCenter = SFVEC3F( m_boardPos.x * m_biuTo3Dunits,
-                             m_boardPos.y * m_biuTo3Dunits,
-                             0.0f );
+    m_boardCenter = SFVEC3F( m_boardPos.x * m_biuTo3Dunits, m_boardPos.y * m_biuTo3Dunits, 0.0f );
 
-    SFVEC3F boardSize = SFVEC3F( m_boardSize.x * m_biuTo3Dunits,
-                                 m_boardSize.y * m_biuTo3Dunits,
+    SFVEC3F boardSize = SFVEC3F( m_boardSize.x * m_biuTo3Dunits, m_boardSize.y * m_biuTo3Dunits,
                                  0.0f );
-            boardSize /= 2.0f;
+    boardSize /= 2.0f;
 
-    SFVEC3F boardMin = (m_boardCenter - boardSize);
-    SFVEC3F boardMax = (m_boardCenter + boardSize);
+    SFVEC3F boardMin = ( m_boardCenter - boardSize );
+    SFVEC3F boardMax = ( m_boardCenter + boardSize );
 
     boardMin.z = m_layerZcoordTop[B_Adhes];
     boardMax.z = m_layerZcoordTop[F_Adhes];

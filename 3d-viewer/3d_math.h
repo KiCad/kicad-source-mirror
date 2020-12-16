@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,9 +33,9 @@
 #include <plugins/3dapi/xv3d_types.h>
 #include "3d_fastmath.h"
 
-// https://en.wikipedia.org/wiki/Spherical_coordinate_system
 /**
- * @brief SphericalToCartesian
+ * https://en.wikipedia.org/wiki/Spherical_coordinate_system
+ *
  * @param aInclination θ ∈ [0, π]
  * @param aAzimuth φ ∈ [0, 2π]
  * @return Cartesian cordinates
@@ -43,34 +43,33 @@
 inline SFVEC3F SphericalToCartesian( float aInclination, float aAzimuth )
 {
     float sinInc = glm::sin( aInclination );
-    return SFVEC3F( sinInc * glm::cos( aAzimuth ),
-                    sinInc * glm::sin( aAzimuth ),
+
+    return SFVEC3F( sinInc * glm::cos( aAzimuth ), sinInc * glm::sin( aAzimuth ),
                     glm::cos( aInclination ) );
 }
 
 
-// https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
-// !TODO: this is not correct because it is not a gaussian random
-inline SFVEC3F UniformRandomHemisphereDirection( )
+/**
+ * @todo This is not correct because it is not a gaussian random.
+ */
+inline SFVEC3F UniformRandomHemisphereDirection()
 {
     // It was experienced that this function is slow! do not use it :/
     // SFVEC3F b( (rand()/(float)RAND_MAX) - 0.5f,
     //            (rand()/(float)RAND_MAX) - 0.5f,
     //            (rand()/(float)RAND_MAX) - 0.5f );
 
-    SFVEC3F b( Fast_RandFloat() * 0.5f,
-               Fast_RandFloat() * 0.5f,
-               Fast_RandFloat() * 0.5f );
+    SFVEC3F b( Fast_RandFloat() * 0.5f, Fast_RandFloat() * 0.5f, Fast_RandFloat() * 0.5f );
 
     return b;
 }
 
 
 // https://pathtracing.wordpress.com/2011/03/03/cosine-weighted-hemisphere/
-inline SFVEC3F CosWeightedRandomHemisphereDirection( const SFVEC3F &n )
+inline SFVEC3F CosWeightedRandomHemisphereDirection( const SFVEC3F& n )
 {
-    const float Xi1 = (float)rand() / (float)RAND_MAX;
-    const float Xi2 = (float)rand() / (float)RAND_MAX;
+    const float Xi1 = (float) rand() / (float) RAND_MAX;
+    const float Xi2 = (float) rand() / (float) RAND_MAX;
 
     const float theta = acos( sqrt( 1.0f - Xi1 ) );
     const float phi = 2.0f * glm::pi<float>() * Xi2;
@@ -99,21 +98,19 @@ inline SFVEC3F CosWeightedRandomHemisphereDirection( const SFVEC3F &n )
 
 
 /**
- * @brief Refract
  * Based on:
  *     https://github.com/mmp/pbrt-v3/blob/master/src/core/reflection.h
  * See also:
  *     http://www.flipcode.com/archives/Raytracing_Topics_Techniques-Part_3_Refractions_and_Beers_Law.shtml
- * @param aInVector incoming vector
- * @param aNormal normal in the intersection point
- * @param aRin_over_Rout incoming refraction index / out refraction index
- * @param aOutVector the refracted vector
+ *
+ * @param aInVector incoming vector.
+ * @param aNormal normal in the intersection point.
+ * @param aRin_over_Rout incoming refraction index / out refraction index.
+ * @param aOutVector the refracted vector.
  * @return true
  */
-inline bool Refract( const SFVEC3F &aInVector,
-                     const SFVEC3F &aNormal,
-                     float aRin_over_Rout,
-                     SFVEC3F &aOutVector )
+inline bool Refract( const SFVEC3F &aInVector, const SFVEC3F &aNormal, float aRin_over_Rout,
+                     SFVEC3F& aOutVector )
 {
     float cosThetaI = -glm::dot( aNormal, aInVector );
     float sin2ThetaI = glm::max( 0.0f, 1.0f - cosThetaI * cosThetaI );
@@ -133,11 +130,7 @@ inline bool Refract( const SFVEC3F &aInVector,
 }
 
 
-inline float mapf( float x,
-                   float in_min,
-                   float in_max,
-                   float out_min,
-                   float out_max)
+inline float mapf( float x, float in_min, float in_max, float out_min, float out_max )
 {
   x = glm::clamp( x, in_min, in_max );
 
@@ -154,17 +147,15 @@ inline float RGBtoGray( const SFVEC3F &aColor )
 inline SFVEC3F MaterialDiffuseToColorCAD( const SFVEC3F &aDiffuseColor )
 {
     // convert to a discret scale of grays
-    const float luminance = glm::min( (((float)((unsigned int) ( 4.0f *
-                                                                 RGBtoGray( aDiffuseColor ) ) ) + 0.5f) /
-                                       4.0f) * 1.0f,
-                                      1.0f );
+    const float luminance = glm::min(
+            ( ( (float) ( (unsigned int) ( 4.0f * RGBtoGray( aDiffuseColor ) ) ) + 0.5f ) / 4.0f )
+                    * 1.0f,
+            1.0f );
 
-    const float maxValue = glm::max( glm::max( glm::max( aDiffuseColor.r,
-                                                         aDiffuseColor.g),
-                                               aDiffuseColor.b ),
-                                     FLT_EPSILON );
+    const float maxValue = glm::max( glm::max( glm::max( aDiffuseColor.r, aDiffuseColor.g ),
+                                               aDiffuseColor.b ), FLT_EPSILON );
 
-    return (aDiffuseColor / SFVEC3F(maxValue) ) * 0.125f + luminance* 0.875f;
+    return ( aDiffuseColor / SFVEC3F( maxValue ) ) * 0.125f + luminance * 0.875f;
 }
 
 
@@ -179,7 +170,7 @@ inline float QuadricEasingInOut( float t )
     {
         t = t - 1.0f;
 
-        return -2.0f * (t * t) + 1.0f;
+        return -2.0f * ( t * t ) + 1.0f;
     }
 }
 

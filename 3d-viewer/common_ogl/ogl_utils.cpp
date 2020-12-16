@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 #include "ogl_utils.h"
 
 
-void OGL_GetScreenshot( wxImage &aDstImage )
+void OGL_GetScreenshot( wxImage& aDstImage )
 {
     struct viewport_params
     {
@@ -45,8 +45,7 @@ void OGL_GetScreenshot( wxImage &aDstImage )
 
     glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
 
-    unsigned char* pixelbuffer = (unsigned char*) malloc( viewport.x *
-                                                          viewport.y * 3 );
+    unsigned char* pixelbuffer = (unsigned char*) malloc( viewport.x * viewport.y * 3 );
 
     // Alphabuffer was causing some transparency problems on some systems (Windows)
     // unsigned char* alphabuffer = (unsigned char*) malloc( viewport.x * viewport.y );
@@ -57,9 +56,8 @@ void OGL_GetScreenshot( wxImage &aDstImage )
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
 
-    glReadPixels( viewport.originX, viewport.originY,
-                  viewport.x, viewport.y,
-                  GL_RGB, GL_UNSIGNED_BYTE, pixelbuffer );
+    glReadPixels( viewport.originX, viewport.originY, viewport.x, viewport.y, GL_RGB,
+                  GL_UNSIGNED_BYTE, pixelbuffer );
 
     // glReadPixels( viewport.originX, viewport.originY,
     //               viewport.x, viewport.y,
@@ -78,7 +76,7 @@ void OGL_GetScreenshot( wxImage &aDstImage )
 }
 
 
-GLuint OGL_LoadTexture( const CIMAGE &aImage )
+GLuint OGL_LoadTexture( const CIMAGE& aImage )
 {
     unsigned char* rgbaBuffer = (unsigned char*) malloc( aImage.GetWidth() *
                                                          aImage.GetHeight() * 4 );
@@ -114,15 +112,8 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
                        GL_UNSIGNED_BYTE,
                        rgbaBuffer );*/
 
-    glTexImage2D( GL_TEXTURE_2D,
-                  0,
-                  GL_RGBA,
-                  aImage.GetWidth(),
-                  aImage.GetHeight(),
-                  0,
-                  GL_RGBA,
-                  GL_UNSIGNED_BYTE,
-                  rgbaBuffer );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, aImage.GetWidth(), aImage.GetHeight(), 0, GL_RGBA,
+                  GL_UNSIGNED_BYTE, rgbaBuffer );
 
     //glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -142,7 +133,8 @@ GLuint OGL_LoadTexture( const CIMAGE &aImage )
 }
 
 
-void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity, bool aUseSelectedMaterial, SFVEC3F aSelectionColor )
+void OGL_SetMaterial( const SMATERIAL&  aMaterial, float aOpacity, bool aUseSelectedMaterial,
+                      SFVEC3F aSelectionColor )
 {
     const SFVEC4F ambient  = SFVEC4F( aMaterial.m_Ambient, 1.0f );
 
@@ -154,9 +146,8 @@ void OGL_SetMaterial( const SMATERIAL & aMaterial, float aOpacity, bool aUseSele
     const SFVEC4F specular = SFVEC4F( aMaterial.m_Specular, 1.0f );
     const SFVEC4F emissive = SFVEC4F( aMaterial.m_Emissive, 1.0f );
 
-    const float shininess = 128.0f * ( (aMaterial.m_Shininess > 1.0f)?
-                                       1.0f:
-                                       aMaterial.m_Shininess );
+    const float shininess =
+            128.0f * ( (aMaterial.m_Shininess > 1.0f) ? 1.0f : aMaterial.m_Shininess );
 
     glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT,  &ambient.r );
     glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE,  &diffuse.r );
@@ -181,7 +172,7 @@ void OGL_SetDiffuseOnlyMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity
 }
 
 
-void OGL_DrawBackground( const SFVEC3F &aTopColor, const SFVEC3F &aBotColor )
+void OGL_DrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor )
 {
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();

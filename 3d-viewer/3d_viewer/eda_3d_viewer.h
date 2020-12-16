@@ -60,15 +60,12 @@ enum EDA_3D_VIEWER_STATUSBAR
 };
 
 /**
- *  Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
+ * Create and handle a window for the 3d viewer connected to a Kiway and a pcbboard
  */
 class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
 {
-
- public:
-
-    EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
-                   const wxString &aTitle,
+public:
+    EDA_3D_VIEWER( KIWAY* aKiway, PCB_BASE_FRAME* aParent, const wxString& aTitle,
                    long style = KICAD_DEFAULT_3D_DRAWFRAME_STYLE );
 
     ~EDA_3D_VIEWER();
@@ -80,24 +77,26 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
     wxWindow* GetToolCanvas() const override { return m_canvas; }
 
     /**
-     * Request reloading the 3D view. However the request will be executed
-     * only when the 3D canvas is refreshed.
-     * It allows one to prepare changes and request for 3D rebuild only when all
-     * changes are committed.
-     * This is made because the 3D rebuild can take a long time, and this rebuild
-     * cannot always made after each change, for calculation time reason.
+     * Request reloading the 3D view.
+     *
+     * However the request will be executed only when the 3D canvas is refreshed.  It allows
+     * one to prepare changes and request for 3D rebuild only when all changes are committed.
+     * This is made because the 3D rebuild can take a long time, and this rebuild cannot
+     * always made after each change, for calculation time reason.
      */
     void ReloadRequest();
 
     // !TODO: review this function: it need a way to tell what changed,
     // to only reload/rebuild things that have really changed
     /**
-     * Reload and refresh (rebuild)  the 3D scene.
-     * Warning: rebuilding the 3D scene can take a bit of time, so
-     * rebuilding the scene can be immediate, or made later, during
-     * the next 3D canvas refresh (on zoom for instance)
-     * @param aForceImmediateRedraw = true to immediately rebuild the 3D scene,
-     * false to wait a refresh later.
+     * Reload and refresh (rebuild) the 3D scene.
+     *
+     * @warning Rebuilding the 3D scene can take a bit of time, so rebuilding the scene can
+     *          be immediate, or made later, during the next 3D canvas refresh (on zoom for
+     *           instance).
+     *
+     * @param aForceImmediateRedraw true to immediately rebuild the 3D scene or false to wait
+     *                              refresh later.
      */
     void NewDisplay( bool aForceImmediateRedraw = false );
 
@@ -109,44 +108,50 @@ class EDA_3D_VIEWER : public EDA_3D_BOARD_HOLDER, public KIWAY_PLAYER
     EDA_3D_CANVAS* GetCanvas()  { return m_canvas; }
 
     /**
-     * Get a SFVEC3D from a wx colour dialog
-     * @param aColor is the SFVEC3D to change
-     * @param aTitle is the title displayed in the colordialog selector
-     * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list which contains
-     * a few predefined colors
+     * Get a SFVEC3D from a color dialog.
+     *
+     * @param aColor is the SFVEC3D to change.
+     * @param aTitle is the title displayed in the colordialog selector.
+     * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list which contains.
+     *                          a few predefined colors
      */
-    bool Set3DColorFromUser( SFVEC4F &aColor, const wxString& aTitle,
+    bool Set3DColorFromUser( SFVEC4F& aColor, const wxString& aTitle,
                              CUSTOM_COLORS_LIST* aPredefinedColors,
                              bool aAllowOpacityControl = false,
                              KIGFX::COLOR4D aDefaultColor = KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
 
     /**
-     * Set the solder mask color from a set of colors
-     * @return true if a new color is chosen, false if no change or aborted by user
+     * Set the solder mask color from a set of colors.
+     *
+     * @return true if a new color is chosen, false if no change or aborted by user.
      */
     bool Set3DSolderMaskColorFromUser();
 
     /**
-     * Set the solder mask color from a set of colors
-     * @return true if a new color is chosen, false if no change or aborted by user
+     * Set the solder mask color from a set of colors.
+     *
+     * @return true if a new color is chosen, false if no change or aborted by user.
      */
     bool Set3DSolderPasteColorFromUser();
 
     /**
-     * Set the copper color from a set of colors
-     * @return true if a new color is chosen, false if no change or aborted by user
+     * Set the copper color from a set of colors.
+     *
+     * @return true if a new color is chosen, false if no change or aborted by user.
      */
     bool Set3DCopperColorFromUser();
 
     /**
-     * Set the copper color from a set of colors
-     * @return true if a new color is chosen, false if no change or aborted by user
+     * Set the copper color from a set of colors.
+     *
+     * @return true if a new color is chosen, false if no change or aborted by user.
      */
     bool Set3DBoardBodyColorFromUser();
 
     /**
-     * Set the silkscreen color from a set of colors
-     * @return true if a new color is chosen, false if no change or aborted by user
+     * Set the silkscreen color from a set of colors.
+     *
+     * @return true if a new color is chosen, false if no change or aborted by user.
      */
     bool Set3DSilkScreenColorFromUser();
 
@@ -166,27 +171,27 @@ protected:
 
 private:
     /// Called when user press the File->Exit
-    void Exit3DFrame( wxCommandEvent &event );
+    void Exit3DFrame( wxCommandEvent& event );
 
-    void OnCloseWindow( wxCloseEvent &event );
+    void OnCloseWindow( wxCloseEvent& event );
 
-    void Process_Special_Functions( wxCommandEvent &event );
+    void Process_Special_Functions( wxCommandEvent& event );
 
-    void OnRenderEngineSelection( wxCommandEvent &event );
+    void OnRenderEngineSelection( wxCommandEvent& event );
     void OnDisableRayTracing( wxCommandEvent& aEvent );
 
-    void OnActivate( wxActivateEvent &event );
+    void OnActivate( wxActivateEvent& event );
 
-    void OnSetFocus( wxFocusEvent &event );
+    void OnSetFocus( wxFocusEvent& event );
 
-    void Install3DViewOptionDialog( wxCommandEvent &event );
+    void Install3DViewOptionDialog( wxCommandEvent& event );
 
     void CreateMenuBar();
     void ReCreateMainToolbar();
 
-    void SaveSettings( APP_SETTINGS_BASE *aCfg ) override;
+    void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    void LoadSettings( APP_SETTINGS_BASE *aCfg ) override;
+    void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     /**
      *  Create a Screenshot of the current 3D view.
@@ -202,8 +207,6 @@ private:
     void refreshRender();
 
     DECLARE_EVENT_TABLE()
-
- private:
 
     /**
      * Load configuration from common settings.

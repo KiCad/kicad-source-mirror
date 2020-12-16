@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,26 +35,26 @@
 static void pivot_render_triangles( float t )
 {
     wxASSERT( t >= 0.0f );
-    
+
     SFVEC3F vertexPointer[12];
 
     const float u = 1.0f / 6.0f;
 
-    vertexPointer[0]  = SFVEC3F( (-3.0f + t) * u, -2.0f * u, 0.0f );
-    vertexPointer[1]  = SFVEC3F( (-3.0f + t) * u,  2.0f * u, 0.0f );
-    vertexPointer[2]  = SFVEC3F( (-1.0f + t) * u,  0.0f * u, 0.0f );
+    vertexPointer[0] = SFVEC3F( ( -3.0f + t ) * u, -2.0f * u, 0.0f );
+    vertexPointer[1] = SFVEC3F( ( -3.0f + t ) * u, 2.0f * u, 0.0f );
+    vertexPointer[2] = SFVEC3F( ( -1.0f + t ) * u, 0.0f * u, 0.0f );
 
-    vertexPointer[3]  = SFVEC3F( -2.0f * u, (-3.0f + t) * u, 0.0f );
-    vertexPointer[4]  = SFVEC3F(  2.0f * u, (-3.0f + t) * u, 0.0f );
-    vertexPointer[5]  = SFVEC3F(  0.0f * u, (-1.0f + t) * u, 0.0f );
+    vertexPointer[3] = SFVEC3F( -2.0f * u, ( -3.0f + t ) * u, 0.0f );
+    vertexPointer[4] = SFVEC3F( 2.0f * u, ( -3.0f + t ) * u, 0.0f );
+    vertexPointer[5] = SFVEC3F( 0.0f * u, ( -1.0f + t ) * u, 0.0f );
 
-    vertexPointer[6]  = SFVEC3F(  (3.0f - t) * u, -2.0f * u, 0.0f );
-    vertexPointer[7]  = SFVEC3F(  (3.0f - t) * u,  2.0f * u, 0.0f );
-    vertexPointer[8]  = SFVEC3F(  (1.0f - t) * u,  0.0f * u, 0.0f );
+    vertexPointer[6] = SFVEC3F( ( 3.0f - t ) * u, -2.0f * u, 0.0f );
+    vertexPointer[7] = SFVEC3F( ( 3.0f - t ) * u, 2.0f * u, 0.0f );
+    vertexPointer[8] = SFVEC3F( ( 1.0f - t ) * u, 0.0f * u, 0.0f );
 
-    vertexPointer[9]  = SFVEC3F(  2.0f * u,  (3.0f - t) * u, 0.0f );
-    vertexPointer[10] = SFVEC3F( -2.0f * u,  (3.0f - t) * u, 0.0f );
-    vertexPointer[11] = SFVEC3F(  0.0f * u,  (1.0f - t) * u, 0.0f );
+    vertexPointer[9] = SFVEC3F( 2.0f * u, ( 3.0f - t ) * u, 0.0f );
+    vertexPointer[10] = SFVEC3F( -2.0f * u, ( 3.0f - t ) * u, 0.0f );
+    vertexPointer[11] = SFVEC3F( 0.0f * u, ( 1.0f - t ) * u, 0.0f );
 
     glDisableClientState( GL_TEXTURE_COORD_ARRAY );
     glDisableClientState( GL_COLOR_ARRAY );
@@ -88,7 +88,6 @@ void EDA_3D_CANVAS::render_pivot( float t , float aScale )
     glDisable( GL_CULL_FACE );
 
     // Set projection and modelview matrixes
-    // /////////////////////////////////////////////////////////////////////////
     glMatrixMode( GL_PROJECTION );
     glLoadMatrixf( glm::value_ptr( m_camera.GetProjectionMatrix() ) );
 
@@ -101,7 +100,7 @@ void EDA_3D_CANVAS::render_pivot( float t , float aScale )
 
     // Translate to the look at position
     glTranslatef( lookAtPos.x, lookAtPos.y, lookAtPos.z );
-    
+
     glScalef( aScale, aScale, aScale );
 
     pivot_render_triangles( t * 0.5f );

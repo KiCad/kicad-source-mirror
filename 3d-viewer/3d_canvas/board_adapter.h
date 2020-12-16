@@ -62,20 +62,19 @@ typedef std::map< PCB_LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
 
 
 /**
- *  Class BOARD_ADAPTER
- *  Helper class to handle information needed to display 3D board
+ *  Helper class to handle information needed to display 3D board.
  */
 class BOARD_ADAPTER
 {
- public:
-
+public:
     BOARD_ADAPTER();
 
     ~BOARD_ADAPTER();
 
     /**
-     * @brief Set3DCacheManager - Update the Cache manager pointer
-     * @param aCachePointer: the pointer to the 3d cache manager
+     * Update the cache manager pointer.
+     *
+     * @param aCachePointer: the pointer to the 3D cache manager.
      */
     void Set3DCacheManager( S3D_CACHE *aCachePointer ) noexcept
     {
@@ -83,8 +82,7 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief Get3DCacheManager - Return the 3d cache manager pointer
-     * @return
+     * Return the 3D cache manager pointer.
      */
     S3D_CACHE *Get3DCacheManager( ) const noexcept
     {
@@ -92,34 +90,37 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetFlag - get a configuration status of a flag
-     * @param aFlag: the flag to get the status
-     * @return true if flag is set, false if not
+     * Get a configuration status of a flag.
+     *
+     * @param aFlag the flag to get the status.
+     * @return true if flag is set, false if not.
      */
     bool GetFlag( DISPLAY3D_FLG aFlag ) const ;
 
     /**
-     * @brief SetFlag - set the status of a flag
-     * @param aFlag: the flag to get the status
-     * @param aState: status to set
+     * Set the status of a flag.
+     *
+     * @param aFlag the flag to set the status
+     * @param aState status to set.
      */
     void SetFlag( DISPLAY3D_FLG aFlag, bool aState );
 
     /**
-     * @brief Is3DLayerEnabled - Check if a layer is enabled
-     * @param aLayer: layer ID to get status
+     * Check if a layer is enabled.
+     *
+     * @param aLayer layer ID to get status.
      */
     bool Is3DLayerEnabled( PCB_LAYER_ID aLayer ) const;
 
     /**
-     * @brief ShouldFPBeDisplayed - Test if footprint should be displayed in relation to
-     * attributes and the flags
+     * Test if footprint should be displayed in relation to attributes and the flags.
      */
     bool ShouldFPBeDisplayed( FOOTPRINT_ATTR_T aFPAttributes ) const;
 
     /**
-     * @brief SetBoard - Set current board to be rendered
-     * @param aBoard: board to process
+     * Set current board to be rendered.
+     *
+     * @param aBoard board to process.
      */
     void SetBoard( BOARD *aBoard ) noexcept
     {
@@ -127,7 +128,8 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetBoard - Get current board to be rendered
+     * Get current board to be rendered.
+     *
      * @return BOARD pointer
      */
     const BOARD *GetBoard() const noexcept
@@ -141,16 +143,17 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief InitSettings - Function to be called by the render when it need to
-     * reload the settings for the board.
-     * @param aStatusReporter: the pointer for the status reporter
-     * @param aWarningReporter: pointer for the warning reporter
+     * Function to be called by the render when it need to reload the settings for the board.
+     *
+     * @param aStatusReporter the pointer for the status reporter.
+     * @param aWarningReporter pointer for the warning reporter.
      */
     void InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     /**
-     * @brief BiuTo3Dunits - Board integer units To 3D units
-     * @return the conversion factor to transform a position from the board to 3d units
+     * Board integer units To 3D units.
+     *
+     * @return the conversion factor to transform a position from the board to 3D units.
      */
     double BiuTo3Dunits() const noexcept
     {
@@ -158,8 +161,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetBBox3DU - Get the bbox of the pcb board
-     * @return the board bbox in 3d units
+     * Get the bbox of the pcb board.
+     *
+     * @return the board bbox in 3D units.
      */
     const CBBOX &GetBBox3DU() const noexcept
     {
@@ -167,8 +171,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetEpoxyThickness3DU - Get the current epoxy thickness
-     * @return thickness in 3d units
+     * Get the current epoxy thickness.
+     *
+     * @return thickness in 3D units.
      */
     float GetEpoxyThickness3DU() const noexcept
     {
@@ -176,8 +181,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetNonCopperLayerThickness3DU - Get the current non copper layers thickness
-     * @return thickness in 3d units of non copperlayers
+     * Get the current non copper layers thickness.
+     *
+     * @return thickness in 3D units of non copperlayers.
      */
     float GetNonCopperLayerThickness3DU() const noexcept
     {
@@ -185,8 +191,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetCopperThickness3DU - Get the current copper layer thickness
-     * @return thickness in 3d units of copperlayers
+     * Get the current copper layer thickness.
+     *
+     * @return thickness in 3D units of copperlayers.
      */
     float GetCopperThickness3DU() const noexcept
     {
@@ -194,14 +201,16 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetCopperThicknessBIU - Get the current copper layer thickness
-     * @return thickness in board units
+     * Get the current copper layer thickness.
+     *
+     * @return thickness in board units.
      */
     int GetHolePlatingThicknessBIU() const noexcept;
 
     /**
-     * @brief GetBoardSizeBIU - Get the board size
-     * @return size in BIU units
+     * Get the board size.
+     *
+     * @return size in BIU units.
      */
     wxSize GetBoardSizeBIU() const noexcept
     {
@@ -209,8 +218,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetBoardPosBIU - Get the board center
-     * @return position in BIU units
+     * Get the board center.
+     *
+     * @return position in BIU units.
      */
     wxPoint GetBoardPosBIU() const noexcept
     {
@@ -218,8 +228,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetBoardCenter - the board center position in 3d units
-     * @return board center vector position in 3d units
+     * The board center position in 3D units.
+     *
+     * @return board center vector position in 3D units.
      */
     const SFVEC3F &GetBoardCenter3DU() const noexcept
     {
@@ -227,17 +238,18 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetModulesZcoord3DIU - Get the position of the footprint in 3d integer units
-     * considering if it is flipped or not.
-     * @param aIsFlipped: true for use in footprints on Front (top) layer, false
-     *                    if footprint is on back (bottom) layer
-     * @return the Z position of 3D shapes, in 3D integer units
+     * Get the position of the footprint in 3d integer units considering if it is flipped or not.
+     *
+     * @param aIsFlipped true for use in footprints on Front (top) layer, false
+     *                   if footprint is on back (bottom) layer.
+     * @return the Z position of 3D shapes, in 3D integer units.
      */
     float GetModulesZcoord3DIU( bool aIsFlipped ) const ;
 
     /**
-     * @brief GridGet - get the current grid
-     * @return space type of the grid
+     * Get the current grid.
+     *
+     * @return space type of the grid.
      */
     GRID3D_TYPE GridGet() const noexcept
     {
@@ -245,8 +257,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GridSet - set the current grid
-     * @param aGridType = the type space of the grid
+     * Set the current grid.
+     *
+     * @param aGridType the type space of the grid.
      */
     void GridSet( GRID3D_TYPE aGridType ) noexcept
     {
@@ -254,20 +267,21 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GridGet - get the current antialiasing mode value
+     * Get the current antialiasing mode value.
+     *
      * @return antialiasing mode value
      */
     ANTIALIASING_MODE AntiAliasingGet() const { return m_antialiasing_mode; }
 
     /**
-     * @brief AntiAliasingSet - set the current antialiasing mode value
-     * @param aAAmode = antialiasing mode value
+     * Set the current antialiasing mode value.
+     *
+     * @param aAAmode antialiasing mode value.
      */
     void AntiAliasingSet( ANTIALIASING_MODE aAAmode ) { m_antialiasing_mode = aAAmode; }
 
     /**
-     * @brief RenderEngineSet
-     * @param aRenderEngine = the render engine mode selected
+     * @param aRenderEngine the render engine mode selected.
      */
     void RenderEngineSet( RENDER_ENGINE aRenderEngine ) noexcept
     {
@@ -275,8 +289,7 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief RenderEngineGet
-     * @return render engine on use
+     * @return render engine on use.
      */
     RENDER_ENGINE RenderEngineGet() const noexcept
     {
@@ -284,8 +297,7 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief MaterialModeSet
-     * @param aMaterialMode = the render material mode
+     * @param aMaterialMode the render material mode.
      */
     void MaterialModeSet( MATERIAL_MODE aMaterialMode ) noexcept
     {
@@ -293,8 +305,7 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief MaterialModeGet
-     * @return material rendering mode
+     * @return material rendering mode.
      */
     MATERIAL_MODE MaterialModeGet() const noexcept
     {
@@ -302,7 +313,8 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetBoardPoly - Get the current polygon of the epoxy board
+     * Get the current polygon of the epoxy board.
+     *
      * @return the shape polygon
      */
     const SHAPE_POLY_SET &GetBoardPoly() const noexcept
@@ -311,30 +323,32 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetLayerColor - get the technical color of a layer
-     * @param aLayerId: the layer to get the color information
-     * @return the color in SFVEC3F format
+     * Get the technical color of a layer.
+     *
+     * @param aLayerId the layer to get the color information.
+     * @return the color in SFVEC3F format.
      */
     SFVEC4F GetLayerColor( PCB_LAYER_ID aLayerId ) const;
 
     /**
-     * @brief GetItemColor - get the technical color of a layer
-     * @param aItemId: the item id to get the color information
-     * @return the color in SFVEC3F format
+     * Get the technical color of a layer.
+     *
+     * @param aItemId the item id to get the color information.
+     * @return the color in SFVEC3F format.
      */
     SFVEC4F GetItemColor( int aItemId ) const;
 
     /**
-     * @brief GetColor
-     * @param aColor: the color mapped
+     * @param aColor the color mapped.
      * @return the color in SFVEC3F format
      */
     SFVEC4F GetColor( COLOR4D aColor ) const;
 
     /**
-     * @brief GetLayerTopZpos3DU - Get the top z position
-     * @param aLayerId: layer id
-     * @return position in 3D units
+     * Get the top z position.
+     *
+     * @param aLayerId layer id.
+     * @return position in 3D units.
      */
     float GetLayerTopZpos3DU( PCB_LAYER_ID aLayerId ) const noexcept
     {
@@ -342,9 +356,10 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetLayerBottomZpos3DU - Get the bottom z position
-     * @param aLayerId: layer id
-     * @return position in 3D units
+     * Get the bottom z position.
+     *
+     * @param aLayerId layer id.
+     * @return position in 3D units.
      */
     float GetLayerBottomZpos3DU( PCB_LAYER_ID aLayerId ) const noexcept
     {
@@ -352,7 +367,8 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetMapLayers - Get the map of container that have the objects per layer
+     * Get the map of container that have the objects per layer.
+     *
      * @return the map containers of this board
      */
     const MAP_CONTAINER_2D &GetMapLayers() const noexcept
@@ -371,8 +387,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetMapLayersHoles -Get the map of container that have the holes per layer
-     * @return the map containers of holes from this board
+     * Get the map of container that have the holes per layer.
+     *
+     * @return the map containers of holes from this board.
      */
     const MAP_CONTAINER_2D &GetMapLayersHoles() const noexcept
     {
@@ -380,8 +397,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetThroughHole_Outer - Get the inflated ThroughHole container
-     * @return a container with holes
+     * Get the inflated ThroughHole container.
+     *
+     * @return a container with holes.
      */
     const CBVHCONTAINER2D &GetThroughHole_Outer() const noexcept
     {
@@ -389,8 +407,8 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetThroughHole_Outer_Ring - Get the ThroughHole container that
-     * include the width of the annular ring.
+     * Get the ThroughHole container that include the width of the annular ring.
+     *
      * @return a container with holes.
      */
     const CBVHCONTAINER2D& GetThroughHole_Outer_Ring() const noexcept
@@ -414,8 +432,7 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetThroughHole_Vias_Outer -
-     * @return a container with via THT holes only
+     * @return a container with via THT holes only.
      */
     const CBVHCONTAINER2D &GetThroughHole_Vias_Outer() const noexcept
     {
@@ -428,8 +445,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetThroughHole_Inner - Get the ThroughHole container
-     * @return a container with holes
+     * Get the ThroughHole container.
+     *
+     * @return a container with holes.
      */
     const CBVHCONTAINER2D &GetThroughHole_Inner() const noexcept
     {
@@ -437,8 +455,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetStats_Nr_Vias - Get statistics of the nr of vias
-     * @return number of vias
+     * Get statistics of the nr of vias.
+     *
+     * @return number of vias.
      */
     unsigned int GetStats_Nr_Vias() const noexcept
     {
@@ -446,8 +465,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetStats_Nr_Holes - Get statistics of the nr of holes
-     * @return number of holes
+     * Get statistics of the nr of holes.
+     *
+     * @return number of holes.
      */
     unsigned int GetStats_Nr_Holes() const noexcept
     {
@@ -455,8 +475,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetStats_Med_Via_Hole_Diameter3DU - Average diameter of the via holes
-     * @return dimension in 3D units
+     * Average diameter of the via holes.
+     *
+     * @return dimension in 3D units.
      */
     float GetStats_Med_Via_Hole_Diameter3DU() const noexcept
     {
@@ -464,8 +485,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetStats_Med_Hole_Diameter3DU - Average diameter of holes
-     * @return dimension in 3D units
+     * average diameter of holes.
+     *
+     * @return dimension in 3D units.
      */
     float GetStats_Med_Hole_Diameter3DU() const noexcept
     {
@@ -473,8 +495,9 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetStats_Med_Track_Width - Average width of the tracks
-     * @return dimensions in 3D units
+     * Average width of the tracks.
+     *
+     * @return dimensions in 3D units.
      */
     float GetStats_Med_Track_Width() const noexcept
     {
@@ -482,22 +505,21 @@ class BOARD_ADAPTER
     }
 
     /**
-     * @brief GetNrSegmentsCircle
-     * @param aDiameter3DU: diameter in 3DU
-     * @return number of sides that should be used in that circle
+     * @param aDiameter3DU diameter in 3DU.
+     * @return number of sides that should be used in that circle.
      */
     unsigned int GetNrSegmentsCircle( float aDiameter3DU ) const;
 
     /**
-     * @brief GetNrSegmentsCircle
-     * @param aDiameterBIU: diameter in board internal units
-     * @return number of sides that should be used in that circle
+     * @param aDiameterBIU diameter in board internal units.
+     * @return number of sides that should be used in that circle.
      */
     unsigned int GetNrSegmentsCircle( int aDiameterBIU ) const;
 
     /**
-     * @brief GetPolyMap - Get maps of polygons's layers
-     * @return the map with polygons's layers
+     * Get maps of polygon's layers.
+     *
+     * @return the map with polygon's layers.
      */
     const MAP_POLY &GetPolyMap() const noexcept
     {
@@ -618,7 +640,6 @@ public:
     int m_raytrace_recursivelevel_refractions;
 
 private:
-
     BOARD*              m_board;
     S3D_CACHE*          m_3d_model_manager;
     COLOR_SETTINGS*     m_colors;
@@ -689,7 +710,7 @@ private:
     MAP_CONTAINER_2D  m_layers_holes2D;
 
     /// It contains the list of throughHoles of the board,
-    /// the radius of the hole is inflated with the copper tickness
+    /// the radius of the hole is inflated with the copper thickness
     CBVHCONTAINER2D   m_through_holes_outer;
 
     /// It contains the list of throughHoles of the board,
@@ -701,7 +722,7 @@ private:
     CBVHCONTAINER2D   m_through_holes_inner;
 
     /// It contains the list of throughHoles vias of the board,
-    /// the radius of the hole is inflated with the copper tickness
+    /// the radius of the hole is inflated with the copper thickness
     CBVHCONTAINER2D   m_through_holes_vias_outer;
 
     /// It contains the list of throughHoles vias of the board,
@@ -733,10 +754,10 @@ private:
     /// Non copper layers thickness
     float  m_nonCopperLayerThickness3DU;
 
-    /// min factor used for cicle segment approximation calculation
+    /// min factor used for circle segment approximation calculation
     float m_calc_seg_min_factor3DU;
 
-    /// max factor used for cicle segment approximation calculation
+    /// max factor used for circle segment approximation calculation
     float m_calc_seg_max_factor3DU;
 
 
