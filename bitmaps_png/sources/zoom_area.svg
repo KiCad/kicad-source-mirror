@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="zoom_area.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/zoom_area.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +25,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="39.543586"
-     inkscape:cx="16.120084"
+     inkscape:cx="11.504923"
      inkscape:cy="9.0189207"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -83,7 +86,7 @@
      class="cls-3"
      d="M 6.966314,3.9662778 14.738805,11.118183 11.5,11.322977 c 0.315389,0.71982 0.783472,1.780474 1.191472,2.706961 a 1.1975088,1.1975088 0 0 1 -0.616525,1.579702 v 0 A 1.1974385,1.1974385 0 0 1 10.497303,14.996234 C 10.089037,14.069866 9.6203702,13.007786 9.3037921,12.285556 l -2.3460158,2.243121 z"
      id="path15"
-     style="fill:#545454;stroke:none;stroke-width:0.703755;stroke-opacity:1" />
+     style="fill:#888888;stroke:none;stroke-width:0.703755;stroke-opacity:1;fill-opacity:1" />
   <path
      class="cls-1"
      d="M 10,20.087099 A 9.9979211,9.9999985 0 1 1 17.071618,3.0175208 v 0 A 9.9949842,9.997061 0 0 1 10,20.087099 Z M 10,1.999621 A 8.0889265,8.0906073 0 1 0 15.723385,4.3660343 8.0680839,8.0697603 0 0 0 10,2 Z"
