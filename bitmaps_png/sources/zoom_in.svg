@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="zoom_in.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,22 +23,22 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="11.753891"
-     inkscape:cy="10.394813"
+     inkscape:zoom="16.385671"
+     inkscape:cx="4.6704221"
+     inkscape:cy="17.189542"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
-       spacingx="0.5"
-       spacingy="0.5"
+       spacingx="1"
+       spacingy="1"
        color="#9999ff"
        opacity="0.13"
        empspacing="2" />
@@ -81,12 +81,12 @@
      id="title160585">zoom_in</title>
   <path
      class="cls-1"
-     d="M 10.006551,20.001297 A 9.9979211,9.9999985 0 1 1 17.078168,2.9317181 v 0 A 9.9949842,9.997061 0 0 1 10.006551,20.001297 Z m 0,-18.0874787 a 8.0889265,8.0906073 0 1 0 5.723384,2.3664133 8.0680839,8.0697603 0 0 0 -5.723384,-2.3660343 z"
+     d="M 9.9976493,18.999997 A 8.998129,8.9999987 0 1 1 16.362105,3.6373763 v 0 A 8.9954858,8.9973549 0 0 1 9.9976493,18.999997 Z m 0,-16.2787305 A 7.2800339,7.2815466 0 1 0 15.148695,4.8510385 7.2612755,7.2627843 0 0 0 9.9976493,2.7216076 Z"
      id="path160587"
-     style="stroke-width:0.999997" />
+     style="fill:#545454;fill-opacity:1;stroke-width:0.899997" />
   <path
      class="cls-1"
-     d="M 22.941542,24.0123 A 1.071826,1.071826 0 0 1 22.181404,23.697278 L 16.004508,17.520382 A 1.0927916,1.0927916 0 0 1 17.524783,16 l 6.177004,6.176896 A 1.075159,1.075159 0 0 1 22.941542,24.0123 Z"
+     d="M 21.941949,23.012172 A 1.071826,1.071826 0 0 1 21.181811,22.69715 l -6.176896,-6.176896 a 1.0927916,1.0927916 0 0 1 1.520275,-1.520382 l 6.177004,6.176896 a 1.075159,1.075159 0 0 1 -0.760245,1.835404 z"
      id="path160589"
      style="stroke-width:1" />
   <line

@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="zoom_selection.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,23 +22,23 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1924"
-     inkscape:window-height="1429"
+     inkscape:window-width="1920"
+     inkscape:window-height="658"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="46"
-     inkscape:window-y="54"
+     inkscape:zoom="19.457986"
+     inkscape:cx="14.363452"
+     inkscape:cy="16.401583"
+     inkscape:window-x="0"
+     inkscape:window-y="400"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
-       spacingx="0.5"
-       spacingy="0.5"
+       spacingx="1"
+       spacingy="1"
        color="#9999ff"
        opacity="0.13"
        empspacing="2" />
@@ -83,13 +83,15 @@
      class="cls-1"
      points="18.89,10.639 7.278,7.27 10.646,18.883 12.641,12.633 "
      id="polygon160621"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.86117809,0,0,0.86110394,-0.26765415,-0.26022561)" />
   <path
      class="cls-2"
-     d="M 10.5508,21.0943 A 10.5531,10.5531 0 1 1 18.0151,3.0806 v 0 a 10.55,10.55 0 0 1 -7.4643,18.0137 z m 0,-19.0879 A 8.5381,8.5381 0 1 0 16.592,4.5037 8.5157,8.5157 0 0 0 10.5508,2.0064 Z"
-     id="path160623" />
+     d="M 9.9976492,18.999997 A 8.9981289,8.9999987 0 1 1 16.362104,3.6373763 v 0 A 8.9954857,8.9973549 0 0 1 9.9976492,18.999997 Z m 0,-16.2787306 a 7.2800338,7.2815465 0 1 0 5.1510448,2.129772 7.2609344,7.2624431 0 0 0 -5.1510448,-2.129772 z"
+     id="path160623"
+     style="stroke-width:0.852742" />
   <path
      class="cls-2"
-     d="m 23.0059,23.999 a 0.9968,0.9968 0 0 1 -0.7071,-0.2929 l -5.7451,-5.7452 a 1.0164,1.0164 0 0 1 1.4141,-1.414 l 5.7451,5.7451 a 1,1 0 0 1 -0.707,1.707 z"
-     id="path160625" />
+     d="m 21.942063,23.011999 a 1.0717261,1.0717043 0 0 1 -0.76025,-0.31491 l -6.17694,-6.176921 a 1.0927993,1.0927771 0 0 1 1.520393,-1.520255 l 6.17694,6.176814 a 1.0751666,1.0751447 0 0 1 -0.760143,1.835272 z"
+     id="path160625"
+     style="stroke-width:1.07515" />
 </svg>
