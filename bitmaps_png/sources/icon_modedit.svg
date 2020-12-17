@@ -12,9 +12,12 @@
    viewBox="0 0 48 48"
    version="1.1"
    sodipodi:docname="icon_modedit.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    width="48"
-   height="48">
+   height="48"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_48/icon_modedit.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -24,15 +27,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2090"
-     inkscape:window-height="1662"
+     inkscape:window-width="1438"
+     inkscape:window-height="798"
      id="namedview966"
      showgrid="true"
-     inkscape:zoom="19.771793"
-     inkscape:cx="19.971866"
-     inkscape:cy="30.849558"
-     inkscape:window-x="1349"
-     inkscape:window-y="131"
+     inkscape:zoom="9.8858965"
+     inkscape:cx="28.254977"
+     inkscape:cy="15.459496"
+     inkscape:window-x="1"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -81,62 +84,63 @@
   <title
      id="title947">icon_modedit</title>
   <path
-     style="fill:#acbac8;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 2,7 v 11 l 3,3 v 6 L 2,30 V 41 H 46 V 7 Z"
+     style="fill:#acbac8;fill-opacity:1;stroke:#545454;stroke-width:1.99999988;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 5,9 v 9.705882 L 7,21 v 6 L 5,29.294118 V 39 H 43 V 9 Z"
      id="path1530"
-     sodipodi:nodetypes="ccccccccc" />
+     sodipodi:nodetypes="ccccccccc"
+     inkscape:connector-curvature="0" />
   <rect
      class="cls-3"
-     x="6"
-     y="0.99999988"
-     width="10"
-     height="15.999999"
+     x="8"
+     y="4"
+     width="8.0590916"
+     height="12.96"
      id="rect961"
-     ry="1.165067"
-     style="stroke-width:1" />
+     ry="0.94370425"
+     style="fill:#1a81c4;stroke-width:1" />
   <rect
      class="cls-3"
-     x="19"
-     y="1.0000018"
-     width="10"
-     height="15.999999"
+     x="19.970455"
+     y="4.0200014"
+     width="8.0590916"
+     height="12.96"
      id="rect2291"
-     ry="1.165067"
-     style="stroke-width:1" />
+     ry="0.94370425"
+     style="fill:#1a81c4;stroke-width:1" />
   <rect
      class="cls-3"
-     x="32"
-     y="1.0000018"
-     width="10"
-     height="15.999999"
+     x="31.940908"
+     y="4"
+     width="8.0590916"
+     height="13"
      id="rect2293"
-     ry="1.165067"
-     style="stroke-width:1" />
+     ry="0.94370425"
+     style="fill:#1a81c4;stroke-width:1" />
   <rect
      class="cls-3"
-     x="6"
+     x="8"
      y="31"
-     width="10"
-     height="15.999999"
+     width="8.0590916"
+     height="12.96"
      id="rect2295"
-     ry="1.165067"
-     style="stroke-width:1" />
+     ry="0.94370425"
+     style="fill:#1a81c4;stroke-width:1" />
   <rect
      class="cls-3"
-     x="19"
-     y="31.000002"
-     width="10"
-     height="15.999999"
+     x="19.970455"
+     y="31.02"
+     width="8.0590916"
+     height="12.96"
      id="rect2297"
-     ry="1.165067"
-     style="stroke-width:1" />
+     ry="0.94370425"
+     style="fill:#1a81c4;stroke-width:1" />
   <rect
      class="cls-3"
      x="32"
-     y="31.000002"
-     width="10"
-     height="15.999999"
+     y="31"
+     width="8.0590916"
+     height="12.96"
      id="rect2299"
-     ry="1.165067"
-     style="stroke-width:1" />
+     ry="0.94370425"
+     style="fill:#1a81c4;stroke-width:1" />
 </svg>
