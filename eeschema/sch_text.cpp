@@ -1145,7 +1145,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
                 for( const wxString& pageNo : pageListCopy )
                     token->Append( wxString::Format( wxT( "%s," ), pageNo ) );
 
-                if( token->Last() == ',' )
+                if( !token->IsEmpty() && token->Last() == ',' )
                     token->RemoveLast();
             }
 
