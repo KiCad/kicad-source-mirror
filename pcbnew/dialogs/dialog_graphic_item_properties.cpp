@@ -327,6 +327,12 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
         m_item->SetBezControl2( wxPoint( m_bezierCtrl2X.GetValue(), m_bezierCtrl2Y.GetValue() ) );
     }
 
+    if( m_item->GetShape() == S_ARC )
+    {
+        m_item->SetCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ) );
+        m_item->SetAngle( m_AngleValue * 10.0, false );
+    }
+
     if( m_fp_item )
     {
         // We are editing a footprint; init the item coordinates relative to the footprint anchor.
@@ -343,12 +349,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->SetFilled( m_filledCtrl->GetValue() );
     m_item->SetWidth( m_thickness.GetValue() );
     m_item->SetLayer( ToLAYER_ID( layer ) );
-
-    if( m_item->GetShape() == S_ARC )
-    {
-        m_item->SetCenter( GetArcCenter( m_item->GetArcStart(), m_item->GetArcEnd(), m_AngleValue ) );
-        m_item->SetAngle( m_AngleValue * 10.0, false );
-    }
 
     m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
 
