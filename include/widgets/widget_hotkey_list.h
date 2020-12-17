@@ -173,6 +173,11 @@ private:
      */
     void changeHotkey( HOTKEY& aHotkey, long aKey );
 
+    /**
+     * Recalculates column widths after model has changed
+     */
+    void updateColumnWidths();
+
 private:
     HOTKEY_STORE&  m_hk_store;
     bool           m_readOnly;

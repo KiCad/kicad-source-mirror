@@ -449,6 +449,20 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     AppendColumn( command_header, 450, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Hotkey" ), 120, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
     AppendColumn( _( "Description" ), 900, wxALIGN_LEFT, wxCOL_RESIZABLE | wxCOL_SORTABLE );
+
+
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+    // Automatic column widths are broken in wxGTK 3.0.x; set min widths to ensure visibility
+
+    wxDataViewCtrl* dv = GetDataView();
+
+    wxString longKey = wxT( "Ctrl+Alt+Shift+X" );
+    int      pad     = 20;
+
+    dv->GetColumn( 0 )->SetMinWidth( dv->GetMainWindow()->GetTextExtent( command_header ).x + pad );
+    dv->GetColumn( 1 )->SetMinWidth( dv->GetMainWindow()->GetTextExtent( longKey ).x + pad );
+#endif
+
     GetDataView()->SetIndent( 10 );
 
     if( !m_readOnly )
@@ -480,14 +494,7 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
         m_hk_store.ResetAllHotkeysToOriginal();
 
     updateFromClientData();
-
-    wxDataViewColumn* col = GetDataView()->GetColumn( 0 );
-    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    col->SetWidth( col->GetWidth() );
-
-    col = GetDataView()->GetColumn( 1 );
-    col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-    col->SetWidth( col->GetWidth() );
+    updateColumnWidths();
 
     Thaw();
 }
@@ -496,16 +503,29 @@ void WIDGET_HOTKEY_LIST::ResetAllHotkeys( bool aResetToDefault )
 bool WIDGET_HOTKEY_LIST::TransferDataToControl()
 {
     updateShownItems( "" );
+    updateColumnWidths();
 
+    return true;
+}
+
+
+void WIDGET_HOTKEY_LIST::updateColumnWidths()
+{
     wxDataViewColumn* col = GetDataView()->GetColumn( 0 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
+
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+    col->SetResizeable( true );
+#endif
 
     col = GetDataView()->GetColumn( 1 );
     col->SetWidth( wxCOL_WIDTH_AUTOSIZE );
     col->SetWidth( col->GetWidth() );
 
-    return true;
+#if defined( __WXGTK__ ) && !wxCHECK_VERSION( 3, 1, 0 )
+    col->SetResizeable( true );
+#endif
 }
 
 
