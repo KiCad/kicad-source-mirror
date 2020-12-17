@@ -1121,7 +1121,7 @@ void APPEARANCE_CONTROLS::setVisibleObjects( GAL_SET aLayers )
     {
         KIGFX::VIEW* view = m_frame->GetCanvas()->GetView();
 
-        for( size_t i = 0; i < aLayers.size(); i++ )
+        for( size_t i = 0; i < GAL_LAYER_INDEX( LAYER_ZONE_START ); i++ )
             view->SetLayerVisible( GAL_LAYER_ID_START + GAL_LAYER_ID( i ), aLayers.test( i ) );
     }
     else
