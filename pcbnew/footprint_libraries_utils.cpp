@@ -178,7 +178,7 @@ static FOOTPRINT* parse_footprint_kicad( const wxFileName& aFileName )
     wxFFile  f( aFileName.GetFullPath() );
 
     if( !f.IsOpened() )
-        return NULL;
+        return nullptr;
 
     f.ReadAll( &fcontents );
 
@@ -187,7 +187,7 @@ static FOOTPRINT* parse_footprint_kicad( const wxFileName& aFileName )
 
 
 /**
- * Try to load a footprint, returning NULL if the file couldn't be accessed.
+ * Try to load a footprint, returning nullptr if the file couldn't be accessed.
  * @param aFileName - file name to load
  * @param aFileType - type of the file to load
  * @param aName - footprint name
@@ -210,7 +210,7 @@ FOOTPRINT* try_load_footprint( const wxFileName& aFileName, IO_MGR::PCB_FILE_T a
 
     default:
         wxFAIL_MSG( wxT( "unexpected IO_MGR::PCB_FILE_T" ) );
-        footprint = NULL;
+        footprint = nullptr;
     }
 
     return footprint;
@@ -233,7 +233,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         fn = getFootprintFilenameFromUser( this, lastOpenedPathForLoading );
 
     if( !fn.IsOk() )
-        return NULL;
+        return nullptr;
 
     FILE* fp = wxFopen( fn.GetFullPath(), wxT( "rt" ) );
 
@@ -241,7 +241,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     {
         wxString msg = wxString::Format( _( "File \"%s\" not found" ), fn.GetFullPath() );
         DisplayError( this, msg );
-        return NULL;
+        return nullptr;
     }
 
     cfg->m_LastImportExportPath = lastOpenedPathForLoading;
@@ -252,10 +252,10 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
     if( fileType == IO_MGR::FILE_TYPE_NONE )
     {
         DisplayError( this, _( "Not a footprint file" ) );
-        return NULL;
+        return nullptr;
     }
 
-    FOOTPRINT* footprint = NULL;
+    FOOTPRINT* footprint = nullptr;
 
     try
     {
@@ -267,7 +267,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
                                              footprintName,
                                              fn.GetFullPath() );
             DisplayError( this, msg );
-            return NULL;
+            return nullptr;
         }
     }
     catch( const IO_ERROR& ioe )
@@ -280,7 +280,7 @@ FOOTPRINT* FOOTPRINT_EDIT_FRAME::ImportFootprint( const wxString& aName )
         // reading the selected file
 
         if( !footprint )
-            return NULL;
+            return nullptr;
     }
 
     footprint->SetFPID( LIB_ID( wxEmptyString, footprintName ) );
@@ -347,7 +347,7 @@ void FOOTPRINT_EDIT_FRAME::ExportFootprint( FOOTPRINT* aFootprint )
 
         FILE* fp = wxFopen( dlg.GetPath(), wxT( "wt" ) );
 
-        if( fp == NULL )
+        if( fp == nullptr )
         {
             wxMessageBox( wxString::Format( _( "Unable to create or write file \"%s\"" ),
                                             dlg.GetPath() ) );
@@ -607,7 +607,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteFootprintFromLibrary( const LIB_ID& aFPID, bool
 void PCB_EDIT_FRAME::ExportFootprintsToLibrary( bool aStoreInNewLib, const wxString& aLibName,
                                                 wxString* aLibPath )
 {
-    if( GetBoard()->GetFirstFootprint() == NULL )
+    if( GetBoard()->GetFirstFootprint() == nullptr )
     {
         DisplayInfoMessage( this, _( "No footprints to export!" ) );
         return;
@@ -783,14 +783,14 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
     // not just add it to the board with total disregard for the netlist...
     PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB_EDITOR, false );
 
-    if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
+    if( pcbframe == nullptr )       // happens when the board editor is not active (or closed)
     {
         ShowInfoBarError( _( "No board currently open." ) );
         return false;
     }
 
     BOARD*     mainpcb  = pcbframe->GetBoard();
-    FOOTPRINT* sourceFootprint  = NULL;
+    FOOTPRINT* sourceFootprint  = nullptr;
     FOOTPRINT* editorFootprint = GetBoard()->GetFirstFootprint();
 
     // Search the old footprint (source) if exists
@@ -809,7 +809,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         }
     }
 
-    if( !aAddNew && sourceFootprint == NULL ) // source not found
+    if( !aAddNew && sourceFootprint == nullptr )    // source not found
     {
         DisplayError( this, _( "Unable to find the footprint on the main board.\nCannot save." ) );
         return false;
@@ -860,7 +860,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
 
 bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 {
-    if( aFootprint == NULL )
+    if( aFootprint == nullptr )
         return false;
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
@@ -923,7 +923,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
     if( libraryName.IsEmpty() )
     {
-        DisplayError( NULL, _( "No library specified.  Footprint could not be saved." ) );
+        DisplayError( this, _( "No library specified.  Footprint could not be saved." ) );
         return false;
     }
 
@@ -933,7 +933,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
 
     if( footprintName.IsEmpty() )
     {
-        DisplayError( NULL, _( "No footprint name specified.  Footprint could not be saved." ) );
+        DisplayError( this, _( "No footprint name specified.  Footprint could not be saved." ) );
         return false;
     }
 
@@ -1027,7 +1027,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
         dlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &footprintName ) );
 
         if( dlg.ShowModal() != wxID_OK )
-            return NULL;    //Aborted by user
+            return nullptr;    //Aborted by user
     }
 
     footprintName.Trim( true );
@@ -1036,7 +1036,7 @@ FOOTPRINT* PCB_BASE_FRAME::CreateNewFootprint( const wxString& aFootprintName )
     if( footprintName.IsEmpty() )
     {
         DisplayInfoMessage( this, _( "No footprint name defined." ) );
-        return NULL;
+        return nullptr;
     }
 
     // Creates the new footprint and add it to the head of the linked list of footprints
