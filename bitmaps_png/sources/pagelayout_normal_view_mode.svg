@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="pagelayout_normal_view_mode.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:zoom="43.139203"
+     inkscape:cx="-1.1363013"
      inkscape:cy="13"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -83,7 +83,8 @@
      class="cls-1"
      points="1.5,1.5 18.538,1.5 18.538,7.496 24.5,7.496 24.5,24.5 1.5,24.5 "
      id="polygon158849"
-     transform="translate(-1,-1)" />
+     transform="translate(-1,-1)"
+     style="fill:#f3f3f3;fill-opacity:1" />
   <path
      class="cls-2"
      d="M 17.0377,1 V 6.9964 H 23 V 23 H 1 V 1 h 16.0377 m 1,-1 H 0 V 24 H 24 V 5.9964 h -5.9623 z"
