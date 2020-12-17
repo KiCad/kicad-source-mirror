@@ -850,7 +850,10 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
     bool autoSaveOk = true;
 
-    tmp.AssignDir( fn.GetPath() );
+    if( fn.GetPath().IsEmpty() )
+        tmp.AssignDir( Prj().GetProjectPath() );
+    else
+        tmp.AssignDir( fn.GetPath() );
 
     if( !tmp.IsOk() )
         return false;
