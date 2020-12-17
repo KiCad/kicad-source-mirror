@@ -69,7 +69,7 @@ PANEL_SETUP_SEVERITIES::PANEL_SETUP_SEVERITIES( PAGED_DIALOG* aParent,
             gridSizer->AddSpacer( 5 );  // col 1
             gridSizer->AddSpacer( 5 );  // col 2
 
-            gridSizer->Add( heading, 0, wxALIGN_BOTTOM | wxALL, 4  );
+            gridSizer->Add( heading, 0, wxALIGN_BOTTOM | wxALL | wxEXPAND, 4  );
             gridSizer->AddSpacer( 0 );  // col 2
         }
         else if( !msg.IsEmpty() )   // items with no message are for internal use only
