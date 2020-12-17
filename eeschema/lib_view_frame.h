@@ -78,7 +78,7 @@ public:
      * @return whether the selection of either library or component was changed (i.e. because the
      * selected library no longer exists)
      */
-    bool ReCreateListLib();
+    bool ReCreateLibList();
 
     /**
      * Create or recreate the list of components in the currently selected library.
@@ -86,7 +86,7 @@ public:
      * @return whether the selection was changed (i.e. because the selected component no longer
      * exists)
      */
-    bool ReCreateListCmp();
+    bool ReCreateSymbolList();
 
     void DisplayLibInfos();
     void doCloseWindow() override;
@@ -170,16 +170,14 @@ private:
 
     void updatePreviewSymbol();
 
-// Private members:
+private:
     wxChoice*           m_unitChoice;
 
-    // List of libraries (for selection )
-    wxListBox*          m_libList;          // The list of libs
-    int                 m_libListWidth;     // Last width of the window
+    wxListBox*          m_libList;             // The list of libs
+    int                 m_libListWidth;        // Last width of the window
 
-    // List of components in the selected library
-    wxListBox*          m_cmpList;          // The list of components
-    int                 m_cmpListWidth;     // Last width of the window
+    wxListBox*          m_symbolList;          // The list of components
+    int                 m_symbolListWidth;     // Last width of the window
 
     // Filters to build list of libs/list of parts
     bool                m_listPowerCmpOnly;

@@ -98,7 +98,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
         LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) parent->Kiway().Player( FRAME_SCH_VIEWER, false );
 
         if( viewer )
-            viewer->ReCreateListLib();
+            viewer->ReCreateLibList();
 
         parent->ClearUndoORRedoList( EDA_BASE_FRAME::UNDO_LIST, 1 );
         parent->SyncView();

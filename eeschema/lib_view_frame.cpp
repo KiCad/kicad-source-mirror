@@ -102,8 +102,10 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
                     wxDefaultPosition, wxDefaultSize,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),
-    m_unitChoice( nullptr ), m_libList( nullptr ),
-    m_cmpList( nullptr ), m_previewItem( nullptr )
+        m_unitChoice( nullptr ),
+        m_libList( nullptr ),
+        m_symbolList( nullptr ),
+        m_previewItem( nullptr )
 {
     wxASSERT( aFrameType == FRAME_SCH_VIEWER || aFrameType == FRAME_SCH_VIEWER_MODAL );
 
@@ -123,7 +125,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     SetIcon( icon );
 
     m_libListWidth = 200;
-    m_cmpListWidth = 300;
+    m_symbolListWidth = 300;
     m_listPowerCmpOnly = false;
 
     SetScreen( new SCH_SCREEN );
@@ -149,12 +151,12 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_libList = new wxListBox( this, ID_LIBVIEW_LIB_LIST, wxDefaultPosition, wxDefaultSize,
                                0, NULL, wxLB_HSCROLL | wxNO_BORDER );
 
-    m_cmpList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxDefaultPosition, wxDefaultSize,
-                               0, NULL, wxLB_HSCROLL | wxNO_BORDER );
+    m_symbolList = new wxListBox( this, ID_LIBVIEW_CMP_LIST, wxDefaultPosition, wxDefaultSize,
+                                  0, NULL, wxLB_HSCROLL | wxNO_BORDER );
 
     if( aLibraryName.empty() )
     {
-        ReCreateListLib();
+        ReCreateLibList();
     }
     else
     {
@@ -176,8 +178,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.AddPane( m_libList, EDA_PANE().Palette().Name( "Libraries" ).Left().Layer(3)
                       .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_libListWidth, -1 ) );
-    m_auimgr.AddPane( m_cmpList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
-                      .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_cmpListWidth, -1 ) );
+    m_auimgr.AddPane( m_symbolList, EDA_PANE().Palette().Name( "Symbols" ).Left().Layer(1)
+                      .CaptionVisible( false ).MinSize( 80, -1 ).BestSize( m_symbolListWidth, -1 ) );
 
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
@@ -463,7 +465,7 @@ void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 }
 
 
-bool LIB_VIEW_FRAME::ReCreateListLib()
+bool LIB_VIEW_FRAME::ReCreateLibList()
 {
     if( !m_libList )
         return false;
@@ -527,7 +529,7 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
         m_convert = LIB_ITEM::LIB_CONVERT::BASE;
     }
 
-    bool cmp_changed = ReCreateListCmp();
+    bool cmp_changed = ReCreateSymbolList();
     DisplayLibInfos();
     GetCanvas()->Refresh();
 
@@ -535,9 +537,9 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
 }
 
 
-bool LIB_VIEW_FRAME::ReCreateListCmp()
+bool LIB_VIEW_FRAME::ReCreateSymbolList()
 {
-    if( m_cmpList == NULL )
+    if( m_symbolList == NULL )
         return false;
 
     wxArrayString aliasNames;
@@ -549,7 +551,7 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
 
-    m_cmpList->Clear();
+    m_symbolList->Clear();
 
     if( aliasNames.IsEmpty() )
     {
@@ -560,9 +562,9 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
         return true;
     }
 
-    m_cmpList->Append( aliasNames );
+    m_symbolList->Append( aliasNames );
 
-    int index = m_cmpList->FindString( m_entryName );
+    int  index = m_symbolList->FindString( m_entryName );
     bool changed = false;
 
     if( index == wxNOT_FOUND )
@@ -576,7 +578,7 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
         m_entryName = wxEmptyString;
     }
 
-    m_cmpList->SetSelection( index, true );
+    m_symbolList->SetSelection( index, true );
 
     wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
     ProcessEvent( evt );
@@ -604,7 +606,7 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
         return;
 
     m_libraryName = aLibraryName;
-    ReCreateListCmp();
+    ReCreateSymbolList();
     GetCanvas()->Refresh();
     DisplayLibInfos();
 
@@ -623,20 +625,20 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
 
 void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
 {
-    int ii = m_cmpList->GetSelection();
+    int ii = m_symbolList->GetSelection();
 
     if( ii < 0 )
         return;
 
     m_selection_changed = true;
 
-    SetSelectedComponent( m_cmpList->GetString( ii ) );
+    SetSelectedComponent( m_symbolList->GetString( ii ) );
 
-    // The m_cmpList has now the focus, in order to be able to use arrow keys
+    // The m_symbolList has now the focus, in order to be able to use arrow keys
     // to navigate inside the list.
     // the gal canvas must not steal the focus to allow navigation
     GetCanvas()->SetStealsFocus( false );
-    m_cmpList->SetFocus();
+    m_symbolList->SetFocus();
 }
 
 
@@ -646,10 +648,10 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
     {
         m_entryName = aComponentName;
 
-        // Ensure the corresponding line in m_cmpList is selected
+        // Ensure the corresponding line in m_symbolList is selected
         // (which is not necessarily the case if SetSelectedComponent is called
         // by another caller than ClickOnCmpList.
-        m_cmpList->SetStringSelection( aComponentName, true );
+        m_symbolList->SetStringSelection( aComponentName, true );
         DisplayLibInfos();
 
         if( m_selection_changed )
@@ -681,7 +683,7 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_LibViewPanel.window );
 
     m_libListWidth = cfg->m_LibViewPanel.lib_list_width;
-    m_cmpListWidth = cfg->m_LibViewPanel.cmp_list_width;
+    m_symbolListWidth = cfg->m_LibViewPanel.cmp_list_width;
 
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_LibViewPanel.show_pin_electrical_type;
 
@@ -689,8 +691,8 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     if( m_libListWidth > m_frameSize.x / 2 )
         m_libListWidth = m_frameSize.x / 2;
 
-    if( m_cmpListWidth > m_frameSize.x / 2 )
-        m_cmpListWidth = m_frameSize.x / 2;
+    if( m_symbolListWidth > m_frameSize.x / 2 )
+        m_symbolListWidth = m_frameSize.x / 2;
 }
 
 
@@ -703,10 +705,10 @@ void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
     if( m_libListWidth && m_libList )
         m_libListWidth = m_libList->GetSize().x;
 
-    m_cmpListWidth = m_cmpList->GetSize().x;
+    m_symbolListWidth = m_symbolList->GetSize().x;
 
     cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
-    cfg->m_LibViewPanel.cmp_list_width = m_cmpListWidth;
+    cfg->m_LibViewPanel.cmp_list_width = m_symbolListWidth;
     cfg->m_LibViewPanel.show_pin_electrical_type = GetRenderSettings()->m_ShowPinsElectricalType;
 }
 
@@ -724,7 +726,7 @@ void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
     if( aEnvVarsChanged )
-        ReCreateListLib();
+        ReCreateLibList();
 }
 
 
@@ -732,7 +734,7 @@ void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 {
     if( event.GetActive() )
     {
-        bool changed = m_libList ? ReCreateListLib() : false;
+        bool changed = m_libList ? ReCreateLibList() : false;
 
         if (changed)
             m_selection_changed = true;
@@ -763,7 +765,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
         m_listPowerCmpOnly = aFilter->GetFilterPowerParts();
     }
 
-    ReCreateListLib();
+    ReCreateLibList();
 }
 
 
@@ -791,8 +793,8 @@ const BOX2I LIB_VIEW_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 
 void LIB_VIEW_FRAME::FinishModal()
 {
-    if( m_cmpList->GetSelection() >= 0 )
-        DismissModal( true, m_libraryName + ':' + m_cmpList->GetStringSelection() );
+    if( m_symbolList->GetSelection() >= 0 )
+        DismissModal( true, m_libraryName + ':' + m_symbolList->GetStringSelection() );
     else
         DismissModal( false );
 
@@ -847,13 +849,13 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 void LIB_VIEW_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
 {
     wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
-    int ii = m_cmpList->GetSelection();
+    int            ii = m_symbolList->GetSelection();
 
     // Select the next symbol or stop at the end of the list.
-    if( ii != wxNOT_FOUND || ii != (int)m_cmpList->GetCount() - 1 )
+    if( ii != wxNOT_FOUND || ii != (int) m_symbolList->GetCount() - 1 )
         ii += 1;
 
-    m_cmpList->SetSelection( ii );
+    m_symbolList->SetSelection( ii );
     ProcessEvent( evt );
 }
 
@@ -861,13 +863,13 @@ void LIB_VIEW_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
 void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 {
     wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
-    int ii = m_cmpList->GetSelection();
+    int            ii = m_symbolList->GetSelection();
 
     // Select the previous symbol or stop at the beginning of list.
     if( ii != wxNOT_FOUND && ii != 0 )
         ii -= 1;
 
-    m_cmpList->SetSelection( ii );
+    m_symbolList->SetSelection( ii );
     ProcessEvent( evt );
 }
 

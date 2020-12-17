@@ -1015,5 +1015,5 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
     }
 
     if( symbolViewer )
-        symbolViewer->ReCreateListLib();
+        symbolViewer->ReCreateLibList();
 }

@@ -157,7 +157,7 @@ bool SCH_EDITOR_CONTROL::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand
         KIWAY_PLAYER* viewer = m_frame->Kiway().Player( FRAME_SCH_VIEWER, false );
 
         if( viewer )
-            static_cast<LIB_VIEW_FRAME*>( viewer )->ReCreateListLib();
+            static_cast<LIB_VIEW_FRAME*>( viewer )->ReCreateLibList();
 
         if( aRunningOnDemand )
         {
