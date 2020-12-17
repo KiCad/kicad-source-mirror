@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="zoom_fit_to_objects.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1440"
+     inkscape:window-height="800"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="8.3791386"
-     inkscape:cy="9.5627092"
+     inkscape:cx="9.0049983"
+     inkscape:cy="13.854319"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -91,23 +91,18 @@
      style="stroke-width:1" />
   <rect
      class="cls-1"
-     x="5"
+     x="8"
      y="11"
-     width="5"
-     height="4"
+     width="7"
+     height="4.5"
      id="rect160573-3"
-     style="fill:#545454"
-     ry="0.81210256" />
+     style="fill:#888888;fill-opacity:1;stroke-width:0.99999994"
+     ry="0.91361535" />
   <ellipse
-     style="fill:#545454;fill-opacity:1;stroke:none;stroke-linecap:square;paint-order:stroke fill markers"
+     style="fill:#888888;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;paint-order:stroke fill markers"
      id="path6788"
-     cx="8.0125294"
-     cy="7.0566769"
-     rx="2.5125294"
-     ry="2.5566769" />
-  <path
-     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 16.5,12 12,4 v 8 z"
-     id="path6792"
-     sodipodi:nodetypes="cccc" />
+     cx="7.7800674"
+     cy="6.8063331"
+     rx="2.7449915"
+     ry="2.8070207" />
 </svg>
