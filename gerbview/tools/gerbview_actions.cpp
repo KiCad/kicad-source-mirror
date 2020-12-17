@@ -171,7 +171,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::toggleDiffMode( "gerbview.Control.toggleDiffMode",
 TOOL_ACTION GERBVIEW_ACTIONS::flipGerberView( "gerbview.Control.flipGerberView",
         AS_GLOBAL, 0, "",
         _( "Flip Gerber View" ), _( "Show as mirror image" ),
-        swap_layer_xpm );
+        flip_board_xpm );
 
 
 // GERBVIEW_SELECTION_TOOL
