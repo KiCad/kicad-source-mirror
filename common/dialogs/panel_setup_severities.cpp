@@ -24,7 +24,7 @@
 #include <widgets/paged_dialog.h>
 #include <widgets/ui_common.h>
 #include <rc_item.h>
-#include "panel_setup_severities.h"
+#include <dialogs/panel_setup_severities.h>
 #include <wx/radiobut.h>
 
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -16,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialog_print_generic.h"
+#include <dialogs/dialog_print_generic.h>
 
 #include <confirm.h>
 #include <eda_draw_frame.h>
@@ -26,6 +27,7 @@
 // Define min and max reasonable values for print scale
 static constexpr double MIN_SCALE = 0.01;
 static constexpr double MAX_SCALE = 100.0;
+
 
 DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings )
     : DIALOG_PRINT_GENERIC_BASE( aParent ),
@@ -246,6 +248,7 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
     auto printout = std::unique_ptr<wxPrintout>( createPrintout( _( "Print" ) ) );
 
     Pgm().m_Printing = true;
+
     {
         if( !printer.Print( this, printout.get(), true ) )
         {
@@ -257,6 +260,7 @@ void DIALOG_PRINT_GENERIC::onPrintButtonClick( wxCommandEvent& event )
             *s_PrintData = printer.GetPrintDialogData().GetPrintData();
         }
     }
+
     Pgm().m_Printing = false;
 }
 
@@ -314,10 +318,10 @@ void DIALOG_PRINT_GENERIC::initPrintData()
         {
             if( pageInfo.IsPortrait() )
                 s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
-                                                    Mils2mm( pageInfo.GetHeightMils() ) ) );
+                                                       Mils2mm( pageInfo.GetHeightMils() ) ) );
             else
                 s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
-                                                    Mils2mm( pageInfo.GetWidthMils() ) ) );
+                                                       Mils2mm( pageInfo.GetWidthMils() ) ) );
         }
 
         *s_PrintData = s_pageSetupData->GetPrintData();

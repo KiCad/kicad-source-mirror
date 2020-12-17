@@ -24,7 +24,7 @@
 #include <bitmaps.h>
 #include <class_libentry.h>
 #include <confirm.h>
-#include <dialog_text_entry.h>
+#include <dialogs/dialog_text_entry.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
 #include <symbol_library_manager.h>

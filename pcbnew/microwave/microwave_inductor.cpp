@@ -29,7 +29,7 @@
 #include <fp_shape.h>
 #include <footprint.h>
 #include <confirm.h>
-#include <dialog_text_entry.h>
+#include <dialogs/dialog_text_entry.h>
 #include <geometry/geometry_utils.h>
 #include <math/util.h>      // for KiROUND
 #include <microwave/microwave_tool.h>

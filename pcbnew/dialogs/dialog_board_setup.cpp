@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -29,7 +29,7 @@
 #include <drc/drc_item.h>
 #include <dialog_import_settings.h>
 #include <io_mgr.h>
-#include <panel_setup_severities.h>
+#include <dialogs/panel_setup_severities.h>
 #include <panel_text_variables.h>
 #include <project.h>
 #include <project/project_file.h>
@@ -41,7 +41,8 @@
 #include "panel_setup_rules.h"
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Board Setup" ), false, _( "Import Settings from Another Board..." ) ),
+        PAGED_DIALOG( aFrame, _( "Board Setup" ), false,
+                      _( "Import Settings from Another Board..." ) ),
         m_frame( aFrame )
 {
     BOARD*                 board = aFrame->GetBoard();

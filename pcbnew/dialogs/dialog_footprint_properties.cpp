@@ -30,7 +30,7 @@
 #include <board_design_settings.h>
 #include <footprint.h>
 #include <confirm.h>
-#include <dialog_text_entry.h>
+#include <dialogs/dialog_text_entry.h>
 #include <filename_resolver.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>

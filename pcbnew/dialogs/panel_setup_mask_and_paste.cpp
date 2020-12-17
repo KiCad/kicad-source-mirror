@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
-#include <dialog_text_entry.h>
+#include <dialogs/dialog_text_entry.h>
 #include <panel_setup_mask_and_paste.h>
 
 
@@ -32,7 +32,8 @@ PANEL_SETUP_MASK_AND_PASTE::PANEL_SETUP_MASK_AND_PASTE( PAGED_DIALOG* aParent,
                                                         PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_MASK_AND_PASTE_BASE( aParent->GetTreebook() ),
         m_maskMargin( aFrame, m_MaskMarginLabel, m_MaskMarginCtrl, m_MaskMarginUnits, true ),
-        m_maskMinWidth( aFrame, m_MaskMinWidthLabel, m_MaskMinWidthCtrl, m_MaskMinWidthUnits, true ),
+        m_maskMinWidth( aFrame, m_MaskMinWidthLabel, m_MaskMinWidthCtrl, m_MaskMinWidthUnits,
+                        true ),
         m_pasteMargin( aFrame, m_PasteMarginLabel, m_PasteMarginCtrl, m_PasteMarginUnits, true )
 {
     m_Frame = aFrame;
@@ -68,7 +69,6 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
 bool PANEL_SETUP_MASK_AND_PASTE::TransferDataFromWindow()
 {
     // These are all stored in project file, not board, so no need for OnModify()
-
     m_BrdSettings->m_SolderMaskMargin = m_maskMargin.GetValue();
     m_BrdSettings->m_SolderMaskMinWidth = m_maskMinWidth.GetValue();
 

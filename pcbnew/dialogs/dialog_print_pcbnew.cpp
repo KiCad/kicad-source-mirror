@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2016 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -34,7 +34,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/pcb_control.h>
-#include <dialog_print_generic.h>
+#include <dialogs/dialog_print_generic.h>
 #include <pcbnew_printout.h>
 
 class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC
@@ -112,7 +112,8 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent,
     createExtraOptions();
     createLeftPanel();
 
-    m_outputMode->Bind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeChanged, this );
+    m_outputMode->Bind( wxEVT_COMMAND_CHOICE_SELECTED, &DIALOG_PRINT_PCBNEW::onColorModeChanged,
+                        this );
 }
 
 
@@ -211,7 +212,8 @@ void DIALOG_PRINT_PCBNEW::createExtraOptions()
                                       wxDefaultPosition, wxDefaultSize, 0 );
     optionsSizer->Add( m_checkUseTheme, wxGBPosition( rows++, 0 ), wxGBSpan( 1, 3 ), wxALL, 5 );
 
-    m_checkUseTheme->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED, &DIALOG_PRINT_PCBNEW::onUseThemeChecked, this );
+    m_checkUseTheme->Bind( wxEVT_COMMAND_CHECKBOX_CLICKED,
+                         &DIALOG_PRINT_PCBNEW::onUseThemeChecked, this );
 
     wxArrayString m_colorThemeChoices;
     m_colorTheme = new wxChoice( sbOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition,
@@ -288,7 +290,8 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
 
     // Select/Unselect all buttons
     m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
-    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Deselect all" ) );
+    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY,
+                                        _( "Deselect all" ) );
 
     m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
             wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onSelectAllClick ), NULL, this );
@@ -301,7 +304,8 @@ void DIALOG_PRINT_PCBNEW::createLeftPanel()
 
 
     // Exclude Edge.Pcb layer checkbox
-    m_checkboxNoEdge = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Exclude PCB edge layer" ) );
+    m_checkboxNoEdge = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY,
+                                       _( "Exclude PCB edge layer" ) );
     m_checkboxNoEdge->SetToolTip( _("Exclude contents of Edges_Pcb layer from all other layers") );
 
     // Static box sizer layout

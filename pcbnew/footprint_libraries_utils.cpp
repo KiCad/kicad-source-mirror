@@ -31,7 +31,7 @@
 #include <filter_reader.h>
 #include <fp_lib_table.h>
 #include <validators.h>
-#include <dialog_text_entry.h>
+#include <dialogs/dialog_text_entry.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <board.h>

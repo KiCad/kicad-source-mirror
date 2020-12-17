@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -22,10 +22,11 @@
 #include <widgets/gal_options_panel.h>
 #include <widgets/paged_dialog.h>
 
-#include <panel_gal_display_options.h>
+#include <dialogs/panel_gal_display_options.h>
 
 
-PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame, PAGED_DIALOG* aParent ) :
+PANEL_GAL_DISPLAY_OPTIONS::PANEL_GAL_DISPLAY_OPTIONS( EDA_DRAW_FRAME* aFrame,
+                                                      PAGED_DIALOG* aParent ) :
     wxPanel( aParent->GetTreebook(), wxID_ANY ),
     m_frame( aFrame )
 {

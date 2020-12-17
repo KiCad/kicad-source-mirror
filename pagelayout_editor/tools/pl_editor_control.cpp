@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,7 @@
 #include <tool/tool_manager.h>
 #include <confirm.h>
 #include <bitmaps.h>
-#include <dialog_page_settings.h>
+#include <dialogs/dialog_page_settings.h>
 #include <page_layout/ws_data_model.h>
 #include <page_layout/ws_painter.h>
 
@@ -37,6 +37,7 @@
 #include "tools/pl_actions.h"
 #include "tools/pl_editor_control.h"
 #include "tools/pl_selection_tool.h"
+
 
 bool PL_EDITOR_CONTROL::Init()
 {

@@ -19,7 +19,7 @@
 #ifndef DIALOG_PRINT_GENERIC_H
 #define DIALOG_PRINT_GENERIC_H
 
-#include "dialog_print_generic_base.h"
+#include <dialogs/dialog_print_generic_base.h>
 #include <wx/valnum.h>
 #include <widgets/unit_binder.h>
 

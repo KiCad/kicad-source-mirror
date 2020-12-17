@@ -23,7 +23,7 @@
 #include <kiface_i.h>
 #include <dialog_sch_import_settings.h>
 #include <dialogs/panel_setup_netclasses.h>
-#include <panel_setup_severities.h>
+#include <dialogs/panel_setup_severities.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
 #include <erc_item.h>

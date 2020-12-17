@@ -36,7 +36,7 @@
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_data_model.h>
 #include <page_layout/ws_painter.h>
-#include <dialog_page_settings.h>
+#include <dialogs/dialog_page_settings.h>
 
 #include "invoke_pl_editor_dialog.h"
 #include "pl_editor_frame.h"

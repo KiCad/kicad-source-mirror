@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_locked_items_query.h>
+#include <dialogs/dialog_locked_items_query.h>
 #include <bitmaps.h>
 
 DIALOG_LOCKED_ITEMS_QUERY::DIALOG_LOCKED_ITEMS_QUERY( wxWindow* aParent, int aLockedItemCount ) :

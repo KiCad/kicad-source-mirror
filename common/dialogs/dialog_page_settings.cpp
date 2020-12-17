@@ -24,7 +24,7 @@
 #include <base_screen.h>
 #include <confirm.h>
 #include <core/arraydim.h>
-#include <dialog_page_settings.h>
+#include <dialogs/dialog_page_settings.h>
 #include <eda_draw_frame.h>
 #include <eda_item.h>
 #include <gr_basic.h>

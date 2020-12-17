@@ -31,7 +31,7 @@
 #include <page_layout/ws_data_item.h>
 #include <page_layout/ws_data_model.h>
 #include <widgets/paged_dialog.h>
-#include <panel_gal_display_options.h>
+#include <dialogs/panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <confirm.h>
 #include <kiplatform/app.h>

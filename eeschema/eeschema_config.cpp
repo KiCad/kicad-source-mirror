@@ -32,7 +32,7 @@
 #include <dialogs/dialog_schematic_setup.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
-#include <panel_gal_display_options.h>
+#include <dialogs/panel_gal_display_options.h>
 #include <panel_hotkeys_editor.h>
 #include <pgm_base.h>
 #include <project/project_file.h>

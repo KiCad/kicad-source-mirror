@@ -39,7 +39,7 @@ using namespace std::placeholders;
 #include <collectors.h>
 #include <dialog_find.h>
 #include <dialog_filter_selection.h>
-#include <dialog_locked_items_query.h>
+#include <dialogs/dialog_locked_items_query.h>
 #include <class_draw_panel_gal.h>
 #include <view/view_controls.h>
 #include <preview_items/selection_area.h>
