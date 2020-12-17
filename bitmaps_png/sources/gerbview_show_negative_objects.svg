@@ -1,37 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" id="Слой_1" data-name="Слой 1" viewBox="0 0 24 24" version="1.1" sodipodi:docname="gerbview_show_negative_objects.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-   <sodipodi:namedview pagecolor="#ffffff" bordercolor="#666666" borderopacity="1" objecttolerance="10" gridtolerance="10" guidetolerance="10" inkscape:pageopacity="0" inkscape:pageshadow="2" inkscape:window-width="1609" inkscape:window-height="1286" id="namedview30" showgrid="true" inkscape:zoom="27.961538" inkscape:cx="3.3259971" inkscape:cy="13" inkscape:window-x="0" inkscape:window-y="37" inkscape:window-maximized="0" inkscape:document-rotation="0" inkscape:current-layer="Слой_1">
-      <inkscape:grid type="xygrid" id="grid_kicad" spacingx="0.5" spacingy="0.5" color="#9999ff" opacity="0.13" empspacing="2" />
-   </sodipodi:namedview>
-   <metadata id="metadata43">
-      <rdf:RDF>
-         <cc:Work rdf:about="">
-            <cc:license rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-            <dc:format>image/svg+xml</dc:format>
-            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-            <dc:title>add_arc</dc:title>
-         </cc:Work>
-         <cc:License rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Notice" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" />
-            <cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-            <cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-         </cc:License>
-      </rdf:RDF>
-   </metadata>
-   <defs id="defs25085">
-      <style id="style25083">.cls-1{fill:#545454;}.cls-2{fill:#1a81c4;}.cls-3{fill:#bf2641;}</style>
-   </defs>
-   <title id="title25087">gerbview_show_negative_opbjects</title>
-   <path class="cls-1" d="M 22.9669,4.998 V 18.9741 H 0.9951 V 4.998 h 21.9718 m 1,-1 H -0.0049 v 15.9761 h 23.9718 z" id="path25089" />
-   <polygon class="cls-2" points="1.003,21.04 1.003,4.962 20.979,4.962 4.934,21.04 " id="polygon25091" transform="translate(-1,-1)" />
-   <path class="cls-3" d="M 0.4966,24.0034 A 0.5,0.5 0 0 1 0.1431,23.1499 L 23.15,0.143 a 0.5,0.5 0 0 1 0.707,0.7071 L 0.85,23.8569 a 0.4983,0.4983 0 0 1 -0.3534,0.1465 z" id="path25093" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="gerbview_show_negative_objects.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2631"
+     inkscape:window-height="1611"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="3.3259971"
+     inkscape:cy="13"
+     inkscape:window-x="825"
+     inkscape:window-y="265"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_arc</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs25085">
+    <style
+       id="style25083">.cls-1{fill:#545454;}.cls-2{fill:#1a81c4;}.cls-3{fill:#bf2641;}</style>
+  </defs>
+  <title
+     id="title25087">gerbview_show_negative_opbjects</title>
+  <path
+     class="cls-1"
+     d="M 22.9669,4.998 V 18.9741 H 0.9951 V 4.998 h 21.9718 m 1,-1 H -0.0049 v 15.9761 h 23.9718 z"
+     id="path25089" />
+  <path
+     id="polygon25091"
+     style="fill:#b9b9b9;stroke:#545454;stroke-width:1;stroke-opacity:1;fill-opacity:1"
+     d="m 19.5,4.5 -15,15 h -4 v -15 z"
+     sodipodi:nodetypes="ccccc" />
+  <line
+     class="cls-3"
+     x1="0.5"
+     y1="23.5"
+     x2="23.5"
+     y2="0.5"
+     id="line158655"
+     style="fill:none;stroke:#545454;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1" />
 </svg>

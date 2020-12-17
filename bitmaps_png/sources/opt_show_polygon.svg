@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2290"
+     inkscape:window-height="1332"
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:cx="4.044234"
+     inkscape:cy="14.586657"
+     inkscape:window-x="997"
+     inkscape:window-y="209"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -83,7 +83,8 @@
      class="cls-1"
      points="6.546 19.286 2.677 15.418 2.677 2.299 15.796 2.299 19.496 5.999"
      id="polyline158651"
-     transform="translate(-1,-1)" />
+     transform="translate(-1,-1)"
+     style="fill:#1a81c4;fill-opacity:1" />
   <polyline
      class="cls-2"
      points="19.854 6.356 23.722 10.225 23.722 23.344 10.603 23.344 6.903 19.644"
@@ -95,5 +96,6 @@
      y1="23.5"
      x2="23.5"
      y2="0.5"
-     id="line158655" />
+     id="line158655"
+     style="stroke:#545454;stroke-opacity:1" />
 </svg>
