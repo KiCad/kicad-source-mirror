@@ -27,6 +27,7 @@
 #include <profile.h>
 #include <common.h>
 #include <erc.h>
+#include <pin_type.h>
 #include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
@@ -526,6 +527,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
             for( SCH_PIN* pin : component->GetPins( &aSheet ) )
             {
+                // Not connected pins are not connected.
+                if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+                    continue;
+
                 pin->InitializeConnection( aSheet, this );
 
                 wxPoint pos = pin->GetPosition();

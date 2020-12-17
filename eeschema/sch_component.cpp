@@ -1796,6 +1796,9 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 
     for( const auto& pin : m_pins )
     {
+        if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
+            continue;
+
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this component instance
         int pin_unit = pin->GetLibPin()->GetUnit();
