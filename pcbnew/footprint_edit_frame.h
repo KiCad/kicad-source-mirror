@@ -74,6 +74,8 @@ public:
 
     FOOTPRINT_EDITOR_SETTINGS* GetSettings();
 
+    APP_SETTINGS_BASE* config() const override;
+
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const override;
 
     const PCB_PLOT_PARAMS& GetPlotSettings() const override;

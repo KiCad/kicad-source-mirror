@@ -499,6 +499,13 @@ FOOTPRINT_EDITOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetSettings()
 }
 
 
+APP_SETTINGS_BASE* FOOTPRINT_EDIT_FRAME::config() const
+{
+    return m_settings ? m_settings
+                      : Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     // aCfg will be the PCBNEW_SETTINGS
@@ -627,9 +634,9 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
     m_auimgr.GetPane( "LayersManager" ).Show( false );
     m_auimgr.GetPane( "SelectionFilter" ).Show( false );
 
-    Pgm().GetSettingsManager().FlushAndRelease( GetSettings() );
-
     Clear_Pcb( false );
+
+    Pgm().GetSettingsManager().FlushAndRelease( GetSettings() );
 }
 
 
