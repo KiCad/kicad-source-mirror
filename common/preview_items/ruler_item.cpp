@@ -165,6 +165,12 @@ void drawTicksAlongLine( KIGFX::VIEW* aView, const VECTOR2D& aOrigin, const VECT
     double majorTickLen = aMinorTickLen * ( majorTickLengthFactor + 1 );
     VECTOR2D labelOffset = tickLine.Resize( majorTickLen - textOffset );
 
+    if( aView->IsMirroredX() )
+    {
+        textOffset = -textOffset;
+        labelOffset = -labelOffset;
+    }
+
     if( aLine.Angle() > 0 )
     {
         gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
