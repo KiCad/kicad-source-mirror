@@ -7,99 +7,101 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="paste.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   id="Слой_1"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/paste.png"
    inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="800"
-     id="namedview30"
-     showgrid="true"
-     inkscape:zoom="22.627416"
-     inkscape:cx="17.440961"
-     inkscape:cy="9.1381455"
-     inkscape:window-x="0"
-     inkscape:window-y="1"
-     inkscape:window-maximized="1"
-     inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
-    <inkscape:grid
-       type="xygrid"
-       id="grid_kicad"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#9999ff"
-       opacity="0.13"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata43">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs158893">
-    <style
-       id="style158891">.cls-1{fill:#686868;}.cls-2{fill:#b9b9b9;}.cls-3{fill:#bf2641;}.cls-4{fill:#fff;}.cls-5{fill:#545454;}</style>
-  </defs>
-  <title
-     id="title158895">paste</title>
-  <path
-     class="cls-1"
-     d="M 10.4837,2.1366 V 0.5017 a 0.5,0.5 0 0 1 0.5,-0.5 h 2 a 0.5,0.5 0 0 1 0.5,0.5 v 1.6466 z"
-     id="path158897"
-     inkscape:connector-curvature="0"
-     style="fill:#686868" />
-  <path
-     class="cls-2"
-     d="M 5.9966163,2.982058 17.595198,2.8750281 C 19.526897,2.8572027 20.9724,3.5643184 20.9724,5.4961 v 12.0013 c 0,1.931782 -1.566018,3.4978 -3.4978,3.4978 H 6.4929 c -1.9317816,0 -3.4978,-1.566018 -3.4978,-3.4978 V 5.4962 c 0,-1.9318368 1.0697617,-2.4963161 3.0015163,-2.514142 z"
-     id="path158899"
-     style="fill:#606060;fill-opacity:1"
-     sodipodi:nodetypes="sssssssss"
-     inkscape:connector-curvature="0" />
-  <path
-     class="cls-5"
-     d="m 9.5065588,1.4860577 5.1664302,-0.00887 C 15.371131,1.47599 15.488212,2 15.496877,2.412165 l 0.01739,0.8274164 C 15.528945,3.9375704 15.429943,4.5265 14.7318,4.5265 H 9.2356 C 8.5374959,4.5265 8.5000552,4.1981041 8.5,3.5 L 8.4801441,2.426922 C 8.4672271,1.7288431 8.8083614,1.4872563 9.5065588,1.4860577 Z"
-     id="path158905"
-     style="fill:#ffffff;fill-opacity:1;stroke:#606060;stroke-opacity:1"
-     sodipodi:nodetypes="sssssscss"
-     inkscape:connector-curvature="0" />
+   inkscape:export-ydpi="96"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="paste.svg"
+   x="0px"
+   y="0px"
+   viewBox="0 0 24 24"
+   style="enable-background:new 0 0 24 24;"
+   xml:space="preserve"><metadata
+   id="metadata850"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>paste</dc:title><cc:license
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
+   id="defs848" />
+<style
+   type="text/css"
+   id="style833">
+	.st0{fill:#727272;}
+	.st1{fill:#606060;}
+	.st2{fill:#F3F3F3;stroke:#545454;}
+</style>
+<sodipodi:namedview
+   bordercolor="#666666"
+   borderopacity="1"
+   gridtolerance="10"
+   guidetolerance="10"
+   id="namedview30"
+   inkscape:current-layer="Слой_1"
+   inkscape:cx="14.724903"
+   inkscape:cy="20.177618"
+   inkscape:document-rotation="0"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-height="715"
+   inkscape:window-maximized="1"
+   inkscape:window-width="1280"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:zoom="38.726151"
+   objecttolerance="10"
+   pagecolor="#ffffff"
+   showgrid="true">
+	<inkscape:grid
+   color="#9999ff"
+   empspacing="2"
+   id="grid_kicad"
+   opacity="0.13"
+   spacingx="1"
+   spacingy="1"
+   type="xygrid">
+		</inkscape:grid>
+</sodipodi:namedview>
+<title
+   id="title158895">paste</title>
+<g
+   id="path158897"
+   inkscape:connector-curvature="0"
+   style="fill:#545454;fill-opacity:1">
+	<path
+   class="st0"
+   d="M10.5,3.1V1.5C10.5,1.2,10.7,1,11,1h2c0.3,0,0.5,0.2,0.5,0.5v1.6L10.5,3.1z"
+   id="path838"
+   style="fill:#545454;fill-opacity:1" />
+</g>
+<g
+   id="path158899"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="sssssssss"
+   style="fill:#545454;fill-opacity:1"
+   transform="matrix(1.125,0,0,1,-1.5,0)">
+	<path
+   class="st0"
+   d="m 7.5,22.5 c -1.7,0 -3,-1.4 -3,-3.2 V 6.7 C 4.5,5.1 5.2,4.5 7,4.5 h 9.6 c 2.9,0 2.9,1.7 2.9,2.2 v 12.6 c 0,1.7 -1.3,3.2 -3,3.2 z"
+   id="path841"
+   style="fill:#545454;fill-opacity:1" />
+	<path
+   class="st1"
+   d="m 7,5 h 9.6 0.1 C 19,5 19,6.2 19,6.7 v 12.6 c 0,1.5 -1.1,2.7 -2.5,2.7 h -9 C 6.1,22 5,20.8 5,19.3 V 6.7 C 5,5.6 5.3,5 7,5 M 7,4 C 5.1,4 4,4.7 4,6.7 v 12.6 c 0,2 1.6,3.7 3.5,3.7 h 9 C 18.4,23 20,21.4 20,19.3 V 6.7 C 20,4.7 18.6,4 16.7,4 c 0,0 0,0 -0.1,0 z"
+   id="path843"
+   style="fill:#545454;fill-opacity:1" />
+</g>
+<path
+   id="path158905"
+   inkscape:connector-curvature="0"
+   sodipodi:nodetypes="sssssscss"
+   class="st2"
+   d="M9.5,2.5l5.2,0  c0.7,0,0.8,0.5,0.8,0.9l0,0.8c0,0.7-0.1,1.3-0.8,1.3H9.2c-0.7,0-0.7-0.3-0.7-1l0-1.1C8.5,2.7,8.8,2.5,9.5,2.5z" />
 </svg>

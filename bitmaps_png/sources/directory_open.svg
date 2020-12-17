@@ -7,89 +7,76 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
    version="1.1"
+   id="Слой_1"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    sodipodi:docname="directory_open.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10000"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
-     id="namedview9483"
-     showgrid="true"
-     inkscape:zoom="39.543588"
-     inkscape:cx="5.3645765"
-     inkscape:cy="10.201237"
-     inkscape:window-x="0"
-     inkscape:window-y="0"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0"
-     inkscape:snap-global="true">
-    <inkscape:grid
-       type="xygrid"
-       id="grid10046"
-       spacingx="0.5"
-       spacingy="0.5"
-       empspacing="2"
-       color="#ceceff"
-       opacity="0.1254902" />
-  </sodipodi:namedview>
-  <metadata
-     id="metadata43">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>folder</dc:title>
-      </cc:Work>
-      <cc:License
-         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Reproduction" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#Distribution" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Notice" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#Attribution" />
-        <cc:permits
-           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
-      </cc:License>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs9472">
-    <style
-       id="style9470">.cls-1{fill:#545454;}.cls-2{fill:#1a81c4;}.cls-3{fill:#b9b9b9;}</style>
-  </defs>
-  <title
-     id="title9474">folder</title>
-  <path
-     class="cls-1"
-     d="M 15.523803,20.857842 5.514597,21.01405 C 1.8774996,21.070811 0.02132338,20.953627 0.0259535,19.935237 L 0.08664509,6.5861885 C 0.09621358,4.4816102 1.9757391,3.8311718 3.0800202,3.8577132 L 9,4 c 0.8432626,1.3e-5 1.230059,0.1560773 2,0.5 L 12,5 c 0.934053,0.2733 2,1 3,1 h 3.5 c 1.102958,-2.209e-4 2.414962,-0.062607 2.431689,1.0402244 l 0.106204,7.0020076 c 0.0069,0.457808 -4.825865,6.80487 -5.51409,6.81561 z"
-     id="path9476"
-     sodipodi:nodetypes="ssssscccccsss"
-     style="fill:#545454;fill-opacity:1" />
-  <path
-     class="cls-3"
-     d="M 7.5991407,7.4635827 21.607602,7.505771 c 1.104564,0.00333 2.350051,0.8143084 2,1.664078 l -4.453196,10.810408 c -0.700101,1.699539 -1.748196,1.622634 -3.957317,1.631906 l -10.5523741,0.04429 c -2.2091196,0.0093 -4.8557848,-0.249471 -4.0630763,-2.136256 L 4.9982814,9.0078056 C 5.354468,8.1600191 6.4945762,7.4602562 7.5991407,7.4635827 Z"
-     id="path9480"
-     style="fill:#545454;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     sodipodi:nodetypes="sssssssss" />
+   x="0px"
+   y="0px"
+   viewBox="0 0 24 24"
+   style="enable-background:new 0 0 24 24;"
+   xml:space="preserve"><metadata
+   id="metadata843"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>folder</dc:title><cc:license
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
+   id="defs841" />
+<style
+   type="text/css"
+   id="style833">
+	.st0{fill:#545454;}
+	.st1{fill:#727272;stroke:#F3F3F3;}
+</style>
+<sodipodi:namedview
+   bordercolor="#666666"
+   borderopacity="1"
+   gridtolerance="10000"
+   guidetolerance="10"
+   id="namedview9483"
+   inkscape:current-layer="Слой_1"
+   inkscape:cx="3.8591244"
+   inkscape:cy="13.627163"
+   inkscape:document-rotation="0"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:snap-global="true"
+   inkscape:window-height="715"
+   inkscape:window-maximized="1"
+   inkscape:window-width="1280"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:zoom="22.234533"
+   objecttolerance="10"
+   pagecolor="#ffffff"
+   showgrid="true">
+	<inkscape:grid
+   color="#ceceff"
+   empspacing="2"
+   id="grid10046"
+   opacity="0.1254902"
+   spacingx="0.5"
+   spacingy="0.5"
+   type="xygrid">
+		</inkscape:grid>
+</sodipodi:namedview>
+<title
+   id="title9474">folder</title>
+<path
+   id="path9476"
+   sodipodi:nodetypes="ssssscccccsss"
+   class="st0"
+   d="M15.5,20.9L5.5,21C1.9,21.1,0,21,0,19.9L0.1,6.6  c0-2.1,1.9-2.8,3-2.7L9,4c0.8,0,1.2,0.2,2,0.5L12,5c0.9,0.3,2,1,3,1h3.5c1.1,0,2.4-0.1,2.4,1l0.1,7C21,14.5,16.2,20.8,15.5,20.9z" />
+<path
+   id="path9480"
+   sodipodi:nodetypes="sssssssss"
+   class="st1"
+   d="M7.6,7.5l14,0c1.1,0,2.4,0.8,2,1.7L19.2,20  c-0.7,1.7-1.7,1.6-4,1.6l-10.6,0c-2.2,0-4.9-0.2-4.1-2.1L5,9C5.4,8.2,6.5,7.5,7.6,7.5z"
+   style="fill:#545454;fill-opacity:1" />
 </svg>

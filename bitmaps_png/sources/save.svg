@@ -7,87 +7,109 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="Слой_1"
-   data-name="Слой 1"
-   viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="save.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   id="Слой_1"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/save.png"
    inkscape:export-xdpi="96"
-   inkscape:export-ydpi="96">
-  <metadata
-     id="metadata29">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>save</dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="800"
-     id="namedview27"
-     showgrid="true"
-     inkscape:zoom="32"
-     inkscape:cx="12.27451"
-     inkscape:cy="13.955139"
-     inkscape:window-x="0"
-     inkscape:window-y="1"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="Слой_1"
-     inkscape:document-rotation="0">
-    <inkscape:grid
-       type="xygrid"
-       id="grid836"
-       spacingx="0.5"
-       spacingy="0.5"
-       color="#a1a1ff"
-       opacity="0.1254902"
-       empspacing="2" />
-  </sodipodi:namedview>
-  <defs
-     id="defs4">
-    <style
-       id="style2">.cls-1,.cls-3{fill:#b9b9b9;}.cls-2{fill:#1a81c4;}.cls-2,.cls-3,.cls-4{stroke:#1a81c4;}.cls-2,.cls-3,.cls-4,.cls-6{stroke-linecap:round;stroke-linejoin:round;}.cls-4,.cls-6{fill:none;}.cls-5{fill:#bf2641;}.cls-6{stroke:#fff;stroke-width:2px;}</style>
-  </defs>
-  <title
-     id="title6">save</title>
-  <path
-     id="polygon10"
-     style="fill:#606060;stroke:#606060;stroke-width:1;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
-     d="m 22.5,7 v 15.5 h -21 l 2e-7,-20.9999999 L 17,1.5 Z"
-     sodipodi:nodetypes="cccccc" />
-  <rect
-     class="cls-3"
-     x="6"
-     y="2"
-     width="7"
-     height="6"
-     id="rect12"
-     style="stroke:none;stroke-width:0.999998;fill:#ffffff;fill-opacity:1" />
-  <path
-     id="line16"
-     style="fill:none;stroke:#606060;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 11.5,1.5 v 4"
-     sodipodi:nodetypes="cc" />
-  <rect
-     style="fill:#ffffff;stroke:none;stroke-linejoin:round;fill-opacity:1"
-     id="rect844"
-     width="11"
-     height="7"
-     x="6"
-     y="14" />
+   inkscape:export-ydpi="96"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="save.svg"
+   x="0px"
+   y="0px"
+   viewBox="0 0 24 24"
+   style="enable-background:new 0 0 24 24;"
+   xml:space="preserve"><metadata
+   id="metadata853"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>save</dc:title><cc:license
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
+   id="defs851" />
+<style
+   type="text/css"
+   id="style833">
+	.st0{fill:#727272;stroke:#545454;stroke-linecap:round;stroke-linejoin:bevel;}
+	.st1{fill:#F3F3F3;}
+	.st2{fill:#545454;}
+	.st3{fill:none;stroke:#727272;stroke-linejoin:round;}
+</style>
+<sodipodi:namedview
+   bordercolor="#666666"
+   borderopacity="1"
+   gridtolerance="10"
+   guidetolerance="10"
+   id="namedview27"
+   inkscape:current-layer="Слой_1"
+   inkscape:cx="12.610724"
+   inkscape:cy="6.9385514"
+   inkscape:document-rotation="0"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:window-height="715"
+   inkscape:window-maximized="1"
+   inkscape:window-width="1280"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:zoom="28.148958"
+   objecttolerance="10"
+   pagecolor="#ffffff"
+   showgrid="true">
+	<inkscape:grid
+   color="#a1a1ff"
+   empspacing="2"
+   id="grid836"
+   opacity="0.1254902"
+   spacingx="1"
+   spacingy="1"
+   type="xygrid">
+		</inkscape:grid>
+</sodipodi:namedview>
+<title
+   id="title6">save</title>
+<path
+   id="polygon10"
+   sodipodi:nodetypes="cccccc"
+   class="st0"
+   d="M22.5,7v15.5h-21v-21H17L22.5,7z"
+   style="fill:#545454;fill-opacity:1" />
+<g
+   id="rect12">
+	<rect
+   x="5.5"
+   y="1.5"
+   class="st1"
+   width="8"
+   height="7"
+   id="rect839" />
+	<path
+   class="st2"
+   d="M13,2v6H6V2H13 M14,1h-1H6H5v1v6v1h1h7h1V8V2V1L14,1z"
+   id="path841" />
+</g>
+<path
+   id="line16"
+   sodipodi:nodetypes="cc"
+   class="st3"
+   d="M11.5,2v4"
+   style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke:#545454;stroke-opacity:1" />
+<g
+   id="rect844">
+	<rect
+   x="5.5"
+   y="14.5"
+   class="st1"
+   width="12"
+   height="8"
+   id="rect845" />
+	<path
+   class="st2"
+   d="M17,15v7H6v-7H17 M18,14h-1H6H5v1v7v1h1h11h1v-1v-7V14L18,14z"
+   id="path847" />
+</g>
 </svg>
