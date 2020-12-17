@@ -518,9 +518,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
         double   theta = RAD2DEG( atan2( -dy, dx ) );
         double   ro = hypot( dx, dy );
 
-        line.Printf( wxT( "r %s  theta %s" ),
-                     MessageTextFromValue( GetUserUnits(), ro, false ),
-                     MessageTextFromValue( EDA_UNITS::DEGREES, theta, false ) );
+        line.Printf( wxT( "r %s  theta %.3f" ),
+                     MessageTextFromValue( GetUserUnits(), ro, false ), theta );
 
         SetStatusText( line, 3 );
     }
