@@ -272,4 +272,5 @@ SGVECTOR& SGVECTOR::operator=( const SGVECTOR& source ) noexcept
     vx = source.vx;
     vy = source.vy;
     vz = source.vz;
+    return *this;
 }
