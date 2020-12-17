@@ -970,7 +970,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                     if( !fpField->GetText().IsEmpty() )
                     {
                         LIB_ID fpId;
-                        fpId.Parse( fpField->GetText(), LIB_ID::ID_SCH, true );
+                        fpId.Parse( fpField->GetText(), true );
                         fpId.SetLibNickname( newfilename.GetName() );
                         fpField->SetText( fpId.Format() );
                     }

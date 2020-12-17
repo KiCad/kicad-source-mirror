@@ -309,7 +309,7 @@ wxString LIB_PART::GetUnitReference( int aUnit )
 
 void LIB_PART::SetName( const wxString& aName )
 {
-    wxString validatedName = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
+    wxString validatedName = LIB_ID::FixIllegalChars( aName );
 
     m_name = validatedName;
     m_libId.SetLibItemName( validatedName, false );

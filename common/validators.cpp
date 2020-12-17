@@ -297,7 +297,7 @@ bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
     {
         msg = _( "Entry contains leading white space." );
     }
-    else if( dummy.Parse( val, m_idType ) != -1 || !dummy.IsValid() )   // Is valid LIB_ID.
+    else if( dummy.Parse( val ) != -1 || !dummy.IsValid() )   // Is valid LIB_ID.
     {
         msg.Printf( _( "\"%s\" is not a valid library identifier format." ), val );
     }

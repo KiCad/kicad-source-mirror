@@ -508,7 +508,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     if( dlg.ShowQuasiModal() != wxID_OK )
         return;
 
-    wxString newFieldValue = LIB_ID::FixIllegalChars( dlg.GetText(), LIB_ID::ID_SCH );
+    wxString newFieldValue = LIB_ID::FixIllegalChars( dlg.GetText() );
     wxString oldFieldValue = aField->GetFullText( m_frame->GetUnit() );
     bool     renamed = aField->GetId() == VALUE_FIELD && newFieldValue != oldFieldValue;
 

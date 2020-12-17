@@ -89,7 +89,7 @@ static void get_components( SCHEMATIC* aSchematic, std::vector<SCH_COMPONENT*>& 
 static LIB_PART* find_component( const wxString& aName, PART_LIBS* aLibs, bool aCached )
 {
     LIB_PART *part = NULL;
-    wxString new_name = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
+    wxString new_name = LIB_ID::FixIllegalChars( aName );
 
     for( PART_LIB& each_lib : *aLibs )
     {
@@ -149,7 +149,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
         part_name = each_component->GetLibId().GetLibItemName();
-        search_name = LIB_ID::FixIllegalChars( part_name, LIB_ID::ID_SCH );
+        search_name = LIB_ID::FixIllegalChars( part_name );
 
         if( last_part_name != part_name )
         {
@@ -254,7 +254,7 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
     for( SCH_COMPONENT* each_component : *( aRescuer.GetComponents() ) )
     {
         part_name = each_component->GetLibId().GetLibItemName();
-        search_name = LIB_ID::FixIllegalChars( part_name, LIB_ID::ID_SCH );
+        search_name = LIB_ID::FixIllegalChars( part_name );
 
         if( old_part_name != part_name )
         {
@@ -416,7 +416,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             }
 
             // Test whether there is a conflict or if the symbol can only be found in the cache.
-            if( LIB_ID::HasIllegalChars( part_id.GetLibItemName(), LIB_ID::ID_SCH ) == -1 )
+            if( LIB_ID::HasIllegalChars( part_id.GetLibItemName() ) == -1 )
             {
                 if( cache_match && lib_match &&
                     !cache_match->PinsConflictWith( *lib_match, true, true, true, true, false ) )
@@ -427,7 +427,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             }
 
             // Fix illegal LIB_ID name characters.
-            wxString new_name = LIB_ID::FixIllegalChars( part_id.GetLibItemName(), LIB_ID::ID_SCH );
+            wxString new_name = LIB_ID::FixIllegalChars( part_id.GetLibItemName() );
 
             // Differentiate symbol name in the rescue library by appending the symbol library
             // table nickname to the symbol name to prevent name clashes in the rescue library.

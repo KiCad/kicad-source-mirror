@@ -102,7 +102,7 @@ SCH_SHEET* CADSTAR_SCH_ARCHIVE_PLUGIN::Load( const wxString& aFileName, SCHEMATI
         libName = "noname";
 
     libName += "-cadstar-import";
-    libName = LIB_ID::FixIllegalChars( libName, LIB_ID::ID_SCH, true );
+    libName = LIB_ID::FixIllegalChars( libName, true );
 
     wxFileName libFileName(
             aSchematic->Prj().GetProjectPath(), libName, KiCadSymbolLibFileExtension );

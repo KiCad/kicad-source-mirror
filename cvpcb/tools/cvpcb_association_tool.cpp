@@ -61,7 +61,7 @@ int CVPCB_ASSOCIATION_TOOL::CopyAssoc( const TOOL_EVENT& aEvent )
     switch( copyControl )
     {
     case CVPCB_MAINFRAME::CONTROL_FOOTPRINT:
-        fpid.Parse( m_frame->GetSelectedFootprint(), LIB_ID::ID_PCB );
+        fpid.Parse( m_frame->GetSelectedFootprint() );
         break;
 
     case CVPCB_MAINFRAME::CONTROL_COMPONENT:
@@ -163,7 +163,7 @@ int CVPCB_ASSOCIATION_TOOL::PasteAssoc( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    if( fpid.Parse( data.GetText(), LIB_ID::ID_PCB ) >= 0 )
+    if( fpid.Parse( data.GetText() ) >= 0 )
         return 0;
 
     // Assign the fpid to the selections
@@ -205,7 +205,7 @@ int CVPCB_ASSOCIATION_TOOL::Associate( const TOOL_EVENT& aEvent )
     // Get the currently selected footprint
     LIB_ID   fpid;
     wxString fp = m_frame->GetSelectedFootprint();
-    fpid.Parse( fp, LIB_ID::ID_PCB );
+    fpid.Parse( fp );
 
     // Ignore the action if the footprint is empty (nothing selected)
     if( fpid.empty() )

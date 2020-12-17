@@ -510,7 +510,7 @@ void PCB_FOOTPRINT::AddToBoard()
     footprint->SetLastEditTime( 0 );
 
     LIB_ID fpID;
-    fpID.Parse( m_compRef, LIB_ID::ID_PCB, true );
+    fpID.Parse( m_compRef, true );
     footprint->SetFPID( fpID );
 
     // reference text

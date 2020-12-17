@@ -500,8 +500,6 @@ protected:
      */
     LIB_TABLE_ROW* findRow( const wxString& aNickname ) const;
 
-    LIB_TABLE_ROW* findRow( const wxString& aNickname );
-
     void reindex()
     {
         nickIndex.clear();

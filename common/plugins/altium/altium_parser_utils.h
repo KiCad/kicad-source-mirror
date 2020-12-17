@@ -29,7 +29,7 @@
 #include <lib_id.h>
 
 
-LIB_ID AltiumToKiCadLibID( LIB_ID::LIB_ID_TYPE aType, wxString aLibName, wxString aLibReference )
+LIB_ID AltiumToKiCadLibID( wxString aLibName, wxString aLibReference )
 {
     ReplaceIllegalFileNameChars( aLibName, '_' );
     ReplaceIllegalFileNameChars( aLibReference, '_' );
@@ -37,7 +37,7 @@ LIB_ID AltiumToKiCadLibID( LIB_ID::LIB_ID_TYPE aType, wxString aLibName, wxStrin
     wxString key = !aLibName.empty() ? ( aLibName + ":" + aLibReference ) : aLibReference;
 
     LIB_ID libId;
-    libId.Parse( key, aType, true );
+    libId.Parse( key, true );
 
     return libId;
 }

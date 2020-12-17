@@ -613,7 +613,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadComponentLibrary()
         footprint->SetPosition( getKiCadPoint( component.Origin ) );
 
         LIB_ID libID;
-        libID.Parse( fpName, LIB_ID::LIB_ID_TYPE::ID_PCB, true );
+        libID.Parse( fpName, true );
 
         footprint->SetFPID( libID );
         loadLibraryFigures( component, footprint );

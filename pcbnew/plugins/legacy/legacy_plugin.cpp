@@ -435,7 +435,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
             ReplaceIllegalFileNameChars( &fpName );
 
             if( !fpName.empty() )
-                fpid.Parse( fpName, LIB_ID::ID_PCB, true );
+                fpid.Parse( fpName, true );
 
             footprint->SetFPID( fpid );
 

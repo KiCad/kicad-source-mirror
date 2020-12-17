@@ -329,7 +329,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 // button.
                 model->DeleteRows( r, 1 );
             }
-            else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_SCH ) ) )
+            else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
             {
                 wxString msg = wxString::Format( _( "Illegal character '%c' in Nickname: \"%s\"" ),
                                                  illegalCh,
@@ -470,7 +470,7 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     {
         wxString filePath = dlg.GetDirectory() + wxFileName::GetPathSeparator() + file;
         wxFileName fn( filePath );
-        wxString nickname = LIB_ID::FixIllegalChars( fn.GetName(), LIB_ID::ID_SCH );
+        wxString nickname = LIB_ID::FixIllegalChars( fn.GetName() );
         bool doAdd = true;
 
         if( cur_model()->ContainsNickname( nickname ) )

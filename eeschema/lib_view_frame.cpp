@@ -373,24 +373,24 @@ bool LIB_VIEW_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
         LIB_TABLE* libTable = Prj().SchSymbolLibTable();
         LIB_ID libid;
 
-        libid.Parse( *aSymbol, LIB_ID::ID_SCH, true );
+        libid.Parse( *aSymbol, true );
 
         if( libid.IsValid() )
         {
-            wxString nickname = libid.GetLibNickname();
+            wxString libName = libid.GetLibNickname();
 
             if( !libTable->HasLibrary( libid.GetLibNickname(), false ) )
             {
-                msg.sprintf( _( "The current configuration does not include a library with the\n"
-                                "nickname \"%s\".  Use Manage Symbol Libraries\n"
-                                "to edit the configuration." ), nickname );
-                DisplayErrorMessage( aParent, _( "Symbol library not found." ), msg );
+                msg.Printf( _( "The current configuration does not include the library '%s'.\n"
+                               "Use Manage Symbol Libraries to edit the configuration." ),
+                             libName );
+                DisplayErrorMessage( this, _( "Library not found in symbol library table." ), msg );
             }
             else if ( !libTable->HasLibrary( libid.GetLibNickname(), true ) )
             {
-                msg.sprintf( _( "The library with the nickname \"%s\" is not enabled\n"
-                                "in the current configuration.  Use Manage Symbol Libraries to\n"
-                                "edit the configuration." ), nickname );
+                msg.Printf( _( "The library '%s' is not enabled in the current configuration.\n"
+                               "Use Manage Symbol Libraries to edit the configuration." ),
+                             libName );
                 DisplayErrorMessage( aParent, _( "Symbol library not enabled." ), msg );
             }
             else

@@ -1529,7 +1529,7 @@ void SCH_SEXPR_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol, OUTPUTFORMATTER& aFo
 
         LIB_ID unitId;
 
-        wxCHECK2( unitId.Parse( aLibName, LIB_ID::ID_SCH ) < 0, /* do nothing */ );
+        wxCHECK2( unitId.Parse( aLibName ) < 0, /* do nothing */ );
 
         unitName = unitId.GetLibItemName();
     }

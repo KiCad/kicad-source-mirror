@@ -149,7 +149,7 @@ wxString SCH_EAGLE_PLUGIN::getLibName()
             m_libName = "noname";
 
         m_libName += "-eagle-import";
-        m_libName = LIB_ID::FixIllegalChars( m_libName, LIB_ID::ID_SCH, true );
+        m_libName = LIB_ID::FixIllegalChars( m_libName, true );
     }
 
     return m_libName;
@@ -2605,7 +2605,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections(
 
 wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
 {
-    wxString ret = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
+    wxString ret = LIB_ID::FixIllegalChars( aName );
 
     return ret;
 }

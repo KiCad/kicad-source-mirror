@@ -253,7 +253,7 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
         if( footprintName.IsEmpty() )  // Cancel command
             return NULL;
         else
-            fpid.Parse( footprintName, LIB_ID::ID_PCB );
+            fpid.Parse( footprintName );
     }
     else
     {

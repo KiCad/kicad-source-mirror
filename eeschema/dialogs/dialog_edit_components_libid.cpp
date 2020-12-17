@@ -541,7 +541,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::validateLibIds()
 
         // a new lib id is found. validate this new value
         LIB_ID id;
-        id.Parse( new_libid, LIB_ID::ID_SCH );
+        id.Parse( new_libid );
 
         if( !id.IsValid() )
         {
@@ -589,7 +589,7 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
         int grid_row_idx = orphanRow; //row index in m_grid for the current item
 
         LIB_ID curr_libid;
-        curr_libid.Parse( orphanLibid, LIB_ID::ID_SCH, true );
+        curr_libid.Parse( orphanLibid, true );
         wxString symbName = curr_libid.GetLibItemName();
         // number of full LIB_ID candidates (because we search for a symbol name
         // inside all avaiable libraries, perhaps the same symbol name can be found
@@ -674,17 +674,16 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
                                                                              0, 0, false );
 #else
     // Use library viewer to choose a symbol
-    LIB_ID aPreselectedLibid;
+    LIB_ID preselected;
     wxString current = m_grid->GetCellValue( aRow, COL_NEW_LIBID );
 
     if( current.IsEmpty() )
         current = m_grid->GetCellValue( aRow, COL_CURR_LIBID );
 
     if( !current.IsEmpty() )
-        aPreselectedLibid.Parse( current, LIB_ID::ID_SCH, true );
+        preselected.Parse( current, true );
 
-    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibBrowser( this, NULL, aPreselectedLibid,
-                                                               0, 0 );
+    PICKED_SYMBOL sel = GetParent()->PickSymbolFromLibBrowser( this, NULL, preselected, 0, 0 );
 #endif
 
     if( sel.LibId.empty() )     // command aborted
@@ -721,7 +720,7 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::TransferDataFromWindow()
 
         // A new lib id is found and was already validated.
         LIB_ID id;
-        id.Parse( new_libid, LIB_ID::ID_SCH, true );
+        id.Parse( new_libid, true );
 
         for( CMP_CANDIDATE& cmp : m_components )
         {

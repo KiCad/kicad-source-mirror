@@ -25,16 +25,12 @@
 
 
 #include <wx/filename.h>
-#include <wx/uri.h>
-
 #include <set>
-
 #include <common.h>
 #include <kiface_i.h>
 #include <lib_table_base.h>
 #include <lib_table_lexer.h>
 #include <macros.h>
-#include <settings/app_settings.h>
 
 
 #define OPT_SEP     '|'         ///< options separator character
@@ -195,33 +191,21 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
     {
         cur->ensureIndex();
 
-        INDEX_CITER it = cur->nickIndex.find( aNickName );
-
-        if( it != cur->nickIndex.end() )
+        for( const std::pair<const wxString, int>& entry : cur->nickIndex )
         {
-            return &cur->rows[it->second];  // found
+            if( entry.first == aNickName )
+                return &cur->rows[entry.second ];
         }
 
-        // not found, search fall back table(s), if any
-    } while( ( cur = cur->fallBack ) != 0 );
-
-    return nullptr; // not found
-}
-
-
-LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName )
-{
-    LIB_TABLE* cur = (LIB_TABLE*) this;
-
-    do
-    {
-        cur->ensureIndex();
-
-        INDEX_ITER it = cur->nickIndex.find( aNickName );
-
-        if( it != cur->nickIndex.end() )
+        // Repeat, this time looking for names that were "fixed" by legacy versions because
+        // the old eeschema file format didn't support spaces in tokens.
+        for( const std::pair<const wxString, int>& entry : cur->nickIndex )
         {
-            return &cur->rows[it->second];  // found
+            wxString legacyLibName = entry.first;
+            legacyLibName.Replace( " ", "_" );
+
+            if( legacyLibName == aNickName )
+                return &cur->rows[entry.second ];
         }
 
         // not found, search fall back table(s), if any

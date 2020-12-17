@@ -1160,8 +1160,8 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( !libTableRow )
             {
-                msg.Printf( _( "The current configuration does not include the symbol library\n"
-                               "\"%s\".\nUse Manage Symbol Libraries to edit the configuration." ),
+                msg.Printf( _( "The current configuration does not include the library '%s'.\n"
+                               "Use Manage Symbol Libraries to edit the configuration." ),
                             libFileName );
                 DisplayErrorMessage( this, _( "Library not found in symbol library table." ), msg );
                 break;
@@ -1171,9 +1171,9 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( !libTable->HasLibrary( libNickname, true ) )
             {
-                msg.Printf( _( "The library with the nickname \"%s\" is not enabled\n"
-                               "in the current configuration.  Use Manage Symbol Libraries to\n"
-                               "edit the configuration." ), libNickname );
+                msg.Printf( _( "The library '%s' is not enabled in the current configuration.\n"
+                               "Use Manage Symbol Libraries to edit the configuration." ),
+                            libNickname );
                 DisplayErrorMessage( this, _( "Symbol library not enabled." ), msg );
                 break;
             }

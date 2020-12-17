@@ -136,7 +136,7 @@ wxString SCH_ALTIUM_PLUGIN::getLibName()
             m_libName = "noname";
 
         m_libName += "-altium-import";
-        m_libName = LIB_ID::FixIllegalChars( m_libName, LIB_ID::ID_SCH, true );
+        m_libName = LIB_ID::FixIllegalChars( m_libName, true );
     }
 
     return m_libName;
@@ -495,7 +495,7 @@ void SCH_ALTIUM_PLUGIN::ParseComponent( int aIndex,
                                       elem.orientation,
                                       elem.isMirrored ? "_mirrored" : "",
                                       elem.libreference );
-    LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), name );
+    LIB_ID libId = AltiumToKiCadLibID( getLibName(), name );
 
     LIB_PART* kpart = new LIB_PART( wxEmptyString );
     kpart->SetName( name );
@@ -1555,7 +1555,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 {
     ASCH_POWER_PORT elem( aProperties );
 
-    LIB_ID libId = AltiumToKiCadLibID( LIB_ID::ID_SCH, getLibName(), elem.text );
+    LIB_ID libId = AltiumToKiCadLibID( getLibName(), elem.text );
 
     LIB_PART* kpart = nullptr;
 

@@ -113,13 +113,13 @@ static int okRevision( const UTF8& aField )
 
 void LIB_ID::clear()
 {
-    nickname.clear();
-    item_name.clear();
-    revision.clear();
+    m_libraryName.clear();
+    m_itemName.clear();
+    m_revision.clear();
 }
 
 
-int LIB_ID::Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix )
+int LIB_ID::Parse( const UTF8& aId, bool aFix )
 {
     clear();
 
@@ -129,14 +129,14 @@ int LIB_ID::Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix )
     size_t      partNdx;
     int         offset = -1;
 
-    //=====<revision>=========================================
+    //=====<revision>=====================================
     // in a LIB_ID like discret:R3/rev4
     if( rev )
     {
         revNdx = rev - buffer;
 
         // no need to check revision, EndsWithRev did that.
-        revision = aId.substr( revNdx );
+        m_revision = aId.substr( revNdx );
         --revNdx;  // back up to omit the '/' which precedes the rev
     }
     else
@@ -144,7 +144,7 @@ int LIB_ID::Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix )
         revNdx = aId.size();
     }
 
-    //=====<nickname>==========================================
+    //=====<name>=========================================
     if( ( partNdx = aId.find( ':' ) ) != aId.npos )
     {
         offset = SetLibNickname( aId.substr( 0, partNdx ) );
@@ -168,9 +168,9 @@ int LIB_ID::Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix )
     // Be sure the item name is valid.
     // Some chars can be found in legacy files converted files from other EDA tools.
     if( aFix )
-        fpname = FixIllegalChars( fpname, aType, false );
+        fpname = FixIllegalChars( fpname, false );
     else
-        offset = HasIllegalChars( fpname, aType );
+        offset = HasIllegalChars( fpname );
 
     if( offset > -1 )
         return offset;
@@ -181,11 +181,11 @@ int LIB_ID::Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix )
 }
 
 
-LIB_ID::LIB_ID( const wxString& aLibName, const wxString& aLibItemName,
+LIB_ID::LIB_ID( const wxString& aLibraryName, const wxString& aItemName,
                 const wxString& aRevision ) :
-    nickname( aLibName ),
-    item_name( aLibItemName ),
-    revision( aRevision )
+        m_libraryName( aLibraryName ),
+        m_itemName( aItemName ),
+        m_revision( aRevision )
 {
 }
 
@@ -195,9 +195,7 @@ int LIB_ID::SetLibNickname( const UTF8& aLogical )
     int offset = okLogical( aLogical );
 
     if( offset == -1 )
-    {
-        nickname = aLogical;
-    }
+        m_libraryName = aLogical;
 
     return offset;
 }
@@ -209,12 +207,12 @@ int LIB_ID::SetLibItemName( const UTF8& aLibItemName, bool aTestForRev )
 
     if( aTestForRev && separation != -1 )
     {
-        item_name = aLibItemName.substr( 0, separation-1 );
+        m_itemName = aLibItemName.substr( 0, separation-1 );
         return separation;
     }
     else
     {
-        item_name = aLibItemName;
+        m_itemName = aLibItemName;
     }
 
     return -1;
@@ -226,9 +224,7 @@ int LIB_ID::SetRevision( const UTF8& aRevision )
     int offset = okRevision( aRevision );
 
     if( offset == -1 )
-    {
-        revision = aRevision;
-    }
+        m_revision = aRevision;
 
     return offset;
 }
@@ -238,18 +234,18 @@ UTF8 LIB_ID::Format() const
 {
     UTF8    ret;
 
-    if( nickname.size() )
+    if( m_libraryName.size() )
     {
-        ret += nickname;
+        ret += m_libraryName;
         ret += ':';
     }
 
-    ret += item_name;
+    ret += m_itemName;
 
-    if( revision.size() )
+    if( m_revision.size() )
     {
         ret += '/';
-        ret += revision;
+        ret += m_revision;
     }
 
     return ret;
@@ -258,35 +254,34 @@ UTF8 LIB_ID::Format() const
 
 UTF8 LIB_ID::GetLibItemNameAndRev() const
 {
-    UTF8 ret = item_name;
+    UTF8 ret = m_itemName;
 
-    if( revision.size() )
+    if( m_revision.size() )
     {
         ret += '/';
-        ret += revision;
+        ret += m_revision;
     }
 
     return ret;
 }
 
 
-UTF8 LIB_ID::Format( const UTF8& aLogicalLib, const UTF8& aLibItemName, const UTF8& aRevision )
+UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName, const UTF8& aRevision )
 {
     UTF8    ret;
     int     offset;
 
-    if( aLogicalLib.size() )
+    if( aLibraryName.size() )
     {
-        offset = okLogical( aLogicalLib );
+        offset = okLogical( aLibraryName );
 
         if( offset != -1 )
         {
             THROW_PARSE_ERROR( _( "Illegal character found in logical library name" ),
-                               wxString::FromUTF8( aLogicalLib.c_str() ),
-                               aLogicalLib.c_str(), 0, offset );
+                               wxString::FromUTF8( aLibraryName.c_str() ), aLibraryName.c_str(), 0, offset );
         }
 
-        ret += aLogicalLib;
+        ret += aLibraryName;
         ret += ':';
     }
 
@@ -319,27 +314,27 @@ int LIB_ID::compare( const LIB_ID& aLibId ) const
     if( this == &aLibId )
         return 0;
 
-    int retv = nickname.compare( aLibId.nickname );
+    int retv = m_libraryName.compare( aLibId.m_libraryName );
 
     if( retv != 0 )
         return retv;
 
-    retv = item_name.compare( aLibId.item_name );
+    retv = m_itemName.compare( aLibId.m_itemName );
 
     if( retv != 0 )
         return retv;
 
-    return revision.compare( aLibId.revision );
+    return m_revision.compare( aLibId.m_revision );
 }
 
 
-int LIB_ID::HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
+int LIB_ID::HasIllegalChars( const UTF8& aLibItemName )
 {
     int offset = 0;
 
     for( auto ch : aLibItemName )
     {
-        if( !isLegalChar( ch, aType ) )
+        if( !isLegalChar( ch ) )
             return offset;
         else
             ++offset;
@@ -349,7 +344,7 @@ int LIB_ID::HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType )
 }
 
 
-UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool aLib )
+UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, bool aLib )
 {
     UTF8 fixedName;
 
@@ -357,19 +352,19 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool 
     {
         auto ch = *chIt;
         if( aLib )
-            fixedName += isLegalLibNicknameChar( ch, aType ) ? ch : '_';
+            fixedName += isLegalLibraryNameChar( ch ) ? ch : '_';
         else
-            fixedName += isLegalChar( ch, aType ) ? ch : '_';
+            fixedName += isLegalChar( ch ) ? ch : '_';
     }
 
     return fixedName;
 }
 
 
-bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
+bool LIB_ID::isLegalChar( unsigned aUniChar )
 {
-    bool const space_allowed = ( aType == ID_PCB );
-    bool const illegal_filename_chars_allowed = ( aType == ID_SCH );
+    bool const space_allowed = true;
+    bool const illegal_filename_chars_allowed = false;
 
     if( aUniChar < ' ' )
         return false;
@@ -400,11 +395,11 @@ bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
 }
 
 
-unsigned LIB_ID::FindIllegalLibNicknameChar( const UTF8& aNickname, LIB_ID_TYPE aType )
+unsigned LIB_ID::FindIllegalLibraryNameChar( const UTF8& aLibraryName )
 {
-    for( unsigned ch : aNickname )
+    for( unsigned ch : aLibraryName )
     {
-        if( !isLegalLibNicknameChar( ch, aType ) )
+        if( !isLegalLibraryNameChar( ch ) )
             return ch;
     }
 
@@ -412,9 +407,9 @@ unsigned LIB_ID::FindIllegalLibNicknameChar( const UTF8& aNickname, LIB_ID_TYPE 
 }
 
 
-bool LIB_ID::isLegalLibNicknameChar( unsigned aUniChar, LIB_ID_TYPE aType )
+bool LIB_ID::isLegalLibraryNameChar( unsigned aUniChar )
 {
-    bool const space_allowed = ( aType != ID_SCH );
+    bool const space_allowed = true;
 
     if( aUniChar < ' ' )
         return false;
@@ -453,7 +448,7 @@ void LIB_ID::Test()
         LIB_ID lpid( lpids[i] );  // parse
 
         // format
-        printf( "input:'%s'  full:'%s'  nickname: %s  item_name:'%s' rev:'%s'\n",
+        printf( "input:'%s'  full:'%s'  nickname: %s  m_itemName:'%s' rev:'%s'\n",
                 lpids[i],
                 lpid.Format().c_str(),
                 lpid.GetLibNickname().c_str(),

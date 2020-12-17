@@ -176,9 +176,8 @@ public:
      * @param aLibIdType is the type of #LIB_ID object to validate.
      * @param aValue is a pointer to a wxString containing the value to validate.
      */
-    LIB_ID_VALIDATOR( LIB_ID::LIB_ID_TYPE aLibIdType, wxString* aValue = NULL ) :
-        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue ),
-        m_idType( aLibIdType )
+    LIB_ID_VALIDATOR( wxString* aValue = NULL ) :
+        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )
     {
         SetCharExcludes( "\r\n\t" );
     }
@@ -189,9 +188,6 @@ public:
     }
 
     bool Validate( wxWindow* aParent ) override;
-
-protected:
-    LIB_ID::LIB_ID_TYPE m_idType;
 };
 
 

@@ -1537,7 +1537,7 @@ FOOTPRINT* EAGLE_PLUGIN::makeFootprint( wxXmlNode* aPackage, const wxString& aPk
     std::unique_ptr<FOOTPRINT> m = std::make_unique<FOOTPRINT>( m_board );
 
     LIB_ID fpID;
-    fpID.Parse( aPkgName, LIB_ID::ID_PCB, true );
+    fpID.Parse( aPkgName, true );
     m->SetFPID( fpID );
 
     // Get the first package item and iterate

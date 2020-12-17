@@ -51,10 +51,6 @@
 class LIB_ID
 {
 public:
-
-    ///> Types of library identifiers
-    enum LIB_ID_TYPE { ID_SCH, ID_PCB };
-
     LIB_ID() {}
 
     // NOTE: don't define any constructors which call Parse() on their arguments.  We want it
@@ -66,12 +62,12 @@ public:
      * names allowing '/' as a valid character.  This was causing the symbol names to
      * be truncated at the first occurrence of '/' in the symbol name.
      *
-     * @param aLibName is the library nickname used to look up the library item in the #LIB_TABLE.
-     * @param aLibItemName is the name of the library item which is not parsed by the standard
+     * @param aLibraryName is the library name used to look up the library item in the #LIB_TABLE.
+     * @param aItemName is the name of the library item which is not parsed by the standard
      *                     LIB_ID::Parse() function.
      * @param aRevision is the revision of the library item.
      */
-    LIB_ID( const wxString& aLibName, const wxString& aLibItemName,
+    LIB_ID( const wxString& aLibraryName, const wxString& aItemName,
             const wxString& aRevision = wxEmptyString );
 
     /**
@@ -83,21 +79,17 @@ public:
      * e.g.: "ttl:7400"
      *
      * @param aId is the string to populate the #LIB_ID object.
-     * @param aType indicates the LIB_ID type for type-specific parsing (such as allowed chars).
      * @param aFix indicates invalid chars should be replaced with '_'.
      *
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
      *               aId at which an error was detected.
      */
-    int Parse( const UTF8& aId, LIB_ID_TYPE aType, bool aFix = false );
+    int Parse( const UTF8& aId, bool aFix = false );
 
     /**
      * Return the logical library name portion of a LIB_ID.
      */
-    const UTF8& GetLibNickname() const
-    {
-        return nickname;
-    }
+    const UTF8& GetLibNickname() const { return m_libraryName; }
 
     /**
      * Override the logical library name portion of the LIB_ID to @a aNickname.
@@ -111,14 +103,14 @@ public:
     /**
      * @return the library item name, i.e. footprintName, in UTF8.
      */
-    const UTF8& GetLibItemName() const { return item_name; }
+    const UTF8& GetLibItemName() const { return m_itemName; }
 
     /**
      * @return the library item name, i.e. footprintName in a wxString (UTF16 or 32).
      * useful to display messages in dialogs
-     * Equivalent to item_name.wx_str(), but more explicit when building a Unicode string in messages.
+     * Equivalent to m_itemName.wx_str(), but more explicit when building a Unicode string in messages.
      */
-    const wxString GetUniStringLibItemName() const { return item_name.wx_str(); }
+    const wxString GetUniStringLibItemName() const { return m_itemName.wx_str(); }
 
     /**
      * Override the library item name portion of the LIB_ID to @a aLibItemName
@@ -131,7 +123,7 @@ public:
 
     int SetRevision( const UTF8& aRevision );
 
-    const UTF8& GetRevision() const { return revision; }
+    const UTF8& GetRevision() const { return m_revision; }
 
     UTF8 GetLibItemNameAndRev() const;
 
@@ -152,11 +144,11 @@ public:
 
     /**
      * @return a string in the proper format as an LIB_ID for a combination of
-     *         aLibNickname, aLibItemName, and aRevision.
+     *         aLibraryName, aLibItemName, and aRevision.
      *
      * @throw PARSE_ERROR if any of the pieces are illegal.
      */
-    static UTF8 Format( const UTF8& aLibNickname, const UTF8& aLibItemName,
+    static UTF8 Format( const UTF8& aLibraryName, const UTF8& aLibItemName,
                         const UTF8& aRevision = "" );
 
     /**
@@ -168,12 +160,18 @@ public:
      * @note A return value of true does not indicated that the #LIB_ID is a valid #LIB_TABLE
      *       entry.
      */
-    bool IsValid() const { return !nickname.empty() && !item_name.empty(); }
+    bool IsValid() const
+    {
+        return !m_libraryName.empty() && !m_itemName.empty();
+    }
 
     /**
-     * @return true if the #LIB_ID only has the #item_name name defined.
+     * @return true if the #LIB_ID only has the #m_itemName name defined.
      */
-    bool IsLegacy() const { return nickname.empty() && !item_name.empty() && revision.empty(); }
+    bool IsLegacy() const
+    {
+        return m_libraryName.empty() && !m_itemName.empty() && m_revision.empty();
+    }
 
     /**
      * Clear the contents of the library nickname, library entry name, and revision strings.
@@ -183,7 +181,10 @@ public:
     /**
      * @return a boolean true value if the LIB_ID is empty.  Otherwise return false.
      */
-    bool empty() const { return nickname.empty() && item_name.empty() && revision.empty(); }
+    bool empty() const
+    {
+        return m_libraryName.empty() && m_itemName.empty() && m_revision.empty();
+    }
 
     /**
      * Compare the contents of LIB_ID objects by performing a std::string comparison of the
@@ -204,29 +205,26 @@ public:
      * Examine \a aLibItemName for invalid #LIB_ID item name characters.
      *
      * @param aLibItemName is the #LIB_ID name to test for illegal characters.
-     * @param aType is the library identifier type
      * @return offset of first illegal character otherwise -1.
      */
-    static int HasIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType );
+    static int HasIllegalChars( const UTF8& aLibItemName );
 
     /**
      * Replace illegal #LIB_ID item name characters with underscores '_'.
      *
      * @param aLibItemName is the #LIB_ID item name to replace illegal characters.
-     * @param aType is the library identifier type
      * @param aLib True if we are checking library names, false if we are checking item names
      * @return the corrected version of \a aLibItemName.
      */
-    static UTF8 FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool aLib = false );
+    static UTF8 FixIllegalChars( const UTF8& aLibItemName, bool aLib = false );
 
     /**
      * Looks for characters that are illegal in library nicknames.
      *
-     * @param aNickname is the logical library name to be tested.
-     * @param aType is the library identifier type
+     * @param aLibraryName is the logical library name to be tested.
      * @return Invalid character found in the name or 0 is the name is valid.
      */
-    static unsigned FindIllegalLibNicknameChar( const UTF8& aNickname, LIB_ID_TYPE aType );
+    static unsigned FindIllegalLibraryNameChar( const UTF8& aLibraryName );
 
 protected:
     /**
@@ -241,8 +239,8 @@ protected:
      *   schematic or symbol library file formats.
      * - Spaces are allowed in footprint library nicknames as they are quoted in the
      *   footprint library table file format.
-     * - Spaces are not allowed in symbol library nicknames since they are not quoted in
-     *   the symbol library file format.
+     * - Spaces are now also allowed in symbol library nicknames since they are quoted in
+     *   the new symbol library sexpr file format.
      * - Illegal file name characters are not allowed in footprint names since the file
      *   name is the footprint name.
      * - Illegal file name characters except '/' are allowed in symbol names since the
@@ -252,7 +250,7 @@ protected:
      * @note @a aUniChar is expected to be a 32 bit unicode character, not a UTF8 char, that use
      * a variable length coding value.
      */
-    static bool isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType );
+    static bool isLegalChar( unsigned aUniChar );
 
     /**
      * Tests whether a unicode character is a legal LIB_ID library nickname character
@@ -260,11 +258,11 @@ protected:
      * @note @a aUniChar is expected to be a 32 bit unicode character, not a UTF8 char, that use
      * a variable length coding value.
      */
-    static bool isLegalLibNicknameChar( unsigned aUniChar, LIB_ID_TYPE aType );
+    static bool isLegalLibraryNameChar( unsigned aUniChar );
 
-    UTF8    nickname;       ///< The nickname of the library or empty.
-    UTF8    item_name;      ///< The name of the entry in the logical library.
-    UTF8    revision;       ///< The revision of the entry.
+    UTF8    m_libraryName;    ///< The nickname of the library or empty.
+    UTF8    m_itemName;       ///< The name of the entry in the logical library.
+    UTF8    m_revision;       ///< The revision of the entry.
 };
 
 

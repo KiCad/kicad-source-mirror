@@ -192,7 +192,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( FOOTPRINT* aFootprint )
     case ID_MATCH_FP_VAL:
         return WildCompareString( m_specifiedValue->GetValue(), aFootprint->GetValue(), false );
     case ID_MATCH_FP_ID:
-        specifiedID.Parse( m_specifiedID->GetValue(), LIB_ID::ID_PCB );
+        specifiedID.Parse( m_specifiedID->GetValue() );
         return aFootprint->GetFPID() == specifiedID;
     default:
         return false;   // just to quiet compiler warnings....
@@ -326,7 +326,7 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::processMatchingFootprints()
 
     if( !m_updateMode )
     {
-        newFPID.Parse( m_newID->GetValue(), LIB_ID::ID_PCB );
+        newFPID.Parse( m_newID->GetValue() );
 
         if( !newFPID.IsValid() )
             return false;

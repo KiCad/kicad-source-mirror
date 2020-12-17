@@ -1510,7 +1510,7 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
             // parsing the symbol name with LIB_ID::Parse() would break symbol library links
             // that contained '/' and ':' characters.
             if( m_version > 3 )
-                libId.Parse( libName, LIB_ID::ID_SCH, true );
+                libId.Parse( libName, true );
             else
                 libId.SetLibItemName( libName, false );
 
@@ -2687,7 +2687,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
 
         aliasName = wxString::FromUTF8( line );
         aliasName.Trim();
-        aliasName = LIB_ID::FixIllegalChars( aliasName, LIB_ID::ID_SCH );
+        aliasName = LIB_ID::FixIllegalChars( aliasName );
 
         LIB_PART_MAP::iterator it = m_symbols.find( aliasName );
 

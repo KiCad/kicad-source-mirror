@@ -149,7 +149,7 @@ LIB_PART* SCH_SEXPR_PARSER::ParseSymbol( LIB_PART_MAP& aSymbolLibMap, int aFileV
 
     LIB_ID id;
 
-    if( id.Parse( name, LIB_ID::ID_SCH ) >= 0 )
+    if( id.Parse( name ) >= 0 )
     {
         error.Printf( _( "Invalid library identifier in\nfile: \"%s\"\nline: %d\noffset: %d" ),
                       CurSource().c_str(), CurLineNumber(), CurOffset() );
@@ -2162,7 +2162,7 @@ SCH_COMPONENT* SCH_SEXPR_PARSER::parseSchematicSymbol()
 
             LIB_ID libId;
 
-            if( libId.Parse( FromUTF8(), LIB_ID::ID_SCH ) >= 0 )
+            if( libId.Parse( FromUTF8() ) >= 0 )
             {
                 error.Printf( _( "Invalid symbol library ID in\nfile: \"%s\"\nline: %d\n"
                                  "offset: %d" ),

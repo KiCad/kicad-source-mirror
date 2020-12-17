@@ -426,7 +426,7 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprint( wxString const& aName )
     {
         LIB_ID lib_id;
 
-        if( lib_id.Parse( aName, LIB_ID::ID_PCB ) == -1 && lib_id.IsValid() )
+        if( lib_id.Parse( aName ) == -1 && lib_id.IsValid() )
         {
             m_fp_preview->ClearStatus();
             m_fp_preview->CacheFootprint( lib_id );

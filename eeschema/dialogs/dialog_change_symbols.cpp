@@ -286,7 +286,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
     {
         LIB_ID newId;
 
-        newId.Parse( m_newId->GetValue(), LIB_ID::ID_SCH );
+        newId.Parse( m_newId->GetValue() );
 
         if( newId.IsValid() )
         {
@@ -384,7 +384,7 @@ bool DIALOG_CHANGE_SYMBOLS::isMatch( SCH_COMPONENT* aSymbol, SCH_SHEET_PATH* aIn
     }
     else if( m_matchById )
     {
-        id.Parse( m_specifiedId->GetValue(), LIB_ID::ID_SCH );
+        id.Parse( m_specifiedId->GetValue() );
         return aSymbol->GetLibId() == id;
     }
 
@@ -405,7 +405,7 @@ bool DIALOG_CHANGE_SYMBOLS::processMatchingSymbols()
 
     if( m_mode == MODE::CHANGE )
     {
-        newId.Parse( m_newId->GetValue(), LIB_ID::ID_SCH );
+        newId.Parse( m_newId->GetValue() );
 
         if( !newId.IsValid() )
             return false;

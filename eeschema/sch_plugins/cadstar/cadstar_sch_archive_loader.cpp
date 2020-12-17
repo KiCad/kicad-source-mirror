@@ -377,7 +377,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                 //KiCad requires parts to be named the same as the net:
                 wxString partName = sym.SymbolVariant.Reference;
 
-                partName = LIB_ID::FixIllegalChars( partName, LIB_ID::ID_SCH );
+                partName = LIB_ID::FixIllegalChars( partName );
 
                 if( mPowerSymLibMap.find( symID ) == mPowerSymLibMap.end()
                         || mPowerSymLibMap.at( symID )->GetName() != partName )

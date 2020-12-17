@@ -902,32 +902,32 @@ bool FOOTPRINT_VIEWER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent 
         LIB_TABLE* fpTable = Prj().PcbFootprintLibs();
         LIB_ID fpid;
 
-        fpid.Parse( *aFootprint, LIB_ID::ID_PCB, true );
+        fpid.Parse( *aFootprint, true );
 
         if( fpid.IsValid() )
         {
-            wxString nickname = fpid.GetLibNickname();
+            wxString libraryName = fpid.GetLibNickname();
 
             if( !fpTable->HasLibrary( fpid.GetLibNickname(), false ) )
             {
-                msg.sprintf( _( "The current configuration does not include a library with the\n"
-                                "nickname \"%s\".  Use Manage Footprint Libraries\n"
-                                "to edit the configuration." ), nickname );
+                msg.sprintf( _( "The current configuration does not include library '%s'.  Use "
+                                "Manage Footprint Libraries to edit the configuration." ),
+                             libraryName );
                 DisplayErrorMessage( aParent, _( "Footprint library not found." ), msg );
             }
             else if ( !fpTable->HasLibrary( fpid.GetLibNickname(), true ) )
             {
-                msg.sprintf( _( "The library with the nickname \"%s\" is not enabled\n"
-                                "in the current configuration.  Use Manage Footprint Libraries to\n"
-                                "edit the configuration." ), nickname );
+                msg.sprintf( _( "Library '%s' is not enabled in the current configuration.  Use "
+                                "Manage Footprint Libraries to edit the configuration." ),
+                             libraryName );
                 DisplayErrorMessage( aParent, _( "Footprint library not enabled." ), msg );
             }
             else
             {
                 // Update last selection:
-                setCurNickname( nickname );
+                setCurNickname( libraryName );
                 setCurFootprintName( fpid.GetLibItemName() );
-                m_libList->SetStringSelection( nickname );
+                m_libList->SetStringSelection( libraryName );
             }
         }
     }

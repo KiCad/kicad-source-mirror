@@ -51,8 +51,8 @@ public:
             unsigned int aComponentIndex, wxString aNewFootprint, wxString aOldFootprint = "" ) :
             m_componentIndex( aComponentIndex )
     {
-        m_newFootprint.Parse( aNewFootprint, LIB_ID::ID_PCB );
-        m_oldFootprint.Parse( aOldFootprint, LIB_ID::ID_PCB );
+        m_newFootprint.Parse( aNewFootprint );
+        m_oldFootprint.Parse( aOldFootprint );
     }
 
     /**

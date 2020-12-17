@@ -752,7 +752,7 @@ void ALTIUM_PCB::ParseComponents6Data( const CFB::CompoundFileReader& aReader,
         m_board->Add( footprint, ADD_MODE::APPEND );
         m_components.emplace_back( footprint );
 
-        LIB_ID fpID = AltiumToKiCadLibID(LIB_ID::ID_PCB, elem.sourcefootprintlibrary, elem.sourcelibreference );
+        LIB_ID fpID = AltiumToKiCadLibID( elem.sourcefootprintlibrary, elem.sourcelibreference );
 
         footprint->SetFPID( fpID );
 

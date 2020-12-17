@@ -374,7 +374,7 @@ FOOTPRINT* DISPLAY_FOOTPRINTS_FRAME::GetFootprint( const wxString& aFootprintNam
     FOOTPRINT* footprint = NULL;
     LIB_ID     fpid;
 
-    if( fpid.Parse( aFootprintName, LIB_ID::ID_PCB ) >= 0 )
+    if( fpid.Parse( aFootprintName ) >= 0 )
     {
         aReporter.Report( wxString::Format( _( "Footprint ID \"%s\" is not valid." ),
                                             aFootprintName ),

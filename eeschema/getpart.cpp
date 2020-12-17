@@ -73,7 +73,7 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParen
     {
         LIB_ID id;
 
-        if( id.Parse( symbol, LIB_ID::ID_SCH ) == -1 )
+        if( id.Parse( symbol ) == -1 )
             sel.LibId = id;
 
         sel.Unit = viewlibFrame->GetUnit();
