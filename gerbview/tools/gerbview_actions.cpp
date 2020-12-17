@@ -44,7 +44,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::openDrillFile( "gerbview.Control.openDrillFile",
         AS_GLOBAL, 0, "",
         _( "Open Excellon Drill File(s)..." ),
         _( "Open Excellon drill file(s) on the current layer. Previous data will be deleted" ),
-        gerbview_drill_file_xpm );
+        load_drill_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::openJobFile( "gerbview.Control.openJobFile",
         AS_GLOBAL, 0, "",

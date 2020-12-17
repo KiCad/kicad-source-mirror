@@ -160,7 +160,7 @@ TOOL_ACTION EE_ACTIONS::exportSymbol( "eeschema.SymbolLibraryControl.exportSymbo
 TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( "eeschema.SymbolLibraryControl.addSymbolToSchematic",
         AS_GLOBAL, 0, "",
         _( "Add Symbol to Schematic" ), _( "Add Symbol to Schematic" ),
-        export_xpm );
+        add_symbol_to_schematic_xpm );
 
 TOOL_ACTION EE_ACTIONS::showElectricalTypes( "eeschema.SymbolLibraryControl.showElectricalTypes",
         AS_GLOBAL, 0, "",

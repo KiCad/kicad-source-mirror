@@ -30,8 +30,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="38.029746"
-     inkscape:cx="9.8830136"
-     inkscape:cy="15.162225"
+     inkscape:cx="9.2913715"
+     inkscape:cy="13.058609"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
@@ -89,8 +89,8 @@
      style="stroke-width:1" />
   <path
      id="rect160555"
-     style="fill:#888888;fill-opacity:1;stroke:#888888;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 6.5,4.5 H 11 L 13.5,7 v 0 6 2.5 h -7 z"
+     style="fill:#909090;fill-opacity:1;stroke:#909090;stroke-width:0.99999994;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6.5,5.5 H 11 L 13.5,8 V 8.5 12.454544 14.5 h -7 z"
      class="cls-2"
      sodipodi:nodetypes="cccccccc"
      inkscape:connector-curvature="0" />

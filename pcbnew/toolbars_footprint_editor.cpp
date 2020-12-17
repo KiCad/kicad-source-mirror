@@ -86,11 +86,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_LOAD_FOOTPRINT_FROM_BOARD, wxEmptyString,
-                            KiScaledBitmap( load_module_board_xpm, this ),
+                            KiScaledBitmap( import_brd_file_xpm, this ),
                             _( "Load footprint from current board" ) );
 
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
-                            KiScaledBitmap( export_xpm, this ),
+                            KiScaledBitmap( insert_module_board_xpm, this ),
                             _( "Insert footprint into current board" ) );
 
     m_mainToolBar->AddScaledSeparator( this );

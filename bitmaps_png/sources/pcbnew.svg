@@ -30,8 +30,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="14.112701"
-     inkscape:cy="11.893305"
+     inkscape:cx="16.169097"
+     inkscape:cy="9.0322321"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
@@ -264,50 +264,6 @@
      sodipodi:nodetypes="cccccc"
      clip-path="url(#clipPath928)"
      transform="translate(0.50068774)" />
-  <rect
-     style="fill:#006400;fill-opacity:1;stroke:none;stroke-width:2.15141153;stroke-linecap:round;stroke-linejoin:round"
-     id="rect878"
-     width="6"
-     height="5"
-     x="17"
-     y="14"
-     rx="0"
-     ry="2"
-     clip-path="url(#clipPath920)"
-     transform="matrix(1.166667,0,0,1,-3.8333398,0)" />
-  <rect
-     style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:1.19999933;stroke-linecap:round;stroke-linejoin:round"
-     id="rect880"
-     width="4"
-     height="3"
-     x="18"
-     y="15"
-     rx="0"
-     ry="1"
-     clip-path="url(#clipPath916)"
-     transform="matrix(1.25,0,0,1,-5.5,0)" />
-  <rect
-     style="fill:#006400;fill-opacity:1;stroke:none;stroke-width:2.15141153;stroke-linecap:round;stroke-linejoin:round"
-     id="rect882"
-     width="6"
-     height="5"
-     x="17"
-     y="20"
-     rx="0"
-     ry="2"
-     clip-path="url(#clipPath912)"
-     transform="matrix(1.1666667,0,0,1,-3.8333333,0)" />
-  <rect
-     style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:1.19999933;stroke-linecap:round;stroke-linejoin:round"
-     id="rect884"
-     width="4"
-     height="3"
-     x="18"
-     y="21"
-     rx="0"
-     ry="0.96360058"
-     clip-path="url(#clipPath908)"
-     transform="matrix(1.25,0,0,1,-5.5,0)" />
   <circle
      style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path936"

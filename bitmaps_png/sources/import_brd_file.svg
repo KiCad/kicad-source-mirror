@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_brd_file.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/import_brd_file.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -27,8 +30,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="6.3572235"
-     inkscape:cy="11.857252"
+     inkscape:cx="12.705229"
+     inkscape:cy="10.426716"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -203,8 +206,8 @@
     <circle
        style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path936"
-       cx="-28.1875"
-       cy="10.6875"
+       cx="-29.11735"
+       cy="10.58021"
        r="1.6027977"
        clip-path="none" />
     <circle
@@ -217,9 +220,10 @@
   </g>
   <path
      class="cls-5"
-     d="m 24.999997,16.992578 a 8,7.9999993 0 1 1 -8,-7.9925771 7.9962321,7.9962313 0 0 1 8,7.9925771 z"
+     d="M 24.684765,16.99287 A 7.6847681,7.6847674 0 1 1 16.999997,9.3152328 7.6811486,7.6811478 0 0 1 24.684765,16.99287 Z"
      id="path908"
-     style="stroke-width:1;fill:#ffffff;fill-opacity:1" />
+     style="fill:#ffffff;fill-opacity:1;stroke-width:0.99999994"
+     inkscape:connector-curvature="0" />
   <path
      class="cls-5"
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
