@@ -23,7 +23,7 @@
 
 #include <gal/color4d.h>
 #include <layers_id_colors_and_visibility.h>
-#include <panel_color_settings.h>
+#include <dialogs/panel_color_settings.h>
 
 class COLOR_SETTINGS;
 class PAGE_INFO;

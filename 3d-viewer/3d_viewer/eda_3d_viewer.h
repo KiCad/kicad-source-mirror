@@ -37,7 +37,7 @@
 #include "3d_rendering/ctrack_ball.h"
 #include <kiway_player.h>
 #include <wx/colourdata.h>
-#include <../common/dialogs/dialog_color_picker.h>  // for CUSTOM_COLORS_LIST definition
+#include <dialogs/dialog_color_picker.h>  // for CUSTOM_COLORS_LIST definition
 
 
 /// A variable name whose value holds the path of 3D shape files.

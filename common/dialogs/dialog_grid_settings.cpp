@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_grid_settings.h>
+#include <dialogs/dialog_grid_settings.h>
 #include <base_units.h>
 #include <common.h>
 #include <settings/app_settings.h>

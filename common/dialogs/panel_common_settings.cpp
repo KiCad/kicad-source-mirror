@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "panel_common_settings.h"
+#include <dialogs/panel_common_settings.h>
 
 #include <bitmap_types.h>
 #include <bitmaps.h>
@@ -75,13 +75,17 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
     m_textEditorBtn->SetBitmap( KiBitmap( folder_xpm ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( folder_xpm ) );
 
-    m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ), NULL, this );
+    m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
+                                wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
+                                NULL, this );
 }
 
 
 PANEL_COMMON_SETTINGS::~PANEL_COMMON_SETTINGS()
 {
-    m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ), NULL, this );
+    m_canvasScaleCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED,
+                                   wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),
+                                   NULL, this );
 }
 
 

@@ -24,10 +24,10 @@
 #include <widgets/color_swatch.h>
 #include <wx/dcmemory.h>
 
-#include "dialog_color_picker.h"
+#include <dialogs/dialog_color_picker.h>
 #include <memory>
 
-wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
+wxDEFINE_EVENT( COLOR_SWATCH_CHANGED, wxCommandEvent );
 
 using KIGFX::COLOR4D;
 

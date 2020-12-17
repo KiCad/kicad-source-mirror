@@ -28,7 +28,7 @@
 #include <netclass.h>
 #include <confirm.h>
 #include <grid_tricks.h>
-#include <panel_setup_netclasses.h>
+#include <dialogs/panel_setup_netclasses.h>
 #include <tool/tool_manager.h>
 #include <widgets/grid_combobox.h>
 #include <widgets/wx_grid.h>

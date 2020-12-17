@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2018 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <dialog_hotkey_list.h>
+#include <dialogs/dialog_hotkey_list.h>
 
 #include <panel_hotkeys_editor.h>
 #include <widgets/ui_common.h>

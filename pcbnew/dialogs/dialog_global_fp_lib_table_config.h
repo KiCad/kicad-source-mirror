@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -21,7 +21,7 @@
 #ifndef _DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG_H_
 #define _DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG_H_
 
-#include "dialog_global_lib_table_config.h"
+#include <dialogs/dialog_global_lib_table_config.h>
 
 
 class DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG : public DIALOG_GLOBAL_LIB_TABLE_CONFIG

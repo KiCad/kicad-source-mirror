@@ -1,3 +1,4 @@
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -24,7 +25,7 @@
 #include <gal/color4d.h>
 #include <gal/gal_display_options.h>
 #include <layers_id_colors_and_visibility.h>
-#include <panel_color_settings.h>
+#include <dialogs/panel_color_settings.h>
 
 class COLOR_SETTINGS;
 class SCH_BASE_FRAME;

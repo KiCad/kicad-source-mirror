@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -26,13 +26,13 @@
 
 
 #include <gal/color4d.h>
-#include "dialog_color_picker_base.h"
+#include "../../common/dialogs/dialog_color_picker_base.h"
 
 class COLOR_SWATCH;
 
 
-/** a class to handle a custom color (predefined color) for
- * the color picker dialog
+/**
+ * A class to handle a custom color (predefined color) for the color picker dialog.
  */
 struct CUSTOM_COLOR_ITEM
 {

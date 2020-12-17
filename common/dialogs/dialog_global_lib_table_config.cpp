@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dialog_global_lib_table_config.h"
+#include <dialogs/dialog_global_lib_table_config.h>
 
 #include <pgm_base.h>
 #include <search_stack.h>
@@ -67,7 +67,9 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
     tmp.Printf( _( "Select global %s library table file:" ), aTableName );
     m_staticText2->SetLabel( tmp );
 
-    m_filePicker1->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
+    m_filePicker1->Connect( wxEVT_UPDATE_UI,
+                            wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
+                            NULL, this );
 
     wxButton* okButton = (wxButton *) FindWindowById( wxID_OK );
 
@@ -80,7 +82,9 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
 
 DIALOG_GLOBAL_LIB_TABLE_CONFIG::~DIALOG_GLOBAL_LIB_TABLE_CONFIG()
 {
-    m_filePicker1->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
+    m_filePicker1->Disconnect( wxEVT_UPDATE_UI,
+                               wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ),
+                               NULL, this );
 }
 
 

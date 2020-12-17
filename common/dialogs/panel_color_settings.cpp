@@ -23,7 +23,7 @@
 #include <launch_ext.h>
 #include <layers_id_colors_and_visibility.h>
 #include <menus_helpers.h>
-#include <panel_color_settings.h>
+#include <dialogs/panel_color_settings.h>
 #include <pgm_base.h>
 #include <settings/color_settings.h>
 #include <settings/common_settings.h>

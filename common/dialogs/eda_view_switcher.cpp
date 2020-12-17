@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_view_switcher.h>
+#include <dialogs/eda_view_switcher.h>
 
 
 #ifdef __WXGTK__
