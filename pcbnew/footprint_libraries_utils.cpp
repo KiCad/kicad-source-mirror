@@ -922,7 +922,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
 
     if( libraryName.IsEmpty() )
     {
-        DisplayError( NULL, _( "No library specified.  Footprint could not be saved." ) );
+        DisplayError( this, _( "No library specified.  Footprint could not be saved." ) );
         return false;
     }
 
@@ -932,7 +932,7 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
 
     if( footprintName.IsEmpty() )
     {
-        DisplayError( NULL, _( "No footprint name specified.  Footprint could not be saved." ) );
+        DisplayError( this, _( "No footprint name specified.  Footprint could not be saved." ) );
         return false;
     }
 
