@@ -1240,7 +1240,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
     DIALOG_CHANGE_SYMBOLS dlg( m_frame, selectedSymbol, mode );
 
-    dlg.ShowModal();
+    dlg.ShowQuasiModal();
 
     return 0;
 }
@@ -1369,12 +1369,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         else if( retval == SYMBOL_PROPS_WANT_UPDATE_SYMBOL )
         {
             DIALOG_CHANGE_SYMBOLS dlg( m_frame, component, DIALOG_CHANGE_SYMBOLS::MODE::UPDATE );
-            dlg.ShowModal();
+            dlg.ShowQuasiModal();
         }
         else if( retval == SYMBOL_PROPS_WANT_EXCHANGE_SYMBOL )
         {
             DIALOG_CHANGE_SYMBOLS dlg( m_frame, component, DIALOG_CHANGE_SYMBOLS::MODE::CHANGE );
-            dlg.ShowModal();
+            dlg.ShowQuasiModal();
         }
     }
         break;
