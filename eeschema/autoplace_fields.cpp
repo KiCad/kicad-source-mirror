@@ -67,7 +67,6 @@
 #include <core/arraydim.h>
 
 #define FIELD_PADDING Mils2iu( 10 )            // arbitrarily chosen for aesthetics
-#define FIELD_PADDING_ALIGNED Mils2iu( 18 )    // aligns 50 mil text to a 100 mil grid
 #define WIRE_V_SPACING Mils2iu( 100 )
 #define HPADDING Mils2iu( 25 )
 #define VPADDING Mils2iu( 25 )
@@ -170,7 +169,7 @@ public:
             if( m_align_to_grid )
             {
                 pos.x = round_n( pos.x, Mils2iu( 50 ), field_side.x >= 0 );
-                pos.y = round_n( pos.y, Mils2iu( 50 ), field_side.y == 1 );
+                pos.y = round_n( pos.y, Mils2iu( 50 ), field_side.y >= 0 );
             }
 
             field->SetPosition( pos );
@@ -193,24 +192,21 @@ protected:
             int field_height;
 
             if( m_symbol->GetTransform().y1 )
-            {
                 field->SetTextAngle( TEXT_ANGLE_VERT );
-            }
             else
-            {
                 field->SetTextAngle( TEXT_ANGLE_HORIZ );
-            }
 
             field_width = field->GetBoundingBox().GetWidth();
             field_height = field->GetBoundingBox().GetHeight();
 
             max_field_width = std::max( max_field_width, field_width );
 
-            if( aDynamic )
-                total_height += field_height + getFieldPadding();
-            else
+            if( !aDynamic )
                 total_height += WIRE_V_SPACING;
-
+            else if( m_align_to_grid )
+                total_height += round_n( field_height, Mils2iu( 50 ), true );
+            else
+                total_height += field_height + FIELD_PADDING;
         }
 
         return wxSize( max_field_width, total_height );
@@ -512,8 +508,13 @@ protected:
     wxPoint fieldBoxPlacement( SIDE aFieldSide )
     {
         wxPoint fbox_center = m_symbol_bbox.Centre();
-        int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2 + HPADDING;
-        int     offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2 + VPADDING;
+        int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2;
+        int     offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2;
+
+        if( aFieldSide.x != 0 )
+            offs_x += HPADDING;
+        else if( aFieldSide.y != 0 )
+            offs_y += VPADDING;
 
         fbox_center.x += aFieldSide.x * offs_x;
         fbox_center.y += aFieldSide.y * offs_y;
@@ -566,16 +567,6 @@ protected:
         m_fbox_size = computeFBoxSize( /* aDynamic */ false );
 
         wxPoint pos = aBox->GetPosition();
-
-        // Remove the existing padding to get a bit more space to work with
-        if( aSide == SIDE_BOTTOM )
-        {
-            pos.y = m_symbol_bbox.GetBottom() - getFieldPadding();
-        }
-        else
-        {
-            pos.y = m_symbol_bbox.GetTop() - m_fbox_size.y + getFieldPadding();
-        }
 
         pos.y = round_n( pos.y, WIRE_V_SPACING, aSide == SIDE_BOTTOM );
 
@@ -637,16 +628,20 @@ protected:
         int field_height;
         int padding;
 
-        if( aDynamic )
-        {
-            field_height = aField->GetBoundingBox().GetHeight();
-
-            padding = getFieldPadding();
-        }
-        else
+        if( !aDynamic )
         {
             field_height = WIRE_V_SPACING / 2;
             padding = WIRE_V_SPACING / 2;
+        }
+        else if( m_align_to_grid )
+        {
+            field_height = aField->GetBoundingBox().GetHeight();
+            padding = round_n( field_height, Mils2iu( 50 ), true ) - field_height;
+        }
+        else
+        {
+            field_height = aField->GetBoundingBox().GetHeight();
+            padding = FIELD_PADDING;
         }
 
         int placement = *aPosAccum + padding / 2 + field_height / 2;
@@ -654,17 +649,6 @@ protected:
         *aPosAccum += padding + field_height;
 
         return placement;
-    }
-
-    /**
-     * Return the desired padding between fields.
-     */
-    int getFieldPadding()
-    {
-        if( m_align_to_grid )
-            return FIELD_PADDING_ALIGNED;
-        else
-            return FIELD_PADDING;
     }
 
 private:
