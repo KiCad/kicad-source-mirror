@@ -71,7 +71,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 
         m_my_part->Plot( plotter, GetUnit(), GetConvert(), plotPos, temp );
 
-        // Plot lib fields, not plotted by m_component->Plot():
+        // Plot lib fields, not plotted by m_my_part->Plot():
         m_my_part->PlotLibFields( plotter, GetUnit(), GetConvert(), plotPos, temp );
     }
 

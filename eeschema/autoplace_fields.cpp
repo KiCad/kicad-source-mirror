@@ -30,23 +30,23 @@
  * annoying if they happened without permission.
  * Short description of the process:
  *
- * 1. Compute the dimensions of the fields' bounding box    ::ComputeFBoxSize
- * 2. Determine which side the fields will go on.           ::choose_side_for_fields
+ * 1. Compute the dimensions of the fields' bounding box    ::computeFBoxSize
+ * 2. Determine which side the fields will go on.           ::chooseSideForFields
  *      1. Sort the four sides in preference order,
  *          depending on the component's shape and
- *          orientation                                     ::get_preferred_sides
+ *          orientation                                     ::getPreferredSides
  *      2. If in manual mode, sift out the sides that would
- *          cause fields to overlap other items             ::get_colliding_sides
+ *          cause fields to overlap other items             ::getCollidingSides
  *      3. If any remaining sides have zero pins there,
  *          choose the highest zero-pin side according to
  *          preference order.
  *      4. If all sides have pins, choose the side with the
  *          fewest pins.
- * 3. Compute the position of the fields' bounding box      ::field_box_placement
+ * 3. Compute the position of the fields' bounding box      ::fieldBoxPlacement
  * 4. In manual mode, shift the box vertically if possible
- *      to fit fields between adjacent wires                ::fit_fields_between_wires
+ *      to fit fields between adjacent wires                ::fitFieldsBetweenWires
  * 5. Move all fields to their final positions
- *      1. Re-justify fields if options allow that          ::justify_field
+ *      1. Re-justify fields if options allow that          ::justifyField
  *      2. Round to a 50-mil grid coordinate if desired
  */
 
@@ -95,15 +95,6 @@ EDA_TEXT_HJUSTIFY_T TO_HJUSTIFY( int x )
 
 class AUTOPLACER
 {
-    SCH_SCREEN* m_screen;
-    SCH_COMPONENT* m_component;
-    std::vector<SCH_FIELD*> m_fields;
-    std::vector<SCH_ITEM*> m_colliders;
-    EDA_RECT m_comp_bbox;
-    wxSize m_fbox_size;
-    bool m_allow_rejustify, m_align_to_grid;
-    bool m_power_symbol;
-
 public:
     typedef wxPoint SIDE;
     static const SIDE SIDE_TOP, SIDE_BOTTOM, SIDE_LEFT, SIDE_RIGHT;
@@ -121,11 +112,11 @@ public:
         COLLISION collision;
     };
 
-
-    AUTOPLACER( SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen ) :
-            m_screen( aScreen ), m_component( aComponent )
+    AUTOPLACER( SCH_COMPONENT* aSymbol, SCH_SCREEN* aScreen ) :
+            m_screen( aScreen ),
+            m_symbol( aSymbol )
     {
-        m_component->GetFields( m_fields, /* aVisibleOnly */ true );
+        m_symbol->GetFields( m_fields, /* aVisibleOnly */ true );
 
         auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
         wxASSERT( cfg );
@@ -139,15 +130,14 @@ public:
             m_align_to_grid = cfg->m_AutoplaceFields.align_to_grid;
         }
 
-        m_comp_bbox = m_component->GetBodyBoundingBox();
-        m_fbox_size = ComputeFBoxSize( /* aDynamic */ true );
+        m_symbol_bbox = m_symbol->GetBodyBoundingBox();
+        m_fbox_size = computeFBoxSize( /* aDynamic */ true );
 
-        m_power_symbol = ! m_component->IsInNetlist();
+        m_is_power_symbol = !m_symbol->IsInNetlist();
 
         if( aScreen )
-            get_possible_colliders( m_colliders );
+            getPossibleCollisions( m_colliders );
     }
-
 
     /**
      * Do the actual autoplacement.
@@ -156,26 +146,26 @@ public:
      */
     void DoAutoplace( bool aManual )
     {
-        bool force_wire_spacing = false;
-        SIDE field_side = choose_side_for_fields( aManual );
-        wxPoint fbox_pos = field_box_placement( field_side );
+        bool     force_wire_spacing = false;
+        SIDE     field_side = chooseSideForFields( aManual );
+        wxPoint  fbox_pos = fieldBoxPlacement( field_side );
         EDA_RECT field_box( fbox_pos, m_fbox_size );
 
         if( aManual )
-            force_wire_spacing = fit_fields_between_wires( &field_box, field_side );
+            force_wire_spacing = fitFieldsBetweenWires( &field_box, field_side );
 
         // Move the fields
         int last_y_coord = field_box.GetTop();
+
         for( unsigned field_idx = 0; field_idx < m_fields.size(); ++field_idx )
         {
             SCH_FIELD* field = m_fields[field_idx];
 
             if( m_allow_rejustify )
-                justify_field( field, field_side );
+                justifyField( field, field_side );
 
-            wxPoint pos(
-                field_horiz_placement( field, field_box ),
-                field_vert_placement( field, field_box, &last_y_coord, !force_wire_spacing ) );
+            wxPoint pos( fieldHorizPlacement( field, field_box ),
+                         fieldVertPlacement( field, field_box, &last_y_coord, !force_wire_spacing ) );
 
             if( m_align_to_grid )
             {
@@ -187,13 +177,12 @@ public:
         }
     }
 
-
 protected:
     /**
      * Compute and return the size of the fields' bounding box.
      * @param aDynamic - if true, use dynamic spacing
      */
-    wxSize ComputeFBoxSize( bool aDynamic )
+    wxSize computeFBoxSize( bool aDynamic )
     {
         int max_field_width = 0;
         int total_height = 0;
@@ -203,7 +192,7 @@ protected:
             int field_width;
             int field_height;
 
-            if( m_component->GetTransform().y1 )
+            if( m_symbol->GetTransform().y1 )
             {
                 field->SetTextAngle( TEXT_ANGLE_VERT );
             }
@@ -218,7 +207,7 @@ protected:
             max_field_width = std::max( max_field_width, field_width );
 
             if( aDynamic )
-                total_height += field_height + get_field_padding();
+                total_height += field_height + getFieldPadding();
             else
                 total_height += WIRE_V_SPACING;
 
@@ -227,13 +216,13 @@ protected:
         return wxSize( max_field_width, total_height );
     }
 
-
     /**
      * Return the side that a pin is on.
      */
-    SIDE get_pin_side( SCH_PIN* aPin )
+    SIDE getPinSide( SCH_PIN* aPin )
     {
-        int pin_orient = aPin->GetLibPin()->PinDrawOrient( m_component->GetTransform() );
+        int pin_orient = aPin->GetLibPin()->PinDrawOrient( m_symbol->GetTransform() );
+
         switch( pin_orient )
         {
             case PIN_RIGHT: return SIDE_LEFT;
@@ -246,44 +235,44 @@ protected:
         }
     }
 
-
     /**
      * Count the number of pins on a side of the component.
      */
-    unsigned pins_on_side( SIDE aSide )
+    unsigned pinsOnSide( SIDE aSide )
     {
         unsigned pin_count = 0;
 
-        for( SCH_PIN* each_pin : m_component->GetPins() )
+        for( SCH_PIN* each_pin : m_symbol->GetPins() )
         {
-            if( !each_pin->IsVisible() && !m_power_symbol )
+            if( !each_pin->IsVisible() && !m_is_power_symbol )
                 continue;
-            if( get_pin_side( each_pin ) == aSide )
+
+            if( getPinSide( each_pin ) == aSide )
                 ++pin_count;
         }
 
         return pin_count;
     }
 
-
     /**
      * Populate a list of all drawing items that *may* collide with the fields. That is,
      * all drawing items, including other fields, that are not the current component or
      * its own fields.
      */
-    void get_possible_colliders( std::vector<SCH_ITEM*>& aItems )
+    void getPossibleCollisions( std::vector<SCH_ITEM*>& aItems )
     {
-        wxCHECK_RET( m_screen, "get_possible_colliders() with null m_screen" );
+        wxCHECK_RET( m_screen, "getPossibleCollisions() with null m_screen" );
 
-        for( auto item : m_screen->Items().Overlapping( m_component->GetBoundingBox() ) )
+        for( SCH_ITEM* item : m_screen->Items().Overlapping( m_symbol->GetBoundingBox() ) )
         {
             if( SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( item ) )
             {
-                if( comp == m_component )
+                if( comp == m_symbol )
                     continue;
 
                 std::vector<SCH_FIELD*> fields;
                 comp->GetFields( fields, /* aVisibleOnly */ true );
+
                 for( SCH_FIELD* field : fields )
                     aItems.push_back( field );
             }
@@ -292,17 +281,18 @@ protected:
         }
     }
 
-
     /**
      * Filter a list of possible colliders to include only those that actually collide
      * with a given rectangle. Returns the new vector.
      */
-    std::vector<SCH_ITEM*> filtered_colliders( const EDA_RECT& aRect )
+    std::vector<SCH_ITEM*> filterCollisions( const EDA_RECT& aRect )
     {
         std::vector<SCH_ITEM*> filtered;
+
         for( SCH_ITEM* item : m_colliders )
         {
             EDA_RECT item_box;
+
             if( SCH_COMPONENT* item_comp = dynamic_cast<SCH_COMPONENT*>( item ) )
                 item_box = item_comp->GetBodyBoundingBox();
             else
@@ -314,32 +304,31 @@ protected:
         return filtered;
     }
 
-
     /**
      * Return a list with the preferred field sides for the component, in
      * decreasing order of preference.
      */
-    std::vector<SIDE_AND_NPINS> get_preferred_sides()
+    std::vector<SIDE_AND_NPINS> getPreferredSides()
     {
         SIDE_AND_NPINS sides_init[] = {
-            { SIDE_RIGHT,   pins_on_side( SIDE_RIGHT ) },
-            { SIDE_TOP,     pins_on_side( SIDE_TOP ) },
-            { SIDE_LEFT,    pins_on_side( SIDE_LEFT ) },
-            { SIDE_BOTTOM,  pins_on_side( SIDE_BOTTOM ) },
+            { SIDE_RIGHT, pinsOnSide( SIDE_RIGHT ) },
+            { SIDE_TOP, pinsOnSide( SIDE_TOP ) },
+            { SIDE_LEFT, pinsOnSide( SIDE_LEFT ) },
+            { SIDE_BOTTOM, pinsOnSide( SIDE_BOTTOM ) },
         };
         std::vector<SIDE_AND_NPINS> sides( sides_init, sides_init + arrayDim( sides_init ) );
 
-        int orient = m_component->GetOrientation();
-        int orient_angle = orient & 0xff; // enum is a bitmask
-        bool h_mirrored = ( ( orient & CMP_MIRROR_X )
-                && ( orient_angle == CMP_ORIENT_0 || orient_angle == CMP_ORIENT_180 ) );
-        double w = double( m_comp_bbox.GetWidth() );
-        double h = double( m_comp_bbox.GetHeight() );
+        int    orient = m_symbol->GetOrientation();
+        int    orient_angle = orient & 0xff; // enum is a bitmask
+        bool   h_mirrored = ( ( orient & CMP_MIRROR_X )
+                             && ( orient_angle == CMP_ORIENT_0 || orient_angle == CMP_ORIENT_180 ) );
+        double w = double( m_symbol_bbox.GetWidth() );
+        double h = double( m_symbol_bbox.GetHeight() );
 
         // The preferred-sides heuristics are a bit magical. These were determined mostly
         // by trial and error.
 
-        if( m_power_symbol )
+        if( m_is_power_symbol )
         {
             // For power symbols, we generally want the label at the top first.
             switch( orient_angle )
@@ -383,35 +372,39 @@ protected:
         return sides;
     }
 
-
     /**
      * Return a list of the sides where a field set would collide with another item.
      */
-    std::vector<SIDE_AND_COLL> get_colliding_sides()
+    std::vector<SIDE_AND_COLL> getCollidingSides()
     {
-        SIDE sides_init[] = { SIDE_RIGHT, SIDE_TOP, SIDE_LEFT, SIDE_BOTTOM };
-        std::vector<SIDE> sides( sides_init, sides_init + arrayDim( sides_init ) );
+        SIDE                       sides_init[] = { SIDE_RIGHT, SIDE_TOP, SIDE_LEFT, SIDE_BOTTOM };
+        std::vector<SIDE>          sides( sides_init, sides_init + arrayDim( sides_init ) );
         std::vector<SIDE_AND_COLL> colliding;
 
         // Iterate over all sides and find the ones that collide
         for( SIDE side : sides )
         {
-            EDA_RECT box( field_box_placement( side ), m_fbox_size );
+            EDA_RECT box( fieldBoxPlacement( side ), m_fbox_size );
 
             COLLISION collision = COLLIDE_NONE;
-            for( SCH_ITEM* collider : filtered_colliders( box ) )
+
+            for( SCH_ITEM* collider : filterCollisions( box ) )
             {
                 SCH_LINE* line = dynamic_cast<SCH_LINE*>( collider );
+
                 if( line && !side.x )
                 {
                     wxPoint start = line->GetStartPoint(), end = line->GetEndPoint();
+
                     if( start.y == end.y && collision != COLLIDE_OBJECTS )
                         collision = COLLIDE_H_WIRES;
                     else
                         collision = COLLIDE_OBJECTS;
                 }
                 else
+                {
                     collision = COLLIDE_OBJECTS;
+                }
             }
 
             if( collision != COLLIDE_NONE )
@@ -421,28 +414,33 @@ protected:
         return colliding;
     }
 
-
     /**
      * Choose a side for the fields, filtered on only one side collision type.
      * Removes the sides matching the filter from the list.
      */
-    SIDE_AND_NPINS choose_side_filtered( std::vector<SIDE_AND_NPINS>& aSides,
-            const std::vector<SIDE_AND_COLL>& aCollidingSides, COLLISION aCollision,
-            SIDE_AND_NPINS aLastSelection)
+    SIDE_AND_NPINS chooseSideFiltered( std::vector<SIDE_AND_NPINS>& aSides,
+                                       const std::vector<SIDE_AND_COLL>& aCollidingSides,
+                                       COLLISION aCollision,
+                                       SIDE_AND_NPINS aLastSelection)
     {
         SIDE_AND_NPINS sel = aLastSelection;
 
         std::vector<SIDE_AND_NPINS>::iterator it = aSides.begin();
+
         while( it != aSides.end() )
         {
             bool collide = false;
+
             for( SIDE_AND_COLL collision : aCollidingSides )
             {
                 if( collision.side == it->side && collision.collision == aCollision )
                     collide = true;
             }
+
             if( !collide )
+            {
                 ++it;
+            }
             else
             {
                 if( it->pins <= sel.pins )
@@ -450,30 +448,31 @@ protected:
                     sel.pins = it->pins;
                     sel.side = it->side;
                 }
+
                 it = aSides.erase( it );
             }
         }
+
         return sel;
     }
-
 
     /**
      * Look where a component's pins are to pick a side to put the fields on
      * @param aAvoidCollisions - if true, pick last the sides where the label will collide
      *      with other items.
      */
-    SIDE choose_side_for_fields( bool aAvoidCollisions )
+    SIDE chooseSideForFields( bool aAvoidCollisions )
     {
-        std::vector<SIDE_AND_NPINS> sides = get_preferred_sides();
+        std::vector<SIDE_AND_NPINS> sides = getPreferredSides();
 
         std::reverse( sides.begin(), sides.end() );
         SIDE_AND_NPINS side = { wxPoint( 1, 0 ), UINT_MAX };
 
         if( aAvoidCollisions )
         {
-            std::vector<SIDE_AND_COLL> colliding_sides = get_colliding_sides();
-            side = choose_side_filtered( sides, colliding_sides, COLLIDE_OBJECTS, side );
-            side = choose_side_filtered( sides, colliding_sides, COLLIDE_H_WIRES, side );
+            std::vector<SIDE_AND_COLL> colliding_sides = getCollidingSides();
+            side = chooseSideFiltered( sides, colliding_sides, COLLIDE_OBJECTS, side );
+            side = chooseSideFiltered( sides, colliding_sides, COLLIDE_H_WIRES, side );
         }
 
         for( SIDE_AND_NPINS& each_side : sides | boost::adaptors::reversed )
@@ -493,52 +492,49 @@ protected:
         return side.side;
     }
 
-
     /**
      * Set the justification of a field based on the side it's supposed to be on, taking
      * into account whether the field will be displayed with flipped justification due to
      * mirroring.
      */
-    void justify_field( SCH_FIELD* aField, SIDE aFieldSide )
+    void justifyField( SCH_FIELD* aField, SIDE aFieldSide )
     {
         // Justification is set twice to allow IsHorizJustifyFlipped() to work correctly.
         aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x ) );
-        aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x *
-                    ( aField->IsHorizJustifyFlipped() ? -1 : 1 ) ) );
+        aField->SetHorizJustify( TO_HJUSTIFY( -aFieldSide.x
+                                                 * ( aField->IsHorizJustifyFlipped() ? -1 : 1 ) ) );
         aField->SetVertJustify( GR_TEXT_VJUSTIFY_CENTER );
     }
-
 
     /**
      * Return the position of the field bounding box.
      */
-    wxPoint field_box_placement( SIDE aFieldSide )
+    wxPoint fieldBoxPlacement( SIDE aFieldSide )
     {
-        wxPoint fbox_center = m_comp_bbox.Centre();
-        int offs_x = ( m_comp_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2 + HPADDING;
-        int offs_y = ( m_comp_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2 + VPADDING;
+        wxPoint fbox_center = m_symbol_bbox.Centre();
+        int     offs_x = ( m_symbol_bbox.GetWidth() + m_fbox_size.GetWidth() ) / 2 + HPADDING;
+        int     offs_y = ( m_symbol_bbox.GetHeight() + m_fbox_size.GetHeight() ) / 2 + VPADDING;
 
         fbox_center.x += aFieldSide.x * offs_x;
         fbox_center.y += aFieldSide.y * offs_y;
 
-        wxPoint fbox_pos(
-                fbox_center.x - m_fbox_size.GetWidth() / 2,
-                fbox_center.y - m_fbox_size.GetHeight() / 2 );
+        wxPoint fbox_pos( fbox_center.x - m_fbox_size.GetWidth() / 2,
+                          fbox_center.y - m_fbox_size.GetHeight() / 2 );
 
         return fbox_pos;
     }
-
 
     /**
      * Shift a field box up or down a bit to make the fields fit between some wires.
      * Returns true if a shift was made.
      */
-    bool fit_fields_between_wires( EDA_RECT* aBox, SIDE aSide )
+    bool fitFieldsBetweenWires( EDA_RECT* aBox, SIDE aSide )
     {
         if( aSide != SIDE_TOP && aSide != SIDE_BOTTOM )
             return false;
 
-        std::vector<SCH_ITEM*> colliders = filtered_colliders( *aBox );
+        std::vector<SCH_ITEM*> colliders = filterCollisions( *aBox );
+
         if( colliders.empty() )
             return false;
 
@@ -548,13 +544,17 @@ protected:
         for( SCH_ITEM* item : colliders )
         {
             SCH_LINE* line = dynamic_cast<SCH_LINE*>( item );
+
             if( !line )
                 return false;
+
             wxPoint start = line->GetStartPoint(), end = line->GetEndPoint();
+
             if( start.y != end.y )
                 return false;
 
             int this_offset = (3 * WIRE_V_SPACING / 2) - ( start.y % WIRE_V_SPACING );
+
             if( offset == 0 )
                 offset = this_offset;
             else if( offset != this_offset )
@@ -563,18 +563,18 @@ protected:
 
         // At this point we are recomputing the field box size. Do not
         // return false after this point.
-        m_fbox_size = ComputeFBoxSize( /* aDynamic */ false );
+        m_fbox_size = computeFBoxSize( /* aDynamic */ false );
 
         wxPoint pos = aBox->GetPosition();
 
         // Remove the existing padding to get a bit more space to work with
         if( aSide == SIDE_BOTTOM )
         {
-            pos.y = m_comp_bbox.GetBottom() - get_field_padding();
+            pos.y = m_symbol_bbox.GetBottom() - getFieldPadding();
         }
         else
         {
-            pos.y = m_comp_bbox.GetTop() - m_fbox_size.y + get_field_padding();
+            pos.y = m_symbol_bbox.GetTop() - m_fbox_size.y + getFieldPadding();
         }
 
         pos.y = round_n( pos.y, WIRE_V_SPACING, aSide == SIDE_BOTTOM );
@@ -582,7 +582,6 @@ protected:
         aBox->SetOrigin( pos );
         return true;
     }
-
 
     /**
      * Place a field horizontally, taking into account the field width and justification.
@@ -592,7 +591,7 @@ protected:
      *
      * @return Correct field horizontal position
      */
-    int field_horiz_placement( SCH_FIELD *aField, const EDA_RECT &aFieldBox )
+    int fieldHorizPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox )
     {
         int field_hjust;
         int field_xcoord;
@@ -632,8 +631,8 @@ protected:
      *
      * @return Correct field vertical position
      */
-    int field_vert_placement( SCH_FIELD *aField, const EDA_RECT &aFieldBox, int *aPosAccum,
-            bool aDynamic )
+    int fieldVertPlacement( SCH_FIELD *aField, const EDA_RECT &aFieldBox, int *aPosAccum,
+                            bool aDynamic )
     {
         int field_height;
         int padding;
@@ -642,7 +641,7 @@ protected:
         {
             field_height = aField->GetBoundingBox().GetHeight();
 
-            padding = get_field_padding();
+            padding = getFieldPadding();
         }
         else
         {
@@ -660,7 +659,7 @@ protected:
     /**
      * Return the desired padding between fields.
      */
-    int get_field_padding()
+    int getFieldPadding()
     {
         if( m_align_to_grid )
             return FIELD_PADDING_ALIGNED;
@@ -668,7 +667,18 @@ protected:
             return FIELD_PADDING;
     }
 
+private:
+    SCH_SCREEN*             m_screen;
+    SCH_COMPONENT*          m_symbol;
+    std::vector<SCH_FIELD*> m_fields;
+    std::vector<SCH_ITEM*>  m_colliders;
+    EDA_RECT                m_symbol_bbox;
+    wxSize                  m_fbox_size;
+    bool                    m_allow_rejustify;
+    bool                    m_align_to_grid;
+    bool                    m_is_power_symbol;
 };
+
 
 const AUTOPLACER::SIDE AUTOPLACER::SIDE_TOP( 0, -1 );
 const AUTOPLACER::SIDE AUTOPLACER::SIDE_BOTTOM( 0, 1 );
