@@ -31,7 +31,6 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <settings/settings_manager.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <confirm.h>
 #include <preview_items/selection_area.h>
 #include <class_library.h>
@@ -42,7 +41,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
-#include <default_values.h>    // For some default values
 
 
 LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART_LIB* aCacheLib,

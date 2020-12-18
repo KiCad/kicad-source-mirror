@@ -57,11 +57,10 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( this,
-                          wxString::Format( _( "Error occurred writing empty symbol library table "
-                                               "file.\n\n%s" ),
-                                            SYMBOL_LIB_TABLE::GetGlobalTableFileName(),
-                                            ioe.What() ) );
+            DisplayError( this, wxString::Format( _( "Error occurred writing empty symbol library "
+                                                     "table.\n\n%s" ),
+                                                  SYMBOL_LIB_TABLE::GetGlobalTableFileName(),
+                                                  ioe.What() ) );
             return false;
         }
 
@@ -81,8 +80,7 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
     // Make sure the symbol library table to copy actually exists.
     if( !fn.FileExists() )
     {
-        DisplayError( this,
-                      wxString::Format( _( "File \"%s\" not found." ), fn.GetFullPath() ) );
+        DisplayError( this, wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() ) );
         return false;
     }
 
@@ -95,9 +93,9 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this,
-                      wxString::Format( _( "File \"%s\" is not a valid symbol library table "
-                                           "file.\n\n%s" ), fn.GetFullPath(), ioe.What() ) );
+        DisplayError( this, wxString::Format( _( "'%s' is not a valid symbol library table.\n\n%s" ),
+                                              fn.GetFullPath(),
+                                              ioe.What() ) );
         return false;
     }
 
@@ -106,19 +104,18 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
 
     if( !symTableFileName.DirExists() && !symTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
     {
-        DisplayError( this,
-                      wxString::Format( _( "Cannot create global library table path \"%s\"." ),
-                                            symTableFileName.GetPath() ) );
+        DisplayError( this, wxString::Format( _( "Cannot create global library table path '%s'." ),
+                                              symTableFileName.GetPath() ) );
         return false;
     }
 
     // Copy the global symbol library table file to the user config.
     if( !::wxCopyFile( fn.GetFullPath(), symTableFileName.GetFullPath() ) )
     {
-        DisplayError( this,
-                      wxString::Format( _( "Cannot copy global symbol library table "
-                                           "file:\n\n \"%s\"\n\n:to:\n\n\"%s\"." ),
-                                        fn.GetFullPath(), symTableFileName.GetFullPath() ) );
+        DisplayError( this, wxString::Format( _( "Cannot copy global symbol library table file "
+                                                 "'%s' to '%s'." ),
+                                              fn.GetFullPath(),
+                                              symTableFileName.GetFullPath() ) );
         return false;
     }
 
@@ -132,9 +129,9 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
     }
     catch( const IO_ERROR& ioe )
     {
-        DisplayError( this,
-                      wxString::Format( _( "Error occurred loading global symbol library table:"
-                                           "\n\n%s" ), ioe.What() ) );
+        DisplayError( this, wxString::Format( _( "Error occurred loading global symbol library "
+                                                 "table.\n\n%s" ),
+                                              ioe.What() ) );
         return false;
     }
 

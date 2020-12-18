@@ -675,8 +675,9 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
-    wxString    msg;
-    int         err_count = 0;
+    SYMBOL_LIB_TABLE* libTable = m_schematic->Prj().SchSymbolLibTable();
+    wxString          msg;
+    int               err_count = 0;
 
     SCH_SCREENS screens( m_schematic->Root() );
 
@@ -690,38 +691,65 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             wxCHECK2( symbol, continue );
 
-            LIB_PART* libSymbolInSchematic = screen->GetLibSymbols()[
-                    symbol->GetLibId().GetUniStringLibId() ];
+            wxString  libIdStr = symbol->GetLibId().GetUniStringLibId();
+            LIB_PART* libSymbolInSchematic = screen->GetLibSymbols()[ libIdStr ];
 
             wxCHECK2( libSymbolInSchematic, continue );
 
-            LIB_PART* libSymbol = SchGetLibPart( symbol->GetLibId(),
-                                                 m_schematic->Prj().SchSymbolLibTable() );
+            wxString       libName = symbol->GetLibId().GetLibNickname();
+            LIB_TABLE_ROW* libTableRow = libTable->FindRow( libName );
+
+            if( !libTableRow )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                ercItem->SetItems( symbol );
+                msg.Printf( _( "The current configuration does not include the library '%s'." ),
+                            libName );
+                ercItem->SetErrorMessage( msg );
+
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                break;
+            }
+            else if( !libTable->HasLibrary( libName, true ) )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                ercItem->SetItems( symbol );
+                msg.Printf( _( "The library '%s' is not enabled in the current configuration." ),
+                            libName );
+                ercItem->SetErrorMessage( msg );
+
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                break;
+            }
+
+            wxString  symbolName = symbol->GetLibId().GetLibItemName();
+            LIB_PART* libSymbol = SchGetLibPart( symbol->GetLibId(), libTable );
 
             if( libSymbol == nullptr )
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( "Library symbol link \"%s\" cannot be found in symbol library table",
-                            symbol->GetLibId().GetUniStringLibId() );
+                msg.Printf( "Symbol '%s' not found in symbol library '%s'",
+                            symbolName,
+                            libName );
                 ercItem->SetErrorMessage( msg );
 
                 markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                break;
             }
-            else
+
+            std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
+
+            if( *flattenedSymbol != *libSymbolInSchematic )
             {
-                std::unique_ptr<LIB_PART> flattenedSymbol = libSymbol->Flatten();
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                ercItem->SetItems( symbol );
+                msg.Printf( "Symbol '%s' has been modified in library '%s'.",
+                            symbolName,
+                            libName );
+                ercItem->SetErrorMessage( msg );
 
-                if( *flattenedSymbol != *libSymbolInSchematic )
-                {
-                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                    ercItem->SetItems( symbol );
-                    msg.Printf( "Library symbol \"%s\" has been modified",
-                                symbol->GetLibId().GetUniStringLibId() );
-                    ercItem->SetErrorMessage( msg );
-
-                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
-                }
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
             }
         }
 
