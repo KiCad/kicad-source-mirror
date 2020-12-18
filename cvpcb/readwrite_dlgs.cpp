@@ -112,12 +112,10 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
     // Check if footprint links were generated before the footprint library table was implemented.
     if( hasMissingNicks )
     {
-        msg = _(
-            "Some of the assigned footprints are legacy entries (are missing lib nicknames). "
-            "Would you like CvPcb to attempt to convert them to the new required LIB_ID format? "
-            "(If you answer no, then these assignments will be cleared out and you will "
-            "have to re-assign these footprints yourself.)"
-            );
+        msg = _( "Some of the assigned footprints are legacy entries with no library names. Would "
+                 "you like Kicad to attempt to convert them to the new required LIB_ID format? "
+                 "(If you answer no, then these assignments will be cleared and you will need to "
+                 "re-assign them manually.)" );
 
         if( IsOK( this, msg ) )
         {

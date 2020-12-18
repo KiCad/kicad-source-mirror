@@ -290,9 +290,8 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname )
 
     if( !row )
     {
-        wxString msg = wxString::Format(
-            _( "fp-lib-table files contain no library with nickname \"%s\"" ),
-            aNickname );
+        wxString msg = wxString::Format( _( "fp-lib-table files contain no library named '%s'." ),
+                                         aNickname );
 
         THROW_IO_ERROR( msg );
     }

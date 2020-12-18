@@ -270,16 +270,16 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         if( !payload.empty() )
         {
             wxFileName fpFileName( payload );
-            wxString libNickname;
-            wxString msg;
+            wxString   libNickname;
+            wxString   msg;
 
             FP_LIB_TABLE*        libTable = Prj().PcbFootprintLibs();
             const LIB_TABLE_ROW* libTableRow = libTable->FindRowByURI( fpFileName.GetPath() );
 
             if( !libTableRow )
             {
-                msg.Printf( _( "The current configuration does not include the footprint library\n"
-                               "\"%s\".\nUse Manage Footprint Libraries to edit the configuration." ),
+                msg.Printf( _( "The current configuration does not include a library named '%s'.\n"
+                               "Use Manage Footprint Libraries to edit the configuration." ),
                             fpFileName.GetPath() );
                 DisplayErrorMessage( this, _( "Library not found in footprint library table." ), msg );
                 break;
@@ -289,9 +289,9 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( !libTable->HasLibrary( libNickname, true ) )
             {
-                msg.Printf( _( "The library with the nickname \"%s\" is not enabled\n"
-                               "in the current configuration.  Use Manage Footprint Libraries to\n"
-                               "edit the configuration." ), libNickname );
+                msg.Printf( _( "The library '%s' is not enabled in the current configuration.\n"
+                               "Use Manage Footprint Libraries to edit the configuration." ),
+                            libNickname );
                 DisplayErrorMessage( this, _( "Footprint library not enabled." ), msg );
                 break;
             }

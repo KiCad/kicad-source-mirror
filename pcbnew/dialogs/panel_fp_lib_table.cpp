@@ -534,7 +534,7 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
             }
             else if( ( illegalCh = LIB_ID::FindIllegalLibraryNameChar( nick ) ) )
             {
-                wxString msg = wxString::Format( _( "Illegal character '%c' in Nickname: \"%s\"" ),
+                wxString msg = wxString::Format( _( "Illegal character '%c' in nickname '%s'." ),
                                                  illegalCh,
                                                  nick );
 
@@ -575,7 +575,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
                 if( nick1 == nick2 )
                 {
-                    wxString msg = wxString::Format( _( "Duplicate nicknames \"%s\"." ), nick1 );
+                    wxString msg = wxString::Format( _( "Multiple libraries cannot share the same "
+                                                        "nickname ('%s')." ),
+                                                     nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
                     if( model != cur_model() )
@@ -840,9 +842,10 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     const ENV_VAR_MAP& envVars       = Pgm().GetLocalEnvVariables();
     bool               addDuplicates = false;
     bool               applyToAll    = false;
-    wxString           warning       = _( "Warning: Duplicate Nickname" );
-    wxString           msg           = _( "A library nicknamed \"%s\" already exists." );
-    wxString           detailedMsg   = _( "Please change the library nickname after adding this library." );
+    wxString           warning       = _( "Warning: Duplicate Nicknames" );
+    wxString           msg           = _( "A library nicknamed '%s' already exists." );
+    wxString           detailedMsg   = _( "One of the nicknames will need to be changed after "
+                                          "adding this library." );
 
     for( const auto& filePath : files )
     {
@@ -855,11 +858,9 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = ( OKOrCancelDialog( this, warning,
-                                                    wxString::Format( msg, nickname ),
-                                                    detailedMsg,
-                                                    _( "Skip" ), _( "Add Anyway" ),
-                                                    &applyToAll ) == wxID_CANCEL );
+                addDuplicates = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                                                  detailedMsg, _( "Skip" ), _( "Add Anyway" ),
+                                                  &applyToAll ) == wxID_CANCEL;
             }
 
             doAdd = addDuplicates;

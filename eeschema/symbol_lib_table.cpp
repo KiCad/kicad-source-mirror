@@ -225,9 +225,10 @@ void SYMBOL_LIB_TABLE::Parse( LIB_TABLE_LEXER* in )
         {
             delete tmp;     // The table did not take ownership of the row.
 
-            wxString msg = wxString::Format(
-                                _( "Duplicate library nickname \"%s\" found in symbol library "
-                                   "table file line %d" ), nickname, lineNum );
+            wxString msg = wxString::Format( _( "Duplicate library nickname '%s' found in symbol "
+                                                "library table file line %d" ),
+                                             nickname,
+                                             lineNum );
 
             if( !errMsg.IsEmpty() )
                 errMsg << '\n';
