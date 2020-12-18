@@ -230,15 +230,15 @@ bool EDA_3D_VIEWER_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, "SubtractMaskFromSilk",      "render.subtract_mask_from_silk" );
 
     auto migrate_color =
-            [&] ( const std::string& k_r, const std::string& k_g,
-                  const std::string &k_b, std::string dest, double alpha = 1.0 )
+            [&] ( const std::string& k_r, const std::string& k_g, const std::string& k_b,
+                  std::string destKey, double alpha = 1.0 )
             {
                 COLOR4D color( 1, 1, 1, alpha );
 
                 if( aCfg->Read( k_r, &color.r ) &&
                     aCfg->Read( k_g, &color.g ) && aCfg->Read( k_b, &color.b ) )
                 {
-                    ( *this )[PointerFromString( dest )] = color;
+                    ( *this )[PointerFromString( destKey )] = color;
                 }
             };
 
