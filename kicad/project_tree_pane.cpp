@@ -118,17 +118,17 @@ const wxString GerberFileExtensionWildCard( ".((gbr|gbrjob|(gb|gt)[alops])|pho)"
 
 
 BEGIN_EVENT_TABLE( PROJECT_TREE_PANE, wxSashLayoutWindow )
-    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, PROJECT_TREE_PANE::OnSelect )
-    EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, PROJECT_TREE_PANE::OnExpand )
-    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, PROJECT_TREE_PANE::OnRight )
-    EVT_MENU( ID_PROJECT_TXTEDIT, PROJECT_TREE_PANE::OnOpenSelectedFileWithTextEditor )
-    EVT_MENU( ID_PROJECT_SWITCH_TO_OTHER, PROJECT_TREE_PANE::OnSwitchToSelectedProject )
-    EVT_MENU( ID_PROJECT_NEWDIR, PROJECT_TREE_PANE::OnCreateNewDirectory )
-    EVT_MENU( ID_PROJECT_OPEN_DIR, PROJECT_TREE_PANE::OnOpenDirectory )
-    EVT_MENU( ID_PROJECT_DELETE, PROJECT_TREE_PANE::OnDeleteFile )
-    EVT_MENU( ID_PROJECT_PRINT, PROJECT_TREE_PANE::OnPrintFile )
-    EVT_MENU( ID_PROJECT_RENAME, PROJECT_TREE_PANE::OnRenameFile )
-    EVT_IDLE( PROJECT_TREE_PANE::OnIdle )
+    EVT_TREE_ITEM_ACTIVATED( ID_PROJECT_TREE, PROJECT_TREE_PANE::onSelect )
+    EVT_TREE_ITEM_EXPANDED( ID_PROJECT_TREE, PROJECT_TREE_PANE::onExpand )
+    EVT_TREE_ITEM_RIGHT_CLICK( ID_PROJECT_TREE, PROJECT_TREE_PANE::onRight )
+    EVT_MENU( ID_PROJECT_TXTEDIT, PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor )
+    EVT_MENU( ID_PROJECT_SWITCH_TO_OTHER, PROJECT_TREE_PANE::onSwitchToSelectedProject )
+    EVT_MENU( ID_PROJECT_NEWDIR, PROJECT_TREE_PANE::onCreateNewDirectory )
+    EVT_MENU( ID_PROJECT_OPEN_DIR, PROJECT_TREE_PANE::onOpenDirectory )
+    EVT_MENU( ID_PROJECT_DELETE, PROJECT_TREE_PANE::onDeleteFile )
+    EVT_MENU( ID_PROJECT_PRINT, PROJECT_TREE_PANE::onPrintFile )
+    EVT_MENU( ID_PROJECT_RENAME, PROJECT_TREE_PANE::onRenameFile )
+    EVT_IDLE( PROJECT_TREE_PANE::onIdle )
 END_EVENT_TABLE()
 
 
@@ -143,7 +143,7 @@ PROJECT_TREE_PANE::PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent ) :
 
     m_watcher = NULL;
     Connect( wxEVT_FSWATCHER,
-             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::OnFileSystemEvent ) );
+             wxFileSystemWatcherEventHandler( PROJECT_TREE_PANE::onFileSystemEvent ) );
 
     /*
      * Filtering is now inverted: the filters are actually used to _enable_ support
@@ -169,7 +169,7 @@ PROJECT_TREE_PANE::~PROJECT_TREE_PANE()
 }
 
 
-void PROJECT_TREE_PANE::OnSwitchToSelectedProject( wxCommandEvent& event )
+void PROJECT_TREE_PANE::onSwitchToSelectedProject( wxCommandEvent& event )
 {
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
 
@@ -182,7 +182,7 @@ void PROJECT_TREE_PANE::OnSwitchToSelectedProject( wxCommandEvent& event )
 }
 
 
-void PROJECT_TREE_PANE::OnOpenDirectory( wxCommandEvent& event )
+void PROJECT_TREE_PANE::onOpenDirectory( wxCommandEvent& event )
 {
     // Get the root directory name:
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
@@ -222,7 +222,7 @@ void PROJECT_TREE_PANE::OnOpenDirectory( wxCommandEvent& event )
 }
 
 
-void PROJECT_TREE_PANE::OnCreateNewDirectory( wxCommandEvent& event )
+void PROJECT_TREE_PANE::onCreateNewDirectory( wxCommandEvent& event )
 {
     // Get the root directory name:
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
@@ -234,29 +234,18 @@ void PROJECT_TREE_PANE::OnCreateNewDirectory( wxCommandEvent& event )
         // Ask for the new sub directory name
         wxString curr_dir = item_data->GetDir();
 
-        if( !curr_dir.IsEmpty() ) // A subdir is selected
-        {
-            // Make this subdir name relative to the current path.
-            // It will be more easy to read by the user, in the next dialog
-            wxFileName fn;
-            fn.AssignDir( curr_dir );
-            fn.MakeRelativeTo( prj_dir );
-            curr_dir = fn.GetPath();
+        if( curr_dir.IsEmpty() )
+            curr_dir = prj_dir;
 
-            if( !curr_dir.IsEmpty() )
-                curr_dir += wxFileName::GetPathSeparator();
-        }
+        wxString new_dir = wxGetTextFromUser( _( "Directory name:" ), _( "Create New Directory" ) );
 
-        wxString msg    = wxString::Format( _( "Current project directory:\n%s" ), prj_dir );
-        wxString subdir = wxGetTextFromUser( msg, _( "Create New Directory" ), curr_dir );
-
-        if( subdir.IsEmpty() )
+        if( new_dir.IsEmpty() )
             return;
 
-        wxString full_dirname = prj_dir + wxFileName::GetPathSeparator() + subdir;
+        wxString full_dirname = curr_dir + wxFileName::GetPathSeparator() + new_dir;
 
-    // Make the new item and let the file watcher add it to the tree
-    wxMkdir( full_dirname );
+        wxMkdir( full_dirname );
+        addItemToProjectTree( full_dirname, item_data->GetId() );
     }
 }
 
@@ -293,7 +282,8 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
 }
 
 
-wxTreeItemId PROJECT_TREE_PANE::AddItemToProjectTree( const wxString& aName, wxTreeItemId& aRoot,
+wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
+                                                      const wxTreeItemId& aRoot,
                                                       bool aCanResetFileWatcher, bool aRecurse )
 {
     wxTreeItemId   newItemId;
@@ -448,7 +438,7 @@ wxTreeItemId PROJECT_TREE_PANE::AddItemToProjectTree( const wxString& aName, wxT
                 do    // Add name in tree, but do not recurse
                 {
                     wxString path = aName + wxFileName::GetPathSeparator() + dir_filename;
-                    AddItemToProjectTree( path, newItemId, false, false );
+                    addItemToProjectTree( path, newItemId, false, false );
                 } while( dir.GetNext( &dir_filename ) );
             }
         }
@@ -528,7 +518,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
                 if( filename != fn.GetFullName() )
                 {
                     wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
-                    AddItemToProjectTree( name, m_root, false );
+                    addItemToProjectTree( name, m_root, false );
                 }
 
                 cont = dir.GetNext( &filename );
@@ -547,7 +537,7 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 }
 
 
-void PROJECT_TREE_PANE::OnRight( wxTreeEvent& Event )
+void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
 {
     wxTreeItemId curr_item = Event.GetItem();
 
@@ -739,7 +729,7 @@ void PROJECT_TREE_PANE::OnRight( wxTreeEvent& Event )
 }
 
 
-void PROJECT_TREE_PANE::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event )
+void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event )
 {
     wxString editorname = Pgm().GetEditorName();
 
@@ -765,7 +755,7 @@ void PROJECT_TREE_PANE::OnOpenSelectedFileWithTextEditor( wxCommandEvent& event 
 }
 
 
-void PROJECT_TREE_PANE::OnDeleteFile( wxCommandEvent& )
+void PROJECT_TREE_PANE::onDeleteFile( wxCommandEvent& event )
 {
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
     wxString                        msg, caption;
@@ -794,7 +784,7 @@ void PROJECT_TREE_PANE::OnDeleteFile( wxCommandEvent& )
 }
 
 
-void PROJECT_TREE_PANE::OnPrintFile( wxCommandEvent& )
+void PROJECT_TREE_PANE::onPrintFile( wxCommandEvent& event )
 {
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
 
@@ -803,7 +793,7 @@ void PROJECT_TREE_PANE::OnPrintFile( wxCommandEvent& )
 }
 
 
-void PROJECT_TREE_PANE::OnRenameFile( wxCommandEvent& )
+void PROJECT_TREE_PANE::onRenameFile( wxCommandEvent& event )
 {
     wxTreeItemId                    curr_item = m_TreeProject->GetFocusedItem();
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
@@ -832,7 +822,7 @@ void PROJECT_TREE_PANE::OnRenameFile( wxCommandEvent& )
 }
 
 
-void PROJECT_TREE_PANE::OnSelect( wxTreeEvent& Event )
+void PROJECT_TREE_PANE::onSelect( wxTreeEvent& Event )
 {
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
 
@@ -846,7 +836,7 @@ void PROJECT_TREE_PANE::OnSelect( wxTreeEvent& Event )
 }
 
 
-void PROJECT_TREE_PANE::OnIdle( wxIdleEvent& aEvent )
+void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
 {
     // Idle executes once all other events finished processing
     // This makes it ideal to launch a new window without starting Focus wars.
@@ -862,7 +852,7 @@ void PROJECT_TREE_PANE::OnIdle( wxIdleEvent& aEvent )
 }
 
 
-void PROJECT_TREE_PANE::OnExpand( wxTreeEvent& Event )
+void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
 {
     wxTreeItemId       itemId    = Event.GetItem();
     PROJECT_TREE_ITEM* tree_data = GetItemIdData( itemId );
@@ -903,7 +893,7 @@ void PROJECT_TREE_PANE::OnExpand( wxTreeEvent& Event )
                 do    // Add name to tree item, but do not recurse in subdirs:
                 {
                     wxString name = fileName + wxFileName::GetPathSeparator() + dir_filename;
-                    AddItemToProjectTree( name, kid, false );
+                    addItemToProjectTree( name, kid, false );
                 } while( dir.GetNext( &dir_filename ) );
             }
 
@@ -1002,7 +992,7 @@ wxTreeItemId PROJECT_TREE_PANE::findSubdirTreeItem( const wxString& aSubDir )
 }
 
 
-void PROJECT_TREE_PANE::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
+void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
 {
     const wxFileName& pathModified = event.GetPath();
     wxString subdir = pathModified.GetPath();
@@ -1033,7 +1023,7 @@ void PROJECT_TREE_PANE::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
     {
     case wxFSW_EVENT_CREATE:
         {
-            wxTreeItemId newitem = AddItemToProjectTree( pathModified.GetFullPath(), root_id );
+            wxTreeItemId newitem = addItemToProjectTree( pathModified.GetFullPath(), root_id );
 
             // If we are in the process of renaming a file, select the new one
             // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
@@ -1091,7 +1081,7 @@ void PROJECT_TREE_PANE::OnFileSystemEvent( wxFileSystemWatcherEvent& event )
             if( newpath.Exists() && ( newfn != rootData->GetFileName() ) )
             {
                 wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
-                wxTreeItemId newitem = AddItemToProjectTree( newfn, newroot_id );
+                wxTreeItemId newitem = addItemToProjectTree( newfn, newroot_id );
 
                 // If the item exists, select it
                 if( newitem.IsOk() )

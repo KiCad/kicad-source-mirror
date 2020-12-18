@@ -50,17 +50,6 @@ class PROJECT_TREE_PANE : public wxSashLayoutWindow
     friend class PROJECT_TREE_ITEM;
 
 public:
-    KICAD_MANAGER_FRAME*    m_Parent;
-    PROJECT_TREE*           m_TreeProject;
-
-private:
-    bool                    m_isRenaming; // Are we in the process of renaming a file
-    wxTreeItemId            m_root;
-    std::vector<wxString>   m_filters;
-    wxFileSystemWatcher*    m_watcher; // file system watcher
-    PROJECT_TREE_ITEM*      m_selectedItem;
-
-public:
     PROJECT_TREE_PANE( KICAD_MANAGER_FRAME* parent );
     ~PROJECT_TREE_PANE();
 
@@ -105,69 +94,69 @@ private:
     /**
      * Called on a double click on an item
      */
-    void OnSelect( wxTreeEvent& Event );
+    void onSelect( wxTreeEvent& Event );
 
     /**
      * Called on a click on the + or - button of an item with children
      */
-    void OnExpand( wxTreeEvent& Event );
+    void onExpand( wxTreeEvent& Event );
 
     /**
      * Called on a right click on an item
      */
-    void OnRight( wxTreeEvent& Event );
+    void onRight( wxTreeEvent& Event );
 
     /**
-     * Function OnOpenSelectedFileWithTextEditor
+     * Function onOpenSelectedFileWithTextEditor
      * Call the text editor to open the selected file in the tree project
      */
-    void OnOpenSelectedFileWithTextEditor( wxCommandEvent& event );
+    void onOpenSelectedFileWithTextEditor( wxCommandEvent& event );
 
     /**
-     * Function OnDeleteFile
+     * Function onDeleteFile
      * Delete the selected file or directory in the tree project
      */
-    void OnDeleteFile( wxCommandEvent& event );
+    void onDeleteFile( wxCommandEvent& event );
 
     /**
-     * Function OnDeleteFile
+     * Function onDeleteFile
      * Print the selected file or directory in the tree project
      */
-    void OnPrintFile( wxCommandEvent& event );
+    void onPrintFile( wxCommandEvent& event );
 
     /**
-     * Function OnRenameFile
+     * Function onRenameFile
      * Rename the selected file or directory in the tree project
      */
-    void OnRenameFile( wxCommandEvent& event );
+    void onRenameFile( wxCommandEvent& event );
 
     /**
-     * Function OnOpenDirectory
+     * Function onOpenDirectory
      * Handles the right-click menu for opening a directory in the current system file browser
      */
-    void OnOpenDirectory( wxCommandEvent& event );
+    void onOpenDirectory( wxCommandEvent& event );
 
     /**
-     * Function OnCreateNewDirectory
+     * Function onCreateNewDirectory
      * Creates a new subdirectory inside the current kicad project directory the user is
      * prompted to enter a directory name
      */
-    void OnCreateNewDirectory( wxCommandEvent& event );
+    void onCreateNewDirectory( wxCommandEvent& event );
 
     /**
      * Switch to a other project selected from the tree project (by selecting an other .pro
      * file inside the current project folder)
      */
-    void OnSwitchToSelectedProject( wxCommandEvent& event );
+    void onSwitchToSelectedProject( wxCommandEvent& event );
 
     /**
      * Idle event handler, used process the selected items at a point in time
      * when all other events have been consumed
      */
-    void OnIdle( wxIdleEvent &aEvent );
+    void onIdle( wxIdleEvent &aEvent );
 
     /**
-     * Function AddItemToProjectTree
+     * Function addItemToProjectTree
      * @brief  Add the file or directory aName to the project tree
      * @param aName = the filename or the directory name to add in tree
      * @param aRoot = the wxTreeItemId item where to add sub tree items
@@ -176,7 +165,7 @@ private:
      *                   false to stop file add.
      * @return the Id for the new tree item
      */
-    wxTreeItemId AddItemToProjectTree( const wxString& aName, wxTreeItemId& aRoot,
+    wxTreeItemId addItemToProjectTree( const wxString& aName, const wxTreeItemId& aRoot,
                                        bool aCanResetFileWatcher = true, bool aRecurse = true );
 
     /**
@@ -193,7 +182,18 @@ private:
      * The tree project is modified when a file or directory is created/deleted/renamed to
      * reflect the file change
      */
-    void OnFileSystemEvent( wxFileSystemWatcherEvent& event );
+    void onFileSystemEvent( wxFileSystemWatcherEvent& event );
+
+public:
+    KICAD_MANAGER_FRAME*    m_Parent;
+    PROJECT_TREE*           m_TreeProject;
+
+private:
+    bool                    m_isRenaming; // Are we in the process of renaming a file
+    wxTreeItemId            m_root;
+    std::vector<wxString>   m_filters;
+    wxFileSystemWatcher*    m_watcher; // file system watcher
+    PROJECT_TREE_ITEM*      m_selectedItem;
 
     DECLARE_EVENT_TABLE()
 };
