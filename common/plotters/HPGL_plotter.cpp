@@ -325,7 +325,7 @@ bool HPGL_PLOTTER::EndPlot()
                 pen_up = true;
             }
 
-            fputs( item.content, m_outputFile );
+            fputs( static_cast<const char*>( item.content.utf8_str() ), m_outputFile );
 
             if( !item.pen_returns )
             {

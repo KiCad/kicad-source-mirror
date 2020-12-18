@@ -49,30 +49,30 @@ static const BITMAP_OPAQUE dummy_xpm[1] = {{ dummy_png, sizeof( dummy_png ), "du
 
 
 EDA_ITEM::EDA_ITEM( EDA_ITEM* parent, KICAD_T idType ) :
-        m_structType( idType ),
         m_status( 0 ),
         m_parent( parent ),
         m_forceVisible( false ),
-        m_flags( 0 )
+        m_flags( 0 ),
+        m_structType( idType )
 { }
 
 
 EDA_ITEM::EDA_ITEM( KICAD_T idType ) :
-        m_structType( idType ),
         m_status( 0 ),
         m_parent( nullptr ),
         m_forceVisible( false ),
-        m_flags( 0 )
+        m_flags( 0 ),
+        m_structType( idType )
 { }
 
 
 EDA_ITEM::EDA_ITEM( const EDA_ITEM& base ) :
         m_Uuid( base.m_Uuid ),
-        m_structType( base.m_structType ),
         m_status( base.m_status ),
         m_parent( base.m_parent ),
         m_forceVisible( base.m_forceVisible ),
-        m_flags( base.m_flags )
+        m_flags( base.m_flags ),
+        m_structType( base.m_structType )
 { }
 
 
