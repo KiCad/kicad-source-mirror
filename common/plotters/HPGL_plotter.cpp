@@ -907,7 +907,7 @@ void HPGL_PLOTTER::sortItems( std::list<HPGL_ITEM>& items )
     items.splice( items.begin(), target );
 }
 
-wxString HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
+const char* HPGL_PLOTTER::lineTypeCommand( PLOT_DASH_TYPE linetype )
 {
     switch( linetype )
     {

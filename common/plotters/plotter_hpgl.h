@@ -177,7 +177,7 @@ protected:
     static void sortItems( std::list<HPGL_ITEM>& items );
 
     /// Return the plot command corresponding to a line type
-    static wxString lineTypeCommand( PLOT_DASH_TYPE linetype );
+    static const char* lineTypeCommand( PLOT_DASH_TYPE linetype );
 
     std::list<HPGL_ITEM> m_items;
     HPGL_ITEM*           m_current_item;
