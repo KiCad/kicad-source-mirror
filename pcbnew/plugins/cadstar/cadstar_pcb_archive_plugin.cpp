@@ -80,8 +80,8 @@ const wxString CADSTAR_PCB_ARCHIVE_PLUGIN::GetFileExtension() const
 }
 
 
-BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load(
-        const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
+BOARD* CADSTAR_PCB_ARCHIVE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
+                                         const PROPERTIES* aProperties, PROJECT* aProject )
 {
     m_props = aProperties;
     m_board = aAppendToMe ? aAppendToMe : new BOARD();

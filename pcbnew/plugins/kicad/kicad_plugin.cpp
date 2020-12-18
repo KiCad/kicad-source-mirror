@@ -113,7 +113,7 @@ public:
      *
      * @param aFootprint if set, save only this footprint, otherwise, save the full library
      */
-    void Save( FOOTPRINT* aFootprint = NULL );
+    void Save( FOOTPRINT* aFootprint = nullptr );
 
     void Load();
 
@@ -2081,7 +2081,8 @@ PCB_IO::~PCB_IO()
 }
 
 
-BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
+BOARD* PCB_IO::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                     PROJECT* aProject )
 {
     FILE_LINE_READER reader( aFileName );
 
@@ -2135,8 +2136,8 @@ BOARD* PCB_IO::DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIE
 
 void PCB_IO::init( const PROPERTIES* aProperties )
 {
-    m_board = NULL;
-    m_reader = NULL;
+    m_board = nullptr;
+    m_reader = nullptr;
     m_props = aProperties;
 }
 
@@ -2275,7 +2276,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFoot
                 return;
 
             // Save throws its own IO_ERROR on failure, so no need to recreate here
-            m_cache->Save( NULL );
+            m_cache->Save( nullptr );
         }
         else
         {
@@ -2466,7 +2467,7 @@ bool PCB_IO::FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES*
     if( m_cache && !m_cache->IsPath( aLibraryPath ) )
     {
         delete m_cache;
-        m_cache = NULL;
+        m_cache = nullptr;
     }
 
     return true;
@@ -2477,7 +2478,7 @@ bool PCB_IO::IsFootprintLibWritable( const wxString& aLibraryPath )
 {
     LOCALE_IO   toggle;
 
-    init( NULL );
+    init( nullptr );
 
     validateCache( aLibraryPath );
 

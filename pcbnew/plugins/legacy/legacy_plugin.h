@@ -5,7 +5,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,8 +54,7 @@ struct LP_CACHE;
 
 
 /**
- * LEGACY_PLUGIN
- * is a PLUGIN derivation which could possibly be put into a DLL/DSO.
+ * A #PLUGIN derivation which could possibly be put into a DLL/DSO.
  * As with any PLUGIN, there is no UI, i.e. windowing calls allowed.
  */
 class LEGACY_PLUGIN : public PLUGIN
@@ -65,8 +64,6 @@ class LEGACY_PLUGIN : public PLUGIN
 public:
     LEGACY_PLUGIN();
     ~LEGACY_PLUGIN();
-
-    //-----<PLUGIN API>---------------------------------------------------------
 
     const wxString PluginName() const override
     {
@@ -79,22 +76,20 @@ public:
     }
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = NULL ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
+                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              const PROPERTIES* aProperties = NULL ) override;
+                              const PROPERTIES* aProperties = nullptr ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = NULL ) override;
+                             const PROPERTIES* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
-
-    //-----</PLUGIN API>--------------------------------------------------------
 
     typedef int BIU;
 
@@ -117,37 +112,31 @@ protected:
     }
 
     /**
-     * Function biuParse
-     * parses an ASCII decimal floating point value and scales it into a BIU
-     * according to the current value of diskToBui.  This fuction is the complement of
-     * fmtBIU().  One has to know what the other is doing.
+     * Parse an ASCII decimal floating point value and scales it into a BIU according to the
+     * current value of diskToBui.
+     *
+     * This fuction is the complement of #fmtBIU().  One has to know what the other is doing.
      *
      * @param aValue is the ASCII value in C locale form with possible leading whitespace
-     *
-     * @param nptrptr may be NULL, but if not, then it tells where to put a
-     *  pointer to the next unconsumed input text. See "man strtod" for more information.
-     *
-     * @return BIU - the converted Board Internal Unit.
+     * @param nptrptr may be NULL, but if not, then it tells where to put a pointer to the
+     *                next unconsumed input text. See "man strtod" for more information.
+     * @return the converted Board Internal Unit.
      */
-    BIU biuParse( const char* aValue, const char** nptrptr = NULL );
+    BIU biuParse( const char* aValue, const char** nptrptr = nullptr );
 
     /**
-     * Function degParse
-     * parses an ASCII decimal floating point value which is certainly an angle.  This
-     * is a dedicated function for encapsulating support for the migration from
+     * Parse an ASCII decimal floating point value which is certainly an angle.
+     *
+     * This is a dedicated function for encapsulating support for the migration from
      * tenths of degrees to degrees in floating point.  This function is the complement of
      * fmtDEG().  One has to know what the other is doing.
      *
-     * @param aValue is the ASCII value in C locale form with possible leading whitespace
-     *
-     * @param nptrptr may be NULL, but if not, then it tells where to put a
-     *  pointer to the next unconsumed input text. See "man strtod" for more information.
-     *
-     * @return double - the string converted to a primitive double type
+     * @param aValue is the ASCII value in C locale form with possible leading whitespace.
+     * @param nptrptr may be NULL, but if not, then it tells where to put a pointer to the
+     *                next unconsumed input text. See "man strtod" for more information.
+     * @return the string converted to a primitive double type
      */
-    double degParse( const char* aValue, const char** nptrptr = NULL );
-
-    //-----<load/parse functions>-----------------------------------------------
+    double degParse( const char* aValue, const char** nptrptr = nullptr );
 
     void checkVersion();
 
@@ -170,8 +159,7 @@ protected:
     void loadFOOTPRINT( FOOTPRINT* aFootprint );
 
     /**
-     * Function loadTrackList
-     * reads a list of segments (Tracks and Vias, or Segzones)
+     * Read a list of segments (Tracks and Vias, or Segzones)
      *
      * @param aStructType is either PCB_TRACE_T to indicate tracks and vias, or NOT_USED
      *                    to indicate oldschool zone segments (which are discarded).
@@ -181,8 +169,6 @@ protected:
     void loadZONE_CONTAINER();      // "$CZONE_OUTLINE"
     void loadDIMENSION();           // "$COTATION"
     void loadPCB_TARGET();          // "$PCB_TARGET"
-
-    //-----</ load/parse functions>---------------------------------------------
 
     /// we only cache one footprint library for now, this determines which one.
     void cacheLib( const wxString& aLibraryPath );

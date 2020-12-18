@@ -20,7 +20,7 @@
 
 /**
  * @file cadstar_pcb_archive_plugin.h
- * @brief Pcbnew PLUGIN for CADSTAR PCB Archive (*.cpa) format: an ASCII format
+ * @brief Pcbnew #PLUGIN for CADSTAR PCB Archive (*.cpa) format: an ASCII format
  *        based on S-expressions.
  */
 
@@ -36,12 +36,10 @@
 class CADSTAR_PCB_ARCHIVE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-    // -----<PUBLIC PLUGIN API>--------------------------------------------------
-
     const wxString PluginName() const override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-            const PROPERTIES* aProperties = NULL ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     const wxString GetFileExtension() const override;
 
@@ -51,10 +49,9 @@ public:
         return 0;
     }
 
-    // -----</PUBLIC PLUGIN API>-------------------------------------------------
-
     /**
-     * @brief Default callback - just returns the automapped layers
+     * Return the automapped layers.
+     *
      * @param aInputLayerDescriptionVector
      * @return Auto-mapped layers
      */
@@ -62,8 +59,8 @@ public:
             const std::vector<INPUT_LAYER_DESC>& aInputLayerDescriptionVector );
 
     /**
-     * @brief Register a different handler to be called when mapping of Cadstar to KiCad
-     * layers occurs
+     * Register a different handler to be called when mapping of Cadstar to KiCad layers occurs.
+     *
      * @param aLayerMappingHandler
      */
     void RegisterLayerMappingCallback( LAYER_MAPPING_HANDLER aLayerMappingHandler ) override;

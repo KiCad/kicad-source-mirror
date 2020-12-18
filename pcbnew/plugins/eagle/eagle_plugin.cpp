@@ -307,7 +307,8 @@ wxSize inline EAGLE_PLUGIN::kicad_fontz( const ECOORD& d, int aTextThickness ) c
 }
 
 
-BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const PROPERTIES* aProperties )
+BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
+                           const PROPERTIES* aProperties, PROJECT* aProject )
 {
     LOCALE_IO       toggle;     // toggles on, then off, the C locale.
     wxXmlNode*      doc;

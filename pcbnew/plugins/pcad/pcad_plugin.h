@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Alexander Lunev <al.lunev@yahoo.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,14 +36,12 @@
 class PCAD_PLUGIN : public PLUGIN
 {
 public:
-
-    // -----<PUBLIC PLUGIN API>--------------------------------------------------
-
     const wxString  PluginName() const override;
 
     BOARD*          Load( const wxString&   aFileName,
                           BOARD*            aAppendToMe,
-                          const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = nullptr,
+                          PROJECT*          aProject = nullptr ) override;
 
     const wxString  GetFileExtension() const override;
 
@@ -52,8 +50,6 @@ public:
         // No support for libraries....
         return 0;
     }
-
-    // -----</PUBLIC PLUGIN API>-------------------------------------------------
 
     PCAD_PLUGIN();
     ~PCAD_PLUGIN();

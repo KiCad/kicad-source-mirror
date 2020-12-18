@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,9 @@
 #define FMT_UNIMPLEMENTED   "Plugin \"%s\" does not implement the \"%s\" function."
 
 /**
- * Function not_implemented
- * throws an IO_ERROR and complains of an API function not being implemented.
+ * Throw an #IO_ERROR and complains of an API function not being implemented.
  *
- * @param aPlugin is a PLUGIN instance
+ * @param aPlugin is a #PLUGIN instance.
  * @param aCaller is the name of the unimplemented API function.
  */
 static void not_implemented( PLUGIN* aPlugin, const char* aCaller )
@@ -44,10 +43,11 @@ static void not_implemented( PLUGIN* aPlugin, const char* aCaller )
 }
 
 
-BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties )
+BOARD* PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                     PROJECT* aProject )
 {
     not_implemented( this, __FUNCTION__ );
-    return NULL;
+    return nullptr;
 }
 
 
@@ -95,7 +95,7 @@ FOOTPRINT* PLUGIN::FootprintLoad( const wxString& aLibraryPath, const wxString& 
 {
     // not pure virtual so that plugins only have to implement subset of the PLUGIN interface.
     not_implemented( this, __FUNCTION__ );
-    return NULL;
+    return nullptr;
 }
 
 

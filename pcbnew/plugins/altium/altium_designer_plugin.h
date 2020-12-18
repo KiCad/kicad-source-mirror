@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +24,7 @@
 
 /**
  * @file pcad_plugin.h
- * @brief Pcbnew PLUGIN for Altium *.PcbDoc format.
+ * @brief Pcbnew #PLUGIN for Altium *.PcbDoc format.
  */
 
 #ifndef ALTIUM_DESIGNER_PLUGIN_H_
@@ -39,8 +40,8 @@ public:
 
     const wxString PluginName() const override;
 
-    BOARD* Load(
-            const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties ) override;
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                 PROJECT* aProject = nullptr) override;
 
     const wxString GetFileExtension() const override;
 

@@ -344,8 +344,7 @@ LSET LEGACY_PLUGIN::leg_mask2new( int cu_count, unsigned aMask )
 
 
 /**
- * Function intParse
- * parses an ASCII integer string with possible leading whitespace into
+ * Parse an ASCII integer string with possible leading whitespace into
  * an integer and updates the pointer at \a out if it is not NULL, just
  * like "man strtol()".  I can use this without casting, and its name says
  * what I am doing.
@@ -357,8 +356,7 @@ static inline int intParse( const char* next, const char** out = NULL )
 }
 
 /**
- * Function layerParse
- * Like intParse but returns a LAYER_NUM
+ * Like #intParse but returns a LAYER_NUM.
  */
 static inline LAYER_NUM layerParse( const char* next, const char** out = NULL )
 {
@@ -366,8 +364,7 @@ static inline LAYER_NUM layerParse( const char* next, const char** out = NULL )
 }
 
 /**
- * Function hexParse
- * parses an ASCII hex integer string with possible leading whitespace into
+ * Parse an ASCII hex integer string with possible leading whitespace into
  * a long integer and updates the pointer at \a out if it is not NULL, just
  * like "man strtol".  I can use this without casting, and its name says
  * what I am doing.
@@ -380,7 +377,7 @@ static inline long hexParse( const char* next, const char** out = NULL )
 
 
 BOARD* LEGACY_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,
-        const PROPERTIES* aProperties )
+                            const PROPERTIES* aProperties, PROJECT* aProject )
 {
     LOCALE_IO   toggle;     // toggles on, then off, the C locale.
 

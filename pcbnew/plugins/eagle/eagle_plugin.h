@@ -47,13 +47,17 @@ typedef NET_MAP::const_iterator         NET_MAP_CITER;
 /// subset of eagle.drawing.board.designrules in the XML document
 struct ERULES
 {
-    int    psElongationLong;    ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
-                                ///< Goes into making a scaling factor for "long" pads.
+    ///< percent over 100%.  0-> not elongated, 100->twice as wide as is tall
+    ///< Goes into making a scaling factor for "long" pads.
+    int    psElongationLong;
 
     int    psElongationOffset;  ///< the offset of the hole within the "long" pad.
 
-    double mvStopFrame;         ///< solder mask, expressed as percentage of the smaller pad/via dimension
-    double mvCreamFrame;        ///< solderpaste mask, expressed as percentage of the smaller pad/via dimension
+    ///< solder mask, expressed as percentage of the smaller pad/via dimension
+    double mvStopFrame;
+
+    ///< solderpaste mask, expressed as percentage of the smaller pad/via dimension
+    double mvCreamFrame;
     int    mlMinStopFrame;      ///< solder mask, minimum size (Eagle mils, here nanometers)
     int    mlMaxStopFrame;      ///< solder mask, maximum size (Eagle mils, here nanometers)
     int    mlMinCreamFrame;     ///< solder paste mask, minimum size (Eagle mils, here nanometers)
@@ -64,8 +68,12 @@ struct ERULES
     int    psFirst;             ///< Shape of the first pads
 
     double srRoundness;         ///< corner rounding ratio for SMD pads (percentage)
-    int    srMinRoundness;      ///< corner rounding radius, minimum size (Eagle mils, here nanometers)
-    int    srMaxRoundness;      ///< corner rounding radius, maximum size (Eagle mils, here nanometers)
+
+    ///< corner rounding radius, minimum size (Eagle mils, here nanometers)
+    int    srMinRoundness;
+
+    ///< corner rounding radius, maximum size (Eagle mils, here nanometers)
+    int    srMaxRoundness;
 
     double rvPadTop;            ///< top pad size as percent of drill size
     // double   rvPadBottom;    ///< bottom pad size as percent of drill size
@@ -112,28 +120,26 @@ struct ERULES
     void parse( wxXmlNode* aRules );
 };
 
+
 /**
- * EAGLE_PLUGIN
- * works with Eagle 6.x XML board files and footprints to implement the
- * Pcbnew PLUGIN API, or a portion of it.
+ * Works with Eagle 6.x XML board files and footprints to implement the Pcbnew #PLUGIN API
+ * or a portion of it.
  */
 class EAGLE_PLUGIN : public PLUGIN, public LAYER_REMAPPABLE_PLUGIN
 {
 public:
-
-    //-----<PUBLIC PLUGIN API>--------------------------------------------------
     const wxString PluginName() const override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = NULL ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     const wxString GetFileExtension() const override;
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = NULL) override;
+                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              const PROPERTIES* aProperties = NULL ) override;
+                              const PROPERTIES* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override
     {
@@ -147,27 +153,13 @@ public:
 
     void FootprintLibOptions( PROPERTIES* aProperties ) const override;
 
-/*
-    void Save( const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties = NULL );
-
-    void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint, const PROPERTIES* aProperties = NULL );
-
-    void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName, const PROPERTIES* aProperties = NULL );
-
-    void FootprintLibCreate( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
-
-    bool FootprintLibDelete( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL );
-*/
-
-    //-----</PUBLIC PLUGIN API>-------------------------------------------------
-
     typedef int BIU;
 
     EAGLE_PLUGIN();
     ~EAGLE_PLUGIN();
 
     /**
-     * @brief Default callback - just returns the automapped layers
+     * Return the automapped layers.
      *
      * The callback needs to have the context of the current board so it can
      * correctly determine copper layer mapping. Thus, it is not static and is
@@ -183,10 +175,10 @@ private:
     typedef std::vector<ELAYER>     ELAYERS;
     typedef ELAYERS::const_iterator EITER;
 
-    int                              m_cu_map[17];     ///< map eagle to kicad, cu layers only.
+    int                              m_cu_map[17];     ///< map eagle to KiCad, cu layers only.
     std::map<int, ELAYER>            m_eagleLayers;    ///< Eagle layer data stored by layer number
     std::map<wxString, int>          m_eagleLayersIds; ///< Eagle layer ids stored by layer name
-    std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCAD layers
+    std::map<wxString, PCB_LAYER_ID> m_layer_map;      ///< Map of Eagle layers to KiCad layers
 
     ERULES*       m_rules;          ///< Eagle design rules.
     XPATH*        m_xpath;          ///< keeps track of what we are working on within
@@ -221,7 +213,7 @@ private:
     int kicad_y( const ECOORD& y ) const { return -y.ToPcbUnits(); }
     int kicad_x( const ECOORD& x ) const { return x.ToPcbUnits(); }
 
-    /// create a font size (fontz) from an eagle font size scalar and KiCAD font thickness
+    /// create a font size (fontz) from an eagle font size scalar and KiCad font thickness
     wxSize  kicad_fontz( const ECOORD& d, int aTextThickness ) const;
 
     /// Generate mapping between Eagle na KiCAD layers
@@ -237,7 +229,7 @@ private:
     /// Get Eagle layer name by its number
     const wxString& eagle_layer_name( int aLayer ) const;
 
-    /// Get Eagle leayer number by its name
+    /// Get Eagle layer number by its name
     int eagle_layer_id( const wxString& aLayerName ) const;
 
     /// This PLUGIN only caches one footprint library, this determines which one.
@@ -255,22 +247,22 @@ private:
     void loadSignals( wxXmlNode* aSignals );
 
     /**
-     * Function loadLibrary
-     * loads the Eagle "library" XML element, which can occur either under
-     * a "libraries" element (if a *.brd file) or under a "drawing" element if a
-     * *.lbr file.
+     * Load the Eagle "library" XML element, which can occur either under a "libraries"
+     * element (if a *.brd file) or under a "drawing" element if a *.lbr file.
+     *
      * @param aLib is the portion of the loaded XML document tree that is the "library"
-     *   element.
+     *             element.
      * @param aLibName is a pointer to the library name or NULL.  If NULL this means
-     *   we are loading a *.lbr not a *.brd file and the key used in m_templates is to exclude
-     *   the library name.
+     *                 we are loading a *.lbr not a *.brd file and the key used in m_templates
+     *                 is to exclude the library name.
      */
     void loadLibrary( wxXmlNode* aLib, const wxString* aLibName );
 
     void loadLibraries( wxXmlNode* aLibs );
     void loadElements( wxXmlNode* aElements );
 
-    /** Loads a copper or keepout polygon and adds it to the board.
+    /**
+     * Load a copper or keepout polygon and adds it to the board.
      *
      * @return The loaded zone or nullptr if was not processed.
      */
@@ -287,8 +279,7 @@ private:
     void centerBoard();
 
     /**
-     * Function makeFootprint
-     * creates a FOOTPRINT from an Eagle package.
+     * Create a FOOTPRINT from an Eagle package.
      */
     FOOTPRINT* makeFootprint( wxXmlNode* aPackage, const wxString& aPkgName );
 
@@ -300,11 +291,9 @@ private:
     void packageCircle( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;
 
     /**
-     * Function packageHole
-     * @parameter aFootprint - The KiCad footprint to which to assign the hole
-     * @parameter aTree - The Eagle XML node that is of type "hole"
-     * @parameter aCenter - If true, center the hole in the footprint and
-     *      offset the footprint position
+     * @param aFootprint The KiCad footprint to which to assign the hole.
+     * @param aTree The Eagle XML node that is of type "hole".
+     * @param aCenter If true, center the hole in the footprint and offset the footprint position.
      */
     void packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aCenter ) const;
     void packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const;

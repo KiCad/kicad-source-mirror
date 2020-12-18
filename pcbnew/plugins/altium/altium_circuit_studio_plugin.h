@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Thomas Pointhuber <thomas.pointhuber@gmx.at>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +36,10 @@
 class ALTIUM_CIRCUIT_STUDIO_PLUGIN : public PLUGIN
 {
 public:
-    // -----<PUBLIC PLUGIN API>--------------------------------------------------
-
     const wxString PluginName() const override;
 
-    BOARD* Load(
-            const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties ) override;
+    BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe, const PROPERTIES* aProperties,
+                 PROJECT* aProject ) override;
 
     const wxString GetFileExtension() const override;
 
@@ -49,8 +48,6 @@ public:
         // TODO?
         return 0;
     }
-
-    // -----</PUBLIC PLUGIN API>-------------------------------------------------
 
     ALTIUM_CIRCUIT_STUDIO_PLUGIN();
     ~ALTIUM_CIRCUIT_STUDIO_PLUGIN();

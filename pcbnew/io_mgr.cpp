@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,22 +154,23 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
 }
 
 
-BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName,
-                     BOARD* aAppendToMe, const PROPERTIES* aProperties )
+BOARD* IO_MGR::Load( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aAppendToMe,
+                     const PROPERTIES* aProperties, PROJECT* aProject )
 {
     // release the PLUGIN even if an exception is thrown.
     PLUGIN::RELEASER pi( PluginFind( aFileType ) );
 
     if( (PLUGIN*) pi )  // test pi->plugin
     {
-        return pi->Load( aFileName, aAppendToMe, aProperties );  // virtual
+        return pi->Load( aFileName, aAppendToMe, aProperties, aProject );  // virtual
     }
 
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
 
 
-void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard, const PROPERTIES* aProperties )
+void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
+                   const PROPERTIES* aProperties )
 {
     // release the PLUGIN even if an exception is thrown.
     PLUGIN::RELEASER pi( PluginFind( aFileType ) );
@@ -185,9 +186,12 @@ void IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoar
 
 // These text strings are "truth" for identifying the plugins.  If you change the spellings,
 // you will obsolete library tables, so don't do it.  Additions are OK.
-static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"), []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP, wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
-static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"), []() -> PLUGIN* { return new PCAD_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerEaglePlugin( IO_MGR::EAGLE, wxT("Eagle"),
+                                                    []() -> PLUGIN* { return new EAGLE_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerKicadPlugin( IO_MGR::KICAD_SEXP,
+                                                    wxT("KiCad"), []() -> PLUGIN* { return new PCB_IO; } );
+static IO_MGR::REGISTER_PLUGIN registerPcadPlugin( IO_MGR::PCAD, wxT("P-Cad"),
+                                                   []() -> PLUGIN* { return new PCAD_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerAltiumDesignerPlugin( IO_MGR::ALTIUM_DESIGNER,
         wxT( "Altium Designer" ), []() -> PLUGIN* { return new ALTIUM_DESIGNER_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitStudioPlugin( IO_MGR::ALTIUM_CIRCUIT_STUDIO,
@@ -198,5 +202,7 @@ static IO_MGR::REGISTER_PLUGIN registerAltiumCircuitMakerPlugin( IO_MGR::ALTIUM_
         []() -> PLUGIN* { return new ALTIUM_CIRCUIT_MAKER_PLUGIN; } );
 static IO_MGR::REGISTER_PLUGIN registerCadstarArchivePlugin( IO_MGR::CADSTAR_PCB_ARCHIVE,
         wxT( "CADSTAR PCB Archive" ), []() -> PLUGIN* { return new CADSTAR_PCB_ARCHIVE_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerLegacyPlugin( IO_MGR::LEGACY, wxT("Legacy"), []() -> PLUGIN* { return new LEGACY_PLUGIN; } );
-static IO_MGR::REGISTER_PLUGIN registerGPCBPlugin( IO_MGR::GEDA_PCB, wxT("GEDA/Pcb"), []() -> PLUGIN* { return new GPCB_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerLegacyPlugin( IO_MGR::LEGACY, wxT("Legacy"),
+                                                     []() -> PLUGIN* { return new LEGACY_PLUGIN; } );
+static IO_MGR::REGISTER_PLUGIN registerGPCBPlugin( IO_MGR::GEDA_PCB, wxT("GEDA/Pcb"),
+                                                   []() -> PLUGIN* { return new GPCB_PLUGIN; } );

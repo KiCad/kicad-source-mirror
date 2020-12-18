@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012-2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2020 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,20 +38,14 @@ class GPCB_FPL_CACHE;
 
 
 /**
- * GPCB_PLUGIN
- * is a PLUGIN derivation for saving and loading Geda PCB files.
+ * A #PLUGIN derivation for saving and loading Geda PCB files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
  * @note Currently only reading GPCB footprint files is implemented.
  */
 class GPCB_PLUGIN : public PLUGIN
 {
-    friend class GPCB_FPL_CACHE;
-
 public:
-
-    //-----<PLUGIN API>---------------------------------------------------------
-
     const wxString PluginName() const override
     {
         return wxT( "Geda PCB" );
@@ -63,20 +57,20 @@ public:
     }
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
+                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
 
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                              const wxString& aFootprintName,
-                                             const PROPERTIES* aProperties = NULL ) override;
+                                             const PROPERTIES* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              const PROPERTIES* aProperties = NULL ) override;
+                              const PROPERTIES* aProperties = nullptr ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = nullptr ) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = NULL ) override;
+                             const PROPERTIES* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
@@ -90,15 +84,6 @@ public:
 
     ~GPCB_PLUGIN();
 
-protected:
-
-    wxString          m_error;        ///< for throwing exceptions
-    const PROPERTIES* m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
-    GPCB_FPL_CACHE*   m_cache;        ///< Footprint library cache.
-    int               m_ctl;
-    LINE_READER*      m_reader;       ///< no ownership here.
-    wxString          m_filename;     ///< for saves only, name is in m_reader for loads
-
 private:
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
@@ -106,6 +91,16 @@ private:
                                    const PROPERTIES* aProperties, bool checkModified );
 
     void init( const PROPERTIES* aProperties );
+
+    friend class GPCB_FPL_CACHE;
+
+protected:
+    wxString          m_error;        ///< for throwing exceptions
+    const PROPERTIES* m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
+    GPCB_FPL_CACHE*   m_cache;        ///< Footprint library cache.
+    int               m_ctl;
+    LINE_READER*      m_reader;       ///< no ownership here.
+    wxString          m_filename;     ///< for saves only, name is in m_reader for loads
 };
 
 #endif  // _GPCB_PLUGIN_H_

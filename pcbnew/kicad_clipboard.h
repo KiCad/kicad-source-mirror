@@ -48,10 +48,10 @@ public:
      * Saves the entire board to the clipboard formatted using the PCB_IO formatting
      */
     void Save( const wxString& aFileName, BOARD* aBoard,
-               const PROPERTIES* aProperties = NULL ) override;
+               const PROPERTIES* aProperties = nullptr ) override;
 
     /*
-     * Writes all the settings of the BOARD* set by setBoard() and then adds all the
+     * Write all the settings of the BOARD* set by setBoard() and then adds all the
      * BOARD_ITEMs found in selection formatted by PCB_IO to clipboard as sexpr text
      */
     void SaveSelection( const PCB_SELECTION& selected, bool isFootprintEditor );
@@ -59,7 +59,7 @@ public:
     BOARD_ITEM* Parse();
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = NULL ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     void SetBoard( BOARD* aBoard );
 

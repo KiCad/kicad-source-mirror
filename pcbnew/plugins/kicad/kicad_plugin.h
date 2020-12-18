@@ -99,11 +99,13 @@ class PCB_TEXT;
 #define CTL_OMIT_TSTAMPS            (1 << 2)    ///< Omit component time stamp (useless in library)
 #define CTL_OMIT_INITIAL_COMMENTS   (1 << 3)    ///< omit FOOTPRINT initial comments
 #define CTL_OMIT_PATH               (1 << 4)    ///< Omit component sheet time stamp (useless in library)
-#define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation
-                                                // (always saved with potion 0,0 and rotation = 0 in library)
+#define CTL_OMIT_AT                 (1 << 5)    ///< Omit position and rotation. (always saved
+                                                ///< with potion 0,0 and rotation = 0 in library).
 //#define CTL_OMIT_HIDE             (1 << 6)    // found and defined in eda_text.h
-#define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for board/not library)
-#define CTL_OMIT_FOOTPRINT_VERSION  (1 << 8)    ///< Omit the version string from the (footprint ) sexpr group
+#define CTL_OMIT_LIBNAME            (1 << 7)    ///< Omit lib alias when saving (used for
+                                                ///< board/not library).
+#define CTL_OMIT_FOOTPRINT_VERSION  (1 << 8)    ///< Omit the version string from the (footprint)
+                                                ///<sexpr group
 
 // common combinations of the above:
 
@@ -111,7 +113,8 @@ class PCB_TEXT;
 #define CTL_FOR_CLIPBOARD           (CTL_OMIT_INITIAL_COMMENTS) // (CTL_OMIT_NETS)
 
 /// Format output for a footprint library instead of clipboard or BOARD
-#define CTL_FOR_LIBRARY             (CTL_OMIT_NETS|CTL_OMIT_TSTAMPS|CTL_OMIT_PATH|CTL_OMIT_AT|CTL_OMIT_LIBNAME)
+#define CTL_FOR_LIBRARY                                                                    \
+    ( CTL_OMIT_NETS | CTL_OMIT_TSTAMPS | CTL_OMIT_PATH | CTL_OMIT_AT | CTL_OMIT_LIBNAME )
 
 /// The zero arg constructor when PCB_IO is used for PLUGIN::Load() and PLUGIN::Save()ing
 /// a BOARD file underneath IO_MGR.
@@ -119,19 +122,13 @@ class PCB_TEXT;
 
 
 /**
- * PCB_IO
- * is a PLUGIN derivation for saving and loading Pcbnew s-expression formatted files.
+ * A #PLUGIN derivation for saving and loading Pcbnew s-expression formatted files.
  *
  * @note This class is not thread safe, but it is re-entrant multiple times in sequence.
  */
 class PCB_IO : public PLUGIN
 {
-    friend class FP_CACHE;
-
 public:
-
-    //-----<PLUGIN API>---------------------------------------------------------
-
     const wxString PluginName() const override
     {
         return wxT( "KiCad" );
@@ -147,43 +144,41 @@ public:
     }
 
     virtual void Save( const wxString& aFileName, BOARD* aBoard,
-               const PROPERTIES* aProperties = NULL ) override;
+                       const PROPERTIES* aProperties = nullptr ) override;
 
     BOARD* Load( const wxString& aFileName, BOARD* aAppendToMe,
-                 const PROPERTIES* aProperties = NULL ) override;
+                 const PROPERTIES* aProperties = nullptr, PROJECT* aProject = nullptr ) override;
 
     BOARD* DoLoad( LINE_READER& aReader, BOARD* aAppendToMe, const PROPERTIES* aProperties );
 
     void FootprintEnumerate( wxArrayString& aFootprintNames, const wxString& aLibraryPath,
-                             bool aBestEfforts, const PROPERTIES* aProperties = NULL ) override;
+                             bool aBestEfforts, const PROPERTIES* aProperties = nullptr ) override;
 
     const FOOTPRINT* GetEnumeratedFootprint( const wxString& aLibraryPath,
                                              const wxString& aFootprintName,
-                                             const PROPERTIES* aProperties = NULL ) override;
+                                             const PROPERTIES* aProperties = nullptr ) override;
 
     bool FootprintExists( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = nullptr ) override;
 
     FOOTPRINT* FootprintLoad( const wxString& aLibraryPath, const wxString& aFootprintName,
-                              const PROPERTIES* aProperties = NULL ) override;
+                              const PROPERTIES* aProperties = nullptr ) override;
 
     void FootprintSave( const wxString& aLibraryPath, const FOOTPRINT* aFootprint,
-                        const PROPERTIES* aProperties = NULL ) override;
+                        const PROPERTIES* aProperties = nullptr ) override;
 
     void FootprintDelete( const wxString& aLibraryPath, const wxString& aFootprintName,
-                          const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = nullptr ) override;
 
     long long GetLibraryTimestamp( const wxString& aLibraryPath ) const override;
 
     void FootprintLibCreate( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = NULL) override;
+                             const PROPERTIES* aProperties = nullptr) override;
 
     bool FootprintLibDelete( const wxString& aLibraryPath,
-                             const PROPERTIES* aProperties = NULL ) override;
+                             const PROPERTIES* aProperties = nullptr ) override;
 
     bool IsFootprintLibWritable( const wxString& aLibraryPath ) override;
-
-    //-----</PLUGIN API>--------------------------------------------------------
 
     PCB_IO( int aControlFlags = CTL_FOR_BOARD );
 
@@ -213,24 +208,6 @@ public:
     BOARD_ITEM* Parse( const wxString& aClipboardSourceInput );
 
 protected:
-
-    wxString        m_error;        ///< for throwing exceptions
-    BOARD*          m_board;        ///< which BOARD, no ownership here
-
-    const
-    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
-    FP_CACHE*       m_cache;        ///< Footprint library cache.
-
-    LINE_READER*    m_reader;       ///< no ownership here.
-    wxString        m_filename;     ///< for saves only, name is in m_reader for loads
-
-    STRING_FORMATTER    m_sf;
-    OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
-    int                 m_ctl;
-    PCB_PARSER*         m_parser;
-    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
-                                    ///< are stored with consecutive integers as net codes
-
     void validateCache( const wxString& aLibraryPath, bool checkModified = true );
 
     const FOOTPRINT* getFootprint( const wxString& aLibraryPath, const wxString& aFootprintName,
@@ -284,6 +261,26 @@ private:
     void formatLayer( const BOARD_ITEM* aItem ) const;
 
     void formatLayers( LSET aLayerMask, int aNestLevel = 0 ) const;
+
+    friend class FP_CACHE;
+
+protected:
+    wxString        m_error;        ///< for throwing exceptions
+    BOARD*          m_board;        ///< which BOARD, no ownership here
+
+    const
+    PROPERTIES*     m_props;        ///< passed via Save() or Load(), no ownership, may be NULL.
+    FP_CACHE*       m_cache;        ///< Footprint library cache.
+
+    LINE_READER*    m_reader;       ///< no ownership here.
+    wxString        m_filename;     ///< for saves only, name is in m_reader for loads
+
+    STRING_FORMATTER    m_sf;
+    OUTPUTFORMATTER*    m_out;      ///< output any Format()s to this, no ownership
+    int                 m_ctl;
+    PCB_PARSER*         m_parser;
+    NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty net codes
+                                    ///< are stored with consecutive integers as net codes
 };
 
 #endif  // KICAD_PLUGIN_H_
