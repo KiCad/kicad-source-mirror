@@ -111,35 +111,47 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
-                LIB_ITEM* lib_item = (LIB_ITEM*) selection.Front();
+                LIB_ITEM* lib_item = static_cast<LIB_ITEM*>( selection.Front() );
 
                 // Pick up any synchronized pins
                 //
                 // Careful when pasting.  The pasted pin will be at the same location as it
                 // was copied from, leading us to believe it's a synchronized pin.  It's not.
-                if( selection.GetSize() == 1 && lib_item->Type() == LIB_PIN_T
-                        && m_frame->SynchronizePins()
+                if( m_frame->SynchronizePins()
                         && ( lib_item->GetEditFlags() & IS_PASTED ) == 0 )
                 {
-                    LIB_PIN*  cur_pin = (LIB_PIN*) lib_item;
-                    LIB_PART* part = m_frame->GetCurPart();
-                    std::vector<bool> got_unit( part->GetUnitCount() );
+                    std::set<LIB_PIN*> sync_pins;
 
-                    got_unit[cur_pin->GetUnit()] = true;
-
-                    for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
+                    for( EDA_ITEM* sel_item : selection )
                     {
-                        if( !got_unit[pin->GetUnit()]
-                         && pin->GetPosition() == cur_pin->GetPosition()
-                         && pin->GetOrientation() == cur_pin->GetOrientation()
-                         && pin->GetConvert() == cur_pin->GetConvert()
-                         && pin->GetType() == cur_pin->GetType()
-                         && pin->GetName() == cur_pin->GetName()  )
+                        lib_item = static_cast<LIB_ITEM*>( sel_item );
+
+                        if(  lib_item->Type() == LIB_PIN_T )
                         {
-                            m_selectionTool->AddItemToSel( pin, true /*quiet mode*/ );
-                            got_unit[pin->GetUnit()] = true;
+                            LIB_PIN* cur_pin = static_cast<LIB_PIN*>( lib_item );
+                            LIB_PART* part = m_frame->GetCurPart();
+                            std::vector<bool> got_unit( part->GetUnitCount() );
+
+                            got_unit[cur_pin->GetUnit()] = true;
+
+                            for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
+                            {
+                                if( !got_unit[pin->GetUnit()]
+                                 && pin->GetPosition() == cur_pin->GetPosition()
+                                 && pin->GetOrientation() == cur_pin->GetOrientation()
+                                 && pin->GetConvert() == cur_pin->GetConvert()
+                                 && pin->GetType() == cur_pin->GetType()
+                                 && pin->GetName() == cur_pin->GetName()  )
+                                {
+                                    if( sync_pins.insert( pin ).second )
+                                        got_unit[pin->GetUnit()] = true;
+                                }
+                            }
                         }
                     }
+
+                    for( LIB_PIN* pin : sync_pins )
+                        m_selectionTool->AddItemToSel( pin, true /*quiet mode*/ );
                 }
 
                 // Apply any initial offset in case we're coming from a previous command.
