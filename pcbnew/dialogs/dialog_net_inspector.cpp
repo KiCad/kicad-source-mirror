@@ -907,14 +907,15 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
 
     finishDialogSettings();
 
-#define connect_event( e, f ) \
-    m_frame->Connect( e, wxCommandEventHandler( DIALOG_NET_INSPECTOR::f ), nullptr, this )
-
-    connect_event( wxEVT_CLOSE_WINDOW, onParentWindowClosed );
-    connect_event( UNITS_CHANGED, onUnitsChanged );
-    connect_event( BOARD_CHANGED, onBoardChanged );
-
-#undef connect_event
+    m_frame->Connect( wxEVT_CLOSE_WINDOW,
+                      wxCommandEventHandler( DIALOG_NET_INSPECTOR::onParentWindowClosed ),
+                      nullptr, this );
+    m_frame->Connect( UNITS_CHANGED,
+                      wxCommandEventHandler( DIALOG_NET_INSPECTOR::onUnitsChanged ),
+                      nullptr, this );
+    m_frame->Connect( BOARD_CHANGED,
+                      wxCommandEventHandler( DIALOG_NET_INSPECTOR::onBoardChanged ),
+                      nullptr, this );
 
     if( m_brd != nullptr )
     {
@@ -933,14 +934,15 @@ DIALOG_NET_INSPECTOR::~DIALOG_NET_INSPECTOR()
     // from now on.  so just disassociate it.
     m_netsList->AssociateModel( nullptr );
 
-#define disconnect_event( e, f ) \
-    m_frame->Disconnect( e, wxCommandEventHandler( DIALOG_NET_INSPECTOR::f ), nullptr, this )
-
-    disconnect_event( wxEVT_CLOSE_WINDOW, onParentWindowClosed );
-    disconnect_event( UNITS_CHANGED, onUnitsChanged );
-    disconnect_event( BOARD_CHANGED, onBoardChanged );
-
-#undef disconnect_event
+    m_frame->Disconnect( wxEVT_CLOSE_WINDOW,
+                         wxCommandEventHandler( DIALOG_NET_INSPECTOR::onParentWindowClosed ),
+                         nullptr, this );
+    m_frame->Disconnect( UNITS_CHANGED,
+                         wxCommandEventHandler( DIALOG_NET_INSPECTOR::onUnitsChanged ),
+                         nullptr, this );
+    m_frame->Disconnect( BOARD_CHANGED,
+                         wxCommandEventHandler( DIALOG_NET_INSPECTOR::onBoardChanged ),
+                         nullptr, this );
 
     if( m_brd != nullptr )
         m_brd->RemoveListener( this );
@@ -991,9 +993,6 @@ void DIALOG_NET_INSPECTOR::onUnitsChanged( wxCommandEvent& event )
 
 void DIALOG_NET_INSPECTOR::onBoardChanged( wxCommandEvent& event )
 {
-    if( m_brd != nullptr )
-        m_brd->RemoveListener( this );
-
     m_brd = m_frame->GetBoard();
 
     if( m_brd != nullptr )
