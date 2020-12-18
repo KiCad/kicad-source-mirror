@@ -96,9 +96,8 @@
 
 
 /**
- * Struct VIA_DIMENSION
- * is a small helper container to handle a stock of specific vias each with
- * unique diameter and drill sizes in the BOARD class.
+ * Container to handle a stock of specific vias each with unique diameter and drill sizes
+ * in the #BOARD class.
  */
 struct VIA_DIMENSION
 {
@@ -133,9 +132,8 @@ struct VIA_DIMENSION
 
 
 /**
- * Struct DIFF_PAIR_DIMENSION
- * is a small helper container to handle a stock of specific differential pairs each with
- * unique track width, gap and via gap.
+ * Container to handle a stock of specific differential pairs each with unique track width,
+ * gap and via gap.
  */
 struct DIFF_PAIR_DIMENSION
 {
@@ -215,11 +213,479 @@ enum class DIM_UNITS_MODE : int;
 
 
 /**
- * BOARD_DESIGN_SETTINGS
- * contains design settings for a BOARD object.
+ * Container for design settings for a #BOARD object.
  */
 class BOARD_DESIGN_SETTINGS : public NESTED_SETTINGS
 {
+public:
+    BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
+
+    virtual ~BOARD_DESIGN_SETTINGS();
+
+    BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther);
+
+    BOARD_DESIGN_SETTINGS& operator=( const BOARD_DESIGN_SETTINGS& aOther );
+
+    bool LoadFromFile( const wxString& aDirectory = "" ) override;
+
+    BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
+
+    SEVERITY GetSeverity( int aDRCErrorCode );
+
+    /**
+     * Return true if the DRC error code's severity is SEVERITY_IGNORE.
+     */
+    bool Ignore( int aDRCErrorCode );
+
+    NETCLASSES& GetNetClasses() const
+    {
+        return *m_netClasses;
+    }
+
+    void SetNetClasses( NETCLASSES* aNetClasses )
+    {
+        if( aNetClasses )
+            m_netClasses = aNetClasses;
+        else
+            m_netClasses = &m_internalNetClasses;
+    }
+
+    ZONE_SETTINGS& GetDefaultZoneSettings()
+    {
+        return m_defaultZoneSettings;
+    }
+
+    void SetDefaultZoneSettings( const ZONE_SETTINGS& aSettings )
+    {
+        m_defaultZoneSettings = aSettings;
+    }
+
+    /**
+     * @return the default netclass.
+     */
+    inline NETCLASS* GetDefault() const
+    {
+        return GetNetClasses().GetDefaultPtr();
+    }
+
+    /**
+     * @return the current net class name.
+     */
+    inline const wxString& GetCurrentNetClassName() const
+    {
+        return m_currentNetClassName;
+    }
+
+    /**
+     * Return true if netclass values should be used to obtain appropriate track width.
+     */
+    inline bool UseNetClassTrack() const
+    {
+        return ( m_trackWidthIndex == 0 && !m_useCustomTrackVia );
+    }
+
+    /**
+     * Return true if netclass values should be used to obtain appropriate via size.
+     */
+    inline bool UseNetClassVia() const
+    {
+        return ( m_viaSizeIndex == 0 && !m_useCustomTrackVia );
+    }
+
+    /**
+     * Return true if netclass values should be used to obtain appropriate diff pair dimensions.
+     */
+    inline bool UseNetClassDiffPair() const
+    {
+        return ( m_diffPairIndex == 0 && !m_useCustomDiffPair );
+    }
+
+    /**
+     * @return the biggest clearance value found in NetClasses list.
+     */
+    int GetBiggestClearanceValue();
+
+    /**
+     * @return the smallest clearance value found in NetClasses list.
+     */
+    int GetSmallestClearanceValue();
+
+    /**
+     * @return the current micro via size that is the current netclass value.
+     */
+    int GetCurrentMicroViaSize();
+
+    /**
+     * @return the current micro via drill that is the current netclass value.
+     */
+    int GetCurrentMicroViaDrill();
+
+    /**
+     * @return the current track width list index.
+     */
+    inline unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
+
+    /**
+     * Set the current track width list index to \a aIndex.
+     *
+     * @param aIndex is the track width list index.
+     */
+    void SetTrackWidthIndex( unsigned aIndex );
+
+    /**
+     * @return the current track width according to the selected options
+     * ( using the default netclass value or a preset/custom value )
+     * the default netclass is always in m_TrackWidthList[0]
+     */
+    int GetCurrentTrackWidth() const;
+
+    /**
+     * Sets custom width for track (i.e. not available in netclasses or preset list).
+     *
+     * To have it returned with GetCurrentTrackWidth() you need to enable custom track &
+     * via sizes with #UseCustomTrackViaSize().
+     *
+     * @param aWidth is the new track width.
+     */
+    inline void SetCustomTrackWidth( int aWidth )
+    {
+        m_customTrackWidth = aWidth;
+    }
+
+    /**
+     * @return Current custom width for a track.
+     */
+    inline int GetCustomTrackWidth() const
+    {
+        return m_customTrackWidth;
+    }
+
+    /**
+     * @return the current via size list index.
+     */
+    inline unsigned GetViaSizeIndex() const
+    {
+        return m_viaSizeIndex;
+    }
+
+    /**
+     * Set the current via size list index to \a aIndex.
+     *
+     * @param aIndex is the via size list index.
+     */
+    void SetViaSizeIndex( unsigned aIndex );
+
+    /**
+     * @return the current via size, according to the selected options
+     * ( using the default netclass value or a preset/custom value )
+     * the default netclass is always in m_TrackWidthList[0]
+     */
+    int GetCurrentViaSize() const;
+
+    /**
+     * Set custom size for via diameter (i.e. not available in netclasses or preset list).
+     *
+     * To have it returned with GetCurrentViaSize() you need to enable custom track & via sizes
+     * with #UseCustomTrackViaSize().
+     *
+     * @param aSize is the new drill diameter.
+     */
+    inline void SetCustomViaSize( int aSize )
+    {
+        m_customViaSize.m_Diameter = aSize;
+    }
+
+    /**
+     * @return Current custom size for the via diameter.
+     */
+    inline int GetCustomViaSize() const
+    {
+        return m_customViaSize.m_Diameter;
+    }
+
+    /**
+     * @return the current via size, according to the selected options
+     * ( using the default netclass value or a preset/custom value )
+     * the default netclass is always in m_TrackWidthList[0].
+     */
+    int GetCurrentViaDrill() const;
+
+    /**
+     * Sets custom size for via drill (i.e. not available in netclasses or preset list).
+     *
+     * To have it returned with GetCurrentViaDrill() you need to enable custom track & via
+     * sizes with #UseCustomTrackViaSize().
+     *
+     * @param aDrill is the new drill size.
+     */
+    inline void SetCustomViaDrill( int aDrill )
+    {
+        m_customViaSize.m_Drill = aDrill;
+    }
+
+    /**
+     * @return Current custom size for the via drill.
+     */
+    inline int GetCustomViaDrill() const
+    {
+        return m_customViaSize.m_Drill;
+    }
+
+    /**
+     * Enables/disables custom track/via size settings.
+     *
+     * If enabled, values set with #SetCustomTrackWidth(), #SetCustomViaSize(),
+     * and #SetCustomViaDrill() are used for newly created tracks and vias.
+     *
+     * @param aEnabled decides if custom settings should be used for new tracks/vias.
+     */
+    inline void UseCustomTrackViaSize( bool aEnabled )
+    {
+        m_useCustomTrackVia = aEnabled;
+    }
+
+    /**
+     * @return True if custom sizes of tracks & vias are enabled, false otherwise.
+     */
+    inline bool UseCustomTrackViaSize() const
+    {
+        return m_useCustomTrackVia;
+    }
+
+    /**
+     * @return the current diff pair dimension list index.
+     */
+    inline unsigned GetDiffPairIndex() const { return m_diffPairIndex; }
+
+    /**
+     * @param aIndex is the diff pair dimensions list index to set.
+     */
+    void SetDiffPairIndex( unsigned aIndex );
+
+    /**
+     * Sets custom track width for differential pairs (i.e. not available in netclasses or
+     * preset list).
+     *
+     * @param aDrill is the new track wdith.
+     */
+    inline void SetCustomDiffPairWidth( int aWidth )
+    {
+        m_customDiffPair.m_Width = aWidth;
+    }
+
+    /**
+     * @return Current custom track width for differential pairs.
+     */
+    inline int GetCustomDiffPairWidth()
+    {
+        return m_customDiffPair.m_Width;
+    }
+
+    /**
+     * Sets custom gap for differential pairs (i.e. not available in netclasses or preset
+     * list).
+     * @param aGap is the new gap.
+     */
+    inline void SetCustomDiffPairGap( int aGap )
+    {
+        m_customDiffPair.m_Gap = aGap;
+    }
+
+    /**
+     * Function GetCustomDiffPairGap
+     * @return Current custom gap width for differential pairs.
+     */
+    inline int GetCustomDiffPairGap()
+    {
+        return m_customDiffPair.m_Gap;
+    }
+
+    /**
+     * Sets custom via gap for differential pairs (i.e. not available in netclasses or
+     * preset list).
+     *
+     * @param aGap is the new gap.  Specify 0 to use the DiffPairGap for vias as well.
+     */
+    inline void SetCustomDiffPairViaGap( int aGap )
+    {
+        m_customDiffPair.m_ViaGap = aGap;
+    }
+
+    /**
+     * @return Current custom via gap width for differential pairs.
+     */
+    inline int GetCustomDiffPairViaGap()
+    {
+        return m_customDiffPair.m_ViaGap > 0 ? m_customDiffPair.m_ViaGap : m_customDiffPair.m_Gap;
+    }
+
+    /**
+     * Enables/disables custom differential pair dimensions.
+     *
+     * @param aEnabled decides if custom settings should be used for new differential pairs.
+     */
+    inline void UseCustomDiffPairDimensions( bool aEnabled )
+    {
+        m_useCustomDiffPair = aEnabled;
+    }
+
+    /**
+     * @return True if custom sizes of diff pairs are enabled, false otherwise.
+     */
+    inline bool UseCustomDiffPairDimensions() const
+    {
+        return m_useCustomDiffPair;
+    }
+
+    /**
+     * @return the current diff pair track width, according to the selected options
+     * ( using the default netclass value or a preset/custom value )
+     * the default netclass is always in m_DiffPairDimensionsList[0].
+     */
+    inline int GetCurrentDiffPairWidth() const
+    {
+        if( m_useCustomDiffPair )
+            return m_customDiffPair.m_Width;
+        else
+            return m_DiffPairDimensionsList[m_diffPairIndex].m_Width;
+    }
+
+    /**
+     * @return the current diff pair gap, according to the selected options
+     * ( using the default netclass value or a preset/custom value )
+     * the default netclass is always in m_DiffPairDimensionsList[0].
+     */
+    inline int GetCurrentDiffPairGap() const
+    {
+        if( m_useCustomDiffPair )
+            return m_customDiffPair.m_Gap;
+        else
+            return m_DiffPairDimensionsList[m_diffPairIndex].m_Gap;
+    }
+
+    /**
+     * @return the current diff pair via gap, according to the selected options
+     * ( using the default netclass value or a preset/custom value )
+     * the default netclass is always in m_DiffPairDimensionsList[0].
+     */
+    inline int GetCurrentDiffPairViaGap() const
+    {
+        if( m_useCustomDiffPair )
+            return m_customDiffPair.m_ViaGap;
+        else
+            return m_DiffPairDimensionsList[m_diffPairIndex].m_ViaGap;
+    }
+
+    /**
+     * @param aValue The minimum distance between the edges of two holes or 0 to disable
+     * hole-to-hole separation checking.
+     */
+    void SetMinHoleSeparation( int aDistance );
+
+    /**
+     * @param aValue The minimum distance between copper items and board edges.
+     */
+    void SetCopperEdgeClearance( int aDistance );
+
+    /**
+     * Set the minimum distance between silk items to \a aValue.
+     *
+     * @note Compound graphics within a single footprint or on the board are not checked,
+     *       but distances between text and between graphics from different footprints are.
+     *
+     * @param aValue The minimum distance between silk items.
+     */
+    void SetSilkClearance( int aDistance );
+
+    /**
+     * Return a bit-mask of all the layers that are enabled.
+     *
+     * @return the enabled layers in bit-mapped form.
+     */
+    inline LSET GetEnabledLayers() const
+    {
+        return m_enabledLayers;
+    }
+
+    /**
+     * Change the bit-mask of enabled layers to \a aMask.
+     *
+     * @param aMask = The new bit-mask of enabled layers.
+     */
+    void SetEnabledLayers( LSET aMask );
+
+    /**
+     * Test whether a given layer \a aLayerId is enabled.
+     *
+     * @param aLayerId The layer to be tested.
+     * @return true if the layer is enabled.
+     */
+    inline bool IsLayerEnabled( PCB_LAYER_ID aLayerId ) const
+    {
+        if( aLayerId >= 0 && aLayerId < PCB_LAYER_ID_COUNT )
+            return m_enabledLayers[aLayerId];
+
+        return false;
+    }
+
+    /**
+     * @return the number of enabled copper layers.
+     */
+    inline int GetCopperLayerCount() const
+    {
+        return m_copperLayerCount;
+    }
+
+    /**
+     * Set the copper layer count to \a aNewLayerCount.
+     *
+     * @param aNewLayerCount The new number of enabled copper layers.
+     */
+    void SetCopperLayerCount( int aNewLayerCount );
+
+    inline int GetBoardThickness() const { return m_boardThickness; }
+    inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
+
+    /*
+     * Return an epsilon which accounts for rounding errors, etc.
+     *
+     * While currently an advanced cfg, going through this API allows us to easily change
+     * it to board-specific if so desired.
+     */
+    int GetDRCEpsilon() const;
+
+    /**
+     * Pad & via drills are finish size.
+     *
+     * Adding the hole plating thickness gives you the actual hole size.
+     */
+    int GetHolePlatingThickness() const;
+
+    /**
+     * Return the default graphic segment thickness from the layer class for the given layer.
+     */
+    int GetLineThickness( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Return the default text size from the layer class for the given layer.
+     */
+    wxSize GetTextSize( PCB_LAYER_ID aLayer ) const;
+
+    /**
+     * Return the default text thickness from the layer class for the given layer.
+     */
+    int GetTextThickness( PCB_LAYER_ID aLayer ) const;
+
+    bool GetTextItalic( PCB_LAYER_ID aLayer ) const;
+    bool GetTextUpright( PCB_LAYER_ID aLayer ) const;
+
+    int GetLayerClass( PCB_LAYER_ID aLayer ) const;
+
+private:
+    void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
+
+    bool migrateSchema0to1();
+
 public:
     // Note: the first value in each dimensions list is the current netclass value
     std::vector<int>                 m_TrackWidthList;
@@ -248,14 +714,15 @@ public:
     std::map<int, SEVERITY>     m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
     std::set<wxString>          m_DrcExclusions;
 
-    /*
+    /**
      * Option to select different fill algorithms.
-     * There are currenly two supported values:
+     *
+     * There are currently two supported values:
      * 5:
      * - Use thick outlines around filled polygons (gives smoothest shape but at the expense
      *   of processing time and slight infidelity when exporting)
      * - Use zone outline when knocking out higher-priority zones (just wrong, but mimics
-     *   legacy behaviour.
+     *   legacy behavior.
      * 6:
      * - No thick outline.
      * - Use filled areas when knocking out higher-priority zones.
@@ -275,7 +742,7 @@ public:
     int        m_SolderMaskMinWidth;        // Solder mask min width (2 areas closer than this
                                             // width are merged)
     int        m_SolderPasteMargin;         // Solder paste margin absolute value
-    double     m_SolderPasteMarginRatio;    // Solder pask margin ratio value of pad size
+    double     m_SolderPasteMarginRatio;    // Solder mask margin ratio value of pad size
                                             // The final margin is the sum of these 2 values
 
     // Variables used in footprint editing (default value in item/footprint creation)
@@ -311,7 +778,7 @@ public:
     bool       m_HasStackup;
 
 private:
-    // Indicies into the trackWidth, viaSizes and diffPairDimensions lists.
+    // Indices into the trackWidth, viaSizes and diffPairDimensions lists.
     // The 0 index is always the current netclass value(s)
     unsigned   m_trackWidthIndex;
     unsigned   m_viaSizeIndex;
@@ -338,7 +805,7 @@ private:
 
     /** the description of layers stackup, for board fabrication
      * only physical layers are in layers stackup.
-     * It includes not only layers enabled for the board edition, but also dielectic layers
+     * It includes not only layers enabled for the board edition, but also dielectric layers
      */
     BOARD_STACKUP m_stackup;
 
@@ -348,505 +815,8 @@ private:
     /// This will point to m_internalNetClasses until it is repointed to the project after load
     NETCLASSES* m_netClasses;
 
-    /// The defualt settings that will be used for new zones
+    /// The default settings that will be used for new zones
     ZONE_SETTINGS m_defaultZoneSettings;
-
-    void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
-
-    bool migrateSchema0to1();
-
-public:
-    BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );
-
-    virtual ~BOARD_DESIGN_SETTINGS();
-
-    BOARD_DESIGN_SETTINGS( const BOARD_DESIGN_SETTINGS& aOther);
-
-    BOARD_DESIGN_SETTINGS& operator=( const BOARD_DESIGN_SETTINGS& aOther );
-
-    bool LoadFromFile( const wxString& aDirectory = "" ) override;
-
-    BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
-
-    SEVERITY GetSeverity( int aDRCErrorCode );
-
-    /**
-     * returns true if the DRC error code's severity is SEVERITY_IGNORE
-     */
-    bool Ignore( int aDRCErrorCode );
-
-    NETCLASSES& GetNetClasses() const
-    {
-        return *m_netClasses;
-    }
-
-    void SetNetClasses( NETCLASSES* aNetClasses )
-    {
-        if( aNetClasses )
-            m_netClasses = aNetClasses;
-        else
-            m_netClasses = &m_internalNetClasses;
-    }
-
-    ZONE_SETTINGS& GetDefaultZoneSettings()
-    {
-        return m_defaultZoneSettings;
-    }
-
-    void SetDefaultZoneSettings( const ZONE_SETTINGS& aSettings )
-    {
-        m_defaultZoneSettings = aSettings;
-    }
-
-    /**
-     * Function GetDefault
-     * @return the default netclass.
-     */
-    inline NETCLASS* GetDefault() const
-    {
-        return GetNetClasses().GetDefaultPtr();
-    }
-
-    /**
-     * Function GetCurrentNetClassName
-     * @return the current net class name.
-     */
-    inline const wxString& GetCurrentNetClassName() const
-    {
-        return m_currentNetClassName;
-    }
-
-    /**
-     * Function UseNetClassTrack
-     * returns true if netclass values should be used to obtain appropriate track width.
-     */
-    inline bool UseNetClassTrack() const
-    {
-        return ( m_trackWidthIndex == 0 && !m_useCustomTrackVia );
-    }
-
-    /**
-     * Function UseNetClassVia
-     * returns true if netclass values should be used to obtain appropriate via size.
-     */
-    inline bool UseNetClassVia() const
-    {
-        return ( m_viaSizeIndex == 0 && !m_useCustomTrackVia );
-    }
-
-    /**
-     * Function UseNetClassDiffPair
-     * returns true if netclass values should be used to obtain appropriate diff pair dimensions.
-     */
-    inline bool UseNetClassDiffPair() const
-    {
-        return ( m_diffPairIndex == 0 && !m_useCustomDiffPair );
-    }
-
-    /**
-     * Function GetBiggestClearanceValue
-     * @return the biggest clearance value found in NetClasses list
-     */
-    int GetBiggestClearanceValue();
-
-    /**
-     * Function GetSmallestClearanceValue
-     * @return the smallest clearance value found in NetClasses list
-     */
-    int GetSmallestClearanceValue();
-
-    /**
-     * Function GetCurrentMicroViaSize
-     * @return the current micro via size,
-     * that is the current netclass value
-     */
-    int GetCurrentMicroViaSize();
-
-    /**
-     * Function GetCurrentMicroViaDrill
-     * @return the current micro via drill,
-     * that is the current netclass value
-     */
-    int GetCurrentMicroViaDrill();
-
-    /**
-     * Function GetTrackWidthIndex
-     * @return the current track width list index.
-     */
-    inline unsigned GetTrackWidthIndex() const { return m_trackWidthIndex; }
-
-    /**
-     * Function SetTrackWidthIndex
-     * sets the current track width list index to \a aIndex.
-     *
-     * @param aIndex is the track width list index.
-     */
-    void SetTrackWidthIndex( unsigned aIndex );
-
-    /**
-     * Function GetCurrentTrackWidth
-     * @return the current track width, according to the selected options
-     * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_TrackWidthList[0]
-     */
-    int GetCurrentTrackWidth() const;
-
-    /**
-     * Function SetCustomTrackWidth
-     * Sets custom width for track (i.e. not available in netclasses or preset list). To have
-     * it returned with GetCurrentTrackWidth() you need to enable custom track & via sizes
-     * (UseCustomTrackViaSize()).
-     * @param aWidth is the new track width.
-     */
-    inline void SetCustomTrackWidth( int aWidth )
-    {
-        m_customTrackWidth = aWidth;
-    }
-
-    /**
-     * Function GetCustomTrackWidth
-     * @return Current custom width for a track.
-     */
-    inline int GetCustomTrackWidth() const
-    {
-        return m_customTrackWidth;
-    }
-
-    /**
-     * Function GetViaSizeIndex
-     * @return the current via size list index.
-     */
-    inline unsigned GetViaSizeIndex() const
-    {
-        return m_viaSizeIndex;
-    }
-
-    /**
-     * Function SetViaSizeIndex
-     * sets the current via size list index to \a aIndex.
-     *
-     * @param aIndex is the via size list index.
-     */
-    void SetViaSizeIndex( unsigned aIndex );
-
-    /**
-     * Function GetCurrentViaSize
-     * @return the current via size, according to the selected options
-     * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_TrackWidthList[0]
-     */
-    int GetCurrentViaSize() const;
-
-    /**
-     * Function SetCustomViaSize
-     * Sets custom size for via diameter (i.e. not available in netclasses or preset list). To have
-     * it returned with GetCurrentViaSize() you need to enable custom track & via sizes
-     * (UseCustomTrackViaSize()).
-     * @param aSize is the new drill diameter.
-     */
-    inline void SetCustomViaSize( int aSize )
-    {
-        m_customViaSize.m_Diameter = aSize;
-    }
-
-    /**
-     * Function GetCustomViaSize
-     * @return Current custom size for the via diameter.
-     */
-    inline int GetCustomViaSize() const
-    {
-        return m_customViaSize.m_Diameter;
-    }
-
-    /**
-     * Function GetCurrentViaDrill
-     * @return the current via size, according to the selected options
-     * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_TrackWidthList[0]
-     */
-    int GetCurrentViaDrill() const;
-
-    /**
-     * Function SetCustomViaDrill
-     * Sets custom size for via drill (i.e. not available in netclasses or preset list). To have
-     * it returned with GetCurrentViaDrill() you need to enable custom track & via sizes
-     * (UseCustomTrackViaSize()).
-     * @param aDrill is the new drill size.
-     */
-    inline void SetCustomViaDrill( int aDrill )
-    {
-        m_customViaSize.m_Drill = aDrill;
-    }
-
-    /**
-     * Function GetCustomViaDrill
-     * @return Current custom size for the via drill.
-     */
-    inline int GetCustomViaDrill() const
-    {
-        return m_customViaSize.m_Drill;
-    }
-
-    /**
-     * Function UseCustomTrackViaSize
-     * Enables/disables custom track/via size settings. If enabled, values set with
-     * SetCustomTrackWidth()/SetCustomViaSize()/SetCustomViaDrill() are used for newly created
-     * tracks and vias.
-     * @param aEnabled decides if custom settings should be used for new tracks/vias.
-     */
-    inline void UseCustomTrackViaSize( bool aEnabled )
-    {
-        m_useCustomTrackVia = aEnabled;
-    }
-
-    /**
-     * Function UseCustomTrackViaSize
-     * @return True if custom sizes of tracks & vias are enabled, false otherwise.
-     */
-    inline bool UseCustomTrackViaSize() const
-    {
-        return m_useCustomTrackVia;
-    }
-
-    /**
-     * Function GetDiffPairIndex
-     * @return the current diff pair dimension list index.
-     */
-    inline unsigned GetDiffPairIndex() const { return m_diffPairIndex; }
-
-    /**
-     * Function SetDiffPairIndex
-     * @param aIndex is the diff pair dimensions list index to set.
-     */
-    void SetDiffPairIndex( unsigned aIndex );
-
-    /**
-     * Function SetCustomDiffPairWidth
-     * Sets custom track width for differential pairs (i.e. not available in netclasses or
-     * preset list).
-     * @param aDrill is the new track wdith.
-     */
-    inline void SetCustomDiffPairWidth( int aWidth )
-    {
-        m_customDiffPair.m_Width = aWidth;
-    }
-
-    /**
-     * Function GetCustomDiffPairWidth
-     * @return Current custom track width for differential pairs.
-     */
-    inline int GetCustomDiffPairWidth()
-    {
-        return m_customDiffPair.m_Width;
-    }
-
-    /**
-     * Function SetCustomDiffPairGap
-     * Sets custom gap for differential pairs (i.e. not available in netclasses or preset
-     * list).
-     * @param aGap is the new gap.
-     */
-    inline void SetCustomDiffPairGap( int aGap )
-    {
-        m_customDiffPair.m_Gap = aGap;
-    }
-
-    /**
-     * Function GetCustomDiffPairGap
-     * @return Current custom gap width for differential pairs.
-     */
-    inline int GetCustomDiffPairGap()
-    {
-        return m_customDiffPair.m_Gap;
-    }
-
-    /**
-     * Function SetCustomDiffPairViaGap
-     * Sets custom via gap for differential pairs (i.e. not available in netclasses or
-     * preset list).
-     * @param aGap is the new gap.  Specify 0 to use the DiffPairGap for vias as well.
-     */
-    inline void SetCustomDiffPairViaGap( int aGap )
-    {
-        m_customDiffPair.m_ViaGap = aGap;
-    }
-
-    /**
-     * Function GetCustomDiffPairViaGap
-     * @return Current custom via gap width for differential pairs.
-     */
-    inline int GetCustomDiffPairViaGap()
-    {
-        return m_customDiffPair.m_ViaGap > 0 ? m_customDiffPair.m_ViaGap : m_customDiffPair.m_Gap;
-    }
-
-    /**
-     * Function UseCustomDiffPairDimensions
-     * Enables/disables custom differential pair dimensions.
-     * @param aEnabled decides if custom settings should be used for new differential pairs.
-     */
-    inline void UseCustomDiffPairDimensions( bool aEnabled )
-    {
-        m_useCustomDiffPair = aEnabled;
-    }
-
-    /**
-     * Function UseCustomDiffPairDimensions
-     * @return True if custom sizes of diff pairs are enabled, false otherwise.
-     */
-    inline bool UseCustomDiffPairDimensions() const
-    {
-        return m_useCustomDiffPair;
-    }
-
-    /**
-     * Function GetCurrentDiffPairWidth
-     * @return the current diff pair track width, according to the selected options
-     * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_DiffPairDimensionsList[0]
-     */
-    inline int GetCurrentDiffPairWidth() const
-    {
-        if( m_useCustomDiffPair )
-            return m_customDiffPair.m_Width;
-        else
-            return m_DiffPairDimensionsList[m_diffPairIndex].m_Width;
-    }
-
-    /**
-     * Function GetCurrentDiffPairGap
-     * @return the current diff pair gap, according to the selected options
-     * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_DiffPairDimensionsList[0]
-     */
-    inline int GetCurrentDiffPairGap() const
-    {
-        if( m_useCustomDiffPair )
-            return m_customDiffPair.m_Gap;
-        else
-            return m_DiffPairDimensionsList[m_diffPairIndex].m_Gap;
-    }
-
-    /**
-     * Function GetCurrentDiffPairViaGap
-     * @return the current diff pair via gap, according to the selected options
-     * ( using the default netclass value or a preset/custom value )
-     * the default netclass is always in m_DiffPairDimensionsList[0]
-     */
-    inline int GetCurrentDiffPairViaGap() const
-    {
-        if( m_useCustomDiffPair )
-            return m_customDiffPair.m_ViaGap;
-        else
-            return m_DiffPairDimensionsList[m_diffPairIndex].m_ViaGap;
-    }
-
-    /**
-     * Function SetMinHoleSeparation
-     * @param aValue The minimum distance between the edges of two holes or 0 to disable
-     * hole-to-hole separation checking.
-     */
-    void SetMinHoleSeparation( int aDistance );
-
-    /**
-     * Function SetCopperEdgeClearance
-     * @param aValue The minimum distance between copper items and board edges.
-     */
-    void SetCopperEdgeClearance( int aDistance );
-
-    /**
-     * Function SetSilkEdgeClearance
-     * @param aValue The minimum distance between silk items.  Note that compound graphics
-     * within a single footprint or on the board are not checked, but distances between text
-     * and between graphics from different footprints are.
-     */
-    void SetSilkClearance( int aDistance );
-
-    /**
-     * Function GetEnabledLayers
-     * returns a bit-mask of all the layers that are enabled
-     * @return int - the enabled layers in bit-mapped form.
-     */
-    inline LSET GetEnabledLayers() const
-    {
-        return m_enabledLayers;
-    }
-
-    /**
-     * Function SetEnabledLayers
-     * changes the bit-mask of enabled layers
-     * @param aMask = The new bit-mask of enabled layers
-     */
-    void SetEnabledLayers( LSET aMask );
-
-    /**
-     * Function IsLayerEnabled
-     * tests whether a given layer is enabled
-     * @param aLayerId = The layer to be tested
-     * @return bool - true if the layer is enabled
-     */
-    inline bool IsLayerEnabled( PCB_LAYER_ID aLayerId ) const
-    {
-        if( aLayerId >= 0 && aLayerId < PCB_LAYER_ID_COUNT )
-            return m_enabledLayers[aLayerId];
-
-        return false;
-    }
-
-    /**
-     * Function GetCopperLayerCount
-     * @return int - the number of neabled copper layers
-     */
-    inline int GetCopperLayerCount() const
-    {
-        return m_copperLayerCount;
-    }
-
-    /**
-     * Function SetCopperLayerCount
-     * do what its name says...
-     * @param aNewLayerCount = The new number of enabled copper layers
-     */
-    void SetCopperLayerCount( int aNewLayerCount );
-
-    inline int GetBoardThickness() const { return m_boardThickness; }
-    inline void SetBoardThickness( int aThickness ) { m_boardThickness = aThickness; }
-
-    /*
-     * Function GetDRCEpsilon
-     * an epsilon which accounts for rounding errors, etc.  While currently an advanced cfg,
-     * going through this API allows us to easily change it to board-specific if so desired.
-     */
-    int GetDRCEpsilon() const;
-
-    /**
-     * Pad & via drills are finish size.  Adding the hole plating thickness gives you the
-     * acutal hole size.
-     */
-    int GetHolePlatingThickness() const;
-
-    /**
-     * Function GetLineThickness
-     * Returns the default graphic segment thickness from the layer class for the given layer.
-     */
-    int GetLineThickness( PCB_LAYER_ID aLayer ) const;
-
-    /**
-     * Function GetTextSize
-     * Returns the default text size from the layer class for the given layer.
-     */
-    wxSize GetTextSize( PCB_LAYER_ID aLayer ) const;
-
-    /**
-     * Function GetTextThickness
-     * Returns the default text thickness from the layer class for the given layer.
-     */
-    int GetTextThickness( PCB_LAYER_ID aLayer ) const;
-
-    bool GetTextItalic( PCB_LAYER_ID aLayer ) const;
-    bool GetTextUpright( PCB_LAYER_ID aLayer ) const;
-
-    int GetLayerClass( PCB_LAYER_ID aLayer ) const;
 };
 
 #endif  // BOARD_DESIGN_SETTINGS_H_

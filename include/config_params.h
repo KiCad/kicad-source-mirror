@@ -37,18 +37,15 @@
 using KIGFX::COLOR4D;
 
 
-/*
- * NOTE: Everything in this file is deprecated, it only remains because advanced_config depends on
- * it for the moment.
- */
-
 /**
- * Function ConfigBaseWriteDouble
- * This is a helper function to write doubles in config
- * We cannot use wxConfigBase->Write for a double, because
- * this function uses a format with very few digits in mantissa,
- * and truncation issues are frequent.
- * We use here a better floating format.
+ * A helper function to write doubles in configuration file.
+ *
+ * We cannot use wxConfigBase->Write for a double, because this function uses a format with
+ * very few digits in mantissa and truncation issues are frequent.  We use here a better
+ * floating format.
+ *
+ * @note Everything in this file is deprecated, it only remains because advanced_config depends on
+ * it for the moment.
  */
 void ConfigBaseWriteDouble( wxConfigBase* aConfig, const wxString& aKey, double aValue );
 
@@ -74,17 +71,34 @@ enum paramcfg_id {
 
 
 /**
- * PARAM_CFG
- * is a base class which establishes the interface functions ReadParam and SaveParam,
+ * A base class which establishes the interface functions ReadParam and SaveParam,
  * which are implemented by a number of derived classes, and these function's
  * doxygen comments are inherited also.
- * <p>
+ *
  * See kicad.odt or kicad.pdf, chapter 2 :
  * "Installation and configuration/Initialization of the default config".
  */
 class PARAM_CFG
 {
 public:
+    PARAM_CFG( const wxString& ident, const paramcfg_id type, const wxChar* group = nullptr,
+               const wxString& legacy_ident = wxEmptyString );
+    virtual ~PARAM_CFG() {}
+
+    /**
+     * Read the value of the parameter stored in \a aConfig.
+     *
+     * @param aConfig the wxConfigBase that holds the parameter.
+     */
+    virtual void ReadParam( wxConfigBase* aConfig ) const {};
+
+    /**
+     * Save the value of the parameter stored in \a aConfig.
+     *
+     * @param aConfig the wxConfigBase that can store the parameter.
+     */
+    virtual void SaveParam( wxConfigBase* aConfig ) const {};
+
     wxString    m_Ident;  ///<  Keyword in config data
     paramcfg_id m_Type;   ///<  Type of parameter
     wxString    m_Group;  ///<  Group name (this is like a path in the config data)
@@ -93,39 +107,14 @@ public:
     // If the m_Ident keyword isn't found, fall back and read values from m_Ident_legacy.
     // Note that values are always written to the current, non-legacy keyword.
     wxString    m_Ident_legacy;
-
-public:
-    PARAM_CFG( const wxString& ident, const paramcfg_id type, const wxChar* group = NULL,
-               const wxString& legacy_ident = wxEmptyString );
-    virtual ~PARAM_CFG() {}
-
-    /**
-     * Function ReadParam
-     * reads the value of the parameter stored in aConfig
-     * @param aConfig = the wxConfigBase that holds the parameter
-     */
-    virtual void ReadParam( wxConfigBase* aConfig ) const {};
-
-    /**
-     * Function SaveParam
-     * saves the value of the parameter stored in aConfig
-     * @param aConfig = the wxConfigBase that can store the parameter
-     */
-    virtual void SaveParam( wxConfigBase* aConfig ) const {};
 };
 
 
 /**
- * Configuration parameter - Integer Class
- *
+ * Configuration object for integers.
  */
-class PARAM_CFG_INT      : public PARAM_CFG
+class PARAM_CFG_INT : public PARAM_CFG
 {
-public:
-    int* m_Pt_param;    ///<  Pointer to the parameter value
-    int  m_Min, m_Max;  ///<  Minimum and maximum values of the param type
-    int  m_Default;     ///<  The default value of the parameter
-
 public:
     PARAM_CFG_INT( const wxString& ident, int* ptparam, int default_val = 0,
                    int min = std::numeric_limits<int>::min(),
@@ -140,147 +129,142 @@ public:
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
+    int* m_Pt_param;    ///<  Pointer to the parameter value
+    int  m_Min, m_Max;  ///<  Minimum and maximum values of the param type
+    int  m_Default;     ///<  The default value of the parameter
 };
 
 /**
- * Configuration parameter - Integer Class
- * with unit conversion.
- * Mainly used to store an integer value in millimeters (or inches)
- * and retrieve it in internal units
- * the stored value is a floating number
+ * Configuration for integers with unit conversion.
+ *
+ * Mainly used to store an integer value in millimeters (or inches) and retrieve it in
+ * internal units.  The stored value is a floating number.
  */
 class PARAM_CFG_INT_WITH_SCALE : public PARAM_CFG_INT
 {
 public:
-    double   m_BIU_to_cfgunit;   ///<  the factor to convert the saved value in internal value
-
-public:
     PARAM_CFG_INT_WITH_SCALE( const wxString& ident, int* ptparam, int default_val = 0,
                               int min = std::numeric_limits<int>::min(),
                               int max = std::numeric_limits<int>::max(),
-                              const wxChar* group = NULL, double aBiu2cfgunit = 1.0,
+                              const wxChar* group = nullptr, double aBiu2cfgunit = 1.0,
                               const wxString& legacy_ident = wxEmptyString );
     PARAM_CFG_INT_WITH_SCALE( bool insetup, const wxString& ident, int* ptparam,
                               int default_val = 0,
                               int min = std::numeric_limits<int>::min(),
                               int max = std::numeric_limits<int>::max(),
-                              const wxChar* group = NULL, double aBiu2cfgunit = 1.0,
+                              const wxChar* group = nullptr, double aBiu2cfgunit = 1.0,
                               const wxString& legacy_ident = wxEmptyString );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
+public:
+    double   m_BIU_to_cfgunit;   ///<  the factor to convert the saved value in internal value
 };
 
 
 /**
- * Configuration parameter - Double Precision Class
- *
+ * Configuration object for double precision floating point numbers.
  */
-class PARAM_CFG_DOUBLE   : public PARAM_CFG
+class PARAM_CFG_DOUBLE : public PARAM_CFG
 {
 public:
+    PARAM_CFG_DOUBLE( const wxString& ident, double* ptparam,
+                      double default_val = 0.0, double min = 0.0, double max = 10000.0,
+                      const wxChar* group = nullptr );
+    PARAM_CFG_DOUBLE( bool Insetup, const wxString& ident, double* ptparam,
+                      double default_val = 0.0, double min = 0.0, double max = 10000.0,
+                      const wxChar* group = nullptr );
+
+    virtual void ReadParam( wxConfigBase* aConfig ) const override;
+    virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
     double* m_Pt_param;     ///<  Pointer to the parameter value
     double  m_Default;      ///<  The default value of the parameter
     double  m_Min, m_Max;   ///<  Minimum and maximum values of the param type
-
-public:
-    PARAM_CFG_DOUBLE( const wxString& ident, double* ptparam,
-                          double default_val = 0.0, double min = 0.0, double max = 10000.0,
-                          const wxChar* group = NULL );
-    PARAM_CFG_DOUBLE( bool Insetup, const wxString& ident, double* ptparam,
-                      double default_val = 0.0, double min = 0.0, double max = 10000.0,
-                      const wxChar* group = NULL );
-
-    virtual void ReadParam( wxConfigBase* aConfig ) const override;
-    virtual void SaveParam( wxConfigBase* aConfig ) const override;
 };
 
 
 /**
- * Configuration parameter - Boolean Class
- *
+ * Configuration object for booleans.
  */
-class PARAM_CFG_BOOL     : public PARAM_CFG
+class PARAM_CFG_BOOL : public PARAM_CFG
 {
 public:
-    bool* m_Pt_param;       ///<  Pointer to the parameter value
-    int   m_Default;        ///<  The default value of the parameter
-
-public:
     PARAM_CFG_BOOL( const wxString& ident, bool* ptparam,
-                    int default_val = false, const wxChar* group = NULL,
+                    int default_val = false, const wxChar* group = nullptr,
                     const wxString& legacy_ident = wxEmptyString );
     PARAM_CFG_BOOL( bool Insetup, const wxString& ident, bool* ptparam,
-                    int default_val = false, const wxChar* group = NULL,
+                    int default_val = false, const wxChar* group = nullptr,
                     const wxString& legacy_ident = wxEmptyString );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
+    bool* m_Pt_param;       ///<  Pointer to the parameter value
+    int   m_Default;        ///<  The default value of the parameter
 };
 
 
 /**
- * Configuration parameter - wxString Class
- *
+ * Configuration object for wxString objects.
  */
 class PARAM_CFG_WXSTRING : public PARAM_CFG
 {
 public:
-    wxString* m_Pt_param;       ///<  Pointer to the parameter value
-    wxString  m_default;        ///<  The default value of the parameter
-
-public:
-    PARAM_CFG_WXSTRING( const wxString& ident, wxString* ptparam, const wxChar* group = NULL );
+    PARAM_CFG_WXSTRING( const wxString& ident, wxString* ptparam, const wxChar* group = nullptr );
 
     PARAM_CFG_WXSTRING( bool            Insetup,
                         const wxString& ident,
                         wxString*       ptparam,
                         const wxString& default_val = wxEmptyString,
-                        const wxChar* group = NULL );
+                        const wxChar* group = nullptr );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
+    wxString* m_Pt_param;       ///<  Pointer to the parameter value
+    wxString  m_default;        ///<  The default value of the parameter
 };
 
 
 /**
- * Configuration parameter - std::set<wxString>
+ * Configuration object for a set of wxString objects.
  *
  */
 class PARAM_CFG_WXSTRING_SET : public PARAM_CFG
 {
 public:
-    std::set<wxString>* m_Pt_param;       ///<  Pointer to the parameter value
-
-public:
-    PARAM_CFG_WXSTRING_SET( const wxString& ident, std::set<wxString>* ptparam, const wxChar* group = NULL );
+    PARAM_CFG_WXSTRING_SET( const wxString& ident, std::set<wxString>* ptparam,
+                            const wxChar* group = nullptr );
 
     PARAM_CFG_WXSTRING_SET( bool                Insetup,
                             const wxString&     ident,
                             std::set<wxString>* ptparam,
-                            const wxChar* group = NULL );
+                            const wxChar* group = nullptr );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
+    std::set<wxString>* m_Pt_param;       ///<  Pointer to the parameter value
 };
 
 
 /**
- * Configuration parameter - PARAM_CFG_FILENAME Class
- * Same as PARAM_CFG_WXSTRING, but stores "\" as "/".
- * and replace "/" by "\" under Windows.
- * Used to store paths and filenames in config files
+ * Configuration object for a file name object.
+ *
+ * Same as #PARAM_CFG_WXSTRING but stores "\" as "/" and replace "/" by "\" under Windows.
  */
-class PARAM_CFG_FILENAME     : public PARAM_CFG
+class PARAM_CFG_FILENAME : public PARAM_CFG
 {
 public:
-    wxString* m_Pt_param;    ///<  Pointer to the parameter value
-
-public:
     PARAM_CFG_FILENAME( const wxString& ident, wxString* ptparam,
-            const wxChar* group = NULL );
+            const wxChar* group = nullptr );
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
+
+    wxString* m_Pt_param;    ///<  Pointer to the parameter value
 };
 
 
@@ -290,9 +274,8 @@ public:
     wxArrayString* m_Pt_param;     ///<  Pointer to the parameter value
 
 public:
-    PARAM_CFG_LIBNAME_LIST( const wxChar*  ident,
-                                wxArrayString* ptparam,
-                                const wxChar*  group = NULL );
+    PARAM_CFG_LIBNAME_LIST( const wxChar* ident, wxArrayString* ptparam,
+                            const wxChar* group = nullptr );
 
     virtual void ReadParam( wxConfigBase* aConfig ) const override;
     virtual void SaveParam( wxConfigBase* aConfig ) const override;
@@ -300,22 +283,21 @@ public:
 
 
 /**
- * Function wxConfigSaveSetups
- * writes @a aList of PARAM_CFG to save configuration values to @a aCfg.
+ * Writes @a aList of #PARAM_CFG objects to @a aCfg.
+ *
  * Only elements with m_Setup set true will be saved, hence the function name.
  *
- * @param aCfg where to save
- * @param aList holds some configuration parameters, not all of which will
- *  necessarily be saved.
+ * @param aCfg where to save.
+ * @param aList holds some configuration parameters, not all of which will necessarily be saved.
  */
 void wxConfigSaveSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
 
 /**
- * Function wxConfigSaveParams
- * writes @a aList of PARAM_CFG to save configuration values to @a aCfg.
+ * Write @a aList of #PARAM_CFG objects @a aCfg.
+ *
  * Only elements with m_Setup set false will be saved, hence the function name.
  *
- * @param aCfg where to save
+ * @param aCfg where to save.
  * @param aList holds some configuration parameters, not all of which will necessarily be saved.
  * @param aGroup indicates in which group the value should be saved, unless the PARAM_CFG provides
  *               its own group, in which case it will take precedence.  aGroup may be empty.
@@ -324,8 +306,8 @@ void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
                          const wxString& aGroup );
 
 /**
- * Function wxConfigLoadSetups
- * uses @a aList of PARAM_CFG to load configuration values from @a aCfg.
+ * Use @a aList of #PARAM_CFG object to load configuration values from @a aCfg.
+ *
  * Only elements whose m_Setup field is true will be loaded.
  *
  * @param aCfg where to load from.
@@ -334,8 +316,7 @@ void wxConfigSaveParams( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aLis
 void wxConfigLoadSetups( wxConfigBase* aCfg, const std::vector<PARAM_CFG*>& aList );
 
 /**
- * Function wxConfigLoadParams
- * uses @a aList of PARAM_CFG to load configuration values from @a aCfg.
+ * Use @a aList of #PARAM_CFG objects to load configuration values from @a aCfg.
  * Only elements whose m_Setup field is false will be loaded.
  *
  * @param aCfg where to load from.

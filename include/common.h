@@ -56,16 +56,14 @@ class REPORTER;
 /**
  * Run a command in a child process.
  *
- * @param aCommandLine The process and any arguments to it all in a single
- *                     string.
+ * @param aCommandLine The process and any arguments to it all in a single string.
  * @param aFlags The same args as allowed for wxExecute()
  * @param callback wxProcess implementing OnTerminate to be run when the
                    child process finishes
- * @return int - pid of process, 0 in case of error (like return values of
- *               wxExecute())
+ * @return pid of process, 0 in case of error (like return values of wxExecute()).
  */
 int ProcessExecute( const wxString& aCommandLine, int aFlags = wxEXEC_ASYNC,
-                    wxProcess *callback = NULL );
+                    wxProcess *callback = nullptr );
 
 /**
  * Return the help file's full path.
@@ -99,13 +97,13 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSearchStack, const wxStrin
  */
 bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
                                 const wxString& aBaseFilename,
-                                REPORTER*       aReporter = NULL );
+                                REPORTER*       aReporter = nullptr );
 
 /**
  * Replace any environment variable & text variable references with their values.
  *
- * @param aString = a string containing (perhaps) references to env var
- * @return a string where env var are replaced by their value
+ * @param aString a string containing (perhaps) references to env var
+ * @return the expanded environment variable.
  */
 const wxString ExpandEnvVarSubstitutions( const wxString& aString, PROJECT* aProject );
 
@@ -128,19 +126,18 @@ const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 #ifdef __WXMAC__
 /**
  * OSX specific function GetOSXKicadUserDataDir
- * @return A wxString pointing to the user data directory for Kicad
+ *
+ * @return The macOS specific user data directory for KiCad.
  */
 wxString GetOSXKicadUserDataDir();
 
 /**
- * OSX specific function GetOSXMachineDataDir
- * @return A wxString pointing to the machine data directory for Kicad
+ * @return The macOS specific machine data directory for KiCad
  */
 wxString GetOSXKicadMachineDataDir();
 
 /**
- * OSX specific function GetOSXKicadDataDir
- * @return A wxString pointing to the bundle data directory for Kicad
+ * @return The macOS specific bundle data directory for KiCad
  */
 wxString GetOSXKicadDataDir();
 #endif
@@ -180,16 +177,14 @@ namespace std
 /**
  * Helper function to print the given wxSize to a stream.
  *
- * Used for debugging functions like EDA_ITEM::Show and also in unit
- * testing fixtures.
+ * Used for debugging functions like EDA_ITEM::Show and also in unit testing fixtures.
  */
 std::ostream& operator<<( std::ostream& out, const wxSize& size );
 
 /**
  * Helper function to print the given wxPoint to a stream.
  *
- * Used for debugging functions like EDA_ITEM::Show and also in unit
- * testing fixtures.
+ * Used for debugging functions like EDA_ITEM::Show and also in unit testing fixtures.
  */
 std::ostream& operator<<( std::ostream& out, const wxPoint& pt );
 

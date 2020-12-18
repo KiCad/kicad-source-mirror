@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009-2014 Jerry Jacobs
- * Copyright (C) 1992-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,24 +33,23 @@
 
 
 /**
- * Function KeywordMatch
- * searches \a aKeyList for any words found in \a aDatabase.
+ * Search \a aKeyList for any words found in \a aDatabase.
  *
  * @return true if keyword is found.
  */
 bool KeywordMatch( const wxString& aKeys, const wxString& aDatabase );
 
 /**
- * Function GetAssociatedDocument
- * open a document (file) with the suitable browser.  Environmental variables are
- * substituted before the document name is resolved for either browser or file
- * @param aParent = main frame
- * @param aDocName = filename of file to open (Full filename or short filename)
- * if \a aDocName begins with http: or ftp: or www. the default internet browser is launched
+ * Open a document (file) with the suitable browser.
+ *
+ * Environmental variables are substituted before the document name is resolved for
+ * either browser or file.  If \a aDocName begins with http: or ftp: or www. the
+ * default internet browser is launched.
+ *
+ * @param aParent main frame.
+ * @param aDocName filename of file to open (Full filename or short filename).
 */
-bool GetAssociatedDocument( wxWindow* aParent,
-                            const wxString& aDocName,
-                            PROJECT* aProject );
+bool GetAssociatedDocument( wxWindow* aParent, const wxString& aDocName, PROJECT* aProject );
 
 
 #endif /* __INCLUDE__EDA_DOC_H__ */

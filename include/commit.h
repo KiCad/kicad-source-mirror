@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2016-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -60,10 +61,8 @@ CHANGE_TYPE operator&( CHANGE_TYPE aTypeA, T aTypeB )
 
 
 /**
- * COMMIT
- *
- * Represents a set of changes (additions, deletions or modifications)
- * of a data model (e.g. the BOARD) class.
+ * Represent a set of changes (additions, deletions or modifications) of a data model
+ * (e.g. the BOARD) class.
  *
  * The class can be used to propagate changes to subscribed objects (e.g. views, ratsnest),
  * and automatically create undo/redo points.
@@ -113,6 +112,7 @@ public:
     }
 
     template<class Range>
+
     COMMIT& StageItems( const Range& aRange, CHANGE_TYPE aChangeType )
     {
         for( const auto& item : aRange )
@@ -121,19 +121,19 @@ public:
         return *this;
     }
 
-
     ///> Adds a change of the item aItem of type aChangeType to the change list.
     virtual COMMIT& Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType );
 
     virtual COMMIT& Stage( std::vector<EDA_ITEM*>& container, CHANGE_TYPE aChangeType );
 
-    virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems, UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
+    virtual COMMIT& Stage( const PICKED_ITEMS_LIST& aItems,
+                           UNDO_REDO aModFlag = UNDO_REDO::UNSPECIFIED );
 
     ///> Executes the changes.
     virtual void Push( const wxString& aMessage = wxT( "A commit" ),
                        bool aCreateUndoEntry = true, bool aSetDirtyBit = true ) = 0;
 
-    ///> Revertes the commit by restoring the modifed items state.
+    ///> Revert the commit by restoring the modified items state.
     virtual void Revert() = 0;
 
     bool Empty() const
@@ -161,10 +161,11 @@ protected:
 
     COMMIT& createModified( EDA_ITEM* aItem, EDA_ITEM* aCopy, int aExtraFlags = 0 );
 
-    virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = NULL );
+    virtual void makeEntry( EDA_ITEM* aItem, CHANGE_TYPE aType, EDA_ITEM* aCopy = nullptr );
 
     /**
-     * Searches for an entry describing change for a particular item
+     * Search for an entry describing change for a particular item.
+     *
      * @return null if there is no related entry.
      */
     COMMIT_LINE* findEntry( EDA_ITEM* aItem );

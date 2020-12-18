@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 #ifndef BIN_MOD_H_
 #define BIN_MOD_H_
 
+/// @todo Should this be a check for the wxWidgets version rather that `#if 0`.
 #if 0
  #include <wx/filehistory.h>    // wx 3.0:
 #else
@@ -38,12 +39,11 @@
 class APP_SETTINGS_BASE;
 
 /**
- * Struct BIN_MOD
- * pertains to a single program module, either an EXE or a DSO/DLL ("bin_mod").
+ * Pertains to a single program module, either an EXE or a DSO/DLL ("bin_mod").
+ *
  * It manages miscellaneous configuration file information pertinent to one bin_mod.
- * Because it serves in both DSO/DLLs and in EXEs, its name is neutral.
- * <p>
- * Accessors are in containing (wrapper) classes.
+ * Because it serves in both DSO/DLLs and in EXEs, its name is neutral.  Accessors are
+ * in containing (wrapper) classes.
  */
 struct BIN_MOD
 {
@@ -54,8 +54,9 @@ struct BIN_MOD
     void End();
 
     /**
-     * Takes ownership of a new application settings object
-     * @param aPtr is the settings object for this module
+     * Takes ownership of a new application settings object.
+     *
+     * @param aPtr is the settings object for this module.
      */
     void InitSettings( APP_SETTINGS_BASE* aPtr ) { m_config = aPtr; }
 
@@ -65,8 +66,6 @@ struct BIN_MOD
     wxString            m_help_file;
 
     SEARCH_STACK        m_search;
-
-
 };
 
 #endif // BIN_MOD_H_

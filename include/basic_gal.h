@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,8 +35,8 @@ class PLOTTER;
 
 
 /*
- * BASIC_GAL is a minimal GAL implementation to draw, plot and convert
- * stroke texts to a set of segments for DRC tests, and to calculate text sizes.
+ * A minimal GAL implementation to draw, plot and convert stroke texts to a set of segments
+ * for DRC tests, and to calculate text sizes.
  *
  * Currently it allows one to use GAL and STROKE_FONT methods in legacy draw mode
  * (using wxDC functions) in plot functions only for texts.
@@ -56,24 +56,17 @@ struct TRANSFORM_PRM    // A helper class to transform coordinates in BASIC_GAL 
     double   m_rotAngle;
 };
 
+
 class BASIC_GAL: public KIGFX::GAL
 {
-public:
-    wxDC* m_DC;
-    COLOR4D m_Color;
-
-private:
-    TRANSFORM_PRM m_transform;
-    std::stack <TRANSFORM_PRM>  m_transformHistory;
-
 public:
     BASIC_GAL( KIGFX::GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
         GAL( aDisplayOptions )
     {
-        m_DC = NULL;
+        m_DC = nullptr;
         m_Color = RED;
-        m_plotter = NULL;
-        m_callback = NULL;
+        m_plotter = nullptr;
+        m_callback = nullptr;
         m_callbackData = nullptr;
         m_isClipped = false;
     }
@@ -83,7 +76,8 @@ public:
         m_plotter = aPlotter;
     }
 
-    void SetCallback( void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ), void* aData  )
+    void SetCallback( void (* aCallback)( int x0, int y0, int xf, int yf, void* aData ),
+                      void* aData  )
     {
         m_callback = aCallback;
         m_callbackData = aData;
@@ -93,13 +87,13 @@ public:
     /// If NULL, no clip will be made
     void SetClipBox( EDA_RECT* aClipBox )
     {
-        m_isClipped = aClipBox != NULL;
+        m_isClipped = aClipBox != nullptr;
 
         if( aClipBox )
             m_clipBox = *aClipBox;
     }
 
-    /// @brief Save the context.
+    /// Save the context.
     virtual void Save() override
     {
         m_transformHistory.push( m_transform );
@@ -112,21 +106,24 @@ public:
     }
 
     /**
-     * @brief Draw a polyline
+     * Draw a polyline
+     *
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
     virtual void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override;
 
     virtual void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override;
 
-    /** Start and end points are defined as 2D-Vectors.
+    /**
+     * Start and end points are defined as 2D-Vectors.
+     *
      * @param aStartPoint   is the start point of the line.
      * @param aEndPoint     is the end point of the line.
      */
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /**
-     * @brief Translate the context.
+     * Translate the context.
      *
      * @param aTranslation is the translation vector.
      */
@@ -136,7 +133,7 @@ public:
     }
 
     /**
-     * @brief Rotate the context.
+     * Rotate the context.
      *
      * @param aAngle is the rotation angle in radians.
      */
@@ -152,6 +149,14 @@ private:
     // Apply the roation/translation transform to aPoint
     const VECTOR2D transform( const VECTOR2D& aPoint ) const;
 
+public:
+    wxDC* m_DC;
+    COLOR4D m_Color;
+
+private:
+    TRANSFORM_PRM m_transform;
+    std::stack <TRANSFORM_PRM>  m_transformHistory;
+
     // A clip box, to clip drawings in a wxDC (mandatory to avoid draw issues)
     EDA_RECT  m_clipBox;        // The clip box
     bool      m_isClipped;      // Allows/disallows clipping
@@ -162,8 +167,7 @@ private:
     void (* m_callback)( int x0, int y0, int xf, int yf, void* aData );
     void* m_callbackData;       // a optional parameter for m_callback
 
-    // When calling the draw functions for plot, the plotter acts as a wxDC
-    // to plot basic items
+    // When calling the draw functions for plot, the plotter acts as a wxDC to plot basic items.
     PLOTTER* m_plotter;
 };
 

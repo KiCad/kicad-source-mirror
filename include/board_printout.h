@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2018 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -62,16 +62,16 @@ struct BOARD_PRINTOUT_SETTINGS : public PRINTOUT_SETTINGS
     void Save( APP_SETTINGS_BASE* aConfig ) override;
 };
 
+
 /**
- * BOARD_PRINTOUT
- * is a class derived from wxPrintout to handle the necessary information to control a printer
- * when printing a board
+ * An object derived from wxPrintout to handle the necessary information to control a printer
+ * when printing a board.
  */
 class BOARD_PRINTOUT : public wxPrintout
 {
 public:
     BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams, const KIGFX::VIEW* aView,
-            const wxString& aTitle );
+                    const wxString& aTitle );
 
     virtual ~BOARD_PRINTOUT() {}
 
@@ -84,14 +84,16 @@ public:
 
     /**
      * Print a page (or a set of pages).
-     * Note: this function prepare print parameters for the function
-     * which actually print the draw layers.
-     * @param aLayerName = a text which can be printed as layer name
-     * @param aPageNum = the number of the current page (only used to print this value)
-     * @param aPageCount = the number of pages to ptint (only used to print this value)
+     *
+     * @note This function prepares the print parameters for the function which actually prints
+     *       the draw layers.
+     *
+     * @param aLayerName a text which can be printed as layer name.
+     * @param aPageNum the number of the current page (only used to print this value).
+     * @param aPageCount the number of pages to ptint (only used to print this value).
      */
     virtual void DrawPage( const wxString& aLayerName = wxEmptyString,
-            int aPageNum = 1, int aPageCount = 1 );
+                           int aPageNum = 1, int aPageCount = 1 );
 
 protected:
     ///> Convert mils to internal units

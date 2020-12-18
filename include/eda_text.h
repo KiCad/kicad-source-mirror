@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jpe.charras at wanadoo.fr
- * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,10 +111,10 @@ struct TEXT_EFFECTS
 
 
 /**
- * A mix-in class (via multiple inheritance) that handles texts such as
- * labels, parts, components, or footprints.  Because it's a mix-in class, care
- * is used to provide function names (accessors) that to not collide with function
- * names likely to be seen in the combined derived classes.
+ * A mix-in class (via multiple inheritance) that handles texts such as labels, parts,
+ * components, or footprints.  Because it's a mix-in class, care is used to provide
+ * function names (accessors) that to not collide with function names likely to be seen
+ * in the combined derived classes.
  */
 class EDA_TEXT
 {
@@ -134,7 +134,8 @@ public:
 
     /**
      * Return the string actually shown after processing of the base text.
-     * @aParam aDepth is used to prevent infinite recusions and loops when expanding
+     *
+     * @param aDepth is used to prevent infinite recursions and loops when expanding
      * text variables.
      */
     virtual wxString GetShownText( int aDepth = 0 ) const { return m_shown_text; }
@@ -142,6 +143,7 @@ public:
     /**
      * A version of GetShownText() which also indicates whether or not the text needs
      * to be processed for text variables.
+     *
      * @param processTextVars [out]
      */
     wxString GetShownText( bool* processTextVars ) const
@@ -165,8 +167,7 @@ public:
     int GetTextThickness() const { return m_e.penwidth; };
 
     /**
-     * The EffectiveTextPenWidth uses the text thickness if > 1 or
-     * aDefaultWidth.
+     * The EffectiveTextPenWidth uses the text thickness if > 1 or aDefaultWidth.
      */
     int GetEffectiveTextPenWidth( int aDefaultWidth = 0 ) const;
 
@@ -195,9 +196,8 @@ public:
     bool IsMirrored() const                     { return m_e.Bit( TE_MIRROR ); }
 
     /**
-     * @param aAllow true if ok to use multiline option, false
-     *  if ok to use only single line text.  (Single line is faster in
-     *  calculations than multiline.)
+     * @param aAllow true if ok to use multiline option, false if ok to use only single line
+     *               text.  (Single line is faster in calculations than multiline.)
      */
     void SetMultilineAllowed( bool aAllow )     { m_e.Bit( TE_MULTILINE, aAllow ); }
     bool IsMultilineAllowed() const             { return m_e.Bit( TE_MULTILINE ); }
@@ -211,7 +211,7 @@ public:
     /**
      * Set the text effects from another instance.
      *
-     * TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
+     * #TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
      * text string itself.
      */
     void SetEffects( const EDA_TEXT& aSrc );
@@ -219,7 +219,7 @@ public:
     /**
      * Swap the text effects of the two involved instances.
      *
-     * TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
+     * #TEXT_EFFECTS is not exposed in the public API, but includes everything except the actual
      * text string itself.
      */
     void SwapEffects( EDA_TEXT& aTradingPartner );
@@ -267,10 +267,10 @@ public:
     /**
      * Print this text object to the device context \a aDC.
      *
-     * @param aDC = the current Device Context
-     * @param aOffset = draw offset (usually (0,0))
-     * @param aColor = text color
-     * @param aDisplay_mode = FILLED or SKETCH
+     * @param aDC the current Device Context.
+     * @param aOffset draw offset (usually (0,0)).
+     * @param aColor text color.
+     * @param aDisplay_mode #FILLED or #SKETCH.
      */
     void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
                 OUTLINE_MODE aDisplay_mode = FILLED );
@@ -290,9 +290,9 @@ public:
      * Used in filling zones calculations
      * Circles and arcs are approximated by segments
      *
-     * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the text bounding box
-     * to the real clearance value (usually near from 1.0)
+     * @param aCornerBuffer a buffer to store the polygon.
+     * @param aClearanceValue the clearance around the text bounding box
+     * to the real clearance value (usually near from 1.0).
      */
     void TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
                                                      int aClearanceValue ) const;
@@ -302,33 +302,34 @@ public:
     /**
      * Test if \a aPoint is within the bounds of this object.
      *
-     * @param aPoint- A wxPoint to test
-     * @param aAccuracy - Amount to inflate the bounding box.
-     * @return bool - true if a hit, else false
+     * @param aPoint A wxPoint to test.
+     * @param aAccuracy Amount to inflate the bounding box.
+     * @return true if a hit, else false.
      */
     virtual bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const;
 
     /**
      * Test if object bounding box is contained within or intersects \a aRect.
      *
-     * @param aRect - Rect to test against.
-     * @param aContains - Test for containment instead of intersection if true.
-     * @param aAccuracy - Amount to inflate the bounding box.
-     * @return bool - true if a hit, else false
+     * @param aRect Rect to test against.
+     * @param aContains Test for containment instead of intersection if true.
+     * @param aAccuracy Amount to inflate the bounding box.
+     * @return true if a hit, else false.
      */
     virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const;
 
     /**
-     * @return the text length in internal units
-     * @param aLine : the line of text to consider.
-     * For single line text, this parameter is always m_Text
-     * @param aThickness : the stroke width of the text
+     * @return the text length in internal units.
+     * @param aLine the line of text to consider.  For single line text, this parameter
+     *              is always m_Text.
+     * @param aThickness the stroke width of the text.
      */
     int LenSize( const wxString& aLine, int aThickness ) const;
 
     /**
      * Useful in multiline texts to calculate the full text or a line area (for zones filling,
      * locate functions....)
+     *
      * @param aLine The line of text to consider.  Pass -1 for all lines.
      * @param aInvertY Invert the Y axis when calculating bounding box.
      * @return the rect containing the line of text (i.e. the position and the size of one line)
@@ -347,20 +348,19 @@ public:
     int GetInterline() const;
 
     /**
-     * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic)
+     * @return a wxString with the style name( Normal, Italic, Bold, Bold+Italic).
      */
     wxString GetTextStyleName() const;
 
     /**
-     * Populate \a aPositions with the position of each line of
-     * a multiline text, according to the vertical justification and the
-     * rotation of the whole text
+     * Populate \a aPositions with the position of each line of a multiline text, according
+     * to the vertical justification and the rotation of the whole text.
      *
-     * @param aPositions is the list to populate by the wxPoint positions
-     * @param aLineCount is the number of lines (not recalculated here
-     * for efficiency reasons
+     * @param aPositions is the list to populate by the wxPoint positions.
+     * @param aLineCount is the number of lines (not recalculated here for efficiency reasons.
      */
     void GetLinePositions( std::vector<wxPoint>& aPositions, int aLineCount ) const;
+
     /**
      * Output the object to \a aFormatter in s-expression form.
      *
@@ -374,6 +374,18 @@ public:
     virtual double GetDrawRotation() const;
 
 private:
+    /**
+     * Print each line of this EDA_TEXT..
+     *
+     * @param aOffset draw offset (usually (0,0)).
+     * @param aColor text color.
+     * @param aFillMode FILLED or SKETCH
+     * @param aText the single line of text to draw.
+     * @param aPos the position of this line ).
+     */
+    void printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
+                             OUTLINE_MODE aFillMode, const wxString& aText, const wxPoint& aPos );
+
     wxString      m_text;
     wxString      m_shown_text;           // Cache of unescaped text for efficient access
     bool          m_shown_text_has_text_var_refs;
@@ -387,20 +399,6 @@ private:
         TE_MULTILINE,
         TE_VISIBLE,
     };
-
-private:
-    /**
-     * Print each line of this EDA_TEXT.
-     *
-     * @param aOffset = draw offset (usually (0,0))
-     * @param aColor = text color
-     * @param aFillMode = FILLED or SKETCH
-     * @param aText = the single line of text to draw.
-     * @param aPos = the position of this line ).
-     */
-    void printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
-                             OUTLINE_MODE aFillMode, const wxString& aText,
-                             const wxPoint& aPos );
 };
 
 

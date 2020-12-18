@@ -82,23 +82,7 @@ class WX_EVENT_LOOP;
  */
 class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
 {
-    /**
-     * Properly handle the wxCloseEvent when in the quasimodal mode when not calling
-     * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
-     */
-    void OnCloseWindow( wxCloseEvent& aEvent );
-
-    /**
-     * Properly handle the default button events when in the quasimodal mode when not
-     * calling EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
-     */
-    void OnButton( wxCommandEvent& aEvent );
-
-protected:
-    virtual void OnCharHook( wxKeyEvent& aEvt );
-
 public:
-
     DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
@@ -146,7 +130,6 @@ public:
     }
 
 protected:
-
     /**
      * In all dialogs, we must call the same functions to fix minimal dlg size, the default
      * position and perhaps some others to fix a few issues depending on Windows Managers
@@ -187,6 +170,27 @@ protected:
      */
     void resetSize();
 
+    virtual void OnCharHook( wxKeyEvent& aEvt );
+
+private:
+    /**
+     * Properly handle the wxCloseEvent when in the quasimodal mode when not calling
+     * EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
+     */
+    void OnCloseWindow( wxCloseEvent& aEvent );
+
+    /**
+     * Properly handle the default button events when in the quasimodal mode when not
+     * calling EndQuasiModal which is possible with any dialog derived from #DIALOG_SHIM.
+     */
+    void OnButton( wxCommandEvent& aEvent );
+
+    void OnGridEditorShown( wxGridEvent& event );
+    void OnGridEditorHidden( wxGridEvent& event );
+
+    DECLARE_EVENT_TABLE();
+
+protected:
     EDA_UNITS              m_units;    // userUnits for display and parsing
     std::string            m_hash_key; // alternate for class_map when classname re-used
 
@@ -205,11 +209,6 @@ protected:
 
     std::vector<wxWindow*> m_tabOrder;
 
-private:
-    void OnGridEditorShown( wxGridEvent& event );
-    void OnGridEditorHidden( wxGridEvent& event );
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif  // DIALOG_SHIM_

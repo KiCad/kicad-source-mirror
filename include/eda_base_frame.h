@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,140 +96,15 @@ wxDECLARE_EVENT( UNITS_CHANGED, wxCommandEvent );
  * This class is not intended to be used directly.  It provides support for automatic calls
  * to SaveSettings() function.  SaveSettings() for a derived class can choose to do nothing,
  * or rely on basic SaveSettings() support in this base class to do most of the work by
- * calling it from the derived class's SaveSettings().
- * <p>
- * This class is not a KIWAY_PLAYER because KICAD_MANAGER_FRAME is derived from it
- * and that class is not a player.
- * </p>
+ * calling it from the derived class's SaveSettings().  This class is not a #KIWAY_PLAYER
+ * because #KICAD_MANAGER_FRAME is derived from it and that class is not a player.
  */
 class EDA_BASE_FRAME : public wxFrame, public TOOLS_HOLDER, public KIWAY_HOLDER
 {
-    /**
-     * (with its unexpected name so it does not collide with the real OnWindowClose()
-     * function provided in derived classes) is called just before a window
-     * closing, and is used to call a derivation specific
-     * SaveSettings().  SaveSettings() is called for all derived wxFrames in this
-     * base class overload.  (Calling it from a destructor is deprecated since the
-     * wxFrame's position is not available in the destructor on linux.)  In other words,
-     * you should not need to call SaveSettings() anywhere, except in this
-     * one function found only in this class.
-     */
-    void windowClosing( wxCloseEvent& event );
-
-    wxWindow* findQuasiModalDialog();
-
-    /**
-     * Return true if the frame is shown in our modal mode
-     * and false  if the frame is shown as an usual frame
-     * In modal mode, the caller that created the frame is responsible to Destroy()
-     * this frame after closing
-     */
-    virtual bool IsModal() const { return false; }
-
-protected:
-    FRAME_T         m_ident;                // Id Type (pcb, schematic, library..)
-    wxPoint         m_framePos;
-    wxSize          m_frameSize;
-    bool            m_maximizeByDefault;
-
-    // These contain the frame size and position for when it is not maximized
-    wxPoint         m_normalFramePos;
-    wxSize          m_normalFrameSize;
-
-    wxString        m_aboutTitle;           // Name of program displayed in About.
-
-    wxAuiManager    m_auimgr;
-    wxString        m_perspective;          // wxAuiManager perspective.
-
-    WX_INFOBAR*     m_infoBar;              // Infobar for the frame
-
-    wxString        m_configName;           // Prefix used to identify some params (frame size...)
-                                            // and to name some config files (legacy hotkey files)
-
-    SETTINGS_MANAGER* m_settingsManager;
-
-    FILE_HISTORY*   m_fileHistory;          // The frame's recently opened file list
-
-    bool            m_hasAutoSave;
-    bool            m_autoSaveState;
-    int             m_autoSaveInterval;     // The auto save interval time in seconds.
-    wxTimer*        m_autoSaveTimer;
-
-    int             m_undoRedoCountMax;     // undo/Redo command Max depth
-
-    UNDO_REDO_CONTAINER m_undoList;         // Objects list for the undo command (old data)
-    UNDO_REDO_CONTAINER m_redoList;         // Objects list for the redo command (old data)
-
-    wxString        m_mruPath;              // Most recently used path.
-
-    EDA_UNITS       m_userUnits;
-
-    // Map containing the UI update handlers registered with wx for each action
-    std::map<int, UIUpdateHandler> m_uiUpdateMap;
-    bool            m_isClosing;            // Set by the close window event handler after frames are asked if they can close
-                                            // Allows other functions when called to know our state is cleanup
-    bool            m_isNonUserClose;       // Set by NonUserClose() to indicate that the user did not request the current close
-
-    ///> Default style flags used for wxAUI toolbars
-    static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
-
-    /**
-     * @return the suffix to be appended to the file extension on backup
-     */
-    static wxString GetBackupSuffix()
-    {
-        return wxT( "-bak" );
-    }
-
-    /**
-     * @return the string to prepend to a file name for automatic save.
-     */
-    static wxString GetAutoSaveFilePrefix()
-    {
-        return wxT( "_autosave-" );
-    }
-
-    /**
-     * Handle the auto save timer event.
-     */
-    void onAutoSaveTimer( wxTimerEvent& aEvent );
-
-    /**
-     * Return the auto save status of the application.
-     *
-     * Override this function if your derived frame supports automatic file saving.
-     */
-    virtual bool isAutoSaveRequired() const { return false; }
-
-    /**
-     * This should be overridden by the derived class to handle the auto save feature.
-     *
-     * @return true if the auto save was successful otherwise false.
-     */
-    virtual bool doAutoSave();
-
-    virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
-    virtual void doCloseWindow() { }
-
-    /**
-     * Called when when the units setting has changed to allow for any derived classes
-     * to handle refreshing and controls that have units based measurements in them.  The
-     * default version only updates the status bar.  Don't forget to call the default
-     * in your derived class or the status bar will not get updated properly.
-     */
-    virtual void unitsChangeRefresh() { }
-
-    /**
-     * Setup the UI conditions for the various actions and their controls in this frame.
-     */
-    virtual void setupUIConditions();
-
-    DECLARE_EVENT_TABLE()
-
 public:
-    EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
-        const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-        long aStyle, const wxString& aFrameName, KIWAY* aKiway );
+    EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType, const wxString& aTitle,
+                    const wxPoint& aPos, const wxSize& aSize, long aStyle,
+                    const wxString& aFrameName, KIWAY* aKiway );
 
     ~EDA_BASE_FRAME();
 
@@ -272,7 +147,7 @@ public:
     virtual void OnCharHook( wxKeyEvent& event );
 
     /**
-     * The TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
+     * The #TOOL_DISPATCHER needs these to work around some issues in wxWidgets where the menu
      * events aren't captured by the menus themselves.
      */
     void OnMenuEvent( wxMenuEvent& event );
@@ -293,12 +168,12 @@ public:
     virtual void UnregisterUIUpdateHandler( int aID ) override;
 
     /**
-     * Handles events generated when the UI is trying to figure out the current state of the UI controls
-     * related to TOOL_ACTIONS (e.g. enabled, checked, etc.).
+     * Handle events generated when the UI is trying to figure out the current state of the
+     * UI controls related to #TOOL_ACTIONS (e.g. enabled, checked, etc.).
      *
      * @param aEvent is the wxUpdateUIEvent to be processed.
      * @param aFrame is the frame to get the selection from
-     * @param aCond are the UI SELECTION_CONDITIONS used
+     * @param aCond are the #UI SELECTION_CONDITIONS used
      */
     static void HandleUpdateUIEvent( wxUpdateUIEvent& aEvent, EDA_BASE_FRAME* aFrame,
                                      ACTION_CONDITIONS aCond );
@@ -317,7 +192,7 @@ public:
     bool IsType( FRAME_T aType ) const { return m_ident == aType; }
 
     /**
-     * Return a SEARCH_STACK pertaining to entire program.
+     * Return a #SEARCH_STACK pertaining to entire program.
      *
      * This is overloaded in #KICAD_MANAGER_FRAME
      */
@@ -331,104 +206,113 @@ public:
     void PrintMsg( const wxString& text );
 
     /**
-     * @return the WX_INFOBAR that can be displayed on the top of the canvas
+     * @return the #WX_INFOBAR that can be displayed on the top of the canvas.
      */
     WX_INFOBAR* GetInfoBar() { return m_infoBar; }
 
     /**
-     * Show the WX_INFOBAR displayed on the top of the canvas with a message
-     * and a Error icon on the left of the infobar. The infobar will be closed
-     * after a timeaout
+     * Show the #WX_INFOBAR displayed on the top of the canvas with a message
+     * and a error icon on the left of the infobar.
+     *
+     * The infobar will be closed after a timeout.
+     *
      * @param aErrorMsg is the message to display
-     * @param aShowCloseButton = true to show a close button on the right of the
-     * WX_INFOBAR
+     * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarError( const wxString& aErrorMsg, bool aShowCloseButton = false );
 
     /**
-     * Show the WX_INFOBAR displayed on the top of the canvas with a message
-     * and a Warning icon on the left of the infobar. The infobar will be closed
-     * after a timeaout
-     * @param aErrorMsg is the message to display
-     * @param aShowCloseButton = true to show a close button on the right of the
-     * WX_INFOBAR
+     * Show the #WX_INFOBAR displayed on the top of the canvas with a message and a warning
+     * icon on the left of the infobar.
+     *
+     * The infobar will be closed after a timeout.
+     *
+     * @param aErrorMsg is the message to display.
+     * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarWarning( const wxString& aWarningMsg, bool aShowCloseButton = false );
 
     /**
-     * Show the WX_INFOBAR displayed on the top of the canvas with a message
-     * and a Info icon on the left of the infobar. The infobar will be closed
-     * after a timeaout
-     * @param aErrorMsg is the message to display
-     * @param aShowCloseButton = true to show a close button on the right of the
-     * WX_INFOBAR
+     * Show the #WX_INFOBAR displayed on the top of the canvas with a message and an info
+     * icon on the left of the infobar.
+     *
+     * The infobar will be closed after a timeout.
+     *
+     * @param aErrorMsg is the message to display.
+     * @param aShowCloseButton true to show a close button on the right of the #WX_INFOBAR.
      */
     void ShowInfoBarMsg( const wxString& aMsg, bool aShowCloseButton = false );
 
     /**
      * Returns the settings object used in SaveSettings(), and is overloaded in
-     * KICAD_MANAGER_FRAME
+     * #KICAD_MANAGER_FRAME.
      */
     virtual APP_SETTINGS_BASE* config() const;
 
     /**
-     * Function InstallPreferences
      * Allow a frame to load its preference panels (if any) into the preferences dialog.
-     * @param aParent a paged dialog into which the preference panels should be installed
+     *
+     * @param aParent a paged dialog into which the preference panels should be installed.
      */
     virtual void InstallPreferences( PAGED_DIALOG* , PANEL_HOTKEYS_EDITOR* ) { }
 
 
     void LoadWindowState( const wxString& aFileName );
     /**
-     * Loads window settings from the given settings object
-     * Normally called by LoadSettings unless the window in question is a child window that
-     * stores its settings somewhere other than APP_SETTINGS_BASE::m_Window
+     * Load window settings from the given settings object.
+     *
+     * Normally called by #LoadSettings() unless the window in question is a child window
+     * that* stores its settings somewhere other than #APP_SETTINGS_BASE::m_Window.
      */
     void LoadWindowSettings( const WINDOW_SETTINGS* aCfg );
 
     /**
-     * Saves window settings to the given settings object
-     * Normally called by SaveSettings unless the window in question is a child window that
-     * stores its settings somewhere other than APP_SETTINGS_BASE::m_Window
+     * Save window settings to the given settings object.
+     *
+     * Normally called by #SaveSettings unless the window in question is a child window that
+     * stores its settings somewhere other than #APP_SETTINGS_BASE::m_Window.
      */
     void SaveWindowSettings( WINDOW_SETTINGS* aCfg );
 
     /**
      * Load common frame parameters from a configuration file.
      *
-     * Don't forget to call the base method or your frames won't
-     * remember their positions and sizes.
+     * Don't forget to call the base method or your frames won't remember their positions
+     * and sizes.
      */
     virtual void LoadSettings( APP_SETTINGS_BASE* aCfg );
 
     /**
-     * Saves common frame parameters to a configuration data file.
+     * Save common frame parameters to a configuration data file.
      *
-     * Don't forget to call the base class's SaveSettings() from
-     * your derived SaveSettings() otherwise the frames won't remember their
-     * positions and sizes.
+     * Don't forget to call the base class's SaveSettings() from your derived
+     * #SaveSettings() otherwise the frames won't remember their positions and sizes.
      */
     virtual void SaveSettings( APP_SETTINGS_BASE* aCfg );
 
     /**
-     * Returns a pointer to the window settings for this frame.
+     * Return a pointer to the window settings for this frame.
+     *
      * By default, points to aCfg->m_Window for top-level frames.
+     *
      * @param aCfg is this frame's config object
      */
     virtual WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg );
 
     /**
-    * Load frame state info from a configuration file
-    */
+     * Load frame state info from a configuration file
+     */
     virtual void LoadWindowState( const WINDOW_STATE& aState );
 
     /**
+     * Get the configuration base name.
+     *
+     * This is usually the name of the frame set by CTOR, except for frames shown in
+     * multiple modes in which case the m_configName must be set to the base name so
+     * that a single configuration can be used.
+     *
      * @return a base name prefix used in Load/Save settings to build the full name of keys
-     * used in config.
-     * This is usually the name of the frame set by CTOR, except for frames shown in multiple
-     * modes in which case the m_configName must be set to the base name so that a single
-     * config can be used.
+     *         used in configuration.
      */
     wxString ConfigBaseName() override
     {
@@ -440,19 +324,18 @@ public:
      * Save changes to the project settings to the project (.pro) file.
      *
      * The method is virtual so you can override it to call the suitable save method.
-     * The base method do nothing
-     * @param aAskForSave = true to open a dialog before saving the settings
+     * The base method does nothing.
+     *
+     * @param aAskForSave true to open a dialog before saving the settings.
      */
     virtual void SaveProjectSettings() {};
-
-    // Read/Save and Import/export hotkeys config
 
     /**
      * Prompt the user for a hotkey file to read, and read it.
      *
-     * @param aActionMap = current hotkey map (over which the imported hotkeys will be applied)
-     * @param aDefaultShortname = a default short name (extension not needed)
-     *     like eechema, kicad...
+     * @param aActionMap current hotkey map (over which the imported hotkeys will be applied).
+     * @param aDefaultShortname a default short name (extension not needed) like
+     *                          Eeschema, KiCad...
      */
     void ImportHotkeyConfigFromFile( std::map<std::string, TOOL_ACTION*> aActionMap,
                                      const wxString& aDefaultShortname );
@@ -461,7 +344,7 @@ public:
      * Fetches the file name from the file history list.
      *
      * This removes the selected file, if this file does not exist.  The menu is also updated,
-     * if FILE_HISTORY::UseMenu was called at init time
+     * if #FILE_HISTORY::UseMenu was called at initialization time.
      *
      * @param cmdId The command ID associated with the \a aFileHistory object.
      * @param type Please document me!
@@ -486,8 +369,8 @@ public:
      * The menu is also updated, if FILE_HISTORY::UseMenu was called at init time.
      *
      * @param FullFileName The full file name including the path.
-     * @param aFileHistory The FILE_HISTORY in use.
-     * If NULL, the main application file history is used.
+     * @param aFileHistory The FILE_HISTORY in use.  If NULL, the main application file
+     *                     history is used.
      */
     void UpdateFileHistory( const wxString& FullFileName, FILE_HISTORY* aFileHistory = nullptr );
 
@@ -507,6 +390,7 @@ public:
 
     /**
      * Get the full filename + path of the currently opened file in the frame.
+     *
      * If no file is open, an empty string is returned.
      *
      * @return the filename and full path to the open file
@@ -527,13 +411,13 @@ public:
 
     /**
      * Checks if \a aFileName can be written.
-     * <p>
+     *
      * The function performs a number of tests on \a aFileName to verify that it can be saved.
      * If \a aFileName defines a path with no file name, them the path is tested for user write
      * permission.  If \a aFileName defines a file name that does not exist in the path, the
      * path is tested for user write permission.  If \a aFileName defines a file that already
      * exits, the file name is tested for user write permissions.
-     * </p>
+     *>
      * @note The file name path must be set or an assertion will be raised on debug builds and
      *       return false on release builds.
      * @param aFileName The full path and/or file name of the file to test.
@@ -544,13 +428,13 @@ public:
     /**
      * Check if an auto save file exists for \a aFileName and takes the appropriate action
      * depending on the user input.
-     * <p>
+     *
      * If an auto save file exists for \a aFileName, the user is prompted if they wish to
      * replace file \a aFileName with the auto saved file.  If the user chooses to replace the
      * file, the backup file of \a aFileName is removed, \a aFileName is renamed to the backup
      * file name, and the auto save file is renamed to \a aFileName.  If user chooses to keep
      * the existing version of \a aFileName, the auto save file is removed.
-     * </p>
+     *
      * @param aFileName A wxFileName object containing the file name to check.
      */
     void CheckForAutoSaveFile( const wxFileName& aFileName );
@@ -599,60 +483,50 @@ public:
      */
     wxSize GetWindowSize();
 
-
-    /* general Undo/Redo command control */
-
     /**
-     * Function ClearUndoORRedoList (virtual).
-     * this function must remove the aItemCount old commands from aList
-     * and delete commands, pickers and picked items if needed
-     * Because picked items must be deleted only if they are not in use, this
-     * is a virtual pure function that must be created for SCH_SCREEN and
-     * PCB_SCREEN
-     * @param aList = the UNDO_REDO_CONTAINER of commands
-     * @param aItemCount = number of old commands to delete. -1 to remove all
-     *                     old commands this will empty the list of commands.
-     *  Commands are deleted from the older to the last.
+     * Remove the \a aItemCount of old commands from \a aList and delete commands, pickers
+     * and picked items if needed.
+     *
+     * Because picked items must be deleted only if they are not in use, this is a virtual
+     * pure function that must be created for #SCH_SCREEN and #PCB_SCREEN.  Commands are
+     * deleted from the older to the last.
+     *
+     * @param aList = the #UNDO_REDO_CONTAINER of commands.
+     * @param aItemCount number of old commands to delete. -1 to remove all old commands
+     *                   this will empty the list of commands.
      */
     enum UNDO_REDO_LIST { UNDO_LIST, REDO_LIST };
     virtual void ClearUndoORRedoList( UNDO_REDO_LIST aList, int aItemCount = -1 )
     { }
 
     /**
-     * Function ClearUndoRedoList
-     * clear undo and redo list, using ClearUndoORRedoList()
-     * picked items are deleted by ClearUndoORRedoList() according to their
-     * status
+     * Clear the undo and redo list using #ClearUndoORRedoList()
+     *
+     * Picked items are deleted by ClearUndoORRedoList() according to their status.
      */
     virtual void ClearUndoRedoList();
 
     /**
-     * Function PushCommandToUndoList
-     * add a command to undo in undo list
-     * delete the very old commands when the max count of undo commands is
-     * reached
-     * ( using ClearUndoORRedoList)
+     * Add a command to undo in the undo list.
+     *
+     * Delete the very old commands when the max count of undo commands is reached.
      */
     virtual void PushCommandToUndoList( PICKED_ITEMS_LIST* aItem );
 
     /**
-     * Function PushCommandToRedoList
-     * add a command to redo in redo list
-     * delete the very old commands when the max count of redo commands is
-     * reached
-     * ( using ClearUndoORRedoList)
+     * Add a command to redo in the redo list.
+     *
+     * Delete the very old commands when the max count of redo commands is reached.
      */
     virtual void PushCommandToRedoList( PICKED_ITEMS_LIST* aItem );
 
-    /** PopCommandFromUndoList
-     * return the last command to undo and remove it from list
-     * nothing is deleted.
+    /**
+     * Return the last command to undo and remove it from list, nothing is deleted.
      */
     virtual PICKED_ITEMS_LIST* PopCommandFromUndoList();
 
-    /** PopCommandFromRedoList
-     * return the last command to undo and remove it from list
-     * nothing is deleted.
+    /**
+     * Return the last command to undo and remove it from list, nothing is deleted.
      */
     virtual PICKED_ITEMS_LIST* PopCommandFromRedoList();
 
@@ -666,6 +540,137 @@ public:
         m_isNonUserClose = true;
         return Close( aForce );
     }
+
+protected:
+    ///< Default style flags used for wxAUI toolbars.
+    static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
+
+    /**
+     * @return the suffix to be appended to the file extension on backup
+     */
+    static wxString GetBackupSuffix()
+    {
+        return wxT( "-bak" );
+    }
+
+    /**
+     * @return the string to prepend to a file name for automatic save.
+     */
+    static wxString GetAutoSaveFilePrefix()
+    {
+        return wxT( "_autosave-" );
+    }
+
+    /**
+     * Handle the auto save timer event.
+     */
+    void onAutoSaveTimer( wxTimerEvent& aEvent );
+
+    /**
+     * Return the auto save status of the application.
+     *
+     * Override this function if your derived frame supports automatic file saving.
+     */
+    virtual bool isAutoSaveRequired() const { return false; }
+
+    /**
+     * This should be overridden by the derived class to handle the auto save feature.
+     *
+     * @return true if the auto save was successful otherwise false.
+     */
+    virtual bool doAutoSave();
+
+    virtual bool canCloseWindow( wxCloseEvent& aCloseEvent ) { return true; }
+    virtual void doCloseWindow() { }
+
+    /**
+     * Called when when the units setting has changed to allow for any derived classes
+     * to handle refreshing and controls that have units based measurements in them.
+     *
+     * The default version only updates the status bar.  Don't forget to call the default
+     * in your derived class or the status bar will not get updated properly.
+     */
+    virtual void unitsChangeRefresh() { }
+
+    /**
+     * Setup the UI conditions for the various actions and their controls in this frame.
+     */
+    virtual void setupUIConditions();
+
+    DECLARE_EVENT_TABLE()
+
+private:
+    /**
+     * (with its unexpected name so it does not collide with the real OnWindowClose()
+     * function provided in derived classes) is called just before a window
+     * closing, and is used to call a derivation specific SaveSettings().
+     *
+     * #SaveSettings() is called for all derived wxFrames in this base class overload.
+     * Calling it from a destructor is deprecated since the wxFrame's position is not
+     * available in the destructor on linux.  In other words, you should not need to
+     * call #SaveSettings() anywhere, except in this one function found only in this class.
+     */
+    void windowClosing( wxCloseEvent& event );
+
+    wxWindow* findQuasiModalDialog();
+
+    /**
+     * Return true if the frame is shown in our modal mode and false  if the frame is
+     * shown as an usual frame.
+     *
+     * In modal mode, the caller that created the frame is responsible to Destroy()
+     * this frame after closing.
+     */
+    virtual bool IsModal() const { return false; }
+
+protected:
+    FRAME_T         m_ident;                // Id Type (pcb, schematic, library..)
+    wxPoint         m_framePos;
+    wxSize          m_frameSize;
+    bool            m_maximizeByDefault;
+
+    // These contain the frame size and position for when it is not maximized
+    wxPoint         m_normalFramePos;
+    wxSize          m_normalFrameSize;
+
+    wxString        m_aboutTitle;           // Name of program displayed in About.
+
+    wxAuiManager    m_auimgr;
+    wxString        m_perspective;          // wxAuiManager perspective.
+
+    WX_INFOBAR*     m_infoBar;              // Infobar for the frame
+
+    wxString        m_configName;           // Prefix used to identify some params (frame size...)
+                                            // and to name some config files (legacy hotkey files)
+
+    SETTINGS_MANAGER* m_settingsManager;
+
+    FILE_HISTORY*   m_fileHistory;          // The frame's recently opened file list
+
+    bool            m_hasAutoSave;
+    bool            m_autoSaveState;
+    int             m_autoSaveInterval;     // The auto save interval time in seconds.
+    wxTimer*        m_autoSaveTimer;
+
+    int             m_undoRedoCountMax;     // undo/Redo command Max depth
+
+    UNDO_REDO_CONTAINER m_undoList;         // Objects list for the undo command (old data)
+    UNDO_REDO_CONTAINER m_redoList;         // Objects list for the redo command (old data)
+
+    wxString        m_mruPath;              // Most recently used path.
+
+    EDA_UNITS       m_userUnits;
+
+    ///< Map containing the UI update handlers registered with wx for each action.
+    std::map<int, UIUpdateHandler> m_uiUpdateMap;
+
+    ///< Set by the close window event handler after frames are asked if they can close.
+    ///< Allows other functions when called to know our state is cleanup.
+    bool            m_isClosing;
+
+    ///< Set by #NonUserClose() to indicate that the user did not request the current close.
+    bool            m_isNonUserClose;
+
 };
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wandadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,9 +43,7 @@ class SHAPE;
 class PCB_GROUP;
 
 /**
- * Enum PCB_SHAPE_TYPE_T
- * is the set of shapes for PCB graphics and tracks and footprint graphics
- * in the .m_Shape member
+ * The set of shapes for PCB graphics and tracks and footprint graphics in the .m_Shape member
  */
 enum PCB_SHAPE_TYPE_T
 {
@@ -77,18 +75,12 @@ static inline wxString PCB_SHAPE_TYPE_T_asString( PCB_SHAPE_TYPE_T a )
 
 
 /**
- * BOARD_ITEM
- * is a base class for any item which can be embedded within the BOARD
- * container class, and therefore instances of derived classes should only be
- * found in Pcbnew or other programs that use class BOARD and its contents.
- * The corresponding class in Eeschema is SCH_ITEM.
+ * A base class for any item which can be embedded within the #BOARD container class, and
+ * therefore instances of derived classes should only be found in Pcbnew or other programs
+ * that use class #BOARD and its contents.
  */
 class BOARD_ITEM : public EDA_ITEM
 {
-protected:
-    PCB_LAYER_ID    m_layer;
-    PCB_GROUP*      m_group;
-
 public:
     BOARD_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
             EDA_ITEM( aParent, idtype ),
@@ -115,11 +107,9 @@ public:
     }
 
     /**
-     * Function GetCenter()
-     *
      * This defaults to the center of the bounding box if not overridden.
      *
-     * @return centre point of the item
+     * @return center point of the item
      */
     virtual wxPoint GetCenter() const
     {
@@ -139,8 +129,8 @@ public:
     }
 
     /**
-     * Function IsConnected()
      * Returns information if the object is derived from BOARD_CONNECTED_ITEM.
+     *
      * @return True if the object is of BOARD_CONNECTED_ITEM type, false otherwise.
      */
     virtual bool IsConnected() const
@@ -162,12 +152,11 @@ public:
     static wxPoint ZeroOffset;
 
     /**
-     * Function GetEffectiveShape
      * Some pad shapes can be complex (rounded/chamfered rectangle), even without considering
      * custom shapes.  This routine returns a COMPOUND shape (set of simple shapes which make
-     * up the pad fod use with routing, collision determiniation, etc).
+     * up the pad for use with routing, collision determination, etc).
      *
-     * Note that this list can contain a SHAPE_SIMPLE (a simple single-outline non-intersecting
+     * @note This list can contain a SHAPE_SIMPLE (a simple single-outline non-intersecting
      * polygon), but should never contain a SHAPE_POLY_SET (a complex polygon consisting of
      * multiple outlines and/or holes).
      *
@@ -179,14 +168,12 @@ public:
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 
     /**
-     * Function GetLayer
-     * returns the primary layer this item is on.
+     * Return the primary layer this item is on.
      */
     virtual PCB_LAYER_ID GetLayer() const { return m_layer; }
 
     /**
-     * Function GetLayerSet
-     * returns a std::bitset of all layers on which the item physically resides.
+     * Return a std::bitset of all layers on which the item physically resides.
      */
     virtual LSET GetLayerSet() const { return LSET( m_layer ); }
     virtual void SetLayerSet( LSET aLayers )
@@ -197,11 +184,12 @@ public:
     }
 
     /**
-     * Function SetLayer
-     * sets the layer this item is on.
+     * Set the layer this item is on.
+     *
+     * This method is virtual because some items (in fact: class DIMENSION)
+     * have a slightly different initialization.
+     *
      * @param aLayer The layer number.
-     * is virtual because some items (in fact: class DIMENSION)
-     * have a slightly different initialization
      */
     virtual void SetLayer( PCB_LAYER_ID aLayer )
     {
@@ -209,8 +197,7 @@ public:
     }
 
     /**
-     * Function Duplicate
-     * creates a copy of a BOARD_ITEM.
+     * Create a copy of a of this #BOARD_ITEM.
      */
     virtual BOARD_ITEM* Duplicate() const
     {
@@ -221,20 +208,25 @@ public:
     }
 
     /**
-     * Swap data between aItem and aImage.
-     * aItem and aImage should have the same type
-     * Used in undo redo command to swap values between an item and its copy
-     * Only values like layer, size .. which are modified by editing are swapped
-     * @param aImage = the item image which contains data to swap
+     * Swap data between \a aItem and \a aImage.
+     *
+     * \a aItem and \a aImage should have the same type.
+     *
+     * Used in undo and redo commands to swap values between an item and its copy.
+     * Only values like layer, size .. which are modified by editing are swapped.
+     *
+     * @param aImage the item image which contains data to swap.
      */
     virtual void SwapData( BOARD_ITEM* aImage );
 
     /**
-     * Function IsOnLayer
-     * tests to see if this object is on the given layer.  Virtual so objects like PAD, which
-     * reside on multiple layers can do their own form of testing.
+     * Test to see if this object is on the given layer.
+     *
+     * Virtual so objects like #PAD, which reside on multiple layers can do their own form
+     * of testing.
+     *
      * @param aLayer The layer to test for.
-     * @return bool - true if on given layer, else false.
+     * @return true if on given layer, else false.
      */
     virtual bool IsOnLayer( PCB_LAYER_ID aLayer ) const
     {
@@ -242,10 +234,9 @@ public:
     }
 
     /**
-     * Function IsTrack
-     * tests to see if this object is a track or via (or microvia).
-     * form of testing.
-     * @return bool - true if a track or via, else false.
+     * Test to see if this object is a track or via (or microvia).
+     *
+     * @return true if a track or via, else false.
      */
     bool IsTrack() const
     {
@@ -253,8 +244,7 @@ public:
     }
 
     /**
-     * Function IsLocked
-     * @return bool - true if the object is locked, else false
+     * @return true if the object is locked, else false.
      */
     virtual bool IsLocked() const
     {
@@ -263,8 +253,7 @@ public:
     }
 
     /**
-     * Function SetLocked
-     * modifies 'lock' status for of the item.
+     * Modify the 'lock' status for of the item.
      */
     virtual void SetLocked( bool aLocked )
     {
@@ -272,22 +261,19 @@ public:
     }
 
     /**
-     * Function DeleteStructure
-     * deletes this object after removing from its parent if it has one.
+     * Delete this object after removing from its parent if it has one.
      */
     void DeleteStructure();
 
     /**
-     * Function ShowShape
-     * converts the enum PCB_SHAPE_TYPE_T integer value to a wxString.
+     * Convert the enum #PCB_SHAPE_TYPE_T integer value to a wxString.
      */
     static wxString ShowShape( PCB_SHAPE_TYPE_T aShape );
 
-    // Some geometric transforms, that must be rewritten for derived classes
     /**
-     * Function Move
-     * move this object.
-     * @param aMoveVector - the move vector for this object.
+     * Move this object.
+     *
+     * @param aMoveVector the move vector for this object.
      */
     virtual void Move( const wxPoint& aMoveVector )
     {
@@ -301,10 +287,10 @@ public:
     }
 
     /**
-     * Function Rotate
      * Rotate this object.
-     * @param aRotCentre - the rotation point.
-     * @param aAngle - the rotation angle in 0.1 degree.
+     *
+     * @param aRotCentre the rotation point.
+     * @param aAngle the rotation angle in 0.1 degree.
      */
     virtual void Rotate( const wxPoint& aRotCentre, double aAngle )
     {
@@ -317,10 +303,10 @@ public:
     }
 
     /**
-     * Function Flip
-     * Flip this object, i.e. change the board side for this object
-     * @param aCentre - the rotation point.
-     * @param aFlipLeftRight - mirror across Y axis instead of X (the default)
+     * Flip this object, i.e. change the board side for this object.
+     *
+     * @param aCentre the rotation point.
+     * @param aFlipLeftRight mirror across Y axis instead of X (the default).
      */
     virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     {
@@ -333,32 +319,30 @@ public:
     }
 
     /**
-     * Function GetBoard
-     * returns the BOARD in which this BOARD_ITEM resides, or NULL if none.
+     * Return the #BOARD in which this #BOARD_ITEM resides, or NULL if none.
      */
     virtual BOARD* GetBoard() const;
 
     /**
-     * Function GetLayerName
-     * returns the name of the PCB layer on which the item resides.
+     * Return the name of the PCB layer on which the item resides.
      *
-     * @return wxString containing the layer name associated with this item.
+     * @return the layer name associated with this item.
      */
     wxString GetLayerName() const;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
-     * Function TransformShapeWithClearanceToPolygon
-     * Convert the item shape to a closed polygon
-     * Used in filling zones calculations
-     * Circles and arcs are approximated by segments
-     * @param aCornerBuffer = a buffer to store the polygon
-     * @param aClearanceValue = the clearance around the pad
-     * @param aError = the maximum deviation from true circle
-     * @param aErrorLoc = should the approximation error be placed outside or inside the polygon?
-     * @param ignoreLineWidth = used for edge cut items where the line width is only
-     * for visualization
+     * Convert the item shape to a closed polygon.
+     *
+     * Used in filling zones calculations.  Circles and arcs are approximated by segments.
+     *
+     * @param aCornerBuffer a buffer to store the polygon.
+     * @param aClearanceValue the clearance around the pad.
+     * @param aError the maximum deviation from true circle.
+     * @param aErrorLoc should the approximation error be placed outside or inside the polygon?
+     * @param ignoreLineWidth used for edge cut items where the line width is only
+     *                        for visualization.
      */
     virtual void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                        PCB_LAYER_ID aLayer, int aClearanceValue,
@@ -376,6 +360,9 @@ protected:
      * because layer names are customizable.
      */
     virtual wxString layerMaskDescribe() const;
+
+    PCB_LAYER_ID    m_layer;
+    PCB_GROUP*      m_group;
 };
 
 #ifndef SWIG
@@ -385,6 +372,7 @@ DECLARE_ENUM_TO_WXANY( PCB_LAYER_ID );
 
 /**
  * A singleton item of this class is returned for a weak reference that no longer exists.
+ *
  * Its sole purpose is to flag the item as having been deleted.
  */
 class DELETED_BOARD_ITEM : public BOARD_ITEM

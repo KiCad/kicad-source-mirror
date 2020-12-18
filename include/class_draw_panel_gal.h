@@ -77,7 +77,7 @@ public:
      * If \p aParentWindow is not an EDA frame, a search through all the parents
      * of the parent window will be done to find the frame.
      *
-     * @param aParentWindow is the window immeidately containing this panel
+     * @param aParentWindow is the window immediately containing this panel
      */
     EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                         const wxPoint& aPosition, const wxSize& aSize,
@@ -88,36 +88,35 @@ public:
     virtual void SetFocus() override;
 
     /**
-     * Function SwitchBackend
-     * Switches method of rendering graphics.
+     * Switch method of rendering graphics.
+     *
      * @param aGalType is a type of rendering engine that you want to use.
      */
     virtual bool SwitchBackend( GAL_TYPE aGalType );
 
     /**
-     * Function GetBackend
-     * Returns the type of backend currently used by GAL canvas.
+     * Return the type of backend currently used by GAL canvas.
      */
     inline GAL_TYPE GetBackend() const { return m_backend; }
 
     /**
-     * Function GetGAL()
-     * Returns a pointer to the GAL instance used in the panel.
+     * Return a pointer to the GAL instance used in the panel.
+     *
      * @return The instance of GAL.
      */
     KIGFX::GAL* GetGAL() const { return m_gal; }
 
     /**
-     * Function GetView()
-     * Returns a pointer to the VIEW instance used in the panel.
-     * @return The instance of VIEW.
+     * Return a pointer to the #VIEW instance used in the panel.
+     *
+     * @return The instance of #VIEW.
      */
     virtual KIGFX::VIEW* GetView() const { return m_view; }
 
     /**
-     * Function GetViewControls()
-     * Returns a pointer to the VIEW_CONTROLS instance used in the panel.
-     * @return The instance of VIEW_CONTROLS.
+     * Return a pointer to the #VIEW_CONTROLS instance used in the panel.
+     *
+     * @return The instance of #VIEW_CONTROLS.
      */
     KIGFX::VIEW_CONTROLS* GetViewControls() const
     {
@@ -128,42 +127,38 @@ public:
     virtual void Refresh( bool aEraseBackground = true, const wxRect* aRect = NULL ) override;
 
     /**
-     * Function ForceRefresh()
-     * Forces a redraw.
+     * Force a redraw.
      */
     void ForceRefresh();
 
     /**
-     * Function SetEventDispatcher()
-     * Sets a dispatcher that processes events and forwards them to tools.
+     * Set a dispatcher that processes events and forwards them to tools.
+     *
+     * #DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
+     * handlers from the #DRAW_PANEL_GAL and parent frame.
+     *
      * @param aEventDispatcher is the object that will be used for dispatching events.
-     * DRAW_PANEL_GAL does not take over the ownership. Passing NULL disconnects all event
-     * handlers from the DRAW_PANEL_GAL and parent frame.
      */
     void SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher );
 
     /**
-     * Function StartDrawing()
-     * Begins drawing if it was stopped previously.
+     * Begin drawing if it was stopped previously.
      */
     void StartDrawing();
 
     /**
-     * Function StopDrawing()
-     * Prevents the GAL canvas from further drawing till it is recreated
-     * or StartDrawing() is called.
+     * Prevent the GAL canvas from further drawing until it is recreated or #StartDrawing()
+     * is called.
      */
     void StopDrawing();
 
     /**
-     * Function SetHighContrastLayer
-     * Takes care of display settings for the given layer to be displayed in high contrast mode.
+     * Take care of display settings for the given layer to be displayed in high contrast mode.
      */
     virtual void SetHighContrastLayer( int aLayer );
 
     /**
-     * Function SetTopLayer
-     * Moves the selected layer to the top, so it is displayed above all others.
+     * Move the selected layer to the top, so it is displayed above all others.
      */
     virtual void SetTopLayer( int aLayer );
 
@@ -173,37 +168,35 @@ public:
     }
 
     /**
-     * Function GetParentEDAFrame()
-     * Returns parent EDA_DRAW_FRAME, if available or NULL otherwise.
+     * Returns parent #EDA_DRAW_FRAME, if available or NULL otherwise.
      */
     EDA_DRAW_FRAME* GetParentEDAFrame() const { return m_edaFrame; }
 
     bool IsDialogPreview() const { return m_parent != (wxWindow*) m_edaFrame; }
 
     /**
-     * Function OnShow()
      * Called when the window is shown for the first time.
      */
     virtual void OnShow() {}
 
     /**
-     * Set whether focus is taken on certain events (mouseover, keys, etc). This should
-     * be true (and is by default) for any primary canvas, but can be false to make
-     * well-behaved preview panes and the like.
+     * Set whether focus is taken on certain events (mouseover, keys, etc).
+     *
+     * This should be true (and is by default) for any primary canvas, but can be false to make
+     * well behaved preview panes and the like.
      */
     void SetStealsFocus( bool aStealsFocus ) { m_stealsFocus = aStealsFocus; }
 
     /**
-     * Function SetCurrentCursor
-     * Set the current cursor shape for this panel
+     * Set the current cursor shape for this panel.
      */
     void SetCurrentCursor( KICURSOR cursor );
 
     /**
-     * Returns the bounding box of the view that should be used if model is not valid
+     * Return the bounding box of the view that should be used if model is not valid.
      * For example, the worksheet bounding box for an empty PCB
      *
-     * @return the default bounding box for the panel
+     * @return the default bounding box for the panel.
      */
     virtual BOX2I GetDefaultViewBBox() const { return BOX2I(); }
 
@@ -214,25 +207,25 @@ public:
 
     /**
      * Repaint the canvas, and fix scrollbar cursors
-     * Usually called by a OnPaint event, but because it do not use a wxPaintDC,
-     * it can be called outside a wxPaintEvent.
+     *
+     * Usually called by a OnPaint event.
+     *
+     * Because it does not use a wxPaintDC, it can be called outside a wxPaintEvent.
      */
     void DoRePaint();
 
     /**
-     * Creates an overlay for rendering debug graphics.
+     * Create an overlay for rendering debug graphics.
      */
     std::shared_ptr<KIGFX::VIEW_OVERLAY> DebugOverlay();
 
 
     /**
-     * Clears the contents of the debug overlay and removes it from the VIEW.
+     * Clear the contents of the debug overlay and removes it from the VIEW.
      */
     void ClearDebugOverlay();
 
-
 protected:
-
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) );
     void onSize( wxSizeEvent& aEvent );
     void onEnter( wxMouseEvent& aEvent );

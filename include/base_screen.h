@@ -35,71 +35,10 @@
 
 
 /**
- * BASE_SCREEN
- * handles how to draw a screen (a board, a schematic ...)
+ * Handles how to draw a screen (a board, a schematic ...)
  */
 class BASE_SCREEN : public EDA_ITEM
 {
-private:
-    bool        m_flagModified;     ///< Indicates current drawing has been modified.
-    bool        m_flagSave;         ///< Indicates automatic file save.
-
-    /**
-     * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
-     * position.  It is an addition indicator typically drawn on grid to indicate to the
-     * user where the current action will be performed.
-     */
-    wxPoint     m_crossHairPosition;
-
-protected:
-    /**
-     * The number of #BASE_SCREEN objects in this design.
-     *
-     * This currently only has meaning for #SCH_SCREEN objects because #PCB_SCREEN object
-     * are limited to a single file.  The count is virtual because #SCH_SCREEN objects can be
-     * used more than once so the screen (page) count can be more than the number of screen
-     * objects.
-     */
-    int         m_pageCount;
-
-    /**
-     * An integer based page number used for printing a range of pages.
-     *
-     * This page number is set before printing and plotting because page numbering does not
-     * reflect the actual page number in complex hiearachies in #SCH_SCREEN objects.
-     */
-    int         m_virtualPageNumber;
-
-    /**
-     * A user defined string page number used for printing and plotting.
-     *
-     * This currently only has meaning for #SCH_SCREEN objects because #PCB_SCREEN object
-     * are limited to a single file.  This must be set before displaying, printing, or
-     * plotting the current sheet.  If empty, the #m_virtualPageNumber value is converted
-     * to a string.
-     */
-    wxString    m_pageNumber;
-
-public:
-    static wxString m_PageLayoutDescrFileName;  ///< the name of the page layout descr file,
-                                                ///< or emty to used the default pagelayout
-
-    wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
-
-    VECTOR2D    m_LocalOrigin;      ///< Relative Screen cursor coordinate (on grid)
-                                    ///< in user units. (coordinates from last reset position)
-
-    wxPoint     m_StartVisu;        ///< Coordinates in drawing units of the current
-                                    ///< view position (upper left corner of device)
-
-    bool        m_Center;           ///< Center on screen.  If true (0.0) is centered on screen
-                                    ///< coordinates can be < 0 and > 0 except for schematics.
-                                    ///< false: when coordinates can only be >= 0 (schematics).
-
-    VECTOR2D    m_ScrollCenter;     ///< Current scroll center point in logical units.
-
-    bool        m_Initialized;
-
 public:
     BASE_SCREEN( EDA_ITEM* aParent, KICAD_T aType = SCREEN_T );
 
@@ -142,9 +81,69 @@ public:
 
     const wxString& GetPageNumber() const;
     void SetPageNumber( const wxString& aPageNumber ) { m_pageNumber = aPageNumber; }
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+    static wxString m_PageLayoutDescrFileName;  ///< the name of the page layout descr file,
+                                                ///< or emty to used the default pagelayout
+
+    wxPoint     m_DrawOrg;          ///< offsets for drawing the circuit on the screen
+
+    VECTOR2D    m_LocalOrigin;      ///< Relative Screen cursor coordinate (on grid)
+                                    ///< in user units. (coordinates from last reset position)
+
+    wxPoint     m_StartVisu;        ///< Coordinates in drawing units of the current
+                                    ///< view position (upper left corner of device)
+
+    bool        m_Center;           ///< Center on screen.  If true (0.0) is centered on screen
+                                    ///< coordinates can be < 0 and > 0 except for schematics.
+                                    ///< false: when coordinates can only be >= 0 (schematics).
+
+    VECTOR2D    m_ScrollCenter;     ///< Current scroll center point in logical units.
+
+    bool        m_Initialized;
+
+protected:
+    /**
+     * The number of #BASE_SCREEN objects in this design.
+     *
+     * This currently only has meaning for #SCH_SCREEN objects because #PCB_SCREEN object
+     * are limited to a single file.  The count is virtual because #SCH_SCREEN objects can be
+     * used more than once so the screen (page) count can be more than the number of screen
+     * objects.
+     */
+    int         m_pageCount;
+
+    /**
+     * An integer based page number used for printing a range of pages.
+     *
+     * This page number is set before printing and plotting because page numbering does not
+     * reflect the actual page number in complex hiearachies in #SCH_SCREEN objects.
+     */
+    int         m_virtualPageNumber;
+
+    /**
+     * A user defined string page number used for printing and plotting.
+     *
+     * This currently only has meaning for #SCH_SCREEN objects because #PCB_SCREEN object
+     * are limited to a single file.  This must be set before displaying, printing, or
+     * plotting the current sheet.  If empty, the #m_virtualPageNumber value is converted
+     * to a string.
+     */
+    wxString    m_pageNumber;
+
+private:
+    bool        m_flagModified;     ///< Indicates current drawing has been modified.
+    bool        m_flagSave;         ///< Indicates automatic file save.
+
+    /**
+     * The cross hair position in logical (drawing) units.  The cross hair is not the cursor
+     * position.  It is an addition indicator typically drawn on grid to indicate to the
+     * user where the current action will be performed.
+     */
+    wxPoint     m_crossHairPosition;
 };
 
 #endif  // BASE_SCREEN_H

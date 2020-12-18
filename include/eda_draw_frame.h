@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -61,99 +61,26 @@ using KIGFX::RENDER_SETTINGS;
 
 
 /**
- * The base class for create windows for drawing purpose.  The Eeschema, Pcbnew and
- * GerbView main windows are just a few examples of classes derived from EDA_DRAW_FRAME.
+ * The base class for create windows for drawing purpose.
+ *
+ * The Eeschema, Pcbnew and GerbView main windows are just a few examples of classes
+ * derived from EDA_DRAW_FRAME.
  */
 class EDA_DRAW_FRAME : public KIWAY_PLAYER
 {
-    BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN
-    EDA_DRAW_PANEL_GAL*         m_canvas;
-
-    ///< GAL display options - this is the frame's interface to setting GAL display options
-    KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
-
-    /// Default display origin transforms object
-    ORIGIN_TRANSFORMS           m_originTransforms;
-
-protected:
-    wxSocketServer*             m_socketServer;
-    std::vector<wxSocketBase*>  m_sockets;         ///< interprocess communication
-
-    std::unique_ptr<wxSingleInstanceChecker> m_file_checker;    ///< prevents opening same file multiple times.
-
-    bool               m_showPageLimits;    // True to display the page limits
-    COLOR4D            m_gridColor;         // Grid color
-    COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for
-                                            // Pcbnew, BLACK or WHITE for eeschema
-    int                m_undoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
-                                            // to screens
-    bool               m_polarCoords;       // For those frames that support polar coordinates
-
-    bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
-    long               m_firstRunDialogSetting;    // Show first run dialog on startup
-
-    wxChoice*          m_gridSelectBox;
-    wxChoice*          m_zoomSelectBox;
-
-    ACTION_TOOLBAR*    m_mainToolBar;
-    ACTION_TOOLBAR*    m_auxiliaryToolBar;  // Additional tools under main toolbar
-    ACTION_TOOLBAR*    m_drawToolBar;       // Drawing tools (typically on right edge of window)
-    ACTION_TOOLBAR*    m_optionsToolBar;    // Options (typically on left edge of window)
-
-    wxFindReplaceData* m_findReplaceData;
-    wxArrayString      m_findStringHistoryList;
-    wxArrayString      m_replaceStringHistoryList;
-
-    EDA_MSG_PANEL*     m_messagePanel;
-    int                m_msgFrameHeight;
-
-    COLOR_SETTINGS*    m_colorSettings;
-
-    /// The current canvas type
-    EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
-
-    virtual void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
-
-    void unitsChangeRefresh() override;
-
-    void setupUnits( APP_SETTINGS_BASE* aCfg );
-
-    /**
-     * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
-     */
-    void resolveCanvasType();
-
-    /**
-     * Returns the canvas type stored in the application settings.
-     */
-    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting();
-
-    /**
-     * Stores the canvas type in the application settings.
-     */
-    bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
-
-    /**
-     * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
-     * to the wxID_EXIT event id.  This is useful in sub-applications to pass the event
-     * up to a non-owning window
-     */
-    void initExitKey();
-
 public:
-    EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                    FRAME_T aFrameType,
-                    const wxString& aTitle,
-                    const wxPoint& aPos, const wxSize& aSize,
-                    long aStyle,
+    EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType, const wxString& aTitle,
+                    const wxPoint& aPos, const wxSize& aSize, long aStyle,
                     const wxString& aFrameName );
 
     ~EDA_DRAW_FRAME();
 
     /**
-     * Mark a schematic file as being in use.  Use ReleaseFile() to undo this.
+     * Mark a schematic file as being in use.
      *
-     * @param aFileName = full path to the file.
+     * Use #ReleaseFile() to undo this.
+     *
+     * @param aFileName full path to the file.
      * @return false if the file was already locked, true otherwise.
      */
     bool LockFile( const wxString& aFileName );
@@ -184,15 +111,17 @@ public:
     void ToggleUserUnits() override;
 
     /**
-     * Get the pair or units in current use. The primary unit is the main
-     * unit of the frame, and the secondary unit is the unit of the other
-     * system that was used most recently.
+     * Get the pair or units in current use.
+     *
+     * The primary unit is the main unit of the frame, and the secondary unit is the unit
+     * of the other system that was used most recently.
      */
     void GetUnitPair( EDA_UNITS& aPrimaryUnit, EDA_UNITS& aSecondaryUnits );
 
     /**
-     * Return the absolute coordinates of the origin of the snap grid.  This is
-     * treated as a relative offset, and snapping will occur at multiples of the grid
+     * Return the absolute coordinates of the origin of the snap grid.
+     *
+     * This is treated as a relative offset and snapping will occur at multiples of the grid
      * size relative to this point.
      */
     virtual const wxPoint& GetGridOrigin() const = 0;
@@ -202,7 +131,7 @@ public:
      * Return the nearest \a aGridSize location to \a aPosition.
      *
      * @param aPosition The position to check.
-     * @return The nearst grid position.
+     * @return The nearest grid position.
      */
     wxPoint GetNearestGridPosition( const wxPoint& aPosition ) const;
 
@@ -236,23 +165,24 @@ public:
      * @param isDirectory indicates the library files are directories
      * @return true for OK; false for Cancel.
      */
-    bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
-                             const wxString& wildcard, const wxString& ext,
-                             bool isDirectory = false );
+    bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename, const wxString& wildcard,
+                             const wxString& ext, bool isDirectory = false );
 
     void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     virtual wxString GetScreenDesc() const;
 
     /**
-     * Return a pointer to a BASE_SCREEN or one of its derivatives.  It is overloaded by
-     * derived classes to return SCH_SCREEN or PCB_SCREEN.
+     * Return a pointer to a BASE_SCREEN or one of its derivatives.
+     *
+     * It is overloaded by derived classes to return #SCH_SCREEN or #PCB_SCREEN.
      */
     virtual BASE_SCREEN* GetScreen() const  { return m_currentScreen; }
 
     /**
      * Execute a remote command sent via socket (to port KICAD_PCB_PORT_SERVICE_NUMBER,
      * currently 4242).
+     *
      * Subclasses should override to implement actual command handlers.
      */
     virtual void ExecuteRemoteCommand( const char* cmdline ){}
@@ -267,6 +197,7 @@ public:
 
     /*
      * These 4 functions provide a basic way to show/hide grid and /get/set grid color.
+     *
      * These parameters are saved in KiCad config for each main frame.
      */
     bool IsGridVisible() const;
@@ -282,7 +213,7 @@ public:
      * application setting is saved.  If you override this method, make sure you call down
      * to the base class.
      *
-     * @param event - Command event from the grid size combobox on the toolbar.
+     * @param event Command event from the grid size combobox on the toolbar.
      */
     void OnSelectGrid( wxCommandEvent& event );
 
@@ -290,7 +221,7 @@ public:
 
     /**
      * Rebuild the grid combobox to respond to any changes in the GUI (units, user
-     * grid changes, etc.)
+     * grid changes, etc.).
      */
     void UpdateGridSelectBox();
 
@@ -318,8 +249,8 @@ public:
     /**
      * Set the zoom factor when selected by the zoom list box in the main tool bar.
      *
-     * @note List position 0 is fit to page
-     *       List position >= 1 = zoom (1 to zoom max)
+     * @note List position 0 is fit to page.
+     *       List position >= 1 = zoom (1 to zoom max).
      *       Last list position is custom zoom not in zoom list.
      */
     virtual void OnSelectZoom( wxCommandEvent& event );
@@ -337,37 +268,37 @@ public:
     virtual void HardRedraw();
 
     /**
-     * Redraw the screen with best zoom level and the best centering
-     * that shows all the page or the board
+     * Redraw the screen with best zoom level and the best centering that shows all the
+     * page or the board.
      */
     virtual void Zoom_Automatique( bool aWarpPointer );
 
     /**
-     * Useful to focus on a particular location, in find functions
-     * Move the graphic cursor (crosshair cursor) at a given coordinate and reframes
-     * the drawing if the requested point is out of view or if center on location is requested.
+     * Useful to focus on a particular location, in find functions.
+     *
+     * Move the graphic cursor (crosshair cursor) at a given coordinate and reframes the
+     * drawing if the requested point is out of view or if center on location is requested.
+     *
      * @param aPos is the point to go to.
      */
     void FocusOnLocation( const wxPoint& aPos );
 
     /**
-     * Function CreateBasicMenu
-     *
-     * Construct a "basic" menu for a tool, containing only items
-     * that apply to all tools (e.g. zoom and grid)
+     * Construct a "basic" menu for a tool, containing only items that apply to all tools
+     * (e.g. zoom and grid).
      */
     void AddStandardSubMenus( TOOL_MENU& aMenu );
 
     /**
      * Prints the page layout with the frame and the basic inscriptions.
      *
-     * @param aScreen screen to draw
+     * @param aScreen screen to draw.
      * @param aMils2Iu The mils to Iu conversion factor.
      * @param aFilename The filename to display in basic inscriptions.
-     * @param aSheetLayer The layer displayed from pcbnew.
+     * @param aSheetLayer The layer displayed from PcbNew.
      */
     void PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aMils2Iu,
-                         const wxString &aFilename, const wxString &aSheetLayer = wxEmptyString );
+                         const wxString& aFilename, const wxString& aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;
 
@@ -408,13 +339,12 @@ public:
     /**
      * Append a message to the message panel.
      *
-     * This helper method checks to make sure the message panel exists in
-     * the frame and appends a message to it using the message panel
-     * AppendMessage() method.
+     * This helper method checks to make sure the message panel exists in the frame and
+     * appends a message to it using the message panel AppendMessage() method.
      *
-     * @param aTextUpper - The message upper text.
-     * @param aTextLower - The message lower text.
-     * @param aPadding - Number of spaces to pad between messages.
+     * @param aTextUpper The message upper text.
+     * @param aTextLower The message lower text.
+     * @param aPadding Number of spaces to pad between messages.
      */
     void AppendMsgPanel( const wxString& aTextUpper, const wxString& aTextLower, int aPadding = 6 );
 
@@ -434,9 +364,9 @@ public:
     /**
      * Helper function that erases the msg panel and then appends a single message
      *
-     * @param aTextUpper - The message upper text.
-     * @param aTextLower - The message lower text.
-     * @param aPadding - Number of spaces to pad between messages.
+     * @param aTextUpper The message upper text.
+     * @param aTextLower The message lower text.
+     * @param aPadding Number of spaces to pad between messages.
      */
     void SetMsgPanel( const wxString& aTextUpper, const wxString& aTextLower, int aPadding = 6 );
 
@@ -453,7 +383,7 @@ public:
     /**
      * Print the page pointed by current screen, set by the calling print function.
      *
-     * @param aDC = wxDC given by the calling print function
+     * @param aDC wxDC given by the calling print function
      */
     virtual void PrintPage( RENDER_SETTINGS* aSettings );
 
@@ -496,9 +426,9 @@ public:
      * false makes it ignore any items outside the PCB edge such as fabrication
      * notes.
      *
-     * @param aIncludeAllVisible - True = Include everything visible in bbox calculations
-     *  False = Ignore some visible items (program dependent)
-     * @return BOX2I - Bounding box of document (ignoring some items as requested)
+     * @param aIncludeAllVisible True to include everything visible in bbox calculations,
+     *                           false to ignore some visible items (program dependent).
+     * @return Bounding box of the document (ignoring some items as requested).
      */
     virtual const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const;
 
@@ -508,6 +438,83 @@ public:
     void RecreateToolbars();
 
     DECLARE_EVENT_TABLE()
+
+protected:
+    virtual void SetScreen( BASE_SCREEN* aScreen )  { m_currentScreen = aScreen; }
+
+    void unitsChangeRefresh() override;
+
+    void setupUnits( APP_SETTINGS_BASE* aCfg );
+
+    /**
+     * Determines the Canvas type to load (with prompt if required) and initializes m_canvasType
+     */
+    void resolveCanvasType();
+
+    /**
+     * Returns the canvas type stored in the application settings.
+     */
+    EDA_DRAW_PANEL_GAL::GAL_TYPE loadCanvasTypeSetting();
+
+    /**
+     * Stores the canvas type in the application settings.
+     */
+    bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
+
+    /**
+     * Sets the common key-pair for exiting the application (Ctrl-Q) and ties it
+     * to the wxID_EXIT event id.
+     *
+     * This is useful in sub-applications to pass the event up to a non-owning window.
+     */
+    void initExitKey();
+
+    wxSocketServer*             m_socketServer;
+    std::vector<wxSocketBase*>  m_sockets;         ///< interprocess communication
+
+    ///< Prevents opening same file multiple times.
+    std::unique_ptr<wxSingleInstanceChecker> m_file_checker;
+
+    bool               m_showPageLimits;    // True to display the page limits
+    COLOR4D            m_gridColor;         // Grid color
+    COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for
+                                            // Pcbnew, BLACK or WHITE for Eeschema
+    int                m_undoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
+                                            // to screens
+    bool               m_polarCoords;       // For those frames that support polar coordinates
+
+    bool               m_showBorderAndTitleBlock;  // Show the worksheet (border and title block).
+    long               m_firstRunDialogSetting;    // Show first run dialog on startup
+
+    wxChoice*          m_gridSelectBox;
+    wxChoice*          m_zoomSelectBox;
+
+    ACTION_TOOLBAR*    m_mainToolBar;
+    ACTION_TOOLBAR*    m_auxiliaryToolBar;  // Additional tools under main toolbar
+    ACTION_TOOLBAR*    m_drawToolBar;       // Drawing tools (typically on right edge of window)
+    ACTION_TOOLBAR*    m_optionsToolBar;    // Options (typically on left edge of window)
+
+    wxFindReplaceData* m_findReplaceData;
+    wxArrayString      m_findStringHistoryList;
+    wxArrayString      m_replaceStringHistoryList;
+
+    EDA_MSG_PANEL*     m_messagePanel;
+    int                m_msgFrameHeight;
+
+    COLOR_SETTINGS*    m_colorSettings;
+
+    ///< The current canvas type.
+    EDA_DRAW_PANEL_GAL::GAL_TYPE    m_canvasType;
+
+private:
+    BASE_SCREEN*                m_currentScreen;      ///< current used SCREEN
+    EDA_DRAW_PANEL_GAL*         m_canvas;
+
+    ///< This the frame's interface to setting GAL display options.
+    KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
+
+    ///< Default display origin transforms object.
+    ORIGIN_TRANSFORMS           m_originTransforms;
 };
 
 #endif  // DRAW_FRAME_H_

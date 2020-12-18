@@ -70,28 +70,28 @@ class MSG_PANEL_ITEM;
 
 
 /**
- * Typedef INSPECTOR
- * is used to inspect and possibly collect the
- * (search) results of iterating over a list or tree of KICAD_T objects.
- * Provide an implementation as needed to inspect EDA_ITEMs visited via
- * EDA_ITEM::Visit() and EDA_ITEM::IterateForward().
- * <p>
- * FYI the std::function may hold a lambda, std::bind, pointer to func, or
- * ptr to member function, per modern C++. It is used primarily for searching,
- * but not limited to that.  It can also collect or modify the scanned objects.
- * 'Capturing' lambdas are particularly convenient because they can use context
- * and this often means @a aTestData is not used.
+ * Used to inspect and possibly collect the (search) results of iterating over a list or
+ * tree of #KICAD_T objects.
  *
- * @param aItem An EDA_ITEM to examine.
+ * Provide an implementation as needed to inspect EDA_ITEMs visited via #EDA_ITEM::Visit()
+ * and #EDA_ITEM::IterateForward().
+ *
+ * FYI the std::function may hold a lambda, std::bind, pointer to func, or ptr to member
+ * function, per modern C++. It is used primarily for searching, but not limited to that.
+ * It can also collect or modify the scanned objects.  'Capturing' lambdas are particularly
+ * convenient because they can use context and this often means @a aTestData is not used.
+ *
+ * @param aItem An #EDA_ITEM to examine.
  * @param aTestData is arbitrary data needed by the inspector to determine
  *  if the EDA_ITEM under test meets its match criteria, and is often NULL
  *  with the advent of capturing lambdas.
  * @return A #SEARCH_RESULT type #SEARCH_QUIT if the iterator function is to
  *          stop the scan, else #SEARCH_CONTINUE;
  */
-typedef std::function< SEARCH_RESULT ( EDA_ITEM* aItem, void* aTestData ) >   INSPECTOR_FUNC;
+typedef std::function< SEARCH_RESULT ( EDA_ITEM* aItem, void* aTestData ) > INSPECTOR_FUNC;
 
-typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested users by ref, avoids copying std::function
+///< std::function passed to nested users by ref, avoids copying std::function.
+typedef const INSPECTOR_FUNC& INSPECTOR;
 
 
 // These define are used for the .m_flags and .m_UndoRedoStatus member of the
@@ -142,41 +142,20 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 typedef unsigned STATUS_FLAGS;
 
 /**
- * EDA_ITEM
- * is a base class for most all the KiCad significant classes used in schematics and boards.
+ * A base class for most all the KiCad significant classes used in schematics and boards.
  */
 class EDA_ITEM : public KIGFX::VIEW_ITEM
 {
 public:
-    const KIID  m_Uuid;
-
-private:
-    /**
-     * Run time identification, _keep private_ so it can never be changed after a ctor
-     * sets it.  See comment near SetType() regarding virtual functions.
-     */
-    KICAD_T       m_structType;
-
-protected:
-    STATUS_FLAGS  m_status;
-    EDA_ITEM*     m_parent;       ///< Linked list: Link (parent struct)
-    bool          m_forceVisible;
-    STATUS_FLAGS  m_flags;
-
-protected:
-    EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
-    EDA_ITEM( KICAD_T idType );
-    EDA_ITEM( const EDA_ITEM& base );
-
-public:
     virtual ~EDA_ITEM() { };
 
     /**
-     * Function Type()
+     * Returns the type of object.
      *
-     * returns the type of object.  This attribute should never be changed after a ctor sets
-     * it, so there is no public "setter" method.
-     * @return KICAD_T - the type of object.
+     * This attribute should never be changed after a ctor sets it, so there is no public
+     * "setter" method.
+     *
+     * @return the type of object.
      */
     inline KICAD_T Type() const { return m_structType; }
 
@@ -242,8 +221,8 @@ public:
     }
 
     /**
-     * Function IsType
-     * Checks whether the item is one of the listed types
+     * Check whether the item is one of the listed types.
+     *
      * @param aScanTypes List of item types
      * @return true if the item type is contained in the list aScanTypes
      */
@@ -262,9 +241,8 @@ public:
     }
 
     /**
-     * Function SetForceVisible
-     * is used to set and cleag force visible flag used to force the item to be drawn
-     * even if it's draw attribute is set to not visible.
+     * Set and clear force visible flag used to force the item to be drawn even if it's draw
+     * attribute is set to not visible.
      *
      * @param aEnable True forces the item to be drawn.  False uses the item's visibility
      *                setting to determine if the item is to be drawn.
@@ -274,8 +252,7 @@ public:
     bool IsForceVisible() const { return m_forceVisible; }
 
     /**
-     * Function GetMsgPanelInfo
-     * populates \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
+     * Populate \a aList of #MSG_PANEL_ITEM objects with it's internal state for display
      * purposes.
      *
      * @param aList is the list to populate.
@@ -285,8 +262,7 @@ public:
     }
 
     /**
-     * Function HitTest
-     * tests if \a aPosition is contained within or on the bounding box of an item.
+     * Test if \a aPosition is contained within or on the bounding box of an item.
      *
      * @param aPosition A reference to a wxPoint object containing the coordinates to test.
      * @param aAccuracy Increase the item bounding box by this amount.
@@ -298,10 +274,9 @@ public:
     }
 
     /**
-     * Function HitTest
-     * tests if \a aRect intersects or is contained within the bounding box of an item.
+     * Test if \a aRect intersects or is contained within the bounding box of an item.
      *
-     * @param aRect A reference to a EDA_RECT object containing the rectangle to test.
+     * @param aRect A reference to a #EDA_RECT object containing the rectangle to test.
      * @param aContained Set to true to test for containment instead of an intersection.
      * @param aAccuracy Increase \a aRect by this amount.
      * @return True if \a aRect contains or intersects the item bounding box.
@@ -312,13 +287,11 @@ public:
     }
 
     /**
-     * Function GetBoundingBox
-     * returns the orthogonal, bounding box of this object for display
-     * purposes.
+     * Return the orthogonal bounding box of this object for display purposes.
+     *
      * This box should be an enclosing perimeter for visible components of this
      * object, and the units should be in the pcb or schematic coordinate
-     * system.
-     * It is OK to overestimate the size by a few counts.
+     * system.  It is OK to overestimate the size by a few counts.
      */
     virtual const EDA_RECT GetBoundingBox() const;
 
@@ -326,15 +299,13 @@ public:
     virtual void SetPosition( const wxPoint& aPos ) {};
 
     /**
-     * Function GetFocusPosition
-     * similar to GetPosition, but allows items to return their visual center rather
+     * Similar to GetPosition, but allows items to return their visual center rather
      * than their anchor.
      */
     virtual const wxPoint GetFocusPosition() const { return GetPosition(); }
 
     /**
-     * Function Clone
-     * creates a duplicate of this item with linked list members set to NULL.
+     * Create a duplicate of this item with linked list members set to NULL.
      *
      * The default version will return NULL in release builds and likely crash the
      * program.  In debug builds, a warning message indicating the derived class
@@ -348,25 +319,23 @@ public:
     virtual EDA_ITEM* Clone() const; // should not be inline, to save the ~ 6 bytes per call site.
 
     /**
-     * Function Visit
-     * may be re-implemented for each derived class in order to handle
-     * all the types given by its member data.  Implementations should call
-     * inspector->Inspect() on types in scanTypes[], and may use
-     * IterateForward()
-     * to do so on lists of such data.
-     * @param inspector An INSPECTOR instance to use in the inspection.
+     * May be re-implemented for each derived class in order to handle all the types given
+     * by its member data.
+     *
+     * Implementations should call inspector->Inspect() on types in scanTypes[], and may use
+     * #IterateForward() to do so on lists of such data.
+     *
+     * @param inspector An #INSPECTOR instance to use in the inspection.
      * @param testData Arbitrary data used by the inspector.
-     * @param scanTypes Which KICAD_T types are of interest and the order
+     * @param scanTypes Which# KICAD_T types are of interest and the order
      *                  is significant too, terminated by EOT.
-     * @return SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
-     *                       else SCAN_CONTINUE, and determined by the inspector.
+     * @return #SEARCH_RESULT SEARCH_QUIT if the Iterator is to stop the scan,
+     *         else #SCAN_CONTINUE, and determined by the inspector.
      */
     virtual SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] );
 
     /**
-     * @copydoc SEARCH_RESULT IterateForward( EDA_ITEM*, INSPECTOR, void*, const KICAD_T )
-     *
-     * This changes first parameter to avoid the DList and use the main queue instead
+     * This changes first parameter to avoid the DList and use the main queue instead.
      */
     template< class T >
     static SEARCH_RESULT IterateForward( std::deque<T>&  aList,
@@ -385,9 +354,7 @@ public:
     }
 
     /**
-     * @copydoc SEARCH_RESULT IterateForward( EDA_ITEM*, INSPECTOR, void*, const KICAD_T )
-     *
-     * This changes first parameter to avoid the DList and use std::vector instead
+     * Change first parameter to avoid the DList and use std::vector instead.
      */
     template <class T>
     static SEARCH_RESULT IterateForward(
@@ -404,43 +371,41 @@ public:
     }
 
     /**
-     * Function GetClass
-     * returns the class name.
-     * @return wxString
+     * Return the class name.
      */
     virtual wxString GetClass() const = 0;
 
     /**
-     * Function GetSelectMenuText
-     * returns the text to display to be used in the selection clarification context menu
-     * when multiple items are found at the current cursor position.  The default version
-     * of this function raises an assertion in the debug mode and returns a string to
-     * indicate that it was not overridden to provide the object specific text.
+     * Return the text to display to be used in the selection clarification context menu
+     * when multiple items are found at the current cursor position.
+     *
+     * The default version of this function raises an assertion in the debug mode and
+     * returns a string to indicate that it was not overridden to provide the object
+     * specific text.
      *
      * @return The menu text string.
      */
     virtual wxString GetSelectMenuText( EDA_UNITS aUnits ) const;
 
     /**
-     * Function GetMenuImage
-     * returns a pointer to an image to be used in menus.  The default version returns
-     * the right arrow image.  Override this function to provide object specific menu
-     * images.
+     * Return a pointer to an image to be used in menus.
+     *
+     * The default version returns the right arrow image.  Override this function to provide
+     * object specific menu images.
+     *
      * @return The menu image associated with the item.
      */
     virtual BITMAP_DEF GetMenuImage() const;
 
     /**
-     * Function Matches
-     * compares the item against the search criteria in \a aSearchData.
+     * Compare the item against the search criteria in \a aSearchData.
      *
      * The base class returns false since many of the objects derived from EDA_ITEM
      * do not have any text to search.
      *
      * @param aSearchData A reference to a wxFindReplaceData object containing the
      *                    search criteria.
-     * @param aAuxData A pointer to optional data required for the search or NULL
-     *                 if not used.
+     * @param aAuxData A pointer to optional data required for the search or NULL if not used.
      * @return True if the item's text matches the search criteria in \a aSearchData.
      */
     virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData )
@@ -449,40 +414,34 @@ public:
     }
 
     /**
-     * Helper function used in search and replace dialog
-     * Function Replace
-     * performs a text replace on \a aText using the find and replace criteria in
+     * Perform a text replace on \a aText using the find and replace criteria in
      * \a aSearchData on items that support text find and replace.
      *
      * @param aSearchData A reference to a wxFindReplaceData object containing the
      *                    search and replace criteria.
-     * @param aText A reference to a wxString object containing the text to be
-     *              replaced.
+     * @param aText A reference to a wxString object containing the text to be replaced.
      * @return True if \a aText was modified, otherwise false.
      */
     static bool Replace( wxFindReplaceData& aSearchData, wxString& aText );
 
     /**
-     * Function Replace
-     * performs a text replace using the find and replace criteria in \a aSearchData
+     * Perform a text replace using the find and replace criteria in \a aSearchData
      * on items that support text find and replace.
      *
      * This function must be overridden for items that support text replace.
      *
-     * @param aSearchData A reference to a wxFindReplaceData object containing the
-     *                    search and replace criteria.
-     * @param aAuxData A pointer to optional data required for the search or NULL
-     *                 if not used.
+     * @param aSearchData A reference to a wxFindReplaceData object containing the search and
+     *                    replace criteria.
+     * @param aAuxData A pointer to optional data required for the search or NULL if not used.
      * @return True if the item text was modified, otherwise false.
      */
-    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) { return false; }
+    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = nullptr )
+    {
+        return false;
+    }
 
     /**
-     * Function IsReplaceable
-     * <p>
-     * Override this method in any derived object that supports test find and
-     * replace.
-     * </p>
+     * Override this method in any derived object that supports test find and replace.
      *
      * @return True if the item has replaceable text that can be modified using
      *         the find and replace dialog.
@@ -498,9 +457,8 @@ public:
     bool operator<( const EDA_ITEM& aItem ) const;
 
     /**
-     * Function Sort
-     * is a helper function to be used by the C++ STL sort algorithm for sorting a STL
-     * container of EDA_ITEM pointers.
+     * Helper function to be used by the C++ STL sort algorithm for sorting a STL
+     * container of #EDA_ITEM pointers.
      *
      * @param aLeft The left hand item to compare.
      * @param aRight The right hand item to compare.
@@ -509,8 +467,7 @@ public:
     static bool Sort( const EDA_ITEM* aLeft, const EDA_ITEM* aRight ) { return *aLeft < *aRight; }
 
     /**
-     * Operator assignment
-     * is used to assign the members of \a aItem to another object.
+     * Assign the members of \a aItem to another object.
      */
     EDA_ITEM& operator=( const EDA_ITEM& aItem );
 
@@ -521,32 +478,37 @@ public:
 #if defined(DEBUG)
 
     /**
-     * Function Show
-     * is used to output the object tree, currently for debugging only.
+     * Output the object tree, currently for debugging only.
+     *
+     * This is pure virtual so compiler warns if somebody mucks up a derived declaration.
+     *
      * @param nestLevel An aid to prettier tree indenting, and is the level
      *                  of nesting of this object within the overall tree.
      * @param os The ostream& to output to.
      */
     virtual void Show( int nestLevel, std::ostream& os ) const = 0;
-    // pure virtual so compiler warns if somebody mucks up a derived declaration
 
     void ShowDummy( std::ostream& os ) const;  ///< call this if you are a lazy developer
 
     /**
-     * Function NestedSpace
-     * outputs nested space for pretty indenting.
-     * @param nestLevel The nest count
+     * Output nested space for pretty indenting.
+     *
+     * @param nestLevel The nest count.
      * @param os The ostream&, where to output
-     * @return std::ostream& - for continuation.
+     * @return The std::ostream& for continuation.
      **/
     static std::ostream& NestedSpace( int nestLevel, std::ostream& os );
 
 #endif
 
 protected:
+    EDA_ITEM( EDA_ITEM* parent, KICAD_T idType );
+    EDA_ITEM( KICAD_T idType );
+    EDA_ITEM( const EDA_ITEM& base );
+
     /**
-     * Function Matches
-     * compares \a aText against search criteria in \a aSearchData.
+     * Compare \a aText against search criteria in \a aSearchData.
+     *
      * This is a helper function for simplify derived class logic.
      *
      * @param aText A reference to a wxString object containing the string to test.
@@ -554,12 +516,27 @@ protected:
      * @return True if \a aText matches the search criteria in \a aSearchData.
      */
     bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
+
+public:
+    const KIID  m_Uuid;
+
+protected:
+    STATUS_FLAGS  m_status;
+    EDA_ITEM*     m_parent;       ///< Linked list: Link (parent struct)
+    bool          m_forceVisible;
+    STATUS_FLAGS  m_flags;
+
+private:
+    /**
+     * Run time identification, _keep private_ so it can never be changed after a ctor
+     * sets it.  See comment near SetType() regarding virtual functions.
+     */
+    KICAD_T       m_structType;
 };
 
 
 /**
- * Function new_clone
- * provides cloning capabilities for all Boost pointer containers of EDA_ITEM pointers.
+ * Provide cloning capabilities for all Boost pointer containers of #EDA_ITEM pointers.
  *
  * @param aItem EDA_ITEM to clone.
  * @return Clone of \a aItem.

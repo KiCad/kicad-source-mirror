@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2014 KiCad Developers, see change_log.txt for contributors.
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,12 +33,11 @@
 #include <math/box2.h>
 
 /**
- * EDA_RECT
- * handles the component boundary box.
- * This class is similar to wxRect, but some wxRect functions are very curious,
- * and are working only if dimensions are >= 0 (not always the case in KiCad)
- * and also KiCad needs some specific method.
- * so I prefer this more suitable class
+ * Handle the component boundary box.
+ *
+ * This class is similar to wxRect, but some wxRect functions are very curious, and are
+ * working only if dimensions are >= 0 (not always the case in KiCad) and also KiCad needs
+ * some specific method which makes this a more suitable class.
  */
 class EDA_RECT
 {
@@ -61,50 +59,44 @@ public:
 
     wxPoint Centre() const
     {
-        return wxPoint( m_pos.x + ( m_size.x >> 1 ),
-                        m_pos.y + ( m_size.y >> 1 ) );
+        return wxPoint( m_pos.x + ( m_size.x >> 1 ), m_pos.y + ( m_size.y >> 1 ) );
     }
 
     /**
-     * Function Move
-     * moves the rectangle by the \a aMoveVector.
-     * @param aMoveVector A wxPoint that is the value to move this rectangle
+     * Move the rectangle by the \a aMoveVector.
+     *
+     * @param aMoveVector A wxPoint that is the value to move this rectangle.
      */
     void Move( const wxPoint& aMoveVector );
 
     /**
-     * Function Normalize
-     * ensures that the height ant width are positive.
+     * Ensures that the height ant width are positive.
      */
     void Normalize();
 
     /**
-     * Function Contains
-     * @param aPoint = the wxPoint to test
-     * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside
+     * @param aPoint the wxPoint to test.
+     * @return true if aPoint is inside the boundary box. A point on a edge is seen as inside.
      */
     bool Contains( const wxPoint& aPoint ) const;
 
     /**
-     * Function Contains
-     * @param x = the x coordinate of the point to test
-     * @param y = the x coordinate of the point to test
+     * @param x the x coordinate of the point to test.
+     * @param y the x coordinate of the point to test.
      * @return true if point is inside the boundary box. A point on a edge is seen as inside
      */
     bool Contains( int x, int y ) const { return Contains( wxPoint( x, y ) ); }
 
     /**
-     * Function Contains
-     * @param aRect = the EDA_RECT to test
-     * @return true if aRect is Contained. A common edge is seen as contained
+     * @param aRect the EDA_RECT to test.
+     * @return true if aRect is Contained. A common edge is seen as contained.
      */
     bool Contains( const EDA_RECT& aRect ) const;
 
     const wxSize GetSize() const { return m_size; }
 
     /**
-     * @brief GetSizeMax
-     * @return the max size dimension
+     * @return the max size dimension.
      */
     int GetSizeMax() const { return ( m_size.x > m_size.y ) ? m_size.x : m_size.y; }
 
@@ -114,7 +106,10 @@ public:
     const wxPoint GetOrigin() const { return m_pos; }
     const wxPoint GetPosition() const { return m_pos; }
     const wxPoint GetEnd() const { return wxPoint( m_pos.x + m_size.x, m_pos.y + m_size.y ); }
-    const wxPoint GetCenter() const { return wxPoint( m_pos.x + ( m_size.x / 2 ), m_pos.y + ( m_size.y / 2 ) ); }
+    const wxPoint GetCenter() const
+    {
+        return wxPoint( m_pos.x + ( m_size.x / 2 ), m_pos.y + ( m_size.y / 2 ) );
+    }
 
     int GetWidth() const { return m_size.x; }
     int GetHeight() const { return m_size.y; }
@@ -203,8 +198,7 @@ public:
     }
 
     /**
-     * Function RevertYAxis
-     * Mirror the rectangle from the X axis (negate Y pos and size)
+     * Mirror the rectangle from the X axis (negate Y pos and size).
      */
     void RevertYAxis()
     {
@@ -214,42 +208,40 @@ public:
     }
 
     /**
-     * Function Intersects
-     * tests for a common area between rectangles.
+     * Test for a common area between rectangles.
      *
      * @param aRect A rectangle to test intersection with.
-     * @return bool - true if the argument rectangle intersects this rectangle.
+     * @return true if the argument rectangle intersects this rectangle.
      * (i.e. if the 2 rectangles have at least a common point)
      */
     bool Intersects( const EDA_RECT& aRect ) const;
 
     /**
-     * Tests for a common area between this rectangle,
-     * and a rectangle with arbitrary rotation
+     * Tests for a common area between this rectangle, and a rectangle with arbitrary rotation
      *
-     * @param aRect a rectangle to test intersection with
-     * @param aRot rectangle rotation (in 1/10 degrees)
+     * @param aRect a rectangle to test intersection with.
+     * @param aRot rectangle rotation (in 1/10 degrees).
      */
     bool Intersects( const EDA_RECT& aRect, double aRot ) const;
 
     /**
-     * Function Intersects
-     * tests for a common area between a segment and this rectangle.
+     * Test for a common area between a segment and this rectangle.
      *
      * @param aPoint1 First point of the segment to test intersection with.
      * @param aPoint2 Second point of the segment to test intersection with.
-     * @return bool - true if the argument segment intersects this rectangle.
+     * @return true if the argument segment intersects this rectangle.
      * (i.e. if the segment and rectangle have at least a common point)
      */
     bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2 ) const;
 
     /**
-     * Tests for intersection between a segment and this rectangle, returning the intersections
-     * @param aPoint1 is the first point of the segment to test intersection with
-     * @param aPoint2 is the second point of the segment to test intersection with
-     * @param aIntersection1 will be filled with the first intersection point, if any
-     * @param aIntersection2 will be filled with the second intersection point, if any
-     * @return true if the segment intersects the rect
+     * Test for intersection between a segment and this rectangle, returning the intersections.
+     *
+     * @param aPoint1 is the first point of the segment to test intersection with.
+     * @param aPoint2 is the second point of the segment to test intersection with.
+     * @param aIntersection1 will be filled with the first intersection point, if any.
+     * @param aIntersection2 will be filled with the second intersection point, if any.
+     * @return true if the segment intersects the rect.
      */
     bool Intersects( const wxPoint& aPoint1, const wxPoint& aPoint2,
                      wxPoint* aIntersection1, wxPoint* aIntersection2 ) const;
@@ -265,29 +257,26 @@ public:
     const wxPoint FarthestPointTo( const wxPoint& aPoint ) const;
 
     /**
-     * Function IntersectsCircle
-     * tests for a common area between a circle and this rectangle
+     * Test for a common area between a circle and this rectangle.
      *
-     * @param aCenter center of the circle
-     * @param aRadius radius of the circle
+     * @param aCenter center of the circle.
+     * @param aRadius radius of the circle.
      */
     bool IntersectsCircle( const wxPoint& aCenter, const int aRadius ) const;
 
     /**
-     * IntersectsCircleEdge
-     * Tests for intersection between this rect and the edge (radius) of a circle
+     * Test for intersection between this rect and the edge (radius) of a circle.
      *
-     * @param aCenter center of the circle
-     * @param aRadius radius of the circle
-     * @param aWidth width of the circle edge
+     * @param aCenter center of the circle.
+     * @param aRadius radius of the circle.
+     * @param aWidth width of the circle edge.
      */
     bool IntersectsCircleEdge( const wxPoint& aCenter, const int aRadius, const int aWidth ) const;
 
     /**
-     * Function operator(wxRect)
-     * overloads the cast operator to return a wxRect
-     * wxRect does not accept negative values for size, so ensure the
-     * wxRect size is always >= 0
+     * Overload the cast operator to return a wxRect.
+     *
+     * wxRect does not accept negative values for size, so ensure the wxRect size is always >= 0.
      */
     operator wxRect() const
     {
@@ -297,9 +286,9 @@ public:
     }
 
     /**
-     * Function operator(BOX2I)
-     * overloads the cast operator to return a BOX2I
-     * @return BOX2I - this box shaped as a BOX2I object.
+     * Overload the cast operator to return a BOX2I.
+     *
+     * @return this box shaped as a BOX2I object.
      */
     operator BOX2I() const
     {
@@ -309,56 +298,54 @@ public:
     }
 
     /**
-     * Function Inflate
-     * inflates the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
+     * Inflate the rectangle horizontally by \a dx and vertically by \a dy. If \a dx
      * and/or \a dy is negative the rectangle is deflated.
      */
     EDA_RECT& Inflate( wxCoord dx, wxCoord dy );
 
     /**
-     * Function Inflate
-     * inflates the rectangle horizontally and vertically by \a aDelta. If \a aDelta
+     * Inflate the rectangle horizontally and vertically by \a aDelta. If \a aDelta
      * is negative the rectangle is deflated.
      */
     EDA_RECT& Inflate( int aDelta );
 
     /**
-     * Function Merge
-     * modifies the position and size of the rectangle in order to contain \a aRect.  It is
-     * mainly used to calculate bounding boxes.
+     * Modify the position and size of the rectangle in order to contain \a aRect.
+     *
+     * It is mainly used to calculate bounding boxes.
+     *
      * @param aRect  The rectangle to merge with this rectangle.
      */
     void Merge( const EDA_RECT& aRect );
 
     /**
-     * Function Merge
-     * modifies the position and size of the rectangle in order to contain the given point.
+     * Modify the position and size of the rectangle in order to contain the given point.
+     *
      * @param aPoint The point to merge with the rectangle.
      */
     void Merge( const wxPoint& aPoint );
 
     /**
-     * Function GetArea
-     * returns the area of the rectangle.
+     * Return the area of the rectangle.
+     *
      * @return The area of the rectangle.
      */
     double GetArea() const;
 
     /**
-     * Function Common
-     * returns the area that is common with another rectangle.
+     * Return the area that is common with another rectangle.
+     *
      * @param aRect is the rectangle to find the common area with.
      * @return The common area rect or 0-sized rectangle if there is no intersection.
      */
     EDA_RECT Common( const EDA_RECT& aRect ) const;
 
     /**
-     * Function GetBoundingBoxRotated
-     * @return the bounding box of this, after rotation
-     * @param aAngle = the rotation angle in 0.1 deg.
-     * @param aRotCenter = the rotation point.
-     * useful to calculate bounding box of rotated items, when
-     * rotation if not k*90 degrees
+     * Useful to calculate bounding box of rotated items, when rotation if not k*90 degrees.
+     *
+     * @return the bounding box of this, after rotation.
+     * @param aAngle the rotation angle in 0.1 deg.
+     * @param aRotCenter the rotation point.
      */
     const EDA_RECT GetBoundingBoxRotated( wxPoint aRotCenter, double aAngle ) const;
 };
