@@ -108,6 +108,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 
 bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 {
+    LIB_PIN original_pin( *aPin );
     DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
 
     if( aPin->GetEditFlags() == 0 )
@@ -127,14 +128,26 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     {
         LIB_PINS pinList;
         aPin->GetParent()->GetPins( pinList );
+        std::vector<bool> got_unit( aPin->GetParent()->GetUnitCount() );
+
+        got_unit[aPin->GetUnit()] = true;
 
         for( LIB_PIN* other : pinList )
         {
             if( other == aPin )
                 continue;
 
-            if( other->GetPosition() == aPin->GetPosition()
-                && other->GetOrientation() == aPin->GetOrientation() )
+            /// Only change one pin per unit to allow stacking pins
+            /// If you change all units on the position, then pins are not
+            /// uniquely editable
+            if( got_unit[other->GetUnit()] )
+                continue;
+
+            if( other->GetPosition() == original_pin.GetPosition()
+                && other->GetOrientation() == original_pin.GetOrientation()
+                && other->GetType() == original_pin.GetType()
+                && other->IsVisible() == original_pin.IsVisible()
+                && other->GetName() == original_pin.GetName() )
             {
                 if( aPin->GetConvert() == 0 )
                 {
@@ -162,6 +175,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 other->SetNumberTextSize( aPin->GetNumberTextSize() );
 
                 other->SetModified();
+                got_unit[other->GetUnit()] = true;
             }
         }
     }

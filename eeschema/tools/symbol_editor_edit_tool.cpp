@@ -257,10 +257,17 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
             toDelete.insert( pin );
 
-            // when pin editing is synchronized, all pins of the same body style are removed:
+            // when pin editing is synchronized, pins in the same position, with the same name
+            // in different units are also removed.  But only one pin per unit (matching)
             if( m_frame->SynchronizePins() )
             {
+                std::vector<bool> got_unit( part->GetUnitCount() );
+
+                got_unit[pin->GetUnit()] = true;
+
                 int curr_convert = pin->GetConvert();
+                ELECTRICAL_PINTYPE etype = pin->GetType();
+                wxString name = pin->GetName();
                 LIB_PIN* next_pin = part->GetNextPin();
 
                 while( next_pin != NULL )
@@ -268,13 +275,23 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                     pin = next_pin;
                     next_pin = part->GetNextPin( pin );
 
+                    if( got_unit[pin->GetUnit()] )
+                        continue;
+
                     if( pin->GetPosition() != pos )
                         continue;
 
                     if( pin->GetConvert() != curr_convert )
                         continue;
 
+                    if( pin->GetType() != etype )
+                        continue;
+
+                    if( pin->GetName() != name )
+                        continue;
+
                     toDelete.insert( pin );
+                    got_unit[pin->GetUnit()] = true;
                 }
             }
         }

@@ -123,14 +123,21 @@ int SYMBOL_EDITOR_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     LIB_PIN*  cur_pin = (LIB_PIN*) lib_item;
                     LIB_PART* part = m_frame->GetCurPart();
+                    std::vector<bool> got_unit( part->GetUnitCount() );
+
+                    got_unit[cur_pin->GetUnit()] = true;
 
                     for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
                     {
-                        if( pin->GetPosition() == cur_pin->GetPosition()
+                        if( !got_unit[pin->GetUnit()]
+                         && pin->GetPosition() == cur_pin->GetPosition()
                          && pin->GetOrientation() == cur_pin->GetOrientation()
-                         && pin->GetConvert() == cur_pin->GetConvert() )
+                         && pin->GetConvert() == cur_pin->GetConvert()
+                         && pin->GetType() == cur_pin->GetType()
+                         && pin->GetName() == cur_pin->GetName()  )
                         {
                             m_selectionTool->AddItemToSel( pin, true /*quiet mode*/ );
+                            got_unit[pin->GetUnit()] = true;
                         }
                     }
                 }
