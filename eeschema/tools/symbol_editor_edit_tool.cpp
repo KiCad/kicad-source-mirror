@@ -497,7 +497,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     // Editing the component value field is equivalent to creating a new component based
     // on the current component.  Set the dialog message to inform the user.
     if( aField->GetId() == VALUE_FIELD )
-        caption = _( "Edit Component Name" );
+        caption = _( "Edit Symbol Name" );
     else
         caption.Printf( _( "Edit %s Field" ), aField->GetName() );
 

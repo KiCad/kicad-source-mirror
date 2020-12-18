@@ -58,7 +58,7 @@ public:
 
     virtual const wxString GetDescription() const override
     {
-        return "Tests components' courtyard clearance";
+        return "Tests footprints' courtyard clearance";
     }
 
     virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;

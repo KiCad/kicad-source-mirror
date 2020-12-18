@@ -234,9 +234,9 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     reporter.ReportHead( msg, RPT_SEVERITY_INFO );
 
     if( m_matchByTimestamp->GetSelection() == 1 )
-        msg = _( "Using reference designators to match components and footprints.\n" );
+        msg = _( "Using reference designators to match symbols and footprints.\n" );
     else
-        msg = _( "Using tstamps (unique IDs) to match components and footprints.\n" );
+        msg = _( "Using tstamps (unique IDs) to match symbols and footprints.\n" );
 
     reporter.ReportHead( msg, RPT_SEVERITY_INFO );
     m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report

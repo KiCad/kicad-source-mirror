@@ -246,23 +246,26 @@ SCH_ITEM* SCH_EDITOR_CONTROL::FindComponentAndItem( const wxString& aReference,
     }
 
     /* Print diag */
-    wxString msg_item;
     wxString msg;
-
-    if( aSearchType == HIGHLIGHT_PIN )
-        msg_item.Printf( _( "pin %s" ), aSearchText );
-    else
-        msg_item = _( "component" );
 
     if( component )
     {
-        if( foundItem )
-            msg.Printf( _( "%s %s found" ), aReference, msg_item );
+        if( aSearchType == HIGHLIGHT_PIN )
+        {
+            if( foundItem )
+                msg.Printf( _( "%s pin %s found" ), aReference, aSearchText );
+            else
+                msg.Printf( _( "%s found but pin %s not found" ), aReference, aSearchText );
+        }
         else
-            msg.Printf( _( "%s found but %s not found" ), aReference, msg_item );
+        {
+            msg.Printf( _( "%s found" ), aReference );
+        }
     }
     else
-        msg.Printf( _( "Component %s not found" ), aReference );
+    {
+        msg.Printf( _( "%s not found" ), aReference );
+    }
 
     m_frame->SetStatusText( msg );
 

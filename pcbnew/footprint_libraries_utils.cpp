@@ -973,8 +973,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( FOOTPRINT* aFootprint )
     // Once saved-as a board footprint is no longer a board footprint
     aFootprint->SetLink( niluuid );
 
-    wxString fmt = footprintExists ? _( "Component \"%s\" replaced in \"%s\"" )
-                                   : _( "Component \"%s\" added in \"%s\"" );
+    wxString fmt = footprintExists ? _( "Footprint '%s' replaced in '%s'" )
+                                   : _( "Footprint '%s' added to '%s'" );
 
     wxString msg = wxString::Format( fmt, footprintName.GetData(), libraryName.GetData() );
     SetStatusText( msg );

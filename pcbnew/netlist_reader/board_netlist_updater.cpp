@@ -392,7 +392,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aPcbCompon
             else if( m_warnForNoNetPads && pad->IsOnCopperLayer() && !pad->GetName().IsEmpty() )
             {
                 // pad is connectable but has no net found in netlist
-                msg.Printf( _( "No net for component %s pin %s." ),
+                msg.Printf( _( "No net for symbol %s pin %s." ),
                             aPcbComponent->GetReference(),
                             pad->GetName() );
                 m_reporter->Report( msg, RPT_SEVERITY_WARNING);
@@ -816,7 +816,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         if( component->GetProperties().count( "exclude_from_board" ) )
             continue;
 
-        msg.Printf( _( "Processing component \"%s:%s\"." ),
+        msg.Printf( _( "Processing symbol '%s:%s'." ),
                     component->GetReference(),
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, RPT_SEVERITY_INFO );

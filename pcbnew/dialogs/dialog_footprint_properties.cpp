@@ -309,13 +309,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
     else
         m_AutoPlaceCtrl->SetSelection( 0 );
 
-    m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Component can be freely moved and auto placed. User "
-                                           "can arbitrarily select and edit component's pads." ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Component can be freely moved and auto placed, but "
+    m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Footprint can be freely moved and auto placed. User "
+                                           "can arbitrarily select and edit footprint's pads." ) );
+    m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Footprint can be freely moved and auto placed, but "
                                            "its pads cannot be edited." ) );
-    m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Component is locked: it cannot be freely moved or "
+    m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Footprint is locked: it cannot be freely moved or "
                                            "auto placed, and can only be selected when the "
-                                           "\"Locked items\" checkbox is enabled in the "
+                                           "'Locked items' checkbox is enabled in the "
                                            "selection filter." ) );
 
     m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
