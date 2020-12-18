@@ -30,8 +30,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="9.0049983"
-     inkscape:cy="13.854319"
+     inkscape:cx="12.491931"
+     inkscape:cy="9.5627096"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
@@ -95,17 +95,17 @@
   <rect
      class="cls-1"
      x="8"
-     y="11"
-     width="7"
-     height="4.5"
+     y="9"
+     width="8"
+     height="5"
      id="rect160573-3"
      style="fill:#888888;fill-opacity:1;stroke-width:0.99999994"
-     ry="0.91361535" />
+     ry="0.38461611" />
   <ellipse
      style="fill:#888888;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;paint-order:stroke fill markers"
      id="path6788"
-     cx="7.7800674"
-     cy="6.8063331"
-     rx="2.7449915"
-     ry="2.8070207" />
+     cx="7.5118423"
+     cy="8.5229769"
+     rx="3.442378"
+     ry="3.4507623" />
 </svg>
