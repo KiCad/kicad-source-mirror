@@ -186,7 +186,7 @@ class SCH_SEXPR_PARSER : public SCHEMATIC_LEXER
     void parsePAGE_INFO( PAGE_INFO& aPageInfo );
     void parseTITLE_BLOCK( TITLE_BLOCK& aTitleBlock );
     void parseSchSymbolInstances( SCH_SCREEN* aScreen );
-    void parseSchSheetInstances( SCH_SCREEN* aScreen );
+    void parseSchSheetInstances( SCH_SHEET* aRootSheet, SCH_SCREEN* aScreen );
 
     SCH_SHEET_PIN* parseSchSheetPin( SCH_SHEET* aSheet );
     SCH_FIELD* parseSchField( SCH_ITEM* aParent );
