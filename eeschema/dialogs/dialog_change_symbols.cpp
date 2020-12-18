@@ -37,6 +37,9 @@
 #include <wx_html_report_panel.h>
 
 
+bool g_selectRefDes = false;
+bool g_selectValue  = false;
+
 bool g_removeExtraFields      = false;
 bool g_resetEmptyFields       = false;
 bool g_resetFieldVisibilities = false;
@@ -97,7 +100,11 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_COMPO
     {
         m_fieldsBox->Append( TEMPLATE_FIELDNAME::GetDefaultFieldName( i ) );
 
-        if( i != REFERENCE_FIELD && i != VALUE_FIELD )
+        if( i == REFERENCE_FIELD )
+            m_fieldsBox->Check( i, g_selectRefDes );
+        else if( i == VALUE_FIELD )
+            m_fieldsBox->Check( i, g_selectValue );
+        else
             m_fieldsBox->Check( i, true );
     }
 
@@ -194,6 +201,9 @@ void DIALOG_CHANGE_SYMBOLS::onMatchTextKillFocus( wxFocusEvent& event )
 
 DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
 {
+    g_selectRefDes = m_fieldsBox->IsChecked( REFERENCE_FIELD );
+    g_selectValue = m_fieldsBox->IsChecked( VALUE_FIELD );
+
     g_removeExtraFields = m_removeExtraBox->GetValue();
     g_resetEmptyFields = m_resetEmptyFields->GetValue();
     g_resetFieldVisibilities = m_resetFieldVisibilities->GetValue();
