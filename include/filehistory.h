@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Ian McInerney <Ian.S.McInerney@ieee.org>
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -131,7 +131,7 @@ public:
     void ClearFileHistory();
 
     /**
-     * Create a SELECTION_CONDITION that can be used to enable a menu item when the
+     * Create a #SELECTION_CONDITION that can be used to enable a menu item when the
      * file history has items in it.
      *
      * @param aHistory is the file history to check for items
@@ -156,8 +156,8 @@ protected:
 
 private:
     /**
-     * Test if the file history is empty. This function is designed to be used with a SELECTION_CONDITION
-     * to enable/disable the file history menu.
+     * Test if the file history is empty. This function is designed to be used with a
+     * #SELECTION_CONDITION to enable/disable the file history menu.
      *
      * @param aSelection is unused
      * @param aHistory is the file history to test for items

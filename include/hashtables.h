@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,7 @@
 // Two competing strategies for providing portable hashtables are given:
 // std C++ and boost.
 
-// First some utility classes and functions common to both strategies..
+// First some utility classes and functions common to both strategies.
 
 /// Equality test for "const char*" type used in very specialized KEYWORD_MAP below
 struct iequal_to : std::binary_function< const char*, const char*, bool >
@@ -105,35 +105,41 @@ class NETINFO_ITEM;
 
 #ifdef SWIG
 /// Declare a std::unordered_map and also the swig %template in unison
-#define DECL_HASH_FOR_SWIG(TypeName, KeyType, ValueType) namespace std { %template(TypeName) unordered_map<KeyType, ValueType>; } typedef std::unordered_map<KeyType, ValueType> TypeName;
+#define DECL_HASH_FOR_SWIG( TypeName, KeyType, ValueType )          \
+    namespace std                                                   \
+    {                                                               \
+        % template( TypeName ) unordered_map<KeyType, ValueType>;   \
+    }                                                               \
+    typedef std::unordered_map<KeyType, ValueType> TypeName;
 #else
 /// Declare a std::unordered_map but no swig %template
-#define DECL_HASH_FOR_SWIG(TypeName, KeyType, ValueType) typedef std::unordered_map<KeyType, ValueType> TypeName;
+#define DECL_HASH_FOR_SWIG( TypeName, KeyType, ValueType )          \
+    typedef std::unordered_map<KeyType, ValueType> TypeName;
 #endif
 
 
-
 /**
- * Type KEYWORD_MAP
- * is a hashtable made of a const char* and an int.  Note that use of this
- * type outside very specific circumstances is foolish since there is no storage
- * provided for the actual C string itself.  This type assumes use with type KEYWORD
- * that is created by CMake and that table creates *constant* storage for C strings
- * (and pointers to those C strings).  Here we are only interested in the C strings
- * themselves and only the pointers are duplicated within the hashtable.
- * If the strings were not constant and fixed, this type would not work.
- * Also note that normally a hashtable (i.e. unordered_map) using a const char* key
- * would simply compare the 32 bit or 64 bit pointers themselves, rather than
- * the C strings which they are known to point to in this context.
- * I force the latter behavior by supplying both "hash" and "equality" overloads
- * to the hashtable (unordered_map) template.
+ * A hashtable made of a const char* and an int.
+ *
+ * @note The use of this type outside very specific circumstances is foolish since there is
+ *       no storage provided for the actual C string itself.
+ *
+ * This type assumes use with type #KEYWORD that is created by CMake and that table creates
+ * *constant* storage for C strings (and pointers to those C strings).  Here we are only
+ * interested in the C strings themselves and only the pointers are duplicated within the
+ * hashtable.  If the strings were not constant and fixed, this type would not work.  Also
+ * note that normally a hashtable (i.e. unordered_map) using a const char* key would simply
+ * compare the 32 bit or 64 bit pointers themselves, rather than the C strings which they
+ * are known to point to in this context.  I force the latter behavior by supplying both
+ * "hash" and "equality" overloads to the hashtable (unordered_map) template.
+ *
  * @author Dick Hollenbeck
  */
-typedef std::unordered_map< const char*, int, fnv_1a, iequal_to >   KEYWORD_MAP;
+typedef std::unordered_map< const char*, int, fnv_1a, iequal_to > KEYWORD_MAP;
 
 /// Map a C string to an EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
-typedef std::unordered_map< std::string, EDA_RECT >     RECT_MAP;
+typedef std::unordered_map< std::string, EDA_RECT > RECT_MAP;
 
 
 #elif 1     // boost::unordered_map
@@ -147,25 +153,26 @@ typedef std::unordered_map< std::string, EDA_RECT >     RECT_MAP;
 
 
 /**
- * Type KEYWORD_MAP
- * is a hashtable made of a const char* and an int.  Note that use of this
- * type outside very specific circumstances is foolish since there is no storage
- * provided for the actual C string itself.  This type assumes use with type KEYWORD
- * that is created by CMake and that table creates *constant* storage for C strings
- * (and pointers to those C strings).  Here we are only interested in the C strings
- * themselves and only the pointers are duplicated within the hashtable.
- * If the strings were not constant and fixed, this type would not work.
- * Also note that normally a hashtable (i.e. unordered_map) using a const char* key
- * would simply compare the 32 bit or 64 bit pointers themselves, rather than
- * the C strings which they are known to point to in this context.
- * I force the latter behavior by supplying both "hash" and "equality" overloads
- * to the hashtable (unordered_map) template.
+ * A hashtable made of a const char* and an int.
+ *
+ * @note The use of this type outside very specific circumstances is foolish since there is
+ *       no storage provided for the actual C string itself.
+ *
+ * This type assumes use with type #KEYWORD that is created by CMake and that table creates
+ * *constant* storage for C strings (and pointers to those C strings).  Here we are only
+ * interested in the C strings themselves and only the pointers are duplicated within the
+ * hashtable.  If the strings were not constant and fixed, this type would not work. Also
+ * note that normally a hashtable (i.e. unordered_map) using a const char* key would simply
+ * compare the 32 bit or 64 bit pointers themselves, rather than the C strings which they
+ * are known to point to in this context.  I force the latter behavior by supplying both
+ * "hash" and "equality" overloads to the hashtable (unordered_map) template.
+ *
  * @author Dick Hollenbeck
  */
 typedef boost::unordered_map< const char*, int, fnv_1a, iequal_to >     KEYWORD_MAP;
 
 
-/// Map a std::string to an EDA_RECT.
+/// Map a std::string to an #EDA_RECT.
 /// The key is the classname of the derived wxformbuilder dialog.
 typedef boost::unordered_map< std::string, EDA_RECT >  RECT_MAP;
 

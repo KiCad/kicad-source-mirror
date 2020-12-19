@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,51 +29,37 @@
 
 
 /**
- * KIFACE_I
- * is a KIFACE (I)mplementation,
- * with some features useful for DSOs which implement a KIFACE.
- * It is abstract, a few functions must be implemented in derivations.
+ * A #KIFACE (I)mplementation.
+ *
+ * This has useful for DSOs which implement a #KIFACE.  It is abstract so a few functions
+ * must be implemented in derivations.
  */
 class KIFACE_I : public KIFACE
 {
 public:
+    /**
+     * Typically #start_common() is called from here.
+     */
+    virtual bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override = 0;
 
-    //-----<KIFACE API>----------------------------------------------------------
-
-        // see base class KIFACE in kiway.h for doxygen docs
-
-    VTBL_ENTRY bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override = 0;
-    /*
-    {
-        typically call start_common() in your overload
-        return start_common();
-    }
-    */
-
-    VTBL_ENTRY void OnKifaceEnd() override
+    virtual void OnKifaceEnd() override
     {
         // overload this if you want, end_common() may be handy.
         end_common();
     }
 
-    VTBL_ENTRY  wxWindow* CreateWindow( wxWindow* aParent,
-            int aClassId, KIWAY* aKIWAY, int aCtlBits = 0 ) override = 0;
+    virtual  wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKIWAY,
+                                     int aCtlBits = 0 ) override = 0;
 
-    VTBL_ENTRY void* IfaceOrAddress( int aDataId ) override = 0;
-
-    //-----</KIFACE API>---------------------------------------------------------
-
-    // The remainder are DSO specific helpers, not part of the KIFACE API
+    virtual void* IfaceOrAddress( int aDataId ) override = 0;
 
     /**
-     * Constructor
-     *
-     * @param aKifaceName should point to a C string in permanent storage,
-     * which contains the name of the DSO.  Examples: "eeschema", "pcbnew", etc.
-     * This controls the name of the wxConfigBase established in m_bm,
-     * so it should be lowercase.
-     * @param aId is the type of DSO ( FACE_SCH, FACE_PCB, FACE_CVPCB,
-     * FACE_GERBVIEW, FACE_PL_EDITOR, FACE_PCB_CALCULATOR, FACE_BMP2CMP)
+     * @param aKifaceName should point to a C string in permanent storage which contains the
+     *                    name of the DSO.  Examples: "eeschema", "pcbnew", etc.  This controls
+     *                    the name of the wxConfigBase established in m_bm, so it should be
+     *                    lowercase.
+     * @param aId is the type of DSO ( #FACE_SCH, #FACE_PCB, #FACE_CVPCB, #FACE_GERBVIEW,
+     *            #FACE_PL_EDITOR, #FACE_PCB_CALCULATOR, #FACE_BMP2CMP)
      */
     KIFACE_I( const char* aKifaceName, KIWAY::FACE_T aId ) :
         m_id( aId ),
@@ -98,27 +84,27 @@ protected:
 
 public:
 
-    const wxString Name()                               { return wxString::FromUTF8( m_bm.m_name ); }
+    const wxString Name()
+    {
+        return wxString::FromUTF8( m_bm.m_name );
+    }
 
     APP_SETTINGS_BASE* KifaceSettings() const           { return m_bm.m_config; }
 
     void InitSettings( APP_SETTINGS_BASE* aSettings )   { m_bm.InitSettings( aSettings ); }
 
     /**
-     * Function StartFlags
-     * returns whatever was passed as @a aCtlBits to OnKifaceStart()
+     * Return whatever was passed as @a aCtlBits to OnKifaceStart().
      */
     int StartFlags() const                              { return m_start_flags; }
 
     /**
-     * Function IsSingle
-     * is this KIFACE_I running under single_top?
+     * Is this KIFACE_I running under single_top?
      */
     bool IsSingle() const                               { return m_start_flags & KFCTL_STANDALONE; }
 
     /**
-     * Function GetHelpFileName
-     * returns just the basename portion of the current help file.
+     * Return just the basename portion of the current help file.
      */
     const wxString& GetHelpFileName() const             { return m_bm.m_help_file; }
 

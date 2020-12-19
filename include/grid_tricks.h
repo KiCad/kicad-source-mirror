@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,25 +46,14 @@ enum
 
 
 /**
- * GRID_TRICKS
- * is used to add mouse and command handling (such as cut, copy, and paste) to a WX_GRID instance.
+ * Add mouse and command handling (such as cut, copy, and paste) to a #WX_GRID instance.
  */
 class GRID_TRICKS : public wxEvtHandler
 {
 public:
-
     explicit GRID_TRICKS( WX_GRID* aGrid );
 
 protected:
-    WX_GRID* m_grid;     ///< I don't own the grid, but he owns me
-
-    // row & col "selection" acquisition
-    // selected area by cell coordinate and count
-    int      m_sel_row_start;
-    int      m_sel_col_start;
-    int      m_sel_row_count;
-    int      m_sel_col_count;
-
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
 
@@ -87,6 +76,15 @@ protected:
     virtual void paste_clipboard();
     virtual void paste_text( const wxString& cb_text );
     virtual void cutcopy( bool doCut );
+
+    WX_GRID* m_grid;     ///< I don't own the grid, but he owns me
+
+    // row & col "selection" acquisition
+    // selected area by cell coordinate and count
+    int      m_sel_row_start;
+    int      m_sel_col_start;
+    int      m_sel_row_count;
+    int      m_sel_col_count;
 };
 
 #endif  // _GRID_TRICKS_H_

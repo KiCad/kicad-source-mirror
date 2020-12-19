@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,51 +34,53 @@ class GL_CONTEXT_MANAGER
 {
 public:
     /**
-     * Function Get
-     * returns the GL_CONTEXT_MANAGER instance (singleton).
+     * Return the GL_CONTEXT_MANAGER instance (singleton).
      */
     static GL_CONTEXT_MANAGER& Get();
 
     /**
-     * Function CreateCtx
-     * creates a managed OpenGL context. It is assured that the created context is freed upon
-     * exit.
-     * See wxGLContext documentation for the parameters description.
+     * Create a managed OpenGL context.
+     *
+     * It is assured that the created context is freed upon exit.  See wxGLContext
+     * documentation for the parameters description.
+     *
      * @return Created OpenGL context.
      */
-    wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = NULL );
+    wxGLContext* CreateCtx( wxGLCanvas* aCanvas, const wxGLContext* aOther = nullptr );
 
     /**
-     * Function DestroyCtx
-     * destroys a managed OpenGL context. The context to be removed has to be created using
-     * GL_CONTEXT_MANAGER::CreateCtx() first.
+     * Destroy a managed OpenGL context.
+     *
+     * The context to be removed has to be created using GL_CONTEXT_MANAGER::CreateCtx() first.
+     *
      * @param aContext is the OpenGL context to be destroyed. It will not be managed anymore.
      */
     void DestroyCtx( wxGLContext* aContext );
 
     /**
-     * Function DeleteAll
-     * destroys all managed OpenGL contexts. This method should be called in the
-     * final deinitialization routine.
+     * Destroy all managed OpenGL contexts.
+     *
+     * This method should be called in the final deinitialization routine.
      */
     void DeleteAll();
 
     /**
-     * Function LockCtx
-     * sets a context as current and prevents other canvases from switching it.
-     * Requires calling UnlockCtx() when there are no more GL calls for the context.
-     * If another canvas has already locked a GL context, then the calling process is blocked.
+     * Set a context as current and prevents other canvases from switching it.
+     *
+     * Requires calling UnlockCtx() when there are no more GL calls for the context.  If
+     * another canvas has already locked a GL context, then the calling process is blocked.
+     *
      * @param aContext is the GL context to be bound.
      * @param aCanvas (optional) allows caller to bind the context to a non-parent canvas
-     * (e.g. when a few canvases share a single GL context).
+     *                (e.g. when a few canvases share a single GL context).
      */
     void LockCtx( wxGLContext* aContext, wxGLCanvas* aCanvas );
 
     /**
-     * Function UnlockCtx
-     * allows other canvases to bind an OpenGL context.
+     * Allow other canvases to bind an OpenGL context.
+     *
      * @param aContext is the currently bound context. It is only a check to assure the right
-     * canvas wants to unlock GL context.
+     *                 canvas wants to unlock GL context.
      */
     void UnlockCtx( wxGLContext* aContext );
 

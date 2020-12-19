@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2010-2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,13 +141,13 @@ static struct hotkey_name_descr hotkeyNameList[] =
 
 
 /**
- * Function KeyNameFromKeyCode
- * return the key name from the key code
- * Only some wxWidgets key values are handled for function key ( see
- * hotkeyNameList[] )
- * @param aKeycode = key code (ascii value, or wxWidgets value for function keys)
- * @param aIsFound = a pointer to a bool to return true if found, or false. an be nullptr default)
- * @return the key name in a wxString
+ * Return the key name from the key code.
+ *
+ * Only some wxWidgets key values are handled for function key ( see hotkeyNameList[] )
+ *
+ * @param aKeycode key code (ASCII value, or wxWidgets value for function keys).
+ * @param aIsFound a pointer to a bool to return true if found, or false. an be nullptr default).
+ * @return the key name in a wxString.
  */
 wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 {
@@ -200,11 +200,10 @@ wxString KeyNameFromKeyCode( int aKeycode, bool* aIsFound )
 
 
 /**
- * AddHotkeyName
- * @param aText - the base text on which to append the hotkey
- * @param aHotKey - the hotkey keycode
- * @param aStyle - IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys)
- *                 IS_COMMENT to add <spaces><(keyname)> mainly in tool tips
+ * @param aText the base text on which to append the hotkey.
+ * @param aHotKey the hotkey keycode.
+ * @param aStyle IS_HOTKEY to add <tab><keyname> (shortcuts in menus, same as hotkeys).
+ *               IS_COMMENT to add <spaces><(keyname)> mainly in tool tips.
  */
 wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE aStyle )
 {
@@ -219,7 +218,7 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
         {
             // Don't add a suffix for unassigned hotkeys:
             // WX spews debug from wxAcceleratorEntry::ParseAccel if it doesn't
-            // recognise the keyname, which is the case for <unassigned>.
+            // recognize the keyname, which is the case for <unassigned>.
             if( aHotKey != 0 )
             {
                 msg << wxT( "\t" ) << keyname;
@@ -245,8 +244,7 @@ wxString AddHotkeyName( const wxString& aText, int aHotKey, HOTKEY_ACTION_TYPE a
 
 
 /**
- * Function KeyCodeFromKeyName
- * return the key code from its user-friendly key name (ie: "Ctrl+M")
+ * Return the key code from its user-friendly key name (ie: "Ctrl+M").
  */
 int KeyCodeFromKeyName( const wxString& keyname )
 {
@@ -312,7 +310,6 @@ int KeyCodeFromKeyName( const wxString& keyname )
 
 
 /*
- * DisplayHotkeyList
  * Displays the hotkeys registered with the given tool manager.
  */
 void DisplayHotkeyList( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolManager )
@@ -322,8 +319,10 @@ void DisplayHotkeyList( EDA_BASE_FRAME* aParent, TOOL_MANAGER* aToolManager )
 }
 
 
-void ReadHotKeyConfig( wxString fileName, std::map<std::string, int>& aHotKeys )
+void ReadHotKeyConfig( const wxString& aFileName, std::map<std::string, int>& aHotKeys )
 {
+    wxString fileName = aFileName;
+
     if( fileName.IsEmpty() )
     {
         wxFileName fn( "user" );
@@ -367,22 +366,19 @@ int WriteHotKeyConfig( const std::map<std::string, TOOL_ACTION*>& aActionMap )
     fn.SetPath( SETTINGS_MANAGER::GetUserSettingsPath() );
 
     // Read the existing config (all hotkeys)
-    //
     ReadHotKeyConfig( fn.GetFullPath(), hotkeys );
 
     // Overlay the current app's hotkey definitions onto the map
-    //
     for( const auto& ii : aActionMap )
         hotkeys[ ii.first ] = ii.second->GetHotKey();
 
     // Write entire hotkey set
-    //
-
     wxFFileOutputStream outStream( fn.GetFullPath() );
     wxTextOutputStream  txtStream( outStream, wxEOL_UNIX );
 
     for( const auto& ii : hotkeys )
-        txtStream << wxString::Format( "%s\t%s", ii.first, KeyNameFromKeyCode( ii.second ) ) << endl;
+        txtStream << wxString::Format( "%s\t%s", ii.first,
+                                       KeyNameFromKeyCode( ii.second ) ) << endl;
 
     txtStream.Flush();
     outStream.Close();

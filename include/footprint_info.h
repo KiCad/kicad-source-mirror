@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Jean-Pierre Charras, <jp.charras@wanadoo.fr>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,8 +59,6 @@ class wxTextFile;
  */
 class APIEXPORT FOOTPRINT_INFO : public LIB_TREE_ITEM
 {
-    friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
-
 public:
     virtual ~FOOTPRINT_INFO()
     {
@@ -134,6 +132,9 @@ public:
      */
     friend bool operator<( const FOOTPRINT_INFO& lhs, const FOOTPRINT_INFO& rhs );
 
+private:
+    friend bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 );
+
 protected:
     void ensure_loaded()
     {
@@ -159,7 +160,7 @@ protected:
 
 
 /**
- * Holds a list of FOOTPRINT_INFO objects, along with a list of IO_ERRORs or
+ * Holds a list of #FOOTPRINT_INFO objects, along with a list of IO_ERRORs or
  * PARSE_ERRORs that were thrown acquiring the FOOTPRINT_INFOs.
  *
  * This is a virtual class; its implementation lives in pcbnew/footprint_info_impl.cpp.
@@ -167,18 +168,10 @@ protected:
  */
 class APIEXPORT FOOTPRINT_LIST
 {
-    friend class FOOTPRINT_ASYNC_LOADER;
-
-protected:
-    FP_LIB_TABLE* m_lib_table; ///< no ownership
-
+public:
     typedef std::vector<std::unique_ptr<FOOTPRINT_INFO>> FPILIST;
     typedef SYNC_QUEUE<std::unique_ptr<IO_ERROR>>        ERRLIST;
 
-    FPILIST m_list;
-    ERRLIST m_errors; ///< some can be PARSE_ERRORs also
-
-public:
     FOOTPRINT_LIST() : m_lib_table( 0 )
     {
     }
@@ -225,8 +218,9 @@ public:
 
     /**
      * Get info for a footprint by index.
-     * @param aIdx = index of the given item
-     * @return the aIdx item in list
+     *
+     * @param aIdx index of the given item.
+     * @return the aIdx item in list.
      */
     FOOTPRINT_INFO& GetItem( unsigned aIdx )
     {
@@ -250,13 +244,13 @@ public:
      * Read all the footprints provided by the combination of aTable and aNickname.
      *
      * @param aTable defines all the libraries.
-     * @param aNickname is the library to read from, or if NULL means read all
-     *         footprints from all known libraries in aTable.
-     * @param aProgressReporter is an optional progress reporter.  ReadFootprintFiles()
-     *         will use 2 phases within the reporter.
-     * @return bool - true if it ran to completion, else false if it aborted after
-     *  some number of errors.  If true, it does not mean there were no errors, check
-     *  GetErrorCount() for that, should be zero to indicate success.
+     * @param aNickname is the library to read from, or if NULL means read all footprints
+     *                  from all known libraries in aTable.
+     * @param aProgressReporter is an optional progress reporter.  ReadFootprintFiles() will
+     *                          use 2 phases within the reporter.
+     * @return true if it ran to completion, else false if it aborted after some number of
+     *         errors.  If true, it does not mean there were no errors, check GetErrorCount()
+     *         for that, should be zero to indicate success.
      */
     virtual bool ReadFootprintFiles( FP_LIB_TABLE* aTable, const wxString* aNickname = nullptr,
                                      PROGRESS_REPORTER* aProgressReporter = nullptr ) = 0;
@@ -269,17 +263,18 @@ public:
     }
 
     /**
-     * Factory function to return a FOOTPRINT_LIST via Kiway. NOT guaranteed
-     * to succeed; will return null if the kiface is not available.
+     * Factory function to return a #FOOTPRINT_LIST via Kiway.
      *
-     * @param aKiway - active kiway instance
+     * This is not guaranteed to succeed and will return null if the kiface is not available.
+     *
+     * @param aKiway active kiway instance.
      */
     static FOOTPRINT_LIST* GetInstance( KIWAY& aKiway );
 
 protected:
     /**
-     * Launch worker threads to load footprints. Part of the
-     * FOOTPRINT_ASYNC_LOADER implementation.
+     * Launch worker threads to load footprints. Part of the #FOOTPRINT_ASYNC_LOADER
+     * implementation.
      */
     virtual void startWorkers( FP_LIB_TABLE* aTable, wxString const* aNickname,
                                FOOTPRINT_ASYNC_LOADER* aLoader, unsigned aNThreads ) = 0;
@@ -293,24 +288,26 @@ protected:
      * Stop worker threads. Part of the FOOTPRINT_ASYNC_LOADER implementation.
      */
     virtual void stopWorkers() = 0;
+
+private:
+    friend class FOOTPRINT_ASYNC_LOADER;
+
+protected:
+    FP_LIB_TABLE* m_lib_table; ///< no ownership
+
+    FPILIST m_list;
+    ERRLIST m_errors; ///< some can be PARSE_ERRORs also
 };
 
 
 /**
- * This class can be used to populate a FOOTPRINT_LIST asynchronously.
- * Constructing one, calling .Start(), then waiting until it reports completion
- * is equivalent to calling FOOTPRINT_LIST::ReadFootprintFiles().
+ * Object used to populate a #FOOTPRINT_LIST asynchronously.
+ *
+ * Construct one, calling #Start(), and then waiting until it reports completion.  This is
+ * equivalent to calling #FOOTPRINT_LIST::ReadFootprintFiles().
  */
 class APIEXPORT FOOTPRINT_ASYNC_LOADER
 {
-    friend class FOOTPRINT_LIST;
-    friend class FOOTPRINT_LIST_IMPL;
-
-    FOOTPRINT_LIST*  m_list;
-    std::string      m_last_table;
-
-    int              m_total_libs;
-
 public:
     /**
      * Construct an asynchronous loader.
@@ -327,9 +324,10 @@ public:
 
     /**
      * Launch the worker threads.
+     *
      * @param aTable defines all the libraries.
-     * @param aNickname is the library to read from, or if NULL means read all
-     *         footprints from all known libraries in aTable.
+     * @param aNickname is the library to read from, or if NULL means read all footprints from
+     *                  all known libraries in \a aTable.
      * @param aNThreads is the number of worker threads.
      */
     void Start( FP_LIB_TABLE* aTable, wxString const* aNickname = nullptr,
@@ -356,11 +354,20 @@ public:
      */
     void Abort();
 
+private:
     /**
      * Default number of worker threads. Determined empirically (by dickelbeck):
      * More than 6 is not significantly faster, less than 6 is likely slower.
      */
     static constexpr unsigned DEFAULT_THREADS = 6;
+
+    friend class FOOTPRINT_LIST;
+    friend class FOOTPRINT_LIST_IMPL;
+
+    FOOTPRINT_LIST*  m_list;
+    std::string      m_last_table;
+
+    int              m_total_libs;
 };
 
 

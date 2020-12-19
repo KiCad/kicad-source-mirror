@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004, 2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,14 +40,13 @@
 
 /**
  * Converts curly quotes and em/en dashes to straight quotes and dashes.
- * @param aString
+ *
  * @return true if any characters required conversion.
  */
 bool ConvertSmartQuotesAndDashes( wxString* aString );
 
 /**
- * Escape/Unescape routines to safely encode reserved-characters in various
- * contexts.
+ * Escape/Unescape routines to safely encode reserved-characters in various contexts.
  */
 enum ESCAPE_CONTEXT
 {
@@ -76,8 +75,8 @@ wxString PrettyPrintForMenu( const wxString& aString );
  * @param aDest is the destination byte buffer.
  * @param aSource is the source bytes as a C string.
  * @param aDestSize is the size of the destination byte buffer.
- * @return int - the number of bytes read from source, which may be more than
- *   the number copied, due to escaping of double quotes and the escape byte itself.
+ * @return the number of bytes read from source, which may be more than the number copied,
+ *         due to escaping of double quotes and the escape byte itself.
  * @deprecated should use the one which fetches a wxString, below.
  */
 int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
@@ -85,21 +84,21 @@ int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
 /**
  * Copy bytes from @a aSource delimited string segment to @a aDest wxString.
  *
- * @param aDest is the destination wxString
+ * @param aDest is the destination wxString.
  * @param aSource is the source C string holding utf8 encoded bytes.
- * @return int - the number of bytes read from source, which may be more than
- *   the number copied, due to escaping of double quotes and the escape byte itself.
+ * @return the number of bytes read from source, which may be more than the number copied,
+ *         due to escaping of double quotes and the escape byte itself.
  */
 int ReadDelimitedText( wxString* aDest, const char* aSource );
 
 /**
- * Function EscapedUTF8
- * returns an 8 bit UTF8 string given aString in unicode form.
+ * Return an 8 bit UTF8 string given aString in Unicode form.
+ *
  * Any double quoted or back slashes are prefixed with a '\\' byte and the form
  * of this UTF8 byte string is compatible with function ReadDelimitedText().
  *
  * @param aString is the input string to convert.
- * @return std::string - the escaped input text, without the wrapping double quotes.
+ * @return the escaped input text, without the wrapping double quotes.
  */
 std::string EscapedUTF8( wxString aString );
 
@@ -113,7 +112,7 @@ wxString EscapeHTML( const wxString& aString );
  *
  * @return a pointer the first useful line read by eliminating blank lines and comments.
  */
-char* GetLine( FILE* aFile, char* Line, int* LineNum = NULL, int SizeLine = 255 );
+char* GetLine( FILE* aFile, char* Line, int* LineNum = nullptr, int SizeLine = 255 );
 
 /**
  * Return true if the string is empty or contains only whitespace.
@@ -180,8 +179,8 @@ int SplitString( wxString  strToSplit,
 /**
  * Gets the trailing int, if any, from a string.
  *
- * @param  aStr the string to check
- * @return      the trailing int or 0 if none found
+ * @param aStr the string to check.
+ * @return the trailing int or 0 if none found.
  */
 int GetTrailingInt( const wxString& aStr );
 
@@ -214,8 +213,9 @@ extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
 
 
 /**
- * A helper for sorting strings from the rear.  Useful for things like 3d model names
- * where they tend to be largely repetitious at the front.
+ * A helper for sorting strings from the rear.
+ *
+ * Useful for things like 3D model names where they tend to be largely repetitious at the front.
  */
 struct rsort_wxString
 {
@@ -264,10 +264,10 @@ struct rsort_wxString
 /**
  * Splits the input string into a vector of output strings
  *
- * @param aStr - Input string with 0 or more delimiters
- * @param aDelim - The string of delimiter.  Multiple characters here denote alternate delimiters
- *
  * @note Multiple delimiters are considered to be separate records with empty strings
+ *
+ * @param aStr Input string with 0 or more delimiters.
+ * @param aDelim The string of delimiter.  Multiple characters here denote alternate delimiters.
  * @return a vector of strings
  */
 static inline std::vector<std::string> split( const std::string& aStr, const std::string& aDelim )
@@ -309,17 +309,17 @@ inline void AccumulateDescription( wxString& aDesc, const wxString& aItem )
 /**
  * Split \a aString to a string list separated at \a aSplitter.
  *
- * @param aText is the text to split
- * @param aStrings will contain the splitted lines
- * @param aSplitter is the 'split' character
+ * @param aText is the text to split.
+ * @param aStrings will contain the split lines.
+ * @param aSplitter is the 'split' character.
  */
 void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter );
 
 /**
- * Function StripTrailingZeros
- * Remove trailing 0 from a string containing a converted float number.
- * The trailing 0 are removed if the mantissa has more
- * than aTrailingZeroAllowed digits and some trailing 0
+ * Remove trailing zeros from a string containing a converted float number.
+ *
+ * The trailing zeros are removed if the mantissa has more than \a aTrailingZeroAllowed
+ * digits and some trailing zeros.
  */
 void StripTrailingZeros( wxString& aStringValue, unsigned aTrailingZeroAllowed = 1 );
 

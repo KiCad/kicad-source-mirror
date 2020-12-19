@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,9 +25,10 @@
 #ifndef GBR_NETLIST_METADATA_H
 #define GBR_NETLIST_METADATA_H
 
-/** this class handle info which can be added in a gerber P&P file as attribute
- * of a component
- * Only applicable to objects having the  TA.AperFunction attribute "ComponentMain"
+/**
+ * Information which can be added in a gerber P&P file as attribute of a component.
+ *
+ * This is only applicable to objects having the TA.AperFunction attribute "ComponentMain"
  * There are specific attributes defined attached to the component by the %TO command
  * %TO.CRot,<angle> The rotation angle of the component.
  *   The rotation angle is consistent with the one for graphics objects.
@@ -37,6 +38,7 @@
  *   Components on the bottom side are of course mirrored.
  *   The base orientation on the bottom side is the one on the top side
  *   mirrored around the X axis.
+ *
  * %TO.CMfr,<string>     Manufacturer
  * %TO.CMPN,<string>     Manufacturer part number
  * %TO.Cpkg,<string>     Package, as per IPC-7351
@@ -49,8 +51,8 @@
  * %TO.CHgt,<string>     Height, a decimal, in the unit of the file.
  * %TO.CLbN,<string>     Library name.
  * %TO.CLbD,<string>     Library description.
- * %TO.Sup,<SN>,<SPN>    SN is a field with the supppier name.
- *                       SPN is a field with the supppier part name
+ * %TO.Sup,<SN>,<SPN>    SN is a field with the supplier name.
+ *                       SPN is a field with the supplier part name.
  */
 class GBR_CMP_PNP_METADATA
 {
@@ -62,6 +64,19 @@ public:
         MOUNT_TYPE_TH
     };
 
+    GBR_CMP_PNP_METADATA() :
+        m_Orientation( 0.0 ),
+        m_MountType( MOUNT_TYPE_UNSPECIFIED )
+    {}
+
+    void ClearData();           // Clear all strings
+
+    /**
+     * @return a string containing the formatted metadata in X2 syntax.
+     */
+    wxString FormatCmpPnPMetadata();
+
+
     double m_Orientation;       // orientation in degree
     wxString m_Manufacturer;    // Manufacturer name
     wxString m_MPN;             // Manufacturer part number
@@ -71,26 +86,15 @@ public:
     wxString m_LibraryDescr;    // Library description
     wxString m_Value;           // Component value
     MOUNT_TYPE m_MountType;     // SMD|TH|Other
-
-    GBR_CMP_PNP_METADATA() :
-        m_Orientation( 0.0 ), m_MountType( MOUNT_TYPE_UNSPECIFIED )
-    {}
-
-    void ClearData();           // Clear all strings
-    /**
-     * @return a string containing the formated metadata in X2 syntax.
-     * one line by non empty data
-     * the orientation is always generated
-     */
-    wxString FormatCmpPnPMetadata();
 };
 
 /**
- * This class handle a Gerber data field.
- * this is a unicode string with some chars converted in escaped Hexa sequence
- * when creating the file
- * Chars always escaped because they are separator in Gerber files: * , \ %
- * non ascii 7 chars can be converted to UTF8 or escaped.
+ * A Gerber data field.
+ *
+ * This is a Unicode string with some chars converted in escaped hexadecimal sequence
+ * when creating the file.  The following characters are  always escaped because they
+ * are separator in Gerber files: * , \ %.  Non ASCII7 characters can be converted to
+ * UTF8 or escaped.
  */
 class GBR_DATA_FIELD
 {
@@ -120,28 +124,27 @@ public:
 
     std::string GetGerberString() const;
 
-
 private:
-    wxString m_field;       ///< the unicade text to print in Gbr file
+    wxString m_field;       ///< the Unicode text to print in Gbr file
                             ///< (after escape and quoting)
-    bool m_useUTF8;         ///< true to use UTF8, false to escape non ascii7 chars
+    bool m_useUTF8;         ///< true to use UTF8, false to escape non ASCII7 chars
     bool m_escapeString;    ///< true to quote the field in gbr file
 };
 
 
-/** this class handle info which can be added in a gerber file as attribute
- * of an object
- * the GBR_INFO_TYPE types can be OR'ed to add 2 (or more) attributes
- * There are only 3 net attributes defined attached to an object by the %TO command
- * %TO.P
- * %TO.N
- * %TO.C
- * the .P attribute can be used only for flashed pads (using the D03 command)
- * and only for external copper layers, if the component is on a external copper layer
- * for other copper layer items (pads on internal layers, tracks ... ), only .N and .C
- * can be used
+/**
+ * Information which can be added in a gerber file as attribute of an object.
+ *
+ * The #GBR_INFO_TYPE types can be OR'ed to add 2 (or more) attributes.  There are only 3
+ * net attributes defined attached to an object by the %TO command:
+ *  - %TO.P
+ *  - %TO.N
+ *  - %TO.C
+ *
+ * The .P attribute can be used only for flashed pads (using the D03 command) and only for
+ * external copper layers, if the component is on a external copper layer for other copper
+ * layer items (pads on internal layers, tracks ... ), only .N and .C can be used.
  */
-
 class GBR_NETLIST_METADATA
 {
 public:
@@ -156,40 +159,21 @@ public:
         GBR_NETINFO_CMP = 4         ///< print info associated to a component (TO.C attribute)
     };
 
-    // these members are used in the %TO object attributes command.
-    int      m_NetAttribType;   ///< the type of net info
-                                ///< (used to define the gerber string to create)
-    bool     m_NotInNet;        ///< true if a pad of a footprint cannot be connected
-                                ///< (for instance a mechanical NPTH, ot a not named pad)
-                                ///< in this case the pad net name is empty in gerber file
-    GBR_DATA_FIELD m_Padname;   ///< for a flashed pad: the pad name ((TO.P attribute)
-    GBR_DATA_FIELD m_PadPinFunction;  ///< for a pad: the pin function (defined in schematic)
-    wxString m_Cmpref;    ///< the component reference parent of the data
-    wxString m_Netname;   ///< for items associated to a net: the netname
-
-    wxString m_ExtraData;       ///< a string to print after %TO object attributes, if not empty
-                                ///< it is printed "as this"
-    /** If true, do not clear all attributes when a atribute has changed
-     *  Usefull when some attributes need to be persistant.
-     *  If false, attributes will be cleared if only one attribute cleared
-     *  This is a more secure way to set attributes, when all attribute changess are not safely managed
-     */
-    bool     m_TryKeepPreviousAttributes;
-
-
     GBR_NETLIST_METADATA(): m_NetAttribType( GBR_NETINFO_UNSPECIFIED ),
             m_NotInNet( false ), m_TryKeepPreviousAttributes( false )
     {
     }
 
-    /** Clear the extra data string printed at end of net attributes
+    /**
+     * Clear the extra data string printed at end of net attributes.
      */
     void ClearExtraData()
     {
         m_ExtraData.Clear();
     }
 
-    /** Set the extra data string printed at end of net attributes
+    /**
+     * Set the extra data string printed at end of net attributes
      */
     void SetExtraData( const wxString& aExtraData)
     {
@@ -197,9 +181,11 @@ public:
     }
 
     /**
-     * remove the net attribute specified by aName
-     * If aName == NULL or empty, remove all attributes
-     * @param aName is the name (.CN, .P .N or .C) of the attribute to remove
+     * Remove the net attribute specified by \a aName.
+     *
+     * If aName == NULL or empty, remove all attributes.
+     *
+     * @param aName is the name (.CN, .P .N or .C) of the attribute to remove.
      */
     void ClearAttribute( const wxString* aName )
     {
@@ -244,11 +230,33 @@ public:
             return;
         }
     }
+
+    // these members are used in the %TO object attributes command.
+    int      m_NetAttribType;   ///< the type of net info
+                                ///< (used to define the gerber string to create)
+    bool     m_NotInNet;        ///< true if a pad of a footprint cannot be connected
+                                ///< (for instance a mechanical NPTH, ot a not named pad)
+                                ///< in this case the pad net name is empty in gerber file
+    GBR_DATA_FIELD m_Padname;   ///< for a flashed pad: the pad name ((TO.P attribute)
+    GBR_DATA_FIELD m_PadPinFunction;  ///< for a pad: the pin function (defined in schematic)
+    wxString m_Cmpref;    ///< the component reference parent of the data
+    wxString m_Netname;   ///< for items associated to a net: the netname
+
+    wxString m_ExtraData;       ///< a string to print after %TO object attributes, if not empty
+                                ///< it is printed "as this"
+    /**
+     * If true, do not clear all attributes when a attribute has changed.  This is useful
+     * when some attributes need to be persistent.   If false, attributes will be cleared
+     * if only one attribute cleared.  This is a more secure way to set attributes, when
+     * all attribute changes are not safely managed.
+     */
+    bool     m_TryKeepPreviousAttributes;
 };
 
+
 // Flashed pads use the full attribute set: this is a helper for flashed pads
-#define GBR_NETINFO_ALL (GBR_NETLIST_METADATA::GBR_NETINFO_PAD\
-                        | GBR_NETLIST_METADATA::GBR_NETINFO_NET\
-                        | GBR_NETLIST_METADATA::GBR_NETINFO_CMP )
+#define GBR_NETINFO_ALL                                                               \
+    ( GBR_NETLIST_METADATA::GBR_NETINFO_PAD | GBR_NETLIST_METADATA::GBR_NETINFO_NET   \
+      | GBR_NETLIST_METADATA::GBR_NETINFO_CMP )
 
 #endif      // GBR_NETLIST_METADATA_H

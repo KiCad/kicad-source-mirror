@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2016 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,9 +38,8 @@
 #define THROW_IO_ERROR( msg )   throw IO_ERROR( msg, __FILE__, __FUNCTION__, __LINE__ )
 
 /**
- * KI_PARAM_ERROR
- * is a class used to hold a translatable error message and may be used when throwing exceptions
- * containing a translated error message.
+ * Hold a translatable error message and may be used when throwing exceptions containing a
+ * translated error message.
  */
 class KI_PARAM_ERROR // similar to std::invalid_argument for instance
 {
@@ -68,29 +67,25 @@ private:
 
 
 /**
- * Struct IO_ERROR
- * is a class used to hold an error message and may be used when throwing exceptions
- * containing meaningful error messages.
+ * Hold an error message and may be used when throwing exceptions containing meaningful
+ * error messages.
+ *
  * @author Dick Hollenbeck
  */
 class IO_ERROR // : std::exception
 {
 public:
     /**
-     * Constructor
+     * Use macro #THROW_IO_ERROR() to wrap a call to this constructor at the call site.
      *
      * @param aProblem is Problem() text.
-     *
-     * @param aThrowersFile is the __FILE__ preprocessor macro but generated
-     *  at the source file of thrower.
-     *
+     * @param aThrowersFile is the __FILE__ preprocessor macro but generated at the source
+     *                      file of thrower.
      * @param aThrowersFunction is the function name at the throw site.
      * @param aThrowersLineNumber is the source code line number of the throw.
-     *
-     * Use macro THROW_IO_ERROR() to wrap a call to this constructor at the call site.
      */
     IO_ERROR( const wxString& aProblem, const char* aThrowersFile,
-            const char* aThrowersFunction, int aThrowersLineNumber )
+              const char* aThrowersFunction, int aThrowersLineNumber )
     {
         init( aProblem, aThrowersFile, aThrowersFunction, aThrowersLineNumber );
     }
@@ -98,7 +93,7 @@ public:
     IO_ERROR() {}
 
     void init( const wxString& aProblem, const char* aThrowersFile,
-        const char* aThrowersFunction, int aThrowersLineNumber );
+               const char* aThrowersFunction, int aThrowersLineNumber );
 
     virtual const wxString Problem() const;         ///< what was the problem?
     virtual const wxString Where() const;           ///< where did the Problem() occur?
@@ -114,10 +109,10 @@ protected:
 
 
 /**
- * Struct PARSE_ERROR
- * contains a filename or source description, a problem input line, a line number,
- * a byte offset, and an error message which contains the the caller's report and his
- * call site information: CPP source file, function, and line number.
+ * A filename or source description, a problem input line, a line number, a byte
+ * offset, and an error message which contains the the caller's report and his call
+ * site information: CPP source file, function, and line number.
+ *
  * @author Dick Hollenbeck
  */
 struct PARSE_ERROR : public IO_ERROR
@@ -132,19 +127,17 @@ struct PARSE_ERROR : public IO_ERROR
     std::string inputLine;
 
     /**
-     * Constructor
-     * which is normally called via the macro THROW_PARSE_ERROR so that
-     * __FILE__ and __FUNCTION__ and __LINE__ can be captured from the call site.
+     * Normally called via the macro #THROW_PARSE_ERROR so that __FILE__, __FUNCTION__,
+     * and __LINE__ can be captured from the call site.
      */
     PARSE_ERROR( const wxString& aProblem, const char* aThrowersFile,
                  const char* aThrowersFunction, int aThrowersLineNumber,
-                 const wxString& aSource,
-                 const char* aInputLine,
+                 const wxString& aSource, const char* aInputLine,
                  int aLineNumber, int aByteIndex ) :
         IO_ERROR()
     {
         init( aProblem, aThrowersFile, aThrowersFunction, aThrowersLineNumber,
-            aSource, aInputLine, aLineNumber, aByteIndex );
+              aSource, aInputLine, aLineNumber, aByteIndex );
     }
 
     void init( const wxString& aProblem, const char* aThrowersFile,
@@ -168,14 +161,14 @@ protected:
 };
 
 
-#define THROW_PARSE_ERROR( aProblem, aSource, aInputLine, aLineNumber, aByteIndex )  \
-        throw PARSE_ERROR( aProblem, __FILE__, __FUNCTION__, __LINE__, aSource, aInputLine, aLineNumber, aByteIndex )
+#define THROW_PARSE_ERROR( aProblem, aSource, aInputLine, aLineNumber, aByteIndex )      \
+    throw PARSE_ERROR( aProblem, __FILE__, __FUNCTION__, __LINE__, aSource, aInputLine,  \
+                       aLineNumber, aByteIndex )
 
 
 /**
- * Struct FUTURE_FORMAT_ERROR
- * variant of PARSE_ERROR indicating that a syntax or related error was likely caused
- * by a file generated by a newer version of KiCad than this. Can be used to generate
+ * Variant of #PARSE_ERROR indicating that a syntax or related error was likely caused
+ * by a file generated by a newer version of KiCad than this. This can be used to generate
  * more informative error messages.
  */
 struct FUTURE_FORMAT_ERROR : public PARSE_ERROR

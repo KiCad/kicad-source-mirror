@@ -32,15 +32,16 @@ class GL_UTILS
 {
 public:
     /**
-     * Attempts to set the OpenGL swap interval
-     * @param aVal if -1 = try to set adaptive swapping, 0 = sync off, 1 = sync with VSYNC rate
+     * Attempts to set the OpenGL swap interval.
+     *
+     * @param aVal if -1 = try to set adaptive swapping, 0 = sync off, 1 = sync with VSYNC rate.
      * @return actual value set
      */
     static int SetSwapInterval( int aVal )
     {
-        /// This routine is written for Linux using X11 only.  The equivalent functions under Windows would
-        /// include <wglext.h> and call wglSwapIntervalEXT
-    #if defined( __linux__ ) && !defined( KICAD_USE_EGL )
+        /// This routine is written for Linux using X11 only.  The equivalent functions under
+        /// Windows would include <wglext.h> and call wglSwapIntervalEXT
+#if defined( __linux__ ) && !defined( KICAD_USE_EGL )
         Display *dpy = glXGetCurrentDisplay();
         GLXDrawable drawable = glXGetCurrentDrawable();
 
@@ -74,9 +75,9 @@ public:
         }
 
         return std::numeric_limits<int>::max();
-    #else
+#else
         return 0;
-    #endif
+#endif
     }
 };
 

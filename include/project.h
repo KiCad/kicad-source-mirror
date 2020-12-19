@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,27 +52,24 @@ class FILENAME_RESOLVER;
 class PROJECT_FILE;
 class PROJECT_LOCAL_SETTINGS;
 
-#define VTBL_ENTRY      virtual
 
 /**
- * PROJECT
- * holds project specific data.  Because it is in the neutral program top, which
- * is not linked to by subsidiarly DSOs, any functions in this interface must
- * be VTBL_ENTRYs.
+ * Container for project specific data.
+ *
+ * Because it is in the neutral program top, which is not linked to by subsidiarly DSOs,
+ * any functions in this interface must be virtual.
  */
 class PROJECT
 {
-    friend class SETTINGS_MANAGER; // so that SM can set project path
-    friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required
-
 public:
-
-    /// A PROJECT can hold stuff it knows nothing about, in the form of
-    /// _ELEM derivatives. Derive PROJECT elements from this, it has a virtual
-    /// destructor, and Elem*() functions can work with it.  Implementation is
-    /// opaque in class PROJECT.  If find you have to include derived class headers
-    /// in this file, you are doing incompatible with the goal of this class.
-    /// Keep knowledge of derived classes opaque to class PROJECT please.
+    /**
+     * A #PROJECT can hold stuff it knows nothing about, in the form of _ELEM derivatives.
+     *
+     * Derive #PROJECT elements from this, it has a virtual destructor, and Elem*() functions
+     * can work with it.  Implementation is opaque in class #PROJECT.  If find you have to
+     * include derived class headersin this file, you are doing incompatible with the goal
+     * of this class.  Keep knowledge of derived classes opaque to class PROJECT please.
+    */
     class _ELEM
     {
     public:
@@ -82,71 +79,76 @@ public:
     };
 
     PROJECT();
-    VTBL_ENTRY ~PROJECT();
+    virtual ~PROJECT();
 
     //-----<Cross Module API>----------------------------------------------------
 
-    VTBL_ENTRY bool TextVarResolver( wxString* aToken ) const;
+    virtual bool TextVarResolver( wxString* aToken ) const;
 
-    VTBL_ENTRY std::map<wxString, wxString>& GetTextVars() const;
-
-    /**
-     * Function GetProjectFullName
-     * returns the full path and name of the project.  This is the same as the
-     * name of the *.pro file and will always be an absolute path.
-     */
-    VTBL_ENTRY const wxString GetProjectFullName() const;
+    virtual std::map<wxString, wxString>& GetTextVars() const;
 
     /**
-     * Function GetProjectPath
-     * returns the full path of the project.  This is the path
-     * of the *.pro file and will always be an absolute path, ending by a dir separator.
+     * Return the full path and name of the project.
+     *
+     * This is the same as the name of the project file (.pro prior to version 6 and .kicad_prj
+     * from version 6 onwards) and will always be an absolute path.
      */
-    VTBL_ENTRY const wxString GetProjectPath() const;
+    virtual const wxString GetProjectFullName() const;
 
     /**
-     * Function GetProjectName
-     * returns the short name of the project. This is the file name without
-     * extension or path.
+     * Return the full path of the project.
+     *
+     * This is the path of the project file and will always be an absolute path, ending with
+     * a path separator.
      */
-    VTBL_ENTRY const wxString GetProjectName() const;
+    virtual const wxString GetProjectPath() const;
 
     /**
-     * Checks if this project is a null project (i.e. the default project object created when
-     * no real project is open).  The null project still presents all the same project interface,
-     * but is not backed by any files, so saving it makes no sense.
-     * @return true if this is a bull project
+     * Return the short name of the project.
+     *
+     * This is the file name without extension or path.
      */
-    VTBL_ENTRY bool IsNullProject() const;
+    virtual const wxString GetProjectName() const;
 
-    VTBL_ENTRY bool IsReadOnly() const { return m_readOnly || IsNullProject(); }
+    /**
+     * Check if this project is a null project (i.e. the default project object created when
+     * no real project is open).
+     *
+     * The null project still presents all the same project interface, but is not backed by
+     * any files, so saving it makes no sense.
+     *
+     * @return true if this is an empty project.
+     */
+    virtual bool IsNullProject() const;
 
-    VTBL_ENTRY void SetReadOnly( bool aReadOnly = true ) { m_readOnly = aReadOnly; }
+    virtual bool IsReadOnly() const { return m_readOnly || IsNullProject(); }
+
+    virtual void SetReadOnly( bool aReadOnly = true ) { m_readOnly = aReadOnly; }
 
     /**
      * Return the name of the sheet identified by the given UUID.
      */
-    VTBL_ENTRY const wxString GetSheetName( const KIID& aSheetID );
+    virtual const wxString GetSheetName( const KIID& aSheetID );
 
     /**
-     * Function FootprintLibTblName
-     * returns the path and filename of this project's fp-lib-table,
-     * i.e. the project specific one, not the global one.
+     * Returns the path and filename of this project's footprint library table.
+     *
+     * This project specific footprint library table not the global one.
      */
-    VTBL_ENTRY const wxString FootprintLibTblName() const;
+    virtual const wxString FootprintLibTblName() const;
 
     /**
      * Return the path and file name of this projects symbol library table.
      */
-    VTBL_ENTRY const wxString SymbolLibTableName() const;
+    virtual const wxString SymbolLibTableName() const;
 
-    VTBL_ENTRY PROJECT_FILE& GetProjectFile() const
+    virtual PROJECT_FILE& GetProjectFile() const
     {
         wxASSERT( m_projectFile );
         return *m_projectFile;
     }
 
-    VTBL_ENTRY PROJECT_LOCAL_SETTINGS& GetLocalSettings() const
+    virtual PROJECT_LOCAL_SETTINGS& GetLocalSettings() const
     {
         wxASSERT( m_localSettings );
         return *m_localSettings;
@@ -175,24 +177,25 @@ public:
     };
 
     /**
-     * Function GetRString
-     * returns a "retained string", which is any session and project specific string
-     * identified in enum RSTRING_T.  Retained strings are not written to disk, and
-     * are therefore good only for the current session.
+     * Return a "retained string", which is any session and project specific string
+     * identified in enum #RSTRING_T.
+     *
+     *Retained strings are not written to disk, and are therefore good only for the current
+     * session.
      */
-    VTBL_ENTRY  const wxString& GetRString( RSTRING_T aStringId );
+    virtual  const wxString& GetRString( RSTRING_T aStringId );
 
     /**
-     * Function SetRString
-     * stores a "retained string", which is any session and project specific string
-     * identified in enum RSTRING_T.  Retained strings are not written to disk, and
-     * are therefore good only for the current session.
+     * Store a "retained string", which is any session and project specific string
+     * identified in enum #RSTRING_T.
+     *
+     * Retained strings are not written to disk, and are therefore good only for the current
+     * session.
      */
-    VTBL_ENTRY  void SetRString( RSTRING_T aStringId, const wxString& aString );
+    virtual  void SetRString( RSTRING_T aStringId, const wxString& aString );
 
     /**
-     * Enum ELEM_T
-     * is the set of _ELEMs that a PROJECT can hold.
+     * The set of #_ELEMs that a #PROJECT can hold.
      */
     enum ELEM_T
     {
@@ -207,26 +210,27 @@ public:
     };
 
     /**
-     * Typically wrapped somewhere else in a more meaningful function wrapper.
-     * This is a cross module API, therefore the _ELEM destructor is virtual and
+     * Get and set the elements for this project.
+     *
+     * This is a cross module API, therefore the #_ELEM destructor is virtual and
      * can point to a destructor function in another link image.  Be careful that
      * that program module is resident at time of destruction.
-     * <p>
-     * Summary: 1) cross module API, 2) PROJECT knows nothing about _ELEM objects,
-     * except how to delete them and set and get pointers to them.
+     *
+     * Summary:
+     *  -#) cross module API.
+     *  -#) #PROJECT knows nothing about #_ELEM objects except how to delete them and
+     *      set and get pointers to them.
      */
-    VTBL_ENTRY  _ELEM*  GetElem( ELEM_T aIndex );
-    VTBL_ENTRY  void    SetElem( ELEM_T aIndex, _ELEM* aElem );
+    virtual  _ELEM*  GetElem( ELEM_T aIndex );
+    virtual  void    SetElem( ELEM_T aIndex, _ELEM* aElem );
 
     /**
-     * Function ElemsClear
-     * deletes all the _ELEMs and set their pointers to NULL.
+     * Delete all the _ELEMs and set their pointers to NULL.
      */
-    VTBL_ENTRY void ElemsClear();
+    virtual void ElemsClear();
 
     /**
-     * Function Clear
-     * clears the _ELEMs and RSTRINGs.
+     * Clear the _ELEMs and RSTRINGs.
      */
     void Clear()        // inline not virtual
     {
@@ -237,22 +241,18 @@ public:
     }
 
     /**
-     * Function AbsolutePath
-     * fixes up @a aFileName if it is relative to the project's directory to
-     * be an absolute path and filename.  This intends to overcome the now missing
-     * chdir() into the project directory.
+     * Fix up @a aFileName if it is relative to the project's directory to be an absolute
+     * path and filename.
+     *
+     * This intends to overcome the now missing chdir() into the project directory.
      */
-    VTBL_ENTRY const wxString AbsolutePath( const wxString& aFileName ) const;
+    virtual const wxString AbsolutePath( const wxString& aFileName ) const;
 
     /**
-     * Return the table of footprint libraries. Requires an active Kiway as
-     * this is fetched from pcbnew.
+     * Return the table of footprint libraries. Requires an active Kiway as this is fetched
+     * from Pcbnew.
      */
-    VTBL_ENTRY FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
-
-    //-----</Cross Module API>---------------------------------------------------
-
-    //-----<KIFACE Specific APIs>------------------------------------------------
+    virtual FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
 
     // These are the non-virtual DATA LOAD ON DEMAND members. They load project related
     // data on demand, and do so typicallly into m_elems[] at a particular index using
@@ -263,19 +263,18 @@ public:
     // non-virtuals resident in PCBNEW link image(s).  By being non-virtual, these
     // functions can get linked into the KIFACE that needs them, and only there.
     // In fact, the other KIFACEs don't even know they exist.
-#if defined(PCBNEW) || defined(CVPCB)
+#if defined( PCBNEW ) || defined( CVPCB )
     /**
-     * Return the table of footprint libraries without Kiway, only from within
-     * pcbnew.
+     * Return the table of footprint libraries without Kiway, only from within Pcbnew.
      */
     FP_LIB_TABLE* PcbFootprintLibs();
 
     /**
-     * Function Get3DCacheManager
-     * returns a pointer to an instance of the 3D cache manager;
-     * an instance is created and initialized if appropriate.
+     * Return a pointer to an instance of the 3D cache manager.
      *
-     * @return a pointer to an instance of the 3D cache manager or NULL on failure
+     * An instance is created and initialized if appropriate.
+     *
+     * @return a pointer to an instance of the 3D cache manager or NULL on failure.
      */
     S3D_CACHE* Get3DCacheManager( bool updateProjDir = false );
 
@@ -284,7 +283,7 @@ public:
 #endif
 
 
-#if defined(EESCHEMA)
+#if defined( EESCHEMA )
     // These are all prefaced with "Sch"
     PART_LIBS*  SchLibs();
 
@@ -298,34 +297,39 @@ public:
     FILENAME_RESOLVER* Get3DFilenameResolver() { return nullptr; }
 #endif
 
-    //-----</KIFACE Specific APIs>-----------------------------------------------
-
 private:
+    friend class SETTINGS_MANAGER; // so that SM can set project path
+    friend class TEST_NETLISTS_FIXTURE; // TODO(JE) make this not required
 
     /**
-     * Sets the:
-     * 1) full directory, 2) basename, and 3) extension of the project.  This is
-     * the name of the *.pro file with full absolute path and it also defines
-     * the name of the project.  The project name and the *.pro file names are
-     * exactly the same, providing the *.pro filename is absolute.
+     * Set the full directory, basename, and extension of the project.
+     *
+     * This is the name of the project file with full absolute path and it also defines
+     * the name of the project.  The project name and the project file names are exactly
+     * the same, providing the project filename is absolute.
      */
-    VTBL_ENTRY void setProjectFullName( const wxString& aFullPathAndName );
+    virtual void setProjectFullName( const wxString& aFullPathAndName );
 
     /**
-     * Sets the backing store file for this project
-     * Should only be called by SETTINGS_MANGER on load.
-     * @param aFile is a loaded PROJECT_FILE
+     * Set the backing store file for this project.
+     *
+     * This should only be called by #SETTINGS_MANGER on load.
+     *
+     * @param aFile is a loaded PROJECT_FILE.
      */
-    VTBL_ENTRY void setProjectFile( PROJECT_FILE* aFile )
+    virtual void setProjectFile( PROJECT_FILE* aFile )
     {
         m_projectFile = aFile;
     }
 
     /**
-     * Sets the local settings backing store.  Should only be called by SETTINGS_MANAGER on load.
+     * Set the local settings backing store.
+     *
+     * This should only be called by #SETTINGS_MANAGER on load.
+     *
      * @param aSettings is the local settings object (may or may not exist on disk at this point)
      */
-    VTBL_ENTRY void setLocalSettings( PROJECT_LOCAL_SETTINGS* aSettings )
+    virtual void setLocalSettings( PROJECT_LOCAL_SETTINGS* aSettings )
     {
         m_localSettings = aSettings;
     }

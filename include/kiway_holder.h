@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,9 +32,9 @@ class PROJECT;
 
 
 /**
- * KIWAY_HOLDER
- * is a mix in class which holds the location of a wxWindow's KIWAY.  It allows calls to 
- * Kiway() and SetKiway().
+ * A mix in class which holds the location of a wxWindow's KIWAY.
+ *
+ * It allows calls to Kiway() and SetKiway().
  */
 class KIWAY_HOLDER
 {
@@ -47,11 +47,11 @@ public:
     {}
 
     HOLDER_TYPE GetType() const { return m_type; }
-    
+
     /**
-     * Function Kiway
-     * returns a reference to the KIWAY that this object has an opportunity
-     * to participate in.  A KIWAY_HOLDER is not necessarily a KIWAY_PLAYER.
+     * Return a reference to the #KIWAY that this object has an opportunity to participate in.
+     *
+     * A KIWAY_HOLDER is not necessarily a KIWAY_PLAYER.
      */
     KIWAY& Kiway() const
     {
@@ -60,19 +60,16 @@ public:
     }
 
     /**
-     * Function Prj
-     * returns a reference to the PROJECT "associated with" this KIWAY.
+     * Return a reference to the #PROJECT associated with this #KIWAY.
      */
     PROJECT& Prj() const;
 
     /**
-     * Function SetKiway
+     * It is only used for debugging, since "this" is not a wxWindow*.  "this" is
+     * a KIWAY_HOLDER mix-in.
      *
-     * @param aDest is the recipient of aKiway pointer.
-     *  It is only used for debugging, since "this" is not a wxWindow*.  "this" is
-     *  a KIWAY_HOLDER mix-in.
-     *
-     * @param aKiway is often from a parent window, or from KIFACE::CreateWindow().
+     * @param aDest is the recipient of \a aKiway pointer.
+     * @param aKiway is often from a parent window or from #KIFACE::CreateWindow().
      */
     void SetKiway( wxWindow* aDest, KIWAY* aKiway );
 
@@ -81,7 +78,6 @@ private:
     KIWAY*          m_kiway;            // no ownership.
     HOLDER_TYPE     m_type;
 };
-
 
 
 #endif // KIWAY_HOLDER_H_

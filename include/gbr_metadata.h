@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +23,10 @@
  */
 
 /**
- * a class to handle special data (items attributes) during plot.
- * used in Gerber plotter to generate auxiliary data during plot
- * (for instance info associated to apertures and flashed pads)
+ * Handle special data (items attributes) during plot.
+ *
+ * Used in Gerber plotter to generate auxiliary data during plot (for instance info associated
+ * to apertures and flashed pads)
  *
  * @file gbr_metadata.h
  */
@@ -35,18 +36,25 @@
 
 #include <gbr_netlist_metadata.h>
 
-/** creates the TF.CreationDate attribute:
- * The attribute value must conform to the full version of the ISO 8601
- * date and time format, including time and time zone. Note that this is
- * the date the Gerber file is effectively created,
- * not the time the project of PCB was started
- * @param aFormat = string compatibility: X1, X2, GBRJOB or NC drill synthax.
- * exemple of structured comment (compatible X1 gerber)
- *  G04 #@! TF.CreationDate,2018-11-21T08:49:16+01:00* (exemple of X1 attribute)
- * exemple NC drill files
- *  ; #@! TF.CreationDate,2018-11-21T08:49:16+01:00*    (exemple of NC drill comment)
- * exemple of X2 attribute:
+/**
+ * Create a gerber TF.CreationDate attribute.
+ *
+ * The attribute value must conform to the full version of the ISO 8601 date and time format,
+ * including time and time zone.
+ *
+ * Example of structured comment (compatible X1 gerber)
+ *  G04 #@! TF.CreationDate,2018-11-21T08:49:16+01:00* (example of X1 attribute)
+ *
+ * Example NC drill files
+ *  ; #@! TF.CreationDate,2018-11-21T08:49:16+01:00*    (example of NC drill comment)
+ *
+ * Example of X2 attribute:
  *  %TF.CreationDate,2018-11-06T08:25:24+01:00*%
+ *
+ * @note This is the date the Gerber file is effectively created, not the time the project
+ *       PCB was started.
+ *
+ * @param aFormat string compatibility: X1, X2, GBRJOB or NC drill syntax.
  */
 enum GBR_NC_STRING_FORMAT       // Options for string format in some attribute strings
 {
@@ -58,11 +66,14 @@ enum GBR_NC_STRING_FORMAT       // Options for string format in some attribute s
 wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat );
 
 
-/** A helper function to build a project GUID using format RFC4122 Version 1 or 4
- * from the project name, because a kicad project has no specific GUID
+/**
+ * Build a project GUID using format RFC4122 Version 1 or 4 from the project name, because
+ * a KiCad project has no specific GUID.
+ *
  * RFC4122 is used mainly for its syntax, because fields have no meaning for Gerber files
- * and therefore the GUID generated has no meaning because it do not use any time and time stamp
- * specific to the project, just a random pattern (random is here a pattern specific to a project).
+ * and therefore the GUID generated has no meaning because it do not use any time and time
+ * stamp specific to the project, just a random pattern (random is here a pattern specific
+ * to a project).
  *
  * See en.wikipedia.org/wiki/Universally_unique_identifier
  */
@@ -79,41 +90,78 @@ class GBR_APERTURE_METADATA
 public:
     enum GBR_APERTURE_ATTRIB
     {
-        GBR_APERTURE_ATTRIB_NONE,           ///< uninitialized attribute
-        GBR_APERTURE_ATTRIB_ETCHEDCMP,      ///< aperture used for etched components
-        GBR_APERTURE_ATTRIB_CONDUCTOR,      ///< aperture used for connected items like tracks (not vias)
-        GBR_APERTURE_ATTRIB_EDGECUT,        ///< aperture used for board cutout
-        GBR_APERTURE_ATTRIB_NONCONDUCTOR,   ///< aperture used for not connected items (texts, outlines on copper)
-        GBR_APERTURE_ATTRIB_VIAPAD,         ///< aperture used for vias
+        GBR_APERTURE_ATTRIB_NONE,           ///< uninitialized attribute.
+        GBR_APERTURE_ATTRIB_ETCHEDCMP,      ///< aperture used for etched components.
 
-        GBR_APERTURE_ATTRIB_COMPONENTPAD,   ///< aperture used for through hole component on outer layer
-        GBR_APERTURE_ATTRIB_SMDPAD_SMDEF,   ///< aperture used for SMD pad. Excluded BGA pads which have their own type
-        GBR_APERTURE_ATTRIB_SMDPAD_CUDEF,   ///< aperture used for SMD pad with a solder mask defined by the solder mask
-        GBR_APERTURE_ATTRIB_BGAPAD_SMDEF,   ///< aperture used for BGA pads with a solder mask defined by the copper shape
-        GBR_APERTURE_ATTRIB_BGAPAD_CUDEF,   ///< aperture used for BGA pad with a solder mask defined by the solder mask
-        GBR_APERTURE_ATTRIB_CONNECTORPAD,   ///< aperture used for edge connector pad (outer layers)
-        GBR_APERTURE_ATTRIB_WASHERPAD,      ///< aperture used for mechanical pads (NPTH)
-        GBR_APERTURE_ATTRIB_TESTPOINT,      ///< aperture used for test point pad (outer layers)
-        GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL,  ///< aperture used for fiducial pad (outer layers), at board level
-        GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL, ///< aperture used for fiducial pad (outer layers), at footprint level
-        GBR_APERTURE_ATTRIB_HEATSINKPAD,    ///< aperture used for heat sink pad (typically for SMDs)
-        GBR_APERTURE_ATTRIB_CASTELLATEDPAD, ///< aperture used for castellated pads in copper layer files
-        GBR_APERTURE_ATTRIB_CASTELLATEDDRILL, ///< aperture used for castellated pads in drill files
+        ///< aperture used for connected items like tracks (not vias).
+        GBR_APERTURE_ATTRIB_CONDUCTOR,
+        GBR_APERTURE_ATTRIB_EDGECUT,        ///< aperture used for board cutout,
 
-        GBR_APERTURE_ATTRIB_VIADRILL,       ///< aperture used for via holes in drill files
-        GBR_APERTURE_ATTRIB_CMP_DRILL,      ///< aperture used for pad holes in drill files
-        GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL, ///< aperture used for pads oblong holes in drill files
-        GBR_APERTURE_ATTRIB_CMP_POSITION,   ///< aperture used for flashed cmp position in placement files
-        GBR_APERTURE_ATTRIB_PAD1_POSITION,  ///< aperture used for flashed pin 1 (or A1 or AA1) position in placement files
-        GBR_APERTURE_ATTRIB_PADOTHER_POSITION,  ///< aperture used for flashed pads position in placement files
-        GBR_APERTURE_ATTRIB_CMP_BODY,       ///< aperture used to draw component physical body outline
-                                            ///< (without pins) in placement files
-        GBR_APERTURE_ATTRIB_CMP_LEAD2LEAD,  ///< aperture used to draw component physical body outline
-                                            ///< (with pins) in placement files
-        GBR_APERTURE_ATTRIB_CMP_FOOTPRINT,  ///< aperture used to draw component footprint bounding box
-                                            ///< in placement files
-        GBR_APERTURE_ATTRIB_CMP_COURTYARD,  ///< aperture used to draw component outline courtyard
-                                            ///< in placement files
+        ///< aperture used for not connected items (texts, outlines on copper).
+        GBR_APERTURE_ATTRIB_NONCONDUCTOR,
+        GBR_APERTURE_ATTRIB_VIAPAD,         ///< aperture used for vias.
+
+        ///< aperture used for through hole component on outer layer.
+        GBR_APERTURE_ATTRIB_COMPONENTPAD,
+
+        ///< aperture used for SMD pad. Excluded BGA pads which have their own type.
+        GBR_APERTURE_ATTRIB_SMDPAD_SMDEF,
+
+        ///< aperture used for SMD pad with a solder mask defined by the solder mask.
+        GBR_APERTURE_ATTRIB_SMDPAD_CUDEF,
+
+        ///< aperture used for BGA pads with a solder mask defined by the copper shape.
+        GBR_APERTURE_ATTRIB_BGAPAD_SMDEF,
+
+        ///< aperture used for BGA pad with a solder mask defined by the solder mask.
+        GBR_APERTURE_ATTRIB_BGAPAD_CUDEF,
+
+        ///< aperture used for edge connector pad (outer layers).
+        GBR_APERTURE_ATTRIB_CONNECTORPAD,
+        GBR_APERTURE_ATTRIB_WASHERPAD,      ///< aperture used for mechanical pads (NPTH).
+        GBR_APERTURE_ATTRIB_TESTPOINT,      ///< aperture used for test point pad (outer layers).
+
+        ///< aperture used for fiducial pad (outer layers), at board level.
+        GBR_APERTURE_ATTRIB_FIDUCIAL_GLBL,
+
+        ///< aperture used for fiducial pad (outer layers), at footprint level.
+        GBR_APERTURE_ATTRIB_FIDUCIAL_LOCAL,
+
+        ///< aperture used for heat sink pad (typically for SMDs).
+        GBR_APERTURE_ATTRIB_HEATSINKPAD,
+
+        ///< aperture used for castellated pads in copper layer files.
+        GBR_APERTURE_ATTRIB_CASTELLATEDPAD,
+
+        ///< aperture used for castellated pads in drill files.
+        GBR_APERTURE_ATTRIB_CASTELLATEDDRILL,
+
+        GBR_APERTURE_ATTRIB_VIADRILL,       ///< aperture used for via holes in drill files.
+        GBR_APERTURE_ATTRIB_CMP_DRILL,      ///< aperture used for pad holes in drill files.
+
+        ///< aperture used for pads oblong holes in drill files.
+        GBR_APERTURE_ATTRIB_CMP_OBLONG_DRILL,
+
+        ///< aperture used for flashed cmp position in placement files.
+        GBR_APERTURE_ATTRIB_CMP_POSITION,
+
+        ///< aperture used for flashed pin 1 (or A1 or AA1) position in placement files.
+        GBR_APERTURE_ATTRIB_PAD1_POSITION,
+
+        ///< aperture used for flashed pads position in placement files.
+        GBR_APERTURE_ATTRIB_PADOTHER_POSITION,
+
+        ///< aperture used to draw component physical body outline without pins in placement files.
+        GBR_APERTURE_ATTRIB_CMP_BODY,
+
+        ///< aperture used to draw component physical body outline with pins in placement files.
+        GBR_APERTURE_ATTRIB_CMP_LEAD2LEAD,
+
+        ///< aperture used to draw component footprint bounding box in placement files.
+        GBR_APERTURE_ATTRIB_CMP_FOOTPRINT,
+
+        ///< aperture used to draw component outline courtyard in placement files.
+        GBR_APERTURE_ATTRIB_CMP_COURTYARD,
         GBR_APERTURE_ATTRIB_END             ///< sentinel: max value
     };
 
@@ -122,7 +170,7 @@ public:
     {}
 
     /**
-     * @return the string corresponding to the aperture attribute
+     * @return the string corresponding to the aperture attribute.
      */
     static std::string GetAttributeName( GBR_APERTURE_ATTRIB aAttribute );
     std::string GetAttributeName()
@@ -131,12 +179,11 @@ public:
     }
 
     /**
+     * @param aUseX1StructuredComment false in X2 mode and true in X1 mode to add the net
+     *                                attribute inside a compatible X1 structured comment
+     *                                starting by "G04 #@! "
      * @return the full command string corresponding to the aperture attribute
-     * like "%TA.AperFunction,<function>*%"
-     * @param aUseX1StructuredComment = false in X2 mode,
-     * and true in X1 mode to add the net attribut
-     * inside a compatible X1 structured comment starting by "G04 #@! "
-     * like "G04 #@! TA.AperFunction,<function>*"
+     *         like "%TA.AperFunction,<function>*%"
      */
     static std::string FormatAttribute( GBR_APERTURE_ATTRIB aAttribute,
                                         bool aUseX1StructuredComment );
@@ -150,9 +197,11 @@ public:
     GBR_APERTURE_ATTRIB m_ApertAttribute;
 };
 
-// this class handle metadata which can be added in a gerber file as attribute
-// in X2 format
-class  GBR_METADATA
+
+/**
+ * Metadata which can be added in a gerber file as attribute in X2 format.
+ */
+class GBR_METADATA
 {
 public:
     GBR_METADATA(): m_isCopper( false)  {}
@@ -195,81 +244,82 @@ public:
     }
 
     /**
-     * Allowed attributes are not the same on board copper layers and on other layers
-     * Therefore a flag can be set or reset when attributes can be depending on layers
+     * Allowed attributes are not the same on board copper layers and on other layers.
+     *
+     * A flag can be set or reset when attributes can be depending on layers
      */
     bool IsCopper() { return m_isCopper; }
     void SetCopper( bool aValue ) { m_isCopper = aValue; }
 
     /**
-     * a item to handle aperture attribute:
+     * An item to handle aperture attribute.
      */
     GBR_APERTURE_METADATA m_ApertureMetadata;
 
     /**
-     * a item to handle object attribute:
+     * An item to handle object attribute.
      */
     GBR_NETLIST_METADATA m_NetlistMetadata;
 
 private:
     /**
-     * if the metadata is relative to a copper layer or not. This is a flag
-     * which can be set/reset when an attribute for a given item depends on the fact
-     * a copper layer or a non copper layer is plotted.
-     * The initial state in false.
+     * If the metadata is relative to a copper layer or not, this flag which can be set/reset
+     * when an attribute for a given item depends on whether a copper layer or a non copper
+     * layer is plotted.  The initial state i false.
      */
     bool m_isCopper;
 };
 
 
 /**
- * This helper function "normalize" aString and convert it to a Gerber std::string
- * Normalisation means convert any code > 0x7F and unautorized code to a hexadecimal
- * 16 bits sequence unicode
- * unautorized codes are ',' '*' '%' '\'
- * @param aString = the wxString to convert
- * @return a std::string (ASCII7 coded) compliant with a gerber string
+ * Normalize \a aString and convert it to a Gerber std::string.
+ *
+ * Normalization means convert any code > 0x7F and unauthorized code to a hexadecimal
+ * 16 bit sequence Unicode.  Illegal characters are ',' '*' '%' '\'.
+ *
+ * @param aString the string to convert.
+ * @return an ASCII7 coded compliant gerber string.
  */
 std::string FormatStringToGerber( const wxString& aString );
 
 
 /**
- * Similar to FormatStringToGerber.
- * "normalize" aString and convert it to a Gerber compatible wxString
- * Normalisation means unautorized code to a hexadecimal 16 bits sequence unicode
- * and, on request convert any code > 0x7F.
- * unautorized codes are ',' '*' '%' '\'
- * @param aString = the wxString to convert
- * @param aAllowUtf8Chars = false to convert non ASCII7 values to unicode sequence
- * @param aQuoteString = true to double quote the returned string
- * @return a wxString without unautorized chars (and converted non ASCII7 chars on request)
+ * Normalize \a aString and convert it to a Gerber compatible wxString.
+ *
+ * Normalization means convert to a hexadecimal 16 bit sequence Unicode and on request
+ * convert any code > 0x7F.  Illegal characters are ',' '*' '%' '\'.
+ *
+ * @param aString the string to convert.
+ * @param aAllowUtf8Chars false to convert non ASCII7 values to Unicode sequence.
+ * @param aQuoteString  true to double quote the returned string.
+ * @return a without illegal chars (and converted non ASCII7 chars on request)
  */
-wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf8Chars, bool aQuoteString );
+wxString ConvertNotAllowedCharsInGerber( const wxString& aString, bool aAllowUtf8Chars,
+                                         bool aQuoteString );
 
 /**
- * This helper function make the inverse conversion of FormatStringToGerber()
- * It converts a "normalized" gerber string and convert it to a 16 bits sequence unicode
- * @param aString = the wxString compliant with a gerber string format
- * @return a wxString (unicode 16) from the gerber string
+ * Convert a gerber string into a 16 bit Unicode string.
+ *
+ * @param aString the gerber string to format.
+ * @return a 16 bit Unicode string.
  */
 wxString FormatStringFromGerber( const wxString& aString );
 
 /**
- * Generates the string to print to a gerber file, to set a net attribute
- * for a graphic object.
- * @param aPrintedText is the string to print
+ * Generate the string to set a net attribute for a graphic object to print to a gerber file.
+ *
+ * @param aPrintedText is the string to print.
  * @param aLastNetAttributes is the current full set of attributes.
- * @param aData is the GBR_NETLIST_METADATA associated to the graphic object (can be NULL
- * if no associated metadata, and aClearPreviousAttributes will be set to false)
- * @param aClearPreviousAttributes returns true if the full set of attributes
- * must be deleted from file before adding new attribute (happens when a previous
- * attribute does not exist no more).
- * @param aUseX1StructuredComment = false in X2 mode, and true in X1 mode to add the net attribut
- * in compatible X1 structured comment (i.e. prefixed by "G04 #@! ")
+ * @param aData is the #GBR_NETLIST_METADATA associated to the graphic object (can be NULL
+ *              if no associated metadata, and aClearPreviousAttributes will be set to false)
+ * @param aClearPreviousAttributes returns true if the full set of attributes must be deleted
+ *                                 from file before adding new attribute (happens when a previous
+ *                                 attribute no longer exists).
+ * @param aUseX1StructuredComment false in X2 mode and true in X1 mode to add the net attribute
+ *                                in compatible X1 structured comment (i.e. prefixed by "G04 #@! ")
  * @return false if nothing can be done (GBR_NETLIST_METADATA has GBR_APERTURE_ATTRIB_NONE,
- * and true if OK
- * if the new attribute(s) is the same as current attribute(s), aPrintedText
- * will be empty
+ *         and true if OK. If the new attribute(s) is the same as current attribute(s),
+ *         \a aPrintedText will be empty.
  */
 bool FormatNetAttribute( std::string& aPrintedText, std::string& aLastNetAttributes,
                          const GBR_NETLIST_METADATA* aData, bool& aClearPreviousAttributes,

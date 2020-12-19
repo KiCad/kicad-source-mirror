@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2007 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2007-2020 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,19 +30,14 @@
 
 
 /**
- * FILTER_READER
- * reads lines of text from another LINE_READER, but only returns non-comment
- * lines and non-blank lines from its ReadLine() function.
+ * Read lines of text from another #LINE_READER but only returns non-comment lines and
+ * non-blank lines from its ReadLine() function.
  */
 class FILTER_READER : public LINE_READER
 {
-    LINE_READER&  reader;
-
 public:
-
     /**
-     * Constructor ( LINE_READER& )
-     * does not take ownership over @a aReader, so will not destroy it.
+     * Does not take ownership over @a aReader so will not destroy it.
      */
     FILTER_READER( LINE_READER& aReader );
 
@@ -59,24 +54,22 @@ public:
     {
         return reader.LineNumber();
     }
+
+private:
+    LINE_READER& reader;
 };
 
 
 /**
- * WHITESPACE_FILTER_READER
- * reads lines of text from another LINE_READER, but only returns non-comment
- * lines and non-blank lines with leading whitespace characters (space and tab)
- * removed from its ReadLine() function.
+ * Read lines of text from another #LINE_READER but only returns non-comment lines and
+ * non-blank lines with leading whitespace characters (space and tab) removed from its
+ * ReadLine() function.
  */
 class WHITESPACE_FILTER_READER : public LINE_READER
 {
-    LINE_READER&  reader;
-
 public:
-
     /**
-     * Constructor ( LINE_READER& )
-     * does not take ownership over @a aReader, so will not destroy it.
+     * Doe not take ownership over @a aReader, so will not destroy it.
      */
     WHITESPACE_FILTER_READER( LINE_READER& aReader );
 
@@ -93,6 +86,9 @@ public:
     {
         return reader.LineNumber();
     }
+
+private:
+    LINE_READER& reader;
 };
 
 #endif // FILTER_READER_H_

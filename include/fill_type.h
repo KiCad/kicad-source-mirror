@@ -21,10 +21,9 @@
 #define FILL_TYPE_H
 
 /**
- * Enum class FILL_TYPE
- * is the set of fill types used in plotting or drawing enclosed areas.
+ * The set of fill types used in plotting or drawing enclosed areas.
  *
- * Warning: Do not renumber this enum, the legacy schematic plugin demands on these values
+ * @warning Do not renumber this enum, the legacy schematic plugin demands on these values.
  */
 enum class FILL_TYPE : int
 {

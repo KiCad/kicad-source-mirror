@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-202 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,21 +33,18 @@
 
 
 /**
- * KIWAY_EXPRESS
- * carries a payload from one KIWAY_PLAYER to another within a PROJECT.
+ * Carry a payload from one #KIWAY_PLAYER to another within a #PROJECT.
  */
 class KIWAY_EXPRESS : public wxEvent
 {
 public:
     /**
-     * Function Dest
-     * returns the destination player id of the message.
+     * Return the destination player id of the message.
      */
-    FRAME_T  Dest()                         { return m_destination; }
+    FRAME_T Dest() { return m_destination; }
 
     /**
-     * Function Command
-     * returns the MAIL_T associated with this mail.
+     * Returns the #MAIL_T associated with this mail.
      */
     MAIL_T Command()
     {
@@ -55,19 +52,17 @@ public:
     }
 
     /**
-     * Function Payload
-     * returns the payload, which can be any text but it typicall self
-     * identifying s-expression.
+     * Return the payload, which can be any text but it typically self identifying s-expression.
      */
-    std::string&  GetPayload()                          { return m_payload; }
-    void SetPayload( const std::string& aPayload )      { m_payload = aPayload; }
+    std::string&  GetPayload() { return m_payload; }
+    void SetPayload( const std::string& aPayload ) { m_payload = aPayload; }
 
-    KIWAY_EXPRESS* Clone() const override   { return new KIWAY_EXPRESS( *this ); }
+    KIWAY_EXPRESS* Clone() const override { return new KIWAY_EXPRESS( *this ); }
 
     //KIWAY_EXPRESS() {}
 
     KIWAY_EXPRESS( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
-                   wxWindow* aSource = NULL );
+                   wxWindow* aSource = nullptr );
 
     KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther );
 
@@ -79,8 +74,8 @@ public:
     //DECLARE_DYNAMIC_CLASS( KIWAY_EXPRESS )
 
 private:
-    FRAME_T         m_destination;      ///< could have been a bitmap indicating multiple recipients
-    std::string&    m_payload;          ///< very often s-expression text, but not always
+    FRAME_T         m_destination;    ///< could have been a bitmap indicating multiple recipients.
+    std::string&    m_payload;        ///< very often s-expression text, but not always.
 
     // possible new ideas here.
 };

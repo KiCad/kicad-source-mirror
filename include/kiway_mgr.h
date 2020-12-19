@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2014 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,10 +30,10 @@
 
 
 /**
- * KIWAY_MGR
- * is a container for all KIWAYS [and PROJECTS].  This class needs to work both
- * for a C++ project manager and an a wxPython one (after being moved into a
- * header later).
+ * A container for all KIWAYS and PROJECTS.
+ *
+ * This class needs to work both for a C++ project manager and an a wxPython one (after
+ * being moved into a header later).
  */
 class KIWAY_MGR
 {

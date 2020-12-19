@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,9 +27,7 @@
 #define FRAME_T_H_
 
 /**
- * Enum FRAME_T
- * is the set of EDA_BASE_FRAME derivatives, typically stored in
- * EDA_BASE_FRAME::m_Ident.
+ * The set of #EDA_BASE_FRAME derivatives, typically stored in EDA_BASE_FRAME::m_Ident.
  */
 enum FRAME_T
 {
