@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="pin_table.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/pin_table.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -27,7 +30,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:cx="11.104539"
      inkscape:cy="13"
      inkscape:window-x="0"
      inkscape:window-y="37"
@@ -85,57 +88,58 @@
      id="path159131" />
   <path
      class="cls-2"
-     d="M 23.9944,5.3924 H 0.0027 V 3.9986 A 3.9994,3.9994 0 0 1 4.0021,-8e-4 h 15.9947 a 3.9994,3.9994 0 0 1 3.9994,3.9994 z"
-     id="path159133" />
+     d="M 23.9944,5 H 0.0027 V 3.7076105 A 3.9994,3.7084105 0 0 1 4.0021,-8e-4 h 15.9947 a 3.9994,3.7084105 0 0 1 3.9994,3.7084105 z"
+     id="path159133"
+     style="fill:#8c8c8c;fill-opacity:1;stroke-width:1"
+     inkscape:connector-curvature="0" />
   <line
      class="cls-3"
      x1="0"
-     y1="5.2157998"
+     y1="8.5"
      x2="24"
-     y2="5.2157998"
-     id="line159135" />
-  <line
-     class="cls-3"
-     x1="0"
-     y1="8.8760996"
-     x2="24"
-     y2="8.8760996"
-     id="line159137" />
+     y2="8.5"
+     id="line159137"
+     style="fill:none;stroke:#8c8c8c;stroke-miterlimit:10;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="0"
      y1="12.5364"
      x2="24"
      y2="12.5364"
-     id="line159139" />
+     id="line159139"
+     style="stroke:#8c8c8c;stroke-opacity:1" />
   <line
      class="cls-3"
      x1="0"
-     y1="16.1966"
+     y1="16.5"
      x2="24"
-     y2="16.1966"
-     id="line159141" />
+     y2="16.5"
+     id="line159141"
+     style="fill:none;stroke:#8c8c8c;stroke-miterlimit:10;stroke-opacity:1" />
   <line
      class="cls-3"
-     x1="4.7730999"
-     y1="5.6034999"
-     x2="4.7730999"
-     y2="17.429001"
-     id="line159143" />
+     x1="0.5"
+     y1="5"
+     x2="0.5"
+     y2="20"
+     id="line159143"
+     style="fill:none;stroke:#8c8c8c;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
   <line
      class="cls-3"
-     x1="12"
-     y1="5.6034999"
-     x2="12"
-     y2="19.7519"
-     id="line159145" />
+     x1="16.5"
+     y1="5"
+     x2="16.5"
+     y2="19.148399"
+     id="line159145"
+     style="fill:none;stroke:#8c8c8c;stroke-miterlimit:10;stroke-opacity:1" />
   <line
      class="cls-3"
-     x1="19.2269"
-     y1="5.6034999"
-     x2="19.2269"
-     y2="19.7519"
-     id="line159147" />
+     x1="23.5"
+     y1="5"
+     x2="23.5"
+     y2="20"
+     id="line159147"
+     style="fill:none;stroke:#8c8c8c;stroke-width:1;stroke-miterlimit:10;stroke-opacity:1" />
   <path
      class="cls-4"
      d="M 22.9962,20.9858 H 7.2784 a 1,1 0 0 1 0,-2 h 15.7178 a 1,1 0 0 1 0,2 z"
@@ -144,4 +148,12 @@
      class="cls-4"
      d="m 3.9991,23.9936 a 4.0078,4.0078 0 1 1 4.0078,-4.0078 4.0121,4.0121 0 0 1 -4.0078,4.0078 z m 0,-6.0156 A 2.0078,2.0078 0 1 0 6.0069,19.9858 2.01,2.01 0 0 0 3.9991,17.978 Z"
      id="path159151" />
+  <line
+     style="fill:none;stroke:#8c8c8c;stroke-miterlimit:10;stroke-opacity:1"
+     id="line828"
+     y2="19.148399"
+     x2="8.5"
+     y1="5"
+     x1="8.5"
+     class="cls-3" />
 </svg>

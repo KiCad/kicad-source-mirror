@@ -12,7 +12,10 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="import_hierarchical_label.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/import_hierarchical_label.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -27,7 +30,7 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:cx="4.5777163"
      inkscape:cy="10.840893"
      inkscape:window-x="0"
      inkscape:window-y="0"
@@ -80,7 +83,7 @@
   <title
      id="title25429">import_hierarchical_label</title>
   <rect
-     style="fill:#e5d7c7;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+     style="fill:#d0c5ac;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
      id="rect12834"
      width="19"
      height="18"

@@ -30,8 +30,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="16.169097"
-     inkscape:cy="9.0322321"
+     inkscape:cx="11.072811"
+     inkscape:cy="11.893305"
      inkscape:window-x="0"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
@@ -234,7 +234,7 @@
      height="24"
      rx="0"
      id="rect9"
-     style="fill:#2cb22c;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-opacity:1"
+     style="fill:#489648;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-opacity:1"
      clip-path="url(#clipPath956)" />
   <path
      class="cls-2"
@@ -245,33 +245,33 @@
      clip-path="url(#clipPath952)"
      inkscape:connector-curvature="0" />
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#489648;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 20.25,9 H 14.5 L 11,5.5 v -5.75"
      id="path2253"
      sodipodi:nodetypes="cccc"
      clip-path="url(#clipPath948)" />
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:2.82843;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#489648;stroke-width:2.82843;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 0,14.5 H 2"
      id="path892"
      sodipodi:nodetypes="cc"
      clip-path="url(#clipPath940)"
      transform="matrix(2.5,0,0,1,0,-0.08578503)" />
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#489648;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 5.5,24 v -3.5 l 4.0000004,-3 V 12 L 5.5,8 v -8.25"
      id="path2265"
      sodipodi:nodetypes="cccccc"
      clip-path="url(#clipPath928)"
      transform="translate(0.50068774)" />
   <circle
-     style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#dd8d15;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="path936"
      cx="4.3198075"
      cy="14.571527"
      r="1.8317689" />
   <circle
-     style="fill:#ffffff;fill-opacity:1;stroke:#f29100;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#ffffff;fill-opacity:1;stroke:#dd8d15;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      id="circle938"
      cx="20.915913"
      cy="9.0609426"

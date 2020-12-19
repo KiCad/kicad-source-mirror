@@ -30,13 +30,13 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="27.961538"
-     inkscape:cx="12.705229"
-     inkscape:cy="10.426716"
+     inkscape:cx="11.900552"
+     inkscape:cy="13.287789"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="g952">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -106,7 +106,7 @@
        height="24"
        rx="0"
        id="rect9"
-       style="fill:#2cb22c;fill-opacity:1;stroke:none;stroke-width:0.571427;stroke-opacity:1"
+       style="fill:#489648;fill-opacity:1;stroke:none;stroke-width:0.571427;stroke-opacity:1"
        clip-path="none"
        transform="matrix(0.875,0,0,0.875,-33,-2)" />
     <path
@@ -118,21 +118,21 @@
        clip-path="none"
        transform="matrix(0.875,0,0,0.875,-33,-2)" />
     <path
-       style="fill:none;stroke:#2cb22c;stroke-width:2.28571;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#489648;stroke-width:2.28571;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 20.571429,9.1428571 H 14.857143 L 11.428571,5.7142857 v -6.8571428"
        id="path2253"
        sodipodi:nodetypes="cccc"
        clip-path="none"
        transform="matrix(0.875,0,0,0.875,-33,-2)" />
     <path
-       style="fill:none;stroke:#2cb22c;stroke-width:3.23249;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#489648;stroke-width:3.23249;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 0,14.5 H 2"
        id="path892"
        sodipodi:nodetypes="cc"
        clip-path="none"
        transform="matrix(2.1875,0,0,0.875,-33,-2.0750619)" />
     <path
-       style="fill:none;stroke:#2cb22c;stroke-width:2.85714;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#489648;stroke-width:2.85714;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 5.2135977,25.142857 V 21.714286 L 9.7850263,17.142857 V 11.428571 L 5.2135977,6.8571429 v -7.42857147"
        id="path2265"
        sodipodi:nodetypes="cccccc"

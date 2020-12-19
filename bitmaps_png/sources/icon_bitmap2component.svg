@@ -12,9 +12,12 @@
    viewBox="0 0 48 48"
    version="1.1"
    sodipodi:docname="icon_bitmap2component.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    width="48"
-   height="48">
+   height="48"
+   inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_48/icon_bitmap2component.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <path
      class="cls-1"
      d="m 8,-0.0013 h 32 a 8,8.026722 0 0 1 8,8.026722 v 32.111704 a 8,8.026722 0 0 1 -8,8.026722 H 8 A 8,8.026722 0 0 1 1.125e-8,40.137126 V 8.026024 A 8,8.026722 0 0 1 8,-0.0013 Z"
@@ -34,13 +37,13 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="11.313709"
-     inkscape:cx="-7.6236198"
-     inkscape:cy="42.64498"
+     inkscape:cx="15.136379"
+     inkscape:cy="21.431778"
      inkscape:window-x="146"
      inkscape:window-y="501"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="g983">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -110,19 +113,20 @@
      style="stroke-width:0.906592">
     <g
        id="g964"
-       transform="matrix(2,0,0,2,-23.520851,-15.701467)"
-       style="stroke-width:0.453296">
+       transform="matrix(2.04,0,0,2.04,-24.120841,-16.101471)"
+       style="stroke-width:0.44440785">
       <path
          class="cls-2"
-         d="m 5.3885,17.382 4.8369,-9.3941 a 1.0508,1.0508 0 0 1 1.749,-0.1825 l 4.9165,6.0372 a 1.0509,1.0509 0 0 0 1.5964,0.0388 l 1.32,-1.4693 a 1.0508,1.0508 0 0 1 1.6628,0.13 l 3.1145,4.7944 A 0.5253,0.5253 0 0 1 24.144,18.148 H 5.8556 A 0.5253,0.5253 0 0 1 5.3885,17.382 Z"
+         d="M 5.6107041,17.382 10.447604,7.9879 a 1.0508,1.0508 0 0 1 1.749,-0.1825 l 4.9165,6.0372 a 1.0509,1.0509 0 0 0 1.5964,0.0388 l 1.32,-1.4693 a 1.0508,1.0508 0 0 1 1.6628,0.13 l 3.1145,4.7944 a 0.5253,0.5253 0 0 1 -0.4406,0.8115 H 6.0778041 a 0.5253,0.5253 0 0 1 -0.4671,-0.766 z"
          id="path4007"
-         style="fill:#1a81c4;fill-opacity:1;stroke-width:0.453296" />
+         style="fill:#1a81c4;fill-opacity:1;stroke-width:0.44440785"
+         inkscape:connector-curvature="0" />
       <circle
          class="cls-2"
-         cx="18.5231"
-         cy="4.527"
+         cx="18.745304"
+         cy="4.7492037"
          id="circle4009"
-         style="fill:#f29100;fill-opacity:1;stroke-width:0.453296"
+         style="fill:#1a81c4;fill-opacity:1;stroke-width:0.44440785"
          r="2.6747999" />
     </g>
   </g>
@@ -131,23 +135,20 @@
      transform="matrix(2,0,0,2.019111,-2,2.5692537)"
      style="stroke-width:0.497628"
      clip-path="url(#clipPath991)">
-    <g
-       id="g4595-3"
-       transform="matrix(1.1030313,0,0,1.1030334,-3.4436842,0.00589049)"
-       style="stroke-width:0.451145">
-      <path
-         class="cls-2"
-         d="m 5.3885,17.382 4.8369,-9.3941 a 1.0508,1.0508 0 0 1 1.749,-0.1825 l 4.9165,6.0372 a 1.0509,1.0509 0 0 0 1.5964,0.0388 l 1.32,-1.4693 a 1.0508,1.0508 0 0 1 1.6628,0.13 l 3.1145,4.7944 A 0.5253,0.5253 0 0 1 24.144,18.148 H 5.8556 A 0.5253,0.5253 0 0 1 5.3885,17.382 Z"
-         id="path4007-6"
-         style="fill:#545454;fill-opacity:1;stroke-width:0.451145" />
-      <circle
-         class="cls-2"
-         cx="18.5231"
-         cy="4.527"
-         r="2.6747999"
-         id="circle4009-7"
-         style="fill:#545454;fill-opacity:1;stroke-width:0.451145" />
-    </g>
+    <path
+       inkscape:connector-curvature="0"
+       style="fill:#545454;fill-opacity:1;stroke-width:0.49762753"
+       id="path4007-6"
+       d="M 2.5,19.178817 7.8352521,8.816811 A 1.1590653,1.1590675 0 0 1 9.7644538,8.6155074 l 5.4230532,6.6592336 a 1.1591756,1.1591778 0 0 0 1.760879,0.0428 l 1.456002,-1.620687 a 1.1590653,1.1590675 0 0 1 1.83412,0.143395 l 3.435391,5.288383 a 0.57942234,0.57942345 0 0 1 -0.485995,0.895112 H 3.0152259 A 0.57942234,0.57942345 0 0 1 2.5,19.178817 Z"
+       class="cls-2" />
+    <ellipse
+       style="fill:#545454;fill-opacity:1;stroke-width:0.49762753"
+       id="circle4009-7"
+       cy="5.2469563"
+       cx="17.237875"
+       class="cls-2"
+       rx="2.950388"
+       ry="2.9503937" />
     <path
        style="fill:none;stroke:#b9b9b9;stroke-width:0.995256;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="M 4,20.5 V 2.5"
