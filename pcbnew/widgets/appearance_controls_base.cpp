@@ -166,11 +166,11 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bPresetsLabels;
 	bPresetsLabels = new wxBoxSizer( wxHORIZONTAL );
 
-	presetsLabel = new wxStaticText( this, wxID_ANY, _( "Presets:" ), wxDefaultPosition, wxDefaultSize, 0 );
+	presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
 	presetsLabel->Wrap( -1 );
 	bPresetsLabels->Add( presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
 
-	presetsHotkey = new wxStaticText( this, wxID_ANY, wxT("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
+	presetsHotkey = new wxStaticText( this, wxID_ANY, _("(Ctrl+Tab)"), wxDefaultPosition, wxDefaultSize, 0 );
 	presetsHotkey->Wrap( -1 );
 	bPresetsLabels->Add( presetsHotkey, 0, wxRIGHT|wxLEFT, 2 );
 
