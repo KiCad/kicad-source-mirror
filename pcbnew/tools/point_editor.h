@@ -64,37 +64,13 @@ public:
      */
     bool HasPoint() { return m_editedPoint != nullptr; }
 
+private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-private:
-    ///> Selection tool used for obtaining selected items
-    PCB_SELECTION_TOOL* m_selectionTool;
+    void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points, const SHAPE_POLY_SET* aOutline );
 
-    ///> Currently edited point, NULL if there is none.
-    EDIT_POINT* m_editedPoint;
-
-    EDIT_POINT* m_hoveredPoint;
-
-    ///> Original position for the current drag point.
-    EDIT_POINT m_original;
-
-    ///> Currently available edit points.
-    std::shared_ptr<EDIT_POINTS> m_editPoints;
-
-    // Alternative constraint, enabled while a modifier key is held
-    std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_altConstraint;
-
-    // EDIT_POINT for alternative constraint mode
-    EDIT_POINT m_altConstrainer;
-
-    // Flag indicating whether the selected zone needs to be refilled
-    bool m_refill;
-
-    // Flag indicating whether the alternative edit method is enabled.
-    bool m_altEditMethod;
-
-    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+    std::shared_ptr<EDIT_POINTS> makePoints( EDA_ITEM* aItem );
 
     ///> Updates item's points with edit points.
     void updateItem() const;
@@ -181,6 +157,23 @@ private:
 
     ///> Change the edit method to an alternative method ( currently, arcs only )
     int changeEditMethod( const TOOL_EVENT& aEvent );
+
+private:
+    PCB_SELECTION_TOOL*                m_selectionTool;
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
+    std::shared_ptr<EDIT_POINTS>       m_editPoints;
+
+    EDIT_POINT*         m_editedPoint;
+    EDIT_POINT*         m_hoveredPoint;
+
+    EDIT_POINT          m_original;        ///> Original position for the current drag point.
+
+    bool                m_refill;
+    bool                m_altEditMethod;
+
+    // Alternative constraint, enabled while a modifier key is held
+    std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT>> m_altConstraint;
+    EDIT_POINT                                   m_altConstrainer;
 };
 
 #endif

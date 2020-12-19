@@ -83,241 +83,15 @@ enum DIMENSION_POINTS
     DIM_CROSSBAREND,
 };
 
-class EDIT_POINTS_FACTORY
-{
-private:
-
-    static void buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
-                                     const SHAPE_POLY_SET* aOutline, KIGFX::GAL* aGal )
-    {
-
-        int cornersCount = aOutline->TotalVertices();
-
-        for( auto iterator = aOutline->CIterateWithHoles(); iterator; iterator++ )
-        {
-            points->AddPoint( *iterator );
-
-            if( iterator.IsEndContour() )
-                points->AddBreak();
-        }
-
-        // Lines have to be added after creating edit points,
-        // as they use EDIT_POINT references
-        for( int i = 0; i < cornersCount - 1; ++i )
-        {
-            if( points->IsContourEnd( i ) )
-            {
-                points->AddLine( points->Point( i ),
-                        points->Point( points->GetContourStartIdx( i ) ) );
-            }
-            else
-            {
-                points->AddLine( points->Point( i ), points->Point( i + 1 ) );
-            }
-
-            points->Line( i ).SetConstraint( new EC_PERPLINE( points->Line( i ) ) );
-        }
-
-        // The last missing line, connecting the last and the first polygon point
-        points->AddLine( points->Point( cornersCount - 1 ),
-                points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
-
-        points->Line( points->LinesSize() - 1 ).SetConstraint(
-                new EC_PERPLINE( points->Line( points->LinesSize() - 1 ) ) );
-    }
-
-public:
-    static std::shared_ptr<EDIT_POINTS> Make( EDA_ITEM* aItem, KIGFX::GAL* aGal )
-    {
-        std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
-
-        if( !aItem )
-            return points;
-
-        // Generate list of edit points basing on the item type
-        switch( aItem->Type() )
-        {
-        case PCB_SHAPE_T:
-        case PCB_FP_SHAPE_T:
-        {
-            const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
-
-            switch( shape->GetShape() )
-            {
-            case S_SEGMENT:
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( shape->GetEnd() );
-                break;
-
-            case S_RECT:
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( wxPoint( shape->GetEnd().x, shape->GetStart().y ) );
-                points->AddPoint( shape->GetEnd() );
-                points->AddPoint( wxPoint( shape->GetStart().x, shape->GetEnd().y ) );
-                break;
-
-            case S_ARC:
-                points->AddPoint( shape->GetCenter() );
-                points->AddPoint( shape->GetArcStart() );
-                points->AddPoint( shape->GetArcMid() );
-                points->AddPoint( shape->GetArcEnd() );
-
-                // Set constraints
-                // Arc end has to stay at the same radius as the start
-                points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
-                                                                       points->Point( ARC_CENTER ),
-                                                                       points->Point( ARC_START ) ) );
-
-                points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
-                                                                     points->Point( ARC_CENTER ) ) );
-
-                points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
-                break;
-
-            case S_CIRCLE:
-                points->AddPoint( shape->GetCenter() );
-                points->AddPoint( shape->GetEnd() );
-                break;
-
-            case S_POLYGON:
-                buildForPolyOutline( points, &shape->GetPolyShape(), aGal );
-                break;
-
-            case S_CURVE:
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( shape->GetBezControl1() );
-                points->AddPoint( shape->GetBezControl2() );
-                points->AddPoint( shape->GetEnd() );
-                break;
-
-            default:        // suppress warnings
-                break;
-            }
-
-            break;
-        }
-
-        case PCB_PAD_T:
-        {
-            const PAD* pad = static_cast<const PAD*>( aItem );
-            wxPoint    shapePos = pad->ShapePos();
-            wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
-
-            if( pad->GetParent() &&
-                    ( pad->GetParent()->IsLocked() || pad->GetParent()->PadsLocked() ) )
-                break;
-
-            switch( pad->GetShape() )
-            {
-            case PAD_SHAPE_CIRCLE:
-                points->AddPoint( shapePos );
-                points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y ) );
-                break;
-
-            case PAD_SHAPE_OVAL:
-            case PAD_SHAPE_TRAPEZOID:
-            case PAD_SHAPE_RECT:
-            case PAD_SHAPE_ROUNDRECT:
-            case PAD_SHAPE_CHAMFERED_RECT:
-            {
-                if( (int) pad->GetOrientation() % 900 != 0 )
-                    break;
-
-                if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
-                    std::swap( halfSize.x, halfSize.y );
-
-                points->AddPoint( shapePos - halfSize );
-                points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
-                points->AddPoint( shapePos + halfSize );
-                points->AddPoint( wxPoint( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
-            }
-                break;
-
-            default:        // suppress warnings
-                break;
-            }
-        }
-            break;
-
-        case PCB_FP_ZONE_T:
-        case PCB_ZONE_T:
-        {
-            const ZONE* zone = static_cast<const ZONE*>( aItem );
-            buildForPolyOutline( points, zone->Outline(), aGal );
-        }
-            break;
-
-        case PCB_DIM_ALIGNED_T:
-        case PCB_DIM_ORTHOGONAL_T:
-        {
-            const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
-
-            points->AddPoint( dimension->GetStart() );
-            points->AddPoint( dimension->GetEnd() );
-            points->AddPoint( dimension->Text().GetPosition() );
-            points->AddPoint( dimension->GetCrossbarStart() );
-            points->AddPoint( dimension->GetCrossbarEnd() );
-
-            if( aItem->Type() == PCB_DIM_ALIGNED_T )
-            {
-                // Dimension height setting - edit points should move only along the feature lines
-                points->Point( DIM_CROSSBARSTART )
-                        .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
-                                                     points->Point( DIM_START ) ) );
-                points->Point( DIM_CROSSBAREND )
-                        .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
-                                                     points->Point( DIM_END ) ) );
-            }
-
-            break;
-        }
-
-        case PCB_DIM_CENTER_T:
-        {
-            const CENTER_DIMENSION* dimension = static_cast<const CENTER_DIMENSION*>( aItem );
-
-            points->AddPoint( dimension->GetStart() );
-            points->AddPoint( dimension->GetEnd() );
-
-            points->Point( DIM_END ).SetConstraint( new EC_45DEGREE( points->Point( DIM_END ),
-                                                                     points->Point( DIM_START ) ) );
-
-            break;
-        }
-
-        case PCB_DIM_LEADER_T:
-        {
-            const LEADER* dimension = static_cast<const LEADER*>( aItem );
-
-            points->AddPoint( dimension->GetStart() );
-            points->AddPoint( dimension->GetEnd() );
-            points->AddPoint( dimension->Text().GetPosition() );
-
-            break;
-        }
-
-        default:
-            points.reset();
-            break;
-        }
-
-        return points;
-    }
-
-private:
-    EDIT_POINTS_FACTORY() {};
-};
-
-
 POINT_EDITOR::POINT_EDITOR() :
     PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( nullptr ),
     m_editedPoint( nullptr ),
     m_hoveredPoint( nullptr ),
     m_original( VECTOR2I( 0, 0 ) ),
-    m_altConstrainer( VECTOR2I( 0, 0 ) ),
     m_refill( false ),
-    m_altEditMethod( false )
+    m_altEditMethod( false ),
+    m_altConstrainer( VECTOR2I( 0, 0 ) )
 {
 }
 
@@ -348,6 +122,221 @@ bool POINT_EDITOR::Init()
                   std::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
+}
+
+
+void POINT_EDITOR::buildForPolyOutline( std::shared_ptr<EDIT_POINTS> points,
+                                        const SHAPE_POLY_SET* aOutline )
+{
+    int cornersCount = aOutline->TotalVertices();
+
+    for( auto iterator = aOutline->CIterateWithHoles(); iterator; iterator++ )
+    {
+        points->AddPoint( *iterator );
+
+        if( iterator.IsEndContour() )
+            points->AddBreak();
+    }
+
+    // Lines have to be added after creating edit points,
+    // as they use EDIT_POINT references
+    for( int i = 0; i < cornersCount - 1; ++i )
+    {
+        if( points->IsContourEnd( i ) )
+            points->AddLine( points->Point( i ), points->Point( points->GetContourStartIdx( i ) ) );
+        else
+            points->AddLine( points->Point( i ), points->Point( i + 1 ) );
+
+        points->Line( i ).SetConstraint( new EC_PERPLINE( points->Line( i ) ) );
+    }
+
+    // The last missing line, connecting the last and the first polygon point
+    points->AddLine( points->Point( cornersCount - 1 ),
+                     points->Point( points->GetContourStartIdx( cornersCount - 1 ) ) );
+
+    points->Line( points->LinesSize() - 1 )
+            .SetConstraint( new EC_PERPLINE( points->Line( points->LinesSize() - 1 ) ) );
+}
+
+
+std::shared_ptr<EDIT_POINTS> POINT_EDITOR::makePoints( EDA_ITEM* aItem )
+{
+    std::shared_ptr<EDIT_POINTS> points = std::make_shared<EDIT_POINTS>( aItem );
+
+    if( !aItem )
+        return points;
+
+    // Generate list of edit points basing on the item type
+    switch( aItem->Type() )
+    {
+    case PCB_SHAPE_T:
+    case PCB_FP_SHAPE_T:
+    {
+        const PCB_SHAPE* shape = static_cast<const PCB_SHAPE*>( aItem );
+
+        switch( shape->GetShape() )
+        {
+        case S_SEGMENT:
+            points->AddPoint( shape->GetStart() );
+            points->AddPoint( shape->GetEnd() );
+            break;
+
+        case S_RECT:
+            points->AddPoint( shape->GetStart() );
+            points->AddPoint( wxPoint( shape->GetEnd().x, shape->GetStart().y ) );
+            points->AddPoint( shape->GetEnd() );
+            points->AddPoint( wxPoint( shape->GetStart().x, shape->GetEnd().y ) );
+            break;
+
+        case S_ARC:
+            points->AddPoint( shape->GetCenter() );
+            points->AddPoint( shape->GetArcStart() );
+            points->AddPoint( shape->GetArcMid() );
+            points->AddPoint( shape->GetArcEnd() );
+
+            // Set constraints
+            // Arc end has to stay at the same radius as the start
+            points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
+                                                                   points->Point( ARC_CENTER ),
+                                                                   points->Point( ARC_START ) ) );
+
+            points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
+                                                                 points->Point( ARC_CENTER ) ) );
+
+            points->Point( ARC_MID ).SetGridConstraint( IGNORE_GRID );
+            break;
+
+        case S_CIRCLE:
+            points->AddPoint( shape->GetCenter() );
+            points->AddPoint( shape->GetEnd() );
+            break;
+
+        case S_POLYGON:
+            buildForPolyOutline( points, &shape->GetPolyShape() );
+            break;
+
+        case S_CURVE:
+            points->AddPoint( shape->GetStart() );
+            points->AddPoint( shape->GetBezControl1() );
+            points->AddPoint( shape->GetBezControl2() );
+            points->AddPoint( shape->GetEnd() );
+            break;
+
+        default:        // suppress warnings
+            break;
+        }
+
+        break;
+    }
+
+    case PCB_PAD_T:
+    {
+        const PAD* pad = static_cast<const PAD*>( aItem );
+        FOOTPRINT* parent = pad->GetParent();
+        wxPoint    shapePos = pad->ShapePos();
+        wxPoint    halfSize( pad->GetSize().x / 2, pad->GetSize().y / 2 );
+
+        if( !m_isFootprintEditor )
+            break;
+
+        if( parent && ( parent->IsLocked() || parent->PadsLocked() ) )
+            break;
+
+        switch( pad->GetShape() )
+        {
+        case PAD_SHAPE_CIRCLE:
+            points->AddPoint( shapePos );
+            points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y ) );
+            break;
+
+        case PAD_SHAPE_OVAL:
+        case PAD_SHAPE_TRAPEZOID:
+        case PAD_SHAPE_RECT:
+        case PAD_SHAPE_ROUNDRECT:
+        case PAD_SHAPE_CHAMFERED_RECT:
+        {
+            if( (int) pad->GetOrientation() % 900 != 0 )
+                break;
+
+            if( pad->GetOrientation() == 900 || pad->GetOrientation() == 2700 )
+                std::swap( halfSize.x, halfSize.y );
+
+            points->AddPoint( shapePos - halfSize );
+            points->AddPoint( wxPoint( shapePos.x + halfSize.x, shapePos.y - halfSize.y ) );
+            points->AddPoint( shapePos + halfSize );
+            points->AddPoint( wxPoint( shapePos.x - halfSize.x, shapePos.y + halfSize.y ) );
+        }
+            break;
+
+        default:        // suppress warnings
+            break;
+        }
+    }
+        break;
+
+    case PCB_FP_ZONE_T:
+    case PCB_ZONE_T:
+    {
+        const ZONE* zone = static_cast<const ZONE*>( aItem );
+        buildForPolyOutline( points, zone->Outline() );
+    }
+        break;
+
+    case PCB_DIM_ALIGNED_T:
+    case PCB_DIM_ORTHOGONAL_T:
+    {
+        const ALIGNED_DIMENSION* dimension = static_cast<const ALIGNED_DIMENSION*>( aItem );
+
+        points->AddPoint( dimension->GetStart() );
+        points->AddPoint( dimension->GetEnd() );
+        points->AddPoint( dimension->Text().GetPosition() );
+        points->AddPoint( dimension->GetCrossbarStart() );
+        points->AddPoint( dimension->GetCrossbarEnd() );
+
+        if( aItem->Type() == PCB_DIM_ALIGNED_T )
+        {
+            // Dimension height setting - edit points should move only along the feature lines
+            points->Point( DIM_CROSSBARSTART )
+                    .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBARSTART ),
+                                                 points->Point( DIM_START ) ) );
+            points->Point( DIM_CROSSBAREND )
+                    .SetConstraint( new EC_LINE( points->Point( DIM_CROSSBAREND ),
+                                                 points->Point( DIM_END ) ) );
+        }
+
+        break;
+    }
+
+    case PCB_DIM_CENTER_T:
+    {
+        const CENTER_DIMENSION* dimension = static_cast<const CENTER_DIMENSION*>( aItem );
+
+        points->AddPoint( dimension->GetStart() );
+        points->AddPoint( dimension->GetEnd() );
+
+        points->Point( DIM_END ).SetConstraint( new EC_45DEGREE( points->Point( DIM_END ),
+                                                                 points->Point( DIM_START ) ) );
+
+        break;
+    }
+
+    case PCB_DIM_LEADER_T:
+    {
+        const LEADER* dimension = static_cast<const LEADER*>( aItem );
+
+        points->AddPoint( dimension->GetStart() );
+        points->AddPoint( dimension->GetEnd() );
+        points->AddPoint( dimension->Text().GetPosition() );
+
+        break;
+    }
+
+    default:
+        points.reset();
+        break;
+    }
+
+    return points;
 }
 
 
@@ -416,7 +405,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     if( !item )
         return 0;
 
-    m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+    m_editPoints = makePoints( item );
 
     if( !m_editPoints )
         return 0;
@@ -1602,8 +1591,11 @@ void POINT_EDITOR::updatePoints()
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
-                m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
-                getView()->Add( m_editPoints.get() );
+
+                m_editPoints = makePoints( item );
+
+                if( m_editPoints )
+                    getView()->Add( m_editPoints.get() );
             }
             else
             {
@@ -1645,8 +1637,11 @@ void POINT_EDITOR::updatePoints()
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
-                m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
-                getView()->Add( m_editPoints.get() );
+
+                m_editPoints = makePoints( item );
+
+                if( m_editPoints )
+                    getView()->Add( m_editPoints.get() );
             }
             else if( target == 2 )
             {
@@ -1673,8 +1668,11 @@ void POINT_EDITOR::updatePoints()
             {
                 getView()->Remove( m_editPoints.get() );
                 m_editedPoint = nullptr;
-                m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
-                getView()->Add( m_editPoints.get() );
+
+                m_editPoints = makePoints( item );
+
+                if( m_editPoints )
+                    getView()->Add( m_editPoints.get() );
             }
             else if( target == 4 )
             {
@@ -1707,8 +1705,11 @@ void POINT_EDITOR::updatePoints()
         {
             getView()->Remove( m_editPoints.get() );
             m_editedPoint = nullptr;
-            m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
-            getView()->Add( m_editPoints.get() );
+
+            m_editPoints = makePoints( item );
+
+            if( m_editPoints )
+                getView()->Add( m_editPoints.get() );
         }
         else
         {
@@ -1803,7 +1804,8 @@ void POINT_EDITOR::setAltConstraint( bool aEnabled )
 
         if( line && isPoly )
         {
-            m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*)( new EC_CONVERGING( *line, *m_editPoints ) ) );
+            EC_CONVERGING* altConstraint = new EC_CONVERGING( *line, *m_editPoints );
+            m_altConstraint.reset( (EDIT_CONSTRAINT<EDIT_POINT>*) altConstraint );
         }
         else
         {

@@ -607,11 +607,8 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     guide.SetIgnoreZoneFills( displayOpts.m_ZoneDisplayMode != ZONE_DISPLAY_MODE::SHOW_FILLED );
 
-    if( m_enteredGroup &&
-        !m_enteredGroup->GetBoundingBox().Contains( wxPoint( aWhere.x, aWhere.y ) ) )
-    {
-            ExitGroup();
-    }
+    if( m_enteredGroup && !m_enteredGroup->GetBoundingBox().Contains( (wxPoint) aWhere ) )
+        ExitGroup();
 
     collector.Collect( board(), m_isFootprintEditor ? GENERAL_COLLECTOR::FootprintItems
                                                     : GENERAL_COLLECTOR::AllBoardItems,
