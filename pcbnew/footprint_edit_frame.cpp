@@ -636,7 +636,14 @@ void FOOTPRINT_EDIT_FRAME::doCloseWindow()
 
     Clear_Pcb( false );
 
-    Pgm().GetSettingsManager().FlushAndRelease( GetSettings() );
+    SETTINGS_MANAGER* mgr = GetSettingsManager();
+
+    if( mgr->IsProjectOpen() && wxFileName::IsDirWritable( Prj().GetProjectPath() ) )
+    {
+        GFootprintList.WriteCacheToFile( Prj().GetProjectPath() + "fp-info-cache" );
+    }
+
+    mgr->FlushAndRelease( GetSettings() );
 }
 
 
