@@ -512,9 +512,6 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::padDisplayMode,       CHECK( !cond.PadFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::viaDisplayMode,       CHECK( !cond.ViaFillDisplay() ) );
     mgr->SetConditions( PCB_ACTIONS::trackDisplayMode,     CHECK( !cond.TrackFillDisplay() ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneDisplayEnable,    CHECK( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneDisplayDisable,   CHECK( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::HIDE_FILLED ) ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutlines,  CHECK( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_OUTLINED ) ) );
 
 
 #if defined( KICAD_SCRIPTING_WXPYTHON )
@@ -533,6 +530,16 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::showPythonConsole,  CHECK( pythonConsoleCond ) );
 #endif
 
+    auto enableZoneControlConition =
+        [this] ( const SELECTION& )
+        {
+            return GetBoard()->GetVisibleElements().Contains( LAYER_ZONES )
+                    && GetDisplayOptions().m_ZoneOpacity > 0.0;
+        };
+
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayEnable,    ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayDisable,   ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::HIDE_FILLED ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutlines,  ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_OUTLINED ) ) );
 
     auto enableBoardSetupCondition =
         [this] ( const SELECTION& )
