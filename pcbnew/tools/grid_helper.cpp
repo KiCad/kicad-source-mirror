@@ -57,23 +57,27 @@ GRID_HELPER::GRID_HELPER( TOOL_MANAGER* aToolMgr, MAGNETIC_SETTINGS* aMagneticSe
     m_enableGrid = true;
     m_enableSnapLine = true;
     m_snapItem = nullptr;
-    KIGFX::VIEW* view = m_toolMgr->GetView();
+
+    KIGFX::VIEW*            view = m_toolMgr->GetView();
+    KIGFX::RENDER_SETTINGS* settings = view->GetPainter()->GetSettings();
+    KIGFX::COLOR4D          auxItemsColor = settings->GetLayerColor( LAYER_AUX_ITEMS );
+    KIGFX::COLOR4D          umbilicalColor = settings->GetLayerColor( LAYER_ANCHOR );
 
     m_viewAxis.SetSize( 20000 );
     m_viewAxis.SetStyle( KIGFX::ORIGIN_VIEWITEM::CROSS );
-    m_viewAxis.SetColor( COLOR4D( 1.0, 1.0, 1.0, 0.4 ) );
+    m_viewAxis.SetColor( auxItemsColor.WithAlpha( 0.4 ) );
     m_viewAxis.SetDrawAtZero( true );
     view->Add( &m_viewAxis );
     view->SetVisible( &m_viewAxis, false );
 
     m_viewSnapPoint.SetStyle( KIGFX::ORIGIN_VIEWITEM::CIRCLE_CROSS );
-    m_viewSnapPoint.SetColor( COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    m_viewSnapPoint.SetColor( auxItemsColor );
     m_viewSnapPoint.SetDrawAtZero( true );
     view->Add( &m_viewSnapPoint );
     view->SetVisible( &m_viewSnapPoint, false );
 
     m_viewSnapLine.SetStyle( KIGFX::ORIGIN_VIEWITEM::DASH_LINE );
-    m_viewSnapLine.SetColor( COLOR4D( 0.33, 0.55, 0.95, 1.0 ) );
+    m_viewSnapLine.SetColor( umbilicalColor );
     m_viewSnapLine.SetDrawAtZero( true );
     view->Add( &m_viewSnapLine );
     view->SetVisible( &m_viewSnapLine, false );
