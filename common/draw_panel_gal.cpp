@@ -264,7 +264,9 @@ void EDA_DRAW_PANEL_GAL::Refresh( bool aEraseBackground, const wxRect* aRect )
     // This ensures that we will render often enough but not too often.
     if( delta >= MinRefreshPeriod )
     {
-        ForceRefresh();
+        if( !m_pendingRefresh )
+            ForceRefresh();
+
         m_refreshTimer.Start( MinRefreshPeriod, true );
     }
     else if( !m_refreshTimer.IsRunning() )
@@ -278,6 +280,7 @@ void EDA_DRAW_PANEL_GAL::ForceRefresh()
 {
     //wxPaintEvent redrawEvent;
     //wxPostEvent( this, redrawEvent );
+    m_pendingRefresh = true;
     DoRePaint();
 }
 
