@@ -46,9 +46,9 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
         m_LastImportExportPath(),
         m_FootprintTextShownColumns()
 {
-    m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
-    m_MagneticItems.tracks   = MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL;
-    m_MagneticItems.graphics = false;
+    m_MagneticItems.pads     = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
+    m_MagneticItems.tracks   = MAGNETIC_OPTIONS::NO_EFFECT;
+    m_MagneticItems.graphics = true;
 
     m_params.emplace_back( new PARAM<int>( "window.lib_width",
             &m_LibWidth, 250 ) );
@@ -61,7 +61,10 @@ FOOTPRINT_EDITOR_SETTINGS::FOOTPRINT_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_pads",
             reinterpret_cast<int*>( &m_MagneticItems.pads ),
-            static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
+            static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_ALWAYS ) ) );
+
+    m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
+            &m_MagneticItems.graphics, true ) );
 
     m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
 

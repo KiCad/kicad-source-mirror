@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,6 @@
  */
 
 #include <board_design_settings.h>
-#include <board.h>
 #include <panel_edit_options.h>
 #include <pcb_edit_frame.h>
 #include <pcb_painter.h>
@@ -33,36 +32,36 @@
 #include <footprint_edit_frame.h>
 
 PANEL_EDIT_OPTIONS::PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALOG* aParent ) :
-        PANEL_EDIT_OPTIONS_BASE( aParent->GetTreebook() ),
-        m_Frame( aFrame )
+        PANEL_EDIT_OPTIONS_BASE( aParent->GetTreebook() ), m_frame( aFrame )
 {
-    m_MagneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) != nullptr );
-    m_FlipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) != nullptr );
+    m_magneticPads->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
+    m_magneticGraphics->Show( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) != nullptr );
+    m_flipLeftRight->Show( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) != nullptr );
 
 #ifdef __WXOSX_MAC__
-    m_fgSizerLMB_OSX->Show( true );
-    m_fgSizerLMBWinLin->Show( false );
+    m_mouseCmdsOSX->Show( true );
+    m_mouseCmdsWinLin->Show( false );
 #else
-    m_fgSizerLMB_OSX->Show( false );
-    m_fgSizerLMBWinLin->Show( true );
+    m_mouseCmdsWinLin->Show( true );
+    m_mouseCmdsOSX->Show( false );
 #endif
 
-    m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) ? 1 : 0 );
+    m_optionsBook->SetSelection( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) ? 1 : 0 );
 }
 
 
 bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 {
-    const PCB_DISPLAY_OPTIONS& displ_opts = m_Frame->GetDisplayOptions();
-    const PCBNEW_SETTINGS&     general_opts = m_Frame->Settings();
+    const PCB_DISPLAY_OPTIONS& displ_opts = m_frame->GetDisplayOptions();
+    const PCBNEW_SETTINGS&     general_opts = m_frame->Settings();
 
-    m_Segments_45_Only_Ctrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
+    m_segments45OnlyCtrl->SetValue( general_opts.m_Use45DegreeGraphicSegments );
 
     wxString rotationAngle;
-    rotationAngle = AngleToStringDegrees( (double)m_Frame->GetRotationAngle() );
-    m_RotationAngle->SetValue( rotationAngle );
+    rotationAngle = AngleToStringDegrees( (double) m_frame->GetRotationAngle() );
+    m_rotationAngle->SetValue( rotationAngle );
 
-    if( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) )
+    if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
     {
         /* Set display options */
         m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts.m_DisplayRatsnestLinesCurved );
@@ -71,9 +70,9 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         m_magneticPadChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.pads ) );
         m_magneticTrackChoice->SetSelection( static_cast<int>( general_opts.m_MagneticItems.tracks ) );
         m_magneticGraphicsChoice->SetSelection( !general_opts.m_MagneticItems.graphics );
-        m_FlipLeftRight->SetValue( general_opts.m_FlipLeftRight );
+        m_flipLeftRight->SetValue( general_opts.m_FlipLeftRight );
 
-        m_Show_Page_Limits->SetValue( m_Frame->ShowPageLimits() );
+        m_Show_Page_Limits->SetValue( m_frame->ShowPageLimits() );
 
         switch( general_opts.m_TrackDragAction )
         {
@@ -82,10 +81,11 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
         case TRACK_DRAG_ACTION::DRAG_FREE_ANGLE: m_rbTrackDragFree->SetValue( true ); break;
         }
     }
-    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) )
+    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        m_MagneticPads->SetValue(
-                m_Frame->GetMagneticItemsSettings()->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+        m_magneticPads->SetValue( m_frame->GetMagneticItemsSettings()->pads
+                                                            == MAGNETIC_OPTIONS::CAPTURE_ALWAYS );
+        m_magneticGraphics->SetValue( m_frame->GetMagneticItemsSettings()->graphics );
     }
 
     return true;
@@ -94,27 +94,27 @@ bool PANEL_EDIT_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
 {
-    PCB_DISPLAY_OPTIONS displ_opts = m_Frame->GetDisplayOptions();
+    PCB_DISPLAY_OPTIONS displ_opts = m_frame->GetDisplayOptions();
 
-    m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
+    m_frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_rotationAngle->GetValue() ) ) );
 
-    m_Frame->Settings().m_Use45DegreeGraphicSegments = m_Segments_45_Only_Ctrl->GetValue();
+    m_frame->Settings().m_Use45DegreeGraphicSegments = m_segments45OnlyCtrl->GetValue();
 
-    if( dynamic_cast<PCB_EDIT_FRAME*>( m_Frame ) )
+    if( dynamic_cast<PCB_EDIT_FRAME*>( m_frame ) )
     {
-        PCBNEW_SETTINGS& pcbnewSettings = m_Frame->Settings();
+        PCBNEW_SETTINGS& pcbnewSettings = m_frame->Settings();
 
         displ_opts.m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
         displ_opts.m_ShowModuleRatsnest = m_showSelectedRatsnest->GetValue();
 
-        m_Frame->Settings().m_MagneticItems.pads =
+        m_frame->Settings().m_MagneticItems.pads =
                 static_cast<MAGNETIC_OPTIONS>( m_magneticPadChoice->GetSelection() );
-        m_Frame->Settings().m_MagneticItems.tracks =
+        m_frame->Settings().m_MagneticItems.tracks =
                 static_cast<MAGNETIC_OPTIONS>( m_magneticTrackChoice->GetSelection() );
-        m_Frame->Settings().m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
+        m_frame->Settings().m_MagneticItems.graphics = !m_magneticGraphicsChoice->GetSelection();
 
-        m_Frame->Settings().m_FlipLeftRight = m_FlipLeftRight->GetValue();
-        m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
+        m_frame->Settings().m_FlipLeftRight = m_flipLeftRight->GetValue();
+        m_frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
         if( m_rbTrackDragMove->GetValue() )
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::MOVE;
@@ -123,25 +123,26 @@ bool PANEL_EDIT_OPTIONS::TransferDataFromWindow()
         else if( m_rbTrackDragFree->GetValue() )
             pcbnewSettings.m_TrackDragAction = TRACK_DRAG_ACTION::DRAG_FREE_ANGLE;
     }
-    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_Frame ) )
+    else if( dynamic_cast<FOOTPRINT_EDIT_FRAME*>( m_frame ) )
     {
-        if( m_MagneticPads->GetValue() )
-            m_Frame->GetMagneticItemsSettings()->pads = MAGNETIC_OPTIONS::CAPTURE_ALWAYS;
-        else
-            m_Frame->GetMagneticItemsSettings()->pads = MAGNETIC_OPTIONS::NO_EFFECT;
+        m_frame->GetMagneticItemsSettings()->pads = m_magneticPads->GetValue()
+                                                            ? MAGNETIC_OPTIONS::CAPTURE_ALWAYS
+                                                            : MAGNETIC_OPTIONS::NO_EFFECT;
+
+        m_frame->GetMagneticItemsSettings()->graphics = m_magneticGraphics->GetValue();
     }
 
     // Apply changes to the GAL
-    KIGFX::VIEW*                view = m_Frame->GetCanvas()->GetView();
+    KIGFX::VIEW*                view = m_frame->GetCanvas()->GetView();
     KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
 
-    m_Frame->SetDisplayOptions( displ_opts );
-    settings->LoadDisplayOptions( displ_opts, m_Frame->ShowPageLimits() );
+    m_frame->SetDisplayOptions( displ_opts );
+    settings->LoadDisplayOptions( displ_opts, m_frame->ShowPageLimits() );
     view->RecacheAllItems();
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
-    m_Frame->GetCanvas()->Refresh();
+    m_frame->GetCanvas()->Refresh();
 
     return true;
 }

@@ -543,8 +543,8 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 
 COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings()
 {
-    return Pgm().GetSettingsManager().GetColorSettings(
-            GetFootprintEditorSettings()->m_ColorTheme );
+    wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
+    return Pgm().GetSettingsManager().GetColorSettings( currentTheme );
 }
 
 
@@ -887,8 +887,8 @@ void FOOTPRINT_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent,
 
     book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
     book->AddSubPage( new PANEL_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
-    book->AddSubPage( new PANEL_FP_EDITOR_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_EDIT_OPTIONS( this, aParent ), _( "Editing Options" ) );
+    book->AddSubPage( new PANEL_FP_EDITOR_COLOR_SETTINGS( this, book ), _( "Colors" ) );
     book->AddSubPage( new PANEL_FP_EDITOR_DEFAULTS( this, aParent ), _( "Default Values" ) );
 
     aHotkeysPanel->AddHotKeys( GetToolManager() );

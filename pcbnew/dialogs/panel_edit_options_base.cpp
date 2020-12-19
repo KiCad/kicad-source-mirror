@@ -23,16 +23,28 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	wxStaticBoxSizer* bOptionsSizer;
 	bOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Editing Options") ), wxVERTICAL );
 
-	m_MagneticPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptionsSizer->Add( m_MagneticPads, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_magneticPads = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic pads"), wxDefaultPosition, wxDefaultSize, 0 );
+	bOptionsSizer->Add( m_magneticPads, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_Segments_45_Only_Ctrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
 
-	bOptionsSizer->Add( m_Segments_45_Only_Ctrl, 0, wxALL, 5 );
+	bOptionsSizer->Add( 0, 3, 0, wxEXPAND, 5 );
 
-	m_FlipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bOptionsSizer->Add( m_FlipLeftRight, 0, wxALL, 5 );
+	m_magneticGraphics = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Magnetic graphics"), wxDefaultPosition, wxDefaultSize, 0 );
+	bOptionsSizer->Add( m_magneticGraphics, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+
+	bOptionsSizer->Add( 0, 6, 0, wxEXPAND, 5 );
+
+	m_segments45OnlyCtrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_segments45OnlyCtrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
+
+	bOptionsSizer->Add( m_segments45OnlyCtrl, 0, wxALL, 5 );
+
+
+	bOptionsSizer->Add( 0, 6, 0, wxEXPAND, 5 );
+
+	m_flipLeftRight = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Flip board items L/R (default is T/B)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bOptionsSizer->Add( m_flipLeftRight, 0, wxALL, 5 );
 
 	wxFlexGridSizer* fgSizer12;
 	fgSizer12 = new wxFlexGridSizer( 0, 2, 0, 0 );
@@ -44,142 +56,178 @@ PANEL_EDIT_OPTIONS_BASE::PANEL_EDIT_OPTIONS_BASE( wxWindow* parent, wxWindowID i
 	m_staticTextRotationAngle->Wrap( -1 );
 	fgSizer12->Add( m_staticTextRotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_RotationAngle = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_RotationAngle->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
+	m_rotationAngle = new wxTextCtrl( bOptionsSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_rotationAngle->SetToolTip( _("Set increment (in degrees) for context menu and hotkey rotation.") );
 
-	fgSizer12->Add( m_RotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	fgSizer12->Add( m_rotationAngle, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
 
 
 	bOptionsSizer->Add( fgSizer12, 0, wxEXPAND|wxTOP, 5 );
 
 
-	bOptionsSizer->Add( 0, 30, 0, 0, 5 );
+	bMiddleLeftSizer->Add( bOptionsSizer, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
-	wxStaticBoxSizer* sbSizerMouseCmdWinLin;
-	sbSizerMouseCmdWinLin = new wxStaticBoxSizer( new wxStaticBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
+	m_mouseCmdsWinLin = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
 
-	m_staticText181 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Left mouse click action depends on  3 modifier keys:\nAlt, Shift, Ctrl/Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText181 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nAlt, Shift and Ctrl."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText181->Wrap( -1 );
-	sbSizerMouseCmdWinLin->Add( m_staticText181, 0, wxALL, 5 );
+	m_mouseCmdsWinLin->Add( m_staticText181, 0, wxALL, 5 );
 
-	m_staticline11 = new wxStaticLine( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	sbSizerMouseCmdWinLin->Add( m_staticline11, 0, wxEXPAND | wxALL, 5 );
+	wxStaticLine* staticline11;
+	staticline11 = new wxStaticLine( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_mouseCmdsWinLin->Add( staticline11, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
-	m_fgSizerLMBWinLin = new wxFlexGridSizer( 0, 2, 0, 0 );
-	m_fgSizerLMBWinLin->SetFlexibleDirection( wxBOTH );
-	m_fgSizerLMBWinLin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* fgSizerCmdsWinLin;
+	fgSizerCmdsWinLin = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerCmdsWinLin->SetFlexibleDirection( wxBOTH );
+	fgSizerCmdsWinLin->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticText61 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("No modifier"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText61->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText61, 0, wxALL, 5 );
+	wxStaticText* staticText61;
+	staticText61 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("No modifier"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText61->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText61, 0, wxALL, 5 );
 
-	m_staticText71 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Item/block selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText71->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText71, 0, wxALL, 5 );
+	wxStaticText* staticText71;
+	staticText71 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Select item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText71->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText71, 0, wxALL, 5 );
 
-	m_staticText81 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText81->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText81, 0, wxALL, 5 );
+	wxStaticText* staticText81;
+	staticText81 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText81->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText81, 0, wxALL, 5 );
 
-	m_staticText91 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection added to current selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText91->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText91, 0, wxALL, 5 );
+	wxStaticText* staticText91;
+	staticText91 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Add item(s) to selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText91->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText91, 0, wxALL, 5 );
 
-	m_staticText121 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("SHIFT+ALT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText121->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText121, 0, wxALL, 5 );
+	wxStaticText* staticText121;
+	staticText121 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Shift+Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText121->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText121, 0, wxALL, 5 );
 
-	m_staticText131 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection removed from current selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText131->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText131, 0, wxALL, 5 );
+	wxStaticText* staticText131;
+	staticText131 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Remove item(s) from selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText131->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText131, 0, wxALL, 5 );
 
-	m_staticText101 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText101->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText101, 0, wxALL, 5 );
+	wxStaticText* staticText141;
+	staticText141 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText141->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText141, 0, wxALL, 5 );
 
-	m_staticText111 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Show full disambiguation context menu"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText111->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText111, 0, wxALL, 5 );
+	wxStaticText* staticText151;
+	staticText151 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Toggle selected state of item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText151->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText151, 0, wxALL, 5 );
 
-	m_staticText141 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("ALT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText141->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText141, 0, wxALL, 5 );
+	wxStaticText* staticText101;
+	staticText101 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText101->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText101, 0, wxALL, 5 );
 
-	m_staticText151 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Toggle new selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText151->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText151, 0, wxALL, 5 );
+	wxStaticText* staticText111;
+	staticText111 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText111->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText111, 0, wxALL, 5 );
 
-	m_staticText161 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL+SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText161->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText161, 0, wxALL, 5 );
+	wxStaticText* staticText161;
+	staticText161 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Ctrl+Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText161->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText161, 0, wxALL, 5 );
 
-	m_staticText171 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText171->Wrap( -1 );
-	m_fgSizerLMBWinLin->Add( m_staticText171, 0, wxALL, 5 );
-
-
-	sbSizerMouseCmdWinLin->Add( m_fgSizerLMBWinLin, 1, wxEXPAND, 5 );
-
-	m_fgSizerLMB_OSX = new wxFlexGridSizer( 0, 2, 0, 0 );
-	m_fgSizerLMB_OSX->SetFlexibleDirection( wxBOTH );
-	m_fgSizerLMB_OSX->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-	m_staticText6 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("No modifier"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText6->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText6, 0, wxALL, 5 );
-
-	m_staticText7 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Item/block selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText7->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText7, 0, wxALL, 5 );
-
-	m_staticText8 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText8, 0, wxALL, 5 );
-
-	m_staticText9 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection added to current selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText9->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText9, 0, wxALL, 5 );
-
-	m_staticText12 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL+SHIFT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText12->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText12, 0, wxALL, 5 );
-
-	m_staticText13 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("New selection removed from current selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText13->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText13, 0, wxALL, 5 );
-
-	m_staticText10 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("ALT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText10->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText10, 0, wxALL, 5 );
-
-	m_staticText11 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Show full disambiguation context menu"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText11, 0, wxALL, 5 );
-
-	m_staticText14 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText14->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText14, 0, wxALL, 5 );
-
-	m_staticText15 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Toggle new selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText15->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText15, 0, wxALL, 5 );
-
-	m_staticText16 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("CTRL+ALT"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText16->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText16, 0, wxALL, 5 );
-
-	m_staticText17 = new wxStaticText( sbSizerMouseCmdWinLin->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText17->Wrap( -1 );
-	m_fgSizerLMB_OSX->Add( m_staticText17, 0, wxALL, 5 );
+	wxStaticText* staticText171;
+	staticText171 = new wxStaticText( m_mouseCmdsWinLin->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText171->Wrap( -1 );
+	fgSizerCmdsWinLin->Add( staticText171, 0, wxALL, 5 );
 
 
-	sbSizerMouseCmdWinLin->Add( m_fgSizerLMB_OSX, 1, wxEXPAND, 5 );
+	m_mouseCmdsWinLin->Add( fgSizerCmdsWinLin, 1, wxEXPAND, 5 );
 
 
-	bOptionsSizer->Add( sbSizerMouseCmdWinLin, 1, wxEXPAND, 5 );
+	bMiddleLeftSizer->Add( m_mouseCmdsWinLin, 1, wxEXPAND|wxALL, 5 );
+
+	m_mouseCmdsOSX = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Left Click Mouse Commands") ), wxVERTICAL );
+
+	m_staticText1811 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nAlt, Shift and Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText1811->Wrap( -1 );
+	m_mouseCmdsOSX->Add( m_staticText1811, 0, wxALL, 5 );
+
+	wxStaticLine* staticline111;
+	staticline111 = new wxStaticLine( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_mouseCmdsOSX->Add( staticline111, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+
+	wxFlexGridSizer* fgSizerCmdsOSX;
+	fgSizerCmdsOSX = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerCmdsOSX->SetFlexibleDirection( wxBOTH );
+	fgSizerCmdsOSX->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	wxStaticText* staticText62;
+	staticText62 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("No modifier"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText62->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText62, 0, wxALL, 5 );
+
+	wxStaticText* staticText72;
+	staticText72 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Select item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText72->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText72, 0, wxALL, 5 );
+
+	wxStaticText* staticText82;
+	staticText82 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Shift"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText82->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText82, 0, wxALL, 5 );
+
+	wxStaticText* staticText92;
+	staticText92 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Add item(s) to selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText92->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText92, 0, wxALL, 5 );
+
+	wxStaticText* staticText122;
+	staticText122 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Shift+Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText122->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText122, 0, wxALL, 5 );
+
+	wxStaticText* staticText132;
+	staticText132 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Remove item(s) from selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText132->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText132, 0, wxALL, 5 );
+
+	wxStaticText* staticText142;
+	staticText142 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText142->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText142, 0, wxALL, 5 );
+
+	wxStaticText* staticText152;
+	staticText152 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Toggle selected state of item(s)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText152->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText152, 0, wxALL, 5 );
+
+	wxStaticText* staticText102;
+	staticText102 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Alt"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText102->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText102, 0, wxALL, 5 );
+
+	wxStaticText* staticText112;
+	staticText112 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText112->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText112, 0, wxALL, 5 );
+
+	wxStaticText* staticText162;
+	staticText162 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Alt+Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText162->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText162, 0, wxALL, 5 );
+
+	wxStaticText* staticText172;
+	staticText172 = new wxStaticText( m_mouseCmdsOSX->GetStaticBox(), wxID_ANY, _("Highlight net (for pads or tracks)."), wxDefaultPosition, wxDefaultSize, 0 );
+	staticText172->Wrap( -1 );
+	fgSizerCmdsOSX->Add( staticText172, 0, wxALL, 5 );
 
 
-	bMiddleLeftSizer->Add( bOptionsSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_mouseCmdsOSX->Add( fgSizerCmdsOSX, 1, wxEXPAND, 5 );
+
+
+	bMiddleLeftSizer->Add( m_mouseCmdsOSX, 1, wxEXPAND|wxALL, 5 );
 
 
 	bMargins->Add( bMiddleLeftSizer, 1, wxEXPAND|wxRIGHT, 5 );

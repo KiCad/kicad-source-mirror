@@ -82,11 +82,11 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "aui.show_layer_manager",
             &m_AuiPanels.show_layer_manager, true ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "aui.right_panel_width", &m_AuiPanels.right_panel_width, -1 ) );
+    m_params.emplace_back( new PARAM<int>( "aui.right_panel_width",
+            &m_AuiPanels.right_panel_width, -1 ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "aui.appearance_panel_tab", &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "aui.appearance_panel_tab",
+            &m_AuiPanels.appearance_panel_tab, 0, 0, 2 ) );
 
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.width",
             &m_FootprintChooser.width, -1 ) );
@@ -100,10 +100,11 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.sash_v",
             &m_FootprintChooser.sash_v, -1 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right", &m_FlipLeftRight, true ) );
+    m_params.emplace_back( new PARAM<bool>( "editing.flip_left_right",
+            &m_FlipLeftRight, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "editing.magnetic_graphics", &m_MagneticItems.graphics, true ) );
+    m_params.emplace_back( new PARAM<bool>( "editing.magnetic_graphics",
+            &m_MagneticItems.graphics, true ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.magnetic_pads",
             reinterpret_cast<int*>( &m_MagneticItems.pads ),
@@ -113,7 +114,8 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             reinterpret_cast<int*>( &m_MagneticItems.tracks ),
             static_cast<int>( MAGNETIC_OPTIONS::CAPTURE_CURSOR_IN_TRACK_TOOL ) ) );
 
-    m_params.emplace_back( new PARAM<bool>( "editing.polar_coords", &m_PolarCoords, false ) );
+    m_params.emplace_back( new PARAM<bool>( "editing.polar_coords",
+            &m_PolarCoords, false ) );
 
     m_params.emplace_back( new PARAM<int>( "editing.track_drag_action",
             reinterpret_cast<int*>( &m_TrackDragAction ),
@@ -122,51 +124,51 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<bool>( "editing.use_45_degree_graphic_segments",
             &m_Use45DegreeGraphicSegments, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.graphic_items_fill", &m_Display.m_DisplayGraphicsFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.graphic_items_fill",
+            &m_Display.m_DisplayGraphicsFill, true ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "pcb_display.max_links_shown", &m_Display.m_MaxLinksShowed, 3, 0, 15 ) );
+    m_params.emplace_back( new PARAM<int>( "pcb_display.max_links_shown",
+            &m_Display.m_MaxLinksShowed, 3, 0, 15 ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.graphics_fill", &m_Display.m_DisplayGraphicsFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.graphics_fill",
+            &m_Display.m_DisplayGraphicsFill, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.text_fill", &m_Display.m_DisplayTextFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.text_fill",
+            &m_Display.m_DisplayTextFill, true ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "pcb_display.net_names_mode", &m_Display.m_DisplayNetNamesMode, 3, 0, 3 ) );
+    m_params.emplace_back( new PARAM<int>( "pcb_display.net_names_mode",
+            &m_Display.m_DisplayNetNamesMode, 3, 0, 3 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.pad_clearance", &m_Display.m_DisplayPadIsol, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_clearance",
+            &m_Display.m_DisplayPadIsol, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.pad_fill", &m_Display.m_DisplayPadFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_fill",
+            &m_Display.m_DisplayPadFill, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.pad_numbers", &m_Display.m_DisplayPadNum, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.pad_numbers",
+            &m_Display.m_DisplayPadNum, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.ratsnest_global", &m_Display.m_ShowGlobalRatsnest, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_global",
+            &m_Display.m_ShowGlobalRatsnest, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.ratsnest_footprint", &m_Display.m_ShowModuleRatsnest, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_footprint",
+            &m_Display.m_ShowModuleRatsnest, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "pcb_display.ratsnest_curved", &m_Display.m_DisplayRatsnestLinesCurved, false ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.ratsnest_curved",
+            &m_Display.m_DisplayRatsnestLinesCurved, false ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "pcb_display.rotation_angle", &m_RotationAngle, 900, 1, 900 ) );
+    m_params.emplace_back( new PARAM<int>( "pcb_display.rotation_angle",
+            &m_RotationAngle, 900, 1, 900 ) );
 
     m_params.emplace_back( new PARAM<int>( "pcb_display.track_clearance_mode",
             reinterpret_cast<int*>( &m_Display.m_ShowTrackClearanceMode ),
             PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.track_fill", &m_Display.m_DisplayPcbTrackFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.track_fill",
+            &m_Display.m_DisplayPcbTrackFill, true ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.via_fill", &m_Display.m_DisplayViaFill, true ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.via_fill",
+            &m_Display.m_DisplayViaFill, true ) );
 
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "pcb_display.zone_mode",
             &m_Display.m_ZoneDisplayMode, ZONE_DISPLAY_MODE::SHOW_FILLED,
@@ -176,14 +178,14 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             reinterpret_cast<int*>( &m_Display.m_DisplayOrigin ),
             PCB_DISPLAY_OPTIONS::PCB_ORIGIN_PAGE ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.origin_invert_x_axis", &m_Display.m_DisplayInvertXAxis, false ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.origin_invert_x_axis",
+            &m_Display.m_DisplayInvertXAxis, false ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "pcb_display.origin_invert_y_axis", &m_Display.m_DisplayInvertYAxis, false ) );
+    m_params.emplace_back( new PARAM<bool>( "pcb_display.origin_invert_y_axis",
+            &m_Display.m_DisplayInvertYAxis, false ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "plot.line_width", &m_PlotLineWidth, 0.1, 0.01, 5.0 ) );
+    m_params.emplace_back( new PARAM<double>( "plot.line_width",
+            &m_PlotLineWidth, 0.1, 0.01, 5.0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "cleanup.cleanup_vias",
             &m_Cleanup.cleanup_vias, true ) );
@@ -232,80 +234,95 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>(
             "gen_drill.drill_file_type", &m_GenDrill.drill_file_type, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "gen_drill.map_file_type", &m_GenDrill.map_file_type, 1 ) );
+    m_params.emplace_back( new PARAM<int>( "gen_drill.map_file_type",
+            &m_GenDrill.map_file_type, 1 ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "gen_drill.zeros_format", &m_GenDrill.zeros_format, 0, 0, 3 ) );
+    m_params.emplace_back( new PARAM<int>( "gen_drill.zeros_format",
+            &m_GenDrill.zeros_format, 0, 0, 3 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "export_idf.auto_adjust", &m_ExportIdf.auto_adjust, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_idf.auto_adjust",
+            &m_ExportIdf.auto_adjust, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "export_idf.ref_units", &m_ExportIdf.ref_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_idf.ref_units",
+            &m_ExportIdf.ref_units, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "export_idf.ref_x", &m_ExportIdf.ref_x, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_idf.ref_x",
+            &m_ExportIdf.ref_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "export_idf.ref_y", &m_ExportIdf.ref_y, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_idf.ref_y",
+            &m_ExportIdf.ref_y, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "export_idf.units_mils", &m_ExportIdf.units_mils, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_idf.units_mils",
+            &m_ExportIdf.units_mils, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "export_step.origin_mode", &m_ExportStep.origin_mode, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_step.origin_mode",
+            &m_ExportStep.origin_mode, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "export_step.origin_units", &m_ExportStep.origin_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_step.origin_units",
+            &m_ExportStep.origin_units, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "export_step.origin_x", &m_ExportStep.origin_x, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_step.origin_x",
+            &m_ExportStep.origin_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "export_step.origin_y", &m_ExportStep.origin_y, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_step.origin_y",
+            &m_ExportStep.origin_y, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "export_step.no_virtual", &m_ExportStep.no_virtual, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_step.no_virtual",
+            &m_ExportStep.no_virtual, false ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "export_svg.black_and_white", &m_ExportSvg.black_and_white, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_svg.black_and_white",
+            &m_ExportSvg.black_and_white, false ) );
 
-    m_params.emplace_back(
-            new PARAM<bool>( "export_svg.mirror", &m_ExportSvg.mirror, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_svg.mirror",
+            &m_ExportSvg.mirror, false ) );
 
-    m_params.emplace_back( new PARAM<bool>( "export_svg.one_file", &m_ExportSvg.one_file, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_svg.one_file",
+            &m_ExportSvg.one_file, false ) );
 
-    m_params.emplace_back(new PARAM<bool>(
-            "export_svg.plot_board_edges", &m_ExportSvg.plot_board_edges, true ) );
+    m_params.emplace_back(new PARAM<bool>( "export_svg.plot_board_edges",
+            &m_ExportSvg.plot_board_edges, true ) );
 
-    m_params.emplace_back( new PARAM<int>( "export_svg.page_size", &m_ExportSvg.page_size, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_svg.page_size",
+            &m_ExportSvg.page_size, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<wxString>( "export_svg.output_dir", &m_ExportSvg.output_dir, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "export_svg.output_dir",
+            &m_ExportSvg.output_dir, "" ) );
 
-    m_params.emplace_back( new PARAM_LIST<int>( "export_svg.layers", &m_ExportSvg.layers, {} ) );
+    m_params.emplace_back( new PARAM_LIST<int>( "export_svg.layers",
+            &m_ExportSvg.layers, {} ) );
 
-    m_params.emplace_back( new PARAM<int>( "export_vrml.units", &m_ExportVrml.units, 1 ) );
+    m_params.emplace_back( new PARAM<int>( "export_vrml.units",
+            &m_ExportVrml.units, 1 ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "export_vrml.copy_3d_models", &m_ExportVrml.copy_3d_models, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_vrml.copy_3d_models",
+            &m_ExportVrml.copy_3d_models, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "export_vrml.use_relative_paths", &m_ExportVrml.use_relative_paths, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_vrml.use_relative_paths",
+            &m_ExportVrml.use_relative_paths, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "export_vrml.use_plain_pcb", &m_ExportVrml.use_plain_pcb, false ) );
+    m_params.emplace_back( new PARAM<bool>( "export_vrml.use_plain_pcb",
+            &m_ExportVrml.use_plain_pcb, false ) );
 
-    m_params.emplace_back( new PARAM<int>( "export_vrml.ref_units", &m_ExportVrml.ref_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "export_vrml.ref_units",
+            &m_ExportVrml.ref_units, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_x", &m_ExportVrml.ref_x, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_x",
+            &m_ExportVrml.ref_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_y", &m_ExportVrml.ref_y, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "export_vrml.ref_y",
+            &m_ExportVrml.ref_y, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "zones.hatching_style", &m_Zones.hatching_style, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "zones.hatching_style",
+            &m_Zones.hatching_style, 0 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "zones.net_filter", &m_Zones.net_filter, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "zones.net_filter",
+            &m_Zones.net_filter, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode", &m_Zones.net_sort_mode, 1 ) );
+    m_params.emplace_back( new PARAM<int>( "zones.net_sort_mode",
+            &m_Zones.net_sort_mode, 1 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "zones.clearance", &m_Zones.clearance, ZONE_CLEARANCE_MIL ) );
+    m_params.emplace_back( new PARAM<double>( "zones.clearance",
+            &m_Zones.clearance, ZONE_CLEARANCE_MIL ) );
 
     m_params.emplace_back( new PARAM<double>( "zones.min_thickness",
             &m_Zones.min_thickness, ZONE_THICKNESS_MIL ) );
@@ -316,71 +333,74 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<double>( "zones.thermal_relief_copper_width",
             &m_Zones.thermal_relief_copper_width, ZONE_THERMAL_RELIEF_COPPER_WIDTH_MIL ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "import_graphics.layer", &m_ImportGraphics.layer, Dwgs_User ) );
+    m_params.emplace_back( new PARAM<int>( "import_graphics.layer",
+            &m_ImportGraphics.layer, Dwgs_User ) );
 
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );
 
-    m_params.emplace_back( new PARAM<int>(
-            "import_graphics.line_width_units", &m_ImportGraphics.line_width_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "import_graphics.line_width_units",
+            &m_ImportGraphics.line_width_units, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "import_graphics.line_width", &m_ImportGraphics.line_width, 0.2 ) );
+    m_params.emplace_back( new PARAM<double>( "import_graphics.line_width",
+            &m_ImportGraphics.line_width, 0.2 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "import_graphics.origin_units", &m_ImportGraphics.origin_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "import_graphics.origin_units",
+            &m_ImportGraphics.origin_units, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "import_graphics.origin_x", &m_ImportGraphics.origin_x, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_x",
+            &m_ImportGraphics.origin_x, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "import_graphics.origin_y", &m_ImportGraphics.origin_y, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "import_graphics.origin_y",
+            &m_ImportGraphics.origin_y, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "import_graphics.dxf_units", &m_ImportGraphics.dxf_units, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "import_graphics.dxf_units",
+            &m_ImportGraphics.dxf_units, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "netlist.report_filter", &m_NetlistDialog.report_filter, -1 ) );
+    m_params.emplace_back( new PARAM<int>( "netlist.report_filter",
+            &m_NetlistDialog.report_filter, -1 ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "netlist.update_footprints", &m_NetlistDialog.update_footprints, true ) );
+    m_params.emplace_back( new PARAM<bool>( "netlist.update_footprints",
+            &m_NetlistDialog.update_footprints, true ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "netlist.delete_shorting_tracks", &m_NetlistDialog.delete_shorting_tracks, false ) );
+    m_params.emplace_back( new PARAM<bool>( "netlist.delete_shorting_tracks",
+            &m_NetlistDialog.delete_shorting_tracks, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "netlist.delete_extra_footprints", &m_NetlistDialog.delete_extra_footprints, false ) );
+    m_params.emplace_back( new PARAM<bool>( "netlist.delete_extra_footprints",
+            &m_NetlistDialog.delete_extra_footprints, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "netlist.delete_single_pad_nets", &m_NetlistDialog.delete_single_pad_nets, false ) );
+    m_params.emplace_back( new PARAM<bool>( "netlist.delete_single_pad_nets",
+            &m_NetlistDialog.delete_single_pad_nets, false ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "netlist.associate_by_ref_sch", &m_NetlistDialog.associate_by_ref_sch, false ) );
+    m_params.emplace_back( new PARAM<bool>( "netlist.associate_by_ref_sch",
+            &m_NetlistDialog.associate_by_ref_sch, false ) );
 
-    m_params.emplace_back(new PARAM<int>( "place_file.units", &m_PlaceFile.units, 1 ) );
+    m_params.emplace_back(new PARAM<int>( "place_file.units",
+            &m_PlaceFile.units, 1 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "place_file.file_options", &m_PlaceFile.file_options, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "place_file.file_options",
+            &m_PlaceFile.file_options, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "place_file.file_format", &m_PlaceFile.file_format, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "place_file.file_format",
+            &m_PlaceFile.file_format, 0 ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "place_file.include_board_edge", &m_PlaceFile.include_board_edge, false ) );
+    m_params.emplace_back( new PARAM<bool>( "place_file.include_board_edge",
+            &m_PlaceFile.include_board_edge, false ) );
 
     m_params.emplace_back( new PARAM<int>( "plot.all_layers_on_one_page",
             &m_Plot.all_layers_on_one_page, 1 ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "plot.pads_drill_mode", &m_Plot.pads_drill_mode, 2 ) );
+    m_params.emplace_back( new PARAM<int>( "plot.pads_drill_mode",
+            &m_Plot.pads_drill_mode, 2 ) );
 
-    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_x", &m_Plot.fine_scale_x, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_x",
+            &m_Plot.fine_scale_x, 0 ) );
 
-    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_y", &m_Plot.fine_scale_y, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "plot.fine_scale_y",
+            &m_Plot.fine_scale_y, 0 ) );
 
-    m_params.emplace_back(
-            new PARAM<double>( "plot.ps_fine_width_adjust", &m_Plot.ps_fine_width_adjust, 0 ) );
+    m_params.emplace_back( new PARAM<double>( "plot.ps_fine_width_adjust",
+            &m_Plot.ps_fine_width_adjust, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "plot.check_zones_before_plotting",
             &m_Plot.check_zones_before_plotting, true ) );
@@ -397,38 +417,38 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.height",
             &m_FootprintWizardList.height, -1 ) );
 
-    m_params.emplace_back( new PARAM<bool>(
-            "reannotate_dialog.annotate_sort_on_modules", &m_Reannotate.sort_on_fp_location, true ) );
-    m_params.emplace_back( new PARAM<bool>(
-            "reannotate_dialog.annotate_remove_front_prefix", &m_Reannotate.remove_front_prefix, false ) );
-    m_params.emplace_back( new PARAM<bool>(
-            "reannotate_dialog.annotate_remove_back_prefix", &m_Reannotate.remove_back_prefix, false ) );
-    m_params.emplace_back( new PARAM<bool>(
-            "reannotate_dialog.annotate_update_schematic", &m_Reannotate.update_schematic, true ) );
-    m_params.emplace_back( new PARAM<bool>(
-            "reannotate_dialog.annotate_exclude_locked", &m_Reannotate.exclude_locked, false ) );
+    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_sort_on_modules",
+            &m_Reannotate.sort_on_fp_location, true ) );
+    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_remove_front_prefix",
+            &m_Reannotate.remove_front_prefix, false ) );
+    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_remove_back_prefix",
+            &m_Reannotate.remove_back_prefix, false ) );
+    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_update_schematic",
+            &m_Reannotate.update_schematic, true ) );
+    m_params.emplace_back( new PARAM<bool>( "reannotate_dialog.annotate_exclude_locked",
+            &m_Reannotate.exclude_locked, false ) );
 
-    m_params.emplace_back(
-            new PARAM<int>( "reannotate_dialog.annotate_grid_index", &m_Reannotate.grid_index, 0 ) );
-    m_params.emplace_back(
-            new PARAM<int>( "reannotate_dialog.annotate_sort_code", &m_Reannotate.sort_code, 0 ) );
-    m_params.emplace_back(
-            new PARAM<int>( "reannotate_dialog.annotate_choice", &m_Reannotate.annotation_choice, 0 ) );
-    m_params.emplace_back( new PARAM<int>(
-            "reannotate_dialog.annotate_report_severity", &m_Reannotate.report_severity, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_grid_index",
+            &m_Reannotate.grid_index, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_sort_code",
+            &m_Reannotate.sort_code, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_choice",
+            &m_Reannotate.annotation_choice, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "reannotate_dialog.annotate_report_severity",
+            &m_Reannotate.report_severity, 0 ) );
 
-    m_params.emplace_back( new PARAM<wxString>(
-            "reannotate_dialog.annotate_front_refdes_start", &m_Reannotate.front_refdes_start, "1" ) );
-    m_params.emplace_back( new PARAM<wxString>(
-            "reannotate_dialog.annotate_back_refdes_start", &m_Reannotate.back_refdes_start, "" ) );
-    m_params.emplace_back( new PARAM<wxString>(
-            "reannotate_dialog.annotate_front_prefix", &m_Reannotate.front_prefix, "" ) );
-    m_params.emplace_back(
-            new PARAM<wxString>( "reannotate_dialog.annotate_back_prefix", &m_Reannotate.back_prefix, "" ) );
-    m_params.emplace_back( new PARAM<wxString>(
-            "reannotate_dialog.annotate_exclude_list", &m_Reannotate.exclude_list, "" ) );
-    m_params.emplace_back( new PARAM<wxString>(
-            "reannotate_dialog.annotate_report_file_name", &m_Reannotate.report_file_name, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_front_refdes_start",
+            &m_Reannotate.front_refdes_start, "1" ) );
+    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_back_refdes_start",
+            &m_Reannotate.back_refdes_start, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_front_prefix",
+            &m_Reannotate.front_prefix, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_back_prefix",
+            &m_Reannotate.back_prefix, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_exclude_list",
+            &m_Reannotate.exclude_list, "" ) );
+    m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_report_file_name",
+            &m_Reannotate.report_file_name, "" ) );
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
@@ -476,10 +496,10 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     addParamsForWindow( &m_FootprintWizard, "footprint_wizard" );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint_lib_dir",
-                                                &m_lastFootprintLibDir, "" ) );
+            &m_lastFootprintLibDir, "" ) );
 
     m_params.emplace_back( new PARAM<wxString>( "system.last_footprint3d_dir",
-                                                &m_lastFootprint3dDir, "" ) );
+            &m_lastFootprint3dDir, "" ) );
 }
 
 
@@ -495,68 +515,67 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     //
     // NOTE: there's no value in line-wrapping these; it just makes the table unreadable.
     //
-    ret &= fromLegacy<bool>( aCfg, "ShowLayerManagerTools",    "aui.show_layer_manager" );
+    ret &= fromLegacy<bool>( aCfg, "ShowLayerManagerTools",         "aui.show_layer_manager" );
 
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserHSashPosition", "footprint_chooser.sash_h" );
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserVSashPosition", "footprint_chooser.sash_v" );
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserWidth",         "footprint_chooser.width" );
     ret &= fromLegacy<int>(  aCfg, "FootprintChooserHeight",        "footprint_chooser.height" );
 
-    ret &= fromLegacy<bool>(  aCfg, "FlipLeftRight",           "editing.flip_left_right" );
-    ret &= fromLegacy<bool>(  aCfg, "MagneticGraphics",        "editing.magnetic_graphics" );
-    ret &= fromLegacy<int>(   aCfg, "MagneticPads",            "editing.magnetic_pads" );
-    ret &= fromLegacy<int>(   aCfg, "MagneticTracks",          "editing.magnetic_tracks" );
-    ret &= fromLegacy<bool>(  aCfg, "DisplayPolarCoords",      "editing.polar_coords" );
-    ret &= fromLegacy<bool>(  aCfg, "Use45DegreeGraphicSegments",
-                              "editing.use_45_degree_graphic_segments" );
+    ret &= fromLegacy<bool>(  aCfg, "FlipLeftRight",                "editing.flip_left_right" );
+    ret &= fromLegacy<bool>(  aCfg, "MagneticGraphics",             "editing.magnetic_graphics" );
+    ret &= fromLegacy<int>(   aCfg, "MagneticPads",                 "editing.magnetic_pads" );
+    ret &= fromLegacy<int>(   aCfg, "MagneticTracks",               "editing.magnetic_tracks" );
+    ret &= fromLegacy<bool>(  aCfg, "DisplayPolarCoords",           "editing.polar_coords" );
+    ret &= fromLegacy<bool>(  aCfg, "Use45DegreeGraphicSegments",   "editing.use_45_degree_graphic_segments" );
 
-    ret &= fromLegacy<bool>(  aCfg, "PcbAffT",                 "pcb_display.graphic_items_fill" );
-    ret &= fromLegacy<int>(   aCfg, "MaxLnkS",                 "pcb_display.max_links_shown" );
-    ret &= fromLegacy<bool>(  aCfg, "ModAffC",                 "pcb_display.footprint_edge_fill" );
-    ret &= fromLegacy<bool>(  aCfg, "ModAffT",                 "pcb_display.footprint_text_fill" );
-    ret &= fromLegacy<int>(   aCfg, "ShowNetNamesMode",        "pcb_display.net_names_mode" );
-    ret &= fromLegacy<int>(   aCfg, "PcbDisplayOrigin",        "pcb_display.origin_mode" );
-    ret &= fromLegacy<bool>(  aCfg, "PcbInvertXAxis",          "pcb_display.origin_invert_x_axis" );
-    ret &= fromLegacy<bool>(  aCfg, "PcbInvertYAxis",          "pcb_display.origin_invert_y_axis" );
-    ret &= fromLegacy<bool>(  aCfg, "PadAffG",                 "pcb_display.pad_clearance" );
-    ret &= fromLegacy<bool>(  aCfg, "PadFill",                 "pcb_display.pad_fill" );
-    ret &= fromLegacy<bool>(  aCfg, "PadSNum",                 "pcb_display.pad_numbers" );
-    ret &= fromLegacy<bool>(  aCfg, "ShowRatsnestLines",       "pcb_display.ratsnest_global" );
-    ret &= fromLegacy<bool>(  aCfg, "ShowRatsnestModuleLines", "pcb_display.ratsnest_footprint" );
-    ret &= fromLegacy<bool>(  aCfg, "CurvedRatsnestLines",     "pcb_display.ratsnest_curved" );
-    ret &= fromLegacy<int>(   aCfg, "RotationAngle",           "pcb_display.rotation_angle" );
-    ret &= fromLegacy<int>(   aCfg, "TrackDisplayClearance",   "pcb_display.track_clearance_mode" );
-    ret &= fromLegacy<bool>(  aCfg, "DisplayTrackFilled",      "pcb_display.track_fill" );
-    ret &= fromLegacy<bool>(  aCfg, "ViaFill",                 "pcb_display.via_fill" );
-    ret &= fromLegacy<int>(   aCfg, "PcbShowZonesMode",        "pcb_display.zone_mode" );
+    ret &= fromLegacy<bool>(  aCfg, "PcbAffT",                      "pcb_display.graphic_items_fill" );
+    ret &= fromLegacy<int>(   aCfg, "MaxLnkS",                      "pcb_display.max_links_shown" );
+    ret &= fromLegacy<bool>(  aCfg, "ModAffC",                      "pcb_display.footprint_edge_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "ModAffT",                      "pcb_display.footprint_text_fill" );
+    ret &= fromLegacy<int>(   aCfg, "ShowNetNamesMode",             "pcb_display.net_names_mode" );
+    ret &= fromLegacy<int>(   aCfg, "PcbDisplayOrigin",             "pcb_display.origin_mode" );
+    ret &= fromLegacy<bool>(  aCfg, "PcbInvertXAxis",               "pcb_display.origin_invert_x_axis" );
+    ret &= fromLegacy<bool>(  aCfg, "PcbInvertYAxis",               "pcb_display.origin_invert_y_axis" );
+    ret &= fromLegacy<bool>(  aCfg, "PadAffG",                      "pcb_display.pad_clearance" );
+    ret &= fromLegacy<bool>(  aCfg, "PadFill",                      "pcb_display.pad_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "PadSNum",                      "pcb_display.pad_numbers" );
+    ret &= fromLegacy<bool>(  aCfg, "ShowRatsnestLines",            "pcb_display.ratsnest_global" );
+    ret &= fromLegacy<bool>(  aCfg, "ShowRatsnestModuleLines",      "pcb_display.ratsnest_footprint" );
+    ret &= fromLegacy<bool>(  aCfg, "CurvedRatsnestLines",          "pcb_display.ratsnest_curved" );
+    ret &= fromLegacy<int>(   aCfg, "RotationAngle",                "pcb_display.rotation_angle" );
+    ret &= fromLegacy<int>(   aCfg, "TrackDisplayClearance",        "pcb_display.track_clearance_mode" );
+    ret &= fromLegacy<bool>(  aCfg, "DisplayTrackFilled",           "pcb_display.track_fill" );
+    ret &= fromLegacy<bool>(  aCfg, "ViaFill",                      "pcb_display.via_fill" );
+    ret &= fromLegacy<int>(   aCfg, "PcbShowZonesMode",             "pcb_display.zone_mode" );
 
-    ret &= fromLegacy<double>( aCfg, "PlotLineWidth_mm",       "plot.line_width" );
+    ret &= fromLegacy<double>( aCfg, "PlotLineWidth_mm",            "plot.line_width" );
 
     aCfg->SetPath( "/dialogs/cleanup_tracks" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupVias",          "cleanup.cleanup_vias" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupMergeSegments", "cleanup.merge_segments" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupUnconnected",   "cleanup.cleanup_unconnected" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupShortCircuit",  "cleanup.cleanup_short_circuits" );
-    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupTracksInPads",  "cleanup.cleanup_tracks_in_pad" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupVias",            "cleanup.cleanup_vias" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupMergeSegments",   "cleanup.merge_segments" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupUnconnected",     "cleanup.cleanup_unconnected" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupShortCircuit",    "cleanup.cleanup_short_circuits" );
+    ret &= fromLegacy<bool>(  aCfg, "DialogCleanupTracksInPads",    "cleanup.cleanup_tracks_in_pad" );
     aCfg->SetPath( "../.." );
 
-    ret &= fromLegacy<bool>(   aCfg, "RefillZonesBeforeDrc", "drc_dialog.refill_zones" );
-    ret &= fromLegacy<bool>(   aCfg, "DrcTestFootprints",    "drc_dialog.test_footprints" );
+    ret &= fromLegacy<bool>(   aCfg, "RefillZonesBeforeDrc",  "drc_dialog.refill_zones" );
+    ret &= fromLegacy<bool>(   aCfg, "DrcTestFootprints",     "drc_dialog.test_footprints" );
 
-    ret &= fromLegacy<bool>(   aCfg, "DrillMergePTHNPTH",   "gen_drill.merge_pth_npth" );
-    ret &= fromLegacy<bool>(   aCfg, "DrillMinHeader",      "gen_drill.minimal_header" );
-    ret &= fromLegacy<bool>(   aCfg, "DrillMirrorYOpt",     "gen_drill.mirror" );
-    ret &= fromLegacy<bool>(   aCfg, "DrillUnit",           "gen_drill.unit_drill_is_inch" );
-    ret &= fromLegacy<bool>(   aCfg, "OvalHolesRouteMode",  "gen_drill.use_route_for_oval_holes" );
-    ret &= fromLegacy<int>(    aCfg, "DrillFileType",       "gen_drill.drill_file_type" );
-    ret &= fromLegacy<int>(    aCfg, "DrillMapFileType",    "gen_drill.map_file_type" );
-    ret &= fromLegacy<int>(    aCfg, "DrillZerosFormat",    "gen_drill.zeros_format" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillMergePTHNPTH",    "gen_drill.merge_pth_npth" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillMinHeader",       "gen_drill.minimal_header" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillMirrorYOpt",      "gen_drill.mirror" );
+    ret &= fromLegacy<bool>(   aCfg, "DrillUnit",            "gen_drill.unit_drill_is_inch" );
+    ret &= fromLegacy<bool>(   aCfg, "OvalHolesRouteMode",   "gen_drill.use_route_for_oval_holes" );
+    ret &= fromLegacy<int>(    aCfg, "DrillFileType",        "gen_drill.drill_file_type" );
+    ret &= fromLegacy<int>(    aCfg, "DrillMapFileType",     "gen_drill.map_file_type" );
+    ret &= fromLegacy<int>(    aCfg, "DrillZerosFormat",     "gen_drill.zeros_format" );
 
-    ret &= fromLegacy<bool>(   aCfg, "IDFRefAutoAdj",       "export_idf.auto_adjust" );
-    ret &= fromLegacy<int>(    aCfg, "IDFRefUnits",         "export_idf.ref_units" );
-    ret &= fromLegacy<double>( aCfg, "IDFRefX",             "export_idf.ref_x" );
-    ret &= fromLegacy<double>( aCfg, "IDFRefY",             "export_idf.ref_y" );
-    ret &= fromLegacy<bool>(   aCfg, "IDFExportThou",       "export_idf.units_mils" );
+    ret &= fromLegacy<bool>(   aCfg, "IDFRefAutoAdj",        "export_idf.auto_adjust" );
+    ret &= fromLegacy<int>(    aCfg, "IDFRefUnits",          "export_idf.ref_units" );
+    ret &= fromLegacy<double>( aCfg, "IDFRefX",              "export_idf.ref_x" );
+    ret &= fromLegacy<double>( aCfg, "IDFRefY",              "export_idf.ref_y" );
+    ret &= fromLegacy<bool>(   aCfg, "IDFExportThou",        "export_idf.units_mils" );
 
     ret &= fromLegacy<int>(    aCfg, "STEP_Origin_Opt",      "export_step.origin_mode" );
     ret &= fromLegacy<int>(    aCfg, "STEP_UserOriginUnits", "export_step.origin_units" );

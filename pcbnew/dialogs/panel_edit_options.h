@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __dialog_general_options_h
-#define __dialog_general_options_h
+#ifndef PANEL_EDIT_OPTIONS_H
+#define PANEL_EDIT_OPTIONS_H
 
 #include "panel_edit_options_base.h"
 
@@ -33,16 +33,16 @@ class PCB_BASE_EDIT_FRAME;
 
 class PANEL_EDIT_OPTIONS : public PANEL_EDIT_OPTIONS_BASE
 {
-private:
-    PCB_BASE_EDIT_FRAME* m_Frame;
-
 public:
     PANEL_EDIT_OPTIONS( PCB_BASE_EDIT_FRAME* aFrame, PAGED_DIALOG* aWindow );
 
 protected:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
+
+private:
+    PCB_BASE_EDIT_FRAME* m_frame;
 };
 
 
-#endif	// __dialog_general_options_h
+#endif	// PANEL_EDIT_OPTIONS_H
