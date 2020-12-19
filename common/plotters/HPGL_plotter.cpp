@@ -193,6 +193,7 @@
  *  YT;
  */
 
+#include <cstdio>
 
 #include <eda_base_frame.h>
 #include <fill_type.h>
