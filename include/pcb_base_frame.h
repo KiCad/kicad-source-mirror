@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,35 +68,14 @@ struct MAGNETIC_SETTINGS;
 wxDECLARE_EVENT( BOARD_CHANGED, wxCommandEvent );
 
 /**
- * PCB_BASE_FRAME
- * basic PCB main window class for Pcbnew, Gerbview, and CvPcb footprint viewer.
+ * Base PCB main window class for Pcbnew, Gerbview, and CvPcb footprint viewer.
  */
 class PCB_BASE_FRAME : public EDA_DRAW_FRAME
 {
-protected:
-    BOARD*                  m_pcb;
-    PCB_DISPLAY_OPTIONS     m_displayOptions;
-    PCB_ORIGIN_TRANSFORMS   m_originTransforms;
-    PCBNEW_SETTINGS*        m_settings; // No ownership, just a shortcut
-
-    virtual void unitsChangeRefresh() override;
-
-    /**
-     * Function loadFootprint
-     * attempts to load \a aFootprintId from the footprint library table.
-     *
-     * @param aFootprintId is the #LIB_ID of component footprint to load.
-     * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
-     *         libraries in the table returned from #Prj().PcbFootprintLibs().
-     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
-     *                 occurs while reading footprint library files.
-     */
-    FOOTPRINT* loadFootprint( const LIB_ID& aFootprintId );
-
 public:
     PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-            const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-            long aStyle, const wxString& aFrameName );
+                    const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+                    long aStyle, const wxString& aFrameName );
 
     ~PCB_BASE_FRAME();
 
@@ -106,15 +85,15 @@ public:
     EDA_3D_VIEWER* Get3DViewerFrame();
 
     /**
-     * Update the 3D view, if the viewer is opened by this frame
-     * @param aTitle = the new title of the 3D frame, or nullptr
-     * to do not change the frame title
+     * Update the 3D view, if the viewer is opened by this frame.
+     *
+     * @param aTitle is the new title of the 3D frame, or nullptr to do not change the
+     *               frame title
      */
     virtual void Update3DView( bool aReloadRequest, const wxString* aTitle = nullptr );
 
     /**
-     * Function LoadFootprint
-     * attempts to load \a aFootprintId from the footprint library table.
+     * Attempt to load \a aFootprintId from the footprint library table.
      *
      * @param aFootprintId is the #LIB_ID of component footprint to load.
      * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
@@ -123,12 +102,12 @@ public:
     FOOTPRINT* LoadFootprint( const LIB_ID& aFootprintId );
 
     /**
-     * Function GetBoardBoundingBox
-     * calculates the bounding box containing all board items (or board edge segments).
+     * Calculate the bounding box containing all board items (or board edge segments).
+     *
      * @param aBoardEdgesOnly is true if we are interested in board edge segments only.
-     * @return EDA_RECT - the board's bounding box
+     * @return the board's bounding box.
      */
-    EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
+    EDA_RECT GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {
@@ -170,14 +149,16 @@ public:
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
     /**
-     * Returns the BOARD_DESIGN_SETTINGS for the open project
+     * Returns the BOARD_DESIGN_SETTINGS for the open project.
+     *
      * Overloaded in FOOTPRINT_EDIT_FRAME.
      */
     virtual BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
 
     /**
-     * Helper to retrieve the current color settings
-     * @return a pointer to the active COLOR_SETTINGS
+     * Helper to retrieve the current color settings.
+     *
+     * @return a pointer to the active COLOR_SETTINGS.
      */
     virtual COLOR_SETTINGS* GetColorSettings() override
     {
@@ -190,9 +171,8 @@ public:
     void SetDrawBgColor( COLOR4D aColor ) override;
 
     /**
-     * Function GetDisplayOptions
      * Display options control the way tracks, vias, outlines and other things are shown
-     * (for instance solid or sketch mode)
+     * (for instance solid or sketch mode).
      */
     const PCB_DISPLAY_OPTIONS& GetDisplayOptions() const { return m_displayOptions; }
     void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions );
@@ -201,18 +181,17 @@ public:
     void SetZoneSettings( const ZONE_SETTINGS& aSettings );
 
     /**
-     * Function GetPlotSettings
-     * returns the PCB_PLOT_PARAMS for the BOARD owned by this frame.
+     * Return the #PCB_PLOT_PARAMS for the BOARD owned by this frame.
+     *
      * Overloaded in FOOTPRINT_EDIT_FRAME.
      */
     virtual const PCB_PLOT_PARAMS& GetPlotSettings() const;
     virtual void SetPlotSettings( const PCB_PLOT_PARAMS& aSettings );
 
     /**
-     * Function SetBoard
-     * sets the m_Pcb member in such as way as to ensure deleting any previous
-     * BOARD.
-     * @param aBoard The BOARD to put into the frame.
+     * Set the #m_Pcb member in such as way as to ensure deleting any previous #BOARD.
+     *
+     * @param aBoard is the #BOARD to put into the frame.
      */
     virtual void SetBoard( BOARD* aBoard );
 
@@ -223,7 +202,6 @@ public:
     }
 
     /**
-     * Function GetModel()
      * @return the primary data model.
      */
     virtual BOARD_ITEM_CONTAINER* GetModel() const = 0;
@@ -242,60 +220,56 @@ public:
 
     /**
      * Shows the 3D view frame.
-     * If it does not exist, it is created.
-     * If it exists, it is bring to the foreground
+     *
+     * If it does not exist, it is created.  If it exists, it is brought to the foreground.
      */
     EDA_3D_VIEWER* CreateAndShow3D_Frame();
 
     /**
-     * Function GetCollectorsGuide
-     * @return GENERAL_COLLECTORS_GUIDE - that considers the global configuration options.
+     * @return global configuration options.
      */
     GENERAL_COLLECTORS_GUIDE GetCollectorsGuide();
 
     /**
-     * Function SelectLibrary
-     * puts up a dialog and allows the user to pick a library, for unspecified use.
+     * Put up a dialog and allows the user to pick a library, for unspecified use.
      *
-     * @param aNicknameExisting is the current choice to highlight
-     * @return wxString - the library or wxEmptyString on abort.
+     * @param aNicknameExisting is the current choice to highlight.
+     * @return the library or wxEmptyString on abort.
      */
     wxString SelectLibrary( const wxString& aNicknameExisting );
 
     /**
-     * Function GetFootprintFromBoardByReference
-     * @return a reference to the footprint found by its refence on the curent board. The
+     * @return a reference to the footprint found by its reference on the current board. The
      *         reference is entered by the user from a dialog (by awxTextCtlr, or a list of
      *         available references)
      */
     FOOTPRINT* GetFootprintFromBoardByReference();
 
     /**
-     * Function OnModify
      * Must be called after a change in order to set the "modify" flag of the current screen
      * and update the date in frame reference.
+     *
      * Do not forget to call this basic OnModify function to update info in derived OnModify
      * functions.
      */
     virtual void OnModify();
 
-    // footprints (footprints)
-
     /**
-     * Function CreateNewFootprint
-     * Creates a new footprint, at position 0,0
+     * Creates a new footprint, at position 0,0.
+     *
      * The new footprint contains only 2 texts: a reference and a value:
      *  Reference = REF**
      *  Value = "VAL**" or Footprint name in lib
-     * Note: they are dummy texts, which will be replaced by the actual texts
-     * when the fooprint is placed on a board and a netlist is read
-     * @param aFootprintName = name of the new footprint in library
+     *
+     * @note They are dummy texts, which will be replaced by the actual texts when the
+     *       footprint is placed on a board and a netlist is read.
+     *
+     * @param aFootprintName is the name of the new footprint in library.
      */
     FOOTPRINT* CreateNewFootprint( const wxString& aFootprintName );
 
     /**
-     * Function PlaceFootprint
-     * places \a aFootprint at the current cursor position and updates footprint coordinates
+     * Places \a aFootprint at the current cursor position and updates footprint coordinates
      * with the new position.
      *
      * @param aRecreateRatsnest A bool true redraws the footprint ratsnest.
@@ -305,71 +279,69 @@ public:
     void ShowPadPropertiesDialog( PAD* aPad );
 
     /**
-     * Function SelectFootprintFromLibTree
-     * opens a dialog to select a footprint.
+     * Open a dialog to select a footprint.
      *
-     * @param aPreslect = if valid, the LIB_ID to select (otherwise the global history is used)
+     * @param aPreslect if valid, the #LIB_ID to select (otherwise the global history is used).
      */
     FOOTPRINT* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID() );
 
     /**
-     * Adds the given footprint to the board.
-     * @param aFootprint
-     * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
+     * Add the given footprint to the board.
+     *
+     * @param aDC is the current Device Context, to draw the new footprint (can be NULL ).
      */
     virtual void AddFootprintToBoard( FOOTPRINT* aFootprint );
 
     /**
-     * Function SelectFootprintFromLibBrowser
-     * launches the footprint viewer to select the name of a footprint to load.
+     * Launch the footprint viewer to select the name of a footprint to load.
      *
      * @return the selected footprint name or an empty string if no selection was made.
      */
     wxString SelectFootprintFromLibBrowser();
 
     /**
-     * Function Compile_Ratsnest
-     *  Create the entire board ratsnest.
-     *  Must be called after a board change (changes for
-     *  pads, footprints or a read netlist ).
-     * @param aDC = the current device context (can be NULL)
-     * @param aDisplayStatus : if true, display the computation results
+     * Create the entire board ratsnest.
+     *
+     * This must be called after a board change (changes for pads, footprints or a read
+     * netlist ).
+     *
+     * @param aDC is the current device context (can be NULL).
+     * @param aDisplayStatus  if true, display the computation results.
      */
     void Compile_Ratsnest( bool aDisplayStatus );
 
-    /* Functions relative to Undo/redo commands: */
-
     /**
-     * Function SaveCopyInUndoList (virtual pure)
-     * Creates a new entry in undo list of commands.
-     * add a picker to handle aItemToCopy
-     * @param aItemToCopy = the board item modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aTransformPoint = the reference point of the transformation, for
-     *                          commands like move
+     * Create a new entry in undo list of commands.
+     *
+     * @param aItemToCopy is the board item modified by the command to undo.
+     * @param aTypeCommand is the command type (see enum #UNDO_REDO).
+     * @param aTransformPoint is the reference point of the transformation, for
+     *                        commands like move
      */
     virtual void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
     /**
-     * Function SaveCopyInUndoList (virtual pure, overloaded).
      * Creates a new entry in undo list of commands.
-     * add a list of pickers to handle a list of items
-     * @param aItemsList = the list of items modified by the command to undo
-     * @param aTypeCommand = command type (see enum UNDO_REDO)
-     * @param aTransformPoint = the reference point of the transformation,
-     *                          for commands like move
+     *
+     * @param aItemsList is the list of items modified by the command to undo.
+     * @param aTypeCommand is the command type (see enum #UNDO_REDO)
+     * @param aTransformPoint is the reference point of the transformation,
+     *                        for commands like move.
      */
     virtual void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
                                      const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) = 0;
 
 
-    /** Install the dialog box for layer selection
-     * @param aDefaultLayer = Preselection (NB_PCB_LAYERS for "(Deselect)" layer)
-     * @param aNotAllowedLayersMask = a layer mask for not allowed layers
-     *                            (= 0 to show all layers in use)
-     * @param aDlgPosition = position of dialog ( defualt = centered)
-     * @return the selected layer id
+    /**
+     * Show the dialog box for layer selection.
+     *
+     * @param aDefaultLayer is the default layer to select.  Use #NB_PCB_LAYERS if no selection
+     *                      is desired.
+     * @param aNotAllowedLayersMask is a layer mask for not allowed layers.  Use 0 to show all
+     *                              layers in use.
+     * @param aDlgPosition is the position of dialog (default is centered).
+     * @return the selected layer id.
      */
     PCB_LAYER_ID SelectLayer( PCB_LAYER_ID aDefaultLayer, LSET aNotAllowedLayersMask = LSET(),
                               wxPoint aDlgPosition = wxDefaultPosition );
@@ -404,26 +376,43 @@ public:
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}
 
     /**
-     * Function DisplayGridMsg()
-     *
      * Display the current grid pane on the status bar.
      */
     void DisplayGridMsg() override;
 
     PCB_DRAW_PANEL_GAL* GetCanvas() const override;
 
-    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void ActivateGalCanvas() override;
 
     /**
-     * Does nothing. Should be overriden in derived classes which support autozoom.
+     * Does nothing. Should be overridden in derived classes which support autozoom.
      */
     virtual void SetAutoZoom( bool aAutoZoom ) {}
 
     /**
-     * Always returns false. Should be overriden in derived classes which support autozoom.
+     * Always returns false. Should be overridden in derived classes which support autozoom.
      */
     virtual bool GetAutoZoom() { return false; }
+
+protected:
+
+    /**
+     * Attempts to load \a aFootprintId from the footprint library table.
+     *
+     * @param aFootprintId is the #LIB_ID of component footprint to load.
+     * @return the #FOOTPRINT if found or NULL if \a aFootprintId not found in any of the
+     *         libraries in the table returned from #Prj().PcbFootprintLibs().
+     * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
+     *                 occurs while reading footprint library files.
+     */
+    FOOTPRINT* loadFootprint( const LIB_ID& aFootprintId );
+
+    BOARD*                  m_pcb;
+    PCB_DISPLAY_OPTIONS     m_displayOptions;
+    PCB_ORIGIN_TRANSFORMS   m_originTransforms;
+    PCBNEW_SETTINGS*        m_settings; // No ownership, just a shortcut
+
+    virtual void unitsChangeRefresh() override;
 };
 
 #endif  // PCB_BASE_FRAME_H

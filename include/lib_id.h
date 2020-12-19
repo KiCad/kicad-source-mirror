@@ -81,8 +81,8 @@ public:
      * @param aId is the string to populate the #LIB_ID object.
      * @param aFix indicates invalid chars should be replaced with '_'.
      *
-     * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
-     *               aId at which an error was detected.
+     * @return minus 1 (i.e. -1) means success, >= 0 indicates the character offset into
+     *         aId at which an error was detected.
      */
     int Parse( const UTF8& aId, bool aFix = false );
 
@@ -106,9 +106,12 @@ public:
     const UTF8& GetLibItemName() const { return m_itemName; }
 
     /**
+     * Get strings for display messages in dialogs.
+     *
+     * Equivalent to m_itemName.wx_str(), but more explicit when building a Unicode string
+     * in messages.
+     *
      * @return the library item name, i.e. footprintName in a wxString (UTF16 or 32).
-     * useful to display messages in dialogs
-     * Equivalent to m_itemName.wx_str(), but more explicit when building a Unicode string in messages.
      */
     const wxString GetUniStringLibItemName() const { return m_itemName.wx_str(); }
 
@@ -134,8 +137,7 @@ public:
 
     /**
      * @return the fully formatted text of the LIB_ID in a wxString (UTF16 or UTF32),
-     * suitable to display the LIB_ID in dialogs.
-     * Equivalent to Format().wx_str(), but more explicit when building a Unicode string in messages.
+     *         suitable to display the LIB_ID in dialogs.
      */
     wxString GetUniStringLibId() const
     {
@@ -152,13 +154,16 @@ public:
                         const UTF8& aRevision = "" );
 
     /**
-     * @return true is the #LIB_ID is valid.
+     * Check if this LID_ID is valid.
      *
      * A valid #LIB_ID must have both the library nickname and the library item name defined.
      * The revision field is optional.
      *
      * @note A return value of true does not indicated that the #LIB_ID is a valid #LIB_TABLE
      *       entry.
+     *
+     * @return true is the #LIB_ID is valid.
+     *
      */
     bool IsValid() const
     {
@@ -191,7 +196,6 @@ public:
      * library nickname, library entry name, and revision strings respectively.
      *
      * @param aLibId is the LIB_ID to compare against.
-     *
      * @return -1 if less than \a aLibId, 1 if greater than \a aLibId, and 0 if equal to \a aLibId.
      */
     int compare( const LIB_ID& aLibId ) const;
@@ -228,7 +232,7 @@ public:
 
 protected:
     /**
-     * Tests whether a unicode character is a legal LIB_ID item name character.
+     * Tests whether a Unicode character is a legal LIB_ID item name character.
      *
      * The criteria for legal LIB_ID character is as follows:
      * - For both symbol and footprint names, neither '/' or ':' are legal.  They are
@@ -247,16 +251,16 @@ protected:
      *   name is not the file name.
      *
      *
-     * @note @a aUniChar is expected to be a 32 bit unicode character, not a UTF8 char, that use
-     * a variable length coding value.
+     * @note @a aUniChar is expected to be a 32 bit Unicode character, not a UTF8 char, that use
+     *                   a variable length coding value.
      */
     static bool isLegalChar( unsigned aUniChar );
 
     /**
-     * Tests whether a unicode character is a legal LIB_ID library nickname character
+     * Tests whether a Unicode character is a legal LIB_ID library nickname character
      *
-     * @note @a aUniChar is expected to be a 32 bit unicode character, not a UTF8 char, that use
-     * a variable length coding value.
+     * @note @a aUniChar is expected to be a 32 bit Unicode character, not a UTF8 char, that use
+     *                   a variable length coding value.
      */
     static bool isLegalLibraryNameChar( unsigned aUniChar );
 

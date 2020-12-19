@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,15 +35,13 @@
 class wxSingleInstanceChecker;
 
 /**
- * Function LockFile
- * tests to see if aFileName can be locked (is not already locked) and only then
+ * Test to see if \a aFileName can be locked (is not already locked) and only then
  * returns a wxSingleInstanceChecker protecting aFileName.
  */
 std::unique_ptr<wxSingleInstanceChecker> LockFile( const wxString& aFileName );
 
 /**
- * Function GetKicadLockFilePath
- * @return A wxString containing the path for lockfiles in Kicad
+ * @return A wxString containing the path for lockfiles in Kicad.
  */
 wxString GetKicadLockFilePath();
 

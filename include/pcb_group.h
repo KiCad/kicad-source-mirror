@@ -25,11 +25,6 @@
 /**
  * @file class_pcb_group.h
  * @brief Class to handle a set of BOARD_ITEMs.
- * Group parent is always board, not logical parent group.
- * Group is transparent container - e.g., its position is derived from the position
- *  of its members.
- * A selection containing a group implicitly contains its members. However other operations
- * on sets of items, like committing, updating the view, etc the set is explicit.
  */
 
 #ifndef CLASS_PCB_GROUP_H_
@@ -46,6 +41,11 @@ class VIEW;
 
 /**
  * PCB_GROUP is a set of BOARD_ITEMs (i.e., without duplicates)
+ *
+ * The group parent is always board, not logical parent group. The group is transparent
+ * container - e.g., its position is derived from the position of its members.  A selection
+ * containing a group implicitly contains its members. However other operations on sets of
+ * items, like committing, updating the view, etc the set is explicit.
  */
 class PCB_GROUP : public BOARD_ITEM
 {
@@ -88,6 +88,7 @@ public:
 
     /*
      * Searches for highest level group containing item.
+     *
      * @param scope restricts the search to groups within the group scope.
      * @return group containing item, if it exists, otherwise, NULL
      */
@@ -121,12 +122,12 @@ public:
     EDA_ITEM* Clone() const override;
 
     /*
-     * Clone() this and all descendents
+     * Clone() this and all descendants
      */
     PCB_GROUP* DeepClone() const;
 
     /*
-     * Duplicate() this and all descendents
+     * Duplicate() this and all descendants
      */
     PCB_GROUP* DeepDuplicate() const;
 
@@ -146,7 +147,8 @@ public:
     const EDA_RECT GetBoundingBox() const override;
 
     ///> @copydoc EDA_ITEM::Visit
-    SEARCH_RESULT Visit( INSPECTOR aInspector, void* aTestData, const KICAD_T aScanTypes[] ) override;
+    SEARCH_RESULT Visit( INSPECTOR aInspector, void* aTestData,
+                         const KICAD_T aScanTypes[] ) override;
 
     ///> @copydoc VIEW_ITEM::ViewGetLayers
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
@@ -174,15 +176,17 @@ public:
 
     /**
      * Invokes a function on all members of the group.
-     * Note that this function should not add or remove items to the group
+     *
+     * @note This function should not add or remove items to the group.
+     *
      * @param aFunction is the function to be invoked.
      */
     void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const;
 
     /**
-     * Invokes a function on all descendents of the group.
-     * Note that this function should not add or remove items to the group or descendent
-     * groups.
+     * Invokes a function on all descendants of the group.
+     *
+     * @note This function should not add or remove items to the group or descendant groups.
      * @param aFunction is the function to be invoked.
      */
     void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const;

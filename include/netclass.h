@@ -41,48 +41,17 @@ DECL_SET_FOR_SWIG( STRINGSET, wxString )
 
 
 /**
- * NETCLASS
- * handles a collection of nets and the parameters used to route or
- * test these nets.
+ * A collection of nets and the parameters used to route or test these nets.
  */
-
 class NETCLASS
 {
-protected:
-    wxString    m_Name;                 ///< Name of the net class
-    wxString    m_Description;          ///< what this NETCLASS is for.
-
-    STRINGSET   m_Members;              ///< names of NET members of this class
-
-    /// The units on these parameters is Internal Units (1 nm)
-
-    OPT<int>         m_Clearance;            ///< clearance when routing
-
-    OPT<int>         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
-    OPT<int>         m_ViaDia;               ///< via diameter
-    OPT<int>         m_ViaDrill;             ///< via drill hole diameter
-
-    OPT<int>         m_uViaDia;              ///< microvia diameter
-    OPT<int>         m_uViaDrill;            ///< microvia drill hole diameter
-
-    OPT<int>         m_diffPairWidth;
-    OPT<int>         m_diffPairGap;
-    OPT<int>         m_diffPairViaGap;
-
-    int         m_wireWidth;
-    int         m_busWidth;
-    COLOR4D     m_schematicColor;
-    int         m_lineStyle;
-
-    COLOR4D     m_PcbColor;          ///< Optional color override for this netclass (PCB context)
-
 public:
     static const char Default[];        ///< the name of the default NETCLASS
 
     /**
-     * Constructor
-     * stuffs a NETCLASS instance with aParent, aName, and optionally the initialParameters
-     * @param aName = the name of this new netclass
+     * Create a NETCLASS instance with \a aName.
+     *
+     * @param aName is the name of this new netclass.
      */
     NETCLASS( const wxString& aName );
 
@@ -97,8 +66,7 @@ public:
     void SetName( const wxString& aName ) { m_Name = aName; }
 
     /**
-     * Function GetCount
-     * returns the number of nets in this NETCLASS, i.e. using these rules.
+     * Return the number of nets in this NETCLASS, i.e. using these rules.
      */
     unsigned GetCount() const
     {
@@ -106,8 +74,7 @@ public:
     }
 
     /**
-     * Function Clear
-     * empties the collection of members.
+     * Empties the collection of members.
      */
     void Clear()
     {
@@ -115,8 +82,8 @@ public:
     }
 
     /**
-     * Function Add
-     * adds \a aNetname to this NETCLASS if it is not already in this NETCLASS.
+     * Adds \a aNetname to this NETCLASS if it is not already in this NETCLASS.
+     *
      * It is harmless to try and add a second identical name.
      */
     void Add( const wxString& aNetname )
@@ -133,8 +100,7 @@ public:
     const_iterator end()   const { return m_Members.end();   }
 
     /**
-     * Function Remove
-     * will remove NET name \a aName from the collection of members.
+     * Remove NET \a aName from the collection of members.
      */
     void Remove( iterator aName )
     {
@@ -142,8 +108,7 @@ public:
     }
 
     /**
-     * Function Remove
-     * will remove NET name \a aName from the collection of members.
+     * Remove NET \a aName from the collection of members.
      */
     void Remove( const wxString& aName )
     {
@@ -209,6 +174,34 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const;
 #endif
+
+protected:
+    wxString    m_Name;                 ///< Name of the net class
+    wxString    m_Description;          ///< what this NETCLASS is for.
+
+    STRINGSET   m_Members;              ///< names of NET members of this class
+
+    /// The units on these parameters is Internal Units (1 nm)
+
+    OPT<int>         m_Clearance;            ///< clearance when routing
+
+    OPT<int>         m_TrackWidth;           ///< track width used to route NETs in this NETCLASS
+    OPT<int>         m_ViaDia;               ///< via diameter
+    OPT<int>         m_ViaDrill;             ///< via drill hole diameter
+
+    OPT<int>         m_uViaDia;              ///< microvia diameter
+    OPT<int>         m_uViaDrill;            ///< microvia drill hole diameter
+
+    OPT<int>         m_diffPairWidth;
+    OPT<int>         m_diffPairGap;
+    OPT<int>         m_diffPairViaGap;
+
+    int         m_wireWidth;
+    int         m_busWidth;
+    COLOR4D     m_schematicColor;
+    int         m_lineStyle;
+
+    COLOR4D     m_PcbColor;          ///< Optional color override for this netclass (PCB context)
 };
 
 
@@ -217,24 +210,20 @@ DECL_MAP_FOR_SWIG( NETCLASS_MAP, wxString, NETCLASSPTR )
 
 
 /**
- * NETCLASSES
- * is a container for NETCLASS instances.  It owns all its NETCLASSes.  This container will
- * always have a default NETCLASS with the name given by const NETCLASS::Default.
+ * A container for NETCLASS instances.
+ *
+ * It owns all its NETCLASSes.  This container will always have a default NETCLASS with the
+ * name given by const NETCLASS::Default.
  */
 class NETCLASSES
 {
-private:
-    NETCLASS_MAP    m_NetClasses;   // All the netclasses EXCEPT the default one
-    NETCLASSPTR     m_default;
-
 public:
     NETCLASSES();
     ~NETCLASSES();
 
     /**
-     * Function Clear
-     * destroys any contained NETCLASS instances except the Default one, and clears any
-     * members from the Default one.
+     * Destroy any contained NETCLASS instances except the default one, and clears any
+     * members from the default one.
      */
     void Clear()
     {
@@ -251,8 +240,7 @@ public:
     const_iterator end()   const { return m_NetClasses.end(); }
 
     /**
-     * Function GetCount
-     * @return the number of netclasses, excluding the default one.
+     * @return the number of netclasses excluding the default one.
      */
     unsigned GetCount() const
     {
@@ -260,7 +248,6 @@ public:
     }
 
     /**
-     * Function GetDefault
      * @return the default net class.
      */
     NETCLASSPTR GetDefault() const
@@ -274,32 +261,37 @@ public:
     }
 
     /**
-     * Function Add
-     * takes \a aNetclass and puts it into this NETCLASSES container.
+     * Add \a aNetclass and puts it into this NETCLASSES container.
+     *
      * @param aNetclass is netclass to add
      * @return true if the name within aNetclass is unique and it could be inserted OK,
-     *  else false because the name was not unique.
+     *         else false because the name was not unique.
      */
     bool Add( const NETCLASSPTR& aNetclass );
 
     /**
-     * Function Remove
-     * removes a NETCLASS from this container but does not destroy/delete it.
+     * Remove a #NETCLASS from this container but does not destroy/delete it.
+     *
      * @param aNetName is the name of the net to delete, and it may not be NETCLASS::Default.
-     * @return NETCLASSPTR - the NETCLASS associated with aNetName if found and removed, else NULL.
+     * @return a pointer to the #NETCLASS associated with \a aNetName if found and removed,
+     *         else NULL.
      */
     NETCLASSPTR Remove( const wxString& aNetName );
 
     /**
-     * Function Find
-     * searches this container for a NETCLASS given by \a aName.
-     * @param aName is the name of the NETCLASS to search for.
-     * @return NETCLASSPTR - if found, else NULL.
+     * Search this container for a NETCLASS given by \a aName.
+     *
+     * @param aName is the name of the #NETCLASS to search for.
+     * @return a pointer to the #NETCLASS if found, else NULL.
      */
     NETCLASSPTR Find( const wxString& aName ) const;
 
     /// Provide public access to m_NetClasses so it gets swigged.
     NETCLASS_MAP&   NetClasses()       { return m_NetClasses; }
+
+private:
+    NETCLASS_MAP    m_NetClasses;   // All the netclasses EXCEPT the default one
+    NETCLASSPTR     m_default;
 };
 
 #endif  // CLASS_NETCLASS_H

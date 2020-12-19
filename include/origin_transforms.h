@@ -36,7 +36,8 @@
  * The functions are templated to allow use with any size scalar
  * parameter: an int, a long long int, or a double.
  */
-class ORIGIN_TRANSFORMS {
+class ORIGIN_TRANSFORMS
+{
 public:
     /**
      * The supported Display Origin Transform types
@@ -52,13 +53,9 @@ public:
         REL_Y_COORD,    //< A relative Y coordinate
     };
 
-public:
     ORIGIN_TRANSFORMS();
 
     virtual ~ORIGIN_TRANSFORMS();
-
-
-    // =============== Single-axis Transforms ===============
 
     virtual int ToDisplay( int           aValue,
                            COORD_TYPES_T aCoordType ) const;
@@ -78,8 +75,6 @@ public:
     virtual double FromDisplay( double        aValue,
                                 COORD_TYPES_T aCoordType ) const;
 
-
-    // =============== Two-axis Transforms ===============
 
     template<class T>
     T ToDisplayAbs( const T& aValue ) const
@@ -124,9 +119,6 @@ public:
 
 
 protected:
-
-    // =============== Generic Relative Transforms ===============
-
     template<class T> inline static
     T ToDisplayRel( T    aInternalValue,
                     bool aInvertAxis )
@@ -153,9 +145,6 @@ protected:
 
         return internalValue;
     }
-
-
-    // =============== Generic Absolute Transforms ===============
 
     template<class T> inline static
     T ToDisplayAbs( T    aInternalValue,

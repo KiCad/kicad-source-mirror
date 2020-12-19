@@ -34,8 +34,6 @@
 class EDA_ITEM;
 
 /**
- * ORIGIN_VIEWITEM
- *
  * View item to draw an origin marker.
  */
 namespace KIGFX {
@@ -73,8 +71,10 @@ public:
     }
 #endif
 
-    /** Get class name
-     * @return  string "ORIGIN_VIEWITEM"
+    /**
+     * Get class name.
+     *
+     * @return string "ORIGIN_VIEWITEM"
      */
     wxString GetClass() const override
     {
@@ -82,10 +82,12 @@ public:
     }
 
     /**
-     * Function SetDrawAtZero()
-     * Set the draw at zero flag. When set the marker will be drawn when it's position is 0,0.
-     * Otherwise it will not be drawn when its position is 0,0
-     * @param aDrawFlag The value to set the draw at zero flag
+     * Set the draw at zero flag.
+     *
+     * When set the marker will be drawn when it's position is 0,0.  Otherwise it will not
+     * be drawn when its position is 0,0.
+     *
+     * @param aDrawFlag The value to set the draw at zero flag.
      */
     inline void SetDrawAtZero( bool aDrawFlag )
     {

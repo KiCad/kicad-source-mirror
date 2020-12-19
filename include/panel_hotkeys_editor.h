@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,14 +40,6 @@ class TOOL_MANAGER;
 
 class PANEL_HOTKEYS_EDITOR : public RESETTABLE_PANEL
 {
-protected:
-    EDA_BASE_FRAME*            m_frame;
-    bool                       m_readOnly;
-
-    std::vector<TOOL_MANAGER*> m_toolManagers;
-    HOTKEY_STORE               m_hotkeyStore;
-    WIDGET_HOTKEY_LIST*        m_hotkeyListCtrl;
-
 public:
     PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly );
 
@@ -64,28 +56,33 @@ public:
     }
 
 private:
-
     /**
      * Install the button panel (global reset/default, import/export)
-     * @param aSizer the dialog to install on
+     *
+     * @param aSizer the dialog to install on.
      */
     void installButtons( wxSizer* aSizer );
 
     /**
-     * Function OnFilterSearch
-     * Handle a change in the hoteky filter text
+     * Handle a change in the hotkey filter text.
      *
-     * @param aEvent: the search event, used to get the search query
+     * @param aEvent is the search event, used to get the search query.
      */
     void OnFilterSearch( wxCommandEvent& aEvent );
 
     /**
-     * Function ImportHotKeys
-     * Puts up a dialog allowing the user to select a hotkeys file and then overlays those
+     * Put up a dialog allowing the user to select a hotkeys file and then overlays those
      * hotkeys onto the current hotkey store.
      */
     void ImportHotKeys();
 
+protected:
+    EDA_BASE_FRAME*            m_frame;
+    bool                       m_readOnly;
+
+    std::vector<TOOL_MANAGER*> m_toolManagers;
+    HOTKEY_STORE               m_hotkeyStore;
+    WIDGET_HOTKEY_LIST*        m_hotkeyListCtrl;
 };
 
 

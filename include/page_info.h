@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2007-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,19 +42,17 @@
 
 
 /**
- * PAGE_INFO
- * describes the page size and margins of a paper page on which to
- * eventually print or plot.  Paper sizes are often described in inches.
- * Here paper is described in 1/1000th of an inch (mils).  For convenience
- * there are some read only accessors for internal units (IU), which is a compile
- * time calculation, not runtime.
+ * Describe the page size and margins of a paper page on which to eventually print or plot.
+ *
+ * Paper sizes are often described in inches.  Here paper is described in 1/1000th of an
+ * inch (mils).  For convenience there are some read only accessors for internal units
+ * which is a compile time calculation, not runtime.
  *
  * @author Dick Hollenbeck
  */
 class PAGE_INFO
 {
 public:
-
     PAGE_INFO( const wxString& aType = PAGE_INFO::A3, bool IsPortrait = false );
 
     // paper size names which are part of the public API, pass to SetType() or
@@ -80,9 +78,8 @@ public:
 
 
     /**
-     * Function SetType
-     * sets the name of the page type and also the sizes and margins
-     * commonly associated with that type name.
+     * Set the name of the page type and also the sizes and margins commonly associated with
+     * that type name.
      *
      * @param aStandardPageDescriptionName is a wxString constant giving one of:
      * "A5" "A4" "A3" "A2" "A1" "A0" "A" "B" "C" "D" "E" "GERBER", "USLetter", "USLegal",
@@ -91,46 +88,41 @@ public:
      * static PAGE_INFO::SetUserWidthMils() and
      * static PAGE_INFO::SetUserHeightMils();
      * @param aIsPortrait Set to true to set page orientation to portrait mode.
-     *
-     * @return bool - true if @a aStandarePageDescription was a recognized type.
+     * @return true if @a aStandarePageDescription was a recognized type.
      */
     bool SetType( const wxString& aStandardPageDescriptionName, bool aIsPortrait = false );
     const wxString& GetType() const { return m_type; }
 
     /**
-     * Function IsDefault
      * @return True if the object has the default page settings which are A3, landscape.
      */
     bool IsDefault() const { return m_type == PAGE_INFO::A3 && !m_portrait; }
 
     /**
-     * Function IsCustom
-     * returns true if the type is Custom
+     * @return true if the type is Custom.
      */
     bool IsCustom() const;
 
     /**
-     * Function SetPortrait
-     * will rotate the paper page 90 degrees.  This PAGE_INFO may either be in
-     * portrait or landscape mode.  Use this function to change from one to the
-     * other mode.
-     * @param aIsPortrait if true and not already in portrait mode, will change
-     *  this PAGE_INFO to portrait mode.  Or if false and not already in landscape mode,
-     *  will change this PAGE_INFO to landscape mode.
+     * Rotate the paper page 90 degrees.
+     *
+     * This PAGE_INFO may either be in portrait or landscape mode.  Use this function to
+     * change from one mode to the other mode.
+     *
+     * @param aIsPortrait if true and not already in portrait mode, will change this
+     *                    PAGE_INFO to portrait mode.  Or if false and not already in
+     *                    landscape mode, will change this PAGE_INFO to landscape mode.
      */
     void SetPortrait( bool aIsPortrait );
     bool IsPortrait() const { return m_portrait; }
 
     /**
-     * Function GetWxOrientation.
      * @return ws' style printing orientation (wxPORTRAIT or wxLANDSCAPE).
      */
     wxPrintOrientation  GetWxOrientation() const { return IsPortrait() ? wxPORTRAIT : wxLANDSCAPE; }
 
     /**
-     * Function GetPaperId
-     * @return wxPaperSize - wxPrintData's style paper id associated with
-     * page type name.
+     * @return wxPrintData's style paper id associated with page type name.
      */
     wxPaperSize GetPaperId() const { return m_paper_id; }
 
@@ -151,40 +143,29 @@ public:
 #endif
 
     /**
-     * Function SetCustomWidthMils
-     * sets the width of Custom page in mils, for any custom page
-     * constructed or made via SetType() after making this call.
+     * Set the width of Custom page in mils for any custom page constructed or made via
+     * SetType() after making this call.
      */
     static void SetCustomWidthMils( int aWidthInMils );
 
     /**
-     * Function SetCustomHeightMils
-     * sets the height of Custom page in mils, for any custom page
-     * constructed or made via SetType() after making this call.
+     * Set the height of Custom page in mils for any custom page constructed or made via
+     * SetType() after making this call.
      */
     static void SetCustomHeightMils( int aHeightInMils );
 
     /**
-     * Function GetCustomWidthMils.
-     * @return int - custom paper width in mils.
+     * @return custom paper width in mils.
      */
     static int GetCustomWidthMils() { return s_user_width; }
 
     /**
-     * Function GetCustomHeightMils.
-     * @return int - custom paper height in mils.
+     * @return custom paper height in mils.
      */
     static int GetCustomHeightMils() { return s_user_height; }
 
     /**
-     * Function GetStandardSizes
-     * returns the standard page types, such as "A4", "A3", etc.
-    static wxArrayString GetStandardSizes();
-     */
-
-    /**
-     * Function Format
-     * outputs the page class to \a aFormatter in s-expression form.
+     * Output the page class to \a aFormatter in s-expression form.
      *
      * @param aFormatter The #OUTPUTFORMATTER object to write to.
      * @param aNestLevel The indentation next level.
@@ -197,9 +178,7 @@ protected:
     // only the class implementation(s) may use this constructor
     PAGE_INFO( const wxSize& aSizeMils, const wxString& aName, wxPaperSize aPaperId );
 
-
 private:
-
     // standard pre-defined sizes
     static const PAGE_INFO pageA5;
     static const PAGE_INFO pageA4;

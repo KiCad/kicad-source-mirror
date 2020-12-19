@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,16 +33,16 @@
 #include <project/board_project_settings.h>
 
 /**
- * PCB_DISPLAY_OPTIONS
- * handles display options like enable/disable some optional drawings.
+ * Container for display options like enable/disable some optional drawings.
  */
 class PCB_DISPLAY_OPTIONS
 {
 public:
+    PCB_DISPLAY_OPTIONS();
 
     /**
-     * Enum TRACE_CLEARANCE_DISPLAY_MODE_T
-     * is the set of values for DISPLAY_OPTIONS.ShowTrackClearanceMode parameter option.
+     * The set of values for DISPLAY_OPTIONS.ShowTrackClearanceMode parameter option.
+     *
      * This parameter controls how to show tracks and vias clearance area.
      */
     enum TRACE_CLEARANCE_DISPLAY_MODE_T {
@@ -92,7 +92,7 @@ public:
     /// Ratsnest draw mode (all layers vs only visible layers)
     RATSNEST_MODE m_RatsnestMode;
 
-    int  m_MaxLinksShowed;              // in track creation: number of hairwires shown
+    int  m_MaxLinksShowed;              // in track creation: number of airwires shown
     bool m_ShowModuleRatsnest;          // When moving a footprint: allows displaying a ratsnest
     bool m_ShowGlobalRatsnest;          // If true, show all
     bool m_DisplayRatsnestLinesCurved;  // Airwires can be drawn as straight lines (false)
@@ -106,8 +106,8 @@ public:
     double m_ZoneOpacity;      ///< Opacity override for filled zone areas
 
     /**
-     * Enum PCB_DISPLAY_ORIGIN_OPTIONS_T
-     * is the set of values for DISPLAY_OPTIONS.DisplayOrigin parameter option.
+     * The set of values for DISPLAY_OPTIONS.DisplayOrigin parameter option.
+     *
      * This parameter controls what is used as the origin point for location values
      */
     enum PCB_DISPLAY_ORIGIN_OPTIONS_T {
@@ -121,9 +121,6 @@ public:
     bool m_DisplayInvertXAxis;          //< true: Invert the X axis for display
     bool m_DisplayInvertYAxis;          //< true: Invert the Y axis for display
 
-public:
-
-    PCB_DISPLAY_OPTIONS();
 };
 
 #endif // PCBSTRUCT_H_

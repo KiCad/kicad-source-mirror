@@ -71,7 +71,7 @@
     #define KI_FALLTHROUGH [[clang::fallthrough]]
 
 #elif KI_HAS_CPP_ATTRIBUTE( gnu::fallthrough )
-    // GNU-specific C++ attribute to sliencing the warning
+    // GNU-specific C++ attribute to silencing the warning
     #define KI_FALLTHROUGH [[gnu::fallthrough]]
 
 #elif defined( __GNUC__ ) && __GNUC__ >= 7
@@ -85,17 +85,19 @@
 #endif
 
 /**
- * Macro TO_UTF8
- * converts a wxString to a UTF8 encoded C string for all wxWidgets build modes.
+ * Convert a wxString to a UTF8 encoded C string for all wxWidgets build modes.
+ *
  * wxstring is a wxString, not a wxT() or _().  The scope of the return value
  * is very limited and volatile, but can be used with printf() style functions well.
- * NOTE: Trying to convert it to a function is tricky because of the
- * type of the parameter!
+ *
+ * @note Trying to convert it to a function is tricky because of the type of the
+ *       parameter!
  */
 #define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
 
 /**
- * Stringifies the given parameter by placing in quotes
+ * Stringifies the given parameter by placing in quotes.
+ *
  * @param cstring STRING (no spaces)
  * @return "STRING"
  */
@@ -103,8 +105,7 @@
 #define TO_STR(x) TO_STR2(x)
 
 /**
- * function FROM_UTF8
- * converts a UTF8 encoded C string to a wxString for all wxWidgets build modes.
+ * Convert a UTF8 encoded C string to a wxString for all wxWidgets build modes.
  */
 static inline wxString FROM_UTF8( const char* cstring )
 {

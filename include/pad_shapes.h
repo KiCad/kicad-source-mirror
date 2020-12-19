@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,8 +27,7 @@
 #include <string>
 
 /**
- * Enum PAD_SHAPE_T
- * is the set of pad shapes, used with PAD::{Set,Get}Shape()
+ * The set of pad shapes, used with PAD::{Set,Get}Shape()
  */
 enum PAD_SHAPE_T
 {
@@ -37,9 +36,11 @@ enum PAD_SHAPE_T
     PAD_SHAPE_OVAL,
     PAD_SHAPE_TRAPEZOID,
     PAD_SHAPE_ROUNDRECT,
-    PAD_SHAPE_CHAMFERED_RECT,   // Rectangle with a champered corner ( and with rounded other corners)
+
+    // Rectangle with a chamfered corner ( and with rounded other corners).
+    PAD_SHAPE_CHAMFERED_RECT,
     PAD_SHAPE_CUSTOM            // A shape defined by user, using a set of basic shapes
-                                // (thick segments, circles, arcs, polygons
+                                // (thick segments, circles, arcs, polygons.
 };
 
 static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE_T a )
@@ -60,8 +61,7 @@ static inline std::string PAD_SHAPE_T_asString( PAD_SHAPE_T a )
 
 
 /**
- * Enum PAD_DRILL_SHAPE_T
- * is the set of pad drill shapes, used with PAD::{Set,Get}DrillShape()
+ * The set of pad drill shapes, used with PAD::{Set,Get}DrillShape()
  */
 enum PAD_DRILL_SHAPE_T
 {
@@ -71,8 +71,8 @@ enum PAD_DRILL_SHAPE_T
 
 
 /**
- * Enum PAD_ATTR_T
- * is the set of pad shapes, used with PAD::{Set,Get}Attribute()
+ * The set of pad shapes, used with PAD::{Set,Get}Attribute().
+ *
  * The double name is for convenience of Python devs
  */
 enum PAD_ATTR_T
@@ -88,9 +88,8 @@ enum PAD_ATTR_T
 
 
 /**
- * Enum PAD_PROP_T
- * is the set of pad properties used in Gerber files (Draw files, and P&P files)
- * to define some properties in fabrication or test files
+ * Ghe set of pad properties used in Gerber files (Draw files, and P&P files)
+ * to define some properties in fabrication or test files.
  */
 enum PAD_PROP_T
 {

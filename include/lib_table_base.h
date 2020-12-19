@@ -276,11 +276,7 @@ private:
  */
 class LIB_TABLE : public PROJECT::_ELEM
 {
-    friend class PANEL_FP_LIB_TABLE;
-    friend class LIB_TABLE_GRID;
-
 public:
-
     /**
      * Parse the #LIB_TABLE_LEXER s-expression library table format into the appropriate
      * #LIB_TABLE_ROW objects.
@@ -493,7 +489,6 @@ public:
     static UTF8 FormatOptions( const PROPERTIES* aProperties );
 
 protected:
-
     /**
      * Return a #LIB_TABLE_ROW if \a aNickname is found in this table or in any chained
      * fallBack table fragment, else NULL.
@@ -517,6 +512,11 @@ protected:
             reindex();
     }
 
+private:
+    friend class PANEL_FP_LIB_TABLE;
+    friend class LIB_TABLE_GRID;
+
+protected:
     LIB_TABLE_ROWS rows;
 
     /// this is a non-owning index into the LIB_TABLE_ROWS table

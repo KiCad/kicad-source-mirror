@@ -3,6 +3,8 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -43,35 +45,31 @@ class GAL;
 class VIEW_ITEM;
 
 /**
- * PAINTER
- * contains all the knowledge about how to draw graphical object onto
- * any particular output device.
- * This knowledge is held outside the individual graphical objects so that
- * alternative output devices may be used, and so that the graphical objects
- * themselves to not contain drawing routines.  Drawing routines in the objects
- * cause problems with usages of the objects as simple container objects in
- * DLL/DSOs.
- * PAINTER is an abstract layer, because every module (pcbnew, eeschema, etc.)
- * has to draw different kinds of objects.
+ * Contains all the knowledge about how to draw graphical object onto any particular
+ * output device.
+ *
+ * This knowledge is held outside the individual graphical objects so that alternative
+ * output devices may be used, and so that the graphical objects themselves to not
+ * contain drawing routines.  Drawing routines in the objects cause problems with usages
+ * of the objects as simple container objects in DLL/DSOs.  PAINTER is an abstract layer
+ * because every module (pcbnew, eeschema, etc.) has to draw different kinds of objects.
  */
 class PAINTER
 {
 public:
     /**
-     * Constructor PAINTER( GAL* )
-     * initializes this object for painting on any of the polymorphic
+     * Initialize this object for painting on any of the polymorphic
      * GRAPHICS_ABSTRACTION_LAYER* derivatives.
      *
-     * @param aGal is a pointer to a polymorphic GAL device on which
-     *  to draw (i.e. Cairo, OpenGL, wxDC)
-     *  No ownership is given to this PAINTER of aGal.
+     * @param aGal is a pointer to a polymorphic GAL device on which to draw (i.e. Cairo,
+     *             OpenGL, wxDC).  No ownership is given to this PAINTER of aGal.
      */
     PAINTER( GAL* aGal );
     virtual ~PAINTER();
 
     /**
-     * Function SetGAL
      * Changes Graphics Abstraction Layer used for drawing items for a new one.
+     *
      * @param aGal is the new GAL instance.
      */
     void SetGAL( GAL* aGal )
@@ -80,26 +78,27 @@ public:
     }
 
     /**
-     * Function ApplySettings
      * Loads colors and display modes settings that are going to be used when drawing items.
+     *
      * @param aSettings are settings to be applied.
      */
     virtual void ApplySettings( const RENDER_SETTINGS* aSettings ) = 0;
 
     /**
-     * Function GetAdapter
-     * Returns pointer to current settings that are going to be used when drawing items.
+     * Return a pointer to current settings that are going to be used when drawing items.
+     *
      * @return Current rendering settings.
      */
     virtual RENDER_SETTINGS* GetSettings() = 0;
 
     /**
-     * Function Draw
-     * Takes an instance of VIEW_ITEM and passes it to a function that know how to draw the item.
+     * Takes an instance of VIEW_ITEM and passes it to a function that knows how to draw
+     * the item.
+     *
      * @param aItem is an item to be drawn.
-     * @param aLayer tells which layer is currently rendered so that draw functions
-     * may know what to draw (eg. for pads there are separate layers for holes, because they
-     * have other dimensions then the pad itself.
+     * @param aLayer tells which layer is currently rendered so that draw functions may
+     *               know what to draw (eg. for pads there are separate layers for holes,
+     *               because they have other dimensions then the pad itself.
      */
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) = 0;
 

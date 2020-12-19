@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  * @author Bernhard Stegmaier <stegmaier@sw-systems.de>
  *
@@ -48,14 +50,16 @@ public:
      * or to return data for the whole container.
      */
     static constexpr int UNDEFINED_TYPE = 0;
-    static_assert( FIRST_TYPE_VAL > UNDEFINED_TYPE, "FIRST_TYPE_VAL has to be greater than UNDEFINED_TYPE" );
-    static_assert( FIRST_TYPE_VAL < LAST_TYPE_VAL, "FIRST_TYPE_VAL has to be greater than LAST_TYPE_VAL" );
+    static_assert( FIRST_TYPE_VAL > UNDEFINED_TYPE,
+                   "FIRST_TYPE_VAL has to be greater than UNDEFINED_TYPE" );
+    static_assert( FIRST_TYPE_VAL < LAST_TYPE_VAL,
+                   "FIRST_TYPE_VAL has to be greater than LAST_TYPE_VAL" );
 
     /**
-    * Helper for defining a list of library draw object pointers.  The Boost
-    * pointer containers are responsible for deleting object pointers placed
-    * in them.  If you access a object pointer from the list, do not delete
-    * it directly.
+    * Helper for defining a list of library draw object pointers.
+    *
+    * The Boost pointer containers are responsible for deleting object pointers placed
+    * in them.  If you access a object pointer from the list, do not delete it directly.
     */
     typedef boost::ptr_vector<T> ITEM_PTR_VECTOR;
 
@@ -157,9 +161,11 @@ public:
     };
 
     ///> The non-const iterator
-    typedef ITERATOR_BASE<T, MULTIVECTOR<T, FIRST_TYPE_VAL, LAST_TYPE_VAL>, typename ITEM_PTR_VECTOR::iterator> ITERATOR;
+    typedef ITERATOR_BASE<T, MULTIVECTOR<T, FIRST_TYPE_VAL, LAST_TYPE_VAL>,
+                          typename ITEM_PTR_VECTOR::iterator> ITERATOR;
     ///> The const iterator
-    typedef ITERATOR_BASE<const T, const MULTIVECTOR<T, FIRST_TYPE_VAL, LAST_TYPE_VAL>, typename ITEM_PTR_VECTOR::const_iterator> CONST_ITERATOR;
+    typedef ITERATOR_BASE<const T, const MULTIVECTOR<T, FIRST_TYPE_VAL, LAST_TYPE_VAL>,
+                          typename ITEM_PTR_VECTOR::const_iterator> CONST_ITERATOR;
 
 
     MULTIVECTOR()

@@ -71,11 +71,11 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aI
         DIALOG_PAGES_SETTINGS_BASE( aParent ),
         m_parent( aParent ),
         m_screen( m_parent->GetScreen() ),
-        m_pageBitmap( nullptr ),
         m_initialized( false ),
+        m_pageBitmap( nullptr ),
+        m_iuPerMils( aIuPerMils ),
         m_customSizeX( aParent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false ),
-        m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false ),
-        m_iuPerMils( aIuPerMils )
+        m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false )
 {
     m_projectPath = Prj().GetProjectPath();
     m_maxPageSizeMils = aMaxUserSizeMils;

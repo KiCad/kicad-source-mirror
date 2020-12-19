@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -75,37 +75,6 @@ class EDA_COMBINED_MATCHER;
 class LIB_TREE_NODE
 {
 public:
-    enum TYPE {
-        ROOT, LIB, LIBID, UNIT, INVALID
-    };
-
-    typedef std::vector<std::unique_ptr<LIB_TREE_NODE>> PTR_VECTOR;
-
-    LIB_TREE_NODE*  m_Parent;     // Parent node or null
-    PTR_VECTOR      m_Children;   // List of child nodes
-    enum TYPE       m_Type;       // Node type
-
-    /**
-     * The rank of the item before any search terms are applied. This is
-     * a fairly expensive sort (involving string compares) so it helps to
-     * store the result of that sort.
-     */
-    int         m_IntrinsicRank;
-
-    int         m_Score;       // The score of an item resulting from the search algorithm.
-    bool        m_Pinned;      // Item should appear at top when there is no search string
-
-    wxString    m_Name;        // Actual name of the part
-    wxString    m_Desc;        // Description to be displayed
-    wxString    m_MatchName;   // Normalized name for matching
-    wxString    m_SearchText;  // Descriptive text to search
-    bool        m_Normalized;  // Support for lazy normalization.
-
-
-    LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
-    int         m_Unit;        // Actual unit, or zero
-    bool        m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
-
     /**
      * Update the score for this part. This is accumulative - it will be
      * called once per search term.
@@ -138,6 +107,37 @@ public:
 
     LIB_TREE_NODE();
     virtual ~LIB_TREE_NODE() {}
+
+    enum TYPE {
+        ROOT, LIB, LIBID, UNIT, INVALID
+    };
+
+    typedef std::vector<std::unique_ptr<LIB_TREE_NODE>> PTR_VECTOR;
+
+    LIB_TREE_NODE*  m_Parent;     // Parent node or null
+    PTR_VECTOR      m_Children;   // List of child nodes
+    enum TYPE       m_Type;       // Node type
+
+    /**
+     * The rank of the item before any search terms are applied. This is
+     * a fairly expensive sort (involving string compares) so it helps to
+     * store the result of that sort.
+     */
+    int         m_IntrinsicRank;
+
+    int         m_Score;       // The score of an item resulting from the search algorithm.
+    bool        m_Pinned;      // Item should appear at top when there is no search string
+
+    wxString    m_Name;        // Actual name of the part
+    wxString    m_Desc;        // Description to be displayed
+    wxString    m_MatchName;   // Normalized name for matching
+    wxString    m_SearchText;  // Descriptive text to search
+    bool        m_Normalized;  // Support for lazy normalization.
+
+
+    LIB_ID      m_LibId;       // LIB_ID determined by the parent library nickname and alias name.
+    int         m_Unit;        // Actual unit, or zero
+    bool        m_IsRoot;      // Indicates if the symbol is a root symbol instead of an alias.
 };
 
 
@@ -146,7 +146,6 @@ public:
  */
 class LIB_TREE_NODE_UNIT: public LIB_TREE_NODE
 {
-
 public:
     /**
      * The addresses of CMP_TREE_NODEs are used as unique IDs for the
@@ -154,7 +153,6 @@ public:
      */
     LIB_TREE_NODE_UNIT( LIB_TREE_NODE_UNIT const& _ ) = delete;
     void operator=( LIB_TREE_NODE_UNIT const& _ ) = delete;
-
 
     /**
      * Construct a unit node.
@@ -188,7 +186,6 @@ public:
      */
     LIB_TREE_NODE_LIB_ID( LIB_TREE_NODE_LIB_ID const& _ ) = delete;
     void operator=( LIB_TREE_NODE_LIB_ID const& _ ) = delete;
-
 
     /**
      * Construct a #LIB_ID node.
@@ -236,7 +233,6 @@ public:
      */
     LIB_TREE_NODE_LIB( LIB_TREE_NODE_LIB const& _ ) = delete;
     void operator=( LIB_TREE_NODE_LIB const& _ ) = delete;
-
 
     /**
      * Construct an empty library node.

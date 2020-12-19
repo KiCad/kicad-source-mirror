@@ -271,8 +271,6 @@ protected:
     static LIB_TREE_NODE* ToNode( wxDataViewItem aItem );
     static unsigned int IntoArray( LIB_TREE_NODE const& aNode, wxDataViewItemArray& aChildren );
 
-    LIB_TREE_NODE_ROOT m_tree;
-
     /**
      * Creates the adapter
      * @param aParent is the parent frame
@@ -331,7 +329,7 @@ protected:
      * @param aItem     item to get formatting for
      * @param aCol      column number of interest
      * @param aAttr     receiver for attributes
-     * @return          true iff the item has non-default attributes
+     * @return          true if the item has non-default attributes
      */
     bool GetAttr( wxDataViewItem const&   aItem,
                   unsigned int            aCol,
@@ -340,7 +338,7 @@ protected:
     /**
      * @return a unicode string to mark a node name like
      * a pinned library name
-     * This is not an ascii7 char, but a unicode char
+     * This is not an ASCII7 char, but a unicode char
      */
     const wxString GetPinningSymbol() const
     {
@@ -348,22 +346,6 @@ protected:
     }
 
 private:
-    EDA_BASE_FRAME*         m_parent;
-
-    CMP_FILTER_TYPE         m_filter;
-    bool                    m_show_units;
-    LIB_ID                  m_preselect_lib_id;
-    int                     m_preselect_unit;
-    int                     m_freeze;
-
-    wxDataViewColumn*       m_col_part;
-    wxDataViewColumn*       m_col_desc;
-    wxDataViewCtrl*         m_widget;
-
-    int                     m_colWidths[NUM_COLS];
-    wxArrayString           m_pinnedLibs;
-    wxString                m_pinnedKey;
-
     /**
      * Find any results worth highlighting and expand them, according to given criteria
      * The highest-scoring node is written to aHighScore
@@ -385,6 +367,26 @@ private:
      * Find and expand a library if there is only one.  Return the best match (if any).
      */
     LIB_TREE_NODE* ShowSingleLibrary();
+
+protected:
+    LIB_TREE_NODE_ROOT      m_tree;
+
+private:
+    EDA_BASE_FRAME*         m_parent;
+
+    CMP_FILTER_TYPE         m_filter;
+    bool                    m_show_units;
+    LIB_ID                  m_preselect_lib_id;
+    int                     m_preselect_unit;
+    int                     m_freeze;
+
+    wxDataViewColumn*       m_col_part;
+    wxDataViewColumn*       m_col_desc;
+    wxDataViewCtrl*         m_widget;
+
+    int                     m_colWidths[NUM_COLS];
+    wxArrayString           m_pinnedLibs;
+    wxString                m_pinnedKey;
 };
 
 #endif // LIB_TREE_MODEL_ADAPTER_H

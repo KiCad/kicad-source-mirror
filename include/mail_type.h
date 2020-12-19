@@ -28,11 +28,11 @@
 #define MAIL_TYPE_H_
 
 /**
- * Enum MAIL_T
- * is the set of mail types sendable via KIWAY::ExpressMail() and supplied as
- * the @a aCommand parameter to that function.  Such mail will be received in
- * KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent ) and aEvent.Command() will
- * match aCommand to KIWAY::ExpressMail().
+ * The set of mail types sendable via #KIWAY::ExpressMail() and supplied as
+ * the @a aCommand parameter to that function.
+ *
+ * Such mail will be received in KIWAY_PLAYER::KiwayMailIn( KIWAY_EXPRESS& aEvent ) and
+ * aEvent.Command() will match aCommand to KIWAY::ExpressMail().
  */
 enum MAIL_T
 {

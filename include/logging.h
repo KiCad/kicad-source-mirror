@@ -36,7 +36,8 @@ public:
     }
 
 protected:
-    void DoLogRecord( wxLogLevel aLevel, const wxString& aMsg, const wxLogRecordInfo& aInfo ) override
+    void DoLogRecord( wxLogLevel aLevel, const wxString& aMsg,
+                      const wxLogRecordInfo& aInfo ) override
     {
         // Only forward the message if it is a trace message
         if( aLevel == wxLOG_Trace )
