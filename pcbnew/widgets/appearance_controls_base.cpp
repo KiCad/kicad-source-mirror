@@ -30,7 +30,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelLayers->SetSizer( m_panelLayersSizer );
 	m_panelLayers->Layout();
 	m_panelLayersSizer->Fit( m_panelLayers );
-	m_notebook->AddPage( m_panelLayers, wxT("Layers"), true );
+	m_notebook->AddPage( m_panelLayers, _("Layers"), true );
 	m_panelObjects = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_panelObjects->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
 
@@ -43,7 +43,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelObjects->SetSizer( m_objectsPanelSizer );
 	m_panelObjects->Layout();
 	m_objectsPanelSizer->Fit( m_panelObjects );
-	m_notebook->AddPage( m_panelObjects, wxT("Objects"), false );
+	m_notebook->AddPage( m_panelObjects, _("Objects"), false );
 	m_panelNetsAndClasses = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_netsTabOuterSizer = new wxBoxSizer( wxVERTICAL );
 
@@ -59,7 +59,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer17;
 	bSizer17 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticTextNets = new wxStaticText( m_panelNets, wxID_ANY, wxT("Nets"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNets = new wxStaticText( m_panelNets, wxID_ANY, _("Nets"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextNets->Wrap( -1 );
 	m_staticTextNets->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
@@ -71,7 +71,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bSizer17->Add( m_txtNetFilter, 1, wxLEFT|wxTOP, 5 );
 
 	m_btnNetInspector = new BITMAP_BUTTON( m_panelNets, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnNetInspector->SetToolTip( wxT("Show the Net Inspector") );
+	m_btnNetInspector->SetToolTip( _("Show the Net Inspector") );
 
 	bSizer17->Add( m_btnNetInspector, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
 
@@ -118,14 +118,14 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizer20;
 	bSizer20 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_staticText14 = new wxStaticText( m_panelNetclasses, wxID_ANY, wxT("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14 = new wxStaticText( m_panelNetclasses, wxID_ANY, _("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
 	m_staticText14->SetFont( wxFont( 9, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	bSizer20->Add( m_staticText14, 1, wxALL, 5 );
 
 	m_btnConfigureNetClasses = new BITMAP_BUTTON( m_panelNetclasses, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
-	m_btnConfigureNetClasses->SetToolTip( wxT("Configure net classes") );
+	m_btnConfigureNetClasses->SetToolTip( _("Configure net classes") );
 
 	bSizer20->Add( m_btnConfigureNetClasses, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
@@ -153,7 +153,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	m_panelNetsAndClasses->SetSizer( m_netsTabOuterSizer );
 	m_panelNetsAndClasses->Layout();
 	m_netsTabOuterSizer->Fit( m_panelNetsAndClasses );
-	m_notebook->AddPage( m_panelNetsAndClasses, wxT("Nets"), false );
+	m_notebook->AddPage( m_panelNetsAndClasses, _("Nets"), false );
 
 	m_sizerOuter->Add( m_notebook, 1, wxEXPAND, 5 );
 
@@ -166,7 +166,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bPresetsLabels;
 	bPresetsLabels = new wxBoxSizer( wxHORIZONTAL );
 
-	presetsLabel = new wxStaticText( this, wxID_ANY, wxT("Presets:"), wxDefaultPosition, wxDefaultSize, 0 );
+	presetsLabel = new wxStaticText( this, wxID_ANY, _( "Presets:" ), wxDefaultPosition, wxDefaultSize, 0 );
 	presetsLabel->Wrap( -1 );
 	bPresetsLabels->Add( presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
 
@@ -177,11 +177,11 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	bPresets->Add( bPresetsLabels, 1, wxEXPAND|wxTOP, 7 );
 
-	wxString m_cbLayerPresetsChoices[] = { wxT("All Layers"), wxT("(unsaved)") };
+	wxString m_cbLayerPresetsChoices[] = { _("All Layers"), _("(unsaved)") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
 	m_cbLayerPresets = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cbLayerPresetsNChoices, m_cbLayerPresetsChoices, 0 );
 	m_cbLayerPresets->SetSelection( 1 );
-	m_cbLayerPresets->SetToolTip( wxT("Layer presets") );
+	m_cbLayerPresets->SetToolTip( _("Layer presets") );
 
 	bPresets->Add( m_cbLayerPresets, 0, wxALL|wxEXPAND, 2 );
 
