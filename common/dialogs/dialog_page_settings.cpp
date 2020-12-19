@@ -1,24 +1,20 @@
 /*
- * This program source code file is part of KICAD, a free EDA CAD application.
+ * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2020 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include <base_screen.h>
@@ -39,14 +35,6 @@
 #include <page_layout/ws_painter.h>
 #include <wx/valgen.h>
 #include <wx/tokenzr.h>
-
-#ifdef EESCHEMA
-#include <general.h>
-#include <sch_edit_frame.h>
-#include <sch_screen.h>
-#include <schematic.h>
-#include <eeschema_settings.h>
-#endif
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 
@@ -78,16 +66,18 @@ static const wxString pageFmts[] =
                                     // to be recognized in code
 };
 
-DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMaxUserSizeMils ) :
-    DIALOG_PAGES_SETTINGS_BASE( parent ),
-    m_initialized( false ),
-    m_customSizeX( parent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false ),
-    m_customSizeY( parent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false )
+DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* aParent, double aIuPerMils,
+                                              wxSize aMaxUserSizeMils ) :
+        DIALOG_PAGES_SETTINGS_BASE( aParent ),
+        m_parent( aParent ),
+        m_screen( m_parent->GetScreen() ),
+        m_pageBitmap( nullptr ),
+        m_initialized( false ),
+        m_customSizeX( aParent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false ),
+        m_customSizeY( aParent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false ),
+        m_iuPerMils( aIuPerMils )
 {
-    m_parent   = parent;
-    m_screen   = m_parent->GetScreen();
     m_projectPath = Prj().GetProjectPath();
-    m_page_bitmap = NULL;
     m_maxPageSizeMils = aMaxUserSizeMils;
     m_tb = m_parent->GetTitleBlock();
     m_customFmt = false;
@@ -100,7 +90,7 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
 
     m_PickDate->SetValue( wxDateTime::Now() );
 
-    if( parent->GetName() == PL_EDITOR_FRAME_NAME )
+    if( m_parent->GetName() == PL_EDITOR_FRAME_NAME )
     {
         SetTitle( _( "Preview Settings" ) );
         m_staticTextPaper->SetLabel( _( "Preview Paper" ) );
@@ -113,41 +103,18 @@ DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMa
         m_staticTextTitleBlock->SetLabel( _( "Title Block" ) );
     }
 
-    initDialog();
-
-    GetSizer()->SetSizeHints( this );
     Centre();
 }
 
 
 DIALOG_PAGES_SETTINGS::~DIALOG_PAGES_SETTINGS()
 {
-#ifdef EESCHEMA
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
-
-    cfg->m_PageSettings.export_paper    = m_PaperExport->GetValue();
-    cfg->m_PageSettings.export_revision = m_RevisionExport->GetValue();
-    cfg->m_PageSettings.export_date     = m_DateExport->GetValue();
-    cfg->m_PageSettings.export_title    = m_TitleExport->GetValue();
-    cfg->m_PageSettings.export_company  = m_CompanyExport->GetValue();
-    cfg->m_PageSettings.export_comment1 = m_Comment1Export->GetValue();
-    cfg->m_PageSettings.export_comment2 = m_Comment2Export->GetValue();
-    cfg->m_PageSettings.export_comment3 = m_Comment3Export->GetValue();
-    cfg->m_PageSettings.export_comment4 = m_Comment4Export->GetValue();
-    cfg->m_PageSettings.export_comment5 = m_Comment5Export->GetValue();
-    cfg->m_PageSettings.export_comment6 = m_Comment6Export->GetValue();
-    cfg->m_PageSettings.export_comment7 = m_Comment7Export->GetValue();
-    cfg->m_PageSettings.export_comment8 = m_Comment8Export->GetValue();
-    cfg->m_PageSettings.export_comment9 = m_Comment9Export->GetValue();
-#endif
-
-    delete m_page_bitmap;
+    delete m_pageBitmap;
     delete m_pagelayout;
 }
 
 
-void DIALOG_PAGES_SETTINGS::initDialog()
+bool DIALOG_PAGES_SETTINGS::TransferDataToWindow()
 {
     wxString      msg;
 
@@ -164,20 +131,6 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // initialize the page layout descr filename
     SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
-#ifdef EESCHEMA
-    // Init display value for schematic sub-sheet number
-    wxString format = m_TextSheetCount->GetLabel();
-    msg.Printf( format, m_screen->GetPageCount() );
-    m_TextSheetCount->SetLabel( msg );
-
-    format = m_TextSheetNumber->GetLabel();
-    msg.Printf( format, m_screen->GetVirtualPageNumber() );
-    m_TextSheetNumber->SetLabel( msg );
-#else
-    m_TextSheetCount->Show( false );
-    m_TextSheetNumber->Show( false );
-#endif
-
     m_pageInfo = m_parent->GetPageSettings();
     SetCurrentPageSizeSelection( m_pageInfo.GetType() );
     m_orientationComboBox->SetSelection( m_pageInfo.IsPortrait() );
@@ -188,13 +141,13 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
     if( m_customFmt )
     {
-        m_customSizeX.SetValue( m_pageInfo.GetWidthMils() * IU_PER_MILS );
-        m_customSizeY.SetValue( m_pageInfo.GetHeightMils() * IU_PER_MILS );
+        m_customSizeX.SetValue( m_pageInfo.GetWidthMils() * m_iuPerMils );
+        m_customSizeY.SetValue( m_pageInfo.GetHeightMils() * m_iuPerMils );
     }
     else
     {
-        m_customSizeX.SetValue( m_pageInfo.GetCustomWidthMils() * IU_PER_MILS );
-        m_customSizeY.SetValue( m_pageInfo.GetCustomHeightMils() * IU_PER_MILS );
+        m_customSizeX.SetValue( m_pageInfo.GetCustomWidthMils() * m_iuPerMils );
+        m_customSizeY.SetValue( m_pageInfo.GetCustomHeightMils() * m_iuPerMils );
     }
 
     m_TextRevision->SetValue( m_tb.GetRevision() );
@@ -211,25 +164,9 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_TextComment8->SetValue( m_tb.GetComment( 7 ) );
     m_TextComment9->SetValue( m_tb.GetComment( 8 ) );
 
-#ifdef EESCHEMA
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-    wxASSERT( cfg );
-
-    m_PaperExport->SetValue( cfg->m_PageSettings.export_paper );
-    m_RevisionExport->SetValue( cfg->m_PageSettings.export_revision );
-    m_DateExport->SetValue( cfg->m_PageSettings.export_date );
-    m_TitleExport->SetValue( cfg->m_PageSettings.export_title );
-    m_CompanyExport->SetValue( cfg->m_PageSettings.export_company  );
-    m_Comment1Export->SetValue( cfg->m_PageSettings.export_comment1 );
-    m_Comment2Export->SetValue( cfg->m_PageSettings.export_comment2 );
-    m_Comment3Export->SetValue( cfg->m_PageSettings.export_comment3 );
-    m_Comment4Export->SetValue( cfg->m_PageSettings.export_comment4 );
-    m_Comment5Export->SetValue( cfg->m_PageSettings.export_comment5 );
-    m_Comment6Export->SetValue( cfg->m_PageSettings.export_comment6 );
-    m_Comment7Export->SetValue( cfg->m_PageSettings.export_comment7 );
-    m_Comment8Export->SetValue( cfg->m_PageSettings.export_comment8 );
-    m_Comment9Export->SetValue( cfg->m_PageSettings.export_comment9 );
-#else
+    // The default is to disable aall these fields for the "generic" dialog
+    m_TextSheetCount->Show( false );
+    m_TextSheetNumber->Show( false );
     m_PaperExport->Show( false );
     m_RevisionExport->Show( false );
     m_DateExport->Show( false );
@@ -244,24 +181,29 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     m_Comment7Export->Show( false );
     m_Comment8Export->Show( false );
     m_Comment9Export->Show( false );
-#endif
+
+    onTransferDataToWindow();
 
     GetPageLayoutInfoFromDialog();
     UpdatePageLayoutExample();
 
+    GetSizer()->SetSizeHints( this );
+
     // Make the OK button the default.
     m_sdbSizerOK->SetDefault();
     m_initialized = true;
+
+    return true;
 }
 
 
-void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
+bool DIALOG_PAGES_SETTINGS::TransferDataFromWindow()
 {
     if( !m_customSizeX.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.x, EDA_UNITS::MILS ) )
-        return;
+        return false;
 
     if( !m_customSizeY.Validate( MIN_PAGE_SIZE_MILS, m_maxPageSizeMils.y, EDA_UNITS::MILS ) )
-        return;
+        return false;
 
     if( SavePageSettings() )
     {
@@ -274,7 +216,7 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
         m_parent->OnPageSettingsChange();
     }
 
-    event.Skip();
+    return true;
 }
 
 
@@ -612,69 +554,7 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 
     m_parent->SetTitleBlock( m_tb );
 
-
-#ifdef EESCHEMA
-    wxCHECK_MSG( dynamic_cast<SCH_EDIT_FRAME*>( m_parent ), true,
-            "DIALOG_PAGES_SETTINGS::OnDateApplyClick frame is not a schematic frame!" );
-
-    // Exports settings to other sheets if requested:
-    SCH_SCREENS ScreenList( dynamic_cast<SCH_EDIT_FRAME*>( m_parent )->Schematic().Root() );
-
-    // Update page info and/or title blocks for all screens
-    for( SCH_SCREEN* screen = ScreenList.GetFirst(); screen; screen = ScreenList.GetNext() )
-    {
-        if( screen == m_screen )
-            continue;
-
-        if( m_PaperExport->IsChecked() )
-            screen->SetPageSettings( m_pageInfo );
-
-        TITLE_BLOCK tb2 = screen->GetTitleBlock();
-
-        if( m_RevisionExport->IsChecked() )
-            tb2.SetRevision( m_tb.GetRevision() );
-
-        if( m_DateExport->IsChecked() )
-            tb2.SetDate( m_tb.GetDate() );
-
-        if( m_TitleExport->IsChecked() )
-            tb2.SetTitle( m_tb.GetTitle() );
-
-        if( m_CompanyExport->IsChecked() )
-            tb2.SetCompany( m_tb.GetCompany() );
-
-        if( m_Comment1Export->IsChecked() )
-            tb2.SetComment( 0, m_tb.GetComment( 0 ) );
-
-        if( m_Comment2Export->IsChecked() )
-            tb2.SetComment( 1, m_tb.GetComment( 1 ) );
-
-        if( m_Comment3Export->IsChecked() )
-            tb2.SetComment( 2, m_tb.GetComment( 2 ) );
-
-        if( m_Comment4Export->IsChecked() )
-            tb2.SetComment( 3, m_tb.GetComment( 3 ) );
-
-        if( m_Comment5Export->IsChecked() )
-            tb2.SetComment( 4, m_tb.GetComment( 4 ) );
-
-        if( m_Comment6Export->IsChecked() )
-            tb2.SetComment( 5, m_tb.GetComment( 5 ) );
-
-        if( m_Comment7Export->IsChecked() )
-            tb2.SetComment( 6, m_tb.GetComment( 6 ) );
-
-        if( m_Comment8Export->IsChecked() )
-            tb2.SetComment( 7, m_tb.GetComment( 7 ) );
-
-        if( m_Comment9Export->IsChecked() )
-            tb2.SetComment( 8, m_tb.GetComment( 8 ) );
-
-        screen->SetTitleBlock( tb2 );
-    }
-#endif
-
-    return true;
+    return onSavePageSettings();
 }
 
 
@@ -720,15 +600,15 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         lyHeight = KiROUND( (double) lyWidth / lyRatio );
     }
 
-    if( m_page_bitmap )
+    if( m_pageBitmap )
     {
         m_PageLayoutExampleBitmap->SetBitmap( wxNullBitmap );
-        delete m_page_bitmap;
+        delete m_pageBitmap;
     }
 
-    m_page_bitmap = new wxBitmap( lyWidth + 1, lyHeight + 1 );
+    m_pageBitmap = new wxBitmap( lyWidth + 1, lyHeight + 1 );
 
-    if( m_page_bitmap->IsOk() )
+    if( m_pageBitmap->IsOk() )
     {
         double scaleW = (double) lyWidth  / clamped_layout_size.x;
         double scaleH = (double) lyHeight / clamped_layout_size.y;
@@ -737,7 +617,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         // Prepare DC.
         wxSize example_size( lyWidth + 1, lyHeight + 1 );
         wxMemoryDC memDC;
-        memDC.SelectObject( *m_page_bitmap );
+        memDC.SelectObject( *m_pageBitmap );
         memDC.SetClippingRegion( wxPoint( 0, 0 ), example_size );
         memDC.Clear();
         memDC.SetUserScale( scale, scale );
@@ -777,7 +657,7 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
                          wxEmptyString, m_screen->GetVirtualPageNumber() ==  1 );
 
         memDC.SelectObject( wxNullBitmap );
-        m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
+        m_PageLayoutExampleBitmap->SetBitmap( *m_pageBitmap );
         WS_DATA_MODEL::SetAltInstance( NULL );
 
         // Refresh the dialog.
@@ -856,8 +736,8 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
 void DIALOG_PAGES_SETTINGS::GetCustomSizeMilsFromDialog()
 {
-    double customSizeX = (double) m_customSizeX.GetValue() / IU_PER_MILS;
-    double customSizeY = (double) m_customSizeY.GetValue() / IU_PER_MILS;
+    double customSizeX = (double) m_customSizeX.GetValue() / m_iuPerMils;
+    double customSizeY = (double) m_customSizeY.GetValue() / m_iuPerMils;
 
     // Prepare to painless double -> int conversion.
     customSizeX = Clamp( double( INT_MIN ), customSizeX, double( INT_MAX ) );

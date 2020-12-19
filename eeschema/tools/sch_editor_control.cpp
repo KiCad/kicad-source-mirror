@@ -27,7 +27,7 @@
 #include <widgets/infobar.h>
 #include <connection_graph.h>
 #include <dialogs/dialog_fields_editor_global.h>
-#include <dialogs/dialog_page_settings.h>
+#include <dialogs/dialog_eeschema_page_settings.h>
 #include <dialogs/dialog_paste_special.h>
 #include <dialogs/dialog_plot_schematic.h>
 #include <dialogs/dialog_symbol_remap.h>
@@ -105,7 +105,7 @@ int SCH_EDITOR_CONTROL::PageSetup( const TOOL_EVENT& aEvent )
     undoCmd.PushItem( wrapper );
     m_frame->SaveCopyInUndoList( undoCmd, UNDO_REDO::PAGESETTINGS, false );
 
-    DIALOG_PAGES_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
+    DIALOG_EESCHEMA_PAGE_SETTINGS dlg( m_frame, wxSize( MAX_PAGE_SIZE_MILS, MAX_PAGE_SIZE_MILS ) );
     dlg.SetWksFileName( BASE_SCREEN::m_PageLayoutDescrFileName );
 
     if( dlg.ShowModal() != wxID_OK )

@@ -47,7 +47,7 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_board_statistics.cpp
     dialogs/dialog_board_statistics_base.cpp
     dialogs/dialog_board_reannotate.cpp
-    dialogs/dialog_board_reannotate_base.cpp  
+    dialogs/dialog_board_reannotate_base.cpp
     dialogs/dialog_choose_footprint.cpp
     dialogs/dialog_cleanup_graphics.cpp
     dialogs/dialog_cleanup_graphics_base.cpp
@@ -366,7 +366,6 @@ set( PCBNEW_SRCS
 
 # extra sources from common
 set( PCBNEW_COMMON_SRCS
-    ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
     ${CMAKE_SOURCE_DIR}/common/base_units.cpp
     ${CMAKE_SOURCE_DIR}/common/hotkeys_basic.cpp
     )
@@ -437,14 +436,14 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
 
     # We deliberately do not use the CMake support for swig here,
     # i.e. swig_add_footprint()) because we want full control.
-    
+
     # Avoid threading in SWIG (breaks threads in pcbnew)
     set( SWIG_OPTS -python -c++ -nothreads  )
-    
+
     if( KICAD_SCRIPTING_PYTHON3 )
         set( SWIG_OPTS ${SWIG_OPTS} -py3 )
     endif()
-    
+
     set( SWIG_OPTS ${SWIG_OPTS} -outdir ${CMAKE_CURRENT_BINARY_DIR} ${SWIG_FLAGS} )
 
     if( EXISTS ${CMAKE_CURRENT_BINARY_DIR}/doxygen-xml )

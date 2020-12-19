@@ -65,6 +65,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_edit_line_style.cpp
     dialogs/dialog_edit_line_style_base.cpp
     dialogs/dialog_edit_one_field.cpp
+    dialogs/dialog_eeschema_page_settings.cpp
     dialogs/dialog_erc.cpp
     dialogs/dialog_erc_base.cpp
     dialogs/dialog_global_sym_lib_table_config.cpp
@@ -268,7 +269,6 @@ set( EESCHEMA_SRCS
 
 
 set( EESCHEMA_COMMON_SRCS
-    ${CMAKE_SOURCE_DIR}/common/dialogs/dialog_page_settings.cpp
     ${CMAKE_SOURCE_DIR}/common/dialogs/panel_gal_display_options.cpp
     ${CMAKE_SOURCE_DIR}/common/dialogs/panel_setup_severities.cpp
     ${CMAKE_SOURCE_DIR}/common/common.cpp
