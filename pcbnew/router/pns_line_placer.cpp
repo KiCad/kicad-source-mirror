@@ -477,7 +477,8 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 
 bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 {
-    LINE newHead( m_head ), bestHead( m_head );
+    LINE newHead( m_head );
+    LINE bestHead( m_head );
     bool hasBest = false;
 
     buildInitialLine( aP, newHead );
@@ -503,7 +504,7 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 
                 // We want the shortest line here to ensure we don't break a clearance
                 // rule on larger, overlapping items (e.g. vias)
-                if( newHead.CLine().Length() < bestHead.CLine().Length() )
+                if( !hasBest || newHead.CLine().Length() < bestHead.CLine().Length() )
                 {
                     bestHead = newHead;
                     hasBest = true;
