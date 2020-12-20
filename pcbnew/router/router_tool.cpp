@@ -1500,7 +1500,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     {
         startItem = m_router->GetWorld()->FindItemByParent( item );
 
-        if( startItem)
+        if( startItem )
             itemsToDrag.Add( startItem );
     }
 
@@ -1512,7 +1512,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     if( startItem )
+    {
         p = snapToItem( startItem, p0 );
+        m_startItem = startItem;
+    }
 
     int dragMode = aEvent.Parameter<int64_t> ();
 
