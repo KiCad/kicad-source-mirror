@@ -54,6 +54,7 @@ public:
         m_diameter = 2; // Dummy value
         m_drill    = 0;
         m_viaType  = VIATYPE::THROUGH;
+        m_isFree   = false;
     }
 
     VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill, int aNet = -1,
@@ -68,6 +69,7 @@ public:
         m_shape = SHAPE_CIRCLE( aPos, aDiameter / 2 );
         m_alternateShape = SHAPE_CIRCLE( m_pos, aDrill / 2 );
         m_viaType = aViaType;
+        m_isFree = false;
     }
 
 
@@ -84,6 +86,7 @@ public:
         m_rank = aB.m_rank;
         m_drill = aB.m_drill;
         m_viaType = aB.m_viaType;
+        m_isFree = aB.m_isFree;
     }
 
     static inline bool ClassOf( const ITEM* aItem )
@@ -134,6 +137,9 @@ public:
         m_drill = aDrill;
     }
 
+    bool IsFree() const { return m_isFree; }
+    void SetIsFree( bool aIsFree ) { m_isFree = aIsFree; }
+
     bool PushoutForce( NODE* aNode,
             const VECTOR2I& aDirection,
             VECTOR2I& aForce,
@@ -175,6 +181,7 @@ private:
     SHAPE_CIRCLE m_shape;
     SHAPE_CIRCLE m_alternateShape;
     VIATYPE      m_viaType;
+    bool         m_isFree;
 };
 
 }

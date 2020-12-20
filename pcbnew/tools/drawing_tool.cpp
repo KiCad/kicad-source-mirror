@@ -2178,15 +2178,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             const wxPoint position = aVia->GetPosition();
             const LSET    lset = aVia->GetLayerSet();
 
-            for( FOOTPRINT* footprint : m_board->Footprints() )
-            {
-                for( PAD* pad : footprint->Pads() )
-                {
-                    if( pad->HitTest( position ) && ( pad->GetLayerSet() & lset ).any() )
-                        return -1;
-                }
-            }
-
             std::vector<ZONE*> foundZones;
 
             for( ZONE* zone : m_board->Zones() )
@@ -2270,7 +2261,10 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 newNet = track->GetNetCode();
             }
             else
+            {
                 newNet = findStitchedZoneNet( via );
+                via->SetIsFree();
+            }
 
             if( newNet > 0 )
                 via->SetNetCode( newNet );

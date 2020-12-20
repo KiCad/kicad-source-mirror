@@ -91,7 +91,8 @@ class PCB_TEXT;
 //#define SEXPR_BOARD_FILE_VERSION    20201002  // Add groups in footprints (for footprint editor).
 //#define SEXPR_BOARD_FILE_VERSION    20201114  // Add first-class support for filled shapes.
 //#define SEXPR_BOARD_FILE_VERSION    20201115  // module -> footprint and change fill syntax.
-#define SEXPR_BOARD_FILE_VERSION    20201116  // Write version and generator string in footprint files.
+//#define SEXPR_BOARD_FILE_VERSION    20201116  // Write version and generator string in footprint files.
+#define SEXPR_BOARD_FILE_VERSION      20201220  // Add free via token
 
 #define BOARD_FILE_HOST_VERSION       20200825  ///< Earlier files than this include the host tag
 

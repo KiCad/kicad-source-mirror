@@ -506,6 +506,14 @@ public:
     void SetDrillDefault()      { m_drill = UNDEFINED_DRILL_DIAMETER; }
 
     /**
+     * Checks if the via is a free via (as opposed to one created on a track by the router).
+     * Free vias don't have their nets automatically updated by the connectivity algorithm.
+     * @return true if the via is a free via
+     */
+    bool GetIsFree() const { return m_isFree; }
+    void SetIsFree( bool aFree = true ) { m_isFree = aFree; }
+
+    /**
      * Function IsDrillDefault
      * @return true if the drill value is default value (-1)
     */
@@ -529,6 +537,7 @@ private:
 
     bool         m_removeUnconnectedLayer;   ///< Remove unconnected copper on a via
     bool         m_keepTopBottomLayer;       ///< Keep the top and bottom annular rings
+    bool         m_isFree;                   ///< "Free" vias don't get their nets auto-updated
 };
 
 

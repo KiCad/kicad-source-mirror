@@ -67,6 +67,7 @@ VIA::VIA( BOARD_ITEM* aParent ) :
     SetDrillDefault();
     m_removeUnconnectedLayer = false;
     m_keepTopBottomLayer = true;
+    m_isFree = false;
 }
 
 

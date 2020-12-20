@@ -920,6 +920,8 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
     if( aVia->IsLocked() )
         via->Mark( PNS::MK_LOCKED );
 
+    via->SetIsFree( aVia->GetIsFree() );
+
     return via;
 }
 
@@ -1426,6 +1428,7 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
         via_board->SetDrill( via->Drill() );
         via_board->SetNetCode( via->Net() > 0 ? via->Net() : 0 );
         via_board->SetViaType( via->ViaType() ); // MUST be before SetLayerPair()
+        via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
                                  ToLAYER_ID( via->Layers().End() ) );
         newBI = via_board;

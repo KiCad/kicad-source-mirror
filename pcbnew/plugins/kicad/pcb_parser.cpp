@@ -4365,8 +4365,13 @@ VIA* PCB_PARSER::parseVIA()
             NeedRIGHT();
             break;
 
+        case T_free:
+            via->SetIsFree();
+            NeedRIGHT();
+            break;
+
         default:
-            Expecting( "blind, micro, at, size, drill, layers, net, tstamp, or status" );
+            Expecting( "blind, micro, at, size, drill, layers, net, free, tstamp, or status" );
         }
     }
 

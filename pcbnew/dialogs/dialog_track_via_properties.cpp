@@ -161,6 +161,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     viaType = v->GetViaType();
                     m_ViaStartLayer->SetLayerSelection( v->TopLayer() );
                     m_ViaEndLayer->SetLayerSelection( v->BottomLayer() );
+                    m_viaNotFree->SetValue( !v->GetIsFree() );
                 }
                 else        // check if values are the same for every selected via
                 {
@@ -178,6 +179,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
                     if( viaType != v->GetViaType() )
                         viaType = VIATYPE::NOT_DEFINED;
+
+                    if( v->GetIsFree() != !m_viaNotFree->GetValue() )
+                        m_viaNotFree->Set3StateValue( wxCHK_UNDETERMINED );
 
                     if( m_ViaStartLayer->GetLayerSelection() != v->TopLayer() )
                     {
@@ -485,6 +489,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( !m_viaY.IsIndeterminate() )
                     v->SetPosition( wxPoint( v->GetPosition().x, m_viaY.GetValue() ) );
+
+                if( m_viaNotFree->Get3StateValue() != wxCHK_UNDETERMINED )
+                    v->SetIsFree( !m_viaNotFree->GetValue() );
 
                 switch( m_ViaTypeChoice->GetSelection() )
                 {

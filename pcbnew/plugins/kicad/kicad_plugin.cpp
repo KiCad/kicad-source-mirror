@@ -1724,6 +1724,9 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
             if( via->GetKeepTopBottom() )
                 m_out->Print( 0, " (keep_end_layers)" );
         }
+
+        if( via->GetIsFree() )
+            m_out->Print( 0, " (free)" );
     }
     else if( aTrack->Type() == PCB_ARC_T )
     {

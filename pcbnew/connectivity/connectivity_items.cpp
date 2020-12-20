@@ -260,7 +260,7 @@ CN_ITEM* CN_LIST::Add( ARC* aArc )
 
  CN_ITEM* CN_LIST::Add( VIA* via )
  {
-     auto item = new CN_ITEM( via, true, 1 );
+     auto item = new CN_ITEM( via, !via->GetIsFree(), 1 );
 
      m_items.push_back( item );
      item->AddAnchor( via->GetStart() );

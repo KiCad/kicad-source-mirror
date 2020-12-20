@@ -117,6 +117,7 @@ fp_line
 fp_poly
 fp_rect
 fp_text
+free
 full
 general
 generator
