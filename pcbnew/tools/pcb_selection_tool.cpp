@@ -346,9 +346,34 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
             {
+                // Don't allow starting a drag from a zone filled area that isn't already selected
+                auto zoneFilledAreaFilter =
+                        []( const VECTOR2I& aWhere, GENERAL_COLLECTOR& aCollector,
+                            PCB_SELECTION_TOOL* aTool )
+                        {
+                            wxPoint location = wxPoint( aWhere );
+                            int     accuracy = KiROUND( 5 * aCollector.GetGuide()->OnePixelInIU() );
+                            std::set<EDA_ITEM*> remove;
+
+                            for( EDA_ITEM* item : aCollector )
+                            {
+                                if( item->Type() == PCB_ZONE_T )
+                                {
+                                    ZONE* zone = static_cast<ZONE*>( item );
+
+                                    if( !zone->HitTestForCorner( location, accuracy * 2 ) &&
+                                        !zone->HitTestForEdge( location, accuracy ) )
+                                        remove.insert( zone );
+                                }
+                            }
+
+                            for( EDA_ITEM* item : remove )
+                                aCollector.Remove( item );
+                        };
+
                 // Selection is empty? try to start dragging the item under the point where drag
                 // started
-                if( m_selection.Empty() && selectCursor() )
+                if( m_selection.Empty() && selectCursor( false, zoneFilledAreaFilter ) )
                     m_selection.SetIsHover( true );
 
                 // Check if dragging has started within any of selected items bounding box.
