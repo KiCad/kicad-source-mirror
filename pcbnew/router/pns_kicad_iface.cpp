@@ -233,7 +233,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         if( parentA )
         {
             parentA->SetLayer( (PCB_LAYER_ID) aLayer );
-            static_cast<BOARD_CONNECTED_ITEM*>( parentA )->SetNetCode( aItemA->Net() );
+            static_cast<BOARD_CONNECTED_ITEM*>( parentA )->SetNetCode( aItemA->Net(), true );
         }
     }
 
@@ -251,7 +251,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         if( parentB )
         {
             parentB->SetLayer( (PCB_LAYER_ID) aLayer );
-            static_cast<BOARD_CONNECTED_ITEM*>( parentB )->SetNetCode( aItemB->Net() );
+            static_cast<BOARD_CONNECTED_ITEM*>( parentB )->SetNetCode( aItemB->Net(), true );
         }
     }
 

@@ -490,15 +490,23 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
     // If we are allowing DRC violations, we don't push back to the hull
     if( !Settings().CanViolateDRC() )
     {
+        int layer = m_head.Layer();
+        int lineWidth = m_placingVia ? m_head.Via().Diameter() : m_head.Width();
+        int clearance;
+
         for( OBSTACLE& obs : obstacles )
         {
-            int cl = m_currentNode->GetClearance( obs.m_item, &newHead );
-            const SHAPE_LINE_CHAIN hull = obs.m_item->Hull( cl, newHead.Width(), newHead.Layer() );
+            if( m_placingVia )
+                clearance = m_currentNode->GetClearance( obs.m_item, &m_head.Via() );
+            else
+                clearance = m_currentNode->GetClearance( obs.m_item, &m_head );
 
-            VECTOR2I nearest = hull.NearestPoint( aP );
+            const SHAPE_LINE_CHAIN hull = obs.m_item->Hull( clearance, lineWidth, layer );
+            VECTOR2I               nearest = hull.NearestPoint( aP );
+
             Dbg()->AddLine( hull, 2, 10000 );
 
-            if( ( nearest - aP ).EuclideanNorm() < newHead.Width() + cl )
+            if( ( nearest - aP ).EuclideanNorm() < lineWidth + clearance )
             {
                 buildInitialLine( nearest, newHead );
 
