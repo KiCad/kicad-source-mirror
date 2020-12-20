@@ -301,7 +301,7 @@ int LIB_TEXT::GetPenWidth() const
 }
 
 
-void LIB_TEXT::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform )
 {
     wxDC*   DC = aSettings->GetPrintDC();

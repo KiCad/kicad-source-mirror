@@ -81,7 +81,7 @@ protected:
      * Print the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
-    void printPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, int aOrientation );
+    void printPinSymbol( const RENDER_SETTINGS* aSettings, const wxPoint& aPos, int aOrientation );
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
@@ -91,13 +91,13 @@ protected:
      * If aTextInside then the text is been put inside,otherwise all is drawn outside.
      * Pin Name:    substring between '~' is negated
      */
-    void printPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int aPinOrient,
+    void printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int aPinOrient,
                         int aTextInside, bool aDrawPinNum, bool aDrawPinName );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
      */
-    void printPinElectricalTypeName( RENDER_SETTINGS* aSettings, wxPoint& aPosition,
+    void printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPoint& aPosition,
                                      int aOrientation );
 
 public:
@@ -189,7 +189,7 @@ public:
      *                electrical types
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
     /**

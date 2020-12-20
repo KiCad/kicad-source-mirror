@@ -158,8 +158,8 @@ int LIB_RECTANGLE::GetPenWidth() const
 }
 
 
-void LIB_RECTANGLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
-                           const TRANSFORM& aTransform )
+void LIB_RECTANGLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                           void* aData, const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();

@@ -33,7 +33,7 @@ class LIB_POLYLINE : public LIB_ITEM
     int m_Width;                              // Line width
     std::vector<wxPoint> m_PolyPoints;        // list of points (>= 2)
 
-    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
 public:

@@ -64,7 +64,7 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset )
+void SCH_SHEET_PIN::Print( const RENDER_SETTINGS* aSettings, const wxPoint&  aOffset )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape called by ::Print
     SCH_HIERLABEL::Print( aSettings, aOffset );
@@ -251,7 +251,7 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 }
 
 
-void SCH_SHEET_PIN::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+void SCH_SHEET_PIN::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                                         std::vector<wxPoint>& aPoints, const wxPoint& aPos )
 {
     /*

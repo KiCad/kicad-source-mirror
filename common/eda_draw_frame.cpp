@@ -272,7 +272,7 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 }
 
 
-void EDA_DRAW_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
+void EDA_DRAW_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
     wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
@@ -825,7 +825,7 @@ void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos )
 
 static const wxString productName = wxT( "KiCad E.D.A.  " );
 
-void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
+void PrintPageLayout( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                       const wxString& aFullSheetName, const wxString& aFileName,
                       const TITLE_BLOCK& aTitleBlock, int aSheetCount, const wxString& aPageNumber,
                       double aMils2Iu, const PROJECT* aProject, const wxString& aSheetLayer,
@@ -850,7 +850,7 @@ void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
 }
 
 
-void EDA_DRAW_FRAME::PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
+void EDA_DRAW_FRAME::PrintWorkSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen,
                                      double aMils2Iu, const wxString &aFilename,
                                      const wxString &aSheetLayer )
 {

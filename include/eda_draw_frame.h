@@ -297,7 +297,7 @@ public:
      * @param aFilename The filename to display in basic inscriptions.
      * @param aSheetLayer The layer displayed from PcbNew.
      */
-    void PrintWorkSheet( RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aMils2Iu,
+    void PrintWorkSheet( const RENDER_SETTINGS* aSettings, BASE_SCREEN* aScreen, double aMils2Iu,
                          const wxString& aFilename, const wxString& aSheetLayer = wxEmptyString );
 
     void DisplayToolMsg( const wxString& msg ) override;
@@ -385,7 +385,7 @@ public:
      *
      * @param aDC wxDC given by the calling print function
      */
-    virtual void PrintPage( RENDER_SETTINGS* aSettings );
+    virtual void PrintPage( const RENDER_SETTINGS* aSettings );
 
     /**
      * Use to start up the GAL drawing canvas.

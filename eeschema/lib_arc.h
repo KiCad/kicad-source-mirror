@@ -50,7 +50,7 @@ class LIB_ARC : public LIB_ITEM
     int      m_Width;           /* Line width */
     int      m_editState;
 
-    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
 public:

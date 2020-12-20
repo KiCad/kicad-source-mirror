@@ -750,7 +750,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
 }
 
 
-void PL_EDITOR_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
+void PL_EDITOR_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
     GetScreen()->SetVirtualPageNumber( GetPageNumberOption() ? 1 : 2 );
     WS_DATA_MODEL&     model = WS_DATA_MODEL::GetTheInstance();

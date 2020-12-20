@@ -195,7 +195,7 @@ int SCH_FIELD::GetPenWidth() const
 }
 
 
-void SCH_FIELD::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );

@@ -34,8 +34,8 @@ class LIB_RECTANGLE  : public LIB_ITEM
     wxPoint m_Pos;                  // Rectangle start point.
     int     m_Width;                // Line width
 
-    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
+    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                void* aData, const TRANSFORM& aTransform ) override;
 
 public:
     LIB_RECTANGLE( LIB_PART * aParent );

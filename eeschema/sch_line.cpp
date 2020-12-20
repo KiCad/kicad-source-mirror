@@ -315,7 +315,7 @@ int SCH_LINE::GetPenWidth() const
 }
 
 
-void SCH_LINE::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
+void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetLineColor();

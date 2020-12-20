@@ -217,7 +217,7 @@ public:
      * used to print a page
      * @param aDC = wxDC given by the calling print function
      */
-    virtual void PrintPage( RENDER_SETTINGS* aSettings ) override;
+    virtual void PrintPage( const RENDER_SETTINGS* aSettings ) override;
 
     void OnFileHistory( wxCommandEvent& event );
     void OnClearFileHistory( wxCommandEvent& aEvent );

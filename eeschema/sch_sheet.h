@@ -121,7 +121,7 @@ public:
      */
     bool IsMovableFromAnchorPoint() override { return true; }
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -129,7 +129,7 @@ public:
      * @param aPoints = a buffer to fill with polygon corners coordinates
      * @param aPos = Position of the shape
      */
-    void CreateGraphicShape( RENDER_SETTINGS* aSettings,
+    void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
                              std::vector <wxPoint>& aPoints, const wxPoint& aPos ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
@@ -437,7 +437,7 @@ public:
 
     int GetPenWidth() const override;
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     /**
      * Return a bounding box for the sheet body but not the fields.

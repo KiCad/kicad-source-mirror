@@ -291,7 +291,7 @@ int LIB_ARC::GetPenWidth() const
 }
 
 
-void LIB_ARC::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+void LIB_ARC::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                      const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );

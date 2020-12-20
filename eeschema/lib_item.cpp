@@ -134,8 +134,8 @@ bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
 }
 
 
-void LIB_ITEM::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
-                      const TRANSFORM& aTransform )
+void LIB_ITEM::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                      void* aData, const TRANSFORM& aTransform )
 {
     print( aSettings, aOffset, aData, aTransform );
 }

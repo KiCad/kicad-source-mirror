@@ -76,7 +76,7 @@ public:
     /**
      * Print the shape is the polygon defined in m_Corners (array of wxPoints).
      */
-    void PrintMarker( RENDER_SETTINGS* aSettings, const wxPoint& aOffset );
+    void PrintMarker( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset );
 
     /**
      * @return the position of this marker in internal units.

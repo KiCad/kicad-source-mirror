@@ -300,8 +300,8 @@ public:
      * @param aConvert - Component conversion (DeMorgan) if available.
      * @param aOpts - Drawing options
      */
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aMulti, int aConvert,
-                const PART_DRAW_OPTIONS& aOpts );
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts );
 
     /**
      * Plot lib part to plotter.

@@ -272,8 +272,8 @@ public:
      * @param aColor text color.
      * @param aDisplay_mode #FILLED or #SKETCH.
      */
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
-                OUTLINE_MODE aDisplay_mode = FILLED );
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                COLOR4D aColor, OUTLINE_MODE aDisplay_mode = FILLED );
 
     /**
      * Convert the text shape to a list of segment.
@@ -383,7 +383,7 @@ private:
      * @param aText the single line of text to draw.
      * @param aPos the position of this line ).
      */
-    void printOneLineOfText( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
+    void printOneLineOfText( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, COLOR4D aColor,
                              OUTLINE_MODE aFillMode, const wxString& aText, const wxPoint& aPos );
 
     wxString      m_text;

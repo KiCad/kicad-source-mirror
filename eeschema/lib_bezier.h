@@ -103,8 +103,8 @@ private:
     int compare( const LIB_ITEM& aOther,
             LIB_ITEM::COMPARE_FLAGS aCompareFlags = LIB_ITEM::COMPARE_FLAGS::NORMAL ) const override;
 
-    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
-                const TRANSFORM& aTransform ) override;
+    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                void* aData, const TRANSFORM& aTransform ) override;
 };
 
 

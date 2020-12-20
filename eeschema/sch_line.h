@@ -164,7 +164,7 @@ public:
      */
     double GetLength() const;
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     int GetPenWidth() const override;
 

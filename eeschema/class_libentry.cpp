@@ -436,8 +436,8 @@ wxString LIB_PART::SubReference( int aUnit, bool aAddSeparator )
 }
 
 
-void LIB_PART::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, int aMulti,
-                      int aConvert, const PART_DRAW_OPTIONS& aOpts )
+void LIB_PART::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                      int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
 {
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background

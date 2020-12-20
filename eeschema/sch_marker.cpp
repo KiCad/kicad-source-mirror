@@ -142,7 +142,7 @@ KIGFX::COLOR4D SCH_MARKER::getColor() const
 }
 
 
-void SCH_MARKER::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_MARKER::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     PrintMarker( aSettings, aOffset );
 }

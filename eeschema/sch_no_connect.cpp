@@ -101,7 +101,7 @@ int SCH_NO_CONNECT::GetPenWidth() const
 }
 
 
-void SCH_NO_CONNECT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_NO_CONNECT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     half = GetSize() / 2;

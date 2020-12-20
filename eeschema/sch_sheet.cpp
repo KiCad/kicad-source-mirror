@@ -979,15 +979,15 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter )
 }
 
 
-void SCH_SHEET::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_SHEET::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
-    wxDC*     DC = aSettings->GetPrintDC();
-    wxPoint   pos = m_pos + aOffset;
-    int       lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    auto*     settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
-    bool      override = settings && settings->m_OverrideItemColors;
-    COLOR4D   border = GetBorderColor();
-    COLOR4D   background = GetBackgroundColor();
+    wxDC*       DC = aSettings->GetPrintDC();
+    wxPoint     pos = m_pos + aOffset;
+    int         lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    const auto* settings = dynamic_cast<const KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+    bool        override = settings && settings->m_OverrideItemColors;
+    COLOR4D     border = GetBorderColor();
+    COLOR4D     background = GetBackgroundColor();
 
     if( override || border == COLOR4D::UNSPECIFIED )
         border = aSettings->GetLayerColor( LAYER_SHEET );

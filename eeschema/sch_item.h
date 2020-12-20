@@ -308,7 +308,7 @@ public:
      *
      * @param aOffset drawing offset (usually {0,0} but can be different when moving an object)
      */
-    virtual void Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset ) = 0;
+    virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
 
     /**
      * Move the item by \a aMoveVector to a new position.

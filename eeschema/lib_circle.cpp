@@ -194,8 +194,8 @@ int LIB_CIRCLE::GetPenWidth() const
 }
 
 
-void LIB_CIRCLE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
-                        const TRANSFORM& aTransform )
+void LIB_CIRCLE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset,
+                        void* aData, const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetPenWidth();

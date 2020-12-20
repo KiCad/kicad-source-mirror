@@ -352,7 +352,7 @@ int SCH_COMPONENT::GetUnitCount() const
 }
 
 
-void SCH_COMPONENT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_COMPONENT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     PART_DRAW_OPTIONS opts;
     opts.transform = m_transform;

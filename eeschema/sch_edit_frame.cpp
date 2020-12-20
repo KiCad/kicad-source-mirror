@@ -1054,7 +1054,7 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
+void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
     wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
 

@@ -80,7 +80,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName )
 }
 
 
-void SYMBOL_EDIT_FRAME::PrintPage( RENDER_SETTINGS* aSettings )
+void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
     if( !m_my_part )
         return;

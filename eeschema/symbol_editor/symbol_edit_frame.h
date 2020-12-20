@@ -284,7 +284,7 @@ public:
     /**
      * Print a page.
      */
-    void PrintPage( RENDER_SETTINGS* aSettings ) override;
+    void PrintPage( const RENDER_SETTINGS* aSettings ) override;
 
     /**
      * Create the SVG print file for the current edited symbol.

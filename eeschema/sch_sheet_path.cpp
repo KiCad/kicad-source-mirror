@@ -73,7 +73,7 @@ public:
 
     // pure virtuals:
     void SetPosition( const wxPoint& ) override {}
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint&  aOffset ) override {}
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override {}
     void Move( const wxPoint& aMoveVector ) override {}
     void MirrorY( int aYaxis_position ) override {}
     void MirrorX( int aXaxis_position ) override {}

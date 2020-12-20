@@ -242,9 +242,9 @@ public:
      * This offset depends on the orientation, the type of text, and the area required to
      * draw the associated graphic symbol or to put the text above a wire.
      */
-    virtual wxPoint GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const;
+    virtual wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const;
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -253,7 +253,7 @@ public:
      * @param Pos Position of the shape, for texts and labels: do nothing
      * Mainly for derived classes (SCH_SHEET_PIN and Hierarchical labels)
      */
-    virtual void CreateGraphicShape( RENDER_SETTINGS* aSettings,
+    virtual void CreateGraphicShape( const RENDER_SETTINGS* aSettings,
                                      std::vector <wxPoint>& aPoints, const wxPoint& Pos )
     {
         aPoints.clear();
@@ -265,7 +265,7 @@ public:
 
     bool operator<( const SCH_ITEM& aItem ) const override;
 
-    int GetTextOffset( RENDER_SETTINGS* aSettings = nullptr ) const;
+    int GetTextOffset( const RENDER_SETTINGS* aSettings = nullptr ) const;
 
     int GetPenWidth() const override;
 
@@ -408,11 +408,11 @@ public:
 
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
-    wxPoint GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const override;
+    wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+    void CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                              std::vector<wxPoint>& aPoints, const wxPoint& aPos ) override;
 
     void UpdateIntersheetRefProps();
@@ -432,7 +432,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
     void Plot( PLOTTER* aPlotter ) override;
 
@@ -470,7 +470,7 @@ public:
 
     ~SCH_HIERLABEL() { }
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset ) override;
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -484,9 +484,9 @@ public:
 
     void SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle ) override;
 
-    wxPoint GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const override;
+    wxPoint GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const override;
 
-    void CreateGraphicShape( RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
+    void CreateGraphicShape( const RENDER_SETTINGS* aSettings, std::vector<wxPoint>& aPoints,
                              const wxPoint& Pos ) override;
 
     const EDA_RECT GetBoundingBox() const override;

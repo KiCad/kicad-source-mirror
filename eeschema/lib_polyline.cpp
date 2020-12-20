@@ -193,7 +193,7 @@ int LIB_POLYLINE::GetPenWidth() const
 }
 
 
-void LIB_POLYLINE::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+void LIB_POLYLINE::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                           const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );

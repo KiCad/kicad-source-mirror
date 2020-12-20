@@ -68,7 +68,7 @@ class LIB_FIELD : public LIB_ITEM, public EDA_TEXT
      * the m_Text
      * </p>
      */
-    void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                 const TRANSFORM& aTransform ) override;
 
     /**

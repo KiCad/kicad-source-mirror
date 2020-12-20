@@ -76,13 +76,13 @@ public:
     }
 
     // The function to print a WS_DRAW_ITEM
-    virtual void PrintWsItem( RENDER_SETTINGS* aSettings )
+    virtual void PrintWsItem( const RENDER_SETTINGS* aSettings )
     {
         PrintWsItem( aSettings, wxPoint( 0, 0 ) );
     }
 
     // More advanced version of DrawWsItem. This is what must be defined in the derived type.
-    virtual void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
+    virtual void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) = 0;
 
     // Derived types must define GetBoundingBox() as a minimum, and can then override the
     // two HitTest() functions if they need something more specific.
@@ -141,7 +141,7 @@ public:
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -175,7 +175,7 @@ public:
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;
 
@@ -224,7 +224,7 @@ public:
     wxPoint GetPosition() const override { return GetStart(); }
     void SetPosition( const wxPoint& aPos ) override { SetStart( aPos ); }
 
-    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
@@ -270,7 +270,7 @@ public:
     wxPoint GetPosition() const override { return wxPoint( 0, 0 ); }
     void SetPosition( const wxPoint& aPos ) override { /* do nothing */ }
 
-    void PrintWsItem( RENDER_SETTINGS* , const wxPoint&  ) override { /* do nothing */ }
+    void PrintWsItem( const RENDER_SETTINGS* , const wxPoint& ) override { /* do nothing */ }
 
     const EDA_RECT GetBoundingBox() const override;
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override { return false; }
@@ -312,7 +312,7 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_TEXT" ); }
 
-    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     void SetTextAngle( double aAngle ) override;
 
@@ -350,7 +350,7 @@ public:
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPos ) override { m_pos = aPos; }
 
-    void PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
@@ -509,7 +509,7 @@ public:
     /**
      * Draws the item list created by BuildWorkSheetGraphicList
      */
-    void Print( RENDER_SETTINGS* aSettings );
+    void Print( const RENDER_SETTINGS* aSettings );
 
     /**
      * Drawing or plot the page layout.

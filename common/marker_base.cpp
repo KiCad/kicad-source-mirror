@@ -134,7 +134,7 @@ EDA_RECT MARKER_BASE::GetBoundingBoxMarker() const
 }
 
 
-void MARKER_BASE::PrintMarker( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void MARKER_BASE::PrintMarker( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC* DC = aSettings->GetPrintDC();
 

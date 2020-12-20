@@ -69,7 +69,7 @@ class LIB_ITEM : public EDA_ITEM
      * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
-    virtual void print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+    virtual void print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform ) = 0;
 
     friend class LIB_PART;
@@ -175,8 +175,8 @@ public:
      *              pass reference to the lib component for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    virtual void Print( RENDER_SETTINGS* aSettings, const wxPoint &aOffset, void* aData,
-                        const TRANSFORM& aTransform );
+    virtual void Print( const RENDER_SETTINGS* aSettings, const wxPoint &aOffset,
+                        void* aData, const TRANSFORM& aTransform );
 
     virtual int GetPenWidth() const = 0;
 

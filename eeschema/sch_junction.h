@@ -62,7 +62,7 @@ public:
 
     const EDA_RECT GetBoundingBox() const override;
 
-    void Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
+    void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
     void Move( const wxPoint& aMoveVector ) override
     {

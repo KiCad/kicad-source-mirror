@@ -69,9 +69,9 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType
 // i.e. the clock symbols (falling clock is actually external but is of
 // the same kind)
 
-static int internalPinDecoSize( RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
+static int internalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
 {
-    KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+    const KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<const KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
 
     if( settings && settings->m_PinSymbolSize )
         return settings->m_PinSymbolSize;
@@ -82,9 +82,9 @@ static int internalPinDecoSize( RENDER_SETTINGS* aSettings, const LIB_PIN &aPin 
 /// Utility for getting the size of the 'external' pin decorators (as a radius)
 // i.e. the negation circle, the polarity 'slopes' and the nonlogic
 // marker
-static int externalPinDecoSize( RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
+static int externalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
 {
-    KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+    const KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<const KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
 
     if( settings && settings->m_PinSymbolSize )
         return settings->m_PinSymbolSize;
@@ -171,7 +171,7 @@ int LIB_PIN::GetPenWidth() const
 }
 
 
-void LIB_PIN::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                      const TRANSFORM& aTransform )
 {
     PART_DRAW_OPTIONS* opts = (PART_DRAW_OPTIONS*) aData;
@@ -199,7 +199,7 @@ void LIB_PIN::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* a
 }
 
 
-void LIB_PIN::printPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, int aOrient )
+void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const wxPoint& aPos, int aOrient )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     MapX1, MapY1, x1, y1;
@@ -310,7 +310,7 @@ void LIB_PIN::printPinSymbol( RENDER_SETTINGS* aSettings, const wxPoint& aPos, i
 }
 
 
-void LIB_PIN::printPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int aPinOrient,
+void LIB_PIN::printPinTexts( const RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int aPinOrient,
                              int aTextInside, bool aDrawPinNum, bool aDrawPinName )
 {
     if( !aDrawPinName && !aDrawPinNum )
@@ -460,7 +460,7 @@ void LIB_PIN::printPinTexts( RENDER_SETTINGS* aSettings, wxPoint& aPinPos, int a
 
 
 
-void LIB_PIN::printPinElectricalTypeName( RENDER_SETTINGS* aSettings, wxPoint& aPosition,
+void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, wxPoint& aPosition,
                                           int aOrientation )
 {
     wxDC*       DC = aSettings->GetPrintDC();

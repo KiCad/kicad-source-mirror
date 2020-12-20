@@ -150,7 +150,7 @@ private:
  * - the LTmargin The left top margin of the page layout.
  * - the RBmargin The right bottom margin of the page layout.
  */
-void PrintPageLayout( RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
+void PrintPageLayout( const RENDER_SETTINGS* aSettings, const PAGE_INFO& aPageInfo,
                       const wxString& aFullSheetName, const wxString& aFileName,
                       const TITLE_BLOCK& aTitleBlock, int aSheetCount, const wxString& aPageNumber,
                       double aScalar, const PROJECT* aProject,

@@ -865,7 +865,7 @@ public:
      *
      * @param aDC = wxDC given by the calling print function
      */
-    virtual void PrintPage( RENDER_SETTINGS* aSettings ) override;
+    virtual void PrintPage( const RENDER_SETTINGS* aSettings ) override;
 
     void SetNetListerCommand( const wxString& aCommand ) { m_netListerCommand = aCommand; }
 

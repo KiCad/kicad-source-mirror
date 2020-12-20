@@ -159,7 +159,7 @@ void WS_DRAW_ITEM_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS
 
 // ============================ TEXT ==============================
 
-void WS_DRAW_ITEM_TEXT::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void WS_DRAW_ITEM_TEXT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     Print( aSettings, aOffset, aSettings->GetLayerColor( LAYER_WORKSHEET ), FILLED );
 }
@@ -197,7 +197,7 @@ void WS_DRAW_ITEM_TEXT::SetTextAngle( double aAngle )
 
 // ============================ POLYGON =================================
 
-void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void WS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
@@ -301,7 +301,7 @@ wxString WS_DRAW_ITEM_POLYPOLYGONS::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ RECT ==============================
 
-void WS_DRAW_ITEM_RECT::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void WS_DRAW_ITEM_RECT::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
@@ -400,7 +400,7 @@ wxString WS_DRAW_ITEM_RECT::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============================ LINE ==============================
 
-void WS_DRAW_ITEM_LINE::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void WS_DRAW_ITEM_LINE::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = aSettings->GetLayerColor( LAYER_WORKSHEET );
@@ -432,7 +432,7 @@ wxString WS_DRAW_ITEM_LINE::GetSelectMenuText( EDA_UNITS aUnits ) const
 
 // ============== BITMAP ================
 
-void WS_DRAW_ITEM_BITMAP::PrintWsItem( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void WS_DRAW_ITEM_BITMAP::PrintWsItem( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     WS_DATA_ITEM_BITMAP* bitmap = (WS_DATA_ITEM_BITMAP*) GetPeer();
 
@@ -533,7 +533,7 @@ void WS_DRAW_ITEM_LIST::BuildWorkSheetGraphicList( const PAGE_INFO& aPageInfo,
  * The selected items are drawn after (usually 0 or 1)
  * to be sure they are seen, even for overlapping items
  */
-void WS_DRAW_ITEM_LIST::Print( RENDER_SETTINGS* aSettings )
+void WS_DRAW_ITEM_LIST::Print( const RENDER_SETTINGS* aSettings )
 {
     std::vector<WS_DRAW_ITEM_BASE*> second_items;
 

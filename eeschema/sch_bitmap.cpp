@@ -114,7 +114,7 @@ const EDA_RECT SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset  )
+void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset  )
 {
     wxPoint pos = m_pos + aOffset;
 

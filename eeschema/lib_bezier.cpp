@@ -202,7 +202,7 @@ int LIB_BEZIER::GetPenWidth() const
 }
 
 
-void LIB_BEZIER::print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
+void LIB_BEZIER::print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset, void* aData,
                         const TRANSFORM& aTransform )
 {
     bool forceNoFill = static_cast<bool>( aData );

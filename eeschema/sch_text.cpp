@@ -173,7 +173,7 @@ bool SCH_TEXT::IncrementLabel( int aIncrement )
 }
 
 
-wxPoint SCH_TEXT::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
+wxPoint SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
 
@@ -321,12 +321,12 @@ bool SCH_TEXT::operator<( const SCH_ITEM& aItem ) const
 }
 
 
-int SCH_TEXT::GetTextOffset( RENDER_SETTINGS* aSettings ) const
+int SCH_TEXT::GetTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     double ratio;
 
     if( aSettings )
-        ratio = static_cast<SCH_RENDER_SETTINGS*>( aSettings )->m_TextOffsetRatio;
+        ratio = static_cast<const SCH_RENDER_SETTINGS*>( aSettings )->m_TextOffsetRatio;
     else if( Schematic() )
         ratio = Schematic()->Settings().m_TextOffsetRatio;
     else
@@ -344,7 +344,7 @@ int SCH_TEXT::GetPenWidth() const
 }
 
 
-void SCH_TEXT::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     COLOR4D color = aSettings->GetLayerColor( m_layer );
     wxPoint text_offset = aOffset + GetSchematicTextOffset( aSettings );
@@ -910,7 +910,7 @@ void SCH_GLOBALLABEL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFu
 }
 
 
-wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
+wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
     int     dist = GetTextOffset( aSettings );
@@ -1158,7 +1158,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( wxString* token, int aDepth ) const
 }
 
 
-void SCH_GLOBALLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
+void SCH_GLOBALLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset )
 {
     static std::vector<wxPoint> s_poly;
 
@@ -1188,7 +1188,7 @@ void SCH_GLOBALLABEL::Plot( PLOTTER* aPlotter )
         m_intersheetRefsField.Plot( aPlotter );
 }
 
-void SCH_GLOBALLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+void SCH_GLOBALLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                                           std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
     int margin    = GetTextOffset( aRenderSettings );
@@ -1380,7 +1380,7 @@ void SCH_HIERLABEL::SetLabelSpinStyle( LABEL_SPIN_STYLE aSpinStyle )
 }
 
 
-void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
+void SCH_HIERLABEL::Print( const RENDER_SETTINGS* aSettings, const wxPoint& offset )
 {
     wxCHECK_RET( Schematic(), "No parent SCHEMATIC set for SCH_LABEL!" );
 
@@ -1400,7 +1400,7 @@ void SCH_HIERLABEL::Print( RENDER_SETTINGS* aSettings, const wxPoint& offset )
 }
 
 
-void SCH_HIERLABEL::CreateGraphicShape( RENDER_SETTINGS* aRenderSettings,
+void SCH_HIERLABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSettings,
                                         std::vector<wxPoint>& aPoints, const wxPoint& Pos )
 {
     int* Template = TemplateShape[static_cast<int>( m_shape )][static_cast<int>( m_spin_style )];
@@ -1477,7 +1477,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 }
 
 
-wxPoint SCH_HIERLABEL::GetSchematicTextOffset( RENDER_SETTINGS* aSettings ) const
+wxPoint SCH_HIERLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     wxPoint text_offset;
     int     dist = GetTextOffset( aSettings );
