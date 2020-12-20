@@ -382,6 +382,10 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( PCB_EDIT_FRAME* aFrame
     PCBNEW_SETTINGS*  app_settings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
     COLOR_SETTINGS*   current      = mgr.GetColorSettings( app_settings->m_ColorTheme );
 
+    // Saved theme doesn't exist?  Reset to default
+    if( current->GetFilename() != app_settings->m_ColorTheme )
+        app_settings->m_ColorTheme = current->GetFilename();
+
     createThemeList( app_settings->m_ColorTheme );
 
     // Currently this only applies to eeschema
