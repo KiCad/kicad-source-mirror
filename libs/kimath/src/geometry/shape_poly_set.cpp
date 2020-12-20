@@ -1623,6 +1623,9 @@ void SHAPE_POLY_SET::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
         for( SHAPE_LINE_CHAIN& path : poly )
             path.Mirror( aX, aY, aRef );
     }
+
+    if( m_triangulationValid )
+        CacheTriangulation();
 }
 
 
