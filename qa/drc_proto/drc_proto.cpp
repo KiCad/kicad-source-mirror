@@ -81,7 +81,8 @@ PROJECT_CONTEXT loadKicadProject( wxString filename, OPT<wxString> rulesFilePath
     manager.LoadProject( pro.GetFullPath() );
 
     rv.project = &manager.Prj();
-    rv.board.reset( KI_TEST::ReadBoardFromFileOrStream( std::string( brdName.GetFullPath().ToUTF8() ) ).release() );
+    rv.board.reset( KI_TEST::ReadBoardFromFileOrStream(
+                            std::string( brdName.GetFullPath().ToUTF8() ) ).release() );
     rv.board->SetProject( rv.project );
 
     if( rulesFilePath )
@@ -132,6 +133,14 @@ int runDRCProto( PROJECT_CONTEXT project, std::shared_ptr<KIGFX::VIEW_OVERLAY> a
           //  provider->Enable(false);
     }
 
-    drcEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    try
+    {
+        drcEngine->RunTests( EDA_UNITS::MILLIMETRES, true, false );
+    }
+    catch( const ClipperLib::clipperException& e )
+    {
+        consoleLog.Print( wxString::Format( "Clipper exception %s occurred.", e.what() ) );
+    }
+
     return 0;
 }

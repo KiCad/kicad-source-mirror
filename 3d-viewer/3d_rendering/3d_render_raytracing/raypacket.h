@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
  */
 
 /**
- * @file  raypacket.h
+ * @file raypacket.h
  * @brief
  */
 
@@ -42,35 +42,28 @@
 
 struct RAYPACKET
 {
-    CFRUSTUM    m_Frustum;
-    RAY         m_ray[RAYPACKET_RAYS_PER_PACKET];
+    RAYPACKET( const CCAMERA& aCamera, const SFVEC2I& aWindowsPosition );
 
-    RAYPACKET( const CCAMERA &aCamera,
-               const SFVEC2I &aWindowsPosition );
+    RAYPACKET( const CCAMERA& aCamera, const SFVEC2I& aWindowsPosition,
+               const SFVEC3F& aDirectionDisplacementFactor );
 
-    RAYPACKET( const CCAMERA &aCamera,
-               const SFVEC2I &aWindowsPosition,
-               const SFVEC3F &aDirectionDisplacementFactor );
-
-    RAYPACKET( const CCAMERA &aCamera,
-               const SFVEC2I &aWindowsPosition,
+    RAYPACKET( const CCAMERA& aCamera, const SFVEC2I& aWindowsPosition,
                unsigned int aPixelMultiple );
 
-    RAYPACKET( const CCAMERA &aCamera,
-               const SFVEC2F &aWindowsPosition );
+    RAYPACKET( const CCAMERA& aCamera, const SFVEC2F& aWindowsPosition );
 
-    RAYPACKET( const CCAMERA &aCamera,
-               const SFVEC2F &aWindowsPosition,
-               const SFVEC2F &a2DWindowsPosDisplacementFactor );
+    RAYPACKET( const CCAMERA& aCamera, const SFVEC2F& aWindowsPosition,
+               const SFVEC2F& a2DWindowsPosDisplacementFactor );
+
+    CFRUSTUM    m_Frustum;
+    RAY         m_ray[RAYPACKET_RAYS_PER_PACKET];
 };
 
-void RAYPACKET_InitRays( const CCAMERA &aCamera,
-                         const SFVEC2F &aWindowsPosition,
-                         RAY *aRayPck );
+void RAYPACKET_InitRays( const CCAMERA& aCamera, const SFVEC2F& aWindowsPosition, RAY* aRayPck );
 
-void RAYPACKET_InitRays_with2DDisplacement( const CCAMERA &aCamera,
-                                            const SFVEC2F &aWindowsPosition,
-                                            const SFVEC2F &a2DWindowsPosDisplacementFactor,
-                                            RAY *aRayPck );
+void RAYPACKET_InitRays_with2DDisplacement( const CCAMERA& aCamera,
+                                            const SFVEC2F& aWindowsPosition,
+                                            const SFVEC2F& a2DWindowsPosDisplacementFactor,
+                                            RAY* aRayPck );
 
 #endif // _RAYPACKET_H_

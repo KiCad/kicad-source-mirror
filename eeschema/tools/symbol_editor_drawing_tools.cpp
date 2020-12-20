@@ -357,7 +357,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             default: break;     // keep compiler quiet
             }
 
-            wxASSERT( item );
+            wxCHECK( item, 0 );
 
             item->SetWidth( settings->m_Defaults.line_width );
             item->SetFillMode( m_lastFillStyle );

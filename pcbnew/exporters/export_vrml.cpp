@@ -350,6 +350,8 @@ static void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColo
             switch( marker_found )
             {
             case 1:    // Material marker
+            {
+                std::streamsize lastPrecision = aOut_file.precision();
                 aOut_file << "              diffuseColor " << std::setprecision(3);
                 aOut_file << aColor.diffuse_red << " ";
                 aOut_file << aColor.diffuse_grn << " ";
@@ -368,6 +370,8 @@ static void write_triangle_bag( std::ostream& aOut_file, const VRML_COLOR& aColo
                 aOut_file << "              ambientIntensity " << aColor.ambient << "\n";
                 aOut_file << "              transparency " << aColor.transp << "\n";
                 aOut_file << "              shininess " << aColor.shiny << "\n";
+                aOut_file.precision( lastPrecision );
+            }
                 break;
 
             case 2:

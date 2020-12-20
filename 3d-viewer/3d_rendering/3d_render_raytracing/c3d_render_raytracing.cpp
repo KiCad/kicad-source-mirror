@@ -116,7 +116,7 @@ void C3D_RENDER_RAYTRACING::opengl_delete_pbo()
 }
 
 
-void C3D_RENDER_RAYTRACING::SetCurWindowSize( const wxSize &aSize )
+void C3D_RENDER_RAYTRACING::SetCurWindowSize( const wxSize& aSize )
 {
     if( m_windowSize != aSize )
     {
@@ -140,9 +140,7 @@ void C3D_RENDER_RAYTRACING::restart_render_state()
     m_blockPositionsWasProcessed.resize( m_blockPositions.size() );
 
     // Mark the blocks not processed yet
-    std::fill( m_blockPositionsWasProcessed.begin(),
-               m_blockPositionsWasProcessed.end(),
-               0 );
+    std::fill( m_blockPositionsWasProcessed.begin(), m_blockPositionsWasProcessed.end(), 0 );
 }
 
 
@@ -152,8 +150,8 @@ static inline void SetPixel( GLubyte *p, const CCOLORRGB &v )
 }
 
 
-bool C3D_RENDER_RAYTRACING::Redraw(
-        bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter )
+bool C3D_RENDER_RAYTRACING::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
+                                    REPORTER* aWarningReporter )
 {
     bool requestRedraw = false;
 
@@ -223,7 +221,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
     // This will only render if need, otherwise it will redraw the PBO on the screen again
     if( aIsMoving || was_camera_changed )
     {
-        // Set head light (camera view light) with the oposite direction of the camera
+        // Set head light (camera view light) with the opposite direction of the camera
         if( m_camera_light )
             m_camera_light->SetDirection( -m_camera.GetDir() );
 
@@ -266,13 +264,14 @@ bool C3D_RENDER_RAYTRACING::Redraw(
                     requestRedraw = true;
 
                 // release pointer to mapping buffer, this initialize the coping to PBO
-                glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB);
+                glUnmapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB );
             }
         }
 
         if( m_rt_render_state == RT_RENDER_STATE_FINISH )
         {
             glClear( GL_COLOR_BUFFER_BIT );
+
             // Options if we want draw background instead
             //OGL_DrawBackground( SFVEC3F(m_boardAdapter.m_BgColorTop),
             //                    SFVEC3F(m_boardAdapter.m_BgColorBot) );
@@ -286,13 +285,7 @@ bool C3D_RENDER_RAYTRACING::Redraw(
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
     glEnable( GL_ALPHA_TEST );
-
-    glDrawPixels( m_realBufferSize.x,
-                  m_realBufferSize.y,
-                  GL_RGBA,
-                  GL_UNSIGNED_BYTE,
-                  0 );
-
+    glDrawPixels( m_realBufferSize.x, m_realBufferSize.y, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
     glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
 
     return requestRedraw;
@@ -301,8 +294,8 @@ bool C3D_RENDER_RAYTRACING::Redraw(
 
 void C3D_RENDER_RAYTRACING::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
-    if( (m_rt_render_state == RT_RENDER_STATE_FINISH) ||
-        (m_rt_render_state >= RT_RENDER_STATE_MAX) )
+    if( ( m_rt_render_state == RT_RENDER_STATE_FINISH )
+      || ( m_rt_render_state >= RT_RENDER_STATE_MAX ) )
     {
         restart_render_state();
 
@@ -314,7 +307,6 @@ void C3D_RENDER_RAYTRACING::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
             // Set all pixels of PBO transparent (Alpha to 0)
             // This way it will draw the full buffer but only shows the updated (
             // already calculated) squares
-            // /////////////////////////////////////////////////////////////////////
             unsigned int nPixels = m_realBufferSize.x * m_realBufferSize.y;
             GLubyte *tmp_ptrPBO = ptrPBO + 3;   // PBO is RGBA
 
@@ -361,8 +353,7 @@ void C3D_RENDER_RAYTRACING::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 }
 
 
-void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte* ptrPBO ,
-                                               REPORTER* aStatusReporter )
+void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     m_isPreview = false;
 
@@ -376,6 +367,7 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte* ptrPBO ,
     size_t parallelThreadCount = std::min<size_t>(
             std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
             m_blockPositions.size() );
+
     for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
         std::thread t = std::thread( [&]()
@@ -411,8 +403,8 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte* ptrPBO ,
 
     if( aStatusReporter )
         aStatusReporter->Report( wxString::Format( _( "Rendering: %.0f %%" ),
-                                                   (float)(m_nrBlocksRenderProgress * 100) /
-                                                   (float)m_blockPositions.size() ) );
+                                                   (float) ( m_nrBlocksRenderProgress * 100 )
+                                                   / (float) m_blockPositions.size() ) );
 
     // Check if it finish the rendering and if should continue to a post processing
     // or mark it as finished
@@ -428,18 +420,16 @@ void C3D_RENDER_RAYTRACING::rt_render_tracing( GLubyte* ptrPBO ,
 
 #ifdef USE_SRGB_SPACE
 
-// This should be removed in future when the KiCad support a greater version of
-// glm lib.
-
+/// @todo This should be removed in future when KiCad supports a greater version of glm lib.
 #define SRGB_GAMA 2.4f
 
 
 // This function implements the conversion from linear RGB to sRGB
 // https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L12
-static SFVEC3F convertLinearToSRGB( const SFVEC3F &aRGBcolor )
+static SFVEC3F convertLinearToSRGB( const SFVEC3F& aRGBcolor )
 {
     const float gammaCorrection = 1.0f / SRGB_GAMA;
-    const SFVEC3F clampedColor = glm::clamp( aRGBcolor, SFVEC3F(0.0f), SFVEC3F(1.0f) );
+    const SFVEC3F clampedColor = glm::clamp( aRGBcolor, SFVEC3F( 0.0f ), SFVEC3F( 1.0f ) );
 
     return glm::mix( glm::pow( clampedColor, SFVEC3F(gammaCorrection) ) * 1.055f - 0.055f,
                      clampedColor * 12.92f,
@@ -449,7 +439,7 @@ static SFVEC3F convertLinearToSRGB( const SFVEC3F &aRGBcolor )
 
 // This function implements the conversion from sRGB to linear RGB
 // https://github.com/g-truc/glm/blob/master/glm/gtc/color_space.inl#L35
-SFVEC3F ConvertSRGBToLinear( const SFVEC3F &aSRGBcolor )
+SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor )
 {
     const float gammaCorrection = SRGB_GAMA;
 
@@ -463,15 +453,13 @@ SFVEC3F ConvertSRGBToLinear( const SFVEC3F &aSRGBcolor )
 #endif
 
 
-void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbColor,
+void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte* ptrPBO, const SFVEC3F& rgbColor,
                                             bool applyColorSpaceConversion )
 {
     SFVEC3F color = rgbColor;
 
 #ifdef USE_SRGB_SPACE
-
-    // This should be used in future when the KiCad support a greater version of
-    // glm lib.
+    /// @note This should be used in future when the KiCad support a greater version of glm lib.
     // if( applyColorSpaceConversion )
     //    rgbColor = glm::convertLinearToSRGB( rgbColor );
 
@@ -486,7 +474,7 @@ void C3D_RENDER_RAYTRACING::rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbC
 }
 
 
-static void HITINFO_PACKET_init( HITINFO_PACKET *aHitPacket )
+static void HITINFO_PACKET_init( HITINFO_PACKET* aHitPacket )
 {
     // Initialize hitPacket with a "not hit" information
     for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
@@ -500,11 +488,9 @@ static void HITINFO_PACKET_init( HITINFO_PACKET *aHitPacket )
 }
 
 
-void C3D_RENDER_RAYTRACING::rt_shades_packet(const SFVEC3F  *bgColorY,
-                                             const RAY      *aRayPkt,
-                                             HITINFO_PACKET *aHitPacket,
-                                             bool           is_testShadow,
-                                             SFVEC3F        *aOutHitColor )
+void C3D_RENDER_RAYTRACING::rt_shades_packet( const SFVEC3F* bgColorY, const RAY* aRayPkt,
+                                              HITINFO_PACKET* aHitPacket, bool is_testShadow,
+                                              SFVEC3F* aOutHitColor )
 {
     for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
     {
@@ -512,12 +498,8 @@ void C3D_RENDER_RAYTRACING::rt_shades_packet(const SFVEC3F  *bgColorY,
         {
             if( aHitPacket[i].m_hitresult == true )
             {
-                aOutHitColor[i] = shadeHit( bgColorY[y],
-                                            aRayPkt[i],
-                                            aHitPacket[i].m_HitInfo,
-                                            false,
-                                            0,
-                                            is_testShadow );
+                aOutHitColor[i] = shadeHit( bgColorY[y], aRayPkt[i], aHitPacket[i].m_HitInfo,
+                                            false, 0, is_testShadow );
             }
             else
             {
@@ -528,11 +510,11 @@ void C3D_RENDER_RAYTRACING::rt_shades_packet(const SFVEC3F  *bgColorY,
 }
 
 
-void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
-                                                const HITINFO_PACKET *aHitPck_X0Y0,
-                                                const HITINFO_PACKET *aHitPck_AA_X1Y1,
-                                                const RAY *aRayPck,
-                                                SFVEC3F *aOutHitColor )
+void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F* aBgColorY,
+                                                const HITINFO_PACKET* aHitPck_X0Y0,
+                                                const HITINFO_PACKET* aHitPck_AA_X1Y1,
+                                                const RAY* aRayPck,
+                                                SFVEC3F* aOutHitColor )
 {
     const bool is_testShadow =  m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS );
 
@@ -563,11 +545,11 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
             unsigned int nodex0y1 = 0;
 
             if( y < (RAYPACKET_DIM - 1) )
-                    nodex0y1 = aHitPck_X0Y0[ idx0y1 ].m_HitInfo.m_acc_node_info;
+                nodex0y1 = aHitPck_X0Y0[ idx0y1 ].m_HitInfo.m_acc_node_info;
 
             unsigned int nodex1y1 = 0;
 
-            if( ( ( x < ( RAYPACKET_DIM - 1 ) ) && ( y < ( RAYPACKET_DIM - 1 ) ) ) )
+            if( idx1y1 < RAYPACKET_RAYS_PER_PACKET )
                 nodex1y1 = aHitPck_X0Y0[idx1y1].m_HitInfo.m_acc_node_info;
 
             // If all notes are equal we assume there was no change on the object hits.
@@ -610,25 +592,18 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
                 if( nodex0y0 != 0 )
                     hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex0y0 );
 
-                if( ( nodex1y0 != 0 ) &&
-                    ( nodex0y0 != nodex1y0 ) )
+                if( ( nodex1y0 != 0 ) && ( nodex0y0 != nodex1y0 ) )
                     hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex1y0 );
 
-                if( ( nodex0y1 != 0 ) &&
-                    ( nodex0y0 != nodex0y1 ) &&
-                    ( nodex1y0 != nodex0y1 ) )
+                if( ( nodex0y1 != 0 ) && ( nodex0y0 != nodex0y1 ) && ( nodex1y0 != nodex0y1 ) )
                     hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex0y1 );
 
-                if( (nodex1y1 != 0 ) &&
-                    ( nodex0y0 != nodex1y1 ) &&
-                    ( nodex0y1 != nodex1y1 ) &&
+                if( ( nodex1y1 != 0 ) && ( nodex0y0 != nodex1y1 ) && ( nodex0y1 != nodex1y1 ) &&
                     ( nodex1y0 != nodex1y1 ) )
                     hitted |= m_accelerator->Intersect( rayAA, hitAA, nodex1y1 );
 
-                if( (node_AA_x0y0 != 0 ) &&
-                    ( nodex0y0 != node_AA_x0y0 ) &&
-                    ( nodex0y1 != node_AA_x0y0 ) &&
-                    ( nodex1y0 != node_AA_x0y0 ) &&
+                if( (node_AA_x0y0 != 0 ) && ( nodex0y0 != node_AA_x0y0 ) &&
+                    ( nodex0y1 != node_AA_x0y0 ) && ( nodex1y0 != node_AA_x0y0 ) &&
                     ( nodex1y1 != node_AA_x0y0 ) )
                     hitted |= m_accelerator->Intersect( rayAA, hitAA, node_AA_x0y0 );
 
@@ -657,12 +632,11 @@ void C3D_RENDER_RAYTRACING::rt_trace_AA_packet( const SFVEC3F *aBgColorY,
 #define DISP_FACTOR 0.075f
 
 
-void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int iBlock )
+void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte* ptrPBO, signed int iBlock )
 {
     // Initialize ray packets
     const SFVEC2UI &blockPos = m_blockPositions[iBlock];
-    const SFVEC2I blockPosI = SFVEC2I( blockPos.x + m_xoffset,
-                                       blockPos.y + m_yoffset );
+    const SFVEC2I blockPosI = SFVEC2I( blockPos.x + m_xoffset, blockPos.y + m_yoffset );
 
     RAYPACKET blockPacket( m_camera, (SFVEC2F)blockPosI + SFVEC2F(DISP_FACTOR, DISP_FACTOR),
                            SFVEC2F(DISP_FACTOR, DISP_FACTOR) /* Displacement random factor */ );
@@ -697,13 +671,9 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
 
                 for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
                 {
-                        m_postshader_ssao.SetPixelData( blockPos.x + x,
-                                                        yBlockPos,
-                                                        SFVEC3F( 0.0f ),
-                                                        outColor,
-                                                        SFVEC3F( 0.0f ),
-                                                        0,
-                                                        1.0f );
+                        m_postshader_ssao.SetPixelData( blockPos.x + x, yBlockPos,
+                                                        SFVEC3F( 0.0f ), outColor,
+                                                        SFVEC3F( 0.0f ), 0, 1.0f );
                 }
             }
         }
@@ -718,7 +688,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
         {
             const SFVEC3F &outColor = bgColor[y];
 
-            const unsigned int yConst = blockPos.x + ( (y + blockPos.y) * m_realBufferSize.x);
+            const unsigned int yConst = blockPos.x + ( (y + blockPos.y) * m_realBufferSize.x );
 
             for( unsigned int x = 0; x < RAYPACKET_DIM; ++x )
             {
@@ -736,11 +706,8 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
     SFVEC3F hitColor_X0Y0[RAYPACKET_RAYS_PER_PACKET];
 
     // Shade original (0, 0) hits ("paint" the intersected objects)
-    rt_shades_packet( bgColor,
-                      blockPacket.m_ray,
-                      hitPacket_X0Y0,
-                      m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
-                      hitColor_X0Y0 );
+    rt_shades_packet( bgColor, blockPacket.m_ray, hitPacket_X0Y0,
+                      m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ), hitColor_X0Y0 );
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) )
     {
@@ -750,8 +717,8 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
         HITINFO_PACKET hitPacket_AA_X1Y1[RAYPACKET_RAYS_PER_PACKET];
         HITINFO_PACKET_init( hitPacket_AA_X1Y1 );
 
-        RAYPACKET blockPacket_AA_X1Y1( m_camera, (SFVEC2F)blockPosI + SFVEC2F(0.5f, 0.5f),
-                                       SFVEC2F(DISP_FACTOR, DISP_FACTOR) );
+        RAYPACKET blockPacket_AA_X1Y1( m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.5f, 0.5f ),
+                                       SFVEC2F( DISP_FACTOR, DISP_FACTOR ) );
 
         if( !m_accelerator->Intersect( blockPacket_AA_X1Y1, hitPacket_AA_X1Y1 ) )
         {
@@ -768,12 +735,9 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
         }
         else
         {
-            rt_shades_packet( bgColor,
-                              blockPacket_AA_X1Y1.m_ray,
-                              hitPacket_AA_X1Y1,
+            rt_shades_packet( bgColor, blockPacket_AA_X1Y1.m_ray, hitPacket_AA_X1Y1,
                               m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ),
-                              hitColor_AA_X1Y1
-                              );
+                              hitColor_AA_X1Y1 );
         }
 
         SFVEC3F hitColor_AA_X1Y0[RAYPACKET_RAYS_PER_PACKET];
@@ -783,7 +747,7 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
         for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
         {
             const SFVEC3F color_average = ( hitColor_X0Y0[i] +
-                                            hitColor_AA_X1Y1[i] ) * SFVEC3F(0.5f);
+                                            hitColor_AA_X1Y1[i] ) * SFVEC3F( 0.5f );
 
             hitColor_AA_X1Y0[i] = color_average;
             hitColor_AA_X0Y1[i] = color_average;
@@ -795,52 +759,39 @@ void C3D_RENDER_RAYTRACING::rt_render_trace_block( GLubyte *ptrPBO, signed int i
         RAY blockRayPck_AA_X1Y1_half[RAYPACKET_RAYS_PER_PACKET];
 
         RAYPACKET_InitRays_with2DDisplacement(
-                m_camera,
-                (SFVEC2F) blockPosI + SFVEC2F( 0.5f - DISP_FACTOR, DISP_FACTOR ),
+                m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.5f - DISP_FACTOR, DISP_FACTOR ),
                 SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X1Y0 );
 
         RAYPACKET_InitRays_with2DDisplacement(
-                m_camera,
-                (SFVEC2F) blockPosI + SFVEC2F( DISP_FACTOR, 0.5f - DISP_FACTOR ),
+                m_camera, (SFVEC2F) blockPosI + SFVEC2F( DISP_FACTOR, 0.5f - DISP_FACTOR ),
                 SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X0Y1 );
 
         RAYPACKET_InitRays_with2DDisplacement(
-                m_camera,
-                (SFVEC2F) blockPosI + SFVEC2F( 0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR ),
+                m_camera, (SFVEC2F) blockPosI + SFVEC2F( 0.25f - DISP_FACTOR, 0.25f - DISP_FACTOR ),
                 SFVEC2F( DISP_FACTOR, DISP_FACTOR ), blockRayPck_AA_X1Y1_half );
 
-        rt_trace_AA_packet( bgColor,
-                            hitPacket_X0Y0, hitPacket_AA_X1Y1,
-                            blockRayPck_AA_X1Y0,
+        rt_trace_AA_packet( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y0,
                             hitColor_AA_X1Y0 );
 
-        rt_trace_AA_packet( bgColor,
-                            hitPacket_X0Y0, hitPacket_AA_X1Y1,
-                            blockRayPck_AA_X0Y1,
+        rt_trace_AA_packet( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X0Y1,
                             hitColor_AA_X0Y1 );
 
-        rt_trace_AA_packet( bgColor,
-                            hitPacket_X0Y0, hitPacket_AA_X1Y1,
-                            blockRayPck_AA_X1Y1_half,
+        rt_trace_AA_packet( bgColor, hitPacket_X0Y0, hitPacket_AA_X1Y1, blockRayPck_AA_X1Y1_half,
                             hitColor_AA_X0Y1_half );
 
         // Average the result
         for( unsigned int i = 0; i < RAYPACKET_RAYS_PER_PACKET; ++i )
         {
-            hitColor_X0Y0[i] = ( hitColor_X0Y0[i] +
-                                 hitColor_AA_X1Y1[i] +
-                                 hitColor_AA_X1Y0[i] +
-                                 hitColor_AA_X0Y1[i] +
-                                 hitColor_AA_X0Y1_half[i]
-                                 ) * SFVEC3F(1.0f / 5.0f);
+            hitColor_X0Y0[i] = ( hitColor_X0Y0[i] + hitColor_AA_X1Y1[i] + hitColor_AA_X1Y0[i] +
+                                 hitColor_AA_X0Y1[i] + hitColor_AA_X0Y1_half[i] ) *
+                    SFVEC3F( 1.0f / 5.0f );
         }
     }
-
 
     // Copy results to the next stage
     GLubyte* ptr = &ptrPBO[( blockPos.x + ( blockPos.y * m_realBufferSize.x ) ) * 4];
 
-    const uint32_t ptrInc = (m_realBufferSize.x - RAYPACKET_DIM) * 4;
+    const uint32_t ptrInc = ( m_realBufferSize.x - RAYPACKET_DIM ) * 4;
 
     if( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) )
     {
@@ -907,19 +858,21 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte* ptrPBO,
         if( aStatusReporter )
             aStatusReporter->Report( _( "Rendering: Post processing shader" ) );
 
-        m_postshader_ssao.SetShadowsEnabled( m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
+        m_postshader_ssao.SetShadowsEnabled(
+                m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
 
         std::atomic<size_t> nextBlock( 0 );
         std::atomic<size_t> threadsFinished( 0 );
 
         size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
             std::thread t = std::thread( [&]()
             {
                 for( size_t y = nextBlock.fetch_add( 1 );
-                            y < m_realBufferSize.y;
-                            y = nextBlock.fetch_add( 1 ) )
+                     y < m_realBufferSize.y;
+                     y = nextBlock.fetch_add( 1 ) )
                 {
                     SFVEC3F *ptr = &m_shaderBuffer[ y * m_realBufferSize.x ];
 
@@ -952,8 +905,8 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_shade( GLubyte* ptrPBO,
 }
 
 
-void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
-                                                                REPORTER *aStatusReporter )
+void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte* ptrPBO,
+                                                                REPORTER* aStatusReporter )
 {
     (void) aStatusReporter; //unused
 
@@ -969,9 +922,8 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
         {
             std::thread t = std::thread( [&]()
             {
-                for( size_t y = nextBlock.fetch_add( 1 );
-                            y < m_realBufferSize.y;
-                            y = nextBlock.fetch_add( 1 ) )
+                for( size_t y = nextBlock.fetch_add( 1 ); y < m_realBufferSize.y;
+                     y = nextBlock.fetch_add( 1 ) )
                 {
                     GLubyte *ptr = &ptrPBO[ y * m_realBufferSize.x * 4 ];
 
@@ -1013,7 +965,7 @@ void C3D_RENDER_RAYTRACING::rt_render_post_process_blur_finish( GLubyte *ptrPBO,
 }
 
 
-void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
+void C3D_RENDER_RAYTRACING::render_preview( GLubyte* ptrPBO )
 {
     m_isPreview = true;
 
@@ -1028,9 +980,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
     {
         std::thread t = std::thread( [&]()
         {
-            for( size_t iBlock = nextBlock.fetch_add( 1 );
-                        iBlock < m_blockPositionsFast.size();
-                        iBlock = nextBlock.fetch_add( 1 ) )
+            for( size_t iBlock = nextBlock.fetch_add( 1 ); iBlock < m_blockPositionsFast.size();
+                 iBlock = nextBlock.fetch_add( 1 ) )
             {
                 const SFVEC2UI &windowPosUI = m_blockPositionsFast[ iBlock ];
                 const SFVEC2I windowsPos = SFVEC2I( windowPosUI.x + m_xoffset,
@@ -1051,9 +1002,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                 //  Intersect packet block
                 m_accelerator->Intersect( blockPacket, hitPacket );
 
-
                 // Calculate background gradient color
-                // /////////////////////////////////////////////////////////////////////
                 SFVEC3F bgColor[RAYPACKET_DIM];
 
                 for( unsigned int y = 0; y < RAYPACKET_DIM; ++y )
@@ -1074,12 +1023,9 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
 
                     if( hitPacket[i].m_hitresult == true )
                     {
-                        const SFVEC3F hitColor = shadeHit( bhColorY,
-                                                           blockPacket.m_ray[i],
-                                                           hitPacket[i].m_HitInfo,
-                                                           false,
-                                                           0,
-                                                           false );
+                        const SFVEC3F hitColor = shadeHit( bhColorY, blockPacket.m_ray[i],
+                                                           hitPacket[i].m_HitInfo, false,
+                                                           0, false );
 
                         hitColorShading[i] = CCOLORRGB( hitColor );
                     }
@@ -1100,7 +1046,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                     //RAY       cRTB_ray;
                     //HITINFO   cRTB_hitInfo;
 
-                    for( unsigned int x = 0; x < (RAYPACKET_DIM - 1); ++x )
+                    for( unsigned int x = 0; x < ( RAYPACKET_DIM - 1 ); ++x )
                     {
                         //      pxl 0  pxl 1  pxl 2  pxl 3  pxl 4
                         //        x0                          x1  ...
@@ -1112,10 +1058,10 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                         //     '---------------------------'
                         // y1  | cLB  | cxxx | cLRB | cxxx | cRB  |
 
-                        const unsigned int iLT = ((x + 0) + RAYPACKET_DIM * (y + 0));
-                        const unsigned int iRT = ((x + 1) + RAYPACKET_DIM * (y + 0));
-                        const unsigned int iLB = ((x + 0) + RAYPACKET_DIM * (y + 1));
-                        const unsigned int iRB = ((x + 1) + RAYPACKET_DIM * (y + 1));
+                        const unsigned int iLT = ( ( x + 0 ) + RAYPACKET_DIM * ( y + 0 ) );
+                        const unsigned int iRT = ( ( x + 1 ) + RAYPACKET_DIM * ( y + 0 ) );
+                        const unsigned int iLB = ( ( x + 0 ) + RAYPACKET_DIM * ( y + 1 ) );
+                        const unsigned int iRB = ( ( x + 1 ) + RAYPACKET_DIM * ( y + 1 ) );
 
                         // !TODO: skip when there are no hits
                         const CCOLORRGB &cLT = hitColorShading[ iLT ];
@@ -1140,12 +1086,11 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
 
                         bool hittedC = false;
 
-                        if( (hitPacket[ iLT ].m_hitresult == true) ||
-                            (hitPacket[ iRT ].m_hitresult == true) ||
-                            (hitPacket[ iLB ].m_hitresult == true) ||
-                            (hitPacket[ iRB ].m_hitresult == true) )
+                        if( ( hitPacket[iLT].m_hitresult == true )
+                          || ( hitPacket[iRT].m_hitresult == true )
+                          || ( hitPacket[iLB].m_hitresult == true )
+                          || ( hitPacket[iRB].m_hitresult == true ) )
                         {
-
                             oriC = ( oriLT + oriRB ) * 0.5f;
                             dirC = glm::normalize( ( dirLT + dirRB ) * 0.5f );
 
@@ -1162,23 +1107,18 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                 hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo,
                                                                      nodeLT );
 
-                            if( ( nodeRT != 0 ) &&
-                                ( nodeRT != nodeLT ) )
+                            if( ( nodeRT != 0 ) && ( nodeRT != nodeLT ) )
                                 hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo,
                                                                      nodeRT );
 
-                            if( ( nodeLB != 0 ) &&
-                                ( nodeLB != nodeLT ) &&
-                                ( nodeLB != nodeRT ) )
-                                    hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo,
-                                                                         nodeLB );
+                            if( ( nodeLB != 0 ) && ( nodeLB != nodeLT ) && ( nodeLB != nodeRT ) )
+                                hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo,
+                                                                     nodeLB );
 
-                            if( ( nodeRB != 0 ) &&
-                                ( nodeRB != nodeLB ) &&
-                                ( nodeRB != nodeLT ) &&
-                                ( nodeRB != nodeRT ) )
-                                    hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo,
-                                                                         nodeRB );
+                            if( ( nodeRB != 0 ) && ( nodeRB != nodeLB ) && ( nodeRB != nodeLT )
+                              && ( nodeRB != nodeRT ) )
+                                hittedC |= m_accelerator->Intersect( centerRay, centerHitInfo,
+                                                                     nodeRB );
 
                             if( hittedC )
                             {
@@ -1191,17 +1131,12 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                 hittedC = m_accelerator->Intersect( centerRay, centerHitInfo );
 
                                 if( hittedC )
-                                    cC = CCOLORRGB( shadeHit( bgColorY,
-                                                              centerRay,
-                                                              centerHitInfo,
-                                                              false,
-                                                              0,
-                                                              false ) );
+                                    cC = CCOLORRGB( shadeHit( bgColorY, centerRay, centerHitInfo,
+                                                              false, 0, false ) );
                             }
                         }
 
                         // Trace and shade cLRT
-                        // /////////////////////////////////////////////////////////////
                         CCOLORRGB cLRT = bgColorYRGB;
 
                         const SFVEC3F &oriRT = blockPacket.m_ray[ iRT ].m_Origin;
@@ -1212,14 +1147,14 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                             // Trace the center ray
                             RAY rayLRT;
                             rayLRT.Init( ( oriLT + oriRT ) * 0.5f,
-                                            glm::normalize( ( dirLT + dirRT ) * 0.5f ) );
+                                         glm::normalize( ( dirLT + dirRT ) * 0.5f ) );
 
                             HITINFO hitInfoLRT;
                             hitInfoLRT.m_tHit = std::numeric_limits<float>::infinity();
 
-                            if( hitPacket[ iLT ].m_hitresult &&
-                                hitPacket[ iRT ].m_hitresult &&
-                                (hitPacket[ iLT ].m_HitInfo.pHitObject == hitPacket[ iRT ].m_HitInfo.pHitObject) )
+                            if( hitPacket[iLT].m_hitresult && hitPacket[iRT].m_hitresult
+                                && ( hitPacket[iLT].m_HitInfo.pHitObject
+                                     == hitPacket[iRT].m_HitInfo.pHitObject ) )
                             {
                                 hitInfoLRT.pHitObject = hitPacket[ iLT ].m_HitInfo.pHitObject;
                                 hitInfoLRT.m_tHit = ( hitPacket[ iLT ].m_HitInfo.m_tHit +
@@ -1228,46 +1163,41 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                         glm::normalize( ( hitPacket[ iLT ].m_HitInfo.m_HitNormal +
                                                           hitPacket[ iRT ].m_HitInfo.m_HitNormal ) * 0.5f );
 
-                                cLRT = CCOLORRGB( shadeHit( bgColorY, rayLRT, hitInfoLRT, false, 0, false ) );
-                                cLRT = BlendColor( cLRT, BlendColor( cLT, cRT) );
+                                cLRT = CCOLORRGB( shadeHit( bgColorY, rayLRT, hitInfoLRT, false,
+                                                            0, false ) );
+                                cLRT = BlendColor( cLRT, BlendColor( cLT, cRT ) );
                             }
                             else
                             {
-                                if( hitPacket[ iLT ].m_hitresult ||
-                                    hitPacket[ iRT ].m_hitresult )                  // If any hits
+                                // If any hits
+                                if( hitPacket[ iLT ].m_hitresult || hitPacket[ iRT ].m_hitresult )
                                 {
-                                    const unsigned int nodeLT = hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
-                                    const unsigned int nodeRT = hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
+                                    const unsigned int nodeLT =
+                                            hitPacket[ iLT ].m_HitInfo.m_acc_node_info;
+                                    const unsigned int nodeRT =
+                                            hitPacket[ iRT ].m_HitInfo.m_acc_node_info;
 
                                     bool hittedLRT = false;
 
                                     if( nodeLT != 0 )
-                                        hittedLRT |= m_accelerator->Intersect( rayLRT, hitInfoLRT, nodeLT );
+                                        hittedLRT |= m_accelerator->Intersect( rayLRT, hitInfoLRT,
+                                                                               nodeLT );
 
-                                    if( ( nodeRT != 0 ) &&
-                                        ( nodeRT != nodeLT ) )
-                                        hittedLRT |= m_accelerator->Intersect( rayLRT,
-                                                                               hitInfoLRT,
+                                    if( ( nodeRT != 0 ) && ( nodeRT != nodeLT ) )
+                                        hittedLRT |= m_accelerator->Intersect( rayLRT, hitInfoLRT,
                                                                                nodeRT );
 
                                     if( hittedLRT )
-                                        cLRT = CCOLORRGB( shadeHit( bgColorY,
-                                                                    rayLRT,
-                                                                    hitInfoLRT,
-                                                                    false,
-                                                                    0,
-                                                                    false ) );
+                                        cLRT = CCOLORRGB( shadeHit( bgColorY, rayLRT, hitInfoLRT,
+                                                                    false, 0, false ) );
                                     else
                                     {
                                         hitInfoLRT.m_tHit = std::numeric_limits<float>::infinity();
 
                                         if( m_accelerator->Intersect( rayLRT,hitInfoLRT ) )
-                                            cLRT = CCOLORRGB( shadeHit( bgColorY,
-                                                                        rayLRT,
-                                                                        hitInfoLRT,
-                                                                        false,
-                                                                        0,
-                                                                        false ) );
+                                            cLRT = CCOLORRGB( shadeHit( bgColorY, rayLRT,
+                                                                        hitInfoLRT, false,
+                                                                        0, false ) );
                                     }
                                 }
                             }
@@ -1293,10 +1223,9 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                             HITINFO hitInfoLTB;
                             hitInfoLTB.m_tHit = std::numeric_limits<float>::infinity();
 
-                            if( hitPacket[ iLT ].m_hitresult &&
-                                hitPacket[ iLB ].m_hitresult &&
-                                ( hitPacket[ iLT ].m_HitInfo.pHitObject ==
-                                  hitPacket[ iLB ].m_HitInfo.pHitObject ) )
+                            if( hitPacket[ iLT ].m_hitresult && hitPacket[ iLB ].m_hitresult
+                              && ( hitPacket[ iLT ].m_HitInfo.pHitObject ==
+                                   hitPacket[ iLB ].m_HitInfo.pHitObject ) )
                             {
                                 hitInfoLTB.pHitObject = hitPacket[ iLT ].m_HitInfo.pHitObject;
                                 hitInfoLTB.m_tHit = ( hitPacket[ iLT ].m_HitInfo.m_tHit +
@@ -1321,34 +1250,24 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                     bool hittedLTB = false;
 
                                     if( nodeLT != 0 )
-                                        hittedLTB |= m_accelerator->Intersect( rayLTB,
-                                                                               hitInfoLTB,
+                                        hittedLTB |= m_accelerator->Intersect( rayLTB, hitInfoLTB,
                                                                                nodeLT );
 
-                                    if( ( nodeLB != 0 ) &&
-                                        ( nodeLB != nodeLT ) )
-                                        hittedLTB |= m_accelerator->Intersect( rayLTB,
-                                                                               hitInfoLTB,
+                                    if( ( nodeLB != 0 ) && ( nodeLB != nodeLT ) )
+                                        hittedLTB |= m_accelerator->Intersect( rayLTB, hitInfoLTB,
                                                                                nodeLB );
 
                                     if( hittedLTB )
-                                        cLTB = CCOLORRGB( shadeHit( bgColorY,
-                                                                    rayLTB,
-                                                                    hitInfoLTB,
-                                                                    false,
-                                                                    0,
-                                                                    false ) );
+                                        cLTB = CCOLORRGB( shadeHit( bgColorY, rayLTB, hitInfoLTB,
+                                                                    false, 0, false ) );
                                     else
                                     {
                                         hitInfoLTB.m_tHit = std::numeric_limits<float>::infinity();
 
                                         if( m_accelerator->Intersect( rayLTB, hitInfoLTB ) )
-                                            cLTB = CCOLORRGB( shadeHit( bgColorY,
-                                                                        rayLTB,
-                                                                        hitInfoLTB,
-                                                                        false,
-                                                                        0,
-                                                                        false ) );
+                                            cLTB = CCOLORRGB( shadeHit( bgColorY, rayLTB,
+                                                                        hitInfoLTB, false,
+                                                                        0, false ) );
                                     }
                                 }
                             }
@@ -1364,14 +1283,14 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                         // Trace the center ray
                         RAY rayRTB;
                         rayRTB.Init( ( oriRT + oriRB ) * 0.5f,
-                                        glm::normalize( ( dirRT + dirRB ) * 0.5f ) );
+                                     glm::normalize( ( dirRT + dirRB ) * 0.5f ) );
 
                         HITINFO hitInfoRTB;
                         hitInfoRTB.m_tHit = std::numeric_limits<float>::infinity();
 
-                        if( hitPacket[ iRT ].m_hitresult && hitPacket[ iRB ].m_hitresult &&
-                            ( hitPacket[ iRT ].m_HitInfo.pHitObject ==
-                              hitPacket[ iRB ].m_HitInfo.pHitObject ) )
+                        if( hitPacket[ iRT ].m_hitresult && hitPacket[ iRB ].m_hitresult
+                          && ( hitPacket[ iRT ].m_HitInfo.pHitObject ==
+                               hitPacket[ iRB ].m_HitInfo.pHitObject ) )
                         {
                             hitInfoRTB.pHitObject = hitPacket[ iRT ].m_HitInfo.pHitObject;
 
@@ -1384,7 +1303,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
 
                             cRTB = CCOLORRGB( shadeHit( bgColorY, rayRTB, hitInfoRTB, false, 0,
                                                         false ) );
-                            cRTB = BlendColor( cRTB, BlendColor( cRT, cRB) );
+                            cRTB = BlendColor( cRTB, BlendColor( cRT, cRB ) );
                         }
                         else
                         {
@@ -1402,31 +1321,22 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                     hittedRTB |= m_accelerator->Intersect( rayRTB, hitInfoRTB,
                                                                            nodeRT );
 
-                                if( ( nodeRB != 0 ) &&
-                                    ( nodeRB != nodeRT ) )
+                                if( ( nodeRB != 0 ) && ( nodeRB != nodeRT ) )
                                     hittedRTB |= m_accelerator->Intersect( rayRTB, hitInfoRTB,
                                                                            nodeRB );
 
                                 if( hittedRTB )
                                 {
-                                    cRTB = CCOLORRGB( shadeHit( bgColorY,
-                                                                rayRTB,
-                                                                hitInfoRTB,
-                                                                false,
-                                                                0,
-                                                                false) );
+                                    cRTB = CCOLORRGB( shadeHit( bgColorY, rayRTB, hitInfoRTB,
+                                                                false, 0, false) );
                                 }
                                 else
                                 {
                                     hitInfoRTB.m_tHit = std::numeric_limits<float>::infinity();
 
                                     if( m_accelerator->Intersect( rayRTB, hitInfoRTB ) )
-                                        cRTB = CCOLORRGB( shadeHit( bgColorY,
-                                                                    rayRTB,
-                                                                    hitInfoRTB,
-                                                                    false,
-                                                                    0,
-                                                                    false ) );
+                                        cRTB = CCOLORRGB( shadeHit( bgColorY, rayRTB, hitInfoRTB,
+                                                                    false, 0, false ) );
                                 }
                             }
                         }
@@ -1447,9 +1357,9 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                         HITINFO hitInfoLRB;
                         hitInfoLRB.m_tHit = std::numeric_limits<float>::infinity();
 
-                        if( hitPacket[ iLB ].m_hitresult && hitPacket[ iRB ].m_hitresult &&
-                            ( hitPacket[ iLB ].m_HitInfo.pHitObject ==
-                              hitPacket[ iRB ].m_HitInfo.pHitObject ) )
+                        if( hitPacket[iLB].m_hitresult && hitPacket[iRB].m_hitresult
+                            && ( hitPacket[iLB].m_HitInfo.pHitObject ==
+                                 hitPacket[iRB].m_HitInfo.pHitObject ) )
                         {
                             hitInfoLRB.pHitObject = hitPacket[ iLB ].m_HitInfo.pHitObject;
 
@@ -1462,7 +1372,7 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
 
                             cLRB = CCOLORRGB( shadeHit( bgColorY, rayLRB, hitInfoLRB, false, 0,
                                                         false ) );
-                            cLRB = BlendColor( cLRB, BlendColor( cLB, cRB) );
+                            cLRB = BlendColor( cLRB, BlendColor( cLB, cRB ) );
                         }
                         else
                         {
@@ -1494,12 +1404,8 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
                                     hitInfoLRB.m_tHit = std::numeric_limits<float>::infinity();
 
                                     if( m_accelerator->Intersect( rayLRB, hitInfoLRB ) )
-                                        cLRB = CCOLORRGB( shadeHit( bgColorY,
-                                                                    rayLRB,
-                                                                    hitInfoLRB,
-                                                                    false,
-                                                                    0,
-                                                                    false ) );
+                                        cLRB = CCOLORRGB( shadeHit( bgColorY, rayLRB, hitInfoLRB,
+                                                                    false, 0, false ) );
                                 }
                             }
                         }
@@ -1654,12 +1560,9 @@ void C3D_RENDER_RAYTRACING::render_preview( GLubyte *ptrPBO )
 
 #define USE_EXPERIMENTAL_SOFT_SHADOWS 1
 
-SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
-                                         const RAY &aRay,
-                                         HITINFO &aHitInfo,
-                                         bool aIsInsideObject,
-                                         unsigned int aRecursiveLevel,
-                                         bool is_testShadow ) const
+SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F& aBgColor, const RAY& aRay,
+                                         HITINFO& aHitInfo, bool aIsInsideObject,
+                                         unsigned int aRecursiveLevel, bool is_testShadow ) const
 {
     const CMATERIAL *objMaterial = aHitInfo.pHitObject->GetMaterial();
     wxASSERT( objMaterial != NULL );
@@ -1686,9 +1589,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
     unsigned int nr_lights_that_can_cast_shadows = 0;
 
-    for( LIST_LIGHT::const_iterator ii = lightList.begin();
-         ii != lightList.end();
-         ++ii )
+    for( LIST_LIGHT::const_iterator ii = lightList.begin(); ii != lightList.end(); ++ii )
     {
         const CLIGHT *light = (CLIGHT *)*ii;
 
@@ -1735,14 +1636,12 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
 #if USE_EXPERIMENTAL_SOFT_SHADOWS
                 }
-
-                // Experimental softshadow calculation
-                else
+                else  // Experimental softshadow calculation
                 {
 
                     const unsigned int shadow_number_of_samples =
                             m_boardAdapter.m_raytrace_nrsamples_shadows;
-                    const float shadow_inc_factor = 1.0f / (float)(shadow_number_of_samples);
+                    const float shadow_inc_factor = 1.0f / (float) ( shadow_number_of_samples );
 
                     for( unsigned int i = 0; i < shadow_number_of_samples; ++i )
                     {
@@ -1775,13 +1674,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 shadow_att_factor_sum += shadow_att_factor_light;
             }
 
-            outColor += objMaterial->Shade( aRay,
-                                            aHitInfo,
-                                            NdotL,
-                                            diffuseColorObj,
-                                            vectorToLight,
-                                            colorOfLight,
-                                            shadow_att_factor_light );
+            outColor += objMaterial->Shade( aRay, aHitInfo, NdotL, diffuseColorObj, vectorToLight,
+                                            colorOfLight, shadow_att_factor_light );
         }
 
         // Only use the headlight for preview
@@ -1806,18 +1700,17 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
     if( !m_isPreview )
     {
         // Reflections
-        if( ( objMaterial->GetReflection() > 0.0f ) &&
-            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) &&
-            ( aRecursiveLevel < objMaterial->GetReflectionsRecursiveLevel() ) )
+        if( ( objMaterial->GetReflection() > 0.0f )
+          && m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS )
+          && ( aRecursiveLevel < objMaterial->GetReflectionsRecursiveLevel() ) )
         {
             const unsigned int reflection_number_of_samples =
                     objMaterial->GetNrReflectionsSamples();
 
-            SFVEC3F sum_color = SFVEC3F(0.0f);
+            SFVEC3F sum_color = SFVEC3F( 0.0f );
 
-            const SFVEC3F reflectVector = aRay.m_Dir -
-                                    2.0f * glm::dot( aRay.m_Dir, aHitInfo.m_HitNormal ) *
-                                    aHitInfo.m_HitNormal;
+            const SFVEC3F reflectVector = aRay.m_Dir - 2.0f *
+                    glm::dot( aRay.m_Dir, aHitInfo.m_HitNormal ) * aHitInfo.m_HitNormal;
 
             for( unsigned int i = 0; i < reflection_number_of_samples; ++i )
             {
@@ -1844,12 +1737,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
                 if( m_accelerator->Intersect( reflectedRay, reflectedHit ) )
                 {
                     sum_color += ( diffuseColorObj + objMaterial->GetSpecularColor() ) *
-                                 shadeHit( aBgColor,
-                                           reflectedRay,
-                                           reflectedHit,
-                                           false,
-                                           aRecursiveLevel + 1,
-                                           is_testShadow ) *
+                                 shadeHit( aBgColor, reflectedRay, reflectedHit, false,
+                                           aRecursiveLevel + 1, is_testShadow ) *
                                  SFVEC3F( objMaterial->GetReflection() *
                                           // Falloff factor
                                           (1.0f / ( 1.0f + 0.75f * reflectedHit.m_tHit *
@@ -1860,12 +1749,11 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
             outColor += (sum_color / SFVEC3F( (float)reflection_number_of_samples) );
         }
 
-        // Refractions
+        // Refraction
         const float objTransparency = aHitInfo.pHitObject->GetModelTransparency();
 
-        if( ( objTransparency > 0.0f ) &&
-            m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) &&
-            ( aRecursiveLevel < objMaterial->GetRefractionsRecursiveLevel() ) )
+        if( ( objTransparency > 0.0f ) && m_boardAdapter.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS )
+          && ( aRecursiveLevel < objMaterial->GetRefractionsRecursiveLevel() ) )
         {
             const float airIndex = 1.000293f;
             const float glassIndex = 1.49f;
@@ -1876,10 +1764,7 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
             SFVEC3F refractedVector;
 
-            if( Refract( aRay.m_Dir,
-                         aHitInfo.m_HitNormal,
-                         refractionRatio,
-                         refractedVector ) )
+            if( Refract( aRay.m_Dir, aHitInfo.m_HitNormal, refractionRatio, refractedVector ) )
             {
                 // This increase the start point by a "fixed" factor so it will work the
                 // same for all distances
@@ -1918,12 +1803,8 @@ SFVEC3F C3D_RENDER_RAYTRACING::shadeHit( const SFVEC3F &aBgColor,
 
                     if( m_accelerator->Intersect( refractedRay, refractedHit ) )
                     {
-                        refractedColor = shadeHit( aBgColor,
-                                                   refractedRay,
-                                                   refractedHit,
-                                                   !aIsInsideObject,
-                                                   aRecursiveLevel + 1,
-                                                   false );
+                        refractedColor = shadeHit( aBgColor, refractedRay, refractedHit,
+                                                   !aIsInsideObject, aRecursiveLevel + 1, false );
 
                         const SFVEC3F absorbance = ( SFVEC3F(1.0f) - diffuseColorObj ) *
                                                    (1.0f - objTransparency ) *
@@ -2026,14 +1907,14 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
         i++;
 
         const SFVEC2UI blockPos( mX * 4 * RAYPACKET_DIM - mX * 4,
-                                 mY * 4 * RAYPACKET_DIM - mY * 4);
+                                 mY * 4 * RAYPACKET_DIM - mY * 4 );
 
         if( ( blockPos.x >= ( (unsigned int)m_windowSize.x - ( 4 * RAYPACKET_DIM + 4 ) ) ) &&
             ( blockPos.y >= ( (unsigned int)m_windowSize.y - ( 4 * RAYPACKET_DIM + 4 ) ) ) )
             break;
 
-        if( ( blockPos.x < ( (unsigned int)m_windowSize.x - ( 4 * RAYPACKET_DIM + 4) ) ) &&
-            ( blockPos.y < ( (unsigned int)m_windowSize.y - ( 4 * RAYPACKET_DIM + 4) ) ) )
+        if( ( blockPos.x < ( (unsigned int)m_windowSize.x - ( 4 * RAYPACKET_DIM + 4 ) ) ) &&
+            ( blockPos.y < ( (unsigned int)m_windowSize.y - ( 4 * RAYPACKET_DIM + 4 ) ) ) )
         {
             m_blockPositionsFast.push_back( blockPos );
 
@@ -2047,25 +1928,26 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
 
     m_fastPreviewModeSize = m_realBufferSize;
 
-    m_realBufferSize.x = ((m_realBufferSize.x + RAYPACKET_DIM * 4) & RAYPACKET_INVMASK);
-    m_realBufferSize.y = ((m_realBufferSize.y + RAYPACKET_DIM * 4) & RAYPACKET_INVMASK);
+    m_realBufferSize.x = ( ( m_realBufferSize.x + RAYPACKET_DIM * 4 ) & RAYPACKET_INVMASK );
+    m_realBufferSize.y = ( ( m_realBufferSize.y + RAYPACKET_DIM * 4 ) & RAYPACKET_INVMASK );
 
-    m_xoffset = (m_windowSize.x - m_realBufferSize.x) / 2;
-    m_yoffset = (m_windowSize.y - m_realBufferSize.y) / 2;
+    m_xoffset = ( m_windowSize.x - m_realBufferSize.x ) / 2;
+    m_yoffset = ( m_windowSize.y - m_realBufferSize.y ) / 2;
 
     m_postshader_ssao.UpdateSize( m_realBufferSize );
 
 
-    // Calc block positions for regular rendering. Choose an 'inside out'
-    // style of rendering
+    // Calc block positions for regular rendering. Choose an 'inside out' style of rendering.
     m_blockPositions.clear();
     const int blocks_x = m_realBufferSize.x / RAYPACKET_DIM;
     const int blocks_y = m_realBufferSize.y / RAYPACKET_DIM;
     m_blockPositions.reserve( blocks_x * blocks_y );
 
     for( int x = 0; x < blocks_x; ++x )
+    {
         for( int y = 0; y < blocks_y; ++y )
             m_blockPositions.emplace_back( x * RAYPACKET_DIM, y * RAYPACKET_DIM );
+    }
 
     const SFVEC2UI center( m_realBufferSize.x / 2, m_realBufferSize.y / 2 );
     std::sort( m_blockPositions.begin(), m_blockPositions.end(),
@@ -2082,7 +1964,7 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
 }
 
 
-BOARD_ITEM *C3D_RENDER_RAYTRACING::IntersectBoardItem( const RAY &aRay )
+BOARD_ITEM* C3D_RENDER_RAYTRACING::IntersectBoardItem( const RAY& aRay )
 {
     HITINFO hitInfo;
     hitInfo.m_tHit = std::numeric_limits<float>::infinity();

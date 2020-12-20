@@ -298,6 +298,8 @@ int BOARD_INSPECTION_TOOL::InspectClearance( const TOOL_EVENT& aEvent )
     BOARD_ITEM* a = static_cast<BOARD_ITEM*>( selection.GetItem( 0 ) );
     BOARD_ITEM* b = static_cast<BOARD_ITEM*>( selection.GetItem( 1 ) );
 
+    wxCHECK( a && b, 0 );
+
     if( a->Type() == PCB_GROUP_T )
     {
         PCB_GROUP* ag = static_cast<PCB_GROUP*>( a );

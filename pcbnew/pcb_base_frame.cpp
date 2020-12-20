@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <boost/uuid/entropy_error.hpp>
 #include <kiface_i.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
@@ -177,7 +178,16 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 {
     static KIID lastBrightenedItemID( niluuid );
 
-    BOARD_ITEM* lastItem = GetBoard()->GetItem( lastBrightenedItemID );
+    BOARD_ITEM* lastItem = nullptr;
+
+    try
+    {
+        lastItem = GetBoard()->GetItem( lastBrightenedItemID );
+    }
+    catch( const boost::uuids::entropy_error& e )
+    {
+        wxLogError( "A Boost UUID entropy exception was thrown in %s:%s.", __FILE__, __FUNCTION__ );
+    }
 
     if( lastItem && lastItem != aItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
     {

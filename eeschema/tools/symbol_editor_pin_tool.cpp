@@ -341,7 +341,19 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
         newPin->SetNumber( unknownNum );
 
         newPin->SetUnit( ii );
-        aPin->GetParent()->AddDrawItem( newPin );
+
+        try
+        {
+            aPin->GetParent()->AddDrawItem( newPin );
+        }
+        catch( const boost::bad_pointer& e )
+        {
+            wxLogError( "Cannot add new pin to symbol.  Boost pointer error %s occurred.",
+                        e.what() );
+            delete newPin;
+            return;
+        }
+
         newPin->ClearFlags( IS_NEW );
     }
 }

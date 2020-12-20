@@ -723,7 +723,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     {
         // A PTH pad has a plated cylinder around the hole so copper clearances apply
         // whether or not there's a flashed pad.  Not true for NPTHs.
-        if( a->Type() == PCB_PAD_T )
+        if( a && a->Type() == PCB_PAD_T )
         {
             const PAD* pad = static_cast<const PAD*>( a );
 

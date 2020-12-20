@@ -30,6 +30,7 @@ using namespace std::placeholders;
 #include <core/kicad_algo.h>
 #include <board.h>
 #include <board_item.h>
+#include <clipper.hpp>
 #include <track.h>
 #include <footprint.h>
 #include <pcb_shape.h>
@@ -2393,7 +2394,14 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         }
         else
         {
-            area = FOOTPRINT::GetCoverageArea( item, aCollector );
+            try
+            {
+                area = FOOTPRINT::GetCoverageArea( item, aCollector );
+            }
+            catch( const ClipperLib::clipperException& e )
+            {
+                wxLogError( "A clipper exception %s was detected.", e.what() );
+            }
         }
 
         itemsByArea.emplace_back( item, area );
