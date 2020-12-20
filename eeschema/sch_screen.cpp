@@ -461,6 +461,10 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
     if( pin_count && pin_count + end_count[WIRES] > 2 )
         return true;
 
+    // If wire segments overlap an entry
+    if( entry_count && entry_count + end_count[WIRES] > 2 )
+        return true;
+
     // If there is at least one segment that ends on a non-parallel line or
     // junction of two other lines
     if( has_nonparallel[WIRES] && end_count[WIRES] > 2 )
