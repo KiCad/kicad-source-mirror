@@ -2320,13 +2320,15 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
         // In some cases, the connection list (SCH_CONNECTION*) can be null.
         // Skip null connections.
-        if( bus_entry->Connection( &sheet ) && bus_wire->Type() == SCH_LINE_T
-            && bus_wire->Connection( &sheet ) )
+        if( bus_entry->Connection( &sheet )
+                && bus_wire->Type() == SCH_LINE_T
+                && bus_wire->Connection( &sheet ) )
         {
-            conflict = true;
+            conflict = true;    // Assume a conflict; we'll reset if we find it's OK
+
             bus_name = bus_wire->Connection( &sheet )->Name( true );
 
-            auto test_name = bus_entry->Connection( &sheet )->Name( true );
+            wxString test_name = bus_entry->Connection( &sheet )->Name( true );
 
             for( const auto& member : bus_wire->Connection( &sheet )->Members() )
             {
@@ -2354,10 +2356,11 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
     if( conflict )
     {
+        wxString netName = aSubgraph->m_driver_connection->Name( true );
         wxString msg = wxString::Format( _( "Net %s is graphically connected to bus %s but is not a"
                                             " member of that bus" ),
-                                         aSubgraph->m_driver_connection->Name( true ),
-                                         bus_name );
+                                         UnescapeString( netName ),
+                                         UnescapeString( bus_name ) );
         std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_BUS_ENTRY_CONFLICT );
         ercItem->SetItems( bus_entry, bus_wire );
         ercItem->SetErrorMessage( msg );
@@ -2726,11 +2729,13 @@ int CONNECTION_GRAPH::ercCheckHierSheets()
 
             for( const std::pair<const wxString, SCH_SHEET_PIN*>& unmatched : pins )
             {
+                wxString msg = wxString::Format( _( "Sheet pin %s has no matching hierarchical "
+                                                    "label inside the sheet" ),
+                                                 UnescapeString( unmatched.first ) );
+
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_HIERACHICAL_LABEL );
                 ercItem->SetItems( unmatched.second );
-                ercItem->SetErrorMessage( wxString::Format(
-                        _( "Sheet port %s has no matching hierarchical label inside the sheet" ),
-                        unmatched.first ) );
+                ercItem->SetErrorMessage( msg );
 
                 SCH_MARKER* marker = new SCH_MARKER( ercItem, unmatched.second->GetPosition() );
                 sheet.LastScreen()->Append( marker );

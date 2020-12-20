@@ -170,10 +170,16 @@ wxString UnescapeString( const wxString& aSource )
         else if( aSource[i] == '{' )
         {
             wxString token;
+            int      depth = 1;
 
             for( i = i + 1; i < sourceLen; ++i )
             {
-                if( aSource[i] == '}' )
+                if( aSource[i] == '{' )
+                    depth++;
+                else if( aSource[i] == '}' )
+                    depth--;
+
+                if( depth <= 0 )
                     break;
                 else
                     token.append( aSource[i] );
@@ -194,7 +200,7 @@ wxString UnescapeString( const wxString& aSource )
             else if( token == wxS( "brace" ) )     newbuf.append( wxS( "{" ) );
             else
             {
-                newbuf.append( "{" + token + "}" );
+                newbuf.append( "{" + UnescapeString( token ) + "}" );
             }
         }
         else

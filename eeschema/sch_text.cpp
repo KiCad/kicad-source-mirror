@@ -552,8 +552,7 @@ wxString SCH_TEXT::GetShownText( int aDepth ) const
 
     if( processTextVars )
     {
-        wxCHECK_MSG( Schematic(), wxEmptyString,
-                     "No parent SCHEMATIC set for SCH_TEXT!" );
+        wxCHECK_MSG( Schematic(), wxEmptyString, "No parent SCHEMATIC set for SCH_TEXT!" );
 
         PROJECT* project = nullptr;
 
