@@ -208,7 +208,7 @@ public:
         if( aIndex < size() )
             retv = at( aIndex );
 
-        return const_cast< SCH_SHEET* >( retv );
+        return retv;
     }
 
     /**

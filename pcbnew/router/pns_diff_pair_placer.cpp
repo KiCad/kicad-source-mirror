@@ -353,8 +353,8 @@ const ITEM_SET DIFF_PAIR_PLACER::Traces()
 {
       ITEM_SET t;
 
-      t.Add( const_cast<LINE*>( &m_currentTrace.PLine() ) );
-      t.Add( const_cast<LINE*>( &m_currentTrace.NLine() ) );
+      t.Add( &m_currentTrace.PLine() );
+      t.Add( &m_currentTrace.NLine() );
 
       return t;
 }

@@ -84,7 +84,7 @@ public:
     /// Return a reference to the project this schematic is part of
     PROJECT& Prj() const
     {
-        return *const_cast<PROJECT*>( m_project );
+        return *m_project;
     }
 
     void SetProject( PROJECT* aPrj );

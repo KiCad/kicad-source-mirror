@@ -366,7 +366,7 @@ public:
 
     const std::vector<SCH_SHEET_PIN*>& GetPins() const
     {
-        return const_cast< std::vector<SCH_SHEET_PIN*>& >( m_pins );
+        return m_pins;
     }
 
     /**

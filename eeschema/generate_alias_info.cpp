@@ -74,7 +74,7 @@ public:
 
         try
         {
-            m_symbol = const_cast< LIB_PART* >( m_sym_lib_table->LoadSymbol( m_lib_id ) );
+            m_symbol = m_sym_lib_table->LoadSymbol( m_lib_id );
         }
         catch( const IO_ERROR& ioe )
         {

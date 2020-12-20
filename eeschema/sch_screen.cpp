@@ -120,7 +120,7 @@ void SCH_SCREEN::DecRefCount()
 
 bool SCH_SCREEN::HasItems( KICAD_T aItemType ) const
 {
-    EE_RTREE::EE_TYPE sheets = const_cast<EE_RTREE&>( m_rtree ).OfType( aItemType );
+    EE_RTREE::EE_TYPE sheets = m_rtree.OfType( aItemType );
 
     return sheets.begin() != sheets.end();
 }
