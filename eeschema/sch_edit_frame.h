@@ -932,7 +932,7 @@ public:
      * so that they are redrawn with up-to-date references.
      * @return
      */
-    int RecomputeIntersheetRefs();
+    void RecomputeIntersheetRefs();
 
     void ShowAllIntersheetRefs( bool aShow );
 

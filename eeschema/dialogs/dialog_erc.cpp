@@ -425,10 +425,11 @@ void DIALOG_ERC::testErc()
     m_markerTreeModel->SetProvider( m_markerProvider );
 
     // Display new markers from the current screen:
-    KIGFX::VIEW* view = m_parent->GetCanvas()->GetView();
-
-    for( auto item : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
-        view->Add( item );
+    for( SCH_ITEM* marker : m_parent->GetScreen()->Items().OfType( SCH_MARKER_T ) )
+    {
+        m_parent->GetCanvas()->GetView()->Remove( marker );
+        m_parent->GetCanvas()->GetView()->Add( marker );
+    }
 
     m_parent->GetCanvas()->Refresh();
 

@@ -725,18 +725,6 @@ void SCH_EDIT_FRAME::ResolveERCExclusions()
         else
             Schematic().RootScreen()->Append( marker );
     }
-
-    // Update the view for the current screen
-    for( SCH_ITEM* item : GetScreen()->Items().OfType( SCH_MARKER_T ) )
-    {
-        SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
-
-        if( marker->IsExcluded() )
-        {
-            GetCanvas()->GetView()->Remove( marker );
-            GetCanvas()->GetView()->Add( marker );
-        }
-    }
 }
 
 
@@ -1277,7 +1265,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
     timer.Stop();
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
-    if( settings.m_IntersheetRefsShow == true )
+    if( settings.m_IntersheetRefsShow )
         RecomputeIntersheetRefs();
 
     std::function<void( SCH_ITEM* )> changeHandler =
@@ -1290,7 +1278,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 }
 
 
-int SCH_EDIT_FRAME::RecomputeIntersheetRefs()
+void SCH_EDIT_FRAME::RecomputeIntersheetRefs()
 {
     std::map<wxString, std::set<wxString>>& pageRefsMap = Schematic().GetPageRefsMap();
 
@@ -1339,9 +1327,6 @@ int SCH_EDIT_FRAME::RecomputeIntersheetRefs()
                 GetCanvas()->GetView()->Update( global );
         }
     }
-
-    GetCanvas()->Refresh();
-    return 0;
 }
 
 
