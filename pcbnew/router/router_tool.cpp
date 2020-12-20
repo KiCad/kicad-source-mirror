@@ -1516,6 +1516,10 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         p = snapToItem( startItem, p0 );
         m_startItem = startItem;
     }
+    else if( footprint )
+    {
+        p = footprint->GetPosition();
+    }
 
     int dragMode = aEvent.Parameter<int64_t> ();
 
