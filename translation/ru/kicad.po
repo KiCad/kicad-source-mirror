@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-16 17:41+0000\n"
+"PO-Revision-Date: 2020-12-21 14:30+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -925,7 +925,7 @@ msgstr "Перевернуть плату"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip the board view"
-msgstr "Перевернуть (отразить) вид на плату"
+msgstr "Перевернуть (отразить) вид платы"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:120
 msgid "Toggle orthographic projection"
@@ -19202,16 +19202,16 @@ msgstr "Перех.отв."
 
 #: pcbnew/board.cpp:1077 pcbnew/pcb_draw_panel_gal.cpp:435
 msgid "Track Segments"
-msgstr "Сегментов дорожек"
+msgstr "Сегменты дорожек"
 
 #: pcbnew/board.cpp:1080 pcbnew/pcb_draw_panel_gal.cpp:438
 msgid "Nodes"
-msgstr "Узлов"
+msgstr "Узлы"
 
 #: pcbnew/board.cpp:1083 pcbnew/pcb_draw_panel_gal.cpp:441
 #: pcbnew/ratsnest/ratsnest.cpp:55
 msgid "Nets"
-msgstr "Цепей"
+msgstr "Цепи"
 
 #: pcbnew/board.cpp:1086 pcbnew/pcb_draw_panel_gal.cpp:444
 msgid "Unrouted"
@@ -32801,7 +32801,7 @@ msgstr "Пользовательского назначения"
 
 #: pcbnew/widgets/appearance_controls.cpp:1440
 msgid "Board's perimeter definition"
-msgstr "Определение контура платы"
+msgstr "Контур платы"
 
 #: pcbnew/widgets/appearance_controls.cpp:1441
 msgid "Board's edge setback outline"
