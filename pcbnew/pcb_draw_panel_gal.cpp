@@ -353,12 +353,14 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
                 m_view->SetTopLayer( ZONE_LAYER_FOR( layer ) );
         }
 
-        // Move the active layer to the top
+        // Move the active layer to the top.  Dwgs_User and Cmts_User are simply the first two
+        // "real" layers in the layer ordering, so they are used as "on top" -- overlay layers
+        // should still be above them.
         if( !IsCopperLayer( aLayer ) )
         {
-            m_view->SetLayerOrder( aLayer, m_view->GetLayerOrder( GAL_LAYER_ORDER[0] ) );
+            m_view->SetLayerOrder( aLayer, m_view->GetLayerOrder( Dwgs_User ) );
             m_view->SetLayerOrder( ZONE_LAYER_FOR( aLayer ),
-                                   m_view->GetLayerOrder( GAL_LAYER_ORDER[1] ) );
+                                   m_view->GetLayerOrder( Cmts_User ) );
         }
     }
     else if( IsCopperLayer( aLayer ) )
