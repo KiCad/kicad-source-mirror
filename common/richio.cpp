@@ -362,12 +362,12 @@ const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee, const char* quote
 }
 
 
-const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee )
+const char* OUTPUTFORMATTER::GetQuoteChar( const char* wrapee ) const
 {
     return GetQuoteChar( wrapee, quoteChar );
 }
 
-int OUTPUTFORMATTER::vprint( const char* fmt,  va_list ap )
+int OUTPUTFORMATTER::vprint( const char* fmt, va_list ap )
 {
     // This function can call vsnprintf twice.
     // But internally, vsnprintf retrieves arguments from the va_list identified by arg as if
@@ -434,7 +434,7 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
 }
 
 
-std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee )
+std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) const
 {
     std::string ret;
 
@@ -473,7 +473,7 @@ std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee )
 }
 
 
-std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee )
+std::string OUTPUTFORMATTER::Quotew( const wxString& aWrapee ) const
 {
     // wxStrings are always encoded as UTF-8 as we convert to a byte sequence.
     // The non-virutal function calls the virtual workhorse function, and if

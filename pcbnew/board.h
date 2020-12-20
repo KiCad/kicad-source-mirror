@@ -264,14 +264,14 @@ public:
      *
      * @return what the board is being used for
      */
-    BOARD_USE GetBoardUse() { return m_boardUse; }
+    BOARD_USE GetBoardUse() const { return m_boardUse; }
 
     /**
      * Find out if the board is being used to hold a single footprint for editing/viewing.
      *
      * @return if the board is just holding a footprint
      */
-    bool IsFootprintHolder()
+    bool IsFootprintHolder() const
     {
         return m_boardUse == BOARD_USE::FPHOLDER;
     }
@@ -293,6 +293,7 @@ public:
     const ZONES& Zones() const { return m_zones; }
 
     MARKERS& Markers() { return m_markers; }
+    const MARKERS& Markers() const { return m_markers; }
 
     /**
      * The groups must maintain the following invariants. These are checked by
@@ -303,6 +304,7 @@ public:
      *   - The graph of groups containing subgroups must be acyclic.
      */
     GROUPS& Groups() { return m_groups; }
+    const GROUPS& Groups() const { return m_groups; }
 
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
@@ -591,6 +593,7 @@ public:
     void SetPlotOptions( const PCB_PLOT_PARAMS& aOptions )  { m_plotOptions = aOptions; }
 
     TITLE_BLOCK& GetTitleBlock()                            { return m_titles; }
+    const TITLE_BLOCK& GetTitleBlock() const                { return m_titles; }
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock )    { m_titles = aTitleBlock; }
 
     wxString GetSelectMenuText( EDA_UNITS aUnits ) const override;

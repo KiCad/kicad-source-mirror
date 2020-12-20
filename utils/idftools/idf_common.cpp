@@ -376,7 +376,7 @@ IDF_DRILL_DATA::IDF_DRILL_DATA( double aDrillDia, double aPosX, double aPosY,
     owner = aOwner;
 }    // IDF_DRILL_DATA::IDF_DRILL_DATA( ... )
 
-bool IDF_DRILL_DATA::Matches( double aDrillDia, double aPosX, double aPosY )
+bool IDF_DRILL_DATA::Matches( double aDrillDia, double aPosX, double aPosY ) const
 {
     double ddia = aDrillDia - dia;
     IDF_POINT p1, p2;
@@ -717,17 +717,17 @@ void IDF_DRILL_DATA::write( std::ostream& aBoardFile, IDF3::IDF_UNIT aBoardUnit 
 }    // IDF_DRILL_DATA::Write( aBoardFile, unitMM )
 
 
-double IDF_DRILL_DATA::GetDrillDia()
+double IDF_DRILL_DATA::GetDrillDia() const
 {
     return dia;
 }
 
-double IDF_DRILL_DATA::GetDrillXPos()
+double IDF_DRILL_DATA::GetDrillXPos() const
 {
     return x;
 }
 
-double IDF_DRILL_DATA::GetDrillYPos()
+double IDF_DRILL_DATA::GetDrillYPos() const
 {
     return y;
 }
@@ -793,7 +793,7 @@ void IDF3::PrintSeg( IDF_SEGMENT* aSegment )
 #endif
 
 
-bool IDF_POINT::Matches( const IDF_POINT& aPoint, double aRadius )
+bool IDF_POINT::Matches( const IDF_POINT& aPoint, double aRadius ) const
 {
     double dx = x - aPoint.x;
     double dy = y - aPoint.y;

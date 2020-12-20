@@ -229,6 +229,7 @@ public:
     bool LoadFromFile( const wxString& aDirectory = "" ) override;
 
     BOARD_STACKUP& GetStackupDescriptor() { return m_stackup; }
+    const BOARD_STACKUP& GetStackupDescriptor() const { return m_stackup; }
 
     SEVERITY GetSeverity( int aDRCErrorCode );
 

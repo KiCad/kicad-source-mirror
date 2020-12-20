@@ -56,7 +56,7 @@ public:
      *  and false for items moved with no reference to anchor
      * @return false for a bus entry
      */
-    bool IsMovableFromAnchorPoint() override { return false; }
+    bool IsMovableFromAnchorPoint() const override { return false; }
 
     wxPoint GetEnd() const;
 

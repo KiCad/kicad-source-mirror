@@ -396,12 +396,12 @@ public:
      * Indicate the event should restart/end an ongoing interactive tool's event loop (eg esc
      * key, click cancel, start different tool).
      */
-    bool IsCancelInteractive();
+    bool IsCancelInteractive() const;
 
     /**
      * Indicate an selection-changed notification event.
      */
-    bool IsSelectionEvent();
+    bool IsSelectionEvent() const;
 
     /**
      * Indicate if the event is from one of the point editors.
@@ -409,14 +409,14 @@ public:
      * Usually used to allow the point editor to activate itself without de-activating the
      * current drawing tool.
      */
-    bool IsPointEditor();
+    bool IsPointEditor() const;
 
     /**
      * Indicate if the event is from one of the move tools.
      *
      * Usually used to allow move to be done without de-activating the current drawing tool.
      */
-    bool IsMoveTool();
+    bool IsMoveTool() const;
 
     /**
      * Return a non-standard parameter assigned to the event. Its meaning depends on the

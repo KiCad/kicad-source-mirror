@@ -187,7 +187,7 @@ bool TOOL_EVENT::IsDblClick( int aButtonMask ) const
 }
 
 
-bool TOOL_EVENT::IsCancelInteractive()
+bool TOOL_EVENT::IsCancelInteractive() const
 {
     return( ( m_commandStr.is_initialized()
                 && m_commandStr.get() == ACTIONS::cancelInteractive.GetName() )
@@ -197,7 +197,7 @@ bool TOOL_EVENT::IsCancelInteractive()
 }
 
 
-bool TOOL_EVENT::IsSelectionEvent()
+bool TOOL_EVENT::IsSelectionEvent() const
 {
     return Matches( EVENTS::ClearedEvent )
         || Matches( EVENTS::UnselectedEvent )
@@ -205,7 +205,7 @@ bool TOOL_EVENT::IsSelectionEvent()
 }
 
 
-bool TOOL_EVENT::IsPointEditor()
+bool TOOL_EVENT::IsPointEditor() const
 {
     return( ( m_commandStr.is_initialized()
                     && m_commandStr.get().find( "PointEditor" ) != GetCommandStr()->npos )
@@ -214,7 +214,7 @@ bool TOOL_EVENT::IsPointEditor()
 }
 
 
-bool TOOL_EVENT::IsMoveTool()
+bool TOOL_EVENT::IsMoveTool() const
 {
     return( m_commandStr.is_initialized()
                 && m_commandStr.get().find( "InteractiveMove" ) != GetCommandStr()->npos );

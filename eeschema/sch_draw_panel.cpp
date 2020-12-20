@@ -106,7 +106,7 @@ SCH_DRAW_PANEL::~SCH_DRAW_PANEL()
 }
 
 
-void SCH_DRAW_PANEL::DisplayComponent( const LIB_PART* aComponent )
+void SCH_DRAW_PANEL::DisplayComponent( LIB_PART* aComponent )
 {
     GetView()->Clear();
     GetView()->DisplayComponent( const_cast<LIB_PART*>(aComponent) );
@@ -114,7 +114,7 @@ void SCH_DRAW_PANEL::DisplayComponent( const LIB_PART* aComponent )
 }
 
 
-void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
+void SCH_DRAW_PANEL::DisplaySheet( SCH_SCREEN *aScreen )
 {
     GetView()->Clear();
 

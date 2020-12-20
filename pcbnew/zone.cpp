@@ -1122,7 +1122,7 @@ void ZONE::CacheTriangulation( PCB_LAYER_ID aLayer )
 }
 
 
-bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
+bool ZONE::IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const
 {
     if( GetNetCode() < 1 )
         return true;

@@ -656,6 +656,11 @@ public:
         return m_polys[aIndex][0];
     }
 
+    const SHAPE_LINE_CHAIN& Outline( int aIndex ) const
+    {
+        return m_polys[aIndex][0];
+    }
+
     /**
      * Function Subset
      * returns a subset of the polygons in this set, the ones between aFirstPolygon and

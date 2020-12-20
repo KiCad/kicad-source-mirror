@@ -79,11 +79,11 @@ public:
 
     void Cleanup();
 
-    void DisplaySheet( SCH_SCREEN* aScreen );
+    void DisplaySheet( const SCH_SCREEN* aScreen );
     void DisplayComponent( LIB_PART* aPart );
 
     // Call it to set new draw area limits (max working and draw area size)
-    void ResizeSheetWorkingArea( SCH_SCREEN *aScreen );
+    void ResizeSheetWorkingArea( const SCH_SCREEN *aScreen );
 
     void SetScale( double aScale, VECTOR2D aAnchor = { 0, 0 } ) override;
 

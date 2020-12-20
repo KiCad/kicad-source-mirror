@@ -228,7 +228,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 }
 
 
-bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
+bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem ) const
 {
     if( m_schSettings.m_ShowUnit            // showing a specific unit
             && aItem->GetUnit()             // item is unit-specific
@@ -248,7 +248,7 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 }
 
 
-float SCH_PAINTER::getShadowWidth()
+float SCH_PAINTER::getShadowWidth() const
 {
     const MATRIX3x3D& matrix = m_gal->GetScreenWorldMatrix();
 
@@ -258,7 +258,7 @@ float SCH_PAINTER::getShadowWidth()
 }
 
 
-COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows )
+COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
@@ -318,7 +318,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 }
 
 
-float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
+float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows ) const
 {
     float width = (float) std::max( aItem->GetPenWidth(), m_schSettings.GetDefaultPenWidth() );
 
@@ -329,7 +329,7 @@ float SCH_PAINTER::getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows )
 }
 
 
-float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
+float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const
 {
     wxCHECK( aItem, static_cast<float>( m_schSettings.m_DefaultWireThickness ) );
 
@@ -342,7 +342,7 @@ float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows )
 }
 
 
-float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows )
+float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows ) const
 {
     float width = (float) aItem->GetEffectiveTextPenWidth( m_schSettings.GetDefaultPenWidth() );
 
@@ -353,7 +353,7 @@ float SCH_PAINTER::getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows
 }
 
 
-float SCH_PAINTER::getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows )
+float SCH_PAINTER::getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows ) const
 {
     float width = (float) aItem->GetEffectiveTextPenWidth( m_schSettings.GetDefaultPenWidth() );
 
@@ -364,7 +364,7 @@ float SCH_PAINTER::getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadow
 }
 
 
-float SCH_PAINTER::getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows )
+float SCH_PAINTER::getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows ) const
 {
     float width = (float) std::max( aItem->GetEffectiveTextPenWidth(),
                                     m_schSettings.GetDefaultPenWidth() );
@@ -376,7 +376,7 @@ float SCH_PAINTER::getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadow
 }
 
 
-float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows )
+float SCH_PAINTER::getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows ) const
 {
     float width = (float) std::max( aItem->GetEffectiveTextPenWidth(),
                                     m_schSettings.GetDefaultPenWidth() );
@@ -394,7 +394,7 @@ void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition, 
 }
 
 
-void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit, int aConvert )
+void SCH_PAINTER::draw( const LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit, int aConvert )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -403,7 +403,7 @@ void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit
         aConvert = m_schSettings.m_ShowConvert;
 
     std::unique_ptr< LIB_PART > tmpPart;
-    LIB_PART* drawnPart = aPart;
+    const LIB_PART* drawnPart = aPart;
 
     if( aPart->IsAlias() )
     {
@@ -504,7 +504,7 @@ void SCH_PAINTER::fillIfSelection( int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
+void SCH_PAINTER::draw( const LIB_RECTANGLE *aRect, int aLayer )
 {
     if( !isUnitAndConversionShown( aRect ) )
         return;
@@ -517,7 +517,7 @@ void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
+void SCH_PAINTER::draw( const LIB_CIRCLE *aCircle, int aLayer )
 {
     if( !isUnitAndConversionShown( aCircle ) )
         return;
@@ -530,7 +530,7 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
+void SCH_PAINTER::draw( const LIB_ARC *aArc, int aLayer )
 {
     if( !isUnitAndConversionShown( aArc ) )
         return;
@@ -572,7 +572,7 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
+void SCH_PAINTER::draw( const LIB_POLYLINE *aLine, int aLayer )
 {
     if( !isUnitAndConversionShown( aLine ) )
         return;
@@ -591,7 +591,7 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
+void SCH_PAINTER::draw( const LIB_FIELD *aField, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -670,7 +670,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
+void SCH_PAINTER::draw( const LIB_TEXT *aText, int aLayer )
 {
     if( !isUnitAndConversionShown( aText ) )
         return;
@@ -1146,7 +1146,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( LIB_BEZIER *aCurve, int aLayer )
+void SCH_PAINTER::draw( const LIB_BEZIER *aCurve, int aLayer )
 {
     if( !isUnitAndConversionShown( aCurve ) )
         return;
@@ -1182,7 +1182,7 @@ void SCH_PAINTER::drawDanglingSymbol( const wxPoint& aPos, int aWidth, bool aDra
 }
 
 
-void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
+void SCH_PAINTER::draw( const SCH_JUNCTION *aJct, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1205,7 +1205,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
+void SCH_PAINTER::draw( const SCH_LINE *aLine, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1284,7 +1284,7 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
+void SCH_PAINTER::draw( const SCH_TEXT *aText, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1461,12 +1461,12 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aSymbol, int aLayer )
     draw( &tempPart, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert() );
 
     // The fields are SCH_COMPONENT-specific so don't need to be copied/oriented/translated
-    for( SCH_FIELD& field : aSymbol->GetFields() )
+    for( const SCH_FIELD& field : aSymbol->GetFields() )
         draw( &field, aLayer );
 }
 
 
-void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
+void SCH_PAINTER::draw( const SCH_FIELD *aField, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1640,10 +1640,11 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
-    draw( static_cast<SCH_TEXT*>( aLabel ), aLayer );
+    draw( static_cast<const SCH_TEXT*>( aLabel ), aLayer );
 }
 
-void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
+
+void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1705,13 +1706,13 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children && aSheet->IsSelected() )
             return;
 
-        for( SCH_FIELD& field : aSheet->GetFields() )
+        for( const SCH_FIELD& field : aSheet->GetFields() )
             draw( &field, aLayer );
     }
 }
 
 
-void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
+void SCH_PAINTER::draw( const SCH_NO_CONNECT *aNC, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
@@ -1731,7 +1732,7 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
+void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
     SCH_LINE line;
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
@@ -1774,7 +1775,7 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
+void SCH_PAINTER::draw( const SCH_BITMAP *aBitmap, int aLayer )
 {
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
@@ -1819,7 +1820,7 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 }
 
 
-void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
+void SCH_PAINTER::draw( const SCH_MARKER *aMarker, int aLayer )
 {
     bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 

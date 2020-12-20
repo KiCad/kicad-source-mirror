@@ -288,12 +288,12 @@ void SCH_SHEET::AddPin( SCH_SHEET_PIN* aSheetPin )
 }
 
 
-void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
+void SCH_SHEET::RemovePin( const SCH_SHEET_PIN* aSheetPin )
 {
     wxASSERT( aSheetPin != NULL );
     wxASSERT( aSheetPin->Type() == SCH_SHEET_PIN_T );
 
-    for( auto i = m_pins.begin();  i < m_pins.end();  ++i )
+    for( auto i = m_pins.begin(); i < m_pins.end(); ++i )
     {
         if( *i == aSheetPin )
         {
@@ -305,7 +305,7 @@ void SCH_SHEET::RemovePin( SCH_SHEET_PIN* aSheetPin )
 }
 
 
-bool SCH_SHEET::HasPin( const wxString& aName )
+bool SCH_SHEET::HasPin( const wxString& aName ) const
 {
     for( SCH_SHEET_PIN* pin : m_pins )
     {
@@ -350,7 +350,7 @@ bool SCH_SHEET::IsVerticalOrientation() const
 }
 
 
-bool SCH_SHEET::HasUndefinedPins()
+bool SCH_SHEET::HasUndefinedPins() const
 {
     for( SCH_SHEET_PIN* pin : m_pins )
     {

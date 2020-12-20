@@ -321,7 +321,7 @@ public:
     }
 
     SHAPE_POLY_SET* Outline() { return m_Poly; }
-    const SHAPE_POLY_SET* Outline() const { return const_cast< SHAPE_POLY_SET* >( m_Poly ); }
+    const SHAPE_POLY_SET* Outline() const { return m_Poly; }
 
     void SetOutline( SHAPE_POLY_SET* aOutline ) { m_Poly = aOutline; }
 
@@ -687,7 +687,7 @@ public:
      * @param aPolyIdx is an inndex into m_FilledPolysList[aLayer]
      * @return true if the given polygon is insulated (i.e. has no net connection)
      */
-    bool IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx );
+    bool IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const;
 
     void SetIsIsland( PCB_LAYER_ID aLayer, int aPolyIdx )
     {

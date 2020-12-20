@@ -99,7 +99,7 @@ public:
     /**
      * Return the generated HTML.
      */
-    wxString GetHtml()
+    wxString GetHtml() const
     {
         return m_html;
     }
@@ -156,7 +156,7 @@ protected:
     }
 
 
-    wxString GetHtmlFieldRow( LIB_FIELD const & aField )
+    wxString GetHtmlFieldRow( const LIB_FIELD& aField ) const
     {
         wxString name = aField.GetCanonicalName();
         wxString text = aField.GetFullText( m_unit > 0 ? m_unit : 1 );

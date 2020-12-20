@@ -122,6 +122,7 @@ public:
 
     void SetParent( LIB_PART* aParent = nullptr );
     PART_REF& GetParent() { return m_parent; }
+    const PART_REF& GetParent() const { return m_parent; }
 
     virtual wxString GetClass() const override
     {
@@ -353,7 +354,7 @@ public:
      *                if TYPE_NOT_INIT search for all items types
      * @return - The next drawing object in the list if found, otherwise NULL.
      */
-    LIB_ITEM* GetNextDrawItem( LIB_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
+    LIB_ITEM* GetNextDrawItem( const LIB_ITEM* aItem = NULL, KICAD_T aType = TYPE_NOT_INIT );
 
     size_t GetPinCount() const { return m_drawings.size( LIB_PIN_T ); }
 
@@ -468,6 +469,7 @@ public:
      * @return LIB_ITEMS_CONTAINER& - Reference to the draw item object container.
      */
     LIB_ITEMS_CONTAINER& GetDrawItems() { return m_drawings; }
+    const LIB_ITEMS_CONTAINER& GetDrawItems() const { return m_drawings; }
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 

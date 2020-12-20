@@ -105,7 +105,7 @@ public:
      * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text is not easy to read
      * if false, the text rotation is free.
      */
-    bool IsKeepUpright()
+    bool IsKeepUpright() const
     {
         return m_keepUpright;
     }

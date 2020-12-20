@@ -621,7 +621,7 @@ void LIB_PART::AddDrawItem( LIB_ITEM* aItem )
 }
 
 
-LIB_ITEM* LIB_PART::GetNextDrawItem( LIB_ITEM* aItem, KICAD_T aType )
+LIB_ITEM* LIB_PART::GetNextDrawItem( const LIB_ITEM* aItem, KICAD_T aType )
 {
     if( aItem == NULL )
     {

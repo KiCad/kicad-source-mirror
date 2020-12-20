@@ -96,7 +96,7 @@ public:
         m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ] = aColor;
     }
 
-    float GetDanglineSymbolThickness()
+    float GetDanglineSymbolThickness() const
     {
         return (float) m_defaultPenWidth / 3.0F;
     }
@@ -156,27 +156,27 @@ public:
     }
 
 private:
-	void draw( LIB_RECTANGLE* aRect, int aLayer );
-	void draw( LIB_PIN* aPin, int aLayer );
-	void draw( LIB_CIRCLE* aCircle, int aLayer );
-	void draw( LIB_PART* aPart, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0 );
-    void draw( LIB_ARC* aArc, int aLayer );
-    void draw( LIB_POLYLINE* aLine, int aLayer );
-    void draw( LIB_FIELD* aField, int aLayer );
-    void draw( LIB_TEXT* aText, int aLayer );
-    void draw( LIB_BEZIER* aCurve, int aLayer );
+    void draw( const LIB_RECTANGLE* aRect, int aLayer );
+    void draw( LIB_PIN* aPin, int aLayer );
+    void draw( const LIB_CIRCLE* aCircle, int aLayer );
+    void draw( const LIB_PART* aPart, int, bool aDrawFields = true, int aUnit = 0, int aConvert = 0 );
+    void draw( const LIB_ARC* aArc, int aLayer );
+    void draw( const LIB_POLYLINE* aLine, int aLayer );
+    void draw( const LIB_FIELD* aField, int aLayer );
+    void draw( const LIB_TEXT* aText, int aLayer );
+    void draw( const LIB_BEZIER* aCurve, int aLayer );
     void draw( SCH_COMPONENT* aSymbol, int aLayer );
-    void draw( SCH_JUNCTION* aJct, int aLayer );
-    void draw( SCH_FIELD* aField, int aLayer );
-    void draw( SCH_TEXT* aText, int aLayer );
+    void draw( const SCH_JUNCTION* aJct, int aLayer );
+    void draw( const SCH_FIELD* aField, int aLayer );
+    void draw( const SCH_TEXT* aText, int aLayer );
     void draw( SCH_HIERLABEL* aLabel, int aLayer );
     void draw( SCH_GLOBALLABEL* aLabel, int aLayer );
-    void draw( SCH_SHEET* aSheet, int aLayer );
-    void draw( SCH_NO_CONNECT* aNC, int aLayer );
-    void draw( SCH_MARKER* aMarker, int aLayer );
-    void draw( SCH_BITMAP* aBitmap, int aLayer );
-    void draw( SCH_LINE* aLine, int aLayer );
-    void draw( SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
+    void draw( const SCH_SHEET* aSheet, int aLayer );
+    void draw( const SCH_NO_CONNECT* aNC, int aLayer );
+    void draw( const SCH_MARKER* aMarker, int aLayer );
+    void draw( const SCH_BITMAP* aBitmap, int aLayer );
+    void draw( const SCH_LINE* aLine, int aLayer );
+    void draw( const SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
     void drawPinDanglingSymbol( const VECTOR2I& aPos, bool aDrawingShadows );
     void drawDanglingSymbol( const wxPoint& aPos, int aWidth, bool aDrawingShadows );
@@ -184,16 +184,16 @@ private:
     int internalPinDecoSize( const LIB_PIN &aPin );
     int externalPinDecoSize( const LIB_PIN &aPin );
 
-    bool isUnitAndConversionShown( const LIB_ITEM* aItem );
+    bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;
 
-    float getShadowWidth();
-    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows );
-    float getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows );
-    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows );
-    float getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows );
-    float getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows );
-    float getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows );
-    float getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows );
+    float getShadowWidth() const;
+    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows ) const;
+    float getLineWidth( const LIB_ITEM* aItem, bool aDrawingShadows ) const;
+    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const SCH_TEXT* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const SCH_FIELD* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const LIB_FIELD* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const LIB_TEXT* aItem, bool aDrawingShadows ) const;
 
     bool setDeviceColors( const LIB_ITEM* aItem, int aLayer );
     void fillIfSelection( int aLayer );

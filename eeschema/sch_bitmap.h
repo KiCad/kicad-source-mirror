@@ -56,7 +56,7 @@ public:
 
     SCH_BITMAP& operator=( const SCH_ITEM& aItem );
 
-    BITMAP_BASE* GetImage()
+    BITMAP_BASE* GetImage() const
     {
         wxCHECK_MSG( m_image != NULL, NULL, "Invalid SCH_BITMAP init, m_image is NULL." );
         return m_image;
@@ -122,7 +122,7 @@ public:
      *  and false for items moved with no reference to anchor
      * @return false for a bus entry
      */
-    bool IsMovableFromAnchorPoint() override { return false; }
+    bool IsMovableFromAnchorPoint() const override { return false; }
 
     void MirrorY( int aYaxis_position ) override;
     void MirrorX( int aXaxis_position ) override;

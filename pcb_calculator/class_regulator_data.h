@@ -134,7 +134,7 @@ public:
         }
     }
 
-    wxArrayString GetRegList()
+    wxArrayString GetRegList() const
     {
         wxArrayString list;
         for( unsigned ii = 0; ii < m_List.size(); ii++ )

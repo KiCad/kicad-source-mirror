@@ -82,7 +82,7 @@ void SCH_VIEW::SetScale( double aScale, VECTOR2D aAnchor )
 }
 
 
-void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
+void SCH_VIEW::ResizeSheetWorkingArea( const SCH_SCREEN* aScreen )
 {
     const PAGE_INFO& page_info = aScreen->GetPageSettings();
     double max_size_x = page_info.GetWidthIU() * 3.0;
@@ -92,7 +92,7 @@ void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
+void SCH_VIEW::DisplaySheet( const SCH_SCREEN *aScreen )
 {
     for( SCH_ITEM* item : aScreen->Items() )
         Add( item );

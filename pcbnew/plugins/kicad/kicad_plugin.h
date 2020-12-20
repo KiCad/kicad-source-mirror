@@ -193,7 +193,7 @@ public:
      * @param aNestLevel The indentation nest level.
      * @throw IO_ERROR on write error.
      */
-    void Format( BOARD_ITEM* aItem, int aNestLevel = 0 ) const;
+    void Format( const BOARD_ITEM* aItem, int aNestLevel = 0 ) const;
 
     std::string GetStringOutput( bool doClear )
     {
@@ -218,47 +218,47 @@ protected:
     void init( const PROPERTIES* aProperties );
 
     /// formats the board setup information
-    void formatSetup( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatSetup( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the General section of the file
-    void formatGeneral( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatGeneral( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the board layer information
-    void formatBoardLayers( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatBoardLayers( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the Nets and Netclasses
-    void formatNetInformation( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatNetInformation( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// formats the Nets and Netclasses
-    void formatProperties( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatProperties( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
     /// writes everything that comes before the board_items, like settings and layers etc
-    void formatHeader( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void formatHeader( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
 private:
-    void format( BOARD* aBoard, int aNestLevel = 0 ) const;
+    void format( const BOARD* aBoard, int aNestLevel = 0 ) const;
 
-    void format( DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
+    void format( const DIMENSION_BASE* aDimension, int aNestLevel = 0 ) const;
 
-    void format( FP_SHAPE* aFPShape, int aNestLevel = 0 ) const;
+    void format( const FP_SHAPE* aFPShape, int aNestLevel = 0 ) const;
 
-    void format( PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
+    void format( const PCB_GROUP* aGroup, int aNestLevel = 0 ) const;
 
-    void format( PCB_SHAPE* aSegment, int aNestLevel = 0 ) const;
+    void format( const PCB_SHAPE* aSegment, int aNestLevel = 0 ) const;
 
-    void format( PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
+    void format( const PCB_TARGET* aTarget, int aNestLevel = 0 ) const;
 
-    void format( FOOTPRINT* aFootprint, int aNestLevel = 0 ) const;
+    void format( const FOOTPRINT* aFootprint, int aNestLevel = 0 ) const;
 
-    void format( PAD* aPad, int aNestLevel = 0 ) const;
+    void format( const PAD* aPad, int aNestLevel = 0 ) const;
 
-    void format( PCB_TEXT* aText, int aNestLevel = 0 ) const;
+    void format( const PCB_TEXT* aText, int aNestLevel = 0 ) const;
 
-    void format( FP_TEXT* aText, int aNestLevel = 0 ) const;
+    void format( const FP_TEXT* aText, int aNestLevel = 0 ) const;
 
-    void format( TRACK* aTrack, int aNestLevel = 0 ) const;
+    void format( const TRACK* aTrack, int aNestLevel = 0 ) const;
 
-    void format( ZONE* aZone, int aNestLevel = 0 ) const;
+    void format( const ZONE* aZone, int aNestLevel = 0 ) const;
 
     void formatLayer( const BOARD_ITEM* aItem ) const;
 

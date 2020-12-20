@@ -65,6 +65,11 @@ public:
     wxString GetName() const { return m_name; }
     void SetName( wxString aName ) { m_name = aName; }
 
+    std::unordered_set<BOARD_ITEM*>& GetItems()
+    {
+        return m_items;
+    }
+
     const std::unordered_set<BOARD_ITEM*>& GetItems() const
     {
         return m_items;

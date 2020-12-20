@@ -34,7 +34,7 @@ extern double DoubleFromString( const wxString& TextValue );
 
 // A helper function to find the choice in a list of values
 // return true if a index in aList that matches aValue is found.
-static bool findMatch(wxArrayString& aList, wxString& aValue, int& aIdx )
+static bool findMatch(wxArrayString& aList, const wxString& aValue, int& aIdx )
 {
     bool success = false;
     // Find the previous choice index:

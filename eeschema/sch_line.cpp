@@ -365,7 +365,7 @@ void SCH_LINE::RotateEnd( wxPoint aPosition )
 }
 
 
-bool SCH_LINE::IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition )
+bool SCH_LINE::IsSameQuadrant( const SCH_LINE* aLine, const wxPoint& aPosition ) const
 {
     wxPoint first;
     wxPoint second;
@@ -388,7 +388,7 @@ bool SCH_LINE::IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition )
 }
 
 
-bool SCH_LINE::IsParallel( SCH_LINE* aLine )
+bool SCH_LINE::IsParallel( const SCH_LINE* aLine ) const
 {
     wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, false,
                  wxT( "Cannot test line segment for overlap." ) );

@@ -167,7 +167,7 @@ private:
         return m_padStacks.back();
     }
 
-    const std::string formatPadShape( HYPERLYNX_PAD_STACK& aStack )
+    const std::string formatPadShape( const HYPERLYNX_PAD_STACK& aStack )
     {
         int  shapeId = 0;
         char buf[1024];
@@ -334,7 +334,7 @@ bool HYPERLYNX_EXPORTER::writeStackupInfo()
     LSEQ layers = m_board->GetDesignSettings().GetEnabledLayers().CuStack();
 
     // Get the board physical stackup structure
-    BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
     m_out->Print( 0, "{STACKUP\n" );
 

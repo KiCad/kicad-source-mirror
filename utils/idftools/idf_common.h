@@ -414,25 +414,25 @@ public:
      *
      * @return bool: true if the diameter and position match this object
      */
-    bool Matches( double aDrillDia, double aPosX, double aPosY );
+    bool Matches( double aDrillDia, double aPosX, double aPosY ) const;
 
     /**
      * Function GettDrillDia
      * returns the drill diameter in mm
      */
-    double GetDrillDia();
+    double GetDrillDia() const;
 
     /**
      * Function GettDrillXPos
      * returns the drill's X position in mm
      */
-    double GetDrillXPos();
+    double GetDrillXPos() const;
 
     /**
      * Function GettDrillYPos
      * returns the drill's Y position in mm
      */
-    double GetDrillYPos();
+    double GetDrillYPos() const;
 
     /**
      * Function GetDrillPlating
@@ -455,7 +455,7 @@ public:
      */
     const std::string& GetDrillHoleType();
 
-    IDF3::KEY_OWNER GetDrillOwner()
+    IDF3::KEY_OWNER GetDrillOwner() const
     {
         return owner;
     }
@@ -494,7 +494,7 @@ public:
      *
      * @return bool: true if this point matches the given point
      */
-    bool    Matches( const IDF_POINT& aPoint, double aRadius = 1e-5 );
+    bool    Matches( const IDF_POINT& aPoint, double aRadius = 1e-5 ) const;
 
     /**
      * Function CalcDistance()

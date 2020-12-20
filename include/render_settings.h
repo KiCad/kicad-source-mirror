@@ -254,7 +254,7 @@ public:
     void SetHighContrastFactor( float aFactor ) { m_hiContrastFactor = aFactor; }
 
     // TODO: these can go away once the worksheet is moved to Cairo-based printing
-    wxDC* GetPrintDC() { return m_printDC; }
+    wxDC* GetPrintDC() const { return m_printDC; }
     void SetPrintDC( wxDC* aDC ) { m_printDC = aDC; }
 
 protected:

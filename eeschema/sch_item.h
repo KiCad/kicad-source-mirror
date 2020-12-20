@@ -244,7 +244,7 @@ public:
      * Usually return true for small items (labels, junctions) and false for
      * items which can be large (hierarchical sheets, symbols)
      */
-    virtual bool IsMovableFromAnchorPoint() { return true; }
+    virtual bool IsMovableFromAnchorPoint() const { return true; }
 
     wxPoint& GetStoredPos() { return m_storedPos; }
     void     SetStoredPos( wxPoint aPos ) { m_storedPos = aPos; }

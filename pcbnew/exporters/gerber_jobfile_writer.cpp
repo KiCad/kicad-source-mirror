@@ -280,7 +280,7 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
             mapValue( m_pcb->GetDesignSettings().GetBoardThickness() );
 
     // Copper finish
-    BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
+    const BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
 
     if( !brd_stackup.m_FinishType.IsEmpty() )
         m_json["GeneralSpecs"]["Finish"] = brd_stackup.m_FinishType;

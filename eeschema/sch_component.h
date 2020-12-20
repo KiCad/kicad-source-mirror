@@ -182,7 +182,7 @@ public:
      *
      * @return true for a component
      */
-    bool IsMovableFromAnchorPoint() override { return true; }
+    bool IsMovableFromAnchorPoint() const override { return true; }
 
     void SetLibId( const LIB_ID& aName );
 
@@ -204,6 +204,7 @@ public:
     bool UseLibIdLookup() const { return m_schLibSymbolName.IsEmpty(); }
 
     std::unique_ptr< LIB_PART >& GetPartRef() { return m_part; }
+    const std::unique_ptr< LIB_PART >& GetPartRef() const { return m_part; }
 
     /**
      * Set this schematic symbol library symbol reference to \a aLibSymbol
@@ -269,7 +270,8 @@ public:
 
     void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
 
-    TRANSFORM& GetTransform() const { return const_cast< TRANSFORM& >( m_transform ); }
+    TRANSFORM& GetTransform() { return m_transform; }
+    const TRANSFORM& GetTransform() const { return m_transform; }
 
     void SetTransform( const TRANSFORM& aTransform );
 
@@ -467,14 +469,14 @@ public:
      *
      * @return Pin object if found, otherwise NULL.
      */
-    SCH_PIN* GetPin( const wxString& number );
+    SCH_PIN* GetPin( const wxString& number ) const;
 
     /**
      * Populate a vector with all the pins from the library object.
      *
      * @param aPinsList is the list to populate with all of the pins.
      */
-    void GetLibPins( std::vector<LIB_PIN*>& aPinsList );
+    void GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const;
 
     SCH_PIN* GetPin( LIB_PIN* aLibPin );
 

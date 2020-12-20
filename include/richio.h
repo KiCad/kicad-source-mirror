@@ -375,7 +375,7 @@ public:
      * @return the quote_char as a single character string, or "" if the wrapee does not need
      *         to be wrapped.
      */
-    virtual const char* GetQuoteChar( const char* wrapee );
+    virtual const char* GetQuoteChar( const char* wrapee ) const;
 
     /**
      * Check \a aWrapee input string for a need to be quoted (e.g. contains a ')' character
@@ -389,9 +389,9 @@ public:
      *
      * @throw IO_ERROR, if there is any kind of problem with the input string.
      */
-     virtual std::string Quotes( const std::string& aWrapee );
+     virtual std::string Quotes( const std::string& aWrapee ) const;
 
-     std::string Quotew( const wxString& aWrapee );
+     std::string Quotew( const wxString& aWrapee ) const;
 
 private:
     std::vector<char>   m_buffer;

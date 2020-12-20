@@ -335,7 +335,7 @@ int PANEL_SETUP_BOARD_STACKUP::GetPcbThickness()
 
 void PANEL_SETUP_BOARD_STACKUP::synchronizeWithBoard( bool aFullSync )
 {
-    BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
+    const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
     if( aFullSync )
     {
@@ -813,7 +813,7 @@ void PANEL_SETUP_BOARD_STACKUP::buildLayerStackPanel( bool aCreatedInitialStacku
         // but if the number of layer is changed in the dialog, the corresponding
         // widgets will be available with their previous values.
         m_stackup.BuildDefaultStackupList( nullptr, m_brdSettings->GetCopperLayerCount() );
-        BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
+        const BOARD_STACKUP& brd_stackup = m_brdSettings->GetStackupDescriptor();
 
         // Now initialize all stackup items to the board values, when exist
         for( BOARD_STACKUP_ITEM* item: m_stackup.GetList() )

@@ -811,7 +811,7 @@ void SCH_COMPONENT::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunc
 }
 
 
-SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber )
+SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber ) const
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
@@ -823,7 +823,7 @@ SCH_PIN* SCH_COMPONENT::GetPin( const wxString& aNumber )
 }
 
 
-void SCH_COMPONENT::GetLibPins( std::vector<LIB_PIN*>& aPinsList )
+void SCH_COMPONENT::GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const
 {
     if( m_part )
         m_part->GetPins( aPinsList, m_unit, m_convert );

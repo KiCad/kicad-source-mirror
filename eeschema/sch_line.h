@@ -201,9 +201,9 @@ public:
      * @param aPosition - Point to reference against lines
      * @return true if lines are mostly in different quadrants of aPosition, false otherwise
      */
-    bool IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition );
+    bool IsSameQuadrant( const SCH_LINE* aLine, const wxPoint& aPosition ) const;
 
-    bool IsParallel( SCH_LINE* aLine );
+    bool IsParallel( const SCH_LINE* aLine ) const;
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 

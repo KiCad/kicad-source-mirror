@@ -442,7 +442,7 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
     {
         bool found = false;
         // Search for initial settings:
-        for( BOARD_STACKUP_ITEM* initial_item: m_list )
+        for( const BOARD_STACKUP_ITEM* initial_item : m_list )
         {
             if( item->GetBrdLayerId() != UNDEFINED_LAYER )
             {
@@ -488,7 +488,7 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
 }
 
 
-void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
+void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSettings,
                                              int aActiveCopperLayersCount )
 {
     // Creates a default stackup, according to the current BOARD_DESIGN_SETTINGS settings.
@@ -605,8 +605,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
     // Transfer other stackup settings from aSettings
     if( aSettings )
     {
-        BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
-        m_HasDielectricConstrains = source_stackup.m_HasDielectricConstrains;
+        const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
         m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
         m_CastellatedPads = source_stackup.m_CastellatedPads;
         m_EdgePlating = source_stackup.m_EdgePlating;
@@ -616,7 +615,7 @@ void BOARD_STACKUP::BuildDefaultStackupList( BOARD_DESIGN_SETTINGS* aSettings,
 
 
 void BOARD_STACKUP::FormatBoardStackup( OUTPUTFORMATTER* aFormatter,
-                                        BOARD* aBoard, int aNestLevel ) const
+                                        const BOARD* aBoard, int aNestLevel ) const
 {
     // Board stackup is the ordered list from top to bottom of
     // physical layers and substrate used to build the board.

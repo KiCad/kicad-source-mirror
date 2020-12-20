@@ -119,7 +119,7 @@ public:
      *
      * @return true for a hierarchical sheet pin
      */
-    bool IsMovableFromAnchorPoint() override { return true; }
+    bool IsMovableFromAnchorPoint() const override { return true; }
 
     void Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset ) override;
 
@@ -265,9 +265,10 @@ public:
      *
      * @return false for a hierarchical sheet
      */
-    bool IsMovableFromAnchorPoint() override { return false; }
+    bool IsMovableFromAnchorPoint() const override { return false; }
 
     std::vector<SCH_FIELD>& GetFields() { return m_fields; }
+    const std::vector<SCH_FIELD>& GetFields() const { return m_fields; }
 
     /**
      * Set multiple schematic fields.
@@ -283,7 +284,7 @@ public:
 
     SCH_SCREEN* GetScreen() const { return m_screen; }
 
-    wxSize GetSize() { return m_size; }
+    wxSize GetSize() const { return m_size; }
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
 
     int GetBorderWidth() const { return m_borderWidth; }
@@ -363,7 +364,7 @@ public:
 
     std::vector<SCH_SHEET_PIN*>& GetPins() { return m_pins; }
 
-    std::vector<SCH_SHEET_PIN*>& GetPins() const
+    const std::vector<SCH_SHEET_PIN*>& GetPins() const
     {
         return const_cast< std::vector<SCH_SHEET_PIN*>& >( m_pins );
     }
@@ -373,7 +374,7 @@ public:
      *
      * @param aSheetPin The sheet pin item to remove from the sheet.
      */
-    void RemovePin( SCH_SHEET_PIN* aSheetPin );
+    void RemovePin( const SCH_SHEET_PIN* aSheetPin );
 
     /**
      * Delete sheet label which do not have a corresponding hierarchical label.
@@ -399,16 +400,16 @@ public:
      *
      * @return  True if sheet pin with \a aName is found, otherwise false.
      */
-    bool HasPin( const wxString& aName );
+    bool HasPin( const wxString& aName ) const;
 
-    bool HasPins() { return !m_pins.empty(); }
+    bool HasPins() const { return !m_pins.empty(); }
 
     /**
      * Check all sheet labels against schematic for undefined hierarchical labels.
      *
      * @return True if there are any undefined labels.
      */
-    bool HasUndefinedPins();
+    bool HasUndefinedPins() const;
 
     /**
      * Return the minimum width of the sheet based on the widths of the sheet pin text.
