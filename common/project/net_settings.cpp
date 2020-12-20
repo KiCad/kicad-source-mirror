@@ -454,11 +454,13 @@ bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
         else if( aGroup[i] == '}' )
         {
             if( braceNesting )
+            {
                 braceNesting--;
+            }
             else
             {
                 if( aMemberList )
-                    aMemberList->push_back( tmp );
+                    aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
 
                 return true;
             }
@@ -467,7 +469,7 @@ bool NET_SETTINGS::ParseBusGroup( wxString aGroup, wxString* aName,
         if( aGroup[i] == ' ' )
         {
             if( aMemberList )
-                aMemberList->push_back( tmp );
+                    aMemberList->push_back( EscapeString( tmp, CTX_NETNAME ) );
 
             tmp.Clear();
             continue;
