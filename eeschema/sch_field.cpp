@@ -324,7 +324,7 @@ bool SCH_FIELD::IsVoid() const
 }
 
 
-bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_FIELD::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
 {
     wxString text = GetShownText();
     int      flags = aSearchData.GetFlags();
@@ -391,7 +391,7 @@ bool SCH_FIELD::IsReplaceable() const
 }
 
 
-bool SCH_FIELD::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_FIELD::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool isReplaced = false;
 

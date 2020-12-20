@@ -592,7 +592,7 @@ public:
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 

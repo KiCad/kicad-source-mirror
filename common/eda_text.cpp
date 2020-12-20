@@ -175,7 +175,7 @@ int EDA_TEXT::GetEffectiveTextPenWidth( int aDefaultWidth ) const
 }
 
 
-bool EDA_TEXT::Replace( wxFindReplaceData& aSearchData )
+bool EDA_TEXT::Replace( const wxFindReplaceData& aSearchData )
 {
     bool retval = EDA_ITEM::Replace( aSearchData, m_text );
     m_shown_text = UnescapeString( m_text );

@@ -1478,7 +1478,7 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 }
 
 
-bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_COMPONENT::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 

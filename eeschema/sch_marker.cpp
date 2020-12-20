@@ -148,7 +148,7 @@ void SCH_MARKER::Print( const RENDER_SETTINGS* aSettings, const wxPoint& aOffset
 }
 
 
-bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_MARKER::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
 {
     return SCH_ITEM::Matches( m_rcItem->GetErrorMessage(), aSearchData );
 }

@@ -78,7 +78,7 @@ public:
         return false;
     }
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );
     }

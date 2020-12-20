@@ -789,7 +789,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 }
 
 
-bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_SHEET::Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( EDA_UNITS::MILLIMETRES ) );
 

@@ -83,7 +83,7 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( m_rcItem->GetErrorMessage(), aSearchData );
     }

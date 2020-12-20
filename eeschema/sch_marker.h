@@ -90,7 +90,7 @@ public:
      * @param aFindLocation - a wxPoint where to put the location of matched item. can be NULL.
      * @return True if the DRC main or auxiliary text matches the search criteria.
      */
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxDat ) override;
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxDat ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 

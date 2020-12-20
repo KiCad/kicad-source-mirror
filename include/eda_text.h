@@ -237,7 +237,7 @@ public:
      *                    search and replace criteria.
      * @return True if the text item was modified, otherwise false.
      */
-    bool Replace( wxFindReplaceData& aSearchData );
+    bool Replace( const wxFindReplaceData& aSearchData );
 
     bool IsDefaultFormatting() const;
 

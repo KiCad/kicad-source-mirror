@@ -410,7 +410,7 @@ public:
      * @param aAuxData A pointer to optional data required for the search or NULL if not used.
      * @return True if the item's text matches the search criteria in \a aSearchData.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData )
+    virtual bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const
     {
         return false;
     }
@@ -424,7 +424,7 @@ public:
      * @param aText A reference to a wxString object containing the text to be replaced.
      * @return True if \a aText was modified, otherwise false.
      */
-    static bool Replace( wxFindReplaceData& aSearchData, wxString& aText );
+    static bool Replace( const wxFindReplaceData& aSearchData, wxString& aText );
 
     /**
      * Perform a text replace using the find and replace criteria in \a aSearchData
@@ -437,7 +437,7 @@ public:
      * @param aAuxData A pointer to optional data required for the search or NULL if not used.
      * @return True if the item text was modified, otherwise false.
      */
-    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = nullptr )
+    virtual bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = nullptr )
     {
         return false;
     }
@@ -517,7 +517,7 @@ protected:
      * @param aSearchData The criteria to search against.
      * @return True if \a aText matches the search criteria in \a aSearchData.
      */
-    bool Matches( const wxString& aText, wxFindReplaceData& aSearchData );
+    bool Matches( const wxString& aText, const wxFindReplaceData& aSearchData ) const;
 
 public:
     const KIID  m_Uuid;

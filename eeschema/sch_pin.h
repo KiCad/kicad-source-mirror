@@ -101,9 +101,9 @@ public:
     /// Returns the pin's position in global coordinates
     wxPoint GetTransformedPosition() const;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
-    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData ) override;
+    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData ) override;
 
     /*
      * While many of these are currently simply covers for the equivalent LIB_PIN methods,

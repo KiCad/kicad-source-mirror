@@ -115,7 +115,7 @@ int SCH_PIN::GetLength() const
 }
 
 
-bool SCH_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
+bool SCH_PIN::Matches( const wxFindReplaceData& aSearchData, void* aAuxDat ) const
 {
     if( !( aSearchData.GetFlags() & FR_SEARCH_ALL_PINS ) )
         return false;
@@ -125,7 +125,7 @@ bool SCH_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
 }
 
 
-bool SCH_PIN::Replace( wxFindReplaceData& aSearchData, void* aAuxData )
+bool SCH_PIN::Replace( const wxFindReplaceData& aSearchData, void* aAuxData )
 {
     bool isReplaced = false;
 

@@ -129,7 +129,7 @@ wxString EDA_ITEM::GetSelectMenuText( EDA_UNITS aUnits ) const
 }
 
 
-bool EDA_ITEM::Matches( const wxString& aText, wxFindReplaceData& aSearchData )
+bool EDA_ITEM::Matches( const wxString& aText, const wxFindReplaceData& aSearchData ) const
 {
     wxString text = aText;
     wxString searchText = aSearchData.GetFindString();
@@ -156,7 +156,7 @@ bool EDA_ITEM::Matches( const wxString& aText, wxFindReplaceData& aSearchData )
 }
 
 
-bool EDA_ITEM::Replace( wxFindReplaceData& aSearchData, wxString& aText )
+bool EDA_ITEM::Replace( const wxFindReplaceData& aSearchData, wxString& aText )
 {
     wxString searchString = (aSearchData.GetFlags() & wxFR_MATCHCASE) ? aText : aText.Upper();
 

@@ -183,12 +183,12 @@ public:
     void MirrorY( int aYaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
         return SCH_ITEM::Matches( GetText(), aSearchData );
     }
 
-    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override
+    bool Replace( const wxFindReplaceData& aSearchData, void* aAuxData = NULL ) override
     {
         return EDA_TEXT::Replace( aSearchData );
     }
@@ -525,7 +525,7 @@ public:
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override;
 
     bool IsReplaceable() const override { return true; }
 

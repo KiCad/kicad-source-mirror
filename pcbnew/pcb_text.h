@@ -64,7 +64,7 @@ public:
 
     wxString GetShownText( int aDepth = 0 ) const override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    bool Matches( const wxFindReplaceData& aSearchData, void* aAuxData ) const override
     {
         return BOARD_ITEM::Matches( GetShownText(), aSearchData );
     }
