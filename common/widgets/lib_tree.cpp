@@ -56,16 +56,10 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
 #ifdef __WXGTK__
         auto bitmap = new wxStaticBitmap( this, wxID_ANY, wxArtProvider::GetBitmap( wxART_FIND, wxART_FRAME_ICON ) );
 
-        if( aWidgets & DETAILS )
-            search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxALL, 5 );
-        else
-            search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxRIGHT, 5 );
+        search_sizer->Add( bitmap, 0, wxALIGN_CENTER | wxRIGHT, 5 );
 #endif
+        search_sizer->Add( m_query_ctrl, 1, wxEXPAND, 5 );
 
-        if( aWidgets & DETAILS )
-            search_sizer->Add( m_query_ctrl, 1, wxLEFT | wxTOP | wxRIGHT | wxEXPAND, 5 );
-        else
-            search_sizer->Add( m_query_ctrl, 1, wxEXPAND, 5 );
         sizer->Add( search_sizer, 0, wxEXPAND, 5 );
 
         m_query_ctrl->Bind( wxEVT_TEXT, &LIB_TREE::onQueryText, this );
@@ -79,20 +73,20 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable,
     m_adapter->AttachTo( m_tree_ctrl );
 
     if( aWidgets & DETAILS )
-        sizer->Add( m_tree_ctrl, 5, wxLEFT | wxTOP | wxRIGHT | wxEXPAND, 5 );
-    else
-        sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 1 );
+        sizer->AddSpacer( 5 );
+
+    sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 1 );
 
     // Description panel
     if( aWidgets & DETAILS )
     {
         if( !aDetails )
         {
-            auto html_sz = ConvertDialogToPixels( wxPoint( 80, 80 ) );
+            wxPoint html_size = ConvertDialogToPixels( wxPoint( 80, 80 ) );
 
-            m_details_ctrl = new wxHtmlWindow(
-                    this, wxID_ANY, wxDefaultPosition, wxSize( html_sz.x, html_sz.y ),
-                    wxHW_SCROLLBAR_AUTO );
+            m_details_ctrl = new wxHtmlWindow( this, wxID_ANY, wxDefaultPosition,
+                                               wxSize( html_size.x, html_size.y ),
+                                               wxHW_SCROLLBAR_AUTO );
 
             sizer->Add( m_details_ctrl, 2, wxALL | wxEXPAND, 5 );
         }

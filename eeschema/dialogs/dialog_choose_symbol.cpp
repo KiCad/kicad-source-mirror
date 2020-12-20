@@ -72,14 +72,14 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     if( aAdapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
         m_show_footprints = false;
 
-    auto sizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
     // Use a slightly different layout, with a details pane spanning the entire window,
     // if we're not showing footprints.
     if( m_show_footprints )
     {
         m_hsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            wxSP_LIVE_UPDATE );
+                                            wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
         //Avoid the splitter window being assigned as the Parent to additional windows
         m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
@@ -89,16 +89,17 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
     else
     {
         m_vsplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            wxSP_LIVE_UPDATE );
+                                            wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
         m_hsplitter = new wxSplitterWindow( m_vsplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                            wxSP_LIVE_UPDATE );
+                                            wxSP_LIVE_UPDATE | wxSP_NOBORDER | wxSP_3DSASH );
 
         //Avoid the splitter window being assigned as the Parent to additional windows
+        m_vsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
         m_hsplitter->SetExtraStyle( wxWS_EX_TRANSIENT );
 
-        auto detailsPanel = new wxPanel( m_vsplitter );
-        auto detailsSizer = new wxBoxSizer( wxVERTICAL );
+        wxPanel*    detailsPanel = new wxPanel( m_vsplitter );
+        wxBoxSizer* detailsSizer = new wxBoxSizer( wxVERTICAL );
         detailsPanel->SetSizer( detailsSizer );
 
         m_details = new wxHtmlWindow( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -114,16 +115,24 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         sizer->Add( m_vsplitter, 1, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 5 );
     }
 
-    m_tree = new LIB_TREE( m_hsplitter, Prj().SchSymbolLibTable(), aAdapter,
-                           LIB_TREE::WIDGETS::ALL, m_details );
+    wxPanel*    treePanel = new wxPanel( m_hsplitter );
+    wxBoxSizer* treeSizer = new wxBoxSizer( wxVERTICAL );
+    treePanel->SetSizer( treeSizer );
+
+    m_tree = new LIB_TREE( treePanel, Prj().SchSymbolLibTable(), aAdapter, LIB_TREE::WIDGETS::ALL,
+                           m_details );
+
+    treeSizer->Add( m_tree, 1, wxEXPAND | wxALL, 5 );
+    treePanel->Layout();
+    treeSizer->Fit( treePanel );
 
     m_hsplitter->SetSashGravity( 0.8 );
     m_hsplitter->SetMinimumPaneSize( 20 );
-    m_hsplitter->SplitVertically( m_tree,  ConstructRightPanel( m_hsplitter ) );
+    m_hsplitter->SplitVertically( treePanel,  ConstructRightPanel( m_hsplitter ) );
 
     m_dbl_click_timer = new wxTimer( this );
 
-    auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
+    wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
 
     if( aAllowBrowser )
     {
@@ -131,9 +140,27 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
         buttonsSizer->Add( m_browser_button, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
     }
 
-    auto sdbSizer = new wxStdDialogButtonSizer();
-    auto okButton = new wxButton( this, wxID_OK );
-    auto cancelButton = new wxButton( this, wxID_CANCEL );
+    m_keepSymbol = new wxCheckBox( this, wxID_ANY, _("Place repeated copies"), wxDefaultPosition,
+                                   wxDefaultSize, wxALIGN_RIGHT );
+    m_keepSymbol->SetToolTip( _( "Keep the symbol selected for subsequent clicks." ) );
+
+    m_useUnits = new wxCheckBox( this, wxID_ANY, _("Place all units"), wxDefaultPosition,
+                                 wxDefaultSize, wxALIGN_RIGHT );
+    m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
+
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        m_keepSymbol->SetValue( cfg->m_SymChooserPanel.keep_symbol );
+        m_useUnits->SetValue( cfg->m_SymChooserPanel.place_all_units );
+    }
+
+    buttonsSizer->Add( m_keepSymbol, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    buttonsSizer->Add( m_useUnits, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+
+    wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
+    wxButton*               okButton = new wxButton( this, wxID_OK );
+    wxButton*               cancelButton = new wxButton( this, wxID_CANCEL );
+
     sdbSizer->AddButton( okButton );
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
@@ -145,9 +172,7 @@ DIALOG_CHOOSE_SYMBOL::DIALOG_CHOOSE_SYMBOL( SCH_BASE_FRAME* aParent, const wxStr
 
     Layout();
 
-    EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    if( cfg )
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
         EESCHEMA_SETTINGS::PANEL_SYM_CHOOSER& panelCfg = cfg->m_SymChooserPanel;
 
@@ -224,20 +249,19 @@ DIALOG_CHOOSE_SYMBOL::~DIALOG_CHOOSE_SYMBOL()
     m_dbl_click_timer->Stop();
     delete m_dbl_click_timer;
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
+    if( EESCHEMA_SETTINGS* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() ) )
+    {
+        cfg->m_SymChooserPanel.width = GetSize().x;
+        cfg->m_SymChooserPanel.height = GetSize().y;
 
-    wxCHECK( cfg, /*void*/ );
+        cfg->m_SymChooserPanel.keep_symbol = m_keepSymbol->GetValue();
+        cfg->m_SymChooserPanel.place_all_units = m_useUnits->GetValue();
 
-    cfg->m_SymChooserPanel.width = GetSize().x;
-    cfg->m_SymChooserPanel.height = GetSize().y;
+        cfg->m_SymChooserPanel.sash_pos_h = m_hsplitter->GetSashPosition();
 
-    cfg->m_SymChooserPanel.keep_symbol = m_keepSymbol->GetValue();
-    cfg->m_SymChooserPanel.place_all_units = m_useUnits->GetValue();
-
-    cfg->m_SymChooserPanel.sash_pos_h = m_hsplitter->GetSashPosition();
-
-    if( m_vsplitter )
-        cfg->m_SymChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
+        if( m_vsplitter )
+            cfg->m_SymChooserPanel.sash_pos_v = m_vsplitter->GetSashPosition();
+    }
 }
 
 
@@ -254,7 +278,7 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
     {
         FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
-        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxBOTTOM | wxRIGHT, 5 );
+        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxALL, 5 );
 
         if ( fp_list )
         {
@@ -265,39 +289,16 @@ wxPanel* DIALOG_CHOOSE_SYMBOL::ConstructRightPanel( wxWindow* aParent )
         }
 
         if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxBOTTOM | wxTOP | wxRIGHT, 5 );
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 3 );
 
         if( m_fp_preview )
-            sizer->Add( m_fp_preview, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
+            sizer->Add( m_fp_preview, 1, wxEXPAND | wxALL, 5 );
     }
     else
     {
-        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxRIGHT, 5 );
+        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxALL, 5 );
     }
 
-    auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( Kiface().KifaceSettings() );
-
-    m_keepSymbol = new wxCheckBox( panel, 1000, _("Multi-Symbol Placement"), wxDefaultPosition,
-                                   wxDefaultSize, wxALIGN_RIGHT );
-    m_keepSymbol->SetValue( cfg ? cfg->m_SymChooserPanel.keep_symbol : true );
-    m_keepSymbol->SetToolTip( _( "Place multiple copies of the symbol." ) );
-
-    m_useUnits = new wxCheckBox( panel, 1000, _("Place all units"), wxDefaultPosition,
-                                 wxDefaultSize, wxALIGN_RIGHT );
-    m_useUnits->SetValue( cfg ? cfg->m_SymChooserPanel.place_all_units : true );
-    m_useUnits->SetToolTip( _( "Sequentially place all units of the symbol." ) );
-
-    auto fgSizer = new wxFlexGridSizer( 0, 2, 0, 1 );
-    fgSizer->AddGrowableCol( 0 );
-    fgSizer->SetFlexibleDirection( wxBOTH );
-    fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-    fgSizer->Add( 0, 0, 1, wxEXPAND );
-    fgSizer->Add( m_keepSymbol, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-    fgSizer->Add( 0, 0, 1, wxEXPAND );
-    fgSizer->Add( m_useUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-
-    sizer->Add( fgSizer, 0, wxALL | wxEXPAND, 5 );
     panel->SetSizer( sizer );
     panel->Layout();
     sizer->Fit( panel );
