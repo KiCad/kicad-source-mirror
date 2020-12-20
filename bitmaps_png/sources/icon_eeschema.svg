@@ -32,7 +32,7 @@
      id="namedview44"
      showgrid="true"
      inkscape:zoom="11.313709"
-     inkscape:cx="23.660316"
+     inkscape:cx="21.671578"
      inkscape:cy="19.836494"
      inkscape:window-x="299"
      inkscape:window-y="334"
@@ -122,35 +122,27 @@
            y2="26.352333"
            id="line11"
            style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-        <line
-           class="cls-3"
-           x1="16.448553"
-           y1="8.4966545"
-           x2="9.2769585"
-           y2="8.4966545"
-           id="line13"
-           style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
         <path
            id="line15"
-           style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-           d="m 16.445994,5.5089315 c -1.857484,0 -3.714968,0 -5.572451,0"
+           style="fill:none;stroke:#707070;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 15.915665,5.5392616 c -1.857484,0 -3.714968,0 -5.572451,0"
            inkscape:connector-curvature="0" />
         <line
            class="cls-3"
-           x1="36.750526"
-           y1="35.58905"
-           x2="27.350325"
-           y2="35.58905"
+           x1="36.838913"
+           y1="36.472931"
+           x2="27.438713"
+           y2="36.472931"
            id="line17"
-           style="fill:none;stroke:#545454;stroke-width:0.99999702;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+           style="fill:none;stroke:#707070;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <line
            class="cls-3"
            x1="33.034874"
-           y1="32.524559"
+           y1="31.582617"
            x2="27.394508"
-           y2="32.524559"
+           y2="31.582617"
            id="line19"
-           style="fill:none;stroke:#545454;stroke-width:0.99998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+           style="fill:none;stroke:#707070;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <path
            id="line21"
            style="fill:none;stroke:#545454;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
