@@ -135,7 +135,7 @@ public:
      */
     SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
-                   const wxPoint& pos = wxPoint( 0, 0 )  );
+                   const wxPoint& pos = wxPoint( 0, 0 ) );
 
     SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet, PICKED_SYMBOL& aSel,
                    const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -186,7 +186,7 @@ public:
 
     void SetLibId( const LIB_ID& aName );
 
-    const LIB_ID& GetLibId() const        { return m_lib_id; }
+    const LIB_ID& GetLibId() const { return m_lib_id; }
 
     /**
      * The name of the symbol in the schematic library symbol list.

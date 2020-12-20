@@ -684,7 +684,7 @@ public:
     /**
      * Checks if a given filled polygon is an insulated island
      * @param aLayer is the layer to test
-     * @param aPolyIdx is an inndex into m_FilledPolysList[aLayer]
+     * @param aPolyIdx is an index into m_FilledPolysList[aLayer]
      * @return true if the given polygon is insulated (i.e. has no net connection)
      */
     bool IsIsland( PCB_LAYER_ID aLayer, int aPolyIdx ) const;

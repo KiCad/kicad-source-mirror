@@ -398,7 +398,7 @@ private:
     char                quoteChar[2];
 
     int sprint( const char* fmt, ... );
-    int vprint( const char* fmt,  va_list ap );
+    int vprint( const char* fmt, va_list ap );
 
 };
 

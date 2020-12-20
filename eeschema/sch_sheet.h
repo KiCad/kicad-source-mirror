@@ -549,8 +549,8 @@ public:
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
         return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE ) ||
-                ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_BUS ) ||
-                ( aItem->Type() == SCH_NO_CONNECT_T );
+               ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_BUS )  ||
+               ( aItem->Type() == SCH_NO_CONNECT_T );
     }
 
     std::vector<wxPoint> GetConnectionPoints() const override;

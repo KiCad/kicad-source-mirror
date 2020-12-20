@@ -556,7 +556,7 @@ void PCB_IO::formatBoardLayers( const BOARD* aBoard, int aNestLevel ) const
         User_9
     };
 
-    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) );  seq;  ++seq )
+    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) ); seq; ++seq )
     {
         PCB_LAYER_ID layer = *seq;
 
@@ -801,7 +801,7 @@ void PCB_IO::format( const PCB_SHAPE* aShape, int aNestLevel ) const
 
             m_out->Print( aNestLevel, "(gr_poly (pts\n" );
 
-            for( int ii = 0; ii < pointsCount;  ++ii )
+            for( int ii = 0; ii < pointsCount; ++ii )
             {
                 int nestLevel = 0;
 
@@ -900,7 +900,7 @@ void PCB_IO::format( const FP_SHAPE* aFPShape, int aNestLevel ) const
 
             m_out->Print( aNestLevel, "(fp_poly (pts" );
 
-            for( int ii = 0; ii < pointsCount;  ++ii )
+            for( int ii = 0; ii < pointsCount; ++ii )
             {
                 int nestLevel = 0;
 
@@ -986,8 +986,8 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
         if( initial_comments )
         {
-            for( unsigned i=0;  i<initial_comments->GetCount();  ++i )
-                m_out->Print( aNestLevel, "%s\n",  TO_UTF8( (*initial_comments)[i] ) );
+            for( unsigned i = 0; i < initial_comments->GetCount(); ++i )
+                m_out->Print( aNestLevel, "%s\n", TO_UTF8( (*initial_comments)[i] ) );
 
             m_out->Print( 0, "\n" );    // improve readability?
         }
@@ -1177,7 +1177,7 @@ void PCB_IO::format( const FOOTPRINT* aFootprint, int aNestLevel ) const
 
 void PCB_IO::formatLayers( LSET aLayerMask, int aNestLevel ) const
 {
-    std::string  output;
+    std::string output;
 
     if( aNestLevel == 0 )
         output += ' ';
@@ -1932,21 +1932,21 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
     if( aZone->GetNumCorners() )
     {
         bool new_polygon = true;
-        bool is_closed = false;
+        bool is_closed   = false;
 
         for( auto iterator = aZone->CIterateWithHoles(); iterator; ++iterator )
         {
             if( new_polygon )
             {
                 newLine = 0;
-                m_out->Print( aNestLevel+1, "(polygon\n" );
-                m_out->Print( aNestLevel+2, "(pts\n" );
+                m_out->Print( aNestLevel + 1, "(polygon\n" );
+                m_out->Print( aNestLevel + 2, "(pts\n" );
                 new_polygon = false;
                 is_closed = false;
             }
 
             if( newLine == 0 )
-                m_out->Print( aNestLevel+3, "(xy %s %s)",
+                m_out->Print( aNestLevel + 3, "(xy %s %s)",
                               FormatInternalUnits( iterator->x ).c_str(),
                               FormatInternalUnits( iterator->y ).c_str() );
             else
@@ -1971,8 +1971,8 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
                 if( newLine != 0 )
                     m_out->Print( 0, "\n" );
 
-                m_out->Print( aNestLevel+2, ")\n" );
-                m_out->Print( aNestLevel+1, ")\n" );
+                m_out->Print( aNestLevel + 2, ")\n" );
+                m_out->Print( aNestLevel + 1, ")\n" );
                 new_polygon = true;
             }
         }
@@ -1982,8 +1982,8 @@ void PCB_IO::format( const ZONE* aZone, int aNestLevel ) const
             if( newLine != 0 )
                 m_out->Print( 0, "\n" );
 
-            m_out->Print( aNestLevel+2, ")\n" );
-            m_out->Print( aNestLevel+1, ")\n" );
+            m_out->Print( aNestLevel + 2, ")\n" );
+            m_out->Print( aNestLevel + 1, ")\n" );
         }
     }
 

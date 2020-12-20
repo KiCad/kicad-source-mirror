@@ -61,4 +61,4 @@ protected:
     void setDefaultLayerDeps();     ///> Sets rendering targets & dependencies for layers.
 };
 
-#endif
+#endif // __SCH_DRAW_PANEL_H

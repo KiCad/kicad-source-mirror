@@ -297,7 +297,7 @@ public:
     void TransformBoundingBoxWithClearanceToPolygon( SHAPE_POLY_SET* aCornerBuffer,
                                                      int aClearanceValue ) const;
 
-    std::shared_ptr<SHAPE_COMPOUND> GetEffectiveTextShape( ) const;
+    std::shared_ptr<SHAPE_COMPOUND> GetEffectiveTextShape() const;
 
     /**
      * Test if \a aPoint is within the bounds of this object.

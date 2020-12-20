@@ -254,7 +254,7 @@ float SCH_PAINTER::getShadowWidth() const
 
     // For best visuals the selection width must be a cross between the zoom level and the
     // default line width.
-    return (float) fabs( matrix.GetScale().x * 2.75 ) + Mils2iu( eeconfig()->m_Selection.thickness );
+    return (float) std::fabs( matrix.GetScale().x * 2.75 ) + Mils2iu( eeconfig()->m_Selection.thickness );
 }
 
 
@@ -1682,7 +1682,7 @@ void SCH_PAINTER::draw( const SCH_SHEET *aSheet, int aLayer )
         }
     }
 
-    VECTOR2D pos = aSheet->GetPosition();
+    VECTOR2D pos  = aSheet->GetPosition();
     VECTOR2D size = aSheet->GetSize();
 
     if( aLayer == LAYER_SHEET_BACKGROUND )

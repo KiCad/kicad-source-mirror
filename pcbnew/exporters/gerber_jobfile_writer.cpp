@@ -563,7 +563,7 @@ void GERBER_JOBFILE_WRITER::addJSONMaterialStackup()
     m_json["MaterialStackup"] = nlohmann::ordered_json::array();
 
     // Build the candidates list:
-    LSET          maskLayer;
+    LSET maskLayer;
     BOARD_STACKUP brd_stackup = m_pcb->GetDesignSettings().GetStackupDescriptor();
 
     // Ensure brd_stackup is up to date (i.e. no change made by SynchronizeWithBoard() )

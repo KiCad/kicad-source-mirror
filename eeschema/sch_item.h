@@ -289,7 +289,7 @@ public:
      *
      * @param aLayer The layer number.
      */
-    void SetLayer( SCH_LAYER_ID aLayer )  { m_layer = aLayer; }
+    void SetLayer( SCH_LAYER_ID aLayer ) { m_layer = aLayer; }
 
     /**
      * Return the layers the item is drawn on (which may be more than its "home" layer)

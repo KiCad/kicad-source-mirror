@@ -523,47 +523,47 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
                         // and does not define FormatInternalUnits, used here
                         // however this function should exist
 
-	aFormatter->Print( aNestLevel + 1, "(effects" );
+    aFormatter->Print( aNestLevel + 1, "(effects" );
 
-	// Text size
-	aFormatter->Print( 0, " (font" );
+    // Text size
+    aFormatter->Print( 0, " (font" );
 
-	aFormatter->Print( 0, " (size %s %s)",
-					   FormatInternalUnits( GetTextHeight() ).c_str(),
-					   FormatInternalUnits( GetTextWidth() ).c_str() );
+    aFormatter->Print( 0, " (size %s %s)",
+                       FormatInternalUnits( GetTextHeight() ).c_str(),
+                       FormatInternalUnits( GetTextWidth() ).c_str() );
 
-	if( GetTextThickness() )
-		aFormatter->Print( 0, " (thickness %s)", FormatInternalUnits( GetTextThickness() ).c_str() );
+    if( GetTextThickness() )
+        aFormatter->Print( 0, " (thickness %s)", FormatInternalUnits( GetTextThickness() ).c_str() );
 
-	if( IsBold() )
-		aFormatter->Print( 0, " bold" );
+    if( IsBold() )
+        aFormatter->Print( 0, " bold" );
 
-	if( IsItalic() )
-		aFormatter->Print( 0, " italic" );
+    if( IsItalic() )
+        aFormatter->Print( 0, " italic" );
 
-	aFormatter->Print( 0, ")"); // (font
+    aFormatter->Print( 0, ")"); // (font
 
-	if( IsMirrored() ||
-	    GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER ||
-	    GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
-	{
-		aFormatter->Print( 0, " (justify");
+    if( IsMirrored() ||
+        GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER ||
+        GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
+    {
+        aFormatter->Print( 0, " (justify");
 
-		if( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
-			aFormatter->Print( 0, (GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
+        if( GetHorizJustify() != GR_TEXT_HJUSTIFY_CENTER )
+            aFormatter->Print( 0, (GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT) ? " left" : " right" );
 
-		if( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
-			aFormatter->Print( 0, (GetVertJustify() == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
+        if( GetVertJustify() != GR_TEXT_VJUSTIFY_CENTER )
+            aFormatter->Print( 0, (GetVertJustify() == GR_TEXT_VJUSTIFY_TOP) ? " top" : " bottom" );
 
-		if( IsMirrored() )
-			aFormatter->Print( 0, " mirror" );
-		aFormatter->Print( 0, ")" ); // (justify
-	}
+        if( IsMirrored() )
+            aFormatter->Print( 0, " mirror" );
+        aFormatter->Print( 0, ")" ); // (justify
+    }
 
-	if( !(aControlBits & CTL_OMIT_HIDE) && !IsVisible() )
-		aFormatter->Print( 0, " hide" );
+    if( !(aControlBits & CTL_OMIT_HIDE) && !IsVisible() )
+        aFormatter->Print( 0, " hide" );
 
-	aFormatter->Print( 0, ")\n" ); // (justify
+    aFormatter->Print( 0, ")\n" ); // (justify
 
 #endif
 }

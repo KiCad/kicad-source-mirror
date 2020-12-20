@@ -48,8 +48,8 @@ public:
     enum TEXT_TYPE
     {
         TEXT_is_REFERENCE = 0,
-        TEXT_is_VALUE = 1,
-        TEXT_is_DIVERS = 2
+        TEXT_is_VALUE     = 1,
+        TEXT_is_DIVERS    = 2
     };
 
     FP_TEXT( FOOTPRINT* aParentFootprint, TEXT_TYPE text_type = TEXT_is_DIVERS );

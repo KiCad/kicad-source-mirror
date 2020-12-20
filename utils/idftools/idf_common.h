@@ -417,19 +417,19 @@ public:
     bool Matches( double aDrillDia, double aPosX, double aPosY ) const;
 
     /**
-     * Function GettDrillDia
+     * Function GetDrillDia
      * returns the drill diameter in mm
      */
     double GetDrillDia() const;
 
     /**
-     * Function GettDrillXPos
+     * Function GetDrillXPos
      * returns the drill's X position in mm
      */
     double GetDrillXPos() const;
 
     /**
-     * Function GettDrillYPos
+     * Function GetDrillYPos
      * returns the drill's Y position in mm
      */
     double GetDrillYPos() const;

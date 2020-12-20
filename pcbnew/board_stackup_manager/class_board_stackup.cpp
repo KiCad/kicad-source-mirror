@@ -438,7 +438,7 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
     }
 
     // Now initialize all stackup items to the initial values, when exist
-    for( BOARD_STACKUP_ITEM* item: stackup.GetList() )
+    for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
     {
         bool found = false;
         // Search for initial settings:
@@ -475,12 +475,12 @@ bool BOARD_STACKUP::SynchronizeWithBoard( BOARD_DESIGN_SETTINGS* aSettings )
     }
 
     // Transfer other stackup settings from aSettings
-    BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
-    m_HasDielectricConstrains = source_stackup.m_HasDielectricConstrains;
+    const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
+    m_HasDielectricConstrains  = source_stackup.m_HasDielectricConstrains;
     m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
     m_CastellatedPads = source_stackup.m_CastellatedPads;
-    m_EdgePlating = source_stackup.m_EdgePlating;
-    m_FinishType = source_stackup.m_FinishType;
+    m_EdgePlating     = source_stackup.m_EdgePlating;
+    m_FinishType      = source_stackup.m_FinishType;
 
     *this = stackup;
 
@@ -608,8 +608,8 @@ void BOARD_STACKUP::BuildDefaultStackupList( const BOARD_DESIGN_SETTINGS* aSetti
         const BOARD_STACKUP& source_stackup = aSettings->GetStackupDescriptor();
         m_EdgeConnectorConstraints = source_stackup.m_EdgeConnectorConstraints;
         m_CastellatedPads = source_stackup.m_CastellatedPads;
-        m_EdgePlating = source_stackup.m_EdgePlating;
-        m_FinishType = source_stackup.m_FinishType;
+        m_EdgePlating     = source_stackup.m_EdgePlating;
+        m_FinishType      = source_stackup.m_FinishType;
     }
 }
 

@@ -1118,7 +1118,7 @@ void PCB_PARSER::parseBoardStackup()
     int dielectric_idx = 1;     // the index of dielectric layers
     BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( CurTok() != T_LEFT )
             Expecting( T_LEFT );
@@ -2391,7 +2391,7 @@ PCB_TEXT* PCB_PARSER::parsePCB_TEXT()
         Unexpected( CurText() );
     }
 
-    for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
             Expecting( T_LEFT );

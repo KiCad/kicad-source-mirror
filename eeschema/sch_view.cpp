@@ -87,7 +87,7 @@ void SCH_VIEW::ResizeSheetWorkingArea( const SCH_SCREEN* aScreen )
     const PAGE_INFO& page_info = aScreen->GetPageSettings();
     double max_size_x = page_info.GetWidthIU() * 3.0;
     double max_size_y = page_info.GetHeightIU() * 3.0;
-    m_boundary.SetOrigin( -max_size_x/4, -max_size_y/4 );
+    m_boundary.SetOrigin( -max_size_x / 4, -max_size_y / 4 );
     m_boundary.SetSize( max_size_x, max_size_y );
 }
 

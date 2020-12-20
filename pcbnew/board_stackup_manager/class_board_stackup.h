@@ -168,7 +168,7 @@ public:
     wxString FormatDielectricLayerName() const;
 
     // Getters:
-    bool IsEnabled() const {return m_enabled; }
+    bool IsEnabled() const { return m_enabled; }
 
     BOARD_STACKUP_ITEM_TYPE GetType() const { return m_Type; }
     PCB_LAYER_ID GetBrdLayerId() const { return m_LayerId; }

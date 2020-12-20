@@ -209,4 +209,4 @@ private:
 }; // namespace KIGFX
 
 
-#endif
+#endif // __SCH_PAINTER_H

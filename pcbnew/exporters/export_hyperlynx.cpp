@@ -175,9 +175,9 @@ private:
         switch( aStack.m_shape )
         {
         case PAD_SHAPE_CIRCLE:
-        case PAD_SHAPE_OVAL: shapeId = 0; break;
+        case PAD_SHAPE_OVAL:      shapeId = 0; break;
         case PAD_SHAPE_ROUNDRECT: shapeId = 2; break;
-        case PAD_SHAPE_RECT: shapeId = 1; break;
+        case PAD_SHAPE_RECT:      shapeId = 1; break;
         default:
             shapeId = 0;
 

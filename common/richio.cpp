@@ -395,7 +395,7 @@ int OUTPUTFORMATTER::vprint( const char* fmt, va_list ap )
 
 int OUTPUTFORMATTER::sprint( const char* fmt, ... )
 {
-    va_list     args;
+    va_list args;
 
     va_start( args, fmt );
     int ret = vprint( fmt, args);
@@ -416,7 +416,7 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
     int result = 0;
     int total  = 0;
 
-    for( int i=0; i<nestLevel;  ++i )
+    for( int i = 0; i < nestLevel; ++i )
     {
         // no error checking needed, an exception indicates an error.
         result = sprint( "%*c", NESTWIDTH, ' ' );
@@ -438,11 +438,11 @@ std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee ) const
 {
     std::string ret;
 
-    ret.reserve( aWrapee.size()*2 + 2 );
+    ret.reserve( aWrapee.size() * 2 + 2 );
 
     ret += '"';
 
-    for( std::string::const_iterator it = aWrapee.begin(); it!=aWrapee.end(); ++it )
+    for( std::string::const_iterator it = aWrapee.begin(); it != aWrapee.end(); ++it )
     {
         switch( *it )
         {
@@ -493,13 +493,13 @@ void STRING_FORMATTER::write( const char* aOutBuf, int aCount )
 
 void STRING_FORMATTER::StripUseless()
 {
-    std::string  copy = m_mystring;
+    std::string copy = m_mystring;
 
     m_mystring.clear();
 
-    for( std::string::iterator i=copy.begin();  i!=copy.end();  ++i )
+    for( std::string::iterator i = copy.begin(); i != copy.end(); ++i )
     {
-        if( !isspace( *i ) && *i!=')' && *i!='(' && *i!='"' )
+        if( !isspace( *i ) && *i != ')' && *i != '(' && *i != '"' )
         {
             m_mystring += *i;
         }
