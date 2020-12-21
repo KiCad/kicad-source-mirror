@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2015-2020 Cirilo Bernardo <cirilo.bernardo@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -931,7 +931,7 @@ static bool getHollerith( const std::string& aString, size_t& aIndex, wxString& 
         i2 += nchars;
     }
 
-    if( aString[i2] != '"' )
+    if( i2 >= aString.size() || aString[i2] != '"' )
     {
         std::ostringstream ostr;
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
