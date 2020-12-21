@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,8 +37,9 @@ class VERTEX_ITEM;
 class SHADER;
 
 /**
- * @brief Class to store VERTEX instances with caching. It associates VERTEX
- * objects and with VERTEX_ITEMs. Caching vertices data in the memory and a
+ * Class to store VERTEX instances with caching.
+ *
+ * It associates VERTEX objects and with VERTEX_ITEMs. Caching vertices data in the memory and a
  * enables fast reuse of that data.
  */
 
@@ -67,12 +70,12 @@ public:
     virtual void Clear() override;
 
     /**
-     * Returns handle to the vertex buffer. It might be negative if the buffer is not initialized.
+     * Return handle to the vertex buffer. It might be negative if the buffer is not initialized.
      */
     virtual unsigned int GetBufferHandle() const = 0;
 
     /**
-     * Returns true if vertex buffer is currently mapped.
+     * Return true if vertex buffer is currently mapped.
      */
     virtual bool IsMapped() const = 0;
 
@@ -90,7 +93,67 @@ protected:
     /// List of all the stored items
     typedef std::set<VERTEX_ITEM*> ITEMS;
 
-    ///> Stores size & offset of free chunks.
+    /**
+     * Resize the chunk that stores the current item to the given size. The current item has
+     * its offset adjusted after the call, and the new chunk parameters are stored
+     * in m_chunkOffset and m_chunkSize.
+     *
+     * @param aSize is the requested chunk size.
+     * @return true in case of success, false otherwise.
+     */
+    bool reallocate( unsigned int aSize );
+
+    /**
+     * Remove empty spaces between chunks and optionally resizes the container.
+     *
+     * After the operation there is continuous space for storing vertices at the end of the
+     * container.
+     *
+     * @param aNewSize is the new size of container, expressed in number of vertices.
+     * @return false in case of failure (e.g. memory shortage).
+     */
+    virtual bool defragmentResize( unsigned int aNewSize ) = 0;
+
+    /**
+     * Transfer all stored data to a new buffer, removing empty spaces between the data chunks
+     * in the container.
+     *
+     * @param aTarget is the destination for the defragmented data.
+     */
+    void defragment( VERTEX* aTarget );
+
+    /**
+     * Look for consecutive free memory chunks and merges them, decreasing fragmentation of
+     * memory.
+     */
+    void mergeFreeChunks();
+
+    /**
+     * Return the size of a chunk.
+     *
+     * @param aChunk is the chunk.
+     */
+    inline int getChunkSize( const CHUNK& aChunk ) const
+    {
+        return aChunk.first;
+    }
+
+    /**
+     * Return the offset of a chunk.
+     *
+     * @param aChunk is the chunk.
+     */
+    inline unsigned int getChunkOffset( const CHUNK& aChunk ) const
+    {
+        return aChunk.second;
+    }
+
+    /**
+     * Add a chunk marked as a free space.
+     */
+    void addFreeChunk( unsigned int aOffset, unsigned int aSize );
+
+    ///> Store size & offset of free chunks.
     FREE_CHUNK_MAP  m_freeChunks;
 
     ///> Stored VERTEX_ITEMs
@@ -105,63 +168,6 @@ protected:
 
     ///> Maximal vertex index number stored in the container
     unsigned int m_maxIndex;
-
-    /**
-     * Resizes the chunk that stores the current item to the given size. The current item has
-     * its offset adjusted after the call, and the new chunk parameters are stored
-     * in m_chunkOffset and m_chunkSize.
-     *
-     * @param aSize is the requested chunk size.
-     * @return true in case of success, false otherwise
-     */
-    bool reallocate( unsigned int aSize );
-
-    /**
-     * Removes empty spaces between chunks and optionally resizes the container.
-     * After the operation there is continous space for storing vertices at the end of the container.
-     *
-     * @param aNewSize is the new size of container, expressed in number of vertices
-     * @return false in case of failure (e.g. memory shortage)
-     */
-    virtual bool defragmentResize( unsigned int aNewSize ) = 0;
-
-    /**
-     * Transfers all stored data to a new buffer, removing empty spaces between the data chunks
-     * in the container.
-     * @param aTarget is the destination for the defragmented data.
-     */
-    void defragment( VERTEX* aTarget );
-
-    /**
-     * Looks for consecutive free memory chunks and merges them, decreasing fragmentation of
-     * memory.
-     */
-    void mergeFreeChunks();
-
-    /**
-     * Returns the size of a chunk.
-     *
-     * @param aChunk is the chunk.
-     */
-    inline int getChunkSize( const CHUNK& aChunk ) const
-    {
-        return aChunk.first;
-    }
-
-    /**
-     * Returns the offset of a chunk.
-     *
-     * @param aChunk is the chunk.
-     */
-    inline unsigned int getChunkOffset( const CHUNK& aChunk ) const
-    {
-        return aChunk.second;
-    }
-
-    /**
-     * Adds a chunk marked as a free space.
-     */
-    void addFreeChunk( unsigned int aOffset, unsigned int aSize );
 
 private:
     /// Debug & test functions

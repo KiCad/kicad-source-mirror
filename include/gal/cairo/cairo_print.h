@@ -1,5 +1,7 @@
 /*
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -29,7 +31,8 @@ class wxGCDC;
 namespace KIGFX
 {
 /**
- * CAIRO_PRINT_CTX provides a Cairo context created from wxPrintDC.
+ * Provide a Cairo context created from wxPrintDC.
+ *
  * It allows one to prepare printouts using the Cairo library and let wxWidgets handle the rest.
  */
 class CAIRO_PRINT_CTX : public PRINT_CONTEXT
@@ -80,7 +83,7 @@ class CAIRO_PRINT_GAL : public CAIRO_GAL_BASE, public GAL_PRINT
 {
 public:
     CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
-            std::unique_ptr<CAIRO_PRINT_CTX> aContext );
+                     std::unique_ptr<CAIRO_PRINT_CTX> aContext );
 
     void ComputeWorldScreenMatrix() override;
 
@@ -96,8 +99,8 @@ public:
 
     /**
      * @param aSize is the printing sheet size expressed in inches.
-     * @param aRotateIfLandscape true if the platform requires 90 degrees
-     * rotation in order to print in landscape format.
+     * @param aRotateIfLandscape true if the platform requires 90 degrees rotation in order
+     *                           to print in landscape format.
      */
     void SetNativePaperSize( const VECTOR2D& aSize, bool aRotateIfLandscape ) override;
 

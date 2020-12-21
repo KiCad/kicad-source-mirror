@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 Bernhard Stegmaier <stegmaier@sw-systems.de>
- * Copyright (C) 2016-2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Base class for HiDPI aware wxGLCanvas implementations.
  *
@@ -31,7 +31,7 @@
 
 
 /**
- * @brief wxGLCanvas wrapper for HiDPI/Retina support.
+ * wxGLCanvas wrapper for HiDPI/Retina support.
  *
  * This is a small wrapper class to enable HiDPI/Retina support for wxGLCanvas.
  */
@@ -39,15 +39,10 @@ class HIDPI_GL_CANVAS : public wxGLCanvas
 {
 public:
     // wxGLCanvas constructor
-    HIDPI_GL_CANVAS( wxWindow *parent,
-               wxWindowID id = wxID_ANY,
-               const int *attribList = NULL,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = 0,
-               const wxString& name = wxGLCanvasName,
-               const wxPalette& palette = wxNullPalette );
-
+    HIDPI_GL_CANVAS( wxWindow *parent, wxWindowID id = wxID_ANY, const int *attribList = NULL,
+                     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
+                     long style = 0, const wxString& name = wxGLCanvasName,
+                     const wxPalette& palette = wxNullPalette );
 
     virtual wxSize GetNativePixelSize() const;
 

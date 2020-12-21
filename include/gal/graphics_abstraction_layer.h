@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2016-2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) - base class
  *
@@ -47,13 +47,13 @@ namespace KIGFX
 {
 
 /**
- * @brief Class GAL is the abstract interface for drawing on a 2D-surface.
+ * Class GAL is the abstract interface for drawing on a 2D-surface.
  *
  * The functions are optimized for drawing shapes of an EDA-program such as KiCad. Most methods
- * are abstract and need to be implemented by a lower layer, for example by a cairo or OpenGL implementation.
- * <br>
- * Almost all methods use world coordinates as arguments. The board design is defined in world space units;
- * for drawing purposes these are transformed to screen units with this layer. So zooming is handled here as well.
+ * are abstract and need to be implemented by a lower layer, for example by a cairo or OpenGL
+ * implementation.  Almost all methods use world coordinates as arguments. The board design is
+ * defined in world space units for drawing purposes these are transformed to screen units with
+ * this layer. So zooming is handled here as well.
  *
  */
 class GAL : GAL_DISPLAY_OPTIONS_OBSERVER
@@ -69,16 +69,16 @@ public:
     GAL( GAL_DISPLAY_OPTIONS& aOptions );
     virtual ~GAL();
 
-    /// @brief Returns the initalization status for the canvas.
+    /// Returns the initialization status for the canvas.
     virtual bool IsInitialized() const { return true; }
 
-    /// @brief Returns true if the GAL canvas is visible on the screen.
+    /// Returns true if the GAL canvas is visible on the screen.
     virtual bool IsVisible() const { return true; }
 
-    /// @brief Returns true if the GAL engine is a cairo based type.
+    /// Returns true if the GAL engine is a cairo based type.
     virtual bool IsCairoEngine() { return false; }
 
-    /// @brief Returns true if the GAL engine is a opengl based type.
+    /// Returns true if the GAL engine is a OpenGL based type.
     virtual bool IsOpenGlEngine() { return false; }
 
     // ---------------
@@ -86,7 +86,7 @@ public:
     // ---------------
 
     /**
-     * @brief Draw a line.
+     * Draw a line.
      *
      * Start and end points are defined as 2D-Vectors.
      *
@@ -96,7 +96,7 @@ public:
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
 
     /**
-     * @brief Draw a rounded segment.
+     * Draw a rounded segment.
      *
      * Start and end points are defined as 2D-Vectors.
      *
@@ -104,10 +104,11 @@ public:
      * @param aEndPoint     is the end point of the segment.
      * @param aWidth        is a width of the segment
      */
-    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth ) {};
+    virtual void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                              double aWidth ) {};
 
     /**
-     * @brief Draw a polyline
+     * Draw a polyline
      *
      * @param aPointList is a list of 2D-Vectors containing the polyline points.
      */
@@ -116,7 +117,7 @@ public:
     virtual void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) {};
 
     /**
-     * @brief Draw a circle using world coordinates.
+     * Draw a circle using world coordinates.
      *
      * @param aCenterPoint is the center point of the circle.
      * @param aRadius is the radius of the circle.
@@ -124,7 +125,7 @@ public:
     virtual void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) {};
 
     /**
-     * @brief Draw an arc.
+     * Draw an arc.
      *
      * @param aCenterPoint  is the center point of the arc.
      * @param aRadius       is the arc radius.
@@ -132,10 +133,11 @@ public:
      * @param aEndAngle     is the end angle of the arc.
      */
     virtual void
-    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle ) {};
+    DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
+             double aEndAngle ) {};
 
     /**
-     * @brief Draw an arc segment.
+     * Draw an arc segment.
      *
      * This method differs from DrawArc() in what happens when fill/stroke are on or off.
      * DrawArc() draws a "pie piece" when fill is turned on, and a thick stroke when fill is off.
@@ -152,10 +154,10 @@ public:
      */
     virtual void
     DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                   double aEndAngle, double aWidth ) {};
+                    double aEndAngle, double aWidth ) {};
 
     /**
-     * @brief Draw a rectangle.
+     * Draw a rectangle.
      *
      * @param aStartPoint   is the start point of the rectangle.
      * @param aEndPoint     is the end point of the rectangle.
@@ -163,7 +165,7 @@ public:
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
 
     /**
-     * @brief Draw a polygon.
+     * Draw a polygon.
      *
      * @param aPointList is the list of the polygon points.
      */
@@ -173,7 +175,7 @@ public:
     virtual void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) {};
 
     /**
-     * @brief Draw a cubic bezier spline.
+     * Draw a cubic bezier spline.
      *
      * @param startPoint    is the start point of the spline.
      * @param controlPointA is the first control point.
@@ -188,7 +190,7 @@ public:
                             double aFilterValue = 0.0 ) {};
 
     /**
-     * @brief Draw a bitmap image.
+     * Draw a bitmap image.
      */
     virtual void DrawBitmap( const BITMAP_BASE& aBitmap ) {};
 
@@ -196,19 +198,19 @@ public:
     // Screen methods
     // --------------
 
-    /// @brief Resizes the canvas.
+    /// Resizes the canvas.
     virtual void ResizeScreen( int aWidth, int aHeight ) {};
 
-    /// @brief Shows/hides the GAL canvas
+    /// Shows/hides the GAL canvas
     virtual bool Show( bool aShow ) { return true; };
 
-    /// @brief Returns GAL canvas size in pixels
+    /// Returns GAL canvas size in pixels
     const VECTOR2I& GetScreenPixelSize() const
     {
         return screenSize;
     }
 
-    /// @brief Force all remaining objects to be drawn.
+    /// Force all remaining objects to be drawn.
     virtual void Flush() {};
 
     void SetClearColor( const COLOR4D& aColor )
@@ -222,7 +224,8 @@ public:
     }
 
     /**
-     * @brief Clear the screen.
+     * Clear the screen.
+     *
      * @param aColor is the color used for clearing.
      */
     virtual void ClearScreen() {};
@@ -232,7 +235,7 @@ public:
     // -----------------
 
     /**
-     * @brief Enable/disable fill.
+     * Enable/disable fill.
      *
      * @param aIsFillEnabled is true, when the graphics objects should be filled, else false.
      */
@@ -242,7 +245,7 @@ public:
     }
 
     /**
-     * @brief Enable/disable stroked outlines.
+     * Enable/disable stroked outlines.
      *
      * @param aIsStrokeEnabled is true, if the outline of an object should be stroked.
      */
@@ -252,7 +255,7 @@ public:
     }
 
     /**
-     * @brief Set the fill color.
+     * Set the fill color.
      *
      * @param aColor is the color for filling.
      */
@@ -262,7 +265,7 @@ public:
     }
 
     /**
-     * @brief Get the fill color.
+     * Get the fill color.
      *
      * @return the color for filling a outline.
      */
@@ -272,7 +275,7 @@ public:
     }
 
     /**
-     * @brief Set the stroke color.
+     * Set the stroke color.
      *
      * @param aColor is the color for stroking the outline.
      */
@@ -282,7 +285,7 @@ public:
     }
 
     /**
-     * @brief Get the stroke color.
+     * Get the stroke color.
      *
      * @return the color for stroking the outline.
      */
@@ -292,7 +295,7 @@ public:
     }
 
     /**
-     * @brief Set the line width.
+     * Set the line width.
      *
      * @param aLineWidth is the line width.
      */
@@ -302,7 +305,7 @@ public:
     }
 
     /**
-     * @brief Get the line width.
+     * Get the line width.
      *
      * @return the actual line width.
      */
@@ -312,7 +315,7 @@ public:
     }
 
     /**
-     * @brief Set the depth of the layer (position on the z-axis)
+     * Set the depth of the layer (position on the z-axis)
      *
      * @param aLayerDepth the layer depth for the objects.
      */
@@ -334,7 +337,7 @@ public:
     }
 
     /**
-     * @brief Draws a vector type text using preloaded Newstroke font.
+     * Draws a vector type text using preloaded Newstroke font.
      *
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
@@ -347,7 +350,7 @@ public:
     }
 
     /**
-     * @brief Draws a text using a bitmap font. It should be faster than StrokeText(),
+     * Draws a text using a bitmap font. It should be faster than StrokeText(),
      * but can be used only for non-Gerber elements.
      *
      * @param aText is the text to be drawn.
@@ -370,7 +373,7 @@ public:
     }
 
     /**
-     * @brief Compute the X and Y size of a given text. The text is expected to be
+     * Compute the X and Y size of a given text. The text is expected to be
      * a only one line text.
      *
      * @param aText is the text string (one line).
@@ -379,7 +382,7 @@ public:
     VECTOR2D GetTextLineSize( const UTF8& aText ) const;
 
     /**
-     * @brief Loads attributes of the given text (bold/italic/underline/mirrored and so on).
+     * Loads attributes of the given text (bold/italic/underline/mirrored and so on).
      *
      * @param aText is the text item.
      */
@@ -394,7 +397,7 @@ public:
     void ResetTextAttributes();
 
     /**
-     * @brief Set the font glyph size.
+     * Set the font glyph size.
      *
      * @param aGlyphSize is the new font glyph size.
      */
@@ -402,7 +405,7 @@ public:
     const VECTOR2D& GetGlyphSize() const { return textProperties.m_glyphSize; }
 
     /**
-     * @brief Set bold property of current font.
+     * Set bold property of current font.
      *
      * @param aBold tells if the font should be bold or not.
      */
@@ -410,7 +413,7 @@ public:
     inline bool IsFontBold() const { return textProperties.m_bold; }
 
     /**
-     * @brief Set italic property of current font.
+     * Set italic property of current font.
      *
      * @param aItalic tells if the font should be italic or not.
      */
@@ -421,7 +424,7 @@ public:
     inline bool IsFontUnderlined() const { return textProperties.m_underlined; }
 
     /**
-     * @brief Set a mirrored property of text.
+     * Set a mirrored property of text.
      *
      * @param aMirrored tells if the text should be mirrored or not.
      */
@@ -429,7 +432,7 @@ public:
     inline bool IsTextMirrored() const { return textProperties.m_mirrored; }
 
     /**
-     * @brief Set the horizontal justify for text drawing.
+     * Set the horizontal justify for text drawing.
      *
      * @param aHorizontalJustify is the horizontal justify value.
      */
@@ -439,7 +442,7 @@ public:
     }
 
     /**
-     * @brief Returns current text horizontal justification setting.
+     * Returns current text horizontal justification setting.
      */
     inline EDA_TEXT_HJUSTIFY_T GetHorizontalJustify() const
     {
@@ -447,7 +450,7 @@ public:
     }
 
     /**
-     * @brief Set the vertical justify for text drawing.
+     * Set the vertical justify for text drawing.
      *
      * @param aVerticalJustify is the vertical justify value.
      */
@@ -457,7 +460,7 @@ public:
     }
 
     /**
-     * @brief Returns current text vertical justification setting.
+     * Returns current text vertical justification setting.
      */
     inline EDA_TEXT_VJUSTIFY_T GetVerticalJustify() const
     {
@@ -470,37 +473,37 @@ public:
     // --------------
 
     /**
-     * @brief Transform the context.
+     * Transform the context.
      *
      * @param aTransformation is the transformation matrix.
      */
     virtual void Transform( const MATRIX3x3D& aTransformation ) {};
 
     /**
-     * @brief Rotate the context.
+     * Rotate the context.
      *
      * @param aAngle is the rotation angle in radians.
      */
     virtual void Rotate( double aAngle ) {};
 
     /**
-     * @brief Translate the context.
+     * Translate the context.
      *
      * @param aTranslation is the translation vector.
      */
     virtual void Translate( const VECTOR2D& aTranslation ) {};
 
     /**
-     * @brief Scale the context.
+     * Scale the context.
      *
      * @param aScale is the scale factor for the x- and y-axis.
      */
     virtual void Scale( const VECTOR2D& aScale ) {};
 
-    /// @brief Save the context.
+    /// Save the context.
     virtual void Save() {};
 
-    /// @brief Restore the context.
+    /// Restore the context.
     virtual void Restore() {};
 
     // --------------------------------------------
@@ -508,7 +511,7 @@ public:
     // ---------------------------------------------
 
     /**
-     * @brief Begin a group.
+     * Begin a group.
      *
      * A group is a collection of graphic items.
      * Hierarchical groups are possible, attributes and transformations can be used.
@@ -517,18 +520,18 @@ public:
      */
     virtual int BeginGroup() { return 0; };
 
-    /// @brief End the group.
+    /// End the group.
     virtual void EndGroup() {};
 
     /**
-     * @brief Draw the stored group.
+     * Draw the stored group.
      *
      * @param aGroupNumber is the group number.
      */
     virtual void DrawGroup( int aGroupNumber ) {};
 
     /**
-     * @brief Changes the color used to draw the group.
+     * Changes the color used to draw the group.
      *
      * @param aGroupNumber is the group number.
      * @param aNewColor is the new color.
@@ -536,7 +539,7 @@ public:
     virtual void ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor ) {};
 
     /**
-     * @brief Changes the depth (Z-axis position) of the group.
+     * Changes the depth (Z-axis position) of the group.
      *
      * @param aGroupNumber is the group number.
      * @param aDepth is the new depth.
@@ -544,14 +547,14 @@ public:
     virtual void ChangeGroupDepth( int aGroupNumber, int aDepth ) {};
 
     /**
-     * @brief Delete the group from the memory.
+     * Delete the group from the memory.
      *
      * @param aGroupNumber is the group number.
      */
     virtual void DeleteGroup( int aGroupNumber ) {};
 
     /**
-     * @brief Delete all data created during caching of graphic items.
+     * Delete all data created during caching of graphic items.
      */
     virtual void ClearCache() {};
 
@@ -559,11 +562,11 @@ public:
     // Handling the world <-> screen transformation
     // --------------------------------------------------------
 
-    /// @brief Compute the world <-> screen transformation matrix
+    /// Compute the world <-> screen transformation matrix
     virtual void ComputeWorldScreenMatrix();
 
     /**
-     * @brief Get the world <-> screen transformation matrix.
+     * Get the world <-> screen transformation matrix.
      *
      * @return the transformation matrix.
      */
@@ -573,7 +576,7 @@ public:
     }
 
     /**
-     * @brief Get the screen <-> world transformation matrix.
+     * Get the screen <-> world transformation matrix.
      *
      * @return the transformation matrix.
      */
@@ -583,7 +586,7 @@ public:
     }
 
     /**
-     * @brief Set the world <-> screen transformation matrix.
+     * Set the world <-> screen transformation matrix.
      *
      * @param aMatrix is the 3x3 world <-> screen transformation matrix.
      */
@@ -593,7 +596,7 @@ public:
     }
 
     /**
-     * @brief Set the unit length.
+     * Set the unit length.
      *
      * This defines the length [inch] per one integer. For instance a value 0.001 means
      * that the coordinate [1000, 1000] corresponds with a point at (1 inch, 1 inch) or
@@ -612,7 +615,7 @@ public:
     }
 
     /**
-     * @brief Set the dots per inch of the screen.
+     * Set the dots per inch of the screen.
      *
      * This value depends on the user screen, it should be configurable by the application.
      * For instance a typical notebook with HD+ resolution (1600x900) has 106 DPI.
@@ -625,7 +628,7 @@ public:
     }
 
     /**
-     * @brief Set the Point in world space to look at.
+     * Set the Point in world space to look at.
      *
      * This point corresponds with the center of the actual drawing area.
      *
@@ -637,7 +640,7 @@ public:
     }
 
     /**
-     * @brief Get the look at point.
+     * Get the look at point.
      *
      * @return the look at point.
      */
@@ -647,7 +650,7 @@ public:
     }
 
     /**
-     * @brief Set the zoom factor of the scene.
+     * Set the zoom factor of the scene.
      *
      * @param aZoomFactor is the zoom factor.
      */
@@ -657,7 +660,7 @@ public:
     }
 
     /**
-     * @brief Get the zoom factor
+     * Get the zoom factor
      *
      * @return the zoom factor.
      */
@@ -667,7 +670,7 @@ public:
     }
 
     /**
-     * @brief Set the rotation angle.
+     * Set the rotation angle.
      *
      * @param aRotation is the new rotation angle (radians).
      */
@@ -687,12 +690,12 @@ public:
     }
 
     /**
-     * @brief Set the range of the layer depth.
+     * Set the range of the layer depth.
      *
      * Usually required for the OpenGL implementation, any object outside this range is not drawn.
      *
      * @param aDepthRange is the depth range where component x is the near clipping plane and y
-     *        is the far clipping plane.
+     *                    is the far clipping plane.
      */
     inline void SetDepthRange( const VECTOR2D& aDepthRange )
     {
@@ -700,7 +703,7 @@ public:
     }
 
     /**
-     * @brief Returns the minimum depth in the currently used range (the top).
+     * Returns the minimum depth in the currently used range (the top).
      */
     inline double GetMinDepth() const
     {
@@ -708,7 +711,7 @@ public:
     }
 
     /**
-     * @brief Returns the maximum depth in the currently used range (the bottom).
+     * Returns the maximum depth in the currently used range (the bottom).
      */
     inline double GetMaxDepth() const
     {
@@ -716,7 +719,7 @@ public:
     }
 
     /**
-     * @brief Get the world scale.
+     * Get the world scale.
      *
      * @return the actual world scale factor.
      */
@@ -726,7 +729,7 @@ public:
     }
 
     /**
-     * @brief Sets flipping of the screen.
+     * Sets flipping of the screen.
      *
      * @param xAxis is the flip flag for the X axis.
      * @param yAxis is the flip flag for the Y axis.
@@ -758,28 +761,28 @@ public:
     // ---------------------------
 
     /**
-     * @brief Sets the target for rendering.
+     * Sets the target for rendering.
      *
      * @param aTarget is the new target for rendering.
      */
     virtual void SetTarget( RENDER_TARGET aTarget ) {};
 
     /**
-     * @brief Gets the currently used target for rendering.
+     * Gets the currently used target for rendering.
      *
      * @return The current rendering target.
      */
     virtual RENDER_TARGET GetTarget() const { return TARGET_CACHED; };
 
     /**
-     * @brief Clears the target for rendering.
+     * Clears the target for rendering.
      *
      * @param aTarget is the target to be cleared.
      */
     virtual void ClearTarget( RENDER_TARGET aTarget ) {};
 
     /**
-     * @brief Returns true if the target exists.
+     * Returns true if the target exists.
      *
      * @param aTarget is the target to be checked.
      */
@@ -789,7 +792,7 @@ public:
     };
 
     /**
-     * @brief Sets negative draw mode in the renderer
+     * Sets negative draw mode in the renderer
      *
      * When negative mode is enabled, drawn items will subtract from
      * previously drawn items.  This is mainly needed for Gerber
@@ -806,7 +809,7 @@ public:
     // -------------
 
     /**
-     * @brief Sets the visibility setting of the grid.
+     * Sets the visibility setting of the grid.
      *
      * @param aVisibility is the new visibility setting of the grid.
      */
@@ -820,7 +823,7 @@ public:
                 ( gridVisibility && options.m_gridSnapping == KIGFX::GRID_SNAPPING::WITH_GRID ) );
     }
     /**
-     * @brief Set the origin point for the grid.
+     * Set the origin point for the grid.
      *
      * @param aGridOrigin is a vector containing the grid origin point, in world coordinates.
      */
@@ -841,7 +844,7 @@ public:
     }
 
     /**
-     * @brief Set the grid size.
+     * Set the grid size.
      *
      * @param aGridSize is a vector containing the grid size in x and y direction.
      */
@@ -858,7 +861,7 @@ public:
     }
 
     /**
-     * @brief Returns the grid size.
+     * Returns the grid size.
      *
      * @return A vector containing the grid size in x and y direction.
      */
@@ -868,7 +871,7 @@ public:
     }
 
     /**
-     * @brief Set the grid color.
+     * Set the grid color.
      *
      * @param aGridColor is the grid color, it should have a low alpha value for the best effect.
      */
@@ -878,7 +881,7 @@ public:
     }
 
     /**
-     * @brief Set the axes color.
+     * Set the axes color.
      *
      * @param aAxesColor is the color to draw the axes if enabled.
      */
@@ -888,7 +891,7 @@ public:
     }
 
     /**
-     * @brief Enables drawing the axes.
+     * Enables drawing the axes.
      */
     inline void SetAxesEnabled( bool aAxesEnabled )
     {
@@ -896,7 +899,7 @@ public:
     }
 
     /**
-     * @brief Draw every tick line wider.
+     * Draw every tick line wider.
      *
      * @param aInterval increase the width of every aInterval line, if 0 do not use this feature.
      */
@@ -906,7 +909,7 @@ public:
     }
 
     /**
-     * @brief Get the grid line width.
+     * Get the grid line width.
      *
      * @return the grid line width
      */
@@ -915,11 +918,10 @@ public:
         return gridLineWidth;
     }
 
-    ///> @brief Draw the grid
+    ///> Draw the grid
     virtual void DrawGrid() {};
 
     /**
-     * Function GetGridPoint()
      * For a given point it returns the nearest point belonging to the grid in world coordinates.
      *
      * @param aPoint is the point for which the grid point is searched.
@@ -928,7 +930,7 @@ public:
     VECTOR2D GetGridPoint( const VECTOR2D& aPoint ) const;
 
     /**
-     * @brief Compute the point position in world coordinates from given screen coordinates.
+     * Compute the point position in world coordinates from given screen coordinates.
      *
      * @param aPoint the pointposition in screen coordinates.
      * @return the point position in world coordinates.
@@ -939,7 +941,7 @@ public:
     }
 
     /**
-     * @brief Compute the point position in screen coordinates from given world coordinates.
+     * Compute the point position in screen coordinates from given world coordinates.
      *
      * @param aPoint the pointposition in world coordinates.
      * @return the point position in screen coordinates.
@@ -950,7 +952,7 @@ public:
     }
 
     /**
-     * @brief Enable/disable cursor.
+     * Enable/disable cursor.
      *
      * @param aCursorEnabled is true if the cursor should be drawn, else false.
      */
@@ -960,7 +962,8 @@ public:
     }
 
     /**
-     * @brief Returns information about cursor visibility.
+     * Returns information about cursor visibility.
+     *
      * @return True if cursor is visible.
      */
     bool IsCursorEnabled() const
@@ -969,7 +972,7 @@ public:
     }
 
     /**
-     * @brief Set the cursor color.
+     * Set the cursor color.
      *
      * @param aCursorColor is the color of the cursor.
      */
@@ -979,14 +982,14 @@ public:
     }
 
     /**
-     * @brief Draw the cursor.
+     * Draw the cursor.
      *
      * @param aCursorPosition is the cursor position in screen coordinates.
      */
     virtual void DrawCursor( const VECTOR2D& aCursorPosition ) {};
 
     /**
-     * @brief Changes the current depth to deeper, so it is possible to draw objects right beneath
+     * Changes the current depth to deeper, so it is possible to draw objects right beneath
      * other.
      */
     inline void AdvanceDepth()
@@ -995,7 +998,7 @@ public:
     }
 
     /**
-     * @brief Stores current drawing depth on the depth stack.
+     * Stores current drawing depth on the depth stack.
      */
     inline void PushDepth()
     {
@@ -1003,7 +1006,7 @@ public:
     }
 
     /**
-     * @brief Restores previously stored drawing depth for the depth stack.
+     * Restores previously stored drawing depth for the depth stack.
      */
     inline void PopDepth()
     {
@@ -1014,6 +1017,68 @@ public:
     virtual void EnableDepthTest( bool aEnabled = false ) {};
 
 protected:
+    /// Private: use GAL_CONTEXT_LOCKER RAII object
+    virtual void lockContext( int aClientCookie ) {}
+
+    virtual void unlockContext( int aClientCookie ) {}
+
+    /// Enables item update mode.
+    /// Private: use GAL_UPDATE_CONTEXT RAII object
+    virtual void beginUpdate() {}
+
+    /// Disables item update mode.
+    virtual void endUpdate() {}
+
+    /// Begin the drawing, needs to be called for every new frame.
+    /// Private: use GAL_DRAWING_CONTEXT RAII object
+    virtual void beginDrawing() {};
+
+    /// End the drawing, needs to be called for every new frame.
+    /// Private: use GAL_DRAWING_CONTEXT RAII object
+    virtual void endDrawing() {};
+
+    /// Compute the scaling factor for the world->screen matrix
+    inline void computeWorldScale()
+    {
+        worldScale = screenDPI * worldUnitLength * zoomFactor;
+    }
+
+    /**
+     * compute minimum grid spacing from the grid settings
+     *
+     * @return the minimum spacing to use for drawing the grid
+     */
+    double computeMinGridSpacing() const;
+
+    /// Possible depth range
+    static const int MIN_DEPTH;
+    static const int MAX_DEPTH;
+
+    /// Depth level on which the grid is drawn
+    static const int GRID_DEPTH;
+
+    /**
+     * Gets the actual cursor color to draw
+     */
+    COLOR4D getCursorColor() const;
+
+    // ---------------
+    // Settings observer interface
+    // ---------------
+    /**
+     * Handler for observer settings changes
+     */
+    void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions ) override;
+
+    /**
+     * Handle updating display options.
+     *
+     * Derived classes should call up to this to set base-class methods.
+     *
+     * @return true if the new settings changed something. Derived classes can use this
+     *         information to refresh themselves
+     */
+    virtual bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions );
 
     GAL_DISPLAY_OPTIONS&    options;
     UTIL::LINK              observerLink;
@@ -1069,70 +1134,6 @@ protected:
 
     /// Instance of object that stores information about how to draw texts
     STROKE_FONT        strokeFont;
-
-    /// Private: use GAL_CONTEXT_LOCKER RAII object
-    virtual void lockContext( int aClientCookie ) {}
-
-    virtual void unlockContext( int aClientCookie ) {}
-
-    /// @brief Enables item update mode.
-    /// Private: use GAL_UPDATE_CONTEXT RAII object
-    virtual void beginUpdate() {}
-
-    /// @brief Disables item update mode.
-    virtual void endUpdate() {}
-
-    /// @brief Begin the drawing, needs to be called for every new frame.
-    /// Private: use GAL_DRAWING_CONTEXT RAII object
-    virtual void beginDrawing() {};
-
-    /// @brief End the drawing, needs to be called for every new frame.
-    /// Private: use GAL_DRAWING_CONTEXT RAII object
-    virtual void endDrawing() {};
-
-    /// Compute the scaling factor for the world->screen matrix
-    inline void computeWorldScale()
-    {
-        worldScale = screenDPI * worldUnitLength * zoomFactor;
-    }
-
-    /**
-     * @brief compute minimum grid spacing from the grid settings
-     *
-     * @return the minimum spacing to use for drawing the grid
-     */
-    double computeMinGridSpacing() const;
-
-    /// Possible depth range
-    static const int MIN_DEPTH;
-    static const int MAX_DEPTH;
-
-    /// Depth level on which the grid is drawn
-    static const int GRID_DEPTH;
-
-    /**
-     * Gets the actual cursor color to draw
-     */
-    COLOR4D getCursorColor() const;
-
-    // ---------------
-    // Settings observer interface
-    // ---------------
-    /**
-     * Handler for observer settings changes
-     */
-    void OnGalDisplayOptionsChanged( const GAL_DISPLAY_OPTIONS& aOptions ) override;
-
-    /**
-     * Function updatedGalDisplayOptions
-     *
-     * @brief handler for updated display options. Derived classes
-     * should call up to this to set base-class methods.
-     *
-     * @return true if the new settings changed something. Derived classes
-     * can use this information to refresh themselves
-     */
-    virtual bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions );
 
 private:
     struct TEXT_PROPERTIES

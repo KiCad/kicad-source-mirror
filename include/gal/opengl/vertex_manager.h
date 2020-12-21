@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,8 +26,6 @@
 
 /**
  * @file vertex_manager.h
- * @brief Class to control vertex container and GPU with possibility of emulating old-style OpenGL
- * 1.0 state machine using modern OpenGL methods.
  */
 
 #ifndef VERTEX_MANAGER_H_
@@ -47,32 +47,31 @@ class VERTEX_ITEM;
 class VERTEX_CONTAINER;
 class GPU_MANAGER;
 
+/**
+ * Class to control vertex container and GPU with possibility of emulating old-style OpenGL
+ * 1.0 state machine using modern OpenGL methods.
+ */
 class VERTEX_MANAGER
 {
 public:
     /**
-     * @brief Constructor.
-     *
      * @param aCached says if vertices should be cached in GPU or system memory. For data that
-     * does not change every frame, it is better to store vertices in GPU memory.
+     *                does not change every frame, it is better to store vertices in GPU memory.
      */
     VERTEX_MANAGER( bool aCached );
 
     /**
-     * Function Map()
-     * maps vertex buffer.
+     * Map vertex buffer.
      */
     void Map();
 
     /**
-     * Function Unmap()
-     * unmaps vertex buffer.
+     * Unmap vertex buffer.
      */
     void Unmap();
 
     /**
-     * Function Reserve()
-     * allocates space for vertices, so it will be used with subsequent Vertex() calls.
+     * Allocate space for vertices, so it will be used with subsequent Vertex() calls.
      *
      * @param aSize is the number of vertices that should be available in the reserved space.
      * @return True if successful, false otherwise.
@@ -80,11 +79,11 @@ public:
     bool Reserve( unsigned int aSize );
 
     /**
-     * Function Vertex()
-     * adds a vertex with the given coordinates to the currently set item. Color & shader
-     * parameters stored in aVertex are ignored, instead color & shader set by Color() and
-     * Shader() functions are used. Vertex coordinates will have the current transformation
-     * matrix applied.
+     * Add a vertex with the given coordinates to the currently set item.
+     *
+     * Color & shader parameters stored in aVertex are ignored, instead color & shader set
+     * by Color() and Shader() functions are used. Vertex coordinates will have the current
+     * transformation matrix applied.
      *
      * @param aVertex contains vertex coordinates.
      * @return True if successful, false otherwise.
@@ -95,9 +94,9 @@ public:
     }
 
     /**
-     * Function Vertex()
-     * adds a vertex with the given coordinates to the currently set item. Vertex coordinates will
-     * have the current transformation matrix applied.
+     * Add a vertex with the given coordinates to the currently set item.
+     *
+     * Vertex coordinates will have the current transformation matrix applied.
      *
      * @param aX is the X coordinate of the new vertex.
      * @param aY is the Y coordinate of the new vertex.
@@ -107,9 +106,9 @@ public:
     bool Vertex( GLfloat aX, GLfloat aY, GLfloat aZ );
 
     /**
-     * Function Vertex()
-     * adds a vertex with the given coordinates to the currently set item. Vertex coordinates will
-     * have the current transformation matrix applied.
+     * Add a vertex with the given coordinates to the currently set item.
+     *
+     * Vertex coordinates will have the current transformation matrix applied.
      *
      * @param aXY are the XY coordinates of the new vertex.
      * @param aZ is the Z coordinate of the new vertex.
@@ -121,22 +120,21 @@ public:
     }
 
     /**
-     * Function Vertices()
-     * adds one or more vertices to the currently set item. It takes advantage of allocating memory
-     * in advance, so should be faster than adding vertices one by one. Color & shader
-     * parameters stored in aVertices are ignored, instead color & shader set by Color() and
-     * Shader() functions are used. All the vertex coordinates will have the current
-     * transformation matrix applied.
+     * Add one or more vertices to the currently set item.
      *
-     * @param aVertices contains vertices to be added
+     * It takes advantage of allocating memory in advance, so should be faster than
+     * adding vertices one by one. Color & shader parameters stored in aVertices are
+     * ignored, instead color & shader set by Color() and Shader() functions are used.
+     * All the vertex coordinates will have the current transformation matrix applied.
+     *
+     * @param aVertices contains vertices to be added.
      * @param aSize is the number of vertices to be added.
      * @return True if successful, false otherwise.
      */
     bool Vertices( const VERTEX aVertices[], unsigned int aSize );
 
     /**
-     * Function Color()
-     * changes currently used color that will be applied to newly added vertices.
+     * Changes currently used color that will be applied to newly added vertices.
      *
      * @param aColor is the new color.
      */
@@ -149,9 +147,10 @@ public:
     }
 
     /**
-     * Function Color()
-     * changes currently used color that will be applied to newly added vertices. It is the
-     * equivalent of glColor4f() function.
+     * Change currently used color that will be applied to newly added vertices.
+     *
+     * It is the equivalent of glColor4f() function.
+     *
      * @param aRed is the red component of the new color.
      * @param aGreen is the green component of the new color.
      * @param aBlue is the blue component of the new color.
@@ -166,10 +165,11 @@ public:
     }
 
     /**
-     * Function Shader()
-     * changes currently used shader and its parameters that will be applied to newly added
-     * vertices. Parameters depend on shader, for more information have a look at shaders source
-     * code.
+     * Change currently used shader and its parameters that will be applied to newly added
+     * vertices.
+     *
+     * Parameters depend on shader, for more information have a look at shaders source code.
+     *
      * @see SHADER_TYPE
      *
      * @param aShaderType is the a shader type to be applied.
@@ -177,8 +177,8 @@ public:
      * @param aParam2 is the optional parameter for a shader.
      * @param aParam3 is the optional parameter for a shader.
      */
-    inline void Shader( GLfloat aShaderType, GLfloat aParam1 = 0.0f,
-                        GLfloat aParam2 = 0.0f, GLfloat aParam3 = 0.0f )
+    inline void Shader( GLfloat aShaderType, GLfloat aParam1 = 0.0f, GLfloat aParam2 = 0.0f,
+                        GLfloat aParam3 = 0.0f )
     {
         m_shader[0] = aShaderType;
         m_shader[1] = aParam1;
@@ -187,9 +187,10 @@ public:
     }
 
     /**
-     * Function Translate()
-     * multiplies the current matrix by a translation matrix, so newly vertices will be
-     * translated by the given vector. It is the equivalent of the glTranslatef() function.
+     * Multiply the current matrix by a translation matrix, so newly vertices will be
+     * translated by the given vector.
+     *
+     * It is the equivalent of the glTranslatef() function.
      *
      * @param aX is the X coordinate of a translation vector.
      * @param aY is the X coordinate of a translation vector.
@@ -201,9 +202,10 @@ public:
     }
 
     /**
-     * Function Rotate()
-     * multiplies the current matrix by a rotation matrix, so the newly vertices will be
-     * rotated by the given angles. It is the equivalent of the glRotatef() function.
+     * Multiply the current matrix by a rotation matrix, so the newly vertices will be
+     * rotated by the given angles.
+     *
+     * It is the equivalent of the glRotatef() function.
      *
      * @param aAngle is the angle of rotation, in radians.
      * @param aX is a multiplier for the X axis
@@ -216,9 +218,10 @@ public:
     }
 
     /**
-     * Function Scale()
-     * multiplies the current matrix by a scaling matrix, so the newly vertices will be
-     * scaled by the given factors. It is the equivalent of the glScalef() function.
+     * Multiply the current matrix by a scaling matrix, so the newly vertices will be
+     * scaled by the given factors.
+     *
+     * It is the equivalent of the glScalef() function.
      *
      * @param aX is the X axis scaling factor.
      * @param aY is the Y axis scaling factor.
@@ -230,9 +233,9 @@ public:
     }
 
     /**
-     * Function PushMatrix()
-     * pushes the current transformation matrix stack. It is the equivalent of the glPushMatrix()
-     * function.
+     * Push the current transformation matrix stack.
+     *
+     * It is the equivalent of the glPushMatrix() function.
      */
     inline void PushMatrix()
     {
@@ -243,9 +246,9 @@ public:
     }
 
     /**
-     * Function PopMatrix()
-     * pops the current transformation matrix stack. It is the equivalent of the glPopMatrix()
-     * function.
+     * Pop the current transformation matrix stack.
+     *
+     * It is the equivalent of the glPopMatrix() function.
      */
     void PopMatrix()
     {
@@ -262,31 +265,28 @@ public:
     }
 
     /**
-     * Function SetItem()
-     * sets an item to start its modifications. After calling the function it is possible to add
-     * vertices using function Add().
+     * Set an item to start its modifications.
+     *
+     * After calling the function it is possible to add vertices using function Add().
      *
      * @param aItem is the item that is going to store vertices in the container.
      */
     void SetItem( VERTEX_ITEM& aItem ) const;
 
     /**
-     * Function FinishItem()
-     * does the cleaning after adding an item.
+     * Clean after adding an item.
      */
     void FinishItem() const;
 
     /**
-     * Function FreeItem()
-     * frees the memory occupied by the item, so it is no longer stored in the container.
+     * Free the memory occupied by the item, so it is no longer stored in the container.
      *
      * @param aItem is the item to be freed
      */
     void FreeItem( VERTEX_ITEM& aItem ) const;
 
     /**
-     * Function ChangeItemColor()
-     * changes the color of all vertices owned by an item.
+     * Change the color of all vertices owned by an item.
      *
      * @param aItem is the item to change.
      * @param aColor is the new color to be applied.
@@ -294,8 +294,7 @@ public:
     void ChangeItemColor( const VERTEX_ITEM& aItem, const COLOR4D& aColor ) const;
 
     /**
-     * Function ChangeItemDepth()
-     * changes the depth of all vertices owned by an item.
+     * Change the depth of all vertices owned by an item.
      *
      * @param aItem is the item to change.
      * @param aDepth is the new color to be applied.
@@ -303,8 +302,7 @@ public:
     void ChangeItemDepth( const VERTEX_ITEM& aItem, GLfloat aDepth ) const;
 
     /**
-     * Function GetVertices()
-     * returns a pointer to the vertices owned by an item.
+     * Return a pointer to the vertices owned by an item.
      *
      * @param aItem is the owner of vertices that are going to be returned.
      * @return Pointer to the vertices or NULL if the item is not stored at the container.
@@ -317,51 +315,45 @@ public:
     }
 
     /**
-     * Function SetShader()
-     * sets a shader program that is going to be used during rendering.
+     * Set a shader program that is going to be used during rendering.
+     *
      * @param aShader is the object containing compiled and linked shader program.
      */
     void SetShader( SHADER& aShader ) const;
 
     /**
-     * Function Clear()
-     * removes all the stored vertices from the container.
+     * Remove all the stored vertices from the container.
      */
     void Clear() const;
 
     /**
-     * Function BeginDrawing()
-     * prepares buffers and items to start drawing.
+     * Prepare buffers and items to start drawing.
      */
     void BeginDrawing() const;
 
     /**
-     * Function DrawItem()
-     * draws an item to the buffer.
+     * Draw an item to the buffer.
      *
      * @param aItem is the item to be drawn.
      */
     void DrawItem( const VERTEX_ITEM& aItem ) const;
 
     /**
-     * Function EndDrawing()
-     * finishes drawing operations.
+     * Finish drawing operations.
      */
     void EndDrawing() const;
 
     /**
-     * Function EnableDepthTest()
-     * Enables/disables Z buffer depth test.
+     * Enable/disable Z buffer depth test.
      */
     void EnableDepthTest( bool aEnabled );
 
 protected:
     /**
-     * Function putVertex()
-     * applies all transformation to the given coordinates and store them at the specified target.
+     * Apply all transformation to the given coordinates and store them at the specified target.
      *
      * @param aTarget is the place where the new vertex is going to be stored (it has to be
-     * allocated first).
+     *                allocated first).
      * @param aX is the X coordinate of the new vertex.
      * @param aY is the Y coordinate of the new vertex.
      * @param aZ is the Z coordinate of the new vertex.

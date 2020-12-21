@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,7 +26,7 @@
 
 /**
  * @file vertex_item.h
- * @brief Class to handle an item held in a container.
+ * Class to handle an item held in a container.
  */
 
 #ifndef VERTEX_ITEM_H_
@@ -49,8 +51,8 @@ public:
     virtual ~VERTEX_ITEM();
 
     /**
-     * Function GetSize()
-     * Returns information about number of vertices stored.
+     * Return information about number of vertices stored.
+     *
      * @return Number of vertices.
      */
     inline unsigned int GetSize() const
@@ -59,8 +61,8 @@ public:
     }
 
     /**
-     * Function GetOffset()
-     * Returns data offset in the container.
+     * Return data offset in the container.
+     *
      * @return Data offset expressed as a number of vertices.
      */
     inline unsigned int GetOffset() const
@@ -69,19 +71,14 @@ public:
     }
 
     /**
-     * Function GetVertices()
-     * Returns pointer to the data used by the VERTEX_ITEM.
+     * Return pointer to the data used by the VERTEX_ITEM.
      */
     VERTEX* GetVertices() const;
 
 private:
-    const VERTEX_MANAGER&   m_manager;
-    unsigned int            m_offset;
-    unsigned int            m_size;
-
     /**
-     * Function SetOffset()
-     * Sets data offset in the container.
+     * Set data offset in the container.
+     *
      * @param aOffset is the offset expressed as a number of vertices.
      */
     inline void setOffset( unsigned int aOffset )
@@ -90,14 +87,18 @@ private:
     }
 
     /**
-     * Function SetSize()
-     * Sets data size in the container.
+     * Set data size in the container.
+     *
      * @param aSize is the size expressed as a number of vertices.
      */
     inline void setSize( unsigned int aSize )
     {
         m_size = aSize;
     }
+
+    const VERTEX_MANAGER&   m_manager;
+    unsigned int            m_offset;
+    unsigned int            m_size;
 };
 } // namespace KIGFX
 

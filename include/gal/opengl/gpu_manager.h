@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,9 +38,8 @@ class CACHED_CONTAINER;
 class NONCACHED_CONTAINER;
 
 /**
- * @brief Class to handle uploading vertices and indices to GPU in drawing purposes.
+ * Class to handle uploading vertices and indices to GPU in drawing purposes.
  */
-
 class GPU_MANAGER
 {
 public:
@@ -47,41 +48,37 @@ public:
     virtual ~GPU_MANAGER();
 
     /**
-     * Function BeginDrawing()
-     * Prepares the stored data to be drawn.
+     * Prepare the stored data to be drawn.
      */
     virtual void BeginDrawing() = 0;
 
     /**
-     * Function DrawIndices()
-     * Makes the GPU draw given range of vertices.
+     * Make the GPU draw given range of vertices.
+     *
      * @param aOffset is the beginning of the range.
      * @param aSize is the number of vertices to be drawn.
      */
     virtual void DrawIndices( unsigned int aOffset, unsigned int aSize ) = 0;
 
     /**
-     * Function DrawIndices()
-     * Makes the GPU draw all the vertices stored in the container.
+     * Make the GPU draw all the vertices stored in the container.
      */
     virtual void DrawAll() = 0;
 
     /**
-     * Function EndDrawing()
      * Clears the container after drawing routines.
      */
     virtual void EndDrawing() = 0;
 
     /**
-     * Function SetShader()
-     * Allows using shaders with the stored data.
+     * Allow using shaders with the stored data.
+     *
      * @param aShader is the object that allows using shaders.
      */
     virtual void SetShader( SHADER& aShader );
 
     /**
-     * Function EnableDepthTest()
-     * Enables/disables Z buffer depth test.
+     * Enable/disable Z buffer depth test.
      */
     void EnableDepthTest( bool aEnabled );
 

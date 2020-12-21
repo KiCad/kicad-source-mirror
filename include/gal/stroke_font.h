@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2016 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2020 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * Stroke font class
  *
@@ -46,7 +46,7 @@ typedef std::vector<std::vector<VECTOR2D>*> GLYPH;
 typedef std::vector<GLYPH*>                 GLYPH_LIST;
 
 /**
- * @brief Class STROKE_FONT implements stroke font drawing.
+ * Class STROKE_FONT implements stroke font drawing.
  *
  * A stroke font is composed of lines.
  */
@@ -59,7 +59,7 @@ public:
     STROKE_FONT( GAL* aGal );
 
     /**
-     * @brief Load the new stroke font.
+     * Load the new stroke font.
      *
      * @param aNewStrokeFont is the pointer to the font data.
      * @param aNewStrokeFontSize is the size of the font data.
@@ -68,7 +68,7 @@ public:
     bool LoadNewStrokeFont( const char* const aNewStrokeFont[], int aNewStrokeFontSize );
 
     /**
-     * @brief Draw a string.
+     * Draw a string.
      *
      * @param aText is the text to be drawn.
      * @param aPosition is the text position in world coordinates.
@@ -77,8 +77,8 @@ public:
     void Draw( const UTF8& aText, const VECTOR2D& aPosition, double aRotationAngle );
 
     /**
-     * Function SetGAL
      * Changes Graphics Abstraction Layer used for drawing items for a new one.
+     *
      * @param aGal is the new GAL instance.
      */
     void SetGAL( GAL* aGal )
@@ -88,7 +88,9 @@ public:
 
     /**
      * Compute the boundary limits of aText (the bounding box of all shapes).
+     *
      * The overbar and alignment are not taken in account, '~' characters are skipped.
+     *
      * @return a VECTOR2D giving the width and height of text.
      */
     VECTOR2D ComputeStringBoundaryLimits( const UTF8& aText, const VECTOR2D& aGlyphSize,
@@ -96,29 +98,25 @@ public:
 
     /**
      * Compute the vertical position of an overbar, sometimes used in texts.
+     *
      * This is the distance between the text base line and the overbar.
+     *
      * @param aGlyphHeight is the height (vertical size) of the text.
      * @return the relative position of the overbar axis.
      */
     double ComputeOverbarVerticalPosition( double aGlyphHeight ) const;
 
     /**
-     * @brief Compute the distance (interline) between 2 lines of text (for multiline texts).
+     * Compute the distance (interline) between 2 lines of text (for multiline texts).
      *
      * @param aGlyphHeight is the height (vertical size) of the text.
      * @return the interline.
      */
     static double GetInterline( double aGlyphHeight );
 
-
-
 private:
-    GAL*                      m_gal;                  ///< Pointer to the GAL
-    const GLYPH_LIST*         m_glyphs;               ///< Glyph list
-    const std::vector<BOX2D>* m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
-
     /**
-     * @brief Compute the X and Y size of a given text. The text is expected to be
+     * Compute the X and Y size of a given text. The text is expected to be
      * a only one line text.
      *
      * @param aText is the text string (one line).
@@ -135,7 +133,7 @@ private:
     double computeUnderlineVerticalPosition() const;
 
     /**
-     * @brief Compute the bounding box of a given glyph.
+     * Compute the bounding box of a given glyph.
      *
      * @param aGlyph is the glyph.
      * @param aGlyphWidth is the x-component of the bounding box size.
@@ -144,7 +142,7 @@ private:
     BOX2D computeBoundingBox( const GLYPH* aGlyph, double aGlyphWidth ) const;
 
     /**
-     * @brief Draws a single line of text. Multiline texts should be split before using the
+     * Draws a single line of text. Multiline texts should be split before using the
      * function.
      *
      * @param aText is the text to be drawn.
@@ -152,7 +150,7 @@ private:
     void drawSingleLineText( const UTF8& aText );
 
     /**
-     * @brief Returns number of lines for a given text.
+     * Returns number of lines for a given text.
      *
      * @param aText is the text to be checked.
      * @return unsigned - The number of lines in aText.
@@ -165,6 +163,10 @@ private:
             // aText.end() - 1 is to skip a newline character that is potentially at the end
             return std::count( aText.begin(), aText.end() - 1, '\n' ) + 1;
     }
+
+    GAL*                      m_gal;                  ///< Pointer to the GAL
+    const GLYPH_LIST*         m_glyphs;               ///< Glyph list
+    const std::vector<BOX2D>* m_glyphBoundingBoxes;   ///< Bounding boxes of the glyphs
 
     ///> Factor that determines relative vertical position of the overbar.
     static const double OVERBAR_POSITION_FACTOR;

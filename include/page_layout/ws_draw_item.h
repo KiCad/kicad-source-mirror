@@ -44,31 +44,19 @@ class EDA_DRAW_FRAME;
 class PROJECT;
 
 /**
- * Helper classes to handle basic graphic items used to draw/plot
- *   title blocks and frame references
- *   segments
- *   rect
- *   polygons (for logos)
- *   graphic texts
- *   bitmaps (also for logos, but they cannot be plot by SVG, GERBER or HPGL plotters
- *            where we just plot the bounding box)
+ * Base class to handle basic graphic items.
+ *
+ * Used to draw and/or plot:
+ *  - title blocks and frame references
+ *  - segments
+ *  - rect
+ *  - polygons (for logos)
+ *  - graphic texts
+ *  - bitmaps (also for logos, but they cannot be plot by SVG, GERBER or HPGL plotters
+ *    where we just plot the bounding box)
  */
-class WS_DRAW_ITEM_BASE : public EDA_ITEM     // This basic class, not directly usable.
+class WS_DRAW_ITEM_BASE : public EDA_ITEM
 {
-protected:
-    WS_DATA_ITEM*  m_peer;       // the parent WS_DATA_ITEM item in the WS_DATA_MODEL
-    int            m_index;      // the index in the parent's repeat count
-    int            m_penWidth;
-
-    WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :
-            EDA_ITEM( aType )
-    {
-        m_peer = aPeer;
-        m_index = aIndex;
-        m_penWidth = 0;
-        m_flags = 0;
-    }
-
 public:
     virtual ~WS_DRAW_ITEM_BASE() {}
 
@@ -110,15 +98,26 @@ public:
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, MSG_PANEL_ITEMS& aList ) override;
+
+protected:
+    WS_DRAW_ITEM_BASE( WS_DATA_ITEM* aPeer, int aIndex, KICAD_T aType ) :
+            EDA_ITEM( aType )
+    {
+        m_peer = aPeer;
+        m_index = aIndex;
+        m_penWidth = 0;
+        m_flags = 0;
+    }
+
+    WS_DATA_ITEM*  m_peer;       // the parent WS_DATA_ITEM item in the WS_DATA_MODEL
+    int            m_index;      // the index in the parent's repeat count
+    int            m_penWidth;
 };
 
 
 // This class draws a thick segment
 class WS_DRAW_ITEM_LINE : public WS_DRAW_ITEM_BASE
 {
-    wxPoint m_start;    // start point of line/rect
-    wxPoint m_end;      // end point
-
 public:
     WS_DRAW_ITEM_LINE( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
                        int aPenWidth ) :
@@ -131,7 +130,6 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_LINE" ); }
 
-    // Accessors:
     const wxPoint&  GetStart() const { return m_start; }
     void SetStart( wxPoint aPos ) { m_start = aPos; }
     const wxPoint&  GetEnd() const { return m_end; }
@@ -150,22 +148,15 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    wxPoint m_start;    // start point of line/rect
+    wxPoint m_end;      // end point
 };
 
 
-// This class draws a polygon
 class WS_DRAW_ITEM_POLYPOLYGONS : public WS_DRAW_ITEM_BASE
 {
-    wxPoint m_pos;      // position of reference point, from the
-                        // WS_DATA_ITEM_POLYGONS parent
-                        // (used only in page layout editor to draw anchors)
-
-public:
-    /** The list of polygons. Because these polygons are only for drawing purposes,
-     * each polygon is expected having no holes, just a main outline
-     */
-    SHAPE_POLY_SET m_Polygons;
-
 public:
     WS_DRAW_ITEM_POLYPOLYGONS( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos, int aPenWidth ) :
             WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_POLY_T )
@@ -176,7 +167,6 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_POLYPOLYGONS" ); }
 
-    // Accessors:
     SHAPE_POLY_SET& GetPolygons() { return m_Polygons; }
     wxPoint GetPosition() const override { return m_pos; }
     void SetPosition( const wxPoint& aPos ) override;
@@ -192,15 +182,28 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+public:
+    /**
+     * The list of polygons.
+     *
+     * Because these polygons are only for drawing purposes, each polygon is expected to
+     * have no holes just a main outline.
+     */
+    SHAPE_POLY_SET m_Polygons;
+
+
+private:
+    wxPoint m_pos;      // position of reference point, from the WS_DATA_ITEM_POLYGONS parent
+                        // (used only in page layout editor to draw anchors)
 };
 
 
-// This class draws a not filled rectangle with thick segment
+/**
+ * Non filled rectangle with thick segment.
+ */
 class WS_DRAW_ITEM_RECT : public WS_DRAW_ITEM_BASE
 {
-    wxPoint m_start;    // start point of line/rect
-    wxPoint m_end;      // end point
-
 public:
     WS_DRAW_ITEM_RECT( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aStart, wxPoint aEnd,
                        int aPenWidth ) :
@@ -213,7 +216,6 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_RECT" ); }
 
-    // Accessors:
     const wxPoint&  GetStart() const { return m_start; }
     void SetStart( wxPoint aPos ) { m_start = aPos; }
     const wxPoint&  GetEnd() const { return m_end; }
@@ -233,18 +235,22 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    wxPoint m_start;    // start point of line/rect
+    wxPoint m_end;      // end point
 };
 
 
-// This class draws a rectangle with thick segment showing the page limits
-// and a marker showing the coord origin. This only a draw item only.
-// Therefore m_peer ( the parent WS_DATA_ITEM item in the WS_DATA_MODEL) is always a nullptr.
+/**
+ * A rectangle with thick segment showing the page limits and a marker showing the coordinate
+ * origin.
+ *
+ * This only a draw item only.  Therefore m_peer ( the parent WS_DATA_ITEM item in the
+ * WS_DATA_MODEL) is always a nullptr.
+ */
 class WS_DRAW_ITEM_PAGE : public WS_DRAW_ITEM_BASE
 {
-    wxPoint m_markerPos;    // position of the marker
-    wxSize  m_pageSize;     // full size of the page
-    double m_markerSize;
-
 public:
     WS_DRAW_ITEM_PAGE( int aPenWidth, double aMarkerSize ) :
             WS_DRAW_ITEM_BASE( nullptr, 0, WSG_PAGE_T )
@@ -255,7 +261,6 @@ public:
 
     virtual wxString GetClass() const override { return wxT( "WS_DRAW_ITEM_PAGE" ); }
 
-    // Accessors:
     void SetPageSize( wxSize aSize ) { m_pageSize = aSize; }
     wxSize GetPageSize() const { return m_pageSize; }
     const wxPoint& GetMarkerPos() const { return m_markerPos; }
@@ -275,12 +280,20 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    wxPoint m_markerPos;    // position of the marker
+    wxSize  m_pageSize;     // full size of the page
+    double m_markerSize;
 };
 
 
-// This class draws a graphic text.
-// it is derived from an EDA_TEXT, so it handle all characteristics
-// of this graphic text (justification, rotation ... )
+/**
+ * A graphic text.
+ *
+ * It is derived from an #EDA_TEXT, so it handle all characteristics of this graphic text
+ * (justification, rotation ... ).
+ */
 class WS_DRAW_ITEM_TEXT : public WS_DRAW_ITEM_BASE, public EDA_TEXT
 {
 public:
@@ -318,11 +331,11 @@ public:
 };
 
 
-// This class draws a bitmap.
+/**
+ * A bitmap.
+ */
 class WS_DRAW_ITEM_BITMAP : public WS_DRAW_ITEM_BASE
 {
-    wxPoint m_pos;                  // position of reference point
-
 public:
     WS_DRAW_ITEM_BITMAP( WS_DATA_ITEM* aPeer, int aIndex, wxPoint aPos ) :
             WS_DRAW_ITEM_BASE( aPeer, aIndex, WSG_BITMAP_T )
@@ -348,6 +361,9 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
+
+private:
+    wxPoint m_pos;                  // position of reference point
 };
 
 
@@ -359,24 +375,6 @@ public:
  */
 class WS_DRAW_ITEM_LIST
 {
-protected:
-    std::vector <WS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
-    unsigned           m_idx;             // for GetFirst, GetNext functions
-    double             m_milsToIu;        // the scalar to convert pages units ( mils)
-                                          // to draw/plot units.
-    int                m_penSize;         // The default line width for drawings.
-                                          // used when an item has a pen size = 0
-    bool               m_isFirstPage;     ///< Is this the first page or not.
-    int                m_sheetCount;      ///< The number of sheets
-                                          // for basic inscriptions, in schematic
-    const TITLE_BLOCK* m_titleBlock;      // for basic inscriptions
-    const wxString*    m_paperFormat;     // for basic inscriptions
-    wxString           m_fileName;        // for basic inscriptions
-    wxString           m_sheetFullName;   // for basic inscriptions
-    wxString           m_pageNumber;      ///< The actual page number displayed in the title block.
-    const wxString*    m_sheetLayer;      // for basic inscriptions
-    const PROJECT*     m_project;         // for project-based variable substitutions
-
 public:
     WS_DRAW_ITEM_LIST()
     {
@@ -561,6 +559,24 @@ public:
      * @return the text, after replacing the format symbols by the actual value
      */
     wxString BuildFullText( const wxString& aTextbase );
+
+protected:
+    std::vector <WS_DRAW_ITEM_BASE*> m_graphicList;     // Items to draw/plot
+    unsigned           m_idx;             // for GetFirst, GetNext functions
+    double             m_milsToIu;        // the scalar to convert pages units ( mils)
+                                          // to draw/plot units.
+    int                m_penSize;         // The default line width for drawings.
+                                          // used when an item has a pen size = 0
+    bool               m_isFirstPage;     ///< Is this the first page or not.
+    int                m_sheetCount;      ///< The number of sheets
+                                          // for basic inscriptions, in schematic
+    const TITLE_BLOCK* m_titleBlock;      // for basic inscriptions
+    const wxString*    m_paperFormat;     // for basic inscriptions
+    wxString           m_fileName;        // for basic inscriptions
+    wxString           m_sheetFullName;   // for basic inscriptions
+    wxString           m_pageNumber;      ///< The actual page number displayed in the title block.
+    const wxString*    m_sheetLayer;      // for basic inscriptions
+    const PROJECT*     m_project;         // for project-based variable substitutions
 };
 
 

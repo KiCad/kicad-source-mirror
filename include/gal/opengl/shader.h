@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Graphics Abstraction Layer (GAL) for OpenGL
  *
@@ -64,12 +64,12 @@ inline const char* translateStringArg( const char* str )
 
 
 /**
- * @brief Class SHADER provides the access to the OpenGL shaders.
+ * Provide the access to the OpenGL shaders.
  *
  * The purpose of this class is advanced drawing with OpenGL. One example is using the pixel
  * shader for drawing exact circles or for anti-aliasing. This class supports vertex, geometry
  * and fragment shaders.
- * <br>
+ *
  * Make sure that the hardware supports these features. This can be identified with the "GLEW"
  * library.
  */
@@ -77,21 +77,15 @@ class SHADER
 {
 public:
 
-    /**
-     * @brief Constructor
-     */
     SHADER();
 
-    /**
-     * @brief Destructor
-     */
     virtual ~SHADER();
 
     /**
-    * @brief Add a shader and compile the shader sources.
+    * Add a shader and compile the shader sources.
     *
     * @param aArgs is the list of strings (std::string or convertible to const char*) which
-             are concatenated and compiled as a single shader source code.
+    *              are concatenated and compiled as a single shader source code.
     * @param aShaderType is the type of the shader.
     * @return True in case of success, false otherwise.
     */
@@ -103,7 +97,7 @@ public:
     }
 
     /**
-     * @brief Loads one of the built-in shaders and compiles it.
+     * Load one of the built-in shaders and compiles it.
      *
      * @param aShaderSourceName is the shader source file name.
      * @param aShaderType is the type of the shader.
@@ -112,14 +106,14 @@ public:
     bool LoadShaderFromFile( SHADER_TYPE aShaderType, const std::string& aShaderSourceName );
 
     /**
-     * @brief Link the shaders.
+     * Link the shaders.
      *
      * @return true in case of success, false otherwise.
      */
     bool Link();
 
     /**
-     * @brief Returns true if shaders are linked correctly.
+     * Return true if shaders are linked correctly.
      */
     bool IsLinked() const
     {
@@ -127,7 +121,7 @@ public:
     }
 
     /**
-     * @brief Use the shader.
+     * Use the shader.
      */
     inline void Use()
     {
@@ -136,7 +130,7 @@ public:
     }
 
     /**
-     * @brief Deactivate the shader and use the default OpenGL program.
+     * Deactivate the shader and use the default OpenGL program.
      */
     inline void Deactivate()
     {
@@ -145,7 +139,7 @@ public:
     }
 
     /**
-     * @brief Returns the current state of the shader.
+     * Return the current state of the shader.
      *
      * @return True if any of shaders is enabled.
      */
@@ -155,7 +149,7 @@ public:
     }
 
     /**
-     * @brief Configure the geometry shader - has to be done before linking!
+     * Configure the geometry shader - has to be done before linking!
      *
      * @param maxVertices is the maximum of vertices to be generated.
      * @param geometryInputType is the input type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
@@ -165,7 +159,7 @@ public:
                                   GLuint geometryOutputType );
 
     /**
-     * @brief Add a parameter to the parameter queue.
+     * Add a parameter to the parameter queue.
      *
      * To communicate with the shader use this function to set up the names for the uniform
      * variables. These are queued in a list and can be assigned with the SetParameter(..)
@@ -177,7 +171,7 @@ public:
     int AddParameter( const std::string& aParameterName );
 
     /**
-     * @brief Set a parameter of the shader.
+     * Set a parameter of the shader.
      *
      * @param aParameterNumber is the number of the parameter.
      * @param aValue is the value of the parameter.
@@ -188,7 +182,7 @@ public:
     void SetParameter( int aParameterNumber, float f0, float f1, float f2, float f3 ) const;
 
     /**
-     * @brief Gets an attribute location.
+     * Get an attribute location.
      *
      * @param aAttributeName is the name of the attribute.
      * @return the location.
@@ -196,7 +190,7 @@ public:
     int GetAttribute( const std::string& aAttributeName ) const;
 
     /**
-    * @brief Read the shader source file
+    * Read the shader source file
     *
     * @param aShaderSourceName is the shader source file name.
     * @return the source as string
@@ -204,22 +198,20 @@ public:
     static std::string ReadSource( const std::string& aShaderSourceName );
 
 private:
-
     /**
-     * @brief Compile vertex of fragment shader source code into the program.
+     * Compile vertex of fragment shader source code into the program.
      */
-    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aArray,
-                                    size_t aSize );
+    bool loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aArray, size_t aSize );
 
     /**
-     * @brief Get the shader program information.
+     * Get the shader program information.
      *
      * @param aProgram is the program number.
      */
     void programInfo( GLuint aProgram );
 
     /**
-     * @brief Get the shader information.
+     * Get the shader information.
      *
      * @param aShader is the shader number.
      */
@@ -231,8 +223,12 @@ private:
     bool                isShaderLinked;     ///< Is the shader linked?
     bool                active;             ///< Is any of shaders used?
     GLuint              maximumVertices;    ///< The maximum of vertices to be generated
-    GLuint              geomInputType;      ///< Input type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
-    GLuint              geomOutputType;     ///< Output type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
+
+    ///< Input type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
+    GLuint              geomInputType;
+
+    ///< Output type [e.g. GL_LINES, GL_TRIANGLES, GL_QUADS etc.]
+    GLuint              geomOutputType;
     std::deque<GLint>   parameterLocation;  ///< Location of the parameter
 };
 } // namespace KIGFX

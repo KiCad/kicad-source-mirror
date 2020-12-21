@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,8 +37,9 @@ class VERTEX_ITEM;
 class SHADER;
 
 /**
- * @brief Specialization of CACHED_CONTAINER that stores data in RAM. This is mainly for
- * video cards/drivers that do not cope well with video memory mapping.
+ * Specialization of CACHED_CONTAINER that stores data in RAM.
+ *
+ * This is mainly for video cards/drivers that do not cope well with video memory mapping.
  */
 
 class CACHED_CONTAINER_RAM : public CACHED_CONTAINER
@@ -57,8 +60,9 @@ public:
     }
 
     /**
-     * Function GetBufferHandle()
-     * returns handle to the vertex buffer. It might be negative if the buffer is not initialized.
+     * Return handle to the vertex buffer.
+     *
+     * It might be negative if the buffer is not initialized.
      */
     unsigned int GetBufferHandle() const override
     {
@@ -66,15 +70,16 @@ public:
     }
 
 protected:
-    ///> Handle to vertices buffer
-    GLuint  m_verticesBuffer;
-
     /**
-     * Defragments the currently stored data and resizes the buffer.
+     * Defragment the currently stored data and resizes the buffer.
+     *
      * @param aNewSize is the new buffer vertex buffer size, expressed as the number of vertices.
      * @return true on success.
      */
     bool defragmentResize( unsigned int aNewSize ) override;
+
+    ///> Handle to vertices buffer
+    GLuint  m_verticesBuffer;
 };
 } // namespace KIGFX
 

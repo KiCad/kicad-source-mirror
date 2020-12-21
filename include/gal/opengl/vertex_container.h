@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,7 +26,7 @@
 
 /**
  * @file vertex_container.h
- * @brief Class to store vertices and handle transfers between system memory and GPU memory.
+ * Class to store vertices and handle transfers between system memory and GPU memory.
  */
 
 #ifndef VERTEX_CONTAINER_H_
@@ -41,30 +43,31 @@ class VERTEX_CONTAINER
 {
 public:
     /**
-     * Returns a pointer to a new container of an appropriate type.
+     * Return a pointer to a new container of an appropriate type.
      */
     static VERTEX_CONTAINER* MakeContainer( bool aCached );
 
     virtual ~VERTEX_CONTAINER();
 
     /**
-     * Returns true if the container caches vertex data in RAM or video memory.
+     * Return true if the container caches vertex data in RAM or video memory.
      * Otherwise it is a single batch draw which is later discarded.
      */
     virtual bool IsCached() const = 0;
 
     /**
-     * Prepares the container for vertices updates.
+     * Prepare the container for vertices updates.
      */
     virtual void Map() {}
 
     /**
-     * Finishes the vertices updates stage.
+     * Finish the vertices updates stage.
      */
     virtual void Unmap() {}
 
     /**
-     * Sets the item for the further actions.
+     * Set the item for the further actions.
+     *
      * @param aItem is the item or NULL in case of finishing the item.
      */
     virtual void SetItem( VERTEX_ITEM* aItem ) = 0;
@@ -75,27 +78,31 @@ public:
     virtual void FinishItem() {};
 
     /**
-     * Returns allocated space for the requested number of vertices associated with the
-     * current item (set with SetItem()). The allocated space is added at the end of the chunk
-     * used by the current item and may serve to store new vertices.
+     * Return allocated space for the requested number of vertices associated with the
+     * current item (set with SetItem()).
+     *
+     * The allocated space is added at the end of the chunk used by the current item and
+     * may serve to store new vertices.
+     *
      * @param aSize is the number of vertices to be allocated.
      * @return Pointer to the allocated space or NULL in case of failure.
      */
     virtual VERTEX* Allocate( unsigned int aSize ) = 0;
 
     /**
-     * Erases the data related to an item.
+     * Erase the data related to an item.
+     *
      * @param aItem is the item to be erased.
      */
     virtual void Delete( VERTEX_ITEM* aItem ) = 0;
 
     /**
-     * Removes all data stored in the container and restores its original state.
+     * Remove all data stored in the container and restores its original state.
      */
     virtual void Clear() = 0;
 
     /**
-     * Returns pointer to the vertices stored in the container.
+     * Return pointer to the vertices stored in the container.
      */
     VERTEX* GetAllVertices() const
     {
@@ -103,8 +110,8 @@ public:
     }
 
     /**
-     * Function GetVertices()
-     * returns vertices stored at the specific offset.
+     * Return vertices stored at the specific offset.
+     *
      * @param aOffset is the offset.
      */
     virtual VERTEX* GetVertices( unsigned int aOffset ) const
@@ -113,8 +120,7 @@ public:
     }
 
     /**
-     * Function GetSize()
-     * returns amount of vertices currently stored in the container.
+     * Return amount of vertices currently stored in the container.
      */
     virtual unsigned int GetSize() const
     {
@@ -122,7 +128,8 @@ public:
     }
 
     /**
-     * Returns information about the container cache state.
+     * Return information about the container cache state.
+     *
      * @return True in case the vertices have to be reuploaded.
      */
     bool IsDirty() const
@@ -131,7 +138,7 @@ public:
     }
 
     /**
-     * Sets the dirty flag, so vertices in the container are going to be reuploaded to the GPU on
+     * Set the dirty flag, so vertices in the container are going to be reuploaded to the GPU on
      * the next frame.
      */
     void SetDirty()
@@ -140,7 +147,7 @@ public:
     }
 
     /**
-     * Clears the dirty flag to prevent reuploading vertices to the GPU memory.
+     * Clear the dirty flag to prevent reuploading vertices to the GPU memory.
      */
     void ClearDirty()
     {
@@ -149,6 +156,16 @@ public:
 
 protected:
     VERTEX_CONTAINER( unsigned int aSize = DEFAULT_SIZE );
+
+    /**
+     * Return size of the used memory space.
+     *
+     * @return Size of the used memory space (expressed as a number of vertices).
+     */
+    unsigned int usedSpace() const
+    {
+        return m_currentSize - m_freeSpace;
+    }
 
     ///> Free space left in the container, expressed in vertices
     unsigned int    m_freeSpace;
@@ -165,16 +182,6 @@ protected:
     // Status flags
     bool            m_failed;
     bool            m_dirty;
-
-    /**
-     * Function usedSpace()
-     * returns size of the used memory space.
-     * @return Size of the used memory space (expressed as a number of vertices).
-     */
-    unsigned int usedSpace() const
-    {
-        return m_currentSize - m_freeSpace;
-    }
 
     ///< Default initial size of a container (expressed in vertices)
     static constexpr unsigned int DEFAULT_SIZE = 1048576;

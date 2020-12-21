@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -24,8 +26,8 @@
 
 /**
  * @file opengl_compositor.h
- * @brief Class that handles multitarget rendering (ie. to different textures/surfaces) and
- * later compositing into a single image (OpenGL flavour).
+ * Handle multitarget rendering (ie. to different textures/surfaces) and later compositing
+ * into a single image (OpenGL flavor).
  */
 
 #ifndef OPENGL_COMPOSITOR_H_
@@ -83,7 +85,6 @@ public:
     // Constant used by glBindFramebuffer to turn off rendering to framebuffers
     static const unsigned int DIRECT_RENDERING = 0;
 
-public:
     VECTOR2U GetScreenSize() const;
     GLenum   GetBufferTexture( unsigned int aBufferHandle );
     void     DrawBuffer( unsigned int aSourceHandle, unsigned int aDestHandle );
@@ -95,6 +96,20 @@ public:
     int GetAntialiasSupersamplingFactor() const;
 
 protected:
+    /// Binds a specific Framebuffer Object.
+    void bindFb( unsigned int aFb );
+
+    /**
+     * Perform freeing of resources.
+     */
+    void clean();
+
+    /// Returns number of used buffers
+    inline unsigned int usedBuffers()
+    {
+        return m_buffers.size();
+    }
+
     // Buffers are simply textures storing a result of certain target rendering.
     typedef struct
     {
@@ -117,21 +132,6 @@ protected:
 
     OPENGL_ANTIALIASING_MODE m_currentAntialiasingMode;
     std::unique_ptr<OPENGL_PRESENTOR> m_antialiasing;
-
-    /// Binds a specific Framebuffer Object.
-    void bindFb( unsigned int aFb );
-
-    /**
-     * Function clean()
-     * performs freeing of resources.
-     */
-    void clean();
-
-    /// Returns number of used buffers
-    inline unsigned int usedBuffers()
-    {
-        return m_buffers.size();
-    }
 };
 } // namespace KIGFX
 

@@ -40,16 +40,15 @@
 #include <memory>
 
 /**
- * @brief Class CAIRO_GAL is the cairo implementation of the graphics abstraction layer.
+ * Class CAIRO_GAL is the cairo implementation of the graphics abstraction layer.
  *
  * Quote from Wikipedia:
  * " Cairo is a software library used to provide a vector graphics-based, device-independent
  *   API for software developers. It is designed to provide primitives for 2-dimensional
  *   drawing across a number of different backends. "
- * <br>
+ *
  * Cairo offers also backends for PostScript and PDF surfaces. So it can be used for printing
  * of KiCad graphics surfaces as well.
- *
  */
 namespace KIGFX
 {
@@ -72,7 +71,8 @@ public:
     void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
     /// @copydoc GAL::DrawSegment()
-    void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth ) override;
+    void DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
+                      double aWidth ) override;
 
     /// @copydoc GAL::DrawCircle()
     void DrawCircle( const VECTOR2D& aCenterPoint, double aRadius ) override;
@@ -90,19 +90,27 @@ public:
 
     /// @copydoc GAL::DrawPolyline()
     void DrawPolyline( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
-    void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override { drawPoly( aPointList, aListSize ); }
+    void DrawPolyline( const VECTOR2D aPointList[], int aListSize ) override
+    {
+        drawPoly( aPointList, aListSize );
+    }
+
     void DrawPolyline( const SHAPE_LINE_CHAIN& aLineChain ) override { drawPoly( aLineChain ); }
 
     /// @copydoc GAL::DrawPolygon()
     void DrawPolygon( const std::deque<VECTOR2D>& aPointList ) override { drawPoly( aPointList ); }
-    void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override { drawPoly( aPointList, aListSize ); }
+    void DrawPolygon( const VECTOR2D aPointList[], int aListSize ) override
+    {
+        drawPoly( aPointList, aListSize );
+    }
+
     void DrawPolygon( const SHAPE_POLY_SET& aPolySet ) override;
     void DrawPolygon( const SHAPE_LINE_CHAIN& aPolySet ) override;
 
     /// @copydoc GAL::DrawCurve()
     void DrawCurve( const VECTOR2D& startPoint, const VECTOR2D& controlPointA,
-                            const VECTOR2D& controlPointB, const VECTOR2D& endPoint,
-                            double aFilterValue = 0.0 ) override;
+                    const VECTOR2D& controlPointB, const VECTOR2D& endPoint,
+                    double aFilterValue = 0.0 ) override;
 
     /// @copydoc GAL::DrawBitmap()
     void DrawBitmap( const BITMAP_BASE& aBitmap ) override;
@@ -111,7 +119,7 @@ public:
     // Screen methods
     // --------------
 
-    /// @brief Resizes the canvas.
+    /// Resizes the canvas.
     void ResizeScreen( int aWidth, int aHeight ) override;
 
     /// @copydoc GAL::Flush()
@@ -215,14 +223,18 @@ protected:
     const VECTOR2D xform( double x, double y ); // rotation, scale and offset
     const VECTOR2D xform( const VECTOR2D& aP ); // rotation, scale and offset
 
-    /** Transform according to the rotation from currentWorld2Screen transform matrix:
-     * @param aAngle is the angle in radians to transform
-     * @return the modified angle
+    /**
+     * Transform according to the rotation from currentWorld2Screen transform matrix.
+     *
+     * @param aAngle is the angle in radians to transform.
+     * @return the modified angle.
      */
     const double angle_xform( const double aAngle );
 
-    /** Transform according to the rotation from currentWorld2Screen transform matrix
-     * for the start angle and the end angle of an arc
+    /**
+     * Transform according to the rotation from currentWorld2Screen transform matrix
+     * for the start angle and the end angle of an arc.
+     *
      * @param aStartAngle is the arc starting point in radians to transform
      * @param aEndAngle is the arc ending point in radians to transform
      */
@@ -237,7 +249,7 @@ protected:
     void resetContext();
 
     /**
-     * @brief Draw a grid line (usually a simplified line function).
+     * Draw a grid line (usually a simplified line function).
      *
      * @param aStartPoint is the start point of the line.
      * @param aEndPoint is the end point of the line.
@@ -246,6 +258,31 @@ protected:
     void drawGridCross( const VECTOR2D& aPoint );
     void drawGridPoint( const VECTOR2D& aPoint, double aWidth, double aHeight );
     void drawAxes( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+
+
+    void flushPath();
+    void storePath();                           ///< Store the actual path
+
+    /**
+     * Blits cursor into the current screen.
+     */
+    void blitCursor( wxMemoryDC& clientDC );
+
+    /// Drawing polygons & polylines is the same in cairo, so here is the common code
+    void drawPoly( const std::deque<VECTOR2D>& aPointList );
+    void drawPoly( const VECTOR2D aPointList[], int aListSize );
+    void drawPoly( const SHAPE_LINE_CHAIN& aLineChain );
+
+    /**
+     * Returns a valid key that can be used as a new group number.
+     *
+     * @return An unique group number that is not used by any other group.
+     */
+    unsigned int getNewGroupNumber();
+
+    void syncLineWidth( bool aForceWidth = false, double aWidth = 0.0 );
+    void updateWorldScreenMatrix();
+    const VECTOR2D roundp( const VECTOR2D& v );
 
     /// Super class definition
     typedef GAL super;
@@ -307,32 +344,6 @@ protected:
     std::vector<cairo_surface_t*> imageSurfaces;
 
     std::vector<cairo_matrix_t> xformStack;
-
-    void flushPath();
-    void storePath();                           ///< Store the actual path
-
-    /**
-     * @brief Blits cursor into the current screen.
-     */
-    void blitCursor( wxMemoryDC& clientDC );
-
-    /// Drawing polygons & polylines is the same in cairo, so here is the common code
-    void drawPoly( const std::deque<VECTOR2D>& aPointList );
-    void drawPoly( const VECTOR2D aPointList[], int aListSize );
-    void drawPoly( const SHAPE_LINE_CHAIN& aLineChain );
-
-    /**
-     * @brief Returns a valid key that can be used as a new group number.
-     *
-     * @return An unique group number that is not used by any other group.
-     */
-    unsigned int getNewGroupNumber();
-
-    void syncLineWidth( bool aForceWidth = false, double aWidth = 0.0 );
-    void updateWorldScreenMatrix();
-    const VECTOR2D roundp( const VECTOR2D& v );
-
-
     /// Format used to store pixels
     static constexpr cairo_format_t GAL_FORMAT = CAIRO_FORMAT_ARGB32;
 };
@@ -342,23 +353,19 @@ class CAIRO_GAL : public CAIRO_GAL_BASE, public wxWindow
 {
 public:
     /**
-     * Constructor CAIRO_GAL_BASE
-     *
      * @param aParent is the wxWidgets immediate wxWindow parent of this object.
+     * @param aMouseListener is the wxEvtHandler that should receive the mouse events, this
+     *                       can be can be any wxWindow, but is often a wxFrame container.
+     * @param aPaintListener is the wxEvtHandler that should receive the paint event.  This
+     *                       can be any wxWindow, but is often a derived instance of this
+     *                       class or a containing wxFrame.  The "paint event" here is a
+     *                       wxCommandEvent holding EVT_GAL_REDRAW, as sent by PostPaint().
      *
-     * @param aMouseListener is the wxEvtHandler that should receive the mouse events,
-     *  this can be can be any wxWindow, but is often a wxFrame container.
-     *
-     * @param aPaintListener is the wxEvtHandler that should receive the paint
-     *  event.  This can be any wxWindow, but is often a derived instance
-     *  of this class or a containing wxFrame.  The "paint event" here is
-     *  a wxCommandEvent holding EVT_GAL_REDRAW, as sent by PostPaint().
-     *
-     * @param aName is the name of this window for use by wxWindow::FindWindowByName()
+     * @param aName is the name of this window for use by wxWindow::FindWindowByName().
      */
-    CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
-               wxWindow* aParent, wxEvtHandler* aMouseListener = NULL,
-               wxEvtHandler* aPaintListener = NULL, const wxString& aName = wxT( "CairoCanvas" ) );
+    CAIRO_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
+               wxEvtHandler* aMouseListener = nullptr, wxEvtHandler* aPaintListener = nullptr,
+               const wxString& aName = wxT( "CairoCanvas" ) );
 
     ~CAIRO_GAL();
 
@@ -383,10 +390,10 @@ public:
     void ClearTarget( RENDER_TARGET aTarget ) override;
 
     /**
-     * Function PostPaint
-     * posts an event to m_paint_listener.  A post is used so that the actual drawing
-     * function can use a device context type that is not specific to the wxEVT_PAINT event,
-     * just by changing the PostPaint code.
+     * Post an event to m_paint_listener.
+     *
+     * A post is used so that the actual drawing function can use a device context type that
+     * is not specific to the wxEVT_PAINT event, just by changing the PostPaint code.
      */
     void PostPaint( wxPaintEvent& aEvent );
 
@@ -399,28 +406,6 @@ public:
     {
         paintListener = aPaintListener;
     }
-
-protected:
-    // Compositor related variables
-    std::shared_ptr<CAIRO_COMPOSITOR> compositor;   ///< Object for layers compositing
-    unsigned int            mainBuffer;             ///< Handle to the main buffer
-    unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
-    RENDER_TARGET           currentTarget;          ///< Current rendering target
-    bool                    validCompositor;        ///< Compositor initialization flag
-
-    // Variables related to wxWidgets
-    wxWindow*               parentWindow;           ///< Parent window
-    wxEvtHandler*           mouseListener;          ///< Mouse listener
-    wxEvtHandler*           paintListener;          ///< Paint listener
-    unsigned int            bufferSize;             ///< Size of buffers cairoOutput, bitmapBuffers
-    unsigned char*          wxOutput;               ///< wxImage comaptible buffer
-
-    // Variables related to Cairo <-> wxWidgets
-    unsigned char*      bitmapBuffer;           ///< Storage of the cairo image
-    int                 stride;                 ///< Stride value for Cairo
-    int                 wxBufferWidth;
-    bool                isInitialized;          ///< Are Cairo image & surface ready to use
-    COLOR4D             backgroundColor;        ///< Background color
 
     /// @copydoc GAL::BeginDrawing()
     void beginDrawing() override;
@@ -445,14 +430,14 @@ protected:
 
     // Event handlers
     /**
-     * @brief Paint event handler.
+     * Paint event handler.
      *
      * @param aEvent is the paint event.
      */
     void onPaint( wxPaintEvent& aEvent );
 
     /**
-     * @brief Mouse event handler, forwards the event to the child.
+     * Mouse event handler, forwards the event to the child.
      *
      * @param aEvent is the mouse event to be forwarded.
      */
@@ -460,6 +445,28 @@ protected:
 
     ///> Cairo-specific update handlers
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
+
+protected:
+    // Compositor related variables
+    std::shared_ptr<CAIRO_COMPOSITOR> compositor;   ///< Object for layers compositing
+    unsigned int            mainBuffer;             ///< Handle to the main buffer
+    unsigned int            overlayBuffer;          ///< Handle to the overlay buffer
+    RENDER_TARGET           currentTarget;          ///< Current rendering target
+    bool                    validCompositor;        ///< Compositor initialization flag
+
+    // Variables related to wxWidgets
+    wxWindow*               parentWindow;           ///< Parent window
+    wxEvtHandler*           mouseListener;          ///< Mouse listener
+    wxEvtHandler*           paintListener;          ///< Paint listener
+    unsigned int            bufferSize;             ///< Size of buffers cairoOutput, bitmapBuffers
+    unsigned char*          wxOutput;               ///< wxImage compatible buffer
+
+    // Variables related to Cairo <-> wxWidgets
+    unsigned char*      bitmapBuffer;           ///< Storage of the cairo image
+    int                 stride;                 ///< Stride value for Cairo
+    int                 wxBufferWidth;
+    bool                isInitialized;          ///< Are Cairo image & surface ready to use
+    COLOR4D             backgroundColor;        ///< Background color
 };
 
 } // namespace KIGFX

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 
 /**
  * @file cairo_compositor.h
- * @brief Class that handles multitarget rendering (ie. to different textures/surfaces) and
+ * Class that handles multitarget rendering (ie. to different textures/surfaces) and
  * later compositing into a single image (Cairo flavour).
  */
 
@@ -94,8 +94,7 @@ public:
     }
 
     /**
-     * Function SetMainContext()
-     * Sets a context to be treated as the main context (ie. as a target of buffers rendering and
+     * Set a context to be treated as the main context (ie. as a target of buffers rendering and
      * as a source of settings for newly created buffers).
      *
      * @param aMainContext is the context that should be treated as the main one.
@@ -109,6 +108,17 @@ public:
     }
 
 protected:
+    /**
+     * Perform freeing of resources.
+     */
+    void clean();
+
+    /// Return number of currently used buffers.
+    unsigned int usedBuffers()
+    {
+        return m_buffers.size();
+    }
+
     typedef uint32_t* BitmapPtr;
     typedef struct
     {
@@ -136,18 +146,6 @@ protected:
     unsigned int m_bufferSize;          ///< Amount of memory needed to store a buffer
 
     cairo_antialias_t       m_currentAntialiasingMode;
-
-    /**
-     * Function clean()
-     * performs freeing of resources.
-     */
-    void clean();
-
-    /// Returns number of currently used buffers
-    unsigned int usedBuffers()
-    {
-        return m_buffers.size();
-    }
 };
 } // namespace KIGFX
 

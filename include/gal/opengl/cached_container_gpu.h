@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +33,7 @@ namespace KIGFX
 {
 
 /**
- * @brief Specialization of CACHED_CONTAINER that stores data in video memory via memory mapping.
+ * Specialization of CACHED_CONTAINER that stores data in video memory via memory mapping.
  */
 
 class CACHED_CONTAINER_GPU : public CACHED_CONTAINER
@@ -57,6 +59,18 @@ public:
     void Unmap() override;
 
 protected:
+    /**
+     * Remove empty spaces between chunks and optionally resizes the container.
+     *
+     * After the operation there is continuous space for storing vertices at the end of
+     * the container.
+     *
+     * @param aNewSize is the new size of container, expressed in number of vertices.
+     * @return false in case of failure (e.g. memory shortage).
+     */
+    bool defragmentResize( unsigned int aNewSize ) override;
+    bool defragmentResizeMemcpy( unsigned int aNewSize );
+
     ///> Flag saying if vertex buffer is currently mapped
     bool m_isMapped;
 
@@ -65,17 +79,6 @@ protected:
 
     ///> Flag saying whether it is safe to use glCopyBufferSubData
     bool m_useCopyBuffer;
-
-    /**
-     * Function defragmentResize()
-     * removes empty spaces between chunks and optionally resizes the container.
-     * After the operation there is continous space for storing vertices at the end of the container.
-     *
-     * @param aNewSize is the new size of container, expressed in number of vertices
-     * @return false in case of failure (e.g. memory shortage)
-     */
-    bool defragmentResize( unsigned int aNewSize ) override;
-    bool defragmentResizeMemcpy( unsigned int aNewSize );
 };
 } // namespace KIGFX
 
