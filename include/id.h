@@ -138,6 +138,7 @@ enum main_id
     ID_LANGUAGE_JAPANESE,
     ID_LANGUAGE_BULGARIAN,
     ID_LANGUAGE_LITHUANIAN,
+    ID_LANGUAGE_VIETNAMESE,
     ID_LANGUAGE_CHOICE_END,
 
     // Popup Menu (mouse Right button) (id consecutifs)
