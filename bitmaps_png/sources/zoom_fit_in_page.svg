@@ -26,22 +26,22 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1251"
-     inkscape:window-height="943"
+     inkscape:window-height="755"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="37.672186"
+     inkscape:zoom="29.180505"
      inkscape:cx="10.12695"
-     inkscape:cy="8.6404457"
+     inkscape:cy="12.067391"
      inkscape:window-x="0"
-     inkscape:window-y="23"
+     inkscape:window-y="303"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
-       spacingx="1"
-       spacingy="1"
+       spacingx="0.5"
+       spacingy="0.5"
        color="#acacff"
        opacity="0.12941176"
        empspacing="2" />
@@ -98,5 +98,5 @@
      class="cls-1"
      d="M 9.9976484,18.999997 A 8.998129,8.9999987 0 1 1 16.362105,3.6373767 v 0 A 8.9954858,8.9973549 0 0 1 9.9976484,18.999997 Z m 0,-16.2787301 A 7.2800339,7.2815466 0 1 0 15.148695,4.8510389 7.2612755,7.2627843 0 0 0 9.9976484,2.721608 Z"
      id="path160551"
-     style="stroke-width:0.899997" />
+     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

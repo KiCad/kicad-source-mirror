@@ -51,12 +51,12 @@
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-height="715"
+   inkscape:window-height="995"
    inkscape:window-maximized="1"
-   inkscape:window-width="1280"
-   inkscape:window-x="0"
+   inkscape:window-width="1920"
+   inkscape:window-x="1280"
    inkscape:window-y="23"
-   inkscape:zoom="28.148958"
+   inkscape:zoom="31.033073"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -65,8 +65,8 @@
    empspacing="2"
    id="grid836"
    opacity="0.1254902"
-   spacingx="1"
-   spacingy="1"
+   spacingx="0.5"
+   spacingy="0.5"
    type="xygrid">
 		</inkscape:grid>
 </sodipodi:namedview>

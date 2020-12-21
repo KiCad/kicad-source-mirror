@@ -22,23 +22,23 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
+     inkscape:window-width="1280"
      inkscape:window-height="658"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="19.457986"
+     inkscape:zoom="12.493516"
      inkscape:cx="14.363452"
      inkscape:cy="16.401583"
      inkscape:window-x="0"
-     inkscape:window-y="400"
+     inkscape:window-y="303"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
-       spacingx="1"
-       spacingy="1"
+       spacingx="0.5"
+       spacingy="0.5"
        color="#9999ff"
        opacity="0.13"
        empspacing="2" />
@@ -88,10 +88,10 @@
      class="cls-2"
      d="M 9.9976492,18.999997 A 8.9981289,8.9999987 0 1 1 16.362104,3.6373763 v 0 A 8.9954857,8.9973549 0 0 1 9.9976492,18.999997 Z m 0,-16.2787306 a 7.2800338,7.2815465 0 1 0 5.1510448,2.129772 7.2609344,7.2624431 0 0 0 -5.1510448,-2.129772 z"
      id="path160623"
-     style="stroke-width:0.852742" />
+     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-2"
      d="m 21.942063,23.011999 a 1.0717261,1.0717043 0 0 1 -0.76025,-0.31491 l -6.17694,-6.176921 a 1.0927993,1.0927771 0 0 1 1.520393,-1.520255 l 6.17694,6.176814 a 1.0751666,1.0751447 0 0 1 -0.760143,1.835272 z"
      id="path160625"
-     style="stroke-width:1.07515" />
+     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

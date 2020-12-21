@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="text_sketch.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1280"
+     inkscape:window-height="755"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
+     inkscape:zoom="16.265564"
      inkscape:cx="3.3259971"
      inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="1487"
+     inkscape:window-y="97"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -83,13 +83,17 @@
      class="cls-1"
      d="M 21.2556,3.2141 H 14.0028 V 9.94 L 9.9972,13.8114 V 3.2141 H 2.7444 V 0 h 18.5112 z"
      id="path160045" />
-  <path
-     class="cls-2"
-     d="M 0.5,24 A 0.5,0.5 0 0 1 0.1465,23.1465 l 23,-23 a 0.5,0.5 0 1 1 0.707,0.707 l -23,23 A 0.4981,0.4981 0 0 1 0.5,24 Z"
-     id="path160047" />
   <polygon
      class="cls-3"
      points="14.003,24 11.997,24 11.997,14.71 10.997,15.71 10.997,25 15.003,25 15.003,11.704 14.003,12.704 "
      id="polygon160049"
      transform="translate(-1,-1)" />
+  <line
+     class="cls-3"
+     x1="0.5"
+     y1="23.5"
+     x2="23.5"
+     y2="0.5"
+     id="line158655"
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

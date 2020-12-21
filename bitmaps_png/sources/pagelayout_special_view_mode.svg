@@ -53,7 +53,7 @@
    inkscape:window-width="1280"
    inkscape:window-x="0"
    inkscape:window-y="303"
-   inkscape:zoom="10.49521"
+   inkscape:zoom="8.1294864"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -62,8 +62,8 @@
    empspacing="2"
    id="grid_kicad"
    opacity="0.13"
-   spacingx="1"
-   spacingy="1"
+   spacingx="0.5"
+   spacingy="0.5"
    type="xygrid">
 		</inkscape:grid>
 </sodipodi:namedview>

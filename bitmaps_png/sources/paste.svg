@@ -46,16 +46,16 @@
    id="namedview30"
    inkscape:current-layer="Слой_1"
    inkscape:cx="14.724903"
-   inkscape:cy="20.177618"
+   inkscape:cy="1.3964314"
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-height="715"
+   inkscape:window-height="995"
    inkscape:window-maximized="1"
-   inkscape:window-width="1280"
-   inkscape:window-x="0"
+   inkscape:window-width="1920"
+   inkscape:window-x="1280"
    inkscape:window-y="23"
-   inkscape:zoom="38.726151"
+   inkscape:zoom="47.068379"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -64,8 +64,8 @@
    empspacing="2"
    id="grid_kicad"
    opacity="0.13"
-   spacingx="1"
-   spacingy="1"
+   spacingx="0.5"
+   spacingy="0.5"
    type="xygrid">
 		</inkscape:grid>
 </sodipodi:namedview>

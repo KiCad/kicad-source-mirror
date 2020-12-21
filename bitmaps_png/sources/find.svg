@@ -23,13 +23,13 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1035"
+     inkscape:window-height="995"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="116.97951"
-     inkscape:cx="11.924361"
-     inkscape:cy="6.5420445"
-     inkscape:window-x="0"
+     inkscape:zoom="32.791667"
+     inkscape:cx="12"
+     inkscape:cy="12"
+     inkscape:window-x="1280"
      inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
@@ -37,8 +37,8 @@
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
-       spacingx="1"
-       spacingy="1"
+       spacingx="0.5"
+       spacingy="0.5"
        color="#9999ff"
        opacity="0.13"
        empspacing="2" />
@@ -83,7 +83,7 @@
      class="cls-1"
      d="M 9.9976483,18.999997 A 8.998129,8.9999987 0 1 1 16.362104,3.637376 v 0 A 8.9954858,8.9973549 0 0 1 9.9976483,18.999997 Z m 0,-16.2787308 A 7.2800339,7.2815466 0 1 0 15.148694,4.8510382 7.2612755,7.2627843 0 0 0 9.9976483,2.7216073 Z"
      id="path160587"
-     style="fill:#545454;stroke-width:0.899997" />
+     style="fill:#545454;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-1"
      d="M 21.934949,23.098172 A 1.071826,1.071826 0 0 1 21.174811,22.78315 l -6.176896,-6.176896 a 1.0927916,1.0927916 0 0 1 1.520275,-1.520382 l 6.177004,6.176896 a 1.075159,1.075159 0 0 1 -0.760245,1.835404 z"
