@@ -570,7 +570,7 @@ TOOL_ACTION ACTIONS::showSymbolEditor( "common.Control.showSymbolEditor",
 TOOL_ACTION ACTIONS::showFootprintBrowser( "common.Control.showFootprintBrowser",
         AS_GLOBAL, 0, "",
         _( "Footprint Library Browser" ), _( "Browse footprint libraries" ),
-        footprint_browser_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_VIEWER );
+        library_browser_xpm, AF_NONE, (void*) FRAME_FOOTPRINT_VIEWER );
 
 TOOL_ACTION ACTIONS::showFootprintEditor( "common.Control.showFootprintEditor",
         AS_GLOBAL, 0, "",
