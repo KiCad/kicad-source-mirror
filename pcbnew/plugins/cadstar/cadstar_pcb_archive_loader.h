@@ -132,6 +132,9 @@ private:
     void loadTextVariables();
 
     // Helper functions for element loading:
+    BOARD_STACKUP_ITEM_TYPE getStackupItemType( const PCB_LAYER_ID& aKiCadLayer );
+    wxString getLayerTypeName( const PCB_LAYER_ID& aKiCadLayer );
+
     void logBoardStackupWarning( const wxString& aCadstarLayerName,
                                  const PCB_LAYER_ID& aKiCadLayer );
     void logBoardStackupMessage( const wxString& aCadstarLayerName,
