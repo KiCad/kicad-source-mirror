@@ -123,11 +123,11 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	gbSizer2->SetFlexibleDirection( wxBOTH );
 	gbSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_plotOriginTitle = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotOriginTitle = new wxStaticText( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, _("Position and units:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotOriginTitle->Wrap( -1 );
 	gbSizer2->Add( m_plotOriginTitle, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
 
-	wxString m_plotOriginOptChoices[] = { _("Bottom left"), _("Center on page") };
+	wxString m_plotOriginOptChoices[] = { _("Bottom left, plotter units"), _("Centered, plotter units"), _("Page fit, user units"), _("Content fit, user units") };
 	int m_plotOriginOptNChoices = sizeof( m_plotOriginOptChoices ) / sizeof( wxString );
 	m_plotOriginOpt = new wxChoice( m_HPGLOptionsSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_plotOriginOptNChoices, m_plotOriginOptChoices, 0 );
 	m_plotOriginOpt->SetSelection( 0 );

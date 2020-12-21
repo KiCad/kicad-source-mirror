@@ -40,6 +40,13 @@ enum PageFormatReq {
     PAGE_SIZE_A
 };
 
+enum class HPGL_PLOT_ORIGIN_AND_UNITS {
+    PLOTTER_BOT_LEFT,
+    PLOTTER_CENTER,
+    USER_FIT_PAGE,
+    USER_FIT_CONTENT,
+};
+
 class PDF_PLOTTER;
 
 class DIALOG_PLOT_SCHEMATIC : public DIALOG_PLOT_SCHEMATIC_BASE
@@ -112,21 +119,48 @@ private:
                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // HPGL
-    bool    GetPlotOriginCenter()
+    HPGL_PLOT_ORIGIN_AND_UNITS  GetPlotOriginAndUnits()
     {
-        return m_plotOriginOpt->GetSelection() == 1;
+        switch( m_plotOriginOpt->GetSelection() )
+        {
+        case 0:
+        default:
+            return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
+        case 1:
+            return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
+        case 2:
+            return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
+        case 3:
+            return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT;
+        }
     }
 
-    void    SetPlotOriginCenter( bool aCenter )
+    void    SetPlotOriginAndUnits( HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits )
     {
-        m_plotOriginOpt->SetSelection( aCenter ? 1 : 0 );
+        switch( aOriginAndUnits )
+        {
+        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
+        default:
+            m_plotOriginOpt->SetSelection( 0 );
+            break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
+            m_plotOriginOpt->SetSelection( 1 );
+            break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
+            m_plotOriginOpt->SetSelection( 2 );
+            break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
+            m_plotOriginOpt->SetSelection( 3 );
+            break;
+        }
     }
 
     void    createHPGLFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aRenderSettings );
     void    SetHPGLPenWidth();
     bool    Plot_1_Page_HPGL( const wxString& aFileName, SCH_SCREEN* aScreen,
                               const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
-                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
+                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef,
+                              HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits );
 
     // PS
     void    createPSFile( bool aPlotAll, bool aPlotFrameRef, RENDER_SETTINGS* aSettings );

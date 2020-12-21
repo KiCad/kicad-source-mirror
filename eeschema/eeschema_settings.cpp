@@ -258,8 +258,8 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<double>( "plot.hpgl_pen_size",
             &m_PlotPanel.hpgl_pen_size, 0.5 ) );
 
-    m_params.emplace_back( new PARAM<bool>( "plot.hpgl_origin",
-            &m_PlotPanel.hpgl_origin, false ) );
+    m_params.emplace_back( new PARAM<int>( "plot.hpgl_origin",
+            &m_PlotPanel.hpgl_origin, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.window.pos_x",
             &m_Simulator.window.state.pos_x, 0 ) );

@@ -141,7 +141,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
         wxPoint plotOffset;
         wxString msg;
 
-        if( GetPlotOriginCenter() )
+        if( GetPlotOriginAndUnits() == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
         {
             plotOffset.x    = plotPage.GetWidthIU() / 2;
             plotOffset.y    = -plotPage.GetHeightIU() / 2;
@@ -161,7 +161,7 @@ void DIALOG_PLOT_SCHEMATIC::createHPGLFile( bool aPlotAll, bool aPlotFrameRef,
             LOCALE_IO toggle;
 
             if( Plot_1_Page_HPGL( plotFileName.GetFullPath(), screen, plotPage, aRenderSettings,
-                                  plotOffset, plot_scale, aPlotFrameRef ) )
+                                  plotOffset, plot_scale, aPlotFrameRef, GetPlotOriginAndUnits() ) )
             {
                 msg.Printf( _( "Plot: \"%s\" OK.\n" ), plotFileName.GetFullPath() );
                 reporter.Report( msg, RPT_SEVERITY_ACTION );
@@ -192,7 +192,8 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
                                               RENDER_SETTINGS*  aRenderSettings,
                                               wxPoint           aPlot0ffset,
                                               double            aScale,
-                                              bool              aPlotFrameRef )
+                                              bool              aPlotFrameRef,
+                                              HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits )
 {
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
     // Currently, plot units are in decimil
@@ -205,6 +206,23 @@ bool DIALOG_PLOT_SCHEMATIC::Plot_1_Page_HPGL( const wxString&   aFileName,
 
     // TODO this could be configurable
     plotter->SetTargetChordLength( Millimeter2iu( 0.6 ) );
+
+    switch( aOriginAndUnits )
+    {
+    case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
+    case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
+    default:
+        plotter->SetUserCoords( false );
+        break;
+    case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
+        plotter->SetUserCoords( true );
+        plotter->SetUserCoordsFit( false );
+        break;
+    case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
+        plotter->SetUserCoords( true );
+        plotter->SetUserCoordsFit( true );
+        break;
+    }
 
     // Init :
     plotter->SetCreator( wxT( "Eeschema-HPGL" ) );

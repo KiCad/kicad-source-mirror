@@ -1164,7 +1164,7 @@
                                                 <property name="gripper">0</property>
                                                 <property name="hidden">0</property>
                                                 <property name="id">wxID_ANY</property>
-                                                <property name="label">Position:</property>
+                                                <property name="label">Position and units:</property>
                                                 <property name="markup">0</property>
                                                 <property name="max_size"></property>
                                                 <property name="maximize_button">0</property>
@@ -1214,7 +1214,7 @@
                                                 <property name="caption"></property>
                                                 <property name="caption_visible">1</property>
                                                 <property name="center_pane">0</property>
-                                                <property name="choices">&quot;Bottom left&quot; &quot;Center on page&quot;</property>
+                                                <property name="choices">&quot;Bottom left, plotter units&quot; &quot;Centered, plotter units&quot; &quot;Page fit, user units&quot; &quot;Content fit, user units&quot;</property>
                                                 <property name="close_button">1</property>
                                                 <property name="context_help"></property>
                                                 <property name="context_menu">1</property>

@@ -223,6 +223,8 @@ HPGL_PLOTTER::HPGL_PLOTTER()
         : arcTargetChordLength( 0 ),
           arcMinChordDegrees( 5.0 ),
           dashType( PLOT_DASH_TYPE::SOLID ),
+          useUserCoords( false ),
+          fitUserCoords( false ),
           m_current_item( nullptr )
 {
     SetPenSpeed( 40 );      // Default pen speed = 40 cm/s; Pen speed is *always* in cm
@@ -273,13 +275,34 @@ bool HPGL_PLOTTER::StartPlot()
 bool HPGL_PLOTTER::EndPlot()
 {
     wxASSERT( m_outputFile );
-    fputs( "PU;", m_outputFile );
+
+    fputs( "PU;\n", m_outputFile );
 
     flushItem();
     sortItems( m_items );
 
     if( m_items.size() > 0 )
     {
+        if( useUserCoords )
+        {
+            if( fitUserCoords )
+            {
+                BOX2D bbox = m_items.front().bbox;
+                for( HPGL_ITEM const& item: m_items )
+                {
+                    bbox.Merge( item.bbox );
+                }
+
+                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", bbox.GetX(), bbox.GetX() + bbox.GetWidth(),
+                         bbox.GetY(), bbox.GetY() + bbox.GetHeight() );
+            }
+            else
+            {
+                DPOINT pagesize_dev( m_paperSize * m_iuPerDeviceUnit );
+                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", 0., pagesize_dev.x, 0., pagesize_dev.y );
+            }
+        }
+
         DPOINT         loc          = m_items.begin()->loc_start;
         bool           pen_up       = true;
         PLOT_DASH_TYPE current_dash = PLOT_DASH_TYPE::SOLID;
@@ -376,6 +399,7 @@ void HPGL_PLOTTER::Rect( const wxPoint& p1, const wxPoint& p2, FILL_TYPE fill, i
     startOrAppendItem( p1dev, wxString::Format( "EA %.0f,%.0f;", p2dev.x, p2dev.y ) );
 
     m_current_item->loc_end = m_current_item->loc_start;
+    m_current_item->bbox.Merge( p2dev );
     PenFinish();
 }
 
@@ -410,6 +434,9 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
                                                hpgl_end_polygon_cmd ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
+        m_current_item->bbox.Merge(
+            BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) )
+        );
         PenFinish();
     }
 
@@ -419,6 +446,9 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
         startOrAppendItem( center_dev, wxString::Format( "CI %g,%g;", radius, chord_degrees ) );
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
+        m_current_item->bbox.Merge(
+            BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) )
+        );
         PenFinish();
     }
 }
@@ -514,6 +544,7 @@ void HPGL_PLOTTER::PenTo( const wxPoint& pos, char plume )
             )
         );
         m_current_item->loc_end = pos_dev;
+        m_current_item->bbox.Merge( pos_dev );
     }
 
     m_penLastpos = pos;
@@ -565,9 +596,10 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
     if( radius <= 0 )
         return;
 
-    double const circumf             = 2.0 * M_PI * userToDeviceSize( radius );
+    double const radius_dev          = userToDeviceSize( radius );
+    double const circumf_dev         = 2.0 * M_PI * radius_dev;
     double const target_chord_length = arcTargetChordLength;
-    double       chord_degrees       = 360.0 * target_chord_length / circumf;
+    double       chord_degrees       = 360.0 * target_chord_length / circumf_dev;
 
     if( chord_degrees < arcMinChordDegrees )
     {
@@ -597,7 +629,10 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
     startOrAppendItem( cmap_dev, wxString::Format( "AA %.0f,%.0f,%.0f,%g", centre_dev.x,
                                          centre_dev.y, angle, chord_degrees ) );
 
-    // TODO We could compute the final position instead...
+    // TODO We could compute the final position and full bounding box instead...
+    m_current_item->bbox.Merge( BOX2D(
+        centre_dev - radius_dev, VECTOR2D( radius_dev * 2, radius_dev * 2 )
+    ) );
     m_current_item->lift_after = true;
     flushItem();
 }
@@ -832,7 +867,13 @@ bool HPGL_PLOTTER::startOrAppendItem( DPOINT location, wxString const& content )
 {
     if( m_current_item == nullptr )
     {
-        HPGL_ITEM item = { location, location, false, false, false, penNumber, dashType, content };
+        HPGL_ITEM item;
+        item.loc_start = location;
+        item.loc_end = location;
+        item.bbox = BOX2D( location );
+        item.pen = penNumber;
+        item.dashType = dashType;
+        item.content = content;
         m_items.push_back( item );
         m_current_item = &m_items.back();
         return true;

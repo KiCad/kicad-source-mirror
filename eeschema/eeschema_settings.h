@@ -159,7 +159,7 @@ public:
         bool     frame_reference;
         int      hpgl_paper_size;
         double   hpgl_pen_size;
-        bool     hpgl_origin;
+        int      hpgl_origin;
     };
 
     struct PANEL_SYM_CHOOSER

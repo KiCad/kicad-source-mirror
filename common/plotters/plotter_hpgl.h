@@ -54,6 +54,18 @@ public:
     /// @param chord_len - chord length in IUs
     void SetTargetChordLength( double chord_len );
 
+    /// Switch to the user coordinate system
+    void SetUserCoords( bool user_coords )
+    {
+        useUserCoords = user_coords;
+    }
+
+    /// Set whether the user coordinate system is fit to content
+    void SetUserCoordsFit( bool user_coords_fit )
+    {
+        fitUserCoords = user_coords_fit;
+    }
+
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
 
@@ -133,21 +145,33 @@ protected:
     /// @return whether a new item was made
     bool startOrAppendItem( DPOINT location, wxString const& content );
 
-    int    penSpeed;
-    int    penNumber;
-    double penDiameter;
+    int            penSpeed;
+    int            penNumber;
+    double         penDiameter;
     double         arcTargetChordLength;
     double         arcMinChordDegrees;
     PLOT_DASH_TYPE dashType;
+    bool           useUserCoords;
+    bool           fitUserCoords;
 
     struct HPGL_ITEM
     {
+        HPGL_ITEM()
+            : lift_before( false ),
+              lift_after( false ),
+              pen_returns( false ),
+              pen( 0 )
+        {}
+
         /// Location the pen should start at
         DPOINT         loc_start;
 
         /// Location the pen will be at when it finishes. If this is not known,
         /// leave it equal to loc_start and set lift_after.
         DPOINT         loc_end;
+
+        /// Bounding box of this item
+        BOX2D          bbox;
 
         /// Whether the command should be executed with the pen lifted
         bool           lift_before;
