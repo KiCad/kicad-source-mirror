@@ -24,7 +24,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+/// @todo The Boost entropy exception does not exist prior to 1.67. Once the minimum Boost
+///       version is raise to 1.67 or greater, this version check can be removed.
+#include <boost/version.hpp>
+
+#if BOOST_VERSION >= 106700
 #include <boost/uuid/entropy_error.hpp>
+#endif
+
 #include <kiface_i.h>
 #include <confirm.h>
 #include <dialog_helpers.h>
@@ -180,6 +187,9 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
 
     BOARD_ITEM* lastItem = nullptr;
 
+    /// @todo The Boost entropy exception does not exist prior to 1.67. Once the minimum Boost
+    ///       version is raise to 1.67 or greater, this version check can be removed.
+#if BOOST_VERSION >= 106700
     try
     {
         lastItem = GetBoard()->GetItem( lastBrightenedItemID );
@@ -188,6 +198,9 @@ void PCB_BASE_FRAME::FocusOnItem( BOARD_ITEM* aItem )
     {
         wxLogError( "A Boost UUID entropy exception was thrown in %s:%s.", __FILE__, __FUNCTION__ );
     }
+#else
+    lastItem = GetBoard()->GetItem( lastBrightenedItemID );
+#endif
 
     if( lastItem && lastItem != aItem && lastItem != DELETED_BOARD_ITEM::GetInstance() )
     {
