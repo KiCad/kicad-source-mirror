@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-13 18:17+0000\n"
+"PO-Revision-Date: 2020-12-21 18:43+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -5742,7 +5742,7 @@ msgstr "Aktualizovat DPS ze schématu..."
 
 #: common/tool/actions.cpp:563
 msgid "Update PCB with changes made to schematic"
-msgstr "Aktualizováno DPS z aktuálního schématu."
+msgstr "Aktualizace DPS se změnami provedenými ve schématu"
 
 #: common/tool/actions.cpp:568
 msgid "Update Schematic from PCB..."
@@ -9072,7 +9072,7 @@ msgstr "Zachovat stávající číslování, i když existují duplikáty"
 
 #: eeschema/dialogs/dialog_paste_special_base.h:50
 msgid "Paste Special"
-msgstr "Speciální vložení..."
+msgstr "Speciální vložení"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:51
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:201
@@ -13273,9 +13273,8 @@ msgid "%s, %s, %s, or %s"
 msgstr "%s, %s, %s, nebo %s"
 
 #: eeschema/sch_validators.cpp:181
-#, fuzzy
 msgid "The reference designator cannot contain text variable references"
-msgstr "%s nesmí obsahovat znaky %s."
+msgstr "Označení reference nemůže obsahovat textové proměnné reference"
 
 #: eeschema/sch_validators.cpp:188
 msgid "Field Validation Error"
@@ -14876,9 +14875,8 @@ msgid "Edit Page Number..."
 msgstr "Upravit číslo stránky..."
 
 #: eeschema/tools/ee_actions.cpp:571
-#, fuzzy
 msgid "Edit the page number of the current or selected sheet"
-msgstr "Upravit aktuální vybraný regulátor."
+msgstr "Upravit číslo stránky aktuálního nebo vybraného listu"
 
 #: eeschema/tools/ee_actions.cpp:576
 msgid "Rescue Symbols..."
@@ -17310,13 +17308,12 @@ msgid "Show title block in preview mode"
 msgstr "Zobrazit spoje jako obrys"
 
 #: pagelayout_editor/tools/pl_actions.cpp:93
-#, fuzzy
 msgid ""
 "Show title block in preview mode:\n"
 "text placeholders will be replaced with preview data."
 msgstr ""
-"Zobrazit blok titulků v režimu úprav: texty jsou zobrazeny tak, jak jsou:\n"
-"texty s formátem se zobrazují bez změny"
+"Zobrazit razítko v režimu náhledu:\n"
+"textové zástupné symboly budou nahrazeny s náhledem dat."
 
 #: pagelayout_editor/tools/pl_actions.cpp:99
 #, fuzzy
@@ -17324,13 +17321,12 @@ msgid "Show title block in edit mode"
 msgstr "Zobrazit spoje jako obrys"
 
 #: pagelayout_editor/tools/pl_actions.cpp:100
-#, fuzzy
 msgid ""
 "Show title block in edit mode:\n"
 "text placeholders are shown as ${keyword} tokens."
 msgstr ""
-"Zobrazit blok titulků v režimu úprav: texty jsou zobrazeny tak, jak jsou:\n"
-"texty s formátem se zobrazují bez změny"
+"Zobrazit razítko v režimu úprav:\n"
+"zástupné symboly textu jsou zobrazeny jako tokeny ${keyword}."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:466
 msgid "Error writing objects to clipboard"
@@ -19742,9 +19738,8 @@ msgstr "Prefix jména plošky:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:248
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:253
-#, fuzzy
 msgid "Optional prefix for component side reference designations (i.e. F_)"
-msgstr "Nelze najít součástku s referencí \"%s\" v netlistu."
+msgstr "Volitelná předpona pro reference schématu na straně součástek (např.F_)"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:257
 #, fuzzy
@@ -20382,12 +20377,8 @@ msgid "Remove islands:"
 msgstr "Odstranit ostrovy:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:345
-#, fuzzy
 msgid "Choose what to do with unconnected copper islands"
-msgstr ""
-"Vznikne ostrov\n"
-"mědi nepřipojený\n"
-"k žádné síti."
+msgstr "Vyberte si, co dělat s nepřipojenými ostrovy mědi"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
 msgid "Below area limit"
