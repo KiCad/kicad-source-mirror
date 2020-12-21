@@ -729,7 +729,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( "Symbol '%s' not found in symbol library '%s'",
+                msg.Printf( "Symbol '%s' not found in symbol library '%s'.",
                             symbolName,
                             libName );
                 ercItem->SetErrorMessage( msg );
