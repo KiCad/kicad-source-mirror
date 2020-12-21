@@ -168,14 +168,15 @@ public:
 
 class PROPERTY_BASE
 {
+private:
+    ///> Used to generate unique IDs.  Must come up front so it's initialized before ctor.
+
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
-        m_id( nextId ),
         m_name( aName ),
         m_display( aDisplay ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } )
     {
-        ++nextId;
     }
 
     virtual ~PROPERTY_BASE()
@@ -245,14 +246,6 @@ public:
      */
     virtual size_t TypeHash() const = 0;
 
-    /**
-     * Returns unique ID of the property.
-     */
-    size_t Id() const
-    {
-        return m_id;
-    }
-
     virtual bool IsReadOnly() const = 0;
 
     PROPERTY_DISPLAY GetDisplay() const
@@ -283,15 +276,10 @@ protected:
     virtual wxAny getter( void* aObject ) const = 0;
 
 private:
-    const size_t m_id;
-    const wxString m_name;
-    const PROPERTY_DISPLAY m_display;
+    const wxString                    m_name;
+    const PROPERTY_DISPLAY            m_display;
 
-    ///> Condition that determines whether the property is available
-    std::function<bool(INSPECTABLE*)> m_availFunc;
-
-    ///> Used to generate unique IDs
-    size_t nextId = 0;
+    std::function<bool(INSPECTABLE*)> m_availFunc;   ///> Eval to determine if prop is available
 
     friend class INSPECTABLE;
 };
