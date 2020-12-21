@@ -902,7 +902,10 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent,
     if( aSettings.sorting_column != -1 )
     {
         if( wxDataViewColumn* c = m_netsList->GetColumn( aSettings.sorting_column ) )
+        {
             c->SetSortOrder( aSettings.sort_order_asc );
+            m_data_model->Resort();
+        }
     }
 
     finishDialogSettings();
@@ -1251,8 +1254,8 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
 }
 
 
-void DIALOG_NET_INSPECTOR::OnBoardItemsRemoved(
-        BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+void DIALOG_NET_INSPECTOR::OnBoardItemsRemoved( BOARD& aBoard,
+                                                std::vector<BOARD_ITEM*>& aBoardItems )
 {
     for( BOARD_ITEM* item : aBoardItems )
     {
@@ -1272,8 +1275,8 @@ void DIALOG_NET_INSPECTOR::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoard
 }
 
 
-void DIALOG_NET_INSPECTOR::OnBoardItemsChanged(
-        BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItems )
+void DIALOG_NET_INSPECTOR::OnBoardItemsChanged( BOARD& aBoard,
+                                                std::vector<BOARD_ITEM*>& aBoardItems )
 {
     buildNetsList();
     m_netsList->Refresh();
@@ -1283,7 +1286,9 @@ void DIALOG_NET_INSPECTOR::OnBoardItemsChanged(
 void DIALOG_NET_INSPECTOR::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
     if( !m_brd->IsHighLightNetON() )
+    {
         m_netsList->UnselectAll();
+    }
     else
     {
         const std::set<int>& selected_codes = m_brd->GetHighLightNetCodes();
@@ -1407,8 +1412,9 @@ unsigned int DIALOG_NET_INSPECTOR::calculateViaLength( const TRACK* aTrack ) con
 }
 
 
-std::unique_ptr<DIALOG_NET_INSPECTOR::LIST_ITEM> DIALOG_NET_INSPECTOR::buildNewItem(
-        NETINFO_ITEM* aNet, unsigned int aPadCount, const std::vector<CN_ITEM*>& aCNItems )
+std::unique_ptr<DIALOG_NET_INSPECTOR::LIST_ITEM>
+DIALOG_NET_INSPECTOR::buildNewItem( NETINFO_ITEM* aNet, unsigned int aPadCount,
+                                    const std::vector<CN_ITEM*>& aCNItems )
 {
     std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( aNet );
 
