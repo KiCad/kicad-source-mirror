@@ -887,6 +887,9 @@ void SYMBOL_EDIT_FRAME::DuplicatePart( bool aFromClipboard )
 
     ensureUniqueName( newPart, lib );
     m_libMgr->UpdatePart( newPart, lib );
+
+    LoadOneLibraryPartAux( newPart, lib, GetUnit(), GetConvert() );
+
     SyncLibraries( false );
     m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart->GetName() ) );
 
