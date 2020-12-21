@@ -111,19 +111,19 @@ public:
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override
     {
-        /* "Zoom to Fit" calls this with "aIncludeAllVisible" as true.  Since that
-        * feature always ignored the page and border, this function returns a bbox
-        * without them as well when passed true.  This technically is not all things
-        * visible, but it keeps behavior consistent.
-        *
-        * When passed false, this function returns a bbox of just the board edge.
-        * This allows things like fabrication text or anything else outside the board
-        * edge to be ignored, and just zooms up to the board itself.
-        *
-        * Calling "GetBoardBoundingBox(true)" when edge cuts are turned off will return bbox of
-        * entire page and border, so we make sure to do "GetBoardBoundingBox(false)" instead.
-        */
-        if( aIncludeAllVisible || ( !aIncludeAllVisible && !m_pcb->IsLayerVisible( Edge_Cuts ) ) )
+        /* "Zoom to Fit" calls this with "aIncludeAllVisible" as true.  Since that feature
+         * always ignored the page and border, this function returns a bbox without them
+         * as well when passed true.  This technically is not all things visible, but it
+         * keeps behavior consistent.
+         *
+         * When passed false, this function returns a bbox of just the board edge. This
+         * allows things like fabrication text or anything else outside the board edge to
+         * be ignored, and just zooms up to the board itself.
+         *
+         * Calling "GetBoardBoundingBox(true)" when edge cuts are turned off will return
+         * the entire page and border, so we call "GetBoardBoundingBox(false)" instead.
+         */
+        if( aIncludeAllVisible || !m_pcb->IsLayerVisible( Edge_Cuts ) )
             return GetBoardBoundingBox( false );
         else
             return GetBoardBoundingBox( true );

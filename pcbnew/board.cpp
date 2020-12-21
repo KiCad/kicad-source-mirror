@@ -1016,6 +1016,9 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
     bool     showInvisibleText = IsElementVisible( LAYER_MOD_TEXT_INVISIBLE )
                                  && PgmOrNull() && !PgmOrNull()->m_Printing;
 
+    if( aBoardEdgesOnly )
+        visible.set( Edge_Cuts );
+
     // Check shapes, dimensions, texts, and fiducials
     for( BOARD_ITEM* item : m_drawings )
     {
