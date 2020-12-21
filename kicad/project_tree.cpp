@@ -73,7 +73,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL_NC (similar TREE_DRILL)
     m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
     m_imageList->Add( KiBitmap( file_svg_xpm ) );               // TREE_SVG
-    m_imageList->Add( KiBitmap( pagelayout_load_xpm ) );        // TREE_PAGE_LAYOUT_DESCR
+    m_imageList->Add( KiBitmap( pagelayout_xpm ) );             // TREE_PAGE_LAYOUT_DESCR
     m_imageList->Add( KiBitmap( module_xpm ) );                 // TREE_FOOTPRINT_FILE
     m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SCHEMATIC_LIBFILE
     m_imageList->Add( KiBitmap( library_xpm ) );                // TREE_SEXPR_SYMBOL_LIB_FILE

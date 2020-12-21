@@ -360,9 +360,9 @@ set( BMAPS_MID
     pads_mask_layers
     pads_remove
     path
-    pagelayout_load
     pagelayout_normal_view_mode
     pagelayout_special_view_mode
+    pagelayout
     palette
     part_properties
     paste

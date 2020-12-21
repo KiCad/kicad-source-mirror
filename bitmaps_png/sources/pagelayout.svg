@@ -10,15 +10,15 @@
    version="1.1"
    id="Слой_1"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
-   sodipodi:docname="pagelayout_special_view_mode.svg"
+   sodipodi:docname="pagelayout.svg"
    x="0px"
    y="0px"
    viewBox="0 0 24 24"
    style="enable-background:new 0 0 24 24;"
    xml:space="preserve"><metadata
-   id="metadata849"><rdf:RDF><cc:Work
+   id="metadata848"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>pagelayout_special_view_mode</dc:title><cc:license
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>pagelayout_load</dc:title><cc:license
          rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
        rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
          rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
@@ -27,14 +27,13 @@
          rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
          rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
          rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
-   id="defs847" />
+   id="defs846" />
 <style
    type="text/css"
    id="style833">
 	.st0{fill:#F3F3F3;}
 	.st1{fill:#1A81C4;}
 	.st2{fill:none;stroke:#1A81C4;stroke-linejoin:round;}
-	.st3{fill:#E49435;}
 </style>
 <sodipodi:namedview
    bordercolor="#666666"
@@ -43,8 +42,8 @@
    guidetolerance="10"
    id="namedview30"
    inkscape:current-layer="Слой_1"
-   inkscape:cx="-5.05944"
-   inkscape:cy="15.171716"
+   inkscape:cx="10.40703"
+   inkscape:cy="13.786781"
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
@@ -53,7 +52,7 @@
    inkscape:window-width="1280"
    inkscape:window-x="0"
    inkscape:window-y="303"
-   inkscape:zoom="10.49521"
+   inkscape:zoom="18.302106"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -62,13 +61,13 @@
    empspacing="2"
    id="grid_kicad"
    opacity="0.13"
-   spacingx="1"
-   spacingy="1"
+   spacingx="0.5"
+   spacingy="0.5"
    type="xygrid">
 		</inkscape:grid>
 </sodipodi:namedview>
 <title
-   id="title26189">pagelayout_special_view_mode</title>
+   id="title26165">pagelayout_load</title>
 <polygon
    id="polygon26167"
    class="st0"
@@ -106,11 +105,4 @@
    y1="22"
    x2="19.5"
    y2="17" />
-<rect
-   id="rect26205"
-   x="5"
-   y="9"
-   class="st3"
-   width="6"
-   height="6" />
 </svg>

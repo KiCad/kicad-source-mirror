@@ -14,7 +14,7 @@
    sodipodi:docname="icon_pagelayout_editor.svg"
    width="48"
    height="48"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_48/icon_pagelayout_editor.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
@@ -27,15 +27,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1440"
-     inkscape:window-height="799"
+     inkscape:window-width="1280"
+     inkscape:window-height="755"
      id="namedview3328"
      showgrid="true"
-     inkscape:zoom="13.980769"
+     inkscape:zoom="10.829366"
      inkscape:cx="31.993794"
      inkscape:cy="23.428461"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="303"
      inkscape:window-maximized="0"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -85,7 +85,7 @@
   <title
      id="title3313">icon_pagelayout_editor</title>
   <rect
-     style="fill:#f2f2f2;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+     style="fill:#f3f3f3;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
      id="rect3901"
      width="45.99622"
      height="45.996307"
