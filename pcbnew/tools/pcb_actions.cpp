@@ -711,10 +711,10 @@ TOOL_ACTION PCB_ACTIONS::highlightItem( "pcbnew.EditorControl.highlightItem",
         AS_GLOBAL );
 
 TOOL_ACTION PCB_ACTIONS::hideNet( "pcbnew.EditorControl.hideNet", AS_GLOBAL, 0, "",
-        _( "Hide Net" ), _( "Hide the ratsnest for the selected net" ), ratsnest_xpm );
+        _( "Hide Net" ), _( "Hide the ratsnest for the selected net" ), hide_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showNet( "pcbnew.EditorControl.showNet", AS_GLOBAL, 0, "",
-        _( "Show Net" ), _( "Show the ratsnest for the selected net" ), ratsnest_xpm );
+        _( "Show Net" ), _( "Show the ratsnest for the selected net" ), show_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showEeschema( "pcbnew.EditorControl.showEeschema",
         AS_GLOBAL, 0, "",

@@ -278,6 +278,7 @@ set( BMAPS_MID
     hammer
     help
     hidden_pin
+    hide_ratsnest
     hierarchy_nav
     highlight_remove
     hotkeys
@@ -403,7 +404,6 @@ set( BMAPS_MID
     ps_tune_length
     push_pad_settings
     py_script
-    ratsnest
     read_setup
     recent
     redo
@@ -454,6 +454,7 @@ set( BMAPS_MID
     show_dcodenumber
     show_footprint
     show_mod_edge
+    show_ratsnest
     showtrack
     show_zone
     show_zone_disable
