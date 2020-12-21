@@ -129,7 +129,6 @@ private:
     wxSizer*                 m_sizer;
 
     bool                     m_update;
-    bool                     m_finished_loading;
     int                      m_max_items;
     wxString                 m_default_footprint;
     wxString                 m_other_footprint;
@@ -140,7 +139,6 @@ private:
     bool                     m_zero_filter;
     EDA_DRAW_FRAME*          m_eda_frame;
 
-    void FootprintsLoaded();
     void OnComboBox( wxCommandEvent& aEvent );
     void OnComboInteractive( wxCommandEvent& aEvent );
 

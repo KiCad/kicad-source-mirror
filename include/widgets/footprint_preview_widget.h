@@ -18,8 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __FOOTPRINT_PREVIEW_WIDGET_H
-#define __FOOTPRINT_PREVIEW_WIDGET_H
+#ifndef FOOTPRINT_PREVIEW_WIDGET_H
+#define FOOTPRINT_PREVIEW_WIDGET_H
 
 #include <wx/panel.h>
 #include <functional>
@@ -33,13 +33,6 @@ class LIB_ID;
 class KIWAY;
 class wxStaticText;
 class wxSizer;
-
-
-enum FOOTPRINT_STATUS {
-    FPS_NOT_FOUND = 0,
-    FPS_READY = 1,
-    FPS_LOADING = 2
-};
 
 
 class FOOTPRINT_PREVIEW_WIDGET: public wxPanel
@@ -59,7 +52,7 @@ public:
      * if Kiway is not available. If this returns false, no other methods should
      * be called.
      */
-    bool IsInitialized() const { return !! m_prev_panel; }
+    bool IsInitialized() const { return m_prev_panel != nullptr; }
 
     /**
      * Set the contents of the status label and display it.
@@ -72,24 +65,12 @@ public:
     void ClearStatus();
 
     /**
-     * Preload a footprint into the cache. This must be called prior to
-     * DisplayFootprint, and may be called early.
-     */
-    void CacheFootprint( const LIB_ID& aFPID );
-
-    /**
      * Set the currently displayed footprint. Any footprint passed in here
      * must have been passed to CacheFootprint before.
      */
     void DisplayFootprint( const LIB_ID& aFPID );
 
 private:
-
-    /**
-     * Callback from the FOOTPRINT_PREVIEW_PANEL
-     */
-    void OnStatusChange( FOOTPRINT_STATUS aStatus );
-
     FOOTPRINT_PREVIEW_PANEL_BASE* m_prev_panel;
 
     wxStaticText* m_status;
@@ -98,9 +79,6 @@ private:
     wxSizer*      m_outerSizer;
 
 };
-
-
-typedef std::function<void( FOOTPRINT_STATUS )> FOOTPRINT_STATUS_HANDLER;
 
 
 /**
@@ -113,21 +91,10 @@ public:
     virtual ~FOOTPRINT_PREVIEW_PANEL_BASE() {}
 
     /**
-     * Preload a footprint into the cache. This must be called prior to
-     * DisplayFootprint, and may be called early.
-     */
-    virtual void CacheFootprint( LIB_ID const& aFPID ) = 0;
-
-    /**
      * Set the currently displayed footprint. Any footprint passed in here
      * must have been passed to CacheFootprint before.
      */
-    virtual void DisplayFootprint( LIB_ID const& aFPID ) = 0;
-
-    /**
-     * Set the callback to receive status updates.
-     */
-    virtual void SetStatusHandler( FOOTPRINT_STATUS_HANDLER aHandler ) = 0;
+    virtual bool DisplayFootprint( LIB_ID const& aFPID ) = 0;
 
     /**
      * Get the underlying wxWindow.
@@ -148,4 +115,4 @@ public:
 };
 
 
-#endif // __FOOTPRINT_PREVIEW_WIDGET_H
+#endif // FOOTPRINT_PREVIEW_WIDGET_H

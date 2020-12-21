@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2016 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -41,29 +41,21 @@ class FOOTPRINT;
 class KIWAY;
 class IO_MGR;
 class BOARD;
-class FP_LOADER_THREAD;
-class FP_THREAD_IFACE;
 
 
 /**
  * Panel that renders a single footprint via Cairo GAL, meant to be exported
  * through Kiface.
  */
-class FOOTPRINT_PREVIEW_PANEL :
-    public PCB_DRAW_PANEL_GAL, public KIWAY_HOLDER, public FOOTPRINT_PREVIEW_PANEL_BASE
+class FOOTPRINT_PREVIEW_PANEL : public PCB_DRAW_PANEL_GAL,
+                                public KIWAY_HOLDER,
+                                public FOOTPRINT_PREVIEW_PANEL_BASE
 {
-    friend class FP_THREAD_IFACE;
-    friend class FP_LOADER_THREAD;
-
 public:
 
     virtual ~FOOTPRINT_PREVIEW_PANEL( );
 
-    virtual void CacheFootprint( const LIB_ID& aFPID ) override;
-
-    virtual void DisplayFootprint( const LIB_ID& aFPID ) override;
-
-    virtual void SetStatusHandler( FOOTPRINT_STATUS_HANDLER aHandler ) override;
+    virtual bool DisplayFootprint( const LIB_ID& aFPID ) override;
 
     virtual const KIGFX::COLOR4D& GetBackgroundColor() override;
     virtual const KIGFX::COLOR4D& GetForegroundColor() override;
@@ -74,13 +66,6 @@ public:
     static FOOTPRINT_PREVIEW_PANEL* New( KIWAY* aKiway, wxWindow* aParent );
 
 private:
-    struct CACHE_ENTRY
-    {
-        LIB_ID                     fpid;
-        std::shared_ptr<FOOTPRINT> footprint;
-        FOOTPRINT_STATUS           status;
-    };
-
     /**
      * Create a new panel
      *
@@ -93,24 +78,12 @@ private:
                              std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
                              GAL_TYPE aGalType );
 
-
-    virtual CACHE_ENTRY CacheAndReturn( const LIB_ID& aFPID );
-
-    void OnLoaderThreadUpdate( wxCommandEvent& aEvent );
-
     void renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint );
 
 private:
-    FP_LOADER_THREAD*                m_loader;
-    std::shared_ptr<FP_THREAD_IFACE> m_iface;
-    FOOTPRINT_STATUS_HANDLER         m_handler;
-
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
-
-    std::shared_ptr<FOOTPRINT> m_currentFootprint;
-    LIB_ID                     m_currentFPID;
-    bool                       m_footprintDisplayed;
+    std::shared_ptr<FOOTPRINT>                  m_currentFootprint;
 };
 
 #endif

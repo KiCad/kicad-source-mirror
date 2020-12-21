@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,11 +43,11 @@ wxDEFINE_EVENT( EVT_FOOTPRINT_SELECTED, wxCommandEvent );
 
 
 FOOTPRINT_SELECT_WIDGET::FOOTPRINT_SELECT_WIDGET( EDA_DRAW_FRAME* aFrame, wxWindow* aParent,
-                                                  FOOTPRINT_LIST* aFpList, bool aUpdate, int aMaxItems ) :
+                                                  FOOTPRINT_LIST* aFpList, bool aUpdate,
+                                                  int aMaxItems ) :
           wxPanel( aParent ),
           m_kiway( nullptr ),
           m_update( aUpdate ),
-          m_finished_loading( false ),
           m_max_items( aMaxItems ),
           m_last_item( 0 ),
           m_fp_list( aFpList ),
@@ -73,26 +73,13 @@ void FOOTPRINT_SELECT_WIDGET::Load( KIWAY& aKiway, PROJECT& aProject )
 
     try
     {
-        auto fp_lib_table = aProject.PcbFootprintLibs( aKiway );
         m_fp_list = FOOTPRINT_LIST::GetInstance( aKiway );
-
-        // We parent to the eda frame so that the taskbar progress indicator displays on it
-        WX_PROGRESS_REPORTER progressReporter( m_eda_frame, _( "Loading Footprint Libraries" ), 2 );
-        m_fp_list->ReadFootprintFiles( fp_lib_table, nullptr, &progressReporter );
-        FootprintsLoaded();
+        m_fp_filter.SetList( *m_fp_list );
     }
     catch( ... )
     {
         // no footprint libraries available
     }
-}
-
-
-void FOOTPRINT_SELECT_WIDGET::FootprintsLoaded()
-{
-    m_fp_filter.SetList( *m_fp_list );
-
-    m_finished_loading = true;
 
     if( m_update )
         UpdateList();
@@ -215,7 +202,7 @@ bool FOOTPRINT_SELECT_WIDGET::UpdateList()
 {
     int n_items = 0;
 
-    if( !m_fp_list || !m_finished_loading )
+    if( !m_fp_list )
         return false;
 
     wxWindowUpdateLocker lock( m_fp_sel_ctrl );

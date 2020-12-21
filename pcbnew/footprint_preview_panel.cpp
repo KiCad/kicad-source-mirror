@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  * Copyright (C) 2016 Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -20,7 +20,6 @@
  */
 
 #include <memory>
-#include <mutex>
 #include <utility>
 
 #include "pcbnew_settings.h"
@@ -29,8 +28,6 @@
 #include <eda_draw_frame.h>
 #include <footprint_preview_panel.h>
 #include <fp_lib_table.h>
-#include <id.h>
-#include <io_mgr.h>
 #include <kiway.h>
 #include <math/box2.h>
 #include <pcb_painter.h>
@@ -42,226 +39,14 @@
 #include <wx/stattext.h>
 #include <zoom_defines.h>
 
-/**
- * Threadsafe interface class between loader thread and panel class.
- */
-class FP_THREAD_IFACE
-{
-    using CACHE_ENTRY = FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY;
-
-    public:
-        FP_THREAD_IFACE() : m_panel( nullptr )
-        {
-        }
-
-        /// Retrieve a cache entry by LIB_ID
-        OPT<CACHE_ENTRY> GetFromCache( const LIB_ID& aFPID )
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            auto it = m_cachedFootprints.find( aFPID );
-
-            if( it != m_cachedFootprints.end() )
-                return it->second;
-            else
-                return NULLOPT;
-        }
-
-        /**
-         * Push an entry to the loading queue and a placeholder to the cache;
-         * return the placeholder.
-         */
-        CACHE_ENTRY AddToQueue( const LIB_ID& aEntry )
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-
-            CACHE_ENTRY ent            = { aEntry, nullptr, FPS_LOADING };
-            m_cachedFootprints[aEntry] = ent;
-            m_loaderQueue.push_back( ent );
-
-            return ent;
-        }
-
-        /// Pop an entry from the queue, or empty option if none is available.
-        OPT<CACHE_ENTRY> PopFromQueue()
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-
-            if( m_loaderQueue.empty() )
-            {
-                return NULLOPT;
-            }
-            else
-            {
-                auto ent = m_loaderQueue.front();
-                m_loaderQueue.pop_front();
-                return ent;
-            }
-        }
-
-        /// Add an entry to the cache.
-        void AddToCache( const CACHE_ENTRY& aEntry )
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            m_cachedFootprints[aEntry.fpid] = aEntry;
-        }
-
-        /**
-         * Threadsafe accessor to set the current footprint.
-         */
-        void SetCurrentFootprint( LIB_ID aFp )
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            m_current_fp = std::move( aFp );
-        }
-
-        /**
-         * Threadsafe accessor to get the current footprint.
-         */
-        LIB_ID GetCurrentFootprint()
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            return m_current_fp;
-        }
-
-        /**
-         * Set the associated panel, for QueueEvent() and GetTable().
-         */
-        void SetPanel( FOOTPRINT_PREVIEW_PANEL* aPanel )
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            m_panel = aPanel;
-        }
-
-        /**
-         * Get the associated panel.
-         */
-        FOOTPRINT_PREVIEW_PANEL* GetPanel()
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            return m_panel;
-        }
-
-        /**
-         * Post an event to the panel, if the panel still exists. Return whether
-         * the event was posted.
-         */
-        bool QueueEvent( const wxEvent& aEvent )
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-
-            if( m_panel )
-            {
-                m_panel->GetEventHandler()->QueueEvent( aEvent.Clone() );
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /**
-         * Get an FP_LIB_TABLE, or null if the panel is dead.
-         */
-        FP_LIB_TABLE* GetTable()
-        {
-            std::lock_guard<std::mutex> lock( m_lock );
-            return m_panel ? m_panel->Prj().PcbFootprintLibs() : nullptr;
-        }
-
-    private:
-        std::deque<CACHE_ENTRY>       m_loaderQueue;
-        std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
-        LIB_ID                        m_current_fp;
-        FOOTPRINT_PREVIEW_PANEL*      m_panel;
-        std::mutex                    m_lock;
-};
-
-
-/**
- * Footprint loader thread to prevent footprint loading from locking the UI.
- * Interface is via a FP_THREAD_IFACE.
- */
-class FP_LOADER_THREAD : public wxThread
-{
-    using CACHE_ENTRY = FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY;
-
-    std::shared_ptr<FP_THREAD_IFACE> m_iface;
-
-public:
-    FP_LOADER_THREAD( const std::shared_ptr<FP_THREAD_IFACE>& aIface )
-            : wxThread( wxTHREAD_DETACHED ), m_iface( aIface )
-    {
-    }
-
-
-    ~FP_LOADER_THREAD()
-    {
-    }
-
-
-    void ProcessEntry( CACHE_ENTRY& aEntry )
-    {
-        FP_LIB_TABLE* fptbl = m_iface->GetTable();
-
-        if( !fptbl )
-            return;
-
-        try
-        {
-            aEntry.footprint.reset( fptbl->FootprintLoadWithOptionalNickname( aEntry.fpid ) );
-
-            if( !aEntry.footprint )
-                aEntry.status = FPS_NOT_FOUND;
-        }
-        catch( const IO_ERROR& )
-        {
-            aEntry.status = FPS_NOT_FOUND;
-        }
-
-        if( aEntry.status != FPS_NOT_FOUND )
-            aEntry.status = FPS_READY;
-
-        m_iface->AddToCache( aEntry );
-
-        if( aEntry.fpid == m_iface->GetCurrentFootprint() )
-        {
-            wxCommandEvent evt( wxEVT_COMMAND_TEXT_UPDATED, 1 );
-            m_iface->QueueEvent( evt );
-        }
-    }
-
-
-    virtual void* Entry() override
-    {
-        while( m_iface->GetPanel() )
-        {
-            auto ent = m_iface->PopFromQueue();
-
-            if( ent )
-                ProcessEntry( *ent );
-            else
-                wxMilliSleep( 100 );
-        }
-
-        return nullptr;
-    }
-};
-
-
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
-        std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType )
-        : PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
-          KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
-          m_displayOptions( std::move( aOpts ) ),
-          m_currentFootprint( nullptr ),
-          m_footprintDisplayed( true )
+                                                  std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
+                                                  GAL_TYPE aGalType ) :
+        PCB_DRAW_PANEL_GAL( aParent, -1, wxPoint( 0, 0 ), wxSize( 200, 200 ), *aOpts, aGalType ),
+        KIWAY_HOLDER( aKiway, KIWAY_HOLDER::PANEL ),
+        m_displayOptions( std::move( aOpts ) ),
+        m_currentFootprint( nullptr )
 {
-    m_iface = std::make_shared<FP_THREAD_IFACE>();
-    m_iface->SetPanel( this );
-    m_loader = new FP_LOADER_THREAD( m_iface );
-    m_loader->Run();
-
     SetStealsFocus( false );
     ShowScrollbars( wxSHOW_SB_NEVER, wxSHOW_SB_NEVER );
     EnableScrolling( false, false );    // otherwise Zoom Auto disables GAL canvas
@@ -273,9 +58,6 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
     Raise();
     Show( true );
     StartDrawing();
-
-    Connect( wxEVT_COMMAND_TEXT_UPDATED,
-            wxCommandEventHandler( FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate ), NULL, this );
 }
 
 
@@ -287,8 +69,6 @@ FOOTPRINT_PREVIEW_PANEL::~FOOTPRINT_PREVIEW_PANEL( )
         GetView()->Clear();
         m_currentFootprint->SetParent( nullptr );
     }
-
-    m_iface->SetPanel( nullptr );
 }
 
 
@@ -310,24 +90,6 @@ const COLOR4D& FOOTPRINT_PREVIEW_PANEL::GetForegroundColor()
 }
 
 
-FOOTPRINT_PREVIEW_PANEL::CACHE_ENTRY FOOTPRINT_PREVIEW_PANEL::CacheAndReturn( const LIB_ID& aFPID )
-{
-    auto opt_ent = m_iface->GetFromCache( aFPID );
-
-    if( opt_ent )
-        return *opt_ent;
-    else
-        return m_iface->AddToQueue( aFPID );
-}
-
-
-// This is separate to avoid having to export CACHE_ENTRY to the global namespace
-void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( const LIB_ID& aFPID )
-{
-    (void) CacheAndReturn( aFPID );
-}
-
-
 void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootprint )
 {
     if( m_currentFootprint )
@@ -337,24 +99,25 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
         m_currentFootprint->SetParent( nullptr );
     }
 
-    aFootprint->SetParent( m_dummyBoard.get() );
+    m_currentFootprint = aFootprint;
+
+    if( !m_currentFootprint )
+        return;
+
+    m_currentFootprint->SetParent( m_dummyBoard.get() );
 
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();
     auto settings = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( painter->GetSettings() );
     settings->SetContrastModeDisplay( HIGH_CONTRAST_MODE::NORMAL );
 
-    GetView()->Add( aFootprint.get() );
-    GetView()->SetVisible( aFootprint.get(), true );
-    GetView()->Update( aFootprint.get(), KIGFX::ALL );
+    GetView()->Add( m_currentFootprint.get() );
+    GetView()->SetVisible( m_currentFootprint.get(), true );
+    GetView()->Update( m_currentFootprint.get(), KIGFX::ALL );
 
-    // Save a reference to the footprint's shared pointer to say we are using it in the
-    // preview panel
-    m_currentFootprint = aFootprint;
-
-    BOX2I bbox = aFootprint->ViewBBox();
-    bbox.Merge( aFootprint->Value().ViewBBox() );
-    bbox.Merge( aFootprint->Reference().ViewBBox() );
+    BOX2I bbox = m_currentFootprint->ViewBBox();
+    bbox.Merge( m_currentFootprint->Value().ViewBBox() );
+    bbox.Merge( m_currentFootprint->Reference().ViewBBox() );
 
     if( bbox.GetSize().x > 0 && bbox.GetSize().y > 0 )
     {
@@ -369,38 +132,23 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
 }
 
 
-void FOOTPRINT_PREVIEW_PANEL::DisplayFootprint ( const LIB_ID& aFPID )
+bool FOOTPRINT_PREVIEW_PANEL::DisplayFootprint( const LIB_ID& aFPID )
 {
-    m_currentFPID = aFPID;
-    m_iface->SetCurrentFootprint( aFPID );
-    m_footprintDisplayed = false;
+    FP_LIB_TABLE* fptbl = Prj().PcbFootprintLibs();
 
-    CACHE_ENTRY fpe = CacheAndReturn( m_currentFPID );
-
-    if( m_handler )
-        m_handler( fpe.status );
-
-    if( fpe.status == FPS_READY )
+    try
     {
-        if( !m_footprintDisplayed )
-        {
-            renderFootprint( fpe.footprint );
-            m_footprintDisplayed = true;
-            Refresh();
-        }
+        m_currentFootprint.reset( fptbl->FootprintLoadWithOptionalNickname( aFPID ) );
     }
-}
+    catch( ... )
+    {
+        m_currentFootprint.reset();
+    }
 
+    renderFootprint( m_currentFootprint );
+    Refresh();
 
-void FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate( wxCommandEvent& aEvent )
-{
-    DisplayFootprint( m_currentFPID );
-}
-
-
-void FOOTPRINT_PREVIEW_PANEL::SetStatusHandler( FOOTPRINT_STATUS_HANDLER aHandler )
-{
-    m_handler = aHandler;
+    return m_currentFootprint != nullptr;
 }
 
 

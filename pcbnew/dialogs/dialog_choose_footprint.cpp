@@ -226,7 +226,6 @@ void DIALOG_CHOOSE_FOOTPRINT::OnComponentPreselected( wxCommandEvent& aEvent )
     else
     {
         m_preview_ctrl->ClearStatus();
-        m_preview_ctrl->CacheFootprint( lib_id );
         m_preview_ctrl->DisplayFootprint( lib_id );
     }
 }

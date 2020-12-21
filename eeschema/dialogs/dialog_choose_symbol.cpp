@@ -430,7 +430,6 @@ void DIALOG_CHOOSE_SYMBOL::ShowFootprint( wxString const& aName )
         if( lib_id.Parse( aName ) == -1 && lib_id.IsValid() )
         {
             m_fp_preview->ClearStatus();
-            m_fp_preview->CacheFootprint( lib_id );
             m_fp_preview->DisplayFootprint( lib_id );
         }
         else

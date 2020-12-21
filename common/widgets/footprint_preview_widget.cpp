@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 Chris Pavlina <pavlina.chris@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -24,14 +24,14 @@
 #include <kiway.h>
 
 
-FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ):
-    wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-             wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL ),
-    m_prev_panel( nullptr ),
-    m_status( nullptr ),
-    m_statusPanel( nullptr ),
-    m_statusSizer( nullptr ),
-    m_outerSizer( nullptr )
+FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ) :
+        wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                 wxFULL_REPAINT_ON_RESIZE | wxTAB_TRAVERSAL ),
+        m_prev_panel( nullptr ),
+        m_status( nullptr ),
+        m_statusPanel( nullptr ),
+        m_statusSizer( nullptr ),
+        m_outerSizer( nullptr )
 {
     m_prev_panel = FOOTPRINT_PREVIEW_PANEL_BASE::Create( this, aKiway );
 
@@ -46,12 +46,14 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
     m_statusSizer->Add( 0, 0, 1 );  // add a spacer
     m_statusPanel->SetSizer( m_statusSizer );
 
-    // Give the status panel the same color scheme as the canvas so it isn't jarring when switched to
+    // Give the status panel the same color scheme as the canvas so it isn't jarring when
+    // switched to
     m_statusPanel->SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
     m_statusPanel->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
+    m_status->SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
 
-    // Set our background so wx doesn't render a normal control background momentarily when rapidly
-    // navigating with arrow keys
+    // Set our background so wx doesn't render a normal control background momentarily when
+    // rapidly navigating with arrow keys
     SetBackgroundColour( m_prev_panel->GetBackgroundColor().ToColour() );
     SetForegroundColour( m_prev_panel->GetForegroundColor().ToColour() );
 
@@ -59,13 +61,9 @@ FOOTPRINT_PREVIEW_WIDGET::FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aK
     m_outerSizer->Add( m_prev_panel->GetWindow(), 1, wxALL | wxEXPAND, 0 );
     m_outerSizer->Add( m_statusPanel, 1, wxALL | wxEXPAND, 0 );
 
-    // Hide the status panel to start
-    m_statusPanel->Hide();
-
-    m_prev_panel->SetStatusHandler( [this]( FOOTPRINT_STATUS s ){ this->OnStatusChange( s ); } );
-
     SetSizer( m_outerSizer );
-    Layout();
+
+    SetStatusText( wxEmptyString );
 }
 
 
@@ -87,30 +85,17 @@ void FOOTPRINT_PREVIEW_WIDGET::ClearStatus()
 }
 
 
-void FOOTPRINT_PREVIEW_WIDGET::CacheFootprint( const LIB_ID& aFPID )
-{
-    if( m_prev_panel )
-        (void) m_prev_panel->CacheFootprint( aFPID );
-}
-
-
 void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprint( const LIB_ID& aFPID )
 {
-    if( m_prev_panel )
-        (void) m_prev_panel->DisplayFootprint( aFPID );
-}
+    if( !m_prev_panel )
+        return;
 
+    wxBusyCursor busy;
 
-void FOOTPRINT_PREVIEW_WIDGET::OnStatusChange( FOOTPRINT_STATUS aStatus )
-{
-    switch( aStatus )
-    {
-    case FPS_NOT_FOUND: SetStatusText( _( "Footprint not found" ) ); break;
-    case FPS_LOADING:   SetStatusText( _( "Loading..." ) );          break;
-    case FPS_READY:     ClearStatus();                               break;
-    }
-
-    Refresh();
+    if( m_prev_panel->DisplayFootprint( aFPID ) )
+        ClearStatus();
+    else
+        SetStatusText( _( "Footprint not found." ) );
 }
 
 
