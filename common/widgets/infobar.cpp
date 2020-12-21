@@ -157,7 +157,7 @@ void WX_INFOBAR::Dismiss()
 void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
 {
     int barWidth = GetSize().GetWidth();
-    int parentWidth = m_parent->GetSize().GetWidth();
+    int parentWidth = m_parent->GetClientSize().GetWidth();
 
     if( barWidth != parentWidth )
         SetSize( parentWidth, GetSize().GetHeight() );

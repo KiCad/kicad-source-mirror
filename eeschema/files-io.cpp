@@ -277,6 +277,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
     }
 
+    // Loading a complex project and build data can be time
+    // consumming, so display a busy cursor
+    wxBusyCursor dummy;
+
     // unload current project file before loading new
     {
         SetScreen( nullptr );

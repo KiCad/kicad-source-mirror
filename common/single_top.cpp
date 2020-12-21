@@ -391,6 +391,14 @@ bool PGM_SINGLE_TOP::OnPgmInit()
 
     App().SetTopWindow( frame );      // wxApp gets a face.
 
+    // Allocate a slice of time to show the frame and update wxWidgets widgets
+    // (especially setting valid sizes) after creating frame and before calling
+    // OpenProjectFiles() that can update/use some widgets.
+    // The 2 calls to wxSafeYield are needed on wxGTK for best results.
+    wxSafeYield();
+    frame->Show();
+    wxSafeYield();
+
     // Individual frames may provide additional option/switch processing, but for compatibility,
     // any positional arguments are treated as a list of files to pass to OpenProjectFiles
     frame->ParseArgs( parser );
@@ -447,8 +455,6 @@ bool PGM_SINGLE_TOP::OnPgmInit()
             return false;
         }
     }
-
-    frame->Show();
 
     return true;
 }
