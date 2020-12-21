@@ -74,16 +74,6 @@ class RC_ITEM
 public:
     typedef std::vector<KIID> KIIDS;
 
-protected:
-    int           m_errorCode;         ///< The error code's numeric value
-    wxString      m_errorMessage;      ///< A message describing the details of this specific error
-    wxString      m_errorTitle;        ///< The string describing the type of error
-    wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
-    MARKER_BASE*  m_parent;            ///< The marker this item belongs to, if any
-
-    KIIDS m_ids;
-
-public:
     RC_ITEM() :
         m_errorCode( 0 ),
         m_parent( nullptr )
@@ -181,6 +171,16 @@ public:
      * Format a coordinate or position to text.
      */
     static wxString ShowCoord( EDA_UNITS aUnits, const wxPoint& aPos );
+
+protected:
+    int           m_errorCode;         ///< The error code's numeric value
+    wxString      m_errorMessage;      ///< A message describing the details of this specific error
+    wxString      m_errorTitle;        ///< The string describing the type of error
+    wxString      m_settingsKey;       ///< The key used to describe this type of error in settings
+    MARKER_BASE*  m_parent;            ///< The marker this item belongs to, if any
+
+    KIIDS m_ids;
+
 };
 
 
@@ -224,8 +224,6 @@ public:
 
     static KIID ToUUID( wxDataViewItem aItem );
 
-
-public:
     RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aView );
 
     ~RC_TREE_MODEL();
@@ -292,7 +290,6 @@ private:
     void rebuildModel( RC_ITEMS_PROVIDER* aProvider, int aSeverities );
     void onSizeView( wxSizeEvent& aEvent );
 
-private:
     EDA_DRAW_FRAME*            m_editFrame;
     wxDataViewCtrl*            m_view;
     int                        m_severities;

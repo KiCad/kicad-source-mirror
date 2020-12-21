@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,8 +26,7 @@
 #define PTREE_H_
 
 /*
-
-Implement "KiCad s-epression" support for boost::property_tree's ptree, the 8
+Implement "KiCad s-expression" support for boost::property_tree's ptree, the 8
 bit string version of property_tree. The ram resident structure of the ptree is
 mostly compatible with one created using the xml_parser from
 boost::property_tree, with slight differences in the way atoms are stored. The
@@ -43,7 +42,6 @@ portion of a much larger document. If so, then using the ptree will likely be a
 the boost website and there are a number of examples in the
 pcbnew/eagle_plugin.cpp file in this project. Powerful path navigation support
 makes it easy to extract a subset of a ptree.
-
 */
 
 
@@ -56,13 +54,13 @@ typedef const PTREE                         CPTREE;
 typedef boost::property_tree::ptree_error   PTREE_ERROR;
 
 /**
- * Function Scan
- * fills an empty PTREE with information from a KiCad s-expresion stream.  Use
- * a DSNLEXER with an empty keyword table as @a aLexer.  Useful for parsing
- * s-expression files or strings of arbitrary grammars, say from a file or clipboard.
- * The s-expression must be "KiCad compatible".  See Documentation/s-expressions.txt
- * for this KiCad compatible definition (it is the non-specctra mode).
- * And also see in tools/property_tree.cpp for example usage.
+ * Fill an empty #PTREE with information from a KiCad s-expression stream.
+ *
+ * Use a #DSNLEXER with an empty keyword table as @a aLexer.  Useful for parsing s-expression
+ * files or strings of arbitrary grammars, say from a file or clipboard.  The s-expression
+ * must be "KiCad compatible".  See Documentation/s-expressions.txt for this KiCad compatible
+ * definition (it is the non-specctra mode).  And also see in tools/property_tree.cpp for
+ * example usage.
  *
  * <code>
  *
@@ -87,8 +85,7 @@ typedef boost::property_tree::ptree_error   PTREE_ERROR;
 void Scan( PTREE* aTree, DSNLEXER* aLexer );
 
 /**
- * Function Format
- * outputs a PTREE into s-expression format via an OUTPUTFORMATTER derivative.
+ * Output a #PTREE into s-expression format via an #OUTPUTFORMATTER derivative.
  */
 void Format( OUTPUTFORMATTER* out, int aNestLevel, int aCtl, const CPTREE& aTree );
 

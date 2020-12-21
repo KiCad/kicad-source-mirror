@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2020 KiCad Developers, see change_log.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -31,10 +31,9 @@
 #include <type_traits>
 
 /**
- * Function IsA()
- *
  * Checks if the type of aObject is T.
- * @param aObject object for type check
+ *
+ * @param aObject the object for type check.
  * @return true, if aObject type equals T.
  */
 template <class T, class I>
@@ -50,11 +49,12 @@ bool IsA( const I& aObject )
 }
 
 /**
- * Function dyn_cast()
+ * A lightweight dynamic downcast.
  *
- * A lightweight dynamic downcast. Casts aObject to type Casted*.
- * Uses EDA_ITEM::Type() and EDA_ITEM::ClassOf() to check if type matches.
- * @param aObject object to be casted
+ * Cast \a aObject to type Casted*.  Uses #EDA_ITEM::Type() and #EDA_ITEM::ClassOf() to
+ * check if type matches.
+ *
+ * @param aObject object to be casted.
  * @return down-casted object or NULL if type doesn't match Casted.
  */
 template<class Casted, class From>
@@ -72,8 +72,7 @@ class EDA_ITEM;
 
 
 /**
- * Enum KICAD_T
- * is the set of class identification values, stored in EDA_ITEM::m_structType
+ * The set of class identification values stored in #EDA_ITEM::m_structType
  */
 enum KICAD_T
 {
@@ -225,10 +224,13 @@ enum KICAD_T
 };
 
 /**
- * Returns the underlying type of the given type.  This is useful for finding the
- * element type given one of the "non-type" types such as SCH_LINE_LOCATE_WIRE_T
- * @param aType Given type to resolve
- * @return Base type
+ * Returns the underlying type of the given type.
+ *
+ * This is useful for finding the element type given one of the "non-type" types such as
+ * SCH_LINE_LOCATE_WIRE_T.
+ *
+ * @param aType Given type to resolve.
+ * @return Base type.
  */
 constexpr KICAD_T BaseType( const KICAD_T aType )
 {

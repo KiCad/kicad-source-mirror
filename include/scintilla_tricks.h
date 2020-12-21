@@ -28,9 +28,7 @@
 #include <wx/stc/stc.h>
 
 /**
- * SCINTILLA_TRICKS
- * is used to add cut/copy/paste, autocomplete and brace highlighting to a wxStyleTextCtrl 
- * instance.
+ * Add cut/copy/paste, autocomplete and brace highlighting to a wxStyleTextCtrl instance.
  */
 class SCINTILLA_TRICKS : public wxEvtHandler
 {

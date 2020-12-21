@@ -33,12 +33,11 @@ class TEMPLATE_FIELDNAMES_LEXER;
 
 
 /**
- * Enum NumFieldType
- * is the set of all field indices assuming an array like sequence that a
- * SCH_COMPONENT or LIB_PART can hold.
- * The first fields are called fixed fields and the quantity of them is
- * given by MANDATORY_FIELDS.  After that come an unlimited number of
- * user defined fields, only some of which have indices defined here.
+ * The set of all field indices assuming an array like sequence that a SCH_COMPONENT or
+ * LIB_PART can hold.
+ *
+ * The first fields are fixed fields and are defined by #MANDATORY_FIELDS.  After that come
+ * an unlimited number of user defined fields, only some of which have indices defined here.
  */
 enum  NumFieldType {
     REFERENCE_FIELD = 0,          ///< Field Reference of part, i.e. "IC21"
@@ -62,17 +61,12 @@ enum  NumFieldType {
 
 
 /**
- * Struct TEMPLATE_FIELDNAME
- * holds a name of a component's field, field value, and default visibility.
- * Template fieldnames are wanted fieldnames for use in the symbol/component
- * property editors.
+ * Hold a name of a symbol's field, field value, and default visibility.
+ *
+ * Template fieldnames are wanted field names for use in the symbol property editors.
  */
 struct TEMPLATE_FIELDNAME
 {
-    wxString    m_Name;         // The field name
-    bool        m_Visible;      // Field defaults to being visible in schematic.
-    bool        m_URL;          // If field should have a browse button
-
     TEMPLATE_FIELDNAME() :
             m_Visible( false ),
             m_URL( false )
@@ -94,34 +88,37 @@ struct TEMPLATE_FIELDNAME
     }
 
     /**
-     * Function Format
-     * serializes this object out as text into the given OUTPUTFORMATTER.
+     * Serialize this object out as text into the given #OUTPUTFORMATTER.
      */
     void Format( OUTPUTFORMATTER* out, int nestLevel ) const ;
 
     /**
-     * Function Parse
-     * fills this object from information in the input stream \a aSpec, which
-     * is a TEMPLATE_FIELDNAMES_LEXER. The entire textual element spec is <br>
-     * (field (name _yourfieldname_)(value _yourvalue_) visible)) <br>
-     * The presence of value is optional, the presence of visible is optional.
-     * When this function is called, the input token stream given by \a aSpec
-     * is assumed to be positioned at the '^' in the following example, i.e. just after the
-     * identifying keyword and before the content specifying stuff.<br>
-     * (field ^ (....) )
+     * Fill this object from information in the input stream \a aSpec, which is a
+     * #TEMPLATE_FIELDNAMES_LEXER.
+     *
+     * The entire textual element spec is <br>(field (name _yourfieldname_)(value _yourvalue_)
+     * visible))</br>.  The presence of value is optional, the presence of visible is optional.
+     * When this function is called, the input token stream given by \a aSpec is assumed to be
+     * positioned at the '^' in the following example, i.e. just after the identifying keyword
+     * and before the content specifying stuff.<br>(field ^ (....) )</br>.
      *
      * @param aSpec is the input token stream of keywords and symbols.
      */
     void Parse( TEMPLATE_FIELDNAMES_LEXER* aSpec );
 
     /**
-     * Function GetDefaultFieldName
-     * returns a default symbol field name for field \a aFieldNdx for all components.
-     * These fieldnames are not modifiable, but template fieldnames are.
-     * @param aFieldNdx The field number index, > 0
-     * @param aTranslate If true, return the translated field name, else get the canonical name
+     * Return a default symbol field name for field \a aFieldNdx for all components.
+     *
+     * These field names are not modifiable but template field names are.
+     *
+     * @param aFieldNdx The field number index, > 0.
+     * @param aTranslate If true, return the translated field name, else get the canonical name.
      */
     static const wxString GetDefaultFieldName( int aFieldNdx, bool aTranslate = true );
+
+    wxString    m_Name;         // The field name
+    bool        m_Visible;      // Field defaults to being visible in schematic.
+    bool        m_URL;          // If field should have a browse button
 };
 
 typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;
@@ -129,6 +126,61 @@ typedef std::vector< TEMPLATE_FIELDNAME > TEMPLATE_FIELDNAMES;
 
 class TEMPLATES
 {
+public:
+    TEMPLATES() :
+            m_resolvedDirty( true )
+    { }
+
+    /**
+     * Serialize this object out as text into the given #OUTPUTFORMATTER.
+     */
+    void Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) const ;
+
+    /**
+     * Fill this object from information in the input stream handled by
+     * #TEMPLATE_FIELDNAMES_LEXER.
+     */
+    void Parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
+
+
+    /**
+     * Insert or append a wanted symbol field name into the field names template.
+     *
+     * Should be used for any symbol property editor.  If the name already exists, it
+     * overwrites the same name.
+     *
+     * @param aFieldName is a full description of the wanted field, and it must not match
+     *                   any of the default field names.
+     * @param aGlobal indicates whether to add to the global or project table.
+     */
+    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal );
+
+    /**
+     * Delete the entire contents.
+     */
+    void DeleteAllFieldNameTemplates( bool aGlobal );
+
+    /**
+     * Return a template field name list for read only access.
+     */
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames();
+
+    /**
+     * Return a specific list (global or project) for read only access.
+     */
+    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal );
+
+    /**
+     * Search for \a aName in the the template field name list.
+     *
+     * @param aName A wxString object containing the field name to search for.
+     * @return the template field name if found; NULL otherwise.
+     */
+    const TEMPLATE_FIELDNAME* GetFieldName( const wxString& aName );
+
+protected:
+    void resolveTemplates();
+
 private:
     TEMPLATE_FIELDNAMES     m_globals;
     TEMPLATE_FIELDNAMES     m_project;
@@ -136,67 +188,6 @@ private:
     // Combined list.  Project templates override global ones.
     TEMPLATE_FIELDNAMES     m_resolved;
     bool                    m_resolvedDirty;
-
-public:
-    TEMPLATES() :
-            m_resolvedDirty( true )
-    { }
-
-    /**
-     * Function Format
-     * serializes this object out as text into the given OUTPUTFORMATTER.
-     */
-    void Format( OUTPUTFORMATTER* out, int nestLevel, bool aGlobal ) const ;
-
-    /**
-     * Function Parse
-     * fills this object from information in the input stream handled by TEMPLATE_FIELDNAMES_LEXER
-     */
-    void Parse( TEMPLATE_FIELDNAMES_LEXER* in, bool aGlobal );
-
-
-    /**
-     * Function AddTemplateFieldName
-     * inserts or appends a wanted symbol field name into the fieldnames
-     * template.  Should be used for any symbol property editor.  If the name
-     * already exists, it overwrites the same name.
-     *
-     * @param aFieldName is a full description of the wanted field, and it must not match
-     *          any of the default fieldnames.
-     * @param aGlobal indicates whether to add to the global or project table.
-     */
-    void AddTemplateFieldName( const TEMPLATE_FIELDNAME& aFieldName, bool aGlobal );
-
-    /**
-     * Function DeleteAllFieldNameTemplates
-     * deletes the entire contents.
-     */
-    void DeleteAllFieldNameTemplates( bool aGlobal );
-
-    /**
-     * Function GetTemplateFieldName
-     * returns a template fieldnames list for read only access.
-     */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames();
-
-    /**
-     * Function GetTemplateFieldName
-     * returns a specific list (global or project) for read only access.
-     */
-    const TEMPLATE_FIELDNAMES& GetTemplateFieldNames( bool aGlobal );
-
-    /**
-     * Function GetFieldName
-     * searches for \a aName in the the template field name list.
-     *
-     * @param aName A wxString object containing the field name to search for.
-     * @return the template fieldname if found; NULL otherwise.
-     */
-    const TEMPLATE_FIELDNAME* GetFieldName( const wxString& aName );
-
-protected:
-    void resolveTemplates();
-
 };
 
 #endif // _TEMPLATE_FIELDNAME_H_

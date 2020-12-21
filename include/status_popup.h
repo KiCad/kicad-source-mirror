@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -36,8 +37,6 @@
 class EDA_DRAW_FRAME;
 
 /**
- * STATUS_POPUP
- *
  * A tiny, headerless popup window used to display useful status (e.g. line length
  * tuning info) next to the mouse cursor.
  */
@@ -54,7 +53,7 @@ public:
     virtual void Move( const VECTOR2I& aWhere );
 
     /**
-     * Hides the popup after a specified time.
+     * Hide the popup after a specified time.
      *
      * @param aMsecs is the time expressed in milliseconds
      */
@@ -75,9 +74,7 @@ protected:
 
 
 /**
- * STATUS_TEXT_POPUP
- *
- * Extension of STATUS_POPUP, displaying a single line text.
+ * Extension of #STATUS_POPUP for displaying a single line text.
  */
 class STATUS_TEXT_POPUP : public STATUS_POPUP
 {
@@ -87,12 +84,14 @@ public:
 
     /**
      * Display a text.
+     *
      * @param aText is the text to be displayed.
      */
     void SetText( const wxString& aText );
 
     /**
      * Change text color.
+     *
      * @param aColor is the new text color.
      */
     void SetTextColor( const wxColour& aColor );

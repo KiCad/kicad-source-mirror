@@ -147,8 +147,8 @@ public:
     */
 
     /**
-     * Function OnPgmInit
-     * this is the first executed function (like main() )
+     * This is the first executed function (like main() ).
+     *
      * @return true if the application can be started.
      */
     virtual bool OnPgmInit() = 0;           // call this from wxApp::OnInit()

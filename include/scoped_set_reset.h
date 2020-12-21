@@ -25,9 +25,8 @@
 #define __SCOPED_SET_RESET_H
 
 /**
- * @class SCOPED_SET_RESET
- * @brief RAII class that sets an value at construction and resets
- * it to the original value at destruction.
+ * RAII class that sets an value at construction and resets it to the original value
+ * at destruction.
  *
  * @note There is no type deduction for template classes until C++17, \
  * so you can't do this:
@@ -46,8 +45,7 @@ class SCOPED_SET_RESET
 {
 public:
 
-    SCOPED_SET_RESET( VAL_TYPE& target,
-                      VAL_TYPE value ):
+    SCOPED_SET_RESET( VAL_TYPE& target, VAL_TYPE value ):
             m_target( target )
     {
         m_original = target;
@@ -55,10 +53,7 @@ public:
     }
 
     /**
-     * Function ~SCOPED_SET_RESET
-     *
-     * Destruct the class, and return the target to its original
-     * value.
+     * Destruct the class, and return the target to its original value.
      */
     ~SCOPED_SET_RESET()
     {

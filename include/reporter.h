@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,8 +43,7 @@ class WX_INFOBAR;
 
 
 /**
- * REPORTER
- * is a pure virtual class used to derive REPORTER objects from.
+ * A pure virtual class used to derive REPORTER objects from.
  *
  * The purpose of the REPORTER object is to offer a way for a procedural function
  * to report multiple errors without having to:
@@ -53,16 +52,17 @@ class WX_INFOBAR;
  * <li> stop after the first error </li>
  * </ul>
  * the reporter has 4 severity levels (flags) tagging the messages:
- * - information
- * - warning
- * - error
- * - action (i.e. indication of changes - add component, change footprint, etc. )
+ *  - information
+ *  - warning
+ *  - error
+ *  - action (i.e. indication of changes - add component, change footprint, etc. )
+ *
  * They are indicators for the message formatting and displaying code,
  * filtering is not made here.
  */
 
-class REPORTER {
-
+class REPORTER
+{
 public:
     /**
      * Location where the message is to be reported.
@@ -77,30 +77,30 @@ public:
     };
 
     /**
-     * Function Report
-     * is a pure virtual function to override in the derived object.
+     * Report a string with a given severity.
      *
      * @param aText is the string to report.
-     * @param aSeverity is an indicator ( RPT_UNDEFINED, RPT_INFO, RPT_WARNING,
-     * RPT_ERROR, RPT_ACTION ) used to filter and format messages
+     * @param aSeverity is an indicator ( RPT_UNDEFINED, RPT_INFO, RPT_WARNING, RPT_ERROR,
+     *                  RPT_ACTION ) used to filter and format messages
      */
 
-    virtual REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) = 0;
+    virtual REPORTER& Report( const wxString& aText,
+                              SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) = 0;
 
     /**
-     * Function ReportTail
      * Places the report at the end of the list, for objects that support report ordering
      */
-    virtual REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
+    virtual REPORTER& ReportTail( const wxString& aText,
+                                  SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
     {
         return Report( aText, aSeverity );
     }
 
     /**
-     * Function ReportHead
-     * Places the report at the beginning of the list for objects that support ordering
+     * Places the report at the beginning of the list for objects that support ordering.
      */
-    virtual REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
+    virtual REPORTER& ReportHead( const wxString& aText,
+                                  SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED )
     {
         return Report( aText, aSeverity );
     }
@@ -113,7 +113,6 @@ public:
     REPORTER& operator <<( const char* aText ) { return Report( aText ); }
 
     /**
-     * Function HasMessage
      * Returns true if the reporter client is non-empty.
      */
     virtual bool HasMessage() const = 0;
@@ -130,8 +129,7 @@ public:
 
 
 /**
- * WX_TEXT_CTRL_REPORTER
- * is wrapper for reporting to a wxTextCtrl object.
+ * A wrapper for reporting to a wxTextCtrl object.
  */
 class WX_TEXT_CTRL_REPORTER : public REPORTER
 {
@@ -148,15 +146,15 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText,
+                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
 
 
 /**
- * WX_STRING_REPORTER
- * is a wrapper for reporting to a wxString object.
+ * A wrapper for reporting to a wxString object.
  */
 class WX_STRING_REPORTER : public REPORTER
 {
@@ -180,8 +178,7 @@ public:
 
 
 /**
- * WX_HTML_PANEL_REPORTER
- * is a wrapper for reporting to a wx HTML window
+ * A wrapper for reporting to a wx HTML window.
  */
 class WX_HTML_PANEL_REPORTER : public REPORTER
 {
@@ -198,21 +195,23 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText,
+                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
-    REPORTER& ReportTail( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& ReportTail( const wxString& aText,
+                          SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
-    REPORTER& ReportHead( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& ReportHead( const wxString& aText,
+                          SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 };
 
 
 /**
- * NULL_REPORTER
+ * A singleton reporter that reports to nowhere.
  *
- * A singleton reporter that reports to nowhere. Used as to simplify code by
- * avoiding the reportee to check for a non-NULL reporter object.
+ * Used as to simplify code by avoiding the reportee to check for a non-NULL reporter object.
  */
 class NULL_REPORTER : public REPORTER
 {
@@ -227,15 +226,14 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText,
+                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };
 
 
 /**
- * STDOUT_REPORTER
- *
  * Debug type reporter, forwarding messages to std::cout.
  */
 class STDOUT_REPORTER : public REPORTER
@@ -251,37 +249,38 @@ public:
 
     static REPORTER& GetInstance();
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText,
+                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override { return false; }
 };
 
 
 /**
- * STATUSBAR_REPORTER
- * is a wrapper for reporting to a specific text location in a statusbar
+ * A wrapper for reporting to a specific text location in a statusbar.
  */
 class STATUSBAR_REPORTER : public REPORTER
 {
-private:
-    wxStatusBar* m_statusBar;
-    int          m_position;
-
 public:
     STATUSBAR_REPORTER( wxStatusBar* aStatusBar, int aPosition = 0 )
-            : REPORTER(), m_statusBar( aStatusBar ), m_position( aPosition )
+            : REPORTER(),
+              m_statusBar( aStatusBar ),
+              m_position( aPosition )
     {
     }
 
     REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
+
+private:
+    wxStatusBar* m_statusBar;
+    int          m_position;
 };
 
 
 /**
- * INFOBAR_REPORTER
- * is a wrapper for reporting to a WX_INFOBAR UI element.
+ * A wrapper for reporting to a #WX_INFOBAR UI element.
  *
  * The infobar is not updated until the @c Finalize() method is called. That method will
  * queue either a show message or a dismiss event for the infobar - so this reporter is
@@ -291,12 +290,6 @@ public:
  */
 class INFOBAR_REPORTER : public REPORTER
 {
-private:
-    bool        m_messageSet;
-    WX_INFOBAR* m_infoBar;
-    wxString    m_message;
-    SEVERITY    m_severity;
-
 public:
     INFOBAR_REPORTER( WX_INFOBAR* aInfoBar )
             : REPORTER(),
@@ -307,7 +300,8 @@ public:
     {
     }
 
-    REPORTER& Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
+    REPORTER& Report( const wxString& aText,
+                      SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED ) override;
 
     bool HasMessage() const override;
 
@@ -315,6 +309,12 @@ public:
      * Update the infobar with the reported text.
      */
     void Finalize();
+
+private:
+    bool        m_messageSet;
+    WX_INFOBAR* m_infoBar;
+    wxString    m_message;
+    SEVERITY    m_severity;
 };
 
 #endif     // _REPORTER_H_

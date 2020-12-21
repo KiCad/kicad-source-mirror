@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Cirilo Bernardo <cirilo.bernardo@gmail.com>
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,90 +29,91 @@
 
 
 #if defined( _WIN32 ) && defined( __GNUC__ )
-    #include <ext/stdio_filebuf.h>
+#include <ext/stdio_filebuf.h>
 
-    #define OSTREAM std::ostream
+#define OSTREAM std::ostream
 
-    #define OPEN_OSTREAM( var, name ) \
-        kicad::stream var ## _BUF_; \
-        std::ostream& var = *var ## _BUF_.Open( name, std::ios_base::out | std::ios_base::trunc | std::ios_base::binary )
+#define OPEN_OSTREAM( var, name )                                                           \
+    kicad::stream var##_BUF_;                                                               \
+    std::ostream& var = *var##_BUF_.Open( name, std::ios_base::out | std::ios_base::trunc   \
+                                                        | std::ios_base::binary )
 
-    #define OPEN_ISTREAM( var, name ) \
-        kicad::stream var ## _BUF_; \
-        std::istream& var = *var ## _BUF_.Open( name, std::ios_base::in | std::ios_base::binary )
+#define OPEN_ISTREAM( var, name )                                                           \
+    kicad::stream var##_BUF_;                                                               \
+    std::istream& var = *var##_BUF_.Open( name, std::ios_base::in | std::ios_base::binary )
 
-    #define OPEN_IOSTREAM( var, name ) \
-        kicad::stream var ## _BUF_; \
-        std::iostream& var = *var ## _BUF_.Open( name, std::ios_base::out | std::ios_base::in | std::ios_base::binary )
+#define OPEN_IOSTREAM( var, name )                                                          \
+    kicad::stream  var##_BUF_;                                                              \
+    std::iostream& var = *var##_BUF_.Open( name, std::ios_base::out | std::ios_base::in     \
+                                                         | std::ios_base::binary )
 
-    #define CLOSE_STREAM( var ) var ## _BUF_.Close()
+#define CLOSE_STREAM( var ) var##_BUF_.Close()
 
-    /**
-     * \namespace kicad
-     */
-    namespace kicad
-    {
-        /**
-         * class stream is equivalent to std::stream, but accept UTF8 chars
-         * in filenames
-         */
-        class stream
-        {
-        private:
-            __gnu_cxx::stdio_filebuf<char>* m_buf;
-            std::iostream*                  m_stream;
+/**
+ * \namespace kicad
+ */
+namespace kicad
+{
+/**
+ * This is equivalent to std::stream but accepts UTF8 chars in filenames.
+ */
+class stream
+{
+private:
+    __gnu_cxx::stdio_filebuf<char>* m_buf;
+    std::iostream*                  m_stream;
 
-        public:
-            stream();
-            virtual ~stream();
+public:
+    stream();
+    virtual ~stream();
 
-            std::iostream* Open( const char* aFileName, std::ios_base::openmode aMode );
-            void Close( void );
+    std::iostream* Open( const char* aFileName, std::ios_base::openmode aMode );
+    void           Close( void );
 
-            std::iostream* GetStream( void );
-        };
-    }
+    std::iostream* GetStream( void );
+};
+} // namespace kicad
 
 
-#elif defined( _MSC_VER )   // defined( _WIN32 ) && defined( __GNUC__ )
+#elif defined( _MSC_VER ) // defined( _WIN32 ) && defined( __GNUC__ )
 
-    #define OSTREAM std::ofstream
+#define OSTREAM std::ofstream
 
-    #define OPEN_OSTREAM( var, name ) \
-    std::ofstream var; \
-    var.open( wxString::FromUTF8Unchecked( name ).wc_str(), \
-    std::ios_base::out | std::ios_base::trunc | std::ios_base::binary )
+#define OPEN_OSTREAM( var, name )                                                           \
+    std::ofstream var;                                                                      \
+    var.open( wxString::FromUTF8Unchecked( name ).wc_str(),                                 \
+              std::ios_base::out | std::ios_base::trunc | std::ios_base::binary )
 
-    #define OPEN_ISTREAM( var, name ) \
-    std::ifstream var; \
-    var.open( wxString::FromUTF8Unchecked( name ).wc_str(), \
-        std::ios_base::in | std::ios_base::binary )
+#define OPEN_ISTREAM( var, name )                                                           \
+    std::ifstream var;                                                                      \
+    var.open( wxString::FromUTF8Unchecked( name ).wc_str(),                                 \
+              std::ios_base::in | std::ios_base::binary )
 
-    #define OPEN_IOSTREAM( var, name ) \
-    std::fstream var; \
-    var.open( wxString::FromUTF8Unchecked( name ).wc_str(), \
-        std::ios_base::out | std::ios_base::in | std::ios_base::binary )
+#define OPEN_IOSTREAM( var, name )                                                          \
+    std::fstream var;                                                                       \
+    var.open( wxString::FromUTF8Unchecked( name ).wc_str(),                                 \
+              std::ios_base::out | std::ios_base::in | std::ios_base::binary )
 
-    #define CLOSE_STREAM( var ) var.close()
+#define CLOSE_STREAM( var ) var.close()
 
-#else   // defined( _WIN32 ) && defined( __GNUC__ )
+#else // defined( _WIN32 ) && defined( __GNUC__ )
 
-    #define OSTREAM std::ofstream
+#define OSTREAM std::ofstream
 
-    #define OPEN_OSTREAM( var, name ) \
-        std::ofstream var; \
-        var.open( name, std::ios_base::out | std::ios_base::trunc )
+#define OPEN_OSTREAM( var, name )                                                           \
+    std::ofstream var;                                                                      \
+    var.open( name, std::ios_base::out | std::ios_base::trunc )
 
-    #define OPEN_ISTREAM( var, name ) \
-        std::ifstream var; \
-        var.open( name, std::ios_base::in )
+#define OPEN_ISTREAM( var, name )                                                           \
+    std::ifstream var;                                                                      \
+    var.open( name, std::ios_base::in )
 
-    #define OPEN_IOSTREAM( var, name ) \
-        std::fstream var; \
-        var.open( name, std::ios_base::out | std::ios_base::in )
+#define OPEN_IOSTREAM( var, name )                                                          \
+    std::fstream var;                                                                       \
+    var.open( name, std::ios_base::out | std::ios_base::in )
 
-    #define CLOSE_STREAM( var ) var.close()
+#define CLOSE_STREAM( var ) var.close()
 
-#endif  // defined( _WIN32 ) && defined( __GNUC__ )
+#endif // defined( _WIN32 ) && defined( __GNUC__ )
 
 #endif  // STREAMWRAPPER_H

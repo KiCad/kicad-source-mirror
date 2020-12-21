@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,13 +40,15 @@ namespace KIGFX
 class VIEW_ITEM;
 
 /**
- * RENDER_SETTINGS
- * Contains all the knowledge about how graphical objects are drawn on any output
- * surface/device. This includes:
- * - color/transparency settings
- * - highlighting and high contrast mode control
- * - drawing quality control (sketch/outline mode)
- * - text processing flags
+ * Container for all the knowledge about how graphical objects are drawn on any output
+ * surface/device.
+ *
+ * This includes:
+ *  - color/transparency settings
+ *  - highlighting and high contrast mode control
+ *  - drawing quality control (sketch/outline mode)
+ *  - text processing flags
+ *
  * The class acts as an interface between the PAINTER object and the GUI (i.e. Layers/Items
  * widget or display options dialog).
  */
@@ -59,8 +61,8 @@ public:
     virtual void LoadColors( const COLOR_SETTINGS* aSettings ) { }
 
     /**
-     * Function SetLayerIsHighContrast
-     * Sets the specified layer as high-contrast.
+     * Set the specified layer as high-contrast.
+     *
      * @param aLayerId is a layer number that should be displayed in a specific mode.
      * @param aEnabled is the new layer state ( true = active or false = not active).
      */
@@ -73,8 +75,8 @@ public:
     }
 
     /**
-     * Function GetLayerIsHighContrast
-     * Returns information whether the queried layer is marked as high-contrast.
+     * Return information whether the queried layer is marked as high-contrast.
+     *
      * @return True if the queried layer is marked as active.
      */
     inline bool GetLayerIsHighContrast( int aLayerId ) const
@@ -83,7 +85,6 @@ public:
     }
 
     /**
-     * Function GetHighContrastLayers()
      * Returns the set of currently high-contrast layers.
      */
     const std::set<unsigned int> GetHighContrastLayers() const
@@ -92,9 +93,10 @@ public:
     }
 
     /**
-     * Returns the board layer which is in high-contrast.  There should only be one
-     * board layer which is high-contrast at any given time, although there might be
-     * many high-contrast synthetic (GAL) layers.
+     * Return the board layer which is in high-contrast mode.
+     *
+     * There should only be one board layer which is high-contrast at any given time, although
+     * there might be many high-contrast synthetic (GAL) layers.
      */
     PCB_LAYER_ID GetPrimaryHighContrastLayer() const
     {
@@ -111,8 +113,7 @@ public:
     void SetActiveLayer( PCB_LAYER_ID aLayer ) { m_activeLayer = aLayer; }
 
     /**
-     * Function ClearHighContrastLayers
-     * Clears the list of active layers.
+     * Clear the list of active layers.
      */
     inline void ClearHighContrastLayers()
     {
@@ -120,8 +121,8 @@ public:
     }
 
     /**
-     * Function IsHighlightEnabled
-     * Returns current highlight setting.
+     * Return current highlight setting.
+     *
      * @return True if highlight is enabled, false otherwise.
      */
     inline bool IsHighlightEnabled() const
@@ -130,8 +131,8 @@ public:
     }
 
     /**
-     * Function GetHighlightNetCode
-     * Returns netcode of currently highlighted net.
+     * Return the netcode of currently highlighted net.
+     *
      * @return Netcode of currently highlighted net.
      */
     inline const std::set<int>& GetHighlightNetCodes() const
@@ -140,11 +141,13 @@ public:
     }
 
     /**
-     * Function SetHighlight
-     * Turns on/off highlighting - it may be done for the active layer or the specified net(s).
+     * Turns on/off highlighting.
+     *
+     * It may be done for the active layer or the specified net(s)..
+     *
      * @param aEnabled tells if highlighting should be enabled.
-     * @param aNetcode is optional and if specified, turns on higlighting only for the net with
-     * number given as the parameter.
+     * @param aNetcode is optional and if specified, turns on highlighting only for the net with
+     *                 number given as the parameter.
      */
     inline void SetHighlight( bool aEnabled, int aNetcode = -1, bool aMulti = false )
     {
@@ -162,7 +165,6 @@ public:
     }
 
     /**
-     * Function SetHighContrast
      * Turns on/off high contrast display mode.
      */
     void SetHighContrast( bool aEnabled ) { m_hiContrastEnabled = aEnabled; }
@@ -171,6 +173,7 @@ public:
     /**
      * Returns the color that should be used to draw the specific VIEW_ITEM on the specific layer
      * using currently used render settings.
+     *
      * @param aItem is the VIEW_ITEM.
      * @param aLayer is the layer.
      * @return The color.
@@ -189,31 +192,28 @@ public:
     void SetShowPageLimits( bool aDraw ) { m_showPageLimits = aDraw; }
 
     /**
-     * Function GetBackgroundColor
-     * Returns current background color settings.
+     * Return current background color settings.
      */
     virtual const COLOR4D& GetBackgroundColor() = 0;
 
     /**
-     * Sets the background color.
+     * Set the background color.
      */
     virtual void SetBackgroundColor( const COLOR4D& aColor ) = 0;
 
     /**
-     * Function GetGridColor
-     * Returns current grid color settings.
+     * Return current grid color settings.
      */
     virtual const COLOR4D& GetGridColor() = 0;
 
     /**
-     * Function GetCursorColor
-     * Returns current cursor color settings.
+     * Return current cursor color settings.
      */
     virtual const COLOR4D& GetCursorColor() = 0;
 
     /**
-     * Function GetLayerColor
-     * Returns the color used to draw a layer.
+     * Return the color used to draw a layer.
+     *
      * @param aLayer is the layer number.
      */
     inline const COLOR4D& GetLayerColor( int aLayer ) const
@@ -222,8 +222,8 @@ public:
     }
 
     /**
-     * Function SetLayerColor
-     * Changes the color used to draw a layer.
+     * Change the color used to draw a layer.
+     *
      * @param aLayer is the layer number.
      * @param aColor is the new color.
      */
@@ -259,7 +259,6 @@ public:
 
 protected:
     /**
-     * Function update
      * Precalculates extra colors for layers (e.g. highlighted, darkened and any needed version
      * of base colors).
      */

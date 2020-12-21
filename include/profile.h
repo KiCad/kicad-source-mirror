@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,7 +37,8 @@
 #include <iomanip>
 
 /**
- * The class PROF_COUNTER is a small class to help profiling.
+ * A small class to help profiling.
+ *
  * It allows the calculation of the elapsed time (in milliseconds) between
  * its creation (or the last call to Start() ) and the last call to Stop()
  */
@@ -45,9 +46,10 @@ class PROF_COUNTER
 {
 public:
     /**
-     * Creates a PROF_COUNTER for measuring an elapsed time in milliseconds
-     * @param aName = a string that will be printed in message.
-     * @param aAutostart = true (default) to immediately start the timer
+     * Create a PROF_COUNTER for measuring an elapsed time in milliseconds.
+     *
+     * @param aName a string that will be printed in message.
+     * @param aAutostart true (default) to immediately start the timer
      */
     PROF_COUNTER( const std::string& aName, bool aAutostart = true ) :
         m_name( aName ), m_running( false )
@@ -57,7 +59,8 @@ public:
     }
 
     /**
-     * Creates a PROF_COUNTER for measuring an elapsed time in milliseconds
+     * Create a PROF_COUNTER for measuring an elapsed time in milliseconds
+     *
      * The counter is started and the string to print in message is left empty.
      */
     PROF_COUNTER()
@@ -66,7 +69,7 @@ public:
     }
 
     /**
-     * Starts or restarts the counter
+     * Start or restart the counter.
      */
     void Start()
     {
@@ -77,7 +80,7 @@ public:
 
 
     /**
-     * save the time when this function was called, and set the counter stane to stop
+     * Save the time when this function was called, and set the counter stane to stop.
      */
     void Stop()
     {
@@ -121,9 +124,9 @@ public:
     }
 
     /**
-     * @return the time since the timer was started. If the timer is stopped,
-     * the duration is from the start time to the time it was stopped, else it
-     * is to the current time.
+     * @return the time since the timer was started. If the timer is stopped, the duration
+     *         is from the start time to the time it was stopped, else it is to the current
+     *         time.
      */
     template <typename DURATION>
     DURATION SinceStart( bool aSinceLast = false )
@@ -137,7 +140,7 @@ public:
     }
 
     /**
-     * @param aSinceLast: only get the time since the last time the time was read
+     * @param aSinceLast only get the time since the last time the time was read.
      * @return the elapsed time in ms since the timer was started.
      */
     double msecs( bool aSinceLast = false )
@@ -199,10 +202,10 @@ private:
 
 
 /**
- * Function GetRunningMicroSecs
  * An alternate way to calculate an elapset time (in microsecondes) to class PROF_COUNTER
- * @return an ever increasing indication of elapsed microseconds.
- * Use this by computing differences between two calls.
+ *
+ * @return an ever increasing indication of elapsed microseconds.  Use this by computing
+ *         differences between two calls.
  * @author Dick Hollenbeck
  */
 unsigned GetRunningMicroSecs();

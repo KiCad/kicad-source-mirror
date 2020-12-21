@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,13 +27,9 @@
  * Synchronized, locking queue. Safe for multiple producer/multiple consumer environments with
  * nontrivial data (though bear in mind data needs to be copied in and out).
  */
-template <typename T> class SYNC_QUEUE
+template <typename T>
+class SYNC_QUEUE
 {
-    typedef std::lock_guard<std::mutex> GUARD;
-
-    std::queue<T>      m_queue;
-    mutable std::mutex m_mutex;
-
 public:
     SYNC_QUEUE()
     {
@@ -58,10 +54,11 @@ public:
     }
 
     /**
-     * Pop a value off the queue into the provided variable. If the queue is empty, the
-     * variable is not touched.
+     * Pop a value if the queue into the provided variable.
      *
-     * @return true iff a value was popped.
+     * If the queue is empty, the variable is not touched.
+     *
+     * @return true if a value was popped.
      */
     bool pop( T& aReceiver )
     {
@@ -80,7 +77,7 @@ public:
     }
 
     /**
-     * Return true iff the queue is empty.
+     * Return true if the queue is empty.
      */
     bool empty() const
     {
@@ -109,6 +106,12 @@ public:
             m_queue.pop();
         }
     }
+
+private:
+    typedef std::lock_guard<std::mutex> GUARD;
+
+    std::queue<T>      m_queue;
+    mutable std::mutex m_mutex;
 };
 
 #endif // SYNC_QUEUE_H

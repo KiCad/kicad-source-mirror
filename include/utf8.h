@@ -2,7 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2013 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Dick Hollenbeck
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,9 +36,9 @@
 
 
 /**
- * Function IsUTF8
- * tests a c-string to see if it is UTF8 encoded.  BTW an ASCII string is a valid
- * UTF8 string.
+ * Test a C string to see if it is UTF8 encoded.
+ *
+ * An ASCII string is a valid UTF8 string.
  */
 bool IsUTF8( const char* aString );
 
@@ -49,31 +51,25 @@ bool IsUTF8( const char* aString );
 
 
 /**
- * UTF8
- * is an 8 bit string that is assuredly encoded in UTF8, and supplies special
- * conversion support to and from wxString, to and from std::string, and has
- * non-mutating iteration over unicode characters.
+ * An 8 bit string that is assuredly encoded in UTF8, and supplies special conversion
+ * support to and from wxString, to and from std::string, and has non-mutating iteration
+ * over Unicode characters.
  *
- * <p>I've been careful to supply only conversion facilities and not try
- * and duplicate wxString() with many member functions. There are multiple ways
- * to create text into a std::string without the need of too many member functions:
+ * I've been careful to supply only conversion facilities and not try and duplicate
+ * wxString() with many member functions. There are multiple ways to create text into
+ * a std::string without the need of too many member functions:
  *
- * <ul>
- *  <li>richio.h's StrPrintf()</li>
- *  <li>std::ostringstream.</li>
- * </ul>
+ *  - richio.h's StrPrintf().
+ *  - std::ostringstream.
  *
- * <p>Because this class used no virtuals, it should be possible to cast any
- * std::string into a UTF8 using this kind of cast: (UTF8 &) without construction
- * or copying being the effect of the cast.  Be sure the source std::string holds
- * UTF8 encoded text before you do that.
- *
- * @author Dick Hollenbeck
+ * Because this class uses no virtuals, it should be possible to cast any std::string
+ * into a UTF8 using this kind of cast: (UTF8 &) without construction or copying being
+ * the effect of the cast.  Be sure the source std::string holds UTF8 encoded text before
+ * you do that.
  */
 class UTF8
 {
 public:
-
     UTF8( const wxString& o );
 
     /// This is a constructor for which you could end up with
@@ -103,7 +99,6 @@ public:
     }
 
     // expose some std::string functions publicly, since base class must be private.
-
     const char* c_str()                         const   { return m_s.c_str(); }
     bool empty()                                const   { return m_s.empty(); }
 
@@ -119,7 +114,8 @@ public:
     bool operator==( const std::string& rhs )   const   { return m_s == rhs; }
     bool operator==( const char* s )            const   { return m_s == s; }
 
-    std::string::size_type find_first_of( const std::string& str, std::string::size_type pos = 0 ) const
+    std::string::size_type find_first_of( const std::string& str,
+                                          std::string::size_type pos = 0 ) const
     {
         return m_s.find_first_of( str, pos );
     }
@@ -206,19 +202,7 @@ public:
      */
     class uni_iter
     {
-        friend class UTF8;
-
-        const unsigned char* it;
-
-        // private constructor
-        uni_iter( const char* start ) :
-            it( (const unsigned char*) start )
-        {
-        }
-
-
     public:
-
         uni_iter()  // Needed only to build python wrapper, not used outside the wrapper
         {
             it = NULL;
@@ -276,11 +260,21 @@ public:
         bool operator<=( const uni_iter& other ) const  { return it <= other.it; }
         bool operator> ( const uni_iter& other ) const  { return it >  other.it; }
         bool operator>=( const uni_iter& other ) const  { return it >= other.it; }
+
+    private:
+        friend class UTF8;
+
+        const unsigned char* it;
+
+        // private constructor
+        uni_iter( const char* start ) :
+            it( (const unsigned char*) start )
+        {
+        }
     };
 
     /**
-     * Function ubegin
-     * returns a @a uni_iter initialized to the start of "this" UTF8 byte sequence.
+     * Returns a @a uni_iter initialized to the start of "this" UTF8 byte sequence.
      */
     uni_iter ubegin() const
     {
@@ -288,8 +282,7 @@ public:
     }
 
     /**
-     * Function uend
-     * returns a @a uni_iter initialized to the end of "this" UTF8 byte sequence.
+     * Return a @a uni_iter initialized to the end of "this" UTF8 byte sequence.
      */
     uni_iter uend() const
     {
@@ -297,13 +290,12 @@ public:
     }
 
     /**
-     * Function uni_forward
-     * advances over a single UTF8 encoded multibyte character, capturing the
-     * unicode character as it goes, and returning the number of bytes consumed.
+     * Advance over a single UTF8 encoded multibyte character, capturing the Unicode character
+     * as it goes, and returning the number of bytes consumed.
      *
      * @param aSequence is the UTF8 byte sequence, must be aligned on start of character.
      * @param aResult is where to put the unicode character, and may be NULL if no interest.
-     * @return int - the count of bytes consumed.
+     * @return the count of bytes consumed.
      */
     static int uni_forward( const unsigned char* aSequence, unsigned* aResult = NULL );
 #endif  // SWIG

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2010 KiCAd Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,26 +36,25 @@
 
 
 /**
- * XNODE
- * holds an XML or S-expression element.  It is used for eXporting
- * a document tree in EITHER XML or S-expression.
+ * Hold an XML or S-expression element.
+ *
+ * It is used for exporting a document tree in either XML or S-expression.
  */
 class XNODE : public wxXmlNode
 {
 public:
-    //-----<overloads>---------------------------------------------------------
     XNODE() :
         wxXmlNode()
     {
     }
 
     XNODE( wxXmlNodeType aType, const wxString& aName, const wxString& aContent = wxEmptyString ) :
-        wxXmlNode( NULL, aType, aName, aContent )
+        wxXmlNode( nullptr, aType, aName, aContent )
     {
     }
 
     XNODE( XNODE* aParent, wxXmlNodeType aType, const wxString& aName,
-           const wxString& aContent = wxEmptyString, wxXmlAttribute* aProperties = NULL ) :
+           const wxString& aContent = wxEmptyString, wxXmlAttribute* aProperties = nullptr ) :
         wxXmlNode( aParent, aType, aName, aContent, aProperties )
     {
     }
@@ -74,23 +73,23 @@ public:
     {
         return (XNODE* )wxXmlNode::GetParent();
     }
-    //-----</overloads>--------------------------------------------------------
 
     /**
-     * Function Format
-     * writes this object as UTF8 out to an OUTPUTFORMATTER as an S-expression.
+     * Write this object as #UTF8 out to an #OUTPUTFORMATTER as an S-expression.
+     *
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
     virtual void Format( OUTPUTFORMATTER* out, int nestLevel );
 
     /**
-     * Function FormatContents
-     * writes the contents of object as UTF8 out to an OUTPUTFORMATTER as an S-expression.
+     * Write the contents of object as #UTF8 out to an #OUTPUTFORMATTER as an S-expression.
+     *
      * This is the same as Format() except that the outer wrapper is not included.
+     *
      * @param out The formatter to write to.
-     * @param nestLevel A multiple of the number of spaces to preceed the output with.
+     * @param nestLevel A multiple of the number of spaces to precede the output with.
      * @throw IO_ERROR if a system error writing the output, such as a full disk.
      */
     virtual void FormatContents( OUTPUTFORMATTER* out, int nestLevel );

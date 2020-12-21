@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +31,7 @@
 class OUTPUTFORMATTER;
 
 /**
- * TITLE_BLOCK
- * holds the information shown in the lower right corner of a plot, printout, or
+ * Hold the information shown in the lower right corner of a plot, printout, or
  * editing view.
  *
  * @author Dick Hollenbeck
@@ -52,7 +51,6 @@ class TITLE_BLOCK
     };
 
 public:
-
     TITLE_BLOCK() {};
     virtual ~TITLE_BLOCK() {};      // a virtual dtor seems needed to build
                                     // python lib without warning
@@ -68,8 +66,7 @@ public:
     }
 
     /**
-     * Function SetDate
-     * sets the date field, and defaults to the current time and date.
+     * Set the date field, and defaults to the current time and date.
      */
     void SetDate( const wxString& aDate )
     {
@@ -119,8 +116,7 @@ public:
     }
 
     /**
-     * Function Format
-     * outputs the object to \a aFormatter in s-expression form.
+     * Output the object to \a aFormatter in s-expression form.
      *
      * @param aFormatter The #OUTPUTFORMATTER object to write to.
      * @param aNestLevel The indentation next level.
@@ -136,6 +132,7 @@ private:
     {
         if( (int)m_tbTexts.GetCount() <= aIdx )
             m_tbTexts.Add( wxEmptyString, aIdx + 1 - m_tbTexts.GetCount() );
+
         m_tbTexts[aIdx] = aText;
     }
 

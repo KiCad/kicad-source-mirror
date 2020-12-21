@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -167,10 +168,6 @@ public:
 
 class PROPERTY_BASE
 {
-private:
-    ///> Used to generate unique IDs
-    size_t nextId = 0;
-
 public:
     PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = DEFAULT ) :
         m_id( nextId ),
@@ -292,6 +289,9 @@ private:
 
     ///> Condition that determines whether the property is available
     std::function<bool(INSPECTABLE*)> m_availFunc;
+
+    ///> Used to generate unique IDs
+    size_t nextId = 0;
 
     friend class INSPECTABLE;
 };
@@ -572,45 +572,44 @@ private:
 
 
 // Helper macros to handle enum types
-#define DECLARE_ENUM_TO_WXANY(type)\
-    template<>\
-    class wxAnyValueTypeImpl<type> : public wxAnyValueTypeImplBase<type>\
-    {\
-        WX_DECLARE_ANY_VALUE_TYPE(wxAnyValueTypeImpl<type>)\
-    public:\
-        wxAnyValueTypeImpl() : wxAnyValueTypeImplBase<type>() {}\
-        virtual ~wxAnyValueTypeImpl() {}\
-        virtual bool ConvertValue( const wxAnyValueBuffer& src,\
-                                  wxAnyValueType* dstType, wxAnyValueBuffer& dst ) const override\
-        {\
-            type value = GetValue(src);\
-            ENUM_MAP<type>& conv = ENUM_MAP<type>::Instance();\
-            if( dstType->CheckType<wxString>() )\
-            {\
-                wxAnyValueTypeImpl<wxString>::SetValue( conv.ToString( value ), dst );\
-                return true;\
-            }\
-            if( dstType->CheckType<int>() )\
-            {\
-                wxAnyValueTypeImpl<int>::SetValue( static_cast<int>(value), dst );\
-                return true;\
-            }\
-            else\
-            {\
-                return false;\
-            }\
-        }\
+#define DECLARE_ENUM_TO_WXANY( type )                                                       \
+    template <>                                                                             \
+    class wxAnyValueTypeImpl<type> : public wxAnyValueTypeImplBase<type>                    \
+    {                                                                                       \
+        WX_DECLARE_ANY_VALUE_TYPE( wxAnyValueTypeImpl<type> )                               \
+    public:                                                                                 \
+        wxAnyValueTypeImpl() : wxAnyValueTypeImplBase<type>() {}                            \
+        virtual ~wxAnyValueTypeImpl() {}                                                    \
+        virtual bool ConvertValue( const wxAnyValueBuffer& src, wxAnyValueType* dstType,    \
+                                   wxAnyValueBuffer& dst ) const override                   \
+        {                                                                                   \
+            type            value = GetValue( src );                                        \
+            ENUM_MAP<type>& conv = ENUM_MAP<type>::Instance();                              \
+            if( dstType->CheckType<wxString>() )                                            \
+            {                                                                               \
+                wxAnyValueTypeImpl<wxString>::SetValue( conv.ToString( value ), dst );      \
+                return true;                                                                \
+            }                                                                               \
+            if( dstType->CheckType<int>() )                                                 \
+            {                                                                               \
+                wxAnyValueTypeImpl<int>::SetValue( static_cast<int>( value ), dst );        \
+                return true;                                                                \
+            }                                                                               \
+            else                                                                            \
+            {                                                                               \
+                return false;                                                               \
+            }                                                                               \
+        }                                                                                   \
     };
 
-#define IMPLEMENT_ENUM_TO_WXANY(type)\
-    WX_IMPLEMENT_ANY_VALUE_TYPE(wxAnyValueTypeImpl<type>)
+#define IMPLEMENT_ENUM_TO_WXANY( type ) WX_IMPLEMENT_ANY_VALUE_TYPE( wxAnyValueTypeImpl<type> )
 
-#define ENUM_TO_WXANY(type)\
-    DECLARE_ENUM_TO_WXANY(type)\
-    IMPLEMENT_ENUM_TO_WXANY(type)
+#define ENUM_TO_WXANY( type )                                                               \
+    DECLARE_ENUM_TO_WXANY( type )                                                           \
+    IMPLEMENT_ENUM_TO_WXANY( type )
 
 ///> Macro to define read-only fields (no setter method available)
-#define NO_SETTER(owner, type) ((void (owner::*)(type))nullptr)
+#define NO_SETTER( owner, type ) ( ( void ( owner::* )( type ) ) nullptr )
 
 /*
 #define DECLARE_PROPERTY(owner,type,name,getter,setter) \

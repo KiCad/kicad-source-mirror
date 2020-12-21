@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -25,8 +26,7 @@ class APP_SETTINGS_BASE;
 class COLOR_SETTINGS;
 
 /**
- * PRINT_PARAMETERS
- * handles the parameters used to print a board drawing.
+ * Handle the parameters used to print a board drawing.
  */
 struct PRINTOUT_SETTINGS
 {
@@ -46,7 +46,14 @@ struct PRINTOUT_SETTINGS
     }
 
     virtual void Save( APP_SETTINGS_BASE* aConfig );
+
     virtual void Load( APP_SETTINGS_BASE* aConfig );
+
+    /**
+     * Returns true if the drawing border and title block should be printed.
+     */
+    bool PrintBorderAndTitleBlock() const { return m_titleBlock; }
+
 
     double m_scale;         ///< Printing scale
     bool   m_titleBlock;    ///< Print frame and title block
@@ -57,11 +64,6 @@ struct PRINTOUT_SETTINGS
 
     /// The color settings to be used for printing
     COLOR_SETTINGS* m_colorSettings;
-
-    /**
-     * Returns true if the drawing border and title block should be printed.
-     */
-    bool PrintBorderAndTitleBlock() const { return m_titleBlock; }
 };
 
 #endif /* PRINTOUT_H */

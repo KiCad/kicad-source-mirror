@@ -27,7 +27,7 @@
 #include <wx/filename.h>
 
 /**
- * WX_FILENAME - A wrapper around a wxFileName which is much more performant with a subset of the API.
+ * A wrapper around a wxFileName which is much more performant with a subset of the API.
  *
  * A wrapper around a wxFileName which avoids expensive calls to wxFileName::SplitPath()
  * and string concatenations by caching the path and filename locally and only resolving

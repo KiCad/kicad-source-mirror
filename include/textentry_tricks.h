@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,9 +28,9 @@
 #include <wx/textentry.h>
 
 /**
- * TEXTENTRY_TRICKS
- * is used to add cut/copy/paste to a wxTextEntry instance.  While these are normally handled
- * witout our intervention, this is not always the case.
+ * Add cut/copy/paste to a wxTextEntry instance.
+ *
+ * While these are normally handled without our intervention, this is not always the case.
  */
 struct TEXTENTRY_TRICKS
 {
