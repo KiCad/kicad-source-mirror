@@ -2,4 +2,7 @@
   (lib (name "font")(type "Legacy")(uri "${KIPRJMOD}/font.lib")(options "")(descr ""))
   (lib (name "symbol")(type "Legacy")(uri "${KIPRJMOD}/symbol.lib")(options "")(descr ""))
   (lib (name "CKJ")(type "Legacy")(uri "${KIPRJMOD}/CKJ.lib")(options "")(descr ""))
+  (lib (name "CJK_symbol")(type "Legacy")(uri "${KIPRJMOD}/CJK_symbol.lib")(options "")(descr ""))
+  (lib (name "hiragana")(type "Legacy")(uri "${KIPRJMOD}/hiragana.lib")(options "")(descr ""))
+  (lib (name "katakana")(type "Legacy")(uri "${KIPRJMOD}/katakana.lib")(options "")(descr ""))
 )
