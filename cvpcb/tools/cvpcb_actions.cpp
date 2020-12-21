@@ -108,13 +108,13 @@ TOOL_ACTION CVPCB_ACTIONS::associate( "cvpcb.Association.Associate",
         WXK_RETURN, "",
         _( "Assign footprint" ),
         _( "Assign footprint to selected symbols" ),
-        auto_associe_xpm );
+        auto_associate_xpm );
 
 TOOL_ACTION CVPCB_ACTIONS::autoAssociate( "cvpcb.Association.AutoAssociate",
         AS_GLOBAL, 0, "",
         _( "Automatically assign footprints" ),
         _( "Perform automatic footprint assignment" ),
-        auto_associe_xpm );
+        auto_associate_xpm );
 
 TOOL_ACTION CVPCB_ACTIONS::deleteAssoc( "cvpcb.Association.Delete",
         AS_GLOBAL,
@@ -151,4 +151,3 @@ TOOL_ACTION CVPCB_ACTIONS::FilterFPbyLibrary( "cvpcb.Control.FilterFPbyLibrary",
         _( "Filter footprint list by library" ),
         module_library_list_xpm, AF_NONE,
         (void*) FOOTPRINTS_LISTBOX::FILTERING_BY_LIBRARY );
-

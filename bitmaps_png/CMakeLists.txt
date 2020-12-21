@@ -165,7 +165,7 @@ set( BMAPS_MID
     annotate
     apply_pad_settings
     array
-    auto_associe
+    auto_associate
     auto_track_width
     autoplace_fields
     axis3d_back
@@ -342,7 +342,6 @@ set( BMAPS_MID
     mw_add_shape
     mw_add_stub_arc
     mw_add_stub
-    mw_toolbar
     net_highlight
     net_highlight_schematic
     netlist
