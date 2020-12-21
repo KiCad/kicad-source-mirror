@@ -1,5 +1,5 @@
 ##########################################################################
-# Build KiCad on Fedora and save the results
+# Build KiCad on Windows and save the results
 ##########################################################################
 build_win64:
   stage: build
