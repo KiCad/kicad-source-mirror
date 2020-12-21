@@ -1,0 +1,37 @@
+##########################################################################
+# Build KiCad on Fedora and save the results
+##########################################################################
+build_win64:
+  stage: build
+  tags: 
+    - kicad-windows-1809
+  extends: .only_code
+  interruptible: false
+  image: registry.gitlab.com/kicad/kicad-ci/source_containers/win64:msvc1809
+  script:
+    - mkdir -p build/windows -Force
+    - cd build/windows
+    - cmake `
+      -G "Ninja" `
+      -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake `
+      -DCMAKE_BUILD_TYPE=Debug `
+      -DKICAD_SCRIPTING=OFF `
+      -DKICAD_SCRIPTING_MODULES=OFF `
+      -DKICAD_SCRIPTING_PYTHON3=OFF `
+      -DKICAD_SCRIPTING_WXPYTHON=OFF `
+      -DKICAD_SCRIPTING_WXPYTHON_PHOENIX=OFF `
+      -DKICAD_SCRIPTING_ACTION_MENU=OFF `
+      -DKICAD_USE_OCE=OFF `
+      -DKICAD_USE_OCC=ON `
+      -DKICAD_SPICE=ON `
+      ../../
+    - cmake --build . 2>&1 | tee compilation_log.txt
+    - cd ../../
+  artifacts:
+    # Only save the artifacts that are needed for running the tests in the next stage
+    # and the compilation log. The entire build directory is too large to save as an
+    # artifact.
+    expire_in: 2 hrs
+    when: always
+    paths:
+      - build/windows/compilation_log.txt
