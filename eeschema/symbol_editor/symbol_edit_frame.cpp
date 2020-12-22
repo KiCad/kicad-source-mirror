@@ -67,6 +67,7 @@
 #include <widgets/lib_tree.h>
 #include <widgets/symbol_tree_pane.h>
 #include <wildcards_and_files_ext.h>
+#include <panel_sym_lib_table.h>
 
 
 bool SYMBOL_EDIT_FRAME::          m_showDeMorgan    = false;
@@ -632,6 +633,20 @@ void SYMBOL_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 }
 
 
+bool SYMBOL_EDIT_FRAME::IsSymbolFromLegacyLibrary() const
+{
+    if( m_my_part )
+    {
+        SYMBOL_LIB_TABLE_ROW* row = m_libMgr->GetLibrary( m_my_part->GetLibNickname() );
+
+        if( row && row->GetType() == SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 wxString SYMBOL_EDIT_FRAME::GetCurLib() const
 {
     wxString libNickname = Prj().GetRString( PROJECT::SCH_LIBEDIT_CUR_LIB );
@@ -686,6 +701,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 
     wxString partName = m_my_part ? m_my_part->GetName() : wxString();
     bool     isAlias = !IsSymbolFromSchematic() && m_my_part && m_my_part->IsAlias();
+    bool     isLegacy = IsSymbolFromLegacyLibrary();
 
     // retain in case this wxFrame is re-opened later on the same PROJECT
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
@@ -697,7 +713,7 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
-    GetRenderSettings()->m_ShowDisabled = isAlias;
+    GetRenderSettings()->m_ShowDisabled = isAlias || isLegacy;
     GetCanvas()->DisplayComponent( m_my_part );
     GetCanvas()->GetView()->HideWorksheet();
     GetCanvas()->GetView()->ClearHiddenFlags();
@@ -717,6 +733,24 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 
         infobar->RemoveAllButtons();
         infobar->ShowMessage( msg, wxICON_INFORMATION );
+    }
+    else if( isLegacy )
+    {
+        wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY,
+                                                       _( "Manage symbol libraries" ),
+                                                       wxEmptyString );
+
+        button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
+                [&]( wxHyperlinkEvent& aEvent )
+                {
+                    InvokeSchEditSymbolLibTable( &Kiway(), this );
+                } ) );
+
+        infobar->RemoveAllButtons();
+        infobar->AddButton( button );
+        infobar->ShowMessage( _( "Symbols in legacy libraries are not editable.  Use Manage "
+                                 "Symbol Libraries to migrate to current format." ),
+                              wxICON_INFORMATION );
     }
     else if( isAlias )
     {

@@ -274,6 +274,8 @@ public:
 
     bool IsSymbolFromSchematic() const { return m_isSymbolFromSchematic; }
 
+    bool IsSymbolFromLegacyLibrary() const;
+
 protected:
     void setupUIConditions() override;
 
