@@ -142,7 +142,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "STEP..." ), _( "Export STEP 3D board representation" ),
                         ID_GEN_EXPORT_FILE_STEP, export_step_xpm );
     submenuExport->Add( _( "SVG..." ), _( "Export SVG board representation" ),
-                        ID_GEN_PLOT_SVG, plot_svg_xpm );
+                        ID_GEN_PLOT_SVG, export_svg_xpm );
     submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
                         _( "Export footprint association file (*.cmp) for schematic back annotation" ),
                         ID_PCB_GEN_CMP_FILE, create_cmp_file_xpm );

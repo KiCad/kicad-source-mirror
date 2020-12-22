@@ -239,6 +239,7 @@ set( BMAPS_MID
     export_module
     export_part
     export_step
+    export_svg
     export
     fabrication
     file_bom
@@ -383,7 +384,6 @@ set( BMAPS_MID
     pin_table
     pin
     plot
-    plot_svg
     plus
     polar_coord
     post_bom

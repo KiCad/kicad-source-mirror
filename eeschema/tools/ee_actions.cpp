@@ -180,7 +180,7 @@ TOOL_ACTION EE_ACTIONS::exportSymbolView( "eeschema.SymbolLibraryControl.exportS
 TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( "eeschema.SymbolLibraryControl.exportSymbolAsSVG",
         AS_GLOBAL, 0, "",
         _( "Export Symbol as SVG..." ), _( "Create SVG file from the current symbol" ),
-        plot_svg_xpm );
+        export_svg_xpm );
 
 TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( "eeschema.SymbolLibraryControl.toggleSyncedPinsMode",
         AS_GLOBAL, 0, "",
