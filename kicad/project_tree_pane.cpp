@@ -37,6 +37,7 @@
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
 #include <kiplatform/environment.h>
+#include <core/kicad_algo.h>
 
 #include "project_tree_item.h"
 #include "project_tree.h"
@@ -245,7 +246,7 @@ void PROJECT_TREE_PANE::onCreateNewDirectory( wxCommandEvent& event )
         wxString full_dirname = curr_dir + wxFileName::GetPathSeparator() + new_dir;
 
         wxMkdir( full_dirname );
-        addItemToProjectTree( full_dirname, item_data->GetId() );
+        addItemToProjectTree( full_dirname, item_data->GetId(), nullptr, false );
     }
 }
 
@@ -282,18 +283,38 @@ wxString PROJECT_TREE_PANE::GetFileExt( TREE_FILE_TYPE type )
 }
 
 
+std::vector<wxString> getProjects( const wxDir& dir )
+{
+    std::vector<wxString> projects;
+    wxString              dir_filename;
+    bool                  haveFile = dir.GetFirst( &dir_filename );
+
+    while( haveFile  )
+    {
+        wxFileName file( dir_filename );
+
+        if( file.GetExt() == LegacyProjectFileExtension || file.GetExt() == ProjectFileExtension )
+            projects.push_back( file.GetName() );
+
+        haveFile = dir.GetNext( &dir_filename );
+    }
+
+    return projects;
+}
+
+
 wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
                                                       const wxTreeItemId& aRoot,
-                                                      bool aCanResetFileWatcher, bool aRecurse )
+                                                      std::vector<wxString>* aProjectNames,
+                                                      bool aRecurse )
 {
-    wxTreeItemId   newItemId;
     TREE_FILE_TYPE type = TREE_FILE_TYPE::UNKNOWN;
     wxFileName     fn( aName );
 
     // Files/dirs names starting by "." are not visible files under unices.
     // Skip them also under Windows
     if( fn.GetName().StartsWith( wxT( "." ) ) )
-        return newItemId;
+        return wxTreeItemId();
 
     if( wxDirExists( aName ) )
     {
@@ -318,7 +339,7 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         }
 
         if( !addFile )
-            return newItemId;
+            return wxTreeItemId();
 
         for( int i = static_cast<int>( TREE_FILE_TYPE::LEGACY_PROJECT );
                 i < static_cast<int>( TREE_FILE_TYPE::MAX ); i++ )
@@ -351,7 +372,14 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     if( ( type == TREE_FILE_TYPE::LEGACY_PROJECT )
             && ( currfile.GetName().CmpNoCase( project.GetName() ) == 0 ) )
     {
-        return newItemId;
+        return wxTreeItemId();
+    }
+
+    if( currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::LEGACY_SCHEMATIC )
+                || currfile.GetExt() == GetFileExt( TREE_FILE_TYPE::SEXPR_SCHEMATIC ) )
+    {
+        if( aProjectNames && !alg::contains( *aProjectNames, currfile.GetName() ) )
+            return wxTreeItemId();
     }
 
     // also check to see if it is already there.
@@ -368,8 +396,9 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
         kid = m_TreeProject->GetNextChild( aRoot, cookie );
     }
 
-    // Only show the JSON project files if both legacy and JSON files are present
-    if( ( type == TREE_FILE_TYPE::LEGACY_PROJECT ) || ( type == TREE_FILE_TYPE::JSON_PROJECT ) )
+    // Only show current files if both legacy and current files are present
+    if( type == TREE_FILE_TYPE::LEGACY_PROJECT || type == TREE_FILE_TYPE::JSON_PROJECT
+        || type == TREE_FILE_TYPE::LEGACY_SCHEMATIC || type == TREE_FILE_TYPE::SEXPR_SCHEMATIC )
     {
         kid = m_TreeProject->GetFirstChild( aRoot, cookie );
 
@@ -383,17 +412,34 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
 
                 if( fname.GetName().CmpNoCase( currfile.GetName() ) == 0 )
                 {
-                    // If the tree item is the legacy project remove it.
-                    if( itemData->GetType() == TREE_FILE_TYPE::LEGACY_PROJECT )
+                    switch( type )
                     {
-                        m_TreeProject->Delete( kid );
+                    case TREE_FILE_TYPE::LEGACY_PROJECT:
+                        if( itemData->GetType() == TREE_FILE_TYPE::JSON_PROJECT )
+                            return wxTreeItemId();
+
                         break;
-                    }
-                    // If we are the legacy project and the tree was the JSON project, ignore this file
-                    else if( ( itemData->GetType() == TREE_FILE_TYPE::JSON_PROJECT )
-                             && ( type == TREE_FILE_TYPE::LEGACY_PROJECT ) )
-                    {
-                        return newItemId;
+
+                    case TREE_FILE_TYPE::LEGACY_SCHEMATIC:
+                        if( itemData->GetType() == TREE_FILE_TYPE::SEXPR_SCHEMATIC )
+                            return wxTreeItemId();
+
+                        break;
+
+                    case TREE_FILE_TYPE::JSON_PROJECT:
+                        if( itemData->GetType() == TREE_FILE_TYPE::LEGACY_PROJECT )
+                            m_TreeProject->Delete( kid );
+
+                        break;
+
+                    case TREE_FILE_TYPE::SEXPR_SCHEMATIC:
+                        if( itemData->GetType() == TREE_FILE_TYPE::LEGACY_SCHEMATIC )
+                            m_TreeProject->Delete( kid );
+
+                        break;
+
+                    default:
+                        break;
                     }
                 }
             }
@@ -403,8 +449,8 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     }
 
     // Append the item (only appending the filename not the full path):
-    newItemId = m_TreeProject->AppendItem( aRoot, file );
-    PROJECT_TREE_ITEM*   data = new PROJECT_TREE_ITEM( type, aName, m_TreeProject );
+    wxTreeItemId       newItemId = m_TreeProject->AppendItem( aRoot, file );
+    PROJECT_TREE_ITEM* data = new PROJECT_TREE_ITEM( type, aName, m_TreeProject );
 
     m_TreeProject->SetItemData( newItemId, data );
     data->SetState( 0 );
@@ -426,20 +472,22 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
 
         if( dir.IsOpened() )    // protected dirs will not open properly.
         {
-            wxString dir_filename;
+            std::vector<wxString> projects = getProjects( dir );
+            wxString              dir_filename;
+            bool                  haveFile = dir.GetFirst( &dir_filename );
 
             data->SetPopulated( true );
 #ifndef __WINDOWS__
-            subdir_populated = aCanResetFileWatcher;
+            subdir_populated = aRecurse;
 #endif
 
-            if( dir.GetFirst( &dir_filename ) )
+            while( haveFile  )
             {
-                do    // Add name in tree, but do not recurse
-                {
-                    wxString path = aName + wxFileName::GetPathSeparator() + dir_filename;
-                    addItemToProjectTree( path, newItemId, false, false );
-                } while( dir.GetNext( &dir_filename ) );
+                // Add name in tree, but do not recurse
+                wxString path = aName + wxFileName::GetPathSeparator() + dir_filename;
+                addItemToProjectTree( path, newItemId, &projects, false );
+
+                haveFile = dir.GetNext( &dir_filename );
             }
         }
 
@@ -510,18 +558,19 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
 
         if( dir.IsOpened() )    // protected dirs will not open, see "man opendir()"
         {
-            wxString filename;
-            bool     cont = dir.GetFirst( &filename );
+            std::vector<wxString> projects = getProjects( dir );
+            wxString              filename;
+            bool                  haveFile = dir.GetFirst( &filename );
 
-            while( cont )
+            while( haveFile )
             {
                 if( filename != fn.GetFullName() )
                 {
                     wxString name = dir.GetName() + wxFileName::GetPathSeparator() + filename;
-                    addItemToProjectTree( name, m_root, false );
+                    addItemToProjectTree( name, m_root, &projects, false );
                 }
 
-                cont = dir.GetNext( &filename );
+                haveFile = dir.GetNext( &filename );
             }
         }
     }
@@ -829,21 +878,21 @@ void PROJECT_TREE_PANE::onSelect( wxTreeEvent& Event )
     if( tree_data.size() != 1 )
         return;
 
-    // Bookmark the selected item but don't try and activate it until later
-    // if we do it now, there will be more events at least on Windows in this frame
-    // that will steal focus from any newly launched windows
+    // Bookmark the selected item but don't try and activate it until later.  If we do it now,
+    // there will be more events at least on Windows in this frame that will steal focus from
+    // any newly launched windows
     m_selectedItem = tree_data[0];
 }
 
 
 void PROJECT_TREE_PANE::onIdle( wxIdleEvent& aEvent )
 {
-    // Idle executes once all other events finished processing
-    // This makes it ideal to launch a new window without starting Focus wars.
+    // Idle executes once all other events finished processing.  This makes it ideal to launch
+    // a new window without starting Focus wars.
     if( m_selectedItem != nullptr )
     {
-        // Activate launches a window which may run the event loop on top of us
-        // and cause OnIdle here to get called again, so be sure to block off the activation condition first
+        // Activate launches a window which may run the event loop on top of us and cause OnIdle
+        // to get called again, so be sure to block off the activation condition first.
         PROJECT_TREE_ITEM* item = m_selectedItem;
         m_selectedItem          = nullptr;
 
@@ -886,15 +935,17 @@ void PROJECT_TREE_PANE::onExpand( wxTreeEvent& Event )
 
         if( dir.IsOpened() )
         {
-            wxString    dir_filename;
+            std::vector<wxString> projects = getProjects( dir );
+            wxString              dir_filename;
+            bool                  haveFile = dir.GetFirst( &dir_filename );
 
-            if( dir.GetFirst( &dir_filename ) )
+            while( haveFile )
             {
-                do    // Add name to tree item, but do not recurse in subdirs:
-                {
-                    wxString name = fileName + wxFileName::GetPathSeparator() + dir_filename;
-                    addItemToProjectTree( name, kid, false );
-                } while( dir.GetNext( &dir_filename ) );
+                // Add name to tree item, but do not recurse in subdirs:
+                wxString name = fileName + wxFileName::GetPathSeparator() + dir_filename;
+                addItemToProjectTree( name, kid, &projects, false );
+
+                haveFile = dir.GetNext( &dir_filename );
             }
 
             itemData->SetPopulated( true );       // set state to populated
@@ -1023,7 +1074,8 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
     {
     case wxFSW_EVENT_CREATE:
         {
-            wxTreeItemId newitem = addItemToProjectTree( pathModified.GetFullPath(), root_id );
+            wxTreeItemId newitem = addItemToProjectTree( pathModified.GetFullPath(), root_id,
+                                                         nullptr, true );
 
             // If we are in the process of renaming a file, select the new one
             // This is needed for MSW and OSX, since we don't get RENAME events from them, just a
@@ -1072,16 +1124,16 @@ void PROJECT_TREE_PANE::onFileSystemEvent( wxFileSystemWatcherEvent& event )
             // Add the new item only if it is not the current project file (root item).
             // Remember: this code is called by a wxFileSystemWatcherEvent event, and not always
             // called after an actual file rename, and the cleanup code does not explore the
-            // root item, because it cannot be renamed by the user. Also, ensure the new file actually
-            // exists on the file system before it is readded. On Linux, moving a file to the trash
-            // can cause the same path to be returned in both the old and new paths of the event,
-            // even though the file isn't there anymore.
+            // root item, because it cannot be renamed by the user. Also, ensure the new file
+            // actually exists on the file system before it is readded. On Linux, moving a file
+            // to the trash can cause the same path to be returned in both the old and new paths
+            // of the event, even though the file isn't there anymore.
             PROJECT_TREE_ITEM* rootData = GetItemIdData( root_id );
 
             if( newpath.Exists() && ( newfn != rootData->GetFileName() ) )
             {
                 wxTreeItemId newroot_id = findSubdirTreeItem( newdir );
-                wxTreeItemId newitem = addItemToProjectTree( newfn, newroot_id );
+                wxTreeItemId newitem = addItemToProjectTree( newfn, newroot_id, nullptr, true );
 
                 // If the item exists, select it
                 if( newitem.IsOk() )
@@ -1105,10 +1157,10 @@ void PROJECT_TREE_PANE::FileWatcherReset()
     #if defined( _WIN32 )
     if( KIPLATFORM::ENV::IsNetworkPath( prj_dir ) )
     {
-        // Due to a combination of a bug in SAMBA sending bad change event IDs
-        // and wxWidgets choosing to fault on an invalid event ID instead of sanely ignoring them
-        // We need to avoid spawning a filewatcher. Unforunately this punishes corporate environments
-        // with Windows Server shares :/
+        // Due to a combination of a bug in SAMBA sending bad change event IDs and wxWidgets
+        // choosing to fault on an invalid event ID instead of sanely ignoring them we need to
+        // avoid spawning a filewatcher. Unforunately this punishes corporate environments with
+        // Windows Server shares :/
         m_Parent->SetStatusText( _( "Network path: not monitoring folder changes" ), 0 );
         return;
     }
@@ -1184,7 +1236,7 @@ void PROJECT_TREE_PANE::FileWatcherReset()
 
             wxLogTrace( tracePathsAndFiles, "%s: add '%s'\n", __func__, TO_UTF8( path ) );
 
-            if( wxFileName::IsDirReadable( path ) )     // linux whines about watching protected dir
+            if( wxFileName::IsDirReadable( path ) )   // linux whines about watching protected dir
             {
                 fn.AssignDir( path );
                 m_watcher->Add( fn );

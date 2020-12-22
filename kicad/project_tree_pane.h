@@ -160,13 +160,12 @@ private:
      * @brief  Add the file or directory aName to the project tree
      * @param aName = the filename or the directory name to add in tree
      * @param aRoot = the wxTreeItemId item where to add sub tree items
-     * @param aCanResetFileWatcher = true to reset file watcher if additional conditions are met
      * @param aRecurse = true to add file or subdir names to the current tree item
      *                   false to stop file add.
      * @return the Id for the new tree item
      */
     wxTreeItemId addItemToProjectTree( const wxString& aName, const wxTreeItemId& aRoot,
-                                       bool aCanResetFileWatcher = true, bool aRecurse = true );
+                                       std::vector<wxString>* aProjectNames, bool aRecurse );
 
     /**
      * Function findSubdirTreeItem
