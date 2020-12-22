@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 16 16"
+   version="1.1"
+   sodipodi:docname="icon_libedit_16.svg"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)"
+   width="16"
+   height="16">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2216"
+     inkscape:window-height="1567"
+     id="namedview1630"
+     showgrid="true"
+     inkscape:zoom="27.961538"
+     inkscape:cx="14.138481"
+     inkscape:cy="17.442797"
+     inkscape:window-x="4824"
+     inkscape:window-y="196"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2225"
+       spacingx="0.5"
+       spacingy="0.5"
+       empspacing="2"
+       empcolor="#3e3eff"
+       empopacity="0.25098039"
+       color="#b0b0ff"
+       opacity="0.1254902" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>icon_libedit</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs1617">
+    <style
+       id="style1615">.cls-1{fill:#b9b9b9;}.cls-2{fill:#545454;}</style>
+  </defs>
+  <title
+     id="title1619">icon_libedit</title>
+  <path
+     style="fill:#acbac8;fill-opacity:1;stroke:#545454;stroke-width:1;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 3.5,1.5 v 14 l 9.999998,-6.9999812 z"
+     id="path2231"
+     sodipodi:nodetypes="cccc" />
+  <path
+     style="fill:none;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 5.5,6.5 H 7.4999998"
+     id="path2229"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 13.499998,8.5000188 h 1.953488"
+     id="path2233"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 1,5.5 2.4418595,2.3e-6"
+     id="path2235"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 1,12.5 H 3.4418598"
+     id="path2237"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 5.5,10.5 H 7.4999998"
+     id="path839"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#1a81c4;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6.4999998,11.384135 V 9.499997"
+     id="path841" />
+</svg>

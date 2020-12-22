@@ -28,9 +28,9 @@
      inkscape:window-height="2099"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="62.667339"
-     inkscape:cx="3.4099077"
-     inkscape:cy="9.7402143"
+     inkscape:zoom="125.33468"
+     inkscape:cx="6.6391336"
+     inkscape:cy="7.0492445"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="1"
@@ -521,7 +521,7 @@
      height="24"
      rx="0"
      id="rect9"
-     style="fill:#2cb22c;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-opacity:1"
+     style="fill:#489648;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-opacity:1"
      clip-path="url(#clipPath1756)"
      transform="matrix(-0.66666667,0,0,0.66666667,16,0)" />
   <path
@@ -533,7 +533,7 @@
      clip-path="url(#clipPath1752)"
      transform="matrix(-0.66666667,0,0,0.66666667,16,0)" />
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#489648;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 20.25,9 H 18 L 9.75,0.75 V -1.5"
      id="path2253"
      sodipodi:nodetypes="cccc"
@@ -548,11 +548,11 @@
        class="cls-3"
        d="M 24.46664,12.841227 A 3.7483125,3.7483126 0 1 1 20.718515,9.0916014 3.7486875,3.7486876 0 0 1 24.46664,12.841227 Z"
        id="path2247"
-       style="fill:#f29100;fill-opacity:1;stroke-width:2.81123;stroke-miterlimit:4;stroke-dasharray:none" />
+       style="fill:#dd8d15;fill-opacity:1;stroke-width:2.81123;stroke-miterlimit:4;stroke-dasharray:none" />
   </g>
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:4.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="m 4.781235,28.5 v -3 l 4.5,-4.5 -4e-7,-10.5 -6,-6 h -7.4999999"
+     style="fill:none;stroke:#489648;stroke-width:4.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 4.781235,28.5 v -3 l 5.25,-4.5 V 10.5 l -6,-5.25 h -8.2500003"
      id="path2265"
      sodipodi:nodetypes="cccccc"
      clip-path="url(#clipPath1740)"
@@ -569,7 +569,7 @@
      clip-path="url(#clipPath1736)"
      transform="matrix(-0.66666667,0,0,1,16,-8.4999999)" />
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#489648;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="m 18,21 v 3"
      id="path886"
      sodipodi:nodetypes="cc"
@@ -582,18 +582,18 @@
      clip-path="url(#clipPath1728)">
     <path
        id="path25"
-       style="fill:#f29100;fill-opacity:1;stroke-width:0.749614"
+       style="fill:#dd8d15;fill-opacity:1;stroke-width:0.749614"
        d="m 25.796139,9.6711109 c 0.02499,1.3837141 -1.034535,2.6825641 -2.395065,2.9360611 -1.350276,0.303402 -2.836044,-0.472549 -3.358591,-1.754047 -0.569363,-1.2613951 -0.108838,-2.8730749 1.041026,-3.6432159 1.132342,-0.8217134 2.82599,-0.6813218 3.808359,0.3143733 0.574181,0.5559117 0.907665,1.347633 0.904271,2.1468285 z" />
   </g>
   <path
-     style="fill:none;stroke:#2cb22c;stroke-width:1.49999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:none;stroke:#489648;stroke-width:1.49999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 23.25,18.75 H 19.5"
      id="path1080"
      sodipodi:nodetypes="cc"
      clip-path="url(#clipPath1724)"
      transform="matrix(-0.66666667,0,0,0.66666667,16,-1.0000001)" />
   <rect
-     style="fill:#f29100;fill-opacity:1;stroke:none;stroke-width:1.34164;stroke-linecap:round;stroke-linejoin:round"
+     style="fill:#dd8d15;fill-opacity:1;stroke:none;stroke-width:1.34164;stroke-linecap:round;stroke-linejoin:round"
      id="rect880"
      width="4"
      height="3"
