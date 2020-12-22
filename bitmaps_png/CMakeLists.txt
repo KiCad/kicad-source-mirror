@@ -72,6 +72,8 @@ set( BMAPS_SMALL
     icon_kicad_16
     icon_libedit_16
     icon_modedit_16
+    icon_pagelayout_editor_16
+    icon_pcbcalculator_16
     icon_pcbnew_16
     pinorient_right
     pinorient_left
@@ -516,6 +518,8 @@ set( BMAPS_32
     icon_kicad_32
     icon_libedit_32
     icon_modedit_32
+    icon_pagelayout_editor_16
+    icon_pcbcalculator_16
     icon_pcbnew_32
     )
 

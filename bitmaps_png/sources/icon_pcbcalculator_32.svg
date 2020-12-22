@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 32 32"
+   version="1.1"
+   sodipodi:docname="icon_pcbcalculator_32.svg"
+   width="32"
+   height="32"
+   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="2854"
+     inkscape:window-height="1519"
+     id="namedview6443"
+     showgrid="true"
+     inkscape:zoom="45.254836"
+     inkscape:cx="10.480522"
+     inkscape:cy="16.958753"
+     inkscape:window-x="0"
+     inkscape:window-y="37"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g2779"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid7006"
+       spacingx="0.5"
+       spacingy="0.5"
+       empspacing="2"
+       color="#9d9dff"
+       opacity="0.1254902" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>icon_pcbcalculator</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6422">
+    <style
+       id="style6420">.cls-1{fill:#f29100;}.cls-2{fill:#b9b9b9;}.cls-3{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-4{fill:#545454;}</style>
+  </defs>
+  <title
+     id="title6424">icon_pcbcalculator</title>
+  <path
+     class="cls-1"
+     d="M 26.666667,0 H 5.3333333 A 5.3333333,5.3333333 0 0 0 0,5.3333333 V 26.666667 A 5.3333333,5.3333333 0 0 0 5.3333333,32 H 26.666667 A 5.3333333,5.3333333 0 0 0 32,26.666667 V 5.3333333 A 5.3333333,5.3333333 0 0 0 26.666667,0 Z"
+     id="path6426"
+     style="stroke-width:1" />
+  <path
+     class="cls-2"
+     d="M 19.489733,15.993467 H 16.0172 v 0.0065 l -0.0172,16 H 26.666667 A 5.3333333,5.3333333 0 0 0 32,26.666634 v -10.6732 z"
+     id="path6428"
+     style="stroke-width:1" />
+  <path
+     id="line6430"
+     style="fill:none;stroke:#ffffff;stroke-width:2;stroke-miterlimit:10;stroke-dasharray:none"
+     d="m 16,0 c 0,10.666089 0,21.332178 0,31.998266" />
+  <line
+     class="cls-3"
+     x1="31.999071"
+     y1="15.999066"
+     x2="0.00093342137"
+     y2="15.999066"
+     id="line6432"
+     style="stroke-width:2;stroke-miterlimit:10;stroke-dasharray:none" />
+  <path
+     class="cls-4"
+     d="m 28.000001,9 h -6 V 7 h 6 z"
+     id="path6440"
+     style="stroke-width:1"
+     sodipodi:nodetypes="ccccc" />
+  <g
+     id="g7016"
+     transform="matrix(0.69565216,0,0,0.69565216,-1.3913043,-0.69565216)"
+     style="stroke-width:1.4375">
+    <path
+       class="cls-4"
+       d="m 42.249999,35.500001 h -8.625 v -2.875 h 8.625 z"
+       id="path7010"
+       style="stroke-width:1.43751"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       class="cls-4"
+       d="m 42.249999,39.8125 h -8.625 v -2.875 h 8.625 z"
+       id="path7012"
+       style="stroke-width:1.4375"
+       sodipodi:nodetypes="ccccc" />
+  </g>
+  <g
+     id="g2773">
+    <path
+       class="cls-4"
+       d="M 10,9 H 4 V 7 h 6 z"
+       id="path2767"
+       style="stroke-width:1"
+       sodipodi:nodetypes="ccccc" />
+    <path
+       class="cls-4"
+       d="m 8,5 v 6 H 6 V 5 Z"
+       id="path2769"
+       style="stroke-width:1"
+       sodipodi:nodetypes="ccccc" />
+  </g>
+  <g
+     id="g2779"
+     transform="matrix(0.85355337,0.85355337,-0.85355337,0.85355337,7.8288544,11.658138)"
+     style="stroke-width:0.828427">
+    <g
+       id="g3395"
+       transform="translate(0.11167487,-0.47411164)">
+      <path
+         class="cls-4"
+         d="m 7.9157368,4.786295 v 7.029437 H 6.1583774 V 4.786295 Z"
+         id="path2777"
+         style="stroke-width:0.828427"
+         sodipodi:nodetypes="ccccc" />
+      <path
+         class="cls-4"
+         d="M 3.5223386,7.4223338 H 10.551776 V 9.1796932 H 3.5223386 Z"
+         id="path3391"
+         style="stroke-width:0.828427"
+         sodipodi:nodetypes="ccccc" />
+    </g>
+  </g>
+</svg>
