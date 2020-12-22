@@ -66,6 +66,13 @@ option( MAINTAIN_PNGS
 # small icons (16x16) needed in listboxes and dialog buttons
 set( BMAPS_SMALL
     folder
+    icon_bitmap2component_16
+    icon_eeschema_16
+    icon_gerbview_16
+    icon_kicad_16
+    icon_libedit_16
+    icon_modedit_16
+    icon_pcbnew_16
     pinorient_right
     pinorient_left
     pinorient_up
@@ -501,6 +508,16 @@ set( BMAPS_MID
     zoom_selection
     )
 
+# 32 x 32 for icon sets
+set( BMAPS_32
+    icon_bitmap2component_32
+    icon_eeschema_32
+    icon_gerbview_32
+    icon_kicad_32
+    icon_libedit_32
+    icon_modedit_32
+    icon_pcbnew_32
+    )
 
 # 48 x 48 for now
 set( BMAPS_BIG
@@ -693,6 +710,8 @@ if( MAINTAIN_PNGS )
 
     bitmap_dir( 24 24 "${BMAPS_MID}" )
 
+    bitmap_dir( 32 32 "${BMAPS_32}" )
+
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
 
 endif( MAINTAIN_PNGS )
@@ -712,6 +731,11 @@ endforeach()
 foreach( bmn ${BMAPS_MID} )
     #message( "library add cpp_24/${bmn}.cpp" )
     list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
+endforeach()
+
+foreach( bmn ${BMAPS_32} )
+    #message( "library add cpp_32/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_32/${bmn}.cpp )
 endforeach()
 
 foreach( bmn ${BMAPS_BIG} )
