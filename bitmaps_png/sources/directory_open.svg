@@ -16,7 +16,7 @@
    viewBox="0 0 24 24"
    style="enable-background:new 0 0 24 24;"
    xml:space="preserve"><metadata
-   id="metadata843"><rdf:RDF><cc:Work
+   id="metadata845"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
          rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>folder</dc:title><cc:license
          rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
@@ -27,12 +27,12 @@
          rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
          rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
          rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
-   id="defs841" />
+   id="defs843" />
 <style
    type="text/css"
    id="style833">
 	.st0{fill:#545454;}
-	.st1{fill:#727272;stroke:#FFFFFF;}
+	.st1{fill:none;stroke:#FFFFFF;}
 </style>
 <sodipodi:namedview
    bordercolor="#666666"
@@ -41,8 +41,8 @@
    guidetolerance="10"
    id="namedview9483"
    inkscape:current-layer="Слой_1"
-   inkscape:cx="3.8591244"
-   inkscape:cy="13.627163"
+   inkscape:cx="12.464218"
+   inkscape:cy="17.522217"
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
@@ -52,7 +52,7 @@
    inkscape:window-width="1280"
    inkscape:window-x="0"
    inkscape:window-y="23"
-   inkscape:zoom="22.234533"
+   inkscape:zoom="21.28955"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -76,7 +76,13 @@
 <path
    id="path9480"
    sodipodi:nodetypes="sssssssss"
+   class="st0"
+   d="M 7.6,9 H 22 c 1.1,0 1.9,1.066569 1.5,1.777615 l -4.3,8.888076 c -0.7,1.422092 -1.7,1.333212 -4,1.333212 H 4.6 c -2.2,0 -4.9,-0.177762 -4.1,-1.777616 L 5,10.244331 C 5.4,9.6221653 6.5,9 7.6,9 Z"
+   style="stroke-width:0.999997" />
+<path
    class="st1"
-   d="M7.6,7.5l14,0c1.1,0,2.4,0.8,2,1.7L19.2,20  c-0.7,1.7-1.7,1.6-4,1.6l-10.6,0c-2.2,0-4.9-0.2-4.1-2.1L5,9C5.4,8.2,6.5,7.5,7.6,7.5z"
-   style="fill:#545454;fill-opacity:1" />
+   d="M -0.5,20.779663 4.9,9.9735596 C 5.3,9.1876611 6.4,8.5 7.5,8.5 H 21"
+   id="path840"
+   sodipodi:nodetypes="ccsc"
+   style="stroke:#ffffff;stroke-width:0.999998;stroke-opacity:1" />
 </svg>
