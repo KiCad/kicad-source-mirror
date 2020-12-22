@@ -449,6 +449,17 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     GetSizer()->SetSizeHints(this);
     Centre();
 
+    if( parent->IsSymbolFromLegacyLibrary() )
+    {
+        m_ButtonsCancel->SetDefault();
+        m_ButtonsOK->SetLabel( _( "Read Only" ) );
+        m_ButtonsOK->Enable( false );
+    }
+    else
+    {
+        m_ButtonsOK->SetDefault();
+    }
+
     m_ButtonsOK->SetDefault();
     m_initialized = true;
     m_modified = false;

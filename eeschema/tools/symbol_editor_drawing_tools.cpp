@@ -26,7 +26,6 @@
 #include <symbol_edit_frame.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
-#include <tools/ee_selection_tool.h>
 #include <tools/symbol_editor_drawing_tools.h>
 #include <tools/symbol_editor_pin_tool.h>
 #include <class_libentry.h>
@@ -41,7 +40,6 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <kicad_string.h>
-#include "ee_point_editor.h"
 
 static void* g_lastPinWeakPtr;
 

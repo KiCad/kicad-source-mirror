@@ -439,7 +439,6 @@ bool SYMBOL_LIBRARY_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxStr
     wxCHECK( partBuf, false );
 
     libBuf.UpdateBuffer( partBuf, aPart );
-    SetCurrentPart( aPart->GetName() );
     m_frame.SyncLibraries( false );
 
     return true;

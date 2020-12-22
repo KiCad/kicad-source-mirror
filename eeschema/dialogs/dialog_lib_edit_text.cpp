@@ -52,7 +52,16 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( SYMBOL_EDIT_FRAME* aParent, LIB_TEXT
     SetInitialFocus( m_TextCtrl );
     m_StyledTextCtrl->Show( false );
 
-    m_sdbSizerButtonsOK->SetDefault();
+    if( aParent->IsSymbolFromLegacyLibrary() )
+    {
+        m_sdbSizerButtonsCancel->SetDefault();
+        m_sdbSizerButtonsOK->SetLabel( _( "Read Only" ) );
+        m_sdbSizerButtonsOK->Enable( false );
+    }
+    else
+    {
+        m_sdbSizerButtonsOK->SetDefault();
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();

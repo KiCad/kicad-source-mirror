@@ -280,25 +280,26 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
     if( aCol != 0 )
         return false;
 
+    LIB_PART* curPart = m_frame->GetCurPart();
+
     switch( node->m_Type )
     {
     case LIB_TREE_NODE::LIB:
         // mark modified libs with bold font
         aAttr.SetBold( m_libMgr->IsLibraryModified( node->m_Name ) );
 
+        // mark the current library with background color
+        if( curPart && curPart->GetLibId().GetLibNickname() == node->m_LibId.GetLibNickname() )
+        {
 #ifdef __WXGTK__
-        // The native wxGTK+ impl ignores background colour, so set the text colour instead.
-        // This works reasonably well in dark themes, and quite poorly in light ones....
-        if( node->m_Name == m_libMgr->GetCurrentLib() )
+            // The native wxGTK+ impl ignores background colour, so set the text colour instead.
+            // This works reasonably well in dark themes, and quite poorly in light ones....
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
-        // mark the current library with background color
-        if( node->m_Name == m_libMgr->GetCurrentLib() )
-        {
             aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT  ) );
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
-        }
 #endif
+        }
         break;
 
     case LIB_TREE_NODE::LIBID:
@@ -308,19 +309,18 @@ bool SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, un
         // mark aliases with italic font
         aAttr.SetItalic( !node->m_IsRoot );
 
+        // mark the current part with background color
+        if( curPart && curPart->GetLibId() == node->m_LibId )
+        {
 #ifdef __WXGTK__
         // The native wxGTK+ impl ignores background colour, so set the text colour instead.
         // This works reasonably well in dark themes, and quite poorly in light ones....
-        if( node->m_LibId == m_libMgr->GetCurrentLibId() )
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
 #else
-        // mark the current part with background color
-        if( node->m_LibId == m_libMgr->GetCurrentLibId() )
-        {
             aAttr.SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT ) );
             aAttr.SetColour( wxSystemSettings::GetColour( wxSYS_COLOUR_LISTBOXHIGHLIGHTTEXT  ) );
-        }
 #endif
+        }
         break;
 
     default:

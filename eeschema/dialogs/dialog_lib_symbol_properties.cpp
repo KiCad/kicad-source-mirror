@@ -86,7 +86,16 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
     m_deleteFilterButton->SetBitmap( KiBitmap( trash_xpm ) );
     m_editFilterButton->SetBitmap( KiBitmap( small_edit_xpm ) );
 
-    m_stdSizerButtonOK->SetDefault();
+    if( aParent->IsSymbolFromLegacyLibrary() )
+    {
+        m_stdSizerButtonCancel->SetDefault();
+        m_stdSizerButtonOK->SetLabel( _( "Read Only" ) );
+        m_stdSizerButtonOK->Enable( false );
+    }
+    else
+    {
+        m_stdSizerButtonOK->SetDefault();
+    }
 
 #ifndef KICAD_SPICE
     m_spiceFieldsButton->Hide();

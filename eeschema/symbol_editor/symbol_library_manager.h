@@ -278,26 +278,6 @@ public:
      */
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>& GetAdapter() { return m_adapter; }
 
-    /**
-     * Returns the currently modified library name.
-     */
-    const wxString& GetCurrentLib() const { return m_currentLib; }
-    void SetCurrentLib( const wxString& aLibrary ) { m_currentLib = aLibrary; }
-
-    /**
-     * Returns the currently modified part name.
-     */
-    const wxString& GetCurrentPart() const { return m_currentPart; }
-    void SetCurrentPart( const wxString& aPart ) { m_currentPart = aPart; }
-
-    /**
-     * Returns the current library and part name as LIB_ID.
-     */
-    LIB_ID GetCurrentLibId() const
-    {
-        return LIB_ID( m_currentLib, m_currentPart );
-    }
-
     void GetRootSymbolNames( const wxString& aLibName, wxArrayString& aRootSymbolNames );
 
     /**
@@ -479,9 +459,6 @@ private:
     SYMBOL_EDIT_FRAME& m_frame;        ///< Parent frame
     LIB_LOGGER         m_logger;
     int                m_syncHash;     ///< Symbol lib table hash value from last synchronization
-
-    wxString           m_currentLib;   ///< Currently modified part
-    wxString           m_currentPart;  ///< Currently modified library
 
     wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER> m_adapter;
 };

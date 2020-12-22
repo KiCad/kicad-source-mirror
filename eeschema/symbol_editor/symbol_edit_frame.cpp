@@ -327,10 +327,11 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return m_my_part;
         };
 
-    auto haveRootSymbolCond =
+    auto isEditableCond =
         [this] ( const SELECTION& )
         {
-            return m_my_part && m_my_part->IsRoot();
+            // Only root symbols are editable
+            return m_my_part && m_my_part->IsRoot() && !IsSymbolFromLegacyLibrary();
         };
 
     auto libMgrModifiedCond =
@@ -384,17 +385,17 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                         CHECK( cond.CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) ) );
 
     mgr->SetConditions( ACTIONS::cut,
-                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+                        ENABLE( isEditableCond && SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::copy,
-                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+                        ENABLE( haveSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::paste,
-                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::Idle ) );
+                        ENABLE( isEditableCond && SELECTION_CONDITIONS::Idle ) );
     mgr->SetConditions( ACTIONS::doDelete,
-                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+                        ENABLE( isEditableCond && SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::duplicate,
-                        ENABLE( haveRootSymbolCond && SELECTION_CONDITIONS::NotEmpty ) );
+                        ENABLE( isEditableCond && SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( ACTIONS::selectAll,
-                        ENABLE( haveRootSymbolCond ) );
+                        ENABLE( haveSymbolCond ) );
 
     mgr->SetConditions( ACTIONS::zoomTool,
                         CHECK( cond.CurrentTool( ACTIONS::zoomTool ) ) );
@@ -415,13 +416,6 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( EE_ACTIONS::showElectricalTypes, CHECK( pinTypeCond ) );
     mgr->SetConditions( EE_ACTIONS::showComponentTree,   CHECK( showCompTreeCond ) );
-
-    auto isEditableCond =
-        [this] ( const SELECTION& )
-        {
-            // Only root symbols are editable
-            return m_my_part && m_my_part->IsRoot();
-        };
 
     auto demorganCond =
         [this] ( const SELECTION& )
@@ -461,8 +455,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
 
     mgr->SetConditions( EE_ACTIONS::showDatasheet,    ENABLE( haveDatasheetCond ) );
     mgr->SetConditions( EE_ACTIONS::symbolProperties, ENABLE( haveSymbolCond ) );
-    mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( isEditableCond) );
-    mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( isEditableCond) );
+    mgr->SetConditions( EE_ACTIONS::runERC,           ENABLE( haveSymbolCond ) );
+    mgr->SetConditions( EE_ACTIONS::pinTable,         ENABLE( haveSymbolCond ) );
 
     mgr->SetConditions( EE_ACTIONS::showDeMorganStandard,
                         ACTION_CONDITIONS().Enable( demorganCond ).Check( demorganStandardCond ) );
@@ -477,17 +471,14 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::deleteTool,             EDIT_TOOL( ACTIONS::deleteTool ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolPin,      EDIT_TOOL( EE_ACTIONS::placeSymbolPin ) );
     mgr->SetConditions( EE_ACTIONS::placeSymbolText,     EDIT_TOOL( EE_ACTIONS::placeSymbolText ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle,
-                        EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
-    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,
-                        EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolRectangle, EDIT_TOOL( EE_ACTIONS::drawSymbolRectangle ) );
+    mgr->SetConditions( EE_ACTIONS::drawSymbolCircle,    EDIT_TOOL( EE_ACTIONS::drawSymbolCircle ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolArc,       EDIT_TOOL( EE_ACTIONS::drawSymbolArc ) );
     mgr->SetConditions( EE_ACTIONS::drawSymbolLines,     EDIT_TOOL( EE_ACTIONS::drawSymbolLines ) );
-    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,
-                        EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
+    mgr->SetConditions( EE_ACTIONS::placeSymbolAnchor,   EDIT_TOOL( EE_ACTIONS::placeSymbolAnchor ) );
 
     RegisterUIUpdateHandler( ID_LIBEDIT_IMPORT_BODY_BUTT, ENABLE( isEditableCond ) );
-    RegisterUIUpdateHandler( ID_LIBEDIT_EXPORT_BODY_BUTT, ENABLE( isEditableCond ) );
+    RegisterUIUpdateHandler( ID_LIBEDIT_EXPORT_BODY_BUTT, ENABLE( haveSymbolCond ) );
 
 #undef CHECK
 #undef ENABLE
@@ -673,8 +664,6 @@ wxString SYMBOL_EDIT_FRAME::SetCurLib( const wxString& aLibNickname )
     else
         Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_LIB, aLibNickname );
 
-    m_libMgr->SetCurrentLib( aLibNickname );
-
     return old;
 }
 
@@ -689,15 +678,9 @@ void SYMBOL_EDIT_FRAME::SetCurPart( LIB_PART* aPart, bool aUpdateZoom )
 
     // select the current component in the tree widget
     if( !IsSymbolFromSchematic() && m_my_part )
-    {
         m_treePane->GetLibTree()->SelectLibId( m_my_part->GetLibId() );
-    }
     else
-    {
         m_treePane->GetLibTree()->Unselect();
-        m_libMgr->SetCurrentLib( wxEmptyString );
-        m_libMgr->SetCurrentPart( wxEmptyString );
-    }
 
     wxString partName = m_my_part ? m_my_part->GetName() : wxString();
     bool     isAlias = !IsSymbolFromSchematic() && m_my_part && m_my_part->IsAlias();

@@ -43,7 +43,17 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( SYMBOL_EDIT_FRAME* aParent
 
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();
-    m_sdbSizerOK->SetDefault();
+
+    if( aParent->IsSymbolFromLegacyLibrary() )
+    {
+        m_sdbSizerCancel->SetDefault();
+        m_sdbSizerOK->SetLabel( _( "Read Only" ) );
+        m_sdbSizerOK->Enable( false );
+    }
+    else
+    {
+        m_sdbSizerOK->SetDefault();
+    }
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
