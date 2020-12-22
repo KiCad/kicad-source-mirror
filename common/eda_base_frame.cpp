@@ -688,7 +688,7 @@ void EDA_BASE_FRAME::CreateInfoBar()
 #if defined( __WXOSX_MAC__ )
     m_infoBar = new WX_INFOBAR( GetToolCanvas() );
 #else
-    m_infoBar = new WX_INFOBAR( this, m_auimgr );
+    m_infoBar = new WX_INFOBAR( this, &m_auimgr );
 
     m_auimgr.AddPane( m_infoBar, EDA_PANE().InfoBar().Name( "InfoBar" ).Top().Layer(1) );
 #endif
