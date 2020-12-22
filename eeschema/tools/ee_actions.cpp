@@ -175,7 +175,7 @@ TOOL_ACTION EE_ACTIONS::showComponentTree( "eeschema.SymbolLibraryControl.showCo
 TOOL_ACTION EE_ACTIONS::exportSymbolView( "eeschema.SymbolLibraryControl.exportSymbolView",
         AS_GLOBAL, 0, "",
         _( "Export View as PNG..." ), _( "Create PNG file from the current view" ),
-        plot_xpm );
+        export_png_xpm );
 
 TOOL_ACTION EE_ACTIONS::exportSymbolAsSVG( "eeschema.SymbolLibraryControl.exportSymbolAsSVG",
         AS_GLOBAL, 0, "",

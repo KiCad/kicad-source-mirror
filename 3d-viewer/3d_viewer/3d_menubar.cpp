@@ -49,7 +49,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     fileMenu->Add( _( "Export Current View as PNG..." ),
                    "",
                    ID_MENU_SCREENCOPY_PNG,
-                   export_xpm );
+                   export_png_xpm );
 
     fileMenu->Add( _( "Export Current View as JPEG..." ),
                    "",

@@ -89,7 +89,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     submenuExport->Add( _( "Export View as &PNG..." ),
                         _( "Create a PNG file from the current view" ),
                         ID_FPEDIT_SAVE_PNG,
-                        plot_xpm );
+                        export_png_xpm );
 
     fileMenu->Add( submenuExport );
 

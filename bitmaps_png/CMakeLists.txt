@@ -238,6 +238,7 @@ set( BMAPS_MID
     export_footprint_names
     export_module
     export_part
+    export_png
     export_step
     export_svg
     export
