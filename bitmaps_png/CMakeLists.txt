@@ -518,8 +518,8 @@ set( BMAPS_32
     icon_kicad_32
     icon_libedit_32
     icon_modedit_32
-    icon_pagelayout_editor_16
-    icon_pcbcalculator_16
+    icon_pagelayout_editor_32
+    icon_pcbcalculator_32
     icon_pcbnew_32
     )
 
