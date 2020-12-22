@@ -112,8 +112,16 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     // Give an icon
     wxIcon icon;
+    wxIconBundle icon_bundle;
+
     icon.CopyFromBitmap( KiBitmap( icon_kicad_xpm ) );
-    SetIcon( icon );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_kicad_32_xpm ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_kicad_16_xpm ) );
+    icon_bundle.AddIcon( icon );
+
+    SetIcons( icon_bundle );
 
     // Load the settings
     LoadSettings( config() );

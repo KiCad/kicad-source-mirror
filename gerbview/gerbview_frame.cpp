@@ -111,8 +111,16 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent )
 
     // Give an icon
     wxIcon icon;
+    wxIconBundle icon_bundle;
+
     icon.CopyFromBitmap( KiBitmap( icon_gerbview_xpm ) );
-    SetIcon( icon );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_gerbview_32_xpm ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_gerbview_16_xpm ) );
+    icon_bundle.AddIcon( icon );
+
+    SetIcons( icon_bundle );
 
     // Be sure a page info is set. this default value will be overwritten later.
     PAGE_INFO pageInfo( wxT( "GERBER" ) );

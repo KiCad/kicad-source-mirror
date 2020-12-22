@@ -171,8 +171,16 @@ BM2CMP_FRAME::BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Give an icon
     wxIcon icon;
+    wxIconBundle icon_bundle;
+
     icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_xpm ) );
-    SetIcon( icon );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_32_xpm ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_bitmap2component_16_xpm ) );
+    icon_bundle.AddIcon( icon );
+
+    SetIcons( icon_bundle );
 
     GetSizer()->SetSizeHints( this );
 

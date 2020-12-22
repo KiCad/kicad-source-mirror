@@ -111,8 +111,16 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_aboutTitle = _( "Symbol Editor" );
 
     wxIcon icon;
+    wxIconBundle icon_bundle;
+
     icon.CopyFromBitmap( KiBitmap( icon_libedit_xpm ) );
-    SetIcon( icon );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_libedit_32_xpm ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_libedit_16_xpm ) );
+    icon_bundle.AddIcon( icon );
+
+    SetIcons( icon_bundle );
 
     m_settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
     LoadSettings( m_settings );

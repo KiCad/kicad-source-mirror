@@ -87,8 +87,16 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Give an icon
     wxIcon icon;
+    wxIconBundle icon_bundle;
+
     icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_xpm ) );
-    SetIcon( icon );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_32_xpm ) );
+    icon_bundle.AddIcon( icon );
+    icon.CopyFromBitmap( KiBitmap( icon_pcbcalculator_16_xpm ) );
+    icon_bundle.AddIcon( icon );
+
+    SetIcons( icon_bundle );
 
     GetSizer()->SetSizeHints( this );
 
