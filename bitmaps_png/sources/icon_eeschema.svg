@@ -32,7 +32,7 @@
      id="namedview44"
      showgrid="true"
      inkscape:zoom="11.313709"
-     inkscape:cx="21.671578"
+     inkscape:cx="5.5407053"
      inkscape:cy="19.836494"
      inkscape:window-x="299"
      inkscape:window-y="334"
@@ -107,7 +107,7 @@
          id="g904"
          clip-path="url(#clipPath934)">
         <rect
-           style="fill:#d0c5ac;stroke-width:2;stroke-linejoin:round;fill-opacity:1"
+           style="fill:#d0c5ac;fill-opacity:1;stroke-width:2;stroke-linejoin:round"
            id="rect853"
            width="48"
            height="48"
@@ -124,7 +124,7 @@
            style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <path
            id="line15"
-           style="fill:none;stroke:#707070;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           style="fill:none;stroke:#5a5a5a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            d="m 15.915665,5.5392616 c -1.857484,0 -3.714968,0 -5.572451,0"
            inkscape:connector-curvature="0" />
         <line
@@ -134,7 +134,7 @@
            x2="27.438713"
            y2="36.472931"
            id="line17"
-           style="fill:none;stroke:#707070;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+           style="fill:none;stroke:#5a5a5a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <line
            class="cls-3"
            x1="33.034874"
@@ -142,7 +142,7 @@
            x2="27.394508"
            y2="31.582617"
            id="line19"
-           style="fill:none;stroke:#707070;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+           style="fill:none;stroke:#5a5a5a;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <path
            id="line21"
            style="fill:none;stroke:#545454;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
