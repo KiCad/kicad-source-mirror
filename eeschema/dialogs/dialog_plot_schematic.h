@@ -40,7 +40,8 @@ enum PageFormatReq {
     PAGE_SIZE_A
 };
 
-enum class HPGL_PLOT_ORIGIN_AND_UNITS {
+enum class HPGL_PLOT_ORIGIN_AND_UNITS
+{
     PLOTTER_BOT_LEFT,
     PLOTTER_CENTER,
     USER_FIT_PAGE,
@@ -119,39 +120,27 @@ private:
                              wxPoint aPlot0ffset, double aScale, bool aPlotFrameRef );
 
     // HPGL
-    HPGL_PLOT_ORIGIN_AND_UNITS  GetPlotOriginAndUnits()
+    HPGL_PLOT_ORIGIN_AND_UNITS GetPlotOriginAndUnits()
     {
         switch( m_plotOriginOpt->GetSelection() )
         {
         case 0:
-        default:
-            return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
-        case 1:
-            return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
-        case 2:
-            return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
-        case 3:
-            return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT;
+        default: return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
+        case 1: return HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
+        case 2: return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
+        case 3: return HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT;
         }
     }
 
-    void    SetPlotOriginAndUnits( HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits )
+    void SetPlotOriginAndUnits( HPGL_PLOT_ORIGIN_AND_UNITS aOriginAndUnits )
     {
         switch( aOriginAndUnits )
         {
         case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
-        default:
-            m_plotOriginOpt->SetSelection( 0 );
-            break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
-            m_plotOriginOpt->SetSelection( 1 );
-            break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE:
-            m_plotOriginOpt->SetSelection( 2 );
-            break;
-        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT:
-            m_plotOriginOpt->SetSelection( 3 );
-            break;
+        default: m_plotOriginOpt->SetSelection( 0 ); break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER: m_plotOriginOpt->SetSelection( 1 ); break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE: m_plotOriginOpt->SetSelection( 2 ); break;
+        case HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_CONTENT: m_plotOriginOpt->SetSelection( 3 ); break;
         }
     }
 

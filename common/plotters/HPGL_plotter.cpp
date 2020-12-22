@@ -288,18 +288,20 @@ bool HPGL_PLOTTER::EndPlot()
             if( fitUserCoords )
             {
                 BOX2D bbox = m_items.front().bbox;
-                for( HPGL_ITEM const& item: m_items )
+                for( HPGL_ITEM const& item : m_items )
                 {
                     bbox.Merge( item.bbox );
                 }
 
-                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", bbox.GetX(), bbox.GetX() + bbox.GetWidth(),
-                         bbox.GetY(), bbox.GetY() + bbox.GetHeight() );
+                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", bbox.GetX(),
+                         bbox.GetX() + bbox.GetWidth(), bbox.GetY(),
+                         bbox.GetY() + bbox.GetHeight() );
             }
             else
             {
                 DPOINT pagesize_dev( m_paperSize * m_iuPerDeviceUnit );
-                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", 0., pagesize_dev.x, 0., pagesize_dev.y );
+                fprintf( m_outputFile, "SC%.0f,%.0f,%.0f,%.0f;\n", 0., pagesize_dev.x, 0.,
+                         pagesize_dev.y );
             }
         }
 
@@ -435,8 +437,7 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
         m_current_item->bbox.Merge(
-            BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) )
-        );
+                BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) ) );
         PenFinish();
     }
 
@@ -447,8 +448,7 @@ void HPGL_PLOTTER::Circle( const wxPoint& centre, int diameter, FILL_TYPE fill,
         m_current_item->lift_before = true;
         m_current_item->pen_returns = true;
         m_current_item->bbox.Merge(
-            BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) )
-        );
+                BOX2D( center_dev - radius, VECTOR2D( 2 * radius, 2 * radius ) ) );
         PenFinish();
     }
 }
@@ -630,9 +630,8 @@ void HPGL_PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, 
                                          centre_dev.y, angle, chord_degrees ) );
 
     // TODO We could compute the final position and full bounding box instead...
-    m_current_item->bbox.Merge( BOX2D(
-        centre_dev - radius_dev, VECTOR2D( radius_dev * 2, radius_dev * 2 )
-    ) );
+    m_current_item->bbox.Merge(
+             BOX2D( centre_dev - radius_dev, VECTOR2D( radius_dev * 2, radius_dev * 2 ) ) );
     m_current_item->lift_after = true;
     flushItem();
 }

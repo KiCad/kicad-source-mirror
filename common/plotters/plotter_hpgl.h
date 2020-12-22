@@ -55,16 +55,10 @@ public:
     void SetTargetChordLength( double chord_len );
 
     /// Switch to the user coordinate system
-    void SetUserCoords( bool user_coords )
-    {
-        useUserCoords = user_coords;
-    }
+    void SetUserCoords( bool user_coords ) { useUserCoords = user_coords; }
 
     /// Set whether the user coordinate system is fit to content
-    void SetUserCoordsFit( bool user_coords_fit )
-    {
-        fitUserCoords = user_coords_fit;
-    }
+    void SetUserCoordsFit( bool user_coords_fit ) { fitUserCoords = user_coords_fit; }
 
     virtual bool StartPlot() override;
     virtual bool EndPlot() override;
@@ -156,12 +150,7 @@ protected:
 
     struct HPGL_ITEM
     {
-        HPGL_ITEM()
-            : lift_before( false ),
-              lift_after( false ),
-              pen_returns( false ),
-              pen( 0 )
-        {}
+        HPGL_ITEM() : lift_before( false ), lift_after( false ), pen_returns( false ), pen( 0 ) {}
 
         /// Location the pen should start at
         DPOINT         loc_start;
