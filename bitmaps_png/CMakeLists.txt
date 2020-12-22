@@ -793,26 +793,6 @@ foreach( bmn ${BMAPS_32} )
     list( APPEND CPP_LIST cpp_32/${bmn}.cpp )
 endforeach()
 
-foreach( bmn ${BMAPS_22} )
-    #message( "library add cpp_22/${bmn}.cpp" )
-    list( APPEND CPP_LIST cpp_22/${bmn}.cpp )
-endforeach()
-
-foreach( bmn ${BMAPS_24} )
-    #message( "library add cpp_24/${bmn}.cpp" )
-    list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
-endforeach()
-
-foreach( bmn ${BMAPS_64} )
-    #message( "library add cpp_64/${bmn}.cpp" )
-    list( APPEND CPP_LIST cpp_64/${bmn}.cpp )
-endforeach()
-
-foreach( bmn ${BMAPS_128} )
-    #message( "library add cpp_128/${bmn}.cpp" )
-    list( APPEND CPP_LIST cpp_128/${bmn}.cpp )
-endforeach()
-
 foreach( bmn ${BMAPS_BIG} )
     #message( "library add cpp_48/${bmn}.cpp" )
     list( APPEND CPP_LIST cpp_48/${bmn}.cpp )
@@ -822,6 +802,29 @@ foreach( bmn ${BMAPS_OTHER} )
     #message( "library add cpp_other/${bmn}.cpp" )
     list( APPEND CPP_LIST cpp_other/${bmn}.cpp )
 endforeach()
+
+# Commented out to prevent name smashing in the library
+# Uncomment to regenerate for icon sets
+# TODO: make this build automatic
+#foreach( bmn ${BMAPS_22} )
+    #message( "library add cpp_22/${bmn}.cpp" )
+#    list( APPEND CPP_LIST cpp_22/${bmn}.cpp )
+#endforeach()
+
+#foreach( bmn ${BMAPS_24} )
+    #message( "library add cpp_24/${bmn}.cpp" )
+#    list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
+#endforeach()
+
+#foreach( bmn ${BMAPS_64} )
+    #message( "library add cpp_64/${bmn}.cpp" )
+#    list( APPEND CPP_LIST cpp_64/${bmn}.cpp )
+#endforeach()
+
+#foreach( bmn ${BMAPS_128} )
+    #message( "library add cpp_128/${bmn}.cpp" )
+#    list( APPEND CPP_LIST cpp_128/${bmn}.cpp )
+#endforeach()
 
 #add_library( bitmaps SHARED ${CPP_LIST} )
 add_library( bitmaps STATIC ${CPP_LIST} )
