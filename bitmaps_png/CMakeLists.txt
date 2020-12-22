@@ -535,6 +535,7 @@ set( BMAPS_BIG
     icon_modedit
     icon_pcbnew
     icon_bitmap2component
+    icon_pagelayout_editor
     icon_pcbcalculator
     reannotate_down_left
     reannotate_down_right
@@ -546,6 +547,48 @@ set( BMAPS_BIG
     reannotate_up_right
     icon_pagelayout_editor
     wizard_add_fplib_icon
+    )
+
+# 22 x 22 for Linux icons
+set( BMAPS_22
+    cvpcb
+    eeschema
+    icon_gerbview
+    icon_kicad
+    icon_libedit
+    icon_modedit
+    icon_pagelayout_editor
+    pcbnew
+    bitmap2component
+    calculator
+    )
+
+# 64 x 64 for icon sets
+set( BMAPS_64
+    icon_cvpcb
+    icon_eeschema
+    icon_gerbview
+    icon_kicad
+    icon_libedit
+    icon_modedit
+    icon_pcbnew
+    icon_pagelayout_editor
+    icon_bitmap2component
+    icon_pcbcalculator
+    )
+
+# 64 x 64 for icon sets
+set( BMAPS_128
+    icon_cvpcb
+    icon_eeschema
+    icon_gerbview
+    icon_kicad
+    icon_libedit
+    icon_modedit
+    icon_pcbnew
+    icon_pagelayout_editor
+    icon_bitmap2component
+    icon_pcbcalculator
     )
 
 set( BMAPS_OTHER
@@ -657,7 +700,7 @@ function( bitmap_dir pngWidth pngHeight bmapList )
     foreach( bmn ${bmapList} )
         set( pngFile "${pngDir}/${bmn}.png" )
         set( cppFile "${cppDir}/${bmn}.cpp" )
-        set( tmpFile "${TMP_DIR}/${bmn}.png" )
+        set( tmpFile "${TMP_DIR}/${bmn}_${pngHeight}.png" )
 
         #svg2png( inputFile outFile pngWidth pngHeight )
         svg2png( ${CMAKE_CURRENT_SOURCE_DIR}/sources/${bmn}.svg ${tmpFile} ${pngWidth} ${pngHeight} )
@@ -716,6 +759,14 @@ if( MAINTAIN_PNGS )
 
     bitmap_dir( 32 32 "${BMAPS_32}" )
 
+    bitmap_dir( 22 22 "${BMAPS_22}" )
+
+    bitmap_dir( 24 24 "${BMAPS_24}" )
+
+    bitmap_dir( 64 64 "${BMAPS_64}" )
+
+    bitmap_dir( 128 128 "${BMAPS_128}" )
+
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
 
 endif( MAINTAIN_PNGS )
@@ -740,6 +791,26 @@ endforeach()
 foreach( bmn ${BMAPS_32} )
     #message( "library add cpp_32/${bmn}.cpp" )
     list( APPEND CPP_LIST cpp_32/${bmn}.cpp )
+endforeach()
+
+foreach( bmn ${BMAPS_22} )
+    #message( "library add cpp_22/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_22/${bmn}.cpp )
+endforeach()
+
+foreach( bmn ${BMAPS_24} )
+    #message( "library add cpp_24/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
+endforeach()
+
+foreach( bmn ${BMAPS_64} )
+    #message( "library add cpp_64/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_64/${bmn}.cpp )
+endforeach()
+
+foreach( bmn ${BMAPS_128} )
+    #message( "library add cpp_128/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_128/${bmn}.cpp )
 endforeach()
 
 foreach( bmn ${BMAPS_BIG} )
