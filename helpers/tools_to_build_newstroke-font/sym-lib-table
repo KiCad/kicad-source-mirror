@@ -5,4 +5,5 @@
   (lib (name "CJK_symbol")(type "Legacy")(uri "${KIPRJMOD}/CJK_symbol.lib")(options "")(descr ""))
   (lib (name "hiragana")(type "Legacy")(uri "${KIPRJMOD}/hiragana.lib")(options "")(descr ""))
   (lib (name "katakana")(type "Legacy")(uri "${KIPRJMOD}/katakana.lib")(options "")(descr ""))
+  (lib (name "half_full")(type "Legacy")(uri "${KIPRJMOD}/half_full.lib")(options "")(descr ""))
 )
