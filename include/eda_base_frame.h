@@ -205,6 +205,10 @@ public:
 
     void PrintMsg( const wxString& text );
 
+    void CreateInfoBar();
+
+    void FinishAUIInitialization();
+
     /**
      * @return the #WX_INFOBAR that can be displayed on the top of the canvas.
      */

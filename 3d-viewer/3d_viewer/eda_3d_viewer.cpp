@@ -144,13 +144,12 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
 
     m_auimgr.SetManagedWindow( this );
 
+    CreateInfoBar();
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer( 6 ) );
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
 
-    // Call Update() to fix all pane default sizes.
-    m_auimgr.Update();
+    FinishAUIInitialization();
 
-    m_infoBar = new WX_INFOBAR( m_canvas );
     m_canvas->SetInfoBar( m_infoBar );
     m_canvas->SetStatusBar( status_bar );
 

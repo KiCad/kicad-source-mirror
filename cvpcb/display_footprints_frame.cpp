@@ -129,6 +129,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     m_auimgr.SetManagedWindow( this );
 
+    CreateInfoBar();
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
                       .Top().Layer( 6 ) );
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
@@ -138,10 +139,7 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
                       .Bottom().Layer( 6 ) );
 
-    // Call Update() to fix all pane default sizes.
-    m_auimgr.Update();
-
-    m_infoBar = new WX_INFOBAR( GetCanvas() );
+    FinishAUIInitialization();
 
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;

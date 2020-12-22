@@ -148,6 +148,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
+    CreateInfoBar();
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" )
                       .Top().Layer( 6 ) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" )
@@ -165,10 +166,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( GetCanvas(), wxAuiPaneInfo().Name( "DrawFrame" )
                       .CentrePane() );
 
-    // Call Update() to fix all pane default sizes.
-    m_auimgr.Update();
-
-    m_infoBar = new WX_INFOBAR( GetCanvas() );
+    FinishAUIInitialization();
 
     if( m_settings->m_LibWidth > 0 )
     {

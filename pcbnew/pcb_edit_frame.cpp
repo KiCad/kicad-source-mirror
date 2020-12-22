@@ -225,6 +225,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
+    CreateInfoBar();
+
     unsigned int auiFlags = wxAUI_MGR_DEFAULT;
 #if !defined( _WIN32 )
     // Windows cannot redraw the UI fast enough during a live resize and may lead to all kinds of graphical glitches
@@ -272,10 +274,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.GetArtProvider()->SetColour( wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR,
                                           wxSystemSettings::GetColour( wxSYS_COLOUR_BTNTEXT ) );
 
-    // Call Update() to fix all pane default sizes.
-    m_auimgr.Update();
-
-    m_infoBar = new WX_INFOBAR( GetCanvas() );
+    FinishAUIInitialization();
 
     if( PCBNEW_SETTINGS* settings = dynamic_cast<PCBNEW_SETTINGS*>( config() ) )
     {

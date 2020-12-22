@@ -21,6 +21,7 @@
 #include <id.h>
 #include <widgets/infobar.h>
 #include "wx/artprov.h"
+#include <wx/aui/framemanager.h>
 #include <wx/debug.h>
 #include <wx/infobar.h>
 #include <wx/sizer.h>
@@ -40,11 +41,12 @@ BEGIN_EVENT_TABLE( WX_INFOBAR, wxInfoBarGeneric )
 END_EVENT_TABLE()
 
 
-WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxWindowID aWinid )
+WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid )
         : wxInfoBarGeneric( aParent, aWinid ),
           m_showTime( 0 ),
           m_updateLock( false ),
-          m_showTimer( nullptr )
+          m_showTimer( nullptr ),
+          m_auiManager( aMgr )
 {
     m_showTimer = new wxTimer( this, ID_CLOSE_INFOBAR );
 
@@ -133,6 +135,9 @@ void WX_INFOBAR::ShowMessage( const wxString& aMessage, int aFlags )
 
     wxInfoBarGeneric::ShowMessage( aMessage, aFlags );
 
+    if( m_auiManager )
+        updateAuiLayout( true );
+
     if( m_showTime > 0 )
         m_showTimer->StartOnce( m_showTime );
 
@@ -150,6 +155,9 @@ void WX_INFOBAR::Dismiss()
 
     wxInfoBarGeneric::Dismiss();
 
+    if( m_auiManager )
+        updateAuiLayout( false );
+
     m_updateLock = false;
 }
 
@@ -163,6 +171,26 @@ void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
         SetSize( parentWidth, GetSize().GetHeight() );
 
     aEvent.Skip();
+}
+
+
+void WX_INFOBAR::updateAuiLayout( bool aShow )
+{
+    wxASSERT( m_auiManager );
+
+    wxAuiPaneInfo& pane = m_auiManager->GetPane( this );
+
+    // If the infobar is in a pane, then show/hide the pane
+    if( pane.IsOk() )
+    {
+        if( aShow )
+            pane.Show();
+        else
+            pane.Hide();
+    }
+
+    // Update the AUI manager regardless
+    m_auiManager->Update();
 }
 
 

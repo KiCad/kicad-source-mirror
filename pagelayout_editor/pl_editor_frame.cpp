@@ -150,6 +150,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.SetManagedWindow( this );
 
+    CreateInfoBar();
     m_propertiesPagelayout = new PROPERTIES_FRAME( this );
 
     // Rows; layers 4 - 6
@@ -174,11 +175,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( "DrawFrame" )
                       .Center() );
 
-
-    // Call Update() to fix all pane default sizes.
-    m_auimgr.Update();
-
-    m_infoBar = new WX_INFOBAR( GetCanvas() );
+    FinishAUIInitialization();
 
     resolveCanvasType();
     SwitchCanvas( m_canvasType );
