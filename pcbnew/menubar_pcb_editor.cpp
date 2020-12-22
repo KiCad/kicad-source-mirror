@@ -412,7 +412,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     submenuActionPlugins->Add( _( "Reveal Plugin Folder in Finder" ),
                                _( "Reveals the plugins folder in a Finder window" ),
                                ID_TOOLBARH_PCB_ACTION_PLUGIN_SHOW_FOLDER,
-                               directory_open_xmp );
+                               directory_open_xpm );
 #else
     submenuActionPlugins->Add( _( "Open Plugin Directory" ),
                                _( "Opens the directory in the default system file manager" ),
