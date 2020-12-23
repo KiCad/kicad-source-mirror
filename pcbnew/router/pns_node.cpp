@@ -1424,11 +1424,14 @@ int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, int aLay
 
     aJoints.clear();
 
-    for( auto j = m_joints.begin(); j != m_joints.end(); ++j )
+    for( JOINT_MAP::value_type& j : m_joints )
     {
-        if( aBox.Contains( j->second.Pos() ) && j->second.LinkCount( aKindMask ) )
+        if( j.second.Layer() != aLayerMask )
+            continue;
+
+        if( aBox.Contains( j.second.Pos() ) && j.second.LinkCount( aKindMask ) )
         {
-            aJoints.push_back( &j->second );
+            aJoints.push_back( &j.second );
             n++;
         }
     }
@@ -1436,13 +1439,13 @@ int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, int aLay
     if( isRoot() )
         return n;
 
-    for( auto j = m_root->m_joints.begin(); j != m_root->m_joints.end(); ++j )
+    for( JOINT_MAP::value_type& j : m_root->m_joints )
     {
-        if( !Overrides( &j->second) )
+        if( !Overrides( &j.second ) && j.second.Layer() == aLayerMask )
         {
-            if( aBox.Contains( j->second.Pos() ) && j->second.LinkCount( aKindMask ) )
+            if( aBox.Contains( j.second.Pos() ) && j.second.LinkCount( aKindMask ) )
             {
-                aJoints.push_back( &j->second );
+                aJoints.push_back( &j.second );
                 n++;
             }
         }

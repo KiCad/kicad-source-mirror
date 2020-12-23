@@ -114,6 +114,7 @@ private:
         LINE     origLine;
         SOLID*   attachedPad;
         VECTOR2I p_orig, p_next;
+        VECTOR2I offset;
     };
 
     std::set<SOLID*>                m_solids;

@@ -50,6 +50,26 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     m_initialDraggedItems = aPrimitives;
     m_p0                  = aP;
 
+    std::unordered_set<LINKED_ITEM*> seenItems;
+
+    auto addLinked =
+            [&]( SOLID* aSolid, LINKED_ITEM* aItem, VECTOR2I aOffset = {} )
+            {
+                if( seenItems.count( aItem ) )
+                    return;
+
+                seenItems.insert( aItem );
+
+                int segIndex;
+                DRAGGED_CONNECTION cn;
+
+                cn.origLine    = m_world->AssembleLine( aItem, &segIndex );
+                cn.attachedPad = aSolid;
+                cn.offset      = aOffset;
+
+                m_conns.push_back( cn );
+            };
+
     for( auto item : aPrimitives.Items() )
     {
         if( item.item->Kind() != ITEM::SOLID_T )
@@ -66,17 +86,23 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
         for( auto link : jt->LinkList() )
         {
             if( link.item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
+                addLinked( solid, static_cast<LINKED_ITEM*>( link.item ) );
+        }
+
+        std::vector<JOINT*> extraJoints;
+
+        if( m_world->QueryJoints( solid->Hull().BBox(), extraJoints, solid->Layer(),
+                                  ITEM::SEGMENT_T | ITEM::ARC_T ) )
+        {
+            for( JOINT* extraJoint : extraJoints )
             {
-                LINKED_ITEM* li = static_cast<LINKED_ITEM*>( link.item );
-                int          segIndex;
+                if( extraJoint->Net() == jt->Net() && extraJoint->LinkCount() == 1 )
+                {
+                    LINKED_ITEM* li = static_cast<LINKED_ITEM*>( extraJoint->LinkList()[0].item );
 
-                auto l0 = m_world->AssembleLine( li, &segIndex );
-
-                DRAGGED_CONNECTION cn;
-
-                cn.origLine    = l0;
-                cn.attachedPad = solid;
-                m_conns.push_back( cn );
+                    if( li->Collide( solid, 0, false, nullptr, nullptr, false ) )
+                        addLinked( solid, li, extraJoint->Pos() - solid->Pos() );
+                }
             }
         }
     }
@@ -108,8 +134,8 @@ bool COMPONENT_DRAGGER::Drag( const VECTOR2I& aP )
         {
             if( l.attachedPad == s )
             {
-                l.p_orig = s->Pos();
-                l.p_next = p_next;
+                l.p_orig = s->Pos() + l.offset;
+                l.p_next = p_next + l.offset;
             }
         }
     }
