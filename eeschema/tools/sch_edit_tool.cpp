@@ -392,27 +392,46 @@ const KICAD_T rotatableItems[] = {
 
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
+    bool          clockwise = ( aEvent.Matches( EE_ACTIONS::rotateCW.MakeEvent() ) );
     EE_SELECTION& selection = m_selectionTool->RequestSelection( rotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
 
+    SCH_ITEM* head = nullptr;
+    int       principalItemCount = 0;  // User-selected items (as opposed to connected wires)
     wxPoint   rotPoint;
-    bool      clockwise = ( aEvent.Matches( EE_ACTIONS::rotateCW.MakeEvent() ) );
-    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
+    bool      moving = false;
     bool      connections = false;
-    bool      moving = item->IsMoving();
 
-    if( selection.GetSize() == 1 )
+    for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
-        if( !moving )
-            saveCopyInUndoList( item, UNDO_REDO::CHANGED );
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
-        switch( item->Type() )
+        if( item->HasFlag( TEMP_SELECTED ) )
+            continue;
+
+        principalItemCount++;
+
+        if( !head )
+            head = item;
+    }
+
+    if( head && head->IsMoving() )
+        moving = true;
+
+    if( principalItemCount == 1 )
+    {
+        rotPoint = head->GetPosition();
+
+        if( !moving )
+            saveCopyInUndoList( head, UNDO_REDO::CHANGED );
+
+        switch( head->Type() )
         {
         case SCH_COMPONENT_T:
         {
-            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( head );
 
             if( clockwise )
                 component->SetOrientation( CMP_ROTATE_CLOCKWISE );
@@ -430,7 +449,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
         {
-            SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
+            SCH_TEXT* textItem = static_cast<SCH_TEXT*>( head );
             textItem->Rotate90( clockwise );
             break;
         }
@@ -438,7 +457,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_SHEET_PIN_T:
         {
             // Rotate pin within parent sheet
-            SCH_SHEET_PIN* pin   = static_cast<SCH_SHEET_PIN*>( item );
+            SCH_SHEET_PIN* pin   = static_cast<SCH_SHEET_PIN*>( head );
             SCH_SHEET*     sheet = pin->GetParent();
 
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
@@ -451,13 +470,13 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
-                item->Rotate( item->GetPosition() );
+                head->Rotate( rotPoint );
 
             break;
 
         case SCH_FIELD_T:
         {
-            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( head );
 
             if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
                 field->SetTextAngle( TEXT_ANGLE_VERT );
@@ -465,14 +484,14 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 field->SetTextAngle( TEXT_ANGLE_HORIZ );
 
             // Now that we're moving a field, they're no longer autoplaced.
-            static_cast<SCH_ITEM*>( item->GetParent() )->ClearFieldsAutoplaced();
+            static_cast<SCH_ITEM*>( head->GetParent() )->ClearFieldsAutoplaced();
 
             break;
         }
 
         case SCH_BITMAP_T:
             for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
-                item->Rotate( item->GetPosition() );
+                head->Rotate( rotPoint );
 
             // The bitmap is cached in Opengl: clear the cache to redraw
             getView()->RecacheAllItems();
@@ -480,14 +499,13 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         case SCH_SHEET_T:
         {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( head );
+            rotPoint = m_frame->GetNearestGridPosition( sheet->GetRotationCenter() );
 
             // Rotate the sheet on itself. Sheets do not have an anchor point.
             for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-            {
-                rotPoint = m_frame->GetNearestGridPosition( sheet->GetRotationCenter() );
                 sheet->Rotate( rotPoint );
-            }
+
             break;
         }
 
@@ -495,61 +513,66 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             break;
         }
 
-        connections = item->IsConnectable();
-        m_frame->UpdateItem( item );
+        connections = head->IsConnectable();
+        m_frame->UpdateItem( head );
     }
-    else if( selection.GetSize() > 1 )
+    else
     {
         rotPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
+    }
 
-        for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
+    for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
+    {
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+
+        // We've already rotated the user selected item if there was only one.  We're just
+        // here to rotate the ends of wires that were attached to it.
+        if( principalItemCount == 1 && !item->HasFlag( TEMP_SELECTED ) )
+            continue;
+
+        if( !moving )
+            saveCopyInUndoList( item, UNDO_REDO::CHANGED, ii > 0 );
+
+        for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
         {
-            item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
-
-            if( !moving )
-                saveCopyInUndoList( item, UNDO_REDO::CHANGED, ii > 0 );
-
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+            if( item->Type() == SCH_LINE_T )
             {
-                if( item->Type() == SCH_LINE_T )
+                SCH_LINE* line = (SCH_LINE*) item;
+
+                if( item->HasFlag( STARTPOINT ) )
+                    line->RotateStart( rotPoint );
+
+                if( item->HasFlag( ENDPOINT ) )
+                    line->RotateEnd( rotPoint );
+            }
+            else if( item->Type() == SCH_SHEET_PIN_T )
+            {
+                if( item->GetParent()->IsSelected() )
                 {
-                    SCH_LINE* line = (SCH_LINE*) item;
-
-                    if( item->HasFlag( STARTPOINT ) )
-                        line->RotateStart( rotPoint );
-
-                    if( item->HasFlag( ENDPOINT ) )
-                        line->RotateEnd( rotPoint );
-                }
-                else if( item->Type() == SCH_SHEET_PIN_T )
-                {
-                    if( item->GetParent()->IsSelected() )
-                    {
-                        // parent will rotate us
-                    }
-                    else
-                    {
-                        // rotate within parent
-                        SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
-                        SCH_SHEET*     sheet = pin->GetParent();
-
-                        pin->Rotate( sheet->GetBoundingBox().GetCenter() );
-                    }
+                    // parent will rotate us
                 }
                 else
                 {
-                    item->Rotate( rotPoint );
+                    // rotate within parent
+                    SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+                    SCH_SHEET*     sheet = pin->GetParent();
+
+                    pin->Rotate( sheet->GetBoundingBox().GetCenter() );
                 }
             }
-
-            connections |= item->IsConnectable();
-            m_frame->UpdateItem( item );
+            else
+            {
+                item->Rotate( rotPoint );
+            }
         }
+
+        connections |= item->IsConnectable();
+        m_frame->UpdateItem( item );
     }
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
-    if( item->IsMoving() )
+    if( moving )
     {
         m_toolMgr->RunAction( ACTIONS::refreshPreview );
     }
