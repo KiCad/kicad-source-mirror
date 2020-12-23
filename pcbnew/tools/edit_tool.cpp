@@ -1002,6 +1002,10 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
 
+    // Clear reference so any mouse dragging that occurs doesn't make the selection jump
+    // to this now invalid reference
+    selection.ClearReferencePoint();
+
     return 0;
 }
 
@@ -1223,6 +1227,10 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+
+    // Clear reference so any mouse dragging that occurs doesn't make the selection jump
+    // to this now invalid reference
+    selection.ClearReferencePoint();
 
     return 0;
 }
