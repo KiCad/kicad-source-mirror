@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-23 16:34+0000\n"
+"PO-Revision-Date: 2020-12-23 22:21+0000\n"
 "Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2235,18 +2235,17 @@ msgid "Image Editor"
 msgstr "Editor obrázka"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "Vykresľovať položky počas presunu"
+msgstr "Výber obsahuje %d zamknuté položky."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
 msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "Ďalej už nezobrazovať"
+msgstr "Ďalej už nezobrazovať."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 #, fuzzy
@@ -4458,9 +4457,9 @@ msgid "Gestures"
 msgstr ""
 
 #: common/kiway.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to load kiface library \"%s\"."
-msgstr "Zlyhalo kopírovanie obrázku do schránky"
+msgstr "Nepodarilo sa načítať knižnicu kiface \"%s\"."
 
 #: common/kiway.cpp:237
 #, c-format
@@ -5309,9 +5308,8 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr ""
 
 #: common/project.cpp:311 common/project.cpp:316
-#, fuzzy
 msgid "Error loading project footprint library table"
-msgstr "Nemožno otvoriť súbor knižnice puzdier <%s>."
+msgstr "Chyba načítania tabuľky z knižnice púzdier projektu"
 
 #: common/project/project_archiver.cpp:90
 msgid "Could not open archive file\n"
