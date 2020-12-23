@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-23 09:24+0100\n"
+"POT-Creation-Date: 2020-12-23 08:35-0800\n"
 "PO-Revision-Date: 2020-12-23 09:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -3515,7 +3515,7 @@ msgid "Info:"
 msgstr "Info:"
 
 #: common/dialogs/wx_html_report_panel.cpp:328
-#: eeschema/dialogs/dialog_erc.cpp:748 pcbnew/dialogs/dialog_drc.cpp:612
+#: eeschema/dialogs/dialog_erc.cpp:748 pcbnew/dialogs/dialog_drc.cpp:615
 msgid "Save Report to File"
 msgstr "Sauver Fichier Rapport sous"
 
@@ -8159,7 +8159,7 @@ msgstr "Annotation non complète.  ERC ne peut pas être exécuté."
 msgid "Delete exclusions too?"
 msgstr "Supprimer les exclusions aussi?"
 
-#: eeschema/dialogs/dialog_erc.cpp:193 pcbnew/dialogs/dialog_drc.cpp:863
+#: eeschema/dialogs/dialog_erc.cpp:193 pcbnew/dialogs/dialog_drc.cpp:866
 #: pcbnew/dialogs/dialog_drc_base.cpp:195
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:32
 msgid "Delete All Markers"
@@ -8222,59 +8222,59 @@ msgstr "Vérification des pins type non connecté pour connexions..."
 msgid "Checking for library symbol issues..."
 msgstr "Vérification des problèmes de symbole de librairies..."
 
-#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:425
+#: eeschema/dialogs/dialog_erc.cpp:499 pcbnew/dialogs/dialog_drc.cpp:428
 msgid "errors"
 msgstr "erreurs"
 
-#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:426
+#: eeschema/dialogs/dialog_erc.cpp:500 pcbnew/dialogs/dialog_drc.cpp:429
 msgid "warnings"
 msgstr "avertissements"
 
-#: eeschema/dialogs/dialog_erc.cpp:501 pcbnew/dialogs/dialog_drc.cpp:427
+#: eeschema/dialogs/dialog_erc.cpp:501 pcbnew/dialogs/dialog_drc.cpp:430
 msgid "appropriate"
 msgstr "approprié"
 
-#: eeschema/dialogs/dialog_erc.cpp:506 pcbnew/dialogs/dialog_drc.cpp:432
+#: eeschema/dialogs/dialog_erc.cpp:506 pcbnew/dialogs/dialog_drc.cpp:435
 msgid "Remove exclusion for this violation"
 msgstr "Supprimer l’exclusion pour cette violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:507 pcbnew/dialogs/dialog_drc.cpp:433
+#: eeschema/dialogs/dialog_erc.cpp:507 pcbnew/dialogs/dialog_drc.cpp:436
 #, c-format
 msgid "It will be placed back in the %s list"
 msgstr "Il sera remis dans la liste des %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:511 pcbnew/dialogs/dialog_drc.cpp:437
+#: eeschema/dialogs/dialog_erc.cpp:511 pcbnew/dialogs/dialog_drc.cpp:440
 msgid "Exclude this violation"
 msgstr "Exclure cette violation"
 
-#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:438
+#: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:441
 #, c-format
 msgid "It will be excluded from the %s list"
 msgstr "Il sera exclu de la liste %s"
 
-#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:445
+#: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:448
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
 msgstr "Changer la gravité en Erreur pour toutes les violations \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:526 eeschema/dialogs/dialog_erc.cpp:532
-#: pcbnew/dialogs/dialog_drc.cpp:447 pcbnew/dialogs/dialog_drc.cpp:454
+#: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "Les sévérités de violation peuvent également être modifiées dans le dialogue "
 "Option de C.I."
 
-#: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:452
+#: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
 msgstr "Changer la gravité en Warning pour toutes les violations \"%s\""
 
-#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:458
+#: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:461
 #, c-format
 msgid "Ignore all '%s' violations"
 msgstr "Ignorer toutes les violations \"%s\""
 
-#: eeschema/dialogs/dialog_erc.cpp:536 pcbnew/dialogs/dialog_drc.cpp:460
+#: eeschema/dialogs/dialog_erc.cpp:536 pcbnew/dialogs/dialog_drc.cpp:463
 msgid "Violations will not be checked or reported"
 msgstr "Les violations ne seront pas vérifiées ou signalées"
 
@@ -8282,7 +8282,7 @@ msgstr "Les violations ne seront pas vérifiées ou signalées"
 msgid "Edit pin-to-pin conflict map..."
 msgstr "Editer la carte des conflits de pins..."
 
-#: eeschema/dialogs/dialog_erc.cpp:547 pcbnew/dialogs/dialog_drc.cpp:465
+#: eeschema/dialogs/dialog_erc.cpp:547 pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Edit violation severities..."
 msgstr "Modifier les sévérités de violation..."
 
@@ -8297,7 +8297,7 @@ msgstr "Carte des Conflits de Pins"
 
 #: eeschema/dialogs/dialog_erc.cpp:644
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
-#: pcbnew/dialogs/dialog_board_setup.cpp:85 pcbnew/dialogs/dialog_drc.cpp:559
+#: pcbnew/dialogs/dialog_board_setup.cpp:85 pcbnew/dialogs/dialog_drc.cpp:562
 msgid "Violation Severity"
 msgstr "Gravité de la Violation"
 
@@ -15868,35 +15868,35 @@ msgstr "pas de symbole sélectionné"
 msgid "symbol is not multi-unit"
 msgstr "le symbole n'est pas multi-unité"
 
-#: eeschema/tools/sch_edit_tool.cpp:911
+#: eeschema/tools/sch_edit_tool.cpp:934
 msgid "Label value cannot go below zero"
 msgstr "La valeur du label ne peut pas descendre en dessous de zéro"
 
-#: eeschema/tools/sch_edit_tool.cpp:1072 pcbnew/tools/pcb_control.cpp:471
+#: eeschema/tools/sch_edit_tool.cpp:1095 pcbnew/tools/pcb_control.cpp:471
 msgid "Item locked."
 msgstr "Elément  verrouillé."
 
-#: eeschema/tools/sch_edit_tool.cpp:1134
+#: eeschema/tools/sch_edit_tool.cpp:1157
 #: eeschema/tools/symbol_editor_edit_tool.cpp:519
 #, c-format
 msgid "Edit %s Field"
 msgstr "Édition Champ %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1667
+#: eeschema/tools/sch_edit_tool.cpp:1690
 msgid "There are no unreferenced pins in this sheet to remove."
 msgstr "Il n'y a pas de pins non référencées à supprimer dans cette feuille."
 
-#: eeschema/tools/sch_edit_tool.cpp:1671
+#: eeschema/tools/sch_edit_tool.cpp:1694
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr ""
 "Souhaitez-vous supprimer les pin de feuille non référencées de cette feuille?"
 
-#: eeschema/tools/sch_edit_tool.cpp:1731
+#: eeschema/tools/sch_edit_tool.cpp:1754
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Entrez le numéro de page pour le chemin hiérarchique de la feuille %s"
 
-#: eeschema/tools/sch_edit_tool.cpp:1734
+#: eeschema/tools/sch_edit_tool.cpp:1757
 msgid "Edit Page Number"
 msgstr "Editer Numéro de Page"
 
@@ -17516,15 +17516,20 @@ msgstr "KiCad erreur"
 msgid "Application failed to load."
 msgstr "Échec du chargement de l’application."
 
-#: kicad/tools/kicad_manager_control.cpp:690
+#: kicad/tools/kicad_manager_control.cpp:684
 #, c-format
 msgid "%s closed [pid=%d]\n"
 msgstr "%s fermé [pid=%d]\n"
 
-#: kicad/tools/kicad_manager_control.cpp:750
+#: kicad/tools/kicad_manager_control.cpp:744
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
+
+#: libs/kiplatform/msw/environment.cpp:47
+#, fuzzy, c-format
+msgid "Error code: %d"
+msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -21661,29 +21666,29 @@ msgstr "Monter règles de conception."
 msgid "-------- DRC cancelled by user.<br><br>"
 msgstr "-------- DRC annulée par l’utilisateur.<br><br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:465
+#: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
 msgstr "Ouvrir le dialogue de Propriétés du CI"
 
-#: pcbnew/dialogs/dialog_drc.cpp:631
+#: pcbnew/dialogs/dialog_drc.cpp:634
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Fichier rapport \"%s\" créé<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:636
+#: pcbnew/dialogs/dialog_drc.cpp:639
 #, c-format
 msgid "Unable to create report file '%s'<br>"
 msgstr "Impossible de créer le fichier rapport \"%s\"<br>"
 
-#: pcbnew/dialogs/dialog_drc.cpp:862
+#: pcbnew/dialogs/dialog_drc.cpp:865
 msgid "Do you wish to delete excluded markers as well?"
 msgstr "Souhaitez-vous supprimer les marqueurs exclus?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:865
+#: pcbnew/dialogs/dialog_drc.cpp:868
 msgid "Delete exclusions"
 msgstr "Supprimer les exclusions"
 
-#: pcbnew/dialogs/dialog_drc.cpp:936
+#: pcbnew/dialogs/dialog_drc.cpp:939
 msgid "not run"
 msgstr "non exécuté"
 
@@ -27777,6 +27782,15 @@ msgstr "(%s diamètre min %s; réel %s)"
 msgid "(%s max diameter %s; actual %s)"
 msgstr "(%s diamètre max %s; réel %s)"
 
+#: pcbnew/edit_zone_helpers.cpp:85 pcbnew/edit_zone_helpers.cpp:141
+msgid "Modify zone properties"
+msgstr "Modifier les propriétés de la zone"
+
+#: pcbnew/edit_zone_helpers.cpp:131
+#, c-format
+msgid "Refill %d Zones"
+msgstr "Remplissage %d Zones"
+
 #: pcbnew/exporters/export_d356.cpp:373
 msgid "Export D-356 Test File"
 msgstr "Export Fichier de Test D-356"
@@ -33716,14 +33730,9 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: pcbnew/zones_by_polygon.cpp:91 pcbnew/zones_by_polygon.cpp:147
-msgid "Modify zone properties"
-msgstr "Modifier les propriétés de la zone"
-
-#: pcbnew/zones_by_polygon.cpp:137
-#, c-format
-msgid "Refill %d Zones"
-msgstr "Remplissage %d Zones"
+#: plugins/3d/vrml/vrml.cpp:219
+msgid "[INFO] load failed: input line too long\n"
+msgstr ""
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
@@ -34010,10 +34019,6 @@ msgstr "Remplissage %d Zones"
 
 #~ msgid "symbols"
 #~ msgstr "symboles"
-
-#, fuzzy, c-format
-#~ msgid "Error code: %d"
-#~ msgstr "Erreur: "
 
 #, c-format
 #~ msgid "%s footprint \"%s\" (from \"%s\") to \"%s\""
