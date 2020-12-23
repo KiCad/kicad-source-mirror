@@ -404,7 +404,7 @@ bool KEEP_TOPOLOGY_CONSTRAINT::Check( int aVertex1, int aVertex2, const LINE* aO
     auto bb = encPoly.BBox();
     std::vector<JOINT*> joints;
 
-    int cnt = m_world->QueryJoints( bb, joints, aOriginLine->Layers().Start(), ITEM::SOLID_T );
+    int cnt = m_world->QueryJoints( bb, joints, aOriginLine->Layers(), ITEM::SOLID_T );
 
     if( !cnt )
         return true;

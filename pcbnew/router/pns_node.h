@@ -233,8 +233,8 @@ public:
 
     int QueryJoints( const BOX2I&         aBox,
                      std::vector<JOINT*>& aJoints,
-                     int                  aLayerMask = -1,
-                     int                  aKindMask = ITEM::ANY_T);
+                     LAYER_RANGE          aLayerMask = LAYER_RANGE::All(),
+                     int                  aKindMask = ITEM::ANY_T );
 
     int QueryColliding( const ITEM* aItem, OBSTACLE_VISITOR& aVisitor );
 

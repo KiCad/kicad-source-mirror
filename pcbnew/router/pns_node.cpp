@@ -1417,7 +1417,7 @@ ARC* NODE::findRedundantArc( ARC* aArc )
 }
 
 
-int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, int aLayerMask,
+int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, LAYER_RANGE aLayerMask,
                        int aKindMask )
 {
     int n = 0;
@@ -1426,7 +1426,7 @@ int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, int aLay
 
     for( JOINT_MAP::value_type& j : m_joints )
     {
-        if( j.second.Layer() != aLayerMask )
+        if( !j.second.Layers().Overlaps( aLayerMask ) )
             continue;
 
         if( aBox.Contains( j.second.Pos() ) && j.second.LinkCount( aKindMask ) )
@@ -1441,7 +1441,7 @@ int NODE::QueryJoints( const BOX2I& aBox, std::vector<JOINT*>& aJoints, int aLay
 
     for( JOINT_MAP::value_type& j : m_root->m_joints )
     {
-        if( !Overrides( &j.second ) && j.second.Layer() == aLayerMask )
+        if( !Overrides( &j.second ) && j.second.Layers().Overlaps( aLayerMask ) )
         {
             if( aBox.Contains( j.second.Pos() ) && j.second.LinkCount( aKindMask ) )
             {

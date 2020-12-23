@@ -91,18 +91,17 @@ bool COMPONENT_DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
 
         std::vector<JOINT*> extraJoints;
 
-        if( m_world->QueryJoints( solid->Hull().BBox(), extraJoints, solid->Layer(),
-                                  ITEM::SEGMENT_T | ITEM::ARC_T ) )
-        {
-            for( JOINT* extraJoint : extraJoints )
-            {
-                if( extraJoint->Net() == jt->Net() && extraJoint->LinkCount() == 1 )
-                {
-                    LINKED_ITEM* li = static_cast<LINKED_ITEM*>( extraJoint->LinkList()[0].item );
+        m_world->QueryJoints( solid->Hull().BBox(), extraJoints, solid->Layers(),
+                              ITEM::SEGMENT_T | ITEM::ARC_T );
 
-                    if( li->Collide( solid, 0, false, nullptr, nullptr, false ) )
-                        addLinked( solid, li, extraJoint->Pos() - solid->Pos() );
-                }
+        for( JOINT* extraJoint : extraJoints )
+        {
+            if( extraJoint->Net() == jt->Net() && extraJoint->LinkCount() == 1 )
+            {
+                LINKED_ITEM* li = static_cast<LINKED_ITEM*>( extraJoint->LinkList()[0].item );
+
+                if( li->Collide( solid, 0, false, nullptr, nullptr, false ) )
+                    addLinked( solid, li, extraJoint->Pos() - solid->Pos() );
             }
         }
     }
