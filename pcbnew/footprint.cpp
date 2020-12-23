@@ -1803,10 +1803,14 @@ void FOOTPRINT::BuildPolyCourtyards( OUTLINE_ERROR_HANDLER* aErrorHandler )
 
     constexpr int errorMax = Millimeter2iu( 0.02 ); /* error max for polygonization */
 
-    if( !ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, errorMax, aErrorHandler ) )
+    if( ConvertOutlineToPolygon( list_front, m_poly_courtyard_front, errorMax, aErrorHandler ) )
+        m_poly_courtyard_front.CacheTriangulation( false );
+    else
         SetFlags( MALFORMED_F_COURTYARD );
 
-    if( !ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, errorMax, aErrorHandler ) )
+    if( ConvertOutlineToPolygon( list_back, m_poly_courtyard_back, errorMax, aErrorHandler ) )
+        m_poly_courtyard_back.CacheTriangulation( false );
+    else
         SetFlags( MALFORMED_B_COURTYARD );
 }
 

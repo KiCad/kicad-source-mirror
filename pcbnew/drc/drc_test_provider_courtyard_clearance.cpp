@@ -68,7 +68,7 @@ public:
 private:
     void testFootprintCourtyardDefinitions();
 
-    void testOverlappingComponentCourtyards();
+    void testCourtyardClearances();
 };
 
 
@@ -123,7 +123,7 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testFootprintCourtyardDefinitions()
 }
 
 
-void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
+void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
@@ -147,52 +147,74 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
         if( footprintFront.OutlineCount() == 0 && footprintBack.OutlineCount() == 0 )
             continue; // No courtyards defined
 
+        BOX2I frontBBox = footprintFront.BBoxFromCaches();
+        BOX2I backBBox = footprintBack.BBoxFromCaches();
+
+        frontBBox.Inflate( m_largestClearance );
+        backBBox.Inflate( m_largestClearance );
+
         for( auto it2 = it1 + 1; it2 != m_board->Footprints().end(); it2++ )
         {
             FOOTPRINT*      test = *it2;
             SHAPE_POLY_SET& testFront = test->GetPolyCourtyardFront();
             SHAPE_POLY_SET& testBack = test->GetPolyCourtyardBack();
-            SHAPE_POLY_SET  intersection;
-            bool            overlap = false;
-            wxPoint         pos;
+            DRC_CONSTRAINT  constraint;
+            int             clearance;
+            int             actual;
+            VECTOR2I        pos;
 
             if( footprintFront.OutlineCount() > 0 && testFront.OutlineCount() > 0
-                && footprintFront.BBoxFromCaches().Intersects( testFront.BBoxFromCaches() ) )
+                    && frontBBox.Intersects( testFront.BBoxFromCaches() ) )
             {
-                intersection.RemoveAllContours();
-                intersection.Append( footprintFront );
+                constraint = m_drcEngine->EvalRulesForItems( COURTYARD_CLEARANCE_CONSTRAINT,
+                                                             footprint, test, F_Cu );
+                clearance = constraint.GetValue().Min();
 
-                // Build the common area between footprint and the test:
-                intersection.BooleanIntersection( testFront, SHAPE_POLY_SET::PM_FAST );
-
-                // If the intersection exists then they overlap
-                if( intersection.OutlineCount() > 0 )
+                if( footprintFront.Collide( &testFront, clearance, &actual, &pos ) )
                 {
-                    overlap = true;
-                    pos = (wxPoint) intersection.CVertex( 0, 0, -1 );
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
+
+                    if( clearance > 0 )
+                    {
+                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), clearance ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetViolatingRule( constraint.GetParentRule() );
+                    }
+
+                    drce->SetItems( footprint, test );
+                    reportViolation( drce, (wxPoint) pos );
                 }
             }
 
             if( footprintBack.OutlineCount() > 0 && testBack.OutlineCount() > 0
-                && footprintBack.BBoxFromCaches().Intersects( testBack.BBoxFromCaches() ) )
+                    && backBBox.Intersects( testBack.BBoxFromCaches() ) )
             {
-                intersection.RemoveAllContours();
-                intersection.Append( footprintBack );
+                constraint = m_drcEngine->EvalRulesForItems( COURTYARD_CLEARANCE_CONSTRAINT,
+                                                             footprint, test, B_Cu );
+                clearance = constraint.GetValue().Min();
 
-                intersection.BooleanIntersection( testBack, SHAPE_POLY_SET::PM_FAST );
-
-                if( intersection.OutlineCount() > 0 )
+                if( footprintBack.Collide( &testBack, clearance, &actual, &pos ) )
                 {
-                    overlap = true;
-                    pos = (wxPoint) intersection.CVertex( 0, 0, -1 );
-                }
-            }
+                    std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
 
-            if( overlap )
-            {
-                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_OVERLAPPING_FOOTPRINTS );
-                drcItem->SetItems( footprint, test );
-                reportViolation( drcItem, pos );
+                    if( clearance > 0 )
+                    {
+                        m_msg.Printf( _( "(%s clearance %s; actual %s)" ),
+                                      constraint.GetName(),
+                                      MessageTextFromValue( userUnits(), clearance ),
+                                      MessageTextFromValue( userUnits(), actual ) );
+
+                        drce->SetErrorMessage( drce->GetErrorText() + wxS( " " ) + m_msg );
+                        drce->SetViolatingRule( constraint.GetParentRule() );
+                    }
+
+                    drce->SetItems( footprint, test );
+                    reportViolation( drce, (wxPoint) pos );
+                }
             }
         }
     }
@@ -202,14 +224,16 @@ void DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testOverlappingComponentCourtyards()
 bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::Run()
 {
     m_board = m_drcEngine->GetBoard();
+    DRC_CONSTRAINT constraint;
 
-    // fixme: don't use polygon intersection but distance for clearance tests
-    //m_largestClearance = 0;
-    //ReportAux( "Worst courtyard clearance : %d nm", m_largestClearance );
+    if( m_drcEngine->QueryWorstConstraint( COURTYARD_CLEARANCE_CONSTRAINT, constraint ) )
+        m_largestClearance = constraint.GetValue().Min();
+
+    reportAux( "Worst courtyard clearance : %d nm", m_largestClearance );
 
     testFootprintCourtyardDefinitions();
 
-    testOverlappingComponentCourtyards();
+    testCourtyardClearances();
 
     return true;
 }
