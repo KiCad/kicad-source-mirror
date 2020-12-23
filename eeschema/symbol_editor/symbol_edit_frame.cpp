@@ -273,7 +273,7 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings()
+COLOR_SETTINGS* SYMBOL_EDIT_FRAME::GetColorSettings() const
 {
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
 

@@ -151,7 +151,7 @@ public:
     virtual void SetDrawBgColor( COLOR4D aColor) { m_drawBgColor= aColor ; }
 
     /// Returns a pointer to the active color theme settings
-    virtual COLOR_SETTINGS* GetColorSettings();
+    virtual COLOR_SETTINGS* GetColorSettings() const;
 
     bool ShowPageLimits() const { return m_showPageLimits; }
     void SetShowPageLimits( bool aShow ) { m_showPageLimits = aShow; }

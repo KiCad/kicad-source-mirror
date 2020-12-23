@@ -160,7 +160,7 @@ public:
      *
      * @return a pointer to the active COLOR_SETTINGS.
      */
-    virtual COLOR_SETTINGS* GetColorSettings() override
+    virtual COLOR_SETTINGS* GetColorSettings() const override
     {
         wxFAIL_MSG( "Color settings requested for a PCB_BASE_FRAME that does not override!" );
         return nullptr;
@@ -365,9 +365,9 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    PCBNEW_SETTINGS* GetPcbNewSettings();
+    PCBNEW_SETTINGS* GetPcbNewSettings() const;
 
-    FOOTPRINT_EDITOR_SETTINGS* GetFootprintEditorSettings();
+    FOOTPRINT_EDITOR_SETTINGS* GetFootprintEditorSettings() const;
 
     virtual MAGNETIC_SETTINGS* GetMagneticItemsSettings();
 

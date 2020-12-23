@@ -233,12 +233,12 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    SYMBOL_EDITOR_SETTINGS* GetSettings()
+    SYMBOL_EDITOR_SETTINGS* GetSettings() const
     {
         return m_settings;
     }
 
-    COLOR_SETTINGS* GetColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() const override;
 
     /**
      * Trigger the wxCloseEvent, which is handled by the function given to EVT_CLOSE() macro:

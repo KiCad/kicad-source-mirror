@@ -793,7 +793,7 @@ WINDOW_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* a
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings()
+COLOR_SETTINGS* FOOTPRINT_VIEWER_FRAME::GetColorSettings() const
 {
     auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 

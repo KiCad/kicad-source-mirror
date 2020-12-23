@@ -676,13 +676,13 @@ void PCB_BASE_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-PCBNEW_SETTINGS* PCB_BASE_FRAME::GetPcbNewSettings()
+PCBNEW_SETTINGS* PCB_BASE_FRAME::GetPcbNewSettings() const
 {
     return Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 }
 
 
-FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings()
+FOOTPRINT_EDITOR_SETTINGS* PCB_BASE_FRAME::GetFootprintEditorSettings() const
 {
     return Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 }

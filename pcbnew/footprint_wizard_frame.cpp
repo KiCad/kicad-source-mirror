@@ -282,10 +282,11 @@ void FOOTPRINT_WIZARD_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetColorSettings()
+COLOR_SETTINGS* FOOTPRINT_WIZARD_FRAME::GetColorSettings() const
 {
-    return Pgm().GetSettingsManager().GetColorSettings(
-            GetFootprintEditorSettings()->m_ColorTheme );
+    wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
+
+    return Pgm().GetSettingsManager().GetColorSettings( currentTheme );
 }
 
 

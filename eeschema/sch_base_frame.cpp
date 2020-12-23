@@ -417,13 +417,23 @@ void SCH_BASE_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 }
 
 
-COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings()
+COLOR_SETTINGS* SCH_BASE_FRAME::GetColorSettings() const
 {
     if( !m_colorSettings )
     {
-        EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
-        m_colorSettings = Pgm().GetSettingsManager().GetColorSettings( cfg->m_ColorTheme );
+        SETTINGS_MANAGER&  settingsManager = Pgm().GetSettingsManager();
+        EESCHEMA_SETTINGS* cfg = settingsManager.GetAppSettings<EESCHEMA_SETTINGS>();
+        COLOR_SETTINGS*    colorSettings = settingsManager.GetColorSettings( cfg->m_ColorTheme );
+
+        const_cast<SCH_BASE_FRAME*>( this )->m_colorSettings = colorSettings;
     }
 
     return m_colorSettings;
 }
+
+
+COLOR4D SCH_BASE_FRAME::GetDrawBgColor() const
+{
+    return GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
+}
+

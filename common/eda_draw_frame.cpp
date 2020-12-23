@@ -943,10 +943,14 @@ void EDA_DRAW_FRAME::RecreateToolbars()
 }
 
 
-COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings()
+COLOR_SETTINGS* EDA_DRAW_FRAME::GetColorSettings() const
 {
     if( !m_colorSettings )
-        m_colorSettings = Pgm().GetSettingsManager().GetColorSettings();
+    {
+        COLOR_SETTINGS* colorSettings = Pgm().GetSettingsManager().GetColorSettings();
+
+        const_cast<EDA_DRAW_FRAME*>( this )->m_colorSettings = colorSettings;
+    }
 
     return m_colorSettings;
 }

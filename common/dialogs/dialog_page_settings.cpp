@@ -641,23 +641,27 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         }
 
         // Draw layout preview.
-        wxString emptyString;
-        GRResetPenAndBrush( &memDC );
+        KIGFX::WS_RENDER_SETTINGS renderSettings;
+        COLOR_SETTINGS*           colorSettings = m_parent->GetColorSettings();
+        COLOR4D                   bgColor = m_parent->GetDrawBgColor();
+        wxString                  emptyString;
 
         WS_DATA_MODEL::SetAltInstance( m_pagelayout );
-        KIGFX::WS_RENDER_SETTINGS renderSettings;
-        renderSettings.SetDefaultPenWidth( 1 );
-        renderSettings.SetLayerColor( LAYER_WORKSHEET, COLOR4D( RED ) );
-        renderSettings.SetPrintDC( &memDC );
+        {
+            GRResetPenAndBrush( &memDC );
+            renderSettings.SetDefaultPenWidth( 1 );
+            renderSettings.LoadColors( colorSettings );
+            renderSettings.SetPrintDC( &memDC );
 
-        GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, WHITE, WHITE );
+            GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor, bgColor );
 
-        PrintPageLayout( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
-                         m_screen->GetPageCount(), m_screen->GetPageNumber(), 1, &Prj(),
-                         wxEmptyString, m_screen->GetVirtualPageNumber() ==  1 );
+            PrintPageLayout( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
+                             m_screen->GetPageCount(), m_screen->GetPageNumber(), 1, &Prj(),
+                             wxEmptyString, m_screen->GetVirtualPageNumber() ==  1 );
 
-        memDC.SelectObject( wxNullBitmap );
-        m_PageLayoutExampleBitmap->SetBitmap( *m_pageBitmap );
+            memDC.SelectObject( wxNullBitmap );
+            m_PageLayoutExampleBitmap->SetBitmap( *m_pageBitmap );
+        }
         WS_DATA_MODEL::SetAltInstance( NULL );
 
         // Refresh the dialog.

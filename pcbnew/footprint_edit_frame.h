@@ -86,7 +86,7 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    COLOR_SETTINGS* GetColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() const override;
 
     const BOX2I GetDocumentExtents( bool aIncludeAllVisible = true ) const override;
 

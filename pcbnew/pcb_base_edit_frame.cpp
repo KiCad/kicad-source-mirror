@@ -205,7 +205,7 @@ void PCB_BASE_EDIT_FRAME::SetObjectVisible( GAL_LAYER_ID aLayer, bool aVisible )
 }
 
 
-COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings()
+COLOR_SETTINGS* PCB_BASE_EDIT_FRAME::GetColorSettings() const
 {
     return Pgm().GetSettingsManager().GetColorSettings( GetPcbNewSettings()->m_ColorTheme );
 }

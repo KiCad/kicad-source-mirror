@@ -123,6 +123,8 @@ public:
         return *m_defaults;
     }
 
+    COLOR4D GetDrawBgColor() const override;
+
     /**
      * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
      */
@@ -255,7 +257,7 @@ public:
      */
     COLOR4D GetLayerColor( SCH_LAYER_ID aLayer );
 
-    COLOR_SETTINGS* GetColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() const override;
 
 protected:
     /**

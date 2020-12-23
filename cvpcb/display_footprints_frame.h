@@ -79,7 +79,7 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
 
-    COLOR_SETTINGS* GetColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() const override;
 
     /**
      * Function GetGridColor() , virtual

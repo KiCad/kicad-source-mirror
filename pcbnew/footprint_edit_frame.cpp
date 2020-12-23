@@ -548,7 +548,7 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings()
+COLOR_SETTINGS* FOOTPRINT_EDIT_FRAME::GetColorSettings() const
 {
     wxString currentTheme = GetFootprintEditorSettings()->m_ColorTheme;
     return Pgm().GetSettingsManager().GetColorSettings( currentTheme );

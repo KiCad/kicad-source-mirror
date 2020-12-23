@@ -89,7 +89,7 @@ public:
      */
     void PythonPluginsReload();
 
-    COLOR_SETTINGS* GetColorSettings() override;
+    COLOR_SETTINGS* GetColorSettings() const override;
 
 private:
 

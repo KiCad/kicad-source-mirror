@@ -505,7 +505,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 }
 
 
-COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings()
+COLOR_SETTINGS* DISPLAY_FOOTPRINTS_FRAME::GetColorSettings() const
 {
     auto* settings = Pgm().GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>();
 
