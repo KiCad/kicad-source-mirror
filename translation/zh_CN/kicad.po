@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-05 01:29+0000\n"
+"PO-Revision-Date: 2020-12-23 16:34+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3345,7 +3345,7 @@ msgstr "应用筛选"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:151
 msgid "Assign Net Class"
-msgstr "分配网络类"
+msgstr "关联网络类"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:156
 msgid "New net class:"
@@ -3353,11 +3353,11 @@ msgstr "新网络类："
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:173
 msgid "Assign To Listed Nets"
-msgstr "分配到列表中的网络"
+msgstr "关联到列表中的网络"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:179
 msgid "Assign To Selected Nets"
-msgstr "分配给选择的网络"
+msgstr "关联给选择的网络"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:207
 #: pcbnew/board_connected_item.cpp:163
@@ -6051,7 +6051,7 @@ msgstr "撤销更改"
 
 #: common/widgets/widget_hotkey_list.cpp:384
 msgid "Clear Assigned Hotkey"
-msgstr "清除分配的快捷键"
+msgstr "清除关联的快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:385
 msgid "Restore Default"
@@ -6365,7 +6365,7 @@ msgstr "尝试加载全局封装库表时发生错误"
 
 #: cvpcb/cvpcb_mainframe.cpp:60 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr "分配封装"
+msgstr "关联封装"
 
 #: cvpcb/cvpcb_mainframe.cpp:99 pcbnew/dialogs/panel_fp_lib_table.cpp:1027
 msgid "Footprint Libraries"
@@ -6373,7 +6373,7 @@ msgstr "封装库"
 
 #: cvpcb/cvpcb_mainframe.cpp:103
 msgid "Symbol : Footprint Assignments"
-msgstr "符号：封装分配"
+msgstr "符号：封装关联"
 
 #: cvpcb/cvpcb_mainframe.cpp:106
 msgid "Filtered Footprints"
@@ -6552,11 +6552,11 @@ msgstr "参考"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
 msgid "Schematic assignment"
-msgstr "原理图分配"
+msgstr "原理图关联"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr "元件文件分配"
+msgstr "元件文件关联"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -6565,13 +6565,13 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"原理图网表与符号封装关联文件(.cmp)的封装分配有冲突\n"
+"原理图网表与符号封装关联文件(.cmp)的封装关联有冲突\n"
 "\n"
-"请选择分配。"
+"请选择关联。"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr "封装分配冲突"
+msgstr "封装关联冲突"
 
 #: cvpcb/display_footprints_frame.cpp:68 eeschema/toolbars_lib_view.cpp:111
 #: pcbnew/toolbars_footprint_viewer.cpp:157
@@ -6641,7 +6641,7 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
-"试图转换封装分配时发生下列错误：\n"
+"试图转换封装关联时发生下列错误：\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:181
@@ -6651,7 +6651,7 @@ msgid ""
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
 "\n"
-"如果你希望下次在 Pcbnew 中导入网表时正确更新它们，则需要手动重新分配它们。"
+"如果你希望下次在 Pcbnew 中导入网表时正确更新它们，则需要手动重新关联它们。"
 
 #: cvpcb/readwrite_dlgs.cpp:298
 msgid "Schematic saved"
@@ -6677,8 +6677,7 @@ msgstr "管理封装关联文件"
 msgid ""
 "Configure footprint association file (.equ) list.  These files are used to "
 "automatically assign footprint names from symbol values."
-msgstr ""
-"配置占用空间关联文件 (.equ) 列表。 这些文件用于从符号值自动分配封装名称。"
+msgstr "配置占用空间关联文件 (.equ) 列表。 这些文件用于从符号值自动关联封装名称。"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save to Schematic"
@@ -6985,7 +6984,7 @@ msgstr "生成"
 
 #: eeschema/dialogs/dialog_bom.cpp:517 eeschema/dialogs/dialog_bom_base.cpp:43
 msgid "Generator nickname:"
-msgstr "生成昵称："
+msgstr "生成别称："
 
 #: eeschema/dialogs/dialog_bom.cpp:517
 msgid "Add Generator"
@@ -6994,7 +6993,7 @@ msgstr "添加生成器"
 #: eeschema/dialogs/dialog_bom.cpp:526
 #, c-format
 msgid "Nickname \"%s\" already in use."
-msgstr "昵称 \"%s\" 已经被占用了。"
+msgstr "别名 \"%s\" 已经被占用了。"
 
 #: eeschema/dialogs/dialog_bom.cpp:561 eeschema/dialogs/dialog_netlist.cpp:760
 msgid "Generator files:"
@@ -8830,7 +8829,7 @@ msgstr ""
 "设置此选项会使有问题的符号出现在\n"
 "“添加电源端口”对话框。 它将锁定值文本，防止\n"
 "在 Eeschema 中编辑。 该符号将不包括在\n"
-"BOM 中，并且无法分配封装。"
+"BOM 中，并且无法关联封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -10475,7 +10474,7 @@ msgstr "基名称"
 #: eeschema/dialogs/dialog_symbol_properties.cpp:136
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:266
 msgid "Alternate Assignment"
-msgstr "备用分配"
+msgstr "备用关联"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:126
 msgid "Unit:"
@@ -10596,7 +10595,7 @@ msgstr "基引脚名称"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:291
 msgid "Alternate Pin Assignments"
-msgstr "备用引脚分配"
+msgstr "备用引脚关联"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:301
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:521
@@ -10756,7 +10755,7 @@ msgstr "更新 PCB 编辑器中已更改的符号的位号。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
-msgstr "封装分配"
+msgstr "封装关联"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:60
 msgid ""
@@ -11395,7 +11394,7 @@ msgstr "总线别名 %s 在 %s 和 %s 上的定义冲突"
 #: eeschema/erc.cpp:377
 #, c-format
 msgid "Different footprints assigned to %s and %s"
-msgstr "分配给 %s 和 %s 的封装不同"
+msgstr "关联给 %s 和 %s 的封装不同"
 
 #: eeschema/erc.cpp:426
 msgid "Pins with \"no connection\" type are connected"
@@ -12376,7 +12375,7 @@ msgstr "从网络类"
 
 #: eeschema/sch_line.cpp:844 eeschema/sch_text.cpp:710
 msgid "Assigned Netclass"
-msgstr "分配的网络类"
+msgstr "关联的网络类"
 
 #: eeschema/sch_marker.cpp:165
 msgid "Electronics Rule Check Error"
@@ -14019,7 +14018,7 @@ msgstr "符号 \"%s\" 已经在库 \"%s\" 中存在"
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1114
 msgid "Nickname"
-msgstr "昵称"
+msgstr "别名"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:644
 msgid "Save Copy of Symbol"
@@ -14786,7 +14785,7 @@ msgstr "更改符号..."
 
 #: eeschema/tools/ee_actions.cpp:407
 msgid "Assign different symbols from the library"
-msgstr "从库中分配不同的符号"
+msgstr "从库中关联不同的符号"
 
 #: eeschema/tools/ee_actions.cpp:412
 msgid "Update Symbols from Library..."
@@ -14798,7 +14797,7 @@ msgstr "更新符号以包含库中的任何更改"
 
 #: eeschema/tools/ee_actions.cpp:419
 msgid "Assign a different symbol from the library"
-msgstr "从库中分配不同的符号"
+msgstr "从库中关联不同的符号"
 
 #: eeschema/tools/ee_actions.cpp:424
 msgid "Update Symbol..."
@@ -14810,11 +14809,11 @@ msgstr "更新符号以包含库中的任何更改"
 
 #: eeschema/tools/ee_actions.cpp:430
 msgid "Assign Netclass..."
-msgstr "分配网络类..."
+msgstr "关联网络类..."
 
 #: eeschema/tools/ee_actions.cpp:430
 msgid "Assign a netclass to the net of the selected wire"
-msgstr "将网络类分配给选定导线的网络"
+msgstr "将网络类关联给选定导线的网络"
 
 #: eeschema/tools/ee_actions.cpp:435
 msgid "DeMorgan Conversion"
@@ -14971,7 +14970,7 @@ msgstr "编辑原理图和库符号之间的链接"
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Assign Footprints..."
-msgstr "分配封装..."
+msgstr "关联封装..."
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Run Cvpcb"
@@ -14979,11 +14978,11 @@ msgstr "运行 Cvpcb"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Import Footprint Assignments..."
-msgstr "导入封装分配..."
+msgstr "导入封装关联..."
 
 #: eeschema/tools/ee_actions.cpp:554
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
-msgstr "从 Pcbnew 创建的 .cmp 文件中导入符号封装分配"
+msgstr "从 Pcbnew 创建的 .cmp 文件中导入符号封装关联"
 
 #: eeschema/tools/ee_actions.cpp:559
 msgid "Annotate Schematic..."
@@ -15418,7 +15417,7 @@ msgstr "错误：在当前图框中找到重复的子图框名称。"
 
 #: eeschema/tools/sch_editor_control.cpp:916
 msgid "Net must be labeled to assign a netclass."
-msgstr "网络必须标记才能分配网络类。"
+msgstr "网络必须标记才能关联网络类。"
 
 #: eeschema/tools/sch_editor_control.cpp:928
 msgid "Netclasses"
@@ -15426,7 +15425,7 @@ msgstr "网络类"
 
 #: eeschema/tools/sch_editor_control.cpp:941
 msgid "Assign Netclass"
-msgstr "分配网络类"
+msgstr "关联网络类"
 
 #: eeschema/tools/sch_editor_control.cpp:942
 msgid "Select netclass:"
@@ -22080,7 +22079,7 @@ msgstr ""
 msgid ""
 "The library ID and footprint ID currently assigned.  Use “Change Footprint…” "
 "to assign a different footprint."
-msgstr "当前分配的库 ID 和封装 ID。使用“更改封装…”来分配不同的封装。"
+msgstr "当前关联的库 ID 和封装 ID。使用“更改封装…”来关联不同的封装。"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:150
 msgid "All footprint generator scripts were loaded"
@@ -23109,9 +23108,7 @@ msgid ""
 "Select whether to update footprint references to match their currently-"
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
-msgstr ""
-"选择是否更新封装参考以匹配其当前分配的符号，或者重新分配封装到符号以匹配它们"
-"当前参考。"
+msgstr "选择是否更新封装参考以匹配其当前关联的符号，或者重新关联封装到符号以匹配它们当前参考。"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:54
 msgid "Replace footprints with those specified in netlist"
@@ -24711,7 +24708,7 @@ msgid ""
 "This will change the net assigned to %s pad %s to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"将分配给%s焊盘%s的网络更改为%s。\n"
+"将关联给 %s 焊盘 %s 的网络更改为 %s。\n"
 "是否要继续？"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:339
@@ -24720,7 +24717,7 @@ msgid ""
 "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"将分配给%s焊盘%s 和 %s焊盘%s的网络更改为%s。\n"
+"将关联给 %s 焊盘 %s 和 %s 焊盘 %s 的网络更改为 %s。\n"
 "是否要继续？"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:349
@@ -24729,7 +24726,7 @@ msgid ""
 "This will change the net assigned to %lu connected pads to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"将分配给 %lu 个焊盘的网络更改为 %s。\n"
+"将关联给 %lu 个焊盘的网络更改为 %s。\n"
 "是否要继续？"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:356
@@ -24885,9 +24882,7 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr ""
-"通常应更改线路板上的封装，以匹配原理图中所做的封装分配更改。仅当您不想更改线"
-"路板上的现有封装外形时，才取消选中此选项。"
+msgstr "通常应更改线路板上的封装，以匹配原理图中所做的封装关联更改。仅当您不想更改线路板上的现有封装时，才取消选中此选项。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:47
 msgid ""
@@ -25122,7 +25117,7 @@ msgstr "编辑选项"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:548
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:588
 msgid "Library Nickname Error"
-msgstr "库昵称错误"
+msgstr "库别名错误"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
 #, c-format
@@ -27941,7 +27936,7 @@ msgstr "在包中"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:146
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "无法添加 %s (没有分配封装)。"
+msgstr "无法添加 %s (没有关联封装)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:158
 #, c-format
@@ -27956,7 +27951,7 @@ msgstr "添加 %s (封装 \"%s\")。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:203
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr "无法更新 %s (没有分配封装)。"
+msgstr "无法更新 %s (没有关联封装)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:215
 #, c-format
@@ -28967,9 +28962,8 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"CADSTAR设计包含分配了“网络类”的网络。KiCad 没有与 CADSTAR 的网络类等效的元"
-"素，因此没有导入这些元素。注：KiCad 的“网络类”版本更接近 CADSTAR 的“网络路线"
-"编码”(已为所有网络导入)。"
+"CADSTAR 设计包含关联了“网络类”的网络。KiCad 没有与 CADSTAR 的网络类等效的元素，因此没有导入这些元素。注：KiCad 的“网络类”"
+"版本更接近 CADSTAR 的“网络路线编码”(已为所有网络导入)。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2746
 msgid ""
@@ -28978,8 +28972,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"CADSTAR 设计包含分配了“间隔类”的网络。KiCad 没有与 CADSTAR 的间隔类等效的元"
-"素，因此未导入这些元素。请检查设计规则，因为敷铜将受此影响。"
+"CADSTAR 设计包含关联了“间隔类”的网络。KiCad 没有与 CADSTAR "
+"的间隔类等效的元素，因此未导入这些元素。请检查设计规则，因为敷铜将受此影响。"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:947
 #, c-format
@@ -30521,7 +30515,7 @@ msgstr "移除或重置通孔焊盘和通孔上未连接的内层"
 
 #: pcbnew/tools/pcb_actions.cpp:412
 msgid "Assign a different footprint from the library"
-msgstr "从库中分配不同的封装"
+msgstr "从库中关联不同的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:417
 msgid "Change Footprints..."
@@ -30529,7 +30523,7 @@ msgstr "保存封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:417
 msgid "Assign different footprints from the library"
-msgstr "从库中分配不同的封装"
+msgstr "从库中关联不同的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:422
 msgid "Swap Layers..."
