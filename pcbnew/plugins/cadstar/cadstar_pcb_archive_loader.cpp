@@ -1136,64 +1136,210 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
         case DIMENSION::TYPE::LINEARDIM:
             switch( csDim.Subtype )
             {
+            case DIMENSION::SUBTYPE::ANGLED:
+                wxLogWarning( wxString::Format( _( "Dimension ID %s is an angled dimension, which "
+                                                   "has no KiCad equivalent. An aligned dimension "
+                                                   "was loaded instead." ),
+                                                csDim.ID ) );
+                KI_FALLTHROUGH;
             case DIMENSION::SUBTYPE::DIRECT:
             case DIMENSION::SUBTYPE::ORTHOGONAL:
             {
-                ::ALIGNED_DIMENSION* dimension = new ::ALIGNED_DIMENSION( mBoard );
-                TEXTCODE             dimText   = getTextCode( csDim.Text.TextCodeID );
-                mBoard->Add( dimension, ADD_MODE::APPEND );
+                if( csDim.Line.Style == DIMENSION::LINE::STYLE::EXTERNAL )
+                {
+                    wxLogWarning( wxString::Format(
+                            _( "Dimension ID %s has 'External' style in CADSTAR. External "
+                               "dimension styles are not yet supported in KiCad. The dimension "
+                               "object was imported with an internal dimension style instead." ),
+                            csDim.ID ) );
+                }
 
-                dimension->SetLayer( getKiCadLayer( csDim.LayerID ) );
-                dimension->SetPrecision( csDim.Precision );
+                ::ALIGNED_DIMENSION* dimension = nullptr;
+
+                if( csDim.Subtype == DIMENSION::SUBTYPE::ORTHOGONAL )
+                {
+                    dimension = new ::ORTHOGONAL_DIMENSION( mBoard );
+                    ORTHOGONAL_DIMENSION* orDim = static_cast<ORTHOGONAL_DIMENSION*>( dimension );
+
+                    if( csDim.ExtensionLineParams.Start.x == csDim.Line.Start.x )
+                        orDim->SetOrientation( ORTHOGONAL_DIMENSION::DIR::HORIZONTAL );
+                    else
+                        orDim->SetOrientation( ORTHOGONAL_DIMENSION::DIR::VERTICAL );
+                }
+                else
+                {
+                    dimension = new ::ALIGNED_DIMENSION( mBoard );
+                }
+
+                mBoard->Add( dimension, ADD_MODE::APPEND );
+                applyDimensionSettings( csDim, dimension );
+                
+                dimension->SetExtensionHeight(
+                        getKiCadLength( csDim.ExtensionLineParams.Overshoot ) );
+
+                // Calculate height:
+                wxPoint  crossbarStart = getKiCadPoint( csDim.Line.Start );
+                wxPoint  crossbarEnd = getKiCadPoint( csDim.Line.End );
+                VECTOR2I crossbarVector = crossbarEnd - crossbarStart;
+                VECTOR2I heightVector = crossbarStart - dimension->GetStart();
+                double   height = 0.0;
+
+                if( csDim.Subtype == DIMENSION::SUBTYPE::ORTHOGONAL )
+                {
+                    if( csDim.ExtensionLineParams.Start.x == csDim.Line.Start.x )
+                        height = heightVector.y;
+                    else
+                        height = heightVector.x;
+                }
+                else
+                {
+                    double angle = crossbarVector.Angle() + ( M_PI / 2 );
+                    height = heightVector.x * cos( angle ) + heightVector.y * sin( angle );
+                }
+
+                dimension->SetHeight( height );
+            }
+            break;
+
+            default:
+                // Radius and diameter dimensions are LEADERDIM (even if not actually leader)
+                // Angular dimensions are always ANGLEDIM
+                wxLogError( wxString::Format(
+                        _( "Unexpected Dimension type (ID %s). This was not imported" ),
+                        csDim.ID ) );
+                continue;
+            }
+            break;
+
+        case DIMENSION::TYPE::LEADERDIM:
+            //TODO: update import when KiCad supports radius and diameter dimensions
+
+            if( csDim.Line.Style == DIMENSION::LINE::STYLE::INTERNAL )
+            {
+                // "internal" is a simple double sided arrow from start to end (no extension lines)
+                ::ALIGNED_DIMENSION* dimension = new ::ALIGNED_DIMENSION( mBoard );
+                mBoard->Add( dimension, ADD_MODE::APPEND );
+                applyDimensionSettings( csDim, dimension );
+
+                // Lets set again start/end:
                 dimension->SetStart( getKiCadPoint( csDim.Line.Start ) );
                 dimension->SetEnd( getKiCadPoint( csDim.Line.End ) );
-                dimension->Text().SetTextThickness( getKiCadLength( dimText.LineWidth ) );
-                dimension->Text().SetTextSize( wxSize(
-                        getKiCadLength( dimText.Width ), getKiCadLength( dimText.Height ) ) );
 
-                if( csDim.LinearUnits == UNITS::DESIGN )
-                {
-                    csDim.LinearUnits = Assignments.Technology.Units;
-                }
-
-                switch( csDim.LinearUnits )
-                {
-                case UNITS::METER:
-                case UNITS::CENTIMETER:
-                case UNITS::MM:
-                case UNITS::MICROMETRE:
-                    dimension->SetUnits( EDA_UNITS::MILLIMETRES );
-                    break;
-
-                case UNITS::INCH:
-                    dimension->SetUnits( EDA_UNITS::INCHES );
-                    break;
-
-                case UNITS::THOU:
-                    dimension->SetUnits( EDA_UNITS::MILS );
-                    break;
-
-                case UNITS::DESIGN:
-                    wxFAIL_MSG( "DESIGN units requested - this should not happen." );
-                    break;
-
-                }
+                // Do not use any extension lines:
+                dimension->SetExtensionOffset( 0 );
+                dimension->SetExtensionHeight( 0 );
+                dimension->SetHeight( 0 );
             }
-                continue;
+            else
+            {
+                // "external" is a "leader" style dimension
+                ::LEADER* leaderDim = new ::LEADER( mBoard );
+                mBoard->Add( leaderDim, ADD_MODE::APPEND );
 
-            default: //all others
-                wxLogError( wxString::Format(
-                        _( "Dimension ID %s has no KiCad equivalent. This was not imported" ),
-                        csDim.ID ) );
-                break;
+                applyDimensionSettings( csDim, leaderDim );
+                leaderDim->SetStart( getKiCadPoint( csDim.Line.End ) );
+
+                /*
+                 * In CADSTAR, the resulting shape orientation of the leader dimension depends on
+                 * on the positions of the #Start (S) and #End (E) points as shown below. In the 
+                 * diagrams below, the leader angle (angRad) is represented by HEV
+                 * 
+                 * Orientation 1: (orientX = -1,  |     Orientation 2: (orientX = 1, 
+                 *                 orientY = 1)   |                     orientY = 1)
+                 *                                |
+                 * --------V                      |               V----------
+                 *          \                     |              / 
+                 *           \                    |             / 
+                 * H         _E/                  |           \E_           H
+                 *                                | 
+                 *                     S          |     S
+                 *                                |
+                 *                               
+                 * Orientation 3: (orientX = -1,  |     Orientation 4: (orientX = 1, 
+                 *                 orientY = -1)  |                     orientY = -1)
+                 *                                |
+                 *                     S          |     S
+                 *             _                  |            _
+                 *  H           E\                |          /E             H
+                 *             /                  |            \
+                 *            /                   |             \
+                 * ----------V                    |              V-----------
+                 *                                |
+                 * 
+                 * Corner cases:
+                 * 
+                 * It is not possible to generate a leader object with start and end point being
+                 * identical. Assume Orientation 2 if start and end points are identical.
+                 * 
+                 * If start and end points are aligned vertically (i.e. S.x == E.x):
+                 * - If E.y > S.y - Orientation 2
+                 * - If E.y < S.y - Orientation 4
+                 * 
+                 * If start and end points are aligned horitontally (i.e. S.y == E.y):
+                 * - If E.x > S.x - Orientation 2
+                 * - If E.x < S.x - Orientation 1
+                 */
+                double  angRad = DEG2RAD( getAngleDegrees( csDim.Line.LeaderAngle ) );
+
+                double orientX = 1;
+                double orientY = 1;
+
+                if( csDim.Line.End.x >= csDim.Line.Start.x )
+                {
+                    if( csDim.Line.End.y >= csDim.Line.Start.y )
+                    {
+                        //Orientation 2
+                        orientX = 1;
+                        orientY = 1;
+                    }
+                    else
+                    {
+                        //Orientation 4
+                        orientX = 1;
+                        orientY = -1;
+                    }
+                }
+                else
+                {
+                    if( csDim.Line.End.y >= csDim.Line.Start.y )
+                    {
+                        //Orientation 1
+                        orientX = -1;
+                        orientY = 1;
+                    }
+                    else
+                    {
+                        //Orientation 3
+                        orientX = -1;
+                        orientY = -1;
+                    }
+                }
+
+                wxPoint endOffset( csDim.Line.LeaderLineLength * cos( angRad ) * orientX,
+                                   csDim.Line.LeaderLineLength * sin( angRad ) * orientY );
+
+                wxPoint endPoint = csDim.Line.End + endOffset;
+                wxPoint txtPoint( endPoint.x + ( csDim.Line.LeaderLineExtensionLength * orientX ),
+                                  endPoint.y );
+
+                leaderDim->SetEnd( getKiCadPoint( endPoint ) );
+                leaderDim->Text().SetTextPos( getKiCadPoint( txtPoint ) );
+                leaderDim->SetText( csDim.Text.Text );
+
+                if( orientX == 1 )
+                    leaderDim->Text().SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+                else
+                    leaderDim->Text().SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
+
+                leaderDim->SetExtensionOffset( 0 );
             }
             break;
 
         case DIMENSION::TYPE::ANGLEDIM:
-        case DIMENSION::TYPE::LEADERDIM:
-        default:
+            //TODO: update import when KiCad supports angular dimensions
             wxLogError( wxString::Format(
-                    _( "Dimension ID %s has no KiCad equivalent. This was not imported" ),
+                    _( "Dimension ID %s is an angular dimension which has no KiCad equivalent. "
+                       "The object was not imported." ),
                     csDim.ID ) );
             break;
         }
@@ -2825,6 +2971,61 @@ void CADSTAR_PCB_ARCHIVE_LOADER::checkAndLogHatchCode( const HATCHCODE_ID& aCads
         }
 
         mHatchcodesTested.insert( aCadstarHatchcodeID );
+    }
+}
+
+
+void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCadstarDim,
+                                                         ::DIMENSION_BASE* aKiCadDim )
+{
+    UNITS dimensionUnits = aCadstarDim.LinearUnits;
+    TEXTCODE txtCode = getTextCode( aCadstarDim.Text.TextCodeID );
+    int correctedHeight = KiROUND( TXT_HEIGHT_RATIO * (double) getKiCadLength( txtCode.Height ) );
+    wxSize   txtSize( getKiCadLength( txtCode.Width ), correctedHeight );
+    LINECODE linecode = Assignments.Codedefs.LineCodes.at( aCadstarDim.Line.LineCodeID );
+
+    aKiCadDim->SetLayer( getKiCadLayer( aCadstarDim.LayerID ) );
+    aKiCadDim->SetPrecision( aCadstarDim.Precision );
+    aKiCadDim->SetStart( getKiCadPoint( aCadstarDim.ExtensionLineParams.Start ) );
+    aKiCadDim->SetEnd( getKiCadPoint( aCadstarDim.ExtensionLineParams.End ) );
+    aKiCadDim->SetExtensionOffset( getKiCadLength( aCadstarDim.ExtensionLineParams.Offset ) );
+    aKiCadDim->SetLineThickness( getKiCadLength( linecode.Width ) );
+    aKiCadDim->Text().SetTextThickness( getKiCadLength( txtCode.LineWidth ) );
+    aKiCadDim->Text().SetTextSize( txtSize );
+
+    if( aCadstarDim.LinearUnits == UNITS::DESIGN )
+    {
+        // For now we will hardcode the units as per the original CADSTAR design.
+        // TODO: update this when KiCad supports design units
+        aKiCadDim->SetPrecision( Assignments.Technology.UnitDisplPrecision );
+        dimensionUnits = Assignments.Technology.Units;
+    }
+
+    switch( dimensionUnits )
+    {
+    case UNITS::METER:
+    case UNITS::CENTIMETER:
+    case UNITS::MICROMETRE:
+        wxLogWarning( wxString::Format( _( "Dimension ID %s uses a type of unit that "
+                                           "is not supported in KiCad. Milimetres were "
+                                           "applied instead." ),
+                                        aCadstarDim.ID ) );
+        KI_FALLTHROUGH;
+    case UNITS::MM: 
+        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::MILLIMETRES );
+        break;
+
+    case UNITS::INCH:
+        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::INCHES );
+        break;
+
+    case UNITS::THOU:
+        aKiCadDim->SetUnitsMode( DIM_UNITS_MODE::MILS );
+        break;
+
+    case UNITS::DESIGN:
+        wxFAIL_MSG( "We should have handled design units before coming here!" );
+        break;
     }
 }
 

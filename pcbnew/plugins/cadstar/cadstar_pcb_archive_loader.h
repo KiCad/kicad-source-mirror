@@ -32,6 +32,7 @@
 #include <set>
 
 class BOARD;
+class DIMENSION_BASE;
 
 class CADSTAR_PCB_ARCHIVE_LOADER : public CADSTAR_PCB_ARCHIVE_PARSER
 {
@@ -147,6 +148,7 @@ private:
     void loadNetTracks( const NET_ID& aCadstarNetID, const NET_PCB::ROUTE& aCadstarRoute );
     void loadNetVia( const NET_ID& aCadstarNetID, const NET_PCB::VIA& aCadstarVia );
     void checkAndLogHatchCode( const HATCHCODE_ID& aCadstarHatchcodeID );
+    void applyDimensionSettings( const DIMENSION& aCadstarDim, ::DIMENSION_BASE* aKiCadDim );
 
     //Helper functions for drawing /loading objects onto screen:
 
