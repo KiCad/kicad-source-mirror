@@ -526,7 +526,7 @@ else()
         CACHE PATH "Location of KiCad binaries." FORCE )
 
     # some paths to single app bundle
-    set( OSX_BUNDLE_MAIN "kicad.app" )
+    set( OSX_BUNDLE_MAIN "KiCad.app" )
     set( OSX_BUNDLE_BIN_DIR "Contents/MacOS" )
     set( OSX_BUNDLE_LIB_DIR "Contents/Frameworks" )
     set( OSX_BUNDLE_KIFACE_DIR "Contents/PlugIns" )
@@ -544,7 +544,7 @@ else()
     set( OSX_BUNDLE_INSTALL_PLUGIN_DIR "${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_KIFACE_DIR}" )
 
     # everything provided with the application bundle goes into
-    # kicad.app/Contents/SharedSupport => accessible via GetDataDir()
+    # KiCad.app/Contents/SharedSupport => accessible via GetDataDir()
     # everything else to the .dmg image
     set( KICAD_DATA ${OSX_BUNDLE_INSTALL_DIR}/${OSX_BUNDLE_SUP_DIR}
         CACHE PATH "Location of KiCad data files." FORCE )
@@ -904,12 +904,12 @@ if( APPLE )
     install( CODE "
             message( STATUS \"Removing existing application bundles...\" )
             # Remove links to standalone apps
-            file( REMOVE ${KICAD_BIN}/bitmap2component.app )
-            file( REMOVE ${KICAD_BIN}/eeschema.app )
-            file( REMOVE ${KICAD_BIN}/gerbview.app )
-            file( REMOVE ${KICAD_BIN}/pcb_calculator.app )
-            file( REMOVE ${KICAD_BIN}/pcbnew.app )
-            file( REMOVE ${KICAD_BIN}/pl_editor.app )
+            file( REMOVE \"${KICAD_BIN}/Bitmap2Component.app\" )
+            file( REMOVE \"${KICAD_BIN}/Eeschema.app\" )
+            file( REMOVE \"${KICAD_BIN}/GerbView.app\" )
+            file( REMOVE \"${KICAD_BIN}/PCB Calculator.app\" )
+            file( REMOVE \"${KICAD_BIN}/Pcbnew.app\" )
+            file( REMOVE \"${KICAD_BIN}/Page Layout Editor.app\" )
             # Remove main bundle
             file( REMOVE_RECURSE ${KICAD_BIN}/${OSX_BUNDLE_MAIN} )
         " COMPONENT Runtime
