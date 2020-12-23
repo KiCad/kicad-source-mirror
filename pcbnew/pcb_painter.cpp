@@ -1436,6 +1436,10 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 {
     if( aLayer == LAYER_ANCHOR )
     {
+        // Draw only when we're selected on our own
+        if( !aGroup->IsSelected() || ( aGroup->GetParent() && aGroup->GetParent()->IsSelected() ) )
+            return;
+
         const COLOR4D color = m_pcbSettings.GetColor( aGroup, LAYER_ANCHOR );
 
         EDA_RECT bbox = aGroup->GetBoundingBox();

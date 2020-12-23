@@ -232,23 +232,8 @@ bool PCB_GROUP::IsOnLayer( PCB_LAYER_ID aLayer ) const
 
 void PCB_GROUP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    // What layer to put bounding box on?  change in class_pcb_group.cpp
-    std::unordered_set<int> layers = { LAYER_ANCHOR }; // for bounding box
-
-    for( BOARD_ITEM* item : m_items )
-    {
-        int member_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], member_layers_count;
-        item->ViewGetLayers( member_layers, member_layers_count );
-
-        for( int i = 0; i < member_layers_count; i++ )
-            layers.insert( member_layers[i] );
-    }
-
-    aCount = layers.size();
-    int i  = 0;
-
-    for( int layer : layers )
-        aLayers[i++] = layer;
+    aCount = 1;
+    aLayers[0] = LAYER_ANCHOR;
 }
 
 

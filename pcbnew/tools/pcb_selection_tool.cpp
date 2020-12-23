@@ -2457,9 +2457,18 @@ void PCB_SELECTION_TOOL::FilterCollectorForGroups( GENERAL_COLLECTOR& aCollector
     for( int j = 0; j < aCollector.GetCount(); )
     {
         BOARD_ITEM* item = aCollector[j];
+        BOARD_ITEM* parent = item->GetParent();
+
+        // Ignore footprint groups in board editor
+        if( !m_isFootprintEditor && parent && parent->Type() == PCB_FOOTPRINT_T )
+        {
+            ++j;
+            continue;
+        }
+
         PCB_GROUP*  aTop = PCB_GROUP::TopLevelGroup( item, m_enteredGroup );
 
-        if( aTop != NULL )
+        if( aTop )
         {
             if( aTop != item )
             {
