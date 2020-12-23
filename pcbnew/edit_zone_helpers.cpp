@@ -24,8 +24,125 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <board.h>
+#include <kiface_i.h>
+#include <confirm.h>
+#include <pcb_edit_frame.h>
+#include <board_commit.h>
 #include <zone.h>
+#include <zones.h>
+#include <zones_functions_for_undo_redo.h>
+#include <connectivity/connectivity_data.h>
+#include <widgets/progress_reporter.h>
+#include <zone_filler.h>
+
+
+void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
+{
+    int               dialogResult;
+    ZONE_SETTINGS     zoneInfo = GetZoneSettings();
+    PICKED_ITEMS_LIST pickedList;    // zones for undo/redo command
+    PICKED_ITEMS_LIST deletedList;   // zones that have been deleted when combined
+    BOARD_COMMIT      commit( this );
+
+    // Save initial zones configuration, for undo/redo, before adding new zone
+    // note the net name and the layer can be changed, so we must save all zones
+    deletedList.ClearListAndDeleteItems();
+    pickedList.ClearListAndDeleteItems();
+    SaveCopyOfZones( pickedList, GetBoard(), -1, UNDEFINED_LAYER );
+
+    if( aZone->GetIsRuleArea() )
+    {
+        // edit a rule area on a copper layer
+        zoneInfo << *aZone;
+        dialogResult = InvokeRuleAreaEditor( this, &zoneInfo );
+    }
+    else if( IsCopperLayer( aZone->GetLayer() ) )
+    {
+        // edit a zone on a copper layer
+        zoneInfo << *aZone;
+        dialogResult = InvokeCopperZonesEditor( this, &zoneInfo );
+    }
+    else
+    {
+        zoneInfo << *aZone;
+        dialogResult = InvokeNonCopperZonesEditor( this, &zoneInfo );
+    }
+
+    if( dialogResult == wxID_CANCEL )
+    {
+        deletedList.ClearListAndDeleteItems();
+        pickedList.ClearListAndDeleteItems();
+        return;
+    }
+
+    SetZoneSettings( zoneInfo );
+    OnModify();
+
+    if( dialogResult == ZONE_EXPORT_VALUES )
+    {
+        UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
+        commit.Stage( pickedList );
+        commit.Push( _( "Modify zone properties" ) );
+        pickedList.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
+        return;
+    }
+
+    wxBusyCursor dummy;
+
+    // Undraw old zone outlines
+    for( ZONE* zone : GetBoard()->Zones() )
+        GetCanvas()->GetView()->Update( zone );
+
+    zoneInfo.ExportSetting( *aZone );
+
+    NETINFO_ITEM* net = GetBoard()->FindNet( zoneInfo.m_NetcodeSelection );
+
+    if( net )   // net == NULL should not occur
+        aZone->SetNetCode( net->GetNetCode() );
+
+    // Combine zones if possible
+    GetBoard()->OnAreaPolygonModified( &deletedList, aZone );
+
+    UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
+
+    // refill zones with the new properties applied
+    std::vector<ZONE*> zones_to_refill;
+
+    for( unsigned i = 0; i < pickedList.GetCount(); ++i )
+    {
+        ZONE* zone = dyn_cast<ZONE*>( pickedList.GetPickedItem( i ) );
+
+        if( zone == nullptr )
+        {
+            wxASSERT_MSG( false, "Expected a zone after zone properties edit" );
+            continue;
+        }
+
+        // aZone won't be filled if the layer set was modified, but it needs to be updated
+        if( zone->IsFilled() || zone == aZone )
+            zones_to_refill.push_back( zone );
+    }
+
+    commit.Stage( pickedList );
+
+    if( zones_to_refill.size() )
+    {
+        ZONE_FILLER filler( GetBoard(), &commit );
+        wxString title = wxString::Format( _( "Refill %d Zones" ), (int) zones_to_refill.size() );
+        filler.InstallNewProgressReporter( this, title, 4 );
+
+        if( !filler.Fill( zones_to_refill ) )
+        {
+            commit.Revert();
+            return;
+        }
+    }
+
+    commit.Push( _( "Modify zone properties" ) );
+    GetBoard()->GetConnectivity()->RecalculateRatsnest();
+
+    pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
+}
 
 
 bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* modified_area )
@@ -37,7 +154,7 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* 
     if( TestZoneIntersections( modified_area ) )
     {
         modified = true;
-        CombineAllZonesInNet( aModifiedZonesList, modified_area->GetNetCode(), true );
+        CombineAllZonesInNet( aModifiedZonesList, modified_area->GetNetCode() );
     }
 
     // Test for bad areas: all zones must have more than 2 corners:
@@ -45,20 +162,26 @@ bool BOARD::OnAreaPolygonModified( PICKED_ITEMS_LIST* aModifiedZonesList, ZONE* 
     for( ZONE* zone : m_zones )
     {
         if( zone->GetNumCorners() < 3 )
-            RemoveZone( aModifiedZonesList, zone );
+        {
+            ITEM_PICKER picker( nullptr, zone, UNDO_REDO::DELETED );
+            aModifiedZonesList->PushItem( picker );
+            zone->SetFlags( STRUCT_DELETED );
+        }
     }
 
     return modified;
 }
 
 
-bool BOARD::CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
-                                  bool aUseLocalFlags )
+bool BOARD::CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode )
 {
     if( m_zones.size() <= 1 )
         return false;
 
     bool modified = false;
+
+    for( ZONE* zone : m_zones )
+        zone->ClearFlags( STRUCT_DELETED );
 
     // Loop through all combinations
     for( unsigned ia1 = 0; ia1 < m_zones.size() - 1; ia1++ )
@@ -75,6 +198,9 @@ bool BOARD::CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
         for( unsigned ia2 = m_zones.size() - 1; ia2 > ia1; ia2-- )
         {
             ZONE* otherZone = m_zones[ia2];
+
+            if( otherZone->HasFlag( STRUCT_DELETED ) )
+                continue;
 
             if( otherZone->GetNetCode() != aNetCode )
                 continue;
@@ -93,7 +219,7 @@ bool BOARD::CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode,
             if( b1.Intersects( b2 ) )
             {
                 // check otherZone against refZone
-                if( refZone->GetLocalFlags() || otherZone->GetLocalFlags() || !aUseLocalFlags )
+                if( refZone->GetLocalFlags() || otherZone->GetLocalFlags() )
                 {
                     bool ret = TestZoneIntersection( refZone, otherZone );
 
@@ -275,7 +401,9 @@ bool BOARD::CombineZones( PICKED_ITEMS_LIST* aDeletedList, ZONE* aRefZone, ZONE*
     delete aRefZone->Outline();
     aRefZone->SetOutline( new SHAPE_POLY_SET( mergedOutlines ) );
 
-    RemoveZone( aDeletedList, aZoneToCombine );
+    ITEM_PICKER picker( nullptr, aZoneToCombine, UNDO_REDO::DELETED );
+    aDeletedList->PushItem( picker );
+    aZoneToCombine->SetFlags( STRUCT_DELETED );
 
     aRefZone->SetLocalFlags( 1 );
     aRefZone->HatchBorder();

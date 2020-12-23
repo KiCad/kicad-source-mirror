@@ -317,9 +317,8 @@ set( PCBNEW_CLASS_SRCS
     tracks_cleaner.cpp
     undo_redo.cpp
     zone_filler.cpp
-    zones_by_polygon.cpp
     zones_functions_for_undo_redo.cpp
-    zones_test_and_combine_areas.cpp
+    edit_zone_helpers.cpp
 
     ratsnest/ratsnest.cpp
 

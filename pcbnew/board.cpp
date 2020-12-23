@@ -1793,24 +1793,6 @@ ZONE* BOARD::AddArea( PICKED_ITEMS_LIST* aNewZonesList, int aNetcode, PCB_LAYER_
 }
 
 
-void BOARD::RemoveZone( PICKED_ITEMS_LIST* aDeletedList, ZONE* aZone )
-{
-    if( aZone == NULL )
-        return;
-
-    if( aDeletedList )
-    {
-        ITEM_PICKER picker( nullptr, aZone, UNDO_REDO::DELETED );
-        aDeletedList->PushItem( picker );
-        Remove( aZone );   // remove from zone list, but does not delete it
-    }
-    else
-    {
-        Delete( aZone );
-    }
-}
-
-
 bool BOARD::NormalizeAreaPolygon( PICKED_ITEMS_LIST * aNewZonesList, ZONE* aCurrArea )
 {
     // mark all areas as unmodified except this one, if modified

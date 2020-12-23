@@ -952,22 +952,9 @@ public:
      * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
      *                       in undo commands can be NULL
      * @param aNetCode = net to consider
-     * @param aUseLocalFlags : if true, don't check areas if both local flags are 0
-     * Sets local flag = 1 for any areas modified
      * @return true if some areas modified
      */
-    bool CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList,
-                               int                aNetCode,
-                               bool               aUseLocalFlags );
-
-    /**
-     * Remove copper area from net, and put it in a deleted list (if exists).
-     *
-     * @param aDeletedList = a PICKED_ITEMS_LIST * where to store deleted areas (useful
-     * in undo commands can be NULL
-     * @param  aZone = area to delete or put in deleted list
-     */
-    void RemoveZone( PICKED_ITEMS_LIST* aDeletedList, ZONE* aZone );
+    bool CombineAllZonesInNet( PICKED_ITEMS_LIST* aDeletedList, int aNetCode );
 
     /**
      * Check for intersection of a given copper area with other areas in same net
