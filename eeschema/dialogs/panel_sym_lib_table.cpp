@@ -674,7 +674,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
     wxArrayInt selectedRows = m_cur_grid->GetSelectedRows();
 
-    if( selectedRows.empty() )
+    if( selectedRows.empty() && m_cur_grid->GetGridCursorRow() >= 0 )
         selectedRows.push_back( m_cur_grid->GetGridCursorRow() );
 
     wxArrayInt legacyRows;
