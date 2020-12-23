@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-11-23 13:52-0800\n"
-"PO-Revision-Date: 2020-12-02 21:37+0000\n"
+"PO-Revision-Date: 2020-12-23 16:34+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -3466,7 +3466,7 @@ msgstr "Όνομα Μεταβλητής"
 
 #: common/dialogs/panel_text_variables_base.cpp:38
 msgid "Text Substitution"
-msgstr "Αντικατάσταση Κειμένου:"
+msgstr "Αντικατάσταση Κειμένου"
 
 #: common/dialogs/wx_html_report_panel.cpp:179
 #: common/dialogs/wx_html_report_panel.cpp:204
@@ -5825,7 +5825,7 @@ msgstr "Τυπικά Γραφικά"
 
 #: common/tool/actions.cpp:578
 msgid "Use software graphics (fall-back)"
-msgstr "Χρήση γραφικών λογισμικού (εναλλακτικό):"
+msgstr "Χρήση γραφικών λογισμικού (εναλλακτικό)"
 
 #: common/tool/actions.cpp:583
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:392
@@ -11572,9 +11572,8 @@ msgid "Wires not connected to anything"
 msgstr "Σύμβολο μη σύνδεσης δεν είναι συνδεδεμένο πουθενά"
 
 #: eeschema/erc_item.cpp:130
-#, fuzzy
 msgid "Library symbol issue"
-msgstr "Σύμβολο Βιβλιοθήκης:"
+msgstr "Πρόβλημα με βιβλιοθήκη συμβόλου"
 
 #: eeschema/fields_grid_table.cpp:132 eeschema/files-io.cpp:95
 msgid "Schematic Files"
@@ -11742,17 +11741,19 @@ msgid "Project Save Warning"
 msgstr "Προειδοποίηση Φόρτωσης Έργου"
 
 #: eeschema/files-io.cpp:768
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
 "%s"
-msgstr "Δεν βρέθηκαν οι ακόλουθες βιβλιοθήκες:"
+msgstr ""
+"Τα ακόλουθα αρχεία θα αντικατασταθούν:\n"
+"\n"
+"%s"
 
 #: eeschema/files-io.cpp:769
-#, fuzzy
 msgid "Overwrite Files"
-msgstr "Αντικατάσταση αρχείων:"
+msgstr "Αντικατάσταση Αρχείων"
 
 #: eeschema/files-io.cpp:770
 #, fuzzy
@@ -12411,14 +12412,14 @@ msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Άγνωστη τιμή SCH_FILE_T: %d"
 
 #: eeschema/sch_line.cpp:654
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Wire, length %s"
-msgstr "Κάθετο κέντρο:"
+msgstr "Κατακόρυφο Καλώδιο, μήκος %s"
 
 #: eeschema/sch_line.cpp:655
-#, fuzzy, c-format
+#, c-format
 msgid "Vertical Bus, length %s"
-msgstr "Πλήθος κατακόρυφα:"
+msgstr "Κατακόρυφος Δίαυλος, μήκος %s"
 
 #: eeschema/sch_line.cpp:656
 #, fuzzy, c-format
@@ -12431,9 +12432,9 @@ msgid "Horizontal Wire, length %s"
 msgstr "Οριζόντια αντιστροφή"
 
 #: eeschema/sch_line.cpp:664
-#, fuzzy, c-format
+#, c-format
 msgid "Horizontal Bus, length %s"
-msgstr "Πλήθος οριζόντια:"
+msgstr "Οριζόντιος Δίαυλος, μήκος %s"
 
 #: eeschema/sch_line.cpp:665
 #, fuzzy, c-format
@@ -15661,9 +15662,9 @@ msgid "Deselect all"
 msgstr "Αποεπιλογή όλων"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Select Layer: %s"
-msgstr "Επιλογή επιπέδου:"
+msgstr "Επιλογή Επιπέδου: %s"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:171
 #: pcbnew/board_connected_item.cpp:159 pcbnew/board_connected_item.cpp:160
@@ -17721,9 +17722,8 @@ msgid "Calculate"
 msgstr "Υπολογισμός"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:201
-#, fuzzy
 msgid "Regulator"
-msgstr "Ρυθμιστής:"
+msgstr "Ρυθμιστής"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:208
 msgid "Regulators data file:"
@@ -17781,9 +17781,8 @@ msgid "Resistive Splitter"
 msgstr "Διχαστής Αντιστάσεων"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:271
-#, fuzzy
 msgid "Attenuators"
-msgstr "Εξασθενητές:"
+msgstr "Εξασθενητές"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:285
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1114
@@ -17879,14 +17878,12 @@ msgid "E12"
 msgstr "12"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:493
-#, fuzzy
 msgid "Available Values"
-msgstr "Διαθέσιμα υλικά:"
+msgstr "Διαθέσιμες Τιμές"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:504
-#, fuzzy
 msgid "Solutions"
-msgstr "Περιστροφή:"
+msgstr "Λύσεις"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:512
 #, fuzzy
@@ -17977,9 +17974,8 @@ msgid "Twisted Pair"
 msgstr "Συνεστραμμένο Ζεύγος"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:684
-#, fuzzy
 msgid "Transmission Line Type"
-msgstr "Τύπος Γραμμής Μετάδοσης:"
+msgstr "Τύπος Γραμμής Μετάδοσης"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:701
 msgid "Substrate Parameters"
@@ -18028,9 +18024,8 @@ msgid "mu Rel C:"
 msgstr "mu Rel C:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:820
-#, fuzzy
 msgid "Component Parameters"
-msgstr "Παράμετροι Εξαρτήματος:"
+msgstr "Παράμετροι Εξαρτήματος"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:858
 msgid "Zdiff = Zodd * 2"
@@ -18041,9 +18036,8 @@ msgid "Zcommon = Zeven / 2"
 msgstr "Zκοινό = Zζυγό / 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:883
-#, fuzzy
 msgid "Physical Parameters"
-msgstr "Φυσικές Παράμετροι:"
+msgstr "Φυσικές Παράμετροι"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:959
 msgid "Analyze"
@@ -18054,9 +18048,8 @@ msgid "Synthesize"
 msgstr "Σύνθεση"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:977
-#, fuzzy
 msgid "Electrical Parameters"
-msgstr "Ηλεκτρικές Παράμετροι:"
+msgstr "Ηλεκτρικές Παράμετροι"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:985
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:997
@@ -18071,9 +18064,8 @@ msgstr "Γωνία"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1028
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1282
-#, fuzzy
 msgid "Results"
-msgstr "Αποτελέσματα:"
+msgstr "Αποτελέσματα"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1108
 msgid "TransLine"
@@ -18294,9 +18286,8 @@ msgid "Ohm-meter"
 msgstr "Ohm-meter"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1517
-#, fuzzy
 msgid "External Layer Traces"
-msgstr "Δρόμοι εξωτερικού επιπέδου:"
+msgstr "Διάδρομοι Εξωτερικού Επιπέδου"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1525
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1623
@@ -18319,9 +18310,8 @@ msgid "mm ^ 2"
 msgstr "mm ^ 2"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1615
-#, fuzzy
 msgid "Internal Layer Traces"
-msgstr "Δρόμοι εσωτερικών επιπέδων:"
+msgstr "Διάδρομοι Εσωτερικού Επιπέδου"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1729
 msgid "Voltage > 500V:"
@@ -18613,27 +18603,24 @@ msgid "Specific Resistance"
 msgstr "Ειδική Αντίσταση"
 
 #: pcb_calculator/transline_ident.cpp:119
-#, fuzzy
 msgid "Er"
-msgstr "Er:"
+msgstr "Er"
 
 #: pcb_calculator/transline_ident.cpp:120
 msgid "Epsilon R: substrate relative dielectric constant"
-msgstr "Epsilon R: σχετική διηλεκτρική σταθερά υποστρώματος"
+msgstr "Έψιλον R: σχετική διηλεκτρική σταθερά υποστρώματος"
 
 #: pcb_calculator/transline_ident.cpp:123
-#, fuzzy
 msgid "TanD"
-msgstr "TanD:"
+msgstr "εφΔ"
 
 #: pcb_calculator/transline_ident.cpp:124
 msgid "Tangent delta: dielectric loss factor."
 msgstr "Δέλτα Εφαπτομένης: παράγοντας απώλειας διηλεκτρικού."
 
 #: pcb_calculator/transline_ident.cpp:129
-#, fuzzy
 msgid "Rho"
-msgstr "Rho:"
+msgstr "Rho"
 
 #: pcb_calculator/transline_ident.cpp:130
 msgid ""
@@ -18709,9 +18696,8 @@ msgstr "Πάχος Ταινίας"
 
 #: pcb_calculator/transline_ident.cpp:158
 #: pcb_calculator/transline_ident.cpp:342
-#, fuzzy
 msgid "Rough"
-msgstr "Τραχύ:"
+msgstr "Τραχύ"
 
 #: pcb_calculator/transline_ident.cpp:159
 #: pcb_calculator/transline_ident.cpp:343
@@ -18719,9 +18705,8 @@ msgid "Conductor Roughness"
 msgstr "Τραχύτητα Αγωγού"
 
 #: pcb_calculator/transline_ident.cpp:161
-#, fuzzy
 msgid "mu Rel S"
-msgstr "mu Rel S:"
+msgstr "mu Rel S"
 
 #: pcb_calculator/transline_ident.cpp:162
 msgid "Relative Permeability (mu) of Substrate"
@@ -18734,9 +18719,8 @@ msgstr "Σχετική Διαπερατότητα (mu) Υποστρώματος"
 #: pcb_calculator/transline_ident.cpp:345
 #: pcb_calculator/transline_ident.cpp:390
 #: pcb_calculator/transline_ident.cpp:424
-#, fuzzy
 msgid "mu Rel C"
-msgstr "mu Rel C:"
+msgstr "mu Rel C"
 
 #: pcb_calculator/transline_ident.cpp:165
 #: pcb_calculator/transline_ident.cpp:196
@@ -18803,9 +18787,8 @@ msgstr "Καταστάσεις-'TM':"
 
 #: pcb_calculator/transline_ident.cpp:260
 #: pcb_calculator/transline_ident.cpp:293
-#, fuzzy
 msgid "mu Rel I"
-msgstr "mu Rel I:"
+msgstr "mu Rel I"
 
 #: pcb_calculator/transline_ident.cpp:261
 #: pcb_calculator/transline_ident.cpp:294
@@ -18826,9 +18809,8 @@ msgstr "Μήκος Κυματοδηγού"
 
 #: pcb_calculator/transline_ident.cpp:301
 #: pcb_calculator/transline_ident.cpp:432
-#, fuzzy
 msgid "Din"
-msgstr "Dεισ:"
+msgstr "Dεισ"
 
 #: pcb_calculator/transline_ident.cpp:302
 #: pcb_calculator/transline_ident.cpp:433
@@ -18837,9 +18819,8 @@ msgstr "Εσωτερική Διάμετρος (αγωγός)"
 
 #: pcb_calculator/transline_ident.cpp:304
 #: pcb_calculator/transline_ident.cpp:435
-#, fuzzy
 msgid "Dout"
-msgstr "Dεξ:"
+msgstr "Dεξ"
 
 #: pcb_calculator/transline_ident.cpp:305
 #: pcb_calculator/transline_ident.cpp:436
@@ -18871,18 +18852,16 @@ msgid "Dielectric Losses Odd:"
 msgstr "Απώλειες Διηλεκτρικού Μονό:"
 
 #: pcb_calculator/transline_ident.cpp:360
-#, fuzzy
 msgid "Zeven"
-msgstr "Ζζυγό:"
+msgstr "Ζζυγό"
 
 #: pcb_calculator/transline_ident.cpp:361
 msgid "Even mode impedance (lines driven by common voltages)"
 msgstr "Μονή εμπέδηση (οι γραμμές οδηγούνται από τις κοινές τάσεις)"
 
 #: pcb_calculator/transline_ident.cpp:363
-#, fuzzy
 msgid "Zodd"
-msgstr "Zμονό:"
+msgstr "Zμονό"
 
 #: pcb_calculator/transline_ident.cpp:364
 msgid "Odd mode impedance (lines driven by opposite (differential) voltages)"
@@ -18894,9 +18873,8 @@ msgid "distance between strip and top metal"
 msgstr "απόσταση μεταξύ ταινίας και πάνω μετάλου"
 
 #: pcb_calculator/transline_ident.cpp:421
-#, fuzzy
 msgid "Twists"
-msgstr "Περιστροφές:"
+msgstr "Περιστροφές"
 
 #: pcb_calculator/transline_ident.cpp:422
 msgid "Number of Twists per Length"
