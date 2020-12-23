@@ -19,7 +19,7 @@ Installation from binary packages
 
  Compiled KiCad binaries exist for Windows (7, 8.1, 10), Mac OS (10.12+) and several
  Linux distributions (Fedora, Debian, Ubuntu, Arch). These are available from the
- main KiCad website: https://kicad-pcb.org/download/
+ main KiCad website: https://kicad.org/download/
 
  Data files (schematic, boards, libraries) are compatible with all platforms.
 
@@ -28,7 +28,7 @@ Installation from binary packages for Windows
 ---------------------------------------------
 
   KiCad can be installed anywhere on the system as long as the user has write privileges.
-  Pre-made installers are available on the KiCad website: https://kicad-pcb.org/download/windows/
+  Pre-made installers are available on the KiCad website: https://kicad.org/download/windows/
 
 
 Installation from binary packages for Linux
@@ -36,7 +36,7 @@ Installation from binary packages for Linux
 
   KiCad comes packaged on many Linux platforms including Debian, Fedora, Ubuntu and Arch,
   and is available in their respective package repositories. More information can be found on
-  the platform's page at https://kicad-pcb.org/download/
+  the platform's page at https://kicad.org/download/
 
 
 Linux install tree

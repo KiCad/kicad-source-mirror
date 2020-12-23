@@ -310,7 +310,7 @@ copy on your machine by using the following command:
 
 Here is a list of source links:
 
-Stable release archives: https://kicad-pcb.org/download/source/
+Stable release archives: https://kicad.org/download/source/
 
 Development branch: https://gitlab.com/kicad/code/kicad/tree/master
 
@@ -634,8 +634,8 @@ to download and [build Boost][] from source.  If you are building Boost on windo
 you will have to apply the Boost patches in the KiCad source [patches folder][].
 
 
-[download]: http://kicad-pcb.org/download/
-[KiCad website]: http://kicad-pcb.org/
+[download]: https://kicad.org/download/
+[KiCad website]: https://kicad.org/
 [GNU GCC]: https://gcc.gnu.org/
 [Clang]: http://clang.llvm.org/
 [CMake]: https://cmake.org/

@@ -101,5 +101,5 @@ capabilities.
 - In progress.
 
 
-[kicad-website]:http://kicad-pcb.org/
-[kicad-docs]:http://ci.kicad-pcb.org/job/kicad-doxygen/ws/Documentation/doxygen/html/index.html
+[kicad-website]:https://kicad.org/
+[kicad-docs]:https://docs.kicad.org/doxygen/

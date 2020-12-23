@@ -40,7 +40,7 @@
 #include <dialogs/dialog_configure_paths.h>
 #include <eda_doc.h>
 
-#define URL_GET_INVOLVED "http://kicad-pcb.org/contribute/"
+#define URL_GET_INVOLVED "https://kicad.org/contribute/"
 
 
 /// URL to launch a new issue with pre-populated description

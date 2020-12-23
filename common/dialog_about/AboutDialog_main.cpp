@@ -130,16 +130,16 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << "<ul>";
     description << "<li>"
                 << _( "The official KiCad website - " )
-                << HtmlHyperlink( "http://www.kicad-pcb.org" )
+                << HtmlHyperlink( "http://www.kicad.org" )
                 << "</li>";
     description << "<li>"
                 << _( "Developer website - " )
-                << HtmlHyperlink( "https://gitlab.com/kicad" )
+                << HtmlHyperlink( "https://go.kicad.org/dev" )
                 << "</li>";
 
     description << "<li>"
                 << _("Official KiCad library repositories - " )
-                << HtmlHyperlink( "https://kicad.github.io" )
+                << HtmlHyperlink( "https://go.kicad.org/libraries" )
                 << "</li>";
 
     description << "</ul></p>";
@@ -152,7 +152,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << "<ul>";
     description << "<li>"
                 << _( "Report or examine bugs - " )
-                << HtmlHyperlink( "https://gitlab.com/kicad/code/kicad/issues" )
+                << HtmlHyperlink( "https://go.kicad.org/bugs" )
                 << "</li>";
     description << "</ul></p>";
 
@@ -163,7 +163,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     description << "<ul>";
     description << "<li>"
                 << _( "KiCad forum - " )
-                << HtmlHyperlink( "https://forum.kicad.info" )
+                << HtmlHyperlink( "https://go.kicad.org/forum" )
                 << "</li>";
 
     description << "</ul></p>";
