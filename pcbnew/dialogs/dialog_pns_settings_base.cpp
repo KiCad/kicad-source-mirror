@@ -86,6 +86,11 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	m_optimizeDraggedTrack = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Optimize track being dragged"), wxDefaultPosition, wxDefaultSize, 0 );
 	bOptions->Add( m_optimizeDraggedTrack, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
+	m_autoPosture = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Use mouse path to set track posture"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_autoPosture->SetToolTip( _("When enabled, the posture of tracks will be guided by how the mouse is moved from the starting location") );
+
+	bOptions->Add( m_autoPosture, 0, wxALL, 5 );
+
 	wxBoxSizer* bEffort;
 	bEffort = new wxBoxSizer( wxHORIZONTAL );
 

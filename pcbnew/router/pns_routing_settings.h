@@ -147,6 +147,9 @@ public:
     bool GetOptimizeDraggedTrack() const { return m_optimizeDraggedTrack; }
     void SetOptimizeDraggedTrack( bool aEnable ) { m_optimizeDraggedTrack = aEnable; }
 
+    bool GetAutoPosture() const { return m_autoPosture; }
+    void SetAutoPosture( bool aEnable ) { m_autoPosture = aEnable; }
+
     void SetMinRadius( int aRadius )
     {
         m_minRadius = aRadius;
@@ -182,6 +185,7 @@ private:
     bool m_snapToPads;
     bool m_roundedCorners;
     bool m_optimizeDraggedTrack;
+    bool m_autoPosture;
 
     int m_minRadius;
     int m_maxRadius;

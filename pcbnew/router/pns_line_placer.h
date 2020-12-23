@@ -94,9 +94,6 @@ public:
     void FlipPosture();
 
 private:
-    const double areaRatioThreshold = 1.5;
-    const double areaRatioEpsilon   = 0.2;
-
     SHAPE_LINE_CHAIN m_trail;
     int              m_tolerance;
     DIRECTION_45     m_direction;

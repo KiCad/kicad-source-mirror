@@ -48,6 +48,8 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
     m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
     m_optimizeDraggedTrack->SetValue( m_settings.GetOptimizeDraggedTrack() );
+    m_autoPosture->SetValue( m_settings.GetAutoPosture() );
+
     // Enable/disable some options
     wxCommandEvent event;
     onModeChange( event );
@@ -75,6 +77,7 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
     m_settings.SetSmoothDraggedSegments( m_smoothDragged->GetValue() );
     m_settings.SetInlineDragEnabled( m_dragToolMode->GetSelection () ? true : false );
     m_settings.SetOptimizeDraggedTrack( m_optimizeDraggedTrack->GetValue() );
+    m_settings.SetAutoPosture( m_autoPosture->GetValue() );
 
     if( m_mode->GetSelection() == PNS::RM_MarkObstacles )
     {

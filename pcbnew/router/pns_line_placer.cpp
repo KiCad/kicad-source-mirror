@@ -1408,7 +1408,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
                 initial_radius = Settings().GetMaxRadius();
 
 
-            if( !m_tail.PointCount() )
+            if( !m_tail.PointCount() && Settings().GetAutoPosture() )
                 l = guessedDir.BuildInitialTrace( m_p_start, aP, false, initial_radius );
             else
                 l = m_direction.BuildInitialTrace( m_p_start, aP, false, initial_radius );
@@ -1571,8 +1571,17 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
 
 DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
 {
+    // Tuning factor for how good the "fit" of the trail must be to the posture
+    const double areaRatioThreshold = 1.5;
+
+    // Tuning factor to minimize flutter
+    const double areaRatioEpsilon = 0.3;
+
+    // Minimum distance factor of the trail before the min area test is used to lock the solver
+    const double minAreaCutoffDistanceFactor = 6;
+
     // Adjusts how far away from p0 we get before whatever posture we solved is locked in
-    const int lockDistanceFactor = 40;
+    const int lockDistanceFactor = 25;
 
     // Adjusts how close to p0 we unlock the posture again if one was locked already
     const int unlockDistanceFactor = 4;
@@ -1589,17 +1598,19 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false ) );
     straight.SetClosed( true );
     straight.Append( m_trail.Reverse() );
+    straight.Simplify();
     dbg->AddLine( straight, m_forced ? 3 : 2, 100000 );
 
-    double areaS = straight.Area();
+    double areaS = std::abs( straight.Area() );
 
     SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
     diag.Append( m_trail.Reverse() );
     diag.SetClosed( true );
+    diag.Simplify();
     dbg->AddLine( diag, 1, 100000 );
 
-    double areaDiag = diag.Area();
-    double ratio    = abs( areaS ) / ( fabs( areaDiag ) + 1.0 );
+    double areaDiag = std::abs( diag.Area() );
+    double ratio    = areaS / ( areaDiag + 1.0 );
 
     // heuristic to detect that the user dragged back the cursor to the beginning of the trace
     // in this case, we cancel any forced posture and restart the trail
@@ -1611,15 +1622,29 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
         m_trail.Append( start );
     }
 
+    bool areaOk = true;
+
+    // Check the actual trail area against the cutoff.  This prevents flutter when the trail is
+    // very close to a straight line.
+    if( !m_forced && refLength > minAreaCutoffDistanceFactor * m_tolerance )
+    {
+        double areaCutoff = m_tolerance * refLength;
+        SHAPE_LINE_CHAIN trail( m_trail );
+        trail.SetClosed( true );
+
+        if( std::abs( trail.Area() ) < areaCutoff )
+            areaOk = false;
+    }
+
     // If we get far away from the initial point, lock in the current solution to prevent flutter
     if( !m_forced && refLength > lockDistanceFactor * m_tolerance )
         m_forced = true;
 
     if( m_forced )
         return m_direction;
-    else if( ratio > areaRatioThreshold + areaRatioEpsilon )
+    else if( areaOk && ratio > areaRatioThreshold + areaRatioEpsilon )
         m_direction = DIRECTION_45::NE;
-    else if( ratio < ( 1.0 / areaRatioThreshold ) - areaRatioEpsilon )
+    else if( areaOk && ratio < ( 1.0 / areaRatioThreshold ) - areaRatioEpsilon )
         m_direction = DIRECTION_45::N;
     else if( m_lastSegDirection != DIRECTION_45::UNDEFINED )
         m_direction = m_lastSegDirection;
@@ -1633,7 +1658,6 @@ void POSTURE_SOLVER::FlipPosture()
     m_direction = m_direction.Right();
     m_forced = true;
 }
-
 
 }
 
