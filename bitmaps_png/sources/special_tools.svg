@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   id="Слой_1"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   sodipodi:docname="special_tools.svg"
+   x="0px"
+   y="0px"
+   viewBox="0 0 24 24"
+   style="enable-background:new 0 0 24 24;"
+   xml:space="preserve"><metadata
+   id="metadata855"><rdf:RDF><cc:Work
+       rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title>folder</dc:title><cc:license
+         rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" /></cc:Work><cc:License
+       rdf:about="http://creativecommons.org/licenses/by-sa/4.0/"><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:permits
+         rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires
+         rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata><defs
+   id="defs853" />
+<style
+   type="text/css"
+   id="style833">
+	.st0{fill:#FFFFFF;}
+	.st1{fill:none;stroke:#545454;stroke-miterlimit:10;}
+	.st2{fill:#545454;}
+</style>
+<sodipodi:namedview
+   bordercolor="#666666"
+   borderopacity="1"
+   gridtolerance="10000"
+   guidetolerance="10"
+   id="namedview9483"
+   inkscape:current-layer="Слой_1"
+   inkscape:cx="16.442424"
+   inkscape:cy="12.81332"
+   inkscape:document-rotation="0"
+   inkscape:pageopacity="0"
+   inkscape:pageshadow="2"
+   inkscape:snap-global="true"
+   inkscape:window-height="1035"
+   inkscape:window-maximized="1"
+   inkscape:window-width="1920"
+   inkscape:window-x="0"
+   inkscape:window-y="23"
+   inkscape:zoom="24.63422"
+   objecttolerance="10"
+   pagecolor="#ffffff"
+   showgrid="true">
+	<inkscape:grid
+   color="#ceceff"
+   empspacing="2"
+   id="grid10046"
+   opacity="0.1254902"
+   spacingx="0.5"
+   spacingy="0.5"
+   type="xygrid">
+		</inkscape:grid>
+</sodipodi:namedview>
+<title
+   id="title9474">folder</title>
+<g
+   id="g844">
+	<rect
+   x="13.8"
+   y="5.7"
+   transform="matrix(0.7071 -0.7071 0.7071 0.7071 0.1063 14.1604)"
+   class="st0"
+   width="6.7"
+   height="2.5"
+   id="rect838" />
+	<rect
+   x="1.4"
+   y="10.7"
+   transform="matrix(0.7071 -0.7071 0.7071 0.7071 -4.9976 11.9346)"
+   class="st1"
+   width="21"
+   height="2.5"
+   id="rect840" />
+	<rect
+   x="2.2"
+   y="12.8"
+   transform="matrix(0.7071 -0.7071 0.7071 0.7071 -7.0518 11.0837)"
+   class="st2"
+   width="15.2"
+   height="2.5"
+   id="rect842" />
+</g>
+<polygon
+   class="st2"
+   points="21.5,0 21,2 19,2.5 21,3 21.5,5 22,3 24,2.5 22,2 "
+   id="polygon846" />
+<polygon
+   class="st2"
+   points="11.5,0.5 10.7,3.7 7.5,4.5 10.7,5.3 11.5,8.5 12.3,5.3 15.5,4.5 12.3,3.7 "
+   id="polygon848" />
+<polygon
+   class="st2"
+   points="19.5,8.5 19.1,10.1 17.5,10.5 19.1,10.9 19.5,12.5 19.9,10.9 21.5,10.5 19.9,10.1 "
+   id="polygon850" />
+</svg>

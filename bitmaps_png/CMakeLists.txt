@@ -456,6 +456,7 @@ set( BMAPS_MID
     show_all_copper_layers
     show_all_front_layers
     show_all_back_layers
+    special_tools
     spreadsheet
     swap_layer
     switch_corner_rounding_shape
