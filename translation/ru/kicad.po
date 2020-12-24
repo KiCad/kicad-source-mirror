@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-21 14:30+0000\n"
+"PO-Revision-Date: 2020-12-25 08:23+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../kicad\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -163,21 +163,19 @@ msgid "No footprint loaded."
 msgstr "Нет загруженных посад.мест."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:484
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Контур посад.места имеет неудачную форму. Выполните проверку посад.места для "
-"получения полной информации."
+"Контур посад.места отсутствует или имеет неудачную форму. Выполните проверку "
+"посад.места для получения полной информации."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:493
 #: pcbnew/dialogs/dialog_export_step.cpp:248
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Контур платы имеет неудачную форму. Выполните проверку правил DRC для "
-"получения полной информации."
+"Контур платы отсутсвует или имеет неудачную форму. Выполните проверку правил "
+"DRC для получения полной информации."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -2246,28 +2244,25 @@ msgid "Image Editor"
 msgstr "Редактор изображений"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "Выбранный элемент заблокирован."
+msgstr "Выделение содержит %d заблокированных элементов."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Эти элементы будут игнорироваться пока их не разблокируют."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "Не показывать снова"
+msgstr "Не показывать снова."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
-#, fuzzy
 msgid "Override Locks"
-msgstr "Переопределить текст"
+msgstr "Разблокировать"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
-#, fuzzy
 msgid "Locked Items"
-msgstr "Заблокированные дорожки"
+msgstr "Заблокированные элементы"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 msgid "Quit KiCad"
@@ -4306,9 +4301,9 @@ msgstr ""
 "посад.мест"
 
 #: common/fp_lib_table.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr "файлы fp-lib-table не содержат библиотек с именем \"%s\""
+msgstr "файлы fp-lib-table не содержат библиотек с именем \"%s\"."
 
 #: common/fp_lib_table.cpp:483 eeschema/symbol_lib_table.cpp:497
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
@@ -4747,28 +4742,24 @@ msgid "Rescue"
 msgstr "Восстановить"
 
 #: common/layer_id.cpp:105
-#, fuzzy
 msgid "Wires"
-msgstr "Проводник"
+msgstr "Проводники"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Шины"
 
 #: common/layer_id.cpp:107
-#, fuzzy
 msgid "Bus junctions"
-msgstr "Соединение шин"
+msgstr "Соединения шин"
 
 #: common/layer_id.cpp:108
-#, fuzzy
 msgid "Junctions"
-msgstr "Соединение"
+msgstr "Соединения"
 
 #: common/layer_id.cpp:109
-#, fuzzy
 msgid "Labels"
-msgstr "Метка"
+msgstr "Метки"
 
 #: common/layer_id.cpp:110
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
@@ -4781,22 +4772,18 @@ msgid "Hierarchical labels"
 msgstr "Иерархические метки"
 
 #: common/layer_id.cpp:112
-#, fuzzy
 msgid "Pin numbers"
-msgstr "Номера выводов:"
+msgstr "Номера выводов"
 
 #: common/layer_id.cpp:113
-#, fuzzy
 msgid "Pin names"
-msgstr "Имя вывода"
+msgstr "Имена выводов"
 
 #: common/layer_id.cpp:114
-#, fuzzy
 msgid "Symbol references"
 msgstr "Обозначения символов"
 
 #: common/layer_id.cpp:115
-#, fuzzy
 msgid "Symbol values"
 msgstr "Значения символов"
 
@@ -4805,12 +4792,10 @@ msgid "Symbol fields"
 msgstr "Поля символов"
 
 #: common/layer_id.cpp:117
-#, fuzzy
 msgid "Symbol body outlines"
 msgstr "Контуры символов"
 
 #: common/layer_id.cpp:118
-#, fuzzy
 msgid "Symbol body fills"
 msgstr "Заливки символов"
 
@@ -4824,31 +4809,27 @@ msgstr "Имена цепей"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
-msgstr ""
+msgstr "Выводы"
 
 #: common/layer_id.cpp:122
-#, fuzzy
 msgid "Sheet borders"
-msgstr "Контур листа"
+msgstr "Контуры листа"
 
 #: common/layer_id.cpp:123
-#, fuzzy
 msgid "Sheet backgrounds"
-msgstr "Фон листа"
+msgstr "Фоны листов"
 
 #: common/layer_id.cpp:124
-#, fuzzy
 msgid "Sheet names"
-msgstr "Имя листа"
+msgstr "Имена листов"
 
 #: common/layer_id.cpp:125
 msgid "Sheet fields"
 msgstr "Поля листа"
 
 #: common/layer_id.cpp:126
-#, fuzzy
 msgid "Sheet file names"
-msgstr "Имя файла листа"
+msgstr "Имена файлов листов"
 
 #: common/layer_id.cpp:127
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
@@ -4856,19 +4837,16 @@ msgid "Sheet pins"
 msgstr "Выводы листов"
 
 #: common/layer_id.cpp:128
-#, fuzzy
 msgid "No-connect symbols"
-msgstr "Символ \"Не подключено\""
+msgstr "Символы \"Не подключено\""
 
 #: common/layer_id.cpp:129
-#, fuzzy
 msgid "ERC warnings"
-msgstr "Предупреждение ERC"
+msgstr "Предупреждения ERC"
 
 #: common/layer_id.cpp:130
-#, fuzzy
 msgid "ERC errors"
-msgstr "Ошибка ERС"
+msgstr "Ошибки ERС"
 
 #: common/layer_id.cpp:131 common/layer_id.cpp:168
 msgid "Helper items"
@@ -4898,7 +4876,6 @@ msgid "Highlighted items"
 msgstr "Подсвеченные элементы"
 
 #: common/layer_id.cpp:137
-#, fuzzy
 msgid "Hidden items"
 msgstr "Скрытые элементы"
 
@@ -4913,12 +4890,10 @@ msgid "Worksheet"
 msgstr "Форматная рамка"
 
 #: common/layer_id.cpp:143
-#, fuzzy
 msgid "Footprints front"
 msgstr "Посад.места сверху"
 
 #: common/layer_id.cpp:144
-#, fuzzy
 msgid "Footprints back"
 msgstr "Посад.места снизу"
 
@@ -4939,32 +4914,26 @@ msgid "Reference designators"
 msgstr "Обозначения"
 
 #: common/layer_id.cpp:147
-#, fuzzy
 msgid "Footprint text front"
-msgstr "Текст посад.места сверху"
+msgstr "Текст посад.мест сверху"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Footprint text back"
-msgstr "Текст посад.места снизу"
+msgstr "Текст посад.мест снизу"
 
 #: common/layer_id.cpp:149
-#, fuzzy
 msgid "Hidden text"
 msgstr "Скрытый текст"
 
 #: common/layer_id.cpp:150
-#, fuzzy
 msgid "Pads front"
 msgstr "Конт.пл. сверху"
 
 #: common/layer_id.cpp:151
-#, fuzzy
 msgid "Pads back"
 msgstr "Конт.пл. снизу"
 
 #: common/layer_id.cpp:152
-#, fuzzy
 msgid "Through-hole pads"
 msgstr "Конт.пл. со сквозными отв."
 
@@ -4978,27 +4947,22 @@ msgid "Tracks"
 msgstr "Дорожки"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Through vias"
-msgstr "Сквозные перех.отв.:"
+msgstr "Сквозные перех.отв."
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Bl/Buried vias"
-msgstr "Глухое/внутр. перех.отв."
+msgstr "Глухие/внутр. перех.отв."
 
 #: common/layer_id.cpp:156
-#, fuzzy
 msgid "Micro-vias"
 msgstr "Перех.микроотв."
 
 #: common/layer_id.cpp:157
-#, fuzzy
 msgid "Via holes"
 msgstr "Отверстия перех.отв."
 
 #: common/layer_id.cpp:158
-#, fuzzy
 msgid "Non-plated holes"
 msgstr "Неметал. отв."
 
@@ -5009,27 +4973,22 @@ msgid "Ratsnest"
 msgstr "Связи"
 
 #: common/layer_id.cpp:160
-#, fuzzy
 msgid "No-connects"
 msgstr "Не подключено"
 
 #: common/layer_id.cpp:161
-#, fuzzy
 msgid "DRC warnings"
-msgstr "Предупреждения"
+msgstr "Предупреждения DRC"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "DRC errors"
-msgstr "Ошибки"
+msgstr "Ошибки DRC"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC exclusions"
-msgstr "Исключения"
+msgstr "Исключения DRC"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC marker shadows"
 msgstr "Тени маркеров DRC"
 
@@ -5038,7 +4997,6 @@ msgid "Anchors"
 msgstr "Привязки"
 
 #: common/layer_id.cpp:170
-#, fuzzy
 msgid "Grid axes"
 msgstr "Оси сетки"
 
@@ -5588,33 +5546,28 @@ msgid "Replace all matches"
 msgstr "Заменить все совпадения"
 
 #: common/tool/actions.cpp:245
-#, fuzzy
 msgid "Previous Marker"
-msgstr "Предыдущий слой"
+msgstr "Предыдущий маркер"
 
 #: common/tool/actions.cpp:245
-#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr "Показать окно проверки электрических правил"
+msgstr "Перейти к предыдущему маркеру из окна проверки правил"
 
 #: common/tool/actions.cpp:251
-#, fuzzy
 msgid "Next Marker"
-msgstr "Найти следующий маркер"
+msgstr "Следующий маркер"
 
 #: common/tool/actions.cpp:251
-#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr "Показать окно проверки посад.места"
+msgstr "Перейти к следующему маркеру из окна проверки правил"
 
 #: common/tool/actions.cpp:257
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Исключён "
+msgstr "Исключить маркер"
 
 #: common/tool/actions.cpp:257
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Пометить текущее нарушение в окне проверки правил как исключение"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
@@ -6078,9 +6031,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Отражение по оси Y пока не доступно"
 
 #: common/widgets/footprint_preview_widget.cpp:98
-#, fuzzy
 msgid "Footprint not found."
-msgstr "Посад.место не найдено"
+msgstr "Посад.место не найдено."
 
 #: common/widgets/footprint_select_widget.cpp:215
 msgid "No default footprint"
@@ -6823,15 +6775,14 @@ msgid "Lib: %s"
 msgstr "Библиотека: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like Kicad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Некоторые из назначенных посад.мест используют устаревшие записи "
-"(отсутствует уникальное имя библиотеки). Желаете ли, чтобы CvPcb попыталась "
+"Некоторые из назначенных посад.мест используют устаревшие записи ("
+"отсутствует уникальное имя библиотеки). Желаете ли, чтобы KiCad попыталась "
 "преобразовать их в новый требуемый формат LIB_ID? (Если ответите нет, по "
 "завершении эти назначения будут убраны и можно будет самостоятельно "
 "переназначить данные посад.места.)"
@@ -6917,42 +6868,34 @@ msgstr ""
 "Сохранить имя назначенного посад.места в поле посад.места символа схемы"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next unassigned symbol"
 msgstr "Выбрать следующий символ без посад.места"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Соответствия Символ : Посад.место"
+msgstr "Выбрать следующий символ без назначенного посад.места"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
-#, fuzzy
 msgid "Select previous unassigned symbol"
 msgstr "Выбрать предыдущий символ без посад.места"
 
 #: cvpcb/tools/cvpcb_actions.cpp:100
-#, fuzzy
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Заменять посад.места для компонентов с изменённым посад.местом"
+msgstr "Выбрать предыдущий символ без назначенного посад.места"
 
 #: cvpcb/tools/cvpcb_actions.cpp:109
-#, fuzzy
 msgid "Assign footprint"
-msgstr "Назначить посад.места"
+msgstr "Назначить посад.место"
 
 #: cvpcb/tools/cvpcb_actions.cpp:110
-#, fuzzy
 msgid "Assign footprint to selected symbols"
-msgstr "Посад.место не выбрано"
+msgstr "Назначить посад.место для выбранного символа"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
-#, fuzzy
 msgid "Automatically assign footprints"
 msgstr "Назначить посад.места автоматически"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
-#, fuzzy
 msgid "Perform automatic footprint assignment"
 msgstr "Выполнить автоматическое назначение посад.мест"
 
@@ -7122,7 +7065,7 @@ msgstr ""
 "Цепь %s графически подключена к шине %s, но она не является членом этой шины"
 
 #: eeschema/connection_graph.cpp:2732
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Выводу листа %s не соответствует ни одна иерархическая метка внутри листа"
@@ -7133,7 +7076,7 @@ msgid "%s pin %s found"
 msgstr "%s вывод %s найден"
 
 #: eeschema/cross-probing.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
 msgstr "%s найден, но %s не найден"
 
@@ -7762,24 +7705,24 @@ msgid "Update"
 msgstr "Обновить"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "Обновлено %s с %s в %s"
+msgstr "Обновление символа %s из '%s' в '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Обновлено %s с %s в %s"
+msgstr "Обновление символов %s из '%s' в '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:506
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Значение %s изменено с '%s' на '%s'."
+msgstr "Замена символа %s из '%s' на '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:513
-#, fuzzy, c-format
+#, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Значение %s изменено с '%s' на '%s'."
+msgstr "Замена символов %s из '%s' на '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:524
 msgid "*** symbol not found ***"
@@ -7814,9 +7757,8 @@ msgid "New library identifier:"
 msgstr "Новый идентификатор библиотеки:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
-#, fuzzy
 msgid "Update/reset Fields"
-msgstr "Обновить поля"
+msgstr "Обновить/сбросить поля"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:108
 msgid "Select None"
@@ -7841,19 +7783,16 @@ msgid "Reset fields if empty in library symbol"
 msgstr "Очистить поля, которые в библиотеке пусты"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
-#, fuzzy
 msgid "Update/reset field visibilities"
-msgstr "Сбросить параметр видимости полей"
+msgstr "Обновить/сбросить видимость полей"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:133
-#, fuzzy
 msgid "Update/reset field sizes and styles"
-msgstr "Сбросить размер и стиль полей"
+msgstr "Обновить/сбросить размер и стиль полей"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:136
-#, fuzzy
 msgid "Update/reset field positions"
-msgstr "Сбросить положение полей"
+msgstr "Обновить/сбросить положение полей"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
 msgid "Update Symbols from Library"
@@ -7865,14 +7804,12 @@ msgid "Select with Browser"
 msgstr "Выбрать в обозревателе"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:143
-#, fuzzy
 msgid "Place repeated copies"
-msgstr "Разместить выбранные посад.места"
+msgstr "Разместить несколько копий"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:145
-#, fuzzy
 msgid "Keep the symbol selected for subsequent clicks."
-msgstr "Не выбраны символы для сохранения."
+msgstr "Оставить символ выбранным для размещения нескольких копий."
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:147
 msgid "Place all units"
@@ -8464,7 +8401,6 @@ msgid "Group symbols"
 msgstr "Группировать символы"
 
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:33
-#, fuzzy
 msgid "Group symbols together based on common properties"
 msgstr "Группировать символы на основе общих свойств"
 
@@ -8604,7 +8540,7 @@ msgid "symbol"
 msgstr "символ"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty symbol library table.\n"
 "\n"
@@ -8619,46 +8555,41 @@ msgid "Please select a symbol library table file."
 msgstr "Пожалуйста выберите файл таблицы библиотек символов."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' not found."
-msgstr "Файл %s не найден."
+msgstr "Файл '%s' не найден."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is not a valid symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Файл \"%s\" - неверный файл таблицы библиотек символов.\n"
+"'%s' - неверный файл таблицы библиотек символов.\n"
 "\n"
 "%s"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create global library table path '%s'."
-msgstr "Не удалось создать глобальную таблицу библиотек по пути \"%s\"."
+msgstr "Не удалось создать глобальную таблицу библиотек по пути '%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
-"Не удалось скопировать файл глобальной таблицы библиотек символов:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":в:\n"
-"\n"
-"%s."
+"Не удалось скопировать файл глобальной таблицы библиотек символов '%s' в "
+"'%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred loading global symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Произошла ошибка при загрузке глобальной таблицы библиотек символов:\n"
+"Произошла ошибка при загрузке глобальной таблицы библиотек символов.\n"
 "\n"
 "%s"
 
@@ -8674,9 +8605,8 @@ msgstr "Свойства соединений"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:455
 #: eeschema/dialogs/dialog_lib_edit_text.cpp:58
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:92
-#, fuzzy
 msgid "Read Only"
-msgstr "[Только чтение]"
+msgstr "Только чтение"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -8915,6 +8845,9 @@ msgid ""
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Поставьте отметку, если компонент состоит из нескольких частей, которые\n"
+"не взаимозаменяемы между собой. Если отметка снята, то части компонента\n"
+"будут отличаться только номерами выводов."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
@@ -9672,9 +9605,8 @@ msgid "Black and White"
 msgstr "Чёрно-белый"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:82
-#, fuzzy
 msgid "Plot background color"
-msgstr "Печатать фон листа"
+msgstr "Чертить фон листа"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
@@ -11476,9 +11408,9 @@ msgid "50"
 msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Неправильный символ '%c' в уникальном имени: \"%s\""
+msgstr "Неверный символ '%c' в уникальном имени '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:345
 #: eeschema/dialogs/panel_sym_lib_table.cpp:387
@@ -11491,7 +11423,7 @@ msgstr "Ошибка уникального имени библиотеки"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "Библиотеки не могут иметь одино и то же уникальное имя ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:420
 #, c-format
@@ -11512,15 +11444,15 @@ msgstr "Предупреждение: дублирование имён"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:465
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:846
-#, fuzzy, c-format
+#, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Библиотека с именем \"%s\" уже существует."
+msgstr "Библиотека с именем '%s' уже существует."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:466
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:847
-#, fuzzy
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr "Пожалуйста, смените имя библиотеки после её добавления."
+msgstr ""
+"Одно из уникальных имён нужно изменить после добавления этой библиотеки."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:485
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1016
@@ -11538,12 +11470,15 @@ msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
 msgstr ""
+"Выберите одну или несколько строк с устаревшими библиотеками, чтобы "
+"сохранить их в текущем формате (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:701
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
 msgstr ""
+"Сохранить '%s' в текущем формате (*.kicad_sym) и заменить запись в таблице?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -11551,16 +11486,18 @@ msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"Сохранить %d устаревших библиотек в текущем формате (*.kicad_sym) и заменить "
+"записи в таблице?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
-#, fuzzy, c-format
+#, c-format
 msgid "Library '%s' not found."
-msgstr "Библиотека \"%s\" не найдена."
+msgstr "Библиотека '%s' не найдена."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:743
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save symbol library file '%s'."
-msgstr "Не удалось сохранить файл библиотеки символов \"%s\""
+msgstr "Не удалось сохранить файл библиотеки символов '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:951
 msgid ""
@@ -11652,9 +11589,8 @@ msgid "Remove library from table"
 msgstr "Удалить библиотеку из таблицы"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:167
-#, fuzzy
 msgid "Migrate Libraries..."
-msgstr "Менеджер библиотек символов..."
+msgstr "Конвертировать библиотеки..."
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:177
 msgid "Path Substitutions:"
@@ -11766,19 +11702,18 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Вывод %s соединён как с %s, так и с %s"
 
 #: eeschema/erc.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr "Имя '%s' конфликтует с существующим элементом в библиотеке '%s'."
+msgstr "Текущая конфигурация не содержит библиотеку '%s'."
 
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "Библиотека '%s' не задействована в текущей конфигурации."
 
 #: eeschema/erc_item.cpp:42
-#, fuzzy
 msgid "Conflicts"
-msgstr "Карта конфликтов выводов"
+msgstr "Конфликты"
 
 #: eeschema/erc_item.cpp:43 pcbnew/drc/drc_item.cpp:46
 msgid "Miscellaneous"
@@ -11805,7 +11740,6 @@ msgid "Conflict problem between pins"
 msgstr "Конфликт между выводами"
 
 #: eeschema/erc_item.cpp:70
-#, fuzzy
 msgid "Mismatch between hierarchical labels and sheet pins"
 msgstr "Различие между иерархическими метками и выводами листа"
 
@@ -11830,12 +11764,10 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Метки похожи (разница только в нижнем/верхнем регистре)"
 
 #: eeschema/erc_item.cpp:94
-#, fuzzy
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "Частям одного компонента назначены разные посадочные места"
 
 #: eeschema/erc_item.cpp:98
-#, fuzzy
 msgid "Different net assigned to a shared pin in another unit of the symbol"
 msgstr "Разные цепи подключены к общим выводам разных частей одного компонента"
 
@@ -11910,9 +11842,9 @@ msgstr "Не удалось переименовать временный фай
 #: eeschema/files-io.cpp:186 pagelayout_editor/files.cpp:159
 #: pagelayout_editor/files.cpp:173 pagelayout_editor/files.cpp:204
 #: pcbnew/files.cpp:930
-#, fuzzy, c-format
+#, c-format
 msgid "File \"%s\" saved."
-msgstr "Файл %s сохранён"
+msgstr "Файл \"%s\" сохранён."
 
 #: eeschema/files-io.cpp:191
 msgid "File write operation failed."
@@ -12117,9 +12049,9 @@ msgid "Root"
 msgstr "Корневой лист"
 
 #: eeschema/hierarch.cpp:275
-#, fuzzy, c-format
+#, c-format
 msgid "(page %s)"
-msgstr "(слой %s)"
+msgstr "(лист %s)"
 
 #: eeschema/lib_arc.cpp:402 eeschema/lib_bezier.cpp:340
 #: eeschema/lib_circle.cpp:250 eeschema/lib_polyline.cpp:340
@@ -12235,14 +12167,13 @@ msgstr "Родитель"
 
 #: eeschema/lib_view_frame.cpp:386
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1186
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Текущие настройки не включают библиотеку символов\n"
-"\"%s\".\n"
-"Воспользуйтесь менеджером библиотек символов для редактирования настроек."
+"В текущей конфигурации библиотеку символов '%s' не задействована.\n"
+"Воспользуйтесь менеджером библиотек символов для изменения параметров."
 
 #: eeschema/lib_view_frame.cpp:389
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1189
@@ -12251,14 +12182,13 @@ msgstr "Библиотека не найдена в таблице библио�
 
 #: eeschema/lib_view_frame.cpp:393
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1197
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Библиотека с уникальным именем \"%s\" не задействована\n"
-"в текущей конфигурации. Воспользуйтесь менеджером библиотек символов\n"
-"для редактирования настроек."
+"Библиотека '%s' не задействована в текущей конфигурации.\n"
+"Воспользуйтесь менеджером библиотек символов для изменения параметров."
 
 #: eeschema/lib_view_frame.cpp:396
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1200
@@ -12689,9 +12619,8 @@ msgid "Highlighted net: %s"
 msgstr "Подсвечена цепь: %s"
 
 #: eeschema/sch_field.cpp:475
-#, fuzzy
 msgid "<root sheet>"
-msgstr "<корневой>"
+msgstr "<корневой лист>"
 
 #: eeschema/sch_field.cpp:482
 #, c-format
@@ -12850,13 +12779,13 @@ msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:98
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
-"Схема CADSTAR содержит исполнения, которые не имеют аналогов в KiCad. Все "
-"компоненты будут загружены поверх друг друга. "
+"Схема CADSTAR содержит исполнения, которые не имеют аналогов в KiCad. Только "
+"главное исполнение ('%s') было загружено."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:106
 msgid ""
@@ -12943,6 +12872,8 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"Символ '%s' масштабирован в исходной схеме CADSTAR, что не поддерживается в "
+"KiCad. Символ загружен в масштабе 1:1 и может потребовать редактирования."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:864
 #, c-format
@@ -12960,6 +12891,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"Символ '%s' повёрнут на угол %.1f° в исходной схеме CADSTAR, но KiCad "
+"поддерживает только углы кратные 90°. Подключенные проводники требуют "
+"исправления."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1160
 #, c-format
@@ -14350,27 +14284,28 @@ msgid ""
 msgstr "Редактируется символ %s из схемы. Сохранение коснётся только схемы."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:729
-#, fuzzy
 msgid "Manage symbol libraries"
-msgstr "Менеджер библиотек символов..."
+msgstr "Менеджер библиотек символов"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Символы из устаревших библиотек доступны только для чтения. Используйте "
+"менеджер библиотек символов для преобразования в текущий формат."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:750
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
+"Символ %s происходит от %s. Редактирование графического обозначения будет "
+"недоступно."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Открыть \"%s\"\n"
+msgstr "Открыть %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:839
 #, c-format
@@ -14499,15 +14434,14 @@ msgstr "Символ \"%s\" уже существует в библиотеке 
 
 #: eeschema/symbol_editor/symbol_editor.cpp:583
 #: eeschema/symbol_editor/symbol_editor.cpp:1129
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr "Библиотека символов не задействована."
+msgstr "Библиотека символов '%s' только для чтения."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:584
 #: eeschema/symbol_editor/symbol_editor.cpp:1130
-#, fuzzy
 msgid "You must save to a different location."
-msgstr "Настроить перекос диф.пары"
+msgstr "Необходимо сохранить в другом месте."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:635 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:878
@@ -14697,11 +14631,11 @@ msgid "Export current drawing"
 msgstr "Экспорт текущей графики"
 
 #: eeschema/symbol_lib_table.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Найдена копия библиотеки с именем \"%s\" в строке %d файла таблицы библиотек "
+"Найдена копия библиотеки с именем '%s' в строке %d файла таблицы библиотек "
 "символов"
 
 #: eeschema/symbol_tree_model_adapter.cpp:106
@@ -14720,9 +14654,8 @@ msgid "(failed to load)"
 msgstr "(не удалось загрузить)"
 
 #: eeschema/toolbars_lib_view.cpp:52
-#, fuzzy
 msgid "Choose symbol"
-msgstr "Символ питания"
+msgstr "Выбрать символ"
 
 #: eeschema/toolbars_lib_view.cpp:56
 msgid "Display previous symbol"
@@ -14733,9 +14666,8 @@ msgid "Display next symbol"
 msgstr "Показать следующий символ"
 
 #: eeschema/toolbars_lib_view.cpp:109
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "Проверить символ"
+msgstr "Просмотрщик символов"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
@@ -14780,9 +14712,9 @@ msgstr ""
 "Нужно запустить менеджер проектов KiCad и создать проект."
 
 #: eeschema/tools/backannotate.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "Посад.место '%s' не связано ни с одним из сиволов."
+msgstr "Посад.место '%s' не связано ни с одним из символов."
 
 #: eeschema/tools/backannotate.cpp:194
 #, c-format
@@ -14800,6 +14732,8 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
+"Посад.места '%s' нет на плате. Соответствующие символы схемы нужно удалить "
+"вручную (если потребуется)."
 
 #: eeschema/tools/backannotate.cpp:301
 msgid "Cannot relink footprints because schematic is not fully annotated."
@@ -14827,9 +14761,9 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Не удалось найти у %s вывод '%s'."
 
 #: eeschema/tools/backannotate.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "У %s посад.место изменено с '%s' на '%s'."
+msgstr "У %s, вывод %s, изменена метка цепи с '%s' на '%s'."
 
 #: eeschema/tools/backannotate.cpp:554
 #, c-format
@@ -14838,9 +14772,9 @@ msgstr ""
 "Цепь %s не может быть заменена на '%s', так как подключена к силовому выводу."
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Добавление метки '%s' для цепи %s."
+msgstr "Добавление метки цепи '%s' к %s, вывод %s."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -15136,7 +15070,6 @@ msgid "Add Hierarchical Label"
 msgstr "Добавить иерархическую метку"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add a hierarchical label"
 msgstr "Добавить метку иерархического листа"
 
@@ -15467,9 +15400,8 @@ msgid "Assign Footprints..."
 msgstr "Назначить посад.места..."
 
 #: eeschema/tools/ee_actions.cpp:548
-#, fuzzy
 msgid "Run footprint assignment tool"
-msgstr "Соответствия символ/посад.место"
+msgstr "Запустить инструмент назначения посад.мест"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Import Footprint Assignments..."
@@ -15546,7 +15478,6 @@ msgid "Switch to PCB Editor"
 msgstr "Перейти к редактору платы"
 
 #: eeschema/tools/ee_actions.cpp:598
-#, fuzzy
 msgid "Open PCB in board editor"
 msgstr "Открыть плату в Pcbnew"
 
@@ -15571,16 +15502,14 @@ msgid "Highlight on PCB"
 msgstr "Подсветить на плате"
 
 #: eeschema/tools/ee_actions.cpp:613
-#, fuzzy
 msgid "Highlight corresponding items in board editor"
-msgstr "Подсветить соответствующие компоненты в PCBNew"
+msgstr "Подсветить соответствующие компоненты в редакторе плат"
 
 #: eeschema/tools/ee_actions.cpp:618
 msgid "Show Hidden Pins"
 msgstr "Показать скрытые выводы"
 
 #: eeschema/tools/ee_actions.cpp:618
-#, fuzzy
 msgid "Toggle display of hidden pins"
 msgstr "Переключить отображение скрытых выводов"
 
@@ -15589,9 +15518,8 @@ msgid "Show Hidden Fields"
 msgstr "Показать скрытые поля"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Toggle display of hidden text fields"
-msgstr "Переключить отображение слоёв паяльной пасты"
+msgstr "Переключить отображение скрытых надписей"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Force H/V Wires and Buses"
@@ -15620,14 +15548,12 @@ msgid "Display the parent sheet in the Eeschema window"
 msgstr "Показать содержимое родительского листа в окне Eeschema"
 
 #: eeschema/tools/ee_actions.cpp:647
-#, fuzzy
 msgid "Hierarchy Navigator"
 msgstr "Навигатор по иерархии листов"
 
 #: eeschema/tools/ee_actions.cpp:647
-#, fuzzy
 msgid "Show schematic sheet hierarchy"
-msgstr "Свойства выводов листа"
+msgstr "Показать иерархию листов схемы"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Navigate to page"
@@ -15862,9 +15788,8 @@ msgid "symbol is not multi-unit"
 msgstr "символ не содержит частей"
 
 #: eeschema/tools/sch_edit_tool.cpp:934
-#, fuzzy
 msgid "Label value cannot go below zero"
-msgstr "Угол дуги не может быть нулевым."
+msgstr "Значение метки не может становиться меньше нуля"
 
 #: eeschema/tools/sch_edit_tool.cpp:1095 pcbnew/tools/pcb_control.cpp:471
 msgid "Item locked."
@@ -15968,9 +15893,8 @@ msgid "No schematic currently open."
 msgstr "Ни одна схема не открыта."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:517
-#, fuzzy
 msgid "Edit Symbol Name"
-msgstr "Имя символа"
+msgstr "Править имя символа"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:222
 #, c-format
@@ -17172,9 +17096,8 @@ msgid "Failed to delete '%s'"
 msgstr "Не удалось удалить '%s'"
 
 #: kicad/project_tree_pane.cpp:241
-#, fuzzy
 msgid "Directory name:"
-msgstr "Направление:"
+msgstr "Имя каталога:"
 
 #: kicad/project_tree_pane.cpp:241
 msgid "Create New Directory"
@@ -17297,11 +17220,11 @@ msgstr "Переименование файла"
 
 #: kicad/project_tree_pane.cpp:1164
 msgid "Network path: not monitoring folder changes"
-msgstr ""
+msgstr "Сетевой каталог: изменения не отслеживаются"
 
 #: kicad/project_tree_pane.cpp:1169
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "Локальный каталог: изменения отслеживаются"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -17656,9 +17579,8 @@ msgid "From:"
 msgstr "Из:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:265
-#, fuzzy
 msgid "End Position"
-msgstr "Поз. X"
+msgstr "Конечная позиция"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:339
 msgid "Set to 0 for default"
@@ -17674,9 +17596,8 @@ msgid "Bitmap DPI:"
 msgstr "DPI изображения:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:393
-#, fuzzy
 msgid "Step"
-msgstr "Шаг по X:"
+msgstr "Шаг"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:401
 msgid "Repeat count:"
@@ -17713,9 +17634,8 @@ msgid "Set to Default"
 msgstr "Установить по умолчанию"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:554
-#, fuzzy
 msgid "Page Margins"
-msgstr "Поля листа:"
+msgstr "Поля листа"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:562
 msgid "Left:"
@@ -17823,14 +17743,12 @@ msgid "Page layout changes are unsaved"
 msgstr "Изменения форматной рамки не сохранены"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
-#, fuzzy
 msgid "Page Width"
-msgstr "Ширина диф.пары"
+msgstr "Ширина листа"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
-#, fuzzy
 msgid "Page Height"
-msgstr "Высота текста"
+msgstr "Высота листа"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:74
 msgid "Left Top paper corner"
@@ -22033,7 +21951,6 @@ msgstr "3D-модели"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:410
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:508
-#, fuzzy
 msgid "3D Models"
 msgstr "3D-модели"
 
@@ -22091,7 +22008,6 @@ msgid "Update text sizes, styles and positions"
 msgstr "Обновить размер, стиль и положение текста"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Update fabrication attributes"
 msgstr "Обновить атрибуты производства"
 
@@ -22106,16 +22022,20 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"Обновить/сбросить надписи: имеется два случая, подпадающих под это описание: "
+"когда пользователь изменяет посад.место на плате и затем хочет вернуть "
+"начальный вид или когда пользователь изменяет посад.место в библиотеке и "
+"хочет применить изменения к посад.местам на плате."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprint %s from '%s' to '%s'"
-msgstr "Обновлено %s с %s в %s"
+msgstr "Обновить посад.место %s с '%s' на '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:377
-#, fuzzy, c-format
+#, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "У %s посад.место изменено с '%s' на '%s'."
+msgstr "Заменить посад.место %s с '%s' на '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:387
 msgid "*** footprint not found ***"
@@ -22150,24 +22070,20 @@ msgid "Remove text items which are not in library footprint"
 msgstr "Удалить текстовые поля, которых нет в библиотеке"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Update/reset text layers and visibilities"
-msgstr "Обновить слой текста и видимость"
+msgstr "Обновить/сбросить слой текста и видимость"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Update/reset text sizes, styles and positions"
-msgstr "Обновить размер, стиль и положение текста"
+msgstr "Обновить/сбросить размер, стиль и положение текста"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Update/reset fabrication attributes"
-msgstr "Обновить атрибуты производства"
+msgstr "Обновить/сбросить атрибуты производства"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "Обновить 3D модели"
+msgstr "Обновить/сбросить 3D модели"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -22596,7 +22512,6 @@ msgid "Footprint Checker"
 msgstr "Проверить посад.место"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:312
-#, fuzzy
 msgid ""
 "Footprint can be freely moved and auto placed. User can arbitrarily select "
 "and edit footprint's pads."
@@ -22605,15 +22520,13 @@ msgstr ""
 "Пользователь может произвольно выбирать и редактировать конт.пл. компонента."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:314
-#, fuzzy
 msgid ""
 "Footprint can be freely moved and auto placed, but its pads cannot be edited."
 msgstr ""
-"Компонент может быть свободно перемещён или размещён автоматически, но конт."
-"пл. не могут быть отредактированы."
+"Компонент может быть свободно перемещён или размещён автоматически, но "
+"конт.пл. не могут быть отредактированы."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:316
-#, fuzzy
 msgid ""
 "Footprint is locked: it cannot be freely moved or auto placed, and can only "
 "be selected when the 'Locked items' checkbox is enabled in the selection "
@@ -23727,9 +23640,8 @@ msgstr "Файл списка цепей не существует."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:140
-#, fuzzy
 msgid "Changes Applied to PCB"
-msgstr "Изменения на плате"
+msgstr "Изменения применены к плате"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:233
 #, c-format
@@ -23737,16 +23649,14 @@ msgid "Reading netlist file \"%s\".\n"
 msgstr "Чтение файла списка цепей \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:237
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr "Для сопоставление компонентов и посад.мест используются обозначения.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:239
-#, fuzzy
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
-"Для сопоставления компонентов и посад.мест используются временные метки "
-"(уникальные идентификаторы).\n"
+"Для сопоставления компонентов и посад.мест используются временные метки ("
+"уникальные идентификаторы).\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
@@ -25526,15 +25436,16 @@ msgid "End layer:"
 msgstr "Конечный слой:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:265
-#, fuzzy
 msgid "Automatically update via net"
-msgstr "Панорамировать при перемещении объекта"
+msgstr "Обновлять цепь перех.отв. автоматически"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:266
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
+"Автоматически изменять цепь перех.отв. при изменении прилегающей конт.пл. "
+"или зоны"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:110
 msgid "Track & Via Properties"
@@ -25698,9 +25609,8 @@ msgid "Magnetic pads"
 msgstr "Притягивающиеся конт.пл."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
-#, fuzzy
 msgid "Magnetic graphics"
-msgstr "Притягивающиеся конт.пл."
+msgstr "Притягивающаяся графика"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:38
 msgid "L&imit graphic lines to H, V and 45 degrees"
@@ -25730,87 +25640,78 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Команды левой кнопки мыши"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:72
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
+"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия клавиш:\n"
+"Alt, Shift и Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:167
-#, fuzzy
 msgid "No modifier"
-msgstr ""
-"\n"
-"Компонентов нет"
+msgstr "Без клавиш"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:91
 #: pcbnew/dialogs/panel_edit_options_base.cpp:172
-#, fuzzy
 msgid "Select item(s)."
-msgstr "Выбрать элемент(ы)"
+msgstr "Выбрать элемент(ы)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 #: pcbnew/dialogs/panel_edit_options_base.cpp:182
-#, fuzzy
 msgid "Add item(s) to selection."
-msgstr "Добавить к выделенному"
+msgstr "Добавить к выделенному."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:106
-#, fuzzy
 msgid "Shift+Alt"
-msgstr "Shift"
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:111
 #: pcbnew/dialogs/panel_edit_options_base.cpp:192
-#, fuzzy
 msgid "Remove item(s) from selection."
-msgstr "Убрать из выделенного"
+msgstr "Убрать из выделенного."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:121
 #: pcbnew/dialogs/panel_edit_options_base.cpp:202
-#, fuzzy
 msgid "Toggle selected state of item(s)."
-msgstr "Удалить выбранный(ые) элемент(ы)"
+msgstr "Изменить состояние выделения на противоположное."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:131
 #: pcbnew/dialogs/panel_edit_options_base.cpp:212
-#, fuzzy
 msgid "Clarify selection from menu."
-msgstr "Уточнение выбора"
+msgstr "Уточнение выбора с помощью меню."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:136
-#, fuzzy
 msgid "Ctrl+Shift"
-msgstr "Shift"
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:222
-#, fuzzy
 msgid "Highlight net (for pads or tracks)."
-msgstr "Подсветить цепь под курсором"
+msgstr "Подсветить цепь (конт.пл. или дорожки)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:153
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
+"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия клавиш:\n"
+"Alt, Shift и Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:187
-#, fuzzy
 msgid "Shift+Cmd"
-msgstr "Shift"
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:197
-#, fuzzy
 msgid "Cmd"
-msgstr "Команда"
+msgstr "Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:217
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 msgid "Magnetic Points"
@@ -25935,9 +25836,9 @@ msgid "Edit options"
 msgstr "Редактировать параметры"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Неправильный символ '%c' в уникальном имени: \"%s\""
+msgstr "Неверный символ '%c' в уникальном имени '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:780
 #, c-format
@@ -25953,9 +25854,8 @@ msgid "Failed to open directories to look for libraries"
 msgstr "Не удалось открыть каталоги при поиске библиотек"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:845
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Предупреждение: дублирование имён"
+msgstr "Предупреждение: дублирование уникальных имён"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 msgid "Add Existing"
@@ -26108,9 +26008,8 @@ msgid "Minimum via diameter:"
 msgstr "Минимальный диаметр перех.отв.:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:242
-#, fuzzy
 msgid "Copper hole clearance:"
-msgstr "Зазор у края платы:"
+msgstr "Зазор отв. меди:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:256
 msgid "Copper edge clearance:"
@@ -27185,24 +27084,20 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Локальные зазор на %s; зазор: %s."
 
 #: pcbnew/drc/drc_item.cpp:42
-#, fuzzy
 msgid "Electrical"
-msgstr "Электрический тип"
+msgstr "Электрические"
 
 #: pcbnew/drc/drc_item.cpp:43
-#, fuzzy
 msgid "Design For Manufacturing"
-msgstr "Вне платы, производственный"
+msgstr "Производственные"
 
 #: pcbnew/drc/drc_item.cpp:44
-#, fuzzy
 msgid "Schematic Parity"
-msgstr "Несоответствия в схеме (%d)"
+msgstr "Соответствие схеме"
 
 #: pcbnew/drc/drc_item.cpp:45
-#, fuzzy
 msgid "Signal Integrity"
-msgstr "Задержка сигнала:"
+msgstr "Целостность сигналов"
 
 #: pcbnew/drc/drc_item.cpp:49
 msgid "Unconnected items"
@@ -27557,9 +27452,9 @@ msgid "Checking hole to hole clearances..."
 msgstr "Проверка зазоров между отверстиями..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "(%s %s; текущий %s)"
+msgstr "(%s мин. %s; текущий %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:79
 msgid "Checking pad holes..."
@@ -28113,28 +28008,26 @@ msgid "Edit Zone"
 msgstr "Править зону"
 
 #: pcbnew/footprint_editor_utils.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Текущая конфигурация не содержит библиотеку с уникальным\n"
-"именем \"%s\". Воспользуйтесь менеджером библиотек посад.мест\n"
-"для редактирования настроек."
+"Текущая конфигурация не содержит библиотеку '%s'.\n"
+"Воспользуйтесь менеджером библиотек посад.мест для настройки параметров."
 
 #: pcbnew/footprint_editor_utils.cpp:284
 msgid "Library not found in footprint library table."
 msgstr "Библиотека посад.мест не найдена в таблице."
 
 #: pcbnew/footprint_editor_utils.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Библиотека с уникальным именем\"%s\" не задействована\n"
-"в текущей конфигурации. Воспользуйтесь менеджером библиотек посад.мест для\n"
-"редактирования настроек."
+"Библиотека '%s' не задействована в текущей конфигурации.\n"
+"Воспользуйтесь менеджером библиотек посад.мест для настройки параметров."
 
 #: pcbnew/footprint_editor_utils.cpp:295 pcbnew/footprint_viewer_frame.cpp:923
 msgid "Footprint library not enabled."
@@ -28264,14 +28157,14 @@ msgid "Footprint %s already exists in %s."
 msgstr "Посад.место %s уже существует в %s."
 
 #: pcbnew/footprint_libraries_utils.cpp:976
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "Посад.место '%s' удалено из библиотеки '%s'"
+msgstr "Посад.место '%s' заменено в '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:977
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr "Посад.место '%s' удалено из библиотеки '%s'"
+msgstr "Посад.место '%s' добавлено к '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Enter footprint name:"
@@ -28309,28 +28202,26 @@ msgstr ""
 "%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Текущая конфигурация не содержит библиотеку посад.мест\n"
-"\"%s\".\n"
-"Воспользуйтесь менеджером библиотек посад.мест для редактирования настроек."
+"Текущая конфигурация не содержит библиотеку посад.мест '%s'. Воспользуйтесь "
+"менеджером библиотек посад.мест для настройки параметров."
 
 #: pcbnew/footprint_viewer_frame.cpp:916
 msgid "Footprint library not found."
 msgstr "Библиотека посад.мест не найдена."
 
 #: pcbnew/footprint_viewer_frame.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Библиотека с уникальным именем\"%s\" не задействована\n"
-"в текущей конфигурации. Воспользуйтесь менеджером библиотек посад.мест для\n"
-"редактирования настроек."
+"Библиотека '%s' не задействована в текущей конфигурации. Воспользуйтесь "
+"менеджером библиотек посад.мест для настройки параметров."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
 #: pcbnew/footprint_wizard_frame_functions.cpp:78
@@ -28375,9 +28266,8 @@ msgid "Couldn't reload footprint wizard"
 msgstr "Не удалось загрузить Мастер посад.мест"
 
 #: pcbnew/fp_shape.cpp:114 pcbnew/fp_text.cpp:283
-#, fuzzy
 msgid "<invalid>"
-msgstr "Неверное"
+msgstr "<неверно>"
 
 #: pcbnew/fp_shape.cpp:123 pcbnew/pcb_shape.cpp:908
 #, c-format
@@ -28897,7 +28787,7 @@ msgid "Disconnect %s pin %s."
 msgstr "Отключена цепь от %s вывод %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "No net for symbol %s pin %s."
 msgstr "Нет цепи у компонента %s, вывод %s."
 
@@ -28957,9 +28847,9 @@ msgid "%s pad %s not found in %s."
 msgstr "%s конт.пл. %s не найдена в %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:819
-#, fuzzy, c-format
+#, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Обработка компонента \"%s:%s\"."
+msgstr "Обработка компонента '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:875
 #, c-format
@@ -29324,9 +29214,9 @@ msgid "must be mm, in, or mil"
 msgstr "должно быть mm, in, или mil"
 
 #: pcbnew/pcb_group.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Анонимная группа, %zu элементов"
+msgstr "Безымянная группа, %zu элементов"
 
 #: pcbnew/pcb_group.cpp:293
 #, c-format
@@ -29334,9 +29224,8 @@ msgid "Group \"%s\", %zu members"
 msgstr "Группа \"%s\", %zu элементов"
 
 #: pcbnew/pcb_group.cpp:307
-#, fuzzy
 msgid "<unnamed>"
-msgstr "безымянный"
+msgstr "<без имени>"
 
 #: pcbnew/pcb_group.cpp:308
 msgid "Members"
@@ -30244,7 +30133,7 @@ msgstr "Предупреждение об устаревшей зоне"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:544
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Файл '%s' имеет неизвестную версию: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:698
 #, c-format
@@ -31017,7 +30906,7 @@ msgstr "Отчёт о зазоре"
 #: pcbnew/tools/board_inspection_tool.cpp:309
 #: pcbnew/tools/board_inspection_tool.cpp:322
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "Нельзя сформировать отчёт о зазорах для пустой группы."
 
 #: pcbnew/tools/board_inspection_tool.cpp:363
 msgid "Silkscreen clearance resolution for:"
@@ -31222,7 +31111,6 @@ msgid "Edit track width/via size"
 msgstr "Редактировать размеры ширина дорожки/перех.отв."
 
 #: pcbnew/tools/edit_tool.cpp:719
-#, fuzzy
 msgid "At least two straight track segments must be selected."
 msgstr "Как минимум два прямых отрезка дорожки должны быть выделены."
 
@@ -31501,7 +31389,7 @@ msgstr "Разместить точку привязки посад.места"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr ""
+msgstr "Установить начало координат (привязку) для посад.места"
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Increase Line Width"
@@ -33401,38 +33289,32 @@ msgstr ""
 "Настройках, чтобы редактирование цветов стало возможным."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
-#, fuzzy
 msgid "Objects"
-msgstr "Масштаб по компонентам"
+msgstr "Объекты"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:74
-#, fuzzy
 msgid "Show the Net Inspector"
 msgstr "Показать инспектора цепей"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:128
-#, fuzzy
 msgid "Configure net classes"
-msgstr "Настройка путей"
+msgstr "Настроить классы цепей"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
-#, fuzzy
 msgid "Presets:"
-msgstr "Наборы слоёв"
+msgstr "Наборы:"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "(unsaved)"
-msgstr "[Изменено]"
+msgstr "(изменено)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:184
-#, fuzzy
 msgid "Layer presets"
-msgstr "Имя нового набора слоёв:"
+msgstr "Наборы слоёв"
 
 #: pcbnew/widgets/panel_selection_filter.cpp:130
 #, c-format
@@ -33440,38 +33322,32 @@ msgid "Only %s"
 msgstr "Только %s"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:21
-#, fuzzy
 msgid "All items"
-msgstr "Все файлы"
+msgstr "Все элементы"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
-#, fuzzy
 msgid "Locked items"
-msgstr "Заблокированные дорожки"
+msgstr "Заблокированные"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
-#, fuzzy
 msgid "Allow selection of locked items"
-msgstr "Удалить снова для удаления заблокированных элементов"
+msgstr "Разрешить выделение заблокированных элементов"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:51
-#, fuzzy
 msgid "Graphics"
-msgstr "Чертёж..."
+msgstr "Графика"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
-#, fuzzy
 msgid "Rule Areas"
-msgstr "Область запрета"
+msgstr "Области запрета"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
 msgstr "Размеры"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
-#, fuzzy
 msgid "Other items"
-msgstr "Последующие листы"
+msgstr "Прочие элементы"
 
 #: pcbnew/zone.cpp:549
 msgid "Rule Area"
@@ -33583,7 +33459,6 @@ msgid "Building zone fills..."
 msgstr "Построение заливки зоны..."
 
 #: pcbnew/zone_filler.cpp:305
-#, fuzzy
 msgid "Removing isolated copper islands..."
 msgstr "Удаление изолированных участков меди..."
 
