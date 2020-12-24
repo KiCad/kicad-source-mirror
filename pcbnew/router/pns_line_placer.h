@@ -93,12 +93,15 @@ public:
 
     void FlipPosture();
 
+    void SetDisabled( bool aDisabled = true ) { m_disabled = aDisabled; }
+
 private:
     SHAPE_LINE_CHAIN m_trail;
     int              m_tolerance;
     DIRECTION_45     m_direction;
-    DIRECTION_45 m_lastSegDirection;
-    bool m_forced;
+    DIRECTION_45     m_lastSegDirection;
+    bool             m_forced;
+    bool             m_disabled;
 };
 
 /**

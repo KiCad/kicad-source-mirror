@@ -986,6 +986,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     m_postureSolver.AddTrailPoint( aP );
     m_postureSolver.SetTolerance( m_head.Width() );
     m_postureSolver.SetDefaultDirections( m_initial_direction, DIRECTION_45::UNDEFINED );
+    m_postureSolver.SetDisabled( !Settings().GetAutoPosture() );
 
     NODE *n;
 
@@ -1409,7 +1410,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
                 initial_radius = Settings().GetMaxRadius();
 
 
-            if( !m_tail.PointCount() && Settings().GetAutoPosture() )
+            if( !m_tail.PointCount() )
                 l = guessedDir.BuildInitialTrace( m_p_start, aP, false, initial_radius );
             else
                 l = m_direction.BuildInitialTrace( m_p_start, aP, false, initial_radius );
@@ -1523,8 +1524,9 @@ int FIXED_TAIL::StageCount() const
 
 POSTURE_SOLVER::POSTURE_SOLVER()
 {
-    m_forced = false;
+    m_forced    = false;
     m_tolerance = 0;
+    m_disabled  = false;
 }
 
 
@@ -1587,7 +1589,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     // Adjusts how close to p0 we unlock the posture again if one was locked already
     const int unlockDistanceFactor = 4;
 
-    if( m_trail.PointCount() < 2 )
+    if( m_disabled || m_trail.PointCount() < 2 )
         return m_direction;
 
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
