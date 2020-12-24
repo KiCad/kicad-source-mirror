@@ -119,9 +119,9 @@ void ZONE::InitDataFromSrcInCopyCtor( const ZONE& aZone )
     m_cornerSmoothingType     = aZone.m_cornerSmoothingType;
     m_cornerRadius            = aZone.m_cornerRadius;
     m_zoneName                = aZone.m_zoneName;
-    SetLayerSet( aZone.GetLayerSet() );
     m_priority                = aZone.m_priority;
     m_isRuleArea              = aZone.m_isRuleArea;
+    SetLayerSet( aZone.GetLayerSet() );
 
     m_doNotAllowCopperPour    = aZone.m_doNotAllowCopperPour;
     m_doNotAllowVias          = aZone.m_doNotAllowVias;
