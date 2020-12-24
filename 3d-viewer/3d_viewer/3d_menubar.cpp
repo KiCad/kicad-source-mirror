@@ -105,7 +105,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     prefsMenu->Add( _( "Display Options" ), "",
                     ID_TOOL_SET_VISIBLE_ITEMS,
-                    read_setup_xpm );
+                    config_xpm );
 
     prefsMenu->Add( _( "Raytracing" ), "",
                     ID_RENDER_CURRENT_VIEW,
@@ -151,7 +151,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
     // Color  submenu
     ACTION_MENU* colorSubmenu = new ACTION_MENU( false, tool );
     colorSubmenu->SetTitle( _( "Choose Colors" ) );
-    colorSubmenu->SetIcon( palette_xpm );
+    colorSubmenu->SetIcon( color_materials_xpm );
 
     colorSubmenu->Add( _( "Background Top Color..." ),
                        ID_MENU3D_BGCOLOR_TOP,

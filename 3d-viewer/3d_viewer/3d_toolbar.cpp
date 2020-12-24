@@ -63,7 +63,7 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
 
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->AddTool( ID_TOOL_SET_VISIBLE_ITEMS, wxEmptyString,
-                            KiScaledBitmap( read_setup_xpm, this ),
+                            KiScaledBitmap( config_xpm, this ),
                             _( "Set display options, and some layers visibility" ) );
 
     m_mainToolBar->AddScaledSeparator( this );

@@ -32,13 +32,13 @@
 
 /* All KiCad icons are linked into shared library 'libbitmaps.a'.
  *  Icons:
- *  preference_xpm;    // Icon for 'Developers' tab
- *  editor_xpm;        // Icon for 'Doc Writers' tab
- *  palette_xpm;       // Icon for 'Artists' tab
- *  language_xpm;      // Icon for 'Translators' tab
- *  right_xpm;         // Right arrow icon for list items
- *  info_xpm;          // Bulb for description tab
- *  tools_xpm;         // Sheet of paper icon for license info tab
+ *  preference_xpm;         // Icon for 'Developers' tab
+ *  editor_xpm;             // Icon for 'Doc Writers' tab
+ *  color_materials_xpm;    // Icon for 'Artists' tab
+ *  language_xpm;           // Icon for 'Translators' tab
+ *  right_xpm;              // Right arrow icon for list items
+ *  info_xpm;               // Bulb for description tab
+ *  tools_xpm;              // Sheet of paper icon for license info tab
  */
 #include <bitmaps.h>
 #include <build_version.h>
@@ -56,15 +56,15 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     // TODO: Change these to 16x16 versions when available
     m_images = new wxImageList( 24, 24, false, 9 );
 
-    m_images->Add( KiBitmap( info_xpm ) );         // INFORMATION
-    m_images->Add( KiBitmap( recent_xpm ) );       // VERSION
-    m_images->Add( KiBitmap( preference_xpm ) );   // DEVELOPERS
-    m_images->Add( KiBitmap( editor_xpm ) );       // DOCWRITERS
-    m_images->Add( KiBitmap( library_xpm ) );      // LIBRARIANS
-    m_images->Add( KiBitmap( palette_xpm ) );      // ARTISTS
-    m_images->Add( KiBitmap( language_xpm ) );     // TRANSLATORS
-    m_images->Add( KiBitmap( zip_xpm ) );          // PACKAGERS
-    m_images->Add( KiBitmap( tools_xpm ) );        // LICENSE
+    m_images->Add( KiBitmap( info_xpm ) );              // INFORMATION
+    m_images->Add( KiBitmap( recent_xpm ) );            // VERSION
+    m_images->Add( KiBitmap( preference_xpm ) );        // DEVELOPERS
+    m_images->Add( KiBitmap( editor_xpm ) );            // DOCWRITERS
+    m_images->Add( KiBitmap( library_xpm ) );           // LIBRARIANS
+    m_images->Add( KiBitmap( color_materials_xpm ) );   // ARTISTS
+    m_images->Add( KiBitmap( language_xpm ) );          // TRANSLATORS
+    m_images->Add( KiBitmap( zip_xpm ) );               // PACKAGERS
+    m_images->Add( KiBitmap( tools_xpm ) );             // LICENSE
 
     m_notebook->SetImageList( m_images );
 

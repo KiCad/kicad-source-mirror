@@ -365,7 +365,6 @@ set( BMAPS_MID
     path
     pagelayout_normal_view_mode
     pagelayout_special_view_mode
-    palette
     part_properties
     paste
     pcb_offset
@@ -395,7 +394,6 @@ set( BMAPS_MID
     ps_tune_length
     push_pad_settings
     py_script
-    read_setup
     recent
     redo
     refresh24
