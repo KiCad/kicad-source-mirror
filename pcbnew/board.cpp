@@ -246,6 +246,8 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_TEXT_T,
         PCB_SHAPE_T,
         PCB_DIM_ALIGNED_T,
+        PCB_DIM_ORTHOGONAL_T,
+        PCB_DIM_CENTER_T,
         PCB_DIM_LEADER_T,
         PCB_TARGET_T,
         PCB_VIA_T,
