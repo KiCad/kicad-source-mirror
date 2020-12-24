@@ -196,12 +196,11 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         // is called, GetParent() will return nullptr.  While this works for some calls, it
         // segfaults when we have our first library expanded.
         // The tree will be expanded again below when we get our matches
-        if( !aSearch.IsNull() )
+        if( !aSearch.IsNull() && m_tree.m_Children.size() )
             m_widget->Collapse( wxDataViewItem( &*m_tree.m_Children[0] ) );
 
-        // Even with the updateLock, wxWidgets sometimes ties its knickers in
-        // a knot when trying to run a wxdataview_selection_changed_callback()
-        // on a row that has been deleted.
+        // Even with the updateLock, wxWidgets sometimes ties its knickers in a knot trying to
+        // run a wxdataview_selection_changed_callback() on a row that has been deleted.
         // https://bugs.launchpad.net/kicad/+bug/1756255
         m_widget->UnselectAll();
 
@@ -214,7 +213,7 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
 
         m_tree.ResetScore();
 
-        for( auto& child: m_tree.m_Children )
+        for( std::unique_ptr<LIB_TREE_NODE>& child: m_tree.m_Children )
         {
             if( child->m_Pinned )
                 child->m_Score *= 2;

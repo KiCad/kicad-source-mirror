@@ -52,7 +52,7 @@ static int matchPosScore(int aPosition, int aMaximum)
 
 void LIB_TREE_NODE::ResetScore()
 {
-    for( auto& child: m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         child->ResetScore();
 
     m_Score = kLowestDefaultScore;
@@ -72,8 +72,8 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
     }
     else
     {
-        for( auto const& node: m_Children )
-            sort_buf.push_back( &*node );
+        for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+            sort_buf.push_back( child.get() );
 
         std::sort( sort_buf.begin(), sort_buf.end(),
                 []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
@@ -289,7 +289,7 @@ void LIB_TREE_NODE_LIB::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 
     if( m_Children.size() )
     {
-        for( auto& child: m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         {
             child->UpdateScore( aMatcher );
             m_Score = std::max( m_Score, child->m_Score );
@@ -333,7 +333,7 @@ LIB_TREE_NODE_LIB& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxString c
 
 void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER& aMatcher )
 {
-    for( auto& child: m_Children )
+    for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
         child->UpdateScore( aMatcher );
 }
 
