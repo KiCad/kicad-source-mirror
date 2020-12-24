@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-23 22:21+0000\n"
+"PO-Revision-Date: 2020-12-25 08:23+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -4976,33 +4976,28 @@ msgid "No-connects"
 msgstr "Χωρίς-Συνδέσεις"
 
 #: common/layer_id.cpp:161
-#, fuzzy
 msgid "DRC warnings"
-msgstr "DRC Προειδοποιήσεις"
+msgstr "DRC προειδοποιήσεις"
 
 #: common/layer_id.cpp:162
-#, fuzzy
 msgid "DRC errors"
-msgstr "DRC Σφάλματα"
+msgstr "DRC σφάλματα"
 
 #: common/layer_id.cpp:163
-#, fuzzy
 msgid "DRC exclusions"
 msgstr "Εξαιρέσεις DRC"
 
 #: common/layer_id.cpp:164
-#, fuzzy
 msgid "DRC marker shadows"
-msgstr "Σκιές Δεικτών DRC"
+msgstr "Σκιές δεικτών DRC"
 
 #: common/layer_id.cpp:165 pcbnew/widgets/appearance_controls.cpp:352
 msgid "Anchors"
 msgstr "Αγκιστρώσεις"
 
 #: common/layer_id.cpp:170
-#, fuzzy
 msgid "Grid axes"
-msgstr "Άξονες Πλέγματος"
+msgstr "Άξονες πλέγματος"
 
 #: common/lib_id.cpp:280
 msgid "Illegal character found in logical library name"
@@ -7561,12 +7556,12 @@ msgstr "Ενημέρωση του %s από %s σε %s"
 #: eeschema/dialogs/dialog_change_symbols.cpp:506
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
-msgstr "Αλλαγή συμβόλου %s από '%s' σε '%s'."
+msgstr "Αλλαγή συμβόλου %s από '%s' σε '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:513
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
-msgstr "Αλλαγή συμβόλων %s από '%s' σε '%s'."
+msgstr "Αλλαγή συμβόλων %s από '%s' σε '%s'"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:524
 msgid "*** symbol not found ***"
@@ -25700,13 +25695,11 @@ msgstr "Προσθήκη εξαρτημάτων"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:91
 #: pcbnew/dialogs/panel_edit_options_base.cpp:172
-#, fuzzy
 msgid "Select item(s)."
-msgstr "Επιλογή αντικειμένων"
+msgstr "Επιλογή αντικειμένου/ων."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:101
 #: pcbnew/dialogs/panel_edit_options_base.cpp:182
-#, fuzzy
 msgid "Add item(s) to selection."
 msgstr "Προσθήκη στην Επιλογή"
 
@@ -25717,7 +25710,6 @@ msgstr "Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:111
 #: pcbnew/dialogs/panel_edit_options_base.cpp:192
-#, fuzzy
 msgid "Remove item(s) from selection."
 msgstr "Αφαίρεση από την Επιλογή"
 
