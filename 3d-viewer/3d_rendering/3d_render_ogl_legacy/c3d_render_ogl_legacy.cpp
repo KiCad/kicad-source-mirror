@@ -1109,6 +1109,9 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
     delete m_board;
     m_board = nullptr;
 
+    delete m_board_with_holes;
+    m_board_with_holes = nullptr;
+
     delete m_anti_board;
     m_anti_board = nullptr;
 
