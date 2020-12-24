@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-23 22:21+0000\n"
+"PO-Revision-Date: 2020-12-25 08:23+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -14678,12 +14678,12 @@ msgid "Export current drawing"
 msgstr "Eksportuj bieżący rysunek"
 
 #: eeschema/symbol_lib_table.cpp:228
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Znaleziono zduplikowaną nazwę skrótową biblioteki \"%s\" w tabeli bibliotek "
-"w linii %d"
+"Znaleziono zduplikowaną nazwę skrótową biblioteki '%s' w tabeli bibliotek w "
+"linii %d"
 
 #: eeschema/symbol_tree_model_adapter.cpp:106
 #, c-format
@@ -14701,9 +14701,8 @@ msgid "(failed to load)"
 msgstr "(nie można załadować)"
 
 #: eeschema/toolbars_lib_view.cpp:52
-#, fuzzy
 msgid "Choose symbol"
-msgstr "Symbol zasilania"
+msgstr "Wybierz symbol"
 
 #: eeschema/toolbars_lib_view.cpp:56
 msgid "Display previous symbol"
@@ -14714,9 +14713,8 @@ msgid "Display next symbol"
 msgstr "Pokaż następny symbol"
 
 #: eeschema/toolbars_lib_view.cpp:109
-#, fuzzy
 msgid "Symbol Viewer"
-msgstr "Sprawdzanie symbolu"
+msgstr "Przeglądarka symboli"
 
 #: eeschema/tools/assign_footprints.cpp:204
 msgid "Load Symbol Footprint Link File"
@@ -14761,9 +14759,9 @@ msgstr ""
 "Należy uruchomić Menedżer programu KiCad oraz utworzyć projekt."
 
 #: eeschema/tools/backannotate.cpp:161
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' has no assigned symbol."
-msgstr "Footprint '%s' nie ma przydzielonego symbolu."
+msgstr "Footprint '%s' nie ma przypisanego symbolu."
 
 #: eeschema/tools/backannotate.cpp:194
 #, c-format
@@ -15122,9 +15120,8 @@ msgid "Add Hierarchical Label"
 msgstr "Dodaj etykietę hierarchiczną"
 
 #: eeschema/tools/ee_actions.cpp:301
-#, fuzzy
 msgid "Add a hierarchical label"
-msgstr "Dodaje etykietę hierarchiczną"
+msgstr "Dodaj etykietę hierarchiczną"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Sheet"
@@ -15456,9 +15453,8 @@ msgid "Assign Footprints..."
 msgstr "Przydziel footprinty..."
 
 #: eeschema/tools/ee_actions.cpp:548
-#, fuzzy
 msgid "Run footprint assignment tool"
-msgstr "Przypisania footprintów"
+msgstr "Uruchom narzędzie do przypisywania footprintów"
 
 #: eeschema/tools/ee_actions.cpp:553
 msgid "Import Footprint Assignments..."
@@ -15536,9 +15532,8 @@ msgid "Switch to PCB Editor"
 msgstr "Przełącz do edytora PCB"
 
 #: eeschema/tools/ee_actions.cpp:598
-#, fuzzy
 msgid "Open PCB in board editor"
-msgstr "Otwórz PCB w Pcbnew"
+msgstr "Otwórz PCB w edytorze obwodów drukowanych"
 
 #: eeschema/tools/ee_actions.cpp:603
 msgid "Export Netlist..."
@@ -15561,16 +15556,14 @@ msgid "Highlight on PCB"
 msgstr "Podświetl sieć na PCB"
 
 #: eeschema/tools/ee_actions.cpp:613
-#, fuzzy
 msgid "Highlight corresponding items in board editor"
-msgstr "Podświetla elementy należące do tej sieci w Pcbnew"
+msgstr "Podświetla odpowiadające elementy w edytorze obwodów drukowanych"
 
 #: eeschema/tools/ee_actions.cpp:618
 msgid "Show Hidden Pins"
 msgstr "Pokaż ukryte piny"
 
 #: eeschema/tools/ee_actions.cpp:618
-#, fuzzy
 msgid "Toggle display of hidden pins"
 msgstr "Przełącza widoczność pinów ukrytych"
 
@@ -15579,9 +15572,8 @@ msgid "Show Hidden Fields"
 msgstr "Pokaż ukryte pola tekstowe"
 
 #: eeschema/tools/ee_actions.cpp:623
-#, fuzzy
 msgid "Toggle display of hidden text fields"
-msgstr "Przełącza wyświetlanie warstw pasty lutowniczej"
+msgstr "Przełącza widoczność ukrytych pól tekstowych"
 
 #: eeschema/tools/ee_actions.cpp:628
 msgid "Force H/V Wires and Buses"
@@ -15608,14 +15600,12 @@ msgid "Display the parent sheet in the Eeschema window"
 msgstr "Wyświetla nadrzędny arkusz w oknie programu Eeschema"
 
 #: eeschema/tools/ee_actions.cpp:647
-#, fuzzy
 msgid "Hierarchy Navigator"
-msgstr "Pokaż okno nawigacji w hierarchii schematów"
+msgstr "Nawigator hierarchii"
 
 #: eeschema/tools/ee_actions.cpp:647
-#, fuzzy
 msgid "Show schematic sheet hierarchy"
-msgstr "Właściwości arkusza schematów"
+msgstr "Wyświetla okno z hierarchią arkuszy"
 
 #: eeschema/tools/ee_actions.cpp:652
 msgid "Navigate to page"
@@ -15956,9 +15946,8 @@ msgid "No schematic currently open."
 msgstr "Żaden schemat nie jest obecnie edytowany."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:517
-#, fuzzy
 msgid "Edit Symbol Name"
-msgstr "Nazwa symbolu"
+msgstr "Edytuj nazwę symbolu"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:222
 #, c-format
@@ -17170,9 +17159,8 @@ msgid "Failed to delete '%s'"
 msgstr "Niepowodzenie przy usuwaniu '%s'"
 
 #: kicad/project_tree_pane.cpp:241
-#, fuzzy
 msgid "Directory name:"
-msgstr "Kierunek:"
+msgstr "Nazwa folderu:"
 
 #: kicad/project_tree_pane.cpp:241
 msgid "Create New Directory"
@@ -17656,9 +17644,8 @@ msgid "From:"
 msgstr "Z:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:265
-#, fuzzy
 msgid "End Position"
-msgstr "Pozycja X"
+msgstr "Pozycja końcowa"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:339
 msgid "Set to 0 for default"
@@ -17821,14 +17808,12 @@ msgid "Page layout changes are unsaved"
 msgstr "Zmiany definicji układu strony nie są zapisane"
 
 #: pagelayout_editor/pl_editor_layout.cpp:62
-#, fuzzy
 msgid "Page Width"
-msgstr "Szerokość DP"
+msgstr "Szerokość strony"
 
 #: pagelayout_editor/pl_editor_layout.cpp:65
-#, fuzzy
 msgid "Page Height"
-msgstr "Wysokość tekstu"
+msgstr "Wysokość strony"
 
 #: pagelayout_editor/toolbars_pl_editor.cpp:74
 msgid "Left Top paper corner"
@@ -22034,7 +22019,6 @@ msgstr "Modele 3D"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:410
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:508
-#, fuzzy
 msgid "3D Models"
 msgstr "Modele 3D"
 
@@ -22092,7 +22076,6 @@ msgid "Update text sizes, styles and positions"
 msgstr "Uaktualnij rozmiary tekstu, style oraz pozycje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:79
-#, fuzzy
 msgid "Update fabrication attributes"
 msgstr "Uaktualnij atrybuty fabrykacji"
 
@@ -22113,14 +22096,14 @@ msgstr ""
 "przenieść z powrotem na PCB."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
-#, fuzzy, c-format
+#, c-format
 msgid "Update footprint %s from '%s' to '%s'"
-msgstr "Uaktualnione %s z %s do %s"
+msgstr "Uaktualnij footprint %s z '%s' do '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:377
 #, c-format
 msgid "Change footprint %s from '%s' to '%s'"
-msgstr "Zmiana footprintu %s z '%s' na '%s'"
+msgstr "Zmień footprint %s z '%s' na '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:387
 msgid "*** footprint not found ***"
@@ -22155,24 +22138,20 @@ msgid "Remove text items which are not in library footprint"
 msgstr "Usuń elementy tekstowe które nie znajdują się w bibliotece footprintu"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:101
-#, fuzzy
 msgid "Update/reset text layers and visibilities"
-msgstr "Uaktualnij warstwy z tekstem oraz widoczność"
+msgstr "Uaktualnij/zresetuj warstwy z tekstem oraz widoczność"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:104
-#, fuzzy
 msgid "Update/reset text sizes, styles and positions"
-msgstr "Uaktualnij rozmiary tekstu, style oraz pozycje"
+msgstr "Uaktualnij/zresetuj rozmiary tekstu, style oraz pozycje"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
-#, fuzzy
 msgid "Update/reset fabrication attributes"
-msgstr "Uaktualnij atrybuty fabrykacji"
+msgstr "Uaktualnij/zresetuj atrybuty fabrykacji"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
-#, fuzzy
 msgid "Update/reset 3D models"
-msgstr "Uaktualnij modele 3D"
+msgstr "Uaktualnij/zresetuj modele 3D"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
 msgid "Update Footprints from Library"
@@ -22602,32 +22581,29 @@ msgid "Footprint Checker"
 msgstr "Sprawdzanie footprintów"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:312
-#, fuzzy
 msgid ""
 "Footprint can be freely moved and auto placed. User can arbitrarily select "
 "and edit footprint's pads."
 msgstr ""
-"Komponent może być swobodnie przesuwany lub automatycznie rozmieszczany. "
+"Footprint może być swobodnie przesuwany lub automatycznie rozmieszczany. "
 "Użytkownik może dowolnie wybierać i zmieniać pola lutownicze komponentu."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:314
-#, fuzzy
 msgid ""
 "Footprint can be freely moved and auto placed, but its pads cannot be edited."
 msgstr ""
-"Komponent może być swobodnie przesuwany lub automatycznie rozmieszczany, ale "
+"Footprint może być swobodnie przesuwany lub automatycznie rozmieszczany, ale "
 "jego pola lutownicze nie mogą być dowolnie zmieniane."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:316
-#, fuzzy
 msgid ""
 "Footprint is locked: it cannot be freely moved or auto placed, and can only "
 "be selected when the 'Locked items' checkbox is enabled in the selection "
 "filter."
 msgstr ""
-"Komponent jest zablokowany: nie można go swobodnie przenosić ani umieszczać "
+"Footprint jest zablokowany: nie można go swobodnie przenosić ani umieszczać "
 "automatycznie i można go wybrać tylko wtedy, gdy w filtrze wyboru jest "
-"zaznaczone pole wyboru \"Zablokowane elementy\"."
+"zaznaczone pole wyboru 'Zablokowane elementy'."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:49
@@ -23736,7 +23712,6 @@ msgstr "Plik z listą sieci nie istnieje."
 
 #: pcbnew/dialogs/dialog_netlist.cpp:159
 #: pcbnew/dialogs/dialog_update_pcb.cpp:140
-#, fuzzy
 msgid "Changes Applied to PCB"
 msgstr "Zmiany wprowadzone na PCB"
 
@@ -23746,15 +23721,14 @@ msgid "Reading netlist file \"%s\".\n"
 msgstr "Wczytuję listę sieci \"%s\".\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:237
-#, fuzzy
 msgid "Using reference designators to match symbols and footprints.\n"
 msgstr "Użyj odnośników przy dopasowywaniu komponentów do footprintów.\n"
 
 #: pcbnew/dialogs/dialog_netlist.cpp:239
-#, fuzzy
 msgid "Using tstamps (unique IDs) to match symbols and footprints.\n"
 msgstr ""
-"Użyj odcisków czasowych przy dopasowywaniu komponentów do footprintów.\n"
+"Użyj odcisków czasowych (unikalnych ID) przy dopasowywaniu komponentów do "
+"footprintów.\n"
 
 #: pcbnew/dialogs/dialog_netlist_base.cpp:25
 msgid "Netlist file:"
@@ -25548,9 +25522,8 @@ msgid "End layer:"
 msgstr "Końcowa warstwa:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:265
-#, fuzzy
 msgid "Automatically update via net"
-msgstr "Panoramuj podczas przesuwania obiektów"
+msgstr "Automatycznie uaktualniaj nazwy sieci na przelotkach"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:266
 msgid ""
@@ -25724,9 +25697,8 @@ msgid "Magnetic pads"
 msgstr "Magnetyczne pola lutownicze"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
-#, fuzzy
 msgid "Magnetic graphics"
-msgstr "Magnetyczne pola lutownicze"
+msgstr "Magnetyczne elementy graficzne"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:38
 msgid "L&imit graphic lines to H, V and 45 degrees"
@@ -25784,9 +25756,8 @@ msgid "Add item(s) to selection."
 msgstr "Dodaj element(y) do zaznaczenia."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:106
-#, fuzzy
 msgid "Shift+Alt"
-msgstr "Shift"
+msgstr "Shift+Alt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:111
 #: pcbnew/dialogs/panel_edit_options_base.cpp:192
@@ -25804,9 +25775,8 @@ msgid "Clarify selection from menu."
 msgstr "Sprecyzuj wybór z menu."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:136
-#, fuzzy
 msgid "Ctrl+Shift"
-msgstr "Shift"
+msgstr "Ctrl+Shift"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:141
 #: pcbnew/dialogs/panel_edit_options_base.cpp:222
@@ -25823,14 +25793,12 @@ msgstr ""
 "Alt, Shift i Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:187
-#, fuzzy
 msgid "Shift+Cmd"
-msgstr "Shift"
+msgstr "Shift+Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:197
-#, fuzzy
 msgid "Cmd"
-msgstr "Polecenie"
+msgstr "Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:217
 msgid "Alt+Cmd"
@@ -25982,9 +25950,8 @@ msgid "Failed to open directories to look for libraries"
 msgstr "Nie można otworzyć folderów by sprawdzić czy są tam biblioteki"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:845
-#, fuzzy
 msgid "Warning: Duplicate Nicknames"
-msgstr "Ostrzeżenie: Zduplikowana nazwa skrótowa"
+msgstr "Ostrzeżenie: Zduplikowane nazwy skrótowe"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:138
 msgid "Add Existing"
@@ -26140,9 +26107,8 @@ msgid "Minimum via diameter:"
 msgstr "Minimalny rozmiar przelotki:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:242
-#, fuzzy
 msgid "Copper hole clearance:"
-msgstr "Prześwit wobec krawędzi:"
+msgstr "Prześwit wobec otworu:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:256
 msgid "Copper edge clearance:"
@@ -27231,19 +27197,16 @@ msgid "Local clearance on %s; clearance: %s."
 msgstr "Lokalny prześwit na %s; prześwit: %s."
 
 #: pcbnew/drc/drc_item.cpp:42
-#, fuzzy
 msgid "Electrical"
-msgstr "Typ elektryczny"
+msgstr "Elektryczne"
 
 #: pcbnew/drc/drc_item.cpp:43
-#, fuzzy
 msgid "Design For Manufacturing"
-msgstr "Poza płytką, produkcyjna"
+msgstr "Produkcyjne"
 
 #: pcbnew/drc/drc_item.cpp:44
-#, fuzzy
 msgid "Schematic Parity"
-msgstr "Zgodność schematu (%d)"
+msgstr "Zgodność ze schematem"
 
 #: pcbnew/drc/drc_item.cpp:45
 msgid "Signal Integrity"
@@ -27602,9 +27565,9 @@ msgid "Checking hole to hole clearances..."
 msgstr "Sprawdzam prześwit pomiędzy otworami..."
 
 #: pcbnew/drc/drc_test_provider_hole_clearance.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min %s; actual %s)"
-msgstr "(%s %s; obecnie %s)"
+msgstr "(%s minimum %s; obecnie %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:79
 msgid "Checking pad holes..."
@@ -28314,14 +28277,14 @@ msgid "Footprint %s already exists in %s."
 msgstr "Footprint %s znajduje się już w %s."
 
 #: pcbnew/footprint_libraries_utils.cpp:976
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' replaced in '%s'"
-msgstr "Footprint '%s' usunięty z biblioteki '%s'"
+msgstr "Footprint '%s' zastąpiony w '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:977
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' added to '%s'"
-msgstr "Footprint '%s' usunięty z biblioteki '%s'"
+msgstr "Footprint '%s' dodany do '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:1025
 msgid "Enter footprint name:"
@@ -28422,9 +28385,8 @@ msgid "Couldn't reload footprint wizard"
 msgstr "Nie mogę przeładować kreatora footprintów"
 
 #: pcbnew/fp_shape.cpp:114 pcbnew/fp_text.cpp:283
-#, fuzzy
 msgid "<invalid>"
-msgstr "Niepoprawny"
+msgstr "<niepoprawny>"
 
 #: pcbnew/fp_shape.cpp:123 pcbnew/pcb_shape.cpp:908
 #, c-format
@@ -28942,9 +28904,9 @@ msgid "Disconnect %s pin %s."
 msgstr "Rozłączony %s pin %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:395
-#, fuzzy, c-format
+#, c-format
 msgid "No net for symbol %s pin %s."
-msgstr "Komponent %s pin %s nie ma przydzielonej sieci."
+msgstr "Symbol %s pin %s nie ma przydzielonej sieci."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:445
 #, c-format
@@ -29002,9 +28964,9 @@ msgid "%s pad %s not found in %s."
 msgstr "%s pole %s nie znalezione w %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:819
-#, fuzzy, c-format
+#, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Przetwarzam komponent \"%s:%s\"."
+msgstr "Przetwarzam symbol '%s:%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:875
 #, c-format
@@ -29367,9 +29329,9 @@ msgid "must be mm, in, or mil"
 msgstr "musi być mm, cal, lub mils"
 
 #: pcbnew/pcb_group.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Grupa anonimowa, %zu członków"
+msgstr "Nienazwana grupa, %zu członków"
 
 #: pcbnew/pcb_group.cpp:293
 #, c-format
@@ -29377,9 +29339,8 @@ msgid "Group \"%s\", %zu members"
 msgstr "Grupa \"%s\", %zu członków"
 
 #: pcbnew/pcb_group.cpp:307
-#, fuzzy
 msgid "<unnamed>"
-msgstr "bez_nazwy"
+msgstr "<bez_nazwy>"
 
 #: pcbnew/pcb_group.cpp:308
 msgid "Members"
@@ -31282,9 +31243,8 @@ msgid "Edit track width/via size"
 msgstr "Edycja szerokości ścieżki/rozmiaru przelotki"
 
 #: pcbnew/tools/edit_tool.cpp:719
-#, fuzzy
 msgid "At least two straight track segments must be selected."
-msgstr "Należy wybrać co najmniej dwa proste odcinki ścieżek."
+msgstr "Muszą być wybrane co najmniej dwa proste odcinki ścieżek."
 
 #: pcbnew/tools/edit_tool.cpp:723
 msgid "Enter fillet radius:"
@@ -33472,19 +33432,16 @@ msgstr ""
 "Ustawieniach by umożliwić zmianę kolorów."
 
 #: pcbnew/widgets/appearance_controls_base.cpp:46
-#, fuzzy
 msgid "Objects"
-msgstr "Powiększaj do obiektów"
+msgstr "Obiekty"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:74
-#, fuzzy
 msgid "Show the Net Inspector"
 msgstr "Pokaż Inspektora listy sieci"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:128
-#, fuzzy
 msgid "Configure net classes"
-msgstr "Konfiguracja ścieżek dostępu"
+msgstr "Konfiguracja klas sieci"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:169
 msgid "Presets:"
@@ -33495,9 +33452,8 @@ msgid "(Ctrl+Tab)"
 msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "(unsaved)"
-msgstr "[Nie zapisany]"
+msgstr "(nie zapisany)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:184
 msgid "Layer presets"
@@ -33509,37 +33465,32 @@ msgid "Only %s"
 msgstr "Tylko %s"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:21
-#, fuzzy
 msgid "All items"
-msgstr "Wszystkie pliki"
+msgstr "Wszystkie elementy"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
-#, fuzzy
 msgid "Locked items"
-msgstr "Zablokowane ścieżki"
+msgstr "Zablokowane elementy"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:27
-#, fuzzy
 msgid "Allow selection of locked items"
-msgstr "Skasować ponownie by usunąć zablokowane elementy"
+msgstr "Dopuszczaj zaznaczanie zablokowanych elementów"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:51
 msgid "Graphics"
 msgstr "Grafika"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:59
-#, fuzzy
 msgid "Rule Areas"
-msgstr "Strefa z regułami"
+msgstr "Strefy z regułami"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:63
 msgid "Dimensions"
 msgstr "Wymiary"
 
 #: pcbnew/widgets/panel_selection_filter_base.cpp:67
-#, fuzzy
 msgid "Other items"
-msgstr "Pozostałe strony"
+msgstr "Pozostałe elementy"
 
 #: pcbnew/zone.cpp:549
 msgid "Rule Area"
@@ -33651,7 +33602,6 @@ msgid "Building zone fills..."
 msgstr "Tworzenie wypełnień strefy..."
 
 #: pcbnew/zone_filler.cpp:305
-#, fuzzy
 msgid "Removing isolated copper islands..."
 msgstr "Usuwanie izolowanych obszarów miedzi..."
 
