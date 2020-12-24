@@ -4,16 +4,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-16 17:41+0000\n"
+"PO-Revision-Date: 2020-12-25 08:23+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -1567,7 +1567,7 @@ msgstr "Hủy bỏ"
 #: common/confirm.cpp:223 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122
 msgid "OK"
-msgstr ""
+msgstr "Đồng ý"
 
 #: common/confirm.cpp:280
 msgid "Info"
@@ -2219,11 +2219,12 @@ msgstr "Trình chỉnh sửa Ảnh"
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %d locked items."
-msgstr ""
+msgstr "Vùng chọn chứa %d đối tượng bị khóa."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
+#, fuzzy
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Các đối tượng này sẽ được bỏ qua trừ khi bạn ghi đè lên các ổ khóa."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 #, fuzzy
@@ -2231,12 +2232,13 @@ msgid "Do not show again."
 msgstr "Không hiện lại"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
+#, fuzzy
 msgid "Override Locks"
-msgstr ""
+msgstr "Ghi đè ổ khóa"
 
 #: common/dialogs/dialog_locked_items_query_base.h:58
 msgid "Locked Items"
-msgstr ""
+msgstr "Đối tượng Bị khóa"
 
 #: common/dialogs/dialog_migrate_settings.cpp:31
 #, fuzzy
@@ -4880,7 +4882,7 @@ msgstr "Dây"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Buses"
 
 #: common/layer_id.cpp:107
 #, fuzzy
@@ -4900,12 +4902,13 @@ msgstr "Nhãn"
 #: common/layer_id.cpp:110
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:43
 msgid "Global labels"
-msgstr ""
+msgstr "Nhãn toàn cục"
 
 #: common/layer_id.cpp:111
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
+#, fuzzy
 msgid "Hierarchical labels"
-msgstr ""
+msgstr "Nhãn phân cấp"
 
 #: common/layer_id.cpp:112
 #, fuzzy
@@ -4947,11 +4950,12 @@ msgstr "Ghi chú"
 
 #: common/layer_id.cpp:120 eeschema/dialogs/dialog_update_from_pcb_base.cpp:69
 msgid "Net names"
-msgstr ""
+msgstr "Tên net"
 
 #: common/layer_id.cpp:121
+#, fuzzy
 msgid "Pins"
-msgstr ""
+msgstr "Pins"
 
 #: common/layer_id.cpp:122
 #, fuzzy
@@ -4979,8 +4983,9 @@ msgstr "Tên tệp Sheet"
 
 #: common/layer_id.cpp:127
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:58
+#, fuzzy
 msgid "Sheet pins"
-msgstr ""
+msgstr "Ghim trang tính"
 
 #: common/layer_id.cpp:128
 #, fuzzy
@@ -5065,7 +5070,7 @@ msgstr "Giá trị"
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:53
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:27
 msgid "Reference designators"
-msgstr ""
+msgstr "Bộ chỉ định tham chiếu"
 
 #: common/layer_id.cpp:147
 #, fuzzy
@@ -5742,7 +5747,7 @@ msgstr "Xem trước trang giấy"
 
 #: common/tool/actions.cpp:245
 msgid "Go to previous marker in Checker window"
-msgstr ""
+msgstr "Đi tới điểm đánh dấu trước đó trong cửa sổ Bộ kiểm tra"
 
 #: common/tool/actions.cpp:251
 #, fuzzy
@@ -5750,8 +5755,9 @@ msgid "Next Marker"
 msgstr "Tìm Điểm đánh dấu Tiếp theo"
 
 #: common/tool/actions.cpp:251
+#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr ""
+msgstr "Đi tới điểm đánh dấu tiếp theo trong cửa sổ Bộ kiểm tra"
 
 #: common/tool/actions.cpp:257
 #, fuzzy
@@ -5759,8 +5765,9 @@ msgid "Exclude Marker"
 msgstr "Loại trừ "
 
 #: common/tool/actions.cpp:257
+#, fuzzy
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Đánh dấu vi phạm hiện tại trong cửa sổ Trình kiểm tra là loại trừ"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
@@ -6261,8 +6268,9 @@ msgid "Lines"
 msgstr "Dòng"
 
 #: common/widgets/gal_options_panel.cpp:88
+#, fuzzy
 msgid "Small crosses"
-msgstr ""
+msgstr "Chữ thập nhỏ"
 
 #: common/widgets/gal_options_panel.cpp:92
 msgid "Grid Style"
@@ -6276,15 +6284,15 @@ msgstr "Độ dày lưới:"
 #: common/widgets/gal_options_panel.cpp:131
 #: common/widgets/gal_options_panel.cpp:147
 msgid "px"
-msgstr ""
+msgstr "Px"
 
 #: common/widgets/gal_options_panel.cpp:120
 msgid "Min grid spacing:"
-msgstr ""
+msgstr "Khoảng cách lưới tối thiểu:"
 
 #: common/widgets/gal_options_panel.cpp:135
 msgid "Snap to Grid:"
-msgstr ""
+msgstr "Đính vào Lưới:"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6292,11 +6300,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:272
 #: pcbnew/dialogs/panel_edit_options_base.cpp:286
 msgid "Always"
-msgstr ""
+msgstr "Luôn luôn"
 
 #: common/widgets/gal_options_panel.cpp:139
 msgid "When grid shown"
-msgstr ""
+msgstr "Khi lưới được hiển thị"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6304,69 +6312,76 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:272
 #: pcbnew/dialogs/panel_edit_options_base.cpp:286
 msgid "Never"
-msgstr ""
+msgstr "Không bao giờ"
 
 #: common/widgets/gal_options_panel.cpp:164
 msgid "Cursor Options"
-msgstr ""
+msgstr "Tùy chọn Con trỏ"
 
 #: common/widgets/gal_options_panel.cpp:169
+#, fuzzy
 msgid "Small crosshair"
-msgstr ""
+msgstr "Hình chéo nhỏ"
 
 #: common/widgets/gal_options_panel.cpp:170
+#, fuzzy
 msgid "Full window crosshair"
-msgstr ""
+msgstr "Toàn bộ cửa sổ crosshair"
 
 #: common/widgets/gal_options_panel.cpp:175
 msgid "Cursor Shape"
-msgstr ""
+msgstr "Hình Con trỏ"
 
 #: common/widgets/gal_options_panel.cpp:180
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "Hình con trỏ cho các công cụ vẽ, vị trí và chuyển động"
 
 #: common/widgets/gal_options_panel.cpp:183
 msgid "Always show crosshairs"
-msgstr ""
+msgstr "Luôn hiển thị dấu chéo"
 
 #: common/widgets/grid_text_button_helpers.cpp:352
 msgid "Select a File"
-msgstr ""
+msgstr "Chọn một tệp tin"
 
 #: common/widgets/mathplot.cpp:1760
+#, fuzzy
 msgid "Center plot view to this position"
-msgstr ""
+msgstr "Trung tâm bản in hiển thị đến vị trí này"
 
 #: common/widgets/mathplot.cpp:1761 eeschema/sim/sim_plot_frame_base.cpp:87
+#, fuzzy
 msgid "Fit on Screen"
-msgstr ""
+msgstr "Tràn trên Màn hình"
 
 #: common/widgets/mathplot.cpp:1761
 msgid "Set plot view to show all items"
-msgstr ""
+msgstr "Cài đặt dạng xem bản in để hiển thị tất cả các mục"
 
 #: common/widgets/mathplot.cpp:1762
+#, fuzzy
 msgid "Zoom in plot view."
-msgstr ""
+msgstr "Phóng to vùng hiển thị bản in"
 
 #: common/widgets/mathplot.cpp:1763
+#, fuzzy
 msgid "Zoom out plot view."
-msgstr ""
+msgstr "Thu nhỏ chế độ xem bản in"
 
 #: common/widgets/net_selector.cpp:50
 msgid "<no net>"
 msgstr ""
 
 #: common/widgets/net_selector.cpp:51
+#, fuzzy
 msgid "<create net>"
-msgstr ""
+msgstr "< tạo net>"
 
 #: common/widgets/net_selector.cpp:76
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:612
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:651
 msgid "Filter:"
-msgstr ""
+msgstr "Bộ lọc:"
 
 #: common/widgets/paged_dialog.cpp:69
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:191
@@ -6374,49 +6389,49 @@ msgstr ""
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1427
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1703
 msgid "Reset to Defaults"
-msgstr ""
+msgstr "Đặt lại về Mặc định"
 
 #: common/widgets/unit_binder.cpp:206
 #, c-format
 msgid "%s must be at least %s."
-msgstr ""
+msgstr "%s phải ít nhất %s."
 
 #: common/widgets/unit_binder.cpp:220
 #, c-format
 msgid "%s must be less than %s."
-msgstr ""
+msgstr "%s phải nhỏ hơn %s."
 
 #: common/widgets/widget_hotkey_list.cpp:95
 msgid "Press a new hotkey, or press Esc to cancel..."
-msgstr ""
+msgstr "Nhấn phím nóng mới hoặc nhấn Esc để hủy bỏ..."
 
 #: common/widgets/widget_hotkey_list.cpp:102
 msgid "Command:"
-msgstr ""
+msgstr "Lệnh:"
 
 #: common/widgets/widget_hotkey_list.cpp:110
 msgid "Current key:"
-msgstr ""
+msgstr "Phím hiện tại:"
 
 #: common/widgets/widget_hotkey_list.cpp:152
 msgid "Set Hotkey"
-msgstr ""
+msgstr "Đặt Phím nóng"
 
 #: common/widgets/widget_hotkey_list.cpp:379
 msgid "Edit..."
-msgstr ""
+msgstr "Chỉnh sửa..."
 
 #: common/widgets/widget_hotkey_list.cpp:380
 msgid "Undo Changes"
-msgstr ""
+msgstr "Hoàn tác tất cả các thay đổi"
 
 #: common/widgets/widget_hotkey_list.cpp:381
 msgid "Clear Assigned Hotkey"
-msgstr ""
+msgstr "Xóa Phím nóng Được Gán"
 
 #: common/widgets/widget_hotkey_list.cpp:382
 msgid "Restore Default"
-msgstr ""
+msgstr "Khôi phục Mặc định"
 
 #: common/widgets/widget_hotkey_list.cpp:418
 #, c-format
@@ -6424,215 +6439,219 @@ msgid ""
 "\"%s\" is already assigned to \"%s\" in section \"%s\". Are you sure you "
 "want to change its assignment?"
 msgstr ""
+"\"%s\" đã được gán cho \"%s\" trong phần \"%s\". Bạn có chắc bạn muốn thay "
+"đổi việc đã gán của nó không?"
 
 #: common/widgets/widget_hotkey_list.cpp:424
 msgid "Confirm change"
-msgstr ""
+msgstr "Xác nhận thay đổi"
 
 #: common/widgets/widget_hotkey_list.cpp:444
 msgid "Command"
-msgstr ""
+msgstr "Lệnh"
 
 #: common/widgets/widget_hotkey_list.cpp:447
 msgid "(double-click to edit)"
-msgstr ""
+msgstr "(kích đúp để sửa)"
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Hotkey"
-msgstr ""
+msgstr "Phím tắt"
 
 #: common/wildcards_and_files_ext.cpp:175
 msgid "All files"
-msgstr ""
+msgstr "Tất cả Tập tin"
 
 #: common/wildcards_and_files_ext.cpp:181
 msgid "KiCad drawing symbol files"
-msgstr ""
+msgstr "Tệp bản vẽ symbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:187
 msgid "KiCad symbol library files"
-msgstr ""
+msgstr "Tệp thư viện symbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:193
 msgid "KiCad legacy symbol library files"
-msgstr ""
+msgstr "Tệp thư viện symbol củ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:199
 msgid "All KiCad symbol library files"
-msgstr ""
+msgstr "Tất cả các tệp thư viện symbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:205
 msgid "KiCad project files"
-msgstr ""
+msgstr "Tệp dự án KiCad"
 
 #: common/wildcards_and_files_ext.cpp:211
 msgid "KiCad legacy project files"
-msgstr ""
+msgstr "Tệp dự án củ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:217
 msgid "All KiCad project files"
-msgstr ""
+msgstr "Tất cả các tệp dự án KiCad"
 
 #: common/wildcards_and_files_ext.cpp:223
 msgid "KiCad legacy schematic files"
-msgstr ""
+msgstr "Tệp sơ đồ mạch củ KiCad"
 
 #: common/wildcards_and_files_ext.cpp:229
 msgid "KiCad s-expression schematic files"
-msgstr ""
+msgstr "Tệp sơ đồ mạch s-expression KiCad"
 
 #: common/wildcards_and_files_ext.cpp:235
 msgid "Altium schematic files"
-msgstr ""
+msgstr "Tệp sơ đồ mạch Altium"
 
 #: common/wildcards_and_files_ext.cpp:241
 msgid "CADSTAR Schematic Archive files"
-msgstr ""
+msgstr "Tệp tin lưu trữ sơ đồ mạch CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:247
 msgid "CADSTAR Archive files"
-msgstr ""
+msgstr "Tệp lưu trữ CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:253
 msgid "Eagle XML schematic files"
-msgstr ""
+msgstr "Tệp sơ đồ mạch Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:259
 msgid "Eagle XML files"
-msgstr ""
+msgstr "Tệp Eagle XML"
 
 #: common/wildcards_and_files_ext.cpp:265
 msgid "KiCad netlist files"
-msgstr ""
+msgstr "Tệp netlist KiCad"
 
 #: common/wildcards_and_files_ext.cpp:271 gerbview/files.cpp:47
 msgid "Gerber files"
-msgstr ""
+msgstr "Các tệp tin Gerber"
 
 #: common/wildcards_and_files_ext.cpp:277
 #: common/wildcards_and_files_ext.cpp:318
 msgid "KiCad printed circuit board files"
-msgstr ""
+msgstr "Tệp bảng mạch in KiCad"
 
 #: common/wildcards_and_files_ext.cpp:283
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr ""
+msgstr "Các tệp tin PCB Eagle ver. 6.x XML"
 
 #: common/wildcards_and_files_ext.cpp:288
 msgid "CADSTAR PCB Archive files"
-msgstr ""
+msgstr "Tệp lưu trữ PCB CADSTAR"
 
 #: common/wildcards_and_files_ext.cpp:293
 msgid "P-Cad 200x ASCII PCB files"
-msgstr ""
+msgstr "Các tệp PCB P-Cad 200x ASCII"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "Altium Designer PCB files"
-msgstr ""
+msgstr "Các tệp PCB Altium Designer"
 
 #: common/wildcards_and_files_ext.cpp:303
 msgid "Altium Circuit Studio PCB files"
-msgstr ""
+msgstr "Các tệp PCB Altium Circuit Studio"
 
 #: common/wildcards_and_files_ext.cpp:308
 msgid "Altium Circuit Maker PCB files"
-msgstr ""
+msgstr "Các tệp PCB Altium Circuit"
 
 #: common/wildcards_and_files_ext.cpp:313
+#, fuzzy
 msgid "Fabmaster PCB files"
-msgstr ""
+msgstr "Tệp Fabmaster PCB"
 
 #: common/wildcards_and_files_ext.cpp:324
 msgid "KiCad footprint files"
-msgstr ""
+msgstr "Tệp footprint  KiCad"
 
 #: common/wildcards_and_files_ext.cpp:330
 msgid "KiCad footprint library paths"
-msgstr ""
+msgstr "Đường dẫn thư viện footprint KiCad"
 
 #: common/wildcards_and_files_ext.cpp:336
 msgid "Legacy footprint library files"
-msgstr ""
+msgstr "Tệp thư viện footprint củ"
 
 #: common/wildcards_and_files_ext.cpp:342
 msgid "Eagle ver. 6.x XML library files"
-msgstr ""
+msgstr "Các tệp tin thư viện Eagle ver. 6.x XML"
 
 #: common/wildcards_and_files_ext.cpp:348
 msgid "Geda PCB footprint library files"
-msgstr ""
+msgstr "Các tệp thư viện footprint Geda PCB"
 
 #: common/wildcards_and_files_ext.cpp:354
 msgid "Page layout design files"
-msgstr ""
+msgstr "Tệp thiết kế bố trí trang"
 
 #: common/wildcards_and_files_ext.cpp:361
 msgid "KiCad symbol footprint link files"
-msgstr ""
+msgstr "Tệp liên kết footprint và symbol KiCad"
 
 #: common/wildcards_and_files_ext.cpp:368 gerbview/files.cpp:66
 msgid "Drill files"
-msgstr ""
+msgstr "Tệp lỗ khoan"
 
 #: common/wildcards_and_files_ext.cpp:374
 msgid "SVG files"
-msgstr ""
+msgstr "Tệp SVG"
 
 #: common/wildcards_and_files_ext.cpp:380
 msgid "HTML files"
-msgstr ""
+msgstr "Tệp HTML"
 
 #: common/wildcards_and_files_ext.cpp:386
 msgid "CSV Files"
-msgstr ""
+msgstr "Tệp CSV"
 
 #: common/wildcards_and_files_ext.cpp:392
 msgid "Portable document format files"
-msgstr ""
+msgstr "Tệp định dạng tài liệu di động"
 
 #: common/wildcards_and_files_ext.cpp:398
 msgid "PostScript files"
-msgstr ""
+msgstr "Tệp PostScript"
 
 #: common/wildcards_and_files_ext.cpp:404
 msgid "Report files"
-msgstr ""
+msgstr "Tệp báo cáo"
 
 #: common/wildcards_and_files_ext.cpp:410
+#, fuzzy
 msgid "Footprint place files"
-msgstr ""
+msgstr "Tập tin đặt footprint"
 
 #: common/wildcards_and_files_ext.cpp:416
 msgid "VRML and X3D files"
-msgstr ""
+msgstr "Tệp VRML và X3D"
 
 #: common/wildcards_and_files_ext.cpp:422
 msgid "IDFv3 footprint files"
-msgstr ""
+msgstr "Tệp footprint IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:428
 msgid "Text files"
-msgstr ""
+msgstr "Tệp văn bản"
 
 #: common/wildcards_and_files_ext.cpp:434
 msgid "Legacy footprint export files"
-msgstr ""
+msgstr "Tệp xuất footprint củ"
 
 #: common/wildcards_and_files_ext.cpp:440
 msgid "Electronic rule check file"
-msgstr ""
+msgstr "Tệp kiểm tra quy tắc điện tử"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
-msgstr ""
+msgstr "Tệp thư viện Spice"
 
 #: common/wildcards_and_files_ext.cpp:452
 msgid "SPICE netlist file"
-msgstr ""
+msgstr "Tệp danh sách netlist SPICE"
 
 #: common/wildcards_and_files_ext.cpp:458
 msgid "CadStar netlist file"
-msgstr ""
+msgstr "Tệp netlist CadStar"
 
 #: common/wildcards_and_files_ext.cpp:464
 msgid "Symbol footprint association files"
