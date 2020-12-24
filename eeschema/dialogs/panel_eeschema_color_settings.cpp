@@ -327,7 +327,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     SCH_JUNCTION* j = new SCH_JUNCTION( MILS_POINT( 3075, 1600 ) );
     addItem( j );
 
-    e2->SetBrightened();
     t2->SetSelected();
 
     {
