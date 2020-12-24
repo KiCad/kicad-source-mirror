@@ -1869,6 +1869,9 @@ void APPEARANCE_CONTROLS::rebuildObjects()
 
                     swatch->Bind( COLOR_SWATCH_CHANGED,
                                   &APPEARANCE_CONTROLS::OnColorSwatchChanged, this );
+
+                    swatch->SetReadOnlyCallback( std::bind( &APPEARANCE_CONTROLS::onReadOnlySwatch,
+                                                            this ) );
                 }
                 else
                 {
