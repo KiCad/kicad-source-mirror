@@ -269,7 +269,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
     if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILLED_HOLES_TOO_CLOSE ) )
         return false;
 
-    std::shared_ptr<SHAPE_CIRCLE> otherHole = getDrilledHoleShape( aItem );
+    std::shared_ptr<SHAPE_CIRCLE> otherHole = getDrilledHoleShape( aOther );
 
     // Holes with identical locations are allowable
     if( aHole->GetCenter() == otherHole->GetCenter() )
@@ -278,7 +278,7 @@ bool DRC_TEST_PROVIDER_HOLE_CLEARANCE::testHoleAgainstHole( BOARD_ITEM* aItem, S
     int actual = ( aHole->GetCenter() - otherHole->GetCenter() ).EuclideanNorm();
     actual = std::max( 0, actual - aHole->GetRadius() - otherHole->GetRadius() );
 
-    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_CLEARANCE_CONSTRAINT, aItem, aOther );
+    auto constraint = m_drcEngine->EvalRulesForItems( HOLE_TO_HOLE_CONSTRAINT, aItem, aOther );
     int  minClearance = constraint.GetValue().Min();
 
     accountCheck( constraint.GetParentRule() );
