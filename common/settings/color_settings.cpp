@@ -368,6 +368,10 @@ std::vector<COLOR_SETTINGS*> COLOR_SETTINGS::CreateBuiltinColorSettings()
     COLOR_SETTINGS* classicTheme = new COLOR_SETTINGS( wxT( "_builtin_classic" ) );
     classicTheme->SetName( _( "KiCad Classic" ) );
     classicTheme->m_writeFile = false;
+
+    for( PARAM_BASE* param : classicTheme->m_params )
+        delete param;
+
     classicTheme->m_params.clear(); // Disable load/store
 
     for( const std::pair<int, COLOR4D> entry : s_classicTheme )
