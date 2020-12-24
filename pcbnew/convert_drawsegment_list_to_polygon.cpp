@@ -185,11 +185,13 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
- * @param aTolerance is the max error distance when polygonizing a curve (internal units)
+ * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
+ * @param aChainingEpsilon is the max error distance when polygonizing a curve (internal units)
  * @param aErrorHandler = an optional error handler
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              int aTolerance, OUTLINE_ERROR_HANDLER* aErrorHandler )
+                              int aErrorMax, int aChainingEpsilon,
+                              OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     if( aSegList.size() == 0 )
         return true;
@@ -237,7 +239,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 wxPoint  center = graphic->GetCenter();
                 double   angle  = -graphic->GetAngle();
                 double   radius = graphic->GetRadius();
-                int      steps  = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
+                int      steps  = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
                 wxPoint  pt;
 
                 for( int step = 1; step<=steps; ++step )
@@ -432,11 +434,11 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     wxPoint pcenter = graphic->GetCenter();
                     double  angle   = -graphic->GetAngle();
                     double  radius  = graphic->GetRadius();
-                    int     steps   = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
+                    int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
 
-                    if( !close_enough( prevPt, pstart, aTolerance ) )
+                    if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                     {
-                        wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aTolerance ) );
+                        wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aChainingEpsilon ) );
 
                         angle = -angle;
                         std::swap( pstart, pend );
@@ -514,7 +516,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
             // Get next closest segment.
 
-            PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aSegList, aTolerance );
+            PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aSegList, aChainingEpsilon );
 
             if( nextGraphic && !( nextGraphic->GetFlags() & SKIP_STRUCT ) )
             {
@@ -526,7 +528,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
             // Finished, or ran into trouble...
 
-            if( close_enough( startPt, prevPt, aTolerance ) )
+            if( close_enough( startPt, prevPt, aChainingEpsilon ) )
             {
                 polygonComplete = true;
                 break;
@@ -595,7 +597,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             double   angle   = 3600.0;
             wxPoint  start   = center;
             int      radius  = graphic->GetRadius();
-            int      steps   = GetArcToSegmentCount( radius, aTolerance, 360.0 );
+            int      steps   = GetArcToSegmentCount( radius, aErrorMax, 360.0 );
             wxPoint  nextPt;
 
             start.x += radius;
@@ -673,11 +675,12 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         wxPoint pcenter = graphic->GetCenter();
                         double  angle   = -graphic->GetAngle();
                         int     radius  = graphic->GetRadius();
-                        int     steps = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
+                        int     steps = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
 
-                        if( !close_enough( prevPt, pstart, aTolerance ) )
+                        if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                         {
-                            wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aTolerance ) );
+                            wxASSERT( close_enough( prevPt, graphic->GetArcEnd(),
+                                                    aChainingEpsilon ) );
 
                             angle = -angle;
                             std::swap( pstart, pend );
@@ -757,7 +760,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
                 // Get next closest segment.
 
-                PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aSegList, aTolerance );
+                PCB_SHAPE* nextGraphic = findNext( graphic, prevPt, aSegList, aChainingEpsilon );
 
                 if( nextGraphic && !( nextGraphic->GetFlags() & SKIP_STRUCT ) )
                 {
@@ -769,7 +772,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
                 // Finished, or ran into trouble...
 
-                if( close_enough( startPt, prevPt, aTolerance ) )
+                if( close_enough( startPt, prevPt, aChainingEpsilon ) )
                 {
                     break;
                 }
@@ -842,8 +845,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
  * Any closed outline inside the main outline is a hole
  * All contours should be closed, i.e. valid closed polygon vertices
  */
-bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aTolerance,
-                                OUTLINE_ERROR_HANDLER* aErrorHandler )
+bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
+                                int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler )
 {
     PCB_TYPE_COLLECTOR  items;
     bool                success = false;
@@ -863,7 +866,8 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aT
 
     if( segList.size() )
     {
-        success = ConvertOutlineToPolygon( segList, aOutlines, aTolerance, aErrorHandler );
+        success = ConvertOutlineToPolygon( segList, aOutlines, aErrorMax, aChainingEpsilon,
+                                           aErrorHandler );
     }
 
     if( !success || !aOutlines.OutlineCount() )
@@ -1055,8 +1059,8 @@ int findEndSegments( SHAPE_LINE_CHAIN& aChain, SEG& aStartSeg, SEG& aEndSeg )
  * * If copper is located outside a closed outline, then that outline will be treated
  *   as a hole, and the outer edge will be formed using the bounding box.
  */
-bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aTolerance,
-                                    OUTLINE_ERROR_HANDLER* aErrorHandler )
+bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
+                                    int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler )
 
 {
     PCB_TYPE_COLLECTOR  items;
@@ -1075,7 +1079,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
             segList.push_back( static_cast<PCB_SHAPE*>( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, outlines, aTolerance, aErrorHandler );
+    bool success = ConvertOutlineToPolygon( segList, outlines, aErrorMax, aChainingEpsilon,
+                                            aErrorHandler );
 
     FOOTPRINT* footprint = aBoard->GetFirstFootprint();
 

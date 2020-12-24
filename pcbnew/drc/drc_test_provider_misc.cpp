@@ -80,7 +80,7 @@ private:
 
 void DRC_TEST_PROVIDER_MISC::testOutline()
 {
-    SHAPE_POLY_SET boardOutlines;
+    SHAPE_POLY_SET dummyOutline;
     bool           errorHandled = false;
 
     OUTLINE_ERROR_HANDLER errorHandler =
@@ -95,7 +95,12 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
                 errorHandled = true;
             };
 
-    if( !m_board->GetBoardPolygonOutlines( boardOutlines, &errorHandler ) )
+    // Use a really tight chaining epsilon here so that we report errors that might affect
+    // other tools (such as STEP export).
+    constexpr int chainingEpsilon = Millimeter2iu( 0.02 ) / 100;
+
+    if( BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
+                                   chainingEpsilon, &errorHandler ) )
     {
         if( errorHandled )
         {

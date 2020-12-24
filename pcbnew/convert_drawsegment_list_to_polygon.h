@@ -45,20 +45,22 @@ const std::function<void( const wxString& msg, BOARD_ITEM* itemA, BOARD_ITEM* it
  * These closed inner outlines are considered as holes in the main outline
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
- * @param aTolerance is the max error distance when polygonizing a curve (internal units)
+ * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
+ * @param aChainingEpsilon is the max distance from one endPt to the next startPt (internal units)
  * @param aErrorHandler = an optional error handler
  */
 bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              int aTolerance, OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
+                              int aErrorMax, int aChainingEpsilon,
+                              OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 
 
 /**
- * Extracts the board outlines and build a closed polygon
- * from lines, arcs and circle items on edge cut layer
- * Any closed outline inside the main outline is a hole
- * All contours should be closed, i.e. are valid vertices for a closed polygon
- * return true if success, false if a contour is not valid
+ * Extracts the board outlines and build a closed polygon from lines, arcs and circle items on
+ * edge cut layer.  Any closed outline inside the main outline is a hole.  All contours should be
+ * closed, i.e. are valid vertices for a closed polygon.
+ * @return true if success, false if a contour is not valid
  */
-extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aTolerance,
+extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
+                                       int aErrorMax, int aChainingEpsilon,
                                        OUTLINE_ERROR_HANDLER* aErrorHandler = nullptr );
 

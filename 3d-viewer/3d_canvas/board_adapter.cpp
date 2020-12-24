@@ -473,8 +473,11 @@ bool BOARD_ADAPTER::createBoardPolygon( wxString* aErrorMsg )
             return false;
         }
 
+        int chainingEpsilon = Millimeter2iu( 0.02 );  // max dist from one endPt to next startPt
+
         success = BuildFootprintPolygonOutlines( m_board, m_board_poly,
-                                                 m_board->GetDesignSettings().m_MaxError );
+                                                 m_board->GetDesignSettings().m_MaxError,
+                                                 chainingEpsilon );
 
         // Make polygon strictly simple to avoid issues (especially in 3D viewer)
         m_board_poly.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
