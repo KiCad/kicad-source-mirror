@@ -91,6 +91,11 @@ DIALOG_PNS_SETTINGS_BASE::DIALOG_PNS_SETTINGS_BASE( wxWindow* parent, wxWindowID
 
 	bOptions->Add( m_autoPosture, 0, wxALL, 5 );
 
+	m_fixAllSegments = new wxCheckBox( bOptions->GetStaticBox(), wxID_ANY, _("Fix all segments on click"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_fixAllSegments->SetToolTip( _("When enabled, all track segments will be fixed in place up to the cursor location.  When disabled, the last segment (closest to the cursor) will remain free and follow the cursor.") );
+
+	bOptions->Add( m_fixAllSegments, 0, wxALL, 5 );
+
 	wxBoxSizer* bEffort;
 	bEffort = new wxBoxSizer( wxHORIZONTAL );
 

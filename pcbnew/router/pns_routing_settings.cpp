@@ -55,6 +55,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_maxRadius = 1000000;
     m_roundedCorners = false;
     m_autoPosture = true;
+    m_fixAllSegments = true;
 
     m_params.emplace_back( new PARAM<int>( "mode", reinterpret_cast<int*>( &m_routingMode ),
             static_cast<int>( RM_Walkaround ) ) );
@@ -97,6 +98,7 @@ ROUTING_SETTINGS::ROUTING_SETTINGS( JSON_SETTINGS* aParent, const std::string& a
     m_params.emplace_back( new PARAM<int>( "max_radius",        &m_maxRadius,         1000000 ) );
     m_params.emplace_back( new PARAM<bool>( "use_rounded",      &m_roundedCorners,    false ) );
     m_params.emplace_back( new PARAM<bool>( "auto_posture",     &m_autoPosture,       true ) );
+    m_params.emplace_back( new PARAM<bool>( "fix_all_segments", &m_fixAllSegments,    true ) );
 
     LoadFromFile();
 }

@@ -50,6 +50,7 @@ class DIALOG_PNS_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_suggestEnding;
 		wxCheckBox* m_optimizeDraggedTrack;
 		wxCheckBox* m_autoPosture;
+		wxCheckBox* m_fixAllSegments;
 		wxStaticText* m_effortLabel;
 		wxSlider* m_effort;
 		wxStaticText* m_lowLabel;

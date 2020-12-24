@@ -150,6 +150,9 @@ public:
     bool GetAutoPosture() const { return m_autoPosture; }
     void SetAutoPosture( bool aEnable ) { m_autoPosture = aEnable; }
 
+    bool GetFixAllSegments() const { return m_fixAllSegments; }
+    void SetFixAllSegments( bool aEnable ) { m_fixAllSegments = aEnable; }
+
     void SetMinRadius( int aRadius )
     {
         m_minRadius = aRadius;
@@ -186,6 +189,7 @@ private:
     bool m_roundedCorners;
     bool m_optimizeDraggedTrack;
     bool m_autoPosture;
+    bool m_fixAllSegments;
 
     int m_minRadius;
     int m_maxRadius;

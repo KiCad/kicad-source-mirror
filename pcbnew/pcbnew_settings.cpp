@@ -722,6 +722,9 @@ bool PCBNEW_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
     ret &= fromLegacy<bool>( aCfg, p + "FreeAngleMode",         "tools.pns.free_angle_mode" );
     ret &= fromLegacy<bool>( aCfg, p + "InlineDragEnabled",     "tools.pns.inline_drag" );
 
+    // Initialize some new PNS settings to legacy behaviors if coming from legacy
+    ( *this )[PointerFromString( "tools.pns.fix_all_segments" )] = false;
+
     // Migrate color settings that were stored in the pcbnew config file
 
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetMigratedColorSettings();

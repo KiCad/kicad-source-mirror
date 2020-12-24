@@ -1089,6 +1089,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
 
 bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
+    bool fixAll  = Settings().GetFixAllSegments();
     bool realEnd = false;
     int lastV;
 
@@ -1148,7 +1149,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     if( aForceFinish )
         realEnd = true;
 
-    if( realEnd || m_placingVia )
+    if( realEnd || m_placingVia || fixAll )
         lastV = l.SegmentCount();
     else
         lastV = std::max( 1, l.SegmentCount() - 1 );
@@ -1193,7 +1194,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     if( !realEnd )
     {
         setInitialDirection( d_last );
-        m_currentStart = m_placingVia ? p_last : p_pre_last;
+        m_currentStart = ( m_placingVia || fixAll ) ? p_last : p_pre_last;
 
         m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
 
@@ -1251,7 +1252,7 @@ bool LINE_PLACER::UnfixRoute()
     m_head.RemoveVia();
     m_tail.RemoveVia();
 
-    if (m_shove)
+    if( m_shove )
     {
         m_shove->RewindSpringbackTo( m_currentNode );
         m_shove->UnlockSpringbackNode( m_currentNode );
