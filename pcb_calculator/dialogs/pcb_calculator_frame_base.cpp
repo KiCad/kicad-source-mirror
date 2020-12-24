@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.9.0 Nov  1 2020)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,8 +9,6 @@
 
 #include "pcb_calculator_frame_base.h"
 
-#include "../bitmaps/arrow_bottom.xpm"
-#include "../bitmaps/arrow_top.xpm"
 #include "../bitmaps/color_code_multiplier.xpm"
 #include "../bitmaps/color_code_tolerance.xpm"
 #include "../bitmaps/color_code_value.xpm"
@@ -336,8 +334,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerAttButt->Add( m_buttonAlcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bpButtonCalcAtt = new wxBitmapButton( m_panelAttenuators, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-
-	m_bpButtonCalcAtt->SetBitmap( wxBitmap( arrow_bottom_xpm ) );
 	bSizerAttButt->Add( m_bpButtonCalcAtt, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
@@ -952,8 +948,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
 	m_bpButtonAnalyze = new wxBitmapButton( m_panelTransline, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-
-	m_bpButtonAnalyze->SetBitmap( wxBitmap( arrow_bottom_xpm ) );
 	bSizerButtons->Add( m_bpButtonAnalyze, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_AnalyseButton = new wxButton( m_panelTransline, wxID_ANY, _("Analyze"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -963,8 +957,6 @@ PCB_CALCULATOR_FRAME_BASE::PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindow
 	bSizerButtons->Add( m_SynthetizeButton, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_bpButtonSynthetize = new wxBitmapButton( m_panelTransline, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-
-	m_bpButtonSynthetize->SetBitmap( wxBitmap( arrow_top_xpm ) );
 	bSizerButtons->Add( m_bpButtonSynthetize, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 

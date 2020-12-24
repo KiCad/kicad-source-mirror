@@ -34,6 +34,10 @@ const wxString DataFileNameExt( wxT("pcbcalc") );
 PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PCB_CALCULATOR_FRAME_BASE( aParent )
 {
+    m_bpButtonCalcAtt->SetBitmap( KiBitmap( small_down_xpm ) );
+    m_bpButtonAnalyze->SetBitmap( KiBitmap( small_down_xpm ) );
+    m_bpButtonSynthetize->SetBitmap( KiBitmap( small_up_xpm ) );
+
     SetKiway( this, aKiway );
     m_currTransLine     = NULL;
     m_currTransLineType = DEFAULT_TYPE;
