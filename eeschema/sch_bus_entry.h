@@ -41,13 +41,6 @@
  */
 class SCH_BUS_ENTRY_BASE : public SCH_ITEM
 {
-protected:
-    wxPoint m_pos;
-    wxSize  m_size;
-    bool m_isDanglingStart;
-    bool m_isDanglingEnd;
-    STROKE_PARAMS m_stroke;
-
 public:
     SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos = wxPoint( 0, 0 ), bool aFlipY = false );
 
@@ -68,7 +61,6 @@ public:
     wxPoint GetEnd() const;
 
     wxSize GetSize() const { return m_size; }
-
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
 
     void SetPenWidth( int aWidth ) { m_stroke.SetWidth( aWidth ); }
@@ -124,6 +116,13 @@ public:
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
+
+protected:
+    wxPoint       m_pos;
+    wxSize        m_size;
+    bool          m_isDanglingStart;
+    bool          m_isDanglingEnd;
+    STROKE_PARAMS m_stroke;
 };
 
 /**

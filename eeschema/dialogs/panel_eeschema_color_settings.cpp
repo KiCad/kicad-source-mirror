@@ -222,6 +222,17 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::onNewThemeSelected()
 }
 
 
+class SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM : public SCH_BUS_WIRE_ENTRY
+{
+public:
+    SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM() :
+            SCH_BUS_WIRE_ENTRY()
+    {
+        m_isDanglingStart = m_isDanglingEnd = false;
+    };
+};
+
+
 void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 {
     KIGFX::VIEW* view = m_preview->GetView();
@@ -275,43 +286,45 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         addItem( wire );
     }
 
-    auto nc = new SCH_NO_CONNECT;
-    nc->SetPosition( wxPoint( Mils2iu( 2525 ), Mils2iu( 1300 ) ) );
+#define MILS_POINT( x, y ) wxPoint( Mils2iu( x ), Mils2iu( y ) )
+
+    SCH_NO_CONNECT* nc = new SCH_NO_CONNECT;
+    nc->SetPosition( MILS_POINT( 2525, 1300 ) );
     addItem( nc );
 
-    auto e1 = new SCH_BUS_WIRE_ENTRY;
-    e1->SetPosition( wxPoint( Mils2iu( 1850 ), Mils2iu( 1400 ) ) );
+    SCH_BUS_WIRE_ENTRY* e1 = new SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM;
+    e1->SetPosition( MILS_POINT( 1850, 1400 ) );
     addItem( e1 );
 
-    auto e2 = new SCH_BUS_WIRE_ENTRY;
-    e2->SetPosition( wxPoint( Mils2iu( 1850 ), Mils2iu( 2500 ) ) );
+    SCH_BUS_WIRE_ENTRY* e2 = new SCH_BUS_WIRE_ENTRY_PREVIEW_ITEM;
+    e2->SetPosition( MILS_POINT( 1850, 2500 ) );
     addItem( e2 );
 
-    auto t1 = new SCH_TEXT( wxPoint( Mils2iu( 2850 ), Mils2iu( 2250 ) ), wxT( "PLAIN TEXT" ) );
+    SCH_TEXT* t1 = new SCH_TEXT( MILS_POINT( 2850, 2250 ), wxT( "PLAIN TEXT" ) );
     t1->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     addItem( t1 );
 
-    auto t2 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 1500 ) ), wxT( "LABEL_{0}" ) );
+    SCH_LABEL* t2 = new SCH_LABEL( MILS_POINT( 1975, 1500 ), wxT( "LABEL_{0}" ) );
     t2->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t2->SetIsDangling( false );
     addItem( t2 );
 
-    auto t3 = new SCH_LABEL( wxPoint( Mils2iu( 1975 ), Mils2iu( 2600 ) ), wxT( "LABEL_{1}" ) );
+    SCH_LABEL* t3 = new SCH_LABEL( MILS_POINT( 1975, 2600 ), wxT( "LABEL_{1}" ) );
     t3->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t3->SetIsDangling( false );
     addItem( t3 );
 
-    auto t4 = new SCH_GLOBALLABEL( wxPoint( Mils2iu( 1750 ), Mils2iu( 1400 ) ), wxT( "GLOBAL[3..0]" ) );
+    SCH_GLOBALLABEL* t4 = new SCH_GLOBALLABEL( MILS_POINT( 1750, 1400 ), wxT( "GLOBAL[3..0]" ) );
     t4->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::LEFT );
     t4->SetIsDangling( false );
     addItem( t4 );
 
-    auto t5 = new SCH_HIERLABEL( wxPoint( Mils2iu( 3250 ), Mils2iu( 1600 ) ), wxT( "HIER_LABEL" ) );
+    SCH_HIERLABEL* t5 = new SCH_HIERLABEL( MILS_POINT( 3250, 1600 ), wxT( "HIER_LABEL" ) );
     t5->SetLabelSpinStyle( LABEL_SPIN_STYLE::SPIN::RIGHT );
     t5->SetIsDangling( false );
     addItem( t5 );
 
-    auto j = new SCH_JUNCTION( wxPoint( Mils2iu( 3075 ), Mils2iu( 1600 ) ) );
+    SCH_JUNCTION* j = new SCH_JUNCTION( MILS_POINT( 3075, 1600 ) );
     addItem( j );
 
     e2->SetBrightened();
@@ -324,20 +337,18 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         LIB_FIELD& ref = part->GetReferenceField();
 
         ref.SetText( wxT( "U1" ) );
-        ref.SetPosition( wxPoint( Mils2iu( p.x + 30 ), Mils2iu( p.y + 260 ) ) );
+        ref.SetPosition( MILS_POINT( p.x + 30, p.y + 260 ) );
         ref.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
         LIB_FIELD& value = part->GetValueField();
 
         value.SetText( wxT( "OPA604" ) );
-        value.SetPosition( wxPoint( Mils2iu( p.x + 30 ), Mils2iu( p.y + 180 ) ) );
+        value.SetPosition( MILS_POINT( p.x + 30, p.y + 180 ) );
         value.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
 
         part->SetShowPinNames( true );
         part->SetShowPinNumbers( true );
         part->SetPinNameOffset( 0 );
-
-        addItem( part );
 
         LIB_POLYLINE* comp_body = new LIB_POLYLINE( part );
 
@@ -345,16 +356,16 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         comp_body->SetConvert( 0 );
         comp_body->SetWidth( Mils2iu( 10 ) );
         comp_body->SetFillMode( FILL_TYPE::FILLED_WITH_BG_BODYCOLOR );
-        comp_body->AddPoint( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y + 200 ) ) );
-        comp_body->AddPoint( wxPoint( Mils2iu( p.x + 200 ), Mils2iu( p.y ) ) );
-        comp_body->AddPoint( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y - 200 ) ) );
-        comp_body->AddPoint( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y + 200 ) ) );
+        comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );
+        comp_body->AddPoint( MILS_POINT( p.x + 200, p.y ) );
+        comp_body->AddPoint( MILS_POINT( p.x - 200, p.y - 200 ) );
+        comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );
 
         addItem( comp_body );
 
         LIB_PIN* pin = new LIB_PIN( part );
 
-        pin->SetPosition( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y + 100 ) ) );
+        pin->SetPosition( MILS_POINT( p.x - 200, p.y + 100 ) );
         pin->SetLength( Mils2iu( 100 ) );
         pin->SetOrientation( PIN_LEFT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
@@ -365,7 +376,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         pin = new LIB_PIN( part );
 
-        pin->SetPosition( wxPoint( Mils2iu( p.x - 200 ), Mils2iu( p.y - 100 ) ) );
+        pin->SetPosition( MILS_POINT( p.x - 200, p.y - 100 ) );
         pin->SetLength( Mils2iu( 100 ) );
         pin->SetOrientation( PIN_LEFT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
@@ -376,7 +387,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         pin = new LIB_PIN( part );
 
-        pin->SetPosition( wxPoint( Mils2iu( p.x + 200 ), Mils2iu( p.y ) ) );
+        pin->SetPosition( MILS_POINT( p.x + 200, p.y ) );
         pin->SetLength( Mils2iu( 100 ) );
         pin->SetOrientation( PIN_RIGHT );
         pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
@@ -384,16 +395,18 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetName( wxT( "OUT" ) );
 
         part->AddDrawItem( pin );
+
+        addItem( part );
     }
 
-    auto s = new SCH_SHEET( nullptr, wxPoint( Mils2iu( 4000 ), Mils2iu( 1300 ) ) );
+    SCH_SHEET* s = new SCH_SHEET( nullptr, MILS_POINT( 4000, 1300 ) );
     s->SetSize( wxSize( Mils2iu( 800 ), Mils2iu( 1300 ) ) );
     s->GetFields().at( SHEETNAME ).SetText( wxT( "SHEET" ) );
     s->GetFields().at( SHEETFILENAME ).SetText( _( "/path/to/sheet" ) );
     s->AutoplaceFields( nullptr, false );
     addItem( s );
 
-    auto sp = new SCH_SHEET_PIN( s, wxPoint( Mils2iu( 4500 ), Mils2iu( 1500 ) ), wxT( "SHEET PIN" ) );
+    SCH_SHEET_PIN* sp = new SCH_SHEET_PIN( s, MILS_POINT( 4500, 1500 ), wxT( "SHEET PIN" ) );
     addItem( sp );
 
     zoomFitPreview();
