@@ -1557,7 +1557,7 @@ void PCB_SELECTION_TOOL::FilterCollectedItems( GENERAL_COLLECTOR& aCollector )
 
 bool PCB_SELECTION_TOOL::itemPassesFilter( BOARD_ITEM* aItem )
 {
-    if( aItem->IsLocked() && !m_filter.lockedItems )
+    if( aItem->IsLocked() && !m_filter.lockedItems && aItem->Type() != PCB_PAD_T )
         return false;
 
     switch( aItem->Type() )
