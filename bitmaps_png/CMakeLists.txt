@@ -138,6 +138,7 @@ set( BMAPS_MID
     add_hierarchical_subsheet
     add_junction
     add_keepout_area
+    add_label
     add_leader
     add_library
     add_line2bus
@@ -175,9 +176,7 @@ set( BMAPS_MID
     axis3d_right
     axis3d_top
     axis3d
-    bom
     break_line
-    browse_files
     bug
     bus_definition_tool
     cancel
@@ -185,7 +184,6 @@ set( BMAPS_MID
     change_lib_symbols_in_schematic
     contrast_mode
     curved_ratsnest
-    create_cmp_file
     checked_ok
     color_materials
     component_select_unit
@@ -229,6 +227,7 @@ set( BMAPS_MID
     exit
     exchange
     export3d
+    export_cmp
     export_dsn
     export_idf
     export_footprint_names
@@ -281,7 +280,6 @@ set( BMAPS_MID
     hotkeys
     hole_to_hole_clearance
     hole_to_copper_clearance
-    icon
     icon_cvpcb_24
     icon_gerbview_24
     import3d
@@ -297,7 +295,6 @@ set( BMAPS_MID
     import
     info
     insert_module_board
-    label
     language
     layers_manager
     leave_sheet

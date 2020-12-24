@@ -302,7 +302,7 @@ TOOL_ACTION EE_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL,
         'L', LEGACY_HK_NAME( "Add Label" ),
         _( "Add Label" ), _( "Add a net label" ),
-        label_xpm, AF_ACTIVATE, (void*) SCH_LABEL_T );
+        add_label_xpm, AF_ACTIVATE, (void*) SCH_LABEL_T );
 
 TOOL_ACTION EE_ACTIONS::placeHierLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL,
@@ -615,7 +615,7 @@ TOOL_ACTION EE_ACTIONS::exportNetlist( "eeschema.EditorControl.exportNetlist",
 TOOL_ACTION EE_ACTIONS::generateBOM( "eeschema.EditorControl.generateBOM",
         AS_GLOBAL, 0, "",
         _( "Generate BOM..." ), _( "Generate a bill of materials for the current schematic" ),
-        bom_xpm );
+        post_bom_xpm );
 
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, 0, "",

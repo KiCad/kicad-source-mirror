@@ -145,7 +145,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                         ID_GEN_PLOT_SVG, export_svg_xpm );
     submenuExport->Add( _( "Footprint Association (.cmp) File..." ),
                         _( "Export footprint association file (*.cmp) for schematic back annotation" ),
-                        ID_PCB_GEN_CMP_FILE, create_cmp_file_xpm );
+                        ID_PCB_GEN_CMP_FILE, export_cmp_xpm );
     submenuExport->Add( _( "Hyperlynx..." ), "",
                         ID_GEN_EXPORT_FILE_HYPERLYNX, export_step_xpm );
 

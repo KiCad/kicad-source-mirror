@@ -65,6 +65,6 @@ static const unsigned char png[] = {
  0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE create_cmp_file_xpm[1] = {{ png, sizeof( png ), "create_cmp_file_xpm" }};
+const BITMAP_OPAQUE export_cmp_xpm[1] = {{ png, sizeof( png ), "export_cmp_xpm" }};
 
 //EOF

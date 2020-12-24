@@ -153,7 +153,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     toolsMenu->Add( _( "Edit Local File..." ),
                     _( "Edit local file in text editor" ),
                     ID_EDIT_LOCAL_FILE_IN_TEXT_EDITOR,
-                    browse_files_xpm );
+                    editor_xpm );
 
     //-- Preferences menu -----------------------------------------------
     //

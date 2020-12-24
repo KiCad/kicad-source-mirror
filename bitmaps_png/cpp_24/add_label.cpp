@@ -24,6 +24,6 @@ static const unsigned char png[] = {
  0x60, 0x82,
 };
 
-const BITMAP_OPAQUE label_xpm[1] = {{ png, sizeof( png ), "label_xpm" }};
+const BITMAP_OPAQUE add_label_xpm[1] = {{ png, sizeof( png ), "add_label_xpm" }};
 
 //EOF
