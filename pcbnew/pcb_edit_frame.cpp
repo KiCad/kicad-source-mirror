@@ -544,9 +544,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
                     && GetDisplayOptions().m_ZoneOpacity > 0.0;
         };
 
-    mgr->SetConditions( PCB_ACTIONS::zoneDisplayEnable,    ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneDisplayDisable,   ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::HIDE_FILLED ) ) );
-    mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutlines,  ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_OUTLINED ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayEnable,
+                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayDisable,
+                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_ZONE_OUTLINE ) ) );
+    mgr->SetConditions( PCB_ACTIONS::zoneDisplayOutlines,
+                        ENABLE( enableZoneControlConition ).Check( cond.ZoneDisplayMode( ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE ) ) );
 
     auto enableBoardSetupCondition =
         [this] ( const SELECTION& )

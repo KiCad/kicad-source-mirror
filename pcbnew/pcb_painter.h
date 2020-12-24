@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -24,8 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __CLASS_PCB_PAINTER_H
-#define __CLASS_PCB_PAINTER_H
+#ifndef PCB_PAINTER_H
+#define PCB_PAINTER_H
 
 #include <painter.h>
 #include <pcb_display_options.h>
@@ -187,46 +187,30 @@ public:
     void SetZoneDisplayMode( ZONE_DISPLAY_MODE mode ) { m_zoneDisplayMode = mode; }
 
 protected:
-    ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
-    bool    m_sketchMode[GAL_LAYER_ID_END];
-
-    ///> Flag determining if graphic items should be outlined or stroked
-    bool    m_sketchGraphics;
-
-    ///> Flag determining if text items should be outlined or stroked
-    bool    m_sketchText;
-
-    ///> Flag determining if pad numbers should be visible
-    bool    m_padNumbers;
-
-    ///> Flag determining if net names should be visible for pads
-    bool    m_netNamesOnPads;
-
-    ///> Flag determining if net names should be visible for tracks
-    bool    m_netNamesOnTracks;
-
-    ///> Flag determining if net names should be visible for vias
-    bool    m_netNamesOnVias;
-
-    ///> Flag determining if zones should have outlines drawn
-    bool    m_zoneOutlines;
-
-    ///> Flag determining if ratsnest lines should be drawn curved
-    bool    m_curvedRatsnestlines = true;
-
-    ///> Flag determining if ratsnest lines are shown by default
-    bool    m_globalRatsnestlines = true;
-
-    bool    m_drawIndividualViaLayers = false;
-
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
 
-    ///> Option for different display modes for zones
-    ZONE_DISPLAY_MODE m_zoneDisplayMode;
+    bool               m_sketchMode[GAL_LAYER_ID_END];
+    bool               m_sketchGraphics;
+    bool               m_sketchText;
 
-    ///> Clearance visibility settings
-    int m_clearance;
+    bool               m_padNumbers;
+    bool               m_netNamesOnPads;
+    bool               m_netNamesOnTracks;
+    bool               m_netNamesOnVias;
+
+    bool               m_zoneOutlines;
+
+    bool               m_curvedRatsnestlines = true;
+    bool               m_globalRatsnestlines = true;
+
+    bool               m_drawIndividualViaLayers = false;
+
+    ZONE_DISPLAY_MODE  m_zoneDisplayMode;
+    HIGH_CONTRAST_MODE m_contrastModeDisplay;
+    RATSNEST_MODE      m_ratsnestDisplayMode;
+
+    int                m_clearanceDisplayFlags;
 
     ///> How to display nets and netclasses with color overrides
     NET_COLOR_MODE m_netColorMode;
@@ -239,11 +223,6 @@ protected:
 
     ///> Set of net codes that should not have their ratsnest displayed
     std::set<int> m_hiddenNets;
-
-    ///> How to display inactive layers (HIGH_CONTRAST_MODE:NORMAL, DIMMED or HIDDEN )
-    HIGH_CONTRAST_MODE m_contrastModeDisplay;
-
-    RATSNEST_MODE m_ratsnestDisplayMode;
 
     // These opacity overrides multiply with any opacity in the base layer color
     double m_trackOpacity;     ///< Opacity override for all tracks
@@ -278,8 +257,6 @@ public:
     virtual bool Draw( const VIEW_ITEM* aItem, int aLayer ) override;
 
 protected:
-    PCB_RENDER_SETTINGS m_pcbSettings;
-
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK* aTrack, int aLayer );
     void draw( const ARC* aArc, int aLayer );
@@ -318,7 +295,10 @@ protected:
      * Return drill diameter for a via (internal units).
      */
     virtual int getDrillSize( const VIA* aVia ) const;
+
+protected:
+        PCB_RENDER_SETTINGS m_pcbSettings;
 };
 } // namespace KIGFX
 
-#endif /* __CLASS_PAINTER_H */
+#endif /* PCB_PAINTER_H */

@@ -63,7 +63,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_netNamesOnVias = true;
     m_zoneOutlines = true;
     m_zoneDisplayMode = ZONE_DISPLAY_MODE::SHOW_FILLED;
-    m_clearance = CL_NONE;
+    m_clearanceDisplayFlags = CL_NONE;
     m_sketchGraphics = false;
     m_sketchText = false;
     m_netColorMode = NET_COLOR_MODE::RATSNEST;
@@ -184,29 +184,28 @@ void PCB_RENDER_SETTINGS::LoadDisplayOptions( const PCB_DISPLAY_OPTIONS& aOption
     // Clearance settings
     switch( aOptions.m_ShowTrackClearanceMode )
     {
-        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
-            m_clearance = CL_NONE;
+        case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE: m_clearanceDisplayFlags = CL_NONE;
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:
-            m_clearance = CL_NEW | CL_TRACKS;
+            m_clearanceDisplayFlags = CL_NEW | CL_TRACKS;
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
-            m_clearance = CL_NEW | CL_TRACKS | CL_VIAS;
+            m_clearanceDisplayFlags = CL_NEW | CL_TRACKS | CL_VIAS;
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
-            m_clearance = CL_NEW | CL_EDITED | CL_TRACKS | CL_VIAS;
+            m_clearanceDisplayFlags = CL_NEW | CL_EDITED | CL_TRACKS | CL_VIAS;
             break;
 
         case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS:
-            m_clearance = CL_NEW | CL_EDITED | CL_EXISTING | CL_TRACKS | CL_VIAS;
+            m_clearanceDisplayFlags = CL_NEW | CL_EDITED | CL_EXISTING | CL_TRACKS | CL_VIAS;
             break;
     }
 
     if( aOptions.m_DisplayPadIsol )
-        m_clearance |= CL_PADS;
+        m_clearanceDisplayFlags |= CL_PADS;
 
     m_contrastModeDisplay = aOptions.m_ContrastModeDisplay;
 
@@ -563,7 +562,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
         // Clearance lines
         constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_TRACKS;
 
-        if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
+        if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags )
         {
             int clearance = aTrack->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -602,7 +601,7 @@ void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
         // Clearance lines
         constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_TRACKS;
 
-        if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
+        if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags )
         {
             int clearance = aArc->GetOwnClearance( m_pcbSettings.GetActiveLayer() );
 
@@ -772,7 +771,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
     // Clearance lines
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_VIAS;
 
-    if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
+    if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags
             && aLayer != LAYER_VIAS_HOLES )
     {
         PCB_LAYER_ID activeLayer = m_pcbSettings.GetActiveLayer();
@@ -1090,7 +1089,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     // Clearance outlines
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
 
-    if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags
+    if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags
             && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
     {
         bool flashActiveLayer = aPad->FlashLayer( m_pcbSettings.GetActiveLayer() );
@@ -1538,7 +1537,8 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
     }
 
     // Draw the filling
-    if( displayMode != ZONE_DISPLAY_MODE::HIDE_FILLED )
+    if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED
+            || displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE )
     {
         const SHAPE_POLY_SET& polySet = aZone->GetFilledPolysList( layer );
 
@@ -1560,7 +1560,7 @@ void PCB_PAINTER::draw( const ZONE* aZone, int aLayer )
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( outline_thickness > 0 );
         }
-        else if( displayMode == ZONE_DISPLAY_MODE::SHOW_OUTLINED )
+        else if( displayMode == ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE )
         {
             m_gal->SetIsFill( false );
             m_gal->SetIsStroke( true );

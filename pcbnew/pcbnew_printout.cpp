@@ -278,8 +278,10 @@ std::unique_ptr<KIGFX::PAINTER> PCBNEW_PRINTOUT::getPainter( KIGFX::GAL* aGal )
 }
 
 
-KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal )
-    : PCB_PAINTER( aGal ), m_drillMarkReal( false ), m_drillMarkSize( 0 )
+KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal ) :
+        PCB_PAINTER( aGal ),
+        m_drillMarkReal( false ),
+        m_drillMarkSize( 0 )
 {
     m_pcbSettings.EnableZoneOutlines( false );
 }
