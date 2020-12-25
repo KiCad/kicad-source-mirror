@@ -350,6 +350,17 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 //    if( !appK2S.FileExists() )
  //       GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );
+
+    // AUI doesn't refresh properly on wxMac after changes in eb7dc6dd, so force it to
+#ifdef __WXMAC__
+    if( Kiface().IsSingle() )
+    {
+        CallAfter( [&]()
+                   {
+                       m_appearancePanel->OnBoardChanged();
+                   } );
+    }
+#endif
 }
 
 
