@@ -36,12 +36,14 @@
 class SELECTION : public KIGFX::VIEW_GROUP
 {
 public:
-    SELECTION() : KIGFX::VIEW_GROUP::VIEW_GROUP()
+    SELECTION() :
+            KIGFX::VIEW_GROUP::VIEW_GROUP()
     {
         m_isHover = false;
     }
 
-    SELECTION( const SELECTION& aOther ) : KIGFX::VIEW_GROUP::VIEW_GROUP()
+    SELECTION( const SELECTION& aOther ) :
+            KIGFX::VIEW_GROUP::VIEW_GROUP()
     {
         m_items = aOther.m_items;
         m_isHover = aOther.m_isHover;

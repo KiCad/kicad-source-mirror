@@ -71,8 +71,8 @@ private:
                 ( net_attr.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightComponent );
-                menuEntry->SetItemLabel( wxString::Format(
-                        _( "Highlight Items of Component \"%s\"" ), net_attr.m_Cmpref ) );
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight Items of Component \"%s\"" ),
+                                                           net_attr.m_Cmpref ) );
                 addSeparator = true;
             }
 
@@ -80,7 +80,7 @@ private:
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightNet );
                 menuEntry->SetItemLabel( wxString::Format( _( "Highlight Items of Net \"%s\"" ),
-                                         UnescapeString( net_attr.m_Netname ) ) );
+                                                           UnescapeString( net_attr.m_Netname ) ) );
                 addSeparator = true;
             }
 
@@ -89,8 +89,8 @@ private:
             if( apertDescr && !apertDescr->m_AperFunction.IsEmpty() )
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightAttribute );
-                menuEntry->SetItemLabel( wxString::Format(
-                        _( "Highlight Aperture Type \"%s\"" ), apertDescr->m_AperFunction ) );
+                menuEntry->SetItemLabel( wxString::Format( _( "Highlight Aperture Type \"%s\"" ),
+                                                           apertDescr->m_AperFunction ) );
                 addSeparator = true;
             }
         }
@@ -202,7 +202,6 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             selectPoint( evt->Position() );
         }
-
         // right click? if there is any object - show the context menu
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -214,20 +213,19 @@ int GERBVIEW_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selection );
         }
-
         // Middle double click?  Do zoom to fit
         else if( evt->IsDblClick( BUT_MIDDLE ) )
         {
             m_toolMgr->RunAction( ACTIONS::zoomFitScreen, true );
         }
-
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
         }
-
         else
+        {
             evt->SetPassEvent();
+        }
     }
 
     return 0;
@@ -331,7 +329,7 @@ int GERBVIEW_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
     if( items )
     {
         // Perform individual selection of each item before processing the event.
-        for( auto item : *items )
+        for( EDA_ITEM* item : *items )
             select( item );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -365,7 +363,7 @@ int GERBVIEW_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
     if( items )
     {
         // Perform individual unselection of each item before processing the event
-        for( auto item : *items )
+        for( EDA_ITEM* item : *items )
             unselect( item );
 
         m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
@@ -397,8 +395,8 @@ void GERBVIEW_SELECTION_TOOL::clearSelection()
     if( m_selection.Empty() )
         return;
 
-    for( auto item : m_selection )
-        unselectVisually( static_cast<EDA_ITEM*>( item ) );
+    for( EDA_ITEM* item : m_selection )
+        unselectVisually( item );
 
     m_selection.Clear();
 

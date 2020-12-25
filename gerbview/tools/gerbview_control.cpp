@@ -111,12 +111,11 @@ int GERBVIEW_CONTROL::ExportToPcbnew( const TOOL_EVENT& aEvent )
         return 0;
     }
 
-    wxString        fileDialogName( wxT( "noname." ) + KiCadPcbFileExtension );
-    wxString        path = m_frame->GetMruPath();
+    wxString     fileDialogName( wxT( "noname." ) + KiCadPcbFileExtension );
+    wxString     path = m_frame->GetMruPath();
 
-    wxFileDialog    filedlg( m_frame, _( "Board File Name" ),
-                             path, fileDialogName, PcbFileWildcard(),
-                             wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+    wxFileDialog filedlg( m_frame, _( "Board File Name" ), path, fileDialogName, PcbFileWildcard(),
+                          wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     if( filedlg.ShowModal() == wxID_CANCEL )
         return 0;
@@ -183,6 +182,7 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
     else if( item && aEvent.IsAction( &GERBVIEW_ACTIONS::highlightAttribute ) )
     {
         D_CODE* apertDescr = item->GetDcodeDescr();
+
         if( apertDescr )
         {
             auto string = apertDescr->m_AperFunction;
@@ -300,9 +300,8 @@ int GERBVIEW_CONTROL::ClearAllLayers( const TOOL_EVENT& aEvent )
 int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
 {
     // Store filenames
-    wxArrayString listOfGerberFiles;
-    std::vector<int> fileType;
-
+    wxArrayString           listOfGerberFiles;
+    std::vector<int>        fileType;
     GERBER_FILE_IMAGE_LIST* list = m_frame->GetImagesList();
 
     for( unsigned i = 0; i < list->ImagesMaxCount(); i++ )
@@ -313,7 +312,7 @@ int GERBVIEW_CONTROL::ReloadAllLayers( const TOOL_EVENT& aEvent )
         if( !list->GetGbrImage( i )->m_InUse )
             continue;
 
-        auto* drill_file = dynamic_cast<EXCELLON_IMAGE*>( list->GetGbrImage( i ) );
+        EXCELLON_IMAGE* drill_file = dynamic_cast<EXCELLON_IMAGE*>( list->GetGbrImage( i ) );
 
         if( drill_file )
             fileType.push_back( 1 );

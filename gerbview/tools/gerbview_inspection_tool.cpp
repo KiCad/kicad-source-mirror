@@ -173,10 +173,14 @@ int GERBVIEW_INSPECTION_TOOL::ShowSource( const TOOL_EVENT& aEvent )
                 wxMessageBox( msg );
             }
             else
+            {
                 ExecuteFile( m_frame, editorname, QuoteFullPath( fn ) );
+            }
         }
         else
+        {
             wxMessageBox( _( "No editor defined. Please select one" ) );
+        }
     }
     else
     {
