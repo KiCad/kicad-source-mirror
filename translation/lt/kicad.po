@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-25 08:23+0000\n"
+"PO-Revision-Date: 2020-12-25 14:13+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/lt/>\n"
@@ -284,7 +284,7 @@ msgstr "Išeksportuoti matomą vaizdą kaip PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 msgid "Export Current View as JPEG..."
-msgstr "Išeksportuoti matomą vaizdą kaip JPEG"
+msgstr "Išeksportuoti matomą vaizdą kaip JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:70
 #: common/tool/actions.cpp:557 pcbnew/footprint_viewer_frame.cpp:949
@@ -1690,7 +1690,7 @@ msgstr "„KiCad“ bibliotekininkų komanda"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
-msgstr "3D modeliai:"
+msgstr "3D modeliai"
 
 #: common/dialog_about/AboutDialog_main.cpp:646
 msgid "Symbols by"
@@ -1702,7 +1702,7 @@ msgstr "Pėdsakai"
 
 #: common/dialog_about/AboutDialog_main.cpp:666
 msgid "Icons by"
-msgstr "Ikonos:"
+msgstr "Ikonos"
 
 #: common/dialog_about/dialog_about.cpp:90
 #, c-format
@@ -1830,7 +1830,7 @@ msgstr "Atspalvis:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr "Grynis"
+msgstr "Grynis:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -2253,7 +2253,7 @@ msgstr "Šie elementai bus praleisti, nebent nepaisysite spynų."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Do not show again."
-msgstr "Daugiau neberodyti"
+msgstr "Daugiau neberodyti."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 msgid "Override Locks"
@@ -6775,7 +6775,7 @@ msgstr ""
 msgid ""
 "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
 msgstr ""
-"Komponento \"%s\" pėdsakas \"%s\" nerasta <b> nė vienoje bibliotekoje.\n"
+"Komponento \"%s\" pėdsakas \"%s\" <b> nerasta </b> nė vienoje bibliotekoje.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:153
 #, c-format
@@ -8110,12 +8110,12 @@ msgstr "Rodyti komentarų dialogo langą."
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- Vartotojas atšaukė EMTT. <br> <br>"
+msgstr "-------- Vartotojas atšaukė EMTT.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:304 eeschema/dialogs/dialog_erc.cpp:437
 #: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
-msgstr "Atlikta. <br> <br>"
+msgstr "Atlikta.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:365
 msgid "Checking sheet names..."
@@ -8467,7 +8467,7 @@ msgstr "Nustatytas į"
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:155
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
 msgid "Text size:"
-msgstr "Teksto dydis"
+msgstr "Teksto dydis:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
@@ -9773,7 +9773,7 @@ msgstr "Importuoti nustatymus iš"
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:73
 #: pcbnew/dialogs/dialog_import_settings.cpp:127
 msgid "File not found."
-msgstr "Nėra failo"
+msgstr "Nėra failo."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
@@ -10093,7 +10093,7 @@ msgstr "Dažnio mastelis"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:45
 msgid "Number of points:"
-msgstr "Taškų skaičius"
+msgstr "Taškų skaičius:"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:55
 msgid "Start frequency:"
@@ -11911,7 +11911,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:463 eeschema/files-io.cpp:495
 msgid "Do not show this dialog again."
-msgstr "Neberodyti šio lango"
+msgstr "Neberodyti šio lango."
 
 #: eeschema/files-io.cpp:488
 msgid "The schematic file will be converted to the new file format on save."
@@ -12527,7 +12527,7 @@ msgstr "Simbolis %s [%s]"
 
 #: eeschema/sch_connection.cpp:353
 msgid "Connection Name"
-msgstr "Ryšio pavadinimas:"
+msgstr "Ryšio pavadinimas"
 
 #: eeschema/sch_connection.cpp:362 pcbnew/dialogs/dialog_net_inspector.cpp:70
 #: pcbnew/netinfo_item.cpp:77
@@ -14443,7 +14443,7 @@ msgstr "Turite išsaugoti kitoje vietoje."
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1114
 msgid "Nickname"
-msgstr ""
+msgstr "Slapyvardžio"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:646
 msgid "Save Copy of Symbol"
@@ -16238,7 +16238,7 @@ msgstr "Atidaryti „Gerber“ failą (-us)"
 
 #: gerbview/files.cpp:228
 msgid "File not found:"
-msgstr "Nėra failo"
+msgstr "Nėra failo:"
 
 #: gerbview/files.cpp:240
 msgid "Loading Gerber files..."
@@ -18821,7 +18821,7 @@ msgstr "Plokštės klasė"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:416
 msgid "PCB Calculator"
-msgstr "PCB Calculator"
+msgstr "PCB Skaičiuoklė"
 
 #: pcb_calculator/eserie_help.h:2
 msgid ""
@@ -19357,7 +19357,7 @@ msgstr "Lentos kraštai turi būti apibrėžti ant %s sluoksnio."
 
 #: pcbnew/autorouter/autoplace_tool.cpp:89
 msgid "Autoplace Components"
-msgstr "Autoplace Components"
+msgstr "Autoplace Komponentai"
 
 #: pcbnew/autorouter/autoplace_tool.cpp:95
 msgid "Autoplace components"
@@ -19446,11 +19446,11 @@ msgstr "jokių sluoksnių"
 
 #: pcbnew/board_item.cpp:181 pcbnew/track.cpp:1028 pcbnew/track.cpp:1045
 msgid "Position X"
-msgstr "Pozicijos X:"
+msgstr "Pozicijos X"
 
 #: pcbnew/board_item.cpp:183 pcbnew/track.cpp:1031 pcbnew/track.cpp:1048
 msgid "Position Y"
-msgstr "Pozicijos Y:"
+msgstr "Pozicijos Y"
 
 #: pcbnew/board_item.cpp:187
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:35
@@ -20068,7 +20068,7 @@ msgstr ""
 "\n"
 "\n"
 "Yra %i nuorodų tipų tipų\n"
-"************************************ ******* ********\n"
+"**********************************************************\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
 #, c-format
@@ -20478,7 +20478,7 @@ msgstr "SMD:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:141
 msgid "Through hole:"
-msgstr "Kiaurai"
+msgstr "Kiaurai:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
 msgid "Connector:"
@@ -20867,7 +20867,7 @@ msgstr "Elektrinės savybės"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
 msgid "Clearance:"
-msgstr "Saugos tarpai"
+msgstr "Saugos tarpai:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:64
@@ -21253,7 +21253,7 @@ msgstr "„Leader“ formatas"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
 msgid "Text frame:"
-msgstr "Teksto rėmelis"
+msgstr "Teksto rėmelis:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
@@ -21348,7 +21348,7 @@ msgstr "Tekstas, kurį norite spausdinti po matmens verte"
 #: pcbnew/dialogs/dialog_plot_base.cpp:387
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:125
 msgid "Precision:"
-msgstr "Tikslumas"
+msgstr "Tikslumas:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:174
@@ -21413,7 +21413,7 @@ msgstr "X teksto tekstas"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:248
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:120
 msgid "Text height"
-msgstr "Teksto aukštis:"
+msgstr "Teksto aukštis"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:261
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:190
@@ -21429,7 +21429,7 @@ msgstr "Storis:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:143
 msgid "Text thickness"
-msgstr "Teksto storis:"
+msgstr "Teksto storis"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:287
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:156
@@ -21542,7 +21542,7 @@ msgstr "Rodyti dizaino taisykles."
 
 #: pcbnew/dialogs/dialog_drc.cpp:250
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- KDR panaikino vartotojas. <br> <br>"
+msgstr "-------- KDR panaikino vartotojas.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
@@ -21735,7 +21735,7 @@ msgstr "Gamybos atributai"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:183
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
 msgid "Component:"
-msgstr "Komponentas"
+msgstr "Komponentas:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:187
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
@@ -22082,7 +22082,7 @@ msgstr "Atnaujinti pėdsakus iš bibliotekos"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #, c-format
 msgid "File %s already exists."
-msgstr "Failas %1 jau yra."
+msgstr "Failas %s jau yra."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, c-format
@@ -22195,7 +22195,7 @@ msgstr "Lentos struktūros kūrėjas:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
 msgid "Tolerance:"
-msgstr "Tolerancija"
+msgstr "Tolerancija:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight"
@@ -23764,7 +23764,7 @@ msgstr "Pasirinkite norimą ištrinti kampą."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:470
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Pėdsakas %s (%s), %s, pasuktas %.1f laipsnių kampu"
+msgstr "Pėdsakas %s (%s), %s, pasuktas %g laipsnių kampu"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:473
 #: pcbnew/dialogs/dialog_text_properties.cpp:280
@@ -24369,7 +24369,7 @@ msgstr "Mastelio koeficientas:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1394
 msgid "Duplicate:"
-msgstr "Duplikuoti"
+msgstr "Duplikuoti:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1562
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
@@ -24591,7 +24591,7 @@ msgstr "Pašalinkite šilkografiją iš vietų be litavimo kaukės"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:219
 msgid "Coordinate format:"
-msgstr "Koordinačių formatas"
+msgstr "Koordinačių formatas:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:223
 msgid "4.5, unit mm"
@@ -25264,7 +25264,7 @@ msgstr "Korpuso teksto savybės"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:77
 msgid "Reference:"
-msgstr "Žyma"
+msgstr "Žyma:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:277
 #, c-format
@@ -26868,7 +26868,7 @@ msgstr "Nėra apibrėžta per grąžtą."
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:275
 #, c-format
 msgid "Via drill less than minimum through hole (%s)."
-msgstr "Per gręžimą mažesnė nei minimali skylė (42)."
+msgstr "Per gręžimą mažesnė nei minimali skylė (%s)."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:284
 msgid "Via drill larger than via diameter."
@@ -27125,7 +27125,7 @@ msgstr "Išgręžtos skylės per arti viena kitos"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track width"
-msgstr "Takelio plotis:"
+msgstr "Takelio plotis"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Annular width"
@@ -27232,7 +27232,7 @@ msgstr "KLAIDA išraiškoje."
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "KLAIDA: <a href='%d:%d'> %d '> %s </a> %s"
+msgstr "KLAIDA: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
@@ -27540,7 +27540,7 @@ msgstr "Tikrinti %d šilkografijos ypatybes su %d lentos elementais."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:99
 msgid "Checking silkscreen for potential soldermask clipping..."
-msgstr "Tikrinama, ar šilkografija nėra iškirpta litavimo kaukės"
+msgstr "Tikrinama, ar šilkografija nėra iškirpta litavimo kaukės..."
 
 #: pcbnew/drc/drc_test_provider_silk_to_mask.cpp:168
 #, c-format
@@ -27888,7 +27888,7 @@ msgstr "Būsena: "
 
 #: pcbnew/footprint.cpp:779
 msgid "Attributes:"
-msgstr "Atributai"
+msgstr "Atributai:"
 
 #: pcbnew/footprint.cpp:784
 #, c-format
@@ -28350,7 +28350,7 @@ msgstr "Importo parametrai"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:131
 msgid "Graphic layer:"
-msgstr "Grafikos sluoksnis"
+msgstr "Grafikos sluoksnis:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:141
 msgid "Import scale:"
@@ -29291,7 +29291,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:416
 #, c-format
 msgid "File not found: '%s'"
-msgstr "Failas nerastas: %s."
+msgstr "Failas nerastas: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:728
 #, c-format
@@ -32522,7 +32522,7 @@ msgstr "Perjunkite maršrutizatorių į „shove“ režimą"
 
 #: pcbnew/tools/pcb_actions.cpp:1281
 msgid "Router Walkaround Mode"
-msgstr "Router Walkaround Mode"
+msgstr "„Router Walkaround“ režimas"
 
 #: pcbnew/tools/pcb_actions.cpp:1281
 msgid "Switch router to walkaround mode"
