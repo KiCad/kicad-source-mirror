@@ -84,7 +84,7 @@ inline bool close_enough( const wxPoint& aLeft, const wxPoint& aRight, unsigned 
 
 /**
  * Function close_st
- * is a local method of qualifying if either the start of end point of a segment is closest to a point.
+ * Local method which qualifies whether the start or end point of a segment is closest to a point.
  *
  * @param aReference is the reference point
  * @param aFirst is the first point
@@ -180,9 +180,9 @@ static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
 
 /**
  * Function ConvertOutlineToPolygon
- * build a polygon (with holes) from a PCB_SHAPE list, which is expected to be
- * a outline, therefore a closed main outline with perhaps closed inner outlines.
- * These closed inner outlines are considered as holes in the main outline
+ * Build a polygon (with holes) from a PCB_SHAPE list, which is expected to be a closed main
+ * outline with perhaps closed inner outlines.  These closed inner outlines are considered as
+ * holes in the main outline.
  * @param aSegList the initial list of drawsegments (only lines, circles and arcs).
  * @param aPolygons will contain the complex polygon.
  * @param aErrorMax is the max error distance when polygonizing a curve (internal units)
@@ -323,6 +323,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         }
     }
 
+    // Keep a list of where the various segments came from so after doing our combined-polygon
+    // tests we can still report errors against the individual graphic items.
     std::map<std::pair<VECTOR2I, VECTOR2I>, PCB_SHAPE*> segOwners;
 
     auto fetchOwner =
@@ -332,9 +334,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 return it == segOwners.end() ? nullptr : it->second;
             };
 
-    // Grab the left most point, assume its on the board's perimeter, and see if we
-    // can put enough graphics together by matching endpoints to formulate a cohesive
-    // polygon.
+    // Grab the left most point, assume its on the board's perimeter, and see if we can put
+    // enough graphics together by matching endpoints to formulate a cohesive polygon.
 
     graphic = (PCB_SHAPE*) aSegList[xmini];
 
@@ -651,8 +652,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         }
         else
         {
-            // Polygon start point. Arbitrarily chosen end of the
-            // segment and build the poly from here.
+            // Polygon start point. Arbitrarily chosen end of the segment and build the poly
+            // from here.
 
             wxPoint startPt( graphic->GetEnd() );
             prevPt = graphic->GetEnd();
@@ -722,9 +723,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                     break;
 
                 case S_CURVE:
-                    // We do not support Bezier curves in polygons, so approximate
-                    // with a series of short lines and put those
-                    // line segments into the !same! PATH.
+                    // We do not support Bezier curves in polygons, so approximate with a series
+                    // of short lines and put those line segments into the !same! PATH.
                     {
                         wxPoint nextPt;
                         bool    reverse = false;
@@ -812,8 +812,8 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     if( !polygonComplete )
         return false;
 
-    // All of the silliness that follows is to work around the segment iterator
-    // while checking for collisions.
+    // All of the silliness that follows is to work around the segment iterator while checking
+    // for collisions.
     // TODO: Implement proper segment and point iterators that follow std
     bool selfIntersecting = false;
 
@@ -1067,13 +1067,12 @@ int findEndSegments( SHAPE_LINE_CHAIN& aChain, SEG& aStartSeg, SEG& aEndSeg )
  * This function is used to extract a board outline for a footprint view.
  *
  * Notes:
- * * Incomplete outlines will be closed by joining the end of the outline
- *   onto the bounding box (by simply projecting the end points) and then take the
- *   area that contains the copper.
- * * If all copper lies inside a closed outline, than that outline will be treated
- *   as an external board outline.
- * * If copper is located outside a closed outline, then that outline will be treated
- *   as a hole, and the outer edge will be formed using the bounding box.
+ * * Incomplete outlines will be closed by joining the end of the outline onto the bounding box
+ *   (by simply projecting the end points) and then take the area that contains the copper.
+ * * If all copper lies inside a closed outline, than that outline will be treated as an external
+ *   board outline.
+ * * If copper is located outside a closed outline, then that outline will be treated as a hole,
+ *   and the outer edge will be formed using the bounding box.
  */
 bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, int aErrorMax,
                                     int aChainingEpsilon, OUTLINE_ERROR_HANDLER* aErrorHandler )
@@ -1161,8 +1160,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         std::vector<SHAPE_LINE_CHAIN> closedChains;
         std::vector<SHAPE_LINE_CHAIN> openChains;
 
-        // The ConvertOutlineToPolygon function returns only one main
-        // outline and the rest as holes, so we promote the holes and process them
+        // The ConvertOutlineToPolygon function returns only one main outline and the rest as
+        // holes, so we promote the holes and process them
         openChains.push_back( outlines.Outline( 0 ) );
 
         for( int j = 0; j < outlines.HoleCount( 0 ); j++ )
@@ -1209,8 +1208,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
         }
         else if( chain.SegmentCount() == 1 )
         {
-            // This case means there is only 1 line segment making up the edge cuts of the footprint,
-            // so we just need to use it to cut the bounding box in half.
+            // This case means there is only 1 line segment making up the edge cuts of the
+            // footprint, so we just need to use it to cut the bounding box in half.
             wxLogTrace( traceBoardOutline, "Only 1 line segment in provided outline" );
 
             startSeg = chain.Segment( 0 );
@@ -1264,7 +1263,8 @@ bool BuildFootprintPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines, in
                 // Angled line segment that cuts across a corner
                 wxLogTrace( traceBoardOutline, "Segment intersects two perpendicular bbox sides" );
 
-                // Figure out which actual lines are intersected, since IntersectLines assumes an infinite line
+                // Figure out which actual lines are intersected, since IntersectLines assumes
+                // an infinite line
                 bool hit0 = rect.Segment( 0 ).Contains( *inter0 );
                 bool hit1 = rect.Segment( 1 ).Contains( *inter1 );
                 bool hit2 = rect.Segment( 2 ).Contains( *inter2 );
