@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-25 08:21+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2020-12-25 08:23+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/lt/>\n"
 "Language: lt\n"
@@ -14523,7 +14523,7 @@ msgstr "Simbolių bibliotekos failas „%s“ išsaugotas"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1179
 msgid "Undefined!"
-msgstr "Nenurodyta"
+msgstr "Nenurodyta!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1189
 msgid "Convert"
