@@ -29,7 +29,7 @@
 #include <drc/drc_results_provider.h>
 #include <footprint_edit_frame.h>
 #include <convert_drawsegment_list_to_polygon.h>
-#include <tools/footprint_editor_tools.h>
+#include <tools/footprint_editor_control.h>
 
 
 DIALOG_FOOTPRINT_CHECKER::DIALOG_FOOTPRINT_CHECKER( FOOTPRINT_EDIT_FRAME* aParent ) :
@@ -128,7 +128,7 @@ void DIALOG_FOOTPRINT_CHECKER::OnCancelClick( wxCommandEvent& aEvent )
     SetReturnCode( wxID_CANCEL );
 
     // Leave the tool to destroy (or not) the dialog
-    FOOTPRINT_EDITOR_TOOLS* tool = m_frame->GetToolManager()->GetTool<FOOTPRINT_EDITOR_TOOLS>();
+    FOOTPRINT_EDITOR_CONTROL* tool = m_frame->GetToolManager()->GetTool<FOOTPRINT_EDITOR_CONTROL>();
     tool->DestroyCheckerDialog();
 }
 

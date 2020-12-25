@@ -331,7 +331,7 @@ set( PCBNEW_CLASS_SRCS
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp
     tools/group_tool.cpp
-    tools/footprint_editor_tools.cpp
+    tools/footprint_editor_control.cpp
     tools/pad_tool.cpp
     tools/pcb_bright_box.cpp
     tools/pcb_control.cpp

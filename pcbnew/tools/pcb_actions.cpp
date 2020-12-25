@@ -315,7 +315,7 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         config_xpm );
 
 
-// FOOTPRINT_EDITOR_TOOLS
+// FOOTPRINT_EDITOR_CONTROL
 //
 TOOL_ACTION PCB_ACTIONS::toggleFootprintTree( "pcbnew.ModuleEditor.toggleFootprintTree",
         AS_GLOBAL, 0, "",

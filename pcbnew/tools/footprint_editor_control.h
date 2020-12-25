@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef FOOTPRINT_EDITOR_TOOLS_H
-#define FOOTPRINT_EDITOR_TOOLS_H
+#ifndef FOOTPRINT_EDITOR_CONTROL_H
+#define FOOTPRINT_EDITOR_CONTROL_H
 
 #include <tools/pcb_tool_base.h>
 
@@ -32,15 +32,15 @@ class FOOTPRINT_EDIT_FRAME;
 class DIALOG_FOOTPRINT_CHECKER;
 
 /**
- * FOOTPRINT_EDITOR_TOOLS
+ * FOOTPRINT_EDITOR_CONTROL
  *
  * Module editor specific tools.
  */
-class FOOTPRINT_EDITOR_TOOLS : public PCB_TOOL_BASE
+class FOOTPRINT_EDITOR_CONTROL : public PCB_TOOL_BASE
 {
 public:
-    FOOTPRINT_EDITOR_TOOLS();
-    ~FOOTPRINT_EDITOR_TOOLS() override;
+    FOOTPRINT_EDITOR_CONTROL();
+    ~FOOTPRINT_EDITOR_CONTROL() override;
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
@@ -89,4 +89,4 @@ private:
     std::unique_ptr<FOOTPRINT> m_copiedFootprint;
 };
 
-#endif
+#endif  // FOOTPRINT_EDITOR_CONTROL_H

@@ -31,7 +31,7 @@
 #include <board.h>
 #include <footprint.h>
 #include <tool/tool_manager.h>
-#include <tools/footprint_editor_tools.h>
+#include <tools/footprint_editor_control.h>
 
 
 wxObjectDataPtr<LIB_TREE_MODEL_ADAPTER>
@@ -52,7 +52,7 @@ FP_TREE_SYNCHRONIZING_ADAPTER::FP_TREE_SYNCHRONIZING_ADAPTER( FOOTPRINT_EDIT_FRA
 
 TOOL_INTERACTIVE* FP_TREE_SYNCHRONIZING_ADAPTER::GetContextMenuTool()
 {
-    return m_frame->GetToolManager()->GetTool<FOOTPRINT_EDITOR_TOOLS>();
+    return m_frame->GetToolManager()->GetTool<FOOTPRINT_EDITOR_CONTROL>();
 }
 
 

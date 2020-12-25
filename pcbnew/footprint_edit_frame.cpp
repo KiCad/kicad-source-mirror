@@ -23,7 +23,7 @@
 #include "tools/convert_tool.h"
 #include "tools/drawing_tool.h"
 #include "tools/edit_tool.h"
-#include "tools/footprint_editor_tools.h"
+#include "tools/footprint_editor_control.h"
 #include "tools/pad_tool.h"
 #include "tools/pcb_actions.h"
 #include "tools/pcb_control.h"
@@ -933,7 +933,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new DRAWING_TOOL );
     m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCB_CONTROL );            // copy/paste
-    m_toolManager->RegisterTool( new FOOTPRINT_EDITOR_TOOLS );
+    m_toolManager->RegisterTool( new FOOTPRINT_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
     m_toolManager->RegisterTool( new PCB_PICKER_TOOL );
     m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
