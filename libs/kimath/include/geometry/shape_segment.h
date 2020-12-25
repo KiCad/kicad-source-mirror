@@ -32,17 +32,25 @@
 
 #include <algorithm>
 
-class SHAPE_SEGMENT : public SHAPE {
-
+class SHAPE_SEGMENT : public SHAPE
+{
 public:
-    SHAPE_SEGMENT():
-        SHAPE( SH_SEGMENT ), m_width( 0 ) {};
+    SHAPE_SEGMENT() :
+        SHAPE( SH_SEGMENT ),
+        m_width( 0 )
+    {};
 
-    SHAPE_SEGMENT( const VECTOR2I& aA, const VECTOR2I& aB, int aWidth = 0 ):
-        SHAPE( SH_SEGMENT ), m_seg( aA, aB ), m_width( aWidth ) {};
+    SHAPE_SEGMENT( const VECTOR2I& aA, const VECTOR2I& aB, int aWidth = 0 ) :
+        SHAPE( SH_SEGMENT ),
+        m_seg( aA, aB ),
+        m_width( aWidth )
+    {};
 
-    SHAPE_SEGMENT( const SEG& aSeg, int aWidth = 0 ):
-        SHAPE( SH_SEGMENT ), m_seg( aSeg ), m_width( aWidth ) {};
+    SHAPE_SEGMENT( const SEG& aSeg, int aWidth = 0 ) :
+        SHAPE( SH_SEGMENT ),
+        m_seg( aSeg ),
+        m_width( aWidth )
+    {};
 
     ~SHAPE_SEGMENT() {};
 
