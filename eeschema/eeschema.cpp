@@ -31,7 +31,7 @@
 #include <eeschema_settings.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <transform.h>
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
@@ -155,7 +155,8 @@ static struct IFACE : public KIFACE_I
         case FRAME_SCH_VIEWER:
         case FRAME_SCH_VIEWER_MODAL:
         {
-            LIB_VIEW_FRAME* frame = new LIB_VIEW_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
+            SYMBOL_VIEWER_FRAME* frame = new SYMBOL_VIEWER_FRAME( aKiway, aParent,
+                                                                  FRAME_T( aClassId ) );
             return frame;
         }
 

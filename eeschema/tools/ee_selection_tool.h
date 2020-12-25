@@ -294,7 +294,7 @@ private:
     KICURSOR        m_nonModifiedCursor; // Cursor in the absence of shift/ctrl/alt
 
     bool            m_isSymbolEditor;    // True when the symbol editor is the parent frame
-    bool            m_isLibView;         // True when libview is the parent frame
+    bool            m_isSymbolViewer;    // True when the symbol browser is the parent frame
     int             m_unit;              // Fixed unit filter (for symbol editor)
     int             m_convert;           // Fixed DeMorgan filter (for symbol editor)
 };

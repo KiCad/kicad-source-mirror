@@ -187,7 +187,7 @@ set( EESCHEMA_SRCS
     lib_polyline.cpp
     lib_rectangle.cpp
     lib_text.cpp
-    lib_view_frame.cpp
+    symbol_viewer_frame.cpp
     libarch.cpp
     menubar.cpp
     pin_number.cpp
@@ -233,7 +233,7 @@ set( EESCHEMA_SRCS
     symbol_lib_table.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp
-    toolbars_lib_view.cpp
+    toolbars_symbol_viewer.cpp
     toolbars_sch_editor.cpp
     transform.cpp
 

@@ -38,7 +38,7 @@
 #include <kiplatform/app.h>
 #include <kiway.h>
 #include <symbol_edit_frame.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <pgm_base.h>
 #include <profile.h>
 #include <project.h>
@@ -600,12 +600,12 @@ bool SCH_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         if( symbolEditor && !symbolEditor->Close() )   // Can close symbol editor?
             return false;
 
-        auto* symbolViewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+        auto* symbolViewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
 
         if( symbolViewer && !symbolViewer->Close() )   // Can close symbol viewer?
             return false;
 
-        symbolViewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
+        symbolViewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
 
         if( symbolViewer && !symbolViewer->Close() )   // Can close modal symbol viewer?
             return false;

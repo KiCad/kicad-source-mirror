@@ -33,7 +33,7 @@
 #include <eeschema_settings.h>
 #include <kiface_i.h>
 #include <kiway.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <widgets/msgpanel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -57,34 +57,34 @@
 #include <default_values.h>
 
 // Save previous component library viewer state.
-wxString LIB_VIEW_FRAME::m_libraryName;
-wxString LIB_VIEW_FRAME::m_entryName;
+wxString SYMBOL_VIEWER_FRAME::m_libraryName;
+wxString SYMBOL_VIEWER_FRAME::m_entryName;
 
-int LIB_VIEW_FRAME::m_unit = 1;
-int LIB_VIEW_FRAME::m_convert = 1;
+int SYMBOL_VIEWER_FRAME::m_unit = 1;
+int SYMBOL_VIEWER_FRAME::m_convert = 1;
 
 
-BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
+BEGIN_EVENT_TABLE( SYMBOL_VIEWER_FRAME, EDA_DRAW_FRAME )
     // Window events
-    EVT_SIZE( LIB_VIEW_FRAME::OnSize )
-    EVT_ACTIVATE( LIB_VIEW_FRAME::OnActivate )
+    EVT_SIZE( SYMBOL_VIEWER_FRAME::OnSize )
+    EVT_ACTIVATE( SYMBOL_VIEWER_FRAME::OnActivate )
 
     // Toolbar events
-    EVT_TOOL( ID_LIBVIEW_SELECT_PART, LIB_VIEW_FRAME::OnSelectSymbol )
-    EVT_TOOL( ID_LIBVIEW_NEXT, LIB_VIEW_FRAME::onSelectNextSymbol )
-    EVT_TOOL( ID_LIBVIEW_PREVIOUS, LIB_VIEW_FRAME::onSelectPreviousSymbol )
-    EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onSelectSymbolUnit )
+    EVT_TOOL( ID_LIBVIEW_SELECT_PART, SYMBOL_VIEWER_FRAME::OnSelectSymbol )
+    EVT_TOOL( ID_LIBVIEW_NEXT, SYMBOL_VIEWER_FRAME::onSelectNextSymbol )
+    EVT_TOOL( ID_LIBVIEW_PREVIOUS, SYMBOL_VIEWER_FRAME::onSelectPreviousSymbol )
+    EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, SYMBOL_VIEWER_FRAME::onSelectSymbolUnit )
 
     // listbox events
-    EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, LIB_VIEW_FRAME::ClickOnLibList )
-    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::ClickOnCmpList )
-    EVT_LISTBOX_DCLICK( ID_LIBVIEW_CMP_LIST, LIB_VIEW_FRAME::DClickOnCmpList )
+    EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, SYMBOL_VIEWER_FRAME::ClickOnLibList )
+    EVT_LISTBOX( ID_LIBVIEW_CMP_LIST, SYMBOL_VIEWER_FRAME::ClickOnCmpList )
+    EVT_LISTBOX_DCLICK( ID_LIBVIEW_CMP_LIST, SYMBOL_VIEWER_FRAME::DClickOnCmpList )
 
     // Menu (and/or hotkey) events
-    EVT_MENU( wxID_CLOSE, LIB_VIEW_FRAME::CloseLibraryViewer )
+    EVT_MENU( wxID_CLOSE, SYMBOL_VIEWER_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
-    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
+    EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, SYMBOL_VIEWER_FRAME::onUpdateUnitChoice )
 
 END_EVENT_TABLE()
 
@@ -96,8 +96,8 @@ END_EVENT_TABLE()
 #define LIB_VIEW_STYLE_MODAL ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT )
 
 
-LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-                                const wxString& aLibraryName ) :
+SYMBOL_VIEWER_FRAME::SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
+                                          const wxString& aLibraryName ) :
     SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Symbol Library Browser" ),
                     wxDefaultPosition, wxDefaultSize,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
@@ -210,7 +210,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 }
 
 
-LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
+SYMBOL_VIEWER_FRAME::~SYMBOL_VIEWER_FRAME()
 {
     // Shutdown all running tools
     if( m_toolManager )
@@ -221,7 +221,7 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 }
 
 
-void LIB_VIEW_FRAME::setupTools()
+void SYMBOL_VIEWER_FRAME::setupTools()
 {
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
@@ -248,7 +248,7 @@ void LIB_VIEW_FRAME::setupTools()
 }
 
 
-void LIB_VIEW_FRAME::setupUIConditions()
+void SYMBOL_VIEWER_FRAME::setupUIConditions()
 {
     SCH_BASE_FRAME::setupUIConditions();
 
@@ -309,7 +309,7 @@ void LIB_VIEW_FRAME::setupUIConditions()
 }
 
 
-void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
+void SYMBOL_VIEWER_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 {
     m_unit = aUnit > 0 ? aUnit : 1;
     m_convert = aConvert > 0 ? aConvert : LIB_ITEM::LIB_CONVERT::BASE;
@@ -319,7 +319,7 @@ void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 }
 
 
-LIB_PART* LIB_VIEW_FRAME::GetSelectedSymbol() const
+LIB_PART* SYMBOL_VIEWER_FRAME::GetSelectedSymbol() const
 {
     LIB_PART* symbol = nullptr;
 
@@ -330,7 +330,7 @@ LIB_PART* LIB_VIEW_FRAME::GetSelectedSymbol() const
 }
 
 
-void LIB_VIEW_FRAME::updatePreviewSymbol()
+void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
 {
     LIB_PART* symbol = GetSelectedSymbol();
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
@@ -367,7 +367,7 @@ void LIB_VIEW_FRAME::updatePreviewSymbol()
 }
 
 
-bool LIB_VIEW_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
+bool SYMBOL_VIEWER_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
 {
     if( aSymbol && !aSymbol->IsEmpty() )
     {
@@ -407,7 +407,7 @@ bool LIB_VIEW_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
 }
 
 
-void LIB_VIEW_FRAME::doCloseWindow()
+void SYMBOL_VIEWER_FRAME::doCloseWindow()
 {
     GetCanvas()->StopDrawing();
 
@@ -425,7 +425,7 @@ void LIB_VIEW_FRAME::doCloseWindow()
 }
 
 
-void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
+void SYMBOL_VIEWER_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
     if( m_auimgr.GetManagedWindow() )
         m_auimgr.Update();
@@ -434,7 +434,7 @@ void LIB_VIEW_FRAME::OnSize( wxSizeEvent& SizeEv )
 }
 
 
-void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 {
     LIB_PART* part = GetSelectedSymbol();
 
@@ -465,7 +465,7 @@ void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 }
 
 
-bool LIB_VIEW_FRAME::ReCreateLibList()
+bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
 {
     if( !m_libList )
         return false;
@@ -537,7 +537,7 @@ bool LIB_VIEW_FRAME::ReCreateLibList()
 }
 
 
-bool LIB_VIEW_FRAME::ReCreateSymbolList()
+bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
 {
     if( m_symbolList == NULL )
         return false;
@@ -587,7 +587,7 @@ bool LIB_VIEW_FRAME::ReCreateSymbolList()
 }
 
 
-void LIB_VIEW_FRAME::ClickOnLibList( wxCommandEvent& event )
+void SYMBOL_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 {
     int ii = m_libList->GetSelection();
 
@@ -600,7 +600,7 @@ void LIB_VIEW_FRAME::ClickOnLibList( wxCommandEvent& event )
 }
 
 
-void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
+void SYMBOL_VIEWER_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
 {
     if( m_libraryName == aLibraryName )
         return;
@@ -623,7 +623,7 @@ void LIB_VIEW_FRAME::SetSelectedLibrary( const wxString& aLibraryName )
 }
 
 
-void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
+void SYMBOL_VIEWER_FRAME::ClickOnCmpList( wxCommandEvent& event )
 {
     int ii = m_symbolList->GetSelection();
 
@@ -642,7 +642,7 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
 }
 
 
-void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
+void SYMBOL_VIEWER_FRAME::SetSelectedComponent( const wxString& aComponentName )
 {
     if( m_entryName != aComponentName )
     {
@@ -667,13 +667,13 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
 }
 
 
-void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
+void SYMBOL_VIEWER_FRAME::DClickOnCmpList( wxCommandEvent& event )
 {
     m_toolManager->RunAction( EE_ACTIONS::addSymbolToSchematic, true );
 }
 
 
-void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
+void SYMBOL_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -696,7 +696,7 @@ void LIB_VIEW_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
+void SYMBOL_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 {
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
 
@@ -713,7 +713,7 @@ void LIB_VIEW_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
 }
 
 
-WINDOW_SETTINGS* LIB_VIEW_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
+WINDOW_SETTINGS* SYMBOL_VIEWER_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 {
     auto cfg = dynamic_cast<EESCHEMA_SETTINGS*>( aCfg );
     wxASSERT( cfg );
@@ -721,7 +721,7 @@ WINDOW_SETTINGS* LIB_VIEW_FRAME::GetWindowSettings( APP_SETTINGS_BASE* aCfg )
 }
 
 
-void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+void SYMBOL_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
 {
     SCH_BASE_FRAME::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
 
@@ -730,7 +730,7 @@ void LIB_VIEW_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVars
 }
 
 
-void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
+void SYMBOL_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
 {
     if( event.GetActive() )
     {
@@ -748,13 +748,13 @@ void LIB_VIEW_FRAME::OnActivate( wxActivateEvent& event )
 }
 
 
-void LIB_VIEW_FRAME::CloseLibraryViewer( wxCommandEvent& event )
+void SYMBOL_VIEWER_FRAME::CloseLibraryViewer( wxCommandEvent& event )
 {
     Close();
 }
 
 
-void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
+void SYMBOL_VIEWER_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 {
     m_listPowerCmpOnly = false;
     m_allowedLibs.Clear();
@@ -769,7 +769,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
 }
 
 
-const BOX2I LIB_VIEW_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
+const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 {
     LIB_PART* part = GetSelectedSymbol();
 
@@ -791,7 +791,7 @@ const BOX2I LIB_VIEW_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) const
 }
 
 
-void LIB_VIEW_FRAME::FinishModal()
+void SYMBOL_VIEWER_FRAME::FinishModal()
 {
     if( m_symbolList->GetSelection() >= 0 )
         DismissModal( true, m_libraryName + ':' + m_symbolList->GetStringSelection() );
@@ -802,7 +802,7 @@ void LIB_VIEW_FRAME::FinishModal()
 }
 
 
-void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
 
@@ -846,7 +846,7 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
 {
     wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
     int            ii = m_symbolList->GetSelection();
@@ -860,7 +860,7 @@ void LIB_VIEW_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 {
     wxCommandEvent evt( wxEVT_COMMAND_LISTBOX_SELECTED, ID_LIBVIEW_CMP_LIST );
     int            ii = m_symbolList->GetSelection();
@@ -874,7 +874,7 @@ void LIB_VIEW_FRAME::onSelectPreviousSymbol( wxCommandEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
+void SYMBOL_VIEWER_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
 {
     int ii = m_unitChoice->GetSelection();
 
@@ -887,7 +887,7 @@ void LIB_VIEW_FRAME::onSelectSymbolUnit( wxCommandEvent& aEvent )
 }
 
 
-void LIB_VIEW_FRAME::DisplayLibInfos()
+void SYMBOL_VIEWER_FRAME::DisplayLibInfos()
 {
     if( m_libList && !m_libList->IsEmpty() && !m_libraryName.IsEmpty() )
     {
@@ -900,7 +900,7 @@ void LIB_VIEW_FRAME::DisplayLibInfos()
 }
 
 
-SELECTION& LIB_VIEW_FRAME::GetCurrentSelection()
+SELECTION& SYMBOL_VIEWER_FRAME::GetCurrentSelection()
 {
     return m_toolManager->GetTool<EE_SELECTION_TOOL>()->GetSelection();
 }

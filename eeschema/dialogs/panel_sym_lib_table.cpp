@@ -35,7 +35,7 @@
 #include <env_paths.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <sch_edit_frame.h>
 #include <kiway.h>
 #include <pgm_base.h>
@@ -925,7 +925,7 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
 {
     auto* schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
     auto* symbolEditor = (SYMBOL_EDIT_FRAME*) aKiway->Player( FRAME_SCH_SYMBOL_EDITOR, false );
-    auto* symbolViewer = (LIB_VIEW_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
+    auto* symbolViewer = (SYMBOL_VIEWER_FRAME*) aKiway->Player( FRAME_SCH_VIEWER, false );
 
     SYMBOL_LIB_TABLE* globalTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
     wxString          globalTablePath = SYMBOL_LIB_TABLE::GetGlobalTableFileName();

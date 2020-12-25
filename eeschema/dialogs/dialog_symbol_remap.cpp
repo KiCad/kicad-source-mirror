@@ -33,7 +33,7 @@
 
 #include <class_library.h>
 #include <core/kicad_algo.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <project_rescue.h>
 #include <sch_io_mgr.h>
 #include <sch_component.h>
@@ -95,7 +95,7 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
 
     if( RESCUER::RescueProject( this, rescuer, false ) )
     {
-        LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) parent->Kiway().Player( FRAME_SCH_VIEWER, false );
+        auto viewer = (SYMBOL_VIEWER_FRAME*) parent->Kiway().Player( FRAME_SCH_VIEWER, false );
 
         if( viewer )
             viewer->ReCreateLibList();

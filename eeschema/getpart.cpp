@@ -29,7 +29,7 @@
 #include <eeschema_id.h>
 #include <general.h>
 #include <kiway.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <pgm_base.h>
 #include <sch_component.h>
 #include <sch_edit_frame.h>
@@ -46,41 +46,41 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParen
                                                         int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
-    LIB_VIEW_FRAME* viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+    SYMBOL_VIEWER_FRAME* viewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
 
-    if( viewlibFrame )
-        viewlibFrame->Destroy();
+    if( viewer )
+        viewer->Destroy();
 
-    viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, aParent );
+    viewer = (SYMBOL_VIEWER_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, aParent );
 
     if( aFilter )
-        viewlibFrame->SetFilter( aFilter );
+        viewer->SetFilter( aFilter );
 
     if( aPreselectedLibId.IsValid() )
     {
-        viewlibFrame->SetSelectedLibrary( aPreselectedLibId.GetLibNickname() );
-        viewlibFrame->SetSelectedComponent( aPreselectedLibId.GetLibItemName() );
+        viewer->SetSelectedLibrary( aPreselectedLibId.GetLibNickname() );
+        viewer->SetSelectedComponent( aPreselectedLibId.GetLibItemName() );
     }
 
-    viewlibFrame->SetUnitAndConvert( aUnit, aConvert );
+    viewer->SetUnitAndConvert( aUnit, aConvert );
 
-    viewlibFrame->Refresh();
+    viewer->Refresh();
 
     PICKED_SYMBOL sel;
     wxString      symbol;
 
-    if( viewlibFrame->ShowModal( &symbol, aParent ) )
+    if( viewer->ShowModal( &symbol, aParent ) )
     {
         LIB_ID id;
 
         if( id.Parse( symbol ) == -1 )
             sel.LibId = id;
 
-        sel.Unit = viewlibFrame->GetUnit();
-        sel.Convert = viewlibFrame->GetConvert();
+        sel.Unit = viewer->GetUnit();
+        sel.Convert = viewer->GetConvert();
     }
 
-    viewlibFrame->Destroy();
+    viewer->Destroy();
 
     return sel;
 }
@@ -88,10 +88,8 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibBrowser( wxTopLevelWindow* aParen
 
 PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilter,
                                                      std::vector<PICKED_SYMBOL>& aHistoryList,
-                                                     bool aUseLibBrowser,
-                                                     int aUnit, int aConvert,
-                                                     bool aShowFootprints,
-                                                     const LIB_ID* aHighlight,
+                                                     bool aUseLibBrowser, int aUnit, int aConvert,
+                                                     bool aShowFootprints, const LIB_ID* aHighlight,
                                                      bool aAllowFields )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );

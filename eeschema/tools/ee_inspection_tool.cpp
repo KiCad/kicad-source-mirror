@@ -32,11 +32,10 @@
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_selection.h>
-#include <search_stack.h>
 #include <sim/sim_plot_frame.h>
 #include <sch_edit_frame.h>
 #include <symbol_edit_frame.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <eda_doc.h>
 #include <invoke_sch_dialog.h>
 #include <project.h>
@@ -394,7 +393,7 @@ int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
-        LIB_PART* entry = static_cast<LIB_VIEW_FRAME*>( m_frame )->GetSelectedSymbol();
+        LIB_PART* entry = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame )->GetSelectedSymbol();
 
         if( !entry )
             return 0;

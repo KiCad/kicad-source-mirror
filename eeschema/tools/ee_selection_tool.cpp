@@ -31,7 +31,7 @@
 #include <eeschema_id.h> // For MAX_SELECT_ITEM_IDS
 #include <symbol_edit_frame.h>
 #include <lib_item.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <math/util.h>
 #include <menus_helpers.h>
 #include <painter.h>
@@ -107,7 +107,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_skip_heuristics( false ),
         m_nonModifiedCursor( KICURSOR::ARROW ),
         m_isSymbolEditor( false ),
-        m_isLibView( false ),
+        m_isSymbolViewer( false ),
         m_unit( 0 ),
         m_convert( 0 )
 {
@@ -128,8 +128,8 @@ bool EE_SELECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    LIB_VIEW_FRAME*    libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
-    SYMBOL_EDIT_FRAME* symbolEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+    SYMBOL_VIEWER_FRAME* symbolViewerFrame = dynamic_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
+    SYMBOL_EDIT_FRAME*   symbolEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
     if( symbolEditorFrame )
     {
@@ -139,7 +139,7 @@ bool EE_SELECTION_TOOL::Init()
     }
     else
     {
-        m_isLibView = libViewFrame != nullptr;
+        m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
@@ -156,23 +156,24 @@ bool EE_SELECTION_TOOL::Init()
     auto schEditSheetPageNumberCondition =
             [this] ( const SELECTION& aSel )
             {
-                return ( !m_isSymbolEditor && !m_isLibView ) && ( E_C::Empty || ( E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T ) ) );
+                return !m_isSymbolEditor
+                        && !m_isSymbolViewer
+                        && ( E_C::Empty || ( E_C::Count( 1 ) && E_C::OnlyType( SCH_SHEET_T ) ) );
             };
 
     auto schEditCondition =
             [this] ( const SELECTION& aSel )
             {
-                return !m_isSymbolEditor && !m_isLibView;
+                return !m_isSymbolEditor && !m_isSymbolViewer;
             };
 
     auto belowRootSheetCondition =
             [&]( const SELECTION& aSel )
             {
-                SCH_EDIT_FRAME* schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+                SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
 
-                return ( schEditFrame &&
-                         schEditFrame->GetCurrentSheet().Last() !=
-                         &schEditFrame->Schematic().Root() );
+                return editFrame
+                        && editFrame->GetCurrentSheet().Last() != &editFrame->Schematic().Root();
             };
 
     auto havePartCondition =
@@ -231,17 +232,17 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
         m_selection.Clear();
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
 
-        SYMBOL_EDIT_FRAME* libEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-        LIB_VIEW_FRAME*    libViewFrame = dynamic_cast<LIB_VIEW_FRAME*>( m_frame );
+        SYMBOL_EDIT_FRAME*   symbolEditFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        SYMBOL_VIEWER_FRAME* symbolViewerFrame = dynamic_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
 
-        if( libEditFrame )
+        if( symbolEditFrame )
         {
             m_isSymbolEditor = true;
-            m_unit = libEditFrame->GetUnit();
-            m_convert = libEditFrame->GetConvert();
+            m_unit = symbolEditFrame->GetUnit();
+            m_convert = symbolEditFrame->GetConvert();
         }
         else
-            m_isLibView = libViewFrame != nullptr;
+            m_isSymbolViewer = symbolViewerFrame != nullptr;
     }
     else
         // Restore previous properties of selected items and remove them from containers

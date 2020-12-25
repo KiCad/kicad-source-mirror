@@ -48,7 +48,7 @@
 #include <schematic.h>
 #include <advanced_config.h>
 #include <sim/sim_plot_frame.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <status_popup.h>
 #include <tool/picker_tool.h>
 #include <tool/tool_manager.h>
@@ -157,7 +157,7 @@ bool SCH_EDITOR_CONTROL::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand
         KIWAY_PLAYER* viewer = m_frame->Kiway().Player( FRAME_SCH_VIEWER, false );
 
         if( viewer )
-            static_cast<LIB_VIEW_FRAME*>( viewer )->ReCreateLibList();
+            static_cast<SYMBOL_VIEWER_FRAME*>( viewer )->ReCreateLibList();
 
         if( aRunningOnDemand )
         {

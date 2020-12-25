@@ -40,7 +40,7 @@ class SYMBOL_LIB_TABLE_ROW;
 /**
  * Symbol library viewer main window.
  */
-class LIB_VIEW_FRAME : public SCH_BASE_FRAME
+class SYMBOL_VIEWER_FRAME : public SCH_BASE_FRAME
 {
 public:
 
@@ -51,10 +51,10 @@ public:
      * @param aFrameType must be either FRAME_SCH_LIB_VIEWER or FRAME_SCH_LIB_VIEWER_MODAL
      * @param aLibrary = the library to open when starting (default = NULL)
      */
-    LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                    FRAME_T aFrameType, const wxString& aLibraryName = wxEmptyString );
+    SYMBOL_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
+                         const wxString& aLibraryName = wxEmptyString );
 
-    ~LIB_VIEW_FRAME();
+    ~SYMBOL_VIEWER_FRAME();
 
     /**
      * Function ShowModal

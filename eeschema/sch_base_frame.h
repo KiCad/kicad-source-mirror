@@ -50,7 +50,7 @@ namespace KIGFX
 
 class PAGE_INFO;
 class TITLE_BLOCK;
-class LIB_VIEW_FRAME;
+class SYMBOL_VIEWER_FRAME;
 class SYMBOL_EDIT_FRAME;
 class LIB_PART;
 class PART_LIB;
@@ -80,7 +80,7 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
 
 /**
  * A shim class between EDA_DRAW_FRAME and several derived classes:
- * SYMBOL_EDIT_FRAME, LIB_VIEW_FRAME, and SCH_EDIT_FRAME, and it brings in a
+ * SYMBOL_EDIT_FRAME, SYMBOL_VIEWER_FRAME, and SCH_EDIT_FRAME, and it brings in a
  * common way of handling the provided virtual functions for the derived classes.
  *
  * The motivation here is to switch onto GetScreen() for the underlying data model.

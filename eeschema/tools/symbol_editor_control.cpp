@@ -28,7 +28,7 @@
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_control.h>
 #include <symbol_edit_frame.h>
-#include <lib_view_frame.h>
+#include <symbol_viewer_frame.h>
 #include <symbol_tree_model_adapter.h>
 #include <wildcards_and_files_ext.h>
 #include <gestfich.h>
@@ -221,16 +221,16 @@ int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-        SYMBOL_EDIT_FRAME* libEditFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-        libEditFrame->SetConvert( convert );
+        SYMBOL_EDIT_FRAME* symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+        symbolEditor->SetConvert( convert );
 
         m_toolMgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
-        libEditFrame->RebuildView();
+        symbolEditor->RebuildView();
     }
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) || m_frame->IsType( FRAME_SCH_VIEWER_MODAL ) )
     {
-        LIB_VIEW_FRAME* libViewFrame = static_cast<LIB_VIEW_FRAME*>( m_frame );
-        libViewFrame->SetUnitAndConvert( libViewFrame->GetUnit(), convert );
+        SYMBOL_VIEWER_FRAME* symbolViewer = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
+        symbolViewer->SetUnitAndConvert( symbolViewer->GetUnit(), convert );
     }
 
     return 0;
@@ -414,20 +414,20 @@ int SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic( const TOOL_EVENT& aEvent )
     }
     else
     {
-        LIB_VIEW_FRAME* viewFrame = getEditFrame<LIB_VIEW_FRAME>();
+        SYMBOL_VIEWER_FRAME* viewerFrame = getEditFrame<SYMBOL_VIEWER_FRAME>();
 
-        if( viewFrame->IsModal() )
+        if( viewerFrame->IsModal() )
         {
             // if we're modal then we just need to return the symbol selection; the caller is
             // already in a EE_ACTIONS::placeSymbol coroutine.
-            viewFrame->FinishModal();
+            viewerFrame->FinishModal();
             return 0;
         }
         else
         {
-            part    = viewFrame->GetSelectedSymbol();
-            unit    = viewFrame->GetUnit();
-            convert = viewFrame->GetConvert();
+            part    = viewerFrame->GetSelectedSymbol();
+            unit    = viewerFrame->GetUnit();
+            convert = viewerFrame->GetConvert();
 
             if( part )
                 libId = part->GetLibId();

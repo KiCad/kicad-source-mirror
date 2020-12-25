@@ -24,7 +24,7 @@
 #include <macros.h>
 #include "class_library.h"
 #include "eeschema_id.h"
-#include "lib_view_frame.h"
+#include "symbol_viewer_frame.h"
 #include "sch_painter.h"
 #include <tool/action_menu.h>
 #include <tool/action_toolbar.h>
@@ -33,7 +33,7 @@
 #include <tools/symbol_editor_control.h>
 #include <widgets/wx_menubar.h>
 
-void LIB_VIEW_FRAME::ReCreateHToolbar()
+void SYMBOL_VIEWER_FRAME::ReCreateHToolbar()
 {
     if( m_mainToolBar )
     {
@@ -41,8 +41,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     }
     else
     {
-        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
-                                            wxDefaultPosition, wxDefaultSize,
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT | wxAUI_TB_HORIZONTAL );
         m_mainToolBar->SetAuiManager( &m_auimgr );
     }
@@ -89,12 +88,12 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
 }
 
 
-void LIB_VIEW_FRAME::ReCreateVToolbar()
+void SYMBOL_VIEWER_FRAME::ReCreateVToolbar()
 {
 }
 
 
-void LIB_VIEW_FRAME::ReCreateMenuBar()
+void SYMBOL_VIEWER_FRAME::ReCreateMenuBar()
 {
     SYMBOL_EDITOR_CONTROL* libControl = m_toolManager->GetTool<SYMBOL_EDITOR_CONTROL>();
     // wxWidgets handles the OSX Application menu behind the scenes, but that means
