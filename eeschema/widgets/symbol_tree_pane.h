@@ -50,8 +50,9 @@ public:
 
 protected:
     void onComponentSelected( wxCommandEvent& aEvent );
+    void onUpdateUI( wxUpdateUIEvent& aEvent );
 
-    SYMBOL_EDIT_FRAME*      m_libEditFrame;
+    SYMBOL_EDIT_FRAME*      m_symbolEditFrame;
     LIB_TREE*               m_tree;             ///< component search tree widget
     SYMBOL_LIBRARY_MANAGER* m_libMgr;
 };

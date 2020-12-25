@@ -25,6 +25,7 @@
 
 #include <pgm_base.h>
 #include <confirm.h>
+#include <kiway.h>
 #include <widgets/infobar.h>
 #include <tools/ee_actions.h>
 #include <tools/symbol_editor_drawing_tools.h>
@@ -435,7 +436,6 @@ void SYMBOL_EDIT_FRAME::SaveAll()
 {
     saveAllLibraries( false );
     m_treePane->GetLibTree()->RefreshLibTree();
-    refreshSchematic();
 }
 
 
@@ -574,31 +574,44 @@ void SYMBOL_EDIT_FRAME::CreateNewPart()
 
 void SYMBOL_EDIT_FRAME::Save()
 {
-    LIB_ID          libId = getTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
+    if( getTargetPart() == m_my_part )
+    {
+        if( IsSymbolFromSchematic() )
+        {
+            SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
 
-    if( !libName.IsEmpty() && m_libMgr->IsLibraryReadOnly( libName ) )
+            if( schframe )
+            {
+                schframe->UpdateSymbolFromEditor( *m_my_part );
+                GetScreen()->ClrModify();
+            }
+        }
+        else
+        {
+            saveCurrentPart();
+        }
+    }
+    else if( !getTargetLibId().GetLibNickname().empty() )
     {
-        wxString msg = wxString::Format( _( "Symbol library '%s' is not writeable." ), libName );
-        wxString msg2 = _( "You must save to a different location." );
+        LIB_ID          libId = getTargetLibId();
+        const wxString& libName = libId.GetLibNickname();
+        const wxString& partName = libId.GetLibItemName();
 
-        if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
-            saveLibrary( libName, true );
-    }
-    else if( partName.IsEmpty() )
-    {
-        saveLibrary( libName, false );
-    }
-    else
-    {
-        // Save a single library.
-        if( m_libMgr->FlushPart( partName, libName ) )
-            m_libMgr->ClearPartModified( partName, libName );
+        if( m_libMgr->IsLibraryReadOnly( libName ) )
+        {
+            wxString msg = wxString::Format( _( "Symbol library '%s' is not writeable." ), libName );
+            wxString msg2 = _( "You must save to a different location." );
+
+            if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
+                saveLibrary( libName, true );
+        }
+        else
+        {
+            saveLibrary( libName, false );
+        }
     }
 
     m_treePane->GetLibTree()->RefreshLibTree();
-    refreshSchematic();
 }
 
 
@@ -614,28 +627,28 @@ void SYMBOL_EDIT_FRAME::SaveAs()
         savePartAs();
 
     m_treePane->GetLibTree()->RefreshLibTree();
-    refreshSchematic();
 }
 
 
 void SYMBOL_EDIT_FRAME::savePartAs()
 {
-    LIB_ID old_lib_id = getTargetLibId();
-    wxString old_name = old_lib_id.GetLibItemName();
-    wxString old_lib = old_lib_id.GetLibNickname();
-    LIB_PART* part = m_libMgr->GetBufferedPart( old_name, old_lib );
+    LIB_PART* part = getTargetPart();
 
     if( part )
     {
-        SYMBOL_LIB_TABLE* tbl = Prj().SchSymbolLibTable();
-        wxArrayString headers;
+        LIB_ID   old_lib_id = part->GetLibId();
+        wxString old_name = old_lib_id.GetLibItemName();
+        wxString old_lib = old_lib_id.GetLibNickname();
+
+        SYMBOL_LIB_TABLE*            tbl = Prj().SchSymbolLibTable();
+        wxArrayString                headers;
         std::vector< wxArrayString > itemsToDisplay;
-        std::vector< wxString > libNicknames = tbl->GetLogicalLibs();
+        std::vector< wxString >      libNicknames = tbl->GetLogicalLibs();
 
         headers.Add( _( "Nickname" ) );
         headers.Add( _( "Description" ) );
 
-        for( const auto& name : libNicknames )
+        for( const wxString& name : libNicknames )
         {
             wxArrayString item;
             item.Add( name );
@@ -685,8 +698,8 @@ void SYMBOL_EDIT_FRAME::savePartAs()
         //       solution to ensure derived parts do not get orphaned.
         if( part->IsAlias() && new_lib != old_lib )
         {
-            DisplayError( this, _( "Derived symbols must be save in the same library\n"
-                                   "that the parent symbol exists." ) );
+            DisplayError( this, _( "Derived symbols must be saved in the same library as their "
+                                   "parent symbol." ) );
             return;
         }
 
@@ -704,8 +717,9 @@ void SYMBOL_EDIT_FRAME::savePartAs()
         // Test if there is a component with this name already.
         if( m_libMgr->PartExists( new_name, new_lib ) )
         {
-            wxString msg = wxString::Format( _( "Symbol \"%s\" already exists in library \"%s\"" ),
-                                             new_name, new_lib );
+            wxString msg = wxString::Format( _( "Symbol '%s' already exists in library '%s'" ),
+                                             new_name,
+                                             new_lib );
             DisplayError( this, msg );
             return;
         }
@@ -797,7 +811,6 @@ void SYMBOL_EDIT_FRAME::DeletePartFromLibrary()
     m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
 
     m_treePane->GetLibTree()->RefreshLibTree();
-    refreshSchematic();
 }
 
 
@@ -968,7 +981,6 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
         LoadPart( curr_partName, libName, unit );
 
     m_treePane->Refresh();
-    refreshSchematic();
 }
 
 

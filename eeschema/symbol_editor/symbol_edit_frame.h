@@ -395,8 +395,6 @@ private:
      */
     void SaveOneSymbol();
 
-    void refreshSchematic();
-
 public:
     /**
      * Selects the currently active library and loads the symbol from \a aLibId.

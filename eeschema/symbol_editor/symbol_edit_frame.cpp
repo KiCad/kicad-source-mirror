@@ -340,40 +340,30 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return m_my_part && m_my_part->IsRoot() && !IsSymbolFromLegacyLibrary();
         };
 
-    auto libMgrModifiedCond =
+    auto schematicModifiedCond =
         [this] ( const SELECTION& )
         {
-            if( IsSymbolFromSchematic() )
-                return GetScreen() && GetScreen()->IsModify();
-            else
-                return m_libMgr->HasModifications();
+            return IsSymbolFromSchematic() && GetScreen() && GetScreen()->IsModify();
         };
 
-    auto modifiedDocumentCondition =
+    auto libModifiedCondition =
         [this] ( const SELECTION& sel )
         {
-            LIB_ID libId = getTargetLibId();
-            const wxString& libName  = libId.GetLibNickname();
-            const wxString& partName = libId.GetLibItemName();
-
-            if( partName.IsEmpty() )
-                return ( m_libMgr->IsLibraryModified( libName ) );
-            else
-                return ( m_libMgr->IsPartModified( partName, libName ) );
+            return m_libMgr->HasModifications();
         };
 
     mgr->SetConditions( ACTIONS::saveAll,
-                        ENABLE( libMgrModifiedCond ) );
+                        ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( ACTIONS::save,
-                        ENABLE( libMgrModifiedCond ||
-                                ( haveSymbolCond && modifiedDocumentCondition ) ) );
-    mgr->SetConditions( EE_ACTIONS::saveInSchematic, ENABLE( libMgrModifiedCond ) );
+                        ENABLE( schematicModifiedCond || libModifiedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveInSchematic,
+                        ENABLE( schematicModifiedCond ) );
     mgr->SetConditions( ACTIONS::undo,
                         ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,
                         ENABLE( haveSymbolCond && cond.RedoAvailable() ) );
     mgr->SetConditions( ACTIONS::revert,
-                        ENABLE( haveSymbolCond && modifiedDocumentCondition ) );
+                        ENABLE( haveSymbolCond && libModifiedCondition ) );
 
     mgr->SetConditions( ACTIONS::toggleGrid,
                         CHECK( cond.GridVisible() ) );
@@ -807,15 +797,6 @@ void SYMBOL_EDIT_FRAME::OnModify()
 bool SYMBOL_EDIT_FRAME::SynchronizePins()
 {
     return m_SyncPinEdit && m_my_part && m_my_part->IsMulti() && !m_my_part->UnitsLocked();
-}
-
-
-void SYMBOL_EDIT_FRAME::refreshSchematic()
-{
-    // There may be no parent window so use KIWAY message to refresh the schematic editor
-    // in case any symbols have changed.
-    std::string dummyPayload;
-    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, dummyPayload, this );
 }
 
 

@@ -1627,6 +1627,8 @@ void SCH_EDIT_FRAME::UpdateSymbolFromEditor( const LIB_PART& aSymbol )
         }
 
         symbol->SetLibSymbol( aSymbol.Flatten().release() );
+        symbol->UpdateFields( true, true );
+
         currentScreen->Append( symbol );
         selectionTool->SelectHighlightItem( symbol );
         GetCanvas()->GetView()->Update( symbol );

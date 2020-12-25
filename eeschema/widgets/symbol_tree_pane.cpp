@@ -32,7 +32,7 @@
 
 SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_MANAGER* aLibMgr )
         : wxPanel( aParent ),
-          m_libEditFrame( aParent ),
+          m_symbolEditFrame( aParent ),
           m_tree( nullptr ),
           m_libMgr( aLibMgr )
 {
@@ -48,6 +48,7 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( SYMBOL_EDIT_FRAME* aParent, SYMBOL_LIBRARY_M
 
     // Event handlers
     Bind( COMPONENT_SELECTED, &SYMBOL_TREE_PANE::onComponentSelected, this );
+    m_tree->Bind( wxEVT_UPDATE_UI, &SYMBOL_TREE_PANE::onUpdateUI, this );
 }
 
 
@@ -59,11 +60,22 @@ SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 
 void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    m_libEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );
+    m_symbolEditFrame->GetToolManager()->RunAction( EE_ACTIONS::editSymbol, true );
 
     // Make sure current-part highlighting doesn't get lost in selection highlighting
     m_tree->Unselect();
 
     // Turn off any previous current-part highlighting
     m_tree->RefreshLibTree();
+}
+
+
+void SYMBOL_TREE_PANE::onUpdateUI( wxUpdateUIEvent& aEvent )
+{
+    if( m_symbolEditFrame->GetCanvas()->HasFocus() )
+    {
+        // Don't allow a selected item in the tree when the canvas has focus: it's too easy
+        // to confuse the selected-highlighting with the being-edited-on-canvas-highlighting.
+        m_tree->Unselect();
+    }
 }
