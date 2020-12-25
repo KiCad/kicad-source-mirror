@@ -99,8 +99,8 @@ void DRC_TEST_PROVIDER_MISC::testOutline()
     // other tools (such as STEP export).
     constexpr int chainingEpsilon = Millimeter2iu( 0.02 ) / 100;
 
-    if( BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
-                                   chainingEpsilon, &errorHandler ) )
+    if( !BuildBoardPolygonOutlines( m_board, dummyOutline, m_board->GetDesignSettings().m_MaxError,
+                                    chainingEpsilon, &errorHandler ) )
     {
         if( errorHandled )
         {
