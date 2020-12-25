@@ -357,6 +357,11 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         for( const wxPoint& pt : pts )
             aPolygons.Append( pt );
 
+        segOwners[ std::make_pair( pts[0], pts[1] ) ] = graphic;
+        segOwners[ std::make_pair( pts[1], pts[2] ) ] = graphic;
+        segOwners[ std::make_pair( pts[2], pts[3] ) ] = graphic;
+        segOwners[ std::make_pair( pts[3], pts[0] ) ] = graphic;
+
         polygonComplete = true;
     }
     else if( graphic->GetShape() == S_POLYGON )
@@ -468,6 +473,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 // of short lines and put those line segments into the !same! PATH.
                 {
                     wxPoint nextPt;
+                    bool    first = true;
                     bool    reverse = false;
 
                     // Use the end point furthest away from
@@ -490,7 +496,12 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         {
                             const wxPoint& pt = graphic->GetBezierPoints()[jj];
                             aPolygons.Append( pt );
-                            segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+
+                            if( first )
+                                first = false;
+                            else
+                                segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+
                             prevPt = pt;
                         }
                     }
@@ -499,7 +510,12 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         for( const wxPoint& pt : graphic->GetBezierPoints() )
                         {
                             aPolygons.Append( pt );
-                            segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+
+                            if( first )
+                                first = false;
+                            else
+                                segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+
                             prevPt = pt;
                         }
                     }
