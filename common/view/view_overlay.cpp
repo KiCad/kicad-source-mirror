@@ -110,53 +110,6 @@ struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
 };
 
 
-struct VIEW_OVERLAY::COMMAND_POLYLINE : public VIEW_OVERLAY::COMMAND
-{
-    COMMAND_POLYLINE( const std::deque<VECTOR2D>& aPointList ) :
-       m_pointList( aPointList ) {}
-
-    virtual void Execute( VIEW* aView ) const override
-    {
-        aView->GetGAL()->DrawPolyline( m_pointList );
-    }
-
-    std::deque<VECTOR2D> m_pointList;
-};
-
-
-struct VIEW_OVERLAY::COMMAND_POLY_POLYLINE : public VIEW_OVERLAY::COMMAND
-{
-    COMMAND_POLY_POLYLINE( const SHAPE_LINE_CHAIN& aLineChain ) :
-       m_polyLine( aLineChain ) {}
-
-    virtual void Execute( VIEW* aView ) const override
-    {
-        aView->GetGAL()->DrawPolyline( m_polyLine );
-    }
-
-    SHAPE_LINE_CHAIN m_polyLine;
-};
-
-
-struct VIEW_OVERLAY::COMMAND_POINT_POLYLINE : public VIEW_OVERLAY::COMMAND
-{
-    COMMAND_POINT_POLYLINE( const VECTOR2D aPointList[], int aListSize )
-    {
-        m_pointList.reserve( aListSize );
-
-        for( int ii = 0; ii < aListSize; ii++ )
-            m_pointList.push_back( aPointList[ii] );
-    }
-
-    virtual void Execute( VIEW* aView ) const override
-    {
-        aView->GetGAL()->DrawPolyline( &m_pointList[0], (int)m_pointList.size() );
-    }
-
-    std::vector<VECTOR2D> m_pointList;
-};
-
-
 struct VIEW_OVERLAY::COMMAND_POLYGON : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_POLYGON( const std::deque<VECTOR2D>& aPointList ) :
@@ -330,24 +283,6 @@ void VIEW_OVERLAY::Segment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoi
 {
     SetLineWidth( aWidth );
     Line( aStartPoint, aEndPoint );
-}
-
-
-void VIEW_OVERLAY::Polyline( std::deque<VECTOR2D>& aPointList )
-{
-    // fixme: implement
-}
-
-
-void VIEW_OVERLAY::Polyline( const VECTOR2D aPointList[], int aListSize )
-{
-    // fixme: implement
-}
-
-
-void VIEW_OVERLAY::Polyline( const SHAPE_LINE_CHAIN& aLineChain )
-{
-    m_commands.push_back( new COMMAND_POLY_POLYLINE( aLineChain ) );
 }
 
 

@@ -64,7 +64,6 @@ public:
 
     struct COMMAND_POLYLINE;
     struct COMMAND_POINT_POLYLINE;
-    struct COMMAND_POLY_POLYLINE;
 
     void Clear();
 
@@ -80,11 +79,6 @@ public:
     void Arc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
     void Rectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
     void Cross( const VECTOR2D& aP, int aSize );
-
-    // Polyline primitives
-    void Polyline( std::deque<VECTOR2D>& aPointList );
-    void Polyline( const VECTOR2D aPointList[], int aListSize );
-    void Polyline( const SHAPE_LINE_CHAIN& aLineChain );
 
     // polygon primitives
     void Polygon( const std::deque<VECTOR2D>& aPointList );
