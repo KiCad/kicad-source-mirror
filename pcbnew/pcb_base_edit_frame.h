@@ -39,8 +39,8 @@ class PCB_BASE_EDIT_FRAME : public PCB_BASE_FRAME
 {
 public:
     PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-                const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
-                long aStyle, const wxString& aFrameName );
+                         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
+                         long aStyle, const wxString& aFrameName );
 
     virtual ~PCB_BASE_EDIT_FRAME();
 
@@ -90,7 +90,7 @@ public:
      *                          commands like move
      */
     void SaveCopyInUndoList( EDA_ITEM* aItemToCopy, UNDO_REDO aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
 
     /**
      * Function SaveCopyInUndoList
@@ -102,7 +102,7 @@ public:
      *                          for commands like move
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO aTypeCommand,
-                            const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
 
     /**
      * Function RestoreCopyFromRedoList

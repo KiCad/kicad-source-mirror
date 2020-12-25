@@ -653,6 +653,15 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
             renderSettings.LoadColors( colorSettings );
             renderSettings.SetPrintDC( &memDC );
 
+            if( m_parent->IsType( FRAME_SCH )
+                || m_parent->IsType( FRAME_SCH_SYMBOL_EDITOR )
+                || m_parent->IsType( FRAME_SCH_VIEWER )
+                || m_parent->IsType( FRAME_SCH_VIEWER_MODAL ) )
+            {
+                COLOR4D worksheetColor = renderSettings.GetLayerColor( LAYER_SCHEMATIC_WORKSHEET );
+                renderSettings.SetLayerColor( LAYER_WORKSHEET, worksheetColor );
+            }
+
             GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, bgColor, bgColor );
 
             PrintPageLayout( &renderSettings, pageDUMMY, emptyString, emptyString, m_tb,
@@ -783,12 +792,13 @@ void DIALOG_PAGES_SETTINGS::OnWksFileSelection( wxCommandEvent& event )
     // For Win/Linux/macOS compatibility, a relative path is a good idea
     if( shortFileName != GetWksFileName() && shortFileName != fileName )
     {
-        wxString msg = wxString::Format( _(
-                "The page layout description file name has changed.\n"
-                "Do you want to use the relative path:\n"
-                "\"%s\"\n"
-                "instead of\n"
-                "\"%s\"?" ), shortFileName, fileName );
+        wxString msg = wxString::Format( _( "The page layout description file name has changed.\n"
+                                            "Do you want to use the relative path:\n"
+                                            "\"%s\"\n"
+                                            "instead of\n"
+                                            "\"%s\"?" ),
+                                         shortFileName,
+                                         fileName );
 
         if( !IsOK( this, msg ) )
             shortFileName = fileName;
