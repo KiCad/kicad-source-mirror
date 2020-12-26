@@ -197,10 +197,10 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         return true;
 
     bool polygonComplete = false;
+    bool selfIntersecting = false;
 
     wxString   msg;
-    PCB_SHAPE* graphic;
-    wxPoint    prevPt;
+    PCB_SHAPE* graphic = nullptr;
 
     std::set<PCB_SHAPE*> startCandidates( aSegList.begin(), aSegList.end() );
 
@@ -337,8 +337,10 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     // Grab the left most point, assume its on the board's perimeter, and see if we can put
     // enough graphics together by matching endpoints to formulate a cohesive polygon.
 
-    graphic = (PCB_SHAPE*) aSegList[xmini];
+    PCB_SHAPE* prevGraphic = nullptr;
+    wxPoint    prevPt;
 
+    graphic = (PCB_SHAPE*) aSegList[xmini];
     graphic->SetFlags( SKIP_STRUCT );
     startCandidates.erase( graphic );
 
@@ -413,116 +415,135 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
         {
             switch( graphic->GetShape() )
             {
-            case S_SEGMENT:
+            case S_RECT:
+            case S_CIRCLE:
+            {
+                // As a non-first item, closed shapes can't be anything but self-intersecting
+
+                if( aErrorHandler )
                 {
-                    wxPoint  nextPt;
-
-                    // Use the line segment end point furthest away from prevPt as we assume
-                    // the other end to be ON prevPt or very close to it.
-
-                    if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
-                        nextPt = graphic->GetEnd();
-                    else
-                        nextPt = graphic->GetStart();
-
-                    aPolygons.Append( nextPt );
-                    segOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
-                    prevPt = nextPt;
+                    wxASSERT( prevGraphic );
+                    (*aErrorHandler)( _( "(self-intersecting)" ), prevGraphic, graphic, prevPt );
                 }
+
+                selfIntersecting = true;
+
+                // A closed shape will finish where it started, so no point in updating prevPt
+            }
+                break;
+
+            case S_SEGMENT:
+            {
+                wxPoint  nextPt;
+
+                // Use the line segment end point furthest away from prevPt as we assume
+                // the other end to be ON prevPt or very close to it.
+
+                if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                    nextPt = graphic->GetEnd();
+                else
+                    nextPt = graphic->GetStart();
+
+                aPolygons.Append( nextPt );
+                segOwners[ std::make_pair( prevPt, nextPt ) ] = graphic;
+                prevPt = nextPt;
+            }
                 break;
 
             case S_ARC:
+            {
                 // We do not support arcs in polygons, so approximate an arc with a series of
                 // short lines and put those line segments into the !same! PATH.
+
+                wxPoint pstart  = graphic->GetArcStart();
+                wxPoint pend    = graphic->GetArcEnd();
+                wxPoint pcenter = graphic->GetCenter();
+                double  angle   = -graphic->GetAngle();
+                double  radius  = graphic->GetRadius();
+                int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
+
+                if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
                 {
-                    wxPoint pstart  = graphic->GetArcStart();
-                    wxPoint pend    = graphic->GetArcEnd();
-                    wxPoint pcenter = graphic->GetCenter();
-                    double  angle   = -graphic->GetAngle();
-                    double  radius  = graphic->GetRadius();
-                    int     steps   = GetArcToSegmentCount( radius, aErrorMax, angle / 10.0 );
+                    wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aChainingEpsilon ) );
 
-                    if( !close_enough( prevPt, pstart, aChainingEpsilon ) )
-                    {
-                        wxASSERT( close_enough( prevPt, graphic->GetArcEnd(), aChainingEpsilon ) );
-
-                        angle = -angle;
-                        std::swap( pstart, pend );
-                    }
-
-                    // Create intermediate points between start and end:
-                    for( int step = 1; step < steps; ++step )
-                    {
-                        double rotation = ( angle * step ) / steps;
-                        wxPoint pt = pstart;
-                        RotatePoint( &pt, pcenter, rotation );
-
-                        aPolygons.Append( pt );
-                        segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
-                        prevPt = pt;
-                    }
-
-                    // Append the last arc end point
-                    aPolygons.Append( pend );
-                    segOwners[ std::make_pair( prevPt, pend ) ] = graphic;
-                    prevPt = pend;
+                    angle = -angle;
+                    std::swap( pstart, pend );
                 }
+
+                // Create intermediate points between start and end:
+                for( int step = 1; step < steps; ++step )
+                {
+                    double rotation = ( angle * step ) / steps;
+                    wxPoint pt = pstart;
+                    RotatePoint( &pt, pcenter, rotation );
+
+                    aPolygons.Append( pt );
+                    segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+                    prevPt = pt;
+                }
+
+                // Append the last arc end point
+                aPolygons.Append( pend );
+                segOwners[ std::make_pair( prevPt, pend ) ] = graphic;
+                prevPt = pend;
+            }
                 break;
 
             case S_CURVE:
+            {
                 // We do not support Bezier curves in polygons, so approximate with a series
                 // of short lines and put those line segments into the !same! PATH.
+
+                wxPoint nextPt;
+                bool    first = true;
+                bool    reverse = false;
+
+                // Use the end point furthest away from
+                // prevPt as we assume the other end to be ON prevPt or
+                // very close to it.
+
+                if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
                 {
-                    wxPoint nextPt;
-                    bool    first = true;
-                    bool    reverse = false;
-
-                    // Use the end point furthest away from
-                    // prevPt as we assume the other end to be ON prevPt or
-                    // very close to it.
-
-                    if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
-                    {
-                        nextPt = graphic->GetEnd();
-                    }
-                    else
-                    {
-                        nextPt = graphic->GetStart();
-                        reverse = true;
-                    }
-
-                    if( reverse )
-                    {
-                        for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
-                        {
-                            const wxPoint& pt = graphic->GetBezierPoints()[jj];
-                            aPolygons.Append( pt );
-
-                            if( first )
-                                first = false;
-                            else
-                                segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
-
-                            prevPt = pt;
-                        }
-                    }
-                    else
-                    {
-                        for( const wxPoint& pt : graphic->GetBezierPoints() )
-                        {
-                            aPolygons.Append( pt );
-
-                            if( first )
-                                first = false;
-                            else
-                                segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
-
-                            prevPt = pt;
-                        }
-                    }
-
-                    prevPt = nextPt;
+                    nextPt = graphic->GetEnd();
                 }
+                else
+                {
+                    nextPt = graphic->GetStart();
+                    reverse = true;
+                }
+
+                if( reverse )
+                {
+                    for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
+                    {
+                        const wxPoint& pt = graphic->GetBezierPoints()[jj];
+                        aPolygons.Append( pt );
+
+                        if( first )
+                            first = false;
+                        else
+                            segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+
+                        prevPt = pt;
+                    }
+                }
+                else
+                {
+                    for( const wxPoint& pt : graphic->GetBezierPoints() )
+                    {
+                        aPolygons.Append( pt );
+
+                        if( first )
+                            first = false;
+                        else
+                            segOwners[ std::make_pair( prevPt, pt ) ] = graphic;
+
+                        prevPt = pt;
+                    }
+                }
+
+                prevPt = nextPt;
+            }
                 break;
 
             default:
@@ -537,6 +558,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
 
             if( nextGraphic && !( nextGraphic->GetFlags() & SKIP_STRUCT ) )
             {
+                prevGraphic = graphic;
                 graphic = nextGraphic;
                 graphic->SetFlags( SKIP_STRUCT );
                 startCandidates.erase( graphic );
@@ -815,7 +837,6 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
     // All of the silliness that follows is to work around the segment iterator while checking
     // for collisions.
     // TODO: Implement proper segment and point iterators that follow std
-    bool selfIntersecting = false;
 
     for( auto seg1 = aPolygons.IterateSegmentsWithHoles(); seg1; seg1++ )
     {
