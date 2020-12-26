@@ -271,16 +271,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
     int            actual;
     VECTOR2I       pos;
 
-    // It would really be better to know what particular nets a nettie should allow, but for now
-    // it is what it is.
-    if( isNetTie( other ) )
-        testClearance = false;
-
-    BOARD_CONNECTED_ITEM* otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
-
-    if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )
-        testClearance = false;
-
     if( testClearance )
     {
         constraint = m_drcEngine->EvalRulesForItems( CLEARANCE_CONSTRAINT, track, other, layer );
@@ -470,6 +460,16 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackClearances()
                     // Filter:
                     [&]( BOARD_ITEM* other ) -> bool
                     {
+                        // It would really be better to know what particular nets a nettie
+                        // should allow, but for now it is what it is.
+                        if( isNetTie( other ) )
+                            return false;
+
+                        auto otherCItem = dynamic_cast<BOARD_CONNECTED_ITEM*>( other );
+
+                        if( otherCItem && otherCItem->GetNetCode() == track->GetNetCode() )
+                            return false;
+
                         BOARD_ITEM* a = track;
                         BOARD_ITEM* b = other;
 
