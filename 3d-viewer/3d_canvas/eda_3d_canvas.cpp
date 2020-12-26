@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file  eda_3d_canvas.cpp
- * @brief Implementation of a 3d canvas
- */
-
 #include <gal/opengl/kiglew.h>    // Must be included first
 #include <gl_utils.h>
 #include <wx/tokenzr.h>
@@ -36,7 +31,6 @@
 #include <eda_3d_viewer.h>
 #include <3d_rendering/3d_render_raytracing/c3d_render_raytracing.h>
 #include <3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.h>
-#include <3d_rendering/3d_render_raytracing/accelerators/cbvh_pbrt.h>
 #include <3d_viewer_id.h>
 #include <board.h>
 #include <reporter.h>
