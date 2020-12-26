@@ -574,6 +574,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
             }
             else if( nextGraphic )  // encountered already-used segment, but not at the start
             {
+                if( aErrorHandler )
+                    (*aErrorHandler)( _( "(self-intersecting)" ), graphic, nextGraphic, prevPt );
+
                 polygonComplete = false;
                 break;
             }
@@ -816,6 +819,9 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 }
                 else if( nextGraphic )  // encountered already-used segment, but not at the start
                 {
+                    if( aErrorHandler )
+                        (*aErrorHandler)( _( "(self-intersecting)" ), graphic, nextGraphic, prevPt );
+
                     polygonComplete = false;
                     break;
                 }
