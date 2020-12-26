@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-25 14:13+0000\n"
+"PO-Revision-Date: 2020-12-27 12:09+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/lt/>\n"
@@ -290,7 +290,7 @@ msgstr "Išeksportuoti matomą vaizdą kaip JPEG..."
 #: common/tool/actions.cpp:557 pcbnew/footprint_viewer_frame.cpp:949
 #: pcbnew/pcb_base_frame.cpp:421
 msgid "3D Viewer"
-msgstr "3D Viewer"
+msgstr "Naršyklė 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
 msgid "Copy 3D Image"
