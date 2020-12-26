@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-23 22:21+0000\n"
+"PO-Revision-Date: 2020-12-27 12:09+0000\n"
 "Last-Translator: Jakub Janek <shaman.janek@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
 "master-source/sk/>\n"
@@ -14412,11 +14412,9 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Otvoriť <%s>\n"
+msgstr "Otvoriť %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:839
 #, fuzzy, c-format
