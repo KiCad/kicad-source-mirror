@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_dashed_line.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="13.980769"
+     inkscape:zoom="16.177201"
      inkscape:cx="-7.1187798"
-     inkscape:cy="20.563411"
+     inkscape:cy="19.018026"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,9 +81,8 @@
      id="title27979">add_dashed_line</title>
   <path
      id="polygon27981"
-     transform="translate(-1,-1)"
      style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2, 4;stroke-dashoffset:0"
-     d="M 11,15 3,4 22,7 19.479,18.938 4.673,22.325 Z"
+     d="M 11,14 3,3 21,6 19.5,18 4.5,21.5 Z"
      class="cls-1"
      sodipodi:nodetypes="cccccc" />
 </svg>

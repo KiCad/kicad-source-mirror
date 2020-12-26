@@ -26,9 +26,9 @@
      inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="11.525209"
-     inkscape:cx="7.6754187"
-     inkscape:cy="12.398897"
+     inkscape:zoom="20.166938"
+     inkscape:cx="12.693102"
+     inkscape:cy="12.502645"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
@@ -81,31 +81,35 @@
      id="title115974">auto_track_width</title>
   <path
      class="cls-1"
-     d="M 9.7362,21.0041 H 5.0273 a 4,4 0 0 1 -4,-4 V 2.0458"
-     id="path115976" />
+     d="M 11,21 H 6 C 3.790861,21 2,19.209139 2,17 V 2"
+     id="path115976"
+     sodipodi:nodetypes="cssc" />
   <path
      class="cls-2"
-     d="m 14.3456,21.0041 h 4.7088 a 4,4 0 0 0 4,-4 V 2.0458"
+     d="m 13,21 h 5 c 2.209139,0 4,-1.790861 4,-4 V 2"
      id="path115978"
-     style="stroke-width:1.99937008;stroke-miterlimit:4;stroke-dasharray:none;stroke:#545454;stroke-opacity:1" />
+     style="stroke:#545454;stroke-width:1.99937;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     sodipodi:nodetypes="cssc" />
   <circle
      class="cls-3"
      cx="12"
-     cy="21.004101"
+     cy="21"
      r="3"
      id="circle115980" />
   <line
      class="cls-4"
-     x1="7.4891996"
+     x1="7.5"
      y1="8.5"
-     x2="16.510799"
+     x2="16.5"
      y2="8.5"
-     id="line115982" />
+     id="line115982"
+     style="stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none" />
   <line
      class="cls-4"
-     x1="7.4891996"
+     x1="7.5"
      y1="11.5"
-     x2="16.510799"
+     x2="16.5"
      y2="11.5"
-     id="line115984" />
+     id="line115984"
+     style="stroke-width:1" />
 </svg>

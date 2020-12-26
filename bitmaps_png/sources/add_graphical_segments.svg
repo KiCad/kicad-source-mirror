@@ -22,16 +22,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="1920"
+     inkscape:window-height="995"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="12.97812"
+     inkscape:zoom="16.555662"
      inkscape:cx="4.2048076"
      inkscape:cy="17.563278"
      inkscape:window-x="0"
      inkscape:window-y="23"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -80,7 +80,7 @@
   <title
      id="title28021">add_graphical_segments</title>
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
      d="M 3,21 21,3"
      id="path4866" />
 </svg>

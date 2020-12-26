@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_zone_cutout.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="14.209423"
+     inkscape:zoom="32.354403"
+     inkscape:cx="13.289139"
      inkscape:cy="14.323504"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -79,26 +79,27 @@
   </defs>
   <title
      id="title115788">add_zone_cutout</title>
-  <polyline
-     class="cls-2"
-     points="18.669 20.068 6.045 20.068 6.045 6.096 16.148 6.096"
+  <path
      id="polyline115792"
+     style="fill:#b9b9b9;fill-opacity:1;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round"
      transform="matrix(1.0843314,0,0,1,-1.5097832,-1)"
-     style="fill:#b9b9b9;fill-opacity:1" />
+     d="M 18.914682,20 H 6.0034997 V 6 H 16.148"
+     class="cls-2"
+     sodipodi:nodetypes="cccc" />
   <path
      class="cls-3"
-     d="m 8.0051,5.0251 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     d="M 8,5 A 3,3 0 1 1 5,2 3,3 0 0 1 8,5 Z"
      id="path115794" />
   <path
      class="cls-3"
-     d="m 8.0051,18.9894 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     d="M 8,19 A 3,3 0 1 1 5,16 3,3 0 0 1 8,19 Z"
      id="path115796" />
   <path
      class="cls-3"
-     d="m 22.0155,18.9894 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     d="m 22,19 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
      id="path115798" />
   <path
      class="cls-3"
-     d="m 19.1061,5.0251 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
+     d="M 19,5 A 3,3 0 1 1 16,2 3,3 0 0 1 19,5 Z"
      id="path115800" />
 </svg>

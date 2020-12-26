@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="array.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="32.354403"
+     inkscape:cx="11.268326"
+     inkscape:cy="12.1964"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,29 +81,30 @@
      id="title115924">array</title>
   <rect
      class="cls-1"
-     x="10.9912"
-     y="10.9902"
-     width="13.0086"
-     height="13.0086"
-     id="rect115926" />
+     x="11"
+     y="11"
+     width="12"
+     height="12"
+     id="rect115926"
+     style="stroke-width:1" />
   <rect
      class="cls-2"
-     x="-0.0044000149"
-     y="10.9996"
+     x="1"
+     y="11"
      width="9"
      height="9"
      id="rect115928" />
   <rect
      class="cls-2"
-     x="10.9995"
-     y="0.00020003319"
+     x="11"
+     y="1"
      width="9"
      height="9"
      id="rect115930" />
   <rect
      class="cls-2"
-     x="0.00010001659"
-     y="0.0012999773"
+     x="1"
+     y="1"
      width="9"
      height="9"
      id="rect115932" />

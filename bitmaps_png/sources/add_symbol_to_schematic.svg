@@ -12,10 +12,56 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_symbol_to_schematic.svg"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    inkscape:export-filename="/Users/jeff/kicad_dev/kicad/bitmaps_png/png_26/add_symbol_to_schematic.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
+  <polygon
+     class="cls-1"
+     points="5,24 21.654,13 5,2 "
+     id="polygon27928"
+     transform="translate(-1,-1.0000859)"
+     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+  <line
+     class="cls-1"
+     x1="20.6542"
+     y1="11.999914"
+     x2="23.0242"
+     y2="11.999914"
+     id="line27930"
+     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+  <line
+     class="cls-1"
+     x1="3.9219999"
+     y1="5.9999142"
+     x2="1"
+     y2="5.9999142"
+     id="line27932"
+     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+  <line
+     class="cls-1"
+     x1="3.9043999"
+     y1="17.999914"
+     x2="1"
+     y2="17.999914"
+     id="line27934"
+     style="fill:none;stroke:#545454;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round" />
+  <path
+     id="line27936"
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m 7,8.4999141 h 3"
+     class="cls-1"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 8.5,11.999914 v 5"
+     id="path17250"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#545454;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 6.000682,14.464151 11,14.499914"
+     id="path17252"
+     sodipodi:nodetypes="cc" />
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -26,16 +72,16 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1645"
-     inkscape:window-height="1413"
+     inkscape:window-height="995"
      id="namedview24"
      showgrid="true"
-     inkscape:zoom="19.771793"
+     inkscape:zoom="21.797591"
      inkscape:cx="15.356926"
      inkscape:cy="13.275634"
-     inkscape:window-x="1510"
-     inkscape:window-y="217"
+     inkscape:window-x="2083"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g893"
+     inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
@@ -82,59 +128,6 @@
   </defs>
   <title
      id="title7">add_symbol_to_schematic</title>
-  <g
-     id="g880"
-     transform="translate(3.614474,6.118756)">
-    <g
-       id="g893">
-      <path
-         class="cls-2"
-         d="m 4.5263319,5.336774 h 1.90223 a 0.8178335,0.8178335 0 1 0 0,-1.6356666 h -1.90223 a 0.8178335,0.8178335 0 0 0 0,1.6356666 z"
-         id="path13-3"
-         style="fill:#545454;stroke-width:1" />
-      <path
-         class="cls-2"
-         d="M 6.4618579,8.330977 V 8.060925 a 0.81783365,0.81783365 0 1 0 -1.6356671,0 V 8.330977 H 4.5570355 a 0.817734,0.817734 0 0 0 0,1.635468 H 4.8261908 V 10.2356 a 0.81783365,0.81783365 0 1 0 1.6356671,0 V 9.966445 h 0.269155 a 0.817734,0.817734 0 1 0 0,-1.635468 z"
-         id="path15-6"
-         style="fill:#545454;stroke-width:1" />
-      <path
-         style="fill:#b9b9b9;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 1.3855261,-4.4330418 V 16.195529 L 16.856956,5.881244 Z"
-         id="path2231"
-         sodipodi:nodetypes="cccc" />
-      <path
-         style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 3.385526,2.381244 h 3"
-         id="path2229"
-         sodipodi:nodetypes="cc"
-         inkscape:connector-curvature="0" />
-      <path
-         style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m 17.128384,5.881244 h 3.257142"
-         id="path2233"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="m -2.614474,-0.118756 4,3.7e-6"
-         id="path2235"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M -2.614474,11.881244 H 1.3858148"
-         id="path2237"
-         sodipodi:nodetypes="cc" />
-      <path
-         style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 3.4088271,9.357943 H 6.3622256"
-         id="path2301"
-         inkscape:connector-curvature="0" />
-      <path
-         style="fill:none;stroke:#545454;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 4.885526,10.834642 V 7.881244"
-         id="path2303"
-         inkscape:connector-curvature="0" />
-    </g>
-  </g>
   <path
      class="cls-3"
      d="M 24.0065,17 A 7.0065,7.0065 0 1 1 17,10 a 7.0032,7.0032 0 0 1 7.0065,7 z"
@@ -145,10 +138,12 @@
      y1="13.6312"
      x2="17.1038"
      y2="20.631201"
-     id="line19" />
+     id="line19"
+     style="stroke:#ffffff;stroke-opacity:1" />
   <polyline
      class="cls-4"
      points="15.349 17.164 18.104 14.412 20.859 17.164"
      id="polyline21"
-     transform="translate(-1,-1)" />
+     transform="translate(-1,-1)"
+     style="stroke:#ffffff;stroke-opacity:1" />
 </svg>

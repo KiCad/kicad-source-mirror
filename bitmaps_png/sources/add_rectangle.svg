@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="1541"
+     inkscape:window-height="923"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="19.775022"
-     inkscape:cx="10.584131"
-     inkscape:cy="12.518969"
+     inkscape:zoom="29.462761"
+     inkscape:cx="12"
+     inkscape:cy="12"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
@@ -86,5 +86,5 @@
      width="18"
      height="16"
      id="rect115739"
-     style="fill:#c1c1c1;fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#c1c1c1;fill-opacity:1;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

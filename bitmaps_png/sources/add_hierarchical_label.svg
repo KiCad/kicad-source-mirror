@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_hierarchical_label.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="995"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="6.3133837"
+     inkscape:zoom="30.82645"
+     inkscape:cx="12.506425"
+     inkscape:cy="13.547431"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -82,24 +82,24 @@
   <path
      id="polygon200"
      style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none"
-     d="m 20.71526,12 -4.5,-5 -4.5,5 4.5,5 z"
+     d="m 21.015362,12 -4.5,-5 -4.5,5 4.5,5 z"
      class="cls-4"
      sodipodi:nodetypes="ccccc" />
   <text
      xml:space="preserve"
      style="font-size:40.9469px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;stroke-width:1.02367"
-     x="0.22718215"
+     x="1.0236715"
      y="17.606413"
      id="text12815"
-     transform="scale(0.97687586,1.0236715)"><tspan
+     transform="scale(0.97687588,1.0236715)"><tspan
        sodipodi:role="line"
        id="tspan12813"
-       x="0.22718215"
+       x="1.0236715"
        y="17.606413"
        style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16.3788px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#545454;fill-opacity:1;stroke-width:1.02367"
        dy="0">A</tspan></text>
   <path
-     style="fill:none;stroke:#545454;stroke-width:2.39019;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 20.71526,12 H 25"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 21.015362,12 h 4.28474"
      id="path12817" />
 </svg>

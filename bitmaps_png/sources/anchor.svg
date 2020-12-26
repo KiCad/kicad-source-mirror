@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="anchor.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
+     inkscape:zoom="32.354403"
      inkscape:cx="11.284902"
-     inkscape:cy="14.054286"
+     inkscape:cy="12.508901"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -101,12 +101,12 @@
      id="path473" />
   <polygon
      class="cls-1"
-     points="5.508,9.505 5.508,6.003 4.508,6.003 4.508,9.505 1.005,9.505 1.005,10.505 4.508,10.505 4.508,14.009 5.508,14.009 5.508,10.505 9.011,10.505 9.011,9.505 "
+     points="4.508,6.003 4.508,9.505 1.005,9.505 1.005,10.505 4.508,10.505 4.508,14.009 5.508,14.009 5.508,10.505 9.011,10.505 9.011,9.505 5.508,9.505 5.508,6.003 "
      id="polygon475"
-     transform="translate(-1,-1)" />
+     transform="translate(-0.505,-0.503)" />
   <path
      class="cls-2"
-     d="M 6.01,9.0084 A 2.0015,2.0015 0 1 1 4.0082,7.0069 2.0016,2.0016 0 0 1 6.01,9.0084 Z"
+     d="M 6.505,9.5054 A 2.0015,2.0015 0 1 1 4.5032,7.5039 2.0016,2.0016 0 0 1 6.505,9.5054 Z"
      id="path477" />
   <polyline
      class="cls-3"
@@ -115,7 +115,7 @@
      transform="translate(-1,-1)" />
   <polygon
      class="cls-1"
-     points="5.642,10.644 10.502,13.449 8.448,15.504 "
+     points="8.448,15.504 5.642,10.644 10.502,13.449 "
      id="polygon481"
-     transform="translate(-1,-1)" />
+     transform="translate(-0.505,-0.503)" />
 </svg>

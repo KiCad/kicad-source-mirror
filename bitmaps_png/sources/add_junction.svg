@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_junction.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="995"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="-3.5584597"
-     inkscape:cy="13"
+     inkscape:zoom="30.82645"
+     inkscape:cx="10.974515"
+     inkscape:cy="11.99437"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,21 +81,22 @@
      id="title308">add_junction</title>
   <line
      class="cls-1"
-     x1="1.0199001"
-     y1="11.9942"
-     x2="12"
-     y2="11.9942"
+     x1="1"
+     y1="12"
+     x2="11"
+     y2="12"
      id="line310" />
   <line
      class="cls-1"
      x1="12"
-     y1="0.96640003"
+     y1="1"
      x2="12"
-     y2="23.0336"
-     id="line312" />
+     y2="23"
+     id="line312"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-2"
-     d="M 16,12 A 3.9664663,4 0 1 1 12.033534,8 3.9664663,4 0 0 1 16,12 Z"
+     d="M 16,12 A 4,4 0 1 1 12,8 4,4 0 0 1 16,12 Z"
      id="path314"
-     style="fill:#1a81c4;fill-opacity:1;stroke-width:1.32774;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#1a81c4;fill-opacity:1;stroke-width:1.32661417;stroke-miterlimit:4;stroke-dasharray:none;stroke:none" />
 </svg>

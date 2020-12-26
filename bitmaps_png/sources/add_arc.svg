@@ -27,7 +27,7 @@
      inkscape:window-height="715"
      id="namedview1001"
      showgrid="true"
-     inkscape:zoom="16.397042"
+     inkscape:zoom="11.804974"
      inkscape:cx="6.7109761"
      inkscape:cy="16.211576"
      inkscape:window-x="0"
@@ -100,7 +100,7 @@
      id="title986">add_arc</title>
   <path
      class="cls-1"
-     d="m 3,22 v 0 A 19,19 0 0 1 22,3 v 0"
+     d="m 3,21 v 0 A 18,18 0 0 1 21,3 v 0"
      id="path988"
-     style="stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="stroke-width:2;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

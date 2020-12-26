@@ -9,7 +9,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    id="Слой_1"
-   inkscape:version="1.0.1 (1.0.1+r74)"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    sodipodi:docname="add_zone.svg"
    x="0px"
    y="0px"
@@ -40,17 +40,17 @@
    guidetolerance="10"
    id="namedview32"
    inkscape:current-layer="Слой_1"
-   inkscape:cx="9.8707278"
-   inkscape:cy="8.6725754"
+   inkscape:cx="11.878286"
+   inkscape:cy="13.625304"
    inkscape:document-rotation="0"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-height="1371"
+   inkscape:window-height="1035"
    inkscape:window-maximized="1"
-   inkscape:window-width="2560"
+   inkscape:window-width="1920"
    inkscape:window-x="0"
-   inkscape:window-y="0"
-   inkscape:zoom="26.841039"
+   inkscape:window-y="23"
+   inkscape:zoom="29.591716"
    objecttolerance="10"
    pagecolor="#ffffff"
    showgrid="true">
@@ -67,12 +67,17 @@
    id="title13">add_zone_2</title>
 <path
    id="polygon838"
-   transform="rotate(-90,12,12)"
-   style="fill:#1a81c4;stroke:#1a81c4"
-   d="m 11.5,2.5 h -9 v 19 h 19 v -13 h -10 z"
-   class="st0"
-   sodipodi:nodetypes="ccccccc" />
-<path
-   id="path2776"
-   style="fill:#545454;fill-opacity:1;stroke:#ffffff;stroke-width:2.2;stroke-miterlimit:0;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
-   d="m 16.928614,8.976565 a 2.0635231,2.010251 0 0 0 -2.064453,2.011718 2.0635231,2.010251 0 0 0 2.064453,2.009766 2.0635231,2.010251 0 0 0 1.78125,-0.998047 h 3.185547 c 0.04089,0 0.07422,-0.03333 0.07422,-0.07422 V 10.07422 C 21.969631,10.03333 21.936301,10 21.895411,10 H 18.723536 A 2.0635231,2.010251 0 0 0 16.928614,8.976565 Z" /></svg>
+   style="fill:#1a81c4;stroke:none"
+   d="M 8 2 L 8 12 L 2 12 L 2 22 L 22 22 L 22 14 L 19.644531 14 A 4 4 0 0 1 17 15 A 4 4 0 0 1 13 11 A 4 4 0 0 1 16.939453 7 A 4 4 0 0 1 17 7 A 4 4 0 0 1 19.644531 8 L 22 8 L 22 2 L 8 2 z " />
+<circle
+   style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+   id="path867"
+   cx="17"
+   cy="11"
+   r="2" /><rect
+   style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:1.00157;stroke-linecap:round;stroke-linejoin:round"
+   id="rect869"
+   width="5"
+   height="2"
+   x="17"
+   y="10" /></svg>

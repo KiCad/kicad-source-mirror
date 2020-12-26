@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="add_graphical_polygon.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2310"
-     inkscape:window-height="1299"
+     inkscape:window-width="1920"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="14.87974"
-     inkscape:cx="6.8897535"
+     inkscape:zoom="17.217404"
+     inkscape:cx="3.2016249"
      inkscape:cy="12.248596"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="1995"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -80,9 +80,9 @@
   <title
      id="title28001">add_graphical_polygon</title>
   <path
-     id="polygon27981"
-     style="fill:#c1c1c1;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0"
-     d="M 10,14 2,3 21,6 18.479,17.938 3.673,21.325 Z"
+     id="polygon27981-2"
+     style="fill:#c1c1c1;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+     d="M 11,14 3,3 l 18,3 -1.5,12 -15,3.5 z"
      class="cls-1"
      sodipodi:nodetypes="cccccc" />
 </svg>

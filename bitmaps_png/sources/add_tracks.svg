@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="715"
+     inkscape:window-width="1588"
+     inkscape:window-height="878"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
+     inkscape:zoom="26.357187"
      inkscape:cx="8.7425276"
-     inkscape:cy="18.324516"
+     inkscape:cy="12.145955"
      inkscape:window-x="0"
      inkscape:window-y="23"
      inkscape:window-maximized="0"
@@ -79,10 +79,11 @@
   </defs>
   <title
      id="title402">add_tracks</title>
-  <polyline
-     class="cls-1"
-     points="24 2 18.877 12.936 7.353 12.936 2 24"
+  <path
      id="polyline404"
+     style="fill:none;stroke:#1a81c4;stroke-width:2px;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
      transform="translate(-1,-1)"
-     style="stroke:#1a81c4;stroke-opacity:1" />
+     d="M 23,3 18.5,13 H 7.5 L 3,23"
+     class="cls-1"
+     sodipodi:nodetypes="cccc" />
 </svg>
