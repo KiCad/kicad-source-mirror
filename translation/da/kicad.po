@@ -1,12 +1,13 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 # Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-25 19:27+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2020-12-27 12:09+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/"
 "master-source/da/>\n"
 "Language: da\n"
@@ -2224,7 +2225,7 @@ msgstr "Disse emner springes over, medmindre du tilsidesætter låsene."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Do not show again."
-msgstr "Vis ikke igen"
+msgstr "Vis ikke igen."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 msgid "Override Locks"
@@ -4598,7 +4599,7 @@ msgstr "F. Indsæt"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "B.Silketryk"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
@@ -25200,7 +25201,7 @@ msgstr "Reference:"
 #: pcbnew/dialogs/dialog_text_properties.cpp:277
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Aftryk %s (%s), %s, retoeret %g grader"
+msgstr "Aftryk %s (%s), %s, retoeret %.1f grader"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:374
 msgid ""
