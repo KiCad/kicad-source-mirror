@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:34+0000\n"
+"PO-Revision-Date: 2020-12-27 12:41+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -24942,12 +24942,12 @@ msgstr ""
 "Chcete pokračovat?"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This will change the net assigned to %lu connected pads to %s.\n"
 "Do you wish to continue?"
 msgstr ""
-"To změní přiřazení sítě na %d připojené vývody na %s.\n"
+"Tím se změní síť přiřazená k ploškám %lu připojeným k %s.\n"
 "Chcete pokračovat?"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:360
@@ -25456,9 +25456,9 @@ msgid "Edit options"
 msgstr "Upravit možnosti"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:537
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Nedovolený znak '%s' nalezen v názvu: '%s' na řádku %d"
+msgstr "Nedovolený znak '%c' v logickém názvu '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:780
 #, c-format
