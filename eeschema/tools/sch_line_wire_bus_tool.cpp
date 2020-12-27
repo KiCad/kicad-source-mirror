@@ -359,14 +359,16 @@ int SCH_LINE_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 }
 
 
-SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
+SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, wxPoint aPos )
 {
     SCHEMATIC_SETTINGS& cfg = getModel<SCHEMATIC>()->Settings();
-    wxPoint             pos = (wxPoint) getViewControls()->GetCursorPosition();
+
+    if( aPos == wxDefaultPosition )
+        aPos = static_cast<wxPoint>( getViewControls()->GetCursorPosition() );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos );
+    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( aPos );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
     m_frame->AddToScreen( m_busUnfold.entry, m_frame->GetScreen() );
 
@@ -377,7 +379,7 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_busUnfold.label->SetFlags( IS_NEW | IS_MOVED );
 
     m_busUnfold.in_progress = true;
-    m_busUnfold.origin = pos;
+    m_busUnfold.origin = aPos;
     m_busUnfold.net_name = aNet;
 
     getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->GetEnd(), false );
@@ -498,6 +500,8 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
     // Set initial cursor
     setCursor();
+
+    wxPoint contextMenuPos;
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -723,6 +727,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
             if( !segment )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
+            contextMenuPos = cursorPos;
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CHOICE_MENU_CHOICE )
@@ -734,7 +739,7 @@ int SCH_LINE_WIRE_BUS_TOOL::doDrawSegments( const std::string& aTool, int aType,
 
                 aType = LAYER_WIRE;
                 wxString net = *evt->Parameter<wxString*>();
-                segment = doUnfoldBus( net );
+                segment = doUnfoldBus( net, contextMenuPos );
             }
         }
         else
