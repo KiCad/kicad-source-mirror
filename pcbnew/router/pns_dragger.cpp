@@ -530,9 +530,23 @@ bool DRAGGER::FixRoute()
 
     if( node )
     {
-        // Collisions still prevent fixing unless "Allow DRC violations" is checked
+        // If collisions exist, we can fix in shove/smart mode because all tracks to be committed
+        // will be in valid positions (even if the current routing solution to the mouse cursor is
+        // invalid).  In other modes, we can only commit if "Allow DRC violations" is enabled.
         if( !m_dragStatus )
-            return false;
+        {
+            switch( m_currentMode )
+            {
+            case RM_Shove:
+            case RM_Smart:
+                break;
+
+            case RM_Walkaround:
+            default:
+                if( !Settings().CanViolateDRC() )
+                    return false;
+            }
+        }
 
         Router()->CommitRouting( node );
         return true;
