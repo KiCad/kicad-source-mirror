@@ -517,7 +517,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                         if( footprint->HitTest( m_refPos, accuracy )
                             && footprint->HitTestAccurate( m_refPos, accuracy ) )
                         {
-                            Append( item );
+                            Append2nd( item );
                             goto exit;
                         }
                     }
@@ -525,7 +525,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         if( shape->HitTest( m_refPos, accuracy ) )
                         {
-                            Append( shape );
+                            Append2nd( shape );
                             goto exit;
                         }
                     }
@@ -535,7 +535,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                         // noisy shape making it feel like they should have a larger bounary.
                         if( dimension->HitTest( m_refPos, KiROUND( accuracy * 1.5 ) ) )
                         {
-                            Append( dimension );
+                            Append2nd( dimension );
                             goto exit;
                         }
                     }
@@ -543,7 +543,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         if( item->HitTest( m_refPos, 0 ) )
                         {
-                            Append( item );
+                            Append2nd( item );
                             goto exit;
                         }
                     }
