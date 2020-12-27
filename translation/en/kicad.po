@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-23 08:35-0800\n"
+"POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -8238,41 +8238,6 @@ msgstr "PolyLine"
 msgid "Graphic Text '%s'"
 msgstr "Graphic Text '%s'"
 
-msgid "<none>"
-msgstr "<none>"
-
-msgid "Parent"
-msgstr "Parent"
-
-#, c-format
-msgid ""
-"The current configuration does not include the library '%s'.\n"
-"Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"The current configuration does not include the library '%s'.\n"
-"Use Manage Symbol Libraries to edit the configuration."
-
-msgid "Library not found in symbol library table."
-msgstr "Library not found in symbol library table."
-
-#, c-format
-msgid ""
-"The library '%s' is not enabled in the current configuration.\n"
-"Use Manage Symbol Libraries to edit the configuration."
-msgstr ""
-"The library '%s' is not enabled in the current configuration.\n"
-"Use Manage Symbol Libraries to edit the configuration."
-
-msgid "Symbol library not enabled."
-msgstr "Symbol library not enabled."
-
-#, c-format
-msgid "Unit %c"
-msgstr "Unit %c"
-
-msgid "no library selected"
-msgstr "no library selected"
-
 #, c-format
 msgid "Failed to add symbol \"%s\" to library file \"%s\"."
 msgstr "Failed to add symbol “%s” to library file “%s”."
@@ -10012,6 +9977,28 @@ msgid "Failed to save backup to \"%s\""
 msgstr "Failed to save backup to \"%s\""
 
 #, c-format
+msgid ""
+"The current configuration does not include the library '%s'.\n"
+"Use Manage Symbol Libraries to edit the configuration."
+msgstr ""
+"The current configuration does not include the library '%s'.\n"
+"Use Manage Symbol Libraries to edit the configuration."
+
+msgid "Library not found in symbol library table."
+msgstr "Library not found in symbol library table."
+
+#, c-format
+msgid ""
+"The library '%s' is not enabled in the current configuration.\n"
+"Use Manage Symbol Libraries to edit the configuration."
+msgstr ""
+"The library '%s' is not enabled in the current configuration.\n"
+"Use Manage Symbol Libraries to edit the configuration."
+
+msgid "Symbol library not enabled."
+msgstr "Symbol library not enabled."
+
+#, c-format
 msgid "%s from schematic"
 msgstr "%s from schematic"
 
@@ -10084,11 +10071,13 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "No library specified.  Symbol could not be saved."
 
 msgid ""
-"Derived symbols must be save in the same library\n"
-"that the parent symbol exists."
+"Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Derived symbols must be save in the same library\n"
-"that the parent symbol exists."
+"Derived symbols must be saved in the same library as their parent symbol."
+
+#, c-format
+msgid "Symbol '%s' already exists in library '%s'"
+msgstr "Symbol '%s' already exists in library '%s'"
 
 #, c-format
 msgid ""
@@ -10136,6 +10125,9 @@ msgstr "Symbol library file “%s” saved"
 
 msgid "Undefined!"
 msgstr "Undefined!"
+
+msgid "Parent"
+msgstr "Parent"
 
 msgid "Convert"
 msgstr "Convert"
@@ -10230,6 +10222,16 @@ msgstr ""
 
 msgid "(failed to load)"
 msgstr "(failed to load)"
+
+msgid "<none>"
+msgstr "<none>"
+
+#, c-format
+msgid "Unit %c"
+msgstr "Unit %c"
+
+msgid "no library selected"
+msgstr "no library selected"
 
 msgid "Choose symbol"
 msgstr "Choose symbol"
@@ -14049,11 +14051,11 @@ msgstr "Convert lines to rectangle"
 msgid "Unknown cleanup action"
 msgstr "Unknown cleanup action"
 
-msgid "(not a closed shape)"
-msgstr "(not a closed shape)"
-
 msgid "(self-intersecting)"
 msgstr "(self-intersecting)"
+
+msgid "(not a closed shape)"
+msgstr "(not a closed shape)"
 
 #, c-format
 msgid "%s pin %s not found"
@@ -17833,6 +17835,28 @@ msgstr "Suggest track finish"
 
 msgid "Optimize track being dragged"
 msgstr "Optimize track being dragged"
+
+msgid "Use mouse path to set track posture"
+msgstr "Use mouse path to set track posture"
+
+msgid ""
+"When enabled, the posture of tracks will be guided by how the mouse is moved "
+"from the starting location"
+msgstr ""
+"When enabled, the posture of tracks will be guided by how the mouse is moved "
+"from the starting location"
+
+msgid "Fix all segments on click"
+msgstr "Fix all segments on click"
+
+msgid ""
+"When enabled, all track segments will be fixed in place up to the cursor "
+"location.  When disabled, the last segment (closest to the cursor) will "
+"remain free and follow the cursor."
+msgstr ""
+"When enabled, all track segments will be fixed in place up to the cursor "
+"location.  When disabled, the last segment (closest to the cursor) will "
+"remain free and follow the cursor."
 
 msgid "Optimizer effort:"
 msgstr "Optimizer effort:"
@@ -24145,6 +24169,13 @@ msgstr "Performing polygon fills…"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid ""
+#~ "Derived symbols must be save in the same library\n"
+#~ "that the parent symbol exists."
+#~ msgstr ""
+#~ "Derived symbols must be save in the same library\n"
+#~ "that the parent symbol exists."
 
 #~ msgid "no such file"
 #~ msgstr "no such file"
