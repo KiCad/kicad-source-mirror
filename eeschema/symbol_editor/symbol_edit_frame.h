@@ -51,63 +51,13 @@ class SYMBOL_EDITOR_SETTINGS;
  */
 class SYMBOL_EDIT_FRAME : public SCH_BASE_FRAME
 {
-    LIB_PART*               m_my_part;           // a part I own, it is not in any library, but a
-                                                 // copy could be.
-    wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
-                                                 // part has multiple units)
-    SYMBOL_TREE_PANE*       m_treePane;          // component search tree widget
-    SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
-    SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
-
-    // The unit number to edit and show
-    int m_unit;
-
-    // Show the normal shape ( m_convert <= 1 ) or the converted shape ( m_convert > 1 )
-    int m_convert;
-
-    ///< Flag if the symbol being edited was loaded directly from a schematic.
-    bool m_isSymbolFromSchematic;
-
-    /**
-     * The reference of the symbol.
-     *
-     * @note This is only valid when the current symbol was loaded from the schematic.
-     */
-    wxString m_reference;
-
-    // True to force DeMorgan/normal tools selection enabled.
-    // They are enabled when the loaded symbol has graphic items for converted shape
-    // But under some circumstances (New symbol created) these tools must left enabled
-    static bool m_showDeMorgan;
-
-public:
-    /**
-     * Set to true to synchronize pins at the same position when editing symbols with multiple
-     * units or multiple body styles.  Deleting or moving pins will affect all pins at the same
-     * location.
-     * When units are interchangeable, synchronizing editing of pins is usually the best way,
-     * because if units are interchangeable, it implies that all similar pins are at the same
-     * location.
-     * When units are not interchangeable, do not synchronize editing of pins, because each part
-     * is specific, and there are no (or few) similar pins between units.
-     *
-     * Setting this to false allows editing each pin per part or body style regardless other
-     * pins at the same location. This requires the user to open each part or body style to make
-     * changes to the other pins at the same location.
-     *
-     * To know if others pins must be coupled when editing a pin, use SynchronizePins() instead
-     * of m_syncPinEdit, because SynchronizePins() is more reliable (takes in account the fact
-     * units are interchangeable, there are more than one unit).
-     */
-    bool          m_SyncPinEdit;
-
 public:
     SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     ~SYMBOL_EDIT_FRAME() override;
 
     /**
-     * switches currently used canvas ( Cairo / OpenGL).
+     * Switch currently used canvas ( Cairo / OpenGL).
      */
     void SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) override;
 
@@ -128,10 +78,14 @@ public:
      */
     bool HasLibModifications() const;
 
-    /** The nickname of the current library being edited and empty string if none. */
+    /**
+     * The nickname of the current library being edited and empty string if none.
+     */
     wxString GetCurLib() const;
 
-    /** Sets the current library nickname and returns the old library nickname. */
+    /**
+     * Set the current library nickname and returns the old library nickname.
+     */
     wxString SetCurLib( const wxString& aLibNickname );
 
     LIB_TREE_NODE* GetCurrentTreeNode() const;
@@ -166,12 +120,12 @@ public:
     void OnExportBody( wxCommandEvent& aEvent );
 
     /**
-     * Creates or adds an existing library to the symbol library table.
+     * Create or add an existing library to the symbol library table.
      */
     bool AddLibraryFile( bool aCreateNew );
 
     /**
-     * Creates a new part in the selected library.
+     * Create a new part in the selected library.
      */
     void CreateNewPart();
 
@@ -194,12 +148,12 @@ public:
     void SaveLibraryAs();
 
     /**
-     * Saves all modified parts and libraries.
+     * Save all modified parts and libraries.
      */
     void SaveAll();
 
     /**
-     * Reverts unsaved changes in a part, restoring to the last saved state.
+     * Revert unsaved changes in a part, restoring to the last saved state.
      */
     void Revert( bool aConfirm = true );
     void RevertAll();
@@ -211,7 +165,9 @@ public:
     void LoadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
 
     /**
-     * Inserts a duplicate part.  If aFromClipboard is true then action is a paste.
+     * Insert a duplicate part.
+     *
+     * If \a aFromClipboard is true then action is a paste.
      */
     void DuplicatePart( bool aFromClipboard );
 
@@ -281,75 +237,6 @@ public:
 
     bool IsSymbolFromLegacyLibrary() const;
 
-protected:
-    void setupUIConditions() override;
-
-private:
-    // Sets up the tool framework
-    void setupTools();
-
-    void savePartAs();
-
-    /**
-     * Saves the changes to the current library.
-     *
-     * A backup file of the current library is saved with the .bak extension before the
-     * changes made to the library are saved.
-     * @param aLibrary is the library name.
-     * @param aNewFile Ask for a new file name to save the library.
-     * @return True if the library was successfully saved.
-     */
-    bool saveLibrary( const wxString& aLibrary, bool aNewFile );
-
-    /**
-     * Updates the main window title bar with the current library name and read only status
-     * of the library.
-     */
-    void updateTitle();
-
-    /**
-     * Set the current active library to \a aLibrary.
-     *
-     * @param aLibrary the nickname of the library in the symbol library table.  If empty,
-     *                 display list of available libraries to select from.
-     */
-    void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
-
-    /**
-     * Display a list of loaded libraries in the symbol library and allows the user to select
-     * a library.
-     *
-     * This list is sorted, with the library cache always at end of the list
-     *
-     * @return the library nickname used in the symbol library table.
-     */
-    wxString SelectLibraryFromList();
-
-    /**
-     * Loads a symbol from the current active library, optionally setting the selected unit
-     * and convert.
-     *
-     * @param aAliasName The symbol alias name to load from the current library.
-     * @param aUnit Unit to be selected
-     * @param aConvert Convert to be selected
-     * @return true if the symbol loaded correctly.
-     */
-    bool LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit = 0, int aConvert = 0 );
-
-    /**
-     * Create a copy of \a aLibEntry into memory.
-     *
-     * @param aLibEntry A pointer to the LIB_PART object to an already loaded symbol.
-     * @param aLibrary the path to the library file that \a aLibEntry was loaded from.  This is
-     *                 for error messaging purposes only.
-     * @param aUnit the initial unit to show.
-     * @param aConvert the initial DeMorgan variant to show.
-     * @return True if a copy of \a aLibEntry was successfully copied.
-     */
-    bool LoadOneLibraryPartAux( LIB_PART* aLibEntry, const wxString& aLibrary, int aUnit,
-                                int aConvert );
-
-public:
     /**
      * Display the documentation of the selected symbol.
      */
@@ -384,25 +271,8 @@ public:
      */
     void ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCount = -1 ) override;
 
-private:
     /**
-     * Read a symbol file (*.sym ) and add graphic items to the current symbol.
-     *
-     * A symbol file *.sym has the same format as a library, and contains only one symbol.
-     */
-    void LoadOneSymbol();
-
-    /**
-     * Saves the current symbol to a symbol file.
-     *
-     * The symbol file format is similar to the standard symbol library file format, but
-     * there is only one symbol.  Invisible pins are not saved.
-     */
-    void SaveOneSymbol();
-
-public:
-    /**
-     * Selects the currently active library and loads the symbol from \a aLibId.
+     * Select the currently active library and loads the symbol from \a aLibId.
      *
      * @param aLibId is the #LIB_ID of the symbol to select.
      * @param aUnit the unit to show
@@ -412,14 +282,12 @@ public:
     bool LoadSymbolAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
 
     /**
-     * Print a page
-     *
-     * @param aDC = wxDC given by the calling print function
+     * Print a page.
      */
     void PrintPage( RENDER_SETTINGS* aSettings ) override;
 
     /**
-     * Creates the SVG print file for the current edited symbol.
+     * Create the SVG print file for the current edited symbol.
      */
     void SVGPlotSymbol( const wxString& aFullFileName );
 
@@ -430,13 +298,14 @@ public:
     void SyncLibraries( bool aShowProgress );
 
     /**
-     * Filter, sort, and redisplay the library tree.  Does NOT synchronize it with libraries
-     * in disk.
+     * Filter, sort, and redisplay the library tree.
+     *
+     * Does NOT synchronize it with libraries in disk.
      */
     void RegenerateLibraryTree();
 
     /**
-     * Allows Libedit to install its preferences panel into the preferences dialog.
+     * Allow the symbol editor to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent, PANEL_HOTKEYS_EDITOR* aHotkeysPanel ) override;
 
@@ -471,54 +340,193 @@ public:
     void LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>& aSymbol,
                                   const wxString& aReference, int aUnit, int aConvert );
 
-    ///> Restores the empty editor screen, without any part or library selected.
+    ///< Restore the empty editor screen, without any part or library selected.
     void emptyScreen();
 
+protected:
+    void setupUIConditions() override;
+
 private:
-    ///> Helper screen used when no part is loaded
-    SCH_SCREEN* m_dummyScreen;
+    // Set up the tool framework
+    void setupTools();
+
+    void savePartAs();
 
     /**
-     * Displays a dialog asking the user to select a symbol library table.
+     * Save the changes to the current library.
+     *
+     * A backup file of the current library is saved with the .bak extension before the
+     * changes made to the library are saved.
+     *
+     * @param aLibrary is the library name.
+     * @param aNewFile Ask for a new file name to save the library.
+     * @return True if the library was successfully saved.
+     */
+    bool saveLibrary( const wxString& aLibrary, bool aNewFile );
+
+    /**
+     * Update the main window title bar with the current library name and read only status
+     * of the library.
+     */
+    void updateTitle();
+
+    /**
+     * Set the current active library to \a aLibrary.
+     *
+     * @param aLibrary the nickname of the library in the symbol library table.  If empty,
+     *                 display list of available libraries to select from.
+     */
+    void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
+
+    /**
+     * Display a list of loaded libraries in the symbol library and allows the user to select
+     * a library.
+     *
+     * This list is sorted, with the library cache always at end of the list
+     *
+     * @return the library nickname used in the symbol library table.
+     */
+    wxString SelectLibraryFromList();
+
+    /**
+     * Load a symbol from the current active library, optionally setting the selected unit
+     * and convert.
+     *
+     * @param aAliasName The symbol alias name to load from the current library.
+     * @param aUnit Unit to be selected
+     * @param aConvert Convert to be selected
+     * @return true if the symbol loaded correctly.
+     */
+    bool LoadSymbolFromCurrentLib( const wxString& aAliasName, int aUnit = 0, int aConvert = 0 );
+
+    /**
+     * Create a copy of \a aLibEntry into memory.
+     *
+     * @param aLibEntry A pointer to the LIB_PART object to an already loaded symbol.
+     * @param aLibrary the path to the library file that \a aLibEntry was loaded from.  This is
+     *                 for error messaging purposes only.
+     * @param aUnit the initial unit to show.
+     * @param aConvert the initial DeMorgan variant to show.
+     * @return True if a copy of \a aLibEntry was successfully copied.
+     */
+    bool LoadOneLibraryPartAux( LIB_PART* aLibEntry, const wxString& aLibrary, int aUnit,
+                                int aConvert );
+
+    /**
+     * Read a symbol file (*.sym ) and add graphic items to the current symbol.
+     *
+     * A symbol file *.sym has the same format as a library, and contains only one symbol.
+     */
+    void LoadOneSymbol();
+
+    /**
+     * Save the current symbol to a symbol file.
+     *
+     * The symbol file format is similar to the standard symbol library file format, but
+     * there is only one symbol.  Invisible pins are not saved.
+     */
+    void SaveOneSymbol();
+
+    /**
+     * Display a dialog asking the user to select a symbol library table.
+     *
      * @param aOptional if set the Cancel button will be relabelled "Skip".
      * @return Pointer to the selected symbol library table or nullptr if canceled.
      */
     SYMBOL_LIB_TABLE* selectSymLibTable( bool aOptional = false );
 
-    ///> Creates a backup copy of a file with requested extension
+    ///< Create a backup copy of a file with requested extension.
     bool backupFile( const wxFileName& aOriginalFile, const wxString& aBackupExt );
 
-    ///> Returns currently edited part.
+    ///< Return currently edited part.
     LIB_PART* getTargetPart() const;
 
-    ///> Returns either the part selected in the symbol tree, if context menu is active or the
-    ///> currently modified part.
+    ///< Return either the part selected in the symbol tree, if context menu is active or the
+    ///< currently modified part.
     LIB_ID getTargetLibId() const;
 
-    ///> Returns either the library selected in the symbol tree, if context menu is active or
-    ///> the library that is currently modified.
+    ///< Return either the library selected in the symbol tree, if context menu is active or
+    ///< the library that is currently modified.
     wxString getTargetLib() const;
 
     /*
-     * Returns true when the operation has succeeded (all requested libraries have been saved
+     * Return true when the operation has succeeded (all requested libraries have been saved
      * or none was selected and confirmed by OK).
+     *
      * @param aRequireConfirmation when true, the user must be asked to confirm.
      */
     bool saveAllLibraries( bool aRequireConfirmation );
 
-    ///> Saves the current part.
+    ///< Save the current part.
     bool saveCurrentPart();
 
-    ///> Stores the currently modified part in the library manager buffer.
+    ///< Store the currently modified part in the library manager buffer.
     void storeCurrentPart();
 
-    ///> Returns true if \a aLibId is an alias for the editor screen part.
+    ///< Return true if \a aLibId is an alias for the editor screen part.
     bool isCurrentPart( const LIB_ID& aLibId ) const;
 
-    ///> Renames LIB_PART aliases to avoid conflicts before adding a symbol to a library
+    ///< Rename LIB_PART aliases to avoid conflicts before adding a symbol to a library.
     void ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary );
 
     DECLARE_EVENT_TABLE()
+
+public:
+    /**
+     * Set to true to synchronize pins at the same position when editing symbols with multiple
+     * units or multiple body styles.  Deleting or moving pins will affect all pins at the same
+     * location.
+     * When units are interchangeable, synchronizing editing of pins is usually the best way,
+     * because if units are interchangeable, it implies that all similar pins are at the same
+     * location.
+     * When units are not interchangeable, do not synchronize editing of pins, because each part
+     * is specific, and there are no (or few) similar pins between units.
+     *
+     * Setting this to false allows editing each pin per part or body style regardless other
+     * pins at the same location. This requires the user to open each part or body style to make
+     * changes to the other pins at the same location.
+     *
+     * To know if others pins must be coupled when editing a pin, use SynchronizePins() instead
+     * of m_syncPinEdit, because SynchronizePins() is more reliable (takes in account the fact
+     * units are interchangeable, there are more than one unit).
+     *
+     * @todo Determine why this member variable is public when all the rest are private and
+     *       either make it private or document why it needs to be public.
+     */
+    bool          m_SyncPinEdit;
+
+private:
+    ///< Helper screen used when no part is loaded
+    SCH_SCREEN* m_dummyScreen;
+
+    LIB_PART*               m_my_part;           // a part I own, it is not in any library, but a
+                                                 // copy could be.
+    wxComboBox*             m_unitSelectBox;     // a ComboBox to select a unit to edit (if the
+                                                 // part has multiple units)
+    SYMBOL_TREE_PANE*       m_treePane;          // component search tree widget
+    SYMBOL_LIBRARY_MANAGER* m_libMgr;            // manager taking care of temporary modifications
+    SYMBOL_EDITOR_SETTINGS* m_settings;          // Handle to the settings
+
+    // The unit number to edit and show
+    int m_unit;
+
+    // Show the normal shape ( m_convert <= 1 ) or the converted shape ( m_convert > 1 )
+    int m_convert;
+
+    ///< Flag if the symbol being edited was loaded directly from a schematic.
+    bool m_isSymbolFromSchematic;
+
+    /**
+     * The reference of the symbol.
+     *
+     * @note This is only valid when the current symbol was loaded from the schematic.
+     */
+    wxString m_reference;
+
+    // True to force DeMorgan/normal tools selection enabled.
+    // They are enabled when the loaded symbol has graphic items for converted shape
+    // But under some circumstances (New symbol created) these tools must left enabled
+    static bool m_showDeMorgan;
 };
 
 #endif  // SYMBOL_EDIT_FRAME_H
