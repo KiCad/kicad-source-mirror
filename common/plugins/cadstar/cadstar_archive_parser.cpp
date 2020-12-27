@@ -1526,10 +1526,21 @@ void CADSTAR_ARCHIVE_PARSER::FIGURE::Parse( XNODE* aNode, PARSER_CONTEXT* aConte
 
 void CADSTAR_ARCHIVE_PARSER::TEXT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
+    Parse( aNode, aContext, true );
+}
+
+
+void CADSTAR_ARCHIVE_PARSER::TEXT::Parse( XNODE* aNode, PARSER_CONTEXT* aContext,
+                                          bool aParseFields )
+{
     wxASSERT( aNode->GetName() == wxT( "TEXT" ) );
 
     ID = GetXmlAttributeIDString( aNode, 0 );
-    Text       = ParseTextFields( GetXmlAttributeIDString( aNode, 1 ), aContext );
+    Text = GetXmlAttributeIDString( aNode, 1 );
+
+    if( aParseFields )
+        Text = ParseTextFields( Text, aContext );
+
     TextCodeID = GetXmlAttributeIDString( aNode, 2 );
     LayerID    = GetXmlAttributeIDString( aNode, 3 );
 

@@ -1472,7 +1472,8 @@ void CADSTAR_PCB_ARCHIVE_PARSER::DIMENSION::Parse( XNODE* aNode, PARSER_CONTEXT*
         }
         else if( !textParsed && cNodeName == wxT( "TEXT" ) )
         {
-            Text.Parse( cNode, aContext );
+            // Do not parse the fields in dimension text (will be done when loading, if required)
+            Text.Parse( cNode, aContext, false );
             textParsed = true;
         }
         else if( cNodeName == wxT( "FIX" ) )

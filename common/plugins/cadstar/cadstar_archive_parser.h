@@ -884,6 +884,7 @@ public:
         REUSEBLOCKREF ReuseBlockRef;
 
         void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
+        void Parse( XNODE* aNode, PARSER_CONTEXT* aContext, bool aParseFields );
     };
 
 

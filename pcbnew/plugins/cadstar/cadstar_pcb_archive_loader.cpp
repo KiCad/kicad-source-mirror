@@ -1324,7 +1324,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadDimensions()
 
                 leaderDim->SetEnd( getKiCadPoint( endPoint ) );
                 leaderDim->Text().SetTextPos( getKiCadPoint( txtPoint ) );
-                leaderDim->SetText( csDim.Text.Text );
+                leaderDim->SetText( ParseTextFields( csDim.Text.Text, &mContext ) );
+                leaderDim->SetPrefix( wxEmptyString );
+                leaderDim->SetSuffix( wxEmptyString );
+                leaderDim->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
 
                 if( orientX == 1 )
                     leaderDim->Text().SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
@@ -2992,6 +2995,32 @@ void CADSTAR_PCB_ARCHIVE_LOADER::applyDimensionSettings( const DIMENSION&  aCads
     aKiCadDim->SetLineThickness( getKiCadLength( linecode.Width ) );
     aKiCadDim->Text().SetTextThickness( getKiCadLength( txtCode.LineWidth ) );
     aKiCadDim->Text().SetTextSize( txtSize );
+
+    // Find prefix and suffix:
+    wxString prefix = wxEmptyString;
+    wxString suffix = wxEmptyString;
+    size_t   startpos = aCadstarDim.Text.Text.Find( wxT( "<@DISTANCE" ) );
+
+    if( startpos != wxNOT_FOUND )
+    {
+        prefix = ParseTextFields( aCadstarDim.Text.Text.SubString( 0, startpos - 1 ), &mContext );
+        wxString remainingStr = aCadstarDim.Text.Text.Mid( startpos );
+        size_t   endpos = remainingStr.Find( "@>" );
+        suffix = ParseTextFields( remainingStr.Mid( endpos + 2 ), &mContext );
+    }
+
+    if( suffix.StartsWith( "mm" ) )
+    {
+        aKiCadDim->SetUnitsFormat( DIM_UNITS_FORMAT::BARE_SUFFIX );
+        suffix = suffix.Mid( 2 );
+    }
+    else
+    {
+        aKiCadDim->SetUnitsFormat( DIM_UNITS_FORMAT::NO_SUFFIX );
+    }
+
+    aKiCadDim->SetPrefix( prefix );
+    aKiCadDim->SetSuffix( suffix );
 
     if( aCadstarDim.LinearUnits == UNITS::DESIGN )
     {
