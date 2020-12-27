@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:41+0000\n"
+"PO-Revision-Date: 2020-12-27 12:44+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -26664,9 +26664,9 @@ msgid "Keepout layer(s) not matched."
 msgstr "Omezení díry: min. %s."
 
 #: pcbnew/drc/drc_engine.cpp:889 pcbnew/drc/drc_engine.cpp:911
-#, fuzzy, c-format
+#, c-format
 msgid "Rule layer \"%s\" not matched."
-msgstr "Stejné názvy vrstev nejsou povoleny."
+msgstr "Pravidlo vrstvy \"%s\" neodpovídá."
 
 #: pcbnew/drc/drc_engine.cpp:895 pcbnew/drc/drc_engine.cpp:917
 #, fuzzy
@@ -26919,9 +26919,9 @@ msgid "Missing version number."
 msgstr "Chybí číslo verze."
 
 #: pcbnew/drc/drc_rule_parser.cpp:137
-#, fuzzy, c-format
+#, c-format
 msgid "Unrecognized item '%s'.| Expected version number"
-msgstr "Nepřipojené položky"
+msgstr "Nerozpoznaná položka '%s'.| Očekávané číslo verze"
 
 #: pcbnew/drc/drc_rule_parser.cpp:144 pcbnew/drc/drc_rule_parser.cpp:223
 #: pcbnew/drc/drc_rule_parser.cpp:365 pcbnew/drc/drc_rule_parser.cpp:386
