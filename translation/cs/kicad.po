@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-23 22:21+0000\n"
+"PO-Revision-Date: 2020-12-27 12:09+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -6414,8 +6414,7 @@ msgstr "Jpeg soubory"
 #: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
-msgstr ""
-"Soubor ekvivalence \"% s\" nenalezen ve výchozích vyhledávacích cestách."
+msgstr "Soubor ekvivalence \"%s\" nenalezen ve výchozích vyhledávacích cestách."
 
 #: cvpcb/auto_associate.cpp:126
 #, c-format
@@ -8355,13 +8354,13 @@ msgid "File '%s' not found."
 msgstr "Soubor '%s' nenalezen."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:96
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is not a valid symbol library table.\n"
 "\n"
 "%s"
 msgstr ""
-"Soubor \"% s\" není platný soubor tabulky knihovny symbolů.\n"
+"'%s' není platná tabulka knihovny symbolů.\n"
 "\n"
 "%s"
 
@@ -10717,7 +10716,7 @@ msgstr "Zrušit záchranu"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:476
 #, c-format
 msgid "Backing up file \"%s\" to file \"%s\"."
-msgstr "Zálohování souborů \"% s\" do souboru \"% s\"."
+msgstr "Zálohování souboru \"%s\" do souboru \"%s\"."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:375
 #: eeschema/dialogs/dialog_symbol_remap.cpp:415
@@ -11183,9 +11182,9 @@ msgid "50"
 msgstr "50"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:334
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Nedovolený znak '%s' nalezen v názvu: '%s' na řádku %d"
+msgstr "Nedovolený znak '%c' v logickém názvu '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:345
 #: eeschema/dialogs/panel_sym_lib_table.cpp:387
@@ -11472,10 +11471,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Vývod %s je připojen k %s i %s"
 
 #: eeschema/erc.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr ""
-"Název \"%s\" koliduje s existujícím záznamem v knihovně symbolů \"%s\"."
+msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'."
 
 #: eeschema/erc.cpp:717
 #, c-format
@@ -21690,9 +21688,8 @@ msgid "Select an IDF export filename"
 msgstr "Zvolte název souboru IDF exportu"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:25
-#, fuzzy
 msgid "*.emn"
-msgstr "*.emn"
+msgstr "*. emn"
 
 #: pcbnew/dialogs/dialog_export_idf_base.cpp:34
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:51
@@ -31949,9 +31946,8 @@ msgid "Shows board statistics"
 msgstr "Zobrazit statistiky desky"
 
 #: pcbnew/tools/pcb_actions.cpp:1041
-#, fuzzy
 msgid "Clearance Resolution..."
-msgstr "Rozlišení izolační mezery pro:"
+msgstr "Rozlišení izolační mezery..."
 
 #: pcbnew/tools/pcb_actions.cpp:1042
 msgid ""
