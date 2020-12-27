@@ -478,6 +478,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         for( EDA_ITEM* item : selection )
             updateItem( item, true );
 
+        EE_SELECTION selectionCopy( selection );
+        m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+
         // If we move items away from a junction, we _may_ want to add a junction there
         // to denote the state.
         for( const DANGLING_END_ITEM& it : internalPoints )
@@ -486,8 +489,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
         }
 
-        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selection );
-        m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+        m_toolMgr->RunAction( EE_ACTIONS::addNeededJunctions, true, &selectionCopy );
 
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
