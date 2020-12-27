@@ -25,7 +25,6 @@
 #include "placement_tool.h"
 #include "pcb_actions.h"
 #include "pcb_selection_tool.h"
-#include "edit_tool.h"
 
 #include <ratsnest/ratsnest_data.h>
 #include <tool/tool_manager.h>
@@ -55,9 +54,6 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
     m_selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
-
-    wxASSERT_MSG( m_selectionTool, "pcbnew.InteractiveSelection tool is not available" );
-
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
     // Create a context menu and make it available through selection tool
@@ -92,14 +88,19 @@ ALIGNMENT_RECTS GetBoundingBoxes( const T &sel )
 {
     ALIGNMENT_RECTS rects;
 
-    for( auto item : sel )
+    for( EDA_ITEM* item : sel )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
         if( item->Type() == PCB_FOOTPRINT_T )
-            rects.emplace_back( std::make_pair( boardItem, static_cast<FOOTPRINT*>( item )->GetFootprintRect() ) );
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+            rects.emplace_back( std::make_pair( boardItem, footprint->GetFootprintRect() ) );
+        }
         else
+        {
             rects.emplace_back( std::make_pair( boardItem, item->GetBoundingBox() ) );
+        }
     }
 
     return rects;
@@ -107,27 +108,28 @@ ALIGNMENT_RECTS GetBoundingBoxes( const T &sel )
 
 
 template< typename T >
-int ALIGN_DISTRIBUTE_TOOL::selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked, T aGetValue )
+int ALIGN_DISTRIBUTE_TOOL::selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked,
+                                         T aGetValue )
 {
-    wxPoint curPos( getViewControls()->GetCursorPosition().x,  getViewControls()->GetCursorPosition().y );
+    wxPoint curPos = (wxPoint) getViewControls()->GetCursorPosition();
 
-    // after sorting, the fist item acts as the target for all others
-    // unless we have a locked item, in which case we use that for the target
-    int target = !aLocked.size() ? aGetValue( aItems.front() ): aGetValue( aLocked.front() );
+    // after sorting, the fist item acts as the target for all others unless we have a locked
+    // item, in which case we use that for the target
+    int target = !aLocked.size() ? aGetValue( aItems.front() ) : aGetValue( aLocked.front() );
 
     // We take the first target that overlaps our cursor.
     // This is deterministic because we assume sorted arrays
-    for( auto item : aLocked )
+    for( const ALIGNMENT_RECT& item : aLocked )
     {
         if( item.second.Contains( curPos ) )
             return aGetValue( item );
     }
 
-    // If there are locked items, prefer aligning to them over
-    // aligning to the cursor as they do not move
+    // If there are locked items, prefer aligning to them over aligning to the cursor as they do
+    // not move
     if( aLocked.empty() )
     {
-        for( auto item : aItems )
+        for( const ALIGNMENT_RECT& item : aItems )
         {
             if( item.second.Contains( curPos ) )
                 return aGetValue( item );
