@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:25+0000\n"
+"PO-Revision-Date: 2020-12-27 12:29+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -21184,9 +21184,9 @@ msgid "Unconnected Items (%d)"
 msgstr "Nepřipojené položky (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:129
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic Parity (%d)"
-msgstr "Pole schématu"
+msgstr "Schematická parita (%d)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:192
 msgid "Delete Marker"
@@ -23162,9 +23162,9 @@ msgid "Net name cannot be empty."
 msgstr "Název sítě nemůže být prázdný."
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1921
-#, fuzzy, c-format
+#, c-format
 msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Používá se síť. Přesto smazat?"
+msgstr "Síť '%s' se používá.  Přesto odstranit?"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:1938
 #, c-format
