@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:32+0000\n"
+"PO-Revision-Date: 2020-12-27 12:34+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -23480,9 +23480,9 @@ msgid "Pad local solder mask clearance must be zero or greater than zero"
 msgstr "Velikost plošky musí být větší než nula"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, fuzzy, c-format
+#, c-format
 msgid "Pad local solder mask clearance must be greater than %s"
-msgstr "Velikost plošky musí být větší než nula"
+msgstr "Místní izolační mezera masky plošky musí být větší než %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1278
 msgid "Error: pad has no layer"
