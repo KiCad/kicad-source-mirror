@@ -196,10 +196,11 @@ void DIALOG_BUS_MANAGER::OnInitDialog( wxInitDialogEvent& aEvent )
 bool DIALOG_BUS_MANAGER::TransferDataToWindow()
 {
     m_aliases.clear();
+    m_screens.clear();
 
     const SCH_SHEET_LIST& sheets = m_parent->Schematic().GetSheets();
 
-    std::vector< std::shared_ptr< BUS_ALIAS > > original_aliases;
+    std::vector< std::shared_ptr<BUS_ALIAS> > original_aliases;
 
     // collect aliases from each open sheet
     for( unsigned i = 0; i < sheets.size(); i++ )
@@ -215,8 +216,10 @@ bool DIALOG_BUS_MANAGER::TransferDataToWindow()
 
     // clone into a temporary working set
     int idx = 0;
-    for( const auto& alias : original_aliases )
+
+    for( const std::shared_ptr<BUS_ALIAS>& alias : original_aliases )
     {
+        m_screens.insert( alias->GetParent() );
         m_aliases.push_back( alias->Clone() );
         auto text = getAliasDisplayText( alias );
         m_bus_list_view->InsertItem( idx, text );
@@ -248,25 +251,11 @@ void DIALOG_BUS_MANAGER::OnCancelClick( wxCommandEvent& aEvent )
 
 bool DIALOG_BUS_MANAGER::TransferDataFromWindow()
 {
-    // Since we have a clone of all the data, and it is from potentially
-    // multiple screens, the way this works is to rebuild each screen's aliases.
-    // A list of screens is stored here so that the screen's alias list is only
-    // cleared once.
+    for( SCH_SCREEN* screen : m_screens )
+        screen->ClearBusAliases();
 
-    std::unordered_set< SCH_SCREEN* > cleared_list;
-
-    for( const auto& alias : m_aliases )
-    {
-        auto screen = alias->GetParent();
-
-        if( cleared_list.count( screen ) == 0 )
-        {
-            screen->ClearBusAliases();
-            cleared_list.insert( screen );
-        }
-
-        screen->AddBusAlias( alias );
-    }
+    for( const std::shared_ptr<BUS_ALIAS>& alias : m_aliases )
+        alias->GetParent()->AddBusAlias( alias );
 
     return true;
 }

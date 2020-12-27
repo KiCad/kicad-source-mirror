@@ -79,6 +79,8 @@ private:
 
     std::vector< std::shared_ptr< BUS_ALIAS > > m_aliases;
 
+    std::unordered_set<SCH_SCREEN*> m_screens;
+
     std::shared_ptr< BUS_ALIAS > m_active_alias;
 
     DECLARE_EVENT_TABLE()
