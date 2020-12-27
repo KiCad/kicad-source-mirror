@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:44+0000\n"
+"PO-Revision-Date: 2020-12-27 14:03+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -27152,24 +27152,25 @@ msgid "No netlist provided, skipping LVS."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:127
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min length: %s; actual: %s)"
-msgstr "minimální délka: %s; aktuální: %s)"
+msgstr "(%s min. délka: %s; skutečná: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:134
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max length: %s; actual: %s)"
-msgstr "maximální délka: %s; aktuální: %s)"
+msgstr "(%s max délka: %s; skutečná: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:169
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max skew: %s; actual: %s; average net length: %s; actual: %s)"
-msgstr "(%s %s; aktuální %s)"
+msgstr ""
+"(%s max. zkosení: %s; skutečné: %s; průměrná délka sítě: %s;skutečná: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "(%s max count: %d; actual: %d)"
-msgstr "(%s max. šířka %s; aktuální %s)"
+msgstr "(max počet %s: %d; skutečný: %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:229
 #, fuzzy
@@ -28870,9 +28871,9 @@ msgid "must be mm, in, or mil"
 msgstr "musí být mm, in nebo mil"
 
 #: pcbnew/pcb_group.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "Unnamed Group, %zu members"
-msgstr "Skupina \"%s\", %zu členů"
+msgstr "Nejmenovaná skupina, %zu členů"
 
 #: pcbnew/pcb_group.cpp:293
 #, c-format
@@ -29203,10 +29204,9 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1121
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1131
-#, fuzzy, c-format
+#, c-format
 msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
-msgstr ""
-"Polygon na vrstvě Altium %d nemá ekvivalent KiCadu. Místo toho to ignorujte"
+msgstr "Rozměr ID %s nemá v KiCadu ekvivalent. Nebylo importováno"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, c-format
@@ -32700,14 +32700,14 @@ msgid "Hide all other nets"
 msgstr "Skrýt všechny ostatní sítě"
 
 #: pcbnew/widgets/appearance_controls.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Click to hide ratsnest for %s"
-msgstr "Zobrazit naznačené spoje desky"
+msgstr "Kliknutím skryjete naznačené spoje pro %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:881
-#, fuzzy, c-format
+#, c-format
 msgid "Click to show ratsnest for %s"
-msgstr "Zobrazit naznačené spoje desky"
+msgstr "Kliknutím zobrazíte naznačené spoje pro %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:1360
 msgid "Double click or middle click for color change, right click for menu"
@@ -32884,9 +32884,9 @@ msgid "Set opacity of %s"
 msgstr "Nastavit neprůhlednost %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2078
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "Přesune vybranou položku(y)"
+msgstr "Zobrazit nebo skrýt naznačené spoje pro sítě v %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2109
 msgid "Set netclass color"
