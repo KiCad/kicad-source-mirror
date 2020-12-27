@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:09+0000\n"
+"PO-Revision-Date: 2020-12-27 12:25+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -12726,15 +12726,15 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "No parent for extended symbol %s in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"neplatné ID sítě v\n"
-"souboru: <%s>\n"
+"Žádný rodič pro rozšířený symbol %s v\n"
+"souboru: \"%s\"\n"
 "řádek: %d\n"
 "offset: %d"
 
@@ -14331,9 +14331,9 @@ msgid "Cannot find %s pin '%s'."
 msgstr "Nelze najít %s vývod '%s'."
 
 #: eeschema/tools/backannotate.cpp:529
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Změnit %s pouzdro z \"%s\" na \"%s\"."
+msgstr "Změnit %s vývod %s sítě označení z '%s' na '%s'."
 
 #: eeschema/tools/backannotate.cpp:554
 #, c-format
@@ -16832,14 +16832,14 @@ msgid "Delete File"
 msgstr "Smazat soubor"
 
 #: kicad/project_tree_pane.cpp:816
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete '%s'?"
-msgstr "Jste si jisti, že chcete smazat vybrané položky?"
+msgstr "Opravdu chcete smazat '%s'?"
 
 #: kicad/project_tree_pane.cpp:821
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %lu items?"
-msgstr "Jste si jisti, že chcete smazat vybrané položky?"
+msgstr "Opravdu chcete smazat %lu položek?"
 
 #: kicad/project_tree_pane.cpp:823
 #, fuzzy
