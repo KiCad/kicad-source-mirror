@@ -1194,7 +1194,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     if( !realEnd )
     {
-        setInitialDirection( d_last );
+        setInitialDirection( fixAll ? m_initial_direction : d_last );
         m_currentStart = ( m_placingVia || fixAll ) ? p_last : p_pre_last;
 
         m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
@@ -1219,7 +1219,8 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_postureSolver.Clear();
         m_postureSolver.SetTolerance( m_head.Width() );
         m_postureSolver.AddTrailPoint( m_currentStart );
-        m_postureSolver.SetDefaultDirections( m_initial_direction, d_last );
+        m_postureSolver.SetDefaultDirections( m_initial_direction,
+                                              fixAll ? d_last.Right() : d_last );
 
         m_placementCorrect = true;
     }
