@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <core/kicad_algo.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <pcb_layer_box_selector.h>
 #include <tools/pcb_selection_tool.h>
@@ -330,8 +331,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& cha
     if( changingPads.size() == 1 )
     {
         PAD* pad = *changingPads.begin();
-        msg.Printf( _( "This will change the net assigned to %s pad %s to %s.\n"
-                       "Do you wish to continue?" ),
+        msg.Printf( _( "Changing the net will also update %s pad %s to %s." ),
                     pad->GetParent()->GetReference(),
                     pad->GetName(),
                     m_netSelector->GetValue() );
@@ -340,8 +340,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& cha
     {
         PAD* pad1 = *changingPads.begin();
         PAD* pad2 = *( ++changingPads.begin() );
-        msg.Printf( _( "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
-                       "Do you wish to continue?" ),
+        msg.Printf( _( "Changing the net will also update %s pad %s and %s pad %s to %s." ),
                     pad1->GetParent()->GetReference(),
                     pad1->GetName(),
                     pad2->GetParent()->GetReference(),
@@ -350,14 +349,13 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& cha
     }
     else
     {
-        msg.Printf( _( "This will change the net assigned to %lu connected pads to %s.\n"
-                       "Do you wish to continue?" ),
+        msg.Printf( _( "Changing the net will also update %lu connected pads to %s." ),
                     static_cast<unsigned long>( changingPads.size() ),
                     m_netSelector->GetValue() );
     }
 
     KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-    dlg.SetOKLabel( _( "Continue" ) );
+    dlg.SetOKCancelLabels( _( "Change Nets" ), _( "Leave Nets Unchanged" ) );
     dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
     return dlg.ShowModal() == wxID_OK;
@@ -366,40 +364,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::confirmPadChange( const std::vector<PAD*>& cha
 
 bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 {
-    auto connectivity = m_frame->GetBoard()->GetConnectivity();
-    int newNetCode = m_netSelector->GetSelectedNetcode();
-    std::vector<PAD*> changingPads;
-
-    if ( !m_netSelector->IsIndeterminate() )
-    {
-        std::set<PAD*> connectedPads;
-
-        for( EDA_ITEM* item : m_items )
-        {
-            const KICAD_T ourTypes[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T, EOT };
-            auto connectedItems = connectivity->GetConnectedItems( static_cast<BOARD_CONNECTED_ITEM*>( item ), ourTypes, true );
-
-            for ( BOARD_CONNECTED_ITEM* citem : connectedItems )
-            {
-                if( citem->Type() == PCB_PAD_T )
-                    connectedPads.insert( static_cast<PAD*>( citem ) );
-            }
-        }
-
-        for( PAD* pad : connectedPads )
-        {
-            if( pad->GetNetCode() != newNetCode )
-                changingPads.push_back( pad );
-        }
-    }
-
     // Run validations:
-
-    if( changingPads.size() )
-    {
-        if( !confirmPadChange( changingPads ) )
-            return false;
-    }
 
     if( m_vias )
     {
@@ -432,6 +397,9 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
     }
 
     // If we survived that, then save the changes:
+    //
+    // We don't bother with updating the nets at this point as it will be useless (any connected
+    // pads will simply drive their existing nets back onto the track segments and vias).
 
     bool changeLock = m_lockedCbox->Get3StateValue() != wxCHK_UNDETERMINED;
     bool setLock = m_lockedCbox->Get3StateValue() == wxCHK_CHECKED;
@@ -472,9 +440,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
                 if( changeLock )
                     t->SetLocked( setLock );
-
-                if ( !m_netSelector->IsIndeterminate() )
-                    t->SetNetCode( m_netSelector->GetSelectedNetcode() );
 
                 break;
             }
@@ -525,7 +490,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                     switch( v->GetViaType() )
                     {
                     default:
-                        wxFAIL_MSG("Unhandled via type");
+                        wxFAIL_MSG( "Unhandled via type" );
                         KI_FALLTHROUGH;
 
                     case VIATYPE::THROUGH:
@@ -549,9 +514,6 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                         v->SetDrill( m_viaDrill.GetValue() );
                 }
 
-                if ( !m_netSelector->IsIndeterminate() )
-                    v->SetNetCode( m_netSelector->GetSelectedNetcode() );
-
                 if( changeLock )
                     v->SetLocked( setLock );
 
@@ -564,19 +526,73 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         }
     }
 
+    m_commit.Push( _( "Edit track/via properties" ) );
+
+    // Pushing the commit will have updated the connectivity so we can now test to see if we
+    // need to update any pad nets.
+
+    auto              connectivity = m_frame->GetBoard()->GetConnectivity();
+    int               newNetCode = m_netSelector->GetSelectedNetcode();
+    bool              updateNets = false;
+    std::vector<PAD*> changingPads;
+
     if ( !m_netSelector->IsIndeterminate() )
     {
-        // Commit::Push() will rebuild connectivitiy propagating nets from connected pads
-        // outwards.  We therefore have to update the connected pads in order for the net
-        // change to "stick".
-        for( PAD* pad : changingPads )
+        updateNets = true;
+
+        for( EDA_ITEM* item : m_items )
         {
-            m_commit.Modify( pad );
-            pad->SetNetCode( m_netSelector->GetSelectedNetcode() );
+            const KICAD_T ourTypes[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_FOOTPRINT_T, EOT };
+            BOARD_CONNECTED_ITEM* boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
+            auto connectedItems = connectivity->GetConnectedItems( boardItem, ourTypes, true );
+
+            for ( BOARD_CONNECTED_ITEM* citem : connectedItems )
+            {
+                if( citem->Type() == PCB_PAD_T )
+                {
+                    PAD* pad = static_cast<PAD*>( citem );
+
+                    if( pad->GetNetCode() != newNetCode && !alg::contains( changingPads, citem ) )
+                        changingPads.push_back( pad );
+                }
+            }
         }
     }
 
-    m_commit.Push( _( "Edit track/via properties" ) );
+    if( changingPads.size() && !confirmPadChange( changingPads ) )
+        updateNets = false;
+
+    if( updateNets )
+    {
+        for( EDA_ITEM* item : m_items )
+        {
+            m_commit.Modify( item );
+
+            switch( item->Type() )
+            {
+                case PCB_TRACE_T:
+                case PCB_ARC_T:
+                    static_cast<TRACK*>( item )->SetNetCode( newNetCode );
+                    break;
+
+                case PCB_VIA_T:
+                    static_cast<VIA*>( item )->SetNetCode( newNetCode );
+                    break;
+
+                default:
+                    wxASSERT( false );
+                    break;
+            }
+        }
+
+        for( PAD* pad : changingPads )
+        {
+            m_commit.Modify( pad );
+            pad->SetNetCode( newNetCode );
+        }
+
+        m_commit.Push( _( "Updating nets" ) );
+    }
 
     return true;
 }
