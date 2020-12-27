@@ -183,7 +183,10 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
     PySys_SetArgv( Pgm().App().argc, Pgm().App().argv );
 
 #ifdef KICAD_SCRIPTING_WXPYTHON
+
+#if PY_VERSION_HEX < 0x03070000  // PyEval_InitThreads() is called by Py_Initialize() starting with version 3.7
     PyEval_InitThreads();
+#endif      // if PY_VERSION_HEX < 0x03070000
 
 #ifndef KICAD_SCRIPTING_WXPYTHON_PHOENIX
 #ifndef __WINDOWS__   // import wxversion.py currently not working under winbuilder, and not useful.
@@ -211,7 +214,7 @@ bool pcbnewInitPythonScripting( const char * aUserScriptingPath )
         Py_Finalize();
         return false;
     }
-#endif
+#endif      // ifndef KICAD_SCRIPTING_WXPYTHON_PHOENIX
 
 #if defined( DEBUG )
     RedirectStdio();
