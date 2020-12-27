@@ -2096,6 +2096,9 @@ int CONNECTION_GRAPH::RunERC()
         // Graph is supposed to be up-to-date before calling RunERC()
         wxASSERT( !subgraph->m_dirty );
 
+        if( subgraph->m_absorbed )
+            continue;
+
         /**
          * NOTE:
          *
