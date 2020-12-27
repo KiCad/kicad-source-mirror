@@ -714,17 +714,18 @@ void PCB_IO::format( DIMENSION_BASE* aDimension, int aNestLevel ) const
         m_out->Print( aNestLevel + 1, "(format" );
 
         if( !aDimension->GetPrefix().IsEmpty() )
-            m_out->Print( 0, " (prefix \"%s\")", TO_UTF8( aDimension->GetPrefix() ) );
+            m_out->Print( 0, " (prefix %s)", m_out->Quotew( aDimension->GetPrefix() ).c_str() );
 
         if( !aDimension->GetSuffix().IsEmpty() )
-            m_out->Print( 0, " (suffix \"%s\")", TO_UTF8( aDimension->GetSuffix() ) );
+            m_out->Print( 0, " (suffix %s)", m_out->Quotew( aDimension->GetSuffix() ).c_str() );
 
         m_out->Print( 0, " (units %d) (units_format %d) (precision %d)",
                 static_cast<int>( aDimension->GetUnitsMode() ),
                 static_cast<int>( aDimension->GetUnitsFormat() ), aDimension->GetPrecision() );
 
         if( aDimension->GetOverrideTextEnabled() )
-            m_out->Print( 0, " (override_value \"%s\")", TO_UTF8( aDimension->GetOverrideText() ) );
+            m_out->Print( 0, " (override_value %s)",
+                          m_out->Quotew( aDimension->GetOverrideText() ).c_str() );
 
         if( aDimension->GetSuppressZeroes() )
             m_out->Print( 0, " suppress_zeroes" );
