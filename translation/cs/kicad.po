@@ -13,10 +13,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-27 14:03+0000\n"
+"PO-Revision-Date: 2020-12-28 12:10+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7116,9 +7116,8 @@ msgid "Generate"
 msgstr "Generovat"
 
 #: eeschema/dialogs/dialog_bom.cpp:522 eeschema/dialogs/dialog_bom_base.cpp:43
-#, fuzzy
 msgid "Generator nickname:"
-msgstr "Generovat netlist"
+msgstr "Generátor krátkých jmen:"
 
 #: eeschema/dialogs/dialog_bom.cpp:522
 msgid "Add Generator"
@@ -7372,16 +7371,60 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
-"# 1- Kompletní dokumentace\n"
+"# 1- Úplná dokumentace\n"
 "\n"
-"Dokumentace Eeschema (* eeschema.html *) popisuje tento mezilehlý netlist a "
-"uvádí příklady (kapitola *** vytváření netlistů a vlastních souborů BOM "
-"***).\n"
+"Dokumentace Eeschema (* eeschema.html *) popisuje tento nepřímý netlist a "
+"poskytuje několik příkladů (kapitola *** vytváření vlastních netlists a BOM "
+"souborů ***).\n"
 "\n"
-"# 2 - přechodný soubor Netlist\n"
+"# 2 - Zprostředkovaný soubor Netlist\n"
 "\n"
 "Soubory BOM(a netlist soubory) lze vytvořit ze souboru * Intermediate "
 "netlist * vytvořeného Eeschema.\n"
+"\n"
+"Tento soubor používá syntaxi XML a nazývá se zprostředkující netlist. "
+"Zprostředkovaný netlist obsahuje velké množství dat o vaší desce a z tohoto "
+"důvodu jej lze použít s následným zpracováním k vytvoření kusovníku nebo "
+"jiných zpráv.\n"
+"\n"
+"V závislosti na výstupu (kusovníku nebo netlistu) budou při následném "
+"zpracování použity různé podmnožiny kompletního souboru Intermediate Netlist."
+"\n"
+"\n"
+"Použitím filtru pro následné zpracování na soubor Interlist netlist můžete "
+"vygenerovat cizí soubory netlist i soubory kusovníku. Protože tato konverze "
+"je transformace textu na text, lze tento filtr pro následné zpracování "
+"zapsat pomocí *Pythonu*, *XSLT* nebo jiného nástroje schopného převzít XML "
+"jako vstup.\n"
+"\n"
+"Samotný XSLT je jazyk XML vhodný pro transformace XML. Existuje bezplatný "
+"program s názvem `xsltproc`, který si můžete stáhnout a nainstalovat. "
+"Program `xsltproc` lze použít ke čtení vstupního souboru Interlist XML "
+"netlist, použití šablony stylů pro transformaci vstupu a uložení výsledků do "
+"výstupního souboru. Použití parametru `xsltproc` vyžaduje soubor šablony "
+"stylů využívající konvence XSLT. Celý proces převodu zpracovává Eeschema "
+"poté, co je jednou nakonfigurován tak, aby konkrétním způsobem spustil "
+"program `xsltproc`.\n"
+"\n"
+"\n"
+"# 4 - Inicializace dialogového okna\n"
+"\n"
+"Nový plugin (skript) byste měli přidat do seznamu pluginů kliknutím na "
+"tlačítko Přidat plugin.\n"
+"\n"
+"## 4.1 - Konfigurační parametry pluginu\n"
+"\n"
+"Dialogové okno konfigurace pluginu Eeschema vyžaduje následující informace:\n"
+"\n"
+"* Název: například název formátu netlistu.\n"
+"* Příkazový řádek ke spuštění převaděče (obvykle skript).\n"
+"\n"
+"*** Poznámka (pouze Windows): ***\n"
+"* Ve výchozím nastavení běží příkazový řádek se skrytým oknem konzoly a "
+"výstup je přesměrován do pole „Informace o pluginu“. Chcete-li zobrazit okno "
+"spuštěného příkazu, zaškrtněte políčko „Zobrazit okno konzoly“. *\n"
+"\n"
+"Jakmile kliknete na tlačítko generovat, stane se toto:\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:41
 msgid "Bus Definitions"
@@ -7659,9 +7702,9 @@ msgid "Candidates count %d "
 msgstr "Počet kandidátů %d "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:659
-#, fuzzy, c-format
+#, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "%s vývod %s nenalezen"
+msgstr "%u odkaz(y) mapovány, %u nenalezeno"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:664
 #, c-format
@@ -8244,9 +8287,8 @@ msgstr "Filtrovat pole podle názvu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:94
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:72
-#, fuzzy
 msgid "Filter items by parent reference designator:"
-msgstr "Z nadřazeného pouzdra"
+msgstr "Filtr položek podle nadřazeného označení reference:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:102
 msgid "Filter items by parent symbol library id:"
@@ -25246,9 +25288,8 @@ msgid "Magnetic pads"
 msgstr "Magnetické plošky"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:32
-#, fuzzy
 msgid "Magnetic graphics"
-msgstr "Magnetické spoje:"
+msgstr "Magnetická grafika"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:38
 #, fuzzy
@@ -32999,12 +33040,10 @@ msgid "Presets:"
 msgstr "Předvolby:"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
-#, fuzzy
 msgid "(Ctrl+Tab)"
 msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
-#, fuzzy
 msgid "(unsaved)"
 msgstr "(neuloženo)"
 
