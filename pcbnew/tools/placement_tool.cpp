@@ -84,11 +84,11 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
 
 
 template <class T>
-ALIGNMENT_RECTS GetBoundingBoxes( const T &sel )
+ALIGNMENT_RECTS GetBoundingBoxes( const T& aItems )
 {
     ALIGNMENT_RECTS rects;
 
-    for( EDA_ITEM* item : sel )
+    for( EDA_ITEM* item : aItems )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
@@ -113,36 +113,33 @@ int ALIGN_DISTRIBUTE_TOOL::selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECT
 {
     wxPoint curPos = (wxPoint) getViewControls()->GetCursorPosition();
 
-    // after sorting, the fist item acts as the target for all others unless we have a locked
-    // item, in which case we use that for the target
-    int target = !aLocked.size() ? aGetValue( aItems.front() ) : aGetValue( aLocked.front() );
+    // Prefer locked items to unlocked items.
+    // Secondly, prefer items under the cursor to other items.
 
-    // We take the first target that overlaps our cursor.
-    // This is deterministic because we assume sorted arrays
-    for( const ALIGNMENT_RECT& item : aLocked )
+    if( aLocked.size() >= 1 )
+    {
+        for( const ALIGNMENT_RECT& item : aLocked )
+        {
+            if( item.second.Contains( curPos ) )
+                return aGetValue( item );
+        }
+
+        return aGetValue( aLocked.front() );
+    }
+
+    for( const ALIGNMENT_RECT& item : aItems )
     {
         if( item.second.Contains( curPos ) )
             return aGetValue( item );
     }
 
-    // If there are locked items, prefer aligning to them over aligning to the cursor as they do
-    // not move
-    if( aLocked.empty() )
-    {
-        for( const ALIGNMENT_RECT& item : aItems )
-        {
-            if( item.second.Contains( curPos ) )
-                return aGetValue( item );
-        }
-    }
-
-    return target;
+    return aGetValue( aItems.front() );
 }
 
 
 template< typename T >
-size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked,
-                                             T aCompare )
+size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItemsToAlign,
+                                             ALIGNMENT_RECTS& aLockedItems, T aCompare )
 {
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
@@ -158,6 +155,7 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_
             } );
 
     std::vector<BOARD_ITEM*> lockedItems;
+    std::vector<BOARD_ITEM*> itemsToAlign;
 
     for( EDA_ITEM* item : selection )
     {
@@ -165,28 +163,16 @@ size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_
 
         if( boardItem->IsLocked() )
             lockedItems.push_back( boardItem );
+        else
+            itemsToAlign.push_back( boardItem );
     }
 
-    selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-            {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
+    aItemsToAlign = GetBoundingBoxes( itemsToAlign );
+    aLockedItems = GetBoundingBoxes( lockedItems );
+    std::sort( aItemsToAlign.begin(), aItemsToAlign.end(), aCompare );
+    std::sort( aLockedItems.begin(), aLockedItems.end(), aCompare );
 
-                    if( item->Type() == PCB_MARKER_T )
-                        aCollector.Remove( item );
-                }
-            },
-            true /* prompt user regarding locked items */ );
-
-    aItems = GetBoundingBoxes( selection );
-    aLocked = GetBoundingBoxes( lockedItems );
-    std::sort( aItems.begin(), aItems.end(), aCompare );
-    std::sort( aLocked.begin(), aLocked.end(), aCompare );
-
-    return aItems.size();
+    return aItemsToAlign.size();
 }
 
 
@@ -205,7 +191,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+
     int targetTop = selectTarget( itemsToAlign, locked_items,
             []( const ALIGNMENT_RECT& aVal )
             {
@@ -222,6 +208,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
+        commit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( 0, difference ) );
     }
 
@@ -246,8 +233,8 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetBottom = selectTarget( itemsToAlign, locked_items,
+
+    int targetBottom = selectTarget( itemsToAlign, locked_items,
             []( const ALIGNMENT_RECT& aVal )
             {
                 return aVal.second.GetBottom();
@@ -263,6 +250,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
+        commit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( 0, difference ) );
     }
 
@@ -302,8 +290,8 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetLeft = selectTarget( itemsToAlign, locked_items,
+
+    int targetLeft = selectTarget( itemsToAlign, locked_items,
             []( const ALIGNMENT_RECT& aVal )
             {
                 return aVal.second.GetLeft();
@@ -319,6 +307,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
         if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
+        commit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( difference, 0 ) );
     }
 
@@ -358,8 +347,8 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetRight = selectTarget( itemsToAlign, locked_items,
+
+    int targetRight = selectTarget( itemsToAlign, locked_items,
             []( const ALIGNMENT_RECT& aVal )
             {
                 return aVal.second.GetRight();
@@ -375,6 +364,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
         if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
+        commit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( difference, 0 ) );
     }
 
@@ -399,8 +389,8 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetX = selectTarget( itemsToAlign, locked_items,
+
+    int targetX = selectTarget( itemsToAlign, locked_items,
             []( const ALIGNMENT_RECT& aVal )
             {
                 return aVal.second.GetCenter().x;
@@ -416,6 +406,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
+        commit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( difference, 0 ) );
     }
 
@@ -440,8 +431,8 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
     }
 
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
-    auto targetY = selectTarget( itemsToAlign, locked_items,
+
+    int targetY = selectTarget( itemsToAlign, locked_items,
             []( const ALIGNMENT_RECT& aVal )
             {
                 return aVal.second.GetCenter().y;
@@ -457,6 +448,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
         if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
             item = item->GetParent();
 
+        commit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( 0, difference ) );
     }
 
@@ -485,10 +477,8 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    auto itemsToDistribute = GetBoundingBoxes( selection );
+    BOARD_COMMIT    commit( m_frame );
+    ALIGNMENT_RECTS itemsToDistribute = GetBoundingBoxes( selection );
 
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
@@ -496,9 +486,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
             {
                 return ( left.second.GetRight() > right.second.GetRight() );
             } );
-    const auto lastItem = itemsToDistribute.begin()->first;
 
-    const auto maxRight = itemsToDistribute.begin()->second.GetRight();
+    BOARD_ITEM* lastItem = itemsToDistribute.begin()->first;
+    const int   maxRight = itemsToDistribute.begin()->second.GetRight();
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
@@ -506,24 +496,23 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
             {
                 return ( left.second.GetX() < right.second.GetX() );
             } );
-    const auto minX = itemsToDistribute.begin()->second.GetX();
-    auto totalGap = maxRight - minX;
-    int totalWidth = 0;
+
+    const int minX = itemsToDistribute.begin()->second.GetX();
+    int       totalGap = maxRight - minX;
+    int       totalWidth = 0;
 
     for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
-    {
         totalWidth += i.second.GetWidth();
-    }
 
     if( totalGap < totalWidth )
     {
         // the width of the items exceeds the gap (overlapping items) -> use center point spacing
-        doDistributeCentersHorizontally( itemsToDistribute );
+        doDistributeCentersHorizontally( itemsToDistribute, commit );
     }
     else
     {
         totalGap -= totalWidth;
-        doDistributeGapsHorizontally( itemsToDistribute, lastItem, totalGap );
+        doDistributeGapsHorizontally( itemsToDistribute, commit, lastItem, totalGap );
     }
 
     commit.Push( _( "Distribute horizontally" ) );
@@ -533,11 +522,12 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 
 
 void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& itemsToDistribute,
+                                                          BOARD_COMMIT& aCommit,
                                                           const BOARD_ITEM* lastItem,
                                                           int totalGap ) const
 {
-    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
-    auto targetX = itemsToDistribute.begin()->second.GetX();
+    const int itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    int       targetX = itemsToDistribute.begin()->second.GetX();
 
     for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
@@ -552,23 +542,26 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& items
             item = item->GetParent();
 
         int difference = targetX - i.second.GetX();
+        aCommit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( difference, 0 ) );
         targetX += ( i.second.GetWidth() + itemGap );
     }
 }
 
 
-void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &itemsToDistribute ) const
+void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &itemsToDistribute,
+                                                             BOARD_COMMIT& aCommit ) const
 {
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
             [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
             {
                 return ( left.second.GetCenter().x < right.second.GetCenter().x );
             } );
-    const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().x
+
+    const int totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().x
                           - itemsToDistribute.begin()->second.GetCenter().x;
-    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
-    auto targetX = itemsToDistribute.begin()->second.GetCenter().x;
+    const int itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    int       targetX = itemsToDistribute.begin()->second.GetCenter().x;
 
     for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
@@ -579,6 +572,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
             item = item->GetParent();
 
         int difference = targetX - i.second.GetCenter().x;
+        aCommit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( difference, 0 ) );
         targetX += ( itemGap );
     }
@@ -604,10 +598,8 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    auto itemsToDistribute = GetBoundingBoxes( selection );
+    BOARD_COMMIT    commit( m_frame );
+    ALIGNMENT_RECTS itemsToDistribute = GetBoundingBoxes( selection );
 
     // find the last item by reverse sorting
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
@@ -615,8 +607,9 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
         {
             return ( left.second.GetBottom() > right.second.GetBottom() );
         } );
-    const auto maxBottom = itemsToDistribute.begin()->second.GetBottom();
-    const auto lastItem = itemsToDistribute.begin()->first;
+
+    BOARD_ITEM* lastItem = itemsToDistribute.begin()->first;
+    const int   maxBottom = itemsToDistribute.begin()->second.GetBottom();
 
     // sort to get starting order
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
@@ -624,25 +617,23 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
         {
             return ( left.second.GetCenter().y < right.second.GetCenter().y );
         } );
-    auto minY = itemsToDistribute.begin()->second.GetY();
 
-    auto totalGap = maxBottom - minY;
+    int minY = itemsToDistribute.begin()->second.GetY();
+    int totalGap = maxBottom - minY;
     int totalHeight = 0;
 
     for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
-    {
         totalHeight += i.second.GetHeight();
-    }
 
     if( totalGap < totalHeight )
     {
         // the width of the items exceeds the gap (overlapping items) -> use center point spacing
-        doDistributeCentersVertically( itemsToDistribute );
+        doDistributeCentersVertically( itemsToDistribute, commit );
     }
     else
     {
         totalGap -= totalHeight;
-        doDistributeGapsVertically( itemsToDistribute, lastItem, totalGap );
+        doDistributeGapsVertically( itemsToDistribute, commit, lastItem, totalGap );
     }
 
     commit.Push( _( "Distribute vertically" ) );
@@ -652,10 +643,12 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 
 
 void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsToDistribute,
-                                                        const BOARD_ITEM* lastItem, int totalGap ) const
+                                                        BOARD_COMMIT& aCommit,
+                                                        const BOARD_ITEM* lastItem,
+                                                        int totalGap ) const
 {
-    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
-    auto targetY = itemsToDistribute.begin()->second.GetY();
+    const int itemGap = totalGap / ( itemsToDistribute.size() - 1 );
+    int       targetY = itemsToDistribute.begin()->second.GetY();
 
     for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
@@ -670,23 +663,26 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsTo
             item = item->GetParent();
 
         int difference = targetY - i.second.GetY();
-        i.first->Move( wxPoint( 0, difference ) );
+        aCommit.Stage( item, CHT_MODIFY );
+        item->Move( wxPoint( 0, difference ) );
         targetY += ( i.second.GetHeight() + itemGap );
     }
 }
 
 
-void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& itemsToDistribute ) const
+void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& itemsToDistribute,
+                                                           BOARD_COMMIT& aCommit ) const
 {
     std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
         [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
         {
             return ( left.second.GetCenter().y < right.second.GetCenter().y );
         } );
-    const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().y
+
+    const int totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().y
                           - itemsToDistribute.begin()->second.GetCenter().y;
-    const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
-    auto targetY = itemsToDistribute.begin()->second.GetCenter().y;
+    const int itemGap  = totalGap / ( itemsToDistribute.size() - 1 );
+    int       targetY  = itemsToDistribute.begin()->second.GetCenter().y;
 
     for( std::pair<BOARD_ITEM*, EDA_RECT>& i : itemsToDistribute )
     {
@@ -697,6 +693,7 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& item
             item = item->GetParent();
 
         int difference = targetY - i.second.GetCenter().y;
+        aCommit.Stage( item, CHT_MODIFY );
         item->Move( wxPoint( 0, difference ) );
         targetY += ( itemGap );
     }
