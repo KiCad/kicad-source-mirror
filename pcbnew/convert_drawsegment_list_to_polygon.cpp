@@ -48,25 +48,6 @@
 const wxChar* traceBoardOutline = wxT( "KICAD_BOARD_OUTLINE" );
 
 /**
- * Function close_ness
- * is a non-exact distance (also called Manhattan distance) used to approximate
- * the distance between two points.
- * The distance is very in-exact, but can be helpful when used
- * to pick between alternative neighboring points.
- * @param aLeft is the first point
- * @param aRight is the second point
- * @return unsigned - a measure of proximity that the caller knows about, in BIU,
- *  but remember it is only an approximation.
- */
-
-static unsigned close_ness(  const wxPoint& aLeft, const wxPoint& aRight )
-{
-    // Don't need an accurate distance calculation, just something
-    // approximating it, for relative ordering.
-    return unsigned( std::abs( aLeft.x - aRight.x ) + abs( aLeft.y - aRight.y ) );
-}
-
-/**
  * Function close_enough
  * is a local and tunable method of qualifying the proximity of two points.
  *
@@ -75,27 +56,23 @@ static unsigned close_ness(  const wxPoint& aLeft, const wxPoint& aRight )
  * @param aLimit is a measure of proximity that the caller knows about.
  * @return bool - true if the two points are close enough, else false.
  */
-inline bool close_enough( const wxPoint& aLeft, const wxPoint& aRight, unsigned aLimit )
+bool close_enough( VECTOR2I aLeft, VECTOR2I aRight, unsigned aLimit )
 {
-    // We don't use an accurate distance calculation, just something
-    // approximating it, since aLimit is non-exact anyway except when zero.
-    return close_ness( aLeft, aRight ) <= aLimit;
+    return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
 }
 
 /**
- * Function close_st
+ * Function closer_to_first
  * Local method which qualifies whether the start or end point of a segment is closest to a point.
  *
- * @param aReference is the reference point
+ * @param aRef is the reference point
  * @param aFirst is the first point
  * @param aSecond is the second point
- * @return bool - true if the the first point is closest to the reference, otherwise false.
+ * @return bool - true if the first point is closest to the reference, otherwise false.
  */
-inline bool close_st( const wxPoint& aReference, const wxPoint& aFirst, const wxPoint& aSecond )
+bool closer_to_first( VECTOR2I aRef, VECTOR2I aFirst, VECTOR2I aSecond )
 {
-    // We don't use an accurate distance calculation, just something
-    // approximating to find the closest to the reference.
-    return close_ness( aReference, aFirst ) <= close_ness( aReference, aSecond );
+    return ( aRef - aFirst ).SquaredEuclideanNorm() < ( aRef - aSecond ).SquaredEuclideanNorm();
 }
 
 
@@ -111,70 +88,78 @@ inline bool close_st( const wxPoint& aReference, const wxPoint& aFirst, const wx
 static PCB_SHAPE* findNext( PCB_SHAPE* aShape, const wxPoint& aPoint,
                             const std::vector<PCB_SHAPE*>& aList, unsigned aLimit )
 {
-    unsigned min_d = INT_MAX;
-    int      ndx_min = 0;
-
-    // find the point closest to aPoint and perhaps exactly matching aPoint.
-    for( size_t i = 0; i < aList.size(); ++i )
+    // Look for an unused, exact hit
+    for( PCB_SHAPE* graphic : aList )
     {
-        PCB_SHAPE* graphic = aList[i];
-
-        if( graphic == aShape )
+        if( graphic == aShape || ( graphic->GetFlags() & SKIP_STRUCT ) != 0 )
             continue;
-
-        unsigned   d;
 
         switch( graphic->GetShape() )
         {
         case S_ARC:
             if( aPoint == graphic->GetArcStart() || aPoint == graphic->GetArcEnd() )
-            {
                 return graphic;
-            }
 
-            d = close_ness( aPoint, graphic->GetArcStart() );
-            if( d < min_d )
-            {
-                min_d = d;
-                ndx_min = i;
-            }
-
-            d = close_ness( aPoint, graphic->GetArcEnd() );
-            if( d < min_d )
-            {
-                min_d = d;
-                ndx_min = i;
-            }
             break;
 
         default:
             if( aPoint == graphic->GetStart() || aPoint == graphic->GetEnd() )
-            {
                 return graphic;
+        }
+    }
+
+    // Search again for anything that's close, even something already used.  (The latter is
+    // important for error reporting.)
+    VECTOR2I    pt( aPoint );
+    SEG::ecoord closest_dist_sq = SEG::Square( aLimit );
+    PCB_SHAPE*  closest_graphic = nullptr;
+    SEG::ecoord d_sq;
+
+    for( PCB_SHAPE* graphic : aList )
+    {
+        if( graphic == aShape )
+            continue;
+
+        switch( graphic->GetShape() )
+        {
+        case S_ARC:
+            d_sq = ( pt - graphic->GetArcStart() ).SquaredEuclideanNorm();
+
+            if( d_sq < closest_dist_sq )
+            {
+                closest_dist_sq = d_sq;
+                closest_graphic = graphic;
             }
 
-            d = close_ness( aPoint, graphic->GetStart() );
-            if( d < min_d )
+            d_sq = ( pt - graphic->GetArcEnd() ).SquaredEuclideanNorm();
+
+            if( d_sq < closest_dist_sq )
             {
-                min_d = d;
-                ndx_min = i;
+                closest_dist_sq = d_sq;
+                closest_graphic = graphic;
+            }
+            break;
+
+        default:
+            d_sq = ( pt - graphic->GetStart() ).SquaredEuclideanNorm();
+
+            if( d_sq < closest_dist_sq )
+            {
+                closest_dist_sq = d_sq;
+                closest_graphic = graphic;
             }
 
-            d = close_ness( aPoint, graphic->GetEnd() );
-            if( d < min_d )
+            d_sq = ( pt - graphic->GetEnd() ).SquaredEuclideanNorm();
+
+            if( d_sq < closest_dist_sq )
             {
-                min_d = d;
-                ndx_min = i;
+                closest_dist_sq = d_sq;
+                closest_graphic = graphic;
             }
         }
     }
 
-    if( min_d <= aLimit )
-    {
-        return aList[ndx_min];
-    }
-
-    return NULL;
+    return closest_graphic;     // Note: will be nullptr if nothing within aLimit
 }
 
 
@@ -439,7 +424,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 // Use the line segment end point furthest away from prevPt as we assume
                 // the other end to be ON prevPt or very close to it.
 
-                if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                     nextPt = graphic->GetEnd();
                 else
                     nextPt = graphic->GetStart();
@@ -502,7 +487,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                 // prevPt as we assume the other end to be ON prevPt or
                 // very close to it.
 
-                if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                 {
                     nextPt = graphic->GetEnd();
                 }
@@ -697,7 +682,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         // prevPt as we assume the other end to be ON prevPt or
                         // very close to it.
 
-                        if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                        if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                             nextPt = graphic->GetEnd();
                         else
                             nextPt = graphic->GetStart();
@@ -758,7 +743,7 @@ bool ConvertOutlineToPolygon( std::vector<PCB_SHAPE*>& aSegList, SHAPE_POLY_SET&
                         // prevPt as we assume the other end to be ON prevPt or
                         // very close to it.
 
-                        if( close_st( prevPt, graphic->GetStart(), graphic->GetEnd() ) )
+                        if( closer_to_first( prevPt, graphic->GetStart(), graphic->GetEnd()) )
                         {
                             nextPt = graphic->GetEnd();
                         }
