@@ -57,15 +57,17 @@ bool SCH_MOVE_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
-    auto moveCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.Empty() )
-            return false;
+    auto moveCondition =
+            []( const SELECTION& aSel )
+            {
+                if( aSel.Empty() )
+                    return false;
 
-        if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
-            return false;
+                if( SCH_LINE_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
+                    return false;
 
-        return true;
-    };
+                return true;
+            };
 
     // Add move actions to the selection tool menu
     //
@@ -473,12 +475,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     else
     {
         // One last update after exiting loop (for slower stuff, such as updating SCREEN's RTree).
-        for( auto item : selection )
+        for( EDA_ITEM* item : selection )
             updateItem( item, true );
 
         // If we move items away from a junction, we _may_ want to add a junction there
         // to denote the state.
-        for( auto it : internalPoints )
+        for( const DANGLING_END_ITEM& it : internalPoints )
         {
             if( m_frame->GetScreen()->IsJunctionNeeded( it.GetPosition(), true ) )
                 m_frame->AddJunction( m_frame->GetScreen(), it.GetPosition(), true, false );
@@ -722,7 +724,9 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
             label->SetPosition( (wxPoint) currentLine.NearestPoint( info.originalLabelPos ) );
         }
         else
+        {
             label->Move( (wxPoint) aDelta );
+        }
 
         break;
     }

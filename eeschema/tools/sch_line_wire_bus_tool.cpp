@@ -990,9 +990,9 @@ int SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded( const TOOL_EVENT& aEvent )
 void SCH_LINE_WIRE_BUS_TOOL::setTransitions()
 {
     Go( &SCH_LINE_WIRE_BUS_TOOL::AddJunctionsIfNeeded, EE_ACTIONS::addNeededJunctions.MakeEvent() );
-    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments, EE_ACTIONS::drawWire.MakeEvent() );
-    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments, EE_ACTIONS::drawBus.MakeEvent() );
-    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments, EE_ACTIONS::drawLines.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawWire.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawBus.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::DrawSegments,         EE_ACTIONS::drawLines.MakeEvent() );
 
-    Go( &SCH_LINE_WIRE_BUS_TOOL::UnfoldBus,    EE_ACTIONS::unfoldBus.MakeEvent() );
+    Go( &SCH_LINE_WIRE_BUS_TOOL::UnfoldBus,            EE_ACTIONS::unfoldBus.MakeEvent() );
 }
