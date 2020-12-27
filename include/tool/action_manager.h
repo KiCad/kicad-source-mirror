@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -40,15 +42,11 @@ class TOOL_ACTION;
  * Functors that can be used to figure out how the action controls should be displayed in the UI
  * and if an action should be enabled given the current selection.
  *
- * @note @c checkCondition is also used for determing the state of a toggled toolbar item
+ * @note @c checkCondition is also used for determining the state of a toggled toolbar item
  *       (the item is toggled when the condition is true).
  */
 struct ACTION_CONDITIONS
 {
-    SELECTION_CONDITION checkCondition;     ///< Returns true if the UI control should be checked
-    SELECTION_CONDITION enableCondition;    ///< Returns true if the UI control should be enabled
-    SELECTION_CONDITION showCondition;      ///< Returns true if the UI control should be shown
-
     ACTION_CONDITIONS()
     {
         checkCondition  = SELECTION_CONDITIONS::ShowNever;      // Never check by default
@@ -73,13 +71,16 @@ struct ACTION_CONDITIONS
         showCondition = aCondition;
         return *this;
     }
+
+    SELECTION_CONDITION checkCondition;     ///< Returns true if the UI control should be checked
+    SELECTION_CONDITION enableCondition;    ///< Returns true if the UI control should be enabled
+    SELECTION_CONDITION showCondition;      ///< Returns true if the UI control should be shown
 };
 
 /**
- * ACTION_MANAGER
+ * Manage #TOOL_ACTION objects.
  *
- * Takes care of TOOL_ACTION objects. Registers them and allows one to run them
- * using associated hot keys, names or ids.
+ * Registering them and allows one to run them using associated hot keys, names or ids.
  */
 class ACTION_MANAGER
 {
@@ -90,12 +91,12 @@ public:
     ACTION_MANAGER( TOOL_MANAGER* aToolManager );
 
     /**
-     * Unregisters every registered action.
+     * Unregister every registered action.
      */
     ~ACTION_MANAGER();
 
     /**
-     * Adds a tool action to the manager and sets it up. After that is is possible to invoke
+     * Add a tool action to the manager and sets it up. After that is is possible to invoke
      * the action using hotkeys or sending a command event with its name.
      *
      * @param aAction: action to be added. Ownership is not transferred.
@@ -103,7 +104,7 @@ public:
     void RegisterAction( TOOL_ACTION* aAction );
 
     /**
-     * Generates an unique ID from for an action with given name.
+     * Generate an unique ID from for an action with given name.
      */
     static int MakeActionId( const std::string& aActionName );
 
@@ -113,7 +114,7 @@ public:
     const std::map<std::string, TOOL_ACTION*>& GetActions() const;
 
     /**
-     * Finds an action with a given name (if there is one available).
+     * Find an action with a given name (if there is one available).
      *
      * @param aActionName is the searched action.
      * @return Pointer to a TOOL_ACTION object or NULL if there is no such action.
@@ -121,7 +122,7 @@ public:
     TOOL_ACTION* FindAction( const std::string& aActionName ) const;
 
     /**
-     * Runs an action associated with a hotkey (if there is one available).
+     * Run an action associated with a hotkey (if there is one available).
      *
      * @param aHotKey is the hotkey to be handled.
      * @return True if there was an action associated with the hotkey, false otherwise.
@@ -129,20 +130,22 @@ public:
     bool RunHotKey( int aHotKey ) const;
 
     /**
-     * Returns the hot key associated with a given action or 0 if there is none.
+     * Return the hot key associated with a given action or 0 if there is none.
      *
      * @param aAction is the queried action.
      */
     int GetHotKey( const TOOL_ACTION& aAction ) const;
 
     /**
-     * Optionally reads the hotkey config files and then rebuilds the internal hotkey maps.
+     * Optionally read the hotkey config files and then rebuilds the internal hotkey maps.
      */
     void UpdateHotKeys( bool aFullUpdate );
 
     /**
-     * Returns list of TOOL_ACTIONs. TOOL_ACTIONs add themselves to the list upon their
-     * creation.
+     * Return list of TOOL_ACTIONs.
+     *
+     * #TOOL_ACTIONs add themselves to the list upon their creation.
+     *
      * @return List of TOOL_ACTIONs.
      */
     static std::list<TOOL_ACTION*>& GetActionList()
@@ -156,36 +159,36 @@ public:
      * Set the conditions the UI elements for activating a specific tool action should use
      * for determining the current UI state (e.g. checked, enabled, shown)
      *
-     * @param aAction is the tool action using these conditions
-     * @param aConditions are the conditions to use for the action
+     * @param aAction is the tool action using these conditions.
+     * @param aConditions are the conditions to use for the action.
      */
     void SetConditions( const TOOL_ACTION& aAction, const ACTION_CONDITIONS& aConditions );
 
     /**
      * Get the conditions to use for a specific tool action.
      *
-     * @param aAction is the tool action
-     * @return the action conditions, returns nullptr if no conditions are registered
+     * @param aAction is the tool action.
+     * @return the action conditions, returns nullptr if no conditions are registered.
      */
     const ACTION_CONDITIONS* GetCondition( const TOOL_ACTION& aAction ) const;
 
 private:
-    // Resolves a hotkey by applying legacy and current settings over the action's
+    // Resolve a hotkey by applying legacy and current settings over the action's
     // default hotkey.
     int processHotKey( TOOL_ACTION* aAction, std::map<std::string, int> aLegacyMap,
                        std::map<std::string, int> aHotKeyMap );
 
-    ///> Tool manager needed to run actions
+    ///< Tool manager needed to run actions
     TOOL_MANAGER* m_toolMgr;
 
-    ///> Map for indexing actions by their names
+    ///< Map for indexing actions by their names
     std::map<std::string, TOOL_ACTION*> m_actionNameIndex;
 
-    ///> Map for indexing actions by their hotkeys
+    ///< Map for indexing actions by their hotkeys
     typedef std::map<int, std::list<TOOL_ACTION*> > HOTKEY_LIST;
     HOTKEY_LIST m_actionHotKeys;
 
-    ///> Quick action<->hot key lookup
+    ///< Quick action<->hot key lookup
     std::map<int, int> m_hotkeys;
 
     /// Map the command ID that wx uses for the action to the UI conditions for the

@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2015 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -34,10 +36,13 @@
 struct BITMAP_OPAQUE;
 
 /**
- * Represents a single user action. For instance:
+ * Represent a single user action.
+ *
+ * For instance:
  * - changing layer to top by pressing PgUp
  * - running the DRC from the menu
  * and so on, and so forth....
+ *
  * Action class groups all necessary properties of an action, including explanation,
  * icons, hotkeys, menu items, etc.
  */
@@ -46,7 +51,8 @@ class TOOL_ACTION
 public:
     TOOL_ACTION( const std::string& aName, TOOL_ACTION_SCOPE aScope = AS_CONTEXT,
                  int aDefaultHotKey = 0, const std::string& aLegacyHotKeyName = "",
-                 const wxString& aMenuText = wxEmptyString, const wxString& aTooltip = wxEmptyString,
+                 const wxString& aMenuText = wxEmptyString,
+                 const wxString& aTooltip = wxEmptyString,
                  const BITMAP_OPAQUE* aIcon = nullptr, TOOL_ACTION_FLAGS aFlags = AF_NONE,
                  void* aParam = nullptr );
 
@@ -67,35 +73,39 @@ public:
     }
 
     /**
-     * Returns name of the action. It is the same one that is contained in TOOL_EVENT that is
-     * sent by activating the TOOL_ACTION.  Convention is "app.tool.actionName".
+     * Return name of the action.
+     *
+     * It is the same one that is contained in #TOOL_EVENT that is sent by activating the
+     * TOOL_ACTION.  Convention is "app.tool.actionName".
      *
      * @return Name of the action.
      */
     const std::string& GetName() const { return m_name; }
 
     /**
-     * Returns the default hotkey (if any) for the action.
+     * Return the default hotkey (if any) for the action.
      */
     int GetDefaultHotKey() const { return m_defaultHotKey; }
 
     /**
-     * Returns the hotkey keycode which initiates the action.
+     * Return the hotkey keycode which initiates the action.
      */
     int GetHotKey() const { return m_hotKey; }
     void SetHotKey( int aKeycode );
 
     /**
-     * Returns the unique id of the TOOL_ACTION object. It is valid only after registering the
-     * TOOL_ACTION by ACTION_MANAGER.
+     * Return the unique id of the TOOL_ACTION object.
+     *
+     * It is valid only after registering the TOOL_ACTION by #ACTION_MANAGER.
      *
      * @return The unique identification number. If the number is negative, then it is not valid.
      */
     int GetId() const { return m_id; }
 
     /*
-     * Get the unique ID for this action in the user interface system. This is simply
-     * the action ID offset by @c ACTION_BASE_UI_ID.
+     * Get the unique ID for this action in the user interface system.
+     *
+     * This is simply the action ID offset by @c ACTION_BASE_UI_ID.
      *
      * @return The unique ID number for use in the user interface system.
      */
@@ -107,7 +117,7 @@ public:
     static int GetBaseUIId() { return ACTION_BASE_UI_ID; }
 
     /**
-     * Returns the event associated with the action (i.e. the event that will be sent after
+     * Return the event associated with the action (i.e. the event that will be sent after
      * activating the action).
      */
     TOOL_EVENT MakeEvent() const
@@ -127,14 +137,14 @@ public:
     TOOL_ACTION_SCOPE GetScope() const { return m_scope; }
 
     /**
-     * Returns name of the tool associated with the action. It is basically the action name
+     * Return name of the tool associated with the action. It is basically the action name
      * stripped of the last part (e.g. for "pcbnew.InteractiveDrawing.drawCircle" it is
      * "pcbnew.InteractiveDrawing").
      */
     std::string GetToolName() const;
 
     /**
-     * Returns true if the action is intended to activate a tool.
+     * Return true if the action is intended to activate a tool.
      */
     bool IsActivation() const
     {
@@ -142,7 +152,7 @@ public:
     }
 
     /**
-     * Returns true if the action is a notification.
+     * Return true if the action is a notification.
      */
     bool IsNotification() const
     {
@@ -150,7 +160,9 @@ public:
     }
 
     /**
-     * Returns an icon associated with the action. It is used in context menu.
+     * Return an icon associated with the action.
+     *
+     * It is used in context menu.
      */
     const BITMAP_OPAQUE* GetIcon() const
     {
@@ -162,15 +174,15 @@ protected:
 
     friend class ACTION_MANAGER;
 
-    ///> Base ID to use inside the user interface system to offset the action IDs.
+    ///< Base ID to use inside the user interface system to offset the action IDs.
     static constexpr int ACTION_BASE_UI_ID = 20000;
 
-    /// Name of the action (convention is "app.tool.actionName")
+    ///< Name of the action (convention is "app.tool.actionName")
     std::string          m_name;
     TOOL_ACTION_SCOPE    m_scope;
 
     const int            m_defaultHotKey;  // Default hot key
-    int                  m_hotKey;         // The curret hotkey (post-user-settings-application)
+    int                  m_hotKey;         // The current hotkey (post-user-settings-application)
     const std::string    m_legacyName;     // Name for reading legacy hotkey settings
 
     wxString             m_label;

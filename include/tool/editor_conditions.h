@@ -33,6 +33,7 @@
 
 class EDA_BASE_FRAME;
 class EDA_DRAW_FRAME;
+
 /**
  * Class that groups generic conditions for editor states.
  */
@@ -49,116 +50,117 @@ public:
     {}
 
     /**
-     * Creates a functor that tests if the content of the frame is modified.
+     * Create a functor that tests if the content of the frame is modified.
      *
-     * @return Functor testing for modified content
+     * @return Functor testing for modified content.
      */
     SELECTION_CONDITION ContentModified();
 
     /**
-     * Creates a functor that tests if there are any items in the undo queue
+     * Create a functor that tests if there are any items in the undo queue.
      *
      * @return Functor testing if the undo queue has items.
      */
     SELECTION_CONDITION UndoAvailable();
 
     /**
-     * Creates a functor that tests if there are any items in the redo queue
+     * Create a functor that tests if there are any items in the redo queue.
      *
      * @return Functor testing if the redo queue has items.
      */
     SELECTION_CONDITION RedoAvailable();
 
     /**
-     * Creates a functor that tests if the frame has the specified units
+     * Create a functor that tests if the frame has the specified units.
      *
      * @return Functor testing the units of a frame.
      */
     SELECTION_CONDITION Units( EDA_UNITS aUnit );
 
     /**
-     * Creates a functor testing if the specified tool is the current active tool in the frame.
+     * Create a functor testing if the specified tool is the current active tool in the frame.
      *
-     * @return Functor testing the current tool of a frame
+     * @return Functor testing the current tool of a frame.
      */
     SELECTION_CONDITION CurrentTool( const TOOL_ACTION& aTool );
 
     /**
-     * Creates a functor testing if there are no tools active in the frame.
+     * Create a functor testing if there are no tools active in the frame.
      *
-     * @return Functor testing the frame has no tools running
+     * @return Functor testing the frame has no tools running.
      */
     SELECTION_CONDITION NoActiveTool();
 
     /**
-     * Creates a functor testing if the grid is visible in a frame.
+     * Create a functor testing if the grid is visible in a frame.
      *
-     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
      *
      * @return Functor testing if the grid is visible
      */
     SELECTION_CONDITION GridVisible();
 
     /**
-     * Creates a functor testing if polar coordinates are current being used.
+     * Create a functor testing if polar coordinates are current being used.
      *
-     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
      *
      * @return Functor testing if the grid is visible
      */
     SELECTION_CONDITION PolarCoordinates();
 
     /**
-     * Creates a functor testing if the cursor is full screen in a frame.
+     * Create a functor testing if the cursor is full screen in a frame.
      *
-     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
      *
      * @return Functor testing if the cursor is full screen
      */
     SELECTION_CONDITION FullscreenCursor();
 
     /**
-     * Creates a functor testing if the specified canvas is active in the frame.
+     * Create a functor testing if the specified canvas is active in the frame.
      *
-     * @note this requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
+     * @note This requires the frame passed into the constructor be be derived from EDA_DRAW_FRAME.
      *
      * @return Functor testing the canvas type of the frame
      */
     SELECTION_CONDITION CanvasType( EDA_DRAW_PANEL_GAL::GAL_TYPE aType );
 
 protected:
-    ///> Helper function used by ContentModified()
+    ///< Helper function used by ContentModified().
     static bool contentModifiedFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///> Helper function used by UndoAvailable()
+    ///< Helper function used by UndoAvailable().
     static bool undoFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///> Helper function used by RedoAvailable()
+    ///< Helper function used by RedoAvailable().
     static bool redoFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///> Helper function used by Units()
+    ///< Helper function used by Units().
     static bool unitsFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame, EDA_UNITS aUnits );
 
-    ///> Helper function used by CurrentTool()
-    static bool toolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame, const TOOL_ACTION& aTool );
+    ///< Helper function used by CurrentTool().
+    static bool toolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame,
+                          const TOOL_ACTION& aTool );
 
-    ///> Helper function used by NoActiveTool()
+    ///< Helper function used by NoActiveTool().
     static bool noToolFunc( const SELECTION& aSelection, EDA_BASE_FRAME* aFrame );
 
-    ///> Helper function used by GridVisible()
+    ///< Helper function used by GridVisible().
     static bool gridFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///> Helper function used by PolarCoordinates()
+    ///< Helper function used by PolarCoordinates().
     static bool polarCoordFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///> Helper function used by FullscreenCursor()
+    ///< Helper function used by FullscreenCursor().
     static bool cursorFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame );
 
-    ///> Helper function used by CanvasType()
+    ///< Helper function used by CanvasType().
     static bool canvasTypeFunc( const SELECTION& aSelection, EDA_DRAW_FRAME* aFrame,
                                 EDA_DRAW_PANEL_GAL::GAL_TYPE aType );
 
-    ///> The frame to apply the conditions to
+    ///< The frame to apply the conditions to.
     EDA_BASE_FRAME* m_frame;
 };
 

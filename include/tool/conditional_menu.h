@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +40,7 @@ class TOOL_INTERACTIVE;
 class CONDITIONAL_MENU : public ACTION_MENU
 {
 public:
-    ///> Constant to indicate that we do not care about an ENTRY location in the menu.
+    ///< Constant to indicate that we do not care about an #ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
     CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool );
@@ -46,12 +48,12 @@ public:
     ACTION_MENU* create() const override;
 
     /**
-     * Adds a menu entry to run a TOOL_ACTION on selected items.
+     * Add a menu entry to run a #TOOL_ACTION on selected items.
      *
      * @param aAction is a menu entry to be added.
      * @param aCondition is a condition that has to be fulfilled to show the menu entry in the menu.
      * @param aOrder determines location of the added item, higher numbers are put on the bottom.
-     * You may use ANY_ORDER here if you think it does not matter.
+     *               You may use ANY_ORDER here if you think it does not matter.
      */
     void AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                   int aOrder = ANY_ORDER );
@@ -60,15 +62,15 @@ public:
                   const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
-     * Adds a checked menu entry to run a TOOL_ACTION on selected items.
+     * Add a checked menu entry to run a TOOL_ACTION on selected items.
      *
-     * The condition for checking the menu entry should be supplied through a ACTION_CONDITION
-     * registered with the ACTION_MANAGER.
+     * The condition for checking the menu entry should be supplied through a #ACTION_CONDITION
+     * registered with the #ACTION_MANAGER.
      *
      * @param aAction is a menu entry to be added.
      * @param aCondition is a condition that has to be fulfilled to show the menu entry in the menu.
      * @param aOrder determines location of the added item, higher numbers are put on the bottom.
-     * You may use ANY_ORDER here if you think it does not matter.
+     *               You may use #ANY_ORDER here if you think it does not matter.
      */
     void AddCheckItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                        int aOrder = ANY_ORDER );
@@ -77,41 +79,43 @@ public:
                        const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
-     * Adds a submenu to the menu. CONDITIONAL_MENU takes ownership of the added menu, so it will
-     * be freed when the CONDITIONAL_MENU object is destroyed.
+     * Add a submenu to the menu.
+     * CONDITIONAL_MENU takes ownership of the added menu, so it will be freed when the
+     * CONDITIONAL_MENU object is destroyed.
      *
      * @param aMenu is the submenu to be added.
      * @param aExpand determines if the added submenu items should be added as individual items
-     * or as a submenu.
-     * @param aCondition is a condition that has to be fulfilled to show the submenu entry in the menu.
+     *                or as a submenu.
+     * @param aCondition is a condition that has to be fulfilled to show the submenu entry in
+     *                   the menu.
      * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
-     * You may use ANY_ORDER here if you think it does not matter.
+     *               You may use ANY_ORDER here if you think it does not matter.
      */
     void AddMenu( ACTION_MENU* aMenu,
                   const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
                   int aOrder = ANY_ORDER );
 
     /**
-     * Adds a separator to the menu.
+     * Add a separator to the menu.
      *
      * @param aOrder determines location of the separator, higher numbers are put on the bottom.
      */
     void AddSeparator( int aOrder = ANY_ORDER );
 
     /**
-     * Updates the contents of the menu based on the supplied conditions.
+     * Update the contents of the menu based on the supplied conditions.
      */
     void Evaluate( SELECTION& aSelection );
 
     /**
-     * Updates the initial contents so that wxWidgets doesn't get its knickers tied in a knot
+     * Update the initial contents so that wxWidgets doesn't get its knickers tied in a knot
      * over the menu being empty (mainly an issue on GTK, but also on OSX with the preferences
      * and quit menu items).
      */
      void Resolve();
 
 private:
-    ///> Helper class to organize menu entries.
+    ///< Helper class to organize menu entries.
     class ENTRY
     {
     public:
@@ -158,7 +162,7 @@ private:
 
         ~ENTRY();
 
-        ///> Possible entry types.
+        ///< Possible entry types.
         enum ENTRY_TYPE {
             ACTION,
             MENU,
@@ -226,19 +230,19 @@ private:
             wxMenuItem*        wxItem;
         } m_data;
 
-        ///> Condition to be fulfilled to show the entry in menu.
+        ///< Condition to be fulfilled to show the entry in menu.
         SELECTION_CONDITION m_condition;
 
-        ///> Order number, the higher the number the lower position it takes it is in the menu.
+        ///< Order number, the higher the number the lower position it takes it is in the menu.
         int m_order;
 
         bool m_isCheckmarkEntry;
     };
 
-    ///> Inserts the entry, preserving the requested order.
+    ///< Inserts the entry, preserving the requested order.
     void addEntry( ENTRY aEntry );
 
-    ///> List of all menu entries.
+    ///< List of all menu entries.
     std::list<ENTRY> m_entries;
 };
 

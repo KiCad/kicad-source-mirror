@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2016 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,11 +32,8 @@
 class EDA_DRAW_FRAME;
 
 /**
- * COMMON_TOOLS
- *
- * Handles actions that are shared between different applications
+ * Handles action that are shared between different applications.
  */
-
 class COMMON_TOOLS : public TOOL_INTERACTIVE
 {
 public:
@@ -90,30 +89,29 @@ public:
 
 private:
     /**
-     * Enum ZOOM_FIT_TYPE_T
-     * is the set of "Zoom to Fit" types that can be performed
+     * The set of "Zoom to Fit" types that can be performed.
      */
     enum ZOOM_FIT_TYPE_T
     {
-        ZOOM_FIT_ALL,     // Zoom to fall all items in view INCLUDING page and border
-        ZOOM_FIT_OBJECTS, // Zoom to fit all items in view EXCLUDING page and border
+        ZOOM_FIT_ALL,     ///< Zoom to fall all items in view INCLUDING page and border
+        ZOOM_FIT_OBJECTS, ///< Zoom to fit all items in view EXCLUDING page and border
     };
 
-    ///> Sets up handlers for various events.
+    ///< Sets up handlers for various events.
     void setTransitions() override;
 
-    ///> Pointer to the currently used edit frame.
+    ///< Pointer to the currently used edit frame.
     EDA_DRAW_FRAME* m_frame;
 
     int doZoomInOut( bool aDirection, bool aCenterOnCursor );
 
-    ///> Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
+    ///< Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
     int doZoomToPreset( int idx, bool aCenterOnCursor );
 
     int doZoomFit( ZOOM_FIT_TYPE_T aFitType );
 
-    std::vector<VECTOR2I> m_grids;  // grids from APP_SETTINGS converted to internal units
-                                    // and with the user grid appended
+    std::vector<VECTOR2I> m_grids;  ///< Grids from #APP_SETTINGS converted to internal units
+                                    ///< and with the user grid appended.
 
     // The last used units in each system (used for toggling between metric and imperial)
     EDA_UNITS m_imperialUnit;

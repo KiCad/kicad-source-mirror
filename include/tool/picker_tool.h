@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override { }
 
-    ///> Event handler types.
+    ///< Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
     typedef std::function<void(const VECTOR2D&)> MOTION_HANDLER;
     typedef std::function<void(void)> CANCEL_HANDLER;
@@ -60,15 +60,15 @@ public:
         EXCEPTION_CANCEL
     };
 
-    ///> Main event loop.
+    ///< Main event loop.
     int Main( const TOOL_EVENT& aEvent );
 
     inline void SetCursor( KICURSOR aCursor ) { m_cursor = aCursor; }
 
     /**
-     * Function SetClickHandler()
-     * Sets a handler for mouse click event. Handler may decide to receive further click by
-     * returning true.
+     * Set a handler for mouse click event.
+     *
+     * The handler may decide to receive further click by returning true.
      */
     inline void SetClickHandler( CLICK_HANDLER aHandler )
     {
@@ -77,8 +77,9 @@ public:
     }
 
     /**
-     * Function SetMotionHandler()
-     * Sets a handler for mouse motion.  Used for roll-over highlighting.
+     * Set a handler for mouse motion.
+     *
+     * This is used for roll-over highlighting.
      */
     inline void SetMotionHandler( MOTION_HANDLER aHandler )
     {
@@ -87,8 +88,7 @@ public:
     }
 
     /**
-     * Function SetCancelHandler()
-     * Sets a handler for cancel events (ESC or context-menu Cancel).
+     * Set a handler for cancel events (ESC or context-menu Cancel).
      */
     inline void SetCancelHandler( CANCEL_HANDLER aHandler )
     {
@@ -97,8 +97,9 @@ public:
     }
 
     /**
-     * Function SetFinalizeHandler()
-     * Sets a handler for the finalize event. Takes the state of the exit from the Main loop
+     * Set a handler for the finalize event.
+     *
+     * Takes the state of the exit from the main loop.
      */
     inline void SetFinalizeHandler( FINALIZE_HANDLER aHandler )
     {
@@ -107,13 +108,13 @@ public:
     }
 
 private:
-    ///> Reinitializes tool to its initial state.
+    ///< Reinitializes tool to its initial state.
     void resetPicker();
 
-    ///> Applies the requested VIEW_CONTROLS settings.
+    ///< Applies the requested VIEW_CONTROLS settings.
     void setControls();
 
-    ///> @copydoc TOOL_INTERACTIVE::setTransitions();
+    ///< @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:

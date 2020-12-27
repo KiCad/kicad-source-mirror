@@ -36,7 +36,6 @@ class ACTIONS;
 
 
 /*
- * Class TOOLS_HOLDER
  * A mix-in class which allows its owner to hold a set of tools from the tool framework.
  *
  * This is just the framework; the owner is responsible for registering individual tools,
@@ -44,27 +43,6 @@ class ACTIONS;
  */
 class TOOLS_HOLDER
 {
-protected:
-    TOOL_MANAGER*     m_toolManager;
-    ACTIONS*          m_actions;
-    TOOL_DISPATCHER*  m_toolDispatcher;
-
-    SELECTION         m_dummySelection;       // Empty dummy selection
-
-    std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  This is NOT a
-                                            // stack of TOOL instances, because somewhat
-                                            // confusingly most TOOLs implement more than one
-                                            // user-level tool.  A user-level tool actually
-                                            // equates to an ACTION handler, so this stack
-                                            // stores ACTION names.
-
-    bool              m_immediateActions;   // Preference for immediate actions.  If false,
-                                            // the first invocation of a hotkey will just
-                                            // select the relevant tool rather than executing
-                                            // the tool's action.
-    bool              m_dragSelects;        // Prefer selection to dragging.
-    bool              m_moveWarpsCursor;    // cursor is warped to move/drag origin
-
 public:
     TOOLS_HOLDER();
 
@@ -79,8 +57,8 @@ public:
      * Register an action's update conditions with the UI layer to allow the UI to appropriately
      * display the state of its controls.
      *
-     * @param aAction is the action to register
-     * @param aConditions are the UI conditions to use for the control states
+     * @param aAction is the action to register.
+     * @param aConditions are the UI conditions to use for the control states.
      */
     virtual void RegisterUIUpdateHandler( const TOOL_ACTION& aAction,
                                           const ACTION_CONDITIONS& aConditions )
@@ -89,18 +67,18 @@ public:
     }
 
     /**
-     * Register a UI update handler for the control with ID @c aID
+     * Register a UI update handler for the control with ID @c aID.
      *
-     * @param aID is the control ID to register the handler for
-     * @param aConditions are the UI conditions to use for the control states
+     * @param aID is the control ID to register the handler for.
+     * @param aConditions are the UI conditions to use for the control states.
      */
     virtual void RegisterUIUpdateHandler( int aID, const ACTION_CONDITIONS& aConditions )
     {}
 
     /**
-     * Unregister a UI handler for an action that was registered using @c RegisterUIUpdateHandler
+     * Unregister a UI handler for an action that was registered using @c RegisterUIUpdateHandler.
      *
-     * @param aAction is the action to unregister the handler for
+     * @param aAction is the action to unregister the handler for.
      */
     virtual void UnregisterUIUpdateHandler( const TOOL_ACTION& aAction )
     {
@@ -108,9 +86,9 @@ public:
     }
 
     /**
-     * Unregister a UI handler for a given ID that was registered using @c RegisterUIUpdateHandler
+     * Unregister a UI handler for a given ID that was registered using @c RegisterUIUpdateHandler.
      *
-     * @param aID is the control ID to unregister the handler for
+     * @param aID is the control ID to unregister the handler for.
      */
     virtual void UnregisterUIUpdateHandler( int aID )
     {}
@@ -118,7 +96,7 @@ public:
     /**
      * Get the current selection from the canvas area.
      *
-     * @return the current selection
+     * @return the current selection.
      */
     virtual SELECTION& GetCurrentSelection()
     {
@@ -126,9 +104,11 @@ public:
     }
 
     /**
-     * NB: the definition of "tool" is different at the user level.  The implementation uses
-     * a single TOOL_BASE derived class to implement several user "tools", such as rectangle
-     * and circle, or wire and bus.  So each user-level tool is actually a TOOL_ACTION.
+     * NB: the definition of "tool" is different at the user level.
+     *
+     * The implementation uses a single TOOL_BASE derived class to implement several user
+     * "tools", such as rectangle and circle, or wire and bus.  So each user-level tool is
+     * actually a #TOOL_ACTION.
      */
     virtual void PushTool( const std::string& actionName );
     virtual void PopTool( const std::string& actionName );
@@ -141,20 +121,20 @@ public:
     virtual void DisplayToolMsg( const wxString& msg ) {};
 
     /**
-     * Indicates that hotkeys should perform an immediate action even if another tool is
+     * Indicate that hotkeys should perform an immediate action even if another tool is
      * currently active.  If false, the first hotkey should select the relevant tool.
      */
     bool GetDoImmediateActions() const { return m_immediateActions; }
 
     /**
-     * Indicates that a drag should draw a selection rectangle, even when started over an
+     * Indicate that a drag should draw a selection rectangle, even when started over an
      * item.
      */
     bool GetDragSelects() const { return m_dragSelects; }
 
     /**
-     * Indicates that a move operation should warp the mouse pointer to the origin of the
-     * move object.  This improves snapping, but some users are alergic to mouse warping.
+     * Indicate that a move operation should warp the mouse pointer to the origin of the
+     * move object.  This improves snapping, but some users are allergic to mouse warping.
      */
     bool GetMoveWarpsCursor() const { return m_moveWarpsCursor; }
 
@@ -171,6 +151,27 @@ public:
     virtual void RefreshCanvas() { }
 
     virtual wxString ConfigBaseName() { return wxEmptyString; }
+
+protected:
+    TOOL_MANAGER*     m_toolManager;
+    ACTIONS*          m_actions;
+    TOOL_DISPATCHER*  m_toolDispatcher;
+
+    SELECTION         m_dummySelection;     // Empty dummy selection
+
+    std::vector<std::string> m_toolStack;   // Stack of user-level "tools".  This is NOT a
+                                            // stack of TOOL instances, because somewhat
+                                            // confusingly most TOOLs implement more than one
+                                            // user-level tool.  A user-level tool actually
+                                            // equates to an ACTION handler, so this stack
+                                            // stores ACTION names.
+
+    bool              m_immediateActions;   // Preference for immediate actions.  If false,
+                                            // the first invocation of a hotkey will just
+                                            // select the relevant tool rather than executing
+                                            // the tool's action.
+    bool              m_dragSelects;        // Prefer selection to dragging.
+    bool              m_moveWarpsCursor;    // cursor is warped to move/drag origin
 };
 
 #endif  // TOOL_HOLDER_H

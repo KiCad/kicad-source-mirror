@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,6 +54,7 @@ public:
 
     /**
      * Set the default action to use when first creating the toolbar palette icon.
+     *
      * If no default action is provided, the default will be the first action in the
      * vector.
      *
@@ -82,16 +83,16 @@ public:
     const std::vector< const TOOL_ACTION*>& GetActions() const { return m_actions; }
 
 protected:
-    ///> The action ID for this action group
+    ///< The action ID for this action group
     int m_id;
 
-    ///> The name of this action group
+    ///< The name of this action group
     std::string m_name;
 
-    ///> The default action to display on the toolbar item
+    ///< The default action to display on the toolbar item
     const TOOL_ACTION* m_defaultAction;
 
-    ///> The actions that compose the group
+    ///< The actions that compose the group
     std::vector<const TOOL_ACTION*> m_actions;
 };
 
@@ -107,7 +108,7 @@ public:
      *
      * @param aParent is the parent window
      * @param aVertical is true if the palette should make the buttons a vertical line,
-     *                  false for a horizonatl line.
+     *                  false for a horizontal line.
      */
     ACTION_TOOLBAR_PALETTE( wxWindow* aParent, bool aVertical );
 
@@ -159,29 +160,26 @@ public:
 protected:
     void onCharHook( wxKeyEvent& aEvent );
 
-protected:
     // The group that the buttons in the palette are part of
      ACTION_GROUP* m_group;
 
-    ///> The size each button on the toolbar should be
+    ///< The size each button on the toolbar should be
     wxRect         m_buttonSize;
 
-    ///> True if the palette uses vertical buttons, false for horizontal buttons
+    ///< True if the palette uses vertical buttons, false for horizontal buttons
     bool           m_isVertical;
 
     wxPanel*       m_panel;
     wxBoxSizer*    m_mainSizer;
     wxBoxSizer*    m_buttonSizer;
 
-    ///> The buttons that act as the toolbar on the palette
+    ///< The buttons that act as the toolbar on the palette
     std::map<int, BITMAP_BUTTON*> m_buttons;
 };
 
 
 /**
- * ACTION_TOOLBAR
- *
- * Defines the structure of a toolbar with buttons that invoke ACTIONs.
+ * Define the structure of a toolbar with buttons that invoke ACTIONs.
  */
 class ACTION_TOOLBAR : public wxAuiToolBar
 {
@@ -200,18 +198,19 @@ public:
     void SetAuiManager( wxAuiManager* aManager ) { m_auiManager = aManager; }
 
     /**
-     * Adds a TOOL_ACTION-based button to the toolbar. After selecting the entry,
-     * a TOOL_EVENT command containing name of the action is sent.
+     * Add a TOOL_ACTION-based button to the toolbar.
      *
-     * @param aAction is the action to add
-     * @param aIsToggleEntry makes the toolbar item a toggle entry when true
-     * @param aIsCancellable when true, cancels the tool if clicked when tool is active
+     * After selecting the entry, a #TOOL_EVENT command containing name of the action is sent.
+     *
+     * @param aAction is the action to add.
+     * @param aIsToggleEntry makes the toolbar item a toggle entry when true.
+     * @param aIsCancellable when true, cancels the tool if clicked when tool is active.
      */
     void Add( const TOOL_ACTION& aAction, bool aIsToggleEntry = false,
               bool aIsCancellable = false );
 
     /**
-     * Adds a large button such as used in the Kicad Manager Frame's launch bar.
+     * Add a large button such as used in the KiCad Manager Frame's launch bar.
      *
      * @param aAction
      */
@@ -227,6 +226,7 @@ public:
 
     /**
      * Add a context menu to a specific tool item on the toolbar.
+     *
      * This toolbar gets ownership of the menu object, and will delete it when the
      * ClearToolbar() function is called.
      *
@@ -239,7 +239,8 @@ public:
      * Add a set of actions to a toolbar as a group. One action from the group will be displayed
      * at a time.
      *
-     * @param aGroup is the group to add. The first action in the group will be the first shown on the toolbar.
+     * @param aGroup is the group to add. The first action in the group will be the first shown
+     *               on the toolbar.
      * @param aIsToggleEntry makes the toolbar item a toggle entry when true
      */
     void AddGroup( ACTION_GROUP* aGroup, bool aIsToggleEntry = false );
@@ -258,14 +259,16 @@ public:
     void ClearToolbar();
 
     /**
-     * Updates the bitmap of a particular tool.  Not icon-based because we use it
-     * for the custom-drawn layer pair bitmap.
+     * Updates the bitmap of a particular tool.
+     *
+     * Not icon-based because we use it for the custom-drawn layer pair bitmap.
      */
     void SetToolBitmap( const TOOL_ACTION& aAction, const wxBitmap& aBitmap );
 
     /**
-     * Applies the default toggle action.  For checked items this is check/uncheck; for
-     * non-checked items it's enable/disable.
+     * Apply the default toggle action.
+     *
+     * For checked items this is check/uncheck; for non-checked items it's enable/disable.
      */
     void Toggle( const TOOL_ACTION& aAction, bool aState );
 
@@ -276,7 +279,8 @@ public:
      *
      * The standard Realize() draws both horizontal and vertical to determine sizing
      * However with many icons, potato PCs, etc, you can actually see that double draw
-     * This custom function avoids the double draw if the HORIZONTAL or VERTICAL toolbar properties are set.
+     * This custom function avoids the double draw if the HORIZONTAL or VERTICAL toolbar
+     * properties are set.
      */
     bool KiRealize();
 
@@ -292,33 +296,32 @@ protected:
     void doSelectAction( ACTION_GROUP* aGroup, const TOOL_ACTION& aAction );
 
     /**
-     * Popup the ACTION_TOOLBAR_PALETTE associated with the ACTION_GROUP of the
+     * Popup the #ACTION_TOOLBAR_PALETTE associated with the ACTION_GROUP of the
      * given toolbar item.
      */
     void popupPalette( wxAuiToolBarItem* aItem );
 
-    ///> Handler for a mouse up/down event
+    ///< Handler for a mouse up/down event
     void onMouseClick( wxMouseEvent& aEvent );
 
-    ///> Handler for when a drag event occurs on an item
+    ///< Handler for when a drag event occurs on an item
     void onItemDrag( wxAuiToolBarEvent& aEvent );
 
-    ///> The default tool event handler
+    ///< The default tool event handler
     void onToolEvent( wxAuiToolBarEvent& aEvent );
 
-    ///> Handle a right-click on a menu item
+    ///< Handle a right-click on a menu item
     void onToolRightClick( wxAuiToolBarEvent& aEvent );
 
-    ///> Handle the button select inside the palette
+    ///< Handle the button select inside the palette
     void onPaletteEvent( wxCommandEvent& aEvent );
 
-    ///> Handle the palette timer triggering
+    ///< Handle the palette timer triggering
     void onTimerDone( wxTimerEvent& aEvent );
 
-    ///> Render the triangle in the lower-right corner that represents that an action pallette
-    ///> is available for an item
-    void OnCustomRender( wxDC& aDc, const wxAuiToolBarItem& aItem,
-                         const wxRect& aRect ) override;
+    ///< Render the triangle in the lower-right corner that represents that an action palette
+    ///< is available for an item
+    void OnCustomRender( wxDC& aDc, const wxAuiToolBarItem& aItem, const wxRect& aRect ) override;
 
 protected:
     // Timer used to determine when the palette should be opened after a group item is pressed

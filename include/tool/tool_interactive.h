@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,62 +38,59 @@ class TOOL_INTERACTIVE : public TOOL_BASE
 {
 public:
     /**
-     * Constructor
-     *
-     * Creates a tool with given id & name. The name must be unique. */
+     * Create a tool with given id & name. The name must be unique.
+     */
     TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName );
 
     /**
-     * Constructor
-     *
-     * Creates a tool with given name. The name must be unique. */
+     * Creates a tool with given name. The name must be unique.
+     */
     TOOL_INTERACTIVE( const std::string& aName );
     virtual ~TOOL_INTERACTIVE();
 
     /**
-     * Function Activate()
-     * Runs the tool. After activation, the tool starts receiving events until it is finished.
+     * Run the tool.
+     *
+     * After activation, the tool starts receiving events until it is finished.
      */
     void Activate();
 
     TOOL_MENU& GetToolMenu() { return m_menu; }
-    
+
     /**
-     * Function SetContextMenu()
+     * Assign a context menu and tells when it should be activated.
      *
-     * Assigns a context menu and tells when it should be activated.
      * @param aMenu is the menu to be assigned.
      * @param aTrigger determines conditions upon which the context menu is activated.
      */
     void SetContextMenu( ACTION_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
     /**
-     * Function RunMainStack()
+     * Call a function using the main stack.
      *
-     * Calls a function using the main stack.
      * @param aFunc is the function to be calls.
      */
     void RunMainStack( std::function<void()> aFunc );
 
     /**
-     * Function Go()
+     * Define which state (aStateFunc) to go when a certain event arrives (aConditions).
      *
-     * Defines which state (aStateFunc) to go when a certain event arrives (aConditions).
      * No conditions means any event.
      */
     template <class T>
     void Go( int (T::* aStateFunc)( const TOOL_EVENT& ),
-            const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_ANY, TA_ANY ) );
+             const TOOL_EVENT_LIST& aConditions = TOOL_EVENT( TC_ANY, TA_ANY ) );
 
     /**
-     * Function Wait()
+     * Suspend execution of the tool until an event specified in aEventList arrives.
      *
-     * Suspends execution of the tool until an event specified in aEventList arrives.
      * No parameters means waiting for any event.
      */
     TOOL_EVENT* Wait( const TOOL_EVENT_LIST& aEventList = TOOL_EVENT( TC_ANY, TA_ANY ) );
 
-    /** functions below are not yet implemented - their interface may change */
+    /**
+     * The functions below are not yet implemented - their interface may change
+     */
     /*template <class Parameters, class ReturnValue>
         bool InvokeTool( const std::string& aToolName, const Parameters& parameters,
                          ReturnValue& returnValue );
@@ -109,13 +107,14 @@ protected:
 
 private:
     /**
-     * This method is meant to be overridden in order to specify handlers for events. It is called
-     * every time tool is reset or finished.
+     * This method is meant to be overridden in order to specify handlers for events.
+     *
+     * It is called every time tool is reset or finished.
      */
     virtual void setTransitions() = 0;
 
     /**
-     * Clears the current transition map and restores the default one created by setTransitions().
+     * Clear the current transition map and restores the default one created by setTransitions().
      */
     void resetTransitions();
 

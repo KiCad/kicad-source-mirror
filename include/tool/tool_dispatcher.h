@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -42,28 +44,28 @@ class VIEW;
  * - takes wx events,
  * - fixes all wx quirks (mouse warping, panning, ordering problems, etc)
  * - translates coordinates to world space
- * - low-level input conditioning (drag/click threshold), updating mouse position during view auto-scroll/pan.
+ * - low-level input conditioning (drag/click threshold), updating mouse position during
+ *   view auto-scroll/pan.
  * - issues TOOL_EVENTS to the tool manager
  */
-
 class TOOL_DISPATCHER : public wxEvtHandler
 {
 public:
     /**
-     * @param aToolMgr: tool manager instance the events will be sent to
-     * @param aActions: ACTIONS subclass instance for ACTIONS::TranslateLegacyId()
+     * @param aToolMgr: tool manager instance the events will be sent to.
+     * @param aActions: ACTIONS subclass instance for ACTIONS::TranslateLegacyId().
      */
     TOOL_DISPATCHER( TOOL_MANAGER* aToolMgr, ACTIONS *aActions );
 
     virtual ~TOOL_DISPATCHER();
 
     /**
-     * Brings the dispatcher to its initial state.
+     * Bring the dispatcher to its initial state.
      */
     virtual void ResetState();
 
     /**
-     * Processes wxEvents (mostly UI events), translates them to TOOL_EVENTs, and makes tools
+     * Process wxEvents (mostly UI events), translate them to TOOL_EVENTs, and make tools
      * handle those.
      *
      * @param aEvent is the wxWidgets event to be processed.
@@ -71,12 +73,12 @@ public:
     virtual void DispatchWxEvent( wxEvent& aEvent );
 
     /**
-     * Maps a wxWidgets key event to a TOOL_EVENT.
+     * Map a wxWidgets key event to a TOOL_EVENT.
      */
     OPT<TOOL_EVENT> GetToolEvent( wxKeyEvent* aKeyEvent, bool* aSpecialKeyFlag );
 
     /**
-     * Processes wxCommands (mostly menu related events) and runs appropriate actions (eg. run the
+     * Process wxCommands (mostly menu related events) and runs appropriate actions (eg. run the
      * specified tool).
      *
      * @param aEvent is the wxCommandEvent to be processed.
@@ -84,21 +86,21 @@ public:
     virtual void DispatchWxCommand( wxCommandEvent& aEvent );
 
 private:
-    ///> Number of mouse buttons that is handled in events.
+    ///< Number of mouse buttons that is handled in events.
     static const int MouseButtonCount = 3;
 
-    ///> The time threshold for a mouse button press that distinguishes between a single mouse
-    ///> click and a beginning of drag event (expressed in milliseconds).
+    ///< The time threshold for a mouse button press that distinguishes between a single mouse
+    ///< click and a beginning of drag event (expressed in milliseconds).
     static const int DragTimeThreshold = 300;
 
-    ///> The distance threshold for mouse cursor that disinguishes between a single mouse click
-    ///> and a beginning of drag event (expressed in screen pixels).
+    ///< The distance threshold for mouse cursor that distinguishes between a single mouse click
+    ///< and a beginning of drag event (expressed in screen pixels).
     static const int DragDistanceThreshold = 8;
 
-    ///> Handles mouse related events (click, motion, dragging).
+    ///< Handles mouse related events (click, motion, dragging).
     bool handleMouseButton( wxEvent& aEvent, int aIndex, bool aMotion );
 
-    ///> Saves the state of key modifiers (Alt, Ctrl and so on).
+    ///< Saves the state of key modifiers (Alt, Ctrl and so on).
     static int decodeModifiers( const wxKeyboardState* aState )
     {
         int mods = 0;
@@ -115,22 +117,22 @@ private:
         return mods;
     }
 
-    ///> Stores all the informations regarding a mouse button state.
+    ///< Stores all the information regarding a mouse button state.
     struct BUTTON_STATE;
 
-    ///> The last mouse cursor position (in world coordinates).
+    ///< The last mouse cursor position (in world coordinates).
     VECTOR2D m_lastMousePos;
 
-    ///> State of mouse buttons.
+    ///< State of mouse buttons.
     std::vector<BUTTON_STATE*> m_buttons;
 
-    ///> Returns the instance of VIEW, used by the application.
+    ///< Returns the instance of VIEW, used by the application.
     KIGFX::VIEW* getView();
 
-    ///> Instance of tool manager that cooperates with the dispatcher.
+    ///< Instance of tool manager that cooperates with the dispatcher.
     TOOL_MANAGER* m_toolMgr;
 
-    ///> Instance of an actions list that handles legacy action translation
+    ///< Instance of an actions list that handles legacy action translation
     ACTIONS* m_actions;
 };
 

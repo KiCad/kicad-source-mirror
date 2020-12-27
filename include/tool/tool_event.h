@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -45,7 +47,6 @@ class TOOL_BASE;
 
 /**
  * Internal (GUI-independent) event definitions.
- * Enums are mostly self-explanatory.
  */
 enum TOOL_EVENT_CATEGORY
 {
@@ -88,7 +89,7 @@ enum TOOL_ACTIONS
     TA_CANCEL_TOOL          = 0x2000,
 
     // Context menu update. Issued whenever context menu is open and the user hovers the mouse
-    // over one of choices. Used in dynamic highligting in disambiguation menu
+    // over one of choices. Used in dynamic highlighting in disambiguation menu
     TA_CHOICE_MENU_UPDATE   = 0x4000,
 
     // Context menu choice. Sent if the user picked something from the context menu or
@@ -142,17 +143,17 @@ enum TOOL_MODIFIERS
 /// Scope of tool actions
 enum TOOL_ACTION_SCOPE
 {
-    AS_CONTEXT = 1,  ///> Action belongs to a particular tool (i.e. a part of a pop-up menu)
-    AS_ACTIVE,       ///> All active tools
-    AS_GLOBAL        ///> Global action (toolbar/main menu event, global shortcut)
+    AS_CONTEXT = 1,  ///< Action belongs to a particular tool (i.e. a part of a pop-up menu)
+    AS_ACTIVE,       ///< All active tools
+    AS_GLOBAL        ///< Global action (toolbar/main menu event, global shortcut)
 };
 
 /// Flags for tool actions
 enum TOOL_ACTION_FLAGS
 {
     AF_NONE     = 0,
-    AF_ACTIVATE = 1,    ///> Action activates a tool
-    AF_NOTIFY   = 2     ///> Action is a notification (it is by default passed to all tools)
+    AF_ACTIVATE = 1,    ///< Action activates a tool
+    AF_NOTIFY   = 2     ///< Action is a notification (it is by default passed to all tools)
 };
 
 /// Defines when a context menu is opened.
@@ -164,16 +165,13 @@ enum CONTEXT_MENU_TRIGGER
 };
 
 /**
- * TOOL_EVENT
- *
  * Generic, UI-independent tool event.
  */
 class TOOL_EVENT
 {
 public:
     /**
-     * Function Format()
-     * Returns information about event in form of a human-readable string.
+     * Return information about event in form of a human-readable string.
      *
      * @return Event information.
      */
@@ -243,46 +241,46 @@ public:
         init();
     }
 
-    ///> Returns the category (eg. mouse/keyboard/action) of an event..
+    ///< Returns the category (eg. mouse/keyboard/action) of an event..
     TOOL_EVENT_CATEGORY Category() const { return m_category; }
 
-    ///> Returns more specific information about the type of an event.
+    ///< Returns more specific information about the type of an event.
     TOOL_ACTIONS Action() const { return m_actions; }
 
-    ///> These give a tool a method of informing the TOOL_MANAGER that a particular event should
-    ///> be passed on to subsequent tools on the stack.  Defaults to true for TC_MESSAGES; false
-    ///> for everything else.
+    ///< These give a tool a method of informing the TOOL_MANAGER that a particular event should
+    ///< be passed on to subsequent tools on the stack.  Defaults to true for TC_MESSAGES; false
+    ///< for everything else.
     bool PassEvent() const { return m_passEvent; }
     void SetPassEvent( bool aPass = true ) { m_passEvent = aPass; }
 
-    ///> Returns if it this event has a valid position (true for mouse events and context-menu
-    ///> or hotkey-based command events)
+    ///< Returns if it this event has a valid position (true for mouse events and context-menu
+    ///< or hotkey-based command events)
     bool HasPosition() const { return m_hasPosition; }
     void SetHasPosition( bool aHasPosition ) { m_hasPosition = aHasPosition; }
 
     TOOL_BASE* FirstResponder() const { return m_firstResponder; }
     void SetFirstResponder( TOOL_BASE* aTool ) { m_firstResponder = aTool; }
 
-    ///> Returns information about difference between current mouse cursor position and the place
-    ///> where dragging has started.
+    ///< Returns information about difference between current mouse cursor position and the place
+    ///< where dragging has started.
     const VECTOR2D Delta() const
     {
         return returnCheckedPosition( m_mouseDelta );
     }
 
-    ///> Returns mouse cursor position in world coordinates.
+    ///< Returns mouse cursor position in world coordinates.
     const VECTOR2D Position() const
     {
         return returnCheckedPosition( m_mousePos );
     }
 
-    ///> Returns the point where dragging has started.
+    ///< Returns the point where dragging has started.
     const VECTOR2D DragOrigin() const
     {
         return returnCheckedPosition( m_mouseDragOrigin );
     }
 
-    ///> Returns information about mouse buttons state.
+    ///< Returns information about mouse buttons state.
     int Buttons() const
     {
         assert( m_category == TC_MOUSE );    // this should be used only with mouse events
@@ -338,7 +336,7 @@ public:
         return m_actions == TA_PRIME;
     }
 
-    ///> Returns information about key modifiers state (Ctrl, Alt, etc.)
+    ///< Returns information about key modifiers state (Ctrl, Alt, etc.)
     int Modifier( int aMask = MD_MODIFIER_MASK ) const
     {
         return m_modifiers & aMask;
@@ -355,8 +353,7 @@ public:
     }
 
     /**
-     * Function Matches()
-     * Tests whether two events match in terms of category & action or command.
+     * Test whether two events match in terms of category & action or command.
      *
      * @param aEvent is the event to test against.
      * @return True if two events match, false otherwise.
@@ -388,47 +385,41 @@ public:
     }
 
     /**
-     * Function IsAction()
-     * Tests if the event contains an action issued upon activation of the given TOOL_ACTION.
+     * Test if the event contains an action issued upon activation of the given #TOOL_ACTION.
+     *
      * @param aAction is the TOOL_ACTION to be checked against.
      * @return True if it matches the given TOOL_ACTION.
      */
     bool IsAction( const TOOL_ACTION* aAction ) const;
 
     /**
-     * Function IsCancelInteractive()
-     *
-     * Indicates the event should restart/end an ongoing interactive tool's event loop (eg esc
+     * Indicate the event should restart/end an ongoing interactive tool's event loop (eg esc
      * key, click cancel, start different tool).
      */
     bool IsCancelInteractive();
 
     /**
-     * Function IsSelectionEvent()
-     *
-     * Indicates an selection-changed notification event.
+     * Indicate an selection-changed notification event.
      */
     bool IsSelectionEvent();
 
     /**
-     * Function IsPointEditor
+     * Indicate if the event is from one of the point editors.
      *
-     * Indicates if the event is from one of the point editors.  Usually used to allow the
-     * point editor to activate itself without de-activating the current drawing tool.
+     * Usually used to allow the point editor to activate itself without de-activating the
+     * current drawing tool.
      */
     bool IsPointEditor();
 
     /**
-     * Function IsMoveTool
+     * Indicate if the event is from one of the move tools.
      *
-     * Indicates if the event is from one of the move tools.  Usually used to allow move to
-     * be done without de-activating the current drawing tool.
+     * Usually used to allow move to be done without de-activating the current drawing tool.
      */
     bool IsMoveTool();
 
     /**
-     * Function Parameter()
-     * Returns a non-standard parameter assigned to the event. Its meaning depends on the
+     * Return a non-standard parameter assigned to the event. Its meaning depends on the
      * target tool.
      */
     template<typename T>
@@ -444,9 +435,9 @@ public:
     }
 
     /**
-     * Function SetParameter()
-     * Sets a non-standard parameter assigned to the event. Its meaning depends on the
+     * Set a non-standard parameter assigned to the event. Its meaning depends on the
      * target tool.
+     *
      * @param aParam is the new parameter.
      */
     template<typename T>
@@ -500,6 +491,7 @@ private:
     /**
      * Ensure that the event is a type that has a position before returning a
      * position, otherwise return a null-constructed position.
+     *
      * Used to defend the position accessors from runtime access when the event
      * does not have a valid position.
      *
@@ -524,29 +516,29 @@ private:
     bool m_passEvent;
     bool m_hasPosition;
 
-    ///> Difference between mouse cursor position and
-    ///> the point where dragging event has started
+    ///< Difference between mouse cursor position and
+    ///< the point where dragging event has started
     VECTOR2D m_mouseDelta;
 
-    ///> Current mouse cursor position
+    ///< Current mouse cursor position
     VECTOR2D m_mousePos;
 
-    ///> Point where dragging has started
+    ///< Point where dragging has started
     VECTOR2D m_mouseDragOrigin;
 
-    ///> State of mouse buttons
+    ///< State of mouse buttons
     int m_mouseButtons;
 
-    ///> Stores code of pressed/released key
+    ///< Stores code of pressed/released key
     int m_keyCode;
 
-    ///> State of key modifierts (Ctrl/Alt/etc.)
+    ///< State of key modifiers (Ctrl/Alt/etc.)
     int m_modifiers;
 
-    ///> Generic parameter used for passing non-standard data.
+    ///< Generic parameter used for passing non-standard data.
     void* m_param;
 
-    ///> The first tool to receive the event
+    ///< The first tool to receive the event
     TOOL_BASE* m_firstResponder;
 
     OPT<int> m_commandId;
@@ -556,10 +548,8 @@ private:
 typedef OPT<TOOL_EVENT> OPT_TOOL_EVENT;
 
 /**
- * TOOL_EVENT_LIST
- *
- * A list of TOOL_EVENTs, with overloaded || operators allowing for
- * concatenating TOOL_EVENTs with little code.
+ * A list of TOOL_EVENTs, with overloaded || operators allowing for concatenating TOOL_EVENTs
+ * with little code.
  */
 class TOOL_EVENT_LIST
 {
@@ -568,17 +558,17 @@ public:
     typedef std::deque<TOOL_EVENT>::iterator iterator;
     typedef std::deque<TOOL_EVENT>::const_iterator const_iterator;
 
-    ///> Default constructor. Creates an empty list.
+    ///< Default constructor. Creates an empty list.
     TOOL_EVENT_LIST()
     {}
 
-    ///> Constructor for a list containing only one TOOL_EVENT.
+    ///< Constructor for a list containing only one TOOL_EVENT.
     TOOL_EVENT_LIST( const TOOL_EVENT& aSingleEvent )
     {
         m_events.push_back( aSingleEvent );
     }
 
-    ///> Copy an existing TOOL_EVENT_LIST
+    ///<y Copy an existing TOOL_EVENT_LIST
     TOOL_EVENT_LIST( const TOOL_EVENT_LIST& aEventList ) = default;
 
     /**
@@ -601,9 +591,9 @@ public:
     }
 
     /**
-     * Function Add()
-     * Adds a tool event to the list.
-     * @param aEvent is the tool event to be addded.
+     * Add a tool event to the list.
+     *
+     * @param aEvent is the tool event to be added.
      */
     void Add( const TOOL_EVENT& aEvent )
     {

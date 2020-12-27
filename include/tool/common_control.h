@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,9 +29,7 @@
 class EDA_BASE_FRAME;
 
 /**
- * COMMON_CONTROL
- *
- * Handles actions that are shared between different applications
+ * Handle actions that are shared between different applications
  */
 
 class COMMON_CONTROL : public TOOL_INTERACTIVE
@@ -49,7 +47,7 @@ public:
 
     int ConfigurePaths( const TOOL_EVENT& aEvent );
     int ShowLibraryTable( const TOOL_EVENT& aEvent );
-    
+
     int ShowPlayer( const TOOL_EVENT& aEvent );
 
     int ShowHelp( const TOOL_EVENT& aEvent );
@@ -57,11 +55,11 @@ public:
     int GetInvolved( const TOOL_EVENT& aEvent );
     int ReportBug( const TOOL_EVENT& aEvent );
 
-    ///> Sets up handlers for various events.
+    ///< Sets up handlers for various events.
     void setTransitions() override;
-    
+
 private:
-    ///> Pointer to the currently used edit frame.
+    ///< Pointer to the currently used edit frame.
     EDA_BASE_FRAME* m_frame;
 
     static wxString m_bugReportUrl;

@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,10 +46,10 @@ class VIEW_CONTROLS;
 
 enum TOOL_TYPE
 {
-    ///> Tool that interacts with the user
+    ///< Tool that interacts with the user
     INTERACTIVE = 0x01,
 
-    ///> Tool that runs in the background without any user intervention
+    ///< Tool that runs in the background without any user intervention
     BATCH       = 0x02
 };
 
@@ -59,8 +60,6 @@ using TOOL_STATE_FUNC = std::function<int(const TOOL_EVENT&)>;
 
 
 /**
- * TOOL_BASE
- *
  * Base abstract interface for all kinds of tools.
  */
 
@@ -75,7 +74,7 @@ public:
 
     virtual ~TOOL_BASE() {};
 
-    ///> Determines the reason of reset for a tool
+    ///< Determine the reason of reset for a tool.
     enum RESET_REASON
     {
         RUN,                ///< Tool is invoked after being inactive
@@ -84,7 +83,6 @@ public:
     };
 
     /**
-     * Function Init()
      * Init() is called once upon a registration of the tool.
      *
      * @return True if the initialization went fine, false - otherwise.
@@ -95,16 +93,17 @@ public:
     }
 
     /**
-     * Function Reset()
-     * Brings the tool to a known, initial state. If the tool claimed anything from
-     * the model or the view, it must release it when its reset.
+     * Bring the tool to a known, initial state.
+     *
+     * If the tool claimed anything from the model or the view, it must release it when its
+     * reset.
      * @param aReason contains information about the reason of tool reset.
      */
     virtual void Reset( RESET_REASON aReason ) = 0;
 
     /**
-     * Function GetType()
-     * Returns the type of the tool.
+     * Return the type of the tool.
+     *
      * @return The type of the tool.
      */
     TOOL_TYPE GetType() const
@@ -113,9 +112,10 @@ public:
     }
 
     /**
-     * Function GetId()
-     * Returns the unique identifier of the tool. The identifier is set by an instance of
-     * TOOL_MANAGER.
+     * Return the unique identifier of the tool.
+     *
+     * The identifier is set by an instance of #TOOL_MANAGER.
+     *
      * @return Identifier of the tool.
      */
     TOOL_ID GetId() const
@@ -124,9 +124,11 @@ public:
     }
 
     /**
-     * Function GetName()
-     * Returns the name of the tool. Tool names are expected to obey the format:
-     * application.ToolName (eg. pcbnew.InteractiveSelection).
+     * Return the name of the tool.
+     *
+     * Tool names are expected to obey the format: application.ToolName (eg.
+     * pcbnew.InteractiveSelection).
+     *
      * @return The name of the tool.
      */
     const std::string& GetName() const
@@ -135,10 +137,9 @@ public:
     }
 
     /**
-     * Function GetManager()
-     * Returns the instance of TOOL_MANAGER that takes care of the tool.
-     * @return Instance of the TOOL_MANAGER. If there is no TOOL_MANAGER associated, it returns
-     * NULL.
+     * Return the instance of #TOOL_MANAGER that takes care of the tool.
+     *
+     * @return Instance of the #TOOL_MANAGER or NULL if there is no associated tool manager.
      */
     TOOL_MANAGER* GetManager() const
     {
@@ -148,40 +149,37 @@ public:
     //TOOL_SETTINGS& GetAdapter();
 
     bool IsToolActive() const;
-    
+
 protected:
     friend class TOOL_MANAGER;
     friend class TOOL_SETTINGS;
 
     /**
-     * Function attachManager()
+     * Set the #TOOL_MANAGER the tool will belong to.
      *
-     * Sets the TOOL_MANAGER the tool will belong to.
-     * Called by TOOL_MANAGER::RegisterTool()
+     * Called by #TOOL_MANAGER::RegisterTool()
      */
     void attachManager( TOOL_MANAGER* aManager );
 
     /**
-     * Function getView()
+     * Returns the instance of #VIEW object used in the application. It allows tools to draw.
      *
-     * Returns the instance of VIEW object used in the application. It allows tools to draw.
      * @return The instance of VIEW.
      */
     KIGFX::VIEW* getView() const;
 
     /**
-     * Function getViewControls()
+     * Return the instance of VIEW_CONTROLS object used in the application.
      *
-     * Returns the instance of VIEW_CONTROLS object used in the application. It allows tools to
-     * read & modify user input and its settings (eg. show cursor, enable snapping to grid, etc.)
+     * It allows tools to read & modify user input and its settings (eg. show cursor, enable
+     * snapping to grid, etc.).
+     *
      * @return The instance of VIEW_CONTROLS.
      */
     KIGFX::VIEW_CONTROLS* getViewControls() const;
 
     /**
-     * Function getEditFrame()
-     *
-     * Returns the application window object, casted to requested user type.
+     * Return the application window object, casted to requested user type.
      */
     template <typename T>
     T* getEditFrame() const
@@ -193,9 +191,7 @@ protected:
     }
 
     /**
-     * Function getModel()
-     *
-     * Returns the model object if it matches the requested type.
+     * Return the model object if it matches the requested type.
      */
     template <typename T>
     T* getModel() const
@@ -207,14 +203,14 @@ protected:
         return static_cast<T*>( m );
     }
 
-    ///> Stores the type of the tool.
+    ///< Store the type of the tool.
     TOOL_TYPE m_type;
 
-    ///> Unique identifier for the tool, assigned by a TOOL_MANAGER instance.
+    ///< Unique identifier for the tool, assigned by a TOOL_MANAGER instance.
     TOOL_ID m_toolId;
 
-    ///> Name of the tool. Names are expected to obey the format application.ToolName
-    ///> (eg. pcbnew.InteractiveSelection).
+    ///< Name of the tool. Names are expected to obey the format application.ToolName
+    ///< (eg. pcbnew.InteractiveSelection).
     std::string m_toolName;
     TOOL_MANAGER* m_toolMgr;
     //TOOL_SETTINGS m_toolSettings;

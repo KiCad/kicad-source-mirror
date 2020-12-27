@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -43,7 +45,7 @@ class TOOL_INTERACTIVE;
 class ACTION_MENU : public wxMenu
 {
 public:
-    ///> Default constructor
+    ///< Default constructor
     ACTION_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool = nullptr );
 
     ~ACTION_MENU() override;
@@ -52,7 +54,7 @@ public:
     ACTION_MENU& operator=( const ACTION_MENU& aMenu ) = delete;
 
     /**
-     * Sets title for the menu. The title is shown as a text label shown on the top of
+     * Set title for the menu. The title is shown as a text label shown on the top of
      * the menu.
      *
      * @param aTitle is the new title.
@@ -60,36 +62,40 @@ public:
     void SetTitle( const wxString& aTitle ) override;
 
     /**
-     * Decides whether a title for a pop up menu should be displayed.
+     * Decide whether a title for a pop up menu should be displayed.
      */
     void DisplayTitle( bool aDisplay = true );
 
     /**
-     * Assigns an icon for the entry.
+     * Assign an icon for the entry.
      *
      * @param aIcon is the icon to be assigned. NULL is used to remove icon.
      */
     void SetIcon( const BITMAP_OPAQUE* aIcon );
 
     /**
-     * Adds a wxWidgets-style entry to the menu. After highlighting/selecting the entry,
-     * a wxWidgets event is generated.
+     * Add a wxWidgets-style entry to the menu.
+     *
+     * After highlighting/selecting the entry, a wxWidgets event is generated.
      */
     wxMenuItem* Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon );
     wxMenuItem* Add( const wxString& aLabel, const wxString& aToolTip, int aId,
                      const BITMAP_OPAQUE* aIcon,  bool aIsCheckmarkEntry = false );
 
     /**
-     * Adds an entry to the menu, basing on the TOOL_ACTION object. After selecting the entry,
-     * a TOOL_EVENT command containing name of the action is sent.
+     * Add an entry to the menu based on the #TOOL_ACTION object.
+     *
+     * After selecting the entry, a #TOOL_EVENT command containing name of the action is sent.
      *
      * @param aAction is the action to be added to menu entry.
      */
     wxMenuItem* Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry = false );
 
     /**
-     * Adds an action menu as a submenu. The difference between this function and
-     * wxMenu::AppendSubMenu() is the capability to handle icons.
+     * Add an action menu as a submenu.
+     *
+     * The difference between this function and wxMenu::AppendSubMenu() is the capability to
+     * handle icons.
      *
      * @param aMenu is the submenu to be added.
      */
@@ -97,23 +103,27 @@ public:
 
     /**
      * Add a standard close item to the menu with the accelerator key CTRL-W.
+     *
      * Emits the wxID_CLOSE event.
      *
-     * @param aAppname is the application name to append to the tooltip
+     * @param aAppname is the application name to append to the tooltip.
      */
     void AddClose( wxString aAppname = "" );
 
     /**
-     * Adds either a standard Quit or Close item to the menu. If aKiface is NULL or in
-     * single-instance then Quite (wxID_QUIT) is used, otherwise Close (wxID_CLOSE) is used.
+     * Add either a standard Quit or Close item to the menu.
      *
-     * @param aAppname is the application name to append to the tooltip
+     * If \a aKiface is NULL or in single-instance then quit (wxID_QUIT) is used, otherwise
+     * close (wxID_CLOSE) is used.
+     *
+     * @param aAppname is the application name to append to the tooltip.
      */
     void AddQuitOrClose( KIFACE_I* aKiface, wxString aAppname = "" );
 
     /**
-     * Removes all the entries from the menu (as well as its title). It leaves the menu in the
-     * initial state.
+     * Remove all the entries from the menu (as well as its title).
+     *
+     * It leaves the menu in the initial state.
      */
     void Clear();
 
@@ -123,8 +133,9 @@ public:
     bool HasEnabledItems() const;
 
     /**
-     * Returns the position of selected item. If the returned value is negative, that means that
-     * menu was dismissed.
+     * Return the position of selected item.
+     *
+     * If the returned value is negative, that means that menu was dismissed.
      *
      * @return The position of selected item in the action menu.
      */
@@ -134,25 +145,25 @@ public:
     }
 
     /**
-     * Runs update handlers for the menu and its submenus.
+     * Run update handlers for the menu and its submenus.
      */
     void UpdateAll();
 
     /**
-     * Clears the dirty flag on the menu and all descendants.
+     * Clear the dirty flag on the menu and all descendants.
      */
     void ClearDirty();
     void SetDirty();
 
     /**
-     * Sets a tool that is the creator of the menu.
+     * Set a tool that is the creator of the menu.
      *
      * @param aTool is the tool that created the menu.
      */
     void SetTool( TOOL_INTERACTIVE* aTool );
 
     /**
-     * Creates a deep, recursive copy of this ACTION_MENU.
+     * Create a deep, recursive copy of this ACTION_MENU.
      */
     ACTION_MENU* Clone() const;
 
@@ -162,23 +173,27 @@ public:
     static constexpr bool CHECK = true;
 
 protected:
-    ///> Returns an instance of this class. It has to be overridden in inheriting classes.
+    ///< Return an instance of this class. It has to be overridden in inheriting classes.
     virtual ACTION_MENU* create() const;
 
-    ///> Returns an instance of TOOL_MANAGER class.
+    ///< Returns an instance of TOOL_MANAGER class.
     TOOL_MANAGER* getToolManager() const;
 
     /**
-     * Update menu state stub. It is called before a menu is shown, in order to update its state.
-     * Here you can tick current settings, enable/disable entries, etc.
+     * Update menu state stub.
+     *
+     * It is called before a menu is shown, in order to update its state.  Here you can tick
+     * current settings, enable/disable entries, etc.
      */
     virtual void update()
     {
     }
 
     /**
-     * Event handler stub. It should be used if you want to generate a TOOL_EVENT from a wxMenuEvent.
-     * It will be called when a menu entry is clicked.
+     * Event handler stub.
+     *
+     * It should be used if you want to generate a #TOOL_EVENT from a wxMenuEvent.  It will be
+     * called when a menu entry is clicked.
      */
     virtual OPT_TOOL_EVENT eventHandler( const wxMenuEvent& )
     {
@@ -186,32 +201,32 @@ protected:
     }
 
     /**
-     * Copies another menus data to this instance. Old entries are preserved, and ones form aMenu
-     * are copied.
+     * Copy another menus data to this instance.
+     *
+     * Old entries are preserved and ones form aMenu are copied.
      */
     void copyFrom( const ACTION_MENU& aMenu );
 
 protected:
     /**
-     * Function appendCopy
-     * Appends a copy of wxMenuItem.
+     * Append a copy of wxMenuItem.
      */
     wxMenuItem* appendCopy( const wxMenuItem* aSource );
 
-    ///> Initializes handlers for events.
+    ///< Initialize handlers for events.
     void setupEvents();
 
-    ///> Updates hot key settings for TOOL_ACTIONs in this menu.
+    ///< Update hot key settings for TOOL_ACTIONs in this menu.
     void updateHotKeys();
 
-    ///> Traverses the submenus tree looking for a submenu capable of handling a particular menu
-    ///> event. In case it is handled, it is returned the aToolEvent parameter.
+    ///< Traverse the submenus tree looking for a submenu capable of handling a particular menu
+    ///< event. In case it is handled, it is returned the aToolEvent parameter.
     void runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent );
 
-    ///> Runs a function on the menu and all its submenus.
+    ///< Run a function on the menu and all its submenus.
     void runOnSubmenus( std::function<void(ACTION_MENU*)> aFunction );
 
-    ///> Checks if any of submenus contains a TOOL_ACTION with a specific ID.
+    ///< Check if any of submenus contains a TOOL_ACTION with a specific ID.
     OPT_TOOL_EVENT findToolAction( int aId );
 
     bool    m_isForcedPosition;
@@ -222,22 +237,22 @@ protected:
     bool m_titleDisplayed;
     bool m_isContextMenu;
 
-    ///> Menu title
+    ///< Menu title
     wxString m_title;
 
-    ///> Optional icon
+    ///< Optional icon
     const BITMAP_OPAQUE* m_icon;
 
-    ///> Stores the id number of selected item.
+    ///< Stores the id number of selected item.
     int m_selected;
 
-    ///> Creator of the menu
+    ///< Creator of the menu
     TOOL_INTERACTIVE* m_tool;
 
-    ///> Associates tool actions with menu item IDs. Non-owning.
+    ///< Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;
 
-    ///> List of submenus.
+    ///< List of submenus.
     std::list<ACTION_MENU*> m_submenus;
 
     friend class TOOL_INTERACTIVE;

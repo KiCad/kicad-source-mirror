@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -42,18 +44,16 @@ enum GRID_CONSTRAINT_TYPE
 
 
 /**
- * EDIT_CONSTRAINT
+ * Describe constraints between two edit handles.
  *
- * Allows one to describe constraints between two edit handles. After the constrained handle is changed,
- * Apply() has to be called to fix its coordinates according to the implemented constraint.
+ * After the constrained handle is changed, Apply() has to be called to fix its coordinates
+ * according to the implemented constraint.
  */
 template<class EDIT_TYPE>
 class EDIT_CONSTRAINT
 {
 public:
     /**
-     * Constructor
-     *
      * @param aConstrained is EDIT_POINT to which the constraint is applied.
      */
     EDIT_CONSTRAINT( EDIT_TYPE& aConstrained ) : m_constrained( aConstrained ) {};
@@ -61,16 +61,12 @@ public:
     virtual ~EDIT_CONSTRAINT() {};
 
     /**
-     * Function Apply()
-     *
-     * Corrects coordinates of the constrained edit handle.
+     * Correct coordinates of the constrained edit handle.
      */
     virtual void Apply( EDIT_TYPE& aHandle ) = 0;
 
     /**
-     * Function Apply()
-     *
-     * Corrects coordinates of the constrained edit handle.
+     * Correct coordinates of the constrained edit handle.
      */
     void Apply()
     {
@@ -78,21 +74,17 @@ public:
     }
 
 protected:
-    EDIT_TYPE& m_constrained;      ///< Point that is constrained by rules implemented by Apply()
+    EDIT_TYPE& m_constrained;      ///< Point that is constrained by rules implemented by Apply().
 };
 
 
 /**
- * EC_VERTICAL.
- *
- * EDIT_CONSTRAINT that imposes a constraint that two points have to have the same X coordinate.
+ * #EDIT_CONSTRAINT that imposes a constraint that two points have to have the same X coordinate.
  */
 class EC_VERTICAL : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
-     * Constructor.
-     *
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
@@ -100,7 +92,7 @@ public:
         EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
@@ -109,16 +101,12 @@ private:
 
 
 /**
- * EC_HORIZONTAL.
- *
- * EDIT_CONSTRAINT that imposes a constraint that two points have to have the same Y coordinate.
+ * #EDIT_CONSTRAINT that imposes a constraint that two points have to have the same Y coordinate.
  */
 class EC_HORIZONTAL : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
-     * Constructor.
-     *
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
@@ -126,7 +114,7 @@ public:
         EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
@@ -135,17 +123,13 @@ private:
 
 
 /**
- * EC_45DEGREE
- *
- * EDIT_CONSTRAINT that imposes a constraint that two points have to be located at angle of 45
+ * #EDIT_CONSTRAINT that imposes a constraint that two points have to be located at angle of 45
  * degree multiplicity.
  */
 class EC_45DEGREE : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
-     * Constructor.
-     *
      * @param aConstrained is the point that is put under constrain.
      * @param aConstrainer is the point that is the source of the constrain.
      */
@@ -153,7 +137,7 @@ public:
         EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_constrainer( aConstrainer )
     {}
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
@@ -162,9 +146,7 @@ private:
 
 
 /**
- * EC_LINE
- *
- * EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
+ * #EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a line (determined
  * by 2 points).
  */
 class EC_LINE : public EDIT_CONSTRAINT<EDIT_POINT>
@@ -172,7 +154,7 @@ class EC_LINE : public EDIT_CONSTRAINT<EDIT_POINT>
 public:
     EC_LINE( EDIT_POINT& aConstrained, const EDIT_POINT& aConstrainer );
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
@@ -182,16 +164,12 @@ private:
 
 
 /**
- * EC_CIRCLE.
- *
- * EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a circle.
+ * #EDIT_CONSTRAINT that imposes a constraint that a point has to lie on a circle.
  */
 class EC_CIRCLE : public EDIT_CONSTRAINT<EDIT_POINT>
 {
 public:
     /**
-     * Constructor.
-     *
      * @param aConstrained is the point that is put under constrain.
      * @param aCenter is the point that is the center of the circle.
      * @param aEnd is the point that decides on the radius of the circle.
@@ -200,22 +178,20 @@ public:
         EDIT_CONSTRAINT<EDIT_POINT>( aConstrained ), m_center( aCenter ), m_end( aEnd )
     {}
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_POINT& aHandle ) override;
 
 private:
-    ///> Point that imposes the constraint (center of the circle).
+    ///< Point that imposes the constraint (center of the circle).
     const EDIT_POINT& m_center;
 
-    ///> Point that imposes the constraint (decides on the radius of the circle).
+    ///< Point that imposes the constraint (decides on the radius of the circle).
     const EDIT_POINT& m_end;
 };
 
 
 /**
- * EC_CONVERGING
- *
- * EDIT_CONSTRAINT for 3 segments: dragged and two adjacent ones, enforcing to keep their slopes
+ * #EDIT_CONSTRAINT for 3 segments: dragged and two adjacent ones, enforcing to keep their slopes
  * and allows only to change ending points. Applied to zones.
  */
 class EC_CONVERGING : public EDIT_CONSTRAINT<EDIT_LINE>
@@ -225,39 +201,37 @@ public:
 
     virtual ~EC_CONVERGING();
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_LINE& aHandle ) override;
 
 private:
-    ///> Constraint for origin side segment.
+    ///< Constraint for origin side segment.
     EDIT_CONSTRAINT<EDIT_POINT>* m_originSideConstraint;
 
-    ///> Constraint for end side segment.
+    ///< Constraint for end side segment.
     EDIT_CONSTRAINT<EDIT_POINT>* m_endSideConstraint;
 
-    ///> Additional constriant, applied when at least two points are collinear. It is a pointer to
-    ///> m_[origin/end]SideConstraint, so it should not be freed.
+    ///< Additional constraint, applied when at least two points are collinear. It is a pointer to
+    ///< m_[origin/end]SideConstraint, so it should not be freed.
     EDIT_CONSTRAINT<EDIT_POINT>* m_colinearConstraint;
 
-    ///> EDIT_POINTS instance that stores currently modified lines.
+    ///< EDIT_POINTS instance that stores currently modified lines.
     EDIT_POINTS& m_editPoints;
 
-    ///> Vector that represents the initial direction of the dragged segment.
+    ///< Vector that represents the initial direction of the dragged segment.
     VECTOR2I m_draggedVector;
 };
 
 
 /**
- * EC_SNAPLINE
- *
- * EDIT_CONSTRAINT for a EDIT_LINE, one of the ends is snapped to a spot determined by a
+ * #EDIT_CONSTRAINT for a EDIT_LINE, one of the ends is snapped to a spot determined by a
  * transform function passed as parameter (e.g. it can be snapped to a grid), instead of having
  * the line center snapped to a point.
  */
 class EC_SNAPLINE : public EDIT_CONSTRAINT<EDIT_LINE>
 {
 public:
-    ///> Typedef for a function that determines snapping point.
+    ///< Typedef for a function that determines snapping point.
     typedef boost::function<VECTOR2D (const VECTOR2D&)> V2D_TRANSFORM_FUN;
 
     EC_SNAPLINE( EDIT_LINE& aLine, V2D_TRANSFORM_FUN aSnapFun );
@@ -265,19 +239,17 @@ public:
     virtual ~EC_SNAPLINE()
     {}
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_LINE& aHandle ) override;
 
 private:
-    ///> Function that determines snapping point.
+    ///< Function that determines snapping point.
     V2D_TRANSFORM_FUN m_snapFun;
 };
 
 
 /**
- * EC_PERPLINE
- *
- * EDIT_CONSTRAINT for a EDIT_LINE, that constrains the line to move perpendicular
+ * #EDIT_CONSTRAINT for a EDIT_LINE, that constrains the line to move perpendicular
  * to the line itself.
  */
 class EC_PERPLINE : public EDIT_CONSTRAINT<EDIT_LINE>
@@ -289,7 +261,7 @@ public:
     virtual ~EC_PERPLINE()
     {}
 
-    ///> @copydoc EDIT_CONSTRAINT::Apply()
+    ///< @copydoc EDIT_CONSTRAINT::Apply()
     virtual void Apply( EDIT_LINE& aHandle ) override;
 
 private:

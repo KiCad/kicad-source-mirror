@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -43,43 +45,37 @@ class VIEW;
 class VIEW_ITEM_DATA;
 
  /**
-  * Enum VIEW_UPDATE_FLAGS.
-  * Defines the how severely the shape/appearance of the item has been changed:
-  * - NONE: TODO
-  * - APPEARANCE: shape or layer set of the item have not been affected,
-  * only colors or visibility.
-  * - COLOR:
-  * - GEOMETRY: shape or layer set of the item have changed, VIEW may need to reindex it.
-  * - LAYERS: TODO
-  * - ALL: all the flags above */
+  * Define the how severely the appearance of the item has been changed.
+  */
 enum VIEW_UPDATE_FLAGS {
-    NONE        = 0x00,     /// No updates are required
-    APPEARANCE  = 0x01,     /// Visibility flag has changed
-    COLOR       = 0x02,     /// Color has changed
-    GEOMETRY    = 0x04,     /// Position or shape has changed
-    LAYERS      = 0x08,     /// Layers have changed
-    INITIAL_ADD = 0x10,     /// Item is being added to the view
-    REPAINT     = 0x20,     /// Item needs to be redrawn
-    ALL         = 0xef      /// All except INITIAL_ADD
+    NONE        = 0x00,     ///< No updates are required.
+    APPEARANCE  = 0x01,     ///< Visibility flag has changed.
+    COLOR       = 0x02,     ///< Color has changed.
+    GEOMETRY    = 0x04,     ///< Position or shape has changed.
+    LAYERS      = 0x08,     ///< Layers have changed.
+    INITIAL_ADD = 0x10,     ///< Item is being added to the view.
+    REPAINT     = 0x20,     ///< Item needs to be redrawn.
+    ALL         = 0xef      ///< All except INITIAL_ADD.
 };
 
 /**
- * Enum VIEW_VISIBILITY_FLAGS.
- * Defines the visibility of the item (temporarily hidden, invisible, etc).
+ * Define the visibility of the item (temporarily hidden, invisible, etc).
  */
 enum VIEW_VISIBILITY_FLAGS {
-    VISIBLE     = 0x01,     /// Item is visible (in general)
-    HIDDEN      = 0x02      /// Item is temporarily hidden (e.g. being used by a tool). Overrides VISIBLE flag.
+    VISIBLE     = 0x01,     ///< Item is visible (in general)
+    HIDDEN      = 0x02      ///< Item is temporarily hidden (e.g. being used by a tool).
+                            ///< Overrides VISIBLE flag.
 };
 
 /**
- * VIEW_ITEM -
- * is an abstract base class for deriving all objects that can be added to a VIEW.
+ * An abstract base class for deriving all objects that can be added to a VIEW.
+ *
  * It's role is to:
- * - communicte geometry, appearance and visibility updates to the associated dynamic VIEW,
+ * - communicate geometry, appearance and visibility updates to the associated dynamic VIEW,
  * - provide a bounding box for redraw area calculation,
- * - (optional) draw the object using the GAL API functions for PAINTER-less implementations.
- * VIEW_ITEM objects are never owned by a VIEW. A single VIEW_ITEM can belong to any number of
+ * - (optional) draw the object using the #GAL API functions for #PAINTER-less implementations.
+ *
+ * VIEW_ITEM objects are never owned by a #VIEW. A single VIEW_ITEM can belong to any number of
  * static VIEWs, but only one dynamic VIEW due to storage of only one VIEW reference.
  */
 class VIEW_ITEM : public INSPECTABLE
@@ -95,56 +91,54 @@ public:
     VIEW_ITEM& operator=( const VIEW_ITEM& aOther ) = delete;
 
     /**
-     * Function ViewBBox()
-     * returns the bounding box of the item covering all its layers.
-     * @return BOX2I - the current bounding box
+     * Return the bounding box of the item covering all its layers.
+     *
+     * @return the current bounding box.
      */
     virtual const BOX2I ViewBBox() const = 0;
 
     /**
-     * Function ViewDraw()
-     * Draws the parts of the object belonging to layer aLayer.
-     * viewDraw() is an alternative way for drawing objects if
-     * if there is no PAINTER assigned for the view or if the PAINTER
-     * doesn't know how to paint this particular implementation of
-     * VIEW_ITEM. The preferred way of drawing is to design an
-     * appropriate PAINTER object, the method below is intended only
-     * for quick hacks and debugging purposes.
+     * Draw the parts of the object belonging to layer aLayer.
      *
-     * @param aLayer: current drawing layer
-     * @param aView: pointer to the VIEW device we are drawing on
+     * An alternative way for drawing objects if there is no #PAINTER assigned for the view
+     * or if the PAINTER doesn't know how to paint this particular implementation of VIEW_ITEM.
+     * The preferred way of drawing is to design an appropriate PAINTER object, the method
+     * below is intended only for quick hacks and debugging purposes.
+     *
+     * @param aLayer is the current drawing layer.
+     * @param aView is a pointer to the #VIEW device we are drawing on.
      */
     virtual void ViewDraw( int aLayer, VIEW* aView ) const
     {}
 
     /**
-     * Function ViewGetLayers()
-     * Returns the all the layers within the VIEW the object is painted on. For instance, a PAD
-     * spans zero or more copper layers and a few technical layers. ViewDraw() or PAINTER::Draw()
-     * is repeatedly called for each of the layers returned by ViewGetLayers(), depending on the
-     * rendering order.
-     * @param aLayers[]: output layer index array
-     * @param aCount: number of layer indices in aLayers[]
+     * Return the all the layers within the VIEW the object is painted on.
+     *
+     * For instance, a #PAD spans zero or more copper layers and a few technical layers.
+     * ViewDraw() or PAINTER::Draw() is repeatedly called for each of the layers returned
+     * by ViewGetLayers(), depending on the rendering order.
+     *
+     * @param aLayers[] is the output layer index array.
+     * @param aCount is the number of layer indices in aLayers[].
      */
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const = 0;
 
     /**
-     * Function ViewGetLOD()
-     * Returns the level of detail (LOD) of the item.
-     * A level of detail is the minimal VIEW scale that
-     * is sufficient for an item to be shown on a given layer.
-     * @param aLayer: current drawing layer
-     * @param aView: pointer to the VIEW device we are drawing on
-     * @return the level of detail. 0 always show the item, because the
-     * actual zoom level (or VIEW scale) is always > 0
+     * Return the level of detail (LOD) of the item.
+     *
+     * A level of detail is the minimal #VIEW scale that is sufficient for an item to be shown
+     * on a given layer.
+     *
+     * @param aLayer is the current drawing layer.
+     * @param aView is a pointer to the #VIEW device we are drawing on.
+     * @return the level of detail. 0 always show the item, because the actual zoom level
+     *         (or VIEW scale) is always > 0
      */
     virtual double ViewGetLOD( int aLayer, VIEW* aView ) const
     {
         // By default always show the item
         return 0.0;
     }
-
-public:
 
     VIEW_ITEM_DATA* viewPrivData() const
     {
@@ -153,7 +147,7 @@ public:
 
     void ClearViewPrivData()
     {
-        m_viewPrivData = NULL;
+        m_viewPrivData = nullptr;
     }
 
 private:

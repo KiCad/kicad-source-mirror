@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -37,17 +39,15 @@
 
 
 /**
- * EDIT_POINT
+ * Represent a single point that can be used for modifying items.
  *
- * Represents a single point that can be used for modifying items. It is directly related to one
- * of points in a graphical item (e.g. vertex of a zone or center of a circle).
+ * It is directly related to one of points in a graphical item (e.g. vertex of a zone or
+ * center of a circle).
  */
 class EDIT_POINT
 {
 public:
     /**
-     * Constructor
-     *
      * @param aPoint stores coordinates for EDIT_POINT.
      */
     EDIT_POINT( const VECTOR2I& aPoint, std::pair<EDA_ITEM*, int> aConnected = { nullptr, 0 } ) :
@@ -62,10 +62,10 @@ public:
     virtual ~EDIT_POINT() {}
 
     /**
-     * Function GetPosition()
+     * Return coordinates of an EDIT_POINT.
      *
-     * Returns coordinates of an EDIT_POINT. Note that it may be different than coordinates of
-     * a graphical item that is bound to the EDIT_POINT.
+     * @note It may be different than coordinates of a graphical item that is bound to the
+     *       EDIT_POINT.
      */
     virtual VECTOR2I GetPosition() const
     {
@@ -81,9 +81,7 @@ public:
     }
 
     /**
-     * Function GetX()
-     *
-     * Returns X coordinate of an EDIT_POINT.
+     * Return X coordinate of an EDIT_POINT.
      */
     inline int GetX() const
     {
@@ -91,9 +89,7 @@ public:
     }
 
     /**
-     * Function GetY()
-     *
-     * Returns Y coordinate of an EDIT_POINT.
+     * Return Y coordinate of an EDIT_POINT.
      */
     inline int GetY() const
     {
@@ -101,10 +97,10 @@ public:
     }
 
     /**
-     * Function SetPosition()
+     * Set new coordinates for an EDIT_POINT.
      *
-     * Sets new coordinates for an EDIT_POINT. It does not change the coordinates of a graphical
-     * item.
+     * It does not change the coordinates of a graphical item.
+     *
      * @param aPosition are new coordinates.
      */
     virtual void SetPosition( const VECTOR2I& aPosition )
@@ -119,18 +115,16 @@ public:
     }
 
     /**
-     * Function WithinPoint()
+     * Check if given point is within a square centered in the EDIT_POINT position.
      *
-     * Checks if given point is within a square centered in the EDIT_POINT position.
      * @param aPoint is point to be checked.
      * @param aSize is length of the square side.
      */
     bool WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const;
 
     /**
-     * Function SetConstraint()
+     * Set a constraint for and EDIT_POINT.
      *
-     * Sets a constraint for and EDIT_POINT.
      * @param aConstraint is the constraint to be set.
      */
     void SetConstraint( EDIT_CONSTRAINT<EDIT_POINT>* aConstraint )
@@ -139,9 +133,7 @@ public:
     }
 
     /**
-     * Function GetConstraint()
-     *
-     * Returns the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
+     * Return the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
      * returned.
      */
     EDIT_CONSTRAINT<EDIT_POINT>* GetConstraint() const
@@ -150,9 +142,7 @@ public:
     }
 
     /**
-     * Function ClearConstraint()
-     *
-     * Removes previously set constraint.
+     * Remove previously set constraint.
      */
     inline void ClearConstraint()
     {
@@ -160,9 +150,8 @@ public:
     }
 
     /**
-     * Function IsConstrained()
+     * Check if point is constrained.
      *
-     * Checks if point is constrained.
      * @return True is point is constrained, false otherwise.
      */
     inline bool IsConstrained() const
@@ -171,9 +160,7 @@ public:
     }
 
     /**
-     * Function ApplyConstraint()
-     *
-     * Corrects coordinates of an EDIT_POINT by applying previously set constraint.
+     * Correct coordinates of an EDIT_POINT by applying previously set constraint.
      */
     virtual void ApplyConstraint()
     {
@@ -195,43 +182,40 @@ public:
         return m_position == aOther.m_position;
     }
 
-    ///> Single point size in pixels
+    ///< Single point size in pixels
     static const int POINT_SIZE = 10;
 
-    ///> Border size when not hovering
+    ///< Border size when not hovering
     static const int BORDER_SIZE = 2;
 
-    ///> Border size when hovering
+    ///< Border size when hovering
     static const int HOVER_SIZE = 5;
 
 private:
-    VECTOR2I             m_position;        // Position of EDIT_POINT
-    bool                 m_isActive;        // True if this point is being manipulated
-    bool                 m_isHover;         // True if this point is being hovered over
-    GRID_CONSTRAINT_TYPE m_gridConstraint;  // Describes the grid snapping behavior.
+    VECTOR2I             m_position;        ///< Position of EDIT_POINT.
+    bool                 m_isActive;        ///< True if this point is being manipulated.
+    bool                 m_isHover;         ///< True if this point is being hovered over.
+    GRID_CONSTRAINT_TYPE m_gridConstraint;  ///< Describe the grid snapping behavior.
 
-    ///> An optional connected item record used to mimic polyLine behaviour with individual
-    /// line segments.
+    ///< An optional connected item record used to mimic polyLine behavior with individual
+    ///< line segments.
     std::pair<EDA_ITEM*, int>                     m_connected;
 
-    ///> Constraint for the point, NULL if none
+    ///< Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
 };
 
 
 /**
- * EDIT_LINE
+ * Represent a line connecting two EDIT_POINTs.
  *
- * Represents a line connecting two EDIT_POINTs. That allows one to move them
- * both by dragging the EDIT_POINT in the middle. As it uses references to
- * EDIT_POINTs, all coordinates are automatically synchronized.
+ * This allows one to move them both by dragging the EDIT_POINT in the middle.  It uses
+ * references to EDIT_POINTs, all coordinates are automatically synchronized.
  */
 class EDIT_LINE : public EDIT_POINT
 {
 public:
     /**
-     * Constructor
-     *
      * @param aOrigin is the origin of EDIT_LINE.
      * @param aEnd is the end of EDIT_LINE.
      */
@@ -243,13 +227,13 @@ public:
         SetGridConstraint( SNAP_BY_GRID );
     }
 
-    ///> @copydoc EDIT_POINT::GetPosition()
+    ///< @copydoc EDIT_POINT::GetPosition()
     virtual VECTOR2I GetPosition() const override
     {
         return ( m_origin.GetPosition() + m_end.GetPosition() ) / 2;
     }
 
-    ///> @copydoc EDIT_POINT::GetPosition()
+    ///< @copydoc EDIT_POINT::GetPosition()
     virtual void SetPosition( const VECTOR2I& aPosition ) override
     {
         VECTOR2I difference = aPosition - GetPosition();
@@ -258,7 +242,7 @@ public:
         m_end.SetPosition( m_end.GetPosition() + difference );
     }
 
-    ///> @copydoc EDIT_POINT::ApplyConstraint()
+    ///< @copydoc EDIT_POINT::ApplyConstraint()
     virtual void ApplyConstraint() override
     {
         if( m_constraint )
@@ -269,9 +253,8 @@ public:
     }
 
     /**
-     * Function SetConstraint()
+     * Set a constraint for and EDIT_POINT.
      *
-     * Sets a constraint for and EDIT_POINT.
      * @param aConstraint is the constraint to be set.
      */
     void SetConstraint( EDIT_CONSTRAINT<EDIT_LINE>* aConstraint )
@@ -280,9 +263,7 @@ public:
     }
 
     /**
-     * Function GetConstraint()
-     *
-     * Returns the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
+     * Return the constraint imposed on an EDIT_POINT. If there are no constraints, NULL is
      * returned.
      */
     EDIT_CONSTRAINT<EDIT_LINE>* GetConstraint() const
@@ -291,9 +272,7 @@ public:
     }
 
     /**
-     * Function GetOrigin()
-     *
-     * Returns the origin EDIT_POINT.
+     * Return the origin EDIT_POINT.
      */
     EDIT_POINT& GetOrigin()
     {
@@ -306,9 +285,7 @@ public:
     }
 
     /**
-     * Function GetEnd()
-     *
-     * Returns the end EDIT_POINT.
+     * Return the end EDIT_POINT.
      */
     EDIT_POINT& GetEnd()
     {
@@ -334,38 +311,31 @@ private:
     EDIT_POINT& m_origin;           ///< Origin point for a line
     EDIT_POINT& m_end;              ///< End point for a line
 
-    ///> Constraint for the point, NULL if none
+    ///< Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_LINE> > m_constraint;
 };
 
 
 /**
- * EDIT_POINTS
- *
- * EDIT_POINTS is a VIEW_ITEM that manages EDIT_POINTs and EDIT_LINEs and draws them.
+ * EDIT_POINTS is a #VIEW_ITEM that manages EDIT_POINTs and EDIT_LINEs and draws them.
  */
 class EDIT_POINTS : public EDA_ITEM
 {
 public:
     /**
-     * Constructor.
-     *
      * @param aParent is the item to which EDIT_POINTs are related.
      */
     EDIT_POINTS( EDA_ITEM* aParent );
 
     /**
-     * Function FindPoint()
+     * Return a point that is at given coordinates or NULL if there is no such point.
      *
-     * Returns a point that is at given coordinates or NULL if there is no such point.
      * @param aLocation is the location for searched point.
      */
     EDIT_POINT* FindPoint( const VECTOR2I& aLocation, KIGFX::VIEW *aView );
 
     /**
-     * Function GetParent()
-     *
-     * Returns parent of the EDIT_POINTS.
+     * Return parent of the EDIT_POINTS.
      */
     EDA_ITEM* GetParent() const
     {
@@ -373,9 +343,8 @@ public:
     }
 
     /**
-     * Function AddPoint()
+     * Add an EDIT_POINT.
      *
-     * Adds an EDIT_POINT.
      * @param aPoint is the new point.
      */
     void AddPoint( const EDIT_POINT& aPoint )
@@ -384,9 +353,8 @@ public:
     }
 
     /**
-     * Function AddPoint()
+     * Add an EDIT_POINT.
      *
-     * Adds an EDIT_POINT.
      * @param aPoint are coordinates of the new point.
      */
     void AddPoint( const VECTOR2I& aPoint, std::pair<EDA_ITEM*, int> aConnected = { nullptr, 0 } )
@@ -395,9 +363,8 @@ public:
     }
 
     /**
-     * Function AddLine()
-     *
      * Adds an EDIT_LINE.
+     *
      * @param aLine is the new line.
      */
     void AddLine( const EDIT_LINE& aLine )
@@ -406,9 +373,8 @@ public:
     }
 
     /**
-     * Function AddLine()
-     *
      * Adds an EDIT_LINE.
+     *
      * @param aOrigin is the origin for a new line.
      * @param aEnd is the end for a new line.
      */
@@ -418,8 +384,6 @@ public:
     }
 
     /**
-     * Function AddBreak()
-     *
      * Adds a break, indicating the end of a contour.
      */
     void AddBreak()
@@ -429,66 +393,60 @@ public:
     }
 
     /**
-     * Function GetContourStartIdx()
+     * Return index of the contour origin for a point with given index.
      *
-     * Returns index of the contour origin for a point with given index.
      * @param aPointIdx is the index of point for which the contour origin is searched.
      * @return Index of the contour origin point.
      */
     int GetContourStartIdx( int aPointIdx ) const;
 
     /**
-     * Function GetContourEndIdx()
+     * Return index of the contour finish for a point with given index.
      *
-     * Returns index of the contour finish for a point with given index.
      * @param aPointIdx is the index of point for which the contour finish is searched.
      * @return Index of the contour finish point.
      */
     int GetContourEndIdx( int aPointIdx ) const;
 
     /**
-     * Function IsContourStart()
+     * Check if a point with given index is a contour origin.
      *
-     * Checks is a point with given index is a contour origin.
      * @param aPointIdx is the index of the point to be checked.
      * @return True if the point is an origin of a contour.
      */
     bool IsContourStart( int aPointIdx ) const;
 
     /**
-     * Function IsContourEnd()
+     * Check is a point with given index is a contour finish.
      *
-     * Checks is a point with given index is a contour finish.
      * @param aPointIdx is the index of the point to be checked.
      * @return True if the point is a finish of a contour.
      */
     bool IsContourEnd( int aPointIdx ) const;
 
     /**
-     * Function Previous()
+     * Return the point that is after the given point in the list.
      *
-     * Returns the point that is after the given point in the list.
      * @param aPoint is the point that is supposed to be preceding the searched point.
      * @param aTraverseContours decides if in case of breaks should we return to the origin
-     * of contour or continue with the next contour.
+     *                          of contour or continue with the next contour.
      * @return The point following aPoint in the list. If aPoint is the first in
-     * the list, the last from the list will be returned. If there are no points at all, NULL
-     * is returned.
+     *         the list, the last from the list will be returned. If there are no points at
+     *         all, NULL is returned.
      */
     EDIT_POINT* Previous( const EDIT_POINT& aPoint, bool aTraverseContours = true );
 
     EDIT_LINE* Previous( const EDIT_LINE& aLine );
 
     /**
-     * Function Next()
+     * Return the point that is before the given point in the list.
      *
-     * Returns the point that is before the given point in the list.
      * @param aPoint is the point that is supposed to be following the searched point.
      * @param aTraverseContours decides if in case of breaks should we return to the origin
-     * of contour or continue with the next contour.
-     * @return The point preceding aPoint in the list. If aPoint is the last in
-     * the list, the first point from the list will be returned. If there are no points at all,
-     * NULL is returned.
+     *                          of contour or continue with the next contour.
+     * @return The point preceding aPoint in the list. If aPoint is the last in the list, the
+     *         first point from the list will be returned. If there are no points at all,
+     *         NULL is returned.
      */
     EDIT_POINT* Next( const EDIT_POINT& aPoint, bool aTraverseContours = true );
 
@@ -515,9 +473,7 @@ public:
     }
 
     /**
-     * Function PointsSize()
-     *
-     * Returns number of stored EDIT_POINTs.
+     * Return number of stored EDIT_POINTs.
      */
     unsigned int PointsSize() const
     {
@@ -525,22 +481,20 @@ public:
     }
 
     /**
-     * Function LinesSize()
-     *
-     * Returns number of stored EDIT_LINEs.
+     * Return number of stored EDIT_LINEs.
      */
     unsigned int LinesSize() const
     {
         return m_lines.size();
     }
 
-    ///> @copydoc VIEW_ITEM::ViewBBox()
+    ///< @copydoc VIEW_ITEM::ViewBBox()
     virtual const BOX2I ViewBBox() const override;
 
-    ///> @copydoc VIEW_ITEM::ViewDraw()
+    ///< @copydoc VIEW_ITEM::ViewDraw()
     virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override;
 
-    ///> @copydoc VIEW_ITEM::ViewGetLayers()
+    ///< @copydoc VIEW_ITEM::ViewGetLayers()
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override
     {
         aCount = 1;
@@ -553,8 +507,10 @@ public:
     }
 #endif
 
-    /** Get class name
-     * @return  string "EDIT_POINTS"
+    /**
+     * Get the class name.
+     *
+     * @return string "EDIT_POINTS".
      */
     virtual wxString GetClass() const override
     {
@@ -562,11 +518,11 @@ public:
     }
 
 private:
-    EDA_ITEM* m_parent;                 ///< Parent of the EDIT_POINTs
-    std::deque<EDIT_POINT> m_points;    ///< EDIT_POINTs for modifying m_parent
-    std::deque<EDIT_LINE> m_lines;      ///< EDIT_LINEs for modifying m_parent
-    std::list<int> m_contours;          ///< Indices of end contour points
-    bool m_allowPoints;                 ///< If false, only allow editing of EDIT_LINES
+    EDA_ITEM* m_parent;                 ///< Parent of the EDIT_POINTs.
+    std::deque<EDIT_POINT> m_points;    ///< EDIT_POINTs for modifying m_parent.
+    std::deque<EDIT_LINE> m_lines;      ///< EDIT_LINEs for modifying m_parent.
+    std::list<int> m_contours;          ///< Indices of end contour points.
+    bool m_allowPoints;                 ///< If false, only allow editing of EDIT_LINES.
 };
 
 #endif /* EDIT_POINTS_H_ */

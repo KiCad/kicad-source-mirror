@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2017-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,57 +33,42 @@
 class ACTION_MENU;
 
 /**
- * TOOL_MENU
+ * Manage a #CONDITIONAL_MENU and some number of CONTEXT_MENUs as sub-menus.
  *
- * Manages a CONDITIONAL_MENU and some number of
- * CONTEXT_MENUs as sub-menus
- *
- * Each "top-level" interactive tool can have one of these,
- * and other tools can contribute CONTEXT_MENUS to it.
- *
- * There are also helper functions for adding common sets of
- * menu items, for example zoom and grid controls.
+ * Each "top-level" interactive tool can have one of these, and other tools can contribute
+ * #CONTEXT_MENUS to it.  There are also helper functions for adding common sets of menu
+ * items, for example zoom and grid controls.
  */
 class TOOL_MENU
 {
 public:
 
     /**
-     * Function TOOL_MENU
+     * Construct a new TOOL_MENU for a specific tool.
      *
-     * Construct a new TOOL_MENU for a specific tool. This menu
-     * will be empty - it's up to the caller to add the relevant
-     * items. This can be done directy, using the reference returned
-     * by TOOL_MENU::GetMenu(), or the helpers for common command sets
-     * can be used, or a combination of the two.
+     * This menu will be empty - it's up to the caller to add the relevant items. This can be
+     * done directly, using the reference returned by TOOL_MENU::GetMenu(), or the helpers for
+     * common command sets can be used, or a combination of the two.
      */
     TOOL_MENU( TOOL_INTERACTIVE& aTool );
 
     /**
-     * Destructor, also destructs any submenus created with
-     * TOOL_MENU::CreateSubMenu().
+     * Destruct any submenus created with TOOL_MENU::CreateSubMenu().
      */
     ~TOOL_MENU();
 
     /**
-     * Function GetMenu
-     *
-     * @return reference to the CONDITIONAL_MENU model, which can be
-     * used tby tools to add their own commands to the menu.
+     * @return reference to the CONDITIONAL_MENU model, which can be used by tools to add
+     *         their own commands to the menu.
      */
     CONDITIONAL_MENU& GetMenu();
 
     /**
-     * Function CreateSubMenu
+     * Store a submenu of this menu model. This can be shared with other menu models.
      *
-     * Store a submenu of this menu model. This can be shared with
-     * other menu models.
-     *
-     * It is the callers responsibility to add the submenu to
-     * m_menu (via GetMenu() ) in the right way, as well
-     * as to set the tool with SetTool(), since it's not a given
-     * that the menu's tool is the tool that directly owns this
-     * TOOL_MENU
+     * It is the callers responsibility to add the submenu to m_menu (via GetMenu() ) in the
+     * right way, as well as to set the tool with SetTool(), since it's not a given that the
+     * menu's tool is the tool that directly owns this #TOOL_MENU.
      *
      * @param aSubMenu: a sub menu to add
      */
@@ -98,39 +83,34 @@ public:
     }
 
     /**
-     * Function ShowContextMenu
+     * Helper function to set and immediately show a #CONDITIONAL_MENU in concert with the
+     * given #SELECTION
      *
-     * Helper function to set and immediately show a CONDITIONAL_MENU
-     * in concert with the given SELECTION
-     *
-     * You don't have to use this function, if the caller has a
-     * different way to show the menu, it can create one from
-     * the reference returned by TOOL_MENU::GetMenu(), but it will
-     * have to be managed externally to this class.
+     * You don't have to use this function, if the caller has a different way to show the
+     * menu, it can create one from the reference returned by TOOL_MENU::GetMenu(), but it
+     * will have to be managed externally to this class.
      */
     void ShowContextMenu( SELECTION& aSelection );
 
     /**
-     * Function ShowContextMenu
-     *
-     * Helper function to show a context menu without any selection
-     * for tools that can't make selections.
+     * Helper function to show a context menu without any selection for tools that can't
+     * make selections.
      */
     void ShowContextMenu();
 
 private:
     /**
-     * The conditional menu displayed by the tool
+     * The conditional menu displayed by the tool.
      */
     CONDITIONAL_MENU m_menu;
 
     /**
-     * The tool that owns this menu
+     * The tool that owns this menu.
      */
     TOOL_INTERACTIVE& m_tool;
 
     /**
-     * Lifetime-managing container of submenus
+     * Lifetime-managing container of submenus.
      */
     std::vector<std::shared_ptr<ACTION_MENU> > m_subMenus;
 };

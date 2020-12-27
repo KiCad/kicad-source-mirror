@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -35,10 +35,10 @@ class TOOL_MANAGER;
 #define LEGACY_HK_NAME( x ) x
 
 /**
- * ACTIONS
+ * Gather all the actions that are shared by tools.
  *
- * Gathers all the actions that are shared by tools. The instance of a subclass of
- * ACTIONS is created inside of ACTION_MANAGER object that registers the actions.
+ * The instance of a subclass of ACTIONS is created inside of #ACTION_MANAGER object that
+ * registers the actions.
  */
 class ACTIONS
 {
@@ -184,28 +184,26 @@ public:
     static TOOL_ACTION reportBug;
 
     /**
-     * Function TranslateLegacyId()
-     * Translates legacy tool ids to the corresponding TOOL_ACTION name.
+     * Translate legacy tool ids to the corresponding TOOL_ACTION name.
+     *
      * @param aId is legacy tool id to be translated.
      * @return std::string is name of the corresponding TOOL_ACTION. It may be empty, if there is
-     * no corresponding TOOL_ACTION.
+     *         no corresponding TOOL_ACTION.
      */
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) = 0;
 
-    ///> Cursor control event types
+    ///< Cursor control event types
     enum CURSOR_EVENT_TYPE { CURSOR_NONE, CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
                              CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_RIGHT_CLICK,
                              CURSOR_FAST_MOVE = 0x8000 };
 
-    ///> Remove event modifier flags
+    ///< Remove event modifier flags
     enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01, CUT = 0x02 };
 };
 
 
 /**
- * EVENTS
- *
- * Gathers all the events that are shared by tools.
+ * Gather all the events that are shared by tools.
  */
 class EVENTS
 {
@@ -214,13 +212,13 @@ public:
     const static TOOL_EVENT UnselectedEvent;
     const static TOOL_EVENT ClearedEvent;
 
-    //< Selected item had a property changed (except movement)
+    ///< Selected item had a property changed (except movement)
     const static TOOL_EVENT SelectedItemsModified;
 
-    //< Selected items were moved, this can be very high frequency on the canvas, use with care
+    ///< Selected items were moved, this can be very high frequency on the canvas, use with care
     const static TOOL_EVENT SelectedItemsMoved;
 
-    ///> Used to inform tools that the selection should temporarily be non-editable
+    ///< Used to inform tools that the selection should temporarily be non-editable
     const static TOOL_EVENT InhibitSelectionEditing;
     const static TOOL_EVENT UninhibitSelectionEditing;
 };

@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -34,17 +36,15 @@ namespace KIGFX
 typedef RTree<VIEW_ITEM*, int, 2, double> VIEW_RTREE_BASE;
 
 /**
- * VIEW_RTREE -
- * Implements an R-tree for fast spatial indexing of VIEW items.
- * Non-owning.
+ * Implement an non-owning R-tree for fast spatial indexing of VIEW items.
  */
 class VIEW_RTREE : public VIEW_RTREE_BASE
 {
 public:
-
     /**
-     * Function Insert()
-     * Inserts an item into the tree. Item's bounding box is taken via its ViewBBox() method.
+     * Insert an item into the tree.
+     *
+     * Item's bounding box is taken via its ViewBBox() method.
      */
     void Insert( VIEW_ITEM* aItem )
     {
@@ -56,9 +56,9 @@ public:
     }
 
     /**
-     * Function Remove()
-     * Removes an item from the tree. Removal is done by comparing pointers, attepmting to remove a copy
-     * of the item will fail.
+     * Remove an item from the tree.
+     *
+     * Removal is done by comparing pointers, attempting to remove a copy of the item will fail.
      */
     void Remove( VIEW_ITEM* aItem )
     {
@@ -72,9 +72,8 @@ public:
     }
 
     /**
-     * Function Query()
-     * Executes a function object aVisitor for each item whose bounding box intersects
-     * with aBounds.
+     * Execute a function object \a aVisitor for each item whose bounding box intersects
+     * with \a aBounds.
      */
     template <class Visitor>
     void Query( const BOX2I& aBounds, Visitor& aVisitor ) const

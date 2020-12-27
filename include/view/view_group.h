@@ -2,6 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,9 +27,6 @@
 
 /**
  * @file view_group.h
- * @brief VIEW_GROUP extends VIEW_ITEM by possibility of grouping items into a single object.
- * VIEW_GROUP does not take over ownership of the held items. The main purpose of this class is
- * to group items and draw them on a single layer (in particular the overlay).
  */
 
 #ifndef VIEW_GROUP_H_
@@ -38,59 +37,55 @@
 
 namespace KIGFX
 {
-
+/**
+ * Extend #VIEW_ITEM by possibility of grouping items into a single object.
+ *
+ * VIEW_GROUP does not take over ownership of the held items. The main purpose of this class is
+ * to group items and draw them on a single layer (in particular the overlay).
+ */
 class VIEW_GROUP : public VIEW_ITEM
 {
-protected:
-    typedef std::vector<VIEW_ITEM*> ITEMS;
-
 public:
     VIEW_GROUP( VIEW* aView = NULL );
     virtual ~VIEW_GROUP();
 
     /**
-     * Function GetSize()
-     * Returns the number of stored items.
+     * Return the number of stored items.
      *
      * @return Number of stored items.
      */
     virtual unsigned int GetSize() const;
 
     /**
-     * Function Add()
-     * Adds an item to the group.
+     * Add an item to the group.
      *
      * @param aItem is the item to be added.
      */
     virtual void Add( VIEW_ITEM* aItem );
 
     /**
-     * Function Remove()
-     * Removes an item from the group.
+     * Remove an item from the group.
      *
      * @param aItem is the item to be removed.
      */
     virtual void Remove( VIEW_ITEM* aItem );
 
     /**
-     * Function Clear()
-     * Removes all the stored items from the group.
+     * Remove all the stored items from the group.
      */
     virtual void Clear();
 
     virtual VIEW_ITEM* GetItem( unsigned int aIdx ) const;
 
     /**
-     * Function ViewBBox()
-     * Returns the bounding box for all stored items covering all its layers.
+     * Return the bounding box for all stored items covering all its layers.
      *
      * @return The current bounding box
      */
     virtual const BOX2I ViewBBox() const override;
 
     /**
-     * Function ViewDraw()
-     * Draws all the stored items in the group on the given layer.
+     * Draw all the stored items in the group on the given layer.
      *
      * @param aLayer is the layer which should be drawn.
      * @param aView is the VIEW that should be used for drawing.
@@ -98,8 +93,7 @@ public:
     virtual void ViewDraw( int aLayer, VIEW* aView ) const override;
 
     /**
-     * Function ViewGetLayers()
-     * Returns all the layers used by the stored items.
+     * Return all the layers used by the stored items.
      *
      * @param aLayers[] is the output layer index array.
      * @param aCount is the number of layer indices in aLayers[].
@@ -107,8 +101,7 @@ public:
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
-     * Function SetLayer()
-     * Sets layer used to draw the group.
+     * Set layer used to draw the group.
      *
      * @param aLayer is the layer used for drawing.
      */
@@ -118,20 +111,19 @@ public:
     }
 
     /**
-     * Function FreeItems()
-     * Frees all the items that were added to the group.
+     * Free all the items that were added to the group.
      */
     void FreeItems();
 
 protected:
+    typedef std::vector<VIEW_ITEM*> ITEMS;
 
     virtual const ITEMS updateDrawList() const;
 
-    /// Layer on which the group is drawn
+    ///< Layer on which the group is drawn.
     int m_layer;
 
-protected:
-    /// Container for storing VIEW_ITEMs
+    ///< Container for storing VIEW_ITEMs.
     ITEMS m_groupItems;
 };
 

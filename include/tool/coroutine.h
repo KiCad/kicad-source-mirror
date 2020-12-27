@@ -2,8 +2,9 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +40,9 @@
 #include <advanced_config.h>
 
 /**
- *  Class COROUNTINE.
- *  Implements a coroutine. Wikipedia has a good explanation:
+ *  Implement a coroutine.
+ *
+ * Wikipedia has a good explanation:
  *
  *  "Coroutines are computer program components that generalize subroutines to
  *  allow multiple entry points for suspending and resuming execution at certain locations.
@@ -135,8 +137,7 @@ public:
     }
 
     /**
-     * Constructor
-     * Creates a coroutine from a member method of an object
+     * Create a coroutine from a member method of an object.
      */
     template <class T>
     COROUTINE( T* object, ReturnType(T::*ptr)( ArgType ) ) :
@@ -145,8 +146,7 @@ public:
     }
 
     /**
-     * Constructor
-     * Creates a coroutine from a delegate object
+     * Create a coroutine from a delegate object.
      */
     COROUTINE( std::function<ReturnType(ArgType)> aEntry ) :
         m_func( std::move( aEntry ) ),
@@ -176,9 +176,8 @@ public:
 
 public:
     /**
-     * Function KiYield()
+     * Stop execution of the coroutine and returns control to the caller.
      *
-     * Stops execution of the coroutine and returns control to the caller.
      * After a yield, Call() or Resume() methods invoked by the caller will
      * immediately return true, indicating that we are not done yet, just asleep.
      */
@@ -188,10 +187,9 @@ public:
     }
 
     /**
-     * Function KiYield()
+     * KiYield with a value.
      *
-     * KiYield with a value - passes a value of given type to the caller.
-     * Useful for implementing generator objects.
+     * Passe a value of given type to the caller.  Useful for implementing generator objects.
      */
     void KiYield( ReturnType& aRetVal )
     {
@@ -200,9 +198,8 @@ public:
     }
 
     /**
-     * Function RunMainStack()
+     * Run a functor inside the application main stack context.
      *
-     * Run a functor inside the application main stack context
      * Call this function for example if the operation will spawn a webkit browser instance which
      * will walk the stack to the upper border of the address space on mac osx systems because
      * its javascript needs garbage collection (for example if you paste text into an edit box).
@@ -214,12 +211,12 @@ public:
     }
 
    /**
-    * Function Call()
+    * Start execution of a coroutine, passing args as its arguments.
     *
-    * Starts execution of a coroutine, passing args as its arguments. Call this method
-    * from the application main stack only.
-    * @return true, if the coroutine has yielded and false if it has finished its
-    * execution (returned).
+    * Call this method from the application main stack only.
+    *
+    * @return true if the coroutine has yielded and false if it has finished its
+    *         execution (returned).
     */
     bool Call( ArgType aArg )
     {
@@ -231,12 +228,12 @@ public:
     }
 
    /**
-    * Function Call()
+    * Start execution of a coroutine, passing args as its arguments.
     *
-    * Starts execution of a coroutine, passing args as its arguments. Call this method
-    * for a nested coroutine invocation.
-    * @return true, if the coroutine has yielded and false if it has finished its
-    * execution (returned).
+    * Call this method for a nested coroutine invocation.
+    *
+    * @return true if the coroutine has yielded and false if it has finished its
+    *         execution (returned).
     */
     bool Call( const COROUTINE& aCor, ArgType aArg )
     {
@@ -248,13 +245,13 @@ public:
     }
 
     /**
-    * Function Resume()
-    *
-    * Resumes execution of a previously yielded coroutine. Call this method only
-    * from the main application stack.
-    * @return true, if the coroutine has yielded again and false if it has finished its
-    * execution (returned).
-    */
+     * Resume execution of a previously yielded coroutine.
+     *
+     * Call this method only from the main application stack.
+     *
+     * @return true if the coroutine has yielded again and false if it has finished its
+     *         execution (returned).
+     */
     bool Resume()
     {
         CALL_CONTEXT ctx;
@@ -265,13 +262,13 @@ public:
     }
 
     /**
-    * Function Resume()
-    *
-    * Resumes execution of a previously yielded coroutine. Call this method
-    * for a nested coroutine invocation.
-    * @return true, if the coroutine has yielded again and false if it has finished its
-    * execution (returned).
-    */
+     * Resume execution of a previously yielded coroutine.
+     *
+     * Call this method for a nested coroutine invocation.
+     *
+     * @return true if the coroutine has yielded again and false if it has finished its
+     *         execution (returned).
+     */
     bool Resume( const COROUTINE& aCor )
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, this, aCor.m_callContext };
@@ -282,9 +279,7 @@ public:
     }
 
     /**
-     * Function ReturnValue()
-     *
-     * Returns the yielded value (the argument KiYield() was called with)
+     * Return the yielded value (the argument KiYield() was called with).
      */
     const ReturnType& ReturnValue() const
     {
@@ -292,9 +287,7 @@ public:
     }
 
     /**
-     * Function Running()
-     *
-     * @return true, if the coroutine is active
+     * @return true if the coroutine is active.
      */
     bool Running() const
     {
@@ -314,7 +307,8 @@ private:
         size_t stackSize = m_stacksize;
         void* sp = nullptr;
 
-        #ifndef LIBCONTEXT_HAS_OWN_STACK
+#ifndef LIBCONTEXT_HAS_OWN_STACK
+
         // fixme: Clean up stack stuff. Add a guard
         m_stack.reset( new char[stackSize] );
 
@@ -327,7 +321,7 @@ private:
 #ifdef KICAD_USE_VALGRIND
         valgrind_stack = VALGRIND_STACK_REGISTER( sp, m_stack.get() );
 #endif
-        #endif
+#endif
 
         m_callee = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
@@ -345,6 +339,7 @@ private:
     static void callerStub( intptr_t aData )
     {
         INVOCATION_ARGS& args = *reinterpret_cast<INVOCATION_ARGS*>( aData );
+
         // get pointer to self
         COROUTINE* cor     = args.destination;
         cor->m_callContext = args.context;
@@ -364,7 +359,7 @@ private:
     {
         args = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &m_caller, m_callee,
-                                           reinterpret_cast<intptr_t>( args ) )
+                                       reinterpret_cast<intptr_t>( args ) )
             );
 
         return args;
@@ -374,9 +369,10 @@ private:
     {
         INVOCATION_ARGS args{ INVOCATION_ARGS::FROM_ROUTINE, nullptr, nullptr };
         INVOCATION_ARGS* ret;
+
         ret = reinterpret_cast<INVOCATION_ARGS*>(
             libcontext::jump_fcontext( &m_callee, m_caller,
-                                           reinterpret_cast<intptr_t>( &args ) )
+                                       reinterpret_cast<intptr_t>( &args ) )
             );
 
         m_callContext = ret->context;
