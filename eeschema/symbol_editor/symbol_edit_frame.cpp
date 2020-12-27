@@ -352,12 +352,21 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
             return m_libMgr->HasModifications();
         };
 
+    auto libSelectedCondition =
+        [this] ( const SELECTION& sel )
+        {
+            return !getTargetLibId().GetLibNickname().empty();
+        };
+
     mgr->SetConditions( ACTIONS::saveAll,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( ACTIONS::save,
                         ENABLE( schematicModifiedCond || libModifiedCondition ) );
     mgr->SetConditions( EE_ACTIONS::saveInSchematic,
                         ENABLE( schematicModifiedCond ) );
+    mgr->SetConditions( EE_ACTIONS::saveLibraryAs, ENABLE( libSelectedCondition ) );
+    mgr->SetConditions( EE_ACTIONS::saveSymbolAs, ENABLE( haveSymbolCond ) );
+
     mgr->SetConditions( ACTIONS::undo,
                         ENABLE( haveSymbolCond && cond.UndoAvailable() ) );
     mgr->SetConditions( ACTIONS::redo,

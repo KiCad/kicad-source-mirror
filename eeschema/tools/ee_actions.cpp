@@ -112,6 +112,11 @@ TOOL_ACTION EE_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSele
 
 // SYMBOL_EDITOR_CONTROL
 //
+TOOL_ACTION EE_ACTIONS::saveLibraryAs( "eeschema.SymbolLibraryControl.saveLibraryAs",
+        AS_GLOBAL, MD_SHIFT + MD_CTRL + 'S', LEGACY_HK_NAME( "Save As" ),
+        _( "Save Library As..." ),
+        _( "Save the current library to a new file." ) );
+
 TOOL_ACTION EE_ACTIONS::newSymbol( "eeschema.SymbolLibraryControl.newSymbol",
         AS_GLOBAL, 0, "",
         _( "New Symbol..." ), _( "Create a new symbol" ),
@@ -126,6 +131,10 @@ TOOL_ACTION EE_ACTIONS::duplicateSymbol( "eeschema.SymbolLibraryControl.duplicat
         AS_GLOBAL, 0, "",
         _( "Duplicate" ), _( "Make a copy of the selected symbol" ),
         duplicate_xpm );
+
+TOOL_ACTION EE_ACTIONS::saveSymbolAs( "eeschema.SymbolLibraryControl.saveSymbolAs",
+        AS_GLOBAL, 0, "", _( "Save Symbol As..." ),
+        _( "Save the current symbol to a different library." ) );
 
 TOOL_ACTION EE_ACTIONS::deleteSymbol( "eeschema.SymbolLibraryControl.deleteSymbol",
         AS_GLOBAL, 0, "",

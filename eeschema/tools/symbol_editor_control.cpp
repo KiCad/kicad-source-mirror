@@ -76,7 +76,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddSeparator();
 
         ctxMenu.AddItem( ACTIONS::save,                  libSelectedCondition );
-        ctxMenu.AddItem( ACTIONS::saveAs,                libSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::saveLibraryAs,      libSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                libSelectedCondition );
 
         ctxMenu.AddSeparator();
@@ -85,7 +85,7 @@ bool SYMBOL_EDITOR_CONTROL::Init()
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( ACTIONS::save,                  symbolSelectedCondition );
-        ctxMenu.AddItem( ACTIONS::saveCopyAs,            symbolSelectedCondition );
+        ctxMenu.AddItem( EE_ACTIONS::saveSymbolAs,       symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::duplicateSymbol,    symbolSelectedCondition );
         ctxMenu.AddItem( EE_ACTIONS::deleteSymbol,       symbolSelectedCondition );
         ctxMenu.AddItem( ACTIONS::revert,                symbolSelectedCondition );
@@ -154,8 +154,10 @@ int SYMBOL_EDITOR_CONTROL::Save( const TOOL_EVENT& aEvt )
 
         if( aEvt.IsAction( &EE_ACTIONS::save ) )
             editFrame->Save();
-        else if( aEvt.IsAction( &EE_ACTIONS::saveAs ) || aEvt.IsAction( &EE_ACTIONS::saveCopyAs ) )
-            editFrame->SaveAs();
+        else if( aEvt.IsAction( &EE_ACTIONS::saveLibraryAs ) )
+            editFrame->SaveLibraryAs();
+        else if( aEvt.IsAction( &EE_ACTIONS::saveSymbolAs ) )
+            editFrame->SaveSymbolAs();
         else if( aEvt.IsAction( &EE_ACTIONS::saveAll ) )
             editFrame->SaveAll();
     }
@@ -503,8 +505,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::EditSymbol,            EE_ACTIONS::editSymbol.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::save.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAs.MakeEvent() );     // for libraries
-    Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveCopyAs.MakeEvent() ); // for symbols
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveLibraryAs.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::Save,                  EE_ACTIONS::saveSymbolAs.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Save,                  ACTIONS::saveAll.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::Revert,                ACTIONS::revert.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::UpdateSymbolInSchematic, EE_ACTIONS::saveInSchematic.MakeEvent() );

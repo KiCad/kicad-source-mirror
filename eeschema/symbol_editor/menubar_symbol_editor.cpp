@@ -48,11 +48,12 @@ void SYMBOL_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->Add( ACTIONS::newLibrary );
     fileMenu->Add( ACTIONS::addLibrary );
+    fileMenu->Add( EE_ACTIONS::saveLibraryAs );
     fileMenu->Add( EE_ACTIONS::newSymbol );
 
     fileMenu->AppendSeparator();
     fileMenu->Add( ACTIONS::save );
-    fileMenu->Add( ACTIONS::saveCopyAs );
+    fileMenu->Add( EE_ACTIONS::saveSymbolAs );
 
     if( !IsSymbolFromSchematic() )
         fileMenu->Add( ACTIONS::saveAll );

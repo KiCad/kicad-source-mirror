@@ -179,14 +179,19 @@ public:
     void ExportPart();
 
     /**
-     * Saves the selected part or library.
+     * Save the selected part or library.
      */
     void Save();
 
     /**
-     * Saves the selected part or library to a new name and/or location.
+     * Save the currently selected symbol to a new name and/or location.
      */
-    void SaveAs();
+    void SaveSymbolAs();
+
+    /**
+     * Save the currently selected library to a new file.
+     */
+    void SaveLibraryAs();
 
     /**
      * Saves all modified parts and libraries.

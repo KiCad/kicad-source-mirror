@@ -167,6 +167,8 @@ public:
     static TOOL_ACTION addSymbolToSchematic;
 
     // Library management
+    static TOOL_ACTION saveLibraryAs;
+    static TOOL_ACTION saveSymbolAs;
     static TOOL_ACTION newSymbol;
     static TOOL_ACTION editSymbol;
     static TOOL_ACTION duplicateSymbol;

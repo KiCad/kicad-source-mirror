@@ -599,7 +599,8 @@ void SYMBOL_EDIT_FRAME::Save()
 
         if( m_libMgr->IsLibraryReadOnly( libName ) )
         {
-            wxString msg = wxString::Format( _( "Symbol library '%s' is not writeable." ), libName );
+            wxString msg = wxString::Format( _( "Symbol library '%s' is not writeable." ),
+                                             libName );
             wxString msg2 = _( "You must save to a different location." );
 
             if( OKOrCancelDialog( this, _( "Warning" ), msg, msg2 ) == wxID_OK )
@@ -615,16 +616,21 @@ void SYMBOL_EDIT_FRAME::Save()
 }
 
 
-void SYMBOL_EDIT_FRAME::SaveAs()
+void SYMBOL_EDIT_FRAME::SaveLibraryAs()
 {
-    LIB_ID libId = getTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
+    wxCHECK( !getTargetLibId().GetLibNickname().empty(), /* void */ );
 
-    if( partName.IsEmpty() )
-        saveLibrary( libName, true );
-    else
-        savePartAs();
+    const wxString& libName = getTargetLibId().GetLibNickname();
+
+    saveLibrary( libName, true );
+    m_treePane->GetLibTree()->RefreshLibTree();
+}
+
+void SYMBOL_EDIT_FRAME::SaveSymbolAs()
+{
+    wxCHECK( getTargetLibId().IsValid(), /* void */ );
+
+    savePartAs();
 
     m_treePane->GetLibTree()->RefreshLibTree();
 }
