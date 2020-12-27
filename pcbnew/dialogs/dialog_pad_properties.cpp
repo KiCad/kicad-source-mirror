@@ -1198,13 +1198,14 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
     wxArrayString error_msgs;
     wxArrayString warning_msgs;
-    wxString msg;
+    wxString      msg;
+    wxSize        pad_size = m_dummyPad->GetSize();
+    wxSize        drill_size = m_dummyPad->GetDrillSize();
 
     // Test for incorrect values
-    if( (m_dummyPad->GetSize().x <= 0) ||
-       ((m_dummyPad->GetSize().y <= 0) && (m_dummyPad->GetShape() != PAD_SHAPE_CIRCLE)) )
+    if( pad_size.x <= 0 || ( pad_size.y <= 0 && m_dummyPad->GetShape() != PAD_SHAPE_CIRCLE ) )
     {
-        error_msgs.Add( _( "Pad size must be greater than zero" ) );
+        error_msgs.Add( _( "Warning: Pad size is less than zero." ) );
     }
 
     // Test hole size against pad size
@@ -1229,8 +1230,8 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
         if( ( drillOutline.BBox().GetWidth() > 0 ) || ( drillOutline.BBox().GetHeight() > 0 ) )
         {
-            warning_msgs.Add( _( "Warning: Pad drill bigger than pad size or drill shape and "
-                                 "pad shape do not overlap" ) );
+            warning_msgs.Add( _( "Warning: Pad drill larger than pad size or drill shape and "
+                                 "pad shape do not overlap." ) );
             skip_tstoffset = true;  // offset parameter will be not tested because if the drill
                                     // value is incorrect the offset parameter is always seen as
                                     // incorrect, even if it is 0
@@ -1238,31 +1239,30 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     }
 
     if( m_dummyPad->GetLocalClearance() < 0 )
-    {
-        error_msgs.Add( _( "Pad local clearance must be zero or greater than zero" ) );
-    }
+        error_msgs.Add( _( "Error: Negative local clearance values will have no effect." ) );
 
     // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
     // However the negative solder mask clearance must not create negative mask size
     // Therefore test for minimal acceptable negative value
     // Hovewer, a negative value can give strange result with custom shapes, so it is not
     // allowed for custom pad shape
-    if( m_dummyPad->GetLocalSolderMaskMargin() < 0 )
+    if( m_dummyPad->GetLocalSolderMaskMargin() < 0 && m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
     {
-        if( m_dummyPad->GetShape() == PAD_SHAPE_CUSTOM )
-        {
-            error_msgs.Add( _( "Pad local solder mask clearance must be zero or greater than zero" ) );
-        }
-        else
-        {
-            int min_smClearance = -std::min( m_dummyPad->GetSize().x, m_dummyPad->GetSize().y )/2;
+        error_msgs.Add( _( "Error: Negative solder mask clearances are not supported for custom "
+                           "pad shapes." ) );
+    }
+    else
+    {
+        wxSize solder_size;
+        int    solder_margin = m_dummyPad->GetLocalSolderMaskMargin();
 
-            if( m_dummyPad->GetLocalSolderMaskMargin() <= min_smClearance )
-            {
-                error_msgs.Add( wxString::Format(
-                                _( "Pad local solder mask clearance must be greater than %s" ),
-                                StringFromValue( GetUserUnits(), min_smClearance ) ) );
-            }
+        solder_size.x = pad_size.x + solder_margin;
+        solder_size.y = pad_size.y + solder_margin;
+
+        if( solder_size.x <= 0 || solder_size.y <= 0 )
+        {
+            error_msgs.Add( _( "Warning: Negative solder mask clearance larger than pad. No "
+                               "solder mask will be generated." ) );
         }
     }
 
@@ -1270,20 +1270,31 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     // Hovewer, a positive value can create issues if the resulting shape is too big.
     // (like a solder paste creating a solder paste area on a neighbour pad or on the solder mask)
     // So we could ask for user to confirm the choice
-    // Currently there are no test
+    // For now we just check for disappearing paste
+    wxSize paste_size;
+    int    paste_margin = m_dummyPad->GetLocalSolderPasteMargin();
+    double paste_ratio = m_dummyPad->GetLocalSolderPasteMarginRatio();
+
+    paste_size.x = pad_size.x + paste_margin + KiROUND( pad_size.x * paste_ratio );
+    paste_size.y = pad_size.y + paste_margin + KiROUND( pad_size.y * paste_ratio );
+
+    if( paste_size.x <= 0 || paste_size.y <= 0 )
+    {
+        error_msgs.Add( _( "Warning: Negative solder paste margins larger than pad. No solder "
+                           "paste mask will be generated." ) );
+    }
 
     LSET padlayers_mask = m_dummyPad->GetLayerSet();
 
     if( padlayers_mask == 0 )
-        error_msgs.Add( _( "Error: pad has no layer" ) );
+        error_msgs.Add( _( "Error: pad has no layer." ) );
 
     if( !padlayers_mask[F_Cu] && !padlayers_mask[B_Cu] )
     {
-        if( ( m_dummyPad->GetDrillSize().x || m_dummyPad->GetDrillSize().y )
-                && m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
+        if( ( drill_size.x || drill_size.y ) && m_dummyPad->GetAttribute() != PAD_ATTRIB_NPTH )
         {
-            msg = _( "Warning: plated through holes should normally have a copper pad on at least one layer" );
-            warning_msgs.Add( msg );
+            warning_msgs.Add( _( "Warning: Plated through holes should normally have a copper pad "
+                                 "on at least one layer." ) );
         }
     }
 
@@ -1299,50 +1310,75 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         if( ( m_dummyPad->GetSize().x / 2 < max_size.x ) ||
             ( m_dummyPad->GetSize().y / 2 < max_size.y ) )
         {
-            error_msgs.Add( _( "Incorrect value for pad offset" ) );
+            error_msgs.Add( _( "Incorrect value for pad offset." ) );
         }
     }
 
     if( error )
-        error_msgs.Add(  _( "Too large value for pad delta size" ) );
+        error_msgs.Add(  _( "Too large value for pad delta size." ) );
 
     switch( m_dummyPad->GetAttribute() )
     {
     case PAD_ATTRIB_NPTH:   // Not plated, but through hole, a hole is expected
     case PAD_ATTRIB_PTH:    // Pad through hole, a hole is also expected
-        if( m_dummyPad->GetDrillSize().x <= 0 ||
-            ( m_dummyPad->GetDrillSize().y <= 0 && m_dummyPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
-            error_msgs.Add( _( "Error: Through hole pad: drill diameter set to 0" ) );
+        if( drill_size.x <= 0
+            || ( drill_size.y <= 0 && m_dummyPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
+        {
+            error_msgs.Add( _( "Error: Through hole pad has no hole." ) );
+        }
         break;
 
     case PAD_ATTRIB_CONN:      // Connector pads are smd pads, just they do not have solder paste.
         if( padlayers_mask[B_Paste] || padlayers_mask[F_Paste] )
-            error_msgs.Add( _( "Error: Connector pads are not on the solder paste layer\n"
-                               "Use SMD pads instead" ) );
+        {
+            error_msgs.Add( _( "Error: Connector pads have no solder paste. Use an SMD pad "
+                               "instead." ) );
+        }
         KI_FALLTHROUGH;
 
     case PAD_ATTRIB_SMD:       // SMD and Connector pads (One external copper layer only)
-        {
+    {
         LSET innerlayers_mask = padlayers_mask & LSET::InternalCuMask();
 
         if( ( padlayers_mask[F_Cu] && padlayers_mask[B_Cu] ) ||
             innerlayers_mask.count() != 0 )
-            warning_msgs.Add( _( "Warning: The pad has been defined in an inner layer only." ) );
+        {
+            warning_msgs.Add( _( "Warning: SMD pad has no outer layers." ) );
         }
+    }
         break;
     }
 
-    if( m_dummyPad->GetProperty() != PAD_PROP_NONE &&
+    if( ( m_dummyPad->GetProperty() == PAD_PROP_FIDUCIAL_GLBL
+       || m_dummyPad->GetProperty() == PAD_PROP_FIDUCIAL_LOCAL )
+            && m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
+    {
+        error_msgs.Add(  _( "Warning: Fiducial property cannot be set on NPTH pads." ) );
+    }
+
+    if( m_dummyPad->GetProperty() == PAD_PROP_TESTPOINT &&
         m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
-        error_msgs.Add(  _( "Property cannot be set for NPTH" ) );
+    {
+        error_msgs.Add(  _( "Warning: Testpoint property cannot be set on NPTH pads." ) );
+    }
+
+    if( m_dummyPad->GetProperty() == PAD_PROP_HEATSINK &&
+        m_dummyPad->GetAttribute() == PAD_ATTRIB_NPTH )
+    {
+        error_msgs.Add(  _( "Warning: Heatsink property cannot be set on NPTH pads." ) );
+    }
 
     if( m_dummyPad->GetProperty() == PAD_PROP_CASTELLATED &&
         m_dummyPad->GetAttribute() != PAD_ATTRIB_PTH )
-        error_msgs.Add(  _( "Castellated property can be set only for PTH" ) );
+    {
+        error_msgs.Add(  _( "Warning: Castellated property can be set only on PTH pads." ) );
+    }
 
     if( m_dummyPad->GetProperty() == PAD_PROP_BGA &&
         m_dummyPad->GetAttribute() != PAD_ATTRIB_SMD )
-        error_msgs.Add(  _( "BGA property can be set only for SMD pads" ) );
+    {
+        error_msgs.Add(  _( "Warning: BGA property can be set only on SMD pads." ) );
+    }
 
     if( m_dummyPad->GetShape() == PAD_SHAPE_ROUNDRECT ||
         m_dummyPad->GetShape() == PAD_SHAPE_CHAMFERED_RECT )
@@ -1352,13 +1388,15 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         double rrRadiusRatioPercent;
 
         if( !value.ToDouble( &rrRadiusRatioPercent ) )
-            error_msgs.Add( _( "Incorrect corner size value" ) );
+        {
+            error_msgs.Add( _( "Error: Corner size not a number." ) );
+        }
         else
         {
             if( rrRadiusRatioPercent < 0.0 )
-                error_msgs.Add( _( "Incorrect (negative) corner size value" ) );
+                error_msgs.Add( _( "Error: Negative corner size." ) );
             else if( rrRadiusRatioPercent > 50.0 )
-                error_msgs.Add( _( "Corner size value must be smaller than 50%" ) );
+                error_msgs.Add( _( "Warning: Corner size will make pad circular." ) );
         }
     }
 
@@ -1369,28 +1407,24 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         m_dummyPad->MergePrimitivesAsPolygon( &mergedPolygon, UNDEFINED_LAYER );
 
         if( mergedPolygon.OutlineCount() > 1 )
-            error_msgs.Add( _( "Incorrect pad shape: the shape must be equivalent to only one polygon" ) );
+            error_msgs.Add( _( "Error: Custom pad shape must resolve to a single polygon." ) );
     }
 
 
     if( error_msgs.GetCount() )
     {
-        HTML_MESSAGE_BOX dlg( this, _("Pad setup errors list" ) );
+        HTML_MESSAGE_BOX dlg( this, _( "Pad setup errors list" ) );
         dlg.ListSet( error_msgs );
 
         if( warning_msgs.GetCount() )
-        {
             dlg.ListSet( warning_msgs );
-        }
 
         dlg.ShowModal();
     }
     else
     {
         for( size_t i = 0; i < warning_msgs.GetCount(); ++i )
-        {
             m_parent->ShowInfoBarWarning( warning_msgs[i] );
-        }
     }
 
     return error_msgs.GetCount() == 0;
@@ -1653,8 +1687,11 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     aPad->SetAttribute( code_type[m_PadType->GetSelection()] );
     aPad->SetShape( code_shape[m_PadShapeSelector->GetSelection()] );
-    aPad->SetAnchorPadShape( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR ?
-                                PAD_SHAPE_RECT : PAD_SHAPE_CIRCLE );
+
+    if( m_PadShapeSelector->GetSelection() == CHOICE_SHAPE_CUSTOM_RECT_ANCHOR )
+        aPad->SetAnchorPadShape( PAD_SHAPE_RECT );
+    else
+        aPad->SetAnchorPadShape( PAD_SHAPE_CIRCLE );
 
     if( aPad->GetShape() == PAD_SHAPE_CUSTOM )
         aPad->ReplacePrimitives( m_primitives );
@@ -1665,18 +1702,10 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     aPad->SetLocalSolderPasteMargin( m_pasteClearance.GetValue() );
     aPad->SetThermalSpokeWidth( m_spokeWidth.GetValue() );
     aPad->SetThermalGap( m_thermalGap.GetValue() );
+
     double dtmp = 0.0;
     msg = m_SolderPasteMarginRatioCtrl->GetValue();
     msg.ToDouble( &dtmp );
-
-    // A -50% margin ratio means no paste on a pad, the ratio must be >= -50%
-    if( dtmp < -50.0 )
-        dtmp = -50.0;
-    // A margin ratio is always <= 0
-    // 0 means use full pad copper area
-    if( dtmp > 0.0 )
-        dtmp = 0.0;
-
     aPad->SetLocalSolderPasteMarginRatio( dtmp / 100 );
 
     switch( m_ZoneConnectionChoice->GetSelection() )

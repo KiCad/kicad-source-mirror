@@ -955,24 +955,27 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             break;
         }
 
+        if( pad_size.x + margin.x <= 0 || pad_size.y + margin.y <= 0 )
+            return;
+
+        std::unique_ptr<PAD>            dummyPad;
+        std::shared_ptr<SHAPE_COMPOUND> shapes;
+        bool                            simpleShapes = true;
+
         if( margin.x != margin.y )
         {
-            const_cast<PAD*>( aPad )->SetSize( pad_size + margin + margin );
+            // Our algorithms below (polygon inflation in particular) can't handle differential
+            // inflation along separate axes.  So for those cases we build a dummy pad instead,
+            // and inflate it.
+            dummyPad.reset( static_cast<PAD*>( aPad->Duplicate() ) );
+            dummyPad->SetSize( pad_size + margin + margin );
+            shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( dummyPad->GetEffectiveShape() );
             margin.x = margin.y = 0;
         }
-
-        // Once we change the size of the pad, check that there is still a pad remaining
-        if( !aPad->GetSize().x || !aPad->GetSize().y )
+        else
         {
-            // Reset the stored pad size
-            if( aPad->GetSize() != pad_size )
-                const_cast<PAD*>( aPad )->SetSize( pad_size );
-
-            return;
+            shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
         }
-
-        auto shapes = std::dynamic_pointer_cast<SHAPE_COMPOUND>( aPad->GetEffectiveShape() );
-        bool simpleShapes = true;
 
         for( SHAPE* shape : shapes->Shapes() )
         {
@@ -1081,12 +1084,9 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                                                         bds.m_MaxError, ERROR_INSIDE );
             m_gal->DrawPolygon( polySet );
         }
-
-        if( aPad->GetSize() != pad_size )
-            const_cast<PAD*>( aPad )->SetSize( pad_size );
     }
 
-    // Draw clearance outlines area
+    // Draw clearance outlines
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
 
     if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags
@@ -1095,10 +1095,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         /* Showing the clearance area is not obvious.
          * - A pad can be removed from some copper layers.
          * - For non copper layers, what is the clearance area?
-         * So for copper layers, the clearance area is the shape if the pad is on this layer
-         * and the hole clearance area for other coppere layers.
+         * So for copper layers, the clearance area is the shape if the pad is flashed on this
+         * layer and the hole clearance area for other copper layers.
          * For other layers, use the pad shape, although one can use an other criteria,
-         * depending on the non copper layer
+         * depending on the non copper layer.
          */
         int activeLayer = m_pcbSettings.GetActiveLayer();
         bool flashActiveLayer = IsCopperLayer( activeLayer ) ?
