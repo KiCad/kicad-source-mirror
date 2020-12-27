@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-23 08:35-0800\n"
-"PO-Revision-Date: 2020-12-27 12:29+0000\n"
+"PO-Revision-Date: 2020-12-27 12:32+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -23383,9 +23383,9 @@ msgid "Select a corner to delete."
 msgstr "Vyberte roh k smazání."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Pouzdro %s (%s), %s orientace %.1f st"
+msgstr "Pouzdro %s (%s), %s, otočení %g st"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:473
 #: pcbnew/dialogs/dialog_text_properties.cpp:280
