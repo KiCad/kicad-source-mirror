@@ -358,6 +358,21 @@ bool EESCHEMA_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 {
     bool ret = APP_SETTINGS_BASE::MigrateFromLegacy( aCfg );
 
+    // Now modify the loaded grid selection, because in earlier versions the grids index was shared
+    // between all applications and started at 1000 mils.  There is a 4-position offset between
+    // this index and the possible eeschema grids list that we have to subtract.
+    nlohmann::json::json_pointer gridSizePtr = PointerFromString( "window.grid.last_size" );
+
+    try
+    {
+        ( *this )[gridSizePtr] = ( *this )[gridSizePtr].get<int>() - 4;
+    }
+    catch( ... )
+    {
+        // Otherwise, default grid size should be 50 mils; index 1
+        ( *this )[gridSizePtr] = 1;
+    }
+
     ret &= fromLegacy<bool>( aCfg, "FootprintPreview",   "appearance.footprint_preview" );
     ret &= fromLegacy<bool>( aCfg, "NavigatorStaysOpen", "appearance.navigator_stays_open" );
     ret &= fromLegacy<bool>( aCfg, "PrintSheetReferenceAndTitleBlock",
