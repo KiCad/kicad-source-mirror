@@ -685,7 +685,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
 
             if( aReporter )
             {
-                msg.Printf( _( "Setting schematic symbol '%s %s' library identifier to '%s'. " ),
+                msg.Printf( _( "Setting schematic symbol '%s %s' library identifier to '%s'." ),
                             symbol->GetField( REFERENCE_FIELD )->GetText(),
                             symbol->GetField( VALUE_FIELD )->GetText(),
                             symbol->GetLibId().Format().wx_str() );
@@ -696,7 +696,7 @@ void SCH_SCREEN::UpdateSymbolLinks( REPORTER* aReporter )
         {
             if( aReporter )
             {
-                msg.Printf( _( "No library symbol found for schematic symbol '%s %s'. " ),
+                msg.Printf( _( "No library symbol found for schematic symbol '%s %s'." ),
                             symbol->GetField( REFERENCE_FIELD )->GetText(),
                             symbol->GetField( VALUE_FIELD )->GetText() );
                 aReporter->ReportTail( msg, RPT_SEVERITY_ERROR );
