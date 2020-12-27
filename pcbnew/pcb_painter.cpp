@@ -1086,13 +1086,23 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             const_cast<PAD*>( aPad )->SetSize( pad_size );
     }
 
-    // Clearance outlines
+    // Draw clearance outlines area
     constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_PADS;
 
     if( ( m_pcbSettings.m_clearanceDisplayFlags & clearanceFlags ) == clearanceFlags
             && ( aLayer == LAYER_PAD_FR || aLayer == LAYER_PAD_BK || aLayer == LAYER_PADS_TH ) )
     {
-        bool flashActiveLayer = aPad->FlashLayer( m_pcbSettings.GetActiveLayer() );
+        /* Showing the clearance area is not obvious.
+         * - A pad can be removed from some copper layers.
+         * - For non copper layers, what is the clearance area?
+         * So for copper layers, the clearance area is the shape if the pad is on this layer
+         * and the hole clearance area for other coppere layers.
+         * For other layers, use the pad shape, although one can use an other criteria,
+         * depending on the non copper layer
+         */
+        int activeLayer = m_pcbSettings.GetActiveLayer();
+        bool flashActiveLayer = IsCopperLayer( activeLayer ) ?
+                                    aPad->FlashLayer( activeLayer ) : true;
 
         if( flashActiveLayer || aPad->GetDrillSize().x )
         {
