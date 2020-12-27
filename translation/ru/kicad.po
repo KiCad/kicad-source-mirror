@@ -3,13 +3,14 @@
 # This file is distributed under GNU Free Documentation License.
 # http://www.gnu.org/licenses/fdl-1.3.html
 # Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-28 12:11+0000\n"
-"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
 "Language: ru\n"
@@ -14445,17 +14446,16 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "Библиотека не выбрана. Символ не сохранён."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Производный символ должен храниться в той же библиотеке,\n"
-"что и родительский символ."
+"Производный символ должен храниться в той же библиотеке, что и родительский "
+"символ."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:720
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Символ \"%s\" уже существует в библиотеке \"%s\""
+msgstr "Символ '%s' уже существует в библиотеке '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:792
 #, c-format
