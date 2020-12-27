@@ -5,10 +5,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-25 08:23+0000\n"
+"PO-Revision-Date: 2020-12-28 12:11+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14489,17 +14489,16 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "Biblioteka nie została określona.  Symbol nie może zostać zapisany."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Symbole pochodne muszą być zapisane w tej samej bibliotece\n"
-"w której istnieją ich symbole nadrzędne."
+"Symbole pochodne muszą być zapisane w tej samej bibliotece w której istnieją "
+"ich symbole nadrzędne."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:720
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Symbol \"%s\" istnieje już w bibliotece \"%s\""
+msgstr "Symbol '%s' istnieje już w bibliotece '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:792
 #, c-format
@@ -25132,17 +25131,19 @@ msgstr "Optymalizuj ścieżki mające być przeciągane"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Użyj trasy myszy by przeciągnąć ścieżkę"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"Gdy włączone, ścieżki będą prowadzone na podstawie ruchu myszy, począwszy od "
+"pozycji startowej"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Napraw wszystkie segmenty po kliknięciu"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -25150,6 +25151,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"Gdy zaznaczone, wszystkie segmenty ścieżek zostaną unieruchomione aż do "
+"położenia ostatniego punktu w miejscu kursora.  Po wyłączeniu ostatni "
+"segment (najbliżej kursora) pozostanie wolny i będzie podążał za kursorem."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
