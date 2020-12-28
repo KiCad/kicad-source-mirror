@@ -1,4 +1,3 @@
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -1956,8 +1955,7 @@ void LEGACY_PLUGIN::loadPCB_LINE()
                     dseg->SetLayer( leg_layer2new( m_cu_count,  layer ) );
                     break;
                 case 1:
-                    int mtype;
-                    mtype = intParse( data );
+                    (void)intParse( data );
                     break;
                 case 2:
                     double angle;
