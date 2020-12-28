@@ -45,6 +45,7 @@
 #include <ratsnest/ratsnest_data.h>
 #include <kiplatform/app.h>
 #include <widgets/appearance_controls.h>
+#include <widgets/infobar.h>
 #include <wx/wupdlock.h>
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
@@ -53,6 +54,7 @@
 #include <project/net_settings.h>
 #include <plugins/cadstar/cadstar_pcb_archive_plugin.h>
 #include <plugins/eagle/eagle_plugin.h>
+#include <plugins/kicad/kicad_plugin.h>
 #include <dialogs/dialog_imported_layers.h>
 #include "footprint_info_impl.h"
 
@@ -729,12 +731,16 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         else
             GetScreen()->ClrModify();
 
-        if( pluginType == IO_MGR::LEGACY &&
-            loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )
+        if( ( pluginType == IO_MGR::LEGACY &&
+              loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION ) ||
+            ( pluginType == IO_MGR::KICAD_SEXP &&
+              loadedBoard->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION ) )
         {
-            DisplayInfoMessage( this,
-                _(  "This file was created by an older version of Pcbnew.\n"
-                    "It will be stored in the new file format when you save this file again." ) );
+            m_infoBar->RemoveAllButtons();
+            m_infoBar->AddCloseButton();
+            m_infoBar->ShowMessage( _( "This file was created by an older version of KiCad. "
+                                       "It will be converted to the new format when saved." ),
+                                    wxICON_WARNING );
         }
     }
 

@@ -1046,7 +1046,6 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     UpdateTitle();
 
     wxFileName fn = GetBoard()->GetFileName();
-    m_infoBar->Dismiss();
 
     // Display a warning that the file is read only
     if( fn.FileExists() && !fn.IsFileWritable() )
