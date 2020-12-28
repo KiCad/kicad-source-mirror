@@ -2182,7 +2182,11 @@ MODULE* PCB_PARSER::parseMODULE_unchecked( wxArrayString* aInitialComments )
         break;
 
         case T_model:
-            module->Add3DModel( parse3DModel() );
+        {
+            MODULE_3D_SETTINGS* model = parse3DModel();
+            module->Add3DModel( model );
+            delete model;
+        }
             break;
 
         default:

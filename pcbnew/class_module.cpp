@@ -783,8 +783,6 @@ void MODULE::Add3DModel( MODULE_3D_SETTINGS* a3DModel )
 
     if( !a3DModel->m_Filename.empty() )
         m_3D_Drawings.push_back( *a3DModel );
-
-    delete a3DModel;
 }
 
 
