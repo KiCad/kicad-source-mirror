@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-25 08:23+0000\n"
+"PO-Revision-Date: 2020-12-28 12:11+0000\n"
 "Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -14180,17 +14180,14 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "没有指定库，符号无法保存。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
-msgstr ""
-"派生符号必须保存在父级符号\n"
-"所在的同一库中。"
+msgstr "派生符号必须被保存在父级符号所在的同一库中。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:720
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "符号 \"%s\" 已经在库 \"%s\" 中存在"
+msgstr "符号 '%s' 已存在于库 '%s' 中"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:792
 #, c-format
@@ -24606,24 +24603,24 @@ msgstr "优化正在拖动的布线"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "使用鼠标路径设置轨迹姿势"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
-msgstr ""
+msgstr "启用时，轨迹的姿态将由鼠标从起始位置移动的方式来引导"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "点击时固定所有片段"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
 "When enabled, all track segments will be fixed in place up to the cursor "
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
-msgstr ""
+msgstr "启用时，所有的轨道段将被固定在光标上方的位置。禁用时，最后一个片段（离光标最近的）将不受约束并跟随光标。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
