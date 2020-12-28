@@ -1392,14 +1392,14 @@ void PCB_IO::format( PAD* aPad, int aNestLevel ) const
     std::string output;
 
     // Unconnected pad is default net so don't save it.
-    if( !( m_ctl & CTL_OMIT_NETS ) && aPad->GetNetCode() != NETINFO_LIST::UNCONNECTED )
+    if( !( m_ctl & CTL_OMIT_PAD_NETS ) && aPad->GetNetCode() != NETINFO_LIST::UNCONNECTED )
         StrPrintf( &output, " (net %d %s)", m_mapping->Translate( aPad->GetNetCode() ),
                    m_out->Quotew( aPad->GetNetname() ).c_str() );
 
     // Add pinfunction, if exists.
     // Pin function is closely related to nets, so if CTL_OMIT_NETS is set,
     // omit also pin function (for instance when saved from library editor)
-    if( !(m_ctl & CTL_OMIT_NETS) && !aPad->GetPinFunction().IsEmpty() )
+    if( !( m_ctl & CTL_OMIT_PAD_NETS ) && !aPad->GetPinFunction().IsEmpty() )
         StrPrintf( &output, " (pinfunction %s)",
                    m_out->Quotew( aPad->GetPinFunction() ).c_str() );
 
