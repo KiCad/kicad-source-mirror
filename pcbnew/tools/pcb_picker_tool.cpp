@@ -61,15 +61,20 @@ int PCB_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Set initial cursor
     setCursor();
+    VECTOR2D cursorPos;
 
     while( TOOL_EVENT* evt = Wait() )
     {
         setCursor();
+        cursorPos =  controls->GetMousePosition();
 
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
-        controls->ForceCursorPosition(true, cursorPos );
+        if( m_snap )
+        {
+            grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+            grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->Modifier( MD_ALT ) );
+            cursorPos = grid.BestSnapAnchor( cursorPos, nullptr );
+            controls->ForceCursorPosition( true, cursorPos );
+        }
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -181,6 +186,7 @@ void PCB_PICKER_TOOL::reset()
 {
     m_layerMask = LSET::AllLayersMask();
     m_cursor    = KICURSOR::ARROW;
+    m_snap      = true;
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;

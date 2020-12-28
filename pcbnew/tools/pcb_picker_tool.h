@@ -66,6 +66,7 @@ public:
 
     inline void SetCursor( KICURSOR aCursor ) { m_cursor = aCursor; }
 
+    inline void SetSnapping( bool aSnap ) { m_snap = aSnap; }
     /**
      * Function SetClickHandler()
      * Sets a handler for mouse click event. Handler may decide to receive further click by
@@ -121,6 +122,7 @@ private:
     ///> The layer set to use for optional snapping
     LSET                  m_layerMask;
     KICURSOR              m_cursor;
+    bool                  m_snap;
 
     OPT<CLICK_HANDLER>    m_clickHandler;
     OPT<MOTION_HANDLER>   m_motionHandler;

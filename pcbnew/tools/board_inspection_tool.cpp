@@ -909,6 +909,7 @@ int BOARD_INSPECTION_TOOL::HighlightNetTool( const TOOL_EVENT& aEvent )
         } );
 
     picker->SetLayerSet( LSET::AllCuMask() );
+    picker->SetSnapping( false );
 
     m_toolMgr->RunAction( ACTIONS::pickerTool, true, &tool );
 
