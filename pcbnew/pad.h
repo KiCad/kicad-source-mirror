@@ -25,6 +25,7 @@
 #ifndef PAD_H
 #define PAD_H
 
+#include <mutex>
 #include <zones.h>
 #include <board_connected_item.h>
 #include <board_item.h>
