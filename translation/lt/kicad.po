@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-27 12:09+0000\n"
+"PO-Revision-Date: 2020-12-28 12:11+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/lt/>\n"
+"Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
+"master-source/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14445,17 +14445,16 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "Nenurodyta biblioteka. Nepavyko išsaugoti simbolio."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Išvestiniai simboliai turi būti išsaugoti toje pačioje bibliotekoje\n"
-"kad tėvo simbolis egzistuoja."
+"Išvestiniai simboliai turi būti išsaugoti toje pačioje bibliotekoje kad tėvo "
+"simbolis egzistuoja."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:720
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' already exists in library '%s'"
-msgstr "Simbolis „%s“ jau yra bibliotekoje „%s“"
+msgstr "Simbolis '%s' jau yra bibliotekoje '%s'"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:792
 #, c-format
