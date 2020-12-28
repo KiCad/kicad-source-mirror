@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-28 17:23+0000\n"
-"Last-Translator: Kliment <kliment@0xfb.com>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6804,9 +6804,8 @@ msgid "Relative"
 msgstr "Relativer Pfad"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
-#, fuzzy
 msgid "Path Type"
-msgstr "Pfadangabe:"
+msgstr "Pfadangabe"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
