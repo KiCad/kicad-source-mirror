@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-21 14:30+0000\n"
+"PO-Revision-Date: 2020-12-28 17:23+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -290,7 +290,7 @@ msgstr "Raytracing"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:568
 msgid "Render Options"
-msgstr "Gjengi alternativer"
+msgstr "Påminnelsesvalg"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
 msgid "Material Properties"
@@ -388,7 +388,7 @@ msgstr "&Rediger"
 #: pcbnew/menubar_footprint_editor.cpp:252 pcbnew/menubar_pcb_editor.cpp:458
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
-msgstr "Vis"
+msgstr "&Vis"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:224 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:179
@@ -531,17 +531,17 @@ msgstr "Vis kobbertykkelse"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 msgid "Other Options"
-msgstr "Andre valg"
+msgstr "Andre alternativer"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr "Anti-aliasing"
+msgstr "Kantutjevning:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr "Avslått"
+msgstr "Deaktivert"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "2x"
@@ -561,7 +561,7 @@ msgstr "3D-Viewer må lukkes og åpnes på nytt for å bruke denne innstillingen
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 msgid "Selection color"
-msgstr "Valgfarge"
+msgstr "Velg farge"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
@@ -618,7 +618,7 @@ msgstr "Rekursivt nivå"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 msgid "Shadows"
-msgstr "Skygger"
+msgstr "Skygge"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:493
 msgid ""
@@ -771,7 +771,7 @@ msgstr "Tilbakestill til forvalg"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:179
 msgid "3D Display Options"
-msgstr "3D-skjermalternativer"
+msgstr "Visningsalternativer"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:333
 msgid "Background Color, Bottom"
@@ -1552,7 +1552,7 @@ msgstr "De nåværende endringene dine går tapt permanent."
 
 #: common/confirm.cpp:196 common/tool/actions.cpp:89
 msgid "Revert"
-msgstr "Tilbakestill"
+msgstr "Gjenopprett"
 
 #: common/confirm.cpp:196 common/confirm.cpp:226 common/tool/actions.cpp:120
 #: eeschema/dialogs/dialog_erc.cpp:294
@@ -1565,7 +1565,7 @@ msgstr "Avbryt"
 #: common/confirm.cpp:223 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122
 msgid "OK"
-msgstr "OK"
+msgstr "Ok"
 
 #: common/confirm.cpp:280
 msgid "Info"
@@ -1582,7 +1582,7 @@ msgstr "Info"
 #: pcbnew/footprint_libraries_utils.cpp:963 pcbnew/router/router_tool.cpp:1312
 #: pcbnew/router/router_tool.cpp:1700 pcbnew/zone_filler.cpp:419
 msgid "Confirmation"
-msgstr "Bekreft"
+msgstr "Bekreftelse"
 
 #: common/dialog_about/AboutDialog_main.cpp:114
 #: common/dialogs/dialog_configure_paths_base.cpp:94
@@ -1662,7 +1662,7 @@ msgstr "Tilleggsbidrag av"
 
 #: common/dialog_about/AboutDialog_main.cpp:599
 msgid "Others"
-msgstr "Andre betalingsmiddel"
+msgstr "Andre"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
@@ -1700,7 +1700,7 @@ msgstr "Versjon"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr "Utviklere"
+msgstr "Utiklere"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
@@ -1764,7 +1764,7 @@ msgstr "Kopier KiCad-versjonsinformasjon til utklippstavlen"
 
 #: common/dialog_about/dialog_about_base.cpp:63
 msgid "&Report Bug"
-msgstr "Innrapporter feil"
+msgstr "&Innrapporter feil"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:646
 msgid "Report a problem with KiCad"
@@ -1788,11 +1788,11 @@ msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr "Rød:"
+msgstr "&Rød:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
-msgstr "Grønn:"
+msgstr "&Grønn:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
 msgid "Blue:"
@@ -1808,7 +1808,7 @@ msgstr "Fargetone:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
 msgid "Saturation:"
-msgstr "Rotasjon"
+msgstr "Metning:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -1830,15 +1830,15 @@ msgstr "Definerte farger"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr "Synlighet:"
+msgstr "Dekkevne:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
-msgstr "Forhåndsvisning (gammel / ny):"
+msgstr "Forhåndsvisning (gammel/ny):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:210
 msgid "Reset to Default"
-msgstr "Tilbakestill"
+msgstr "Tilbakestill til forvalg"
 
 #: common/dialogs/dialog_configure_paths.cpp:249
 #: common/dialogs/dialog_configure_paths.cpp:319
@@ -1890,7 +1890,7 @@ msgstr "Navnet %s er reservert, og kan ikke brukes her"
 
 #: common/dialogs/dialog_configure_paths.cpp:494
 msgid "File Browser..."
-msgstr "Fil utforsker..."
+msgstr "Filutforsker..."
 
 #: common/dialogs/dialog_configure_paths.cpp:497
 #: common/widgets/grid_text_button_helpers.cpp:378
@@ -1963,7 +1963,7 @@ msgstr "3D-søkestier"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:92 common/eda_item.cpp:305
 msgid "Alias"
-msgstr "Alias"
+msgstr "Kallenavn"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
@@ -2225,7 +2225,7 @@ msgstr "Det valgte elementet er låst."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Disse elementene hoppes over med mindre du overstyrer låsene."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 #, fuzzy
@@ -2349,7 +2349,7 @@ msgstr "Tittelblokk"
 #: common/dialogs/dialog_page_settings.cpp:696
 #: common/dialogs/dialog_page_settings_base.cpp:49
 msgid "Portrait"
-msgstr "Portrett"
+msgstr "Stående"
 
 #: common/dialogs/dialog_page_settings.cpp:463
 #, c-format
@@ -2363,7 +2363,7 @@ msgstr "oversettelsen for papirstørrelse må bevare originale stavemåter"
 #: common/dialogs/dialog_page_settings.cpp:698
 #: common/dialogs/dialog_page_settings_base.cpp:49
 msgid "Landscape"
-msgstr "Landskap"
+msgstr "Liggende"
 
 #: common/dialogs/dialog_page_settings.cpp:779
 msgid "Select Page Layout Description File"
@@ -2397,7 +2397,7 @@ msgstr "dummy tekst"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:126
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:154
 msgid "Orientation:"
-msgstr "Sideretning:"
+msgstr "Orientasjon:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:55
 msgid "Custom paper size:"
@@ -2539,7 +2539,7 @@ msgstr "<<<"
 
 #: common/dialogs/dialog_page_settings_base.cpp:188
 msgid "Revision:"
-msgstr "Revisjon:"
+msgstr "Revisjoner:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:200
 #: eeschema/dialogs/dialog_netlist.cpp:430
@@ -2606,7 +2606,7 @@ msgstr "Skriv ut"
 #: common/dialogs/dialog_print_generic.cpp:45
 #: common/dialogs/dialog_print_generic.cpp:198
 msgid "Print Preview"
-msgstr "Forhåndsvisning"
+msgstr "Utskriftsforhåndsvisning"
 
 #: common/dialogs/dialog_print_generic.cpp:46 common/tool/action_menu.cpp:205
 #: eeschema/dialogs/dialog_annotate.cpp:101 eeschema/dialogs/dialog_bom.cpp:245
@@ -2684,7 +2684,7 @@ msgstr "Det oppstod en feil ved initialisering av skriverinformasjonen."
 #: pcbnew/dialogs/dialog_push_pad_properties_base.cpp:23
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:25
 msgid "Options"
-msgstr "Alternativer"
+msgstr "Valg"
 
 #: common/dialogs/dialog_print_generic_base.cpp:31
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:72
@@ -2748,7 +2748,7 @@ msgstr "Filter"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr "Varer:"
+msgstr "Elementer:"
 
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
@@ -2778,7 +2778,7 @@ msgstr "Nytt tema ..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr "(skrivebeskyttet)"
+msgstr "(read-only)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 msgid "Copy color"
@@ -2851,7 +2851,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings.cpp:285
 msgid "Executable files ("
-msgstr "Kjørbare filer ("
+msgstr "Kjørbar fil ("
 
 #: common/dialogs/panel_common_settings.cpp:290
 msgid "Select Preferred PDF Browser"
@@ -2859,7 +2859,7 @@ msgstr "Velg Foretrukket PDF-nettleser"
 
 #: common/dialogs/panel_common_settings_base.cpp:26
 msgid "&Auto save:"
-msgstr "& Auto lagre:"
+msgstr "&Autolagring:"
 
 #: common/dialogs/panel_common_settings_base.cpp:34
 msgid ""
@@ -2951,7 +2951,7 @@ msgstr "Systemets standard PDF-visningsprogram"
 #: common/dialogs/panel_common_settings_base.cpp:123
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:175
 msgid "Other:"
-msgstr "Annen:"
+msgstr "Andre:"
 
 #: common/dialogs/panel_common_settings_base.cpp:143
 msgid "User Interface"
@@ -3183,13 +3183,13 @@ msgstr "Mellomknappen dra:"
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
 msgid "Pan"
-msgstr "Mønster"
+msgstr "Panorér"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
 #: common/tool/zoom_menu.cpp:43
 msgid "Zoom"
-msgstr "Forstørrelse"
+msgstr "Forstørr"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
@@ -3381,7 +3381,7 @@ msgstr "Linjestil"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:128
 #: eeschema/tools/sch_editor_control.cpp:931
 msgid "Default"
-msgstr "Standard"
+msgstr "Forvalgt"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:65
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:144
@@ -3413,7 +3413,7 @@ msgstr "Vis alle nett"
 #: common/dialogs/panel_setup_netclasses_base.cpp:141
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:60
 msgid "Apply Filters"
-msgstr "Bruk filtre"
+msgstr "Legg til filter"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:151
 msgid "Assign Net Class"
@@ -3523,7 +3523,7 @@ msgstr "Advarsler"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
 msgid "Actions"
-msgstr "Handlinger"
+msgstr "Actions"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:60
 msgid "Infos"
@@ -3546,7 +3546,7 @@ msgstr "Kunne ikke bruke OpenGL"
 
 #: common/dsnlexer.cpp:34
 msgid "clipboard"
-msgstr "&utklippstavle"
+msgstr "utklippstavle"
 
 #: common/dsnlexer.cpp:324
 #, c-format
@@ -3601,12 +3601,12 @@ msgstr "Filen %s ble ikke funnet."
 
 #: common/eda_base_frame.cpp:832
 msgid "Preferences"
-msgstr "Innstillinger"
+msgstr "Preferanser"
 
 #: common/eda_base_frame.cpp:835 common/hotkey_store.cpp:65
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:20
 msgid "Common"
-msgstr "Vanlig"
+msgstr "Ofte brukte"
 
 #: common/eda_base_frame.cpp:837
 msgid "Mouse and Touchpad"
@@ -3744,7 +3744,7 @@ msgstr "Nei takk"
 
 #: common/eda_item.cpp:259
 msgid "Screen"
-msgstr "Screen"
+msgstr "Skjerm"
 
 #: common/eda_item.cpp:261 eeschema/dialogs/dialog_fields_editor_global.cpp:968
 #: eeschema/sch_component.cpp:1390
@@ -3773,7 +3773,7 @@ msgstr "Fotavtrykkstekst"
 
 #: common/eda_item.cpp:267 common/eda_item.cpp:276
 msgid "Zone"
-msgstr "Sone"
+msgstr "Zone"
 
 #: common/eda_item.cpp:268 pcbnew/track.cpp:603
 msgid "Track"
@@ -4026,7 +4026,7 @@ msgstr "Venstre"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:135
 msgid "Center"
-msgstr "Midtstilt"
+msgstr "Sentrer"
 
 #: common/eda_text.cpp:650 eeschema/dialogs/dialog_edit_label_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
@@ -4047,7 +4047,7 @@ msgstr "Høyre"
 #: eeschema/fields_grid_table.cpp:492
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:108
 msgid "Top"
-msgstr "Øverst"
+msgstr "Topp"
 
 #: common/eda_text.cpp:654
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
@@ -4056,7 +4056,7 @@ msgstr "Øverst"
 #: eeschema/fields_grid_table.cpp:496
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:108
 msgid "Bottom"
-msgstr "Nederst"
+msgstr "Bunn"
 
 #: common/eda_text.cpp:658 common/page_layout/ws_draw_item.cpp:123
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:43 eeschema/lib_text.h:59
@@ -4213,7 +4213,7 @@ msgstr "3D-modell søkesti"
 
 #: common/filename_resolver.cpp:482
 msgid "Alias: "
-msgstr "Alias: "
+msgstr "Kallenavn: "
 
 #: common/filename_resolver.cpp:485
 msgid "This path:"
@@ -4238,7 +4238,7 @@ msgstr "Skriv listen over 3D-stier"
 
 #: common/filename_resolver.cpp:637
 msgid "Could not open configuration file"
-msgstr "Kunne ikke åpne konfigurasjonsfilen"
+msgstr "Kunne ikke åpne oppsettsfil"
 
 #: common/filename_resolver.cpp:664
 msgid "Problems writing configuration file"
@@ -4342,7 +4342,7 @@ msgstr "Lim ut utklippstavlecellene til matrise ved gjeldende celle"
 #: pcbnew/dialogs/dialog_import_settings.cpp:98
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:76
 msgid "Select All"
-msgstr "Velg Alle"
+msgstr "Velg alle"
 
 #: common/grid_tricks.cpp:243
 msgid "Select all cells"
@@ -4374,7 +4374,7 @@ msgstr "Bytt valgstatus"
 
 #: common/hotkey_store.cpp:49
 msgid "Remove from Selection"
-msgstr "Fjern fra utvalg"
+msgstr "Fjern fra samling"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Grid Snaps"
@@ -4627,7 +4627,7 @@ msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr "Brukerkommentarer"
+msgstr "Brukerkommentar"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
@@ -4643,7 +4643,7 @@ msgstr "Edge. Kutt"
 
 #: common/layer_id.cpp:81 pcbnew/dialogs/panel_setup_layers_base.cpp:679
 msgid "Margin"
-msgstr "Margin"
+msgstr "Marg"
 
 #: common/layer_id.cpp:84
 msgid "F.Courtyard"
@@ -4708,7 +4708,7 @@ msgstr "Wire"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Busser"
 
 #: common/layer_id.cpp:107
 #, fuzzy
@@ -4779,7 +4779,7 @@ msgstr "Nettnavn"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
-msgstr ""
+msgstr "Pins"
 
 #: common/layer_id.cpp:122
 #, fuzzy
@@ -4990,7 +4990,7 @@ msgstr "DRC Marker Shadows"
 
 #: common/layer_id.cpp:165 pcbnew/widgets/appearance_controls.cpp:352
 msgid "Anchors"
-msgstr "Ankere"
+msgstr "Anker"
 
 #: common/layer_id.cpp:170
 #, fuzzy
@@ -5023,7 +5023,7 @@ msgstr "Enhet"
 
 #: common/lib_tree_model_adapter.cpp:272
 msgid "Item"
-msgstr "Element"
+msgstr "Item"
 
 #: common/libeval_compiler/libeval_compiler.cpp:565
 #, c-format
@@ -5352,7 +5352,7 @@ msgstr "Åpne..."
 
 #: common/tool/actions.cpp:59
 msgid "Open existing document"
-msgstr "Åpne eksisterende dokument"
+msgstr "Åpne et eksisterende dokument"
 
 #: common/tool/actions.cpp:65
 msgid "Save changes"
@@ -5433,7 +5433,7 @@ msgstr "Angre siste redigering"
 
 #: common/tool/actions.cpp:146
 msgid "Redo"
-msgstr "Gjør om"
+msgstr "Gjør Om"
 
 #: common/tool/actions.cpp:146
 msgid "Redo last edit"
@@ -5479,7 +5479,7 @@ msgstr "Slett"
 
 #: common/tool/actions.cpp:187
 msgid "Deletes selected item(s)"
-msgstr "Sletter valgte element (er)"
+msgstr "Sletter valgte element(er)"
 
 #: common/tool/actions.cpp:192
 msgid "Interactive Delete Tool"
@@ -5500,7 +5500,7 @@ msgstr "Endre redigeringsmetodebegrensninger"
 #: common/tool/actions.cpp:204 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.h:81
 msgid "Find"
-msgstr "Søk"
+msgstr "Finn"
 
 #: common/tool/actions.cpp:204
 msgid "Find text"
@@ -5569,11 +5569,11 @@ msgstr "Ekskludert "
 
 #: common/tool/actions.cpp:257
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Merk gjeldende brudd i kontrollervinduet som en ekskludering"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
-msgstr "Gjenoppfrisk"
+msgstr "Oppdater"
 
 #: common/tool/actions.cpp:280
 msgid "Zoom to Fit"
@@ -5594,7 +5594,7 @@ msgstr "Zoom ut på markøren"
 #: common/tool/actions.cpp:313 common/widgets/mathplot.cpp:1762
 #: eeschema/sim/sim_plot_frame_base.cpp:79
 msgid "Zoom In"
-msgstr "Zoom inn"
+msgstr "Forstørr"
 
 #: common/tool/actions.cpp:319 common/widgets/mathplot.cpp:1763
 #: eeschema/sim/sim_plot_frame_base.cpp:83
@@ -5886,7 +5886,7 @@ msgstr "Bruk programvaregrafikk (tilbakeslag)"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:392
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:490
 msgid "Configure Paths..."
-msgstr "Konfigurer baner ..."
+msgstr "Sett opp stier..."
 
 #: common/tool/actions.cpp:603
 msgid "Edit path configuration environment variables"
@@ -5994,7 +5994,7 @@ msgstr "Zoom: %.2f"
 #: common/validators.cpp:250
 #, c-format
 msgid "Incorrect value: %s"
-msgstr "Feil verdi: %s"
+msgstr "Ugyldig verdi: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
@@ -6079,7 +6079,7 @@ msgstr "Min rutenettavstand:"
 
 #: common/widgets/gal_options_panel.cpp:135
 msgid "Snap to Grid:"
-msgstr "Snap to Grid:"
+msgstr "Lås til ruter:"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6115,7 +6115,7 @@ msgstr "Full vindu trådkors"
 
 #: common/widgets/gal_options_panel.cpp:175
 msgid "Cursor Shape"
-msgstr "Markørform"
+msgstr "Pekerutseende"
 
 #: common/widgets/gal_options_panel.cpp:180
 msgid "Cursor shape for drawing, placement and movement tools"
@@ -6236,7 +6236,7 @@ msgstr "(dobbeltklikk for å redigere)"
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Hotkey"
-msgstr "Snarvei"
+msgstr "Hurtigtast"
 
 #: common/wildcards_and_files_ext.cpp:175
 msgid "All files"
@@ -6377,7 +6377,7 @@ msgstr "SVG-filer"
 
 #: common/wildcards_and_files_ext.cpp:380
 msgid "HTML files"
-msgstr "HTML-fil"
+msgstr "HTML-filer"
 
 #: common/wildcards_and_files_ext.cpp:386
 msgid "CSV Files"
@@ -6465,7 +6465,7 @@ msgstr "Arbeidsbokfil"
 
 #: common/wildcards_and_files_ext.cpp:512
 msgid "PNG file"
-msgstr "PNG-fil"
+msgstr "PNG-filer"
 
 #: common/wildcards_and_files_ext.cpp:518
 msgid "Jpeg file"
@@ -6602,7 +6602,7 @@ msgstr "Beskrivelse: %s; Nøkkelord: %s"
 #: cvpcb/cvpcb_mainframe.cpp:773
 #, c-format
 msgid "Library location: %s"
-msgstr "Bibliotekssted: %s"
+msgstr "Bibliotekplassering: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:775
 msgid "Library location: unknown"
@@ -6672,11 +6672,11 @@ msgstr "Fjern"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 msgid "Move Up"
-msgstr "Flytt opp"
+msgstr "Flytt oppover"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:45
 msgid "Move Down"
-msgstr "Flytt ned"
+msgstr "Flytt nedover"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
 msgid "Edit File"
@@ -7007,7 +7007,7 @@ msgstr "Laster inn symbolbiblioteker"
 
 #: eeschema/class_library.cpp:513
 msgid "Loading "
-msgstr "Laster inn "
+msgstr "Laster "
 
 #: eeschema/class_library.cpp:556
 #, c-format
@@ -7129,7 +7129,7 @@ msgstr "Omfang"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 msgid "Order"
-msgstr "Rekkefølge"
+msgstr "Sorter"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
@@ -7633,7 +7633,7 @@ msgstr "Aliasnavn"
 #: eeschema/dialogs/dialog_bus_manager.cpp:78
 #: eeschema/dialogs/dialog_bus_manager.cpp:112
 msgid "Rename"
-msgstr "Endre navn"
+msgstr "Gi nytt navn"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:92
 msgid "Alias Members"
@@ -8021,7 +8021,7 @@ msgstr "Ned"
 #: pcbnew/footprint.cpp:1920 pcbnew/pad.cpp:1376
 #: pcbnew/text_mod_grid_table.cpp:96
 msgid "Orientation"
-msgstr "Retning"
+msgstr "Skjermretning"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:124
 msgid "Bold and italic"
@@ -8038,7 +8038,7 @@ msgstr "Stil"
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:35 eeschema/pin_type.cpp:53
 #: eeschema/sch_text.cpp:488
 msgid "Input"
-msgstr "Peker"
+msgstr "Inndata"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:130
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:36 eeschema/pin_type.cpp:54
@@ -8092,7 +8092,7 @@ msgstr "Stil:"
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:68
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:46
 msgid "Combo!"
-msgstr "Kombinert!"
+msgstr "Kombo!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:216
 msgid "Illegal reference designator value!"
