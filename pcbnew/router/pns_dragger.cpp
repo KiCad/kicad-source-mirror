@@ -151,6 +151,7 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM_SET& aPrimitives )
     m_draggedItems.Clear();
     m_currentMode = Settings().Mode();
     m_freeAngleMode = (m_mode & DM_FREE_ANGLE);
+    m_lastValidPoint = aP;
 
     if( m_currentMode == RM_Shove  && !m_freeAngleMode )
     {
@@ -535,18 +536,15 @@ bool DRAGGER::FixRoute()
         // invalid).  In other modes, we can only commit if "Allow DRC violations" is enabled.
         if( !m_dragStatus )
         {
-            switch( m_currentMode )
-            {
-            case RM_Shove:
-            case RM_Smart:
-                break;
+            Drag( m_lastValidPoint );
+            node = CurrentNode();
 
-            case RM_Walkaround:
-            default:
-                if( !Settings().CanViolateDRC() )
-                    return false;
-            }
+            if( !node )
+                return false;
         }
+
+        if( !m_dragStatus && !Settings().CanViolateDRC()  )
+            return false;
 
         Router()->CommitRouting( node );
         return true;
@@ -558,24 +556,38 @@ bool DRAGGER::FixRoute()
 
 bool DRAGGER::Drag( const VECTOR2I& aP )
 {
+    bool ret = false;
+
     if( m_freeAngleMode )
-        return dragMarkObstacles( aP );
-
-    switch( m_currentMode )
     {
-    case RM_MarkObstacles:
-        return dragMarkObstacles( aP );
-
-    case RM_Shove:
-    case RM_Smart:
-        return dragShove( aP );
-
-    case RM_Walkaround:
-        return dragWalkaround( aP );
-
-    default:
-        return false;
+        ret = dragMarkObstacles( aP );
     }
+    else
+    {
+        switch( m_currentMode )
+        {
+        case RM_MarkObstacles:
+            ret = dragMarkObstacles( aP );
+            break;
+
+        case RM_Shove:
+        case RM_Smart:
+            ret = dragShove( aP );
+            break;
+
+        case RM_Walkaround:
+            ret = dragWalkaround( aP );
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    if( ret )
+        m_lastValidPoint = aP;
+
+    return ret;
 }
 
 

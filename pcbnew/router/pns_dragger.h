@@ -137,6 +137,7 @@ private:
     int                    m_draggedSegmentIndex;
     bool                   m_dragStatus;
     PNS_MODE               m_currentMode;
+    VECTOR2D               m_lastValidPoint;
 
     ///< Contains the list of items that are currently modified by the dragger
     ITEM_SET               m_draggedItems;
