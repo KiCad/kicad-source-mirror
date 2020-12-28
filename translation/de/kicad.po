@@ -4,21 +4,22 @@
 # Kliment <kliment@0xfb.com>, 2020.
 # jonathan haas <jonathan.haas@live.de>, 2020.
 # Jonathan Haas <haasjona@gmail.com>, 2020.
+# Mathias Neumann <alfrede@opferindustries.de>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-17 19:29+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2020-12-28 17:23+0000\n"
+"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-Basepath: ../../../../../../mnt/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -3634,7 +3635,7 @@ msgid "Unexpected '%s'"
 msgstr "Unerwartetes \"%s\""
 
 #: common/dsnlexer.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "need a number for '%s'"
 msgstr "benötige eine Zahl für \"%s\""
 
@@ -3804,9 +3805,8 @@ msgid "&No Thanks"
 msgstr "&Nein Danke"
 
 #: common/eda_item.cpp:259
-#, fuzzy
 msgid "Screen"
-msgstr "Bestückungsdruck"
+msgstr "Schirm"
 
 #: common/eda_item.cpp:261 eeschema/dialogs/dialog_fields_editor_global.cpp:968
 #: eeschema/sch_component.cpp:1390
@@ -3856,14 +3856,12 @@ msgid "Aligned Dimension"
 msgstr "Bemaßung hinzufügen"
 
 #: common/eda_item.cpp:272
-#, fuzzy
 msgid "Orthogonal Dimension"
-msgstr "Abmessung"
+msgstr "Senkrechte Abmessungen"
 
 #: common/eda_item.cpp:273
-#, fuzzy
 msgid "Center Dimension"
-msgstr "Abmessung"
+msgstr "Zentrale Abmessung"
 
 #: common/eda_item.cpp:274 pcbnew/dimension.cpp:957
 msgid "Leader"
@@ -5947,9 +5945,8 @@ msgid "Update Schematic from PCB..."
 msgstr "Aktualisiere Schaltplan von PCB..."
 
 #: common/tool/actions.cpp:588
-#, fuzzy
 msgid "Update schematic with changes made to PCB"
-msgstr "Aktualisiere Schaltplan von PCB"
+msgstr "Aktualisiere den Schaltplan mit den auf dem PCB gemachten Änderungen"
 
 #: common/tool/actions.cpp:593
 msgid "Accelerated Graphics"
@@ -6404,9 +6401,8 @@ msgid "Eagle ver. 6.x XML PCB files"
 msgstr "Eagle Ver. 6.x XML PCB Dateien"
 
 #: common/wildcards_and_files_ext.cpp:288
-#, fuzzy
 msgid "CADSTAR PCB Archive files"
-msgstr "CADSTAR PCB-Archivdateien"
+msgstr "CADSTAR PCB Archivdateien"
 
 #: common/wildcards_and_files_ext.cpp:293
 msgid "P-Cad 200x ASCII PCB files"
@@ -6577,9 +6573,9 @@ msgid "Equivalence File Load Error"
 msgstr "Fehler beim Einlesen der Äquivalenzdatei"
 
 #: cvpcb/auto_associate.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "%lu Footprint/Bauteil-Äquivalenz gefunden."
+msgstr "%lu Footprint/Symbol Äquivalenz gefunden."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6665,9 +6661,8 @@ msgid "Keywords"
 msgstr "Schlüsselwörter"
 
 #: cvpcb/cvpcb_mainframe.cpp:695
-#, fuzzy
 msgid "Pin Count"
-msgstr "Pad Anzahl"
+msgstr "Pin Anzahl"
 
 #: cvpcb/cvpcb_mainframe.cpp:708 eeschema/sch_component.cpp:1377
 #: eeschema/sch_component.cpp:1381 eeschema/sch_component.cpp:1409
@@ -6677,14 +6672,12 @@ msgid "Library"
 msgstr "Bibliothek"
 
 #: cvpcb/cvpcb_mainframe.cpp:721
-#, fuzzy
 msgid "Search Text"
 msgstr "Text suchen"
 
 #: cvpcb/cvpcb_mainframe.cpp:725
-#, fuzzy
 msgid "No Filtering"
-msgstr "Ungefiltert"
+msgstr "Keine Filterung"
 
 #: cvpcb/cvpcb_mainframe.cpp:727
 #, c-format
@@ -6692,7 +6685,7 @@ msgid "Filtered by %s"
 msgstr "Gefiltert nach %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:741
-#, fuzzy, c-format
+#, c-format
 msgid "Description: %s;  Keywords: %s"
 msgstr "Beschreibung:%s;  Schlüsselwörter: %s"
 
@@ -6816,7 +6809,7 @@ msgstr "Relativer Pfad"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 #, fuzzy
 msgid "Path Type"
-msgstr "Pfadvariante:"
+msgstr "Pfadangabe:"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
