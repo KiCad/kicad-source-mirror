@@ -31,9 +31,7 @@
 #include <board.h>
 #include <zone.h>
 #include <footprint.h>
-#include <fp_shape.h>
 #include <pcb_shape.h>
-#include <pcb_text.h>
 #include <pcb_target.h>
 #include <track.h>
 #include <connectivity/connectivity_data.h>
@@ -92,12 +90,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     std::shared_ptr<CONNECTIVITY_DATA> connectivity = m_board->GetConnectivity();
     std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
 
+    if( !lock )
+        return false;
+
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     m_worstClearance = bds.GetBiggestClearanceValue();
-
-    if( !lock )
-        return false;
 
     if( m_progressReporter )
     {
@@ -494,7 +492,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
         m_progressReporter->KeepRefreshing();
     }
 
-    connectivity->SetProgressReporter( nullptr );
     return true;
 }
 
