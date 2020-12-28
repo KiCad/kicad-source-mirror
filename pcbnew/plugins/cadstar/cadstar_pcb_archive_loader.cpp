@@ -129,129 +129,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::Load( ::BOARD* aBoard, ::PROJECT* aProject )
 }
 
 
-BOARD_STACKUP_ITEM_TYPE CADSTAR_PCB_ARCHIVE_LOADER::getStackupItemType(
-        const PCB_LAYER_ID& aKiCadLayer )
-{
-    // Stackup item type can be (mostly) inferred from the PCB_LAYER_ID
-
-    switch( aKiCadLayer )
-    {
-    case PCB_LAYER_ID::F_Cu:
-    case PCB_LAYER_ID::In1_Cu:
-    case PCB_LAYER_ID::In2_Cu:
-    case PCB_LAYER_ID::In3_Cu:
-    case PCB_LAYER_ID::In4_Cu:
-    case PCB_LAYER_ID::In5_Cu:
-    case PCB_LAYER_ID::In6_Cu:
-    case PCB_LAYER_ID::In7_Cu:
-    case PCB_LAYER_ID::In8_Cu:
-    case PCB_LAYER_ID::In9_Cu:
-    case PCB_LAYER_ID::In10_Cu:
-    case PCB_LAYER_ID::In11_Cu:
-    case PCB_LAYER_ID::In12_Cu:
-    case PCB_LAYER_ID::In13_Cu:
-    case PCB_LAYER_ID::In14_Cu:
-    case PCB_LAYER_ID::In15_Cu:
-    case PCB_LAYER_ID::In16_Cu:
-    case PCB_LAYER_ID::In17_Cu:
-    case PCB_LAYER_ID::In18_Cu:
-    case PCB_LAYER_ID::In19_Cu:
-    case PCB_LAYER_ID::In20_Cu:
-    case PCB_LAYER_ID::In21_Cu:
-    case PCB_LAYER_ID::In22_Cu:
-    case PCB_LAYER_ID::In23_Cu:
-    case PCB_LAYER_ID::In24_Cu:
-    case PCB_LAYER_ID::In25_Cu:
-    case PCB_LAYER_ID::In26_Cu:
-    case PCB_LAYER_ID::In27_Cu:
-    case PCB_LAYER_ID::In28_Cu:
-    case PCB_LAYER_ID::In29_Cu:
-    case PCB_LAYER_ID::In30_Cu:
-    case PCB_LAYER_ID::B_Cu:
-        return BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER;
-
-    case PCB_LAYER_ID::B_Paste:
-    case PCB_LAYER_ID::F_Paste:
-        return BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERPASTE;
-
-    case PCB_LAYER_ID::B_SilkS:
-    case PCB_LAYER_ID::F_SilkS:
-        return BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SILKSCREEN;
-
-    case PCB_LAYER_ID::B_Mask:
-    case PCB_LAYER_ID::F_Mask:
-        return BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_SOLDERMASK;
-
-    case PCB_LAYER_ID::UNDEFINED_LAYER:
-        //Special case: if undefined layer we assume that it was a dielectric layer
-        return BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC;
-
-    default:
-        break;
-    }
-
-    // All other layers are documentation/not part of the stackup
-    return BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_UNDEFINED;
-}
-
-
-wxString CADSTAR_PCB_ARCHIVE_LOADER::getLayerTypeName( const PCB_LAYER_ID& aKiCadLayer )
-{
-    // Layer type name can be inferred from the KiCad layer unless it is a dielectric layer
-
-    switch( aKiCadLayer )
-    {
-    case PCB_LAYER_ID::F_Cu:
-    case PCB_LAYER_ID::In1_Cu:
-    case PCB_LAYER_ID::In2_Cu:
-    case PCB_LAYER_ID::In3_Cu:
-    case PCB_LAYER_ID::In4_Cu:
-    case PCB_LAYER_ID::In5_Cu:
-    case PCB_LAYER_ID::In6_Cu:
-    case PCB_LAYER_ID::In7_Cu:
-    case PCB_LAYER_ID::In8_Cu:
-    case PCB_LAYER_ID::In9_Cu:
-    case PCB_LAYER_ID::In10_Cu:
-    case PCB_LAYER_ID::In11_Cu:
-    case PCB_LAYER_ID::In12_Cu:
-    case PCB_LAYER_ID::In13_Cu:
-    case PCB_LAYER_ID::In14_Cu:
-    case PCB_LAYER_ID::In15_Cu:
-    case PCB_LAYER_ID::In16_Cu:
-    case PCB_LAYER_ID::In17_Cu:
-    case PCB_LAYER_ID::In18_Cu:
-    case PCB_LAYER_ID::In19_Cu:
-    case PCB_LAYER_ID::In20_Cu:
-    case PCB_LAYER_ID::In21_Cu:
-    case PCB_LAYER_ID::In22_Cu:
-    case PCB_LAYER_ID::In23_Cu:
-    case PCB_LAYER_ID::In24_Cu:
-    case PCB_LAYER_ID::In25_Cu:
-    case PCB_LAYER_ID::In26_Cu:
-    case PCB_LAYER_ID::In27_Cu:
-    case PCB_LAYER_ID::In28_Cu:
-    case PCB_LAYER_ID::In29_Cu:
-    case PCB_LAYER_ID::In30_Cu:
-    case PCB_LAYER_ID::B_Cu:    return KEY_COPPER;
-
-    case PCB_LAYER_ID::B_Paste: return _HKI( "Bottom Solder Paste" );
-    case PCB_LAYER_ID::F_Paste: return _HKI( "Top Solder Paste" );
-    case PCB_LAYER_ID::B_SilkS: return _HKI( "Bottom Silk Screen" );
-    case PCB_LAYER_ID::F_SilkS: return _HKI( "Top Silk Screen" );
-    case PCB_LAYER_ID::B_Mask:  return _HKI( "Bottom Solder Mask" );
-    case PCB_LAYER_ID::F_Mask:  return _HKI( "Top Solder Mask" );
-
-    //Special case: if undefined layer we assume that it was a dielectric layer (prepreg)
-    case PCB_LAYER_ID::UNDEFINED_LAYER: return KEY_PREPREG;
-
-    default: break;
-    }
-
-    // All other layers do not have a type name
-    return wxEmptyString;
-}
-
-
 void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupWarning(
         const wxString& aCadstarLayerName,
                                                          const PCB_LAYER_ID& aKiCadLayer )
@@ -279,44 +156,248 @@ void CADSTAR_PCB_ARCHIVE_LOADER::logBoardStackupMessage( const wxString& aCadsta
 }
 
 
+void CADSTAR_PCB_ARCHIVE_LOADER::initStackupItem( const LAYER&          aCadstarLayer,
+                                                  ::BOARD_STACKUP_ITEM* aKiCadItem,
+                                                  int aDielectricSublayer )
+{
+    if( !aCadstarLayer.MaterialId.IsEmpty() )
+    {
+        MATERIAL material = Assignments.Layerdefs.Materials.at( aCadstarLayer.MaterialId );
+
+        aKiCadItem->SetMaterial( material.Name, aDielectricSublayer );
+        aKiCadItem->SetEpsilonR( material.Permittivity.GetDouble(), aDielectricSublayer );
+        aKiCadItem->SetLossTangent( material.LossTangent.GetDouble(), aDielectricSublayer );
+        //TODO add Resistivity when KiCad supports it
+    }
+
+    aKiCadItem->SetLayerName( aCadstarLayer.Name );
+    aKiCadItem->SetThickness( getKiCadLength( aCadstarLayer.Thickness ), aDielectricSublayer );
+}
+
+
 void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 {
-    std::map<LAYER_ID, LAYER>&       cpaLayers              = Assignments.Layerdefs.Layers;
-    std::map<MATERIAL_ID, MATERIAL>& cpaMaterials           = Assignments.Layerdefs.Materials;
-    std::vector<LAYER_ID>&           cpaLayerStack          = Assignments.Layerdefs.LayerStack;
-    unsigned                         numElecAndPowerLayers  = 0;
-    BOARD_DESIGN_SETTINGS&           designSettings         = mBoard->GetDesignSettings();
-    BOARD_STACKUP&                   stackup                = designSettings.GetStackupDescriptor();
-    int                              noOfKiCadStackupLayers = 0;
-    int                              lastElectricalLayerIndex = 0;
-    int                              dielectricSublayer       = 0;
-    int                              numDielectricLayers      = 0;
-    bool                             prevWasDielectric        = false;
-    BOARD_STACKUP_ITEM*              tempKiCadLayer           = nullptr;
-    std::vector<PCB_LAYER_ID>        layerIDs;
-
-    //Remove all layers except required ones
-    stackup.RemoveAll();
-    layerIDs.push_back( PCB_LAYER_ID::F_CrtYd );
-    layerIDs.push_back( PCB_LAYER_ID::B_CrtYd );
-    layerIDs.push_back( PCB_LAYER_ID::Margin );
-    layerIDs.push_back( PCB_LAYER_ID::Edge_Cuts );
-    designSettings.SetEnabledLayers( LSET( &layerIDs[0], layerIDs.size() ) );
-
-    for( auto it = cpaLayerStack.begin(); it != cpaLayerStack.end(); ++it )
+    // Structure describing an electrical layer with optional dielectric layers below it
+    // (construction layers in CADSTAR)
+    struct LAYER_BLOCK
     {
-        LAYER_T                 copperType     = LAYER_T::LT_UNDEFINED;
-        PCB_LAYER_ID            kicadLayerID   = PCB_LAYER_ID::UNDEFINED_LAYER;
-        wxString                layerTypeName  = wxEmptyString;
+        LAYER_ID ElecLayerID = wxEmptyString;     // Normally not empty, but could be empty if the
+                                                  // first layer in the stackup is a construction
+                                                  // layer
+        std::vector<LAYER_ID> ConstructionLayers; // Normally empty for the last electrical layer
+                                                  // but it is possible to build a board in CADSTAR
+                                                  // with no construction layers or with the bottom
+                                                  // layer being a construction layer
 
-        if( cpaLayers.find( *it ) == cpaLayers.end() )
+        bool IsInitialised() { return !ElecLayerID.IsEmpty() || ConstructionLayers.size() > 0; };
+    };
+
+    std::vector<LAYER_BLOCK> cadstarBoardStackup;
+    LAYER_BLOCK              currentBlock;
+
+    // Find the electrical and construction (dielectric) layers in the stackup
+    for( LAYER_ID cadstarLayerID : Assignments.Layerdefs.LayerStack )
+    {
+        LAYER cadstarLayer = Assignments.Layerdefs.Layers.at( cadstarLayerID );
+
+        if( cadstarLayer.Type == LAYER_TYPE::JUMPERLAYER || 
+            cadstarLayer.Type == LAYER_TYPE::POWER ||
+            cadstarLayer.Type == LAYER_TYPE::ELEC )
         {
-            THROW_IO_ERROR( _( "The selected file is not valid or might be corrupt: The layer "
-                               "stack refers to layer ID '%s' which does not exist in the layer "
-                               "definitions." ) );
+            if( currentBlock.IsInitialised() )
+            {
+                cadstarBoardStackup.push_back( currentBlock );
+                currentBlock = LAYER_BLOCK(); // reset the block
+            }
+
+            currentBlock.ElecLayerID = cadstarLayerID;
+        }
+        else if( cadstarLayer.Type == LAYER_TYPE::CONSTRUCTION )
+        {
+            currentBlock.ConstructionLayers.push_back( cadstarLayerID );
+        }
+    }
+
+    if( currentBlock.IsInitialised() )
+        cadstarBoardStackup.push_back( currentBlock );
+
+    int totalCopperLayers = cadstarBoardStackup.size();
+
+    // Special case: last layer in the stackup is a construction layer, we need to use B.Cu as a
+    // dummy layer
+    if( cadstarBoardStackup.back().ConstructionLayers.size() > 0 )
+    {
+        cadstarBoardStackup.push_back( LAYER_BLOCK() ); //Add dummy layer at the end
+        ++totalCopperLayers;
+    }
+
+    // Make sure it is an even number of layers (KiCad doesn't yet support unbalanced stack-ups)
+    if( ( totalCopperLayers % 2 ) != 0 )
+    {
+        LAYER_BLOCK bottomLayer = cadstarBoardStackup.back();
+        cadstarBoardStackup.pop_back();
+
+        LAYER_BLOCK secondToLastLayer = cadstarBoardStackup.back();
+        cadstarBoardStackup.pop_back();
+
+        LAYER_BLOCK dummyLayer;
+        LAYER_ID           lastConstruction = secondToLastLayer.ConstructionLayers.back();
+
+        if( secondToLastLayer.ConstructionLayers.size() > 1 )
+        {
+            // At least two construction layers, lets remove it here and use it in the dummy layer
+            secondToLastLayer.ConstructionLayers.pop_back();
+        }
+        else
+        {
+            // There is only one construction layer, lets halve its thickness so it is split evenly
+            // between this layer and the dummy layer
+            Assignments.Layerdefs.Layers.at( lastConstruction ).Thickness /= 2;
         }
 
-        LAYER curLayer = cpaLayers.at( *it );
+        dummyLayer.ConstructionLayers.push_back( lastConstruction );
+        cadstarBoardStackup.push_back( secondToLastLayer );
+        cadstarBoardStackup.push_back( dummyLayer );
+        cadstarBoardStackup.push_back( bottomLayer );
+        ++totalCopperLayers;
+    }
+
+    wxASSERT( totalCopperLayers == cadstarBoardStackup.size() );
+    wxASSERT( cadstarBoardStackup.back().ConstructionLayers.size() == 0 );
+
+
+    // Create a new stackup from default stackup list
+    BOARD_STACKUP& stackup = mBoard->GetDesignSettings().GetStackupDescriptor();
+    stackup.RemoveAll();
+    mBoard->SetEnabledLayers( LSET::AllLayersMask() );
+    mBoard->SetVisibleLayers( LSET::AllLayersMask() );
+    mBoard->SetCopperLayerCount( totalCopperLayers );
+    stackup.BuildDefaultStackupList( &mBoard->GetDesignSettings(), totalCopperLayers );
+
+    size_t stackIndex = 0;
+    
+    for( BOARD_STACKUP_ITEM* item : stackup.GetList() )
+    {
+        if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER )
+        {
+            LAYER_ID layerID = cadstarBoardStackup.at( stackIndex ).ElecLayerID;
+
+            if( layerID.IsEmpty() )
+            {
+                // Loading a dummy layer. Make zero thickness so it doesn't affect overall stackup
+                item->SetThickness( 0 );
+            }
+            else
+            {
+                LAYER copperLayer = Assignments.Layerdefs.Layers.at( layerID );
+                initStackupItem( copperLayer, item, 0 );
+                LAYER_T copperType = LAYER_T::LT_SIGNAL;
+
+                switch( copperLayer.Type )
+                {
+                case LAYER_TYPE::JUMPERLAYER:
+                    copperType = LAYER_T::LT_JUMPER;
+                    break;
+
+                case LAYER_TYPE::ELEC:
+                    copperType = LAYER_T::LT_SIGNAL;
+                    break;
+
+                case LAYER_TYPE::POWER:
+                    copperType = LAYER_T::LT_POWER;
+                    mPowerPlaneLayers.push_back( copperLayer.ID ); //need to add a Copper zone
+                    break;
+
+                default:
+                    wxFAIL_MSG( "Unexpected Layer type. Was expecting an electrical type" );
+                    break;
+                }
+
+                mBoard->SetLayerType( item->GetBrdLayerId(), copperType );
+                mBoard->SetLayerName( item->GetBrdLayerId(), item->GetLayerName() );
+                mCopperLayers.insert( { copperLayer.PhysicalLayer, copperLayer.ID } );
+                mLayermap.insert( { copperLayer.ID, item->GetBrdLayerId() } );
+            }
+        }
+        else if( item->GetType() == BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_DIELECTRIC )
+        {
+            LAYER_BLOCK layerBlock = cadstarBoardStackup.at( stackIndex );
+            LAYER_BLOCK layerBlockBelow = cadstarBoardStackup.at( stackIndex + 1 );
+
+            // We should have made sure all layer blocks have at least one construction layer
+            wxASSERT( layerBlock.ConstructionLayers.size() > 0 );
+
+            int dielectricId = stackIndex + 1;
+            // item->SetBrdLayerId();
+            item->SetDielectricLayerId( dielectricId );
+
+            //Prepreg or core?
+            //Look at CADSTAR layer embedding (see LAYER->Embedding) to check whether the electrical
+            //layer embeds above and below to decide if current layer is prepreg or core
+            if( layerBlock.ElecLayerID.IsEmpty() )
+            {
+                //Dummy electrical layer, assume prepreg
+                item->SetTypeName( KEY_PREPREG );
+            }
+            else
+            {
+                LAYER copperLayer = Assignments.Layerdefs.Layers.at( layerBlock.ElecLayerID );
+
+                if( layerBlockBelow.ElecLayerID.IsEmpty() )
+                {
+                    // Dummy layer below, just use current layer to decide
+
+                    if( copperLayer.Embedding == EMBEDDING::ABOVE )
+                        item->SetTypeName( KEY_CORE );
+                    else 
+                        item->SetTypeName( KEY_PREPREG );
+                }
+                else
+                {
+                    LAYER copperLayerBelow =
+                            Assignments.Layerdefs.Layers.at( layerBlockBelow.ElecLayerID );
+
+                    if( copperLayer.Embedding == EMBEDDING::ABOVE )
+                    {
+                        // Need to check layer below is embedding downwards
+                        if( copperLayerBelow.Embedding == EMBEDDING::BELOW )
+                            item->SetTypeName( KEY_CORE );
+                        else
+                            item->SetTypeName( KEY_PREPREG );
+                    }
+                    else
+                    {
+                        item->SetTypeName( KEY_PREPREG );
+                    }
+                }
+            }
+
+            int dielectricSublayer = 0;
+
+            for( LAYER_ID constructionLaID : layerBlock.ConstructionLayers )
+            {
+                LAYER dielectricLayer = Assignments.Layerdefs.Layers.at( constructionLaID );
+                
+                if( dielectricSublayer )
+                    item->AddDielectricPrms( dielectricSublayer );
+                
+                initStackupItem( dielectricLayer, item, dielectricSublayer );
+                mBoard->SetLayerName( item->GetBrdLayerId(), item->GetLayerName() );
+                mLayermap.insert( { dielectricLayer.ID, item->GetBrdLayerId() } );
+                ++dielectricSublayer;
+            }
+
+            ++stackIndex;
+        }
+    }
+
+    int numElecAndPowerLayers = 0;
+
+    for( LAYER_ID cadstarLayerID : Assignments.Layerdefs.LayerStack )
+    {
+        LAYER        curLayer = Assignments.Layerdefs.Layers.at( cadstarLayerID );
+        PCB_LAYER_ID kicadLayerID = PCB_LAYER_ID::UNDEFINED_LAYER;
+        wxString     layerName = curLayer.Name.Lower();
 
         enum class LOG_LEVEL
         {
@@ -348,14 +429,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
                 }
             };
 
-        if( prevWasDielectric && ( curLayer.Type != LAYER_TYPE::CONSTRUCTION ) )
-        {
-            stackup.Add( tempKiCadLayer ); //only add dielectric layers here after all are done
-            dielectricSublayer = 0;
-            prevWasDielectric  = false;
-            noOfKiCadStackupLayers++;
-        }
-
         switch( curLayer.Type )
         {
         case LAYER_TYPE::ALLDOC:
@@ -366,34 +439,15 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             //Shouldn't be here if CPA file is correctly parsed and not corrupt
             THROW_IO_ERROR( wxString::Format(
                     _( "Unexpected layer '%s' in layer stack." ), curLayer.Name ) );
+            break;
 
         case LAYER_TYPE::JUMPERLAYER:
-            copperType     = LAYER_T::LT_JUMPER;
-            kicadLayerID   = getKiCadCopperLayerID( ++numElecAndPowerLayers );
-            layerTypeName  = KEY_COPPER;
-            break;
-
         case LAYER_TYPE::ELEC:
-            copperType     = LAYER_T::LT_SIGNAL;
-            kicadLayerID   = getKiCadCopperLayerID( ++numElecAndPowerLayers );
-            layerTypeName  = KEY_COPPER;
-            break;
-
-        case LAYER_TYPE::POWER:
-            copperType     = LAYER_T::LT_POWER;
-            kicadLayerID   = getKiCadCopperLayerID( ++numElecAndPowerLayers );
-            layerTypeName  = KEY_COPPER;
-            mPowerPlaneLayers.push_back( curLayer.ID ); //we will need to add a Copper zone
-            break;
-
+        case LAYER_TYPE::POWER: 
+            ++numElecAndPowerLayers;
+            KI_FALLTHROUGH;
         case LAYER_TYPE::CONSTRUCTION:
-            kicadLayerID      = PCB_LAYER_ID::UNDEFINED_LAYER;
-            prevWasDielectric = true;
-            layerTypeName     = KEY_PREPREG;
-            //TODO handle KEY_CORE and KEY_PREPREG
-            //will need to look at CADSTAR layer embedding (see LAYER->Embedding) to
-            //check electrical layers above and below to decide if current layer is prepreg
-            // or core
+            //Already dealt with these when loading board stackup
             break;
 
         case LAYER_TYPE::DOC:
@@ -413,39 +467,32 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
 
             case LAYER_SUBTYPE::LAYERSUBTYPE_NONE:
                 // Generic Non-electrical layer (older CADSTAR versions).
-                // Attempt to detect technical layers by string matching.
+                // Attempt to detect technical layers by string matching.                
+                if( layerName.Contains( "glue" ) || layerName.Contains( "adhesive" ) )
                 {
-                    wxString name = curLayer.Name.Lower();
-
-                    if( name.Contains( "glue" ) || name.Contains( "adhesive" ) )
-                    {
-                        selectLayerID( PCB_LAYER_ID::F_Adhes, PCB_LAYER_ID::B_Adhes,
-                                       LOG_LEVEL::MSG );
-                    }
-                    else if( name.Contains( "silk" ) || name.Contains( "legend" ) )
-                    {
-                        selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS,
-                                       LOG_LEVEL::MSG );
-                    }
-                    else if( name.Contains( "assembly" ) || name.Contains( "fabrication" ) )
-                    {
-                        selectLayerID( PCB_LAYER_ID::F_Fab, PCB_LAYER_ID::B_Fab, LOG_LEVEL::MSG );
-                    }
-                    else if( name.Contains( "resist" ) || name.Contains( "mask" ) )
-                    {
-                        selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG );
-                    }
-                    else if( name.Contains( "paste" ) )
-                    {
-                        selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste,
-                                       LOG_LEVEL::MSG );
-                    }
-                    else
-                    {
-                        // Does not appear to be a technical layer - warn the user.
-                        selectLayerID( PCB_LAYER_ID::Eco1_User, PCB_LAYER_ID::Eco2_User,
-                                       LOG_LEVEL::WARN );
-                    }
+                    selectLayerID( PCB_LAYER_ID::F_Adhes, PCB_LAYER_ID::B_Adhes, LOG_LEVEL::MSG );
+                }
+                else if( layerName.Contains( "silk" ) || layerName.Contains( "legend" ) )
+                {
+                    selectLayerID( PCB_LAYER_ID::F_SilkS, PCB_LAYER_ID::B_SilkS, LOG_LEVEL::MSG );
+                }
+                else if( layerName.Contains( "assembly" ) || layerName.Contains( "fabrication" ) )
+                {
+                    selectLayerID( PCB_LAYER_ID::F_Fab, PCB_LAYER_ID::B_Fab, LOG_LEVEL::MSG );
+                }
+                else if( layerName.Contains( "resist" ) || layerName.Contains( "mask" ) )
+                {
+                    selectLayerID( PCB_LAYER_ID::F_Mask, PCB_LAYER_ID::B_Mask, LOG_LEVEL::MSG );
+                }
+                else if( layerName.Contains( "paste" ) )
+                {
+                    selectLayerID( PCB_LAYER_ID::F_Paste, PCB_LAYER_ID::B_Paste, LOG_LEVEL::MSG );
+                }
+                else
+                {
+                    // Does not appear to be a technical layer - Map to Eco layers for now.
+                    selectLayerID( PCB_LAYER_ID::Eco1_User, PCB_LAYER_ID::Eco2_User,
+                                   LOG_LEVEL::WARN );
                 }
                 break;
 
@@ -478,93 +525,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadBoardStackup()
             break;
         }
 
-        mLayermap.insert( std::make_pair( curLayer.ID, kicadLayerID ) );
-
-        if( dielectricSublayer == 0 )
-            tempKiCadLayer = new BOARD_STACKUP_ITEM( getStackupItemType( kicadLayerID ) );
-
-        tempKiCadLayer->SetLayerName( curLayer.Name );
-        tempKiCadLayer->SetBrdLayerId( kicadLayerID );
-
-        if( prevWasDielectric )
-        {
-            wxASSERT_MSG( kicadLayerID == PCB_LAYER_ID::UNDEFINED_LAYER,
-                    wxT( "Error Processing Dielectric Layer. "
-                         "Expected to have undefined layer type" ) );
-
-            if( dielectricSublayer == 0 )
-                tempKiCadLayer->SetDielectricLayerId( ++numDielectricLayers );
-            else
-                tempKiCadLayer->AddDielectricPrms( dielectricSublayer );
-        }
-
-        if( curLayer.MaterialId != UNDEFINED_MATERIAL_ID )
-        {
-            tempKiCadLayer->SetMaterial(
-                    cpaMaterials[curLayer.MaterialId].Name, dielectricSublayer );
-            tempKiCadLayer->SetEpsilonR( cpaMaterials[curLayer.MaterialId].Permittivity.GetDouble(),
-                    dielectricSublayer );
-            tempKiCadLayer->SetLossTangent(
-                    cpaMaterials[curLayer.MaterialId].LossTangent.GetDouble(), dielectricSublayer );
-            //TODO add Resistivity when KiCad supports it
-        }
-
-        tempKiCadLayer->SetThickness(
-                curLayer.Thickness * KiCadUnitMultiplier, dielectricSublayer );
-
-        if( layerTypeName == wxEmptyString )
-            layerTypeName = getLayerTypeName( kicadLayerID );
-
-
-        if( layerTypeName != wxEmptyString )
-            tempKiCadLayer->SetTypeName( layerTypeName );
-
-        if( !prevWasDielectric )
-        {
-            stackup.Add( tempKiCadLayer ); //only add non-dielectric layers here
-            ++noOfKiCadStackupLayers;
-            layerIDs.push_back( tempKiCadLayer->GetBrdLayerId() );
-            designSettings.SetEnabledLayers( LSET( &layerIDs[0], layerIDs.size() ) );
-        }
-        else
-            ++dielectricSublayer;
-
-        if( copperType != LAYER_T::LT_UNDEFINED )
-        {
-            wxASSERT( mBoard->SetLayerType( tempKiCadLayer->GetBrdLayerId(),
-                    copperType ) ); //move to outside, need to enable layer in board first
-            lastElectricalLayerIndex = noOfKiCadStackupLayers - 1;
-            wxASSERT( mBoard->SetLayerName(
-                    tempKiCadLayer->GetBrdLayerId(), tempKiCadLayer->GetLayerName() ) );
-            //TODO set layer names for other CADSTAR layers when KiCad supports custom
-            //layer names on non-copper layers
-            mCopperLayers.insert( std::make_pair( curLayer.PhysicalLayer, curLayer.ID ) );
-        }
+        mLayermap.insert( { curLayer.ID, kicadLayerID } );
     }
-
-    //change last copper layer to be B_Cu instead of an inner layer
-    LAYER_ID     cadstarlastElecLayer = mCopperLayers.rbegin()->second;
-
-    PCB_LAYER_ID lastElecBrdId =
-            stackup.GetStackupLayer( lastElectricalLayerIndex )->GetBrdLayerId();
-
-    layerIDs.erase(
-            std::remove( layerIDs.begin(), layerIDs.end(), lastElecBrdId ), layerIDs.end() );
-
-    layerIDs.push_back( PCB_LAYER_ID::B_Cu );
-    tempKiCadLayer = stackup.GetStackupLayer( lastElectricalLayerIndex );
-    tempKiCadLayer->SetBrdLayerId( PCB_LAYER_ID::B_Cu );
-
-    wxASSERT( mBoard->SetLayerName(
-            tempKiCadLayer->GetBrdLayerId(), tempKiCadLayer->GetLayerName() ) );
-
-    mLayermap.at( cadstarlastElecLayer ) = PCB_LAYER_ID::B_Cu;
-
-    //make all layers enabled and visible
-    mBoard->SetEnabledLayers( LSET( &layerIDs[0], layerIDs.size() ) );
-    mBoard->SetVisibleLayers( LSET( &layerIDs[0], layerIDs.size() ) );
-
-    mBoard->SetCopperLayerCount( numElecAndPowerLayers );
 }
 
 
@@ -3169,9 +3131,9 @@ NETINFO_ITEM* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadNet( const NET_ID& aCadstarNet
 }
 
 
-PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLayerNum )
+PCB_LAYER_ID CADSTAR_PCB_ARCHIVE_LOADER::getKiCadCopperLayerID( unsigned int aLayerNum, bool aDetectMaxLayer )
 {
-    if( aLayerNum == Assignments.Technology.MaxPhysicalLayer )
+    if( aDetectMaxLayer && aLayerNum == Assignments.Technology.MaxPhysicalLayer )
         return PCB_LAYER_ID::B_Cu;
 
     switch( aLayerNum )

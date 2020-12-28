@@ -133,13 +133,12 @@ private:
     void loadTextVariables();
 
     // Helper functions for element loading:
-    BOARD_STACKUP_ITEM_TYPE getStackupItemType( const PCB_LAYER_ID& aKiCadLayer );
-    wxString getLayerTypeName( const PCB_LAYER_ID& aKiCadLayer );
-
     void logBoardStackupWarning( const wxString& aCadstarLayerName,
                                  const PCB_LAYER_ID& aKiCadLayer );
     void logBoardStackupMessage( const wxString& aCadstarLayerName,
                                  const PCB_LAYER_ID& aKiCadLayer );
+    void initStackupItem( const LAYER& aCadstarLayer, ::BOARD_STACKUP_ITEM* aKiCadItem,
+                          int aDielectricSublayer );
     void loadLibraryFigures( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
     void loadLibraryCoppers( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
     void loadLibraryAreas( const SYMDEF_PCB& aComponent, FOOTPRINT* aFootprint );
@@ -440,9 +439,10 @@ private:
     /**
      * @brief
      * @param aLayerNum Physical / logical layer number (starts at 1)
+     * @param aDetectMaxLayer If true, returns B.Cu if the requested layer is the maximum layer
      * @return PCB_LAYER_ID
      */
-    PCB_LAYER_ID getKiCadCopperLayerID( unsigned int aLayerNum );
+    PCB_LAYER_ID getKiCadCopperLayerID( unsigned int aLayerNum, bool aDetectMaxLayer = true );
 
     /**
      * @brief
