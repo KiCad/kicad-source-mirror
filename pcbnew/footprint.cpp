@@ -968,13 +968,11 @@ unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 
 void FOOTPRINT::Add3DModel( FP_3DMODEL* a3DModel )
 {
-    if( NULL == a3DModel )
+    if( nullptr == a3DModel )
         return;
 
     if( !a3DModel->m_Filename.empty() )
         m_3D_Drawings.push_back( *a3DModel );
-
-    delete a3DModel;
 }
 
 

@@ -3117,7 +3117,11 @@ FOOTPRINT* PCB_PARSER::parseFOOTPRINT_unchecked( wxArrayString* aInitialComments
             break;
 
         case T_model:
-            footprint->Add3DModel( parse3DModel() );
+        {
+            FP_3DMODEL* model = parse3DModel();
+            footprint->Add3DModel( model );
+            delete model;
+        }
             break;
 
         case T_zone:
