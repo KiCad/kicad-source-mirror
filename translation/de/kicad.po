@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 17:23+0000\n"
+"PO-Revision-Date: 2020-12-28 17:24+0000\n"
 "Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -7156,12 +7156,12 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Unterschiedliche Werte für %s%d%s (%s) und %s%d%s (%s)"
 
 #: eeschema/connection_graph.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr ""
-"%s und %s sind jeweils mit den gleichen Leitung verbunden. %s wurde "
-"ausgewählt als Bezeichner für das Netzlisting."
+"%s und %s sind jeweils mit dem gleichen Teil verbunden. %s wird in der "
+"Netzliste benutzt"
 
 #: eeschema/connection_graph.cpp:2360
 #, c-format
@@ -7199,9 +7199,8 @@ msgid "%s not found"
 msgstr "%s nicht gefunden"
 
 #: eeschema/cross-probing.cpp:316
-#, fuzzy
 msgid "Selected net:"
-msgstr "Ausgewähltes Netz: "
+msgstr "Ausgewähltes Netz:"
 
 #: eeschema/dialogs/dialog_annotate.cpp:96
 msgid "Annotation Messages:"
