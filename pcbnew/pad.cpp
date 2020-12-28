@@ -299,6 +299,13 @@ int PAD::GetBoundingRadius() const
 
 void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 {
+    std::lock_guard<std::mutex> RAII_lock( m_shapesBuildingLock );
+
+    // If we had to wait for the lock then we were probably waiting for someone else to
+    // finish rebuilding the shapes.  So check to see if they're clean now.
+    if( !m_shapesDirty )
+        return;
+
     BOARD* board = GetBoard();
     int    maxError = board ? board->GetDesignSettings().m_MaxError : ARC_HIGH_DEF;
 

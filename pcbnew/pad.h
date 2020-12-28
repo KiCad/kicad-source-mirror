@@ -655,6 +655,7 @@ private:
 
     // Must be set to true to force rebuild shapes to draw (after geometry change for instance)
     mutable bool                              m_shapesDirty;
+    mutable std::mutex                        m_shapesBuildingLock;
     mutable int                               m_effectiveBoundingRadius;
     mutable EDA_RECT                          m_effectiveBoundingBox;
     mutable std::shared_ptr<SHAPE_COMPOUND>   m_effectiveShape;
