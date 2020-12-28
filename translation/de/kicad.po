@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 17:24+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2020-12-28 17:25+0000\n"
+"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -7211,14 +7211,12 @@ msgid "Annotate"
 msgstr "Annotation"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
-#, fuzzy
 msgid "Entire schematic"
-msgstr "Auf alle Schaltpläne anwenden"
+msgstr "Ganzer Schaltplan"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:38
-#, fuzzy
 msgid "Current sheet only"
-msgstr "Nur die aktuelle Lage"
+msgstr "Nur das aktuelle Blatt"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:23
@@ -7229,9 +7227,8 @@ msgid "Scope"
 msgstr "Anwendungsbereich"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
-#, fuzzy
 msgid "Order"
-msgstr "Reihenfolge:"
+msgstr "Reihenfolge"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
@@ -7254,9 +7251,8 @@ msgid "Reset, but keep order of multi-unit parts"
 msgstr "Ersetzen, vorhandene Multi-Einheiten jedoch nicht tauschen"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
-#, fuzzy
 msgid "Numbering"
-msgstr "Nummerierungsoptionen:"
+msgstr "Nummerierung"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 msgid "Use first free number after:"
@@ -7772,59 +7768,48 @@ msgid "Net or Bus Name"
 msgstr "Netz- oder Busname"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:64
-#, fuzzy
 msgid "Change all symbols in schematic"
-msgstr "Alle Symbole im Schaltplan %s"
+msgstr "Ändere alle Symbole im Schaltplan"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:65
-#, fuzzy
 msgid "Change Symbols"
-msgstr "Bauteil im Schaltplan:"
+msgstr "Ändere Symbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:74
-#, fuzzy
 msgid "Change selected Symbol"
-msgstr "Ausgewähltes Symbol %s"
+msgstr "Ausgewähltes Symbol ändern"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:91
-#, fuzzy
 msgid "Change symbols matching reference designator:"
-msgstr "%s Footprints die dem Referenzbezeichner entsprechen:"
+msgstr "Ändere Symbole die dem Referenzbezeichner entsprechen:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:92
-#, fuzzy
 msgid "Change symbols matching value:"
-msgstr "%s Footprints mit Wert:"
+msgstr "Ändere Symbole mit dem Wert:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:93
-#, fuzzy
 msgid "Change symbols matching library identifier:"
-msgstr "Symbole %s, die mit Bibliothekssymbol übereinstimmen:"
+msgstr "Ändere Symbole, die mit dem Bibliothekssymbol übereinstimmen:"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:129
-#, fuzzy
 msgid "Update Fields"
-msgstr "Bauteilfelder aktualisieren"
+msgstr "aktualisiere Felder"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:130
-#, fuzzy
 msgid "Remove fields if not in new symbol"
-msgstr "Entferne nicht vorhandene Felder in der %s Symbole"
+msgstr "Entferne nicht vorhandene Felder in einem neuen Symbol"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:131
-#, fuzzy
 msgid "Reset fields if empty in new symbol"
-msgstr "Zurücksetzen der Felder die im %s-Symbol leer sind"
+msgstr "Zurücksetzen der Felder die im neuen Symbol leer sind"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:132
-#, fuzzy
 msgid "Update field visibilities"
-msgstr "%s Sichtbarkeit der Felder"
+msgstr "Ändere die Sichtbarkeit der Felder"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
-#, fuzzy
 msgid "Update field sizes and styles"
-msgstr "Testgröße und Textart %s"
+msgstr "Änderunf der Testgröße und Textart"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 #, fuzzy
