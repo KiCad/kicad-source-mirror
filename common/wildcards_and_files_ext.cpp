@@ -437,7 +437,7 @@ wxString ModLegacyExportFileWildcard()
 
 wxString ErcFileWildcard()
 {
-    return _( "Electronic rule check file" ) + AddFileExtListToFilter( { "erc" } );
+    return _( "Electrical rule check file" ) + AddFileExtListToFilter( { "erc" } );
 }
 
 
