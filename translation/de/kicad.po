@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-28 17:23+0000\n"
-"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -2269,6 +2269,8 @@ msgstr "Gewähltes Element ist gesperrt."
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
 msgstr ""
+"Diese Elemente werden übersprungen, sofern Sie die Sperren nicht "
+"überschreiben."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 #, fuzzy
@@ -4675,19 +4677,19 @@ msgstr "V. Kleber"
 
 #: common/layer_id.cpp:68
 msgid "B.Paste"
-msgstr "R. Lotpaste"
+msgstr "R.Lotpaste"
 
 #: common/layer_id.cpp:69
 msgid "F.Paste"
-msgstr "V. Lotpaste"
+msgstr "V.Lotpaste"
 
 #: common/layer_id.cpp:70
 msgid "B.Silkscreen"
-msgstr "R. Bestückungsdruck"
+msgstr "R.Bestückungsdruck"
 
 #: common/layer_id.cpp:71
 msgid "F.Silkscreen"
-msgstr "V. Bestückungsdruck"
+msgstr "V.Bestückungsdruck"
 
 #: common/layer_id.cpp:72
 msgid "B.Mask"
@@ -4784,7 +4786,7 @@ msgstr "Elektr. Verbindung"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Busse"
 
 #: common/layer_id.cpp:107
 #, fuzzy
@@ -4856,7 +4858,7 @@ msgstr "Netzname"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
-msgstr ""
+msgstr "Pins"
 
 #: common/layer_id.cpp:122
 #, fuzzy
@@ -5212,7 +5214,7 @@ msgstr "Linie, Länge %s"
 
 #: common/page_layout/ws_draw_item.cpp:486
 msgid "Page Limits"
-msgstr "Seitenlimits"
+msgstr "Seitenlimit"
 
 #: common/pgm_base.cpp:169
 msgid "No default editor found, you must choose it"
@@ -5381,7 +5383,7 @@ msgstr "KiCad-Standard"
 
 #: common/settings/color_settings.cpp:369
 msgid "KiCad Classic"
-msgstr "KiCad Classic"
+msgstr "KiCad Klassisch"
 
 #: common/template_fieldnames.cpp:64 eeschema/sch_sheet.cpp:57
 #, c-format
