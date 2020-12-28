@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 12:11+0000\n"
+"PO-Revision-Date: 2020-12-28 13:45+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
@@ -6817,7 +6817,8 @@ msgstr ""
 msgid ""
 "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
 msgstr ""
-"Komponenttia \"%s\" jalanjälkeä \"%s\" ei löytynyt <b> mistään kirjastosta.\n"
+"Komponenttia \"%s\" jalanjälkeä \"%s\" <b>ei löytynyt</b> mistään "
+"kirjastosta.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:153
 #, c-format
@@ -8619,16 +8620,11 @@ msgid "Cannot create global library table path '%s'."
 msgstr "Ei voida luoda yleistä kirjastotaulukon polkua \"%s\"."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
 msgstr ""
-"Yleisen symbolikirjastotaulukon tiedostoa ei voi kopioida:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-": kohteeseen:\n"
-"\n"
-"\"%s\"."
+"Yleisen symbolikirjastotaulukon tiedostoa ei voi kopioida '%s' kohteeseen "
+"'%s'."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
 #, fuzzy, c-format
@@ -14388,13 +14384,12 @@ msgstr "Varmuuskopion tallentaminen kansioon \"%s\" epäonnistui"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1167
 #: eeschema/symbol_viewer_frame.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Nykyinen kokoonpano ei sisällä symbolikirjastoa\n"
-"\"%s\".\n"
+"Nykyinen kokoonpano ei sisällä symbolikirjastoa '%s'.\n"
 "Muokkaa asetuksia Hallitse symbolikirjastoja."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1170
@@ -14404,14 +14399,13 @@ msgstr "Kirjastoa ei löydy symbolikirjastotaulukosta."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1178
 #: eeschema/symbol_viewer_frame.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Kirjastoa lempinimellä \"%s\" ei ole otettu käyttöön\n"
-"nykyisessä kokoonpanossa. Käytä Hallitse symbolikirjastoja\n"
-"muokkaa määritystä."
+"Kirjastoa '%s' ei ole otettu käyttöön nykyisessä kokoonpanossa.\n"
+"Käytä Hallitse symbolikirjastoja muokkaa määritystä."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
 #: eeschema/symbol_viewer_frame.cpp:396
@@ -14522,12 +14516,11 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "Kirjastoa ei ole määritetty. Symbolia ei voitu tallentaa."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Johdetut symbolit on tallennettava samaan kirjastoon\n"
-"että ylätunnus on olemassa."
+"Johdetut symbolit on tallennettava samaan kirjastoon että ylätunnus on "
+"olemassa."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:720
 #, fuzzy, c-format
@@ -14591,7 +14584,7 @@ msgstr "Symbolikirjastotiedosto \"%s\" tallennettu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1191
 msgid "Undefined!"
-msgstr "Määrittelemätön"
+msgstr "Määrittelemätön!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 #: eeschema/symbol_viewer_frame.cpp:361
@@ -16339,7 +16332,7 @@ msgstr "Avaa Gerber-tiedosto (t)"
 
 #: gerbview/files.cpp:228
 msgid "File not found:"
-msgstr "Tiedostoa ei löytynyt!"
+msgstr "Tiedostoa ei löytynyt:"
 
 #: gerbview/files.cpp:240
 msgid "Loading Gerber files..."
@@ -21173,7 +21166,7 @@ msgstr "pistemäärä"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 msgid "Bad parameters"
-msgstr "Virheelliset parametrit!"
+msgstr "Virheelliset parametrit"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:31
 msgid "Horizontal count:"
@@ -28153,28 +28146,27 @@ msgid "Edit Zone"
 msgstr "Muokkaa vyöhykettä"
 
 #: pcbnew/footprint_editor_utils.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Nykyinen kokoonpano ei sisällä kirjastoa\n"
-"lempinimi \"%s\". Käytä Hallitse jalanjälkikirjastoja\n"
-"muokata kokoonpanoa."
+"Nykyinen kokoonpano ei sisällä kirjastoa lempinimi '%s'.\n"
+"Käytä Hallitse jalanjälkikirjastoja muokata kokoonpanoa."
 
 #: pcbnew/footprint_editor_utils.cpp:284
 msgid "Library not found in footprint library table."
 msgstr "Kirjastoa ei löydy jalanjälkikirjastotaulukosta."
 
 #: pcbnew/footprint_editor_utils.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Kirjastoa lempinimellä \"%s\" ei ole otettu käyttöön\n"
-"nykyisessä kokoonpanossa. Käytä Hallitse jalanjälkikirjastoja -toimintoa\n"
-"muokkaa määritystä."
+"Kirjastoa lempinimellä '%s' ei ole otettu käyttöön nykyisessä kokoonpanossa."
+"\n"
+"Käytä Hallitse jalanjälkikirjastoja -toimintoa muokkaa määritystä."
 
 #: pcbnew/footprint_editor_utils.cpp:295 pcbnew/footprint_viewer_frame.cpp:923
 msgid "Footprint library not enabled."
@@ -28349,28 +28341,26 @@ msgstr ""
 "%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Nykyinen kokoonpano ei sisällä jalanjälkikirjastoa\n"
-"\"%s\".\n"
-"Muokkaa kokoonpanoa Hallitse jalanjälkikirjastoja."
+"Nykyinen kokoonpano ei sisällä jalanjälkikirjastoa '%s'.  Muokkaa "
+"kokoonpanoa Hallitse jalanjälkikirjastoja."
 
 #: pcbnew/footprint_viewer_frame.cpp:916
 msgid "Footprint library not found."
 msgstr "Jalanjälkikirjastoa ei löydy."
 
 #: pcbnew/footprint_viewer_frame.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Kirjastoa lempinimellä \"%s\" ei ole otettu käyttöön\n"
-"nykyisessä kokoonpanossa. Käytä Hallitse jalanjälkikirjastoja -toimintoa\n"
-"muokkaa määritystä."
+"Kirjastoa '%s' ei ole otettu käyttöön nykyisessä kokoonpanossa.  Käytä "
+"Hallitse jalanjälkikirjastoja -toimintoa muokkaa määritystä."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
 #: pcbnew/footprint_wizard_frame_functions.cpp:78
@@ -28476,7 +28466,7 @@ msgstr "Avaa tiedosto"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:275
 msgid "No file selected!"
-msgstr "Tiedostoa ei ole valittu"
+msgstr "Tiedostoa ei ole valittu!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:286
 msgid "Please select a valid layer."
