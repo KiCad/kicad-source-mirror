@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-28 17:24+0000\n"
-"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -6852,9 +6852,9 @@ msgstr "Bibliothek \"%s\" nicht in der Footprintbibliothekstabelle gefunden."
 
 #: cvpcb/display_footprints_frame.cpp:401
 #: cvpcb/display_footprints_frame.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint \"%s\" not found."
-msgstr "Footprint \"%s\" nicht gefunden"
+msgstr "Footprint \"%s\" nicht gefunden."
 
 #: cvpcb/display_footprints_frame.cpp:453 pcbnew/footprint.cpp:783
 #, c-format
