@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-28 17:23+0000\n"
-"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
+"Last-Translator: Kliment <kliment@0xfb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -1441,7 +1441,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "Wählen Sie die Platinenlage auf der der Umriss erstellt werden soll.\n"
-"Der Referenzbezeichner und der -wert werden immer auf der Lage für Siebdruck "
+"Der Referenzbezeichner und der Wert werden immer auf der Lage für Siebdruck "
 "platziert (jedoch markiert als unsichtbar)."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
@@ -2184,7 +2184,7 @@ msgstr "Eine Seite"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:67
 msgid "Current Grid"
-msgstr "Aktuelles Raster"
+msgstr "Aktueller Raster"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:83
 msgid "User Defined Grid"
