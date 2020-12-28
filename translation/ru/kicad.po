@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-27 14:03+0000\n"
+"PO-Revision-Date: 2020-12-28 12:11+0000\n"
 "Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25047,17 +25047,19 @@ msgstr "Оптимизировать дорожку при перетаскив�
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Направление мыши определяет наклон дорожки"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"Если отмечено, наклон дорожки будет зависить от того куда движется курсор "
+"мыши от начальной точки"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Фиксировать все сегменты по щелчку мыши"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -25065,6 +25067,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"Если отмечено, все сегменты дорожки будут зафиксированы на своих местах, "
+"вплоть до позиции курсора. В продивном случае, последний сегмент (ближайший "
+"к курсору) будет оставаться свободным и следовать за курсором."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
