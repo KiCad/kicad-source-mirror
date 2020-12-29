@@ -6,6 +6,7 @@
 #define __MD5_HASH_H
 
 #include <cstdint>
+#include <string>
 
 class MD5_HASH
 {
@@ -28,6 +29,13 @@ public:
 
     bool operator==( const MD5_HASH& aOther ) const;
     bool operator!=( const MD5_HASH& aOther ) const;
+
+    /** @return a hexadecimal string from the 16 bytes of MD5_HASH
+     *  Mainly for debug purposes.
+     * @param aCompactForm = false to generate a string with spaces between each byte (2 chars)
+     * = true to generate a string filled with 32 hexadecimal chars
+     */
+    std::string Format( bool aCompactForm = false );
 
 private:
     struct MD5_CTX {

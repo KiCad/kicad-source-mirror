@@ -92,6 +92,34 @@ bool MD5_HASH::operator!=( const MD5_HASH& aOther ) const
 }
 
 
+std::string MD5_HASH::Format( bool aCompactForm )
+{
+    std::string data;
+
+    // Build a hexadecimal string from the 16 bytes of MD5_HASH:
+    for( int ii = 0; ii < 16; ++ii )
+    {
+        char lsb = ( m_hash[ii] & 0x0F ) + '0';
+
+        if( lsb > '9' )
+            lsb += 'A'-'9';
+
+        char msb = ( ( m_hash[ii] >> 4 ) & 0x0F ) + '0';
+
+        if( msb > '9' )
+            msb += 'A'-'9';
+
+         data += msb;
+         data += lsb;
+
+        if( !aCompactForm )
+            data += ' ';
+    }
+
+    return data;
+}
+
+
 void MD5_HASH::md5_transform(MD5_CTX *ctx, uint8_t data[])
 {
    uint32_t a,b,c,d,m[16],i,j;
