@@ -359,6 +359,13 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
             m_view->SetLayerOrder( aLayer, m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 1 );
             m_view->SetLayerOrder( ZONE_LAYER_FOR( aLayer ),
                                    m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 2 );
+
+            // Fix up pad and via netnames to be below.  This is hacky, we need a rethink
+            // of layer ordering...
+            m_view->SetLayerOrder( LAYER_PADS_NETNAMES,
+                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 3 );
+            m_view->SetLayerOrder( LAYER_VIAS_NETNAMES,
+                                   m_view->GetLayerOrder( LAYER_MARKER_SHADOWS ) + 4 );
         }
     }
     else if( IsCopperLayer( aLayer ) )
