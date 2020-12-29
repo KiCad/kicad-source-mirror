@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 12:11+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2020-12-29 21:39+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/lt/>\n"
 "Language: lt\n"
@@ -471,7 +471,7 @@ msgstr "3D modelių matomumas"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
-msgstr "Rodyti išvadinių komponentų 3D modelius"
+msgstr "Rodyti 3D per skylių modelius"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:120
 msgid "Show 3D SMD models"
@@ -1052,7 +1052,7 @@ msgstr "Pateikite atspindinčių savybių medžiagas galutiniame tinke (lėtas)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Render with improved quality on final render (slow)"
-msgstr "Pateikti geresnę kokybę galutiniame pateikime (lėtas)"
+msgstr "Pateikti patobulintą kokybę galutiniame pateikime (lėtas)"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:263
 msgid ""
@@ -1811,7 +1811,7 @@ msgstr "RŽM/RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr "Raudona:"
+msgstr "&Raudona:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
 msgid "Green:"
@@ -1853,7 +1853,7 @@ msgstr "Apibrėžtos spalvos"
 
 #: common/dialogs/dialog_color_picker_base.cpp:163
 msgid "Opacity:"
-msgstr "Nepermatomumas:"
+msgstr "Permatomumas:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:185
 msgid "Preview (old/new):"
@@ -1908,7 +1908,7 @@ msgstr ""
 #: common/dialogs/dialog_configure_paths.cpp:358
 #, c-format
 msgid "The name %s is reserved, and cannot be used here"
-msgstr "Pavadinimas %s yra rezervuotas ir jo negalima naudoti"
+msgstr "Pavadinimas %s yra rezervuotas ir jo čia naudoti negalima"
 
 #: common/dialogs/dialog_configure_paths.cpp:494
 msgid "File Browser..."
@@ -2800,7 +2800,7 @@ msgstr "Nauja tema ..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr "(tik skaitymui)"
+msgstr "(Tik skaitymui)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 msgid "Copy color"
@@ -2911,7 +2911,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:61
 msgid "Days"
-msgstr "Dienų"
+msgstr "Dienos"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
 msgid "Accelerated graphics:"
@@ -3068,7 +3068,7 @@ msgstr "Didžiausias atsarginių kopijų kiekis per dieną:"
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "How many backup files to keep each day (set to 0 for no limit)"
 msgstr ""
-"Kiek atsarginių failų reikia saugoti kiekvieną dieną (nustatykite 0 be jokių "
+"Kiek atsarginių failų reikia saugoti kiekvieną dieną (nustatyta į 0 be jokių "
 "apribojimų)"
 
 #: common/dialogs/panel_common_settings_base.cpp:244
@@ -3180,7 +3180,7 @@ msgstr "Mastelio greitis:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:51
 msgid "How far to zoom in for each rotation of the mouse wheel"
-msgstr "Kaip priartinti kiekvieną pelės ratuko pasukimą"
+msgstr "Priartinti kiekvieną pelės ratuko pasukimą"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
@@ -4164,7 +4164,7 @@ msgstr "Vietoje įdiegtų simbolių bibliotekų pagrindinis kelias."
 
 #: common/env_vars.cpp:77
 msgid "A directory containing project templates installed with KiCad."
-msgstr "Katalogas, kuriame yra projekto šablonai, įdiegti kartu su „KiCad“."
+msgstr "Katalogas su projekto šablonais, įdiegtais kartu su „KiCad“."
 
 #: common/env_vars.cpp:79
 msgid ""
@@ -5173,7 +5173,7 @@ msgstr "Pasirinktas failas neteisingas arba gali būti sugadintas!"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2139
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "Netikėtas taškų skaičius '%s'. Rasta %d, bet tikėtasi %d."
+msgstr "Netikėtas taškų skaičius „%s“. Rasta %d, bet tikėtasi %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:38
 #, c-format
@@ -5446,7 +5446,7 @@ msgstr "Pasirinkite visus ekrane esančius elementus"
 
 #: common/tool/actions.cpp:175
 msgid "Paste Special..."
-msgstr "Įklijuoti specialų ..."
+msgstr "Įdėti kitaip..."
 
 #: common/tool/actions.cpp:175
 msgid "Paste item(s) from clipboard with options"
@@ -5742,7 +5742,7 @@ msgstr "Poliarinės koordinatės"
 
 #: common/tool/actions.cpp:509
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Perjungti poliarines ir dekartines koordinates"
+msgstr "Perjungti poliarines ir dekartines koordinačių sistemas"
 
 #: common/tool/actions.cpp:515
 msgid "Reset Local Coordinates"
@@ -7103,7 +7103,7 @@ msgstr "Taikymo sritis"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:45
 msgid "Order"
-msgstr "Įsakymas"
+msgstr "Užsakymas"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
@@ -7200,7 +7200,7 @@ msgstr "Pašalinkite dabartinį generatoriaus scenarijų iš sąrašo"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
-msgstr "Komandinė eilutė, paleista generatorių:"
+msgstr "Komandinė eilutė, paleidžianti generatorių:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:101
 msgid "Show console window"
@@ -7408,14 +7408,14 @@ msgid ""
 msgstr ""
 "# 1 - išsami dokumentacija\n"
 "\n"
-"„Eeschema“ dokumentacijoje (* eeschema.html *) aprašomas šis tarpinis tinklo "
-"sąrašas ir pateikiami pavyzdžiai (skyrius ***, kuriantis tinkintus tinklų "
-"sąrašus ir „bom“ failus ***).\n"
+"„Eeschema“ dokumentacijoje (* eeschema.html *) aprašomas šis tarpinis "
+"tinklaraštis ir pateikiami pavyzdžiai (skyrius ***, kuriantis tinkintus "
+"tinklo sąrašus ir bom failus ***).\n"
 "\n"
 "# 2 - tarpinis „Netlist“ failas\n"
 "\n"
-"BOM failus (ir netlist failus) galima sukurti iš „Eeschema“ sukurto * "
-"„Intermediate netlist“ failo *.\n"
+"BOM failus (ir netlist failus) galima sukurti iš „Eeschema“ sukurto * „"
+"Intermediate netlist“ failo *.\n"
 "\n"
 "Šis failas naudoja XML sintaksę ir vadinamas tarpiniu netlist. Tarpiniame "
 "tinklaraštyje yra daug duomenų apie jūsų plokštę, todėl jis gali būti "
@@ -7423,15 +7423,15 @@ msgstr ""
 "kitas ataskaitas.\n"
 "\n"
 "Atsižvelgiant į išvestį (BOM arba netlist), po apdorojimo bus naudojami "
-"skirtingi viso tarpinio „Netlist“ failo pogrupiai.\n"
+"skirtingi viso tarpinio Netlist failo pogrupiai.\n"
 "\n"
 "# 3 - konversija į naują formatą\n"
 "\n"
 "Taikydami „Intermediate netlist“ failą po apdorojimo filtrą, galite "
 "generuoti užsienio netlist failus ir BOM failus. Kadangi ši konversija yra "
-"teksto į tekstą transformacija, šį po apdorojimo filtrą galima parašyti "
-"naudojant * Python *, * XSLT * ar bet kurį kitą įrankį, galintį naudoti XML "
-"kaip įvestį.\n"
+"teksto į tekstą transformacija, šį vėlesnio apdorojimo filtrą galima "
+"parašyti naudojant * Python *, * XSLT * ar bet kurį kitą įrankį, galintį "
+"naudoti XML kaip įvestį.\n"
 "\n"
 "Pati XSLT yra XML kalba, tinkanti XML transformacijoms. Yra nemokama "
 "programa „xsltproc“, kurią galite atsisiųsti ir įdiegti. Programą `xsltproc` "
@@ -7451,8 +7451,8 @@ msgstr ""
 "\n"
 "## 4.1 - papildinio konfigūracijos parametrai\n"
 "\n"
-"„Eeschema“ papildinio konfigūravimo dialogo lange reikalinga ši "
-"informacija:\n"
+"„Eeschema“ papildinio konfigūravimo dialogo lange reikalinga ši informacija:"
+"\n"
 "\n"
 " * Pavadinimas: pavyzdžiui, netlist formato pavadinimas.\n"
 " * Komandos eilutė konverteriui paleisti (paprastai scenarijus).\n"
@@ -7460,8 +7460,8 @@ msgstr ""
 "*** Pastaba (tik „Windows“): ***\n"
 "* Pagal numatytuosius nustatymus komandinė eilutė veikia su paslėptu "
 "konsolės langu ir išvestis nukreipiama į lauką „Papildinio informacija“. "
-"Norėdami parodyti vykdomos komandos langą, nustatykite žymimąjį laukelį "
-"„Rodyti konsolės langą“. *\n"
+"Norėdami parodyti vykdomos komandos langą, nustatykite žymimąjį laukelį „"
+"Rodyti konsolės langą“. *\n"
 "\n"
 "Spustelėjus mygtuką generuoti, įvyks:\n"
 "\n"
@@ -7476,74 +7476,74 @@ msgstr ""
 "komanda.\n"
 "\n"
 "\"\n"
-"xsltproc.exe -o <išvesties failo vardas> <stiliaus lapo failo pavadinimas> "
-"<konvertuojamas XML failas>\n"
+"xsltproc.exe -o <išvesties failo pavadinimas> <stiliaus lapo failo "
+"pavadinimas> <konvertuojamas XML failas>\n"
 "\"\n"
 "\n"
 "„Windows“ komandų eilutė yra tokia.\n"
 "\n"
 "\"\n"
-"f: /kicad/bin/xsltproc.exe -o \"% O\" f: /kicad/bin/plugins/myconverter.xsl "
-"\"% I\"\n"
+"f: /kicad/bin/xsltproc.exe -o \"%O\" f: /kicad/bin/plugins/myconverter.xsl \""
+"%I\"\n"
 "\"\n"
 "\n"
 "„Linux“ komanda tampa tokia.\n"
 "\n"
 "\"\n"
-"xsltproc -o \"% O\" / usr / local / kicad / bin / plugins / myconverter .xsl "
-"\"% I\"\n"
+"xsltproc -o \"%O\" / usr / local / kicad / bin / plugins / myconverter .xsl "
+"\"%I\"\n"
 "\"\n"
 "kur `myconverter.xsl` yra stiliaus lapas, kurį taikote.\n"
 "\n"
 "Nepamirškite dvigubų kabučių, esančių aplink failų pavadinimus, tai leis "
 "jiems turėti tarpų pakeitus Eeschema.\n"
 "\n"
-"Jei naudojamas „Python“ scenarijus, komandinė eilutė yra maždaug tokia "
-"(atsižvelgiant į „Python“ scenarijų):\n"
+"Jei naudojamas „Python“ scenarijus, komandinė eilutė yra maždaug tokia ("
+"atsižvelgiant į „Python“ scenarijų):\n"
 "\n"
 "\"\n"
-"python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"% I\" \"% O\"\n"
+"python f: /kicad/bin/plugins/bom-in-python/myconverter.py \"%I\" \"%O\"\n"
 "\"\n"
 "\n"
 "arba\n"
 "\n"
 "\"\n"
 "python / usr / local / kicad / bin / plugins / bom-in-python / myconverter ."
-"xsl \"% I\" \"% O\"\n"
+"xsl \"%I\" \"%O\"\n"
 "\"\n"
 "\n"
 "Komandinės eilutės formatas priima failų vardų parametrus. Palaikomi "
 "formatavimo parametrai yra šie:\n"
 "\n"
-" * `% B`: pasirinkto išvesties failo bazinis failo pavadinimas, atėmus kelią "
+" * `%B`: pasirinkto išvesties failo bazinis failo pavadinimas, atėmus kelią "
 "ir plėtinį.\n"
-" * `% P`: projekto katalogas, be pavadinimo ir be galo '/'.\n"
-" * `% I`: visas laikino įvesties failo vardas ir kelias\n"
+" * `%P`: projekto katalogas, be pavadinimo ir be galo '/'.\n"
+" * `%I`: visas laikino įvesties failo vardas ir kelias\n"
 "(tarpinė tinklo byla).\n"
-" * `% O`: pilnas vartotojo vardas ir kelias (bet be plėtinio)\n"
+" * `%O`: pilnas vartotojo vardas ir kelias (bet be plėtinio)\n"
 "pasirinktą išvesties failą.\n"
 "\n"
-"`% I` pakeis tikrasis tarpinio failo pavadinimas (paprastai visas šakninio "
+"`%I` pakeis tikrasis tarpinio failo pavadinimas (paprastai visas šakninio "
 "lapo failo pavadinimas su plėtiniu„ .xml “).\n"
-"„% O“ pakeis tikrasis išvesties failo pavadinimas (visas šakninio lapo failo "
+"`%O` pakeis tikrasis išvesties failo pavadinimas (visas šakninio lapo failo "
 "vardas atėmus plėtinį).\n"
-"\"% B\" bus pakeistas faktiniu išvesties trumpojo failo pavadinimu (trumpas "
+"`%B` bus pakeistas faktiniu išvesties trumpojo failo pavadinimu (trumpas "
 "šakninio lapo failo pavadinimas atėmus plėtinį).\n"
-"„% P“ bus pakeistas dabartiniu projekto keliu.\n"
+"`%P` bus pakeistas dabartiniu projekto keliu.\n"
 "\n"
 "## 4.3 - komandinės eilutės formatas:\n"
 "\n"
 "### 4.3.1 - Pastaba:\n"
 "\n"
 "Dažniausiai sukurtas failas turi turėti plėtinį, atsižvelgiant į jo tipą.\n"
-"Todėl prie parinkties ***% O *** turite pridėti tinkamą failo plėtinį.\n"
+"Todėl prie parinkties ***%O *** turite pridėti tinkamą failo plėtinį.\n"
 "\n"
 "Pavyzdžiui:\n"
 "\n"
-" * **% O.csv **, jei norite sukurti .csv failą (kableliais atskirtos vertės "
+" * **%O.csv **, jei norite sukurti .csv failą (kableliais atskirtos vertės "
 "failas).\n"
-" * **% O.htm **, jei norite sukurti .html failą.\n"
-" * **% O.bom **, jei norite sukurti .bom failą.\n"
+" * **%O.htm **, jei norite sukurti .html failą.\n"
+" * **%O.bom **, jei norite sukurti .bom failą.\n"
 "\n"
 "### 4.3.2 „xsltproc“ pavyzdys:\n"
 "\n"
@@ -7555,19 +7555,19 @@ msgstr ""
 "\n"
 "„Windows“:\n"
 "\"\n"
-"f: /kicad/bin/xsltproc.exe -o \"% O.bom\" f: /kicad/bin/plugins/"
-"netlist_form_pads-pcb.xsl \"% I\"\n"
+"f: /kicad/bin/xsltproc.exe -o \"%O.bom\" f: /kicad/bin/plugins/"
+"netlist_form_pads-pcb.xsl \"%I\"\n"
 "\"\n"
 "\n"
 "„Linux“:\n"
 "\"\n"
-"xsltproc -o \"% O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"% I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "\"\n"
 "\n"
 "Ankstesniuose pavyzdžiuose daroma prielaida, kad „xsltproc“ yra įdiegtas "
-"jūsų kompiuteryje pagal „Windows“ ir „xsl“ failus, esančius "
-"„<path_to_kicad> / kicad / bin / plugins /“.\n"
+"jūsų kompiuteryje pagal „Windows“ ir „xsl“ failus, esančius „<path_to_kicad> "
+"/ kicad / bin / plugins /“.\n"
 "\n"
 "\n"
 "### 4.3.3 „Python“ scenarijų pavyzdys:\n"
@@ -7575,7 +7575,7 @@ msgstr ""
 "Darant prielaidą, kad jūsų kompiuteryje yra įdiegtas „python“, o „python“ "
 "scenarijai yra\n"
 "\n"
-" \"<path_to_kicad> / kicad / bin / plugins / bom-in-python /\",\n"
+" \"<path_to_kicad>/kicad/bin/plugins/bom-in-python/\",\n"
 "\n"
 "„Python“ komandinės eilutės formatas yra kažkas panašaus:\n"
 "\n"
@@ -7586,14 +7586,14 @@ msgstr ""
 "\n"
 "„Windows“:\n"
 "\"\n"
-"python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% I\" "
-"\"% O.html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
 "\"\n"
 "\n"
 "„Linux“:\n"
 "\"\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"% I"
-"\" \"% O.csv\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
+"\"%O.csv\"\n"
 "\"\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:41
@@ -7714,7 +7714,7 @@ msgstr "*** simbolis nerastas ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 msgid "*** new symbol has too few units ***"
-msgstr "*** naujame simbolyje yra per mažai vienetų ***"
+msgstr "*** naujajame simbolyje yra per mažai vienetų ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
 msgid "Update all symbols in schematic"
@@ -8116,7 +8116,7 @@ msgstr "-------- Vartotojas atšaukė EMTT.<br><br>"
 #: eeschema/dialogs/dialog_erc.cpp:304 eeschema/dialogs/dialog_erc.cpp:437
 #: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
-msgstr "Atlikta.<br><br>"
+msgstr "Atlikta. <br> <br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:365
 msgid "Checking sheet names..."
@@ -8191,9 +8191,10 @@ msgstr "Pakeiskite visų „%s“ pažeidimų sunkumą į „Klaida“"
 
 #: eeschema/dialogs/dialog_erc.cpp:526 eeschema/dialogs/dialog_erc.cpp:532
 #: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
+#, fuzzy
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
-"Pažeidimų sunkumus taip pat galima redaguoti dialogo lange „Nustatymai ...“"
+"Pažeidimo sunkumą taip pat galima redaguoti dialogo lange Valdybos sąranka..."
 
 #: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
@@ -8284,7 +8285,7 @@ msgstr "Pažeidimai"
 #: eeschema/dialogs/dialog_erc_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
 msgid "Exclusions"
-msgstr "Išskiriantis"
+msgstr "Išskyrimo"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:109
 msgid "Delete Markers"
@@ -9043,7 +9044,7 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Nustačius šią parinktį, atitinkamas simbolis bus rodomas\n"
+"Nustačius šią parinktį, atitinkamas simbolis pasirodys\n"
 "dialogo langas \"pridėti maitinimo prievadą\". Jis užrakins vertės tekstą, "
 "kad jį apsaugotų\n"
 "nuo redagavimo „Eeschema“. Simbolis nebus įtrauktas į\n"
@@ -9225,7 +9226,7 @@ msgstr "Priimti vardą"
 
 #: eeschema/dialogs/dialog_migrate_buses_base.h:53
 msgid "Migrate Buses"
-msgstr "Perkelti autobusus"
+msgstr "Perkelkite autobusus"
 
 #: eeschema/dialogs/dialog_netlist.cpp:256
 msgid "Options:"
@@ -10245,7 +10246,7 @@ msgstr "Laiko žingsnis:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:869
 #: eeschema/dialogs/dialog_spice_model_base.cpp:880
 msgid "seconds"
-msgstr "sekundės"
+msgstr "sekundžių"
 
 #: eeschema/dialogs/dialog_sim_settings_base.cpp:376
 msgid "Final time:"
@@ -10503,7 +10504,7 @@ msgstr "Impulso plotis:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:443
 msgid "Period:"
-msgstr "Laikotarpis:"
+msgstr "Tūkstančių skyriklis:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:458
 msgid "Pulse"
