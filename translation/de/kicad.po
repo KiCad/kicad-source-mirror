@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-29 21:39+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -22225,7 +22225,7 @@ msgstr "Design-Regeln"
 
 #: pcbnew/dialogs/dialog_drc.cpp:250
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- DRC vom Benutzer abgebrochen. <br> <br>"
+msgstr "-------- DRC vom Benutzer abgebrochen. <br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
