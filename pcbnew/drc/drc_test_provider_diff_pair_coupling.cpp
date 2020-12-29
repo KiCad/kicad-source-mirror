@@ -233,7 +233,6 @@ static void extractDiffPairCoupledItems( DIFF_PAIR_ITEMS& aDp, DRC_RTREE& aTree 
 
         if( bestCoupled )
         {
-            printf("Best-gap %d\n", bestGap );
             auto excludeSelf =
                     [&] ( BOARD_ITEM *aItem )
                     {
@@ -393,8 +392,6 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
             cpair.computedGap = gap;
 
             auto overlay = m_drcEngine->GetDebugOverlay();
-
-            printf("Overlay %p\n", overlay.get () );
 
             if( overlay )
             {
