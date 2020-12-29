@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-29 18:04+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: Jonathan Haas <haasjona@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3859,7 +3859,7 @@ msgstr "Senkrechte Abmessungen"
 
 #: common/eda_item.cpp:273
 msgid "Center Dimension"
-msgstr "Zentrale Abmessung"
+msgstr "Mittige Bemaßung"
 
 #: common/eda_item.cpp:274 pcbnew/dimension.cpp:957
 msgid "Leader"
