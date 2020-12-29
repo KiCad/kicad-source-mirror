@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"PO-Revision-Date: 2020-12-29 21:39+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -11674,6 +11674,7 @@ msgstr "Bibliothekseditor"
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr ""
+"Mehrere Bibliotheken können nicht denselben Spitznamen ('%s') verwenden."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:420
 #, fuzzy, c-format
@@ -11721,12 +11722,16 @@ msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
 msgstr ""
+"Wählen Sie eine oder mehrere Tabellenzeilen mit Legacy-Bibliotheken aus, die "
+"als aktuelles Format gespeichert werden sollen (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:701
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
 msgstr ""
+"'%s' als aktuelles Format (* .kicad_sym) speichern und alten Eintrag in "
+"Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -11734,6 +11739,8 @@ msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"%d Legacy-Bibliotheken als aktuelles Format (* .kicad_sym) speichern und "
+"Legacy-Einträge in der Tabelle ersetzen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
 #, fuzzy, c-format
@@ -11966,7 +11973,7 @@ msgstr ""
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "Die Bibliothek '%s' ist in der aktuellen Konfiguration nicht aktiviert."
 
 #: eeschema/erc_item.cpp:42
 #, fuzzy
@@ -13142,6 +13149,9 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"Das Symbol '%s' ist im ursprünglichen CADSTAR-Schema skaliert, wird jedoch "
+"in KiCad nicht unterstützt. Das Symbol wurde im Maßstab 1: 1 geladen und "
+"muss möglicherweise manuell befestigt werden."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:864
 #, c-format
@@ -13159,6 +13169,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"Das Symbol '%s' wird im ursprünglichen CADSTAR-Design um einen Winkel von "
+"%.1f Grad gedreht, KiCad unterstützt jedoch nur Drehwinkel-Vielfache von 90 "
+"Grad. Die Verbindungsdrähte müssen manuell befestigt werden."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1160
 #, c-format
@@ -14584,11 +14597,15 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Symbole in Legacy-Bibliotheken können nicht bearbeitet werden. Verwenden Sie "
+"Symbolbibliotheken verwalten, um zum aktuellen Format zu migrieren."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
+"Das Symbol %s leitet sich von %s ab. Symbolgrafiken können nicht bearbeitet "
+"werden."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:744
 #, fuzzy, c-format
@@ -15103,6 +15120,8 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
+"Der Footprint '%s' ist auf der Leiterplatte nicht vorhanden. Entsprechende "
+"Symbole im Schaltplan müssen manuell gelöscht werden (falls gewünscht)."
 
 #: eeschema/tools/backannotate.cpp:301
 #, fuzzy
@@ -17689,11 +17708,11 @@ msgstr "Dateinamen ändern"
 
 #: kicad/project_tree_pane.cpp:1164
 msgid "Network path: not monitoring folder changes"
-msgstr ""
+msgstr "Netzwerkpfad: Ordneränderungen werden nicht überwacht"
 
 #: kicad/project_tree_pane.cpp:1169
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "Lokaler Pfad: Ordneränderungen überwachen"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 msgid "New Project..."
@@ -22702,6 +22721,11 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"Aktualisieren / Zurücksetzen von Zeichenfolgen: Es gibt zwei Fälle, die in "
+"diesen Beschreibungen behandelt werden müssen: Der Benutzer hat "
+"Überschreibungen an einem Footprint auf der Leiterplatte vorgenommen und "
+"möchte diese entfernen, oder der Benutzer hat Änderungen am Footprint der "
+"Bibliothek vorgenommen und möchte sie wieder auf die Leiterplatte übertragen."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
 #, fuzzy, c-format
@@ -24008,7 +24032,7 @@ msgstr "Liniensegmenteigenschaften"
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
-msgstr "Linienbreite darf für ungefüllte Flächen nicht 0 sein."
+msgstr "Die Linienbreite darf für ungefüllte Formen nicht 0 sein."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
 msgid "Modify drawing properties"
@@ -25847,17 +25871,19 @@ msgstr "Optimiert das Ziehen der Spur"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Verwenden Sie den Mauspfad, um die Spurhaltung festzulegen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"Wenn diese Option aktiviert ist, wird die Haltung der Spuren davon bestimmt, "
+"wie die Maus vom Startort bewegt wird"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Korrigieren Sie alle Segmente beim Klicken"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -25865,6 +25891,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"Wenn diese Option aktiviert ist, werden alle Spursegmente bis zur "
+"Cursorposition fixiert. Wenn deaktiviert, bleibt das letzte Segment (das dem "
+"Cursor am nächsten liegt) frei und folgt dem Cursor."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
@@ -26278,6 +26307,8 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
+"Ändern Sie das Netz automatisch über, wenn die Pads oder Zonen, die es "
+"berührt, geändert werden"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:110
 msgid "Track & Via Properties"
@@ -26483,18 +26514,20 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Klicken Sie mit der linken Maustaste auf Mausbefehle"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:72
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
+"Linksklick- (und Zieh-) Aktionen hängen von 3 Modifizierertasten ab:\n"
+"Alt, Umschalt und Strg."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:167
 msgid "No modifier"
-msgstr ""
+msgstr "Kein Modifikator"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:91
 #: pcbnew/dialogs/panel_edit_options_base.cpp:172
@@ -26547,6 +26580,8 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
+"Linksklick- (und Zieh-) Aktionen hängen von 3 Modifizierertasten ab:\n"
+"Alt, Umschalt und Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:187
 #, fuzzy
@@ -26560,7 +26595,7 @@ msgstr "Aktion"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:217
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt + Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 msgid "Magnetic Points"
@@ -30978,23 +31013,29 @@ msgstr "Ignoriere ein Polygon, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Ignoriere eine Verbindung, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
+"Das Ignorieren eines Drahtes seit der Eagle-Ebene '%s' (%d) wurde nicht "
+"abgebildet"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1768
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignoriere ein Text, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
+msgstr ""
+"Das Ignorieren eines Textes seit der Eagle-Ebene '%s' (%d) wurde nicht "
+"zugeordnet"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1906
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
 msgstr ""
-"Ignoriere ein Rechteck, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
+"Das Ignorieren eines Rechtecks seit der Eagle-Ebene '%s' (%d) wurde nicht "
+"zugeordnet"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2091
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignoriere ein Kreis, da Eagle-Ebene '%s' (%d) nicht zugeordnet wurde"
+msgstr ""
+"Das Ignorieren eines Kreises seit der Eagle-Ebene '%s' (%d) wurde nicht "
+"zugeordnet"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
@@ -31271,7 +31312,7 @@ msgstr "Legacy Flächenwarnung"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:544
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Die Datei '%s' hat eine nicht erkannte Version: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:698
 #, c-format
@@ -32075,7 +32116,7 @@ msgstr "Abstandsmaß"
 #: pcbnew/tools/board_inspection_tool.cpp:309
 #: pcbnew/tools/board_inspection_tool.cpp:322
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "Freigabebericht für leere Gruppe kann nicht erstellt werden."
 
 #: pcbnew/tools/board_inspection_tool.cpp:363
 #, fuzzy
@@ -32614,7 +32655,7 @@ msgstr "Anker vom Footprint setzen"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr ""
+msgstr "Legen Sie den Koordinatenursprungspunkt (Anker) des Footprints fest"
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Increase Line Width"
@@ -34673,7 +34714,7 @@ msgstr "Rücksetzen"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Strg + Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 #, fuzzy
