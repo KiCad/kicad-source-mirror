@@ -410,10 +410,10 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 
     switch( pin->GetOrientation() )
     {
-    case PIN_UP:    step.x = settings->m_Repeat.pin_step;   break;
-    case PIN_DOWN:  step.x = settings->m_Repeat.pin_step;   break;
-    case PIN_LEFT:  step.y = -settings->m_Repeat.pin_step;  break;
-    case PIN_RIGHT: step.y = -settings->m_Repeat.pin_step;  break;
+    case PIN_UP:    step.x = Mils2iu(settings->m_Repeat.pin_step);   break;
+    case PIN_DOWN:  step.x = Mils2iu(settings->m_Repeat.pin_step);   break;
+    case PIN_LEFT:  step.y = Mils2iu(-settings->m_Repeat.pin_step);  break;
+    case PIN_RIGHT: step.y = Mils2iu(-settings->m_Repeat.pin_step);  break;
     }
 
     pin->Offset( step );
