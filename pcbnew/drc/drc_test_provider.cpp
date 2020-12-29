@@ -36,6 +36,13 @@ std::vector<KICAD_T> DRC_TEST_PROVIDER::s_allBasicItems;
 std::vector<KICAD_T> DRC_TEST_PROVIDER::s_allBasicItemsButZones;
 
 
+DRC_TEST_PROVIDER_REGISTRY::~DRC_TEST_PROVIDER_REGISTRY()
+{
+    for( DRC_TEST_PROVIDER* provider : m_providers )
+        delete provider;
+}
+
+
 DRC_TEST_PROVIDER::DRC_TEST_PROVIDER() :
     m_drcEngine( nullptr )
 {

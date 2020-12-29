@@ -37,8 +37,9 @@ class DRC_TEST_PROVIDER;
 class DRC_TEST_PROVIDER_REGISTRY
 {
 public:
-    DRC_TEST_PROVIDER_REGISTRY() {};
-    ~DRC_TEST_PROVIDER_REGISTRY() {};
+    DRC_TEST_PROVIDER_REGISTRY() {}
+
+    ~DRC_TEST_PROVIDER_REGISTRY();
 
     static DRC_TEST_PROVIDER_REGISTRY& Instance()
     {
@@ -72,7 +73,7 @@ class DRC_TEST_PROVIDER
 {
 public:
     DRC_TEST_PROVIDER ();
-    virtual ~DRC_TEST_PROVIDER() {}
+    virtual ~DRC_TEST_PROVIDER() = default;
 
     void SetDRCEngine( DRC_ENGINE *engine )
     {
