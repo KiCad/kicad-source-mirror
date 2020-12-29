@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-29 21:39+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: WhiteChairFromIkea <dainius.mazuika@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/lt/>\n"
 "Language: lt\n"
@@ -215,7 +215,7 @@ msgstr "Renderinimo laikas %.0f ms ( %.1f fps)"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:748
 #, c-format
 msgid "Net %s\tNetClass %s\tPadName %s"
-msgstr "„Net“ %s „NetClass“ %s „PadName“ %s"
+msgstr "Grandinė %s\tGrandinėsKlasė %s\tAikštelėsVardas %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:773
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:786
