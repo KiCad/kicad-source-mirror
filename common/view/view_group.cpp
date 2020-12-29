@@ -140,10 +140,8 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
     int layers[VIEW::VIEW_MAX_LAYERS] = { 0 };
     int layers_count = 0;
 
-    for( const auto& entry : layer_item_map )
-    {
+    for( const std::pair<const int, std::vector<VIEW_ITEM*>>& entry : layer_item_map )
         layers[ layers_count++ ] = entry.first;
-    }
 
     aView->SortLayers( layers, layers_count );
 
@@ -175,7 +173,7 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
         {
             gal->AdvanceDepth();
 
-            for( auto item : layer_item_map[ layers[i] ] )
+            for( VIEW_ITEM* item : layer_item_map[ layers[i] ] )
             {
                 if( !painter->Draw( item, layers[i] ) )
                     item->ViewDraw( layers[i], aView ); // Alternative drawing method
