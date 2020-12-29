@@ -2071,8 +2071,18 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     }
 
     // All other items are selected only if the layer on which they exist is visible
-    return board()->IsLayerVisible( aItem->GetLayer() )
-            && aItem->ViewGetLOD( aItem->GetLayer(), view() ) < view()->GetScale();
+    if( m_isFootprintEditor )
+    {
+        if( !view()->IsLayerVisible( aItem->GetLayer() ) )
+            return false;
+    }
+    else
+    {
+        if( !board()->IsLayerVisible( aItem->GetLayer() ) )
+            return false;
+    }
+
+    return aItem->ViewGetLOD( aItem->GetLayer(), view() ) < view()->GetScale();
 }
 
 
