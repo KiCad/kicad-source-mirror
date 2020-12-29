@@ -345,6 +345,8 @@ public:
         struct JUNCTION_SCH : CADSTAR_ARCHIVE_PARSER::NET::JUNCTION ///< "JPT" nodename.
         {
             TERMINALCODE_ID TerminalCodeID; ///< Usually a circle, but size can be varied
+            bool            HasNetLabel = false;
+            SIGLOC          NetLabel;
 
             void Parse( XNODE* aNode, PARSER_CONTEXT* aContext ) override;
         };

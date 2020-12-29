@@ -816,14 +816,30 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             }
         }
 
-        for( std::pair<NETELEMENT_ID, NET::JUNCTION> juncPair : net.Junctions )
+        for( std::pair<NETELEMENT_ID, NET_SCH::JUNCTION_SCH> juncPair : net.Junctions )
         {
-            NET::JUNCTION junc = juncPair.second;
+            NET_SCH::JUNCTION_SCH junc = juncPair.second;
 
             SCH_JUNCTION* kiJunc = new SCH_JUNCTION();
 
             kiJunc->SetPosition( getKiCadPoint( junc.Location ) );
             mSheetMap.at( junc.LayerID )->GetScreen()->Append( kiJunc );
+
+            if( junc.HasNetLabel )
+            {
+                // In CADSTAR the label can be placed anywhere, but in KiCad it has to be placed
+                // in the same location as the junction for it to be connected to it.
+                SCH_LABEL* label = new SCH_LABEL();
+                label->SetText( netName );
+                label->SetPosition( getKiCadPoint( junc.Location ) );
+                label->SetVisible( true );
+
+                double labelAngleDeciDeg = getAngleTenthDegree( junc.NetLabel.OrientAngle );
+                LABEL_SPIN_STYLE spin = getSpinStyleDeciDeg( labelAngleDeciDeg );
+                label->SetLabelSpinStyle( spin );
+
+                mSheetMap.at( junc.LayerID )->GetScreen()->Append( label );
+            }
         }
     }
 }

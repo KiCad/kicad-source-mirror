@@ -1148,10 +1148,30 @@ void CADSTAR_SCH_ARCHIVE_PARSER::SCHEMATIC::Parse( XNODE* aNode, PARSER_CONTEXT*
 
 void CADSTAR_SCH_ARCHIVE_PARSER::NET_SCH::JUNCTION_SCH::Parse( XNODE* aNode, PARSER_CONTEXT* aContext )
 {
-    CADSTAR_ARCHIVE_PARSER::NET::JUNCTION::Parse( aNode, aContext );
+    ParseIdentifiers( aNode, aContext );
 
     TerminalCodeID = GetXmlAttributeIDString( aNode, 1 );
     LayerID        = GetXmlAttributeIDString( aNode, 2 );
+
+    XNODE* cNode = aNode->GetChildren();
+
+    for( ; cNode; cNode = cNode->GetNext() )
+    {
+        if( ParseSubNode( cNode, aContext ) )
+        {
+            continue;
+        }
+        else if( cNode->GetName() == wxT( "SIGLOC" ) )
+        {
+            NetLabel.Parse( cNode, aContext );
+            HasNetLabel = true;
+        }
+        else
+        {
+            THROW_UNKNOWN_NODE_IO_ERROR( cNode->GetName(), aNode->GetName() );
+        }
+    }
+    
 }
 
 
