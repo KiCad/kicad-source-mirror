@@ -27,6 +27,7 @@
 #include <wx/sizer.h>
 #include <wx/timer.h>
 #include <wx/hyperlink.h>
+#include <eda_base_frame.h>
 
 
 wxDEFINE_EVENT( KIEVT_SHOW_INFOBAR,    wxCommandEvent );
@@ -52,12 +53,6 @@ WX_INFOBAR::WX_INFOBAR( wxWindow* aParent, wxAuiManager* aMgr, wxWindowID aWinid
 
     SetShowHideEffects( wxSHOW_EFFECT_ROLL_TO_BOTTOM, wxSHOW_EFFECT_ROLL_TO_TOP );
     SetEffectDuration( 300 );
-
-#ifndef __WXOSX__
-    // Prevent draw flicker observed on windows.  (Sadly wxWidgets didn't think this was worth
-    // a NOP on OSX so it has to be conditionally compiled.)
-    SetDoubleBuffered( true );
-#endif
 
     // The infobar seems to start too small, so increase its height
     int sx, sy;
@@ -161,7 +156,7 @@ void WX_INFOBAR::Dismiss()
     m_updateLock = false;
 }
 
-#include <eda_base_frame.h>
+
 void WX_INFOBAR::onSize( wxSizeEvent& aEvent )
 {
     int barWidth = GetSize().GetWidth();
