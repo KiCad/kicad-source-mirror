@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-29 18:04+0000\n"
-"Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -3198,7 +3198,7 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:38
 msgid "Use zoom acceleration"
-msgstr "Benutze Zoom-Beschleunigung"
+msgstr "Zoom-Beschleunigung Benutzen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
@@ -5647,7 +5647,7 @@ msgstr "Ausgeschlossen"
 
 #: common/tool/actions.cpp:257
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Aktuelle Verletzung im Checker-Fenster als Ausschluss markieren"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
@@ -7809,7 +7809,7 @@ msgstr "Ändere die Sichtbarkeit der Felder"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:133
 msgid "Update field sizes and styles"
-msgstr "Änderunf der Testgröße und Textart"
+msgstr "Änderung der Testgröße und Textart"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update field positions"
@@ -16116,12 +16116,13 @@ msgstr ""
 "<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:310
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> in symbol %c "
 "of converted.<br>"
 msgstr ""
-"<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</br> "
+"welche im Symbol %c angegeben wurde.<br>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:322
 #, fuzzy, c-format
@@ -16130,12 +16131,13 @@ msgstr ""
 "<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</b>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:330
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> \"%s\" at location <b>(%.3f, %.3f)</b> in symbol %c."
 "<br>"
 msgstr ""
-"<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</b>"
+"<b>Pin %s außerhalb des Rasters</b> \"%s\" an Position <b>(%.3f, %.3f)</b> "
+"im Symbol %c.<>"
 
 #: eeschema/tools/ee_inspection_tool.cpp:343
 msgid "No off grid or duplicate pins were found."
@@ -20753,22 +20755,24 @@ msgid "Aborted: too many errors"
 msgstr "Abbruch durch Benutzer"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
 msgstr ""
 "\n"
-"Keine Footprints."
+"\n"
+"Vorderseitige Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:890
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "Footprints"
+msgstr ""
+"\n"
+"\n"
+"Rückseitige Footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:961
 #, fuzzy
@@ -34350,15 +34354,15 @@ msgid "Set net color"
 msgstr "Farbe zuweisen"
 
 #: pcbnew/widgets/appearance_controls.cpp:833
-#, fuzzy, c-format
+#, c-format
 msgid "Highlight %s"
-msgstr "Hervorhebung"
+msgstr "Hervorhebung %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2120
-#, fuzzy, c-format
+#, c-format
 msgid "Select tracks and vias in %s"
-msgstr "Leiterbahnen und Durchkontaktierungen erstellen"
+msgstr "Wähle Leiterbahnen und Durchkontaktierungen aus %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:839
 #: pcbnew/widgets/appearance_controls.cpp:2124
