@@ -366,11 +366,9 @@ private:
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
 private:
-    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode,
-                            PCB_SELECTION* aSelectionViewGroup, bool isChild);
+    void highlightInternal( BOARD_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
 
-    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode,
-                              PCB_SELECTION* aSelectionViewGroup, bool isChild);
+    void unhighlightInternal( BOARD_ITEM* aItem, int aHighlightMode, bool aUsingOverlay );
 
     PCB_BASE_FRAME*  m_frame;     // Pointer to the parent frame
     PCB_SELECTION    m_selection; // Current state of selection

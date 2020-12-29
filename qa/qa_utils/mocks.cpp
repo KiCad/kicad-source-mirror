@@ -791,7 +791,7 @@ void PCB_SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION*
 
 }
 
-void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup, bool isChild )
+void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
 {
 
 }
@@ -803,7 +803,7 @@ void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTIO
 }
 
 
-void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup, bool isChild )
+void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
 {
 
 }

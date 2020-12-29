@@ -36,6 +36,7 @@
 #include <track.h>
 #include <zone.h>
 #include <pcb_marker.h>
+#include <pcb_group.h>
 #include <pcb_target.h>
 #include <core/arraydim.h>
 #include <core/kicad_algo.h>
@@ -2074,93 +2075,24 @@ wxString BOARD::GroupsSanityCheckInternal( bool repair )
 
 BOARD::GroupLegalOpsField BOARD::GroupLegalOps( const PCB_SELECTION& selection ) const
 {
-    GroupLegalOpsField legalOps = { false, false, false, false, false, false };
-
-    std::unordered_set<const BOARD_ITEM*> allMembers;
-
-    for( const PCB_GROUP* grp : m_groups )
-    {
-        for( const BOARD_ITEM* member : grp->GetItems() )
-            allMembers.insert( member );
-    }
-
-    bool hasGroup              = ( SELECTION_CONDITIONS::HasType( PCB_GROUP_T ) )( selection );
-    // All elements of selection are groups, and no element is a descendant group of any other.
-    bool onlyGroups            = ( SELECTION_CONDITIONS::OnlyType( PCB_GROUP_T ) )( selection );
-    // Any elements of the selections are already members of groups
-    bool anyGrouped            = false;
-    // Any elements of the selections, except the first group, are already members of groups.
-    bool anyGroupedExceptFirst = false;
-    // All elements of the selections are already members of groups
-    bool allGrouped            = true;
-    bool seenFirstGroup        = false;
-
-    if( onlyGroups )
-    {
-        // Check that no groups are descendant subgroups of another group in the selection
-        for( EDA_ITEM* item : selection )
-        {
-            const PCB_GROUP*                     group = static_cast<const PCB_GROUP*>( item );
-            std::unordered_set<const PCB_GROUP*> subgroupos;
-            std::queue<const PCB_GROUP*>         toCheck;
-            toCheck.push( group );
-
-            while( !toCheck.empty() )
-            {
-                const PCB_GROUP* candidate = toCheck.front();
-                toCheck.pop();
-
-                for( const BOARD_ITEM* aChild : candidate->GetItems() )
-                {
-                    if( aChild->Type() == PCB_GROUP_T )
-                    {
-                        const PCB_GROUP* childGroup = static_cast<const PCB_GROUP*>( aChild );
-                        subgroupos.insert( childGroup );
-                        toCheck.push( childGroup );
-                    }
-                }
-            }
-
-            for( EDA_ITEM* otherItem : selection )
-            {
-                if( otherItem != item
-                    && subgroupos.find( static_cast<PCB_GROUP*>( otherItem ) ) != subgroupos.end() )
-                {
-                    // otherItem is a descendant subgroup of item
-                    onlyGroups = false;
-                }
-            }
-        }
-    }
+    bool hasGroup = false;
+    bool hasMember = false;
 
     for( EDA_ITEM* item : selection )
     {
-        BOARD_ITEM* board_item   = static_cast<BOARD_ITEM*>( item );
-        bool        isFirstGroup = !seenFirstGroup && board_item->Type() == PCB_GROUP_T;
+        if( item->Type() == PCB_GROUP_T )
+            hasGroup = true;
 
-        if( isFirstGroup )
-        {
-            seenFirstGroup = true;
-        }
-
-        if( allMembers.find( board_item ) == allMembers.end() )
-        {
-            allGrouped = false;
-        }
-        else
-        {
-            anyGrouped = true;
-
-            if( !isFirstGroup )
-                anyGroupedExceptFirst = true;
-        }
+        if( item->GetParent() && item->GetParent()->Type() == PCB_GROUP_T )
+            hasMember = true;
     }
 
-    legalOps.create      = !anyGrouped;
-    legalOps.merge       = hasGroup && !anyGroupedExceptFirst && ( selection.Size() > 1 );
-    legalOps.ungroup     = onlyGroups;
-    legalOps.removeItems = allGrouped;
-    legalOps.flatten     = onlyGroups;
-    legalOps.enter       = onlyGroups && selection.Size() == 1;
+    GroupLegalOpsField legalOps;
+
+    legalOps.create      = true;
+    legalOps.removeItems = hasMember;
+    legalOps.ungroup     = hasGroup;
+    legalOps.enter       = hasGroup && selection.Size() == 1;
+
     return legalOps;
 }

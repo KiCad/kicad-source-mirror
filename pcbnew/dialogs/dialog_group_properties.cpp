@@ -54,6 +54,13 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
 }
 
 
+DIALOG_GROUP_PROPERTIES::~DIALOG_GROUP_PROPERTIES()
+{
+    m_brdEditor->FocusOnItem( nullptr );
+    m_brdEditor->GetCanvas()->Refresh();
+}
+
+
 bool DIALOG_GROUP_PROPERTIES::TransferDataToWindow()
 {
     // Don't do anything here; it gets called every time we re-show the dialog after
@@ -67,8 +74,27 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_brdEditor );
     commit.Modify( m_group );
 
-    m_group->SetName( m_nameCtrl->GetValue() );
+    m_group->RunOnDescendants(
+            [&]( BOARD_ITEM* descendant )
+            {
+                commit.Modify( descendant );
+            } );
 
+    for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) );
+        PCB_GROUP*  existingGroup = item->GetParentGroup();
+
+        if( existingGroup != m_group )
+        {
+            commit.Modify( item );
+
+            if( existingGroup )
+                commit.Modify( existingGroup );
+        }
+    }
+
+    m_group->SetName( m_nameCtrl->GetValue() );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_group->RemoveAll();
@@ -76,20 +102,12 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
     for( size_t ii = 0; ii < m_membersList->GetCount(); ++ii )
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( m_membersList->GetClientData( ii ) );
-        PCB_GROUP*  existingGroup = item->GetParentGroup();
-
-        if( existingGroup )
-        {
-            commit.Modify( existingGroup );
-            existingGroup->RemoveItem( item );
-        }
-
         m_group->AddItem( item );
     }
 
-    commit.Push( _( "Modified group" ) );
     m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, m_group );
 
+    commit.Push( _( "Modified group" ) );
     return true;
 }
 
@@ -138,6 +156,9 @@ void DIALOG_GROUP_PROPERTIES::OnRemoveMember( wxCommandEvent& event )
 
     if( selected >= 0 )
         m_membersList->Delete( selected );
+
+    m_brdEditor->FocusOnItem( nullptr );
+    m_brdEditor->GetCanvas()->Refresh();
 }
 
 

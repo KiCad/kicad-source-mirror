@@ -114,29 +114,6 @@ const KIGFX::VIEW_GROUP::ITEMS PCB_SELECTION::updateDrawList() const
     for( EDA_ITEM* item : m_items )
         addItem( item );
 
-#if 0
-    for( EDA_ITEM* item : m_items )
-    {
-        items.push_back( item );
-
-        if( item->Type() == PCB_FOOTPRINT_T )
-        {
-            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
-            footprint->RunOnChildren( [&]( BOARD_ITEM* bitem )
-                                      {
-                                          items.push_back( bitem );
-                                      } );
-        }
-        else if( item->Type() == PCB_GROUP_T )
-        {
-            PCB_GROUP* group = static_cast<PCB_GROUP*>( item );
-            group->RunOnChildren( [&]( BOARD_ITEM* bitem )
-                                  {
-                                      items.push_back( bitem );
-                                  } );
-        }
-    }
-#endif
     return items;
 }
 

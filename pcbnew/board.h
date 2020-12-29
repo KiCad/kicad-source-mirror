@@ -1139,10 +1139,8 @@ public:
     struct GroupLegalOpsField
     {
         bool create      : 1;
-        bool merge       : 1;
         bool ungroup     : 1;
         bool removeItems : 1;
-        bool flatten     : 1;
         bool enter       : 1;
     };
 

@@ -455,6 +455,7 @@ void PCB_SELECTION_TOOL::EnterGroup()
 
     ClearSelection();
     m_enteredGroup = aGroup;
+    m_enteredGroup->SetFlags( ENTERED );
     m_enteredGroup->RunOnChildren( [&]( BOARD_ITEM* titem )
                                    {
                                        select( titem );
@@ -470,6 +471,7 @@ void PCB_SELECTION_TOOL::ExitGroup( bool aSelectGroup )
     if( m_enteredGroup == nullptr )
         return;
 
+    m_enteredGroup->ClearFlags( ENTERED );
     ClearSelection();
 
     if( aSelectGroup )
@@ -1666,16 +1668,22 @@ void PCB_SELECTION_TOOL::RebuildSelection()
                 {
                     EDA_ITEM* parent = item->GetParent();
 
-                    // Flags on footprint children might be set only because the parent is
-                    // selected.
-                    if( parent && parent->Type() == PCB_FOOTPRINT_T && parent->IsSelected() )
+                    // Let selected parents handle their children.
+                    if( parent && parent->IsSelected() )
                         return SEARCH_RESULT::CONTINUE;
 
                     highlight( (BOARD_ITEM*) item, SELECTED, &m_selection );
                 }
 
                 if( item == m_enteredGroup )
+                {
+                    item->SetFlags( ENTERED );
                     enteredGroupFound = true;
+                }
+                else
+                {
+                    item->ClearFlags( ENTERED );
+                }
 
                 return SEARCH_RESULT::CONTINUE;
             };
@@ -2071,9 +2079,7 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 void PCB_SELECTION_TOOL::select( BOARD_ITEM* aItem )
 {
     if( aItem->IsSelected() )
-    {
         return;
-    }
 
     if( aItem->Type() == PCB_PAD_T )
     {
@@ -2095,8 +2101,10 @@ void PCB_SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 
 void PCB_SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
 {
-    highlightInternal( aItem, aMode, aGroup, false );
+    if( aGroup )
+        aGroup->Add( aItem );
 
+    highlightInternal( aItem, aMode, aGroup != nullptr );
     view()->Update( aItem, KIGFX::REPAINT );
 
     // Many selections are very temporal and updating the display each time just
@@ -2106,31 +2114,22 @@ void PCB_SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION*
 }
 
 
-void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
-                                            PCB_SELECTION* aSelectionViewGroup, bool isChild )
+void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
         aItem->SetBrightened();
 
-    if( aSelectionViewGroup )
-    {
-        // Hide the original item, so it is shown only on overlay
-        view()->Hide( aItem, true );
+    if( aUsingOverlay )
+        view()->Hide( aItem, true );    // Hide the original item, so it is shown only on overlay
 
-        if( !isChild || aMode == BRIGHTENED )
-            aSelectionViewGroup->Add( aItem );
-    }
-
-    // footprints are treated in a special way - when they are highlighted, we have to highlight
-    // all the parts that make the footprint, not the footprint itself
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
                 {
-                    highlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                    highlightInternal( aChild, aMode, aUsingOverlay );
                 } );
     }
     else if( aItem->Type() == PCB_GROUP_T )
@@ -2138,7 +2137,7 @@ void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
         static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
                 {
-                    highlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                    highlightInternal( aChild, aMode, aUsingOverlay );
                 } );
     }
 }
@@ -2146,8 +2145,10 @@ void PCB_SELECTION_TOOL::highlightInternal( BOARD_ITEM* aItem, int aMode,
 
 void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTION* aGroup )
 {
-    unhighlightInternal( aItem, aMode, aGroup, false );
+    if( aGroup )
+        aGroup->Remove( aItem );
 
+    unhighlightInternal( aItem, aMode, aGroup != nullptr );
     view()->Update( aItem, KIGFX::REPAINT );
 
     // Many selections are very temporal and updating the display each time just
@@ -2157,35 +2158,22 @@ void PCB_SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, PCB_SELECTIO
 }
 
 
-void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
-                                              PCB_SELECTION* aSelectionViewGroup, bool isChild )
+void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode, bool aUsingOverlay )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
         aItem->ClearBrightened();
 
-    if( aSelectionViewGroup )
-    {
-        aSelectionViewGroup->Remove( aItem );
+    if( aUsingOverlay )
+        view()->Hide( aItem, false );   // // Restore original item visibility
 
-        // Restore original item visibility
-        view()->Hide( aItem, false );
-
-        // N.B. if we clear the selection flag for sub-elements, we need to also
-        // remove the element from the selection group (if it exists)
-        if( isChild )
-            view()->Update( aItem, KIGFX::REPAINT );
-    }
-
-    // footprints are treated in a special way - when they are highlighted, we have to
-    // highlight all the parts that make the footprint, not the footprint itself
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
         static_cast<FOOTPRINT*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
                 {
-                    unhighlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                    unhighlightInternal( aChild, aMode, aUsingOverlay );
                 } );
     }
     else if( aItem->Type() == PCB_GROUP_T )
@@ -2193,7 +2181,7 @@ void PCB_SELECTION_TOOL::unhighlightInternal( BOARD_ITEM* aItem, int aMode,
         static_cast<PCB_GROUP*>( aItem )->RunOnChildren(
                 [&]( BOARD_ITEM* aChild )
                 {
-                    unhighlightInternal( aChild, aMode, aSelectionViewGroup, true );
+                    unhighlightInternal( aChild, aMode, aUsingOverlay );
                 } );
     }
 }
@@ -2205,7 +2193,7 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
-    for( auto item : m_selection )
+    for( EDA_ITEM* item : m_selection )
     {
         BOX2I itemBox = item->ViewBBox();
         itemBox.Inflate( margin.x, margin.y );    // Give some margin for gripping an item

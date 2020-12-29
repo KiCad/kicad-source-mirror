@@ -1445,9 +1445,18 @@ void PCB_PAINTER::draw( const PCB_GROUP* aGroup, int aLayer )
 {
     if( aLayer == LAYER_ANCHOR )
     {
-        // Draw only when we're selected on our own
-        if( !aGroup->IsSelected() || ( aGroup->GetParent() && aGroup->GetParent()->IsSelected() ) )
+        if( aGroup->IsSelected() && !( aGroup->GetParent() && aGroup->GetParent()->IsSelected() ) )
+        {
+            // Selected on our own; draw enclosing box
+        }
+        else if( aGroup->IsEntered() )
+        {
+            // Entered group; draw enclosing box
+        }
+        else
+        {
             return;
+        }
 
         const COLOR4D color = m_pcbSettings.GetColor( aGroup, LAYER_ANCHOR );
 

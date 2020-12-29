@@ -40,7 +40,7 @@ private:
 
 public:
     DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, PCB_GROUP* aTarget );
-    ~DIALOG_GROUP_PROPERTIES() { }
+    ~DIALOG_GROUP_PROPERTIES();
 
     void OnMemberSelected( wxCommandEvent& event ) override;
     void OnAddMember( wxCommandEvent& event ) override;

@@ -133,6 +133,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 #define UR_TRANSIENT   (1 << 28)   ///< indicates the item is owned by the undo/redo stack
 
 #define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling
+#define ENTERED        (1 << 30)
 
 // WARNING: if you add flags, you'll probably need to adjust the masks in GetEditFlags() and
 // ClearTempFlags().
@@ -168,6 +169,7 @@ public:
     inline bool IsDragging() const { return m_flags & IS_DRAGGED; }
     inline bool IsWireImage() const { return m_flags & IS_WIRE_IMAGE; }
     inline bool IsSelected() const { return m_flags & SELECTED; }
+    inline bool IsEntered() const { return m_flags & ENTERED; }
     inline bool IsResized() const { return m_flags & IS_RESIZED; }
     inline bool IsBrightened() const { return m_flags & BRIGHTENED; }
 
