@@ -253,5 +253,10 @@ BOOST_AUTO_TEST_CASE( BusJunctions )
 }
 
 
+BOOST_AUTO_TEST_CASE( HierRenaming )
+{
+    doNetlistTest( "test_hier_renaming" );
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

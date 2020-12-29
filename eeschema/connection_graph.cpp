@@ -1732,6 +1732,10 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                 if( neighbor_name == member->Name() )
                     continue;
 
+                // Was this neighbor already updated from a different sheet?  Don't rename it again
+                if( neighbor_conn->Sheet() != neighbor->m_sheet )
+                    continue;
+
                 // Safety check against infinite recursion
                 wxASSERT( neighbor_conn->IsNet() );
 
