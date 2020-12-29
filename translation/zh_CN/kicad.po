@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 12:11+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -11504,7 +11504,7 @@ msgstr "当前配置不包含库 '%s'。"
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr "当前配置中未启用库'%s'。"
+msgstr "当前配置中未启用库 '%s'。"
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -24609,18 +24609,18 @@ msgstr "使用鼠标路径设置轨迹姿势"
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
-msgstr "启用时，轨迹的姿态将由鼠标从起始位置移动的方式来引导"
+msgstr "启用时，布线的姿态将由鼠标从起始位置移动的方式来引导"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr "点击时固定所有片段"
+msgstr "修复点击时的所有线段"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
 "When enabled, all track segments will be fixed in place up to the cursor "
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
-msgstr "启用时，所有的轨道段将被固定在光标上方的位置。禁用时，最后一个片段（离光标最近的）将不受约束并跟随光标。"
+msgstr "启用时，所有的布线线段将被固定在光标上方的位置。禁用时，最后一个线段（离光标最近的）将不受约束并跟随光标。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
@@ -25026,7 +25026,7 @@ msgstr "通过网自动更新"
 msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
-msgstr "自动更改这个过孔的网，当它接触的焊盘或区域更改时"
+msgstr "当它接触的焊盘或区域更改时自动更改这个过孔的网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:110
 msgid "Track & Via Properties"
@@ -29585,7 +29585,7 @@ msgstr "旧区警告"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:544
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr "文件 '%s'有一个未被识别的版本:%d。"
+msgstr "文件 '%s' 有一个未被识别的版本: %d。"
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:698
 #, c-format
