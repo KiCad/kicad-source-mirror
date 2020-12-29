@@ -1216,7 +1216,8 @@ void SIM_PLOT_FRAME::menuWhiteBackground( wxCommandEvent& event )
         if( curPage == m_welcomePanel )
             continue;
 
-        // ensure it is truely a plot panel and not the welcome panel which is only SIM_PLOT_PANEL_BASE
+        // ensure it is truely a plot panel and not the (zero plots) placeholder
+        // which is only SIM_PLOT_PANEL_BASE
         SIM_PLOT_PANEL* panel = dynamic_cast<SIM_PLOT_PANEL*>( curPage );
 
         if( panel != nullptr )
