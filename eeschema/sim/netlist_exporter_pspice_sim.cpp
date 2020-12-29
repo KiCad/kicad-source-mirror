@@ -54,7 +54,7 @@ wxString NETLIST_EXPORTER_PSPICE_SIM::ComponentToVector(
         wxString device = GetSpiceDevice( aName ).Lower();
         wxString param = aParam.Lower();
 
-        if( device[0] == 'x' )
+        if( device.length() > 0 && device[0] == 'x' )
         {
             return "current probe of .subckt not yet implemented";
         }
