@@ -92,29 +92,29 @@ enum DRAG_MODE
  class ROUTER_IFACE
  {
  public:
-        ROUTER_IFACE() {};
-        virtual ~ROUTER_IFACE() {};
+    ROUTER_IFACE() {};
+    virtual ~ROUTER_IFACE() {};
 
-        virtual void SyncWorld( NODE* aNode ) = 0;
-        virtual void AddItem( ITEM* aItem ) = 0;
-        virtual void RemoveItem( ITEM* aItem ) = 0;
-        virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const = 0;
-        virtual bool IsItemVisible( const PNS::ITEM* aItem ) const = 0;
-        virtual bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const = 0;
-        virtual void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1, bool aEdit = false ) = 0;
-        virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) = 0;
-        virtual void HideItem( ITEM* aItem ) = 0;
-        virtual void Commit() = 0;
-        virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, int aNet ) = 0;
-//        virtual void Abort () = 0;
+    virtual void SyncWorld( NODE* aNode ) = 0;
+    virtual void AddItem( ITEM* aItem ) = 0;
+    virtual void RemoveItem( ITEM* aItem ) = 0;
+    virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const = 0;
+    virtual bool IsItemVisible( const PNS::ITEM* aItem ) const = 0;
+    virtual bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const = 0;
+    virtual void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1,
+                              bool aEdit = false ) = 0;
+    virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) = 0;
+    virtual void HideItem( ITEM* aItem ) = 0;
+    virtual void Commit() = 0;
+    virtual bool ImportSizes( SIZES_SETTINGS& aSizes, ITEM* aStartItem, int aNet ) = 0;
 
-        virtual void EraseView() = 0;
-        virtual void UpdateNet( int aNetCode ) = 0;
+    virtual void EraseView() = 0;
+    virtual void UpdateNet( int aNetCode ) = 0;
 
-        virtual PNS::NODE* GetWorld() const = 0;
+    virtual PNS::NODE* GetWorld() const = 0;
 
-        virtual RULE_RESOLVER* GetRuleResolver() = 0;
-        virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
+    virtual RULE_RESOLVER* GetRuleResolver() = 0;
+    virtual DEBUG_DECORATOR* GetDebugDecorator() = 0;
 };
 
 class ROUTER

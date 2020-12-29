@@ -35,7 +35,10 @@ namespace PNS {
 class SOLID : public ITEM
 {
 public:
-    SOLID() : ITEM( SOLID_T ), m_shape( NULL ), m_alternateShape( NULL )
+    SOLID() :
+        ITEM( SOLID_T ),
+        m_shape( NULL ),
+        m_alternateShape( NULL )
     {
         m_movable = false;
         m_padToDie = 0;
@@ -74,10 +77,7 @@ public:
 
     const SHAPE* Shape() const override { return m_shape; }
 
-    const SHAPE* AlternateShape() const override
-    {
-        return m_alternateShape;
-    }
+    const SHAPE* AlternateShape() const override { return m_alternateShape; }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                  int aLayer = -1 ) const override;
@@ -94,22 +94,11 @@ public:
         m_alternateShape = shape;
     }
 
-    const VECTOR2I& Pos() const
-    {
-        return m_pos;
-    }
-
+    const VECTOR2I& Pos() const { return m_pos; }
     void SetPos( const VECTOR2I& aCenter );
 
-    int GetPadToDie() const
-    {
-        return m_padToDie;
-    }
-
-    void SetPadToDie( int aLen )
-    {
-        m_padToDie = aLen;
-    }
+    int GetPadToDie() const { return m_padToDie; }
+    void SetPadToDie( int aLen ) { m_padToDie = aLen; }
 
     virtual VECTOR2I Anchor( int aN ) const override
     {
@@ -121,15 +110,8 @@ public:
         return 1;
     }
 
-    VECTOR2I Offset() const
-    {
-        return m_offset;
-    }
-
-    void SetOffset( const VECTOR2I& aOffset )
-    {
-        m_offset = aOffset;
-    }
+    VECTOR2I Offset() const { return m_offset; }
+    void SetOffset( const VECTOR2I& aOffset ) { m_offset = aOffset; }
 
     double GetOrientation() const { return m_orientation; }
     void SetOrientation( double aOrientation ) { m_orientation = aOrientation; }
