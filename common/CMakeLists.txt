@@ -532,6 +532,7 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_condition.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_rule_parser.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/drc/drc_test_provider.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/plugins/eagle/eagle_plugin.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/footprint_editor_settings.cpp
     ${CMAKE_SOURCE_DIR}/pcbnew/plugins/geda/gpcb_plugin.cpp
