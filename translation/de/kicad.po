@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 17:25+0000\n"
+"PO-Revision-Date: 2020-12-29 18:04+0000\n"
 "Last-Translator: Mathias Neumann <alfrede@opferindustries.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -7812,9 +7812,8 @@ msgid "Update field sizes and styles"
 msgstr "Änderunf der Testgröße und Textart"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:134
-#, fuzzy
 msgid "Update field positions"
-msgstr "Positionen der Felder %s"
+msgstr "Änderung der Position der Felder"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:152
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:161
@@ -7848,43 +7847,36 @@ msgid "Change symbols %s from '%s' to '%s'"
 msgstr "Ändere Wert %s von %s zu %s."
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:524
-#, fuzzy
 msgid "*** symbol not found ***"
-msgstr "*** Footprint nicht gefunden ***"
+msgstr "*** Symbol nicht gefunden ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 msgid "*** new symbol has too few units ***"
 msgstr "*** neues Symbol hat zu wenige Einheiten ***"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:27
-#, fuzzy
 msgid "Update all symbols in schematic"
-msgstr "Alle Symbole im Schaltplan %s"
+msgstr "Update alle Symbole im Schaltplan"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:30
-#, fuzzy
 msgid "Update selected symbol"
-msgstr "Ausgewähltes Symbol %s"
+msgstr "Ausgewähltes Symbol updaten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:33
-#, fuzzy
 msgid "Update symbols matching reference designator:"
-msgstr "%s Footprints die dem Referenzbezeichner entsprechen:"
+msgstr "Update Symbole die dem Referenzbezeichner entsprechen:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:39
-#, fuzzy
 msgid "Update symbols matching value:"
-msgstr "%s Footprints mit Wert:"
+msgstr "Update Symbole mit passendem Wert:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:45
-#, fuzzy
 msgid "Update symbols matching library identifier:"
-msgstr "Symbole %s, die mit Bibliothekssymbol übereinstimmen:"
+msgstr "Update Symbole, die mit dem Bibliothekssymbol übereinstimmen:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:72
-#, fuzzy
 msgid "New library identifier:"
-msgstr "Keine Bibliothek angegeben!"
+msgstr "Neue Bibliotheksbezeichnung:"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:94
 #, fuzzy
@@ -7901,9 +7893,8 @@ msgid "Update Options"
 msgstr "Aktualisierung Einstellungen"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:119
-#, fuzzy
 msgid "Remove fields if not in library symbol"
-msgstr "Entferne nicht vorhandene Felder in der %s Symbole"
+msgstr "Entferne Felder die nicht im Bibliothekssymbol enthalten sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:120
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
@@ -7912,9 +7903,8 @@ msgstr ""
 "Entfernt Felder welche nicht in den originalen Bibliothekssymbolen vorkommen."
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:124
-#, fuzzy
 msgid "Reset fields if empty in library symbol"
-msgstr "Zurücksetzen der Felder die im %s-Symbol leer sind"
+msgstr "Zurücksetzen der Felder die im Bibliothekssymbol leer sind"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:130
 #, fuzzy
@@ -7932,9 +7922,8 @@ msgid "Update/reset field positions"
 msgstr "Positionen der Felder %s"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:96
-#, fuzzy
 msgid "Update Symbols from Library"
-msgstr "Aktualisiere Felder von Bibliothek..."
+msgstr "Aktualisiere Symbole aus der Bibliothek"
 
 #: eeschema/dialogs/dialog_choose_symbol.cpp:139
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:94
@@ -8119,7 +8108,7 @@ msgstr "Syntaxhilfe"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:240
 #, fuzzy
 msgid "Note:"
-msgstr "Notizen"
+msgstr "Notiz"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:108
 msgid ""
@@ -8211,9 +8200,8 @@ msgid "Text Editor"
 msgstr "Text Editor"
 
 #: eeschema/dialogs/dialog_edit_line_style.cpp:54
-#, fuzzy
 msgid "Leave unchanged"
-msgstr "Änderungen speichern"
+msgstr "Änderungen nicht speichern"
 
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:44
 #: eeschema/dialogs/dialog_junction_props_base.cpp:38
@@ -8238,20 +8226,19 @@ msgid "Value may not be empty."
 msgstr "Der Wert darf nicht leer sein."
 
 #: eeschema/dialogs/dialog_erc.cpp:79
-#, fuzzy
 msgid "Run ERC"
-msgstr "Starte DRC"
+msgstr "Starte ERC"
 
 #: eeschema/dialogs/dialog_erc.cpp:92
-#, fuzzy
 msgid "Show Annotation dialog"
-msgstr "Annotation-Nachrichten:"
+msgstr "Zeige den Annotation Dialog"
 
 #: eeschema/dialogs/dialog_erc.cpp:105 eeschema/dialogs/dialog_erc.cpp:274
 #: eeschema/dialogs/dialog_erc.cpp:346
-#, fuzzy
 msgid "Annotation not complete. ERC cannot be run."
-msgstr "Annotation vollständig."
+msgstr ""
+"Annotation der Bauteile ist nicht vollständig. ERC kann nicht ausgeführt "
+"werden."
 
 #: eeschema/dialogs/dialog_erc.cpp:193
 msgid "Delete exclusions too?"
@@ -8264,9 +8251,8 @@ msgid "Delete All Markers"
 msgstr "Alle Marker entfernen"
 
 #: eeschema/dialogs/dialog_erc.cpp:195
-#, fuzzy
 msgid "Errors and Warnings Only"
-msgstr "Fehler: Sie müssen für das Pad eine Lage wählen"
+msgstr "Nur Fehler unnd Warnungen"
 
 #: eeschema/dialogs/dialog_erc.cpp:195
 msgid "Errors, Warnings and Exclusions"
@@ -8275,16 +8261,16 @@ msgstr "Fehler, Warnungen und Ausschlüsse"
 #: eeschema/dialogs/dialog_erc.cpp:276 eeschema/dialogs/dialog_erc.cpp:348
 #, fuzzy
 msgid "Show Annotation dialog."
-msgstr "Annotation vollständig."
+msgstr "Zeige den Annotation Dialog"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC vom Benutzer abgebrochen. <br> <br>"
+msgstr "-------- ERC vom Benutzer abgebrochen. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:304 eeschema/dialogs/dialog_erc.cpp:437
 #: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
-msgstr "Fertig. <br> <br>"
+msgstr "Fertig. <br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:365
 msgid "Checking sheet names..."
@@ -8447,9 +8433,8 @@ msgid "Click on items to highlight them on the board."
 msgstr "Auf Elemente klicken um diese auf der Platine hervorzuheben."
 
 #: eeschema/dialogs/dialog_erc_base.cpp:57
-#, fuzzy
 msgid "Violations"
-msgstr "Verletzungen:"
+msgstr "Verstösse"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:86
 #: pcbnew/dialogs/dialog_drc_base.cpp:169
@@ -8617,17 +8602,15 @@ msgstr "Filter Elemente nach übergeordneter Bauteilbibliothek-ID:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:108
 #, fuzzy
 msgid "Filter items by parent symbol type:"
-msgstr "Filter Elemente nach übergeordneter Bauteilbibliothek-ID:"
+msgstr "Filtere Elemente nach übergeordnetem Bauteilbibliotheksymbol"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Non-power symbols"
-msgstr "Spannungsquellensymbol"
+msgstr "keine Spannungsquellensymbole"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:111
-#, fuzzy
 msgid "Power symbols"
-msgstr "Spannungsquellensymbol"
+msgstr "Spannungssymbol"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:123
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
@@ -8678,19 +8661,16 @@ msgid "Line width:"
 msgstr "Linenbreite:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:296
-#, fuzzy
 msgid "Line color:"
-msgstr "Rahmenfarbe:"
+msgstr "Linienfarbe:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:305
-#, fuzzy
 msgid "Line style:"
-msgstr "Linienstil:"
+msgstr "Linienstyle:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:321
-#, fuzzy
 msgid "Sheet background color:"
-msgstr "Blatthintergrund:"
+msgstr "Hintergrundfabe:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:104
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:93
@@ -8765,14 +8745,12 @@ msgstr ""
 "%s"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
-#, fuzzy
 msgid "Diameter:"
-msgstr "Durchmesser"
+msgstr "Durchmesser:"
 
 #: eeschema/dialogs/dialog_junction_props_base.h:57
-#, fuzzy
 msgid "Junction Properties"
-msgstr "Pin-Eigenschaften"
+msgstr "Kreuzungs Pin-Eigenschaften"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item.cpp:50
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:455
@@ -9031,21 +9009,18 @@ msgstr "Bauteil als Spannungsquellensymbol erstellen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:82
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:178
-#, fuzzy
 msgid "Exclude from schematic bill of materials"
-msgstr "Stückliste (BOM) erstellen"
+msgstr "Entnehme die Stückliste (BOM) nicht aus dem Schaltplan"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:85
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:181
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
-#, fuzzy
 msgid "Exclude from board"
-msgstr "Entferne Platine"
+msgstr "Nicht von der Platine entnehmen"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:103
-#, fuzzy
 msgid "Pin name position offset:"
-msgstr "Offset für Position des Pintextes:"
+msgstr "Name der Position des Pintextes:"
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:120
 msgid "Show pin number text"
@@ -9103,9 +9078,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:426
 #: eeschema/dialogs/dialog_symbol_properties.cpp:769
-#, fuzzy, c-format
+#, c-format
 msgid "The name '%s' is already in use."
-msgstr "Eine Lage mit dem Namen \"%s\" wird bereits benutzt."
+msgstr "Der Name '%s' wird bereits verwendet."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:495
 #: eeschema/dialogs/dialog_sheet_properties.cpp:676
