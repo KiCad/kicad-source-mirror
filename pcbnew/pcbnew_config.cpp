@@ -131,6 +131,7 @@ bool PCB_EDIT_FRAME::LoadProjectSettings()
     opts.m_ViaOpacity          = localSettings.m_ViaOpacity;
     opts.m_PadOpacity          = localSettings.m_PadOpacity;
     opts.m_ZoneOpacity         = localSettings.m_ZoneOpacity;
+    opts.m_ZoneDisplayMode     = localSettings.m_ZoneDisplayMode;
     SetDisplayOptions( opts );
 
     wxFileName fn( GetCurrentFileName() );

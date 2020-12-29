@@ -154,13 +154,10 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
                            &m_RatsnestMode, RATSNEST_MODE::ALL, RATSNEST_MODE::ALL,
                            RATSNEST_MODE::VISIBLE ) );
 
-    // TODO: move the rest of PCB_DISPLAY_OPTIONS that are project-specific in here
-#if 0
     m_params.emplace_back( new PARAM_ENUM<ZONE_DISPLAY_MODE>( "board.zone_display_mode",
                            &m_ZoneDisplayMode,
-                           ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE,
-                           ZONE_DISPLAY_MODE::SHOW_FILLED ) );
-#endif
+                           ZONE_DISPLAY_MODE::SHOW_FILLED, ZONE_DISPLAY_MODE::SHOW_FILLED,
+                           ZONE_DISPLAY_MODE::SHOW_FILLED_OUTLINE ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
             [&]() -> nlohmann::json

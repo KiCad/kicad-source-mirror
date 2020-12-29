@@ -116,7 +116,7 @@ public:
     /// The current ratsnest draw mode
     RATSNEST_MODE m_RatsnestMode;
 
-    /// How zones are drawn (TODO: not yet used)
+    /// How zones are drawn
     ZONE_DISPLAY_MODE m_ZoneDisplayMode;
 
     double m_TrackOpacity;     ///< Opacity override for all tracks
