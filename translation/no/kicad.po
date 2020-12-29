@@ -1,12 +1,13 @@
 # Jarl Gjessing <jarlgjessing@gmail.com>, 2020.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Allan Nordhøy <epost@anotheragency.no>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 17:23+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
 "Language: no\n"
@@ -461,7 +462,7 @@ msgstr "Vis virtuelle 3D-modeller"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 msgid "Board Layers"
-msgstr "Board Layers"
+msgstr "Kretskortlag"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
@@ -823,7 +824,7 @@ msgstr "Kobberfarge"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1032
 msgid "Board Body Color"
-msgstr "Board Body Color"
+msgstr "Kretskortfarge"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1052
 msgid "Solder Paste Color"
@@ -887,7 +888,7 @@ msgstr "Tilbakestill visning"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip Board"
-msgstr "Flip Board"
+msgstr "Vend kretskort"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:115
 msgid "Flip the board view"
@@ -931,11 +932,11 @@ msgstr "Ingen 3D-rutenett"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:166
 msgid "3D Grid 10mm"
-msgstr "3D Grid 10mm"
+msgstr "3D-rutenett 10mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:171
 msgid "3D Grid 5mm"
-msgstr "3D Grid 5mm"
+msgstr "3D-rutenett 5mm"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:176
 msgid "3D Grid 2.5mm"
@@ -1540,7 +1541,7 @@ msgstr "Lagre"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183
 msgid "Discard Changes"
-msgstr "Forkaste Endringer?"
+msgstr "Forkast endringer"
 
 #: common/confirm.cpp:159 common/confirm.cpp:234
 msgid "Apply to all"
@@ -1565,7 +1566,7 @@ msgstr "Avbryt"
 #: common/confirm.cpp:223 gerbview/dialogs/dialog_select_one_pcb_layer.cpp:184
 #: pcbnew/microwave/microwave_polygon.cpp:122
 msgid "OK"
-msgstr "Ok"
+msgstr "OK"
 
 #: common/confirm.cpp:280
 msgid "Info"
@@ -1653,8 +1654,9 @@ msgid "Lead Development Team"
 msgstr "Lede utviklingsteam"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
+#, fuzzy
 msgid "Lead Development Alumni"
-msgstr "Lead Development Alumni"
+msgstr "Sjefsutviklings-æreselev"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -1666,7 +1668,7 @@ msgstr "Andre"
 
 #: common/dialog_about/AboutDialog_main.cpp:619
 msgid "KiCad Librarian Team"
-msgstr "KiCad Librarian Team"
+msgstr "KiCad-bibliotekarlaget"
 
 #: common/dialog_about/AboutDialog_main.cpp:634
 msgid "3D models by"
@@ -1700,11 +1702,11 @@ msgstr "Versjon"
 
 #: common/dialog_about/dialog_about.cpp:125
 msgid "Developers"
-msgstr "Utiklere"
+msgstr "Utviklere"
 
 #: common/dialog_about/dialog_about.cpp:127
 msgid "Doc Writers"
-msgstr "Doc Writers"
+msgstr "Dokumentasjonsskribenter"
 
 #: common/dialog_about/dialog_about.cpp:130
 msgid "Librarians"
@@ -2219,9 +2221,9 @@ msgid "Image Editor"
 msgstr "Bildeditor"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
-msgstr "Det valgte elementet er låst."
+msgstr "Utvalget inneholder %d låste elementer."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
@@ -2778,7 +2780,7 @@ msgstr "Nytt tema ..."
 
 #: common/dialogs/panel_color_settings.cpp:213
 msgid "(read-only)"
-msgstr "(read-only)"
+msgstr "(skrivebeskyttet)"
 
 #: common/dialogs/panel_color_settings.cpp:282
 msgid "Copy color"
@@ -3183,7 +3185,7 @@ msgstr "Mellomknappen dra:"
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
 msgid "Pan"
-msgstr "Panorér"
+msgstr "Panorer"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:101
 #: common/dialogs/panel_mouse_settings_base.cpp:111
@@ -3523,7 +3525,7 @@ msgstr "Advarsler"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:54
 msgid "Actions"
-msgstr "Actions"
+msgstr "Handlinger"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:60
 msgid "Infos"
@@ -3773,7 +3775,7 @@ msgstr "Fotavtrykkstekst"
 
 #: common/eda_item.cpp:267 common/eda_item.cpp:276
 msgid "Zone"
-msgstr "Zone"
+msgstr "Sone"
 
 #: common/eda_item.cpp:268 pcbnew/track.cpp:603
 msgid "Track"
@@ -3927,8 +3929,9 @@ msgstr "Flerdelt linje"
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:97
 #: pcbnew/dialogs/dialog_pad_properties.cpp:701
 #: pcbnew/dialogs/dialog_pad_properties.cpp:2111
+#, fuzzy
 msgid "Bezier"
-msgstr "Bezier"
+msgstr "Bézier-kurve"
 
 #: common/eda_item.cpp:312 eeschema/lib_pin.h:122 eeschema/sch_pin.cpp:159
 msgid "Pin"
@@ -4627,7 +4630,7 @@ msgstr "User.Drawings"
 
 #: common/layer_id.cpp:77
 msgid "User.Comments"
-msgstr "Brukerkommentar"
+msgstr "Brukerkommentarer"
 
 #: common/layer_id.cpp:78
 msgid "User.Eco1"
@@ -4884,7 +4887,7 @@ msgstr "Fotavtrykk Tilbake"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Values"
-msgstr "Values"
+msgstr "Verdier"
 
 #: common/layer_id.cpp:146
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:25
@@ -5023,7 +5026,7 @@ msgstr "Enhet"
 
 #: common/lib_tree_model_adapter.cpp:272
 msgid "Item"
-msgstr "Item"
+msgstr "Element"
 
 #: common/libeval_compiler/libeval_compiler.cpp:565
 #, c-format
@@ -5433,7 +5436,7 @@ msgstr "Angre siste redigering"
 
 #: common/tool/actions.cpp:146
 msgid "Redo"
-msgstr "Gjør Om"
+msgstr "Gjør om"
 
 #: common/tool/actions.cpp:146
 msgid "Redo last edit"
@@ -5563,9 +5566,8 @@ msgid "Go to next marker in Checker window"
 msgstr "Vis vinduet for fotavtrykkskontroll"
 
 #: common/tool/actions.cpp:257
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Ekskludert "
+msgstr "Ekskluder peker"
 
 #: common/tool/actions.cpp:257
 msgid "Mark current violation in Checker window as an exclusion"
@@ -6079,7 +6081,7 @@ msgstr "Min rutenettavstand:"
 
 #: common/widgets/gal_options_panel.cpp:135
 msgid "Snap to Grid:"
-msgstr "Lås til ruter:"
+msgstr "Fest til rutenett:"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6986,7 +6988,7 @@ msgid ""
 "not found. Script not available."
 msgstr ""
 "Skriptfil:\n"
-"[1. 3]\n"
+"%s\n"
 "ikke funnet. Skript ikke tilgjengelig."
 
 #: eeschema/class_library.cpp:53
@@ -7585,22 +7587,23 @@ msgstr ""
 "\n"
 "På Linux:\n"
 "``\n"
-"xsltproc -o \"% O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"% I\"\n"
+"xsltproc -o \"% O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"% I\"\n"
 "``\n"
 "\n"
 "Ovennevnte eksempler antar at 'xsltproc' er installert på PCen din under "
-"Windows og xsl-filer som ligger i '<path_to_kicad> / kicad / bin / plugins / "
+"Windows og XSL-filer som ligger i '<path_to_kicad> / kicad / bin / plugins / "
 "`.\n"
 "\n"
 "\n"
 "### 4.3.3 Eksempel på Python-skript:\n"
 "\n"
-"Forutsatt at python er installert på PC-en din, og python-skript ligger i\n"
+"Forutsatt at Python er installert på PC-en din, og at Python-skript ligger "
+"i\n"
 "\n"
 " `<path_to_kicad> / kicad / bin / plugins / bom-in-python /`,\n"
 "\n"
-"kommandolinjeformatet for python er omtrent som:\n"
+"kommandolinjeformatet for Python er omtrent slik:\n"
 "\n"
 "``\n"
 "python <scriptfilnavn> <input filnavn> <output filnavn>\n"
@@ -7608,14 +7611,14 @@ msgstr ""
 "\n"
 "På Windows:\n"
 "``\n"
-"python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% I\" "
-"\"% O.html\"\n"
+"python.exe f: /kicad/bin/plugins/bom-in-python/my_python_script.py \"% I\" \""
+"% O.html\"\n"
 "``\n"
 "\n"
 "På Linux:\n"
 "``\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"% I"
-"\" \"% O.csv\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/my_python_script.py \"% I\""
+" \"% O.csv\"\n"
 "``\n"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:41
@@ -8590,16 +8593,9 @@ msgid "Cannot create global library table path '%s'."
 msgstr "Kan ikke lage den globale bibliotektabellen \"%s\"."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot copy global symbol library table file '%s' to '%s'."
-msgstr ""
-"Kan ikke kopiere global symbolbibliotekstabellfil:\n"
-"\n"
-" \"%s\"\n"
-"\n"
-":til:\n"
-"\n"
-"\"%s\"."
+msgstr "Kan ikke kopiere global symbolbibliotekstabellfil «%s» til «%s»."
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:132
 #, fuzzy, c-format
@@ -10932,9 +10928,9 @@ msgid "Symbol library table mapping complete!"
 msgstr "Kartlegging av symbolbiblioteket er fullført!"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:345
-#, c-format
+#, c-format, fuzzy
 msgid "Cannot create project remap back up folder \"%s\"."
-msgstr "Kan ikke opprette sikkerhetskopimappen for prosjektet \"Map 44\"."
+msgstr "Kan ikke opprette sikkerhetskopimappen «%s» for prosjektmappen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:348
 #: eeschema/dialogs/dialog_symbol_remap.cpp:491
@@ -11276,7 +11272,7 @@ msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "_1"
@@ -11437,9 +11433,9 @@ msgstr "Bibliotekets kallenavnfeil"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:375
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
-#, c-format
+#, c-format, fuzzy
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "Flere bibliotek kan ikke ha samme kallenavn («%s"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:420
 #, c-format
@@ -11487,12 +11483,16 @@ msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
 msgstr ""
+"Velg én eller flere tabellrader som inneholder foreldede bibliotek å lagre "
+"som nåværende format (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:701
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
 msgstr ""
+"Lagre «%s» som nåværende format (*.kicad_sym) og erstatt foreldet oppføring "
+"i tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -11500,6 +11500,8 @@ msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"Lagre %d foreldede bibliotek som nåværende format (*.kicad_sym) og erstatt "
+"foreldede oppføringer i tabell?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
 #, fuzzy, c-format
@@ -11714,16 +11716,14 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pinne %s er koblet til både %s og %s"
 
 #: eeschema/erc.cpp:706
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the library '%s'."
-msgstr ""
-"Navnet '%s' kommer i konflikt med en eksisterende oppføring i biblioteket "
-"'%s'."
+msgstr "Nåværende oppsett inneholder ikke biblioteket «%s."
 
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "Biblioteket «%s» er ikke påskrudd i nåværende oppsett."
 
 #: eeschema/erc_item.cpp:42
 #, fuzzy
@@ -11732,7 +11732,7 @@ msgstr "Pin konflikter kart"
 
 #: eeschema/erc_item.cpp:43 pcbnew/drc/drc_item.cpp:46
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Ymse"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
@@ -12009,7 +12009,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:769
 msgid "Overwrite Files"
-msgstr "Overskriv fil?"
+msgstr "Overskriv filer"
 
 #: eeschema/files-io.cpp:770
 msgid "Abort Project Save"
@@ -12754,13 +12754,13 @@ msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:98
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
 "CADSTAR-designet inneholder varianter som ikke har noen KiCad-ekvivalent. "
-"Alle komponentene er lastet oppå hverandre. "
+"Kun hovedvarianten («%s») ble innlastet."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:106
 msgid ""
@@ -14275,11 +14275,9 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:744
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Åpne \"%s\"\n"
+msgstr "Åpne %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:820
 #, c-format
@@ -14340,9 +14338,8 @@ msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Den gjeldende konfigurasjonen inkluderer ikke symbolbiblioteket\n"
-"\"%s\".\n"
-"Bruk Manage Symbol Libraries til å redigere konfigurasjonen."
+"Den gjeldende konfigurasjonen inkluderer ikke symbolbiblioteket «%s».\n"
+"Bruk Manage Symbol Libraries til å redigere oppsettet."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1170
 #: eeschema/symbol_viewer_frame.cpp:389
@@ -14356,9 +14353,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Biblioteket med kallenavnet \"%s\" er ikke aktivert\n"
-"i gjeldende konfigurasjon. Bruk Manage Symbol Libraries til\n"
-"rediger konfigurasjonen."
+"Biblioteket med kallenavnet «%s» er ikke aktivert\n"
+"i gjeldende oppsett. Bruk Manage Symbol Libraries tilå endre oppsettet."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
 #: eeschema/symbol_viewer_frame.cpp:396
@@ -14441,9 +14437,9 @@ msgstr "Symbolet \"%s\" eksisterer allerede i biblioteket \"%s\""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:602
 #: eeschema/symbol_editor/symbol_editor.cpp:1141
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol library '%s' is not writeable."
-msgstr "Symbolbiblioteket ikke aktivert."
+msgstr "Symbolbiblioteket «%s» er skrivebeskyttet."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:603
 #: eeschema/symbol_editor/symbol_editor.cpp:1142
@@ -14455,7 +14451,7 @@ msgstr "Still skjevheten til et differensialpar"
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1114
 msgid "Nickname"
-msgstr ""
+msgstr "Kallenavn"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:659
 msgid "Save Copy of Symbol"
@@ -14471,12 +14467,11 @@ msgid "No library specified.  Symbol could not be saved."
 msgstr "Ingen bibliotek spesifisert. Symbolet kunne ikke lagres."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:701
-#, fuzzy
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
-"Avledede symboler må lagres i samme bibliotek\n"
-"at foreldresymbolet eksisterer."
+"Avledede symboler må lagres i samme bibliotek som foreldresymbolet "
+"eksisterer i."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:720
 #, fuzzy, c-format
@@ -14681,7 +14676,7 @@ msgstr "<ingen>"
 #: eeschema/symbol_viewer_frame.cpp:456
 #, c-format
 msgid "Unit %c"
-msgstr "Enhet %s"
+msgstr "Enhet %c"
 
 #: eeschema/symbol_viewer_frame.cpp:897 pcbnew/footprint_viewer_frame.cpp:985
 msgid "no library selected"
@@ -14797,7 +14792,7 @@ msgstr "Finner ikke %s pin '%s'."
 #: eeschema/tools/backannotate.cpp:529
 #, fuzzy, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "Bytt tildeling av %s fotavtrykk fra '%s' til '%s'."
+msgstr "Bytt %s-festing av %s-nettetikett fra fra «%s» til «%s»."
 
 #: eeschema/tools/backannotate.cpp:554
 #, c-format
@@ -14807,7 +14802,7 @@ msgstr "Nett %s kan ikke endres til '%s' fordi det drives av en strømnål."
 #: eeschema/tools/backannotate.cpp:563
 #, fuzzy, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Legg til etiketten '%s' til nettet %s."
+msgstr "Legg til etiketten «%s» til %s-festing av %s-nett."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -16771,7 +16766,7 @@ msgstr "Fremhev deler av komponenten \"%s\""
 #: gerbview/tools/gerbview_selection_tool.cpp:82
 #, c-format
 msgid "Highlight Items of Net \"%s\""
-msgstr "Fremhev gjenstander av nett \"24\""
+msgstr "Fremhev gjenstander av nett \"%s\""
 
 #: gerbview/tools/gerbview_selection_tool.cpp:92
 #, c-format
@@ -17236,12 +17231,12 @@ msgstr "Slett katalog"
 
 #: kicad/project_tree_pane.cpp:815
 msgid "Delete File"
-msgstr "Slett fil?"
+msgstr "Slett fil"
 
 #: kicad/project_tree_pane.cpp:816
 #, c-format
 msgid "Are you sure you want to delete '%s'?"
-msgstr "Vil du virkelig slette '%1'?"
+msgstr "Vil du virkelig slette «%s»?"
 
 #: kicad/project_tree_pane.cpp:821
 #, c-format
@@ -17474,7 +17469,7 @@ msgstr "%s %s åpnet [pid = %ld]\n"
 #: libs/kiplatform/msw/environment.cpp:47
 #, c-format
 msgid "Error code: %d"
-msgstr "Feilkode: %s"
+msgstr "Feilkode: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -19436,7 +19431,7 @@ msgstr "Pads"
 #: pcbnew/widgets/appearance_controls.cpp:334
 #: pcbnew/widgets/panel_selection_filter_base.cpp:43
 msgid "Vias"
-msgstr "Vias"
+msgstr "Via-er"
 
 #: pcbnew/board.cpp:1094 pcbnew/pcb_draw_panel_gal.cpp:439
 msgid "Track Segments"
@@ -20548,7 +20543,7 @@ msgstr "Blind / begravet:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:149
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:173
 msgid "Micro vias:"
-msgstr "Micro vias:"
+msgstr "Mikrovia-er:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:363
 #: pcbnew/dialogs/dialog_board_statistics.cpp:378
@@ -21724,7 +21719,7 @@ msgstr "Ubegrenset"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:62
 #: pcbnew/text_mod_grid_table.cpp:98
 msgid "X Offset"
-msgstr "X Offset"
+msgstr "X-forskyvning"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:63
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:63
@@ -22131,7 +22126,7 @@ msgstr "Oppdater Footprints from Library"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
 #, c-format
 msgid "File %s already exists."
-msgstr "Filen %1 eksisterer allerede."
+msgstr "Filen %s finnes allerede."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, c-format
@@ -22657,7 +22652,7 @@ msgstr ""
 "Dette er det lokale klareringsforholdet i prosent mellom elektroder og "
 "loddepasta for dette fotavtrykket.\n"
 "En verdi på 10 betyr at klareringsverdien er 10 prosent av putestørrelsen.\n"
-"Denne verdien kan erstattes av en lokal lokal verdi.\n"
+"Denne verdien kan erstattes av en lokal verdi.\n"
 "Den endelige klareringsverdien er summen av denne verdien og "
 "klareringsverdien.\n"
 "En negativ verdi betyr mindre maskestørrelse enn padstørrelse."
@@ -23556,7 +23551,7 @@ msgstr "Padantall"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:73
 msgid "Via Count"
-msgstr "Via Count"
+msgstr "Via-antall"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:74
 msgid "Via Length"
@@ -23814,7 +23809,7 @@ msgstr "Velg et hjørne du vil slette."
 #: pcbnew/dialogs/dialog_pad_properties.cpp:470
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
-msgstr "Fotavtrykk %s (%s), %s, rotert %.1f grader"
+msgstr "Fotavtrykk %s (%s), %s, rotert %g grader"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:473
 #: pcbnew/dialogs/dialog_text_properties.cpp:280
@@ -25450,7 +25445,7 @@ msgstr "Bruk nettoklassestørrelser"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:239
 msgid "Via type:"
-msgstr "Via type:"
+msgstr "Via-type:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:243
 #: pcbnew/track.cpp:1006
@@ -26075,8 +26070,9 @@ msgid "Hole to hole clearance:"
 msgstr "Hull-til-hull-klaring:"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:332
+#, fuzzy
 msgid "uVias"
-msgstr "uVias"
+msgstr "Mikrovia-er"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:348
 msgid "Minimum uVia diameter:"
@@ -26217,7 +26213,7 @@ msgstr "18"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
 msgid "20"
-msgstr ""
+msgstr "20"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
 msgid "22"
@@ -26237,7 +26233,7 @@ msgstr "28"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
 msgid "30"
-msgstr ""
+msgstr "30"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:36
 msgid "32"
@@ -27209,7 +27205,7 @@ msgstr "Bor for lite"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Via diameter"
-msgstr "Via diameter"
+msgstr "Via-diameter"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Padstack is not valid"
@@ -27304,7 +27300,7 @@ msgstr "FEIL i uttrykk."
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "FEIL: <a href='%d:%d'> %d '> %s </a> %s"
+msgstr "FEIL: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
@@ -28062,8 +28058,7 @@ msgid ""
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
 "Den gjeldende konfigurasjonen inkluderer ikke et bibliotek med\n"
-"kallenavn \"%s\". Bruk Manage Footprint Libraries\n"
-"for å redigere konfigurasjonen."
+"kallenavn «%s». Bruk Manage Footprint Libraries for å redigere oppsettet."
 
 #: pcbnew/footprint_editor_utils.cpp:284
 msgid "Library not found in footprint library table."
@@ -28075,9 +28070,8 @@ msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Biblioteket med kallenavnet \"%s\" er ikke aktivert\n"
-"i gjeldende konfigurasjon. Bruk Manage Footprint Libraries til\n"
-"rediger konfigurasjonen."
+"Biblioteket med kallenavnet «%s» er ikke aktivert i gjeldende oppsett.\n"
+"Bruk Manage Footprint Libraries til å endre oppsettet."
 
 #: pcbnew/footprint_editor_utils.cpp:295 pcbnew/footprint_viewer_frame.cpp:923
 msgid "Footprint library not enabled."
@@ -28255,9 +28249,8 @@ msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Den gjeldende konfigurasjonen inkluderer ikke fotavtrykksbiblioteket\n"
-"\"%s\".\n"
-"Bruk Manage Footprint Libraries til å redigere konfigurasjonen."
+"Den gjeldende oppsettet inkluderer ikke fotavtrykksbiblioteket\n"
+"«%s». Bruk Manage Footprint Libraries til å endre oppsettet."
 
 #: pcbnew/footprint_viewer_frame.cpp:916
 msgid "Footprint library not found."
@@ -28269,9 +28262,8 @@ msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Biblioteket med kallenavnet \"%s\" er ikke aktivert\n"
-"i gjeldende konfigurasjon. Bruk Manage Footprint Libraries til\n"
-"rediger konfigurasjonen."
+"Biblioteket med kallenavnet «%s» er ikke aktivert i gjeldende oppsett.\n"
+"Bruk Manage Footprint Libraries til å endre oppsettet."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
 #: pcbnew/footprint_wizard_frame_functions.cpp:78
@@ -31988,7 +31980,7 @@ msgstr "Fjern gruppering"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Remove Items"
-msgstr "Fjern elementer?"
+msgstr "Fjern elementer"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Remove items from group"
@@ -32833,7 +32825,7 @@ msgstr "Lagbunn"
 
 #: pcbnew/track.cpp:1072
 msgid "Via Type"
-msgstr "Via Type"
+msgstr "Via-type"
 
 #: pcbnew/undo_redo.cpp:586
 msgid "Incomplete undo/redo operation: some items not found"
@@ -33347,7 +33339,7 @@ msgstr "Forhåndsinnstillinger"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl+Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 #, fuzzy
@@ -33462,7 +33454,7 @@ msgstr "HatchBorder Lines"
 
 #: pcbnew/zone.cpp:659
 msgid "Corner Count"
-msgstr "Corner Count"
+msgstr "Hjørneantall"
 
 #: pcbnew/zone.cpp:872
 #, c-format
