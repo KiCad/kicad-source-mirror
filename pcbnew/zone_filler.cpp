@@ -93,6 +93,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
     if( !lock )
         return false;
 
+    // Rebuild just in case. This really needs to be reliable.
+    connectivity->Clear();
+    connectivity->Build( m_board, m_progressReporter );
+
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
     m_worstClearance = bds.GetBiggestClearanceValue();
