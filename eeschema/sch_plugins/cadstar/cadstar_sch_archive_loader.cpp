@@ -1593,6 +1593,21 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets(
 
         if( block.LayerID == aCadstarSheetID && block.Type == BLOCK::TYPE::CHILD )
         {
+            if( block.AssocLayerID == wxT( "NO_LINK" ) )
+            {
+                if( block.Figures.size() > 0 )
+                {
+                    wxLogError( wxString::Format(
+                            _( "The block ID %s (Block name: '%s') is drawn on sheet '%s' but is "
+                               "not linked to another sheet in the design. KiCad requires all "
+                               "sheet symbols to be associated to a sheet, so the block was not "
+                               "loaded." ),
+                            block.ID, block.Name, Sheets.SheetNames.at( aCadstarSheetID ) ) );
+                }
+
+                continue;
+            }
+
             // In KiCad you can only draw rectangular shapes whereas in Cadstar arbitrary shapes
             // are allowed. We will calculate the extents of the Cadstar shape and draw a rectangle
 
