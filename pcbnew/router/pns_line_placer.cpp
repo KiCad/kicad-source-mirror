@@ -982,10 +982,24 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     initPlacement();
 
+    DIRECTION_45 lastSegDir = DIRECTION_45::UNDEFINED;
+
+    if( aStartItem && aStartItem->Kind() == ITEM::SEGMENT_T )
+    {
+        // NOTE: have to flip this over at the moment because DIRECTION_45(SEG) assumes +y is
+        // North but a SEG will have -y be North in KiCad world coordinate system.
+        // This should probably be fixed in DIRECTION_45 but it's used in a lot of PNS code
+        // that would need to be checked carefully for such a change...
+        SEG seg = static_cast<SEGMENT*>( aStartItem )->Seg();
+        seg.A.y = -seg.A.y;
+        seg.B.y = -seg.B.y;
+        lastSegDir = DIRECTION_45( seg );
+    }
+
     m_postureSolver.Clear();
     m_postureSolver.AddTrailPoint( aP );
     m_postureSolver.SetTolerance( m_head.Width() );
-    m_postureSolver.SetDefaultDirections( m_initial_direction, DIRECTION_45::UNDEFINED );
+    m_postureSolver.SetDefaultDirections( m_initial_direction, lastSegDir );
     m_postureSolver.SetDisabled( !Settings().GetAutoPosture() );
 
     NODE *n;
@@ -1139,7 +1153,11 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     VECTOR2I p_pre_last = l.CPoint( -1 );
     const VECTOR2I p_last = l.CPoint( -1 );
-    DIRECTION_45 d_last( l.CSegment( -1 ) );
+
+    SEG lastDirSeg = l.CSegment( -1 );
+    lastDirSeg.A.y = -lastDirSeg.A.y;
+    lastDirSeg.B.y = -lastDirSeg.B.y;
+    DIRECTION_45 d_last( lastDirSeg );
 
     if( l.PointCount() > 2 )
         p_pre_last = l.CPoint( -2 );
@@ -1219,8 +1237,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_postureSolver.Clear();
         m_postureSolver.SetTolerance( m_head.Width() );
         m_postureSolver.AddTrailPoint( m_currentStart );
-        m_postureSolver.SetDefaultDirections( m_initial_direction,
-                                              fixAll ? d_last.Right() : d_last );
+        m_postureSolver.SetDefaultDirections( m_initial_direction, d_last );
 
         m_placementCorrect = true;
     }
@@ -1525,9 +1542,9 @@ int FIXED_TAIL::StageCount() const
 
 POSTURE_SOLVER::POSTURE_SOLVER()
 {
-    m_forced    = false;
     m_tolerance = 0;
     m_disabled  = false;
+    Clear();
 }
 
 
@@ -1536,7 +1553,8 @@ POSTURE_SOLVER::~POSTURE_SOLVER() {}
 
 void POSTURE_SOLVER::Clear()
 {
-    m_forced = false;
+    m_forced         = false;
+    m_manuallyForced = false;
     m_trail.Clear();
 }
 
@@ -1591,7 +1609,12 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     const int unlockDistanceFactor = 4;
 
     if( m_disabled || m_trail.PointCount() < 2 )
+    {
+        if( m_lastSegDirection != DIRECTION_45::UNDEFINED )
+            m_direction = m_lastSegDirection;
+
         return m_direction;
+    }
 
     auto dbg = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
 
@@ -1640,18 +1663,83 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
             areaOk = false;
     }
 
+    DIRECTION_45 straightDirection;
+    DIRECTION_45 diagDirection;
+    DIRECTION_45 newDirection = m_direction;
+
+    SEG seg = straight.CSegment( 0 );
+    seg.A.y = -seg.A.y;
+    seg.B.y = -seg.B.y;
+    straightDirection = DIRECTION_45( seg );
+
+    seg = diag.CSegment( 0 );
+    seg.A.y = -seg.A.y;
+    seg.B.y = -seg.B.y;
+    diagDirection = DIRECTION_45( seg );
+
+    if( !m_forced && areaOk && ratio > areaRatioThreshold + areaRatioEpsilon )
+        newDirection = diagDirection;
+    else if( !m_forced && areaOk && ratio < ( 1.0 / areaRatioThreshold ) - areaRatioEpsilon )
+        newDirection = straightDirection;
+    else
+        newDirection = m_direction.IsDiagonal() ? diagDirection : straightDirection;
+
+    m_direction = newDirection;
+
+    // If we have a last segment, correct the direction relative to it.  For segment exit, we want
+    // to correct to the least obtuse
+    if( !m_manuallyForced && m_lastSegDirection != DIRECTION_45::UNDEFINED )
+    {
+        if( straightDirection == m_lastSegDirection )
+        {
+            m_direction = straightDirection;
+        }
+        else if( diagDirection == m_lastSegDirection )
+        {
+            m_direction = diagDirection;
+        }
+        else
+        {
+            switch( m_direction.Angle( m_lastSegDirection ) )
+            {
+            case DIRECTION_45::ANG_HALF_FULL:
+                // Force a better (acute) connection
+                m_direction = m_direction.IsDiagonal() ? straightDirection : diagDirection;
+                break;
+
+            case DIRECTION_45::ANG_ACUTE:
+            {
+                // Force a better connection by flipping if possible
+                DIRECTION_45 candidate = m_direction.IsDiagonal() ? straightDirection
+                                                                  : diagDirection;
+
+                if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_RIGHT )
+                    m_direction = candidate;
+
+                break;
+            }
+
+            case DIRECTION_45::ANG_RIGHT:
+            {
+                // Force a better connection by flipping if possible
+                DIRECTION_45 candidate = m_direction.IsDiagonal() ? straightDirection
+                                                                  : diagDirection;
+
+                if( candidate.Angle( m_lastSegDirection ) == DIRECTION_45::ANG_OBTUSE )
+                    m_direction = candidate;
+
+                break;
+            }
+
+            default:
+                break;
+            }
+        }
+    }
+
     // If we get far away from the initial point, lock in the current solution to prevent flutter
     if( !m_forced && refLength > lockDistanceFactor * m_tolerance )
         m_forced = true;
-
-    if( m_forced )
-        return m_direction;
-    else if( areaOk && ratio > areaRatioThreshold + areaRatioEpsilon )
-        m_direction = DIRECTION_45::NE;
-    else if( areaOk && ratio < ( 1.0 / areaRatioThreshold ) - areaRatioEpsilon )
-        m_direction = DIRECTION_45::N;
-    else if( m_lastSegDirection != DIRECTION_45::UNDEFINED )
-        m_direction = m_lastSegDirection;
 
     return m_direction;
 }
@@ -1661,6 +1749,7 @@ void POSTURE_SOLVER::FlipPosture()
 {
     m_direction = m_direction.Right();
     m_forced = true;
+    m_manuallyForced = true;
 }
 
 }

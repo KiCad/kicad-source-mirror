@@ -102,6 +102,7 @@ private:
     DIRECTION_45     m_lastSegDirection;
     bool             m_forced;
     bool             m_disabled;
+    bool             m_manuallyForced;
 };
 
 /**
