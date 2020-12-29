@@ -469,6 +469,35 @@ private:
     ///< Rename LIB_PART aliases to avoid conflicts before adding a symbol to a library.
     void ensureUniqueName( LIB_PART* aPart, const wxString& aLibrary );
 
+    enum TABLE_SCOPE
+    {
+        GLOBAL_LIB_TABLE,
+        PROJECT_LIB_TABLE
+    };
+
+    /**
+     * Add \a aLibFile to the symbol library table defined by \a aScope.
+     *
+     * @note The library defined by \a aLibFile must be a KiCad (s-expression) library.
+     *
+     * @param aLibFile is the full path and file name of the symbol library to add to the table.
+     * @param aScope defines if \a aLibFile is added to the global or project library table.
+     * @return true if successful or false if a failure occurs.
+     */
+    bool addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE aScope = GLOBAL_LIB_TABLE );
+
+    /**
+     * Replace the file path of the symbol library table entry \a aLibNickname with \a aLibFile.
+     *
+     * @note The library defined by \a aLibFile must be a KiCad (s-expression) library.
+     *
+     * @param aLibNickmane is the nickname of an existing library table entry.
+     * @param aLibFile is the full path and file name of the symbol library to replace in the
+     *                 table.
+     * @return true if successful or false if a failure occurs.
+     */
+    bool replaceLibTableEntry( const wxString& aLibNickname, const wxString& aLibFile );
+
     DECLARE_EVENT_TABLE()
 
 public:

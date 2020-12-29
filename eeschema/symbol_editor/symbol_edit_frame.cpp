@@ -30,6 +30,7 @@
 #include <core/kicad_algo.h>
 #include <eeschema_id.h>
 #include <eeschema_settings.h>
+#include <env_paths.h>
 #include <kiface_i.h>
 #include <kiplatform/app.h>
 #include <kiway_express.h>
@@ -1306,4 +1307,124 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( const std::unique_ptr<LIB_PART>
     SetShowDeMorgan( GetCurPart()->HasConversion() );
     DisplaySymbolDatasheet();
     Refresh();
+}
+
+
+bool SYMBOL_EDIT_FRAME::addLibTableEntry( const wxString& aLibFile, TABLE_SCOPE aScope )
+{
+    wxFileName fn = aLibFile;
+    wxFileName libTableFileName( Prj().GetProjectPath(),
+                                 SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+    wxString libNickname = fn.GetName();
+    SYMBOL_LIB_TABLE* libTable = Prj().SchSymbolLibTable();
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+
+    if( libTable->HasLibrary( libNickname ) )
+    {
+        wxString tmp;
+        int suffix = 1;
+
+        while( libTable->HasLibrary( libNickname ) )
+        {
+            tmp.Printf( "%s%d", fn.GetName(), suffix );
+            libNickname = tmp;
+            suffix += 1;
+        }
+    }
+
+    SYMBOL_LIB_TABLE_ROW* row = new SYMBOL_LIB_TABLE_ROW();
+    row->SetNickName( libNickname );
+
+    wxString normalizedPath = NormalizePath( aLibFile, &envVars, Prj().GetProjectPath() );
+
+    if( aScope == GLOBAL_LIB_TABLE )
+    {
+        libTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+        libTableFileName = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
+
+        // We cannot normalize against the current project path when saving to global table.
+        normalizedPath = NormalizePath( aLibFile, &envVars, wxEmptyString );
+    }
+
+    if( normalizedPath.IsEmpty() )
+        normalizedPath = aLibFile;
+
+    row->SetFullURI( normalizedPath );
+
+    wxCHECK( libTable->InsertRow( row ), false );
+
+    try
+    {
+        libTable->Save( libTableFileName.GetFullPath() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg;
+        msg.Printf( _( "Error saving %s symbol library table." ),
+                    ( aScope == GLOBAL_LIB_TABLE ) ? _( "global" ) : _( "project" ) );
+
+        wxMessageDialog dlg( this, msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        dlg.SetExtendedMessage( ioe.What() );
+        dlg.ShowModal();
+
+        return false;
+    }
+
+    return true;
+}
+
+
+bool SYMBOL_EDIT_FRAME::replaceLibTableEntry( const wxString& aLibNickname,
+                                              const wxString& aLibFile )
+{
+    // Check the global library table first because checking the project library table
+    // checks the global library table as well due to library chaining.
+    bool isGlobalTable = true;
+    wxFileName libTableFileName = SYMBOL_LIB_TABLE::GetGlobalTableFileName();;
+    const ENV_VAR_MAP& envVars = Pgm().GetLocalEnvVariables();
+    SYMBOL_LIB_TABLE* libTable = &SYMBOL_LIB_TABLE::GetGlobalLibTable();
+    SYMBOL_LIB_TABLE_ROW* row = libTable->FindRow( aLibNickname );
+
+    if( !row )
+    {
+        libTableFileName.SetPath( Prj().GetProjectPath() );
+        libTableFileName.SetName( SYMBOL_LIB_TABLE::GetSymbolLibTableFileName() );
+        libTable = Prj().SchSymbolLibTable();
+        isGlobalTable = false;
+        row = libTable->FindRow( aLibNickname );
+    }
+
+    wxCHECK( row, false );
+
+    wxString projectPath;
+
+    if( !isGlobalTable )
+        projectPath = Prj().GetProjectPath();
+
+    wxString normalizedPath = NormalizePath( aLibFile, &envVars, projectPath );
+
+    if( normalizedPath.IsEmpty() )
+        normalizedPath = aLibFile;
+
+    row->SetFullURI( normalizedPath );
+    row->SetType( "KiCad" );
+
+    try
+    {
+        libTable->Save( libTableFileName.GetFullPath() );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg;
+        msg.Printf( _( "Error saving %s symbol library table." ),
+                    ( isGlobalTable ) ? _( "global" ) : _( "project" ) );
+
+        wxMessageDialog dlg( this, msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        dlg.SetExtendedMessage( ioe.What() );
+        dlg.ShowModal();
+
+        return false;
+    }
+
+    return true;
 }

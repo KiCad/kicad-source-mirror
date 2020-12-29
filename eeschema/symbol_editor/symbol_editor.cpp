@@ -45,6 +45,92 @@
 #include <wx/clipbrd.h>
 
 
+/**
+ * Helper control to inquire user what to do on library save as operation.
+ */
+class SAVE_AS_HELPER : public wxPanel
+{
+public:
+    SAVE_AS_HELPER( wxWindow* aParent ) :
+        wxPanel( aParent )
+    {
+        m_simpleSaveAs = new wxRadioButton( this, wxID_ANY, _( "Normal save as operation" ),
+                                            wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
+        m_simpleSaveAs->SetToolTip( _( "Do not perform any additional operations after saving "
+                                       "library." ) );
+        m_replaceTableEntry = new wxRadioButton( this, wxID_ANY,
+                                                 _( "Replace library table entry" ) );
+        m_replaceTableEntry->SetToolTip( _( "Replacy symbol library table entry with new library."
+                                            "\n\nThe original library will no longer be avaliable "
+                                            "for use." ) );
+        m_addGlobalTableEntry = new wxRadioButton( this, wxID_ANY,
+                                                   _( "Add new global library table entry" ) );
+        m_addGlobalTableEntry->SetToolTip( _( "Add new entry to the global symbol library table."
+                                              "\n\nThe symbol library table nickname is suffixed "
+                                              "with\nan integer to ensure no duplicate table "
+                                              "entries." ) );
+        m_addProjectTableEntry = new wxRadioButton( this, wxID_ANY,
+                                                    _( "Add new project library table entry" ) );
+        m_addProjectTableEntry->SetToolTip( _( "Add new entry to the project symbol library table."
+                                               "\n\nThe symbol library table nickname is suffixed "
+                                               "with\nan integer to ensure no duplicate table "
+                                               "entries." ) );
+
+        wxBoxSizer* sizer = new wxBoxSizer( wxHORIZONTAL );
+        sizer->Add( m_simpleSaveAs, 0, wxLEFT | wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
+        sizer->Add( m_replaceTableEntry, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
+        sizer->Add( m_addGlobalTableEntry, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
+        sizer->Add( m_addProjectTableEntry, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 5 );
+
+        SetSizerAndFit( sizer );
+    }
+
+    enum SAH_TYPE
+    {
+        UNDEFINED = -1,
+        NORMAL_SAVE_AS,
+        REPLACE_TABLE_ENTRY,
+        ADD_GLOBAL_TABLE_ENTRY,
+        ADD_PROJECT_TABLE_ENTRY
+    };
+
+    SAH_TYPE GetOption() const
+    {
+        if( m_simpleSaveAs->GetValue() )
+            return SAH_TYPE::NORMAL_SAVE_AS;
+        else if( m_replaceTableEntry->GetValue() )
+            return SAH_TYPE::REPLACE_TABLE_ENTRY;
+        else if( m_addGlobalTableEntry->GetValue() )
+            return ADD_GLOBAL_TABLE_ENTRY;
+        else if( m_addProjectTableEntry->GetValue() )
+            return ADD_PROJECT_TABLE_ENTRY;
+        else
+            return UNDEFINED;
+    }
+
+    /**
+     * Create a new panel to add to a wxFileDialog object.
+     *
+     * The caller owns the created object and is responsible for deleting it.
+     *
+     * @param aParent is the parent window that will own the created object.
+     * @return the newly created panel to add to the wxFileDialog.
+     */
+    static wxWindow* Create( wxWindow* aParent )
+    {
+        wxCHECK( aParent, nullptr );
+
+        return new SAVE_AS_HELPER( aParent );
+    }
+
+private:
+    wxRadioButton* m_simpleSaveAs;
+    wxRadioButton* m_replaceTableEntry;
+    wxRadioButton* m_addGlobalTableEntry;
+    wxRadioButton* m_addProjectTableEntry;
+};
+
+
 void SYMBOL_EDIT_FRAME::updateTitle()
 {
     wxString lib = GetCurLib();
@@ -1026,6 +1112,7 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 {
     wxFileName fn;
     wxString   msg;
+    SAVE_AS_HELPER::SAH_TYPE type = SAVE_AS_HELPER::SAH_TYPE::UNDEFINED;
     SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::SCH_FILE_T::SCH_KICAD;
     PROJECT&   prj = Prj();
 
@@ -1056,6 +1143,8 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
                           default_path, fn.GetFullName(), wildcards,
                           wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
+        dlg.SetExtraControlCreator( &SAVE_AS_HELPER::Create );
+
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;
 
@@ -1065,6 +1154,11 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
 
         if( fn.GetExt().IsEmpty() )
             fn.SetExt( KiCadSymbolLibFileExtension );
+
+        const SAVE_AS_HELPER* sah = dynamic_cast<const SAVE_AS_HELPER*>( dlg.GetExtraControl() );
+        wxCHECK( sah, false );
+
+        type = sah->GetOption();
     }
     else
     {
@@ -1091,7 +1185,40 @@ bool SYMBOL_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     }
 
     if( !aNewFile )
+    {
         m_libMgr->ClearLibraryModified( aLibrary );
+    }
+    else
+    {
+        bool resyncLibTree = false;
+        wxString originalLibNickname = getTargetLib();
+
+        switch( type )
+        {
+        case SAVE_AS_HELPER::SAH_TYPE::REPLACE_TABLE_ENTRY:
+            resyncLibTree = replaceLibTableEntry( originalLibNickname, fn.GetFullPath() );
+            break;
+
+        case SAVE_AS_HELPER::SAH_TYPE::ADD_GLOBAL_TABLE_ENTRY:
+            resyncLibTree = addLibTableEntry( fn.GetFullPath() );
+            break;
+
+        case SAVE_AS_HELPER::SAH_TYPE::ADD_PROJECT_TABLE_ENTRY:
+            resyncLibTree = addLibTableEntry( fn.GetFullPath(), PROJECT_LIB_TABLE );
+            break;
+
+        case SAVE_AS_HELPER::SAH_TYPE::NORMAL_SAVE_AS:
+        default:
+            break;
+        }
+
+        if( resyncLibTree )
+        {
+            FreezeSearchTree();
+            SyncLibraries( true );
+            ThawSearchTree();
+        }
+    }
 
     ClearMsgPanel();
     msg.Printf( _( "Symbol library file \"%s\" saved" ), fn.GetFullPath() );
