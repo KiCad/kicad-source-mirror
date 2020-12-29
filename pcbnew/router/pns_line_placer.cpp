@@ -28,6 +28,7 @@
 #include "pns_node.h"
 #include "pns_router.h"
 #include "pns_shove.h"
+#include "pns_solid.h"
 #include "pns_topology.h"
 #include "pns_walkaround.h"
 
@@ -702,7 +703,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
 
         int effortLevel = OPTIMIZER::MERGE_OBTUSE;
 
-        if( Settings().SmartPads() )
+        if( Settings().SmartPads() && !m_postureSolver.IsManuallyForced() )
             effortLevel = OPTIMIZER::SMART_PADS;
 
         optimizer.SetEffortLevel( effortLevel );
@@ -994,6 +995,13 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
         seg.A.y = -seg.A.y;
         seg.B.y = -seg.B.y;
         lastSegDir = DIRECTION_45( seg );
+    }
+    else if( aStartItem && aStartItem->Kind() == ITEM::SOLID_T &&
+             static_cast<SOLID*>( aStartItem )->Parent()->Type() == PCB_PAD_T )
+    {
+        double angle = static_cast<SOLID*>( aStartItem )->GetOrientation() / 10.0;
+        angle        = ( angle + 22.5 ) / 45.0;
+        lastSegDir   = DIRECTION_45( static_cast<DIRECTION_45::Directions>( int( angle ) ) );
     }
 
     m_postureSolver.Clear();
@@ -1608,9 +1616,9 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
     // Adjusts how close to p0 we unlock the posture again if one was locked already
     const int unlockDistanceFactor = 4;
 
-    if( m_disabled || m_trail.PointCount() < 2 )
+    if( m_disabled || m_trail.PointCount() < 2 || m_manuallyForced )
     {
-        if( m_lastSegDirection != DIRECTION_45::UNDEFINED )
+        if( !m_manuallyForced && m_lastSegDirection != DIRECTION_45::UNDEFINED )
             m_direction = m_lastSegDirection;
 
         return m_direction;

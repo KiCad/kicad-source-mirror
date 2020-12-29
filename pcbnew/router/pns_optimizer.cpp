@@ -931,7 +931,7 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
 
                 DIRECTION_45 dir_bkout( breakout.CSegment( -1 ) );
 
-                if(!connect.SegmentCount())
+                if( !connect.SegmentCount() )
                     continue;
 
                 int ang1 = dir_bkout.Angle( DIRECTION_45( connect.CSegment( 0 ) ) );

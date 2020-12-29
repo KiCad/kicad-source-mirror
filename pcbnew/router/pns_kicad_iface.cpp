@@ -831,6 +831,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
     solid->SetNet( aPad->GetNetCode() );
     solid->SetParent( aPad );
     solid->SetPadToDie( aPad->GetPadToDieLength() );
+    solid->SetOrientation( aPad->GetOrientation() );
 
     wxPoint wx_c = aPad->ShapePos();
     wxPoint offset = aPad->GetOffset();

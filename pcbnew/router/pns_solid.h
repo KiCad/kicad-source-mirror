@@ -39,6 +39,7 @@ public:
     {
         m_movable = false;
         m_padToDie = 0;
+        m_orientation = 0;
     }
 
     ~SOLID()
@@ -130,12 +131,16 @@ public:
         m_offset = aOffset;
     }
 
+    double GetOrientation() const { return m_orientation; }
+    void SetOrientation( double aOrientation ) { m_orientation = aOrientation; }
+
 private:
     VECTOR2I    m_pos;
     SHAPE*      m_shape;
     SHAPE*      m_alternateShape;
     VECTOR2I    m_offset;
     int         m_padToDie;
+    double      m_orientation;  // in 1/10 degrees, matching PAD
 };
 
 }

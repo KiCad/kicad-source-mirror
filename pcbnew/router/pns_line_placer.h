@@ -95,6 +95,8 @@ public:
 
     void SetDisabled( bool aDisabled = true ) { m_disabled = aDisabled; }
 
+    bool IsManuallyForced() const { return m_manuallyForced; }
+
 private:
     SHAPE_LINE_CHAIN m_trail;
     int              m_tolerance;
