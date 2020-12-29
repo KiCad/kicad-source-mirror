@@ -1042,6 +1042,9 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
     opt.SetEffortLevel( aEffortLevel );
     opt.SetCollisionMask( -1 );
 
+    if( aEffortLevel & OPTIMIZER::PRESERVE_VERTEX )
+        opt.SetPreserveVertex( aV );
+
     return opt.Optimize( aLine );
 }
 
