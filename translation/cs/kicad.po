@@ -8,13 +8,14 @@
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020.
 # Jan Straka <bach@email.cz>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-28 12:10+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
 "Language: cs\n"
@@ -658,6 +659,8 @@ msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
 msgstr ""
+"Interakce počítají, že paprsek může cestovat objekty. (vyšší počet úrovní "
+"zlepšuje výsledky, zvláště na velmi transparentních deskách)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
@@ -666,11 +669,11 @@ msgstr "Refrakce"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:537
 msgid "Number of rays that will be cast to evaluate a refraction point"
-msgstr ""
+msgstr "Počet paprsků, které budou vrženy k vyhodnocení lomu"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:548
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr ""
+msgstr "Počet odrazů, které může paprsek zasáhnout reflexní objekty"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
@@ -1660,7 +1663,7 @@ msgstr "Vedoucí vývojový tým"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr ""
+msgstr "Absolventi rozvoje absolventů"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -2230,7 +2233,7 @@ msgstr "Výběr obsahuje %d uzamčených položek."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Tyto položky budou přeskočeny, pokud nepřepíšete zámky."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Do not show again."
@@ -2831,6 +2834,14 @@ msgid ""
 "If this does not match the system DPI scaling, the canvas will not match the "
 "window size and cursor position."
 msgstr ""
+"Nastavte měřítko pro plátno.\n"
+"\n"
+"Na displejích s vysokým DPI na některých platformách nemůže KiCad určit "
+"měřítko. V takovém případě budete možná muset nastavit tuto hodnotu tak, aby "
+"odpovídala měřítku DPI vašeho systému. 2.0 je běžná hodnota.\n"
+"\n"
+"Pokud to neodpovídá škálování systému DPI, plátno nebude odpovídat velikosti "
+"okna a poloze kurzoru."
 
 #: common/dialogs/panel_common_settings.cpp:62
 msgid ""
@@ -3140,7 +3151,7 @@ msgstr "Použít akceleraci zoomu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:39
 msgid "Zoom faster when scrolling quickly"
-msgstr ""
+msgstr "Rychlejší přiblížení při rychlém posouvání"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:45
 msgid "Zoom speed:"
@@ -3152,7 +3163,7 @@ msgstr "Jak daleko přiblížit při každém otočení kolečka myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:58
 msgid "Pick the zoom speed automatically"
-msgstr ""
+msgstr "Vyberte rychlost zoomu automaticky"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
@@ -3160,7 +3171,7 @@ msgstr "Rychlost automatického posouvání:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
-msgstr ""
+msgstr "Jak rychle se pohybovat při pohybu objektu od okraje obrazovky"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:89
 msgid "Mouse Buttons"
@@ -3250,12 +3261,13 @@ msgstr "Posun doleva/doprava:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:206
 msgid "Pan left/right with horizontal touchpad or scroll wheel movement"
-msgstr ""
+msgstr "Posouvání doleva / doprava s vodorovným touchpadem nebo pohybem kolečka"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
+"Při posouvání zleva doprava na touchpadu posouvejte plátno doleva a doprava"
 
 #: common/dialogs/panel_setup_netclasses.cpp:82
 #: eeschema/dialogs/dialog_edit_line_style.cpp:46
@@ -4283,6 +4295,9 @@ msgid ""
 "\n"
 "Unknown file type."
 msgstr ""
+"Nelze tisknout „%s“.\n"
+"\n"
+"Neznámý typ souboru."
 
 #: common/gestfich.cpp:372 eeschema/eeschema.cpp:401 eeschema/eeschema.cpp:433
 #: gerbview/gerbview.cpp:230 kicad/project_template.cpp:243
@@ -4360,7 +4375,7 @@ msgstr "Odebrat z výběru"
 
 #: common/hotkey_store.cpp:50
 msgid "Ignore Grid Snaps"
-msgstr ""
+msgstr "Ignorovat mřížku"
 
 #: common/hotkey_store.cpp:51
 msgid "Ignore Other Snaps"
@@ -4687,7 +4702,7 @@ msgstr "Dráty"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr "Sběrnice"
+msgstr "Autobusy"
 
 #: common/layer_id.cpp:107
 msgid "Bus junctions"
@@ -4749,7 +4764,7 @@ msgstr "Názvy sítí"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
-msgstr "Vývody"
+msgstr "Špendlíky"
 
 #: common/layer_id.cpp:122
 msgid "Sheet borders"
@@ -4975,7 +4990,7 @@ msgstr "Nerozpoznaný znak '%c'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:830
 msgid "Unknown parent of function parameters"
-msgstr ""
+msgstr "Neznámý rodič parametrů funkce"
 
 #: common/libeval_compiler/libeval_compiler.cpp:844
 msgid "Unknown parent of property"
@@ -5122,12 +5137,12 @@ msgstr "Nelze otevřít soubor '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2035
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2041
 msgid "The selected file is not valid or might be corrupt!"
-msgstr ""
+msgstr "Vybraný soubor není platný nebo může být poškozen!"
 
 #: common/plugins/cadstar/cadstar_archive_parser.cpp:2139
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr ""
+msgstr "Neočekávaný počet bodů v „%s“. Nalezeno %d, ale očekáváno %d."
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:38
 #, c-format
@@ -5147,7 +5162,7 @@ msgstr "Chybějící parametr '%s' v '%s'"
 #: common/plugins/cadstar/cadstar_archive_parser.h:47
 #, c-format
 msgid "Unknown Parameter '%s' in '%s'"
-msgstr ""
+msgstr "Neznámý parametr „%s“ v „%s“"
 
 #: common/plugins/cadstar/cadstar_archive_parser.h:50
 #, c-format
@@ -5364,7 +5379,7 @@ msgstr "Zobrazit kontextové menu"
 
 #: common/tool/actions.cpp:126
 msgid "Perform the right-mouse-button action"
-msgstr ""
+msgstr "Proveďte akci pravým tlačítkem myši"
 
 #: common/tool/actions.cpp:135
 msgid "Undo"
@@ -5463,7 +5478,7 @@ msgstr "Najít Další"
 
 #: common/tool/actions.cpp:216
 msgid "Find next match"
-msgstr "Hledat další výskyt"
+msgstr "Najít další podobné"
 
 #: common/tool/actions.cpp:222
 msgid "Find Next Marker"
@@ -5509,7 +5524,7 @@ msgstr "Vyloučit značku"
 
 #: common/tool/actions.cpp:257
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Označit aktuální porušení v okně Kontrola jako vyloučení"
 
 #: common/tool/actions.cpp:269
 msgid "Refresh"
@@ -5643,7 +5658,7 @@ msgstr "Zobrazit mřížku"
 
 #: common/tool/actions.cpp:475
 msgid "Display grid dots or lines in the edit window"
-msgstr ""
+msgstr "Zobrazí tečky nebo čáry mřížky v editačním okně"
 
 #: common/tool/actions.cpp:480
 msgid "Grid Properties..."
@@ -5727,7 +5742,7 @@ msgstr "Režim zobrazení jedné vrstvy"
 
 #: common/tool/actions.cpp:532
 msgid "Toggle inactive layers between normal and dimmed"
-msgstr ""
+msgstr "Přepínat neaktivní vrstvy mezi normálními a šedými"
 
 #: common/tool/actions.cpp:536
 msgid "Single Layer View Mode (3-state)"
@@ -5735,7 +5750,7 @@ msgstr "Režim zobrazení jedné vrstvy (3-stavový)"
 
 #: common/tool/actions.cpp:537
 msgid "Toggle inactive layers between normal, dimmed, and hidden"
-msgstr ""
+msgstr "Přepínat neaktivní vrstvy mezi normálními, šedými a skrytými"
 
 #: common/tool/actions.cpp:541
 msgid "Select item(s)"
@@ -5939,11 +5954,11 @@ msgstr "Nesprávná hodnota: %s"
 
 #: common/validators.cpp:294
 msgid "Entry contains trailing white space."
-msgstr ""
+msgstr "Záznam obsahuje koncové prázdné místo."
 
 #: common/validators.cpp:298
 msgid "Entry contains leading white space."
-msgstr ""
+msgstr "Záznam obsahuje úvodní prázdné místo."
 
 #: common/validators.cpp:302
 #, c-format
@@ -6020,7 +6035,7 @@ msgstr "Minimální rozteč mřížky:"
 
 #: common/widgets/gal_options_panel.cpp:135
 msgid "Snap to Grid:"
-msgstr "Přichytit k mřížce:"
+msgstr "Přichytávat k mřížce:"
 
 #: common/widgets/gal_options_panel.cpp:139
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:349
@@ -6777,7 +6792,7 @@ msgstr "Schéma je uloženo"
 
 #: cvpcb/toolbars_cvpcb.cpp:74
 msgid "Footprint Filters:"
-msgstr "Filtry pouzder:"
+msgstr "Filtry pouzdra:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
@@ -6999,13 +7014,14 @@ msgstr "Různé hodnoty pro %s%d%s (%s) a %s%d%s (%s)"
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr ""
+msgstr "%s i %s jsou připojeny ke stejným položkám; %s bude použit v netlistu"
 
 #: eeschema/connection_graph.cpp:2360
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr ""
+"Síť %s je graficky připojena ke sběrnici %s, ale není členem této sběrnice"
 
 #: eeschema/connection_graph.cpp:2732
 #, fuzzy, c-format
@@ -7812,6 +7828,8 @@ msgid ""
 "The margins around the text are controlled by the text offset ratio\n"
 "in Schematic Setup > General > Formatting."
 msgstr ""
+"Okraje kolem textu jsou řízeny poměrem odsazení textu\n"
+"v části Schematické nastavení> Obecné> Formátování."
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:118
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
@@ -8016,12 +8034,12 @@ msgstr "odpovídající"
 
 #: eeschema/dialogs/dialog_erc.cpp:506 pcbnew/dialogs/dialog_drc.cpp:435
 msgid "Remove exclusion for this violation"
-msgstr ""
+msgstr "Odeberte vyloučení z tohoto porušení"
 
 #: eeschema/dialogs/dialog_erc.cpp:507 pcbnew/dialogs/dialog_drc.cpp:436
 #, c-format
 msgid "It will be placed back in the %s list"
-msgstr ""
+msgstr "Bude vráceno zpět do seznamu %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:511 pcbnew/dialogs/dialog_drc.cpp:440
 msgid "Exclude this violation"
@@ -8030,12 +8048,12 @@ msgstr "Vyloučit toto porušení"
 #: eeschema/dialogs/dialog_erc.cpp:512 pcbnew/dialogs/dialog_drc.cpp:441
 #, c-format
 msgid "It will be excluded from the %s list"
-msgstr ""
+msgstr "Bude vyloučeno ze seznamu %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:524 pcbnew/dialogs/dialog_drc.cpp:448
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr ""
+msgstr "U všech porušení „%s“ změňte závažnost na chybu"
 
 #: eeschema/dialogs/dialog_erc.cpp:526 eeschema/dialogs/dialog_erc.cpp:532
 #: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
@@ -8045,7 +8063,7 @@ msgstr "Závažnost porušení lze také upravit v Nastavení desky... dialog"
 #: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr ""
+msgstr "Změňte závažnost na Varování pro všechna porušení pravidel „%s“"
 
 #: eeschema/dialogs/dialog_erc.cpp:535 pcbnew/dialogs/dialog_drc.cpp:461
 #, c-format
@@ -8054,11 +8072,11 @@ msgstr "Ignorovat všechna '%s' porušení"
 
 #: eeschema/dialogs/dialog_erc.cpp:536 pcbnew/dialogs/dialog_drc.cpp:463
 msgid "Violations will not be checked or reported"
-msgstr ""
+msgstr "Porušení nebude zkontrolováno ani nahlášeno"
 
 #: eeschema/dialogs/dialog_erc.cpp:543
 msgid "Edit pin-to-pin conflict map..."
-msgstr "Upravte mapu konfliktů vývod-vývod..."
+msgstr "Upravit mapu konfliktů pin-to-pin ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:547 pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Edit violation severities..."
@@ -8071,7 +8089,7 @@ msgstr "Otevřete dialog konfigurace schématu"
 #: eeschema/dialogs/dialog_erc.cpp:640
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
 msgid "Pin Conflicts Map"
-msgstr "Mapa konfliktů vývodů"
+msgstr "Připnout mapu konfliktů"
 
 #: eeschema/dialogs/dialog_erc.cpp:644
 #: eeschema/dialogs/dialog_schematic_setup.cpp:71
@@ -8660,6 +8678,10 @@ msgid ""
 "This was previously known as an alias.  Do not select\n"
 "an existing symbol to create a new root symbol."
 msgstr ""
+"Vyberte symbol v aktuální knihovně jako nadřazený symbol.\n"
+"\n"
+"Toto bylo dříve známé jako alias. Nevybírejte\n"
+"existující symbol k vytvoření nového kořenového symbolu."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:51
 msgid "Default reference designator:"
@@ -8684,6 +8706,11 @@ msgid ""
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Zaškrtnutím této možnosti povolíte, aby se symboly s více jednotkami mohly "
+"lišit\n"
+"elementy. Zrušte zaškrtnutí této možnosti, pokud jsou všechny jednotky "
+"symbolů identické kromě\n"
+"pro čísla PIN."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
@@ -8737,7 +8764,7 @@ msgstr "Pole musí mít název."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:269
 msgid "Aliased symbol must have a parent selected"
-msgstr ""
+msgstr "Aliasy symbol musí mít vybraného rodiče"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:277
 msgid "Delete extra units from symbol?"
@@ -8862,6 +8889,13 @@ msgid ""
 "derived from another symbols or they stand alone as\n"
 "root symbols."
 msgstr ""
+"Vyberte symbol pro odvození tohoto symbolu nebo vyberte\n"
+"<Žádný> pro kořenový symbol.\n"
+"\n"
+"Odvozené symboly byly dříve označovány jako aliasy.\n"
+"Toto již neplatí a všechny symboly jsou buď\n"
+"odvozené od jiných symbolů, nebo stojí samostatně jako\n"
+"kořenové symboly."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (DeMorgan)"
@@ -8882,6 +8916,11 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"Nastavením této možnosti se dotyčný symbol objeví v\n"
+"dialogové okno \"přidat napájecí port\". Uzamkne text hodnoty, aby byl "
+"chráněn\n"
+"z úprav v Eeschema. Symbol nebude součástí\n"
+"kusovníku a nelze mu přiřadit stopu."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -9038,12 +9077,16 @@ msgid ""
 "This schematic has one or more buses with more than one label.\n"
 "This was allowed in previous KiCad versions but is no longer permitted."
 msgstr ""
+"Toto schéma má jednu nebo více sběrnic s více než jedním štítkem.\n"
+"To bylo povoleno v předchozích verzích KiCadu, ale již to není povoleno."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:23
 msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
+"Pro každý z níže uvedených autobusů vyberte nový název.\n"
+"Název vám byl navržen na základě štítků připojených k autobusu."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
@@ -9093,6 +9136,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
+"Zadejte příkazový řádek a spusťte koření\n"
+"Obvykle <cesta k binárnímu koření> %I\n"
+"%I Budu nahrazen skutečným názvem netlist koření"
 
 #: eeschema/dialogs/dialog_netlist.cpp:389
 msgid "Create Netlist and Run Simulator Command"
@@ -9430,7 +9476,7 @@ msgstr "Vyplňte pozadí"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:83
 msgid "Plot the background color if the output format supports it"
-msgstr ""
+msgstr "Pokud to výstupní formát podporuje, vykreslete barvu pozadí"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:87
 msgid "Color theme:"
@@ -9438,7 +9484,7 @@ msgstr "Barevné téma:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:94
 msgid "Select the color theme to use for plotting"
-msgstr ""
+msgstr "Vyberte barevné téma, které se má použít pro vykreslování"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:98
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:186
@@ -9514,7 +9560,7 @@ msgstr "Vyplňte pozadí"
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:35
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:211
 msgid "Use a different color theme for printing:"
-msgstr ""
+msgstr "Pro tisk použijte jiné barevné téma:"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:104
 msgid ""
@@ -9641,7 +9687,7 @@ msgstr "Šablony názvů polí"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:54
 msgid "Pin conflict map"
-msgstr "Mapa konfliktů vývodu"
+msgstr "Připnout mapu konfliktu"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:64
@@ -9690,7 +9736,7 @@ msgstr "Slova"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:89
 #: pcbnew/dialogs/dialog_find_base.cpp:49
 msgid "Wildcards"
-msgstr "Zástupné znaky"
+msgstr "Žolíky"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:92
 #, fuzzy
@@ -9761,7 +9807,7 @@ msgstr "Textové proměnné"
 #: eeschema/dialogs/dialog_schematic_setup.cpp:86
 #: pcbnew/dialogs/dialog_board_setup.cpp:99
 msgid "Project is missing or read-only. Changes will not be saved."
-msgstr "Projekt chybí nebo je jen pro čtení. Změny se neuloží."
+msgstr "Projekt chybí nebo je jen pro čtení. Změny nebudou uloženy."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:148
 #, c-format
@@ -9769,6 +9815,8 @@ msgid ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded"
 msgstr ""
+"Chyba při importu nastavení z projektu:\n"
+"Soubor projektu %s nelze načíst"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:64
 msgid "Connection type:"
@@ -9784,7 +9832,7 @@ msgstr "List musí mít platný název souboru."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:266
 msgid "Sheet file must have a '.kicad_sch' extension."
-msgstr ""
+msgstr "Soubor listu musí mít příponu „.kicad_sch“."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:292
 msgid "Untitled Sheet"
@@ -9792,7 +9840,7 @@ msgstr "List bez názvu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:318
 msgid "Note: item colors are overridden in the current color theme."
-msgstr ""
+msgstr "Poznámka: Barvy položek jsou v aktuálním barevném motivu přepsány."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:320
 #, c-format
@@ -9800,6 +9848,9 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Eeschema > Colors."
 msgstr ""
+"Chcete-li zobrazit barvy jednotlivých položek, zrušte zaškrtnutí políčka „%s“"
+"\n"
+"v Předvolby> Eeschema> Barvy."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:366
 #, c-format
@@ -9855,7 +9906,7 @@ msgstr "List musí mít specifikovaný soubor."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:623
 msgid "Sheet filename must have a '.kicad_sch' extension."
-msgstr ""
+msgstr "Název souboru listu musí mít příponu '.kicad_sch'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:771
 msgid "Hierarchical path: "
@@ -10151,22 +10202,27 @@ msgid ""
 "Check the symbol and use \"Alternate node sequence\" to reorder the pins, if "
 "necessary"
 msgstr ""
+"Číslování pinů symbolů nemusí vždy odpovídat požadované objednávce pinů "
+"SPICE\n"
+"Zkontrolujte symbol a v případě potřeby změňte pořadí kolíků pomocí „"
+"Alternativní sekvence uzlů“"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:454
 msgid "For a Diode, pin order is anode, cathode"
-msgstr ""
+msgstr "Pro diodu je pořadí pinů anoda, katoda"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:458
 msgid "For a BJT, pin order is collector, base, emitter, substrate (optional)"
 msgstr ""
+"U BJT je objednávka pinů kolektor, základna, emitor, substrát (volitelně)"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:462
 msgid "For a MOSFET, pin order is drain, grid, source"
-msgstr ""
+msgstr "Pro MOSFET je pořadí pinů odtok, mřížka, zdroj"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:466
 msgid "For a JFET, pin order is drain, grid, source"
-msgstr ""
+msgstr "Pro JFET je pořadí pinů odtok, mřížka, zdroj"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1015
 msgid "Select library"
@@ -10201,7 +10257,7 @@ msgstr "Lambda:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1105
 msgid "type of random generator for source is invalid"
-msgstr ""
+msgstr "typ náhodného generátoru pro zdroj je neplatný"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:30
 #: eeschema/dialogs/dialog_spice_model_base.cpp:233
@@ -10468,7 +10524,7 @@ msgstr "Přechodný šum"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
 msgid "Uniform"
-msgstr ""
+msgstr "Jednotný"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
 msgid "Gaussian"
@@ -10476,7 +10532,7 @@ msgstr "Gaussův"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:853
 msgid "Poisson"
-msgstr ""
+msgstr "Poisson"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:862
 #, fuzzy
@@ -10614,6 +10670,9 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
+"To je užitečné pro přidání symbolů pro stopy na palubě, jako jsou například "
+"referenční značky\n"
+"a loga, která nechcete zobrazovat v exportu kusovníku"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:200
 msgid ""
@@ -10621,6 +10680,9 @@ msgid ""
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
 msgstr ""
+"To je užitečné pro přidání symbolů, které se exportují pouze do kusovníku, "
+"ale\n"
+"rozvržení desky, jako jsou mechanické spojovací prvky a kryty, není nutné"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid "Update Symbol from Library..."
@@ -10810,10 +10872,13 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
+"Za normálních okolností jsou stopy spojeny s jejich symboly prostřednictvím "
+"jejich jedinečných ID. Tuto možnost vyberte, pouze pokud chcete obnovit "
+"vazby stopy na základě jejich referenčních označení."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
-msgstr ""
+msgstr "Aktualizujte odkazy na symboly, které byly změněny v editoru PCB."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:59
 msgid "Footprint assignments"
@@ -10824,6 +10889,8 @@ msgid ""
 "Update footprint associations of symbols whose footprints have been replaced "
 "with different footprints in PCB."
 msgstr ""
+"Aktualizujte asociace stop symbolů, jejichž stopy byly nahrazeny různými "
+"stopami na PCB."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:65
 msgid "Update symbols values that have been replaced in the PCB editor."
@@ -10900,7 +10967,7 @@ msgstr "&Zvýraznit tloušťku:"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:70
 msgid "(highlight color can be edited in the \"Colors\" page)"
-msgstr ""
+msgstr "(barvu zvýraznění lze upravit na stránce „Barvy“)"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:78
 #: pcbnew/dialogs/panel_display_options_base.cpp:74
@@ -10911,7 +10978,7 @@ msgstr "Post-processing"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:80
 #: pcbnew/dialogs/panel_display_options_base.cpp:76
 msgid "Center view on cross-probed items"
-msgstr ""
+msgstr "Pohled na střed na položkách s křížovou sondou"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:84
 #: pcbnew/dialogs/panel_display_options_base.cpp:80
@@ -10927,7 +10994,7 @@ msgstr "Zvýrazněná síť: %s"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:90
 msgid "Highlight nets when they are highlighted in the PCB editor"
-msgstr ""
+msgstr "Zvýrazněte sítě, když jsou zvýrazněny v editoru PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:23
 msgid "&Restrict buses and wires to H and V orientation"
@@ -10951,6 +11018,8 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
+"Pokud je povoleno, můžete zahájit zapojení kliknutím na nepřipojené kolíky, "
+"i když drátový nástroj není aktivní"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:21
@@ -10976,6 +11045,9 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
+"Ve schématickém editoru:\n"
+"Pokud je povoleno, kliknutím na špendlík vyberte nadřazený symbol.\n"
+"Pokud je zakázáno, kliknutím na špendlík vyberete pouze špendlík."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:90
 msgid "Symbol Field Automatic Placement"
@@ -11095,6 +11167,7 @@ msgstr "Poměr odsazení textu:"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:64
 msgid "Percentage of the text size to offset text above or below wire or bus"
 msgstr ""
+"Procento velikosti textu k odsazení textu nad nebo pod vodičem nebo sběrnicí"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:90
 msgid "Default line thickness:"
@@ -11242,7 +11315,7 @@ msgstr "Editor knihoven"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "Více knihoven nemůže sdílet stejnou přezdívku („%s“)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:420
 #, c-format
@@ -11289,12 +11362,16 @@ msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
 msgstr ""
+"Vyberte jeden nebo více řádků tabulky obsahujících starší knihovny, které "
+"chcete uložit jako aktuální formát (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:701
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
 msgstr ""
+"Uložit „%s“ jako aktuální formát (* .kicad_sym) a nahradit starší položku v "
+"tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -11302,6 +11379,8 @@ msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"Uložit %d starší knihovny jako aktuální formát (* .kicad_sym) a nahradit "
+"starší položky v tabulce?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
 #, fuzzy, c-format
@@ -11319,6 +11398,8 @@ msgid ""
 "Changes must be saved or discarded before the symbol library table can be "
 "modified."
 msgstr ""
+"U jedné nebo více knihoven symbolů byly provedeny úpravy.\n"
+"Před úpravou tabulky knihovny symbolů je nutné uložit nebo zrušit změny."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:965
 msgid "Symbol Libraries"
@@ -11487,12 +11568,12 @@ msgstr "Nezapojeno"
 
 #: eeschema/erc.cpp:276
 msgid "Unresolved text variable in worksheet."
-msgstr ""
+msgstr "Nevyřešená textová proměnná v listu."
 
 #: eeschema/erc.cpp:307
 #, c-format
 msgid "Bus alias %s has conflicting definitions on %s and %s"
-msgstr ""
+msgstr "Alias sběrnice %s má konfliktní definice v %s a %s"
 
 #: eeschema/erc.cpp:377
 #, c-format
@@ -11522,7 +11603,7 @@ msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'."
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "Knihovna „%s“ není v aktuální konfiguraci povolena."
 
 #: eeschema/erc_item.cpp:42
 msgid "Conflicts"
@@ -11594,27 +11675,27 @@ msgstr "Různá síť přiřazena sdílenému vývodu v jiné jednotce stejné s
 
 #: eeschema/erc_item.cpp:102
 msgid "Conflict between bus alias definitions across schematic sheets"
-msgstr ""
+msgstr "Konflikt mezi definicemi aliasů sběrnice napříč schematickými listy"
 
 #: eeschema/erc_item.cpp:106
 msgid "More than one name given to this bus or net"
-msgstr ""
+msgstr "Více než jedno jméno dané této sběrnici nebo síti"
 
 #: eeschema/erc_item.cpp:110
 msgid "Net is graphically connected to a bus but not a bus member"
-msgstr ""
+msgstr "Síť je graficky připojena ke sběrnici, ale není členem sběrnice"
 
 #: eeschema/erc_item.cpp:114
 msgid "Label attached to bus item does not describe a bus"
-msgstr ""
+msgstr "Štítek připojený k položce sběrnice nepopisuje sběrnici"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
-msgstr ""
+msgstr "Autobusy jsou graficky propojeny, ale nesdílejí žádné členy sběrnice"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
-msgstr ""
+msgstr "Neplatné spojení mezi sběrnicí a položkami sítě"
 
 #: eeschema/erc_item.cpp:126 pcbnew/drc/drc_item.cpp:165
 msgid "Unresolved text variable"
@@ -11733,6 +11814,10 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
+"Knihovny symbolů definované v seznamu knihoven symbolů souboru projektu již "
+"nejsou podporovány a budou odstraněny.\n"
+"\n"
+"To může za určitých podmínek způsobit nefunkční odkazy na knihovny symbolů."
 
 #: eeschema/files-io.cpp:463 eeschema/files-io.cpp:495
 msgid "Do not show this dialog again."
@@ -11740,7 +11825,7 @@ msgstr "Nezobrazovat znovu tento dialog."
 
 #: eeschema/files-io.cpp:488
 msgid "The schematic file will be converted to the new file format on save."
-msgstr ""
+msgstr "Schematický soubor bude při uložení převeden do nového formátu souboru."
 
 #: eeschema/files-io.cpp:492
 msgid ""
@@ -11749,6 +11834,10 @@ msgid ""
 "\n"
 "The new file format cannot be opened with previous versions of KiCad."
 msgstr ""
+"Toto schéma bylo uloženo ve starším formátu souborů, který již není "
+"podporován, a bude uložen v novém formátu souboru.\n"
+"\n"
+"Nový formát souboru nelze otevřít u předchozích verzí KiCadu."
 
 #: eeschema/files-io.cpp:590
 msgid "Append Schematic"
@@ -11781,7 +11870,7 @@ msgstr "Adresář \"%s\" není zapisovatelný."
 #: eeschema/files-io.cpp:764
 msgid ""
 "Saving the project to the new file format will overwrite existing files."
-msgstr ""
+msgstr "Uložení projektu do nového formátu souborů přepíše existující soubory."
 
 #: eeschema/files-io.cpp:765
 msgid "Project Save Warning"
@@ -12493,10 +12582,11 @@ msgstr "Nezapojeno"
 #: eeschema/sch_plugin.cpp:138
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr ""
+"V tomto SCH_PLUGIN povolte <b> ladění </b> protokolování funkcí Symbol * ()."
 
 #: eeschema/sch_plugin.cpp:142
 msgid "Regular expression <b>symbol name</b> filter."
-msgstr ""
+msgstr "Regulární výraz filtru <b>název pouzdra</b>."
 
 #: eeschema/sch_plugin.cpp:146 pcbnew/plugin.cpp:154
 msgid ""
@@ -12525,7 +12615,7 @@ msgstr ""
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1575
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
-msgstr ""
+msgstr "Symbol moci vytváří globální štítek s názvem „%s“"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:66
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
@@ -12537,6 +12627,12 @@ msgid ""
 "Current Design size: %.2f, %.2f millimeters. \n"
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
+"Design je příliš velký a nelze jej importovat do KiCadu.\n"
+"Snižte maximální velikost návrhu v CADSTARu tak, že přejdete na:\n"
+"Záložka Návrh -> Vlastnosti -> Možnosti návrhu -> Maximální velikost návrhu."
+"\n"
+"Aktuální velikost návrhu: %.2f, %.2f milimetrů.\n"
+"Maximální povolená velikost návrhu: %.2f, %.2f milimetrů.\n"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:98
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:111
