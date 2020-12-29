@@ -557,24 +557,26 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         {
             NET_SCH::SYM_TERM netTerm = terminalPair.second;
 
-            if( netTerm.HasNetLabel )
+            if( mPowerSymMap.find( netTerm.SymbolID ) != mPowerSymMap.end() )
             {
-                if( mPowerSymMap.find( netTerm.SymbolID ) != mPowerSymMap.end() )
+                SCH_FIELD* val = mPowerSymMap.at( netTerm.SymbolID )->GetField( VALUE_FIELD );
+                val->SetText( netName );
+                val->SetBold( false );
+                val->SetVisible( false );
+
+                if( netTerm.HasNetLabel )
                 {
-                    SCH_FIELD* val = mPowerSymMap.at( netTerm.SymbolID )->GetField( VALUE_FIELD );
-                    val->SetText( netName );
+                    val->SetVisible( true );
                     val->SetPosition( getKiCadPoint( netTerm.NetLabel.Position ) );
                     val->SetTextAngle( getAngleTenthDegree( netTerm.NetLabel.OrientAngle ) );
-                    val->SetBold( false );
-                    val->SetVisible( true );
 
                     applyTextSettings( netTerm.NetLabel.TextCodeID, netTerm.NetLabel.Alignment,
-                            netTerm.NetLabel.Justification, val );
+                                       netTerm.NetLabel.Justification, val );
                 }
-                else if( mGlobLabelMap.find( netTerm.SymbolID ) != mGlobLabelMap.end() )
-                {
-                    mGlobLabelMap.at( netTerm.SymbolID )->SetText( netName );
-                }
+            }
+            else if( mGlobLabelMap.find( netTerm.SymbolID ) != mGlobLabelMap.end() )
+            {
+                mGlobLabelMap.at( netTerm.SymbolID )->SetText( netName );
             }
         }
 
