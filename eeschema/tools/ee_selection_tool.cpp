@@ -597,7 +597,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
 void EE_SELECTION_TOOL::OnIdle( wxIdleEvent& aEvent )
 {
-    if( m_frame->ToolStackIsEmpty() )
+    if( m_frame->ToolStackIsEmpty() && !m_multiple )
     {
         wxMouseState keyboardState = wxGetMouseState();
 
