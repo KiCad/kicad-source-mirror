@@ -734,7 +734,7 @@ void CADSTAR_ARCHIVE_PARSER::SETTINGS::Parse( XNODE* aNode, PARSER_CONTEXT* aCon
 
 wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_CONTEXT* aContext )
 {
-    static const std::map<TEXT_FIELD_NAME, wxString> txtTokens = 
+    static const std::map<TEXT_FIELD_NAME, wxString> txtTokens =
     {
         { TEXT_FIELD_NAME::DESIGN_TITLE,        wxT( "DESIGN TITLE" ) },
         { TEXT_FIELD_NAME::SHORT_JOBNAME,       wxT( "SHORT_JOBNAME" ) },
@@ -757,7 +757,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
         { TEXT_FIELD_NAME::UNITS_FULL,          wxT( "UNITS FULL" ) },
         { TEXT_FIELD_NAME::HYPERLINK,           wxT( "HYPERLINK" ) }
     };
-    
+
 
     wxString remainingStr = aTextString;
     wxString returnStr;
@@ -767,7 +767,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
         //Find the start token
         size_t startpos = remainingStr.Find( wxT( "<@" ) );
 
-        if( startpos == wxNOT_FOUND )
+        if( static_cast<int>( startpos ) == wxNOT_FOUND )
         {
             // No more fields to parse, add to return string
             returnStr += remainingStr;
@@ -804,7 +804,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
         //Now lets find the end token
         size_t endpos = remainingStr.Find( wxT( "@>" ) );
 
-        if( endpos == wxNOT_FOUND )
+        if( static_cast<int>( endpos ) == wxNOT_FOUND )
         {
             // The field we found isn't valid as it doesn't have a termination
             // Lets append the whole thing as plain text
@@ -865,7 +865,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
                 aContext->TextFieldToValuesMap.insert( { foundField, fieldValue } );
             }
 
-        KI_FALLTHROUGH;
+            KI_FALLTHROUGH;
 
         case TEXT_FIELD_NAME::NUM_OF_SHEETS:
         case TEXT_FIELD_NAME::SHEET_NUMBER:
@@ -919,7 +919,7 @@ wxString CADSTAR_ARCHIVE_PARSER::ParseTextFields( wxString aTextString, PARSER_C
         if( ( endpos + 2 ) >= remainingStr.size() )
             break;
 
-        remainingStr = remainingStr.Mid( endpos + 2 );        
+        remainingStr = remainingStr.Mid( endpos + 2 );
     }
 
     return returnStr;

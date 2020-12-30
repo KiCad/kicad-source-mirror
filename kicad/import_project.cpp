@@ -51,8 +51,9 @@
 void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString aFilesWildcard,
         wxString aSchFileExtension, wxString aPcbFileExtension, int aSchFileType, int aPcbFileType )
 {
-    int      style       = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
+    wxString msg;
     wxString default_dir = GetMruPath();
+    int      style       = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
 
     ClearMsg();
 
@@ -60,7 +61,6 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
 
     if( schdlg.ShowModal() == wxID_CANCEL )
         return;
-
 
     wxFileName sch( schdlg.GetPath() );
     sch.SetExt( aSchFileExtension );
@@ -87,10 +87,9 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
 
     if( directory.HasFiles() )
     {
-        wxString msg =
-                _( "The selected directory is not empty.  We recommend you "
-                   "create projects in their own clean directory.\n\nDo you "
-                   "want to create a new empty directory for the project?" );
+        msg = _( "The selected directory is not empty.  We recommend you "
+                 "create projects in their own clean directory.\n\nDo you "
+                 "want to create a new empty directory for the project?" );
 
         KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
@@ -113,17 +112,16 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
 
             if( !wxMkdir( pro.GetPath() ) )
             {
-                wxString msg = _( "Error creating new directory. Please try a different path. The "
-                                  "project was not imported." );
+                msg = _( "Error creating new directory. Please try a different path. The "
+                         "project was not imported." );
 
-                wxMessageDialog dlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-                dlg.ShowModal();
+                wxMessageDialog dirErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
+                dirErrorDlg.ShowModal();
                 return;
             }
         }
     }
 
-    
     std::string packet;
 
     pro.SetExt( ProjectFileExtension );
