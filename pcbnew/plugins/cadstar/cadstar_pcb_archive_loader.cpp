@@ -1565,13 +1565,13 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadTemplates()
 
         if( csTemplate.Pouring.BoxIsolatedPins )
             wxLogError( wxString::Format(
-                    _( "The CADSTAR template '%s' has the setting 'Box Isolated Pins'"
+                    _( "The CADSTAR template '%s' has the setting 'Box Isolated Pins' "
                        "enabled. This setting has no KiCad equivalent, so it has been ignored." ),
                     csTemplate.Name ) );
 
         if( csTemplate.Pouring.AutomaticRepour )
             wxLogWarning( wxString::Format(
-                    _( "The CADSTAR template '%s' has the setting 'Automatic Repour'"
+                    _( "The CADSTAR template '%s' has the setting 'Automatic Repour' "
                        "enabled. This setting has no KiCad equivalent, so it has been ignored." ),
                     csTemplate.Name ) );
 
