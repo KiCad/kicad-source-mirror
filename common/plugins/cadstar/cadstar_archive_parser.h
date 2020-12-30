@@ -74,6 +74,7 @@
 #define SIGNALNAME_ORIGIN_ATTRID ( ATTRIBUTE_ID ) wxT( "__SIGNALNAME_ORIGIN__" )
 #define PART_NAME_ATTRID ( ATTRIBUTE_ID ) wxT( "__PART_NAME__" )
 
+class EDA_TEXT;
 
 /**
  * @brief Helper functions and common structures for CADSTAR PCB and Schematic archive files.
@@ -1324,6 +1325,14 @@ public:
      */
     static std::vector<CUTOUT> ParseAllChildCutouts(
             XNODE* aNode, PARSER_CONTEXT* aContext, bool aTestAllChildNodes = false );
+
+    /**
+     * Corrects the position of a text element that had NO_ALIGNMENT in CADSTAR. Assumes that the
+     * provided text element has been initialised with a position and orientation.
+     * @param aKiCadTextItem a Kicad item to correct
+     */
+    static void FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem );
+
 }; // class CADSTAR_ARCHIVE_PARSER
 
 #endif // CADSTAR_ARCHIVE_PARSER_H_

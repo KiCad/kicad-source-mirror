@@ -627,12 +627,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             if( busTerm.HasNetLabel )
             {
                 SCH_LABEL* label = new SCH_LABEL();
-                applyTextSettings( busTerm.NetLabel.TextCodeID, busTerm.NetLabel.Alignment,
-                        busTerm.NetLabel.Justification, label );
-
                 label->SetText( netName );
                 label->SetPosition( getKiCadPoint( busTerm.SecondPoint ) );
                 label->SetVisible( true );
+
+                applyTextSettings( busTerm.NetLabel.TextCodeID, busTerm.NetLabel.Alignment,
+                                   busTerm.NetLabel.Justification, label );
+
                 netlabels.insert( { busTerm.ID, label } );
 
                 mSheetMap.at( bus.LayerID )->GetScreen()->Append( label );
@@ -1642,11 +1643,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets(
 
                 SCH_FIELD blockNameField( getKiCadPoint( block.BlockLabel.Position ), 2,
                         loadedSheet, wxString( "Block name" ) );
-                applyTextSettings( block.BlockLabel.TextCodeID, block.BlockLabel.Alignment,
-                        block.BlockLabel.Justification, &blockNameField );
                 blockNameField.SetTextAngle( getAngleTenthDegree( block.BlockLabel.OrientAngle ) );
                 blockNameField.SetText( block.Name );
                 blockNameField.SetVisible( true );
+                applyTextSettings( block.BlockLabel.TextCodeID, block.BlockLabel.Alignment,
+                        block.BlockLabel.Justification, &blockNameField );
                 fields.push_back( blockNameField );
                 loadedSheet->SetFields( fields );
             }
@@ -1916,14 +1917,16 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( const TEXTCODE_ID& aCadstarT
         EDA_TEXT* aKiCadTextItem )
 {
     TEXTCODE textCode = getTextCode( aCadstarTextCodeID );
-
+    int      textHeight = KiROUND( (double) getKiCadLength( textCode.Height ) * TXT_HEIGHT_RATIO );
     aKiCadTextItem->SetTextWidth( getKiCadLength( textCode.Width ) );
-    aKiCadTextItem->SetTextHeight( getKiCadLength( textCode.Height ) );
+    aKiCadTextItem->SetTextHeight( textHeight );
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
 
     switch( aCadstarAlignment )
     {
-    case ALIGNMENT::NO_ALIGNMENT: // Default for Single line text is Bottom Left
+    case ALIGNMENT::NO_ALIGNMENT: // Bottom left of the first line
+        FixTextPositionNoAlignment( aKiCadTextItem );
+        KI_FALLTHROUGH;
     case ALIGNMENT::BOTTOMLEFT:
         aKiCadTextItem->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         aKiCadTextItem->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
@@ -1977,10 +1980,10 @@ SCH_TEXT* CADSTAR_SCH_ARCHIVE_LOADER::getKiCadSchText( const TEXT& aCadstarTextE
 
     kiTxt->SetPosition( getKiCadPoint( aCadstarTextElement.Position ) );
     kiTxt->SetText( aCadstarTextElement.Text );
-    applyTextSettings( aCadstarTextElement.TextCodeID, aCadstarTextElement.Alignment,
-            aCadstarTextElement.Justification, kiTxt );
     kiTxt->SetTextAngle( getAngleTenthDegree( aCadstarTextElement.OrientAngle ) );
     kiTxt->SetMirrored( aCadstarTextElement.Mirror );
+    applyTextSettings( aCadstarTextElement.TextCodeID, aCadstarTextElement.Alignment,
+            aCadstarTextElement.Justification, kiTxt );
 
     return kiTxt;
 }

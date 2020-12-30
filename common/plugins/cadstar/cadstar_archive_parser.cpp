@@ -24,6 +24,8 @@
  */
 
 #include <plugins/cadstar/cadstar_archive_parser.h>
+#include <eda_text.h>
+#include <trigo.h>
 
 // Ratio derived from CADSTAR default font. See doxygen comment in cadstar_archive_parser.h
 const double CADSTAR_ARCHIVE_PARSER::TXT_HEIGHT_RATIO = ( 24.0 - 5.0 ) / 24.0;
@@ -2415,4 +2417,25 @@ std::vector<CADSTAR_ARCHIVE_PARSER::CUTOUT> CADSTAR_ARCHIVE_PARSER::ParseAllChil
     }
 
     return retVal;
+}
+
+
+void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem )
+{
+    if( !aKiCadTextItem->GetText().IsEmpty() )
+    {
+        //No exact KiCad equivalent, so lets move the position of the text
+        int     txtAngleDecideg = aKiCadTextItem->GetTextAngleDegrees() * 10.0;
+        wxPoint positionOffset( 0, aKiCadTextItem->GetInterline() );
+        RotatePoint( &positionOffset, txtAngleDecideg );
+
+        //Count num of additional lines
+        wxString text = aKiCadTextItem->GetText();
+        int      numExtraLines = text.Replace( "\n", "\n" );
+        numExtraLines -= text.at( text.size() - 1 ) == '\n'; // Ignore new line character at end
+        positionOffset.x *= numExtraLines;
+        positionOffset.y *= numExtraLines;
+
+        aKiCadTextItem->Offset( positionOffset );
+    }
 }

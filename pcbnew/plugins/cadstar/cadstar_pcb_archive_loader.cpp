@@ -2106,6 +2106,9 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
 
     txt->Move( aMoveVector );
 
+    if( aCadstarText.Alignment == ALIGNMENT::NO_ALIGNMENT )
+        FixTextPositionNoAlignment( txt );
+
     LAYER_ID layersToDrawOn = aCadstarLayerOverride;
 
     if( layersToDrawOn.IsEmpty() )
@@ -2661,6 +2664,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::addAttribute( const ATTRIBUTE_LOCATION& aCadsta
     switch( aCadstarAttrLoc.Alignment )
     {
     case ALIGNMENT::NO_ALIGNMENT: // Default for Single line text is Bottom Left
+        FixTextPositionNoAlignment( txt );
+        KI_FALLTHROUGH;
     case ALIGNMENT::BOTTOMLEFT:
         txt->SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         txt->SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
