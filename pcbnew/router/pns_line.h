@@ -67,7 +67,8 @@ public:
      * Constructor
      * Makes an empty line.
      */
-    LINE() : LINK_HOLDER( LINE_T )
+    LINE() :
+        LINK_HOLDER( LINE_T )
     {
         m_hasVia = false;
         m_width = 1;        // Dummy value
@@ -81,11 +82,11 @@ public:
      * Copies properties (net, layers, etc.) from a base line and replaces the shape
      * by another
      **/
-    LINE( const LINE& aBase, const SHAPE_LINE_CHAIN& aLine )
-            : LINK_HOLDER( aBase ),
-              m_line( aLine ),
-              m_width( aBase.m_width ),
-              m_snapThreshhold( aBase.m_snapThreshhold )
+    LINE( const LINE& aBase, const SHAPE_LINE_CHAIN& aLine ) :
+        LINK_HOLDER( aBase ),
+        m_line( aLine ),
+        m_width( aBase.m_width ),
+        m_snapThreshhold( aBase.m_snapThreshhold )
     {
         m_net = aBase.m_net;
         m_layers = aBase.m_layers;
@@ -134,52 +135,19 @@ public:
     }
 
     ///> Returns the shape of the line
-    const SHAPE* Shape() const override
-    {
-        return &m_line;
-    }
+    const SHAPE* Shape() const override { return &m_line; }
 
     ///> Modifiable accessor to the underlying shape
-    SHAPE_LINE_CHAIN& Line()
-    {
-        return m_line;
-    }
+    SHAPE_LINE_CHAIN& Line() { return m_line; }
+    const SHAPE_LINE_CHAIN& CLine() const { return m_line; }
 
-    ///> Const accessor to the underlying shape
-    const SHAPE_LINE_CHAIN& CLine() const
-    {
-        return m_line;
-    }
-
-    ///> Returns the number of segments in the line
-    int SegmentCount() const
-    {
-        return m_line.SegmentCount();
-    }
-
-    ///> Returns the number of points in the line
-    int PointCount() const
-    {
-        return m_line.PointCount();
-    }
-
-    ///> Returns the number of arcs in the line
-    int ArcCount() const
-    {
-        return m_line.ArcCount();
-    }
+    int SegmentCount() const { return m_line.SegmentCount(); }
+    int PointCount() const { return m_line.PointCount(); }
+    int ArcCount() const { return m_line.ArcCount(); }
 
     ///> Returns the aIdx-th point of the line
-    const VECTOR2I& CPoint( int aIdx ) const
-    {
-        return m_line.CPoint( aIdx );
-    }
-
-    ///> Returns the aIdx-th segment of the line
-    const SEG CSegment( int aIdx ) const
-    {
-        return m_line.CSegment( aIdx );
-    }
+    const VECTOR2I& CPoint( int aIdx ) const { return m_line.CPoint( aIdx ); }
+    const SEG CSegment( int aIdx ) const { return m_line.CSegment( aIdx ); }
 
     ///> Sets line width
     void SetWidth( int aWidth )
@@ -189,10 +157,7 @@ public:
     }
 
     ///> Returns line width
-    int Width() const
-    {
-        return m_width;
-    }
+    int Width() const { return m_width; }
 
     ///> Returns true if the line is geometrically identical as line aOther
     bool CompareGeometry( const LINE& aOther );
@@ -210,21 +175,15 @@ public:
     ///> Returns the number of corners of angles specified by mask aAngles.
     int CountCorners( int aAngles ) const;
 
-    ///> Calculates a line thightly wrapping a convex hull
-    ///> of an obstacle object (aObstacle).
+    ///> Calculates a line thightly wrapping a convex hull of an obstacle object (aObstacle).
     ///> aPrePath = path from origin to the obstacle
     ///> aWalkaroundPath = path around the obstacle
     ///> aPostPath = past from obstacle till the end
     ///> aCW = whether to walk around in clockwise or counter-clockwise direction.
-    bool Walkaround( SHAPE_LINE_CHAIN aObstacle,
-            SHAPE_LINE_CHAIN& aPre,
-            SHAPE_LINE_CHAIN& aWalk,
-            SHAPE_LINE_CHAIN& aPost,
-            bool aCw ) const;
+    bool Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre, SHAPE_LINE_CHAIN& aWalk,
+                     SHAPE_LINE_CHAIN& aPost, bool aCw ) const;
 
-    bool Walkaround( const SHAPE_LINE_CHAIN& aObstacle,
-            SHAPE_LINE_CHAIN& aPath,
-            bool aCw ) const;
+    bool Walkaround( const SHAPE_LINE_CHAIN& aObstacle, SHAPE_LINE_CHAIN& aPath, bool aCw ) const;
 
     bool Is45Degree() const;
 
@@ -275,26 +234,20 @@ private:
     void dragSegmentFree( const VECTOR2I& aP, int aIndex );
     void dragCornerFree( const VECTOR2I& aP, int aIndex );
 
-    VECTOR2I snapToNeighbourSegments(
-            const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP, int aIndex ) const;
+    VECTOR2I snapToNeighbourSegments( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
+                                      int aIndex ) const;
 
-    VECTOR2I snapDraggedCorner(
-            const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP, int aIndex ) const;
+    VECTOR2I snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
+                                int aIndex ) const;
 
-    ///> The actual shape of the line
-    SHAPE_LINE_CHAIN m_line;
+    SHAPE_LINE_CHAIN m_line;            ///> The actual shape of the line
+    int              m_width;           ///> our width
 
-    ///> our width
-    int m_width;
 
-    ///> If true, the line ends with a via
-    bool m_hasVia;
+    int              m_snapThreshhold;  ///> Width to smooth out jagged segments
 
-    ///> Width to smooth out jagged segments
-    int m_snapThreshhold;
-
-    ///> Via at the end point, if m_hasVia == true
-    VIA m_via;
+    bool             m_hasVia;          ///> Optional via at the end point
+    VIA              m_via;
 };
 
 }
