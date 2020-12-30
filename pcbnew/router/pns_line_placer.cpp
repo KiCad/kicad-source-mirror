@@ -1114,7 +1114,6 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 {
     bool fixAll  = Settings().GetFixAllSegments();
     bool realEnd = false;
-    int lastV;
 
     LINE pl = Trace();
 
@@ -1172,11 +1171,6 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     VECTOR2I p_pre_last = l.CPoint( -1 );
     const VECTOR2I p_last = l.CPoint( -1 );
 
-    SEG lastDirSeg = l.CSegment( -1 );
-    lastDirSeg.A.y = -lastDirSeg.A.y;
-    lastDirSeg.B.y = -lastDirSeg.B.y;
-    DIRECTION_45 d_last( lastDirSeg );
-
     if( l.PointCount() > 2 )
         p_pre_last = l.CPoint( -2 );
 
@@ -1185,6 +1179,18 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     if( aForceFinish )
         realEnd = true;
+
+    // TODO: Rollback doesn't work properly if fix-all isn't enabled and we are placing arcs,
+    // so if we are, act as though we are in fix-all mode.
+    if( !fixAll && l.ArcCount() )
+        fixAll = true;
+
+    SEG lastDirSeg = ( !fixAll && l.SegmentCount() > 1 ) ? l.CSegment( -2 ) : l.CSegment( -1 );
+    lastDirSeg.A.y = -lastDirSeg.A.y;
+    lastDirSeg.B.y = -lastDirSeg.B.y;
+    DIRECTION_45 d_last( lastDirSeg );
+
+    int lastV;
 
     if( realEnd || m_placingVia || fixAll )
         lastV = l.SegmentCount();
@@ -1199,7 +1205,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     {
         ssize_t arcIndex = l.ArcIndex( i );
 
-        if( arcIndex < 0 || ( lastArc >= 0 && i == lastV - 1 ) )
+        if( arcIndex < 0 || ( lastArc >= 0 && i == lastV - 1 && l.CShapes()[lastV] == -1 ) )
         {
             seg = SEGMENT( pl.CSegment( i ), m_currentNet );
             seg.SetWidth( pl.Width() );
@@ -1230,10 +1236,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     if( !realEnd )
     {
-        setInitialDirection( fixAll ? m_initial_direction : d_last );
+        setInitialDirection( d_last );
         m_currentStart = ( m_placingVia || fixAll ) ? p_last : p_pre_last;
 
-        m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, m_currentNode );
+        NODE* commit = fixAll ? m_lastNode : m_currentNode;
+
+        m_fixedTail.AddStage( m_p_start, m_currentLayer, m_placingVia, m_direction, commit );
 
         m_startItem = NULL;
         m_placingVia = false;
@@ -1249,7 +1257,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         m_currentNode = m_lastNode;
         m_lastNode = m_lastNode->Branch();
 
-        if ( m_shove )
+        if( m_shove )
             m_shove->AddLockedSpringbackNode( m_currentNode );
 
         DIRECTION_45 lastSegDir = pl.EndsWithVia() ? DIRECTION_45::UNDEFINED : d_last;
@@ -1290,6 +1298,10 @@ bool LINE_PLACER::UnfixRoute()
     m_tail.SetLayer( m_currentLayer );
     m_head.RemoveVia();
     m_tail.RemoveVia();
+
+    m_postureSolver.Clear();
+    m_postureSolver.SetDefaultDirections( m_initial_direction, m_direction );
+    m_postureSolver.AddTrailPoint( m_p_start );
 
     if( m_shove )
     {
@@ -1642,7 +1654,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
 
     double refLength = SEG( p0, aP ).Length();
 
-    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false ) );
+    SHAPE_LINE_CHAIN straight( DIRECTION_45().BuildInitialTrace( p0, aP, false, false ) );
     straight.SetClosed( true );
     straight.Append( m_trail.Reverse() );
     straight.Simplify();
@@ -1650,7 +1662,7 @@ DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
 
     double areaS = std::abs( straight.Area() );
 
-    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true ) );
+    SHAPE_LINE_CHAIN diag( DIRECTION_45().BuildInitialTrace( p0, aP, true, false ) );
     diag.Append( m_trail.Reverse() );
     diag.SetClosed( true );
     diag.Simplify();
