@@ -1147,6 +1147,13 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     if( !l.SegmentCount() )
     {
+        // Do a final optimization to the stored state
+        NODE::ITEM_VECTOR removed, added;
+        m_lastNode->GetUpdatedItems( removed, added );
+
+        if( !added.empty() && added.back()->Kind() == ITEM::SEGMENT_T )
+            simplifyNewLine( m_lastNode, static_cast<SEGMENT*>( added.back() ) );
+
         // Nothing to commit if we have an empty line
         if( !pl.EndsWithVia() )
             return false;
@@ -1181,6 +1188,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     else
         lastV = std::max( 1, l.SegmentCount() - 1 );
 
+    SEGMENT  seg;
     SEGMENT* lastSeg = nullptr;
     int      lastArc = -1;
 
@@ -1190,13 +1198,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
         if( arcIndex < 0 )
         {
-            const SEG& s = pl.CSegment( i );
-            auto       seg = std::make_unique<SEGMENT>( s, m_currentNet );
-            seg->SetWidth( pl.Width() );
-            seg->SetLayer( m_currentLayer );
+            seg = SEGMENT( pl.CSegment( i ), m_currentNet );
+            seg.SetWidth( pl.Width() );
+            seg.SetLayer( m_currentLayer );
 
-            if( !m_lastNode->Add( std::move( seg ) ) )
-                lastSeg = nullptr;
+            if( m_lastNode->Add( std::make_unique<SEGMENT>( seg ) ) )
+                lastSeg = &seg;
         }
         else
         {
@@ -1242,10 +1249,12 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         if ( m_shove )
             m_shove->AddLockedSpringbackNode( m_currentNode );
 
+        DIRECTION_45 lastSegDir = pl.EndsWithVia() ? DIRECTION_45::UNDEFINED : d_last;
+
         m_postureSolver.Clear();
         m_postureSolver.SetTolerance( m_head.Width() );
         m_postureSolver.AddTrailPoint( m_currentStart );
-        m_postureSolver.SetDefaultDirections( m_initial_direction, d_last );
+        m_postureSolver.SetDefaultDirections( m_initial_direction, lastSegDir );
 
         m_placementCorrect = true;
     }
@@ -1364,11 +1373,14 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 void LINE_PLACER::simplifyNewLine( NODE* aNode, SEGMENT* aLatest )
 {
     LINE l = aNode->AssembleLine( aLatest );
+
+    bool optimized = OPTIMIZER::Optimize( &l, OPTIMIZER::MERGE_COLINEAR, aNode );
+
     SHAPE_LINE_CHAIN simplified( l.CLine() );
 
     simplified.Simplify();
 
-    if( simplified.PointCount() != l.PointCount() )
+    if( optimized || simplified.PointCount() != l.PointCount() )
     {
         aNode->Remove( l );
         l.SetShape( simplified );
@@ -1602,10 +1614,10 @@ void POSTURE_SOLVER::AddTrailPoint( const VECTOR2I& aP )
 DIRECTION_45 POSTURE_SOLVER::GetPosture( const VECTOR2I& aP )
 {
     // Tuning factor for how good the "fit" of the trail must be to the posture
-    const double areaRatioThreshold = 1.5;
+    const double areaRatioThreshold = 1.3;
 
     // Tuning factor to minimize flutter
-    const double areaRatioEpsilon = 0.3;
+    const double areaRatioEpsilon = 0.25;
 
     // Minimum distance factor of the trail before the min area test is used to lock the solver
     const double minAreaCutoffDistanceFactor = 6;

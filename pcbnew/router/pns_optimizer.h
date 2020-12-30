@@ -97,14 +97,14 @@ class OPTIMIZER
 public:
     enum OptimizationEffort
     {
-        MERGE_SEGMENTS  = 0x01,
-        SMART_PADS      = 0x02,
-        MERGE_OBTUSE    = 0x04,
-        FANOUT_CLEANUP    = 0x08,
-        KEEP_TOPOLOGY = 0x10,
-        PRESERVE_VERTEX = 0x20,
-        RESTRICT_VERTEX_RANGE = 0x40
-
+        MERGE_SEGMENTS        = 0x01,   ///< Reduce corner cost iteratively
+        SMART_PADS            = 0x02,   ///< Reroute pad exits
+        MERGE_OBTUSE          = 0x04,   ///< Reduce corner cost by merging obtuse segments
+        FANOUT_CLEANUP        = 0x08,   ///< Simplify pad-pad and pad-via connections if possible
+        KEEP_TOPOLOGY         = 0x10,
+        PRESERVE_VERTEX       = 0x20,
+        RESTRICT_VERTEX_RANGE = 0x40,
+        MERGE_COLINEAR        = 0x80    ///< Merge co-linear segments
     };
 
     OPTIMIZER( NODE* aWorld );
@@ -172,6 +172,7 @@ private:
 
     bool mergeObtuse( LINE* aLine );
     bool mergeFull( LINE* aLine );
+    bool mergeColinear( LINE* aLine );
     bool removeUglyCorners( LINE* aLine );
     bool runSmartPads( LINE* aLine );
     bool mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentLine, int step );

@@ -598,6 +598,25 @@ bool OPTIMIZER::mergeFull( LINE* aLine )
 }
 
 
+bool OPTIMIZER::mergeColinear( LINE* aLine )
+{
+    SHAPE_LINE_CHAIN& line = aLine->Line();
+
+    int nSegs = line.SegmentCount();
+
+    for( int segIdx = 0; segIdx < line.SegmentCount() - 1; ++segIdx )
+    {
+        SEG s1 = line.CSegment( segIdx );
+        SEG s2 = line.CSegment( segIdx + 1 );
+
+        if( s1.Collinear( s2 ) )
+            line.Replace( segIdx, segIdx + 1, s1.A );
+    }
+
+    return line.SegmentCount() < nSegs;
+}
+
+
 bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
 {
     if( !aResult )
@@ -635,6 +654,9 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
 
     if( m_effortLevel & MERGE_OBTUSE )
         rv |= mergeObtuse( aResult );
+
+    if( m_effortLevel & MERGE_COLINEAR )
+        rv |= mergeColinear( aResult );
 
     if( m_effortLevel & SMART_PADS )
         rv |= runSmartPads( aResult );
