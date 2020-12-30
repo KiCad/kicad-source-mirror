@@ -850,12 +850,22 @@ bool BOARD_DESIGN_SETTINGS::Ignore( int aDRCErrorCode )
 
 int BOARD_DESIGN_SETTINGS::GetBiggestClearanceValue()
 {
+    int            biggest = 0;
     DRC_CONSTRAINT constraint;
 
     if( m_DRCEngine )
+    {
         m_DRCEngine->QueryWorstConstraint( CLEARANCE_CONSTRAINT, constraint );
+        biggest = std::max( biggest, constraint.Value().Min() );
 
-    return constraint.Value().HasMin() ? constraint.Value().Min() : 0;
+        m_DRCEngine->QueryWorstConstraint( HOLE_CLEARANCE_CONSTRAINT, constraint );
+        biggest = std::max( biggest, constraint.Value().Min() );
+
+        m_DRCEngine->QueryWorstConstraint( EDGE_CLEARANCE_CONSTRAINT, constraint );
+        biggest = std::max( biggest, constraint.Value().Min() );
+    }
+
+    return biggest;
 }
 
 
