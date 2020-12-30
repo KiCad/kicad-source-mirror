@@ -22,24 +22,19 @@
 const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
                                                         bool aStartDiagonal, bool aFillet ) const
 {
-    bool start_diagonal;
+    bool startDiagonal;
 
     if( m_dir == UNDEFINED )
-        start_diagonal = aStartDiagonal;
+        startDiagonal = aStartDiagonal;
     else
-        start_diagonal = IsDiagonal();
+        startDiagonal = IsDiagonal();
 
     int w = abs( aP1.x - aP0.x );
     int h = abs( aP1.y - aP0.y );
     int sw = sign( aP1.x - aP0.x );
     int sh = sign( aP1.y - aP0.y );
 
-    int radius = std::min( w, h );
-
-    VECTOR2I mp0, mp1, arc_offset_90, arc_offset_45;
-    VECTOR2I arcStart, arcEnd;
-    double diagLength;
-    int tangentLength;
+    VECTOR2I mp0, mp1;
 
     /*
      * Non-filleted case:
@@ -71,6 +66,9 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
      * the distance from A to aP1 (diagLength) to calculate the radius of the arc.
      */
 
+    VECTOR2I arcStart, arcCenter;
+    int tangentLength;
+
     if( w > h )
     {
         mp0 = VECTOR2I( ( w - h ) * sw, 0 );    // direction: E
@@ -90,31 +88,37 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     if( aFillet )
     {
         double diag2 = tangentLength >= 0 ? mp1.SquaredEuclideanNorm() : mp0.SquaredEuclideanNorm();
-        diagLength = std::sqrt( ( 2 * diag2 ) - ( 2 * diag2 * std::cos( 3 * M_PI_4 ) ) );
-        int arcRadius = KiROUND( diagLength / ( 2.0 * std::cos( 67.5 * M_PI / 180.0 ) ) );
+        double diagLength = std::sqrt( ( 2 * diag2 ) - ( 2 * diag2 * std::cos( 3 * M_PI_4 ) ) );
+        int    arcRadius  = KiROUND( diagLength / ( 2.0 * std::cos( 67.5 * M_PI / 180.0 ) ) );
 
-        if( start_diagonal )
+        // There are four different ways to build an arc, depending on whether or not we are
+        // starting diagonally and whether or not we have a negative tangent length (meaning the
+        // arc has to be on the opposite end of the line from normal).  This math could probably
+        // be condensed and optimized but I'm tired of staring at it for now (and it works!)
+
+        if( startDiagonal )
         {
+            int      rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
+            VECTOR2D centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+
             if( tangentLength >= 0 )
             {
                 // Positive tangentLength, diagonal start: arc goes at the start
-                int rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
-                arcStart         = aP0 + mp1 + mp0.Resize( mp1.EuclideanNorm() );
-                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
-                VECTOR2D  arcCenter( arcStart + centerDir.Resize( arcRadius ) );
+                arcStart  = aP0 + mp1 + mp0.Resize( mp1.EuclideanNorm() );
+                arcCenter = arcStart + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, aP0, 45 * rotationSign );
+
                 pl.Append( new_arc );
                 pl.Append( aP1 );
             }
             else
             {
-                pl.Append( aP0 );
                 // Negative tangentLength, diagonal start: arc goes at the end
-                int rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
-                arcStart         = aP0 + mp1.Resize( std::abs( tangentLength ) );
-                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
-                VECTOR2D  arcCenter( aP1 + centerDir.Resize( arcRadius ) );
+                arcStart  = aP0 + mp1.Resize( std::abs( tangentLength ) );
+                arcCenter = aP1 + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+
+                pl.Append( aP0 );
                 pl.Append( new_arc );
 
                 // TODO: nicer way of fixing these up
@@ -124,15 +128,17 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
         }
         else
         {
+            int      rotationSign = ( w > h ) ? ( sw * sh ) : ( sw * sh * -1 );
+            VECTOR2D centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+
             if( tangentLength >= 0 )
             {
-                pl.Append( aP0 );
                 // Positive tangentLength: arc goes at the end
-                int rotationSign = ( w > h ) ? ( sw * sh ) : ( sw * sh * -1 );
-                arcStart         = aP0 + mp0.Resize( tangentLength );
-                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
-                VECTOR2D  arcCenter( arcStart + centerDir.Resize( arcRadius ) );
+                arcStart  = aP0 + mp0.Resize( tangentLength );
+                arcCenter = arcStart + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+
+                pl.Append( aP0 );
                 pl.Append( new_arc );
 
                 // TODO: nicer way of fixing these up
@@ -142,11 +148,10 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
             else
             {
                 // Negative tangentLength: arc goes at the start
-                int rotationSign = ( w > h ) ? ( sw * sh ) : ( sw * sh * -1 );
-                arcStart         = aP0;
-                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
-                VECTOR2D  arcCenter( arcStart + centerDir.Resize( arcRadius ) );
+                arcStart  = aP0;
+                arcCenter = arcStart + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+
                 pl.Append( new_arc );
                 pl.Append( aP1 );
             }
@@ -155,12 +160,9 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     else
     {
         pl.Append( aP0 );
-        pl.Append( start_diagonal ? ( aP0 + mp1 ) : ( aP0 + mp0 ) );
+        pl.Append( startDiagonal ? ( aP0 + mp1 ) : ( aP0 + mp0 ) );
         pl.Append( aP1 );
     }
-
-    // TODO: be careful about including P0 and P1 above, because SHAPE_LINE_CHAIN::Simplify
-    // does not seem to properly handle when an arc overlaps P0.
 
     pl.Simplify();
     return pl;
