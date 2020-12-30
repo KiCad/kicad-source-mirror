@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
 "PO-Revision-Date: 2020-12-31 14:35+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -757,7 +757,7 @@ msgstr "3"
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:114
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:175
 msgid "7"
-msgstr ""
+msgstr "7"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:747
 #: pcbnew/dialogs/dialog_create_array_base.cpp:258
@@ -1557,7 +1557,7 @@ msgstr "Opslaan"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183
 msgid "Discard Changes"
-msgstr "Discard Changes?"
+msgstr "Veranderingen afwijzen"
 
 #: common/confirm.cpp:159 common/confirm.cpp:234
 msgid "Apply to all"
@@ -1822,9 +1822,8 @@ msgid "Hue:"
 msgstr "Tint:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:95
-#, fuzzy
 msgid "Saturation:"
-msgstr "Verzadiging"
+msgstr "Verzadiging:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:114
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
@@ -2247,9 +2246,8 @@ msgid "These items will be skipped unless you override the locks."
 msgstr "Deze items worden overgeslagen, tenzij u de vergrendelingen opheft."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
-#, fuzzy
 msgid "Do not show again."
-msgstr "Niet opnieuw tonen"
+msgstr "Niet opnieuw tonen."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:53
 msgid "Override Locks"
@@ -2561,7 +2559,7 @@ msgstr "Herziening:"
 #: common/dialogs/dialog_page_settings_base.cpp:200
 #: eeschema/dialogs/dialog_netlist.cpp:430
 msgid "Title:"
-msgstr "Titel"
+msgstr "Titel:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:212
 msgid "Company:"
@@ -2961,9 +2959,8 @@ msgid "Helper Applications"
 msgstr "Helper-toepassingen"
 
 #: common/dialogs/panel_common_settings_base.cpp:108
-#, fuzzy
 msgid "Text editor:"
-msgstr "Tekstbewerker"
+msgstr "Tekstbewerker:"
 
 #: common/dialogs/panel_common_settings_base.cpp:120
 msgid "System default PDF viewer"
@@ -3609,7 +3606,7 @@ msgstr "Onafgebroken gescheiden string"
 
 #: common/dsnlexer.cpp:696
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr "String scheidingsteken moet een enkel karakter zijn van  ', \", of $"
+msgstr "String scheidingsteken moet een enkel karakter zijn van ', \", of $"
 
 #: common/eda_base_frame.cpp:400
 msgid "&About KiCad"
@@ -6482,7 +6479,7 @@ msgstr "%lu footprint / symboolequivalenties gevonden."
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr "Component %s: footprint %s niet gevonden in bibliotheken"
+msgstr "Component %s: footprint %s niet gevonden in bibliotheken."
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
@@ -7965,9 +7962,8 @@ msgid "Text:"
 msgstr "Tekst:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:81
-#, fuzzy
 msgid "Text Size:"
-msgstr "Tekstgrootte"
+msgstr "Tekstgrootte:"
 
 #: eeschema/dialogs/dialog_edit_label_base.cpp:98
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:38
@@ -8132,12 +8128,12 @@ msgstr "Toon annotatiedialoog."
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "-------- ERC cancelled by user.<br><br>"
-msgstr "-------- ERC geannuleerd door gebruiker. <br> <br>"
+msgstr "-------- ERC geannuleerd door gebruiker.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:304 eeschema/dialogs/dialog_erc.cpp:437
 #: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
-msgstr "Klaar. <br> <br>"
+msgstr "Klaar.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:365
 msgid "Checking sheet names..."
@@ -8215,7 +8211,7 @@ msgstr "Wijzig de ernst in Fout voor alle '%s' overtredingen"
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
 "De ernst van overtredingen kan ook worden bewerkt in het dialoogvenster "
-"Board Setup ..."
+"Board Setup"
 
 #: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
@@ -8240,9 +8236,8 @@ msgid "Edit violation severities..."
 msgstr "Ernst van overtredingen bewerken ..."
 
 #: eeschema/dialogs/dialog_erc.cpp:548
-#, fuzzy
 msgid "Open the Schematic Setup... dialog"
-msgstr "Open het dialoogvenster Schematische instellingen ..."
+msgstr "Open het dialoogvenster Schematische instellingen"
 
 #: eeschema/dialogs/dialog_erc.cpp:640
 #: eeschema/dialogs/dialog_schematic_setup.cpp:72
@@ -8490,9 +8485,8 @@ msgstr "Stel in op"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:158
 #: eeschema/dialogs/dialog_lib_edit_text_base.cpp:155
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:53
-#, fuzzy
 msgid "Text size:"
-msgstr "Tekstgrootte"
+msgstr "Tekstgrootte:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:184
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
@@ -9698,7 +9692,7 @@ msgstr "Print blad referentie en titelblok"
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:24
 msgid "Print (or not) the Frame references."
-msgstr "Print (of niet) Rand referentie"
+msgstr "Print (of niet) Rand referentie."
 
 #: eeschema/dialogs/dialog_print_using_printer_base.cpp:28
 msgid "Print in &black and white only"
@@ -9805,15 +9799,13 @@ msgstr "Instellingen importeren van"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:73
 #: pcbnew/dialogs/dialog_import_settings.cpp:127
-#, fuzzy
 msgid "File not found."
-msgstr "Bestand is niet gevonden!"
+msgstr "Bestand is niet gevonden."
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:22
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:22
-#, fuzzy
 msgid "Import from:"
-msgstr "Importeren uit"
+msgstr "Importeren uit:"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:27
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:31
@@ -9867,9 +9859,8 @@ msgid "Replace &with:"
 msgstr "Vervangen door:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:52
-#, fuzzy
 msgid "Direction:"
-msgstr "Richting"
+msgstr "Richting:"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:61
 msgid "F&orward"
@@ -10035,9 +10026,8 @@ msgid "Create new file \"%s\" with contents of \"%s\"?"
 msgstr "Nieuw bestand \"%s\" maken met inhoud van \"%s\"?"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:454
-#, fuzzy
 msgid "This action cannot be undone."
-msgstr "Deze actie kan niet ongedaan worden"
+msgstr "Deze actie kan niet ongedaan worden."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:519
 #, c-format
@@ -10393,9 +10383,8 @@ msgid "Offset:"
 msgstr "Afstand:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1088
-#, fuzzy
 msgid "Standard deviation:"
-msgstr "Standaardafwijking"
+msgstr "Standaardafwijking:"
 
 #: eeschema/dialogs/dialog_spice_model.cpp:1089
 #: eeschema/dialogs/dialog_spice_model.cpp:1094
@@ -10553,7 +10542,7 @@ msgstr "DC-offset:"
 #: eeschema/dialogs/dialog_spice_model_base.cpp:687
 #: eeschema/dialogs/dialog_spice_model_base.cpp:765
 msgid "Amplitude:"
-msgstr "Omvang"
+msgstr "Omvang:"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:490
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:828
@@ -11295,7 +11284,7 @@ msgstr ".1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "-1"
-msgstr ""
+msgstr "-1"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:30
 msgid "_1"
@@ -11964,9 +11953,8 @@ msgstr ""
 "symboolbibliotheken veroorzaken."
 
 #: eeschema/files-io.cpp:463 eeschema/files-io.cpp:495
-#, fuzzy
 msgid "Do not show this dialog again."
-msgstr "Toon dit venster niet opnieuw"
+msgstr "Toon dit venster niet opnieuw."
 
 #: eeschema/files-io.cpp:488
 msgid "The schematic file will be converted to the new file format on save."
@@ -12039,7 +12027,7 @@ msgstr ""
 
 #: eeschema/files-io.cpp:769
 msgid "Overwrite Files"
-msgstr "Bestand overschrijven?"
+msgstr "Overschreven bestanden"
 
 #: eeschema/files-io.cpp:770
 msgid "Abort Project Save"
@@ -12212,7 +12200,7 @@ msgstr "Toevoegen van symbool \"%s\" aan bibliotheekbestand \"%s\" is mislukt."
 
 #: eeschema/libarch.cpp:108
 msgid "Unexpected exception occurred."
-msgstr "Er is een onverwachte fout opgetreden"
+msgstr "Er is een onverwachte fout opgetreden."
 
 #: eeschema/libarch.cpp:123
 #, c-format
@@ -12312,9 +12300,8 @@ msgid "Could not find library file %s"
 msgstr "Kon bibliotheekbestand %s niet vinden"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:122
-#, fuzzy
 msgid "Run command:"
-msgstr "Voer commando's uit"
+msgstr "Voer commando's uit:"
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:128
 #, c-format
@@ -13977,9 +13964,8 @@ msgstr ""
 "Wilt u doorgaan?"
 
 #: eeschema/sheet.cpp:569
-#, fuzzy
 msgid "Do not show this message again."
-msgstr "Dit bericht niet meer tonen"
+msgstr "Dit bericht niet meer tonen."
 
 #: eeschema/sheet.cpp:570
 msgid "Create New Sheet"
@@ -14506,7 +14492,7 @@ msgstr "U moet op een andere locatie opslaan."
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1114
 msgid "Nickname"
-msgstr ""
+msgstr "Bijnaam"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:659
 msgid "Save Copy of Symbol"
@@ -14591,7 +14577,7 @@ msgstr "Symboolbibliotheekbestand \"%s\" opgeslagen"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1191
 msgid "Undefined!"
-msgstr "Ongedefinieerd"
+msgstr "Ongedefinieerd!"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1192
 #: eeschema/symbol_viewer_frame.cpp:361
@@ -16332,9 +16318,8 @@ msgid "Open Gerber File(s)"
 msgstr "Open Gerber-bestand (en)"
 
 #: gerbview/files.cpp:228
-#, fuzzy
 msgid "File not found:"
-msgstr "Bestand is niet gevonden!"
+msgstr "Bestand is niet gevonden:"
 
 #: gerbview/files.cpp:240
 msgid "Loading Gerber files..."
@@ -17528,9 +17513,9 @@ msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s geopend [pid = %ld]\n"
 
 #: libs/kiplatform/msw/environment.cpp:47
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Foutcode: %s"
+msgstr "Foutcode: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -17647,7 +17632,7 @@ msgstr "Tekst hoogte:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:160
 msgid "Maximum width:"
-msgstr "Maximale breedte"
+msgstr "Maximale breedte:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:162
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:178
@@ -17656,7 +17641,7 @@ msgstr "Stel in op 0 om deze beperking uit te schakelen"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:176
 msgid "Maximum height:"
-msgstr "Maximale hoogte"
+msgstr "Maximale hoogte:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:195
 msgid "Set to 0 to use default values"
@@ -19901,7 +19886,7 @@ msgstr ""
 
 #: pcbnew/build_BOM_from_board.cpp:89
 msgid "Save Bill of Materials"
-msgstr "Sla Materiaallijst op:"
+msgstr "Sla Materiaallijst op"
 
 #: pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:642
@@ -20594,9 +20579,8 @@ msgid "Through hole:"
 msgstr "Doorgaand gat:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:143
-#, fuzzy
 msgid "Connector:"
-msgstr "Verbindingslijnen en labels"
+msgstr "Connector:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:144
 msgid "NPTH:"
@@ -20982,9 +20966,8 @@ msgid "Electrical Properties"
 msgstr "Elektrische eigenschappen"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:194
-#, fuzzy
 msgid "Clearance:"
-msgstr "Afstand"
+msgstr "Afstand:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:205
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:64
@@ -21184,7 +21167,7 @@ msgstr "puntentelling"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:436
 msgid "Bad parameters"
-msgstr "Verkeerde parameters!"
+msgstr "Verkeerde parameters"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:31
 msgid "Horizontal count:"
@@ -21253,9 +21236,8 @@ msgid "From start value"
 msgstr "Vanaf startwaarde"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:121
-#, fuzzy
 msgid "Initial Pad Number"
-msgstr "Initieel padnummer:"
+msgstr "Initieel padnummer"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:125
 msgid "Continuous (1, 2, 3...)"
@@ -21371,9 +21353,8 @@ msgid "Leader Format"
 msgstr "Leader-indeling"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:37
-#, fuzzy
 msgid "Text frame:"
-msgstr "Tekstframe"
+msgstr "Tekstframe:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:47
@@ -21545,9 +21526,8 @@ msgstr "Tekst pos Y"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:39
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:141
-#, fuzzy
 msgid "Thickness:"
-msgstr "Dikte"
+msgstr "Dikte:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:274
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:143
@@ -21666,7 +21646,7 @@ msgstr "Toon ontwerpregels."
 
 #: pcbnew/dialogs/dialog_drc.cpp:250
 msgid "-------- DRC cancelled by user.<br><br>"
-msgstr "-------- DRC geannuleerd door gebruiker. <br> <br>"
+msgstr "-------- DRC geannuleerd door gebruiker.<br><br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:468
 msgid "Open the Board Setup... dialog"
@@ -21858,9 +21838,8 @@ msgstr "Fabricage-attributen"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:183
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:276
-#, fuzzy
 msgid "Component:"
-msgstr "Onderdelen"
+msgstr "Onderdelen:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:187
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
@@ -22205,15 +22184,14 @@ msgid "Update/reset 3D models"
 msgstr "Update / reset 3D-modellen"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.h:86
-#, fuzzy
 msgid "Update Footprints from Library"
-msgstr "Footprints bijwerken vanuit bibliotheek ..."
+msgstr "Werk footprints bij vanuit bibliotheken"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:161
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid "File %s already exists."
-msgstr "Bestand %1 bestaat al."
+msgstr "Bestand %s bestaat al."
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:223
 #, c-format
@@ -22325,9 +22303,8 @@ msgid "Board outline builder:"
 msgstr "Board outline builder:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:152
-#, fuzzy
 msgid "Tolerance:"
-msgstr "Tolerantie"
+msgstr "Tolerantie:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:156
 msgid "Tight"
@@ -22928,9 +22905,8 @@ msgid "Report file %s created\n"
 msgstr "Rapportbestand %s aangemaakt\n"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:22
-#, fuzzy
 msgid "Output folder:"
-msgstr "Map"
+msgstr "Uitvoermap:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:42
 msgid "Drill File Format"
@@ -24514,12 +24490,11 @@ msgstr "Verplaats vector"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1372
 msgid "Scaling factor:"
-msgstr "Schaal"
+msgstr "Schaal:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1394
-#, fuzzy
 msgid "Duplicate:"
-msgstr "Dupliceren"
+msgstr "Dupliceren:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1562
 msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
@@ -24745,9 +24720,8 @@ msgid "Remove silkscreen from areas without soldermask"
 msgstr "Verwijder zeefdruk van gebieden zonder soldeermasker"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:219
-#, fuzzy
 msgid "Coordinate format:"
-msgstr "Coördinatenformaat"
+msgstr "Coördinatenformaat:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:223
 msgid "4.5, unit mm"
@@ -25224,9 +25198,8 @@ msgid "high"
 msgstr "hoog"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:70
-#, fuzzy
 msgid "Interactive Router Settings"
-msgstr "Instellingen interactieve router ..."
+msgstr "Instellingen interactieve router"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:164
 msgid "Reset to the current distance from the reference position."
@@ -25452,9 +25425,9 @@ msgid "Reference:"
 msgstr "Referentie:"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:277
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s (%s), %s, rotated %.1f deg"
-msgstr "Voetafdruk %s (%s), %s, gedraaid %g graden"
+msgstr "Voetafdruk %s (%s), %s, gedraaid %.1f graden"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:374
 msgid ""
@@ -25559,9 +25532,8 @@ msgstr "Vooraf gedefinieerde maten:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
-#, fuzzy
 msgid "Via diameter:"
-msgstr "Via diameter"
+msgstr "Via diameter:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
@@ -26033,9 +26005,8 @@ msgid "Add Existing"
 msgstr "Voeg bestaande"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:166
-#, fuzzy
 msgid "Path Substitutions"
-msgstr "Padvervangingen:"
+msgstr "Padvervangingen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -27196,9 +27167,9 @@ msgid "Checking %s; edge clearance: %s."
 msgstr "Controleren %s; randvrijheid: %s."
 
 #: pcbnew/drc/drc_engine.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "Controleert %s"
+msgstr "Controleert %s."
 
 #: pcbnew/drc/drc_engine.cpp:831
 msgid "Board and netclass clearances apply only between copper items."
@@ -27434,7 +27405,7 @@ msgstr "FOUT in uitdrukking."
 #: pcbnew/drc/drc_rule_parser.cpp:443
 #, c-format
 msgid "ERROR: <a href='%d:%d'>%s</a>%s"
-msgstr "FOUT: <a href='%d:%d'> %d '> %s </a> %s"
+msgstr "FOUT: <a href='%d:%d'>%s</a>%s"
 
 #: pcbnew/drc/drc_rule_parser.cpp:70 pcbnew/drc/drc_rule_parser.cpp:453
 #, c-format
@@ -28096,9 +28067,8 @@ msgid "Status: "
 msgstr "Status: "
 
 #: pcbnew/footprint.cpp:779
-#, fuzzy
 msgid "Attributes:"
-msgstr "Attributen"
+msgstr "Attributen:"
 
 #: pcbnew/footprint.cpp:784
 #, c-format
@@ -28512,7 +28482,7 @@ msgstr "Open een Bestand"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:275
 msgid "No file selected!"
-msgstr "Geen bestand geselecteerd"
+msgstr "Geen bestand geselecteerd!"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:286
 msgid "Please select a valid layer."
@@ -28895,7 +28865,7 @@ msgstr "Vorm heeft een null waarde!"
 
 #: pcbnew/microwave/microwave_polygon.cpp:278
 msgid "Shape has no points!"
-msgstr "Vorm heeft geen punten"
+msgstr "Vorm heeft geen punten!"
 
 #: pcbnew/microwave/microwave_tool.cpp:93
 msgid "Place microwave feature"
@@ -29507,9 +29477,9 @@ msgstr ""
 "implementeert."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:416
-#, fuzzy, c-format
+#, c-format
 msgid "File not found: '%s'"
-msgstr "Bestand niet aangetroffen: %s."
+msgstr "Bestand niet aangetroffen: '%s'"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:728
 #, c-format
@@ -30210,9 +30180,9 @@ msgid "Cannot overwrite library path \"%s\"."
 msgstr "Kan bibliotheekpad \"%s\" niet overschrijven."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2417
-#, fuzzy, c-format
+#, c-format
 msgid "User does not have permission to delete directory \"%s\"."
-msgstr "gebruiker heeft geen toestemming om directory \"%s\" te verwijderen"
+msgstr "Gebruiker heeft geen toestemming om directory \"%s\" te verwijderen."
 
 #: pcbnew/plugins/kicad/kicad_plugin.cpp:2425
 #, c-format
@@ -30650,7 +30620,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:123
 msgid "Select Layer and Place Through Via..."
-msgstr "Selecteer laag en plaats via via ..."
+msgstr "Selecteer laag en plaats via via..."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid ""
@@ -32166,7 +32136,7 @@ msgstr "Degroeperen"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Remove Items"
-msgstr "Items verwijderen?"
+msgstr "Verwijder items"
 
 #: pcbnew/tools/pcb_actions.cpp:668
 msgid "Remove items from group"
@@ -32278,7 +32248,7 @@ msgstr "Ratsnest Weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:762
 msgid "Show board ratsnest"
-msgstr "Bord ratsnest weergeven "
+msgstr "Bord ratsnest weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Curved Ratsnest Lines"
