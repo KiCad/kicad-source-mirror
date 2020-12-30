@@ -908,6 +908,10 @@ int OPTIMIZER::smartPadsSingle( LINE* aLine, ITEM* aPad, bool aEnd, int aEndVert
     if( solid && solid->Offset() != VECTOR2I( 0, 0 ) )
         return -1;
 
+    // don't do optimization on vias, they are always round at the moment and the optimizer
+    // will possibly mess up an intended via exit posture
+    if( aPad->Kind() == ITEM::VIA_T )
+        return -1;
 
     BREAKOUT_LIST    breakouts = computeBreakouts( aLine->Width(), aPad, true );
     SHAPE_LINE_CHAIN line = ( aEnd ? aLine->CLine().Reverse() : aLine->CLine() );
