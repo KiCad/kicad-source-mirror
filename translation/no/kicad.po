@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"PO-Revision-Date: 2020-12-31 14:35+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
 "master-source/nb_NO/>\n"
@@ -3123,7 +3123,7 @@ msgstr "Importer hurtigtaster-fil:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:18
 msgid "Pan and Zoom"
-msgstr "Panorere og zoome"
+msgstr "Panorering og forstørrelse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:25
 msgid "Center and warp cursor on zoom"
@@ -3135,7 +3135,7 @@ msgstr "Sentrer markøren på skjermen når du zoomer."
 
 #: common/dialogs/panel_mouse_settings_base.cpp:33
 msgid "Automatically pan while moving object"
-msgstr "Panorere automatisk mens du beveger objektet"
+msgstr "Panorer automatisk mens du beveger objektet"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:34
 msgid ""
@@ -3167,12 +3167,13 @@ msgstr "Velg zoomhastighet automatisk"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:67
 msgid "Auto pan speed:"
-msgstr "Automatisk panorering hastighet:"
+msgstr "Automatisk panoreringshastighet:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:72
 msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr ""
-"Hvor raskt å panorere når du flytter et objekt utenfor kanten av skjermen"
+"Hvor raskt skal det panoreres når du flytter et objekt utenfor kanten av "
+"skjermen"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:89
 msgid "Mouse Buttons"
@@ -3254,22 +3255,23 @@ msgstr "Forstørr:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:171
 msgid "Pan up / down:"
-msgstr "Panorere opp / ned:"
+msgstr "Panorer opp / ned:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:187
 msgid "Pan left / right:"
-msgstr "Panorer venstre / høyre:"
+msgstr "Panorer til venstre / høyre:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:206
 msgid "Pan left/right with horizontal touchpad or scroll wheel movement"
 msgstr ""
-"Panorer venstre / høyre med horisontal styreflate eller rullhjulbevegelse"
+"Panorer til venstre / høyre med horisontal styreflate eller "
+"rullhjulsbevegelse"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:207
 msgid ""
 "Pan the canvas left and right when scrolling left to right on the touchpad"
 msgstr ""
-"Panorer lerretet til venstre og høyre når du blar til venstre mot høyre på "
+"Panorer lerretet til venstre og høyre når du blar fra venstre mot høyre på "
 "pekeplaten"
 
 #: common/dialogs/panel_setup_netclasses.cpp:82
@@ -4353,7 +4355,7 @@ msgstr "Velg alle celler"
 
 #: common/hotkey_store.cpp:43
 msgid "Pan Left/Right"
-msgstr "Panorer venstre / høyre"
+msgstr "Panorer til venstre / høyre"
 
 #: common/hotkey_store.cpp:44
 msgid "Pan Up/Down"
@@ -12717,11 +12719,11 @@ msgstr ""
 
 #: eeschema/sch_plugin.cpp:151 pcbnew/plugin.cpp:159
 msgid "User name for <b>login</b> to some special library server."
-msgstr "Brukernavn for <b> pålogging </b> til en spesiell bibliotekserver."
+msgstr "Brukernavn for <b> pålogging </b> til en spesiell bibliotektjener."
 
 #: eeschema/sch_plugin.cpp:155 pcbnew/plugin.cpp:163
 msgid "Password for <b>login</b> to some special library server."
-msgstr "Passord for <b> pålogging </b> til en spesiell bibliotekserver."
+msgstr "Passord for <b> pålogging </b> til en spesiell bibliotektjener."
 
 #: eeschema/sch_plugin.cpp:163
 msgid ""
@@ -14013,7 +14015,7 @@ msgstr "Feil: simuleringstypen støtter ikke tegning!\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:805 eeschema/sim/sim_plot_frame.cpp:1439
 msgid "Signal"
-msgstr ""
+msgstr "Signal"
 
 #: eeschema/sim/sim_plot_frame.cpp:1044
 msgid "Open simulation workbook"
@@ -14268,6 +14270,8 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Symboler i foreldede bibliotek kan ikke redigeres. Bruk «Håndter "
+"symbolbibliotek» for å migrere til nåværende format."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 #, c-format
@@ -24101,7 +24105,7 @@ msgid ""
 "Note: IPC norm gives a max value = 0.25mm."
 msgstr ""
 "Hjørneradius.\n"
-"Kan ikke være mer enn halv pute bredde.\n"
+"Kan ikke være mer enn halv putebredde.\n"
 "Bredden er den mindre verdien mellom størrelse X og størrelse Y.\n"
 "Merk: IPC-norm gir en maksimal verdi = 0,25 mm."
 
@@ -25473,7 +25477,7 @@ msgstr "Sluttlag:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:265
 #, fuzzy
 msgid "Automatically update via net"
-msgstr "Panorere automatisk mens du beveger objektet"
+msgstr "Oppdater automatisk via nettet"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:266
 msgid ""
@@ -26134,7 +26138,7 @@ msgstr "\"%s\" er forbudt i lagnavn."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:753
 msgid "Layer name \"signal\" is reserved."
-msgstr "Lagnavnet \"signal\" er reservert."
+msgstr "Lagnavnet «signal\" er reservert."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:761
 #, c-format
@@ -29678,7 +29682,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR-malen '%s' har innstillingen 'Tillat i ingen rutingsområder' "
+"CADSTAR-malen «%s» har innstillingen «Tillat i ingen rutingsområder' "
 "aktivert. Denne innstillingen har ingen KiCad-ekvivalent, så den har blitt "
 "ignorert."
 
@@ -29688,7 +29692,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR-malen '%s' har innstillingen 'Box Isolated Pins'enabled. Denne "
+"CADSTAR-malen «%s» har innstillingen «Box Isolated Pins» aktivert. Denne "
 "innstillingen har ingen KiCad-ekvivalent, så den har blitt ignorert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1398
@@ -29697,7 +29701,7 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR-malen '%s' har innstillingen 'Automatic Repour'enabled. Denne "
+"CADSTAR-malen «%s» har innstillingen «Automatic Repour» aktivert. Denne "
 "innstillingen har ingen KiCad-ekvivalent, så den har blitt ignorert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1407
@@ -29707,8 +29711,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"CADSTAR-malen '%s' har en verdi som ikke er null definert for innstillingen "
-"'Sliver Width'. Det er ingen KiCad-ekvivalent for dette, så denne "
+"CADSTAR-malen «%s» har en verdi som ikke er null definert for innstillingen «"
+"Sliver Width». Det er ingen KiCad-ekvivalent for dette, så denne "
 "innstillingen ble ignorert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1415
@@ -29764,7 +29768,7 @@ msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
-"Nettet '%s' refererer til komponent-ID '%s' som ikke eksisterer. Dette har "
+"Nettet '%s» refererer til komponent-ID «%s» som ikke eksisterer. Dette har "
 "blitt ignorert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1634
@@ -29773,8 +29777,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
-"Nettet '%s' refererer til ikke-eksisterende pad-indeks '%d' i komponent "
-"'%s'. Dette har blitt ignorert."
+"Nettet «%s» refererer til ikke-eksisterende pad-indeks «%d» i komponent «"
+"%s'. Dette har blitt ignorert."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1731
 #, c-format
@@ -29881,27 +29885,27 @@ msgstr "Ingen \"%s\" pakke i biblioteket \"%s\""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2021
 #, c-format
 msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
-msgstr "Å ignorere en polygon siden Eagle-laget '%s' (%d) ikke ble kartlagt"
+msgstr "Ignorerer en polygon siden Eagle-laget «%s' (%d) ikke ble kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1595
 #, c-format
 msgid "Ignoring a wire since Eagle layer '%s' (%d) was not mapped"
-msgstr "Å ignorere en ledning siden Eagle-laget '%s' (%d) ikke ble kartlagt"
+msgstr "Ignorerer en ledning siden Eagle-laget «%s' (%d) ikke ble kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1768
 #, c-format
 msgid "Ignoring a text since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorer en tekst siden Eagle-laget '%s' (%d) ikke ble kartlagt"
+msgstr "Ignorer en tekst siden Eagle-laget «%s' (%d) ikke ble kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1906
 #, c-format
 msgid "Ignoring a rectange since Eagle layer '%s' (%d) was not mapped"
-msgstr "Ignorer en rektange siden Eagle-laget '%s' (%d) ikke ble kartlagt"
+msgstr "Ignorer et rektangel siden Eagle-laget «%s» (%d) ikke ble kartlagt"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:2091
 #, c-format
 msgid "Ignoring a circle since Eagle layer '%s' (%d) was not mapped"
-msgstr "Å ignorere en sirkel siden Eagle-laget '%s' (%d) ikke ble kartlagt"
+msgstr "Å ignorere en sirkel siden Eagle-laget «%s» (%d) ikke ble kartlagt"
 
 #: pcbnew/plugins/geda/gpcb_plugin.cpp:89
 #, c-format
