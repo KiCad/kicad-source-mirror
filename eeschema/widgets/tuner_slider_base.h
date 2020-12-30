@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun 24 2016)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __TUNER_SLIDER_BASE_H__
-#define __TUNER_SLIDER_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -17,6 +16,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/slider.h>
@@ -29,10 +31,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class TUNER_SLIDER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class TUNER_SLIDER_BASE : public wxPanel 
+class TUNER_SLIDER_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_name;
 		wxButton* m_closeBtn;
@@ -41,7 +43,7 @@ class TUNER_SLIDER_BASE : public wxPanel
 		wxTextCtrl* m_valueText;
 		wxTextCtrl* m_minText;
 		wxButton* m_saveBtn;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onClose( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSliderChanged( wxScrollEvent& event ) { event.Skip(); }
@@ -49,13 +51,12 @@ class TUNER_SLIDER_BASE : public wxPanel
 		virtual void onValueTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onMinTextEnter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onSave( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 97,283 ), long style = wxTAB_TRAVERSAL ); 
+
+		TUNER_SLIDER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 126,283 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~TUNER_SLIDER_BASE();
-	
+
 };
 
-#endif //__TUNER_SLIDER_BASE_H__
