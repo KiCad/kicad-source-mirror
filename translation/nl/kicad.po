@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-30 07:07+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2020-12-31 14:35+0000\n"
+"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -241,7 +241,7 @@ msgstr "Laden %s"
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:564
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:179
 msgid "Loading..."
-msgstr "Loading..."
+msgstr "Laden..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:474
 msgid "Load Raytracing: board"
@@ -1665,11 +1665,11 @@ msgstr "GNU General Public License (GPL) versie 3 of een latere versie"
 
 #: common/dialog_about/AboutDialog_main.cpp:200
 msgid "Lead Development Team"
-msgstr "Lead Development Team"
+msgstr "Hoofdontwikkelaarsteam"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Alumni"
-msgstr "Lead Development Alumni"
+msgstr "Vorige Hoofdontwikkelaars"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Additional Contributions By"
@@ -1707,7 +1707,7 @@ msgstr "Ongeveer %s"
 #: common/dialog_about/dialog_about.cpp:118
 #: common/dialog_about/dialog_about_base.h:56
 msgid "About"
-msgstr "About"
+msgstr "Over"
 
 #: common/dialog_about/dialog_about.cpp:123
 msgid "Version"
@@ -2195,7 +2195,7 @@ msgstr "Rooster 2:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:173 common/tool/actions.cpp:468
 msgid "Reset Grid Origin"
-msgstr "Reset Grid Origin"
+msgstr "Grid Origin opnieuw instellen"
 
 #: common/dialogs/dialog_grid_settings_base.h:79
 msgid "Grid Settings"
