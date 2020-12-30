@@ -1485,7 +1485,8 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
 
     if( v.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
-        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP + force, initial_radius );
+        SHAPE_LINE_CHAIN line = guessedDir.BuildInitialTrace( m_p_start, aP + force, false,
+                                                              initial_radius );
         aHead = LINE( aHead, line );
 
         v.SetPos( v.Pos() + force );
