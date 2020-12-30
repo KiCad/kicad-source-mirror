@@ -98,12 +98,28 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
         if( dlg.ShowModal() == wxID_YES )
         {
             // Append a new directory with the same name of the project file
-            // and try to create it
-            pro.AppendDir( pro.GetName() );
+            // Keep iterating until we find an empty directory
+            wxString newDir = pro.GetName();
+            int      attempt = 0;
+
+            pro.AppendDir( newDir );
+
+            while( pro.DirExists() )
+            {
+                pro.RemoveLastDir();
+                wxString suffix = wxString::Format( "_%d", ++attempt );
+                pro.AppendDir( newDir + suffix );
+            }
 
             if( !wxMkdir( pro.GetPath() ) )
-                // There was a problem, undo
-                pro.RemoveLastDir();
+            {
+                wxString msg = _( "Error creating new directory. Please try a different path. The "
+                                  "project was not imported." );
+
+                wxMessageDialog dlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
+                dlg.ShowModal();
+                return;
+            }
         }
     }
 
@@ -118,13 +134,13 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
     wxFileName schCopy( pro );
     schCopy.SetExt( aSchFileExtension );
 
-    if( sch.Exists() )
+    if( sch.Exists() && !schCopy.SameAs( sch ) )
         wxCopyFile( sch.GetFullPath(), schCopy.GetFullPath(), true );
 
     wxFileName pcbCopy( pro );
     pcbCopy.SetExt( aPcbFileExtension );
 
-    if( pcb.Exists() )
+    if( pcb.Exists() && !pcbCopy.SameAs( pcb ) )
         wxCopyFile( pcb.GetFullPath(), pcbCopy.GetFullPath(), true );
 
     // Close the project and make the new one
@@ -148,7 +164,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
 
         schframe->Raise();
 
-        wxRemoveFile( schCopy.GetFullPath() );
+        if( !schCopy.SameAs( sch ) ) // Do not delete the original file!
+            wxRemoveFile( schCopy.GetFullPath() );
     }
 
     if( pcbCopy.FileExists() )
@@ -167,7 +184,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( wxString aWindowTitle, wxString
 
         pcbframe->Raise();
 
-        wxRemoveFile( pcbCopy.GetFullPath() );
+        if( !pcbCopy.SameAs( pcb ) ) // Do not delete the original file!
+            wxRemoveFile( pcbCopy.GetFullPath() );
     }
 
     ReCreateTreePrj();
