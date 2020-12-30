@@ -1147,12 +1147,15 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
 
     if( !l.SegmentCount() )
     {
-        // Do a final optimization to the stored state
-        NODE::ITEM_VECTOR removed, added;
-        m_lastNode->GetUpdatedItems( removed, added );
+        if( m_lastNode )
+        {
+            // Do a final optimization to the stored state
+            NODE::ITEM_VECTOR removed, added;
+            m_lastNode->GetUpdatedItems( removed, added );
 
-        if( !added.empty() && added.back()->Kind() == ITEM::SEGMENT_T )
-            simplifyNewLine( m_lastNode, static_cast<SEGMENT*>( added.back() ) );
+            if( !added.empty() && added.back()->Kind() == ITEM::SEGMENT_T )
+                simplifyNewLine( m_lastNode, static_cast<SEGMENT*>( added.back() ) );
+        }
 
         // Nothing to commit if we have an empty line
         if( !pl.EndsWithVia() )
