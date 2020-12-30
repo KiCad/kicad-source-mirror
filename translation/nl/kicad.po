@@ -1,11 +1,12 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-30 07:05+0000\n"
-"Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
+"PO-Revision-Date: 2020-12-30 07:07+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -14298,9 +14299,9 @@ msgstr "Wijzigingen in schema opslaan voordat u afsluit?"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:548
 #: eeschema/tools/sch_edit_tool.cpp:112
-#, fuzzy, c-format
+#, c-format
 msgid "Unit %s"
-msgstr "Eenheid %c"
+msgstr "Eenheid %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:710
 #, c-format
@@ -17179,7 +17180,7 @@ msgstr "Hernoem Bestand"
 
 #: kicad/project_tree_item.cpp:120
 msgid "Unable to rename file ... "
-msgstr "Hernoemen niet mogelijk ..."
+msgstr "Hernoemen niet mogelijk ... "
 
 #: kicad/project_tree_item.cpp:120
 msgid "Permission error?"
