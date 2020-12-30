@@ -75,6 +75,8 @@ private:
     }
 
     bool Validate() override;
+
+    void onLayer( wxCommandEvent& event ) override;
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
@@ -188,12 +190,22 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
         break;
 
     case S_POLYGON:
+    {
+        LSET graphicPolygonsLayers = LSET::AllLayersMask();
+        graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
+
         SetTitle( _( "Polygon Properties" ) );
         m_sizerLeft->Show( false );
 
         m_filledCtrl->Show( true );
-        break;
+        m_filledCtrl->Enable( graphicPolygonsLayers.Contains( m_item->GetLayer() ) );
 
+        // Prevent courtyard/edge cuts from being filled
+        if( !graphicPolygonsLayers.Contains( m_item->GetLayer() ) )
+            m_filledCtrl->SetValue( false );
+
+        break;
+    }
     case S_RECT:
         SetTitle( _( "Rectangle Properties" ) );
 
@@ -357,6 +369,24 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_parent->UpdateMsgPanel();
 
     return true;
+}
+
+
+void DIALOG_GRAPHIC_ITEM_PROPERTIES::onLayer( wxCommandEvent& event )
+{
+    if( m_item->GetShape() == S_POLYGON )
+    {
+        LSET graphicPolygonsLayers = LSET::AllLayersMask();
+        graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
+
+        m_filledCtrl->Enable( graphicPolygonsLayers.Contains(
+                ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) ) );
+
+        // Prevent courtyard/edge cuts from being filled
+        if( !graphicPolygonsLayers.Contains(
+                    ToLAYER_ID( m_LayerSelectionCtrl->GetLayerSelection() ) ) )
+            m_filledCtrl->SetValue( false );
+    }
 }
 
 

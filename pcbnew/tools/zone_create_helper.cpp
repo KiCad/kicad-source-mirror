@@ -232,32 +232,14 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE> aZone )
 
             graphicPolygonsLayers.reset( Edge_Cuts ).reset( F_CrtYd ).reset( B_CrtYd );
 
-            if( graphicPolygonsLayers.Contains( m_params.m_layer ) )
-            {
-                auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT *) parent )
-                                                       : new PCB_SHAPE();
-                poly->SetShape( S_POLYGON );
-                poly->SetFilled( m_params.m_layer != Edge_Cuts );
-                poly->SetLayer( m_params.m_layer );
-                poly->SetPolyShape ( *aZone->Outline() );
-                bCommit.Add( poly );
-                m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, poly );
-            }
-            else
-            {
-                SHAPE_POLY_SET* outline = aZone->Outline();
-
-                for( auto seg = outline->CIterateSegments( 0 ); seg; seg++ )
-                {
-                    auto* new_seg = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT *) parent )
-                                                               : new PCB_SHAPE();
-                    new_seg->SetShape( S_SEGMENT );
-                    new_seg->SetLayer( m_params.m_layer );
-                    new_seg->SetStart( wxPoint( seg.Get().A.x, seg.Get().A.y ) );
-                    new_seg->SetEnd( wxPoint( seg.Get().B.x, seg.Get().B.y ) );
-                    bCommit.Add( new_seg );
-                }
-            }
+            auto poly = m_tool.m_isFootprintEditor ? new FP_SHAPE( (FOOTPRINT*) parent )
+                                                   : new PCB_SHAPE();
+            poly->SetShape( S_POLYGON );
+            poly->SetFilled( graphicPolygonsLayers.Contains( m_params.m_layer ) );
+            poly->SetLayer( m_params.m_layer );
+            poly->SetPolyShape( *aZone->Outline() );
+            bCommit.Add( poly );
+            m_tool.GetManager()->RunAction( PCB_ACTIONS::selectItem, true, poly );
 
             bCommit.Push( _( "Add a graphical polygon" ) );
 
