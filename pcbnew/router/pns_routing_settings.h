@@ -55,8 +55,8 @@ enum class CORNER_MODE
 {
     MITERED_90,     ///< H/V only (90-degree corners) (not yet implemented)
     MITERED_45,     ///< H/V/45 with mitered corners (default)
-    ROUNDED_90,     ///< H/V/45 with filleted corners
-    ROUNDED_45      ///< H/V with filleted corners (not yet implemented)
+    ROUNDED_90,     ///< H/V with filleted corners (not yet implemented)
+    ROUNDED_45      ///< H/V/45 with filleted corners
 };
 
 /**
