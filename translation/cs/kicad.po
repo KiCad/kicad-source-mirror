@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"PO-Revision-Date: 2020-12-31 14:35+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -153,19 +153,18 @@ msgid "No footprint loaded."
 msgstr "Nenačteno pouzdro."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:487
-#, fuzzy
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Obrys pouzdra je nesprávně tvarovaný. Spusťte Footprint Checker pro úplnou "
-"analýzu."
+"Obrys pouzdra chybí nebo má nesprávný tvar. Spusťte Footprint Checker pro "
+"úplnou analýzu."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:496
 #: pcbnew/dialogs/dialog_export_step.cpp:248
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "Obrys desky je nesprávně tvarovaný. Spusťte DRC pro úplnou analýzu."
+msgstr ""
+"Obrys desky chybí nebo má nesprávný tvar. Spusťte DRC pro úplnou analýzu."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
@@ -2227,7 +2226,7 @@ msgid "Image Editor"
 msgstr "Editor obrázku"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
-#, fuzzy, c-format
+#, c-format
 msgid "The selection contains %d locked items."
 msgstr "Výběr obsahuje %d uzamčených položek."
 
@@ -4259,9 +4258,9 @@ msgstr ""
 "řádku %d"
 
 #: common/fp_lib_table.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "fp-lib-table files contain no library named '%s'."
-msgstr "Soubory fp-lib-table neobsahují žádnou knihovnu s názvem \"%s\""
+msgstr "Soubory fp-lib-table neobsahují žádnou knihovnu s názvem '%s'."
 
 #: common/fp_lib_table.cpp:483 eeschema/symbol_lib_table.cpp:497
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:109
@@ -5505,18 +5504,16 @@ msgid "Previous Marker"
 msgstr "Předchozí značka"
 
 #: common/tool/actions.cpp:245
-#, fuzzy
 msgid "Go to previous marker in Checker window"
-msgstr "Provézt kontrolu návrhu"
+msgstr "Přejít na předchozí značku v okně Kontrola"
 
 #: common/tool/actions.cpp:251
 msgid "Next Marker"
 msgstr "Další značka"
 
 #: common/tool/actions.cpp:251
-#, fuzzy
 msgid "Go to next marker in Checker window"
-msgstr "Provézt kontrolu návrhu"
+msgstr "Přejít na další značku v okně Kontrola"
 
 #: common/tool/actions.cpp:257
 msgid "Exclude Marker"
@@ -5724,9 +5721,8 @@ msgid "Always Show Cursor"
 msgstr "Vždy zobrazit kurzor"
 
 #: common/tool/actions.cpp:521
-#, fuzzy
 msgid "Display crosshairs even in selection tool"
-msgstr "Vždy zobrazit nitkový kříž (není ve standardní sadě)"
+msgstr "Zobrazit nitkový kříž i v nástroji pro výběr"
 
 #: common/tool/actions.cpp:526
 msgid "Full-Window Crosshairs"
@@ -5986,9 +5982,8 @@ msgid "Mirroring for Y axis is not supported yet"
 msgstr "Zrcadlení pro osu Y není zatím podporováno"
 
 #: common/widgets/footprint_preview_widget.cpp:98
-#, fuzzy
 msgid "Footprint not found."
-msgstr "Pouzdro nenalezeno"
+msgstr "Pouzdro nenalezeno."
 
 #: common/widgets/footprint_select_widget.cpp:215
 msgid "No default footprint"
@@ -6732,17 +6727,16 @@ msgid "Lib: %s"
 msgstr "Knih.: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
-#, fuzzy
 msgid ""
 "Some of the assigned footprints are legacy entries with no library names. "
 "Would you like Kicad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
-"Některé z přiřazených pouzder jsou starší záznamy (chybí krátká jména)."
-"Chcete, aby se je CvPcb pokusil převést na nový požadovaný formát LIB_ID? "
-"(Pokud odpovíte ne, budou tato přiřazení smazána a budete muset tyto pouzdra "
-"znovu přiřadit ručně.)"
+"Některé z přiřazených pouzder jsou starší položky bez názvů knihoven. "
+"Chcete, aby se Kicad pokusil převést je do nového požadovaného formátu "
+"LIB_ID? (Pokud odpovíte ne, budou tato přiřazení smazána a budete muset tyto "
+"pouzdra znovu přiřadit ručně.)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
@@ -6823,14 +6817,12 @@ msgid "Save footprint associations in schematic symbol footprint fields"
 msgstr "Uložit přiřazení pouzdra v polích pouzdra symbolu schématu"
 
 #: cvpcb/tools/cvpcb_actions.cpp:92
-#, fuzzy
 msgid "Select next unassigned symbol"
-msgstr "Vybrat další nepřidružený symbol"
+msgstr "Vybrat další nepřiřazený symbol"
 
 #: cvpcb/tools/cvpcb_actions.cpp:93
-#, fuzzy
 msgid "Select next symbol with no footprint assignment"
-msgstr "Ponechat existující přiřazení pouzder k součástkám"
+msgstr "Vybrat další symbol bez přiřazení pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:99
 msgid "Select previous unassigned symbol"
@@ -6853,7 +6845,6 @@ msgid "Automatically assign footprints"
 msgstr "Automaticky přiřadit pouzdra"
 
 #: cvpcb/tools/cvpcb_actions.cpp:116
-#, fuzzy
 msgid "Perform automatic footprint assignment"
 msgstr "Provézt automatické přiřazení pouzdra"
 
@@ -7024,10 +7015,9 @@ msgstr ""
 "Síť %s je graficky připojena ke sběrnici %s, ale není členem této sběrnice"
 
 #: eeschema/connection_graph.cpp:2732
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr ""
-"Vývod listu %s nemá uvnitř listu žádné odpovídající hierarchické označení"
+msgstr "Vývod listu %s nemá uvnitř listu odpovídající hierarchické označení"
 
 #: eeschema/cross-probing.cpp:256 pcbnew/cross-probing.cpp:167
 #, c-format
@@ -7035,9 +7025,9 @@ msgid "%s pin %s found"
 msgstr "%s vývod %s nalezen"
 
 #: eeschema/cross-probing.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid "%s found but pin %s not found"
-msgstr "%s nalezen, ale %s nenalezen"
+msgstr "%s nalezeno, ale vývod %s nenalezen"
 
 #: eeschema/cross-probing.cpp:262 pcbnew/cross-probing.cpp:180
 #, c-format
@@ -7140,18 +7130,17 @@ msgid "Add Generator"
 msgstr "Přidat generátor"
 
 #: eeschema/dialogs/dialog_bom.cpp:531
-#, fuzzy, c-format
+#, c-format
 msgid "Nickname \"%s\" already in use."
-msgstr "List s názvem \"%s\" již existuje."
+msgstr "Přezdívka \"%s\" se již používá."
 
 #: eeschema/dialogs/dialog_bom.cpp:566 eeschema/dialogs/dialog_netlist.cpp:759
 msgid "Generator files:"
 msgstr "Soubory generátoru:"
 
 #: eeschema/dialogs/dialog_bom.cpp:585
-#, fuzzy
 msgid "Generator file name not found."
-msgstr "Název souboru pluginu nebyl nalezen."
+msgstr "Název souboru generátoru nebyl nalezen."
 
 #: eeschema/dialogs/dialog_bom.cpp:595
 msgid "No text editor selected in KiCad.  Please choose one."
@@ -7174,9 +7163,8 @@ msgid "Edit the script file in the text editor"
 msgstr "Upravit soubor skriptu v textovém editoru"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:82
-#, fuzzy
 msgid "Remove the current generator script from list"
-msgstr "Smazat aktuální plugin ze seznamu"
+msgstr "Odebrat aktuální skript generátoru ze seznamu"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:92
 msgid "Command line running the generator:"
@@ -7599,9 +7587,8 @@ msgid "Alias Members"
 msgstr "Aliasy"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:102
-#, fuzzy
 msgid "Member Name"
-msgstr "Název tabulky"
+msgstr "Jméno člena"
 
 #: eeschema/dialogs/dialog_bus_manager.cpp:183
 #, fuzzy
@@ -33370,19 +33357,19 @@ msgid "Corner Count"
 msgstr "Počet rohů"
 
 #: pcbnew/zone.cpp:872
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area Cutout on %s"
-msgstr "Vlastnosti zakázané oblasti"
+msgstr "Pravidlo oblasti výřezu na %s"
 
 #: pcbnew/zone.cpp:874
-#, fuzzy, c-format
+#, c-format
 msgid "Zone Cutout on %s"
-msgstr "Obrys zóny %s na %s"
+msgstr "Výřez zóny na %s"
 
 #: pcbnew/zone.cpp:879
-#, fuzzy, c-format
+#, c-format
 msgid "Rule Area on %s"
-msgstr "Vyplněná oblast"
+msgstr "Oblast pravidla na %s"
 
 #: pcbnew/zone.cpp:881
 #, fuzzy, c-format
