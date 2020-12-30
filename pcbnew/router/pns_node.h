@@ -62,7 +62,9 @@ enum class CONSTRAINT_TYPE
     CT_LENGTH = 3,
     CT_WIDTH = 4,
     CT_VIA_DIAMETER = 5,
-    CT_VIA_HOLE = 6
+    CT_VIA_HOLE = 6,
+    CT_HOLE_CLEARANCE = 7,
+    CT_EDGE_CLEARANCE = 8
 };
 
 struct CONSTRAINT
@@ -243,11 +245,11 @@ public:
      *
      * Follows the line in search of an obstacle that is nearest to the starting to the line's starting
      * point.
-     * @param aItem the item to find collisions with
+     * @param aLine the item to find collisions with
      * @param aKindMask mask of obstacle types to take into account
      * @return the obstacle, if found, otherwise empty.
      */
-    OPT_OBSTACLE NearestObstacle( const LINE*             aItem,
+    OPT_OBSTACLE NearestObstacle( const LINE*             aLine,
                                   int                     aKindMask = ITEM::ANY_T,
                                   const std::set<ITEM*>*  aRestrictedSet = NULL );
 

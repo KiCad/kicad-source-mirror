@@ -301,13 +301,13 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aK
 }
 
 
-NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
+NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                                           const std::set<ITEM*>* aRestrictedSet )
 {
     OBSTACLES obs_list;
     bool found_isects = false;
 
-    const SHAPE_LINE_CHAIN& line = aItem->CLine();
+    const SHAPE_LINE_CHAIN& line = aLine->CLine();
 
     obs_list.reserve( 100 );
 
@@ -315,17 +315,15 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
     for( int i = 0; i < line.SegmentCount(); i++ )
     {
-        const SEGMENT s( *aItem, line.CSegment( i ) );
+        const SEGMENT s( *aLine, line.CSegment( i ) );
         n += QueryColliding( &s, obs_list, aKindMask );
     }
 
-    if( aItem->EndsWithVia() )
-        n += QueryColliding( &aItem->Via(), obs_list, aKindMask );
+    if( aLine->EndsWithVia() )
+        n += QueryColliding( &aLine->Via(), obs_list, aKindMask );
 
     if( !n )
         return OPT_OBSTACLE();
-
-    LINE& aLine = (LINE&) *aItem;
 
     OBSTACLE nearest;
     nearest.m_item = NULL;
@@ -341,22 +339,22 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
         std::vector<SHAPE_LINE_CHAIN::INTERSECTION> isect_list;
 
-        int clearance = GetClearance( obs.m_item, &aLine );
+        int clearance = GetClearance( obs.m_item, aLine );
 
-        SHAPE_LINE_CHAIN hull = obs.m_item->Hull( clearance, aItem->Width(), aItem->Layer() );
+        SHAPE_LINE_CHAIN obsHull = obs.m_item->Hull( clearance, aLine->Width(), aLine->Layer() );
 
-        if( aLine.EndsWithVia() )
+        if( aLine->EndsWithVia() )
         {
-            clearance = GetClearance( obs.m_item, &aLine.Via() );
+            clearance = GetClearance( obs.m_item, &aLine->Via() );
 
-            SHAPE_LINE_CHAIN viaHull = aLine.Via().Hull( clearance, aItem->Width() );
+            SHAPE_LINE_CHAIN viaHull = aLine->Via().Hull( clearance, aLine->Width() );
 
-            viaHull.Intersect( hull, isect_list );
+            viaHull.Intersect( obsHull, isect_list );
 
             for( const SHAPE_LINE_CHAIN::INTERSECTION& isect : isect_list )
             {
-                int dist = aLine.CLine().Length() +
-                           ( isect.p - aLine.Via().Pos() ).EuclideanNorm();
+                int dist = aLine->CLine().Length() +
+                           ( isect.p - aLine->Via().Pos() ).EuclideanNorm();
 
                 if( dist < nearest.m_distFirst )
                 {
@@ -364,7 +362,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
                     nearest.m_distFirst = dist;
                     nearest.m_ipFirst = isect.p;
                     nearest.m_item = obs.m_item;
-                    nearest.m_hull = hull;
+                    nearest.m_hull = obsHull;
                 }
 
                 if( dist > dist_max )
@@ -377,11 +375,11 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
 
         isect_list.clear();
 
-        hull.Intersect( aLine.CLine(), isect_list );
+        obsHull.Intersect( aLine->CLine(), isect_list );
 
         for( const SHAPE_LINE_CHAIN::INTERSECTION& isect : isect_list )
         {
-            int dist = aLine.CLine().PathLength( isect.p );
+            int dist = aLine->CLine().PathLength( isect.p );
 
             if( dist < nearest.m_distFirst )
             {
@@ -389,7 +387,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aItem, int aKindMask,
                 nearest.m_distFirst = dist;
                 nearest.m_ipFirst = isect.p;
                 nearest.m_item = obs.m_item;
-                nearest.m_hull = hull;
+                nearest.m_hull = obsHull;
             }
 
             if( dist > dist_max )
