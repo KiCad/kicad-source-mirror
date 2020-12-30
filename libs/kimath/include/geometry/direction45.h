@@ -194,20 +194,17 @@ public:
     }
 
     /**
-     * Function BuildInitialTrace()
-     *
      * Builds a 2-segment line chain between points aP0 and aP1 and following 45-degree routing
      * regime. If aStartDiagonal is true, the trace starts with a diagonal segment.
      * @param aP0 starting point
      * @param aP1 ending point
      * @param aStartDiagonal whether the first segment has to be diagonal
-     * @param aRadius is the radius of curvature for rounding.  If =0, do not insert arcs
+     * @param aFillet if true will fillet the 45-degree portion of the line chain
      * @return the trace
      */
-    const SHAPE_LINE_CHAIN BuildInitialTrace( const VECTOR2I& aP0,
-            const VECTOR2I& aP1,
-            bool aStartDiagonal = false,
-            int aMaxRadius = 0 ) const;
+    const SHAPE_LINE_CHAIN BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
+                                              bool aStartDiagonal = false,
+                                              bool aFillet = false ) const;
 
     bool operator==( const DIRECTION_45& aOther ) const
     {

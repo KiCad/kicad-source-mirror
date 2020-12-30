@@ -537,7 +537,19 @@ bool ROUTER::IsPlacingVia() const
 
 void ROUTER::ToggleRounded()
 {
-    m_settings->SetRounded( !m_settings->GetRounded() );
+    CORNER_MODE newMode = CORNER_MODE::MITERED_45;
+
+    switch( m_settings->GetCornerMode() )
+    {
+    case CORNER_MODE::MITERED_45:
+        newMode = CORNER_MODE::ROUNDED_45;
+        break;
+
+    default:
+        break;
+    }
+
+    m_settings->SetCornerMode( newMode );
 }
 
 

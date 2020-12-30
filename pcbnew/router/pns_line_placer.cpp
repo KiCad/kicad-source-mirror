@@ -1196,7 +1196,7 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
     {
         ssize_t arcIndex = l.ArcIndex( i );
 
-        if( arcIndex < 0 )
+        if( arcIndex < 0 || ( lastArc >= 0 && i == lastV - 1 ) )
         {
             seg = SEGMENT( pl.CSegment( i ), m_currentNet );
             seg.SetWidth( pl.Width() );
@@ -1427,9 +1427,10 @@ void LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
 {
     SHAPE_LINE_CHAIN l;
-    int initial_radius = 0;
-
     DIRECTION_45 guessedDir = m_postureSolver.GetPosture( aP );
+
+    // Rounded corners don't make sense when routing orthogonally (single track at a time)
+    bool fillet = !m_orthoMode && Settings().GetCornerMode() == CORNER_MODE::ROUNDED_45;
 
     if( m_p_start == aP )
     {
@@ -1443,15 +1444,10 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
         }
         else
         {
-            // Rounded corners don't make sense when routing orthogonally (single track at a time)
-            if( Settings().GetRounded()  && !m_orthoMode )
-                initial_radius = Settings().GetMaxRadius();
-
-
             if( !m_tail.PointCount() )
-                l = guessedDir.BuildInitialTrace( m_p_start, aP, false, initial_radius );
+                l = guessedDir.BuildInitialTrace( m_p_start, aP, false, fillet );
             else
-                l = m_direction.BuildInitialTrace( m_p_start, aP, false, initial_radius );
+                l = m_direction.BuildInitialTrace( m_p_start, aP, false, fillet );
         }
 
         if( l.SegmentCount() > 1 && m_orthoMode )
@@ -1486,7 +1482,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead )
     if( v.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
         SHAPE_LINE_CHAIN line = guessedDir.BuildInitialTrace( m_p_start, aP + force, false,
-                                                              initial_radius );
+                                                              fillet );
         aHead = LINE( aHead, line );
 
         v.SetPos( v.Pos() + force );

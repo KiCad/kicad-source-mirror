@@ -1071,6 +1071,10 @@ bool OPTIMIZER::Optimize( LINE* aLine, int aEffortLevel, NODE* aWorld, const VEC
     if( aEffortLevel & OPTIMIZER::PRESERVE_VERTEX )
         opt.SetPreserveVertex( aV );
 
+    // TODO: fix optimizer for arcs
+    if( aLine->ArcCount() )
+        return -1;
+
     return opt.Optimize( aLine );
 }
 

@@ -448,7 +448,7 @@ void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
     {
         const VECTOR2I p = aOtherLine.CPoint( 0 );
         m_points.push_back( p );
-        m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
+        m_shapes.push_back( aOtherLine.CShapes()[0] );
         m_bbox.Merge( p );
     }
 

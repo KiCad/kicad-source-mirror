@@ -20,7 +20,7 @@
 #include <geometry/direction45.h>
 
 const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, const VECTOR2I& aP1,
-        bool aStartDiagonal, int aMaxRadius ) const
+                                                        bool aStartDiagonal, bool aFillet ) const
 {
     bool start_diagonal;
 
@@ -34,68 +34,133 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     int sw = sign( aP1.x - aP0.x );
     int sh = sign( aP1.y - aP0.y );
 
-    int  radius = std::min( aMaxRadius, std::min( w, h ) );
-    bool use_rounded = aMaxRadius > 0;
-    int  dist90 = use_rounded ? KiROUND( ( M_SQRT2 - 1.0 ) * radius ) : 0;
-    int  dist45 = use_rounded ? KiROUND( radius * ( 1.0 - M_SQRT1_2 ) ) : 0;
+    int radius = std::min( w, h );
 
     VECTOR2I mp0, mp1, arc_offset_90, arc_offset_45;
+    VECTOR2I arcStart, arcEnd;
+    double diagLength;
+    int tangentLength;
 
-    // we are more horizontal than vertical?
-//    if( m_90deg )
-//    {
-//        if( m_dir == N || m_dir == S )
-//
-//    }
+    /*
+     * Non-filleted case:
+     *
+     * For width greater than height, we're calculating something like this.
+     * mp0 will be used if we start straight; mp1 if we start diagonal.
+     *
+     * aP0 ----------------- mp0
+     *  .                     \
+     *   .                     \
+     *    .                     \
+     *     mp1 . . . . . . . .  aP1
+     *
+     * Filleted case:
+     *
+     * For a fillet, we need to know the arc start point (A in the diagram below)
+     * A straight segment will be needed between aP0 and A if we are starting straight,
+     * or between the arc end and aP1 if we are starting diagonally.
+     *
+     * aP0 -- A --___        mp0
+     *  .             ---
+     *   .                 --
+     *    .                   --
+     *     mp1 . . . . . . . .  aP1
+     *
+     * For the length of this segment (tangentLength), we subtract the length of the "diagonal"
+     * line from the "straight" line (i.e. dist(aP0, mp0) - dist(mp0, aP1))
+     * In the example above, we will have a straight segment from aP0 to A, and then we can use
+     * the distance from A to aP1 (diagLength) to calculate the radius of the arc.
+     */
 
     if( w > h )
     {
-        mp0 = VECTOR2I( ( w - h - dist90 ) * sw, 0 );               // direction: E
-        mp1 = VECTOR2I( ( h - dist45 ) * sw, ( h - dist45 ) * sh ); // direction: NE
-        arc_offset_90 = VECTOR2I( 0, radius * sh );
-        arc_offset_45 = VECTOR2I( sw * radius * M_SQRT1_2, -sh * radius * M_SQRT1_2 );
+        mp0 = VECTOR2I( ( w - h ) * sw, 0 );    // direction: E
+        mp1 = VECTOR2I( h * sw, h * sh );       // direction: NE
+        tangentLength = ( w - h ) - mp1.EuclideanNorm();
     }
     else
     {
-        mp0 = VECTOR2I( 0, sh * ( h - w - dist90 ) );               // direction: N
-        mp1 = VECTOR2I( sw * ( w - dist45 ), sh * ( w - dist45 ) ); // direction: NE
-        arc_offset_90 = VECTOR2I( radius * sw, 0 );
-        arc_offset_45 = VECTOR2I( -sw * radius * M_SQRT1_2, sh * radius * M_SQRT1_2 );
+        mp0 = VECTOR2I( 0, sh * ( h - w ) );    // direction: N
+        mp1 = VECTOR2I( sw * w, sh * w );       // direction: NE
+        tangentLength = ( h - w ) - mp1.EuclideanNorm();
     }
 
     SHAPE_LINE_CHAIN pl;
-    VECTOR2I arc_center;
 
-    pl.Append( aP0 );
-    VECTOR2I next_point;
-
-    if( start_diagonal )
+    // TODO: if tangentLength zero, we could still place a small arc at the start...
+    if( aFillet )
     {
-        next_point = aP0 + mp1;
-        arc_center = aP0 + mp1 + arc_offset_45;
+        double diag2 = tangentLength >= 0 ? mp1.SquaredEuclideanNorm() : mp0.SquaredEuclideanNorm();
+        diagLength = std::sqrt( ( 2 * diag2 ) - ( 2 * diag2 * std::cos( 3 * M_PI_4 ) ) );
+        int arcRadius = KiROUND( diagLength / ( 2.0 * std::cos( 67.5 * M_PI / 180.0 ) ) );
+
+        if( start_diagonal )
+        {
+            if( tangentLength >= 0 )
+            {
+                // Positive tangentLength, diagonal start: arc goes at the start
+                int rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
+                arcStart         = aP0 + mp1 + mp0.Resize( mp1.EuclideanNorm() );
+                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+                VECTOR2D  arcCenter( arcStart + centerDir.Resize( arcRadius ) );
+                SHAPE_ARC new_arc( arcCenter, aP0, 45 * rotationSign );
+                pl.Append( new_arc );
+                pl.Append( aP1 );
+            }
+            else
+            {
+                pl.Append( aP0 );
+                // Negative tangentLength, diagonal start: arc goes at the end
+                int rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
+                arcStart         = aP0 + mp1.Resize( std::abs( tangentLength ) );
+                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+                VECTOR2D  arcCenter( aP1 + centerDir.Resize( arcRadius ) );
+                SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+                pl.Append( new_arc );
+
+                // TODO: nicer way of fixing these up
+                if( new_arc.GetP1() != aP1 )
+                    pl.Replace( -1, -1, aP1 );
+            }
+        }
+        else
+        {
+            if( tangentLength >= 0 )
+            {
+                pl.Append( aP0 );
+                // Positive tangentLength: arc goes at the end
+                int rotationSign = ( w > h ) ? ( sw * sh ) : ( sw * sh * -1 );
+                arcStart         = aP0 + mp0.Resize( tangentLength );
+                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+                VECTOR2D  arcCenter( arcStart + centerDir.Resize( arcRadius ) );
+                SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+                pl.Append( new_arc );
+
+                // TODO: nicer way of fixing these up
+                if( new_arc.GetP1() != aP1 )
+                    pl.Replace( -1, -1, aP1 );
+            }
+            else
+            {
+                // Negative tangentLength: arc goes at the start
+                int rotationSign = ( w > h ) ? ( sw * sh ) : ( sw * sh * -1 );
+                arcStart         = aP0;
+                VECTOR2D  centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+                VECTOR2D  arcCenter( arcStart + centerDir.Resize( arcRadius ) );
+                SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+                pl.Append( new_arc );
+                pl.Append( aP1 );
+            }
+        }
     }
     else
     {
-        next_point = aP0 + mp0;
-        arc_center = aP0 + mp0 + arc_offset_90;
+        pl.Append( aP0 );
+        pl.Append( start_diagonal ? ( aP0 + mp1 ) : ( aP0 + mp0 ) );
+        pl.Append( aP1 );
     }
 
-    if( use_rounded )
-    {
-        int sa = start_diagonal ? -sw * sh : sw * sh;
-
-        if( h > w )
-            sa = -sa;
-
-        SHAPE_ARC new_arc( arc_center, next_point, sa * 45.0 );
-        pl.Append( new_arc );
-    }
-    else
-    {
-        pl.Append( next_point );
-    }
-
-    pl.Append( aP1 );
+    // TODO: be careful about including P0 and P1 above, because SHAPE_LINE_CHAIN::Simplify
+    // does not seem to properly handle when an arc overlaps P0.
 
     pl.Simplify();
     return pl;

@@ -50,6 +50,15 @@ enum PNS_OPTIMIZATION_EFFORT
     OE_FULL = 2
 };
 
+///> What kind of corners to create in the line placers
+enum class CORNER_MODE
+{
+    MITERED_90,     ///< H/V only (90-degree corners) (not yet implemented)
+    MITERED_45,     ///< H/V/45 with mitered corners (default)
+    ROUNDED_90,     ///< H/V/45 with filleted corners
+    ROUNDED_45      ///< H/V with filleted corners (not yet implemented)
+};
+
 /**
  * ROUTING_SETTINGS
  *
@@ -141,8 +150,8 @@ public:
     bool GetSnapToTracks() const { return m_snapToTracks; }
     bool GetSnapToPads() const { return m_snapToPads; }
 
-    bool GetRounded() const { return m_roundedCorners; }
-    void SetRounded( bool aRound ) { m_roundedCorners = aRound; }
+    CORNER_MODE GetCornerMode() const { return m_cornerMode; }
+    void SetCornerMode( CORNER_MODE aMode ) { m_cornerMode = aMode; }
 
     bool GetOptimizeDraggedTrack() const { return m_optimizeDraggedTrack; }
     void SetOptimizeDraggedTrack( bool aEnable ) { m_optimizeDraggedTrack = aEnable; }
@@ -152,25 +161,6 @@ public:
 
     bool GetFixAllSegments() const { return m_fixAllSegments; }
     void SetFixAllSegments( bool aEnable ) { m_fixAllSegments = aEnable; }
-
-    void SetMinRadius( int aRadius )
-    {
-        m_minRadius = aRadius;
-
-        if( m_maxRadius < m_minRadius )
-            m_maxRadius = m_minRadius;
-    }
-
-    void SetMaxRadius( int aRadius )
-    {
-        m_maxRadius = aRadius;
-
-        if( m_maxRadius < m_minRadius )
-            m_minRadius = m_maxRadius;
-    }
-
-    int GetMinRadius() const { return m_minRadius; }
-    int GetMaxRadius() const { return m_maxRadius; }
 
 private:
     bool m_shoveVias;
@@ -186,13 +176,11 @@ private:
     bool m_inlineDragEnabled;
     bool m_snapToTracks;
     bool m_snapToPads;
-    bool m_roundedCorners;
     bool m_optimizeDraggedTrack;
     bool m_autoPosture;
     bool m_fixAllSegments;
 
-    int m_minRadius;
-    int m_maxRadius;
+    CORNER_MODE m_cornerMode;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;
