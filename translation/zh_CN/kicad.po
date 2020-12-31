@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"PO-Revision-Date: 2020-12-31 14:35+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -2203,7 +2203,7 @@ msgstr "选中部分含 %d 个锁定项目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "除非您覆盖锁，否则这些项将被跳过。"
+msgstr "除非您覆盖锁定，否则跳过这些项目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Do not show again."
@@ -11278,7 +11278,7 @@ msgstr "选择包含旧版库的一个或多个表行以另存为当前格式（
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
-msgstr "将'%s'另存为当前格式（* .kicad_sym）并替换表中的旧条目？"
+msgstr "将 '%s' 另存为当前格式（* .kicad_sym）并替换表中的旧条目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -24609,7 +24609,7 @@ msgstr "使用鼠标路径设置轨迹姿势"
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
-msgstr "启用时，布线的姿态将由鼠标从起始位置移动的方式来引导"
+msgstr "启用时，布线的方式将由鼠标从起始位置移动的方式来引导"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
