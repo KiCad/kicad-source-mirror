@@ -4,10 +4,10 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-25 08:23+0000\n"
+"PO-Revision-Date: 2020-12-31 14:35+0000\n"
 "Last-Translator: lê văn lập <levanlap2502@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6371,7 +6371,7 @@ msgstr "Thu nhỏ chế độ xem bản in"
 
 #: common/widgets/net_selector.cpp:50
 msgid "<no net>"
-msgstr ""
+msgstr "<no net>"
 
 #: common/widgets/net_selector.cpp:51
 #, fuzzy
@@ -6656,62 +6656,65 @@ msgstr "Tệp netlist CadStar"
 
 #: common/wildcards_and_files_ext.cpp:464
 msgid "Symbol footprint association files"
-msgstr ""
+msgstr "Tệp liên kết footprint và symbol"
 
 #: common/wildcards_and_files_ext.cpp:470
 msgid "Zip file"
-msgstr ""
+msgstr "Tệp Zip"
 
 #: common/wildcards_and_files_ext.cpp:476
 msgid "GenCAD 1.4 board files"
-msgstr ""
+msgstr "Các tệp bo mạch GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:482
 msgid "DXF Files"
-msgstr ""
+msgstr "Tệp DXF"
 
 #: common/wildcards_and_files_ext.cpp:488
+#, fuzzy
 msgid "Gerber job file"
-msgstr ""
+msgstr "Tệp làm việc Gerber"
 
 #: common/wildcards_and_files_ext.cpp:494
 msgid "Specctra DSN file"
-msgstr ""
+msgstr "Tệp Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:500
 msgid "IPC-D-356 Test Files"
-msgstr ""
+msgstr "Tệp kiểm tra IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:506
+#, fuzzy
 msgid "Workbook file"
-msgstr ""
+msgstr "Tệp sổ làm việc"
 
 #: common/wildcards_and_files_ext.cpp:512
 msgid "PNG file"
-msgstr ""
+msgstr "Tệp PNG"
 
 #: common/wildcards_and_files_ext.cpp:518
 msgid "Jpeg file"
-msgstr ""
+msgstr "Tệp jpeg"
 
 #: cvpcb/auto_associate.cpp:105
 #, c-format
 msgid "Equivalence file \"%s\" could not be found in the default search paths."
 msgstr ""
+"Không thể tìm thấy tệp tương đương \"%s\" trong đường dẫn tìm kiếm mặc định."
 
 #: cvpcb/auto_associate.cpp:126
 #, c-format
 msgid "Error opening equivalence file \"%s\"."
-msgstr ""
+msgstr "Lỗi khi mở tệp tương đương \"%s\"."
 
 #: cvpcb/auto_associate.cpp:178
 msgid "Equivalence File Load Error"
-msgstr ""
+msgstr "Lỗi tải tệp tương đương"
 
 #: cvpcb/auto_associate.cpp:185
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr ""
+msgstr "%lu Footprint/Symbol tương đương được tìm thấy."
 
 #: cvpcb/auto_associate.cpp:261
 #, c-format
@@ -6719,10 +6722,12 @@ msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
 msgstr ""
+"Linh kiện %s: footprint %s không được tìm thấy trong bất kỳ thư viện "
+"footprint nào của dự án."
 
 #: cvpcb/auto_associate.cpp:306
 msgid "CvPcb Warning"
-msgstr ""
+msgstr "Cảnh báo CvPcb"
 
 #: cvpcb/cvpcb.cpp:154
 msgid ""
@@ -6735,98 +6740,108 @@ msgid ""
 "See the \"Footprint Library Table\" section of the CvPcb documentation for "
 "more information."
 msgstr ""
+"Bạn đã chạy CvPcb lần đầu tiên bằng cách sử dụng phương pháp tạo bảng thư "
+"viện footprint mới để tìm các footprint.\n"
+"CvPcb đã sao chép bảng mặc định hoặc tạo một bảng trống trong thư mục chính "
+"của bạn.\n"
+"Trước tiên, bạn phải định cấu hình bảng thư viện để bao gồm tất cả các thư "
+"viện footprint không có trong KiCad.\n"
+"Xem phần \"Bảng Thư viện Footprint\" của tài liệu CvPcb để biết thêm thông "
+"tin."
 
 #: cvpcb/cvpcb.cpp:169
 msgid "An error occurred attempting to load the global footprint library table"
-msgstr ""
+msgstr "Đã xảy ra lỗi khi cố tải bảng thư viện footprint toàn cục"
 
 #: cvpcb/cvpcb_mainframe.cpp:60 cvpcb/menubar.cpp:51
 msgid "Assign Footprints"
-msgstr ""
+msgstr "Chỉ định dấu chân"
 
 #: cvpcb/cvpcb_mainframe.cpp:99 pcbnew/dialogs/panel_fp_lib_table.cpp:1032
 msgid "Footprint Libraries"
-msgstr ""
+msgstr "Thư viện Footprint"
 
 #: cvpcb/cvpcb_mainframe.cpp:103
 msgid "Symbol : Footprint Assignments"
-msgstr ""
+msgstr "Symbol : chỉ định Footprint"
 
 #: cvpcb/cvpcb_mainframe.cpp:106
 msgid "Filtered Footprints"
-msgstr ""
+msgstr "Các Footprint được lọc"
 
 #: cvpcb/cvpcb_mainframe.cpp:142
 #: eeschema/dialogs/dialog_fields_editor_global_base.cpp:105
 msgid "Apply, Save Schematic && Continue"
-msgstr ""
+msgstr "Áp dụng, Lưu Sơ đồ mạch && Tiếp tục"
 
 #: cvpcb/cvpcb_mainframe.cpp:210
 msgid "Symbol to footprint changes are unsaved"
-msgstr ""
+msgstr "Thay đổi Symbol với footprint chưa được lưu"
 
 #: cvpcb/cvpcb_mainframe.cpp:387
 msgid "Symbol to Footprint links have been modified. Save changes?"
-msgstr ""
+msgstr "Các liên kết Symbol đến Footprint đã được sửa đổi. Lưu thay đổi?"
 
 #: cvpcb/cvpcb_mainframe.cpp:525 cvpcb/tools/cvpcb_association_tool.cpp:218
 #, c-format
 msgid "\"%s\" is not a valid footprint."
-msgstr ""
+msgstr "\"%s\" không phải là footprint hợp lệ."
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_component.cpp:1395
 #: eeschema/symbol_editor/symbol_editor.cpp:1214
 #: eeschema/symbol_viewer_frame.cpp:363 pcbnew/generate_footprint_info.cpp:36
 msgid "Keywords"
-msgstr ""
+msgstr "Từ khóa"
 
 #: cvpcb/cvpcb_mainframe.cpp:695
 msgid "Pin Count"
-msgstr ""
+msgstr "Số lượng pin"
 
 #: cvpcb/cvpcb_mainframe.cpp:708 eeschema/sch_component.cpp:1377
 #: eeschema/sch_component.cpp:1381 eeschema/sch_component.cpp:1409
 #: eeschema/sch_component.cpp:1414 eeschema/symbol_editor/symbol_editor.cpp:98
 #: pcbnew/tools/pcb_control.cpp:1065
 msgid "Library"
-msgstr ""
+msgstr "Thư Viện"
 
 #: cvpcb/cvpcb_mainframe.cpp:721
 msgid "Search Text"
-msgstr ""
+msgstr "Tìm kiếm Văn bản"
 
 #: cvpcb/cvpcb_mainframe.cpp:725
 msgid "No Filtering"
-msgstr ""
+msgstr "Không lọc"
 
 #: cvpcb/cvpcb_mainframe.cpp:727
 #, c-format
 msgid "Filtered by %s"
-msgstr ""
+msgstr "Được lọc bởi %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:741
 #, c-format
 msgid "Description: %s;  Keywords: %s"
-msgstr ""
+msgstr "Mô tả: %s;  Từ khóa: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:773
 #, c-format
 msgid "Library location: %s"
-msgstr ""
+msgstr "Vị trí thư viện: %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:775
 msgid "Library location: unknown"
-msgstr ""
+msgstr "Vị trí thư viện: không xác định"
 
 #: cvpcb/cvpcb_mainframe.cpp:788
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
 msgstr ""
+"Không có thư viện footprint nào trong PCB được liệt kê trong bảng thư viện "
+"footprint hiện tại."
 
 #: cvpcb/cvpcb_mainframe.cpp:789
 msgid "Configuration Error"
-msgstr ""
+msgstr "Lỗi Cấu hình"
 
 #: cvpcb/cvpcb_mainframe.cpp:793 pcbnew/footprint_edit_frame.cpp:810
 #: pcbnew/load_select_footprint.cpp:205
@@ -6839,28 +6854,31 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
+"Lỗi tải sơ đồ mạch.\n"
+"%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:49
 #, c-format
 msgid "Project file: \"%s\""
-msgstr ""
+msgstr "Tệp dự án: \"%s\""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:101
 msgid "No editor defined in KiCad. Please choose it."
 msgstr ""
+"Không có trình soạn thảo nào được định nghĩa trong KiCad. Vui lòng chọn nó."
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:248
 msgid "Footprint Association File"
-msgstr ""
+msgstr "Tệp Liên kết footprint"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:292
 #, c-format
 msgid "File \"%s\" already exists in list"
-msgstr ""
+msgstr "Tệp \"%s\" đã tồn tại trong danh sách"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
-msgstr ""
+msgstr "Tệp liên kết footprint và symbol"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
@@ -6868,30 +6886,30 @@ msgstr ""
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:998
 msgid "Add"
-msgstr ""
+msgstr "Thêm"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 #: eeschema/dialogs/dialog_bus_manager.cpp:79
 #: eeschema/dialogs/dialog_bus_manager.cpp:113
 #: eeschema/dialogs/dialog_spice_model_base.cpp:659
 msgid "Remove"
-msgstr ""
+msgstr "Loại bỏ"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:42
 msgid "Move Up"
-msgstr ""
+msgstr "Di chuyển Lên"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:45
 msgid "Move Down"
-msgstr ""
+msgstr "Di chuyển xuống"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:48
 msgid "Edit File"
-msgstr ""
+msgstr "Chỉnh sửa tập tin"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:63
 msgid "Available environment variables for relative paths:"
-msgstr ""
+msgstr "Các biến môi trường có sẵn cho đường dẫn tương đối:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:81
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:967
@@ -6911,32 +6929,33 @@ msgstr ""
 #: pcbnew/footprint.cpp:1918 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:280 pcbnew/text_mod_grid_table.cpp:110
 msgid "Value"
-msgstr ""
+msgstr "Giá trị"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:96
 msgid "Absolute"
-msgstr ""
+msgstr "Tuyệt đối"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:99
 msgid "Relative"
-msgstr ""
+msgstr "Tương đối"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type"
-msgstr ""
+msgstr "Kiểu Đường dẫn"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
-msgstr ""
+msgstr "Ref"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:38
+#, fuzzy
 msgid "Schematic assignment"
-msgstr ""
+msgstr "Chỉ định sơ đồ mạch"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr ""
+msgstr "Gán tệp Cmp"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -6945,41 +6964,46 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
+"Việc gán footprint từ netlist sơ đồ và tệp liên kết footprint và symbol (."
+"cmp) đang xung đột.\n"
+"\n"
+"Vui lòng chọn cài đặt."
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.h:53
 msgid "Footprint Assignment Conflicts"
-msgstr ""
+msgstr "Xung đột gán Footprint"
 
 #: cvpcb/display_footprints_frame.cpp:68
 #: pcbnew/toolbars_footprint_viewer.cpp:157
+#, fuzzy
 msgid "Footprint Viewer"
-msgstr ""
+msgstr "Chương Trình xem Footprint"
 
 #: cvpcb/display_footprints_frame.cpp:377
 #, c-format
 msgid "Footprint ID \"%s\" is not valid."
-msgstr ""
+msgstr "ID footprint \"%s\" không hợp lệ."
 
 #: cvpcb/display_footprints_frame.cpp:392
 #, c-format
 msgid "Library \"%s\" is not in the footprint library table."
-msgstr ""
+msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
 #: cvpcb/display_footprints_frame.cpp:401
 #: cvpcb/display_footprints_frame.cpp:423
 #, c-format
 msgid "Footprint \"%s\" not found."
-msgstr ""
+msgstr "Footprint \"%s\" không tìm thấy."
 
 #: cvpcb/display_footprints_frame.cpp:453 pcbnew/footprint.cpp:783
 #, c-format
 msgid "Footprint: %s"
-msgstr ""
+msgstr "Footprint: %s"
 
 #: cvpcb/display_footprints_frame.cpp:464
 #, c-format
 msgid "Lib: %s"
-msgstr ""
+msgstr "Lib: %s"
 
 #: cvpcb/readwrite_dlgs.cpp:115
 msgid ""
@@ -6988,26 +7012,36 @@ msgid ""
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
 msgstr ""
+"Một số dấu chân được gán là các mục nhập củ không có tên thư viện. Bạn có "
+"muốn Kicad cố gắng chuyển đổi chúng sang định dạng LIB_ID bắt buộc mới "
+"không? (Nếu bạn trả lời không, thì những bài tập này sẽ bị xóa và bạn sẽ cần "
+"phải gán lại chúng theo cách thủ công.)"
 
 #: cvpcb/readwrite_dlgs.cpp:145
 #, c-format
 msgid ""
 "Component \"%s\" footprint \"%s\" was <b>not found</b> in any library.\n"
 msgstr ""
+"Linh kiện \"%s\" footprint \"%s\" <b> không được tìm thấy </b> trong bất kỳ "
+"thư viện nào.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:153
 #, c-format
 msgid ""
 "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n"
 msgstr ""
+"Linh kiện \"%s\" footprint \"%s\" đã được tìm thấy trong <b> nhiều</b> thư "
+"viện.\n"
 
 #: cvpcb/readwrite_dlgs.cpp:166
 msgid "First check your footprint library table entries."
 msgstr ""
+"Đầu tiên hãy kiểm tra các mục được nhập trong bảng thư viện footprint của "
+"bạn."
 
 #: cvpcb/readwrite_dlgs.cpp:168
 msgid "Problematic Footprint Library Tables"
-msgstr ""
+msgstr "Bảng thư viện footprint có vấn đề"
 
 #: cvpcb/readwrite_dlgs.cpp:176
 msgid ""
@@ -7015,6 +7049,8 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
+"Các lỗi sau đã xảy ra khi cố gắng chuyển đổi việc gán footprint:\n"
+"\n"
 
 #: cvpcb/readwrite_dlgs.cpp:179
 msgid ""
@@ -7022,14 +7058,17 @@ msgid ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
+"\n"
+"Bạn sẽ cần phải gán lại chúng bằng tay nếu bạn muốn chúng được cập nhật một "
+"cách chính xác trong lần tiếp theo bạn nhập netlist trong Pcbnew."
 
 #: cvpcb/readwrite_dlgs.cpp:296
 msgid "Schematic saved"
-msgstr ""
+msgstr "Sơ đồ mạch đã được lưu"
 
 #: cvpcb/toolbars_cvpcb.cpp:74
 msgid "Footprint Filters:"
-msgstr ""
+msgstr "Bộ lọc footprint:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:52
 msgid "View selected footprint"
