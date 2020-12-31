@@ -109,7 +109,12 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 arcStart  = aP0 + mp1 + mp0.Resize( mp1.EuclideanNorm() );
                 arcCenter = arcStart + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, aP0, 45 * rotationSign );
-                pl.Append( new_arc );
+
+                if( new_arc.GetP0() == new_arc.GetP1() )
+                    pl.Append( aP0 );
+                else
+                    pl.Append( new_arc );
+
                 pl.Append( aP1 );
             }
             else
@@ -122,7 +127,11 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 new_arc.ConstructFromStartEndAngle( arcStart, aP1, 45 * rotationSign );
 
                 pl.Append( aP0 );
-                pl.Append( new_arc );
+
+                if( new_arc.GetP0() == new_arc.GetP1() )
+                    pl.Append( aP1 );
+                else
+                    pl.Append( new_arc );
             }
         }
         else
@@ -140,7 +149,11 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 new_arc.ConstructFromStartEndAngle( arcStart, aP1, 45 * rotationSign );
 
                 pl.Append( aP0 );
-                pl.Append( new_arc );
+
+                if( new_arc.GetP0() == new_arc.GetP1() )
+                    pl.Append( aP1 );
+                else
+                    pl.Append( new_arc );
             }
             else
             {
@@ -149,7 +162,11 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 arcCenter = arcStart + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
 
-                pl.Append( new_arc );
+                if( new_arc.GetP0() == new_arc.GetP1() )
+                    pl.Append( aP0 );
+                else
+                    pl.Append( new_arc );
+
                 pl.Append( aP1 );
             }
         }
