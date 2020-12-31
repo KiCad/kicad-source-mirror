@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
@@ -33,6 +33,7 @@
 #include <trigo.h>
 #include <i18n_utility.h>
 #include <geometry/shape_circle.h>
+#include <eda_draw_frame.h>
 
 PCB_TARGET::PCB_TARGET( BOARD_ITEM* aParent ) :
     BOARD_ITEM( aParent, PCB_TARGET_T )
@@ -140,6 +141,20 @@ void PCB_TARGET::SwapData( BOARD_ITEM* aImage )
     assert( aImage->Type() == PCB_TARGET_T );
 
     std::swap( *((PCB_TARGET*) this), *((PCB_TARGET*) aImage) );
+}
+
+
+void PCB_TARGET::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
+{
+    EDA_UNITS units = aFrame->GetUserUnits();
+
+    aList.emplace_back( _( "PCB Target" ), wxEmptyString );
+
+    aList.emplace_back( _( "Layer" ), GetLayerName() );
+
+    aList.emplace_back( _( "Size" ), MessageTextFromValue( units, GetSize() ) );
+    aList.emplace_back( _( "Width" ), MessageTextFromValue( units, GetWidth() ) );
+    aList.emplace_back( _( "Shape" ), GetShape() == 0 ? "+" : "X" );
 }
 
 
