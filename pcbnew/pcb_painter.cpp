@@ -640,7 +640,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
             for( unsigned int layer : m_pcbSettings.GetHighContrastLayers() )
             {
-                if( aVia->IsOnLayer( static_cast<PCB_LAYER_ID>( layer ) ) )
+                if( aVia->FlashLayer( static_cast<PCB_LAYER_ID>( layer ), true ) )
                 {
                     draw = true;
                     break;
@@ -692,6 +692,23 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
             || ( aLayer == LAYER_VIA_BBLIND && aVia->GetViaType() == VIATYPE::BLIND_BURIED )
             || ( aLayer == LAYER_VIA_MICROVIA && aVia->GetViaType() == VIATYPE::MICROVIA ) )
     {
+        if( m_pcbSettings.GetHighContrast() )
+        {
+            bool draw_annular = false;
+
+            for( unsigned int layer : m_pcbSettings.GetHighContrastLayers() )
+            {
+                if( aVia->FlashLayer( static_cast<PCB_LAYER_ID>( layer ) , true ) )
+                {
+                    draw_annular = true;
+                    break;
+                }
+            }
+
+            if( !draw_annular )
+                return;
+        }
+
         radius = aVia->GetWidth() / 2.0;
     }
     else
@@ -701,7 +718,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     /// Vias not connected to copper are optionally not drawn
     /// We draw instead the hole size to ensure we show the proper clearance
-    if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer ) )
+    if( IsCopperLayer( aLayer ) && !aVia->FlashLayer( aLayer, true ) )
         radius = getDrillSize( aVia ) / 2.0 ;
 
     bool sketchMode = false;
@@ -900,6 +917,27 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
     // Pad drawing
     BOARD_DESIGN_SETTINGS& bds = aPad->GetBoard()->GetDesignSettings();
     COLOR4D                color = m_pcbSettings.GetColor( aPad, aLayer );
+    bool                   draw_annular = true;
+
+    if( aLayer == LAYER_PADS_TH
+                    && aPad->GetSizeX() <= aPad->GetDrillSizeX()
+                    && aPad->GetSizeY() <= aPad->GetDrillSizeY() )
+    {
+        draw_annular = false;
+    }
+    else if( m_pcbSettings.GetHighContrast() )
+    {
+        draw_annular = false;
+
+        for( unsigned int layer : m_pcbSettings.GetHighContrastLayers() )
+        {
+            if( aPad->FlashLayer( static_cast<PCB_LAYER_ID>( layer ) , true ) )
+            {
+                draw_annular = true;
+                break;
+            }
+        }
+    }
 
     if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
     {
@@ -927,9 +965,7 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
         else
             m_gal->DrawSegment( seg->GetSeg().A, seg->GetSeg().B, seg->GetWidth() );
     }
-    else if( aLayer == LAYER_PADS_TH
-                && aPad->GetSizeX() <= aPad->GetDrillSizeX()
-                && aPad->GetSizeY() <= aPad->GetDrillSizeY() )
+    else if( !draw_annular )
     {
         // no annular ring to draw
     }
