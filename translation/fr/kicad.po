@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-28 15:01+0100\n"
+"POT-Creation-Date: 2020-12-31 11:43+0100\n"
+"PO-Revision-Date: 2020-12-31 17:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -6434,9 +6434,8 @@ msgid "Legacy footprint export files"
 msgstr "Anciens fichiers d'export d'empreintes"
 
 #: common/wildcards_and_files_ext.cpp:440
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Fichier contrôle des règles électroniques"
+msgstr "Fichier contrôle des règles électriques"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
@@ -12968,6 +12967,8 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"Les variables texte n’ont pas pu être définies car il n’y a pas de projet "
+"joint."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -13005,6 +13006,10 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Le bloc ID %s (Nom du bloc: '%s') est dessiné sur la feuille '%s' mais n’est "
+"pas lié à une autre feuille dans la schématique. KiCad exige que tous les "
+"symboles de feuille soient associés à une feuille, de sorte que le bloc n’a "
+"pas été chargé."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -14426,36 +14431,32 @@ msgstr "Librairie de symboles non activée."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving %s symbol library table."
-msgstr ""
-"Erreur en enregistrant la table globale de librairie de symboles:\n"
-"%s"
+msgstr "Erreur en sauvant la table de librairie de symboles %s"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "global"
-msgstr "Global"
+msgstr "global"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "project"
-msgstr "Projet"
+msgstr "projet"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Sauvegarde usuelle"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
 msgstr ""
+"Ne pas effectuer d’opérations supplémentaires après avoir sauvé la librairie."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "Supprimer une librairie de cette table de librairies"
+msgstr "Remplacer l’entrée de la table des librairies"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid ""
@@ -14463,11 +14464,14 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
+"Remplace l'entrée dans la table de librairie de symbole par la nouvelle "
+"librairie.\n"
+"\n"
+"La librairie d’origine ne sera plus disponible pour utilisation."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "Ajouter à Table Globale des Librairies"
+msgstr "Ajouter nouvelle entrée à table globale de librairies"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 msgid ""
@@ -14476,11 +14480,14 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Ajouter une nouvelle entrée à la table de librairie de symboles globale.\n"
+"\n"
+"Le nom logique dans la table de librairie de symbole est suffixé avec\n"
+"un entier pour s’assurer qu’il n’y a pas d’entrées de table en double."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "Créer une table  de librairies de symboles spécifique au projet.\n"
+msgstr "Ajouter une nouvelle entrée à la table de librairies du projet"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid ""
@@ -14489,6 +14496,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Ajouter une nouvelle entrée à la table de librairie de symboles du projet.\n"
+"\n"
+"Le nom logique dans la table de librairie de symbole est suffixé avec\n"
+"un entier pour s’assurer qu’il n’y a pas d’entrées de table en double."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
 #, c-format
@@ -17159,6 +17170,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
 msgstr ""
+"Erreur en créant un nouveau répertoire. Essayer un chemin différent. Le "
+"projet n’a pas été importé."
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -17637,11 +17650,6 @@ msgstr "%s fermé [pid=%d]\n"
 #, c-format
 msgid "%s %s opened [pid=%ld]\n"
 msgstr "%s %s ouvert [pid = %ld]\n"
-
-#: libs/kiplatform/msw/environment.cpp:47
-#, fuzzy, c-format
-msgid "Error code: %d"
-msgstr "Erreur: "
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:222
 msgid "Layout"
@@ -29887,13 +29895,13 @@ msgstr ""
 "d’équivalent KiCad.  Ces éléments n'ont pas été chargés."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
 "Le schéma CADSTAR contient des variantes qui n’ont pas d’équivalent KiCad. "
-"Seule la variante principale ('%s') a été chargée."
+"Seule la variante '%s' a été chargée."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:139
 #, c-format
@@ -29971,13 +29979,13 @@ msgstr ""
 "dans la carte de groupe (ID de groupe parent=%s, Nom=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"La forme pour '%s' est hachurée dans CADSTAR, et n’a pas d’équivalent KiCad. "
-"Remplissage solide à la place."
+"La cote type %s une dimension d'angle, qui n’a pas d’équivalent KiCad. Une "
+"dimension standard a été chargée à la place."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -29986,18 +29994,23 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"La cote type %s a un style \"externe\" dans CADSTAR. Les styles de dimension "
+"externe ne sont pas encore pris en charge dans KiCad. L’objet dimension a "
+"été importé avec un style de dimension interne à la place."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported"
-msgstr "Cote type %s n'a pas d'équivalent dans KiCad. N'a pas été importée."
+msgstr "Cote type %s inattendue N'a pas été importée."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "Cote type %s n'a pas d'équivalent dans KiCad. N'a pas été importée."
+msgstr ""
+"La cote type %s est une cote angulaire et n'a pas d'équivalent dans KiCad. "
+"N'a pas été importée."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
@@ -30042,22 +30055,22 @@ msgstr ""
 "activé . Ce paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1568
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
 "Le modèle CADSTAR '%s' a le paramètre 'Box Isolated Pins' activé. Ce "
-"paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
+"paramètre n’a pas d’équivalent KiCad, il a été ignoré."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"Le modèle CADSTAR '%s' a activé le paramètre 'Automatic Repour'. Ce "
-"paramètre n’a pas d’équivalent KiCad, il a donc été ignoré."
+"Le modèle CADSTAR '%s' a le paramètre 'Automatic Repour' activé. Ce "
+"paramètre n’a pas d’équivalent KiCad, il a été ignoré."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1583
 #, c-format
@@ -30138,6 +30151,8 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
+"Les variables texte n’ont pas pu être définies car il n’y a pas de projet "
+"chargé."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -30211,6 +30226,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
+"La cote type %s utilise un type d’unité qui n’est pas pris en charge dans "
+"KiCad. Des millimètres ont été utilisés à la place."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
@@ -33923,10 +33940,6 @@ msgstr "Continuer sans re-remplir"
 msgid "Performing polygon fills..."
 msgstr "Exécution de remplissage des polygones..."
 
-#: plugins/3d/vrml/vrml.cpp:219
-msgid "[INFO] load failed: input line too long\n"
-msgstr ""
-
 #, c-format
 #~ msgid ""
 #~ "The selected file is not valid or might be corrupt: The layer stack "
@@ -33982,6 +33995,10 @@ msgstr ""
 
 #~ msgid "Continue"
 #~ msgstr "Continuer"
+
+#, fuzzy, c-format
+#~ msgid "Error code: %d"
+#~ msgstr "Erreur: "
 
 #~ msgid "Multi-Symbol Placement"
 #~ msgstr "Placement multi-symbole"
