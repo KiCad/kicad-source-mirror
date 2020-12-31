@@ -31,7 +31,7 @@
 #include <gestfich.h>
 #include <id.h>
 #include <project.h>            // For PROJECT_VAR_NAME definition
-#include <fp_lib_table.h>       // For KISYSMOD definition
+#include <fp_lib_table.h>       // For KICAD6_FOOTPRINT_DIR definition
 
 #include <cvpcb_mainframe.h>
 #include <dialog_config_equfiles.h>

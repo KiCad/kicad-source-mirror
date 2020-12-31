@@ -121,7 +121,7 @@ FP_LIB_TABLE GFootprintTable;
 
 
 // A short lived implementation.  cvpcb will get combine into pcbnew shortly, so
-// we skip setting KISYSMOD here for now.  User should set the environment
+// we skip setting KICAD6_FOOTPRINT_DIR here for now.  User should set the environment
 // variable.
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )

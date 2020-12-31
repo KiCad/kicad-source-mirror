@@ -35,10 +35,10 @@ using STRING_MAP = std::map<wxString, wxString>;
  */
 static const ENV_VAR_LIST predefined_env_vars = {
     "KIPRJMOD",
-    "KICAD_SYMBOL_DIR",
-    "KISYS3DMOD",
-    "KISYSMOD",
-    "KICAD_TEMPLATE_DIR",
+    "KICAD6_SYMBOL_DIR",
+    "KICAD6_3DMODEL_DIR",
+    "KICAD6_FOOTPRINT_DIR",
+    "KICAD6_TEMPLATE_DIR",
     "KICAD_USER_TEMPLATE_DIR",
     "KICAD_PTEMPLATES",
 };
@@ -66,14 +66,14 @@ void initialiseEnvVarHelp( STRING_MAP& aMap )
 {
     // Set up dynamically, as we want to be able to use _() translations,
     // which can't be done statically
-    aMap["KISYSMOD"] =
+    aMap["KICAD6_FOOTPRINT_DIR"] =
         _( "The base path of locally installed system "
             "footprint libraries (.pretty folders).");
-    aMap["KISYS3DMOD"] =
+    aMap["KICAD6_3DMODEL_DIR"] =
         _( "The base path of system footprint 3D shapes (.3Dshapes folders).");
-    aMap["KICAD_SYMBOL_DIR"] =
+    aMap["KICAD6_SYMBOL_DIR"] =
         _( "The base path of the locally installed symbol libraries.");
-    aMap["KICAD_TEMPLATE_DIR"] =
+    aMap["KICAD6_TEMPLATE_DIR"] =
         _( "A directory containing project templates installed with KiCad.");
     aMap["KICAD_USER_TEMPLATE_DIR"] =
         _( "Optional. Can be defined if you want to create your own project "
@@ -84,10 +84,20 @@ void initialiseEnvVarHelp( STRING_MAP& aMap )
           "variable can be used to define files and paths relative to the currently loaded "
           "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
           "folder containing a project specific footprint library named footprints.pretty." );
+    aMap["KICAD6_SCRIPTING_DIR"] =
+        _( "A directory containing system-wide scripts installed with KiCad" );
+    aMap["KICAD6_USER_SCRIPTING_DIR"] =
+        _( "A directory containing user-specific scripts installed with KiCad" );
 
     // Deprecated vars
     aMap["KICAD_PTEMPLATES"] =
         _( "Deprecated version of KICAD_TEMPLATE_DIR.");
+    aMap["KISYS3DMOD"] =
+        _( "Deprecated version of KICAD6_3DMODEL_DIR." );
+    aMap["KISYSMOD"] =
+        _( "Deprecated version of KICAD6_FOOTPRINT_DIR." );
+    aMap["KICAD_SYMBOL_DIR"] =
+        _( "Deprecated version of KICAD_SYMBOL_DIR.");
 }
 
 

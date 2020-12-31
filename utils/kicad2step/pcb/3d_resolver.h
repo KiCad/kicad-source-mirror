@@ -114,7 +114,7 @@ private:
     /**
      * Function createPathList
      * builds the path list using available information such as
-     * KISYS3DMOD and the 3d_path_list configuration file. Invalid
+     * KICAD6_3DMODEL_DIR and the 3d_path_list configuration file. Invalid
      * paths are silently discarded and removed from the configuration
      * file.
      *

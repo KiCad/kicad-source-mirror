@@ -119,13 +119,13 @@ bool PGM_KICAD::OnPgmInit()
                 m_bm.m_search.AddPaths( fn.GetPath() );
         }
 
-        // The KICAD_TEMPLATE_DIR takes precedence over the search stack template path.
-        ENV_VAR_MAP_CITER it = GetLocalEnvVariables().find( "KICAD_TEMPLATE_DIR" );
+        // The KICAD6_TEMPLATE_DIR takes precedence over the search stack template path.
+        ENV_VAR_MAP_CITER it = GetLocalEnvVariables().find( "KICAD6_TEMPLATE_DIR" );
 
         if( it != GetLocalEnvVariables().end() && it->second.GetValue() != wxEmptyString )
             m_bm.m_search.Insert( it->second.GetValue(), 0 );
 
-        // The KICAD_USER_TEMPLATE_DIR takes precedence over KICAD_TEMPLATE_DIR and the search
+        // The KICAD_USER_TEMPLATE_DIR takes precedence over KICAD6_TEMPLATE_DIR and the search
         // stack template path.
         it = GetLocalEnvVariables().find( "KICAD_USER_TEMPLATE_DIR" );
 

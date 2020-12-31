@@ -49,7 +49,7 @@ struct SEARCH_PATH
  * Provide an extensible class to resolve 3D model paths.
  *
  * Initially the legacy behavior will be implemented and an incomplete path would be checked
- * against the project directory or the KISYS3DMOD environment variable. In the future a
+ * against the project directory or the KICAD6_3DMODEL_DIR environment variable. In the future a
  * configurable set of search paths may be specified.
  */
 class FILENAME_RESOLVER
@@ -132,13 +132,13 @@ public:
     /**
      * Return a list of path environment variables local to KiCad.
      *
-     * This list always includes KISYS3DMOD even if it is not defined locally.
+     * This list always includes KICAD6_3DMODEL_DIR even if it is not defined locally.
      */
     bool GetKicadPaths( std::list< wxString >& paths );
 
 private:
     /**
-     * Build the path list using available information such as KISYS3DMOD and the 3d_path_list
+     * Build the path list using available information such as KICAD6_3DMODEL_DIR and the 3d_path_list
      * configuration file.
      *
      * @warning Invalid paths are silently discarded and removed from the configuration file.

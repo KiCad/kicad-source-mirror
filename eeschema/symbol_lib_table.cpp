@@ -478,7 +478,7 @@ LIB_PART* SYMBOL_LIB_TABLE::LoadSymbolWithOptionalNickname( const LIB_ID& aLibId
 
 const wxString SYMBOL_LIB_TABLE::GlobalPathEnvVariableName()
 {
-    return  "KICAD_SYMBOL_DIR";
+    return  "KICAD6_SYMBOL_DIR";
 }
 
 
@@ -504,7 +504,7 @@ bool SYMBOL_LIB_TABLE::LoadGlobalTable( SYMBOL_LIB_TABLE& aTable )
         SystemDirsAppend( &ss );
 
         wxString templatePath =
-            Pgm().GetLocalEnvVariables().at( wxT( "KICAD_TEMPLATE_DIR" ) ).GetValue();
+            Pgm().GetLocalEnvVariables().at( wxT( "KICAD6_TEMPLATE_DIR" ) ).GetValue();
 
         if( !templatePath.IsEmpty() )
             ss.AddPaths( templatePath, 0 );

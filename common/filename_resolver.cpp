@@ -324,8 +324,8 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
     // directory, which has already been checked. This case accounts
     // for partial paths which do not contain ${KIPRJMOD}.
     // This check is performed before checking the path relative to
-    // ${KISYS3DMOD} so that users can potentially override a model
-    // within ${KISYS3DMOD}
+    // ${KICAD6_3DMODEL_DIR} so that users can potentially override a model
+    // within ${KICAD6_3DMODEL_DIR}
     if( !sPL->m_Pathexp.empty() && !tname.StartsWith( ":" ) )
     {
         tmpFN.Assign( sPL->m_Pathexp, "" );
@@ -343,11 +343,11 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
 
     }
 
-    // check the partial path relative to ${KISYS3DMOD} (legacy behavior)
+    // check the partial path relative to ${KICAD6_3DMODEL_DIR} (legacy behavior)
     if( !tname.StartsWith( ":" ) )
     {
         wxFileName fpath;
-        wxString fullPath( "${KISYS3DMOD}" );
+        wxString fullPath( "${KICAD6_3DMODEL_DIR}" );
         fullPath.Append( fpath.GetPathSeparator() );
         fullPath.Append( tname );
         fullPath = ExpandEnvVarSubstitutions( fullPath, m_project );
@@ -374,7 +374,7 @@ wxString FILENAME_RESOLVER::ResolvePath( const wxString& aFileName )
         if( !( m_errflags & ERRFLG_RELPATH ) )
         {
             // this can happen if the file was intended to be relative to
-            // ${KISYS3DMOD} but ${KISYS3DMOD} not set or incorrect.
+            // ${KICAD6_3DMODEL_DIR} but ${KICAD6_3DMODEL_DIR} not set or incorrect.
             m_errflags |= ERRFLG_RELPATH;
             wxString errmsg = "[3D File Resolver] No such path";
             errmsg.append( "\n" );
@@ -447,8 +447,8 @@ bool FILENAME_RESOLVER::addPath( const SEARCH_PATH& aPath )
     if( !path.DirExists() )
     {
         // suppress the message if the missing pathvar is the
-        // legacy KISYS3DMOD variable
-        if( aPath.m_Pathvar.compare( wxT( "${KISYS3DMOD}" ) ) )
+        // legacy KICAD6_3DMODEL_DIR variable
+        if( aPath.m_Pathvar.compare( wxT( "${KICAD6_3DMODEL_DIR}" ) ) )
         {
             wxString msg = _( "The given path does not exist" );
             msg.append( wxT( "\n" ) );
@@ -581,8 +581,8 @@ bool FILENAME_RESOLVER::readPathList()
         if( !getHollerith( cfgLine, idx, al.m_Alias ) )
             continue;
 
-        // never add on KISYS3DMOD from a config file
-        if( !al.m_Alias.Cmp( wxT( "KISYS3DMOD" ) ) )
+        // never add on KICAD6_3DMODEL_DIR from a config file
+        if( !al.m_Alias.Cmp( wxT( "KICAD6_3DMODEL_DIR" ) ) )
             continue;
 
         if( !getHollerith( cfgLine, idx, al.m_Pathvar ) )
@@ -1024,7 +1024,7 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths )
     {
         // filter out URLs, template directories, and known system paths
         if( mS->first == wxString( "KICAD_PTEMPLATES" )
-            || mS->first == wxString( "KISYSMOD" ) )
+            || mS->first == wxString( "KICAD6_FOOTPRINT_DIR" ) )
         {
             ++mS;
             continue;
@@ -1041,14 +1041,14 @@ bool FILENAME_RESOLVER::GetKicadPaths( std::list< wxString >& paths )
         tmp.Append( "}" );
         paths.push_back( tmp );
 
-        if( tmp == "${KISYS3DMOD}" )
+        if( tmp == "${KICAD6_3DMODEL_DIR}" )
             hasKisys3D = true;
 
         ++mS;
     }
 
     if( !hasKisys3D )
-        paths.emplace_back("${KISYS3DMOD}" );
+        paths.emplace_back("${KICAD6_3DMODEL_DIR}" );
 
     return true;
 }

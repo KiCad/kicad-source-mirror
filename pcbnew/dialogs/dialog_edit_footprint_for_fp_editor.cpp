@@ -92,7 +92,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
     if( cfg->m_lastFootprint3dDir.IsEmpty() )
     {
-        wxGetEnv( KISYS3DMOD, &cfg->m_lastFootprint3dDir );
+        wxGetEnv( KICAD6_3DMODEL_DIR, &cfg->m_lastFootprint3dDir );
     }
 
     wxGridCellAttr* attr = new wxGridCellAttr;
@@ -289,7 +289,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     // 3D Settings
 
     wxString default_path;
-    wxGetEnv( KISYS3DMOD, &default_path );
+    wxGetEnv( KICAD6_3DMODEL_DIR, &default_path );
 #ifdef __WINDOWS__
     default_path.Replace( wxT( "/" ), wxT( "\\" ) );
 #endif
@@ -443,11 +443,11 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     wxString sidx = prj.GetRString( PROJECT::VIEWER_3D_FILTER_INDEX );
     int      filter = 0;
 
-    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KISYS3DMOD environment
+    // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KICAD6_3DMODEL_DIR environment
     // varaible and fall back to the project path if necessary.
     if( initialpath.IsEmpty() )
     {
-        if( !wxGetEnv( "KISYS3DMOD", &initialpath ) || initialpath.IsEmpty() )
+        if( !wxGetEnv( "KICAD6_3DMODEL_DIR", &initialpath ) || initialpath.IsEmpty() )
             initialpath = prj.GetProjectPath();
     }
 

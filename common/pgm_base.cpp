@@ -279,8 +279,8 @@ bool PGM_BASE::InitPgm()
     baseSharePath.AppendDir( "kicad" );
 #endif
 
-    // KISYSMOD
-    wxString envVarName = wxT( "KISYSMOD" );
+    // KICAD6_FOOTPRINT_DIR
+    wxString envVarName = wxT( "KICAD6_FOOTPRINT_DIR" );
     ENV_VAR_ITEM envVarItem;
     wxString envValue;
     wxFileName tmpFileName;
@@ -303,8 +303,8 @@ bool PGM_BASE::InitPgm()
                 envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
-    // KISYS3DMOD
-    envVarName = wxT( "KISYS3DMOD" );
+    // KICAD6_3DMODEL_DIR
+    envVarName = wxT( "KICAD6_3DMODEL_DIR" );
 
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
@@ -324,8 +324,8 @@ bool PGM_BASE::InitPgm()
                 envVarName, envVarItem.GetValue() );
     m_local_env_vars[ envVarName ] = envVarItem;
 
-    // KICAD_TEMPLATE_DIR
-    envVarName = "KICAD_TEMPLATE_DIR";
+    // KICAD6_TEMPLATE_DIR
+    envVarName = "KICAD6_TEMPLATE_DIR";
 
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
@@ -400,7 +400,7 @@ bool PGM_BASE::InitPgm()
     m_local_env_vars[ envVarName ] = envVarItem;
 
     // KICAD_SYMBOLS
-    envVarName = wxT( "KICAD_SYMBOL_DIR" );
+    envVarName = wxT( "KICAD6_SYMBOL_DIR" );
 
     if( wxGetEnv( envVarName, &envValue ) == true && !envValue.IsEmpty() )
     {
