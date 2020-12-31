@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 06:04-0800\n"
+"POT-Creation-Date: 2020-12-31 06:36-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -4137,8 +4137,8 @@ msgstr "Text files"
 msgid "Legacy footprint export files"
 msgstr "Legacy footprint export files"
 
-msgid "Electronic rule check file"
-msgstr "Electronic rule check file"
+msgid "Electrical rule check file"
+msgstr "Electrical rule check file"
 
 msgid "Spice library file"
 msgstr "Spice library file"
@@ -8752,6 +8752,9 @@ msgstr ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 
+msgid "Text Variables could not be set as there is no project attached."
+msgstr "Text Variables could not be set as there is no project attached."
+
 #, c-format
 msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
@@ -8777,6 +8780,16 @@ msgid ""
 msgstr ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
+
+#, c-format
+msgid ""
+"The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
+"to another sheet in the design. KiCad requires all sheet symbols to be "
+"associated to a sheet, so the block was not loaded."
+msgstr ""
+"The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
+"to another sheet in the design. KiCad requires all sheet symbols to be "
+"associated to a sheet, so the block was not loaded."
 
 #, c-format
 msgid ""
@@ -9162,8 +9175,12 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "Falling back to cache to set symbol '%s:%s' link '%s'."
 
 #, c-format
-msgid "No library symbol found for schematic symbol '%s %s'. "
-msgstr "No library symbol found for schematic symbol '%s %s'. "
+msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
+msgstr "Setting schematic symbol '%s %s' library identifier to '%s'."
+
+#, c-format
+msgid "No library symbol found for schematic symbol '%s %s'."
+msgstr "No library symbol found for schematic symbol '%s %s'."
 
 msgid "Sheet name"
 msgstr "Sheet name"
@@ -9999,6 +10016,62 @@ msgid "Symbol library not enabled."
 msgstr "Symbol library not enabled."
 
 #, c-format
+msgid "Error saving %s symbol library table."
+msgstr "Error saving %s symbol library table."
+
+msgid "global"
+msgstr "global"
+
+msgid "project"
+msgstr "project"
+
+msgid "Normal save as operation"
+msgstr "Normal save as operation"
+
+msgid "Do not perform any additional operations after saving library."
+msgstr "Do not perform any additional operations after saving library."
+
+msgid "Replace library table entry"
+msgstr "Replace library table entry"
+
+msgid ""
+"Replacy symbol library table entry with new library.\n"
+"\n"
+"The original library will no longer be avaliable for use."
+msgstr ""
+"Replacy symbol library table entry with new library.\n"
+"\n"
+"The original library will no longer be avaliable for use."
+
+msgid "Add new global library table entry"
+msgstr "Add new global library table entry"
+
+msgid ""
+"Add new entry to the global symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to ensure no duplicate table entries."
+msgstr ""
+"Add new entry to the global symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to ensure no duplicate table entries."
+
+msgid "Add new project library table entry"
+msgstr "Add new project library table entry"
+
+msgid ""
+"Add new entry to the project symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to ensure no duplicate table entries."
+msgstr ""
+"Add new entry to the project symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to ensure no duplicate table entries."
+
+#, c-format
 msgid "%s from schematic"
 msgstr "%s from schematic"
 
@@ -10370,6 +10443,12 @@ msgstr "Select Connection"
 msgid "Select a complete connection"
 msgstr "Select a complete connection"
 
+msgid "Save Library As..."
+msgstr "Save Library As..."
+
+msgid "Save the current library to a new file."
+msgstr "Save the current library to a new file."
+
 msgid "New Symbol..."
 msgstr "New Symbol..."
 
@@ -10384,6 +10463,12 @@ msgstr "Show selected symbol on editor canvas"
 
 msgid "Make a copy of the selected symbol"
 msgstr "Make a copy of the selected symbol"
+
+msgid "Save Symbol As..."
+msgstr "Save Symbol As..."
+
+msgid "Save the current symbol to a different library."
+msgstr "Save the current symbol to a different library."
 
 msgid "Remove the selected symbol from its library"
 msgstr "Remove the selected symbol from its library"
@@ -11937,6 +12022,13 @@ msgstr ""
 "their own clean directory.\n"
 "\n"
 "Do you want to create a new empty directory for the project?"
+
+msgid ""
+"Error creating new directory. Please try a different path. The project was "
+"not imported."
+msgstr ""
+"Error creating new directory. Please try a different path. The project was "
+"not imported."
 
 msgid "Import CADSTAR Archive Project Files"
 msgstr "Import CADSTAR Archive Project Files"
@@ -16555,6 +16647,9 @@ msgstr "Filled shape"
 msgid "Graphic Item Properties"
 msgstr "Graphic Item Properties"
 
+msgid "Modified group"
+msgstr "Modified group"
+
 msgid "Group name:"
 msgstr "Group name:"
 
@@ -16929,75 +17024,91 @@ msgstr "Connected layers only"
 msgid "%s and %s"
 msgstr "%s and %s"
 
-msgid "Pad size must be greater than zero"
-msgstr "Pad size must be greater than zero"
+msgid "Warning: Pad size is less than zero."
+msgstr "Warning: Pad size is less than zero."
 
 msgid ""
-"Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
-"overlap"
+"Warning: Pad drill larger than pad size or drill shape and pad shape do not "
+"overlap."
 msgstr ""
-"Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
-"overlap"
+"Warning: Pad drill larger than pad size or drill shape and pad shape do not "
+"overlap."
 
-msgid "Pad local clearance must be zero or greater than zero"
-msgstr "Pad local clearance must be zero or greater than zero"
-
-msgid "Pad local solder mask clearance must be zero or greater than zero"
-msgstr "Pad local solder mask clearance must be zero or greater than zero"
-
-#, c-format
-msgid "Pad local solder mask clearance must be greater than %s"
-msgstr "Pad local solder mask clearance must be greater than %s"
-
-msgid "Error: pad has no layer"
-msgstr "Error: pad has no layer"
+msgid "Error: Negative local clearance values will have no effect."
+msgstr "Error: Negative local clearance values will have no effect."
 
 msgid ""
-"Warning: plated through holes should normally have a copper pad on at least "
-"one layer"
+"Error: Negative solder mask clearances are not supported for custom pad "
+"shapes."
 msgstr ""
-"Warning: plated through holes should normally have a copper pad on at least "
-"one layer"
-
-msgid "Incorrect value for pad offset"
-msgstr "Incorrect value for pad offset"
-
-msgid "Too large value for pad delta size"
-msgstr "Too large value for pad delta size"
-
-msgid "Error: Through hole pad: drill diameter set to 0"
-msgstr "Error: Through hole pad: drill diameter set to 0"
+"Error: Negative solder mask clearances are not supported for custom pad "
+"shapes."
 
 msgid ""
-"Error: Connector pads are not on the solder paste layer\n"
-"Use SMD pads instead"
+"Warning: Negative solder mask clearance larger than pad. No solder mask will "
+"be generated."
 msgstr ""
-"Error: Connector pads are not on the solder paste layer\n"
-"Use SMD pads instead"
+"Warning: Negative solder mask clearance larger than pad. No solder mask will "
+"be generated."
 
-msgid "Warning: The pad has been defined in an inner layer only."
-msgstr "Warning: The pad has been defined in an inner layer only."
+msgid ""
+"Warning: Negative solder paste margins larger than pad. No solder paste mask "
+"will be generated."
+msgstr ""
+"Warning: Negative solder paste margins larger than pad. No solder paste mask "
+"will be generated."
 
-msgid "Property cannot be set for NPTH"
-msgstr "Property cannot be set for NPTH"
+msgid "Error: pad has no layer."
+msgstr "Error: pad has no layer."
 
-msgid "Castellated property can be set only for PTH"
-msgstr "Castellated property can be set only for PTH"
+msgid ""
+"Warning: Plated through holes should normally have a copper pad on at least "
+"one layer."
+msgstr ""
+"Warning: Plated through holes should normally have a copper pad on at least "
+"one layer."
 
-msgid "BGA property can be set only for SMD pads"
-msgstr "BGA property can be set only for SMD pads"
+msgid "Incorrect value for pad offset."
+msgstr "Incorrect value for pad offset."
 
-msgid "Incorrect corner size value"
-msgstr "Incorrect corner size value"
+msgid "Too large value for pad delta size."
+msgstr "Too large value for pad delta size."
 
-msgid "Incorrect (negative) corner size value"
-msgstr "Incorrect (negative) corner size value"
+msgid "Error: Through hole pad has no hole."
+msgstr "Error: Through hole pad has no hole."
 
-msgid "Corner size value must be smaller than 50%"
-msgstr "Corner size value must be smaller than 50%"
+msgid "Error: Connector pads have no solder paste. Use an SMD pad instead."
+msgstr "Error: Connector pads have no solder paste. Use an SMD pad instead."
 
-msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
-msgstr "Incorrect pad shape: the shape must be equivalent to only one polygon"
+msgid "Warning: SMD pad has no outer layers."
+msgstr "Warning: SMD pad has no outer layers."
+
+msgid "Warning: Fiducial property cannot be set on NPTH pads."
+msgstr "Warning: Fiducial property cannot be set on NPTH pads."
+
+msgid "Warning: Testpoint property cannot be set on NPTH pads."
+msgstr "Warning: Testpoint property cannot be set on NPTH pads."
+
+msgid "Warning: Heatsink property cannot be set on NPTH pads."
+msgstr "Warning: Heatsink property cannot be set on NPTH pads."
+
+msgid "Warning: Castellated property can be set only on PTH pads."
+msgstr "Warning: Castellated property can be set only on PTH pads."
+
+msgid "Warning: BGA property can be set only on SMD pads."
+msgstr "Warning: BGA property can be set only on SMD pads."
+
+msgid "Error: Corner size not a number."
+msgstr "Error: Corner size not a number."
+
+msgid "Error: Negative corner size."
+msgstr "Error: Negative corner size."
+
+msgid "Warning: Corner size will make pad circular."
+msgstr "Warning: Corner size will make pad circular."
+
+msgid "Error: Custom pad shape must resolve to a single polygon."
+msgstr "Error: Custom pad shape must resolve to a single polygon."
 
 msgid "Pad setup errors list"
 msgstr "Pad setup errors list"
@@ -18071,31 +18182,22 @@ msgid "Parent footprint description"
 msgstr "Parent footprint description"
 
 #, c-format
-msgid ""
-"This will change the net assigned to %s pad %s to %s.\n"
-"Do you wish to continue?"
-msgstr ""
-"This will change the net assigned to %s pad %s to %s.\n"
-"Do you wish to continue?"
+msgid "Changing the net will also update %s pad %s to %s."
+msgstr "Changing the net will also update %s pad %s to %s."
 
 #, c-format
-msgid ""
-"This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
-"Do you wish to continue?"
-msgstr ""
-"This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
-"Do you wish to continue?"
+msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
+msgstr "Changing the net will also update %s pad %s and %s pad %s to %s."
 
 #, c-format
-msgid ""
-"This will change the net assigned to %lu connected pads to %s.\n"
-"Do you wish to continue?"
-msgstr ""
-"This will change the net assigned to %lu connected pads to %s.\n"
-"Do you wish to continue?"
+msgid "Changing the net will also update %lu connected pads to %s."
+msgstr "Changing the net will also update %lu connected pads to %s."
 
-msgid "Continue"
-msgstr "Continue"
+msgid "Change Nets"
+msgstr "Change Nets"
+
+msgid "Leave Nets Unchanged"
+msgstr "Leave Nets Unchanged"
 
 msgid "Via drill size must be smaller than via diameter"
 msgstr "Via drill size must be smaller than via diameter"
@@ -18105,6 +18207,9 @@ msgstr "Via start layer and end layer cannot be the same"
 
 msgid "Edit track/via properties"
 msgstr "Edit track/via properties"
+
+msgid "Updating nets"
+msgstr "Updating nets"
 
 msgid "Start point X:"
 msgstr "Start point X:"
@@ -19828,11 +19933,11 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB “%s” does not exist.  Do you wish to create it?"
 
 msgid ""
-"This file was created by an older version of Pcbnew.\n"
-"It will be stored in the new file format when you save this file again."
+"This file was created by an older version of KiCad. It will be converted to "
+"the new format when saved."
 msgstr ""
-"This file was created by an older version of Pcbnew.\n"
-"It will be stored in the new file format when you save this file again."
+"This file was created by an older version of KiCad. It will be converted to "
+"the new format when saved."
 
 #, c-format
 msgid "No access rights to write to file \"%s\""
@@ -21144,6 +21249,14 @@ msgstr ""
 
 #, c-format
 msgid ""
+"The CADSTAR design contains variants which has no KiCad equivalent. Only the "
+"variant '%s' was loaded."
+msgstr ""
+"The CADSTAR design contains variants which has no KiCad equivalent. Only the "
+"variant '%s' was loaded."
+
+#, c-format
+msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
@@ -21157,14 +21270,6 @@ msgid ""
 msgstr ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
-
-#, c-format
-msgid ""
-"The selected file is not valid or might be corrupt: The layer stack refers "
-"to layer ID '%s' which does not exist in the layer definitions."
-msgstr ""
-"The selected file is not valid or might be corrupt: The layer stack refers "
-"to layer ID '%s' which does not exist in the layer definitions."
 
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
@@ -21218,8 +21323,34 @@ msgstr ""
 "(parent group ID=%s, Name=%s)."
 
 #, c-format
-msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
-msgstr "Dimension ID %s has no KiCad equivalent. This was not imported"
+msgid ""
+"Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
+"aligned dimension was loaded instead."
+msgstr ""
+"Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
+"aligned dimension was loaded instead."
+
+#, c-format
+msgid ""
+"Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
+"are not yet supported in KiCad. The dimension object was imported with an "
+"internal dimension style instead."
+msgstr ""
+"Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
+"are not yet supported in KiCad. The dimension object was imported with an "
+"internal dimension style instead."
+
+#, c-format
+msgid "Unexpected Dimension type (ID %s). This was not imported"
+msgstr "Unexpected Dimension type (ID %s). This was not imported"
+
+#, c-format
+msgid ""
+"Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
+"object was not imported."
+msgstr ""
+"Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
+"object was not imported."
 
 #, c-format
 msgid ""
@@ -21257,18 +21388,18 @@ msgstr ""
 
 #, c-format
 msgid ""
-"The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
+"The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
+"The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 
 #, c-format
 msgid ""
-"The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
+"The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
+"The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 
 #, c-format
@@ -21340,6 +21471,9 @@ msgstr ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 
+msgid "Text Variables could not be set as there is no project loaded."
+msgstr "Text Variables could not be set as there is no project loaded."
+
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -21399,6 +21533,14 @@ msgstr ""
 "degrees. KiCad only supports hatching 90 degrees apart.  The imported "
 "hatching has two hatches 90 degrees apart, oriented %.1f degrees from "
 "horizontal."
+
+#, c-format
+msgid ""
+"Dimension ID %s uses a type of unit that is not supported in KiCad. "
+"Milimetres were applied instead."
+msgstr ""
+"Dimension ID %s uses a type of unit that is not supported in KiCad. "
+"Milimetres were applied instead."
 
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
@@ -22434,9 +22576,6 @@ msgstr "Copy cancelled"
 
 msgid "_copy"
 msgstr "_copy"
-
-msgid "Modified group"
-msgstr "Modified group"
 
 msgid "Grouping"
 msgstr "Grouping"
@@ -24169,6 +24308,147 @@ msgstr "Performing polygon fills…"
 
 msgid "[INFO] load failed: input line too long\n"
 msgstr "[INFO] load failed: input line too long\n"
+
+#~ msgid "Electronic rule check file"
+#~ msgstr "Electronic rule check file"
+
+#, c-format
+#~ msgid "No library symbol found for schematic symbol '%s %s'. "
+#~ msgstr "No library symbol found for schematic symbol '%s %s'. "
+
+#~ msgid "Pad size must be greater than zero"
+#~ msgstr "Pad size must be greater than zero"
+
+#~ msgid ""
+#~ "Warning: Pad drill bigger than pad size or drill shape and pad shape do "
+#~ "not overlap"
+#~ msgstr ""
+#~ "Warning: Pad drill bigger than pad size or drill shape and pad shape do "
+#~ "not overlap"
+
+#~ msgid "Pad local clearance must be zero or greater than zero"
+#~ msgstr "Pad local clearance must be zero or greater than zero"
+
+#~ msgid "Pad local solder mask clearance must be zero or greater than zero"
+#~ msgstr "Pad local solder mask clearance must be zero or greater than zero"
+
+#, c-format
+#~ msgid "Pad local solder mask clearance must be greater than %s"
+#~ msgstr "Pad local solder mask clearance must be greater than %s"
+
+#~ msgid "Error: pad has no layer"
+#~ msgstr "Error: pad has no layer"
+
+#~ msgid ""
+#~ "Warning: plated through holes should normally have a copper pad on at "
+#~ "least one layer"
+#~ msgstr ""
+#~ "Warning: plated through holes should normally have a copper pad on at "
+#~ "least one layer"
+
+#~ msgid "Incorrect value for pad offset"
+#~ msgstr "Incorrect value for pad offset"
+
+#~ msgid "Too large value for pad delta size"
+#~ msgstr "Too large value for pad delta size"
+
+#~ msgid "Error: Through hole pad: drill diameter set to 0"
+#~ msgstr "Error: Through hole pad: drill diameter set to 0"
+
+#~ msgid ""
+#~ "Error: Connector pads are not on the solder paste layer\n"
+#~ "Use SMD pads instead"
+#~ msgstr ""
+#~ "Error: Connector pads are not on the solder paste layer\n"
+#~ "Use SMD pads instead"
+
+#~ msgid "Warning: The pad has been defined in an inner layer only."
+#~ msgstr "Warning: The pad has been defined in an inner layer only."
+
+#~ msgid "Property cannot be set for NPTH"
+#~ msgstr "Property cannot be set for NPTH"
+
+#~ msgid "Castellated property can be set only for PTH"
+#~ msgstr "Castellated property can be set only for PTH"
+
+#~ msgid "BGA property can be set only for SMD pads"
+#~ msgstr "BGA property can be set only for SMD pads"
+
+#~ msgid "Incorrect corner size value"
+#~ msgstr "Incorrect corner size value"
+
+#~ msgid "Incorrect (negative) corner size value"
+#~ msgstr "Incorrect (negative) corner size value"
+
+#~ msgid "Corner size value must be smaller than 50%"
+#~ msgstr "Corner size value must be smaller than 50%"
+
+#~ msgid ""
+#~ "Incorrect pad shape: the shape must be equivalent to only one polygon"
+#~ msgstr ""
+#~ "Incorrect pad shape: the shape must be equivalent to only one polygon"
+
+#, c-format
+#~ msgid ""
+#~ "This will change the net assigned to %s pad %s to %s.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "This will change the net assigned to %s pad %s to %s.\n"
+#~ "Do you wish to continue?"
+
+#, c-format
+#~ msgid ""
+#~ "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
+#~ "Do you wish to continue?"
+
+#, c-format
+#~ msgid ""
+#~ "This will change the net assigned to %lu connected pads to %s.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "This will change the net assigned to %lu connected pads to %s.\n"
+#~ "Do you wish to continue?"
+
+#~ msgid "Continue"
+#~ msgstr "Continue"
+
+#~ msgid ""
+#~ "This file was created by an older version of Pcbnew.\n"
+#~ "It will be stored in the new file format when you save this file again."
+#~ msgstr ""
+#~ "This file was created by an older version of Pcbnew.\n"
+#~ "It will be stored in the new file format when you save this file again."
+
+#, c-format
+#~ msgid ""
+#~ "The selected file is not valid or might be corrupt: The layer stack "
+#~ "refers to layer ID '%s' which does not exist in the layer definitions."
+#~ msgstr ""
+#~ "The selected file is not valid or might be corrupt: The layer stack "
+#~ "refers to layer ID '%s' which does not exist in the layer definitions."
+
+#, c-format
+#~ msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
+#~ msgstr "Dimension ID %s has no KiCad equivalent. This was not imported"
+
+#, c-format
+#~ msgid ""
+#~ "The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. "
+#~ "This setting has no KiCad equivalent, so it has been ignored."
+#~ msgstr ""
+#~ "The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. "
+#~ "This setting has no KiCad equivalent, so it has been ignored."
+
+#, c-format
+#~ msgid ""
+#~ "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
+#~ "setting has no KiCad equivalent, so it has been ignored."
+#~ msgstr ""
+#~ "The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
+#~ "setting has no KiCad equivalent, so it has been ignored."
 
 #~ msgid ""
 #~ "Derived symbols must be save in the same library\n"

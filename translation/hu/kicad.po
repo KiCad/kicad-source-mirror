@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-27 06:04-0800\n"
+"POT-Creation-Date: 2020-12-31 06:36-0800\n"
 "PO-Revision-Date: 2019-06-03 15:48+0200\n"
 "Last-Translator: szlldm\n"
 "Language-Team: szlldm\n"
@@ -99,7 +99,7 @@ msgstr "Z tengely:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:781
-#: pcbnew/pad.cpp:873
+#: pcbnew/pad.cpp:893
 msgid "Rotation"
 msgstr "Forgatás"
 
@@ -346,7 +346,7 @@ msgstr "Alapértelmezett beállítások visszaállítása"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:71
 #: eeschema/menubar.cpp:269
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:163
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:164
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:439
@@ -356,7 +356,7 @@ msgstr "Beállítások"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:270
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:164
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:165
 #: gerbview/menubar.cpp:213 kicad/menubar.cpp:166
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:440
@@ -365,7 +365,7 @@ msgstr "Megnyitott eszközök beállításai "
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:286
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
 #: eeschema/toolbars_symbol_viewer.cpp:130 gerbview/menubar.cpp:229
 #: kicad/menubar.cpp:176 pagelayout_editor/menubar.cpp:172
 #: pcbnew/menubar_footprint_editor.cpp:250 pcbnew/menubar_pcb_editor.cpp:456
@@ -375,14 +375,14 @@ msgstr "Fálj"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:85
 #: eeschema/menubar.cpp:287
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:181
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:182
 #: pagelayout_editor/menubar.cpp:173 pcbnew/menubar_footprint_editor.cpp:251
 #: pcbnew/menubar_pcb_editor.cpp:457
 msgid "&Edit"
 msgstr "Szerkesztés"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223 eeschema/menubar.cpp:288
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:182
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
 #: eeschema/toolbars_symbol_viewer.cpp:131 gerbview/menubar.cpp:230
 #: kicad/menubar.cpp:177 pagelayout_editor/menubar.cpp:174
 #: pcbnew/menubar_footprint_editor.cpp:252 pcbnew/menubar_pcb_editor.cpp:458
@@ -816,7 +816,7 @@ msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szüks�
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:853 common/confirm.cpp:125
 #: common/confirm.cpp:264 common/dialogs/panel_setup_severities.cpp:40
-#: kicad/tools/kicad_manager_control.cpp:174
+#: kicad/import_project.cpp:118 kicad/tools/kicad_manager_control.cpp:174
 #: pcbnew/router/length_tuner_tool.cpp:166
 msgid "Error"
 msgstr "Hiba"
@@ -1586,10 +1586,10 @@ msgstr "Kérdés"
 #: common/confirm.cpp:124 common/confirm.cpp:252
 #: common/dialogs/panel_setup_severities.cpp:40
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:156
-#: eeschema/sheet.cpp:567 eeschema/symbol_editor/symbol_editor.cpp:327
-#: eeschema/symbol_editor/symbol_editor.cpp:605
-#: eeschema/symbol_editor/symbol_editor.cpp:800
-#: eeschema/symbol_editor/symbol_editor.cpp:1146
+#: eeschema/sheet.cpp:567 eeschema/symbol_editor/symbol_editor.cpp:413
+#: eeschema/symbol_editor/symbol_editor.cpp:692
+#: eeschema/symbol_editor/symbol_editor.cpp:892
+#: eeschema/symbol_editor/symbol_editor.cpp:1279
 #: pcbnew/dialogs/dialog_export_vrml.cpp:181
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:334
 #: pcbnew/plugins/kicad/pcb_parser.cpp:675
@@ -1601,7 +1601,7 @@ msgid "If you don't save, all your changes will be permanently lost."
 msgstr "Ha nem menti, az összes módosítás véglegesen elvész."
 
 #: common/confirm.cpp:156 common/confirm.cpp:183 common/tool/actions.cpp:65
-#: eeschema/symbol_editor/symbol_editor.cpp:661
+#: eeschema/symbol_editor/symbol_editor.cpp:753
 #: eeschema/widgets/tuner_slider_base.cpp:66
 #: pcbnew/footprint_libraries_utils.cpp:891
 msgid "Save"
@@ -1642,14 +1642,14 @@ msgstr "Információ"
 
 #: common/confirm.cpp:293
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:155
-#: eeschema/tools/symbol_editor_pin_tool.cpp:225 kicad/import_project.cpp:93
+#: eeschema/tools/symbol_editor_pin_tool.cpp:225 kicad/import_project.cpp:94
 #: kicad/tools/kicad_manager_control.cpp:258
 #: pcbnew/dialogs/dialog_export_idf.cpp:162
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:359
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:357
 #: pcbnew/footprint_libraries_utils.cpp:438
 #: pcbnew/footprint_libraries_utils.cpp:963 pcbnew/router/router_tool.cpp:1312
-#: pcbnew/router/router_tool.cpp:1700 pcbnew/zone_filler.cpp:419
+#: pcbnew/router/router_tool.cpp:1718 pcbnew/zone_filler.cpp:421
 msgid "Confirmation"
 msgstr "Megerősítés"
 
@@ -1657,8 +1657,8 @@ msgstr "Megerősítés"
 #: common/dialogs/dialog_configure_paths_base.cpp:94
 #: common/lib_tree_model_adapter.cpp:273
 #: common/widgets/widget_hotkey_list.cpp:451 eeschema/sch_component.cpp:1393
-#: eeschema/symbol_editor/symbol_editor.cpp:649
-#: eeschema/symbol_editor/symbol_editor.cpp:1213
+#: eeschema/symbol_editor/symbol_editor.cpp:741
+#: eeschema/symbol_editor/symbol_editor.cpp:1346
 #: eeschema/symbol_viewer_frame.cpp:362 include/lib_table_grid.h:189
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
@@ -2021,7 +2021,7 @@ msgstr "Környezeti változók"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:278
 #: eeschema/fields_grid_table.cpp:194 eeschema/lib_pin.cpp:981
 #: eeschema/sch_component.cpp:1362 eeschema/sch_component.cpp:1403
-#: eeschema/sch_pin.cpp:177 eeschema/symbol_editor/symbol_editor.cpp:1185
+#: eeschema/sch_pin.cpp:177 eeschema/symbol_editor/symbol_editor.cpp:1318
 #: eeschema/symbol_viewer_frame.cpp:360
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
@@ -3292,12 +3292,12 @@ msgstr "Nagyítás"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:324
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:420
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:79
-#: pcbnew/dialogs/dialog_pad_properties.cpp:916
-#: pcbnew/dialogs/dialog_pad_properties.cpp:925
-#: pcbnew/dialogs/dialog_pad_properties.cpp:935
+#: pcbnew/dialogs/dialog_pad_properties.cpp:918
+#: pcbnew/dialogs/dialog_pad_properties.cpp:927
+#: pcbnew/dialogs/dialog_pad_properties.cpp:937
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
-#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1354
+#: pcbnew/dialogs/dialog_plot_base.cpp:117 pcbnew/pad.cpp:1374
 #: pcbnew/widgets/appearance_controls.cpp:662 pcbnew/zone.cpp:1390
 msgid "None"
 msgstr "Nincs"
@@ -3527,8 +3527,8 @@ msgstr "Hozzárendeli a kijelölt vezetékekhez"
 #: common/dialogs/panel_setup_netclasses_base.cpp:207
 #: pcbnew/board_connected_item.cpp:163
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:33
-#: pcbnew/dialogs/dialog_net_inspector.cpp:70 pcbnew/pad.cpp:829
-#: pcbnew/track.cpp:694 pcbnew/zone.cpp:586
+#: pcbnew/dialogs/dialog_net_inspector.cpp:70 pcbnew/pad.cpp:849
+#: pcbnew/track.cpp:707 pcbnew/zone.cpp:586
 msgid "Net"
 msgstr "Vezeték"
 
@@ -3846,13 +3846,13 @@ msgstr "Szitanyomat"
 #: common/eda_item.cpp:261 eeschema/dialogs/dialog_fields_editor_global.cpp:968
 #: eeschema/sch_component.cpp:1390
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:114
-#: pcbnew/fp_text.cpp:283 pcbnew/load_select_footprint.cpp:342
-#: pcbnew/pad.cpp:822
+#: pcbnew/fp_text.cpp:283 pcbnew/load_select_footprint.cpp:349
+#: pcbnew/pad.cpp:842
 msgid "Footprint"
 msgstr "Alkatrészrajzolat"
 
 #: common/eda_item.cpp:262 pcbnew/dialogs/dialog_board_statistics.cpp:481
-#: pcbnew/pad.cpp:824
+#: pcbnew/pad.cpp:844
 msgid "Pad"
 msgstr "Forrszem"
 
@@ -3876,12 +3876,12 @@ msgstr "Alsó alkatrészrajzolat szövegek"
 msgid "Zone"
 msgstr "Zónák"
 
-#: common/eda_item.cpp:268 pcbnew/track.cpp:603
+#: common/eda_item.cpp:268 pcbnew/track.cpp:616
 msgid "Track"
 msgstr "Vezetősáv"
 
 #: common/eda_item.cpp:269 pcbnew/dialogs/dialog_board_statistics.cpp:481
-#: pcbnew/track.cpp:658
+#: pcbnew/track.cpp:671
 #, fuzzy
 msgid "Via"
 msgstr "Viák (átvezetőfuratok)"
@@ -3925,7 +3925,7 @@ msgstr "Elemek"
 msgid "Net Info"
 msgstr "Vezeték azonosító"
 
-#: common/eda_item.cpp:279 pcbnew/pcb_group.cpp:292
+#: common/eda_item.cpp:279 pcbnew/pcb_group.cpp:298
 #: pcbnew/tools/pcb_actions.cpp:658
 #, fuzzy
 msgid "Group"
@@ -4009,23 +4009,23 @@ msgstr "Szitanyomat"
 
 #: common/eda_item.cpp:304
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:166
-#: eeschema/symbol_editor/symbol_editor.cpp:1210
+#: eeschema/symbol_editor/symbol_editor.cpp:1343
 msgid "Symbol"
 msgstr "Rajzjel"
 
 #: common/eda_item.cpp:306 eeschema/lib_arc.h:70
 #: gerbview/gerber_draw_item.cpp:233 pcbnew/board_item.cpp:37
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:111
-#: pcbnew/dialogs/dialog_pad_properties.cpp:707
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2110 pcbnew/pcb_shape.cpp:486
+#: pcbnew/dialogs/dialog_pad_properties.cpp:709
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2141 pcbnew/pcb_shape.cpp:486
 msgid "Arc"
 msgstr "Körív"
 
 #: common/eda_item.cpp:307 eeschema/lib_circle.h:53
 #: gerbview/gerber_draw_item.cpp:236 pcbnew/board_item.cpp:38
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43
-#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:135 pcbnew/pad.cpp:1030
-#: pcbnew/pad.cpp:1345 pcbnew/pcb_shape.cpp:479
+#: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:135 pcbnew/pad.cpp:1050
+#: pcbnew/pad.cpp:1365 pcbnew/pcb_shape.cpp:479
 msgid "Circle"
 msgstr "Kör"
 
@@ -4036,7 +4036,7 @@ msgstr "Rajzjel név"
 
 #: common/eda_item.cpp:309 common/page_layout/ws_draw_item.cpp:118
 #: eeschema/lib_rectangle.h:54
-#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1346
+#: pcbnew/dialogs/dialog_dimension_properties_base.cpp:43 pcbnew/pad.cpp:1366
 #: pcbnew/pcb_shape.cpp:510
 msgid "Rectangle"
 msgstr "Négyszög"
@@ -4048,8 +4048,8 @@ msgstr "Vonal / sokszög"
 
 #: common/eda_item.cpp:311 eeschema/lib_bezier.h:54
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:97
-#: pcbnew/dialogs/dialog_pad_properties.cpp:701
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2111
+#: pcbnew/dialogs/dialog_pad_properties.cpp:703
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2142
 msgid "Bezier"
 msgstr "Bezier"
 
@@ -4078,7 +4078,7 @@ msgid "Image"
 msgstr "Kép"
 
 #: common/eda_text.cpp:496 eeschema/dialogs/dialog_edit_label_base.cpp:124
-#: eeschema/sch_text.cpp:675 eeschema/symbol_editor/symbol_editor.cpp:1203
+#: eeschema/sch_text.cpp:675 eeschema/symbol_editor/symbol_editor.cpp:1336
 #: gerbview/gerber_file_image.cpp:352 gerbview/gerber_file_image.cpp:356
 #: gerbview/gerber_file_image.cpp:359
 #: pcbnew/microwave/microwave_polygon.cpp:132
@@ -4148,7 +4148,7 @@ msgstr "Balra"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:92
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:108
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:315
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:172
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:174
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:114
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:135
 msgid "Center"
@@ -4224,10 +4224,10 @@ msgstr "Látható"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:43
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:161
-#: pcbnew/fp_text.cpp:304 pcbnew/pad.cpp:860 pcbnew/pcb_shape.cpp:513
+#: pcbnew/fp_text.cpp:304 pcbnew/pad.cpp:880 pcbnew/pcb_shape.cpp:513
 #: pcbnew/pcb_shape.cpp:540 pcbnew/pcb_target.cpp:155 pcbnew/pcb_text.cpp:120
-#: pcbnew/text_mod_grid_table.cpp:91 pcbnew/track.cpp:609 pcbnew/track.cpp:1026
-#: pcbnew/track.cpp:1043 pcbnew/track.cpp:1062
+#: pcbnew/text_mod_grid_table.cpp:91 pcbnew/track.cpp:622 pcbnew/track.cpp:1039
+#: pcbnew/track.cpp:1056 pcbnew/track.cpp:1075
 msgid "Width"
 msgstr "Szélesség"
 
@@ -4236,7 +4236,7 @@ msgstr "Szélesség"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:665
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:56
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:56
-#: pcbnew/fp_text.cpp:307 pcbnew/pad.cpp:861 pcbnew/pcb_shape.cpp:516
+#: pcbnew/fp_text.cpp:307 pcbnew/pad.cpp:881 pcbnew/pcb_shape.cpp:516
 #: pcbnew/pcb_text.cpp:121 pcbnew/text_mod_grid_table.cpp:92
 msgid "Height"
 msgstr "Magasság"
@@ -4443,7 +4443,7 @@ msgid "Cannot copy file \"%s\"."
 msgstr "A(z) \"%s\" fájl nem másolható."
 
 #: common/grid_tricks.cpp:240 common/tool/actions.cpp:152
-#: eeschema/tools/ee_actions.cpp:137 pcbnew/tools/edit_tool.cpp:1422
+#: eeschema/tools/ee_actions.cpp:146 pcbnew/tools/edit_tool.cpp:1430
 msgid "Cut"
 msgstr "Kivágás"
 
@@ -4452,7 +4452,7 @@ msgid "Clear selected cells placing original contents on clipboard"
 msgstr "A kijelölt cellák tartalmának vágólapra történő áthelyezése"
 
 #: common/grid_tricks.cpp:241 common/tool/actions.cpp:158
-#: eeschema/tools/ee_actions.cpp:142
+#: eeschema/tools/ee_actions.cpp:151
 msgid "Copy"
 msgstr "Másolás"
 
@@ -4490,7 +4490,7 @@ msgstr ""
 msgid "Pan Up/Down"
 msgstr ""
 
-#: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:239
+#: common/hotkey_store.cpp:45 eeschema/tools/ee_actions.cpp:248
 msgid "Finish Drawing"
 msgstr "Rajzolás vége"
 
@@ -4529,12 +4529,12 @@ msgstr ""
 "%s\n"
 
 #: common/hotkey_store.cpp:67 eeschema/eeschema_config.cpp:64
-#: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1225
+#: eeschema/menubar.cpp:127 eeschema/sch_edit_frame.cpp:1230
 msgid "Eeschema"
 msgstr "Eeschema - Kapcsolási rajz szerkesztő"
 
 #: common/hotkey_store.cpp:68 pcbnew/menubar_pcb_editor.cpp:188
-#: pcbnew/pcb_edit_frame.cpp:1192 pcbnew/pcbnew_config.cpp:54
+#: pcbnew/pcb_edit_frame.cpp:1191 pcbnew/pcbnew_config.cpp:54
 msgid "Pcbnew"
 msgstr "Pcbnew - Nyáktervező"
 
@@ -5196,7 +5196,7 @@ msgid "Illegal character found in revision"
 msgstr "Érvénytelen karakter található a \"revision\"-ben"
 
 #: common/lib_tree_model.cpp:139 eeschema/lib_item.cpp:61
-#: eeschema/sch_pin.cpp:166 eeschema/symbol_editor/symbol_editor.cpp:1198
+#: eeschema/sch_pin.cpp:166 eeschema/symbol_editor/symbol_editor.cpp:1331
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:56
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:67
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:78
@@ -5359,22 +5359,22 @@ msgstr ""
 msgid "The KiCad language file for this language is not installed."
 msgstr ""
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:1979
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2202
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:240
 #: pcbnew/plugins/altium/altium_pcb.cpp:60
 #, fuzzy, c-format
 msgid "Cannot open file '%s'"
 msgstr "A(z) \"%s\" fájl nem másolható."
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:1995
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2013
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2029
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2035
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2041
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2218
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2236
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2252
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2258
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2264
 msgid "The selected file is not valid or might be corrupt!"
 msgstr ""
 
-#: common/plugins/cadstar/cadstar_archive_parser.cpp:2139
+#: common/plugins/cadstar/cadstar_archive_parser.cpp:2363
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr ""
@@ -5670,7 +5670,7 @@ msgstr ""
 msgid "Paste item(s) from clipboard with options"
 msgstr "Tartalom beillesztése vágólapról"
 
-#: common/tool/actions.cpp:181 eeschema/tools/ee_actions.cpp:127
+#: common/tool/actions.cpp:181 eeschema/tools/ee_actions.cpp:132
 msgid "Duplicate"
 msgstr "Duplikálás"
 
@@ -5678,9 +5678,9 @@ msgstr "Duplikálás"
 msgid "Duplicates the selected item(s)"
 msgstr "Kijelölt elem(ek) duplikálása"
 
-#: common/tool/actions.cpp:187 eeschema/tools/ee_actions.cpp:132
+#: common/tool/actions.cpp:187 eeschema/tools/ee_actions.cpp:141
 #: kicad/project_tree_pane.cpp:760 pcbnew/plugins/kicad/pcb_parser.cpp:678
-#: pcbnew/tools/edit_tool.cpp:1424
+#: pcbnew/tools/edit_tool.cpp:1432
 msgid "Delete"
 msgstr "Töröl"
 
@@ -6057,8 +6057,8 @@ msgid "Browse symbol libraries"
 msgstr "Rajzjelkönyvtár böngésző"
 
 #: common/tool/actions.cpp:567 eeschema/eeschema_config.cpp:219
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:111
-#: eeschema/symbol_editor/symbol_editor.cpp:67
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:112
+#: eeschema/symbol_editor/symbol_editor.cpp:153
 msgid "Symbol Editor"
 msgstr "Rajzjel szerkesztő"
 
@@ -6688,7 +6688,8 @@ msgid "Legacy footprint export files"
 msgstr "Örökölt alkatrészrajzolat export fájl (*.emp)"
 
 #: common/wildcards_and_files_ext.cpp:440
-msgid "Electronic rule check file"
+#, fuzzy
+msgid "Electrical rule check file"
 msgstr "Elektromos szabályellenőrzési fájl (.erc)|*.erc"
 
 #: common/wildcards_and_files_ext.cpp:446
@@ -6832,7 +6833,7 @@ msgstr "A(z) \"%s\" nem érvényes LIB_ID."
 
 #: cvpcb/cvpcb_mainframe.cpp:679 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_component.cpp:1395
-#: eeschema/symbol_editor/symbol_editor.cpp:1214
+#: eeschema/symbol_editor/symbol_editor.cpp:1347
 #: eeschema/symbol_viewer_frame.cpp:363 pcbnew/generate_footprint_info.cpp:36
 msgid "Keywords"
 msgstr "Kulcsszavak:"
@@ -6844,7 +6845,7 @@ msgstr "Forrszemek száma"
 
 #: cvpcb/cvpcb_mainframe.cpp:708 eeschema/sch_component.cpp:1377
 #: eeschema/sch_component.cpp:1381 eeschema/sch_component.cpp:1409
-#: eeschema/sch_component.cpp:1414 eeschema/symbol_editor/symbol_editor.cpp:98
+#: eeschema/sch_component.cpp:1414 eeschema/symbol_editor/symbol_editor.cpp:184
 #: pcbnew/tools/pcb_control.cpp:1065
 msgid "Library"
 msgstr "Könyvtár"
@@ -6890,7 +6891,7 @@ msgid "Configuration Error"
 msgstr "Konfigurációs hiba"
 
 #: cvpcb/cvpcb_mainframe.cpp:793 pcbnew/footprint_edit_frame.cpp:810
-#: pcbnew/load_select_footprint.cpp:205
+#: pcbnew/load_select_footprint.cpp:212
 msgid "Loading Footprint Libraries"
 msgstr "Alkatrészrajzolat könyvtárak betöltése"
 
@@ -6934,7 +6935,7 @@ msgstr "Rajzjel - alkatrészrajzolat hozzárendelés fájl (.equ)"
 #: eeschema/dialogs/dialog_bus_manager.cpp:77
 #: eeschema/dialogs/dialog_bus_manager.cpp:111
 #: eeschema/dialogs/dialog_spice_model_base.cpp:651
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:998
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1008
 msgid "Add"
 msgstr "Hozzáadás"
 
@@ -6976,7 +6977,7 @@ msgstr "Elérhető környezeti változók relatív útvonala:"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:61
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:54
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:453 pcbnew/dimension.cpp:327
-#: pcbnew/footprint.cpp:1918 pcbnew/footprint_wizard_frame.cpp:328
+#: pcbnew/footprint.cpp:1916 pcbnew/footprint_wizard_frame.cpp:328
 #: pcbnew/fp_text.cpp:280 pcbnew/text_mod_grid_table.cpp:110
 msgid "Value"
 msgstr "Érték"
@@ -7278,7 +7279,7 @@ msgstr ""
 "történő betöltése során."
 
 #: eeschema/class_library.cpp:495
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:908
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:918
 #: eeschema/symbol_tree_model_adapter.cpp:65
 msgid "Loading Symbol Libraries"
 msgstr "Rajzjelkönyvtárak betöltése"
@@ -7347,13 +7348,13 @@ msgstr ""
 "Mind %s, mind %s ugyanahhoz a vezetékhez lett hozzácsatolva. A netlistában a "
 "%s címke lesz használva."
 
-#: eeschema/connection_graph.cpp:2360
+#: eeschema/connection_graph.cpp:2367
 #, fuzzy, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "A(z) %s (%s) és %s (%s) össze van kötve, de nem tagja a busznak"
 
-#: eeschema/connection_graph.cpp:2732
+#: eeschema/connection_graph.cpp:2739
 #, fuzzy, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "Eltérés a hierarchikus címkék és lábak között"
@@ -8146,7 +8147,7 @@ msgstr "Lefelé"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:156
-#: pcbnew/footprint.cpp:1920 pcbnew/pad.cpp:1376
+#: pcbnew/footprint.cpp:1918 pcbnew/pad.cpp:1396
 #: pcbnew/text_mod_grid_table.cpp:96
 msgid "Orientation"
 msgstr "Tájolás"
@@ -8196,7 +8197,7 @@ msgstr "Passzív"
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:231
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:121
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:44
-#: pcbnew/pad.cpp:1370 pcbnew/pcb_shape.cpp:474 pcbnew/pcb_target.cpp:158
+#: pcbnew/pad.cpp:1390 pcbnew/pcb_shape.cpp:474 pcbnew/pcb_target.cpp:158
 msgid "Shape"
 msgstr "Alak"
 
@@ -8529,12 +8530,12 @@ msgstr "Csoportosítás"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:966
 #: eeschema/dialogs/dialog_rescue_each.cpp:133 eeschema/sch_component.cpp:1350
-#: eeschema/sch_component.cpp:1400 pcbnew/footprint.cpp:1916
+#: eeschema/sch_component.cpp:1400 pcbnew/footprint.cpp:1914
 msgid "Reference"
 msgstr "Referencia"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:969
-#: eeschema/symbol_editor/symbol_editor.cpp:1215
+#: eeschema/symbol_editor/symbol_editor.cpp:1348
 msgid "Datasheet"
 msgstr "Adatlap"
 
@@ -8863,7 +8864,7 @@ msgstr "Lábnév szövegméret"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:69
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:51
 #: eeschema/lib_pin.cpp:993 eeschema/sch_pin.cpp:189 pcbnew/pcb_shape.cpp:499
-#: pcbnew/pcb_shape.cpp:524 pcbnew/track.cpp:620
+#: pcbnew/pcb_shape.cpp:524 pcbnew/track.cpp:633
 msgid "Length"
 msgstr "Hosszúság"
 
@@ -9100,7 +9101,7 @@ msgid "Delete alternate body style (DeMorgan) draw items from symbol?"
 msgstr "Törli az alternatív (DeMorgan) rajzjel elemeit?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:313
-#: eeschema/symbol_editor/symbol_editor.cpp:750
+#: eeschema/symbol_editor/symbol_editor.cpp:842
 #, c-format
 msgid "The name '%s' conflicts with an existing entry in the library '%s'."
 msgstr "A(z) \"%s\" név már létezik a(z) \"%s\" könyvtárban."
@@ -9378,7 +9379,7 @@ msgid "New Label"
 msgstr "Új címke"
 
 #: eeschema/dialogs/dialog_migrate_buses.cpp:104
-#: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/track.cpp:726
+#: pcbnew/dialogs/dialog_find_base.cpp:120 pcbnew/track.cpp:739
 msgid "Status"
 msgstr "Állapot"
 
@@ -9498,7 +9499,7 @@ msgstr "Generátor eltávolítása..."
 
 #: eeschema/dialogs/dialog_netlist_base.cpp:85
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.cpp:28
-#: eeschema/symbol_editor/symbol_editor.cpp:665
+#: eeschema/symbol_editor/symbol_editor.cpp:757
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:27
 #: pcbnew/board_stackup_manager/dialog_dielectric_list_manager_base.cpp:35
 #: pcbnew/footprint_libraries_utils.cpp:895
@@ -10122,7 +10123,7 @@ msgid "Electrical Rules"
 msgstr "Elektromos szabályellenőrző"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:74
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:990
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1000
 #: pcbnew/dialogs/dialog_board_setup.cpp:87
 #: pcbnew/dialogs/dialog_board_statistics.cpp:649
 #: pcbnew/footprint_libraries_utils.cpp:496
@@ -10495,7 +10496,7 @@ msgstr "SPICE irányelvek:"
 msgid "Load directives from schematic"
 msgstr "Irányelvek betöltése a kapcsolási rajzból"
 
-#: eeschema/dialogs/dialog_sim_settings_base.cpp:436 pcbnew/pad.cpp:1351
+#: eeschema/dialogs/dialog_sim_settings_base.cpp:436 pcbnew/pad.cpp:1371
 msgid "Custom"
 msgstr "Egyedi"
 
@@ -11039,7 +11040,7 @@ msgid "Update Symbol from Library..."
 msgstr "Mezők frissítése könyvtárból..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:216
-#: eeschema/tools/ee_actions.cpp:418
+#: eeschema/tools/ee_actions.cpp:427
 #, fuzzy
 msgid "Change Symbol..."
 msgstr "Új rajzjel..."
@@ -11275,7 +11276,7 @@ msgstr "Adatlap"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:26
 #: pcbnew/footprint_edit_frame.cpp:239 pcbnew/footprint_edit_frame.cpp:725
-#: pcbnew/pcb_edit_frame.cpp:262 pcbnew/pcb_edit_frame.cpp:1127
+#: pcbnew/pcb_edit_frame.cpp:262 pcbnew/pcb_edit_frame.cpp:1126
 #, fuzzy
 msgid "Appearance"
 msgstr "Szigetelési távolság"
@@ -11718,7 +11719,7 @@ msgstr ""
 "Válassza ki a könyvtártáblázatot amelyhez hozzá akarja adni a könyvtárat:"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:485
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:997
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1007
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:862
 msgid "Skip"
 msgstr "Kihagy"
@@ -11783,8 +11784,10 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_lib_table.cpp:987
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1000
 #: eeschema/sch_base_frame.cpp:218 eeschema/sch_base_frame.cpp:234
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1366
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1422
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1054
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1067 pcbnew/files.cpp:1128
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1067 pcbnew/files.cpp:1134
 msgid "File Save Error"
 msgstr "Hiba a fájl mentése közben"
 
@@ -12100,7 +12103,7 @@ msgstr ""
 "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során.\n"
 "%s"
 
-#: eeschema/files-io.cpp:135 pcbnew/files.cpp:881
+#: eeschema/files-io.cpp:135 pcbnew/files.cpp:887
 #, fuzzy, c-format
 msgid "Failed to create temporary file \"%s\""
 msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
@@ -12114,14 +12117,14 @@ msgstr ""
 "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során.\n"
 "%s"
 
-#: eeschema/files-io.cpp:156 pcbnew/files.cpp:900
+#: eeschema/files-io.cpp:156 pcbnew/files.cpp:906
 #, fuzzy, c-format
 msgid "Failed to rename temporary file \"%s\""
 msgstr "Nem sikerült létrehozni a(z) \"%s\" fájlt"
 
 #: eeschema/files-io.cpp:186 pagelayout_editor/files.cpp:159
 #: pagelayout_editor/files.cpp:173 pagelayout_editor/files.cpp:204
-#: pcbnew/files.cpp:930
+#: pcbnew/files.cpp:936
 #, fuzzy, c-format
 msgid "File \"%s\" saved."
 msgstr "A(z) %s fájl mentése megtörtént"
@@ -12226,7 +12229,7 @@ msgstr ""
 "\n"
 "El szeretné menteni az aktuális dokumentumot, mielőtt folytatná?"
 
-#: eeschema/files-io.cpp:661 pcbnew/files.cpp:139
+#: eeschema/files-io.cpp:661 pcbnew/files.cpp:141
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:248
 msgid "All supported formats|"
 msgstr "Minden támogatott formátum|"
@@ -12291,7 +12294,7 @@ msgstr "Megnevezés"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: eeschema/getpart.cpp:136 pcbnew/load_select_footprint.cpp:230
+#: eeschema/getpart.cpp:136 pcbnew/load_select_footprint.cpp:237
 msgid "Recently Used"
 msgstr "Legutoljára használt"
 
@@ -12347,7 +12350,7 @@ msgid "Arc, radius %s"
 msgstr "sugár %s"
 
 #: eeschema/lib_circle.cpp:253
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:174
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:176
 #: pcbnew/pcb_shape.cpp:482 pcbnew/pcb_shape.cpp:492
 msgid "Radius"
 msgstr "Sugár"
@@ -12359,13 +12362,13 @@ msgstr "sugár %s"
 
 #: eeschema/lib_item.cpp:54 eeschema/lib_pin.cpp:983 eeschema/sch_pin.cpp:159
 #: eeschema/sch_pin.cpp:179 eeschema/sch_text.cpp:690
-#: eeschema/symbol_editor/symbol_editor.cpp:1212
+#: eeschema/symbol_editor/symbol_editor.cpp:1345
 #: gerbview/gerber_draw_item.cpp:667
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:37
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:25
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:74
 #: pcbnew/fp_text.cpp:288 pcbnew/pcb_marker.cpp:93 pcbnew/pcb_shape.cpp:472
-#: pcbnew/track.cpp:603 pcbnew/track.cpp:661 pcbnew/zone.cpp:560
+#: pcbnew/track.cpp:616 pcbnew/track.cpp:674 pcbnew/zone.cpp:560
 msgid "Type"
 msgstr "Típus"
 
@@ -12483,7 +12486,7 @@ msgid ""
 msgstr ""
 "Aktuális lap lecserélése egy másik alkalmazásból importált kapcsolási rajzzal"
 
-#: eeschema/menubar.cpp:112 eeschema/symbol_editor/menubar_symbol_editor.cpp:70
+#: eeschema/menubar.cpp:112 eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 #: pcbnew/dialogs/dialog_export_step.cpp:130
 #: pcbnew/dialogs/dialog_export_svg.cpp:92
 #: pcbnew/menubar_footprint_editor.cpp:85 pcbnew/menubar_pcb_editor.cpp:132
@@ -12491,21 +12494,21 @@ msgid "Export"
 msgstr "Exportolás"
 
 #: eeschema/menubar.cpp:180
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:122
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:123
 #: gerbview/menubar.cpp:176 pagelayout_editor/menubar.cpp:117
 #: pcbnew/menubar_footprint_editor.cpp:149 pcbnew/menubar_pcb_editor.cpp:250
 msgid "&Units"
 msgstr "Mértékegységek"
 
 #: eeschema/menubar.cpp:289
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
 #: pagelayout_editor/menubar.cpp:175 pcbnew/menubar_footprint_editor.cpp:253
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "&Place"
 msgstr "Hozzáad"
 
 #: eeschema/menubar.cpp:290
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:184
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
 #: pagelayout_editor/menubar.cpp:176 pcbnew/menubar_footprint_editor.cpp:254
 #: pcbnew/menubar_pcb_editor.cpp:461
 msgid "&Inspect"
@@ -12517,7 +12520,7 @@ msgid "&Tools"
 msgstr "Eszközök"
 
 #: eeschema/menubar.cpp:292
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:185
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:186
 #: pagelayout_editor/menubar.cpp:177 pcbnew/menubar_footprint_editor.cpp:256
 #: pcbnew/menubar_pcb_editor.cpp:463
 msgid "P&references"
@@ -12797,8 +12800,8 @@ msgstr "Az alábbi könyvtárak nem találhatóak:"
 msgid "New schematic file is unsaved"
 msgstr "A(z) \"%s\" kapcsolási rajz fájl nem található."
 
-#: eeschema/sch_edit_frame.cpp:628
-#: eeschema/symbol_editor/symbol_editor.cpp:1118
+#: eeschema/sch_edit_frame.cpp:633
+#: eeschema/symbol_editor/symbol_editor.cpp:1251
 #: pagelayout_editor/pl_editor_frame.cpp:357
 #: pcbnew/footprint_edit_frame.cpp:615 pcbnew/pcb_edit_frame.cpp:790
 #, c-format
@@ -12808,7 +12811,7 @@ msgstr ""
 "\"%s\"\n"
 "változásait mielőtt bezárja?"
 
-#: eeschema/sch_edit_frame.cpp:790
+#: eeschema/sch_edit_frame.cpp:795
 #, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -12819,39 +12822,39 @@ msgstr ""
 "lett elindítva. A kívánt munkafolyamatok használatához mindig a KiCad "
 "keretrendszerből indítsa el a programokat."
 
-#: eeschema/sch_edit_frame.cpp:904
+#: eeschema/sch_edit_frame.cpp:909
 msgid "Schematic"
 msgstr "Kapcsolási rajz"
 
-#: eeschema/sch_edit_frame.cpp:921
+#: eeschema/sch_edit_frame.cpp:926
 msgid "New Schematic"
 msgstr "Új kapcsolási rajz"
 
-#: eeschema/sch_edit_frame.cpp:933
+#: eeschema/sch_edit_frame.cpp:938
 #, c-format
 msgid "Schematic file \"%s\" already exists."
 msgstr "A(z) \"%s\" kapcsolási rajz fájl már létezik."
 
-#: eeschema/sch_edit_frame.cpp:954
+#: eeschema/sch_edit_frame.cpp:959
 msgid "Open Schematic"
 msgstr "Kapcsolási rajz megnyitása"
 
-#: eeschema/sch_edit_frame.cpp:1037
+#: eeschema/sch_edit_frame.cpp:1042
 msgid "Could not open CvPcb"
 msgstr "Nem sikerült megnyitni az alkatrésztársítót"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1229
 #, fuzzy
 msgid "[no file]"
 msgstr "[nincs fájl]"
 
-#: eeschema/sch_edit_frame.cpp:1239 kicad/kicad_manager_frame.cpp:614
-#: pcbnew/footprint_edit_frame.cpp:775 pcbnew/pcb_edit_frame.cpp:1188
+#: eeschema/sch_edit_frame.cpp:1244 kicad/kicad_manager_frame.cpp:614
+#: pcbnew/footprint_edit_frame.cpp:775 pcbnew/pcb_edit_frame.cpp:1187
 #, fuzzy
 msgid "[Read Only]"
 msgstr "[Csak olvasható]"
 
-#: eeschema/sch_edit_frame.cpp:1412
+#: eeschema/sch_edit_frame.cpp:1417
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Kiemelt vezeték: %s"
@@ -13006,7 +13009,7 @@ msgid "Power symbol creates a global label with name '%s'"
 msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:66
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:60
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:63
 #, c-format
 msgid ""
 "The design is too large and cannot be imported into KiCad. \n"
@@ -13016,39 +13019,38 @@ msgid ""
 "Maximum permitted design size: %.2f, %.2f millimeters.\n"
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:98
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:111
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:99
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:106
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:107
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:113
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:119
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:114
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:122
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:170
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:124
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:171
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:127
 msgid ""
 "The CADSTAR design has been imported successfully.\n"
 "Please review the import errors and warnings (if any)."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:224
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:225
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:300
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:301
 #, c-format
 msgid ""
 "Part definition '%s' references symbol '%s' (alternate '%s') which could not "
@@ -13056,35 +13058,35 @@ msgid ""
 "library."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:335
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:336
 #, c-format
 msgid ""
 "Symbol '%s' references part '%s' which could not be found in the library. "
 "The symbol was not loaded"
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:358
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:359
 #, c-format
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:368
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:369
 #, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:449
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:450
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a component or a net "
 "power / symbol. The symbol was not loaded."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:462
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:463
 #, c-format
 msgid ""
 "Symbol '%s' is scaled in the original CADSTAR schematic but this is not "
@@ -13092,14 +13094,18 @@ msgid ""
 "manual fixing."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:864
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:884
 #, c-format
 msgid ""
 "Documentation Symbol '%s' refers to symbol definition ID '%s' which does not "
 "exist in the library. The symbol was not loaded."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1144
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
+msgid "Text Variables could not be set as there is no project attached."
+msgstr ""
+
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
 msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
@@ -13107,21 +13113,29 @@ msgid ""
 "connecting wires will need manual fixing."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1160
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1240
 #, c-format
 msgid ""
 "Symbol '%s' references sheet ID '%s' which does not exist in the design. The "
 "symbol was not loaded."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1243
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1323
 #, c-format
 msgid ""
 "Net %s references unknown net element %s. The net was not properly loaded "
 "and may require manual fixing."
 msgstr ""
 
-#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1531
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1604
+#, c-format
+msgid ""
+"The block ID %s (Block name: '%s') is drawn on sheet '%s' but is not linked "
+"to another sheet in the design. KiCad requires all sheet symbols to be "
+"associated to a sheet, so the block was not loaded."
+msgstr ""
+
+#: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
@@ -13532,7 +13546,7 @@ msgstr ""
 msgid "symbol document library file is empty"
 msgstr "a rajzjel dokumentumtár fájl üres"
 
-#: eeschema/sch_screen.cpp:591 eeschema/sch_screen.cpp:688
+#: eeschema/sch_screen.cpp:591
 #, fuzzy, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'. "
 msgstr "Érvénytelen rajzjel könyvtár azonosító"
@@ -13561,9 +13575,14 @@ msgstr "Hiba történt a könyvtár mentésekor"
 msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
+#: eeschema/sch_screen.cpp:688
+#, fuzzy, c-format
+msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
+msgstr "Érvénytelen rajzjel könyvtár azonosító"
+
 #: eeschema/sch_screen.cpp:699
 #, fuzzy, c-format
-msgid "No library symbol found for schematic symbol '%s %s'. "
+msgid "No library symbol found for schematic symbol '%s %s'."
 msgstr ""
 "Nem található alternatív rajzjel a(z) \"%s\" rajzjelhez a(z) \"%s\" "
 "könyvtárban."
@@ -14061,7 +14080,7 @@ msgstr "Beállítások"
 msgid "Welcome!"
 msgstr "Üdvözöljük!"
 
-#: eeschema/sim/sim_plot_frame.cpp:449 eeschema/sim/sim_plot_frame.cpp:1295
+#: eeschema/sim/sim_plot_frame.cpp:449 eeschema/sim/sim_plot_frame.cpp:1302
 msgid "There were errors during netlist export, aborted."
 msgstr "Hiba történt a netlista exportálásakor, megszakítva."
 
@@ -14083,7 +14102,7 @@ msgstr "Hiba a papírelrendezés fájl írása közben"
 msgid "Error: simulation type doesn't support plotting!\n"
 msgstr ""
 
-#: eeschema/sim/sim_plot_frame.cpp:805 eeschema/sim/sim_plot_frame.cpp:1439
+#: eeschema/sim/sim_plot_frame.cpp:805 eeschema/sim/sim_plot_frame.cpp:1446
 msgid "Signal"
 msgstr "Jel"
 
@@ -14111,12 +14130,12 @@ msgstr "Ábra mentése képként"
 msgid "Save Plot Data"
 msgstr "Ábra mentése adatsorként"
 
-#: eeschema/sim/sim_plot_frame.cpp:1329
+#: eeschema/sim/sim_plot_frame.cpp:1336
 #, fuzzy
 msgid "You need to run plot-providing simulation first."
 msgstr "Először futtatnia kell a szimulátort."
 
-#: eeschema/sim/sim_plot_frame.cpp:1525
+#: eeschema/sim/sim_plot_frame.cpp:1532
 #, fuzzy
 msgid ""
 "\n"
@@ -14125,19 +14144,19 @@ msgid ""
 "\n"
 msgstr "Szimulátor beállítások"
 
-#: eeschema/sim/sim_plot_frame.cpp:1587
+#: eeschema/sim/sim_plot_frame.cpp:1594
 msgid "Hide Signal"
 msgstr "Jel elrejtése"
 
-#: eeschema/sim/sim_plot_frame.cpp:1588
+#: eeschema/sim/sim_plot_frame.cpp:1595
 msgid "Erase the signal from plot screen"
 msgstr "Jel eltávolítása az ábráról"
 
-#: eeschema/sim/sim_plot_frame.cpp:1594
+#: eeschema/sim/sim_plot_frame.cpp:1601
 msgid "Hide Cursor"
 msgstr "Kurzor elrejtése"
 
-#: eeschema/sim/sim_plot_frame.cpp:1596
+#: eeschema/sim/sim_plot_frame.cpp:1603
 msgid "Show Cursor"
 msgstr "Kurzor megjelenítése"
 
@@ -14303,21 +14322,21 @@ msgstr "Kérjük, töltse ki a kötelező mezőket"
 msgid "\"%s\" is not a valid Spice value"
 msgstr "A(z) \"%s\" nem érvényes SPICE érték"
 
-#: eeschema/symbol_editor/menubar_symbol_editor.cpp:78
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:97
+#: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:98
 msgid "Library Editor"
 msgstr "Könyvtár szerkesztő"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:169
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:170
 #: pcbnew/footprint_edit_frame.cpp:231 pcbnew/footprint_edit_frame.cpp:721
 msgid "Libraries"
 msgstr "Könyvtárak"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:218
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:219
 msgid "Library changes are unsaved"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:499
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:509
 #, fuzzy
 msgid "Save changes to schematic before closing?"
 msgstr ""
@@ -14325,47 +14344,47 @@ msgstr ""
 "\"%s\"\n"
 "változásait mielőtt bezárja?"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:548
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:558
 #: eeschema/tools/sch_edit_tool.cpp:112
 #, c-format
 msgid "Unit %s"
 msgstr "%s részegység"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:710
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:720
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:719
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:729
 #, fuzzy
 msgid "Manage symbol libraries"
 msgstr "Rajzjel könyvtárak kezelése..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:730
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:740
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:750
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:744
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:754
 #, fuzzy, c-format
 msgid "Open %s"
 msgstr ""
 "\n"
 "\"%s\" megnyitása\n"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:820
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:830
 #, c-format
 msgid "Library \"%s\" already exists"
 msgstr "A(z) \"%s\" könyvtár már létezik"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:834
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:844
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -14374,48 +14393,48 @@ msgstr ""
 "Nem sikerült létrehozni a '%s' könyvtár fájlt.\n"
 "Ellenőrizze az írási engedélyeket."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:844
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:854
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:203
 msgid "Could not open the library file."
 msgstr "A könyvtár fájlt nem lehet megnyitni."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:913
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:923
 #: eeschema/symbol_tree_model_adapter.cpp:75
 #, c-format
 msgid "Loading library \"%s\""
 msgstr "A(z) \"%s\" könyvtár betöltése"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:978
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:988
 #, fuzzy
 msgid "Add the library to the global library table?"
 msgstr "Egy üres globális %s könyvtártáblázat létrehozása"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:979
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:989
 #, fuzzy
 msgid "Add To Global Library Table"
 msgstr "Hozzáadás a könyvtártáblázathoz"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:989
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:999
 #: pcbnew/footprint_libraries_utils.cpp:495
 msgid "Global"
 msgstr "Globális műveletek"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:992
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1002
 #: pcbnew/footprint_libraries_utils.cpp:499
 msgid "Choose the Library Table to add the library to:"
 msgstr ""
 "Válassza ki a könyvtártáblázatot amelyhez hozzá akarja adni a könyvtárat:"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:993
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1003
 msgid "Add To Library Table"
 msgstr "Hozzáadás a könyvtártáblázathoz"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1025
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
 #, c-format
 msgid "Failed to save backup to \"%s\""
 msgstr "Nem sikerült menteni a biztonsági mentést a(z) \"%s\"-ba."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1167
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1177
 #: eeschema/symbol_viewer_frame.cpp:386
 #, fuzzy, c-format
 msgid ""
@@ -14426,12 +14445,12 @@ msgstr ""
 "\"%s\".\n"
 "Nyissa meg a \"Könyvtárak kezelése\" menüpontot a szerkesztéshez."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1170
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1180
 #: eeschema/symbol_viewer_frame.cpp:389
 msgid "Library not found in symbol library table."
 msgstr "A könyvtár nem található a könyvtártáblázatban."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1178
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1188
 #: eeschema/symbol_viewer_frame.cpp:393
 #, fuzzy, c-format
 msgid ""
@@ -14442,126 +14461,192 @@ msgstr ""
 "konfiguráció.\n"
 "Nyissa meg a \"Könyvtárak kezelése\" menüpontot a szerkesztéshez."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1181
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1191
 #: eeschema/symbol_viewer_frame.cpp:396
 msgid "Symbol library not enabled."
 msgstr "A könyvtár nincs engedélyezve"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:55
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
+#, fuzzy, c-format
+msgid "Error saving %s symbol library table."
+msgstr ""
+"Hiba történt a globális könyvtártáblázat mentése során:\n"
+"%s"
+
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
+#, fuzzy
+msgid "global"
+msgstr "Globális műveletek"
+
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
+#, fuzzy
+msgid "project"
+msgstr "Projekt"
+
+#: eeschema/symbol_editor/symbol_editor.cpp:57
+msgid "Normal save as operation"
+msgstr ""
+
+#: eeschema/symbol_editor/symbol_editor.cpp:59
+msgid "Do not perform any additional operations after saving library."
+msgstr ""
+
+#: eeschema/symbol_editor/symbol_editor.cpp:62
+#, fuzzy
+msgid "Replace library table entry"
+msgstr "Könyvtár eltávolítása a táblázatból"
+
+#: eeschema/symbol_editor/symbol_editor.cpp:63
+msgid ""
+"Replacy symbol library table entry with new library.\n"
+"\n"
+"The original library will no longer be avaliable for use."
+msgstr ""
+
+#: eeschema/symbol_editor/symbol_editor.cpp:67
+#, fuzzy
+msgid "Add new global library table entry"
+msgstr "Hozzáadás a könyvtártáblázathoz"
+
+#: eeschema/symbol_editor/symbol_editor.cpp:68
+msgid ""
+"Add new entry to the global symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to ensure no duplicate table entries."
+msgstr ""
+
+#: eeschema/symbol_editor/symbol_editor.cpp:73
+#, fuzzy
+msgid "Add new project library table entry"
+msgstr "Projekt rajzjel könyvtártáblázat létrehozva.\n"
+
+#: eeschema/symbol_editor/symbol_editor.cpp:74
+msgid ""
+"Add new entry to the project symbol library table.\n"
+"\n"
+"The symbol library table nickname is suffixed with\n"
+"an integer to ensure no duplicate table entries."
+msgstr ""
+
+#: eeschema/symbol_editor/symbol_editor.cpp:141
 #, fuzzy, c-format
 msgid "%s from schematic"
 msgstr "Mérőpont a kapcsolási rajzból"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:64
+#: eeschema/symbol_editor/symbol_editor.cpp:150
 #, fuzzy
 msgid "[Read Only Library]"
 msgstr "[Csak olvasható]"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:92
+#: eeschema/symbol_editor/symbol_editor.cpp:178
 msgid "No symbol libraries are loaded."
 msgstr "Nincsenek könyvtárak betöltve."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:114
+#: eeschema/symbol_editor/symbol_editor.cpp:200
 msgid "Select Symbol Library"
 msgstr "Könyvtár kiválasztása"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:162
+#: eeschema/symbol_editor/symbol_editor.cpp:248
 msgid "The current symbol has been modified.  Save changes?"
 msgstr "A rajzjel módosult. Kívánja menteni a módosításokat?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:188
+#: eeschema/symbol_editor/symbol_editor.cpp:274
 #, c-format
 msgid "Error occurred loading symbol \"%s\" from library \"%s\"."
 msgstr "Hiba a(z) \"%s\" rajzjel \"%s\" könyvtárból történő betöltése során."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:290
+#: eeschema/symbol_editor/symbol_editor.cpp:376
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:53
 msgid "Import Symbol"
 msgstr "Rajzjel importálása"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:312
+#: eeschema/symbol_editor/symbol_editor.cpp:398
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #, c-format
 msgid "Cannot import symbol library \"%s\"."
 msgstr "A(z) \"%s\" könyvtár nem importálható."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:319
+#: eeschema/symbol_editor/symbol_editor.cpp:405
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:85
 #, c-format
 msgid "Symbol library file \"%s\" is empty."
 msgstr "A(z) \"%s\" könyvtár fájl üres."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:326
+#: eeschema/symbol_editor/symbol_editor.cpp:412
 #, c-format
 msgid "More than one symbol found in symbol file \"%s\"."
 msgstr "Egynél több rajzjel található a(z) \"%s\" rajzjelfájlban."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:393
+#: eeschema/symbol_editor/symbol_editor.cpp:479
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:122
 msgid "Export Symbol"
 msgstr "Rajzjel exportálása"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:413
+#: eeschema/symbol_editor/symbol_editor.cpp:499
 #, c-format
 msgid "Saving symbol in \"%s\""
 msgstr "Rajzjel mentése (ebben: \"%s\")"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:429
+#: eeschema/symbol_editor/symbol_editor.cpp:515
 #, c-format
 msgid "An error occurred saving symbol file \"%s\""
 msgstr "Hiba lépett fel a(z) \"%s\" rajzjel fájl mentése közben."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:469
+#: eeschema/symbol_editor/symbol_editor.cpp:555
 msgid "This new symbol has no name and cannot be created."
 msgstr "Az új rajzjelnek nincs neve, így nem hozható létre."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:480
+#: eeschema/symbol_editor/symbol_editor.cpp:566
 #, c-format
 msgid "Symbol \"%s\" already exists in library \"%s\""
 msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:602
-#: eeschema/symbol_editor/symbol_editor.cpp:1141
+#: eeschema/symbol_editor/symbol_editor.cpp:688
+#: eeschema/symbol_editor/symbol_editor.cpp:1274
 #, fuzzy, c-format
 msgid "Symbol library '%s' is not writeable."
 msgstr "A könyvtár nincs engedélyezve"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:603
-#: eeschema/symbol_editor/symbol_editor.cpp:1142
+#: eeschema/symbol_editor/symbol_editor.cpp:690
+#: eeschema/symbol_editor/symbol_editor.cpp:1275
 #, fuzzy
 msgid "You must save to a different location."
 msgstr "Differenciális jelvezeték jelcsúszás kompenzálása"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:648 include/lib_table_grid.h:183
+#: eeschema/symbol_editor/symbol_editor.cpp:740 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:878
 #: pcbnew/footprint_libraries_utils.cpp:1114
 msgid "Nickname"
 msgstr "Megnevezés"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:659
+#: eeschema/symbol_editor/symbol_editor.cpp:751
 msgid "Save Copy of Symbol"
 msgstr "Rajzjel másolat mentése"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:660
+#: eeschema/symbol_editor/symbol_editor.cpp:752
 #: pcbnew/footprint_libraries_utils.cpp:890
 msgid "Save in library:"
 msgstr "Rajzjel könyvtárba mentés:"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:692
+#: eeschema/symbol_editor/symbol_editor.cpp:784
 msgid "No library specified.  Symbol could not be saved."
 msgstr "Nincs megadva könyvtár. A rajzjel nem menthető."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:701
+#: eeschema/symbol_editor/symbol_editor.cpp:793
 msgid ""
 "Derived symbols must be saved in the same library as their parent symbol."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:720
+#: eeschema/symbol_editor/symbol_editor.cpp:812
 #, fuzzy, c-format
 msgid "Symbol '%s' already exists in library '%s'"
 msgstr "A(z) \"%s\" rajzjel már létezik a(z) \"%s\" könyvtárban"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:792
+#: eeschema/symbol_editor/symbol_editor.cpp:884
 #, c-format
 msgid ""
 "The symbol \"%s\" is used to derive other symbols.\n"
@@ -14570,70 +14655,70 @@ msgid ""
 "Do you wish to delete this symbol and all of it's derivatives?"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_editor.cpp:797
+#: eeschema/symbol_editor/symbol_editor.cpp:889
 #, fuzzy
 msgid "Delete Symbol"
 msgstr "Rajzjel kiválasztása"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:798
+#: eeschema/symbol_editor/symbol_editor.cpp:890
 #, fuzzy
 msgid "Keep Symbol"
 msgstr "Új rajzjel"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:936
+#: eeschema/symbol_editor/symbol_editor.cpp:1028
 #: pcbnew/footprint_libraries_utils.cpp:992
 #, c-format
 msgid "Revert \"%s\" to last version saved?"
 msgstr "\"%s\" visszaállítása az utolsó mentett verzióra?"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1004
+#: eeschema/symbol_editor/symbol_editor.cpp:1096
 #, c-format
 msgid "Symbol name \"%s\" not found in library \"%s\""
 msgstr "A(z) \"%s\" rajzjel név nem található a(z) \"%s\" könyvtárban"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1030
+#: eeschema/symbol_editor/symbol_editor.cpp:1123
 msgid "No library specified."
 msgstr "Nincs könyvtár kiválasztva."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1049
+#: eeschema/symbol_editor/symbol_editor.cpp:1142
 #, c-format
 msgid "Save Library \"%s\" As..."
 msgstr "A(z) \"%s\" könyvtár mentése másként..."
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1081
+#: eeschema/symbol_editor/symbol_editor.cpp:1181
 #, c-format
 msgid "Failed to save changes to symbol library file \"%s\""
 msgstr "Nem sikerült menteni a(z) \"%s\" könyvtár fájl változásokat"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1083
+#: eeschema/symbol_editor/symbol_editor.cpp:1183
 msgid "Error saving library"
 msgstr "Hiba történt a könyvtár mentésekor"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1091
+#: eeschema/symbol_editor/symbol_editor.cpp:1224
 #, c-format
 msgid "Symbol library file \"%s\" saved"
 msgstr "A(z) \"%s\" könyvtár fájl mentve"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1191
+#: eeschema/symbol_editor/symbol_editor.cpp:1324
 #, fuzzy
 msgid "Undefined!"
 msgstr "Meghatározatlan!!!"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1192
+#: eeschema/symbol_editor/symbol_editor.cpp:1325
 #: eeschema/symbol_viewer_frame.cpp:361
 #, fuzzy
 msgid "Parent"
 msgstr "Áram"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1201
+#: eeschema/symbol_editor/symbol_editor.cpp:1334
 msgid "Convert"
 msgstr "Átalakít"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1205
+#: eeschema/symbol_editor/symbol_editor.cpp:1338
 msgid "Body"
 msgstr "Rajzjel körvonal"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:1208
+#: eeschema/symbol_editor/symbol_editor.cpp:1341
 msgid "Power Symbol"
 msgstr "Tápszimbólum"
 
@@ -14948,95 +15033,114 @@ msgid "Select a complete connection"
 msgstr "Teljes csatlakozás kiválasztása"
 
 #: eeschema/tools/ee_actions.cpp:117
+msgid "Save Library As..."
+msgstr "Rajzjel könyvtár mentése másként"
+
+#: eeschema/tools/ee_actions.cpp:118
+#, fuzzy
+msgid "Save the current library to a new file."
+msgstr "Aktuális könyvtárat egy új fájlba mentése"
+
+#: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
 msgstr "Új rajzjel..."
 
-#: eeschema/tools/ee_actions.cpp:117
+#: eeschema/tools/ee_actions.cpp:122
 msgid "Create a new symbol"
 msgstr "Új rajzjel létrehozása"
 
-#: eeschema/tools/ee_actions.cpp:122
+#: eeschema/tools/ee_actions.cpp:127
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: eeschema/tools/ee_actions.cpp:122
+#: eeschema/tools/ee_actions.cpp:127
 #, fuzzy
 msgid "Show selected symbol on editor canvas"
 msgstr "Rajzjel kiválasztása böngészővel"
 
-#: eeschema/tools/ee_actions.cpp:127
+#: eeschema/tools/ee_actions.cpp:132
 #, fuzzy
 msgid "Make a copy of the selected symbol"
 msgstr "Aktuális nyákterv másolatának mentése"
 
-#: eeschema/tools/ee_actions.cpp:132
+#: eeschema/tools/ee_actions.cpp:136
+#, fuzzy
+msgid "Save Symbol As..."
+msgstr "Új rajzjel..."
+
+#: eeschema/tools/ee_actions.cpp:137
+#, fuzzy
+msgid "Save the current symbol to a different library."
+msgstr "Minden lap mentése a kapcsolási rajz projektbe"
+
+#: eeschema/tools/ee_actions.cpp:141
 #, fuzzy
 msgid "Remove the selected symbol from its library"
 msgstr "Kattintson duplán a rajzjel kiválasztásához a könyvtár böngészőjéből"
 
-#: eeschema/tools/ee_actions.cpp:147
+#: eeschema/tools/ee_actions.cpp:156
 msgid "Paste Symbol"
 msgstr "Rajzjel beillesztése"
 
-#: eeschema/tools/ee_actions.cpp:152
+#: eeschema/tools/ee_actions.cpp:161
 msgid "Import Symbol..."
 msgstr "Rajzjel importálása..."
 
-#: eeschema/tools/ee_actions.cpp:152
+#: eeschema/tools/ee_actions.cpp:161
 msgid "Import a symbol to the current library"
 msgstr "Rajzjel importálása az aktuális könyvtárba"
 
-#: eeschema/tools/ee_actions.cpp:157
+#: eeschema/tools/ee_actions.cpp:166
 msgid "Export..."
 msgstr "Exportolás..."
 
-#: eeschema/tools/ee_actions.cpp:157
+#: eeschema/tools/ee_actions.cpp:166
 #, fuzzy
 msgid "Export a symbol to a new library file"
 msgstr "Rajzjel importálása az aktuális könyvtárba"
 
-#: eeschema/tools/ee_actions.cpp:162
+#: eeschema/tools/ee_actions.cpp:171
 #, fuzzy
 msgid "Add Symbol to Schematic"
 msgstr "Rajzjel beillesztése a kapcsolási rajzba"
 
-#: eeschema/tools/ee_actions.cpp:167
+#: eeschema/tools/ee_actions.cpp:176
 msgid "Show Pin Electrical Types"
 msgstr "Láb elektromos típus megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:167
+#: eeschema/tools/ee_actions.cpp:176
 msgid "Annotate pins with their electrical types"
 msgstr "Lábak sorszámozása elektromos típusaik alapján"
 
-#: eeschema/tools/ee_actions.cpp:172
+#: eeschema/tools/ee_actions.cpp:181
 msgid "Show Symbol Tree"
 msgstr "Rajzjel fa megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:177
+#: eeschema/tools/ee_actions.cpp:186
 #, fuzzy
 msgid "Export View as PNG..."
 msgstr "Aktuális nézet exportálása PNG fájlba..."
 
-#: eeschema/tools/ee_actions.cpp:177
+#: eeschema/tools/ee_actions.cpp:186
 #, fuzzy
 msgid "Create PNG file from the current view"
 msgstr "Aktuális képernyőtartalom mentése PNG fájlba"
 
-#: eeschema/tools/ee_actions.cpp:182
+#: eeschema/tools/ee_actions.cpp:191
 #, fuzzy
 msgid "Export Symbol as SVG..."
 msgstr "Rajzjel SVG fájlként..."
 
-#: eeschema/tools/ee_actions.cpp:182
+#: eeschema/tools/ee_actions.cpp:191
 #, fuzzy
 msgid "Create SVG file from the current symbol"
 msgstr "SVG fájl létrehozása az aktuális rajzjelből"
 
-#: eeschema/tools/ee_actions.cpp:187
+#: eeschema/tools/ee_actions.cpp:196
 msgid "Synchronized Pins Edit Mode"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:188
+#: eeschema/tools/ee_actions.cpp:197
 #, fuzzy
 msgid ""
 "Synchronized Pins Edit Mode\n"
@@ -15048,772 +15152,772 @@ msgstr ""
 "részegységben alkalmazásra kerülnek, a számozást leszámítva.\n"
 "Alapértelmezetten engedélyezve van több egységből álló rajzjelekre."
 
-#: eeschema/tools/ee_actions.cpp:195
+#: eeschema/tools/ee_actions.cpp:204
 #, fuzzy
 msgid "Save In Schematic"
 msgstr "Kapcsolási rajz megnyitása"
 
-#: eeschema/tools/ee_actions.cpp:195
+#: eeschema/tools/ee_actions.cpp:204
 #, fuzzy
 msgid "Save the current symbol in the schematic"
 msgstr "Minden lap mentése a kapcsolási rajz projektbe"
 
-#: eeschema/tools/ee_actions.cpp:204
+#: eeschema/tools/ee_actions.cpp:213
 msgid "Add Pin"
 msgstr "Láb hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:204
+#: eeschema/tools/ee_actions.cpp:213
 msgid "Add a pin"
 msgstr "Láb hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:209 eeschema/tools/ee_actions.cpp:329
+#: eeschema/tools/ee_actions.cpp:218 eeschema/tools/ee_actions.cpp:338
 #: pagelayout_editor/tools/pl_actions.cpp:54 pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Text"
 msgstr "Szöveg hozzáadás"
 
-#: eeschema/tools/ee_actions.cpp:209 pagelayout_editor/tools/pl_actions.cpp:54
+#: eeschema/tools/ee_actions.cpp:218 pagelayout_editor/tools/pl_actions.cpp:54
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add a text item"
 msgstr "Szöveg hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:214 pagelayout_editor/tools/pl_actions.cpp:49
+#: eeschema/tools/ee_actions.cpp:223 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
 msgstr "Négyszög hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:214 pagelayout_editor/tools/pl_actions.cpp:49
+#: eeschema/tools/ee_actions.cpp:223 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add a rectangle"
 msgstr "Négyszög hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:219
+#: eeschema/tools/ee_actions.cpp:228
 msgid "Add Circle"
 msgstr "Kör hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:219
+#: eeschema/tools/ee_actions.cpp:228
 msgid "Add a circle"
 msgstr "Kör hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:224
+#: eeschema/tools/ee_actions.cpp:233
 msgid "Add Arc"
 msgstr "Körív hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:224
+#: eeschema/tools/ee_actions.cpp:233
 msgid "Add an arc"
 msgstr "Körív hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:229 eeschema/tools/ee_actions.cpp:687
+#: eeschema/tools/ee_actions.cpp:238 eeschema/tools/ee_actions.cpp:696
 msgid "Add Lines"
 msgstr "Vonal hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:229 eeschema/tools/ee_actions.cpp:687
+#: eeschema/tools/ee_actions.cpp:238 eeschema/tools/ee_actions.cpp:696
 msgid "Add connected graphic lines"
 msgstr "Vonal hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:234
+#: eeschema/tools/ee_actions.cpp:243
 msgid "Move Symbol Anchor"
 msgstr "Rajzjel horgony mozgatás"
 
-#: eeschema/tools/ee_actions.cpp:234
+#: eeschema/tools/ee_actions.cpp:243
 msgid "Specify a new location for the symbol anchor"
 msgstr "Rajzjel horgony új helyének megadása"
 
-#: eeschema/tools/ee_actions.cpp:239
+#: eeschema/tools/ee_actions.cpp:248
 msgid "Finish drawing shape"
 msgstr "Rajzolás befejezése"
 
-#: eeschema/tools/ee_actions.cpp:246
+#: eeschema/tools/ee_actions.cpp:255
 msgid "Push Pin Length"
 msgstr "Lábhosszúság klónozása"
 
-#: eeschema/tools/ee_actions.cpp:246
+#: eeschema/tools/ee_actions.cpp:255
 msgid "Copy pin length to other pins in symbol"
 msgstr "Az akutális láb hosszúságának beállítása a többi lábon"
 
-#: eeschema/tools/ee_actions.cpp:251
+#: eeschema/tools/ee_actions.cpp:260
 msgid "Push Pin Name Size"
 msgstr "Lábnév méret klónozása"
 
-#: eeschema/tools/ee_actions.cpp:251
+#: eeschema/tools/ee_actions.cpp:260
 msgid "Copy pin name size to other pins in symbol"
 msgstr "Az akutális láb név méretének beállítása a többi lábon"
 
-#: eeschema/tools/ee_actions.cpp:256
+#: eeschema/tools/ee_actions.cpp:265
 msgid "Push Pin Number Size"
 msgstr "Lábszámozás méret klónozása"
 
-#: eeschema/tools/ee_actions.cpp:256
+#: eeschema/tools/ee_actions.cpp:265
 msgid "Copy pin number size to other pins in symbol"
 msgstr "Az akutális láb számozás méretének beállítása a többi lábon"
 
-#: eeschema/tools/ee_actions.cpp:265
+#: eeschema/tools/ee_actions.cpp:274
 msgid "Add Symbol"
 msgstr "Rajzjel hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:265
+#: eeschema/tools/ee_actions.cpp:274
 msgid "Add a symbol"
 msgstr "Rajzjel hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:271
+#: eeschema/tools/ee_actions.cpp:280
 msgid "Add Power"
 msgstr "Tápszimbólum hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:271
+#: eeschema/tools/ee_actions.cpp:280
 msgid "Add a power port"
 msgstr "Tápszimbólum hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:277
+#: eeschema/tools/ee_actions.cpp:286
 msgid "Add No Connect Flag"
 msgstr "\"Nem csatlakoztatott\" jelölés hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:277
+#: eeschema/tools/ee_actions.cpp:286
 msgid "Add a no-connection flag"
 msgstr "\"Nem csatlakoztatott\" jelölés hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:283
+#: eeschema/tools/ee_actions.cpp:292
 msgid "Add Junction"
 msgstr "Csomópont hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:283
+#: eeschema/tools/ee_actions.cpp:292
 msgid "Add a junction"
 msgstr "Csomópont hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:289
+#: eeschema/tools/ee_actions.cpp:298
 msgid "Add Wire to Bus Entry"
 msgstr "Vezeték-busz csatlakozás hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:289
+#: eeschema/tools/ee_actions.cpp:298
 msgid "Add a wire entry to a bus"
 msgstr "Vezeték-busz csatlakozó hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:295
+#: eeschema/tools/ee_actions.cpp:304
 msgid "Add Label"
 msgstr "Címke hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:295
+#: eeschema/tools/ee_actions.cpp:304
 msgid "Add a net label"
 msgstr "Címke hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:301
+#: eeschema/tools/ee_actions.cpp:310
 msgid "Add Hierarchical Label"
 msgstr "Hierarchikus címke hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:301
+#: eeschema/tools/ee_actions.cpp:310
 #, fuzzy
 msgid "Add a hierarchical label"
 msgstr "Hierarchikus címke hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:307
+#: eeschema/tools/ee_actions.cpp:316
 msgid "Add Sheet"
 msgstr "Lap hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:307
+#: eeschema/tools/ee_actions.cpp:316
 msgid "Add a hierarchical sheet"
 msgstr "Hierarchikus lap hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:312
+#: eeschema/tools/ee_actions.cpp:321
 msgid "Add Sheet Pin"
 msgstr "Lap kivezető láb hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:312
+#: eeschema/tools/ee_actions.cpp:321
 msgid "Add a sheet pin"
 msgstr "Lap kivezető láb hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:317
+#: eeschema/tools/ee_actions.cpp:326
 msgid "Import Sheet Pin"
 msgstr "Lap kivezető lábak importálása"
 
-#: eeschema/tools/ee_actions.cpp:317
+#: eeschema/tools/ee_actions.cpp:326
 msgid "Import a hierarchical sheet pin"
 msgstr "Hierarchikus lap kivezető láb importálása"
 
-#: eeschema/tools/ee_actions.cpp:323
+#: eeschema/tools/ee_actions.cpp:332
 msgid "Add Global Label"
 msgstr "Globális címke hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:323
+#: eeschema/tools/ee_actions.cpp:332
 msgid "Add a global label"
 msgstr "Globális címke hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:329
+#: eeschema/tools/ee_actions.cpp:338
 msgid "Add text"
 msgstr "Szöveg hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:334
+#: eeschema/tools/ee_actions.cpp:343
 msgid "Add Image"
 msgstr "Kép hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:334
+#: eeschema/tools/ee_actions.cpp:343
 msgid "Add bitmap image"
 msgstr "Kép hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:339
+#: eeschema/tools/ee_actions.cpp:348
 msgid "Finish Sheet"
 msgstr "Lap szerkesztés befejezése"
 
-#: eeschema/tools/ee_actions.cpp:339
+#: eeschema/tools/ee_actions.cpp:348
 msgid "Finish drawing sheet"
 msgstr "Lap szerkesztés befejezése"
 
-#: eeschema/tools/ee_actions.cpp:348
+#: eeschema/tools/ee_actions.cpp:357
 msgid "Repeat Last Item"
 msgstr "Utolsó elem megismétlése"
 
-#: eeschema/tools/ee_actions.cpp:348
+#: eeschema/tools/ee_actions.cpp:357
 msgid "Duplicates the last drawn item"
 msgstr "Utoljára rajzolt elem duplikálása"
 
-#: eeschema/tools/ee_actions.cpp:353 pcbnew/tools/pcb_actions.cpp:277
+#: eeschema/tools/ee_actions.cpp:362 pcbnew/tools/pcb_actions.cpp:277
 msgid "Rotate Clockwise"
 msgstr "Forgatás jobbra"
 
-#: eeschema/tools/ee_actions.cpp:353 pcbnew/tools/pcb_actions.cpp:277
+#: eeschema/tools/ee_actions.cpp:362 pcbnew/tools/pcb_actions.cpp:277
 msgid "Rotates selected item(s) clockwise"
 msgstr "Kijelölt elem(ek) jobbra forgatása"
 
-#: eeschema/tools/ee_actions.cpp:359 pcbnew/tools/edit_tool.cpp:995
+#: eeschema/tools/ee_actions.cpp:368 pcbnew/tools/edit_tool.cpp:995
 msgid "Rotate"
 msgstr "Forgatás"
 
-#: eeschema/tools/ee_actions.cpp:359
+#: eeschema/tools/ee_actions.cpp:368
 msgid "Rotates selected item(s) counter-clockwise"
 msgstr "Kijelölt elem(ek) balra forgatása"
 
-#: eeschema/tools/ee_actions.cpp:365
+#: eeschema/tools/ee_actions.cpp:374
 msgid "Mirror Around Horizontal Axis"
 msgstr "Függőleges tükrözés"
 
-#: eeschema/tools/ee_actions.cpp:365
+#: eeschema/tools/ee_actions.cpp:374
 msgid "Flips selected item(s) from top to bottom"
 msgstr "Kijelölt elem(ek) tükrözése a vízszintes tengelyre"
 
-#: eeschema/tools/ee_actions.cpp:371
+#: eeschema/tools/ee_actions.cpp:380
 msgid "Mirror Around Vertical Axis"
 msgstr "Vízszintes tükrözés"
 
-#: eeschema/tools/ee_actions.cpp:371
+#: eeschema/tools/ee_actions.cpp:380
 msgid "Flips selected item(s) from left to right"
 msgstr "Kijelölt elem(ek) tükrözése a függőleges tengelyre"
 
-#: eeschema/tools/ee_actions.cpp:377 pcbnew/tools/pcb_actions.cpp:314
+#: eeschema/tools/ee_actions.cpp:386 pcbnew/tools/pcb_actions.cpp:314
 msgid "Properties..."
 msgstr "Tulajdonságok..."
 
-#: eeschema/tools/ee_actions.cpp:377 pcbnew/tools/pcb_actions.cpp:314
+#: eeschema/tools/ee_actions.cpp:386 pcbnew/tools/pcb_actions.cpp:314
 msgid "Displays item properties dialog"
 msgstr "Elem tulajdonságok párbeszédablak megnyitása"
 
-#: eeschema/tools/ee_actions.cpp:383
+#: eeschema/tools/ee_actions.cpp:392
 #, fuzzy
 msgid "Edit Reference Designator..."
 msgstr "Referencia szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:383
+#: eeschema/tools/ee_actions.cpp:392
 #, fuzzy
 msgid "Displays reference designator dialog"
 msgstr "Referencia mező párbeszédablak megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:389
+#: eeschema/tools/ee_actions.cpp:398
 msgid "Edit Value..."
 msgstr "Érték szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:389
+#: eeschema/tools/ee_actions.cpp:398
 msgid "Displays value field dialog"
 msgstr "Érték mező párbeszédablak megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:395
+#: eeschema/tools/ee_actions.cpp:404
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:255
 msgid "Edit Footprint..."
 msgstr "Alkatrészrajzolat szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:395
+#: eeschema/tools/ee_actions.cpp:404
 msgid "Displays footprint field dialog"
 msgstr "Alkatrészrajzolat mező párbeszédablak megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:401
+#: eeschema/tools/ee_actions.cpp:410
 msgid "Autoplace Fields"
 msgstr "Mezők automatikus elhelyezése"
 
-#: eeschema/tools/ee_actions.cpp:401
+#: eeschema/tools/ee_actions.cpp:410
 #, fuzzy
 msgid "Runs the automatic placement algorithm on the symbol or sheet's fields"
 msgstr "Rajzjel mezők automatikus elhelyezése"
 
-#: eeschema/tools/ee_actions.cpp:406
+#: eeschema/tools/ee_actions.cpp:415
 #, fuzzy
 msgid "Change Symbols..."
 msgstr "Új rajzjel..."
 
-#: eeschema/tools/ee_actions.cpp:407
+#: eeschema/tools/ee_actions.cpp:416
 #, fuzzy
 msgid "Assign different symbols from the library"
 msgstr "Másik alkatrészrajzolat hozzárendelése a könyvtárból"
 
-#: eeschema/tools/ee_actions.cpp:412
+#: eeschema/tools/ee_actions.cpp:421
 #, fuzzy
 msgid "Update Symbols from Library..."
 msgstr "Mezők frissítése könyvtárból..."
 
-#: eeschema/tools/ee_actions.cpp:413
+#: eeschema/tools/ee_actions.cpp:422
 #, fuzzy
 msgid "Update symbols to include any changes from the library"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
-#: eeschema/tools/ee_actions.cpp:419
+#: eeschema/tools/ee_actions.cpp:428
 #, fuzzy
 msgid "Assign a different symbol from the library"
 msgstr "Egy másik alkatrészrajzolat hozzárendelése a könyvtárból"
 
-#: eeschema/tools/ee_actions.cpp:424
+#: eeschema/tools/ee_actions.cpp:433
 #, fuzzy
 msgid "Update Symbol..."
 msgstr "Új rajzjel..."
 
-#: eeschema/tools/ee_actions.cpp:425
+#: eeschema/tools/ee_actions.cpp:434
 #, fuzzy
 msgid "Update symbol to include any changes from the library"
 msgstr "Alkatrészrajzolatok frissítése a könyvtárból"
 
-#: eeschema/tools/ee_actions.cpp:430
+#: eeschema/tools/ee_actions.cpp:439
 #, fuzzy
 msgid "Assign Netclass..."
 msgstr "Vezetékosztály hozzárendelés"
 
-#: eeschema/tools/ee_actions.cpp:430
+#: eeschema/tools/ee_actions.cpp:439
 #, fuzzy
 msgid "Assign a netclass to the net of the selected wire"
 msgstr "Lap kivezető láb hozzáadása a kijelölt laphoz"
 
-#: eeschema/tools/ee_actions.cpp:435
+#: eeschema/tools/ee_actions.cpp:444
 msgid "DeMorgan Conversion"
 msgstr "\"De Morgan\" átalakítás"
 
-#: eeschema/tools/ee_actions.cpp:435
+#: eeschema/tools/ee_actions.cpp:444
 msgid "Switch between DeMorgan representations"
 msgstr "Váltás az alternatív \"De Morgan\" és normál rajzjel között"
 
-#: eeschema/tools/ee_actions.cpp:440
+#: eeschema/tools/ee_actions.cpp:449
 msgid "DeMorgan Standard"
 msgstr "Normál rajzjel"
 
-#: eeschema/tools/ee_actions.cpp:440
+#: eeschema/tools/ee_actions.cpp:449
 msgid "Switch to standard DeMorgan representation"
 msgstr "Váltás a normál rajzjelre"
 
-#: eeschema/tools/ee_actions.cpp:445
+#: eeschema/tools/ee_actions.cpp:454
 msgid "DeMorgan Alternate"
 msgstr "Alternatív \"De Morgan\" rajzjel"
 
-#: eeschema/tools/ee_actions.cpp:445
+#: eeschema/tools/ee_actions.cpp:454
 msgid "Switch to alternate DeMorgan representation"
 msgstr "Váltás az alternatív \"De Morgan\" rajzjelre"
 
-#: eeschema/tools/ee_actions.cpp:450
+#: eeschema/tools/ee_actions.cpp:459
 msgid "Change to Label"
 msgstr "Címkévé változtat"
 
-#: eeschema/tools/ee_actions.cpp:450
+#: eeschema/tools/ee_actions.cpp:459
 msgid "Change existing item to a label"
 msgstr "Meglévő elem átváltoztatása címkévé"
 
-#: eeschema/tools/ee_actions.cpp:455
+#: eeschema/tools/ee_actions.cpp:464
 msgid "Change to Hierarchical Label"
 msgstr "Hierarchikus címkévé változtat"
 
-#: eeschema/tools/ee_actions.cpp:455
+#: eeschema/tools/ee_actions.cpp:464
 msgid "Change existing item to a hierarchical label"
 msgstr "Meglévő elem átváltoztatása hierarchikus címkévé"
 
-#: eeschema/tools/ee_actions.cpp:460
+#: eeschema/tools/ee_actions.cpp:469
 msgid "Change to Global Label"
 msgstr "Globális címkévé változtat"
 
-#: eeschema/tools/ee_actions.cpp:460
+#: eeschema/tools/ee_actions.cpp:469
 msgid "Change existing item to a global label"
 msgstr "Meglévő elem átváltoztatása globális címkévé"
 
-#: eeschema/tools/ee_actions.cpp:465
+#: eeschema/tools/ee_actions.cpp:474
 msgid "Change to Text"
 msgstr "Szöveggé változtat"
 
-#: eeschema/tools/ee_actions.cpp:465
+#: eeschema/tools/ee_actions.cpp:474
 msgid "Change existing item to a text comment"
 msgstr "Meglévő elem átalakítása szöveggé"
 
-#: eeschema/tools/ee_actions.cpp:470
+#: eeschema/tools/ee_actions.cpp:479
 msgid "Cleanup Sheet Pins"
 msgstr "Lap kivezető lábak rendbetétele"
 
-#: eeschema/tools/ee_actions.cpp:470
+#: eeschema/tools/ee_actions.cpp:479
 msgid "Delete unreferenced sheet pins"
 msgstr "Nem hivatkozott lap kivezető lábak törlése"
 
-#: eeschema/tools/ee_actions.cpp:475 pcbnew/tools/pcb_actions.cpp:433
+#: eeschema/tools/ee_actions.cpp:484 pcbnew/tools/pcb_actions.cpp:433
 #, fuzzy
 msgid "Edit Text & Graphics Properties..."
 msgstr "Szöveg és grafikai elem tulajdonságok szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:476
+#: eeschema/tools/ee_actions.cpp:485
 #, fuzzy
 msgid "Edit text and graphics properties globally across schematic"
 msgstr "Rajzjel és szövegmező tulajdonságok szerkesztése"
 
-#: eeschema/tools/ee_actions.cpp:481
+#: eeschema/tools/ee_actions.cpp:490
 msgid "Symbol Properties..."
 msgstr "Rajzjel tulajdonságok..."
 
-#: eeschema/tools/ee_actions.cpp:481
+#: eeschema/tools/ee_actions.cpp:490
 msgid "Displays symbol properties dialog"
 msgstr "Rajzjel tulajdonságok párbeszédablak megnyitása"
 
-#: eeschema/tools/ee_actions.cpp:486
+#: eeschema/tools/ee_actions.cpp:495
 msgid "Pin Table..."
 msgstr "Lábkiosztás táblázat..."
 
-#: eeschema/tools/ee_actions.cpp:486
+#: eeschema/tools/ee_actions.cpp:495
 msgid "Displays pin table for bulk editing of pins"
 msgstr "Lábkiosztás táblázat megjelenítése a tömeges szerkesztéshez"
 
-#: eeschema/tools/ee_actions.cpp:491
+#: eeschema/tools/ee_actions.cpp:500
 msgid "Break Wire"
 msgstr "Töréspont létrehozása a vezetéken"
 
-#: eeschema/tools/ee_actions.cpp:491
+#: eeschema/tools/ee_actions.cpp:500
 msgid "Divide a wire into segments which can be dragged independently"
 msgstr ""
 "Vezetékszakasz felbontása két szegmensre, amelyek függetlenül vonszolhatóak"
 
-#: eeschema/tools/ee_actions.cpp:496
+#: eeschema/tools/ee_actions.cpp:505
 msgid "Break Bus"
 msgstr "Töréspont létrehozása a buszon"
 
-#: eeschema/tools/ee_actions.cpp:496
+#: eeschema/tools/ee_actions.cpp:505
 msgid "Divide a bus into segments which can be dragged independently"
 msgstr ""
 "Busz-szakasz felbontása két szegmensre, amelyek függetlenül vonszolhatóak"
 
-#: eeschema/tools/ee_actions.cpp:507
+#: eeschema/tools/ee_actions.cpp:516
 msgid "Add a simulator probe"
 msgstr "Szimulátor mérőpont hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:511
+#: eeschema/tools/ee_actions.cpp:520
 msgid "Select a value to be tuned"
 msgstr "Válasszon ki egy hangolandó értéket"
 
-#: eeschema/tools/ee_actions.cpp:516 gerbview/tools/gerbview_actions.cpp:113
+#: eeschema/tools/ee_actions.cpp:525 gerbview/tools/gerbview_actions.cpp:113
 #: pcbnew/tools/pcb_actions.cpp:687 pcbnew/tools/pcb_actions.cpp:707
 msgid "Highlight Net"
 msgstr "Vezeték kiemelése"
 
-#: eeschema/tools/ee_actions.cpp:516
+#: eeschema/tools/ee_actions.cpp:525
 #, fuzzy
 msgid "Highlight net under cursor"
 msgstr "Vezeték kiemelése"
 
-#: eeschema/tools/ee_actions.cpp:527 pcbnew/tools/pcb_actions.cpp:700
+#: eeschema/tools/ee_actions.cpp:536 pcbnew/tools/pcb_actions.cpp:700
 msgid "Highlight Nets"
 msgstr "Vezeték kiemelése"
 
-#: eeschema/tools/ee_actions.cpp:527
+#: eeschema/tools/ee_actions.cpp:536
 msgid "Highlight wires and pins of a net"
 msgstr "Ehhez a vezetékhez tartozó elemek kiemelése"
 
-#: eeschema/tools/ee_actions.cpp:533
+#: eeschema/tools/ee_actions.cpp:542
 msgid "Edit with Symbol Editor"
 msgstr "Szerkesztés Rajzjel szerkesztővel"
 
-#: eeschema/tools/ee_actions.cpp:533
+#: eeschema/tools/ee_actions.cpp:542
 msgid "Open the symbol editor to edit the symbol"
 msgstr "Rajzjel szerkesztő megnyitása"
 
-#: eeschema/tools/ee_actions.cpp:538
+#: eeschema/tools/ee_actions.cpp:547
 msgid "Edit Symbol Fields..."
 msgstr "Rajzjel mezők szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:538
+#: eeschema/tools/ee_actions.cpp:547
 msgid "Bulk-edit fields of all symbols in schematic"
 msgstr "Kapcsolási rajzon lévő rajzjel mezők tömeges szerkesztése"
 
-#: eeschema/tools/ee_actions.cpp:543
+#: eeschema/tools/ee_actions.cpp:552
 msgid "Edit Symbol Library Links..."
 msgstr "Rajzjel könyvtár hivatkozások szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:543
+#: eeschema/tools/ee_actions.cpp:552
 msgid "Edit links between schematic and library symbols"
 msgstr "A könyvtári és lehelyezett rajzjelek közötti hivatkozások szerkesztése"
 
-#: eeschema/tools/ee_actions.cpp:548
+#: eeschema/tools/ee_actions.cpp:557
 msgid "Assign Footprints..."
 msgstr "Alkatrészrajzolat hozzárendelés..."
 
-#: eeschema/tools/ee_actions.cpp:548
+#: eeschema/tools/ee_actions.cpp:557
 #, fuzzy
 msgid "Run footprint assignment tool"
 msgstr "Rajzjel : Alkatrészrajzolat hozzárendelések"
 
-#: eeschema/tools/ee_actions.cpp:553
+#: eeschema/tools/ee_actions.cpp:562
 #, fuzzy
 msgid "Import Footprint Assignments..."
 msgstr "Rajzjel : Alkatrészrajzolat hozzárendelések"
 
-#: eeschema/tools/ee_actions.cpp:554
+#: eeschema/tools/ee_actions.cpp:563
 #, fuzzy
 msgid "Import symbol footprint assignments from .cmp file created by Pcbnew"
 msgstr ""
 "Rajzjel - alkatrészrajzolat hozzárendelés importálása a Nyáktervező által "
 "látrehozott .cmp fájlból"
 
-#: eeschema/tools/ee_actions.cpp:559
+#: eeschema/tools/ee_actions.cpp:568
 msgid "Annotate Schematic..."
 msgstr "Rajzjel sorszámozás..."
 
-#: eeschema/tools/ee_actions.cpp:559
+#: eeschema/tools/ee_actions.cpp:568
 msgid "Fill in schematic symbol reference designators"
 msgstr "Alkatrész referencia jelölés mezők kitöltése"
 
-#: eeschema/tools/ee_actions.cpp:564
+#: eeschema/tools/ee_actions.cpp:573
 #, fuzzy
 msgid "Schematic Setup..."
 msgstr "Kapcsolási rajz mérete"
 
-#: eeschema/tools/ee_actions.cpp:565
+#: eeschema/tools/ee_actions.cpp:574
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:570
+#: eeschema/tools/ee_actions.cpp:579
 #, fuzzy
 msgid "Edit Page Number..."
 msgstr "Paraméterek szerkesztése..."
 
-#: eeschema/tools/ee_actions.cpp:571
+#: eeschema/tools/ee_actions.cpp:580
 #, fuzzy
 msgid "Edit the page number of the current or selected sheet"
 msgstr "Az aktuálisan kiválasztott mező szöveg (vagy érték)"
 
-#: eeschema/tools/ee_actions.cpp:576
+#: eeschema/tools/ee_actions.cpp:585
 #, fuzzy
 msgid "Rescue Symbols..."
 msgstr "Rajzjelek átmentése..."
 
-#: eeschema/tools/ee_actions.cpp:577
+#: eeschema/tools/ee_actions.cpp:586
 msgid "Find old symbols in project and rename/rescue them"
 msgstr "Elavult rajzjelek keresése és átnevezése/átmentése"
 
-#: eeschema/tools/ee_actions.cpp:582
+#: eeschema/tools/ee_actions.cpp:591
 #, fuzzy
 msgid "Remap Legacy Library Symbols..."
 msgstr "Rajzjelek migrálása..."
 
-#: eeschema/tools/ee_actions.cpp:583
+#: eeschema/tools/ee_actions.cpp:592
 #, fuzzy
 msgid ""
 "Remap library symbol references in legacy schematics to the symbol library "
 "table"
 msgstr "Megörökölt rajzjelek migrálása könytártáblázatba"
 
-#: eeschema/tools/ee_actions.cpp:588
+#: eeschema/tools/ee_actions.cpp:597
 msgid "Bus Definitions..."
 msgstr "Busz definíciók..."
 
-#: eeschema/tools/ee_actions.cpp:588
+#: eeschema/tools/ee_actions.cpp:597
 msgid "Manage bus definitions"
 msgstr "Busz definíciók kezelése"
 
-#: eeschema/tools/ee_actions.cpp:593
+#: eeschema/tools/ee_actions.cpp:602
 #, fuzzy
 msgid "Export Drawing to Clipboard"
 msgstr "Kapcsolási rajz másolása a vágólapra"
 
-#: eeschema/tools/ee_actions.cpp:593
+#: eeschema/tools/ee_actions.cpp:602
 #, fuzzy
 msgid "Export drawing of current sheet to clipboard"
 msgstr "Kapcsolási rajz másolása a vágólapra"
 
-#: eeschema/tools/ee_actions.cpp:598
+#: eeschema/tools/ee_actions.cpp:607
 #, fuzzy
 msgid "Switch to PCB Editor"
 msgstr "Előző réteg"
 
-#: eeschema/tools/ee_actions.cpp:598
+#: eeschema/tools/ee_actions.cpp:607
 #, fuzzy
 msgid "Open PCB in board editor"
 msgstr "Nyáktervező megnyitása"
 
-#: eeschema/tools/ee_actions.cpp:603
+#: eeschema/tools/ee_actions.cpp:612
 #, fuzzy
 msgid "Export Netlist..."
 msgstr "Netlista importálása"
 
-#: eeschema/tools/ee_actions.cpp:603
+#: eeschema/tools/ee_actions.cpp:612
 msgid "Export file containing netlist in one of several formats"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:608
+#: eeschema/tools/ee_actions.cpp:617
 msgid "Generate BOM..."
 msgstr "Bevásárlólista létrehozása..."
 
-#: eeschema/tools/ee_actions.cpp:608
+#: eeschema/tools/ee_actions.cpp:617
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Bevásárlólista (BOM) létrehozása a jelenlegi kapcsolási rajzból"
 
-#: eeschema/tools/ee_actions.cpp:613
+#: eeschema/tools/ee_actions.cpp:622
 msgid "Highlight on PCB"
 msgstr "Kiemelés a nyákterven"
 
-#: eeschema/tools/ee_actions.cpp:613
+#: eeschema/tools/ee_actions.cpp:622
 #, fuzzy
 msgid "Highlight corresponding items in board editor"
 msgstr "Társított elem kiemelés a nyákterven"
 
-#: eeschema/tools/ee_actions.cpp:618
+#: eeschema/tools/ee_actions.cpp:627
 msgid "Show Hidden Pins"
 msgstr "Rejtett lábak megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:618
+#: eeschema/tools/ee_actions.cpp:627
 #, fuzzy
 msgid "Toggle display of hidden pins"
 msgstr "Teljes képernyős célkereszt"
 
-#: eeschema/tools/ee_actions.cpp:623
+#: eeschema/tools/ee_actions.cpp:632
 #, fuzzy
 msgid "Show Hidden Fields"
 msgstr "Rejtett lábak megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:623
+#: eeschema/tools/ee_actions.cpp:632
 #, fuzzy
 msgid "Toggle display of hidden text fields"
 msgstr "Forrasztópaszta réteg megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:628
+#: eeschema/tools/ee_actions.cpp:637
 #, fuzzy
 msgid "Force H/V Wires and Buses"
 msgstr "Vezetékek és buszok csak vízszintesen és függőlegesen"
 
-#: eeschema/tools/ee_actions.cpp:628
+#: eeschema/tools/ee_actions.cpp:637
 #, fuzzy
 msgid "Switch H & V only mode for new wires and buses"
 msgstr "VF irány vezetékeknek és buszoknak"
 
-#: eeschema/tools/ee_actions.cpp:636
+#: eeschema/tools/ee_actions.cpp:645
 msgid "Enter Sheet"
 msgstr "Lap megnyitása"
 
-#: eeschema/tools/ee_actions.cpp:636
+#: eeschema/tools/ee_actions.cpp:645
 msgid "Display the selected sheet's contents in the Eeschema window"
 msgstr "Kiválasztott lap tartalmának megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:642
+#: eeschema/tools/ee_actions.cpp:651
 msgid "Leave Sheet"
 msgstr "Lap elhagyása"
 
-#: eeschema/tools/ee_actions.cpp:642
+#: eeschema/tools/ee_actions.cpp:651
 msgid "Display the parent sheet in the Eeschema window"
 msgstr "Szülő lap tartalmának megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:647
+#: eeschema/tools/ee_actions.cpp:656
 #, fuzzy
 msgid "Hierarchy Navigator"
 msgstr "Hierarchikus struktúra megjelenítése"
 
-#: eeschema/tools/ee_actions.cpp:647
+#: eeschema/tools/ee_actions.cpp:656
 #, fuzzy
 msgid "Show schematic sheet hierarchy"
 msgstr "Hierarchia struktúra bejárása"
 
-#: eeschema/tools/ee_actions.cpp:652
+#: eeschema/tools/ee_actions.cpp:661
 #, fuzzy
 msgid "Navigate to page"
 msgstr "Laphoz igazítva"
 
-#: eeschema/tools/ee_actions.cpp:660
+#: eeschema/tools/ee_actions.cpp:669
 msgid "Add Junctions to Selection where needed"
 msgstr ""
 
-#: eeschema/tools/ee_actions.cpp:667
+#: eeschema/tools/ee_actions.cpp:676
 msgid "Add Wire"
 msgstr "Vezeték hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:667
+#: eeschema/tools/ee_actions.cpp:676
 msgid "Add a wire"
 msgstr "Vezeték hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:674
+#: eeschema/tools/ee_actions.cpp:683
 msgid "Add Bus"
 msgstr "Busz hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:674
+#: eeschema/tools/ee_actions.cpp:683
 msgid "Add a bus"
 msgstr "Busz hozzáadása"
 
-#: eeschema/tools/ee_actions.cpp:680
+#: eeschema/tools/ee_actions.cpp:689
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:79
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:135
 msgid "Unfold from Bus"
 msgstr "Kibontás a buszból"
 
-#: eeschema/tools/ee_actions.cpp:680
+#: eeschema/tools/ee_actions.cpp:689
 msgid "Break a wire out of a bus"
 msgstr "Vezeték leágaztatása a buszról"
 
-#: eeschema/tools/ee_actions.cpp:693
+#: eeschema/tools/ee_actions.cpp:702
 msgid "Finish Wire or Bus"
 msgstr "Vezeték/busz befejezése"
 
-#: eeschema/tools/ee_actions.cpp:693
+#: eeschema/tools/ee_actions.cpp:702
 msgid "Complete drawing at current segment"
 msgstr "Vezeték/busz rajzolásának befejezése"
 
-#: eeschema/tools/ee_actions.cpp:698
+#: eeschema/tools/ee_actions.cpp:707
 msgid "Finish Wire"
 msgstr "Vezeték befejezése"
 
-#: eeschema/tools/ee_actions.cpp:698
+#: eeschema/tools/ee_actions.cpp:707
 msgid "Complete wire with current segment"
 msgstr "Vezeték rajzolásának befejezése"
 
-#: eeschema/tools/ee_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:712
 msgid "Finish Bus"
 msgstr "Busz befejezése"
 
-#: eeschema/tools/ee_actions.cpp:703
+#: eeschema/tools/ee_actions.cpp:712
 msgid "Complete bus with current segment"
 msgstr "Busz rajzolásának befejezése"
 
-#: eeschema/tools/ee_actions.cpp:708
+#: eeschema/tools/ee_actions.cpp:717
 msgid "Finish Lines"
 msgstr "Vonal befejezése"
 
-#: eeschema/tools/ee_actions.cpp:708
+#: eeschema/tools/ee_actions.cpp:717
 msgid "Complete connected lines with current segment"
 msgstr "Vonal rajzolásának befejezése"
 
-#: eeschema/tools/ee_actions.cpp:717 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:726 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/dialogs/panel_edit_options_base.cpp:331
 #: pcbnew/tools/pcb_actions.cpp:242
 msgid "Move"
 msgstr "Mozgatás"
 
-#: eeschema/tools/ee_actions.cpp:717 pagelayout_editor/tools/pl_actions.cpp:68
+#: eeschema/tools/ee_actions.cpp:726 pagelayout_editor/tools/pl_actions.cpp:68
 #: pcbnew/tools/pcb_actions.cpp:242
 msgid "Moves the selected item(s)"
 msgstr "A kijelölt elem(ek) mozgatása"
 
-#: eeschema/tools/ee_actions.cpp:722 pcbnew/tools/edit_tool.cpp:615
+#: eeschema/tools/ee_actions.cpp:731 pcbnew/tools/edit_tool.cpp:615
 msgid "Drag"
 msgstr "Vonszolás"
 
-#: eeschema/tools/ee_actions.cpp:722
+#: eeschema/tools/ee_actions.cpp:731
 msgid "Drags the selected item(s)"
 msgstr "A kijelölt elem(ek) vonszolása"
 
-#: eeschema/tools/ee_actions.cpp:726
+#: eeschema/tools/ee_actions.cpp:735
 msgid "Move Activate"
 msgstr "Mozgatás aktiválása"
 
-#: eeschema/tools/ee_actions.cpp:730
+#: eeschema/tools/ee_actions.cpp:739
 #, fuzzy
 msgid "Symbol Move Activate"
 msgstr "Mozgatás aktiválása"
 
-#: eeschema/tools/ee_actions.cpp:734
+#: eeschema/tools/ee_actions.cpp:743
 #, fuzzy
 msgid "Align Elements to Grid"
 msgstr "Igazítás jobbra"
@@ -15901,13 +16005,13 @@ msgstr ""
 
 #: eeschema/tools/ee_selection_tool.cpp:1403
 #: pagelayout_editor/tools/pl_selection_tool.cpp:589
-#: pcbnew/tools/pcb_selection_tool.cpp:1736
+#: pcbnew/tools/pcb_selection_tool.cpp:1744
 #, fuzzy
 msgid "Select &All\tA"
 msgstr "Az összes kijelölése"
 
 #: eeschema/tools/ee_selection_tool.cpp:1406
-#: pcbnew/tools/pcb_selection_tool.cpp:1739
+#: pcbnew/tools/pcb_selection_tool.cpp:1747
 #, fuzzy
 msgid "&Expand Selection\tE"
 msgstr "Kijelölés bővítése"
@@ -16041,27 +16145,27 @@ msgstr "nincs busz kiválasztva"
 msgid "Bus has no members"
 msgstr "\"%s\" busz megnevezés tagjai"
 
-#: eeschema/tools/symbol_editor_control.cpp:323
-#: eeschema/tools/symbol_editor_control.cpp:363
+#: eeschema/tools/symbol_editor_control.cpp:325
+#: eeschema/tools/symbol_editor_control.cpp:365
 #, fuzzy
 msgid "No symbol to export"
 msgstr "Ne exportálja"
 
-#: eeschema/tools/symbol_editor_control.cpp:334
+#: eeschema/tools/symbol_editor_control.cpp:336
 msgid "Image File Name"
 msgstr "3D kép fájlnév"
 
-#: eeschema/tools/symbol_editor_control.cpp:345
+#: eeschema/tools/symbol_editor_control.cpp:347
 #, c-format
 msgid "Can't save file \"%s\"."
 msgstr "A(z) \"%s\" fájl nem menthető"
 
-#: eeschema/tools/symbol_editor_control.cpp:374
+#: eeschema/tools/symbol_editor_control.cpp:376
 msgid "Filename:"
 msgstr "Fájlnév:"
 
-#: eeschema/tools/symbol_editor_control.cpp:443
-#: eeschema/tools/symbol_editor_control.cpp:481
+#: eeschema/tools/symbol_editor_control.cpp:445
+#: eeschema/tools/symbol_editor_control.cpp:483
 msgid "No schematic currently open."
 msgstr "Nincs kapcsolási rajz megnyitva."
 
@@ -16232,12 +16336,12 @@ msgstr "Réteg kiválasztása:"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:59
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:51
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:47 pcbnew/dimension.cpp:366
-#: pcbnew/dimension.cpp:969 pcbnew/footprint.cpp:1911 pcbnew/footprint.cpp:1914
-#: pcbnew/fp_text.cpp:293 pcbnew/pad.cpp:833 pcbnew/pcb_shape.cpp:538
+#: pcbnew/dimension.cpp:969 pcbnew/footprint.cpp:1909 pcbnew/footprint.cpp:1912
+#: pcbnew/fp_text.cpp:293 pcbnew/pad.cpp:853 pcbnew/pcb_shape.cpp:538
 #: pcbnew/pcb_text.cpp:113 pcbnew/text_mod_grid_table.cpp:95
 #: pcbnew/tools/board_inspection_tool.cpp:366
-#: pcbnew/tools/board_inspection_tool.cpp:390 pcbnew/track.cpp:607
-#: pcbnew/track.cpp:665 pcbnew/track.cpp:1067 pcbnew/zone.cpp:608
+#: pcbnew/tools/board_inspection_tool.cpp:390 pcbnew/track.cpp:620
+#: pcbnew/track.cpp:678 pcbnew/track.cpp:1080 pcbnew/zone.cpp:608
 msgid "Layer"
 msgstr "Réteg"
 
@@ -16505,7 +16609,7 @@ msgid "Polarity"
 msgstr "Polaritás"
 
 #: gerbview/gerber_draw_item.cpp:711 pcbnew/fp_text.cpp:295
-#: pcbnew/pcb_text.cpp:115 pcbnew/tools/edit_tool.cpp:1132
+#: pcbnew/pcb_text.cpp:115 pcbnew/tools/edit_tool.cpp:1136
 #: pcbnew/tools/pcb_actions.cpp:294
 msgid "Mirror"
 msgstr "Tükrözés"
@@ -17162,11 +17266,11 @@ msgstr "Projekt kitömörítése a(z) \"%s\" mappába.\n"
 msgid "Archive Project Files"
 msgstr "Projekt fájlok archiválása"
 
-#: kicad/import_project.cpp:72
+#: kicad/import_project.cpp:74
 msgid "KiCad Project Destination"
 msgstr "KiCad projekt célmappa"
 
-#: kicad/import_project.cpp:89
+#: kicad/import_project.cpp:90
 msgid ""
 "The selected directory is not empty.  We recommend you create projects in "
 "their own clean directory.\n"
@@ -17178,12 +17282,18 @@ msgstr ""
 "\n"
 "Létrehoz egy üres mappát a projekt számára?"
 
-#: kicad/import_project.cpp:163
+#: kicad/import_project.cpp:115
+msgid ""
+"Error creating new directory. Please try a different path. The project was "
+"not imported."
+msgstr ""
+
+#: kicad/import_project.cpp:196
 #, fuzzy
 msgid "Import CADSTAR Archive Project Files"
 msgstr "Projekt fájlok archiválása"
 
-#: kicad/import_project.cpp:171
+#: kicad/import_project.cpp:204
 msgid "Import Eagle Project Files"
 msgstr "Eagle projektfájlok importálása"
 
@@ -17672,8 +17782,8 @@ msgid "Application failed to load:\n"
 msgstr "A Nyáktervezőnek nem sikerült betöltenie:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:611
-#: kicad/tools/kicad_manager_control.cpp:618 pcbnew/pcb_edit_frame.cpp:1426
-#: pcbnew/pcb_edit_frame.cpp:1457
+#: kicad/tools/kicad_manager_control.cpp:618 pcbnew/pcb_edit_frame.cpp:1425
+#: pcbnew/pcb_edit_frame.cpp:1456
 msgid "KiCad Error"
 msgstr "KiCad Hiba"
 
@@ -19602,50 +19712,50 @@ msgstr "Alkatrészek automatikus elhelyezése"
 msgid "Autoplace components"
 msgstr "Alkatrészek automatikus elhelyezése"
 
-#: pcbnew/board.cpp:88
+#: pcbnew/board.cpp:89
 msgid "This is the default net class."
 msgstr "Ez az alapértelmezett vezetékosztály"
 
-#: pcbnew/board.cpp:739
+#: pcbnew/board.cpp:742
 msgid "PCB"
 msgstr "NYÁK"
 
-#: pcbnew/board.cpp:1088 pcbnew/dialogs/dialog_board_statistics.cpp:670
+#: pcbnew/board.cpp:1091 pcbnew/dialogs/dialog_board_statistics.cpp:670
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:77
-#: pcbnew/netinfo_item.cpp:100 pcbnew/pcb_draw_panel_gal.cpp:433
+#: pcbnew/netinfo_item.cpp:100 pcbnew/pcb_draw_panel_gal.cpp:440
 #: pcbnew/tools/pcb_control.cpp:1081 pcbnew/widgets/appearance_controls.cpp:335
 #: pcbnew/widgets/panel_selection_filter_base.cpp:47
 msgid "Pads"
 msgstr "Forrszemek"
 
-#: pcbnew/board.cpp:1091 pcbnew/dialogs/dialog_board_statistics.cpp:676
+#: pcbnew/board.cpp:1094 pcbnew/dialogs/dialog_board_statistics.cpp:676
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:156
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:68
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:31
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:154
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:84
-#: pcbnew/netinfo_item.cpp:119 pcbnew/pcb_draw_panel_gal.cpp:436
+#: pcbnew/netinfo_item.cpp:119 pcbnew/pcb_draw_panel_gal.cpp:443
 #: pcbnew/widgets/appearance_controls.cpp:334
 #: pcbnew/widgets/panel_selection_filter_base.cpp:43
 msgid "Vias"
 msgstr "Viák (átvezetőfuratok)"
 
-#: pcbnew/board.cpp:1094 pcbnew/pcb_draw_panel_gal.cpp:439
+#: pcbnew/board.cpp:1097 pcbnew/pcb_draw_panel_gal.cpp:446
 msgid "Track Segments"
 msgstr "Vezetősáv szegmensek"
 
-#: pcbnew/board.cpp:1097 pcbnew/pcb_draw_panel_gal.cpp:442
+#: pcbnew/board.cpp:1100 pcbnew/pcb_draw_panel_gal.cpp:449
 msgid "Nodes"
 msgstr "Csomópontok"
 
-#: pcbnew/board.cpp:1100 pcbnew/pcb_draw_panel_gal.cpp:445
+#: pcbnew/board.cpp:1103 pcbnew/pcb_draw_panel_gal.cpp:452
 #: pcbnew/widgets/appearance_controls_base.cpp:62
 #: pcbnew/widgets/appearance_controls_base.cpp:156
 msgid "Nets"
 msgstr "Összeköttetések"
 
-#: pcbnew/board.cpp:1103 pcbnew/pcb_draw_panel_gal.cpp:448
+#: pcbnew/board.cpp:1106 pcbnew/pcb_draw_panel_gal.cpp:455
 msgid "Unrouted"
 msgstr "Nem huzalozott"
 
@@ -19653,13 +19763,13 @@ msgstr "Nem huzalozott"
 msgid "NetName"
 msgstr "Vezetéknév"
 
-#: pcbnew/board_connected_item.cpp:167 pcbnew/pad.cpp:831 pcbnew/track.cpp:696
+#: pcbnew/board_connected_item.cpp:167 pcbnew/pad.cpp:851 pcbnew/track.cpp:709
 #: pcbnew/zone.cpp:588
 #, fuzzy
 msgid "NetClass"
 msgstr "Vezetékosztály"
 
-#: pcbnew/board_item.cpp:36 pcbnew/pad.cpp:1032
+#: pcbnew/board_item.cpp:36 pcbnew/pad.cpp:1052
 msgid "Rect"
 msgstr "Négyszög"
 
@@ -19667,7 +19777,7 @@ msgstr "Négyszög"
 msgid "Bezier Curve"
 msgstr "Bezier görbe"
 
-#: pcbnew/board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2113
+#: pcbnew/board_item.cpp:40 pcbnew/dialogs/dialog_pad_properties.cpp:2144
 #: pcbnew/pcb_shape.cpp:503
 msgid "Polygon"
 msgstr "Sokszög"
@@ -19687,12 +19797,12 @@ msgstr " és további"
 msgid "no layers"
 msgstr "nem réteg"
 
-#: pcbnew/board_item.cpp:181 pcbnew/track.cpp:1028 pcbnew/track.cpp:1045
+#: pcbnew/board_item.cpp:181 pcbnew/track.cpp:1041 pcbnew/track.cpp:1058
 #, fuzzy
 msgid "Position X"
 msgstr "X pozíció:"
 
-#: pcbnew/board_item.cpp:183 pcbnew/track.cpp:1031 pcbnew/track.cpp:1048
+#: pcbnew/board_item.cpp:183 pcbnew/track.cpp:1044 pcbnew/track.cpp:1061
 #, fuzzy
 msgid "Position Y"
 msgstr "Y pozíció:"
@@ -19708,37 +19818,31 @@ msgid "Dielectric %d"
 msgstr "Dielektrikum veszteségek:"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:525
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:369
 #, fuzzy
 msgid "Top Silk Screen"
 msgstr "Szitanyomat"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:533
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:353
 #, fuzzy
 msgid "Top Solder Paste"
 msgstr "Forrasztásgátló és paszta réteg"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:541
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:385
 #, fuzzy
 msgid "Top Solder Mask"
 msgstr "Forrasztásgátló réteg színe"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:585
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:380
 #, fuzzy
 msgid "Bottom Solder Mask"
 msgstr "Felső forrasztásgátló réteg"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:593
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:348
 #, fuzzy
 msgid "Bottom Solder Paste"
 msgstr "Felső forrasztópaszta"
 
 #: pcbnew/board_stackup_manager/class_board_stackup.cpp:601
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:364
 #, fuzzy
 msgid "Bottom Silk Screen"
 msgstr "Szitanyomat"
@@ -20091,7 +20195,7 @@ msgstr "Elnevezés"
 msgid "Supplier and ref"
 msgstr "Szállító és referencia"
 
-#: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:104
+#: pcbnew/cleanup_item.cpp:46 pcbnew/zone_filler.cpp:106
 msgid "Checking zone fills..."
 msgstr "Zónakitöltések ellenőrzése..."
 
@@ -20681,7 +20785,7 @@ msgid ""
 "Associated project file %s could not be loaded"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:189 pcbnew/files.cpp:675
+#: pcbnew/dialogs/dialog_board_setup.cpp:189 pcbnew/files.cpp:677
 #, c-format
 msgid ""
 "Error loading board file:\n"
@@ -20783,11 +20887,11 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:479 pcbnew/pad.cpp:1046
+#: pcbnew/dialogs/dialog_board_statistics.cpp:479 pcbnew/pad.cpp:1066
 msgid "PTH"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_statistics.cpp:479 pcbnew/pad.cpp:1049
+#: pcbnew/dialogs/dialog_board_statistics.cpp:479 pcbnew/pad.cpp:1069
 msgid "NPTH"
 msgstr ""
 
@@ -22066,8 +22170,8 @@ msgstr "Furatszerelt"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:187
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:280
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1047
-#: pcbnew/pad.cpp:1340
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1067
+#: pcbnew/pad.cpp:1360
 msgid "SMD"
 msgstr "SMD"
 
@@ -23635,51 +23739,51 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:171
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:173
 msgid "Circle Properties"
 msgstr "Kör tulajdonságok"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:184
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:186
 msgid "Arc Properties"
 msgstr "Körív tulajdonságok"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:191
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:197
 msgid "Polygon Properties"
 msgstr "Sokszög tulajdonságok"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:198
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:210
 #, fuzzy
 msgid "Rectangle Properties"
 msgstr "Kör tulajdonságok"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:209
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:221
 msgid "Line Segment Properties"
 msgstr "Vonalszegmens tulajdonságok"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:279
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:291
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:174
 msgid "Line width may not be 0 for unfilled shapes."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:355
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:367
 msgid "Modify drawing properties"
 msgstr "Rajzelem tulajdonságok módosítása"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:376
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:406
 msgid "The arc angle cannot be zero."
 msgstr "A körív nyílásszöge nem lehet nulla."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:383
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:413
 #, fuzzy
 msgid "The radius cannot be zero."
 msgstr "A körív nyílásszöge nem lehet nulla."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:389
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:419
 #, fuzzy
 msgid "The rectangle cannot be empty."
 msgstr "A körív nyílásszöge nem lehet nulla."
 
-#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:405
+#: pcbnew/dialogs/dialog_graphic_item_properties.cpp:435
 msgid "Error List"
 msgstr "Hibalista"
 
@@ -23710,9 +23814,13 @@ msgstr "Körív nyílásszög:"
 msgid "Filled shape"
 msgstr "Kijelölt elem(ek) átfordítása"
 
-#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:92
+#: pcbnew/dialogs/dialog_graphic_item_properties_base.h:93
 msgid "Graphic Item Properties"
 msgstr "Grafikai elem tulajdonságok"
+
+#: pcbnew/dialogs/dialog_group_properties.cpp:110
+msgid "Modified group"
+msgstr ""
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:28
 #, fuzzy
@@ -24149,8 +24257,8 @@ msgid "Non Copper Zones Properties"
 msgstr "Nem rézkitöltő zónák tulajdonságai"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:79
-#: pcbnew/dialogs/dialog_pad_properties.cpp:695
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2109 pcbnew/pcb_shape.cpp:521
+#: pcbnew/dialogs/dialog_pad_properties.cpp:697
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2140 pcbnew/pcb_shape.cpp:521
 msgid "Segment"
 msgstr "Szegmens"
 
@@ -24188,202 +24296,227 @@ msgstr "Válasszon ki egy sarkot, amely után az új sarkot kívánja hozzáadni
 msgid "Select a corner to delete."
 msgstr "Válasszon ki egy sarkot a törléshez"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:470
+#: pcbnew/dialogs/dialog_pad_properties.cpp:472
 #, fuzzy, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr ""
 "Alkatrészrajzolat: %s (%s), %s\n"
 "Elforgatás: %.1f°"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:473
+#: pcbnew/dialogs/dialog_pad_properties.cpp:475
 #: pcbnew/dialogs/dialog_text_properties.cpp:280
 msgid "back side (mirrored)"
 msgstr "alsó oldal (alkatrészek tükrözve)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:474
+#: pcbnew/dialogs/dialog_pad_properties.cpp:476
 #: pcbnew/dialogs/dialog_text_properties.cpp:280
 msgid "front side"
 msgstr "felső oldal"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:690
+#: pcbnew/dialogs/dialog_pad_properties.cpp:692
 #, fuzzy
 msgid "width"
 msgstr "szélesség %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:696
-#: pcbnew/dialogs/dialog_pad_properties.cpp:702
+#: pcbnew/dialogs/dialog_pad_properties.cpp:698
+#: pcbnew/dialogs/dialog_pad_properties.cpp:704
 #, fuzzy
 msgid "from"
 msgstr "kitől "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:697
-#: pcbnew/dialogs/dialog_pad_properties.cpp:703
+#: pcbnew/dialogs/dialog_pad_properties.cpp:699
+#: pcbnew/dialogs/dialog_pad_properties.cpp:705
 #, fuzzy
 msgid "to"
 msgstr "kihez"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:708
+#: pcbnew/dialogs/dialog_pad_properties.cpp:710
 #, fuzzy
 msgid "center"
 msgstr "középre "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:709
+#: pcbnew/dialogs/dialog_pad_properties.cpp:711
 #, fuzzy
 msgid "start"
 msgstr "kezdő "
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:710
+#: pcbnew/dialogs/dialog_pad_properties.cpp:712
 #, fuzzy
 msgid "angle"
 msgstr "szög %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:715
+#: pcbnew/dialogs/dialog_pad_properties.cpp:717
 msgid "ring"
 msgstr "gyűrű"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:717
+#: pcbnew/dialogs/dialog_pad_properties.cpp:719
 msgid "circle"
 msgstr "kör"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:720
+#: pcbnew/dialogs/dialog_pad_properties.cpp:722
 #, fuzzy
 msgid "radius"
 msgstr "sugár %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:725
+#: pcbnew/dialogs/dialog_pad_properties.cpp:727
 #, c-format
 msgid "corners count %d"
 msgstr "sarkok száma %d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:911
+#: pcbnew/dialogs/dialog_pad_properties.cpp:913
 msgid "All copper layers"
 msgstr "Minden vezető"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:912
+#: pcbnew/dialogs/dialog_pad_properties.cpp:914
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:915
+#: pcbnew/dialogs/dialog_pad_properties.cpp:917
 #, fuzzy
 msgid "Connected layers only"
 msgstr "Csak az aktuális réteg"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:920
+#: pcbnew/dialogs/dialog_pad_properties.cpp:922
 #, fuzzy, c-format
 msgid "%s and %s"
 msgstr " és további"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1207
-msgid "Pad size must be greater than zero"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1210
+#, fuzzy
+msgid "Warning: Pad size is less than zero."
 msgstr "Forrszem méretének nullánál nagyobbnak kell lennie"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1232
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1235
 msgid ""
-"Warning: Pad drill bigger than pad size or drill shape and pad shape do not "
-"overlap"
+"Warning: Pad drill larger than pad size or drill shape and pad shape do not "
+"overlap."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1242
-msgid "Pad local clearance must be zero or greater than zero"
-msgstr "A forrszem lokális szigetelési távolsága nem lehet negatív"
-
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1254
-msgid "Pad local solder mask clearance must be zero or greater than zero"
-msgstr "A forrszem lokális forrasztásgátló távolságtartása nem lehet negatív"
-
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1263
-#, c-format
-msgid "Pad local solder mask clearance must be greater than %s"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1244
+msgid "Error: Negative local clearance values will have no effect."
 msgstr ""
-"A forrszem lokális forrasztásgátló távolságtartása legyen nagyobb mint %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1278
-msgid "Error: pad has no layer"
-msgstr "Hiba: a forrszemnek nincs réteg megadva."
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1253
+msgid ""
+"Error: Negative solder mask clearances are not supported for custom pad "
+"shapes."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1266
+msgid ""
+"Warning: Negative solder mask clearance larger than pad. No solder mask will "
+"be generated."
+msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
+#, fuzzy
 msgid ""
-"Warning: plated through holes should normally have a copper pad on at least "
-"one layer"
+"Warning: Negative solder paste margins larger than pad. No solder paste mask "
+"will be generated."
+msgstr ""
+"Negatív távolságtartás esetén a kizárt terület kisebb a forrszemnél (pl. "
+"forrasztópaszta rétegnél szokásos)"
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1292
+#, fuzzy
+msgid "Error: pad has no layer."
+msgstr "Hiba: a forrszemnek nincs réteg megadva."
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1298
+msgid ""
+"Warning: Plated through holes should normally have a copper pad on at least "
+"one layer."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1302
-msgid "Incorrect value for pad offset"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1315
+#, fuzzy
+msgid "Incorrect value for pad offset."
 msgstr "Helytelen forrszem eltolási érték"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1307
-msgid "Too large value for pad delta size"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1320
+#, fuzzy
+msgid "Too large value for pad delta size."
 msgstr "A forrszem delta mérete túl nagy"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1315
-msgid "Error: Through hole pad: drill diameter set to 0"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1329
+#, fuzzy
+msgid "Error: Through hole pad has no hole."
 msgstr "Hiba: furatszerelt forrszem esetén a furat nem lehet nulla méretű."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1320
-msgid ""
-"Error: Connector pads are not on the solder paste layer\n"
-"Use SMD pads instead"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1336
+#, fuzzy
+msgid "Error: Connector pads have no solder paste. Use an SMD pad instead."
 msgstr ""
 "Hiba: Az élcsatlakozó típusú forrszemek esetén nem alkalmazható "
 "forrasztópaszta.\n"
 "Használjon SMD forrszem típust."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1330
-msgid "Warning: The pad has been defined in an inner layer only."
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1348
+#, fuzzy
+msgid "Warning: SMD pad has no outer layers."
+msgstr "Hiba: a forrszemnek nincs réteg megadva."
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1358
+msgid "Warning: Fiducial property cannot be set on NPTH pads."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1337
-msgid "Property cannot be set for NPTH"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1364
+msgid "Warning: Testpoint property cannot be set on NPTH pads."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1341
-msgid "Castellated property can be set only for PTH"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1370
+msgid "Warning: Heatsink property cannot be set on NPTH pads."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1345
-msgid "BGA property can be set only for SMD pads"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1376
+msgid "Warning: Castellated property can be set only on PTH pads."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1355
-msgid "Incorrect corner size value"
-msgstr "Helytelen sarokméret"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1382
+msgid "Warning: BGA property can be set only on SMD pads."
+msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1359
-msgid "Incorrect (negative) corner size value"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1394
+msgid "Error: Corner size not a number."
+msgstr ""
+
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1399
+#, fuzzy
+msgid "Error: Negative corner size."
 msgstr "Helytelen (negatív) sarokméret"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1361
-msgid "Corner size value must be smaller than 50%"
-msgstr "A sarokméretnek 50%-nál kisebbnek kell lennie"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1401
+msgid "Warning: Corner size will make pad circular."
+msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1372
-msgid "Incorrect pad shape: the shape must be equivalent to only one polygon"
-msgstr "Helytelen forrszem alak: nem adható meg egyetlen sokszögként"
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1412
+msgid "Error: Custom pad shape must resolve to a single polygon."
+msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1378
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
 msgstr "Forrszem beállítási hibalista"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1614
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1650
 msgid "Modify pad"
 msgstr "Forrszem módosítása"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2019
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2163
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2197
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2050
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2194
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2228
 msgid "No shape selected"
 msgstr "Nincs alak kiválasztva"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2112
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2143
 msgid "Ring/Circle"
 msgstr "Gyűrű/kör"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2116
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2147
 msgid "Shape type:"
 msgstr "Alak típus:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:2116
+#: pcbnew/dialogs/dialog_pad_properties.cpp:2147
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:810
 msgid "Add Primitive"
 msgstr "Primitív hozzáadása"
@@ -24392,7 +24525,7 @@ msgstr "Primitív hozzáadása"
 msgid "Pad type:"
 msgstr "Forrszem típus:"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1339
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:40 pcbnew/pad.cpp:1359
 msgid "Through-hole"
 msgstr "Átmenőfuratos"
 
@@ -24425,8 +24558,8 @@ msgid "Circular"
 msgstr "Kör"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:104
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:364 pcbnew/pad.cpp:1031
-#: pcbnew/pad.cpp:1347
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:364 pcbnew/pad.cpp:1051
+#: pcbnew/pad.cpp:1367
 msgid "Oval"
 msgstr "Ovális"
 
@@ -24438,12 +24571,12 @@ msgstr "Négyszög"
 msgid "Trapezoidal"
 msgstr "Trapéz"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:104 pcbnew/pad.cpp:1349
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:104 pcbnew/pad.cpp:1369
 #, fuzzy
 msgid "Rounded rectangle"
 msgstr "Lekerekített téglalap"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:104 pcbnew/pad.cpp:1350
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:104 pcbnew/pad.cpp:1370
 #, fuzzy
 msgid "Chamfered rectangle"
 msgstr "Letört sarkú téglalap"
@@ -24641,26 +24774,26 @@ msgid ""
 "These properties are specified in Gerber X2  files."
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1355
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1375
 #, fuzzy
 msgid "BGA pad"
 msgstr "Forrszem hozzáadása"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1357
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1377
 #, fuzzy
 msgid "Fiducial, local to footprint"
 msgstr "Ismétlődő alkatrészrajzolatok"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1356
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1376
 msgid "Fiducial, global to board"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1358
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1378
 #, fuzzy
 msgid "Test point pad"
 msgstr "Alkatrészrajzolatok ellenőrzése"
 
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1359
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1379
 msgid "Heatsink pad"
 msgstr ""
 
@@ -25783,49 +25916,47 @@ msgstr "Tartsa az irányt"
 msgid "Parent footprint description"
 msgstr "Szülő alkatrészrajzolat leírása"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:333
-#, c-format
-msgid ""
-"This will change the net assigned to %s pad %s to %s.\n"
-"Do you wish to continue?"
-msgstr ""
-"A(z) %s alkatrész %s lábának átkötése a(z) %s vezetékre.\n"
-"Folytatja?"
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:334
+#, fuzzy, c-format
+msgid "Changing the net will also update %s pad %s to %s."
+msgstr "A(z) %s alkatrész %s lábának átkötése (%s -> %s)"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, c-format
-msgid ""
-"This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
-"Do you wish to continue?"
-msgstr ""
-"A(z) %s alkatrész %s láb valamint a(z) %s alkatrész %s láb átkötése a(z) %s "
-"vezetékre.\n"
-"Folytatja?"
-
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:353
 #, fuzzy, c-format
-msgid ""
-"This will change the net assigned to %lu connected pads to %s.\n"
-"Do you wish to continue?"
-msgstr ""
-"Összesen %d alkatrészláb átkötése a(z) %s vezetékre.\n"
-"Folytatja?"
+msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
+msgstr "A(z) %s alkatrész %s lábának átkötése (%s -> %s)"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:360
-msgid "Continue"
-msgstr "Folytatás"
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:352
+#, fuzzy, c-format
+msgid "Changing the net will also update %lu connected pads to %s."
+msgstr "A(z) %s alkatrész %s lábának átkötése (%s -> %s)"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:414
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:358
+#, fuzzy
+msgid "Change Nets"
+msgstr "Típus módosítása"
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:358
+#, fuzzy
+msgid "Leave Nets Unchanged"
+msgstr "Változások mentése"
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:379
 msgid "Via drill size must be smaller than via diameter"
 msgstr "Via furatnak kisebnek kell lennie a via átmérőjénél"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:423
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:388
 msgid "Via start layer and end layer cannot be the same"
 msgstr "Via átvezetés kezdő és befejező rétege nem lehet azonos"
 
-#: pcbnew/dialogs/dialog_track_via_properties.cpp:579
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:529
 msgid "Edit track/via properties"
 msgstr "Vezetősáv / Via tulajdonságok szerkesztése"
+
+#: pcbnew/dialogs/dialog_track_via_properties.cpp:594
+#, fuzzy
+msgid "Updating nets"
+msgstr "Netlista frissítése"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:49
 msgid "Start point X:"
@@ -25879,17 +26010,17 @@ msgid "Via type:"
 msgstr "Via típus:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:243
-#: pcbnew/track.cpp:1006
+#: pcbnew/track.cpp:1019
 msgid "Through"
 msgstr "Átmenő"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:243
-#: pcbnew/track.cpp:1008
+#: pcbnew/track.cpp:1021
 msgid "Micro"
 msgstr "μVia"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:243
-#: pcbnew/track.cpp:1007
+#: pcbnew/track.cpp:1020
 msgid "Blind/buried"
 msgstr "Zsák/eltemetett"
 
@@ -27443,8 +27574,8 @@ msgstr ""
 msgid "Pre-defined track and via dimensions:"
 msgstr "Előre definiált vezetősáv és via méretek:"
 
-#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:102 pcbnew/pad.cpp:885
-#: pcbnew/track.cpp:673 pcbnew/track.cpp:1065
+#: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:102 pcbnew/pad.cpp:905
+#: pcbnew/track.cpp:686 pcbnew/track.cpp:1078
 msgid "Drill"
 msgstr "Furat"
 
@@ -27986,27 +28117,27 @@ msgstr "Alkatrészrajzolatok összevetése a rajzjelekkel...\n"
 msgid "Checking footprints for overlapping courtyards..."
 msgstr "Alkatrészrajzolat határolódobozok átlapolódása nem engedélyezett"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:342
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:341
 #, fuzzy
 msgid "DPs evaluated:"
 msgstr "Pulzáló érték:"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:450
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:447
 #, fuzzy, c-format
 msgid "(%s maximum uncoupled length: %s; actual: %s)"
 msgstr "lokális távolságtartás és szigetelési távolság beállítások"
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:484
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:481
 #, c-format
 msgid "minimum gap: %s; "
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:488
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:485
 #, c-format
 msgid "maximum gap: %s; "
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:491
+#: pcbnew/drc/drc_test_provider_diff_pair_coupling.cpp:488
 #, fuzzy, c-format
 msgid "actual: %s)"
 msgstr "Valós méret"
@@ -28318,65 +28449,65 @@ msgid ""
 "Please fix the stackup"
 msgstr ""
 
-#: pcbnew/files.cpp:120
+#: pcbnew/files.cpp:122
 #, fuzzy
 msgid "All KiCad Board Files"
 msgstr "Nem KiCad nyákterv fájl importálása"
 
-#: pcbnew/files.cpp:158
+#: pcbnew/files.cpp:160
 msgid "Open Board File"
 msgstr "Nyákterv fájl megnyitása"
 
-#: pcbnew/files.cpp:158
+#: pcbnew/files.cpp:160
 msgid "Import Non KiCad Board File"
 msgstr "Nem KiCad nyákterv fájl importálása"
 
-#: pcbnew/files.cpp:184
+#: pcbnew/files.cpp:186
 #, fuzzy
 msgid "Create a new project for this board"
 msgstr "Projekt létrehozása sablonból"
 
-#: pcbnew/files.cpp:186
+#: pcbnew/files.cpp:188
 msgid ""
 "Creating a project will enable features such as design rules, net classes, "
 "and layer presets"
 msgstr ""
 
-#: pcbnew/files.cpp:228
+#: pcbnew/files.cpp:230
 msgid "Save Board File As"
 msgstr "Nyákterv fájl mentése másként"
 
-#: pcbnew/files.cpp:258
+#: pcbnew/files.cpp:260
 msgid "Printed circuit board"
 msgstr "Nyomtatott áramköri lap"
 
-#: pcbnew/files.cpp:322
+#: pcbnew/files.cpp:324
 #, c-format
 msgid "Recovery file \"%s\" not found."
 msgstr "A(z) \"%s\" biztonsági másolat fájl nem található."
 
-#: pcbnew/files.cpp:327
+#: pcbnew/files.cpp:329
 #, fuzzy, c-format
 msgid "OK to load recovery file \"%s\""
 msgstr "A visszaállítás sikerült a(z) \"%s\" biztonsági másolat fájlból."
 
-#: pcbnew/files.cpp:350
+#: pcbnew/files.cpp:352
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to \"%s\" before continuing?"
 msgstr ""
 "A jelenlegi nyákterv el fog veszni, a művelet nem vonható vissza!\n"
 "Folytatja?"
 
-#: pcbnew/files.cpp:358
+#: pcbnew/files.cpp:360
 #, fuzzy
 msgid "Current Board will be closed. Continue?"
 msgstr "Az aktuális adatok elveszhetnek?"
 
-#: pcbnew/files.cpp:399
+#: pcbnew/files.cpp:401
 msgid "noname"
 msgstr "névtelen"
 
-#: pcbnew/files.cpp:511
+#: pcbnew/files.cpp:513
 #, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -28389,38 +28520,39 @@ msgstr ""
 "Ez a KiCad korábbi verzióiban eltérő módon működött, amelyek esetén\n"
 "a körvonal vastagság határozta meg a szigetelési távolságot."
 
-#: pcbnew/files.cpp:515
+#: pcbnew/files.cpp:517
 msgid "Edge Clearance Warning"
 msgstr "Rézkitöltés szigetelési távolság figyelmeztetés"
 
-#: pcbnew/files.cpp:546
+#: pcbnew/files.cpp:548
 #, c-format
 msgid "PCB file \"%s\" is already open."
 msgstr "A(z) \"%s\" nyákterv fájl már meg van nyitva."
 
-#: pcbnew/files.cpp:553
+#: pcbnew/files.cpp:555
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "A nyákterv módosult. Menti a módosításokat?"
 
-#: pcbnew/files.cpp:572
+#: pcbnew/files.cpp:574
 #, c-format
 msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "A(z) \"%s\" panel nem létezik. Szeretné létrehozni?"
 
-#: pcbnew/files.cpp:736
+#: pcbnew/files.cpp:741
+#, fuzzy
 msgid ""
-"This file was created by an older version of Pcbnew.\n"
-"It will be stored in the new file format when you save this file again."
+"This file was created by an older version of KiCad. It will be converted to "
+"the new format when saved."
 msgstr ""
 "Ezt a fájlt a Nyáktervező egy régebbi verziója hozta létre.\n"
 "A fájl már az új formátumban kerül tárolásra, ha ismét menti ezt a fájlt."
 
-#: pcbnew/files.cpp:812 pcbnew/files.cpp:950
+#: pcbnew/files.cpp:818 pcbnew/files.cpp:956
 #, c-format
 msgid "No access rights to write to file \"%s\""
 msgstr "Nincs írási jogosultsága a(z) \"%s\" fájlba íráshoz."
 
-#: pcbnew/files.cpp:876 pcbnew/files.cpp:970
+#: pcbnew/files.cpp:882 pcbnew/files.cpp:976
 #, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -28429,7 +28561,7 @@ msgstr ""
 "Hiba a(z) \"%s\" panel fájl mentése közben.\n"
 "%s"
 
-#: pcbnew/files.cpp:895
+#: pcbnew/files.cpp:901
 #, fuzzy, c-format
 msgid ""
 "Error saving board file \"%s\".\n"
@@ -28438,7 +28570,7 @@ msgstr ""
 "Hiba a(z) \"%s\" panel fájl mentése közben.\n"
 "%s"
 
-#: pcbnew/files.cpp:1008
+#: pcbnew/files.cpp:1014
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -28447,7 +28579,7 @@ msgstr ""
 "Nyákterv másolva:\n"
 "\"%s\""
 
-#: pcbnew/files.cpp:1126
+#: pcbnew/files.cpp:1132
 #, c-format
 msgid ""
 "Error occurred saving project specific footprint library table:\n"
@@ -28520,36 +28652,36 @@ msgstr "Dokumentum: %s "
 msgid "Keywords: %s"
 msgstr "Kulcsszavak: %s"
 
-#: pcbnew/footprint.cpp:1072
+#: pcbnew/footprint.cpp:1070
 #, fuzzy
 msgid "<no reference designator>"
 msgstr "referencia jelölés"
 
-#: pcbnew/footprint.cpp:1074
+#: pcbnew/footprint.cpp:1072
 #, fuzzy, c-format
 msgid "Footprint %s"
 msgstr "Alkatrészrajzolat: %s"
 
-#: pcbnew/footprint.cpp:1923 pcbnew/pad.cpp:1420
+#: pcbnew/footprint.cpp:1921 pcbnew/pad.cpp:1440
 #, fuzzy
 msgid "Local Clearance"
 msgstr "Szigetelési távolság"
 
-#: pcbnew/footprint.cpp:1926 pcbnew/pad.cpp:1397
+#: pcbnew/footprint.cpp:1924 pcbnew/pad.cpp:1417
 #, fuzzy
 msgid "Local Solderpaste Margin"
 msgstr "Forrasztópaszta réteg távolságtartás:"
 
-#: pcbnew/footprint.cpp:1929 pcbnew/pad.cpp:1400
+#: pcbnew/footprint.cpp:1927 pcbnew/pad.cpp:1420
 msgid "Local Solderpaste Margin Ratio"
 msgstr ""
 
-#: pcbnew/footprint.cpp:1931
+#: pcbnew/footprint.cpp:1929
 #, fuzzy
 msgid "Thermal Width"
 msgstr "Vezetősáv szélesség"
 
-#: pcbnew/footprint.cpp:1934
+#: pcbnew/footprint.cpp:1932
 #, fuzzy
 msgid "Thermal Gap"
 msgstr "Hőcsapda hézag:"
@@ -28584,7 +28716,7 @@ msgstr ""
 msgid "%s [from %s.%s]"
 msgstr "%s frissítve (\"%s\" -> \"%s\")"
 
-#: pcbnew/footprint_edit_frame.cpp:782 pcbnew/pcb_edit_frame.cpp:1190
+#: pcbnew/footprint_edit_frame.cpp:782 pcbnew/pcb_edit_frame.cpp:1189
 msgid "[Unsaved]"
 msgstr "[Nincs mentve]"
 
@@ -29039,22 +29171,22 @@ msgstr "ISMERETLEN (%d)"
 msgid "Clipboard content is not KiCad compatible"
 msgstr "A vágólap tartalma nem KiCad kompatibilis"
 
-#: pcbnew/load_select_footprint.cpp:240
+#: pcbnew/load_select_footprint.cpp:247
 #, c-format
 msgid "Choose Footprint (%d items loaded)"
 msgstr "Válasszon alkatrészrajzolatot (%d elem betöltve)"
 
-#: pcbnew/load_select_footprint.cpp:338
+#: pcbnew/load_select_footprint.cpp:345
 #, c-format
 msgid "Footprints [%u items]"
 msgstr "Alkatrészrajzolatok [%u elem]"
 
-#: pcbnew/load_select_footprint.cpp:402
+#: pcbnew/load_select_footprint.cpp:409
 #, c-format
 msgid "Footprint \"%s\" saved"
 msgstr "\"%s\" alkatrészrajzolat elmentve."
 
-#: pcbnew/load_select_footprint.cpp:412
+#: pcbnew/load_select_footprint.cpp:419
 #, c-format
 msgid "Footprint library \"%s\" saved as \"%s\"."
 msgstr "A(z) \"%s\" alkatrészrajzolat könyvtár elmentve \"%s\" néven."
@@ -29607,184 +29739,184 @@ msgstr ""
 "\"%s\" fájlban,\n"
 "%d. sor"
 
-#: pcbnew/pad.cpp:653
+#: pcbnew/pad.cpp:673
 #, c-format
 msgid "pad %s"
 msgstr ""
 
-#: pcbnew/pad.cpp:763 pcbnew/pad.cpp:784 pcbnew/pad.cpp:803
+#: pcbnew/pad.cpp:783 pcbnew/pad.cpp:804 pcbnew/pad.cpp:823
 #, fuzzy
 msgid "parent footprint"
 msgstr "Szülő alkatrészrajzolatból"
 
-#: pcbnew/pad.cpp:770 pcbnew/pad.cpp:790 pcbnew/pad.cpp:809
+#: pcbnew/pad.cpp:790 pcbnew/pad.cpp:810 pcbnew/pad.cpp:829
 #, fuzzy
 msgid "pad"
 msgstr "Forrszem"
 
-#: pcbnew/pad.cpp:827
+#: pcbnew/pad.cpp:847
 #, fuzzy
 msgid "Pin Name"
 msgstr "Lábnév"
 
-#: pcbnew/pad.cpp:844
+#: pcbnew/pad.cpp:864
 msgid "BGA"
 msgstr ""
 
-#: pcbnew/pad.cpp:845
+#: pcbnew/pad.cpp:865
 msgid "Fiducial global"
 msgstr ""
 
-#: pcbnew/pad.cpp:846
+#: pcbnew/pad.cpp:866
 msgid "Fiducial local"
 msgstr ""
 
-#: pcbnew/pad.cpp:847
+#: pcbnew/pad.cpp:867
 #, fuzzy
 msgid "Test point"
 msgstr "Alkatrészrajzolatok ellenőrzése"
 
-#: pcbnew/pad.cpp:848
+#: pcbnew/pad.cpp:868
 #, fuzzy
 msgid "Heat sink"
 msgstr "Rajzjel láb ismétlése"
 
-#: pcbnew/pad.cpp:849
+#: pcbnew/pad.cpp:869
 #, fuzzy
 msgid "Castellated"
 msgstr "Számolás"
 
-#: pcbnew/pad.cpp:856 pcbnew/track.cpp:669 pcbnew/track.cpp:1063
+#: pcbnew/pad.cpp:876 pcbnew/track.cpp:682 pcbnew/track.cpp:1076
 msgid "Diameter"
 msgstr "Forrszem átmérő"
 
-#: pcbnew/pad.cpp:878
+#: pcbnew/pad.cpp:898
 #, fuzzy
 msgid "Length in Package"
 msgstr "IC bondolás hossza"
 
-#: pcbnew/pad.cpp:891
+#: pcbnew/pad.cpp:911
 msgid "Drill X / Y"
 msgstr "Furat X / Y"
 
-#: pcbnew/pad.cpp:901 pcbnew/track.cpp:635 pcbnew/track.cpp:678
+#: pcbnew/pad.cpp:921 pcbnew/track.cpp:648 pcbnew/track.cpp:691
 #: pcbnew/zone.cpp:628
 #, fuzzy, c-format
 msgid "Min Clearance: %s"
 msgstr "Minimális szigetelési távolság:"
 
-#: pcbnew/pad.cpp:903 pcbnew/track.cpp:637 pcbnew/track.cpp:644
-#: pcbnew/track.cpp:680 pcbnew/track.cpp:686 pcbnew/zone.cpp:630
+#: pcbnew/pad.cpp:923 pcbnew/track.cpp:650 pcbnew/track.cpp:657
+#: pcbnew/track.cpp:693 pcbnew/track.cpp:699 pcbnew/zone.cpp:630
 #, fuzzy, c-format
 msgid "(from %s)"
 msgstr "kitől "
 
-#: pcbnew/pad.cpp:1033
+#: pcbnew/pad.cpp:1053
 msgid "Trap"
 msgstr "Trapéz"
 
-#: pcbnew/pad.cpp:1034
+#: pcbnew/pad.cpp:1054
 msgid "Roundrect"
 msgstr "Lekerekített négyszög"
 
-#: pcbnew/pad.cpp:1035
+#: pcbnew/pad.cpp:1055
 msgid "Chamferedrect"
 msgstr "Letört sarkú négyszög"
 
-#: pcbnew/pad.cpp:1036
+#: pcbnew/pad.cpp:1056
 msgid "CustomShape"
 msgstr "Egyedi alakzat"
 
-#: pcbnew/pad.cpp:1048
+#: pcbnew/pad.cpp:1068
 msgid "Conn"
 msgstr "Élcsatlakozó"
 
-#: pcbnew/pad.cpp:1059
+#: pcbnew/pad.cpp:1079
 #, c-format
 msgid "Pad of %s on %s"
 msgstr "\"%s\" alkatrészrajzolat forrszeme a(z) \"%s\" réteg(ek)en."
 
-#: pcbnew/pad.cpp:1065
+#: pcbnew/pad.cpp:1085
 #, c-format
 msgid "Pad %s of %s on %s"
 msgstr ""
 "A(z) \"%s\" forrszem (\"%s\" alkatrészrajzolat) a(z) \"%s\" réteg(ek)en."
 
-#: pcbnew/pad.cpp:1341
+#: pcbnew/pad.cpp:1361
 #, fuzzy
 msgid "Edge connector"
 msgstr "Élcsatlakozó"
 
-#: pcbnew/pad.cpp:1342
+#: pcbnew/pad.cpp:1362
 #, fuzzy
 msgid "NPTH, mechanical"
 msgstr "Fémezetlen furat / rögzítő"
 
-#: pcbnew/pad.cpp:1348
+#: pcbnew/pad.cpp:1368
 #, fuzzy
 msgid "Trapezoid"
 msgstr "Trapéz"
 
-#: pcbnew/pad.cpp:1360
+#: pcbnew/pad.cpp:1380
 #, fuzzy
 msgid "Castellated pad"
 msgstr "Furatfémezett forrszemek:"
 
-#: pcbnew/pad.cpp:1366
+#: pcbnew/pad.cpp:1386
 #, fuzzy
 msgid "Pad Type"
 msgstr "Forrszem típus:"
 
-#: pcbnew/pad.cpp:1374
+#: pcbnew/pad.cpp:1394
 #, fuzzy
 msgid "Pad Number"
 msgstr "Forrszem sorszám:"
 
-#: pcbnew/pad.cpp:1379
+#: pcbnew/pad.cpp:1399
 #, fuzzy
 msgid "Size X"
 msgstr "X méret:"
 
-#: pcbnew/pad.cpp:1382
+#: pcbnew/pad.cpp:1402
 #, fuzzy
 msgid "Size Y"
 msgstr "Y méret:"
 
-#: pcbnew/pad.cpp:1385
+#: pcbnew/pad.cpp:1405
 #, fuzzy
 msgid "Hole Size X"
 msgstr "Furat méret X:"
 
-#: pcbnew/pad.cpp:1388
+#: pcbnew/pad.cpp:1408
 #, fuzzy
 msgid "Hole Size Y"
 msgstr "Furat méret Y:"
 
-#: pcbnew/pad.cpp:1391 pcbnew/track.cpp:625
+#: pcbnew/pad.cpp:1411 pcbnew/track.cpp:638
 msgid "Pad To Die Length"
 msgstr "IC bondolás hossza"
 
-#: pcbnew/pad.cpp:1394
+#: pcbnew/pad.cpp:1414
 #, fuzzy
 msgid "Local Soldermask Margin"
 msgstr "Forrasztásgátló réteg távolságtartás:"
 
-#: pcbnew/pad.cpp:1402
+#: pcbnew/pad.cpp:1422
 #, fuzzy
 msgid "Thermal Relief Spoke Width"
 msgstr "Hőcsapda-küllő szélesség:"
 
-#: pcbnew/pad.cpp:1405
+#: pcbnew/pad.cpp:1425
 #, fuzzy
 msgid "Thermal Relief"
 msgstr "Hőcsillapítók:"
 
-#: pcbnew/pad.cpp:1408
+#: pcbnew/pad.cpp:1428
 #, fuzzy
 msgid "Fabrication Property"
 msgstr "Sorozatgyártáshoz szükséges fájlok"
 
-#: pcbnew/pad.cpp:1411
+#: pcbnew/pad.cpp:1431
 #, fuzzy
 msgid "Round Radius Ratio"
 msgstr "Szimulátor futtatása"
@@ -29803,16 +29935,16 @@ msgstr "A(z) %s fájl mentése megtörtént"
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Az automatikus mentés \"%s\" fájl nem távolítható el!"
 
-#: pcbnew/pcb_edit_frame.cpp:1087
+#: pcbnew/pcb_edit_frame.cpp:1086
 msgid "PCB file changes are unsaved"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1332
+#: pcbnew/pcb_edit_frame.cpp:1331
 #, fuzzy
 msgid "The schematic for this board cannot be found."
 msgstr "Ez a művelet nem vonható vissza."
 
-#: pcbnew/pcb_edit_frame.cpp:1366
+#: pcbnew/pcb_edit_frame.cpp:1365
 msgid ""
 "Cannot update the PCB because Pcbnew is opened in stand-alone mode. In order "
 "to create or update PCBs from schematics, you must launch the KiCad project "
@@ -29822,20 +29954,20 @@ msgstr ""
 "kívánt munkafolyamatok használatához mindig a KiCad keretrendszerből indítsa "
 "el a programokat."
 
-#: pcbnew/pcb_edit_frame.cpp:1384
+#: pcbnew/pcb_edit_frame.cpp:1383
 msgid "Eeschema netlist"
 msgstr "Eeschema netlista"
 
-#: pcbnew/pcb_edit_frame.cpp:1425
+#: pcbnew/pcb_edit_frame.cpp:1424
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "A(z) \"%s\" kapcsolási rajz fájl nem található."
 
-#: pcbnew/pcb_edit_frame.cpp:1456
+#: pcbnew/pcb_edit_frame.cpp:1455
 msgid "Eeschema failed to load:\n"
 msgstr "A Kapcsolási rajz szerkesztőnek nem sikerült betöltenie:\n"
 
-#: pcbnew/pcb_edit_frame.cpp:1653
+#: pcbnew/pcb_edit_frame.cpp:1652
 msgid "Export Hyperlynx Layout"
 msgstr "Nyákterv exportálása Hyperlynx formátumba"
 
@@ -29869,22 +30001,22 @@ msgstr "Alkatrészrajzolat határolódoboza nincs megadva"
 msgid "must be mm, in, or mil"
 msgstr ""
 
-#: pcbnew/pcb_group.cpp:274
+#: pcbnew/pcb_group.cpp:280
 #, fuzzy, c-format
 msgid "Unnamed Group, %zu members"
 msgstr "Rajzjelek csoportosítása"
 
-#: pcbnew/pcb_group.cpp:278
+#: pcbnew/pcb_group.cpp:284
 #, c-format
 msgid "Group \"%s\", %zu members"
 msgstr ""
 
-#: pcbnew/pcb_group.cpp:292
+#: pcbnew/pcb_group.cpp:298
 #, fuzzy
 msgid "<unnamed>"
 msgstr "névtelen"
 
-#: pcbnew/pcb_group.cpp:293
+#: pcbnew/pcb_group.cpp:299
 #, fuzzy
 msgid "Members"
 msgstr "Megnevezés tagok"
@@ -29924,12 +30056,12 @@ msgstr "Pont vonszolása"
 msgid "Unrecognized"
 msgstr ""
 
-#: pcbnew/pcb_shape.cpp:1273 pcbnew/track.cpp:1034 pcbnew/track.cpp:1051
+#: pcbnew/pcb_shape.cpp:1273 pcbnew/track.cpp:1047 pcbnew/track.cpp:1064
 #, fuzzy
 msgid "End X"
 msgstr "Vég X:"
 
-#: pcbnew/pcb_shape.cpp:1275 pcbnew/track.cpp:1036 pcbnew/track.cpp:1053
+#: pcbnew/pcb_shape.cpp:1275 pcbnew/track.cpp:1049 pcbnew/track.cpp:1066
 #, fuzzy
 msgid "End Y"
 msgstr "Vég Y:"
@@ -30123,7 +30255,7 @@ msgid ""
 "Fill on Altium layer %d has no KiCad equivalent. Put it on Eco1_User instead"
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:78
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:81
 msgid ""
 "The selected file indicates that nets might be out of synchronisation with "
 "the schematic. It is recommended that you carry out an 'Align Nets' "
@@ -30131,52 +30263,51 @@ msgid ""
 "and the schematic. "
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:104
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:107
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:135
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
+#, c-format
+msgid ""
+"The CADSTAR design contains variants which has no KiCad equivalent. Only the "
+"variant '%s' was loaded."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:139
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:148
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:188
-#, c-format
-msgid ""
-"The selected file is not valid or might be corrupt: The layer stack refers "
-"to layer ID '%s' which does not exist in the layer definitions."
-msgstr ""
-
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:212
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:441
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:570
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:598
 #, c-format
 msgid "Design rule %s was not found. This was ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:594
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:597
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:624
 msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:699
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:726
 #, c-format
 msgid ""
 "The CADSTAR area '%s' in library component '%s' does not have a KiCad "
@@ -30184,34 +30315,55 @@ msgid ""
 "imported."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:934
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:961
 #, c-format
 msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:995
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1022
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find group ID %s in the group "
 "definitions."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1002
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1029
 #, c-format
 msgid ""
 "The file appears to be corrupt. Unable to find sub group %s in the group map "
 "(parent group ID=%s, Name=%s)."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1121
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1131
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
 #, c-format
-msgid "Dimension ID %s has no KiCad equivalent. This was not imported"
+msgid ""
+"Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
+"aligned dimension was loaded instead."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
+#, c-format
+msgid ""
+"Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
+"are not yet supported in KiCad. The dimension object was imported with an "
+"internal dimension style instead."
 msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
+#, c-format
+msgid "Unexpected Dimension type (ID %s). This was not imported"
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
+#, c-format
+msgid ""
+"Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
+"object was not imported."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
 msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
@@ -30219,45 +30371,45 @@ msgid ""
 "were imported."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1178
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1354
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1205
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1381
 #, c-format
 msgid "Unable to find component '%s' in the library(Symdef ID: '%s')"
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1320
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1496
 #, c-format
 msgid "Unable to find documentation symbol in the library (Symdef ID: '%s')"
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1386
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1562
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1392
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1568
 #, c-format
 msgid ""
-"The CADSTAR template '%s' has the setting 'Box Isolated Pins'enabled. This "
+"The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1398
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1574
 #, c-format
 msgid ""
-"The CADSTAR template '%s' has the setting 'Automatic Repour'enabled. This "
+"The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1407
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1583
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
@@ -30265,7 +30417,7 @@ msgid ""
 "ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1415
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1591
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for 'Retain Poured Copper - "
@@ -30274,7 +30426,7 @@ msgid ""
 "as the minimum island area of the KiCad Zone."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1446
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1622
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has different settings for thermal relief in pads "
@@ -30282,7 +30434,7 @@ msgid ""
 "pads has been applied."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1486
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1662
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
@@ -30290,7 +30442,7 @@ msgid ""
 "created."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1530
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1706
 msgid ""
 "The CADSTAR design contains COPPER elements, which have no direct KiCad "
 "equivalent. These have been imported as a KiCad Zone if solid or hatch "
@@ -30298,21 +30450,25 @@ msgid ""
 "closed)."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1628
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1804
 #, c-format
 msgid ""
 "The net '%s' references component ID '%s' which does not exist. This has "
 "been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1634
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1810
 #, c-format
 msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1731
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
+msgid "Text Variables could not be set as there is no project loaded."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
 msgid ""
 "The CADSTAR via code '%s' has different shape from a circle defined. KiCad "
@@ -30320,14 +30476,14 @@ msgid ""
 "with circular shape of %.2f mm diameter."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1936
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2176
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2655
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2897
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has %d hatches defined. KiCad only supports 2 "
@@ -30335,7 +30491,7 @@ msgid ""
 "crosshatched."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2665
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2907
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different line widths for each hatch. "
@@ -30343,7 +30499,7 @@ msgid ""
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2677
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2919
 #, c-format
 msgid ""
 "The CADSTAR Hatching code '%s' has different step sizes for each hatch. "
@@ -30351,7 +30507,7 @@ msgid ""
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2690
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2932
 #, c-format
 msgid ""
 "The hatches in CADSTAR Hatching code '%s' have an angle  difference of %.1f "
@@ -30360,7 +30516,14 @@ msgid ""
 "horizontal."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2773
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3005
+#, c-format
+msgid ""
+"Dimension ID %s uses a type of unit that is not supported in KiCad. "
+"Milimetres were applied instead."
+msgstr ""
+
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
 "The CADSTAR design contains nets with a 'Net Class' assigned. KiCad does not "
 "have an equivalent to CADSTAR's Net Class so these elements were not "
@@ -30368,7 +30531,7 @@ msgid ""
 "Route Code' (which has been imported for all nets)."
 msgstr ""
 
-#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:2784
+#: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3107
 msgid ""
 "The CADSTAR design contains nets with a 'Spacing Class' assigned. KiCad does "
 "not have an equivalent to CADSTAR's Spacing Class so these elements were not "
@@ -30614,13 +30777,13 @@ msgstr ""
 "Ismétlődő VEZETÉKOSZTÁLY név: \"%s\", a(z) \"%s\" fájl %d. sorában (%d. "
 "karakter)"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3198
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3202
 #, c-format
 msgid "Cannot handle footprint text type %s"
 msgstr "Az alkatrészrajzolat %s szövegtípusa nem kezelhető"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3720
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4329
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3724
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4333
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -30632,7 +30795,7 @@ msgstr ""
 "fájl: \"%s\" \n"
 "%d. sor, %d. oszlop"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:3736
+#: pcbnew/plugins/kicad/pcb_parser.cpp:3740
 #, fuzzy, c-format
 msgid ""
 "Net name doesn't match net ID in\n"
@@ -30644,9 +30807,9 @@ msgstr ""
 "fájl: \"%s\" \n"
 "%d. sor, %d. oszlop"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4171
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4242
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4432
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4175
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4246
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4436
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -30658,14 +30821,14 @@ msgstr ""
 "fájl: \"%s\" \n"
 "%d. sor, %d. oszlop"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4548
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4552
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2575
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
 msgstr "A régi kitöltési mód nem ajánlott. Átváltja sokszög kitöltésre?"
 
-#: pcbnew/plugins/kicad/pcb_parser.cpp:4550
+#: pcbnew/plugins/kicad/pcb_parser.cpp:4554
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2577
 msgid "Legacy Zone Warning"
 msgstr "Legacy zóna figyelmeztetés"
@@ -30890,12 +31053,12 @@ msgstr "Behangolva: "
 msgid "?"
 msgstr "?"
 
-#: pcbnew/router/pns_kicad_iface.cpp:950
+#: pcbnew/router/pns_kicad_iface.cpp:951
 #, c-format
 msgid "%s is malformed."
 msgstr ""
 
-#: pcbnew/router/pns_kicad_iface.cpp:953
+#: pcbnew/router/pns_kicad_iface.cpp:954
 #, fuzzy
 msgid ""
 "This zone cannot be handled by the track layout tool.\n"
@@ -30905,7 +31068,7 @@ msgstr ""
 "Ez a zóna nem kezelhető a huzalozás során.\n"
 "Ellenőrizze, hogy a zónakörvonal nem egy önmagát metsző sokszög."
 
-#: pcbnew/router/pns_kicad_iface.cpp:1486 pcbnew/router/router_tool.cpp:423
+#: pcbnew/router/pns_kicad_iface.cpp:1487 pcbnew/router/router_tool.cpp:423
 msgid "Interactive Router"
 msgstr "Interaktív huzalozás"
 
@@ -31157,7 +31320,7 @@ msgstr ""
 msgid "Tracks on Copper layers only"
 msgstr "Vezetősávok lehelyezése csak vezetőrétegeken lehetséges"
 
-#: pcbnew/router/router_tool.cpp:1312 pcbnew/router/router_tool.cpp:1700
+#: pcbnew/router/router_tool.cpp:1312 pcbnew/router/router_tool.cpp:1718
 msgid "The selected item is locked."
 msgstr "A kijelölt elem zárolva van."
 
@@ -31165,7 +31328,7 @@ msgstr "A kijelölt elem zárolva van."
 msgid "Drag Anyway"
 msgstr "Vonszolás mindenképpen"
 
-#: pcbnew/router/router_tool.cpp:1702 pcbnew/tools/pcb_actions.cpp:1315
+#: pcbnew/router/router_tool.cpp:1720 pcbnew/tools/pcb_actions.cpp:1315
 #: pcbnew/tools/pcb_actions.cpp:1321
 msgid "Break Track"
 msgstr "Vezetősáv töréspont"
@@ -31721,34 +31884,34 @@ msgstr "A szegmens nem vonszolható: két kollineáris szegmens"
 msgid "Some of the track segments could not be filleted."
 msgstr "Némely projekt fájlról nem lehetett biztonsági mentést készíteni."
 
-#: pcbnew/tools/edit_tool.cpp:1217 pcbnew/tools/pcb_actions.cpp:289
+#: pcbnew/tools/edit_tool.cpp:1221 pcbnew/tools/pcb_actions.cpp:289
 msgid "Flip"
 msgstr "Átfordítás"
 
-#: pcbnew/tools/edit_tool.cpp:1350 pcbnew/tools/zone_filler_tool.cpp:172
+#: pcbnew/tools/edit_tool.cpp:1358 pcbnew/tools/zone_filler_tool.cpp:172
 msgid "Fill Zone"
 msgstr "Zóna kitöltése"
 
-#: pcbnew/tools/edit_tool.cpp:1519
+#: pcbnew/tools/edit_tool.cpp:1527
 msgid "Move exact"
 msgstr "Mozgatás pontosan"
 
-#: pcbnew/tools/edit_tool.cpp:1670
+#: pcbnew/tools/edit_tool.cpp:1678
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d azonos elem"
 
-#: pcbnew/tools/edit_tool.cpp:1888
+#: pcbnew/tools/edit_tool.cpp:1896
 #, fuzzy
 msgid "Select reference point for the copy..."
 msgstr "Referencia pont megadása másoláshoz..."
 
-#: pcbnew/tools/edit_tool.cpp:1889 pcbnew/tools/edit_tool.cpp:1903
+#: pcbnew/tools/edit_tool.cpp:1897 pcbnew/tools/edit_tool.cpp:1911
 #, fuzzy
 msgid "Selection copied"
 msgstr "Kijelölés másolva."
 
-#: pcbnew/tools/edit_tool.cpp:1890
+#: pcbnew/tools/edit_tool.cpp:1898
 #, fuzzy
 msgid "Copy cancelled"
 msgstr "Másolás megszakítva."
@@ -31757,20 +31920,16 @@ msgstr "Másolás megszakítva."
 msgid "_copy"
 msgstr "_masolat"
 
-#: pcbnew/tools/group_tool.cpp:115
-msgid "Modified group"
-msgstr ""
-
-#: pcbnew/tools/group_tool.cpp:175
+#: pcbnew/tools/group_tool.cpp:41
 #, fuzzy
 msgid "Grouping"
 msgstr "Csoportosítás"
 
-#: pcbnew/tools/group_tool.cpp:197
+#: pcbnew/tools/group_tool.cpp:63
 msgid "Group is in inconsistent state:"
 msgstr ""
 
-#: pcbnew/tools/group_tool.cpp:280
+#: pcbnew/tools/group_tool.cpp:146
 msgid "Click on new member..."
 msgstr ""
 
@@ -33355,39 +33514,39 @@ msgstr "Alkatrészrajzolat név"
 msgid "Select"
 msgstr "Választ"
 
-#: pcbnew/tools/placement_tool.cpp:67
+#: pcbnew/tools/placement_tool.cpp:63
 msgid "Align/Distribute"
 msgstr "Igazítás/Szétszórás"
 
-#: pcbnew/tools/placement_tool.cpp:226
+#: pcbnew/tools/placement_tool.cpp:215
 msgid "Align to top"
 msgstr "Igazítás felülre"
 
-#: pcbnew/tools/placement_tool.cpp:267
+#: pcbnew/tools/placement_tool.cpp:257
 msgid "Align to bottom"
 msgstr "Igazítás alulra"
 
-#: pcbnew/tools/placement_tool.cpp:323
+#: pcbnew/tools/placement_tool.cpp:314
 msgid "Align to left"
 msgstr "Igazítás balra"
 
-#: pcbnew/tools/placement_tool.cpp:379
+#: pcbnew/tools/placement_tool.cpp:371
 msgid "Align to right"
 msgstr "Igazítás jobbra"
 
-#: pcbnew/tools/placement_tool.cpp:420
+#: pcbnew/tools/placement_tool.cpp:413
 msgid "Align to middle"
 msgstr "Igazítás függőlegesen középre"
 
-#: pcbnew/tools/placement_tool.cpp:461
+#: pcbnew/tools/placement_tool.cpp:455
 msgid "Align to center"
 msgstr "Igazítás vízszintesen középre"
 
-#: pcbnew/tools/placement_tool.cpp:527
+#: pcbnew/tools/placement_tool.cpp:518
 msgid "Distribute horizontally"
 msgstr "Szétszórás vízszintesen"
 
-#: pcbnew/tools/placement_tool.cpp:646
+#: pcbnew/tools/placement_tool.cpp:639
 msgid "Distribute vertically"
 msgstr "Szétszórás függőlegesen"
 
@@ -33428,7 +33587,7 @@ msgstr "Zóna kivágás hozzáadása"
 msgid "Add a zone"
 msgstr "Zóna hozzáadása"
 
-#: pcbnew/tools/zone_create_helper.cpp:262
+#: pcbnew/tools/zone_create_helper.cpp:244
 msgid "Add a graphical polygon"
 msgstr "Sokszög hozzáadása"
 
@@ -33482,62 +33641,62 @@ msgstr "\"%s\" érték mely a(z) \"%s\" alkatrészhez tartozik."
 msgid "removed annular ring"
 msgstr "Fityegő viák törlése"
 
-#: pcbnew/track.cpp:628
+#: pcbnew/track.cpp:641
 msgid "Full Length"
 msgstr "Teljes hossz"
 
-#: pcbnew/track.cpp:642
+#: pcbnew/track.cpp:655
 #, fuzzy, c-format
 msgid "Min Width: %s"
 msgstr "Vonalszélesség"
 
-#: pcbnew/track.cpp:655
+#: pcbnew/track.cpp:668
 msgid "Micro Via"
 msgstr "μVia"
 
-#: pcbnew/track.cpp:656
+#: pcbnew/track.cpp:669
 msgid "Blind/Buried Via"
 msgstr "Zsák/eltemetett via"
 
-#: pcbnew/track.cpp:657
+#: pcbnew/track.cpp:670
 msgid "Through Via"
 msgstr "Átmenő via"
 
-#: pcbnew/track.cpp:684
+#: pcbnew/track.cpp:697
 #, c-format
 msgid "Min Annular Width: %s"
 msgstr ""
 
-#: pcbnew/track.cpp:703
+#: pcbnew/track.cpp:716
 msgid "NetCode"
 msgstr "Vezetékkód"
 
-#: pcbnew/track.cpp:844
+#: pcbnew/track.cpp:857
 #, fuzzy, c-format
 msgid "Track %s on %s, length %s"
 msgstr "Vezetősáv %s %s a(z) %s rétegen, hossza: %s"
 
-#: pcbnew/track.cpp:1029 pcbnew/track.cpp:1046
+#: pcbnew/track.cpp:1042 pcbnew/track.cpp:1059
 #, fuzzy
 msgid "Origin X"
 msgstr "Kezdőpont"
 
-#: pcbnew/track.cpp:1032 pcbnew/track.cpp:1049
+#: pcbnew/track.cpp:1045 pcbnew/track.cpp:1062
 #, fuzzy
 msgid "Origin Y"
 msgstr "Kezdőpont"
 
-#: pcbnew/track.cpp:1068
+#: pcbnew/track.cpp:1081
 #, fuzzy
 msgid "Layer Top"
 msgstr "Réteg"
 
-#: pcbnew/track.cpp:1070
+#: pcbnew/track.cpp:1083
 #, fuzzy
 msgid "Layer Bottom"
 msgstr "Alulra"
 
-#: pcbnew/track.cpp:1072
+#: pcbnew/track.cpp:1085
 #, fuzzy
 msgid "Via Type"
 msgstr "Via típus:"
@@ -34279,35 +34438,85 @@ msgstr "Hőcsapda hézag:"
 msgid "Thermal Spoke Width"
 msgstr "Hőcsapda-küllő szélesség:"
 
-#: pcbnew/zone_filler.cpp:105
+#: pcbnew/zone_filler.cpp:107
 #, fuzzy
 msgid "Building zone fills..."
 msgstr "Zónakitöltések ellenőrzése..."
 
-#: pcbnew/zone_filler.cpp:305
+#: pcbnew/zone_filler.cpp:307
 #, fuzzy
 msgid "Removing isolated copper islands..."
 msgstr "Rézkitöltés szigetek eltávolítása"
 
-#: pcbnew/zone_filler.cpp:418
+#: pcbnew/zone_filler.cpp:420
 msgid "Zone fills are out-of-date. Refill?"
 msgstr "A zóna kitöltések már nem naprakészek. Elvégzi az újrakitöltést?"
 
-#: pcbnew/zone_filler.cpp:420
+#: pcbnew/zone_filler.cpp:422
 msgid "Refill"
 msgstr "Újrakitöltés"
 
-#: pcbnew/zone_filler.cpp:420
+#: pcbnew/zone_filler.cpp:422
 msgid "Continue without Refill"
 msgstr "Folytatás újrakitöltés nélkül"
 
-#: pcbnew/zone_filler.cpp:431
+#: pcbnew/zone_filler.cpp:433
 msgid "Performing polygon fills..."
 msgstr "Sokszög kitöltések végrehajtása..."
 
 #: plugins/3d/vrml/vrml.cpp:219
 msgid "[INFO] load failed: input line too long\n"
 msgstr ""
+
+#~ msgid "Pad local clearance must be zero or greater than zero"
+#~ msgstr "A forrszem lokális szigetelési távolsága nem lehet negatív"
+
+#~ msgid "Pad local solder mask clearance must be zero or greater than zero"
+#~ msgstr ""
+#~ "A forrszem lokális forrasztásgátló távolságtartása nem lehet negatív"
+
+#, c-format
+#~ msgid "Pad local solder mask clearance must be greater than %s"
+#~ msgstr ""
+#~ "A forrszem lokális forrasztásgátló távolságtartása legyen nagyobb mint %s"
+
+#~ msgid "Incorrect corner size value"
+#~ msgstr "Helytelen sarokméret"
+
+#~ msgid "Corner size value must be smaller than 50%"
+#~ msgstr "A sarokméretnek 50%-nál kisebbnek kell lennie"
+
+#~ msgid ""
+#~ "Incorrect pad shape: the shape must be equivalent to only one polygon"
+#~ msgstr "Helytelen forrszem alak: nem adható meg egyetlen sokszögként"
+
+#, c-format
+#~ msgid ""
+#~ "This will change the net assigned to %s pad %s to %s.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "A(z) %s alkatrész %s lábának átkötése a(z) %s vezetékre.\n"
+#~ "Folytatja?"
+
+#, c-format
+#~ msgid ""
+#~ "This will change the net assigned to %s pad %s and %s pad %s to %s.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "A(z) %s alkatrész %s láb valamint a(z) %s alkatrész %s láb átkötése a(z) "
+#~ "%s vezetékre.\n"
+#~ "Folytatja?"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "This will change the net assigned to %lu connected pads to %s.\n"
+#~ "Do you wish to continue?"
+#~ msgstr ""
+#~ "Összesen %d alkatrészláb átkötése a(z) %s vezetékre.\n"
+#~ "Folytatja?"
+
+#~ msgid "Continue"
+#~ msgstr "Folytatás"
 
 #~ msgid "no such file"
 #~ msgstr "nincs ilyen fájl"
@@ -38367,9 +38576,6 @@ msgstr ""
 #~ msgid "Edit with Library Editor"
 #~ msgstr "Szerkesztés a Könyvtár szerkesztővel"
 
-#~ msgid "Change Type"
-#~ msgstr "Típus módosítása"
-
 #~ msgid "Delete Junction"
 #~ msgstr "Csomópont törlése"
 
@@ -38812,9 +39018,6 @@ msgstr ""
 
 #~ msgid "Block Operation"
 #~ msgstr "Blokkművelet"
-
-#~ msgid "Changing footprint %s pad %s net from %s to %s."
-#~ msgstr "A(z) %s alkatrész %s lábának átkötése (%s -> %s)"
 
 #, fuzzy
 #~ msgid "Checking netlist symbol footprint \"%s:%s:%s\"."
@@ -40203,12 +40406,6 @@ msgstr ""
 
 #~ msgid "General &Options"
 #~ msgstr "Általános Beállítások"
-
-#~ msgid "Save Library As..."
-#~ msgstr "Rajzjel könyvtár mentése másként"
-
-#~ msgid "Save the current library to a new file"
-#~ msgstr "Aktuális könyvtárat egy új fájlba mentése"
 
 #~ msgid "Export Current View as &PNG..."
 #~ msgstr "Aktuális nézet exportálása PNG-ként"
