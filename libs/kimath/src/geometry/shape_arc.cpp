@@ -32,7 +32,7 @@
 
 SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
                       double aCenterAngle, int aWidth ) :
-    SHAPE( SH_ARC ), m_width( aWidth )
+        SHAPE( SH_ARC ), m_width( aWidth )
 {
     m_start = aArcStartPoint;
     m_mid = aArcStartPoint;
@@ -167,6 +167,24 @@ SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
     m_mid = aOther.m_mid;
     m_width = aOther.m_width;
     m_bbox = aOther.m_bbox;
+}
+
+
+SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                                  double aAngle, double aWidth )
+{
+    m_start = aStart;
+    m_mid   = aStart;
+    m_end   = aEnd;
+    m_width = aWidth;
+
+    VECTOR2I center( GetArcCenter( aStart, aEnd, aAngle ) );
+
+    RotatePoint( m_mid, center, -aAngle * 10.0 / 2.0 );
+
+    update_bbox();
+
+    return *this;
 }
 
 

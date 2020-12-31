@@ -66,7 +66,6 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
      * the distance from A to aP1 (diagLength) to calculate the radius of the arc.
      */
 
-    VECTOR2I arcStart, arcCenter;
     int tangentLength;
 
     if( w > h )
@@ -87,6 +86,9 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     // TODO: if tangentLength zero, we could still place a small arc at the start...
     if( aFillet )
     {
+        VECTOR2I arcStart;
+        VECTOR2D arcCenter;
+
         double diag2 = tangentLength >= 0 ? mp1.SquaredEuclideanNorm() : mp0.SquaredEuclideanNorm();
         double diagLength = std::sqrt( ( 2 * diag2 ) - ( 2 * diag2 * std::cos( 3 * M_PI_4 ) ) );
         int    arcRadius  = KiROUND( diagLength / ( 2.0 * std::cos( 67.5 * M_PI / 180.0 ) ) );
@@ -107,7 +109,6 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 arcStart  = aP0 + mp1 + mp0.Resize( mp1.EuclideanNorm() );
                 arcCenter = arcStart + centerDir.Resize( arcRadius );
                 SHAPE_ARC new_arc( arcCenter, aP0, 45 * rotationSign );
-
                 pl.Append( new_arc );
                 pl.Append( aP1 );
             }
@@ -116,14 +117,12 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 // Negative tangentLength, diagonal start: arc goes at the end
                 arcStart  = aP0 + mp1.Resize( std::abs( tangentLength ) );
                 arcCenter = aP1 + centerDir.Resize( arcRadius );
-                SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+
+                SHAPE_ARC new_arc;
+                new_arc.ConstructFromStartEndAngle( arcStart, aP1, 45 * rotationSign );
 
                 pl.Append( aP0 );
                 pl.Append( new_arc );
-
-                // TODO: nicer way of fixing these up
-                if( new_arc.GetP1() != aP1 )
-                    pl.Replace( -1, -1, aP1 );
             }
         }
         else
@@ -136,14 +135,12 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
                 // Positive tangentLength: arc goes at the end
                 arcStart  = aP0 + mp0.Resize( tangentLength );
                 arcCenter = arcStart + centerDir.Resize( arcRadius );
-                SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+
+                SHAPE_ARC new_arc;
+                new_arc.ConstructFromStartEndAngle( arcStart, aP1, 45 * rotationSign );
 
                 pl.Append( aP0 );
                 pl.Append( new_arc );
-
-                // TODO: nicer way of fixing these up
-                if( new_arc.GetP1() != aP1 )
-                    pl.Replace( -1, -1, aP1 );
             }
             else
             {

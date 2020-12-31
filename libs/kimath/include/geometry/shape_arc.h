@@ -46,7 +46,8 @@ public:
     {};
 
     /**
-     * SHAPE_ARC ctor.
+     * SHAPE_ARC ctor using center, start, angle.  Center and angle are used to calculate the mid
+     * and end points of the arc, and are not stored
      * @param aArcCenter is the arc center
      * @param aArcStartPoint is the arc start point
      * @param aCenterAngle is the arc angle in degrees
@@ -83,6 +84,17 @@ public:
     {
         return new SHAPE_ARC( *this );
     }
+
+    /**
+     * Constructs this arc from the given start, end and angle.
+     * @param aStart is the arc starting point
+     * @param aEnd is the arc endpoint
+     * @param aAngle is the arc included angle
+     * @param aWidth is the arc line thickness
+     * @return *this
+     */
+    SHAPE_ARC& ConstructFromStartEndAngle( const VECTOR2I& aStart, const VECTOR2I& aEnd,
+                                           double aAngle, double aWidth = 0 );
 
     const VECTOR2I& GetP0() const { return m_start; }
     const VECTOR2I& GetP1() const { return m_end; }
