@@ -1,3 +1,3 @@
 (fp_lib_table
-  (lib (name Connector_Dsub)(type KiCad)(uri "$(KISYSMOD)/Connector_Dsub.pretty")(options "")(descr ""))
+  (lib (name Connector_Dsub)(type KiCad)(uri "$(KICAD6_FOOTPRINT_DIR)/Connector_Dsub.pretty")(options "")(descr ""))
 )

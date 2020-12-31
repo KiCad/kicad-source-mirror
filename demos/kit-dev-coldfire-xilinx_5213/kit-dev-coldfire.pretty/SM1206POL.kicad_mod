@@ -21,7 +21,7 @@
   (fp_line (start -2.54 -1.143) (end -2.794 -1.143) (layer F.SilkS) (width 0.127))
   (pad "1" smd rect (at -1.651 0) (size 1.524 2.032) (layers "F.Cu" "F.Paste" "F.Mask"))
   (pad "2" smd rect (at 1.651 0) (size 1.524 2.032) (layers "F.Cu" "F.Paste" "F.Mask"))
-  (model "${KISYS3DMOD}/Capacitor_SMD.3dshapes/C_1206_3216Metric.wrl"
+  (model "${KICAD6_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.wrl"
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

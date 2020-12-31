@@ -305,7 +305,7 @@
       (net 2 "Net-(C1-Pad1)") (tstamp aeded7e3-b278-4188-a018-5517ed785333))
     (pad "2" thru_hole circle (at 5 0 90) (size 2 2) (drill 1) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp ddeafcc4-fac1-48aa-a9d5-a388bf01a059))
-    (model "${KISYS3DMOD}/Capacitor_THT.3dshapes/CP_Radial_D10.0mm_P5.00mm.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Capacitor_THT.3dshapes/CP_Radial_D10.0mm_P5.00mm.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -348,7 +348,7 @@
       (net 3 "Net-(C2-Pad1)") (tstamp 87622d23-7d7a-471d-bcd4-c13eacfb9e91))
     (pad "2" thru_hole circle (at 5 0 90) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 4 "Net-(C2-Pad2)") (tstamp 434f4a07-999c-4c64-a829-a4342b3a5aca))
-    (model "${KISYS3DMOD}/Capacitor_THT.3dshapes/C_Disc_D4.7mm_W2.5mm_P5.00mm.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D4.7mm_W2.5mm_P5.00mm.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -462,7 +462,7 @@
       (net 8 "Net-(R1-Pad1)") (tstamp feb2f18d-24ad-4008-aa5c-b444c01530ed))
     (pad "2" thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 4 "Net-(C2-Pad2)") (tstamp 58fbc74c-6eca-4aaa-9941-3e7756811e38))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -507,7 +507,7 @@
       (net 9 "Net-(R2-Pad1)") (tstamp 66512dbb-55f5-4672-8f38-a2db5bbb6679))
     (pad "2" thru_hole oval (at 7.62 0 180) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp d5df32dc-6c81-4b69-bdcb-79b78c9cb647))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -552,7 +552,7 @@
       (net 5 "Net-(P1-Pad2)") (tstamp 3cceafde-73f6-4420-81bc-b45ba5ef5d9d))
     (pad "2" thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 237d5d44-fd22-4dab-93dd-3f87c398aeaf))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -600,7 +600,7 @@
       (net 3 "Net-(C2-Pad1)") (tstamp 64fa2c3c-cf53-4756-8c15-dbd4d0a56751))
     (pad "2" thru_hole circle (at 5 0 270) (size 3 3) (drill 1.5) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp fcafdf4e-325c-4dff-94c3-2f82524d2a8d))
-    (model "${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -648,7 +648,7 @@
       (net 2 "Net-(C1-Pad1)") (tstamp f0d2b6fe-a6af-4c5b-8e09-64ce9d131da6))
     (pad "2" thru_hole circle (at 5 0 270) (size 3 3) (drill 1.5) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 38edf51a-3917-4c5e-85e2-b9f7eded7cd4))
-    (model "${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -696,7 +696,7 @@
       (net 6 "Net-(P4-Pad1)") (tstamp 9ab869f6-b2a7-4a32-b76c-d749641805a9))
     (pad "2" thru_hole circle (at 5 0) (size 3 3) (drill 1.5) (layers *.Cu *.Mask)
       (net 7 "Net-(P4-Pad2)") (tstamp 41450b75-3636-4586-bd4c-716d87743e02))
-    (model "${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -741,7 +741,7 @@
       (net 3 "Net-(C2-Pad1)") (tstamp 61e29ef0-01c0-4612-860d-df6b334f1798))
     (pad "2" thru_hole oval (at 7.62 0 180) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 587d6891-33ea-463a-b75d-744f879246c9))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -835,7 +835,7 @@
       (net 1 "GND") (tstamp 8cfed677-bcc6-4731-8666-ac6469a1b78b))
     (pad "2" thru_hole circle (at 5 0 90) (size 3 3) (drill 1.5) (layers *.Cu *.Mask)
       (net 5 "Net-(P1-Pad2)") (tstamp e07422cc-c731-421a-8571-b1fa0373f3e9))
-    (model "${KISYS3DMOD}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/TerminalBlock_Altech.3dshapes/Altech_AK300_1x02_P5.00mm_45-Degree.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))

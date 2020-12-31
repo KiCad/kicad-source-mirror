@@ -24,7 +24,7 @@
   (fp_line (start 6 3) (end -5.75 3) (layer F.CrtYd) (width 0.12))
   (pad 1 smd rect (at -3.175 0 90) (size 3.556 4.191) (layers F.Cu F.Paste F.Mask))
   (pad 2 smd rect (at 3.175 0 90) (size 3.556 4.191) (layers F.Cu F.Paste F.Mask))
-  (model ${KISYS3DMOD}/Capacitor_SMD.3dshapes/C_2816_7142Metric.wrl
+  (model ${KICAD6_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_2816_7142Metric.wrl
     (at (xyz 0 0 0))
     (scale (xyz 1 1 1))
     (rotate (xyz 0 0 0))

@@ -337,7 +337,7 @@
       (net 2 "Net-(C1-Pad1)") (tstamp f194fb04-aacf-4ad7-a4b8-9bc113a374a3))
     (pad "2" thru_hole circle (at 7.5 0 90) (size 2.4 2.4) (drill 1.2) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp cbfb8a2e-bf7a-4a42-bd86-43b1d51269e9))
-    (model "${KISYS3DMOD}/Capacitor_THT.3dshapes/CP_Radial_D12.5mm_P7.50mm.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Capacitor_THT.3dshapes/CP_Radial_D12.5mm_P7.50mm.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -382,7 +382,7 @@
       (net 8 "Net-(R1-Pad1)") (tstamp 14ad4d27-f719-448a-b78b-8719838388d9))
     (pad "2" thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 4 "Net-(C2-Pad2)") (tstamp d6d04fff-9ade-455b-a565-08e12ae14f54))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -427,7 +427,7 @@
       (net 9 "Net-(R2-Pad1)") (tstamp 7df81f87-f003-479f-8372-1c18a0aed507))
     (pad "2" thru_hole oval (at 7.62 0 90) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 35450c87-6900-40db-9086-7067174c1ffe))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -472,7 +472,7 @@
       (net 3 "Net-(C2-Pad1)") (tstamp 461d64e3-dde8-4d38-a59f-82eed34cf89e))
     (pad "2" thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 9af90d1a-b749-4c88-9557-560344512e7a))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -517,7 +517,7 @@
       (net 5 "Net-(P1-Pad2)") (tstamp 8c9f36ed-17ef-4bca-865f-50bb610ef811))
     (pad "2" thru_hole oval (at 7.62 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp a1fb3569-3e1f-4a78-b6d8-1ca67443d211))
-    (model "${KISYS3DMOD}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -693,7 +693,7 @@
       (net 3 "Net-(C2-Pad1)") (tstamp 5702babf-5203-41a2-ae19-799bcc92d81c))
     (pad "2" thru_hole oval (at 20 0 270) (size 1.6 1.6) (drill 0.8) (layers *.Cu *.Mask)
       (net 4 "Net-(C2-Pad2)") (tstamp 6aaced28-2767-4763-b9fd-3d001814e3aa))
-    (model "${KISYS3DMOD}/Capacitor_THT.3dshapes/C_Axial_L12.0mm_D6.5mm_P20.00mm_Horizontal.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Axial_L12.0mm_D6.5mm_P20.00mm_Horizontal.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -737,7 +737,7 @@
       (net 3 "Net-(C2-Pad1)") (tstamp e683ae31-6af3-424c-a55a-a5a6b9f7c9af))
     (pad "2" thru_hole oval (at 0 2.54 180) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 9b073810-2889-46ca-b4cb-a3f9829bfcba))
-    (model "${KISYS3DMOD}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -781,7 +781,7 @@
       (net 2 "Net-(C1-Pad1)") (tstamp ac77d90f-cff2-459a-bb97-8f5e1cced5b9))
     (pad "2" thru_hole oval (at 0 2.54 180) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 1 "GND") (tstamp 459dddf8-2cc2-44c0-af8a-ea6b905c3dd1))
-    (model "${KISYS3DMOD}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -825,7 +825,7 @@
       (net 1 "GND") (tstamp d79aa92f-b959-43f9-9f3b-4e7a77b4ad37))
     (pad "2" thru_hole oval (at 0 2.54) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 5 "Net-(P1-Pad2)") (tstamp aeb94703-7bc4-4268-a31e-4cc35fc4c0e9))
-    (model "${KISYS3DMOD}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -869,7 +869,7 @@
       (net 6 "Net-(P4-Pad1)") (tstamp dc6778f5-9e75-4962-b82f-05bc7f8fd796))
     (pad "2" thru_hole oval (at 0 2.54 270) (size 1.7 1.7) (drill 1) (layers *.Cu *.Mask)
       (net 7 "Net-(P4-Pad2)") (tstamp 8e05bb2b-7b13-43a2-a0db-8f4efa2b4a5d))
-    (model "${KISYS3DMOD}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
+    (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x02_P2.54mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
