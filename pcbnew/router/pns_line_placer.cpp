@@ -852,6 +852,7 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     initPlacement();
 
+    DIRECTION_45 initialDir = m_initial_direction;
     DIRECTION_45 lastSegDir = DIRECTION_45::UNDEFINED;
 
     if( aStartItem && aStartItem->Kind() == ITEM::SEGMENT_T )
@@ -878,13 +879,13 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     {
         double angle = static_cast<SOLID*>( aStartItem )->GetOrientation() / 10.0;
         angle        = ( angle + 22.5 ) / 45.0;
-        lastSegDir   = DIRECTION_45( static_cast<DIRECTION_45::Directions>( int( angle ) ) );
+        initialDir   = DIRECTION_45( static_cast<DIRECTION_45::Directions>( int( angle ) ) );
     }
 
     m_postureSolver.Clear();
     m_postureSolver.AddTrailPoint( aP );
     m_postureSolver.SetTolerance( m_head.Width() );
-    m_postureSolver.SetDefaultDirections( m_initial_direction, lastSegDir );
+    m_postureSolver.SetDefaultDirections( initialDir, lastSegDir );
     m_postureSolver.SetDisabled( !Settings().GetAutoPosture() );
 
     NODE *n;
