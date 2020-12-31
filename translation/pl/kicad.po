@@ -1,14 +1,14 @@
 # Mark Roszko <mark.roszko@gmail.com>, 2020.
-# ZbeeGin <zbeegin@op.pl>, 2020.
+# ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-29 18:05+0000\n"
+"PO-Revision-Date: 2021-01-01 17:16+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6397,9 +6397,8 @@ msgid "Legacy footprint export files"
 msgstr "Pliki eksportu starszych typów bibliotek"
 
 #: common/wildcards_and_files_ext.cpp:440
-#, fuzzy
 msgid "Electrical rule check file"
-msgstr "Plik raportu ERC"
+msgstr "Plik wynikowy z kontroli ERC"
 
 #: common/wildcards_and_files_ext.cpp:446
 msgid "Spice library file"
@@ -12880,6 +12879,7 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"Zmienne tekstowe nie mogą być ustawione gdyż nie ma załączonego projektu."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -12917,6 +12917,10 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Identyfikator bloku %s (nazwa bloku: '%s') jest narysowany na arkuszu '%s', "
+"ale nie jest powiązany z innym arkuszem w projekcie. KiCad wymaga, aby "
+"wszystkie symbole arkusza były skojarzone z arkuszem, więc blok nie został "
+"załadowany."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -13385,16 +13389,15 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "Wracam do pamięci podręcznej, aby ustawić symbol '%s:%s' łącze '%s'."
 
 #: eeschema/sch_screen.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr ""
-"Ustawiam symbolowi na schemacie '%s %s' identyfikator biblioteki na '%s'. "
+"Ustawianie symbolowi na schemacie '%s %s' identyfikatora biblioteki '%s'."
 
 #: eeschema/sch_screen.cpp:699
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr ""
-"Nie znaleziono symbolu bibliotecznego dla symbolu na schemacie '%s %s'. "
+msgstr "Nie znaleziono symbolu bibliotecznego dla symbolu na schemacie '%s %s'."
 
 #: eeschema/sch_sheet.cpp:55
 msgid "Sheet name"
@@ -14408,36 +14411,31 @@ msgstr "Biblioteka symboli nie jest aktywna."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving %s symbol library table."
-msgstr ""
-"Wystąpił błąd zapisywania globalnej tabeli bibliotek:\n"
-"%s"
+msgstr "Wystąpił błąd zapisywania %s tabeli bibliotek."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "global"
-msgstr "Globalne"
+msgstr "globalnej"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "project"
-msgstr "Projekt"
+msgstr "projektowej"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Normalny zapis bez dodatkowych operacji"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "Nie wykonuj żadnych dodatkowych operacji po zapisaniu biblioteki."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "Usuwa bibliotekę z tableli"
+msgstr "Zamień wpis w tabeli bibliotek"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid ""
@@ -14445,11 +14443,13 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
+"Zamienia wpis w tabeli bibliotek symboli nową biblioteką.\n"
+"\n"
+"Poprzednia biblioteka przestanie być już dostępna."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "Dodaj do Globalnej Tabeli Bibliotek"
+msgstr "Dodaj nowy wpis do Globalnej Tabeli Bibliotek"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 msgid ""
@@ -14458,11 +14458,14 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Dodaje nowy wpis do globalnej tabeli bibliotek symboli.\n"
+"\n"
+"Do nazwy skrótowej w tabeli biblioteki symboli dodawany jest przyrostek\n"
+"z liczbą całkowitą zapewniającą brak duplikatów w wpisach tabeli."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "Utworzono tabelę bibliotek symboli projektów.\n"
+msgstr "Dodaj nowy wpis w Bibliotece Symboli Projektu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid ""
@@ -14471,6 +14474,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Dodaje nowy wpis do tabeli biblioteki symboli projektu.\n"
+"\n"
+"Do nazwy skrótowej w tabeli biblioteki symboli dodawany jest przyrostek\n"
+"z liczbą całkowitą zapewniającą brak duplikatów w wpisach tabeli."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
 #, c-format
@@ -14972,14 +14979,12 @@ msgid "Select a complete connection"
 msgstr "Usuwa pełne połączenie"
 
 #: eeschema/tools/ee_actions.cpp:117
-#, fuzzy
 msgid "Save Library As..."
-msgstr "Zapisz bibliotekę \"%s\" jako..."
+msgstr "Zapisz bibliotekę jako..."
 
 #: eeschema/tools/ee_actions.cpp:118
-#, fuzzy
 msgid "Save the current library to a new file."
-msgstr "Proszę wybrać plik z tabelą bibliotek footprintów."
+msgstr "Zapisz obecną bibliotekę w nowym pliku."
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
@@ -15002,14 +15007,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Tworzy kopię zaznaczonego symbolu"
 
 #: eeschema/tools/ee_actions.cpp:136
-#, fuzzy
 msgid "Save Symbol As..."
-msgstr "Zmień symbole..."
+msgstr "Zapisz symbol jako..."
 
 #: eeschema/tools/ee_actions.cpp:137
-#, fuzzy
 msgid "Save the current symbol to a different library."
-msgstr "Zapisuje bieżący symbol na schemacie"
+msgstr "Zapisuje bieżący symbol w innej bibliotece."
 
 #: eeschema/tools/ee_actions.cpp:141
 msgid "Remove the selected symbol from its library"
@@ -17132,6 +17135,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
 msgstr ""
+"Błąd podczas tworzenia nowego folderu. Spróbuj wybrać inną ścieżkę. Projekt "
+"nie został zaimportowany."
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -24047,126 +24052,118 @@ msgid "%s and %s"
 msgstr "%s oraz %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1210
-#, fuzzy
 msgid "Warning: Pad size is less than zero."
-msgstr "Rozmiar pola musi być większa niż zero"
+msgstr "Ostrzeżenie: Rozmiar pola jest mniejszy niż zero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill larger than pad size or drill shape and pad shape do not "
 "overlap."
 msgstr ""
-"Ostrzeżenie: Rozmiar wiercenia pola lutowniczego większy niż rozmiar lub "
-"kształt pola, lub kształt wiercenia oraz kształt pola nie zachodzą na siebie"
+"Ostrzeżenie: Rozmiar wiercenia pola lutowniczego jest większy niż rozmiar "
+"lub kształt pola, lub kształt wiercenia oraz kształt pola nie zachodzą na "
+"siebie."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Błąd: Ujemne wartości lokalnego prześwitu nie mają żadnego wpływu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
 msgstr ""
+"Błąd: Ujemne prześwity maski lutowniczej nie są obsługiwane w przypadku "
+"niestandardowych kształtów pól lutowniczych."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Ostrzeżenie: Ujemny prześwit maski lutowniczej jest większy niż pole. Nie "
+"zostanie wygenerowana soldermaska."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
-#, fuzzy
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
-"Ujemna wartość prześwitu oznacza mniejszą przestrzeń niż pole lutownicze "
-"(zwykle dla prześwitu pasty)."
+"Ostrzeżenie: Ujemne marginesy pasty lutowniczej są większe niż samo pole. "
+"Nie zostanie wygenerowana żadna maska pasty."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1292
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "Błąd: Pole lutownicze nie posiada warstwy"
+msgstr "Błąd: Pole lutownicze nie posiada żadnej warstwy sygnałowej."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1298
-#, fuzzy
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
-"Ostrzeżenie: otwory pokryte powinny normalnie posiadać pole lutownicze "
-"przynajmniej na jednej z warstw"
+"Ostrzeżenie: Otwory pokryte powinny normalnie posiadać pole lutownicze "
+"przynajmniej na jednej z warstw."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
-#, fuzzy
 msgid "Incorrect value for pad offset."
-msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego"
+msgstr "Niewłaściwa wartość dla przesunięcia pola lutowniczego."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "Zbyt duża wartość dla przesunięcia pola lutowniczego"
+msgstr "Zbyt duża wartość rozmiaru nachylenia pola lutowniczego."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1329
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "Błąd: Pole lutownicze PTH o średnicy wiercenia 0"
+msgstr "Błąd: Pole lutownicze THT nie posiada otworu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1336
-#, fuzzy
 msgid "Error: Connector pads have no solder paste. Use an SMD pad instead."
 msgstr ""
-"Błąd: Pola lutownicze złącza nie są na warstwie pasty\n"
-"Należy użyć pól SMD"
+"Błąd: Pola lutownicze złącza nie posiadają warstw pasty. Należy użyć pól SMD."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Warning: SMD pad has no outer layers."
-msgstr "Błąd: Pole lutownicze nie posiada warstwy"
+msgstr "Ostrzeżenie: Pole lutownicze SMD nie posiada zewnętrznych warstw."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1358
-#, fuzzy
 msgid "Warning: Fiducial property cannot be set on NPTH pads."
-msgstr "Właściwość nie może zostać użyta dla pól NPTH"
+msgstr "Ostrzeżenie: Właściwość Fiducial nie może zostać użyta dla pól NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid "Warning: Testpoint property cannot be set on NPTH pads."
-msgstr "Właściwość nie może zostać użyta dla pól NPTH"
+msgstr ""
+"Ostrzeżenie: Właściwość Punkt Testowy nie może zostać użyta dla pól NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1370
-#, fuzzy
 msgid "Warning: Heatsink property cannot be set on NPTH pads."
-msgstr "Właściwość nie może zostać użyta dla pól NPTH"
+msgstr ""
+"Ostrzeżenie: Właściwość Pole Radiatorowe nie może zostać użyta dla pól NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1376
-#, fuzzy
 msgid "Warning: Castellated property can be set only on PTH pads."
-msgstr "Właściwość Pola z kastelacją może być użyta tylko dla pól PTH"
+msgstr "Ostrzeżenie: Właściwość Kastelacja może być użyta tylko dla pól PTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1382
-#, fuzzy
 msgid "Warning: BGA property can be set only on SMD pads."
-msgstr "Właściwość BGA może być użyta tylko dla pół SMD"
+msgstr "Ostrzeżenie: Właściwość BGA może być użyta tylko dla pół SMD."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Błąd: Rozmiar narożnika nie jest liczbą."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
-#, fuzzy
 msgid "Error: Negative corner size."
-msgstr "Niepoprawna (ujemna) wartość rozmiaru narożnika"
+msgstr "Błąd: Niepoprawna (ujemna) wartość rozmiaru narożnika."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Ostrzeżenie: Rozmiar narożnika spowoduje, że pole będzie okrągłe."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
+"Błąd: Niestandardowy kształt pola musi zostać przekształcony w pojedynczy "
+"wielokąt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
@@ -25578,30 +25575,27 @@ msgstr "Opis footprintu nadrzędnego"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:334
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "Zmiana sieci spowoduje również zaktualizowanie %s pole %s do %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
 msgstr ""
-"To spowoduje zmianę przydzielonej sieci do %s pole %s oraz %s pole %s na "
-"%s.\n"
-"Czy chcesz kontynuować?"
+"Zmiana sieci spowoduje równierz zmianę %s pole %s oraz %s pole %s na %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
 msgstr ""
+"Zmiana sieci spowoduje również zaktualizowanie %lu podłączonych pól do %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy
 msgid "Change Nets"
-msgstr "Zmień na tekst"
+msgstr "Zmień sieci"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "Pozostaw niezmieniony"
+msgstr "Pozostaw sieci niezmienione"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:379
 msgid "Via drill size must be smaller than via diameter"
@@ -25616,9 +25610,8 @@ msgid "Edit track/via properties"
 msgstr "Edytuj właściwości ścieżki/przelotki"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:594
-#, fuzzy
 msgid "Updating nets"
-msgstr "Uaktualnij listę sieci"
+msgstr "Uaktualnianie sieci"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:49
 msgid "Start point X:"
@@ -28117,13 +28110,12 @@ msgstr ""
 "Plik z obwodem drukowanym \"%s\" nie istnieje.  Czy chcesz go teraz utworzyć?"
 
 #: pcbnew/files.cpp:741
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Ten plik został stworzony w starszej wersji Pcbnew.\n"
-" Plik zostanie zachowany w nowym formacie, gdy ponownie zostanie zapisany."
+"Ten plik został stworzony w starszej wersji programu KiCad. Plik zostanie "
+"zachowany w nowym formacie, gdy ponownie zostanie zapisany."
 
 #: pcbnew/files.cpp:818 pcbnew/files.cpp:956
 #, c-format
@@ -29810,13 +29802,13 @@ msgstr ""
 "odpowiedników w programie KiCad. Te elementy nie zostały załadowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
 "Projekt CADSTAR zawiera warianty, które nie mają odpowiedników w programie "
-"KiCad. Został załadowany wyłącznie wariant nadrzędny ('%s')."
+"KiCad. Został załadowany wyłącznie wariant '%s'."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:139
 #, c-format
@@ -29896,13 +29888,13 @@ msgstr ""
 "mapie definicji grup (ID grupy nadrzędnej=%s, Nazwa=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"Kształt '%s' to wypełnienie kreskowane w programie CADSTAR, który nie ma "
-"odpowiednika w programie KiCad. Zamiast tego użyto pełnego wypełnienia."
+"Wymiar o ID %s to wymiar kątowy, który nie ma odpowiednika w programie "
+"KiCad. Zamiast tego załadowano wymiar prosty."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -29911,22 +29903,23 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Identyfikator wymiaru %s posiada styl 'External' w programie CADSTAR. Style "
+"wymiarów zewnętrznych nie są jeszcze obsługiwane w programie KiCad. Zamiast "
+"tego obiekt został zaimportowany z wewnętrznym stylem wymiarowania."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported"
-msgstr ""
-"Rozmiar o identyfikatorze %s nie ma odpowiednika w programie KiCad. Nie "
-"został zaimportowany"
+msgstr "Nieoczekiwany typ wymiaru (identyfikator %s). Nie został zaimportowany"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"Rozmiar o identyfikatorze %s nie ma odpowiednika w programie KiCad. Nie "
-"został zaimportowany"
+"Rozmiar o identyfikatorze %s to rozmiar łukowy, który nie ma odpowiednika w "
+"programie KiCad. Obiekt nie został zaimportowany."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
@@ -29968,7 +29961,7 @@ msgstr ""
 "ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1568
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
@@ -29977,7 +29970,7 @@ msgstr ""
 "ustawienie nie ma odpowiednika w programie KiCad, więc zostało zignorowane."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
@@ -30065,6 +30058,8 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
+"Nie można ustawiać zmiennych tekstowych, ponieważ nie załadowano żadnego "
+"projektu."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -30140,6 +30135,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
+"Identyfikator wymiaru %s używa typu jednostki, który nie jest obsługiwany w "
+"programie KiCad. Zamiast tego zastosowano jednostki w milimetrach."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
