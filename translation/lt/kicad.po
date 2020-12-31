@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-27 06:04-0800\n"
-"PO-Revision-Date: 2020-12-29 21:39+0000\n"
-"Last-Translator: WhiteChairFromIkea <dainius.mazuika@gmail.com>\n"
+"PO-Revision-Date: 2020-12-31 14:35+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/"
 "master-source/lt/>\n"
 "Language: lt\n"
@@ -1313,7 +1313,7 @@ msgstr "pikselių"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:66
 msgid "Bitmap PPI:"
-msgstr "Bitmap PPI:"
+msgstr "PPI rezoliucija:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:78
 msgid "PPI"
@@ -8116,7 +8116,7 @@ msgstr "-------- Vartotojas atšaukė EMTT.<br><br>"
 #: eeschema/dialogs/dialog_erc.cpp:304 eeschema/dialogs/dialog_erc.cpp:437
 #: pcbnew/dialogs/dialog_drc.cpp:252
 msgid "Done.<br><br>"
-msgstr "Atlikta. <br> <br>"
+msgstr "Atlikta.<br><br>"
 
 #: eeschema/dialogs/dialog_erc.cpp:365
 msgid "Checking sheet names..."
@@ -8191,10 +8191,9 @@ msgstr "Pakeiskite visų „%s“ pažeidimų sunkumą į „Klaida“"
 
 #: eeschema/dialogs/dialog_erc.cpp:526 eeschema/dialogs/dialog_erc.cpp:532
 #: pcbnew/dialogs/dialog_drc.cpp:450 pcbnew/dialogs/dialog_drc.cpp:457
-#, fuzzy
 msgid "Violation severities can also be edited in the Board Setup... dialog"
 msgstr ""
-"Pažeidimo sunkumą taip pat galima redaguoti dialogo lange Valdybos sąranka..."
+"Pažeidimo sunkumą taip pat galima redaguoti dialogo lange Valdybos sąranka"
 
 #: eeschema/dialogs/dialog_erc.cpp:530 pcbnew/dialogs/dialog_drc.cpp:455
 #, c-format
@@ -8592,7 +8591,7 @@ msgstr "Sankryžos ypatybės"
 #: eeschema/dialogs/dialog_lib_edit_text.cpp:58
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:92
 msgid "Read Only"
-msgstr "Read Only"
+msgstr "Tik skaitymui"
 
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:39
 msgid "Do not fill"
@@ -14627,8 +14626,8 @@ msgstr "Eksportuoti šį brėžinį"
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Simbolių bibliotekos lentelės failo eilutėje %d rastas pasikartojantis "
-"bibliotekos slapyvardis „%s“."
+"Rastas pasikartojantis bibliotekos slapyvardis '%s', simbolių bibliotekos "
+"lentelės failo eilutė %d"
 
 #: eeschema/symbol_tree_model_adapter.cpp:106
 #, c-format
@@ -25028,18 +25027,19 @@ msgstr "Optimizuokite traukiamą takelį"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Norėdami nustatyti kelio laikyseną, naudokite pelės kelią"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"Kai ši funkcija įjungta, takelių laikysena bus nustatoma pagal tai, kaip "
+"pele perkeliama iš pradinės vietos"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
-#, fuzzy
 msgid "Fix all segments on click"
-msgstr "Сохранить все листы проекта схемы"
+msgstr "Pataisykite visus segmentus paspaudę"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -25047,6 +25047,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"Kai bus įjungta, visi takelių segmentai bus fiksuoti iki žymeklio vietos. "
+"Kai jis bus išjungtas, paskutinis segmentas (arčiausiai žymeklio) liks "
+"laisvas ir seks žymeklį."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
@@ -29743,8 +29746,8 @@ msgid ""
 "The net '%s' references non-existent pad index '%d' in component '%s'. This "
 "has been ignored."
 msgstr ""
-"Grynasis „%s“ komponentas „%s“ nurodo neegzistuojančią trinkelių indeksą "
-"„%d“. Tai buvo ignoruota."
+"Tinklas '%s' buvo pridėtas prie nesuderinto indekso '%d', komponente '%s'. "
+"Tai buvo ignoruota."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1731
 #, c-format
@@ -32959,7 +32962,7 @@ msgstr "Neaktyvūs sluoksniai bus rodomi visa spalva"
 
 #: pcbnew/widgets/appearance_controls.cpp:591
 msgid "Dim"
-msgstr "Dim"
+msgstr "Mažiau ryškumo"
 
 #: pcbnew/widgets/appearance_controls.cpp:593
 msgid "Non-active layers will be dimmed"
