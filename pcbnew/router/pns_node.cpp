@@ -1002,10 +1002,10 @@ int NODE::FindLinesBetweenJoints( const JOINT& aA, const JOINT& aB, std::vector<
 {
     for( ITEM* item : aA.LinkList() )
     {
-        if( item->Kind() == ITEM::SEGMENT_T )
+        if( item->Kind() == ITEM::SEGMENT_T || item->Kind() == ITEM::ARC_T )
         {
-            SEGMENT* seg = static_cast<SEGMENT*>( item );
-            LINE line = AssembleLine( seg );
+            LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
+            LINE line = AssembleLine( li );
 
             if( !line.Layers().Overlaps( aB.Layers() ) )
                 continue;
