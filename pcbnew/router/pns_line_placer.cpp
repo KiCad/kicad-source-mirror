@@ -987,14 +987,22 @@ bool LINE_PLACER::Start( const VECTOR2I& aP, ITEM* aStartItem )
 
     if( aStartItem && aStartItem->Kind() == ITEM::SEGMENT_T )
     {
+        // If we land on a segment endpoint, assume the starting direction is continuing along
+        // the same direction as the endpoint.  If we started in the middle, don't set a
+        // direction so that the posture solver is not biased.
+        SEG seg = static_cast<SEGMENT*>( aStartItem )->Seg();
+
         // NOTE: have to flip this over at the moment because DIRECTION_45(SEG) assumes +y is
         // North but a SEG will have -y be North in KiCad world coordinate system.
         // This should probably be fixed in DIRECTION_45 but it's used in a lot of PNS code
         // that would need to be checked carefully for such a change...
-        SEG seg = static_cast<SEGMENT*>( aStartItem )->Seg();
         seg.A.y = -seg.A.y;
         seg.B.y = -seg.B.y;
-        lastSegDir = DIRECTION_45( seg );
+
+        if( aP == seg.A )
+            lastSegDir = DIRECTION_45( seg );
+        else if( aP == seg.B )
+            lastSegDir = DIRECTION_45( seg.Reversed() );
     }
     else if( aStartItem && aStartItem->Kind() == ITEM::SOLID_T &&
              static_cast<SOLID*>( aStartItem )->Parent()->Type() == PCB_PAD_T )

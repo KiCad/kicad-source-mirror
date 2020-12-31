@@ -354,6 +354,11 @@ public:
         std::swap( A, B );
     }
 
+    SEG Reversed() const
+    {
+        return SEG( B, A );
+    }
+
     ///> Returns the center point of the line
     VECTOR2I Center() const
     {
