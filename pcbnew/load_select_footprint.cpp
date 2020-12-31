@@ -51,6 +51,7 @@ using namespace std::placeholders;
 #include <view/view_controls.h>
 #include <widgets/lib_tree.h>
 #include <widgets/progress_reporter.h>
+#include <dialog_pad_properties.h>
 
 #include "fp_tree_model_adapter.h"
 
@@ -97,6 +98,12 @@ bool FOOTPRINT_EDIT_FRAME::LoadFootprintFromBoard( FOOTPRINT* aFootprint )
 
     if( aFootprint == NULL )
         return false;
+
+    // Ensure we do not have the pad editor open (that is apseudo modal dlg).
+    // LoadFootprintFromBoard() can be called from the board editor, and we must ensure
+    // no footprint item is currently in edit
+    if( wxWindow::FindWindowByName( PAD_PROPERTIES_DLG_NAME ) )
+        wxWindow::FindWindowByName( PAD_PROPERTIES_DLG_NAME )->Close();
 
     if( !Clear_Pcb( true ) )
         return false;
