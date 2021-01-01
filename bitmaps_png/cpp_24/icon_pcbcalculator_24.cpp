@@ -25,6 +25,6 @@ static const unsigned char png[] = {
  0x82,
 };
 
-const BITMAP_OPAQUE calculator_xpm[1] = {{ png, sizeof( png ), "calculator_xpm" }};
+const BITMAP_OPAQUE icon_pcbcalculator_24_xpm[1] = {{ png, sizeof( png ), "icon_pcbcalculator_24_xpm" }};
 
 //EOF

@@ -51,6 +51,6 @@ static const unsigned char png[] = {
  0x60, 0x82,
 };
 
-const BITMAP_OPAQUE bitmap2component_xpm[1] = {{ png, sizeof( png ), "bitmap2component_xpm" }};
+const BITMAP_OPAQUE icon_bitmap2component_24_xpm[1] = {{ png, sizeof( png ), "icon_bitmap2component_24_xpm" }};
 
 //EOF

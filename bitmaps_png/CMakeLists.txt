@@ -368,7 +368,6 @@ set( BMAPS_MID
     path
     pagelayout_normal_view_mode
     pagelayout_special_view_mode
-    pagelayout
     palette
     part_properties
     paste
@@ -510,9 +509,6 @@ set( BMAPS_24
     icon_bitmap2component_24
     icon_eeschema_24
     icon_gerbview_24
-    icon_kicad_24
-    icon_libedit_24
-    icon_modedit_24
     icon_pagelayout_editor_24
     icon_pcbcalculator_24
     icon_pcbnew_24
@@ -782,6 +778,11 @@ foreach( bmn ${BMAPS_MID} )
     list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
 endforeach()
 
+foreach( bmn ${BMAPS_24} )
+    #message( "library add cpp_24/${bmn}.cpp" )
+    list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
+endforeach()
+
 foreach( bmn ${BMAPS_32} )
     #message( "library add cpp_32/${bmn}.cpp" )
     list( APPEND CPP_LIST cpp_32/${bmn}.cpp )
@@ -803,11 +804,6 @@ endforeach()
 #foreach( bmn ${BMAPS_22} )
     #message( "library add cpp_22/${bmn}.cpp" )
 #    list( APPEND CPP_LIST cpp_22/${bmn}.cpp )
-#endforeach()
-
-#foreach( bmn ${BMAPS_24} )
-    #message( "library add cpp_24/${bmn}.cpp" )
-#    list( APPEND CPP_LIST cpp_24/${bmn}.cpp )
 #endforeach()
 
 #foreach( bmn ${BMAPS_64} )

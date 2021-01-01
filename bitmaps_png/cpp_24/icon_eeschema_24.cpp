@@ -38,6 +38,6 @@ static const unsigned char png[] = {
  0x00, 0x00, 0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE eeschema_xpm[1] = {{ png, sizeof( png ), "eeschema_xpm" }};
+const BITMAP_OPAQUE icon_eeschema_24_xpm[1] = {{ png, sizeof( png ), "icon_eeschema_24_xpm" }};
 
 //EOF
