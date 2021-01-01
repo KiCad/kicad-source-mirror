@@ -29,13 +29,6 @@ if( DOXYGEN_FOUND )
         COMMENT "building doxygen docs into directory Documentation/doxygen/html"
         )
 
-    add_custom_target( dev-docs
-        ${CMAKE_COMMAND} -E remove_directory Documentation/development/doxygen
-        COMMAND ${DOXYGEN_EXECUTABLE}
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Documentation/development
-        COMMENT "building developer's resource docs into directory Documentation/development/doxygen/html"
-        )
-
     # Add the docset targets
     add_subdirectory( docset )
 else()
