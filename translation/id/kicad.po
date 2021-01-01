@@ -1,40 +1,46 @@
+# Triyan W. Nugroho <triyan.wn@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2018-07-15 17:07+0200\n"
+"PO-Revision-Date: 2021-01-02 01:07+0000\n"
+"Last-Translator: Triyan W. Nugroho <triyan.wn@gmail.com>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/"
+"master-source/id/>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
-msgstr ""
+msgstr "Semua Berkas (*. *) | *. *"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:100
 #, c-format
 msgid "All supported files (%s)"
-msgstr ""
+msgstr "Semua berkas yang didukung (%s)"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:58
 msgid "Available paths:"
-msgstr ""
+msgstr "Path yang tersedia:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:72
 msgid "Configure Paths"
-msgstr ""
+msgstr "Konfigurasikan Path"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel_base.h:63
 msgid "Select 3D Model"
-msgstr ""
+msgstr "Pilih Model 3D"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56
 msgid "Scale"
-msgstr ""
+msgstr "Skala"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:29
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:74
@@ -57,7 +63,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1327
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
 msgid "X:"
-msgstr ""
+msgstr "X:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:39
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:84
@@ -83,19 +89,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1338
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:78
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:49
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:94
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:139
 msgid "Z:"
-msgstr ""
+msgstr "Z:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:66
 #: gerbview/gerber_draw_item.cpp:701 pcbnew/footprint.cpp:781
 #: pcbnew/pad.cpp:893
 msgid "Rotation"
-msgstr ""
+msgstr "Rotasi"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:111
 msgid "Offset"
@@ -103,7 +109,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:156
 msgid "Opacity"
-msgstr ""
+msgstr "Opasitas"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:171
 #: common/dialogs/dialog_page_settings_base.cpp:118
@@ -111,55 +117,59 @@ msgstr ""
 #: eeschema/dialogs/dialog_print_using_printer.cpp:275
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:254
 msgid "Preview"
-msgstr ""
+msgstr "Pratinjau"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:192
 msgid "Change to isometric perspective"
-msgstr ""
+msgstr "Ubah ke perspektif isometrik"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:221
 msgid "Reload board and 3D models"
-msgstr ""
+msgstr "Muat ulang papan sirkuit dan model 3D"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:287
 msgid "Build board outline"
-msgstr ""
+msgstr "Buat garis besar papan sirkuit"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:449
 msgid "Create layers"
-msgstr ""
+msgstr "Buat lapisan"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:471
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:85
 msgid "No footprint loaded."
-msgstr ""
+msgstr "Tidak ada footprint yang dimuat."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:487
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
+"Garis besar footprint hilang atau salah format. Jalankan Pemeriksa Footprint "
+"untuk analisis lengkap."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:496
 #: pcbnew/dialogs/dialog_export_step.cpp:248
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
+"Garis besar papan sirkuit hilang atau salah format. Jalankan DRC untuk "
+"analisis lengkap."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:222
 msgid "Create tracks and vias"
-msgstr ""
+msgstr "Buat trek dan via"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:690
 msgid "Create zones"
-msgstr ""
+msgstr "Buat zona"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:760
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Menyederhanakan poligon lapisan tembaga"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:839
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Sederhanakan kontur lubang"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:868
 msgid "Build Tech layers"
@@ -171,12 +181,12 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:423
 msgid "Your OpenGL version is not supported. Minimum required is 1.5"
-msgstr ""
+msgstr "Versi OpenGL Anda tidak didukung. Minimum yang dibutuhkan adalah 1.5"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:544
 #, c-format
 msgid "Render time %.0f ms ( %.1f fps)"
-msgstr ""
+msgstr "Waktu render %.0f ms (%.1f fps)"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:748
 #, c-format
@@ -195,50 +205,50 @@ msgstr ""
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:499
 msgid "Load OpenGL: holes and vias"
-msgstr ""
+msgstr "Muat OpenGL: lubang dan via"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:583
 msgid "Load OpenGL: layers"
-msgstr ""
+msgstr "Muat OpenGL: lapisan"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:686
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:923
 msgid "Loading 3D models"
-msgstr ""
+msgstr "Memuat model 3D"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:696
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:1065
 #, c-format
 msgid "Reload time %.3f s"
-msgstr ""
+msgstr "Waktu muat ulang %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:935
 #, c-format
 msgid "Loading %s"
-msgstr ""
+msgstr "Memuat %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:564
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:179
 msgid "Loading..."
-msgstr ""
+msgstr "Memuat..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:474
 msgid "Load Raytracing: board"
-msgstr ""
+msgstr "Muat Raytracing: papan sirkuit"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:676
 msgid "Load Raytracing: layers"
-msgstr ""
+msgstr "Muat Raytracing: lapisan"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:350
 #, c-format
 msgid "Rendering time %.3f s"
-msgstr ""
+msgstr "Waktu render %.3f s"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:405
 #, c-format
 msgid "Rendering: %.0f %%"
-msgstr ""
+msgstr "Merender: %.0f %%"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:859
 msgid "Rendering: Post processing shader"
@@ -246,21 +256,21 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:49
 msgid "Export Current View as PNG..."
-msgstr ""
+msgstr "Ekspor Tampilan Saat Ini sebagai PNG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:54
 msgid "Export Current View as JPEG..."
-msgstr ""
+msgstr "Ekspor Tampilan Saat Ini sebagai JPEG ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:60 common/hotkey_store.cpp:70
 #: common/tool/actions.cpp:557 pcbnew/footprint_viewer_frame.cpp:949
 #: pcbnew/pcb_base_frame.cpp:421
 msgid "3D Viewer"
-msgstr ""
+msgstr "Penampil 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:68
 msgid "Copy 3D Image"
-msgstr ""
+msgstr "Salin Gambar 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:106
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:282
@@ -268,18 +278,18 @@ msgstr ""
 #: gerbview/gerbview_frame.cpp:1000 pagelayout_editor/pl_editor_frame.cpp:469
 #: pcbnew/footprint_edit_frame.cpp:907 pcbnew/pcbnew_config.cpp:55
 msgid "Display Options"
-msgstr ""
+msgstr "Opsi Tampilan"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:110
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:806
 msgid "Raytracing"
-msgstr ""
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:117
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:28
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:568
 msgid "Render Options"
-msgstr ""
+msgstr "Opsi Render"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:122
 msgid "Material Properties"
@@ -287,23 +297,23 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:135
 msgid "Raytracing Options"
-msgstr ""
+msgstr "Opsi Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:153
 msgid "Choose Colors"
-msgstr ""
+msgstr "Pilih Warna"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:156
 msgid "Background Top Color..."
-msgstr ""
+msgstr "Warna Atas Latar Belakang ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:160
 msgid "Background Bottom Color..."
-msgstr ""
+msgstr "Warna Bawah Latar Belakang ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:164
 msgid "Silkscreen Color..."
-msgstr ""
+msgstr "Warna Silkscreen ..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:168
 msgid "Solder Mask Color..."
@@ -327,11 +337,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:198
 msgid "3D Grid"
-msgstr ""
+msgstr "Kisi 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:210
 msgid "Reset to Default Settings"
-msgstr ""
+msgstr "Setel ulang ke Pengaturan Bawaan"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:213 cvpcb/menubar.cpp:71
 #: eeschema/menubar.cpp:269
@@ -340,7 +350,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:439
 msgid "Preferences..."
-msgstr ""
+msgstr "Preferensi..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:270
@@ -349,7 +359,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:157 pcbnew/menubar_footprint_editor.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:440
 msgid "Show preferences for all open tools"
-msgstr ""
+msgstr "Tampilkan preferensi untuk semua alat terbuka"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:221 cvpcb/menubar.cpp:84
 #: eeschema/menubar.cpp:286
@@ -359,7 +369,7 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:250 pcbnew/menubar_pcb_editor.cpp:456
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "&File"
-msgstr ""
+msgstr "&Berkas"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:222 cvpcb/menubar.cpp:85
 #: eeschema/menubar.cpp:287
@@ -367,7 +377,7 @@ msgstr ""
 #: pagelayout_editor/menubar.cpp:173 pcbnew/menubar_footprint_editor.cpp:251
 #: pcbnew/menubar_pcb_editor.cpp:457
 msgid "&Edit"
-msgstr ""
+msgstr "&Sunting"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:223 eeschema/menubar.cpp:288
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:183
@@ -376,32 +386,32 @@ msgstr ""
 #: pcbnew/menubar_footprint_editor.cpp:252 pcbnew/menubar_pcb_editor.cpp:458
 #: pcbnew/toolbars_footprint_viewer.cpp:177
 msgid "&View"
-msgstr ""
+msgstr "&Tampilan"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:224 cvpcb/menubar.cpp:86
 #: gerbview/menubar.cpp:232 kicad/menubar.cpp:179
 msgid "&Preferences"
-msgstr ""
+msgstr "&Preferensi"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
-msgstr ""
+msgstr "Muat ulang papan sirkuit"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 msgid "Copy 3D image to clipboard"
-msgstr ""
+msgstr "Salin gambar 3D ke papan klip"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Set display options, and some layers visibility"
-msgstr ""
+msgstr "Setel opsi tampilan, dan beberapa lapisan visibilitas"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:72
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Render tampilan saat ini menggunakan Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:41
 msgid "Realistic mode"
-msgstr ""
+msgstr "Mode realistis"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:50
 msgid "Show board body"
@@ -431,7 +441,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
-msgstr ""
+msgstr "Visibilitas Model 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:111
 msgid "Show 3D through hole models"
@@ -439,23 +449,23 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:120
 msgid "Show 3D SMD models"
-msgstr ""
+msgstr "Tampilkan model 3D SMD"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:129
 msgid "Show 3D virtual models"
-msgstr ""
+msgstr "Tampilkan model virtual 3D"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:148
 msgid "Board Layers"
-msgstr ""
+msgstr "Lapisan Papan Sirkuit"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:161
 msgid "Show silkscreen layers"
-msgstr ""
+msgstr "Tampilkan lapisan silkscreen"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:170
 msgid "Show solder mask layers"
-msgstr ""
+msgstr "Tampilkan lapisan solder mask"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:179
 msgid "Show solder paste layers"
@@ -467,7 +477,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:198
 msgid "User Layers (not shown in realistic mode)"
-msgstr ""
+msgstr "Lapisan Pengguna (tidak ditampilkan dalam mode realistis)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:211
 msgid "Show comments and drawings layers"
@@ -475,11 +485,11 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:220
 msgid "Show ECO layers"
-msgstr ""
+msgstr "Tampilkan lapisan ECO"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:230
 msgid "Camera Options"
-msgstr ""
+msgstr "Opsi Kamera"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:235
 msgid "Rotation Increment:"
@@ -493,19 +503,19 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:342
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1359
 msgid "deg"
-msgstr ""
+msgstr "derajat"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:253
 msgid "Enable animation"
-msgstr ""
+msgstr "Aktifkan animasi"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:260
 msgid "Animation speed:"
-msgstr ""
+msgstr "Kecepatan animasi:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:291
 msgid "OpenGL Render Options"
-msgstr ""
+msgstr "Opsi Render OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:304
 msgid "Show model bounding boxes"
@@ -513,41 +523,42 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:313
 msgid "Show copper thickness"
-msgstr ""
+msgstr "Tampilkan ketebalan tembaga"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:323
 msgid "Other Options"
-msgstr ""
+msgstr "Opsi Lain"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:333
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:445
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:257
 msgid "Anti-aliasing"
-msgstr ""
+msgstr "Anti-alias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "Disabled"
-msgstr ""
+msgstr "Tidak aktif"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "2x"
-msgstr ""
+msgstr "2x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "4x"
-msgstr ""
+msgstr "4x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:337
 msgid "8x"
-msgstr ""
+msgstr "8x"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:341
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
+"Penampil 3D harus ditutup dan dibuka kembali untuk menerapkan pengaturan ini"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:348
 msgid "Selection color"
-msgstr ""
+msgstr "Warna pilihan"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:362
 msgid "While Moving"
@@ -555,7 +566,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:372
 msgid "Disable anti-aliasing"
-msgstr ""
+msgstr "Nonaktifkan anti-alias"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:378
 msgid "Disable thickness"
@@ -563,19 +574,19 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:384
 msgid "Disable vias"
-msgstr ""
+msgstr "Nonaktifkan via"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:390
 msgid "Disable holes"
-msgstr ""
+msgstr "Nonaktifkan lubang"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:406
 msgid "OpenGL"
-msgstr ""
+msgstr "OpenGL"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:420
 msgid "Raytracing Render Options"
-msgstr ""
+msgstr "Opsi Render Raytracing"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:431
 msgid "Procedural textures"
