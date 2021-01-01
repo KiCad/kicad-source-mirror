@@ -170,7 +170,7 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
     if( !drcEngine )
         return false;
 
-    DRC_CONSTRAINT_TYPE_T hostType;
+    DRC_CONSTRAINT_T hostType;
 
     switch ( aType )
     {

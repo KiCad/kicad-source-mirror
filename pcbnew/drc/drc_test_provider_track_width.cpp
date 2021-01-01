@@ -57,7 +57,7 @@ public:
         return "Tests track widths";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     int GetNumPhases() const override;
 };
@@ -67,7 +67,7 @@ bool DRC_TEST_PROVIDER_TRACK_WIDTH::Run()
 {
     const int delta = 100;  // This is the number of tests between 2 calls to the progress bar
 
-    if( !m_drcEngine->HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T::TRACK_WIDTH_CONSTRAINT ) )
+    if( !m_drcEngine->HasRulesForConstraintType( TRACK_WIDTH_CONSTRAINT ) )
     {
         reportAux( "No track width constraints found. Skipping check." );
         return false;
@@ -169,7 +169,7 @@ int DRC_TEST_PROVIDER_TRACK_WIDTH::GetNumPhases() const
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_TRACK_WIDTH::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_TRACK_WIDTH::GetConstraintTypes() const
 {
     return { TRACK_WIDTH_CONSTRAINT };
 }

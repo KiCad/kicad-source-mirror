@@ -669,11 +669,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     zone_boundingbox.Inflate( m_worstClearance + extra_margin );
 
     auto evalRulesForItems =
-            [&bds]( DRC_CONSTRAINT_TYPE_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
+            [&bds]( DRC_CONSTRAINT_T aConstraint, const BOARD_ITEM* a, const BOARD_ITEM* b,
                     PCB_LAYER_ID aEvalLayer ) -> int
             {
-                DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aEvalLayer );
-                return c.Value().HasMin() ? c.Value().Min() : 0;
+                auto c = bds.m_DRCEngine->EvalRulesForItems( aConstraint, a, b, aEvalLayer );
+                return c.Value().Min();
             };
 
     // Add non-connected pad clearances

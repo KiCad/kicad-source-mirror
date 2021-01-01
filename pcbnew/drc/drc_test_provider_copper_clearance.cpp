@@ -73,7 +73,7 @@ public:
         return "Tests copper item clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     int GetNumPhases() const override;
 
@@ -896,7 +896,7 @@ int DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetNumPhases() const
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_COPPER_CLEARANCE::GetConstraintTypes() const
 {
     return { CLEARANCE_CONSTRAINT, HOLE_CLEARANCE_CONSTRAINT };
 }

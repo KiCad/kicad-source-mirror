@@ -38,7 +38,7 @@ class DRC_CONSTRAINT;
 class DRC_RULE_CONDITION;
 
 
-enum DRC_CONSTRAINT_TYPE_T
+enum DRC_CONSTRAINT_T
 {
     NULL_CONSTRAINT = 0,
     CLEARANCE_CONSTRAINT,
@@ -88,7 +88,7 @@ public:
     };
 
     void AddConstraint( DRC_CONSTRAINT& aConstraint );
-    OPT<DRC_CONSTRAINT> FindConstraint( DRC_CONSTRAINT_TYPE_T aType );
+    OPT<DRC_CONSTRAINT> FindConstraint( DRC_CONSTRAINT_T aType );
 
 public:
     bool                        m_Unary;
@@ -104,7 +104,7 @@ public:
 class DRC_CONSTRAINT
 {
     public:
-    DRC_CONSTRAINT( DRC_CONSTRAINT_TYPE_T aType = NULL_CONSTRAINT,
+    DRC_CONSTRAINT( DRC_CONSTRAINT_T aType = NULL_CONSTRAINT,
                     const wxString& aName = wxEmptyString ) :
             m_Type( aType ),
             m_DisallowFlags( 0 ),
@@ -138,13 +138,13 @@ class DRC_CONSTRAINT
     }
 
 public:
-    DRC_CONSTRAINT_TYPE_T  m_Type;
-    MINOPTMAX<int>         m_Value;
-    int                    m_DisallowFlags;
+    DRC_CONSTRAINT_T  m_Type;
+    MINOPTMAX<int>    m_Value;
+    int               m_DisallowFlags;
 
 private:
-    wxString               m_name;          // For just-in-time constraints
-    DRC_RULE*              m_parentRule;    // For constraints found in rules
+    wxString          m_name;          // For just-in-time constraints
+    DRC_RULE*         m_parentRule;    // For constraints found in rules
 };
 
 

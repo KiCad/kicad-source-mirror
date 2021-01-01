@@ -73,11 +73,10 @@ DRC_ENGINE::~DRC_ENGINE()
     for( DRC_RULE* rule : m_rules )
         delete rule;
 
-    for( std::pair< DRC_CONSTRAINT_TYPE_T,
-                    std::vector<CONSTRAINT_WITH_CONDITIONS*>* > pair : m_constraintMap )
+    for( std::pair<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> pair : m_constraintMap )
     {
-        for( CONSTRAINT_WITH_CONDITIONS* constraintWithCondition : *pair.second )
-            delete constraintWithCondition;
+        for( DRC_ENGINE_CONSTRAINT* constraint : *pair.second )
+            delete constraint;
 
         delete pair.second;
     }
@@ -432,8 +431,8 @@ static wxString formatConstraint( const DRC_CONSTRAINT& constraint )
 {
     struct FORMATTER
     {
-        DRC_CONSTRAINT_TYPE_T type;
-        wxString              name;
+        DRC_CONSTRAINT_T type;
+        wxString         name;
         std::function<wxString(const DRC_CONSTRAINT&)> formatter;
     };
 
@@ -526,12 +525,12 @@ void DRC_ENGINE::compileRules()
         ReportAux( wxString::Format( "- Provider: '%s': ", provider->GetName() ) );
         drc_dbg( 7, "do prov %s", provider->GetName() );
 
-        for( DRC_CONSTRAINT_TYPE_T id : provider->GetConstraintTypes() )
+        for( DRC_CONSTRAINT_T id : provider->GetConstraintTypes() )
         {
             drc_dbg( 7, "do id %d", id );
 
             if( m_constraintMap.find( id ) == m_constraintMap.end() )
-                m_constraintMap[ id ] = new std::vector<CONSTRAINT_WITH_CONDITIONS*>();
+                m_constraintMap[ id ] = new std::vector<DRC_ENGINE_CONSTRAINT*>();
 
             for( DRC_RULE* rule : m_rules )
             {
@@ -553,7 +552,7 @@ void DRC_ENGINE::compileRules()
                     if( constraint.m_Type != id )
                         continue;
 
-                    CONSTRAINT_WITH_CONDITIONS* rcons = new CONSTRAINT_WITH_CONDITIONS;
+                    DRC_ENGINE_CONSTRAINT* rcons = new DRC_ENGINE_CONSTRAINT;
 
                     rcons->layerTest = rule->m_LayerCondition;
                     rcons->condition = condition;
@@ -608,11 +607,10 @@ void DRC_ENGINE::InitEngine( const wxFileName& aRulePath )
     m_rules.clear();
     m_rulesValid = false;
 
-    for( std::pair< DRC_CONSTRAINT_TYPE_T,
-                    std::vector<CONSTRAINT_WITH_CONDITIONS*>* > pair : m_constraintMap )
+    for( std::pair<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> pair : m_constraintMap )
     {
-        for( CONSTRAINT_WITH_CONDITIONS* constraintWithCondition : *pair.second )
-            delete constraintWithCondition;
+        for( DRC_ENGINE_CONSTRAINT* constraint : *pair.second )
+            delete constraint;
 
         delete pair.second;
     }
@@ -708,7 +706,7 @@ void DRC_ENGINE::RunTests( EDA_UNITS aUnits, bool aReportAllTrackErrors, bool aT
 }
 
 
-DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintId,
+DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
                                               const BOARD_ITEM* a, const BOARD_ITEM* b,
                                               PCB_LAYER_ID aLayer, REPORTER* aReporter )
 {
@@ -778,7 +776,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
     }
 
     auto processConstraint =
-            [&]( const CONSTRAINT_WITH_CONDITIONS* c ) -> bool
+            [&]( const DRC_ENGINE_CONSTRAINT* c ) -> bool
             {
                 implicit = c->parentRule && c->parentRule->m_Implicit;
 
@@ -961,7 +959,7 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_TYPE_T aConstraintI
 
     if( m_constraintMap.count( aConstraintId ) )
     {
-        std::vector<CONSTRAINT_WITH_CONDITIONS*>* ruleset = m_constraintMap[ aConstraintId ];
+        std::vector<DRC_ENGINE_CONSTRAINT*>* ruleset = m_constraintMap[ aConstraintId ];
 
         if( aReporter )
         {
@@ -1100,7 +1098,7 @@ bool DRC_ENGINE::ReportPhase( const wxString& aMessage )
 
 
 #if 0
-DRC_CONSTRAINT DRC_ENGINE::GetWorstGlobalConstraint( DRC_CONSTRAINT_TYPE_T ruleID )
+DRC_CONSTRAINT DRC_ENGINE::GetWorstGlobalConstraint( DRC_CONSTRAINT_T ruleID )
 {
     DRC_CONSTRAINT rv;
 
@@ -1120,13 +1118,13 @@ DRC_CONSTRAINT DRC_ENGINE::GetWorstGlobalConstraint( DRC_CONSTRAINT_TYPE_T ruleI
 #endif
 
 
-std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYPE_T constraintID )
+std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_T constraintID )
 {
     std::vector<DRC_CONSTRAINT> rv;
 
     if( m_constraintMap.count( constraintID ) )
     {
-        for ( CONSTRAINT_WITH_CONDITIONS* c : *m_constraintMap[constraintID] )
+        for ( DRC_ENGINE_CONSTRAINT* c : *m_constraintMap[constraintID] )
             rv.push_back( c->constraint );
     }
 
@@ -1134,7 +1132,7 @@ std::vector<DRC_CONSTRAINT> DRC_ENGINE::QueryConstraintsById( DRC_CONSTRAINT_TYP
 }
 
 
-bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID )
+bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID )
 {
     //drc_dbg(10,"hascorrect id %d size %d\n", ruleID,  m_ruleMap[ruleID]->sortedRules.size( ) );
     if( m_constraintMap.count( constraintID ) )
@@ -1144,8 +1142,7 @@ bool DRC_ENGINE::HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID )
 }
 
 
-bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aConstraintId,
-                                       DRC_CONSTRAINT& aConstraint )
+bool DRC_ENGINE::QueryWorstConstraint( DRC_CONSTRAINT_T aConstraintId, DRC_CONSTRAINT& aConstraint )
 {
     int worst = 0;
 

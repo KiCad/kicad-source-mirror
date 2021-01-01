@@ -212,9 +212,8 @@ void BOARD_INSPECTION_TOOL::reportZoneConnection( ZONE* aZone, PAD* aPad, REPORT
 }
 
 
-void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_TYPE_T aClearanceType,
-                                             PCB_LAYER_ID aLayer, BOARD_ITEM* aA, BOARD_ITEM* aB,
-                                             REPORTER* r )
+void BOARD_INSPECTION_TOOL::reportClearance( DRC_CONSTRAINT_T aClearanceType, PCB_LAYER_ID aLayer,
+                                             BOARD_ITEM* aA, BOARD_ITEM* aB, REPORTER* r )
 {
     r->Report( "" );
 

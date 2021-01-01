@@ -89,7 +89,7 @@ public:
     virtual const wxString GetName() const;
     virtual const wxString GetDescription() const;
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const = 0;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const = 0;
 
     virtual int GetNumPhases() const = 0;
 

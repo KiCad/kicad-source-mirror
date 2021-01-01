@@ -71,7 +71,7 @@ public:
         return 1;
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
 private:
 
@@ -247,7 +247,7 @@ bool DRC_TEST_PROVIDER_SILK_CLEARANCE::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_SILK_CLEARANCE::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_SILK_CLEARANCE::GetConstraintTypes() const
 {
     return { SILK_CLEARANCE_CONSTRAINT };
 }

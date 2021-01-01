@@ -70,7 +70,7 @@ public:
         return 1;
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     DRC_LENGTH_REPORT BuildLengthReport() const;
 
@@ -235,7 +235,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
     auto evaluateLengthConstraints =
             [&]( BOARD_ITEM *item ) -> bool
             {
-                const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
+                const DRC_CONSTRAINT_T constraintsToCheck[] = {
                         LENGTH_CONSTRAINT,
                         SKEW_CONSTRAINT,
                         VIA_COUNT_CONSTRAINT,
@@ -387,7 +387,7 @@ bool DRC_TEST_PROVIDER_MATCHED_LENGTH::runInternal( bool aDelayReportMode )
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_MATCHED_LENGTH::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_MATCHED_LENGTH::GetConstraintTypes() const
 {
     return { LENGTH_CONSTRAINT, SKEW_CONSTRAINT, VIA_COUNT_CONSTRAINT };
 }

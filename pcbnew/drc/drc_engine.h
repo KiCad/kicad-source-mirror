@@ -140,14 +140,14 @@ public:
 
     bool IsErrorLimitExceeded( int error_code );
 
-    DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_TYPE_T ruleID, const BOARD_ITEM* a,
+    DRC_CONSTRAINT EvalRulesForItems( DRC_CONSTRAINT_T ruleID, const BOARD_ITEM* a,
                                       const BOARD_ITEM* b = nullptr,
                                       PCB_LAYER_ID aLayer = UNDEFINED_LAYER,
                                       REPORTER* aReporter = nullptr );
 
-    std::vector<DRC_CONSTRAINT> QueryConstraintsById( DRC_CONSTRAINT_TYPE_T ruleID );
+    std::vector<DRC_CONSTRAINT> QueryConstraintsById( DRC_CONSTRAINT_T ruleID );
 
-    bool HasRulesForConstraintType( DRC_CONSTRAINT_TYPE_T constraintID );
+    bool HasRulesForConstraintType( DRC_CONSTRAINT_T constraintID );
 
     EDA_UNITS UserUnits() const { return m_userUnits; }
     bool GetReportAllTrackErrors() const { return m_reportAllTrackErrors; }
@@ -160,7 +160,7 @@ public:
     bool ReportPhase( const wxString& aMessage );
     void ReportAux( const wxString& aStr );
 
-    bool QueryWorstConstraint( DRC_CONSTRAINT_TYPE_T aRuleId, DRC_CONSTRAINT& aConstraint );
+    bool QueryWorstConstraint( DRC_CONSTRAINT_T aRuleId, DRC_CONSTRAINT& aConstraint );
 
     std::vector<DRC_TEST_PROVIDER* > GetTestProviders() const { return m_testProviders; };
 
@@ -183,7 +183,7 @@ private:
 
     void compileRules();
 
-    struct CONSTRAINT_WITH_CONDITIONS
+    struct DRC_ENGINE_CONSTRAINT
     {
         LSET                 layerTest;
         DRC_RULE_CONDITION*  condition;
@@ -192,7 +192,6 @@ private:
     };
 
     void loadImplicitRules();
-    void loadTestProviders();
     DRC_RULE* createImplicitRule( const wxString& name );
 
 protected:
@@ -211,8 +210,7 @@ protected:
     bool                             m_testFootprints;
 
     // constraint -> rule -> provider
-    std::unordered_map< DRC_CONSTRAINT_TYPE_T,
-                        std::vector<CONSTRAINT_WITH_CONDITIONS*>* > m_constraintMap;
+    std::unordered_map<DRC_CONSTRAINT_T, std::vector<DRC_ENGINE_CONSTRAINT*>*> m_constraintMap;
 
     DRC_VIOLATION_HANDLER            m_violationHandler;
     REPORTER*                        m_reporter;

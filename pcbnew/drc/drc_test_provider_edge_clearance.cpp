@@ -68,19 +68,19 @@ public:
         return "Tests items vs board edge clearance";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     int GetNumPhases() const override;
 
 private:
     bool testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape, BOARD_ITEM* other,
-                          DRC_CONSTRAINT_TYPE_T aConstraintType, PCB_DRC_CODE aErrorCode );
+                          DRC_CONSTRAINT_T aConstraintType, PCB_DRC_CODE aErrorCode );
 };
 
 
 bool DRC_TEST_PROVIDER_EDGE_CLEARANCE::testAgainstEdge( BOARD_ITEM* item, SHAPE* itemShape,
                                                         BOARD_ITEM* edge,
-                                                        DRC_CONSTRAINT_TYPE_T aConstraintType,
+                                                        DRC_CONSTRAINT_T aConstraintType,
                                                         PCB_DRC_CODE aErrorCode )
 {
     const std::shared_ptr<SHAPE>& edgeShape = edge->GetEffectiveShape( Edge_Cuts );
@@ -259,7 +259,7 @@ int DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetNumPhases() const
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_EDGE_CLEARANCE::GetConstraintTypes() const
 {
     return { EDGE_CLEARANCE_CONSTRAINT, SILK_CLEARANCE_CONSTRAINT };
 }

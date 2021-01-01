@@ -56,7 +56,7 @@ public:
         return "Tests for disallowed items (e.g. keepouts)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     int GetNumPhases() const override;
 };
@@ -126,7 +126,7 @@ int DRC_TEST_PROVIDER_DISALLOW::GetNumPhases() const
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_DISALLOW::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_DISALLOW::GetConstraintTypes() const
 {
     return { DISALLOW_CONSTRAINT };
 }

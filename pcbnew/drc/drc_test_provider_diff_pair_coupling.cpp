@@ -78,7 +78,7 @@ public:
         return 1;
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
 private:
 
@@ -289,7 +289,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
                 {
                     drc_dbg( 10, "eval dp %p\n", item );
 
-                    const DRC_CONSTRAINT_TYPE_T constraintsToCheck[] = {
+                    const DRC_CONSTRAINT_T constraintsToCheck[] = {
                             DIFF_PAIR_GAP_CONSTRAINT,
                             DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT
                     };
@@ -507,7 +507,7 @@ bool test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::Run()
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> test::DRC_TEST_PROVIDER_DIFF_PAIR_COUPLING::GetConstraintTypes() const
 {
     return { DIFF_PAIR_GAP_CONSTRAINT, DIFF_PAIR_MAX_UNCOUPLED_CONSTRAINT };
 }

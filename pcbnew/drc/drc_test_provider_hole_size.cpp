@@ -62,7 +62,7 @@ public:
         return "Tests sizes of drilled holes (via/pad drills)";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     int GetNumPhases() const override;
 
@@ -202,7 +202,7 @@ int DRC_TEST_PROVIDER_HOLE_SIZE::GetNumPhases() const
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_HOLE_SIZE::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_HOLE_SIZE::GetConstraintTypes() const
 {
     return { HOLE_SIZE_CONSTRAINT };
 }

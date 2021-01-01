@@ -67,7 +67,7 @@ public:
         return "Performs layout-vs-schematics integity check";
     }
 
-    virtual std::set<DRC_CONSTRAINT_TYPE_T> GetConstraintTypes() const override;
+    virtual std::set<DRC_CONSTRAINT_T> GetConstraintTypes() const override;
 
     int GetNumPhases() const override;
 
@@ -237,7 +237,7 @@ int DRC_TEST_PROVIDER_LVS::GetNumPhases() const
 }
 
 
-std::set<DRC_CONSTRAINT_TYPE_T> DRC_TEST_PROVIDER_LVS::GetConstraintTypes() const
+std::set<DRC_CONSTRAINT_T> DRC_TEST_PROVIDER_LVS::GetConstraintTypes() const
 {
     return {};
 }
