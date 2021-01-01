@@ -1041,7 +1041,16 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 void PCB_EDIT_FRAME::onBoardLoaded()
 {
     DRC_TOOL* drcTool = m_toolManager->GetTool<DRC_TOOL>();
-    drcTool->Reset( TOOL_BASE::MODEL_RELOAD );
+
+    try
+    {
+        drcTool->GetDRCEngine()->InitEngine( GetDesignRulesPath() );
+    }
+    catch( PARSE_ERROR& pe )
+    {
+        // Not sure this is the best place to tell the user their rules are buggy, so
+        // we'll stay quiet for now.  Feel free to revisit this decision....
+    }
 
     UpdateTitle();
 
