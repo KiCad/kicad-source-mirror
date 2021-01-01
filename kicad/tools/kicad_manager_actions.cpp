@@ -63,7 +63,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editSchematic( "kicad.Control.editSchematic",
         AS_GLOBAL,
         MD_CTRL + 'E', LEGACY_HK_NAME( "Run Eeschema" ),
         _( "Edit Schematic" ), _( "Edit Schematic" ),
-        eeschema_xpm, AF_NONE, (void*) FRAME_SCH );
+        icon_eeschema_24_xpm, AF_NONE, (void*) FRAME_SCH );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editSymbols( "kicad.Control.editSymbols",
         AS_GLOBAL,
@@ -75,7 +75,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::editPCB( "kicad.Control.editPCB",
         AS_GLOBAL,
         MD_CTRL + 'P', LEGACY_HK_NAME( "Run Pcbnew" ),
         _( "Edit PCB" ), _( "Edit PCB" ),
-        pcbnew_xpm, AF_NONE, (void*) FRAME_PCB_EDITOR );
+        icon_pcbnew_24_xpm, AF_NONE, (void*) FRAME_PCB_EDITOR );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editFootprints( "kicad.Control.editFootprints",
         AS_GLOBAL,
@@ -93,12 +93,12 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( "kicad.Control.convertImage",
         AS_GLOBAL,
         MD_CTRL + 'B', LEGACY_HK_NAME( "Run Bitmap2Component" ),
         _( "Convert Image" ), _( "Convert bitmap images to schematic or PCB components" ),
-        bitmap2component_xpm );
+        icon_bitmap2component_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::showCalculator( "kicad.Control.showCalculator",
         AS_GLOBAL, 0, LEGACY_HK_NAME( "Run PcbCalculator" ),
         _( "Calculator Tools" ), _( "Run component calculations, track width calculations, etc." ),
-        calculator_xpm );
+        icon_pcbcalculator_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::editWorksheet( "kicad.Control.editWorksheet",
         AS_GLOBAL,

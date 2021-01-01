@@ -44,7 +44,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     // icons size is not know (depending on they are built)
     // so get it:
     wxSize iconsize;
-    wxBitmap dummy = KiBitmap( eeschema_xpm );
+    wxBitmap dummy = KiBitmap( icon_eeschema_24_xpm );
     iconsize.x = dummy.GetWidth();
     iconsize.y = dummy.GetHeight();
 
@@ -54,11 +54,11 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
 
     m_imageList->Add( KiBitmap( project_xpm ) );                // TREE_LEGACY_PROJECT
     m_imageList->Add( KiBitmap( project_kicad_xpm ) );          // TREE_JSON_PROJECT
-    m_imageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_LEGACY_SCHEMATIC
-    m_imageList->Add( KiBitmap( eeschema_xpm ) );               // TREE_SEXPR_SCHEMATIC
-    m_imageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_LEGACY_PCB
-    m_imageList->Add( KiBitmap( pcbnew_xpm ) );                 // TREE_SEXPR_PCB
-    m_imageList->Add( KiBitmap( icon_gerbview_24_xpm ) );    // TREE_GERBER
+    m_imageList->Add( KiBitmap( icon_eeschema_24_xpm ) );       // TREE_LEGACY_SCHEMATIC
+    m_imageList->Add( KiBitmap( icon_eeschema_24_xpm ) );       // TREE_SEXPR_SCHEMATIC
+    m_imageList->Add( KiBitmap( icon_pcbnew_24_xpm ) );         // TREE_LEGACY_PCB
+    m_imageList->Add( KiBitmap( icon_pcbnew_24_xpm ) );         // TREE_SEXPR_PCB
+    m_imageList->Add( KiBitmap( icon_gerbview_24_xpm ) );       // TREE_GERBER
     m_imageList->Add( KiBitmap( gerber_job_file_xpm ) );        // TREE_GERBER_JOB_FILE (.gbrjob)
     m_imageList->Add( KiBitmap( file_html_xpm ) );              // TREE_HTML
     m_imageList->Add( KiBitmap( file_pdf_xpm ) );               // TREE_PDF
@@ -66,7 +66,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
     m_imageList->Add( KiBitmap( netlist_xpm ) );                // TREE_NET
     m_imageList->Add( KiBitmap( unknown_xpm ) );                // TREE_UNKNOWN
     m_imageList->Add( KiBitmap( directory_xpm ) );              // TREE_DIRECTORY
-    m_imageList->Add( KiBitmap( icon_cvpcb_24_xpm ) );       // TREE_CMP_LINK
+    m_imageList->Add( KiBitmap( icon_cvpcb_24_xpm ) );          // TREE_CMP_LINK
     m_imageList->Add( KiBitmap( tools_xpm ) );                  // TREE_REPORT
     m_imageList->Add( KiBitmap( file_pos_xpm ) );               // TREE_POS
     m_imageList->Add( KiBitmap( file_drl_xpm ) );               // TREE_DRILL
