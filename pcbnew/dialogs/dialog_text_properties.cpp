@@ -28,6 +28,7 @@
 #include <board_commit.h>
 #include <board.h>
 #include <footprint.h>
+#include <kicad_string.h>
 #include <pcb_text.h>
 #include <fp_text.h>
 #include <pcb_edit_frame.h>
@@ -345,7 +346,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         if( !m_MultiLineText->GetValue().IsEmpty() )
         {
             BOARD*   board = m_Parent->GetBoard();
-            wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
+            wxString txt = EscapeString(
+                    board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() ),
+                    CTX_QUOTED_STR );
 
             // On Windows, a new line is coded as \r\n.
             // We use only \n in kicad files and in drawing routines.

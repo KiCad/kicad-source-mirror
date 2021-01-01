@@ -198,6 +198,7 @@ wxString UnescapeString( const wxString& aSource )
             else if( token == wxS( "tab" ) )       newbuf.append( wxS( "\t" ) );
             else if( token == wxS( "return" ) )    newbuf.append( wxS( "\n" ) );
             else if( token == wxS( "brace" ) )     newbuf.append( wxS( "{" ) );
+            else if( token.IsEmpty() )             newbuf.append( wxS( "{" ) );
             else
             {
                 newbuf.append( "{" + UnescapeString( token ) + "}" );
