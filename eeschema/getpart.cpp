@@ -93,7 +93,6 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
                                                      bool aAllowFields )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_SYMBOL::g_Mutex, std::defer_lock );
-    wxString                     dialogTitle;
     SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
 
     // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
@@ -141,10 +140,13 @@ PICKED_SYMBOL SCH_BASE_FRAME::PickSymbolFromLibTree( const SCHLIB_FILTER* aFilte
     const std::vector< wxString > libNicknames = libs->GetLogicalLibs();
 
     if( !loaded )
-        static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames, this );
+         static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapter.get() )->AddLibraries( libNicknames,
+                                                  this );
 
     if( aHighlight && aHighlight->IsValid() )
         adapter->SetPreselectNode( *aHighlight, /* aUnit */ 0 );
+
+    wxString dialogTitle;
 
     if( adapter->GetFilter() == SYMBOL_TREE_MODEL_ADAPTER::CMP_FILTER_POWER )
         dialogTitle.Printf( _( "Choose Power Symbol (%d items loaded)" ), adapter->GetItemCount() );
