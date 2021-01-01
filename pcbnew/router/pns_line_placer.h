@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -42,31 +42,33 @@ class VIA;
 class SIZES_SETTINGS;
 class NODE;
 
-class FIXED_TAIL {
+class FIXED_TAIL
+{
 public:
-    FIXED_TAIL ( int aLineCount = 1);
+    FIXED_TAIL( int aLineCount = 1);
     ~FIXED_TAIL();
 
     struct FIX_POINT
     {
-        int layer;
-        bool placingVias;
-        VECTOR2I p;
+        int          layer;
+        bool         placingVias;
+        VECTOR2I     p;
         DIRECTION_45 direction;
     };
 
-    struct STAGE {
-        NODE *commit;
+    struct STAGE
+    {
+        NODE*                  commit;
         std::vector<FIX_POINT> pts;
     };
 
     void Clear();
-    void AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction, NODE *aNode );
+    void AddStage( VECTOR2I aStart, int aLayer, bool placingVias, DIRECTION_45 direction,
+                   NODE *aNode );
     bool PopStage( STAGE& aStage );
     int StageCount() const;
 
 private:
-
     std::vector<STAGE> m_stages;
 };
 
@@ -140,11 +142,10 @@ public:
     /**
      * Function FixRoute()
      *
-     * Commits the currently routed track to the parent node, taking
-     * aP as the final end point and aEndItem as the final anchor (if provided).
-     * @return true, if route has been commited. May return false if the routing
-     * result is violating design rules - in such case, the track is only committed
-     * if Settings.CanViolateDRC() is on.
+     * Commits the currently routed track to the parent node, taking aP as the final end point
+     * and aEndItem as the final anchor (if provided).
+     * @return true, if route has been commited. May return false if the routing result is
+     * violating design rules - in such case, the track is only committed if CanViolateDRC() is on.
      */
     bool FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish ) override;
 
@@ -173,8 +174,8 @@ public:
     /**
      * Function Head()
      *
-     * Returns the "head" of the line being placed, that is the volatile part
-     * that has not "settled" yet.
+     * Returns the "head" of the line being placed, that is the volatile part that has not been
+     * "fixed" yet.
      */
     const LINE& Head() const { return m_head; }
 
@@ -248,9 +249,8 @@ public:
     /**
      * Function UpdateSizes()
      *
-     * Performs on-the-fly update of the width, via diameter & drill size from
-     * a settings class. Used to dynamically change these parameters as
-     * the track is routed.
+     * Performs on-the-fly update of the width, via diameter & drill size from a settings class.
+     * Used to dynamically change these parameters as the track is routed.
      */
     void UpdateSizes( const SIZES_SETTINGS& aSizes ) override;
 
@@ -263,8 +263,8 @@ public:
     /**
      * Function SplitAdjacentSegments()
      *
-     * Checks if point aP lies on segment aSeg. If so, splits the segment in two,
-     * forming a joint at aP and stores updated topology in node aNode.
+     * Checks if point aP lies on segment aSeg. If so, splits the segment in two, forming a
+     * joint at aP and stores updated topology in node aNode.
      */
     bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
 
@@ -273,10 +273,9 @@ private:
     /**
      * Function route()
      *
-     * Re-routes the current track to point aP. Returns true, when routing has
-     * completed successfully (i.e. the trace end has reached point aP), and false
-     * if the trace was stuck somewhere on the way. May call routeStep()
-     * repetitively due to mouse smoothing.
+     * Re-routes the current track to point aP. Returns true, when routing has completed
+     * successfully (i.e. the trace end has reached point aP), and false if the trace was
+     * stuck somewhere on the way. May call routeStep() repetitively due to mouse smoothing.
      * @param aP ending point of current route.
      * @return true, if the routing is complete.
      */
@@ -285,9 +284,8 @@ private:
     /**
      * Function updateLeadingRatLine()
      *
-     * Draws the "leading" ratsnest line, which connects the end of currently
-     * routed track and the nearest yet unrouted item. If the routing for
-     * current net is complete, draws nothing.
+     * Draws the "leading" ratsnest line, which connects the end of currently routed track and
+     * the nearest yet unrouted item. If the routing for current net is complete, draws nothing.
      */
     void updateLeadingRatLine();
 
@@ -424,54 +422,45 @@ private:
 
     bool buildInitialLine( const VECTOR2I& aP, LINE& aHead );
 
-    ///> current routing direction
-    DIRECTION_45 m_direction;
 
-    ///> routing direction for new traces
-    DIRECTION_45 m_initial_direction;
+    DIRECTION_45   m_direction;         ///> current routing direction
+    DIRECTION_45   m_initial_direction; ///> routing direction for new traces
 
-    ///> routing "head": volatile part of the track from the previously
-    ///  analyzed point to the current routing destination
-    LINE m_head;
+    LINE           m_head;          ///> the volatile part of the track from the previously
+                                    ///> analyzed point to the current routing destination
 
-    ///> routing "tail": part of the track that has been already fixed due to collisions with obstacles
-    LINE m_tail;
+    LINE           m_tail;          ///> routing "tail": part of the track that has been already
+                                    ///> fixed due to collisions with obstacles
 
-    ///> pointer to world to search colliding items
-    NODE* m_world;
+    NODE*          m_world;         ///> pointer to world to search colliding items
+    VECTOR2I       m_p_start;       ///> current routing start (end of tail, beginning of head)
 
-    ///> current routing start point (end of tail, beginning of head)
-    VECTOR2I m_p_start;
+    std::unique_ptr<SHOVE> m_shove; ///> The shove engine
 
-    ///> The shove engine
-    std::unique_ptr< SHOVE > m_shove;
-
-    ///> Current world state
-    NODE* m_currentNode;
-
-    ///> Postprocessed world state (including marked collisions & removed loops)
-    NODE* m_lastNode;
+    NODE*          m_currentNode;   ///> Current world state
+    NODE*          m_lastNode;      ///> Postprocessed world state (including marked collisions &
+                                    ///> removed loops)
 
     SIZES_SETTINGS m_sizes;
 
-    ///> Are we placing a via?
-    bool m_placingVia;
+    bool           m_placingVia;
 
-    int m_currentNet;
-    int m_currentLayer;
+    int            m_currentNet;
+    int            m_currentLayer;
 
-    VECTOR2I m_currentEnd, m_currentStart;
-    LINE m_currentTrace;
+    VECTOR2I       m_currentEnd;
+    VECTOR2I       m_currentStart;
+    LINE           m_currentTrace;
 
-    PNS_MODE m_currentMode;
-    ITEM* m_startItem;
+    PNS_MODE       m_currentMode;
+    ITEM*          m_startItem;
 
-    bool m_idle;
-    bool m_chainedPlacement;
-    bool m_orthoMode;
-    bool m_placementCorrect;
+    bool           m_idle;
+    bool           m_chainedPlacement;
+    bool           m_orthoMode;
+    bool           m_placementCorrect;
 
-    FIXED_TAIL m_fixedTail;
+    FIXED_TAIL     m_fixedTail;
     POSTURE_SOLVER m_postureSolver;
 };
 
