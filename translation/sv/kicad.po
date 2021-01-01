@@ -1,19 +1,19 @@
-# Seth Hillbrand <seth@kipro-pcb.com>, 2020.
+# Seth Hillbrand <seth@kipro-pcb.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-05 01:29+0000\n"
+"PO-Revision-Date: 2021-01-01 17:17+0000\n"
 "Last-Translator: Seth Hillbrand <seth@kipro-pcb.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -2231,7 +2231,7 @@ msgstr "Kopiera markerat föremål"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr ""
+msgstr "Dessa objekt hoppas över om du inte åsidosätter lås."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 #, fuzzy
@@ -4825,7 +4825,7 @@ msgstr "Tråd"
 
 #: common/layer_id.cpp:106
 msgid "Buses"
-msgstr ""
+msgstr "Bussar"
 
 #: common/layer_id.cpp:107
 #, fuzzy
@@ -4900,7 +4900,7 @@ msgstr "Filtrera nät namn"
 
 #: common/layer_id.cpp:121
 msgid "Pins"
-msgstr ""
+msgstr "Stift"
 
 #: common/layer_id.cpp:122
 #, fuzzy
@@ -5744,7 +5744,7 @@ msgstr "Utesluten "
 
 #: common/tool/actions.cpp:257
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
+msgstr "Markera aktuell överträdelse i kontrollrutan som en uteslutning"
 
 #: common/tool/actions.cpp:269
 #, fuzzy
@@ -9292,6 +9292,11 @@ msgid ""
 "elements.  Uncheck this option when all symbol units are identical except\n"
 "for pin numbers."
 msgstr ""
+"Markera det här alternativet för att tillåta att symboler med flera enheter "
+"har olika\n"
+"element. Avmarkera det här alternativet när alla symbolenheter är identiska "
+"utom\n"
+"för pin-nummer."
 
 #: eeschema/dialogs/dialog_lib_new_component_base.cpp:76
 msgid "Create symbol with alternate body style (DeMorgan)"
@@ -12041,7 +12046,7 @@ msgstr "Biblioteksredigerare"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:578
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr ""
+msgstr "Flera bibliotek kan inte dela samma smeknamn ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:420
 #, c-format
@@ -12089,12 +12094,16 @@ msgid ""
 "Select one or more table rows containing legacy libraries to save as current "
 "format (*.kicad_sym)."
 msgstr ""
+"Välj en eller flera tabellrader som innehåller äldre bibliotek för att spara "
+"som aktuellt format (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:701
 #, c-format
 msgid ""
 "Save '%s' as current format (*.kicad_sym) and replace legacy entry in table?"
 msgstr ""
+"Spara '%s' som aktuellt format (* .kicad_sym) och ersätta äldre post i "
+"tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:707
 #, c-format
@@ -12102,6 +12111,8 @@ msgid ""
 "Save %d legacy libraries as current format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
+"Spara %d äldre bibliotek som aktuellt format (* .kicad_sym) och ersätta "
+"äldre poster i tabellen?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:725
 #, fuzzy, c-format
@@ -12331,7 +12342,7 @@ msgstr "Namnet '%s' strider mot en befintlig post i biblioteket '%s'."
 #: eeschema/erc.cpp:717
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
-msgstr ""
+msgstr "Biblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
 
 #: eeschema/erc_item.cpp:42
 #, fuzzy
@@ -12340,7 +12351,7 @@ msgstr "Pin Pin Conflicts Map"
 
 #: eeschema/erc_item.cpp:43 pcbnew/drc/drc_item.cpp:46
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Diverse"
 
 #: eeschema/erc_item.cpp:46
 msgid "Duplicate sheet names within a given sheet"
@@ -13484,6 +13495,9 @@ msgid ""
 "supported in KiCad. The symbol was loaded with 1:1 scale and may require "
 "manual fixing."
 msgstr ""
+"Symbolen '%s' skalas i det ursprungliga CADSTAR-schemat, men detta stöds "
+"inte i KiCad. Symbolen laddades med 1: 1-skala och kan kräva manuell "
+"fixering."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:884
 #, c-format
@@ -13497,6 +13511,8 @@ msgstr ""
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
 msgstr ""
+"Textvariabler kunde inte ställas in eftersom det inte finns något projekt "
+"bifogat."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -13505,6 +13521,9 @@ msgid ""
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
 msgstr ""
+"Symbolen '%s' roteras med en vinkel på %.1f grader i den ursprungliga "
+"CADSTAR-designen men KiCad stöder endast rotationsvinklar multiplar på 90 "
+"grader. Anslutningskablarna behöver fixeras manuellt."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1240
 #, c-format
@@ -13531,6 +13550,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Block-ID %s (blocknamn: '%s') ritas på ark '%s' men är inte länkat till ett "
+"annat ark i designen. KiCad kräver att alla arksymboler är associerade till "
+"ett ark, så blocket laddades inte."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -14718,13 +14740,16 @@ msgid "You need to run plot-providing simulation first."
 msgstr "Du måste köra plot-tillhandahållande simulering först."
 
 #: eeschema/sim/sim_plot_frame.cpp:1532
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Simulation results:\n"
 "\n"
-msgstr "Utskriftsformat"
+msgstr ""
+"\n"
+"\n"
+"Simuleringsresultat:\n"
+"\n"
 
 #: eeschema/sim/sim_plot_frame.cpp:1594
 #, fuzzy
@@ -14961,18 +14986,18 @@ msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
+"Symboler i äldre bibliotek kan inte redigeras. Använd Manage Symbol "
+"Libraries för att migrera till aktuellt format."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:750
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
-msgstr ""
+msgstr "Symbol %s härrör från %s. Symbolgrafik kan inte redigeras."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr ""
-"\n"
-"Öppna '%s'\n"
+msgstr "Öppna '%s'"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:830
 #, c-format
@@ -15085,11 +15110,11 @@ msgstr "&Projekt"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Normal spara som drift"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "Utför inga ytterligare åtgärder efter att du har sparat biblioteket."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 #, fuzzy
@@ -15102,6 +15127,10 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
+"Ersättningssymbolsbibliotekstabellpost med nytt bibliotek.\n"
+"\n"
+"Det ursprungliga biblioteket kommer inte längre att vara tillgängligt för "
+"användning."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
 #, fuzzy
@@ -15115,6 +15144,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Lägg till ny post i den globala symbolbibliotekstabellen.\n"
+"\n"
+"Smeknamnet på symbolbibliotekets tabell är suffix med\n"
+"ett heltal för att säkerställa inga dubbla tabellposter."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
 #, fuzzy
@@ -15128,6 +15161,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Lägg till ny post i projektsymbolens bibliotektabell.\n"
+"\n"
+"Smeknamnet på symbolbibliotekets tabell är suffix med\n"
+"ett heltal för att säkerställa inga dubbla tabellposter."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
 #, fuzzy, c-format
@@ -15538,6 +15575,8 @@ msgid ""
 "Footprint '%s' is not present on PCB. Corresponding symbols in schematic "
 "must be manually deleted (if desired)."
 msgstr ""
+"Footprint '%s' finns inte på PCB. Motsvarande symboler i schemat måste "
+"raderas manuellt (om så önskas)."
 
 #: eeschema/tools/backannotate.cpp:301
 #, fuzzy
@@ -16703,11 +16742,12 @@ msgid "Errors reported by Eeschema:\n"
 msgstr "Fel rapporterade av Eeschema:\n"
 
 #: eeschema/tools/reannotate.cpp:75
-#, fuzzy
 msgid ""
 "\n"
 "Annotation not performed!\n"
-msgstr "Annotera schema komponenter"
+msgstr ""
+"\n"
+"Annotation ej utförd!\n"
 
 #: eeschema/tools/sch_drawing_tools.cpp:422
 #: pagelayout_editor/pl_editor_frame.cpp:839
@@ -18015,6 +18055,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
 msgstr ""
+"Fel vid skapande av ny katalog. Försök med en annan väg. Projektet "
+"importerades inte."
 
 #: kicad/import_project.cpp:196
 #, fuzzy
@@ -18307,11 +18349,11 @@ msgstr "Ändra filnamn"
 
 #: kicad/project_tree_pane.cpp:1164
 msgid "Network path: not monitoring folder changes"
-msgstr ""
+msgstr "Nätverksväg: övervakar inte mappändringar"
 
 #: kicad/project_tree_pane.cpp:1169
 msgid "Local path: monitoring folder changes"
-msgstr ""
+msgstr "Lokal sökväg: övervakning av mappändringar"
 
 #: kicad/tools/kicad_manager_actions.cpp:41
 #, fuzzy
@@ -21219,11 +21261,13 @@ msgstr ""
 "Främre fotavtryck börjar vid %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Back footprints will start at %s."
-msgstr "&Nuvarande bilbiotek"
+msgstr ""
+"\n"
+"Fotavtryck på baksidan börjar vid %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:328
 #, fuzzy
@@ -21317,12 +21361,15 @@ msgstr ""
 "************************************************* ********\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Excluding: %s from reannotation\n"
 "\n"
-msgstr "Öppna schema"
+msgstr ""
+"\n"
+"Exklusive: %s från reannotation\n"
+"\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:544
 msgid ""
@@ -21339,11 +21386,12 @@ msgid "will be ignored"
 msgstr "kommer att ignoreras"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:565
-#, fuzzy
 msgid ""
 "\n"
 "No footprints"
-msgstr "Lägg till pinne"
+msgstr ""
+"\n"
+"Inga fotavtryck"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:571
 #, c-format
@@ -21365,11 +21413,13 @@ msgid "Reference Designator Coordinates"
 msgstr "Föredragen redigerare:"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:575
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Sort Code %d"
-msgstr "Färger"
+msgstr ""
+"\n"
+"Sorteringskod %d"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:579
 #, c-format
@@ -21406,11 +21456,12 @@ msgid "Reannotate anyway?"
 msgstr "Kommentera ändå?"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:661
-#, fuzzy
 msgid ""
 "\n"
 "Reannotate failed!\n"
-msgstr "Rotera fält"
+msgstr ""
+"\n"
+"Reannotate misslyckades!\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:854
 #, fuzzy
@@ -21418,20 +21469,24 @@ msgid "Aborted: too many errors"
 msgstr "Används redan"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:889
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Front Footprints"
-msgstr "Lägg till pinne"
+msgstr ""
+"\n"
+"\n"
+"Främre Fotavtryck"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:890
-#, fuzzy
 msgid ""
 "\n"
 "\n"
 "Back Footprints"
-msgstr "Fotavtryck"
+msgstr ""
+"\n"
+"\n"
+"Tillbaka Fotavtryck"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:961
 #, fuzzy
@@ -23384,6 +23439,10 @@ msgid ""
 "or the user made changes to the library footprint and wants to propagate "
 "them back to the PCB."
 msgstr ""
+"Uppdatera / återställ strängar: det finns två fall som dessa beskrivningar "
+"måste täcka: användaren har åsidosatt ett fotavtryck på kretskortet och vill "
+"ta bort dem, eller användaren har gjort ändringar i bibliotekets fotavtryck "
+"och vill sprida dem tillbaka till kretskortet."
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
 #, fuzzy, c-format
@@ -23841,9 +23900,9 @@ msgid "Searching..."
 msgstr "Laddar "
 
 #: pcbnew/dialogs/dialog_find.cpp:327
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" not found"
-msgstr " hittades inte"
+msgstr "\"%s\" hittades inte"
 
 #: pcbnew/dialogs/dialog_find.cpp:333
 #, fuzzy
@@ -25398,19 +25457,21 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Fel: Negativa lokala avståndsvärden har ingen effekt."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
-msgstr ""
+msgstr "Fel: Negativa lödmaskavstånd stöds inte för anpassade padformer."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Varning: Negativ lödmaskeringsavstånd större än dynan. Ingen lödmask "
+"genereras."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
 #, fuzzy
@@ -25489,7 +25550,7 @@ msgstr "BGA-egenskap kan endast ställas in för SMD-dynor"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Fel: Hörnstorlek inte ett nummer."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
 #, fuzzy
@@ -25498,11 +25559,11 @@ msgstr "Felaktigt (negativt) hörnstorleksvärde"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Varning: Hörnstorleken gör dynan cirkulär."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "Fel: Anpassad padform måste lösas till en enda polygon."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
@@ -26642,17 +26703,19 @@ msgstr "Optimera spåret som dras"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:89
 msgid "Use mouse path to set track posture"
-msgstr ""
+msgstr "Använd musvägen för att ställa in spårställning"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:90
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
+"När det är aktiverat styrs spårets hållning av hur musen flyttas från "
+"startplatsen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:94
 msgid "Fix all segments on click"
-msgstr ""
+msgstr "Fixa alla segment vid klick"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:95
 msgid ""
@@ -26660,6 +26723,9 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
+"När det är aktiverat kommer alla spårsegment att fixeras på plats upp till "
+"markörens plats. När den är inaktiverad förblir det sista segmentet (närmast "
+"markören) fritt och följer markören."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimizer effort:"
@@ -26967,7 +27033,7 @@ msgstr "Automatiskt associering"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:334
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "Om du byter nät uppdateras %s pad %s till %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
 #, fuzzy, c-format
@@ -26979,7 +27045,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr ""
+msgstr "Om du byter nät uppdateras %lu anslutna dynor till %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
 #, fuzzy
@@ -27100,6 +27166,8 @@ msgid ""
 "Automatically change the net of this via when the pads or zones it touches "
 "are changed"
 msgstr ""
+"Ändra automatiskt nätet för detta via när dynorna eller zonerna det rör vid "
+"byts ut"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:110
 #, fuzzy
@@ -27313,13 +27381,15 @@ msgstr "Ställ in steg (i grader) för snabbmenyn och snabbtangentrotation."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 #: pcbnew/dialogs/panel_edit_options_base.cpp:151
 msgid "Left Click Mouse Commands"
-msgstr ""
+msgstr "Vänsterklicka muskommandon"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:72
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Ctrl."
 msgstr ""
+"Vänsterklicka (och dra) åtgärder beror på tre modifieringsnycklar:\n"
+"Alt, Skift och Ctrl."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 #: pcbnew/dialogs/panel_edit_options_base.cpp:167
@@ -27378,6 +27448,8 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Alt, Shift and Cmd."
 msgstr ""
+"Vänsterklicka (och dra) åtgärder beror på tre modifieringsnycklar:\n"
+"Alt, Skift och Cmd."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:187
 #, fuzzy
@@ -27391,7 +27463,7 @@ msgstr "Kommando"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:217
 msgid "Alt+Cmd"
-msgstr ""
+msgstr "Alt + Cmd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:245
 #, fuzzy
@@ -31482,6 +31554,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Dimension ID %s har \"Extern\" stil i CADSTAR. Externa dimensionstilar stöds "
+"ännu inte i KiCad. Dimensionsobjektet importerades istället med ett internt "
+"format."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, fuzzy, c-format
@@ -31632,7 +31707,7 @@ msgstr ""
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "Textvariabler kunde inte ställas in eftersom inget projekt laddades."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -31707,6 +31782,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
+"Dimensions-ID %s använder en typ av enhet som inte stöds i KiCad. Milimeter "
+"användes istället."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
@@ -32037,7 +32114,7 @@ msgstr "Varning"
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:544
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
-msgstr ""
+msgstr "Filen %s har en okänd version: %d."
 
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:698
 #, c-format
@@ -32834,7 +32911,7 @@ msgstr "Avbryt"
 #: pcbnew/tools/board_inspection_tool.cpp:309
 #: pcbnew/tools/board_inspection_tool.cpp:322
 msgid "Cannot generate clearance report on empty group."
-msgstr ""
+msgstr "Det går inte att generera godkännanderapport för tom grupp."
 
 #: pcbnew/tools/board_inspection_tool.cpp:363
 #, fuzzy
@@ -33371,7 +33448,7 @@ msgstr "Placera Footprint Anchor"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr ""
+msgstr "Ställ in koordinatets startpunkt (ankare) för fotavtrycket"
 
 #: pcbnew/tools/pcb_actions.cpp:191
 msgid "Increase Line Width"
@@ -35477,7 +35554,7 @@ msgstr "Förinställningar"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:173
 msgid "(Ctrl+Tab)"
-msgstr ""
+msgstr "(Ctrl + Tab)"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 #, fuzzy
