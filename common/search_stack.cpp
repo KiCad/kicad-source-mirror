@@ -29,7 +29,7 @@
 #include <wx/log.h>
 
 
-#if defined(__MINGW32__)
+#if defined(_WIN32)
  #define PATH_SEPS          wxT( ";\r\n" )
 #else
  #define PATH_SEPS          wxT( ":;\r\n" )       // unix == linux | mac
