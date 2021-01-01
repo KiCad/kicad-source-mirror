@@ -76,7 +76,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
         // Should be full path to this program executable.
         wxString   bin_dir = Pgm().GetExecutablePath();
 
-#if defined(__MINGW32__)
+#if defined(_WIN32)
         // bin_dir uses unix path separator.  So to parse with wxFileName
         // use windows separator, especially important for server inclusion:
         // like: \\myserver\local_path .
@@ -110,7 +110,7 @@ void SystemDirsAppend( SEARCH_STACK* aSearchStack )
      * files do not need to be installed separately.  If someone can
      * figure out a way to implement this without #ifdef, please do.
      */
-#if defined(__MINGW32__)
+#if defined(_WIN32)
     maybe.AddPaths( wxGetenv( wxT( "PROGRAMFILES" ) ) );
 #else
     maybe.AddPaths( wxGetenv( wxT( "PATH" ) ) );
