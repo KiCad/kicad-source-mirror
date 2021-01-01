@@ -175,13 +175,11 @@ set( BMAPS_MID
     axis3d_right
     axis3d_top
     axis3d
-    bitmap2component
     bom
     break_line
     browse_files
     bug
     bus_definition_tool
-    calculator
     cancel
     change_entry_orient
     change_lib_symbols_in_schematic
@@ -199,7 +197,6 @@ set( BMAPS_MID
     cursor
     custom_pad_to_primitives
     cut
-    cvpcb
     datasheet
     delete_association
     delete_gerber
@@ -224,7 +221,6 @@ set( BMAPS_MID
     edit_text
     edit
     edge_to_copper_clearance
-    eeschema
     enter_sheet
     ercerr
     erc_green
@@ -287,8 +283,8 @@ set( BMAPS_MID
     hole_to_hole_clearance
     hole_to_copper_clearance
     icon
-    icon_cvpcb_small
-    icon_gerbview_small
+    icon_cvpcb_24
+    icon_gerbview_24
     import3d
     image
     import_brd_file
@@ -377,7 +373,6 @@ set( BMAPS_MID
     palette
     part_properties
     paste
-    pcbnew
     pcb_offset
     pin2pin
     pin_size_to
@@ -511,6 +506,19 @@ set( BMAPS_MID
     zoom_selection
     )
 
+# 24 x 24 for internal icons
+set( BMAPS_24
+    icon_bitmap2component_24
+    icon_eeschema_24
+    icon_gerbview_24
+    icon_kicad_24
+    icon_libedit_24
+    icon_modedit_24
+    icon_pagelayout_editor_24
+    icon_pcbcalculator_24
+    icon_pcbnew_24
+    )
+
 # 32 x 32 for icon sets
 set( BMAPS_32
     icon_bitmap2component_32
@@ -550,20 +558,6 @@ set( BMAPS_BIG
     wizard_add_fplib_icon
     )
 
-# 22 x 22 for Linux icons
-set( BMAPS_22
-    cvpcb
-    eeschema
-    icon_gerbview
-    icon_kicad
-    icon_libedit
-    icon_modedit
-    icon_pagelayout_editor
-    pcbnew
-    bitmap2component
-    calculator
-    )
-
 # 64 x 64 for icon sets
 set( BMAPS_64
     icon_cvpcb
@@ -578,7 +572,7 @@ set( BMAPS_64
     icon_pcbcalculator
     )
 
-# 64 x 64 for icon sets
+# 128 x 128 for icon sets
 set( BMAPS_128
     icon_cvpcb
     icon_eeschema

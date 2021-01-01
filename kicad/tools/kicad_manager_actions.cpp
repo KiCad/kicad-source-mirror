@@ -87,7 +87,7 @@ TOOL_ACTION KICAD_MANAGER_ACTIONS::viewGerbers( "kicad.Control.viewGerbers",
         AS_GLOBAL,
         MD_CTRL + 'G', LEGACY_HK_NAME( "Run Gerbview" ),
         _( "View Gerber Files" ), _( "View Gerber Files" ),
-        icon_gerbview_small_xpm );
+        icon_gerbview_24_xpm );
 
 TOOL_ACTION KICAD_MANAGER_ACTIONS::convertImage( "kicad.Control.convertImage",
         AS_GLOBAL,

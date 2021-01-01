@@ -11,8 +11,11 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="convert.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   sodipodi:docname="convert2.svg"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   inkscape:export-filename="S:\repos\kicad\bitmaps_png\sources\convert2\convert.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,16 +25,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="1600"
+     inkscape:window-height="1173"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="12.618883"
-     inkscape:cy="11.603131"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
-     inkscape:window-maximized="0"
+     inkscape:zoom="9.8280561"
+     inkscape:cx="25.612657"
+     inkscape:cy="6.0670136"
+     inkscape:window-x="1591"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
     <inkscape:grid
@@ -53,7 +56,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>convert</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -86,15 +89,6 @@
      x2="21.001301"
      y2="3.0021"
      id="line727" />
-  <polygon
-     class="cls-2"
-     points="13,24.037 21.964,14.016 4,19.453 "
-     id="polygon729"
-     transform="translate(-1,-1)" />
-  <path
-     class="cls-3"
-     d="m 12,24.0371 a 0.99,0.99 0 0 1 -0.4541,-0.1094 l -9,-4.5839 A 1,1 0 0 1 2.71,17.4961 l 17.9638,-5.4375 a 1,1 0 0 1 1.0352,1.624 L 12.7451,23.7041 A 0.9976,0.9976 0 0 1 12,24.0371 Z M 5.6689,18.69 l 6.0987,3.1065 6.0752,-6.792 z"
-     id="path731" />
   <path
      class="cls-3"
      d="m 6.0008,6.0115 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
@@ -107,16 +101,26 @@
      class="cls-3"
      d="m 15,4.4971 a 3,3 0 1 1 -3,-3 3,3 0 0 1 3,3 z"
      id="path737" />
-  <line
-     class="cls-4"
-     x1="12"
-     y1="8.4898996"
-     x2="12"
-     y2="15.3459"
-     id="line739" />
-  <polygon
-     class="cls-5"
-     points="13,20.776 14.453,15.355 11.547,15.355 "
-     id="polygon741"
-     transform="translate(-1,-1)" />
+  <g
+     id="g871"
+     transform="translate(0,1)">
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 15.000001,9.5 H 10 l 2.500001,3 z"
+       id="path36"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#bf2641;fill-opacity:1;stroke:#bf2641;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 15,9.5 H 9.999999 L 12.5,12.5 Z"
+       id="path36-4"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccc" />
+  </g>
+  <path
+     style="fill:#b9b9b9;fill-opacity:1;stroke:#1a81c4;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 3.5000004,18.463 12.5,23 l 9,-7.5 z"
+     id="path852"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cccc" />
 </svg>

@@ -555,7 +555,7 @@ TOOL_ACTION EE_ACTIONS::editSymbolLibraryLinks( "eeschema.EditorControl.editSymb
 TOOL_ACTION EE_ACTIONS::assignFootprints( "eeschema.EditorControl.assignFootprints",
         AS_GLOBAL, 0, "",
         _( "Assign Footprints..." ), _( "Run footprint assignment tool" ),
-        cvpcb_xpm );
+        icon_cvpcb_24_xpm );
 
 TOOL_ACTION EE_ACTIONS::importFPAssignments( "eeschema.EditorControl.importFPAssignments",
         AS_GLOBAL, 0, "",
