@@ -22,13 +22,13 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-width="2619"
+     inkscape:window-height="1704"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="10.661391"
-     inkscape:cy="13.548151"
+     inkscape:zoom="39.543586"
+     inkscape:cx="9.0301106"
+     inkscape:cy="12.910219"
      inkscape:window-x="0"
      inkscape:window-y="37"
      inkscape:window-maximized="0"
@@ -81,22 +81,26 @@
      id="title27738">zip</title>
   <polygon
      class="cls-1"
-     points="12.883,10.331 24,5.82 23.989,20.14 12.883,25 "
+     points="24,5.82 23.989,20.14 12.883,25 12.883,10.331 "
      id="polygon27740"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.72727273,0,0,0.70833333,2.6305454,4.2916667)"
+     style="stroke-width:1.39326" />
   <polygon
      class="cls-2"
-     points="12.883,10.05 2,5.46 2,20.084 12.883,25 "
+     points="2,5.46 2,20.084 12.883,25 12.883,10.05 "
      id="polygon27742"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.72727273,0,0,0.70833333,2.6305454,4.2916667)"
+     style="stroke-width:1.39326" />
   <polygon
      class="cls-3"
      points="12.894,10.41 23.761,5.92 24,5.82 17.927,3.3 7.369,7.895 "
      id="polygon27744"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.72727273,0,0,0.70833333,2.6305454,4.2916667)"
+     style="stroke-width:1.39326" />
   <polygon
      class="cls-4"
-     points="12.384,1 2,5.46 7.369,7.895 17.927,3.3 "
+     points="2,5.46 7.369,7.895 17.927,3.3 12.384,1 "
      id="polygon27746"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.72727273,0,0,0.70833333,2.6305454,4.2916667)"
+     style="stroke-width:1.39326" />
 </svg>
