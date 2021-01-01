@@ -955,7 +955,14 @@ bool PNS_KICAD_IFACE_BASE::syncZone( PNS::NODE* aWorld, ZONE* aZone, SHAPE_POLY_
 {
     SHAPE_POLY_SET poly;
 
-    // TODO handle no-via restriction
+    if( !aZone->GetIsRuleArea() && aZone->GetZoneName().IsEmpty() )
+        return false;
+
+    // Required by expression function insideArea()
+    aZone->CacheBoundingBox();
+
+    // TODO handle aZone->GetDoNotAllowVias()
+    // TODO handle rules which disallow tracks & vias
     if( !aZone->GetIsRuleArea() || !aZone->GetDoNotAllowTracks() )
         return false;
 
