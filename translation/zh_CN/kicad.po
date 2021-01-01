@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # taotieren <admin@taotieren.com>,2019-2020.
 # Rigo Ligo <rigoligo03@gmail.com>, 2020.
-# Eric <spice2wolf@gmail.com>, 2020.
+# Eric <spice2wolf@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-31 14:35+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2021-01-01 17:17+0000\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -6308,7 +6308,6 @@ msgid "Legacy footprint export files"
 msgstr "旧的封装导出文件"
 
 #: common/wildcards_and_files_ext.cpp:440
-#, fuzzy
 msgid "Electrical rule check file"
 msgstr "电气规则检查文件"
 
@@ -12606,7 +12605,7 @@ msgstr "文档符号 '%s' 是指库中不存在的符号定义 ID '%s'。未加�
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "无法设置文本变量，因为没有附加项目。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -13097,9 +13096,9 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr "正在回退到缓存以设置符号 '%s:%s' 链接 '%s'。"
 
 #: eeschema/sch_screen.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "正在将原理图符号 '%s %s' 库标识符设置为 '%s'。 "
+msgstr "正将原理图符号 '%s %s' 库标识符设置为 '%s'。"
 
 #: eeschema/sch_screen.cpp:699
 #, fuzzy, c-format
