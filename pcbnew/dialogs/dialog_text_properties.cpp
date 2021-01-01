@@ -93,8 +93,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         SetInitialFocus( m_MultiLineText );
         m_SingleLineSizer->Show( false );
 
-        // This option make sense only for footprint texts,
-        // Texts on board are always visible:
+        // This option make sense only for footprint texts; texts on board are always visible.
         m_Visible->SetValue( true );
         m_Visible->Show( false );
 
@@ -118,8 +117,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_orientation.SetUnits( EDA_UNITS::DEGREES );
     m_orientation.SetPrecision( 3 );
 
-    // Set predefined rotations in combo dropdown, according to the locale
-    // floating point separator notation
+    // Set predefined rotations in combo dropdown, according to the locale floating point
+    // separator notation
     double rot_list[] = { 0.0, 90.0, -90.0, 180.0 };
 
     for( size_t ii = 0; ii < m_OrientCtrl->GetCount() && ii < 4; ++ii )
@@ -319,7 +318,9 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     if( !m_textWidth.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE )
         || !m_textHeight.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) )
+    {
         return false;
+    }
 
     BOARD_COMMIT commit( m_Parent );
     commit.Modify( m_item );
@@ -328,10 +329,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     // (for a command in progress, will be made later, at the completion of command)
     bool pushCommit = ( m_item->GetEditFlags() == 0 );
 
-    /* set flag in edit to force undo/redo/abort proper operation,
-     * and avoid new calls to SaveCopyInUndoList for the same text
-     * this can occurs when a text is moved, and then rotated, edited ..
-    */
+    // Set IN_EDIT flag to force undo/redo/abort proper operation and avoid new calls to
+    // SaveCopyInUndoList for the same text if is moved, and then rotated, edited, etc....
     if( !pushCommit )
         m_item->SetFlags( IN_EDIT );
 
@@ -346,17 +345,14 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         if( !m_MultiLineText->GetValue().IsEmpty() )
         {
             BOARD*   board = m_Parent->GetBoard();
-            wxString txt = EscapeString(
-                    board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() ),
-                    CTX_QUOTED_STR );
+            wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
 
-            // On Windows, a new line is coded as \r\n.
-            // We use only \n in kicad files and in drawing routines.
-            // so strip the \r char
 #ifdef __WINDOWS__
+            // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
+            // drawing routines so strip the \r char.
             txt.Replace( "\r", "" );
 #endif
-            m_edaText->SetText( txt );
+            m_edaText->SetText( EscapeString( txt, CTX_QUOTED_STR ) );
         }
     }
 
@@ -395,7 +391,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     case 2: m_edaText->SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );  break;
     default: break;
     }
-
 
     if( pushCommit )
         commit.Push( _( "Change text properties" ) );
