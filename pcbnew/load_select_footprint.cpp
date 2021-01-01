@@ -212,10 +212,12 @@ FOOTPRINT* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect )
                                                     _( "Loading Footprint Libraries" ), 3 );
     GFootprintList.ReadFootprintFiles( fpTable, nullptr, progressReporter );
     bool cancel = progressReporter->WasCancelled();
-    // Force immediate deletion of the WX_PROGRESS_REPORTER (do not use Destroy() )
-    // because on Windows, APP_PROGRESS_DIALOG has some side effects on the event loop
-    // manager. A side effect is the call of ShowModal() of a dialog following
-    // the use of SYMBOL_TREE_MODEL_ADAPTER creating a SYMBOL_TREE_MODEL_ADAPTER
+    // Force immediate deletion of the WX_PROGRESS_REPORTER
+    // ( do not use Destroy(), or use Destroy() followed by wxSafeYield() )
+    // because on Windows, APP_PROGRESS_DIALOG or WX_PROGRESS_REPORTER has some side
+    // effects on the event loop manager.
+    // A side effect is the call of ShowModal() or ShowQuasiModal() of a dialog following
+    // the use of  a WX_PROGRESS_REPORTER
     // has a broken behavior (incorrect modal or quasi modal behavior).
     delete progressReporter;
 

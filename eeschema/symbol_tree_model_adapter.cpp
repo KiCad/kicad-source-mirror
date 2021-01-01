@@ -85,10 +85,11 @@ void SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
 
     if( prg )
     {
-        // Force immediate deletion of the WX_PROGRESS_REPORTER (do not use Destroy() )
+        // Force immediate deletion of the APP_PROGRESS_DIALOG
+        // ( do not use Destroy(), or use Destroy() followed by wxSafeYield() )
         // because on Windows, APP_PROGRESS_DIALOG has some side effects on the event loop
         // manager. A side effect is the call of ShowModal() of a dialog following
-        // the use of SYMBOL_TREE_MODEL_ADAPTER creating a SYMBOL_TREE_MODEL_ADAPTER
+        // the use of SYMBOL_TREE_MODEL_ADAPTER creating a APP_PROGRESS_DIALOG
         // has a broken behavior (incorrect modal behavior).
         delete prg;
         m_show_progress = false;
