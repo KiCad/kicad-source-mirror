@@ -28,12 +28,23 @@ typedef VECTOR2I::extended_type ecoord;
 
 namespace PNS {
 
-bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
-                          const NODE* aParentNode, bool aDifferentNetsOnly ) const
+bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const
 {
     const ROUTER_IFACE* iface = ROUTER::GetInstance()->GetInterface();
     const SHAPE*        shapeA = Shape();
+    const SHAPE*        holeA = Hole();
+    int                 lineWidthA = 0;
     const SHAPE*        shapeB = aOther->Shape();
+    const SHAPE*        holeB = aOther->Hole();
+    int                 lineWidthB = 0;
+
+    // Sadly collision routines ignore SHAPE_POLY_LINE widths so we have to pass them in as part
+    // of the clearance value.
+    if( m_kind == LINE_T )
+        lineWidthA = static_cast<const LINE*>( this )->Width() / 2;
+
+    if( aOther->m_kind == LINE_T )
+        lineWidthB = static_cast<const LINE*>( aOther )->Width() / 2;
 
     // same nets? no collision!
     if( aDifferentNetsOnly && m_net == aOther->m_net && m_net >= 0 && aOther->m_net >= 0 )
@@ -43,62 +54,69 @@ bool ITEM::collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VEC
     if( !m_layers.Overlaps( aOther->m_layers ) )
         return false;
 
-    if( !aOther->Layers().IsMultilayer() && !iface->IsOnLayer( this, aOther->Layer() ) )
+    if( holeA || holeB )
     {
-        if( !AlternateShape() )
+        int holeClearance = aNode->GetHoleClearance( this, aOther );
+
+        if( holeA && holeA->Collide( shapeB, holeClearance + lineWidthB ) )
         {
-            wxLogError( "Missing expected Alternate shape for %s at %d %d",
-                        m_parent->GetClass(),
-                        Anchor( 0 ).x,
-                        Anchor( 0 ).y );
+            Mark( MK_HOLE );
+            return true;
         }
-        else
+
+        if( holeB && holeB->Collide( shapeA, holeClearance + lineWidthA ) )
         {
-            shapeA = AlternateShape();
-            Mark( MK_ALT_SHAPE );
+            aOther->Mark( MK_HOLE );
+            return true;
+        }
+
+        if( holeA && holeB )
+        {
+            int holeToHoleClearance = aNode->GetHoleToHoleClearance( this, aOther );
+
+            if( holeA->Collide( holeB, holeToHoleClearance ) )
+            {
+                Mark( MK_HOLE );
+                aOther->Mark( MK_HOLE );
+                return true;
+            }
         }
     }
 
-    if( !Layers().IsMultilayer() && !iface->IsOnLayer( aOther, Layer() ) )
-    {
-        if( !aOther->AlternateShape() )
-        {
-            wxLogError( "Missing expected Alternate shape for %s at %d %d",
-                        aOther->Parent()->GetClass(),
-                        aOther->Anchor( 0 ).x,
-                        aOther->Anchor( 0 ).y );
-        }
-        else
-        {
-            shapeB = aOther->AlternateShape();
-            aOther->Mark( MK_ALT_SHAPE );
-        }
-    }
+    if( !aOther->Layers().IsMultilayer() && !iface->IsFlashedOnLayer( this, aOther->Layer()) )
+        return false;
 
-    if( aNeedMTV )
-        return shapeA->Collide( shapeB, aClearance, aMTV );
-    else
-        return shapeA->Collide( shapeB, aClearance );
+    if( !Layers().IsMultilayer() && !iface->IsFlashedOnLayer( aOther, Layer()) )
+        return false;
+
+    int clearance = aNode->GetClearance( this, aOther );
+    return shapeA->Collide( shapeB, clearance + lineWidthA + lineWidthB );
 }
 
 
-bool ITEM::Collide( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
-                    const NODE* aParentNode, bool aDifferentNetsOnly ) const
+bool ITEM::Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const
 {
-    if( collideSimple( aOther, aClearance, aNeedMTV, aMTV, aParentNode, aDifferentNetsOnly ) )
+    if( collideSimple( aOther, aNode, aDifferentNetsOnly ) )
         return true;
 
-    // special case for "head" line with a via attached at the end.
+    // Special cases for "head" lines with vias attached at the end.  Note that this does not
+    // support head-line-via to head-line-via collisions, but you can't route two independant
+    // tracks at once so it shouldn't come up.
+
+    if( m_kind == LINE_T )
+    {
+        const LINE* line = static_cast<const LINE*>( this );
+
+        if( line->EndsWithVia() && line->Via().collideSimple( aOther, aNode, aDifferentNetsOnly ) )
+            return true;
+    }
+
     if( aOther->m_kind == LINE_T )
     {
         const LINE* line = static_cast<const LINE*>( aOther );
-        int clearance = aClearance - line->Width() / 2;
 
-        if( line->EndsWithVia() )
-        {
-            return collideSimple( &line->Via(), clearance, aNeedMTV, aMTV, aParentNode,
-                                  aDifferentNetsOnly );
-        }
+        if( line->EndsWithVia() && line->Via().collideSimple( this, aNode, aDifferentNetsOnly ) )
+            return true;
     }
 
     return false;
@@ -109,14 +127,14 @@ std::string ITEM::KindStr() const
 {
     switch( m_kind )
     {
-    case ARC_T:     return "arc";
-    case LINE_T:    return "line";
-    case SEGMENT_T: return "segment";
-    case VIA_T:     return "via";
-    case JOINT_T:   return "joint";
-    case SOLID_T:   return "solid";
-    case DIFF_PAIR_T:   return "diff-pair";
-    default:        return "unknown";
+    case ARC_T:       return "arc";
+    case LINE_T:      return "line";
+    case SEGMENT_T:   return "segment";
+    case VIA_T:       return "via";
+    case JOINT_T:     return "joint";
+    case SOLID_T:     return "solid";
+    case DIFF_PAIR_T: return "diff-pair";
+    default:          return "unknown";
     }
 }
 

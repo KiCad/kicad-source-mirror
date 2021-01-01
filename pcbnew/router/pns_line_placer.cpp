@@ -478,54 +478,16 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 
 bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 {
-    LINE newHead( m_head );
-    LINE bestHead( m_head );
-    bool hasBest = false;
+    buildInitialLine( aP, m_head );
 
-    buildInitialLine( aP, newHead );
-
-    NODE::OBSTACLES obstacles;
-
-    m_currentNode->QueryColliding( &newHead, obstacles );
-
-    // If we are allowing DRC violations, we don't push back to the hull
+    // If we are enforcing DRC violations, push back to the hull
     if( !Settings().CanViolateDRC() )
     {
-        int layer = m_head.Layer();
-        int lineWidth = m_placingVia ? m_head.Via().Diameter() : m_head.Width();
-        int clearance;
+        NODE::OPT_OBSTACLE obs = m_currentNode->NearestObstacle( &m_head );
 
-        for( OBSTACLE& obs : obstacles )
-        {
-            if( m_placingVia )
-                clearance = m_currentNode->GetClearance( obs.m_item, &m_head.Via() );
-            else
-                clearance = m_currentNode->GetClearance( obs.m_item, &m_head );
-
-            const SHAPE_LINE_CHAIN hull = obs.m_item->Hull( clearance, lineWidth, layer );
-            VECTOR2I               nearest = hull.NearestPoint( aP );
-
-            Dbg()->AddLine( hull, 2, 10000 );
-
-            if( ( nearest - aP ).EuclideanNorm() < lineWidth + clearance )
-            {
-                buildInitialLine( nearest, newHead );
-
-                // We want the shortest line here to ensure we don't break a clearance
-                // rule on larger, overlapping items (e.g. vias)
-                if( !hasBest || newHead.CLine().Length() < bestHead.CLine().Length() )
-                {
-                    bestHead = newHead;
-                    hasBest = true;
-                }
-            }
-        }
+        if( obs && obs->m_distFirst != INT_MAX )
+            buildInitialLine( obs->m_ipFirst, m_head );
     }
-
-    if( hasBest )
-        m_head = bestHead;
-    else
-        m_head = newHead;
 
     aNewHead = m_head;
 

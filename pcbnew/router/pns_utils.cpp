@@ -112,11 +112,20 @@ const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance,
 const SHAPE_LINE_CHAIN SegmentHull ( const SHAPE_SEGMENT& aSeg, int aClearance,
                                      int aWalkaroundThickness )
 {
-    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2 + HULL_MARGIN;
+    int cl = aClearance + aWalkaroundThickness / 2 + HULL_MARGIN;
+    int d = aSeg.GetWidth() / 2 + cl;
     int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d );
 
     const VECTOR2I a = aSeg.GetSeg().A;
     const VECTOR2I b = aSeg.GetSeg().B;
+
+    if( a == b )
+    {
+        return OctagonalHull( a - VECTOR2I( aSeg.GetWidth() / 2, aSeg.GetWidth() / 2 ),
+                              VECTOR2I( aSeg.GetWidth(), aSeg.GetWidth() ),
+                              cl + 1,
+                              0.52 * d );
+    }
 
     VECTOR2I dir = b - a;
     VECTOR2I p0 = dir.Perpendicular().Resize( d );

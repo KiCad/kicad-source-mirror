@@ -79,21 +79,16 @@ static const SHAPE_LINE_CHAIN buildHullForPrimitiveShape( const SHAPE* aShape, i
 
 const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, int aLayer ) const
 {
-    SHAPE* shape = m_shape;
+    if( !ROUTER::GetInstance()->GetInterface()->IsFlashedOnLayer( this, aLayer ) )
+        return HoleHull( aClearance, aWalkaroundThickness, aLayer );
 
-    if( !ROUTER::GetInstance()->GetInterface()->IsOnLayer( this, aLayer ) )
+    if( !m_shape )
+        return SHAPE_LINE_CHAIN();
+
+    if( m_shape->Type() == SH_COMPOUND )
     {
-        /// The alternate shape is defined for THT pads.  If we don't have an alternate shape
-        /// then the solid shape does not exist on this layer
-        if( !m_alternateShape )
-            return SHAPE_LINE_CHAIN();
+        SHAPE_COMPOUND* cmpnd = static_cast<SHAPE_COMPOUND*>( m_shape );
 
-        shape = m_alternateShape;
-    }
-
-    if( shape->Type() == SH_COMPOUND )
-    {
-        auto cmpnd = static_cast<SHAPE_COMPOUND*>( shape );
         if ( cmpnd->Shapes().size() == 1 )
         {
             return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance, aWalkaroundThickness );
@@ -107,10 +102,35 @@ const SHAPE_LINE_CHAIN SOLID::Hull( int aClearance, int aWalkaroundThickness, in
     }
     else
     {
-        return buildHullForPrimitiveShape( shape, aClearance, aWalkaroundThickness );
+        return buildHullForPrimitiveShape( m_shape, aClearance, aWalkaroundThickness );
     }
-        
-    return SHAPE_LINE_CHAIN();
+}
+
+
+const SHAPE_LINE_CHAIN SOLID::HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
+{
+    if( !m_hole )
+        return SHAPE_LINE_CHAIN();
+
+    if( m_hole->Type() == SH_COMPOUND )
+    {
+        SHAPE_COMPOUND* cmpnd = static_cast<SHAPE_COMPOUND*>( m_hole );
+
+        if ( cmpnd->Shapes().size() == 1 )
+        {
+            return buildHullForPrimitiveShape( cmpnd->Shapes()[0], aClearance, aWalkaroundThickness );
+        }
+        else
+        {
+            // fixme - shouldn't happen but one day we should move TransformShapeWithClearanceToPolygon()
+            // to the Geometry Library
+            return SHAPE_LINE_CHAIN();
+        }
+    }
+    else
+    {
+        return buildHullForPrimitiveShape( m_hole, aClearance, aWalkaroundThickness );
+    }
 }
 
 

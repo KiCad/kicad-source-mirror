@@ -158,9 +158,7 @@ struct OPTIMIZER::CACHE_VISITOR
         if( !( m_mask & aOtherItem->Kind() ) )
             return true;
 
-        int clearance = m_node->GetClearance( aOtherItem, m_ourItem );
-
-        if( !aOtherItem->Collide( m_ourItem, clearance, false, nullptr, m_node ) )
+        if( !aOtherItem->Collide( m_ourItem, m_node ) )
             return true;
 
         m_collidingItem = aOtherItem;
@@ -1156,7 +1154,7 @@ bool verifyDpBypass( NODE* aNode, DIFF_PAIR* aPair, bool aRefIsP, const SHAPE_LI
     LINE refLine ( aRefIsP ? aPair->PLine() : aPair->NLine(), aNewRef );
     LINE coupledLine ( aRefIsP ? aPair->NLine() : aPair->PLine(), aNewCoupled );
 
-    if( aNode->CheckColliding( &refLine, &coupledLine, ITEM::ANY_T, aPair->Gap() - 10 ) )
+    if( refLine.Collide( &coupledLine, aNode ) )
         return false;
 
     if( aNode->CheckColliding ( &refLine ) )

@@ -308,7 +308,13 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
         for( OBSTACLE& obs : obstacles )
         {
-            int clearance = aNode->GetClearance( item, obs.m_item );
+            int clearance;
+
+            if( ( obs.m_item->Marker() & MK_HOLE ) > 0 )
+                clearance = aNode->GetHoleClearance( item, obs.m_item );
+            else
+                clearance = aNode->GetClearance( item, obs.m_item );
+
             std::unique_ptr<ITEM> tmp( obs.m_item->Clone() );
             tmp->Mark( tmp->Marker() | MK_VIOLATION );
             m_iface->DisplayItem( tmp.get(), -1, clearance );
@@ -370,7 +376,16 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
         m_iface->DisplayItem( l, -1, clearance );
 
         if( l->EndsWithVia() )
-            m_iface->DisplayItem( &l->Via(), -1, clearance );
+        {
+            const VIA& via = l->Via();
+            int viaClearance = GetRuleResolver()->Clearance( &via, nullptr );
+            int holeClearance = GetRuleResolver()->HoleClearance( &via, nullptr );
+
+            if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
+                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+
+            m_iface->DisplayItem( &l->Via(), -1, viaClearance );
+        }
     }
 
     //ITEM_SET tmp( &current );

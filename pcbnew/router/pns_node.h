@@ -64,7 +64,8 @@ enum class CONSTRAINT_TYPE
     CT_VIA_DIAMETER = 5,
     CT_VIA_HOLE = 6,
     CT_HOLE_CLEARANCE = 7,
-    CT_EDGE_CLEARANCE = 8
+    CT_EDGE_CLEARANCE = 8,
+    CT_HOLE_TO_HOLE = 9
 };
 
 struct CONSTRAINT
@@ -82,10 +83,10 @@ class RULE_RESOLVER
 public:
     virtual ~RULE_RESOLVER() {}
 
-    virtual bool CollideHoles( const ITEM* aA, const ITEM* aB,
-                               bool aNeedMTV, VECTOR2I* aMTV ) const = 0;
-
     virtual int Clearance( const ITEM* aA, const ITEM* aB ) = 0;
+    virtual int HoleClearance( const ITEM* aA, const ITEM* aB ) = 0;
+    virtual int HoleToHoleClearance( const ITEM* aA, const ITEM* aB ) = 0;
+
     virtual int DpCoupledNet( int aNet ) = 0;
     virtual int DpNetPolarity( int aNet ) = 0;
     virtual bool DpNetPair( const ITEM* aItem, int& aNetP, int& aNetN ) = 0;
@@ -114,12 +115,11 @@ struct OBSTACLE
     ///> Hull of the colliding m_item
     SHAPE_LINE_CHAIN m_hull;
 
-    ///> First and last intersection point between the head item and the hull
-    ///> of the colliding m_item
-    VECTOR2I m_ipFirst, m_ipLast;
+    ///> First intersection point between the head item and the hull of the colliding m_item
+    VECTOR2I m_ipFirst;
 
     ///> ... and the distance thereof
-    int m_distFirst, m_distLast;
+    int m_distFirst;
 };
 
 /**
@@ -180,6 +180,8 @@ public:
 
     ///> Returns the expected clearance between items a and b.
     int GetClearance( const ITEM* aA, const ITEM* aB ) const;
+    int GetHoleClearance( const ITEM* aA, const ITEM* aB ) const;
+    int GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB ) const;
 
     ///> Returns the pre-set worst case clearance between any pair of items
     int GetMaxClearance() const
@@ -230,15 +232,12 @@ public:
                         OBSTACLES&   aObstacles,
                         int          aKindMask = ITEM::ANY_T,
                         int          aLimitCount = -1,
-                        bool         aDifferentNetsOnly = true,
-                        int          aForceClearance = -1 );
+                        bool         aDifferentNetsOnly = true );
 
     int QueryJoints( const BOX2I&         aBox,
                      std::vector<JOINT*>& aJoints,
                      LAYER_RANGE          aLayerMask = LAYER_RANGE::All(),
                      int                  aKindMask = ITEM::ANY_T );
-
-    int QueryColliding( const ITEM* aItem, OBSTACLE_VISITOR& aVisitor );
 
     /**
      * Function NearestObstacle()
@@ -277,22 +276,6 @@ public:
      */
     OPT_OBSTACLE CheckColliding( const ITEM_SET&  aSet,
                                  int              aKindMask = ITEM::ANY_T );
-
-
-    /**
-     * Function CheckColliding()
-     *
-     * Checks if 2 items collide.
-     * and if found, returns the obstacle.
-     * @param aItemA  first item to find collisions with
-     * @param aItemB  second item to find collisions with
-     * @param aKindMask mask of obstacle types to take into account
-     * @return the obstacle, if found, otherwise empty.
-     */
-    bool CheckColliding( const ITEM*    aItemA,
-                         const ITEM*    aItemB,
-                         int            aKindMask = ITEM::ANY_T,
-                         int            aForceClearance = -1 );
 
     /**
      * Function HitTest()
@@ -439,7 +422,7 @@ public:
 
     void AllItemsInNet( int aNet, std::set<ITEM*>& aItems, int aKindMask = -1 );
 
-    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION | MK_ALT_SHAPE );
+    void ClearRanks( int aMarkerMask = MK_HEAD | MK_VIOLATION | MK_HOLE );
 
     void RemoveByMarker( int aMarker );
 

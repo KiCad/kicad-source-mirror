@@ -41,8 +41,7 @@ enum LineMarker {
     MK_VIOLATION    = ( 1 << 3 ),
     MK_LOCKED       = ( 1 << 4 ),
     MK_DP_COUPLED   = ( 1 << 5 ),
-    MK_ALT_SHAPE    = ( 1 << 6 )    // For instance, a simple annular ring when the pad has
-                                    // been dropped from a layer.
+    MK_HOLE         = ( 1 << 6 )
 };
 
 
@@ -113,6 +112,11 @@ public:
      * @param aWalkaroundThickness is the width of the line that walks around this hull.
      */
     virtual const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0, int aLayer = -1 ) const
+    {
+        return SHAPE_LINE_CHAIN();
+    }
+
+    virtual const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness, int aLayer ) const
     {
         return SHAPE_LINE_CHAIN();
     }
@@ -199,13 +203,9 @@ public:
      * Optionally returns a minimum translation vector for force propagation algorithm.
      *
      * @param aOther item to check collision against
-     * @param aClearance desired clearance
-     * @param aNeedMTV when true, the minimum translation vector is calculated
-     * @param aMTV the minimum translation vector
      * @return true, if a collision was found.
      */
-    virtual bool Collide( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
-                          const NODE* aParentNode, bool aDifferentNetsOnly = true ) const;
+    bool Collide( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly = true ) const;
 
     /**
      * Function Shape()
@@ -215,12 +215,12 @@ public:
      */
     virtual const SHAPE* Shape() const
     {
-        return NULL;
+        return nullptr;
     }
 
-    virtual const SHAPE* AlternateShape() const
+    virtual const SHAPE* Hole() const
     {
-        return Shape();
+        return nullptr;
     }
 
     virtual void Mark( int aMarker ) const { m_marker = aMarker; }
@@ -249,8 +249,7 @@ public:
     bool IsRoutable() const { return m_routable; }
 
 private:
-    bool collideSimple( const ITEM* aOther, int aClearance, bool aNeedMTV, VECTOR2I* aMTV,
-                        const NODE* aParentNode, bool aDifferentNetsOnly ) const;
+    bool collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferentNetsOnly ) const;
 
 protected:
     PnsKind       m_kind;

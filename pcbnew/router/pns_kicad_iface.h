@@ -56,7 +56,7 @@ public:
     void SetBoard( BOARD* aBoard );
     void SyncWorld( PNS::NODE* aWorld ) override;
     bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override { return true; };
-    bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return true; };
+    bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return true; };
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; }
     void HideItem( PNS::ITEM* aItem ) override {}
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0,
@@ -115,7 +115,7 @@ public:
     void EraseView() override;
     bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const override;
     bool IsItemVisible( const PNS::ITEM* aItem ) const override;
-    bool IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
+    bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
     void HideItem( PNS::ITEM* aItem ) override;
     void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0,
                       bool aEdit = false ) override;

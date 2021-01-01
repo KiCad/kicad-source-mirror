@@ -73,10 +73,10 @@ public:
     PNS_PCBNEW_RULE_RESOLVER( BOARD* aBoard, PNS::ROUTER_IFACE* aRouterIface );
     virtual ~PNS_PCBNEW_RULE_RESOLVER();
 
-    virtual bool CollideHoles( const PNS::ITEM* aA, const PNS::ITEM* aB,
-                               bool aNeedMTV, VECTOR2I* aMTV ) const override;
-
     virtual int Clearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+    virtual int HoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+    virtual int HoleToHoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB ) override;
+
     virtual int DpCoupledNet( int aNet ) override;
     virtual int DpNetPolarity( int aNet ) override;
     virtual bool DpNetPair( const PNS::ITEM* aItem, int& aNetP, int& aNetN ) override;
@@ -97,6 +97,8 @@ private:
     VIA                m_dummyVia;
 
     std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_clearanceCache;
+    std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_holeClearanceCache;
+    std::map<std::pair<const PNS::ITEM*, const PNS::ITEM*>, int> m_holeToHoleClearanceCache;
 };
 
 
@@ -137,44 +139,6 @@ int PNS_PCBNEW_RULE_RESOLVER::holeRadius( const PNS::ITEM* aItem ) const
 }
 
 
-bool PNS_PCBNEW_RULE_RESOLVER::CollideHoles( const PNS::ITEM* aA, const PNS::ITEM* aB,
-                                             bool aNeedMTV, VECTOR2I* aMTV ) const
-{
-    VECTOR2I pos_a = aA->Shape()->Centre();
-    VECTOR2I pos_b = aB->Shape()->Centre();
-
-    // Holes with identical locations are allowable
-    if( pos_a == pos_b )
-        return false;
-
-    int radius_a = holeRadius( aA );
-    int radius_b = holeRadius( aB );
-
-    // Do both objects have holes?
-    if( radius_a > 0 && radius_b > 0 )
-    {
-        int holeToHoleMin = m_board->GetDesignSettings().m_HoleToHoleMin;
-
-        ecoord min_dist = holeToHoleMin + radius_a + radius_b;
-        ecoord min_dist_sq = min_dist * min_dist;
-
-        const VECTOR2I delta = pos_b - pos_a;
-
-        ecoord dist_sq = delta.SquaredEuclideanNorm();
-
-        if( dist_sq == 0 || dist_sq < min_dist_sq )
-        {
-            if( aNeedMTV )
-                *aMTV = delta.Resize( min_dist - sqrt( dist_sq ) + 3 );  // fixme: apparent rounding error
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
-
 bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM* aB )
 {
     int net_p, net_n;
@@ -191,6 +155,11 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 }
 
 
+bool isEdge( const PNS::ITEM* aItem )
+{
+    return aItem->Layer() == Edge_Cuts || aItem->Layer() == Margin;
+}
+
 
 bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
                                                 const PNS::ITEM* aItemA, const PNS::ITEM* aItemB,
@@ -205,13 +174,16 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
 
     switch ( aType )
     {
-        case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:     hostType = CLEARANCE_CONSTRAINT;     break;
-        case PNS::CONSTRAINT_TYPE::CT_WIDTH:         hostType = TRACK_WIDTH_CONSTRAINT;   break;
-        case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP: hostType = DIFF_PAIR_GAP_CONSTRAINT; break;
-        case PNS::CONSTRAINT_TYPE::CT_LENGTH:        hostType = LENGTH_CONSTRAINT;        break;
-        case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:  hostType = VIA_DIAMETER_CONSTRAINT;  break;
-        case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:      hostType = HOLE_SIZE_CONSTRAINT;     break;
-        default:                                     return false; // should not happen
+    case PNS::CONSTRAINT_TYPE::CT_CLEARANCE:      hostType = CLEARANCE_CONSTRAINT;      break;
+    case PNS::CONSTRAINT_TYPE::CT_WIDTH:          hostType = TRACK_WIDTH_CONSTRAINT;    break;
+    case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:  hostType = DIFF_PAIR_GAP_CONSTRAINT;  break;
+    case PNS::CONSTRAINT_TYPE::CT_LENGTH:         hostType = LENGTH_CONSTRAINT;         break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:   hostType = VIA_DIAMETER_CONSTRAINT;   break;
+    case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:       hostType = HOLE_SIZE_CONSTRAINT;      break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE: hostType = HOLE_CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE: hostType = EDGE_CLEARANCE_CONSTRAINT; break;
+    case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:   hostType = HOLE_TO_HOLE_CONSTRAINT;   break;
+    default:                                      return false; // should not happen
     }
 
     BOARD_ITEM*    parentA = aItemA ? aItemA->Parent() : nullptr;
@@ -271,6 +243,9 @@ bool PNS_PCBNEW_RULE_RESOLVER::QueryConstraint( PNS::CONSTRAINT_TYPE aType,
         case PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_GAP:
         case PNS::CONSTRAINT_TYPE::CT_VIA_DIAMETER:
         case PNS::CONSTRAINT_TYPE::CT_VIA_HOLE:
+        case PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE:
+        case PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE:
+        case PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE:
             aConstraint->m_Value = hostConstraint.GetValue();
             aConstraint->m_RuleName = hostConstraint.GetName();
             aConstraint->m_Type = aType;
@@ -291,7 +266,6 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         return it->second;
 
     PNS::CONSTRAINT constraint;
-    bool ok = false;
     int rv = 0;
 
     if( aB && IsDiffPair( aA, aB ) )
@@ -301,26 +275,72 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
                              &constraint ) )
         {
             rv = constraint.m_Value.Opt();
-            ok = true;
+            m_clearanceCache[ key ] = rv;
+            return rv;
         }
     }
 
-    if( !ok )
+    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
+                         &constraint ) )
     {
-        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
+        rv = constraint.m_Value.Min();
+    }
+
+    if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
+    {
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_EDGE_CLEARANCE, aA, aB, aA->Layer(),
                              &constraint ) )
         {
-            rv = constraint.m_Value.Min();
-            ok = true;
+            if( constraint.m_Value.Min() > rv )
+                rv = constraint.m_Value.Min();
         }
     }
 
-    // still no valid clearance rule? fall back to global minimum.
-    if( !ok )
-        rv = m_board->GetDesignSettings().m_MinClearance;
-
     m_clearanceCache[ key ] = rv;
+    return rv;
+}
 
+
+int PNS_PCBNEW_RULE_RESOLVER::HoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
+{
+    std::pair<const PNS::ITEM*, const PNS::ITEM*> key( aA, aB );
+    auto it = m_holeClearanceCache.find( key );
+
+    if( it != m_holeClearanceCache.end() )
+        return it->second;
+
+    PNS::CONSTRAINT constraint;
+    int rv = 0;
+
+    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_CLEARANCE, aA, aB, aA->Layer(),
+                         &constraint ) )
+    {
+        rv = constraint.m_Value.Min();
+    }
+
+    m_holeClearanceCache[ key ] = rv;
+    return rv;
+}
+
+
+int PNS_PCBNEW_RULE_RESOLVER::HoleToHoleClearance( const PNS::ITEM* aA, const PNS::ITEM* aB )
+{
+    std::pair<const PNS::ITEM*, const PNS::ITEM*> key( aA, aB );
+    auto it = m_holeToHoleClearanceCache.find( key );
+
+    if( it != m_holeToHoleClearanceCache.end() )
+        return it->second;
+
+    PNS::CONSTRAINT constraint;
+    int rv = 0;
+
+    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_HOLE_TO_HOLE, aA, aB, aA->Layer(),
+                         &constraint ) )
+    {
+        rv = constraint.m_Value.Min();
+    }
+
+    m_holeToHoleClearanceCache[ key ] = rv;
     return rv;
 }
 
@@ -821,7 +841,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE_BASE::syncPad( PAD* aPad )
             slot->SetWidth( slot->GetWidth() + bds.GetHolePlatingThickness() * 2 );
         }
 
-        solid->SetAlternateShape( slot );
+        solid->SetHole( slot );
     }
 
     if( aPad->GetAttribute() == PAD_ATTRIB_NPTH )
@@ -922,6 +942,10 @@ std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE_BASE::syncVia( VIA* aVia )
         via->Mark( PNS::MK_LOCKED );
 
     via->SetIsFree( aVia->GetIsFree() );
+
+    BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+    via->SetHole( SHAPE_CIRCLE( aVia->GetPosition(),
+                                aVia->GetDrill() / 2 + bds.GetHolePlatingThickness() ) );
 
     return via;
 }
@@ -1107,7 +1131,7 @@ bool PNS_KICAD_IFACE::IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const
 }
 
 
-bool PNS_KICAD_IFACE::IsOnLayer( const PNS::ITEM* aItem, int aLayer ) const
+bool PNS_KICAD_IFACE::IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const
 {
     /// Default is all layers
     if( aLayer < 0 )
@@ -1170,7 +1194,7 @@ bool PNS_KICAD_IFACE::IsItemVisible( const PNS::ITEM* aItem ) const
 
 void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
 {
-    int worstPadClearance = 0;
+    int worstClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
 
     m_world = aWorld;
 
@@ -1210,7 +1234,7 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
             if( std::unique_ptr<PNS::SOLID> solid = syncPad( pad ) )
                 aWorld->Add( std::move( solid ) );
 
-            worstPadClearance = std::max( worstPadClearance, pad->GetLocalClearance() );
+            worstClearance = std::max( worstClearance, pad->GetLocalClearance() );
         }
 
         syncTextItem( aWorld, &footprint->Reference(), footprint->Reference().GetLayer() );
@@ -1256,15 +1280,13 @@ void PNS_KICAD_IFACE_BASE::SyncWorld( PNS::NODE *aWorld )
         }
     }
 
-    int worstRuleClearance = m_board->GetDesignSettings().GetBiggestClearanceValue();
-
     // NB: if this were ever to become a long-lived object we would need to dirty its
     // clearance cache here....
     delete m_ruleResolver;
     m_ruleResolver = new PNS_PCBNEW_RULE_RESOLVER( m_board, this );
 
     aWorld->SetRuleResolver( m_ruleResolver );
-    aWorld->SetMaxClearance( 4 * std::max(worstPadClearance, worstRuleClearance ) );
+    aWorld->SetMaxClearance( 4 * worstClearance );
 }
 
 

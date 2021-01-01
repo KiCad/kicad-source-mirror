@@ -36,6 +36,8 @@
 #include "pns_solid.h"
 #include "pns_joint.h"
 #include "pns_index.h"
+#include "pns_debug_decorator.h"
+#include "pns_router.h"
 
 
 namespace PNS {
@@ -100,6 +102,24 @@ int NODE::GetClearance( const ITEM* aA, const ITEM* aB ) const
         return 100000;
 
    return m_ruleResolver->Clearance( aA, aB );
+}
+
+
+int NODE::GetHoleClearance( const ITEM* aA, const ITEM* aB ) const
+   {
+      if( !m_ruleResolver )
+           return 0;
+
+      return m_ruleResolver->HoleClearance( aA, aB );
+   }
+
+
+int NODE::GetHoleToHoleClearance( const ITEM* aA, const ITEM* aB ) const
+{
+   if( !m_ruleResolver )
+        return 0;
+
+   return m_ruleResolver->HoleToHoleClearance( aA, aB );
 }
 
 
@@ -194,8 +214,6 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 
     bool m_differentNetsOnly;
 
-    int m_forceClearance;
-
     DEFAULT_OBSTACLE_VISITOR( NODE::OBSTACLES& aTab, const ITEM* aItem, int aKindMask, bool aDifferentNetsOnly ) :
         OBSTACLE_VISITOR( aItem ),
         m_tab( aTab ),
@@ -203,8 +221,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         m_limitCount( -1 ),
         m_matchCount( 0 ),
         m_extraClearance( 0 ),
-        m_differentNetsOnly( aDifferentNetsOnly ),
-        m_forceClearance( -1 )
+        m_differentNetsOnly( aDifferentNetsOnly )
     {
         if( aItem && aItem->Kind() == ITEM::LINE_T )
         {
@@ -229,18 +246,7 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
         if( visit( aCandidate ) )
             return true;
 
-        int clearance = m_extraClearance + m_node->GetClearance( aCandidate, m_item );
-
-        if( aCandidate->Kind() == ITEM::LINE_T ) // this should never happen.
-        {
-            assert( false );
-            clearance += static_cast<LINE*>( aCandidate )->Width() / 2;
-        }
-
-        if( m_forceClearance >= 0 )
-            clearance = m_forceClearance;
-
-        if( !aCandidate->Collide( m_item, clearance, false, nullptr, m_node, m_differentNetsOnly ) )
+        if( !aCandidate->Collide( m_item, m_node, m_differentNetsOnly ) )
             return true;
 
         OBSTACLE obs;
@@ -259,24 +265,8 @@ struct NODE::DEFAULT_OBSTACLE_VISITOR : public OBSTACLE_VISITOR
 };
 
 
-int NODE::QueryColliding( const ITEM* aItem, OBSTACLE_VISITOR& aVisitor )
-{
-    aVisitor.SetWorld( this, NULL );
-    m_index->Query( aItem, m_maxClearance, aVisitor );
-
-    // if we haven't found enough items, look in the root branch as well.
-    if( !isRoot() )
-    {
-        aVisitor.SetWorld( m_root, this );
-        m_root->m_index->Query( aItem, m_maxClearance, aVisitor );
-    }
-
-    return 0;
-}
-
-
 int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aKindMask,
-                          int aLimitCount, bool aDifferentNetsOnly, int aForceClearance )
+                          int aLimitCount, bool aDifferentNetsOnly )
 {
     DEFAULT_OBSTACLE_VISITOR visitor( aObstacles, aItem, aKindMask, aDifferentNetsOnly );
 
@@ -286,7 +276,7 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aK
 
     visitor.SetCountLimit( aLimitCount );
     visitor.SetWorld( this, NULL );
-    visitor.m_forceClearance = aForceClearance;
+
     // first, look for colliding items in the local index
     m_index->Query( aItem, m_maxClearance, visitor );
 
@@ -304,105 +294,131 @@ int NODE::QueryColliding( const ITEM* aItem, NODE::OBSTACLES& aObstacles, int aK
 NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                                           const std::set<ITEM*>* aRestrictedSet )
 {
-    OBSTACLES obs_list;
-    bool found_isects = false;
+    OBSTACLES obstacleList;
+    obstacleList.reserve( 100 );
 
-    const SHAPE_LINE_CHAIN& line = aLine->CLine();
-
-    obs_list.reserve( 100 );
-
-    int n = 0;
-
-    for( int i = 0; i < line.SegmentCount(); i++ )
+    for( int i = 0; i < aLine->CLine().SegmentCount(); i++ )
     {
-        const SEGMENT s( *aLine, line.CSegment( i ) );
-        n += QueryColliding( &s, obs_list, aKindMask );
+        const SEGMENT s( *aLine, aLine->CLine().CSegment( i ) );
+        QueryColliding( &s, obstacleList, aKindMask );
     }
 
     if( aLine->EndsWithVia() )
-        n += QueryColliding( &aLine->Via(), obs_list, aKindMask );
+        QueryColliding( &aLine->Via(), obstacleList, aKindMask );
 
-    if( !n )
+    if( obstacleList.empty() )
         return OPT_OBSTACLE();
 
     OBSTACLE nearest;
     nearest.m_item = NULL;
     nearest.m_distFirst = INT_MAX;
 
-    for( const OBSTACLE& obs : obs_list )
-    {
-        VECTOR2I ip_last;
-        int dist_max = INT_MIN;
+    auto updateNearest =
+            [&]( int dist, VECTOR2I pt, ITEM* item, const SHAPE_LINE_CHAIN& hull )
+            {
+                if( dist < nearest.m_distFirst )
+                {
+                    nearest.m_distFirst = dist;
+                    nearest.m_ipFirst = pt;
+                    nearest.m_item = item;
+                    nearest.m_hull = hull;
+                }
+            };
 
-        if( aRestrictedSet && aRestrictedSet->find( obs.m_item ) == aRestrictedSet->end() )
+    for( const OBSTACLE& obstacle : obstacleList )
+    {
+        if( aRestrictedSet && aRestrictedSet->find( obstacle.m_item ) == aRestrictedSet->end() )
             continue;
 
-        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> isect_list;
+        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
 
-        int clearance = GetClearance( obs.m_item, aLine );
+        int clearance = GetClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
+        SHAPE_LINE_CHAIN obstacleHull = obstacle.m_item->Hull( clearance, 0, aLine->Layer() );
 
-        SHAPE_LINE_CHAIN obsHull = obs.m_item->Hull( clearance, aLine->Width(), aLine->Layer() );
+        ROUTER::GetInstance()->GetInterface()->GetDebugDecorator()->AddLine( obstacleHull, 2, 1000 );
 
         if( aLine->EndsWithVia() )
         {
-            clearance = GetClearance( obs.m_item, &aLine->Via() );
+            const VIA& via = aLine->Via();
+            int viaClearance = GetClearance( obstacle.m_item, &via );
+            int holeClearance = GetHoleClearance( obstacle.m_item, &via );
 
-            SHAPE_LINE_CHAIN viaHull = aLine->Via().Hull( clearance, aLine->Width() );
+            if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
+                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
 
-            viaHull.Intersect( obsHull, isect_list );
+            // ObstacleHull has line clearance and 1/2 line width already built in.  So
+            // viaHull's clearance needs to be only that portion of the via clearance that
+            // is *in excess* of the line clearance.
+            viaClearance = std::max( 0, viaClearance - clearance );
 
-            for( const SHAPE_LINE_CHAIN::INTERSECTION& isect : isect_list )
+            SHAPE_LINE_CHAIN viaHull = via.Hull( viaClearance, 0 );
+
+            obstacleHull.Intersect( viaHull, intersectingPts );
+
+            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
             {
-                int dist = aLine->CLine().Length() +
-                           ( isect.p - aLine->Via().Pos() ).EuclideanNorm();
-
-                if( dist < nearest.m_distFirst )
-                {
-                    found_isects = true;
-                    nearest.m_distFirst = dist;
-                    nearest.m_ipFirst = isect.p;
-                    nearest.m_item = obs.m_item;
-                    nearest.m_hull = obsHull;
-                }
-
-                if( dist > dist_max )
-                {
-                    dist_max = dist;
-                    ip_last = isect.p;
-                }
+                int dist = aLine->CLine().Length() + ( ip.p - via.Pos() ).EuclideanNorm();
+                updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
             }
         }
 
-        isect_list.clear();
+        intersectingPts.clear();
+        obstacleHull.Intersect( aLine->CLine(), intersectingPts );
 
-        obsHull.Intersect( aLine->CLine(), isect_list );
-
-        for( const SHAPE_LINE_CHAIN::INTERSECTION& isect : isect_list )
+        for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
         {
-            int dist = aLine->CLine().PathLength( isect.p );
-
-            if( dist < nearest.m_distFirst )
-            {
-                found_isects = true;
-                nearest.m_distFirst = dist;
-                nearest.m_ipFirst = isect.p;
-                nearest.m_item = obs.m_item;
-                nearest.m_hull = obsHull;
-            }
-
-            if( dist > dist_max )
-            {
-                dist_max = dist;
-                ip_last = isect.p;
-            }
+            int dist = aLine->CLine().PathLength( ip.p );
+            updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
         }
 
-        nearest.m_ipLast = ip_last;
-        nearest.m_distLast = dist_max;
+        if( obstacle.m_item->Hole() )
+        {
+            clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
+            obstacleHull = obstacle.m_item->HoleHull( clearance, 0, aLine->Layer() );
+
+            ROUTER::GetInstance()->GetInterface()->GetDebugDecorator()->AddLine( obstacleHull, 3, 1000 );
+
+            if( aLine->EndsWithVia() )
+            {
+                const VIA& via = aLine->Via();
+                int viaClearance = GetClearance( obstacle.m_item, &via );
+                int holeClearance = GetHoleClearance( obstacle.m_item, &via );
+                int holeToHole = GetHoleToHoleClearance( obstacle.m_item, &via );
+
+                if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
+                    viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+
+                if( holeToHole + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
+                    viaClearance = holeToHole + via.Drill() / 2 - via.Diameter() / 2;
+
+                // ObsHull has line clearance and 1/2 line width already built in.  So viaHull's
+                // clearance needs to be just that which is *in excess* of clearance.
+                viaClearance = std::max( 0, viaClearance - clearance );
+
+                SHAPE_LINE_CHAIN viaHull = via.Hull( viaClearance, 0 );
+
+                obstacleHull.Intersect( viaHull, intersectingPts );
+
+                for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
+                {
+                    int dist = aLine->CLine().Length() + ( ip.p - via.Pos() ).EuclideanNorm();
+                    updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
+                }
+            }
+
+            intersectingPts.clear();
+            obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+
+            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
+            {
+                int dist = aLine->CLine().PathLength( ip.p );
+                updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
+            }
+        }
     }
 
-    if( !found_isects )
-        nearest.m_item = obs_list[0].m_item;
+    if( nearest.m_distFirst == INT_MAX )
+        nearest.m_item = obstacleList[0].m_item;
 
     return nearest;
 }
@@ -455,25 +471,6 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
         return OPT_OBSTACLE( obs[0] );
 
     return OPT_OBSTACLE();
-}
-
-
-bool NODE::CheckColliding( const ITEM* aItemA, const ITEM* aItemB, int aKindMask, int aForceClearance )
-{
-    assert( aItemB );
-    int clearance;
-    if( aForceClearance >= 0 )
-        clearance = aForceClearance;
-    else
-        clearance = GetClearance( aItemA, aItemB );
-
-    // fixme: refactor
-    if( aItemA->Kind() == ITEM::LINE_T )
-        clearance += static_cast<const LINE*>( aItemA )->Width() / 2;
-    if( aItemB->Kind() == ITEM::LINE_T )
-        clearance += static_cast<const LINE*>( aItemB )->Width() / 2;
-
-    return aItemA->Collide( aItemB, clearance, false, nullptr, this );
 }
 
 

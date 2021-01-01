@@ -23,6 +23,8 @@
 #include <cassert>
 #include <math/box2.h>
 
+#include <geometry/shape_compound.h>
+
 #include "pns_arc.h"
 #include "pns_line.h"
 #include "pns_node.h"
@@ -70,6 +72,14 @@ int SHOVE::getClearance( const ITEM* aA, const ITEM* aB ) const
         return m_forceClearance;
 
     return m_currentNode->GetClearance( aA, aB );
+}
+
+int SHOVE::getHoleClearance( const ITEM* aA, const ITEM* aB ) const
+{
+    if( m_forceClearance >= 0 )
+        return m_forceClearance;
+
+    return m_currentNode->GetHoleClearance( aA, aB );
 }
 
 
@@ -129,6 +139,11 @@ bool SHOVE::checkBumpDirection( const LINE& aCurrent, const LINE& aObstacle, con
 SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved )
 {
     int clearance = getClearance( &aCurrent, &aObstacle );
+    int holeClearance = getHoleClearance( &aCurrent.Via(), &aObstacle );
+
+    if( holeClearance + aCurrent.Via().Drill() / 2 > clearance + aCurrent.Via().Diameter() / 2 )
+        clearance = holeClearance + aCurrent.Via().Drill() / 2 - aCurrent.Via().Diameter() / 2;
+
     const SHAPE_LINE_CHAIN hull = aCurrent.Via().Hull( clearance, aObstacle.Width(), aCurrent.Layer() );
     SHAPE_LINE_CHAIN path_cw;
     SHAPE_LINE_CHAIN path_ccw;
@@ -152,7 +167,7 @@ SHOVE::SHOVE_STATUS SHOVE::walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, L
 
     aShoved.SetShape( shortest );
 
-    if( m_currentNode->CheckColliding( &aShoved, &aCurrent ) )
+    if( aShoved.Collide( &aCurrent, m_currentNode ) )
         return SH_INCOMPLETE;
 
     return SH_OK;
@@ -234,7 +249,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
             continue;
         }
 
-        bool colliding = m_currentNode->CheckColliding( &l, &aCurrent, ITEM::ANY_T, m_forceClearance );
+        bool colliding = l.Collide( &aCurrent, m_currentNode );
 
 #ifdef DEBUG
         char str[128];
@@ -248,7 +263,7 @@ SHOVE::SHOVE_STATUS SHOVE::processHullSet( LINE& aCurrent, LINE& aObstacle,
 
             for( ITEM* item : jtStart->LinkList() )
             {
-                if( m_currentNode->CheckColliding( item, &l ) )
+                if( item->Collide( &l, m_currentNode ) )
                     colliding = true;
             }
         }
@@ -321,7 +336,16 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
         }
 
         if( viaOnEnd )
-            hulls.push_back( aCurrent.Via().Hull( clearance, w ) );
+        {
+            const VIA& via = aCurrent.Via();
+            int viaClearance = getClearance( &via, &aObstacle );
+            int holeClearance = getHoleClearance( &via, &aObstacle );
+
+            if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
+                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
+
+            hulls.push_back( aCurrent.Via().Hull( viaClearance, w ) );
+        }
 
 #ifdef DEBUG
         char str[128];
@@ -530,7 +554,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
             }
         }
 
-        if( via && m_currentNode->CheckColliding( via, aObstacle ) )
+        if( via && via->Collide( aObstacle, m_currentNode ) )
             return onCollidingVia( aObstacle, via );
     }
 
@@ -598,7 +622,7 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSolid( LINE& aCurrent, ITEM* aObstacle )
         {
             LINE lastLine = m_lineStack.front();
 
-            if( m_currentNode->CheckColliding( &lastLine, &walkaroundLine ) )
+            if( lastLine.Collide( &walkaroundLine, m_currentNode ) )
             {
                 LINE dummy( lastLine );
 
@@ -834,72 +858,50 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
  */
 SHOVE::SHOVE_STATUS SHOVE::onCollidingVia( ITEM* aCurrent, VIA* aObstacleVia )
 {
-    int clearance = getClearance( aCurrent, aObstacleVia ) + PNS_HULL_MARGIN;
+    int clearance = getClearance( aCurrent, aObstacleVia );
     LINE_PAIR_VEC draggedLines;
-    bool lineCollision = false;
-    bool viaCollision = false;
-    bool holeCollision = false;
-    LINE* currentLine = NULL;
-    VECTOR2I mtvLine;       // Minimum translation vector to correct line collisions
-    VECTOR2I mtvVia;        // MTV to correct via collisions
-    VECTOR2I mtvHoles;      // MTV to correct hole collisions
-    VECTOR2I mtvSolid;      // MTV to correct solid collisions
-    VECTOR2I mtv;           // Union of relevant MTVs (will correct all collisions)
+    VECTOR2I mtv;
     int rank = -1;
+
+    SHAPE_COMPOUND shape;
 
     if( aCurrent->OfKind( ITEM::LINE_T ) )
     {
+        LINE* currentLine = (LINE*) aCurrent;
+
 #if 0
-         m_logger.NewGroup( "push-via-by-line", m_iter );
-         m_logger.Log( aCurrent, 4, "current" );
+        m_logger.NewGroup( "push-via-by-line", m_iter );
+        m_logger.Log( currentLine, 4, "current" );
 #endif
 
-        currentLine = (LINE*) aCurrent;
-        lineCollision = aObstacleVia->Shape()->Collide( currentLine->Shape(),
-                                                        clearance + currentLine->Width() / 2,
-                                                        &mtvLine );
+        shape.AddShape( currentLine->Shape()->Clone() );
 
+        // SHAPE_LINE_CHAIN collisions don't currently pay any attention to the line-chain's
+        // width, so we have to add it to the clearance.
+        clearance += currentLine->Width() / 2;
+
+        // Add a second shape for the via (if any)
         if( currentLine->EndsWithVia() )
         {
-            int currentNet = currentLine->Net();
-            int obstacleNet = aObstacleVia->Net();
+            const VIA& currentVia = currentLine->Via();
+            int        viaClearance = getClearance( &currentVia, aObstacleVia );
+            int        holeClearance = getHoleClearance( &currentVia, aObstacleVia );
+            int        effectiveRadius = std::max( currentVia.Diameter() / 2 + viaClearance,
+                                                   currentVia.Drill() / 2 + holeClearance );
 
-            if( currentNet != obstacleNet && currentNet >= 0 && obstacleNet >= 0 )
-            {
-                viaCollision = currentLine->Via().Shape()->Collide( aObstacleVia->Shape(),
-                                                                    clearance, &mtvVia );
-            }
-
-            // hole-to-hole is a mechanical constraint (broken drill bits), not an electrical
-            // one, so it has to be checked irrespective of matching nets.
-
-            // temporarily removed hole-to-hole collision check due to conflicts with the
-            // springback algorithm...
-            // we need to figure out a better solution here - TW
-            holeCollision = false; //rr->CollideHoles( &currentLine->Via(), aObstacleVia, true, &mtvHoles );
+            // Since we have to run the collision with the line's clearance + 1/2 its width (as
+            // it's the only way to take the SHAPE_LINE_CHAIN's width into account), we need to
+            // subtract that clearance back out of the via's effective radius.
+            shape.AddShape( new SHAPE_CIRCLE( currentVia.Pos(), effectiveRadius - clearance ) );
         }
-
-        // These aren't /actually/ lengths as we don't bother to do the square-root part,
-        // but we're just comparing them to each other so it's faster this way.
-        ecoord lineMTVLength = lineCollision ? mtvLine.SquaredEuclideanNorm() : 0;
-        ecoord viaMTVLength = viaCollision ? mtvVia.SquaredEuclideanNorm() : 0;
-        ecoord holeMTVLength = holeCollision ? mtvHoles.SquaredEuclideanNorm() : 0;
-
-        if( lineMTVLength >= viaMTVLength && lineMTVLength >= holeMTVLength )
-            mtv = mtvLine;
-        else if( viaMTVLength >= lineMTVLength && viaMTVLength >= holeMTVLength )
-            mtv = mtvVia;
-        else
-            mtv = mtvHoles;
-
-        rank = currentLine->Rank();
     }
     else if( aCurrent->OfKind( ITEM::SOLID_T ) )
     {
-        aObstacleVia->Shape()->Collide( aCurrent->Shape(), clearance, &mtvSolid );
-        mtv = -mtvSolid;
-        rank = aCurrent->Rank() + 10000;
+        shape.AddShape( aCurrent->Shape()->Clone() );
     }
+
+    aObstacleVia->Shape()->Collide( &shape, clearance + PNS_HULL_MARGIN, &mtv );
+    rank = aCurrent->Rank() + 10000;
 
     return pushOrShoveVia( aObstacleVia, mtv, rank );
 }
@@ -1111,8 +1113,7 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         {
             wxLogTrace( "PNS", "iter %d: reverse-collide-via", aIter );
 
-            if( currentLine.EndsWithVia()
-                    && m_currentNode->CheckColliding( &currentLine.Via(), (VIA*) ni ) )
+            if( currentLine.EndsWithVia() )
             {
                 st = SH_INCOMPLETE;
             }

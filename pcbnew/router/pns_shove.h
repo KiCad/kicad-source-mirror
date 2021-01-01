@@ -153,6 +153,7 @@ private:
     SHOVE_STATUS shoveMainLoop();
 
     int getClearance( const ITEM* aA, const ITEM* aB ) const;
+    int getHoleClearance( const ITEM* aA, const ITEM* aB ) const;
 
     std::vector<SPRINGBACK_TAG> m_nodeStack;
     std::vector<LINE>           m_lineStack;

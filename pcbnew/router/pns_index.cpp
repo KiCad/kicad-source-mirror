@@ -33,28 +33,7 @@ void INDEX::Add( ITEM* aItem )
         m_subIndices.resize( 2 * range.End() + 1 ); // +1 handles the 0 case
 
     for( int i = range.Start(); i <= range.End(); ++i )
-    {
-        if( !ROUTER::GetInstance()->GetInterface()->IsOnLayer( aItem, i ) )
-        {
-            if( aItem->AlternateShape() )
-            {
-                m_subIndices[i].Add( aItem, aItem->AlternateShape()->BBox() );
-            }
-            else
-            {
-                wxLogError( "Missing expected Alternate shape for %s at %d %d",
-                            aItem->Parent()->GetClass(),
-                            aItem->Anchor( 0 ).x,
-                            aItem->Anchor( 0 ).y );
-                m_subIndices[i].Add( aItem );
-            }
-
-        }
-        else
-        {
-            m_subIndices[i].Add( aItem );
-        }
-    }
+        m_subIndices[i].Add( aItem );
 
     m_allItems.insert( aItem );
     int net = aItem->Net();

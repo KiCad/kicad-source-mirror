@@ -38,7 +38,7 @@ public:
     SOLID() :
         ITEM( SOLID_T ),
         m_shape( NULL ),
-        m_alternateShape( NULL )
+        m_hole( NULL )
     {
         m_movable = false;
         m_padToDie = 0;
@@ -48,7 +48,7 @@ public:
     ~SOLID()
     {
         delete m_shape;
-        delete m_alternateShape;
+        delete m_hole;
     }
 
     SOLID( const SOLID& aSolid ) :
@@ -59,10 +59,10 @@ public:
         else
             m_shape = nullptr;
 
-        if( aSolid.m_alternateShape )
-            m_alternateShape = aSolid.m_alternateShape->Clone();
+        if( aSolid.m_hole )
+            m_hole = aSolid.m_hole->Clone();
         else
-            m_alternateShape = nullptr;
+            m_hole = nullptr;
 
         m_pos = aSolid.m_pos;
         m_padToDie = aSolid.m_padToDie;
@@ -77,10 +77,13 @@ public:
 
     const SHAPE* Shape() const override { return m_shape; }
 
-    const SHAPE* AlternateShape() const override { return m_alternateShape; }
+    const SHAPE* Hole() const override { return m_hole; }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
                                  int aLayer = -1 ) const override;
+
+    const SHAPE_LINE_CHAIN HoleHull( int aClearance, int aWalkaroundThickness,
+                                     int aLayer ) const override;
 
     void SetShape( SHAPE* shape )
     {
@@ -88,10 +91,10 @@ public:
         m_shape = shape;
     }
 
-    void SetAlternateShape( SHAPE* shape )
+    void SetHole( SHAPE* shape )
     {
-        delete m_alternateShape;
-        m_alternateShape = shape;
+        delete m_hole;
+        m_hole = shape;
     }
 
     const VECTOR2I& Pos() const { return m_pos; }
@@ -119,7 +122,7 @@ public:
 private:
     VECTOR2I    m_pos;
     SHAPE*      m_shape;
-    SHAPE*      m_alternateShape;
+    SHAPE*      m_hole;
     VECTOR2I    m_offset;
     int         m_padToDie;
     double      m_orientation;  // in 1/10 degrees, matching PAD
