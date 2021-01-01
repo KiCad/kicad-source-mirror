@@ -7,17 +7,17 @@
 # translation of kicad.po to
 # Radovan Blažek <blazra@gmail.com>, 2020.
 # Jan Vykydal <vvykys@gmail.com>, 2020.
-# Jan Straka <bach@email.cz>, 2020.
+# Jan Straka <bach@email.cz>, 2020, 2021.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-31 14:35+0000\n"
+"PO-Revision-Date: 2021-01-01 17:16+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
+"master-source/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -7191,7 +7191,6 @@ msgid "Bill of Material"
 msgstr "Rozpiska materiálu"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
-#, fuzzy
 msgid ""
 "# 1 - Full documentation\n"
 "\n"
@@ -7377,16 +7376,16 @@ msgid ""
 "\"%O.csv\"\n"
 "```\n"
 msgstr ""
-"# 1- Úplná dokumentace\n"
+"# 1 - Úplná dokumentace\n"
 "\n"
-"Dokumentace Eeschema (* eeschema.html *) popisuje tento nepřímý netlist a "
-"poskytuje několik příkladů (kapitola *** vytváření vlastních netlists a BOM "
-"souborů ***).\n"
+"Dokumentace Eeschema (*eeschema.html*) popisuje tento nepřímý netlist a "
+"poskytuje několik příkladů (kapitola ***vytváření vlastních netlists a BOM "
+"souborů***).\n"
 "\n"
 "# 2 - Zprostředkovaný soubor Netlist\n"
 "\n"
-"Soubory BOM(a netlist soubory) lze vytvořit ze souboru * Intermediate "
-"netlist * vytvořeného Eeschema.\n"
+"Soubory BOM(a netlist soubory) lze vytvořit ze souboru *Intermediate netlist*"
+" vytvořeného Eeschema.\n"
 "\n"
 "Tento soubor používá syntaxi XML a nazývá se zprostředkující netlist. "
 "Zprostředkovaný netlist obsahuje velké množství dat o vaší desce a z tohoto "
@@ -7394,8 +7393,8 @@ msgstr ""
 "jiných zpráv.\n"
 "\n"
 "V závislosti na výstupu (kusovníku nebo netlistu) budou při následném "
-"zpracování použity různé podmnožiny kompletního souboru Intermediate "
-"Netlist.\n"
+"zpracování použity různé podmnožiny kompletního souboru Intermediate Netlist."
+"\n"
 "\n"
 "# 3 - Převod do nového formátu\n"
 "\n"
@@ -7428,15 +7427,15 @@ msgstr ""
 "* Název: například název formátu netlistu.\n"
 "* Příkazový řádek ke spuštění převaděče (obvykle skript).\n"
 "\n"
-"*** Poznámka (pouze Windows): ***\n"
-"* Ve výchozím nastavení běží příkazový řádek se skrytým oknem konzoly a "
-"výstup je přesměrován do pole „Informace o pluginu“. Chcete-li zobrazit okno "
-"spuštěného příkazu, zaškrtněte políčko „Zobrazit okno konzoly“. *\n"
+"***Poznámka (pouze Windows):***\n"
+"*Ve výchozím nastavení běží příkazový řádek se skrytým oknem konzoly a "
+"výstup je přesměrován do pole \"Informace o pluginu\". Chcete-li zobrazit "
+"okno spuštěného příkazu, zaškrtněte políčko \"Zobrazit okno konzoly\".*\n"
 "\n"
 "Jakmile kliknete na tlačítko generovat, stane se toto:\n"
 "\n"
-"1. Eeschema vytvoří přechodný soubor netlistu \\ *. Xml, například `test."
-"xml`.\n"
+"1. Eeschema vytvoří přechodný soubor netlistu \\*. Xml, například `test.xml`."
+"\n"
 "2. Eeschema spustí skript z příkazového řádku a vytvoří finální výstupní "
 "soubor.\n"
 "\n"
@@ -7454,8 +7453,8 @@ msgstr ""
 "Ve Windows je příkazový řádek následující.\n"
 "\n"
 "```\n"
-"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%I"
-"\"\n"
+"f:/kicad/bin/xsltproc.exe -o \"%O\" f:/kicad/bin/plugins/myconverter.xsl \"%"
+"I\"\n"
 "```\n"
 "\n"
 "V Linuxu může použitý příkazový řádek vypadat takto.\n"
@@ -7478,28 +7477,27 @@ msgstr ""
 "nebo\n"
 "\n"
 "```\n"
-"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" "
-"\"%O\"\n"
+"python /usr/local/kicad/bin/plugins/bom-in-python/myconverter .xsl \"%I\" \"%"
+"O\"\n"
 "```\n"
 "\n"
 "Formát příkazového řádku přijímá parametry pro názvy souborů.Podporované "
 "parametry formátování jsou:\n"
 "\n"
-"* `% B`: základní název vybraného výstupního souboru, mínus cesta a "
-"přípona.\n"
-"* `% P`: adresář projektu, bez názvu a bez koncovky '/'.\n"
-"* `% I`: úplný název souboru a cesta dočasného vstupního souboru\n"
+"* `%B`: základní název vybraného výstupního souboru, mínus cesta a přípona.\n"
+"* `%P`: adresář projektu, bez názvu a bez koncovky '/'.\n"
+"* `%I`: úplný název souboru a cesta dočasného vstupního souboru\n"
 "(zprostředkující net soubor).\n"
-"* `% O`: kompletní název souboru a cesta (ale bez přípony) uživatelem\n"
+"* `%O`: kompletní název souboru a cesta (ale bez přípony) uživatelem\n"
 "zvoleného výstupního souboru.\n"
 "\n"
-"`% I` bude nahrazeno skutečným mezilehlým názvem souboru (obvykle úplný "
-"název kořenového listu s příponou„ .xml “).\n"
-"`% O` bude nahrazeno skutečným názvem výstupního souboru (úplná přípona "
-"názvu kořenového listu minus).\n"
-"`% B` bude nahrazeno skutečným výstupním krátkým názvem souboru (krátký "
-"název kořenového listu s příponou mínus).\n"
-"`% P` bude nahrazen skutečnou aktuální cestou projektu.\n"
+"`%I` bude nahrazeno skutečným mezilehlým názvem souboru (obvykle úplný název "
+"kořenového listu s příponou„ .xml “).\n"
+"`%O` bude nahrazeno skutečným názvem výstupního souboru (úplná přípona názvu "
+"kořenového listu minus).\n"
+"`%B` bude nahrazeno skutečným výstupním krátkým názvem souboru (krátký název "
+"kořenového listu s příponou mínus).\n"
+"`%P` bude nahrazen skutečnou aktuální cestou projektu.\n"
 "\n"
 "## 4.3 - Formát příkazového řádku:\n"
 "\n"
@@ -7509,10 +7507,11 @@ msgstr ""
 "Proto musíte přidat k možnosti ***% O *** správnou příponu souboru.\n"
 "\n"
 "Například:\n"
-"* **%O.csv ** k vytvoření souboru .csv (soubor s hodnotami oddělenými "
+"\n"
+"* **%O.csv** k vytvoření souboru .csv (soubor s hodnotami oddělenými "
 "čárkami).\n"
-"* **%O.htm ** k vytvoření souboru .html.\n"
-"* **%O.bom ** k vytvoření souboru .bom.\n"
+"* **%O.htm** k vytvoření souboru .html.\n"
+"* **%O.bom** k vytvoření souboru .bom.\n"
 "\n"
 "### 4.3.2 Příklad pro xsltproc:\n"
 "\n"
@@ -7530,8 +7529,8 @@ msgstr ""
 "\n"
 "V Linuxu:\n"
 "```\n"
-"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-pcb."
-"xsl \"%I\"\n"
+"xsltproc -o \"%O.bom\" /usr/local/kicad/bin/plugins/netlist_form_pads-"
+"pcb.xsl \"%I\"\n"
 "```\n"
 "\n"
 "Výše uvedené příklady předpokládají, že je ` xsltproc` nainstalován na vašem "
@@ -7555,8 +7554,8 @@ msgstr ""
 "\n"
 "Na Windows:\n"
 "```\n"
-"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" "
-"\"%O.html\"\n"
+"python.exe f:/kicad/bin/plugins/bom-in-python/my_python_script.py \"%I\" \"%O"
+".html\"\n"
 "```\n"
 "\n"
 "Na Linuxu:\n"
@@ -7632,9 +7631,8 @@ msgid "Update Fields"
 msgstr "Aktualizovat pole"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:130
-#, fuzzy
 msgid "Remove fields if not in new symbol"
-msgstr "Vytvoří nový adresář"
+msgstr "Odstranit pole, pokud nejsou v novém symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:131
 #, fuzzy
@@ -8053,9 +8051,8 @@ msgid "Combo!"
 msgstr "Kombinace!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:216
-#, fuzzy
 msgid "Illegal reference designator value!"
-msgstr "Nepovolená hodnota pole reference!"
+msgstr "Nepovolená hodnota označení reference!"
 
 #: eeschema/dialogs/dialog_edit_one_field.cpp:224
 msgid "Value may not be empty."
@@ -8509,9 +8506,8 @@ msgstr "Barva pozadí listu:"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.h:104
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.h:93
-#, fuzzy
 msgid "Edit Text and Graphic Properties"
-msgstr "Upravit vlastnosti pole"
+msgstr "Upravit vlastnosti textu a grafiky"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
 msgid "symbol"
@@ -13326,14 +13322,14 @@ msgid "Falling back to cache to set symbol '%s:%s' link '%s'."
 msgstr ""
 
 #: eeschema/sch_screen.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
-msgstr "Nastavení symbolu schématu '%s %s' identifikátor knihovny na '%s'. "
+msgstr "Nastavení symbolu schématu '%s %s' identifikátor knihovny na '%s'."
 
 #: eeschema/sch_screen.cpp:699
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "Nenalezena knihovna symbolů pro symbol schématu '%s %s'. "
+msgstr "Nenalezena knihovna symbolů pro symbol schématu '%s %s'."
 
 #: eeschema/sch_sheet.cpp:55
 msgid "Sheet name"
@@ -14088,9 +14084,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:729
-#, fuzzy
 msgid "Manage symbol libraries"
-msgstr "Správa knihoven symbolů..."
+msgstr "Správa knihoven symbolů"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:740
 msgid ""
@@ -14162,11 +14157,13 @@ msgstr "Selhalo uložení zálohy do \"%s\""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1177
 #: eeschema/symbol_viewer_frame.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include the library '%s'.\n"
 "Use Manage Symbol Libraries to edit the configuration."
-msgstr "Aktuální konfigurace neobsahuje knihovnu '%s'."
+msgstr ""
+"Aktuální konfigurace neobsahuje knihovnu '%s'.\n"
+"K úpravě konfigurace použijte Spravovat knihovny symbolů."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1180
 #: eeschema/symbol_viewer_frame.cpp:389
@@ -14190,11 +14187,9 @@ msgstr "Knihovna symbolů není povolena."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving %s symbol library table."
-msgstr ""
-"Došlo k chybě při ukládání globální tabulky knihovny symbolů:\n"
-"%s"
+msgstr "Chyba při ukládání %s tabulky symbolů knihovny."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
@@ -14334,9 +14329,8 @@ msgstr "Do knihovny symbolů '%s' nelze zapisovat."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:690
 #: eeschema/symbol_editor/symbol_editor.cpp:1275
-#, fuzzy
 msgid "You must save to a different location."
-msgstr "Ladit sklon diferenciálního páru"
+msgstr "Musíte uložit na jiné místo."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:740 include/lib_table_grid.h:183
 #: pcbnew/footprint_libraries_utils.cpp:878
@@ -14744,9 +14738,8 @@ msgid "Save Library As..."
 msgstr "Uložit knihovnu jako..."
 
 #: eeschema/tools/ee_actions.cpp:118
-#, fuzzy
 msgid "Save the current library to a new file."
-msgstr "Uložit současnou knihovnu do nového souboru"
+msgstr "Uložit aktuální knihovnu do nového souboru."
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
@@ -14775,9 +14768,8 @@ msgid "Save Symbol As..."
 msgstr "Změnit symbol..."
 
 #: eeschema/tools/ee_actions.cpp:137
-#, fuzzy
 msgid "Save the current symbol to a different library."
-msgstr "Aktualizovat knihovnu symbolů ve schématu"
+msgstr "Uložit aktuální symbol na jiný knihovny."
 
 #: eeschema/tools/ee_actions.cpp:141
 #, fuzzy
@@ -15754,9 +15746,8 @@ msgid "symbol is not multi-unit"
 msgstr "symbol není multi-jednotka"
 
 #: eeschema/tools/sch_edit_tool.cpp:934
-#, fuzzy
 msgid "Label value cannot go below zero"
-msgstr "Úhel oblouku nemůže být nulový."
+msgstr "Hodnota označení nesmí klesnout pod nulu"
 
 #: eeschema/tools/sch_edit_tool.cpp:1095 pcbnew/tools/pcb_control.cpp:479
 msgid "Item locked."
@@ -21777,7 +21768,6 @@ msgid "Solder paste absolute clearance:"
 msgstr "Pájecí pasta poměr mezer:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:275
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -21788,9 +21778,12 @@ msgid ""
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
 "To je místní izolační mezera mezi ploškami a maskou\n"
-"pro toto pouzdro\n"
-"Tato hodnota může být nahrazena místní hodnotou plošky.\n"
-"Pokud je hodnota 0, je použita globální hodnota"
+"pro toto pouzdro.\n"
+"Konečná hodnota izolační mezery je součtem této hodnoty a poměru hodnoty "
+"mezery.\n"
+"Záporná hodnota znamená menší velikost masky než velikost plošky.\n"
+"Tato hodnota může být přepsána na základě ploška-po-plošce v Místní\n"
+"izolační mezera a kartě Nastavení ve Vlastnosti plošky."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:286
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:382
@@ -22531,7 +22524,6 @@ msgstr ""
 "Pokud je hodnota 0, je použita globální hodnota."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:371
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for this "
 "footprint.\n"
@@ -22540,9 +22532,11 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"To je místní izolační mezera mezi ploškami a pájecí pastou pro toto pouzdro\n"
+"To je místní izolační mezera mezi ploškami a pájecí pastou pro toto pouzdro."
+"\n"
 "Tato hodnota může být nahrazena místní hodnotou plošky.\n"
-"Konečná hodnota mezery"
+"Konečná hodnota mezery je součtem této hodnoty a poměru hodnoty mezery.\n"
+"Záporná hodnota znamená menší velikost masky než velikost plošky."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
 msgid ""
@@ -23175,7 +23169,7 @@ msgstr ""
 "%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy global footprint library table file:\n"
 "\n"
@@ -23188,6 +23182,7 @@ msgstr ""
 "Nelze kopírovat soubor globální tabulky symbolu knihovny:\n"
 "\n"
 " \"%s\"\n"
+"\n"
 ":do:\n"
 "\n"
 "\"%s\"."
@@ -23819,9 +23814,8 @@ msgid "%s and %s"
 msgstr "%s a %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1210
-#, fuzzy
 msgid "Warning: Pad size is less than zero."
-msgstr "Velikost plošky musí být větší než nula"
+msgstr "Varování: Velikost plošky je menší než nula."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
 msgid ""
@@ -23854,9 +23848,8 @@ msgstr ""
 "Záporná mezera znamená oblast menší, než ploška (obvykle pro pájecí pastu)."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1292
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "Chyba: ploška není na vrstvě"
+msgstr "Chyba: ploška nemá vrstvu."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1298
 #, fuzzy
@@ -23870,7 +23863,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
 #, fuzzy
 msgid "Incorrect value for pad offset."
-msgstr "Nesprávná hodnota posunu plošek"
+msgstr "Nesprávná hodnota pro offset plošek"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
 #, fuzzy
@@ -23886,8 +23879,8 @@ msgstr "Chyba: Průchozí otvor plošky: Ø vrtání nastaven na hodnotu 0"
 #, fuzzy
 msgid "Error: Connector pads have no solder paste. Use an SMD pad instead."
 msgstr ""
-"Chyba: Konektory nejsou na vrstvě pájecí pasty\n"
-"Použijte místo nich SMD plošky"
+"Chyba: Konektory nejsou na vrstvě pájecí pasty. Použijte místo nich SMD "
+"plošky"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
 #, fuzzy
@@ -24244,15 +24237,12 @@ msgstr ""
 "Pokud je 0, je použita místní hodnota pouzdra nebo třídy sítě."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:622
-#, fuzzy
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"To je místní izolační mezera mezi ploškami a maskou\n"
-"pro toto pouzdro\n"
-"Tato hodnota může být nahrazena místní hodnotou plošky.\n"
-"Pokud je hodnota 0, je použita globální hodnota"
+"To je místní izolační mezera mezi ploškami a maskou.\n"
+"Pokud je 0, je použita místní hodnota pouzdra nebo globální hodnota."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:635
 msgid ""
@@ -25840,12 +25830,10 @@ msgid "Default text items for new footprints:"
 msgstr "Výchozí textové položky pro nové pouzdra:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:87
-#, fuzzy
 msgid ""
 "Note: a blank reference designator or value will use the footprint name."
 msgstr ""
-"Výchozí text pro referenci\n"
-"Nechte prázdné, pokud chcete používat název pouzdra"
+"Poznámka: Prázdné označení reference nebo hodnota použije název pouzdra."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
@@ -26104,14 +26092,14 @@ msgstr ""
 "Chcete pokračovat?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:564
-#, fuzzy
 msgid ""
 "Items have been found on removed layers. This operation will delete all "
 "items from removed layers and cannot be undone.\n"
 "Do you wish to continue?"
 msgstr ""
 "Byly nalezeny položky na odstraněných vrstvách. Tato operace smaže všechny "
-"položky z odstraněných vrstev a nelze ji vrátit zpět. Chcete pokračovat?"
+"položky z odstraněných vrstev a nelze ji vrátit zpět. \n"
+"Chcete pokračovat?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:740
 msgid "Layer must have a name."
@@ -26484,13 +26472,12 @@ msgstr "jumper"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:556
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:570
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
-#, fuzzy
 msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
-"Typ vrstvy mědi pro Freerouter. Napájecí vrstvy jsou odstraněny z menu "
-"vrstev Freerouter-u."
+"Typ vrstvy mědi pro Freerouter a další externí routry.\n"
+"Napájecí vrstvy jsou odstraněny z menu vrstev Freerouter-u."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:157
 msgid "In1"
@@ -26791,16 +26778,16 @@ msgid "Solder mask minimum bridge width:"
 msgstr "Minimální šířka pájecí masky:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:64
-#, fuzzy
 msgid ""
 "Min. dist between 2 pad areas.\n"
 "Two pad areas nearer than this value will be merged during plotting.\n"
 "This parameter is only used to plot solder mask layers.\n"
 "Leave at 0 unless you know what you are doing."
 msgstr ""
-"Minimální vzdálenost mezi 2 oblastmi plošek.\n"
-"Dvě oblasti plošek blíže než tato hodnota budou sloučeny během kreslení.\n"
-"Tento parametr je použit pouze pro tisk vrstev nepájivé masky."
+"Min. vzdálenost mezi 2 oblastmi plošek.\n"
+"Dvě oblasti plošek blíže než tato hodnota budou sloučeny během vykreslení.\n"
+"Tento parametr je použit pouze pro tisk vrstev nepájivé masky.\n"
+"Nechte to na 0, pokud nevíte, co děláte."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:86
 #, fuzzy
@@ -27874,13 +27861,12 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" neexistuje. Chcete ji vytvořit?"
 
 #: pcbnew/files.cpp:741
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Tento soubor byl vytvořen starší verzí Pcbnew.\n"
-"Bude uložen v novém formátu, pokud ho uložíte znovu."
+"Tento soubor byl vytvořen starší verzí Pcbnew. Po uložení bude převeden do "
+"nového formátu."
 
 #: pcbnew/files.cpp:818 pcbnew/files.cpp:956
 #, c-format
@@ -28059,28 +28045,26 @@ msgid "Edit Zone"
 msgstr "Upravit zónu"
 
 #: pcbnew/footprint_editor_utils.cpp:281
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library named '%s'.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Současná konfigurace neobsahuje knihovnu pouzder\n"
-"se jménem \"%s\". Chcete-li upravit konfiguraci,\n"
-"použijte možnost Spravovat knihovny pouzder."
+"Aktuální konfigurace neobsahuje knihovnu s názvem '%s'.\n"
+"K úpravě konfigurace použijte Spravovat knihovny pouzder."
 
 #: pcbnew/footprint_editor_utils.cpp:284
 msgid "Library not found in footprint library table."
 msgstr "Knihovna nenalezena v tabulce knihoven pouzder."
 
 #: pcbnew/footprint_editor_utils.cpp:292
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The library '%s' is not enabled in the current configuration.\n"
 "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Knihovna se jménem \"%s\" není povolena v aktuální konfiguraci. \n"
-"Chcete-li upravit konfiguraci, použijte funkci\n"
-"Spravovat knihovny pouzder."
+"Knihovna '%s' není povolena v aktuální konfiguraci. \n"
+"K úpravě konfigurace použijte Spravovat knihovny pouzder."
 
 #: pcbnew/footprint_editor_utils.cpp:295 pcbnew/footprint_viewer_frame.cpp:923
 msgid "Footprint library not enabled."
@@ -28252,28 +28236,26 @@ msgstr ""
 "%s"
 
 #: pcbnew/footprint_viewer_frame.cpp:913
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include library '%s'.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Současná konfigurace neobsahuje knihovnu pouzder\n"
-"\"%s\".\n"
-"Chcete-li upravit konfiguraci, použijte možnost Spravovat knihovny pouzder."
+"Aktuální konfigurace neobsahuje knihovnu '%s'.  K úpravě konfigurace "
+"použijte Spravovat knihovny pouzder."
 
 #: pcbnew/footprint_viewer_frame.cpp:916
 msgid "Footprint library not found."
 msgstr "Knihovna pouzdra nenalezena."
 
 #: pcbnew/footprint_viewer_frame.cpp:920
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Library '%s' is not enabled in the current configuration.  Use Manage "
 "Footprint Libraries to edit the configuration."
 msgstr ""
-"Knihovna se jménem \"%s\" není povolena v aktuální konfiguraci. \n"
-"Chcete-li upravit konfiguraci, použijte funkci\n"
-"Spravovat knihovny pouzder."
+"Knihovna '%s' není povolena v aktuální konfiguraci.  K úpravě konfigurace "
+"použijte Spravovat knihovny pouzder."
 
 #: pcbnew/footprint_wizard_frame.cpp:80
 #: pcbnew/footprint_wizard_frame_functions.cpp:78
@@ -28617,13 +28599,12 @@ msgid "Export Footprints to Library..."
 msgstr "Aktualizovat pouzdra z knihovny..."
 
 #: pcbnew/menubar_pcb_editor.cpp:154
-#, fuzzy
 msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Archivovat všechny pouzdra do existující knihovny v tabulce knihoven "
-"pouzder(ponechá ostatní pouzdra v této knihovně)"
+"Přidat pouzdra použité nadesce do existující knihovny pouzder\n"
+"(neodstraní další pouzdra z této knihovny)"
 
 #: pcbnew/menubar_pcb_editor.cpp:158
 #, fuzzy
@@ -30096,13 +30077,12 @@ msgstr ""
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4552
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2575
-#, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
 msgstr ""
-"Režim staršího zaplnění segmentu se nedoporučuje. Převést zónu na "
-"mnohoúhelníkovou výplň?"
+"Starší režim vyplnění segmentu již není podporován.\n"
+"Převést zóny na polygonové vyplnění?"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:4554
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2577
