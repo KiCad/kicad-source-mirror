@@ -1143,8 +1143,9 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
         for( int i = activePts.size() - 1; i >= 0; --i )
         {
             wxPoint pt = activePts[i];
+            size_t  pt_count = trackMap[ pt ].size() + viaMap.count( pt );
 
-            if( trackMap[ pt ].size() > 2 && aStopCondition == STOP_AT_JUNCTION )
+            if( pt_count > 2 && aStopCondition == STOP_AT_JUNCTION )
             {
                 activePts.erase( activePts.begin() + i );
                 continue;
@@ -1172,7 +1173,7 @@ void PCB_SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem
                 expand = true;
             }
 
-            if( viaMap.count( pt ) && !viaMap[ pt ]->IsSelected() )
+            if( viaMap.count( pt ) && !viaMap[ pt ]->IsSelected() && aStopCondition != STOP_AT_JUNCTION )
                 select( viaMap[ pt ] );
 
             activePts.erase( activePts.begin() + i );
