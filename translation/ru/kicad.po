@@ -2,17 +2,17 @@
 # mentioned in every translation file „Language-Team” sections.
 # This file is distributed under GNU Free Documentation License.
 # http://www.gnu.org/licenses/fdl-1.3.html
-# Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020.
+# Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>, 2020, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-12-28 12:11+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2021-01-01 17:16+0000\n"
+"Last-Translator: Konstantin Baranovskiy <baranovskiykonstantin@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6418,7 +6418,6 @@ msgid "Legacy footprint export files"
 msgstr "Файлы экспорта посад.мест"
 
 #: common/wildcards_and_files_ext.cpp:440
-#, fuzzy
 msgid "Electrical rule check file"
 msgstr "Файлы проверки электрических правил"
 
@@ -12842,7 +12841,7 @@ msgstr ""
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
-msgstr ""
+msgstr "Не удаётся установить текстовые переменные, так как отсутствует проект."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -12880,6 +12879,9 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"Блок с ID %s (имя: %s) изображён на листе '%s', но не связан ни с каким из "
+"других листов проекта. KiCad требует, чтобы все символы листа были связаны с "
+"листом, поэтому блок не был загружен."
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -13349,14 +13351,14 @@ msgstr ""
 "Используется кэш для присвоения символу '%s:%s' ссылки на библиотеку '%s'."
 
 #: eeschema/sch_screen.cpp:688
-#, fuzzy, c-format
+#, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "Присвоение символу схемы '%s %s' идентификатора библиотеки '%s'."
 
 #: eeschema/sch_screen.cpp:699
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "Для символа схемы '%s %s' не подходит ни один символ из библиотеки."
+msgstr "Символ схемы '%s %s' не найден в библиотеке."
 
 #: eeschema/sch_sheet.cpp:55
 msgid "Sheet name"
@@ -14364,36 +14366,31 @@ msgstr "Библиотека символов не задействована."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving %s symbol library table."
-msgstr ""
-"Ошибка при сохранении глобальной таблицы библиотек символов:\n"
-"%s"
+msgstr "Ошибка при сохранении %s таблицы библиотек символов."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "global"
-msgstr "Глобальная"
+msgstr "глобальной"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "project"
-msgstr "Проект"
+msgstr "проектной"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr ""
+msgstr "Обычное сохранение"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "Не предпринимать дополнительных действий после сохранения библиотеки."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "Удалить библиотеку из таблицы"
+msgstr "Заменить запись в таблице библиотек"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid ""
@@ -14401,11 +14398,13 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
+"Заменить запись в таблице библиотек символов на новую библиотеку.\n"
+"\n"
+"Исходная библиотека станет недоступной для дальнейшего использования."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "Добавить в глобальную таблицу"
+msgstr "Добавить новую запись в глобальную таблицу библиотек"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 msgid ""
@@ -14414,11 +14413,14 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Добавить новую запись в глобальную таблицу библиотек символов.\n"
+"\n"
+"Уникальное имя библиотеки будет дополнено цифровым суфиксом,\n"
+"чтобы избежать дублирования имён."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "Таблица библиотек символов проекта создана.\n"
+msgstr "Добавить новую запись в таблицу библиотек проекта"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid ""
@@ -14427,6 +14429,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"Добавить новую запись в таблицу библиотек символов проекта.\n"
+"\n"
+"Уникальное имя библиотеки будет дополнено цифровым суфиксом,\n"
+"чтобы избежать дублирования имён."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
 #, c-format
@@ -14923,14 +14929,12 @@ msgid "Select a complete connection"
 msgstr "Выделить всё соединение"
 
 #: eeschema/tools/ee_actions.cpp:117
-#, fuzzy
 msgid "Save Library As..."
-msgstr "Сохранить библиотеку \"%s\" как..."
+msgstr "Сохранить библиотеку как..."
 
 #: eeschema/tools/ee_actions.cpp:118
-#, fuzzy
 msgid "Save the current library to a new file."
-msgstr "Выберите файл таблицы библиотек посад.мест."
+msgstr "Сохранить текущую библиотеку в новом файле."
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
@@ -14953,14 +14957,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "Создать копию выделенного символа"
 
 #: eeschema/tools/ee_actions.cpp:136
-#, fuzzy
 msgid "Save Symbol As..."
-msgstr "Заменить символы..."
+msgstr "Сохранить символ как..."
 
 #: eeschema/tools/ee_actions.cpp:137
-#, fuzzy
 msgid "Save the current symbol to a different library."
-msgstr "Сохранить текущий символ в схеме"
+msgstr "Сохранить текущий символ в другой библиотеке."
 
 #: eeschema/tools/ee_actions.cpp:141
 msgid "Remove the selected symbol from its library"
@@ -17070,6 +17072,8 @@ msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
 msgstr ""
+"Не удалось создать нувую директорию. Используйте другой путь. Проект не "
+"импортирован."
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -23975,125 +23979,115 @@ msgid "%s and %s"
 msgstr "%s и %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1210
-#, fuzzy
 msgid "Warning: Pad size is less than zero."
-msgstr "Размер конт.пл. должен быть больше нуля"
+msgstr "Предупреждение: размер конт.пл. меньше нуля."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill larger than pad size or drill shape and pad shape do not "
 "overlap."
 msgstr ""
 "Предупреждение: отв. конт.пл. больше самой конт.пл. или отв. и конт.пл. не "
-"пересекаются"
+"пересекаются."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "Ошибка: отрицательные значения локального зазора ни на что не влияют."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
 msgstr ""
+"Ошибка: отрицательные зазоры паяльной маски не поддерживаются конт.пл. "
+"сложной формы."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr ""
+"Предупреждение: отрицательный зазор паяльной маски больше конт.пл. Паяльная "
+"маска не будет сформирована."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
-#, fuzzy
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr ""
-"Отрицательный зазор указывает, что площадь меньше конт.пл. (норма для "
-"паяльной пасты)."
+"Предупреждение: отрицательные границы паяльной пасты больше конт.пл. Маска "
+"паяльной пасты не будет сформирована."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1292
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "Ошибка: конт.пл. не имеет слоёв"
+msgstr "Ошибка: конт.пл. не имеет слоёв."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1298
-#, fuzzy
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr ""
-"Предупреждение: метал. отверстие должно иметь конт.пл. хотя бы на одном слое"
+"Предупреждение: метал. отверстие должно иметь конт.пл. хотя бы на одном слое."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
-#, fuzzy
 msgid "Incorrect value for pad offset."
 msgstr "Неверное значение смещения конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "Слишком большая разница значения размера конт.пл."
+msgstr "Слишком большое значение разницы размеров конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1329
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "Ошибка: Сквозное отв. конт.пл.: диаметр сверла равен 0"
+msgstr "Ошибка: конт.пл. со сквозным отв. не имеет отв."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1336
-#, fuzzy
 msgid "Error: Connector pads have no solder paste. Use an SMD pad instead."
 msgstr ""
-"Ошибка: Конт.пл. соединителя не имеет слоя паяльной пасты\n"
-"Вместо этого используйте SMD конт.пл."
+"Ошибка: конт.пл. соединителя не имеет слоя паяльной пасты. Используйте SMD "
+"конт.пл."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Warning: SMD pad has no outer layers."
-msgstr "Ошибка: конт.пл. не имеет слоёв"
+msgstr "Предупреждение: SMD конт.пл. не имеет наружных слоёв."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1358
-#, fuzzy
 msgid "Warning: Fiducial property cannot be set on NPTH pads."
-msgstr "Нельзя задать параметр для NPTH"
+msgstr "Предупреждение: нельзя обозначить NPTH конт.пл. реперной."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid "Warning: Testpoint property cannot be set on NPTH pads."
-msgstr "Нельзя задать параметр для NPTH"
+msgstr "Предупреждение: нельзя обозначить NPTH конт.пл. тестовой."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1370
-#, fuzzy
 msgid "Warning: Heatsink property cannot be set on NPTH pads."
-msgstr "Нельзя задать параметр для NPTH"
+msgstr "Предупреждение: нельзя обозначить NPTH конт.пл. теплоотводной."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1376
-#, fuzzy
 msgid "Warning: Castellated property can be set only on PTH pads."
-msgstr "Краевыми полуотверстиями могут быть только PTH отверстия"
+msgstr ""
+"Предупреждение: нельзя обозначить PTH конт.пл. как периферийное "
+"полу-отверстие."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1382
-#, fuzzy
 msgid "Warning: BGA property can be set only on SMD pads."
-msgstr "BGA конт.пл. могут быть только SMD конт.пл."
+msgstr "Предупреждение: только SMD конт.пл. могут быть обозначены как BGA."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "Ошибка: размер скругления не является числом."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
-#, fuzzy
 msgid "Error: Negative corner size."
-msgstr "Неверное (отрицательное) значение размера скругления"
+msgstr "Ошибка: отрицательное значение размера скругления."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "Предупреждение: скругление сделает конт.пл. круглой."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "Ошибка: конт.пл. сложной формы должна образовать единый полигон."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
@@ -25495,27 +25489,23 @@ msgstr "Описание родительского посад.места"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:334
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "У %s на конт.пл. %s цепь изменится на %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr ""
-"У %s на конт.пл. %s и у %s на конт.пл. %s цепь изменится на %s.\n"
-"Продолжить?"
+msgstr "У %s на конт.пл. %s и у %s на конт.пл. %s цепь изменится на %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr ""
+msgstr "У %lu соединённых конт.пл. цепь изменится на %s."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy
 msgid "Change Nets"
-msgstr "Изменить на текст"
+msgstr "Заменить цепи"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy
 msgid "Leave Nets Unchanged"
 msgstr "Не изменять"
 
@@ -25532,9 +25522,8 @@ msgid "Edit track/via properties"
 msgstr "Редактировать свойства дорожки/перех.отв."
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:594
-#, fuzzy
 msgid "Updating nets"
-msgstr "Обновить список цепей"
+msgstr "Обновление цепей"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:49
 msgid "Start point X:"
@@ -28004,13 +27993,12 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "Плата \"%s\" не существует. Создать?"
 
 #: pcbnew/files.cpp:741
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
 msgstr ""
-"Этот файл создан в старой версии Pcbnew.\n"
-"При сохранении файла он будет записан в новом формате."
+"Этот файл создан в старой версии KiCad. При сохранении он будет записан в "
+"новом формате."
 
 #: pcbnew/files.cpp:818 pcbnew/files.cpp:956
 #, c-format
@@ -29691,13 +29679,13 @@ msgstr ""
 "KiCad. Такие элементы не будут загружены."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
 msgstr ""
 "Схема CADSTAR содержит исполнения, которые не имеют аналогов в KiCad. Только "
-"главное исполнение ('%s') было загружено."
+"исполнение '%s' было загружено."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:139
 #, c-format
@@ -29776,13 +29764,13 @@ msgstr ""
 "(родительская группа: ID=%s, Name=%s)."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"Форма для '%s' имеет штриховую заливку в CADSTAR, аналога которой нет в "
-"KiCad. Используется сплошная заливка."
+"Наклонная размерная линия %s не имеет аналога в KiCad. Она была загружена "
+"как выровненная размерная линия."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -29791,6 +29779,9 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
+"Размерная линия %s имеет 'внешний' стиль в CADSTAR. Размерные линии со "
+"стилями пока не поддреживаются в KiCad. Была импортирована размерная линия с "
+"использованием внутреннего стиля."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
 #, fuzzy, c-format
@@ -29939,6 +29930,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
 msgstr ""
+"Текстовые переменные не могут быть установлены, так как проект не загружен."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -30012,6 +30004,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
 msgstr ""
+"Размерная линия %s использует неподдерживаемые в KiCad единицы измерения. "
+"Они были заменены на миллиметры."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
