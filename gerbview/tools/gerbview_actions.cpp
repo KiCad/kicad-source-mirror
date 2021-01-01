@@ -116,7 +116,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
         AS_GLOBAL, 0, "",
         _( "Highlight Component" ), "",
-        file_footprint_xpm );
+        module_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
         AS_GLOBAL, 0, "",

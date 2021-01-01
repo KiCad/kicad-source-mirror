@@ -242,7 +242,6 @@ set( BMAPS_MID
     file_bom
     file_drl
     file_dsn
-    file_footprint
     file_gbr
     file_html
     file_idf
