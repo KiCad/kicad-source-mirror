@@ -289,6 +289,24 @@ void ROUTER::moveDragging( const VECTOR2I& aP, ITEM* aEndItem )
 
 void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR& aRemoved )
 {
+    auto updateItem =
+            [&]( ITEM* currentItem, ITEM* itemToMark )
+            {
+                std::unique_ptr<ITEM> tmp( itemToMark->Clone() );
+                int                   clearance;
+
+                if( itemToMark->Marker() & MK_HOLE )
+                    clearance = aNode->GetHoleClearance( currentItem, itemToMark );
+                else
+                    clearance = aNode->GetClearance( currentItem, itemToMark );
+
+                m_iface->DisplayItem( tmp.get(), -1, clearance );
+
+                // Remove the obstacle itself from the view unless we're just marking its hole
+                if( itemToMark->Marker() & MK_HOLE )
+                    aRemoved.push_back( itemToMark );
+            };
+
     for( ITEM* item : aCurrent.Items() )
     {
         NODE::OBSTACLES obstacles;
@@ -308,17 +326,17 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
 
         for( OBSTACLE& obs : obstacles )
         {
-            int clearance;
+            obs.m_item->Mark( obs.m_item->Marker() | MK_VIOLATION );
+            updateItem( item, obs.m_item );
+        }
 
-            if( ( obs.m_item->Marker() & MK_HOLE ) > 0 )
-                clearance = aNode->GetHoleClearance( item, obs.m_item );
-            else
-                clearance = aNode->GetClearance( item, obs.m_item );
+        if( item->Kind() == ITEM::LINE_T )
+        {
+            LINE* line = static_cast<LINE*>( item );
 
-            std::unique_ptr<ITEM> tmp( obs.m_item->Clone() );
-            tmp->Mark( tmp->Marker() | MK_VIOLATION );
-            m_iface->DisplayItem( tmp.get(), -1, clearance );
-            aRemoved.push_back( obs.m_item );
+            // Show clearance on any blocking obstacles
+            if( line->GetBlockingObstacle() )
+                updateItem( item, line->GetBlockingObstacle() );
         }
     }
 }

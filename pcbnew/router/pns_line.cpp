@@ -47,6 +47,7 @@ LINE::LINE( const LINE& aOther )
     m_hasVia = aOther.m_hasVia;
     m_marker = aOther.m_marker;
     m_rank = aOther.m_rank;
+    m_blockingObstacle = aOther.m_blockingObstacle;
 
     copyLinks( &aOther );
 }
@@ -70,6 +71,7 @@ LINE& LINE::operator=( const LINE& aOther )
     m_rank = aOther.m_rank;
     m_owner = aOther.m_owner;
     m_snapThreshhold = aOther.m_snapThreshhold;
+    m_blockingObstacle = aOther.m_blockingObstacle;
 
     copyLinks( &aOther );
 

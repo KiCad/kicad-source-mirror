@@ -333,8 +333,8 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
         if( aLine->EndsWithVia() )
         {
             const VIA& via = aLine->Via();
-            int viaClearance = GetClearance( obstacle.m_item, &via );
-            int holeClearance = GetHoleClearance( obstacle.m_item, &via );
+            int        viaClearance = GetClearance( obstacle.m_item, &via );
+            int        holeClearance = GetHoleClearance( obstacle.m_item, &via );
 
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
                 viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
@@ -396,6 +396,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
                 {
                     int dist = aLine->CLine().Length() + ( ip.p - via.Pos() ).EuclideanNorm();
                     updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
+                    obstacle.m_item->Mark( obstacle.m_item->Marker() | MK_HOLE );
                 }
             }
 
@@ -406,6 +407,7 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
             {
                 int dist = aLine->CLine().PathLength( ip.p );
                 updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
+                obstacle.m_item->Mark( obstacle.m_item->Marker() | MK_HOLE );
             }
         }
     }

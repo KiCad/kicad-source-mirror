@@ -86,7 +86,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
     m_color.a = 0.8;
     m_depth = BaseOverlayDepth - aItem->Layers().Start();
 
-    if(( aItem->Marker() & PNS::MK_HOLE ) && aItem->Hole() )
+    if( ( aItem->Marker() & PNS::MK_HOLE ) && aItem->Hole() )
         m_shape = aItem->Hole()->Clone();
     else
         m_shape = aItem->Shape()->Clone();

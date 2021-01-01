@@ -60,13 +60,13 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
 
         if( holeA && holeA->Collide( shapeB, holeClearance + lineWidthB ) )
         {
-            Mark( MK_HOLE );
+            Mark( Marker() | MK_HOLE );
             return true;
         }
 
         if( holeB && holeB->Collide( shapeA, holeClearance + lineWidthA ) )
         {
-            aOther->Mark( MK_HOLE );
+            aOther->Mark( aOther->Marker() | MK_HOLE );
             return true;
         }
 
@@ -76,8 +76,8 @@ bool ITEM::collideSimple( const ITEM* aOther, const NODE* aNode, bool aDifferent
 
             if( holeA->Collide( holeB, holeToHoleClearance ) )
             {
-                Mark( MK_HOLE );
-                aOther->Mark( MK_HOLE );
+                Mark( Marker() | MK_HOLE );
+                aOther->Mark( aOther->Marker() | MK_HOLE );
                 return true;
             }
         }

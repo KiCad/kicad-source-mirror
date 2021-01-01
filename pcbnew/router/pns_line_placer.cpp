@@ -479,6 +479,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 {
     buildInitialLine( aP, m_head );
+    m_head.SetBlockingObstacle( nullptr );
 
     // If we are enforcing DRC violations, push back to the hull
     if( !Settings().CanViolateDRC() )
@@ -486,109 +487,15 @@ bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
         NODE::OPT_OBSTACLE obs = m_currentNode->NearestObstacle( &m_head );
 
         if( obs && obs->m_distFirst != INT_MAX )
+        {
             buildInitialLine( obs->m_ipFirst, m_head );
+            m_head.SetBlockingObstacle( obs->m_item );
+        }
     }
 
     aNewHead = m_head;
 
     return static_cast<bool>( m_currentNode->CheckColliding( &m_head ) );
-}
-
-
-const LINE LINE_PLACER::reduceToNearestObstacle( const LINE& aOriginalLine )
-{
-    const auto& l0 = aOriginalLine.CLine();
-
-    if ( !l0.PointCount() )
-        return aOriginalLine;
-
-    int l = l0.Length();
-    int step = l / 2;
-    VECTOR2I target;
-
-    LINE l_test( aOriginalLine );
-
-    while( step > 0 )
-    {
-        target = l0.PointAlong( l );
-        SHAPE_LINE_CHAIN l_cur( l0 );
-
-        int index = l_cur.Split( target );
-
-        l_test.SetShape( l_cur.Slice( 0, index ) );
-
-        if ( m_currentNode->CheckColliding( &l_test ) )
-            l -= step;
-        else
-            l += step;
-
-        step /= 2;
-    }
-
-    l = l_test.CLine().Length();
-
-    while( m_currentNode->CheckColliding( &l_test ) && l > 0 )
-    {
-        l--;
-        target = l0.PointAlong( l );
-        SHAPE_LINE_CHAIN l_cur( l0 );
-
-        int index = l_cur.Split( target );
-
-        l_test.SetShape( l_cur.Slice( 0, index ) );
-    }
-
-    return l_test;
-}
-
-
-bool LINE_PLACER::rhStopAtNearestObstacle( const VECTOR2I& aP, LINE& aNewHead )
-{
-    LINE l0;
-    l0 = m_head;
-
-    buildInitialLine( aP, l0 );
-
-    LINE l_cur = reduceToNearestObstacle( l0 );
-
-    const SHAPE_LINE_CHAIN l_shape = l_cur.CLine();
-
-    if( l_shape.SegmentCount() == 0 )
-        return false;
-
-    if( l_shape.SegmentCount() == 1 )
-    {
-        SEG s = l_shape.CSegment( 0 );
-
-        VECTOR2I dL( DIRECTION_45( s ).Left().ToVector() );
-        VECTOR2I dR( DIRECTION_45( s ).Right().ToVector() );
-
-        SEG leadL( s.B, s.B + dL );
-        SEG leadR( s.B, s.B + dR );
-
-        SEG segL( s.B, leadL.LineProject( aP ) );
-        SEG segR( s.B, leadR.LineProject( aP ) );
-
-        LINE finishL( l0, SHAPE_LINE_CHAIN( { segL.A, segL.B } ) );
-        LINE finishR( l0, SHAPE_LINE_CHAIN( { segR.A, segR.B } ) );
-
-        LINE reducedL = reduceToNearestObstacle( finishL );
-        LINE reducedR = reduceToNearestObstacle( finishR );
-
-        int lL = reducedL.CLine().Length();
-        int lR = reducedR.CLine().Length();
-
-        if( lL > lR )
-            l_cur.Line().Append( reducedL.CLine() );
-        else
-            l_cur.Line().Append( reducedR.CLine() );
-
-        l_cur.Line().Simplify();
-    }
-
-    m_head = l_cur;
-    aNewHead = m_head;
-    return true;
 }
 
 

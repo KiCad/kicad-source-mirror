@@ -68,7 +68,8 @@ public:
      * Makes an empty line.
      */
     LINE() :
-        LINK_HOLDER( LINE_T )
+        LINK_HOLDER( LINE_T ),
+        m_blockingObstacle( nullptr )
     {
         m_hasVia = false;
         m_width = 1;        // Dummy value
@@ -86,7 +87,8 @@ public:
         LINK_HOLDER( aBase ),
         m_line( aLine ),
         m_width( aBase.m_width ),
-        m_snapThreshhold( aBase.m_snapThreshhold )
+        m_snapThreshhold( aBase.m_snapThreshhold ),
+        m_blockingObstacle( nullptr )
     {
         m_net = aBase.m_net;
         m_layers = aBase.m_layers;
@@ -99,7 +101,8 @@ public:
      * @param aVia
      */
     LINE( const VIA& aVia ) :
-        LINK_HOLDER( LINE_T )
+        LINK_HOLDER( LINE_T ),
+        m_blockingObstacle( nullptr )
     {
         m_hasVia = true;
         m_via = aVia;
@@ -204,6 +207,9 @@ public:
     virtual void Unmark( int aMarker = -1 ) const override;
     virtual int Marker() const override;
 
+    void SetBlockingObstacle( ITEM* aObstacle ) { m_blockingObstacle = aObstacle; }
+    ITEM* GetBlockingObstacle() const { return m_blockingObstacle; }
+
     void DragSegment( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
     void DragCorner( const VECTOR2I& aP, int aIndex, bool aFreeAngle = false );
 
@@ -214,7 +220,6 @@ public:
     bool HasLockedSegments() const;
 
     void Clear();
-    void Merge ( const LINE& aOther );
 
     OPT_BOX2I ChangedArea( const LINE* aOther ) const;
 
@@ -240,14 +245,16 @@ private:
     VECTOR2I snapDraggedCorner( const SHAPE_LINE_CHAIN& aPath, const VECTOR2I& aP,
                                 int aIndex ) const;
 
-    SHAPE_LINE_CHAIN m_line;            ///> The actual shape of the line
-    int              m_width;           ///> our width
+    SHAPE_LINE_CHAIN m_line;                ///> The actual shape of the line.
+    int              m_width;               ///> Our width.
 
 
-    int              m_snapThreshhold;  ///> Width to smooth out jagged segments
+    int              m_snapThreshhold;      ///> Width to smooth out jagged segments.
 
-    bool             m_hasVia;          ///> Optional via at the end point
+    bool             m_hasVia;              ///> Optional via at the end point.
     VIA              m_via;
+
+    ITEM*            m_blockingObstacle;    ///> For mark obstacle mode.
 };
 
 }
