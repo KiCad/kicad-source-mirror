@@ -50,6 +50,7 @@ private:
 
     /// Initialises member variables
     void InitValues();
+    void OnOptionChanged( wxCommandEvent& event ) override;
     void OnClearAnnotationClick( wxCommandEvent& event ) override;
     void OnCloseClick( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
@@ -188,6 +189,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
     m_Parent->GetCanvas()->Refresh();
 
     m_btnClear->Enable();
+    m_sdbSizer1Cancel->SetDefault();
 
     // Don't close dialog if there are things the user needs to address
     if( reporter.HasMessage() )
@@ -208,6 +210,13 @@ void DIALOG_ANNOTATE::OnClearAnnotationClick( wxCommandEvent& event )
 
     m_Parent->DeleteAnnotation( !GetLevel(), &appendUndo );
     m_btnClear->Enable( false );
+}
+
+
+void DIALOG_ANNOTATE::OnOptionChanged( wxCommandEvent& event )
+{
+    m_sdbSizer1OK->Enable( true );
+    m_sdbSizer1OK->SetDefault();
 }
 
 
