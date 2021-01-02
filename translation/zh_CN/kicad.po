@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
 "PO-Revision-Date: 2021-01-03 08:32+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12638,7 +12638,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"块ID %s（块名称：“ %s”）绘制在图纸“ %s”上，但未链接到设计中的另一张图纸。 KiCad要求将所有图纸符号都与图纸相关联，因此未加载块。"
+"原理图块ID %s（块名称：“ %s”）绘制在图纸“ %s”上，但未链接到项目中的另一张图纸。 "
+"KiCad要求将所有图纸符号都与图纸相关联，因此未加载该图块。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -14114,11 +14115,11 @@ msgstr "工程"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr "正常的另存为操作"
+msgstr "正常另存为操作"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr "保存库后不要执行任何额外操作。"
+msgstr "保存库后不执行任何额外操作。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
 msgid "Replace library table entry"
@@ -16771,7 +16772,7 @@ msgstr ""
 msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
-msgstr "创建新目录时出错。请尝试一个不同的路径。该项目未被导入。"
+msgstr "创建新目录时出错。请尝试其他路径。未导入该项目。"
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -23581,13 +23582,13 @@ msgstr "警告：焊盘钻头大于焊盘尺寸或钻头形状和焊盘形状不
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
-msgstr "错误：负的局部间隙值没有效果。"
+msgstr "错误：局部间隙值为负将没有效果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
-msgstr "错误：自定义焊盘形状不支持负值的焊接掩模间隙。"
+msgstr "错误：自定义形状焊盘不支持负的阻焊间隙值。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
@@ -25015,7 +25016,7 @@ msgstr "更改文本属性"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:57
 msgid "Enter the text placed on selected layer."
-msgstr "输入文字放在所选层."
+msgstr "输入要放在所选层上的文字。"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:202
 msgid "Keep text upright"
@@ -25028,25 +25029,25 @@ msgstr "父级封装描述"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:334
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr "更改网还会将%s焊盘%s更新为%s。"
+msgstr "更改网络还会将%s的%s焊盘的网络更新为%s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
 #, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr "更改网还会更新%s焊盘%s和%s焊盘%s到%s。"
+msgstr "更改网络还会将%s的%s焊盘和%s的%s焊盘的网络更新为%s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr "更改网还会更新%lu连接焊盘为%s。"
+msgstr "更改网络还会将%lu个所连接的焊盘的网络更新为%s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
 msgid "Change Nets"
-msgstr "更改网"
+msgstr "更改网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
 msgid "Leave Nets Unchanged"
-msgstr "保持网不变"
+msgstr "保持网络不变"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:379
 msgid "Via drill size must be smaller than via diameter"
@@ -25062,7 +25063,7 @@ msgstr "编辑布线/过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:594
 msgid "Updating nets"
-msgstr "正在更新网"
+msgstr "正在更新网络"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:49
 msgid "Start point X:"
