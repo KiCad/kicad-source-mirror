@@ -419,20 +419,21 @@ bool DRAGGER::dragWalkaround( const VECTOR2I& aP )
             ok = true;
         }
 
-        if(ok)
+        if( ok )
         {
             m_lastNode->Remove( origLine );
             SEG dummy;
             optimizeAndUpdateDraggedLine( dragged, dummy, aP );
         }
-    break;
     }
+        break;
+
     case DM_VIA: // fixme...
     {
         dragViaWalkaround( m_initialVia, m_lastNode, aP );
-
-        break;
+        ok = !m_world->CheckColliding( m_draggedItems );
     }
+        break;
     }
 
     m_dragStatus = ok;
