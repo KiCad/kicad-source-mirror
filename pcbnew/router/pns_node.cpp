@@ -307,107 +307,100 @@ NODE::OPT_OBSTACLE NODE::NearestObstacle( const LINE* aLine, int aKindMask,
     nearest.m_distFirst = INT_MAX;
 
     auto updateNearest =
-            [&]( int dist, VECTOR2I pt, ITEM* item, const SHAPE_LINE_CHAIN& hull )
+            [&]( VECTOR2I pt, ITEM* obstacle, const SHAPE_LINE_CHAIN& hull, bool isHole )
             {
+                int dist = aLine->CLine().PathLength( pt );
+
                 if( dist < nearest.m_distFirst )
                 {
                     nearest.m_distFirst = dist;
                     nearest.m_ipFirst = pt;
-                    nearest.m_item = item;
+                    nearest.m_item = obstacle;
                     nearest.m_hull = hull;
+
+                    obstacle->Mark( isHole ? obstacle->Marker() | MK_HOLE
+                                           : obstacle->Marker() & ~MK_HOLE );
                 }
             };
+
+    SHAPE_LINE_CHAIN obstacleHull;
+    DEBUG_DECORATOR* debugDecorator = ROUTER::GetInstance()->GetInterface()->GetDebugDecorator();
+    std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
+    int layer = aLine->Layer();
 
     for( const OBSTACLE& obstacle : obstacleList )
     {
         if( aRestrictedSet && aRestrictedSet->find( obstacle.m_item ) == aRestrictedSet->end() )
             continue;
 
-        std::vector<SHAPE_LINE_CHAIN::INTERSECTION> intersectingPts;
-
         int clearance = GetClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
-        SHAPE_LINE_CHAIN obstacleHull = obstacle.m_item->Hull( clearance, 0, aLine->Layer() );
-
-        ROUTER::GetInstance()->GetInterface()->GetDebugDecorator()->AddLine( obstacleHull, 2, 1000 );
-
-        if( aLine->EndsWithVia() )
-        {
-            const VIA& via = aLine->Via();
-            int        viaClearance = GetClearance( obstacle.m_item, &via );
-            int        holeClearance = GetHoleClearance( obstacle.m_item, &via );
-
-            if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
-
-            // ObstacleHull has line clearance and 1/2 line width already built in.  So
-            // viaHull's clearance needs to be only that portion of the via clearance that
-            // is *in excess* of the line clearance.
-            viaClearance = std::max( 0, viaClearance - clearance );
-
-            SHAPE_LINE_CHAIN viaHull = via.Hull( viaClearance, 0 );
-
-            obstacleHull.Intersect( viaHull, intersectingPts );
-
-            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-            {
-                int dist = aLine->CLine().Length() + ( ip.p - via.Pos() ).EuclideanNorm();
-                updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
-            }
-        }
+        obstacleHull = obstacle.m_item->Hull( clearance + PNS_HULL_MARGIN, 0, layer );
+        debugDecorator->AddLine( obstacleHull, 2 );
 
         intersectingPts.clear();
         obstacleHull.Intersect( aLine->CLine(), intersectingPts );
 
         for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
+            updateNearest( ip.p, obstacle.m_item, obstacleHull, false );
+
+        if( aLine->EndsWithVia() )
         {
-            int dist = aLine->CLine().PathLength( ip.p );
-            updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
-        }
+            const VIA& via = aLine->Via();
+            // Don't use via.Drill(); it doesn't include the plating thickness
+            int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
 
-        if( obstacle.m_item->Hole() )
-        {
-            clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
-            obstacleHull = obstacle.m_item->HoleHull( clearance, 0, aLine->Layer() );
+            int viaClearance = GetClearance( obstacle.m_item, &via ) + via.Diameter() / 2;
+            int holeClearance = GetHoleClearance( obstacle.m_item, &via ) + viaHoleRadius;
 
-            ROUTER::GetInstance()->GetInterface()->GetDebugDecorator()->AddLine( obstacleHull, 3, 1000 );
+            if( holeClearance > viaClearance )
+                viaClearance = holeClearance;
 
-            if( aLine->EndsWithVia() )
-            {
-                const VIA& via = aLine->Via();
-                int viaClearance = GetClearance( obstacle.m_item, &via );
-                int holeClearance = GetHoleClearance( obstacle.m_item, &via );
-                int holeToHole = GetHoleToHoleClearance( obstacle.m_item, &via );
-
-                if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                    viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
-
-                if( holeToHole + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
-                    viaClearance = holeToHole + via.Drill() / 2 - via.Diameter() / 2;
-
-                // ObsHull has line clearance and 1/2 line width already built in.  So viaHull's
-                // clearance needs to be just that which is *in excess* of clearance.
-                viaClearance = std::max( 0, viaClearance - clearance );
-
-                SHAPE_LINE_CHAIN viaHull = via.Hull( viaClearance, 0 );
-
-                obstacleHull.Intersect( viaHull, intersectingPts );
-
-                for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
-                {
-                    int dist = aLine->CLine().Length() + ( ip.p - via.Pos() ).EuclideanNorm();
-                    updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
-                    obstacle.m_item->Mark( obstacle.m_item->Marker() | MK_HOLE );
-                }
-            }
+            obstacleHull = obstacle.m_item->Hull( viaClearance + PNS_HULL_MARGIN, 0, layer );
+            debugDecorator->AddLine( obstacleHull, 3 );
 
             intersectingPts.clear();
             obstacleHull.Intersect( aLine->CLine(), intersectingPts );
 
             for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
+                updateNearest( ip.p, obstacle.m_item, obstacleHull, false );
+        }
+
+        if( obstacle.m_item->Hole() )
+        {
+            clearance = GetHoleClearance( obstacle.m_item, aLine ) + aLine->Width() / 2;
+            obstacleHull = obstacle.m_item->HoleHull( clearance + PNS_HULL_MARGIN, 0, layer );
+            debugDecorator->AddLine( obstacleHull, 4 );
+
+            intersectingPts.clear();
+            obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+
+            for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
+                updateNearest( ip.p, obstacle.m_item, obstacleHull, true );
+
+            if( aLine->EndsWithVia() )
             {
-                int dist = aLine->CLine().PathLength( ip.p );
-                updateNearest( dist, ip.p, obstacle.m_item, obstacleHull );
-                obstacle.m_item->Mark( obstacle.m_item->Marker() | MK_HOLE );
+                const VIA& via = aLine->Via();
+                // Don't use via.Drill(); it doesn't include the plating thickness
+                int viaHoleRadius = static_cast<const SHAPE_CIRCLE*>( via.Hole() )->GetRadius();
+
+                int viaClearance = GetClearance( obstacle.m_item, &via ) + via.Diameter() / 2;
+                int holeClearance = GetHoleClearance( obstacle.m_item, &via ) + viaHoleRadius;
+                int holeToHole = GetHoleToHoleClearance( obstacle.m_item, &via ) + viaHoleRadius;
+
+                if( holeClearance > viaClearance )
+                    viaClearance = holeClearance;
+
+                if( holeToHole > viaClearance )
+                    viaClearance = holeToHole;
+
+                obstacleHull = obstacle.m_item->Hull( viaClearance + PNS_HULL_MARGIN, 0, layer );
+                debugDecorator->AddLine( obstacleHull, 5 );
+
+                intersectingPts.clear();
+                obstacleHull.Intersect( aLine->CLine(), intersectingPts );
+
+                for( const SHAPE_LINE_CHAIN::INTERSECTION& ip : intersectingPts )
+                    updateNearest( ip.p, obstacle.m_item, obstacleHull, true );
             }
         }
     }
