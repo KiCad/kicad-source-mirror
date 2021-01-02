@@ -39,10 +39,10 @@ class NODE;
 // in PNS::NODE. Sooner or later I'll have to fix it for good using smart pointers - twl
 struct VIA_HANDLE
 {
-    bool valid = false;
-    VECTOR2I pos;
+    bool        valid = false;
+    VECTOR2I    pos;
     LAYER_RANGE layers;
-    int net;
+    int         net;
 };
 
 class VIA : public ITEM
@@ -57,9 +57,9 @@ public:
         m_isFree   = false;
     }
 
-    VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill, int aNet = -1,
-            VIATYPE aViaType = VIATYPE::THROUGH )
-            : ITEM( VIA_T )
+    VIA( const VECTOR2I& aPos, const LAYER_RANGE& aLayers, int aDiameter, int aDrill,
+         int aNet = -1, VIATYPE aViaType = VIATYPE::THROUGH ) :
+        ITEM( VIA_T )
     {
         SetNet( aNet );
         SetLayers( aLayers );
@@ -71,7 +71,6 @@ public:
         m_viaType = aViaType;
         m_isFree = false;
     }
-
 
     VIA( const VIA& aB ) :
         ITEM( aB )
@@ -94,11 +93,7 @@ public:
         return aItem && VIA_T == aItem->Kind();
     }
 
-
-    const VECTOR2I& Pos() const
-    {
-        return m_pos;
-    }
+    const VECTOR2I& Pos() const { return m_pos; }
 
     void SetPos( const VECTOR2I& aPos )
     {
@@ -106,20 +101,10 @@ public:
         m_shape.SetCenter( aPos );
     }
 
-    VIATYPE ViaType() const
-    {
-        return m_viaType;
-    }
+    VIATYPE ViaType() const { return m_viaType; }
+    void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
-    void SetViaType( VIATYPE aViaType )
-    {
-        m_viaType = aViaType;
-    }
-
-    int Diameter() const
-    {
-        return m_diameter;
-    }
+    int Diameter() const { return m_diameter; }
 
     void SetDiameter( int aDiameter )
     {
@@ -127,43 +112,24 @@ public:
         m_shape.SetRadius( m_diameter / 2 );
     }
 
-    int Drill() const
-    {
-        return m_drill;
-    }
-
-    void SetDrill( int aDrill )
-    {
-        m_drill = aDrill;
-    }
+    int Drill() const { return m_drill; }
+    void SetDrill( int aDrill ) { m_drill = aDrill; }
 
     bool IsFree() const { return m_isFree; }
     void SetIsFree( bool aIsFree ) { m_isFree = aIsFree; }
 
-    bool PushoutForce( NODE* aNode,
-            const VECTOR2I& aDirection,
-            VECTOR2I& aForce,
-            bool aSolidsOnly = true,
-            int aMaxIterations = 10 );
+    bool PushoutForce( NODE* aNode, const VECTOR2I& aDirection, VECTOR2I& aForce,
+                       bool aSolidsOnly = true, int aMaxIterations = 10 );
 
-    const SHAPE* Shape() const override
-    {
-        return &m_shape;
-    }
+    const SHAPE* Shape() const override { return &m_shape; }
 
-    const SHAPE_CIRCLE* Hole() const override
-    {
-        return &m_hole;
-    }
-
-    void SetHole( const SHAPE_CIRCLE& aHole )
-    {
-        m_hole = aHole;
-    }
+    const SHAPE_CIRCLE* Hole() const override { return &m_hole; }
+    void SetHole( const SHAPE_CIRCLE& aHole ) { m_hole = aHole; }
 
     VIA* Clone() const override;
 
-    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0, int aLayer = -1 ) const override;
+    const SHAPE_LINE_CHAIN Hull( int aClearance = 0, int aWalkaroundThickness = 0,
+                                 int aLayer = -1 ) const override;
 
     virtual VECTOR2I Anchor( int n ) const override
     {
