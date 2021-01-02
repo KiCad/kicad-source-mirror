@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
 "PO-Revision-Date: 2021-01-02 16:40+0000\n"
-"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
+"Last-Translator: Eric <spice2wolf@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12638,6 +12638,7 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
+"块ID %s（块名称：'%s'）被绘制在薄板'%s'上，但未被链接到设计中的另一薄板。KiCad要求所有薄板符号与一块薄板相关联，因此该块未被加载。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
@@ -13101,9 +13102,9 @@ msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
 msgstr "正将原理图符号 '%s %s' 库标识符设置为 '%s'。"
 
 #: eeschema/sch_screen.cpp:699
-#, fuzzy, c-format
+#, c-format
 msgid "No library symbol found for schematic symbol '%s %s'."
-msgstr "找不到原理图符号 '%s %s' 的库符号。 "
+msgstr "找不到原理图符号 '%s %s'的库符号。"
 
 #: eeschema/sch_sheet.cpp:55
 msgid "Sheet name"
@@ -14097,36 +14098,31 @@ msgstr "符号库未启用。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving %s symbol library table."
-msgstr ""
-"保存全局符号库表时出错：\n"
-"%s"
+msgstr "保存 %s 符号库表出错。"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "global"
 msgstr "全局"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
-#, fuzzy
 msgid "project"
 msgstr "工程"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:57
 msgid "Normal save as operation"
-msgstr ""
+msgstr "正常的另存为操作"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:59
 msgid "Do not perform any additional operations after saving library."
-msgstr ""
+msgstr "保存库后不要执行任何额外操作。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:62
-#, fuzzy
 msgid "Replace library table entry"
-msgstr "从表中删除库"
+msgstr "替换库表条目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:63
 msgid ""
@@ -14134,11 +14130,13 @@ msgid ""
 "\n"
 "The original library will no longer be avaliable for use."
 msgstr ""
+"用新库替换符号库表条目。\n"
+"\n"
+"原始库将不再可用。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:67
-#, fuzzy
 msgid "Add new global library table entry"
-msgstr "添加到全局库表"
+msgstr "添加新的全局库表条目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:68
 msgid ""
@@ -14147,11 +14145,14 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"将新条目添加到全局符号库表中。\n"
+"\n"
+"符号库表的昵称后缀为\n"
+"一个整数，以确保没有重复的表条目。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "创建工程符号库表。\n"
+msgstr "添加新的项目库表条目"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid ""
@@ -14160,6 +14161,10 @@ msgid ""
 "The symbol library table nickname is suffixed with\n"
 "an integer to ensure no duplicate table entries."
 msgstr ""
+"将新条目添加到项目符号库表。\n"
+"\n"
+"符号库表的昵称后缀为\n"
+"一个整数，以确保没有重复的表条目。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:141
 #, c-format
@@ -14646,14 +14651,12 @@ msgid "Select a complete connection"
 msgstr "选择完整的连接"
 
 #: eeschema/tools/ee_actions.cpp:117
-#, fuzzy
 msgid "Save Library As..."
-msgstr "另存为库 \"%s\"..."
+msgstr "将库保存为 ......"
 
 #: eeschema/tools/ee_actions.cpp:118
-#, fuzzy
 msgid "Save the current library to a new file."
-msgstr "用新名称保存当前电路板"
+msgstr "将当前库保存到一个新的文件。"
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "New Symbol..."
@@ -14676,14 +14679,12 @@ msgid "Make a copy of the selected symbol"
 msgstr "制作所选符号的副本"
 
 #: eeschema/tools/ee_actions.cpp:136
-#, fuzzy
 msgid "Save Symbol As..."
-msgstr "更改符号..."
+msgstr "将符号保存为 ......"
 
 #: eeschema/tools/ee_actions.cpp:137
-#, fuzzy
 msgid "Save the current symbol to a different library."
-msgstr "将当前符号保存在原理图中"
+msgstr "将当前符号保存到一个不同的库。"
 
 #: eeschema/tools/ee_actions.cpp:141
 msgid "Remove the selected symbol from its library"
@@ -16770,7 +16771,7 @@ msgstr ""
 msgid ""
 "Error creating new directory. Please try a different path. The project was "
 "not imported."
-msgstr ""
+msgstr "创建新目录时出错。请尝试一个不同的路径。该项目未被导入。"
 
 #: kicad/import_project.cpp:196
 msgid "Import CADSTAR Archive Project Files"
@@ -23569,120 +23570,102 @@ msgid "%s and %s"
 msgstr "%s 和 %s"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1210
-#, fuzzy
 msgid "Warning: Pad size is less than zero."
-msgstr "焊盘尺寸必须大于 0"
+msgstr "警告：焊盘尺寸小于零。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1235
-#, fuzzy
 msgid ""
 "Warning: Pad drill larger than pad size or drill shape and pad shape do not "
 "overlap."
-msgstr "警告：焊盘钻头大于焊盘尺寸或钻头形状和焊盘形状不重叠"
+msgstr "警告：焊盘钻头大于焊盘尺寸或钻头形状和焊盘形状不重叠。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1244
 msgid "Error: Negative local clearance values will have no effect."
-msgstr ""
+msgstr "错误：负的局部间隙值没有效果。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1253
 msgid ""
 "Error: Negative solder mask clearances are not supported for custom pad "
 "shapes."
-msgstr ""
+msgstr "错误：自定义焊盘形状不支持负值的焊接掩模间隙。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1266
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
-msgstr ""
+msgstr "警告：阻焊层的负间隙大于焊盘。不会产生阻焊层。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1285
-#, fuzzy
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
-msgstr "负间隙是指比焊盘小的区域 (通常用于锡膏间隙)。"
+msgstr "警告：负焊膏边缘大于焊盘。不会生成锡膏掩模。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1292
-#, fuzzy
 msgid "Error: pad has no layer."
-msgstr "错误：焊盘没有层"
+msgstr "错误：焊盘没有层。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1298
-#, fuzzy
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
-msgstr "警告：电镀通孔通常应至少在一层上有铜焊盘"
+msgstr "警告：电镀通孔通常应至少在一层上有铜焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1315
-#, fuzzy
 msgid "Incorrect value for pad offset."
-msgstr "焊盘偏移数值不正确"
+msgstr "焊盘偏移数值不正确。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1320
-#, fuzzy
 msgid "Too large value for pad delta size."
-msgstr "焊盘增量尺寸值太大"
+msgstr "焊盘增量尺寸值太大。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1329
-#, fuzzy
 msgid "Error: Through hole pad has no hole."
-msgstr "错误：通孔焊盘：钻孔直径设置为 0"
+msgstr "错误：通孔焊盘没有孔。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1336
-#, fuzzy
 msgid "Error: Connector pads have no solder paste. Use an SMD pad instead."
-msgstr ""
-"错误：焊盘连接不是在锡膏层\n"
-"使用贴片焊盘替代"
+msgstr "错误：连接器焊盘没有焊膏。使用表面黏装零件（SMD）焊盘代替。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1348
-#, fuzzy
 msgid "Warning: SMD pad has no outer layers."
-msgstr "错误：焊盘没有层"
+msgstr "警告：表面黏装零件焊盘没有外层。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1358
-#, fuzzy
 msgid "Warning: Fiducial property cannot be set on NPTH pads."
-msgstr "无法为非金属化孔设置属性"
+msgstr "警告：基准属性不能被设置在\"非导通孔\"(NPTH) 焊盘上。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1364
-#, fuzzy
 msgid "Warning: Testpoint property cannot be set on NPTH pads."
-msgstr "无法为非金属化孔设置属性"
+msgstr "警告：测试点属性不能被设置在\"非导通孔\"(NPTH)焊盘上。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1370
-#, fuzzy
 msgid "Warning: Heatsink property cannot be set on NPTH pads."
-msgstr "无法为非金属化孔设置属性"
+msgstr "警告：散热片属性不能被设置在\"非导通孔\"(NPTH) 焊盘上。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1376
-#, fuzzy
 msgid "Warning: Castellated property can be set only on PTH pads."
-msgstr "只能为金属化孔设置邮票孔属性"
+msgstr "警告：雉堞状属性不能被设置在镀通孔 (PTH) 焊盘上。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1382
-#, fuzzy
 msgid "Warning: BGA property can be set only on SMD pads."
-msgstr "BGA 属性只能为贴片焊盘设置"
+msgstr "警告：“球状网格阵列”属性只能设置在表面组装设备（SMD）焊盘上。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Error: Corner size not a number."
-msgstr ""
+msgstr "错误：边角尺寸不是数字。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
-#, fuzzy
 msgid "Error: Negative corner size."
-msgstr "不正确的（负）拐角值"
+msgstr "警告：负的拐角尺寸。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1401
 msgid "Warning: Corner size will make pad circular."
-msgstr ""
+msgstr "警告：拐角尺寸将使焊盘呈圆形。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1412
 msgid "Error: Custom pad shape must resolve to a single polygon."
-msgstr ""
+msgstr "错误：自定义焊盘形状必须解析为单个多边形。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1418
 msgid "Pad setup errors list"
@@ -25045,29 +25028,25 @@ msgstr "父级封装描述"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:334
 #, c-format
 msgid "Changing the net will also update %s pad %s to %s."
-msgstr ""
+msgstr "更改网还会将%s焊盘%s更新为%s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:343
-#, fuzzy, c-format
+#, c-format
 msgid "Changing the net will also update %s pad %s and %s pad %s to %s."
-msgstr ""
-"将关联给 %s 焊盘 %s 和 %s 焊盘 %s 的网络更改为 %s。\n"
-"是否要继续？"
+msgstr "更改网还会更新%s焊盘%s和%s焊盘%s到%s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:352
 #, c-format
 msgid "Changing the net will also update %lu connected pads to %s."
-msgstr ""
+msgstr "更改网还会更新%lu连接焊盘为%s。"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy
 msgid "Change Nets"
-msgstr "改变类型"
+msgstr "更改网"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:358
-#, fuzzy
 msgid "Leave Nets Unchanged"
-msgstr "保持不变"
+msgstr "保持网不变"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:379
 msgid "Via drill size must be smaller than via diameter"
@@ -25082,9 +25061,8 @@ msgid "Edit track/via properties"
 msgstr "编辑布线/过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:594
-#, fuzzy
 msgid "Updating nets"
-msgstr "更新网表"
+msgstr "正在更新网"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:49
 msgid "Start point X:"
@@ -27511,13 +27489,10 @@ msgid "PCB \"%s\" does not exist.  Do you wish to create it?"
 msgstr "PCB \"%s\" 不存在，你想创建它吗？"
 
 #: pcbnew/files.cpp:741
-#, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr ""
-"这个文件是由 Pcbnew 旧版本创建\n"
-"当您保存此文件，它会以新的文件格式存储。"
+msgstr "这个文件由Kicad的旧版本所创建。它将被转换成新的格式保存。"
 
 #: pcbnew/files.cpp:818 pcbnew/files.cpp:956
 #, c-format
@@ -29145,11 +29120,11 @@ msgid ""
 msgstr "CADSTAR 设计包含没有 KiCad 等效项的布线元素。未加载这些元素。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
-msgstr "CADSTAR 设计包含没有 KiCad 等效项的变体。仅主变体 ('%s') 被加载。"
+msgstr "这个 CADSTAR 设计包含没有 KiCad 等效项的变量。仅变量 '%s'被加载。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:139
 #, c-format
@@ -29222,13 +29197,11 @@ msgid ""
 msgstr "该文件似乎已损坏。无法在组映射中查找子组 %s（父组 ID=%s，名称=%s）。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1102
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr ""
-"'%s' 的形状是在 CADSTAR 中填充的图案填充，该 CADSTAR 没有 KiCad 等效项。改用"
-"实体填充。"
+msgstr "尺度 ID %s 是一个角度尺寸，KiCad中没有与之等效的东西。取而代之的是一个对齐的尺度。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1113
 #, c-format
@@ -29236,19 +29209,19 @@ msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
-msgstr ""
+msgstr "尺寸 ID%s在 CADSTAR 中有“外部”样式。KiCad 尚不支持外部尺寸样式。软件使用内部尺寸样式导入了尺寸对象。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1170
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported"
-msgstr "标注 ID %s 没有 KiCad 等效项。这不是导入的"
+msgstr "出乎意料的尺度类型 （ID%s）。这未被导入"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1306
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dimension ID %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "标注 ID %s 没有 KiCad 等效项。这不是导入的"
+msgstr "尺度ID %s是一个没有 KiCad 等价物的角度标注。对象未被导入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1346
 #, c-format
@@ -29287,22 +29260,18 @@ msgstr ""
 "被忽略。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1568
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"CADSTAR 模板 '%s' 启用了设置“盒式隔离引脚”。此设置没有 KiCad 等效项，因此已被"
-"忽略。"
+msgstr "这个 CADSTAR 模板 '%s' 启用了设置“盒式隔离引脚”。此设置没有 KiCad 等效项，因此已被忽略。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1574
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"CADSTAR 模板 '%s' 启用了“自动刷新”设置。此设置没有 KiCad 等效项，因此已被忽"
-"略。"
+msgstr "这个 CADSTAR 模板 '%s' 启用了“自动重灌”设置。此设置没有 KiCad 等效项，因此已被忽略。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1583
 #, c-format
@@ -29373,7 +29342,7 @@ msgstr "网络 '%s' 引用了不存在的焊盘索引 '%d' 在元件 '%s' 中 �
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1883
 msgid "Text Variables could not be set as there is no project loaded."
-msgstr ""
+msgstr "由于未加载任何项目，因此无法设置文本变量。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
@@ -29441,7 +29410,7 @@ msgstr ""
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Milimetres were applied instead."
-msgstr ""
+msgstr "尺寸 ID %s 使用了 KiCad 不支持的一种单位。改为使用毫米。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:3096
 msgid ""
