@@ -249,7 +249,7 @@ __asm (
 "retq\n"
 "finish:\n"
 "xor    %rcx,%rcx\n"
-"callq  _exit\n"
+"call  _exit\n"
 "hlt\n"
 "   .seh_endproc\n"
 ".def	_exit;	.scl	2;	.type	32;	.endef  \n"
