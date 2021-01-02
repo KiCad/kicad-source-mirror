@@ -977,7 +977,7 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
     GetCanvas()->SetFocus();                                // allow capture of hotkeys
     GetCanvas()->SetHighContrastLayer( aLayer );
 
-    // Vias on a restricted layer set must be redrawn when the active layer is changed
+    // Pads and vias on a restricted layer set must be redrawn when the active layer is changed
     GetCanvas()->GetView()->UpdateAllItemsConditionally( KIGFX::REPAINT,
             []( KIGFX::VIEW_ITEM* aItem ) -> bool
             {
@@ -985,6 +985,12 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
                 {
                     return ( via->GetViaType() == VIATYPE::BLIND_BURIED ||
                              via->GetViaType() == VIATYPE::MICROVIA );
+                }
+                else if( PAD* pad = dynamic_cast<PAD*>( aItem ) )
+                {
+                    // TODO: this could be optimized if the pad painter is changed
+                    // See https://gitlab.com/kicad/code/kicad/-/issues/6912
+                    return true;
                 }
 
                 return false;

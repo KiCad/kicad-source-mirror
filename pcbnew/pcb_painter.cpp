@@ -936,6 +936,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
                 draw_annular = true;
                 break;
             }
+            else if( !IsCopperLayer( layer ) )
+            {
+                // If a non-copper layer is the high-contrast layer, just show the pad
+                draw_annular = true;
+                break;
+            }
         }
     }
 
