@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
 "PO-Revision-Date: 2021-01-02 16:40+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -12638,7 +12638,7 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"块ID %s（块名称：'%s'）被绘制在薄板'%s'上，但未被链接到设计中的另一薄板。KiCad要求所有薄板符号与一块薄板相关联，因此该块未被加载。"
+"块ID %s（块名称：“ %s”）绘制在图纸“ %s”上，但未链接到设计中的另一张图纸。 KiCad要求将所有图纸符号都与图纸相关联，因此未加载块。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1626
 #, c-format
