@@ -9,10 +9,12 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 24 24"
+   viewBox="0 0 16 16"
    version="1.1"
    sodipodi:docname="small_down.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   width="16"
+   height="16">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +25,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="995"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
+     inkscape:zoom="36.325579"
+     inkscape:cx="9.5840332"
      inkscape:cy="13"
-     inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-x="2021"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,14 +83,15 @@
      id="title160011">small_down</title>
   <line
      class="cls-1"
-     x1="11.9999"
-     y1="20.452999"
-     x2="11.9999"
-     y2="3"
+     x1="8"
+     y1="14"
+     x2="8"
+     y2="2"
      id="line160013" />
-  <polyline
-     class="cls-1"
-     points="20 15.138 13 22 6 15.138"
+  <path
      id="polyline160015"
-     transform="translate(-1,-1)" />
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 13,9.5 8,14 3,9.5"
+     class="cls-1"
+     sodipodi:nodetypes="ccc" />
 </svg>

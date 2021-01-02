@@ -12,7 +12,7 @@
    viewBox="0 0 16 16"
    version="1.1"
    sodipodi:docname="folder.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    width="16"
    height="16">
   <sodipodi:namedview
@@ -24,15 +24,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1920"
+     inkscape:window-height="1035"
      id="namedview9483"
      showgrid="true"
-     inkscape:zoom="39.543587"
-     inkscape:cx="7.682271"
-     inkscape:cy="10.76419"
+     inkscape:zoom="74.228553"
+     inkscape:cx="10.629943"
+     inkscape:cy="7.2059979"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:current-layer="Слой_1"
      inkscape:document-rotation="0">
@@ -77,21 +77,7 @@
   <title
      id="title9474">folder</title>
   <path
-     class="cls-1"
-     d="M 12.7094,16 H 3.1030667 c -1.3456,0 -2.4364,-1.0908 -2.4364,-1.769733 V 2 C 0.6666667,0.5969333 1.2636,0 2,0 H 5.1840667 C 5.7462432,8.0477183e-6 6.3021047,0.11851762 6.8154,0.3478 L 9,1.4795414 C 9.3421899,1.6323932 10.070889,1.9999915 10.445666,2 H 14 c 0.735305,-1.469e-4 1.331329,0.5958947 1.331466,1.3312 l 0.0019,10.044867 C 15.333602,14.825225 14.158558,16 12.7094,16 Z"
-     id="path9476"
-     style="stroke-width:0.999996"
-     sodipodi:nodetypes="ssssscccccsss" />
-  <path
-     class="cls-2"
-     d="M 2.3800272,3 H 13.586227 c 0.589104,-6e-7 1.08664,1.1596141 1.08664,2.9304774 v 0.02005 H 1.3333333 v -0.02005 C 1.3333333,4.1596144 1.7909235,3 2.3800272,3 Z"
-     id="path9478"
-     style="stroke-width:0.999996;fill:#ffffff;fill-opacity:1"
-     sodipodi:nodetypes="scsccss" />
-  <path
-     class="cls-3"
-     d="M 1.3333333,5 H 14.666667 C 15.403047,5.0000002 16,5.5969538 16,6.3333333 V 13.333333 C 16,14.806093 14.806093,16 13.333333,16 H 2.6666667 C 1.1939072,16 0,14.806092 0,13.333333 V 6.3333333 C 0,5.5969537 0.59695365,5 1.3333333,5 Z"
-     id="path9480"
-     style="stroke-width:0.999996;fill:#545454;fill-opacity:1"
-     sodipodi:nodetypes="scsssssss" />
+     id="path845"
+     style="fill:#545454;fill-opacity:1;stroke:none;stroke-width:0.999995"
+     d="M 2.9511719,2 A 2,2 0 0 0 1,4 2,2 0 0 0 1,4.048828 V 12 a 2,2 0 0 0 2,2 2,2 0 0 0 0.048828,0 H 13 a 2,2 0 0 0 2,-2 2,2 0 0 0 0,-0.04883 V 6 A 2,2 0 0 0 13,4 H 12.951172 8.5 L 6.5,2 H 3 a 2,2 0 0 0 -0.048828,0 z" />
 </svg>
