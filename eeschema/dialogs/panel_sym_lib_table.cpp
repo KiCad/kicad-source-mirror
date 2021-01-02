@@ -283,10 +283,10 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     // Configure button logos
     m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
+    m_delete_button->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_move_up_button->SetBitmap( KiBitmap( small_up_xpm ) );
     m_move_down_button->SetBitmap( KiBitmap( small_down_xpm ) );
-    m_browse_button->SetBitmap( KiBitmap( folder_xpm ) );
+    m_browse_button->SetBitmap( KiBitmap( small_folder_xpm ) );
 }
 
 

@@ -72,8 +72,8 @@ PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aP
     m_antialiasingFallbackLabel->Show( false );
 #endif
 
-    m_textEditorBtn->SetBitmap( KiBitmap( folder_xpm ) );
-    m_pdfViewerBtn->SetBitmap( KiBitmap( folder_xpm ) );
+    m_textEditorBtn->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_pdfViewerBtn->SetBitmap( KiBitmap( small_folder_xpm ) );
 
     m_canvasScaleCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED,
                                 wxCommandEventHandler( PANEL_COMMON_SETTINGS::OnCanvasScaleChange ),

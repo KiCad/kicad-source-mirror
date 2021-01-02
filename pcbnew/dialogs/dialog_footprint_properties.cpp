@@ -168,10 +168,10 @@ DIALOG_FOOTPRINT_PROPERTIES::DIALOG_FOOTPRINT_PROPERTIES( PCB_EDIT_FRAME* aParen
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
+    m_bpDelete->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_buttonAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_buttonBrowse->SetBitmap( KiBitmap( folder_xpm ) );
-    m_buttonRemove->SetBitmap( KiBitmap( trash_xpm ) );
+    m_buttonBrowse->SetBitmap( KiBitmap( small_folder_xpm ) );
+    m_buttonRemove->SetBitmap( KiBitmap( small_trash_xpm ) );
 
     finishDialogSettings();
 }

@@ -171,7 +171,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, NETCLASSE
     m_membershipGrid->SetColAttr( 0, attr );
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_removeButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_removeButton->SetBitmap( KiBitmap( small_trash_xpm ) );
 
     // wxFormBuilder doesn't include this event...
     m_netclassGrid->Connect( wxEVT_GRID_CELL_CHANGING,

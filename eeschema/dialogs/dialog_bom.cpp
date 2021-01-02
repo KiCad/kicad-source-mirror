@@ -232,7 +232,7 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
         m_helpWindow( nullptr )
 {
     m_buttonAddGenerator->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_buttonDelGenerator->SetBitmap( KiBitmap( trash_xpm ) );
+    m_buttonDelGenerator->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_buttonEdit->SetBitmap( KiBitmap( small_edit_xpm ) );
 
     installGeneratorsList();

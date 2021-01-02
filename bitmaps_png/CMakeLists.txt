@@ -65,7 +65,6 @@ option( MAINTAIN_PNGS
 
 # small icons (16x16) needed in listboxes and dialog buttons
 set( BMAPS_SMALL
-    folder
     icon_bitmap2component_16
     icon_eeschema_16
     icon_gerbview_16
@@ -99,13 +98,14 @@ set( BMAPS_SMALL
     pintype_opencoll
     pintype_openemit
     pintype_noconnect
-    refresh
     small_down
     small_edit
+    small_folder
     small_library
     small_plus
+    small_refresh
+    small_trash
     small_up
-    trash
     tree_nosel
     tree_sel
     triangle_down
@@ -396,7 +396,7 @@ set( BMAPS_MID
     py_script
     recent
     redo
-    refresh24
+    refresh
     reload2
     reload
     render_mode
@@ -464,7 +464,7 @@ set( BMAPS_MID
     three_d
     tool_ratsnest
     tools
-    trash24
+    trash
     undo
     unit_inch
     unit_mil

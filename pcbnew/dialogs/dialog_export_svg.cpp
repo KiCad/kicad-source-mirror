@@ -83,7 +83,7 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_EDIT_FRAME* aParent, BOARD* aBoard ) :
         m_oneFileOnly( false ),
         m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
-    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
 
     initDialog();
 

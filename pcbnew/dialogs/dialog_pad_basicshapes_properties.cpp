@@ -235,7 +235,7 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
     }
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_deleteButton->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_warningIcon->SetBitmap( KiBitmap( dialog_warning_xpm ) );
 
     // Test for acceptable polygon (more than 2 corners, and not self-intersecting) and

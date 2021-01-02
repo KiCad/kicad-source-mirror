@@ -185,7 +185,7 @@ TOOL_ACTION ACTIONS::doDelete( "common.Interactive.delete",
         AS_GLOBAL,
         WXK_DELETE, LEGACY_HK_NAME( "Delete Item" ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
-        trash24_xpm );
+        trash_xpm );
 
 TOOL_ACTION ACTIONS::deleteTool( "common.Interactive.deleteTool",
         AS_GLOBAL, 0, "",
@@ -267,7 +267,7 @@ TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
 #endif
         LEGACY_HK_NAME( "Zoom Redraw" ),
         _( "Refresh" ), _( "Refresh" ),
-        refresh24_xpm );
+        refresh_xpm );
 
 TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL,

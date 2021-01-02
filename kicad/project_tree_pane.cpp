@@ -758,7 +758,7 @@ void PROJECT_TREE_PANE::onRight( wxTreeEvent& Event )
         }
 
         AddMenuItem( &popup_menu, ID_PROJECT_DELETE, _( "Delete" ), help_text,
-                     KiBitmap( trash24_xpm ) );
+                     KiBitmap( trash_xpm ) );
     }
 
     if( can_print )

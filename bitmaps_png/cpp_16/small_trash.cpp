@@ -34,6 +34,6 @@ static const unsigned char png[] = {
  0x82,
 };
 
-const BITMAP_OPAQUE trash_xpm[1] = {{ png, sizeof( png ), "trash_xpm" }};
+const BITMAP_OPAQUE small_trash_xpm[1] = {{ png, sizeof( png ), "small_trash_xpm" }};
 
 //EOF

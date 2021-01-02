@@ -52,7 +52,7 @@ DIALOG_PLOT_SCHEMATIC::DIALOG_PLOT_SCHEMATIC( SCH_EDIT_FRAME* parent )
 {
     m_configChanged = false;
 
-    m_browseButton->SetBitmap( KiBitmap( folder_xpm ) );
+    m_browseButton->SetBitmap( KiBitmap( small_folder_xpm ) );
 
     // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
     // that requires us to correct the button labels here.

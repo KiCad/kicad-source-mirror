@@ -443,8 +443,8 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( SYMBOL_EDIT_FRAME* parent,
     */
 
     m_addButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteButton->SetBitmap( KiBitmap( trash_xpm ) );
-    m_refreshButton->SetBitmap( KiBitmap( refresh_xpm ) );
+    m_deleteButton->SetBitmap( KiBitmap( small_trash_xpm ) );
+    m_refreshButton->SetBitmap( KiBitmap( small_refresh_xpm ) );
 
     GetSizer()->SetSizeHints(this);
     Centre();

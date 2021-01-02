@@ -328,7 +328,7 @@ public:
             m_normalize( aNormalize ),
             m_normalizeBasePath( aNormalizeBasePath )
     {
-        SetButtonBitmaps( KiBitmap( folder_xpm ) );
+        SetButtonBitmaps( KiBitmap( small_folder_xpm ) );
     }
 
 protected:

@@ -63,9 +63,9 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESO
     m_helpDialog( nullptr )
 {
     m_btnAddEnvVar->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_btnDeleteEnvVar->SetBitmap( KiBitmap( trash_xpm ) );
+    m_btnDeleteEnvVar->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_btnAddSearchPath->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_btnDeleteSearchPath->SetBitmap( KiBitmap( trash_xpm ) );
+    m_btnDeleteSearchPath->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_btnMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
     m_btnMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
 
@@ -491,7 +491,7 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellRightClick( wxGridEvent& aEvent )
     {
         wxMenu menu;
 
-        AddMenuItem( &menu, 1, _( "File Browser..." ), KiBitmap( folder_xpm ) );
+        AddMenuItem( &menu, 1, _( "File Browser..." ), KiBitmap( small_folder_xpm ) );
         if( GetPopupMenuSelectionFromUser( menu ) == 1 )
         {
             wxDirDialog dlg( nullptr, _( "Select Path" ), m_curdir,

@@ -63,11 +63,11 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( PAGED_DIALOG* aParent,
     m_ConstraintsPanel = aConstraintsPanel;
 
     m_trackWidthsAddButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_trackWidthsRemoveButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_trackWidthsRemoveButton->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_viaSizesAddButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_viaSizesRemoveButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_viaSizesRemoveButton->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_diffPairsAddButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_diffPairsRemoveButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_diffPairsRemoveButton->SetBitmap( KiBitmap( small_trash_xpm ) );
 
     // Membership combobox editors require a bit more room, so increase the row size of
     // all our grids for consistency

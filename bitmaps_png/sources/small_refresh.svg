@@ -9,10 +9,12 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 24 24"
+   viewBox="0 0 16 16"
    version="1.1"
    sodipodi:docname="refresh.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
+   width="16"
+   height="16">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +25,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="37.437403"
+     inkscape:cx="7.2655863"
+     inkscape:cy="9.2451712"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -53,7 +55,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>add_arc</dc:title>
+        <dc:title>refresh</dc:title>
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
@@ -81,20 +83,24 @@
      id="title26817">refresh</title>
   <path
      class="cls-1"
-     d="M 2.95,7.57 A 10.2024,10.2024 0 0 1 21.5675,8.5535"
-     id="path26819" />
+     d="M 2.5984,5.3419694 A 6.12144,6.1212522 0 0 1 13.7689,5.9320513"
+     id="path26819"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-1"
-     d="M 21.0361,16.35 A 10.1937,10.1937 0 0 1 2.0809,14.5042"
-     id="path26821" />
+     d="M 13.45006,10.609808 A 6.11622,6.1160323 0 0 1 2.07694,9.5023617"
+     id="path26821"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-1"
      points="17.701 17.481 22.198 17.078 23.071 21.738"
      id="polyline26823"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.6,0,0,0.59998159,0.2284,0.20012715)"
+     style="stroke-width:3.33338447;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-1"
      points="8.441 8.231 3.945 8.634 3.071 3.974"
      id="polyline26825"
-     transform="translate(-1,-1)" />
+     transform="matrix(0.6,0,0,0.59998159,0.2284,0.20012715)"
+     style="stroke-width:3.33338447;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>

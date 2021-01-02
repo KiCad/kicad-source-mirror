@@ -91,7 +91,7 @@ public:
 
         // Configure button logos
         m_append_button->SetBitmap( KiBitmap( small_plus_xpm ) );
-        m_delete_button->SetBitmap( KiBitmap( trash_xpm ) );
+        m_delete_button->SetBitmap( KiBitmap( small_trash_xpm ) );
 
         // initial focus on the grid please.
         SetInitialFocus( m_grid );

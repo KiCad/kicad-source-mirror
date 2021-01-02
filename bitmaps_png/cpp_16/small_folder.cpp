@@ -16,6 +16,6 @@ static const unsigned char png[] = {
  0x00, 0x00, 0x49, 0x45, 0x4e, 0x44, 0xae, 0x42, 0x60, 0x82,
 };
 
-const BITMAP_OPAQUE folder_xpm[1] = {{ png, sizeof( png ), "folder_xpm" }};
+const BITMAP_OPAQUE small_folder_xpm[1] = {{ png, sizeof( png ), "small_folder_xpm" }};
 
 //EOF

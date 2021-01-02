@@ -1593,7 +1593,7 @@ SIM_PLOT_FRAME::SIGNAL_CONTEXT_MENU::SIGNAL_CONTEXT_MENU( const wxString& aSigna
 
     AddMenuItem( this, HIDE_SIGNAL, _( "Hide Signal" ),
                  _( "Erase the signal from plot screen" ),
-                 KiBitmap( trash24_xpm ) );
+                 KiBitmap( trash_xpm ) );
 
     TRACE* trace = plot->GetTrace( m_signal );
 

@@ -50,7 +50,7 @@ PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::PANEL_EESCHEMA_TEMPLATE_FIELDNAMES( SCH_EDIT
     }
 
     m_addFieldButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteFieldButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_deleteFieldButton->SetBitmap( KiBitmap( small_trash_xpm ) );
 
     m_checkboxColWidth = m_grid->GetColSize( 1 );
 

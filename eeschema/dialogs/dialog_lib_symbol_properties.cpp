@@ -79,11 +79,11 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_bpDelete->SetBitmap( KiBitmap( trash_xpm ) );
+    m_bpDelete->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_bpMoveUp->SetBitmap( KiBitmap( small_up_xpm ) );
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
     m_addFilterButton->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteFilterButton->SetBitmap( KiBitmap( trash_xpm ) );
+    m_deleteFilterButton->SetBitmap( KiBitmap( small_trash_xpm ) );
     m_editFilterButton->SetBitmap( KiBitmap( small_edit_xpm ) );
 
     if( aParent->IsSymbolFromLegacyLibrary() )

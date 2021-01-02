@@ -38,7 +38,7 @@ DIALOG_GROUP_PROPERTIES::DIALOG_GROUP_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
         m_group( aGroup )
 {
     m_bpAddMember->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_bpRemoveMember->SetBitmap( KiBitmap( trash_xpm ) );
+    m_bpRemoveMember->SetBitmap( KiBitmap( small_trash_xpm ) );
 
     m_nameCtrl->SetValue( m_group->GetName() );
 

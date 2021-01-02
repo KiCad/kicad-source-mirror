@@ -195,7 +195,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_alternatesGrid->SetColAttr( COL_SHAPE, attr );
 
     m_addAlternate->SetBitmap( KiBitmap( small_plus_xpm ) );
-    m_deleteAlternate->SetBitmap( KiBitmap( trash_xpm ) );
+    m_deleteAlternate->SetBitmap( KiBitmap( small_trash_xpm ) );
 
     m_sdbSizerButtonsOK->SetDefault();
     SetInitialFocus( m_textPinName );

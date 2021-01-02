@@ -41,7 +41,7 @@ PANEL_PCBNEW_ACTION_PLUGINS::PANEL_PCBNEW_ACTION_PLUGINS( PCB_EDIT_FRAME* aFrame
 
     m_moveUpButton->SetBitmap( KiBitmap( small_up_xpm ) );
     m_moveDownButton->SetBitmap( KiBitmap( small_down_xpm ) );
-    m_reloadButton->SetBitmap( KiBitmap( refresh_xpm ) );
+    m_reloadButton->SetBitmap( KiBitmap( small_refresh_xpm ) );
 }
 
 
