@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2021-01-01 17:16+0000\n"
+"PO-Revision-Date: 2021-01-02 16:40+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -1462,7 +1462,7 @@ msgstr "cu. milů"
 
 #: common/base_units.cpp:507
 msgid "in"
-msgstr "v"
+msgstr "palec"
 
 #: common/base_units.cpp:509
 msgid "sq. in"
@@ -9197,8 +9197,8 @@ msgid ""
 "Please select a new name for each of the buses below.\n"
 "A name has been suggested for you based on the labels attached to the bus."
 msgstr ""
-"Pro každý z níže uvedených autobusů vyberte nový název.\n"
-"Název vám byl navržen na základě štítků připojených k autobusu."
+"Pro každý z níže uvedených sběrnic vyberte nový název.\n"
+"Název vám byl navržen na základě štítků připojených ke sběrnici."
 
 #: eeschema/dialogs/dialog_migrate_buses_base.cpp:32
 msgid "Proposed new name:"
@@ -9248,9 +9248,9 @@ msgid ""
 "Usually <path to spice binary> %I\n"
 "%I will be replaced by the actual spice netlist name"
 msgstr ""
-"Zadejte příkazový řádek a spusťte koření\n"
-"Obvykle <cesta k binárnímu koření> %I\n"
-"%I Budu nahrazen skutečným názvem netlist koření"
+"Zadejte příkazový řádek a spusťte spice\n"
+"Obvykle <cesta k binárnímu spice> %I\n"
+"%I Budu nahrazen skutečným názvem netlist spice"
 
 #: eeschema/dialogs/dialog_netlist.cpp:389
 msgid "Create Netlist and Run Simulator Command"
@@ -10782,7 +10782,7 @@ msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
 msgstr ""
-"To je užitečné pro přidání symbolů pro stopy na palubě, jako jsou například "
+"To je užitečné pro přidání symbolů pro pouzdra na desce, jako jsou například "
 "referenční značky\n"
 "a loga, která nechcete zobrazovat v exportu kusovníku"
 
@@ -11130,7 +11130,7 @@ msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
 msgstr ""
-"Pokud je povoleno, můžete zahájit zapojení kliknutím na nepřipojené kolíky, "
+"Pokud je povoleno, můžete zahájit zapojení kliknutím na nepřipojené vývody, "
 "i když drátový nástroj není aktivní"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:41
@@ -11157,9 +11157,9 @@ msgid ""
 "If enabled, clicking on a pin select the parent symbol.\n"
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
-"Ve schématickém editoru:\n"
-"Pokud je povoleno, kliknutím na špendlík vyberte nadřazený symbol.\n"
-"Pokud je zakázáno, kliknutím na špendlík vyberete pouze špendlík."
+"Ve editoru schémat:\n"
+"Pokud je povoleno, kliknutím na vývod vyberte nadřazený symbol.\n"
+"Pokud je zakázáno, kliknutím na vývod vyberete pouze vývod."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:90
 msgid "Symbol Field Automatic Placement"
@@ -11805,7 +11805,7 @@ msgstr "Štítek připojený k položce sběrnice nepopisuje sběrnici"
 
 #: eeschema/erc_item.cpp:118
 msgid "Buses are graphically connected but share no bus members"
-msgstr "Autobusy jsou graficky propojeny, ale nesdílejí žádné členy sběrnice"
+msgstr "Sběrnice jsou graficky propojeny, ale nesdílejí žádné členy sběrnice"
 
 #: eeschema/erc_item.cpp:122
 msgid "Invalid connection between bus and net items"
@@ -11939,8 +11939,7 @@ msgstr "Nezobrazovat znovu tento dialog."
 
 #: eeschema/files-io.cpp:488
 msgid "The schematic file will be converted to the new file format on save."
-msgstr ""
-"Schematický soubor bude při uložení převeden do nového formátu souboru."
+msgstr "Soubor schématu bude při uložení převeden do nového formátu souboru."
 
 #: eeschema/files-io.cpp:492
 msgid ""
@@ -11952,7 +11951,7 @@ msgstr ""
 "Toto schéma bylo uloženo ve starším formátu souborů, který již není "
 "podporován, a bude uložen v novém formátu souboru.\n"
 "\n"
-"Nový formát souboru nelze otevřít u předchozích verzí KiCadu."
+"Nový formát souboru nelze otevřít v předchozích verzí KiCadu."
 
 #: eeschema/files-io.cpp:590
 msgid "Append Schematic"
@@ -12916,14 +12915,14 @@ msgstr ""
 "offset: %d"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:154
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid library identifier in\n"
 "file: \"%s\"\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatné ID knihovny symbolů v\n"
+"Neplatný identifikátor knihovny v\n"
 "souboru: \"%s\"\n"
 "řádek: %d\n"
 "offset: %d"
@@ -14237,9 +14236,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:73
-#, fuzzy
 msgid "Add new project library table entry"
-msgstr "Vytvoření tabulky knihovny symbolů projektu.\n"
+msgstr "Přidat novou položku do tabulky knihovny projektu"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:74
 msgid ""
@@ -30313,12 +30311,10 @@ msgid "%s is malformed."
 msgstr "%s má nesprávný tvar."
 
 #: pcbnew/router/pns_kicad_iface.cpp:954
-#, fuzzy
 msgid ""
 "This zone cannot be handled by the track layout tool.\n"
 "Please verify it is not a self-intersecting polygon."
 msgstr ""
-"%s\n"
 "Tuto zónu nelze zpracovat pomocí nástroje pro kreslení cest.\n"
 "Zkontrolujte, zda se nejedná o zónu překrývající jinou zónu."
 
