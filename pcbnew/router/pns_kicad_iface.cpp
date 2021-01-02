@@ -155,6 +155,20 @@ bool PNS_PCBNEW_RULE_RESOLVER::IsDiffPair( const PNS::ITEM* aA, const PNS::ITEM*
 }
 
 
+bool isCopper( const PNS::ITEM* aItem )
+{
+    BOARD_ITEM* parent = aItem->Parent();
+
+    if( parent && parent->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( parent );
+        return pad->IsOnCopperLayer() && pad->GetAttribute() != PAD_ATTRIB_NPTH;
+    }
+
+    return true;
+}
+
+
 bool isEdge( const PNS::ITEM* aItem )
 {
     return aItem->Layer() == Edge_Cuts || aItem->Layer() == Margin;
@@ -280,10 +294,14 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
         }
     }
 
-    if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
-                         &constraint ) )
+    if( isCopper( aA ) && ( !aB || isCopper( aB ) ) )
     {
-        rv = constraint.m_Value.Min();
+        if( QueryConstraint( PNS::CONSTRAINT_TYPE::CT_CLEARANCE, aA, aB, aA->Layer(),
+                             &constraint ) )
+        {
+            if( constraint.m_Value.Min() > rv )
+                rv = constraint.m_Value.Min();
+        }
     }
 
     if( isEdge( aA ) || ( aB && isEdge( aB ) ) )
