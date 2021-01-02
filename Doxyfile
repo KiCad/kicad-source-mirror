@@ -853,10 +853,11 @@ EXCLUDE_SYMLINKS       = NO
 # exclude all test directories for example use the pattern */test/*
 
 EXCLUDE_PATTERNS       = */bitmaps_png/*.md \
-						 */pcb_calculator/*.md \
+                         */pcb_calculator/*.md \
                          */pcb_calculator/attenuators/*.md \
-						 */eeschema/*.md \
-                         */eeschema/dialogs/*.md
+                         */eeschema/*.md \
+                         */eeschema/dialogs/*.md \
+                         */pcbnew/dialogs/*.md
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
