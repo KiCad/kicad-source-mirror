@@ -303,7 +303,7 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
                 m_iface->DisplayItem( tmp.get(), -1, clearance );
 
                 // Remove the obstacle itself from the view unless we're just marking its hole
-                if( itemToMark->Marker() & MK_HOLE )
+                if( !(itemToMark->Marker() & MK_HOLE ) )
                     aRemoved.push_back( itemToMark );
             };
 
