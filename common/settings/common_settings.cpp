@@ -18,6 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <set>
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <view/view_controls.h>
@@ -26,6 +27,16 @@
 #include <wx/log.h>
 
 using KIGFX::MOUSE_DRAG_ACTION;
+
+
+///! The following environment variables will never be migrated from a previous version
+const std::set<wxString> envVarBlacklist =
+        {
+            wxT( "KICAD6_SYMBOL_DIR" ),
+            wxT( "KICAD6_FOOTPRINT_DIR" ),
+            wxT( "KICAD6_TEMPLATES_DIR" ),
+            wxT( "KICAD6_3DMODEL_DIR" )
+        };
 
 
 ///! Update the schema version whenever a migration is required
@@ -250,6 +261,12 @@ bool COMMON_SETTINGS::MigrateFromLegacy( wxConfigBase* aCfg )
 
           while( aCfg->GetNextEntry( key, index ) )
           {
+              if( envVarBlacklist.count( key ) )
+              {
+                  wxLogTrace( traceSettings, "Migrate Env: %s is blacklisted; skipping.", key );
+                  continue;
+              }
+
               value = aCfg->Read( key, wxEmptyString );
 
               if( !value.IsEmpty() )
