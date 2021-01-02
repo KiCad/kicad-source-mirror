@@ -256,8 +256,6 @@ void PL_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, bool* aSelectionCan
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )
     {
-        collector.m_MenuTitle =  _( "Clarify Selection" );
-
         // Must call selectionMenu via RunAction() to avoid event-loop contention
         m_toolMgr->RunAction( PL_ACTIONS::selectionMenu, true, &collector );
 
@@ -589,10 +587,16 @@ bool PL_SELECTION_TOOL::doSelectionMenu( COLLECTOR* aCollector )
     menu.Add( _( "Select &All\tA" ), limit + 1, plus_xpm );
 
     if( aCollector->m_MenuTitle.Length() )
+    {
         menu.SetTitle( aCollector->m_MenuTitle );
+        menu.SetIcon( info_xpm );
+        menu.DisplayTitle( true );
+    }
+    else
+    {
+        menu.DisplayTitle( false );
+    }
 
-    menu.SetIcon( info_xpm );
-    menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
 
     bool selectAll = false;

@@ -671,7 +671,7 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
         if( aOnDrag )
             Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
 
-        if( !doSelectionMenu( &collector, wxEmptyString ) )
+        if( !doSelectionMenu( &collector ) )
         {
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
@@ -1704,13 +1704,13 @@ int PCB_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
     GENERAL_COLLECTOR* collector = aEvent.Parameter<GENERAL_COLLECTOR*>();
 
-    doSelectionMenu( collector, wxEmptyString );
+    doSelectionMenu( collector );
 
     return 0;
 }
 
 
-bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxString& aTitle )
+bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
 {
     BOARD_ITEM*   current = nullptr;
     PCB_SELECTION highlightGroup;
@@ -1747,14 +1747,16 @@ bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const w
         if( !expandSelection && aCollector->HasAdditionalItems() )
             menu.Add( _( "&Expand Selection\tE" ), limit + 2, nullptr );
 
-        if( aTitle.Length() )
+        if( aCollector->m_MenuTitle.Length() )
         {
-            menu.SetTitle( aTitle );
+            menu.SetTitle( aCollector->m_MenuTitle );
             menu.SetIcon( info_xpm );
             menu.DisplayTitle( true );
         }
         else
+        {
             menu.DisplayTitle( false );
+        }
 
         SetContextMenu( &menu, CMENU_NOW );
 

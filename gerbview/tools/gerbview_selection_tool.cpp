@@ -424,9 +424,17 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
         menu.Add( text, i + 1, item->GetMenuImage() );
     }
 
-    menu.SetTitle( _( "Clarify selection" ) );
-    menu.SetIcon( info_xpm );
-    menu.DisplayTitle( true );
+    if( aCollector->m_MenuTitle.Length() )
+    {
+        menu.SetTitle( aCollector->m_MenuTitle );
+        menu.SetIcon( info_xpm );
+        menu.DisplayTitle( true );
+    }
+    else
+    {
+        menu.DisplayTitle( false );
+    }
+
     SetContextMenu( &menu, CMENU_NOW );
 
     while( TOOL_EVENT* evt = Wait() )

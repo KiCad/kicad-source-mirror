@@ -757,7 +757,7 @@ int PCB_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 }
 
 
-bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxString& aTitle )
+bool PCB_SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector )
 {
     return false;
 }

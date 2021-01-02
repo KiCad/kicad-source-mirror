@@ -702,7 +702,6 @@ bool EE_SELECTION_TOOL::selectPoint( EE_COLLECTOR& aCollector, EDA_ITEM** aItem,
     // If still more than one item we're going to have to ask the user.
     if( aCollector.GetCount() > 1 )
     {
-        aCollector.m_MenuTitle = wxEmptyString;
         // Must call selectionMenu via RunAction() to avoid event-loop contention
         m_toolMgr->RunAction( EE_ACTIONS::selectionMenu, true, &aCollector );
 

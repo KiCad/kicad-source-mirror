@@ -240,10 +240,9 @@ private:
      * Allows the selection of a single item from a list via pop-up menu.  The items are
      * highlighted on the canvas when hovered in the menu.  The collector is trimmed to
      * the picked item.
-     * @param aTitle (optional) Allows the menu to be titled (ie: "Clarify Selection").
      * @return true if an item was picked
      */
-    bool doSelectionMenu( GENERAL_COLLECTOR* aItems, const wxString& aTitle );
+    bool doSelectionMenu( GENERAL_COLLECTOR* aItems );
 
     /**
      * Expands the current track selection to the next boundary (junctions, pads, or all)
