@@ -2,15 +2,15 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # taotieren <admin@taotieren.com>,2019-2020.
-# Rigo Ligo <rigoligo03@gmail.com>, 2020.
+# Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2021-01-01 17:17+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2021-01-02 16:40+0000\n"
+"Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -8257,7 +8257,7 @@ msgstr "其他符号字段"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Wires && wire labels"
-msgstr "电线和电线标签"
+msgstr "导线和导线标签"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Buses && bus labels"
@@ -8338,7 +8338,7 @@ msgstr "..."
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:220
 msgid "H Alignment (fields only):"
-msgstr "H 对齐(仅限字段)："
+msgstr "水平对齐(仅限字段)："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:236
 msgid "Visible (fields only)"
@@ -8346,7 +8346,7 @@ msgstr "可见(仅限字段)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
 msgid "V Alignment (fields only):"
-msgstr "V 对齐(仅限字段)："
+msgstr "垂直对齐(仅限字段)："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:282
 #: eeschema/dialogs/dialog_lib_edit_draw_item_base.cpp:25
@@ -8866,9 +8866,9 @@ msgstr ""
 "<None>表示根符号。\n"
 "\n"
 "派生符号以前称为别名。\n"
-"现在不再是这样了，所有符号都\n"
-"派生自另一个符号或他们单独作为\n"
-"根符号。"
+"现在不再是这样了，所有符号要么\n"
+"派生自另一个符号，要么他们单独\n"
+"作为根符号。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:168
 msgid "Has alternate body style (DeMorgan)"
@@ -8889,10 +8889,10 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"设置此选项会使有问题的符号出现在\n"
-"“添加电源端口”对话框。 它将锁定值文本，防止\n"
-"在 Eeschema 中编辑。 该符号将不包括在\n"
-"BOM 中，并且无法关联封装。"
+"设置此选项，会使该符号出现在\n"
+"“添加电源端口”对话框中。 \n"
+"它将锁定值文本，防止其在 Eeschema 中被编辑。 \n"
+"该符号将不包括在BOM 中，并且无法关联封装。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:187
 msgid "Number of Units:"
@@ -12605,7 +12605,7 @@ msgstr "文档符号 '%s' 是指库中不存在的符号定义 ID '%s'。未加�
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:989
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "无法设置文本变量，因为没有附加项目。"
+msgstr "由于原理图没有附加在项目中，因此无法设置文本变量。"
 
 #: eeschema/sch_plugins/cadstar/cadstar_sch_archive_loader.cpp:1224
 #, c-format
@@ -15201,7 +15201,7 @@ msgstr "高亮网络"
 
 #: eeschema/tools/ee_actions.cpp:536
 msgid "Highlight wires and pins of a net"
-msgstr "高亮网络的电线和引脚"
+msgstr "高亮同一网络的导线和引脚"
 
 #: eeschema/tools/ee_actions.cpp:542
 msgid "Edit with Symbol Editor"
@@ -15417,7 +15417,7 @@ msgstr "断开总线上的连线"
 
 #: eeschema/tools/ee_actions.cpp:702
 msgid "Finish Wire or Bus"
-msgstr "结束电线或总线"
+msgstr "结束导线或总线"
 
 #: eeschema/tools/ee_actions.cpp:702
 msgid "Complete drawing at current segment"
