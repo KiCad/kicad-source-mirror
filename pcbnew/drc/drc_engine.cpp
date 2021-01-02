@@ -713,22 +713,9 @@ DRC_CONSTRAINT DRC_ENGINE::EvalRulesForItems( DRC_CONSTRAINT_T aConstraintId,
 #define REPORT( s ) { if( aReporter ) { aReporter->Report( s ); } }
 #define UNITS aReporter ? aReporter->GetUnits() : EDA_UNITS::MILLIMETRES
     /*
-     * NOTE: all string manipulation MUST be kept inside the REPORT macro.  It absolutely
+     * NOTE: all string manipulation MUST BE KEPT INSIDE the REPORT macro.  It absolutely
      * kills performance when running bulk DRC tests (where aReporter is nullptr).
      */
-
-    if( aConstraintId == CLEARANCE_CONSTRAINT )
-    {
-        // A PTH pad has a plated cylinder around the hole so copper clearances apply
-        // whether or not there's a flashed pad.  Not true for NPTHs.
-        if( a && a->Type() == PCB_PAD_T )
-        {
-            const PAD* pad = static_cast<const PAD*>( a );
-
-            if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( aLayer ) )
-                aConstraintId = HOLE_CLEARANCE_CONSTRAINT;
-        }
-    }
 
     const BOARD_CONNECTED_ITEM* ac = a && a->IsConnected() ?
                                          static_cast<const BOARD_CONNECTED_ITEM*>( a ) : nullptr;
