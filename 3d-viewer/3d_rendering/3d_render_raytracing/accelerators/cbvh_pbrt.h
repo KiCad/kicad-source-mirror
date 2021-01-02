@@ -67,8 +67,8 @@
  */
 
 
-#ifndef _CBVH_PBRT_H_
-#define _CBVH_PBRT_H_
+#ifndef _BVH_PBRT_H_
+#define _BVH_PBRT_H_
 
 #include "caccelerator.h"
 #include <cstdint>
@@ -82,7 +82,7 @@ struct MortonPrimitive;
 struct LinearBVHNode
 {
     // 24 bytes
-    CBBOX bounds;
+    BBOX_3D bounds;
 
     // 4 bytes
     union
@@ -107,59 +107,47 @@ enum class SPLITMETHOD
 };
 
 
-class  CBVH_PBRT : public CGENERICACCELERATOR
+class BVH_PBRT : public ACCELERATOR_3D
 {
 public:
-    CBVH_PBRT( const CGENERICCONTAINER& aObjectContainer, int aMaxPrimsInNode = 4,
-               SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
+    BVH_PBRT( const CONTAINER_3D_BASE& aObjectContainer, int aMaxPrimsInNode = 4,
+              SPLITMETHOD aSplitMethod = SPLITMETHOD::SAH );
 
-    ~CBVH_PBRT();
+    ~BVH_PBRT();
 
-    // Imported from CGENERICACCELERATOR
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo, unsigned int aAccNodeInfo ) const override;
-    bool Intersect( const RAYPACKET &aRayPacket, HITINFO_PACKET *aHitInfoPacket ) const override;
-    bool IntersectP( const RAY &aRay, float aMaxDistance ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo, unsigned int aAccNodeInfo ) const override;
+    bool Intersect( const RAYPACKET& aRayPacket, HITINFO_PACKET* aHitInfoPacket ) const override;
+    bool IntersectP( const RAY& aRay, float aMaxDistance ) const override;
 
 private:
+    BVHBuildNode* recursiveBuild( std::vector<BVHPrimitiveInfo>& primitiveInfo, int start,
+                                  int end, int* totalNodes, CONST_VECTOR_OBJECT& orderedPrims );
 
-    BVHBuildNode *recursiveBuild( std::vector<BVHPrimitiveInfo> &primitiveInfo,
-                                  int start,
-                                  int end,
-                                  int *totalNodes,
-                                  CONST_VECTOR_OBJECT &orderedPrims );
-
-    BVHBuildNode *HLBVHBuild( const std::vector<BVHPrimitiveInfo> &primitiveInfo,
-                              int *totalNodes,
-                              CONST_VECTOR_OBJECT &orderedPrims );
+    BVHBuildNode* HLBVHBuild( const std::vector<BVHPrimitiveInfo>& primitiveInfo,
+                              int* totalNodes, CONST_VECTOR_OBJECT& orderedPrims );
 
     //!TODO: after implement memory arena, put const back to this functions
-    BVHBuildNode *emitLBVH( BVHBuildNode *&buildNodes,
-                            const std::vector<BVHPrimitiveInfo> &primitiveInfo,
-                            MortonPrimitive *mortonPrims,
-                            int nPrimitives,
-                            int *totalNodes,
-                            CONST_VECTOR_OBJECT &orderedPrims,
-                            int *orderedPrimsOffset,
-                            int bit );
+    BVHBuildNode* emitLBVH( BVHBuildNode* &buildNodes,
+                            const std::vector<BVHPrimitiveInfo>& primitiveInfo,
+                            MortonPrimitive* mortonPrims, int nPrimitives, int* totalNodes,
+                            CONST_VECTOR_OBJECT& orderedPrims, int* orderedPrimsOffset, int bit );
 
-    BVHBuildNode *buildUpperSAH( std::vector<BVHBuildNode *> &treeletRoots,
-                                 int start,
-                                 int end,
-                                 int *totalNodes );
+    BVHBuildNode* buildUpperSAH( std::vector<BVHBuildNode*>& treeletRoots, int start, int end,
+                                 int* totalNodes );
 
-    int flattenBVHTree( BVHBuildNode *node, uint32_t *offset );
+    int flattenBVHTree( BVHBuildNode* node, uint32_t* offset );
 
     // BVH Private Data
     const int           m_maxPrimsInNode;
     SPLITMETHOD         m_splitMethod;
     CONST_VECTOR_OBJECT m_primitives;
-    LinearBVHNode       *m_nodes;
+    LinearBVHNode*      m_nodes;
 
-    std::list<void *> m_addresses_pointer_to_mm_free;
+    std::list<void*> m_addresses_pointer_to_mm_free;
 
     // Partition traversal
     unsigned int m_I[RAYPACKET_RAYS_PER_PACKET];
 };
 
-#endif  // _CBVH_PBRT_H_
+#endif  // _BVH_PBRT_H_

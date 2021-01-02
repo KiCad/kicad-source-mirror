@@ -23,12 +23,12 @@
  */
 
 /**
- * @file  clight.h
+ * @file clight.h
  * @brief declare and implement light types classes
  */
 
-#ifndef _CLIGHT_H_
-#define _CLIGHT_H_
+#ifndef _LIGHT_H_
+#define _LIGHT_H_
 
 #include "ray.h"
 #include "hitinfo.h"
@@ -37,12 +37,12 @@
 /**
  * A base light class to derive to implement other light classes.
  */
-class CLIGHT
+class LIGHT
 {
 public:
-    CLIGHT() { m_castShadow = true; }
+    LIGHT() { m_castShadow = true; }
 
-    virtual ~CLIGHT() {}
+    virtual ~LIGHT() {}
 
     /**
      * Get parameters from this light.
@@ -53,10 +53,8 @@ public:
      * @param aOutLightColor the color of this light
      * @param aOutDistance the distance from the point to the light
      */
-    virtual void GetLightParameters( const SFVEC3F &aHitPoint,
-                                     SFVEC3F &aOutVectorToLight,
-                                     SFVEC3F &aOutLightColor,
-                                     float &aOutDistance ) const = 0;
+    virtual void GetLightParameters( const SFVEC3F& aHitPoint, SFVEC3F& aOutVectorToLight,
+                                     SFVEC3F& aOutLightColor, float& aOutDistance ) const = 0;
 
     void SetCastShadows( bool aCastShadow ) { m_castShadow = aCastShadow; }
     bool GetCastShadows() const { return m_castShadow; }
@@ -67,12 +65,12 @@ protected:
 
 
 /**
- * Point light based on http://ogldev.atspace.co.uk/www/tutorial20/tutorial20.html.
+ * Point light source based on http://ogldev.atspace.co.uk/www/tutorial20/tutorial20.html.
  */
-class CPOINTLIGHT : public CLIGHT
+class POINT_LIGHT : public LIGHT
 {
 public:
-    CPOINTLIGHT( const SFVEC3F &aPos, const SFVEC3F &aColor )
+    POINT_LIGHT( const SFVEC3F& aPos, const SFVEC3F& aColor )
     {
         m_position     = aPos;
         m_color        = aColor;
@@ -82,11 +80,9 @@ public:
         m_castShadow   = true;
     }
 
-    // Imported functions from CLIGHT
-    void GetLightParameters( const SFVEC3F &aHitPoint,
-                             SFVEC3F &aOutVectorToLight,
-                             SFVEC3F &aOutLightColor,
-                             float &aOutDistance ) const override
+    // Imported functions from LIGHT
+    void GetLightParameters( const SFVEC3F& aHitPoint, SFVEC3F& aOutVectorToLight,
+                             SFVEC3F& aOutLightColor, float& aOutDistance ) const override
     {
         const SFVEC3F vectorLight = m_position - aHitPoint;
 
@@ -114,12 +110,12 @@ private:
 
 
 /**
- * A light based only on a direction vector.
+ * A light source based only on a directional vector.
  */
-class CDIRECTIONALLIGHT : public CLIGHT
+class DIRECTIONAL_LIGHT : public LIGHT
 {
 public:
-    CDIRECTIONALLIGHT( const SFVEC3F &aDir, const SFVEC3F &aColor )
+    DIRECTIONAL_LIGHT( const SFVEC3F& aDir, const SFVEC3F& aColor )
     {
         // Invert light direction and make sure it is normalized
         m_inv_direction = glm::normalize( -aDir );
@@ -128,16 +124,15 @@ public:
     }
 
     /**
-     * @brief SetDirection Set directional light orientation
-     * @param aDir: vector from the light
+     * Set directional light orientation.
+     *
+     * @param aDir is the vector defining the direction of the light source.
      */
-    void SetDirection( const SFVEC3F &aDir ) { m_inv_direction = -aDir; }
+    void SetDirection( const SFVEC3F& aDir ) { m_inv_direction = -aDir; }
 
-    // Imported functions from CLIGHT
-    void GetLightParameters( const SFVEC3F &aHitPoint,
-                             SFVEC3F &aOutVectorToLight,
-                             SFVEC3F &aOutLightColor,
-                             float &aOutDistance ) const override
+    // Imported functions from LIGHT
+    void GetLightParameters( const SFVEC3F& aHitPoint, SFVEC3F& aOutVectorToLight,
+                             SFVEC3F& aOutLightColor, float& aOutDistance ) const override
     {
         (void)aHitPoint; // unused
 
@@ -152,34 +147,32 @@ private:
 };
 
 
-typedef std::list< CLIGHT * > LIST_LIGHT;
+typedef std::list<LIGHT*> LIST_LIGHT;
 
 
 /**
- * A light container. It will add lights and remove it in the end.
+ * A container for light sources.
  *
  * @todo Do we really need this object? Wouldn't it be cleaner to just use std::list directly?
  */
-class  CLIGHTCONTAINER
+class LIGHT_SOURCES
 {
 public:
-    CLIGHTCONTAINER() {}
+    LIGHT_SOURCES() {}
 
-    ~CLIGHTCONTAINER() { Clear(); }
+    ~LIGHT_SOURCES() { Clear(); }
 
     /**
-     * @brief Clear - Remove all lights from the container
+     * Remove all lights from the container.
      */
     void Clear()
     {
         if( !m_lights.empty() )
         {
-            for( LIST_LIGHT::iterator ii = m_lights.begin();
-                 ii != m_lights.end();
-                 ++ii )
+            for( LIST_LIGHT::iterator ii = m_lights.begin(); ii != m_lights.end(); ++ii )
             {
                 delete *ii;
-                *ii = NULL;
+                *ii = nullptr;
             }
 
             m_lights.clear();
@@ -187,23 +180,23 @@ public:
     }
 
     /**
-     * @brief Add - Add a light to the container
-     * @param aLight
+     * Add a light source to the container.
      */
-    void Add( CLIGHT *aLight )
+    void Add( LIGHT* aLight )
     {
         if( aLight )
             m_lights.push_back( aLight );
     }
 
     /**
-     * @brief GetList - get light list of this container
+     * Get light list of this container.
+     *
      * @return a list of lights
      */
-    const LIST_LIGHT &GetList() const { return m_lights; }
+    const LIST_LIGHT& GetList() const { return m_lights; }
 
 private:
     LIST_LIGHT m_lights;    ///< list of lights
 };
 
-#endif // _CLIGHT_H_
+#endif // _LIGHT_H_

@@ -117,7 +117,7 @@ C3D_MODEL_VIEWER::~C3D_MODEL_VIEWER()
 }
 
 
-void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL &a3DModel )
+void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL& a3DModel )
 {
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel with a S3DMODEL" ) );
 
@@ -144,7 +144,7 @@ void C3D_MODEL_VIEWER::Set3DModel( const S3DMODEL &a3DModel )
 }
 
 
-void C3D_MODEL_VIEWER::Set3DModel(const wxString &aModelPathName)
+void C3D_MODEL_VIEWER::Set3DModel(const wxString& aModelPathName)
 {
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::Set3DModel with a wxString" ) );
 
@@ -182,7 +182,6 @@ void C3D_MODEL_VIEWER::ogl_initialize()
 
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     glEnable( GL_DEPTH_TEST );
-    //glDepthFunc( GL_LEQUAL );
     glEnable( GL_CULL_FACE );
     glShadeModel( GL_SMOOTH );
     glEnable( GL_LINE_SMOOTH );
@@ -219,7 +218,7 @@ void C3D_MODEL_VIEWER::ogl_set_arrow_material()
 }
 
 
-void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
+void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 {
     event.Skip( false );
 
@@ -257,7 +256,7 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
         wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnPaint m_reload_is_needed" ) );
 
         m_reload_is_needed = false;
-        m_ogl_3dmodel      = new C_OGL_3DMODEL( *m_3d_model, MATERIAL_MODE::NORMAL );
+        m_ogl_3dmodel      = new MODEL_3D( *m_3d_model, MATERIAL_MODE::NORMAL );
 
         // It convert a model as it was a board, so get the max size dimension of the board
         // and compute the conversion scale
@@ -330,15 +329,15 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
     ogl_set_arrow_material();
 
     glColor3f( 0.9f, 0.0f, 0.0f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( RANGE_SCALE_3D / 2.65f, 0.0f, 0.0f ),
+    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( RANGE_SCALE_3D / 2.65f, 0.0f, 0.0f ),
                     0.275f );
 
     glColor3f( 0.0f, 0.9f, 0.0f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, RANGE_SCALE_3D / 2.65f, 0.0f ),
+    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, RANGE_SCALE_3D / 2.65f, 0.0f ),
                     0.275f );
 
     glColor3f( 0.0f, 0.0f, 0.9f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, 0.0f, RANGE_SCALE_3D / 2.65f ),
+    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, 0.0f, RANGE_SCALE_3D / 2.65f ),
                     0.275f );
 
     // "Swaps the double-buffer of this window, making the back-buffer the
@@ -350,14 +349,14 @@ void C3D_MODEL_VIEWER::OnPaint( wxPaintEvent &event )
 }
 
 
-void C3D_MODEL_VIEWER::OnEraseBackground( wxEraseEvent &event )
+void C3D_MODEL_VIEWER::OnEraseBackground( wxEraseEvent& event )
 {
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnEraseBackground" ) );
     // Do nothing, to avoid flashing.
 }
 
 
-void C3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent& event )
 {
     wxLogTrace( m_logTrace, wxT( "C3D_MODEL_VIEWER::OnMouseWheel" ) );
 
@@ -390,19 +389,11 @@ void C3D_MODEL_VIEWER::OnMouseWheel( wxMouseEvent &event )
 #ifdef USE_OSX_MAGNIFY_EVENT
 void C3D_MODEL_VIEWER::OnMagnify( wxMouseEvent& event )
 {
-    /*
-    double magnification = ( event.GetMagnification() + 1.0f );
-    GetPrm3DVisu().m_Zoom /= magnification;
-    if( GetPrm3DVisu().m_Zoom <= 0.01 )
-        GetPrm3DVisu().m_Zoom = 0.01;
-    DisplayStatus();
-    Refresh( false );
-    */
 }
 #endif
 
 
-void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent& event )
 {
     m_trackBallCamera.SetCurWindowSize( GetClientSize() );
 
@@ -410,8 +401,6 @@ void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent &event )
     {
         if( event.LeftIsDown() )            // Drag
             m_trackBallCamera.Drag( event.GetPosition() );
-        //else if( event.MiddleIsDown() )     // Pan
-        //    m_trackBallCamera.Pan( event.GetPosition() );
 
         // orientation has changed, redraw mesh
         Refresh( false );
@@ -421,37 +410,31 @@ void C3D_MODEL_VIEWER::OnMouseMove( wxMouseEvent &event )
 }
 
 
-void C3D_MODEL_VIEWER::OnLeftDown( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnLeftDown( wxMouseEvent& event )
 {
-    //m_is_moving_mouse = true;
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnLeftUp( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnLeftUp( wxMouseEvent& event )
 {
-    //m_is_moving_mouse = false;
-    //Refresh( false );
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnMiddleDown( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnMiddleDown( wxMouseEvent& event )
 {
-    //m_is_moving_mouse = true;
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnMiddleUp( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnMiddleUp( wxMouseEvent& event )
 {
-    //m_is_moving_mouse = false;
-    //Refresh( false );
     event.Skip();
 }
 
 
-void C3D_MODEL_VIEWER::OnRightClick( wxMouseEvent &event )
+void C3D_MODEL_VIEWER::OnRightClick( wxMouseEvent& event )
 {
     event.Skip();
 }

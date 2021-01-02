@@ -23,14 +23,13 @@
  */
 
 /**
- * @file  cplane.cpp
- * @brief
+ * @file cplane.cpp
  */
 
 #include "cplane.h"
 
 
-CXYPLANE::CXYPLANE( const CBBOX& aBBox ) : COBJECT( OBJECT3D_TYPE::XYPLANE )
+XY_PLANE::XY_PLANE( const BBOX_3D& aBBox ) : OBJECT_3D( OBJECT_3D_TYPE::XYPLANE )
 {
     m_centerPoint = aBBox.GetCenter();
     m_centroid = m_centerPoint;
@@ -39,35 +38,32 @@ CXYPLANE::CXYPLANE( const CBBOX& aBBox ) : COBJECT( OBJECT3D_TYPE::XYPLANE )
     m_bbox.Set( aBBox );
     m_xsize = aBBox.GetExtent().x;
     m_ysize = aBBox.GetExtent().y;
-    m_xsize_inv2 = 1.0f / (2.0f * m_xsize);
-    m_ysize_inv2 = 1.0f / (2.0f * m_ysize);
+    m_xsize_inv2 = 1.0f / ( 2.0f * m_xsize );
+    m_ysize_inv2 = 1.0f / ( 2.0f * m_ysize );
 }
 
 
-CXYPLANE::CXYPLANE( SFVEC3F aCenterPoint, float aXSize, float aYSize )
-        : COBJECT( OBJECT3D_TYPE::XYPLANE )
+XY_PLANE::XY_PLANE( SFVEC3F aCenterPoint, float aXSize, float aYSize )
+        : OBJECT_3D( OBJECT_3D_TYPE::XYPLANE )
 {
     m_centerPoint = aCenterPoint;
     m_xsize = aXSize;
     m_ysize = aYSize;
-    m_xsize_inv2 = 1.0f / (2.0f * aXSize);
-    m_ysize_inv2 = 1.0f / (2.0f * aYSize);
-    m_bbox.Set( SFVEC3F( aCenterPoint.x - aXSize / 2.0f,
-                         aCenterPoint.y - aYSize / 2.0f,
+    m_xsize_inv2 = 1.0f / ( 2.0f * aXSize );
+    m_ysize_inv2 = 1.0f / ( 2.0f * aYSize );
+    m_bbox.Set( SFVEC3F( aCenterPoint.x - aXSize / 2.0f, aCenterPoint.y - aYSize / 2.0f,
                          aCenterPoint.z ),
-                SFVEC3F( aCenterPoint.x + aXSize / 2.0f,
-                         aCenterPoint.y + aYSize / 2.0f,
+                SFVEC3F( aCenterPoint.x + aXSize / 2.0f, aCenterPoint.y + aYSize / 2.0f,
                          aCenterPoint.z ) );
     m_centroid = aCenterPoint;
 }
 
 
-bool CXYPLANE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool XY_PLANE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
     const float t = (m_centerPoint.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-    if( ( t < FLT_EPSILON ) ||
-        ( t >= aHitInfo.m_tHit ) )
+    if( ( t < FLT_EPSILON ) || ( t >= aHitInfo.m_tHit ) )
         return false;
 
     const float vSU = t * aRay.m_Dir.x + aRay.m_Origin.x - m_centerPoint.x;
@@ -77,7 +73,7 @@ bool CXYPLANE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
     const float vSV = t * aRay.m_Dir.y + aRay.m_Origin.y - m_centerPoint.y;
 
-    if( (vSV < -m_ysize) || (vSV > m_ysize) )
+    if( ( vSV < -m_ysize ) || ( vSV > m_ysize ) )
         return false;
 
     aHitInfo.m_tHit = t;
@@ -95,12 +91,11 @@ bool CXYPLANE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CXYPLANE::IntersectP(const RAY &aRay , float aMaxDistance ) const
+bool XY_PLANE::IntersectP(const RAY& aRay, float aMaxDistance ) const
 {
-    const float t = (m_centerPoint.z - aRay.m_Origin.z) * aRay.m_InvDir.z;
+    const float t = ( m_centerPoint.z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
-    if( ( t < FLT_EPSILON ) ||
-        ( t >= aMaxDistance ) )
+    if( ( t < FLT_EPSILON ) || ( t >= aMaxDistance ) )
         return false;
 
     const float vSU = t * aRay.m_Dir.x + aRay.m_Origin.x - m_centerPoint.x;
@@ -110,20 +105,20 @@ bool CXYPLANE::IntersectP(const RAY &aRay , float aMaxDistance ) const
 
     const float vSV = t * aRay.m_Dir.y + aRay.m_Origin.y - m_centerPoint.y;
 
-    if( (vSV < -m_ysize) || (vSV > m_ysize) )
+    if( ( vSV < -m_ysize ) || ( vSV > m_ysize ) )
         return false;
 
     return true;
 }
 
 
-bool CXYPLANE::Intersects( const CBBOX &aBBox ) const
+bool XY_PLANE::Intersects( const BBOX_3D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
 }
 
 
-SFVEC3F CXYPLANE::GetDiffuseColor( const HITINFO &aHitInfo ) const
+SFVEC3F XY_PLANE::GetDiffuseColor( const HITINFO& aHitInfo ) const
 {
     (void)aHitInfo; // unused
 

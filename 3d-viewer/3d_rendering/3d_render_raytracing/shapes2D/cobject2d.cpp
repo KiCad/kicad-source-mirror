@@ -31,38 +31,38 @@
 #include <cstdio>
 
 
-COBJECT2D_STATS *COBJECT2D_STATS::s_instance = 0;
+OBJECT_2D_STATS *OBJECT_2D_STATS::s_instance = 0;
 
 
-COBJECT2D::COBJECT2D( OBJECT2D_TYPE aObjType, const BOARD_ITEM &aBoardItem )
+OBJECT_2D::OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM &aBoardItem )
     : m_boardItem(aBoardItem)
 {
     m_obj_type = aObjType;
-    COBJECT2D_STATS::Instance().AddOne( aObjType );
+    OBJECT_2D_STATS::Instance().AddOne( aObjType );
 }
 
 
 /*
- * Lookup table for OBJECT2D_TYPE printed names
+ * Lookup table for OBJECT_2D_TYPE printed names
  */
 // clang-format off
-const std::map<OBJECT2D_TYPE, const char*> objectTypeNames
+const std::map<OBJECT_2D_TYPE, const char*> objectTypeNames
 {
-    { OBJECT2D_TYPE::FILLED_CIRCLE, "OBJECT2D_TYPE::FILLED_CIRCLE" },
-    { OBJECT2D_TYPE::CSG,           "OBJECT2D_TYPE::CSG" },
-    { OBJECT2D_TYPE::POLYGON,       "OBJECT2D_TYPE::POLYGON" },
-    { OBJECT2D_TYPE::DUMMYBLOCK,    "OBJECT2D_TYPE::DUMMYBLOCK" },
-    { OBJECT2D_TYPE::POLYGON4PT,    "OBJECT2D_TYPE::POLYGON4PT" },
-    { OBJECT2D_TYPE::RING,          "OBJECT2D_TYPE::RING" },
-    { OBJECT2D_TYPE::ROUNDSEG,      "OBJECT2D_TYPE::ROUNDSEG" },
-    { OBJECT2D_TYPE::TRIANGLE,      "OBJECT2D_TYPE::TRIANGLE" },
-    { OBJECT2D_TYPE::CONTAINER,     "OBJECT2D_TYPE::CONTAINER" },
-    { OBJECT2D_TYPE::BVHCONTAINER,  "OBJECT2D_TYPE::BVHCONTAINER" },
+    { OBJECT_2D_TYPE::FILLED_CIRCLE, "OBJECT_2D_TYPE::FILLED_CIRCLE" },
+    { OBJECT_2D_TYPE::CSG,           "OBJECT_2D_TYPE::CSG" },
+    { OBJECT_2D_TYPE::POLYGON,       "OBJECT_2D_TYPE::POLYGON" },
+    { OBJECT_2D_TYPE::DUMMYBLOCK,    "OBJECT_2D_TYPE::DUMMYBLOCK" },
+    { OBJECT_2D_TYPE::POLYGON4PT,    "OBJECT_2D_TYPE::POLYGON4PT" },
+    { OBJECT_2D_TYPE::RING,          "OBJECT_2D_TYPE::RING" },
+    { OBJECT_2D_TYPE::ROUNDSEG,      "OBJECT_2D_TYPE::ROUNDSEG" },
+    { OBJECT_2D_TYPE::TRIANGLE,      "OBJECT_2D_TYPE::TRIANGLE" },
+    { OBJECT_2D_TYPE::CONTAINER,     "OBJECT_2D_TYPE::CONTAINER" },
+    { OBJECT_2D_TYPE::BVHCONTAINER,  "OBJECT_2D_TYPE::BVHCONTAINER" },
 };
 // clang-format on
 
 
-void COBJECT2D_STATS::PrintStats()
+void OBJECT_2D_STATS::PrintStats()
 {
     for( auto& objectType : objectTypeNames )
     {

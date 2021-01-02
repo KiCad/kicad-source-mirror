@@ -31,9 +31,9 @@
 #include <wx/debug.h>
 
 
-CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F& aStart, const SFVEC2F& aEnd, float aWidth,
-                                  const BOARD_ITEM& aBoardItem ) :
-        COBJECT2D( OBJECT2D_TYPE::ROUNDSEG, aBoardItem ),
+ROUND_SEGMENT_2D::ROUND_SEGMENT_2D( const SFVEC2F& aStart, const SFVEC2F& aEnd, float aWidth,
+                                    const BOARD_ITEM& aBoardItem ) :
+        OBJECT_2D( OBJECT_2D_TYPE::ROUNDSEG, aBoardItem ),
         m_segment( aStart, aEnd )
 {
     wxASSERT( aStart != aEnd );
@@ -49,8 +49,7 @@ CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F& aStart, const SFVEC2F& aEnd, fl
     m_leftEndMinusStart = m_leftEnd - m_leftStart;
     m_leftDir   = glm::normalize( m_leftEndMinusStart );
 
-    SFVEC2F rightRadiusOffset( -leftRadiusOffset.x,
-                               -leftRadiusOffset.y );
+    SFVEC2F rightRadiusOffset( -leftRadiusOffset.x, -leftRadiusOffset.y );
     m_rightStart = aEnd   + rightRadiusOffset;
     m_rightEnd   = aStart + rightRadiusOffset;
     m_rightEndMinusStart = m_rightEnd - m_rightStart;
@@ -67,7 +66,7 @@ CROUNDSEGMENT2D::CROUNDSEGMENT2D( const SFVEC2F& aStart, const SFVEC2F& aEnd, fl
 }
 
 
-bool CROUNDSEGMENT2D::Intersects( const CBBOX2D &aBBox ) const
+bool ROUND_SEGMENT_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return false;
@@ -96,7 +95,6 @@ bool CROUNDSEGMENT2D::Intersects( const CBBOX2D &aBBox ) const
     if( IntersectSegment( m_leftStart, m_leftEndMinusStart, v[3], v[0] - v[3] ) )
         return true;
 
-
     if( IntersectSegment( m_rightStart, m_rightEndMinusStart, v[0], v[1] - v[0] ) )
         return true;
 
@@ -120,16 +118,14 @@ bool CROUNDSEGMENT2D::Intersects( const CBBOX2D &aBBox ) const
 }
 
 
-bool CROUNDSEGMENT2D::Overlaps( const CBBOX2D &aBBox ) const
+bool ROUND_SEGMENT_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return false;
 }
 
 
-bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
-                                 float *aOutT,
-                                 SFVEC2F *aNormalOut ) const
+bool ROUND_SEGMENT_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
     const bool start_is_inside = IsPointInside( aSegRay.m_Start );
     const bool end_is_inside = IsPointInside( aSegRay.m_End );
@@ -147,8 +143,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
     SFVEC2F farHitNormal;
 
     float leftSegT;
-    const bool leftSegmentHit = aSegRay.IntersectSegment( m_leftStart,
-                                                          m_leftEndMinusStart,
+    const bool leftSegmentHit = aSegRay.IntersectSegment( m_leftStart, m_leftEndMinusStart,
                                                           &leftSegT );
 
     if( leftSegmentHit )
@@ -162,8 +157,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
     }
 
     float rightSegT;
-    const bool rightSegmentHit = aSegRay.IntersectSegment( m_rightStart,
-                                                           m_rightEndMinusStart,
+    const bool rightSegmentHit = aSegRay.IntersectSegment( m_rightStart, m_rightEndMinusStart,
                                                            &rightSegT );
 
     if( rightSegmentHit )
@@ -203,7 +197,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
         {
             if( !start_is_inside )
             {
-                if( (hitted == false) || (circleStart_T0 < closerHitT) )
+                if( ( hitted == false ) || ( circleStart_T0 < closerHitT ) )
                 {
                     closerHitT = circleStart_T0;
                     closerHitNormal = circleStart_N0;
@@ -211,7 +205,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
             }
             else
             {
-                if( (hitted == false) || (circleStart_T1 > farHitT) )
+                if( ( hitted == false ) || ( circleStart_T1 > farHitT ) )
                 {
                     farHitT = circleStart_T1;
                     farHitNormal = circleStart_N1;
@@ -221,7 +215,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
         else
         {
             // This can only happen if the ray starts inside
-            if( (hitted == false) || (circleStart_T1 > farHitT) )
+            if( ( hitted == false ) || ( circleStart_T1 > farHitT ) )
             {
                 farHitT = circleStart_T1;
                 farHitNormal = circleStart_N1;
@@ -245,7 +239,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
         {
             if( !start_is_inside )
             {
-                if( (hitted == false) || (circleEnd_T0 < closerHitT) )
+                if( ( hitted == false ) || ( circleEnd_T0 < closerHitT ) )
                 {
                     closerHitT = circleEnd_T0;
                     closerHitNormal = circleEnd_N0;
@@ -253,7 +247,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
             }
             else
             {
-                if( (hitted == false) || (circleEnd_T1 > farHitT) )
+                if( ( hitted == false ) || ( circleEnd_T1 > farHitT ) )
                 {
                     farHitT = circleEnd_T1;
                     farHitNormal = circleEnd_N1;
@@ -263,7 +257,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
         else
         {
             // This can only happen if the ray starts inside
-            if( (hitted == false) || (circleEnd_T1 > farHitT) )
+            if( ( hitted == false ) || ( circleEnd_T1 > farHitT ) )
             {
                 farHitT = circleEnd_T1;
                 farHitNormal = circleEnd_N1;
@@ -300,7 +294,7 @@ bool CROUNDSEGMENT2D::Intersect( const RAYSEG2D &aSegRay,
 }
 
 
-INTERSECTION_RESULT CROUNDSEGMENT2D::IsBBoxInside( const CBBOX2D &aBBox ) const
+INTERSECTION_RESULT ROUND_SEGMENT_2D::IsBBoxInside( const BBOX_2D &aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return INTERSECTION_RESULT::MISSES;
@@ -331,7 +325,7 @@ INTERSECTION_RESULT CROUNDSEGMENT2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 }
 
 
-bool CROUNDSEGMENT2D::IsPointInside( const SFVEC2F &aPoint ) const
+bool ROUND_SEGMENT_2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     float dSquared = m_segment.DistanceToPointSquared( aPoint );
 

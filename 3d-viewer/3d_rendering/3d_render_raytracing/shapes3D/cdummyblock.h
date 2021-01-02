@@ -24,11 +24,10 @@
 
 /**
  * @file  cdummyblock.h
- * @brief
  */
 
-#ifndef _CDUMMYBLOCK_H_
-#define _CDUMMYBLOCK_H_
+#ifndef _DUMMY_BLOCK_H_
+#define _DUMMY_BLOCK_H_
 
 #include "cobject.h"
 
@@ -36,22 +35,21 @@
  * A dummy block is used to fill the polygons. It will only will be intercepted
  * from top or from bottom.
  */
-class  CDUMMYBLOCK : public COBJECT
+class DUMMY_BLOCK : public OBJECT_3D
 {
 public:
-    explicit CDUMMYBLOCK( const CBBOX &aBBox );
+    explicit DUMMY_BLOCK( const BBOX_3D& aBBox );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
-    bool Intersects( const CBBOX &aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP(const RAY& aRay , float aMaxDistance ) const override;
+    bool Intersects( const BBOX_3D& aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
 
 private:
     SFVEC3F m_diffusecolor;
 };
 
 
-#endif // _CDUMMYBLOCK_H_
+#endif // _DUMMY_BLOCK_H_

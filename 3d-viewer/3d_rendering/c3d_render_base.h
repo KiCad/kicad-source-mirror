@@ -27,8 +27,8 @@
  * @brief
  */
 
-#ifndef C3D_RENDER_BASE_H
-#define C3D_RENDER_BASE_H
+#ifndef RENDER_3D_BASE_H
+#define RENDER_3D_BASE_H
 
 
 #include <pcb_base_frame.h>
@@ -40,12 +40,12 @@
 /**
  *  This is a base class to hold data and functions for render targets.
  */
-class C3D_RENDER_BASE
+class RENDER_3D_BASE
 {
 public:
-    explicit C3D_RENDER_BASE( BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera );
+    explicit RENDER_3D_BASE( BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera );
 
-    virtual ~C3D_RENDER_BASE() = 0;
+    virtual ~RENDER_3D_BASE() = 0;
 
     /**
      * Before each render, the canvas will tell the render what is the size of its windows,
@@ -53,7 +53,7 @@ public:
      *
      * @param aSize the current size of the render window
      */
-    virtual void SetCurWindowSize( const wxSize &aSize ) = 0;
+    virtual void SetCurWindowSize( const wxSize& aSize ) = 0;
 
     /**
      * Redraw the view.
@@ -62,8 +62,8 @@ public:
      * @param aStatusReporter a pointer to the status progress reporter.
      * @return true if the render would like to redraw again.
      */
-    virtual bool Redraw( bool aIsMoving, REPORTER* aStatusReporter = NULL,
-                         REPORTER* aWarningReporter = NULL ) = 0;
+    virtual bool Redraw( bool aIsMoving, REPORTER* aStatusReporter = nullptr,
+                         REPORTER* aWarningReporter = nullptr ) = 0;
 
     /**
      * @todo This must be reviewed to add flags to improve specific render.
@@ -102,7 +102,7 @@ protected:
     ///< Settings reference in use for this render.
     BOARD_ADAPTER& m_boardAdapter;
 
-    CCAMERA&       m_camera;
+    CAMERA&        m_camera;
 
     ///< Flag if the opengl specific for this render was already initialized.
     bool m_is_opengl_initialized;
@@ -119,11 +119,11 @@ protected:
      *  "KI_TRACE_3D_RENDER".  See the wxWidgets documentation on wxLogTrace for
      *  more information.
      */
-    static const wxChar *m_logTrace;
+    static const wxChar* m_logTrace;
 
 private:
     ///< Factory that returns a suitable busy indicator for the context.
     BUSY_INDICATOR::FACTORY m_busyIndicatorFactory;
 };
 
-#endif // C3D_RENDER_BASE_H
+#endif // RENDER_3D_BASE_H

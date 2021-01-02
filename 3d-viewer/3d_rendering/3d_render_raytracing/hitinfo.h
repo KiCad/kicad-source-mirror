@@ -34,7 +34,7 @@
 
 //#define RAYTRACING_RAY_STATISTICS
 
-class COBJECT;
+class OBJECT_3D;
 
 /// Stores the hit information of a ray with a point on the surface of a object
 struct HITINFO
@@ -42,7 +42,7 @@ struct HITINFO
     SFVEC3F m_HitNormal;                ///< (12) normal at the hit point
     float   m_tHit;                     ///< ( 4) distance
 
-    const COBJECT *pHitObject;          ///< ( 4) Object that was hitted
+    const OBJECT_3D* pHitObject;        ///< ( 4) Object that was hitted
     SFVEC2F m_UV;                       ///< ( 8) 2-D texture coordinates
     unsigned int m_acc_node_info;       ///< ( 4) The acc stores here the node that it hits
 

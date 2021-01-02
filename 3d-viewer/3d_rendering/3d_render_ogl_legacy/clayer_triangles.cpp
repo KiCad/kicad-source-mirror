@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,8 +23,7 @@
  */
 
 /**
- * @file  clayer_triangles.cpp
- * @brief
+ * @file clayer_triangles.cpp
  */
 
 
@@ -35,8 +34,7 @@
 #include <atomic>
 
 
-CLAYER_TRIANGLE_CONTAINER::CLAYER_TRIANGLE_CONTAINER( unsigned int aNrReservedTriangles,
-                                                      bool aReserveNormals )
+TRIANGLE_LIST::TRIANGLE_LIST( unsigned int aNrReservedTriangles, bool aReserveNormals )
 {
     wxASSERT( aNrReservedTriangles > 0 );
 
@@ -50,8 +48,7 @@ CLAYER_TRIANGLE_CONTAINER::CLAYER_TRIANGLE_CONTAINER( unsigned int aNrReservedTr
 }
 
 
-void CLAYER_TRIANGLE_CONTAINER::Reserve_More( unsigned int aNrReservedTriangles,
-                                              bool aReserveNormals )
+void TRIANGLE_LIST::Reserve_More( unsigned int aNrReservedTriangles, bool aReserveNormals )
 {
     m_vertexs.reserve( m_vertexs.size() + aNrReservedTriangles * 3 );
 
@@ -60,10 +57,8 @@ void CLAYER_TRIANGLE_CONTAINER::Reserve_More( unsigned int aNrReservedTriangles,
 }
 
 
-void CLAYER_TRIANGLE_CONTAINER::AddQuad( const SFVEC3F &aV1,
-                                         const SFVEC3F &aV2,
-                                         const SFVEC3F &aV3,
-                                         const SFVEC3F &aV4 )
+void TRIANGLE_LIST::AddQuad( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
+                             const SFVEC3F& aV4 )
 {
     m_vertexs.push_back( aV1 );
     m_vertexs.push_back( aV2 );
@@ -75,9 +70,7 @@ void CLAYER_TRIANGLE_CONTAINER::AddQuad( const SFVEC3F &aV1,
 }
 
 
-void CLAYER_TRIANGLE_CONTAINER::AddTriangle( const SFVEC3F &aV1,
-                                             const SFVEC3F &aV2,
-                                             const SFVEC3F &aV3 )
+void TRIANGLE_LIST::AddTriangle( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 )
 {
     m_vertexs.push_back( aV1 );
     m_vertexs.push_back( aV2 );
@@ -85,19 +78,15 @@ void CLAYER_TRIANGLE_CONTAINER::AddTriangle( const SFVEC3F &aV1,
 }
 
 
-void CLAYER_TRIANGLE_CONTAINER::AddNormal( const SFVEC3F &aN1,
-                                           const SFVEC3F &aN2,
-                                           const SFVEC3F &aN3 )
+void TRIANGLE_LIST::AddNormal( const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3 )
 {
     m_normals.push_back( aN1 );
     m_normals.push_back( aN2 );
     m_normals.push_back( aN3 );
 }
 
-void CLAYER_TRIANGLE_CONTAINER::AddNormal( const SFVEC3F &aN1,
-                                           const SFVEC3F &aN2,
-                                           const SFVEC3F &aN3,
-                                           const SFVEC3F &aN4 )
+void TRIANGLE_LIST::AddNormal( const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3,
+                               const SFVEC3F& aN4 )
 {
     m_normals.push_back( aN1 );
     m_normals.push_back( aN2 );
@@ -109,24 +98,19 @@ void CLAYER_TRIANGLE_CONTAINER::AddNormal( const SFVEC3F &aN1,
 }
 
 
-CLAYER_TRIANGLES::CLAYER_TRIANGLES( unsigned int aNrReservedTriangles )
+TRIANGLE_DISPLAY_LIST::TRIANGLE_DISPLAY_LIST( unsigned int aNrReservedTriangles )
 {
     wxASSERT( aNrReservedTriangles > 0 );
 
-    m_layer_top_segment_ends        = new CLAYER_TRIANGLE_CONTAINER( aNrReservedTriangles,
-                                                                     false );
-    m_layer_top_triangles           = new CLAYER_TRIANGLE_CONTAINER( aNrReservedTriangles,
-                                                                     false );
-    m_layer_middle_contourns_quads  = new CLAYER_TRIANGLE_CONTAINER( aNrReservedTriangles,
-                                                                     true  );
-    m_layer_bot_triangles           = new CLAYER_TRIANGLE_CONTAINER( aNrReservedTriangles,
-                                                                     false );
-    m_layer_bot_segment_ends        = new CLAYER_TRIANGLE_CONTAINER( aNrReservedTriangles,
-                                                                     false );
+    m_layer_top_segment_ends        = new TRIANGLE_LIST( aNrReservedTriangles, false );
+    m_layer_top_triangles           = new TRIANGLE_LIST( aNrReservedTriangles, false );
+    m_layer_middle_contourns_quads  = new TRIANGLE_LIST( aNrReservedTriangles, true  );
+    m_layer_bot_triangles           = new TRIANGLE_LIST( aNrReservedTriangles, false );
+    m_layer_bot_segment_ends        = new TRIANGLE_LIST( aNrReservedTriangles, false );
 }
 
 
-CLAYER_TRIANGLES::~CLAYER_TRIANGLES()
+TRIANGLE_DISPLAY_LIST::~TRIANGLE_DISPLAY_LIST()
 {
     delete m_layer_top_segment_ends;
     m_layer_top_segment_ends = 0;
@@ -145,11 +129,9 @@ CLAYER_TRIANGLES::~CLAYER_TRIANGLES()
 }
 
 
-void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aContournPoints,
-                                             float zBot,
-                                             float zTop,
-                                             bool aInvertFaceDirection,
-                                             const CBVHCONTAINER2D *aThroughHoles )
+void TRIANGLE_DISPLAY_LIST::AddToMiddleContourns( const std::vector< SFVEC2F >& aContournPoints,
+                                                  float zBot, float zTop, bool aInvertFaceDirection,
+                                                  const BVH_CONTAINER_2D* aThroughHoles )
 {
     if( aContournPoints.size() >= 4 )
     {
@@ -163,8 +145,8 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
         {
             for( unsigned int i = 0; i < ( aContournPoints.size() - 1 ); ++i )
             {
-                const SFVEC2F &v0 = aContournPoints[i + 0];
-                const SFVEC2F &v1 = aContournPoints[i + 1];
+                const SFVEC2F& v0 = aContournPoints[i + 0];
+                const SFVEC2F& v1 = aContournPoints[i + 1];
                 const SFVEC2F n = glm::normalize( v1 - v0 );
 
                 contournNormals[i] = SFVEC2F( n.y,-n.x );
@@ -174,8 +156,8 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
         {
             for( unsigned int i = 0; i < ( aContournPoints.size() - 1 ); ++i )
             {
-                const SFVEC2F &v0 = aContournPoints[i + 0];
-                const SFVEC2F &v1 = aContournPoints[i + 1];
+                const SFVEC2F& v0 = aContournPoints[i + 0];
+                const SFVEC2F& v1 = aContournPoints[i + 1];
                 const SFVEC2F n = glm::normalize( v1 - v0 );
 
                 contournNormals[i] = SFVEC2F( -n.y, n.x );
@@ -218,11 +200,13 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
             const SFVEC3F n3d0 = SFVEC3F( n0.x, n0.y, 0.0f );
             const SFVEC3F n3d1 = SFVEC3F( n1.x, n1.y, 0.0f );
 
-            const SFVEC2F &v0 = aContournPoints[i + 0];
-            const SFVEC2F &v1 = aContournPoints[i + 1];
+            const SFVEC2F& v0 = aContournPoints[i + 0];
+            const SFVEC2F& v1 = aContournPoints[i + 1];
 
             if( aThroughHoles && aThroughHoles->IntersectAny( RAYSEG2D( v0, v1 ) ) )
+            {
                 continue;
+            }
             else
             {
                 std::lock_guard<std::mutex> lock( m_middle_layer_lock );
@@ -238,31 +222,27 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
 }
 
 
-void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_LINE_CHAIN &outlinePath,
-                                             float zBot,
-                                             float zTop,
-                                             double aBiuTo3Du,
-                                             bool aInvertFaceDirection,
-                                             const CBVHCONTAINER2D *aThroughHoles )
+void TRIANGLE_DISPLAY_LIST::AddToMiddleContourns( const SHAPE_LINE_CHAIN& outlinePath, float zBot,
+                                                  float zTop, double aBiuTo3Du,
+                                                  bool aInvertFaceDirection,
+                                                  const BVH_CONTAINER_2D* aThroughHoles )
 {
     std::vector< SFVEC2F >contournPoints;
 
     contournPoints.clear();
     contournPoints.reserve( outlinePath.PointCount() + 2 );
 
-    const VECTOR2I &firstV = outlinePath.CPoint( 0 );
+    const VECTOR2I& firstV = outlinePath.CPoint( 0 );
 
-    SFVEC2F lastV = SFVEC2F( firstV.x * aBiuTo3Du,
-                            -firstV.y * aBiuTo3Du );
+    SFVEC2F lastV = SFVEC2F( firstV.x * aBiuTo3Du, -firstV.y * aBiuTo3Du );
 
     contournPoints.push_back( lastV );
 
     for( unsigned int i = 1; i < (unsigned int)outlinePath.PointCount(); ++i )
     {
-        const VECTOR2I & v = outlinePath.CPoint( i );
+        const VECTOR2I&  v = outlinePath.CPoint( i );
 
-        const SFVEC2F vf = SFVEC2F(  v.x * aBiuTo3Du,
-                                    -v.y * aBiuTo3Du );
+        const SFVEC2F vf = SFVEC2F(  v.x * aBiuTo3Du, -v.y * aBiuTo3Du );
 
         if( vf != lastV ) // Do not add repeated points
         {
@@ -279,12 +259,10 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_LINE_CHAIN &outlinePath
 }
 
 
-void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
-                                             float zBot,
-                                             float zTop,
-                                             double aBiuTo3Du,
-                                             bool aInvertFaceDirection,
-                                             const CBVHCONTAINER2D *aThroughHoles )
+void TRIANGLE_DISPLAY_LIST::AddToMiddleContourns( const SHAPE_POLY_SET& aPolySet, float zBot,
+                                                  float zTop, double aBiuTo3Du,
+                                                  bool aInvertFaceDirection,
+                                                  const BVH_CONTAINER_2D* aThroughHoles )
 {
     if( aPolySet.OutlineCount() == 0 )
         return;
@@ -300,37 +278,37 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
 
         for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
         {
-            const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
+            const SHAPE_LINE_CHAIN& hole = aPolySet.CHole( i, h );
 
             nrContournPointsToReserve += hole.PointCount();
         }
     }
 
     // Request to reserve more space
-    m_layer_middle_contourns_quads->Reserve_More( nrContournPointsToReserve * 2,
-                                                  true );
+    m_layer_middle_contourns_quads->Reserve_More( nrContournPointsToReserve * 2, true );
 
     for( int i = 0; i < aPolySet.OutlineCount(); i++ )
     {
         // Add outline
         const SHAPE_LINE_CHAIN& pathOutline = aPolySet.COutline( i );
 
-        AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection, aThroughHoles );
+        AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection,
+                              aThroughHoles );
 
         // Add holes for this outline
         for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
         {
-            const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
-            AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection, aThroughHoles );
+            const SHAPE_LINE_CHAIN& hole = aPolySet.CHole( i, h );
+            AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection,
+                                  aThroughHoles );
         }
     }
 }
 
 
-CLAYERS_OGL_DISP_LISTS::CLAYERS_OGL_DISP_LISTS( const CLAYER_TRIANGLES &aLayerTriangles,
+OPENGL_RENDER_LIST::OPENGL_RENDER_LIST( const TRIANGLE_DISPLAY_LIST& aLayerTriangles,
                                                 GLuint aTextureIndexForSegEnds,
-                                                float aZBot,
-                                                float aZTop )
+                                                float aZBot, float aZTop )
 {
     m_zBot = aZBot;
     m_zTop = aZTop;
@@ -349,13 +327,11 @@ CLAYERS_OGL_DISP_LISTS::CLAYERS_OGL_DISP_LISTS( const CLAYER_TRIANGLES &aLayerTr
         {
             m_layer_top_segment_ends =
                     generate_top_or_bot_seg_ends( aLayerTriangles.m_layer_top_segment_ends,
-                                                  true,
-                                                  aTextureIndexForSegEnds );
+                                                  true, aTextureIndexForSegEnds );
 
             m_layer_bot_segment_ends =
                     generate_top_or_bot_seg_ends( aLayerTriangles.m_layer_bot_segment_ends,
-                                                  false,
-                                                  aTextureIndexForSegEnds );
+                                                  false, aTextureIndexForSegEnds );
         }
     }
 
@@ -379,7 +355,7 @@ CLAYERS_OGL_DISP_LISTS::CLAYERS_OGL_DISP_LISTS( const CLAYER_TRIANGLES &aLayerTr
 }
 
 
-CLAYERS_OGL_DISP_LISTS::~CLAYERS_OGL_DISP_LISTS()
+OPENGL_RENDER_LIST::~OPENGL_RENDER_LIST()
 {
     if( glIsList( m_layer_top_segment_ends ) )
         glDeleteLists( m_layer_top_segment_ends, 1 );
@@ -404,7 +380,7 @@ CLAYERS_OGL_DISP_LISTS::~CLAYERS_OGL_DISP_LISTS()
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawTopAndMiddle() const
+void OPENGL_RENDER_LIST::DrawTopAndMiddle() const
 {
     beginTransformation();
 
@@ -421,7 +397,7 @@ void CLAYERS_OGL_DISP_LISTS::DrawTopAndMiddle() const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawBotAndMiddle() const
+void OPENGL_RENDER_LIST::DrawBotAndMiddle() const
 {
     beginTransformation();
 
@@ -438,7 +414,7 @@ void CLAYERS_OGL_DISP_LISTS::DrawBotAndMiddle() const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawTop() const
+void OPENGL_RENDER_LIST::DrawTop() const
 {
     beginTransformation();
 
@@ -452,7 +428,7 @@ void CLAYERS_OGL_DISP_LISTS::DrawTop() const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawBot() const
+void OPENGL_RENDER_LIST::DrawBot() const
 {
     beginTransformation();
 
@@ -466,7 +442,7 @@ void CLAYERS_OGL_DISP_LISTS::DrawBot() const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawMiddle() const
+void OPENGL_RENDER_LIST::DrawMiddle() const
 {
     beginTransformation();
 
@@ -477,7 +453,7 @@ void CLAYERS_OGL_DISP_LISTS::DrawMiddle() const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawAll( bool aDrawMiddle ) const
+void OPENGL_RENDER_LIST::DrawAll( bool aDrawMiddle ) const
 {
     beginTransformation();
 
@@ -501,10 +477,11 @@ void CLAYERS_OGL_DISP_LISTS::DrawAll( bool aDrawMiddle ) const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulled(float zCameraPos, bool aDrawMiddle ) const
+void OPENGL_RENDER_LIST::DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle ) const
 {
-    zCameraPos = m_haveTransformation?( (zCameraPos - m_zPositionTransformation ) /
-                                        m_zScaleTransformation ):zCameraPos;
+    zCameraPos = m_haveTransformation
+            ? ( ( zCameraPos - m_zPositionTransformation ) / m_zScaleTransformation )
+            : zCameraPos;
 
     if( aDrawMiddle )
         DrawMiddle();
@@ -521,17 +498,17 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulled(float zCameraPos, bool aDrawMid
         }
         else
         {
-            // If camera is in the middle dont draw it
+            // If camera is in the middle dont draw it.
         }
     }
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
-                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractA,
-                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractB,
-                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractC,
-                                        const CLAYERS_OGL_DISP_LISTS *aLayerToSubtractD ) const
+void OPENGL_RENDER_LIST::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
+                                        const OPENGL_RENDER_LIST* aLayerToSubtractA,
+                                        const OPENGL_RENDER_LIST* aLayerToSubtractB,
+                                        const OPENGL_RENDER_LIST* aLayerToSubtractC,
+                                        const OPENGL_RENDER_LIST* aLayerToSubtractD ) const
 {
     glClearStencil( 0x00 );
     glClear( GL_STENCIL_BUFFER_BIT );
@@ -558,11 +535,8 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
     if( aLayerToSubtractD )
         aLayerToSubtractD->DrawBot();
 
-    //if( !m_draw_it_transparent )
-    {
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(GL_TRUE);
-    }
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
 
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     glStencilFunc( GL_EQUAL, 0, 1 );
@@ -588,12 +562,8 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
     if( aLayerToSubtractD )
         aLayerToSubtractD->DrawTop();
 
-    //if( !m_draw_it_transparent )
-    {
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(GL_TRUE);
-    }
-
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     glStencilFunc( GL_NOTEQUAL, 2, 0x03 );
     glStencilOp( GL_KEEP, GL_KEEP, GL_INCR );
@@ -613,32 +583,16 @@ void CLAYERS_OGL_DISP_LISTS::DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
     {
         if( aLayerToSubtractA )
             aLayerToSubtractA->DrawMiddle();
-
-        // It will not render the middle contours of the layer.
-        // It is used with vias and holes (copper vias and to subtract solder
-        // mask holes). But since in the vias, it will draw a cylinder
-        // and in soldermask it doesn't need to draw the contour.
-        // so it is not used the middle part of B
-//        if( aLayerToSubtractB )
-//            aLayerToSubtractB->DrawMiddle();
     }
 
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE );
 
     glCullFace( GL_BACK );
     glDisable( GL_STENCIL_TEST );
-
-/*
-    if( m_draw_it_transparent )
-    {
-        glEnable(GL_DEPTH_TEST);
-        glDepthMask(GL_TRUE);
-    }*/
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::ApplyScalePosition( float aZposition,
-                                                 float aZscale )
+void OPENGL_RENDER_LIST::ApplyScalePosition( float aZposition, float aZscale )
 {
     wxASSERT( aZscale > FLT_EPSILON );
 
@@ -648,37 +602,33 @@ void CLAYERS_OGL_DISP_LISTS::ApplyScalePosition( float aZposition,
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::SetItIsTransparent( bool aSetTransparent )
+void OPENGL_RENDER_LIST::SetItIsTransparent( bool aSetTransparent )
 {
     m_draw_it_transparent = aSetTransparent;
 }
 
 
-GLuint CLAYERS_OGL_DISP_LISTS::generate_top_or_bot_seg_ends(
-        const CLAYER_TRIANGLE_CONTAINER *aTriangleContainer,
-        bool aIsNormalUp,
-        GLuint aTextureId ) const
+GLuint OPENGL_RENDER_LIST::generate_top_or_bot_seg_ends(
+        const TRIANGLE_LIST* aTriangleContainer, bool aIsNormalUp, GLuint aTextureId ) const
 {
-    wxASSERT( aTriangleContainer != NULL );
+    wxASSERT( aTriangleContainer != nullptr );
 
     wxASSERT( (aTriangleContainer->GetVertexSize() % 3) == 0 );
 
     // Top and Bot dont have normals array stored in container
     wxASSERT( aTriangleContainer->GetNormalsSize() == 0 );
 
-    if( (aTriangleContainer->GetVertexSize() > 0) &&
-        ((aTriangleContainer->GetVertexSize() % 3) == 0) )
+    if( ( aTriangleContainer->GetVertexSize() > 0 )
+      && ( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 ) )
     {
         GLuint listIdx = glGenLists( 1 );
 
         if( glIsList( listIdx ) )
         {
             // Prepare an array of UV text coordinates
-            SFVEC2F *uvArray = new SFVEC2F[aTriangleContainer->GetVertexSize()];
+            SFVEC2F* uvArray = new SFVEC2F[aTriangleContainer->GetVertexSize()];
 
-            for( unsigned int i = 0;
-                 i < aTriangleContainer->GetVertexSize();
-                 i += 3 )
+            for( unsigned int i = 0; i < aTriangleContainer->GetVertexSize(); i += 3 )
             {
                 uvArray[i + 0] = SFVEC2F( 1.0f, 0.0f );
                 uvArray[i + 1] = SFVEC2F( 0.0f, 1.0f );
@@ -726,19 +676,18 @@ GLuint CLAYERS_OGL_DISP_LISTS::generate_top_or_bot_seg_ends(
 }
 
 
-GLuint CLAYERS_OGL_DISP_LISTS::generate_top_or_bot_triangles(
-        const CLAYER_TRIANGLE_CONTAINER *aTriangleContainer,
-        bool aIsNormalUp ) const
+GLuint OPENGL_RENDER_LIST::generate_top_or_bot_triangles(
+        const TRIANGLE_LIST* aTriangleContainer, bool aIsNormalUp ) const
 {
-    wxASSERT( aTriangleContainer != NULL );
+    wxASSERT( aTriangleContainer != nullptr );
 
-    wxASSERT( (aTriangleContainer->GetVertexSize() % 3) == 0 );
+    wxASSERT( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 );
 
     // Top and Bot dont have normals array stored in container
     wxASSERT( aTriangleContainer->GetNormalsSize() == 0 );
 
-    if( (aTriangleContainer->GetVertexSize() > 0) &&
-        ( (aTriangleContainer->GetVertexSize() % 3) == 0) )
+    if( ( aTriangleContainer->GetVertexSize() > 0 )
+      && ( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 ) )
     {
         const GLuint listIdx = glGenLists( 1 );
 
@@ -771,25 +720,24 @@ GLuint CLAYERS_OGL_DISP_LISTS::generate_top_or_bot_triangles(
 }
 
 
-GLuint CLAYERS_OGL_DISP_LISTS::generate_middle_triangles(
-        const CLAYER_TRIANGLE_CONTAINER *aTriangleContainer ) const
+GLuint OPENGL_RENDER_LIST::generate_middle_triangles(
+        const TRIANGLE_LIST* aTriangleContainer ) const
 {
-    wxASSERT( aTriangleContainer != NULL );
+    wxASSERT( aTriangleContainer != nullptr );
 
     // We expect that it is a multiple of 3 vertex
-    wxASSERT( (aTriangleContainer->GetVertexSize() % 3) == 0 );
+    wxASSERT( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 );
 
     // We expect that it is a multiple of 6 vertex (because we expect to add quads)
-    wxASSERT( (aTriangleContainer->GetVertexSize() % 6) == 0 );
+    wxASSERT( (aTriangleContainer->GetVertexSize() % 6 ) == 0 );
 
     // We expect that there are normals with same size as vertex
     wxASSERT( aTriangleContainer->GetNormalsSize() == aTriangleContainer->GetVertexSize() );
 
-
-    if( ( aTriangleContainer->GetVertexSize() > 0 ) &&
-        ( (aTriangleContainer->GetVertexSize() % 3) == 0 ) &&
-        ( (aTriangleContainer->GetVertexSize() % 6) == 0 ) &&
-        ( aTriangleContainer->GetNormalsSize() == aTriangleContainer->GetVertexSize() ) )
+    if( ( aTriangleContainer->GetVertexSize() > 0 )
+      && ( ( aTriangleContainer->GetVertexSize() % 3 ) == 0 )
+      && ( ( aTriangleContainer->GetVertexSize() % 6 ) == 0 )
+      && ( aTriangleContainer->GetNormalsSize() == aTriangleContainer->GetVertexSize() ) )
     {
         const GLuint listIdx = glGenLists( 1 );
 
@@ -822,7 +770,7 @@ GLuint CLAYERS_OGL_DISP_LISTS::generate_middle_triangles(
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::endTransformation() const
+void OPENGL_RENDER_LIST::endTransformation() const
 {
     if( m_haveTransformation )
     {
@@ -831,14 +779,14 @@ void CLAYERS_OGL_DISP_LISTS::endTransformation() const
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::setBlendfunction() const
+void OPENGL_RENDER_LIST::setBlendfunction() const
 {
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 }
 
 
-void CLAYERS_OGL_DISP_LISTS::beginTransformation() const
+void OPENGL_RENDER_LIST::beginTransformation() const
 {
     if( m_haveTransformation )
     {

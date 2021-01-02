@@ -40,32 +40,32 @@
  *
  * @ingroup trace_env_vars
  */
-const wxChar* C3D_RENDER_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
+const wxChar* RENDER_3D_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
 
 
-C3D_RENDER_BASE::C3D_RENDER_BASE( BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera ) :
+RENDER_3D_BASE::RENDER_3D_BASE( BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera ) :
         m_boardAdapter( aBoardAdapter ),
         m_camera( aCamera )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_RENDER_BASE::C3D_RENDER_BASE" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_BASE::RENDER_3D_BASE" ) );
     m_is_opengl_initialized = false;
     m_windowSize            = wxSize( -1, -1 );
     m_reloadRequested       = true;
 }
 
 
-C3D_RENDER_BASE::~C3D_RENDER_BASE()
+RENDER_3D_BASE::~RENDER_3D_BASE()
 {
 }
 
 
-void C3D_RENDER_BASE::SetBusyIndicatorFactory( BUSY_INDICATOR::FACTORY aNewFactory )
+void RENDER_3D_BASE::SetBusyIndicatorFactory( BUSY_INDICATOR::FACTORY aNewFactory )
 {
     m_busyIndicatorFactory = aNewFactory;
 }
 
 
-std::unique_ptr<BUSY_INDICATOR> C3D_RENDER_BASE::CreateBusyIndicator() const
+std::unique_ptr<BUSY_INDICATOR> RENDER_3D_BASE::CreateBusyIndicator() const
 {
     std::unique_ptr<BUSY_INDICATOR> busy;
 

@@ -27,25 +27,25 @@
  * @brief
  */
 
-#ifndef _CCONTAINER2D_H_
-#define _CCONTAINER2D_H_
+#ifndef _CONTAINER_2D_H_
+#define _CONTAINER_2D_H_
 
 #include "../shapes2D/cobject2d.h"
 #include <list>
 #include <mutex>
 
-typedef std::list<COBJECT2D *> LIST_OBJECT2D;
-typedef std::list<const COBJECT2D *> CONST_LIST_OBJECT2D;
+typedef std::list<OBJECT_2D*> LIST_OBJECT2D;
+typedef std::list<const OBJECT_2D*> CONST_LIST_OBJECT2D;
 
 
-class CGENERICCONTAINER2D
+class CONTAINER_2D_BASE
 {
 public:
-    explicit CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType );
+    explicit CONTAINER_2D_BASE( OBJECT_2D_TYPE aObjType );
 
-    virtual ~CGENERICCONTAINER2D();
+    virtual ~CONTAINER_2D_BASE();
 
-    void Add( COBJECT2D *aObject )
+    void Add( OBJECT_2D* aObject )
     {
         if( aObject )
         {
@@ -55,14 +55,14 @@ public:
         }
     }
 
-    const CBBOX2D &GetBBox() const
+    const BBOX_2D& GetBBox() const
     {
         return m_bbox;
     }
 
     virtual void Clear();
 
-    const LIST_OBJECT2D &GetList() const { return m_objects; }
+    const LIST_OBJECT2D& GetList() const { return m_objects; }
 
     /**
      * Get a list of objects that intersects a bounding box.
@@ -70,8 +70,8 @@ public:
      * @param aBBox The bounding box to test.
      * @param aOutList The list of objects that intersects the bounding box.
      */
-    virtual void GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                           CONST_LIST_OBJECT2D &aOutList ) const = 0;
+    virtual void GetListObjectsIntersects( const BBOX_2D& aBBox,
+                                           CONST_LIST_OBJECT2D& aOutList ) const = 0;
 
     /**
      * Intersect and check if a segment ray hits a object or is inside it.
@@ -79,10 +79,10 @@ public:
      * @param aSegRay The segment to intersect with objects.
      * @return true if it hits any of the objects or is inside any object.
      */
-    virtual bool IntersectAny( const RAYSEG2D &aSegRay ) const = 0;
+    virtual bool IntersectAny( const RAYSEG2D& aSegRay ) const = 0;
 
 protected:
-    CBBOX2D m_bbox;
+    BBOX_2D m_bbox;
     LIST_OBJECT2D m_objects;
 
 private:
@@ -90,58 +90,56 @@ private:
 };
 
 
-class CCONTAINER2D : public CGENERICCONTAINER2D
+class CONTAINER_2D : public CONTAINER_2D_BASE
 {
 public:
-    CCONTAINER2D();
+    CONTAINER_2D();
 
-    // Imported from CGENERICCONTAINER2D
-    void GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                   CONST_LIST_OBJECT2D &aOutList ) const override;
+    void GetListObjectsIntersects( const BBOX_2D& aBBox,
+                                   CONST_LIST_OBJECT2D& aOutList ) const override;
 
-    bool IntersectAny( const RAYSEG2D &aSegRay ) const override;
+    bool IntersectAny( const RAYSEG2D& aSegRay ) const override;
 };
 
 
 struct BVH_CONTAINER_NODE_2D
 {
-    CBBOX2D                 m_BBox;
-    BVH_CONTAINER_NODE_2D   *m_Children[2];
+    BBOX_2D                 m_BBox;
+    BVH_CONTAINER_NODE_2D*  m_Children[2];
 
     /// Store the list of objects if that node is a Leaf
     CONST_LIST_OBJECT2D     m_LeafList;
 };
 
 
-class CBVHCONTAINER2D : public CGENERICCONTAINER2D
+class BVH_CONTAINER_2D : public CONTAINER_2D_BASE
 {
 public:
-    CBVHCONTAINER2D();
-    ~CBVHCONTAINER2D();
+    BVH_CONTAINER_2D();
+    ~BVH_CONTAINER_2D();
 
     void BuildBVH();
 
     void Clear() override;
 
-    // Imported from CGENERICCONTAINER2D
-    void GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                   CONST_LIST_OBJECT2D &aOutList ) const override;
+    void GetListObjectsIntersects( const BBOX_2D& aBBox,
+                                   CONST_LIST_OBJECT2D& aOutList ) const override;
 
-    bool IntersectAny( const RAYSEG2D &aSegRay ) const override;
+    bool IntersectAny( const RAYSEG2D& aSegRay ) const override;
 
 private:
     void destroy();
-    void recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeParent );
-    void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D *aNode,
-                                            const CBBOX2D & aBBox,
-                                            CONST_LIST_OBJECT2D &aOutList ) const;
-    bool recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
-                                const RAYSEG2D &aSegRay ) const;
+    void recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNodeParent );
+    void recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D* aNode,
+                                            const BBOX_2D& aBBox,
+                                            CONST_LIST_OBJECT2D& aOutList ) const;
+    bool recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode,
+                                const RAYSEG2D& aSegRay ) const;
 
     bool m_isInitialized;
-    std::list<BVH_CONTAINER_NODE_2D *> m_elements_to_delete;
+    std::list<BVH_CONTAINER_NODE_2D*> m_elements_to_delete;
     BVH_CONTAINER_NODE_2D* m_Tree;
 
 };
 
-#endif // _CCONTAINER2D_H_
+#endif // _CONTAINER_2D_H_

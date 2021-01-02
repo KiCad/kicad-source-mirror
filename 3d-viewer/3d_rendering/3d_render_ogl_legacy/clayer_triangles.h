@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,11 @@
  */
 
 /**
- * @file  clayer_triangles.h
- * @brief
+ * @file clayer_triangles.h
  */
 
-#ifndef CLAYER_TRIANGLES_H_
-#define CLAYER_TRIANGLES_H_
+#ifndef TRIANGLE_DISPLAY_LIST_H_
+#define TRIANGLE_DISPLAY_LIST_H_
 
 #include "../../common_ogl/openGL_includes.h"
 #include <plugins/3dapi/xv3d_types.h>
@@ -43,89 +42,49 @@ typedef std::vector< SFVEC3F > SFVEC3F_VECTOR;
 
 
 /**
- * @brief The CLAYER_TRIANGLE_CONTAINER class stores an manage vector of triangles
+ * Container to  manage a vector of triangles.
  */
-class CLAYER_TRIANGLE_CONTAINER
+class TRIANGLE_LIST
 {
-
 public:
 
     /**
-     * @brief CLAYER_TRIANGLE_CONTAINER
-     * @param aNrReservedTriangles: number of triangles expected to be used
-     * @param aReserveNormals: if you will use normals, set it to bool to pre
-     *        reserve space
+     * @param aNrReservedTriangles is number of triangles expected to be used.
+     * @param aReserveNormals if you use normals, set it to bool to  reserve space.
      */
-    CLAYER_TRIANGLE_CONTAINER( unsigned int aNrReservedTriangles, bool aReserveNormals );
+    TRIANGLE_LIST( unsigned int aNrReservedTriangles, bool aReserveNormals );
 
     /**
-     * @brief Reserve_More - reserve more triangles
-     *
+     * Reserve more triangles.
      */
     void Reserve_More( unsigned int aNrReservedTriangles, bool aReserveNormals );
 
-    /**
-     * @brief AddTriangle
-     * @param aV1
-     * @param aV2
-     * @param aV3
-     */
-    void AddTriangle( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3 );
+    void AddTriangle( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 );
+
+    void AddQuad( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3, const SFVEC3F& aV4 );
+
+    void AddNormal( const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3 );
+
+    void AddNormal( const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3,
+                    const SFVEC3F& aN4 );
 
     /**
-     * @brief AddQuad
-     * @param aV1
-     * @param aV2
-     * @param aV3
-     * @param aV4
+     * Get the array of vertexes.
+     *
+     * @return a pointer to the start of array vertex.
      */
-    void AddQuad( const SFVEC3F &aV1,
-                  const SFVEC3F &aV2,
-                  const SFVEC3F &aV3,
-                  const SFVEC3F &aV4 );
+    const float* GetVertexPointer() const { return (const float *)&m_vertexs[0].x; }
 
     /**
-     * @brief AddNormal
-     * @param aN1
-     * @param aN2
-     * @param aN3
+     * Get the array of normals.
+     *
+     * @return a pointer to start of array of normals.
      */
-    void AddNormal( const SFVEC3F &aN1, const SFVEC3F &aN2, const SFVEC3F &aN3 );
+    const float* GetNormalsPointer() const { return (const float*) &m_normals[0].x; }
 
-    /**
-     * @brief AddNormal
-     * @param aN1
-     * @param aN2
-     * @param aN3
-     */
-    void AddNormal( const SFVEC3F &aN1,
-                    const SFVEC3F &aN2,
-                    const SFVEC3F &aN3,
-                    const SFVEC3F &aN4 );
+    unsigned int GetVertexSize() const { return (unsigned int) m_vertexs.size(); }
 
-    /**
-     * @brief GetVertexPointer - Get the array of vertexes
-     * @return The pointer to the start of array vertex
-     */
-    const float *GetVertexPointer() const { return (const float *)&m_vertexs[0].x; }
-
-    /**
-     * @brief GetNormalsPointer - Get the array of normals
-     * @return The pointer to start of array of normals
-     */
-    const float *GetNormalsPointer() const { return (const float *)&m_normals[0].x; }
-
-    /**
-     * @brief GetVertexSize
-     * @return
-     */
-    unsigned int GetVertexSize() const { return (unsigned int)m_vertexs.size(); }
-
-    /**
-     * @brief GetNormalsSize
-     * @return
-     */
-    unsigned int GetNormalsSize() const { return (unsigned int)m_normals.size(); }
+    unsigned int GetNormalsSize() const { return (unsigned int) m_normals.size(); }
 
 private:
     SFVEC3F_VECTOR m_vertexs;  ///< vertex array
@@ -134,134 +93,118 @@ private:
 
 
 /**
- * @brief The CLAYER_TRIANGLES class stores arrays of triangles to be used to
- * create display lists
+ * Store arrays of triangles to be used to create display lists.
  */
-class CLAYER_TRIANGLES
+class TRIANGLE_DISPLAY_LIST
 {
 public:
     /**
-     * @brief CLAYER_TRIANGLES - initialize arrays with reserved triangles
-     * @param aNrReservedTriangles: number of pre alloc triangles to reserve
+     * Initialize arrays with reserved triangles.
+     *
+     * @param aNrReservedTriangles is the number of triangles to reserve.
      */
-    explicit CLAYER_TRIANGLES( unsigned int aNrReservedTriangles );
+    explicit TRIANGLE_DISPLAY_LIST( unsigned int aNrReservedTriangles );
+
+    ~TRIANGLE_DISPLAY_LIST();
 
     /**
-     * @brief ~CLAYER_TRIANGLES - Free containers
-     */
-    ~CLAYER_TRIANGLES();
-
-    /**
-     * @brief IsLayersSizeValid - check if the vertex arrays of the layers are
-     * as expected
-     * @return TRUE if layers are correctly setup
+     * Check if the vertex arrays of the layers are as expected.
+     *
+     * @return true if layers are correctly setup.
      */
     bool IsLayersSizeValid();
 
 
-    void AddToMiddleContourns( const SHAPE_LINE_CHAIN &outlinePath,
-                               float zBot,
-                               float zTop,
-                               double aBiuTo3Du,
-                               bool aInvertFaceDirection,
-                               const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    void AddToMiddleContourns( const SHAPE_LINE_CHAIN& outlinePath, float zBot, float zTop,
+                               double aBiuTo3Du, bool aInvertFaceDirection,
+                               const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    void AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
-                               float zBot,
-                               float zTop,
-                               double aBiuTo3Du,
-                               bool aInvertFaceDirection,
-                               const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    void AddToMiddleContourns( const SHAPE_POLY_SET& aPolySet, float zBot, float zTop,
+                               double aBiuTo3Du, bool aInvertFaceDirection,
+                               const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    void AddToMiddleContourns( const std::vector< SFVEC2F > &aContournPoints,
-                               float zBot,
-                               float zTop,
-                               bool aInvertFaceDirection,
-                               const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    void AddToMiddleContourns( const std::vector< SFVEC2F >& aContournPoints, float zBot,
+                               float zTop, bool aInvertFaceDirection,
+                               const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
     std::mutex m_middle_layer_lock;
 
-    CLAYER_TRIANGLE_CONTAINER *m_layer_top_segment_ends;
-    CLAYER_TRIANGLE_CONTAINER *m_layer_top_triangles;
-    CLAYER_TRIANGLE_CONTAINER *m_layer_middle_contourns_quads;
-    CLAYER_TRIANGLE_CONTAINER *m_layer_bot_triangles;
-    CLAYER_TRIANGLE_CONTAINER *m_layer_bot_segment_ends;
+    TRIANGLE_LIST* m_layer_top_segment_ends;
+    TRIANGLE_LIST* m_layer_top_triangles;
+    TRIANGLE_LIST* m_layer_middle_contourns_quads;
+    TRIANGLE_LIST* m_layer_bot_triangles;
+    TRIANGLE_LIST* m_layer_bot_segment_ends;
 };
 
 
 /**
- * @brief The CLAYERS_OGL_DISP_LISTS class stores the openGL display lists to
- * related with a layer
+ * Store the OpenGL display lists to related with a layer.
  */
-class CLAYERS_OGL_DISP_LISTS
+class OPENGL_RENDER_LIST
 {
 public:
     /**
-     * @brief CLAYERS_OGL_DISP_LISTS - Creates the display lists for a layer
-     * @param aLayerTriangles: contains the layers array of vertex to render to
-     *                         display lists
-     * @param aTextureIndexForSegEnds: texture index to be used by segment ends.
-     *                                 It is a black and white squared texture
-     *                                 with a center circle diameter of the size
-     *                                 of the texture.
+     * Create the display lists for a layer.
+     *
+     * @param aLayerTriangles contains the layers array of vertex to render to display lists.
+     * @param aTextureIndexForSegEnds is the texture index to be used by segment ends.
+     *                                It is a black and white squared texture
+     *                                with a center circle diameter of the size
+     *                                of the texture.
      */
-    CLAYERS_OGL_DISP_LISTS( const CLAYER_TRIANGLES &aLayerTriangles,
-                            GLuint aTextureIndexForSegEnds,
-                            float aZBot,
-                            float aZTop );
+    OPENGL_RENDER_LIST( const TRIANGLE_DISPLAY_LIST& aLayerTriangles,
+                        GLuint aTextureIndexForSegEnds, float aZBot, float aZTop );
 
     /**
-     * @brief ~CLAYERS_OGL_DISP_LISTS - Destroy this class while free the display
-     * lists from GPU mem
+     * Destroy this class while free the display lists from GPU memory.
      */
-    ~CLAYERS_OGL_DISP_LISTS();
+    ~OPENGL_RENDER_LIST();
 
     /**
-     * @brief DrawTopAndMiddle - This function calls the display lists for the
-     * top elements and middle contourns
+     * Call the display lists for the top elements and middle contours.
      */
     void DrawTopAndMiddle() const;
 
     /**
-     * @brief DrawBotAndMiddle - This function calls the display lists for the
-     * botton elements and middle contourns
+     * Call the display lists for the bottom elements and middle contours.
      */
     void DrawBotAndMiddle() const;
 
     /**
-     * @brief DrawTop - This function calls the display lists for the top elements
+     * Call the display lists for the top elements.
      */
     void DrawTop() const;
 
     /**
-     * @brief DrawBot - This function calls the display lists for the botton elements
+     * Call the display lists for the bottom elements.
      */
     void DrawBot() const;
 
     /**
-     * @brief DrawMiddle - This function calls the display lists for the middle
-     * elements
+     * Call the display lists for the middle elements.
      */
     void DrawMiddle() const;
 
     /**
-     * @brief DrawAll - This function calls all the display lists
+     * Call to draw all the display lists.
      */
     void DrawAll( bool aDrawMiddle = true ) const;
 
     /**
-     * @brief DrawAllCameraCulled - Draw all layers if they are visible by the camera.
-     * i.e.: if camera position is above the layer. This only works because the
-     * board is centered and the planes are always perpendicular to the Z axis.
-     * @param zCameraPos: camera z position
+     * Draw all layers if they are visible by the camera if camera position is above the layer.
+     *
+     * This only works because the board is centered and the planes are always perpendicular to
+     * the Z axis.
+     *
+     * @param zCameraPos is the camera z axis position.
      */
     void DrawAllCameraCulled( float zCameraPos, bool aDrawMiddle = true ) const;
 
     void DrawAllCameraCulledSubtractLayer( bool aDrawMiddle,
-                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractA = nullptr,
-                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractB = nullptr,
-                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractC = nullptr,
-                               const CLAYERS_OGL_DISP_LISTS* aLayerToSubtractD = nullptr ) const;
+                               const OPENGL_RENDER_LIST* aLayerToSubtractA = nullptr,
+                               const OPENGL_RENDER_LIST* aLayerToSubtractB = nullptr,
+                               const OPENGL_RENDER_LIST* aLayerToSubtractC = nullptr,
+                               const OPENGL_RENDER_LIST* aLayerToSubtractD = nullptr ) const;
 
     void ApplyScalePosition( float aZposition, float aZscale );
 
@@ -273,14 +216,13 @@ public:
     float GetZTop() const { return m_zTop; }
 
 private:
-    GLuint generate_top_or_bot_seg_ends( const CLAYER_TRIANGLE_CONTAINER * aTriangleContainer,
-                                         bool aIsNormalUp,
-                                         GLuint aTextureId ) const;
+    GLuint generate_top_or_bot_seg_ends( const TRIANGLE_LIST* aTriangleContainer,
+                                         bool aIsNormalUp, GLuint aTextureId ) const;
 
-    GLuint generate_top_or_bot_triangles( const CLAYER_TRIANGLE_CONTAINER * aTriangleContainer,
+    GLuint generate_top_or_bot_triangles( const TRIANGLE_LIST* aTriangleContainer,
                                           bool aIsNormalUp ) const;
 
-    GLuint generate_middle_triangles( const CLAYER_TRIANGLE_CONTAINER * aTriangleContainer ) const;
+    GLuint generate_middle_triangles( const TRIANGLE_LIST* aTriangleContainer ) const;
 
     void beginTransformation() const;
     void endTransformation() const;
@@ -303,4 +245,4 @@ private:
     bool    m_draw_it_transparent;
 };
 
-#endif // CLAYER_TRIANGLES_H_
+#endif // TRIANGLE_DISPLAY_LIST_H_

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 #include "cdummyblock.h"
 
 
-CDUMMYBLOCK::CDUMMYBLOCK( const CBBOX& aBBox ) : COBJECT( OBJECT3D_TYPE::DUMMYBLOCK )
+DUMMY_BLOCK::DUMMY_BLOCK( const BBOX_3D& aBBox ) : OBJECT_3D( OBJECT_3D_TYPE::DUMMYBLOCK )
 {
     m_centroid = aBBox.GetCenter();
     m_bbox.Reset();
@@ -38,7 +38,7 @@ CDUMMYBLOCK::CDUMMYBLOCK( const CBBOX& aBBox ) : COBJECT( OBJECT3D_TYPE::DUMMYBL
 }
 
 
-bool CDUMMYBLOCK::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool DUMMY_BLOCK::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
     float t;
 
@@ -66,7 +66,7 @@ bool CDUMMYBLOCK::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CDUMMYBLOCK::IntersectP(const RAY &aRay , float aMaxDistance ) const
+bool DUMMY_BLOCK::IntersectP(const RAY& aRay, float aMaxDistance ) const
 {
     float t;
 
@@ -80,13 +80,13 @@ bool CDUMMYBLOCK::IntersectP(const RAY &aRay , float aMaxDistance ) const
 }
 
 
-bool CDUMMYBLOCK::Intersects( const CBBOX &aBBox ) const
+bool DUMMY_BLOCK::Intersects( const BBOX_3D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
 }
 
 
-SFVEC3F CDUMMYBLOCK::GetDiffuseColor( const HITINFO &aHitInfo ) const
+SFVEC3F DUMMY_BLOCK::GetDiffuseColor( const HITINFO& aHitInfo ) const
 {
     (void)aHitInfo; // unused
 

@@ -34,38 +34,38 @@
 #include <wx/debug.h>   // For the wxASSERT
 
 
-CBBOX::CBBOX()
+BBOX_3D::BBOX_3D()
 {
     Reset();
 }
 
 
-CBBOX::CBBOX( const SFVEC3F &aPbInit )
+BBOX_3D::BBOX_3D( const SFVEC3F& aPbInit )
 {
     m_min = aPbInit;
     m_max = aPbInit;
 }
 
 
-CBBOX::CBBOX( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax )
+BBOX_3D::BBOX_3D( const SFVEC3F& aPbMin, const SFVEC3F& aPbMax )
 {
     Set( aPbMin, aPbMax );
 }
 
 
-CBBOX::~CBBOX()
+BBOX_3D::~BBOX_3D()
 {
 }
 
 
-void CBBOX::Set( const SFVEC3F &aPoint )
+void BBOX_3D::Set( const SFVEC3F& aPoint )
 {
     m_min = aPoint;
     m_max = aPoint;
 }
 
 
-void CBBOX::Set( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax )
+void BBOX_3D::Set( const SFVEC3F& aPbMin, const SFVEC3F& aPbMax )
 {
     m_min.x =  fminf( aPbMin.x, aPbMax.x );
     m_min.y =  fminf( aPbMin.y, aPbMax.y );
@@ -77,7 +77,7 @@ void CBBOX::Set( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax )
 }
 
 
-void CBBOX::Set( const CBBOX &aBBox )
+void BBOX_3D::Set( const BBOX_3D& aBBox )
 {
     wxASSERT( aBBox.IsInitialized() );
 
@@ -85,25 +85,21 @@ void CBBOX::Set( const CBBOX &aBBox )
 }
 
 
-bool CBBOX::IsInitialized() const
+bool BBOX_3D::IsInitialized() const
 {
-    return !( ( FLT_MAX == m_min.x) ||
-              ( FLT_MAX == m_min.y) ||
-              ( FLT_MAX == m_min.z) ||
-              (-FLT_MAX == m_max.x) ||
-              (-FLT_MAX == m_max.y) ||
-              (-FLT_MAX == m_max.z) );
+    return !( ( FLT_MAX == m_min.x) || ( FLT_MAX == m_min.y) || ( FLT_MAX == m_min.z) ||
+              (-FLT_MAX == m_max.x) || (-FLT_MAX == m_max.y) || (-FLT_MAX == m_max.z) );
 }
 
 
-void CBBOX::Reset()
+void BBOX_3D::Reset()
 {
     m_min = SFVEC3F( FLT_MAX, FLT_MAX, FLT_MAX );
     m_max = SFVEC3F(-FLT_MAX,-FLT_MAX,-FLT_MAX );
 }
 
 
-void CBBOX::Union( const SFVEC3F &aPoint )
+void BBOX_3D::Union( const SFVEC3F& aPoint )
 {
     // get the minimum value between the added point and the existent bounding box
     m_min.x =  fminf( m_min.x, aPoint.x );
@@ -117,7 +113,7 @@ void CBBOX::Union( const SFVEC3F &aPoint )
 }
 
 
-void CBBOX::Union( const CBBOX &aBBox )
+void BBOX_3D::Union( const BBOX_3D& aBBox )
 {
     wxASSERT( aBBox.IsInitialized() );
 
@@ -133,26 +129,26 @@ void CBBOX::Union( const CBBOX &aBBox )
 }
 
 
-SFVEC3F CBBOX::GetCenter() const
+SFVEC3F BBOX_3D::GetCenter() const
 {
-    return (m_max + m_min) * 0.5f;
+    return ( m_max + m_min ) * 0.5f;
 }
 
 
-float CBBOX::GetCenter( unsigned int aAxis ) const
+float BBOX_3D::GetCenter( unsigned int aAxis ) const
 {
     wxASSERT( aAxis < 3 );
     return (m_max[aAxis] + m_min[aAxis]) * 0.5f;
 }
 
 
-const SFVEC3F CBBOX::GetExtent() const
+const SFVEC3F BBOX_3D::GetExtent() const
 {
     return m_max - m_min;
 }
 
 
-unsigned int CBBOX::MaxDimension() const
+unsigned int BBOX_3D::MaxDimension() const
 {
     unsigned int result = 0;
 
@@ -160,6 +156,7 @@ unsigned int CBBOX::MaxDimension() const
 
     if( extent.y > extent.x )
         result = 1;
+
     if( extent.z > extent.y )
         result = 2;
 
@@ -167,7 +164,7 @@ unsigned int CBBOX::MaxDimension() const
 }
 
 
-float CBBOX::GetMaxDimension() const
+float BBOX_3D::GetMaxDimension() const
 {
     unsigned int max_dimensions_idx = 0;
 
@@ -175,6 +172,7 @@ float CBBOX::GetMaxDimension() const
 
     if( extent.y > extent.x )
         max_dimensions_idx = 1;
+
     if( extent.z > extent.y )
         max_dimensions_idx = 2;
 
@@ -182,29 +180,27 @@ float CBBOX::GetMaxDimension() const
 }
 
 
-float CBBOX::SurfaceArea() const
+float BBOX_3D::SurfaceArea() const
 {
     SFVEC3F extent = GetExtent();
 
-    return 2.0f * ( extent.x * extent.z +
-                    extent.x * extent.y +
-                    extent.y * extent.z );
+    return 2.0f * ( extent.x * extent.z + extent.x * extent.y + extent.y * extent.z );
 }
 
 
-void CBBOX::Scale( float aScale )
+void BBOX_3D::Scale( float aScale )
 {
     wxASSERT( IsInitialized() );
 
     SFVEC3F scaleV  = SFVEC3F( aScale, aScale, aScale );
     SFVEC3F centerV = GetCenter();
 
-    m_min = (m_min - centerV) * scaleV + centerV;
-    m_max = (m_max - centerV) * scaleV + centerV;
+    m_min = ( m_min - centerV ) * scaleV + centerV;
+    m_max = ( m_max - centerV ) * scaleV + centerV;
 }
 
 
-void CBBOX::ScaleNextUp()
+void BBOX_3D::ScaleNextUp()
 {
     m_min.x = NextFloatDown( m_min.x );
     m_min.y = NextFloatDown( m_min.y );
@@ -216,7 +212,7 @@ void CBBOX::ScaleNextUp()
 }
 
 
-void CBBOX::ScaleNextDown()
+void BBOX_3D::ScaleNextDown()
 {
     m_min.x = NextFloatUp( m_min.x );
     m_min.y = NextFloatUp( m_min.y );
@@ -228,7 +224,7 @@ void CBBOX::ScaleNextDown()
 }
 
 
-bool CBBOX::Intersects( const CBBOX &aBBox ) const
+bool BBOX_3D::Intersects( const BBOX_3D& aBBox ) const
 {
     wxASSERT( IsInitialized() );
     wxASSERT( aBBox.IsInitialized() );
@@ -241,7 +237,7 @@ bool CBBOX::Intersects( const CBBOX &aBBox ) const
 }
 
 
-bool CBBOX::Inside( const SFVEC3F &aPoint ) const
+bool BBOX_3D::Inside( const SFVEC3F& aPoint ) const
 {
     wxASSERT( IsInitialized() );
 
@@ -251,7 +247,7 @@ bool CBBOX::Inside( const SFVEC3F &aPoint ) const
 }
 
 
-float CBBOX::Volume() const
+float BBOX_3D::Volume() const
 {
     wxASSERT( IsInitialized() );
 
@@ -261,7 +257,7 @@ float CBBOX::Volume() const
 }
 
 
-SFVEC3F CBBOX::Offset( const SFVEC3F &p ) const
+SFVEC3F BBOX_3D::Offset( const SFVEC3F& p ) const
 {
     return (p - m_min) / (m_max - m_min);
 }
@@ -270,9 +266,8 @@ SFVEC3F CBBOX::Offset( const SFVEC3F &p ) const
 // Intersection code based on the book:
 // "Physical Based Ray Tracing" (by Matt Pharr and Greg Humphrey)
 // https://github.com/mmp/pbrt-v2/blob/master/src/core/geometry.cpp#L68
-// /////////////////////////////////////////////////////////////////////////
 #if 0
-bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) const
+bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) const
 {
     float t0 = 0.0f;
     float t1 = FLT_MAX;
@@ -280,8 +275,8 @@ bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) con
     for( unsigned int i = 0; i < 3; ++i )
     {
         // Update interval for _i_th bounding box slab
-        float tNear = (m_min[i] - aRay.m_Origin[i]) * aRay.m_InvDir[i];
-        float tFar  = (m_max[i] - aRay.m_Origin[i]) * aRay.m_InvDir[i];
+        float tNear = ( m_min[i] - aRay.m_Origin[i] ) * aRay.m_InvDir[i];
+        float tFar  = ( m_max[i] - aRay.m_Origin[i] ) * aRay.m_InvDir[i];
 
         // Update parametric interval from slab intersection
         if( tNear > tFar )
@@ -301,6 +296,7 @@ bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) con
 
     if( aOutHitt0 )
         *aOutHitt0 = t0;
+
     if( aOutHitt1 )
         *aOutHitt1 = t1;
 
@@ -308,9 +304,7 @@ bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) con
 }
 #else
 // https://github.com/mmp/pbrt-v2/blob/master/src/accelerators/bvh.cpp#L126
-bool CBBOX::Intersect( const RAY &aRay,
-                       float *aOutHitt0,
-                       float *aOutHitt1 ) const
+bool BBOX_3D::Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) const
 {
     wxASSERT( aOutHitt0 );
     wxASSERT( aOutHitt1 );
@@ -323,17 +317,17 @@ bool CBBOX::Intersect( const RAY &aRay,
     const float tymin = (bounds[    aRay.m_dirIsNeg[1]].y - aRay.m_Origin.y) * aRay.m_InvDir.y;
     const float tymax = (bounds[1 - aRay.m_dirIsNeg[1]].y - aRay.m_Origin.y) * aRay.m_InvDir.y;
 
-    if( (tmin > tymax) || (tymin > tmax) )
+    if( ( tmin > tymax ) || ( tymin > tmax ) )
         return false;
 
-    tmin = (tymin > tmin)? tymin : tmin;
-    tmax = (tymax < tmax)? tymax : tmax;
+    tmin = ( tymin > tmin ) ? tymin : tmin;
+    tmax = ( tymax < tmax ) ? tymax : tmax;
 
     // Check for ray intersection against z slab
     const float tzmin = (bounds[    aRay.m_dirIsNeg[2]].z - aRay.m_Origin.z) * aRay.m_InvDir.z;
     const float tzmax = (bounds[1 - aRay.m_dirIsNeg[2]].z - aRay.m_Origin.z) * aRay.m_InvDir.z;
 
-    if( (tmin > tzmax) || (tzmin > tmax) )
+    if( ( tmin > tzmax ) || ( tzmin > tmax ) )
         return false;
 
     tmin = (tzmin > tmin)? tzmin : tmin;
@@ -349,15 +343,13 @@ bool CBBOX::Intersect( const RAY &aRay,
 #endif
 
 
-void CBBOX::ApplyTransformation( glm::mat4 aTransformMatrix )
+void BBOX_3D::ApplyTransformation( glm::mat4 aTransformMatrix )
 {
     wxASSERT( IsInitialized() );
 
-    const SFVEC3F v1 = SFVEC3F( aTransformMatrix *
-                                glm::vec4( m_min.x, m_min.y, m_min.z, 1.0f ) );
+    const SFVEC3F v1 = SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_min.y, m_min.z, 1.0f ) );
 
-    const SFVEC3F v2 = SFVEC3F( aTransformMatrix *
-                                glm::vec4( m_max.x, m_max.y, m_max.z, 1.0f ) );
+    const SFVEC3F v2 = SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_max.y, m_max.z, 1.0f ) );
 
     Reset();
     Union( v1 );
@@ -365,36 +357,28 @@ void CBBOX::ApplyTransformation( glm::mat4 aTransformMatrix )
 }
 
 
-void CBBOX::ApplyTransformationAA( glm::mat4 aTransformMatrix )
+void BBOX_3D::ApplyTransformationAA( glm::mat4 aTransformMatrix )
 {
     wxASSERT( IsInitialized() );
 
     // apply the transformation matrix for each of vertices of the bounding box
     // and make a union with all vertices
-    CBBOX tmpBBox = CBBOX(
-                   SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_min.x, m_min.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_max.x, m_min.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_min.x, m_max.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_min.x, m_min.y, m_max.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_min.x, m_max.y, m_max.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_max.x, m_max.y, m_min.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_max.x, m_min.y, m_max.z, 1.0f ) ) );
-    tmpBBox.Union( SFVEC3F( aTransformMatrix *
-                            glm::vec4( m_max.x, m_max.y, m_max.z, 1.0f ) ) );
+    BBOX_3D tmpBBox = BBOX_3D(
+                   SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_min.y, m_min.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_min.y, m_min.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_max.y, m_min.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_min.y, m_max.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_min.x, m_max.y, m_max.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_max.y, m_min.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_min.y, m_max.z, 1.0f ) ) );
+    tmpBBox.Union( SFVEC3F( aTransformMatrix * glm::vec4( m_max.x, m_max.y, m_max.z, 1.0f ) ) );
 
     m_min = tmpBBox.m_min;
     m_max = tmpBBox.m_max;
 }
 
 
-void CBBOX::debug() const
+void BBOX_3D::debug() const
 {
     wxLogDebug( "min(%f, %f, %f) - max(%f, %f, %f)\n", m_min.x, m_min.y, m_min.z,
                 m_max.x, m_max.y, m_max.z );

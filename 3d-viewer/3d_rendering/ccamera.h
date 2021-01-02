@@ -27,8 +27,8 @@
  * @brief Define an abstract camera
  */
 
-#ifndef CCAMERA_H
-#define CCAMERA_H
+#ifndef CAMERA_H
+#define CAMERA_H
 
 #include "../3d_rendering/3d_render_raytracing/ray.h"
 #include <wx/gdicmn.h>  // for wxSize
@@ -44,7 +44,7 @@ enum class PROJECTION_TYPE
  * Frustum is a implementation based on a tutorial by
  * http://www.lighthouse3d.com/tutorials/view-frustum-culling/
  */
-struct FRUSTUM
+struct CAMERA_FRUSTUM
 {
     SFVEC3F nc;
     SFVEC3F fc;
@@ -74,7 +74,7 @@ enum class CAMERA_INTERPOLATION
  *
  *  It must be derived by other classes to implement a real camera object.
  */
-class CCAMERA
+class CAMERA
 {
 public:
     /**
@@ -84,12 +84,11 @@ public:
      *                    -aRangeScale/2 to +aRangeScale/2.  It will initialize the
      *                    Z position with aRangeScale.
      */
-    explicit CCAMERA( float aRangeScale );
+    explicit CAMERA( float aRangeScale );
 
-    virtual ~CCAMERA()
+    virtual ~CAMERA()
     {
     }
-
 
     /**
      *  Get the rotation matrix to be applied in a transformation camera.
@@ -98,21 +97,21 @@ public:
      */
     const glm::mat4 GetRotationMatrix() const;
 
-    const glm::mat4 &GetViewMatrix() const;
-    const glm::mat4 &GetViewMatrix_Inv() const;
+    const glm::mat4& GetViewMatrix() const;
+    const glm::mat4& GetViewMatrix_Inv() const;
 
-    const glm::mat4 &GetProjectionMatrix() const;
-    const glm::mat4 &GetProjectionMatrixInv() const;
+    const glm::mat4& GetProjectionMatrix() const;
+    const glm::mat4& GetProjectionMatrixInv() const;
 
-    const SFVEC3F &GetRight()    const { return m_right; }
-    const SFVEC3F &GetUp()       const { return m_up; }
-    const SFVEC3F &GetDir()      const { return m_dir; }
-    const SFVEC3F &GetPos()      const { return m_pos; }
-    const SFVEC2F &GetFocalLen() const { return m_focalLen; }
+    const SFVEC3F& GetRight()    const { return m_right; }
+    const SFVEC3F& GetUp()       const { return m_up; }
+    const SFVEC3F& GetDir()      const { return m_dir; }
+    const SFVEC3F& GetPos()      const { return m_pos; }
+    const SFVEC2F& GetFocalLen() const { return m_focalLen; }
     float GetNear() const { return m_frustum.nearD; }
     float GetFar() const { return m_frustum.farD; }
 
-    void SetBoardLookAtPos( const SFVEC3F &aBoardPos )
+    void SetBoardLookAtPos( const SFVEC3F& aBoardPos )
     {
         if( m_board_lookat_pos_init != aBoardPos )
         {
@@ -121,27 +120,27 @@ public:
         }
     }
 
-    virtual void SetLookAtPos( const SFVEC3F &aLookAtPos ) = 0;
+    virtual void SetLookAtPos( const SFVEC3F& aLookAtPos ) = 0;
 
-    void SetLookAtPos_T1( const SFVEC3F &aLookAtPos )
+    void SetLookAtPos_T1( const SFVEC3F& aLookAtPos )
     {
         m_lookat_pos_t1 = aLookAtPos;
     }
 
-    const SFVEC3F &GetLookAtPos_T1() const { return m_lookat_pos_t1; }
+    const SFVEC3F& GetLookAtPos_T1() const { return m_lookat_pos_t1; }
 
-    const SFVEC3F &GetCameraPos() const { return m_camera_pos; }
+    const SFVEC3F& GetCameraPos() const { return m_camera_pos; }
 
     /**
      *  Calculate a new mouse drag position
      */
-    virtual void Drag( const wxPoint &aNewMousePosition )  = 0;
+    virtual void Drag( const wxPoint& aNewMousePosition )  = 0;
 
-    virtual void Pan( const wxPoint &aNewMousePosition )  = 0;
+    virtual void Pan( const wxPoint& aNewMousePosition )  = 0;
 
-    virtual void Pan( const SFVEC3F &aDeltaOffsetInc )  = 0;
+    virtual void Pan( const SFVEC3F& aDeltaOffsetInc )  = 0;
 
-    virtual void Pan_T1( const SFVEC3F &aDeltaOffsetInc )  = 0;
+    virtual void Pan_T1( const SFVEC3F& aDeltaOffsetInc )  = 0;
 
     /**
      *  Reset the camera to initial state
@@ -155,7 +154,7 @@ public:
     /**
      *  Update the current mouse position without make any new calculations on camera.
      */
-    void SetCurMousePosition( const wxPoint &aPosition );
+    void SetCurMousePosition( const wxPoint& aPosition );
 
     void ToggleProjection();
     PROJECTION_TYPE GetProjection() { return m_projectionType; }
@@ -165,7 +164,7 @@ public:
      *
      * @return true if the windows size changed since last time.
      */
-    bool SetCurWindowSize( const wxSize &aSize );
+    bool SetCurWindowSize( const wxSize& aSize );
 
     void ZoomReset();
 
@@ -217,7 +216,7 @@ public:
      * @param aOutOrigin out origin position of the ray.
      * @param aOutDirection out direction
      */
-    void MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
+    void MakeRay( const SFVEC2I& aWindowPos, SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
 
     /**
      * Make a ray based on a windows screen position, it will interpolate based on the
@@ -227,7 +226,7 @@ public:
      * @param aOutOrigin out origin position of the ray.
      * @param aOutDirection out direction.
      */
-    void MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
+    void MakeRay( const SFVEC2F& aWindowPos, SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
 
     /**
      * Make a ray based on the latest mouse position.
@@ -235,7 +234,7 @@ public:
      * @param aOutOrigin out origin position of the ray.
      * @param aOutDirection out direction.
      */
-    void MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const;
+    void MakeRayAtCurrrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const;
 
 protected:
     void rebuildProjection();
@@ -276,7 +275,7 @@ protected:
     glm::mat4 m_projectionMatrixInv;
     PROJECTION_TYPE m_projectionType;
 
-    FRUSTUM m_frustum;
+    CAMERA_FRUSTUM m_frustum;
 
     SFVEC3F m_right;
     SFVEC3F m_up;
@@ -323,10 +322,10 @@ protected:
      * Trace mask used to enable or disable the trace output of this class.
      *
      * The debug output can be turned on by setting the WXTRACE environment variable to
-     * "KI_TRACE_CCAMERA".  See the wxWidgets documentation on wxLogTrace for
+     * "KI_TRACE_CAMERA".  See the wxWidgets documentation on wxLogTrace for
      * more information.
      */
-    static const wxChar *m_logTrace;
+    static const wxChar* m_logTrace;
 };
 
-#endif // CCAMERA_H
+#endif // CAMERA_H

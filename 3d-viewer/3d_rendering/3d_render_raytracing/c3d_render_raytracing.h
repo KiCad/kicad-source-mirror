@@ -24,11 +24,10 @@
 
 /**
  * @file  c3d_render_raytracing.h
- * @brief
  */
 
-#ifndef C3D_RENDER_RAYTRACING_H
-#define C3D_RENDER_RAYTRACING_H
+#ifndef RENDER_3D_RAYTRACE_H
+#define RENDER_3D_RAYTRACE_H
 
 #include "../../common_ogl/openGL_includes.h"
 #include "accelerators/ccontainer.h"
@@ -42,10 +41,10 @@
 #include <map>
 
 /// Vector of materials
-typedef std::vector< CBLINN_PHONG_MATERIAL > MODEL_MATERIALS;
+typedef std::vector< BLINN_PHONG_MATERIAL > MODEL_MATERIALS;
 
-/// Maps a S3DMODEL pointer with a created CBLINN_PHONG_MATERIAL vector
-typedef std::map< const S3DMODEL * , MODEL_MATERIALS > MAP_MODEL_MATERIALS;
+/// Maps a S3DMODEL pointer with a created BLINN_PHONG_MATERIAL vector
+typedef std::map< const S3DMODEL* , MODEL_MATERIALS > MAP_MODEL_MATERIALS;
 
 typedef enum
 {
@@ -57,15 +56,15 @@ typedef enum
 } RT_RENDER_STATE;
 
 
-class C3D_RENDER_RAYTRACING : public C3D_RENDER_BASE
+class RENDER_3D_RAYTRACE : public RENDER_3D_BASE
 {
 public:
-    explicit C3D_RENDER_RAYTRACING( BOARD_ADAPTER& aAdapter, CCAMERA& aCamera );
+    explicit RENDER_3D_RAYTRACE( BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
-    ~C3D_RENDER_RAYTRACING();
+    ~RENDER_3D_RAYTRACE();
 
-    // Imported from C3D_RENDER_BASE
-    void SetCurWindowSize( const wxSize &aSize ) override;
+    // Imported from RENDER_3D_BASE
+    void SetCurWindowSize( const wxSize& aSize ) override;
     bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
 
     int GetWaitForEditingTimeOut() override;
@@ -73,97 +72,82 @@ public:
     void Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter,
                  bool aOnlyLoadCopperAndShapes );
 
-    BOARD_ITEM *IntersectBoardItem( const RAY &aRay );
+    BOARD_ITEM *IntersectBoardItem( const RAY& aRay );
 
 private:
     bool initializeOpenGL();
     void initializeNewWindowSize();
     void opengl_init_pbo();
     void opengl_delete_pbo();
-    void createItemsFromContainer( const CBVHCONTAINER2D *aContainer2d,
-                                   PCB_LAYER_ID aLayer_id,
-                                   const CMATERIAL *aMaterialLayer,
-                                   const SFVEC3F &aLayerColor,
+    void createItemsFromContainer( const BVH_CONTAINER_2D* aContainer2d, PCB_LAYER_ID aLayer_id,
+                                   const MATERIAL* aMaterialLayer, const SFVEC3F& aLayerColor,
                                    float aLayerZOffset );
 
     void restart_render_state();
     void rt_render_tracing( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void rt_render_post_process_shade( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void rt_render_post_process_blur_finish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void rt_render_trace_block( GLubyte *ptrPBO , signed int iBlock );
-    void rt_final_color( GLubyte *ptrPBO, const SFVEC3F &rgbColor, bool applyColorSpaceConversion );
+    void rt_render_trace_block( GLubyte* ptrPBO , signed int iBlock );
+    void rt_final_color( GLubyte* ptrPBO, const SFVEC3F& rgbColor, bool applyColorSpaceConversion );
 
-    void rt_shades_packet( const SFVEC3F *bgColorY,
-                           const RAY *aRayPkt,
-                           HITINFO_PACKET *aHitPacket,
-                           bool is_testShadow,
-                           SFVEC3F *aOutHitColor );
+    void rt_shades_packet( const SFVEC3F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
+                           bool is_testShadow, SFVEC3F* aOutHitColor );
 
-    void rt_trace_AA_packet( const SFVEC3F *aBgColorY,
-                             const HITINFO_PACKET *aHitPck_X0Y0,
-                             const HITINFO_PACKET *aHitPck_AA_X1Y1,
-                             const RAY *aRayPck,
-                             SFVEC3F *aOutHitColor );
+    void rt_trace_AA_packet( const SFVEC3F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
+                             const HITINFO_PACKET* aHitPck_AA_X1Y1, const RAY* aRayPck,
+                             SFVEC3F* aOutHitColor );
 
     // Materials
     void setupMaterials();
 
-    SFVEC3F shadeHit( const SFVEC3F &aBgColor,
-                      const RAY &aRay,
-                      HITINFO &aHitInfo,
-                      bool aIsInsideObject,
-                      unsigned int aRecursiveLevel,
+    SFVEC3F shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, HITINFO& aHitInfo,
+                      bool aIsInsideObject, unsigned int aRecursiveLevel,
                       bool is_testShadow ) const;
 
     /**
      * Create one or more 3D objects form a 2D object and Z positions.
      *
      * It tries to optimize some types of objects that will be faster to trace than the
-     * CLAYERITEM object.
+     * LAYER_ITEM object.
      */
-    void create_3d_object_from( CCONTAINER &aDstContainer,
-                                const COBJECT2D *aObject2D,
-                                float aZMin, float aZMax,
-                                const CMATERIAL *aMaterial,
-                                const SFVEC3F &aObjColor );
+    void create_3d_object_from( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D,
+                                float aZMin, float aZMax, const MATERIAL* aMaterial,
+                                const SFVEC3F& aObjColor );
 
     void add_3D_vias_and_pads_to_container();
     void insert3DViaHole( const VIA* aVia );
     void insert3DPadHole( const PAD* aPad );
-    void load_3D_models( CCONTAINER &aDstContainer, bool aSkipMaterialInformation );
-    void add_3D_models( CCONTAINER &aDstContainer,
-                        const S3DMODEL *a3DModel,
-                        const glm::mat4 &aModelMatrix,
-                        float aFPOpacity,
-                        bool aSkipMaterialInformation,
-                        BOARD_ITEM *aBoardItem );
+    void load_3D_models( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation );
+    void add_3D_models( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
+                        const glm::mat4& aModelMatrix, float aFPOpacity,
+                        bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem );
 
-    MODEL_MATERIALS *get_3D_model_material( const S3DMODEL *a3DModel );
+    MODEL_MATERIALS* get_3D_model_material( const S3DMODEL* a3DModel );
 
     void initialize_block_positions();
 
     void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
-    void render_preview( GLubyte *ptrPBO );
+    void render_preview( GLubyte* ptrPBO );
 
     struct
     {
-        CBLINN_PHONG_MATERIAL m_Paste;
-        CBLINN_PHONG_MATERIAL m_SilkS;
-        CBLINN_PHONG_MATERIAL m_SolderMask;
-        CBLINN_PHONG_MATERIAL m_EpoxyBoard;
-        CBLINN_PHONG_MATERIAL m_Copper;
-        CBLINN_PHONG_MATERIAL m_NonPlatedCopper;
-        CBLINN_PHONG_MATERIAL m_Floor;
+        BLINN_PHONG_MATERIAL m_Paste;
+        BLINN_PHONG_MATERIAL m_SilkS;
+        BLINN_PHONG_MATERIAL m_SolderMask;
+        BLINN_PHONG_MATERIAL m_EpoxyBoard;
+        BLINN_PHONG_MATERIAL m_Copper;
+        BLINN_PHONG_MATERIAL m_NonPlatedCopper;
+        BLINN_PHONG_MATERIAL m_Floor;
     } m_materials;
 
-    CBOARDNORMAL        m_board_normal_perturbator;
-    CCOPPERNORMAL       m_copper_normal_perturbator;
-    CPLATEDCOPPERNORMAL m_platedcopper_normal_perturbator;
-    CSOLDERMASKNORMAL   m_solder_mask_normal_perturbator;
-    CPLASTICNORMAL      m_plastic_normal_perturbator;
-    CPLASTICSHINENORMAL m_plastic_shine_normal_perturbator;
-    CMETALBRUSHEDNORMAL m_brushed_metal_normal_perturbator;
-    CSILKSCREENNORMAL   m_silkscreen_normal_perturbator;
+    BOARD_NORMAL         m_board_normal_perturbator;
+    COPPER_NORMAL        m_copper_normal_perturbator;
+    PLATED_COPPER_NORMAL m_platedcopper_normal_perturbator;
+    SOLDER_MASK_NORMAL   m_solder_mask_normal_perturbator;
+    PLASTIC_NORMAL       m_plastic_normal_perturbator;
+    PLASTIC_SHINE_NORMAL m_plastic_shine_normal_perturbator;
+    BRUSHED_METAL_NORMAL m_brushed_metal_normal_perturbator;
+    SILK_SCREEN_NORMAL   m_silkscreen_normal_perturbator;
 
     bool m_isPreview;
 
@@ -176,27 +160,27 @@ private:
     /// Save the number of blocks progress of the render
     size_t m_nrBlocksRenderProgress;
 
-    CPOSTSHADER_SSAO m_postshader_ssao;
+    POST_SHADER_SSAO m_postshader_ssao;
 
-    CLIGHTCONTAINER m_lights;
+    LIGHT_SOURCES m_lights;
 
-    CDIRECTIONALLIGHT *m_camera_light;
+    DIRECTIONAL_LIGHT* m_camera_light;
 
     bool m_opengl_support_vertex_buffer_object;
 
     GLuint m_pboId;
     GLuint m_pboDataSize;
 
-    CCONTAINER m_object_container;
+    CONTAINER_3D m_object_container;
 
     /// This will store the list of created objects special for RT,
     /// that will be clear in the end
-    CCONTAINER2D m_containerWithObjectsToDelete;
+    CONTAINER_2D m_containerWithObjectsToDelete;
 
-    CCONTAINER2D *m_outlineBoard2dObjects;
-    CBVHCONTAINER2D *m_antioutlineBoard2dObjects;
+    CONTAINER_2D* m_outlineBoard2dObjects;
+    BVH_CONTAINER_2D* m_antioutlineBoard2dObjects;
 
-    CGENERICACCELERATOR *m_accelerator;
+    ACCELERATOR_3D* m_accelerator;
 
     SFVEC3F m_BgColorTop_LinearRGB;
     SFVEC3F m_BgColorBot_LinearRGB;
@@ -218,9 +202,9 @@ private:
     SFVEC2UI m_realBufferSize;
     SFVEC2UI m_fastPreviewModeSize;
 
-    HITINFO_PACKET *m_firstHitinfo;
+    HITINFO_PACKET* m_firstHitinfo;
 
-    SFVEC3F *m_shaderBuffer;
+    SFVEC3F* m_shaderBuffer;
 
     // Display Offset
     unsigned int m_xoffset;
@@ -237,9 +221,9 @@ private:
 #define USE_SRGB_SPACE
 
 #ifdef USE_SRGB_SPACE
-extern SFVEC3F ConvertSRGBToLinear( const SFVEC3F &aSRGBcolor );
+extern SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor );
 #else
-#define ConvertSRGBToLinear(v) (v)
+#define ConvertSRGBToLinear( v ) ( v )
 #endif
 
-#endif // C3D_RENDER_RAYTRACING_H
+#endif // RENDER_3D_RAYTRACE_H

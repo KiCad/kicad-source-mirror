@@ -27,8 +27,8 @@
  * @brief Declaration of the cogl_att_list class
  */
 
-#ifndef _COGL_ATT_LIST_H
-#define _COGL_ATT_LIST_H
+#ifndef _OGL_ATT_LIST_H
+#define _OGL_ATT_LIST_H
 
 /// Anti-aliasing options
 enum class ANTIALIASING_MODE
@@ -40,20 +40,20 @@ enum class ANTIALIASING_MODE
 };
 
 /**
- *  Class COGL_ATT_LIST
- *  Helper class to create an attribute list
+ *  Helper class to create an attribute list.
  */
-class COGL_ATT_LIST
+class OGL_ATT_LIST
 {
 
 public:
     /**
-     *  Get a list of attributes to pass to wxGLCanvas
+     *  Get a list of attributes to pass to wxGLCanvas.
+     *
      *  @param aAntiAliasingMode = 0 - disabled; try to initialize (if is supported) the
      *  list with anti aliasing capabilities
      *  @return a list of options to be passed in the creation of a EDA_3D_CANVAS class
      */
-    static const int *GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode );
+    static const int* GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode );
 
 private:
     /**
@@ -70,9 +70,9 @@ private:
     static const int m_openGL_attributes_list[];
 
     /**
-     * Attributes list that was (eventualy) changed and are passed to creation
+     * Attributes list that was (eventually) changed and are passed to creation.
      */
     static int m_openGL_attributes_list_to_use[];
 };
 
-#endif // _COGL_ATT_LIST_H
+#endif // _OGL_ATT_LIST_H

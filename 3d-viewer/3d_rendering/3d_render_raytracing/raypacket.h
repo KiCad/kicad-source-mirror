@@ -35,34 +35,33 @@
 #include "../ccamera.h"
 
 #define RAYPACKET_DIM (1 << 3)
-#define RAYPACKET_MASK    (unsigned int)( (RAYPACKET_DIM - 1))
-#define RAYPACKET_INVMASK (unsigned int)(~(RAYPACKET_DIM - 1))
-#define RAYPACKET_RAYS_PER_PACKET (RAYPACKET_DIM * RAYPACKET_DIM)
+#define RAYPACKET_MASK (unsigned int) ( ( RAYPACKET_DIM - 1 ) )
+#define RAYPACKET_INVMASK (unsigned int) ( ~( RAYPACKET_DIM - 1 ) )
+#define RAYPACKET_RAYS_PER_PACKET ( RAYPACKET_DIM * RAYPACKET_DIM )
 
 
 struct RAYPACKET
 {
-    RAYPACKET( const CCAMERA& aCamera, const SFVEC2I& aWindowsPosition );
+    RAYPACKET( const CAMERA& aCamera, const SFVEC2I& aWindowsPosition );
 
-    RAYPACKET( const CCAMERA& aCamera, const SFVEC2I& aWindowsPosition,
+    RAYPACKET( const CAMERA& aCamera, const SFVEC2I& aWindowsPosition,
                const SFVEC3F& aDirectionDisplacementFactor );
 
-    RAYPACKET( const CCAMERA& aCamera, const SFVEC2I& aWindowsPosition,
+    RAYPACKET( const CAMERA& aCamera, const SFVEC2I& aWindowsPosition,
                unsigned int aPixelMultiple );
 
-    RAYPACKET( const CCAMERA& aCamera, const SFVEC2F& aWindowsPosition );
+    RAYPACKET( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition );
 
-    RAYPACKET( const CCAMERA& aCamera, const SFVEC2F& aWindowsPosition,
+    RAYPACKET( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition,
                const SFVEC2F& a2DWindowsPosDisplacementFactor );
 
-    CFRUSTUM    m_Frustum;
+    FRUSTUM     m_Frustum;
     RAY         m_ray[RAYPACKET_RAYS_PER_PACKET];
 };
 
-void RAYPACKET_InitRays( const CCAMERA& aCamera, const SFVEC2F& aWindowsPosition, RAY* aRayPck );
+void RAYPACKET_InitRays( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition, RAY* aRayPck );
 
-void RAYPACKET_InitRays_with2DDisplacement( const CCAMERA& aCamera,
-                                            const SFVEC2F& aWindowsPosition,
+void RAYPACKET_InitRays_with2DDisplacement( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition,
                                             const SFVEC2F& a2DWindowsPosDisplacementFactor,
                                             RAY* aRayPck );
 

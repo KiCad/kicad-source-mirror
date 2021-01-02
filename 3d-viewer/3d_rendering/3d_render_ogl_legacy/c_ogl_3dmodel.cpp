@@ -39,14 +39,15 @@
 
 
 /*
- * Flag to enable connectivity profiling
+ * Flag to enable connectivity profiling.
+ *
  * @ingroup trace_env_vars
  */
-const wxChar * C_OGL_3DMODEL::m_logTrace = wxT( "KI_TRACE_EDA_OGL_3DMODEL" );
+const wxChar* MODEL_3D::m_logTrace = wxT( "KI_TRACE_EDA_OGL_3DMODEL" );
 
 
-void C_OGL_3DMODEL::MakeBbox( const CBBOX &aBox, unsigned int aIdxOffset, VERTEX *aVtxOut,
-                              GLuint *aIdxOut, const glm::vec4 &aColor )
+void MODEL_3D::MakeBbox( const BBOX_3D& aBox, unsigned int aIdxOffset, VERTEX* aVtxOut,
+                         GLuint* aIdxOut, const glm::vec4& aColor )
 {
     aVtxOut[0].m_pos = { aBox.Min().x, aBox.Min().y, aBox.Min().z };
     aVtxOut[1].m_pos = { aBox.Max().x, aBox.Min().y, aBox.Min().z };
@@ -84,9 +85,9 @@ void C_OGL_3DMODEL::MakeBbox( const CBBOX &aBox, unsigned int aIdxOffset, VERTEX
 }
 
 
-C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialMode )
+MODEL_3D::MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode )
 {
-    wxLogTrace( m_logTrace, wxT( "C_OGL_3DMODEL::C_OGL_3DMODEL %u meshes %u materials" ),
+    wxLogTrace( m_logTrace, wxT( "MODEL_3D::MODEL_3D %u meshes %u materials" ),
                 static_cast<unsigned int>( a3DModel.m_MeshesSize ),
                 static_cast<unsigned int>( a3DModel.m_MaterialsSize ) );
 
@@ -101,11 +102,10 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialM
     m_material_mode = aMaterialMode;
 
     if( a3DModel.m_Materials == nullptr || a3DModel.m_Meshes == nullptr
-        || a3DModel.m_MaterialsSize == 0 || a3DModel.m_MeshesSize == 0 )
+      || a3DModel.m_MaterialsSize == 0 || a3DModel.m_MeshesSize == 0 )
         return;
 
-    // create empty bbox for each mesh.  it will be updated when the vertices
-    // are copied.
+    // create empty bbox for each mesh.  it will be updated when the vertices are copied.
     m_meshes_bbox.resize( a3DModel.m_MeshesSize );
 
     // copy materials for later use during rendering.
@@ -138,11 +138,11 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialM
         // silently ignore meshes that have invalid material references
         // or invalid geometry.
         if( mesh.m_MaterialIdx >= m_materials.size()
-            || mesh.m_Positions == nullptr
-            || mesh.m_FaceIdx == nullptr
-            || mesh.m_Normals == nullptr
-            || mesh.m_FaceIdxSize == 0
-            || mesh.m_VertexSize == 0 )
+          || mesh.m_Positions == nullptr
+          || mesh.m_FaceIdx == nullptr
+          || mesh.m_Normals == nullptr
+          || mesh.m_FaceIdxSize == 0
+          || mesh.m_VertexSize == 0 )
           continue;
 
         auto& mesh_group = mesh_groups[mesh.m_MaterialIdx];
@@ -185,8 +185,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialM
 
               vtx_out.m_cad_color =
                   glm::clamp( glm::vec4( MaterialDiffuseToColorCAD( mesh.m_Color[vtx_i] ),
-                                         1 ) * 255.0f,
-                              0.0f, 255.0f );
+                                         1 ) * 255.0f, 0.0f, 255.0f );
             }
             else
             {
@@ -343,9 +342,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialM
                 *idx_out++ = static_cast<GLuint>( idx + prev_vtx_count );
         }
 
-        glBufferSubData( GL_ARRAY_BUFFER,
-                         vtx_offset,
-                         mg.m_vertices.size() * sizeof( VERTEX ),
+        glBufferSubData( GL_ARRAY_BUFFER, vtx_offset, mg.m_vertices.size() * sizeof( VERTEX ),
                          mg.m_vertices.data() );
 
         mat.m_render_idx_buffer_offset = idx_offset;
@@ -358,8 +355,8 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialM
 
     glGenBuffers( 1, &m_index_buffer );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_index_buffer );
-    glBufferData( GL_ELEMENT_ARRAY_BUFFER, idx_size * total_index_count,
-                  tmp_idx.get(), GL_STATIC_DRAW );
+    glBufferData( GL_ELEMENT_ARRAY_BUFFER, idx_size * total_index_count, tmp_idx.get(),
+                  GL_STATIC_DRAW );
 
     glBindBuffer( GL_ARRAY_BUFFER, 0 );
     glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
@@ -372,7 +369,7 @@ C_OGL_3DMODEL::C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialM
 }
 
 
-void C_OGL_3DMODEL::BeginDrawMulti( bool aUseColorInformation )
+void MODEL_3D::BeginDrawMulti( bool aUseColorInformation )
 {
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_NORMAL_ARRAY );
@@ -388,7 +385,7 @@ void C_OGL_3DMODEL::BeginDrawMulti( bool aUseColorInformation )
 }
 
 
-void C_OGL_3DMODEL::EndDrawMulti()
+void MODEL_3D::EndDrawMulti()
 {
     glDisable( GL_COLOR_MATERIAL );
     glDisableClientState( GL_VERTEX_ARRAY );
@@ -401,8 +398,8 @@ void C_OGL_3DMODEL::EndDrawMulti()
 }
 
 
-void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
-                          SFVEC3F aSelectionColor ) const
+void MODEL_3D::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
+                     SFVEC3F aSelectionColor ) const
 {
     if( aOpacity <= FLT_EPSILON )
         return;
@@ -462,7 +459,7 @@ void C_OGL_3DMODEL::Draw( bool aTransparent, float aOpacity, bool aUseSelectedMa
 }
 
 
-C_OGL_3DMODEL::~C_OGL_3DMODEL()
+MODEL_3D::~MODEL_3D()
 {
     if( glDeleteBuffers )
     {
@@ -474,7 +471,7 @@ C_OGL_3DMODEL::~C_OGL_3DMODEL()
 }
 
 
-void C_OGL_3DMODEL::Draw_bbox() const
+void MODEL_3D::Draw_bbox() const
 {
     if( !glBindBuffer )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to draw bbox" );
@@ -493,7 +490,7 @@ void C_OGL_3DMODEL::Draw_bbox() const
 }
 
 
-void C_OGL_3DMODEL::Draw_bboxes() const
+void MODEL_3D::Draw_bboxes() const
 {
     if( !glBindBuffer )
         throw std::runtime_error( "The OpenGL context no longer exists: unable to draw bboxes" );

@@ -25,48 +25,46 @@
 
 /**
  * @file  ctriangle.h
- * @brief Implements a triangle ray intersection based on article
+ * @brief Implement a triangle ray intersection based on article
  * http://www.flipcode.com/archives/Raytracing_Topics_Techniques-Part_7_Kd-Trees_and_More_Speed.shtml
  * by Jacco Bikker, that implement optimizations based on Ingo Wald's thesis.
  */
 
 
-#ifndef _CTRIANGLE_H_
-#define _CTRIANGLE_H_
+#ifndef _TRIANGLE_H_
+#define _TRIANGLE_H_
 
 #include "cobject.h"
 
 /**
- * A triangle object
+ * A triangle object.
  */
-class CTRIANGLE : public COBJECT
+class TRIANGLE : public OBJECT_3D
 {
 public:
-    CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3 );
+    TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 );
 
-    CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3,
-               const SFVEC3F &aFaceNormal );
+    TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
+              const SFVEC3F& aFaceNormal );
 
-    CTRIANGLE( const SFVEC3F &aV1, const SFVEC3F &aV2, const SFVEC3F &aV3,
-               const SFVEC3F &aN1, const SFVEC3F &aN2, const SFVEC3F &aN3 );
+    TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
+              const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3 );
 
-    void SetColor( const SFVEC3F &aColor );
+    void SetColor( const SFVEC3F& aColor );
 
-    void SetColor( const SFVEC3F &aVC0, const SFVEC3F &aVC1, const SFVEC3F &aVC2 );
+    void SetColor( const SFVEC3F& aVC0, const SFVEC3F& aVC1, const SFVEC3F& aVC2 );
 
     void SetColor( unsigned int aFaceColorRGBA );
 
-    void SetColor( unsigned int aVertex1ColorRGBA,
-                   unsigned int aVertex2ColorRGBA,
+    void SetColor( unsigned int aVertex1ColorRGBA, unsigned int aVertex2ColorRGBA,
                    unsigned int aVertex3ColorRGBA );
 
-    void SetUV( const SFVEC2F &aUV1, const SFVEC2F &aUV2, const SFVEC2F &aUV3 );
+    void SetUV( const SFVEC2F& aUV1, const SFVEC2F& aUV2, const SFVEC2F& aUV3 );
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
-    bool Intersects( const CBBOX &aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP(const RAY& aRay, float aMaxDistance ) const override;
+    bool Intersects( const BBOX_3D& aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
 
 private:
     void pre_calc_const();
@@ -83,4 +81,4 @@ private:
                                         // 152 bytes (max 160 == 5 * 32)
 };
 
-#endif // _CTRIANGLE_H_
+#endif // _TRIANGLE_H_

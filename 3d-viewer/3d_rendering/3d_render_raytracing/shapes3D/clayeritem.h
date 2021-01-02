@@ -27,31 +27,31 @@
  * @brief
  */
 
-#ifndef _CLAYERITEM_H_
-#define _CLAYERITEM_H_
+#ifndef _LAYER_ITEM_H_
+#define _LAYER_ITEM_H_
 
 #include "cobject.h"
 #include "../shapes2D/cobject2d.h"
 
 
-class  CLAYERITEM : public COBJECT
+class LAYER_ITEM : public OBJECT_3D
 {
 public:
-    CLAYERITEM( const COBJECT2D *aObject2D, float aZMin, float aZMax );
+    LAYER_ITEM( const OBJECT_2D* aObject2D, float aZMin, float aZMax );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
-    bool Intersects( const CBBOX &aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+    // Imported from OBJECT_3D
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP(const RAY& aRay , float aMaxDistance ) const override;
+    bool Intersects( const BBOX_3D& aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
 
 protected:
-    const COBJECT2D *m_object2d;
+    const OBJECT_2D* m_object2d;
 
 private:
     SFVEC3F m_diffusecolor;
 };
 
-#endif // _CLAYERITEM_H_
+#endif // _LAYER_ITEM_H_

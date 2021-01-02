@@ -34,37 +34,40 @@
 #include "../3d_render_raytracing/shapes2D/croundsegment2d.h"
 
 /**
- * @brief OGL_draw_arrow - draw a round arrow
- * @param aPosition: start position of the arrow
- * @param aTargetPos: end position of the arror
- * @param aSize: diameter size
+ * Draw a round arrow.
+ *
+ * @param aPosition is the start position of the arrow.
+ * @param aTargetPos is the end position of the arrow.
+ * @param aSize is the diameter of the arrow.
  */
-void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize );
+void DrawRoundArrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize );
 
 
 /**
- * @brief OGL_draw_bbox - draw the bounding box lines
- * @param aBBox is the box to draw
+ * Draw the bounding box lines.
+ *
+ * @param aBBox is the box to draw.
  */
-void OGL_draw_bbox( const CBBOX &aBBox );
+void DrawBoundingBox( const BBOX_3D& aBBox );
 
 
 /**
- * @brief OGL_draw_half_open_cylinder - draws an open half cylinder
- * with diameter 1.0f and Height 1.0f
- * the bottom center is at (0,0,0) and top center is at (0,0,1)
+ * Draw a half open cylinder with diameter 1.0f and height 1.0f.
+ *
+ * The bottom center is at (0,0,0) and top center is at (0,0,1).
+ *
  * @param aNrSidesPerCircle is the number of segments to approximate a circle.
  */
-void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle );
+void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle );
 
 
 /**
- * @brief OGL_Draw_segment draws a thick segment with rounded ends
+ * Draw a thick line segment with rounded ends.
+ *
  * @param aSegment is the thick segment to draw
- * @param aNrSidesPerCircle is the number of segments to approximate a circle.
- * used to draw the rounded ends of the segment
+ * @param aNrSidesPerCircle is the number of segments to approximate the circle used to draw
+ *                          the rounded ends of the segment.
  */
-void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
-                       unsigned int aNrSidesPerCircle );
+void DrawSegment( const ROUND_SEGMENT_2D& aSegment, unsigned int aNrSidesPerCircle );
 
 #endif // OGL_LEGACY_UTILS_H_

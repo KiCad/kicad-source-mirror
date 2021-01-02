@@ -103,7 +103,7 @@ public:
     void Redraw();
 
     BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
-    CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
+    CAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
     EDA_3D_CANVAS* GetCanvas()  { return m_canvas; }
 
@@ -218,8 +218,8 @@ private:
     ACTION_TOOLBAR*  m_mainToolBar;
     EDA_3D_CANVAS*   m_canvas;
     BOARD_ADAPTER    m_boardAdapter;
-    CCAMERA&         m_currentCamera;
-    CTRACK_BALL      m_trackBallCamera;
+    CAMERA&          m_currentCamera;
+    TRACK_BALL       m_trackBallCamera;
 
     bool             m_disable_ray_tracing;
 

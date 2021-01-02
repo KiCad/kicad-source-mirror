@@ -35,20 +35,18 @@
 #include <wx/debug.h>
 
 
-CGENERICCONTAINER2D::CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType )
+CONTAINER_2D_BASE::CONTAINER_2D_BASE( OBJECT_2D_TYPE aObjType )
 {
     m_bbox.Reset();
 }
 
 
-void CGENERICCONTAINER2D::Clear()
+void CONTAINER_2D_BASE::Clear()
 {
     std::lock_guard<std::mutex> lock( m_lock );
     m_bbox.Reset();
 
-    for( LIST_OBJECT2D::iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ++ii )
+    for( LIST_OBJECT2D::iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
         delete *ii;
     }
@@ -57,196 +55,51 @@ void CGENERICCONTAINER2D::Clear()
 }
 
 
-CGENERICCONTAINER2D::~CGENERICCONTAINER2D()
+CONTAINER_2D_BASE::~CONTAINER_2D_BASE()
 {
     Clear();
 }
 
 
-CCONTAINER2D::CCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::CONTAINER )
+CONTAINER_2D::CONTAINER_2D() : CONTAINER_2D_BASE( OBJECT_2D_TYPE::CONTAINER )
 {
 
 }
 
 
-/// @todo Determine what to do with this commented out code.
-/*
-
-bool CCONTAINER2D::Intersects( const CBBOX2D &aBBox ) const
-{
-    return false;
-}
-
-
-bool CCONTAINER2D::Overlaps( const CBBOX2D &aBBox ) const
-{
-    // NOT IMPLEMENTED
-    return false;
-}
-
-
-bool CCONTAINER2D::Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const
-{
-    if( !m_bbox.Intersect( aSegRay ) )
-        return false;
-
-    bool hitted = false;
-
-    for( LIST_OBJECT2D::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ii++ )
-    {
-        const COBJECT2D *object = static_cast<const COBJECT2D *>(*ii);
-
-        float t;
-        SFVEC2F hitNormal;
-        if( object->Intersect( aSegRay, &t, &hitNormal ) )
-            if( (hitted == false) || (t < *aOutT ) )
-            {
-                hitted = true;
-                *aOutT = t;
-                *aNormalOut = hitNormal;
-            }
-    }
-
-    return hitted;
-}
-
-
-INTERSECTION_RESULT CCONTAINER2D::IsBBoxInside( const CBBOX2D &aBBox ) const
-{
-    return INTERSECTION_RESULT::MISSES;
-}
-
-
-bool CCONTAINER2D::IsPointInside( const SFVEC2F &aPoint ) const
-{
-    if( !m_bbox.Inside( aPoint ) )
-        return false;
-
-    for( LIST_OBJECT2D::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ii++ )
-    {
-        const COBJECT2D *object = static_cast<const COBJECT2D *>(*ii);
-
-        if( object->IsPointInside( aPoint ) )
-            return true;
-    }
-
-    return false;
-}
-
-*/
-
-void CCONTAINER2D::GetListObjectsIntersects( const CBBOX2D & aBBox,
-                                             CONST_LIST_OBJECT2D &aOutList ) const
+void CONTAINER_2D::GetListObjectsIntersects( const BBOX_2D& aBBox,
+                                             CONST_LIST_OBJECT2D& aOutList ) const
 {
     /// @todo Determine what to do with this code.
 }
 
 
-bool CCONTAINER2D::IntersectAny( const RAYSEG2D &aSegRay ) const
+bool CONTAINER_2D::IntersectAny( const RAYSEG2D& aSegRay ) const
 {
     /// @todo Determine what what needs done because someone wrote TODO here.
     return false;
 }
 
 
-CBVHCONTAINER2D::CBVHCONTAINER2D() : CGENERICCONTAINER2D( OBJECT2D_TYPE::BVHCONTAINER )
+BVH_CONTAINER_2D::BVH_CONTAINER_2D() : CONTAINER_2D_BASE( OBJECT_2D_TYPE::BVHCONTAINER )
 {
     m_isInitialized = false;
     m_bbox.Reset();
     m_elements_to_delete.clear();
-    m_Tree = NULL;
+    m_Tree = nullptr;
 }
 
 
-/// @todo Determine what to do with this commented out code.
-/*
-bool CBVHCONTAINER2D::Intersects( const CBBOX2D &aBBox ) const
+void BVH_CONTAINER_2D::Clear()
 {
-    // !TODO: implement the BVH
-    return m_bbox.Intersects( aBBox );
-}
-
-
-bool CBVHCONTAINER2D::Overlaps( const CBBOX2D &aBBox ) const
-{
-    // NOT IMPLEMENTED
-    return false;
-}
-
-
-bool CBVHCONTAINER2D::Intersect( const RAYSEG2D &aSegRay,
-                                 float *aOutT, SFVEC2F *aNormalOut ) const
-{
-    // !TODO: implement the BVH
-
-    if( !m_bbox.Intersect( aSegRay ) )
-        return false;
-
-    bool hitted = false;
-
-    for( LIST_OBJECT2D::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ii++ )
-    {
-        const COBJECT2D *object = static_cast<const COBJECT2D *>(*ii);
-
-        float t;
-        SFVEC2F hitNormal;
-        if( object->Intersect( aSegRay, &t, &hitNormal ) )
-            if( (hitted == false) || (t < *aOutT ) )
-            {
-                hitted = true;
-                *aOutT = t;
-                *aNormalOut = hitNormal;
-            }
-    }
-
-    return hitted;
-}
-
-
-INTERSECTION_RESULT CBVHCONTAINER2D::IsBBoxInside( const CBBOX2D &aBBox ) const
-{
-    return INTR_MISSES;
-}
-
-
-bool CBVHCONTAINER2D::IsPointInside( const SFVEC2F &aPoint ) const
-{
-    // !TODO: implement the BVH
-
-    if( !m_bbox.Inside( aPoint ) )
-        return false;
-
-    for( LIST_OBJECT2D::const_iterator ii = m_objects.begin();
-         ii != m_objects.end();
-         ii++ )
-    {
-        const COBJECT2D *object = static_cast<const COBJECT2D *>(*ii);
-
-        if( object->IsPointInside( aPoint ) )
-            return true;
-    }
-
-    return false;
-}
-*/
-
-
-void CBVHCONTAINER2D::Clear()
-{
-    CGENERICCONTAINER2D::Clear();
+    CONTAINER_2D_BASE::Clear();
     destroy();
 }
 
 
-void CBVHCONTAINER2D::destroy()
+void BVH_CONTAINER_2D::destroy()
 {
-    for( std::list<BVH_CONTAINER_NODE_2D *>::iterator ii = m_elements_to_delete.begin();
+    for( std::list<BVH_CONTAINER_NODE_2D*>::iterator ii = m_elements_to_delete.begin();
          ii != m_elements_to_delete.end();
          ++ii )
     {
@@ -259,7 +112,7 @@ void CBVHCONTAINER2D::destroy()
 }
 
 
-CBVHCONTAINER2D::~CBVHCONTAINER2D()
+BVH_CONTAINER_2D::~BVH_CONTAINER_2D()
 {
     destroy();
 }
@@ -268,7 +121,7 @@ CBVHCONTAINER2D::~CBVHCONTAINER2D()
 #define BVH_CONTAINER2D_MAX_OBJ_PER_LEAF 4
 
 
-void CBVHCONTAINER2D::BuildBVH()
+void BVH_CONTAINER_2D::BuildBVH()
 {
     if( m_isInitialized )
         destroy();
@@ -287,7 +140,7 @@ void CBVHCONTAINER2D::BuildBVH()
 
     for( LIST_OBJECT2D::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
-        m_Tree->m_LeafList.push_back( static_cast<const COBJECT2D *>( *ii ) );
+        m_Tree->m_LeafList.push_back( static_cast<const OBJECT_2D*>( *ii ) );
     }
 
     recursiveBuild_MIDDLE_SPLIT( m_Tree );
@@ -301,35 +154,35 @@ void CBVHCONTAINER2D::BuildBVH()
 // "Split in the middle of the longest Axis"
 // "Creates a binary tree with Top-Down approach.
 //  Fastest BVH building, but least [speed] accuracy."
-static bool sortByCentroid_X( const COBJECT2D *a, const COBJECT2D *b )
+static bool sortByCentroid_X( const OBJECT_2D* a, const OBJECT_2D* b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
 
 
-static bool sortByCentroid_Y( const COBJECT2D *a, const COBJECT2D *b )
+static bool sortByCentroid_Y( const OBJECT_2D* a, const OBJECT_2D* b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
 
 
-static bool sortByCentroid_Z( const COBJECT2D *a, const COBJECT2D *b )
+static bool sortByCentroid_Z( const OBJECT_2D* a, const OBJECT_2D* b )
 {
     return a->GetCentroid()[0] < b->GetCentroid()[0];
 }
 
 
-void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeParent )
+void BVH_CONTAINER_2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D* aNodeParent )
 {
-    wxASSERT( aNodeParent != NULL );
+    wxASSERT( aNodeParent != nullptr );
     wxASSERT( aNodeParent->m_BBox.IsInitialized() == true );
     wxASSERT( aNodeParent->m_LeafList.size() > 0 );
 
     if( aNodeParent->m_LeafList.size() > BVH_CONTAINER2D_MAX_OBJ_PER_LEAF )
     {
         // Create Leaf Nodes
-        BVH_CONTAINER_NODE_2D *leftNode  = new BVH_CONTAINER_NODE_2D;
-        BVH_CONTAINER_NODE_2D *rightNode = new BVH_CONTAINER_NODE_2D;
+        BVH_CONTAINER_NODE_2D* leftNode  = new BVH_CONTAINER_NODE_2D;
+        BVH_CONTAINER_NODE_2D* rightNode = new BVH_CONTAINER_NODE_2D;
         m_elements_to_delete.push_back( leftNode );
         m_elements_to_delete.push_back( rightNode );
 
@@ -355,7 +208,7 @@ void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeP
              ii != aNodeParent->m_LeafList.end();
              ++ii )
         {
-            const COBJECT2D *object = static_cast<const COBJECT2D *>(*ii);
+            const OBJECT_2D* object = static_cast<const OBJECT_2D*>( *ii );
 
             if( i < (aNodeParent->m_LeafList.size() / 2 ) )
             {
@@ -388,16 +241,16 @@ void CBVHCONTAINER2D::recursiveBuild_MIDDLE_SPLIT( BVH_CONTAINER_NODE_2D *aNodeP
     else
     {
         // It is a Leaf
-        aNodeParent->m_Children[0] = NULL;
-        aNodeParent->m_Children[1] = NULL;
+        aNodeParent->m_Children[0] = nullptr;
+        aNodeParent->m_Children[1] = nullptr;
     }
 
-    wxASSERT( aNodeParent != NULL );
+    wxASSERT( aNodeParent != nullptr );
     wxASSERT( aNodeParent->m_BBox.IsInitialized() == true );
 }
 
 
-bool CBVHCONTAINER2D::IntersectAny( const RAYSEG2D &aSegRay ) const
+bool BVH_CONTAINER_2D::IntersectAny( const RAYSEG2D& aSegRay ) const
 {
     wxASSERT( m_isInitialized == true );
 
@@ -408,22 +261,21 @@ bool CBVHCONTAINER2D::IntersectAny( const RAYSEG2D &aSegRay ) const
 }
 
 
-bool CBVHCONTAINER2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
-                                             const RAYSEG2D &aSegRay ) const
+bool BVH_CONTAINER_2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D* aNode,
+                                              const RAYSEG2D& aSegRay ) const
 {
-    wxASSERT( aNode != NULL );
+    wxASSERT( aNode != nullptr );
 
-    if( aNode->m_BBox.Inside( aSegRay.m_Start ) ||
-        aNode->m_BBox.Inside( aSegRay.m_End ) ||
+    if( aNode->m_BBox.Inside( aSegRay.m_Start ) || aNode->m_BBox.Inside( aSegRay.m_End ) ||
         aNode->m_BBox.Intersect( aSegRay ) )
     {
         if( !aNode->m_LeafList.empty() )
         {
-            wxASSERT( aNode->m_Children[0] == NULL );
-            wxASSERT( aNode->m_Children[1] == NULL );
+            wxASSERT( aNode->m_Children[0] == nullptr );
+            wxASSERT( aNode->m_Children[1] == nullptr );
 
             // Leaf
-            for( const COBJECT2D *obj : aNode->m_LeafList )
+            for( const OBJECT_2D* obj : aNode->m_LeafList )
             {
                 if( obj->IsPointInside( aSegRay.m_Start ) ||
                     obj->IsPointInside( aSegRay.m_End ) ||
@@ -433,8 +285,8 @@ bool CBVHCONTAINER2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
         }
         else
         {
-            wxASSERT( aNode->m_Children[0] != NULL );
-            wxASSERT( aNode->m_Children[1] != NULL );
+            wxASSERT( aNode->m_Children[0] != nullptr );
+            wxASSERT( aNode->m_Children[1] != nullptr );
 
             // Node
             if( recursiveIntersectAny( aNode->m_Children[0], aSegRay ) )
@@ -448,8 +300,8 @@ bool CBVHCONTAINER2D::recursiveIntersectAny( const BVH_CONTAINER_NODE_2D *aNode,
 }
 
 
-void CBVHCONTAINER2D::GetListObjectsIntersects( const CBBOX2D &aBBox,
-                                                CONST_LIST_OBJECT2D &aOutList ) const
+void BVH_CONTAINER_2D::GetListObjectsIntersects( const BBOX_2D& aBBox,
+                                                 CONST_LIST_OBJECT2D& aOutList ) const
 {
     wxASSERT( aBBox.IsInitialized() == true );
     wxASSERT( m_isInitialized == true );
@@ -461,26 +313,26 @@ void CBVHCONTAINER2D::GetListObjectsIntersects( const CBBOX2D &aBBox,
 }
 
 
-void CBVHCONTAINER2D::recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D *aNode,
-                                                         const CBBOX2D & aBBox,
-                                                         CONST_LIST_OBJECT2D &aOutList ) const
+void BVH_CONTAINER_2D::recursiveGetListObjectsIntersects( const BVH_CONTAINER_NODE_2D* aNode,
+                                                          const BBOX_2D& aBBox,
+                                                          CONST_LIST_OBJECT2D& aOutList ) const
 {
-    wxASSERT( aNode != NULL );
+    wxASSERT( aNode != nullptr );
     wxASSERT( aBBox.IsInitialized() == true );
 
     if( aNode->m_BBox.Intersects( aBBox ) )
     {
         if( !aNode->m_LeafList.empty() )
         {
-            wxASSERT( aNode->m_Children[0] == NULL );
-            wxASSERT( aNode->m_Children[1] == NULL );
+            wxASSERT( aNode->m_Children[0] == nullptr );
+            wxASSERT( aNode->m_Children[1] == nullptr );
 
             // Leaf
             for( CONST_LIST_OBJECT2D::const_iterator ii = aNode->m_LeafList.begin();
                  ii != aNode->m_LeafList.end();
                  ++ii )
             {
-                const COBJECT2D *obj = static_cast<const COBJECT2D *>(*ii);
+                const OBJECT_2D* obj = static_cast<const OBJECT_2D*>( *ii );
 
                 if( obj->Intersects( aBBox ) )
                     aOutList.push_back( obj );
@@ -488,8 +340,8 @@ void CBVHCONTAINER2D::recursiveGetListObjectsIntersects( const BVH_CONTAINER_NOD
         }
         else
         {
-            wxASSERT( aNode->m_Children[0] != NULL );
-            wxASSERT( aNode->m_Children[1] != NULL );
+            wxASSERT( aNode->m_Children[0] != nullptr );
+            wxASSERT( aNode->m_Children[1] != nullptr );
 
             // Node
             recursiveGetListObjectsIntersects( aNode->m_Children[0], aBBox, aOutList );

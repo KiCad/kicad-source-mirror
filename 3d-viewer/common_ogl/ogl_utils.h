@@ -60,7 +60,7 @@ void OGL_SetDiffuseOnlyMaterial( const SFVEC3F& aMaterialDiffuse, float aOpacity
  * @param aImage a image to generate the texture from.
  * @return the OpenGL texture index created.
  */
-GLuint OGL_LoadTexture( const CIMAGE& aImage );
+GLuint OGL_LoadTexture( const IMAGE& aImage );
 
 /**
  * Get the pixel data of current OpenGL image.

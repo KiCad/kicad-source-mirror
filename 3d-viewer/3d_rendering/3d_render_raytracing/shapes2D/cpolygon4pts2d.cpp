@@ -31,24 +31,14 @@
 #include <wx/debug.h>
 
 
-CPOLYGON4PTS2D::CPOLYGON4PTS2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVEC2F& v3,
+POLYGON_4PT_2D::POLYGON_4PT_2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVEC2F& v3,
                                 const SFVEC2F& v4, const BOARD_ITEM& aBoardItem ) :
-        COBJECT2D( OBJECT2D_TYPE::POLYGON4PT, aBoardItem )
-{ /*
-    if( (v1.x > v2.x) || (v1.y < v2.y) )
-    {
-        m_segments[0] = v4;
-        m_segments[1] = v3;
-        m_segments[2] = v2;
-        m_segments[3] = v1;
-    }
-    else
-    {*/
+        OBJECT_2D( OBJECT_2D_TYPE::POLYGON4PT, aBoardItem )
+{
     m_segments[0] = v1;
     m_segments[1] = v4;
     m_segments[2] = v3;
     m_segments[3] = v2;
-    // }
 
     unsigned int i;
     unsigned int j = 4 - 1;
@@ -76,63 +66,20 @@ CPOLYGON4PTS2D::CPOLYGON4PTS2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVE
 }
 
 
-bool CPOLYGON4PTS2D::Intersects( const CBBOX2D& aBBox ) const
+bool POLYGON_4PT_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
-
-    // This source code is not working OK.
-    /*
-    if( !m_bbox.Intersects( aBBox ) )
-        return false;
-
-    // Check if the bounding box complety have inside the small bounding box
-    if( (aBBox.Max().x > m_bbox.Max().x) &&
-        (aBBox.Max().y > m_bbox.Max().x) &&
-        (aBBox.Min().x < m_bbox.Min().x) &&
-        (aBBox.Min().y < m_bbox.Min().y)
-        )
-        return true;
-
-    SFVEC2F v[4];
-
-    v[0] = aBBox.Min();
-    v[1] = SFVEC2F( aBBox.Min().x, aBBox.Max().y );
-    v[2] = aBBox.Max();
-    v[3] = SFVEC2F( aBBox.Max().x, aBBox.Min().y );
-
-    for( unsigned int i = 0; i < 4; i++ )
-    {
-        if( IntersectSegment( m_segments[i], m_precalc_slope[i], v[0], v[1] - v[0] ) )
-            return true;
-        if( IntersectSegment( m_segments[i], m_precalc_slope[i], v[1], v[2] - v[1] ) )
-            return true;
-        if( IntersectSegment( m_segments[i], m_precalc_slope[i], v[2], v[3] - v[2] ) )
-            return true;
-        if( IntersectSegment( m_segments[i], m_precalc_slope[i], v[3], v[0] - v[3] ) )
-            return true;
-    }
-
-    if( IsPointInside( v[0] ) )
-        return true;
-    if( IsPointInside( v[1] ) )
-        return true;
-    if( IsPointInside( v[2] ) )
-        return true;
-    if( IsPointInside( v[3] ) )
-        return true;
-
-    return false;*/
 }
 
 
-bool CPOLYGON4PTS2D::Overlaps( const CBBOX2D& aBBox ) const
+bool POLYGON_4PT_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return true;
 }
 
 
-bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
+bool POLYGON_4PT_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
     bool         hited = false;
     unsigned int hitIndex;
@@ -170,7 +117,7 @@ bool CPOLYGON4PTS2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* 
 }
 
 
-INTERSECTION_RESULT CPOLYGON4PTS2D::IsBBoxInside( const CBBOX2D& aBBox ) const
+INTERSECTION_RESULT POLYGON_4PT_2D::IsBBoxInside( const BBOX_2D& aBBox ) const
 {
     // !TODO:
 
@@ -178,7 +125,7 @@ INTERSECTION_RESULT CPOLYGON4PTS2D::IsBBoxInside( const CBBOX2D& aBBox ) const
 }
 
 
-bool CPOLYGON4PTS2D::IsPointInside( const SFVEC2F& aPoint ) const
+bool POLYGON_4PT_2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     unsigned int i;
     unsigned int j        = 4 - 1;

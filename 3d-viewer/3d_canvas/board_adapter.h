@@ -50,7 +50,7 @@
 class COLOR_SETTINGS;
 
 /// A type that stores a container of 2d objects for each layer id
-typedef std::map< PCB_LAYER_ID, CBVHCONTAINER2D *> MAP_CONTAINER_2D;
+typedef std::map< PCB_LAYER_ID, BVH_CONTAINER_2D *> MAP_CONTAINER_2D_BASE;
 
 /// A type that stores polysets for each layer id
 typedef std::map< PCB_LAYER_ID, SHAPE_POLY_SET *> MAP_POLY;
@@ -76,7 +76,7 @@ public:
      *
      * @param aCachePointer: the pointer to the 3D cache manager.
      */
-    void Set3DCacheManager( S3D_CACHE *aCachePointer ) noexcept
+    void Set3DCacheManager( S3D_CACHE* aCachePointer ) noexcept
     {
         m_3d_model_manager = aCachePointer;
     }
@@ -122,7 +122,7 @@ public:
      *
      * @param aBoard board to process.
      */
-    void SetBoard( BOARD *aBoard ) noexcept
+    void SetBoard( BOARD* aBoard ) noexcept
     {
         m_board = aBoard;
     }
@@ -132,7 +132,7 @@ public:
      *
      * @return BOARD pointer
      */
-    const BOARD *GetBoard() const noexcept
+    const BOARD* GetBoard() const noexcept
     {
         return m_board;
     }
@@ -165,7 +165,7 @@ public:
      *
      * @return the board bbox in 3D units.
      */
-    const CBBOX &GetBBox3DU() const noexcept
+    const BBOX_3D& GetBBox3DU() const noexcept
     {
         return m_boardBoundingBox;
     }
@@ -232,7 +232,7 @@ public:
      *
      * @return board center vector position in 3D units.
      */
-    const SFVEC3F &GetBoardCenter3DU() const noexcept
+    const SFVEC3F& GetBoardCenter3DU() const noexcept
     {
         return m_boardCenter;
     }
@@ -317,7 +317,7 @@ public:
      *
      * @return the shape polygon
      */
-    const SHAPE_POLY_SET &GetBoardPoly() const noexcept
+    const SHAPE_POLY_SET& GetBoardPoly() const noexcept
     {
         return m_board_poly;
     }
@@ -371,17 +371,17 @@ public:
      *
      * @return the map containers of this board
      */
-    const MAP_CONTAINER_2D &GetMapLayers() const noexcept
+    const MAP_CONTAINER_2D_BASE& GetMapLayers() const noexcept
     {
         return m_layers_container2D;
     }
 
-    const CBVHCONTAINER2D* GetPlatedPads_Front() const noexcept
+    const BVH_CONTAINER_2D* GetPlatedPads_Front() const noexcept
     {
         return m_platedpads_container2D_F_Cu;
     }
 
-    const CBVHCONTAINER2D* GetPlatedPads_Back() const noexcept
+    const BVH_CONTAINER_2D* GetPlatedPads_Back() const noexcept
     {
         return m_platedpads_container2D_B_Cu;
     }
@@ -391,7 +391,7 @@ public:
      *
      * @return the map containers of holes from this board.
      */
-    const MAP_CONTAINER_2D &GetMapLayersHoles() const noexcept
+    const MAP_CONTAINER_2D_BASE& GetMapLayersHoles() const noexcept
     {
         return m_layers_holes2D;
     }
@@ -401,7 +401,7 @@ public:
      *
      * @return a container with holes.
      */
-    const CBVHCONTAINER2D &GetThroughHole_Outer() const noexcept
+    const BVH_CONTAINER_2D& GetThroughHole_Outer() const noexcept
     {
         return m_through_holes_outer;
     }
@@ -411,22 +411,22 @@ public:
      *
      * @return a container with holes.
      */
-    const CBVHCONTAINER2D& GetThroughHole_Outer_Ring() const noexcept
+    const BVH_CONTAINER_2D& GetThroughHole_Outer_Ring() const noexcept
     {
         return m_through_holes_outer_ring;
     }
 
-    const SHAPE_POLY_SET &GetThroughHole_Outer_poly() const noexcept
+    const SHAPE_POLY_SET& GetThroughHole_Outer_poly() const noexcept
     {
         return m_through_outer_holes_poly;
     }
 
-    const SHAPE_POLY_SET &GetThroughHole_Outer_Ring_poly() const noexcept
+    const SHAPE_POLY_SET& GetThroughHole_Outer_Ring_poly() const noexcept
     {
         return m_through_outer_ring_holes_poly;
     }
 
-    const SHAPE_POLY_SET &GetThroughHole_Outer_poly_NPTH() const noexcept
+    const SHAPE_POLY_SET& GetThroughHole_Outer_poly_NPTH() const noexcept
     {
         return m_through_outer_holes_poly_NPTH;
     }
@@ -434,12 +434,12 @@ public:
     /**
      * @return a container with via THT holes only.
      */
-    const CBVHCONTAINER2D &GetThroughHole_Vias_Outer() const noexcept
+    const BVH_CONTAINER_2D& GetThroughHole_Vias_Outer() const noexcept
     {
         return m_through_holes_vias_outer;
     }
 
-    const SHAPE_POLY_SET &GetThroughHole_Vias_Outer_poly() const noexcept
+    const SHAPE_POLY_SET& GetThroughHole_Vias_Outer_poly() const noexcept
     {
         return m_through_outer_holes_vias_poly;
     }
@@ -449,7 +449,7 @@ public:
      *
      * @return a container with holes.
      */
-    const CBVHCONTAINER2D &GetThroughHole_Inner() const noexcept
+    const BVH_CONTAINER_2D& GetThroughHole_Inner() const noexcept
     {
         return m_through_holes_inner;
     }
@@ -521,7 +521,7 @@ public:
      *
      * @return the map with polygon's layers.
      */
-    const MAP_POLY &GetPolyMap() const noexcept
+    const MAP_POLY& GetPolyMap() const noexcept
     {
         return m_layers_poly;
     }
@@ -536,12 +536,12 @@ public:
         return m_B_Cu_PlatedPads_poly;
     }
 
-    const MAP_POLY &GetPolyMapHoles_Inner() const noexcept
+    const MAP_POLY& GetPolyMapHoles_Inner() const noexcept
     {
         return m_layers_inner_holes_poly;
     }
 
-    const MAP_POLY &GetPolyMapHoles_Outer() const noexcept
+    const MAP_POLY& GetPolyMapHoles_Outer() const noexcept
     {
         return m_layers_outer_holes_poly;
     }
@@ -557,52 +557,49 @@ public:
     void destroyLayers();
 
     // Helper functions to create the board
-     void createNewTrack( const TRACK* aTrack, CGENERICCONTAINER2D *aDstContainer,
+     void createNewTrack( const TRACK* aTrack, CONTAINER_2D_BASE* aDstContainer,
                           int aClearanceValue );
 
-    void createNewPadWithClearance( const PAD *aPad, CGENERICCONTAINER2D *aDstContainer,
+    void createNewPadWithClearance( const PAD *aPad, CONTAINER_2D_BASE* aDstContainer,
                                     PCB_LAYER_ID aLayer, wxSize aClearanceValue ) const;
 
-    COBJECT2D *createNewPadDrill( const PAD* aPad, int aInflateValue );
+    OBJECT_2D *createNewPadDrill( const PAD* aPad, int aInflateValue );
 
-    void AddPadsWithClearanceToContainer( const FOOTPRINT *aFootprint,
-                                          CGENERICCONTAINER2D *aDstContainer,
+    void AddPadsWithClearanceToContainer( const FOOTPRINT* aFootprint,
+                                          CONTAINER_2D_BASE* aDstContainer,
                                           PCB_LAYER_ID aLayerId, int aInflateValue,
                                           bool aSkipNPTHPadsWihNoCopper, bool aSkipPlatedPads,
                                           bool aSkipNonPlatedPads );
 
-    void AddFPShapesWithClearanceToContainer( const FOOTPRINT *aFootprint,
-                                              CGENERICCONTAINER2D *aDstContainer,
+    void AddFPShapesWithClearanceToContainer( const FOOTPRINT* aFootprint,
+                                              CONTAINER_2D_BASE* aDstContainer,
                                               PCB_LAYER_ID aLayerId, int aInflateValue );
 
-    void AddShapeWithClearanceToContainer( const PCB_TEXT *aText,
-                                           CGENERICCONTAINER2D *aDstContainer,
+    void AddShapeWithClearanceToContainer( const PCB_TEXT* aText, CONTAINER_2D_BASE* aDstContainer,
                                            PCB_LAYER_ID aLayerId, int aClearanceValue );
 
-    void AddShapeWithClearanceToContainer( const PCB_SHAPE *aShape,
-                                           CGENERICCONTAINER2D *aDstContainer,
+    void AddShapeWithClearanceToContainer( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aDstContainer,
                                            PCB_LAYER_ID aLayerId, int aClearanceValue );
 
-    void AddShapeWithClearanceToContainer( const DIMENSION_BASE *aDimension,
-                                           CGENERICCONTAINER2D *aDstContainer,
+    void AddShapeWithClearanceToContainer( const DIMENSION_BASE* aDimension,
+                                           CONTAINER_2D_BASE* aDstContainer,
                                            PCB_LAYER_ID aLayerId, int aClearanceValue );
 
-    void AddSolidAreasShapesToContainer( const ZONE *aZoneContainer,
-                                         CGENERICCONTAINER2D *aDstContainer,
+    void AddSolidAreasShapesToContainer( const ZONE* aZoneContainer, CONTAINER_2D_BASE* aDstContainer,
                                          PCB_LAYER_ID aLayerId );
 
-    void TransformArcToSegments( const wxPoint &aCentre, const wxPoint &aStart, double aArcAngle,
+    void TransformArcToSegments( const wxPoint& aCentre, const wxPoint& aStart, double aArcAngle,
                                  int aCircleToSegmentsCount, int aWidth,
-                                 CGENERICCONTAINER2D *aDstContainer, const BOARD_ITEM &aBoardItem );
+                                 CONTAINER_2D_BASE* aDstContainer, const BOARD_ITEM& aBoardItem );
 
-    void buildPadShapeThickOutlineAsSegments( const PAD *aPad, CGENERICCONTAINER2D *aDstContainer,
+    void buildPadShapeThickOutlineAsSegments( const PAD* aPad, CONTAINER_2D_BASE* aDstContainer,
                                               int aWidth );
 
     // Helper functions to create poly contours
-    void buildPadShapeThickOutlineAsPolygon( const PAD *aPad, SHAPE_POLY_SET &aCornerBuffer,
+    void buildPadShapeThickOutlineAsPolygon( const PAD* aPad, SHAPE_POLY_SET& aCornerBuffer,
                                              int aWidth) const;
 
-    void transformFPShapesToPolygon( const FOOTPRINT *aFootprint, PCB_LAYER_ID aLayer,
+    void transformFPShapesToPolygon( const FOOTPRINT* aFootprint, PCB_LAYER_ID aLayer,
                                      SHAPE_POLY_SET& aCornerBuffer ) const;
 
 public:
@@ -668,7 +665,7 @@ private:
     // Pcb board bounding boxes
 
     /// 3d bounding box of the pcb board in 3d units
-    CBBOX             m_boardBoundingBox;
+    BBOX_3D           m_boardBoundingBox;
 
     /// It contains polygon contours for each layer
     MAP_POLY          m_layers_poly;
@@ -701,33 +698,33 @@ private:
     // 2D element containers
 
     /// It contains the 2d elements of each layer
-    MAP_CONTAINER_2D  m_layers_container2D;
+    MAP_CONTAINER_2D_BASE  m_layers_container2D;
 
-    CBVHCONTAINER2D*  m_platedpads_container2D_F_Cu;
-    CBVHCONTAINER2D*  m_platedpads_container2D_B_Cu;
+    BVH_CONTAINER_2D*  m_platedpads_container2D_F_Cu;
+    BVH_CONTAINER_2D*  m_platedpads_container2D_B_Cu;
 
     /// It contains the holes per each layer
-    MAP_CONTAINER_2D  m_layers_holes2D;
+    MAP_CONTAINER_2D_BASE  m_layers_holes2D;
 
     /// It contains the list of throughHoles of the board,
     /// the radius of the hole is inflated with the copper thickness
-    CBVHCONTAINER2D   m_through_holes_outer;
+    BVH_CONTAINER_2D   m_through_holes_outer;
 
     /// It contains the list of throughHoles of the board,
     /// the radius of the hole is inflated with the annular ring size
-    CBVHCONTAINER2D   m_through_holes_outer_ring;
+    BVH_CONTAINER_2D   m_through_holes_outer_ring;
 
     /// It contains the list of throughHoles of the board,
     /// the radius is the inner hole
-    CBVHCONTAINER2D   m_through_holes_inner;
+    BVH_CONTAINER_2D   m_through_holes_inner;
 
     /// It contains the list of throughHoles vias of the board,
     /// the radius of the hole is inflated with the copper thickness
-    CBVHCONTAINER2D   m_through_holes_vias_outer;
+    BVH_CONTAINER_2D   m_through_holes_vias_outer;
 
     /// It contains the list of throughHoles vias of the board,
     /// the radius of the hole
-    CBVHCONTAINER2D   m_through_holes_vias_inner;
+    BVH_CONTAINER_2D   m_through_holes_vias_inner;
 
 
     // Layers information
@@ -787,7 +784,7 @@ private:
      *  "KI_TRACE_EDA_CINFO3D_VISU".  See the wxWidgets documentation on wxLogTrace for
      *  more information.
      */
-    static const wxChar *m_logTrace;
+    static const wxChar* m_logTrace;
 
 };
 
@@ -796,7 +793,7 @@ class EDA_3D_BOARD_HOLDER
 {
 public:
     virtual BOARD_ADAPTER& GetAdapter() = 0;
-    virtual CCAMERA&       GetCurrentCamera() = 0;
+    virtual CAMERA&        GetCurrentCamera() = 0;
 
     virtual ~EDA_3D_BOARD_HOLDER() {};
 };

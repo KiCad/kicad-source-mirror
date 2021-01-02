@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,17 +24,17 @@
 
 /**
  * @file  caccelerator.cpp
- * @brief
  */
 
 #include "caccelerator.h"
 
 
-CGENERICACCELERATOR::CGENERICACCELERATOR( )
+ACCELERATOR_3D::ACCELERATOR_3D( )
 {
     m_bbox.Reset();
 }
 
-CGENERICACCELERATOR::~CGENERICACCELERATOR()
+
+ACCELERATOR_3D::~ACCELERATOR_3D()
 {
 }

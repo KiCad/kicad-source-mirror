@@ -31,30 +31,24 @@
 #include "ccylinder.h"
 
 
-CVCYLINDER::CVCYLINDER( SFVEC2F aCenterPoint, float aZmin, float aZmax, float aRadius )
-        : COBJECT( OBJECT3D_TYPE::CYLINDER )
+CYLINDER::CYLINDER( SFVEC2F aCenterPoint, float aZmin, float aZmax, float aRadius )
+        : OBJECT_3D( OBJECT_3D_TYPE::CYLINDER )
 {
     m_center = aCenterPoint;
     m_radius_squared = aRadius * aRadius;
     m_inv_radius = 1.0f / aRadius;
 
-    m_bbox.Set( SFVEC3F( aCenterPoint.x - aRadius,
-                         aCenterPoint.y - aRadius,
-                         aZmin ),
-                SFVEC3F( aCenterPoint.x + aRadius,
-                         aCenterPoint.y + aRadius,
-                         aZmax ) );
+    m_bbox.Set( SFVEC3F( aCenterPoint.x - aRadius, aCenterPoint.y - aRadius, aZmin ),
+                SFVEC3F( aCenterPoint.x + aRadius, aCenterPoint.y + aRadius, aZmax ) );
     m_bbox.ScaleNextUp();
     m_centroid = m_bbox.GetCenter();
 }
 
 
-bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool CYLINDER::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
-    // Based on:
-    // http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
+    // Based on: http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
     // Ray-sphere intersection: geometric
-    // /////////////////////////////////////////////////////////////////////////
     const double OCx_Start = aRay.m_Origin.x - m_center.x;
     const double OCy_Start = aRay.m_Origin.y - m_center.y;
 
@@ -66,7 +60,7 @@ bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                      (double)aRay.m_Dir.y * (double)OCy_Start;
     const double c = p_dot_p - m_radius_squared;
 
-    const float delta = (float)(b * b - a * c);
+    const float delta = (float) ( b * b - a * c );
 
     bool hitResult = false;
 
@@ -78,8 +72,7 @@ bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         const float t = (-b - sdelta) * inv_a;
         const float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
-        if( (z >= m_bbox.Min().z) &&
-            (z <= m_bbox.Max().z) )
+        if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
         {
             if( t < aHitInfo.m_tHit )
             {
@@ -93,8 +86,7 @@ bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
             const float t1 = (-b + sdelta) * inv_a;
             const float z1 = aRay.m_Origin.z + t1 * aRay.m_Dir.z;
 
-            if( (z1 > m_bbox.Min().z ) &&
-                (z1 < m_bbox.Max().z ) )
+            if( ( z1 > m_bbox.Min().z ) && ( z1 < m_bbox.Max().z ) )
             {
                 if( t1 < aHitInfo.m_tHit )
                 {
@@ -109,8 +101,7 @@ bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     {
         aHitInfo.m_HitPoint = aRay.at( aHitInfo.m_tHit );
 
-        const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x,
-                                            aHitInfo.m_HitPoint.y );
+        const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x, aHitInfo.m_HitPoint.y );
 
         aHitInfo.m_HitNormal = SFVEC3F( -(hitPoint2D.x - m_center.x) * m_inv_radius,
                                         -(hitPoint2D.y - m_center.y) * m_inv_radius,
@@ -125,12 +116,10 @@ bool CVCYLINDER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CVCYLINDER::IntersectP(const RAY &aRay , float aMaxDistance ) const
+bool CYLINDER::IntersectP(const RAY& aRay , float aMaxDistance ) const
 {
-    // Based on:
-    // http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
+    // Based on: http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
     // Ray-sphere intersection: geometric
-    // /////////////////////////////////////////////////////////////////////////
     const double OCx_Start = aRay.m_Origin.x - m_center.x;
     const double OCy_Start = aRay.m_Origin.y - m_center.y;
 
@@ -142,7 +131,7 @@ bool CVCYLINDER::IntersectP(const RAY &aRay , float aMaxDistance ) const
                      (double)aRay.m_Dir.y * (double)OCy_Start;
     const double c = p_dot_p - m_radius_squared;
 
-    const float delta = (float)(b * b - a * c);
+    const float delta = (float) ( b * b - a * c );
 
     if( delta > FLT_EPSILON )
     {
@@ -152,8 +141,7 @@ bool CVCYLINDER::IntersectP(const RAY &aRay , float aMaxDistance ) const
         const float t = (-b - sdelta) * inv_a;
         const float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
-        if( (z >= m_bbox.Min().z) &&
-            (z <= m_bbox.Max().z) )
+        if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
         {
             if( t < aMaxDistance )
                 return true;
@@ -162,8 +150,7 @@ bool CVCYLINDER::IntersectP(const RAY &aRay , float aMaxDistance ) const
         const float t1 = (-b + sdelta) * inv_a;
         const float z1 = aRay.m_Origin.z + t1 * aRay.m_Dir.z;
 
-        if( (z1 > m_bbox.Min().z ) &&
-            (z1 < m_bbox.Max().z ) )
+        if( ( z1 > m_bbox.Min().z ) && ( z1 < m_bbox.Max().z ) )
         {
             if( t1 < aMaxDistance )
                 return true;
@@ -174,14 +161,14 @@ bool CVCYLINDER::IntersectP(const RAY &aRay , float aMaxDistance ) const
 }
 
 
-bool CVCYLINDER::Intersects( const CBBOX &aBBox ) const
+bool CYLINDER::Intersects( const BBOX_3D& aBBox ) const
 {
     // !TODO: improove
     return m_bbox.Intersects( aBBox );
 }
 
 
-SFVEC3F CVCYLINDER::GetDiffuseColor( const HITINFO &aHitInfo ) const
+SFVEC3F CYLINDER::GetDiffuseColor( const HITINFO& aHitInfo ) const
 {
     (void)aHitInfo; // unused
 

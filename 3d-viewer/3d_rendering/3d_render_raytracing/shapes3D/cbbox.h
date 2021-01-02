@@ -27,28 +27,28 @@
  * @brief Bounding Box class definition
  */
 
-#ifndef _CBBOX_H_
-#define _CBBOX_H_
+#ifndef _BBOX_3D_H_
+#define _BBOX_3D_H_
 
 #include "../ray.h"
 
 /**
  * Manage a bounding box defined by two SFVEC3F min max points.
  */
-struct CBBOX
+struct BBOX_3D
 {
 public:
     /**
      * Create with default values a bounding box (not initialized)
      */
-    CBBOX();
+    BBOX_3D();
 
     /**
      * Initialize a bounding box with a given point.
      *
      * @param aPbInit a point for the bounding box initialization.
      */
-    explicit CBBOX( const SFVEC3F &aPbInit );
+    explicit BBOX_3D( const SFVEC3F& aPbInit );
 
     /**
      * Initialize a bounding box with a minimum and a maximum point.
@@ -56,9 +56,9 @@ public:
      * @param aPbMin the minimum point to initialize the bounding box.
      * @param aPbMax the maximum point to initialize the bounding box.
      */
-    CBBOX( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax );
+    BBOX_3D( const SFVEC3F& aPbMin, const SFVEC3F& aPbMax );
 
-    ~CBBOX();
+    ~BBOX_3D();
 
 
     /**
@@ -67,9 +67,9 @@ public:
      * @param aPbMin the minimum point to initialize the bounding box.
      * @param aPbMax the maximum point to initialize the bounding box.
      */
-    void Set( const SFVEC3F &aPbMin, const SFVEC3F &aPbMax );
+    void Set( const SFVEC3F& aPbMin, const SFVEC3F& aPbMax );
 
-    void Set( const CBBOX &aBBox );
+    void Set( const BBOX_3D& aBBox );
 
     /**
      * @brief Set
@@ -83,14 +83,14 @@ public:
      *
      * @param aPoint the point to be bounded.
      */
-    void Union( const SFVEC3F &aPoint );
+    void Union( const SFVEC3F& aPoint );
 
     /**
      * Recalculate the bounding box adding other bounding box.
      *
      * @param aBBox the bounding box to be bounded.
      */
-    void Union( const CBBOX &aBBox );
+    void Union( const BBOX_3D& aBBox );
 
     /**
      * Scales a bounding box by its center.
@@ -114,14 +114,14 @@ public:
      *
      * @param aBBox the bounding box to check if it intersects.
      */
-    bool Intersects( const CBBOX &aBBox ) const;
+    bool Intersects( const BBOX_3D& aBBox ) const;
 
     /**
      * Check if a point is inside this bounding box.
      *
      * @param aPoint point to test.
      */
-    bool Inside( const SFVEC3F &aPoint ) const;
+    bool Inside( const SFVEC3F& aPoint ) const;
 
     /**
      * Apply a transformation matrix to the box points.
@@ -146,7 +146,7 @@ public:
     float Volume() const;
 
     /**
-     * Output this CBBOX to the stdout.
+     * Output this BBOX_3D to the stdout.
      */
     void debug() const;
 
@@ -179,7 +179,7 @@ public:
     /**
      * @return SFVEC3F - return the offset relative to max-min.
      */
-    SFVEC3F Offset( const SFVEC3F &p ) const;
+    SFVEC3F Offset( const SFVEC3F& p ) const;
 
     /**
      * @return SFVEC3F - max-min.
@@ -191,14 +191,14 @@ public:
      *
      * @return SFVEC3F - the minimum vertex position.
      */
-    const SFVEC3F &Min() const { return m_min; }
+    const SFVEC3F& Min() const { return m_min; }
 
     /**
      * Return the maximum vertex pointer.
      *
      * @return SFVEC3F - the maximum vertex position.
      */
-    const SFVEC3F &Max() const { return m_max; }
+    const SFVEC3F& Max() const { return m_max; }
 
 
     /**
@@ -221,9 +221,9 @@ public:
      * @param t The distance point of the ray of the intersection (if true).
      * @return true if the ray hits the box.
      */
-    bool Intersect( const RAY &aRay, float *t ) const;
+    bool Intersect( const RAY& aRay, float* t ) const;
 
-    bool Intersect( const RAY &aRay ) const;
+    bool Intersect( const RAY& aRay ) const;
 
     /**
      * Fetch the enter and exit position when a ray starts inside the bounding box.
@@ -233,7 +233,7 @@ public:
      * @param aOutHitt1 The distance point of the ray of the exit (if true).
      * @return true if the ray hits the box
      */
-    bool Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) const;
+    bool Intersect( const RAY& aRay, float* aOutHitt0, float* aOutHitt1 ) const;
 
 private:
     SFVEC3F m_min;  ///< (12) point of the lower position of the bounding box

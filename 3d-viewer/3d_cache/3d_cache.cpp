@@ -80,7 +80,7 @@ static bool isSHA1Same( const unsigned char* shaA, const unsigned char* shaB ) n
 
 static bool checkTag( const char* aTag, void* aPluginMgrPtr )
 {
-    if( NULL == aTag || NULL == aPluginMgrPtr )
+    if( nullptr == aTag || nullptr == aPluginMgrPtr )
         return false;
 
     S3D_PLUGIN_MANAGER *pp = (S3D_PLUGIN_MANAGER*) aPluginMgrPtr;
@@ -149,8 +149,8 @@ private:
 
 S3D_CACHE_ENTRY::S3D_CACHE_ENTRY()
 {
-    sceneData = NULL;
-    renderData = NULL;
+    sceneData = nullptr;
+    renderData = nullptr;
     memset( sha1sum, 0, 20 );
 }
 
@@ -159,14 +159,14 @@ S3D_CACHE_ENTRY::~S3D_CACHE_ENTRY()
 {
     delete sceneData;
 
-    if( NULL != renderData )
+    if( nullptr != renderData )
         S3D::Destroy3DModel( &renderData );
 }
 
 
 void S3D_CACHE_ENTRY::SetSHA1( const unsigned char* aSHA1Sum )
 {
-    if( NULL == aSHA1Sum )
+    if( nullptr == aSHA1Sum )
     {
         wxLogTrace( MASK_3D_CACHE, "%s:%s:%d\n * [BUG] NULL passed for aSHA1Sum",
                     __FILE__, __FUNCTION__, __LINE__ );
@@ -217,7 +217,7 @@ S3D_CACHE::~S3D_CACHE()
 SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr )
 {
     if( aCachePtr )
-        *aCachePtr = NULL;
+        *aCachePtr = nullptr;
 
     wxString full3Dpath = m_FNResolver->ResolvePath( aModelFile );
 
@@ -226,7 +226,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
         // the model cannot be found; we cannot proceed
         wxLogTrace( MASK_3D_CACHE, "%s:%s:%d\n * [3D model] could not find model '%s'\n",
                     __FILE__, __FUNCTION__, __LINE__, aModelFile );
-        return NULL;
+        return nullptr;
     }
 
     // check cache if file is already loaded
@@ -259,13 +259,13 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
 
             if( reload )
             {
-                if( NULL != mi->second->sceneData )
+                if( nullptr != mi->second->sceneData )
                 {
                     S3D::DestroyNode( mi->second->sceneData );
-                    mi->second->sceneData = NULL;
+                    mi->second->sceneData = nullptr;
                 }
 
-                if( NULL != mi->second->renderData )
+                if( nullptr != mi->second->renderData )
                     S3D::Destroy3DModel( &mi->second->renderData );
 
                 mi->second->sceneData = m_Plugins->Load3DModel( full3Dpath,
@@ -273,7 +273,7 @@ SCENEGRAPH* S3D_CACHE::load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCach
             }
         }
 
-        if( NULL != aCachePtr )
+        if( nullptr != aCachePtr )
             *aCachePtr = mi->second;
 
         return mi->second->sceneData;
@@ -293,7 +293,7 @@ SCENEGRAPH* S3D_CACHE::Load( const wxString& aModelFile )
 SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr )
 {
     if( aCachePtr )
-        *aCachePtr = NULL;
+        *aCachePtr = nullptr;
 
     unsigned char sha1sum[20];
 
@@ -322,7 +322,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
                 *aCachePtr = ep;
         }
 
-        return NULL;
+        return nullptr;
     }
 
     S3D_CACHE_ENTRY* ep = new S3D_CACHE_ENTRY;
@@ -338,7 +338,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 
         m_CacheList.pop_back();
         delete ep;
-        return NULL;
+        return nullptr;
     }
 
     if( aCachePtr )
@@ -354,7 +354,7 @@ SCENEGRAPH* S3D_CACHE::checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** 
 
     ep->sceneData = m_Plugins->Load3DModel( aFileName, ep->pluginInfo );
 
-    if( NULL != ep->sceneData )
+    if( nullptr != ep->sceneData )
         saveCacheData( ep );
 
     return ep->sceneData;
@@ -371,7 +371,7 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
         return false;
     }
 
-    if( NULL == aSHA1Sum )
+    if( nullptr == aSHA1Sum )
     {
         wxLogTrace( MASK_3D_CACHE, "%s\n * [BUG] NULL pointer passed for aMD5Sum",
                     __FILE__, __FUNCTION__, __LINE__ );
@@ -385,7 +385,7 @@ bool S3D_CACHE::getSHA1( const wxString& aFileName, unsigned char* aSHA1Sum )
     FILE* fp = fopen( aFileName.ToUTF8(), "rb" );
 #endif
 
-    if( NULL == fp )
+    if( nullptr == fp )
         return false;
 
     boost::uuids::detail::sha1 dblock;
@@ -446,12 +446,12 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
         return false;
     }
 
-    if( NULL != aCacheItem->sceneData )
+    if( nullptr != aCacheItem->sceneData )
         S3D::DestroyNode( (SGNODE*) aCacheItem->sceneData );
 
     aCacheItem->sceneData = (SCENEGRAPH*)S3D::ReadCache( fname.ToUTF8(), m_Plugins, checkTag );
 
-    if( NULL == aCacheItem->sceneData )
+    if( nullptr == aCacheItem->sceneData )
         return false;
 
     return true;
@@ -460,7 +460,7 @@ bool S3D_CACHE::loadCacheData( S3D_CACHE_ENTRY* aCacheItem )
 
 bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
 {
-    if( NULL == aCacheItem )
+    if( nullptr == aCacheItem )
     {
         wxLogTrace( MASK_3D_CACHE, "%s:%s:%d\n * NULL passed for aCacheItem",
                     __FILE__, __FUNCTION__, __LINE__ );
@@ -468,7 +468,7 @@ bool S3D_CACHE::saveCacheData( S3D_CACHE_ENTRY* aCacheItem )
         return false;
     }
 
-    if( NULL == aCacheItem->sceneData )
+    if( nullptr == aCacheItem->sceneData )
     {
         wxLogTrace( MASK_3D_CACHE, "%s:%s:%d\n * aCacheItem has no valid scene data",
                     __FILE__, __FUNCTION__, __LINE__ );
@@ -665,11 +665,11 @@ void S3D_CACHE::ClosePlugins()
 
 S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
 {
-    S3D_CACHE_ENTRY* cp = NULL;
+    S3D_CACHE_ENTRY* cp = nullptr;
     SCENEGRAPH* sp = load( aModelFileName, &cp );
 
     if( !sp )
-        return NULL;
+        return nullptr;
 
     if( !cp )
     {
@@ -677,7 +677,7 @@ S3DMODEL* S3D_CACHE::GetModel( const wxString& aModelFileName )
                     "%s:%s:%d\n  * [BUG] model loaded with no associated S3D_CACHE_ENTRY",
                     __FILE__, __FUNCTION__, __LINE__ );
 
-        return NULL;
+        return nullptr;
     }
 
     if( cp->renderData )

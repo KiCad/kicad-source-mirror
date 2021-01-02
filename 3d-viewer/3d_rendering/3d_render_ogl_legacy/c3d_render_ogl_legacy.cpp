@@ -38,28 +38,27 @@
  */
 #define UNITS3D_TO_UNITSPCB (IU_PER_MM)
 
-C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& aCamera ) :
-        C3D_RENDER_BASE( aAdapter, aCamera )
+RENDER_3D_LEGACY::RENDER_3D_LEGACY( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
+        RENDER_3D_BASE( aAdapter, aCamera )
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_LEGACY::RENDER_3D_LEGACY" ) );
 
     m_layers.clear();
     m_layers_holes_outer.clear();
     m_layers_holes_inner.clear();
     m_triangles.clear();
-    m_board = NULL;
-    m_anti_board = NULL;
+    m_board = nullptr;
+    m_anti_board = nullptr;
 
     m_platedPads_F_Cu = nullptr;
     m_platedPads_B_Cu = nullptr;
 
-    m_through_holes_outer = NULL;
-    m_through_holes_outer_ring = NULL;
-    m_through_holes_vias_outer = NULL;
-    //m_through_holes_vias_inner = NULL;
-    m_vias = NULL;
-    m_pad_holes = NULL;
-    m_vias_and_pad_holes_outer_contourn_and_caps = NULL;
+    m_through_holes_outer = nullptr;
+    m_through_holes_outer_ring = nullptr;
+    m_through_holes_vias_outer = nullptr;
+    m_vias = nullptr;
+    m_pad_holes = nullptr;
+    m_vias_and_pad_holes_outer_contourn_and_caps = nullptr;
 
     m_ogl_circle_texture = 0;
     m_grid = 0;
@@ -71,9 +70,9 @@ C3D_RENDER_OGL_LEGACY::C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& 
 }
 
 
-C3D_RENDER_OGL_LEGACY::~C3D_RENDER_OGL_LEGACY()
+RENDER_3D_LEGACY::~RENDER_3D_LEGACY()
 {
-    wxLogTrace( m_logTrace, wxT( "C3D_RENDER_OGL_LEGACY::~C3D_RENDER_OGL_LEGACY" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_LEGACY::~RENDER_3D_LEGACY" ) );
 
     ogl_free_all_display_lists();
 
@@ -81,13 +80,13 @@ C3D_RENDER_OGL_LEGACY::~C3D_RENDER_OGL_LEGACY()
 }
 
 
-int C3D_RENDER_OGL_LEGACY::GetWaitForEditingTimeOut()
+int RENDER_3D_LEGACY::GetWaitForEditingTimeOut()
 {
     return 50; // ms
 }
 
 
-void C3D_RENDER_OGL_LEGACY::SetCurWindowSize( const wxSize &aSize )
+void RENDER_3D_LEGACY::SetCurWindowSize( const wxSize& aSize )
 {
     if( m_windowSize != aSize )
     {
@@ -99,7 +98,7 @@ void C3D_RENDER_OGL_LEGACY::SetCurWindowSize( const wxSize &aSize )
 }
 
 
-void C3D_RENDER_OGL_LEGACY::setLight_Front( bool enabled )
+void RENDER_3D_LEGACY::setLight_Front( bool enabled )
 {
     if( enabled )
         glEnable( GL_LIGHT0 );
@@ -108,7 +107,7 @@ void C3D_RENDER_OGL_LEGACY::setLight_Front( bool enabled )
 }
 
 
-void C3D_RENDER_OGL_LEGACY::setLight_Top( bool enabled )
+void RENDER_3D_LEGACY::setLight_Top( bool enabled )
 {
     if( enabled )
         glEnable( GL_LIGHT1 );
@@ -117,7 +116,7 @@ void C3D_RENDER_OGL_LEGACY::setLight_Top( bool enabled )
 }
 
 
-void C3D_RENDER_OGL_LEGACY::setLight_Bottom( bool enabled )
+void RENDER_3D_LEGACY::setLight_Bottom( bool enabled )
 {
     if( enabled )
         glEnable( GL_LIGHT2 );
@@ -126,7 +125,7 @@ void C3D_RENDER_OGL_LEGACY::setLight_Bottom( bool enabled )
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_arrows()
+void RENDER_3D_LEGACY::render_3D_arrows()
 {
     const float arrow_size = RANGE_SCALE_3D * 0.30f;
 
@@ -154,25 +153,19 @@ void C3D_RENDER_OGL_LEGACY::render_3D_arrows()
     ogl_set_arrow_material();
 
     glColor3f( 0.9f, 0.0f, 0.0f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                    SFVEC3F( arrow_size, 0.0f, 0.0f ),
-                    0.275f );
+    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( arrow_size, 0.0f, 0.0f ), 0.275f );
 
     glColor3f( 0.0f, 0.9f, 0.0f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                    SFVEC3F( 0.0f, arrow_size, 0.0f ),
-                    0.275f );
+    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, arrow_size, 0.0f ), 0.275f );
 
     glColor3f( 0.0f, 0.0f, 0.9f );
-    OGL_draw_arrow( SFVEC3F( 0.0f, 0.0f, 0.0f ),
-                    SFVEC3F( 0.0f, 0.0f, arrow_size ),
-                    0.275f );
+    DrawRoundArrow( SFVEC3F( 0.0f, 0.0f, 0.0f ), SFVEC3F( 0.0f, 0.0f, arrow_size ), 0.275f );
 
     glEnable( GL_CULL_FACE );
 }
 
 
-void C3D_RENDER_OGL_LEGACY::setupMaterials()
+void RENDER_3D_LEGACY::setupMaterials()
 {
     m_materials = {};
 
@@ -230,9 +223,12 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                                     m_boardAdapter.m_SilkScreenColorTop.b );
 
         m_materials.m_SilkSTop.m_Specular = SFVEC3F(
-                m_boardAdapter.m_SilkScreenColorTop.r * m_boardAdapter.m_SilkScreenColorTop.r + 0.10f,
-                m_boardAdapter.m_SilkScreenColorTop.g * m_boardAdapter.m_SilkScreenColorTop.g + 0.10f,
-                m_boardAdapter.m_SilkScreenColorTop.b * m_boardAdapter.m_SilkScreenColorTop.b + 0.10f );
+                m_boardAdapter.m_SilkScreenColorTop.r * m_boardAdapter.m_SilkScreenColorTop.r +
+                0.10f,
+                m_boardAdapter.m_SilkScreenColorTop.g * m_boardAdapter.m_SilkScreenColorTop.g +
+                0.10f,
+                m_boardAdapter.m_SilkScreenColorTop.b * m_boardAdapter.m_SilkScreenColorTop.b +
+                0.10f );
 
         m_materials.m_SilkSTop.m_Shininess = 0.078125f * 128.0f;
         m_materials.m_SilkSTop.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
@@ -243,9 +239,12 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
                                                     m_boardAdapter.m_SilkScreenColorBot.b );
 
         m_materials.m_SilkSBot.m_Specular = SFVEC3F(
-                m_boardAdapter.m_SilkScreenColorBot.r * m_boardAdapter.m_SilkScreenColorBot.r + 0.10f,
-                m_boardAdapter.m_SilkScreenColorBot.g * m_boardAdapter.m_SilkScreenColorBot.g + 0.10f,
-                m_boardAdapter.m_SilkScreenColorBot.b * m_boardAdapter.m_SilkScreenColorBot.b + 0.10f );
+                m_boardAdapter.m_SilkScreenColorBot.r * m_boardAdapter.m_SilkScreenColorBot.r +
+                0.10f,
+                m_boardAdapter.m_SilkScreenColorBot.g * m_boardAdapter.m_SilkScreenColorBot.g +
+                0.10f,
+                m_boardAdapter.m_SilkScreenColorBot.b * m_boardAdapter.m_SilkScreenColorBot.b +
+                0.10f );
 
         m_materials.m_SilkSBot.m_Shininess = 0.078125f * 128.0f;
         m_materials.m_SilkSBot.m_Emissive  = SFVEC3F( 0.0f, 0.0f, 0.0f );
@@ -254,12 +253,10 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
         m_materials.m_SolderMask.m_Emissive     = SFVEC3F( 0.0f, 0.0f, 0.0f );
 
         // Epoxy material
-        m_materials.m_EpoxyBoard.m_Ambient   = SFVEC3F( 117.0f / 255.0f,
-                                                         97.0f / 255.0f,
+        m_materials.m_EpoxyBoard.m_Ambient   = SFVEC3F( 117.0f / 255.0f, 97.0f / 255.0f,
                                                          47.0f / 255.0f );
 
-        m_materials.m_EpoxyBoard.m_Specular  = SFVEC3F( 18.0f / 255.0f,
-                                                         3.0f / 255.0f,
+        m_materials.m_EpoxyBoard.m_Specular  = SFVEC3F( 18.0f / 255.0f, 3.0f / 255.0f,
                                                         20.0f / 255.0f );
 
         m_materials.m_EpoxyBoard.m_Shininess = 0.1f * 128.0f;
@@ -317,7 +314,7 @@ void C3D_RENDER_OGL_LEGACY::setupMaterials()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
+void RENDER_3D_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 {
     switch( aLayerID )
     {
@@ -394,7 +391,7 @@ void C3D_RENDER_OGL_LEGACY::set_layer_material( PCB_LAYER_ID aLayerID )
 }
 
 
-SFVEC4F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
+SFVEC4F RENDER_3D_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
 {
     SFVEC4F layerColor = m_boardAdapter.GetLayerColor( aLayerID );
 
@@ -451,7 +448,7 @@ SFVEC4F C3D_RENDER_OGL_LEGACY::get_layer_color( PCB_LAYER_ID aLayerID )
 }
 
 
-void init_lights(void)
+void init_lights( void )
 {
     // Setup light
     // https://www.opengl.org/sdk/docs/man2/xhtml/glLight.xml
@@ -498,13 +495,13 @@ void init_lights(void)
 }
 
 
-void C3D_RENDER_OGL_LEGACY::setCopperMaterial()
+void RENDER_3D_LEGACY::setCopperMaterial()
 {
     OGL_SetMaterial( m_materials.m_NonPlatedCopper, 1.0f );
 }
 
 
-void C3D_RENDER_OGL_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
+void RENDER_3D_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_id )
 {
     glEnable( GL_POLYGON_OFFSET_FILL );
     glPolygonOffset(-0.1f, -2.0f );
@@ -512,13 +509,13 @@ void C3D_RENDER_OGL_LEGACY::setPlatedCopperAndDepthOffset( PCB_LAYER_ID aLayer_i
 }
 
 
-void C3D_RENDER_OGL_LEGACY::unsetDepthOffset()
+void RENDER_3D_LEGACY::unsetDepthOffset()
 {
     glDisable( GL_POLYGON_OFFSET_FILL );
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
+void RENDER_3D_LEGACY::render_board_body( bool aSkipRenderHoles )
 {
     m_materials.m_EpoxyBoard.m_Diffuse   = m_boardAdapter.m_BoardBodyColor;
 
@@ -527,7 +524,7 @@ void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
 
     OGL_SetMaterial( m_materials.m_EpoxyBoard, 1.0f );
 
-    CLAYERS_OGL_DISP_LISTS* ogl_disp_list = nullptr;
+    OPENGL_RENDER_LIST* ogl_disp_list = nullptr;
 
     if( aSkipRenderHoles )
         ogl_disp_list = m_board;
@@ -546,8 +543,8 @@ void C3D_RENDER_OGL_LEGACY::render_board_body( bool aSkipRenderHoles )
 }
 
 
-bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
-                                    REPORTER* aWarningReporter )
+bool RENDER_3D_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
+                               REPORTER* aWarningReporter )
 {
     // Initialize OpenGL
     if( !m_is_opengl_initialized )
@@ -623,7 +620,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     glEnable( GL_LIGHTING );
 
     {
-        const SFVEC3F &cameraPos = m_camera.GetPos();
+        const SFVEC3F& cameraPos = m_camera.GetPos();
 
         // Place the light at a minimum Z so the diffuse factor will not drop
         // and the board will still look with good light.
@@ -638,10 +635,8 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             zpos = glm::min( cameraPos.z,-0.5f ) - cameraPos.z * cameraPos.z;
         }
 
-        const GLfloat headlight_pos[] = { cameraPos.x,
-                                          cameraPos.y,
-                                          zpos,
-                                          1.0f }; // This is a point light
+        // This is a point light.
+        const GLfloat headlight_pos[] = { cameraPos.x, cameraPos.y, zpos, 1.0f };
 
         glLightfv( GL_LIGHT0, GL_POSITION, headlight_pos );
     }
@@ -690,11 +685,9 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
         glPushMatrix();
 
-        /// @todo Determine what to do with this commented out code.
-        //glScalef( 1.0f, 1.0f, 3.0f );
-        CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>(ii->second);
+        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
 
-        if( (layer_id >= F_Cu) && (layer_id <= B_Cu) )
+        if( ( layer_id >= F_Cu ) && ( layer_id <= B_Cu ) )
         {
             if( !m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE ) ||
                 !( m_boardAdapter.GetFlag( FL_RENDER_PLATED_PADS_AS_PLATED ) &&
@@ -743,12 +736,12 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
                 if( m_layers_holes_outer.find( layer_id ) != m_layers_holes_outer.end() )
                 {
-                    const CLAYERS_OGL_DISP_LISTS* viasHolesLayer =
+                    const OPENGL_RENDER_LIST* viasHolesLayer =
                             m_layers_holes_outer.at( layer_id );
 
-                    wxASSERT( viasHolesLayer != NULL );
+                    wxASSERT( viasHolesLayer != nullptr );
 
-                    if( viasHolesLayer != NULL )
+                    if( viasHolesLayer != nullptr )
                     {
                         pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
                                                                           m_through_holes_outer,
@@ -817,7 +810,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         {
             set_layer_material( layer_id );
 
-            CLAYERS_OGL_DISP_LISTS* throughHolesOuter =
+            OPENGL_RENDER_LIST* throughHolesOuter =
                     m_boardAdapter.GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS )
                         && m_boardAdapter.GetFlag( FL_USE_REALISTIC_MODE )
                         && ( layer_id == B_SilkS || layer_id == F_SilkS )
@@ -831,7 +824,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                         pLayerDispList->GetZTop() - pLayerDispList->GetZBot() );
             }
 
-            CLAYERS_OGL_DISP_LISTS* anti_board = m_anti_board;
+            OPENGL_RENDER_LIST* anti_board = m_anti_board;
 
             if( ( layer_id == B_Paste ) || ( layer_id == F_Paste ) )
                 anti_board = nullptr;
@@ -851,7 +844,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
             {
                 const PCB_LAYER_ID layerMask_id = (layer_id == B_SilkS) ? B_Mask : F_Mask;
 
-                const CLAYERS_OGL_DISP_LISTS *pLayerDispListMask = m_layers.at( layerMask_id );
+                const OPENGL_RENDER_LIST* pLayerDispListMask = m_layers.at( layerMask_id );
 
                 pLayerDispList->DrawAllCameraCulledSubtractLayer( drawMiddleSegments,
                                                                   pLayerDispListMask,
@@ -983,7 +976,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 }
 
 
-bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
+bool RENDER_3D_LEGACY::initializeOpenGL()
 {
     glEnable( GL_LINE_SMOOTH );
     glShadeModel( GL_SMOOTH );
@@ -992,7 +985,7 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
     glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
 
     // Initialize the open GL texture to draw the filled semi-circle of the segments
-    CIMAGE *circleImage = new CIMAGE( SIZE_OF_CIRCLE_TEXTURE, SIZE_OF_CIRCLE_TEXTURE );
+    IMAGE* circleImage = new IMAGE( SIZE_OF_CIRCLE_TEXTURE, SIZE_OF_CIRCLE_TEXTURE );
 
     if( !circleImage )
         return false;
@@ -1002,12 +995,7 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
                                ( SIZE_OF_CIRCLE_TEXTURE / 2 ) - 4,
                                0xFF );
 
-    /// @todo Determine what to do with this commented out code.
-    //circleImage->CircleFilled( (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1,
-    //                           (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 1,
-    //                           (SIZE_OF_CIRCLE_TEXTURE / 4)*1.5f - 2, 0xFF );
-
-    CIMAGE *circleImage_Copy = new CIMAGE( *circleImage );
+    IMAGE* circleImage_Copy = new IMAGE( *circleImage );
 
     circleImage->EfxFilter( circleImage_Copy, IMAGE_FILTER::BLUR_3X3 );
 
@@ -1031,7 +1019,7 @@ bool C3D_RENDER_OGL_LEGACY::initializeOpenGL()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::ogl_set_arrow_material()
+void RENDER_3D_LEGACY::ogl_set_arrow_material()
 {
     glEnable( GL_COLOR_MATERIAL );
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
@@ -1050,7 +1038,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_set_arrow_material()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
+void RENDER_3D_LEGACY::ogl_free_all_display_lists()
 {
     if( glIsList( m_grid ) )
         glDeleteLists( m_grid, 1 );
@@ -1059,7 +1047,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     for( MAP_OGL_DISP_LISTS::const_iterator ii = m_layers.begin(); ii != m_layers.end(); ++ii )
     {
-        CLAYERS_OGL_DISP_LISTS *pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>( ii->second );
+        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
         delete pLayerDispList;
     }
 
@@ -1075,7 +1063,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
          ii != m_layers_holes_outer.end();
          ++ii )
     {
-        CLAYERS_OGL_DISP_LISTS* pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>( ii->second );
+        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
         delete pLayerDispList;
     }
 
@@ -1085,7 +1073,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
          ii != m_layers_holes_inner.end();
          ++ii )
     {
-        CLAYERS_OGL_DISP_LISTS* pLayerDispList = static_cast<CLAYERS_OGL_DISP_LISTS*>( ii->second );
+        OPENGL_RENDER_LIST* pLayerDispList = static_cast<OPENGL_RENDER_LIST*>( ii->second );
         delete pLayerDispList;
     }
 
@@ -1100,7 +1088,7 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 
     for( MAP_3DMODEL::const_iterator ii = m_3dmodel_map.begin(); ii != m_3dmodel_map.end(); ++ii )
     {
-        C_OGL_3DMODEL *pointer = static_cast<C_OGL_3DMODEL*>(ii->second);
+        MODEL_3D* pointer = static_cast<MODEL_3D*>(ii->second);
         delete pointer;
     }
 
@@ -1135,9 +1123,8 @@ void C3D_RENDER_OGL_LEGACY::ogl_free_all_display_lists()
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer( PCB_LAYER_ID aLayerID, float aZPosition,
-                                                      bool aDrawMiddleSegments,
-                                                      bool aSkipRenderHoles )
+void RENDER_3D_LEGACY::render_solder_mask_layer( PCB_LAYER_ID aLayerID, float aZPosition,
+                                                 bool aDrawMiddleSegments, bool aSkipRenderHoles )
 {
     wxASSERT( (aLayerID == B_Mask) || (aLayerID == F_Mask) );
 
@@ -1147,7 +1134,7 @@ void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer( PCB_LAYER_ID aLayerID, flo
     {
         if( m_layers.find( aLayerID ) != m_layers.end() )
         {
-            CLAYERS_OGL_DISP_LISTS *pLayerDispListMask = m_layers.at( aLayerID );
+            OPENGL_RENDER_LIST* pLayerDispListMask = m_layers.at( aLayerID );
 
             if( m_through_holes_vias_outer )
                 m_through_holes_vias_outer->ApplyScalePosition( aZPosition, nonCopperThickness );
@@ -1195,12 +1182,11 @@ void C3D_RENDER_OGL_LEGACY::render_solder_mask_layer( PCB_LAYER_ID aLayerID, flo
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
-                                                       bool aRenderTransparentOnly,
-                                                       bool aRenderSelectedOnly )
+void RENDER_3D_LEGACY::render_3D_models_selected( bool aRenderTopOrBot, bool aRenderTransparentOnly,
+                                                  bool aRenderSelectedOnly )
 {
 
-    C_OGL_3DMODEL::BeginDrawMulti( !aRenderSelectedOnly );
+    MODEL_3D::BeginDrawMulti( !aRenderSelectedOnly );
 
     // Go for all footprints
     for( FOOTPRINT* fp : m_boardAdapter.GetBoard()->Footprints() )
@@ -1242,11 +1228,11 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models_selected( bool aRenderTopOrBot,
         }
     }
 
-    C_OGL_3DMODEL::EndDrawMulti();
+    MODEL_3D::EndDrawMulti();
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot, bool aRenderTransparentOnly )
+void RENDER_3D_LEGACY::render_3D_models( bool aRenderTopOrBot, bool aRenderTransparentOnly )
 {
     if( m_boardAdapter.GetFlag( FL_USE_SELECTION ) )
         render_3D_models_selected( aRenderTopOrBot, aRenderTransparentOnly, true );
@@ -1255,9 +1241,8 @@ void C3D_RENDER_OGL_LEGACY::render_3D_models( bool aRenderTopOrBot, bool aRender
 }
 
 
-void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
-                                                 bool aRenderTransparentOnly,
-                                                 bool aIsSelected )
+void RENDER_3D_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
+                                            bool aRenderTransparentOnly, bool aIsSelected )
 {
     if( !aFootprint->Models().empty() )
     {
@@ -1282,8 +1267,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
 
         double modelunit_to_3d_units_factor = m_boardAdapter.BiuTo3Dunits() * UNITS3D_TO_UNITSPCB;
 
-        glScaled( modelunit_to_3d_units_factor,
-                  modelunit_to_3d_units_factor,
+        glScaled( modelunit_to_3d_units_factor, modelunit_to_3d_units_factor,
                   modelunit_to_3d_units_factor );
 
         // Get the list of model files for this model
@@ -1298,7 +1282,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
             if( cache_i == m_3dmodel_map.end() )
                 continue;
 
-            if( const C_OGL_3DMODEL *modelPtr = cache_i->second )
+            if( const MODEL_3D* modelPtr = cache_i->second )
             {
                 bool opaque = sM.m_Opacity >= 1.0;
 
@@ -1359,7 +1343,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_footprint( const FOOTPRINT* aFootprint,
 }
 
 
-void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
+void RENDER_3D_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
 {
     if( glIsList( m_grid ) )
         glDeleteLists( m_grid, 1 );
@@ -1421,12 +1405,12 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
     const int ysize = std::max( brd_size.y, Millimeter2iu( 100 ) ) * 1.2;
 
     // Grid limits, in 3D units
-    double  xmin    = (brd_center_pos.x - xsize / 2) * scale;
-    double  xmax    = (brd_center_pos.x + xsize / 2) * scale;
-    double  ymin    = (brd_center_pos.y - ysize / 2) * scale;
-    double  ymax    = (brd_center_pos.y + ysize / 2) * scale;
-    double  zmin    = Millimeter2iu( -50 ) * scale;
-    double  zmax    = Millimeter2iu( 100 ) * scale;
+    double  xmin = ( brd_center_pos.x - xsize / 2 ) * scale;
+    double  xmax = ( brd_center_pos.x + xsize / 2 ) * scale;
+    double  ymin = ( brd_center_pos.y - ysize / 2 ) * scale;
+    double  ymax = ( brd_center_pos.y + ysize / 2 ) * scale;
+    double  zmin = Millimeter2iu( -50 ) * scale;
+    double  zmax = Millimeter2iu( 100 ) * scale;
 
     // Draw horizontal grid centered on 3D origin (center of the board)
     for( int ii = 0; ; ii++ )
@@ -1434,9 +1418,7 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
         if( (ii % 5) )
             glColor4f( gridColor.r, gridColor.g, gridColor.b, transparency );
         else
-            glColor4f( gridColor_marker.r,
-                       gridColor_marker.g,
-                       gridColor_marker.b,
+            glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b,
                        transparency );
 
         const int delta = KiROUND( ii * griSizeMM * IU_PER_MM );
@@ -1460,15 +1442,15 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
         if( delta <= ysize / 2 )    // Draw grid lines parallel to Y axis
         {
             glBegin( GL_LINES );
-            glVertex3f( xmin, -(brd_center_pos.y + delta) * scale, zpos );
-            glVertex3f( xmax, -(brd_center_pos.y + delta) * scale, zpos );
+            glVertex3f( xmin, -( brd_center_pos.y + delta ) * scale, zpos );
+            glVertex3f( xmax, -( brd_center_pos.y + delta ) * scale, zpos );
             glEnd();
 
             if( ii != 0 )
             {
                 glBegin( GL_LINES );
-                glVertex3f( xmin, -(brd_center_pos.y - delta) * scale, zpos );
-                glVertex3f( xmax, -(brd_center_pos.y - delta) * scale, zpos );
+                glVertex3f( xmin, -( brd_center_pos.y - delta ) * scale, zpos );
+                glVertex3f( xmax, -( brd_center_pos.y - delta ) * scale, zpos );
                 glEnd();
             }
         }
@@ -1488,15 +1470,13 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
         if( (ii % 5) )
             glColor4f( gridColor.r, gridColor.g, gridColor.b, transparency );
         else
-            glColor4f( gridColor_marker.r,
-                       gridColor_marker.g,
-                       gridColor_marker.b,
+            glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b,
                        transparency );
 
         const double delta = ii * griSizeMM * IU_PER_MM;
 
         glBegin( GL_LINES );
-        xmax = (brd_center_pos.x + delta) * scale;
+        xmax = ( brd_center_pos.x + delta ) * scale;
 
         glVertex3f( xmax, posy, zmin );
         glVertex3f( xmax, posy, zmax );
@@ -1505,7 +1485,7 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
         if( ii != 0 )
         {
             glBegin( GL_LINES );
-            xmin = (brd_center_pos.x - delta) * scale;
+            xmin = ( brd_center_pos.x - delta ) * scale;
             glVertex3f( xmin, posy, zmin );
             glVertex3f( xmin, posy, zmax );
             glEnd();
@@ -1521,9 +1501,7 @@ void C3D_RENDER_OGL_LEGACY::generate_new_3DGrid( GRID3D_TYPE aGridType )
         if( (ii % 5) )
             glColor4f( gridColor.r, gridColor.g, gridColor.b, transparency );
         else
-            glColor4f( gridColor_marker.r,
-                       gridColor_marker.g,
-                       gridColor_marker.b,
+            glColor4f( gridColor_marker.r, gridColor_marker.g, gridColor_marker.b,
                        transparency );
 
         const double delta = ii * griSizeMM * IU_PER_MM * scale;

@@ -27,25 +27,25 @@
  * @brief
  */
 
-#ifndef _CRING2D_H_
-#define _CRING2D_H_
+#ifndef _RING_2D_H_
+#define _RING_2D_H_
 
 #include "cobject2d.h"
 
-class  CRING2D : public COBJECT2D
+class RING_2D : public OBJECT_2D
 {
 public:
-    CRING2D( const SFVEC2F &aCenter, float aInnerRadius, float aOuterRadius,
-             const BOARD_ITEM &aBoardItem );
+    RING_2D( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
+             const BOARD_ITEM& aBoardItem );
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    // Imported from OBJECT_2D
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
-    const SFVEC2F &GetCenter() const { return m_center; }
+    const SFVEC2F& GetCenter() const { return m_center; }
     float GetInnerRadius() const { return m_inner_radius; }
     float GetOuterRadius() const { return m_outer_radius; }
 
@@ -61,4 +61,4 @@ private:
 };
 
 
-#endif // _CRING2D_H_
+#endif // _RING_2D_H_

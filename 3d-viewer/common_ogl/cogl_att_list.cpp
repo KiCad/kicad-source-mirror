@@ -32,18 +32,8 @@
 #include <wx/debug.h>
 #include <core/arraydim.h>
 
-/**
- *  Attributes list to be passed to a wxGLCanvas creation.
- *
- *  This array should be 2*n+1
- *  Sadly wxwidgets / glx < 13 allowed
- *  a thing named "boolean attributes" that don't take a value.
- *  (See src/unix/glx11.cpp -> wxGLCanvasX11::ConvertWXAttrsToGL() ).
- *  To avoid problems due to this, just specify those attributes twice.
- *  Only WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO are such boolean
- *  attributes.
- */
-const int COGL_ATT_LIST::m_openGL_attributes_list[] = {
+
+const int OGL_ATT_LIST::m_openGL_attributes_list[] = {
 
     // Boolean attributes (using itself at padding):
 
@@ -76,16 +66,15 @@ const int COGL_ATT_LIST::m_openGL_attributes_list[] = {
 #define ATT_WX_GL_SAMPLE_BUFFERS_OFFSET 10
 #define ATT_WX_GL_SAMPLE_BUFFERS_DATA 11
 
-int COGL_ATT_LIST::m_openGL_attributes_list_to_use[
-                                        arrayDim( COGL_ATT_LIST::m_openGL_attributes_list ) ] = { 0 };
+int OGL_ATT_LIST::m_openGL_attributes_list_to_use[
+                                        arrayDim( OGL_ATT_LIST::m_openGL_attributes_list ) ] = { 0 };
 
 
-const int *COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode )
+const int* OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode )
 {
     wxASSERT( aAntiAliasingMode <= ANTIALIASING_MODE::AA_8X );
 
-    memcpy( m_openGL_attributes_list_to_use,
-            m_openGL_attributes_list,
+    memcpy( m_openGL_attributes_list_to_use, m_openGL_attributes_list,
             sizeof( m_openGL_attributes_list_to_use ) );
 
     if( aAntiAliasingMode > ANTIALIASING_MODE::AA_NONE )

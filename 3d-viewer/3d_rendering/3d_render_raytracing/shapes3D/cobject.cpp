@@ -32,15 +32,15 @@
 #include <map>
 
 
-COBJECT3D_STATS *COBJECT3D_STATS::s_instance = 0;
+OBJECT_3D_STATS* OBJECT_3D_STATS::s_instance = 0;
 
-static const CBLINN_PHONG_MATERIAL s_defaultMaterial = CBLINN_PHONG_MATERIAL();
+static const BLINN_PHONG_MATERIAL s_defaultMaterial = BLINN_PHONG_MATERIAL();
 
 
-COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
+OBJECT_3D::OBJECT_3D( OBJECT_3D_TYPE aObjType )
 {
     m_obj_type = aObjType;
-    COBJECT3D_STATS::Instance().AddOne( aObjType );
+    OBJECT_3D_STATS::Instance().AddOne( aObjType );
     m_material = &s_defaultMaterial;
     m_modelTransparency = 0.0f;
     m_boardItem = nullptr;
@@ -48,24 +48,24 @@ COBJECT::COBJECT( OBJECT3D_TYPE aObjType )
 
 
 /*
- * Lookup table for OBJECT2D_TYPE printed names
+ * Lookup table for OBJECT_2D_TYPE printed names
  */
 // clang-format off
-const std::map<OBJECT3D_TYPE, const char*> objectTypeNames
+const std::map<OBJECT_3D_TYPE, const char*> objectTypeNames
 {
-    { OBJECT3D_TYPE::CYLINDER,   "OBJECT3D_TYPE::CYLINDER" },
-    { OBJECT3D_TYPE::DUMMYBLOCK, "OBJECT2D_TYPE::DUMMYBLOCK" },
-    { OBJECT3D_TYPE::LAYERITEM,  "OBJECT2D_TYPE::LAYERITEM" },
-    { OBJECT3D_TYPE::XYPLANE,    "OBJECT2D_TYPE::XYPLANE" },
-    { OBJECT3D_TYPE::ROUNDSEG,   "OBJECT2D_TYPE::ROUNDSEG" },
-    { OBJECT3D_TYPE::TRIANGLE,   "OBJECT2D_TYPE::TRIANGLE" }
+    { OBJECT_3D_TYPE::CYLINDER,   "OBJECT_3D_TYPE::CYLINDER" },
+    { OBJECT_3D_TYPE::DUMMYBLOCK, "OBJECT_3D_TYPE::DUMMY_BLOCK" },
+    { OBJECT_3D_TYPE::LAYERITEM,  "OBJECT_3D_TYPE::LAYER_ITEM" },
+    { OBJECT_3D_TYPE::XYPLANE,    "OBJECT_3D_TYPE::XY_PLANE" },
+    { OBJECT_3D_TYPE::ROUNDSEG,   "OBJECT_3D_TYPE::ROUND_SEG" },
+    { OBJECT_3D_TYPE::TRIANGLE,   "OBJECT_3D_TYPE::TRIANGLE" }
 };
 // clang-format on
 
 
-void COBJECT3D_STATS::PrintStats()
+void OBJECT_3D_STATS::PrintStats()
 {
-    wxLogDebug( "OBJ3D Statistics:\n" );
+    wxLogDebug( "OBJECT_3D_STATS:\n" );
 
     for( auto& objectType : objectTypeNames )
     {

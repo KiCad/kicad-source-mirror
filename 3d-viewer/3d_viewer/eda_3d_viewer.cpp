@@ -107,7 +107,7 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent, const wxSt
     SetStatusWidths( arrayDim( status_dims ), status_dims );
 
     m_canvas = new EDA_3D_CANVAS( this,
-                                  COGL_ATT_LIST::GetAttributesList( m_boardAdapter.AntiAliasingGet() ),
+                                  OGL_ATT_LIST::GetAttributesList( m_boardAdapter.AntiAliasingGet() ),
                                   aParent->GetBoard(), m_boardAdapter, m_currentCamera,
                                   Prj().Get3DCacheManager() );
 
@@ -314,7 +314,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::Process_Special_Functions id %d isChecked %d",
                 id, isChecked );
 
-    if( m_canvas == NULL )
+    if( m_canvas == nullptr )
         return;
 
     switch( id )

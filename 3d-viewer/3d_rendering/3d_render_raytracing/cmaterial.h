@@ -27,45 +27,47 @@
  * @brief
  */
 
-#ifndef _CMATERIAL_H_
-#define _CMATERIAL_H_
+#ifndef _MATERIAL_H_
+#define _MATERIAL_H_
 
 #include "ray.h"
 #include "hitinfo.h"
 #include "PerlinNoise.h"
 
-/// A base class that can be used to derive a procedural generator implementation
-class CPROCEDURALGENERATOR
+/**
+ * A base class that can be used to derive procedurally generated materials.
+ */
+class PROCEDURAL_GENERATOR
 {
 public:
-    CPROCEDURALGENERATOR();
+    PROCEDURAL_GENERATOR();
 
-    virtual ~CPROCEDURALGENERATOR()
+    virtual ~PROCEDURAL_GENERATOR()
     {
     }
 
     /**
-     * Generates a 3D vector based on the ray and* hit information depending on the implementation.
+     * Generate a 3D vector based on the ray and hit information depending on the implementation.
      *
      * @param aRay the camera ray that hits the object
      * @param aHitInfo the hit information
      * @return the result of the procedural
      */
-    virtual SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const = 0;
+    virtual SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const = 0;
 };
 
 
-class CBOARDNORMAL : public CPROCEDURALGENERATOR
+class BOARD_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CBOARDNORMAL() : CPROCEDURALGENERATOR() { m_scale = 1.0f; }
-    CBOARDNORMAL( float aScale );
+    BOARD_NORMAL() : PROCEDURAL_GENERATOR() { m_scale = 1.0f; }
+    BOARD_NORMAL( float aScale );
 
-    virtual ~CBOARDNORMAL()
+    virtual ~BOARD_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
     float m_scale;
@@ -75,169 +77,171 @@ private:
 /**
  * Procedural generation of the copper normals.
  */
-class CCOPPERNORMAL : public CPROCEDURALGENERATOR
+class COPPER_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CCOPPERNORMAL() : CPROCEDURALGENERATOR()
+    COPPER_NORMAL() : PROCEDURAL_GENERATOR()
     {
-        m_board_normal_generator = NULL;
+        m_board_normal_generator = nullptr;
         m_scale = 1.0f;
     }
 
-    CCOPPERNORMAL( float aScale, const CPROCEDURALGENERATOR *aBoardNormalGenerator );
+    COPPER_NORMAL( float aScale, const PROCEDURAL_GENERATOR* aBoardNormalGenerator );
 
-    virtual ~CCOPPERNORMAL()
+    virtual ~COPPER_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    const CPROCEDURALGENERATOR *m_board_normal_generator;
+    const PROCEDURAL_GENERATOR* m_board_normal_generator;
     float                       m_scale;
 };
 
 
-class CPLATEDCOPPERNORMAL : public CPROCEDURALGENERATOR
+class PLATED_COPPER_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CPLATEDCOPPERNORMAL() : CPROCEDURALGENERATOR()
+    PLATED_COPPER_NORMAL() : PROCEDURAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
 
-    CPLATEDCOPPERNORMAL( float aScale )
+    PLATED_COPPER_NORMAL( float aScale )
     {
         m_scale = 1.0f / aScale;
     }
 
-    virtual ~CPLATEDCOPPERNORMAL()
+    virtual ~PLATED_COPPER_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
+
 private:
-    float                       m_scale;
+    float m_scale;
 };
 
 
 /**
  * Procedural generation of the solder mask.
  */
-class CSOLDERMASKNORMAL : public CPROCEDURALGENERATOR
+class SOLDER_MASK_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CSOLDERMASKNORMAL() : CPROCEDURALGENERATOR() { m_copper_normal_generator = NULL; }
-    CSOLDERMASKNORMAL( const CPROCEDURALGENERATOR *aCopperNormalGenerator );
+    SOLDER_MASK_NORMAL() : PROCEDURAL_GENERATOR() { m_copper_normal_generator = nullptr; }
+    SOLDER_MASK_NORMAL( const PROCEDURAL_GENERATOR* aCopperNormalGenerator );
 
-    virtual ~CSOLDERMASKNORMAL()
+    virtual ~SOLDER_MASK_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    const CPROCEDURALGENERATOR *m_copper_normal_generator;
+    const PROCEDURAL_GENERATOR* m_copper_normal_generator;
 };
 
 
 /**
  * Procedural generation of the plastic normals.
  */
-class CPLASTICNORMAL : public CPROCEDURALGENERATOR
+class PLASTIC_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CPLASTICNORMAL() : CPROCEDURALGENERATOR()
+    PLASTIC_NORMAL() : PROCEDURAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
 
-    CPLASTICNORMAL( float aScale );
+    PLASTIC_NORMAL( float aScale );
 
-    virtual ~CPLASTICNORMAL()
+    virtual ~PLASTIC_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    float                       m_scale;
+    float m_scale;
 };
 
 
 /**
  * Procedural generation of the shiny plastic normals.
  */
-class CPLASTICSHINENORMAL : public CPROCEDURALGENERATOR
+class PLASTIC_SHINE_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CPLASTICSHINENORMAL() : CPROCEDURALGENERATOR()
+    PLASTIC_SHINE_NORMAL() : PROCEDURAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
 
-    CPLASTICSHINENORMAL( float aScale );
+    PLASTIC_SHINE_NORMAL( float aScale );
 
-    virtual ~CPLASTICSHINENORMAL()
+    virtual ~PLASTIC_SHINE_NORMAL()
     {
     }
 
-    // Imported from CPROCEDURALGENERATOR
-    SFVEC3F Generate( const RAY &aRay,
-                      const HITINFO &aHitInfo ) const override;
+    // Imported from PROCEDURAL_GENERATOR
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
+
 private:
-    float                       m_scale;
+    float m_scale;
 };
+
 
 /**
  * Procedural generation of the shiny brushed metal.
  */
-class CMETALBRUSHEDNORMAL : public CPROCEDURALGENERATOR
+class BRUSHED_METAL_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CMETALBRUSHEDNORMAL() : CPROCEDURALGENERATOR()
+    BRUSHED_METAL_NORMAL() : PROCEDURAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
 
-    CMETALBRUSHEDNORMAL( float aScale );
+    BRUSHED_METAL_NORMAL( float aScale );
 
-    virtual ~CMETALBRUSHEDNORMAL()
+    virtual ~BRUSHED_METAL_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    float                       m_scale;
+    float m_scale;
 };
 
 
-class CSILKSCREENNORMAL : public CPROCEDURALGENERATOR
+class SILK_SCREEN_NORMAL : public PROCEDURAL_GENERATOR
 {
 public:
-    CSILKSCREENNORMAL() : CPROCEDURALGENERATOR()
+    SILK_SCREEN_NORMAL() : PROCEDURAL_GENERATOR()
     {
         m_scale = 1.0f;
     }
 
-    CSILKSCREENNORMAL( float aScale );
+    SILK_SCREEN_NORMAL( float aScale );
 
-    virtual ~CSILKSCREENNORMAL()
+    virtual ~SILK_SCREEN_NORMAL()
     {
     }
 
-    SFVEC3F Generate( const RAY &aRay, const HITINFO &aHitInfo ) const override;
+    SFVEC3F Generate( const RAY& aRay, const HITINFO& aHitInfo ) const override;
 
 private:
-    float                       m_scale;
+    float m_scale;
 };
 
 
 /**
  * Base material class that can be used to derive other material implementations.
  */
-class CMATERIAL
+class MATERIAL
 {
 public:
     static void SetDefaultNrRefractionsSamples( unsigned int aNrRefractions )
@@ -260,19 +264,15 @@ public:
         m_default_reflections_recursive_levels = aReflectionLevel;
     }
 
-    CMATERIAL();
-    CMATERIAL( const SFVEC3F &aAmbient,
-               const SFVEC3F &aEmissive,
-               const SFVEC3F &aSpecular,
-               float aShinness,
-               float aTransparency,
-               float aReflection );
+    MATERIAL();
+    MATERIAL( const SFVEC3F& aAmbient, const SFVEC3F& aEmissive, const SFVEC3F& aSpecular,
+               float aShinness, float aTransparency, float aReflection );
 
-    virtual ~CMATERIAL() {}
+    virtual ~MATERIAL() {}
 
-    const SFVEC3F &GetAmbientColor()  const { return m_ambientColor; }
-    const SFVEC3F &GetEmissiveColor() const { return m_emissiveColor; }
-    const SFVEC3F &GetSpecularColor() const { return m_specularColor; }
+    const SFVEC3F& GetAmbientColor()  const { return m_ambientColor; }
+    const SFVEC3F& GetEmissiveColor() const { return m_emissiveColor; }
+    const SFVEC3F& GetSpecularColor() const { return m_specularColor; }
 
     float GetShinness()     const { return m_shinness; }
     float GetTransparency() const { return m_transparency; }
@@ -325,22 +325,19 @@ public:
      * @param aShadowAttenuationFactor 0.0f total in shadow, 1.0f completely not in shadow
      * @return the resultant color
      */
-    virtual SFVEC3F Shade( const RAY &aRay,
-                           const HITINFO &aHitInfo,
-                           float NdotL,
-                           const SFVEC3F &aDiffuseObjColor,
-                           const SFVEC3F &aDirToLight,
-                           const SFVEC3F &aLightColor,
+    virtual SFVEC3F Shade( const RAY& aRay, const HITINFO& aHitInfo, float NdotL,
+                           const SFVEC3F& aDiffuseObjColor, const SFVEC3F& aDirToLight,
+                           const SFVEC3F& aLightColor,
                            float aShadowAttenuationFactor ) const = 0;
 
-    void SetNormalPerturbator( const CPROCEDURALGENERATOR *aPerturbator )
+    void SetNormalPerturbator( const PROCEDURAL_GENERATOR* aPerturbator )
     {
         m_normal_perturbator = aPerturbator;
     }
 
-    const CPROCEDURALGENERATOR *GetNormalPerturbator() const { return m_normal_perturbator; }
+    const PROCEDURAL_GENERATOR* GetNormalPerturbator() const { return m_normal_perturbator; }
 
-    void PerturbeNormal( SFVEC3F &aNormal, const RAY &aRay, const HITINFO &aHitInfo ) const;
+    void PerturbeNormal( SFVEC3F& aNormal, const RAY& aRay, const HITINFO& aHitInfo ) const;
 
 protected:
     SFVEC3F m_ambientColor;
@@ -371,7 +368,7 @@ protected:
     ///< Number of levels it allows for reflection recursiveness.
     unsigned int     m_reflections_recursive_levels;
 
-    const CPROCEDURALGENERATOR *m_normal_perturbator;
+    const PROCEDURAL_GENERATOR* m_normal_perturbator;
 
 private:
     static int m_default_nrsamples_refractions;
@@ -383,31 +380,20 @@ private:
 
 /// Blinn Phong based material
 /// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_shading_model
-class CBLINN_PHONG_MATERIAL : public CMATERIAL
+class BLINN_PHONG_MATERIAL : public MATERIAL
 {
 public:
-    CBLINN_PHONG_MATERIAL() : CMATERIAL() {}
+    BLINN_PHONG_MATERIAL() : MATERIAL() {}
 
-    CBLINN_PHONG_MATERIAL( const SFVEC3F &aAmbient,
-                           const SFVEC3F &aEmissive,
-                           const SFVEC3F &aSpecular,
-                           float aShinness,
-                           float aTransparency,
-                           float aReflection ) : CMATERIAL( aAmbient,
-                                                            aEmissive,
-                                                            aSpecular,
-                                                            aShinness,
-                                                            aTransparency,
-                                                            aReflection ) {}
+    BLINN_PHONG_MATERIAL( const SFVEC3F& aAmbient, const SFVEC3F& aEmissive,
+                          const SFVEC3F& aSpecular, float aShinness, float aTransparency,
+                          float aReflection ) :
+        MATERIAL( aAmbient, aEmissive, aSpecular, aShinness, aTransparency, aReflection ) {}
 
-    // Imported from CMATERIAL
-    SFVEC3F Shade( const RAY &aRay,
-                   const HITINFO &aHitInfo,
-                   float NdotL,
-                   const SFVEC3F &aDiffuseObjColor,
-                   const SFVEC3F &aDirToLight,
-                   const SFVEC3F &aLightColor,
-                   float aShadowAttenuationFactor ) const override;
+    // Imported from MATERIAL
+    SFVEC3F Shade( const RAY& aRay, const HITINFO& aHitInfo, float NdotL,
+                   const SFVEC3F& aDiffuseObjColor, const SFVEC3F& aDirToLight,
+                   const SFVEC3F& aLightColor, float aShadowAttenuationFactor ) const override;
 };
 
-#endif // _CMATERIAL_H_
+#endif // _MATERIAL_H_

@@ -47,24 +47,11 @@ void Run_3d_viewer_test_cases()
 
     s_Run_Test_Cases = true;
 
-    // Test CBBOX2D
-    CBBOX2D bbox2d_A;
-    CBBOX2D bbox2d_B;
+    // Test BBOX_2D
+    BBOX_2D bbox2d_A;
+    BBOX_2D bbox2d_B;
 
     // Test a not initialized box conditions
-    /*
-    wxASSERT( bbox2d_A.IsInitialized() == false );
-    wxASSERT( bbox2d_A.Area() == 0.0f );
-    wxASSERT( bbox2d_A.GetCenter() == SFVEC2F( 0.0f, 0.0f ) );
-    wxASSERT( bbox2d_A.GetExtent() == SFVEC2F( 0.0f, 0.0f ) );
-    wxASSERT( bbox2d_A.Inside( SFVEC2F( 0.0f, 0.0f ) ) == false );
-    wxASSERT( bbox2d_A.Max() == SFVEC2F( 0.0f, 0.0f ) );
-    wxASSERT( bbox2d_A.Min() == SFVEC2F( 0.0f, 0.0f ) );
-    wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == false );
-    wxASSERT( bbox2d_A.Intersects( bbox2d_A ) == false );
-    wxASSERT( bbox2d_A.MaxDimension() == 0 );
-    wxASSERT( bbox2d_A.Perimeter() == 0.0f );
-    */
     bbox2d_A.Set( SFVEC2F( 1.0f, -1.0f ), SFVEC2F( -1.0f, 1.0f ) );
 
     wxASSERT( bbox2d_A.IsInitialized() == true );
@@ -74,7 +61,6 @@ void Run_3d_viewer_test_cases()
     wxASSERT( bbox2d_A.Inside( SFVEC2F( 0.0f, 0.0f ) ) == true );
     wxASSERT( bbox2d_A.Max() == SFVEC2F( 1.0f, 1.0f ) );
     wxASSERT( bbox2d_A.Min() == SFVEC2F(-1.0f,-1.0f ) );
-    //wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == false );
     wxASSERT( bbox2d_A.Intersects( bbox2d_A ) == true );
     wxASSERT( bbox2d_A.MaxDimension() == 0 );
     wxASSERT( bbox2d_A.Perimeter() == 8.0f );
@@ -88,7 +74,6 @@ void Run_3d_viewer_test_cases()
     wxASSERT( bbox2d_A.Inside( SFVEC2F( 0.0f, 0.0f ) ) == true );
     wxASSERT( bbox2d_A.Max() == SFVEC2F( 2.0f, 2.0f ) );
     wxASSERT( bbox2d_A.Min() == SFVEC2F(-2.0f,-2.0f ) );
-    //wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == false );
     wxASSERT( bbox2d_A.Intersects( bbox2d_A ) == true );
     wxASSERT( bbox2d_A.MaxDimension() == 0 );
     wxASSERT( bbox2d_A.Perimeter() == 16.0f );
@@ -133,8 +118,8 @@ void Run_3d_viewer_test_cases()
     bbox2d_B.Set( SFVEC2F(-0.5f, -0.5f ), SFVEC2F( 0.5f, 0.5f ) );
     wxASSERT( bbox2d_A.Intersects( bbox2d_B ) == true );
 
-    // Test CFILLEDCIRCLE2D
-    CFILLEDCIRCLE2D filledCircle2d( SFVEC2F( 2.0f, 2.0f ), 1.0f );
+    // Test FILLED_CIRCLE_2D
+    FILLED_CIRCLE_2D filledCircle2d( SFVEC2F( 2.0f, 2.0f ), 1.0f );
 
     wxASSERT( filledCircle2d.IsPointInside( SFVEC2F( 2.0f, 2.0f ) ) == true );
 
@@ -176,8 +161,8 @@ void Run_3d_viewer_test_cases()
     wxASSERT( filledCircle2d.Intersects( bbox2d_B ) == true );
 
 
-    // Test CROUNDSEGMENT2D
-    CROUNDSEGMENT2D roundSegment2d( SFVEC2F( -1.0f, 0.0f ), SFVEC2F( 1.0f, 0.0f ), 2.0f );
+    // Test ROUND_SEGMENT_2D
+    ROUND_SEGMENT_2D roundSegment2d( SFVEC2F( -1.0f, 0.0f ), SFVEC2F( 1.0f, 0.0f ), 2.0f );
 
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 0.0f, 0.0f ) ) == true );
     wxASSERT( roundSegment2d.IsPointInside( SFVEC2F( 1.0f, 0.0f ) ) == true );
@@ -235,53 +220,11 @@ void Run_3d_viewer_test_cases()
 #if 0
     // Test Frustum
     {
-    CFRUSTUM frustum;
+    FRUSTUM frustum;
 
     SFVEC3F ori = SFVEC3F( 0.0, 0.0, 0.0 );
 
     float z = 10.0;
-/*
-    const RAY topLeft(     ori, glm::normalize( SFVEC3F(+1.0,-1.0, z) - ori ) );
-    const RAY topRight(    ori, glm::normalize( SFVEC3F(-1.0,-1.0, z) - ori ) );
-    const RAY bottomLeft(  ori, glm::normalize( SFVEC3F(+1.0,+1.0, z) - ori ) );
-    const RAY bottomRight( ori, glm::normalize( SFVEC3F(-1.0,+1.0, z) - ori ) );
-*/
-/*
-    const RAY topLeft(     ori, glm::normalize( SFVEC3F(+1.0,+1.0, z) - ori ) );
-    const RAY topRight(    ori, glm::normalize( SFVEC3F(-1.0,+1.0, z) - ori ) );
-    const RAY bottomLeft(  ori, glm::normalize( SFVEC3F(+1.0,-1.0, z) - ori ) );
-    const RAY bottomRight( ori, glm::normalize( SFVEC3F(-1.0,-1.0, z) - ori ) );
-*/
-/*
-    const RAY topLeft(     ori, glm::normalize( SFVEC3F(-1.0,-1.0, z) - ori ) );
-    const RAY topRight(    ori, glm::normalize( SFVEC3F(+1.0,-1.0, z) - ori ) );
-    const RAY bottomLeft(  ori, glm::normalize( SFVEC3F(-1.0,+1.0, z) - ori ) );
-    const RAY bottomRight( ori, glm::normalize( SFVEC3F(+1.0,+1.0, z) - ori ) );
-*/
-/*
-    const RAY topLeft(     ori, glm::normalize( SFVEC3F(-1.0,+1.0, z) - ori ) );
-    const RAY topRight(    ori, glm::normalize( SFVEC3F(+1.0,+1.0, z) - ori ) );
-    const RAY bottomLeft(  ori, glm::normalize( SFVEC3F(-1.0,-1.0, z) - ori ) );
-    const RAY bottomRight( ori, glm::normalize( SFVEC3F(+1.0,-1.0, z) - ori ) );
-*/
-/*
-    const RAY topLeft(     ori, glm::normalize( ori - SFVEC3F(+1.0,-1.0, z) ) );
-    const RAY topRight(    ori, glm::normalize( ori - SFVEC3F(-1.0,-1.0, z) ) );
-    const RAY bottomLeft(  ori, glm::normalize( ori - SFVEC3F(+1.0,+1.0, z) ) );
-    const RAY bottomRight( ori, glm::normalize( ori - SFVEC3F(-1.0,+1.0, z) ) );
-*/
-/*
-    const RAY topLeft(     ori, glm::normalize( ori - SFVEC3F(-1.0,-1.0, z) ) );
-    const RAY topRight(    ori, glm::normalize( ori - SFVEC3F(+1.0,-1.0, z) ) );
-    const RAY bottomLeft(  ori, glm::normalize( ori - SFVEC3F(-1.0,+1.0, z) ) );
-    const RAY bottomRight( ori, glm::normalize( ori - SFVEC3F(+1.0,+1.0, z) ) );
-*/
-/*
-    const RAY topLeft(     ori, glm::normalize( ori - SFVEC3F(-1.0,+1.0, z) ) );
-    const RAY topRight(    ori, glm::normalize( ori - SFVEC3F(+1.0,+1.0, z) ) );
-    const RAY bottomLeft(  ori, glm::normalize( ori - SFVEC3F(-1.0,-1.0, z) ) );
-    const RAY bottomRight( ori, glm::normalize( ori - SFVEC3F(+1.0,-1.0, z) ) );
-*/
 
     const RAY topLeft(     ori, glm::normalize( ori - SFVEC3F(+1.0,+1.0, z) ) );
     const RAY topRight(    ori, glm::normalize( ori - SFVEC3F(-1.0,+1.0, z) ) );
@@ -290,7 +233,7 @@ void Run_3d_viewer_test_cases()
 
     frustum.GenerateFrustum( topLeft, topRight, bottomLeft, bottomRight );
 
-    CBBOX bbox3d;
+    BBOX_3D bbox3d;
 
     bbox3d.Set( SFVEC3F( -1.0f, -1.0f, z ), SFVEC3F( +1.0f, +1.0f, z + 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );
@@ -323,7 +266,7 @@ void Run_3d_viewer_test_cases()
     wxASSERT( frustum.Intersect( bbox3d ) == false );
     }
     {
-    CFRUSTUM frustum;
+    FRUSTUM frustum;
 
     float z = 10.0;
 
@@ -336,7 +279,7 @@ void Run_3d_viewer_test_cases()
 
     frustum.GenerateFrustum( topLeft, topRight, bottomLeft, bottomRight );
 
-    CBBOX bbox3d;
+    BBOX_3D bbox3d;
 
     bbox3d.Set( SFVEC3F( -1.0f, -1.0f, -z), SFVEC3F( +1.0f, +1.0f, -z + 1.0f ) );
     wxASSERT( frustum.Intersect( bbox3d ) == true );

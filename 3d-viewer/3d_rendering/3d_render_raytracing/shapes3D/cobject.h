@@ -23,12 +23,11 @@
  */
 
 /**
- * @file  cobject.h
- * @brief
+ * @file cobject.h
  */
 
-#ifndef _COBJECT_H_
-#define _COBJECT_H_
+#ifndef _OBJECT_3D_H_
+#define _OBJECT_3D_H_
 
 #include "cbbox.h"
 #include "../hitinfo.h"
@@ -36,7 +35,7 @@
 
 #include <board_item.h>
 
-enum class OBJECT3D_TYPE
+enum class OBJECT_3D_TYPE
 {
     CYLINDER,
     DUMMYBLOCK,
@@ -48,61 +47,59 @@ enum class OBJECT3D_TYPE
 };
 
 
-class COBJECT
+class OBJECT_3D
 {
 public:
-    explicit COBJECT( OBJECT3D_TYPE aObjType );
+    explicit OBJECT_3D( OBJECT_3D_TYPE aObjType );
 
-    const void SetBoardItem( BOARD_ITEM *aBoardItem ) { m_boardItem = aBoardItem; }
-    BOARD_ITEM *GetBoardItem() const { return m_boardItem; }
+    const void SetBoardItem( BOARD_ITEM* aBoardItem ) { m_boardItem = aBoardItem; }
+    BOARD_ITEM* GetBoardItem() const { return m_boardItem; }
 
-    void SetMaterial( const CMATERIAL *aMaterial )
+    void SetMaterial( const MATERIAL* aMaterial )
     {
         m_material = aMaterial;
         m_modelTransparency = aMaterial->GetTransparency(); // Default transparency is from material
     }
 
-    const CMATERIAL *GetMaterial() const { return m_material; }
+    const MATERIAL *GetMaterial() const { return m_material; }
     float GetModelTransparency() const { return m_modelTransparency; }
     void SetModelTransparency( float aModelTransparency )
     {
         m_modelTransparency = aModelTransparency;
     }
 
-    virtual SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const = 0;
+    virtual SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const = 0;
 
-    virtual ~COBJECT() {}
+    virtual ~OBJECT_3D() {}
 
     /**
-     * Intersects - a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅).
-     *
-     * It intersects if the result intersection is not null
+     * @return true if this object intersects \a aBBox.
      */
-    virtual bool Intersects( const CBBOX &aBBox ) const = 0;
+    virtual bool Intersects( const BBOX_3D& aBBox ) const = 0;
 
 
     /**
-     * @return true if the aRay intersects the object
+     * @return true if the \a aRay intersects the object.
      */
-    virtual bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const = 0;
+    virtual bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const = 0;
 
     /**
-     * @param aMaxDistance - max distance of the test
-     * @return true if the aRay intersects the object
+     * @param aMaxDistance is the maximum distance of the test.
+     * @return true if \a aRay intersects the object.
      */
-    virtual bool IntersectP( const RAY &aRay, float aMaxDistance ) const = 0;
+    virtual bool IntersectP( const RAY& aRay, float aMaxDistance ) const = 0;
 
-    const CBBOX &GetBBox() const { return m_bbox; }
+    const BBOX_3D& GetBBox() const { return m_bbox; }
 
-    const SFVEC3F &GetCentroid() const { return m_centroid; }
+    const SFVEC3F& GetCentroid() const { return m_centroid; }
 
 protected:
-    CBBOX m_bbox;
+    BBOX_3D m_bbox;
     SFVEC3F m_centroid;
-    OBJECT3D_TYPE m_obj_type;
-    const CMATERIAL *m_material;
+    OBJECT_3D_TYPE m_obj_type;
+    const MATERIAL* m_material;
 
-    BOARD_ITEM *m_boardItem;
+    BOARD_ITEM* m_boardItem;
 
     // m_modelTransparency combines the material and model opacity
     // 0.0 full opaque, 1.0 full transparent.
@@ -112,44 +109,44 @@ protected:
 
 /// Implements a class for object statistics
 /// using Singleton pattern
-class COBJECT3D_STATS
+class OBJECT_3D_STATS
 {
 public:
     void ResetStats()
     {
-        memset( m_counter, 0, sizeof( unsigned int ) * static_cast<int>( OBJECT3D_TYPE::MAX ) );
+        memset( m_counter, 0, sizeof( unsigned int ) * static_cast<int>( OBJECT_3D_TYPE::MAX ) );
     }
 
-    unsigned int GetCountOf( OBJECT3D_TYPE aObjType ) const
+    unsigned int GetCountOf( OBJECT_3D_TYPE aObjType ) const
     {
         return m_counter[static_cast<int>( aObjType )];
     }
 
-    void AddOne( OBJECT3D_TYPE aObjType )
+    void AddOne( OBJECT_3D_TYPE aObjType )
     {
         m_counter[static_cast<int>( aObjType )]++;
     }
 
     void PrintStats();
 
-    static COBJECT3D_STATS &Instance()
+    static OBJECT_3D_STATS& Instance()
     {
         if( !s_instance )
-            s_instance = new COBJECT3D_STATS;
+            s_instance = new OBJECT_3D_STATS;
 
         return *s_instance;
     }
 
 private:
-    COBJECT3D_STATS(){ ResetStats(); }
-    COBJECT3D_STATS( const COBJECT3D_STATS &old );
-    const COBJECT3D_STATS &operator=( const COBJECT3D_STATS &old );
-    ~COBJECT3D_STATS() {}
+    OBJECT_3D_STATS(){ ResetStats(); }
+    OBJECT_3D_STATS( const OBJECT_3D_STATS& old );
+    const OBJECT_3D_STATS& operator=( const OBJECT_3D_STATS& old );
+    ~OBJECT_3D_STATS() {}
 
-    unsigned int m_counter[static_cast<int>( OBJECT3D_TYPE::MAX )];
+    unsigned int m_counter[static_cast<int>( OBJECT_3D_TYPE::MAX )];
 
-    static COBJECT3D_STATS *s_instance;
+    static OBJECT_3D_STATS* s_instance;
 };
 
 
-#endif // _COBJECT_H_
+#endif // _OBJECT_3D_H_

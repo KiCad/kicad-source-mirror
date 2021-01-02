@@ -35,25 +35,24 @@
 /**
  * A plane that is parallel to XY plane
  */
-class  CXYPLANE : public COBJECT
+class XY_PLANE : public OBJECT_3D
 {
 public:
-    explicit CXYPLANE( const CBBOX &aBBox );
+    explicit XY_PLANE( const BBOX_3D& aBBox );
 
     /**
      * @param aCenterPoint = position of the center of the plane
      * @param aXSize = size by X axis
      * @param aYSize = size by Y axis
      */
-    CXYPLANE( SFVEC3F aCenterPoint, float aXSize, float aYSize );
+    XY_PLANE( SFVEC3F aCenterPoint, float aXSize, float aYSize );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
-    bool Intersects( const CBBOX &aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP(const RAY& aRay, float aMaxDistance ) const override;
+    bool Intersects( const BBOX_3D& aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
 
 private:
     SFVEC3F m_centerPoint;

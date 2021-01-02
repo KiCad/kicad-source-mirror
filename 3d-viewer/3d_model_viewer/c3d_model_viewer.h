@@ -37,7 +37,7 @@
 #include <gal/hidpi_gl_canvas.h>
 
 class S3D_CACHE;
-class C_OGL_3DMODEL;
+class MODEL_3D;
 
 /**
  *  Implement a canvas based on a wxGLCanvas.
@@ -49,7 +49,7 @@ public:
      *  Create a new 3D Canvas with a attribute list.
      *
      *  @param aParent the parent creator of this canvas.
-     *  @param aAttribList a list of openGL options created by #COGL_ATT_LIST::GetAttributesList.
+     *  @param aAttribList a list of openGL options created by #OGL_ATT_LIST::GetAttributesList.
      */
     C3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList  = 0,
                       S3D_CACHE* aCacheManager = nullptr );
@@ -107,13 +107,13 @@ private:
     wxGLContext* m_glRC;
 
     /// Camera used in this canvas
-    CTRACK_BALL m_trackBallCamera;
+    TRACK_BALL m_trackBallCamera;
 
     /// Original 3d model data
     const S3DMODEL* m_3d_model;
 
     /// Class holder for 3d model to display on openGL
-    C_OGL_3DMODEL* m_ogl_3dmodel;
+    MODEL_3D* m_ogl_3dmodel;
 
     /// Flag that we have a new model and it need to be reloaded when the paint is called
     bool m_reload_is_needed;

@@ -27,18 +27,18 @@
  * @brief Declaration for a track ball camera
  */
 
-#ifndef CTRACK_BALL_H
-#define CTRACK_BALL_H
+#ifndef TRACK_BALL_H
+#define TRACK_BALL_H
 
 #include "ccamera.h"
 
 
-class CTRACK_BALL : public CCAMERA
+class TRACK_BALL : public CAMERA
 {
 public:
-    explicit CTRACK_BALL( float aRangeScale );
+    explicit TRACK_BALL( float aRangeScale );
 
-    virtual ~CTRACK_BALL()
+    virtual ~TRACK_BALL()
     {
     }
 
@@ -69,4 +69,4 @@ private:
     double m_quat_t1[4];
 };
 
-#endif // CTRACK_BALL_H
+#endif // TRACK_BALL_H

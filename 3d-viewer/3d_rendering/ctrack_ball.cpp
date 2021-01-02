@@ -34,9 +34,9 @@
 #include <wx/log.h>
 
 
-CTRACK_BALL::CTRACK_BALL( float aRangeScale ) : CCAMERA( aRangeScale )
+TRACK_BALL::TRACK_BALL( float aRangeScale ) : CAMERA( aRangeScale )
 {
-    wxLogTrace( m_logTrace, wxT( "CTRACK_BALL::CTRACK_BALL" ) );
+    wxLogTrace( m_logTrace, wxT( "TRACK_BALL::TRACK_BALL" ) );
 
     memset( m_quat, 0, sizeof( m_quat ) );
     memset( m_quat_t0, 0, sizeof( m_quat_t0 ) );
@@ -48,7 +48,7 @@ CTRACK_BALL::CTRACK_BALL( float aRangeScale ) : CCAMERA( aRangeScale )
 }
 
 
-void CTRACK_BALL::Drag( const wxPoint& aNewMousePosition )
+void TRACK_BALL::Drag( const wxPoint& aNewMousePosition )
 {
     m_parametersChanged = true;
 
@@ -77,7 +77,7 @@ void CTRACK_BALL::Drag( const wxPoint& aNewMousePosition )
 }
 
 
-void CTRACK_BALL::SetLookAtPos( const SFVEC3F& aLookAtPos )
+void TRACK_BALL::SetLookAtPos( const SFVEC3F& aLookAtPos )
 {
     if( m_lookat_pos != aLookAtPos )
     {
@@ -91,14 +91,14 @@ void CTRACK_BALL::SetLookAtPos( const SFVEC3F& aLookAtPos )
 }
 
 
-void CTRACK_BALL::Pan( const wxPoint& aNewMousePosition )
+void TRACK_BALL::Pan( const wxPoint& aNewMousePosition )
 {
     m_parametersChanged = true;
 
     if( m_projectionType == PROJECTION_TYPE::ORTHO )
     {
         // With the orthographic projection, there is just a zoom factor
-        const float panFactor = m_zoom / 37.5f; // Magic number from CCAMERA::rebuildProjection
+        const float panFactor = m_zoom / 37.5f; // Magic number from CAMERA::rebuildProjection
         m_camera_pos.x -= panFactor * ( m_lastPosition.x - aNewMousePosition.x );
         m_camera_pos.y -= panFactor * ( aNewMousePosition.y - m_lastPosition.y );
     }
@@ -116,7 +116,7 @@ void CTRACK_BALL::Pan( const wxPoint& aNewMousePosition )
 }
 
 
-void CTRACK_BALL::Pan( const SFVEC3F& aDeltaOffsetInc )
+void TRACK_BALL::Pan( const SFVEC3F& aDeltaOffsetInc )
 {
     m_parametersChanged = true;
 
@@ -127,40 +127,40 @@ void CTRACK_BALL::Pan( const SFVEC3F& aDeltaOffsetInc )
 }
 
 
-void CTRACK_BALL::Pan_T1( const SFVEC3F& aDeltaOffsetInc )
+void TRACK_BALL::Pan_T1( const SFVEC3F& aDeltaOffsetInc )
 {
     m_camera_pos_t1 = m_camera_pos + aDeltaOffsetInc;
 }
 
 
-void CTRACK_BALL::Reset()
+void TRACK_BALL::Reset()
 {
-    CCAMERA::Reset();
+    CAMERA::Reset();
 
     memset( m_quat, 0, sizeof( m_quat ) );
     trackball( m_quat, 0.0, 0.0, 0.0, 0.0 );
 }
 
 
-void CTRACK_BALL::Reset_T1()
+void TRACK_BALL::Reset_T1()
 {
-    CCAMERA::Reset_T1();
+    CAMERA::Reset_T1();
 
     memset( m_quat_t1, 0, sizeof( m_quat_t1 ) );
     trackball( m_quat_t1, 0.0, 0.0, 0.0, 0.0 );
 }
 
 
-void CTRACK_BALL::SetT0_and_T1_current_T()
+void TRACK_BALL::SetT0_and_T1_current_T()
 {
-    CCAMERA::SetT0_and_T1_current_T();
+    CAMERA::SetT0_and_T1_current_T();
 
     memcpy( m_quat_t0, m_quat, sizeof( m_quat ) );
     memcpy( m_quat_t1, m_quat, sizeof( m_quat ) );
 }
 
 
-void CTRACK_BALL::Interpolate( float t )
+void TRACK_BALL::Interpolate( float t )
 {
     wxASSERT( t >= 0.0f );
 
@@ -195,5 +195,5 @@ void CTRACK_BALL::Interpolate( float t )
 
     m_rotationMatrix = glm::make_mat4( &rotationMatrix[0][0] );
 
-    CCAMERA::Interpolate( t );
+    CAMERA::Interpolate( t );
 }

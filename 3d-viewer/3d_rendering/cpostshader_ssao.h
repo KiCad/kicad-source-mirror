@@ -27,21 +27,21 @@
  * @brief Implements a post shader screen space ambient occlusion on software
  */
 
-#ifndef CPOSTSHADER_SSAO_H
-#define CPOSTSHADER_SSAO_H
+#ifndef POST_SHADER_SSAO_H
+#define POST_SHADER_SSAO_H
 
 
 #include "cpostshader.h"
 
 
-class CPOSTSHADER_SSAO : public CPOSTSHADER
+class POST_SHADER_SSAO : public POST_SHADER
 {
 public:
-    explicit CPOSTSHADER_SSAO( const CCAMERA &aCamera );
+    explicit POST_SHADER_SSAO( const CAMERA& aCamera );
 
-    SFVEC3F Shade(const SFVEC2I &aShaderPos ) const override;
-    SFVEC3F ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor,
-                             const SFVEC3F &aShadeColor ) const override;
+    SFVEC3F Shade(const SFVEC2I& aShaderPos ) const override;
+    SFVEC3F ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC3F& aInputColor,
+                             const SFVEC3F& aShadeColor ) const override;
 
     SFVEC3F Blur( const SFVEC2I& aShaderPos ) const;
 
@@ -76,7 +76,7 @@ private:
      * @param aColor input color.
      * @return transformed color.
      */
-    SFVEC3F giColorCurve( const SFVEC3F &aColor ) const;
+    SFVEC3F giColorCurve( const SFVEC3F& aColor ) const;
 
     SFVEC3F* m_shadedBuffer;
 
@@ -84,4 +84,4 @@ private:
 };
 
 
-#endif   // CPOSTSHADER_SSAO_H
+#endif   // POST_SHADER_SSAO_H

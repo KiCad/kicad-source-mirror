@@ -23,12 +23,11 @@
  */
 
 /**
- * @file  ctriangle2d.h
- * @brief
+ * @file ctriangle2d.h
  */
 
-#ifndef _CTRIANGLE2D_H_
-#define _CTRIANGLE2D_H_
+#ifndef _TRIANGLE_2D_H_
+#define _TRIANGLE_2D_H_
 
 #include "cobject2d.h"
 #include "../accelerators/ccontainer2d.h"
@@ -36,24 +35,22 @@
 #include <geometry/shape_poly_set.h>
 #include <clipper.hpp>
 
-class  CTRIANGLE2D : public COBJECT2D
+class TRIANGLE_2D : public OBJECT_2D
 {
 public:
-    CTRIANGLE2D ( const SFVEC2F &aV1,
-                  const SFVEC2F &aV2,
-                  const SFVEC2F &aV3,
-                  const BOARD_ITEM &aBoardItem );
+    TRIANGLE_2D( const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F& aV3,
+                 const BOARD_ITEM& aBoardItem );
 
-    const SFVEC2F &GetP1() const { return p1; }
-    const SFVEC2F &GetP2() const { return p2; }
-    const SFVEC2F &GetP3() const { return p3; }
+    const SFVEC2F& GetP1() const { return p1; }
+    const SFVEC2F& GetP2() const { return p2; }
+    const SFVEC2F& GetP3() const { return p3; }
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    // Imported from OBJECT_2D
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
 private:
     SFVEC2F p1;
@@ -68,8 +65,8 @@ private:
 };
 
 
-void Convert_shape_line_polygon_to_triangles(  SHAPE_POLY_SET &aPolyList,
-                                               CGENERICCONTAINER2D &aDstContainer,
+void Convert_shape_line_polygon_to_triangles(  SHAPE_POLY_SET& aPolyList,
+                                               CONTAINER_2D_BASE& aDstContainer,
                                                float aBiuTo3DunitsScale,
-                                               const BOARD_ITEM &aBoardItem );
-#endif // _CTRIANGLE2D_H_
+                                               const BOARD_ITEM& aBoardItem );
+#endif // _TRIANGLE_2D_H_

@@ -27,26 +27,26 @@
  * @brief
  */
 
-#ifndef _CCONTAINER_H_
-#define _CCONTAINER_H_
+#ifndef _CONTAINER_3D_H_
+#define _CONTAINER_3D_H_
 
 #include "../shapes3D/cobject.h"
 #include <list>
 #include <vector>
 
-typedef std::list<COBJECT *> LIST_OBJECT;
-typedef std::vector<COBJECT *> VECTOR_OBJECT;
-typedef std::vector<const COBJECT *> CONST_VECTOR_OBJECT;
+typedef std::list<OBJECT_3D*> LIST_OBJECT;
+typedef std::vector<OBJECT_3D*> VECTOR_OBJECT;
+typedef std::vector<const OBJECT_3D*> CONST_VECTOR_OBJECT;
 
 
-class CGENERICCONTAINER
+class CONTAINER_3D_BASE
 {
 public:
-    CGENERICCONTAINER();
+    CONTAINER_3D_BASE();
 
-    virtual ~CGENERICCONTAINER();
+    virtual ~CONTAINER_3D_BASE();
 
-    void Add( COBJECT *aObject )
+    void Add( OBJECT_3D *aObject )
     {
         if( aObject )
         {
@@ -57,26 +57,26 @@ public:
 
     void Clear();
 
-    const LIST_OBJECT &GetList() const { return m_objects; }
+    const LIST_OBJECT& GetList() const { return m_objects; }
 
-    void ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const;
+    void ConvertTo( CONST_VECTOR_OBJECT& aOutVector ) const;
 
-    const CBBOX &GetBBox() const { return m_bbox; }
+    const BBOX_3D& GetBBox() const { return m_bbox; }
 
-    virtual bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const = 0;
-    virtual bool IntersectP( const RAY &aRay, float aMaxDistance ) const = 0;
+    virtual bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const = 0;
+    virtual bool IntersectP( const RAY& aRay, float aMaxDistance ) const = 0;
 
 protected:
-    CBBOX       m_bbox;
+    BBOX_3D     m_bbox;
     LIST_OBJECT m_objects;
 };
 
 
-class CCONTAINER : public CGENERICCONTAINER
+class CONTAINER_3D : public CONTAINER_3D_BASE
 {
 public:
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP( const RAY &aRay, float aMaxDistance ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP( const RAY& aRay, float aMaxDistance ) const override;
 };
 
-#endif // _CCONTAINER_H_
+#endif // _CONTAINER_3D_H_

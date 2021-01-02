@@ -32,12 +32,13 @@
 #include <wx/debug.h>
 
 
-CLAYERITEM::CLAYERITEM( const COBJECT2D* aObject2D, float aZMin, float aZMax )
-        : COBJECT( OBJECT3D_TYPE::LAYERITEM ), m_object2d( aObject2D )
+LAYER_ITEM::LAYER_ITEM( const OBJECT_2D* aObject2D, float aZMin, float aZMax ) :
+    OBJECT_3D( OBJECT_3D_TYPE::LAYERITEM ),
+    m_object2d( aObject2D )
 {
     wxASSERT( aObject2D );
 
-    CBBOX2D bbox2d = m_object2d->GetBBox();
+    BBOX_2D bbox2d = m_object2d->GetBBox();
     bbox2d.ScaleNextUp();
     bbox2d.ScaleNextUp();
 
@@ -47,13 +48,12 @@ CLAYERITEM::CLAYERITEM( const COBJECT2D* aObject2D, float aZMin, float aZMax )
     m_bbox.ScaleNextUp();
     m_bbox.Scale( 1.0001f );
 
-    m_centroid = SFVEC3F( aObject2D->GetCentroid().x,
-                          aObject2D->GetCentroid().y,
-                          (aZMax + aZMin) * 0.5f );
+    m_centroid = SFVEC3F( aObject2D->GetCentroid().x, aObject2D->GetCentroid().y,
+                          ( aZMax + aZMin ) * 0.5f );
 }
 
 
-bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool LAYER_ITEM::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
     float tBBoxStart;
     float tBBoxEnd;
@@ -76,7 +76,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         bool hit_top = false;
         bool hit_bot = false;
 
-        if( (float)fabs(aRay.m_Dir.z) > FLT_EPSILON )
+        if( (float) fabs( aRay.m_Dir.z ) > FLT_EPSILON )
         {
             tBot    = (m_bbox.Min().z - aRay.m_Origin.z) * aRay.m_InvDir.z;
             tTop    = (m_bbox.Max().z - aRay.m_Origin.z) * aRay.m_InvDir.z;
@@ -220,8 +220,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
             // The hitT is a hit value for the segment length 'start' - 'end',
             // so it ranges from 0.0 - 1.0. We now convert it to a 3D hit position
             // and calculate the real hitT of the ray.
-            SFVEC3F hitPoint = boxHitPointStart +
-                               (boxHitPointEnd - boxHitPointStart) * tOut;
+            SFVEC3F hitPoint = boxHitPointStart + ( boxHitPointEnd - boxHitPointStart ) * tOut;
 
             const float t = glm::length( hitPoint - aRay.m_Origin );
 
@@ -230,8 +229,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 aHitInfo.m_tHit = t;
                 aHitInfo.m_HitPoint = hitPoint;
 
-                if( (outNormal.x == 0.0f) &&
-                    (outNormal.y == 0.0f) )
+                if( ( outNormal.x == 0.0f ) && ( outNormal.y == 0.0f ) )
                 {
                     aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, 1.0f );
                 }
@@ -264,16 +262,16 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
         const SFVEC2F boxHitPointEnd2D( boxHitPointEnd.x, boxHitPointEnd.y );
 
-        if(!(m_object2d->IsPointInside( boxHitPointStart2D ) &&
-             m_object2d->IsPointInside( boxHitPointEnd2D ) ) )
+        if( !( m_object2d->IsPointInside( boxHitPointStart2D ) &&
+               m_object2d->IsPointInside( boxHitPointEnd2D ) ) )
             return false;
 
         float tOut;
         SFVEC2F outNormal;
         RAYSEG2D raySeg( boxHitPointStart2D, boxHitPointEnd2D );
 
-        if( (m_object2d->IsPointInside( boxHitPointStart2D ) &&
-             m_object2d->IsPointInside( boxHitPointEnd2D ) ) )
+        if( ( m_object2d->IsPointInside( boxHitPointStart2D ) &&
+              m_object2d->IsPointInside( boxHitPointEnd2D ) ) )
         {
             if( tBBoxEnd < aHitInfo.m_tHit )
             {
@@ -299,7 +297,7 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 // so it ranges from 0.0 - 1.0. We now convert it to a 3D hit position
                 // and calculate the real hitT of the ray.
                 const SFVEC3F hitPoint = boxHitPointStart +
-                                         (boxHitPointEnd - boxHitPointStart) * tOut;
+                                         ( boxHitPointEnd - boxHitPointStart ) * tOut;
 
                 const float t = glm::length( hitPoint - aRay.m_Origin );
 
@@ -318,11 +316,12 @@ bool CLAYERITEM::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         }
 #endif
     }
+
     return false;
 }
 
 
-bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
+bool LAYER_ITEM::IntersectP( const RAY& aRay, float aMaxDistance ) const
 {
     float tBBoxStart;
     float tBBoxEnd;
@@ -330,9 +329,7 @@ bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
     if( !m_bbox.Intersect( aRay, &tBBoxStart, &tBBoxEnd ) )
             return false;
 
-    if( ( tBBoxStart > aMaxDistance ) ||
-        //( tBBoxEnd < FLT_EPSILON )
-        ( fabs(tBBoxStart - tBBoxEnd) < FLT_EPSILON ) )
+    if( ( tBBoxStart > aMaxDistance ) || ( fabs( tBBoxStart - tBBoxEnd ) < FLT_EPSILON ) )
         return false;
 
     float tTop = FLT_MAX;
@@ -340,10 +337,10 @@ bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
     bool hit_top = false;
     bool hit_bot = false;
 
-    if( (float)fabs(aRay.m_Dir.z) > FLT_EPSILON )
+    if( (float)fabs( aRay.m_Dir.z ) > FLT_EPSILON )
     {
-        tBot = (m_bbox.Min().z - aRay.m_Origin.z) * aRay.m_InvDir.z;
-        tTop = (m_bbox.Max().z - aRay.m_Origin.z) * aRay.m_InvDir.z;
+        tBot = ( m_bbox.Min().z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
+        tTop = ( m_bbox.Max().z - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
         const float tBBoxStartAdjusted = NextFloatUp( tBBoxStart );
 
@@ -455,10 +452,10 @@ bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
             // so it ranges from 0.0 - 1.0. We now convert it to a 3D hit position
             // and calculate the real hitT of the ray.
             const SFVEC3F hitPoint = boxHitPointStart +
-                                     (boxHitPointEnd - boxHitPointStart) * tOut;
+                                     ( boxHitPointEnd - boxHitPointStart ) * tOut;
             const float t = glm::length( hitPoint - aRay.m_Origin );
 
-            if( (t < aMaxDistance) && ( t > FLT_EPSILON ) )
+            if( ( t < aMaxDistance ) && ( t > FLT_EPSILON ) )
                 return true;
         }
     }
@@ -467,19 +464,19 @@ bool CLAYERITEM::IntersectP( const RAY &aRay , float aMaxDistance ) const
 }
 
 
-bool CLAYERITEM::Intersects( const CBBOX &aBBox ) const
+bool LAYER_ITEM::Intersects( const BBOX_3D& aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return false;
 
-    const CBBOX2D bbox2D( SFVEC2F( aBBox.Min().x, aBBox.Min().y),
-                          SFVEC2F( aBBox.Max().x, aBBox.Max().y) );
+    const BBOX_2D bbox2D( SFVEC2F( aBBox.Min().x, aBBox.Min().y ),
+                          SFVEC2F( aBBox.Max().x, aBBox.Max().y ) );
 
     return m_object2d->Intersects( bbox2D );
 }
 
 
-SFVEC3F CLAYERITEM::GetDiffuseColor( const HITINFO &aHitInfo ) const
+SFVEC3F LAYER_ITEM::GetDiffuseColor( const HITINFO& aHitInfo ) const
 {
     (void)aHitInfo; // unused
 

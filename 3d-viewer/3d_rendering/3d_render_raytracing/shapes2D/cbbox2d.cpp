@@ -33,31 +33,31 @@
 #include <wx/debug.h>
 
 
-CBBOX2D::CBBOX2D()
+BBOX_2D::BBOX_2D()
 {
     Reset();
 }
 
 
-CBBOX2D::CBBOX2D( const SFVEC2F &aPbInit )
+BBOX_2D::BBOX_2D( const SFVEC2F& aPbInit )
 {
     m_min = aPbInit;
     m_max = aPbInit;
 }
 
 
-CBBOX2D::CBBOX2D( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax )
+BBOX_2D::BBOX_2D( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax )
 {
     Set( aPbMin, aPbMax );
 }
 
 
-CBBOX2D::~CBBOX2D()
+BBOX_2D::~BBOX_2D()
 {
 }
 
 
-void CBBOX2D::Set( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax )
+void BBOX_2D::Set( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax )
 {
     m_min.x =  fminf( aPbMin.x, aPbMax.x );
     m_min.y =  fminf( aPbMin.y, aPbMax.y );
@@ -67,7 +67,7 @@ void CBBOX2D::Set( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax )
 }
 
 
-void CBBOX2D::Set( const CBBOX2D &aBBox )
+void BBOX_2D::Set( const BBOX_2D& aBBox )
 {
     wxASSERT( aBBox.IsInitialized() );
 
@@ -75,23 +75,21 @@ void CBBOX2D::Set( const CBBOX2D &aBBox )
 }
 
 
-bool CBBOX2D::IsInitialized() const
+bool BBOX_2D::IsInitialized() const
 {
-    return !( ( FLT_MAX == m_min.x) ||
-              ( FLT_MAX == m_min.y) ||
-              (-FLT_MAX == m_max.x) ||
-              (-FLT_MAX == m_max.y) );
+    return !( ( FLT_MAX == m_min.x) || ( FLT_MAX == m_min.y) ||
+              (-FLT_MAX == m_max.x) || (-FLT_MAX == m_max.y) );
 }
 
 
-void CBBOX2D::Reset()
+void BBOX_2D::Reset()
 {
     m_min = SFVEC2F( FLT_MAX, FLT_MAX );
-    m_max = SFVEC2F(-FLT_MAX,-FLT_MAX );
+    m_max = SFVEC2F( -FLT_MAX,-FLT_MAX );
 }
 
 
-void CBBOX2D::Union( const SFVEC2F &aPoint )
+void BBOX_2D::Union( const SFVEC2F& aPoint )
 {
     // get the minimum value between the added point and the existent bounding box
     m_min.x =  fminf( m_min.x, aPoint.x );
@@ -103,7 +101,7 @@ void CBBOX2D::Union( const SFVEC2F &aPoint )
 }
 
 
-void CBBOX2D::Union( const CBBOX2D &aBBox )
+void BBOX_2D::Union( const BBOX_2D& aBBox )
 {
     // get the minimum value between the added bounding box and
     // the existent bounding box
@@ -117,19 +115,19 @@ void CBBOX2D::Union( const CBBOX2D &aBBox )
 }
 
 
-SFVEC2F CBBOX2D::GetCenter() const
+SFVEC2F BBOX_2D::GetCenter() const
 {
     return (m_max + m_min) * 0.5f;
 }
 
 
-SFVEC2F CBBOX2D::GetExtent() const
+SFVEC2F BBOX_2D::GetExtent() const
 {
     return m_max - m_min;
 }
 
 
-unsigned int CBBOX2D::MaxDimension() const
+unsigned int BBOX_2D::MaxDimension() const
 {
     unsigned int result = 0;
     const SFVEC2F extent = GetExtent();
@@ -140,7 +138,7 @@ unsigned int CBBOX2D::MaxDimension() const
 }
 
 
-float CBBOX2D::Perimeter() const
+float BBOX_2D::Perimeter() const
 {
     const SFVEC2F extent = GetExtent();
 
@@ -148,7 +146,7 @@ float CBBOX2D::Perimeter() const
 }
 
 
-void CBBOX2D::Scale( float aScale )
+void BBOX_2D::Scale( float aScale )
 {
     wxASSERT( IsInitialized() );
 
@@ -160,7 +158,7 @@ void CBBOX2D::Scale( float aScale )
 }
 
 
-void CBBOX2D::ScaleNextUp()
+void BBOX_2D::ScaleNextUp()
 {
     m_min.x = NextFloatDown( m_min.x );
     m_min.y = NextFloatDown( m_min.y );
@@ -170,7 +168,7 @@ void CBBOX2D::ScaleNextUp()
 }
 
 
-void CBBOX2D::ScaleNextDown()
+void BBOX_2D::ScaleNextDown()
 {
     m_min.x = NextFloatUp( m_min.x );
     m_min.y = NextFloatUp( m_min.y );
@@ -182,7 +180,7 @@ void CBBOX2D::ScaleNextDown()
 
 // http://goanna.cs.rmit.edu.au/~gl/teaching/rtr&3dgp/notes/intersection.pdf
 // http://www.mrtc.mdh.se/projects/3Dgraphics/paperF.pdf
-bool CBBOX2D::Intersects( const SFVEC2F &aCenter, float aRadiusSquared ) const
+bool BBOX_2D::Intersects( const SFVEC2F& aCenter, float aRadiusSquared ) const
 {
     float fDistSq = 0.0f;
 
@@ -209,7 +207,7 @@ bool CBBOX2D::Intersects( const SFVEC2F &aCenter, float aRadiusSquared ) const
 }
 
 
-bool CBBOX2D::Intersects( const CBBOX2D &aBBox ) const
+bool BBOX_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     wxASSERT( IsInitialized() );
     wxASSERT( aBBox.IsInitialized() );
@@ -221,7 +219,7 @@ bool CBBOX2D::Intersects( const CBBOX2D &aBBox ) const
 }
 
 
-bool CBBOX2D::Inside( const SFVEC2F &aPoint ) const
+bool BBOX_2D::Inside( const SFVEC2F& aPoint ) const
 {
     wxASSERT( IsInitialized() );
 
@@ -230,7 +228,7 @@ bool CBBOX2D::Inside( const SFVEC2F &aPoint ) const
 }
 
 
-float CBBOX2D::Area() const
+float BBOX_2D::Area() const
 {
     SFVEC2F extent = GetExtent();
     return extent.x * extent.y;
@@ -238,7 +236,7 @@ float CBBOX2D::Area() const
 
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections/
-bool CBBOX2D::Intersect( const RAY2D &aRay, float *t ) const
+bool BBOX_2D::Intersect( const RAY2D& aRay, float* t ) const
 {
     wxASSERT( t );
 
@@ -263,7 +261,7 @@ bool CBBOX2D::Intersect( const RAY2D &aRay, float *t ) const
 }
 
 
-bool CBBOX2D::Intersect( const RAYSEG2D &aRaySeg ) const
+bool BBOX_2D::Intersect( const RAYSEG2D& aRaySeg ) const
 {
     const float tx1 = (m_min.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
     const float tx2 = (m_max.x - aRaySeg.m_Start.x) * aRaySeg.m_InvDir.x;
@@ -288,19 +286,19 @@ bool CBBOX2D::Intersect( const RAYSEG2D &aRaySeg ) const
 }
 
 
-bool CBBOX2D::Intersect( const RAY2D &aRay, float *aOutHitT0, float *aOutHitT1 ) const
+bool BBOX_2D::Intersect( const RAY2D& aRay, float* aOutHitT0, float* aOutHitT1 ) const
 {
     wxASSERT( aOutHitT0 );
     wxASSERT( aOutHitT1 );
 
-    const float tx1 = (m_min.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
-    const float tx2 = (m_max.x - aRay.m_Origin.x) * aRay.m_InvDir.x;
+    const float tx1 = ( m_min.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
+    const float tx2 = ( m_max.x - aRay.m_Origin.x ) * aRay.m_InvDir.x;
 
     float tmin = glm::min( tx1, tx2 );
     float tmax = glm::max( tx1, tx2 );
 
-    const float ty1 = (m_min.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
-    const float ty2 = (m_max.y - aRay.m_Origin.y) * aRay.m_InvDir.y;
+    const float ty1 = ( m_min.y - aRay.m_Origin.y ) * aRay.m_InvDir.y;
+    const float ty2 = ( m_max.y - aRay.m_Origin.y ) * aRay.m_InvDir.y;
 
     tmin = glm::max( tmin, glm::min( ty1, ty2 ) );
     tmax = glm::min( tmax, glm::max( ty1, ty2 ) );

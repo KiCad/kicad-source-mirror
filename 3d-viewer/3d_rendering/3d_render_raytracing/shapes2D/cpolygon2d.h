@@ -91,19 +91,19 @@ typedef struct
  * There is information for the contours (used to test the ray2d intersection) and a close
  * definition of the block polygon to test if a point is inside.
  */
-class  CPOLYGONBLOCK2D : public COBJECT2D
+class POLYGON_2D : public OBJECT_2D
 {
 public:
-    CPOLYGONBLOCK2D( const SEGMENTS_WIDTH_NORMALS &aOpenSegmentList,
-                     const OUTERS_AND_HOLES &aOuter_and_holes,
-                     const BOARD_ITEM &aBoardItem );
+    POLYGON_2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
+                const OUTERS_AND_HOLES& aOuter_and_holes,
+                const BOARD_ITEM& aBoardItem );
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    // Imported from OBJECT_2D
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
 private:
     /**
@@ -124,29 +124,27 @@ private:
  *
  * If the point is inside the bounding box it will return always true. However, the
  * intersection with a ray will return always false.  This is used as a sub block
- * extracted from polygon (pcb polygon areas) and represents an area that is full filled.
+ * extracted from polygon (pcb polygon areas) and represents an area that is fully filled.
  */
-class  CDUMMYBLOCK2D : public COBJECT2D
+class DUMMY_BLOCK_2D : public OBJECT_2D
 {
 public:
-    CDUMMYBLOCK2D( const SFVEC2F &aPbMin,
-                   const SFVEC2F &aPbMax,
-                   const BOARD_ITEM &aBoardItem );
+    DUMMY_BLOCK_2D( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax, const BOARD_ITEM& aBoardItem );
 
-    CDUMMYBLOCK2D( const CBBOX2D &aBBox, const BOARD_ITEM &aBoardItem );
+    DUMMY_BLOCK_2D( const BBOX_2D& aBBox, const BOARD_ITEM& aBoardItem );
 
-     // Imported from COBJECT2D
-     bool Overlaps( const CBBOX2D &aBBox ) const override;
-     bool Intersects( const CBBOX2D &aBBox ) const override;
-     bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-     INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-     bool IsPointInside( const SFVEC2F &aPoint ) const override;
+     // Imported from OBJECT_2D
+     bool Overlaps( const BBOX_2D& aBBox ) const override;
+     bool Intersects( const BBOX_2D& aBBox ) const override;
+     bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+     INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+     bool IsPointInside( const SFVEC2F& aPoint ) const override;
 };
 
 
 /**
  * Use a polygon in the format of the ClipperLib::Path and process it and create multiple 2d
- * objects (CPOLYGONBLOCK2D and CDUMMYBLOCK2D) that can be used to represent this polygon area.
+ * objects (POLYGON_2D and DUMMY_BLOCK_2D) that can be used to represent this polygon area.
  *
  * @param aMainPath the polygon are that was converted from the pcb board
  * @param aDstContainer the destination container to put the created sub blocks
@@ -155,11 +153,11 @@ public:
  *                   0.0f will use the internal polygon segm statistics
  */
 void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
-        const SHAPE_POLY_SET &aMainPath,
-        CGENERICCONTAINER2D &aDstContainer,
+        const SHAPE_POLY_SET& aMainPath,
+        CONTAINER_2D_BASE& aDstContainer,
         float aBiuTo3DunitsScale,
         float aDivFactor,
-        const BOARD_ITEM &aBoardItem,
+        const BOARD_ITEM& aBoardItem,
         int aPolyIndex );
 
 void Polygon2d_TestModule();

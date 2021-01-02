@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 // This source code is public domain, but please mention us if you use it."
 
 
-bool CBBOX::Intersect( const RAY& aRay, float* t ) const
+bool BBOX_3D::Intersect( const RAY& aRay, float* t ) const
 {
     switch( aRay.m_Classification )
     {
@@ -557,7 +557,7 @@ bool CBBOX::Intersect( const RAY& aRay, float* t ) const
 }
 
 
-bool CBBOX::Intersect( const RAY& aRay ) const
+bool BBOX_3D::Intersect( const RAY& aRay ) const
 {
     switch( aRay.m_Classification )
     {

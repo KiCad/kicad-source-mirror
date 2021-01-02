@@ -105,7 +105,7 @@ private:
 private:
     EDA_3D_CANVAS* m_canvas;
     BOARD_ADAPTER* m_boardAdapter;
-    CCAMERA*       m_camera;
+    CAMERA*        m_camera;
     double         m_rotationIncrement;     ///< Rotation increment for the rotate actions (degrees)
 };
 

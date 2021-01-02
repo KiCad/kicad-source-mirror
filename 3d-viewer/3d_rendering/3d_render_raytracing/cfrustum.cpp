@@ -39,10 +39,8 @@
 
 #endif
 
-void CFRUSTUM::GenerateFrustum( const RAY &topLeft,
-                                const RAY &topRight,
-                                const RAY &bottomLeft,
-                                const RAY &bottomRight )
+void FRUSTUM::GenerateFrustum( const RAY& topLeft, const RAY& topRight, const RAY& bottomLeft,
+                               const RAY& bottomRight )
 {
     m_point[0] = topLeft.m_Origin;
     m_point[1] = topRight.m_Origin;
@@ -62,7 +60,7 @@ void CFRUSTUM::GenerateFrustum( const RAY &topLeft,
 // by Nathan Slobody and Adam Wright
 // The frustum test is not exllude all the boxes,
 // when a box is behind and if it is intersecting the planes it will not be discardly but should.
-bool CFRUSTUM::Intersect( const CBBOX &aBBox ) const
+bool FRUSTUM::Intersect( const BBOX_3D& aBBox ) const
 {
     const SFVEC3F box[8] = { aBBox.Min(),
                              aBBox.Max(),
@@ -79,8 +77,8 @@ bool CFRUSTUM::Intersect( const CBBOX &aBBox ) const
 
     for( unsigned int i = 0; i < 4; ++i )
     {
-        const SFVEC3F &pointPlane  = m_point[i];
-        const SFVEC3F &normalPlane = m_normals[i];
+        const SFVEC3F& pointPlane  = m_point[i];
+        const SFVEC3F& normalPlane = m_normals[i];
 
         for( unsigned int j = 0; j < 8; ++j )
         {

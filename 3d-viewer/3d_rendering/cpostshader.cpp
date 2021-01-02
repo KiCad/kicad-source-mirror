@@ -33,26 +33,27 @@
 #include <wx/debug.h>
 
 
-CPOSTSHADER::CPOSTSHADER( const CCAMERA &aCamera ) : m_camera(aCamera)
+POST_SHADER::POST_SHADER( const CAMERA& aCamera ) :
+    m_camera( aCamera )
 {
     m_size    = SFVEC2UI( 0, 0 );
-    m_normals = NULL;
-    m_color   = NULL;
-    m_depth   = NULL;
-    m_wc_hitposition    = NULL;
-    m_shadow_att_factor = NULL;
+    m_normals = nullptr;
+    m_color   = nullptr;
+    m_depth   = nullptr;
+    m_wc_hitposition    = nullptr;
+    m_shadow_att_factor = nullptr;
     m_tmin    = FLT_MAX;
     m_tmax    = FLT_MIN;
 }
 
 
-CPOSTSHADER::~CPOSTSHADER()
+POST_SHADER::~POST_SHADER()
 {
     destroy_buffers();
 }
 
 
-void CPOSTSHADER::UpdateSize( unsigned int xSize, unsigned int ySize )
+void POST_SHADER::UpdateSize( unsigned int xSize, unsigned int ySize )
 {
     destroy_buffers();
 
@@ -69,14 +70,14 @@ void CPOSTSHADER::UpdateSize( unsigned int xSize, unsigned int ySize )
 }
 
 
-void CPOSTSHADER::UpdateSize( const SFVEC2UI &aSize )
+void POST_SHADER::UpdateSize( const SFVEC2UI& aSize )
 {
     UpdateSize( aSize.x, aSize.y );
 }
 
 
-void CPOSTSHADER::SetPixelData( unsigned int x, unsigned int y, const SFVEC3F &aNormal,
-                                const SFVEC3F &aColor, const SFVEC3F &aHitPosition,
+void POST_SHADER::SetPixelData( unsigned int x, unsigned int y, const SFVEC3F& aNormal,
+                                const SFVEC3F& aColor, const SFVEC3F& aHitPosition,
                                 float aDepth, float aShadowAttFactor )
 {
     wxASSERT( x < m_size.x );
@@ -103,7 +104,7 @@ void CPOSTSHADER::SetPixelData( unsigned int x, unsigned int y, const SFVEC3F &a
 }
 
 
-void CPOSTSHADER::destroy_buffers()
+void POST_SHADER::destroy_buffers()
 {
     delete[] m_normals;
     m_normals = nullptr;
@@ -118,55 +119,55 @@ void CPOSTSHADER::destroy_buffers()
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetNormalAt( const SFVEC2F &aPos ) const
+const SFVEC3F& POST_SHADER::GetNormalAt( const SFVEC2F& aPos ) const
 {
     return m_normals[GetIndex( aPos )];
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetColorAt( const SFVEC2F &aPos ) const
+const SFVEC3F& POST_SHADER::GetColorAt( const SFVEC2F& aPos ) const
 {
     return m_color[GetIndex( aPos )];
 }
 
 
-float CPOSTSHADER::GetDepthAt( const SFVEC2F &aPos ) const
+float POST_SHADER::GetDepthAt( const SFVEC2F& aPos ) const
 {
     return m_depth[GetIndex( aPos )];
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetPositionAt( const SFVEC2F &aPos ) const
+const SFVEC3F& POST_SHADER::GetPositionAt( const SFVEC2F& aPos ) const
 {
     return m_wc_hitposition[GetIndex( aPos )];
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetNormalAt( const SFVEC2I &aPos ) const
+const SFVEC3F& POST_SHADER::GetNormalAt( const SFVEC2I& aPos ) const
 {
     return m_normals[GetIndex( aPos )];
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetColorAt( const SFVEC2I &aPos ) const
+const SFVEC3F& POST_SHADER::GetColorAt( const SFVEC2I& aPos ) const
 {
     return m_color[GetIndex( aPos )];
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetColorAtNotProtected( const SFVEC2I &aPos ) const
+const SFVEC3F& POST_SHADER::GetColorAtNotProtected( const SFVEC2I& aPos ) const
 {
     return m_color[ aPos.x + m_size.x * aPos.y ];
 }
 
 
-float CPOSTSHADER::GetDepthAt( const SFVEC2I &aPos ) const
+float POST_SHADER::GetDepthAt( const SFVEC2I& aPos ) const
 {
     return m_depth[GetIndex( aPos )];
 }
 
 
-float CPOSTSHADER::GetDepthNormalizedAt( const SFVEC2I &aPos ) const
+float POST_SHADER::GetDepthNormalizedAt( const SFVEC2I& aPos ) const
 {
     const float depth = m_depth[GetIndex( aPos )];
 
@@ -177,19 +178,19 @@ float CPOSTSHADER::GetDepthNormalizedAt( const SFVEC2I &aPos ) const
 }
 
 
-const SFVEC3F &CPOSTSHADER::GetPositionAt( const SFVEC2I &aPos ) const
+const SFVEC3F& POST_SHADER::GetPositionAt( const SFVEC2I& aPos ) const
 {
     return m_wc_hitposition[GetIndex( aPos )];
 }
 
 
-const float &CPOSTSHADER::GetShadowFactorAt( const SFVEC2I &aPos ) const
+const float& POST_SHADER::GetShadowFactorAt( const SFVEC2I& aPos ) const
 {
     return m_shadow_att_factor[GetIndex( aPos )];
 }
 
 
-void CPOSTSHADER::DebugBuffersOutputAsImages() const
+void POST_SHADER::DebugBuffersOutputAsImages() const
 {
     DBG_SaveBuffer( "m_shadow_att_factor", m_shadow_att_factor, m_size.x, m_size.y );
     DBG_SaveBuffer( "m_color", m_color, m_size.x, m_size.y );

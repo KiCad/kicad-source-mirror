@@ -27,18 +27,18 @@
  * @brief a base class to create post shaders
  */
 
-#ifndef CPOSTSHADER_H
-#define CPOSTSHADER_H
+#ifndef POST_SHADER_H
+#define POST_SHADER_H
 
 #include "ccamera.h"
 
-class  CPOSTSHADER
+class POST_SHADER
 {
 public:
-    explicit CPOSTSHADER( const CCAMERA &aCamera );
-    virtual ~CPOSTSHADER();
+    explicit POST_SHADER( const CAMERA& aCamera );
+    virtual ~POST_SHADER();
 
-    virtual SFVEC3F Shade( const SFVEC2I &aShaderPos ) const = 0;
+    virtual SFVEC3F Shade( const SFVEC2I& aShaderPos ) const = 0;
 
     /**
      * Apply the final color process using a previous stage color.
@@ -46,20 +46,20 @@ public:
      * @param aShadeColor The result of the shader.
      * @return the result of the shade process
      */
-    virtual SFVEC3F ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor,
-                                     const SFVEC3F &aShadeColor ) const = 0;
+    virtual SFVEC3F ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC3F& aInputColor,
+                                     const SFVEC3F& aShadeColor ) const = 0;
 
-    void UpdateSize( const SFVEC2UI &aSize );
+    void UpdateSize( const SFVEC2UI& aSize );
 
     void UpdateSize( unsigned int xSize, unsigned int ySize );
 
     void InitFrame() { m_tmin = FLT_MAX; m_tmax = 0.0f; }
 
-    void SetPixelData( unsigned int x, unsigned int y, const SFVEC3F &aNormal,
-                       const SFVEC3F &aColor, const SFVEC3F &aHitPosition,
+    void SetPixelData( unsigned int x, unsigned int y, const SFVEC3F& aNormal,
+                       const SFVEC3F& aColor, const SFVEC3F& aHitPosition,
                        float aDepth, float aShadowAttFactor );
 
-    const SFVEC3F &GetColorAtNotProtected( const SFVEC2I &aPos ) const;
+    const SFVEC3F& GetColorAtNotProtected( const SFVEC2I& aPos ) const;
 
     void DebugBuffersOutputAsImages() const;
 
@@ -87,35 +87,35 @@ public:
     }
 
 protected:
-    const SFVEC3F &GetNormalAt( const SFVEC2F &aPos ) const;
-    const SFVEC3F &GetColorAt( const SFVEC2F &aPos ) const;
-    const SFVEC3F &GetPositionAt( const SFVEC2F &aPos ) const;
-    float GetDepthAt( const SFVEC2F &aPos ) const;
+    const SFVEC3F& GetNormalAt( const SFVEC2F& aPos ) const;
+    const SFVEC3F& GetColorAt( const SFVEC2F& aPos ) const;
+    const SFVEC3F& GetPositionAt( const SFVEC2F& aPos ) const;
+    float GetDepthAt( const SFVEC2F& aPos ) const;
 
-    const SFVEC3F &GetNormalAt( const SFVEC2I &aPos ) const;
-    const SFVEC3F &GetColorAt( const SFVEC2I &aPos ) const;
-    const SFVEC3F &GetPositionAt( const SFVEC2I &aPos ) const;
-    const float &GetShadowFactorAt( const SFVEC2I &aPos ) const;
+    const SFVEC3F& GetNormalAt( const SFVEC2I& aPos ) const;
+    const SFVEC3F& GetColorAt( const SFVEC2I& aPos ) const;
+    const SFVEC3F& GetPositionAt( const SFVEC2I& aPos ) const;
+    const float& GetShadowFactorAt( const SFVEC2I& aPos ) const;
 
-    float GetDepthAt( const SFVEC2I &aPos ) const;
-    float GetDepthNormalizedAt( const SFVEC2I &aPos ) const;
+    float GetDepthAt( const SFVEC2I& aPos ) const;
+    float GetDepthNormalizedAt( const SFVEC2I& aPos ) const;
     float GetMaxDepth() const { return m_tmax; }
 
 private:
     void destroy_buffers();
 
 protected:
-    const CCAMERA &m_camera;
+    const CAMERA& m_camera;
 
     SFVEC2UI m_size;
-    SFVEC3F *m_normals;
-    SFVEC3F *m_color;
-    SFVEC3F *m_wc_hitposition;
-    float   *m_depth;
-    float   *m_shadow_att_factor;
-    float   m_tmin;
-    float   m_tmax;
+    SFVEC3F* m_normals;
+    SFVEC3F* m_color;
+    SFVEC3F* m_wc_hitposition;
+    float*   m_depth;
+    float*   m_shadow_att_factor;
+    float    m_tmin;
+    float    m_tmax;
 };
 
 
-#endif   // CPOSTSHADER_H
+#endif   // POST_SHADER_H

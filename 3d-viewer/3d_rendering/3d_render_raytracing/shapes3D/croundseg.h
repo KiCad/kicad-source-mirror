@@ -23,28 +23,27 @@
  */
 
 /**
- * @file  croundseg.h
- * @brief
+ * @file croundseg.h
  */
 
-#ifndef _CROUNDSEG_H_
-#define _CROUNDSEG_H_
+#ifndef _ROUND_SEGMENT_H_
+#define _ROUND_SEGMENT_H_
 
 #include "cobject.h"
 #include "../shapes2D/croundsegment2d.h"
 
-class  CROUNDSEG : public COBJECT
+class ROUND_SEGMENT : public OBJECT_3D
 {
 public:
-    CROUNDSEG( const CROUNDSEGMENT2D &aSeg2D, float aZmin, float aZmax );
+    ROUND_SEGMENT( const ROUND_SEGMENT_2D& aSeg2D, float aZmin, float aZmax );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP( const RAY &aRay, float aMaxDistance ) const override;
-    bool Intersects( const CBBOX &aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+    // Imported from OBJECT_3D
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP( const RAY& aRay, float aMaxDistance ) const override;
+    bool Intersects( const BBOX_3D& aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
 
 private:
     RAYSEG2D m_segment;
@@ -65,22 +64,19 @@ private:
 
 #if 0
 /**
- * This is a object similar to a round segment but with a ring
+ * This is a object similar to a round segment but with a ring indside of it.
+ *
  * It is used for Oblong holes
  */
-class  COBLONGRING : public COBJECT
+class OBLONG_RING : public OBJECT_3D
 {
 public:
-    CROUNDSEG( const SFVEC2F &aStart,
-               const SFVEC2F &aEnd,
-               float aInnerRadius,
-               float aOuterRadius,
-               float aZmin,
-               float aZmax );
+    ROUND_SEGMENT( const SFVEC2F& aStart, const SFVEC2F& aEnd, float aInnerRadius,
+                   float aOuterRadius, float aZmin, float aZmax );
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const;
-    bool Intersects( const CBBOX &aBBox ) const;
+    // Imported from OBJECT_3D
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const;
+    bool Intersects( const BBOX_3D& aBBox ) const;
 
 private:
     RAYSEG2D m_segment;
@@ -101,4 +97,4 @@ private:
 };
 #endif
 
-#endif // _CROUNDSEG_H_
+#endif // _ROUND_SEGMENT_H_

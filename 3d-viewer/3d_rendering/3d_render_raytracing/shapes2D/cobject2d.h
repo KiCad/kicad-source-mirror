@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,11 +24,10 @@
 
 /**
  * @file  cobject2d.h
- * @brief
  */
 
-#ifndef _COBJECT2D_H_
-#define _COBJECT2D_H_
+#ifndef _OBJECT_2D_H_
+#define _OBJECT_2D_H_
 
 #include "cbbox2d.h"
 #include <cstring>
@@ -43,7 +42,7 @@ enum class INTERSECTION_RESULT
 };
 
 
-enum class OBJECT2D_TYPE
+enum class OBJECT_2D_TYPE
 {
     FILLED_CIRCLE,
     CSG,
@@ -59,13 +58,13 @@ enum class OBJECT2D_TYPE
 };
 
 
-class  COBJECT2D
+class OBJECT_2D
 {
 public:
-    COBJECT2D( OBJECT2D_TYPE aObjType, const BOARD_ITEM &aBoardItem );
-    virtual ~COBJECT2D() {}
+    OBJECT_2D( OBJECT_2D_TYPE aObjType, const BOARD_ITEM& aBoardItem );
+    virtual ~OBJECT_2D() {}
 
-    const BOARD_ITEM &GetBoardItem() const { return m_boardItem; }
+    const BOARD_ITEM& GetBoardItem() const { return m_boardItem; }
 
     /**
      * Test if the box overlaps the object.
@@ -78,86 +77,83 @@ public:
      * of the bounding box (so the overlap cannot be a point or a line) and one
      * of the boxes cannot full contain the other box.
      *
-     * @param aBBox - The bounding box to test
-     * @return true if the BBox intersects the object or is inside it
+     * @param aBBox is the bounding box to test.
+     * @return true if the BBox intersects the object or is inside it.
      */
-    virtual bool Overlaps( const CBBOX2D &aBBox ) const = 0;
+    virtual bool Overlaps( const BBOX_2D& aBBox ) const = 0;
 
     /**
      * a.Intersects(b) ⇔ !a.Disjoint(b) ⇔ !(a ∩ b = ∅)
      */
-    virtual bool Intersects( const CBBOX2D &aBBox ) const = 0;
+    virtual bool Intersects( const BBOX_2D& aBBox ) const = 0;
 
     /**
-     * @param aOutT a value between 0.0 and 1.0 in relation to the time of the
-     * hit of the segment
+     * @param aOutT a value between 0.0 and 1.0 in relation to the time of the hit of the segment.
      */
-    virtual bool Intersect( const RAYSEG2D &aSegRay,
-                            float *aOutT,
-                            SFVEC2F *aNormalOut ) const = 0;
+    virtual bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const = 0;
 
     /**
      * Test this object if it's completely outside, intersects, or is completely inside \a aBBox.
      *
      * @return INTERSECTION_RESULT
      */
-    virtual INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const = 0;
+    virtual INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const = 0;
 
-    virtual bool IsPointInside( const SFVEC2F &aPoint ) const = 0;
+    virtual bool IsPointInside( const SFVEC2F& aPoint ) const = 0;
 
-    const CBBOX2D &GetBBox() const { return m_bbox; }
+    const BBOX_2D& GetBBox() const { return m_bbox; }
 
-    const SFVEC2F &GetCentroid() const { return m_centroid; }
+    const SFVEC2F& GetCentroid() const { return m_centroid; }
 
-    OBJECT2D_TYPE GetObjectType() const { return m_obj_type; }
+    OBJECT_2D_TYPE GetObjectType() const { return m_obj_type; }
 
 protected:
-    CBBOX2D          m_bbox;
+    BBOX_2D          m_bbox;
     SFVEC2F          m_centroid;
-    OBJECT2D_TYPE    m_obj_type;
+    OBJECT_2D_TYPE   m_obj_type;
 
-    const BOARD_ITEM &m_boardItem;
+    const BOARD_ITEM& m_boardItem;
 };
 
 
 
-class COBJECT2D_STATS
+class OBJECT_2D_STATS
 {
 public:
     void ResetStats()
     {
-        memset( m_counter, 0, sizeof( unsigned int ) * static_cast<int>( OBJECT2D_TYPE::MAX ) );
+        memset( m_counter, 0, sizeof( unsigned int ) * static_cast<int>( OBJECT_2D_TYPE::MAX ) );
     }
 
-    unsigned int GetCountOf( OBJECT2D_TYPE aObjType ) const
+    unsigned int GetCountOf( OBJECT_2D_TYPE aObjType ) const
     {
         return m_counter[static_cast<int>( aObjType )];
     }
 
-    void AddOne( OBJECT2D_TYPE aObjType )
+    void AddOne( OBJECT_2D_TYPE aObjType )
     {
         m_counter[static_cast<int>( aObjType )]++;
     }
 
     void PrintStats();
 
-    static COBJECT2D_STATS &Instance()
+    static OBJECT_2D_STATS& Instance()
     {
         if( !s_instance )
-            s_instance = new COBJECT2D_STATS;
+            s_instance = new OBJECT_2D_STATS;
 
         return *s_instance;
     }
 
 private:
-    COBJECT2D_STATS(){ ResetStats(); }
-    COBJECT2D_STATS( const COBJECT2D_STATS &old );
-    const COBJECT2D_STATS &operator=( const COBJECT2D_STATS &old );
-    ~COBJECT2D_STATS(){}
+    OBJECT_2D_STATS(){ ResetStats(); }
+    OBJECT_2D_STATS( const OBJECT_2D_STATS& old );
+    const OBJECT_2D_STATS& operator=( const OBJECT_2D_STATS& old );
+    ~OBJECT_2D_STATS(){}
 
-    unsigned int m_counter[static_cast<int>( OBJECT2D_TYPE::MAX )];
+    unsigned int m_counter[static_cast<int>( OBJECT_2D_TYPE::MAX )];
 
-    static COBJECT2D_STATS *s_instance;
+    static OBJECT_2D_STATS* s_instance;
 };
 
-#endif // _COBJECT2D_H_
+#endif // _OBJECT_2D_H_

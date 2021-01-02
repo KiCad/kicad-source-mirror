@@ -88,7 +88,7 @@ public:
     wxWindow* GetToolCanvas() const override { return m_previewPane; }
 
     BOARD_ADAPTER& GetAdapter() override { return m_boardAdapter; }
-    CCAMERA& GetCurrentCamera() override { return m_currentCamera; }
+    CAMERA& GetCurrentCamera() override { return m_currentCamera; }
 
     /**
      * Set the currently selected index in the model list so that the scale/rotation/offset
@@ -111,7 +111,7 @@ private:
     /**
      * It will receive the events from editing the fields.
      */
-    void updateOrientation( wxCommandEvent &event ) override;
+    void updateOrientation( wxCommandEvent& event ) override;
 
 	void onMouseWheelScale( wxMouseEvent& event ) override;
 	void onMouseWheelRot( wxMouseEvent& event ) override;
@@ -198,8 +198,8 @@ private:
     EDA_3D_CANVAS*           m_previewPane;
     WX_INFOBAR*              m_infobar;
     BOARD_ADAPTER            m_boardAdapter;
-    CCAMERA&                 m_currentCamera;
-    CTRACK_BALL              m_trackBallCamera;
+    CAMERA&                  m_currentCamera;
+    TRACK_BALL               m_trackBallCamera;
 
     BOARD*                   m_dummyBoard;
     FOOTPRINT*               m_dummyFootprint;

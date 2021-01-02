@@ -35,9 +35,8 @@
 /**
  * A vertical cylinder
  */
-class  CVCYLINDER : public COBJECT
+class CYLINDER : public OBJECT_3D
 {
-
 public:
     /**
      * @param aCenterPoint = position of the vertical cylinder axis in the XY plane
@@ -45,15 +44,14 @@ public:
      * @param aZmax = top position (Z axis)
      * @param aRadius = radius of the cylinder
      */
-    CVCYLINDER( SFVEC2F aCenterPoint, float aZmin, float aZmax, float aRadius );
+    CYLINDER( SFVEC2F aCenterPoint, float aZmin, float aZmax, float aRadius );
 
     void SetColor( SFVEC3F aObjColor ) { m_diffusecolor = aObjColor; }
 
-    // Imported from COBJECT
-    bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const override;
-    bool IntersectP(const RAY &aRay , float aMaxDistance ) const override;
-    bool Intersects( const CBBOX &aBBox ) const override;
-    SFVEC3F GetDiffuseColor( const HITINFO &aHitInfo ) const override;
+    bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const override;
+    bool IntersectP(const RAY& aRay, float aMaxDistance ) const override;
+    bool Intersects( const BBOX_3D& aBBox ) const override;
+    SFVEC3F GetDiffuseColor( const HITINFO& aHitInfo ) const override;
 
 private:
     SFVEC2F m_center;

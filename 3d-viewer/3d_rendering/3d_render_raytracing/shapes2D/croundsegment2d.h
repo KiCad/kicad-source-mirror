@@ -24,50 +24,47 @@
 
 /**
  * @file  croundsegment2d.h
- * @brief
  */
 
-#ifndef _CROUNDSEGMENT2D_H_
-#define _CROUNDSEGMENT2D_H_
+#ifndef _ROUND_SEGMENT_2D_H_
+#define _ROUND_SEGMENT_2D_H_
 
 #include "cobject2d.h"
 
-class  CROUNDSEGMENT2D : public COBJECT2D
+class ROUND_SEGMENT_2D : public OBJECT_2D
 {
-
-friend class CROUNDSEG;
-
 public:
-    CROUNDSEGMENT2D( const SFVEC2F &aStart, const SFVEC2F &aEnd, float aWidth,
-                     const BOARD_ITEM &aBoardItem );
+    ROUND_SEGMENT_2D( const SFVEC2F& aStart, const SFVEC2F& aEnd, float aWidth,
+                      const BOARD_ITEM& aBoardItem );
 
     float GetRadius() const { return m_radius; }
     float GetRadiusSquared() const { return m_radius_squared; }
     float GetWidth()  const { return m_width; }
     float GetLength() const { return m_segment.m_Length; }
 
-    const SFVEC2F &GetStart() const { return m_segment.m_Start; }
-    const SFVEC2F &GetEnd() const { return m_segment.m_End; }
-    const SFVEC2F &GetEnd_minus_Start() const { return m_segment.m_End_minus_start; }
+    const SFVEC2F& GetStart() const { return m_segment.m_Start; }
+    const SFVEC2F& GetEnd() const { return m_segment.m_End; }
+    const SFVEC2F& GetEnd_minus_Start() const { return m_segment.m_End_minus_start; }
 
-    const SFVEC2F &GetLeftStar() const { return m_leftStart; }
-    const SFVEC2F &GetLeftEnd()  const { return m_leftEnd; }
-    const SFVEC2F &GetLeftEnd_minus_Start() const { return m_leftEndMinusStart; }
-    const SFVEC2F &GetLeftDir()  const { return m_leftDir; }
+    const SFVEC2F& GetLeftStar() const { return m_leftStart; }
+    const SFVEC2F& GetLeftEnd()  const { return m_leftEnd; }
+    const SFVEC2F& GetLeftEnd_minus_Start() const { return m_leftEndMinusStart; }
+    const SFVEC2F& GetLeftDir()  const { return m_leftDir; }
 
-    const SFVEC2F &GetRightStar() const { return m_rightStart; }
-    const SFVEC2F &GetRightEnd()  const { return m_rightEnd; }
-    const SFVEC2F &GetRightEnd_minus_Start() const { return m_rightEndMinusStart; }
-    const SFVEC2F &GetRightDir()  const { return m_rightDir; }
+    const SFVEC2F& GetRightStar() const { return m_rightStart; }
+    const SFVEC2F& GetRightEnd()  const { return m_rightEnd; }
+    const SFVEC2F& GetRightEnd_minus_Start() const { return m_rightEndMinusStart; }
+    const SFVEC2F& GetRightDir()  const { return m_rightDir; }
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
 private:
+    friend class ROUND_SEGMENT;
+
     RAYSEG2D m_segment;
 
     SFVEC2F  m_leftStart;
@@ -85,7 +82,7 @@ private:
     float    m_width;
 };
 
-static const float s_min_dot = (FLT_EPSILON * 4.0f * FLT_EPSILON * 4.0f) ;
+static const float s_min_dot = ( FLT_EPSILON * 4.0f * FLT_EPSILON * 4.0f );
 
 /**
  * Check if segment start and end is very close to each other.
@@ -94,7 +91,7 @@ static const float s_min_dot = (FLT_EPSILON * 4.0f * FLT_EPSILON * 4.0f) ;
  *
  * @return true is it is better to convert the segment to circle
  */
-inline bool Is_segment_a_circle( const SFVEC2F &aStart, const SFVEC2F &aEnd )
+inline bool Is_segment_a_circle( const SFVEC2F& aStart, const SFVEC2F& aEnd )
 {
     const SFVEC2F vec = aEnd - aStart;
 
@@ -104,4 +101,4 @@ inline bool Is_segment_a_circle( const SFVEC2F &aStart, const SFVEC2F &aEnd )
             ( glm::dot( vec, vec ) <= s_min_dot );
 }
 
-#endif // _CROUNDSEGMENT2D_H_
+#endif // _ROUND_SEGMENT_2D_H_

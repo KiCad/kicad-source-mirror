@@ -42,7 +42,7 @@
 #endif
 
 
-CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
+IMAGE::IMAGE( unsigned int aXsize, unsigned int aYsize )
 {
     m_wxh    = aXsize * aYsize;
     m_pixels = new unsigned char[m_wxh];
@@ -53,7 +53,7 @@ CIMAGE::CIMAGE( unsigned int aXsize, unsigned int aYsize )
 }
 
 
-CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
+IMAGE::IMAGE( const IMAGE& aSrcImage )
 {
     m_wxh    = aSrcImage.GetWidth() * aSrcImage.GetHeight();
     m_pixels = new unsigned char[m_wxh];
@@ -64,19 +64,19 @@ CIMAGE::CIMAGE( const CIMAGE &aSrcImage )
 }
 
 
-CIMAGE::~CIMAGE()
+IMAGE::~IMAGE()
 {
     delete[] m_pixels;
 }
 
 
-unsigned char* CIMAGE::GetBuffer() const
+unsigned char* IMAGE::GetBuffer() const
 {
     return m_pixels;
 }
 
 
-bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
+bool IMAGE::wrapCoords( int* aXo, int* aYo ) const
 {
     int x = *aXo;
     int y = *aYo;
@@ -111,7 +111,7 @@ bool CIMAGE::wrapCoords( int *aXo, int *aYo ) const
 }
 
 
-void CIMAGE::plot8CircleLines( int aCx, int aCy, int aX, int aY, unsigned char aValue )
+void IMAGE::plot8CircleLines( int aCx, int aCy, int aX, int aY, unsigned char aValue )
 {
     Hline( aCx - aX, aCx + aX, aCy + aY, aValue );
     Hline( aCx - aX, aCx + aX, aCy - aY, aValue );
@@ -120,14 +120,14 @@ void CIMAGE::plot8CircleLines( int aCx, int aCy, int aX, int aY, unsigned char a
 }
 
 
-void CIMAGE::Setpixel( int aX, int aY, unsigned char aValue )
+void IMAGE::Setpixel( int aX, int aY, unsigned char aValue )
 {
     if( wrapCoords( &aX, &aY ) )
         m_pixels[aX + aY * m_width] = aValue;
 }
 
 
-unsigned char CIMAGE::Getpixel( int aX, int aY ) const
+unsigned char IMAGE::Getpixel( int aX, int aY ) const
 {
     if( wrapCoords( &aX, &aY ) )
         return m_pixels[aX + aY * m_width];
@@ -136,7 +136,7 @@ unsigned char CIMAGE::Getpixel( int aX, int aY ) const
 }
 
 
-void CIMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
+void IMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
 {
     if( ( aY < 0 ) || ( aY >= (int) m_height ) || ( ( aXStart < 0 ) && ( aXEnd < 0 ) )
       || ( ( aXStart >= (int) m_width ) && ( aXEnd >= (int) m_width ) ) )
@@ -170,7 +170,7 @@ void CIMAGE::Hline( int aXStart, int aXEnd, int aY, unsigned char aValue )
 
 // Based on paper
 // http://web.engr.oregonstate.edu/~sllu/bcircle.pdf
-void CIMAGE::CircleFilled( int aCx, int aCy, int aRadius, unsigned char aValue )
+void IMAGE::CircleFilled( int aCx, int aCy, int aRadius, unsigned char aValue )
 {
     int x = aRadius;
     int y = 0;
@@ -195,25 +195,25 @@ void CIMAGE::CircleFilled( int aCx, int aCy, int aRadius, unsigned char aValue )
 }
 
 
-void CIMAGE::Invert()
+void IMAGE::Invert()
 {
     for( unsigned int it = 0; it < m_wxh; it++ )
         m_pixels[it] = 255 - m_pixels[it];
 }
 
 
-void CIMAGE::CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOperation )
+void IMAGE::CopyFull( const IMAGE* aImgA, const IMAGE* aImgB, IMAGE_OP aOperation )
 {
     int aV, bV;
 
     if( aOperation == IMAGE_OP::RAW )
     {
-        if( aImgA == NULL )
+        if( aImgA == nullptr )
             return;
     }
     else
     {
-        if( ( aImgA == NULL ) || ( aImgB == NULL ) )
+        if( ( aImgA == nullptr ) || ( aImgB == nullptr ) )
             return;
     }
 
@@ -471,7 +471,7 @@ static const S_FILTER FILTERS[] =   {
 ///        do it without use the getpixel function.
 ///        Optimization can be done to m_pixels[ix + iy * m_width]
 ///        but keep in mind the parallel process of the algorithm
-void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
+void IMAGE::EfxFilter( IMAGE* aInImg, IMAGE_FILTER aFilterType )
 {
     S_FILTER filter = FILTERS[static_cast<int>( aFilterType )];
 
@@ -487,9 +487,7 @@ void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
     {
         std::thread t = std::thread( [&]()
         {
-            for( size_t iy = nextRow.fetch_add( 1 );
-                 iy < m_height;
-                 iy = nextRow.fetch_add( 1 ) )
+            for( size_t iy = nextRow.fetch_add( 1 ); iy < m_height; iy = nextRow.fetch_add( 1 ) )
             {
                 for( size_t ix = 0; ix < m_width; ix++ )
                 {
@@ -500,8 +498,7 @@ void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
                         for( size_t sx = 0; sx < 5; sx++ )
                         {
                             int factor = filter.kernel[sx][sy];
-                            unsigned char pixelv = aInImg->Getpixel( ix + sx - 2,
-                                                                     iy + sy - 2 );
+                            unsigned char pixelv = aInImg->Getpixel( ix + sx - 2, iy + sy - 2 );
 
                             v += pixelv * factor;
                         }
@@ -527,7 +524,7 @@ void CIMAGE::EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType )
 }
 
 
-void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
+void IMAGE::SetPixelsFromNormalizedFloat( const float* aNormalizedFloatArray )
 {
     for( unsigned int i = 0; i < m_wxh; i++ )
     {
@@ -539,7 +536,7 @@ void CIMAGE::SetPixelsFromNormalizedFloat( const float * aNormalizedFloatArray )
 }
 
 
-void CIMAGE::SaveAsPNG( const wxString& aFileName ) const
+void IMAGE::SaveAsPNG( const wxString& aFileName ) const
 {
     DBG_SaveBuffer( aFileName, m_pixels, m_width, m_height );
 }

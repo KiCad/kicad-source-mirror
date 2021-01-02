@@ -38,8 +38,8 @@
 class WX_INFOBAR;
 class wxStatusBar;
 class BOARD;
-class C3D_RENDER_RAYTRACING;
-class C3D_RENDER_OGL_LEGACY;
+class RENDER_3D_RAYTRACE;
+class RENDER_3D_LEGACY;
 
 
 /**
@@ -57,7 +57,7 @@ public:
      *  @param aSettings the settings options to be used by this canvas.
      */
     EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
-                   BOARD_ADAPTER& aSettings, CCAMERA& aCamera, S3D_CACHE* a3DCachePointer );
+                   BOARD_ADAPTER& aSettings, CAMERA& aCamera, S3D_CACHE* a3DCachePointer );
 
     ~EDA_3D_CANVAS();
 
@@ -81,7 +81,7 @@ public:
         m_parentInfoBar = aInfoBar;
     }
 
-    void ReloadRequest( BOARD *aBoard = NULL, S3D_CACHE *aCachePointer = NULL );
+    void ReloadRequest( BOARD* aBoard = nullptr, S3D_CACHE* aCachePointer = nullptr );
 
     /**
      * Query if there is a pending reload request.
@@ -102,10 +102,11 @@ public:
     void RenderRaytracingRequest();
 
     /**
-     *  Request a screenshot and output it to the aDstImage
+     *  Request a screenshot and output it to the \a aDstImage
+     *
      *  @param aDstImage - Screenshot destination image
      */
-    void GetScreenshot( wxImage &aDstImage );
+    void GetScreenshot( wxImage& aDstImage );
 
     /**
      * Helper function to call view commands.
@@ -183,24 +184,24 @@ private:
      */
     void DoRePaint();
 
-    void OnEraseBackground( wxEraseEvent &event );
+    void OnEraseBackground( wxEraseEvent& event );
 
     void OnRefreshRequest( wxEvent& aEvent );
 
-    void OnMouseWheel( wxMouseEvent &event );
+    void OnMouseWheel( wxMouseEvent& event );
 
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
     void   OnMagnify( wxMouseEvent& event );
 #endif
 
-    void OnMouseMove( wxMouseEvent &event );
-    void OnLeftDown( wxMouseEvent &event );
-    void OnLeftUp( wxMouseEvent &event );
-    void OnMiddleUp( wxMouseEvent &event );
-    void OnMiddleDown( wxMouseEvent &event );
+    void OnMouseMove( wxMouseEvent& event );
+    void OnLeftDown( wxMouseEvent& event );
+    void OnLeftUp( wxMouseEvent& event );
+    void OnMiddleUp( wxMouseEvent& event );
+    void OnMiddleDown( wxMouseEvent& event );
     void OnTimerTimeout_Editing( wxTimerEvent& event );
-    void OnCloseWindow( wxCloseEvent &event );
-    void OnResize( wxSizeEvent &event );
+    void OnCloseWindow( wxCloseEvent& event );
+    void OnResize( wxSizeEvent& event );
     void OnTimerTimeout_Redraw( wxTimerEvent& event );
 
     DECLARE_EVENT_TABLE()
@@ -272,10 +273,10 @@ private:
     int                    m_moving_speed_multiplier; // Camera animation speed multiplier option
 
     BOARD_ADAPTER&         m_boardAdapter;            // Pre-computed 3D info and settings
-    CCAMERA&               m_camera;
-    C3D_RENDER_BASE*       m_3d_render;
-    C3D_RENDER_RAYTRACING* m_3d_render_raytracing;
-    C3D_RENDER_OGL_LEGACY* m_3d_render_ogl_legacy;
+    CAMERA&                m_camera;
+    RENDER_3D_BASE*        m_3d_render;
+    RENDER_3D_RAYTRACE*    m_3d_render_raytracing;
+    RENDER_3D_LEGACY*      m_3d_render_ogl_legacy;
 
     static const float     m_delta_move_step_factor;  // Step factor to used with cursor on
                                                       // relation to the current zoom
@@ -283,8 +284,8 @@ private:
     bool                   m_opengl_supports_raytracing;
     bool                   m_render_raytracing_was_requested;
 
-    CCONTAINER             m_3DShapes_container;      // Holds 3D shapes from footprints
-    CGENERICACCELERATOR    *m_accelerator3DShapes;    // used for mouse over searching
+    CONTAINER_3D           m_3DShapes_container;      // Holds 3D shapes from footprints
+    ACCELERATOR_3D*        m_accelerator3DShapes;    // used for mouse over searching
 
     BOARD_ITEM*            m_currentIntersectedBoardItem;
 
@@ -294,7 +295,7 @@ private:
      *  "KI_TRACE_EDA_3D_CANVAS".  See the wxWidgets documentation on wxLogTrace for
      *  more information.
      */
-    static const wxChar *m_logTrace;
+    static const wxChar* m_logTrace;
 };
 
 

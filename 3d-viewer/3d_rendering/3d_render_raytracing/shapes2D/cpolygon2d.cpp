@@ -65,9 +65,9 @@ static bool polygon_IsPointInside( const SEGMENTS& aSegments, const SFVEC2F& aPo
 }
 
 
-CPOLYGONBLOCK2D::CPOLYGONBLOCK2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
-        const OUTERS_AND_HOLES& aOuter_and_holes, const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::POLYGON, aBoardItem )
+POLYGON_2D::POLYGON_2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList,
+                        const OUTERS_AND_HOLES& aOuter_and_holes, const BOARD_ITEM& aBoardItem )
+        : OBJECT_2D( OBJECT_2D_TYPE::POLYGON, aBoardItem )
 {
     m_open_segments.resize( aOpenSegmentList.size() );
 
@@ -104,7 +104,7 @@ CPOLYGONBLOCK2D::CPOLYGONBLOCK2D( const SEGMENTS_WIDTH_NORMALS& aOpenSegmentList
 }
 
 
-bool CPOLYGONBLOCK2D::Intersects( const CBBOX2D& aBBox ) const
+bool POLYGON_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
 
@@ -114,14 +114,14 @@ bool CPOLYGONBLOCK2D::Intersects( const CBBOX2D& aBBox ) const
 }
 
 
-bool CPOLYGONBLOCK2D::Overlaps( const CBBOX2D& aBBox ) const
+bool POLYGON_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return false;
 }
 
 
-bool CPOLYGONBLOCK2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
+bool POLYGON_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
     int   hitIndex = -1;
     float hitU     = 0.0f;
@@ -180,14 +180,14 @@ bool CPOLYGONBLOCK2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F*
 }
 
 
-INTERSECTION_RESULT CPOLYGONBLOCK2D::IsBBoxInside( const CBBOX2D& aBBox ) const
+INTERSECTION_RESULT POLYGON_2D::IsBBoxInside( const BBOX_2D& aBBox ) const
 {
 
     return INTERSECTION_RESULT::MISSES;
 }
 
 
-bool CPOLYGONBLOCK2D::IsPointInside( const SFVEC2F& aPoint ) const
+bool POLYGON_2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     // NOTE: we could add here a test for the bounding box, but because in the
     // 3d object it already checked for a 3d bbox.
@@ -211,9 +211,9 @@ bool CPOLYGONBLOCK2D::IsPointInside( const SFVEC2F& aPoint ) const
 }
 
 
-CDUMMYBLOCK2D::CDUMMYBLOCK2D( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax,
-                              const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::DUMMYBLOCK, aBoardItem )
+DUMMY_BLOCK_2D::DUMMY_BLOCK_2D( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax,
+                                const BOARD_ITEM& aBoardItem )
+        : OBJECT_2D( OBJECT_2D_TYPE::DUMMYBLOCK, aBoardItem )
 {
     m_bbox.Set( aPbMin, aPbMax );
     m_bbox.ScaleNextUp();
@@ -221,8 +221,8 @@ CDUMMYBLOCK2D::CDUMMYBLOCK2D( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax,
 }
 
 
-CDUMMYBLOCK2D::CDUMMYBLOCK2D( const CBBOX2D& aBBox, const BOARD_ITEM& aBoardItem )
-        : COBJECT2D( OBJECT2D_TYPE::DUMMYBLOCK, aBoardItem )
+DUMMY_BLOCK_2D::DUMMY_BLOCK_2D( const BBOX_2D& aBBox, const BOARD_ITEM& aBoardItem )
+        : OBJECT_2D( OBJECT_2D_TYPE::DUMMYBLOCK, aBoardItem )
 {
     m_bbox.Set( aBBox );
     m_bbox.ScaleNextUp();
@@ -230,20 +230,20 @@ CDUMMYBLOCK2D::CDUMMYBLOCK2D( const CBBOX2D& aBBox, const BOARD_ITEM& aBoardItem
 }
 
 
-bool CDUMMYBLOCK2D::Intersects( const CBBOX2D& aBBox ) const
+bool DUMMY_BLOCK_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
 }
 
 
-bool CDUMMYBLOCK2D::Overlaps( const CBBOX2D& aBBox ) const
+bool DUMMY_BLOCK_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
     // Not implemented
     return false;
 }
 
 
-bool CDUMMYBLOCK2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
+bool DUMMY_BLOCK_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
     // The dummy block will be never intersected because it have no edges,
     // only it have a plan surface of the size of the bounding box
@@ -251,14 +251,14 @@ bool CDUMMYBLOCK2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* a
 }
 
 
-INTERSECTION_RESULT CDUMMYBLOCK2D::IsBBoxInside( const CBBOX2D& aBBox ) const
+INTERSECTION_RESULT DUMMY_BLOCK_2D::IsBBoxInside( const BBOX_2D& aBBox ) const
 {
     //!TODO:
     return INTERSECTION_RESULT::MISSES;
 }
 
 
-bool CDUMMYBLOCK2D::IsPointInside( const SFVEC2F& aPoint ) const
+bool DUMMY_BLOCK_2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     // The dummy is filled in all his bounding box, so if it hit the bbox
     // it will hit this dummy
@@ -306,7 +306,7 @@ static bool intersect( const SEGMENT_WITH_NORMALS& aSeg, const SFVEC2F& aStart,
 }
 
 
-static void extractPathsFrom( const SEGMENTS_WIDTH_NORMALS& aSegList, const CBBOX2D& aBBox,
+static void extractPathsFrom( const SEGMENTS_WIDTH_NORMALS& aSegList, const BBOX_2D& aBBox,
                               SEGMENTS_WIDTH_NORMALS& aOutSegThatIntersect )
 {
     wxASSERT( aSegList.size() >= 3 );
@@ -334,7 +334,7 @@ static void extractPathsFrom( const SEGMENTS_WIDTH_NORMALS& aSegList, const CBBO
             // Check if a segment intersects the bounding box
 
             // Make a bounding box based on the segments start and end
-            CBBOX2D segmentBBox( aSegList[i].m_Start, aSegList[j].m_Start );
+            BBOX_2D segmentBBox( aSegList[i].m_Start, aSegList[j].m_Start );
 
             if( aBBox.Intersects( segmentBBox ) )
             {
@@ -380,7 +380,7 @@ static void polygon_Convert( const SHAPE_LINE_CHAIN& aPath, SEGMENTS& aOutSegmen
 
 
 void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks( const SHAPE_POLY_SET& aMainPath,
-        CGENERICCONTAINER2D& aDstContainer, float aBiuTo3DunitsScale, float aDivFactor,
+        CONTAINER_2D_BASE& aDstContainer, float aBiuTo3DunitsScale, float aDivFactor,
         const BOARD_ITEM& aBoardItem, int aPolyIndex )
 {
     // Get the path
@@ -391,7 +391,7 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks( const SHAPE_POLY_S
     BOX2I pathBounds = path.BBox();
 
     // Convert the points to segments class
-    CBBOX2D bbox;
+    BBOX_2D bbox;
     bbox.Reset();
 
     // Contains the main list of segments and each segment normal interpolated
@@ -553,14 +553,13 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks( const SHAPE_POLY_S
 
     for( unsigned int iy = 0; iy < grid_divisions.y; iy++ )
     {
-
         int   leftToRight = pathBounds.GetLeft();
         float blockX      = bbox.Min().x;
 
         for( unsigned int ix = 0; ix < grid_divisions.x; ix++ )
         {
-            CBBOX2D blockBox( SFVEC2F( blockX, blockY - blockAdvance.y ),
-                    SFVEC2F( blockX + blockAdvance.x, blockY ) );
+            BBOX_2D blockBox( SFVEC2F( blockX, blockY - blockAdvance.y ),
+                              SFVEC2F( blockX + blockAdvance.x, blockY ) );
 
             // Make the box large to it will catch (intersect) the edges
             blockBox.ScaleNextUp();
@@ -587,7 +586,7 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks( const SHAPE_POLY_S
                     // polygon, so it means that if any point is inside it,
                     // then all other are inside the polygon.
                     // This is a full bbox inside, so add a dummy box
-                    aDstContainer.Add( new CDUMMYBLOCK2D( blockBox, aBoardItem ) );
+                    aDstContainer.Add( new DUMMY_BLOCK_2D( blockBox, aBoardItem ) );
                     stats_n_dummy_blocks++;
                 }
                 else
@@ -619,8 +618,8 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks( const SHAPE_POLY_S
 
                 // We need here a strictly simple polygon with outlines and holes
                 SHAPE_POLY_SET solution;
-                solution.BooleanIntersection(
-                        aMainPath, subBlockPoly, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+                solution.BooleanIntersection( aMainPath, subBlockPoly,
+                                              SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
                 OUTERS_AND_HOLES outersAndHoles;
 
@@ -650,8 +649,8 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks( const SHAPE_POLY_S
 
                 if( !outersAndHoles.m_Outers.empty() )
                 {
-                    aDstContainer.Add( new CPOLYGONBLOCK2D( extractedSegments, outersAndHoles,
-                                                            aBoardItem ) );
+                    aDstContainer.Add( new POLYGON_2D( extractedSegments, outersAndHoles,
+                                                       aBoardItem ) );
                     stats_n_poly_blocks++;
                 }
             }
@@ -693,8 +692,7 @@ static void polygon_Convert( const ClipperLib::Path& aPath, SEGMENTS& aOutSegmen
 
 void Polygon2d_TestModule()
 {
-    // "This structure contains a sequence of IntPoint vertices defining a
-    // single contour"
+    // "This structure contains a sequence of IntPoint vertices defining a single contour"
     ClipperLib::Path aPath;
 
     SEGMENTS aSegments;

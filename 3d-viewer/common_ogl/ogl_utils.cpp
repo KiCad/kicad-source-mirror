@@ -76,7 +76,7 @@ void OGL_GetScreenshot( wxImage& aDstImage )
 }
 
 
-GLuint OGL_LoadTexture( const CIMAGE& aImage )
+GLuint OGL_LoadTexture( const IMAGE& aImage )
 {
     unsigned char* rgbaBuffer = (unsigned char*) malloc( aImage.GetWidth() *
                                                          aImage.GetHeight() * 4 );

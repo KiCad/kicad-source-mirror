@@ -27,8 +27,8 @@
  * @brief one 8bit-channel image definition
  */
 
-#ifndef CIMAGE_H
-#define CIMAGE_H
+#ifndef IMAGE_H
+#define IMAGE_H
 
 #include <wx/string.h>
 
@@ -86,27 +86,27 @@ typedef struct
 /**
  * Manage an 8-bit channel image.
  */
-class CIMAGE
+class IMAGE
 {
 public:
     /**
-     * Construct a CIMAGE based on image size.
+     * Construct a IMAGE based on image size.
      *
      * @param aXsize x size
      * @param aYsize y size
      */
-    CIMAGE( unsigned int aXsize, unsigned int aYsize );
+    IMAGE( unsigned int aXsize, unsigned int aYsize );
 
     /**
-     * Construct a CIMAGE based from an existing image.
+     * Construct a IMAGE based from an existing image.
      *
      * It will make a copy the \a aSrcImage.
      *
      * @param aSrcImage
      */
-    CIMAGE( const CIMAGE &aSrcImage );
+    IMAGE( const IMAGE& aSrcImage );
 
-    ~CIMAGE();
+    ~IMAGE();
 
     /**
      * Set a value in a pixel position, position is clamped in accordance with the
@@ -160,7 +160,7 @@ public:
      * @param aImgB an image input.
      * @param aOperation operation to perform
      */
-    void CopyFull( const CIMAGE* aImgA, const CIMAGE* aImgB, IMAGE_OP aOperation );
+    void CopyFull( const IMAGE* aImgA, const IMAGE* aImgB, IMAGE_OP aOperation );
 
     /**
      * Invert the values of this image <- (255 - this)
@@ -173,7 +173,7 @@ public:
      * @param aInImg input image
      * @param aFilterType filter type to apply
      */
-    void EfxFilter( CIMAGE* aInImg, IMAGE_FILTER aFilterType );
+    void EfxFilter( IMAGE* aInImg, IMAGE_FILTER aFilterType );
 
     /**
      * Save image buffer to a PNG file into the working folder.
@@ -211,7 +211,7 @@ private:
      * @param aXo Y coordinate to be converted (output).
      * @return bool - true if the coordinates are inside the image, false otherwise.
      */
-    bool wrapCoords( int *aXo, int *aYo ) const;
+    bool wrapCoords( int* aXo, int* aYo ) const;
 
     void plot8CircleLines( int aCx, int aCy, int aX, int aY, unsigned char aValue );
 
@@ -222,4 +222,4 @@ private:
     IMAGE_WRAP      m_wraping;          ///< current wrapping type
 };
 
-#endif   // CIMAGE_H
+#endif   // IMAGE_H

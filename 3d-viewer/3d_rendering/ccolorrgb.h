@@ -27,12 +27,12 @@
  * @brief
  */
 
-#ifndef CCOLORRGB_H
-#define CCOLORRGB_H
+#ifndef COLOR_RGB_H
+#define COLOR_RGB_H
 
 #include <plugins/3dapi/xv3d_types.h>
 
-union CCOLORRGB
+union COLOR_RGB
 {
     unsigned char c[3];
 
@@ -43,9 +43,9 @@ union CCOLORRGB
         unsigned char b;
     };
 
-    CCOLORRGB( const SFVEC3F &aColor );
-    CCOLORRGB() { r = 0; g = 0; b = 0; }
-    CCOLORRGB( unsigned char aR, unsigned char aG, unsigned char aB )
+    COLOR_RGB( const SFVEC3F& aColor );
+    COLOR_RGB() { r = 0; g = 0; b = 0; }
+    COLOR_RGB( unsigned char aR, unsigned char aG, unsigned char aB )
     {
         r = aR;
         g = aG;
@@ -54,9 +54,9 @@ union CCOLORRGB
 };
 
 
-CCOLORRGB BlendColor( const CCOLORRGB &aC1, const CCOLORRGB &aC2 );
-CCOLORRGB BlendColor( const CCOLORRGB &aC1, const CCOLORRGB &aC2, const CCOLORRGB &aC3 );
-CCOLORRGB BlendColor( const CCOLORRGB &aC1, const CCOLORRGB &aC2, const CCOLORRGB &aC3,
-                      const CCOLORRGB &aC4 );
+COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2 );
+COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2, const COLOR_RGB& aC3 );
+COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2, const COLOR_RGB& aC3,
+                      const COLOR_RGB& aC4 );
 
-#endif   // CCOLORRGB_H
+#endif   // COLOR_RGB_H

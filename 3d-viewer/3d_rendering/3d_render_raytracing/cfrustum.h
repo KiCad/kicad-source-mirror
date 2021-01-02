@@ -27,8 +27,8 @@
  * @brief implements a frustum that is used to test ray pack tests
  */
 
-#ifndef _CFRUSTUM_H_
-#define _CFRUSTUM_H_
+#ifndef _FRUSTUM_H_
+#define _FRUSTUM_H_
 
 #include "shapes3D/cbbox.h"
 #include "ray.h"
@@ -38,28 +38,19 @@
 #if 0
 #error not implemented
 #else
-struct CFRUSTUM
+struct FRUSTUM
 {
-
 public:
-    /**
-     * @brief GenerateFrustum
-     * @param topLeft
-     * @param topRight
-     * @param bottomLeft
-     * @param bottomRight
-     */
-    void GenerateFrustum( const RAY &topLeft,
-                          const RAY &topRight,
-                          const RAY &bottomLeft,
-                          const RAY &bottomRight );
+    void GenerateFrustum( const RAY& topLeft, const RAY& topRight, const RAY& bottomLeft,
+                          const RAY& bottomRight );
 
     /**
-     * @brief Intersect - Intersects a bbox with this frustum
-     * @param aBBox: a bbox to test
-     * @return true if the bbox intersects this frustum
+     * Intersect \a aBBox with this frustum.
+     *
+     * @param aBBox is a bounding box to test.
+     * @return true if the bounding box intersects this frustum.
      */
-    bool Intersect( const CBBOX &aBBox ) const;
+    bool Intersect( const BBOX_3D& aBBox ) const;
 
 private:
         SFVEC3F m_normals[4];
@@ -68,4 +59,4 @@ private:
 #endif
 
 
-#endif // _CFRUSTUM_H_
+#endif // _FRUSTUM_H_

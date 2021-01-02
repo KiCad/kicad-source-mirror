@@ -27,8 +27,8 @@
  * @brief 2D Bounding Box class definition
  */
 
-#ifndef _CBBOX2D_H_
-#define _CBBOX2D_H_
+#ifndef _BBOX_2D_H_
+#define _BBOX_2D_H_
 
 #include "../ray.h"
 
@@ -36,22 +36,21 @@
 /**
  * Manage a bounding box defined by two SFVEC2F min max points.
  */
-struct CBBOX2D
+struct BBOX_2D
 {
-
 public:
 
     /**
      * Create with default values a bounding box (not initialized).
      */
-    CBBOX2D();
+    BBOX_2D();
 
     /**
      * Initialize a bounding box with a given point.
      *
      * @param aPbInit a point for the bounding box initialization.
      */
-    explicit CBBOX2D( const SFVEC2F &aPbInit );
+    explicit BBOX_2D( const SFVEC2F& aPbInit );
 
     /**
      * Initialize a bounding box with a minimum and a maximum point.
@@ -59,9 +58,9 @@ public:
      * @param aPbMin the minimum point to initialize the bounding box.
      * @param aPbMax the maximum point to initialize the bounding box.
      */
-    CBBOX2D( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax );
+    BBOX_2D( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax );
 
-    ~CBBOX2D();
+    ~BBOX_2D();
 
 
     /**
@@ -70,28 +69,28 @@ public:
      * @param aPbMin the minimum point to initialize the bounding box.
      * @param aPbMax the maximum point to initialize the bounding box.
      */
-    void Set( const SFVEC2F &aPbMin, const SFVEC2F &aPbMax );
+    void Set( const SFVEC2F& aPbMin, const SFVEC2F& aPbMax );
 
     /**
      * Set bounding box based on another bounding box.
      *
-     * @param CBBOX2D a bounding box to initialize this one.
+     * @param BBOX_2D a bounding box to initialize this one.
      */
-    void Set( const CBBOX2D &aBBox );
+    void Set( const BBOX_2D& aBBox );
 
     /**
      * Recalculate the bounding box adding a point.
      *
      * @param aPoint the point to be bounded
      */
-    void Union( const SFVEC2F &aPoint );
+    void Union( const SFVEC2F& aPoint );
 
     /**
      * Recalculate the bounding box adding other bounding box.
      *
      * @param aBBox the bounding box to be bounded.
      */
-    void Union( const CBBOX2D &aBBox );
+    void Union( const BBOX_2D& aBBox );
 
     /**
      * Scale a bounding box by its center.
@@ -115,21 +114,21 @@ public:
      *
      * @param aBBox the bounding box to check if it intersects.
      */
-    bool Intersects( const CBBOX2D &aBBox ) const;
+    bool Intersects( const BBOX_2D& aBBox ) const;
 
     /**
      * Test if a circle intersects this box.
      *
      * @param aBBox the bounding box to check if it intersects.
      */
-    bool Intersects( const SFVEC2F &aCenter, float aRadiusSquared ) const;
+    bool Intersects( const SFVEC2F& aCenter, float aRadiusSquared ) const;
 
     /**
      * Check is a point is inside this bounding box.
      *
      * @param aPoint point to test.
      */
-    bool Inside( const SFVEC2F &aPoint ) const;
+    bool Inside( const SFVEC2F& aPoint ) const;
 
     /**
      * Calculate the area of a bounding box.
@@ -151,8 +150,6 @@ public:
     void Reset();
 
     /**
-     * Return the center point of the bounding box.
-     *
      * @return the position of the center of this bounding box.
      */
     SFVEC2F GetCenter() const;
@@ -163,17 +160,14 @@ public:
     SFVEC2F GetExtent() const;
 
     /**
-     * Return the minimum vertex point.
-     *
      * @return the minimum vertex position.
      */
-    const SFVEC2F &Min() const { return m_min; }
+    const SFVEC2F& Min() const { return m_min; }
 
     /**
-     * Return the maximum vertex point.
      * @return the maximum vertex position.
      */
-    const SFVEC2F &Max() const { return m_max; }
+    const SFVEC2F& Max() const { return m_max; }
 
 
     /**
@@ -182,20 +176,20 @@ public:
     unsigned int MaxDimension() const;
 
     /**
-     * @return the surface area of the box
+     * @return the surface area of the box.
      */
     float Perimeter() const;
 
     /**
-     * @param aRay ray to intersect the box
-     * @param t distance point of the ray of the intersection (if true)
-     * @return true if the ray hits the box
+     * @param aRay is a ray to intersect the box.
+     * @param t is the distance point of the ray of the intersection (if true).
+     * @return true if the ray hits the box.
      */
-    bool Intersect( const RAY2D &aRay, float *t ) const;
+    bool Intersect( const RAY2D& aRay, float* t ) const;
 
-    bool Intersect( const RAY2D &aRay, float *aOutHitT0, float *aOutHitT1 ) const;
+    bool Intersect( const RAY2D& aRay, float* aOutHitT0, float* aOutHitT1 ) const;
 
-    bool Intersect( const RAYSEG2D &aRaySeg ) const;
+    bool Intersect( const RAYSEG2D& aRaySeg ) const;
 
 private:
     SFVEC2F m_min; ///< point of the lower position of the bounding box

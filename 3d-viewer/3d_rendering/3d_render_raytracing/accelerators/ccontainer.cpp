@@ -30,21 +30,21 @@
 #include "ccontainer.h"
 #include <cstdio>
 
-CGENERICCONTAINER::CGENERICCONTAINER()
+CONTAINER_3D_BASE::CONTAINER_3D_BASE()
 {
     m_objects.clear();
     m_bbox.Reset();
 }
 
 
-void CGENERICCONTAINER::Clear()
+void CONTAINER_3D_BASE::Clear()
 {
     if( !m_objects.empty() )
     {
         for( LIST_OBJECT::iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
         {
             delete *ii;
-            *ii = NULL;
+            *ii = nullptr;
         }
 
         m_objects.clear();
@@ -54,13 +54,13 @@ void CGENERICCONTAINER::Clear()
 }
 
 
-CGENERICCONTAINER::~CGENERICCONTAINER()
+CONTAINER_3D_BASE::~CONTAINER_3D_BASE()
 {
     Clear();
 }
 
 
-void CGENERICCONTAINER::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
+void CONTAINER_3D_BASE::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
 {
     aOutVector.resize( m_objects.size() );
 
@@ -70,15 +70,15 @@ void CGENERICCONTAINER::ConvertTo( CONST_VECTOR_OBJECT &aOutVector ) const
 
         for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
         {
-            wxASSERT( (*ii) != NULL );
+            wxASSERT( (*ii) != nullptr );
 
-            aOutVector[i++] = static_cast<const COBJECT *>(*ii);
+            aOutVector[i++] = static_cast<const OBJECT_3D *>(*ii);
         }
     }
 }
 
 
-bool CCONTAINER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool CONTAINER_3D::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 {
 
     if( !m_bbox.Intersect( aRay ) )
@@ -88,7 +88,7 @@ bool CCONTAINER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
     for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
-        const COBJECT *object = static_cast<const COBJECT *>( *ii );
+        const OBJECT_3D *object = static_cast<const OBJECT_3D *>( *ii );
 
         if( object->Intersect( aRay, aHitInfo) )
             hitted = true;
@@ -98,17 +98,11 @@ bool CCONTAINER::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CCONTAINER::IntersectP( const RAY &aRay, float aMaxDistance ) const
+bool CONTAINER_3D::IntersectP( const RAY &aRay, float aMaxDistance ) const
 {
-    /// @todo Determine what to do with this commented out code.
-/*
-    if( !m_bbox.Inside( aRay.m_Origin ) )
-        if( !m_bbox.Intersect( aRay ) )
-            return false;
-*/
     for( LIST_OBJECT::const_iterator ii = m_objects.begin(); ii != m_objects.end(); ++ii )
     {
-        const COBJECT *object = static_cast<const COBJECT *>(*ii);
+        const OBJECT_3D *object = static_cast<const OBJECT_3D*>( *ii );
 
         if( object->IntersectP( aRay, aMaxDistance ) )
             return true;

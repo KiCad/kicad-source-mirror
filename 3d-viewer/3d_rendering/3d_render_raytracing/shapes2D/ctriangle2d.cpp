@@ -39,9 +39,9 @@
 #include "../../../3d_fastmath.h"
 
 
-CTRIANGLE2D::CTRIANGLE2D( const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F& aV3,
+TRIANGLE_2D::TRIANGLE_2D( const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F& aV3,
                           const BOARD_ITEM& aBoardItem ) :
-        COBJECT2D( OBJECT2D_TYPE::TRIANGLE, aBoardItem )
+        OBJECT_2D( OBJECT_2D_TYPE::TRIANGLE, aBoardItem )
 {
     p1 = aV1;
     p2 = aV2;
@@ -66,7 +66,7 @@ CTRIANGLE2D::CTRIANGLE2D( const SFVEC2F& aV1, const SFVEC2F& aV2, const SFVEC2F&
 }
 
 
-bool CTRIANGLE2D::Intersects( const CBBOX2D &aBBox ) const
+bool TRIANGLE_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return false;
@@ -76,22 +76,20 @@ bool CTRIANGLE2D::Intersects( const CBBOX2D &aBBox ) const
 }
 
 
-bool CTRIANGLE2D::Overlaps( const CBBOX2D &aBBox ) const
+bool TRIANGLE_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return false;
 }
 
 
-bool CTRIANGLE2D::Intersect( const RAYSEG2D &aSegRay,
-                             float *aOutT,
-                             SFVEC2F *aNormalOut ) const
+bool TRIANGLE_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
     return false;
 }
 
 
-INTERSECTION_RESULT CTRIANGLE2D::IsBBoxInside( const CBBOX2D &aBBox ) const
+INTERSECTION_RESULT TRIANGLE_2D::IsBBoxInside( const BBOX_2D& aBBox ) const
 {
     if( !m_bbox.Intersects( aBBox ) )
         return INTERSECTION_RESULT::MISSES;
@@ -101,7 +99,7 @@ INTERSECTION_RESULT CTRIANGLE2D::IsBBoxInside( const CBBOX2D &aBBox ) const
 }
 
 
-bool CTRIANGLE2D::IsPointInside( const SFVEC2F &aPoint ) const
+bool TRIANGLE_2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     // http://totologic.blogspot.co.uk/2014/01/accurate-point-in-triangle-test.html
 
@@ -126,10 +124,10 @@ bool CTRIANGLE2D::IsPointInside( const SFVEC2F &aPoint ) const
 }
 
 
-void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
-                                              CGENERICCONTAINER2D &aDstContainer,
+void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET& aPolyList,
+                                              CONTAINER_2D_BASE& aDstContainer,
                                               float aBiuTo3DunitsScale ,
-                                              const BOARD_ITEM &aBoardItem )
+                                              const BOARD_ITEM& aBoardItem )
 {
     VECTOR2I a;
     VECTOR2I b;
@@ -146,12 +144,9 @@ void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
         {
             triPoly->GetTriangle( i, a, b, c );
 
-            aDstContainer.Add( new CTRIANGLE2D( SFVEC2F( a.x * conver_d,
-                                                        -a.y * conver_d ),
-                                                SFVEC2F( b.x * conver_d,
-                                                        -b.y * conver_d ),
-                                                SFVEC2F( c.x * conver_d,
-                                                        -c.y * conver_d ),
+            aDstContainer.Add( new TRIANGLE_2D( SFVEC2F( a.x * conver_d, -a.y * conver_d ),
+                                                SFVEC2F( b.x * conver_d, -b.y * conver_d ),
+                                                SFVEC2F( c.x * conver_d, -c.y * conver_d ),
                                                 aBoardItem ) );
         }
     }

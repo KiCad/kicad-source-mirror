@@ -32,7 +32,7 @@
 #include <wx/debug.h>
 
 
-static void RAYPACKET_GenerateFrustum( CFRUSTUM *m_Frustum, RAY *m_ray )
+static void RAYPACKET_GenerateFrustum( FRUSTUM* m_Frustum, RAY* m_ray )
 {
     m_Frustum->GenerateFrustum(
                 m_ray[                   0 * RAYPACKET_DIM +                   0 ],
@@ -42,7 +42,7 @@ static void RAYPACKET_GenerateFrustum( CFRUSTUM *m_Frustum, RAY *m_ray )
 }
 
 
-RAYPACKET::RAYPACKET( const CCAMERA &aCamera, const SFVEC2I &aWindowsPosition )
+RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2I& aWindowsPosition )
 {
     unsigned int i = 0;
 
@@ -53,8 +53,7 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera, const SFVEC2I &aWindowsPosition )
             SFVEC3F rayOrigin;
             SFVEC3F rayDir;
 
-            aCamera.MakeRay( SFVEC2I( aWindowsPosition.x + x,
-                                      aWindowsPosition.y + y ),
+            aCamera.MakeRay( SFVEC2I( aWindowsPosition.x + x, aWindowsPosition.y + y ),
                              rayOrigin, rayDir );
 
             m_ray[i].Init( rayOrigin, rayDir );
@@ -69,8 +68,7 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera, const SFVEC2I &aWindowsPosition )
 }
 
 
-RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
-                      const SFVEC2F &aWindowsPosition )
+RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition )
 {
     RAYPACKET_InitRays( aCamera, aWindowsPosition, m_ray );
 
@@ -78,9 +76,8 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
 }
 
 
-RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
-                      const SFVEC2F &aWindowsPosition,
-                      const SFVEC2F &a2DWindowsPosDisplacementFactor )
+RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition,
+                      const SFVEC2F& a2DWindowsPosDisplacementFactor )
 {
     RAYPACKET_InitRays_with2DDisplacement( aCamera,
                                            aWindowsPosition,
@@ -91,9 +88,8 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
 }
 
 
-RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
-                      const SFVEC2I &aWindowsPosition,
-                      const SFVEC3F &aDirectionDisplacementFactor )
+RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2I& aWindowsPosition,
+                      const SFVEC3F& aDirectionDisplacementFactor )
 {
     unsigned int i = 0;
 
@@ -123,8 +119,7 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
 }
 
 
-RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
-                      const SFVEC2I &aWindowsPosition,
+RAYPACKET::RAYPACKET( const CAMERA& aCamera, const SFVEC2I& aWindowsPosition,
                       unsigned int aPixelMultiple )
 {
     unsigned int i = 0;
@@ -152,9 +147,7 @@ RAYPACKET::RAYPACKET( const CCAMERA &aCamera,
 }
 
 
-void RAYPACKET_InitRays( const CCAMERA &aCamera,
-                         const SFVEC2F &aWindowsPosition,
-                         RAY *aRayPck )
+void RAYPACKET_InitRays( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition, RAY* aRayPck )
 {
     for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
     {
@@ -173,10 +166,9 @@ void RAYPACKET_InitRays( const CCAMERA &aCamera,
 }
 
 
-void RAYPACKET_InitRays_with2DDisplacement( const CCAMERA &aCamera,
-                                            const SFVEC2F &aWindowsPosition,
-                                            const SFVEC2F &a2DWindowsPosDisplacementFactor,
-                                            RAY *aRayPck )
+void RAYPACKET_InitRays_with2DDisplacement( const CAMERA& aCamera, const SFVEC2F& aWindowsPosition,
+                                            const SFVEC2F& a2DWindowsPosDisplacementFactor,
+                                            RAY* aRayPck )
 {
     for( unsigned int y = 0, i = 0; y < RAYPACKET_DIM; ++y )
     {

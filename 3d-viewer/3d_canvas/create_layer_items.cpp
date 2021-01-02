@@ -197,7 +197,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
         layer_id.push_back( curr_layer_id );
 
-        CBVHCONTAINER2D *layerContainer = new CBVHCONTAINER2D;
+        BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
         m_layers_container2D[curr_layer_id] = layerContainer;
 
         if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS )
@@ -213,8 +213,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         m_F_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
         m_B_Cu_PlatedPads_poly = new SHAPE_POLY_SET;
 
-        m_platedpads_container2D_F_Cu = new CBVHCONTAINER2D;
-        m_platedpads_container2D_B_Cu = new CBVHCONTAINER2D;
+        m_platedpads_container2D_F_Cu = new BVH_CONTAINER_2D;
+        m_platedpads_container2D_B_Cu = new BVH_CONTAINER_2D;
 
     }
 
@@ -226,7 +226,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
-        CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
+        BVH_CONTAINER_2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // Add track segments shapes and via annulus shapes
         unsigned int nTracks = trackList.size();
@@ -280,13 +280,13 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 {
 
                     // Add hole objects
-                    CBVHCONTAINER2D *layerHoleContainer = NULL;
+                    BVH_CONTAINER_2D *layerHoleContainer = nullptr;
 
                     // Check if the layer is already created
                     if( m_layers_holes2D.find( curr_layer_id ) == m_layers_holes2D.end() )
                     {
                         // not found, create a new container
-                        layerHoleContainer = new CBVHCONTAINER2D;
+                        layerHoleContainer = new BVH_CONTAINER_2D;
                         m_layers_holes2D[curr_layer_id] = layerHoleContainer;
                     }
                     else
@@ -296,34 +296,30 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     }
 
                     // Add a hole for this layer
-                    layerHoleContainer->Add( new CFILLEDCIRCLE2D( via_center,
-                                                                  hole_inner_radius + thickness,
-                                                                  *track ) );
+                    layerHoleContainer->Add( new FILLED_CIRCLE_2D( via_center,
+                                                                   hole_inner_radius + thickness,
+                                                                   *track ) );
                 }
                 else if( curr_layer_id == layer_id[0] ) // it only adds once the THT holes
                 {
                     // Add through hole object
-                    m_through_holes_outer.Add( new CFILLEDCIRCLE2D( via_center,
-                                                                    hole_inner_radius + thickness,
-                                                                    *track ) );
+                    m_through_holes_outer.Add( new FILLED_CIRCLE_2D( via_center,
+                                                                     hole_inner_radius + thickness,
+                                                                     *track ) );
                     m_through_holes_vias_outer.Add(
-                                new CFILLEDCIRCLE2D( via_center, hole_inner_radius + thickness,
-                                                     *track ) );
+                                new FILLED_CIRCLE_2D( via_center, hole_inner_radius + thickness,
+                                                      *track ) );
 
                     if( GetFlag( FL_CLIP_SILK_ON_VIA_ANNULUS ) &&
                         GetFlag( FL_USE_REALISTIC_MODE ) )
                     {
-                        m_through_holes_outer_ring.Add( new CFILLEDCIRCLE2D( via_center,
-                                                                             ring_radius,
-                                                                             *track ) );
+                        m_through_holes_outer_ring.Add( new FILLED_CIRCLE_2D( via_center,
+                                                                              ring_radius,
+                                                                              *track ) );
                     }
 
-                    m_through_holes_inner.Add( new CFILLEDCIRCLE2D( via_center, hole_inner_radius,
-                                                                    *track ) );
-
-                    //m_through_holes_vias_inner.Add( new CFILLEDCIRCLE2D( via_center,
-                    //                                                     hole_inner_radius,
-                    //                                                     *track ) );
+                    m_through_holes_inner.Add( new FILLED_CIRCLE_2D( via_center, hole_inner_radius,
+                                                                     *track ) );
                 }
             }
         }
@@ -353,8 +349,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                     // Add VIA hole contours
 
                     // Add outer holes of VIAs
-                    SHAPE_POLY_SET *layerOuterHolesPoly = NULL;
-                    SHAPE_POLY_SET *layerInnerHolesPoly = NULL;
+                    SHAPE_POLY_SET *layerOuterHolesPoly = nullptr;
+                    SHAPE_POLY_SET *layerInnerHolesPoly = nullptr;
 
                     // Check if the layer is already created
                     if( m_layers_outer_holes_poly.find( curr_layer_id ) ==
@@ -527,7 +523,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
-        CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
+        BVH_CONTAINER_2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // ADD PADS
         for( FOOTPRINT* footprint : m_board->Footprints() )
@@ -607,7 +603,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     {
         wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
 
-        CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
+        BVH_CONTAINER_2D *layerContainer = m_layers_container2D[curr_layer_id];
 
         // Add graphic items on copper layers (texts and other graphics)
         for( BOARD_ITEM* item : m_board->Drawings() )
@@ -897,7 +893,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
         if( !Is3DLayerEnabled( curr_layer_id ) )
             continue;
 
-        CBVHCONTAINER2D *layerContainer = new CBVHCONTAINER2D;
+        BVH_CONTAINER_2D *layerContainer = new BVH_CONTAINER_2D;
         m_layers_container2D[curr_layer_id] = layerContainer;
 
         SHAPE_POLY_SET *layerPoly = new SHAPE_POLY_SET;

@@ -23,15 +23,15 @@
  */
 
 /**
- * @file  croundseg.cpp
- * @brief
+ * @file croundseg.cpp
  */
 
 #include "croundseg.h"
 
 
-CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D& aSeg2D, float aZmin, float aZmax )
-        : COBJECT( OBJECT3D_TYPE::ROUNDSEG ), m_segment( aSeg2D.m_segment )
+ROUND_SEGMENT::ROUND_SEGMENT( const ROUND_SEGMENT_2D& aSeg2D, float aZmin, float aZmax ) :
+        OBJECT_3D( OBJECT_3D_TYPE::ROUNDSEG ),
+        m_segment( aSeg2D.m_segment )
 {
     m_radius = aSeg2D.GetRadius();
     m_radius_squared = m_radius * m_radius;
@@ -42,8 +42,8 @@ CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D& aSeg2D, float aZmin, float aZmax )
 
     m_bbox.Reset();
 
-    m_bbox.Set( SFVEC3F( m_segment.m_Start.x, m_segment.m_Start.y, aZmin),
-                SFVEC3F( m_segment.m_End.x,   m_segment.m_End.y,   aZmax) );
+    m_bbox.Set( SFVEC3F( m_segment.m_Start.x, m_segment.m_Start.y, aZmin ),
+                SFVEC3F( m_segment.m_End.x, m_segment.m_End.y, aZmax ) );
 
     m_bbox.Set( m_bbox.Min() - SFVEC3F( m_radius, m_radius, 0.0f ),
                 m_bbox.Max() + SFVEC3F( m_radius, m_radius, 0.0f ) );
@@ -54,18 +54,16 @@ CROUNDSEG::CROUNDSEG( const CROUNDSEGMENT2D& aSeg2D, float aZmin, float aZmax )
     m_center_left  = m_centroid + m_plane_dir_left  * m_radius;
     m_center_right = m_centroid + m_plane_dir_right * m_radius;
 
-    m_seglen_over_two_squared = (m_segment.m_Length / 2.0f) *
-                                (m_segment.m_Length / 2.0f);
+    m_seglen_over_two_squared = ( m_segment.m_Length / 2.0f ) * ( m_segment.m_Length / 2.0f );
 }
 
 
-bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+bool ROUND_SEGMENT::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
     // Top / Bottom plane
-    // /////////////////////////////////////////////////////////////////////////
     float zPlanePos = aRay.m_dirIsNeg[2]? m_bbox.Max().z : m_bbox.Min().z;
 
-    float tPlane    = ( zPlanePos - aRay.m_Origin.z) * aRay.m_InvDir.z;
+    float tPlane = ( zPlanePos - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
     if( ( tPlane >= aHitInfo.m_tHit ) || ( tPlane < FLT_EPSILON ) )
         return false;   // Early exit
@@ -80,12 +78,9 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         if( tPlane < aHitInfo.m_tHit )
         {
             aHitInfo.m_tHit = tPlane;
-            aHitInfo.m_HitPoint = SFVEC3F( planeHitPoint2d.x,
-                                           planeHitPoint2d.y,
+            aHitInfo.m_HitPoint = SFVEC3F( planeHitPoint2d.x, planeHitPoint2d.y,
                                            aRay.m_Origin.z + aRay.m_Dir.z * tPlane );
-            aHitInfo.m_HitNormal = SFVEC3F( 0.0f,
-                                            0.0f,
-                                            aRay.m_dirIsNeg[2]? 1.0f: -1.0f );
+            aHitInfo.m_HitNormal = SFVEC3F( 0.0f, 0.0f, aRay.m_dirIsNeg[2] ? 1.0f : -1.0f );
             aHitInfo.pHitObject = this;
 
             m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
@@ -97,7 +92,6 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     }
 
     // Test LEFT / RIGHT plane
-    // /////////////////////////////////////////////////////////////////////////
     float normal_dot_ray = glm::dot( m_plane_dir_right, aRay.m_Dir );
 
     if( normal_dot_ray < 0.0f ) // If the dot is neg, the it hits the plane
@@ -113,16 +107,14 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
             const SFVEC3F v = hitP - m_center_right;
             const float len = glm::dot( v, v );
 
-            if( (len <= m_seglen_over_two_squared) &&
-                (hitP.z >= m_bbox.Min().z) &&
-                (hitP.z <= m_bbox.Max().z) )
+            if( ( len <= m_seglen_over_two_squared ) && ( hitP.z >= m_bbox.Min().z )
+              && ( hitP.z <= m_bbox.Max().z ) )
             {
                 if( t < aHitInfo.m_tHit )
                 {
                     aHitInfo.m_tHit = t;
                     aHitInfo.m_HitPoint = hitP;
-                    aHitInfo.m_HitNormal = SFVEC3F( m_plane_dir_right.x,
-                                                    m_plane_dir_right.y,
+                    aHitInfo.m_HitNormal = SFVEC3F( m_plane_dir_right.x, m_plane_dir_right.y,
                                                     0.0f );
                     aHitInfo.pHitObject = this;
 
@@ -142,7 +134,7 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         if( normal_dot_ray < 0.0f ) // If the dot is neg, the it hits the plane
         {
             const float n_dot_ray_origin = glm::dot( m_plane_dir_left,
-                                                 m_center_left - aRay.m_Origin );
+                                                     m_center_left - aRay.m_Origin );
             const float t = n_dot_ray_origin / normal_dot_ray;
 
             if( t > 0.0f )
@@ -152,16 +144,14 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
                 const SFVEC3F v = hitP - m_center_left;
                 const float len = glm::dot( v, v );
 
-                if( (len <= m_seglen_over_two_squared) &&
-                    (hitP.z >= m_bbox.Min().z) &&
-                    (hitP.z <= m_bbox.Max().z) )
+                if( ( len <= m_seglen_over_two_squared ) && ( hitP.z >= m_bbox.Min().z )
+                  && ( hitP.z <= m_bbox.Max().z ) )
                 {
                     if( t < aHitInfo.m_tHit )
                     {
                         aHitInfo.m_tHit = t;
                         aHitInfo.m_HitPoint = hitP;
-                        aHitInfo.m_HitNormal = SFVEC3F( m_plane_dir_left.x,
-                                                        m_plane_dir_left.y,
+                        aHitInfo.m_HitNormal = SFVEC3F( m_plane_dir_left.x, m_plane_dir_left.y,
                                                         0.0f );
                         aHitInfo.pHitObject = this;
 
@@ -176,12 +166,8 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         }
     }
 
-    // Based on:
-    // http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
-
+    // Based on: http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
     // Ray-sphere intersection: geometric
-    // /////////////////////////////////////////////////////////////////////////
-
     const double OCx_Start = aRay.m_Origin.x - m_segment.m_Start.x;
     const double OCy_Start = aRay.m_Origin.y - m_segment.m_Start.y;
 
@@ -195,24 +181,22 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 
     const double c_Start = p_dot_p_Start - m_radius_squared;
 
-    const float delta_Start = (float)(b_Start * b_Start - a * c_Start);
+    const float delta_Start = (float) ( b_Start * b_Start - a * c_Start );
 
     if( delta_Start > FLT_EPSILON )
     {
         const float sdelta = sqrtf( delta_Start );
-        const float t = (-b_Start - sdelta) / a;
+        const float t = ( -b_Start - sdelta ) / a;
         const float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
-        if( (z >= m_bbox.Min().z) &&
-            (z <= m_bbox.Max().z) )
+        if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
         {
             if( t < aHitInfo.m_tHit )
             {
                 aHitInfo.m_tHit = t;
                 aHitInfo.m_HitPoint = aRay.at( t );
 
-                const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x,
-                                                    aHitInfo.m_HitPoint.y );
+                const SFVEC2F hitPoint2D = SFVEC2F( aHitInfo.m_HitPoint.x, aHitInfo.m_HitPoint.y );
 
                 aHitInfo.m_HitNormal = SFVEC3F(
                             (hitPoint2D.x - m_segment.m_Start.x) * m_inv_radius,
@@ -248,8 +232,7 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
         const float t = (-b_End - sdelta) / a;
         const float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
-        if( (z >= m_bbox.Min().z) &&
-            (z <= m_bbox.Max().z) )
+        if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
         {
             if( t < aHitInfo.m_tHit )
             {
@@ -278,13 +261,12 @@ bool CROUNDSEG::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
+bool ROUND_SEGMENT::IntersectP( const RAY& aRay, float aMaxDistance ) const
 {
     // Top / Bottom plane
-    // /////////////////////////////////////////////////////////////////////////
     const float zPlanePos = aRay.m_dirIsNeg[2]? m_bbox.Max().z : m_bbox.Min().z;
 
-    const float tPlane    = ( zPlanePos - aRay.m_Origin.z) * aRay.m_InvDir.z;
+    const float tPlane = ( zPlanePos - aRay.m_Origin.z ) * aRay.m_InvDir.z;
 
     if( ( tPlane >= aMaxDistance) || ( tPlane < FLT_EPSILON ) )
         return false;   // Early exit
@@ -307,13 +289,11 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
     return false;
 #if 0
     // Test LEFT / RIGHT plane
-    // /////////////////////////////////////////////////////////////////////////
     float normal_dot_ray = glm::dot( m_plane_dir_right, aRay.m_Dir );
 
     if( normal_dot_ray < 0.0f ) // If the dot is neg, the it hits the plane
     {
-        float n_dot_ray_origin = glm::dot( m_plane_dir_right,
-                                           m_center_right - aRay.m_Origin );
+        float n_dot_ray_origin = glm::dot( m_plane_dir_right, m_center_right - aRay.m_Origin );
         float t = n_dot_ray_origin / normal_dot_ray;
 
         if( t > 0.0f )
@@ -323,8 +303,8 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
             SFVEC3F v = hitP - m_center_right;
             float len = glm::dot( v, v );
 
-            if( (len <= m_seglen_over_two_squared) &&
-                (hitP.z >= m_bbox.Min().z) && (hitP.z <= m_bbox.Max().z) )
+            if( ( len <= m_seglen_over_two_squared ) &&
+                ( hitP.z >= m_bbox.Min().z ) && ( hitP.z <= m_bbox.Max().z ) )
             {
                 if( t < aMaxDistance )
                     return true;
@@ -340,7 +320,7 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
         if( normal_dot_ray < 0.0f ) // If the dot is neg, the it hits the plane
         {
             const float n_dot_ray_origin = glm::dot( m_plane_dir_left,
-                                                 m_center_left - aRay.m_Origin );
+                                                     m_center_left - aRay.m_Origin );
             const float t = n_dot_ray_origin / normal_dot_ray;
 
             if( t > 0.0f )
@@ -350,8 +330,8 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
                 SFVEC3F v = hitP - m_center_left;
                 float len = glm::dot( v, v );
 
-                if( (len <= m_seglen_over_two_squared) &&
-                    (hitP.z >= m_bbox.Min().z) && (hitP.z <= m_bbox.Max().z) )
+                if( ( len <= m_seglen_over_two_squared ) &&
+                    ( hitP.z >= m_bbox.Min().z ) && ( hitP.z <= m_bbox.Max().z ) )
                 {
                     if( t < aMaxDistance )
                         return true;
@@ -362,11 +342,8 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
         }
     }
 
-    // Based on:
-    // http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
-
+    // Based on: http://www.cs.utah.edu/~lha/Code%206620%20/Ray4/Cylinder.cpp
     // Ray-sphere intersection: geometric
-    // /////////////////////////////////////////////////////////////////////////
 
     double OCx_Start = aRay.m_Origin.x - m_segment.m_Start.x;
     double OCy_Start = aRay.m_Origin.y - m_segment.m_Start.y;
@@ -389,8 +366,7 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
         float t = (-b_Start - sdelta) / a;
         float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
-        if( (z >= m_bbox.Min().z) &&
-            (z <= m_bbox.Max().z) )
+        if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
         {
             if( t < aMaxDistance )
                 return true;
@@ -415,11 +391,10 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
     if( delta_End > FLT_EPSILON )
     {
         float sdelta = sqrtf( delta_End );
-        float t = (-b_End - sdelta) / a;
+        float t = ( -b_End - sdelta ) / a;
         float z = aRay.m_Origin.z + t * aRay.m_Dir.z;
 
-        if( (z >= m_bbox.Min().z) &&
-            (z <= m_bbox.Max().z) )
+        if( ( z >= m_bbox.Min().z ) && ( z <= m_bbox.Max().z ) )
         {
             if( t < aMaxDistance )
                 return true;
@@ -433,14 +408,14 @@ bool CROUNDSEG::IntersectP( const RAY &aRay, float aMaxDistance ) const
 }
 
 
-bool CROUNDSEG::Intersects( const CBBOX &aBBox ) const
+bool ROUND_SEGMENT::Intersects( const BBOX_3D& aBBox ) const
 {
     //!TODO: improve
     return m_bbox.Intersects( aBBox );
 }
 
 
-SFVEC3F CROUNDSEG::GetDiffuseColor( const HITINFO &aHitInfo ) const
+SFVEC3F ROUND_SEGMENT::GetDiffuseColor( const HITINFO& aHitInfo ) const
 {
     (void)aHitInfo; // unused
 

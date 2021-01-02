@@ -45,16 +45,16 @@ inline void normalise2PI( float& aAngle )
 /**
  * @ingroup trace_env_vars
  */
-const wxChar *CCAMERA::m_logTrace = wxT( "KI_TRACE_CCAMERA" );
+const wxChar *CAMERA::m_logTrace = wxT( "KI_TRACE_CAMERA" );
 
 
 #define MIN_ZOOM 0.10f
 #define MAX_ZOOM 1.25f
 
 
-CCAMERA::CCAMERA( float aRangeScale )
+CAMERA::CAMERA( float aRangeScale )
 {
-    wxLogTrace( m_logTrace, wxT( "CCAMERA::CCAMERA" ) );
+    wxLogTrace( m_logTrace, wxT( "CAMERA::CAMERA" ) );
 
     m_range_scale           = aRangeScale;
     m_camera_pos_init       = SFVEC3F( 0.0f, 0.0f, -(aRangeScale * 2.0f ) );
@@ -67,7 +67,7 @@ CCAMERA::CCAMERA( float aRangeScale )
 }
 
 
-void CCAMERA::Reset()
+void CAMERA::Reset()
 {
     m_parametersChanged    = true;
     m_projectionMatrix     = glm::mat4( 1.0f );
@@ -99,7 +99,7 @@ void CCAMERA::Reset()
 }
 
 
-void CCAMERA::Reset_T1()
+void CAMERA::Reset_T1()
 {
     m_camera_pos_t1        = m_camera_pos_init;
     m_zoom_t1              = 1.0f;
@@ -120,7 +120,7 @@ void CCAMERA::Reset_T1()
 }
 
 
-void CCAMERA::updateViewMatrix()
+void CAMERA::updateViewMatrix()
 {
     m_viewMatrix = glm::translate( glm::mat4( 1.0f ), m_camera_pos ) *
                    m_rotationMatrix * m_rotationMatrixAux *
@@ -128,20 +128,17 @@ void CCAMERA::updateViewMatrix()
 }
 
 
-void CCAMERA::updateRotationMatrix()
+void CAMERA::updateRotationMatrix()
 {
-    m_rotationMatrixAux = glm::rotate( glm::mat4( 1.0f ),
-                                       m_rotate_aux.x,
+    m_rotationMatrixAux = glm::rotate( glm::mat4( 1.0f ), m_rotate_aux.x,
                                        SFVEC3F( 1.0f, 0.0f, 0.0f ) );
     normalise2PI( m_rotate_aux.x );
 
-    m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux,
-                                       m_rotate_aux.y,
+    m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux, m_rotate_aux.y,
                                        SFVEC3F( 0.0f, 1.0f, 0.0f ) );
     normalise2PI( m_rotate_aux.y );
 
-    m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux,
-                                       m_rotate_aux.z,
+    m_rotationMatrixAux = glm::rotate( m_rotationMatrixAux, m_rotate_aux.z,
                                        SFVEC3F( 0.0f, 0.0f, 1.0f ) );
     normalise2PI( m_rotate_aux.z );
 
@@ -152,13 +149,13 @@ void CCAMERA::updateRotationMatrix()
 }
 
 
-const glm::mat4 CCAMERA::GetRotationMatrix() const
+const glm::mat4 CAMERA::GetRotationMatrix() const
 {
     return m_rotationMatrix * m_rotationMatrixAux;
 }
 
 
-void CCAMERA::rebuildProjection()
+void CAMERA::rebuildProjection()
 {
     if( ( m_windowSize.x == 0 ) || ( m_windowSize.y == 0 ) )
         return;
@@ -178,10 +175,8 @@ void CCAMERA::rebuildProjection()
         // Ratio width / height of the window display
         m_frustum.angle = 45.0f * m_zoom;
 
-        m_projectionMatrix = glm::perspective( glm::radians( m_frustum.angle ),
-                                               m_frustum.ratio,
-                                               m_frustum.nearD,
-                                               m_frustum.farD );
+        m_projectionMatrix = glm::perspective( glm::radians( m_frustum.angle ), m_frustum.ratio,
+                                               m_frustum.nearD, m_frustum.farD );
 
         m_projectionMatrixInv = glm::inverse( m_projectionMatrix );
 
@@ -253,7 +248,7 @@ void CCAMERA::rebuildProjection()
 }
 
 
-void CCAMERA::updateFrustum()
+void CAMERA::updateFrustum()
 {
     // Update matrix and vectors
     m_viewMatrixInverse = glm::inverse( m_viewMatrix );
@@ -311,8 +306,8 @@ void CCAMERA::updateFrustum()
 }
 
 
-void CCAMERA::MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin,
-                       SFVEC3F &aOutDirection ) const
+void CAMERA::MakeRay( const SFVEC2I& aWindowPos, SFVEC3F& aOutOrigin,
+                       SFVEC3F& aOutDirection ) const
 {
     wxASSERT( aWindowPos.x < m_windowSize.x );
     wxASSERT( aWindowPos.y < m_windowSize.y );
@@ -335,8 +330,8 @@ void CCAMERA::MakeRay( const SFVEC2I &aWindowPos, SFVEC3F &aOutOrigin,
 }
 
 
-void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin,
-                       SFVEC3F &aOutDirection ) const
+void CAMERA::MakeRay( const SFVEC2F& aWindowPos, SFVEC3F& aOutOrigin,
+                       SFVEC3F& aOutDirection ) const
 {
     wxASSERT( aWindowPos.x < (float)m_windowSize.x );
     wxASSERT( aWindowPos.y < (float)m_windowSize.y );
@@ -367,7 +362,7 @@ void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin,
 }
 
 
-void CCAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin, SFVEC3F &aOutDirection ) const
+void CAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F& aOutOrigin, SFVEC3F& aOutDirection ) const
 {
     const SFVEC2I windowPos = SFVEC2I( m_lastPosition.x, m_windowSize.y - m_lastPosition.y );
 
@@ -379,19 +374,19 @@ void CCAMERA::MakeRayAtCurrrentMousePosition( SFVEC3F &aOutOrigin, SFVEC3F &aOut
 }
 
 
-const glm::mat4 &CCAMERA::GetProjectionMatrix() const
+const glm::mat4& CAMERA::GetProjectionMatrix() const
 {
     return m_projectionMatrix;
 }
 
 
-const glm::mat4 &CCAMERA::GetProjectionMatrixInv() const
+const glm::mat4& CAMERA::GetProjectionMatrixInv() const
 {
     return m_projectionMatrixInv;
 }
 
 
-void CCAMERA::ResetXYpos()
+void CAMERA::ResetXYpos()
 {
     m_parametersChanged = true;
     m_camera_pos.x = 0.0f;
@@ -402,32 +397,32 @@ void CCAMERA::ResetXYpos()
 }
 
 
-void CCAMERA::ResetXYpos_T1()
+void CAMERA::ResetXYpos_T1()
 {
     m_camera_pos_t1.x = 0.0f;
     m_camera_pos_t1.y = 0.0f;
 }
 
 
-const glm::mat4 &CCAMERA::GetViewMatrix() const
+const glm::mat4& CAMERA::GetViewMatrix() const
 {
     return m_viewMatrix;
 }
 
 
-const glm::mat4 &CCAMERA::GetViewMatrix_Inv() const
+const glm::mat4& CAMERA::GetViewMatrix_Inv() const
 {
     return m_viewMatrixInverse;
 }
 
 
-void CCAMERA::SetCurMousePosition( const wxPoint &aNewMousePosition )
+void CAMERA::SetCurMousePosition( const wxPoint& aNewMousePosition )
 {
     m_lastPosition = aNewMousePosition;
 }
 
 
-void CCAMERA::ToggleProjection()
+void CAMERA::ToggleProjection()
 {
     if( m_projectionType == PROJECTION_TYPE::ORTHO )
         m_projectionType = PROJECTION_TYPE::PERSPECTIVE;
@@ -438,7 +433,7 @@ void CCAMERA::ToggleProjection()
 }
 
 
-bool CCAMERA::SetCurWindowSize( const wxSize &aSize )
+bool CAMERA::SetCurWindowSize( const wxSize& aSize )
 {
     const SFVEC2I newSize = SFVEC2I( aSize.x, aSize.y );
 
@@ -454,7 +449,7 @@ bool CCAMERA::SetCurWindowSize( const wxSize &aSize )
 }
 
 
-void CCAMERA::ZoomReset()
+void CAMERA::ZoomReset()
 {
     m_zoom = 1.0f;
 
@@ -464,7 +459,7 @@ void CCAMERA::ZoomReset()
     rebuildProjection();
 }
 
-bool CCAMERA::Zoom( float aFactor )
+bool CAMERA::Zoom( float aFactor )
 {
     if( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 )
       || aFactor == 1 )
@@ -487,7 +482,7 @@ bool CCAMERA::Zoom( float aFactor )
 }
 
 
-bool CCAMERA::Zoom_T1( float aFactor )
+bool CAMERA::Zoom_T1( float aFactor )
 {
     if( ( m_zoom == MIN_ZOOM && aFactor > 1 ) || ( m_zoom == MAX_ZOOM && aFactor < 1 )
       || aFactor == 1 )
@@ -507,52 +502,52 @@ bool CCAMERA::Zoom_T1( float aFactor )
 }
 
 
-float CCAMERA::ZoomGet() const
+float CAMERA::ZoomGet() const
 {
     return m_zoom;
 }
 
 
-void CCAMERA::RotateX( float aAngleInRadians )
+void CAMERA::RotateX( float aAngleInRadians )
 {
     m_rotate_aux.x += aAngleInRadians;
     updateRotationMatrix();
 }
 
 
-void CCAMERA::RotateY( float aAngleInRadians )
+void CAMERA::RotateY( float aAngleInRadians )
 {
     m_rotate_aux.y += aAngleInRadians;
     updateRotationMatrix();
 }
 
 
-void CCAMERA::RotateZ( float aAngleInRadians )
+void CAMERA::RotateZ( float aAngleInRadians )
 {
     m_rotate_aux.z += aAngleInRadians;
     updateRotationMatrix();
 }
 
 
-void CCAMERA::RotateX_T1( float aAngleInRadians )
+void CAMERA::RotateX_T1( float aAngleInRadians )
 {
     m_rotate_aux_t1.x += aAngleInRadians;
 }
 
 
-void CCAMERA::RotateY_T1( float aAngleInRadians )
+void CAMERA::RotateY_T1( float aAngleInRadians )
 {
     m_rotate_aux_t1.y += aAngleInRadians;
 }
 
 
-void CCAMERA::RotateZ_T1( float aAngleInRadians )
+void CAMERA::RotateZ_T1( float aAngleInRadians )
 {
     m_rotate_aux_t1.z += aAngleInRadians;
 }
 
 
-void CCAMERA::SetT0_and_T1_current_T()
+void CAMERA::SetT0_and_T1_current_T()
 {
     m_camera_pos_t0 = m_camera_pos;
     m_lookat_pos_t0 = m_lookat_pos;
@@ -566,7 +561,7 @@ void CCAMERA::SetT0_and_T1_current_T()
 }
 
 
-void CCAMERA::Interpolate( float t )
+void CAMERA::Interpolate( float t )
 {
     wxASSERT( t >= 0.0f );
 
@@ -584,7 +579,7 @@ void CCAMERA::Interpolate( float t )
 }
 
 
-bool CCAMERA::ParametersChanged()
+bool CAMERA::ParametersChanged()
 {
     const bool parametersChanged = m_parametersChanged;
 

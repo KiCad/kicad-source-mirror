@@ -27,8 +27,8 @@
  * @brief A simplified 4 point polygon
  */
 
-#ifndef _CPOLYGON4PTS2D_H_
-#define _CPOLYGON4PTS2D_H_
+#ifndef _POLYGON_4PT_2D_H_
+#define _POLYGON_4PT_2D_H_
 
 #include "cobject2d.h"
 
@@ -38,31 +38,27 @@
  * Used for footprint pads. (rectangles, trapezoids, with rotation.etc).  This is a
  * simplified version of the #CPOLYGON2D class.
  */
-class  CPOLYGON4PTS2D : public COBJECT2D
+class POLYGON_4PT_2D : public OBJECT_2D
 {
 public:
-    CPOLYGON4PTS2D( const SFVEC2F &v1,
-                    const SFVEC2F &v2,
-                    const SFVEC2F &v3,
-                    const SFVEC2F &v4,
-                    const BOARD_ITEM &aBoardItem );
+    POLYGON_4PT_2D( const SFVEC2F& v1, const SFVEC2F& v2, const SFVEC2F& v3, const SFVEC2F& v4,
+                    const BOARD_ITEM& aBoardItem );
 
-    const SFVEC2F &GetV0() const { return m_segments[0]; }
-    const SFVEC2F &GetV1() const { return m_segments[1]; }
-    const SFVEC2F &GetV2() const { return m_segments[2]; }
-    const SFVEC2F &GetV3() const { return m_segments[3]; }
+    const SFVEC2F& GetV0() const { return m_segments[0]; }
+    const SFVEC2F& GetV1() const { return m_segments[1]; }
+    const SFVEC2F& GetV2() const { return m_segments[2]; }
+    const SFVEC2F& GetV3() const { return m_segments[3]; }
 
-    const SFVEC2F &GetN0() const { return m_seg_normal[0]; }
-    const SFVEC2F &GetN1() const { return m_seg_normal[1]; }
-    const SFVEC2F &GetN2() const { return m_seg_normal[2]; }
-    const SFVEC2F &GetN3() const { return m_seg_normal[3]; }
+    const SFVEC2F& GetN0() const { return m_seg_normal[0]; }
+    const SFVEC2F& GetN1() const { return m_seg_normal[1]; }
+    const SFVEC2F& GetN2() const { return m_seg_normal[2]; }
+    const SFVEC2F& GetN3() const { return m_seg_normal[3]; }
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
 private:
     SFVEC2F m_segments[4];
@@ -71,4 +67,4 @@ private:
 };
 
 
-#endif // _CPOLYGON4PTS2D_H_
+#endif // _POLYGON_4PT_2D_H_

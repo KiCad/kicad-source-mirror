@@ -28,8 +28,8 @@
  * @brief implement a legacy 3dmodel render
  */
 
-#ifndef _C_OGL_3DMODEL_H_
-#define _C_OGL_3DMODEL_H_
+#ifndef _MODEL_3D_H_
+#define _MODEL_3D_H_
 
 #include <vector>
 #include <plugins/3dapi/c3dmodel.h>
@@ -37,25 +37,25 @@
 #include "../3d_render_raytracing/shapes3D/cbbox.h"
 #include "../../3d_enums.h"
 
-class C_OGL_3DMODEL
+class MODEL_3D
 {
 public:
     /**
-     * Load a 3d model.
+     * Load a 3D model.
      *
      * @note This must be called inside a gl context.
+     *
      * @param a3DModel a 3d model data to load.
      * @param aMaterialMode a mode to render the materials of the model.
      */
-    C_OGL_3DMODEL( const S3DMODEL &a3DModel, MATERIAL_MODE aMaterialMode );
+    MODEL_3D( const S3DMODEL& a3DModel, MATERIAL_MODE aMaterialMode );
 
-    ~C_OGL_3DMODEL();
+    ~MODEL_3D();
 
     /**
      * Render the model into the current context.
      */
-    void Draw_opaque( bool aUseSelectedMaterial,
-                      SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
+    void Draw_opaque( bool aUseSelectedMaterial, SFVEC3F aSelectionColor = SFVEC3F( 0.0f ) ) const
     {
         Draw( false, 1.0f, aUseSelectedMaterial, aSelectionColor );
     }
@@ -93,7 +93,7 @@ public:
      * Get the main bounding box.
      * @return the main model bounding box.
      */
-    const CBBOX &GetBBox() const { return m_model_bbox; }
+    const BBOX_3D& GetBBox() const { return m_model_bbox; }
 
     /**
      * Set some basic render states before drawing multiple models.
@@ -106,15 +106,15 @@ public:
     static void EndDrawMulti();
 
 private:
-    static const wxChar *m_logTrace;
+    static const wxChar* m_logTrace;
 
     // the material mode that was used to generate the rendering data.
     // FIXME: this can be selected at run-time and does not require re-creation
     //        of the whole model objects.
     MATERIAL_MODE m_material_mode;
 
-    CBBOX   m_model_bbox;               ///< global bounding box for this model
-    std::vector<CBBOX> m_meshes_bbox;   ///< individual bbox for each mesh
+    BBOX_3D   m_model_bbox;               ///< global bounding box for this model
+    std::vector<BBOX_3D> m_meshes_bbox;   ///< individual bbox for each mesh
 
     // unified vertex format for mesh rendering.
     struct VERTEX
@@ -139,7 +139,7 @@ private:
         unsigned int m_render_idx_buffer_offset = 0;
         unsigned int m_render_idx_count = 0;
 
-        MATERIAL( const SMATERIAL &aOther ) : SMATERIAL( aOther ) { }
+        MATERIAL( const SMATERIAL& aOther ) : SMATERIAL( aOther ) { }
         bool IsTransparent() const { return m_Transparency > FLT_EPSILON; }
     };
 
@@ -160,12 +160,11 @@ private:
     GLuint m_bbox_index_buffer = 0;
     GLenum m_bbox_index_buffer_type = GL_INVALID_ENUM;
 
-    static void MakeBbox( const CBBOX &aBox, unsigned int aIdxOffset,
-                          VERTEX *aVtxOut, GLuint *aIdxOut,
-                          const glm::vec4 &aColor );
+    static void MakeBbox( const BBOX_3D& aBox, unsigned int aIdxOffset, VERTEX* aVtxOut,
+                          GLuint* aIdxOut, const glm::vec4& aColor );
 
     void Draw( bool aTransparent, float aOpacity, bool aUseSelectedMaterial,
                SFVEC3F aSelectionColor ) const;
 };
 
-#endif // _C_OGL_3DMODEL_H_
+#endif // _MODEL_3D_H_

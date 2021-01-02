@@ -32,11 +32,9 @@
 #include <wx/debug.h>
 
 
-CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D* aObjectA,
-                                  std::vector<const COBJECT2D*>* aObjectB,
-                                  const COBJECT2D* aObjectC,
-                                  const BOARD_ITEM& aBoardItem ) :
-        COBJECT2D( OBJECT2D_TYPE::CSG, aBoardItem ),
+LAYER_ITEM_2D::LAYER_ITEM_2D( const OBJECT_2D* aObjectA, std::vector<const OBJECT_2D*>* aObjectB,
+                                  const OBJECT_2D* aObjectC, const BOARD_ITEM& aBoardItem ) :
+        OBJECT_2D( OBJECT_2D_TYPE::CSG, aBoardItem ),
         m_objectA( aObjectA ),
         m_objectB( aObjectB ),
         m_objectC( aObjectC )
@@ -52,17 +50,17 @@ CITEMLAYERCSG2D::CITEMLAYERCSG2D( const COBJECT2D* aObjectA,
 }
 
 
-CITEMLAYERCSG2D::~CITEMLAYERCSG2D()
+LAYER_ITEM_2D::~LAYER_ITEM_2D()
 {
     if( ( (void*) m_objectB != CSGITEM_EMPTY ) && ( (void*) m_objectB != CSGITEM_FULL ) )
     {
         delete m_objectB;
-        m_objectB = NULL;
+        m_objectB = nullptr;
     }
 }
 
 
-bool CITEMLAYERCSG2D::Intersects( const CBBOX2D& aBBox ) const
+bool LAYER_ITEM_2D::Intersects( const BBOX_2D& aBBox ) const
 {
     return m_bbox.Intersects( aBBox );
     // !TODO: improve this implementation
@@ -70,7 +68,7 @@ bool CITEMLAYERCSG2D::Intersects( const CBBOX2D& aBBox ) const
 }
 
 
-bool CITEMLAYERCSG2D::Overlaps( const CBBOX2D& aBBox ) const
+bool LAYER_ITEM_2D::Overlaps( const BBOX_2D& aBBox ) const
 {
     // NOT IMPLEMENTED
     return false;
@@ -79,9 +77,9 @@ bool CITEMLAYERCSG2D::Overlaps( const CBBOX2D& aBBox ) const
 
 // Based on ideas and implementation by Nick Chapman
 // http://homepages.paradise.net.nz/nickamy/raytracer/raytracer.htm
-bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
+bool LAYER_ITEM_2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const
 {
-    if( m_objectA->GetObjectType() == OBJECT2D_TYPE::DUMMYBLOCK )
+    if( m_objectA->GetObjectType() == OBJECT_2D_TYPE::DUMMYBLOCK )
         return false;
 
     SFVEC2F  currentRayPos = aSegRay.m_Start;
@@ -112,13 +110,13 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F*
             //check against all subbed objects
             for( unsigned int i = 0; i < m_objectB->size(); ++i )
             {
-                if( ( (const COBJECT2D*) ( *m_objectB )[i] )->IsPointInside( currentRayPos ) )
+                if( ( (const OBJECT_2D*) ( *m_objectB )[i] )->IsPointInside( currentRayPos ) )
                 {
                     // ray point is inside a subtracted region,  so move it to the end of the
                     // subtracted region
                     float   hitDist;
                     SFVEC2F tmpNormal;
-                    if( !( (const COBJECT2D*) ( *m_objectB )[i] )
+                    if( !( (const OBJECT_2D*) ( *m_objectB )[i] )
                                     ->Intersect( currentRay, &hitDist, &tmpNormal ) )
                         return false; // ray hit main object but did not leave subtracted volume
 
@@ -155,7 +153,7 @@ bool CITEMLAYERCSG2D::Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F*
 }
 
 
-INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D& aBBox ) const
+INTERSECTION_RESULT LAYER_ITEM_2D::IsBBoxInside( const BBOX_2D& aBBox ) const
 {
 
     // !TODO:
@@ -164,7 +162,7 @@ INTERSECTION_RESULT CITEMLAYERCSG2D::IsBBoxInside( const CBBOX2D& aBBox ) const
 }
 
 
-bool CITEMLAYERCSG2D::IsPointInside( const SFVEC2F& aPoint ) const
+bool LAYER_ITEM_2D::IsPointInside( const SFVEC2F& aPoint ) const
 {
     // Perform the operation (A - B) /\ C
     if( m_objectA->IsPointInside( aPoint ) )

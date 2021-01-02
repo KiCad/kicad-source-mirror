@@ -27,26 +27,26 @@
  * @brief
  */
 
-#ifndef _CFILLEDCIRCLE2D_H_
-#define _CFILLEDCIRCLE2D_H_
+#ifndef _FILLED_CIRCLE_2D_H_
+#define _FILLED_CIRCLE_2D_H_
 
 #include "cobject2d.h"
 
-class  CFILLEDCIRCLE2D : public COBJECT2D
+class FILLED_CIRCLE_2D : public OBJECT_2D
 {
 public:
-    CFILLEDCIRCLE2D( const SFVEC2F &aCenter, float aRadius, const BOARD_ITEM &aBoardItem );
+    FILLED_CIRCLE_2D( const SFVEC2F& aCenter, float aRadius, const BOARD_ITEM& aBoardItem );
 
     float GetRadius() const { return m_radius; }
-    const SFVEC2F &GetCenter() const { return m_center; }
+    const SFVEC2F& GetCenter() const { return m_center; }
     float GetRadiusSquared() const { return m_radius_squared; }
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    // Imported from OBJECT_2D
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
 private:
     SFVEC2F m_center;
@@ -55,4 +55,4 @@ private:
 };
 
 
-#endif // _CFILLEDCIRCLE2D_H_
+#endif // _FILLED_CIRCLE_2D_H_

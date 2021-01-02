@@ -27,8 +27,8 @@
  * @brief
  */
 
-#ifndef C3D_RENDER_OGL_LEGACY_H_
-#define C3D_RENDER_OGL_LEGACY_H_
+#ifndef RENDER_3D_LEGACY_H_
+#define RENDER_3D_LEGACY_H_
 
 #include "../c3d_render_base.h"
 #include "clayer_triangles.h"
@@ -47,23 +47,23 @@
 #include <map>
 
 
-typedef std::map< PCB_LAYER_ID, CLAYERS_OGL_DISP_LISTS* > MAP_OGL_DISP_LISTS;
-typedef std::list<CLAYER_TRIANGLES * > LIST_TRIANGLES;
-typedef std::map< wxString, C_OGL_3DMODEL * > MAP_3DMODEL;
+typedef std::map< PCB_LAYER_ID, OPENGL_RENDER_LIST* > MAP_OGL_DISP_LISTS;
+typedef std::list<TRIANGLE_DISPLAY_LIST* > LIST_TRIANGLES;
+typedef std::map< wxString, MODEL_3D* > MAP_3DMODEL;
 
 #define SIZE_OF_CIRCLE_TEXTURE 1024
 
 /**
  * Object to render the board using openGL legacy mode.
  */
-class C3D_RENDER_OGL_LEGACY : public C3D_RENDER_BASE
+class RENDER_3D_LEGACY : public RENDER_3D_BASE
 {
 public:
-    explicit C3D_RENDER_OGL_LEGACY( BOARD_ADAPTER& aAdapter, CCAMERA& aCamera );
+    explicit RENDER_3D_LEGACY( BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
-    ~C3D_RENDER_OGL_LEGACY();
+    ~RENDER_3D_LEGACY();
 
-    void SetCurWindowSize( const wxSize &aSize ) override;
+    void SetCurWindowSize( const wxSize& aSize ) override;
     bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
 
     int GetWaitForEditingTimeOut() override;
@@ -74,85 +74,61 @@ public:
     }
 
 private:
-    CLAYERS_OGL_DISP_LISTS *generate_holes_display_list( const LIST_OBJECT2D &aListHolesObject2d,
-                                                         const SHAPE_POLY_SET &aPoly,
-                                                         float aZtop,
-                                                         float aZbot,
-                                                         bool aInvertFaces,
-                                                         const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    OPENGL_RENDER_LIST* generate_holes_display_list( const LIST_OBJECT2D& aListHolesObject2d,
+                                                     const SHAPE_POLY_SET& aPoly,
+                                                     float aZtop,
+                                                     float aZbot,
+                                                     bool aInvertFaces,
+                                                     const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    CLAYERS_OGL_DISP_LISTS*  generateLayerListFromContainer( const CBVHCONTAINER2D *aContainer,
-                                                             const SHAPE_POLY_SET *aPolyList,
-                                                             PCB_LAYER_ID aLayerId,
-                                                             const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    OPENGL_RENDER_LIST* generateLayerListFromContainer( const BVH_CONTAINER_2D* aContainer,
+                                                        const SHAPE_POLY_SET* aPolyList,
+                                                        PCB_LAYER_ID aLayerId,
+                                                        const BVH_CONTAINER_2D* aThroughHoles = nullptr );
 
-    void add_triangle_top_bot( CLAYER_TRIANGLES *aDst,
-                               const SFVEC2F &v0,
-                               const SFVEC2F &v1,
-                               const SFVEC2F &v2,
-                               float top,
-                               float bot );
+    void add_triangle_top_bot( TRIANGLE_DISPLAY_LIST* aDst, const SFVEC2F& v0, const SFVEC2F& v1,
+                               const SFVEC2F& v2, float top, float bot );
 
-    void add_object_to_triangle_layer( const CRING2D *aRing,
-                                       CLAYER_TRIANGLES *aDstLayer,
-                                       float aZtop,
-                                       float aZbot );
+    void add_object_to_triangle_layer( const RING_2D* aRing, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                                       float aZtop, float aZbot );
 
-    void add_object_to_triangle_layer( const CPOLYGON4PTS2D *aPoly,
-                                       CLAYER_TRIANGLES *aDstLayer,
-                                       float aZtop,
-                                       float aZbot );
+    void add_object_to_triangle_layer( const POLYGON_4PT_2D* aPoly,
+                                       TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop, float aZbot );
 
-    void add_object_to_triangle_layer( const CFILLEDCIRCLE2D *aFilledCircle,
-                                       CLAYER_TRIANGLES *aDstLayer,
-                                       float aZtop,
-                                       float aZbot );
+    void add_object_to_triangle_layer( const FILLED_CIRCLE_2D* aFilledCircle,
+                                       TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop, float aZbot );
 
-    void add_object_to_triangle_layer( const CTRIANGLE2D *aTri,
-                                       CLAYER_TRIANGLES *aDstLayer,
-                                       float aZtop,
-                                       float aZbot );
+    void add_object_to_triangle_layer( const TRIANGLE_2D* aTri, TRIANGLE_DISPLAY_LIST* aDstLayer,
+                                       float aZtop, float aZbot );
 
-    void add_object_to_triangle_layer( const CROUNDSEGMENT2D *aSeg,
-                                       CLAYER_TRIANGLES *aDstLayer,
-                                       float aZtop,
-                                       float aZbot );
+    void add_object_to_triangle_layer( const ROUND_SEGMENT_2D* aSeg,
+                                       TRIANGLE_DISPLAY_LIST* aDstLayer, float aZtop, float aZbot );
 
-    void render_solder_mask_layer( PCB_LAYER_ID aLayerID,
-                                   float aZPosition,
-                                   bool aDrawMiddleSegments,
-                                   bool aSkipRenderHoles );
+    void render_solder_mask_layer( PCB_LAYER_ID aLayerID, float aZPosition,
+                                   bool aDrawMiddleSegments, bool aSkipRenderHoles );
 
     void render_board_body( bool aSkipRenderHoles );
 
-    void get_layer_z_pos( PCB_LAYER_ID aLayerID,
-                          float &aOutZtop,
-                          float &aOutZbot ) const;
+    void get_layer_z_pos( PCB_LAYER_ID aLayerID, float& aOutZtop, float& aOutZbot ) const;
 
-    void generate_ring_contour( const SFVEC2F &aCenter,
-                                float aInnerRadius,
-                                float aOuterRadius,
-                                unsigned int aNr_sides_per_circle,
-                                std::vector< SFVEC2F > &aInnerContourResult,
-                                std::vector< SFVEC2F > &aOuterContourResult,
+    void generate_ring_contour( const SFVEC2F& aCenter, float aInnerRadius,
+                                float aOuterRadius, unsigned int aNr_sides_per_circle,
+                                std::vector< SFVEC2F >& aInnerContourResult,
+                                std::vector< SFVEC2F >& aOuterContourResult,
                                 bool aInvertOrder );
 
-    void generate_cylinder( const SFVEC2F &aCenter,
-                            float aInnerRadius,
-                            float aOuterRadius,
-                            float aZtop,
-                            float aZbot,
-                            unsigned int aNr_sides_per_circle,
-                            CLAYER_TRIANGLES *aDstLayer );
+    void generate_cylinder( const SFVEC2F& aCenter, float aInnerRadius, float aOuterRadius,
+                            float aZtop, float aZbot, unsigned int aNr_sides_per_circle,
+                            TRIANGLE_DISPLAY_LIST* aDstLayer );
 
     void generate_3D_Vias_and_Pads();
 
     /**
      * Load footprint models from the cache and load it to openGL lists in the form of
-     * #C_OGL_3DMODEL objects.
+     * #MODEL_3D objects.
      *
      * This map of models will work as a local cache for this render. (cache based on
-     * C_OGL_3DMODEL with associated openGL lists in GPU memory)
+     * MODEL_3D with associated openGL lists in GPU memory)
      */
     void load_3D_models( REPORTER* aStatusReporter );
 
@@ -193,8 +169,8 @@ private:
     SFVEC4F get_layer_color( PCB_LAYER_ID aLayerID );
 
     bool initializeOpenGL();
-    CLAYERS_OGL_DISP_LISTS* createBoard( const SHAPE_POLY_SET& aBoardPoly,
-                                         const CBVHCONTAINER2D *aThroughHoles = nullptr );
+    OPENGL_RENDER_LIST* createBoard( const SHAPE_POLY_SET& aBoardPoly,
+                                     const BVH_CONTAINER_2D* aThroughHoles = nullptr );
     void reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter );
 
     void ogl_set_arrow_material();
@@ -214,18 +190,18 @@ private:
         SMATERIAL m_GrayMaterial;
     } m_materials;
 
-    MAP_OGL_DISP_LISTS      m_layers;
-    CLAYERS_OGL_DISP_LISTS* m_platedPads_F_Cu;
-    CLAYERS_OGL_DISP_LISTS* m_platedPads_B_Cu;
-    MAP_OGL_DISP_LISTS      m_layers_holes_outer;
-    MAP_OGL_DISP_LISTS      m_layers_holes_inner;
-    CLAYERS_OGL_DISP_LISTS* m_board;
-    CLAYERS_OGL_DISP_LISTS* m_board_with_holes;
-    CLAYERS_OGL_DISP_LISTS* m_anti_board;
-    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer;
-    CLAYERS_OGL_DISP_LISTS* m_through_holes_vias_outer;
-    CLAYERS_OGL_DISP_LISTS* m_through_holes_outer_ring;
-    CLAYERS_OGL_DISP_LISTS* m_vias_and_pad_holes_outer_contourn_and_caps;
+    MAP_OGL_DISP_LISTS  m_layers;
+    OPENGL_RENDER_LIST* m_platedPads_F_Cu;
+    OPENGL_RENDER_LIST* m_platedPads_B_Cu;
+    MAP_OGL_DISP_LISTS  m_layers_holes_outer;
+    MAP_OGL_DISP_LISTS  m_layers_holes_inner;
+    OPENGL_RENDER_LIST* m_board;
+    OPENGL_RENDER_LIST* m_board_with_holes;
+    OPENGL_RENDER_LIST* m_anti_board;
+    OPENGL_RENDER_LIST* m_through_holes_outer;
+    OPENGL_RENDER_LIST* m_through_holes_vias_outer;
+    OPENGL_RENDER_LIST* m_through_holes_outer_ring;
+    OPENGL_RENDER_LIST* m_vias_and_pad_holes_outer_contourn_and_caps;
 
     LIST_TRIANGLES m_triangles;     ///< store pointers so can be deleted latter
     GLuint m_ogl_circle_texture;
@@ -233,8 +209,8 @@ private:
     GLuint m_grid;                  ///< oGL list that stores current grid
     GRID3D_TYPE m_last_grid_type;   ///< Stores the last grid computed
 
-    CLAYERS_OGL_DISP_LISTS* m_vias;
-    CLAYERS_OGL_DISP_LISTS* m_pad_holes;
+    OPENGL_RENDER_LIST* m_vias;
+    OPENGL_RENDER_LIST* m_pad_holes;
 
     MAP_3DMODEL m_3dmodel_map;
 
@@ -243,4 +219,4 @@ private:
     SHAPE_POLY_SET m_anti_board_poly; ///< negative polygon representation of the board outline
 };
 
-#endif // C3D_RENDER_OGL_LEGACY_H_
+#endif // RENDER_3D_LEGACY_H_

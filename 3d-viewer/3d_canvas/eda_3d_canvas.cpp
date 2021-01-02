@@ -52,7 +52,7 @@
  *
  * @ingroup trace_env_vars
  */
-const wxChar * EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
+const wxChar* EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
 
 const float EDA_3D_CANVAS::m_delta_move_step_factor = 0.7f;
 
@@ -87,7 +87,7 @@ END_EVENT_TABLE()
 
 
 EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* aBoard,
-                              BOARD_ADAPTER& aBoardAdapter, CCAMERA& aCamera,
+                              BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera,
                               S3D_CACHE* a3DCachePointer )
         : HIDPI_GL_CANVAS( aParent, wxID_ANY, aAttribList, wxDefaultPosition, wxDefaultSize,
                            wxFULL_REPAINT_ON_RESIZE ),
@@ -116,26 +116,20 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::EDA_3D_CANVAS" );
 
     m_editing_timeout_timer.SetOwner( this );
-    Connect( m_editing_timeout_timer.GetId(),
-             wxEVT_TIMER,
-             wxTimerEventHandler( EDA_3D_CANVAS::OnTimerTimeout_Editing ),
-             NULL,
-             this );
+    Connect( m_editing_timeout_timer.GetId(), wxEVT_TIMER,
+             wxTimerEventHandler( EDA_3D_CANVAS::OnTimerTimeout_Editing ), nullptr, this );
 
     m_redraw_trigger_timer.SetOwner( this );
-    Connect( m_redraw_trigger_timer.GetId(),
-             wxEVT_TIMER,
-             wxTimerEventHandler( EDA_3D_CANVAS::OnTimerTimeout_Redraw ),
-             NULL,
-             this );
+    Connect( m_redraw_trigger_timer.GetId(), wxEVT_TIMER,
+             wxTimerEventHandler( EDA_3D_CANVAS::OnTimerTimeout_Redraw ), nullptr, this );
 
     m_is_currently_painting.clear();
 
-    m_3d_render_raytracing = new C3D_RENDER_RAYTRACING( m_boardAdapter, m_camera );
-    m_3d_render_ogl_legacy = new C3D_RENDER_OGL_LEGACY( m_boardAdapter, m_camera );
+    m_3d_render_raytracing = new RENDER_3D_RAYTRACE( m_boardAdapter, m_camera );
+    m_3d_render_ogl_legacy = new RENDER_3D_LEGACY( m_boardAdapter, m_camera );
 
-    wxASSERT( m_3d_render_raytracing != NULL );
-    wxASSERT( m_3d_render_ogl_legacy != NULL );
+    wxASSERT( m_3d_render_raytracing != nullptr );
+    wxASSERT( m_3d_render_ogl_legacy != nullptr );
 
     auto busy_indicator_factory = []() { return std::make_unique<WX_BUSY_INDICATOR>(); };
 
@@ -144,12 +138,12 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
 
     RenderEngineChanged();
 
-    wxASSERT( aBoard != NULL );
+    wxASSERT( aBoard != nullptr );
     m_boardAdapter.SetBoard( aBoard );
 
     m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
 
-    wxASSERT( a3DCachePointer != NULL );
+    wxASSERT( a3DCachePointer != nullptr );
     m_boardAdapter.Set3DCacheManager( a3DCachePointer );
 
     const wxEventType events[] =
@@ -169,7 +163,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList, BOARD* 
     };
 
     for( wxEventType eventType : events )
-        Connect( eventType, wxEventHandler( EDA_3D_CANVAS::OnEvent ), NULL, m_eventDispatcher );
+        Connect( eventType, wxEventHandler( EDA_3D_CANVAS::OnEvent ), nullptr, m_eventDispatcher );
 }
 
 
@@ -178,7 +172,7 @@ EDA_3D_CANVAS::~EDA_3D_CANVAS()
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::~EDA_3D_CANVAS" );
 
     delete m_accelerator3DShapes;
-    m_accelerator3DShapes = NULL;
+    m_accelerator3DShapes = nullptr;
 
     releaseOpenGL();
 }
@@ -191,22 +185,22 @@ void EDA_3D_CANVAS::releaseOpenGL()
         GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
 
         delete m_3d_render_raytracing;
-        m_3d_render_raytracing = NULL;
+        m_3d_render_raytracing = nullptr;
 
         delete m_3d_render_ogl_legacy;
-        m_3d_render_ogl_legacy = NULL;
+        m_3d_render_ogl_legacy = nullptr;
 
-        // This is just a copy of a pointer, can safely be set to NULL
-        m_3d_render = NULL;
+        // This is just a copy of a pointer, can safely be set to NULL.
+        m_3d_render = nullptr;
 
         GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
         GL_CONTEXT_MANAGER::Get().DestroyCtx( m_glRC );
-        m_glRC = NULL;
+        m_glRC = nullptr;
     }
 }
 
 
-void EDA_3D_CANVAS::OnCloseWindow( wxCloseEvent &event )
+void EDA_3D_CANVAS::OnCloseWindow( wxCloseEvent& event )
 {
     releaseOpenGL();
 
@@ -214,7 +208,7 @@ void EDA_3D_CANVAS::OnCloseWindow( wxCloseEvent &event )
 }
 
 
-void EDA_3D_CANVAS::OnResize( wxSizeEvent &event )
+void EDA_3D_CANVAS::OnResize( wxSizeEvent& event )
 {
     this->Request_refresh();
 }
@@ -295,18 +289,18 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
 }
 
 
-void EDA_3D_CANVAS::GetScreenshot( wxImage &aDstImage )
+void EDA_3D_CANVAS::GetScreenshot( wxImage& aDstImage )
 {
     OGL_GetScreenshot( aDstImage );
 }
 
 
-void EDA_3D_CANVAS::ReloadRequest( BOARD *aBoard , S3D_CACHE *aCachePointer )
+void EDA_3D_CANVAS::ReloadRequest( BOARD* aBoard , S3D_CACHE* aCachePointer )
 {
-    if( aCachePointer != NULL )
+    if( aCachePointer != nullptr )
         m_boardAdapter.Set3DCacheManager( aCachePointer );
 
-    if( aBoard != NULL )
+    if( aBoard != nullptr )
         m_boardAdapter.SetBoard( aBoard );
 
     m_boardAdapter.SetColorSettings( Pgm().GetSettingsManager().GetColorSettings() );
@@ -392,7 +386,7 @@ void EDA_3D_CANVAS::DoRePaint()
     //  This function may only be called when the window is shown on screen"
 
     // Explicitly create a new rendering context instance for this canvas.
-    if( m_glRC == NULL )
+    if( m_glRC == nullptr )
         m_glRC = GL_CONTEXT_MANAGER::Get().CreateCtx( this );
 
     GL_CONTEXT_MANAGER::Get().LockCtx( m_glRC, this );
@@ -554,7 +548,7 @@ void EDA_3D_CANVAS::DoRePaint()
     if( !err_messages.IsEmpty() )
         wxLogMessage( err_messages );
 
-    if( (!m_camera_is_moving) && requested_redraw )
+    if( ( !m_camera_is_moving ) && requested_redraw )
     {
         m_mouse_was_moved = false;
         Request_refresh( false );
@@ -572,14 +566,14 @@ void EDA_3D_CANVAS::SetEventDispatcher( TOOL_DISPATCHER* aEventDispatcher )
     {
         m_parent->Connect( wxEVT_TOOL,
                            wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                           NULL, m_eventDispatcher );
+                           nullptr, m_eventDispatcher );
     }
     else
     {
         // While loop is used to be sure that all event handlers are removed.
         while( m_parent->Disconnect( wxEVT_TOOL,
                                      wxCommandEventHandler( TOOL_DISPATCHER::DispatchWxCommand ),
-                                     NULL, m_eventDispatcher ) );
+                                     nullptr, m_eventDispatcher ) );
     }
 }
 
@@ -595,14 +589,14 @@ void EDA_3D_CANVAS::OnEvent( wxEvent& aEvent )
 }
 
 
-void EDA_3D_CANVAS::OnEraseBackground( wxEraseEvent &event )
+void EDA_3D_CANVAS::OnEraseBackground( wxEraseEvent& event )
 {
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnEraseBackground" );
     // Do nothing, to avoid flashing.
 }
 
 
-void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
+void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent& event )
 {
     bool mouseActivity = false;
 
@@ -690,7 +684,7 @@ void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 #endif
 
 
-void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
+void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent& event )
 {
     //wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnMouseMove" ) );
 
@@ -811,7 +805,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 }
 
 
-void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent &event )
+void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent& event )
 {
     SetFocus();
     stop_editingTimeOut_Timer();
@@ -827,7 +821,7 @@ void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent &event )
 }
 
 
-void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent &event )
+void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent& event )
 {
     if( m_camera_is_moving )
         return;
@@ -840,14 +834,14 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent &event )
 }
 
 
-void EDA_3D_CANVAS::OnMiddleDown( wxMouseEvent &event )
+void EDA_3D_CANVAS::OnMiddleDown( wxMouseEvent& event )
 {
     SetFocus();
     stop_editingTimeOut_Timer();
 }
 
 
-void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent &event )
+void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent& event )
 {
     if( m_camera_is_moving )
         return;
@@ -864,7 +858,7 @@ void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent &event )
 }
 
 
-void EDA_3D_CANVAS::OnTimerTimeout_Editing( wxTimerEvent &event )
+void EDA_3D_CANVAS::OnTimerTimeout_Editing( wxTimerEvent& event )
 {
     (void)event;
 
@@ -888,7 +882,7 @@ void EDA_3D_CANVAS::restart_editingTimeOut_Timer()
 }
 
 
-void EDA_3D_CANVAS::OnTimerTimeout_Redraw( wxTimerEvent &event )
+void EDA_3D_CANVAS::OnTimerTimeout_Redraw( wxTimerEvent& event )
 {
     Request_refresh( true );
 }
@@ -1136,7 +1130,7 @@ void EDA_3D_CANVAS::RenderEngineChanged()
     {
     case RENDER_ENGINE::OPENGL_LEGACY: m_3d_render = m_3d_render_ogl_legacy; break;
     case RENDER_ENGINE::RAYTRACING:    m_3d_render = m_3d_render_raytracing; break;
-    default:                           m_3d_render = NULL;                   break;
+    default:                           m_3d_render = nullptr;                break;
     }
 
     if( m_3d_render )

@@ -34,11 +34,11 @@
 #include "ctriangle.h"
 
 
-void CTRIANGLE::pre_calc_const()
+void TRIANGLE::pre_calc_const()
 {
-    const SFVEC3F &A = m_vertex[0];
-    const SFVEC3F &B = m_vertex[1];
-    const SFVEC3F &C = m_vertex[2];
+    const SFVEC3F& A = m_vertex[0];
+    const SFVEC3F& B = m_vertex[1];
+    const SFVEC3F& C = m_vertex[2];
     const SFVEC3F c = B - A;
     const SFVEC3F b = C - A;
 
@@ -66,9 +66,8 @@ void CTRIANGLE::pre_calc_const()
             m_k = 2;
     }
 
-    int u = (m_k + 1) % 3;
-    int v = (m_k + 2) % 3;
-
+    int u = ( m_k + 1 ) % 3;
+    int v = ( m_k + 2 ) % 3;
 
     // precomp
     float krec = 1.0f / m_n[m_k];
@@ -77,13 +76,11 @@ void CTRIANGLE::pre_calc_const()
     m_nv = m_n[v] * krec;
     m_nd = glm::dot( m_n, A ) * krec;
 
-
     // first line equation
     float reci = 1.0f / (b[u] * c[v] - b[v] * c[u]);
 
     m_bnu =  b[u] * reci;
     m_bnv = -b[v] * reci;
-
 
     // second line equation
     m_cnu =  c[v] * reci;
@@ -98,8 +95,8 @@ void CTRIANGLE::pre_calc_const()
 }
 
 
-CTRIANGLE::CTRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 )
-        : COBJECT( OBJECT3D_TYPE::TRIANGLE )
+TRIANGLE::TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3 )
+        : OBJECT_3D( OBJECT_3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
     m_vertex[1] = aV2;
@@ -113,9 +110,9 @@ CTRIANGLE::CTRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3
 }
 
 
-CTRIANGLE::CTRIANGLE(
-        const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3, const SFVEC3F& aFaceNormal )
-        : COBJECT( OBJECT3D_TYPE::TRIANGLE )
+TRIANGLE::TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
+                      const SFVEC3F& aFaceNormal )
+        : OBJECT_3D( OBJECT_3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
     m_vertex[1] = aV2;
@@ -133,9 +130,9 @@ CTRIANGLE::CTRIANGLE(
 }
 
 
-CTRIANGLE::CTRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
-        const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3 )
-        : COBJECT( OBJECT3D_TYPE::TRIANGLE )
+TRIANGLE::TRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3,
+                    const SFVEC3F& aN1, const SFVEC3F& aN2, const SFVEC3F& aN3 )
+        : OBJECT_3D( OBJECT_3D_TYPE::TRIANGLE )
 {
     m_vertex[0] = aV1;
     m_vertex[1] = aV2;
@@ -153,33 +150,33 @@ CTRIANGLE::CTRIANGLE( const SFVEC3F& aV1, const SFVEC3F& aV2, const SFVEC3F& aV3
 }
 
 
-void CTRIANGLE::SetColor( const SFVEC3F &aColor )
+void TRIANGLE::SetColor( const SFVEC3F& aColor )
 {
-    m_vertexColorRGBA[0] = ((unsigned int)(aColor.r * 255) << 24) |
-                           ((unsigned int)(aColor.g * 255) << 16) |
-                           ((unsigned int)(aColor.b * 255) <<  8) | 0xFF;
+    m_vertexColorRGBA[0] = ( (unsigned int) ( aColor.r * 255 ) << 24 )
+                           | ( (unsigned int) ( aColor.g * 255 ) << 16 )
+                           | ( (unsigned int) ( aColor.b * 255 ) << 8 ) | 0xFF;
     m_vertexColorRGBA[1] = m_vertexColorRGBA[0];
     m_vertexColorRGBA[2] = m_vertexColorRGBA[0];
 }
 
 
-void CTRIANGLE::SetColor( const SFVEC3F &aVC0,
-                          const SFVEC3F &aVC1,
-                          const SFVEC3F &aVC2 )
+void TRIANGLE::SetColor( const SFVEC3F& aVC0,
+                          const SFVEC3F& aVC1,
+                          const SFVEC3F& aVC2 )
 {
-    m_vertexColorRGBA[0] = ((unsigned int)(aVC0.r * 255) << 24) |
-                           ((unsigned int)(aVC0.g * 255) << 16) |
-                           ((unsigned int)(aVC0.b * 255) <<  8) | 0xFF;
-    m_vertexColorRGBA[1] = ((unsigned int)(aVC1.r * 255) << 24) |
-                           ((unsigned int)(aVC1.g * 255) << 16) |
-                           ((unsigned int)(aVC1.b * 255) <<  8) | 0xFF;
-    m_vertexColorRGBA[2] = ((unsigned int)(aVC2.r * 255) << 24) |
-                           ((unsigned int)(aVC2.g * 255) << 16) |
-                           ((unsigned int)(aVC2.b * 255) <<  8) | 0xFF;
+    m_vertexColorRGBA[0] = ( (unsigned int) ( aVC0.r * 255 ) << 24 )
+                           | ( (unsigned int) ( aVC0.g * 255 ) << 16 )
+                           | ( (unsigned int) ( aVC0.b * 255 ) << 8 ) | 0xFF;
+    m_vertexColorRGBA[1] = ( (unsigned int) ( aVC1.r * 255 ) << 24 )
+                           | ( (unsigned int) ( aVC1.g * 255 ) << 16 )
+                           | ( (unsigned int) ( aVC1.b * 255 ) << 8 ) | 0xFF;
+    m_vertexColorRGBA[2] = ( (unsigned int) ( aVC2.r * 255 ) << 24 )
+                           | ( (unsigned int) ( aVC2.g * 255 ) << 16 )
+                           | ( (unsigned int) ( aVC2.b * 255 ) << 8 ) | 0xFF;
 }
 
 
-void CTRIANGLE::SetColor( unsigned int aFaceColorRGBA )
+void TRIANGLE::SetColor( unsigned int aFaceColorRGBA )
 {
     m_vertexColorRGBA[0] = aFaceColorRGBA;
     m_vertexColorRGBA[1] = aFaceColorRGBA;
@@ -187,8 +184,7 @@ void CTRIANGLE::SetColor( unsigned int aFaceColorRGBA )
 }
 
 
-void CTRIANGLE::SetColor( unsigned int aVertex1ColorRGBA,
-                          unsigned int aVertex2ColorRGBA,
+void TRIANGLE::SetColor( unsigned int aVertex1ColorRGBA, unsigned int aVertex2ColorRGBA,
                           unsigned int aVertex3ColorRGBA )
 {
     m_vertexColorRGBA[0] = aVertex1ColorRGBA;
@@ -197,9 +193,7 @@ void CTRIANGLE::SetColor( unsigned int aVertex1ColorRGBA,
 }
 
 
-void CTRIANGLE::SetUV( const SFVEC2F &aUV1,
-                       const SFVEC2F &aUV2,
-                       const SFVEC2F &aUV3 )
+void TRIANGLE::SetUV( const SFVEC2F& aUV1, const SFVEC2F& aUV2, const SFVEC2F& aUV3 )
 {
     m_uv[0] = aUV1;
     m_uv[1] = aUV2;
@@ -209,20 +203,21 @@ void CTRIANGLE::SetUV( const SFVEC2F &aUV1,
 
 static const unsigned int s_modulo[] = { 0, 1, 2, 0, 1 };
 
-bool CTRIANGLE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
+
+bool TRIANGLE::Intersect( const RAY& aRay, HITINFO& aHitInfo ) const
 {
     //!TODO: precalc this, improove it
 #define ku s_modulo[m_k + 1]
 #define kv s_modulo[m_k + 2]
 
-    const SFVEC3F &O = aRay.m_Origin;
-    const SFVEC3F &D = aRay.m_Dir;
-    const SFVEC3F &A = m_vertex[0];
+    const SFVEC3F& O = aRay.m_Origin;
+    const SFVEC3F& D = aRay.m_Dir;
+    const SFVEC3F& A = m_vertex[0];
 
     const float lnd = 1.0f / (D[m_k] + m_nu * D[ku] + m_nv * D[kv]);
     const float t = (m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv]) * lnd;
 
-    if( !( (aHitInfo.m_tHit > t) && (t > 0.0f) ) )
+    if( !( ( aHitInfo.m_tHit > t ) && ( t > 0.0f ) ) )
         return false;
 
     const float hu = O[ku] + t * D[ku] - A[ku];
@@ -250,8 +245,7 @@ bool CTRIANGLE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
     aHitInfo.m_HitPoint = aRay.at( t );
 
     // interpolate vertex normals with UVW using Gouraud's shading
-    aHitInfo.m_HitNormal = glm::normalize( (1.0f - u - v) * m_normal[0] +
-                                            u * m_normal[1] +
+    aHitInfo.m_HitNormal = glm::normalize( (1.0f - u - v) * m_normal[0] + u * m_normal[1] +
                                             v * m_normal[2] );
 
     m_material->PerturbeNormal( aHitInfo.m_HitNormal, aRay, aHitInfo );
@@ -264,8 +258,7 @@ bool CTRIANGLE::Intersect( const RAY &aRay, HITINFO &aHitInfo ) const
 }
 
 
-bool CTRIANGLE::IntersectP( const RAY &aRay,
-                            float aMaxDistance ) const
+bool TRIANGLE::IntersectP( const RAY& aRay, float aMaxDistance ) const
 {
     //!TODO: precalc this
 #define ku s_modulo[m_k + 1]
@@ -278,7 +271,7 @@ bool CTRIANGLE::IntersectP( const RAY &aRay,
     const float lnd = 1.0f / (D[m_k] + m_nu * D[ku] + m_nv * D[kv]);
     const float t = (m_nd - O[m_k] - m_nu * O[ku] - m_nv * O[kv]) * lnd;
 
-    if( !( (aMaxDistance > t) && (t > 0.0f) ) )
+    if( !( ( aMaxDistance > t ) && ( t > 0.0f ) ) )
         return false;
 
     const float hu = O[ku] + t * D[ku] - A[ku];
@@ -308,28 +301,28 @@ bool CTRIANGLE::IntersectP( const RAY &aRay,
 }
 
 
-bool CTRIANGLE::Intersects( const CBBOX &aBBox ) const
+bool TRIANGLE::Intersects( const BBOX_3D& aBBox ) const
 {
     //!TODO: improove
     return m_bbox.Intersects( aBBox );
 }
 
 
-SFVEC3F CTRIANGLE::GetDiffuseColor( const HITINFO &aHitInfo ) const
+SFVEC3F TRIANGLE::GetDiffuseColor( const HITINFO& aHitInfo ) const
 {
     const unsigned int rgbC1 = m_vertexColorRGBA[0];
     const unsigned int rgbC2 = m_vertexColorRGBA[1];
     const unsigned int rgbC3 = m_vertexColorRGBA[2];
 
-    const SFVEC3F c1 = SFVEC3F( (float)((rgbC1 >> 24) & 0xFF) / 255.0f,
-                                (float)((rgbC1 >> 16) & 0xFF) / 255.0f,
-                                (float)((rgbC1 >>  8) & 0xFF) / 255.0f );
-    const SFVEC3F c2 = SFVEC3F( (float)((rgbC2 >> 24) & 0xFF) / 255.0f,
-                                (float)((rgbC2 >> 16) & 0xFF) / 255.0f,
-                                (float)((rgbC2 >>  8) & 0xFF) / 255.0f );
-    const SFVEC3F c3 = SFVEC3F( (float)((rgbC3 >> 24) & 0xFF) / 255.0f,
-                                (float)((rgbC3 >> 16) & 0xFF) / 255.0f,
-                                (float)((rgbC3 >>  8) & 0xFF) / 255.0f );
+    const SFVEC3F c1 = SFVEC3F( (float) ( ( rgbC1 >> 24 ) & 0xFF ) / 255.0f,
+                                (float) ( ( rgbC1 >> 16 ) & 0xFF ) / 255.0f,
+                                (float) ( ( rgbC1 >> 8 ) & 0xFF ) / 255.0f );
+    const SFVEC3F c2 = SFVEC3F( (float) ( ( rgbC2 >> 24 ) & 0xFF ) / 255.0f,
+                                (float) ( ( rgbC2 >> 16 ) & 0xFF ) / 255.0f,
+                                (float) ( ( rgbC2 >> 8 ) & 0xFF ) / 255.0f );
+    const SFVEC3F c3 = SFVEC3F( (float) ( ( rgbC3 >> 24 ) & 0xFF ) / 255.0f,
+                                (float) ( ( rgbC3 >> 16 ) & 0xFF ) / 255.0f,
+                                (float) ( ( rgbC3 >> 8 ) & 0xFF ) / 255.0f );
 
     const float u = aHitInfo.m_UV.x;
     const float v = aHitInfo.m_UV.y;

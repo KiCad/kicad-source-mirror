@@ -146,7 +146,7 @@ private:
      * @param aCachePtr is an optional return address for cache entry pointer.
      * @return SCENEGRAPH object associated with file name or NULL on error.
      */
-    SCENEGRAPH* checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr = NULL );
+    SCENEGRAPH* checkCache( const wxString& aFileName, S3D_CACHE_ENTRY** aCachePtr = nullptr );
 
     /**
      * Calculate the SHA1 hash of the given file.
@@ -164,7 +164,7 @@ private:
     bool saveCacheData( S3D_CACHE_ENTRY* aCacheItem );
 
     // the real load function (can supply a cache entry pointer to member functions)
-    SCENEGRAPH* load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr = NULL );
+    SCENEGRAPH* load( const wxString& aModelFile, S3D_CACHE_ENTRY** aCachePtr = nullptr );
 
     /// cache entries
     std::list< S3D_CACHE_ENTRY* > m_CacheList;

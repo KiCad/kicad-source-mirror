@@ -91,7 +91,7 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, FOOTPRI
 
     // Create the 3D canvas
     m_previewPane = new EDA_3D_CANVAS( this,
-                                       COGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
+                                       OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
                                        m_dummyBoard, m_boardAdapter, m_currentCamera,
                                        aFrame->Prj().Get3DCacheManager() );
 

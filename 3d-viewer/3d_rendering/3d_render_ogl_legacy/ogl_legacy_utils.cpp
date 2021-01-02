@@ -35,11 +35,11 @@
 
 #define RADPERDEG 0.0174533
 
-void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
+void DrawRoundArrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
 {
     wxASSERT( aSize > 0.0f );
 
-    SFVEC3F vec = (aTargetPos - aPosition);
+    SFVEC3F vec = aTargetPos - aPosition;
     float length = glm::length( vec );
 
     GLUquadricObj *quadObj;
@@ -50,13 +50,12 @@ void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
 
       if( ( vec.x != 0.0f ) || ( vec.y != 0.0f ) )
       {
-        glRotatef( atan2( vec.y, vec.x ) / RADPERDEG, 0.0f, 0.0f, 1.0f );
-        glRotatef( atan2( sqrt( vec.x * vec.x + vec.y * vec.y ), vec.z ) / RADPERDEG,
-                   0.0f,
-                   1.0f,
-                   0.0f );
+          glRotatef( atan2( vec.y, vec.x ) / RADPERDEG, 0.0f, 0.0f, 1.0f );
+          glRotatef( atan2( sqrt( vec.x * vec.x + vec.y * vec.y ), vec.z ) / RADPERDEG,
+                     0.0f, 1.0f, 0.0f );
 
-      } else if( vec.z < 0.0f )
+      }
+      else if( vec.z < 0.0f )
       {
         glRotatef( 180.0f, 1.0f, 0.0f, 0.0f );
       }
@@ -95,14 +94,6 @@ void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
       gluQuadricNormals( quadObj, GLU_SMOOTH );
       gluCylinder( quadObj, aSize, aSize, length - 4.0 * aSize, 12, 1 );
       gluDeleteQuadric( quadObj );
-/*
-
-      quadObj = gluNewQuadric();
-      gluQuadricDrawStyle( quadObj, GLU_FILL );
-      gluQuadricNormals( quadObj, GLU_SMOOTH );
-      gluSphere( quadObj, aSize, 24, 24 );
-      gluDeleteQuadric( quadObj );
-*/
 
       quadObj = gluNewQuadric();
       gluQuadricDrawStyle( quadObj, GLU_FILL );
@@ -114,7 +105,7 @@ void OGL_draw_arrow( SFVEC3F aPosition, SFVEC3F aTargetPos, float aSize )
 }
 
 
-void OGL_draw_bbox( const CBBOX &aBBox )
+void DrawBoundingBox( const BBOX_3D& aBBox )
 {
     wxASSERT( aBBox.IsInitialized() );
 
@@ -154,7 +145,7 @@ void OGL_draw_bbox( const CBBOX &aBBox )
 }
 
 
-void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle )
+void DrawHalfOpenCylinder( unsigned int aNrSidesPerCircle )
 {
     if( aNrSidesPerCircle > 1 )
     {
@@ -213,8 +204,7 @@ void OGL_draw_half_open_cylinder( unsigned int aNrSidesPerCircle )
 }
 
 
-void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
-                       unsigned int aNrSidesPerCircle )
+void DrawSegment( const ROUND_SEGMENT_2D& aSegment, unsigned int aNrSidesPerCircle )
 {
     glPushMatrix();
 
@@ -228,16 +218,13 @@ void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
 
     if( ( end_minus_start.x != 0.0f ) || ( end_minus_start.y != 0.0f ) )
     {
-      glRotatef( atan2( end_minus_start.y, end_minus_start.x ) / RADPERDEG,
-                 0.0f,
-                 0.0f,
-                 1.0f );
+        glRotatef( atan2( end_minus_start.y, end_minus_start.x ) / RADPERDEG, 0.0f, 0.0f, 1.0f );
     }
 
     glPushMatrix();
     glTranslatef( length, 0.0, 0.0f );
     glScalef( width, width, 1.0f );
-    OGL_draw_half_open_cylinder( aNrSidesPerCircle );
+    DrawHalfOpenCylinder( aNrSidesPerCircle );
     glPopMatrix();
 
     glBegin( GL_QUADS );
@@ -274,7 +261,7 @@ void OGL_Draw_segment( const CROUNDSEGMENT2D &aSegment,
 
     glScalef( width, width, 1.0f );
     glRotatef( 180, 0.0, 0.0, 1.0 );
-    OGL_draw_half_open_cylinder( aNrSidesPerCircle );
+    DrawHalfOpenCylinder( aNrSidesPerCircle );
 
     glPopMatrix ();
 }

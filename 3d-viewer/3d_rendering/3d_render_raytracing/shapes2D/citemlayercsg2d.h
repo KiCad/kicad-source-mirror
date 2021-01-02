@@ -1,3 +1,4 @@
+
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,18 +28,18 @@
  * @brief
  */
 
-#ifndef _CITEMLAYERCSG2D_H_
-#define _CITEMLAYERCSG2D_H_
+#ifndef _LAYER_ITEM_2D_H_
+#define _LAYER_ITEM_2D_H_
 
 #include "cobject2d.h"
 #include <vector>
 
 
 #define CSGITEM_EMPTY 0
-#define CSGITEM_FULL (COBJECT2D *)((size_t)(-1))
+#define CSGITEM_FULL (OBJECT_2D*) ( ( size_t )( -1 ) )
 
 /**
- *  Make constructive solid geometry for items objects on layers.
+ *  Make solid geometry for objects on layers.
  *
  *  The operation is in the form (A - B) /\ C
  *  For almost all of the layers it translate something like:
@@ -75,27 +76,25 @@
  *  Layers.Paste =    P - 0 /\ BODY
  *  Layers.Silk  =    S - 0 /\ BODY
  */
-class  CITEMLAYERCSG2D : public COBJECT2D
+class LAYER_ITEM_2D : public OBJECT_2D
 {
 public:
-    CITEMLAYERCSG2D( const COBJECT2D *aObjectA,
-                     std::vector<const COBJECT2D *> *aObjectB,
-                     const COBJECT2D *aObjectC,
-                     const BOARD_ITEM &aBoardItem );
+    LAYER_ITEM_2D( const OBJECT_2D* aObjectA, std::vector<const OBJECT_2D*>* aObjectB,
+                   const OBJECT_2D* aObjectC, const BOARD_ITEM& aBoardItem );
 
-    ~CITEMLAYERCSG2D();
+    ~LAYER_ITEM_2D();
 
-    // Imported from COBJECT2D
-    bool Overlaps( const CBBOX2D &aBBox ) const override;
-    bool Intersects( const CBBOX2D &aBBox ) const override;
-    bool Intersect( const RAYSEG2D &aSegRay, float *aOutT, SFVEC2F *aNormalOut ) const override;
-    INTERSECTION_RESULT IsBBoxInside( const CBBOX2D &aBBox ) const override;
-    bool IsPointInside( const SFVEC2F &aPoint ) const override;
+    // Imported from OBJECT_2D
+    bool Overlaps( const BBOX_2D& aBBox ) const override;
+    bool Intersects( const BBOX_2D& aBBox ) const override;
+    bool Intersect( const RAYSEG2D& aSegRay, float* aOutT, SFVEC2F* aNormalOut ) const override;
+    INTERSECTION_RESULT IsBBoxInside( const BBOX_2D& aBBox ) const override;
+    bool IsPointInside( const SFVEC2F& aPoint ) const override;
 
 private:
-    const COBJECT2D                *m_objectA;
-    std::vector<const COBJECT2D *> *m_objectB;
-    const COBJECT2D                *m_objectC;
+    const OBJECT_2D*                m_objectA;
+    std::vector<const OBJECT_2D*>*  m_objectB;
+    const OBJECT_2D*                m_objectC;
 };
 
-#endif // _CITEMLAYERCSG2D_H_
+#endif // _LAYER_ITEM_2D_H_

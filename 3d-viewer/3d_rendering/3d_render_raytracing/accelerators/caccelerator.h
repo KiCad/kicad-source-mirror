@@ -34,25 +34,24 @@
 #include "../raypacket.h"
 
 
-class CGENERICACCELERATOR
+class ACCELERATOR_3D
 {
 public:
-    CGENERICACCELERATOR( );
-    virtual ~CGENERICACCELERATOR();
+    ACCELERATOR_3D( );
+    virtual ~ACCELERATOR_3D();
 
-    virtual bool Intersect( const RAY &aRay, HITINFO &aHitInfo ) const = 0;
+    virtual bool Intersect( const RAY& aRay, HITINFO& aHitInfo ) const = 0;
 
-    virtual bool Intersect( const RAY &aRay,
-                            HITINFO &aHitInfo,
+    virtual bool Intersect( const RAY& aRay, HITINFO& aHitInfo,
                             unsigned int aAccNodeInfo ) const = 0;
 
-    virtual bool Intersect( const RAYPACKET &aRayPacket,
-                            HITINFO_PACKET *aHitInfoPacket ) const = 0;
+    virtual bool Intersect( const RAYPACKET& aRayPacket,
+                            HITINFO_PACKET* aHitInfoPacket ) const = 0;
 
-    virtual bool IntersectP( const RAY &aRay, float aMaxDistance ) const = 0;
+    virtual bool IntersectP( const RAY& aRay, float aMaxDistance ) const = 0;
 
 protected:
-    CBBOX       m_bbox;
+    BBOX_3D m_bbox;
 };
 
 #endif // _CACCELERATOR_H_

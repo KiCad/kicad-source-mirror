@@ -31,8 +31,8 @@
 #include "../3d_fastmath.h"
 
 
-CPOSTSHADER_SSAO::CPOSTSHADER_SSAO( const CCAMERA &aCamera ) :
-        CPOSTSHADER( aCamera ),
+POST_SHADER_SSAO::POST_SHADER_SSAO( const CAMERA& aCamera ) :
+        POST_SHADER( aCamera ),
         m_shadedBuffer( nullptr ),
         m_isUsingShadows( false )
 {
@@ -44,8 +44,8 @@ CPOSTSHADER_SSAO::CPOSTSHADER_SSAO( const CCAMERA &aCamera ) :
 //http://www.gamedev.net/topic/556187-the-best-ssao-ive-seen/
 //http://www.gamedev.net/topic/556187-the-best-ssao-ive-seen/?view=findpost&p=4632208
 
-float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos, const SFVEC3F &ddiff,
-                              const SFVEC3F &cnorm, const float aShadowAtSamplePos,
+float POST_SHADER_SSAO::aoFF( const SFVEC2I& aShaderPos, const SFVEC3F& ddiff,
+                              const SFVEC3F& cnorm, const float aShadowAtSamplePos,
                               const float aShadowAtCenterPos, int c1, int c2 ) const
 {
     const float shadowGain = 0.60f;
@@ -110,8 +110,8 @@ float CPOSTSHADER_SSAO::aoFF( const SFVEC2I &aShaderPos, const SFVEC3F &ddiff,
 }
 
 
-float CPOSTSHADER_SSAO::giFF( const SFVEC2I &aShaderPos, const SFVEC3F &ddiff,
-                              const SFVEC3F &cnorm, const float aShadow, int c1, int c2 ) const
+float POST_SHADER_SSAO::giFF( const SFVEC2I& aShaderPos, const SFVEC3F& ddiff,
+                              const SFVEC3F& cnorm, const float aShadow, int c1, int c2 ) const
 {
     if( ( ddiff.x > FLT_EPSILON ) || ( ddiff.y > FLT_EPSILON ) || ( ddiff.z > FLT_EPSILON ) )
     {
@@ -130,7 +130,7 @@ float CPOSTSHADER_SSAO::giFF( const SFVEC2I &aShaderPos, const SFVEC3F &ddiff,
 }
 
 
-SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
+SFVEC3F POST_SHADER_SSAO::Shade( const SFVEC2I& aShaderPos ) const
 {
     float cdepth = GetDepthAt( aShaderPos );
 
@@ -146,7 +146,7 @@ SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
 
         // initialize variables:
         float ao = 0.0f;
-        SFVEC3F gi = SFVEC3F(0.0f);
+        SFVEC3F gi = SFVEC3F( 0.0f );
 
 #define ROUNDS 3
         for( unsigned int i = 0; i < ROUNDS; ++i )
@@ -227,8 +227,8 @@ SFVEC3F CPOSTSHADER_SSAO::Shade( const SFVEC2I &aShaderPos ) const
 }
 
 
-SFVEC3F CPOSTSHADER_SSAO::ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVEC3F &aInputColor,
-                                           const SFVEC3F &aShadeColor ) const
+SFVEC3F POST_SHADER_SSAO::ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC3F& aInputColor,
+                                           const SFVEC3F& aShadeColor ) const
 {
     SFVEC3F outColor;
 
@@ -244,7 +244,7 @@ SFVEC3F CPOSTSHADER_SSAO::ApplyShadeColor( const SFVEC2I &aShaderPos, const SFVE
 }
 
 
-SFVEC3F CPOSTSHADER_SSAO::giColorCurve( const SFVEC3F &aColor ) const
+SFVEC3F POST_SHADER_SSAO::giColorCurve( const SFVEC3F& aColor ) const
 {
     const SFVEC3F vec1 = SFVEC3F( 1.0f );
 
@@ -256,7 +256,7 @@ SFVEC3F CPOSTSHADER_SSAO::giColorCurve( const SFVEC3F &aColor ) const
 }
 
 
-SFVEC3F CPOSTSHADER_SSAO::Blur( const SFVEC2I& aShaderPos ) const
+SFVEC3F POST_SHADER_SSAO::Blur( const SFVEC2I& aShaderPos ) const
 {
     const float dCenter = GetDepthAt( aShaderPos );
 
