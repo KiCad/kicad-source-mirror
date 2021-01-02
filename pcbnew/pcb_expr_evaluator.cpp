@@ -535,8 +535,12 @@ LIBEVAL::VALUE PCB_EXPR_VAR_REF::GetValue( LIBEVAL::CONTEXT* aCtx )
         return PCB_LAYER_VALUE( context->GetLayer() );
     }
 
-    BOARD_ITEM* item  = const_cast<BOARD_ITEM*>( GetObject( aCtx ) );
-    auto        it = m_matchingTypes.find( TYPE_HASH( *item ) );
+    BOARD_ITEM* item = GetObject( aCtx );
+
+    if( !item )
+        return LIBEVAL::VALUE();
+
+    auto it = m_matchingTypes.find( TYPE_HASH( *item ) );
 
     if( it == m_matchingTypes.end() )
     {
