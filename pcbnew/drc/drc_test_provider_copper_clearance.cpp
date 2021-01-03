@@ -162,9 +162,6 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::Run()
                 if( !reportProgress( ii++, count, delta ) )
                     return false;
 
-                if( item->Type() == PCB_FP_TEXT_T && !static_cast<FP_TEXT*>( item )->IsVisible() )
-                    return true;
-
                 m_copperTree.Insert( item, m_largestClearance );
                 return true;
             };
@@ -270,6 +267,14 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testTrackAgainstItem( TRACK* track, SHA
     int            clearance;
     int            actual;
     VECTOR2I       pos;
+
+    if( other->Type() == PCB_PAD_T )
+    {
+        PAD* pad = static_cast<PAD*>( other );
+
+        if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )
+            testClearance = false;
+    }
 
     if( testClearance )
     {
@@ -520,6 +525,12 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
         testClearance = false;
     }
 
+    if( pad->GetAttribute() == PAD_ATTRIB_NPTH && !pad->FlashLayer( layer ) )
+        testClearance = false;
+
+    if( !IsCopperLayer( layer ) )
+        testClearance = false;
+
     // Track clearances are tested in testTrackClearances()
     if( dynamic_cast<TRACK*>( other) )
         testClearance = false;
@@ -614,6 +625,9 @@ bool DRC_TEST_PROVIDER_COPPER_CLEARANCE::testPadAgainstItem( PAD* pad, SHAPE* pa
 
         // Pads of the same (defined) net get a waiver on clearance tests
         if( pad->GetNetCode() && otherPad->GetNetCode() == pad->GetNetCode() )
+            testClearance = false;
+
+        if( otherPad->GetAttribute() == PAD_ATTRIB_NPTH && !otherPad->FlashLayer( layer ) )
             testClearance = false;
     }
 
