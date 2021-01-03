@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2021-01-03 08:32+0000\n"
+"PO-Revision-Date: 2021-01-03 20:48+0000\n"
 "Last-Translator: Rigo Ligo <rigoligo03@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -203,7 +203,7 @@ msgstr "网络 %s\t网络类 %s\t焊盘名称 %s"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:786
 #, c-format
 msgid "Net %s\tNetClass %s"
-msgstr "网络 %s\t网络类 %s"
+msgstr "网络 %s网络类 %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:466
 msgid "Load OpenGL: board"
@@ -231,7 +231,7 @@ msgstr "重新载入时间 %.3f s"
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_createscene_ogl_legacy.cpp:935
 #, c-format
 msgid "Loading %s"
-msgstr "加载 %s"
+msgstr "正在载入 %s"
 
 #: 3d-viewer/3d_rendering/3d_render_ogl_legacy/c3d_render_ogl_legacy.cpp:564
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:179
@@ -240,11 +240,11 @@ msgstr "载入中..."
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:474
 msgid "Load Raytracing: board"
-msgstr "加载 Raytracing：电路板"
+msgstr "加载光线追踪：电路板"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_createscene.cpp:676
 msgid "Load Raytracing: layers"
-msgstr "加载 Raytracing：层"
+msgstr "加载光线追踪：层"
 
 #: 3d-viewer/3d_rendering/3d_render_raytracing/c3d_render_raytracing.cpp:350
 #, c-format
@@ -434,16 +434,16 @@ msgstr "从丝印中减去阻焊"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:77
 msgid "Clip silkscreen at via annulus"
-msgstr "通过过孔环修剪丝印"
+msgstr "删除过孔周围的丝印"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:86
 msgid "Non plated pads copper as bare copper"
-msgstr "无镀铜焊盘，为裸铜"
+msgstr "除含镀层的焊盘外的铜层渲染为裸铜"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:87
 msgid ""
 "Display plated pads as plated but other copper as raw copper material. (Slow)"
-msgstr "显示电镀焊盘为电镀，其他铜为原料铜。(慢速)"
+msgstr "对有镀层的焊盘显示镀层颜色；其他的铜显示为原料铜色。(慢速)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:98
 msgid "3D Model Visibility"
@@ -599,7 +599,7 @@ msgstr "过程纹理"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:438
 msgid "Add floor"
-msgstr "添加层"
+msgstr "显示背景板"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:452
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:262
@@ -608,7 +608,7 @@ msgstr "后期处理"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:473
 msgid "Number of Samples"
-msgstr "样本数量"
+msgstr "采样数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:477
 msgid "Spread Factor %"
@@ -616,7 +616,7 @@ msgstr "扩散系数 %"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:481
 msgid "Recursive Level"
-msgstr "递归级"
+msgstr "递归深度"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:488
 msgid "Shadows"
@@ -632,7 +632,7 @@ msgstr "将投射到灯光方向以计算阴影点的光线数"
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:520
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:543
 msgid "Random direction factor of the cast rays"
-msgstr "投射光线的随机方向因子"
+msgstr "投射光线方向的随机度"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:509
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:252
@@ -647,9 +647,7 @@ msgstr "将投射以计算反射点的光线数"
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
-msgstr ""
-"光线可以通过对象传播的交互作用数。(级别数量越多，结果越好，特别是在非常透明的"
-"板上)"
+msgstr "一束光线所能穿过的物体数量。(递归深度越大，效果越好，特别是在非常透明的板上)"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:532
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:247
@@ -662,7 +660,7 @@ msgstr "将投射以计算折射点的光线数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:548
 msgid "Number of bounces that a ray can hit reflective objects"
-msgstr "光线可以击中反射对象的反弹次数"
+msgstr "一束光线所能在反光的物体上反射的次数"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:574
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:798
@@ -671,7 +669,7 @@ msgstr "灯光配置"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:582
 msgid "Ambient Camera Light"
-msgstr "环境光摄影机灯光"
+msgstr "相机环境光"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:601
 msgid "Top Light"
@@ -803,7 +801,7 @@ msgstr "错误"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:884
 msgid "Failed to copy image to clipboard"
-msgstr "复制图像到剪贴板失败"
+msgstr "无法将图像复制到剪贴板"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:895
 msgid "Can't save file"
@@ -823,7 +821,7 @@ msgstr "铜箔颜色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1032
 msgid "Board Body Color"
-msgstr "电路板颜色"
+msgstr "基板颜色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1052
 msgid "Solder Paste Color"
@@ -971,19 +969,19 @@ msgstr "根据材质的漫反射颜色使用 CAD 颜色样式"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle Through Hole 3D models"
-msgstr "切换 3D 通孔模型"
+msgstr "切换直插 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:210
 msgid "Toggle 3D models with 'Through hole' attribute"
-msgstr "切换通孔类型的 3D 模型"
+msgstr "切换直插元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle SMD 3D models"
-msgstr "切换表面贴装 3D 模型"
+msgstr "切换贴片 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:216
 msgid "Toggle 3D models with 'Surface mount' attribute"
-msgstr "切换表面贴装类型的 3D 模型"
+msgstr "切换贴片元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle Virtual 3D models"
@@ -991,7 +989,7 @@ msgstr "切换虚拟 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:222
 msgid "Toggle 3D models with 'Virtual' attribute"
-msgstr "切换虚拟类型的 3D 模型"
+msgstr "切换虚拟元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:227
 msgid "Show Model Bounding Boxes"
@@ -1049,7 +1047,7 @@ msgstr "显示 3D 轴线"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:283
 msgid "Toggle zone display"
-msgstr "切换区域显示"
+msgstr "切换覆铜显示"
 
 #: 3d-viewer/3d_viewer/tools/3d_actions.cpp:288
 msgid "Toggle adhesive display"
@@ -1392,7 +1390,7 @@ msgstr "ECO2 用户层"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:184
 msgid "Board Layer for Outline"
-msgstr "轮廓板层"
+msgstr "轮廓层"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:186
 msgid ""
@@ -1401,7 +1399,7 @@ msgid ""
 "layer (but will be marked invisible)."
 msgstr ""
 "选择要放置轮廓的电路板图层。\n"
-"位号和值始终放置在丝印层上（但将标记为不可见）。"
+"位号和值始终放置在丝印层上（但会被标记为不可见）。"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:100
 msgid "Bitmap to Component Converter"
@@ -1409,11 +1407,11 @@ msgstr "将位图转换成元件"
 
 #: common/base_units.cpp:481
 msgid "sq. mm"
-msgstr "sq. mm"
+msgstr "mm^2"
 
 #: common/base_units.cpp:483
 msgid "cu. mm"
-msgstr "cu. mm"
+msgstr "mm^3"
 
 #: common/base_units.cpp:493 common/eda_draw_frame.cpp:490
 #: eeschema/dialogs/dialog_junction_props_base.cpp:34
@@ -1438,11 +1436,11 @@ msgstr "mils (密尔)"
 
 #: common/base_units.cpp:495
 msgid "sq. mils"
-msgstr "sq. mils"
+msgstr "mil^2"
 
 #: common/base_units.cpp:497
 msgid "cu. mils"
-msgstr "cu. mils"
+msgstr "mil^3"
 
 #: common/base_units.cpp:507
 msgid "in"
@@ -1450,11 +1448,11 @@ msgstr "英寸"
 
 #: common/base_units.cpp:509
 msgid "sq. in"
-msgstr "sq. in"
+msgstr "in^2"
 
 #: common/base_units.cpp:511
 msgid "cu. in"
-msgstr "cu. in"
+msgstr "in^3"
 
 #: common/base_units.cpp:515
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:71
@@ -1482,7 +1480,7 @@ msgstr "环境变量扩展失败：缺少 \"%c\" , 位置 \"%u\" （在 \"%s\" �
 #: common/common.cpp:296
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
-msgstr "不能设置 \"%s\" 为绝对路径 \"%s\"。"
+msgstr "无法获取文件 \"%s\" 在 \"%s\" 中的绝对路径。"
 
 #: common/common.cpp:315
 #, c-format
@@ -1522,7 +1520,7 @@ msgstr "警告"
 
 #: common/confirm.cpp:155 common/confirm.cpp:182
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "如果你不保存，你的所有更改将永久丢失。"
+msgstr "如果不保存，所有更改将永久丢失。"
 
 #: common/confirm.cpp:156 common/confirm.cpp:183 common/tool/actions.cpp:65
 #: eeschema/symbol_editor/symbol_editor.cpp:753
@@ -1769,7 +1767,7 @@ msgstr "报告"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
-msgstr "透明颜色"
+msgstr "清除颜色"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -1862,6 +1860,7 @@ msgstr ""
 "只会被暂时覆盖。"
 
 #: common/dialogs/dialog_configure_paths.cpp:343
+#, fuzzy
 msgid ""
 "The next time KiCad is launched, any paths that have already\n"
 "been defined are honored and any settings defined in the path\n"
@@ -1869,10 +1868,10 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"下次启动 KiCad 时，将支持已定义的任何路径，\n"
+"下次启动 KiCad 时，将使用已经定义的所有路径，\n"
 "并忽略在路径配置对话框中定义的任何设置。\n"
-"如果您不打算执行此行为，\n"
-"请重命名任何冲突的条目或从系统中删除外部环境变量。"
+"如果您不想 KiCad 这样做，请重命名任何冲突的条目，\n"
+"或从系统中删除外部环境变量。"
 
 #: common/dialogs/dialog_configure_paths.cpp:358
 #, c-format
@@ -1895,9 +1894,7 @@ msgid ""
 "Environment variables defined at the system or user level take precedence "
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
-msgstr ""
-"为每个环境变量输入名称和路径。灰色条目为系统或用户级外部定义的名称。在系统或"
-"用户级定义的环境变量优先于该表中定义。这意味着该表中的值将被忽略。"
+msgstr "为每个环境变量输入名称和路径。灰色条目为系统或用户在外部定义的名称。在系统或用户级定义的环境变量优先于该表中定义。这意味着该表中的值将被忽略。"
 
 #: common/dialogs/dialog_configure_paths.cpp:582
 msgid ""
@@ -1957,7 +1954,7 @@ msgstr "别名"
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, c-format
 msgid "Configure Global %s Library Table"
-msgstr "配置全局 %s 库表"
+msgstr "配置全局%s库表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:42
 #, c-format
@@ -1968,50 +1965,50 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad 首次使用新的 %s 库表来访问库。\n"
-"为了让 KiCad 访问 %s 库，\n"
-"您必须配置全局 %s 库表。\n"
+"KiCad 首次使用新的%s库表来访问库。\n"
+"为了让 KiCad 访问%s库，\n"
+"您必须配置全局%s库表。\n"
 "请从以下选项中选择一个。\n"
 "如果您不确定要选择哪个选项，请使用默认选择。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "复制默认的全局 %s 库表 (推荐)"
+msgstr "复制默认的全局%s库表 (推荐)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
-msgstr "如果你不确定如何配置全局 %s 库表，请选择此选项"
+msgstr "如果你不确定如何配置全局%s库表，请选择此选项"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
 #, c-format
 msgid "Copy custom global %s library table"
-msgstr "复制自定义全局 %s 库表"
+msgstr "复制自定义全局%s库表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr "选择此选项可复制除默认值以外的 %s 库表文件"
+msgstr "选择此选项可复制除默认值以外的%s库表文件"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, c-format
 msgid "Create an empty global %s library table"
-msgstr "创建一个空的全局 %s 库表"
+msgstr "创建一个空的全局%s库表"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr "选择此选项可在工程专用库表中定义 %s 库"
+msgstr "选择此选项可在工程专用库表中定义%s库"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:67
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "选择全局 %s 库表文件："
+msgstr "选择全局%s库表文件："
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2175,14 +2172,14 @@ msgstr "错误的比例数值"
 #, c-format
 msgid ""
 "This scale results in an image which is too small (%.2f mm or %.1f mil)."
-msgstr "此比例的图像尺寸太小 (%.2f mm 或 %.1f mil)。"
+msgstr "此比例会使图像尺寸太小 (%.2f mm 或 %.1f mil)。"
 
 #: common/dialogs/dialog_image_editor.cpp:93
 #, c-format
 msgid ""
 "This scale results in an image which is very large (%.1f mm or %.2f in). Are "
 "you sure?"
-msgstr "此比例的图像尺寸非常大(%.1f mm 或 %.2f in)。你确定吗？"
+msgstr "此比例会使图像尺寸非常大(%.1f mm 或 %.2f in)。确定吗？"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33
 msgid "Grey"
