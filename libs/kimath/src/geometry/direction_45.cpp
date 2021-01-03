@@ -83,6 +83,16 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
 
     SHAPE_LINE_CHAIN pl;
 
+    // Shortcut where we can generate just one segment and quit.  Avoids more complicated handling
+    // of precision errors if filleting is enabled
+    // TODO: needs refactoring if we support 90-degree arcs via this function
+    if( w == h || w == 0 || h == 0 )
+    {
+        pl.Append( aP0 );
+        pl.Append( aP1 );
+        return pl;
+    }
+
     // TODO: if tangentLength zero, we could still place a small arc at the start...
     if( aFillet )
     {
