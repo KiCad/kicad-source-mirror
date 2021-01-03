@@ -11,7 +11,7 @@
    data-name="Слой 1"
    viewBox="0 0 16 16"
    version="1.1"
-   sodipodi:docname="refresh.svg"
+   sodipodi:docname="small_refresh.svg"
    inkscape:version="1.0.1 (c497b03c, 2020-09-10)"
    width="16"
    height="16">
@@ -28,7 +28,7 @@
      inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="37.437403"
+     inkscape:zoom="43.318962"
      inkscape:cx="7.2655863"
      inkscape:cy="9.2451712"
      inkscape:window-x="0"
@@ -83,24 +83,24 @@
      id="title26817">refresh</title>
   <path
      class="cls-1"
-     d="M 2.5984,5.3419694 A 6.12144,6.1212522 0 0 1 13.7689,5.9320513"
+     d="M 13.5436,5.3419694 A -6.12144,6.1212522 0 0 0 2.3731,5.9320513"
      id="path26819"
      style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <path
      class="cls-1"
-     d="M 13.45006,10.609808 A 6.11622,6.1160323 0 0 1 2.07694,9.5023617"
+     d="M 2.69194,10.609808 A -6.11622,6.1160323 0 0 0 14.06506,9.5023617"
      id="path26821"
      style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-1"
      points="17.701 17.481 22.198 17.078 23.071 21.738"
      id="polyline26823"
-     transform="matrix(0.6,0,0,0.59998159,0.2284,0.20012715)"
-     style="stroke-width:3.33338447;stroke-miterlimit:4;stroke-dasharray:none" />
+     transform="matrix(-0.6,0,0,0.59998159,15.9136,0.20012715)"
+     style="stroke-width:3.33338;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-1"
      points="8.441 8.231 3.945 8.634 3.071 3.974"
      id="polyline26825"
-     transform="matrix(0.6,0,0,0.59998159,0.2284,0.20012715)"
-     style="stroke-width:3.33338447;stroke-miterlimit:4;stroke-dasharray:none" />
+     transform="matrix(-0.6,0,0,0.59998159,15.9136,0.20012715)"
+     style="stroke-width:3.33338;stroke-miterlimit:4;stroke-dasharray:none" />
 </svg>
