@@ -131,11 +131,7 @@ public:
     // aThickness > THICKNESS_MIN == use aThickness
     void SetPCBThickness( double aThickness );
 
-    void SetMinDistance( double aDistance )
-    {
-        // m_minDistance2 keeps a squared distance value
-        m_minDistance2 = aDistance * aDistance;
-    }
+    void SetMinDistance( double aDistance );
 
     // create the PCB model using the current outlines and drill holes
     bool CreatePCB();
