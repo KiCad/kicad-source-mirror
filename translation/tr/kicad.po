@@ -1,23 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Oğuz Ersen <oguzersen@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-12-31 06:36-0800\n"
-"PO-Revision-Date: 2020-10-19 17:26+0000\n"
+"PO-Revision-Date: 2021-01-03 08:32+0000\n"
 "Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3.1-dev\n"
+"X-Generator: Weblate 4.4.1-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:59
 msgid "All Files (*.*)|*.*"
@@ -132,9 +131,8 @@ msgid "Reload board and 3D models"
 msgstr "Kartı ve 3B modelleri yeniden yükle"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:287
-#, fuzzy
 msgid "Build board outline"
-msgstr "Kart gövdesini oluştur"
+msgstr "Kart dış hatlarını oluştur"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:449
 msgid "Create layers"
@@ -352,9 +350,8 @@ msgstr "Öntanımlı Ayarlara Sıfırla"
 #: gerbview/menubar.cpp:212 kicad/menubar.cpp:165
 #: pagelayout_editor/menubar.cpp:156 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:439
-#, fuzzy
 msgid "Preferences..."
-msgstr "&Tercihler"
+msgstr "Tercihler..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:214 cvpcb/menubar.cpp:72
 #: eeschema/menubar.cpp:270
@@ -1206,9 +1203,8 @@ msgstr "Görüntü Seç"
 #: bitmap2component/bitmap2cmp_gui.cpp:339
 #: eeschema/tools/sch_drawing_tools.cpp:406
 #: pagelayout_editor/pl_editor_frame.cpp:829
-#, fuzzy
 msgid "Image Files"
-msgstr "Görüntü Dosyaları "
+msgstr "Görüntü Dosyaları"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:695
 msgid "Unable to export to the Clipboard"
@@ -1265,9 +1261,8 @@ msgid "Black&&White Picture"
 msgstr "Siyah Beyaz Resim"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:41
-#, fuzzy
 msgid "Bitmap Information"
-msgstr "Bitmap Bilgileri:"
+msgstr "Bitmap Bilgileri"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:50
 msgid "Bitmap size:"
@@ -7291,14 +7286,14 @@ msgid "Update"
 msgstr ""
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:489
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbol %s from '%s' to '%s'"
-msgstr "Simge Kütüphanesi Oluştur"
+msgstr "%s simgesini '%s'den '%s'e güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "Update symbols %s from '%s' to '%s'"
-msgstr "Simge Kütüphanesi Oluştur"
+msgstr "%s simgelerini '%s'den '%s'e güncelle"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:506
 #, c-format
@@ -13351,9 +13346,9 @@ msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:754
-#, fuzzy, c-format
+#, c-format
 msgid "Open %s"
-msgstr "OpenGL"
+msgstr "%s aç"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:830
 #, c-format
@@ -13433,9 +13428,9 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1363
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1419
-#, fuzzy, c-format
+#, c-format
 msgid "Error saving %s symbol library table."
-msgstr "Simge Kütüphanesi Oluştur"
+msgstr "%s simge kütüphanesi tablosu kaydedilirken hata oluştu."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1364
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1420
@@ -17267,9 +17262,8 @@ msgid "E12"
 msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:493
-#, fuzzy
 msgid "Available Values"
-msgstr "Kullanılabilir yollar:"
+msgstr "Kullanılabilir Değerler"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:504
 msgid "Solutions"
@@ -21791,9 +21785,8 @@ msgid "Current layer only"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:84
-#, fuzzy
 msgid "Layer Filter"
-msgstr "Görüntü Dosyaları "
+msgstr "Katman Filtresi"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:100
 msgid "Current layer:"
