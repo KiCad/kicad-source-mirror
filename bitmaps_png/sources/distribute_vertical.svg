@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="distribute_vertical.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +23,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="13.618553"
-     inkscape:cy="16.27096"
+     inkscape:zoom="20.307321"
+     inkscape:cx="3.7212448"
+     inkscape:cy="17.025425"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,76 +81,30 @@
      id="title116576">distribute_horizontal</title>
   <path
      id="line116578"
-     style="fill:none;stroke:#1a81c4;stroke-width:1.0035px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 2.9953965,12.499899 H 20.995399"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="M 22.000301,6.000402 H 2.000302"
      sodipodi:nodetypes="cc" />
   <rect
      class="cls-2"
-     x="6.9999928"
-     y="11"
-     width="10"
-     height="3"
+     x="-18.000301"
+     y="-10.000302"
+     width="12"
+     height="8"
      id="rect116580"
-     style="fill:#545454;fill-opacity:1;stroke-width:1" />
-  <path
-     id="line116582"
-     style="fill:none;stroke:#1a81c4;stroke-width:1.0035px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 2.9462985,22.4999 H 20.9463"
-     sodipodi:nodetypes="cc" />
-  <rect
-     class="cls-2"
-     x="6.9999928"
-     y="20.999998"
-     width="10"
-     height="3"
-     id="rect116584"
-     style="fill:#545454;fill-opacity:1;stroke-width:1" />
+     style="fill:#545454;fill-opacity:1;stroke-width:0.999997"
+     transform="scale(-1)" />
   <path
      id="line116586"
-     style="fill:none;stroke:#1a81c4;stroke-width:1.0035px;stroke-linecap:round;stroke-linejoin:round"
-     d="M 2.9999975,2.5 H 21"
+     style="fill:none;stroke:#1a81c4;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+     d="m 22.000302,18.000302 h -20"
      sodipodi:nodetypes="cc" />
   <rect
      class="cls-2"
-     x="6.9770579"
-     y="1.0018711"
-     width="10"
-     height="2.999254"
-     transform="matrix(1,-7.4612921e-5,1.3264485e-4,0.99999999,0,0)"
+     x="-19.998554"
+     y="-22.000196"
+     width="15.999365"
+     height="7.9980106"
+     transform="matrix(-0.99999999,1.243547e-4,-7.9587011e-5,-1,0,0)"
      id="rect116588"
      style="fill:#545454;fill-opacity:1;stroke-width:1" />
-  <line
-     class="cls-3"
-     x1="2.3325977"
-     y1="5.3302999"
-     x2="2.3325977"
-     y2="9.4888"
-     id="line116590" />
-  <polygon
-     class="cls-4"
-     points="1.787,22.667 6.123,21.505 6.123,23.829 "
-     id="polygon116592"
-     transform="rotate(90,11.999989,12.99999)" />
-  <polygon
-     class="cls-4"
-     points="13.033,22.667 8.696,21.505 8.696,23.829 "
-     id="polygon116594"
-     transform="rotate(90,12.831489,12.17349)" />
-  <line
-     class="cls-3"
-     x1="2.3325977"
-     y1="16.561197"
-     x2="2.3325977"
-     y2="20.450798"
-     id="line116596" />
-  <polygon
-     class="cls-4"
-     points="13.017,22.667 17.354,21.505 17.354,23.829 "
-     id="polygon116598"
-     transform="rotate(90,12.831489,12.17349)" />
-  <polygon
-     class="cls-4"
-     points="19.658,21.505 19.658,23.829 23.995,22.667 "
-     id="polygon116600"
-     transform="rotate(90,13.331489,11.67349)" />
 </svg>
