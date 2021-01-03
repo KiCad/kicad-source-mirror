@@ -12,7 +12,23 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="drc.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
+  <g
+     id="g852"
+     transform="matrix(0.89812662,0,0,0.89812662,3.3492444,2.7336055)"
+     style="stroke-width:1.11343">
+    <path
+       class="cls-5"
+       d="M 22.6079,7.0745 21.7826,6.2492 a 1.316,1.316 0 0 0 -1.8611,0 l -9.27,9.27 2.6864,2.6867 9.27,-9.2707 a 1.316,1.316 0 0 0 0,-1.8607 z"
+       id="path116708"
+       style="stroke-width:1.11343" />
+    <polygon
+       class="cls-5"
+       points="14.973,19.571 13.658,18.268 12.286,16.884 11.632,20.19 "
+       id="polygon116710"
+       transform="translate(-2,-1)"
+       style="stroke-width:1.11343" />
+  </g>
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,14 +39,14 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="9.8466293"
-     inkscape:cy="12.764753"
+     inkscape:zoom="24.84502"
+     inkscape:cx="16.491864"
+     inkscape:cy="14.410687"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,63 +97,45 @@
      id="title116688">drc</title>
   <rect
      class="cls-2"
-     x="2.1571999"
-     y="3.6673999"
-     width="3.8692"
-     height="3.8692"
-     id="rect116692" />
+     x="1.9999999"
+     y="9.999999"
+     width="3.9999998"
+     height="3.9999998"
+     id="rect116694"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;fill:none" />
   <rect
      class="cls-2"
-     x="2.1571999"
-     y="10.1623"
-     width="3.8692"
-     height="3.8692999"
-     id="rect116694" />
-  <rect
-     class="cls-2"
-     x="2.1571999"
-     y="16.657301"
-     width="3.8692"
-     height="3.8692999"
-     id="rect116696" />
+     x="1.9999999"
+     y="18"
+     width="3.9999998"
+     height="3.9999998"
+     id="rect116696"
+     style="fill:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <line
      class="cls-3"
-     x1="8.1601"
-     y1="5.4052"
-     x2="16.875401"
-     y2="5.4052"
-     id="line116698" />
+     x1="10"
+     y1="4"
+     x2="19"
+     y2="4"
+     id="line116698"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
+  <path
+     id="path876"
+     style="color:#000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-variant-east-asian:normal;font-feature-settings:normal;font-variation-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;shape-margin:0;inline-size:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000000;solid-opacity:1;vector-effect:none;fill:#545454;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.00001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate;stop-color:#000000;stop-opacity:1"
+     d="m 10,11 c -0.5522836,3e-6 -0.9999972,0.447716 -1,1 2.8e-6,0.552284 0.4477164,0.999997 1,1 h 4.5 l 2,-2 z"
+     sodipodi:nodetypes="cccccc" />
   <line
      class="cls-3"
-     x1="8.1601"
-     y1="11.9494"
-     x2="15.120701"
-     y2="11.9494"
-     id="line116700" />
-  <line
-     class="cls-3"
-     x1="8.1601"
-     y1="18.6903"
-     x2="9.7504997"
-     y2="18.6903"
-     id="line116702" />
+     x1="10"
+     y1="20"
+     x2="11.5904"
+     y2="20"
+     id="line116702"
+     style="stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none" />
   <polyline
      class="cls-4"
      points="3.737 5.378 5.819 7.46 9.538 3.741"
      id="polyline116704"
-     transform="translate(-2,-1)" />
-  <polyline
-     class="cls-4"
-     points="3.737 11.898 5.819 13.98 9.538 10.261"
-     id="polyline116706"
-     transform="translate(-2,-1)" />
-  <path
-     class="cls-5"
-     d="M 22.6079,7.0745 21.7826,6.2492 a 1.316,1.316 0 0 0 -1.8611,0 l -9.27,9.27 2.6864,2.6867 9.27,-9.2707 a 1.316,1.316 0 0 0 0,-1.8607 z"
-     id="path116708" />
-  <polygon
-     class="cls-5"
-     points="14.973,19.571 13.658,18.268 12.286,16.884 11.632,20.19 "
-     id="polygon116710"
-     transform="translate(-2,-1)" />
+     transform="matrix(0.87823583,0,0,0.9050724,-1.2969029,-0.8188359)"
+     style="stroke:#545454;stroke-width:2.24328;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
 </svg>

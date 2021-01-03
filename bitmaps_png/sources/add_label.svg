@@ -11,8 +11,8 @@
    data-name="Слой 1"
    viewBox="0 0 24 24"
    version="1.1"
-   sodipodi:docname="label.svg"
-   inkscape:version="1.0.1 (1.0.1+r74)">
+   sodipodi:docname="add_label.svg"
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -22,15 +22,15 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="2560"
-     inkscape:window-height="1371"
+     inkscape:window-width="1280"
+     inkscape:window-height="715"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="-3.5584597"
-     inkscape:cy="4.8133837"
+     inkscape:zoom="26.841039"
+     inkscape:cx="12.61081"
+     inkscape:cy="11.85484"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="23"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
      inkscape:current-layer="Слой_1">
@@ -81,17 +81,18 @@
      id="title157963">label</title>
   <text
      xml:space="preserve"
-     style="font-size:40px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px"
-     x="6.7458234"
-     y="15.560363"
-     id="text15403"><tspan
+     style="font-size:39.5847px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;stroke-width:0.999997"
+     x="7.0734468"
+     y="15.398791"
+     id="text15403"
+     transform="scale(0.98961652,1.0104924)"><tspan
        sodipodi:role="line"
        id="tspan15401"
-       x="6.7458234"
-       y="15.560363"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:16px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#545454;fill-opacity:1">A</tspan></text>
+       x="7.0734468"
+       y="15.398791"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:15.8339px;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans Medium';fill:#545454;fill-opacity:1;stroke-width:0.999997">A</tspan></text>
   <path
-     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 0,18 H 24"
+     style="fill:none;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="M 2,18 H 22"
      id="path15966" />
 </svg>

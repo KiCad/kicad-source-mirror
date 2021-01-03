@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="ps_diff_pair_gap.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -23,17 +23,18 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1609"
-     inkscape:window-height="1286"
+     inkscape:window-height="1035"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="27.961538"
-     inkscape:cx="3.3259971"
-     inkscape:cy="13"
+     inkscape:zoom="25.744032"
+     inkscape:cx="6.5017705"
+     inkscape:cy="12.600186"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     showguides="false">
     <inkscape:grid
        type="xygrid"
        id="grid_kicad"
@@ -83,16 +84,18 @@
      class="cls-1"
      x1="7.5"
      y1="10.5"
-     x2="0.5"
+     x2="1.5"
      y2="10.5"
-     id="line26699" />
+     id="line26699"
+     style="stroke-width:0.999997" />
   <line
      class="cls-1"
      x1="7.5"
      y1="14.5"
-     x2="0.5"
+     x2="1.5"
      y2="14.5"
-     id="line26701" />
+     id="line26701"
+     style="stroke-width:0.999997" />
   <polyline
      class="cls-2"
      points="8 11 12 11 17 3.006 24 3.006"
@@ -105,26 +108,29 @@
      transform="translate(-1,-1)" />
   <line
      class="cls-1"
-     x1="2.5"
+     x1="4.5"
      y1="5.5479999"
-     x2="2.5"
-     y2="0.49849999"
-     id="line26707" />
-  <polygon
-     class="cls-3"
-     points="3.5,10.978 2.047,5.557 4.953,5.557 "
+     x2="4.5"
+     y2="1.5"
+     id="line26707"
+     style="stroke-width:0.999997" />
+  <path
      id="polygon26709"
-     transform="translate(-1,-1)" />
+     style="fill:#545454"
+     d="m 4.5,10 -3,-5 h 6 z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
   <line
      class="cls-1"
-     x1="2.5"
+     x1="4.5"
      y1="19.475401"
-     x2="2.5"
+     x2="4.5"
      y2="23.530399"
      id="line26711" />
-  <polygon
-     class="cls-3"
-     points="3.5,16.046 4.953,21.466 2.047,21.466 "
+  <path
      id="polygon26713"
-     transform="translate(-1,-1)" />
+     style="fill:#545454"
+     d="m 4.5,15 3,5 h -6 z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
 </svg>

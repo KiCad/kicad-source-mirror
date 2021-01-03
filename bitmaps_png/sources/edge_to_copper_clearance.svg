@@ -12,7 +12,7 @@
    viewBox="0 0 24 24"
    version="1.1"
    sodipodi:docname="edge_to_copper_clearance.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   inkscape:version="1.0.1 (c497b03c, 2020-09-10)">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -26,13 +26,14 @@
      inkscape:window-height="951"
      id="namedview116754"
      showgrid="true"
-     inkscape:zoom="42.838886"
-     inkscape:cx="10.923574"
-     inkscape:cy="10.360675"
+     inkscape:zoom="42.434575"
+     inkscape:cx="12.450548"
+     inkscape:cy="10.249909"
      inkscape:window-x="0"
-     inkscape:window-y="37"
+     inkscape:window-y="23"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Слой_1">
+     inkscape:current-layer="Слой_1"
+     inkscape:document-rotation="0">
     <inkscape:grid
        type="xygrid"
        id="grid240655"
@@ -107,16 +108,20 @@
      x2="10.1181"
      y2="8.5043001"
      id="line116745" />
-  <polygon
-     class="cls-3"
-     points="22.979,9.504 19.185,10.521 19.185,8.487 "
+  <path
      id="polygon116747"
-     transform="translate(-1,-1)" />
-  <polygon
+     style="fill:#545454;stroke:none;stroke-width:0.801924"
+     transform="matrix(1.0542963,0,0,1.4749263,-2.2266738,-5.5176991)"
+     d="M 18.2365,11.538 V 7.47 l 4.7425,2.034 z"
      class="cls-3"
-     points="8.017,9.504 11.812,10.521 11.812,8.487 "
+     sodipodi:nodetypes="cccc" />
+  <path
      id="polygon116749"
-     transform="translate(-1,-1)" />
+     style="fill:#545454;stroke:none;stroke-width:0.80203"
+     transform="matrix(1.0540184,0,0,1.4749262,-1.4500659,-5.5176988)"
+     d="M 12.76075,11.538 V 7.47 L 8.017,9.504 Z"
+     class="cls-3"
+     sodipodi:nodetypes="cccc" />
   <polyline
      class="cls-4"
      points="7 6 7 16 2 20"
