@@ -785,18 +785,31 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
                 if( gridpt != VECTOR2I( 0, 0 ) )
                 {
-                    for( auto dritem : unique_items )
+                    for( EDA_ITEM* dragItem : unique_items )
                     {
-                        if( dritem->GetParent() && dritem->GetParent()->IsSelected() )
+                        if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
                             continue;
 
-                        saveCopyInUndoList( dritem, UNDO_REDO::CHANGED, append_undo );
+                        saveCopyInUndoList( dragItem, UNDO_REDO::CHANGED, append_undo );
                         append_undo = true;
 
-                        moveItem( dritem, gridpt );
-                        updateItem( dritem, true );
+                        moveItem( dragItem, gridpt );
+                        updateItem( dragItem, true );
                     }
                 }
+            }
+        }
+        else if( item->Type() == SCH_FIELD_T )
+        {
+            VECTOR2I gridpt = grid.AlignGrid( item->GetPosition() ) - item->GetPosition();
+
+            if( gridpt != VECTOR2I( 0, 0 ) )
+            {
+                saveCopyInUndoList( item, UNDO_REDO::CHANGED, append_undo );
+                append_undo = true;
+
+                moveItem( item, gridpt );
+                updateItem( item, true );
             }
         }
         else
@@ -827,16 +840,16 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
             if( most_common != VECTOR2I( 0, 0 ) )
             {
-                for( EDA_ITEM* dritem : drag_items )
+                for( EDA_ITEM* dragItem : drag_items )
                 {
-                    if( dritem->GetParent() && dritem->GetParent()->IsSelected() )
+                    if( dragItem->GetParent() && dragItem->GetParent()->IsSelected() )
                         continue;
 
-                    saveCopyInUndoList( dritem, UNDO_REDO::CHANGED, append_undo );
+                    saveCopyInUndoList( dragItem, UNDO_REDO::CHANGED, append_undo );
                     append_undo = true;
 
-                    moveItem( dritem, most_common );
-                    updateItem( dritem, true );
+                    moveItem( dragItem, most_common );
+                    updateItem( dragItem, true );
                 }
             }
         }
