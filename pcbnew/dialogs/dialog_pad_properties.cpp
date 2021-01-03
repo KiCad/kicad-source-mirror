@@ -1232,7 +1232,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
 
         if( ( drillOutline.BBox().GetWidth() > 0 ) || ( drillOutline.BBox().GetHeight() > 0 ) )
         {
-            warning_msgs.Add( _( "Warning: Pad drill larger than pad size or drill shape and "
+            warning_msgs.Add( _( "Warning: Pad drill will leave no copper or drill shape and "
                                  "pad shape do not overlap." ) );
             skip_tstoffset = true;  // offset parameter will be not tested because if the drill
                                     // value is incorrect the offset parameter is always seen as
