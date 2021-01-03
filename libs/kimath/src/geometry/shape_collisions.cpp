@@ -438,9 +438,10 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_RECT& aB, int aCle
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_RECT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    int clearance = aClearance + ( aA.GetWidth() / 2 );
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB.Outline(), aClearance, aActual, aLocation, aMTV );
+    return Collide( lc, aB.Outline(), clearance, aActual, aLocation, aMTV );
 }
 
 
@@ -448,7 +449,8 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
-    bool rv = Collide( aB, lc, aClearance, aActual, aLocation, aMTV );
+    int clearance = aClearance + ( aA.GetWidth() / 2 );
+    bool rv = Collide( aB, lc, clearance, aActual, aLocation, aMTV );
 
     if( rv && aMTV )
         *aMTV = - *aMTV ;
@@ -460,27 +462,30 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_CIRCLE& aB, int aCl
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    int clearance = aClearance + ( aA.GetWidth() / 2 );
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
+    return Collide( lc, aB, clearance, aActual, aLocation, aMTV );
 }
 
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_SEGMENT& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    int clearance = aClearance + ( aA.GetWidth() / 2 );
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
+    return Collide( lc, aB, clearance, aActual, aLocation, aMTV );
 }
 
 
 static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_LINE_CHAIN_BASE& aB, int aClearance,
                             int* aActual, VECTOR2I* aLocation, VECTOR2I* aMTV )
 {
+    int clearance = aClearance + ( aA.GetWidth() / 2 );
     const SHAPE_LINE_CHAIN lc = aA.ConvertToPolyline();
 
-    return Collide( lc, aB, aClearance, aActual, aLocation, aMTV );
+    return Collide( lc, aB, clearance, aActual, aLocation, aMTV );
 }
 
 
@@ -489,8 +494,9 @@ static inline bool Collide( const SHAPE_ARC& aA, const SHAPE_ARC& aB, int aClear
 {
     const SHAPE_LINE_CHAIN lcA = aA.ConvertToPolyline();
     const SHAPE_LINE_CHAIN lcB = aB.ConvertToPolyline();
+    int clearance = aClearance + ( aA.GetWidth() / 2 ) + ( aB.GetWidth() / 2 );
 
-    return Collide( lcA, lcB, aClearance, aActual, aLocation, aMTV );
+    return Collide( lcA, lcB, clearance, aActual, aLocation, aMTV );
 }
 
 
