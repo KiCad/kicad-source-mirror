@@ -239,14 +239,37 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 {
     m_parent->SetLastPath( LAST_PATH_STEP, m_filePickerSTEP->GetPath() );
 
+    double tolerance = 0.01;   // default value in mm
+
+    switch( m_tolerance->GetSelection() )
+    {
+    case 0:         // small
+        tolerance = 0.001;
+        break;
+
+    default:
+    case 1: break;  // Normal
+
+    case 2:         // large
+        tolerance = 0.1;
+        break;
+    }
+
     SHAPE_POLY_SET outline;
     wxString msg;
 
     // Check if the board outline is continuous
-    if( !m_parent->GetBoard()->GetBoardPolygonOutlines( outline ) )
+    // max dist from one endPt to next startPt to build a closed shape:
+    int chainingEpsilon = Millimeter2iu( tolerance );
+    // Arc to segment approx error (not critical here: we do not use the outline shape):
+    int maxError = Millimeter2iu( 0.005 );
+    bool success = BuildBoardPolygonOutlines( m_parent->GetBoard(), outline, maxError,
+                                              chainingEpsilon, nullptr );
+    if( !success )
     {
-        DisplayErrorMessage( this, _( "Board outline is missing or malformed. "
-                                      "Run DRC for a full analysis." ) );
+        DisplayErrorMessage( this, wxString::Format(
+                             _( "Board outline is missing or not closed using %.3f mm tolerance.\n"
+                                "Run DRC for a full analysis." ), tolerance ) );
         return;
     }
 
@@ -329,24 +352,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             break;
     }
 
-    if( m_tolerance->GetSelection() != 1 )
     {
-        double tolerance = 0.01;   // defautl value in mm
-
-        switch( m_tolerance->GetSelection() )
-        {
-        case 0:         // small
-            tolerance = 0.001;
-            break;
-
-        default:
-        case 1: break;  // Normal
-
-        case 2:         // large
-            tolerance = 0.1;
-            break;
-        }
-
         LOCALE_IO dummy;
         cmdK2S.Append( wxString::Format( " --min-distance=\"%.3f mm\"", tolerance ) );
     }
