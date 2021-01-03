@@ -72,7 +72,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( ACTIONS::show3DViewer );
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
-                            KiScaledBitmap( export_xpm, this ),
+                            KiScaledBitmap( insert_module_board_xpm, this ),
                             _( "Insert footprint in board" ) );
 
     m_mainToolBar->AddScaledSeparator( this );
