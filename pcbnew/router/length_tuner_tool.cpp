@@ -163,7 +163,7 @@ void LENGTH_TUNER_TOOL::performTuning()
 
     if( !m_router->StartRouting( m_startSnapPoint, m_startItem, 0 ) )
     {
-        wxMessageBox( m_router->FailureReason(), _( "Error" ) );
+        frame()->ShowInfoBarMsg( m_router->FailureReason() );
         highlightNet( false );
         return;
     }
