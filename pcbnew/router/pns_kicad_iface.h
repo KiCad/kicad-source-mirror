@@ -59,8 +59,7 @@ public:
     bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override { return true; };
     bool IsItemVisible( const PNS::ITEM* aItem ) const override { return true; }
     void HideItem( PNS::ITEM* aItem ) override {}
-    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0,
-                      bool aEdit = false ) override {}
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false ) override {}
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) override {}
     void AddItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
@@ -117,8 +116,7 @@ public:
     bool IsItemVisible( const PNS::ITEM* aItem ) const override;
     bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const override;
     void HideItem( PNS::ITEM* aItem ) override;
-    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0,
-                      bool aEdit = false ) override;
+    void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false ) override;
     void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) override;
     void Commit() override;
     void AddItem( PNS::ITEM* aItem ) override;

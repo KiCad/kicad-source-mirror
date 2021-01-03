@@ -294,16 +294,32 @@ void ROUTER::markViolations( NODE* aNode, ITEM_SET& aCurrent, NODE::ITEM_VECTOR&
             {
                 std::unique_ptr<ITEM> tmp( itemToMark->Clone() );
                 int                   clearance;
+                bool                  removeOriginal = true;
 
                 if( itemToMark->Marker() & MK_HOLE )
                     clearance = aNode->GetHoleClearance( currentItem, itemToMark );
                 else
                     clearance = aNode->GetClearance( currentItem, itemToMark );
 
-                m_iface->DisplayItem( tmp.get(), -1, clearance );
+                if( itemToMark->Layers().IsMultilayer() && !currentItem->Layers().IsMultilayer() )
+                    itemToMark->SetLayer( currentItem->Layer() );
 
-                // Remove the obstacle itself from the view unless we're just marking its hole
-                if( !(itemToMark->Marker() & MK_HOLE ) )
+                if( itemToMark->Kind() == ITEM::SOLID_T )
+                {
+                    if( ( itemToMark->Marker() & PNS::MK_HOLE )
+                            || !m_iface->IsFlashedOnLayer( itemToMark, itemToMark->Layer() ) )
+                    {
+                        SOLID* solid = static_cast<SOLID*>( tmp.get() );
+                        solid->SetShape( solid->Hole()->Clone() );
+
+                        // Leave the pad flashing around the highlighted hole
+                        removeOriginal = false;
+                    }
+                }
+
+                m_iface->DisplayItem( tmp.get(), clearance );
+
+                if( removeOriginal )
                     aRemoved.push_back( itemToMark );
             };
 
@@ -358,7 +374,7 @@ void ROUTER::updateView( NODE* aNode, ITEM_SET& aCurrent, bool aDragging )
     for( ITEM* item : added )
     {
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
-        m_iface->DisplayItem( item, -1, clearance, aDragging );
+        m_iface->DisplayItem( item, clearance, aDragging );
     }
 
     for( ITEM* item : removed )
@@ -391,7 +407,7 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
         const LINE* l = static_cast<const LINE*>( item );
         int clearance = GetRuleResolver()->Clearance( item, nullptr );
 
-        m_iface->DisplayItem( l, -1, clearance );
+        m_iface->DisplayItem( l, clearance );
 
         if( l->EndsWithVia() )
         {
@@ -402,7 +418,7 @@ void ROUTER::movePlacing( const VECTOR2I& aP, ITEM* aEndItem )
             if( holeClearance + via.Drill() / 2 > viaClearance + via.Diameter() / 2 )
                 viaClearance = holeClearance + via.Drill() / 2 - via.Diameter() / 2;
 
-            m_iface->DisplayItem( &l->Via(), -1, viaClearance );
+            m_iface->DisplayItem( &l->Via(), viaClearance );
         }
     }
 

@@ -61,8 +61,6 @@ public:
 
     void Update( const PNS::ITEM* aItem );
 
-    void StuckMarker( VECTOR2I& aPosition );
-
     void Line( const SHAPE_LINE_CHAIN& aLine, int aWidth = 0, int aStyle = 0 );
     void Box( const BOX2I& aBox, int aStyle = 0 );
     void Point ( const VECTOR2I& aPos, int aStyle = 0);

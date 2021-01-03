@@ -1337,14 +1337,11 @@ void PNS_KICAD_IFACE_BASE::SetDebugDecorator( PNS::DEBUG_DECORATOR *aDec )
     m_debugDecorator = aDec;
 }
 
-void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClearance, bool aEdit )
+void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit )
 {
     wxLogTrace( "PNS", "DisplayItem %p", aItem );
 
     ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( aItem, m_view );
-
-    if( aColor >= 0 )
-        pitem->SetColor( KIGFX::COLOR4D( aColor ) );
 
     if( aClearance >= 0 )
     {

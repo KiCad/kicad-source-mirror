@@ -42,7 +42,8 @@ ROUTER_PREVIEW_ITEM::ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem, KIGFX::VIEW* a
 {
     m_view = aView;
 
-    m_shape = NULL;
+    m_shape = aItem ? aItem->Shape()->Clone() : nullptr;
+
     m_clearance = -1;
     m_originLayer = m_layer = LAYER_SELECT_OVERLAY ;
 
@@ -85,11 +86,6 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
     m_color = getLayerColor( m_originLayer );
     m_color.a = 0.8;
     m_depth = BaseOverlayDepth - aItem->Layers().Start();
-
-    if( ( aItem->Marker() & PNS::MK_HOLE ) && aItem->Kind() == PNS::ITEM::SOLID_T && aItem->Hole() )
-        m_shape = aItem->Hole()->Clone();
-    else
-        m_shape = aItem->Shape()->Clone();
 
     switch( aItem->Kind() )
     {

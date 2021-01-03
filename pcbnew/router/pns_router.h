@@ -101,8 +101,7 @@ enum DRAG_MODE
     virtual bool IsAnyLayerVisible( const LAYER_RANGE& aLayer ) const = 0;
     virtual bool IsItemVisible( const PNS::ITEM* aItem ) const = 0;
     virtual bool IsFlashedOnLayer( const PNS::ITEM* aItem, int aLayer ) const = 0;
-    virtual void DisplayItem( const ITEM* aItem, int aColor = -1, int aClearance = -1,
-                              bool aEdit = false ) = 0;
+    virtual void DisplayItem( const ITEM* aItem, int aClearance, bool aEdit = false ) = 0;
     virtual void DisplayRatline( const SHAPE_LINE_CHAIN& aRatline, int aColor = -1 ) = 0;
     virtual void HideItem( ITEM* aItem ) = 0;
     virtual void Commit() = 0;
