@@ -66,7 +66,7 @@ void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
     int soldermask_min_thickness = aBoard->GetDesignSettings().m_SolderMaskMinWidth;
 
     // Set a default color and the text mode for this layer
-    aPlotter->SetColor( aPlotOpt.GetColor() );
+    aPlotter->SetColor( BLACK );
     aPlotter->SetTextMode( aPlotOpt.GetTextMode() );
 
     // Specify that the contents of the "Edges Pcb" layer are to be plotted in addition to the

@@ -132,7 +132,6 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
     m_fineScaleAdjustX           = 1.0;
     m_fineScaleAdjustY           = 1.0;
     m_widthAdjust                = 0.;
-    m_color                      = BLACK;
     m_textMode                   = PLOT_TEXT_MODE::DEFAULT;
     m_outputDirectory.clear();
     m_layerSelection             = LSET( 7, F_SilkS, B_SilkS, F_Mask, B_Mask,
@@ -197,7 +196,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
         aFormatter->Print( aNestLevel+1, "(%s %d)\n",
                            getTokenName( T_gerberprecision ), m_gerberPrecision );
 
-    // Svg options
+    // SVG options
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_svguseinch ),
                        m_svgUseInch ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_svgprecision ),
@@ -213,18 +212,23 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        GetPlotMode() == SKETCH ? 2 : 1 );       // Value 0 (LINE mode) no more used
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_useauxorigin ),
                        m_useAuxOrigin ? trueStr : falseStr );
+
+    // HPGL options
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpennumber ),
                        m_HPGLPenNum );
-
-    //  Obsolete parameter, pen speed is no more managed, because hpgl format
-    // is now an export format, and for this, pen speed has no meaning
-    //    aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
-    //                       m_HPGLPenSpeed );
-
     aFormatter->Print( aNestLevel+1, "(%s %d)\n", getTokenName( T_hpglpenspeed ),
                        m_HPGLPenSpeed );
     aFormatter->Print( aNestLevel+1, "(%s %f)\n", getTokenName( T_hpglpendiameter ),
                        m_HPGLPenDiam );
+
+    // DXF options
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfpolygonmode ),
+                       m_DXFplotPolygonMode ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfimperialunits ),
+                       m_DXFplotUnits == DXF_UNITS::INCHES ? trueStr : falseStr );
+    aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_dxfusepcbnewfont ),
+                       m_textMode == PLOT_TEXT_MODE::NATIVE ? falseStr : trueStr );
+
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psnegative ),
                        m_negative ? trueStr : falseStr );
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_psa4output ),
@@ -260,7 +264,7 @@ void PCB_PLOT_PARAMS::Parse( PCB_PLOT_PARAMS_PARSER* aParser )
 }
 
 
-bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCompareOnlySavedPrms ) const
+bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
 {
     if( m_layerSelection != aPcbPlotParams.m_layerSelection )
         return false;
@@ -284,13 +288,10 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
         return false;
     if( m_plotMode != aPcbPlotParams.m_plotMode )
         return false;
-    if( !aCompareOnlySavedPrms )
-    {
-        if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
-            return false;
-        if( m_DXFplotUnits != aPcbPlotParams.m_DXFplotUnits )
-            return false;
-    }
+    if( m_DXFplotPolygonMode != aPcbPlotParams.m_DXFplotPolygonMode )
+        return false;
+    if( m_DXFplotUnits != aPcbPlotParams.m_DXFplotUnits )
+        return false;
     if( m_svgPrecision != aPcbPlotParams.m_svgPrecision )
         return false;
     if( m_svgUseInch != aPcbPlotParams.m_svgUseInch )
@@ -335,11 +336,6 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
         return false;
     if( m_widthAdjust != aPcbPlotParams.m_widthAdjust )
         return false;
-    if( !aCompareOnlySavedPrms )
-    {
-        if( m_color != aPcbPlotParams.m_color )
-            return false;
-    }
     if( m_textMode != aPcbPlotParams.m_textMode )
         return false;
     if( !m_outputDirectory.IsSameAs( aPcbPlotParams.m_outputDirectory ) )
@@ -402,18 +398,12 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
                 if( token == T_NUMBER ) // pretty 3 format had legacy Cu stack.
                 {
-                    // unsigned legacy_mask = atol( cur.c_str() );
-
-                    /*  It's not possible to convert a legacy Cu layer number to a new
-                        Cu layer number without knowing the number or total Cu layers
-                        in the legacy board.  We do not have that information here.
-                        So simply set all layers ON.  User can turn them off in the UI.
-                        This is one of the superiorities of the new Cu sequence.
-                    aPcbPlotParams->m_layerSelection = LEGACY_PLUGIN::leg_mask2new( cu_count, legacy_mask );
-                    */
-
-                    // sorry, use the UI once to fix:
-                    aPcbPlotParams->m_layerSelection = LSET( 2, F_SilkS, B_SilkS) | LSET::AllCuMask();
+                    //  It's not possible to convert a legacy Cu layer number to a new Cu layer
+                    //  number without knowing the number or total Cu layers in the legacy board.
+                    //  We do not have that information here, so simply set all layers ON.  User
+                    //  can turn them off in the UI.
+                    aPcbPlotParams->m_layerSelection = LSET( 2, F_SilkS, B_SilkS)
+                                                        | LSET::AllCuMask();
                 }
                 else if( cur.find_first_of( "0x" ) == 0 )   // pretty ver. 4.
                 {
@@ -446,8 +436,8 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_gerberprecision:
-            aPcbPlotParams->m_gerberPrecision =
-                parseInt( gbrDefaultPrecision-1, gbrDefaultPrecision);
+            aPcbPlotParams->m_gerberPrecision = parseInt( gbrDefaultPrecision-1,
+                                                          gbrDefaultPrecision);
             break;
 
         case T_svgprecision:
@@ -499,6 +489,20 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
         case T_hpglpenoverlay:
             // No more used. juste here for compatibility with old versions
             parseInt( 0, HPGL_PEN_DIAMETER_MAX );
+            break;
+
+        case T_dxfpolygonmode:
+            aPcbPlotParams->m_DXFplotPolygonMode = parseBool();
+            break;
+
+        case T_dxfimperialunits:
+            aPcbPlotParams->m_DXFplotUnits = parseBool() ? DXF_UNITS::INCHES
+                                                         : DXF_UNITS::MILLIMETERS;
+            break;
+
+        case T_dxfusepcbnewfont:
+            aPcbPlotParams->m_textMode = parseBool() ? PLOT_TEXT_MODE::DEFAULT
+                                                     : PLOT_TEXT_MODE::NATIVE;
             break;
 
         case T_pscolor:

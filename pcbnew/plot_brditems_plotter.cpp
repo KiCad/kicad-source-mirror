@@ -28,7 +28,6 @@
 #include <vector>                             // for vector, __vector_base<>...
 
 #include <eda_item.h>
-#include <convert_basic_shapes_to_polygon.h>
 #include <geometry/seg.h>                     // for SEG
 #include <geometry/shape_circle.h>
 #include <geometry/shape_line_chain.h>        // for SHAPE_LINE_CHAIN
@@ -223,8 +222,8 @@ void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMod
         break;
 
     case PAD_SHAPE_OVAL:
-        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(),
-                                 aPad->GetOrientation(), aPlotMode, &gbr_metadata );
+        m_plotter->FlashPadOval( shape_pos, aPad->GetSize(), aPad->GetOrientation(), aPlotMode,
+                                 &gbr_metadata );
         break;
 
     case PAD_SHAPE_RECT:
@@ -253,7 +252,7 @@ void BRDITEMS_PLOTTER::PlotPad( PAD* aPad, COLOR4D aColor, OUTLINE_MODE aPlotMod
         coord[3] = wxPoint( -half_size.x + trap_delta.y, -half_size.y - trap_delta.x );
 
         m_plotter->FlashPadTrapez( shape_pos, coord, aPad->GetOrientation(), aPlotMode,
-                                 &gbr_metadata );
+                                   &gbr_metadata );
     }
         break;
 
@@ -521,10 +520,10 @@ void BRDITEMS_PLOTTER::PlotFootprintGraphicItems( FOOTPRINT* aFootprint )
 {
     for( BOARD_ITEM* item : aFootprint->GraphicalItems() )
     {
-        FP_SHAPE* edge = dynamic_cast<FP_SHAPE*>( item );
+        FP_SHAPE* shape = dynamic_cast<FP_SHAPE*>( item );
 
-        if( edge && m_layerMask[ edge->GetLayer() ] )
-            PlotFootprintGraphicItem( edge );
+        if( shape && m_layerMask[ shape->GetLayer() ] )
+            PlotFootprintGraphicItem( shape );
     }
 }
 
@@ -769,7 +768,9 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
         // they are not used to connect items, so the aperture attribute cannot
         // be set as conductor
         if( aZone->GetNetname().IsEmpty() )
+        {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
+        }
         else
         {
             gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_CONDUCTOR );
@@ -817,15 +818,19 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
                 if( m_plotter->GetPlotterType() == PLOT_FORMAT::GERBER )
                 {
                     if( outline_thickness > 0 )
-                        m_plotter->PlotPoly( cornerList, FILL_TYPE::NO_FILL,
-                                             outline_thickness, &gbr_metadata );
+                    {
+                        m_plotter->PlotPoly( cornerList, FILL_TYPE::NO_FILL, outline_thickness,
+                                             &gbr_metadata );
+                    }
 
-                    static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion(
-                                                        cornerList, &gbr_metadata );
+                    static_cast<GERBER_PLOTTER*>( m_plotter )->PlotGerberRegion( cornerList,
+                                                                                 &gbr_metadata );
                 }
                 else
-                    m_plotter->PlotPoly( cornerList, FILL_TYPE::FILLED_SHAPE,
-                                         outline_thickness, &gbr_metadata );
+                {
+                    m_plotter->PlotPoly( cornerList, FILL_TYPE::FILLED_SHAPE, outline_thickness,
+                                         &gbr_metadata );
+                }
             }
             else
             {
@@ -834,8 +839,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE* aZone, SHAPE_POLY_SET& polysList )
                     for( unsigned jj = 1; jj < cornerList.size(); jj++ )
                     {
                         m_plotter->ThickSegment( cornerList[jj -1], cornerList[jj],
-                                                 outline_thickness,
-                                                 GetPlotMode(), &gbr_metadata );
+                                                 outline_thickness, GetPlotMode(), &gbr_metadata );
                     }
                 }
 
@@ -1000,7 +1004,9 @@ void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wx
         m_plotter->FlashPadOval( aDrillPos, aDrillSize, aOrientation, GetPlotMode(), NULL );
     }
     else
+    {
         m_plotter->FlashPadCircle( aDrillPos, aDrillSize.x, GetPlotMode(), NULL );
+    }
 }
 
 
@@ -1008,8 +1014,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
 {
     /* If small drills marks were requested prepare a clamp value to pass
        to the helper function */
-    int small_drill = (GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE) ?
-                        SMALL_DRILL : 0;
+    int smallDrill = GetDrillMarksType() == PCB_PLOT_PARAMS::SMALL_DRILL_SHAPE ? SMALL_DRILL : 0;
 
     /* In the filled trace mode drill marks are drawn white-on-black to scrape
        the underlying pad. This works only for drivers supporting color change,
@@ -1025,32 +1030,30 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
     if( GetPlotMode() == FILLED )
          m_plotter->SetColor( WHITE );
 
-    for( auto pts : m_board->Tracks() )
+    for( TRACK* tracks : m_board->Tracks() )
     {
-        const VIA* via = dyn_cast<const VIA*>( pts );
+        const VIA* via = dyn_cast<const VIA*>( tracks );
 
         if( via )
         {
             plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
-                    wxSize( via->GetDrillValue(), 0 ),
-                    wxSize( via->GetWidth(), 0 ), 0, small_drill );
+                              wxSize( via->GetDrillValue(), 0 ),
+                              wxSize( via->GetWidth(), 0 ), 0, smallDrill );
         }
     }
 
-    for( auto Module : m_board->Footprints() )
+    for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        for( auto pad : Module->Pads() )
+        for( PAD* pad : footprint->Pads() )
         {
             if( pad->GetDrillSize().x == 0 )
                 continue;
 
-            plotOneDrillMark( pad->GetDrillShape(),
-                              pad->GetPosition(), pad->GetDrillSize(),
-                              pad->GetSize(), pad->GetOrientation(),
-                              small_drill );
+            plotOneDrillMark( pad->GetDrillShape(), pad->GetPosition(), pad->GetDrillSize(),
+                              pad->GetSize(), pad->GetOrientation(), smallDrill );
         }
     }
 
     if( GetPlotMode() == FILLED )
-        m_plotter->SetColor( GetColor() );
+        m_plotter->SetColor( BLACK );
 }

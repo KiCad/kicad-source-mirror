@@ -1,6 +1,9 @@
 creategerberjobfile
 disableapertmacros
 drillshape
+dxfimperialunits
+dxfpolygonmode
+dxfusepcbnewfont
 excludeedgelayer
 false
 gerberprecision

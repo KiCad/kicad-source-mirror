@@ -180,7 +180,6 @@ private:
     int         m_HPGLPenSpeed;         ///< HPGL only: pen speed, always in cm/s (1 to 99 cm/s)
     double      m_HPGLPenDiam;          ///< HPGL only: pen diameter in MILS, useful to fill areas
                                         ///< However, it is in mm in hpgl files.
-    COLOR4D     m_color;                ///< Color for plotting the current layer. Provided, but not really used
 
     /// Pointer to active color settings to be used for plotting
     COLOR_SETTINGS* m_colors;
@@ -204,10 +203,7 @@ public:
      * and false to compare the full set of parameters.
      * @return true is parameters are same, false if one (or more) parameter does not match
      */
-    bool        IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCompareOnlySavedPrms ) const;
-
-    void        SetColor( COLOR4D aVal ) { m_color = aVal; }
-    COLOR4D     GetColor() const { return m_color; }
+    bool        IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const;
 
     void SetColorSettings( COLOR_SETTINGS* aSettings ) { m_colors = aSettings; }
 
