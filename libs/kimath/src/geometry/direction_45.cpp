@@ -86,8 +86,8 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
     // TODO: if tangentLength zero, we could still place a small arc at the start...
     if( aFillet )
     {
-        VECTOR2I arcStart;
-        VECTOR2D arcCenter;
+        SHAPE_ARC arc;
+        VECTOR2I  arcEndpoint;
 
         double diag2 = tangentLength >= 0 ? mp1.SquaredEuclideanNorm() : mp0.SquaredEuclideanNorm();
         double diagLength = std::sqrt( ( 2 * diag2 ) - ( 2 * diag2 * std::cos( 3 * M_PI_4 ) ) );
@@ -100,38 +100,33 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
 
         if( startDiagonal )
         {
-            int      rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
-            VECTOR2D centerDir( mp0.Rotate( M_PI_2 * rotationSign ) );
+            int rotationSign = ( w > h ) ? ( sw * sh * -1 ) : ( sw * sh );
 
             if( tangentLength >= 0 )
             {
                 // Positive tangentLength, diagonal start: arc goes at the start
-                arcStart  = aP0 + mp1 + mp0.Resize( mp1.EuclideanNorm() );
-                arcCenter = arcStart + centerDir.Resize( arcRadius );
-                SHAPE_ARC new_arc( arcCenter, aP0, 45 * rotationSign );
+                arcEndpoint = aP1 - mp0.Resize( tangentLength );
+                arc.ConstructFromStartEndAngle( aP0, arcEndpoint, 45 * rotationSign );
 
-                if( new_arc.GetP0() == new_arc.GetP1() )
+                if( arc.GetP0() == arc.GetP1() )
                     pl.Append( aP0 );
                 else
-                    pl.Append( new_arc );
+                    pl.Append( arc );
 
                 pl.Append( aP1 );
             }
             else
             {
                 // Negative tangentLength, diagonal start: arc goes at the end
-                arcStart  = aP0 + mp1.Resize( std::abs( tangentLength ) );
-                arcCenter = aP1 + centerDir.Resize( arcRadius );
-
-                SHAPE_ARC new_arc;
-                new_arc.ConstructFromStartEndAngle( arcStart, aP1, 45 * rotationSign );
+                arcEndpoint = aP0 + mp1.Resize( std::abs( tangentLength ) );
+                arc.ConstructFromStartEndAngle( arcEndpoint, aP1, 45 * rotationSign );
 
                 pl.Append( aP0 );
 
-                if( new_arc.GetP0() == new_arc.GetP1() )
+                if( arc.GetP0() == arc.GetP1() )
                     pl.Append( aP1 );
                 else
-                    pl.Append( new_arc );
+                    pl.Append( arc );
             }
         }
         else
@@ -142,30 +137,42 @@ const SHAPE_LINE_CHAIN DIRECTION_45::BuildInitialTrace( const VECTOR2I& aP0, con
             if( tangentLength >= 0 )
             {
                 // Positive tangentLength: arc goes at the end
-                arcStart  = aP0 + mp0.Resize( tangentLength );
-                arcCenter = arcStart + centerDir.Resize( arcRadius );
-
-                SHAPE_ARC new_arc;
-                new_arc.ConstructFromStartEndAngle( arcStart, aP1, 45 * rotationSign );
+                arcEndpoint = aP0 + mp0.Resize( tangentLength );
+                arc.ConstructFromStartEndAngle( arcEndpoint, aP1, 45 * rotationSign );
 
                 pl.Append( aP0 );
 
-                if( new_arc.GetP0() == new_arc.GetP1() )
+                if( arc.GetP0() == arc.GetP1() )
                     pl.Append( aP1 );
                 else
-                    pl.Append( new_arc );
+                    pl.Append( arc );
             }
             else
             {
                 // Negative tangentLength: arc goes at the start
-                arcStart  = aP0;
-                arcCenter = arcStart + centerDir.Resize( arcRadius );
-                SHAPE_ARC new_arc( arcCenter, arcStart, 45 * rotationSign );
+                VECTOR2I  arcCenter = aP0 + centerDir.Resize( arcRadius );
+                SHAPE_ARC ca( arcCenter, aP0, 45 * rotationSign );
 
-                if( new_arc.GetP0() == new_arc.GetP1() )
+                // Constructing with a center can lead to imprecise endpoint.  We need to guarantee
+                // tangency of the endpoint.
+                // TODO: update the math above to calculate the proper endpoint directly
+                VECTOR2I endpoint( ca.GetP1() );
+
+                if( std::abs( endpoint.y - aP1.y ) < SHAPE_ARC::MIN_PRECISION_IU )
+                {
+                    VECTOR2I fixedEnd( endpoint.x, aP1.y );
+                    ca.ConstructFromStartEndAngle( ca.GetP0(), fixedEnd, 45 * rotationSign );
+                }
+                else if( std::abs( endpoint.x - aP1.x ) < SHAPE_ARC::MIN_PRECISION_IU )
+                {
+                    VECTOR2I fixedEnd( aP1.x, endpoint.y );
+                    ca.ConstructFromStartEndAngle( ca.GetP0(), fixedEnd, 45 * rotationSign );
+                }
+
+                if( ca.GetP0() == ca.GetP1() )
                     pl.Append( aP0 );
                 else
-                    pl.Append( new_arc );
+                    pl.Append( ca );
 
                 pl.Append( aP1 );
             }
