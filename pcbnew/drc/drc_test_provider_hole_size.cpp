@@ -23,7 +23,6 @@
 
 #include <pad.h>
 #include <track.h>
-#include <drc/drc_engine.h>
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_test_provider_clearance_base.h>
@@ -32,10 +31,8 @@
 /*
     Drilled hole size test. scans vias/through-hole pads and checks for min drill sizes
     Errors generated:
-    - DRCE_TOO_SMALL_DRILL
-    - DRCE_TOO_SMALL_MICROVIA_DRILL
-
-    TODO: max drill size check
+    - DRCE_DRILL_OUT_OF_RANGE
+    - DRCE_MICROVIA_DRILL_OUT_OF_RANGE
 */
 
 class DRC_TEST_PROVIDER_HOLE_SIZE : public DRC_TEST_PROVIDER
@@ -83,12 +80,12 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
-        if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
+        if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
             break;
 
         for( PAD* pad : footprint->Pads() )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL ) )
+            if( m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE ) )
                 break;
 
             checkPad( pad );
@@ -109,8 +106,8 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
     for( VIA* via : vias )
     {
-        bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_MICROVIA_DRILL );
-        bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_TOO_SMALL_DRILL );
+        bool exceedMicro = m_drcEngine->IsErrorLimitExceeded( DRCE_MICROVIA_DRILL_OUT_OF_RANGE );
+        bool exceedStd = m_drcEngine->IsErrorLimitExceeded( DRCE_DRILL_OUT_OF_RANGE );
 
         if( exceedMicro && exceedStd )
             break;
@@ -126,24 +123,49 @@ bool DRC_TEST_PROVIDER_HOLE_SIZE::Run()
 
 void DRC_TEST_PROVIDER_HOLE_SIZE::checkPad( PAD* aPad )
 {
-    int holeSize = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
+    int holeMinor = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
+    int holeMajor = std::max( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
 
-    if( holeSize == 0 )
+    if( holeMinor == 0 )
         return;
 
     auto constraint = m_drcEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, aPad );
-    int  minHole = constraint.GetValue().Min();
+    bool fail_min = false;
+    bool fail_max = false;
+    int  constraintValue;
 
     accountCheck( constraint );
 
-    if( holeSize < minHole )
+    if( constraint.Value().HasMin() && holeMinor < constraint.Value().Min() )
     {
-        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_SMALL_DRILL );
+        fail_min        = true;
+        constraintValue = constraint.Value().Min();
+    }
 
-        m_msg.Printf( _( "(%s %s; actual %s)" ),
-                      constraint.GetName(),
-                      MessageTextFromValue( userUnits(), minHole ),
-                      MessageTextFromValue( userUnits(), holeSize ) );
+    if( constraint.Value().HasMax() && holeMajor > constraint.Value().Max() )
+    {
+        fail_max        = true;
+        constraintValue = constraint.Value().Max();
+    }
+
+    if( fail_min || fail_max )
+    {
+        std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_DRILL_OUT_OF_RANGE );
+
+        if( fail_min )
+        {
+            m_msg.Printf( _( "(%s min width %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), constraintValue ),
+                          MessageTextFromValue( userUnits(), holeMinor ) );
+        }
+        else
+        {
+            m_msg.Printf( _( "(%s max width %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), constraintValue ),
+                          MessageTextFromValue( userUnits(), holeMajor ) );
+        }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
         drcItem->SetItems( aPad );
@@ -163,29 +185,53 @@ void DRC_TEST_PROVIDER_HOLE_SIZE::checkVia( VIA* via, bool aExceedMicro, bool aE
         if( aExceedMicro )
             return;
 
-        errorCode = DRCE_TOO_SMALL_MICROVIA_DRILL;
+        errorCode = DRCE_MICROVIA_DRILL_OUT_OF_RANGE;
     }
     else
     {
         if( aExceedStd )
             return;
 
-        errorCode = DRCE_TOO_SMALL_DRILL;
+        errorCode = DRCE_DRILL_OUT_OF_RANGE;
     }
 
     auto constraint = m_drcEngine->EvalRulesForItems( HOLE_SIZE_CONSTRAINT, via );
-    int  minHole = constraint.GetValue().Min();
+    bool fail_min = false;
+    bool fail_max = false;
+    int  constraintValue;
 
     accountCheck( constraint );
 
-    if( via->GetDrillValue() < minHole )
+    if( constraint.Value().HasMin() && via->GetDrillValue() < constraint.Value().Min() )
+    {
+        fail_min        = true;
+        constraintValue = constraint.Value().Min();
+    }
+
+    if( constraint.Value().HasMax() && via->GetDrillValue() > constraint.Value().Max() )
+    {
+        fail_max        = true;
+        constraintValue = constraint.Value().Max();
+    }
+
+    if( fail_min || fail_max )
     {
         std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( errorCode );
 
-        m_msg.Printf( _( "(%s %s; actual %s)" ),
-                      constraint.GetName(),
-                      MessageTextFromValue( userUnits(), minHole ),
-                      MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
+        if( fail_min )
+        {
+            m_msg.Printf( _( "(%s min width %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), constraintValue ),
+                          MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
+        }
+        else
+        {
+            m_msg.Printf( _( "(%s max width %s; actual %s)" ),
+                          constraint.GetName(),
+                          MessageTextFromValue( userUnits(), constraintValue ),
+                          MessageTextFromValue( userUnits(), via->GetDrillValue() ) );
+        }
 
         drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + m_msg );
         drcItem->SetItems( via );

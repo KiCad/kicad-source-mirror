@@ -101,9 +101,9 @@ DRC_ITEM DRC_ITEM::annularWidth( DRCE_ANNULAR_WIDTH,
         _( "Annular width" ),
         wxT( "annular_width" ) );
 
-DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_TOO_SMALL_DRILL,
-        _( "Drill too small" ),
-        wxT( "drill_too_small" ) );
+DRC_ITEM DRC_ITEM::drillTooSmall( DRCE_DRILL_OUT_OF_RANGE,
+        _( "Drill out of range" ),
+        wxT( "drill_out_of_range" ) );
 
 DRC_ITEM DRC_ITEM::viaDiameter( DRCE_VIA_DIAMETER,
         _( "Via diameter" ),
@@ -113,9 +113,9 @@ DRC_ITEM DRC_ITEM::padstack( DRCE_PADSTACK,
         _( "Padstack is not valid" ),
         wxT( "padstack" ) );
 
-DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_TOO_SMALL_MICROVIA_DRILL,
-        _( "Micro via drill too small" ),
-        wxT( "microvia_drill_too_small" ) );
+DRC_ITEM DRC_ITEM::microviaDrillTooSmall( DRCE_MICROVIA_DRILL_OUT_OF_RANGE,
+        _( "Micro via drill out of range" ),
+        wxT( "microvia_drill_out_of_range" ) );
 
 DRC_ITEM DRC_ITEM::courtyardsOverlap( DRCE_OVERLAPPING_FOOTPRINTS,
         _( "Courtyards overlap" ),
@@ -260,10 +260,10 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_HOLE_CLEARANCE:           return std::make_shared<DRC_ITEM>( holeClearance );
     case DRCE_TRACK_WIDTH:              return std::make_shared<DRC_ITEM>( trackWidth );
     case DRCE_ANNULAR_WIDTH:                  return std::make_shared<DRC_ITEM>( annularWidth );
-    case DRCE_TOO_SMALL_DRILL:          return std::make_shared<DRC_ITEM>( drillTooSmall );
+    case DRCE_DRILL_OUT_OF_RANGE:          return std::make_shared<DRC_ITEM>( drillTooSmall );
     case DRCE_VIA_DIAMETER:             return std::make_shared<DRC_ITEM>( viaDiameter );
     case DRCE_PADSTACK:                 return std::make_shared<DRC_ITEM>( padstack );
-    case DRCE_TOO_SMALL_MICROVIA_DRILL: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );
+    case DRCE_MICROVIA_DRILL_OUT_OF_RANGE: return std::make_shared<DRC_ITEM>( microviaDrillTooSmall );
     case DRCE_OVERLAPPING_FOOTPRINTS:   return std::make_shared<DRC_ITEM>( courtyardsOverlap );
     case DRCE_MISSING_COURTYARD:        return std::make_shared<DRC_ITEM>( missingCourtyard );
     case DRCE_MALFORMED_COURTYARD:      return std::make_shared<DRC_ITEM>( malformedCourtyard );

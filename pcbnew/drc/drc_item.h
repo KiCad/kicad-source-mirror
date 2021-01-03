@@ -47,10 +47,10 @@ enum PCB_DRC_CODE {
     DRCE_HOLE_CLEARANCE,                 //
     DRCE_TRACK_WIDTH,                    // Track width is too small or too large
     DRCE_ANNULAR_WIDTH,                  // Via size and drill leave annulus too small or too large
-    DRCE_TOO_SMALL_DRILL,                // Too small via or pad drill
+    DRCE_DRILL_OUT_OF_RANGE,             // Too small via or pad drill
     DRCE_VIA_DIAMETER,                   // Via diameter checks (min/max)
     DRCE_PADSTACK,                       // something is wrong with a pad or via stackup
-    DRCE_TOO_SMALL_MICROVIA_DRILL,       // Too small micro via drill
+    DRCE_MICROVIA_DRILL_OUT_OF_RANGE,    // Too small micro via drill
     DRCE_OVERLAPPING_FOOTPRINTS,         // footprint courtyards overlap
     DRCE_MISSING_COURTYARD,              // footprint has no courtyard defined
     DRCE_MALFORMED_COURTYARD,            // footprint has a courtyard but malformed
