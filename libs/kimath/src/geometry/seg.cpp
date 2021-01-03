@@ -49,7 +49,7 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
     };
 
     ecoord m = VECTOR2I::ECOORD_MAX;
-  
+
     for( int i = 0; i < 4; i++ )
     {
         m = std::min( m, pts[i].SquaredEuclideanNorm() );
@@ -90,7 +90,7 @@ const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
     };
 
     int min_i = 0;
- 
+
     for( int i = 0; i < 4; i++ )
     {
         if( pts_dist[i] < pts_dist[min_i] )
@@ -170,5 +170,5 @@ bool SEG::Collide( const SEG& aSeg, int aClearance, int* aActual ) const
 
 bool SEG::Contains( const VECTOR2I& aP ) const
 {
-    return SquaredDistance( aP ) < 1;       // 1 * 1 to be pedantic
+    return SquaredDistance( aP ) <= 1;       // 1 * 1 to be pedantic
 }
